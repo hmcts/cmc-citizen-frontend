@@ -1,0 +1,13 @@
+{% extends "layout.njk" %}
+
+{% set title = t('Error View claim') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ t('You are not authorised to view the claim!') }}</h1>
+      <p>{{ t('There was an error during your last operation. Please try again later.') }}</p>
+      <a href="/first-contact/claim-reference">{{ t('Click here to try again') }}</a>
+    </div>
+  </div>
+{% endblock %}

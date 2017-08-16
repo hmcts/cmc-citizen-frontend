@@ -1,0 +1,43 @@
+{% extends "layout.njk" %}
+
+{% set title = t('Resolving dispute | Money claim') %}
+{% set heading = t('Resolving this dispute') %}
+
+{% from "includes/macros/form.njk" import csrfProtection, yesNoRadio, submitButton, errorSummary %}
+
+{% block content %}
+
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <p>{{ t("You should try to solve the dispute directly with the party before making a claim by:") }}</p>
+
+    <ul class="list-bullet form-group">
+      <li>{{ t("Speaking to them (send an email or letter if you want a record)") }}.</li>
+      <li>{{ t("Telling them what you believe they owe you and why") }}.</li>
+      <li>{{ t("Explaining that if you can't reach an agreement (such as a timetable for paying the money) you'll make a legal money claim") }}.</li>
+      <li>{{ t("Telling them that they might have to pay the full amount as well as") }}
+        <a href="http://hmctsformfinder.justice.gov.uk/HMCTS/GetLeaflet.do?court_leaflets_id=264">
+          {{ t("fees and other costs") }}</a>
+        {{ t('if they ‘defend the claim’, and that they could get a <a href="%s"> County Court Judgment (CCJ) </a> registered against them',
+          {
+            postProcess: 'sprintf',
+            sprintf: ['https://www.gov.uk/county-court-judgments-ccj-for-debt']
+          }
+        ) | safe
+        }}</li>
+    </ul>
+
+    <p class="panel panel-border-wide form-group">
+      {{ t("It might count against you in court if you don’t try to sort out the dispute with the person directly, before you make an official claim") }}.
+    </p>
+
+    <form novalidate method="post">
+      {{ csrfProtection(csrf) }}
+
+      {{ submitButton("I confirm I've read this") }}
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}

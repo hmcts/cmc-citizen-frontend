@@ -1,0 +1,178 @@
+{% macro input(label, name, form, hint='', type='text', inputClass='', autocomplete='on') %}
+  {% set error = form.errorFor(name) %}
+  <div class="form-group {% if error %} form-group-error {% endif %}">
+    <label for="{{ name }}" id="{{ name }}[label]" class="form-label">{{ label }}
+      {% if hint != '' %}
+        <span class="form-hint">{{ hint }}</span>
+      {% endif %}
+    </label>
+    <span class="error-message">{{ error }}</span>
+    <input id="{{ name }}" name="{{ name }}" type="{{ type }}" autocomplete="{{ autocomplete }}" class="form-control {{ inputClass }} {% if error %} form-control-error {% endif %}" value="{{ form.valueFor(name) }}">
+  </div>
+{% endmacro %}
+
+{% macro csrfProtection(token) %}
+  <input type="hidden" name="_csrf" value="{{ token }}">
+{% endmacro %}
+
+{% macro textInput(label, name, form, hint='', inputClass='', autocomplete='on') %}
+  {{ input(label, name, form, hint, 'text', inputClass, autocomplete) }}
+{% endmacro %}
+
+{% macro textInputInline( name, form, inputClass='', prefixClass='') %}
+  {% set error = form.errorFor(name) %}
+  <label for="{{ name }}"></label>
+  <span class="{{ prefixClass }}">
+    <input id="{{ name }}" name="{{ name }}" type="text" class="form-control {{ inputClass }} {% if error %} form-control-error {% endif %}" value="{{ form.valueFor(name) }}">
+  </span>
+{% endmacro %}
+
+{% macro emailInput(label, name, form, hint='') %}
+  {{ input(label, name, form, hint, 'email') }}
+{% endmacro %}
+
+{% macro textArea(label, name, form, rows=5) %}
+  {% set error = form.errorFor(name) %}
+  <div class="form-group {% if error %} form-group-error {% endif %}">
+    <span class="error-message">{{ error }}</span>
+    <label for="{{ name }}" id="{{ name }}[label]">{{ label }}</label>
+    <textarea id="{{ name }}" name="{{ name }}" rows="{{ rows }}" class="form-control form-control-3-4 {% if error %} form-control-error {% endif %}">{{ form.valueFor(name) }}</textarea>
+  </div>
+{% endmacro %}
+
+{% macro submitButton(label) %}
+  <div class="form-group">
+    <input type="submit" class="button" value="{{ t(label) | default(t('Continue')) }}">
+  </div>
+{% endmacro %}
+
+{% macro saveAndContinueButton() %}
+  {{ submitButton('Save and continue') }}
+{% endmacro %}
+
+{% macro linkButton(label, name, class) %}
+  <input type="submit" class="{{ class }}" name="{{ name }}" value="{{ t(label) }}">
+{% endmacro %}
+
+{% macro yesNoRadio(label, name, form) %}
+  {{ radioGroup(
+      label,
+      name,
+      [
+        { label: 'Yes', value: true },
+        { label: 'No', value: false }
+      ],
+      form,
+      isInline = true
+    )
+  }}
+{% endmacro %}
+
+{% macro radioOption(label, name, form, value, hint = '', checked = form.valueFor(name) == value, bold = false) %}
+  {{ option(label, name, form, value, 'radio', hint, checked, bold) }}
+{% endmacro %}
+
+{% macro checkboxOption(label, name, form, value, hint = '', checked = false, bold = false) %}
+  {{ option(label, name, form, value, 'checkbox', hint, checked, bold) }}
+{% endmacro %}
+
+{% macro option(label, name, form, value, type, hint = '', checked = false, bold = false) %}
+  <div class="multiple-choice" data-target="{{ name }}-{{ value }}">
+    {% set idValue = name + value | replace(' ', '') %}
+    <input id="{{ idValue }}" type="{{ type }}" name="{{ name }}" value="{{ value }}" {% if checked %} checked="checked" {% endif %}>
+    <label for="{{ idValue }}">
+      {% if hint == '' %}
+        {{ t(label) }}
+      {% else %}
+        {% if bold %}
+          <strong class="bold-small">{{ t(label) }}</strong>
+        {% else %}
+          {{ t(label) }}
+        {% endif %}
+        <br>
+        {{ t(hint) }}
+      {% endif %}
+    </label>
+  </div>
+{% endmacro %}
+
+{% macro checkboxGroup(label, name, options, form, isInline = false, bold = false, legendHidden = false) %}
+  {% set error = form.errorFor(name) %}
+  {% set selection = form.valueFor(name) %}
+  <div class="form-group {% if error %} form-group-error {% endif %}">
+    <fieldset id="{{ name }}[label]" {% if isInline %} class="inline" {% endif %}>
+      <legend>
+        <span class="form-label-bold {% if legendHidden %}visually-hidden{% endif %}">
+          {{ label }}
+        </span>
+        <span class="error-message">{{ t(error) }}</span>
+      </legend>
+      {% for option in options %}
+        {{ checkboxOption(
+          label = option.label,
+          name = name,
+          form = form,
+          value = option.value,
+          hint = option.hint,
+          checked = (selection === option.value),
+          bold = bold
+        )
+        }}
+      {% endfor %}
+    </fieldset>
+  </div>
+{% endmacro %}
+
+
+{% macro radioGroup(label, name, options, form, isInline = false) %}
+  {% set error = form.errorFor(name) %}
+  {% set selection = form.valueFor(name) %}
+  <div class="form-group {% if error %} form-group-error {% endif %}">
+    <fieldset id="{{ name }}[label]" {% if isInline %} class="inline" {% endif %}>
+      <legend>
+        <span class="form-label-bold">
+          {{ label }}
+        </span>
+        <span class="error-message">{{ t(error) }}</span>
+      </legend>
+      {% for option in options %}
+        {{ radioOption(
+            label = option.label,
+            name = name,
+            form = form,
+            value = option.value,
+            hint = option.hint,
+            checked = (selection === option.value),
+            bold = option.bold
+          )
+        }}
+      {% endfor %}
+    </fieldset>
+  </div>
+{% endmacro %}
+
+{% macro errorSummary(form) %}
+  {% if form.hasErrors() %}
+    <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
+      <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
+        {{ t('There was a problem') }}
+      </h1>
+      <ul class="error-summary-list">
+        {% for error in form.errors %}
+          <li><a href="#{{ error.fieldName }}[label]">{{ t(error.message) }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro addressInput(form, fieldName) %}
+  {{ textInput(t('Address line 1'), fieldName + '[line1]', form) }}
+  {{ textInput(t('Address line 2 (optional)'), fieldName + '[line2]', form) }}
+  {{ textInput(t('Town or city'), fieldName + '[city]', form) }}
+  {{ textInput(t('Postcode'), fieldName + '[postcode]', form, '', 'postcode') }}
+{% endmacro %}
+
+{% macro nameInput(label = 'Your full name', form) %}
+  {{ textInput(t(label), 'name', form, autocomplete='name') }}
+{% endmacro %}

@@ -1,0 +1,35 @@
+.action-panel {
+  background-color: $grey-3;
+  padding: 15px 15px 30px;
+  text-align: center;
+
+  .flush-top {
+    font-weight: 700;
+    margin-top: 0;
+  }
+
+  p {
+    margin-bottom: 0;
+    text-align: center;
+  }
+}
+
+.claim-dashboard {
+  td {
+    &:nth-child(1) {
+      width: 20%;
+    }
+
+    &:nth-child(2) {
+      width: 25%;
+    }
+
+    &:nth-child(3) {
+      width: 20%;
+    }
+
+    &:nth-child(4) {
+      width: 35%;
+    }
+  }
+}

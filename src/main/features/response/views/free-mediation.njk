@@ -1,0 +1,90 @@
+{% extends "layout.njk" %}
+{% from "includes/macros/form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary %}
+
+{% set title = t("Money claim") %}
+
+{% set heading = t("Free mediation") %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <p class="lede">
+        {{ t("You might feel you need to go to a hearing now. However, many people resolve their dispute before a hearing by taking part in telephone mediation.") }}</p>
+
+      <p>{{ t("A mediator will:") }}</p>
+
+      <ul class="list list-bullet">
+        <li>{{ t("listen to each side separately - you won’t talk to directly to the other side") }}</li>
+        <li>{{ t("ask you to consider what the other side says, but won’t make you compromise") }}</li>
+        <li>{{ t("help you reach an agreement, if possible") }}</li>
+      </ul>
+
+      <h2 class="heading-medium">
+        {{ t("Will you try mediation?") }}
+      </h2>
+
+      <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        <div class="form-group">
+          <fieldset>
+
+            <legend id="option[label]" class="visually-hidden">{{ t("Will you try mediation?") }}</legend>
+
+            <p>{{ t("Over 68% of people who use our Mediation Service settle on the day.*") }}</p>
+
+            {{
+              radioOption(
+                label = t("Yes, I want help to resolve this dispute"),
+                name = 'option',
+                form = form,
+                value = 'yes'
+              )
+            }}
+            <div class="panel panel-border-narrow js-hidden" id="option-yes">
+              <p>
+              {{
+                t("If both you and %s say yes, we'll contact you to set up an appointment and answer any questions you have.",
+                  {
+                   postProcess: 'sprintf',
+                   sprintf: [ claimantFullName ]
+                  }
+                )
+              }}
+              </p>
+            </div>
+            {{
+              radioOption(
+                label = t("No, I don't want mediation"),
+                name = 'option',
+                form = form,
+                value = 'no'
+              )
+            }}
+
+            <div class="panel panel-border-narrow js-hidden" id="option-no">
+              <p>
+                {{
+                  t("If you can reach an agreement with %s you don't need to go to a hearing. You'll need to explain your side and if the court decides you owe the money, you might have to pay more or get a <a href='%s'>County Court Judgment (CCJ)</a> made against you.",
+                  {
+                    postProcess: 'sprintf',
+                    sprintf: [
+                      claimantFullName,
+                      'https://www.gov.uk/county-court-judgments-ccj-for-debt'
+                    ]
+                  }) | safe
+                }}
+              </p>
+            </div>
+          </fieldset>
+        </div>
+        <div class="form-group">
+          {{ saveAndContinueButton() }}
+        </div>
+      </form>
+      <p>{{ t("* Source: Money Claim Mediation Service statistics, April 2015 to March 2016.") }}</p>
+    </div>
+  </div>
+{% endblock %}
+

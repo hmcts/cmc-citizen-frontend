@@ -1,0 +1,48 @@
+{% extends "layout.njk" %}
+{% from "includes/macros/form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
+
+{% set title = t("Money claim") %}
+
+{% set heading = t("Defence options") %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        <div class="form-group">
+          {{ radioGroup(
+          'What do you want to do?',
+          'counterClaim',
+          [
+          {
+            label: 'Defend now',
+            value: false,
+            hint: t('Prepare your defence now. You can save a draft as you go but you must submit it by %s .',
+            {
+              postProcess: 'sprintf',
+              sprintf: [responseDeadline | date]
+            }
+            ),
+            bold: true
+          },
+          {
+            label: 'Defend now and also make a counterclaim',
+            value: true,
+            hint: "You'll need to complete the defence and counterclaim form.",
+            bold: true
+          }
+          ],
+          form
+          ) }}
+        </div>
+        <div class="form-group">
+          {{ saveAndContinueButton() }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+

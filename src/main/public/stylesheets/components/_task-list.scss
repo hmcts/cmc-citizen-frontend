@@ -1,0 +1,49 @@
+.task-group {
+  margin-bottom: 4rem;
+}
+
+.task-number {
+  margin-right: 32px;
+}
+
+.task {
+  border-bottom: 1px solid $grey-2;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+
+  &:first-of-type {
+    border-top: 1px solid $grey-2;
+  }
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.task-name {
+  margin-left: 70px;
+}
+
+.task-finished {
+  float: right;
+
+  strong {
+    background-color: $link-colour;
+    color: $white;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 1.25;
+    padding: 3px 6px 0;
+  }
+}
+
+.due-or-overdue {
+  color: $error-colour;
+  font-weight: bold;
+}

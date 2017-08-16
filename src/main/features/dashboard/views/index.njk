@@ -1,0 +1,128 @@
+{% extends "layout.njk" %}
+{% from "includes/macros/form.njk" import submitButton, errorSummary %}
+{% from "includes/macros/timeRemaining.njk" import timeRemaining %}
+{% from "includes/macros/support.njk" import supportWidget %}
+
+{% set title = 'Money claim' %}
+{% set heading = 'Your money claims account' %}
+{% set headingSize = 'large' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <div class="text">
+        <p class="lede">{{ t('Use this service to:') }}</p>
+        <ul class="list list-bullet">
+          <li>{{ t('make a money claim') }}</li>
+          <li>{{ t('view a money claim made against you') }}</li>
+          <li>{{ t('manage a money claim') }}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="column-one-third">
+      <div class="action-panel">
+        {% if not claimDraftSaved %}
+          <p class="heading-small flush-top">{{ t('Make a money claim') }}</p>
+          <p>
+            <a id="start-now" class="button" href="{{ paths.claimStartPage.uri }}">{{ t('Start now') }}</a>
+          </p>
+        {% endif %}
+
+        {% if claimDraftSaved %}
+          <p class="heading-small panel-body flush-top">{{ t('Manage money claim') }}</p>
+          <p>
+            <a id="continue-claim" class="button" href="{{ paths.claimTaskListPage.uri }}">
+              {{ t('Continue with new claim') }}
+            </a>
+          </p>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if claimsAsClaimant | length or claimDraftSaved %}
+      <div class="column-full">
+        <h2 class="heading-medium"> {{ t('Claims you’ve made or are in progress') }}</h2>
+        <table class="claim-dashboard claims">
+          <thead>
+          <tr>
+            <th scope="col">{{ t('Claim number') }}</th>
+            <th scope="col">{{ t('Defendant name') }}</th>
+            <th scope="col">{{ t('Claim amount') }}</th>
+
+            <th scope="col">{{ t('Status') }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% if claimDraftSaved %}
+            <tr class="draft">
+              <td><a href="{{ paths.claimTaskListPage.uri }}">{{ t('Draft claim') }}</a></td>
+              <td>-</td>
+
+              <td>-</td>
+              <td>{{ t('In progress') }}</td>
+            </tr>
+          {% endif %}
+          {% for claim in claimsAsClaimant %}
+            <tr class="claims default">
+              <td><a href="/dashboard/{{ claim.externalId }}/claimant">{{ claim.claimNumber }}</a></td>
+              <td>{{ claim.claimData.defendant.name }}</td>
+              <td>{{ claim.totalAmount | numeral }}</td>
+              <td>{{ t('Your claim is being processed. We will email you to explain what to do next.') }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+
+    {% if claimsAsDefendant | length or responseDraftSaved %}
+      <div class="column-full">
+        <h2 class="heading-medium"> {{ t('Claims made against you') }}</h2>
+        <table class="claim-dashboard claims">
+          <thead>
+          <tr>
+            <th scope="col">{{ t('Claim number') }}</th>
+            <th scope="col">{{ t('Claimant name') }}</th>
+            <th scope="col">{{ t('Claim amount') }}</th>
+
+            <th scope="col">{{ t('Status') }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% if responseDraftSaved %}
+            <tr class="draft">
+              <td><a href="{{ paths.responseTaskListPage.uri }}">Draft response</a></td>
+              <td>-</td>
+
+              <td>-</td>
+              <td>In progress</td>
+            </tr>
+          {% endif %}
+          {% for claim in claimsAsDefendant %}
+            <tr class="claims default">
+              {% if claim.respondedAt %}
+                {% set url = '/dashboard/' + claim.externalId + '/defendant' %}
+              {% else %}
+                {% set url = '/response/task-list' %}
+              {% endif %}
+              <td><a href="{{ url }}">{{ claim.claimNumber }}</a></td>
+              <td>{{ claim.claimData.claimant.name }}</td>
+              <td>{{ claim.totalAmount | numeral }}</td>
+              {% if claim.respondedAt %}
+                <td>{{ t('Your reponse is being processed. We will email you to explain what to do next.') }}</td>
+              {% else %}
+                <td>
+                  {{ t('Respond to claim') }}
+                  <span class="block">
+                    {{ timeRemaining(claim.remainingDays, isAfter4pm) }}
+                  </span>
+                </td>
+              {% endif %}
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

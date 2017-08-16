@@ -1,0 +1,28 @@
+{
+  "idam": {
+    "authentication-web": {
+      "url": "http://localhost:18000"
+    },
+    "api": {
+      "url": "http://localhost:18080"
+    },
+    "service-2-service-auth": {
+      "url": "http://localhost:14552"
+    }
+  },
+  "claim-store": {
+    "url": "http://localhost:14400"
+  },
+  "draft-store": {
+    "url": "http://localhost:18800"
+  },
+  "fees": {
+    "url": "http://localhost:18182"
+  },
+  "pay": {
+    "url": "http://localhost:14421"
+  },
+  "pdf-service": {
+    "url": "http://localhost:15500"
+  }
+}

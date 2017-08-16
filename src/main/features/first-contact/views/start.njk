@@ -1,0 +1,89 @@
+{% extends "layout.njk" %}
+
+{% set title = t('Money claim') %}
+
+{% from "includes/macros/form.njk" import submitButton %}
+{% from "includes/macros/support.njk" import supportWidget %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ t('Respond to a money claim') }}</h1>
+
+      <p>{{ t('You need to respond to the money claim within 14 days of receiving the claim.') }}</p>
+
+      <p>{{ t('Your response will be sent to the claimant (the person or organisation who says you owe them money).'
+        + ' The claimant can apply for a <a href="%s">County Court Judgment (CCJ)</a> against you if you don’t respond'
+        + ' in time. They can then use this to get the money from you. For example, they could hire bailiffs.'
+        , { postProcess: 'sprintf', sprintf: ['https://www.gov.uk/county-court-judgments-ccj-for-debt'] }) | safe }}</p>
+
+      <p>{{ t('A CCJ may make it harder to get credit, such as a mobile phone contract, credit card or mortgage.') }}</p>
+
+      <div class="clearfix">
+        <a class="button button-start" href="claim-reference" role="button">{{ t('Start now') }}</a>
+      </div>
+
+      <h2 class="heading-medium">{{ t('Your response options') }}</h2>
+
+
+      <h3 class="heading-small">{{ t('Accept the money claim') }}</h3>
+
+      <p>
+        {{ t('If you accept the claim is owed you can contact the claimant yourself and pay the money.'
+        + ' Ask them to let the court know when they have your payment.') }}
+      </p>
+
+      <p>
+       {{ t('If you can’t afford to pay it all at once you can suggest a repayment plan for them to consider.')}}
+      </p>
+
+      <h3 class="heading-small">{{ t('Reject the claim') }}</h3>
+
+      <p>{{ t('If you don’t accept you owe the amount of money claimed you can prepare and submit your defence online.'
+        +  ' You might have to go to a hearing - it can take up to 7 months to get a hearing date.') }}</p>
+
+      <h3 class="heading-small">{{ t('Make a deal') }}</h3>
+
+      <p>{{ t('You can try to settle the claim by making the claimant an offer. If the claimant rejects your offer you’ll'
+        + ' have to go a hearing. The claimant can’t mention that you made them a suggestion at the hearing.') }}</p>
+
+      <h3 class="heading-small">{{ t('If you think you’re owed money') }}</h3>
+      <p>
+        {{ t('If you believe the claimant owes you money you can make a claim against them (‘counterclaim’).'
+          + ' Download and fill in <a href="%s" target="_blank"> Defence and Counterclaim form N9B</a>.',
+        { postProcess: 'sprintf', sprintf: ['http://hmctsformfinder.justice.gov.uk/HMCTS/GetForm.do?court_forms_id=659'] }) | safe }}
+      </p>
+      <p>
+        {{ t('You might have to pay a <a href="%s">claim fee</a>.',
+        { postProcess: 'sprintf', sprintf: ['https://www.gov.uk/make-court-claim-for-money/court-fees'] }) | safe }}
+      </p>
+
+      <h3 class="heading-small">{{ t("If you can't afford to pay the money back") }}</h3>
+      <p>
+        {{ t('You might be able to get free legal advice to help you deal with debt from organisations like'
+           + ' <a href="%s" target="_blank">StepChange</a>.',
+        { postProcess: 'sprintf', sprintf: ['https://www.stepchange.org/'] }) | safe }}
+
+      </p>
+
+      {{ supportWidget('Help to use this service') }}
+
+    </div>
+    <div class="column-third">
+      <aside class="govuk-related-items" role="complementary">
+        <h2 class="heading-medium" id="subsection-title">{{ t("Support") }}</h2>
+        <nav role="navigation" aria-labelledby="subsection-title">
+          <ul class="font-xsmall">
+            <li><a href="https://www.gov.uk/make-court-claim-for-money/court-fees">{{ t("Money claim fees") }}</a></li>
+            <li><a href="/other-options">{{ t("Other options") }}</a></li>
+            <li><a class="external" rel="external"
+                   href="https://courttribunalfinder.service.gov.uk/courts/county-court-business-centre-ccbc"
+                   target="_blank">{{ t("Contact us") }}</a></li>
+          </ul>
+        </nav>
+      </aside>
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,381 @@
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Money Claim response receipt</title>
+  <style>
+    @page {
+      size: 8.5in 11in;
+      margin: 10%;
+
+      @top-right {
+        content: "Page " counter(page) " of " counter(pages);
+      }
+      @bottom-left {
+        content: "OCON11";
+      }
+    }
+
+    html {
+      /*noinspection CssNoGenericFontName*/
+      font-family: Arial Unicode MS; /* Name needs to be unquoted, a limitation of OpenPDF which we use in the backend */
+    }
+
+    body {
+      counter-reset: section;
+    }
+
+    .section {
+      margin-bottom: 25px;
+    }
+
+    .section .section-heading {
+      margin-bottom: 10px;
+    }
+
+    .section .section-heading strong:before {
+      counter-increment: section;
+      content: counter(section) ". ";
+    }
+
+    .next-steps .section-heading strong:before {
+      content: "";
+    }
+
+    table {
+      width: 100%;
+      border-spacing: 0;
+    }
+
+    table td {
+      border-top: 1px solid #999;
+      padding: 5px;
+    }
+    table tr:last-child td {
+      border-bottom: 1px solid #999;
+    }
+
+    table td:first-child {
+      width: 220px;
+      vertical-align: top;
+    }
+
+    table td:last-child {
+      width: auto;
+    }
+
+    header table td, header table tr:last-child td {
+      border: none;
+    }
+
+    header p, header h2 {
+      text-align:right;
+      margin: 0;
+      padding: 0;
+    }
+
+    header td {
+      margin: 0;
+      padding: 0;
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <table>
+    <tr>
+      <td colspan="2"><p>In the County Court Business Centre Online Court</p></td>
+    </tr>
+    <tr>
+      <td style="margin-left: 20%"><h2><strong>Claim number: </strong></h2></td>
+      <td><h2 style="font-weight: normal"> {{ claim.claimNumber }}</h2></td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <p>{{ defendant.fullName }}’s defence</p>
+      </td>
+    </tr>
+    <tr>
+      <td><p><strong>Defence submitted on: </strong></p></td>
+      <td><p>{{ defence.respondedAt }}</p></td>
+    </tr>
+  </table>
+</header>
+
+<br />
+
+<div class="section">
+  <div class="section-heading">
+    <strong>Claimant’s details</strong>
+  </div>
+  <div class="section-body">
+    <table>
+      <tr>
+        <td>Name:</td>
+        <td>
+          {{ claimant.fullName }}
+        </td>
+      </tr>
+      <tr>
+        <td>Address:</td>
+        <td>
+          {{ claimant.address.lineOne }}
+          <br/>
+          {% if claimant.address.lineTwo is defined %}
+            {{ claimant.address.lineTwo }}
+            <br/>
+          {% endif %}
+          {{ claimant.address.townOrCity }}
+          <br/>
+          {{ claimant.address.postcode }}
+        </td>
+      </tr>
+      <tr>
+        <td>Email:</td>
+        <td>
+          {{ claimant.email }}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-heading">
+    <strong>Defendant’s details</strong>
+  </div>
+  <div class="section-body">
+    <table>
+      <tr>
+        <td>Name:</td>
+        <td>
+          {{ defendant.fullName }}
+        </td>
+      </tr>
+      <tr>
+        <td>Address:</td>
+        <td>
+          {{ defendant.address.lineOne }}
+          <br/>
+          {% if defendant.address.lineTwo is defined %}
+            {{ defendant.address.lineTwo }}
+            <br/>
+          {% endif %}
+          {{ defendant.address.townOrCity }}
+          <br/>
+          {{ defendant.address.postcode }}
+        </td>
+      </tr>
+      {% if defendant.correspondenceAddress is not empty %}
+      <tr>
+        <td>Correspondence address:</td>
+        <td>
+          {{ defendant.correspondenceAddress.lineOne }}
+          <br/>
+          {% if defendant.correspondenceAddress.lineTwo is defined %}
+            {{ defendant.correspondenceAddress.lineTwo }}
+            <br/>
+          {% endif %}
+          {{ defendant.correspondenceAddress.townOrCity }}
+          <br/>
+          {{ defendant.correspondenceAddress.postcode }}
+        </td>
+      </tr>
+      {% endif %}
+      <tr>
+        <td>Email:</td>
+        <td>
+          {{ defendant.email }}
+        </td>
+      </tr>
+      <tr>
+        <td>Date of birth:</td>
+        <td>
+          {{ defendant.dateOfBirth }}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-heading">
+    <strong>Claim</strong>
+  </div>
+  <div class="section-body">
+    <table>
+      <tr>
+        <td>Reason for claim:</td>
+        <td>
+          {{ claim.reason }}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section">
+    <h3>Defendant’s defence:</h3>
+  </div>
+  <div class="section-body">
+    <table border="1">
+      <tr>
+        <td>Defence:</td>
+        <td>
+          {{ defence.response }}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-heading">
+    <strong>Claim amount</strong>
+  </div>
+  <div class="section-body">
+    <table>
+      <tr>
+        <td>Claim amount:</td>
+        <td>
+          {{ claim.amount }}
+        </td>
+      </tr>
+      {% if claim.interest is defined %}
+      <tr>
+        <td>Interest rate:</td>
+        <td>
+          {{ claim.interest.rate }}% a year
+        </td>
+      </tr>
+      <tr>
+        <td>Explanation:</td>
+        <td>
+          The claimant reserves the right to claim interest under Section 69 of the County Courts Act 1984
+        </td>
+      </tr>
+      <tr>
+        <td>Date interest is claimed from:</td>
+        <td>
+          {{ claim.interest.dateClaimedFrom }}
+        </td>
+      </tr>
+      {% if claim.interest.claimedAtDateOfSubmission is defined %}
+      <tr>
+        <td>Total interest claimed to the date of submission:</td>
+        <td>
+          {{ claim.interest.claimedAtDateOfSubmission }}
+        </td>
+      </tr>
+      {% endif %}
+      {% endif %}
+      <tr>
+        <td>Accrued interest:</td>
+        <td>
+          Interest will accrue at the daily rate of {{ claim.interest.dailyAmount }} up to the date of judgment.
+        </td>
+      </tr>
+      <tr>
+        <td>Claim fee:</td>
+        <td>
+          {{ claim.issueFee }}
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Total claim amount:</strong></td>
+        <td>
+          <strong>{{ claim.totalAmount }}</strong>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-heading">
+    <strong>Statement of Truth</strong>
+  </div>
+  <div class="section-body">
+    <table>
+      <tr>
+        <td>Declaration:</td>
+        <td>
+          I {{ defendant.fullName }} believe that the facts stated in this defence form are true.
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          {{ defendant.fullName }}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="section">
+    <h3>What happens next</h3>
+</div>
+
+<div class="section next-steps">
+  <div class="section-heading">
+    <strong>Settle the claim</strong>
+  </div>
+  <div class="section-body">
+    <table>
+      <tr>
+        <td></td>
+        <td>
+          Unless you’ve been asked not to, you can still contact {{ claimant.fullName }} directly.
+          If you can reach an agreement you may not have to go to a hearing.
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="section next-steps">
+  <div class="section-heading">
+    <strong>Mediation</strong>
+  </div>
+  <div class="section-body">
+    <table>
+      <tr>
+        <td></td>
+        <td>
+          {% if defence.freeMediation == 'yes' %}
+            <p>You have asked to use the mediation service. We’ll contact the claimant to ask if they want to mediate.
+              If they want to mediate then we’ll contact you to arrange a mediation appointment.</p>
+          {% else %}
+            <p>You have chosen not to use the free mediation service.
+              The case will be reviewed by a judge and might go to a hearing.
+              We’ll contact you if a hearing date is scheduled and explain what you need to do to prepare.</p>
+          {% endif %}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="section next-steps">
+  <div class="section-heading">
+    <strong>View your response online</strong>
+  </div>
+  <div class="section-body">
+    <ul>
+      <li>Go to <a href="{{ responseDashboardUrl }}">{{ responseDashboardUrl }}</a></li>
+      <li>Enter your your email address</li>
+      <li>Enter your password</li>
+    </ul>
+  </div>
+</div>
+
+<p>
+  This document sets out the claim issued against you and your response to the claim.
+  This information will be shared with the claimant.
+</p>
+
+</body>
+</html>

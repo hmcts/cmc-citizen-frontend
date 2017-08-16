@@ -1,0 +1,20 @@
+{% extends "layout.njk" %}
+{% from "includes/macros/form.njk" import csrfProtection, textInput, saveAndContinueButton, errorSummary %}
+
+{% set title = t('Money claim') %}
+{% set heading = t('What is your mobile number?') %}
+
+{% block content %}
+  <div class="grid-row">
+      <div class="column-two-thirds">
+
+        <p>{{ t("We might need to contact you about your defence. We’ll only call on weekdays between 9:30am and 5pm.") }}</p>
+        <form method="post">
+          {{ csrfProtection(csrf) }}
+
+          {{ textInput(t('Mobile number'), 'number', form) }}
+          {{ saveAndContinueButton() }}
+        </form>
+      </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "layout.njk" %}
+
+{% set title = t('Money Claim | Page not found') %}
+{% set heading = t('Page not found') %}
+
+{% block content %}
+  <p>
+    {{ t('You can return to <a href="/">Civil Money Claims</a> and start your claim or defence again.') | safe }}
+  </p>
+
+  <a class="button" href="/">{{ t('Start again') }}</a>
+{% endblock %}

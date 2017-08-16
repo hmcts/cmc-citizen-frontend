@@ -1,0 +1,62 @@
+{
+  "security": {
+    "referrerPolicy": "origin"
+  },
+  "idam": {
+    "authentication-web": {
+      "url": "https://localhost:8000"
+    },
+    "api": {
+      "url": "http://localhost:8080"
+    },
+    "service-2-service-auth": {
+      "url": "http://localhost:4552",
+      "totpSecret": "AAAAAAAAAAAAAAAA",
+      "microservice": "cmc"
+    }
+  },
+  "claim-store": {
+    "url": "http://localhost:4400"
+  },
+  "draft-store": {
+    "url": "http://localhost:8800",
+    "apiVersion": "v2"
+  },
+  "session": {
+    "cookieName": "SESSION_ID"
+  },
+  "analytics": {
+    "gaTrackingId": "",
+    "piwikTrackingId": "2",
+    "piwikTrackingSite": "https://hmctspiwik.useconnect.co.uk/"
+  },
+  "fees": {
+    "url": "http://localhost:8182",
+    "issueFeeCode": "onlinefees",
+    "hearingFeeCode": "hearingfees"
+  },
+  "pay": {
+    "url": "http://localhost:4421"
+  },
+  "pdf-service": {
+    "url": "http://localhost:5500",
+    "apiVersion": "v1"
+  },
+  "support": {
+    "contact-email": "i-am-configurable@example.com"
+  },
+  "feedback": {
+    "serviceSurvey": {
+      "url": "#"
+    },
+    "feedbackSurvey": {
+      "url": "#"
+    },
+    "reportProblemSurvey": {
+      "url": "#"
+    }
+  },
+  "http": {
+    "timeout": 10000
+  }
+}

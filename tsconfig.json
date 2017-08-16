@@ -1,0 +1,75 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "lib": [
+      "es6",
+      "es2017.object",
+      "dom"
+    ],
+    "target": "es5",
+    "baseUrl": "src/main",
+    "paths": {
+      "app/*": [
+        "app/*"
+      ],
+      "client/*": [
+        "app/client/*"
+      ],
+      "drafts/*": [
+        "app/drafts/*"
+      ],
+      "claims/*": [
+        "app/claims/*"
+      ],
+      "fees/*": [
+        "app/fees/*"
+      ],
+      "forms/*": [
+        "app/forms/*"
+      ],
+      "health/*": [
+        "app/health/*"
+      ],
+      "idam/*": [
+        "app/idam/*"
+      ],
+      "logging/*": [
+        "app/logging/*"
+      ],
+      "models/*": [
+        "app/models/*"
+      ],
+      "utils/*": [
+        "app/utils/*"
+      ],
+      "modules/*": [
+        "modules/*"
+      ],
+      "routes/*": [
+        "routes/*"
+      ],
+      "common/*": [
+        "common/*"
+      ],
+      "claim/*": [
+        "features/claim/*"
+      ],
+      "first-contact/*": [
+        "features/first-contact/*"
+      ],
+      "response/*": [
+        "features/response/*"
+      ],
+      "dashboard/*": [
+        "features/dashboard/*"
+      ]
+    },
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ]
+  }
+}

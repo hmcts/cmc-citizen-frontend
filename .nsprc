@@ -1,0 +1,9 @@
+{
+  "exceptions": [
+    // Only vulnerability here is if you $.get an untrusted url
+    // https://github.com/jquery/jquery/issues/2432#issuecomment-235579713
+    // Can't upgrade jquery unfortunately because the only fixed version is >3
+    // and >3 doesn't support IE 8
+    "https://nodesecurity.io/advisories/328"
+  ]
+}

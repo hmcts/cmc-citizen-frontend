@@ -1,0 +1,13 @@
+$report-problem-colour: #454a4c;
+
+.report-error {
+  clear: both;
+  color: $report-problem-colour;
+  font-size: 16px;
+  margin: 90px auto -80px 0;
+
+  span {
+    display: block;
+    font-size: 14px;
+  }
+}

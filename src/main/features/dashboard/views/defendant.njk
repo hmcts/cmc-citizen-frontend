@@ -1,0 +1,41 @@
+{% extends "layout.njk" %}
+
+{% set title = t('Money claim') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-full">
+      <h1 class="heading-large">
+        <span class="heading-secondary">{{ t('Claim number:') }}</span>
+        {{ claim.claimNumber }}
+      </h1>
+    </div>
+    <div class="column-two-thirds">
+      <h2 class="heading-medium">{{ t('Claim status') }}</h2>
+      <p>{{ t('Your defence is being processed. We will email you to explain what to do next.') }}</p>
+    </div>
+
+    <div class="column-one-third">
+      <div class="meta-data">
+        <ul class="font-xsmall list">
+          <li>
+            <strong class="bold">{{ t('Claimant name:') }}</strong>
+            <span class="block">{{ claim.claimData.claimant.name }}</span>
+          </li>
+          <li>
+            <strong class="bold">{{ t('Claim amount:') }}</strong>
+            <span class="block">{{ claim.totalAmount | numeral }}</span>
+          </li>
+          <li>
+            <strong class="bold">{{ t('Claim details:') }}</strong>
+            <span class="block"><a href="{{ claimReceiptUri }}">{{ t('Download claim details') }}</a></span>
+          </li>
+          <li>
+            <strong class="bold">{{ t('Your response:') }}</strong>
+            <span class="block"><a href="{{ responseReceiptUri }}">{{ t('Download your response') }}</a></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}

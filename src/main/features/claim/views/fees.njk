@@ -1,0 +1,68 @@
+{% extends "layout.njk" %}
+{% from "includes/macros/form.njk" import csrfProtection, yesNoRadio, submitButton %}
+
+{% set title = t('Fees | Money claim') %}
+{% set heading = t("Fees you'll pay") %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+        <p>
+          {{ t("You must pay the claim fee up front. However, we'll add it to the amount you're claiming back from the respondent.") }}
+        </p>
+
+        <table class="form-group">
+          <thead>
+          <tr>
+            <th scope="col"></th>
+            <th class="numeric" scope="col"></th>
+          </tr>
+          </thead>
+          <tbody>
+
+          <tr>
+            <td>{{ t('Claim fee') }}</td>
+            <td class="numeric">£{{ issueFee }}</td>
+          </tr>
+
+          <tr>
+            <td>{{ t('Hearing fee (if your claim goes to a hearing)') }}</td>
+            <td class="numeric">£{{ hearingFee }}</td>
+          </tr>
+
+          <tr>
+            <td>{{ t('Other fees - for example, to update your claim once submitted') }}</td>
+            <td class="numeric">{{ t('varies by case') }}</td>
+          </tr>
+
+          </tbody>
+        </table>
+
+
+        <details class="notice">
+          <summary>{{ t('How these fees are calculated') }}</summary>
+
+          <div class="panel">
+            <p>
+              {{ t("The court fee is based on the amount you're claiming, including any <a class='external' rel='external' href='%s'>interest</a>.", { postProcess: 'sprintf', sprintf: ['https://www.gov.uk/make-court-claim-for-money/work-out-interest']}) | safe }}
+            </p>
+
+          </div>
+        </details>
+
+        <p>
+          {{ t('If you’re on a low income or get certain benefits you might be able to get <a href="%s">help with fees</a>. Do this before you make your claim.', { postProcess: 'sprintf', sprintf: ['https://www.gov.uk/get-help-with-court-fees']}) | safe }}
+        </p>
+
+        <div class="form-group">
+          {{ submitButton(t('Continue')) }}
+        </div>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,8 @@
+.govuk-box-highlight {
+  a {
+    &:visited,
+    &:link {
+      color: $white;
+    }
+  }
+}

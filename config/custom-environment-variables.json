@@ -1,0 +1,62 @@
+{
+  "security": {
+    "referrerPolicy": "SECURITY_REFERRER_POLICY",
+    "hpkp": {
+      "maxAge": "SECURITY_HPKP_MAX_AGE",
+      "pins": "SECURITY_HPKP_PINS"
+    }
+  },
+  "idam": {
+    "authentication-web": {
+      "url": "IDAM_AUTHENTICATION_WEB_URL"
+    },
+    "api": {
+      "url": "IDAM_API_URL"
+    },
+    "service-2-service-auth": {
+      "url": "IDAM_S2S_AUTH",
+      "totpSecret": "IDAM_S2S_TOTP_SECRET"
+    }
+  },
+  "claim-store": {
+    "url": "CLAIM_STORE_URL"
+  },
+  "draft-store": {
+    "url": "DRAFT_STORE_URL",
+    "apiVersion": "DRAFT_STORE_API_VERSION"
+  },
+  "analytics": {
+    "gaTrackingId": "GA_TRACKING_ID",
+    "piwikTrackingId": "PIWIK_TRACKING_ID",
+    "piwikTrackingSite": "PIWIK_TRACKING_SITE"
+  },
+  "session": {
+    "cookieName": "JWT_COOKIE_NAME"
+  },
+  "fees": {
+    "url": "FEES_URL"
+  },
+  "pay": {
+    "url": "PAY_URL"
+  },
+  "pdf-service": {
+    "url": "PDF_SERVICE_URL"
+  },
+  "support": {
+    "contact-email": "CONTACT_EMAIL"
+  },
+  "feedback": {
+    "serviceSurvey": {
+      "url": "SERVICE_SURVEY_URL"
+    },
+    "feedbackSurvey": {
+      "url": "FEEDBACK_SURVEY_URL"
+    },
+    "reportProblemSurvey": {
+      "url": "REPORT_PROBLEM_SURVEY_URL"
+    }
+  },
+  "http": {
+    "timeout": "HTTP_TIMEOUT"
+  }
+}

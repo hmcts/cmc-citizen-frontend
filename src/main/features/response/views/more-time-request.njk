@@ -1,0 +1,47 @@
+{% extends "layout.njk" %}
+{% from "includes/macros/form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
+{% from "includes/macros/table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
+
+{% set title = t("Money claim") %}
+
+{% set heading = t("Do you want more time to respond?") %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <p class="lede">
+        {{ t("You can request an extra 14 days to prepare your case.") }}
+      </p>
+      <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        {{
+          radioGroup(
+            label = "What do you want to do?",
+            name = "option",
+            options = [
+              {
+                label: "Yes, I need an extra 14 days",
+                value: "yes",
+                hint: "You'll have 14 more days to submit your response",
+                bold: true
+              },
+              {
+                label: "No, I don't need more time",
+                value: "no",
+                hint: "",
+                bold: true
+              }
+            ],
+            form = form
+          )
+        }}
+        <div class="form-group">
+          {{ saveAndContinueButton() }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+

@@ -1,0 +1,18 @@
+msgid ""
+msgstr ""
+
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;\n"
+
+msgid "This is a new service – your <a href=\"%s\">feedback</a> will help us to improve it."
+msgstr "Mae hwn yn wasanaeth newydd - bydd eich <a href=\"%s\">adborth</a> yn ein helpu i wella."
+
+msgid "Crown copyright"
+msgstr "Hawlfraint y Goron"
+
+msgid "All content is available under the <a href=\"%s\" rel=\"license\">Open Government Licence v3.0</a>, except where otherwise stated"
+msgstr "Mae’r holl gynnwys ar gael dan <a href=\"%s\" rel=\"license\">Drwydded y Llywodraeth Agored v3.0</a>, ac eithrio lle nodir yn wahanol"
+
+msgid "Welcome to the Money Claim beta"
+msgstr "Croeso i beta Money Claim"

@@ -1,0 +1,11 @@
+{% extends 'layout.njk' %}
+
+{% set heading = 'Error' %}
+
+{% block content %}
+  <h1 class="heading-large">{{ error.message }}</h1>
+  {% if error.status %}
+    <h3 class="heading-medium">{{ error.status }}</h3>
+  {% endif %}
+  <pre class="code">{{ error.stack }}</pre>
+{% endblock %}

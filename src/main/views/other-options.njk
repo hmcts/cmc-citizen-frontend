@@ -1,0 +1,78 @@
+{% extends "layout.njk" %}
+{% set heading = t('Before you make a money claim') %}
+
+{% set title = t('Money claim') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('In some situations a money claim might not be your only or best option') }}</p>
+
+      <h2 class="heading-medium">{{ t('Talk to the person who owes you') }}</h2>
+
+      <p>
+        {{ t("Before you make a claim it’s a good idea to try to sort out the situation with the person who owes first.") }}
+      </p>
+
+      <ul class="list list-bullet">
+        <li>
+          {{ t('Contact them - you can just speak to them, or <a href="%s">send an email or letter</a> if you’d like to have a record.',
+          { postProcess: 'sprintf', sprintf: [
+            'http://www.which.co.uk/consumer-rights/letter/letter-before-small-claims-court-claim'
+            ] }) | safe }}
+        </li>
+        <li>{{ t('Tell them what you believe they owe you and why.') }}</li>
+        <li>
+          {{ t("Explain that if you can’t reach an agreement (such as a timetable for paying the money) you’ll make an official money claim.") }}
+        </li>
+        <li>
+          {{ t('Tell them that they might have to pay the full amount as well as <a href="%s">fees and other costs</a>'
+           + ' if they ‘defend the claim’, and that they could get a <a href="%s">County Court Judgment (CCJ)</a>.'
+          , { postProcess: 'sprintf', sprintf: [
+            'https://www.gov.uk/court-fees-what-they-are',
+            'https://www.gov.uk/county-court-judgments-ccj-for-debt/overview'
+            ] }) | safe }}
+        </li>
+      </uL>
+
+      <h2 class="heading-medium">{{ t('Unpaid invoices and flight delays') }}</h2>
+
+      <p>{{ t('The best way to make a claim depends on the type of claim you’re making:') }}</p>
+
+      <p><a href="https://www.gov.uk/employment-tribunals/when-you-can-claim">{{ t('Employment tribunals') }}</a></p>
+      <p>
+        <a href="https://www.gov.uk/late-commercial-payments-interest-debt-recovery/when-a-payment-becomes-late">
+          {{ t('Late payment of invoices') }}
+        </a>
+      </p>
+      <p>
+        <a href="https://www.caa.co.uk/Passengers/Resolving-travel-problems/Delays-cancellations/Making-a-claim/Claiming-for-costs-and-compensation/">
+          {{ t('Airline claims') }}
+        </a>
+      </p>
+      <p>
+        {{ t('You might be able to use <a href="%s">Resolver</a> which will guide you through reclaiming money from'
+          + ' organisations like utility companies, airlines and shops.',
+        { postProcess: 'sprintf', sprintf: [
+          'https://www.resolver.co.uk/'
+          ] }) | safe }}
+      </p>
+
+      <h2 class="heading-medium">{{ t('Mediation') }}</h2>
+      <p>
+        {{ t('A <a href="%s">mediation service</a> could be quicker and cheaper than going to court.',
+        { postProcess: 'sprintf', sprintf: [
+          'http://civilmediation.justice.gov.uk/'
+          ] }) | safe }}
+      <p>
+        {{ t("Mediation is when an impartial person helps both sides work out an agreement. You can often do this over"
+        + " the phone. And if you don’t want to speak to the person you’re claiming against a mediator can speak to you"
+        + " separately.") }}
+
+      </p>
+
+
+    </div>
+
+  </div>
+{% endblock %}

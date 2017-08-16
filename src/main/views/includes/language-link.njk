@@ -1,0 +1,9 @@
+{% macro link(code, name) %}
+  <a href="?lang={{ code }}">{{ name }}</a>
+{% endmacro %}
+
+{% if language === 'en' %}
+  {{ link('cy', 'Cymraeg') }}
+{% else %}
+  {{ link('en', 'English') }}
+{% endif %}

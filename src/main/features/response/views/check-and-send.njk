@@ -1,0 +1,65 @@
+{% extends "layout.njk" %}
+{% from "includes/macros/table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
+{% from "includes/macros/form.njk" import csrfProtection, submitButton, errorSummary, checkboxGroup %}
+{% from "includes/macros/statement-of-truth.njk" import statementOfTruth %}
+
+{% set title = t("Money claim") %}
+{% set heading = t("Check your answers before submitting your response") %}
+
+{% if defendant.partyDetails.hasCorrespondenceAddress  %}
+  {% set correspondenceAddressLines = [
+    defendant.partyDetails.correspondenceAddress.line1,
+    defendant.partyDetails.correspondenceAddress.line2,
+    defendant.partyDetails.correspondenceAddress.city,
+    defendant.partyDetails.correspondenceAddress.postcode
+  ] %}
+{% else %}
+  {% set correspondenceAddressLines = [t('Same as address')] %}
+{% endif %}
+
+{% block content %}
+  <form novalidate method="post">
+    {{ csrfProtection(csrf) }}
+
+    {{ tableStart("yourDetails", "Your details") }}
+    {{ row("Name:", defendant.fullName, paths.defendantYourDetailsPage.uri) }}
+    {{
+      rowWithMultipleValue(
+        label = "Address:",
+        values = [ defendant.partyDetails.address.line1, defendant.partyDetails.address.line2, defendant.partyDetails.address.city, defendant.partyDetails.address.postcode ],
+        changeLink = paths.defendantAddressPage.uri,
+        bottomBorder = false
+      )
+    }}
+    {{
+      rowWithMultipleValue(
+        label = "Correspondence address:",
+        values = correspondenceAddressLines
+      )
+    }}
+
+    {% set dateOfBirth = defendant.dateOfBirth.date.asString() | date %}
+    {{ row("Date of birth:", dateOfBirth, paths.defendantDateOfBirthPage.uri) }}
+
+    {% set mobilePhone = defendant.mobilePhone.number %}
+    {{ row("Phone:", mobilePhone, paths.defendantMobilePage.uri) }}
+
+    {{ tableEnd() }}
+
+    {{ tableStart("yourResponse", "Your response") }}
+    {{ row('Do you owe the money claimed', response.response.type.displayValue, '/response/response-type') }}
+    {% if response.requireDefence() %}
+      {{ row('Your defence', response.defence.text, '/response/your-defence') }}
+      {{ row('Free mediation', t(response.freeMediation.option) | capitalize, '/response/free-mediation') }}
+    {% endif %}
+    {{ tableEnd() }}
+
+    <div class="form-group">
+      {% if isStatementOfTruthRequired %}
+        {{ statementOfTruth(form, 'I believe that the facts stated in this defence are true') }}
+      {% endif %}
+
+      {{ submitButton('Submit response') }}
+    </div>
+  </form>
+{% endblock %}

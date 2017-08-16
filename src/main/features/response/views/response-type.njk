@@ -1,0 +1,50 @@
+{% extends "layout.njk" %}
+{% from "includes/macros/form.njk" import csrfProtection, errorSummary, radioOption, saveAndContinueButton %}
+
+{% set title = t("Money claim") %}
+
+{% block content %}
+  <div class="grid-row">
+    <h1 class="heading-xlarge">{{ t("Do you owe the money claimed?") }}</h1>
+
+    <form method="POST" novalidate>
+      {{ csrfProtection(csrf) }}
+
+      {% set error = form.errorFor('type') %}
+      <div class="form-group {% if error %} form-group-error {% endif %}">
+        <fieldset id="type[label]">
+          <legend class="visually-hidden">{{ t("Do you owe the money claimed?") }}</legend>
+          {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+
+          {{ radioOption(form = form, name = 'type[value]', value = 'OWE_ALL_PAID_ALL',
+            label = t("I've already paid"), bold = true,
+            hint = t("You need to submit a defence explaining how much you’ve paid the claimant and when you paid.")
+          )}}
+
+          {{ radioOption(form = form, name = 'type[value]', value = 'OWE_ALL_PAID_NONE',
+            label = t("I owe all of the money"), bold = true,
+            hint = t("You need to complete an admission form and explain when you’re going to pay the money.")
+          )}}
+
+          {{ radioOption(form = form, name = 'type[value]', value = 'OWE_SOME_PAID_NONE',
+            label = t("I owe some of the money"), bold = true,
+            hint = t("You need to complete the admission and defence forms. Use these to offer the amount of money you believe you owe and explain why you don't owe the remaining amount.")
+          )}}
+
+          {{ radioOption(form = form, name = 'type[value]', value = 'OWE_ALL_PAID_SOME',
+            label = t("I’ve paid some of the money but still owe some"), bold = true,
+            hint = t("You need to complete the admission and defence forms. Use these to offer the amount of money you believe you owe and explain why you don’t owe the remaining amount.")
+          )}}
+
+          {{ radioOption(form = form, name = 'type[value]', value = 'OWE_NONE',
+            label = t("I reject the money claim"), bold = true,
+            hint = t("Submit your defence.")
+          )}}
+        </fieldset>
+      </div>
+
+      {{ saveAndContinueButton() }}
+    </form>
+  </div>
+{% endblock %}
+
