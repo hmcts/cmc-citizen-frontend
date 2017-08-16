@@ -1,6 +1,8 @@
 {% extends "layout.njk" %}
 
-{% set title = t('Money claim') %}
+{% set title = 'Money claim' %}
+
+{% from "includes/macros/form.njk" import submitButton, csrfProtection %}
 
 {% block content %}
   <div class="grid-row">
@@ -15,10 +17,25 @@
         <h2 class="heading-medium">{{ t('Claim status') }}</h2>
         <div class="panel panel-border-wide">
           <p>
-            {{ t('The defendant %s has not responded to your claim.',
+            {{ t('The defendant %s has not responded to your claim. ',
             { postProcess: 'sprintf', sprintf: [claim.claimData.defendant.name] }) }}
+            {% if claim.eligibleForCCJ %}
+              {{ t('You can request a County Court Judgment (CCJ)') }}
+            {% endif %}
           </p>
         </div>
+
+        {% if claim.eligibleForCCJ %}
+          <p>{{ t('You can only ask for a CCJ at this stage if the defendant has not responded to your claim.') }}</p>
+          <p>{{ t('A CCJ means the court orders the defendant to pay the claim.') }}</p>
+
+          <form novalidate method="post">
+            {{ csrfProtection(csrf) }}
+
+            {{ submitButton('Request a County Court Judgment') }}
+          </form>
+
+        {% endif %}
       </div>
     </div>
 

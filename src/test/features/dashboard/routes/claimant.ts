@@ -6,6 +6,7 @@ import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 
 import { Paths } from 'dashboard/paths'
+import { Paths as CCJPaths } from 'ccj/paths'
 
 import { app } from '../../../../main/app'
 
@@ -50,6 +51,20 @@ describe('Dashboard - claimant page', () => {
         })
       })
     })
+    describe('on POST', () => {
+      checkAuthorizationGuards(app, 'post', claimantPage)
+      context('when user authorised', () => {
+        beforeEach(() => {
+          idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
+        })
 
+        it('should redirect to county court judgment flow', async () => {
+          await request(app)
+            .post(claimantPage)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect.toLocation(CCJPaths.theirDetailsPage.uri))
+        })
+      })
+    })
   })
 })
