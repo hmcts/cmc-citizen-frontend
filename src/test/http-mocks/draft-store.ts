@@ -73,6 +73,10 @@ export const sampleClaimDraftObj = {
   }
 }
 
+const sampleCCJDraftObj = {
+
+}
+
 const sampleResponseDraftObj = {
   response: {
     type: ResponseType.OWE_NONE
@@ -110,6 +114,9 @@ export function resolveRetrieve (draftType: string, draftOverride?: object) {
       break
     case 'response':
       draft = { ...sampleResponseDraftObj, ...draftOverride }
+      break
+    case 'ccj':
+      draft = { ...sampleCCJDraftObj, ...draftOverride }
       break
     default:
       throw new Error('Unsupported draft type')

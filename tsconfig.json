@@ -67,7 +67,7 @@
         "features/dashboard/*"
       ],
       "ccj/*": [
-        "features/county-court-judgment/*"
+        "features/ccj/*"
       ]
     },
     "typeRoots": [

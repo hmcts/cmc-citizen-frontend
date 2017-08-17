@@ -8,7 +8,6 @@ export class ClaimMiddleware {
   static retrieveByExternalId (req: express.Request, res: express.Response, next: express.NextFunction): void {
     // req.params isn't populated here https://github.com/expressjs/express/issues/2088
     const externalId = req.path.split('/')[2]
-    console.log('i got called', externalId)
     const isValidUUID = uuidValidator(externalId)
     if (!isValidUUID) {
       throw new Error('Invalid UUID')

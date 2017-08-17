@@ -27,9 +27,7 @@ export class RoutablePath {
 
     const isCaseUri: boolean = split[0] === 'case'
     const featureName: string = isCaseUri ? split[1] : split[0]
-    console.log(featureName)
     const viewPath: string = split.slice(isCaseUri ? 2 : 1).join('/')
-    const s = `${featureName}/views/${viewPath}`
-    return s
+    return `${featureName}/views/${viewPath}`
   }
 }

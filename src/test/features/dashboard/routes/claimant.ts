@@ -13,10 +13,11 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
+import { sampleClaimDraftObj } from '../../../http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const claimantPage = Paths.claimantPage.uri.replace(':externalId', 'b17af4d2-273f-4999-9895-bce382fa24c8')
+const claimantPage = Paths.claimantPage.uri.replace(':externalId', sampleClaimDraftObj.externalId)
 
 describe('Dashboard - claimant page', () => {
   attachDefaultHooks()
@@ -51,19 +52,20 @@ describe('Dashboard - claimant page', () => {
         })
       })
     })
-    describe('on POST', () => {
-      checkAuthorizationGuards(app, 'post', claimantPage)
-      context('when user authorised', () => {
-        beforeEach(() => {
-          idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
-        })
+  })
+  describe('on POST', () => {
+    checkAuthorizationGuards(app, 'post', claimantPage)
+    context('when user authorised', () => {
+      beforeEach(() => {
+        idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
+      })
 
-        it('should redirect to county court judgment flow', async () => {
-          await request(app)
-            .post(claimantPage)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect.toLocation(CCJPaths.theirDetailsPage.uri))
-        })
+      it('should redirect to county court judgment flow', async () => {
+        await request(app)
+          .post(claimantPage)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.redirect.toLocation(
+            CCJPaths.theirDetailsPage.uri.replace(':externalId', sampleClaimDraftObj.externalId)))
       })
     })
   })
