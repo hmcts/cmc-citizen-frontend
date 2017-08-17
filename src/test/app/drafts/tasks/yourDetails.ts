@@ -8,27 +8,22 @@ describe('Your details', () => {
     it('should return true when the task is completed', () => {
       const input = {
         claimant: {
-          name: {
-            name: 'John Doe'
-          },
-          partyDetails: {
-            address: {
-              line1: 'Here',
-              line2: 'There',
-              city: 'London',
-              postcode: 'BB12 7NQ'
-            },
-            hasCorrespondenceAddress: false
-          },
-          dateOfBirth: {
-            date: {
-              day: 10,
-              month: 11,
-              year: 1990
-            }
+          partyTypeResponse: {
+            type : { value : 'INDIVIDUAL', displayValue: 'individual'}
           },
           mobilePhone: {
             number: '7123123123'
+          },
+          partyDetails: {
+            address: {line1: 'Here',line2: 'There',city: 'London',postcode: 'BB12 7NQ'},
+            name: 'John Doe',
+            dateOfBirth: {
+              date: {
+                day: 10,
+                month: 11,
+                year: 1990
+              }
+            }
           }
         }
       }

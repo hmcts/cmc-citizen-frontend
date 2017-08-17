@@ -9,9 +9,8 @@ import { InterestType } from 'app/forms/models/interest'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}/api/${config.get('draft-store.apiVersion')}`
 
-export const sampleClaimDraftObj = {
+const sampleClaimDraftObj = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
-  lastUpdateTimestamp: '1502462391',
   readResolveDispute: true,
   readCompletingClaim: true,
   claimant: {
@@ -39,7 +38,7 @@ export const sampleClaimDraftObj = {
     payment: {
       id: 12,
       amount: 2500,
-      state: { status: 'success' }
+      state: { status: 'failed' }
     }
   },
   defendant: {
@@ -77,7 +76,6 @@ const sampleResponseDraftObj = {
   response: {
     type: ResponseType.OWE_NONE
   },
-  lastUpdateTimestamp: '1502462391',
   counterClaim: {
     counterClaim: false
   },
@@ -118,12 +116,6 @@ export function resolveRetrieve (draftType: string, draftOverride?: object) {
   mock(serviceBaseURL)
     .get(`/draft/${draftType}`)
     .reply(HttpStatus.OK, draft)
-}
-
-export function resolveRetrieveNoDraftFound (draftType: string) {
-  mock(serviceBaseURL)
-    .get(`/draft/${draftType}`)
-    .reply(HttpStatus.NOT_FOUND)
 }
 
 export function rejectRetrieve (draftType: string, reason: string) {

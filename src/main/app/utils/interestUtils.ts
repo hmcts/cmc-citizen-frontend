@@ -3,6 +3,7 @@ import { calculateInterest } from 'app/common/calculateInterest'
 import { MomentFactory } from 'common/momentFactory'
 import ClaimAmountBreakdown from 'app/forms/models/claimAmountBreakdown'
 import DraftClaim from 'app/drafts/models/draftClaim'
+import Claim from 'app/claims/models/claim'
 
 export function interestAmount (claimDraft: DraftClaim): number {
   const interestRate = claimDraft.interest
@@ -22,4 +23,14 @@ export function claimAmountWithInterest ( claimDraft: DraftClaim): number {
   const claimAmount: number = claimDraft.amount.totalAmount()
 
   return claimAmount + interest
+}
+
+export function claimAmountWithInterestAndFees (claim: Claim): number {
+  const interestRate = claim.claimData.interest
+  const interestDate = claim.claimData.interestDate
+  const claimAmount: number = claim.claimData.amount
+  const feesPaid: number = claim.claimData.paidFeeAmount
+  const date = interestDate.type === InterestDateType.CUSTOM ? interestDate.date : MomentFactory.currentDate()
+  const interest = calculateInterest(claimAmount, interestRate, date)
+  return claimAmount + interest + feesPaid
 }

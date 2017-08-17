@@ -7,7 +7,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { Name } from 'forms/models/name'
 
 import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
-import { ErrorHandling } from 'common/errorHandling'
+import ErrorHandling from 'common/errorHandling'
 
 function renderView (form: Form<Name>, res: express.Response): void {
   res.render(Paths.defendantDetailsPath.associatedView, { form: form })

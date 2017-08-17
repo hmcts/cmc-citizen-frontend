@@ -2,10 +2,11 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
+import { Paths as ResponsePaths } from 'response/paths'
+
 import '../../../../routes/expectations'
 
 import * as claimStoreServiceMock from '../../../../http-mocks/claim-store'
-import { Paths } from 'dashboard/paths'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -33,6 +34,6 @@ export function checkAlreadySubmittedGuard (app: any, method: string, pagePath: 
 
     await request(app)[method](pagePath)
       .set('Cookie', `${cookieName}=ABC`)
-      .expect(res => expect(res).to.be.redirect.toLocation(Paths.dashboardPage.uri))
+      .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.dashboardPage.uri))
   })
 }

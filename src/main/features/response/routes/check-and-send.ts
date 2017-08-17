@@ -11,7 +11,7 @@ import User from 'app/idam/user'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ResponseType } from 'response/form/models/responseType'
 import AllResponseTasksCompletedGuard from 'response/guards/allResponseTasksCompletedGuard'
-import { ErrorHandling } from 'common/errorHandling'
+import ErrorHandling from 'common/errorHandling'
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
   const user: User = res.locals.user
@@ -19,10 +19,10 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   res.render(Paths.checkAndSendPage.associatedView, {
     form: form,
     defendant: {
-      fullName: user.responseDraft.defendantDetails.name.name,
+      fullName: user.responseDraft.defendantDetails.partyDetails.name,
       partyDetails: user.responseDraft.defendantDetails.partyDetails,
-      dateOfBirth: user.responseDraft.defendantDetails.dateOfBirth,
-      mobilePhone: user.responseDraft.defendantDetails.mobilePhone
+      // dateOfBirth: user.responseDraft.defendantDetails.dateOfBirth,
+      mobilePhone: user.responseDraft.defendantDetails.email
     },
     paths: Paths,
     response: user.responseDraft,

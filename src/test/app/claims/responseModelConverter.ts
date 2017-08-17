@@ -1,16 +1,16 @@
 import { expect } from 'chai'
 
 import { ResponseModelConverter } from 'claims/responseModelConverter'
-import { ResponseDraft } from 'response/draft/responseDraft'
+// import { ResponseDraft } from 'response/draft/responseDraft'
 import { MobilePhone } from 'forms/models/mobilePhone'
 import DateOfBirth from 'forms/models/dateOfBirth'
-import { Response as DefendantResponse } from 'response/form/models/response'
-import { ResponseType } from 'response/form/models/responseType'
-import Defence from 'response/form/models/defence'
-import { FreeMediation, FreeMediationOption } from 'response/form/models/freeMediation'
-import { PartyDetails } from 'forms/models/partyDetails'
+// import { Response as DefendantResponse } from 'response/form/models/response'
+// import { ResponseType } from 'response/form/models/responseType'
+// import Defence from 'response/form/models/defence'
+// import { FreeMediation, FreeMediationOption } from 'response/form/models/freeMediation'
+// import { PartyDetails } from 'forms/models/partyDetails'
 import { Address } from 'forms/models/address'
-import { Defendant } from 'drafts/models/defendant'
+// import { Defendant } from 'drafts/models/defendant'
 import { Name } from 'forms/models/name'
 
 const testAddress = {
@@ -33,13 +33,13 @@ describe('ResponseModelConverter', () => {
           address: testAddress,
           hasCorrespondenceAddress: true,
           correspondenceAddress: testAddress
-        } as PartyDetails
-      } as Defendant,
-      response: new DefendantResponse(ResponseType.OWE_NONE),
-      defence: new Defence('my defence'),
-      freeMediation: new FreeMediation(FreeMediationOption.NO),
-      requireDefence: () => true
-    } as ResponseDraft
+        } // as PartyDetails
+      } // as Defendant,
+      // response: new DefendantResponse(ResponseType.OWE_NONE),
+      // defence: new Defence('my defence'),
+      // freeMediation: new FreeMediation(FreeMediationOption.NO),
+      // requireDefence: () => true
+    } // as ResponseDraft
   })
 
   context('when converting party details', () => {

@@ -7,7 +7,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import DateOfBirth from 'forms/models/dateOfBirth'
 
 import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
-import { ErrorHandling } from 'common/errorHandling'
+import ErrorHandling from 'common/errorHandling'
 
 function renderView (form: Form<DateOfBirth>, res: express.Response): void {
   res.render(Paths.claimantDateOfBirthPage.associatedView, { form: form })
@@ -15,7 +15,7 @@ function renderView (form: Form<DateOfBirth>, res: express.Response): void {
 
 export default express.Router()
   .get(Paths.claimantDateOfBirthPage.uri, (req: express.Request, res: express.Response) => {
-    renderView(new Form(res.locals.user.claimDraft.claimant.dateOfBirth), res)
+    renderView(new Form(res.locals.user.claimDraft.claimant.partyDetails.dateOfBirth), res)
   })
   .post(
     Paths.claimantDateOfBirthPage.uri,
@@ -26,8 +26,8 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.claimDraft.claimant.dateOfBirth = form.model
+        res.locals.user.claimDraft.claimant.partyDetails.dateOfBirth = form.model
         await ClaimDraftMiddleware.save(res, next)
-        res.redirect(Paths.claimantAddressPage.uri)
+        res.redirect(Paths.claimantMobilePage.uri)
       }
     }))

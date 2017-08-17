@@ -6,6 +6,7 @@ import * as mock from 'nock'
 import './expectations'
 
 import { Paths as AppPaths } from 'app/paths'
+import { Paths as ClaimPaths } from 'claim/paths'
 
 import { app } from '../../main/app'
 
@@ -25,7 +26,7 @@ describe('Home page', () => {
       await request(app)
         .get(AppPaths.homePage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.redirect.toLocation(AppPaths.receiver.uri))
+        .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPage.uri))
     })
   })
 })

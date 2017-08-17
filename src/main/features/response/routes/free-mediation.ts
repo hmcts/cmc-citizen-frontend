@@ -10,11 +10,11 @@ import Claim from 'claims/models/claim'
 
 import { FreeMediation } from 'response/form/models/freeMediation'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
-import { ErrorHandling } from 'common/errorHandling'
+import ErrorHandling from 'common/errorHandling'
 
 async function renderView (form: Form<FreeMediation>, res: express.Response, next: express.NextFunction) {
   try {
-    const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(res.locals.user.id)
+    const claim: Claim = await ClaimStoreClient.retrieveByDefendantId(res.locals.user.id)
 
     res.render(Paths.freeMediationPage.associatedView, {
       form: form,

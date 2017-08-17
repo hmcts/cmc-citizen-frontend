@@ -7,9 +7,8 @@ import { CounterClaim } from 'response/form/models/counterClaim'
 import { ResponseType } from 'response/form/models/responseType'
 import { isNullOrUndefined } from 'util'
 import { Defendant } from 'app/drafts/models/defendant'
-import { Draft } from 'app/models/draft'
 
-export class ResponseDraft extends Draft implements Serializable<ResponseDraft> {
+export class ResponseDraft implements Serializable<ResponseDraft> {
 
   response?: Response
   defence?: Defence
@@ -26,7 +25,6 @@ export class ResponseDraft extends Draft implements Serializable<ResponseDraft> 
       this.moreTimeNeeded = new MoreTimeNeeded(input.moreTimeNeeded && input.moreTimeNeeded.option)
       this.counterClaim = CounterClaim.fromObject(input.counterClaim)
       this.defendantDetails = new Defendant().deserialize(input.defendantDetails)
-      this.lastUpdateTimestamp = input.lastUpdateTimestamp
     }
     return this
   }

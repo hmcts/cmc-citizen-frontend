@@ -9,10 +9,10 @@
       <h1 class="bold-large">{{ t("Defence submitted") }}</h1>
 
       <p>
-        <strong class="bold">{{ submittedOn | date }}</strong>
+        <strong class="bold">{{ viewModel.submittedOn | date }}</strong>
       </p>
       <p class="issue-receipt-download ">
-        <a href="/response/{{ claim.externalId }}/receipt">{{ t("Download defence as pdf") }}</a>
+        <a href="/response/receipt">{{ t("Download defence as pdf") }}</a>
       </p>
     </div>
 
@@ -21,12 +21,12 @@
          t("Your defence will be shared with %s and the court.",
            {
               postProcess: 'sprintf',
-              sprintf: [claim.claimData.claimant.name]
+              sprintf: [viewModel.claimantName]
            }
          )
        }}
     </p>
-    <p>{{ t("We've also sent a copy to:") }} <strong>{{ defendantEmail }}</strong>.</p>
+    <p>{{ t("We've also sent a copy to:") }} <strong>{{ viewModel.defendantEmail }}</strong>.</p>
 
     <div>
       <h2 class="heading-medium">{{ t("What happens next") }}</h2>
@@ -37,7 +37,7 @@
       <p>{{ t('You can <a href="%s">view the status of this claim</a> at any time.',
         {
           postProcess: 'sprintf',
-          sprintf: ['/dashboard']
+          sprintf: ['/response/dashboard']
         }) | safe
         }}</p>
 
@@ -48,7 +48,7 @@
          t("Unless you’ve been asked not to, you can still contact %s directly. If you can reach an agreement you won’t have to go to a hearing.",
            {
               postProcess: 'sprintf',
-              sprintf: [claim.claimData.claimant.name]
+              sprintf: [viewModel.claimantName]
            }
          )
         }}

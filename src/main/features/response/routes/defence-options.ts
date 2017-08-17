@@ -10,13 +10,11 @@ import { CounterClaim } from 'response/form/models/counterClaim'
 import ClaimStoreClient from 'claims/claimStoreClient'
 import Claim from 'claims/models/claim'
 import OweNoneResponseRequiredGuard from 'response/guards/oweNoneResponseRequiredGuard'
-import { ErrorHandling } from 'common/errorHandling'
-import User from 'app/idam/user'
+import ErrorHandling from 'common/errorHandling'
 
 async function renderView (form: Form<CounterClaim>, res: express.Response, next: express.NextFunction) {
   try {
-    const user: User = res.locals.user
-    const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(user.id)
+    const claim: Claim = await ClaimStoreClient.retrieveByDefendantId(res.locals.user.id)
     res.render(Paths.defenceOptionsPage.associatedView, {
       form: form,
       responseDeadline: claim.responseDeadline

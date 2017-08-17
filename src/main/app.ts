@@ -16,7 +16,6 @@ import { Feature as ClaimIssueFeature } from 'claim/index'
 import { Feature as DefendantFirstContactFeature } from 'first-contact/index'
 import { Feature as DefendantResponseFeature } from 'response/index'
 import { CsrfProtection } from 'modules/csrf'
-import { DashboardFeature } from 'dashboard/index'
 
 export const app: express.Express = express()
 
@@ -56,7 +55,6 @@ if (env !== 'mocha') {
   new CsrfProtection().enableFor(app)
 }
 
-new DashboardFeature().enableFor(app)
 new ClaimIssueFeature().enableFor(app)
 new DefendantFirstContactFeature().enableFor(app)
 new DefendantResponseFeature().enableFor(app)

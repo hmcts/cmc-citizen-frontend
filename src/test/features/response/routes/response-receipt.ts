@@ -16,13 +16,11 @@ import * as pdfServiceMock from '../../../http-mocks/pdf-service'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const receiptPath = ResponsePaths.receiptReceiver.uri.replace(':externalId', 'b17af4d2-273f-4999-9895-bce382fa24c8')
-
 describe('Defendant response: receipt', () => {
   attachDefaultHooks()
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', receiptPath)
+    checkAuthorizationGuards(app, 'get', ResponsePaths.receiptReceiver.uri)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -30,42 +28,42 @@ describe('Defendant response: receipt', () => {
       })
 
       it('should return 500 and render error page when cannot retrieve claim by defendant id', async () => {
-        claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+        claimStoreServiceMock.rejectRetrieveByDefendantId('HTTP error')
 
         await request(app)
-          .get(receiptPath)
+          .get(ResponsePaths.receiptReceiver.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
       it('should return 500 and render error page when cannot retrieve claim by defendant id', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
         claimStoreServiceMock.rejectRetrieveResponseByDefendantId('HTTP error')
 
         await request(app)
-          .get(receiptPath)
+          .get(ResponsePaths.receiptReceiver.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
       it('should return 500 and render error page when cannot generate PDF', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
         claimStoreServiceMock.resolveRetrieveResponsesByDefendantId()
-        pdfServiceMock.rejectGenerate('HTTP Error')
+        pdfServiceMock.rejectGenerate('HTTP error')
 
         await request(app)
-          .get(receiptPath)
+          .get(ResponsePaths.receiptReceiver.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
       it('should return receipt when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
         claimStoreServiceMock.resolveRetrieveResponsesByDefendantId()
         pdfServiceMock.resolveGenerate()
 
         await request(app)
-          .get(receiptPath)
+          .get(ResponsePaths.receiptReceiver.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful)
       })

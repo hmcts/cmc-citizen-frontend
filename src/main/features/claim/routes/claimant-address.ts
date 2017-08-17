@@ -6,8 +6,8 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 
 import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
+import ErrorHandling from 'common/errorHandling'
 import { PartyDetails } from 'forms/models/partyDetails'
-import { ErrorHandling } from 'common/errorHandling'
 
 function renderView (form: Form<PartyDetails>, res: express.Response): void {
   res.render(Paths.claimantAddressPage.associatedView, { form: form })

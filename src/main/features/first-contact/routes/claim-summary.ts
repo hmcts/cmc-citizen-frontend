@@ -3,6 +3,7 @@ import * as config from 'config'
 import { Paths } from 'first-contact/paths'
 import { Paths as ResponsePaths } from 'response/paths'
 import Claim from 'claims/models/claim'
+import { claimAmountWithInterestAndFees } from 'utils/interestUtils'
 import { buildURL } from 'utils/CallbackBuilder'
 import ClaimReferenceMatchesGuard from 'first-contact/guards/claimReferenceMatchesGuard'
 
@@ -15,7 +16,9 @@ export default express.Router()
   .get(Paths.claimSummaryPage.uri, ClaimReferenceMatchesGuard.requestHandler, async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
     try {
       const claim: Claim = res.locals.user.claim
-      res.render(Paths.claimSummaryPage.associatedView, { claim: claim })
+      res.render(Paths.claimSummaryPage.associatedView, {
+        claim: claim, claimAmountWithInterestAndFees: claimAmountWithInterestAndFees(claim)
+      })
     } catch (err) {
       next(err)
     }

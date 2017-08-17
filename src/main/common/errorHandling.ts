@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-export class ErrorHandling {
+export default class ErrorHandling {
 
   static apply (requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction) => Promise<void>) {
     return async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {

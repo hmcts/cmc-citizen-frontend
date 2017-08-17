@@ -3,7 +3,7 @@ import * as express from 'express'
 import { Paths } from 'claim/paths'
 
 import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
-import { ErrorHandling } from 'common/errorHandling'
+import ErrorHandling from 'common/errorHandling'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import InterestDate from 'forms/models/interestDate'

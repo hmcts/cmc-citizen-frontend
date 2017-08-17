@@ -29,7 +29,6 @@ export class FormValidator {
       const model: T = modelTypeMapper(req.body)
 
       const errors: ValidationError[] = isValidationEnabledFor(req) ? validator.validateSync(model) : []
-
       const action: object = req.body.action
 
       req.body = new Form<T>(model, errors)

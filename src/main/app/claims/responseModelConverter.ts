@@ -3,8 +3,8 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 export class ResponseModelConverter {
 
   static convert (responseDraft: ResponseDraft): any {
-    responseDraft.defendantDetails.mobilePhone = responseDraft.defendantDetails.mobilePhone.number as any
-    responseDraft.defendantDetails.dateOfBirth = responseDraft.defendantDetails.dateOfBirth.date.asString() as any
+    responseDraft.defendantDetails.email = responseDraft.defendantDetails.email as any
+    // responseDraft.defendantDetails.dateOfBirth = responseDraft.defendantDetails.dateOfBirth.date.asString() as any
 
     this.convertPartyDetails(responseDraft)
 
@@ -28,7 +28,7 @@ export class ResponseModelConverter {
     }
     delete responseDraft.defendantDetails.partyDetails
 
-    responseDraft.defendantDetails['name'] = responseDraft.defendantDetails.name.name as any
+    responseDraft.defendantDetails.partyDetails['name'] = responseDraft.defendantDetails.partyDetails.name as any
 
     if (!responseDraft.defendantDetails.email || !responseDraft.defendantDetails.email.address) {
       delete responseDraft.defendantDetails.email

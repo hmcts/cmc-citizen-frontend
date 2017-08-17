@@ -3,7 +3,7 @@ import * as express from 'express'
 import { Paths } from 'claim/paths'
 
 import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
-import { ErrorHandling } from 'common/errorHandling'
+import ErrorHandling from 'common/errorHandling'
 
 export default express.Router()
   .get(Paths.completingClaimPage.uri, (req: express.Request, res: express.Response) => {

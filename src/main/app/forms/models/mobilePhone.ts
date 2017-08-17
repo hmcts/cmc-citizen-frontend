@@ -19,6 +19,10 @@ export class MobilePhone implements Serializable<MobilePhone>, CompletableTask {
     this.number = num
   }
 
+  static fromObject (input?: any): MobilePhone {
+    return new MobilePhone(input.number)
+  }
+
   deserialize (input?: any): MobilePhone {
     if (input) {
       this.number = input.number

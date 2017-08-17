@@ -11,8 +11,6 @@ import { buildURL } from 'app/utils/CallbackBuilder'
 import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
 import { RangeFee } from 'app/fees/rangeFee'
 import { claimAmountWithInterest } from 'app/utils/interestUtils'
-import User from 'app/idam/user'
-
 const logger = require('@hmcts/nodejs-logging').getLogger('router/pay')
 const issueFeeCode = config.get<string>('fees.issueFeeCode')
 
@@ -22,8 +20,8 @@ const getPayClient = async (): Promise<PayClient> => {
   return new PayClient(authToken)
 }
 
-const getReturnURL = (req: express.Request, externalId: string) => {
-  return buildURL(req, Paths.finishPaymentReceiver.uri.replace(':externalId', externalId))
+const getReturnURL = (req: express.Request) => {
+  return buildURL(req, Paths.finishPaymentReceiver.uri, true)
 }
 
 function logPaymentError (id: number, payment: Payment) {
@@ -62,52 +60,30 @@ async function successHandler (res, next) {
 
 export default express.Router()
   .get(Paths.startPaymentReceiver.uri, async (req, res, next) => {
-    const user: User = res.locals.user
     try {
-      if (!user.claimDraft.externalId) {
-        throw new Error(`externalId is missing from the draft claim. User Id : ${user.id}`)
+      if (!res.locals.user.claimDraft.externalId) {
+        throw new Error(`externalId is missing from the draft claim. User Id : ${res.locals.user.id}`)
       }
-      const amount = claimAmountWithInterest(user.claimDraft)
-      if (!amount) {
-        throw new Error('No amount entered, you cannot pay yet')
-      }
-
-      const paymentId = user.claimDraft.claimant.payment.id
-
-      if (paymentId) {
-        const payClient: PayClient = await getPayClient()
-        const payment: Payment = await payClient.retrieve(user, paymentId)
-        switch (payment.state.status) {
-          case 'success':
-            return res.redirect(Paths.finishPaymentReceiver.uri.replace(':externalId', user.claimDraft.externalId))
-        }
-      }
-
-      const issueFee: RangeFee = await FeesClient.callFeesRegister(issueFeeCode, amount)
+      const issueFee: RangeFee = await FeesClient.callFeesRegister(issueFeeCode, claimAmountWithInterest(res.locals.user.claimDraft))
       const payClient: PayClient = await getPayClient()
-      const payment: PaymentResponse = await payClient.create(user, issueFee, getReturnURL(req, user.claimDraft.externalId))
-      user.claimDraft.claimant.payment = payment as any
+      const payment: PaymentResponse = await payClient.create(res.locals.user, issueFee, getReturnURL(req))
+      res.locals.user.claimDraft.claimant.payment = payment
 
       await ClaimDraftMiddleware.save(res, next)
       res.redirect(payment._links.next_url.href)
     } catch (err) {
-      logPaymentError(user.id, user.claimDraft.claimant.payment)
+      logPaymentError(res.locals.user.id, res.locals.user.claimDraft.claimant.payment)
       next(err)
     }
   })
   .get(Paths.finishPaymentReceiver.uri, async (req, res, next) => {
-    const user: User = res.locals.user
     try {
-      const { externalId } = req.params
-
-      const paymentId = user.claimDraft.claimant.payment.id
-      if (!paymentId) {
-        return res.redirect(Paths.confirmationPage.uri.replace(':externalId', externalId))
-      }
       const payClient = await getPayClient()
 
-      const payment: Payment = await payClient.retrieve(user, paymentId)
-      user.claimDraft.claimant.payment = new Payment().deserialize(payment)
+      const paymentId = res.locals.user.claimDraft.claimant.payment.id
+
+      const payment: Payment = await payClient.retrieve(res.locals.user, paymentId)
+      res.locals.user.claimDraft.claimant.payment = new Payment().deserialize(payment)
 
       await ClaimDraftMiddleware.save(res, next)
       const status: string = payment.state.status
@@ -116,18 +92,18 @@ export default express.Router()
       switch (status) {
         case 'cancelled':
         case 'failed':
-          logPaymentError(user.id, payment)
+          logPaymentError(res.locals.user.id, payment)
           res.redirect(Paths.checkAndSendPage.uri)
           break
         case 'success':
           await successHandler(res, next)
           break
         default:
-          logPaymentError(user.id, payment)
+          logPaymentError(res.locals.user.id, payment)
           next(new Error(`Payment failed. Status ${status} is returned by the service`))
       }
     } catch (err) {
-      logPaymentError(user.id, user.claimDraft.claimant.payment)
+      logPaymentError(res.locals.user.id, res.locals.user.claimDraft.claimant.payment)
       next(err)
     }
   })

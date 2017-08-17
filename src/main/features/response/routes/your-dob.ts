@@ -7,7 +7,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import DateOfBirth from 'forms/models/dateOfBirth'
 
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
-import { ErrorHandling } from 'common/errorHandling'
+import ErrorHandling from 'common/errorHandling'
 
 function renderView (form: Form<DateOfBirth>, res: express.Response) {
   res.render(Paths.defendantDateOfBirthPage.associatedView, {

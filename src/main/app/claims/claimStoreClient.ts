@@ -13,7 +13,7 @@ const claimStoreResponsesApiUrl = `${claimApiBaseUrl}/responses/claim`
 export default class ClaimStoreClient {
   static saveClaimForUser (user: User): Promise<Claim> {
     const convertedDraftClaim = ClaimModelConverter.convert(user.claimDraft)
-
+    console.log(`converted claim ========>  ${JSON.stringify(convertedDraftClaim)}`)
     return request.post(`${claimStoreApiUrl}/${user.id}`, {
       body: convertedDraftClaim,
       headers: {
@@ -60,7 +60,17 @@ export default class ClaimStoreClient {
   static retrieveAllResponsesByDefendantId (defendantId: number): Promise<DefendantResponse[]> {
     return request
       .get(`${claimApiBaseUrl}/responses/defendant/${defendantId}`)
-      .then(response => response.map(item => new DefendantResponse().deserialize(item)))
+      .then(response => {
+        if (response) {
+          let result = []
+          response.forEach(item => {
+            result.push(new DefendantResponse().deserialize(item))
+          })
+          return result
+        } else {
+          throw new Error('Call was successful, but received an empty response instance')
+        }
+      })
   }
 
   static retrieveByLetterHolderId (letterHolderId: number): Promise<Claim> {
@@ -95,17 +105,7 @@ export default class ClaimStoreClient {
       })
   }
 
-  static retrieveByDefendantId (defendantId: number): Promise<Claim[]> {
-    if (!defendantId) {
-      return Promise.reject('Defendant ID is required')
-    }
-
-    return request
-      .get(`${claimStoreApiUrl}/defendant/${defendantId}`)
-      .then((claims: object[]) => claims.map(claim => new Claim().deserialize(claim)))
-  }
-
-  static retrieveLatestClaimByDefendantId (defendantId: number): Promise<Claim> {
+  static retrieveByDefendantId (defendantId: number): Promise<Claim> {
     if (!defendantId) {
       return Promise.reject('Defendant ID is required')
     }

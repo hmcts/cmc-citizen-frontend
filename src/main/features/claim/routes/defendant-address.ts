@@ -6,8 +6,8 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 
 import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
+import ErrorHandling from 'common/errorHandling'
 import { Address } from 'app/forms/models/address'
-import { ErrorHandling } from 'common/errorHandling'
 
 function renderView (form: Form<Address>, res: express.Response): void {
   res.render(Paths.defendantAddressPage.associatedView, { form: form })

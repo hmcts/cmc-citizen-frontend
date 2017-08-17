@@ -6,37 +6,28 @@
 {% set title = t("Money claim") %}
 {% set heading = t("Check your answers before submitting your response") %}
 
-{% if defendant.partyDetails.hasCorrespondenceAddress  %}
-  {% set correspondenceAddressLines = [
-    defendant.partyDetails.correspondenceAddress.line1,
-    defendant.partyDetails.correspondenceAddress.line2,
-    defendant.partyDetails.correspondenceAddress.city,
-    defendant.partyDetails.correspondenceAddress.postcode
-  ] %}
-{% else %}
-  {% set correspondenceAddressLines = [t('Same as address')] %}
-{% endif %}
-
 {% block content %}
   <form novalidate method="post">
     {{ csrfProtection(csrf) }}
 
     {{ tableStart("yourDetails", "Your details") }}
-    {{ row("Name:", defendant.fullName, paths.defendantYourDetailsPage.uri) }}
+    {{ row("Name:", defendant.fullName, paths.defendantNamePage.uri) }}
     {{
       rowWithMultipleValue(
         label = "Address:",
         values = [ defendant.partyDetails.address.line1, defendant.partyDetails.address.line2, defendant.partyDetails.address.city, defendant.partyDetails.address.postcode ],
         changeLink = paths.defendantAddressPage.uri,
-        bottomBorder = false
+        bottomBorder = defendant.partyDetails.hasCorrespondenceAddress != true
       )
     }}
+    {% if defendant.partyDetails.hasCorrespondenceAddress == true %}
     {{
       rowWithMultipleValue(
         label = "Correspondence address:",
-        values = correspondenceAddressLines
+        values = [ defendant.partyDetails.correspondenceAddress.line1, defendant.partyDetails.correspondenceAddress.line2, defendant.partyDetails.correspondenceAddress.city, defendant.partyDetails.correspondenceAddress.postcode ]
       )
     }}
+    {% endif %}
 
     {% set dateOfBirth = defendant.dateOfBirth.date.asString() | date %}
     {{ row("Date of birth:", dateOfBirth, paths.defendantDateOfBirthPage.uri) }}

@@ -7,7 +7,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import Email from 'forms/models/email'
 
 import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
-import { ErrorHandling } from 'common/errorHandling'
+import ErrorHandling from 'common/errorHandling'
 
 function renderView (form: Form<Email>, res: express.Response): void {
   res.render(Paths.defendantEmailPage.associatedView, { form: form })
