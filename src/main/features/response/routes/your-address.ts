@@ -29,6 +29,7 @@ function defaultToAddressProvidedByClaimant (providedByDefendant: PartyDetails, 
     return providedByDefendant
   } else {
     return new PartyDetails(
+      'name',
       new Address(
         providedByClaimant.line1,
         providedByClaimant.line2,

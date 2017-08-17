@@ -19,7 +19,6 @@ export default class Claim implements Serializable<Claim> {
   moreTimeRequested: boolean
   respondedAt: Moment
   claimantEmail: string
-
   deserialize (input: any): Claim {
     if (input) {
       this.id = input.id

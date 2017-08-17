@@ -2,11 +2,11 @@ import * as path from 'path'
 
 import { MomentFormatter } from 'utils/momentFormatter'
 import { DefendantResponse } from 'claims/models/defendantResponse'
-import { PersonalDetailsMapper } from 'app/pdf/mappers/personalDetailsMapper'
+import { PartyDetailsMapper } from 'app/pdf/mappers/partyDetailsMapper'
 import { ClaimMapper } from 'app/pdf/mappers/claimMapper'
 import Claim from 'claims/models/claim'
 import { DefendantMapper } from 'app/pdf/mappers/defendantMapper'
-import { Person } from 'app/claims/models/person'
+import Party from 'app/claims/models/party'
 import { Defendant } from 'app/claims/models/defendant'
 
 const responseTemplatePath = path.join(__dirname, '..', '..', 'resources', 'pdf', 'responseReceipt.njk')
@@ -28,8 +28,8 @@ export class ResponseReceipt {
         response: this.defendantResponse.response.defence,
         freeMediation: this.defendantResponse.response.freeMediation
       },
-      claimant: PersonalDetailsMapper.createPersonalDetails(
-        this.claim.claimData.claimant as Person,
+      claimant: PartyDetailsMapper.createPersonalDetails(
+        this.claim.claimData.claimant as Party,
         this.claim.claimantEmail
       ),
       defendant: DefendantMapper.createDefendantDetails(

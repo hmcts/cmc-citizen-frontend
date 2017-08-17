@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import DraftClaim from 'drafts/models/draftClaim'
+// import DraftClaim from 'drafts/models/draftClaim'
 import { ClaimModelConverter } from 'claims/claimModelConverter'
 import InterestDateType from 'app/common/interestDateType'
 import InterestDate from 'app/forms/models/interestDate'
@@ -8,7 +8,7 @@ import { LocalDate } from 'forms/models/localDate'
 import DateOfBirth from 'forms/models/dateOfBirth'
 import Reason from 'forms/models/reason'
 import { Address } from 'app/forms/models/address'
-import { PartyDetails } from 'forms/models/partyDetails'
+import { IndividualDetails } from 'forms/models/individualDetails'
 
 const testAddress = {
   line1: 'line1',
@@ -22,27 +22,27 @@ describe('ClaimModelConverter', () => {
     draftClaim = {
       interestDate: new InterestDate(InterestDateType.CUSTOM, new LocalDate(2017, 1, 1), 'because'),
       claimant: {
-        name: {
-          name: 'John Doe'
-        },
         partyDetails: {
+          name: 'John Doe',
+          type: 'INDIVIDUAL',
+          dateOfBirth: new DateOfBirth(new LocalDate(1982, 1, 1)),
           address: testAddress,
           hasCorrespondenceAddress: true,
           correspondenceAddress: testAddress
-        } as PartyDetails,
+        } as IndividualDetails,
         dateOfBirth: new DateOfBirth(new LocalDate(1990, 1, 1))
       },
       defendant: {
-        name: {
-          name: 'John Other'
-        },
         partyDetails: {
+          name: 'John Other',
+          type: 'INDIVIDUAL',
+          dateOfBirth: new DateOfBirth(new LocalDate(1982, 1, 1)),
           address: testAddress,
           hasCorrespondenceAddress: false
-        } as PartyDetails
+        } as IndividualDetails
       },
       reason: new Reason('because')
-    } as DraftClaim
+    }
   })
 
   describe('when converting claimant details', () => {
@@ -76,7 +76,8 @@ describe('ClaimModelConverter', () => {
 
     it('should set the address on converted object', () => {
       let converted = ClaimModelConverter.convert(draftClaim)
-      expect(converted.defendant.address).to.deep.equal(testAddress)
+      expect(converted.defendant.address.line1).to.equal('line1')
+      expect(converted.defendant.address.postcode).to.equal('postcode')
     })
   })
 

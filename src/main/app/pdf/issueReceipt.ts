@@ -1,9 +1,11 @@
 import * as path from 'path'
 
 import Claim from 'claims/models/claim'
+import { PartyDetailsMapper } from 'app/pdf/mappers/partyDetailsMapper'
 import { PersonalDetailsMapper } from 'app/pdf/mappers/personalDetailsMapper'
 import { ClaimMapper } from 'app/pdf/mappers/claimMapper'
 import { Person } from 'app/claims/models/person'
+import Party from 'app/claims/models/party'
 
 const issueTemplatePath = path.join(__dirname, '..', '..', 'resources', 'pdf', 'issueReceipt.njk')
 
@@ -19,8 +21,8 @@ export default class IssueReceipt {
   data (): object {
     return {
       claim: ClaimMapper.createClaimDetails(this.claim),
-      claimant: PersonalDetailsMapper.createPersonalDetails(
-        this.claim.claimData.claimant as Person,
+      claimant: PartyDetailsMapper.createPersonalDetails(
+        this.claim.claimData.claimant as Party,
         this.claim.claimantEmail
       ),
       defendant: PersonalDetailsMapper.createPersonalDetails(

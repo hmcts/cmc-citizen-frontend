@@ -23,7 +23,6 @@ export default class DraftClaim extends Draft implements Serializable<DraftClaim
   deserialize (input: any): DraftClaim {
     if (input) {
       this.externalId = input.externalId
-      this.claimant = new Claimant().deserialize(input.claimant)
       this.defendant = new Defendant().deserialize(input.defendant)
       this.interest = new Interest().deserialize(input.interest)
       this.interestDate = new InterestDate().deserialize(input.interestDate)
@@ -32,6 +31,7 @@ export default class DraftClaim extends Draft implements Serializable<DraftClaim
       this.readResolveDispute = input.readResolveDispute
       this.readCompletingClaim = input.readCompletingClaim
       this.lastUpdateTimestamp = input.lastUpdateTimestamp
+      this.claimant = new Claimant().deserialize(input.claimant)
     }
     return this
   }

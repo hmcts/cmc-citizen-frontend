@@ -12,7 +12,7 @@ import User from 'app/idam/user'
 
 function renderView (form: Form<Reason>, res: express.Response): void {
   const user: User = res.locals.user
-  const defendantName = user.claimDraft.defendant.name ? user.claimDraft.defendant.name.name : ''
+  const defendantName = user.claimDraft.defendant.partyDetails.name ? user.claimDraft.defendant.partyDetails.name : ''
 
   res.render(Paths.reasonPage.associatedView, { form: form, defendantName: defendantName })
 }

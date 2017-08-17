@@ -1,0 +1,14 @@
+{% extends "layout.njk" %}
+{% from "includes/macros/partyDetails.njk" import organisationForm %}
+{% from "includes/macros/form.njk" import csrfProtection,textInput, saveAndContinueButton, errorSummary %}
+
+{% set title = t('Money claim') %}
+{% set heading = t('Organisation details') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+       {{ organisationForm(form, csrf) }}
+    </div>
+  </div>
+{% endblock %}

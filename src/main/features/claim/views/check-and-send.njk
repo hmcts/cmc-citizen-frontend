@@ -5,7 +5,8 @@
 
 {% set title = t("Money claim") %}
 {% set heading = t("Check your answers before submitting your claim") %}
-
+{% set partyType = draftClaim.claimant.partyTypeResponse.type.value %}
+{% set displayPartyType = draftClaim.claimant.partyTypeResponse.type.displayValue %}
 {% set claimantFullName = draftClaim.claimant.name.name %}
 {% set defendantFullName = draftClaim.defendant.name.name %}
 {% set dateOfBirth = draftClaim.claimant.dateOfBirth.date.asString() | date %}
@@ -26,9 +27,16 @@
     {{ csrfProtection(csrf) }}
 
     {{ tableStart("yourDetails", "Your details") }}
-    {{ row("Name:", claimantFullName) }}
-    {{ row("Date of birth:", dateOfBirth) }}
-    {{ row("Phone:", draftClaim.claimant.mobilePhone.number) }}
+    {{ row("About you:", displayPartyType) }}
+    {{ row("Name:", name ) }}
+    {% if (partyType === 'COMPANY' or partyType === 'ANOTHER_ORGANISATION') %}
+      {% if (contactPerson) %}
+        {{ row("Contact Name:", contactPerson) }}
+      {% endif %}  
+    {% endif %}
+    {% if (partyType === 'SOLE_TRADER_OR_SELF_EMPLOYED') %}
+      {{ row("Business name:", businessName ) }}
+    {% endif %}  
     {{
       rowWithMultipleValue(
         label = "Address:",
@@ -45,10 +53,17 @@
         values = correspondenceAddressLines
       )
     }}
+    {% endif %}
+    {% if (partyType === 'INDIVIDUAL' or partyType === 'SOLE_TRADER_OR_SELF_EMPLOYED') %}
+      {{ row("Date of birth:", dateOfBirth.date.asString() | date) }}
+    {% endif %}  
+    {{ row("Phone:", draftClaim.claimant.mobilePhone.number) }}
     {{ tableEnd() }}
+    
+    
 
     {{ tableStart("theirDetails", "Their details") }}
-    {{ row('Name:', defendantFullName) }}
+    {{ row('Name:', draftClaim.defendant.partyDetails.name) }}
     {{ rowWithMultipleValue("Address:", [
     draftClaim.defendant.partyDetails.address.line1,
     draftClaim.defendant.partyDetails.address.line2,

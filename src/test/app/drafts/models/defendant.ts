@@ -9,7 +9,7 @@ describe('Defendant', () => {
   describe('constructor', () => {
     it('should have undefined name and email fields', () => {
       const defendant = new Defendant()
-      expect(defendant.name).to.be.undefined
+      expect(defendant.partyDetails.name).to.be.undefined
       expect(defendant.email).to.be.undefined
     })
 

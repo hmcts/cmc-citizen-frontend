@@ -19,10 +19,10 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   res.render(Paths.checkAndSendPage.associatedView, {
     form: form,
     defendant: {
-      fullName: user.responseDraft.defendantDetails.name.name,
+      fullName: user.responseDraft.defendantDetails.partyDetails.name,
       partyDetails: user.responseDraft.defendantDetails.partyDetails,
-      dateOfBirth: user.responseDraft.defendantDetails.dateOfBirth,
-      mobilePhone: user.responseDraft.defendantDetails.mobilePhone
+      // dateOfBirth: user.responseDraft.defendantDetails.dateOfBirth,
+      mobilePhone: user.responseDraft.defendantDetails.email
     },
     paths: Paths,
     response: user.responseDraft,
