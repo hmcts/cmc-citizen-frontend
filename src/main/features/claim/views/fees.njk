@@ -50,7 +50,22 @@
             <p>
               {{ t("The court fee is based on the amount you're claiming, including any <a class='external' rel='external' href='%s'>interest</a>.", { postProcess: 'sprintf', sprintf: ['https://www.gov.uk/make-court-claim-for-money/work-out-interest']}) | safe }}
             </p>
-
+            <table>
+              <thead>
+              <tr>
+                <th scope="col">Claim amount</th>
+                <th scope="col">Claim fee</th>
+                <th scope="col">Hearing fee</th>
+              </tr>
+              </thead>
+              {% for row in rows %}
+                <tr>
+                  <td>{{ row.from | pennies2pounds | numeral }} to {{ row.to | pennies2pounds | numeral }}</td>
+                  <td>{{ row.fees[1] | pennies2pounds | numeral }}</td>
+                  <td>{{ row.fees[2] | pennies2pounds | numeral }}</td>
+                </tr>
+              {% endfor %}
+            </table>
           </div>
         </details>
 

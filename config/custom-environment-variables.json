@@ -34,7 +34,13 @@
     "cookieName": "JWT_COOKIE_NAME"
   },
   "fees": {
-    "url": "FEES_URL"
+    "url": "FEES_URL",
+    "issueFee": {
+      "code": "ISSUE_FEE_CODE"
+    },
+    "hearingFee": {
+      "code": "HEARING_FEE_CODE"
+    }
   },
   "pay": {
     "url": "PAY_URL"
