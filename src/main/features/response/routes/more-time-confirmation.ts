@@ -8,7 +8,7 @@ import MoreTimeRequestRequiredGuard from 'response/guards/moreTimeRequestRequire
 
 async function renderView (res: express.Response, next: express.NextFunction) {
   try {
-    const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(res.locals.user.id)
+    const claim: Claim = await ClaimStoreClient.retrieveByDefendantId(res.locals.user.id)
     res.render(Paths.moreTimeConfirmationPage.associatedView, {
       newDeadline: claim.responseDeadline,
       claimantFullName: claim.claimData.claimant.name

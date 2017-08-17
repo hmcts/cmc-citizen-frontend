@@ -8,7 +8,6 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import { sampleClaimDraftObj } from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as feesServiceMock from '../../../http-mocks/fees'
 import * as payServiceMock from '../../../http-mocks/pay'
@@ -97,18 +96,7 @@ describe('Claim issue: initiate payment receiver', () => {
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.redirect.toLocation('/claim-confirmed'))
-    })
-
-    it('should redirect to pay receiver page when pay status is success', async () => {
-      draftStoreServiceMock.resolveRetrieve(draftType)
-      idamServiceMock.resolveRetrieveServiceToken(serviceToken)
-      payServiceMock.resolveRetrieve('success')
-
-      await request(app)
-        .get(Paths.startPaymentReceiver.uri)
-        .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.redirect.toLocation(Paths.finishPaymentReceiver.uri.replace(':externalId', sampleClaimDraftObj.externalId)))
+        .expect(res => expect(res).to.be.redirect.toLocation(`/claim-confirmed`))
     })
   })
 })
@@ -123,7 +111,7 @@ describe('Claim issue: post payment callback receiver', () => {
       idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
     })
 
-    function initiatedPayment (): object {
+    function initiatedPayment (): Object {
       return {
         claimant: {
           name: { name: 'John Smith' },
@@ -249,16 +237,7 @@ describe('Claim issue: post payment callback receiver', () => {
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${sampleClaimDraftObj.externalId}/confirmation`))
-          })
-
-          it('should redirect to confirmation page when payment is missing', async () => {
-            draftStoreServiceMock.resolveRetrieve(draftType, { claimant: undefined })
-
-            await request(app)
-              .get(Paths.finishPaymentReceiver.uri.replace(':externalId', sampleClaimDraftObj.externalId))
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${sampleClaimDraftObj.externalId}/confirmation`))
+              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/fe6e9413-e804-48d5-bbfd-645917fc46e5/confirmation`))
           })
         })
 

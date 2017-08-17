@@ -1,4 +1,4 @@
-import { ErrorHandling } from 'common/errorHandling'
+import ErrorHandling from 'common/errorHandling'
 import * as express from 'express'
 
 import * as chai from 'chai'

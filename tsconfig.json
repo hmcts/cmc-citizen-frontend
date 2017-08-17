@@ -62,9 +62,6 @@
       ],
       "response/*": [
         "features/response/*"
-      ],
-      "dashboard/*": [
-        "features/dashboard/*"
       ]
     },
     "typeRoots": [

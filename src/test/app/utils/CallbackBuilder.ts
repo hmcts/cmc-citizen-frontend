@@ -26,6 +26,18 @@ describe('CallbackBuilder', () => {
       expect(url.length).gt(0)
       expect(url).to.eq(expected)
     })
+
+    it('for non SSL request passed with forceSSL true', () => {
+      const path = 'my/service/path'
+      const expected = `https://localhost/${path}`
+      req.secure = false
+      req.headers = { host: 'localhost' }
+
+      let url = buildURL(req, path, true)
+      expect(url.length).gt(0)
+      expect(url).to.eq(expected)
+    })
+
   })
 
   describe(`buildURL should throw error `, () => {

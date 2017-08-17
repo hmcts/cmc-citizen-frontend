@@ -1,19 +1,41 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import nameInput, saveAndContinueButton, csrfProtection, errorSummary %}
+{% from "includes/macros/form.njk" import nameInput, csrfProtection, errorSummary, radioOption, saveAndContinueButton %}
 
-{% set title = t('Money claim') %}
-{% set heading = t('Your details') %}
+{% set title = t("Money claim") %}
 
 {% block content %}
   <div class="grid-row">
-    <div class="column-two-thirds">
-      <form novalidate method="post">
-        {{ csrfProtection(csrf) }}
+    <h1 class="heading-xlarge">{{ t("About you and this claim") }}</h1>
+    <p>{{ t("We need to know if you're making this claim as an individual, sole trader or on behalf of a company or an organisation.") }}</p>
+    <p>{{ t("I'm claiming as:") }}</p>
+    <form method="POST" novalidate>
+      {{ csrfProtection(csrf) }}
 
-        {{ nameInput(form) }}
+      {% set error = form.errorFor('type') %}
+      <div class="form-group {% if error %} form-group-error {% endif %}">
+        <fieldset id="type[label]">
+          <legend class="visually-hidden">{{ t("About you and this claim") }}</legend>
+          {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
 
-        {{ saveAndContinueButton() }}
-      </form>
-    </div>
+          {{ radioOption(form = form, name = 'type[value]', value = 'INDIVIDUAL',
+            label = t("An individual"), bold = true
+          )}}
+
+          {{ radioOption(form = form, name = 'type[value]', value = 'SOLE_TRADER_OR_SELF_EMPLOYED',
+            label = t("A sole trader or self-employed person"), bold = true
+          )}}
+
+          {{ radioOption(form = form, name = 'type[value]', value = 'COMPANY',
+            label = t("On behalf of a company"), bold = true
+          )}}
+
+          {{ radioOption(form = form, name = 'type[value]', value = 'ANOTHER_ORGANISATION',
+            label = t("As another type of organisation"), bold = true
+          )}}
+        </fieldset>
+      </div>
+
+      {{ saveAndContinueButton() }}
+    </form>
   </div>
 {% endblock %}

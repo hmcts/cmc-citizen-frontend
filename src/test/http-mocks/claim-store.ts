@@ -103,12 +103,6 @@ export function resolveRetrieveByClaimantIdToEmptyList () {
     .reply(HttpStatus.OK, [])
 }
 
-export function resolveRetrieveByDefendantIdToEmptyList () {
-  mock(`${serviceBaseURL}/claims`)
-    .get(new RegExp('/defendant/[0-9]+'))
-    .reply(HttpStatus.OK, [])
-}
-
 export function rejectRetrieveByClaimantId (reason: string) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/claimant/[0-9]+'))

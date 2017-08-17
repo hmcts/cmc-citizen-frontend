@@ -1,0 +1,44 @@
+{% extends "layout.njk" %}
+{% from "includes/macros/form.njk" import submitButton, errorSummary %}
+{% from "includes/macros/support.njk" import supportWidget %}
+
+{% set title = t('Money claim') %}
+{% set heading = t("Your dashboard") %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h4 class="heading-medium"> {{ t('Current Status') }}</h4>
+
+      <p>
+        {{ t('Your claim is currently being processed. We will be in touch via email for the next step.') }}
+      </p>
+
+      <ul>
+        {% for claim in claims %}
+          <li>
+            <a href="/claim/{{ claim.externalId }}/receipt">
+              {{ t("Download your claim %s as a PDF", { postProcess: 'sprintf', sprintf: [ claim.claimNumber ] }) }}
+            </a>
+            {% if claim.respondedAt !== undefined %}
+              <a class="block" href="/claim/{{ claim.externalId }}/defendant-response">
+              {{ t("Download Defendant's response to your claim %s as a PDF", { postProcess: 'sprintf', sprintf: [ claim.claimNumber ] }) }}
+              </a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+
+      {{ supportWidget() }}
+
+      <div>
+        {% if draftSaved %}
+          <a class="button" href="{{ paths.taskListPage.uri }}">{{ t('Continue claim') }}</a>
+        {% else %}
+          <a class="button" href="{{ paths.startPage.uri }}">{{ t('Start claim') }}</a>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

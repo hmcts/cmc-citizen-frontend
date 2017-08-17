@@ -26,7 +26,7 @@ export function checkAuthorizationGuards (app: any, method: string, pagePath: st
 
   it('should redirect to access denied page when user not in required role', async () => {
     mock.cleanAll()
-    idamServiceMock.resolveRetrieveUserFor(1, 'divorce-private-beta')
+    idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
 
     await request.agent(app)[method](pagePath)
       .set('Cookie', `${cookieName}=ABC`)

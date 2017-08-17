@@ -7,7 +7,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import Interest, { InterestType } from 'forms/models/interest'
 
 import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
-import { ErrorHandling } from 'common/errorHandling'
+import ErrorHandling from 'common/errorHandling'
 
 function renderView (form: Form<Interest>, res: express.Response): void {
   res.render(Paths.interestPage.associatedView, { form: form })

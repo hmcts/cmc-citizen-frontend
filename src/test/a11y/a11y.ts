@@ -49,14 +49,14 @@ function ensurePageCallWillSucceed (url: string): Promise<void> {
 }
 
 const excludedPaths: DefendantResponsePaths[] = [
+  ClaimIssuePaths.claimantLoginReceiver,
   ClaimIssuePaths.startPaymentReceiver,
   ClaimIssuePaths.finishPaymentReceiver,
   ClaimIssuePaths.receiptReceiver,
   ClaimIssuePaths.defendantResponseCopy,
   DefendantResponsePaths.defendantLoginReceiver,
   DefendantResponsePaths.defendantLinkReceiver,
-  DefendantResponsePaths.receiptReceiver,
-  DefendantResponsePaths.legacyDashboardRedirect
+  DefendantResponsePaths.receiptReceiver
 ]
 
 describe('Accessibility', () => {

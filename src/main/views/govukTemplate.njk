@@ -4,7 +4,7 @@
 <!--[if gt IE 8]><!--><html lang="{{ html_lang|default('en') }}"><!--<![endif]-->
 <head>
   <meta charset="utf-8" />
-  <title>{{ t(title) }}</title>
+  <title>{{ title }}</title>
 
   <!--[if gt IE 8]><!--><link href="{{ asset_paths['style_vendor'] }}/govuk-template.css?{{ govuk_template_version }}" media="screen" rel="stylesheet" /><!--<![endif]-->
   <!--[if IE 6]><link href="{{ asset_paths['style_vendor'] }}/govuk-template-ie6.css?{{ govuk_template_version }}" media="screen" rel="stylesheet" /><![endif]-->
@@ -73,10 +73,10 @@
   {% endif %}
 
   {% if heading %}
-    <h1 class="heading-{{ headingSize | default('xlarge') }}">
-      {{ t(heading) }}
+    <h1 class="heading-xlarge">
+      {{ heading }}
     {% if headingSecondary %}
-      <span class="heading-secondary">{{ t(headingSecondary) }}</span>
+      <span class="heading-secondary">{{ headingSecondary }}</span>
     {% endif %}
     </h1>
   {% endif %}

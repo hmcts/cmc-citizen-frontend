@@ -18,7 +18,6 @@ import { YourDefenceTask } from 'response/tasks/yourDefenceTask'
 import { MoreTimeNeededTask } from 'response/tasks/moreTimeNeededTask'
 import { YourDetails } from 'response/tasks/yourDetails'
 import User from 'app/idam/user'
-import { isAfter4pm } from 'common/dateUtils'
 
 export function buildBeforeYouStartSection (responseDraft: ResponseDraft): TaskList {
   const tasks: TaskListItem[] = []
@@ -52,11 +51,19 @@ function buildSubmitSection (): TaskList {
   return new TaskList(3, 'Submit', tasks)
 }
 
+function calculateRemainingDays (claim: Claim): number {
+  return claim.responseDeadline.diff(MomentFactory.currentDate(), 'days')
+}
+
+function isAfter4pm (): boolean {
+  return MomentFactory.currentDateTime().hour() > 15
+}
+
 export default express.Router()
   .get(Paths.taskListPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       const user: User = res.locals.user
-      const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(user.id)
+      const claim: Claim = await ClaimStoreClient.retrieveByDefendantId(user.id)
       const responseDeadline: Moment = claim.responseDeadline
       const beforeYouStartSection = buildBeforeYouStartSection(user.responseDraft)
       const respondToClaimSection = buildRespondToClaimSection(user.responseDraft, responseDeadline)
@@ -69,6 +76,7 @@ export default express.Router()
           respondToClaimSection: respondToClaimSection,
           allTasksCompleted: beforeYouStartSection.isCompleted() && respondToClaimSection.isCompleted(),
           claim: claim,
+          noOfRemainingDays: calculateRemainingDays(claim),
           isAfter4pm: isAfter4pm()
         })
     } catch (err) {

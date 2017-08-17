@@ -3,7 +3,6 @@ import * as HttpStatus from 'http-status-codes'
 import request from 'client/request'
 
 import { MomentFactory } from 'common/momentFactory'
-import { Draft } from 'app/models/draft'
 
 const draftStoreConfig = config.get<any>('draft-store')
 
@@ -29,8 +28,8 @@ export default class DraftStoreClient<T> {
     this.endpointURL = `${draftStoreConfig.url}/api/${draftStoreConfig.apiVersion}/draft/${draftType}`
   }
 
-  save (userId: number, draft: Draft): Promise<void> {
-    draft.lastUpdateTimestamp = MomentFactory.currentDateTime().unix()
+  save (userId: number, draft: T): Promise<void> {
+    draft['lastUpdateTimestamp'] = MomentFactory.currentDateTime().unix() // Workaround to track draft has been saved
     return request.post(this.endpointURL, withAuthHeader(userId, {
       body: draft
     }))

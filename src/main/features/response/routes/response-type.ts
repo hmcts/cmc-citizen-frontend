@@ -8,7 +8,7 @@ import { Form } from 'forms/form'
 import { Response } from 'response/form/models/response'
 import { ResponseType } from 'response/form/models/responseType'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
-import { ErrorHandling } from 'common/errorHandling'
+import ErrorHandling from 'common/errorHandling'
 
 function renderView (form: Form<Response>, res: express.Response, next: express.NextFunction) {
   try {

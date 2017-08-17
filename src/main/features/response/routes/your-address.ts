@@ -6,15 +6,18 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Address as ProvidedAddress } from 'claims/models/address'
 import { Address } from 'forms/models/address'
+
 import ClaimStoreClient from 'claims/claimStoreClient'
 import Claim from 'claims/models/claim'
+
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
+
+import ErrorHandling from 'common/errorHandling'
 import { PartyDetails } from 'forms/models/partyDetails'
-import { ErrorHandling } from 'common/errorHandling'
 import User from 'app/idam/user'
 
 async function getAddressProvidedByClaimant (defendantId: number): Promise<ProvidedAddress> {
-  const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(defendantId)
+  const claim: Claim = await ClaimStoreClient.retrieveByDefendantId(defendantId)
   return claim.claimData.defendant.address
 }
 
@@ -29,6 +32,7 @@ function defaultToAddressProvidedByClaimant (providedByDefendant: PartyDetails, 
     return providedByDefendant
   } else {
     return new PartyDetails(
+      'name',
       new Address(
         providedByClaimant.line1,
         providedByClaimant.line2,

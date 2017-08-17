@@ -9,6 +9,7 @@
 {% set responseDeadline = claim.responseDeadline.format('LL') %}
 {% set referenceNumber = claim.claimNumber %}
 
+
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
@@ -23,7 +24,7 @@
       }}
       </p>
       <p class="panel panel-border-wide">
-        {{ t('You have until <strong class="bold">%s</strong> to respond to this claim. You might have to pay more and the claimant can apply for a <a href="https://www.gov.uk/county-court-judgments-ccj-for-debt">County Court Judgment (CCJ)</a> against you if you don’t respond in time.',
+        {{ t('You have until <strong class="bold"> %s  </strong> to respond to this claim. You might have to pay more and the claimant can apply for a <a href="https://www.gov.uk/county-court-judgments-ccj-for-debt"> County Court Judgment (CCJ) </a> against you if you don’t respond in time.',
         {
           postProcess: 'sprintf',
           sprintf: [responseDeadline]
@@ -33,8 +34,8 @@
 
       </p>
       {{ subheading( t('Claim details')) }}
-      <p><span class="bold">{{ t('Number:') }}</span> {{ referenceNumber }}</p>
-      <p><span class="bold">{{ t('Amount:') }}</span> {{ claim.totalAmount | numeral }}</p>
+      <p><span class="bold">{{  t('Number:') }}</span> {{ referenceNumber }}</p>
+      <p><span class="bold">{{  t('Amount:') }}</span> {{ claimAmountWithInterestAndFees | numeral }}</p>
 
       <p class="bold">{{ t('Reason for claim:') }}</p>
       <p>
@@ -46,6 +47,8 @@
 
         {{ submitButton('Respond to claim') }}
       </form>
+
     </div>
   </div>
 {% endblock %}
+

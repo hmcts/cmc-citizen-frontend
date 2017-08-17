@@ -10,11 +10,11 @@ import Claim from 'app/claims/models/claim'
 
 import Defence from 'response/form/models/defence'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
-import { ErrorHandling } from 'common/errorHandling'
+import ErrorHandling from 'common/errorHandling'
 
 async function renderView (form: Form<Defence>, res: express.Response, next: express.NextFunction) {
   try {
-    const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(res.locals.user.id)
+    const claim: Claim = await ClaimStoreClient.retrieveByDefendantId(res.locals.user.id)
 
     res.render(Paths.defencePage.associatedView, {
       form: form,

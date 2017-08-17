@@ -11,7 +11,7 @@
         content: "Page " counter(page) " of " counter(pages);
       }
       @bottom-left {
-        content: "OCON11";
+        content: "OCRN11";
       }
     }
 
@@ -35,10 +35,6 @@
     .section .section-heading strong:before {
       counter-increment: section;
       content: counter(section) ". ";
-    }
-
-    .next-steps .section-heading strong:before {
-      content: "";
     }
 
     table {
@@ -85,11 +81,11 @@
 <header>
   <table>
     <tr>
-      <td colspan="2"><p>In the County Court Business Centre Online Court</p></td>
-    </tr>
-    <tr>
       <td style="margin-left: 20%"><h2><strong>Claim number: </strong></h2></td>
       <td><h2 style="font-weight: normal"> {{ claim.claimNumber }}</h2></td>
+    </tr>
+    <tr>
+      <td colspan="2"><p>In the County Court Business Centre Online Court</p></td>
     </tr>
     <tr>
       <td colspan="2">
@@ -97,7 +93,7 @@
       </td>
     </tr>
     <tr>
-      <td><p><strong>Defence submitted on: </strong></p></td>
+      <td><p><strong>Submitted on: </strong></p></td>
       <td><p>{{ defence.respondedAt }}</p></td>
     </tr>
   </table>
@@ -217,7 +213,7 @@
 
 <div class="section">
   <div class="section">
-    <h3>Defendant’s defence:</h3>
+    <h3>Defendant’s response:</h3>
   </div>
   <div class="section-body">
     <table border="1">
@@ -302,7 +298,7 @@
       <tr>
         <td>Declaration:</td>
         <td>
-          I {{ defendant.fullName }} believe that the facts stated in this defence form are true.
+          I {{ defendant.fullName }} believe that the facts stated in this claim form are true.
         </td>
       </tr>
       <tr>
@@ -319,7 +315,7 @@
     <h3>What happens next</h3>
 </div>
 
-<div class="section next-steps">
+<div class="section">
   <div class="section-heading">
     <strong>Settle the claim</strong>
   </div>
@@ -336,7 +332,7 @@
   </div>
 </div>
 
-<div class="section next-steps">
+<div class="section">
   <div class="section-heading">
     <strong>Mediation</strong>
   </div>
@@ -359,7 +355,7 @@
   </div>
 </div>
 
-<div class="section next-steps">
+<div class="section">
   <div class="section-heading">
     <strong>View your response online</strong>
   </div>
