@@ -68,6 +68,9 @@
       ],
       "ccj/*": [
         "features/ccj/*"
+      ],
+      "testing-support/*": [
+        "features/testing-support/*"
       ]
     },
     "typeRoots": [
