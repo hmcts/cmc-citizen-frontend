@@ -167,10 +167,10 @@
 {% endmacro %}
 
 {% macro addressInput(form, fieldName) %}
-  {{ textInput(t('Address line 1'), fieldName + '[line1]', form) }}
-  {{ textInput(t('Address line 2 (optional)'), fieldName + '[line2]', form) }}
-  {{ textInput(t('Town or city'), fieldName + '[city]', form) }}
-  {{ textInput(t('Postcode'), fieldName + '[postcode]', form, '', 'postcode') }}
+  {{ textInput(t('Address line 1'), fieldName + '[line1]', form, autocomplete='address-line1') }}
+  {{ textInput(t('Address line 2 (optional)'), fieldName + '[line2]', form, autocomplete='address-line2') }}
+  {{ textInput(t('Town or city (optional)'), fieldName + '[city]', form, autocomplete='address-line3') }}
+  {{ textInput(t('Postcode'), fieldName + '[postcode]', form, autocomplete='postal-code') }}
 {% endmacro %}
 
 {% macro nameInput(label = 'Your full name', form) %}

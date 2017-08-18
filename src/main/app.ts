@@ -17,6 +17,7 @@ import { Feature as DefendantFirstContactFeature } from 'first-contact/index'
 import { Feature as DefendantResponseFeature } from 'response/index'
 import { CsrfProtection } from 'modules/csrf'
 import { DashboardFeature } from 'dashboard/index'
+import { CCJFeature } from 'ccj/index'
 
 export const app: express.Express = express()
 
@@ -60,6 +61,7 @@ new DashboardFeature().enableFor(app)
 new ClaimIssueFeature().enableFor(app)
 new DefendantFirstContactFeature().enableFor(app)
 new DefendantResponseFeature().enableFor(app)
+new CCJFeature().enableFor(app)
 
 app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
 

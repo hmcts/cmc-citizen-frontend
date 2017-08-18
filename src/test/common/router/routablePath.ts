@@ -23,6 +23,10 @@ describe('RoutablePath', () => {
         expect(new RoutablePath('/claim/:externalId/confirmation').associatedView).to.be.equal('claim/views/confirmation')
         expect(new RoutablePath('/claim/:type/:subtype/list').associatedView).to.be.equal('claim/views/list')
       })
+
+      it('should remove case from view path', () => {
+        expect(new RoutablePath('/case/:externalId/claim/confirmation').associatedView).to.be.equal('claim/views/confirmation')
+      })
     })
 
     describe('for others', () => {
