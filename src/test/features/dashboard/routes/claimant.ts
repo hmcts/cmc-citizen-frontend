@@ -53,7 +53,7 @@ describe('Dashboard - claimant page', () => {
       })
     })
   })
-  describe('on POST', () => {
+  describe('on POST for requesting a CCJ', () => {
     checkAuthorizationGuards(app, 'post', claimantPage)
     context('when user authorised', () => {
       beforeEach(() => {
