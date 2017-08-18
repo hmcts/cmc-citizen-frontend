@@ -20,7 +20,7 @@ const serviceToken = 'token'
 const draftType = 'claim'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const issueFeeCode: string = config.get<string>('fees.issueFeeCode')
+const issueFeeCode: string = config.get<string>('fees.issueFee.code')
 
 describe('Claim issue: initiate payment receiver', () => {
   attachDefaultHooks()
@@ -43,7 +43,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
     it('should return 500 and error page when cannot calculate issue fee', async () => {
       draftStoreServiceMock.resolveRetrieve(draftType, { claimant: { payment: undefined } })
-      feesServiceMock.rejectCallFeesRegister(issueFeeCode)
+      feesServiceMock.rejectCalculateFee(issueFeeCode)
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
@@ -53,7 +53,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
     it('should return 500 and error page when cannot retrieve service token needed for payment service', async () => {
       draftStoreServiceMock.resolveRetrieve(draftType, { claimant: { payment: undefined } })
-      feesServiceMock.resolveCallFeesRegister(issueFeeCode)
+      feesServiceMock.resolveCalculateFee(issueFeeCode)
       idamServiceMock.rejectRetrieveServiceToken()
 
       await request(app)
@@ -64,7 +64,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
     it('should return 500 and error page when cannot create payment', async () => {
       draftStoreServiceMock.resolveRetrieve(draftType, { claimant: { payment: undefined } })
-      feesServiceMock.resolveCallFeesRegister(issueFeeCode)
+      feesServiceMock.resolveCalculateFee(issueFeeCode)
       idamServiceMock.resolveRetrieveServiceToken(serviceToken)
       payServiceMock.rejectCreate()
 
@@ -76,7 +76,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
     it('should return 500 and error page when cannot save draft', async () => {
       draftStoreServiceMock.resolveRetrieve(draftType, { claimant: { payment: undefined } })
-      feesServiceMock.resolveCallFeesRegister(issueFeeCode)
+      feesServiceMock.resolveCalculateFee(issueFeeCode)
       idamServiceMock.resolveRetrieveServiceToken(serviceToken)
       payServiceMock.resolveCreate()
       draftStoreServiceMock.rejectSave(draftType, 'HTTP error')
@@ -89,7 +89,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
     it('should redirect to next page when everything is fine', async () => {
       draftStoreServiceMock.resolveRetrieve(draftType, { claimant: { payment: undefined } })
-      feesServiceMock.resolveCallFeesRegister(issueFeeCode)
+      feesServiceMock.resolveCalculateFee(issueFeeCode)
       idamServiceMock.resolveRetrieveServiceToken(serviceToken)
       payServiceMock.resolveCreate()
       draftStoreServiceMock.resolveSave(draftType)
