@@ -58,5 +58,8 @@
   },
   "http": {
     "timeout": 10000
+  },
+  "featureToggles": {
+    "testingSupport": false
   }
 }

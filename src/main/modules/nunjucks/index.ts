@@ -55,5 +55,6 @@ export default class Nunjucks {
     nunjucksEnv.addGlobal('betaFeedbackSurveyUrl', config.get('feedback.feedbackSurvey.url'))
     nunjucksEnv.addGlobal('reportProblemSurveyUrl', config.get('feedback.reportProblemSurvey.url'))
     nunjucksEnv.addGlobal('customerSurveyUrl', config.get('feedback.serviceSurvey.url'))
+    nunjucksEnv.addGlobal('featureToggles', config.get('featureToggles'))
   }
 }

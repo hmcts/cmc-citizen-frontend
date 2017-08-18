@@ -1,5 +1,7 @@
-<ul class="hidden">
-  <li>
-    {% include "includes/language-link.njk" %}
-  </li>
+<ul>
+  {% if featureToggles.testingSupport %}
+    <li>
+      <a href="/testing-support">Testing support</a>
+    </li>
+  {% endif %}
 </ul>
