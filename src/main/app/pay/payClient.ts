@@ -8,7 +8,6 @@ import User from 'app/idam/user'
 import ServiceAuthToken from 'app/idam/serviceAuthToken'
 
 import * as uuid from 'uuid/v4'
-import { RangeFee } from 'app/fees/rangeFee'
 
 const payUrl = config.get('pay.url')
 
@@ -21,16 +20,17 @@ export default class PayClient {
    * Creates a payment request for CC-Pay
    *
    * @param user a user
-   * @param rangeFee the amount in pounds
+   * @param feeCode the fee code
+   * @param amount the amount in pounds
    * @param returnURL the url the user should be redirected to
    * @returns {Promise.URL}
    */
-  create (user: User, rangeFee: RangeFee, returnURL: string): Promise<PaymentResponse> {
-    const paymentReference = `CMC1$$$${uuid()}$$$AA00$$$${rangeFee.id}`
+  create (user: User, feeCode: string, amount: number, returnURL: string): Promise<PaymentResponse> {
+    const paymentReference = `CMC1$$$${uuid()}$$$AA00$$$${feeCode}`
 
     return request.post({
       uri: `${payUrl}/users/${user.id}/payments`,
-      body: new PaymentRequest(rangeFee.amount, paymentReference, 'Money Claim issue fee', returnURL),
+      body: new PaymentRequest(amount, paymentReference, 'Money Claim issue fee', returnURL),
       headers: {
         Authorization: `Bearer ${user.bearerToken}`,
         ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`

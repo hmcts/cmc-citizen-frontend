@@ -25,6 +25,7 @@ import { default as DraftClaimant } from 'app/drafts/models/claimant'
 import { Claimant } from 'app/claims/models/claimant'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { Address } from 'claims/models/address'
+import { RangeGroup } from 'fees/models/rangeGroup'
 
 function mockedDraftClaim () {
   let draft = new DraftClaim()
@@ -165,7 +166,9 @@ mock('claims/claimStoreClient', {
 mock('fees/feesClient', {
   'default': {
     calculateIssueFee: (amount) => Promise.resolve(100),
-    calculateHearingFee: (amount) => Promise.resolve(50)
+    calculateHearingFee: (amount) => Promise.resolve(50),
+    getIssueFeeRangeGroup: () => Promise.resolve(new RangeGroup('IF', 'Issue fee', [])),
+    getHearingFeeRangeGroup: () => Promise.resolve(new RangeGroup('HF', 'Hearing fee', []))
   }
 })
 

@@ -698,6 +698,10 @@ circular-json@^0.3.1:
   version "0.3.1"
   resolved "https://artifactory.reform.hmcts.net:443/artifactory/api/npm/npm/circular-json/-/circular-json-0.3.1.tgz#be8b36aefccde8b3ca7aa2d6afc07a37242c0d2d"
 
+class-transformer@^0.1.7:
+  version "0.1.7"
+  resolved "https://artifactory.reform.hmcts.net:443/artifactory/api/npm/npm/class-transformer/-/class-transformer-0.1.7.tgz#d577a7ce6fe83b766a447b2ba8c880eb5c9cd681"
+
 class-validator@^0.7.0:
   version "0.7.0"
   resolved "https://artifactory.reform.hmcts.net:443/artifactory/api/npm/npm/class-validator/-/class-validator-0.7.0.tgz#a45b96aaa2154d06efda1cac1061b0adf69ea55e"
@@ -3216,7 +3220,7 @@ mock-require@^2.0.1:
   dependencies:
     caller-id "^0.1.0"
 
-moment@2.x.x, moment@^2.17.1, moment@^2.18.1, moment@^2.9.0:
+moment@2.x.x, moment@^2.17.1, moment@^2.18.1:
   version "2.18.1"
   resolved "https://artifactory.reform.hmcts.net:443/artifactory/api/npm/npm/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
 
@@ -3456,12 +3460,6 @@ number-is-nan@^1.0.0:
 numeral@^2.0.4:
   version "2.0.6"
   resolved "https://artifactory.reform.hmcts.net:443/artifactory/api/npm/npm/numeral/-/numeral-2.0.6.tgz#4ad080936d443c2561aed9f2197efffe25f4e506"
-
-nunjucks-date-filter@^0.1.1:
-  version "0.1.1"
-  resolved "https://artifactory.reform.hmcts.net:443/artifactory/api/npm/npm/nunjucks-date-filter/-/nunjucks-date-filter-0.1.1.tgz#a936d44d2cc9898d95c6ab7b2aba7084fa60aba6"
-  dependencies:
-    moment "^2.9.0"
 
 nunjucks-numeral-filter@0.0.2:
   version "0.0.2"
@@ -4013,6 +4011,10 @@ redent@^1.0.0:
 referrer-policy@1.1.0:
   version "1.1.0"
   resolved "https://artifactory.reform.hmcts.net:443/artifactory/api/npm/npm/referrer-policy/-/referrer-policy-1.1.0.tgz#35774eb735bf50fb6c078e83334b472350207d79"
+
+reflect-metadata@^0.1.10:
+  version "0.1.10"
+  resolved "https://artifactory.reform.hmcts.net:443/artifactory/api/npm/npm/reflect-metadata/-/reflect-metadata-0.1.10.tgz#b4f83704416acad89988c9b15635d47e03b9344a"
 
 regenerator-runtime@^0.10.0:
   version "0.10.5"
