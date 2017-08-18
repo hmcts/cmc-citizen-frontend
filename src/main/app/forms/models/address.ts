@@ -40,7 +40,7 @@ export class Address implements Serializable<Address>, CompletableTask {
     this.postcode = postcode
   }
 
-  static fromClaimAddress(address: ClaimAddress): Address {
+  static fromClaimAddress (address: ClaimAddress): Address {
     return new Address(address.line1, address.line2, address.city, address.postcode)
   }
 

@@ -18,7 +18,6 @@ function defaultToAddressProvidedByClaimant (providedByDefendant: PartyDetails, 
   }
 }
 
-
 function renderView (form: Form<PartyDetails>, res: express.Response): void {
   res.render(Paths.theirDetailsPage.associatedView, { form: form, claim: res.locals.user.claim })
 }
