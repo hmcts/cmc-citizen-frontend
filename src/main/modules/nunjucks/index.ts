@@ -6,6 +6,7 @@ import * as nunjucks from 'nunjucks'
 import dateFilter from 'modules/nunjucks/dateFilter'
 import * as numeralFilter from 'nunjucks-numeral-filter'
 import * as numeral from 'numeral'
+import * as toBoolean from 'to-boolean'
 
 import { NUMBER_FORMAT } from 'app/utils/numberFormatter'
 
@@ -55,6 +56,8 @@ export default class Nunjucks {
     nunjucksEnv.addGlobal('betaFeedbackSurveyUrl', config.get('feedback.feedbackSurvey.url'))
     nunjucksEnv.addGlobal('reportProblemSurveyUrl', config.get('feedback.reportProblemSurvey.url'))
     nunjucksEnv.addGlobal('customerSurveyUrl', config.get('feedback.serviceSurvey.url'))
+
+    nunjucksEnv.addGlobal('toBoolean', toBoolean)
     nunjucksEnv.addGlobal('featureToggles', config.get('featureToggles'))
   }
 }

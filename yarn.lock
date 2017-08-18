@@ -3216,7 +3216,7 @@ mock-require@^2.0.1:
   dependencies:
     caller-id "^0.1.0"
 
-moment@2.x.x, moment@^2.17.1, moment@^2.18.1, moment@^2.9.0:
+moment@2.x.x, moment@^2.17.1, moment@^2.18.1:
   version "2.18.1"
   resolved "https://artifactory.reform.hmcts.net:443/artifactory/api/npm/npm/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
 
@@ -3456,12 +3456,6 @@ number-is-nan@^1.0.0:
 numeral@^2.0.4:
   version "2.0.6"
   resolved "https://artifactory.reform.hmcts.net:443/artifactory/api/npm/npm/numeral/-/numeral-2.0.6.tgz#4ad080936d443c2561aed9f2197efffe25f4e506"
-
-nunjucks-date-filter@^0.1.1:
-  version "0.1.1"
-  resolved "https://artifactory.reform.hmcts.net:443/artifactory/api/npm/npm/nunjucks-date-filter/-/nunjucks-date-filter-0.1.1.tgz#a936d44d2cc9898d95c6ab7b2aba7084fa60aba6"
-  dependencies:
-    moment "^2.9.0"
 
 nunjucks-numeral-filter@0.0.2:
   version "0.0.2"
@@ -4738,6 +4732,10 @@ time-stamp@^1.0.0:
 timed-out@^2.0.0:
   version "2.0.0"
   resolved "https://artifactory.reform.hmcts.net:443/artifactory/api/npm/npm/timed-out/-/timed-out-2.0.0.tgz#f38b0ae81d3747d628001f41dafc652ace671c0a"
+
+to-boolean@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/to-boolean/-/to-boolean-1.0.0.tgz#840653cc95abde6ae7fa259e7d74868a91232e3f"
 
 to-fast-properties@^1.0.1:
   version "1.0.3"

@@ -19,6 +19,7 @@ import { CsrfProtection } from 'modules/csrf'
 import { DashboardFeature } from 'dashboard/index'
 import { CCJFeature } from 'ccj/index'
 import { TestingSupportFeature } from 'testing-support/index'
+import * as toBoolean from 'to-boolean'
 
 export const app: express.Express = express()
 
@@ -66,7 +67,7 @@ new ClaimIssueFeature().enableFor(app)
 new DefendantFirstContactFeature().enableFor(app)
 new DefendantResponseFeature().enableFor(app)
 new CCJFeature().enableFor(app)
-if (config.get<boolean>('featureToggles.testingSupport')) {
+if (toBoolean(config.get<boolean>('featureToggles.testingSupport'))) {
   logger.info('Testing support activated')
   new TestingSupportFeature().enableFor(app)
 }

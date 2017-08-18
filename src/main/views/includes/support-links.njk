@@ -1,5 +1,5 @@
 <ul>
-  {% if featureToggles.testingSupport %}
+  {% if toBoolean(featureToggles.testingSupport) %}
     <li>
       <a href="/testing-support">Testing support</a>
     </li>

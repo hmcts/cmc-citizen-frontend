@@ -58,5 +58,8 @@
   },
   "http": {
     "timeout": "HTTP_TIMEOUT"
+  },
+  "featureToggles": {
+    "testingSupport": "FEATURE_TESTING_SUPPORT"
   }
 }

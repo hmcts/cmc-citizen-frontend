@@ -5,12 +5,10 @@ import User from 'app/idam/user'
 import { DefendantResponse } from 'app/claims/models/defendantResponse'
 import { ClaimModelConverter } from 'claims/claimModelConverter'
 import { ResponseModelConverter } from 'claims/responseModelConverter'
-import { UpdateResponseDeadlineRequest } from 'testing-support/models/updateResponseDeadlineRequest'
 
-const claimApiBaseUrl = `${config.get<string>('claim-store.url')}`
+export const claimApiBaseUrl = `${config.get<string>('claim-store.url')}`
 const claimStoreApiUrl = `${claimApiBaseUrl}/claims`
 const claimStoreResponsesApiUrl = `${claimApiBaseUrl}/responses/claim`
-const testingSupportUrl = `${claimApiBaseUrl}/testing-support/claims`
 
 export default class ClaimStoreClient {
   static saveClaimForUser (user: User): Promise<Claim> {
@@ -159,19 +157,5 @@ export default class ClaimStoreClient {
         Authorization: `Bearer ${user.bearerToken}`
       }
     })
-  }
-
-  static updateResponseDeadline (updateRequest: UpdateResponseDeadlineRequest, user: User) {
-    if (config.get('featureToggles.testingSupport')) {
-      return request.put(
-        `${testingSupportUrl}/${updateRequest.claimNumber}/response-deadline/${updateRequest.date.asString()}`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.bearerToken}`
-          }
-        })
-    } else {
-      throw new Error('Testing support is not enabled')
-    }
   }
 }

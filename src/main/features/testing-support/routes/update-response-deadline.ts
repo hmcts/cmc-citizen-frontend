@@ -4,8 +4,8 @@ import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'forms/form'
 import { UpdateResponseDeadlineRequest } from 'testing-support/models/updateResponseDeadlineRequest'
 import { FormValidator } from 'app/forms/validation/formValidator'
-import ClaimStoreClient from 'claims/claimStoreClient'
 import User from 'app/idam/user'
+import { TestingSupportClient } from 'testing-support/testingSupportClient'
 
 function renderView (form: Form<UpdateResponseDeadlineRequest>, res: express.Response): void {
   res.render(Paths.updateResponseDeadlinePage.associatedView, { form: form })
@@ -25,7 +25,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        await ClaimStoreClient.updateResponseDeadline(
+        await TestingSupportClient.updateResponseDeadline(
           form.model as UpdateResponseDeadlineRequest,
           res.locals.user as User
         )
