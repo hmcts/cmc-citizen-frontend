@@ -53,4 +53,8 @@ export default class Claim implements Serializable<Claim> {
   get remainingDays (): number {
     return this.responseDeadline.diff(MomentFactory.currentDate(), 'days')
   }
+
+  get eligibleForCCJ (): boolean {
+    return this.remainingDays < 0 && !this.respondedAt
+  }
 }

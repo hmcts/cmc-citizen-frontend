@@ -65,6 +65,9 @@
       ],
       "dashboard/*": [
         "features/dashboard/*"
+      ],
+      "ccj/*": [
+        "features/ccj/*"
       ]
     },
     "typeRoots": [

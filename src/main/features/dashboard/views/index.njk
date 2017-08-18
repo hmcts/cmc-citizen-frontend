@@ -67,7 +67,13 @@
               <td><a href="/dashboard/{{ claim.externalId }}/claimant">{{ claim.claimNumber }}</a></td>
               <td>{{ claim.claimData.defendant.name }}</td>
               <td>{{ claim.totalAmount | numeral }}</td>
-              <td>{{ t('Your claim is being processed. We will email you to explain what to do next.') }}</td>
+              <td>
+                {% if claim.eligibleForCCJ %}
+                  {{ t('Request a County Court Judgment.') }}
+                {% else %}
+                  {{ t('Your claim is being processed. We will email you to explain what to do next.') }}
+                {% endif %}
+              </td>
             </tr>
           {% endfor %}
           </tbody>

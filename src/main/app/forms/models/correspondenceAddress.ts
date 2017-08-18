@@ -20,11 +20,11 @@ export class CorrespondenceAddress extends Address {
 
   @IsDefined({ message: ValidationErrors.FIRST_LINE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.FIRST_LINE_REQUIRED })
-  @MaxLength(50, { message: ValidationErrors.FIRST_LINE_TOO_LONG })
+  @MaxLength(100, { message: ValidationErrors.FIRST_LINE_TOO_LONG })
   line1?: string
-  @MaxLength(50, { message: ValidationErrors.SECOND_LINE_TOO_LONG })
+  @MaxLength(100, { message: ValidationErrors.SECOND_LINE_TOO_LONG })
   line2?: string
-  @MaxLength(50, { message: ValidationErrors.CITY_NOT_VALID })
+  @MaxLength(100, { message: ValidationErrors.CITY_NOT_VALID })
   city?: string
   @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED })

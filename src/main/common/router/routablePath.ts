@@ -25,8 +25,9 @@ export class RoutablePath {
       .substring(1) // remove leading slash
       .split('/')
 
-    const featureName: string = split[0]
-    const viewPath: string = split.slice(1).join('/')
+    const isCaseUri: boolean = split[0] === 'case'
+    const featureName: string = isCaseUri ? split[1] : split[0]
+    const viewPath: string = split.slice(isCaseUri ? 2 : 1).join('/')
     return `${featureName}/views/${viewPath}`
   }
 }
