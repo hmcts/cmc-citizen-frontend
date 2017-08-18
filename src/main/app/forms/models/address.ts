@@ -4,6 +4,7 @@ import { IsNotBlank } from 'forms/validation/validators/isBlank'
 
 import { Serializable } from 'models/serializable'
 import { CompletableTask } from 'app/models/task'
+import { Address as ClaimAddress } from 'claims/models/address'
 
 export class ValidationErrors {
   static readonly FIRST_LINE_REQUIRED: string = 'Enter first address line'
@@ -21,11 +22,11 @@ export class Address implements Serializable<Address>, CompletableTask {
 
   @IsDefined({ message: ValidationErrors.FIRST_LINE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.FIRST_LINE_REQUIRED })
-  @MaxLength(50, { message: ValidationErrors.FIRST_LINE_TOO_LONG })
+  @MaxLength(100, { message: ValidationErrors.FIRST_LINE_TOO_LONG })
   line1?: string
-  @MaxLength(50, { message: ValidationErrors.SECOND_LINE_TOO_LONG })
+  @MaxLength(100, { message: ValidationErrors.SECOND_LINE_TOO_LONG })
   line2?: string
-  @MaxLength(50, { message: ValidationErrors.CITY_NOT_VALID })
+  @MaxLength(100, { message: ValidationErrors.CITY_NOT_VALID })
   city?: string
   @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED })
@@ -37,6 +38,10 @@ export class Address implements Serializable<Address>, CompletableTask {
     this.line2 = line2
     this.city = city
     this.postcode = postcode
+  }
+
+  static fromClaimAddress (address: ClaimAddress): Address {
+    return new Address(address.line1, address.line2, address.city, address.postcode)
   }
 
   deserialize (input?: any): Address {

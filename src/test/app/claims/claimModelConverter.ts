@@ -53,12 +53,18 @@ describe('ClaimModelConverter', () => {
 
     it('should set the address on converted object', () => {
       let converted = ClaimModelConverter.convert(draftClaim)
-      expect(converted.claimant.address).to.deep.equal(testAddress)
+      expect(converted.claimant.address.line1).to.equal(testAddress.line1)
+      expect(converted.claimant.address.line2).to.equal(testAddress.line2)
+      expect(converted.claimant.address.city).to.equal(testAddress.city)
+      expect(converted.claimant.address.postcode).to.equal(testAddress.postcode)
     })
 
     it('should set the correspondence address on converted object', () => {
       let converted = ClaimModelConverter.convert(draftClaim)
-      expect(converted.claimant.correspondenceAddress).to.deep.equal(testAddress)
+      expect(converted.claimant.address.line1).to.equal(testAddress.line1)
+      expect(converted.claimant.address.line2).to.equal(testAddress.line2)
+      expect(converted.claimant.address.city).to.equal(testAddress.city)
+      expect(converted.claimant.address.postcode).to.equal(testAddress.postcode)
     })
 
     it('should not set the correspondence address if one is not provided', () => {

@@ -63,8 +63,6 @@ export default class Claimant implements CompletableTask {
           case PartyType.ORGANISATION:
             this.partyDetails = new OrganisationDetails().deserialize(input.partyDetails)
             break
-          default:
-            throw new Error()
         }
       }
     }
@@ -91,8 +89,6 @@ export default class Claimant implements CompletableTask {
           let organisationDetails = this.partyDetails as OrganisationDetails
           result = !!organisationDetails && organisationDetails.isCompleted()
           break
-        default:
-          throw new Error()
       }
     }
     return result && !!this.mobilePhone && this.mobilePhone.isCompleted()

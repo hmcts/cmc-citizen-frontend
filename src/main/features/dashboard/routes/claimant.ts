@@ -1,6 +1,7 @@
 import * as express from 'express'
 
 import { Paths } from 'dashboard/paths'
+import { Paths as CCJPaths } from 'ccj/paths'
 import { ErrorHandling } from 'common/errorHandling'
 
 import ClaimStoreClient from 'claims/claimStoreClient'
@@ -15,4 +16,8 @@ export default express.Router()
       claim: claim,
       receiptUri: Paths.claimReceiptReceiver.uri.replace(':externalId', externalId)
     })
+  }))
+  .post(Paths.claimantPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
+    const { externalId } = req.params
+    res.redirect(CCJPaths.theirDetailsPage.uri.replace(':externalId', externalId))
   }))

@@ -1,13 +1,12 @@
-import TheirDetails from './theirDetails'
-import { Moment } from 'moment'
+import { TheirDetails } from './theirDetails'
 import { PartyType } from 'forms/models/partyType'
-import { Address } from 'forms/models/address'
+import { Address } from 'claims/models/address'
+import Email from 'forms/models/email'
 
-export default class Individual extends TheirDetails {
+export class Individual extends TheirDetails {
   constructor (name?: string,
               address?: Address,
-              email?: string,
-              dateOfBirth?: Moment) {
+              email?: Email) {
     super(PartyType.INDIVIDUAL.value,
           name,
           address,

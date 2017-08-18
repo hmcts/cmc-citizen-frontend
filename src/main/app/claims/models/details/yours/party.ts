@@ -1,8 +1,8 @@
 import { Serializable } from 'models/serializable'
-import { Address } from 'forms/models/address'
+import { Address } from 'claims/models/address'
 import { MobilePhone } from 'forms/models/mobilePhone'
 
-export default class Party implements Serializable<Party> {
+export class Party implements Serializable<Party> {
   type: string
   name: string
   address: Address

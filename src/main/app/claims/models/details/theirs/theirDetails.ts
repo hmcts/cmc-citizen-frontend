@@ -1,17 +1,17 @@
 import { Serializable } from 'models/serializable'
-import { Address } from 'forms/models/address'
+import { Address } from 'claims/models/address'
 import Email from 'forms/models/email'
 
-export default class TheirDetails implements Serializable<TheirDetails> {
+export class TheirDetails implements Serializable<TheirDetails> {
   type: string
   name: string
   address: Address
-  email?: string
+  email?: Email
 
   constructor (type?: string,
               name?: string,
               address?: Address,
-              email?: string ) {
+              email?: Email ) {
     this.name = name
     this.address = address
     this.email = email
@@ -28,7 +28,7 @@ export default class TheirDetails implements Serializable<TheirDetails> {
         this.address = new Address().deserialize(input.address)
       }
       if (input.email) {
-        this.email = new Email().deserialize(input.email).address
+        this.email = new Email().deserialize(input.email)
       }
     }
     return this

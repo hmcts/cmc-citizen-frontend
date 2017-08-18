@@ -6,22 +6,26 @@ import { CompanyDetails } from 'forms/models/companyDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import ClaimData from 'claims/models/claimData'
-import Party from 'claims/models/party'
-import Individual from 'claims/models/individual'
-import SoleTrader from 'claims/models/soleTrader'
-import Company from 'claims/models/company'
-import Organisation from 'claims/models/organisation'
-import { Defendant } from 'claims/models/defendant'
-import TheirDetails from 'claims/models/theirDetails'
+import { Party } from 'claims/models/details/yours/party'
+import { Individual as ClaimantAsIndividual } from 'claims/models/details/yours/individual'
+import { Company as ClaimantAsCompany } from 'claims/models/details/yours/company'
+import { SoleTrader as ClaimantAsSoleTrader } from 'claims/models/details/yours/soleTrader'
+import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
+import { Organisation as ClaimantAsOrganisation } from 'claims/models/details/yours/organisation'
+import { Individual as DefendantAsIndividual } from 'claims/models/details/theirs/individual'
+import { Company as DefendantAsCompany } from 'claims/models/details/theirs/company'
+import { SoleTrader as DefendantAsSoleTrader } from 'claims/models/details/theirs/soleTrader'
+import { Organisation as DefendantAsOrganisation } from 'claims/models/details/theirs/organisation'
 import InterestDate from 'app/claims/models/interestDate'
 import { Address } from 'claims/models/address'
+import { Address as AddressForm } from 'forms/models/address'
 
 export class ClaimModelConverter {
 
   static convert (draftClaim: DraftClaim): ClaimData {
     let claimData: ClaimData = new ClaimData()
     if (draftClaim.interestDate.date.asString() === '') {
-      delete claimData.interestDate.date
+      // delete claimData.interestDate
     } else {
       claimData.interestDate = new InterestDate()
       claimData.interestDate.date = draftClaim.interestDate.date.asString() as any
@@ -38,33 +42,36 @@ export class ClaimModelConverter {
   }
 
   private static convertClaimantDetails (draftClaim: DraftClaim): Party {
-
     switch (draftClaim.claimant.partyDetails.type) {
       case PartyType.INDIVIDUAL.value:
         let individualDetails = draftClaim.claimant.partyDetails as IndividualDetails
-        return new Individual(individualDetails.name, individualDetails.address,
-                               individualDetails.correspondenceAddress,
+        return new ClaimantAsIndividual(individualDetails.name,
+                               this.convertAddress(individualDetails.address),
+                               this.convertAddress(individualDetails.correspondenceAddress),
                                draftClaim.claimant.mobilePhone,
                                undefined,
                                individualDetails.dateOfBirth.date.toMoment())
       case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
         let soleTraderDetails: SoleTraderDetails = draftClaim.claimant.partyDetails as SoleTraderDetails
-        return new SoleTrader(soleTraderDetails.name, soleTraderDetails.address,
-                               soleTraderDetails.correspondenceAddress,
+        return new ClaimantAsSoleTrader(soleTraderDetails.name,
+                               this.convertAddress(soleTraderDetails.address),
+                               this.convertAddress(soleTraderDetails.correspondenceAddress),
                                draftClaim.claimant.mobilePhone,
                                undefined,
                                soleTraderDetails.businessName)
       case PartyType.COMPANY.value:
         let companyDetails = draftClaim.claimant.partyDetails as CompanyDetails
-        return new Company(companyDetails.name, companyDetails.address,
-                               companyDetails.correspondenceAddress,
+        return new ClaimantAsCompany(companyDetails.name,
+                               this.convertAddress(companyDetails.address),
+                               this.convertAddress(companyDetails.correspondenceAddress),
                                draftClaim.claimant.mobilePhone,
                                undefined,
                                companyDetails.contactPerson)
       case PartyType.ORGANISATION.value:
         let organisationDetails = draftClaim.claimant.partyDetails as OrganisationDetails
-        return new Organisation(organisationDetails.name, organisationDetails.address,
-                               organisationDetails.correspondenceAddress,
+        return new ClaimantAsOrganisation(organisationDetails.name,
+                               this.convertAddress(organisationDetails.address),
+                               this.convertAddress(organisationDetails.correspondenceAddress),
                                draftClaim.claimant.mobilePhone,
                                undefined,
                                organisationDetails.contactPerson)
@@ -78,64 +85,40 @@ export class ClaimModelConverter {
     const defendantDetails: PartyDetails = draftClaim.defendant.partyDetails
     switch (defendantDetails.type) {
       case PartyType.INDIVIDUAL.value:
-        break
-    }
-    
-    let defendant = new TheirDetails()
-    defendant.address = new Address()
-    defendant.address.line1 = defendantDetails.address.line1
-    defendant.address.postcode = defendantDetails.address.postcode
-    defendant.name = defendantDetails.name as any
-    // delete draftClaim.defendant.partyDetails
-
-    // if (!draftClaim.defendant.dateOfBirth || !draftClaim.defendant.dateOfBirth.date) {
-    //   delete draftClaim.defendant.dateOfBirth
-   // }
-
-    if (!draftClaim.defendant.email) {
-      defendant.email = draftClaim.defendant.email
-    }
-
-  switch (defendantDetails.type) {
-      case PartyType.INDIVIDUAL.value:
         let individualDetails = defendantDetails as IndividualDetails
-        return new Individual(individualDetails.name, individualDetails.address,
-                               individualDetails.correspondenceAddress,
-                               draftClaim.claimant.mobilePhone,
-                               undefined,
-                               individualDetails.dateOfBirth.date.toMoment())
+        return new DefendantAsIndividual(individualDetails.name,
+                               this.convertAddress(individualDetails.address),
+                               draftClaim.defendant.email)
       case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
         let soleTraderDetails: SoleTraderDetails = draftClaim.claimant.partyDetails as SoleTraderDetails
-        return new SoleTrader(soleTraderDetails.name, soleTraderDetails.address,
-                               soleTraderDetails.correspondenceAddress,
-                               draftClaim.claimant.mobilePhone,
-                               undefined,
+        return new DefendantAsSoleTrader(soleTraderDetails.name,
+                               this.convertAddress(soleTraderDetails.address),
+                               draftClaim.defendant.email,
                                soleTraderDetails.businessName)
       case PartyType.COMPANY.value:
         let companyDetails = draftClaim.claimant.partyDetails as CompanyDetails
-        return new Company(companyDetails.name, companyDetails.address,
-                               companyDetails.correspondenceAddress,
-                               draftClaim.claimant.mobilePhone,
-                               undefined,
+        return new DefendantAsCompany(companyDetails.name,
+                               this.convertAddress(companyDetails.address),
+                               draftClaim.defendant.email,
                                companyDetails.contactPerson)
       case PartyType.ORGANISATION.value:
         let organisationDetails = draftClaim.claimant.partyDetails as OrganisationDetails
-        return new Organisation(organisationDetails.name, organisationDetails.address,
-                               organisationDetails.correspondenceAddress,
-                               draftClaim.claimant.mobilePhone,
-                               undefined,
+        return new DefendantAsOrganisation(organisationDetails.name,
+                               this.convertAddress(organisationDetails.address),
+                               draftClaim.defendant.email,
                                organisationDetails.contactPerson)
       default:
         console.log('Something went wrong, No claimant type is set')
         return undefined
-    }  
+    }
+  }
 
-
-
-
-
-
-
-    return defendant
+  private static convertAddress (addressForm: AddressForm): Address {
+    let address = new Address()
+    address.line1 = addressForm.line1
+    address.line2 = addressForm.line2
+    address.city = addressForm.city
+    address.postcode = addressForm.postcode
+    return address
   }
 }

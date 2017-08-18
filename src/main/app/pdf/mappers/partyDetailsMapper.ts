@@ -1,7 +1,7 @@
-import Party from 'app/claims/models/party'
+import { Party } from 'claims/models/details/yours/party'
 
 export class PartyDetailsMapper {
-  static createPersonalDetails (party: Party, email: string): object {
+  static createPartyDetails (party: Party, email: string): object {
     let data = {
       fullName: party.name,
       address: {

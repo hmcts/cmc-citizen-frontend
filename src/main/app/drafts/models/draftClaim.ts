@@ -12,7 +12,7 @@ export default class DraftClaim extends Draft implements Serializable<DraftClaim
 
   externalId = uuid()
   claimant: Claimant = new Claimant()
-  defendant?: Defendant = new Defendant()
+  defendant: Defendant = new Defendant()
   amount: ClaimAmountBreakdown = new ClaimAmountBreakdown()
   interest: Interest = new Interest()
   interestDate: InterestDate = new InterestDate()

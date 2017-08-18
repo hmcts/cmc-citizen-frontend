@@ -3,7 +3,8 @@ import * as path from 'path'
 import * as express from 'express'
 import * as config from 'config'
 import * as nunjucks from 'nunjucks'
-import dateFilter from 'modules/nunjucks/dateFilter'
+import dateFilter from 'modules/nunjucks/filters/dateFilter'
+import { convertToPoundsFilter } from 'modules/nunjucks/filters/convertToPounds'
 import * as numeralFilter from 'nunjucks-numeral-filter'
 import * as numeral from 'numeral'
 
@@ -51,6 +52,7 @@ export default class Nunjucks {
     nunjucksEnv.addGlobal('piwikTrackingSite', config.get<string>('analytics.piwikTrackingSite'))
     nunjucksEnv.addGlobal('t', (key: string, options?: TranslationOptions): string => this.i18next.t(key, options))
     nunjucksEnv.addFilter('date', dateFilter)
+    nunjucksEnv.addFilter('pennies2pounds', convertToPoundsFilter)
     nunjucksEnv.addFilter('numeral', numeralFilter)
     nunjucksEnv.addGlobal('betaFeedbackSurveyUrl', config.get('feedback.feedbackSurvey.url'))
     nunjucksEnv.addGlobal('reportProblemSurveyUrl', config.get('feedback.reportProblemSurvey.url'))

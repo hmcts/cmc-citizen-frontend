@@ -1,9 +1,9 @@
-import TheirDetails from './theirDetails'
+import { Party } from './party'
 import { PartyType } from 'forms/models/partyType'
-import { Address } from 'forms/models/address'
+import { Address } from 'claims/models/address'
 import { MobilePhone } from 'forms/models/mobilePhone'
 
-export default class Organisation extends TheirDetails {
+export class Organisation extends Party {
   contactPerson?: string
 
   constructor (name?: string,
@@ -15,13 +15,15 @@ export default class Organisation extends TheirDetails {
     super(PartyType.ORGANISATION.value,
           name,
           address,
+          correspondenceAddress,
+          mobilePhone,
           email)
     this.contactPerson = contactPerson
   }
 
   deserialize (input: any): Organisation {
     if (input) {
-      Object.assign(this, new TheirDetails().deserialize(input))
+      Object.assign(this, new Party().deserialize(input))
       this.contactPerson = input.contactPerson
       this.type = PartyType.ORGANISATION.value
     }

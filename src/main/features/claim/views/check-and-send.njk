@@ -9,7 +9,6 @@
 {% set displayPartyType = draftClaim.claimant.partyTypeResponse.type.displayValue %}
 {% set claimantFullName = draftClaim.claimant.name.name %}
 {% set defendantFullName = draftClaim.defendant.name.name %}
-{% set dateOfBirth = draftClaim.claimant.dateOfBirth.date.asString() | date %}
 
 {% if draftClaim.claimant.partyDetails.hasCorrespondenceAddress %}
   {% set correspondenceAddressLines = [
@@ -53,7 +52,6 @@
         values = correspondenceAddressLines
       )
     }}
-    {% endif %}
     {% if (partyType === 'INDIVIDUAL' or partyType === 'SOLE_TRADER_OR_SELF_EMPLOYED') %}
       {{ row("Date of birth:", dateOfBirth.date.asString() | date) }}
     {% endif %}  

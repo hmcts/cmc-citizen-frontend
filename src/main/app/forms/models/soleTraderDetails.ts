@@ -37,7 +37,6 @@ export class SoleTraderDetails extends PartyDetails {
   deserialize (input?: any): SoleTraderDetails {
     if (input) {
       Object.assign(this, new PartyDetails().deserialize(input))
-      this.name = input.name
       this.businessName = input.businessName
       this.type = PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value
       if (input.dateOfBirth) {

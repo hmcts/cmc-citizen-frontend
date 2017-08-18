@@ -1,13 +1,14 @@
-import TheirDetails from './theirDetails'
+import { TheirDetails } from './theirDetails'
 import { PartyType } from 'forms/models/partyType'
-import { Address } from 'forms/models/address'
+import { Address } from 'claims/models/address'
+import Email from 'forms/models/email'
 
-export default class Company extends TheirDetails {
+export class Company extends TheirDetails {
   contactPerson?: string
 
   constructor (name?: string,
               address?: Address,
-              email?: string,
+              email?: Email,
               contactPerson?: string) {
     super(PartyType.COMPANY.value,
           name,

@@ -37,8 +37,6 @@ export class Defendant implements CompletableTask {
         case PartyType.ORGANISATION:
           deserialized.partyDetails = OrganisationDetails.fromObject(input.partyDetails)
           break
-        default:
-          throw new Error()
       }
     }
     return deserialized
@@ -51,22 +49,20 @@ export class Defendant implements CompletableTask {
       if (input.email) {
         this.email = new Email().deserialize(input.email)
       }
-      if (this.partyTypeResponse) {
-        switch (this.partyTypeResponse.type) {
-          case PartyType.INDIVIDUAL:
+      if (input.partyTypeResponse) {
+        switch (input.partyTypeResponse.type.value) {
+          case PartyType.INDIVIDUAL.value:
             this.partyDetails = new IndividualDetails().deserialize(input.partyDetails)
             break
-          case PartyType.COMPANY:
+          case PartyType.COMPANY.value:
             this.partyDetails = new CompanyDetails().deserialize(input.partyDetails)
             break
-          case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED:
+          case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
             this.partyDetails = new SoleTraderDetails().deserialize(input.partyDetails)
             break
-          case PartyType.ORGANISATION:
+          case PartyType.ORGANISATION.value:
             this.partyDetails = new OrganisationDetails().deserialize(input.partyDetails)
             break
-          default:
-            throw new Error()
         }
       }
     }
@@ -93,8 +89,6 @@ export class Defendant implements CompletableTask {
           let organisationDetails = this.partyDetails as OrganisationDetails
           result = !!organisationDetails && organisationDetails.isCompleted()
           break
-        default:
-          throw new Error()
       }
     }
     return result && !!this.email && this.email.isCompleted()

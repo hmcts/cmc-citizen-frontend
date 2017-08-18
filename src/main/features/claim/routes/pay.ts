@@ -1,20 +1,26 @@
 import * as express from 'express'
 import * as config from 'config'
+
+import { Paths } from 'claim/paths'
+
+import IdamClient from 'idam/idamClient'
+
 import PayClient from 'app/pay/payClient'
 import PaymentResponse from 'app/pay/paymentResponse'
-import { Paths } from 'claim/paths'
-import IdamClient from 'idam/idamClient'
-import FeesClient from 'app/fees/feesClient'
 import Payment from 'app/pay/payment'
-import ClaimStoreClient from 'app/claims/claimStoreClient'
-import { buildURL } from 'app/utils/CallbackBuilder'
+
+import FeesClient from 'app/fees/feesClient'
+import { CalculationOutcome } from 'app/fees/models/calculationOutcome'
+
 import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
-import { RangeFee } from 'app/fees/rangeFee'
+import ClaimStoreClient from 'app/claims/claimStoreClient'
+
+import { buildURL } from 'app/utils/CallbackBuilder'
 import { claimAmountWithInterest } from 'app/utils/interestUtils'
 import User from 'app/idam/user'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('router/pay')
-const issueFeeCode = config.get<string>('fees.issueFeeCode')
+const issueFeeCode = config.get<string>('fees.issueFee.code')
 
 const getPayClient = async (): Promise<PayClient> => {
   const authToken = await IdamClient.retrieveServiceToken()
@@ -82,12 +88,10 @@ export default express.Router()
             return res.redirect(Paths.finishPaymentReceiver.uri.replace(':externalId', user.claimDraft.externalId))
         }
       }
-
-      const issueFee: RangeFee = await FeesClient.callFeesRegister(issueFeeCode, amount)
+      const feeCalculationOutcome: CalculationOutcome = await FeesClient.calculateFee(issueFeeCode, claimAmountWithInterest(res.locals.user.claimDraft))
       const payClient: PayClient = await getPayClient()
-      const payment: PaymentResponse = await payClient.create(user, issueFee, getReturnURL(req, user.claimDraft.externalId))
-      user.claimDraft.claimant.payment = payment as any
-
+      const payment: PaymentResponse = await payClient.create(res.locals.user, feeCalculationOutcome.fee.code, feeCalculationOutcome.amount, getReturnURL(req, user.claimDraft.externalId))
+      res.locals.user.claimDraft.claimant.payment = payment
       await ClaimDraftMiddleware.save(res, next)
       res.redirect(payment._links.next_url.href)
     } catch (err) {

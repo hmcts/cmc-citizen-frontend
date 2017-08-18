@@ -29,8 +29,10 @@ describe('Claim issue: fees page', () => {
 
       it('should return 500 and render error page when cannot calculate issue fee', async () => {
         draftStoreServiceMock.resolveRetrieve('claim')
-        feesServiceMock.rejectCalculateIssueFee('HTTP error')
+        feesServiceMock.rejectCalculateIssueFee()
         feesServiceMock.resolveCalculateHearingFee()
+        feesServiceMock.resolveGetIssueFeeRangeGroup()
+        feesServiceMock.resolveGetHearingFeeRangeGroup()
 
         await request(app)
           .get(ClaimPaths.feesPage.uri)
@@ -41,7 +43,35 @@ describe('Claim issue: fees page', () => {
       it('should return 500 and render error page when cannot calculate hearing fee', async () => {
         draftStoreServiceMock.resolveRetrieve('claim')
         feesServiceMock.resolveCalculateIssueFee()
-        feesServiceMock.rejectCalculateHearingFee('HTTP error')
+        feesServiceMock.rejectCalculateHearingFee()
+        feesServiceMock.resolveGetIssueFeeRangeGroup()
+        feesServiceMock.resolveGetHearingFeeRangeGroup()
+
+        await request(app)
+          .get(ClaimPaths.feesPage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should return 500 and render error page when retrieving issue fee range group failed', async () => {
+        draftStoreServiceMock.resolveRetrieve('claim')
+        feesServiceMock.resolveCalculateIssueFee()
+        feesServiceMock.resolveCalculateHearingFee()
+        feesServiceMock.rejectGetIssueFeeRangeGroup()
+        feesServiceMock.resolveGetHearingFeeRangeGroup()
+
+        await request(app)
+          .get(ClaimPaths.feesPage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should return 500 and render error page when retrieving hearing fee range group failed', async () => {
+        draftStoreServiceMock.resolveRetrieve('claim')
+        feesServiceMock.resolveCalculateIssueFee()
+        feesServiceMock.resolveCalculateHearingFee()
+        feesServiceMock.resolveGetIssueFeeRangeGroup()
+        feesServiceMock.rejectGetHearingFeeRangeGroup()
 
         await request(app)
           .get(ClaimPaths.feesPage.uri)
@@ -53,6 +83,8 @@ describe('Claim issue: fees page', () => {
         draftStoreServiceMock.resolveRetrieve('claim')
         feesServiceMock.resolveCalculateIssueFee()
         feesServiceMock.resolveCalculateHearingFee()
+        feesServiceMock.resolveGetIssueFeeRangeGroup()
+        feesServiceMock.resolveGetHearingFeeRangeGroup()
 
         await request(app)
           .get(ClaimPaths.feesPage.uri)

@@ -1,31 +1,33 @@
-import Party from './party'
+import { Party } from './party'
+import { Moment } from 'moment'
+import { MomentFactory } from 'common/momentFactory'
 import { PartyType } from 'forms/models/partyType'
-import { Address } from 'forms/models/address'
+import { Address } from 'claims/models/address'
 import { MobilePhone } from 'forms/models/mobilePhone'
 
-export default class SoleTrader extends Party {
-  businessName?: string
+export class Individual extends Party {
+  dateOfBirth: Moment
 
   constructor (name?: string,
               address?: Address,
               correspondenceAddress?: Address,
               mobilePhone?: MobilePhone,
               email?: string,
-              businessName?: string) {
-    super(PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value,
+              dateOfBirth?: Moment) {
+    super(PartyType.INDIVIDUAL.value,
           name,
           address,
           correspondenceAddress,
           mobilePhone,
           email)
-    this.businessName = businessName
+    this.dateOfBirth = dateOfBirth
   }
 
-  deserialize (input: any): SoleTrader {
+  deserialize (input: any): Individual {
     if (input) {
       Object.assign(this, new Party().deserialize(input))
-      this.businessName = input.businessName
-      this.type = PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value
+      this.dateOfBirth = MomentFactory.parse(input.dateOfBirth)
+      this.type = PartyType.INDIVIDUAL.value
     }
     return this
   }

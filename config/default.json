@@ -32,8 +32,12 @@
   },
   "fees": {
     "url": "http://localhost:4182",
-    "issueFeeCode": "cmc-online",
-    "hearingFeeCode": "cmc-hearing"
+    "issueFee": {
+      "code": "cmc-online"
+    },
+    "hearingFee": {
+      "code": "cmc-hearing"
+    }
   },
   "pay": {
     "url": "http://localhost:4421"

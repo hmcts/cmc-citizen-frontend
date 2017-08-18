@@ -33,10 +33,11 @@ describe('DraftClaim deserialization', () => {
         }
       },
       defendant: {
-        name: {
-          name: 'Janice Henrietta Clark'
+        partyTypeResponse: {
+          type : { value : 'INDIVIDUAL', displayValue: 'individual'}
         },
         partyDetails: {
+          name: 'Janice Henrietta Clark',
           address: {
             line1: 'Another lane',
             city: 'Manchester',
@@ -54,7 +55,7 @@ describe('DraftClaim deserialization', () => {
   it('should set the values of the fields to the ones from provided object', () => {
     let deserialized = new DraftClaim().deserialize(input)
 
-    expect((deserialized.claimant.partyDetails as IndividualDetails).name).to.equal('John Doe')
+    expect(deserialized.claimant.partyDetails.name).to.equal('John Doe')
     expect(deserialized.claimant.partyDetails.address.line1).to.equal('Here')
     expect(deserialized.claimant.partyDetails.address.line2).to.equal('There')
     expect(deserialized.claimant.partyDetails.address.city).to.equal('London')
@@ -63,6 +64,7 @@ describe('DraftClaim deserialization', () => {
     expect((deserialized.claimant.partyDetails as IndividualDetails).dateOfBirth.date.month).to.equal(11)
     expect((deserialized.claimant.partyDetails as IndividualDetails).dateOfBirth.date.year).to.equal(1990)
     expect(deserialized.claimant.mobilePhone.number).to.equal('7123123123')
+
     expect(deserialized.defendant.partyDetails.name).to.equal('Janice Henrietta Clark')
     expect(deserialized.defendant.partyDetails.address.line1).to.equal('Another lane')
     expect(deserialized.defendant.partyDetails.address.line2).to.equal(undefined)
