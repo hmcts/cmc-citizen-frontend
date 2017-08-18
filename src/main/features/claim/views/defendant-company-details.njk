@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "includes/macros/form.njk" import errorSummary %}
-{% from "includes/macros/partyDetails.njk" import companyForm %}
+{% from "includes/macros/partyDetails.njk" import defendantAsCompanyForm %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Company details') %}
@@ -8,7 +8,7 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      {{ companyForm(form, csrf) }}
+      {{ defendantAsCompanyForm(form, csrf) }}
     </div>
   </div>
 {% endblock %}

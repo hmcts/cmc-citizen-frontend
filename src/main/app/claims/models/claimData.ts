@@ -13,7 +13,7 @@ import Payment from 'app/pay/payment'
 
 export default class ClaimData implements Serializable<ClaimData> {
   claimant: Party
-  defendant: Defendant
+  defendant: TheirDetails
   paidFeeAmount: number
   amount: number
   reason: string

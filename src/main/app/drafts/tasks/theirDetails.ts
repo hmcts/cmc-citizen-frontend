@@ -6,7 +6,6 @@ export class TheirDetails {
     if (!claim || !claim.defendant) {
       return false
     }
-    console.log(`>>>>>>>>>>>>><<<<<<<<<<<<<${JSON.stringify(claim.defendant.isCompleted())}`)
     return claim.defendant.isCompleted()
   }
 

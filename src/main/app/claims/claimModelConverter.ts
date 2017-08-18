@@ -12,6 +12,7 @@ import SoleTrader from 'claims/models/soleTrader'
 import Company from 'claims/models/company'
 import Organisation from 'claims/models/organisation'
 import { Defendant } from 'claims/models/defendant'
+import TheirDetails from 'claims/models/theirDetails'
 import InterestDate from 'app/claims/models/interestDate'
 import { Address } from 'claims/models/address'
 
@@ -73,9 +74,14 @@ export class ClaimModelConverter {
     }
   }
 
-  private static convertDefendantDetails (draftClaim: DraftClaim): Defendant {
+  private static convertDefendantDetails (draftClaim: DraftClaim): TheirDetails {
     const defendantDetails: PartyDetails = draftClaim.defendant.partyDetails
-    let defendant = new Defendant()
+    switch (defendantDetails.type) {
+      case PartyType.INDIVIDUAL.value:
+        break
+    }
+    
+    let defendant = new TheirDetails()
     defendant.address = new Address()
     defendant.address.line1 = defendantDetails.address.line1
     defendant.address.postcode = defendantDetails.address.postcode
@@ -89,6 +95,47 @@ export class ClaimModelConverter {
     if (!draftClaim.defendant.email) {
       defendant.email = draftClaim.defendant.email
     }
+
+  switch (defendantDetails.type) {
+      case PartyType.INDIVIDUAL.value:
+        let individualDetails = defendantDetails as IndividualDetails
+        return new Individual(individualDetails.name, individualDetails.address,
+                               individualDetails.correspondenceAddress,
+                               draftClaim.claimant.mobilePhone,
+                               undefined,
+                               individualDetails.dateOfBirth.date.toMoment())
+      case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+        let soleTraderDetails: SoleTraderDetails = draftClaim.claimant.partyDetails as SoleTraderDetails
+        return new SoleTrader(soleTraderDetails.name, soleTraderDetails.address,
+                               soleTraderDetails.correspondenceAddress,
+                               draftClaim.claimant.mobilePhone,
+                               undefined,
+                               soleTraderDetails.businessName)
+      case PartyType.COMPANY.value:
+        let companyDetails = draftClaim.claimant.partyDetails as CompanyDetails
+        return new Company(companyDetails.name, companyDetails.address,
+                               companyDetails.correspondenceAddress,
+                               draftClaim.claimant.mobilePhone,
+                               undefined,
+                               companyDetails.contactPerson)
+      case PartyType.ORGANISATION.value:
+        let organisationDetails = draftClaim.claimant.partyDetails as OrganisationDetails
+        return new Organisation(organisationDetails.name, organisationDetails.address,
+                               organisationDetails.correspondenceAddress,
+                               draftClaim.claimant.mobilePhone,
+                               undefined,
+                               organisationDetails.contactPerson)
+      default:
+        console.log('Something went wrong, No claimant type is set')
+        return undefined
+    }  
+
+
+
+
+
+
+
     return defendant
   }
 }

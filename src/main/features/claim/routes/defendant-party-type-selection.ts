@@ -32,17 +32,21 @@ export default express.Router()
       } else {
         res.locals.user.claimDraft.defendant.partyTypeResponse = form.model
         await ClaimDraftMiddleware.save(res, next)
-        if (PartyType.INDIVIDUAL === form.model.type) {
-          res.redirect(Paths.defendantIndividualDetailsPage.uri)
-        } else if (PartyType.SOLE_TRADER_OR_SELF_EMPLOYED === form.model.type) {
-        //  res.redirect(Paths.soleTraderOrSelfEmployedDetailsPage.uri)
-        // } else if (PartyType.COMPANY === form.model.type) {
-        //  res.redirect(Paths.companyDetailsPage.uri)
-        // } else if (PartyType.ORGANISATION === form.model.type) {
-        //  res.redirect(Paths.organisationDetailsPage.uri)
-        // } else {
-       //   throw new Error()
-       // }
+        switch (form.model.type) {
+          case PartyType.INDIVIDUAL:
+            res.redirect(Paths.defendantIndividualDetailsPage.uri)
+            break
+          case PartyType.COMPANY:
+            res.redirect(Paths.defendantCompanyDetailsPage.uri)
+            break
+          case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED:
+            res.redirect(Paths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)
+            break
+          case PartyType.ORGANISATION:
+            res.redirect(Paths.defendantOrganisationDetailsPage.uri)
+            break
+          default:
+            throw Error('Something went wrong, No defendant type is set')
         }
       }
     }))

@@ -31,9 +31,9 @@
     "piwikTrackingSite": "https://hmctspiwik.useconnect.co.uk/"
   },
   "fees": {
-    "url": "http://localhost:8182",
-    "issueFeeCode": "onlinefees",
-    "hearingFeeCode": "hearingfees"
+    "url": "http://localhost:4182",
+    "issueFeeCode": "cmc-online",
+    "hearingFeeCode": "cmc-hearing"
   },
   "pay": {
     "url": "http://localhost:4421"

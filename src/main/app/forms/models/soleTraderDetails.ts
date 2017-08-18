@@ -47,7 +47,11 @@ export class SoleTraderDetails extends PartyDetails {
     return this
   }
 
-  isCompleted (): boolean {
-    return super.isCompleted() && !!this.name && this.name.length > 0 && !!this.dateOfBirth && this.dateOfBirth.isCompleted()
+  isCompleted (isClaimant?: boolean): boolean {
+    let dobCompleted: boolean = true
+    if (isClaimant) {
+      dobCompleted = !!this.dateOfBirth && this.dateOfBirth.isCompleted()
+    }
+    return super.isCompleted() && !!this.name && this.name.length > 0 && dobCompleted
   }
 }

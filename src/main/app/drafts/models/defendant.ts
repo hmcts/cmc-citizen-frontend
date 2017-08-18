@@ -24,14 +24,21 @@ export class Defendant implements CompletableTask {
       deserialized.email = new Email().deserialize(input.email)
     }
     if (input.partyTypeResponse) {
-      if (input.partyTypeResponse.type === PartyType.INDIVIDUAL) {
-        deserialized.partyDetails = IndividualDetails.fromObject(input.partyDetails)
-      } else if (input.partyTypeResponse.type === PartyType.COMPANY) {
-        deserialized.partyDetails = CompanyDetails.fromObject(input.partyDetails)
-      } else if (input.partyTypeResponse.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED) {
-        deserialized.partyDetails = SoleTraderDetails.fromObject(input.partyDetails)
-      } else if (input.partyTypeResponse.type === PartyType.ORGANISATION) {
-        deserialized.partyDetails = OrganisationDetails.fromObject(input.partyDetails)
+      switch (input.partyTypeResponse.type) {
+        case PartyType.INDIVIDUAL:
+          deserialized.partyDetails = IndividualDetails.fromObject(input.partyDetails)
+          break
+        case PartyType.COMPANY:
+          deserialized.partyDetails = CompanyDetails.fromObject(input.partyDetails)
+          break
+        case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED:
+          deserialized.partyDetails = SoleTraderDetails.fromObject(input.partyDetails)
+          break
+        case PartyType.ORGANISATION:
+          deserialized.partyDetails = OrganisationDetails.fromObject(input.partyDetails)
+          break
+        default:
+          throw new Error()
       }
     }
     return deserialized
@@ -45,14 +52,21 @@ export class Defendant implements CompletableTask {
         this.email = new Email().deserialize(input.email)
       }
       if (this.partyTypeResponse) {
-        if (this.partyTypeResponse.type === PartyType.INDIVIDUAL) {
-          this.partyDetails = new IndividualDetails().deserialize(input.partyDetails)
-        } else if (this.partyTypeResponse.type === PartyType.COMPANY) {
-          this.partyDetails = new CompanyDetails().deserialize(input.partyDetails)
-        } else if (this.partyTypeResponse.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED) {
-          this.partyDetails = new SoleTraderDetails().deserialize(input.partyDetails)
-        } else if (this.partyTypeResponse.type === PartyType.ORGANISATION) {
-          this.partyDetails = new OrganisationDetails().deserialize(input.partyDetails)
+        switch (this.partyTypeResponse.type) {
+          case PartyType.INDIVIDUAL:
+            this.partyDetails = new IndividualDetails().deserialize(input.partyDetails)
+            break
+          case PartyType.COMPANY:
+            this.partyDetails = new CompanyDetails().deserialize(input.partyDetails)
+            break
+          case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED:
+            this.partyDetails = new SoleTraderDetails().deserialize(input.partyDetails)
+            break
+          case PartyType.ORGANISATION:
+            this.partyDetails = new OrganisationDetails().deserialize(input.partyDetails)
+            break
+          default:
+            throw new Error()
         }
       }
     }
@@ -62,18 +76,25 @@ export class Defendant implements CompletableTask {
   isCompleted (): boolean {
     let result = false
     if (this.partyTypeResponse) {
-      if (this.partyTypeResponse.type === PartyType.INDIVIDUAL) {
-        let individualDetails = this.partyDetails as IndividualDetails
-        result = !!individualDetails && individualDetails.isCompleted(false)
-      } else if (this.partyTypeResponse.type === PartyType.COMPANY) {
-        let companyDetails = this.partyDetails as CompanyDetails
-        result = !!companyDetails && companyDetails.isCompleted()
-      } else if (this.partyTypeResponse.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED) {
-        let soleTraderDetails = this.partyDetails as SoleTraderDetails
-        result = !!soleTraderDetails && soleTraderDetails.isCompleted()
-      } else if (this.partyTypeResponse.type === PartyType.ORGANISATION) {
-        let organisationDetails = this.partyDetails as OrganisationDetails
-        result = !!organisationDetails && organisationDetails.isCompleted()
+      switch (this.partyTypeResponse.type) {
+        case PartyType.INDIVIDUAL:
+          let individualDetails = this.partyDetails as IndividualDetails
+          result = individualDetails.isCompleted(false)
+          break
+        case PartyType.COMPANY:
+          let companyDetails = this.partyDetails as CompanyDetails
+          result = !!companyDetails && companyDetails.isCompleted()
+          break
+        case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED:
+          let soleTraderDetails = this.partyDetails as SoleTraderDetails
+          result = !!soleTraderDetails && soleTraderDetails.isCompleted()
+          break
+        case PartyType.ORGANISATION:
+          let organisationDetails = this.partyDetails as OrganisationDetails
+          result = !!organisationDetails && organisationDetails.isCompleted()
+          break
+        default:
+          throw new Error()
       }
     }
     return result && !!this.email && this.email.isCompleted()
