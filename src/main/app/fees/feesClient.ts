@@ -7,7 +7,7 @@ import { RangeGroup } from 'app/fees/models/rangeGroup'
 
 import ClaimValidator from 'app/utils/claimValidator'
 import StringUtils from 'utils/stringUtils'
-import MoneyConvertor from 'app/fees/moneyConvertor'
+import MoneyConverter from 'app/fees/moneyConverter'
 
 const feesUrl = config.get('fees.url')
 
@@ -24,7 +24,7 @@ export default class FeesClient {
    */
   static calculateIssueFee (claimValue: number): Promise<number> {
     return this.calculateFee(issueFeeCode, claimValue)
-      .then((outcome: CalculationOutcome) => MoneyConvertor.convertPenniesToPounds(outcome.amount))
+      .then((outcome: CalculationOutcome) => MoneyConverter.convertPenniesToPounds(outcome.amount))
   }
 
   /**
@@ -35,7 +35,7 @@ export default class FeesClient {
    */
   static calculateHearingFee (claimValue: number): Promise<number> {
     return this.calculateFee(hearingFeeCode, claimValue)
-      .then((outcome: CalculationOutcome) => MoneyConvertor.convertPenniesToPounds(outcome.amount))
+      .then((outcome: CalculationOutcome) => MoneyConverter.convertPenniesToPounds(outcome.amount))
   }
 
   /**
@@ -47,7 +47,7 @@ export default class FeesClient {
    */
   static calculateFee (feeCode: string, amount: number): Promise<CalculationOutcome> {
     ClaimValidator.claimAmount(amount)
-    const amountInPennies = MoneyConvertor.convertPoundsToPennies(amount)
+    const amountInPennies = MoneyConverter.convertPoundsToPennies(amount)
     if (amountInPennies <= 0) {
       throw new Error(`Amount must be at least 1 penny, amount was: ${amountInPennies}`)
     }

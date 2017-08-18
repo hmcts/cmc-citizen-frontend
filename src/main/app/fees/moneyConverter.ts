@@ -1,4 +1,4 @@
-export default class MoneyConvertor {
+export default class MoneyConverter {
 
   static convertPenniesToPounds (amount: number): number {
     return amount / 100
