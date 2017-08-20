@@ -6,7 +6,7 @@ const path = require('path')
 const chai = require('chai')
 const expect = chai.expect
 
-const spies = require('chai-spies')
+const spies = require('sinon-chai')
 
 chai.use(spies)
 
