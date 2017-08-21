@@ -15,7 +15,7 @@ export function expectValidationError (errors: ValidationError[], message: strin
 
 export function expectPropertyValidationError (errors: ValidationError[], property: string, message: string) {
   const violations: Violation[] = extractViolationsFrom(errors)
-  expect(violations).to.contain(new Violation(property, message), `Error '${message}' has not been triggered for property '${property}'. The following errors has been triggered instead: ${violations}`)
+  expect(violations).to.deep.include(new Violation(property, message))
 }
 
 function extractViolationsFrom (errors: ValidationError[], parentProperty?: string): Violation[] {
