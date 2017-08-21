@@ -8,9 +8,9 @@
   <div class="grid-row">
     <div class="column-two-thirds">
 
-      <p>{{ t("Briefly explain why you are owed the money. You’ll have an opportunity to explain your claim in greater detail later in the process.") }}</p>
+      <p>{{ t("Briefly explain why you are owed the money.") }}</p>
       <div class="panel panel-border-wide">
-        <p>{{ t('Your claim will be sent to the defendant %s - a judge will not consider your explanation unless the claim is defended.',
+        <p>{{ t('Your claim will be sent to the defendant %1s - a judge will not consider your explanation unless the defendant %1s rejects your claim.',
         {
           postProcess: 'sprintf',
           sprintf: [defendantName]
