@@ -6,7 +6,8 @@
 {% set title = t("Money claim") %}
 {% set heading = t("Check your answers before submitting your claim") %}
 {% set partyType = draftClaim.claimant.partyTypeResponse.type.value %}
-{% set displayPartyType = draftClaim.claimant.partyTypeResponse.type.displayValue %}
+{% set claimantPartyType = draftClaim.claimant.partyTypeResponse.type.displayValue %}
+{% set defendantPartyType = draftClaim.defendant.partyTypeResponse.type.displayValue %}
 {% set claimantFullName = draftClaim.claimant.name.name %}
 {% set defendantFullName = draftClaim.defendant.name.name %}
 
@@ -26,7 +27,7 @@
     {{ csrfProtection(csrf) }}
 
     {{ tableStart("yourDetails", "Your details") }}
-    {{ row("About you:", displayPartyType) }}
+    {{ row("About you:", claimantPartyType) }}
     {{ row("Name:", name ) }}
     {% if (partyType === 'COMPANY' or partyType === 'ANOTHER_ORGANISATION') %}
       {% if (contactPerson) %}
@@ -61,6 +62,7 @@
     
 
     {{ tableStart("theirDetails", "Their details") }}
+    {{ row("About them:", defendantPartyType) }}
     {{ row('Name:', draftClaim.defendant.partyDetails.name) }}
     {{ rowWithMultipleValue("Address:", [
     draftClaim.defendant.partyDetails.address.line1,

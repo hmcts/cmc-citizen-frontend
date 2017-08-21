@@ -266,7 +266,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.dateOfBirth = undefined
       soleTraderDetails.hasCorrespondenceAddress = true
       soleTraderDetails.correspondenceAddress = validAddress
-      expect(soleTraderDetails.isCompleted()).to.equal(false)
+      expect(soleTraderDetails.isCompleted(true)).to.equal(false)
     })
 
     it('should return false when has correspondence address and correspondence address is not completed', () => {

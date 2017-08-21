@@ -25,10 +25,17 @@ export class InterestMapper {
   }
 
   public static calculateInterest (claimData: ClaimData): number {
-    return calculateInterest(claimData.amount, claimData.interest, claimData.interestDate.date)
+    return calculateInterest(this.totalAmount(claimData), claimData.interest, claimData.interestDate.date)
   }
 
   private static calculateDailyAmount (claimData: ClaimData): number {
-    return claimData.amount / claimData.interest.rate / 365
+    return this.totalAmount(claimData) / claimData.interest.rate / 365
+  }
+
+  private static totalAmount (claimData: ClaimData): number {
+    if (claimData.amount) {
+      return claimData.amount.totalAmount()
+    }
+    return 0.00
   }
 }

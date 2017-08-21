@@ -28,6 +28,7 @@ export class SoleTraderDetails extends PartyDetails {
       deserialized.name = input.name
     }
     deserialized.businessName = input.businessName
+    deserialized.type = PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value
     if (input.dateOfBirth) {
       deserialized.dateOfBirth = DateOfBirth.fromObject(input.dateOfBirth)
     }

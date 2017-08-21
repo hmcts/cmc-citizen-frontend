@@ -15,7 +15,7 @@ describe('Claimant', () => {
 
     it('should have party details field initialised', () => {
       let claimant = new Claimant()
-      expect(claimant.partyDetails).to.be.instanceOf(undefined)
+      expect(claimant.partyDetails).to.be.eq(undefined)
     })
   })
 

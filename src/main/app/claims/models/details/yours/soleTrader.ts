@@ -1,7 +1,6 @@
 import { Party } from './party'
 import { PartyType } from 'forms/models/partyType'
 import { Address } from 'claims/models/address'
-import { MobilePhone } from 'forms/models/mobilePhone'
 
 export class SoleTrader extends Party {
   businessName?: string
@@ -9,7 +8,7 @@ export class SoleTrader extends Party {
   constructor (name?: string,
               address?: Address,
               correspondenceAddress?: Address,
-              mobilePhone?: MobilePhone,
+              mobilePhone?: string,
               email?: string,
               businessName?: string) {
     super(PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value,

@@ -16,6 +16,7 @@ export class IndividualDetails extends PartyDetails {
     }
     let deserialized = new IndividualDetails()
     Object.assign(deserialized, PartyDetails.fromObject(input))
+    deserialized.type = PartyType.INDIVIDUAL.value
     if (input.dateOfBirth) {
       deserialized.dateOfBirth = DateOfBirth.fromObject(input.dateOfBirth)
     }
@@ -34,7 +35,7 @@ export class IndividualDetails extends PartyDetails {
   }
 
   isCompleted (isClaimant?: boolean): boolean {
-    let dobComplete: boolean = false
+    let dobComplete: boolean = true
     if (isClaimant) {
       dobComplete = !!this.dateOfBirth && this.dateOfBirth.isCompleted()
     } else {

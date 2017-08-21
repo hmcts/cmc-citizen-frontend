@@ -15,7 +15,7 @@ describe('DraftClaim deserialization', () => {
     input = {
       claimant: {
         partyTypeResponse: {
-          type : { value : 'INDIVIDUAL', displayValue: 'individual'}
+          type : { value : 'individual', displayValue: 'individual'}
         },
         mobilePhone: {
           number: '7123123123'
@@ -34,7 +34,7 @@ describe('DraftClaim deserialization', () => {
       },
       defendant: {
         partyTypeResponse: {
-          type : { value : 'INDIVIDUAL', displayValue: 'individual'}
+          type : { value : 'individual', displayValue: 'individual'}
         },
         partyDetails: {
           name: 'Janice Henrietta Clark',

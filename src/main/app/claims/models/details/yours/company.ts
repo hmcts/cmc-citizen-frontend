@@ -1,7 +1,6 @@
 import { Party } from './party'
 import { PartyType } from 'forms/models/partyType'
 import { Address } from 'claims/models/address'
-import { MobilePhone } from 'forms/models/mobilePhone'
 
 export class Company extends Party {
   contactPerson?: string
@@ -9,7 +8,7 @@ export class Company extends Party {
   constructor (name?: string,
               address?: Address,
               correspondenceAddress?: Address,
-              mobilePhone?: MobilePhone,
+              mobilePhone?: string,
               email?: string,
               contactPerson?: string) {
     super(PartyType.COMPANY.value,

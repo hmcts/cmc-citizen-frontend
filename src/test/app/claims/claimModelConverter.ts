@@ -24,7 +24,7 @@ describe('ClaimModelConverter', () => {
       claimant: {
         partyDetails: {
           name: 'John Doe',
-          type: 'INDIVIDUAL',
+          type: 'individual',
           dateOfBirth: new DateOfBirth(new LocalDate(1982, 1, 1)),
           address: testAddress,
           hasCorrespondenceAddress: true,
@@ -35,7 +35,7 @@ describe('ClaimModelConverter', () => {
       defendant: {
         partyDetails: {
           name: 'John Other',
-          type: 'INDIVIDUAL',
+          type: 'individual',
           dateOfBirth: new DateOfBirth(new LocalDate(1982, 1, 1)),
           address: testAddress,
           hasCorrespondenceAddress: false

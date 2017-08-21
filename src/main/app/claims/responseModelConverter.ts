@@ -4,8 +4,6 @@ export class ResponseModelConverter {
 
   static convert (responseDraft: ResponseDraft): any {
     responseDraft.defendantDetails.email = responseDraft.defendantDetails.email as any
-    // responseDraft.defendantDetails.dateOfBirth = responseDraft.defendantDetails.dateOfBirth.date.asString() as any
-
     this.convertPartyDetails(responseDraft)
 
     const response = {

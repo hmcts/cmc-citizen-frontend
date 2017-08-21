@@ -16,10 +16,11 @@ import { Organisation as DefendantAsOrganisation } from 'claims/models/details/t
 import Payment from 'app/pay/payment'
 
 export default class ClaimData implements Serializable<ClaimData> {
+  externalId: string
   claimant: Party
   defendant: TheirDetails
   paidFeeAmount: number
-  amount: number
+  amount: ClaimAmountBreakdown = new ClaimAmountBreakdown()
   reason: string
   interest: Interest
   interestDate: InterestDate
@@ -67,8 +68,9 @@ export default class ClaimData implements Serializable<ClaimData> {
         }
       }
       this.paidFeeAmount = this.payment.amount / 100
-      this.amount = new ClaimAmountBreakdown().deserialize(input.amount).totalAmount()
+      this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
       this.reason = input.reason
+      this.externalId = input.externalId
       if (input.interest) {
         this.interest = new Interest().deserialize(input.interest)
       }

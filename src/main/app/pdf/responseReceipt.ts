@@ -7,7 +7,7 @@ import { ClaimMapper } from 'app/pdf/mappers/claimMapper'
 import Claim from 'claims/models/claim'
 import { DefendantMapper } from 'app/pdf/mappers/defendantMapper'
 import { Party } from 'claims/models/details/yours/party'
-import { Defendant } from 'app/claims/models/defendant'
+import { TheirDetails as Defendant } from 'app/claims/models/details/theirs/theirDetails'
 
 const responseTemplatePath = path.join(__dirname, '..', '..', 'resources', 'pdf', 'responseReceipt.njk')
 

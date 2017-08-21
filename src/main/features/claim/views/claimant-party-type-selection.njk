@@ -17,19 +17,19 @@
           <legend class="visually-hidden">{{ t("About you and this claim") }}</legend>
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
 
-          {{ radioOption(form = form, name = 'type[value]', value = 'INDIVIDUAL',
+          {{ radioOption(form = form, name = 'type[value]', value = 'individual',
             label = t("An individual"), bold = true
           )}}
 
-          {{ radioOption(form = form, name = 'type[value]', value = 'SOLE_TRADER_OR_SELF_EMPLOYED',
+          {{ radioOption(form = form, name = 'type[value]', value = 'soleTrader',
             label = t("A sole trader or self-employed person"), bold = true
           )}}
 
-          {{ radioOption(form = form, name = 'type[value]', value = 'COMPANY',
+          {{ radioOption(form = form, name = 'type[value]', value = 'company',
             label = t("On behalf of a company"), bold = true
           )}}
 
-          {{ radioOption(form = form, name = 'type[value]', value = 'ANOTHER_ORGANISATION',
+          {{ radioOption(form = form, name = 'type[value]', value = 'organisation',
             label = t("As another type of organisation"), bold = true
           )}}
         </fieldset>

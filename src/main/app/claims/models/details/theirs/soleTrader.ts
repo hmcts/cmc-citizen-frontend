@@ -1,14 +1,13 @@
 import { TheirDetails } from './theirDetails'
 import { PartyType } from 'forms/models/partyType'
 import { Address } from 'claims/models/address'
-import Email from 'forms/models/email'
 
 export class SoleTrader extends TheirDetails {
   businessName?: string
 
   constructor (name?: string,
               address?: Address,
-              email?: Email,
+              email?: string,
               businessName?: string) {
     super(PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value,
           name,

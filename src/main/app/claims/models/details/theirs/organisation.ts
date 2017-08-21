@@ -1,14 +1,13 @@
 import { TheirDetails } from './theirDetails'
 import { PartyType } from 'forms/models/partyType'
 import { Address } from 'claims/models/address'
-import Email from 'forms/models/email'
 
 export class Organisation extends TheirDetails {
   contactPerson?: string
 
   constructor (name?: string,
               address?: Address,
-              email?: Email,
+              email?: string,
               contactPerson?: string) {
     super(PartyType.ORGANISATION.value,
           name,

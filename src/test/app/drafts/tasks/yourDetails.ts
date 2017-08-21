@@ -9,7 +9,7 @@ describe('Your details', () => {
       const input = {
         claimant: {
           partyTypeResponse: {
-            type : { value : 'INDIVIDUAL', displayValue: 'individual'}
+            type : { value : 'individual', displayValue: 'individual'}
           },
           mobilePhone: {
             number: '7123123123'

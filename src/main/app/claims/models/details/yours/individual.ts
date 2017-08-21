@@ -1,19 +1,16 @@
 import { Party } from './party'
-import { Moment } from 'moment'
-import { MomentFactory } from 'common/momentFactory'
 import { PartyType } from 'forms/models/partyType'
 import { Address } from 'claims/models/address'
-import { MobilePhone } from 'forms/models/mobilePhone'
 
 export class Individual extends Party {
-  dateOfBirth: Moment
+  dateOfBirth: string
 
   constructor (name?: string,
               address?: Address,
               correspondenceAddress?: Address,
-              mobilePhone?: MobilePhone,
+              mobilePhone?: string,
               email?: string,
-              dateOfBirth?: Moment) {
+              dateOfBirth?: string) {
     super(PartyType.INDIVIDUAL.value,
           name,
           address,
@@ -26,7 +23,7 @@ export class Individual extends Party {
   deserialize (input: any): Individual {
     if (input) {
       Object.assign(this, new Party().deserialize(input))
-      this.dateOfBirth = MomentFactory.parse(input.dateOfBirth)
+      this.dateOfBirth = input.dateOfBirth
       this.type = PartyType.INDIVIDUAL.value
     }
     return this

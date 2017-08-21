@@ -17,20 +17,24 @@
           <legend class="visually-hidden">{{ t("Who are you making the claim against?") }}</legend>
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
 
-          {{ radioOption(form = form, name = 'type[value]', value = 'INDIVIDUAL',
-            label = t("An individual"), bold = true
+          {{ radioOption(form = form, name = 'type[value]', value = 'individual',
+            label = t("An individual"), bold = true,
+            hint = t("For example, someone you lent money")
           )}}
 
-          {{ radioOption(form = form, name = 'type[value]', value = 'SOLE_TRADER_OR_SELF_EMPLOYED',
-            label = t("A sole trader or self-employed person"), bold = true
+          {{ radioOption(form = form, name = 'type[value]', value = 'soleTrader',
+            label = t("A sole trader or self-employed person"), bold = true,
+            hint = t("For example, a tradesperson who did work for you")
           )}}
 
-          {{ radioOption(form = form, name = 'type[value]', value = 'COMPANY',
-            label = t("On behalf of a company"), bold = true
+          {{ radioOption(form = form, name = 'type[value]', value = 'company',
+            label = t("On behalf of a company"), bold = true,
+            hint = t("For example, a company that sold you goods or services")
           )}}
 
-          {{ radioOption(form = form, name = 'type[value]', value = 'ANOTHER_ORGANISATION',
-            label = t("As another type of organisation"), bold = true
+          {{ radioOption(form = form, name = 'type[value]', value = 'organisation',
+            label = t("As another type of organisation"), bold = true,
+            hint = t("For example, a partnership, trust, charity, club or association")
           )}}
         </fieldset>
       </div>

@@ -23,18 +23,18 @@ export class Defendant implements CompletableTask {
     if (input.email) {
       deserialized.email = new Email().deserialize(input.email)
     }
-    if (input.partyTypeResponse) {
-      switch (input.partyTypeResponse.type) {
-        case PartyType.INDIVIDUAL:
+    if (input.partyTypeResponse && input.partyTypeResponse.type) {
+      switch (input.partyTypeResponse.type.value) {
+        case PartyType.INDIVIDUAL.value:
           deserialized.partyDetails = IndividualDetails.fromObject(input.partyDetails)
           break
-        case PartyType.COMPANY:
+        case PartyType.COMPANY.value:
           deserialized.partyDetails = CompanyDetails.fromObject(input.partyDetails)
           break
-        case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED:
+        case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
           deserialized.partyDetails = SoleTraderDetails.fromObject(input.partyDetails)
           break
-        case PartyType.ORGANISATION:
+        case PartyType.ORGANISATION.value:
           deserialized.partyDetails = OrganisationDetails.fromObject(input.partyDetails)
           break
       }
@@ -49,7 +49,7 @@ export class Defendant implements CompletableTask {
       if (input.email) {
         this.email = new Email().deserialize(input.email)
       }
-      if (input.partyTypeResponse) {
+      if (input.partyTypeResponse && input.partyTypeResponse.type) {
         switch (input.partyTypeResponse.type.value) {
           case PartyType.INDIVIDUAL.value:
             this.partyDetails = new IndividualDetails().deserialize(input.partyDetails)
@@ -70,27 +70,23 @@ export class Defendant implements CompletableTask {
   }
 
   isCompleted (): boolean {
-    let result = false
-    if (this.partyTypeResponse) {
-      switch (this.partyTypeResponse.type) {
-        case PartyType.INDIVIDUAL:
+    let emailCompleted = !!this.email && this.email.isCompleted()
+    if (this.partyTypeResponse && this.partyTypeResponse.type) {
+      switch (this.partyTypeResponse.type.value) {
+        case PartyType.INDIVIDUAL.value:
           let individualDetails = this.partyDetails as IndividualDetails
-          result = individualDetails.isCompleted(false)
-          break
-        case PartyType.COMPANY:
+          return individualDetails.isCompleted(false) && emailCompleted
+        case PartyType.COMPANY.value:
           let companyDetails = this.partyDetails as CompanyDetails
-          result = !!companyDetails && companyDetails.isCompleted()
-          break
-        case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED:
+          return !!companyDetails && companyDetails.isCompleted() && emailCompleted
+        case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
           let soleTraderDetails = this.partyDetails as SoleTraderDetails
-          result = !!soleTraderDetails && soleTraderDetails.isCompleted()
-          break
-        case PartyType.ORGANISATION:
+          return !!soleTraderDetails && soleTraderDetails.isCompleted(false) && emailCompleted
+        case PartyType.ORGANISATION.value:
           let organisationDetails = this.partyDetails as OrganisationDetails
-          result = !!organisationDetails && organisationDetails.isCompleted()
-          break
+          return !!organisationDetails && organisationDetails.isCompleted() && emailCompleted
       }
     }
-    return result && !!this.email && this.email.isCompleted()
+    return false
   }
 }

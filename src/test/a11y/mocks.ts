@@ -19,11 +19,11 @@ import InterestDate from 'app/claims/models/interestDate'
 import InterestDateType from 'app/common/interestDateType'
 import Interest, { InterestType } from 'app/forms/models/interest'
 import { Defendant as DraftDefendant } from 'app/drafts/models/defendant'
-import { Defendant } from 'app/claims/models/defendant'
+import { TheirDetails } from 'app/claims/models/details/theirs/theirDetails'
+import { Individual } from 'app/claims/models/details/yours/individual'
 import { default as DraftClaimant } from 'app/drafts/models/claimant'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { Address } from 'claims/models/address'
-import Individual from 'claims/models/individual'
 import { RangeGroup } from 'fees/models/rangeGroup'
 
 function mockedDraftClaim () {
@@ -66,7 +66,7 @@ function mockedResponseDraft () {
 function mockedClaim () {
   let claim = new Claim()
   claim.claimData = new ClaimData()
-  claim.claimData.defendant = new Defendant()
+  claim.claimData.defendant = new TheirDetails()
   claim.claimData.claimant = new Individual()
   claim.claimData.interest = mockedInterest()
   claim.claimData.interestDate = mockedInterestDate()
@@ -93,12 +93,11 @@ function mockedDefendantResponse () {
   let response = new DefendantResponse()
   response.response = new DefendantResponseData()
   response.respondedAt = moment()
-  response.defendantDetails = new Defendant()
-  response.defendantDetails.dateOfBirth = moment('1970-12-12')
+  response.defendantDetails = new TheirDetails()
   response.defendantDetails.address = new Address()
   response.defendantDetails.address.postcode = 'postcode'
   response.defendantDetails.address.line1 = 'line1'
-  response.defendantDetails.mobilePhone = new MobilePhone('07912312345')
+  response.defendantDetails.email = 'example@example.com'
 
   return response
 }
