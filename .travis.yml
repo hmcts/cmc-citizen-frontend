@@ -4,4 +4,6 @@ script:
   - yarn lint
   - yarn test
   - yarn test:routes
-
+before_install: yarn global add greenkeeper-lockfile@1
+before_script: greenkeeper-lockfile-update
+after_script: greenkeeper-lockfile-upload
