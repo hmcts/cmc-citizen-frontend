@@ -39,12 +39,13 @@ export default express.Router()
       async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
         const form: Form<PartyDetails> = req.body
         const user: User = res.locals.user
+        const { externalId } = req.params
 
         if (form.hasErrors()) {
           renderView(form, res)
         } else {
           user.ccjDraft.defendant.partyDetails = form.model
           await DraftCCJService.save(res, next)
-          res.redirect('todo')
+          res.redirect(Paths.dateOfBirthPage.uri.replace(':externalId', externalId))
         }
       }))

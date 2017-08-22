@@ -4,5 +4,5 @@ const ccjPath = '/case/:externalId/ccj'
 
 export class Paths {
   static readonly theirDetailsPage = new RoutablePath(`${ccjPath}/their-details`)
-
+  static readonly dateOfBirthPage = new RoutablePath(`${ccjPath}/date-of-birth`)
 }
