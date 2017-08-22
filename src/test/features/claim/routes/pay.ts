@@ -127,6 +127,9 @@ describe('Claim issue: post payment callback receiver', () => {
       return {
         claimant: {
           name: { name: 'John Smith' },
+          mobilePhone: {
+            number: '0700000091'
+          },
           partyDetails: {
             address: {
               line1: 'Apt 99',

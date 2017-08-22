@@ -10,7 +10,7 @@ export class ResponseModelConverter {
 
     const response = {
       response: responseDraft.response.type.value as string,
-      defendantDetails: responseDraft.defendantDetails
+      defendant: responseDraft.defendantDetails
     }
 
     if (responseDraft.requireDefence()) {
@@ -33,6 +33,8 @@ export class ResponseModelConverter {
     if (!responseDraft.defendantDetails.email || !responseDraft.defendantDetails.email.address) {
       delete responseDraft.defendantDetails.email
     }
+
+    responseDraft.defendantDetails['type'] = 'individual'
   }
 
 }
