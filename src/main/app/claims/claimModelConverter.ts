@@ -17,6 +17,9 @@ export class ClaimModelConverter {
     draftClaim.claimant.dateOfBirth = draftClaim.claimant.dateOfBirth.date.asString() as any
     draftClaim.reason = draftClaim.reason.reason as any
 
+    draftClaim['payment'] = draftClaim.claimant.payment as any
+    delete draftClaim.claimant.payment
+
     return draftClaim
   }
 
@@ -29,6 +32,10 @@ export class ClaimModelConverter {
     delete draftClaim.claimant.partyDetails
 
     draftClaim.claimant['name'] = draftClaim.claimant.name.name as any
+
+    draftClaim.claimant['type'] = 'individual'
+
+    draftClaim.claimant.mobilePhone = draftClaim.claimant.mobilePhone.number as any
   }
 
   private static convertDefendantDetails (draftClaim: DraftClaim): void {
@@ -45,6 +52,12 @@ export class ClaimModelConverter {
     if (!draftClaim.defendant.mobilePhone || !draftClaim.defendant.mobilePhone.number) {
       delete draftClaim.defendant.mobilePhone
     }
+
+    if (draftClaim.defendant.email && draftClaim.defendant.email.address) {
+      draftClaim.defendant.email = draftClaim.defendant.email.address as any
+    }
+
+    draftClaim.defendant['type'] = 'individual'
   }
 
 }

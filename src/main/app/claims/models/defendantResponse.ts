@@ -20,7 +20,7 @@ export class DefendantResponse implements Serializable<DefendantResponse> {
       this.id = input.id
       this.claimId = input.claimId
       this.response = new DefendantResponseData().deserialize(input.response)
-      this.defendantDetails = new Defendant().deserialize(input.response.defendantDetails)
+      this.defendantDetails = new Defendant().deserialize(input.response.defendant)
       this.respondedAt = MomentFactory.parse(input.respondedAt)
       this.defendantId = input.defendantId
       this.defendantEmail = input.defendantEmail
