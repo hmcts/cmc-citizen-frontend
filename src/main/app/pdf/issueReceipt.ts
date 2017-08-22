@@ -25,7 +25,7 @@ export default class IssueReceipt {
       ),
       defendant: PersonalDetailsMapper.createPersonalDetails(
         this.claim.claimData.defendant as Person,
-        this.claim.claimData.defendant.email.address
+        this.claim.claimData.defendant.email
       )
     }
   }

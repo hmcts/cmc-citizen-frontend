@@ -98,7 +98,7 @@ function mockedDefendantResponse () {
   response.defendantDetails.address = new Address()
   response.defendantDetails.address.postcode = 'postcode'
   response.defendantDetails.address.line1 = 'line1'
-  response.defendantDetails.mobilePhone = new MobilePhone('07912312345')
+  response.defendantDetails.mobilePhone = '07912312345'
 
   return response
 }
