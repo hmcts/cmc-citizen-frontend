@@ -19,11 +19,19 @@ const cookieName: string = config.get<string>('session.cookieName')
 const theirDetailsPage = Paths.theirDetailsPage.uri.replace(':externalId', 'b17af4d2-273f-4999-9895-bce382fa24c8')
 
 const validFormData = {
-  address: {
-    line1: 'Apt 99',
-    line2: '',
-    city: 'London',
-    postcode: 'E1'
+  defendant: {
+    email: { address: 'example@example.com' },
+    partyDetails: {
+      type : 'individual',
+      name: 'Janice Henrieta Clark',
+      address: {
+        line1: 'Apt 99',
+        line2: '',
+        city: 'London',
+        postcode: 'E1'
+      },
+      hasCorrespondenceAddress: false
+    }
   }
 }
 

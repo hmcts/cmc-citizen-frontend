@@ -2,7 +2,6 @@ import { CompanyDetails } from 'forms/models/companyDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { IndividualDetails } from 'forms/models/individualDetails'
-import PartyTypeResponse from 'forms/models/partyTypeResponse'
 import { PartyType } from 'forms/models/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { MobilePhone } from 'app/forms/models/mobilePhone'
@@ -11,7 +10,6 @@ import { CompletableTask } from 'app/models/task'
 
 export default class Claimant implements CompletableTask {
   partyDetails?: PartyDetails
-  partyTypeResponse: PartyTypeResponse
   mobilePhone?: MobilePhone
   payment: Payment = new Payment()
 
@@ -21,8 +19,8 @@ export default class Claimant implements CompletableTask {
     }
     let deserialized = new Claimant()
     deserialized.mobilePhone = MobilePhone.fromObject(input.mobilePhone)
-    if (input.partyTypeResponse && input.partyTypeResponse.type) {
-      switch (input.partyTypeResponse.type.value) {
+    if (input.partyDetails && input.partyDetails.type) {
+      switch (input.partyDetails.type) {
         case PartyType.INDIVIDUAL.value:
           deserialized.partyDetails = IndividualDetails.fromObject(input.partyDetails)
           break
@@ -44,13 +42,12 @@ export default class Claimant implements CompletableTask {
 
   deserialize (input?: any): Claimant {
     if (input) {
-      this.partyTypeResponse = PartyTypeResponse.fromObject(input.partyTypeResponse)
       this.payment = new Payment().deserialize(input.payment)
       if (input.mobilePhone) {
         this.mobilePhone = new MobilePhone().deserialize(input.mobilePhone)
       }
-      if (this.partyTypeResponse && this.partyTypeResponse.type) {
-        switch (this.partyTypeResponse.type.value) {
+      if (input.partyDetails && input.partyDetails.type) {
+        switch (input.partyDetails.type) {
           case PartyType.INDIVIDUAL.value:
             this.partyDetails = new IndividualDetails().deserialize(input.partyDetails)
             break
@@ -71,8 +68,8 @@ export default class Claimant implements CompletableTask {
 
   isCompleted (): boolean {
     let result = false
-    if (this.partyTypeResponse && this.partyTypeResponse.type) {
-      switch (this.partyTypeResponse.type.value) {
+    if (this.partyDetails && this.partyDetails.type) {
+      switch (this.partyDetails.type) {
         case PartyType.INDIVIDUAL.value:
           let individualDetails = this.partyDetails as IndividualDetails
           result = !!individualDetails && individualDetails.isCompleted(true)

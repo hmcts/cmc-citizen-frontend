@@ -6,7 +6,10 @@ import { FormValidator } from 'forms/validation/formValidator'
 import PartyTypeResponse from 'forms/models/partyTypeResponse'
 import { PartyType } from 'forms/models/partyType'
 import { ErrorHandling } from 'common/errorHandling'
-import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
+import { IndividualDetails } from 'forms/models/individualDetails'
+import { OrganisationDetails } from 'forms/models/organisationDetails'
+import { CompanyDetails } from 'forms/models/companyDetails'
+import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 
 function renderView (form: Form<PartyTypeResponse>, res: express.Response, next: express.NextFunction) {
   try {
@@ -20,7 +23,13 @@ function renderView (form: Form<PartyTypeResponse>, res: express.Response, next:
 
 export default express.Router()
   .get(Paths.defendantPartyTypeSelectionPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    renderView(new Form(res.locals.user.claimDraft.defendant.partyTypeResponse), res, next)
+    if (res.locals.user.claimDraft.defendant.partyDetails) {
+      console.log(`here.........`)
+      renderView(new Form(PartyTypeResponse.valueOf(res.locals.user.claimDraft.defendant.partyDetails.type)), res, next)
+    } else {
+      console.log(`here.........here........`)
+      renderView(Form.empty<PartyTypeResponse>(), res, next)
+    }
   })
   .post(
     Paths.defendantPartyTypeSelectionPage.uri,
@@ -30,19 +39,21 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
-        res.locals.user.claimDraft.defendant.partyTypeResponse = form.model
-        await ClaimDraftMiddleware.save(res, next)
         switch (form.model.type) {
           case PartyType.INDIVIDUAL:
+            res.locals.user.claimDraft.defendant.partyDetails = new IndividualDetails()
             res.redirect(Paths.defendantIndividualDetailsPage.uri)
             break
           case PartyType.COMPANY:
+            res.locals.user.claimDraft.claimant.partyDetails = new CompanyDetails()
             res.redirect(Paths.defendantCompanyDetailsPage.uri)
             break
           case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED:
+            res.locals.user.claimDraft.claimant.partyDetails = new SoleTraderDetails()
             res.redirect(Paths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)
             break
           case PartyType.ORGANISATION:
+            res.locals.user.claimDraft.claimant.partyDetails = new OrganisationDetails()
             res.redirect(Paths.defendantOrganisationDetailsPage.uri)
             break
           default:

@@ -8,13 +8,11 @@ describe('Your details', () => {
     it('should return true when the task is completed', () => {
       const input = {
         claimant: {
-          partyTypeResponse: {
-            type : { value : 'individual', displayValue: 'individual'}
-          },
           mobilePhone: {
             number: '7123123123'
           },
           partyDetails: {
+            type : 'individual',
             address: {line1: 'Here',line2: 'There',city: 'London',postcode: 'BB12 7NQ'},
             name: 'John Doe',
             dateOfBirth: {

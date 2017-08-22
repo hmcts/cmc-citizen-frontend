@@ -18,7 +18,7 @@ export default class Party implements Serializable<Party> {
         this.correspondenceAddress = new Address().deserialize(input.correspondenceAddress)
       }
       if (input.type) {
-        this.type = PartyTypeResponse.fromObject(input.type).type
+        this.type = PartyTypeResponse.valueOf(input.type.value).type
       }
       if (input.payment) {
         this.payment = new Payment().deserialize(input.payment)

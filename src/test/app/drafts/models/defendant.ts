@@ -6,10 +6,9 @@ import { Defendant } from 'app/drafts/models/defendant'
 
 describe('Defendant', () => {
   describe('constructor', () => {
-    it('should have undefined email and partyResponse fields', () => {
+    it('should have undefined email', () => {
       const defendant = new Defendant()
       expect(defendant.email).to.be.undefined
-      expect(defendant.partyTypeResponse).to.be.undefined
     })
 
     it('should have undefined party details field', () => {

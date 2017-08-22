@@ -1,6 +1,5 @@
 import Email from 'app/forms/models/email'
 import { CompletableTask } from 'app/models/task'
-import PartyTypeResponse from 'forms/models/partyTypeResponse'
 import { PartyType } from 'forms/models/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
 import Payment from 'app/pay/payment'
@@ -11,7 +10,6 @@ import { IndividualDetails } from 'forms/models/individualDetails'
 
 export class Defendant implements CompletableTask {
   partyDetails?: PartyDetails
-  partyTypeResponse: PartyTypeResponse
   email?: Email
   payment: Payment = new Payment()
 
@@ -23,8 +21,8 @@ export class Defendant implements CompletableTask {
     if (input.email) {
       deserialized.email = new Email().deserialize(input.email)
     }
-    if (input.partyTypeResponse && input.partyTypeResponse.type) {
-      switch (input.partyTypeResponse.type.value) {
+    if (input.partyDetails && input.partyDetails.type) {
+      switch (input.partyDetails.type) {
         case PartyType.INDIVIDUAL.value:
           deserialized.partyDetails = IndividualDetails.fromObject(input.partyDetails)
           break
@@ -44,13 +42,12 @@ export class Defendant implements CompletableTask {
 
   deserialize (input: any): Defendant {
     if (input) {
-      this.partyTypeResponse = PartyTypeResponse.fromObject(input.partyTypeResponse)
       this.payment = new Payment().deserialize(input.payment)
       if (input.email) {
         this.email = new Email().deserialize(input.email)
       }
-      if (input.partyTypeResponse && input.partyTypeResponse.type) {
-        switch (input.partyTypeResponse.type.value) {
+      if (input.partyDetails && input.partyDetails.type) {
+        switch (input.partyDetails.type) {
           case PartyType.INDIVIDUAL.value:
             this.partyDetails = new IndividualDetails().deserialize(input.partyDetails)
             break
@@ -71,8 +68,8 @@ export class Defendant implements CompletableTask {
 
   isCompleted (): boolean {
     let emailCompleted = !!this.email && this.email.isCompleted()
-    if (this.partyTypeResponse && this.partyTypeResponse.type) {
-      switch (this.partyTypeResponse.type.value) {
+    if (this.partyDetails && this.partyDetails.type) {
+      switch (this.partyDetails.type) {
         case PartyType.INDIVIDUAL.value:
           let individualDetails = this.partyDetails as IndividualDetails
           return individualDetails.isCompleted(false) && emailCompleted

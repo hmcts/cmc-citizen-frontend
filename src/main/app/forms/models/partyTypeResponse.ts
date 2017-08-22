@@ -16,8 +16,14 @@ export default class PartyTypeResponse {
 
   static fromObject (value?: any): PartyTypeResponse {
     if (value && value.type) {
+      return PartyTypeResponse.valueOf(value.type.value)
+    }
+  }
+
+  static valueOf (value?: string): PartyTypeResponse {
+    if (value) {
       const claimantType = PartyType.all()
-        .filter(type => type.value === value.type.value)
+        .filter(type => type.value === value)
         .pop()
 
       return new PartyTypeResponse(claimantType)

@@ -35,9 +35,9 @@ function getBusinessName (claimant: Claimant): string {
 }
 
 function getDateOfBirth (claimant: Claimant): DateOfBirth {
-  if (claimant.partyTypeResponse.type === PartyType.INDIVIDUAL) {
+  if (claimant.partyDetails.type === PartyType.INDIVIDUAL.value) {
     return (claimant.partyDetails as IndividualDetails).dateOfBirth
-  } else if (claimant.partyTypeResponse.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED) {
+  } else if (claimant.partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
     return (claimant.partyDetails as SoleTraderDetails).dateOfBirth
   } else {
     return undefined
@@ -45,13 +45,13 @@ function getDateOfBirth (claimant: Claimant): DateOfBirth {
 }
 
 function value (claimant: Claimant, fieldName: string): string {
-  if (claimant.partyTypeResponse.type === PartyType.INDIVIDUAL) {
+  if (claimant.partyDetails.type === PartyType.INDIVIDUAL.value) {
     return (claimant.partyDetails as IndividualDetails)[`${fieldName}`]
-  } else if (claimant.partyTypeResponse.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED) {
+  } else if (claimant.partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
     return (claimant.partyDetails as SoleTraderDetails)[`${fieldName}`]
-  } else if (claimant.partyTypeResponse.type === PartyType.COMPANY) {
+  } else if (claimant.partyDetails.type === PartyType.COMPANY.value) {
     return (claimant.partyDetails as CompanyDetails)[`${fieldName}`]
-  } else if (claimant.partyTypeResponse.type === PartyType.ORGANISATION) {
+  } else if (claimant.partyDetails.type === PartyType.ORGANISATION.value) {
     return (claimant.partyDetails as CompanyDetails)[`${fieldName}`]
   } else {
     return undefined

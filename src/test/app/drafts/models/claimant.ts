@@ -9,7 +9,6 @@ describe('Claimant', () => {
     it('should have undefined name, dateOfBirth, mobilePhone fields', () => {
       let claimant = new Claimant()
       expect(claimant.partyDetails).to.be.undefined
-      expect(claimant.partyTypeResponse).to.be.undefined
       expect(claimant.mobilePhone).to.be.undefined
     })
 

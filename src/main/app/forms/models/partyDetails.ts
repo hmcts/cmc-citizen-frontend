@@ -72,7 +72,7 @@ export class PartyDetails implements Serializable<PartyDetails>, CompletableTask
       this.type = input.type
       this.name = input.name
       this.address = new Address().deserialize(input.address)
-      this.hasCorrespondenceAddress = input.hasCorrespondenceAddress === 'true'
+      this.hasCorrespondenceAddress = input.hasCorrespondenceAddress === 'true' || input.hasCorrespondenceAddress === true
       this.correspondenceAddress = new CorrespondenceAddress().deserialize(input.correspondenceAddress)
     }
     return this
