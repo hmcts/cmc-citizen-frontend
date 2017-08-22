@@ -29,7 +29,7 @@
     "@types/lodash": "^4.14.52",
     "@types/nock": "^8.2.1",
     "@types/node": "^8.0.24",
-    "@types/nunjucks": "^0.0.32",
+    "@types/nunjucks": "^0.0.33",
     "@types/request-promise-native": "^1.0.2",
     "@types/shortid": "^0.0.29",
     "HTML_CodeSniffer": "https://github.com/squizlabs/HTML_CodeSniffer/archive/2.0.7.tar.gz",
