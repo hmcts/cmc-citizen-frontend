@@ -46,23 +46,23 @@ describe.skip('ResponseModelConverter', () => {
   context('when converting party details', () => {
     it('should delete the partyDetails property', () => {
       let converted = ResponseModelConverter.convert(responseDraft)
-      expect(converted.defendantDetails.hasOwnProperty('partyDetails')).to.equal(false)
+      expect(converted.defendant.hasOwnProperty('partyDetails')).to.equal(false)
     })
 
     it('should flatten the address on the converted object', () => {
       let converted = ResponseModelConverter.convert(responseDraft)
-      expect(converted.defendantDetails.address).to.deep.equal(testAddress)
+      expect(converted.defendant.address).to.deep.equal(testAddress)
     })
 
     it('should flatten the correspondence address on the converted object if one is provided', () => {
       let converted = ResponseModelConverter.convert(responseDraft)
-      expect(converted.defendantDetails.correspondenceAddress).to.deep.equal(testAddress)
+      expect(converted.defendant.correspondenceAddress).to.deep.equal(testAddress)
     })
 
     it('should not set correspondence address the converted object if one is not provided', () => {
       responseDraft.defendantDetails.partyDetails.hasCorrespondenceAddress = false
       let converted = ResponseModelConverter.convert(responseDraft)
-      expect(converted.defendantDetails.hasOwnProperty('correspondenceAddress')).to.equal(false)
+      expect(converted.defendant.hasOwnProperty('correspondenceAddress')).to.equal(false)
     })
   })
 })

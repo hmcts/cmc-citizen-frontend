@@ -40,9 +40,9 @@
   </div>
 {% endmacro %}
 
-{% macro submitButton(label) %}
+{% macro submitButton(label = 'Continue') %}
   <div class="form-group">
-    <input type="submit" class="button" value="{{ t(label) | default(t('Continue')) }}">
+    <input type="submit" class="button" value="{{ t(label) }}">
   </div>
 {% endmacro %}
 

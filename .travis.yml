@@ -1,0 +1,11 @@
+language: node_js
+cache: yarn
+script:
+  - yarn setup
+  - yarn lint
+  - yarn test
+  - yarn test:routes
+  - yarn test:a11y
+before_install: yarn global add greenkeeper-lockfile@1
+before_script: greenkeeper-lockfile-update
+after_script: greenkeeper-lockfile-upload

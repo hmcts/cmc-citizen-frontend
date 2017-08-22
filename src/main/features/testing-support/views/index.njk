@@ -1,0 +1,12 @@
+{% extends "layout.njk" %}
+
+{% set title = 'Testing support' %}
+{% set heading = t('Testing support') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+        <a href="{{ paths.updateResponseDeadlinePage.uri }}">{{ t('Update response deadline') }}</a>
+    </div>
+  </div>
+{% endblock %}
