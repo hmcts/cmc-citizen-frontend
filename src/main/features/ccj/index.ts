@@ -8,6 +8,7 @@ import { buildURL } from 'utils/CallbackBuilder'
 import { Paths as AppPaths } from 'app/paths'
 import { ClaimMiddleware } from 'app/claims/claimMiddleware'
 import { DraftCCJService } from 'ccj/draft/DraftCCJService'
+import { CCJGuard } from 'ccj/guards/ccjGuard'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -23,6 +24,7 @@ export class CCJFeature {
   enableFor (app: express.Express) {
     app.all(/^\/case\/.+\/ccj\/.*$/, requestHandler())
     app.all(/^\/case\/.+\/ccj\/.*$/, ClaimMiddleware.retrieveByExternalId)
+    app.all(/^\/case\/.+\/ccj\/.*$/, CCJGuard.requestHandler)
     app.all(/^\/case\/.+\/ccj\/.*$/, DraftCCJService.retrieve)
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
