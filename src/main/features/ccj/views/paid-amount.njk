@@ -22,7 +22,7 @@
       {% set selection = form.valueFor('option') %}
       <div class="form-group {% if error %} form-group-error {% endif %}">
         <fieldset>
-          <legend>sd</legend>
+          <legend class="visually-hidden">Has the defendant paid some of the amount owed?</legend>
 
           {{
             radioOption(
@@ -31,15 +31,23 @@
           }}
 
           <div class="panel panel-border-narrow js-hidden" id="option-yes">
-            <p>{{ t("Total amount payable by defendant is £1643.20") }}</p>
+
+            <p>
+              {{
+                t("Total amount payable by defendant is %s", {
+                    postProcess: 'sprintf', sprintf: [ totalAmount | numeral ]
+                  }
+                )
+              }}
+            </p>
 
             {{
               textInput(
                 label = 'Amount already paid',
                 name = 'amount',
                 form = form,
-                hint='',
-                inputClass='fee pound'
+                hint = '',
+                inputClass = 'fee pound'
               )
             }}
           </div>
