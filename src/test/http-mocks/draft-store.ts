@@ -6,72 +6,82 @@ import { ResponseType } from 'response/form/models/responseType'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import { InterestType } from 'app/forms/models/interest'
-
+import { Defendant } from 'app/drafts/models/defendant'
+import Claimant from 'app/drafts/models/claimant'
+import DraftClaim from 'app/drafts/models/draftClaim'
+import { IndividualDetails } from 'app/forms/models/individualDetails'
+import { MobilePhone } from 'app/forms/models/mobilePhone'
+import Payment from 'app/pay/payment'
+import { Address } from 'forms/models/address'
+import DateOfBirth from 'app/forms/models/dateOfBirth'
+import { LocalDate } from 'forms/models/localDate'
+import ClaimAmountBreakdown from 'forms/models/claimAmountBreakdown'
+import ClaimAmountRow from 'forms/models/claimAmountRow'
+import Interest from 'forms/models/interest'
+import InterestDate from 'forms/models/interestDate'
+import Reason from 'forms/models/reason'
 const serviceBaseURL: string = `${config.get('draft-store.url')}/api/${config.get('draft-store.apiVersion')}`
 
 export const sampleClaimDraftObj = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
-  lastUpdateTimestamp: '1502462391',
   readResolveDispute: true,
   readCompletingClaim: true,
   claimant: {
-    name: {
-      name: 'John Smith'
-    },
     partyDetails: {
+      type: 'individual',
+      name: 'John Smith',
       address: {
         line1: 'Apt 99',
         city: 'London',
         postcode: 'E1'
-      },
-      hasCorrespondenceAddress: false
-    },
-    dateOfBirth: {
-      date: {
-        day: '31',
-        month: '12',
-        year: '1980'
-      }
-    },
+      } as Address,
+      hasCorrespondenceAddress: false,
+      dateOfBirth: {
+        date: {
+          day: 31,
+          month: 12,
+          year: 1980
+        } as LocalDate
+      } as DateOfBirth
+    } as IndividualDetails,
     mobilePhone: {
       number: '07000000000'
-    },
+    } as MobilePhone,
     payment: {
-      id: 12,
+      id: '12',
       amount: 2500,
       state: { status: 'success' }
-    }
-  },
+    } as Payment
+  } as Claimant,
   defendant: {
-    name: {
-      name: 'Rose Smith'
-    },
     partyDetails: {
+      type: 'individual',
+      name: 'Rose Smith',
       address: {
         line1: 'Apt 99',
         city: 'London',
         postcode: 'E1'
       },
       hasCorrespondenceAddress: false
-    },
+    } as IndividualDetails,
     email: {}
-  },
+  } as Defendant,
   amount: {
     rows: [
       {
         reason: 'Valid reason',
         amount: 1
-      }
+      } as ClaimAmountRow
     ]
-  },
+  } as ClaimAmountBreakdown,
   interest: {
     type: InterestType.NO_INTEREST
-  },
-  interestDate: {},
+  } as Interest,
+  interestDate: {} as InterestDate,
   reason: {
     reason: 'Valid reason'
-  }
-}
+  } as Reason
+} as DraftClaim
 
 const sampleCCJDraftObj = {
 
@@ -95,14 +105,18 @@ const sampleResponseDraftObj = {
     option: MoreTimeNeededOption.YES
   },
   defendantDetails: {
-    name: { name: 'John Smith' },
     partyDetails: {
-      address: { line1: 'Apartment 99', line2: '', city: 'London', postcode: 'SE28 0JE' },
+      type: 'individual',
+      name: 'John Smith',
+      address: { line1: 'Apartment 99', line2: '', city: 'London', postcode: 'SE28 0JE' } as Address,
       hasCorrespondenceAddress: false
-    },
-    dateOfBirth: { date: { year: 1978, month: 1, day: 11 } },
-    mobilePhone: { number: '07123456789' }
-  }
+    } as IndividualDetails,
+    payment: {
+      id: '12',
+      amount: 2500,
+      state: { status: 'success' }
+    } as Payment
+  } as Defendant
 }
 
 export function resolveRetrieve (draftType: string, draftOverride?: object) {

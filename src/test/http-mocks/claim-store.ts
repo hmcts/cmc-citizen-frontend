@@ -1,8 +1,10 @@
 import * as config from 'config'
 import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
-
 import { InterestType } from 'app/forms/models/interest'
+import { Individual as DefendantAsIndividual } from 'claims/models/details/theirs/individual'
+import { Individual as claimantAsIndividual } from 'claims/models/details/yours/individual'
+import { Address } from 'claims/models/address'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
@@ -10,36 +12,39 @@ const sampleClaimObj = {
   id: 1,
   claimantId: 1,
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
-  referenceNumber: '000MC000',
+  defendantId: 123,
+  claimNumber: '000MC000',
   createdAt: '2017-07-25T22:45:51.785',
   issuedOn: '2017-07-25',
-  claim: {
+  claimData: {
+    payment: {
+      id: '12',
+      amount: 2500,
+      state: { status: 'failed' }
+    },
+    amount: {
+      rows: [{ reason: 'Reason', amount: 200 }]
+    },
+    interestDate: {
+      date: {
+        year: 2000,
+        month: 2,
+        day: 1
+      }
+    },
     claimant: {
+      type: 'individual',
       name: 'John Smith',
       address: {
         line1: 'line1',
         line2: 'line2',
         city: 'city',
         postcode: 'bb127nq'
-      },
-      dateOfBirth: '1990-02-17',
-      payment: {
-        id: '12',
-        amount: 2500,
-        state: { status: 'failed' }
-      },
-      amount: {
-        rows: [{ reason: 'Reason', amount: 200 }]
-      },
-      interestDate: {
-        date: {
-          year: 2000,
-          month: 2,
-          day: 1
-        }
-      }
-    },
+      } as Address,
+      dateOfBirth: '1990-02-17'
+    } as claimantAsIndividual,
     defendant: {
+      type: 'individual',
       name: 'John Doe',
       address: {
         line1: 'line1',
@@ -47,7 +52,7 @@ const sampleClaimObj = {
         city: 'city',
         postcode: 'bb127nq'
       }
-    },
+    } as DefendantAsIndividual,
     interest: {
       type: InterestType.NO_INTEREST
     },
@@ -62,6 +67,7 @@ const sampleDefendantResponseObj = {
   defendantId: 1,
   response: {
     defendant: {
+      type: 'individual',
       name: 'full name',
       address: {
         line1: 'line1',

@@ -74,8 +74,7 @@ export class ClaimModelConverter {
                                 undefined,
                                 organisationDetails.contactPerson)
         default:
-          console.log('Something went wrong, No claimant type is set')
-          return undefined
+          throw Error('Something went wrong, No claimant type is set')
       }
     }
   }
@@ -108,8 +107,7 @@ export class ClaimModelConverter {
                                 this.convertEmail(draftClaim),
                                 organisationDetails.contactPerson)
         default:
-          console.log('Something went wrong, No claimant type is set')
-          return undefined
+          throw Error('Something went wrong, No defendant type is set')
       }
     }
   }

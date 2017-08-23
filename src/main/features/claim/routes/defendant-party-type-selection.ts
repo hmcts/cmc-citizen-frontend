@@ -24,10 +24,8 @@ function renderView (form: Form<PartyTypeResponse>, res: express.Response, next:
 export default express.Router()
   .get(Paths.defendantPartyTypeSelectionPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (res.locals.user.claimDraft.defendant.partyDetails) {
-      console.log(`here.........`)
       renderView(new Form(PartyTypeResponse.valueOf(res.locals.user.claimDraft.defendant.partyDetails.type)), res, next)
     } else {
-      console.log(`here.........here........`)
       renderView(Form.empty<PartyTypeResponse>(), res, next)
     }
   })
