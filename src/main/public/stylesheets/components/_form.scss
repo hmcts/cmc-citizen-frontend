@@ -17,7 +17,9 @@
   }
 }
 
-.pound {
-  background: url('/img/poundbg.png') no-repeat left center;
-  padding-left: 40px;
+.panel-border-narrow {
+  .pound {
+    background: url('/img/poundbg.png') no-repeat left center;
+    padding-left: 40px;
+  }
 }

@@ -4,7 +4,7 @@ const ccjPath = '/case/:externalId/ccj'
 
 export class Paths {
   static readonly theirDetailsPage = new RoutablePath(`${ccjPath}/their-details`)
-  static readonly claimAmountPage = new RoutablePath(`${ccjPath}/claim-amount`)
-  static readonly claimAmountSummaryPage = new RoutablePath(`${ccjPath}/claim-amount-summary`)
+  static readonly paidAmountPage = new RoutablePath(`${ccjPath}/paid-amount`)
+  static readonly paidAmountSummaryPage = new RoutablePath(`${ccjPath}/paid-amount-summary`)
 
 }

@@ -13,27 +13,23 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
+import { PaidAmountOption } from 'ccj/form/models/paidAmount'
 
 const cookieName: string = config.get<string>('session.cookieName')
-
 const externalId = 'b17af4d2-273f-4999-9895-bce382fa24c8'
-const theirDetailsPage = Paths.theirDetailsPage.uri.replace(':externalId', externalId)
 const paidAmountPage = Paths.paidAmountPage.uri.replace(':externalId', externalId)
+const paidAmountSummaryPage = Paths.paidAmountSummaryPage.uri.replace(':externalId', externalId)
 
 const validFormData = {
-  address: {
-    line1: 'Apt 99',
-    line2: '',
-    city: 'London',
-    postcode: 'E1'
-  }
+  option: PaidAmountOption.YES,
+  amount: 10
 }
 
-describe('CCJ - their details', () => {
+describe('CCJ - paid amount page', () => {
   attachDefaultHooks()
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', theirDetailsPage)
+    checkAuthorizationGuards(app, 'get', paidAmountPage)
 
     context('when user authorised', () => {
       beforeEach(() => {
@@ -44,7 +40,7 @@ describe('CCJ - their details', () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .get(theirDetailsPage)
+          .get(paidAmountPage)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -54,13 +50,13 @@ describe('CCJ - their details', () => {
         draftStoreServiceMock.resolveRetrieve('ccj')
 
         await request(app)
-          .get(theirDetailsPage)
+          .get(paidAmountPage)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Confirm their details'))
+          .expect(res => expect(res).to.be.successful.withText('Has the defendant paid some of the amount owed?'))
       })
     })
     describe('on POST', () => {
-      checkAuthorizationGuards(app, 'post', theirDetailsPage)
+      checkAuthorizationGuards(app, 'post', paidAmountPage)
       context('when user authorised', () => {
         beforeEach(() => {
           idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
@@ -73,10 +69,10 @@ describe('CCJ - their details', () => {
             draftStoreServiceMock.resolveSave('ccj')
 
             await request(app)
-              .post(theirDetailsPage)
+              .post(paidAmountPage)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
-              .expect(res => expect(res).to.be.redirect.toLocation(paidAmountPage))
+              .expect(res => expect(res).to.be.redirect.toLocation(paidAmountSummaryPage))
           })
         })
         context('when form is invalid', async () => {
@@ -85,10 +81,10 @@ describe('CCJ - their details', () => {
             draftStoreServiceMock.resolveRetrieve('ccj')
 
             await request(app)
-              .post(theirDetailsPage)
+              .post(paidAmountPage)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ name: 'John Smith' })
-              .expect(res => expect(res).to.be.successful.withText('Confirm their details', 'div class="error-summary"'))
+              .send({ option: undefined })
+              .expect(res => expect(res).to.be.successful.withText('Has the defendant paid some of the amount owed?', 'div class="error-summary"'))
           })
         })
       })

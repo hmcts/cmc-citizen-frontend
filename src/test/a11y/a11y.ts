@@ -73,5 +73,4 @@ describe('Accessibility', () => {
   checkPaths(ClaimIssueErrorPaths)
   checkPaths(DefendantFirstContactPaths)
   checkPaths(DefendantFirstContactErrorPaths)
-  checkPaths(DefendantResponsePaths)
 })
