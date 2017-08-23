@@ -44,9 +44,10 @@ export default class Claim implements Serializable<Claim> {
     const interestRate = this.claimData.interest
     const interestDate = this.claimData.interestDate
     const claimAmount: number = this.claimData.amount
-    const date = interestDate.type === InterestDateType.SUBMISSION ? this.createdAt : interestDate.date
+    const paidFeeAmount: number = this.claimData.paidFeeAmount || 0
+    const date = (interestDate.type === InterestDateType.SUBMISSION) ? this.createdAt : interestDate.date
 
-    return claimAmount + this.claimData.paidFeeAmount + calculateInterest(claimAmount, interestRate, date)
+    return claimAmount + paidFeeAmount + calculateInterest(claimAmount, interestRate, date)
   }
 
   // noinspection JSUnusedGlobalSymbols Called in the view
