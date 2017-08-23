@@ -1,5 +1,7 @@
+/* tslint:disable:no-unused-expression */
 import * as chai from 'chai'
-import * as spies from 'chai-spies'
+import * as sinon from 'sinon'
+import * as spies from 'sinon-chai'
 import { mockReq as req, mockRes as res } from 'sinon-express-mock'
 import { IsDefined } from 'class-validator'
 
@@ -66,10 +68,10 @@ describe('FormValidator', () => {
   })
 
   it('should pass control to the next middleware', () => {
-    const spy = chai.spy(next)
+    const spy = sinon.spy(next)
 
     FormValidator.requestHandler(Person)(req, res, spy)
 
-    chai.expect(spy).to.have.been.called()
+    chai.expect(spy).to.have.been.called
   })
 })

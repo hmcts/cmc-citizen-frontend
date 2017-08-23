@@ -61,12 +61,8 @@ const sampleDefendantResponseObj = {
   claimId: 1,
   defendantId: 1,
   response: {
-    defendantDetails: {
-      name: {
-        fullName: function () {
-          return 'full name'
-        }
-      },
+    defendant: {
+      name: 'full name',
       address: {
         line1: 'line1',
         line2: 'line2',

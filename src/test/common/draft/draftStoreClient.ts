@@ -1,7 +1,8 @@
 /* tslint:disable:no-unused-expression */
 
 import * as chai from 'chai'
-import * as spies from 'chai-spies'
+import * as sinon from 'sinon'
+import * as spies from 'sinon-chai'
 import * as asPromised from 'chai-as-promised'
 import * as mock from 'mock-require'
 import * as HttpStatus from 'http-status-codes'
@@ -72,7 +73,7 @@ describe('DraftStoreClient', () => {
 
     describe('when handling json returned from the backend', () => {
       it('should deserialize object using provided deserialization function', async () => {
-        const spy = chai.spy(deserializationFn)
+        const spy = sinon.spy(deserializationFn)
 
         await clientWithRequestMockedToReturn({}).retrieve(123, spy)
         chai.expect(spy).to.have.been.called
