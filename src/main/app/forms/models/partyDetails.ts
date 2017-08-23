@@ -47,7 +47,6 @@ export class PartyDetails implements Serializable<PartyDetails>, CompletableTask
     if (input == null) {
       return input
     }
-
     let deserialized: PartyDetails = new PartyDetails(
       input.name,
       new Address().deserialize(input.address),
@@ -58,11 +57,7 @@ export class PartyDetails implements Serializable<PartyDetails>, CompletableTask
     if (deserialized.hasCorrespondenceAddress === false) {
       deserialized.correspondenceAddress = undefined
     }
-
-    if (input.type) {
-      deserialized.type = input.type
-    }
-
+    deserialized.type = input.type
     return deserialized
   }
 

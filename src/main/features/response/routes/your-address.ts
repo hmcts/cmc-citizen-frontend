@@ -56,7 +56,6 @@ export default express.Router()
     FormValidator.requestHandler(PartyDetails, PartyDetails.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<PartyDetails> = req.body
-
       if (form.hasErrors()) {
         renderView(form, res)
       } else {

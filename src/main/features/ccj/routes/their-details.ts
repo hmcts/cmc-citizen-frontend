@@ -11,7 +11,7 @@ import { DraftCCJService } from 'ccj/draft/DraftCCJService'
 import { Address } from 'forms/models/address'
 
 function defaultToAddressProvidedByClaimant (providedByDefendant: PartyDetails, name: string, providedByClaimant: Address): PartyDetails {
-  if (providedByDefendant.isCompleted()) {
+  if (providedByDefendant && providedByDefendant.isCompleted()) {
     return providedByDefendant
   } else {
     return new PartyDetails(name, providedByClaimant)
@@ -39,7 +39,6 @@ export default express.Router()
       async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
         const form: Form<PartyDetails> = req.body
         const user: User = res.locals.user
-
         if (form.hasErrors()) {
           renderView(form, res)
         } else {

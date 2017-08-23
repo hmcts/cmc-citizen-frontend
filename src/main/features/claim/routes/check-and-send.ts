@@ -14,7 +14,7 @@ import { IndividualDetails } from 'forms/models/individualDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import DateOfBirth from 'forms/models/dateOfBirth'
-import Claimant from 'drafts/models/claimant'
+import { PartyDetails } from 'forms/models/partyDetails'
 
 function getClaimAmountTotal (res: express.Response): Promise<ClaimAmountTotal> {
   return FeesClient.calculateIssueFee(claimAmountWithInterest(res.locals.user.claimDraft))
@@ -23,36 +23,36 @@ function getClaimAmountTotal (res: express.Response): Promise<ClaimAmountTotal> 
     })
 }
 
-function getName (claimant: Claimant): string {
-  return value(claimant, 'name')
+function getName (partyDetails: PartyDetails): string {
+  return value(partyDetails, 'name')
 }
 
-function getContactPerson (claimant: Claimant): string {
-  return value(claimant, 'contactPerson')
+function getContactPerson (partyDetails: PartyDetails): string {
+  return value(partyDetails, 'contactPerson')
 }
-function getBusinessName (claimant: Claimant): string {
-  return value(claimant, 'businessName')
+function getBusinessName (partyDetails: PartyDetails): string {
+  return value(partyDetails, 'businessName')
 }
 
-function getDateOfBirth (claimant: Claimant): DateOfBirth {
-  if (claimant.partyDetails.type === PartyType.INDIVIDUAL.value) {
-    return (claimant.partyDetails as IndividualDetails).dateOfBirth
-  } else if (claimant.partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
-    return (claimant.partyDetails as SoleTraderDetails).dateOfBirth
+function getDateOfBirth (partyDetails: PartyDetails): DateOfBirth {
+  if (partyDetails.type === PartyType.INDIVIDUAL.value) {
+    return (partyDetails as IndividualDetails).dateOfBirth
+  } else if (partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
+    return (partyDetails as SoleTraderDetails).dateOfBirth
   } else {
     return undefined
   }
 }
 
-function value (claimant: Claimant, fieldName: string): string {
-  if (claimant.partyDetails.type === PartyType.INDIVIDUAL.value) {
-    return (claimant.partyDetails as IndividualDetails)[`${fieldName}`]
-  } else if (claimant.partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
-    return (claimant.partyDetails as SoleTraderDetails)[`${fieldName}`]
-  } else if (claimant.partyDetails.type === PartyType.COMPANY.value) {
-    return (claimant.partyDetails as CompanyDetails)[`${fieldName}`]
-  } else if (claimant.partyDetails.type === PartyType.ORGANISATION.value) {
-    return (claimant.partyDetails as CompanyDetails)[`${fieldName}`]
+function value (partyDetails: PartyDetails, fieldName: string): string {
+  if (partyDetails.type === PartyType.INDIVIDUAL.value) {
+    return (partyDetails as IndividualDetails)[`${fieldName}`]
+  } else if (partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
+    return (partyDetails as SoleTraderDetails)[`${fieldName}`]
+  } else if (partyDetails.type === PartyType.COMPANY.value) {
+    return (partyDetails as CompanyDetails)[`${fieldName}`]
+  } else if (partyDetails.type === PartyType.ORGANISATION.value) {
+    return (partyDetails as CompanyDetails)[`${fieldName}`]
   } else {
     return undefined
   }
@@ -65,10 +65,10 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
         claimAmountTotal: claimAmountTotal,
         payAtSubmission: res.locals.user.claimDraft.interestDate.type === InterestDateType.SUBMISSION,
         interestClaimed: (res.locals.user.claimDraft.interest.type !== InterestType.NO_INTEREST),
-        name: getName(res.locals.user.claimDraft.claimant),
-        contactPerson: getContactPerson(res.locals.user.claimDraft.claimant),
-        businessName: getBusinessName(res.locals.user.claimDraft.claimant),
-        dateOfBirth : getDateOfBirth(res.locals.user.claimDraft.claimant),
+        name: getName(res.locals.user.claimDraft.claimant.partyDetails),
+        contactPerson: getContactPerson(res.locals.user.claimDraft.claimant.partyDetails),
+        businessName: getBusinessName(res.locals.user.claimDraft.claimant.partyDetails),
+        dateOfBirth : getDateOfBirth(res.locals.user.claimDraft.claimant.partyDetails),
         form: form
       })
     }).catch(next)

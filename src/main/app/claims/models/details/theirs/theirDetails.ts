@@ -19,9 +19,6 @@ export class TheirDetails implements Serializable<TheirDetails> {
 
   deserialize (input: any): TheirDetails {
     if (input) {
-      if (input.name) {
-        this.name = input.name
-      }
       this.type = input.type
       this.name = input.name
       if (input.address) {

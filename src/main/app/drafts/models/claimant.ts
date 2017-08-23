@@ -80,7 +80,7 @@ export default class Claimant implements CompletableTask {
           break
         case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
           let soleTraderDetails = this.partyDetails as SoleTraderDetails
-          result = !!soleTraderDetails && soleTraderDetails.isCompleted()
+          result = !!soleTraderDetails && soleTraderDetails.isCompleted(true)
           break
         case PartyType.ORGANISATION.value:
           let organisationDetails = this.partyDetails as OrganisationDetails

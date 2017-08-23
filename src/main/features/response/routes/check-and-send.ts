@@ -12,16 +12,30 @@ import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ResponseType } from 'response/form/models/responseType'
 import AllResponseTasksCompletedGuard from 'response/guards/allResponseTasksCompletedGuard'
 import { ErrorHandling } from 'common/errorHandling'
+import { PartyDetails } from 'forms/models/partyDetails'
+import { PartyType } from 'forms/models/partyType'
+import { IndividualDetails } from 'forms/models/individualDetails'
+import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
+import DateOfBirth from 'forms/models/dateOfBirth'
+
+function getDateOfBirth (partyDetails: PartyDetails): DateOfBirth {
+  if (partyDetails.type === PartyType.INDIVIDUAL.value) {
+    return (partyDetails as IndividualDetails).dateOfBirth
+  } else if (partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
+    return (partyDetails as SoleTraderDetails).dateOfBirth
+  } else {
+    return undefined
+  }
+}
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
   const user: User = res.locals.user
-
   res.render(Paths.checkAndSendPage.associatedView, {
     form: form,
     defendant: {
       fullName: user.responseDraft.defendantDetails.partyDetails.name,
       partyDetails: user.responseDraft.defendantDetails.partyDetails,
-      // dateOfBirth: user.responseDraft.defendantDetails.dateOfBirth,
+      dateOfBirth: getDateOfBirth(user.responseDraft.defendantDetails.partyDetails),
       mobilePhone: user.responseDraft.defendantDetails.email
     },
     paths: Paths,

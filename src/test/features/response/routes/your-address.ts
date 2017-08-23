@@ -63,6 +63,7 @@ describe('Defendant user details: your address page', () => {
     checkAuthorizationGuards(app, 'post', ResponsePaths.defendantAddressPage.uri)
 
     const formData = {
+      name: 'name',
       address: { line1: 'Apartment 99', line2: '', city: 'London', postcode: 'SE28 0JE' },
       hasCorrespondenceAddress: false
     } as PartyDetails

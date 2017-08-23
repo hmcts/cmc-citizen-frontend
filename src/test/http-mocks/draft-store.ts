@@ -20,12 +20,15 @@ import ClaimAmountRow from 'forms/models/claimAmountRow'
 import Interest from 'forms/models/interest'
 import InterestDate from 'forms/models/interestDate'
 import Reason from 'forms/models/reason'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import Email from 'app/forms/models/email'
 const serviceBaseURL: string = `${config.get('draft-store.url')}/api/${config.get('draft-store.apiVersion')}`
 
 export const sampleClaimDraftObj = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
   readResolveDispute: true,
   readCompletingClaim: true,
+  lastUpdateTimestamp: 12345,
   claimant: {
     partyDetails: {
       type: 'individual',
@@ -64,7 +67,7 @@ export const sampleClaimDraftObj = {
       },
       hasCorrespondenceAddress: false
     } as IndividualDetails,
-    email: {}
+    email: {address: 'example@example.com' }
   } as Defendant,
   amount: {
     rows: [
@@ -88,12 +91,9 @@ const sampleCCJDraftObj = {
 }
 
 const sampleResponseDraftObj = {
+  lastUpdateTimestamp: 12345,
   response: {
     type: ResponseType.OWE_NONE
-  },
-  lastUpdateTimestamp: '1502462391',
-  counterClaim: {
-    counterClaim: false
   },
   defence: {
     text: 'Some valid defence'
@@ -104,12 +104,23 @@ const sampleResponseDraftObj = {
   moreTimeNeeded: {
     option: MoreTimeNeededOption.YES
   },
+  counterClaim: {
+    counterClaim: false
+  },
   defendantDetails: {
+    email: {address: 'example@example.com'} as Email,
     partyDetails: {
       type: 'individual',
       name: 'John Smith',
       address: { line1: 'Apartment 99', line2: '', city: 'London', postcode: 'SE28 0JE' } as Address,
-      hasCorrespondenceAddress: false
+      hasCorrespondenceAddress: false,
+      dateOfBirth: {
+        date: {
+          day: 31,
+          month: 12,
+          year: 1980
+        } as LocalDate
+      } as DateOfBirth
     } as IndividualDetails,
     payment: {
       id: '12',
@@ -117,7 +128,7 @@ const sampleResponseDraftObj = {
       state: { status: 'success' }
     } as Payment
   } as Defendant
-}
+} as ResponseDraft
 
 export function resolveRetrieve (draftType: string, draftOverride?: object) {
   let draft: object

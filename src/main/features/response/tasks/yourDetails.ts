@@ -3,7 +3,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 export class YourDetails {
 
   static isCompleted (response: ResponseDraft): boolean {
-    if (!response || !response.defendantDetails || !response.defendantDetails.partyDetails.name || !response.defendantDetails.partyDetails) {
+    if (!response || !response.defendantDetails || !response.defendantDetails.partyDetails || !response.defendantDetails.partyDetails.name ) {
       return false
     }
 
