@@ -25,6 +25,9 @@ describe('ClaimModelConverter', () => {
         name: {
           name: 'John Doe'
         },
+        mobilePhone: {
+          number: '0712313213'
+        },
         partyDetails: {
           address: testAddress,
           hasCorrespondenceAddress: true,

@@ -41,9 +41,6 @@ timestamps {
           '''
         }
 
-        stage('Lint') {
-          sh "yarn run lint"
-        }
 
         stage('Node security check') {
           try {
@@ -56,27 +53,34 @@ timestamps {
           sh "rm nsp-report.txt"
         }
 
-        stage('Test') {
-          try {
-            sh "yarn test"
-          } finally {
-            archiveArtifacts 'mochawesome-report/unit.html'
+        // Travis runs all linting and unit testing, no need to do this twice (but run on master to be safe)
+        onMaster {
+          stage('Lint') {
+            sh "yarn lint"
           }
-        }
 
-        stage('Test routes') {
-          try {
-            sh "yarn test:routes"
-          } finally {
-            archiveArtifacts 'mochawesome-report/routes.html'
+          stage('Test') {
+            try {
+              sh "yarn test"
+            } finally {
+              archiveArtifacts 'mochawesome-report/unit.html'
+            }
           }
-        }
 
-        stage('Test a11y') {
-          try {
-            sh "yarn test:a11y"
-          } finally {
-            archiveArtifacts 'mochawesome-report/a11y.html'
+          stage('Test routes') {
+            try {
+              sh "yarn test:routes"
+            } finally {
+              archiveArtifacts 'mochawesome-report/routes.html'
+            }
+          }
+
+          stage('Test a11y') {
+            try {
+              sh "yarn test:a11y"
+            } finally {
+              archiveArtifacts 'mochawesome-report/a11y.html'
+            }
           }
         }
 
@@ -92,7 +96,7 @@ timestamps {
             packager.publishNodeRPM('citizen-frontend')
           }
         }
-        
+
         stage('Integration Tests') {
           integrationTests.execute([
             'CITIZEN_FRONTEND_VERSION': citizenFrontendVersion

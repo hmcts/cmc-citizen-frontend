@@ -1,6 +1,5 @@
 import { Serializable } from 'models/serializable'
 import { Moment } from 'moment'
-import { MobilePhone } from 'app/forms/models/mobilePhone'
 import { MomentFactory } from 'common/momentFactory'
 import { Address } from 'claims/models/address'
 
@@ -9,7 +8,7 @@ export class Person implements Serializable<Person> {
   address: Address
   correspondenceAddress?: Address
   dateOfBirth?: Moment
-  mobilePhone?: MobilePhone
+  mobilePhone?: string
 
   deserialize (input: any): Person {
     if (input) {
@@ -22,7 +21,7 @@ export class Person implements Serializable<Person> {
         this.dateOfBirth = MomentFactory.parse(input.dateOfBirth)
       }
       if (input.mobilePhone) {
-        this.mobilePhone = new MobilePhone().deserialize(input.mobilePhone)
+        this.mobilePhone = input.mobilePhone
       }
     }
     return this

@@ -4,7 +4,7 @@ import { Converter, Form, FormValidationError } from 'forms/form'
 
 import { expectPropertyValidationError } from './models/validationUtils'
 
-function newValidationError (property: string, constraints: {[type: string]: string}, childern?: ValidationError[]): ValidationError {
+function newValidationError (property: string, constraints: { [type: string]: string }, childern?: ValidationError[]): ValidationError {
   const instance: ValidationError = new ValidationError()
   instance.property = property
   instance.constraints = constraints
@@ -52,9 +52,7 @@ describe('Form', () => {
       const formValidationError = new FormValidationError(validationError)
       expect(formValidationError.message).to.equal('City must be empty')
     })
-  })
 
-  describe('Form', () => {
     describe('new instance creation', () => {
       it('should flatten nested validation errors into single errors array', () => {
         const simpleError = newValidationError('amount', {

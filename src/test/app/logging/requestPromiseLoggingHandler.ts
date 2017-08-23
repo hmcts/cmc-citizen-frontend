@@ -1,5 +1,7 @@
+/* tslint:disable:no-unused-expression */
 import * as chai from 'chai'
-import * as spies from 'chai-spies'
+import * as sinon from 'sinon'
+import * as spies from 'sinon-chai'
 
 chai.use(spies)
 const expect = chai.expect
@@ -39,7 +41,11 @@ describe('RequestLoggingHandler', () => {
     let logRequestCall
 
     beforeEach(() => {
-      logRequestCall = chai.spy.on(apiLogger, 'logRequest')
+      logRequestCall = sinon.spy(apiLogger, 'logRequest')
+    })
+
+    afterEach(() => {
+      logRequestCall.restore()
     })
 
     const suiteParameters = [
@@ -51,42 +57,42 @@ describe('RequestLoggingHandler', () => {
       describe(`when passed an ${suite.paramName}`, () => {
         it('should handle logging on a get call', () => {
           proxy.get(suite.param)
-          expect(logRequestCall).to.have.been.called()
+          expect(logRequestCall).to.have.been.called
         })
 
         it('should handle logging on a put call', () => {
           proxy.put(suite.param)
-          expect(logRequestCall).to.have.been.called()
+          expect(logRequestCall).to.have.been.called
         })
 
         it('should handle logging on a post call', () => {
           proxy.post(suite.param)
-          expect(logRequestCall).to.have.been.called()
+          expect(logRequestCall).to.have.been.called
         })
 
         it('should handle logging on a del call', () => {
           proxy.del(suite.param)
-          expect(logRequestCall).to.have.been.called()
+          expect(logRequestCall).to.have.been.called
         })
 
         it('should handle logging on a delete call', () => {
           proxy.delete(suite.param)
-          expect(logRequestCall).to.have.been.called()
+          expect(logRequestCall).to.have.been.called
         })
 
         it('should handle logging on a patch call', () => {
           proxy.patch(suite.param)
-          expect(logRequestCall).to.have.been.called()
+          expect(logRequestCall).to.have.been.called
         })
 
         it('should handle logging on a head call', () => {
           proxy.head(suite.param)
-          expect(logRequestCall).to.have.been.called()
+          expect(logRequestCall).to.have.been.called
         })
 
         it('should not handle logging on other calls', () => {
           proxy.another(suite.param)
-          expect(logRequestCall).not.to.have.been.called()
+          expect(logRequestCall).not.to.have.been.called
         })
       })
     })
@@ -96,7 +102,7 @@ describe('RequestLoggingHandler', () => {
     let originalCallback
 
     beforeEach(() => {
-      originalCallback = chai.spy()
+      originalCallback = sinon.spy()
     })
 
     it('should assign a callback to the options object', () => {
@@ -117,7 +123,7 @@ describe('RequestLoggingHandler', () => {
       handler.handleLogging('any', options)
       options.callback()
 
-      expect(originalCallback).to.have.been.called()
+      expect(originalCallback).to.have.been.called
     })
   })
 })
