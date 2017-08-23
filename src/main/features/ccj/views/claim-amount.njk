@@ -1,0 +1,59 @@
+{% extends "layout.njk" %}
+
+{% set title = 'Money claim' %}
+
+{% from "includes/macros/form.njk" import saveAndContinueButton, csrfProtection, textInput, radioOption, errorSummary %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+
+    <h1 class="heading-large">
+      <span class="heading-secondary">{{ t("County Court Judgment") }} </span>
+
+      {{ t("Has the defendant paid some of the amount owed?") }}
+    </h1>
+
+    <form method="post" novalidate>
+
+      {{ csrfProtection(csrf) }}
+
+      {% set error = form.errorFor('option') %}
+      {% set selection = form.valueFor('option') %}
+      <div class="form-group {% if error %} form-group-error {% endif %}">
+        <fieldset>
+          <legend>sd</legend>
+
+          {{
+            radioOption(
+              label = 'Yes', name = 'option', form = form, value = 'yes', hint = '', checked = (selection == 'yes')
+            )
+          }}
+
+          <div class="panel panel-border-narrow js-hidden" id="option-yes">
+            <p>{{ t("Total amount payable by defendant is £1643.20") }}</p>
+
+            {{
+              textInput(
+                label = 'Amount already paid',
+                name = 'amount',
+                form = form,
+                hint='',
+                inputClass='fee pound'
+              )
+            }}
+          </div>
+
+          {{
+            radioOption(
+              label = 'No', name = 'option', form = form, value = 'no', hint = '', checked = (selection == 'no')
+            )
+          }}
+        </fieldset>
+      </div>
+      {{ saveAndContinueButton() }}
+    </form>
+
+  </div>
+</div>
+{% endblock %}

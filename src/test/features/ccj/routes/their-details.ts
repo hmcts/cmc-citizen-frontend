@@ -65,7 +65,7 @@ describe('CCJ - their details', () => {
         })
 
         context('when form is valid', async () => {
-          it('should redirect to todo page', async () => {
+          it('should redirect to claim amount page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('ccj')
             draftStoreServiceMock.resolveSave('ccj')
@@ -74,7 +74,7 @@ describe('CCJ - their details', () => {
               .post(theirDetailsPage)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
-              .expect(res => expect(res).to.be.redirect.toLocation('todo'))
+              .expect(res => expect(res).to.be.redirect.toLocation('/case/b17af4d2-273f-4999-9895-bce382fa24c8/ccj/claim-amount'))
           })
         })
         context('when form is invalid', async () => {
