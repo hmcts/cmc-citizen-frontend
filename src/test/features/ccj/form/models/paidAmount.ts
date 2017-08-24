@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
 import { PaidAmount, ValidationErrors } from 'ccj/form/models/paidAmount'
-import { PaidAmountOption } from 'ccj/form/models/paidAmountOption'
+import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 
 describe('PaidAmount', () => {
   describe('validation', () => {

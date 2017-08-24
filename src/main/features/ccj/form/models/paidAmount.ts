@@ -1,6 +1,6 @@
 import { IsDefined, IsIn, IsPositive, ValidateIf } from 'class-validator'
 import { Serializable } from 'models/serializable'
-import { PaidAmountOption } from 'ccj/form/models/paidAmountOption'
+import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 
 export class ValidationErrors {
   static readonly OPTION_REQUIRED: string = 'Choose option: yes or no'

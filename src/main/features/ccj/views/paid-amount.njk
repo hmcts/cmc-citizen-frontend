@@ -24,11 +24,7 @@
         <fieldset>
           <legend class="visually-hidden">Has the defendant paid some of the amount owed?</legend>
 
-          {{
-            radioOption(
-              label = 'Yes', name = 'option', form = form, value = 'yes', hint = '', checked = (selection == 'yes')
-            )
-          }}
+          {{ radioOption(label = 'Yes', name = 'option', form = form, value = 'yes', checked = (selection == 'yes')) }}
 
           <div class="panel panel-border-narrow js-hidden" id="option-yes">
 
@@ -41,22 +37,10 @@
               }}
             </p>
 
-            {{
-              textInput(
-                label = 'Amount already paid',
-                name = 'amount',
-                form = form,
-                hint = '',
-                inputClass = 'fee pound'
-              )
-            }}
+            {{ textInput(label = 'Amount already paid', name = 'amount', form = form, inputClass = 'fee pound') }}
           </div>
 
-          {{
-            radioOption(
-              label = 'No', name = 'option', form = form, value = 'no', hint = '', checked = (selection == 'no')
-            )
-          }}
+          {{ radioOption(label = 'No', name = 'option', form = form, value = 'no', checked = (selection == 'no')) }}
         </fieldset>
       </div>
       {{ saveAndContinueButton() }}

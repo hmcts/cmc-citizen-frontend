@@ -13,7 +13,7 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
-import { PaidAmountOption } from 'ccj/form/models/paidAmountOption'
+import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = 'b17af4d2-273f-4999-9895-bce382fa24c8'
