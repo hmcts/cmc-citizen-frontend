@@ -8,6 +8,7 @@ import DateOfBirth from 'forms/models/dateOfBirth'
 
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
+import { IndividualDetails } from 'forms/models/individualDetails'
 
 function renderView (form: Form<DateOfBirth>, res: express.Response) {
   res.render(Paths.defendantDateOfBirthPage.associatedView, {
@@ -17,7 +18,7 @@ function renderView (form: Form<DateOfBirth>, res: express.Response) {
 
 export default express.Router()
   .get(Paths.defendantDateOfBirthPage.uri, (req: express.Request, res: express.Response) => {
-    renderView(new Form(res.locals.user.responseDraft.defendantDetails.dateOfBirth), res)
+    renderView(new Form((res.locals.user.responseDraft.defendantDetails.partyDetails as IndividualDetails).dateOfBirth), res)
   })
   .post(
     Paths.defendantDateOfBirthPage.uri,
@@ -28,7 +29,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.responseDraft.defendantDetails.dateOfBirth = form.model
+        (res.locals.user.responseDraft.defendantDetails.partyDetails as IndividualDetails).dateOfBirth = form.model
         await ResponseDraftMiddleware.save(res, next)
         res.redirect(Paths.defendantMobilePage.uri)
       }

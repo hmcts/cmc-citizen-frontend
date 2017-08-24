@@ -46,7 +46,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.responseDraft.defendantDetails.name = form.model
+        res.locals.user.responseDraft.defendantDetails.partyDetails.name = form.model
         await ResponseDraftMiddleware.save(res, next)
         res.redirect(Paths.defendantAddressPage.uri)
       }

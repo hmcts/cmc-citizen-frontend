@@ -68,7 +68,6 @@ export default express.Router()
     FormValidator.requestHandler(StatementOfTruth, StatementOfTruth.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<StatementOfTruth> = req.body
-
       const user: User = res.locals.user
       if (isStatementOfTruthRequired(user) && form.hasErrors()) {
         renderView(form, res)

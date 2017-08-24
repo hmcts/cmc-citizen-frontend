@@ -1,4 +1,5 @@
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { PartyType } from 'forms/models/partyType'
 
 export class ResponseModelConverter {
 
@@ -24,15 +25,14 @@ export class ResponseModelConverter {
     if (responseDraft.defendantDetails.partyDetails.hasCorrespondenceAddress) {
       responseDraft.defendantDetails['correspondenceAddress'] = responseDraft.defendantDetails.partyDetails.correspondenceAddress
     }
-    delete responseDraft.defendantDetails.partyDetails
-
-    responseDraft.defendantDetails.partyDetails['name'] = responseDraft.defendantDetails.partyDetails.name as any
+    responseDraft.defendantDetails['name'] = responseDraft.defendantDetails.partyDetails.name as any
 
     if (!responseDraft.defendantDetails.email || !responseDraft.defendantDetails.email.address) {
       delete responseDraft.defendantDetails.email
     }
 
-    responseDraft.defendantDetails['type'] = 'individual'
+    responseDraft.defendantDetails['type'] = PartyType.INDIVIDUAL.value
+    delete responseDraft.defendantDetails.partyDetails
   }
 
 }
