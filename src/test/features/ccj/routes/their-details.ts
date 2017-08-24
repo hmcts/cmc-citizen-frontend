@@ -18,7 +18,6 @@ const cookieName: string = config.get<string>('session.cookieName')
 
 const externalId = 'b17af4d2-273f-4999-9895-bce382fa24c8'
 const theirDetailsPage = Paths.theirDetailsPage.uri.replace(':externalId', externalId)
-const paidAmountPage = Paths.paidAmountPage.uri.replace(':externalId', externalId)
 
 const validFormData = {
   address: {
@@ -76,7 +75,7 @@ describe('CCJ - their details', () => {
               .post(theirDetailsPage)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
-              .expect(res => expect(res).to.be.redirect.toLocation(paidAmountPage))
+              .expect(res => expect(res).to.be.redirect.toLocation('todo'))
           })
         })
         context('when form is invalid', async () => {

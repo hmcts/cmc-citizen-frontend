@@ -43,9 +43,8 @@ export default express.Router()
         if (form.hasErrors()) {
           renderView(form, res)
         } else {
-          const { externalId } = req.params
           user.ccjDraft.defendant.partyDetails = form.model
           await DraftCCJService.save(res, next)
-          res.redirect(Paths.paidAmountPage.uri.replace(':externalId', externalId))
+          res.redirect('todo')
         }
       }))

@@ -1,6 +1,6 @@
 import { IsDefined, IsIn, IsPositive, ValidateIf } from 'class-validator'
 import { Serializable } from 'models/serializable'
-import { CompletableTask } from 'models/task'
+import { PaidAmountOption } from 'ccj/form/models/paidAmountOption'
 
 export class ValidationErrors {
   static readonly OPTION_REQUIRED: string = 'Choose option: yes or no'
@@ -8,40 +8,33 @@ export class ValidationErrors {
   static readonly AMOUNT_NOT_VALID: string = 'Invalid amount'
 }
 
-export class PaidAmountOption {
-  static readonly YES = 'yes'
-  static readonly NO = 'no'
-
-  static all (): string[] {
-    return [
-      PaidAmountOption.YES,
-      PaidAmountOption.NO
-    ]
-  }
-}
-
-export class PaidAmount implements Serializable <PaidAmount>, CompletableTask {
+export class PaidAmount implements Serializable <PaidAmount> {
 
   @IsDefined({ message: ValidationErrors.OPTION_REQUIRED })
   @IsIn(PaidAmountOption.all(), { message: ValidationErrors.OPTION_REQUIRED })
-  option?: string
+  option?: PaidAmountOption
 
   @ValidateIf(o => o.option === PaidAmountOption.YES)
   @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED })
   @IsPositive({ message: ValidationErrors.AMOUNT_NOT_VALID })
   amount?: number
 
-  constructor (option?: string, amount?: number) {
+  constructor (option?: PaidAmountOption, amount?: number) {
     this.option = option
     this.amount = amount
   }
 
   static fromObject (value?: any): PaidAmount {
-    if (value == null) {
-      return value
+    console.log(value)
+    if (value && value.option) {
+      const amount = value.amount ? parseFloat(value.amount) : undefined
+      const option = PaidAmountOption.all()
+        .filter(option => option.value === value.option)
+        .pop()
+      return new PaidAmount(option, amount)
+    } else {
+      return new PaidAmount()
     }
-
-    return new PaidAmount(value.option, value.amount ? parseFloat(value.amount) : undefined)
   }
 
   deserialize (input?: any): PaidAmount {
@@ -51,9 +44,5 @@ export class PaidAmount implements Serializable <PaidAmount>, CompletableTask {
     }
 
     return this
-  }
-
-  isCompleted (): boolean {
-    return !!this.option && (this.option === PaidAmountOption.NO || this.amount > 0)
   }
 }

@@ -2,7 +2,8 @@ import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
-import { PaidAmount, PaidAmountOption, ValidationErrors } from 'ccj/form/models/paidAmount'
+import { PaidAmount, ValidationErrors } from 'ccj/form/models/paidAmount'
+import { PaidAmountOption } from 'ccj/form/models/paidAmountOption'
 
 describe('PaidAmount', () => {
   describe('validation', () => {
@@ -17,7 +18,7 @@ describe('PaidAmount', () => {
       })
 
       it('invalid option', () => {
-        const errors = validator.validateSync(new PaidAmount('maybe'))
+        const errors = validator.validateSync(new PaidAmount(new PaidAmountOption('maybe')))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.OPTION_REQUIRED)

@@ -24,6 +24,7 @@ export default express.Router()
     FormValidator.requestHandler(PaidAmount, PaidAmount.fromObject),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+
         const form: Form<PaidAmount> = req.body
         const user: User = res.locals.user
 

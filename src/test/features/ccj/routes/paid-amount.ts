@@ -13,7 +13,7 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
-import { PaidAmountOption } from 'ccj/form/models/paidAmount'
+import { PaidAmountOption } from 'ccj/form/models/paidAmountOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = 'b17af4d2-273f-4999-9895-bce382fa24c8'
@@ -21,7 +21,7 @@ const paidAmountPage = Paths.paidAmountPage.uri.replace(':externalId', externalI
 const paidAmountSummaryPage = Paths.paidAmountSummaryPage.uri.replace(':externalId', externalId)
 
 const validFormData = {
-  option: PaidAmountOption.YES,
+  option: PaidAmountOption.YES.value,
   amount: 10
 }
 

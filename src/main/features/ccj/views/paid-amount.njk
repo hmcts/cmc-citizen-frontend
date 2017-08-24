@@ -19,7 +19,7 @@
       {{ csrfProtection(csrf) }}
 
       {% set error = form.errorFor('option') %}
-      {% set selection = form.valueFor('option') %}
+      {% set selection = form.valueFor('option').value %}
       <div class="form-group {% if error %} form-group-error {% endif %}">
         <fieldset>
           <legend class="visually-hidden">Has the defendant paid some of the amount owed?</legend>
