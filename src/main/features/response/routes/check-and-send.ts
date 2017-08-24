@@ -36,7 +36,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
       fullName: user.responseDraft.defendantDetails.partyDetails.name,
       partyDetails: user.responseDraft.defendantDetails.partyDetails,
       dateOfBirth: getDateOfBirth(user.responseDraft.defendantDetails.partyDetails),
-      mobilePhone: user.responseDraft.defendantDetails.email
+      mobilePhone: user.responseDraft.defendantDetails.mobilePhone
     },
     paths: Paths,
     response: user.responseDraft,

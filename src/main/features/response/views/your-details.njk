@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import nameInput, saveAndContinueButton, csrfProtection, errorSummary %}
+{% from "includes/macros/form.njk" import textInput, saveAndContinueButton, csrfProtection, errorSummary %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Your details') %}
@@ -9,9 +9,7 @@
     <div class="column-two-thirds">
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
-
-        {{ nameInput(form) }}
-
+        {{ textInput(t('Your full name'), 'name', form, autocomplete='name') }}
         {{ saveAndContinueButton() }}
       </form>
     </div>

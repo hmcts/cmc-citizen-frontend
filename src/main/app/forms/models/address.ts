@@ -44,6 +44,19 @@ export class Address implements Serializable<Address>, CompletableTask {
     return new Address(address.line1, address.line2, address.city, address.postcode)
   }
 
+  static fromObject (input?: any): Address {
+    if (input == null) {
+      return input
+    }
+    let deserialized: Address = new Address(
+        input.line1,
+        input.line2,
+        input.city,
+        input.postcode
+    )
+    return deserialized
+  }
+
   deserialize (input?: any): Address {
     if (input) {
       this.line1 = input.line1

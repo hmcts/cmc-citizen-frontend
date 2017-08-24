@@ -19,6 +19,10 @@ export class Name implements Serializable<Name>, CompletableTask {
     this.name = name
   }
 
+  static fromObject (input?: any): Name {
+    return new Name(input.name)
+  }
+
   deserialize (input?: any): Name {
     if (input) {
       this.name = input.name

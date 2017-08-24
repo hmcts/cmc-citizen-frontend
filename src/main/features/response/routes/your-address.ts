@@ -9,7 +9,7 @@ import { Address } from 'forms/models/address'
 import ClaimStoreClient from 'claims/claimStoreClient'
 import Claim from 'claims/models/claim'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
-import { PartyDetails } from 'forms/models/partyDetails'
+import { AddressDetails } from 'forms/models/addressDetails'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'app/idam/user'
 
@@ -18,18 +18,17 @@ async function getAddressProvidedByClaimant (defendantId: number): Promise<Provi
   return claim.claimData.defendant.address
 }
 
-function renderView (form: Form<PartyDetails>, res: express.Response) {
+function renderView (form: Form<AddressDetails>, res: express.Response) {
   res.render(Paths.defendantAddressPage.associatedView, {
     form: form
   })
 }
 
-function defaultToAddressProvidedByClaimant (providedByDefendant: PartyDetails, providedByClaimant: ProvidedAddress): PartyDetails {
+function defaultToAddressProvidedByClaimant (providedByDefendant: AddressDetails, providedByClaimant: ProvidedAddress): AddressDetails {
   if (providedByDefendant.isCompleted()) {
     return providedByDefendant
   } else {
-    return new PartyDetails(
-      'name',
+    return new AddressDetails(
       new Address(
         providedByClaimant.line1,
         providedByClaimant.line2,
@@ -44,7 +43,7 @@ export default express.Router()
   .get(Paths.defendantAddressPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       const user: User = res.locals.user
-      const providedByDefendant: PartyDetails = user.responseDraft.defendantDetails.partyDetails
+      const providedByDefendant: AddressDetails = user.responseDraft.defendantDetails.partyDetails
       const providedByClaimant: ProvidedAddress = await getAddressProvidedByClaimant(user.id)
       renderView(new Form(defaultToAddressProvidedByClaimant(providedByDefendant, providedByClaimant)), res)
     } catch (err) {
@@ -53,13 +52,15 @@ export default express.Router()
   })
   .post(
     Paths.defendantAddressPage.uri,
-    FormValidator.requestHandler(PartyDetails, PartyDetails.fromObject),
+    FormValidator.requestHandler(AddressDetails, AddressDetails.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<PartyDetails> = req.body
+      const form: Form<AddressDetails> = req.body
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.responseDraft.defendantDetails.partyDetails = form.model
+        res.locals.user.responseDraft.defendantDetails.partyDetails.address = form.model.address
+        res.locals.user.responseDraft.defendantDetails.partyDetails.hasCorrespondenceAddress = form.model.hasCorrespondenceAddress
+        res.locals.user.responseDraft.defendantDetails.partyDetails.correspondenceAddress = form.model.correspondenceAddress
 
         await ResponseDraftMiddleware.save(res, next)
         res.redirect(Paths.defendantDateOfBirthPage.uri)

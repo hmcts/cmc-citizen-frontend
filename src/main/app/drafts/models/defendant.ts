@@ -7,11 +7,13 @@ import { CompanyDetails } from 'forms/models/companyDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { IndividualDetails } from 'forms/models/individualDetails'
+import { MobilePhone } from 'app/forms/models/mobilePhone'
 
 export class Defendant implements CompletableTask {
   partyDetails?: PartyDetails
   email?: Email
   payment: Payment = new Payment()
+  mobilePhone?: MobilePhone
 
   static fromObject (input?: any): Defendant {
     if (input == null) {
@@ -21,6 +23,10 @@ export class Defendant implements CompletableTask {
     if (input.email) {
       deserialized.email = new Email().deserialize(input.email)
     }
+    if (input.mobilePhone) {
+      deserialized.mobilePhone = MobilePhone.fromObject(input.mobilePhone)
+    }
+
     if (input.partyDetails && input.partyDetails.type) {
       switch (input.partyDetails.type) {
         case PartyType.INDIVIDUAL.value:
@@ -45,6 +51,9 @@ export class Defendant implements CompletableTask {
       this.payment = new Payment().deserialize(input.payment)
       if (input.email) {
         this.email = new Email().deserialize(input.email)
+      }
+      if (input.mobilePhone) {
+        this.mobilePhone = MobilePhone.fromObject(input.mobilePhone)
       }
       if (input.partyDetails && input.partyDetails.type) {
         switch (input.partyDetails.type) {

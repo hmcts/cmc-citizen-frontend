@@ -19,10 +19,8 @@ export class YourDetails {
     if (!response || !response.defendantDetails || !response.defendantDetails.partyDetails || !response.defendantDetails.partyDetails.name ) {
       return false
     }
-
-    return response.defendantDetails.partyDetails.name
-      && this.isDateOfBirthCompleted(response.defendantDetails.partyDetails)
+    return this.isDateOfBirthCompleted(response.defendantDetails.partyDetails)
       && response.defendantDetails.partyDetails.isCompleted()
-      && response.defendantDetails.email.isCompleted()
+      && response.defendantDetails.mobilePhone.isCompleted()
   }
 }

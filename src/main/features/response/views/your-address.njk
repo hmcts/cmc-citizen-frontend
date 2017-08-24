@@ -1,15 +1,14 @@
 {% extends "layout.njk" %}
 {% from "includes/macros/form.njk" import errorSummary %}
-{% from "includes/macros/partyDetails.njk" import partyDetailsForm %}
+{% from "includes/macros/partyDetails.njk" import partyResponseAddressDetailsForm %}
 
 {% set title = t('Money claim') %}
-{% set heading = t('Your address') %}
+{% set heading = t('Confirm Your address') %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-
-      {{ partyDetailsForm(form, csrf) }}
+      {{ partyResponseAddressDetailsForm(form, csrf) }}
     </div>
   </div>
 {% endblock %}
