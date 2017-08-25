@@ -14,9 +14,10 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
+import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const externalId = 'b17af4d2-273f-4999-9895-bce382fa24c8'
+const externalId = sampleClaimObj.externalId
 const paidAmountPage = Paths.paidAmountPage.uri.replace(':externalId', externalId)
 const paidAmountSummaryPage = Paths.paidAmountSummaryPage.uri.replace(':externalId', externalId)
 

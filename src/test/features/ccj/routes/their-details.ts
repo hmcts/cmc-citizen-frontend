@@ -13,10 +13,11 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
+import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const externalId = 'b17af4d2-273f-4999-9895-bce382fa24c8'
+const externalId = sampleClaimObj.externalId
 const theirDetailsPage = Paths.theirDetailsPage.uri.replace(':externalId', externalId)
 
 const validFormData = {
