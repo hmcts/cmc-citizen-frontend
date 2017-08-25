@@ -37,8 +37,8 @@
                 {{ t("Interest to date of judgment") }}
               </summary>
               <div class="panel text-small" id="details-content-0" aria-hidden>
-                {{ t("Interest calculated at 8&#37; for %s days", {
-                  postProcess: 'sprintf', sprintf: [ interestDetails.numberOfDays ]
+                {{ t("Interest calculated at %s&#37; for %s days", {
+                  postProcess: 'sprintf', sprintf: [ interestDetails.rate, interestDetails.numberOfDays ]
                   }) | safe
                 }}
                 <br>
@@ -65,12 +65,20 @@
           <td class="numeric last">
             <span class="font-small">{{ claim.claimData.paidFeeAmount | numeral }}</span>
           </td>
-
         </tr>
+
+        {% if alreadyPaid %}
+        <tr>
+          <th scope="row">{{ t("Amount already paid") }}</th>
+          <td class="numeric last">
+            <span class="font-small">{{ alreadyPaid | numeral }}</span>
+          </td>
+        </tr>
+        {% endif %}
 
         <tr>
           <th scope="col" class="bold-medium">{{ t("Total") }}</th>
-          <td class="numeric last bold-medium"><span name="subt" id="subt">{{ claim.totalAmount | numeral }}</span></td>
+          <td class="numeric last bold-medium"><span name="subt" id="subt">{{ (claim.totalAmount - alreadyPaid) | numeral }}</span></td>
         </tr>
         </tbody>
       </table>
