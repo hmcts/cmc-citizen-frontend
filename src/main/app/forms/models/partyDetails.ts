@@ -32,7 +32,7 @@ export class PartyDetails implements Serializable<PartyDetails>, CompletableTask
   correspondenceAddress?: CorrespondenceAddress
 
   constructor (
-    name: string = undefined,
+    name?: string,
     address: Address = new Address(),
     hasCorrespondenceAddress: boolean = false,
     correspondenceAddress: Address = new CorrespondenceAddress()
@@ -47,13 +47,12 @@ export class PartyDetails implements Serializable<PartyDetails>, CompletableTask
     if (input == null) {
       return input
     }
-    let deserialized: PartyDetails = new PartyDetails(
+    const deserialized: PartyDetails = new PartyDetails(
       input.name,
       new Address().deserialize(input.address),
       input.hasCorrespondenceAddress === 'true',
       new CorrespondenceAddress().deserialize(input.correspondenceAddress)
     )
-
     if (deserialized.hasCorrespondenceAddress === false) {
       deserialized.correspondenceAddress = undefined
     }

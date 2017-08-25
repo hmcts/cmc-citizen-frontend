@@ -14,7 +14,7 @@ export class IndividualDetails extends PartyDetails {
     if (input == null) {
       return input
     }
-    let deserialized = new IndividualDetails()
+    const deserialized = new IndividualDetails()
     Object.assign(deserialized, PartyDetails.fromObject(input))
     deserialized.type = PartyType.INDIVIDUAL.value
     if (input.dateOfBirth) {

@@ -109,6 +109,7 @@ const sampleResponseDraftObj = {
   },
   defendantDetails: {
     email: {address: 'example@example.com'} as Email,
+    mobilePhone: { number: '01223344444' } as MobilePhone,
     partyDetails: {
       type: 'individual',
       name: 'John Smith',
