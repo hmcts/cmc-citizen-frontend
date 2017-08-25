@@ -8,7 +8,7 @@ import Payment from 'app/pay/payment'
 
 export default class ClaimData implements Serializable<ClaimData> {
   claimant: Claimant
-  defendant: Defendant
+  defendants: Defendant[]
   paidFeeAmount: number
   amount: number
   reason: string
@@ -16,10 +16,22 @@ export default class ClaimData implements Serializable<ClaimData> {
   interestDate: InterestDate
   payment: Payment = new Payment()
 
+  get defendant (): Defendant {
+    if (this.defendants.length === 1) {
+      return this.defendants[0]
+    } else {
+      throw new Error('This claim has multiple defendants')
+    }
+  }
+
   deserialize (input: any): ClaimData {
     if (input) {
       this.claimant = new Claimant().deserialize(input.claimant)
-      this.defendant = new Defendant().deserialize(input.defendant)
+      let defendants: Defendant[] = []
+      input.defendants.forEach((defendant: Defendant) => {
+        defendants.push(new Defendant().deserialize(defendant))
+      })
+      this.defendants = defendants
       this.payment = new Payment().deserialize(input.payment)
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount).totalAmount()
       this.interest = new Interest().deserialize(input.interest)
