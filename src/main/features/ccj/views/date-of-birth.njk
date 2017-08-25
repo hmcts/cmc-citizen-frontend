@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import csrfProtection, textInput, radioGroup, saveAndContinueButton, errorSummary %}
+{% from "includes/macros/form.njk" import csrfProtection, textInput, radioGroup, radioOption, saveAndContinueButton, errorSummary %}
 {% from "includes/macros/date.njk" import dateInput %}
 
 {% set title = t('Money claim') %}
@@ -19,21 +19,33 @@
         "For example, if there are 2 people living at the same address with the same " +
         "name.") }}</p>
 
-        {{ radioGroup(
-        "Do you know the defendant's date of birth?",
-          'hasDateOfBirth',
-        [
-        { label: 'Yes', value: true, bold: true },
-        { label: 'Not sure', value: false, bold: true, hint:t('The court will still enter the judgment for you.') }
-        ],
-        form,
-        isInline = false
-        )
-        }}
 
-        <div class="panel panel-border-narrow js-hidden" id="hasDateOfBirth-true">
-          {{ dateInput('date', form) }}
-        </div>
+        {% set errorType = form.errorFor('known') %}
+        <fieldset class="form-group {% if errorType %} form-group-error {% endif %}">
+
+          <legend>
+              <span class="form-label-bold">
+                {{ t("Do you know the defendant's date of birth?") }}
+              </span>
+          </legend>
+
+          {% if errorType %}<span class="error-message">{{ t(errorType) }}</span>{% endif %}
+          <div class="multiple-choice" data-target="type-known">
+            <input id="yesType" type="radio" name="known" value="true" {% if form.valueFor('known.value')  == "true" %} checked="checked" {% endif %}>
+            <label class="form-label-bold" for="yesType">{{ t('Yes') }} </label>
+          </div>
+
+          <div class="form-group panel panel-border-narrow js-hidden " id="type-known" aria-hidden="false">
+            {{ dateInput('date', form) }}
+          </div>
+
+          <div class="multiple-choice">
+            <input id="notSureType" type="radio" name="known" value="false" {% if form.valueFor('known.value')  == "false" %} checked="checked" {% endif %}>
+            <label class="form-label-bold" for="notSureType">{{ t('Not sure') }} </label><br>
+            <label class="form-hint"> {{ t('The court will still enter the judgment for you.') }}</label>
+          </div>
+        </fieldset>
+
         {{ saveAndContinueButton() }}
       </form>
     </div>

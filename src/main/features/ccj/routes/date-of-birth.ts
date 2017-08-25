@@ -24,7 +24,6 @@ export default express.Router()
     FormValidator.requestHandler(DateOfBirth, DateOfBirth.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<DateOfBirth> = req.body
-
       if (form.hasErrors()) {
         renderView(form, res)
       } else {

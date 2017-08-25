@@ -1,4 +1,4 @@
-import { ValidateNested } from 'class-validator'
+import { ValidateNested, IsDefined, ValidateIf } from 'class-validator'
 
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { MaximumAgeValidator } from 'forms/validation/validators/maximumAgeValidator'
@@ -16,7 +16,10 @@ export class ValidationErrors {
 }
 
 export default class DateOfBirth implements Serializable<DateOfBirth>, CompletableTask {
+  @IsDefined ({ message: 'Choose option: Yes or Not sure' })
+  known: boolean
 
+  @ValidateIf(o => o.known === true)
   @ValidateNested()
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID })
   @isValidYearFormat(4, { message: ValidationErrors.DATE_INVALID_YEAR })
@@ -24,7 +27,8 @@ export default class DateOfBirth implements Serializable<DateOfBirth>, Completab
   @MaximumAgeValidator(150, { message: ValidationErrors.DATE_NOT_VALID })
   date: LocalDate
 
-  constructor (date: LocalDate = new LocalDate()) {
+  constructor (known?: boolean, date: LocalDate = new LocalDate()) {
+    this.known = known
     this.date = date
   }
 
@@ -32,7 +36,7 @@ export default class DateOfBirth implements Serializable<DateOfBirth>, Completab
     if (!value) {
       return value
     }
-    return new DateOfBirth(LocalDate.fromObject(value.date))
+    return new DateOfBirth(Object.getOwnPropertyDescriptor(value, 'known') !== undefined ? value.known === 'true' : undefined, LocalDate.fromObject(value.date))
   }
 
   deserialize (input?: any): DateOfBirth {

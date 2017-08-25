@@ -5,6 +5,8 @@ import * as config from 'config'
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 
+import { Paths } from 'ccj/paths'
+
 import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
@@ -14,7 +16,7 @@ import { checkAuthorizationGuards } from './checks/authorization-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const dateOfBirthPage = '/case/b17af4d2-273f-4999-9895-bce382fa24c8/ccj/date-of-birth'
+const dateOfBirthPage = Paths.dateOfBirthPage.uri.replace(':externalId', 'b17af4d2-273f-4999-9895-bce382fa24c8')
 
 describe('CCJ - defendant date of birth', () => {
   attachDefaultHooks()
