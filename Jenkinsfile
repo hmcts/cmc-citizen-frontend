@@ -124,16 +124,15 @@ timestamps {
             }
           }
           milestone()
-//           Disabled until Tuesday 29th August to allow for T2 Pen testing
-//          lock(resource: "CMC-deploy-demo", inversePrecedence: true) {
-//            stage('Deploy (Demo)') {
-//              ansible.runDeployPlaybook(version, 'demo')
-//            }
-//            stage('Smoke test (Demo)') {
-//              smokeTests.executeAgainst(env.CMC_DEMO_APPLICATION_URL)
-//            }
-//          }
-//          milestone()
+          lock(resource: "CMC-deploy-demo", inversePrecedence: true) {
+            stage('Deploy (Demo)') {
+              ansible.runDeployPlaybook(version, 'demo')
+            }
+            stage('Smoke test (Demo)') {
+              smokeTests.executeAgainst(env.CMC_DEMO_APPLICATION_URL)
+            }
+          }
+          milestone()
         }
       } catch (Throwable err) {
         notifyBuildFailure channel: channel
