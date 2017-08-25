@@ -1,7 +1,5 @@
 {% extends "layout.njk" %}
-
 {% set title = 'Money claim' %}
-
 {% from "includes/macros/form.njk" import submitButton, csrfProtection %}
 
 {% block content %}
@@ -12,72 +10,75 @@
       {{ t("Amount to be paid by defendant") }}
     </h1>
 
-    <p>
-      {{ t("Amount payable by defendant is calculated based on the amount you're claiming and any other costs minus any amount paid by defendant.") }}
-    </p>
-    <table class="table-form">
-      <caption class="visuallyhidden">{{ t("Amount payable by defendant") }}</caption>
-      <thead>
-      <tr>
-        <th scope="col"></th>
-        <th class="numeric last" scope="col">{{ t("Amount") }}</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <th scope="row">{{ t("Claim amount") }}</th>
-        <td class="numeric last">
-          <span class="font-small">{{ claim.claimData.amount | numeral }}</span>
-        </td>
-      </tr>
-      {% if claim.claimData.interest.type != 'no interest' %}
-      <tr>
-        <th scope="row">
-          <details role="group">
-            <summary role="button" aria-controls="details-content-0" aria-expanded="false">
-              Interest to date of judgment
-            </summary>
-            <div class="panel text-small" id="details-content-0" aria-hidden>
-              {{ t("Interest calculated at 8&#37; for %s days", { postProcess: 'sprintf', sprintf: [ numberOfDays ] }) }}
-              <br>
-              <span class="font-xsmall">
+    <div class="form-group">
+      <p>
+        {{ t("Amount payable by defendant is calculated based on the amount you're claiming and any other costs minus any amount paid by defendant.") }}
+      </p>
+      <table class="table-form">
+        <caption class="visuallyhidden">{{ t("Amount payable by defendant") }}</caption>
+        <thead>
+        <tr>
+          <th scope="col"></th>
+          <th class="numeric last" scope="col">{{ t("Amount") }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th scope="row">{{ t("Claim amount") }}</th>
+          <td class="numeric last">
+            <span class="font-small">{{ claim.claimData.amount | numeral }}</span>
+          </td>
+        </tr>
+        {% if interestDetails %}
+        <tr>
+          <th scope="row">
+            <details role="group">
+              <summary role="button" aria-controls="details-content-0" aria-expanded="false">
+                {{ t("Interest to date of judgment") }}
+              </summary>
+              <div class="panel text-small" id="details-content-0" aria-hidden>
+                {{ t("Interest calculated at 8&#37; for %s days", {
+                  postProcess: 'sprintf', sprintf: [ interestDetails.numberOfDays ]
+                  }) | safe
+                }}
+                <br>
+                <span class="font-xsmall">
                 ({{
                   t("%s to %s", {
                     postProcess: 'sprintf', sprintf: [
-                      claim.claimData.interestDate.date | date,
-                      claim.issuedOn | date
+                      interestDetails.interestDate | date,
+                      interestDetails.defaultJudgmentDate | date
                     ]
                   })
                 }})
               </span>
-            </div>
-          </details>
-        </th>
-        <td class="numeric last">
-          <span class="font-small">£68.20</span>
-        </td>
-      </tr>
-      {% endif %}
-      <tr>
-        <th scope="row">{{ t("Claim fee") }}</th>
-        <td class="numeric last">
-          <span class="font-small">{{ claim.claimData.paidFeeAmount | numeral }}</span>
-        </td>
+              </div>
+            </details>
+          </th>
+          <td class="numeric last">
+            <span class="font-small">{{ interestDetails.interest | numeral }}</span>
+          </td>
+        </tr>
+        {% endif %}
+        <tr>
+          <th scope="row">{{ t("Claim fee") }}</th>
+          <td class="numeric last">
+            <span class="font-small">{{ claim.claimData.paidFeeAmount | numeral }}</span>
+          </td>
 
-      </tr>
+        </tr>
 
-      <tr>
-        <th scope="col" class="bold-medium">Total</th>
-        <td class="numeric last bold-medium"><span name="subt" id="subt">{{ claim.totalAmount | numeral }}</span></td>
-      </tr>
-      </tbody>
-    </table>
+        <tr>
+          <th scope="col" class="bold-medium">{{ t("Total") }}</th>
+          <td class="numeric last bold-medium"><span name="subt" id="subt">{{ claim.totalAmount | numeral }}</span></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
 
-    <form class="form" novalidate>
-      {{ csrfProtection() }}
-      {{ submitButton() }}
-    </form>
-
+    <div class="form-group">
+      <a class="button" href="{{nextPageUrl}}">{{ t("Continue") }}</a>
+    </div>
   </div>
 </div>
 {% endblock %}

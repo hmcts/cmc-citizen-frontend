@@ -25,7 +25,6 @@ export class PaidAmount implements Serializable <PaidAmount> {
   }
 
   static fromObject (value?: any): PaidAmount {
-    console.log(value)
     if (value && value.option) {
       const amount = value.amount ? parseFloat(value.amount) : undefined
       const option = PaidAmountOption.all()

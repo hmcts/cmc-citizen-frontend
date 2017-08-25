@@ -3,36 +3,50 @@ import * as express from 'express'
 import { Paths } from 'ccj/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
-import ClaimStoreClient from 'claims/claimStoreClient'
 import Claim from 'claims/models/claim'
 import { MomentFactory } from 'common/momentFactory'
+import { InterestType } from 'forms/models/interest'
+import InterestDateType from 'app/common/interestDateType'
+import { Moment } from 'moment'
+
+const nextPageUrl: string = 'todo'
 
 function calculateInterest (amount: number, noOfDays: number) {
   const rate = 8.0
   return parseFloat(((amount * noOfDays * rate) / (365 * 100) ).toFixed(2))
 }
 
+function getInterestDetails (claim: Claim): object {
+  if (claim.claimData.interest.type === InterestType.NO_INTEREST) {
+    return undefined
+  }
+
+  let interestDate: Moment
+
+  if (claim.claimData.interestDate.type === InterestDateType.CUSTOM) {
+    interestDate = claim.claimData.interestDate.date
+  } else {
+    interestDate = claim.createdAt
+  }
+
+  const todayDate: Moment = MomentFactory.currentDate()
+  const noOfDays: number = todayDate.diff(interestDate, 'days')
+
+  return {
+    numberOfDays: noOfDays,
+    interest: calculateInterest(claim.claimData.amount, noOfDays),
+    interestDate: interestDate,
+    defaultJudgmentDate: todayDate
+  }
+}
+
 export default express.Router()
   .get(Paths.paidAmountSummaryPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const { externalId } = req.params
-      const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId)
-      const amount: number = claim.claimData.amount
-      let noOfDays: number = 0
-      let interest: number = 0
-
-      if (claim.claimData.interestDate.date) {
-        noOfDays = MomentFactory.currentDateTime().diff(claim.claimData.interestDate.date, 'days')
-        interest = calculateInterest(amount, noOfDays)
-      }
+      const claim: Claim = res.locals.user.claim
 
       res.render(
         Paths.paidAmountSummaryPage.associatedView,
-        { claim: claim, numberOfDays: noOfDays, interest: interest }
+        { claim: claim, interestDetails: getInterestDetails(claim), nextPageUrl: nextPageUrl }
       )
     }))
-  .post(Paths.paidAmountSummaryPage.uri,
-    ErrorHandling.apply(
-      async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-        res.redirect('todo')
-      }))
