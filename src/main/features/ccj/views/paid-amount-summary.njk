@@ -69,7 +69,11 @@
 
         {% if alreadyPaid %}
         <tr>
-          <th scope="row">{{ t("Amount already paid") }}</th>
+          <th scope="col" class="bold-small">{{ t("Sub total") }}</th>
+          <td class="numeric last bold-small"><span id="sub-total">{{ claim.totalAmount | numeral }}</span></td>
+        </tr>
+        <tr>
+          <th scope="row">{{ t("Minus amount already paid") }}</th>
           <td class="numeric last">
             <span class="font-small">{{ alreadyPaid | numeral }}</span>
           </td>
@@ -78,7 +82,7 @@
 
         <tr>
           <th scope="col" class="bold-medium">{{ t("Total") }}</th>
-          <td class="numeric last bold-medium"><span name="subt" id="subt">{{ (claim.totalAmount - alreadyPaid) | numeral }}</span></td>
+          <td class="numeric last bold-medium"><span id="total">{{ (claim.totalAmount - alreadyPaid) | numeral }}</span></td>
         </tr>
         </tbody>
       </table>

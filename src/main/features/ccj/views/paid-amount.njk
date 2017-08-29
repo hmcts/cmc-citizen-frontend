@@ -2,7 +2,7 @@
 
 {% set title = 'Money claim' %}
 
-{% from "includes/macros/form.njk" import saveAndContinueButton, csrfProtection, textInput, radioOption, errorSummary %}
+{% from "includes/macros/form.njk" import saveAndContinueButton, csrfProtection, poundInput, radioOption, errorSummary %}
 
 {% block content %}
 <div class="grid-row">
@@ -37,7 +37,8 @@
               }}
             </p>
 
-            {{ textInput(label = 'Amount already paid', name = 'amount', form = form, inputClass = 'fee pound') }}
+            {{ poundInput(label = 'Amount already paid', name = 'amount', form = form) }}
+
           </div>
 
           {{ radioOption(label = 'No', name = 'option', form = form, value = 'no', checked = (selection == 'no')) }}
