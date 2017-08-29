@@ -27,11 +27,8 @@ export default class ClaimData implements Serializable<ClaimData> {
   deserialize (input: any): ClaimData {
     if (input) {
       this.claimant = new Claimant().deserialize(input.claimant)
-      let defendants: Defendant[] = []
-      input.defendants.forEach((defendant: Defendant) => {
-        defendants.push(new Defendant().deserialize(defendant))
-      })
-      this.defendants = defendants
+
+      this.defendants = input.defendants.map((defendant: any) => new Defendant().deserialize(defendant))
       this.payment = new Payment().deserialize(input.payment)
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount).totalAmount()
       this.interest = new Interest().deserialize(input.interest)
