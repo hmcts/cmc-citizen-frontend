@@ -56,8 +56,10 @@ describe('CCJ - paid amount page', () => {
           .expect(res => expect(res).to.be.successful.withText('Has the defendant paid some of the amount owed?'))
       })
     })
+
     describe('on POST', () => {
       checkAuthorizationGuards(app, 'post', paidAmountPage)
+
       context('when user authorised', () => {
         beforeEach(() => {
           idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
@@ -76,6 +78,7 @@ describe('CCJ - paid amount page', () => {
               .expect(res => expect(res).to.be.redirect.toLocation(paidAmountSummaryPage))
           })
         })
+
         context('when form is invalid', async () => {
           it('should render page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()

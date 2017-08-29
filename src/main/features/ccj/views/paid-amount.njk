@@ -22,7 +22,7 @@
       {% set selection = form.valueFor('option').value %}
       <div class="form-group {% if error %} form-group-error {% endif %}">
         <fieldset>
-          <legend class="visually-hidden">Has the defendant paid some of the amount owed?</legend>
+          <legend class="visually-hidden">{{ t("Has the defendant paid some of the amount owed?") }}</legend>
 
           {{ radioOption(label = 'Yes', name = 'option', form = form, value = 'yes', checked = (selection == 'yes')) }}
 

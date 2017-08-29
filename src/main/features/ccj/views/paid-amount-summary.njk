@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% set title = 'Money claim' %}
-{% from "includes/macros/form.njk" import submitButton, csrfProtection %}
+{% from "includes/macros/form.njk" import submitButton %}
 
 {% block content %}
 <div class="grid-row">
@@ -37,7 +37,7 @@
                 {{ t("Interest to date of judgment") }}
               </summary>
               <div class="panel text-small" id="details-content-0" aria-hidden>
-                {{ t("Interest calculated at %s&#37; for %s days", {
+                {{ t("Interest calculated at %s%% for %s days", {
                   postProcess: 'sprintf', sprintf: [ interestDetails.rate, interestDetails.numberOfDays ]
                   }) | safe
                 }}
