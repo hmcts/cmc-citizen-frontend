@@ -39,6 +39,16 @@ describe('CCJ - paid amount summary page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
+      it('should return 500 and render error page when cannot retrieve CCJ draft', async () => {
+        draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+        await request(app)
+          .get(paidAmountSummaryPage)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
       it('should render page when everything is fine', async () => {
         draftStoreServiceMock.resolveRetrieve('ccj')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
