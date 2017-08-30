@@ -72,4 +72,3 @@ describe('CCJ - defendant date of birth', () => {
     })
   })
 })
-

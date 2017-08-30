@@ -31,7 +31,7 @@ function mockedDraftClaim () {
   let draft = new DraftClaim()
   draft.readResolveDispute = true
   draft.claimant = new DraftClaimant()
-  draft.claimant.dateOfBirth = new DateOfBirth(new LocalDate(1980, 1, 1))
+  draft.claimant.dateOfBirth = new DateOfBirth(true, new LocalDate(1980, 1, 1))
   draft.claimant.name = new Name('John Smith')
   draft.claimant.partyDetails = new PartyDetails()
   draft.claimant.partyDetails.address.postcode = 'postcode'
@@ -41,7 +41,7 @@ function mockedDraftClaim () {
   draft.defendant.partyDetails = new PartyDetails()
   draft.defendant.partyDetails.address.postcode = 'postcode'
   draft.defendant.partyDetails.address.line1 = 'line1'
-  draft.defendant.dateOfBirth = new DateOfBirth(new LocalDate(1980, 1, 1))
+  draft.defendant.dateOfBirth = new DateOfBirth(true, new LocalDate(1980, 1, 1))
   draft.interestDate.date = new LocalDate(2017, 7, 21)
 
   return draft
@@ -54,7 +54,7 @@ function mockedResponseDraft () {
   draft.defendantDetails = new DraftDefendant()
   draft.defendantDetails.mobilePhone = new MobilePhone('07873738765')
   draft.defendantDetails.name = new Name('Pa11y Super Awesome-Tests')
-  draft.defendantDetails.dateOfBirth = new DateOfBirth(new LocalDate(1980, 1, 1))
+  draft.defendantDetails.dateOfBirth = new DateOfBirth(true, new LocalDate(1980, 1, 1))
   draft.defendantDetails.partyDetails = new PartyDetails()
   draft.defendantDetails.partyDetails.address.postcode = 'postcode'
   draft.defendantDetails.partyDetails.address.line1 = 'line1'

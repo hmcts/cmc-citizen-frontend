@@ -33,7 +33,7 @@ describe('ClaimModelConverter', () => {
           hasCorrespondenceAddress: true,
           correspondenceAddress: testAddress
         } as PartyDetails,
-        dateOfBirth: new DateOfBirth(new LocalDate(1990, 1, 1))
+        dateOfBirth: new DateOfBirth(true, new LocalDate(1990, 1, 1))
       },
       defendant: {
         name: {

@@ -132,5 +132,5 @@ describe('DateOfBirth', () => {
 })
 
 function dateOfBirth (year: number, month: number, day: number): DateOfBirth {
-  return new DateOfBirth(new LocalDate(year, month, day))
+  return new DateOfBirth(true, new LocalDate(year, month, day))
 }

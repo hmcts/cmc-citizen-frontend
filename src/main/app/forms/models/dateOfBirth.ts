@@ -16,7 +16,7 @@ export class ValidationErrors {
 }
 
 export default class DateOfBirth implements Serializable<DateOfBirth>, CompletableTask {
-  @IsDefined ({ message: 'Choose option: Yes or Not sure' })
+  @IsDefined ({ message: 'Select an option' })
   known: boolean
 
   @ValidateIf(o => o.known === true)
@@ -36,11 +36,19 @@ export default class DateOfBirth implements Serializable<DateOfBirth>, Completab
     if (!value) {
       return value
     }
-    return new DateOfBirth(Object.getOwnPropertyDescriptor(value, 'known') !== undefined ? value.known === 'true' : undefined, LocalDate.fromObject(value.date))
+
+    const dateOfBirth = new DateOfBirth(value.known !== undefined ? value.known === 'true' : undefined, LocalDate.fromObject(value.date))
+
+    if (!dateOfBirth.known) {
+      delete dateOfBirth.date
+    }
+
+    return dateOfBirth
   }
 
   deserialize (input?: any): DateOfBirth {
     if (input) {
+      this.known = input.known
       this.date = new LocalDate().deserialize(input.date)
     }
     return this

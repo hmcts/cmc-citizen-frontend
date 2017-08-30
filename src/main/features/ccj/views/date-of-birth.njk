@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import csrfProtection, textInput, radioGroup, radioOption, saveAndContinueButton, errorSummary %}
+{% from "includes/macros/form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary %}
 {% from "includes/macros/date.njk" import dateInput %}
 
 {% set title = t('Money claim') %}
@@ -20,8 +20,8 @@
         "name.") }}</p>
 
 
-        {% set errorType = form.errorFor('known') %}
-        <fieldset class="form-group {% if errorType %} form-group-error {% endif %}">
+        {% set error = form.errorFor('known') %}
+        <fieldset class="form-group {% if error %} form-group-error {% endif %}">
 
           <legend>
               <span class="form-label-bold">
@@ -29,21 +29,19 @@
               </span>
           </legend>
 
-          {% if errorType %}<span class="error-message">{{ t(errorType) }}</span>{% endif %}
-          <div class="multiple-choice" data-target="type-known">
-            <input id="yesType" type="radio" name="known" value="true" {% if form.valueFor('known.value')  == "true" %} checked="checked" {% endif %}>
-            <label class="form-label-bold" for="yesType">{{ t('Yes') }} </label>
-          </div>
+          {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+          {{
+            radioOption(form = form, label = 'Yes', name = 'known', value = 'true', checked = form.valueFor('known') === true, bold = true, hint = ' ')
+          }}
 
-          <div class="form-group panel panel-border-narrow js-hidden " id="type-known" aria-hidden="false">
+          <div class="form-group panel panel-border-narrow js-hidden " id="known-true" aria-hidden="false">
             {{ dateInput('date', form) }}
           </div>
 
-          <div class="multiple-choice">
-            <input id="notSureType" type="radio" name="known" value="false" {% if form.valueFor('known.value')  == "false" %} checked="checked" {% endif %}>
-            <label class="form-label-bold" for="notSureType">{{ t('Not sure') }} </label><br>
-            <label class="form-hint"> {{ t('The court will still enter the judgment for you.') }}</label>
-          </div>
+          {{
+            radioOption(form = form, label = 'Not sure', name = 'known', value = 'false', checked = form.valueFor('known') === false, bold = true, hint = 'The court will still enter the judgment for you.')
+          }}
+
         </fieldset>
 
         {{ saveAndContinueButton() }}
