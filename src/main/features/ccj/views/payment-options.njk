@@ -19,11 +19,11 @@
     </h1>
 
     <form method="post" novalidate>
-      {{ csrfProtection() }}
+      {{ csrfProtection(csrf) }}
 
       {{
       radioGroup(
-        "What do you want to do?",
+        'What do you want to do?',
         'option',
         [
           {'label': 'Immediately', value: 'immediately'},

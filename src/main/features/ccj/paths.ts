@@ -4,5 +4,10 @@ const ccjPath = '/case/:externalId/ccj'
 
 export class Paths {
   static readonly theirDetailsPage = new RoutablePath(`${ccjPath}/their-details`)
+  static readonly paidAmountPage = new RoutablePath(`${ccjPath}/paid-amount`)
+  static readonly paidAmountSummaryPage = new RoutablePath(`${ccjPath}/paid-amount-summary`)
   static readonly paymentOptionsPage = new RoutablePath(`${ccjPath}/payment-options`)
+  static readonly checkYourAnswerPage = new RoutablePath(`${ccjPath}/check-your-answer`)
+  static readonly payBySetDatePage = new RoutablePath(`${ccjPath}/pay-by-set-date`)
+  static readonly repaymentPlanPage = new RoutablePath(`${ccjPath}/repayment-plan`)
 }

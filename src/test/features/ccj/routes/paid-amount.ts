@@ -13,23 +13,24 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
-import { CCJPaymentOption } from 'ccj/form/models/ccjPaymentType'
+import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
-
 const externalId = sampleClaimObj.externalId
-const paymentOptionsPage = Paths.paymentOptionsPage.uri.replace(':externalId', externalId)
+const paidAmountPage = Paths.paidAmountPage.uri.replace(':externalId', externalId)
+const paidAmountSummaryPage = Paths.paidAmountSummaryPage.uri.replace(':externalId', externalId)
 
-const validFormData: object = {
-  option: CCJPaymentOption.IMMEDIATELY.option
+const validFormData = {
+  option: PaidAmountOption.YES.value,
+  amount: 10
 }
 
-describe('CCJ - payment options', () => {
+describe('CCJ - paid amount page', () => {
   attachDefaultHooks()
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', paymentOptionsPage)
+    checkAuthorizationGuards(app, 'get', paidAmountPage)
 
     context('when user authorised', () => {
       beforeEach(() => {
@@ -40,7 +41,7 @@ describe('CCJ - payment options', () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .get(paymentOptionsPage)
+          .get(paidAmountPage)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -50,7 +51,7 @@ describe('CCJ - payment options', () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
         await request(app)
-          .get(paymentOptionsPage)
+          .get(paidAmountPage)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -60,14 +61,14 @@ describe('CCJ - payment options', () => {
         draftStoreServiceMock.resolveRetrieve('ccj')
 
         await request(app)
-          .get(paymentOptionsPage)
+          .get(paidAmountPage)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Payment options'))
+          .expect(res => expect(res).to.be.successful.withText('Has the defendant paid some of the amount owed?'))
       })
     })
 
     describe('on POST', () => {
-      checkAuthorizationGuards(app, 'post', paymentOptionsPage)
+      checkAuthorizationGuards(app, 'post', paidAmountPage)
 
       context('when user authorised', () => {
         beforeEach(() => {
@@ -79,7 +80,7 @@ describe('CCJ - payment options', () => {
             claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
-              .post(paymentOptionsPage)
+              .post(paidAmountPage)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -90,38 +91,36 @@ describe('CCJ - payment options', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(paymentOptionsPage)
+              .post(paidAmountPage)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
         })
 
-        context('when form is valid should redirect to', async () => {
-
-          async function submitFormWithValueShouldRedirectToPage (validForm: object, expectedToRedirect: string) {
+        context('when form is valid', async () => {
+          it('should redirect to claim amount page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('ccj')
             draftStoreServiceMock.resolveSave('ccj')
 
             await request(app)
-              .post(paymentOptionsPage)
+              .post(paidAmountPage)
               .set('Cookie', `${cookieName}=ABC`)
-              .send(validForm)
-              .expect(res => expect(res).to.be.redirect.toLocation(expectedToRedirect)
-              )
-          }
-
-          it('check and send for "IMMEDIATELY" option selected', async () => {
-            await submitFormWithValueShouldRedirectToPage({ option: CCJPaymentOption.IMMEDIATELY.option }, Paths.checkYourAnswerPage.uri.replace(':externalId', externalId))
+              .send(validFormData)
+              .expect(res => expect(res).to.be.redirect.toLocation(paidAmountSummaryPage))
           })
 
-          it('repayment plan for "BY_INSTALMENTS" option selected', async () => {
-            await submitFormWithValueShouldRedirectToPage({ option: CCJPaymentOption.BY_INSTALMENTS.option }, Paths.repaymentPlanPage.uri.replace(':externalId', externalId))
-          })
+          it('should return 500 and render error page when cannot save ccj draft', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveRetrieve('ccj')
+            draftStoreServiceMock.rejectSave('ccj', 'Error')
 
-          it('pay by set date for "FULL" option selected', async () => {
-            await submitFormWithValueShouldRedirectToPage({ option: CCJPaymentOption.FULL.option }, Paths.payBySetDatePage.uri.replace(':externalId', externalId))
+            await request(app)
+              .post(paidAmountPage)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(validFormData)
+              .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
         })
 
@@ -131,10 +130,10 @@ describe('CCJ - payment options', () => {
             draftStoreServiceMock.resolveRetrieve('ccj')
 
             await request(app)
-              .post(paymentOptionsPage)
+              .post(paidAmountPage)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ name: 'John Smith' })
-              .expect(res => expect(res).to.be.successful.withText('Payment options', 'div class="error-summary"'))
+              .send({ option: undefined })
+              .expect(res => expect(res).to.be.successful.withText('Has the defendant paid some of the amount owed?', 'div class="error-summary"'))
           })
         })
       })
