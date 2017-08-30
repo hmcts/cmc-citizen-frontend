@@ -7,10 +7,7 @@ export class TheirDetails implements Serializable<TheirDetails> {
   address: Address
   email?: string
 
-  constructor (type?: string,
-              name?: string,
-              address?: Address,
-              email?: string ) {
+  constructor (type?: string, name?: string, address?: Address, email?: string ) {
     this.type = type
     this.name = name
     this.address = address

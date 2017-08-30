@@ -40,11 +40,11 @@ export class ResponseModelConverter {
         partyDetails = new SoleTrader()
         break
     }
-    partyDetails['address'] = new Address().deserialize(responseDraft.defendantDetails.partyDetails.address)
+    partyDetails.address = new Address().deserialize(responseDraft.defendantDetails.partyDetails.address)
     if (responseDraft.defendantDetails.partyDetails.hasCorrespondenceAddress) {
       partyDetails['correspondenceAddress'] = new Address().deserialize(responseDraft.defendantDetails.partyDetails.correspondenceAddress)
     }
-    partyDetails['name'] = responseDraft.defendantDetails.partyDetails.name as any
+    partyDetails.name = responseDraft.defendantDetails.partyDetails.name
     if (responseDraft.defendantDetails.email) {
       partyDetails.email = responseDraft.defendantDetails.email.address
     }

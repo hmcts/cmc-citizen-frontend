@@ -122,12 +122,7 @@ const sampleResponseDraftObj = {
           year: 1980
         } as LocalDate
       } as DateOfBirth
-    } as IndividualDetails,
-    payment: {
-      id: '12',
-      amount: 2500,
-      state: { status: 'success' }
-    } as Payment
+    } as IndividualDetails
   } as Defendant
 } as ResponseDraft
 

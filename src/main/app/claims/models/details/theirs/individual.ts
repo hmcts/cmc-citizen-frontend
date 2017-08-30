@@ -3,13 +3,8 @@ import { PartyType } from 'forms/models/partyType'
 import { Address } from 'claims/models/address'
 
 export class Individual extends TheirDetails {
-  constructor (name?: string,
-              address?: Address,
-              email?: string) {
-    super(PartyType.INDIVIDUAL.value,
-          name,
-          address,
-          email)
+  constructor (name?: string, address?: Address, email?: string) {
+    super(PartyType.INDIVIDUAL.value, name, address, email)
   }
 
   deserialize (input: any): Individual {

@@ -5,18 +5,14 @@ import { Address } from 'claims/models/address'
 export class Company extends Party {
   contactPerson?: string
 
-  constructor (name?: string,
+  constructor (
+              name?: string,
               address?: Address,
               correspondenceAddress?: Address,
               mobilePhone?: string,
               email?: string,
               contactPerson?: string) {
-    super(PartyType.COMPANY.value,
-          name,
-          address,
-          correspondenceAddress,
-          mobilePhone,
-          email)
+    super(PartyType.COMPANY.value, name, address, correspondenceAddress, mobilePhone, email)
     this.contactPerson = contactPerson
   }
 

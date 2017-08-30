@@ -5,14 +5,8 @@ import { Address } from 'claims/models/address'
 export class Company extends TheirDetails {
   contactPerson?: string
 
-  constructor (name?: string,
-              address?: Address,
-              email?: string,
-              contactPerson?: string) {
-    super(PartyType.COMPANY.value,
-          name,
-          address,
-          email)
+  constructor (name?: string, address?: Address, email?: string, contactPerson?: string) {
+    super(PartyType.COMPANY.value, name, address, email)
     this.contactPerson = contactPerson
   }
 

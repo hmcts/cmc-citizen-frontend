@@ -1,14 +1,21 @@
 import { expect } from 'chai'
-
-// import DraftClaim from 'drafts/models/draftClaim'
 import { ClaimModelConverter } from 'claims/claimModelConverter'
 import InterestDateType from 'app/common/interestDateType'
-import InterestDate from 'app/forms/models/interestDate'
+import { InterestType } from 'app/forms/models/interest'
+import { Defendant } from 'app/drafts/models/defendant'
+import Claimant from 'app/drafts/models/claimant'
+import DraftClaim from 'app/drafts/models/draftClaim'
+import { IndividualDetails } from 'app/forms/models/individualDetails'
+import { MobilePhone } from 'app/forms/models/mobilePhone'
+import Payment from 'app/pay/payment'
+import { Address } from 'forms/models/address'
+import DateOfBirth from 'app/forms/models/dateOfBirth'
 import { LocalDate } from 'forms/models/localDate'
-import DateOfBirth from 'forms/models/dateOfBirth'
+import ClaimAmountBreakdown from 'forms/models/claimAmountBreakdown'
+import ClaimAmountRow from 'forms/models/claimAmountRow'
+import Interest from 'forms/models/interest'
+import InterestDate from 'forms/models/interestDate'
 import Reason from 'forms/models/reason'
-import { Address } from 'app/forms/models/address'
-import { IndividualDetails } from 'forms/models/individualDetails'
 
 const testAddress = {
   line1: 'line1',
@@ -20,29 +27,50 @@ describe('ClaimModelConverter', () => {
 
   beforeEach(() => {
     draftClaim = {
-      interestDate: new InterestDate(InterestDateType.CUSTOM, new LocalDate(2017, 1, 1), 'because'),
+      externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
+      readResolveDispute: true,
+      readCompletingClaim: true,
+      lastUpdateTimestamp: 12345,
       claimant: {
         partyDetails: {
-          name: 'John Doe',
           type: 'individual',
-          dateOfBirth: new DateOfBirth(new LocalDate(1982, 1, 1)),
-          address: testAddress,
+          name: 'John Smith',
+          address: testAddress as Address,
           hasCorrespondenceAddress: true,
-          correspondenceAddress: testAddress
+          correspondenceAddress: testAddress as Address,
+          dateOfBirth: new DateOfBirth(new LocalDate(1990, 1, 1)) as DateOfBirth
         } as IndividualDetails,
-        dateOfBirth: new DateOfBirth(new LocalDate(1990, 1, 1))
-      },
+        mobilePhone: {
+          number: '07000000000'
+        } as MobilePhone,
+        payment: {
+          id: '12',
+          amount: 2500,
+          state: { status: 'success' }
+        } as Payment
+      } as Claimant,
       defendant: {
         partyDetails: {
-          name: 'John Other',
           type: 'individual',
-          dateOfBirth: new DateOfBirth(new LocalDate(1982, 1, 1)),
+          name: 'John Other',
           address: testAddress,
           hasCorrespondenceAddress: false
-        } as IndividualDetails
-      },
-      reason: new Reason('because')
-    }
+        } as IndividualDetails,
+        email: {address: 'example@example.com' }
+      } as Defendant,
+      amount: {
+        rows: [{
+          reason: 'Valid reason',
+          amount: 1
+        } as ClaimAmountRow
+        ]
+      } as ClaimAmountBreakdown,
+      interest: {
+        type: InterestType.NO_INTEREST
+      } as Interest,
+      interestDate: new InterestDate(InterestDateType.CUSTOM, new LocalDate(2017, 1, 1), 'because') as InterestDate,
+      reason: new Reason('because') as Reason
+    } as DraftClaim
   })
 
   describe('when converting claimant details', () => {
@@ -90,7 +118,7 @@ describe('ClaimModelConverter', () => {
   describe('when converting names', () => {
     it('should set the name property to a string for claimant', () => {
       let converted = ClaimModelConverter.convert(draftClaim)
-      expect(converted.claimant.name).to.equal('John Doe')
+      expect(converted.claimant.name).to.equal('John Smith')
     })
 
     it('should set the name property to a string for defendant', () => {

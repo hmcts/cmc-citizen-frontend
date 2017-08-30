@@ -5,18 +5,14 @@ import { Address } from 'claims/models/address'
 export class SoleTrader extends Party {
   businessName?: string
 
-  constructor (name?: string,
+  constructor (
+              name?: string,
               address?: Address,
               correspondenceAddress?: Address,
               mobilePhone?: string,
               email?: string,
               businessName?: string) {
-    super(PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value,
-          name,
-          address,
-          correspondenceAddress,
-          mobilePhone,
-          email)
+    super(PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value, name, address, correspondenceAddress, mobilePhone, email)
     this.businessName = businessName
   }
 

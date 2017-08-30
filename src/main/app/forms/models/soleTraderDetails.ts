@@ -48,10 +48,7 @@ export class SoleTraderDetails extends PartyDetails {
   }
 
   isCompleted (isClaimant?: boolean): boolean {
-    let dobCompleted: boolean = true
-    if (isClaimant) {
-      dobCompleted = !!this.dateOfBirth && this.dateOfBirth.isCompleted()
-    }
+    const dobCompleted: boolean = isClaimant ? !!this.dateOfBirth && this.dateOfBirth.isCompleted() : true
     return super.isCompleted() && !!this.name && this.name.length > 0 && dobCompleted
   }
 }

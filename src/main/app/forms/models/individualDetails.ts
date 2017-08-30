@@ -35,12 +35,7 @@ export class IndividualDetails extends PartyDetails {
   }
 
   isCompleted (isClaimant?: boolean): boolean {
-    let dobComplete: boolean = true
-    if (isClaimant) {
-      dobComplete = !!this.dateOfBirth && this.dateOfBirth.isCompleted()
-    } else {
-      dobComplete = true
-    }
+    const dobComplete: boolean = isClaimant ? !!this.dateOfBirth && this.dateOfBirth.isCompleted() : true
     return super.isCompleted() && dobComplete
   }
 }

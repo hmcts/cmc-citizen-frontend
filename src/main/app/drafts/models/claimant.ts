@@ -19,6 +19,9 @@ export default class Claimant implements CompletableTask {
     }
     let deserialized = new Claimant()
     deserialized.mobilePhone = MobilePhone.fromObject(input.mobilePhone)
+    if (input.payment) {
+      deserialized.payment = Payment.fromObject(input.payment)
+    }
     if (input.partyDetails && input.partyDetails.type) {
       switch (input.partyDetails.type) {
         case PartyType.INDIVIDUAL.value:
@@ -46,21 +49,19 @@ export default class Claimant implements CompletableTask {
       if (input.mobilePhone) {
         this.mobilePhone = new MobilePhone().deserialize(input.mobilePhone)
       }
-      if (input.partyDetails && input.partyDetails.type) {
-        switch (input.partyDetails.type) {
-          case PartyType.INDIVIDUAL.value:
-            this.partyDetails = new IndividualDetails().deserialize(input.partyDetails)
-            break
-          case PartyType.COMPANY.value:
-            this.partyDetails = new CompanyDetails().deserialize(input.partyDetails)
-            break
-          case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
-            this.partyDetails = new SoleTraderDetails().deserialize(input.partyDetails)
-            break
-          case PartyType.ORGANISATION.value:
-            this.partyDetails = new OrganisationDetails().deserialize(input.partyDetails)
-            break
-        }
+      switch (input.partyDetails.type) {
+        case PartyType.INDIVIDUAL.value:
+          this.partyDetails = new IndividualDetails().deserialize(input.partyDetails)
+          break
+        case PartyType.COMPANY.value:
+          this.partyDetails = new CompanyDetails().deserialize(input.partyDetails)
+          break
+        case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+          this.partyDetails = new SoleTraderDetails().deserialize(input.partyDetails)
+          break
+        case PartyType.ORGANISATION.value:
+          this.partyDetails = new OrganisationDetails().deserialize(input.partyDetails)
+          break
       }
     }
     return this

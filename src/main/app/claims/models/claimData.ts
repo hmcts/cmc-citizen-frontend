@@ -28,45 +28,11 @@ export default class ClaimData implements Serializable<ClaimData> {
 
   deserialize (input: any): ClaimData {
     if (input) {
-      if (input.claimant) {
-        switch (input.claimant.type) {
-          case PartyType.INDIVIDUAL.value:
-            this.claimant = new ClaimantAsIndividual().deserialize(input.claimant)
-            break
-          case PartyType.COMPANY.value:
-            this.claimant = new ClaimantAsCompany().deserialize(input.claimant)
-            break
-          case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
-            this.claimant = new ClaimantAsSoleTrader().deserialize(input.claimant)
-            break
-          case PartyType.ORGANISATION.value:
-            this.claimant = new ClaimantAsOrganisation().deserialize(input.claimant)
-            break
-          default:
-            throw Error('Something went wrong, No claimant type is set')
-        }
-      }
+      this.claimant = this.deserializeClaimant(input.claimant)
       if (input.payment) {
         this.payment = new Payment().deserialize(input.payment)
       }
-      if (input.defendant) {
-        switch (input.defendant.type) {
-          case PartyType.INDIVIDUAL.value:
-            this.defendant = new DefendantAsIndividual().deserialize(input.defendant)
-            break
-          case PartyType.COMPANY.value:
-            this.defendant = new DefendantAsCompany().deserialize(input.defendant)
-            break
-          case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
-            this.defendant = new DefendantAsSoleTrader().deserialize(input.defendant)
-            break
-          case PartyType.ORGANISATION.value:
-            this.defendant = new DefendantAsOrganisation().deserialize(input.defendant)
-            break
-          default:
-            throw Error('Something went wrong, No defendant type is set')
-        }
-      }
+      this.defendant = this.deserializeDefendant(input.defendant)
       this.paidFeeAmount = this.payment.amount / 100
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
       this.reason = input.reason
@@ -77,5 +43,39 @@ export default class ClaimData implements Serializable<ClaimData> {
       this.interestDate = new InterestDate().deserialize(input.interestDate)
     }
     return this
+  }
+
+  deserializeClaimant (claimant: any): Party {
+    if (claimant) {
+      switch (claimant.type) {
+        case PartyType.INDIVIDUAL.value:
+          return this.claimant = new ClaimantAsIndividual().deserialize(claimant)
+        case PartyType.COMPANY.value:
+          return this.claimant = new ClaimantAsCompany().deserialize(claimant)
+        case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+          return this.claimant = new ClaimantAsSoleTrader().deserialize(claimant)
+        case PartyType.ORGANISATION.value:
+          return this.claimant = new ClaimantAsOrganisation().deserialize(claimant)
+        default:
+          throw Error('Something went wrong, No claimant type is set')
+      }
+    }
+  }
+
+  deserializeDefendant (defendant: any): TheirDetails {
+    if (defendant) {
+      switch (defendant.type) {
+        case PartyType.INDIVIDUAL.value:
+          return this.defendant = new DefendantAsIndividual().deserialize(defendant)
+        case PartyType.COMPANY.value:
+          return this.defendant = new DefendantAsCompany().deserialize(defendant)
+        case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+          return this.defendant = new DefendantAsSoleTrader().deserialize(defendant)
+        case PartyType.ORGANISATION.value:
+          return this.defendant = new DefendantAsOrganisation().deserialize(defendant)
+        default:
+          throw Error('Something went wrong, No defendant type is set')
+      }
+    }
   }
 }

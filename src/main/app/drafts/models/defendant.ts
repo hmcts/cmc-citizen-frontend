@@ -2,7 +2,6 @@ import Email from 'app/forms/models/email'
 import { CompletableTask } from 'app/models/task'
 import { PartyType } from 'forms/models/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
-import Payment from 'app/pay/payment'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
@@ -12,14 +11,13 @@ import { MobilePhone } from 'app/forms/models/mobilePhone'
 export class Defendant implements CompletableTask {
   partyDetails?: PartyDetails
   email?: Email
-  payment: Payment = new Payment()
   mobilePhone?: MobilePhone
 
   static fromObject (input?: any): Defendant {
     if (input == null) {
       return input
     }
-    let deserialized = new Defendant()
+    const deserialized = new Defendant()
     if (input.email) {
       deserialized.email = new Email().deserialize(input.email)
     }
@@ -48,7 +46,6 @@ export class Defendant implements CompletableTask {
 
   deserialize (input: any): Defendant {
     if (input) {
-      this.payment = new Payment().deserialize(input.payment)
       if (input.email) {
         this.email = new Email().deserialize(input.email)
       }
@@ -76,20 +73,20 @@ export class Defendant implements CompletableTask {
   }
 
   isCompleted (): boolean {
-    let emailCompleted = !!this.email && this.email.isCompleted()
+    const emailCompleted = !!this.email && this.email.isCompleted()
     if (this.partyDetails && this.partyDetails.type) {
       switch (this.partyDetails.type) {
         case PartyType.INDIVIDUAL.value:
-          let individualDetails = this.partyDetails as IndividualDetails
+          const individualDetails = this.partyDetails as IndividualDetails
           return individualDetails.isCompleted(false) && emailCompleted
         case PartyType.COMPANY.value:
-          let companyDetails = this.partyDetails as CompanyDetails
+          const companyDetails = this.partyDetails as CompanyDetails
           return !!companyDetails && companyDetails.isCompleted() && emailCompleted
         case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
-          let soleTraderDetails = this.partyDetails as SoleTraderDetails
+          const soleTraderDetails = this.partyDetails as SoleTraderDetails
           return !!soleTraderDetails && soleTraderDetails.isCompleted(false) && emailCompleted
         case PartyType.ORGANISATION.value:
-          let organisationDetails = this.partyDetails as OrganisationDetails
+          const organisationDetails = this.partyDetails as OrganisationDetails
           return !!organisationDetails && organisationDetails.isCompleted() && emailCompleted
       }
     }

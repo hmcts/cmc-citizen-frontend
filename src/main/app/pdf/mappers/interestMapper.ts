@@ -5,6 +5,7 @@ import { calculateInterest } from 'app/common/calculateInterest'
 import { InterestType } from 'app/forms/models/interest'
 import Claim from 'app/claims/models/claim'
 import InterestDateType from 'app/common/interestDateType'
+import { Moment } from 'moment'
 
 export class InterestMapper {
 
@@ -18,14 +19,14 @@ export class InterestMapper {
       return {
         rate: claimData.interest.rate,
         dateClaimedFrom: MomentFormatter.formatLongDate(interestDate),
-        claimedAtDateOfSubmission: NumberFormatter.formatMoney(InterestMapper.calculateInterest(claimData)),
+        claimedAtDateOfSubmission: NumberFormatter.formatMoney(InterestMapper.calculateInterest(claimData, interestDate)),
         accruedInterest: NumberFormatter.formatMoney(InterestMapper.calculateDailyAmount(claimData))
       }
     }
   }
 
-  public static calculateInterest (claimData: ClaimData): number {
-    return calculateInterest(this.totalAmount(claimData), claimData.interest, claimData.interestDate.date)
+  public static calculateInterest (claimData: ClaimData, interestDate: Moment): number {
+    return calculateInterest(this.totalAmount(claimData), claimData.interest, interestDate)
   }
 
   private static calculateDailyAmount (claimData: ClaimData): number {
