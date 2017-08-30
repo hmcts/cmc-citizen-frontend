@@ -75,6 +75,29 @@ describe('CCJ - paid amount page', () => {
           idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
         })
 
+        context('when middleware failure', () => {
+          it('should return 500 when cannot retrieve claim by external id', async () => {
+            claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+
+            await request(app)
+              .post(paidAmountPage)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(validFormData)
+              .expect(res => expect(res).to.be.serverError.withText('Error'))
+          })
+
+          it('should return 500 when cannot retrieve CCJ draft', async () => {
+            draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+            await request(app)
+              .post(paidAmountPage)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(validFormData)
+              .expect(res => expect(res).to.be.serverError.withText('Error'))
+          })
+        })
+
         context('when form is valid', async () => {
           it('should redirect to claim amount page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
@@ -86,6 +109,18 @@ describe('CCJ - paid amount page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
               .expect(res => expect(res).to.be.redirect.toLocation(paidAmountSummaryPage))
+          })
+
+          it('should return 500 and render error page when cannot save ccj draft', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveRetrieve('ccj')
+            draftStoreServiceMock.rejectSave('ccj', 'Error')
+
+            await request(app)
+              .post(paidAmountPage)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(validFormData)
+              .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
         })
 
