@@ -10,8 +10,8 @@ import { Paths as DashboardPaths } from 'dashboard/paths'
 import * as config from 'config'
 import { expect } from 'chai'
 import { MomentFactory } from 'common/momentFactory'
+import { RoutablePath } from 'common/router/routablePath'
 
-const theirDetailsPage = Paths.theirDetailsPage.uri.replace(':externalId', 'b17af4d2-273f-4999-9895-bce382fa24c8')
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('CCJ guard', () => {
@@ -21,13 +21,25 @@ describe('CCJ guard', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
       })
-      it('should redirect to dashboard when claim not eligible for CCJ', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId({ respondedAt: MomentFactory.currentDateTime() })
+      context('should redirect to dashboard when claim not eligible for CCJ', () => {
 
-        await request(app)
-          .get(theirDetailsPage)
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
+        [
+          Paths.theirDetailsPage,
+          Paths.paidAmountPage,
+          Paths.paidAmountSummaryPage
+        ]
+          .forEach((path: RoutablePath) => {
+            const route: string = path.uri.replace(':externalId', 'b17af4d2-273f-4999-9895-bce382fa24c8')
+
+            it(`for their details ${route}`, async () => {
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId({ respondedAt: MomentFactory.currentDateTime() })
+
+              await request(app)
+                .get(route)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
+            })
+          })
       })
     })
   })
