@@ -40,7 +40,9 @@ export default class ClaimData implements Serializable<ClaimData> {
       if (input.interest) {
         this.interest = new Interest().deserialize(input.interest)
       }
-      this.interestDate = new InterestDate().deserialize(input.interestDate)
+      if (input.interestDate) {
+        this.interestDate = new InterestDate().deserialize(input.interestDate)
+      }
     }
     return this
   }

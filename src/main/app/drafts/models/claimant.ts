@@ -17,7 +17,7 @@ export default class Claimant implements CompletableTask {
     if (input == null) {
       return input
     }
-    let deserialized = new Claimant()
+    const deserialized = new Claimant()
     deserialized.mobilePhone = MobilePhone.fromObject(input.mobilePhone)
     if (input.payment) {
       deserialized.payment = Payment.fromObject(input.payment)
