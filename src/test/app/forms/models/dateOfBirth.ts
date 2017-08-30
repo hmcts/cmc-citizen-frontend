@@ -26,6 +26,7 @@ describe('DateOfBirth', () => {
 
     it('should deserialize all fields', () => {
       expect(DateOfBirth.fromObject({
+        known: 'true',
         date: {
           year: 2017,
           month: 12,
@@ -100,7 +101,7 @@ describe('DateOfBirth', () => {
 
   describe('constructor', () => {
     it('should set the simple type fields to undefined', () => {
-      let dateOfBirth = new DateOfBirth()
+      let dateOfBirth = new DateOfBirth(true, new LocalDate())
       expect(dateOfBirth.date.day).to.be.undefined
       expect(dateOfBirth.date.month).to.be.undefined
       expect(dateOfBirth.date.year).to.be.undefined

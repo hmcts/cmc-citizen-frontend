@@ -11,7 +11,7 @@ describe('Date of Birth', () => {
     })
 
     it('should return false when there is no date', () => {
-      const dob: DateOfBirth = new DateOfBirth()
+      const dob: DateOfBirth = new DateOfBirth(true, new LocalDate())
       expect(dob.isCompleted()).to.equal(false)
     })
   })

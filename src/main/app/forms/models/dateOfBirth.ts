@@ -27,7 +27,7 @@ export default class DateOfBirth implements Serializable<DateOfBirth>, Completab
   @MaximumAgeValidator(150, { message: ValidationErrors.DATE_NOT_VALID })
   date: LocalDate
 
-  constructor (known?: boolean, date: LocalDate = new LocalDate()) {
+  constructor (known?: boolean, date?: LocalDate) {
     this.known = known
     this.date = date
   }
@@ -40,7 +40,7 @@ export default class DateOfBirth implements Serializable<DateOfBirth>, Completab
     const dateOfBirth = new DateOfBirth(value.known !== undefined ? value.known === 'true' : undefined, LocalDate.fromObject(value.date))
 
     if (!dateOfBirth.known) {
-      delete dateOfBirth.date
+      dateOfBirth.date = undefined
     }
 
     return dateOfBirth

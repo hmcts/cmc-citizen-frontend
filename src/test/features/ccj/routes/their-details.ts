@@ -74,7 +74,7 @@ describe('CCJ - their details', () => {
               .post(theirDetailsPage)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
-              .expect(res => expect(res).to.be.redirect.toLocation('todo'))
+              .expect(res => expect(res).to.be.redirect.toLocation('/case/b17af4d2-273f-4999-9895-bce382fa24c8/ccj/date-of-birth'))
           })
         })
         context('when form is invalid', async () => {
