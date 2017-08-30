@@ -9,8 +9,9 @@ script:
   - yarn test:routes
   - yarn test:a11y
 before_install: 
-  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 0.27.5
-  - export PATH="$HOME/.yarn/bin:$PATH"
   - yarn global add greenkeeper-lockfile@1
 before_script: greenkeeper-lockfile-update
 after_script: greenkeeper-lockfile-upload
+# needed for newer yarn for a little bit: https://github.com/travis-ci/travis-ci/issues/7566#issuecomment-324138144
+group: edge
+sudo: required
