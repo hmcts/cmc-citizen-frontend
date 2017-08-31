@@ -13,17 +13,12 @@
       {{ t("Payment options") }}
     </h1>
 
-
-    <h1 class="heading-medium">
-      {{ t("I would like the defendant to be ordered to pay: ") }}
-    </h1>
-
     <form method="post" novalidate>
       {{ csrfProtection(csrf) }}
 
       {{
       radioGroup(
-        'What do you want to do?',
+        'I would like the defendant to be ordered to pay:',
         'option',
         [
           {'label': 'Immediately', value: 'immediately'},
