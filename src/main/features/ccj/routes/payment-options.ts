@@ -41,8 +41,6 @@ export default express.Router()
             case PaymentType.BY_INSTALMENTS:
               res.redirect(Paths.repaymentPlanPage.uri.replace(':externalId', externalId))
               break
-            default:
-              console.log(form.model)
           }
         }
       }))
