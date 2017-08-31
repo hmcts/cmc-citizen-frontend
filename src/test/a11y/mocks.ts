@@ -69,9 +69,9 @@ function mockedResponseDraft () {
 function mockedClaim () {
   let claim = new Claim()
   claim.claimData = new ClaimData()
-  claim.claimData.defendants = [new Defendant()]
-  // claim.claimData.defendant = new Defendant()
-  // claim.claimData.defendant.address = new Address()
+  const defendant: Defendant = new Defendant()
+  defendant.address = new Address()
+  claim.claimData.defendants = [defendant]
   claim.claimData.claimant = new Claimant()
   claim.claimData.interest = mockedInterest()
   claim.claimData.interestDate = mockedInterestDate()
