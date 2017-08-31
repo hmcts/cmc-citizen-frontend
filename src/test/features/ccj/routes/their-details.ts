@@ -18,6 +18,7 @@ import { sampleClaimObj } from '../../../http-mocks/claim-store'
 const cookieName: string = config.get<string>('session.cookieName')
 
 const externalId = sampleClaimObj.externalId
+const dateOfBirthPage = Paths.dateOfBirthPage.uri.replace(':externalId', externalId)
 const theirDetailsPage = Paths.theirDetailsPage.uri.replace(':externalId', externalId)
 
 const validFormData = {
@@ -76,7 +77,7 @@ describe('CCJ - their details', () => {
               .post(theirDetailsPage)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
-              .expect(res => expect(res).to.be.redirect.toLocation('/case/b17af4d2-273f-4999-9895-bce382fa24c8/ccj/date-of-birth'))
+              .expect(res => expect(res).to.be.redirect.toLocation(dateOfBirthPage))
           })
         })
         context('when form is invalid', async () => {

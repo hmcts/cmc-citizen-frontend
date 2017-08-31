@@ -17,6 +17,7 @@ import { sampleClaimObj } from '../../../http-mocks/claim-store'
 const externalId = sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
+const paidAmountPage = Paths.paidAmountPage.uri.replace(':externalId', externalId)
 const dateOfBirthPage = Paths.dateOfBirthPage.uri.replace(':externalId', externalId)
 
 describe('CCJ - defendant date of birth', () => {
@@ -97,7 +98,7 @@ describe('CCJ - defendant date of birth', () => {
             .post(dateOfBirthPage)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ known: 'true', date: { day: '31', month: '12', year: '1980' } })
-            .expect(res => expect(res).to.be.redirect.toLocation('toDo'))
+            .expect(res => expect(res).to.be.redirect.toLocation(paidAmountPage))
         })
 
         it('should return 500 and render error page when cannot save ccj draft', async () => {

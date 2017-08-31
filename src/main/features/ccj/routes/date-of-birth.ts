@@ -27,8 +27,10 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const { externalId } = req.params
         res.locals.user.ccjDraft.defendant.dateOfBirth = form.model
         await DraftCCJService.save(res, next)
-        res.redirect('toDo')
+        res.redirect(Paths.paidAmountPage.uri.replace(':externalId', externalId))
+
       }
     }))

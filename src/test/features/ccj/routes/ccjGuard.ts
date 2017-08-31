@@ -25,6 +25,7 @@ describe('CCJ guard', () => {
 
         [
           Paths.theirDetailsPage,
+          Paths.dateOfBirthPage,
           Paths.paidAmountPage,
           Paths.paidAmountSummaryPage
         ]
