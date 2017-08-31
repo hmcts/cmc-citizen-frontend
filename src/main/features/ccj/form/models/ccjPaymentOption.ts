@@ -23,6 +23,12 @@ export class PaymentType {
       PaymentType.FULL
     ]
   }
+
+  static valueOf (value: string): PaymentType {
+    return PaymentType.all()
+      .filter(type => type.value === value)
+      .pop()
+  }
 }
 
 export class CCJPaymentOption implements Serializable <CCJPaymentOption> {
@@ -36,10 +42,11 @@ export class CCJPaymentOption implements Serializable <CCJPaymentOption> {
   }
 
   static fromObject (value?: any): CCJPaymentOption {
-    if (value && value.option) {
-      const option: PaymentType = PaymentType.all()
-        .filter(o => o.value === value.option)
-        .pop()
+    if (!value) {
+      return value
+    }
+    if (value.option) {
+      const option: PaymentType = PaymentType.valueOf(value.option)
       return new CCJPaymentOption(option)
     } else {
       return new CCJPaymentOption()
@@ -47,10 +54,9 @@ export class CCJPaymentOption implements Serializable <CCJPaymentOption> {
   }
 
   deserialize (input?: any): CCJPaymentOption {
-    if (input) {
-      this.option = input.option
+    if (input && input.option) {
+      this.option = PaymentType.valueOf(input.option.value)
     }
-
     return this
   }
 }

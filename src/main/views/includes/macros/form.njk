@@ -162,7 +162,7 @@
             form = form,
             value = option.value,
             hint = option.hint,
-            checked = (selection === option.value),
+            checked = option.checked or (selection === option.value),
             bold = option.bold
           )
         }}
