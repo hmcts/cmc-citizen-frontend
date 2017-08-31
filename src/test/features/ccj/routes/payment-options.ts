@@ -13,7 +13,7 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
-import { CCJPaymentOption } from 'ccj/form/models/ccjPaymentType'
+import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
@@ -22,7 +22,7 @@ const externalId = sampleClaimObj.externalId
 const paymentOptionsPage = Paths.paymentOptionsPage.uri.replace(':externalId', externalId)
 
 const validFormData: object = {
-  option: CCJPaymentOption.IMMEDIATELY.option
+  option: PaymentType.IMMEDIATELY
 }
 
 describe('CCJ - payment options', () => {
@@ -113,15 +113,15 @@ describe('CCJ - payment options', () => {
           }
 
           it('check and send for "IMMEDIATELY" option selected', async () => {
-            await submitFormWithValueShouldRedirectToPage({ option: CCJPaymentOption.IMMEDIATELY.option }, Paths.checkYourAnswerPage.uri.replace(':externalId', externalId))
+            await submitFormWithValueShouldRedirectToPage({ option: PaymentType.IMMEDIATELY.value }, Paths.checkYourAnswerPage.uri.replace(':externalId', externalId))
           })
 
           it('repayment plan for "BY_INSTALMENTS" option selected', async () => {
-            await submitFormWithValueShouldRedirectToPage({ option: CCJPaymentOption.BY_INSTALMENTS.option }, Paths.repaymentPlanPage.uri.replace(':externalId', externalId))
+            await submitFormWithValueShouldRedirectToPage({ option: PaymentType.BY_INSTALMENTS.value }, Paths.repaymentPlanPage.uri.replace(':externalId', externalId))
           })
 
           it('pay by set date for "FULL" option selected', async () => {
-            await submitFormWithValueShouldRedirectToPage({ option: CCJPaymentOption.FULL.option }, Paths.payBySetDatePage.uri.replace(':externalId', externalId))
+            await submitFormWithValueShouldRedirectToPage({ option: PaymentType.FULL.value }, Paths.payBySetDatePage.uri.replace(':externalId', externalId))
           })
         })
 

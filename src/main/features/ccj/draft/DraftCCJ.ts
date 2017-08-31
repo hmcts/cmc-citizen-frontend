@@ -1,5 +1,5 @@
 import { Defendant } from 'app/drafts/models/defendant'
-import { CCJPaymentOption } from 'ccj/form/models/ccjPaymentType'
+import { CCJPaymentOption } from 'ccj/form/models/ccjPaymentOption'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 
 export class DraftCCJ {
