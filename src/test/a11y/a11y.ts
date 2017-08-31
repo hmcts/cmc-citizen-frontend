@@ -7,6 +7,7 @@ import { RoutablePath } from 'common/router/routablePath'
 import { ErrorPaths as ClaimIssueErrorPaths, Paths as ClaimIssuePaths } from 'claim/paths'
 import { ErrorPaths as DefendantFirstContactErrorPaths, Paths as DefendantFirstContactPaths } from 'first-contact/paths'
 import { Paths as DefendantResponsePaths } from 'response/paths'
+import { Paths as CCJPaths } from 'ccj/paths'
 
 import './mocks'
 import { app } from '../../main/app'
@@ -74,4 +75,5 @@ describe('Accessibility', () => {
   checkPaths(DefendantFirstContactPaths)
   checkPaths(DefendantFirstContactErrorPaths)
   checkPaths(DefendantResponsePaths)
+  checkPaths(CCJPaths)
 })
