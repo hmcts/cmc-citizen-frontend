@@ -29,7 +29,7 @@ function getInterestDetails (claim: Claim): object {
 
   return {
     numberOfDays: noOfDays,
-    interest: calculateInterest(claim.claimData.amount, claim.claimData.interest, interestDate),
+    interest: calculateInterest(claim.claimData.amount.totalAmount(), claim.claimData.interest, interestDate),
     rate: rate,
     interestDate: interestDate,
     defaultJudgmentDate: todayDate
