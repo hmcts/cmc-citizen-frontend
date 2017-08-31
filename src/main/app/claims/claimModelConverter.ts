@@ -14,11 +14,14 @@ export class ClaimModelConverter {
     this.convertClaimantDetails(draftClaim)
     this.convertDefendantDetails(draftClaim)
 
-    draftClaim.claimant.dateOfBirth = draftClaim.claimant.dateOfBirth.date.asString() as any
     draftClaim.reason = draftClaim.reason.reason as any
+
+    draftClaim['feeAmountInPennies'] = draftClaim.claimant.payment.amount
 
     draftClaim['payment'] = draftClaim.claimant.payment as any
     delete draftClaim.claimant.payment
+
+    draftClaim.amount['type'] = 'breakdown'
 
     return draftClaim
   }
@@ -36,6 +39,8 @@ export class ClaimModelConverter {
     draftClaim.claimant['type'] = 'individual'
 
     draftClaim.claimant.mobilePhone = draftClaim.claimant.mobilePhone.number as any
+
+    draftClaim.claimant.dateOfBirth = draftClaim.claimant.dateOfBirth.date.asString() as any
   }
 
   private static convertDefendantDetails (draftClaim: DraftClaim): void {
@@ -58,6 +63,9 @@ export class ClaimModelConverter {
     }
 
     draftClaim.defendant['type'] = 'individual'
+
+    draftClaim['defendants'] = [draftClaim.defendant]
+    delete draftClaim.defendant
   }
 
 }

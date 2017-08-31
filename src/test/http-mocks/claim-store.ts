@@ -6,7 +6,7 @@ import { InterestType } from 'app/forms/models/interest'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
-const sampleClaimObj = {
+export const sampleClaimObj = {
   id: 1,
   claimantId: 1,
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
@@ -15,6 +15,7 @@ const sampleClaimObj = {
   issuedOn: '2017-07-25',
   claim: {
     claimant: {
+      type: 'individual',
       name: 'John Smith',
       address: {
         line1: 'line1',
@@ -29,6 +30,7 @@ const sampleClaimObj = {
         state: { status: 'failed' }
       },
       amount: {
+        type: 'breakdown',
         rows: [{ reason: 'Reason', amount: 200 }]
       },
       interestDate: {
@@ -39,7 +41,8 @@ const sampleClaimObj = {
         }
       }
     },
-    defendant: {
+    defendants: [{
+      type: 'individual',
       name: 'John Doe',
       address: {
         line1: 'line1',
@@ -47,7 +50,7 @@ const sampleClaimObj = {
         city: 'city',
         postcode: 'bb127nq'
       }
-    },
+    }],
     interest: {
       type: InterestType.NO_INTEREST
     },
