@@ -15,6 +15,7 @@ export const sampleClaimObj = {
   issuedOn: '2017-07-25',
   claim: {
     claimant: {
+      type: 'individual',
       name: 'John Smith',
       address: {
         line1: 'line1',
@@ -29,6 +30,7 @@ export const sampleClaimObj = {
         state: { status: 'failed' }
       },
       amount: {
+        type: 'breakdown',
         rows: [{ reason: 'Reason', amount: 200 }]
       },
       interestDate: {
@@ -39,7 +41,8 @@ export const sampleClaimObj = {
         }
       }
     },
-    defendant: {
+    defendants: [{
+      type: 'individual',
       name: 'John Doe',
       address: {
         line1: 'line1',
@@ -47,7 +50,7 @@ export const sampleClaimObj = {
         city: 'city',
         postcode: 'bb127nq'
       }
-    },
+    }],
     interest: {
       type: InterestType.NO_INTEREST
     },
