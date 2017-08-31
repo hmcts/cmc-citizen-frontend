@@ -41,8 +41,8 @@ describe('CCJ - defendant date of birth', () => {
       })
 
       it('should return 500 and render error page when cannot retrieve CCJ draft', async () => {
-        draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
 
         await request(app)
           .get(dateOfBirthPage)
@@ -57,50 +57,43 @@ describe('CCJ - defendant date of birth', () => {
         await request(app)
           .get(dateOfBirthPage)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('The court will still enter the judgment for you'))
+          .expect(res => expect(res).to.be.successful.withText('Defendant&#39;s date of birth'))
       })
     })
   })
 
   describe('on POST', () => {
+    const validFormData = { known: 'true', date: { day: '31', month: '12', year: '1900' } }
+
     checkAuthorizationGuards(app, 'post', dateOfBirthPage)
+
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
       })
-      context('when form is invalid', async () => {
-        it('should return 500 and render error page when cannot retrieve claim', async () => {
-          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
-          await request(app)
-            .post(dateOfBirthPage)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send({ known: 'true', date: { day: '31', month: '12', year: '1900' } })
-            .expect(res => expect(res).to.be.serverError.withText('Error'))
-        })
 
-        it('should return 500 when cannot retrieve CCJ draft', async () => {
-          draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+      it('should return 500 and render error page when cannot retrieve claim', async () => {
+        claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
-          await request(app)
-            .post(dateOfBirthPage)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send({ known: 'true', date: { day: '31', month: '12', year: '1900' } })
-            .expect(res => expect(res).to.be.serverError.withText('Error'))
-        })
+        await request(app)
+          .post(dateOfBirthPage)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send(validFormData)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
-      context('when form is valid', async () => {
-        it('should redirect to todo page', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
-          draftStoreServiceMock.resolveSave('ccj')
-          await request(app)
-            .post(dateOfBirthPage)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send({ known: 'true', date: { day: '31', month: '12', year: '1980' } })
-            .expect(res => expect(res).to.be.redirect.toLocation(paidAmountPage))
-        })
 
+      it('should return 500 when cannot retrieve CCJ draft', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+
+        await request(app)
+          .post(dateOfBirthPage)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send(validFormData)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      context('when form is valid', async () => {
         it('should return 500 and render error page when cannot save ccj draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveRetrieve('ccj')
@@ -109,8 +102,33 @@ describe('CCJ - defendant date of birth', () => {
           await request(app)
             .post(dateOfBirthPage)
             .set('Cookie', `${cookieName}=ABC`)
-            .send({ known: 'true', date: { day: '31', month: '12', year: '1980' } })
+            .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+
+        it('should redirect to paid amount page', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveRetrieve('ccj')
+          draftStoreServiceMock.resolveSave('ccj')
+
+          await request(app)
+            .post(dateOfBirthPage)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.redirect.toLocation(paidAmountPage))
+        })
+      })
+
+      context('when form is invalid', async () => {
+        it('should render page when everything is fine', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveRetrieve('ccj')
+
+          await request(app)
+            .post(dateOfBirthPage)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ known: undefined })
+            .expect(res => expect(res).to.be.successful.withText('Defendant&#39;s date of birth', 'div class="error-summary"'))
         })
       })
     })
