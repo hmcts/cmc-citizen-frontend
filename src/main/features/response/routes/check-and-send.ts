@@ -33,6 +33,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   res.render(Paths.checkAndSendPage.associatedView, {
     form: form,
     defendant: {
+      type: user.responseDraft.defendantDetails.partyDetails.type,
       fullName: user.responseDraft.defendantDetails.partyDetails.name,
       partyDetails: user.responseDraft.defendantDetails.partyDetails,
       dateOfBirth: getDateOfBirth(user.responseDraft.defendantDetails.partyDetails),

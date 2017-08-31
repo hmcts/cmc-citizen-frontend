@@ -49,19 +49,21 @@ export default class Claimant implements CompletableTask {
       if (input.mobilePhone) {
         this.mobilePhone = new MobilePhone().deserialize(input.mobilePhone)
       }
-      switch (input.partyDetails.type) {
-        case PartyType.INDIVIDUAL.value:
-          this.partyDetails = new IndividualDetails().deserialize(input.partyDetails)
-          break
-        case PartyType.COMPANY.value:
-          this.partyDetails = new CompanyDetails().deserialize(input.partyDetails)
-          break
-        case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
-          this.partyDetails = new SoleTraderDetails().deserialize(input.partyDetails)
-          break
-        case PartyType.ORGANISATION.value:
-          this.partyDetails = new OrganisationDetails().deserialize(input.partyDetails)
-          break
+      if (input.partyDetails && input.partyDetails.type) {
+        switch (input.partyDetails.type) {
+          case PartyType.INDIVIDUAL.value:
+            this.partyDetails = new IndividualDetails().deserialize(input.partyDetails)
+            break
+          case PartyType.COMPANY.value:
+            this.partyDetails = new CompanyDetails().deserialize(input.partyDetails)
+            break
+          case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+            this.partyDetails = new SoleTraderDetails().deserialize(input.partyDetails)
+            break
+          case PartyType.ORGANISATION.value:
+            this.partyDetails = new OrganisationDetails().deserialize(input.partyDetails)
+            break
+        }
       }
     }
     return this

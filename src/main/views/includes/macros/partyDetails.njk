@@ -19,7 +19,7 @@
       }}
 
       <div class="panel panel-border-narrow js-hidden" id="hasCorrespondenceAddress-true" aria-hidden="false">
-        <p>{{ t('All correspondence will be sent here, instead of your residential address. This is sometimes known as an &lsquo;address for service&rsquo;.') | safe }}</p>
+        <p>{{ t('All correspondence will be sent here, instead of to your residential address. This is sometimes known as an &lsquo;address for service&rsquo;.') | safe }}</p>
         {{ addressInput(form, 'correspondenceAddress') }}
       </div>
     {{ saveAndContinueButton() }}
@@ -50,7 +50,7 @@
       }}
 
       <div class="panel panel-border-narrow js-hidden" id="hasCorrespondenceAddress-true" aria-hidden="false">
-        <p>{{ t('All correspondence will be sent here, instead of your residential address. This is sometimes known as an &lsquo;address for service&rsquo;.') | safe }}</p>
+        <p>{{ t('All correspondence will be sent here, instead of to your organisation address. This is sometimes known as an &lsquo;address for service&rsquo;.') | safe }}</p>
         {{ addressInput(form, 'correspondenceAddress') }}
       </div>
       {{ saveAndContinueButton() }}
@@ -79,7 +79,7 @@
       }}
 
       <div class="panel panel-border-narrow js-hidden" id="hasCorrespondenceAddress-true" aria-hidden="false">
-        <p>{{ t('All correspondence will be sent here, instead of your residential address. This is sometimes known as an &lsquo;address for service&rsquo;.') | safe }}</p>
+        <p>{{ t('All correspondence will be sent here, instead of to your residential address. This is sometimes known as an &lsquo;address for service&rsquo;.') | safe }}</p>
         {{ addressInput(form, 'correspondenceAddress') }}
       </div>
         {{ saveAndContinueButton() }}
@@ -109,7 +109,7 @@
       }}
 
       <div class="panel panel-border-narrow js-hidden" id="hasCorrespondenceAddress-true" aria-hidden="false">
-        <p>{{ t('All correspondence will be sent here, instead of your residential address. This is sometimes known as an &lsquo;address for service&rsquo;.') | safe }}</p>
+        <p>{{ t('All correspondence will be sent here, instead of to your residential address. This is sometimes known as an &lsquo;address for service&rsquo;.') | safe }}</p>
         {{ addressInput(form, 'correspondenceAddress') }}
       </div>
         {{ saveAndContinueButton() }}
@@ -139,7 +139,7 @@
       }}
 
       <div class="panel panel-border-narrow js-hidden" id="hasCorrespondenceAddress-true" aria-hidden="false">
-        <p>{{ t('All correspondence will be sent here, instead of your residential address. This is sometimes known as an &lsquo;address for service&rsquo;.') | safe }}</p>
+        <p>{{ t('All correspondence will be sent here, instead of to your company address. This is sometimes known as an &lsquo;address for service&rsquo;.') | safe }}</p>
         {{ addressInput(form, 'correspondenceAddress') }}
       </div>
         {{ saveAndContinueButton() }}
@@ -149,9 +149,9 @@
 {% macro defendantAsIndividualForm(form, csrfToken) %}
   <form method="post">
     {{ csrfProtection(csrfToken) }}
-        {{ textInput(t('Their Full name'), 'name', form, autocomplete='name') }}
+        {{ textInput(t('Their full name'), 'name', form, autocomplete='name') }}
         <h2 class="heading-medium">{{ t('Their residential address') }}</h2>
-        <p>{{ t("TYou must enter the defendant's residential address to make a claim against them.") }}</p>
+        <p>{{ t("You must enter the defendant's residential address to make a claim against them.") }}</p>
          {{ addressInput(form, 'address') }}
         {{ saveAndContinueButton() }}
   </form>
@@ -172,10 +172,10 @@
 {% macro defendantAsSoleTraderForm(form, csrfToken) %}
   <form method="post">
     {{ csrfProtection(csrfToken) }}
-        {{ textInput(t('Their Full name'), 'name', form, autocomplete='name') }}
+        {{ textInput(t('Their full name'), 'name', form, autocomplete='name') }}
         {{ textInput(t('Business name (optional)'), 'businessName', form) }}
         <h2 class="heading-medium">{{ t('Their address') }}</h2>
-        <p>{{ t("You must enter the defendant’s residential or trade address to make a claim against them..") }}</p>
+        <p>{{ t("You must enter the defendant’s residential or trade address to make a claim against them.") }}</p>
         {{ addressInput(form, 'address') }}
         {{ saveAndContinueButton() }}
   </form>

@@ -22,6 +22,7 @@
     {{ csrfProtection(csrf) }}
 
     {{ tableStart("yourDetails", "Your details") }}
+    {{ row("About you:", defendant.type) }}
     {{ row("Name:", defendant.fullName, paths.defendantYourDetailsPage.uri) }}
     {{
       rowWithMultipleValue(
@@ -37,10 +38,10 @@
         values = correspondenceAddressLines
       )
     }}
-
-    {% set dateOfBirth = defendant.dateOfBirth.date.asString() | date %}
-    {{ row("Date of birth:", dateOfBirth, paths.defendantDateOfBirthPage.uri) }}
-
+    {% if dateOfBirth %}
+      {% set dateOfBirth = defendant.dateOfBirth.date.asString() | date %}
+      {{ row("Date of birth:", dateOfBirth, paths.defendantDateOfBirthPage.uri) }}
+    {% endif %}
     {% set mobilePhone = defendant.mobilePhone.number %}
     {{ row("Phone:", mobilePhone, paths.defendantMobilePage.uri) }}
 

@@ -6,7 +6,6 @@
 {% block content %}
   <div class="grid-row">
     <h1 class="heading-xlarge">{{ t("About you and this claim") }}</h1>
-    <p>{{ t("We need to know if you're making this claim as an individual, sole trader or on behalf of a company or an organisation.") }}</p>
     <p>{{ t("I'm claiming as:") }}</p>
     <form method="POST" novalidate>
       {{ csrfProtection(csrf) }}
@@ -18,19 +17,23 @@
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
 
           {{ radioOption(form = form, name = 'type[value]', value = 'individual',
-            label = t("An individual"), bold = true
+            label = t("An individual"), bold = true,
+            hint = t("For example, you are claiming  for yourself")
           )}}
 
           {{ radioOption(form = form, name = 'type[value]', value = 'soleTrader',
-            label = t("A sole trader or self-employed person"), bold = true
+            label = t("A sole trader or self-employed person"), bold = true,
+            hint = t("For example, you are claiming as a tradesperson")
           )}}
 
           {{ radioOption(form = form, name = 'type[value]', value = 'company',
-            label = t("On behalf of a company"), bold = true
+            label = t("On behalf of a company"), bold = true,
+            hint = t("For example, you sell goods or services as a company")
           )}}
 
           {{ radioOption(form = form, name = 'type[value]', value = 'organisation',
-            label = t("As another type of organisation"), bold = true
+            label = t("As another type of organisation"), bold = true,
+            hint = t("For example, a partnership, trust, charity, club or association")
           )}}
         </fieldset>
       </div>

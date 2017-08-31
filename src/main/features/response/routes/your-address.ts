@@ -10,6 +10,7 @@ import ClaimStoreClient from 'claims/claimStoreClient'
 import Claim from 'claims/models/claim'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { AddressDetails } from 'forms/models/addressDetails'
+import { PartyType } from 'forms/models/partyType'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'app/idam/user'
 
@@ -63,6 +64,21 @@ export default express.Router()
         res.locals.user.responseDraft.defendantDetails.partyDetails.correspondenceAddress = form.model.correspondenceAddress
 
         await ResponseDraftMiddleware.save(res, next)
-        res.redirect(Paths.defendantDateOfBirthPage.uri)
+        switch (res.locals.user.responseDraft.defendantDetails.partyDetails.type) {
+          case PartyType.INDIVIDUAL.value:
+            res.redirect(Paths.defendantDateOfBirthPage.uri)
+            break
+          case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+            res.redirect(Paths.defendantDateOfBirthPage.uri)
+            break
+          case PartyType.COMPANY.value:
+            res.redirect(Paths.defendantMobilePage.uri)
+            break
+          case PartyType.ORGANISATION.value:
+            res.redirect(Paths.defendantMobilePage.uri)
+            break
+          default:
+            throw new Error()
+        }
       }
     }))

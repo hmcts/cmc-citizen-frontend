@@ -92,7 +92,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.name = aVeryLongString()
       soleTraderDetails.address = validAddress
       let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
-      expectValidationError(errors, PartydDetailsValidationErrors.NAME_TOO_LONG)
+      expectValidationError(errors, PartydDetailsValidationErrors.NAME_TOO_LONG.replace('$constraint1','255'))
     })
 
     it('should return no error when business name is blank', () => {

@@ -12,7 +12,7 @@ export class YourDetails {
     } else if (partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
       return (partyDetails as SoleTraderDetails).dateOfBirth.isCompleted()
     } else {
-      return false
+      return true
     }
   }
   static isCompleted (response: ResponseDraft): boolean {

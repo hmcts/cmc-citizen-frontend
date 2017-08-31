@@ -85,7 +85,7 @@ describe('OrganisationDetails', () => {
       organisationDetails.contactPerson = 'contactPerson'
       organisationDetails.address = validAddress
       let errors: ValidationError[] = validator.validateSync(organisationDetails)
-      expectValidationError(errors, PartydDetailsValidationErrors.NAME_TOO_LONG.replace('$constraint1','35'))
+      expectValidationError(errors, PartydDetailsValidationErrors.NAME_TOO_LONG.replace('$constraint1','255'))
     })
 
     it('should return error when contact person is undefined', () => {

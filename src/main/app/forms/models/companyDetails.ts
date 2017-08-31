@@ -4,7 +4,7 @@ import { PartyDetails } from './partyDetails'
 import { PartyType } from 'forms/models/partyType'
 
 export class ValidationErrors {
-  static readonly CONTACT_PERSON_NAME_TOO_LONG: string = 'Contact Person name no longer than $constraint1 characters'
+  static readonly CONTACT_PERSON_NAME_TOO_LONG: string = 'Contact Person name must be no longer than $constraint1 characters'
   static readonly CONTACT_PERSON_REQUIRED: string = 'Enter contact person name(s)'
 }
 

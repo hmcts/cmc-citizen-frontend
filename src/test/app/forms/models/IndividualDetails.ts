@@ -91,7 +91,7 @@ describe('IndividualDetails', () => {
     it('should return error when name got more than 255 character', () => {
       individualDetails.name = aVeryLongString()
       let errors: ValidationError[] = validator.validateSync(individualDetails)
-      expectValidationError(errors, PartydDetailsValidationErrors.NAME_TOO_LONG)
+      expectValidationError(errors, PartydDetailsValidationErrors.NAME_TOO_LONG.replace('$constraint1','255'))
     })
 
     it('should return error when dataOfBirth is undefined', () => {

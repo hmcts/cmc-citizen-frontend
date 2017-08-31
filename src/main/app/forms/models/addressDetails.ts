@@ -7,8 +7,6 @@ import { CorrespondenceAddress } from 'forms/models/correspondenceAddress'
 export class ValidationErrors {
   static readonly ADDRESS_REQUIRED = 'Enter an address'
   static readonly CORRESPONDENCE_ADDRESS_REQUIRED = 'Enter a correspondence address'
-  static readonly NAME_REQUIRED: string = 'Enter name'
-  static readonly NAME_TOO_LONG: string = 'You’ve entered too many characters'
 }
 
 export class AddressDetails implements Serializable<AddressDetails>, CompletableTask {

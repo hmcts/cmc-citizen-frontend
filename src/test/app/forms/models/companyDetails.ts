@@ -82,14 +82,14 @@ describe('CompanyDetails', () => {
       companyDetails.contactPerson = 'contactPerson'
       companyDetails.address = validAddress
       let errors: ValidationError[] = validator.validateSync(companyDetails)
-      expectValidationError(errors, PartydDetailsValidationErrors.NAME_TOO_LONG.replace('$constraint1','35'))
+      expectValidationError(errors, PartydDetailsValidationErrors.NAME_TOO_LONG.replace('$constraint1','255'))
     })
 
     it('should return error when contact person is undefined', () => {
       companyDetails.name = 'companyName'
       companyDetails.contactPerson = undefined
       let errors: ValidationError[] = validator.validateSync(companyDetails)
-      expectValidationError(errors, CompanyDetailsValidationErrors.CONTACT_PERSON_REQUIRED)
+      expectValidationError(errors, CompanyDetailsValidationErrors.CONTACT_PERSON_REQUIRED.replace('$constraint1','35'))
     })
 
     it('should return error when contact person is blank', () => {

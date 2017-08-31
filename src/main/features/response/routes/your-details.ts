@@ -33,29 +33,15 @@ export default express.Router()
   .get(Paths.defendantYourDetailsPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       const user: User = res.locals.user
-      if (user.responseDraft.defendantDetails.partyDetails == null) {
-        const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(user.id)
-        switch (claim.claimData.defendant.type) {
-          case PartyType.INDIVIDUAL.value:
-            user.responseDraft.defendantDetails.partyDetails = new IndividualDetails()
-            break
-          case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
-            user.responseDraft.defendantDetails.partyDetails = new SoleTraderDetails()
-            break
-          case PartyType.COMPANY.value:
-            user.responseDraft.defendantDetails.partyDetails = new CompanyDetails()
-            break
-          case PartyType.ORGANISATION.value:
-            user.responseDraft.defendantDetails.partyDetails = new OrganisationDetails()
-            break
-        }
+      let nameProvidedByDefendant = null
+      if (user.responseDraft.defendantDetails.partyDetails) {
+        nameProvidedByDefendant = user.responseDraft.defendantDetails.partyDetails.name
       }
-      const nameProvidedByDefendant = user.responseDraft.defendantDetails.partyDetails.name
       const nameProvidedByClaimant = await getNameProvidedByClaimant(user.id)
       if (nameProvidedByDefendant == null) {
         renderView(new Form<Name>(new Name(nameProvidedByClaimant)), res)
       } else {
-        renderView(new Form<Name>(new Name(nameProvidedByClaimant)), res)
+        renderView(new Form<Name>(new Name(nameProvidedByDefendant)), res)
       }
     } catch (err) {
       next(err)
@@ -70,6 +56,25 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const user: User = res.locals.user
+        if (user.responseDraft.defendantDetails.partyDetails == null) {
+          const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(user.id)
+          switch (claim.claimData.defendant.type) {
+            case PartyType.INDIVIDUAL.value:
+              user.responseDraft.defendantDetails.partyDetails = new IndividualDetails()
+              break
+            case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+              user.responseDraft.defendantDetails.partyDetails = new SoleTraderDetails()
+              break
+            case PartyType.COMPANY.value:
+              user.responseDraft.defendantDetails.partyDetails = new CompanyDetails()
+              break
+            case PartyType.ORGANISATION.value:
+              user.responseDraft.defendantDetails.partyDetails = new OrganisationDetails()
+              break
+          }
+        }
+        console.log(`------------------> ${JSON.stringify(res.locals.user.responseDraft.defendantDetails.partyDetails)}`)
         res.locals.user.responseDraft.defendantDetails.partyDetails.name = form.model.name
         await ResponseDraftMiddleware.save(res, next)
         res.redirect(Paths.defendantAddressPage.uri)

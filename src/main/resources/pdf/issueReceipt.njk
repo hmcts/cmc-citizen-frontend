@@ -113,11 +113,33 @@
   <div class="section-body">
     <table>
       <tr>
+        <td>Claimant type:</td>
+        <td>
+          {{ claimant.type }}
+        </td>
+      </tr>
+      <tr>
         <td>Name:</td>
         <td>
           {{ claimant.fullName }}
         </td>
       </tr>
+      {% if claimant.contactPerson is defined %}
+        <tr>
+          <td>Contact person:</td>
+          <td>
+            {{ claimant.contactPerson }}
+          </td>
+        </tr>
+      {% endif %}
+      {% if claimant.businessName is defined %}
+        <tr>
+          <td>Business name:</td>
+          <td>
+            {{ claimant.businessName }}
+          </td>
+        </tr>
+      {% endif %}
       <tr>
         <td>Address:</td>
         <td>
@@ -165,11 +187,33 @@
   <div class="section-body">
     <table>
       <tr>
+        <td>Defendant type:</td>
+        <td>
+          {{ defendant.type }}
+        </td>
+      </tr>
+      <tr>
         <td>Name:</td>
         <td>
           {{ defendant.fullName }}
         </td>
       </tr>
+      {% if defendant.contactPerson is defined %}
+        <tr>
+          <td>Contact person:</td>
+          <td>
+            {{ defendant.contactPerson }}
+          </td>
+        </tr>
+      {% endif %}
+      {% if defendant.businessName is defined %}
+        <tr>
+          <td>Business name:</td>
+          <td>
+            {{ defendant.businessName }}
+          </td>
+        </tr>
+      {% endif %}
       <tr>
         <td>Address:</td>
         <td>
