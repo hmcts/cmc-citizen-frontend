@@ -11,7 +11,7 @@ import { TheirDetails as Defendant } from 'app/claims/models/details/theirs/thei
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
-const sampleClaimObj = {
+export const sampleClaimObj = {
   id: 1,
   claimantId: 1,
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
