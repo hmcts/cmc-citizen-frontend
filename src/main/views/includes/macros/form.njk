@@ -19,6 +19,27 @@
   {{ input(label, name, form, hint, 'text', inputClass, autocomplete) }}
 {% endmacro %}
 
+{% macro poundInput(label, name, form, hint = '') %}
+  {% set error = form.errorFor(name) %}
+  <div class="form-group {% if error %} form-group-error {% endif %}">
+    <label for="{{ name }}" id="{{ name }}[label]" class="form-label">
+      {{ label }}
+
+      {% if hint != '' %}
+      <span class="form-hint">{{ hint }}</span>
+      {% endif %}
+    </label>
+    <span class="error-message">{{ error }}</span>
+    <span class="input-symbol-pound">
+      <input id="{{ name }}"
+             name="{{ name }}" value="{{ form.valueFor(name) }}"
+             type="number"
+             class="form-control {% if error %} form-control-error {% endif %}"
+             maxlength="10" size="7">
+    </span>
+  </div>
+{% endmacro %}
+
 {% macro textInputInline( name, form, inputClass='', prefixClass='') %}
   {% set error = form.errorFor(name) %}
   <label for="{{ name }}"></label>
