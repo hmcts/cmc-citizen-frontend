@@ -109,11 +109,10 @@ describe('DateOfBirth', () => {
   })
 
   describe('constructor', () => {
-    it('should set the simple type fields to undefined', () => {
-      let dateOfBirth = new DateOfBirth(true, new LocalDate())
-      expect(dateOfBirth.date.day).to.be.undefined
-      expect(dateOfBirth.date.month).to.be.undefined
-      expect(dateOfBirth.date.year).to.be.undefined
+    it('should set fields to undefined', () => {
+      let dateOfBirth = new DateOfBirth()
+      expect(dateOfBirth.known).to.be.undefined
+      expect(dateOfBirth.date).to.be.undefined
     })
   })
 
