@@ -68,7 +68,7 @@ describe('Accessibility', () => {
     Object.values(pathsRegistry).forEach((path: RoutablePath) => {
       const excluded = excludedPaths.some(_ => _ === path)
       if (!excluded) {
-        check(path.uri)
+        check(path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6' }))
       }
     })
   }
