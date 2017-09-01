@@ -108,7 +108,7 @@ describe('Claim issue: initiate payment receiver', () => {
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.redirect.toLocation(Paths.finishPaymentReceiver.uri.replace(':externalId', sampleClaimDraftObj.externalId)))
+        .expect(res => expect(res).to.be.redirect.toLocation(Paths.finishPaymentReceiver.evaluateUri({ externalId: sampleClaimDraftObj.externalId })))
     })
   })
 })
@@ -259,7 +259,7 @@ describe('Claim issue: post payment callback receiver', () => {
             draftStoreServiceMock.resolveRetrieve(draftType, { claimant: undefined })
 
             await request(app)
-              .get(Paths.finishPaymentReceiver.uri.replace(':externalId', sampleClaimDraftObj.externalId))
+              .get(Paths.finishPaymentReceiver.evaluateUri({ externalId: sampleClaimDraftObj.externalId }))
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${sampleClaimDraftObj.externalId}/confirmation`))
           })

@@ -17,7 +17,7 @@ import { sampleClaimDraftObj } from '../../../http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const claimantPage = Paths.claimantPage.uri.replace(':externalId', sampleClaimDraftObj.externalId)
+const claimantPage = Paths.claimantPage.evaluateUri({ externalId: sampleClaimDraftObj.externalId })
 
 describe('Dashboard - claimant page', () => {
   attachDefaultHooks()
@@ -64,8 +64,7 @@ describe('Dashboard - claimant page', () => {
         await request(app)
           .post(claimantPage)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.redirect.toLocation(
-            CCJPaths.theirDetailsPage.uri.replace(':externalId', sampleClaimDraftObj.externalId)))
+          .expect(res => expect(res).to.be.redirect.toLocation(CCJPaths.theirDetailsPage.evaluateUri({ externalId: sampleClaimDraftObj.externalId })))
       })
     })
   })

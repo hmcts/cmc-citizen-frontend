@@ -18,7 +18,7 @@ import { sampleClaimObj } from '../../../http-mocks/claim-store'
 const cookieName: string = config.get<string>('session.cookieName')
 
 const externalId = sampleClaimObj.externalId
-const theirDetailsPage = Paths.theirDetailsPage.uri.replace(':externalId', externalId)
+const theirDetailsPage = Paths.theirDetailsPage.evaluateUri({ externalId: externalId })
 
 const validFormData = {
   address: {
