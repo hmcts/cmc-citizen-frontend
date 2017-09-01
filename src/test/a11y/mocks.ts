@@ -26,6 +26,9 @@ import { Claimant } from 'app/claims/models/claimant'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { Address } from 'claims/models/address'
 import { RangeGroup } from 'fees/models/rangeGroup'
+import { DraftCCJ } from 'ccj/draft/DraftCCJ'
+import { PaidAmount } from 'ccj/form/models/paidAmount'
+import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 
 function mockedDraftClaim () {
   let draft = new DraftClaim()
@@ -66,7 +69,9 @@ function mockedResponseDraft () {
 function mockedClaim () {
   let claim = new Claim()
   claim.claimData = new ClaimData()
-  claim.claimData.defendants = [new Defendant()]
+  const defendant: Defendant = new Defendant()
+  defendant.address = new Address()
+  claim.claimData.defendants = [defendant]
   claim.claimData.claimant = new Claimant()
   claim.claimData.interest = mockedInterest()
   claim.claimData.interestDate = mockedInterestDate()
@@ -105,6 +110,13 @@ function mockedDefendantResponse () {
 
 function mockUser () {
   return { id: 123, roles: ['citizen', 'letter-holder'] }
+}
+
+function mockCCJDraft (): DraftCCJ {
+  const ccjDraft: DraftCCJ = new DraftCCJ()
+  ccjDraft.paidAmount = new PaidAmount(PaidAmountOption.YES, 10)
+
+  return ccjDraft
 }
 
 const justForwardRequestHandler = {
@@ -216,6 +228,32 @@ mock('response/guards/allResponseTasksCompletedGuard', {
   'default': {
     requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
       res.locals.user.claim = mockedClaim()
+      next()
+    }
+  }
+})
+
+mock('app/claims/claimMiddleware', {
+  'ClaimMiddleware': {
+    retrieveByExternalId: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
+      res.locals.user.claim = mockedClaim()
+      next()
+    }
+  }
+})
+
+mock('ccj/guards/ccjGuard', {
+  'CCJGuard': {
+    requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      next()
+    }
+  }
+})
+
+mock('ccj/draft/DraftCCJService', {
+  'DraftCCJService': {
+    retrieve: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
+      res.locals.user[`ccjDraft`] = mockCCJDraft()
       next()
     }
   }

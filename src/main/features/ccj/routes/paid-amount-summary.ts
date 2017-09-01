@@ -41,13 +41,14 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.user.claim
       const alreadyPaid: number = res.locals.user.ccjDraft.paidAmount.amount || 0
+      const { externalId } = req.params
 
       res.render(
         Paths.paidAmountSummaryPage.associatedView, {
           claim: claim,
           alreadyPaid: alreadyPaid,
           interestDetails: getInterestDetails(claim),
-          nextPageUrl: 'todo'
+          nextPageUrl: Paths.paymentOptionsPage.uri.replace(':externalId', externalId)
         }
       )
     }))
