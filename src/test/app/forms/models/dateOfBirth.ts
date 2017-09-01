@@ -26,6 +26,7 @@ describe('DateOfBirth', () => {
 
     it('should deserialize all fields', () => {
       expect(DateOfBirth.fromObject({
+        known: 'true',
         date: {
           year: 2017,
           month: 12,
@@ -38,72 +39,80 @@ describe('DateOfBirth', () => {
   describe('validation', () => {
     const validator: Validator = new Validator()
 
-    it('should reject non existing date', () => {
-      const errors = validator.validateSync(dateOfBirth(2017, 2, 29))
+    context('when date is known', () => {
+      it('should reject non existing date', () => {
+        const errors = validator.validateSync(dateOfBirth(2017, 2, 29))
 
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.DATE_NOT_VALID)
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.DATE_NOT_VALID)
+      })
+
+      it('should reject current date', () => {
+        const today = moment()
+
+        const errors = validator.validateSync(dateOfBirth(today.year(), today.month() + 1, today.date()))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.DATE_UNDER_18)
+      })
+
+      it('should reject future date', () => {
+        const tomorrow = moment().add(1, 'days')
+
+        const errors = validator.validateSync(dateOfBirth(tomorrow.year(), tomorrow.month() + 1, tomorrow.date()))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.DATE_UNDER_18)
+      })
+
+      it('should reject date of birth below 18', () => {
+        const almost18YearsAgo = moment().subtract(18, 'years').add(1, 'days')
+
+        const errors = validator.validateSync(dateOfBirth(almost18YearsAgo.year(), almost18YearsAgo.month() + 1, almost18YearsAgo.date()))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.DATE_UNDER_18)
+      })
+
+      it('should reject date of birth with age over 150', () => {
+        const over150YearsAgo = moment().subtract(151, 'years')
+
+        const errors = validator.validateSync(dateOfBirth(over150YearsAgo.year(), over150YearsAgo.month(), over150YearsAgo.date()))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.DATE_NOT_VALID)
+      })
+
+      it('should accept date of birth of 18 and over', () => {
+        const exactly18YearsAgo = moment().subtract(18, 'years')
+
+        const errors = validator.validateSync(dateOfBirth(exactly18YearsAgo.year(), exactly18YearsAgo.month() + 1, exactly18YearsAgo.date()))
+
+        expect(errors.length).to.equal(0)
+      })
+
+      it('should reject date of birth with invalid digits in year', () => {
+        const errors = validator.validateSync(dateOfBirth(90, 12, 31))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.DATE_INVALID_YEAR)
+      })
     })
 
-    it('should reject current date', () => {
-      const today = moment()
+    context('when date is unknown', () => {
+      it('should accept undefined date', () => {
+        const errors = validator.validateSync(new DateOfBirth(false, undefined))
 
-      const errors = validator.validateSync(dateOfBirth(today.year(), today.month() + 1, today.date()))
-
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.DATE_UNDER_18)
+        expect(errors.length).to.equal(0)
+      })
     })
-
-    it('should reject future date', () => {
-      const tomorrow = moment().add(1, 'days')
-
-      const errors = validator.validateSync(dateOfBirth(tomorrow.year(), tomorrow.month() + 1, tomorrow.date()))
-
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.DATE_UNDER_18)
-    })
-
-    it('should reject date of birth below 18', () => {
-      const almost18YearsAgo = moment().subtract(18, 'years').add(1, 'days')
-
-      const errors = validator.validateSync(dateOfBirth(almost18YearsAgo.year(), almost18YearsAgo.month() + 1, almost18YearsAgo.date()))
-
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.DATE_UNDER_18)
-    })
-
-    it('should reject date of birth with age over 150', () => {
-      const over150YearsAgo = moment().subtract(151, 'years')
-
-      const errors = validator.validateSync(dateOfBirth(over150YearsAgo.year(), over150YearsAgo.month(), over150YearsAgo.date()))
-
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.DATE_NOT_VALID)
-    })
-
-    it('should accept date of birth of 18 and over', () => {
-      const exactly18YearsAgo = moment().subtract(18, 'years')
-
-      const errors = validator.validateSync(dateOfBirth(exactly18YearsAgo.year(), exactly18YearsAgo.month() + 1, exactly18YearsAgo.date()))
-
-      expect(errors.length).to.equal(0)
-    })
-
-    it('should reject date of birth with invalid digits in year', () => {
-      const errors = validator.validateSync(dateOfBirth(90, 12, 31))
-
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.DATE_INVALID_YEAR)
-    })
-
   })
 
   describe('constructor', () => {
-    it('should set the simple type fields to undefined', () => {
+    it('should set fields to undefined', () => {
       let dateOfBirth = new DateOfBirth()
-      expect(dateOfBirth.date.day).to.be.undefined
-      expect(dateOfBirth.date.month).to.be.undefined
-      expect(dateOfBirth.date.year).to.be.undefined
+      expect(dateOfBirth.known).to.be.undefined
+      expect(dateOfBirth.date).to.be.undefined
     })
   })
 
@@ -132,5 +141,5 @@ describe('DateOfBirth', () => {
 })
 
 function dateOfBirth (year: number, month: number, day: number): DateOfBirth {
-  return new DateOfBirth(new LocalDate(year, month, day))
+  return new DateOfBirth(true, new LocalDate(year, month, day))
 }

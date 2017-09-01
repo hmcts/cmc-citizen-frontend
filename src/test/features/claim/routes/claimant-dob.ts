@@ -56,7 +56,7 @@ describe('Claim issue: claimant date of birth page', () => {
         await request(app)
           .post(ClaimPaths.claimantDateOfBirthPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ date: { day: '31', month: '12', year: '1980' } })
+          .send({ known: 'true', date: { day: '31', month: '12', year: '1980' } })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -67,7 +67,7 @@ describe('Claim issue: claimant date of birth page', () => {
         await request(app)
           .post(ClaimPaths.claimantDateOfBirthPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ date: { day: '31', month: '12', year: '1980' } })
+          .send({ known: 'true', date: { day: '31', month: '12', year: '1980' } })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.claimantAddressPage.uri))
       })
     })
