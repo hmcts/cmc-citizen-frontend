@@ -64,7 +64,9 @@ describe('Dashboard - claimant page', () => {
         await request(app)
           .post(claimantPage)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.redirect.toLocation(CCJPaths.theirDetailsPage.evaluateUri({ externalId: sampleClaimDraftObj.externalId })))
+          .expect(res => expect(res).to.be.redirect.toLocation(
+            CCJPaths.theirDetailsPage.evaluateUri({ externalId: sampleClaimDraftObj.externalId })
+          ))
       })
     })
   })

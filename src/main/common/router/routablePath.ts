@@ -33,18 +33,25 @@ export class RoutablePath {
     return `${featureName}/views/${viewPath}`
   }
 
-  evaluateUri (substitutions: {[key: string]: string}): string {
+  evaluateUri (substitutions: { [key: string]: string }): string {
     if (substitutions === undefined || Object.keys(substitutions).length === 0) {
       throw new Error('Path parameter substitutions are required')
     }
 
     const path = Object.entries(substitutions).reduce((uri: string, substitution: [string, string]) => {
       const [parameterName, parameterValue] = substitution
-      return uri.replace(`:${parameterName}`, parameterValue)
+
+      const updatedUri: string = uri.replace(`:${parameterName}`, parameterValue)
+      if (updatedUri === uri) {
+        throw new Error(`Path parameter :${parameterName} is not defined`)
+      }
+      return updatedUri
     }, this.uri)
 
-    if (pathParameterRegex.test(path)) {
-      throw new Error('At least one path parameter substitution is missing')
+    const missingParameters = path.match(pathParameterRegex)
+    if (missingParameters) {
+      const removeLeadingSlash = value => value.substring(1)
+      throw new Error(`Path parameter substitutions for ${missingParameters.map(removeLeadingSlash).join(', ')} are missing`)
     }
 
     return path
