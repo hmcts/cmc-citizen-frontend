@@ -14,7 +14,7 @@ describe('RoutablePath', () => {
 
   describe('evaluating uri', () => {
     it('should fail when substitutions is not provided', () => {
-      [undefined, null, {}].forEach(invalidValue => {
+      [undefined, {}].forEach(invalidValue => {
         expect(() => new RoutablePath('/case/:externalId/payment/:payment-type').evaluateUri(invalidValue))
           .to.throw(Error, 'Path parameter substitutions are required')
       })

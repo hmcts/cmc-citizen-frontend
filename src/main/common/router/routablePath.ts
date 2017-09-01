@@ -34,7 +34,7 @@ export class RoutablePath {
   }
 
   evaluateUri (substitutions: {[key: string]: string}): string {
-    if (substitutions == null || Object.keys(substitutions).length === 0) {
+    if (substitutions === undefined || Object.keys(substitutions).length === 0) {
       throw new Error('Path parameter substitutions are required')
     }
 
