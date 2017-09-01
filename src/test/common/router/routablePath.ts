@@ -12,6 +12,30 @@ describe('RoutablePath', () => {
     })
   })
 
+  describe('evaluating uri', () => {
+    it('should fail when substitutions is not provided', () => {
+      [undefined, {}].forEach(invalidValue => {
+        expect(() => new RoutablePath('/case/:externalId/payment/:payment-type').evaluateUri(invalidValue))
+          .to.throw(Error, 'Path parameter substitutions are required')
+      })
+    })
+
+    it('should fail when not all path parameter placeholders has been replaced', () => {
+      expect(() => new RoutablePath('/case/:id/payment/:payment-type').evaluateUri({ id: '999' }))
+        .to.throw(Error, 'Path parameter substitutions for :payment-type are missing')
+    })
+
+    it('should fail when not all path parameter substitutions has been used', () => {
+      expect(() => new RoutablePath('/case/:id').evaluateUri({ id: '999', foo: 'bar' }))
+        .to.throw(Error, 'Path parameter :foo is not defined')
+    })
+
+    it('should replace all path parameter placeholders', () => {
+      expect(new RoutablePath('/case/:id/payment/:payment-type').evaluateUri({ id: '999', 'payment-type': 'card' }))
+        .to.be.equal('/case/999/payment/card')
+    })
+  })
+
   describe('finding associated view', () => {
     describe('for features', () => {
       it('should return path within feature directory structure', () => {

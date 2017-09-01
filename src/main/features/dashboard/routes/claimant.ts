@@ -14,10 +14,10 @@ export default express.Router()
 
     res.render(Paths.claimantPage.associatedView, {
       claim: claim,
-      receiptUri: Paths.claimReceiptReceiver.uri.replace(':externalId', externalId)
+      receiptUri: Paths.claimReceiptReceiver.evaluateUri({ externalId: externalId })
     })
   }))
   .post(Paths.claimantPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
     const { externalId } = req.params
-    res.redirect(CCJPaths.theirDetailsPage.uri.replace(':externalId', externalId))
+    res.redirect(CCJPaths.theirDetailsPage.evaluateUri({ externalId: externalId }))
   }))

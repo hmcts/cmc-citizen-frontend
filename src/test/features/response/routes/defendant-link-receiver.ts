@@ -19,13 +19,13 @@ describe('Defendant link receiver', () => {
   attachDefaultHooks()
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ResponsePaths.defendantLinkReceiver.uri.replace(':letterHolderId', '1'))
+    checkAuthorizationGuards(app, 'get', ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: '1' }))
 
     it('should redirect to access denied page when user not in letter holder ID role', async () => {
       idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'letter-holder')
 
       await request(app)
-        .get(`${ResponsePaths.defendantLinkReceiver.uri.replace(':letterHolderId', '999')}?jwt=ABC`)
+        .get(`${ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: '999' })}?jwt=ABC`)
         .expect(res => expect(res).to.be.redirect.toLocation(accessDeniedPagePattern))
     })
 
@@ -38,7 +38,7 @@ describe('Defendant link receiver', () => {
         claimStoreServiceMock.rejectRetrieveByLetterHolderId('HTTP error')
 
         await request(app)
-          .get(`${ResponsePaths.defendantLinkReceiver.uri.replace(':letterHolderId', '1')}?jwt=ABC`)
+          .get(`${ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: '1' })}?jwt=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -46,7 +46,7 @@ describe('Defendant link receiver', () => {
         claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001', 2)
 
         await request(app)
-          .get(`${ResponsePaths.defendantLinkReceiver.uri.replace(':letterHolderId', '1')}?jwt=ABC`)
+          .get(`${ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: '1' })}?jwt=ABC`)
           .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.taskListPage.uri))
       })
 
@@ -55,7 +55,7 @@ describe('Defendant link receiver', () => {
         claimStoreServiceMock.rejectLinkDefendant('HTTP error')
 
         await request(app)
-          .get(`${ResponsePaths.defendantLinkReceiver.uri.replace(':letterHolderId', '1')}?jwt=ABC`)
+          .get(`${ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: '1' })}?jwt=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -64,7 +64,7 @@ describe('Defendant link receiver', () => {
         claimStoreServiceMock.resolveLinkDefendant()
 
         await request(app)
-          .get(`${ResponsePaths.defendantLinkReceiver.uri.replace(':letterHolderId', '1')}?jwt=ABC`)
+          .get(`${ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: '1' })}?jwt=ABC`)
           .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.taskListPage.uri))
       })
 
@@ -73,7 +73,7 @@ describe('Defendant link receiver', () => {
         claimStoreServiceMock.resolveLinkDefendant()
 
         await request(app)
-          .get(`${ResponsePaths.defendantLinkReceiver.uri.replace(':letterHolderId', '1')}?jwt=ABC`)
+          .get(`${ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: '1' })}?jwt=ABC`)
           .expect(res => expect(res).to.have.cookie(cookieName, 'ABC'))
       })
     })

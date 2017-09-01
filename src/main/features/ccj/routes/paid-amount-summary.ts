@@ -48,7 +48,7 @@ export default express.Router()
           claim: claim,
           alreadyPaid: alreadyPaid,
           interestDetails: getInterestDetails(claim),
-          nextPageUrl: Paths.paymentOptionsPage.uri.replace(':externalId', externalId)
+          nextPageUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
         }
       )
     }))

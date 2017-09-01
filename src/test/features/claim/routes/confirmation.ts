@@ -20,7 +20,7 @@ describe('Claim issue: confirmation page', () => {
   attachDefaultHooks()
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ClaimPaths.confirmationPage.uri.replace(':externalId', externalId))
+    checkAuthorizationGuards(app, 'get', ClaimPaths.confirmationPage.evaluateUri({ externalId: externalId }))
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -31,7 +31,7 @@ describe('Claim issue: confirmation page', () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .get(ClaimPaths.confirmationPage.uri.replace(':externalId', externalId))
+          .get(ClaimPaths.confirmationPage.evaluateUri({ externalId: externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -40,7 +40,7 @@ describe('Claim issue: confirmation page', () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
         await request(app)
-          .get(ClaimPaths.confirmationPage.uri.replace(':externalId', externalId))
+          .get(ClaimPaths.confirmationPage.evaluateUri({ externalId: externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Claim confirmation'))
       })
