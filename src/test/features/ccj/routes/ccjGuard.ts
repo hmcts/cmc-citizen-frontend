@@ -24,7 +24,7 @@ describe('CCJ guard', () => {
 
       context('should redirect to dashboard when claim not eligible for CCJ', () => {
         Object.values(Paths).forEach((path: RoutablePath) => {
-          const route: string = path.uri.replace(':externalId', 'b17af4d2-273f-4999-9895-bce382fa24c8')
+          const route: string = path.evaluateUri({ externalId: 'b17af4d2-273f-4999-9895-bce382fa24c8' })
 
           it(`for ${route} route`, async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId({ respondedAt: MomentFactory.currentDateTime() })

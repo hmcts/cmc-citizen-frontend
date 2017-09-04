@@ -29,7 +29,7 @@ const getPayClient = async (): Promise<PayClient> => {
 }
 
 const getReturnURL = (req: express.Request, externalId: string) => {
-  return buildURL(req, Paths.finishPaymentReceiver.uri.replace(':externalId', externalId))
+  return buildURL(req, Paths.finishPaymentReceiver.evaluateUri({ externalId: externalId }))
 }
 
 function logPaymentError (id: number, payment: Payment) {
@@ -58,11 +58,11 @@ async function successHandler (res, next) {
   }
   if (claimStatus) {
     await ClaimDraftMiddleware.delete(res, next)
-    res.redirect(Paths.confirmationPage.uri.replace(':externalId', externalId))
+    res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
   } else {
     const claim = await ClaimStoreClient.saveClaimForUser(res.locals.user)
     await ClaimDraftMiddleware.delete(res, next)
-    res.redirect(Paths.confirmationPage.uri.replace(':externalId', claim.externalId))
+    res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
   }
 }
 
@@ -85,7 +85,7 @@ export default express.Router()
         const payment: Payment = await payClient.retrieve(user, paymentId)
         switch (payment.state.status) {
           case 'success':
-            return res.redirect(Paths.finishPaymentReceiver.uri.replace(':externalId', user.claimDraft.externalId))
+            return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: user.claimDraft.externalId }))
         }
       }
       const feeCalculationOutcome: CalculationOutcome = await FeesClient.calculateFee(issueFeeCode, claimAmountWithInterest(res.locals.user.claimDraft))
@@ -106,7 +106,7 @@ export default express.Router()
 
       const paymentId = user.claimDraft.claimant.payment.id
       if (!paymentId) {
-        return res.redirect(Paths.confirmationPage.uri.replace(':externalId', externalId))
+        return res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
       }
       const payClient = await getPayClient()
 
