@@ -3,31 +3,25 @@ import * as express from 'express'
 import { Paths } from 'claim/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import PartyTypeResponse from 'forms/models/partyTypeResponse'
+import { PartyTypeResponse } from 'forms/models/partyTypeResponse'
 import { PartyType } from 'forms/models/partyType'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { ErrorHandling } from 'common/errorHandling'
+import { PartyDetails } from 'forms/models/partyDetails'
 
 function renderView (form: Form<PartyTypeResponse>, res: express.Response, next: express.NextFunction) {
-  try {
-    res.render(Paths.claimantPartyTypeSelectionPage.associatedView, {
-      form: form
-    })
-  } catch (err) {
-    next(err)
-  }
+  res.render(Paths.claimantPartyTypeSelectionPage.associatedView, {
+    form: form
+  })
 }
 
 export default express.Router()
   .get(Paths.claimantPartyTypeSelectionPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (res.locals.user.claimDraft.claimant.partyDetails) {
-      renderView(new Form<PartyTypeResponse>(PartyTypeResponse.valueOf(res.locals.user.claimDraft.claimant.partyDetails.type)), res, next)
-    } else {
-      renderView(new Form<PartyTypeResponse>(new PartyTypeResponse(PartyType.INDIVIDUAL)), res, next)
-    }
+    const partyDetails: PartyDetails = res.locals.user.claimDraft.claimant.partyDetails
+    renderView(new Form(new PartyTypeResponse(partyDetails ? PartyType.valueOf(partyDetails.type) : undefined)), res, next)
   })
   .post(
     Paths.claimantPartyTypeSelectionPage.uri,

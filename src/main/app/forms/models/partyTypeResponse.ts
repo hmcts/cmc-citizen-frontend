@@ -5,7 +5,7 @@ export class ValidationErrors {
   static readonly TYPE_REQUIRED: string = 'Choose your response'
 }
 
-export default class PartyTypeResponse {
+export class PartyTypeResponse {
   @IsDefined({ message: ValidationErrors.TYPE_REQUIRED })
   @IsIn(PartyType.all(), { message: ValidationErrors.TYPE_REQUIRED })
   type?: PartyType
@@ -15,20 +15,9 @@ export default class PartyTypeResponse {
   }
 
   static fromObject (value?: any): PartyTypeResponse {
-    if (value && value.type) {
-      return PartyTypeResponse.valueOf(value.type.value)
+    if (!value) {
+      return value
     }
-  }
-
-  static valueOf (value?: string): PartyTypeResponse {
-    if (value) {
-      const claimantType = PartyType.all()
-        .filter(type => type.value === value)
-        .pop()
-
-      return new PartyTypeResponse(claimantType)
-    } else {
-      return new PartyTypeResponse()
-    }
+    return new PartyTypeResponse(value.type ? PartyType.valueOf(value.type.value) : undefined)
   }
 }

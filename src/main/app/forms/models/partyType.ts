@@ -3,6 +3,7 @@ export class PartyType {
   static readonly SOLE_TRADER_OR_SELF_EMPLOYED = new PartyType('soleTrader', 'as a sole trader or self-employed person')
   static readonly COMPANY = new PartyType('company', 'on behalf of a company')
   static readonly ORGANISATION = new PartyType('organisation', 'on behalf of an organisation')
+
   readonly value: string
   readonly displayValue: string
 
@@ -18,5 +19,11 @@ export class PartyType {
       PartyType.COMPANY,
       PartyType.ORGANISATION
     ]
+  }
+
+  static valueOf (value: string): PartyType {
+    return PartyType.all()
+      .filter(type => type.value === value)
+      .pop()
   }
 }
