@@ -15,6 +15,7 @@ import {
   ValidationConstants as CorrespondenceAddressValidationConstants,
   ValidationErrors as CorrespondenceAddressValidationErrors
 } from 'forms/models/correspondenceAddress'
+import { Address as ClaimAddress } from 'claims/models/address'
 
 describe('Address/CorrespondenceAddress', () => {
   [
@@ -64,6 +65,24 @@ describe('Address/CorrespondenceAddress', () => {
         expect(result.line2).to.be.equals('AddressLine2')
         expect(result.city).to.be.equals('City')
         expect(result.postcode).to.be.equals('PostCode')
+      })
+    })
+
+    describe('fromClaimAddress', () => {
+      it('should create a valid Address object', () => {
+        const claimAddress: ClaimAddress = new ClaimAddress().deserialize({
+          line1: 'line1',
+          line2: 'line2',
+          city: 'city',
+          postcode: 'postcode'
+        })
+
+        const address: Address = Address.fromClaimAddress(claimAddress)
+
+        expect(address.line1).to.equal(claimAddress.line1)
+        expect(address.line2).to.equal(claimAddress.line2)
+        expect(address.city).to.equal(claimAddress.city)
+        expect(address.postcode).to.equal(claimAddress.postcode)
       })
     })
 
