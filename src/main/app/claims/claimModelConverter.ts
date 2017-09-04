@@ -28,8 +28,9 @@ export class ClaimModelConverter {
     claimData.externalId = draftClaim.externalId
     claimData.interestDate = this.convertInterestDate(draftClaim)
     claimData.amount = draftClaim.amount
+    claimData.feeAmountInPennies = draftClaim.claimant.payment.amount
     claimData.claimant = this.convertClaimantDetails(draftClaim)
-    claimData.defendant = this.convertDefendantDetails(draftClaim)
+    claimData.defendants = [this.convertDefendantDetails(draftClaim)]
     claimData.payment = draftClaim.claimant.payment
     claimData.reason = draftClaim.reason.reason
     if (draftClaim.claimant.partyDetails && !draftClaim.claimant.partyDetails.hasCorrespondenceAddress) {

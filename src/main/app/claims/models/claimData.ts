@@ -18,13 +18,18 @@ import Payment from 'app/pay/payment'
 export default class ClaimData implements Serializable<ClaimData> {
   externalId: string
   claimant: Party
-  defendant: TheirDetails
+  defendants: TheirDetails[]
   paidFeeAmount: number
   amount: ClaimAmountBreakdown = new ClaimAmountBreakdown()
+  feeAmountInPennies: number
   reason: string
   interest: Interest
   interestDate: InterestDate
   payment: Payment = new Payment()
+
+  get defendant (): TheirDetails {
+    return this.defendants[0]
+  }
 
   deserialize (input: any): ClaimData {
     if (input) {
@@ -32,7 +37,7 @@ export default class ClaimData implements Serializable<ClaimData> {
       if (input.payment) {
         this.payment = new Payment().deserialize(input.payment)
       }
-      this.defendant = this.deserializeDefendant(input.defendant)
+      this.defendants = this.deserializeDefendants(input.defendants)
       this.paidFeeAmount = this.payment.amount / 100
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
       this.reason = input.reason
@@ -64,20 +69,22 @@ export default class ClaimData implements Serializable<ClaimData> {
     }
   }
 
-  deserializeDefendant (defendant: any): TheirDetails {
-    if (defendant) {
-      switch (defendant.type) {
-        case PartyType.INDIVIDUAL.value:
-          return this.defendant = new DefendantAsIndividual().deserialize(defendant)
-        case PartyType.COMPANY.value:
-          return this.defendant = new DefendantAsCompany().deserialize(defendant)
-        case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
-          return this.defendant = new DefendantAsSoleTrader().deserialize(defendant)
-        case PartyType.ORGANISATION.value:
-          return this.defendant = new DefendantAsOrganisation().deserialize(defendant)
-        default:
-          throw Error('Something went wrong, No defendant type is set')
-      }
+  private deserializeDefendants (defendants: any[]): TheirDetails[] {
+    if (defendants) {
+      return defendants.map((defendant: any) => {
+        switch (defendant.type) {
+          case PartyType.INDIVIDUAL.value:
+            return new DefendantAsIndividual().deserialize(defendant)
+          case PartyType.COMPANY.value:
+            return new DefendantAsCompany().deserialize(defendant)
+          case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+            return new DefendantAsSoleTrader().deserialize(defendant)
+          case PartyType.ORGANISATION.value:
+            return new DefendantAsOrganisation().deserialize(defendant)
+          default:
+            throw Error('Something went wrong, No defendant type is set')
+        }
+      })
     }
   }
 }
