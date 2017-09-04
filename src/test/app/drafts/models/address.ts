@@ -1,14 +1,15 @@
 import { expect } from 'chai'
 
-import { Address, ValidationErrors } from 'app/forms/models/address'
+import { Address, ValidationConstants, ValidationErrors } from 'app/forms/models/address'
 import { Address as ClaimAddress } from 'claims/models/address'
 import { Validator } from 'class-validator'
-import { expectValidationError } from '../../forms/models/validationUtils'
-import * as randomstring from 'randomstring'
+import { expectValidationError, generateString, evaluateErrorMsg } from '../../forms/models/validationUtils'
 
 describe('Address', () => {
   describe('validation', () => {
     const validator: Validator = new Validator()
+    const tooLongAddress: number = ValidationConstants.ADDRESS_MAX_LENGTH + 1
+    const tooLongPostcode: number = ValidationConstants.POSTCODE_MAX_LENGTH + 1
 
     it('should accept valid values (all given)', () => {
       const errors = validator.validateSync(new Address('line1', 'line2', 'city', 'postcode'))
@@ -28,17 +29,21 @@ describe('Address', () => {
     })
 
     it('should reject when line 1 too long', () => {
-      const errors = validator.validateSync(new Address(generateString(101), 'line2', 'city', 'postcode'))
+      const errors = validator.validateSync(new Address(generateString(tooLongAddress), 'line2', 'city', 'postcode'))
       expect(errors.length).to.equal(1)
 
-      expectValidationError(errors, ValidationErrors.FIRST_LINE_TOO_LONG.replace('$constraint1', '100'))
+      expectValidationError(
+        errors, evaluateErrorMsg(ValidationErrors.FIRST_LINE_TOO_LONG, ValidationConstants.ADDRESS_MAX_LENGTH)
+      )
     })
 
     it('should reject when line 2 too long', () => {
-      const errors = validator.validateSync(new Address('line1', generateString(101), 'city', 'postcode'))
+      const errors = validator.validateSync(new Address('line1', generateString(tooLongAddress), 'city', 'postcode'))
       expect(errors.length).to.equal(1)
 
-      expectValidationError(errors, ValidationErrors.SECOND_LINE_TOO_LONG.replace('$constraint1', '100'))
+      expectValidationError(
+        errors, evaluateErrorMsg(ValidationErrors.SECOND_LINE_TOO_LONG, ValidationConstants.ADDRESS_MAX_LENGTH)
+      )
     })
 
     it('should reject when city empty', () => {
@@ -48,13 +53,6 @@ describe('Address', () => {
       expectValidationError(errors, ValidationErrors.CITY_REQUIRED)
     })
 
-    it('should reject when city too long', () => {
-      const errors = validator.validateSync(new Address('line1', 'line2', generateString(101), 'postcode'))
-      expect(errors.length).to.equal(1)
-
-      expectValidationError(errors, ValidationErrors.CITY_NOT_VALID.replace('$constraint1', '100'))
-    })
-
     it('should reject when postcode empty', () => {
       const errors = validator.validateSync(new Address('line1', 'line2', 'city', ''))
       expect(errors.length).to.equal(1)
@@ -62,11 +60,22 @@ describe('Address', () => {
       expectValidationError(errors, ValidationErrors.POSTCODE_REQUIRED)
     })
 
-    it('should reject when postcode too long', () => {
-      const errors = validator.validateSync(new Address('line1', 'line2', 'city', generateString(9)))
+    it('should reject when city too long', () => {
+      const errors = validator.validateSync(new Address('line1', 'line2', generateString(tooLongAddress), 'postcode'))
       expect(errors.length).to.equal(1)
 
-      expectValidationError(errors, ValidationErrors.POSTCODE_NOT_VALID.replace('$constraint1', '8'))
+      expectValidationError(
+        errors, evaluateErrorMsg(ValidationErrors.CITY_NOT_VALID, ValidationConstants.ADDRESS_MAX_LENGTH)
+      )
+    })
+
+    it('should reject when postcode too long', () => {
+      const errors = validator.validateSync(new Address('line1', 'line2', 'city', generateString(tooLongPostcode)))
+      expect(errors.length).to.equal(1)
+
+      expectValidationError(
+        errors, evaluateErrorMsg(ValidationErrors.POSTCODE_NOT_VALID, ValidationConstants.POSTCODE_MAX_LENGTH)
+      )
     })
 
     it('should reject empty values', () => {
@@ -130,10 +139,3 @@ describe('Address', () => {
     })
   })
 })
-
-function generateString (length: number): string {
-  return randomstring.generate({
-    length: length,
-    charset: 'alphabetic'
-  })
-}
