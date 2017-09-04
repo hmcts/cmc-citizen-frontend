@@ -2,12 +2,7 @@ import * as config from 'config'
 import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
 import { InterestType } from 'app/forms/models/interest'
-import { Individual as DefendantAsIndividual } from 'claims/models/details/theirs/individual'
-import { DefendantResponseData } from 'app/claims/models/defendantResponseData'
-import { Individual as claimantAsIndividual } from 'claims/models/details/yours/individual'
 import { Address } from 'claims/models/address'
-import { DefendantResponse } from 'claims/models/defendantResponse'
-import { TheirDetails as Defendant } from 'app/claims/models/details/theirs/theirDetails'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
@@ -45,17 +40,19 @@ export const sampleClaimObj = {
         postcode: 'bb127nq'
       } as Address,
       dateOfBirth: '1990-02-17'
-    } as claimantAsIndividual,
-    defendant: {
-      type: 'individual',
-      name: 'John Doe',
-      address: {
-        line1: 'line1',
-        line2: 'line2',
-        city: 'city',
-        postcode: 'bb127nq'
+    },
+    defendants: [
+      {
+        type: 'individual',
+        name: 'John Doe',
+        address: {
+          line1: 'line1',
+          line2: 'line2',
+          city: 'city',
+          postcode: 'bb127nq'
+        }
       }
-    } as DefendantAsIndividual,
+    ],
     interest: {
       type: InterestType.NO_INTEREST
     },
@@ -73,7 +70,7 @@ const sampleDefendantResponseObj = {
     type: 'OWE_ALL_PAID_SOME',
     defence: '',
     freeMediation: ''
-  } as DefendantResponseData,
+  },
   defendantDetails: {
     type: 'individual',
     name: 'full name',
@@ -82,9 +79,9 @@ const sampleDefendantResponseObj = {
       line2: 'line2',
       city: 'city',
       postcode: 'bb127nq'
-    } as Address
-  } as Defendant
-} as DefendantResponse
+    }
+  }
+}
 
 export function resolveRetrieveClaimByExternalId (claimOverride?: object) {
   mock(`${serviceBaseURL}/claims`)
