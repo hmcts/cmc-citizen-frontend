@@ -12,6 +12,7 @@ export class ValidationErrors {
 
   static readonly SECOND_LINE_TOO_LONG: string = 'The second address line must be no longer than $constraint1 characters'
 
+  static readonly CITY_REQUIRED: string = 'Enter a valid town/city'
   static readonly CITY_NOT_VALID: string = 'The city must be no longer than $constraint1 characters'
 
   static readonly POSTCODE_REQUIRED: string = 'Enter postcode'
@@ -26,6 +27,8 @@ export class Address implements Serializable<Address>, CompletableTask {
   line1?: string
   @MaxLength(100, { message: ValidationErrors.SECOND_LINE_TOO_LONG })
   line2?: string
+  @IsDefined({ message: ValidationErrors.CITY_REQUIRED })
+  @IsNotBlank({ message: ValidationErrors.CITY_REQUIRED })
   @MaxLength(100, { message: ValidationErrors.CITY_NOT_VALID })
   city?: string
   @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED })

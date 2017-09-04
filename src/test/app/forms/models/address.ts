@@ -56,28 +56,30 @@ describe('Address/CorrespondenceAddress', () => {
       it('should reject address with empty first address line and postcode', () => {
         const errors = validator.validateSync(new ClassFunction('', '', '', ''))
 
-        expect(errors.length).to.equal(2)
+        expect(errors.length).to.equal(3)
         expectValidationError(errors, ValidationErrors.FIRST_LINE_REQUIRED)
+        expectValidationError(errors, ValidationErrors.CITY_REQUIRED)
         expectValidationError(errors, ValidationErrors.POSTCODE_REQUIRED)
       })
 
       it('should reject address with blank first address line and postcode', () => {
         const errors = validator.validateSync(new ClassFunction(' ', '', '', ' '))
 
-        expect(errors.length).to.equal(2)
+        expect(errors.length).to.equal(3)
         expectValidationError(errors, ValidationErrors.FIRST_LINE_REQUIRED)
+        expectValidationError(errors, ValidationErrors.CITY_REQUIRED)
         expectValidationError(errors, ValidationErrors.POSTCODE_REQUIRED)
       })
 
       it('should reject address with first line longer then upper limit', () => {
-        const errors = validator.validateSync(new ClassFunction(_.repeat('*', 101), '', '', 'SA1'))
+        const errors = validator.validateSync(new ClassFunction(_.repeat('*', 101), '', 'town', 'SA1'))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.FIRST_LINE_TOO_LONG.replace('$constraint1', '100'))
       })
 
       it('should reject address with second line longer then upper limit', () => {
-        const errors = validator.validateSync(new ClassFunction('Apartment 99', _.repeat('*', 101), '', 'SA1'))
+        const errors = validator.validateSync(new ClassFunction('Apartment 99', _.repeat('*', 101), 'town', 'SA1'))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.SECOND_LINE_TOO_LONG.replace('$constraint1', '100'))
@@ -91,14 +93,14 @@ describe('Address/CorrespondenceAddress', () => {
       })
 
       it('should reject address with postcode longer then upper limit', () => {
-        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', _.repeat('*', 9)))
+        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', 'town', _.repeat('*', 9)))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.POSTCODE_NOT_VALID.replace('$constraint1', '8'))
       })
 
       it('should accept valid address', () => {
-        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', 'SA1'))
+        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', 'Town', 'SA1'))
 
         expect(errors.length).to.equal(0)
       })
