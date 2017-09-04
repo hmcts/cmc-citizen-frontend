@@ -73,7 +73,7 @@ export class Defendant implements CompletableTask {
   }
 
   isCompleted (): boolean {
-    const emailCompleted = !!this.email && this.email.isCompleted()
+    const emailCompleted = this.email ? this.email.isCompleted() : true
     if (this.partyDetails && this.partyDetails.type) {
       switch (this.partyDetails.type) {
         case PartyType.INDIVIDUAL.value:

@@ -26,4 +26,41 @@ describe('Defendant', () => {
       expect(new Defendant().deserialize(null)).to.eql(new Defendant())
     })
   })
+
+  describe('task state', () => {
+    const defendant: object = {
+      partyDetails: {
+        type: 'individual',
+        name: 'John Smith',
+        address: {
+          line1: 'Flat 101',
+          city: 'London',
+          postcode: 'E10AA'
+        },
+        hasCorrespondenceAddress: false
+      },
+      phone: {
+        number: '07000000000'
+      }
+    }
+
+    context('is incomplete', () => {
+      it('when email is defined and invalid', () => {
+        const state = new Defendant().deserialize({ ...defendant, email: { address: 'some-text' } })
+        expect(state.isCompleted()).to.be.false
+      })
+    })
+
+    context('is complete', () => {
+      it('when email is undefined', () => {
+        const state = new Defendant().deserialize({ ...defendant, email: undefined })
+        expect(state.isCompleted()).to.be.true
+      })
+
+      it('when email is defined and valid', () => {
+        const state = new Defendant().deserialize({ ...defendant, email: { address: 'user@example.com' } })
+        expect(state.isCompleted()).to.be.true
+      })
+    })
+  })
 })
