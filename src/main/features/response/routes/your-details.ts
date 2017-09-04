@@ -74,7 +74,6 @@ export default express.Router()
               break
           }
         }
-        console.log(`------------------> ${JSON.stringify(res.locals.user.responseDraft.defendantDetails.partyDetails)}`)
         res.locals.user.responseDraft.defendantDetails.partyDetails.name = form.model.name
         await ResponseDraftMiddleware.save(res, next)
         res.redirect(Paths.defendantAddressPage.uri)

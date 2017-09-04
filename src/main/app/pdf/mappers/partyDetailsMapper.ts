@@ -7,7 +7,7 @@ import { PartyType } from 'forms/models/partyType'
 export class PartyDetailsMapper {
   static createPartyDetails (party: Party, email: string): object {
     let data = {
-      type: party.type,
+      type: this.partyTypeAsString(party),
       fullName: party.name,
       contactPerson: this.contactPerson(party),
       businessName: this.businessName(party),
@@ -30,6 +30,22 @@ export class PartyDetailsMapper {
     return data
   }
 
+  static partyTypeAsString (partyDetails: Party): string {
+    if (partyDetails && partyDetails.type) {
+      switch (partyDetails.type) {
+        case PartyType.INDIVIDUAL.value:
+          return PartyType.INDIVIDUAL.displayValue
+        case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+          return PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.displayValue
+        case PartyType.COMPANY.value:
+          return PartyType.COMPANY.displayValue
+        case PartyType.ORGANISATION.value:
+          return PartyType.ORGANISATION.displayValue
+        default:
+          return undefined
+      }
+    }
+  }
   static businessName (partyDetails: Party): any {
     if (partyDetails && partyDetails.type) {
       switch (partyDetails.type) {

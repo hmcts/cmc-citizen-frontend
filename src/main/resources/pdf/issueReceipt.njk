@@ -124,7 +124,7 @@
           {{ claimant.fullName }}
         </td>
       </tr>
-      {% if claimant.contactPerson is defined %}
+      {% if claimant.contactPerson is not empty %}
         <tr>
           <td>Contact person:</td>
           <td>
@@ -132,7 +132,7 @@
           </td>
         </tr>
       {% endif %}
-      {% if claimant.businessName is defined %}
+      {% if claimant.businessName is not empty %}
         <tr>
           <td>Business name:</td>
           <td>
@@ -198,7 +198,7 @@
           {{ defendant.fullName }}
         </td>
       </tr>
-      {% if defendant.contactPerson is defined %}
+      {% if defendant.contactPerson is not empty %}
         <tr>
           <td>Contact person:</td>
           <td>
@@ -206,7 +206,7 @@
           </td>
         </tr>
       {% endif %}
-      {% if defendant.businessName is defined %}
+      {% if defendant.businessName is not empty %}
         <tr>
           <td>Business name:</td>
           <td>

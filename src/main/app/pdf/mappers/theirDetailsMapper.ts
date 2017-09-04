@@ -21,6 +21,23 @@ export class TheirDetailsMapper {
     return data
   }
 
+  static partyTypeAsString (partyDetails: TheirDetails): string {
+    if (partyDetails && partyDetails.type) {
+      switch (partyDetails.type) {
+        case PartyType.INDIVIDUAL.value:
+          return PartyType.INDIVIDUAL.displayValue
+        case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+          return PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.displayValue
+        case PartyType.COMPANY.value:
+          return PartyType.COMPANY.displayValue
+        case PartyType.ORGANISATION.value:
+          return PartyType.ORGANISATION.displayValue
+        default:
+          return undefined
+      }
+    }
+  }
+
   static businessName (partyDetails: TheirDetails): any {
     if (partyDetails && partyDetails.type) {
       switch (partyDetails.type) {

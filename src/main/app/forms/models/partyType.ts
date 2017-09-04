@@ -1,8 +1,8 @@
 export class PartyType {
-  static readonly INDIVIDUAL = new PartyType('individual', 'Individual')
-  static readonly SOLE_TRADER_OR_SELF_EMPLOYED = new PartyType('soleTrader', 'Sole Trader')
-  static readonly COMPANY = new PartyType('company', 'Company')
-  static readonly ORGANISATION = new PartyType('organisation', 'Organisation')
+  static readonly INDIVIDUAL = new PartyType('individual', 'as an individual')
+  static readonly SOLE_TRADER_OR_SELF_EMPLOYED = new PartyType('soleTrader', 'as a sole trader or self-employed person')
+  static readonly COMPANY = new PartyType('company', 'on behalf of a company')
+  static readonly ORGANISATION = new PartyType('organisation', 'on behalf of an organisation')
   readonly value: string
   readonly displayValue: string
 

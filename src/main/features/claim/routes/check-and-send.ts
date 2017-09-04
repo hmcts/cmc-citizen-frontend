@@ -13,6 +13,7 @@ import AllClaimTasksCompletedGuard from 'claim/guards/allClaimTasksCompletedGuar
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { CompanyDetails } from 'forms/models/companyDetails'
+import { OrganisationDetails } from 'forms/models/organisationDetails'
 import DateOfBirth from 'forms/models/dateOfBirth'
 import { PartyDetails } from 'forms/models/partyDetails'
 
@@ -23,15 +24,12 @@ function getClaimAmountTotal (res: express.Response): Promise<ClaimAmountTotal> 
     })
 }
 
-function getName (partyDetails: PartyDetails): string {
-  return value(partyDetails, 'name')
-}
-
-function getContactPerson (partyDetails: PartyDetails): string {
-  return value(partyDetails, 'contactPerson')
-}
 function getBusinessName (partyDetails: PartyDetails): string {
-  return value(partyDetails, 'businessName')
+  if (partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
+    return (partyDetails as SoleTraderDetails).businessName
+  } else {
+    return undefined
+  }
 }
 
 function getDateOfBirth (partyDetails: PartyDetails): DateOfBirth {
@@ -44,19 +42,16 @@ function getDateOfBirth (partyDetails: PartyDetails): DateOfBirth {
   }
 }
 
-function value (partyDetails: PartyDetails, fieldName: string): string {
-  if (partyDetails.type === PartyType.INDIVIDUAL.value) {
-    return (partyDetails as IndividualDetails)[`${fieldName}`]
-  } else if (partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
-    return (partyDetails as SoleTraderDetails)[`${fieldName}`]
-  } else if (partyDetails.type === PartyType.COMPANY.value) {
-    return (partyDetails as CompanyDetails)[`${fieldName}`]
+function getContactPerson (partyDetails: PartyDetails): string {
+  if (partyDetails.type === PartyType.COMPANY.value) {
+    return (partyDetails as CompanyDetails).contactPerson
   } else if (partyDetails.type === PartyType.ORGANISATION.value) {
-    return (partyDetails as CompanyDetails)[`${fieldName}`]
+    return (partyDetails as OrganisationDetails).contactPerson
   } else {
     return undefined
   }
 }
+
 function renderView (form: Form<StatementOfTruth>, res: express.Response, next: express.NextFunction) {
   getClaimAmountTotal(res)
     .then((claimAmountTotal: ClaimAmountTotal) => {
@@ -65,10 +60,11 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
         claimAmountTotal: claimAmountTotal,
         payAtSubmission: res.locals.user.claimDraft.interestDate.type === InterestDateType.SUBMISSION,
         interestClaimed: (res.locals.user.claimDraft.interest.type !== InterestType.NO_INTEREST),
-        name: getName(res.locals.user.claimDraft.claimant.partyDetails),
         contactPerson: getContactPerson(res.locals.user.claimDraft.claimant.partyDetails),
         businessName: getBusinessName(res.locals.user.claimDraft.claimant.partyDetails),
         dateOfBirth : getDateOfBirth(res.locals.user.claimDraft.claimant.partyDetails),
+        defendantContactPerson: getContactPerson(res.locals.user.claimDraft.defendant.partyDetails),
+        defendantBusinessName: getBusinessName(res.locals.user.claimDraft.defendant.partyDetails),
         form: form
       })
     }).catch(next)
