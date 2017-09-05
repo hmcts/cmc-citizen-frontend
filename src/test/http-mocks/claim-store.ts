@@ -69,16 +69,16 @@ const sampleDefendantResponseObj = {
   response: {
     type: 'OWE_ALL_PAID_SOME',
     defence: '',
-    freeMediation: ''
-  },
-  defendantDetails: {
-    type: 'individual',
-    name: 'full name',
-    address: {
-      line1: 'line1',
-      line2: 'line2',
-      city: 'city',
-      postcode: 'bb127nq'
+    freeMediation: '',
+    defendant: {
+      type: 'individual',
+      name: 'full name',
+      address: {
+        line1: 'line1',
+        line2: 'line2',
+        city: 'city',
+        postcode: 'bb127nq'
+      }
     }
   }
 }
