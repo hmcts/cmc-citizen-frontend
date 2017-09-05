@@ -1,169 +1,128 @@
-{% from "includes/macros/form.njk" import csrfProtection, textInput, addressInput, radioGroup, saveAndContinueButton %}
+{% from "includes/macros/form.njk" import csrfProtection, textInput, radioGroup, saveAndContinueButton %}
+{% from "includes/macros/address.njk" import addressFragment, correspondenceAddressFragment %}
 
 {% macro organisationForm(form, csrfToken) %}
   <form method="post">
     {{ csrfProtection(csrfToken) }}
-        {{ textInput(t('Organisation name'), 'name', form) }}
-        {{ textInput(t('Contact person'), 'contactPerson', form) }}
-        <h2 class="heading-medium">{{ t('Organisation address') }}</h2>
-        <p>{{ t("Enter the organisation's main office or an organisation's address that has a connection with the claim.") }}</p>
-        {{ addressInput(form, 'address') }}
 
-        <h2 class="heading-medium">{{ t('Correspondence address') }}</h2>
+    {{ textInput(t('Organisation name'), 'name', form) }}
+    {{ textInput(t('Contact person'), 'contactPerson', form) }}
 
-        {{ radioGroup(
-          t('Would you like correspondence sent to a different address?'),
-          'hasCorrespondenceAddress',
-          [
-            { label: 'No', value: false },
-            { label: 'Yes, add a correspondence address', value: true }
-          ],
-          form,
-          isInline = false
-        )
-      }}
+    <h2 class="heading-medium">{{ t('Organisation address') }}</h2>
+    <p>{{ t("Enter the organisation's main office or an organisation's address that has a connection with the claim.") }}</p>
+    {{ addressFragment(form, name = 'address') }}
 
-      <div class="panel panel-border-narrow js-hidden" id="hasCorrespondenceAddress-true" aria-hidden="false">
-        <p>{{ t('All correspondence will be sent here, instead of to your organisation address. This is sometimes known as an &lsquo;address for service&rsquo;.') | safe }}</p>
-        {{ addressInput(form, 'correspondenceAddress') }}
-      </div>
-      {{ saveAndContinueButton() }}
+    {{ correspondenceAddressFragment(form) }}
+
+    {{ saveAndContinueButton() }}
   </form>
 {% endmacro %}
 
 {% macro claimantAsIndividualForm(form, csrfToken) %}
   <form method="post">
     {{ csrfProtection(csrfToken) }}
-        {{ textInput(t('Full name'), 'name', form, autocomplete='name') }}
-        <h2 class="heading-medium">{{ t('Your residential address') }}</h2>
-        <p>{{ t("This must be the address where you live.") }}</p>
-         {{ addressInput(form, 'address') }}
-        <h2 class="heading-medium">{{ t('Correspondence address') }}</h2>
 
-        {{ radioGroup(
-          t('Would you like correspondence sent to a different address?'),
-          'hasCorrespondenceAddress',
-          [
-            { label: 'No', value: false },
-            { label: 'Yes, add a correspondence address', value: true }
-          ],
-          form,
-          isInline = false
-        )
-      }}
+    {{ textInput(t('Full name'), 'name', form, autocomplete='name') }}
 
-      <div class="panel panel-border-narrow js-hidden" id="hasCorrespondenceAddress-true" aria-hidden="false">
-        <p>{{ t('All correspondence will be sent here, instead of to your residential address. This is sometimes known as an &lsquo;address for service&rsquo;.') | safe }}</p>
-        {{ addressInput(form, 'correspondenceAddress') }}
-      </div>
-        {{ saveAndContinueButton() }}
+    <h2 class="heading-medium">{{ t('Your residential address') }}</h2>
+    <p>{{ t("This must be the address where you live.") }}</p>
+    {{ addressFragment(form, name = 'address') }}
+
+    {{ correspondenceAddressFragment(form) }}
+
+    {{ saveAndContinueButton() }}
   </form>
 {% endmacro %}
 
 {% macro soleTraderForm(form, csrfToken) %}
   <form method="post">
     {{ csrfProtection(csrfToken) }}
-        {{ textInput(t('Full name'), 'name', form, autocomplete='name') }}
-        {{ textInput(t('Business name (optional)'), 'businessName', form) }}
-        <h2 class="heading-medium">{{ t('Your residential address') }}</h2>
-        <p>{{ t("This must be the address where you live.") }}</p>
-        {{ addressInput(form, 'address') }}
-        <h2 class="heading-medium">{{ t('Correspondence address') }}</h2>
 
-        {{ radioGroup(
-          t('Would you like correspondence sent to a different address?'),
-          'hasCorrespondenceAddress',
-          [
-            { label: 'No', value: false },
-            { label: 'Yes, add a correspondence address', value: true }
-          ],
-          form,
-          isInline = false
-        )
-      }}
+    {{ textInput(t('Full name'), 'name', form, autocomplete='name') }}
+    {{ textInput(t('Business name (optional)'), 'businessName', form) }}
 
-      <div class="panel panel-border-narrow js-hidden" id="hasCorrespondenceAddress-true" aria-hidden="false">
-        <p>{{ t('All correspondence will be sent here, instead of to your residential address. This is sometimes known as an &lsquo;address for service&rsquo;.') | safe }}</p>
-        {{ addressInput(form, 'correspondenceAddress') }}
-      </div>
-        {{ saveAndContinueButton() }}
+    <h2 class="heading-medium">{{ t('Your residential address') }}</h2>
+    <p>{{ t("This must be the address where you live.") }}</p>
+    {{ addressFragment(form, name = 'address') }}
+
+    {{ correspondenceAddressFragment(form) }}
+
+    {{ saveAndContinueButton() }}
   </form>
 {% endmacro %}
 
 {% macro companyForm(form, csrfToken) %}
   <form method="post">
     {{ csrfProtection(csrfToken) }}
-        {{ textInput(t('Company name'), 'name', form, autocomplete='companyName') }}
-        {{ textInput(t('Contact person'), 'contactPerson', form) }}
-        <h2 class="heading-medium">{{ t('Company address') }}</h2>
-        <p>{{ t("Enter the company’s registered office or a company address that has a connection with the claim.") }}</p>
-        {{ addressInput(form, 'address') }}
-        <h2 class="heading-medium">{{ t('Correspondence address') }}</h2>
 
-        {{ radioGroup(
-          t('Would you like correspondence sent to a different address?'),
-          'hasCorrespondenceAddress',
-          [
-            { label: 'No', value: false },
-            { label: 'Yes, add a correspondence address', value: true }
-          ],
-          form,
-          isInline = false
-        )
-      }}
+    {{ textInput(t('Company name'), 'name', form, autocomplete='companyName') }}
+    {{ textInput(t('Contact person'), 'contactPerson', form) }}
 
-      <div class="panel panel-border-narrow js-hidden" id="hasCorrespondenceAddress-true" aria-hidden="false">
-        <p>{{ t('All correspondence will be sent here, instead of to your company address. This is sometimes known as an &lsquo;address for service&rsquo;.') | safe }}</p>
-        {{ addressInput(form, 'correspondenceAddress') }}
-      </div>
-        {{ saveAndContinueButton() }}
+    <h2 class="heading-medium">{{ t('Company address') }}</h2>
+    <p>{{ t("Enter the company’s registered office or a company address that has a connection with the claim.") }}</p>
+    {{ addressFragment(form, name = 'address') }}
+
+    {{ correspondenceAddressFragment(form) }}
+
+    {{ saveAndContinueButton() }}
   </form>
 {% endmacro %}
 
 {% macro defendantAsIndividualForm(form, csrfToken) %}
   <form method="post">
     {{ csrfProtection(csrfToken) }}
-        {{ textInput(t('Their full name'), 'name', form, autocomplete='name') }}
-        <h2 class="heading-medium">{{ t('Their residential address') }}</h2>
-        <p>{{ t("You must enter the defendant's residential address to make a claim against them.") }}</p>
-         {{ addressInput(form, 'address') }}
-        {{ saveAndContinueButton() }}
+
+    {{ textInput(t('Their full name'), 'name', form, autocomplete='name') }}
+
+    <h2 class="heading-medium">{{ t('Their residential address') }}</h2>
+    <p>{{ t("You must enter the defendant's residential address to make a claim against them.") }}</p>
+    {{ addressFragment(form, name = 'address') }}
+
+    {{ saveAndContinueButton() }}
   </form>
 {% endmacro %}
 
 {% macro defendantAsOrganisationForm(form, csrfToken) %}
   <form method="post">
     {{ csrfProtection(csrfToken) }}
-        {{ textInput(t('Organisation name'), 'name', form) }}
-        {{ textInput(t('Contact person'), 'contactPerson', form) }}
-        <h2 class="heading-medium">{{ t('Organisation address') }}</h2>
-        <p>{{ t("Enter the organisation's main office or an organisation's address that has a connection with the claim.") }}</p>
-        {{ addressInput(form, 'address') }}
-      {{ saveAndContinueButton() }}
+
+    {{ textInput(t('Organisation name'), 'name', form) }}
+    {{ textInput(t('Contact person'), 'contactPerson', form) }}
+
+    <h2 class="heading-medium">{{ t('Organisation address') }}</h2>
+    <p>{{ t("Enter the organisation's main office or an organisation's address that has a connection with the claim.") }}</p>
+    {{ addressFragment(form, name = 'address') }}
+
+    {{ saveAndContinueButton() }}
   </form>
 {% endmacro %}
 
 {% macro defendantAsSoleTraderForm(form, csrfToken) %}
   <form method="post">
     {{ csrfProtection(csrfToken) }}
-        {{ textInput(t('Their full name'), 'name', form, autocomplete='name') }}
-        {{ textInput(t('Business name (optional)'), 'businessName', form) }}
-        <h2 class="heading-medium">{{ t('Their address') }}</h2>
-        <p>{{ t("You must enter the defendant’s residential or trade address to make a claim against them.") }}</p>
-        {{ addressInput(form, 'address') }}
-        {{ saveAndContinueButton() }}
+
+    {{ textInput(t('Their full name'), 'name', form, autocomplete='name') }}
+    {{ textInput(t('Business name (optional)'), 'businessName', form) }}
+
+    <h2 class="heading-medium">{{ t('Their address') }}</h2>
+    <p>{{ t("You must enter the defendant’s residential or trade address to make a claim against them.") }}</p>
+    {{ addressFragment(form, name = 'address') }}
+
+    {{ saveAndContinueButton() }}
   </form>
 {% endmacro %}
 
 {% macro defendantAsCompanyForm(form, csrfToken) %}
   <form method="post">
     {{ csrfProtection(csrfToken) }}
-        {{ textInput(t('Company name'), 'name', form, autocomplete='companyName') }}
-        {{ textInput(t('Contact person'), 'contactPerson', form) }}
-        <h2 class="heading-medium">{{ t('Company address') }}</h2>
-        <p>{{ t("Enter the company’s registered office or a company address that has a connection with the claim.") }}</p>
-        {{ addressInput(form, 'address') }}
 
-        {{ saveAndContinueButton() }}
+    {{ textInput(t('Company name'), 'name', form, autocomplete='companyName') }}
+    {{ textInput(t('Contact person'), 'contactPerson', form) }}
+
+    <h2 class="heading-medium">{{ t('Company address') }}</h2>
+    <p>{{ t("Enter the company’s registered office or a company address that has a connection with the claim.") }}</p>
+    {{ addressFragment(form, name = 'address') }}
+
+    {{ saveAndContinueButton() }}
   </form>
 {% endmacro %}

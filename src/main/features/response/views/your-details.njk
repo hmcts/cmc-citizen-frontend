@@ -1,5 +1,6 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import csrfProtection, textInput, addressInput, radioGroup, saveAndContinueButton, errorSummary %}
+{% from "includes/macros/form.njk" import csrfProtection, textInput, radioGroup, saveAndContinueButton, errorSummary %}
+{% from "includes/macros/address.njk" import addressFragment, correspondenceAddressFragment %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Confirm your details') %}
@@ -18,27 +19,9 @@
 
         <h2 class="heading-medium">{{ t('Your address') }}</h2>
 
-        {{ addressInput(form, 'address') }}
+        {{ addressFragment(form, name = 'address') }}
 
-        <h2 class="heading-medium">{{ t('Correspondence address') }}</h2>
-
-        {{
-          radioGroup(
-            form = form,
-            label = t('Would you like correspondence sent to a different address?'),
-            name = 'hasCorrespondenceAddress',
-            options = [
-              { label: 'No', value: false },
-              { label: 'Yes, add a correspondence address', value: true }
-            ],
-            isInline = false
-          )
-        }}
-
-        <div class="panel panel-border-narrow js-hidden" id="hasCorrespondenceAddress-true" aria-hidden="false">
-          <p>{{ t('All correspondence will be sent here, instead of to your residential address. This is sometimes known as an &lsquo;address for service&rsquo;.') | safe }}</p>
-          {{ addressInput(form, 'correspondenceAddress') }}
-        </div>
+        {{ correspondenceAddressFragment(form) }}
 
         {{ saveAndContinueButton() }}
       </form>
