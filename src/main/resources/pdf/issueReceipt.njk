@@ -116,12 +116,6 @@
   <div class="section-body">
     <table>
       <tr>
-        <td>Claimant type:</td>
-        <td>
-          {{ claimant.type }}
-        </td>
-      </tr>
-      <tr>
         <td>Name:</td>
         <td>
           {{ claimant.fullName }}
@@ -135,11 +129,12 @@
           </td>
         </tr>
       {% endif %}
+
       {% if claimant.businessName is not empty %}
         <tr>
           <td>Business name:</td>
           <td>
-            {{ claimant.businessName }}
+            Trading as {{ claimant.businessName }}
           </td>
         </tr>
       {% endif %}
@@ -190,12 +185,6 @@
   <div class="section-body">
     <table>
       <tr>
-        <td>Defendant type:</td>
-        <td>
-          {{ defendant.type }}
-        </td>
-      </tr>
-      <tr>
         <td>Name:</td>
         <td>
           {{ defendant.fullName }}
@@ -213,7 +202,7 @@
         <tr>
           <td>Business name:</td>
           <td>
-            {{ defendant.businessName }}
+            Trading as {{ defendant.businessName }}
           </td>
         </tr>
       {% endif %}

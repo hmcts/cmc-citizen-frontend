@@ -22,7 +22,6 @@
     {{ csrfProtection(csrf) }}
 
     {{ tableStart("yourDetails", "Your details") }}
-    {{ row("About you:", defendant.type) }}
     {{ row("Name:", defendant.fullName, paths.defendantYourDetailsPage.uri) }}
     {{
       rowWithMultipleValue(

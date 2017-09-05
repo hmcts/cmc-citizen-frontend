@@ -64,7 +64,7 @@
   <form method="post">
     {{ csrfProtection(csrfToken) }}
         {{ textInput(t('Full name'), 'name', form, autocomplete='name') }}
-        {{ textInput(t('Business name (optional)'), 'businessName', form) }}
+        {{ textInput(t('Business name'), 'businessName', form) }}
         <h2 class="heading-medium">{{ t('Your residential address') }}</h2>
         <p>{{ t("This must be the address where you live.") }}</p>
         {{ addressInput(form, 'address') }}
@@ -147,7 +147,7 @@
   <form method="post">
     {{ csrfProtection(csrfToken) }}
         {{ textInput(t('Their full name'), 'name', form, autocomplete='name') }}
-        {{ textInput(t('Business name (optional)'), 'businessName', form) }}
+        {{ textInput(t('Business name'), 'businessName', form) }}
         <h2 class="heading-medium">{{ t('Their address') }}</h2>
         <p>{{ t("You must enter the defendant’s residential or trade address to make a claim against them.") }}</p>
         {{ addressInput(form, 'address') }}

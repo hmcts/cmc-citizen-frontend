@@ -25,16 +25,15 @@
     {{ csrfProtection(csrf) }}
 
     {{ tableStart("yourDetails", "Your details") }}
-    {{ row("About you:", claimantPartyType) }}
     {{ row("Name:", draftClaim.claimant.partyDetails.name) }}
     {% if (partyType === 'company' or partyType === 'organisation') %}
       {% if (contactPerson) %}
         {{ row("Contact Name:", contactPerson) }}
-      {% endif %}  
+      {% endif %}
     {% endif %}
     {% if (partyType === 'soleTrader') %}
-      {{ row("Business name:", businessName ) }}
-    {% endif %}  
+      {{ row("Business name:", 'Trading as ' + businessName ) }}
+    {% endif %}
     {{
       rowWithMultipleValue(
         label = "Address:",
@@ -53,22 +52,21 @@
     }}
     {% if (partyType === 'individual' or partyType === 'soleTrader') %}
       {{ row("Date of birth:", dateOfBirth.date.asString() | date) }}
-    {% endif %}  
+    {% endif %}
     {{ row("Phone:", draftClaim.claimant.mobilePhone.number) }}
     {{ tableEnd() }}
-    
-    
+
+
 
     {{ tableStart("theirDetails", "Their details") }}
-    {{ row("About them:", defendantPartyType) }}
     {{ row('Name:', draftClaim.defendant.partyDetails.name) }}
     {% if (defendantPartyType === 'company' or defendantPartyType === 'organisation') %}
       {% if (contactPerson) %}
         {{ row("Contact Name:", defendantContactPerson) }}
-      {% endif %}  
+      {% endif %}
     {% endif %}
     {% if (defendantPartyType === 'soleTrader') %}
-      {{ row("Business name:", defendantBusinessName ) }}
+      {{ row("Business name:", 'Trading as ' + defendantBusinessName ) }}
     {% endif %}
     {{ rowWithMultipleValue("Address:", [
     draftClaim.defendant.partyDetails.address.line1,
