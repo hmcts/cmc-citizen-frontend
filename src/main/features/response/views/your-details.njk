@@ -1,15 +1,45 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import textInput, saveAndContinueButton, csrfProtection, errorSummary %}
+{% from "includes/macros/form.njk" import csrfProtection, textInput, addressInput, radioGroup, saveAndContinueButton, errorSummary %}
 
 {% set title = t('Money claim') %}
-{% set heading = t('Your details') %}
+{% set heading = t('Confirm your details') %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
-        {{ textInput(t('Your full name'), 'name', form, autocomplete='name') }}
+
+        <input type="hidden" name="type" value="{{ form.model.type }}">
+        <input type="hidden" name="contactPerson" value="{{ form.model.contactPerson }}">
+        <input type="hidden" name="businessName" value="{{ form.model.businessName }}">
+
+        {{ textInput(t('Your full name'), 'name', form, autocomplete = 'name') }}
+
+        <h2 class="heading-medium">{{ t('Your address') }}</h2>
+
+        {{ addressInput(form, 'address') }}
+
+        <h2 class="heading-medium">{{ t('Correspondence address') }}</h2>
+
+        {{
+          radioGroup(
+            form = form,
+            label = t('Would you like correspondence sent to a different address?'),
+            name = 'hasCorrespondenceAddress',
+            options = [
+              { label: 'No', value: false },
+              { label: 'Yes, add a correspondence address', value: true }
+            ],
+            isInline = false
+          )
+        }}
+
+        <div class="panel panel-border-narrow js-hidden" id="hasCorrespondenceAddress-true" aria-hidden="false">
+          <p>{{ t('All correspondence will be sent here, instead of to your residential address. This is sometimes known as an &lsquo;address for service&rsquo;.') | safe }}</p>
+          {{ addressInput(form, 'correspondenceAddress') }}
+        </div>
+
         {{ saveAndContinueButton() }}
       </form>
     </div>

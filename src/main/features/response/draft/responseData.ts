@@ -32,8 +32,8 @@ export class ResponseData extends Draft implements Serializable<ResponseData> {
     if (input) {
       this.response = input.response
       this.defence = input.defence
-      this.freeMediation = input.freeMediation.option
-      this.moreTimeNeeded = input.moreTimeNeeded.option
+      this.freeMediation = input.freeMediation
+      this.moreTimeNeeded = input.moreTimeNeeded
 
       switch (input.defendant.type) {
         case PartyType.INDIVIDUAL.value:
@@ -49,7 +49,6 @@ export class ResponseData extends Draft implements Serializable<ResponseData> {
           this.defendant = new SoleTrader().deserialize(input.defendant)
           break
       }
-      this.lastUpdateTimestamp = input.lastUpdateTimestamp
     }
     return this
   }

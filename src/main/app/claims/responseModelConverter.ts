@@ -8,50 +8,63 @@ import { Company } from 'app/claims/models/details/yours/company'
 import { Address } from 'app/claims/models/address'
 import { Organisation } from 'app/claims/models/details/yours/organisation'
 import { SoleTrader } from 'app/claims/models/details/yours/soleTrader'
+import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
+import { CompanyDetails } from 'forms/models/companyDetails'
+import { OrganisationDetails } from 'forms/models/organisationDetails'
+import { Defendant } from 'drafts/models/defendant'
 
 export class ResponseModelConverter {
 
   static convert (responseDraft: ResponseDraft): ResponseData {
-
-    const responseData = new ResponseData(responseDraft.response.type.value,
-                                          responseDraft.defence.text,
-                                          responseDraft.freeMediation == null ? undefined : responseDraft.freeMediation.option,
-                                          responseDraft.moreTimeNeeded == null ? undefined : responseDraft.moreTimeNeeded.option,
-                                          this.convertPartyDetails(responseDraft))
-    return responseData
+    return new ResponseData(
+      responseDraft.response.type.value,
+      responseDraft.defence.text,
+      responseDraft.freeMediation === undefined ? undefined : responseDraft.freeMediation.option,
+      responseDraft.moreTimeNeeded === undefined ? undefined : responseDraft.moreTimeNeeded.option,
+      this.convertPartyDetails(responseDraft.defendantDetails)
+    )
   }
 
-  private static convertPartyDetails (responseDraft: ResponseDraft): Party {
-    let partyDetails: Party = undefined
-    switch (responseDraft.defendantDetails.partyDetails.type) {
+  private static convertPartyDetails (defendant: Defendant): Party {
+    let party: Party = undefined
+    switch (defendant.partyDetails.type) {
       case PartyType.INDIVIDUAL.value:
-        partyDetails = new Individual()
-        if ((responseDraft.defendantDetails.partyDetails as IndividualDetails).dateOfBirth) {
-          (partyDetails as Individual).dateOfBirth = (responseDraft.defendantDetails.partyDetails as IndividualDetails).dateOfBirth.date.asString()
+        party = new Individual()
+        if ((defendant.partyDetails as IndividualDetails).dateOfBirth) {
+          (party as Individual).dateOfBirth = (defendant.partyDetails as IndividualDetails).dateOfBirth.date.asString()
         }
         break
       case PartyType.COMPANY.value:
-        partyDetails = new Company()
+        party = new Company()
+        if ((defendant.partyDetails as CompanyDetails).contactPerson) {
+          (party as Company).contactPerson = (defendant.partyDetails as CompanyDetails).contactPerson
+        }
         break
       case PartyType.ORGANISATION.value:
-        partyDetails = new Organisation()
+        party = new Organisation()
+        if ((defendant.partyDetails as OrganisationDetails).contactPerson) {
+          (party as Organisation).contactPerson = (defendant.partyDetails as OrganisationDetails).contactPerson
+        }
         break
       case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
-        partyDetails = new SoleTrader()
+        party = new SoleTrader()
+        if ((defendant.partyDetails as SoleTraderDetails).businessName) {
+          (party as SoleTrader).businessName = (defendant.partyDetails as SoleTraderDetails).businessName
+        }
         break
     }
-    partyDetails.address = new Address().deserialize(responseDraft.defendantDetails.partyDetails.address)
-    if (responseDraft.defendantDetails.partyDetails.hasCorrespondenceAddress) {
-      partyDetails['correspondenceAddress'] = new Address().deserialize(responseDraft.defendantDetails.partyDetails.correspondenceAddress)
+    party.address = new Address().deserialize(defendant.partyDetails.address)
+    if (defendant.partyDetails.hasCorrespondenceAddress) {
+      party.correspondenceAddress = new Address().deserialize(defendant.partyDetails.correspondenceAddress)
     }
-    partyDetails.name = responseDraft.defendantDetails.partyDetails.name
-    if (responseDraft.defendantDetails.email) {
-      partyDetails.email = responseDraft.defendantDetails.email.address
+    party.name = defendant.partyDetails.name
+    if (defendant.email) {
+      party.email = defendant.email.address
     }
-    if (responseDraft.defendantDetails.mobilePhone) {
-      partyDetails.mobilePhone = responseDraft.defendantDetails.mobilePhone.number
+    if (defendant.mobilePhone) {
+      party.mobilePhone = defendant.mobilePhone.number
     }
-    return partyDetails
+    return party
   }
 
 }

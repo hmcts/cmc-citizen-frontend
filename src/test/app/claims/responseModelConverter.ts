@@ -1,68 +1,128 @@
 import { expect } from 'chai'
 
 import { ResponseModelConverter } from 'claims/responseModelConverter'
-// import { ResponseDraft } from 'response/draft/responseDraft'
-import Email from 'forms/models/email'
-import DateOfBirth from 'forms/models/dateOfBirth'
-// import { Response as DefendantResponse } from 'response/form/models/response'
-// import { ResponseType } from 'response/form/models/responseType'
-// import Defence from 'response/form/models/defence'
-// import { FreeMediation, FreeMediationOption } from 'response/form/models/freeMediation'
-import { PartyDetails } from 'forms/models/partyDetails'
-import { PartyTypeResponse } from 'forms/models/partyTypeResponse'
+import { ResponseDraft } from 'response/draft/responseDraft'
 import { PartyType } from 'forms/models/partyType'
-import { Address } from 'forms/models/address'
-import Payment from 'app/pay/payment'
+import { ResponseData } from 'response/draft/responseData'
 
-const testAddress = {
-  line1: 'line1',
-  postcode: 'postcode'
-} as Address
-
-describe.skip('ResponseModelConverter', () => {
-  let responseDraft
+describe('ResponseModelConverter', () => {
+  let responseDraft: any
+  let responseData: any
 
   beforeEach(() => {
     responseDraft = {
       defendantDetails: {
-        payment: new Payment(),
-        email: new Email('whatever'),
-        dateOfBirth: new DateOfBirth(),
-        partyTypeResponse: new PartyTypeResponse(PartyType.INDIVIDUAL),
         partyDetails: {
-          name: 'John Doe',
-          address: testAddress,
+          name: 'John Smith',
+          address: {
+            line1: 'Flat 1',
+            line2: 'Street 1',
+            city: 'London',
+            postcode: 'E10AA'
+          },
           hasCorrespondenceAddress: true,
-          correspondenceAddress: testAddress
-        } as PartyDetails
+          correspondenceAddress: {
+            line1: 'Flat 2',
+            line2: 'Street 2',
+            city: 'Belfast',
+            postcode: 'B10A'
+          }
+        },
+        mobilePhone: {
+          number: '0700000000'
+        },
+        email: {
+          address: 'user@example.com'
+        }
+      },
+      moreTimeNeeded: {
+        option: 'no'
+      },
+      response: {
+        type: {
+          value: 'OWE_NONE'
+        }
+      },
+      defence: {
+        text: 'My defence'
+      },
+      freeMediation: {
+        option: 'no'
       }
-      // response: new DefendantResponse(ResponseType.OWE_NONE),
-      // defence: new Defence('my defence'),
-      // freeMediation: new FreeMediation(FreeMediationOption.NO),
-      // requireDefence: () => true
-    } // as ResponseDraft
+    }
+    responseData = {
+      defendant: {
+        name: 'John Smith',
+        address: {
+          line1: 'Flat 1',
+          line2: 'Street 1',
+          city: 'London',
+          postcode: 'E10AA'
+        },
+        correspondenceAddress: {
+          line1: 'Flat 2',
+          line2: 'Street 2',
+          city: 'Belfast',
+          postcode: 'B10A'
+        },
+        mobilePhone: '0700000000',
+        email: 'user@example.com'
+      },
+      moreTimeNeeded: 'no',
+      response: 'OWE_NONE',
+      defence: 'My defence',
+      freeMediation: 'no'
+    }
   })
 
-  context('when converting party details', () => {
-    it('should delete the partyDetails property', () => {
-      let converted = ResponseModelConverter.convert(responseDraft)
-      expect(converted.defendant.hasOwnProperty('partyDetails')).to.equal(false)
-    })
+  it('should convert response submitted by individual', () => {
+    responseDraft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
+    responseDraft.defendantDetails.partyDetails.dateOfBirth = {
+      date: {
+        year: '1999',
+        month: '1',
+        day: '1'
+      }
+    }
 
-    it('should flatten the address on the converted object', () => {
-      let converted = ResponseModelConverter.convert(responseDraft)
-      expect(converted.defendant.address).to.deep.equal(testAddress)
-    })
+    responseData.defendant.type = PartyType.INDIVIDUAL.value
+    responseData.defendant.dateOfBirth = '1999-01-01'
 
-    it('should flatten the correspondence address on the converted object if one is provided', () => {
-      let converted = ResponseModelConverter.convert(responseDraft)
-      expect(converted.defendant.correspondenceAddress).to.deep.equal(testAddress)
-    })
-
-    it('should not set correspondence address the converted object if one is not provided', () => {
-      responseDraft.defendantDetails.partyDetails.hasCorrespondenceAddress = false
-      let converted = ResponseModelConverter.convert(responseDraft)
-      expect(converted.defendant.hasOwnProperty('correspondenceAddress')).to.equal(false)
-    })
+    const result = ResponseModelConverter.convert(new ResponseDraft().deserialize(responseDraft))
+    expect(result).to.deep.equal(new ResponseData().deserialize(responseData))
   })
+
+  it('should convert response submitted by sole trader', () => {
+    responseDraft.defendantDetails.partyDetails.type = PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value
+    responseDraft.defendantDetails.partyDetails.businessName = 'Example Inc.'
+
+    responseData.defendant.type = PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value
+    responseData.defendant.businessName = 'Example Inc.'
+
+    const result = ResponseModelConverter.convert(new ResponseDraft().deserialize(responseDraft))
+    expect(result).to.deep.equal(new ResponseData().deserialize(responseData))
+  })
+
+  it('should convert response submitted by company', () => {
+    responseDraft.defendantDetails.partyDetails.type = PartyType.COMPANY.value
+    responseDraft.defendantDetails.partyDetails.contactPerson = 'John Smith'
+
+    responseData.defendant.type = PartyType.COMPANY.value
+    responseData.defendant.contactPerson = 'John Smith'
+
+    const result = ResponseModelConverter.convert(new ResponseDraft().deserialize(responseDraft))
+    expect(result).to.deep.equal(new ResponseData().deserialize(responseData))
+  })
+
+  it('should convert response submitted by organisation', () => {
+    responseDraft.defendantDetails.partyDetails.type = PartyType.ORGANISATION.value
+    responseDraft.defendantDetails.partyDetails.contactPerson = 'John Smith'
+
+    responseData.defendant.type = PartyType.ORGANISATION.value
+    responseData.defendant.contactPerson = 'John Smith'
+
+    const result = ResponseModelConverter.convert(new ResponseDraft().deserialize(responseDraft))
+    expect(result).to.deep.equal(new ResponseData().deserialize(responseData))
+  })
+
 })

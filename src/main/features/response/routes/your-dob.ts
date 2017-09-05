@@ -27,7 +27,7 @@ export default express.Router()
         renderView(new Form((res.locals.user.responseDraft.defendantDetails.partyDetails as SoleTraderDetails).dateOfBirth), res)
         break
       default:
-        renderView(Form.empty<DateOfBirth>(), res)
+        res.redirect(Paths.defendantMobilePage.uri)
         break
     }
   })

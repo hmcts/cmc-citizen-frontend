@@ -13,6 +13,7 @@ export class ValidationErrors {
 }
 
 export class PartyDetails implements Serializable<PartyDetails>, CompletableTask {
+  type?: string
 
   @IsDefined({ message: ValidationErrors.NAME_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.NAME_REQUIRED })
@@ -22,7 +23,6 @@ export class PartyDetails implements Serializable<PartyDetails>, CompletableTask
   @IsDefined({ message: ValidationErrors.ADDRESS_REQUIRED })
   @ValidateNested()
   address?: Address = new Address()
-  type?: string
 
   hasCorrespondenceAddress?: boolean
 

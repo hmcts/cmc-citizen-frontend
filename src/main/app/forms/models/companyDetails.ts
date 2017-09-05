@@ -14,6 +14,7 @@ export class CompanyDetails extends PartyDetails {
   @IsNotBlank({ message: ValidationErrors.CONTACT_PERSON_REQUIRED })
   @MaxLength(35, { message: ValidationErrors.CONTACT_PERSON_NAME_TOO_LONG })
   contactPerson?: string
+
   constructor () {
     super()
     this.type = PartyType.COMPANY.value

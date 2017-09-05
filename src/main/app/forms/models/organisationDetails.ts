@@ -19,6 +19,7 @@ export class OrganisationDetails extends PartyDetails {
     super()
     this.type = PartyType.ORGANISATION.value
   }
+
   static fromObject (input?: any): OrganisationDetails {
     if (input == null) {
       return input
@@ -29,6 +30,7 @@ export class OrganisationDetails extends PartyDetails {
     deserialized.type = PartyType.ORGANISATION.value
     return deserialized
   }
+
   deserialize (input?: any): OrganisationDetails {
     if (input) {
       Object.assign(this, new PartyDetails().deserialize(input))

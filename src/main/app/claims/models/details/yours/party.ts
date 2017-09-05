@@ -27,6 +27,7 @@ export class Party implements Serializable<Party> {
     if (input) {
       this.name = input.name
       this.type = input.type
+      this.email = input.email
       this.mobilePhone = input.mobilePhone
       if (input.address) {
         this.address = new Address().deserialize(input.address)
