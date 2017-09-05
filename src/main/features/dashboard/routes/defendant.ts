@@ -13,7 +13,7 @@ export default express.Router()
 
     res.render(Paths.defendantPage.associatedView, {
       claim: claim,
-      claimReceiptUri: Paths.claimReceiptReceiver.uri.replace(':externalId', externalId),
-      responseReceiptUri: Paths.responseReceiptReceiver.uri.replace(':externalId', externalId)
+      claimReceiptUri: Paths.claimReceiptReceiver.evaluateUri({ externalId: externalId }),
+      responseReceiptUri: Paths.responseReceiptReceiver.evaluateUri({ externalId: externalId })
     })
   }))

@@ -1,3 +1,5 @@
+const pathParameterRegex = /\/:[^\/]+/g
+
 export class RoutablePath {
   _uri: string
 
@@ -16,12 +18,12 @@ export class RoutablePath {
   get associatedView (): string {
     if (!this.feature) {
       return this._uri
-        .replace(/\/:[^\/]+/g, '') // remove path params
+        .replace(pathParameterRegex, '') // remove path params
         .substring(1) // remove leading slash
     }
 
     const split: string[] = this._uri
-      .replace(/\/:[^\/]+/g, '') // remove path params
+      .replace(pathParameterRegex, '') // remove path params
       .substring(1) // remove leading slash
       .split('/')
 
@@ -29,5 +31,29 @@ export class RoutablePath {
     const featureName: string = isCaseUri ? split[1] : split[0]
     const viewPath: string = split.slice(isCaseUri ? 2 : 1).join('/')
     return `${featureName}/views/${viewPath}`
+  }
+
+  evaluateUri (substitutions: { [key: string]: string }): string {
+    if (substitutions === undefined || Object.keys(substitutions).length === 0) {
+      throw new Error('Path parameter substitutions are required')
+    }
+
+    const path = Object.entries(substitutions).reduce((uri: string, substitution: [string, string]) => {
+      const [parameterName, parameterValue] = substitution
+
+      const updatedUri: string = uri.replace(`:${parameterName}`, parameterValue)
+      if (updatedUri === uri) {
+        throw new Error(`Path parameter :${parameterName} is not defined`)
+      }
+      return updatedUri
+    }, this.uri)
+
+    const missingParameters = path.match(pathParameterRegex)
+    if (missingParameters) {
+      const removeLeadingSlash = value => value.substring(1)
+      throw new Error(`Path parameter substitutions for ${missingParameters.map(removeLeadingSlash).join(', ')} are missing`)
+    }
+
+    return path
   }
 }

@@ -9,15 +9,19 @@
 
       @top-right {
         content: "Page " counter(page) " of " counter(pages);
+        /*noinspection CssNoGenericFontName*/
+        font-family: "Open Sans";
       }
       @bottom-left {
         content: "OCON11";
+        /*noinspection CssNoGenericFontName*/
+        font-family: "Open Sans";
       }
     }
 
     html {
       /*noinspection CssNoGenericFontName*/
-      font-family: Arial Unicode MS; /* Name needs to be unquoted, a limitation of OpenPDF which we use in the backend */
+      font-family: "Open Sans";
     }
 
     body {
@@ -145,7 +149,7 @@
         <td>
           {{ claimant.address.lineOne }}
           <br/>
-          {% if claimant.address.lineTwo is defined %}
+          {% if claimant.address.lineTwo is not empty %}
             {{ claimant.address.lineTwo }}
             <br/>
           {% endif %}
@@ -203,7 +207,7 @@
         <td>
           {{ defendant.address.lineOne }}
           <br/>
-          {% if defendant.address.lineTwo is defined %}
+          {% if defendant.address.lineTwo is not empty %}
             {{ defendant.address.lineTwo }}
             <br/>
           {% endif %}
@@ -218,7 +222,7 @@
         <td>
           {{ defendant.correspondenceAddress.lineOne }}
           <br/>
-          {% if defendant.correspondenceAddress.lineTwo is defined %}
+          {% if defendant.correspondenceAddress.lineTwo is not empty %}
             {{ defendant.correspondenceAddress.lineTwo }}
             <br/>
           {% endif %}

@@ -2,7 +2,6 @@ import * as config from 'config'
 import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
 import { InterestType } from 'app/forms/models/interest'
-import { Address } from 'claims/models/address'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
@@ -15,21 +14,6 @@ export const sampleClaimObj = {
   createdAt: '2017-07-25T22:45:51.785',
   issuedOn: '2017-07-25',
   claim: {
-    payment: {
-      id: '12',
-      amount: 2500,
-      state: { status: 'failed' }
-    },
-    amount: {
-      rows: [{ reason: 'Reason', amount: 200 }]
-    },
-    interestDate: {
-      date: {
-        year: 2000,
-        month: 2,
-        day: 1
-      }
-    },
     claimant: {
       type: 'individual',
       name: 'John Smith',
@@ -38,7 +22,7 @@ export const sampleClaimObj = {
         line2: 'line2',
         city: 'city',
         postcode: 'bb127nq'
-      } as Address,
+      },
       dateOfBirth: '1990-02-17'
     },
     defendants: [
@@ -53,6 +37,22 @@ export const sampleClaimObj = {
         }
       }
     ],
+    payment: {
+      id: '12',
+      amount: 2500,
+      state: { status: 'failed' }
+    },
+    amount: {
+      type: 'breakdown',
+      rows: [{ reason: 'Reason', amount: 200 }]
+    },
+    interestDate: {
+      date: {
+        year: 2000,
+        month: 2,
+        day: 1
+      }
+    },
     interest: {
       type: InterestType.NO_INTEREST
     },

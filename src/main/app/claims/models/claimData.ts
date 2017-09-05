@@ -28,16 +28,27 @@ export default class ClaimData implements Serializable<ClaimData> {
   payment: Payment = new Payment()
 
   get defendant (): TheirDetails {
-    return this.defendants[0]
+    if (this.defendants.length === 1) {
+      return this.defendants[0]
+    } else {
+      throw new Error('This claim has multiple defendants')
+    }
   }
 
   deserialize (input: any): ClaimData {
     if (input) {
       this.claimant = this.deserializeClaimant(input.claimant)
+      this.defendants = this.deserializeDefendants(input.defendants)
       if (input.payment) {
         this.payment = new Payment().deserialize(input.payment)
       }
-      this.defendants = this.deserializeDefendants(input.defendants)
+
+      this.payment = new Payment().deserialize(input.payment)
+      this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
+      this.interest = new Interest().deserialize(input.interest)
+      this.interestDate = new InterestDate().deserialize(input.interestDate)
+
+      this.reason = input.reason
       this.paidFeeAmount = this.payment.amount / 100
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
       this.reason = input.reason
@@ -52,7 +63,7 @@ export default class ClaimData implements Serializable<ClaimData> {
     return this
   }
 
-  deserializeClaimant (claimant: any): Party {
+  private deserializeClaimant (claimant: any): Party {
     if (claimant) {
       switch (claimant.type) {
         case PartyType.INDIVIDUAL.value:

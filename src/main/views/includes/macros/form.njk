@@ -111,7 +111,7 @@
           {{ t(label) }}
         {% endif %}
         <br>
-        {{ t(hint) }}
+        <span class="form-hint">{{ t(hint) }}</span>
       {% endif %}
     </label>
   </div>
@@ -144,7 +144,6 @@
   </div>
 {% endmacro %}
 
-
 {% macro radioGroup(label, name, options, form, isInline = false) %}
   {% set error = form.errorFor(name) %}
   {% set selection = form.valueFor(name) %}
@@ -163,7 +162,7 @@
             form = form,
             value = option.value,
             hint = option.hint,
-            checked = (selection === option.value),
+            checked = option.checked or (selection === option.value),
             bold = option.bold
           )
         }}

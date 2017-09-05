@@ -33,6 +33,7 @@ describe('SoleTraderDetails', () => {
       },
       name: 'claimantName',
       dateOfBirth: {
+        known: 'true',
         date: {
           year: 2017,
           month: 12,
@@ -240,7 +241,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.address = validAddress
       soleTraderDetails.hasCorrespondenceAddress = false
       soleTraderDetails.name = 'claimantName'
-      soleTraderDetails.dateOfBirth = new DateOfBirth(new LocalDate(2007, 1, 1))
+      soleTraderDetails.dateOfBirth = new DateOfBirth(true, new LocalDate(2007, 1, 1))
       expect(soleTraderDetails.isCompleted()).to.equal(true)
     })
 
@@ -254,7 +255,7 @@ describe('SoleTraderDetails', () => {
     it('should return false when has name is undefined', () => {
       soleTraderDetails.address = validAddress
       soleTraderDetails.name = undefined
-      soleTraderDetails.dateOfBirth = new DateOfBirth(new LocalDate(2007, 1, 1))
+      soleTraderDetails.dateOfBirth = new DateOfBirth(true, new LocalDate(2007, 1, 1))
       soleTraderDetails.hasCorrespondenceAddress = true
       soleTraderDetails.correspondenceAddress = validAddress
       expect(soleTraderDetails.isCompleted()).to.equal(false)
@@ -279,7 +280,7 @@ describe('SoleTraderDetails', () => {
     it('should return true when all the required fields are completed', () => {
       soleTraderDetails.address = validAddress
       soleTraderDetails.name = 'claimantName'
-      soleTraderDetails.dateOfBirth = new DateOfBirth(new LocalDate(2007, 1, 1))
+      soleTraderDetails.dateOfBirth = new DateOfBirth(true, new LocalDate(2007, 1, 1))
       soleTraderDetails.hasCorrespondenceAddress = true
       soleTraderDetails.correspondenceAddress = validAddress
       expect(soleTraderDetails.isCompleted()).to.equal(true)

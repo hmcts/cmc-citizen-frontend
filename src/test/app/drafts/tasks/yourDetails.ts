@@ -16,6 +16,7 @@ describe('Your details', () => {
             address: {line1: 'Here',line2: 'There',city: 'London',postcode: 'BB12 7NQ'},
             name: 'John Doe',
             dateOfBirth: {
+              known: 'true',
               date: {
                 day: 10,
                 month: 11,

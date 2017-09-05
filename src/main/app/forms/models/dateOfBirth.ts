@@ -1,4 +1,5 @@
-import { ValidateNested } from 'class-validator'
+import { ValidateNested, IsDefined, ValidateIf } from 'class-validator'
+
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { MaximumAgeValidator } from 'forms/validation/validators/maximumAgeValidator'
 import { MinimumAgeValidator } from 'forms/validation/validators/minimumAgeValidator'
@@ -7,6 +8,7 @@ import { Serializable } from 'models/serializable'
 import { LocalDate } from 'forms/models/localDate'
 import { CompletableTask } from 'app/models/task'
 import { isValidYearFormat } from 'app/forms/validation/validators/isValidYearFormat'
+import * as toBoolean from 'to-boolean'
 
 export class ValidationErrors {
   static readonly DATE_NOT_VALID: string = 'Please enter a valid date'
@@ -15,7 +17,10 @@ export class ValidationErrors {
 }
 
 export default class DateOfBirth implements Serializable<DateOfBirth>, CompletableTask {
+  @IsDefined ({ message: 'Select an option' })
+  known: boolean
 
+  @ValidateIf(o => o.known === true)
   @ValidateNested()
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID })
   @isValidYearFormat(4, { message: ValidationErrors.DATE_INVALID_YEAR })
@@ -23,7 +28,8 @@ export default class DateOfBirth implements Serializable<DateOfBirth>, Completab
   @MaximumAgeValidator(150, { message: ValidationErrors.DATE_NOT_VALID })
   date: LocalDate
 
-  constructor (date: LocalDate = new LocalDate()) {
+  constructor (known?: boolean, date?: LocalDate) {
+    this.known = known
     this.date = date
   }
 
@@ -31,11 +37,19 @@ export default class DateOfBirth implements Serializable<DateOfBirth>, Completab
     if (!value) {
       return value
     }
-    return new DateOfBirth(LocalDate.fromObject(value.date))
+
+    const dateOfBirth = new DateOfBirth(value.known !== undefined ? toBoolean(value.known) === true : undefined, LocalDate.fromObject(value.date))
+
+    if (!dateOfBirth.known) {
+      dateOfBirth.date = undefined
+    }
+
+    return dateOfBirth
   }
 
   deserialize (input?: any): DateOfBirth {
     if (input) {
+      this.known = input.known
       this.date = new LocalDate().deserialize(input.date)
     }
     return this

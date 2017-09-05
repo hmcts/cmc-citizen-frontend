@@ -4,6 +4,10 @@ import { ResponseModelConverter } from 'claims/responseModelConverter'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { PartyType } from 'forms/models/partyType'
 import { ResponseData } from 'response/draft/responseData'
+import { MobilePhone } from 'forms/models/mobilePhone'
+import DateOfBirth from 'forms/models/dateOfBirth'
+import { Name } from 'forms/models/name'
+import { LocalDate } from 'app/forms/models/localDate'
 
 describe('ResponseModelConverter', () => {
   let responseDraft: any
@@ -12,6 +16,11 @@ describe('ResponseModelConverter', () => {
   beforeEach(() => {
     responseDraft = {
       defendantDetails: {
+        name: {
+          name: 'John Doe'
+        } as Name,
+        mobilePhone: new MobilePhone('0700000000'),
+        dateOfBirth: new DateOfBirth(true, new LocalDate()),
         partyDetails: {
           name: 'John Smith',
           address: {
@@ -27,9 +36,6 @@ describe('ResponseModelConverter', () => {
             city: 'Belfast',
             postcode: 'B10A'
           }
-        },
-        mobilePhone: {
-          number: '0700000000'
         },
         email: {
           address: 'user@example.com'
@@ -78,6 +84,7 @@ describe('ResponseModelConverter', () => {
   it('should convert response submitted by individual', () => {
     responseDraft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
     responseDraft.defendantDetails.partyDetails.dateOfBirth = {
+      known: 'true',
       date: {
         year: '1999',
         month: '1',

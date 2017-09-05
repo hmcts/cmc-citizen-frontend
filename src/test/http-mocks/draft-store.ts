@@ -40,6 +40,7 @@ export const sampleClaimDraftObj = {
       } as Address,
       hasCorrespondenceAddress: false,
       dateOfBirth: {
+        known: true,
         date: {
           day: 31,
           month: 12,
@@ -116,6 +117,7 @@ const sampleResponseDraftObj = {
       address: { line1: 'Apartment 99', line2: '', city: 'London', postcode: 'SE28 0JE' } as Address,
       hasCorrespondenceAddress: false,
       dateOfBirth: {
+        known: true,
         date: {
           day: 31,
           month: 12,

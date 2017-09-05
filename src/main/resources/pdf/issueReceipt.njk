@@ -6,18 +6,21 @@
     @page {
       size: 8.5in 11in;
       margin: 10%;
-
       @top-center {
         content: "For reference only";
+        /*noinspection CssNoGenericFontName*/
+        font-family: "Open Sans";
       }
       @top-right {
         content: "Page " counter(page) " of " counter(pages);
+        /*noinspection CssNoGenericFontName*/
+        font-family: "Open Sans";
       }
     }
 
     html {
       /*noinspection CssNoGenericFontName*/
-      font-family: Arial Unicode MS; /* Name needs to be unquoted, a limitation of OpenPDF which we use in the backend */
+      font-family: "Open Sans";
     }
 
     body {
@@ -145,7 +148,7 @@
         <td>
           {{ claimant.address.lineOne }}
           <br/>
-          {% if claimant.address.lineTwo is defined %}
+          {% if claimant.address.lineTwo is not empty %}
             {{ claimant.address.lineTwo }}
             <br/>
           {% endif %}
@@ -155,20 +158,20 @@
         </td>
       </tr>
       {% if claimant.correspondenceAddress is not empty %}
-      <tr>
-        <td>Correspondence address:</td>
-        <td>
-          {{ claimant.correspondenceAddress.lineOne }}
-          <br/>
-          {% if claimant.correspondenceAddress.lineTwo is defined %}
-            {{ claimant.correspondenceAddress.lineTwo }}
+        <tr>
+          <td>Correspondence address:</td>
+          <td>
+            {{ claimant.correspondenceAddress.lineOne }}
             <br/>
-          {% endif %}
-          {{ claimant.correspondenceAddress.townOrCity }}
-          <br/>
-          {{ claimant.correspondenceAddress.postcode }}
-        </td>
-      </tr>
+            {% if claimant.correspondenceAddress.lineTwo is not empty %}
+              {{ claimant.correspondenceAddress.lineTwo }}
+              <br/>
+            {% endif %}
+            {{ claimant.correspondenceAddress.townOrCity }}
+            <br/>
+            {{ claimant.correspondenceAddress.postcode }}
+          </td>
+        </tr>
       {% endif %}
       <tr>
         <td>Email:</td>
@@ -219,7 +222,7 @@
         <td>
           {{ defendant.address.lineOne }}
           <br/>
-          {% if defendant.address.lineTwo is defined %}
+          {% if defendant.address.lineTwo is not empty %}
             {{ defendant.address.lineTwo }}
             <br/>
           {% endif %}

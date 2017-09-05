@@ -33,6 +33,7 @@ describe('IndividualDetails', () => {
       },
       name: 'claimantName',
       dateOfBirth: {
+        known: 'true',
         date: {
           year: 2017,
           month: 12,
@@ -220,7 +221,7 @@ describe('IndividualDetails', () => {
       individualDetails.address = validAddress
       individualDetails.hasCorrespondenceAddress = false
       individualDetails.name = 'claimantName'
-      individualDetails.dateOfBirth = new DateOfBirth(new LocalDate(2007, 1, 1))
+      individualDetails.dateOfBirth = new DateOfBirth(true, new LocalDate(2007, 1, 1))
       expect(individualDetails.isCompleted()).to.equal(true)
     })
 
@@ -234,7 +235,7 @@ describe('IndividualDetails', () => {
     it('should return false when has name is undefined', () => {
       individualDetails.address = validAddress
       individualDetails.name = undefined
-      individualDetails.dateOfBirth = new DateOfBirth(new LocalDate(2007, 1, 1))
+      individualDetails.dateOfBirth = new DateOfBirth(true, new LocalDate(2007, 1, 1))
       individualDetails.hasCorrespondenceAddress = true
       individualDetails.correspondenceAddress = validAddress
       expect(individualDetails.isCompleted()).to.equal(false)
@@ -259,7 +260,7 @@ describe('IndividualDetails', () => {
     it('should return true when all the required fields are completed', () => {
       individualDetails.address = validAddress
       individualDetails.name = 'claimantName'
-      individualDetails.dateOfBirth = new DateOfBirth(new LocalDate(2007, 1, 1))
+      individualDetails.dateOfBirth = new DateOfBirth(true, new LocalDate(2007, 1, 1))
       individualDetails.hasCorrespondenceAddress = true
       individualDetails.correspondenceAddress = validAddress
       expect(individualDetails.isCompleted()).to.equal(true)
