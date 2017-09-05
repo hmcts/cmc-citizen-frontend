@@ -13,36 +13,6 @@ export default class Claimant implements CompletableTask {
   mobilePhone?: MobilePhone
   payment: Payment = new Payment()
 
-  static fromObject (input?: any): Claimant {
-    if (input == null) {
-      return input
-    }
-    const deserialized = new Claimant()
-    deserialized.mobilePhone = MobilePhone.fromObject(input.mobilePhone)
-    if (input.payment) {
-      deserialized.payment = Payment.fromObject(input.payment)
-    }
-    if (input.partyDetails && input.partyDetails.type) {
-      switch (input.partyDetails.type) {
-        case PartyType.INDIVIDUAL.value:
-          deserialized.partyDetails = IndividualDetails.fromObject(input.partyDetails)
-          break
-        case PartyType.COMPANY.value:
-          deserialized.partyDetails = CompanyDetails.fromObject(input.partyDetails)
-          break
-        case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
-          deserialized.partyDetails = SoleTraderDetails.fromObject(input.partyDetails)
-          break
-        case PartyType.ORGANISATION.value:
-          deserialized.partyDetails = OrganisationDetails.fromObject(input.partyDetails)
-          break
-        default:
-          throw new Error()
-      }
-    }
-    return deserialized
-  }
-
   deserialize (input?: any): Claimant {
     if (input) {
       this.payment = new Payment().deserialize(input.payment)

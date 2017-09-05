@@ -13,37 +13,6 @@ export class Defendant implements CompletableTask {
   email?: Email
   mobilePhone?: MobilePhone
 
-  static fromObject (input?: any): Defendant {
-    if (input == null) {
-      return input
-    }
-    const deserialized = new Defendant()
-    if (input.email) {
-      deserialized.email = new Email().deserialize(input.email)
-    }
-    if (input.mobilePhone) {
-      deserialized.mobilePhone = MobilePhone.fromObject(input.mobilePhone)
-    }
-
-    if (input.partyDetails && input.partyDetails.type) {
-      switch (input.partyDetails.type) {
-        case PartyType.INDIVIDUAL.value:
-          deserialized.partyDetails = IndividualDetails.fromObject(input.partyDetails)
-          break
-        case PartyType.COMPANY.value:
-          deserialized.partyDetails = CompanyDetails.fromObject(input.partyDetails)
-          break
-        case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
-          deserialized.partyDetails = SoleTraderDetails.fromObject(input.partyDetails)
-          break
-        case PartyType.ORGANISATION.value:
-          deserialized.partyDetails = OrganisationDetails.fromObject(input.partyDetails)
-          break
-      }
-    }
-    return deserialized
-  }
-
   deserialize (input: any): Defendant {
     if (input) {
       if (input.email) {
