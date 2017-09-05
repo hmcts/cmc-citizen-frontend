@@ -12,35 +12,13 @@ import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ResponseType } from 'response/form/models/responseType'
 import AllResponseTasksCompletedGuard from 'response/guards/allResponseTasksCompletedGuard'
 import { ErrorHandling } from 'common/errorHandling'
-import { PartyDetails } from 'forms/models/partyDetails'
-import { PartyType } from 'forms/models/partyType'
-import { IndividualDetails } from 'forms/models/individualDetails'
-import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
-import DateOfBirth from 'forms/models/dateOfBirth'
-
-function getDateOfBirth (partyDetails: PartyDetails): DateOfBirth {
-  if (partyDetails.type === PartyType.INDIVIDUAL.value) {
-    return (partyDetails as IndividualDetails).dateOfBirth
-  } else if (partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
-    return (partyDetails as SoleTraderDetails).dateOfBirth
-  } else {
-    return undefined
-  }
-}
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
   const user: User = res.locals.user
   res.render(Paths.checkAndSendPage.associatedView, {
-    form: form,
-    defendant: {
-      type: user.responseDraft.defendantDetails.partyDetails.type,
-      fullName: user.responseDraft.defendantDetails.partyDetails.name,
-      partyDetails: user.responseDraft.defendantDetails.partyDetails,
-      dateOfBirth: getDateOfBirth(user.responseDraft.defendantDetails.partyDetails),
-      mobilePhone: user.responseDraft.defendantDetails.mobilePhone
-    },
     paths: Paths,
-    response: user.responseDraft,
+    form: form,
+    draft: user.responseDraft,
     isStatementOfTruthRequired: isStatementOfTruthRequired(user)
   })
 }
@@ -50,7 +28,7 @@ function defendantIsCounterClaiming (user: User): boolean {
     user.responseDraft.counterClaim.counterClaim
 }
 
-function isStatementOfTruthRequired (user: User) {
+function isStatementOfTruthRequired (user: User): boolean {
   const responseType: ResponseType = user.responseDraft.response.type
   return (responseType === ResponseType.OWE_NONE && !defendantIsCounterClaiming(user))
     || responseType === ResponseType.OWE_ALL_PAID_ALL
