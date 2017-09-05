@@ -1,12 +1,12 @@
 import { expect } from 'chai'
 import * as moment from 'moment'
 
-import { DateInFutureConstraint } from 'forms/validation/validators/isInFuture'
+import { DateTodayOrInFutureConstraint } from 'forms/validation/validators/isTodayOrInFuture'
 
 import { LocalDate } from 'app/forms/models/localDate'
 
-describe('DateIsInFutureConstraint', () => {
-  const constraint: DateInFutureConstraint = new DateInFutureConstraint()
+describe('DateTodayOrInFutureConstraint', () => {
+  const constraint: DateTodayOrInFutureConstraint = new DateTodayOrInFutureConstraint()
 
   describe('validate', () => {
 

@@ -10,7 +10,7 @@ import { MomentFactory } from 'common/momentFactory'
 import { LocalDate } from 'forms/models/localDate'
 
 @ValidatorConstraint()
-export class DateInFutureConstraint implements ValidatorConstraintInterface {
+export class DateTodayOrInFutureConstraint implements ValidatorConstraintInterface {
   validate (value: any, args?: ValidationArguments) {
     if (value == null) {
       return true
@@ -22,19 +22,20 @@ export class DateInFutureConstraint implements ValidatorConstraintInterface {
 
     const date = value.toMoment()
     const now = MomentFactory.currentDate()
-
-    return date.isAfter(now)
+    if (date.isAfter(now) || date.isSame(now)) {
+      return true
+    }
   }
 }
 
-export function IsInFuture (validationOptions?: ValidationOptions) {
+export function IsTodayOrInFuture (validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
       constraints: [],
-      validator: DateInFutureConstraint
+      validator: DateTodayOrInFutureConstraint
     })
   }
 }

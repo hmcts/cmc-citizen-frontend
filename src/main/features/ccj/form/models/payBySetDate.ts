@@ -1,7 +1,7 @@
 import { IsDefined, ValidateNested } from 'class-validator'
 
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
-import { IsInFuture } from 'forms/validation/validators/IsInFuture'
+import { IsTodayOrInFuture } from 'forms/validation/validators/IsTodayOrInFuture'
 
 import { Serializable } from 'models/serializable'
 import { LocalDate } from 'forms/models/localDate'
@@ -10,8 +10,9 @@ import { isValidYearFormat } from 'app/forms/validation/validators/isValidYearFo
 export class ValidationErrors {
   static readonly DATE_REQUIRED: string = 'Enter a date'
   static readonly DATE_NOT_VALID: string = 'Enter a valid date'
-  static readonly DATE_IN_FUTURE: string = 'Enter a date that is today or in the future'
+  static readonly DATE_TODAY_OR_IN_FUTURE: string = 'Enter a date that is today or in the future'
   static readonly DATE_INVALID_YEAR: string = 'Enter a 4 digit year'
+
 }
 
 export class PayBySetDate implements Serializable <PayBySetDate> {
@@ -20,7 +21,8 @@ export class PayBySetDate implements Serializable <PayBySetDate> {
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
   @isValidYearFormat(4, { message: ValidationErrors.DATE_INVALID_YEAR })
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID })
-  @IsInFuture({ message: ValidationErrors.DATE_IN_FUTURE })
+  @IsTodayOrInFuture({ message: ValidationErrors.DATE_TODAY_OR_IN_FUTURE })
+
   date?: LocalDate
   constructor (date?: LocalDate) {
     this.date = date
