@@ -203,6 +203,16 @@ describe('CompanyDetails', () => {
 
     beforeEach(() => {
       companyDetails = new CompanyDetails()
+      companyDetails.name = 'John Smith'
+      companyDetails.address = validAddress
+      companyDetails.hasCorrespondenceAddress = true
+      companyDetails.correspondenceAddress = validAddress
+      companyDetails.contactPerson = 'Me'
+    })
+
+    it('should return false when has name is undefined', () => {
+      companyDetails.name = undefined
+      expect(companyDetails.isCompleted()).to.equal(false)
     })
 
     it('should return false when address is undefined', () => {
@@ -215,40 +225,30 @@ describe('CompanyDetails', () => {
       expect(companyDetails.isCompleted()).to.equal(false)
     })
 
-    it('should return true when address is completed and does not have correspondence address', () => {
-      companyDetails.address = validAddress
-      companyDetails.hasCorrespondenceAddress = false
-      companyDetails.name = 'claimantName'
-      expect(companyDetails.isCompleted()).to.equal(true)
-    })
-
     it('should return false when has correspondence address and correspondence address is undefined', () => {
-      companyDetails.address = validAddress
       companyDetails.hasCorrespondenceAddress = true
       companyDetails.correspondenceAddress = undefined
       expect(companyDetails.isCompleted()).to.equal(false)
     })
 
-    it('should return false when has name is undefined', () => {
-      companyDetails.address = validAddress
-      companyDetails.name = undefined
-      companyDetails.hasCorrespondenceAddress = true
-      companyDetails.correspondenceAddress = validAddress
-      expect(companyDetails.isCompleted()).to.equal(false)
-    })
-
     it('should return false when has correspondence address and correspondence address is not completed', () => {
-      companyDetails.address = validAddress
       companyDetails.hasCorrespondenceAddress = true
       companyDetails.correspondenceAddress = new Address()
       expect(companyDetails.isCompleted()).to.equal(false)
     })
 
+    it('should return false when contact person is undefined', () => {
+      companyDetails.contactPerson = undefined
+      expect(companyDetails.isCompleted()).to.equal(false)
+    })
+
+    it('should return true when address is completed and does not have correspondence address', () => {
+      companyDetails.hasCorrespondenceAddress = false
+      companyDetails.correspondenceAddress = undefined
+      expect(companyDetails.isCompleted()).to.equal(true)
+    })
+
     it('should return true when all the required fields are completed', () => {
-      companyDetails.address = validAddress
-      companyDetails.name = 'claimantName'
-      companyDetails.hasCorrespondenceAddress = true
-      companyDetails.correspondenceAddress = validAddress
       expect(companyDetails.isCompleted()).to.equal(true)
     })
   })
