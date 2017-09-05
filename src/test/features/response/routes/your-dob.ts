@@ -82,7 +82,7 @@ describe('Defendant user details: your date of birth page', () => {
             await request(app)
               .post(ResponsePaths.defendantDateOfBirthPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ date: { year: '1978', month: '1', day: '11' } })
+              .send({ known: 'true', date: { year: '1978', month: '1', day: '11' } })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -93,7 +93,7 @@ describe('Defendant user details: your date of birth page', () => {
             await request(app)
               .post(ResponsePaths.defendantDateOfBirthPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ date: { year: '1978', month: '1', day: '11' } })
+              .send({ known: 'true', date: { year: '1978', month: '1', day: '11' } })
               .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.defendantMobilePage.uri))
           })
         })

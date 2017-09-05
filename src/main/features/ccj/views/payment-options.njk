@@ -1,0 +1,35 @@
+{% extends "layout.njk" %}
+
+{% set title = 'Money claim' %}
+
+{% from "includes/macros/form.njk" import saveAndContinueButton, csrfProtection, radioGroup, errorSummary %}
+
+{% block content %}
+  <div class="column-two-thirds">
+
+    <h1 class="heading-large">
+      <span class="heading-secondary">{{ t("County Court Judgment") }} </span>
+
+      {{ t("Payment options") }}
+    </h1>
+
+    <form method="post" novalidate>
+      {{ csrfProtection(csrf) }}
+      {{
+      radioGroup(
+        'I would like the defendant to be ordered to pay:',
+        'option',
+        [
+          {'label': 'Immediately', value: 'immediately', checked: (form.valueFor('option').value === 'immediately')},
+          {'label': 'By instalments', value: 'instalments', checked: (form.valueFor('option').value === 'instalments')},
+          {'label': 'The full amount by a set date', value: 'full', checked: (form.valueFor('option').value === 'full')}
+        ],
+        form = form
+      )
+      }}
+
+      {{ saveAndContinueButton() }}
+    </form>
+
+  </div>
+{% endblock %}

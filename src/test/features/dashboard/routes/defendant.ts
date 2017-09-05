@@ -15,7 +15,7 @@ import { checkAuthorizationGuards } from './checks/authorization-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const defendantPage = Paths.defendantPage.uri.replace(':externalId', 'b17af4d2-273f-4999-9895-bce382fa24c8')
+const defendantPage = Paths.defendantPage.evaluateUri({ externalId: 'b17af4d2-273f-4999-9895-bce382fa24c8' })
 
 describe('Dashboard - defendant page', () => {
   attachDefaultHooks()

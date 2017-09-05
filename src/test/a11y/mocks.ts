@@ -26,12 +26,15 @@ import { Claimant } from 'app/claims/models/claimant'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { Address } from 'claims/models/address'
 import { RangeGroup } from 'fees/models/rangeGroup'
+import { DraftCCJ } from 'ccj/draft/DraftCCJ'
+import { PaidAmount } from 'ccj/form/models/paidAmount'
+import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 
 function mockedDraftClaim () {
   let draft = new DraftClaim()
   draft.readResolveDispute = true
   draft.claimant = new DraftClaimant()
-  draft.claimant.dateOfBirth = new DateOfBirth(new LocalDate(1980, 1, 1))
+  draft.claimant.dateOfBirth = new DateOfBirth(true, new LocalDate(1980, 1, 1))
   draft.claimant.name = new Name('John Smith')
   draft.claimant.partyDetails = new PartyDetails()
   draft.claimant.partyDetails.address.postcode = 'postcode'
@@ -41,7 +44,7 @@ function mockedDraftClaim () {
   draft.defendant.partyDetails = new PartyDetails()
   draft.defendant.partyDetails.address.postcode = 'postcode'
   draft.defendant.partyDetails.address.line1 = 'line1'
-  draft.defendant.dateOfBirth = new DateOfBirth(new LocalDate(1980, 1, 1))
+  draft.defendant.dateOfBirth = new DateOfBirth(true, new LocalDate(1980, 1, 1))
   draft.interestDate.date = new LocalDate(2017, 7, 21)
 
   return draft
@@ -54,7 +57,7 @@ function mockedResponseDraft () {
   draft.defendantDetails = new DraftDefendant()
   draft.defendantDetails.mobilePhone = new MobilePhone('07873738765')
   draft.defendantDetails.name = new Name('Pa11y Super Awesome-Tests')
-  draft.defendantDetails.dateOfBirth = new DateOfBirth(new LocalDate(1980, 1, 1))
+  draft.defendantDetails.dateOfBirth = new DateOfBirth(true, new LocalDate(1980, 1, 1))
   draft.defendantDetails.partyDetails = new PartyDetails()
   draft.defendantDetails.partyDetails.address.postcode = 'postcode'
   draft.defendantDetails.partyDetails.address.line1 = 'line1'
@@ -66,7 +69,9 @@ function mockedResponseDraft () {
 function mockedClaim () {
   let claim = new Claim()
   claim.claimData = new ClaimData()
-  claim.claimData.defendants = [new Defendant()]
+  const defendant: Defendant = new Defendant()
+  defendant.address = new Address()
+  claim.claimData.defendants = [defendant]
   claim.claimData.claimant = new Claimant()
   claim.claimData.interest = mockedInterest()
   claim.claimData.interestDate = mockedInterestDate()
@@ -105,6 +110,13 @@ function mockedDefendantResponse () {
 
 function mockUser () {
   return { id: 123, roles: ['citizen', 'letter-holder'] }
+}
+
+function mockCCJDraft (): DraftCCJ {
+  const ccjDraft: DraftCCJ = new DraftCCJ()
+  ccjDraft.paidAmount = new PaidAmount(PaidAmountOption.YES, 10)
+
+  return ccjDraft
 }
 
 const justForwardRequestHandler = {
@@ -216,6 +228,32 @@ mock('response/guards/allResponseTasksCompletedGuard', {
   'default': {
     requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
       res.locals.user.claim = mockedClaim()
+      next()
+    }
+  }
+})
+
+mock('app/claims/claimMiddleware', {
+  'ClaimMiddleware': {
+    retrieveByExternalId: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
+      res.locals.user.claim = mockedClaim()
+      next()
+    }
+  }
+})
+
+mock('ccj/guards/ccjGuard', {
+  'CCJGuard': {
+    requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      next()
+    }
+  }
+})
+
+mock('ccj/draft/DraftCCJService', {
+  'DraftCCJService': {
+    retrieve: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
+      res.locals.user[`ccjDraft`] = mockCCJDraft()
       next()
     }
   }

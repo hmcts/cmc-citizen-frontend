@@ -22,7 +22,7 @@ describe('Claim issue: receipt', () => {
   attachDefaultHooks()
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ClaimPaths.receiptReceiver.uri.replace(':externalId', externalId))
+    checkAuthorizationGuards(app, 'get', ClaimPaths.receiptReceiver.evaluateUri({ externalId: externalId }))
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -33,7 +33,7 @@ describe('Claim issue: receipt', () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .get(ClaimPaths.receiptReceiver.uri.replace(':externalId', externalId))
+          .get(ClaimPaths.receiptReceiver.evaluateUri({ externalId: externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -43,7 +43,7 @@ describe('Claim issue: receipt', () => {
         pdfServiceMock.rejectGenerate('HTTP error')
 
         await request(app)
-          .get(ClaimPaths.receiptReceiver.uri.replace(':externalId', externalId))
+          .get(ClaimPaths.receiptReceiver.evaluateUri({ externalId: externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -53,7 +53,7 @@ describe('Claim issue: receipt', () => {
         pdfServiceMock.resolveGenerate()
 
         await request(app)
-          .get(ClaimPaths.receiptReceiver.uri.replace(':externalId', externalId))
+          .get(ClaimPaths.receiptReceiver.evaluateUri({ externalId: externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful)
       })

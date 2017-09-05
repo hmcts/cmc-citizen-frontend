@@ -9,6 +9,8 @@
   <div class="grid-row">
     <div class="column-two-thirds">
       <form method="post">
+        <input type="hidden" name="known" value="true" />
+
         {{ csrfProtection(csrf) }}
 
         {{ dateInput('date', form) }}

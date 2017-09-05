@@ -12,6 +12,7 @@ import { PartyDetails } from 'forms/models/partyDetails'
 import { Address } from 'forms/models/address'
 import { Defendant } from 'drafts/models/defendant'
 import { Name } from 'forms/models/name'
+import { LocalDate } from 'app/forms/models/localDate'
 
 const testAddress = {
   line1: 'line1',
@@ -28,7 +29,7 @@ describe('ResponseModelConverter', () => {
           name: 'John Doe'
         } as Name,
         mobilePhone: new MobilePhone('whatever'),
-        dateOfBirth: new DateOfBirth(),
+        dateOfBirth: new DateOfBirth(true, new LocalDate()),
         partyDetails: {
           address: testAddress,
           hasCorrespondenceAddress: true,
