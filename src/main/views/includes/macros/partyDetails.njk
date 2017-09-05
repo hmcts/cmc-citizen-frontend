@@ -1,128 +1,61 @@
 {% from "includes/macros/form.njk" import csrfProtection, textInput, radioGroup, saveAndContinueButton %}
 {% from "includes/macros/address.njk" import addressFragment, correspondenceAddressFragment %}
 
-{% macro organisationForm(form, csrfToken) %}
-  <form method="post">
-    {{ csrfProtection(csrfToken) }}
+{% macro individualDetailsFragment(form, nameLabel = 'Full name', addressHeading = 'Address', addressHint, hasCorrespondenceAddress = false) %}
+  {{ textInput(t(nameLabel), 'name', form, autocomplete = 'name') }}
 
-    {{ textInput(t('Organisation name'), 'name', form) }}
-    {{ textInput(t('Contact person'), 'contactPerson', form) }}
+  <h2 class="heading-medium">{{ t(addressHeading) }}</h2>
+  {% if addressHint %}
+    <p>{{ t(addressHint) }}</p>
+  {% endif %}
+  {{ addressFragment(form, name = 'address') }}
 
-    <h2 class="heading-medium">{{ t('Organisation address') }}</h2>
-    <p>{{ t("Enter the organisation's main office or an organisation's address that has a connection with the claim.") }}</p>
-    {{ addressFragment(form, name = 'address') }}
-
+  {% if hasCorrespondenceAddress == true %}
     {{ correspondenceAddressFragment(form) }}
-
-    {{ saveAndContinueButton() }}
-  </form>
+  {% endif %}
 {% endmacro %}
 
-{% macro claimantAsIndividualForm(form, csrfToken) %}
-  <form method="post">
-    {{ csrfProtection(csrfToken) }}
+{% macro soleTraderDetailsFragment(form, nameLabel = 'Full name', addressHeading = 'Address', addressHint, hasCorrespondenceAddress = false) %}
+  {{ textInput(t(nameLabel), 'name', form, autocomplete = 'name') }}
+  {{ textInput(t('Trading as (optional)'), 'businessName', form) }}
 
-    {{ textInput(t('Full name'), 'name', form, autocomplete='name') }}
+  <h2 class="heading-medium">{{ t(addressHeading) }}</h2>
+  {% if addressHint %}
+    <p>{{ t(addressHint) }}</p>
+  {% endif %}
+  {{ addressFragment(form, name = 'address') }}
 
-    <h2 class="heading-medium">{{ t('Your residential address') }}</h2>
-    <p>{{ t("This must be the address where you live.") }}</p>
-    {{ addressFragment(form, name = 'address') }}
-
+  {% if hasCorrespondenceAddress == true %}
     {{ correspondenceAddressFragment(form) }}
-
-    {{ saveAndContinueButton() }}
-  </form>
+  {% endif %}
 {% endmacro %}
 
-{% macro soleTraderForm(form, csrfToken) %}
-  <form method="post">
-    {{ csrfProtection(csrfToken) }}
+{% macro companyDetailsFragment(form, nameLabel = 'Company name', addressHeading = 'Company address', addressHint, hasCorrespondenceAddress = false) %}
+  {{ textInput(t(nameLabel), 'name', form, autocomplete = 'companyName') }}
+  {{ textInput(t('Contact person'), 'contactPerson', form) }}
 
-    {{ textInput(t('Full name'), 'name', form, autocomplete='name') }}
-    {{ textInput(t('Business name (optional)'), 'businessName', form) }}
+  <h2 class="heading-medium">{{ t(addressHeading) }}</h2>
+  {% if addressHint %}
+    <p>{{ t(addressHint) }}</p>
+  {% endif %}
+  {{ addressFragment(form, name = 'address') }}
 
-    <h2 class="heading-medium">{{ t('Your residential address') }}</h2>
-    <p>{{ t("This must be the address where you live.") }}</p>
-    {{ addressFragment(form, name = 'address') }}
-
+  {% if hasCorrespondenceAddress == true %}
     {{ correspondenceAddressFragment(form) }}
-
-    {{ saveAndContinueButton() }}
-  </form>
+  {% endif %}
 {% endmacro %}
 
-{% macro companyForm(form, csrfToken) %}
-  <form method="post">
-    {{ csrfProtection(csrfToken) }}
+{% macro organisationDetailsFragment(form, nameLabel = 'Organisation name', addressHeading = 'Organisation address', addressHint, hasCorrespondenceAddress = false) %}
+  {{ textInput(t(nameLabel), 'name', form) }}
+  {{ textInput(t('Contact person'), 'contactPerson', form) }}
 
-    {{ textInput(t('Company name'), 'name', form, autocomplete='companyName') }}
-    {{ textInput(t('Contact person'), 'contactPerson', form) }}
+  <h2 class="heading-medium">{{ t(addressHeading) }}</h2>
+  {% if addressHint %}
+    <p>{{ t(addressHint) }}</p>
+  {% endif %}
+  {{ addressFragment(form, name = 'address') }}
 
-    <h2 class="heading-medium">{{ t('Company address') }}</h2>
-    <p>{{ t("Enter the company’s registered office or a company address that has a connection with the claim.") }}</p>
-    {{ addressFragment(form, name = 'address') }}
-
+  {% if hasCorrespondenceAddress == true %}
     {{ correspondenceAddressFragment(form) }}
-
-    {{ saveAndContinueButton() }}
-  </form>
-{% endmacro %}
-
-{% macro defendantAsIndividualForm(form, csrfToken) %}
-  <form method="post">
-    {{ csrfProtection(csrfToken) }}
-
-    {{ textInput(t('Their full name'), 'name', form, autocomplete='name') }}
-
-    <h2 class="heading-medium">{{ t('Their residential address') }}</h2>
-    <p>{{ t("You must enter the defendant's residential address to make a claim against them.") }}</p>
-    {{ addressFragment(form, name = 'address') }}
-
-    {{ saveAndContinueButton() }}
-  </form>
-{% endmacro %}
-
-{% macro defendantAsOrganisationForm(form, csrfToken) %}
-  <form method="post">
-    {{ csrfProtection(csrfToken) }}
-
-    {{ textInput(t('Organisation name'), 'name', form) }}
-    {{ textInput(t('Contact person'), 'contactPerson', form) }}
-
-    <h2 class="heading-medium">{{ t('Organisation address') }}</h2>
-    <p>{{ t("Enter the organisation's main office or an organisation's address that has a connection with the claim.") }}</p>
-    {{ addressFragment(form, name = 'address') }}
-
-    {{ saveAndContinueButton() }}
-  </form>
-{% endmacro %}
-
-{% macro defendantAsSoleTraderForm(form, csrfToken) %}
-  <form method="post">
-    {{ csrfProtection(csrfToken) }}
-
-    {{ textInput(t('Their full name'), 'name', form, autocomplete='name') }}
-    {{ textInput(t('Business name (optional)'), 'businessName', form) }}
-
-    <h2 class="heading-medium">{{ t('Their address') }}</h2>
-    <p>{{ t("You must enter the defendant’s residential or trade address to make a claim against them.") }}</p>
-    {{ addressFragment(form, name = 'address') }}
-
-    {{ saveAndContinueButton() }}
-  </form>
-{% endmacro %}
-
-{% macro defendantAsCompanyForm(form, csrfToken) %}
-  <form method="post">
-    {{ csrfProtection(csrfToken) }}
-
-    {{ textInput(t('Company name'), 'name', form, autocomplete='companyName') }}
-    {{ textInput(t('Contact person'), 'contactPerson', form) }}
-
-    <h2 class="heading-medium">{{ t('Company address') }}</h2>
-    <p>{{ t("Enter the company’s registered office or a company address that has a connection with the claim.") }}</p>
-    {{ addressFragment(form, name = 'address') }}
-
-    {{ saveAndContinueButton() }}
-  </form>
+  {% endif %}
 {% endmacro %}

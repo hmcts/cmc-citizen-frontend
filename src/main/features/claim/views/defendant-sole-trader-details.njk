@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import errorSummary %}
-{% from "includes/macros/partyDetails.njk" import defendantAsSoleTraderForm %}
+{% from "includes/macros/form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
+{% from "includes/macros/partyDetails.njk" import soleTraderDetailsFragment %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Their details') %}
@@ -8,7 +8,21 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      {{ defendantAsSoleTraderForm(form, csrf) }}
+      <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        {{
+          soleTraderDetailsFragment(
+            form,
+            nameLabel = "Full name",
+            addressHeading = "Their address",
+            addressHint = "You must enter the defendant's residential or trade address to make a claim against them.",
+            hasCorrespondenceAddress = false
+          )
+        }}
+
+        {{ saveAndContinueButton() }}
+      </form>
     </div>
   </div>
 {% endblock %}

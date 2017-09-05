@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/partyDetails.njk" import defendantAsOrganisationForm %}
-{% from "includes/macros/form.njk" import csrfProtection,textInput, saveAndContinueButton, errorSummary %}
+{% from "includes/macros/form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
+{% from "includes/macros/partyDetails.njk" import organisationDetailsFragment %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Organisation details') %}
@@ -8,7 +8,21 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-       {{ defendantAsOrganisationForm(form, csrf) }}
+      <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        {{
+          organisationDetailsFragment(
+            form,
+            nameLabel = 'Organisation name',
+            addressHeading = "Organisation address",
+            addressHint = "Enter the organisation's main office or a organisation's address that has a connection with the claim.",
+            hasCorrespondenceAddress = false
+          )
+        }}
+
+        {{ saveAndContinueButton() }}
+      </form>
     </div>
   </div>
 {% endblock %}

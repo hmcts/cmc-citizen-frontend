@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "includes/macros/form.njk" import csrfProtection, textInput, radioGroup, saveAndContinueButton, errorSummary %}
-{% from "includes/macros/address.njk" import addressFragment, correspondenceAddressFragment %}
+{% from "includes/macros/partyDetails.njk" import individualDetailsFragment, soleTraderDetailsFragment, companyDetailsFragment, organisationDetailsFragment %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Confirm your details') %}
@@ -10,20 +10,45 @@
     <div class="column-two-thirds">
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
-
         <input type="hidden" name="type" value="{{ form.model.type }}">
-        <input type="hidden" name="contactPerson" value="{{ form.model.contactPerson }}">
-        <input type="hidden" name="businessName" value="{{ form.model.businessName }}">
 
-        {{ textInput(t('Your full name'), 'name', form, autocomplete = 'name') }}
-
-        <h2 class="heading-medium">{{ t('Your address') }}</h2>
-
-        {{ addressFragment(form, name = 'address') }}
-
-        {{ correspondenceAddressFragment(form) }}
-
-        {{ saveAndContinueButton() }}
+        {% if form.model.type == 'individual' %}
+          {{
+            individualDetailsFragment(
+              form,
+              nameLabel = "Your full name",
+              addressHeading = "Your address",
+              hasCorrespondenceAddress = true
+            )
+          }}
+        {% elif form.model.type == 'soleTrader' %}
+          {{
+            soleTraderDetailsFragment(
+              form,
+              nameLabel = "Your full name",
+              addressHeading = "Your address",
+              hasCorrespondenceAddress = true
+            )
+          }}
+        {% elif form.model.type == 'company' %}
+          {{
+            companyDetailsFragment(
+              form,
+              nameLabel = "Company name",
+              addressHeading = "Company address",
+              hasCorrespondenceAddress = true
+              )
+            }}
+        {% elif form.model.type == 'organisation' %}
+          {{
+            organisationDetailsFragment(
+              form,
+              nameLabel = "Organisation name",
+              addressHeading = "Organisation address",
+              hasCorrespondenceAddress = true
+            )
+          }}
+        {% endif %}
       </form>
     </div>
   </div>

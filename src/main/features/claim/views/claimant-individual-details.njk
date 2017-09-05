@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import errorSummary %}
-{% from "includes/macros/partyDetails.njk" import claimantAsIndividualForm %}
+{% from "includes/macros/form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
+{% from "includes/macros/partyDetails.njk" import individualDetailsFragment %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Your details') %}
@@ -8,7 +8,21 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      {{ claimantAsIndividualForm(form, csrf) }}
+      <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        {{
+          individualDetailsFragment(
+            form,
+            nameLabel = 'Full name',
+            addressHeading = "Your residential address",
+            addressHint = "This must be the address where you live.",
+            hasCorrespondenceAddress = true
+          )
+        }}
+
+        {{ saveAndContinueButton() }}
+      </form>
     </div>
   </div>
 {% endblock %}
