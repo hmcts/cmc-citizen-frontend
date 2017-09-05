@@ -30,7 +30,7 @@ export default express.Router()
         const { externalId } = req.params
         user.ccjDraft.payBySetDate = form.model
         await DraftCCJService.save(res, next)
-        res.redirect(Paths.checkYourAnswerPage.uri.replace(':externalId', externalId))
+        res.redirect(Paths.repaymentPlanPage.uri.replace(':externalId', externalId))
 
       }
     }))
