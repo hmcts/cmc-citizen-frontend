@@ -24,5 +24,9 @@
   },
   "pdf-service": {
     "url": "http://localhost:15500"
+  },
+  "featureToggles": {
+    "testingSupport": true,
+    "countyCourtJudgment": true
   }
 }
