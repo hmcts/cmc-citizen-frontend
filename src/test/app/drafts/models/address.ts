@@ -1,5 +1,4 @@
 import { expect } from 'chai'
-
 import { Address } from 'app/forms/models/address'
 
 describe('Address', () => {
