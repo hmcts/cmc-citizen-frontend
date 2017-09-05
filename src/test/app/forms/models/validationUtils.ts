@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import * as _ from 'lodash'
 
 import { ValidationError } from 'class-validator'
+import * as randomstring from 'randomstring'
 
 class Violation {
   constructor (public property: string, public message: string) {
@@ -32,4 +33,15 @@ function extractViolationsFrom (errors: ValidationError[], parentProperty?: stri
       }
     })
   )
+}
+
+export function generateString (length: number): string {
+  return randomstring.generate({
+    length: length,
+    charset: 'alphabetic'
+  })
+}
+
+export function evaluateErrorMsg (errorMsg: string, value: number): string {
+  return errorMsg.replace('$constraint1', value.toString())
 }

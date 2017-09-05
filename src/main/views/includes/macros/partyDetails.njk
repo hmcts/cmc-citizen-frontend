@@ -17,7 +17,7 @@
 
 {% macro soleTraderDetailsFragment(form, nameLabel = 'Full name', addressHeading = 'Address', addressHint, hasCorrespondenceAddress = false) %}
   {{ textInput(t(nameLabel), 'name', form, autocomplete = 'name') }}
-  {{ textInput(t('Trading as (optional)'), 'businessName', form) }}
+  {{ textInput(t('Business name'), 'businessName', form) }}
 
   <h2 class="heading-medium">{{ t(addressHeading) }}</h2>
   {% if addressHint %}

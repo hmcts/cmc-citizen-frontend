@@ -49,7 +49,7 @@ export class PartyDetailsMapper {
   static businessName (partyDetails: Party): any {
     if (partyDetails && partyDetails.type) {
       switch (partyDetails.type) {
-        case PartyType.ORGANISATION.value:
+        case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
           return (partyDetails as SoleTrader).businessName
       }
     }
