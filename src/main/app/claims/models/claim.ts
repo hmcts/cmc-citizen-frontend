@@ -5,6 +5,8 @@ import ClaimData from 'app/claims/models/claimData'
 import { MomentFactory } from 'common/momentFactory'
 import InterestDateType from 'app/common/interestDateType'
 import { calculateInterest } from 'app/common/calculateInterest'
+import * as config from 'config'
+import * as toBoolean from 'to-boolean'
 
 export default class Claim implements Serializable<Claim> {
   id: number
@@ -54,6 +56,10 @@ export default class Claim implements Serializable<Claim> {
   }
 
   get eligibleForCCJ (): boolean {
+    if (!toBoolean(config.get<boolean>('featureToggles.countyCourtJudgment'))) {
+      return false
+    }
+
     return this.remainingDays < 0 && !this.respondedAt
   }
 }

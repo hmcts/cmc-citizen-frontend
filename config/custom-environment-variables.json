@@ -66,6 +66,7 @@
     "timeout": "HTTP_TIMEOUT"
   },
   "featureToggles": {
-    "testingSupport": "FEATURE_TESTING_SUPPORT"
+    "testingSupport": "FEATURE_TESTING_SUPPORT",
+    "countyCourtJudgment": "FEATURE_CCJ"
   }
 }

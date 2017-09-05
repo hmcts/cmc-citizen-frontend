@@ -39,7 +39,7 @@ describe('Defendant response copy', () => {
       })
 
       it('should return 500 and render error page when the user is not owner of claim', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId({ claimantId: 123 })
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId({ submitterId: 123 })
 
         await request(app)
           .get(ClaimPaths.defendantResponseCopy.evaluateUri({ externalId: externalId }))
