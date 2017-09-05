@@ -20,6 +20,8 @@ import InterestDate from 'app/claims/models/interestDate'
 import { Address } from 'claims/models/address'
 import { Address as AddressForm } from 'forms/models/address'
 import ClaimAmountBreakdown from 'app/forms/models/claimAmountBreakdown'
+import DraftInterestDate from 'app/forms/models/interestDate'
+import InterestDateType from 'app/common/interestDateType'
 
 export class ClaimModelConverter {
 
@@ -27,17 +29,13 @@ export class ClaimModelConverter {
     const claimData: ClaimData = new ClaimData()
     claimData.interest = draftClaim.interest
     claimData.externalId = draftClaim.externalId
-    claimData.interestDate = this.convertInterestDate(draftClaim)
+    claimData.interestDate = this.convertInterestDate(draftClaim.interestDate)
     claimData.amount = new ClaimAmountBreakdown().deserialize(draftClaim.amount)
     claimData.feeAmountInPennies = draftClaim.claimant.payment.amount
     claimData.claimant = this.convertClaimantDetails(draftClaim)
     claimData.defendants = [this.convertDefendantDetails(draftClaim)]
     claimData.payment = draftClaim.claimant.payment
     claimData.reason = draftClaim.reason.reason
-    if (draftClaim.claimant.partyDetails && !draftClaim.claimant.partyDetails.hasCorrespondenceAddress) {
-      delete claimData.claimant.correspondenceAddress
-    }
-
     claimData.feeAmountInPennies = draftClaim.claimant.payment.amount
     return claimData
   }
@@ -50,8 +48,8 @@ export class ClaimModelConverter {
         return new ClaimantAsIndividual(
           individualDetails.name,
           this.convertAddress(individualDetails.address),
-          this.convertAddress(individualDetails.correspondenceAddress),
-          this.convertMobileNumber(draftClaim),
+          individualDetails.hasCorrespondenceAddress ? this.convertAddress(individualDetails.correspondenceAddress) : undefined,
+          draftClaim.claimant.mobilePhone.number,
           undefined,
           individualDetails.dateOfBirth.date.asString()
         )
@@ -62,8 +60,8 @@ export class ClaimModelConverter {
         return new ClaimantAsSoleTrader(
           soleTraderDetails.name,
           this.convertAddress(soleTraderDetails.address),
-          this.convertAddress(soleTraderDetails.correspondenceAddress),
-          this.convertMobileNumber(draftClaim),
+          soleTraderDetails.hasCorrespondenceAddress ? this.convertAddress(soleTraderDetails.correspondenceAddress) : undefined,
+          draftClaim.claimant.mobilePhone.number,
           undefined,
           soleTraderDetails.businessName
         )
@@ -74,8 +72,8 @@ export class ClaimModelConverter {
         return new ClaimantAsCompany(
           companyDetails.name,
           this.convertAddress(companyDetails.address),
-          this.convertAddress(companyDetails.correspondenceAddress),
-          this.convertMobileNumber(draftClaim),
+          companyDetails.hasCorrespondenceAddress ? this.convertAddress(companyDetails.correspondenceAddress) : undefined,
+          draftClaim.claimant.mobilePhone.number,
           undefined,
           companyDetails.contactPerson
         )
@@ -86,8 +84,8 @@ export class ClaimModelConverter {
         return new ClaimantAsOrganisation(
           organisationDetails.name,
           this.convertAddress(organisationDetails.address),
-          this.convertAddress(organisationDetails.correspondenceAddress),
-          this.convertMobileNumber(draftClaim),
+          organisationDetails.hasCorrespondenceAddress ? this.convertAddress(organisationDetails.correspondenceAddress) : undefined,
+          draftClaim.claimant.mobilePhone.number,
           undefined,
           organisationDetails.contactPerson
         )
@@ -105,33 +103,34 @@ export class ClaimModelConverter {
 
         return new DefendantAsIndividual(
           individualDetails.name,
-          this.convertAddress(individualDetails.address),
-          this.convertEmail(draftClaim)
+          individualDetails.hasCorrespondenceAddress ? this.convertAddress(individualDetails.address) : undefined,
+          draftClaim.defendant.email.address
         )
 
       case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
-        const soleTraderDetails: SoleTraderDetails = draftClaim.claimant.partyDetails as SoleTraderDetails
+        const soleTraderDetails: SoleTraderDetails = defendantDetails as SoleTraderDetails
 
         return new DefendantAsSoleTrader(
           soleTraderDetails.name,
-          this.convertAddress(soleTraderDetails.address),
-          this.convertEmail(draftClaim), soleTraderDetails.businessName
+          soleTraderDetails.hasCorrespondenceAddress ? this.convertAddress(soleTraderDetails.address) : undefined,
+          draftClaim.defendant.email.address, soleTraderDetails.businessName
         )
 
       case PartyType.COMPANY.value:
-        const companyDetails = draftClaim.claimant.partyDetails as CompanyDetails
+        const companyDetails = defendantDetails as CompanyDetails
 
         return new DefendantAsCompany(
           companyDetails.name,
-          this.convertAddress(companyDetails.address),
-          this.convertEmail(draftClaim), companyDetails.contactPerson
+          companyDetails.hasCorrespondenceAddress ? this.convertAddress(companyDetails.address) : undefined,
+          draftClaim.defendant.email.address, companyDetails.contactPerson
         )
       case PartyType.ORGANISATION.value:
-        const organisationDetails = draftClaim.claimant.partyDetails as OrganisationDetails
+        const organisationDetails = defendantDetails as OrganisationDetails
+
         return new DefendantAsOrganisation(
           organisationDetails.name,
-          this.convertAddress(organisationDetails.address),
-          this.convertEmail(draftClaim),
+          organisationDetails.hasCorrespondenceAddress ? this.convertAddress(organisationDetails.address) : undefined,
+          draftClaim.defendant.email.address,
           organisationDetails.contactPerson
         )
       default:
@@ -150,22 +149,13 @@ export class ClaimModelConverter {
     return address
   }
 
-  private static convertInterestDate (draftClaim: DraftClaim): InterestDate {
-    if (draftClaim.interestDate) {
-      const interestDate: InterestDate = new InterestDate()
-      interestDate.date = draftClaim.interestDate.date.toMoment()
-      interestDate.reason = draftClaim.interestDate.reason
-      interestDate.type = draftClaim.interestDate.type
-      return interestDate
+  private static convertInterestDate (draftInterestDate: DraftInterestDate): InterestDate {
+    const interestDate: InterestDate = new InterestDate()
+    interestDate.type = draftInterestDate.type
+    if (draftInterestDate.type === InterestDateType.CUSTOM) {
+      interestDate.date = draftInterestDate.date.toMoment()
+      interestDate.reason = draftInterestDate.reason
     }
-    return undefined
-  }
-
-  private static convertMobileNumber (draftClaim: DraftClaim): string {
-    return draftClaim.claimant.mobilePhone.number
-  }
-
-  private static convertEmail (draftClaim: DraftClaim): string {
-    return draftClaim.defendant.email.address
+    return interestDate
   }
 }

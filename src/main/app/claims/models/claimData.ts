@@ -19,7 +19,6 @@ export default class ClaimData implements Serializable<ClaimData> {
   externalId: string
   claimant: Party
   defendants: TheirDetails[]
-  paidFeeAmount: number
   amount: ClaimAmountBreakdown = new ClaimAmountBreakdown()
   feeAmountInPennies: number
   reason: string
@@ -35,6 +34,10 @@ export default class ClaimData implements Serializable<ClaimData> {
     }
   }
 
+  get paidFeeAmount (): number {
+    return this.payment.amount / 100
+  }
+
   deserialize (input: any): ClaimData {
     if (input) {
       this.claimant = this.deserializeClaimant(input.claimant)
@@ -42,6 +45,7 @@ export default class ClaimData implements Serializable<ClaimData> {
       if (input.payment) {
         this.payment = new Payment().deserialize(input.payment)
       }
+      this.feeAmountInPennies = input.feeAmountInPennies
 
       this.payment = new Payment().deserialize(input.payment)
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
@@ -49,7 +53,6 @@ export default class ClaimData implements Serializable<ClaimData> {
       this.interestDate = new InterestDate().deserialize(input.interestDate)
 
       this.reason = input.reason
-      this.paidFeeAmount = this.payment.amount / 100
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
       this.reason = input.reason
       this.externalId = input.externalId

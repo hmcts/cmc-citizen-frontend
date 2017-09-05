@@ -1,6 +1,6 @@
 import { individual } from './party'
 
-export const response = {
+export const responseData = {
   defendant: individual,
   moreTimeNeeded: 'no',
   response: 'OWE_NONE',
