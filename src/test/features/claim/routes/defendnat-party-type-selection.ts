@@ -15,7 +15,7 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-describe('defendant party type selection page', () => {
+describe('Claim issue: defendant party type selection page', () => {
   attachDefaultHooks()
 
   describe('on GET', () => {
@@ -46,46 +46,62 @@ describe('defendant party type selection page', () => {
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ type: {value: '', displayValue: ''} })
+          .send({ type: { value: '', displayValue: '' } })
           .expect(res => expect(res).to.be.successful.withText('About them', 'div class="error-summary"'))
       })
 
-      it('should redirect to individual details page when Individual party type selected ', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+      it('should return 500 and render error page when form is valid and cannot save draft', async () => {
+        draftStoreServiceMock.resolveRetrieve('claim', { defendant: undefined })
+        draftStoreServiceMock.rejectSave('claim', 'HTTP error')
 
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ type: {value: 'individual', displayValue: 'Individual'} })
+          .send({ type: { value: 'individual', displayValue: 'Individual' } })
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should redirect to individual details page when Individual party type selected ', async () => {
+        draftStoreServiceMock.resolveRetrieve('claim', { defendant: undefined })
+        draftStoreServiceMock.resolveSave('claim')
+
+        await request(app)
+          .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ type: { value: 'individual', displayValue: 'Individual' } })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantIndividualDetailsPage.uri))
       })
 
       it('should redirect to sole trader details page when soleTrader party type selected ', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveRetrieve('claim', { defendant: undefined })
+        draftStoreServiceMock.resolveSave('claim')
 
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ type: {value: 'soleTrader', displayValue: 'soleTrader'} })
+          .send({ type: { value: 'soleTrader', displayValue: 'soleTrader' } })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri))
       })
 
       it('should redirect to company details page when company party type selected ', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveRetrieve('claim', { defendant: undefined })
+        draftStoreServiceMock.resolveSave('claim')
 
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ type: {value: 'company', displayValue: 'company'} })
+          .send({ type: { value: 'company', displayValue: 'company' } })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantCompanyDetailsPage.uri))
       })
+
       it('should redirect to organization details page when organization party type selected ', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveRetrieve('claim', { defendant: undefined })
+        draftStoreServiceMock.resolveSave('claim')
 
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ type: {value: 'organisation', displayValue: 'organisation'} })
+          .send({ type: { value: 'organisation', displayValue: 'organisation' } })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantOrganisationDetailsPage.uri))
       })
     })

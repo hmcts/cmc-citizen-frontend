@@ -1,4 +1,4 @@
-import { IsDefined, ValidateNested, ValidateIf, MaxLength } from 'class-validator'
+import { IsDefined, MaxLength, ValidateIf, ValidateNested } from 'class-validator'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { Serializable } from 'models/serializable'
 import { CompletableTask } from 'app/models/task'
@@ -31,12 +31,10 @@ export class PartyDetails implements Serializable<PartyDetails>, CompletableTask
   @ValidateNested()
   correspondenceAddress?: CorrespondenceAddress
 
-  constructor (
-    name?: string,
-    address: Address = new Address(),
-    hasCorrespondenceAddress: boolean = false,
-    correspondenceAddress: Address = new CorrespondenceAddress()
-  ) {
+  constructor (name?: string,
+               address: Address = new Address(),
+               hasCorrespondenceAddress: boolean = false,
+               correspondenceAddress: Address = new CorrespondenceAddress()) {
     this.address = address
     this.hasCorrespondenceAddress = hasCorrespondenceAddress
     this.correspondenceAddress = correspondenceAddress

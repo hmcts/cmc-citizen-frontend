@@ -5,12 +5,10 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { PartyTypeResponse } from 'forms/models/partyTypeResponse'
 import { PartyType } from 'forms/models/partyType'
-import { IndividualDetails } from 'forms/models/individualDetails'
-import { OrganisationDetails } from 'forms/models/organisationDetails'
-import { CompanyDetails } from 'forms/models/companyDetails'
-import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { ErrorHandling } from 'common/errorHandling'
 import { PartyDetails } from 'forms/models/partyDetails'
+import { PartyDetailsFactory } from 'forms/models/partyDetailsFactory'
+import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
 
 function renderView (form: Form<PartyTypeResponse>, res: express.Response, next: express.NextFunction) {
   res.render(Paths.claimantPartyTypeSelectionPage.associatedView, {
@@ -28,28 +26,30 @@ export default express.Router()
     FormValidator.requestHandler(PartyTypeResponse, PartyTypeResponse.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<PartyTypeResponse> = req.body
+
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
-        switch (form.model.type) {
-          case PartyType.INDIVIDUAL:
-            res.locals.user.claimDraft.claimant.partyDetails = new IndividualDetails()
+        let partyDetails: PartyDetails = res.locals.user.claimDraft.claimant.partyDetails
+
+        if (partyDetails === undefined || partyDetails.type !== form.model.type.value) {
+          partyDetails = res.locals.user.claimDraft.claimant.partyDetails = PartyDetailsFactory.createInstance(form.model.type.value)
+          await ClaimDraftMiddleware.save(res, next)
+        }
+
+        switch (partyDetails.type) {
+          case PartyType.INDIVIDUAL.value:
             res.redirect(Paths.claimantIndividualDetailsPage.uri)
             break
-          case PartyType.COMPANY:
-            res.locals.user.claimDraft.claimant.partyDetails = new CompanyDetails()
+          case PartyType.COMPANY.value:
             res.redirect(Paths.claimantCompanyDetailsPage.uri)
             break
-          case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED:
-            res.locals.user.claimDraft.claimant.partyDetails = new SoleTraderDetails()
+          case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
             res.redirect(Paths.claimantSoleTraderOrSelfEmployedDetailsPage.uri)
             break
-          case PartyType.ORGANISATION:
-            res.locals.user.claimDraft.claimant.partyDetails = new OrganisationDetails()
+          case PartyType.ORGANISATION.value:
             res.redirect(Paths.claimantOrganisationDetailsPage.uri)
             break
-          default:
-            throw Error('Something went wrong, No claimant type is set')
         }
       }
     }))

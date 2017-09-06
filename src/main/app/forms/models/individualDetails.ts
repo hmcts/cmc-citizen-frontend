@@ -5,6 +5,7 @@ import { PartyType } from 'forms/models/partyType'
 export class IndividualDetails extends PartyDetails {
 
   dateOfBirth?: DateOfBirth
+
   constructor () {
     super()
     this.type = PartyType.INDIVIDUAL.value
