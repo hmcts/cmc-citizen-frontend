@@ -13,9 +13,6 @@ function prepareUrls (externalId: string): object {
 }
 
 function renderView (form: Form<StatementOfTruth>, req: express.Request, res: express.Response): void {
-
-  console.log(res.locals.user.ccjDraft)
-
   res.render(Paths.checkAndSendPage.associatedView, {
     form: form,
     details: res.locals.user.ccjDraft,
