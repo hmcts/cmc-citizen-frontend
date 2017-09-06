@@ -1,8 +1,8 @@
 import * as express from 'express'
 import { Paths } from 'ccj/paths'
 import { Form } from 'forms/form'
-import StatementOfTruth from 'forms/models/statementOfTruth'
 import { FormValidator } from 'forms/validation/formValidator'
+import { Declaration } from 'ccj/form/models/declaration'
 
 function prepareUrls (externalId: string): object {
   return {
@@ -12,7 +12,7 @@ function prepareUrls (externalId: string): object {
   }
 }
 
-function renderView (form: Form<StatementOfTruth>, req: express.Request, res: express.Response): void {
+function renderView (form: Form<Declaration>, req: express.Request, res: express.Response): void {
   res.render(Paths.checkAndSendPage.associatedView, {
     form: form,
     details: res.locals.user.ccjDraft,
@@ -22,13 +22,13 @@ function renderView (form: Form<StatementOfTruth>, req: express.Request, res: ex
 
 export default express.Router()
   .get(Paths.checkAndSendPage.uri, (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    renderView(Form.empty<StatementOfTruth>(), req, res)
+    renderView(Form.empty<Declaration>(), req, res)
   })
   .post(
     Paths.checkAndSendPage.uri,
-    FormValidator.requestHandler(StatementOfTruth, StatementOfTruth.fromObject),
+    FormValidator.requestHandler(Declaration, Declaration.fromObject),
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const form: Form<StatementOfTruth> = req.body
+      const form: Form<Declaration> = req.body
 
       if (form.hasErrors()) {
         renderView(form, req, res)
