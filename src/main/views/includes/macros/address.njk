@@ -3,7 +3,7 @@
 {% macro addressFragment(form, name) %}
   {{ textInput(t('Address line 1'), name + '[line1]', form, autocomplete='address-line1') }}
   {{ textInput(t('Address line 2 (optional)'), name + '[line2]', form, autocomplete='address-line2') }}
-  {{ textInput(t('Town or city'), name + '[city]', form, autocomplete='address-line3') }}
+  {{ textInput(t('Town or city'), name + '[city]', form, autocomplete='address-level2') }}
   {{ textInput(t('Postcode'), name + '[postcode]', form, autocomplete='postal-code') }}
 {% endmacro %}
 
