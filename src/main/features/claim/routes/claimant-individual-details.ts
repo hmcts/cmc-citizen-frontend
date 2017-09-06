@@ -24,7 +24,9 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        (res.locals.user.claimDraft.claimant.partyDetails as IndividualDetails) = form.model
+        // Workaround: reset date of birth which is erased in the process of form deserialization
+        form.model.dateOfBirth = (res.locals.user.claimDraft.claimant.partyDetails as IndividualDetails).dateOfBirth
+        res.locals.user.claimDraft.claimant.partyDetails = form.model
         await ClaimDraftMiddleware.save(res, next)
         res.redirect(Paths.claimantDateOfBirthPage.uri)
       }

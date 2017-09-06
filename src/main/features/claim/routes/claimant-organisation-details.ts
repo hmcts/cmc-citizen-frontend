@@ -25,7 +25,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        (res.locals.user.claimDraft.claimant.partyDetails as OrganisationDetails) = form.model
+        res.locals.user.claimDraft.claimant.partyDetails = form.model
         await ClaimDraftMiddleware.save(res, next)
         res.redirect(Paths.claimantMobilePage.uri)
       }
