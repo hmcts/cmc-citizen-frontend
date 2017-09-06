@@ -1,7 +1,7 @@
 import { MaxLength } from 'class-validator'
 import { PartyDetails } from './partyDetails'
 import DateOfBirth from 'forms/models/dateOfBirth'
-import { PartyType } from 'forms/models/partyType'
+import { PartyType } from 'app/common/partyType'
 
 export class ValidationErrors {
   static readonly ORGANISATION_NAME_TOO_LONG: string = 'Enter organization name no longer than $constraint1 characters'

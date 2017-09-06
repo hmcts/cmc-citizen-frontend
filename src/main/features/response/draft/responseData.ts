@@ -1,5 +1,5 @@
 import { Serializable } from 'models/serializable'
-import { PartyType } from 'app/forms/models/partyType'
+import { PartyType } from 'app/common/partyType'
 import { Party } from 'app/claims/models/details/yours/party'
 import { Individual } from 'app/claims/models/details/yours/individual'
 import { Company } from 'app/claims/models/details/yours/company'

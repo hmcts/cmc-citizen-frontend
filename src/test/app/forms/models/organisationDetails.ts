@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { OrganisationDetails, ValidationErrors as OrganisationDetailsValidationErrors } from 'forms/models/organisationDetails'
 import { ValidationErrors as PartydDetailsValidationErrors } from 'forms/models/partyDetails'
-import { PartyType } from 'forms/models/partyType'
+import { PartyType } from 'app/common/partyType'
 import { ValidationErrors as AddressValidationErrors } from 'forms/models/address'
 import { ValidationErrors as CorrespondenceAddressValidationErrors } from 'forms/models/correspondenceAddress'
 import { Address } from 'forms/models/address'

@@ -1,7 +1,7 @@
 import { IsDefined, MaxLength } from 'class-validator'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { PartyDetails } from './partyDetails'
-import { PartyType } from 'forms/models/partyType'
+import { PartyType } from 'app/common/partyType'
 
 export class ValidationErrors {
   static readonly CONTACT_PERSON_REQUIRED: string = 'Enter contact person name(s)'

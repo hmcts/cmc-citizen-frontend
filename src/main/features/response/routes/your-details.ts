@@ -6,7 +6,7 @@ import { ErrorHandling } from 'common/errorHandling'
 
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import { PartyType } from 'app/forms/models/partyType'
+import { PartyType } from 'app/common/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'

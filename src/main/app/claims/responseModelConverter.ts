@@ -1,6 +1,6 @@
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { ResponseData } from 'response/draft/responseData'
-import { PartyType } from 'forms/models/partyType'
+import { PartyType } from 'app/common/partyType'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { Party } from 'app/claims/models/details/yours/party'
 import { Individual } from 'app/claims/models/details/yours/individual'

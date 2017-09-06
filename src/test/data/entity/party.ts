@@ -1,4 +1,4 @@
-import { PartyType } from 'forms/models/partyType'
+import { PartyType } from 'app/common/partyType'
 
 export const individual = {
   type: PartyType.INDIVIDUAL.value,

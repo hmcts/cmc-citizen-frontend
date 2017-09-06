@@ -1,6 +1,6 @@
 import DraftClaim from 'drafts/models/draftClaim'
 import { PartyDetails } from 'forms/models/partyDetails'
-import { PartyType } from 'forms/models/partyType'
+import { PartyType } from 'app/common/partyType'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'

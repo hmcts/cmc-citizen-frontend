@@ -4,7 +4,7 @@ import { expect } from 'chai'
 import { Validator } from 'class-validator'
 import { expectValidationError } from './validationUtils'
 
-import { PartyType } from 'forms/models/partyType'
+import { PartyType } from 'app/common/partyType'
 import { PartyTypeResponse, ValidationErrors } from 'forms/models/partyTypeResponse'
 
 describe('PartyTypeResponse', () => {

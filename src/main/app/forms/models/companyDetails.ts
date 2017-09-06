@@ -1,7 +1,7 @@
 import { IsDefined, MaxLength, Validator } from 'class-validator'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { PartyDetails } from './partyDetails'
-import { PartyType } from 'forms/models/partyType'
+import { PartyType } from 'app/common/partyType'
 
 export class ValidationErrors {
   static readonly CONTACT_PERSON_NAME_TOO_LONG: string = 'Contact Person name must be no longer than $constraint1 characters'

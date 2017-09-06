@@ -2,7 +2,7 @@ import { Party } from 'claims/models/details/yours/party'
 import { Company } from 'claims/models/details/yours/company'
 import { SoleTrader } from 'claims/models/details/yours/soleTrader'
 import { Organisation } from 'claims/models/details/yours/organisation'
-import { PartyType } from 'forms/models/partyType'
+import { PartyType } from 'app/common/partyType'
 
 export class PartyDetailsMapper {
   static createPartyDetails (party: Party, email: string): object {
@@ -34,13 +34,13 @@ export class PartyDetailsMapper {
     if (partyDetails && partyDetails.type) {
       switch (partyDetails.type) {
         case PartyType.INDIVIDUAL.value:
-          return PartyType.INDIVIDUAL.displayValue
+          return PartyType.INDIVIDUAL.name
         case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
-          return PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.displayValue
+          return PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.name
         case PartyType.COMPANY.value:
-          return PartyType.COMPANY.displayValue
+          return PartyType.COMPANY.name
         case PartyType.ORGANISATION.value:
-          return PartyType.ORGANISATION.displayValue
+          return PartyType.ORGANISATION.name
         default:
           return undefined
       }
