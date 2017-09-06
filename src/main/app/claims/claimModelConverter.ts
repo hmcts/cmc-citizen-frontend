@@ -103,7 +103,7 @@ export class ClaimModelConverter {
 
         return new DefendantAsIndividual(
           individualDetails.name,
-          individualDetails.hasCorrespondenceAddress ? this.convertAddress(individualDetails.address) : undefined,
+          this.convertAddress(individualDetails.address),
           draftClaim.defendant.email.address
         )
 
@@ -112,8 +112,9 @@ export class ClaimModelConverter {
 
         return new DefendantAsSoleTrader(
           soleTraderDetails.name,
-          soleTraderDetails.hasCorrespondenceAddress ? this.convertAddress(soleTraderDetails.address) : undefined,
-          draftClaim.defendant.email.address, soleTraderDetails.businessName
+          this.convertAddress(soleTraderDetails.address),
+          draftClaim.defendant.email.address,
+          soleTraderDetails.businessName
         )
 
       case PartyType.COMPANY.value:
@@ -121,15 +122,16 @@ export class ClaimModelConverter {
 
         return new DefendantAsCompany(
           companyDetails.name,
-          companyDetails.hasCorrespondenceAddress ? this.convertAddress(companyDetails.address) : undefined,
-          draftClaim.defendant.email.address, companyDetails.contactPerson
+          this.convertAddress(companyDetails.address),
+          draftClaim.defendant.email.address,
+          companyDetails.contactPerson
         )
       case PartyType.ORGANISATION.value:
         const organisationDetails = defendantDetails as OrganisationDetails
 
         return new DefendantAsOrganisation(
           organisationDetails.name,
-          organisationDetails.hasCorrespondenceAddress ? this.convertAddress(organisationDetails.address) : undefined,
+          this.convertAddress(organisationDetails.address),
           draftClaim.defendant.email.address,
           organisationDetails.contactPerson
         )
