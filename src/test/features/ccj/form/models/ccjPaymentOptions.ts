@@ -49,7 +49,7 @@ describe('CCJPaymentOption', () => {
       })
 
       it('invalid option', () => {
-        const errors = validator.validateSync(new CCJPaymentOption(new PaymentType('unknown')))
+        const errors = validator.validateSync(new CCJPaymentOption(new PaymentType('unknown', '')))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.OPTION_REQUIRED)
