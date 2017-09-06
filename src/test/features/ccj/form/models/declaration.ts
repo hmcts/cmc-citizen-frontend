@@ -9,8 +9,8 @@ import { Declaration, ValidationErrors } from 'ccj/form/models/declaration'
 describe('Declaration', () => {
   describe('constructor', () => {
     it('should set the primitive fields to undefined', () => {
-      const statementOfTruth = new Declaration()
-      expect(statementOfTruth.signed).to.be.undefined
+      const declaration = new Declaration()
+      expect(declaration.signed).to.be.undefined
     })
   })
 
