@@ -61,7 +61,7 @@
     {{ tableStart("theirDetails", "Their details") }}
     {{ row('Name:', draftClaim.defendant.partyDetails.name) }}
     {% if (defendantPartyType === 'company' or defendantPartyType === 'organisation') %}
-      {% if (contactPerson) %}
+      {% if (defendantContactPerson) %}
         {{ row("Contact Name:", defendantContactPerson) }}
       {% endif %}
     {% endif %}
