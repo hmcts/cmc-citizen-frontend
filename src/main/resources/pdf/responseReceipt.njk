@@ -237,12 +237,14 @@
           {{ defendant.email }}
         </td>
       </tr>
+      {% if defendant.dateOfBirth is defined %}
       <tr>
         <td>Date of birth:</td>
         <td>
           {{ defendant.dateOfBirth }}
         </td>
       </tr>
+      {% endif %}
     </table>
   </div>
 </div>

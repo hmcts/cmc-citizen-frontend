@@ -1,6 +1,7 @@
 import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
-import { Company } from 'claims/models/details/theirs/company'
+import { Individual } from 'claims/models/details/theirs/individual'
 import { SoleTrader } from 'claims/models/details/theirs/soleTrader'
+import { Company } from 'claims/models/details/theirs/company'
 import { Organisation } from 'claims/models/details/theirs/organisation'
 import { PartyType } from 'app/common/partyType'
 
@@ -17,6 +18,7 @@ export class TheirDetailsMapper {
         townOrCity: party.address.city,
         postcode: party.address.postcode
       },
+      dateOfBirth: this.dateOfBirth(party),
       email: email
     }
   }
@@ -38,7 +40,7 @@ export class TheirDetailsMapper {
     }
   }
 
-  static businessName (partyDetails: TheirDetails): any {
+  private static businessName (partyDetails: TheirDetails): any {
     if (partyDetails && partyDetails.type) {
       switch (partyDetails.type) {
         case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
@@ -48,7 +50,7 @@ export class TheirDetailsMapper {
     return undefined
   }
 
-  static contactPerson (partyDetails: TheirDetails): any {
+  private static contactPerson (partyDetails: TheirDetails): any {
     if (partyDetails && partyDetails.type) {
       switch (partyDetails.type) {
         case PartyType.COMPANY.value:
@@ -58,5 +60,14 @@ export class TheirDetailsMapper {
       }
     }
     return undefined
+  }
+
+  private static dateOfBirth (partyDetails: TheirDetails): any {
+    if (partyDetails && partyDetails.type) {
+      switch (partyDetails.type) {
+        case PartyType.INDIVIDUAL.value:
+          return (partyDetails as Individual).dateOfBirth
+      }
+    }
   }
 }
