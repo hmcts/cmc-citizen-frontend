@@ -6,7 +6,7 @@ import { PartyType } from 'app/common/partyType'
 
 export class PartyDetailsMapper {
   static createPartyDetails (party: Party, email: string): object {
-    let data = {
+    const data = {
       type: this.partyTypeAsString(party),
       fullName: party.name,
       contactPerson: this.contactPerson(party),

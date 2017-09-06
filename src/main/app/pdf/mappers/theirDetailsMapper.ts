@@ -3,10 +3,11 @@ import { Company } from 'claims/models/details/theirs/company'
 import { SoleTrader } from 'claims/models/details/theirs/soleTrader'
 import { Organisation } from 'claims/models/details/theirs/organisation'
 import { PartyType } from 'app/common/partyType'
+
 export class TheirDetailsMapper {
   static createTheirDetails (party: TheirDetails, email: string): object {
-    let data = {
-      type: party.type,
+    return {
+      type: this.partyTypeAsString(party),
       fullName: party.name,
       contactPerson: this.contactPerson(party),
       businessName: this.businessName(party),
@@ -18,7 +19,6 @@ export class TheirDetailsMapper {
       },
       email: email
     }
-    return data
   }
 
   static partyTypeAsString (partyDetails: TheirDetails): string {

@@ -3,7 +3,6 @@ import { TheirDetailsMapper } from 'app/pdf/mappers/theirDetailsMapper'
 
 export class DefendantMapper {
   static createDefendantDetails (defendant: Defendant, email: string): object {
-    let mapped = TheirDetailsMapper.createTheirDetails(defendant, email)
-    return mapped
+    return TheirDetailsMapper.createTheirDetails(defendant, email)
   }
 }
