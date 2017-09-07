@@ -124,7 +124,7 @@
     <fieldset id="{{ name }}[label]" {% if isInline %} class="inline" {% endif %}>
       <legend>
         <span class="form-label-bold {% if legendHidden %}visually-hidden{% endif %}">
-          {{ label }}
+          {{ t(label) }}
         </span>
         <span class="error-message">{{ t(error) }}</span>
       </legend>
