@@ -59,7 +59,7 @@ export default express.Router()
   }))
   .post(
     Paths.defendantYourDetailsPage.uri,
-    FormValidator.requestHandler(PartyDetails, deserializeFn),
+    FormValidator.requestHandler(PartyDetails, deserializeFn, 'defendant'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<PartyDetails> = req.body
 

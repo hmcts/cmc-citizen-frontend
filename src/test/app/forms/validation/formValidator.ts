@@ -62,7 +62,7 @@ describe('FormValidator', () => {
   it('should not validate deserialized object when action is whitelisted', () => {
     req.body = { action: { reload: 'Reload page' } }
 
-    FormValidator.requestHandler(Party, null, ['reload'])(req, res, next)
+    FormValidator.requestHandler(Party, null, undefined, ['reload'])(req, res, next)
 
     chai.expect(req.body.errors.length).to.be.equal(0)
   })

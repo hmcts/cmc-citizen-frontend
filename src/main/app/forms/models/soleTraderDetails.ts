@@ -8,7 +8,7 @@ export class ValidationErrors {
 
 export class SoleTraderDetails extends PartyDetails {
 
-  @MaxLength(35, { message: ValidationErrors.ORGANISATION_NAME_TOO_LONG })
+  @MaxLength(35, { message: ValidationErrors.ORGANISATION_NAME_TOO_LONG, groups: ['claimant', 'defendant'] })
   businessName?: string
 
   constructor () {

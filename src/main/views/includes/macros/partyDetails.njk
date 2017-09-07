@@ -17,7 +17,7 @@
 
 {% macro soleTraderDetailsFragment(form, nameLabel = 'Full name', addressHeading = 'Address', addressHint, hasCorrespondenceAddress = false) %}
   {{ textInput(t(nameLabel), 'name', form, autocomplete = 'name') }}
-  {{ textInput(t('Business name'), 'businessName', form) }}
+  {{ textInput(t('Business name (optional)'), 'businessName', form) }}
 
   <h2 class="heading-medium">{{ t(addressHeading) }}</h2>
   {% if addressHint %}
@@ -30,9 +30,9 @@
   {% endif %}
 {% endmacro %}
 
-{% macro companyDetailsFragment(form, nameLabel = 'Company name', addressHeading = 'Company address', addressHint, hasCorrespondenceAddress = false) %}
+{% macro companyDetailsFragment(form, nameLabel = 'Company name', contactPersonLabel = 'Contact person', addressHeading = 'Company address', addressHint, hasCorrespondenceAddress = false) %}
   {{ textInput(t(nameLabel), 'name', form, autocomplete = 'companyName') }}
-  {{ textInput(t('Contact person'), 'contactPerson', form) }}
+  {{ textInput(t(contactPersonLabel), 'contactPerson', form) }}
 
   <h2 class="heading-medium">{{ t(addressHeading) }}</h2>
   {% if addressHint %}
@@ -45,9 +45,9 @@
   {% endif %}
 {% endmacro %}
 
-{% macro organisationDetailsFragment(form, nameLabel = 'Organisation name', addressHeading = 'Organisation address', addressHint, hasCorrespondenceAddress = false) %}
+{% macro organisationDetailsFragment(form, nameLabel = 'Organisation name', contactPersonLabel = 'Contact person', addressHeading = 'Organisation address', addressHint, hasCorrespondenceAddress = false) %}
   {{ textInput(t(nameLabel), 'name', form) }}
-  {{ textInput(t('Contact person'), 'contactPerson', form) }}
+  {{ textInput(t(contactPersonLabel), 'contactPerson', form) }}
 
   <h2 class="heading-medium">{{ t(addressHeading) }}</h2>
   {% if addressHint %}

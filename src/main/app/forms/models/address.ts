@@ -26,19 +26,19 @@ export class ValidationConstants {
 
 export class Address implements Serializable<Address>, CompletableTask {
 
-  @IsDefined({ message: ValidationErrors.FIRST_LINE_REQUIRED })
-  @IsNotBlank({ message: ValidationErrors.FIRST_LINE_REQUIRED })
-  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.FIRST_LINE_TOO_LONG })
+  @IsDefined({ message: ValidationErrors.FIRST_LINE_REQUIRED, groups: ['claimant', 'defendant'] })
+  @IsNotBlank({ message: ValidationErrors.FIRST_LINE_REQUIRED, groups: ['claimant', 'defendant'] })
+  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.FIRST_LINE_TOO_LONG, groups: ['claimant', 'defendant'] })
   line1?: string
-  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.SECOND_LINE_TOO_LONG })
+  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.SECOND_LINE_TOO_LONG, groups: ['claimant', 'defendant'] })
   line2?: string
-  @IsDefined({ message: ValidationErrors.CITY_REQUIRED })
-  @IsNotBlank({ message: ValidationErrors.CITY_REQUIRED })
-  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.CITY_NOT_VALID })
+  @IsDefined({ message: ValidationErrors.CITY_REQUIRED, groups: ['claimant', 'defendant'] })
+  @IsNotBlank({ message: ValidationErrors.CITY_REQUIRED, groups: ['claimant', 'defendant'] })
+  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.CITY_NOT_VALID, groups: ['claimant', 'defendant'] })
   city?: string
-  @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED })
-  @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED })
-  @MaxLength(ValidationConstants.POSTCODE_MAX_LENGTH, { message: ValidationErrors.POSTCODE_NOT_VALID })
+  @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant'] })
+  @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant'] })
+  @MaxLength(ValidationConstants.POSTCODE_MAX_LENGTH, { message: ValidationErrors.POSTCODE_NOT_VALID, groups: ['claimant', 'defendant'] })
   postcode?: string
 
   constructor (line1?: string, line2?: string, city?: string, postcode?: string) {

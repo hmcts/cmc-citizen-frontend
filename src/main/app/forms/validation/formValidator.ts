@@ -8,7 +8,7 @@ type Mapper<T> = (value: any) => T
 
 export class FormValidator {
 
-  static requestHandler<T> (modelType: Constructor<T>, modelTypeMapper?: Mapper<T>, actionsWithoutValidation?: string[]): express.RequestHandler {
+  static requestHandler<T> (modelType: Constructor<T>, modelTypeMapper?: Mapper<T>, validationGroup?: string, actionsWithoutValidation?: string[]): express.RequestHandler {
     const validator: Validator = new Validator()
 
     if (!modelTypeMapper) {
@@ -28,7 +28,7 @@ export class FormValidator {
     return (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const model: T = modelTypeMapper(req.body)
 
-      const errors: ValidationError[] = isValidationEnabledFor(req) ? validator.validateSync(model) : []
+      const errors: ValidationError[] = isValidationEnabledFor(req) ? validator.validateSync(model, { groups: validationGroup !== undefined ? [validationGroup] : [] }) : []
       const action: object = req.body.action
 
       req.body = new Form<T>(model, errors)

@@ -15,20 +15,20 @@ export class ValidationErrors {
 export class PartyDetails implements Serializable<PartyDetails>, CompletableTask {
   type?: string
 
-  @IsDefined({ message: ValidationErrors.NAME_REQUIRED })
-  @IsNotBlank({ message: ValidationErrors.NAME_REQUIRED })
-  @MaxLength(255, { message: ValidationErrors.NAME_TOO_LONG })
+  @IsDefined({ message: ValidationErrors.NAME_REQUIRED, groups: ['claimant', 'defendant'] })
+  @IsNotBlank({ message: ValidationErrors.NAME_REQUIRED, groups: ['claimant', 'defendant'] })
+  @MaxLength(255, { message: ValidationErrors.NAME_TOO_LONG, groups: ['claimant', 'defendant'] })
   name?: string
 
-  @IsDefined({ message: ValidationErrors.ADDRESS_REQUIRED })
-  @ValidateNested()
+  @IsDefined({ message: ValidationErrors.ADDRESS_REQUIRED, groups: ['claimant', 'defendant'] })
+  @ValidateNested({ groups: ['claimant', 'defendant'] })
   address?: Address = new Address()
 
   hasCorrespondenceAddress?: boolean
 
-  @ValidateIf(partyDetails => partyDetails.hasCorrespondenceAddress === true)
-  @IsDefined({ message: ValidationErrors.CORRESPONDENCE_ADDRESS_REQUIRED })
-  @ValidateNested()
+  @ValidateIf(partyDetails => partyDetails.hasCorrespondenceAddress === true, { groups: ['claimant', 'defendant'] })
+  @IsDefined({ message: ValidationErrors.CORRESPONDENCE_ADDRESS_REQUIRED, groups: ['claimant', 'defendant'] })
+  @ValidateNested({ groups: ['claimant', 'defendant'] })
   correspondenceAddress?: CorrespondenceAddress
 
   constructor (name?: string,

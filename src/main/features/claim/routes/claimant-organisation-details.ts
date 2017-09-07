@@ -19,7 +19,7 @@ export default express.Router()
   })
   .post(
     Paths.claimantOrganisationDetailsPage.uri,
-    FormValidator.requestHandler(OrganisationDetails, OrganisationDetails.fromObject),
+    FormValidator.requestHandler(OrganisationDetails, OrganisationDetails.fromObject, 'claimant'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<OrganisationDetails> = req.body
       if (form.hasErrors()) {

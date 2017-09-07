@@ -10,9 +10,9 @@ export class ValidationErrors {
 
 export class OrganisationDetails extends PartyDetails {
 
-  @IsDefined({ message: ValidationErrors.CONTACT_PERSON_REQUIRED })
-  @IsNotBlank({ message: ValidationErrors.CONTACT_PERSON_REQUIRED })
-  @MaxLength(35, { message: ValidationErrors.CONTACT_PERSON_NAME_TOO_LONG })
+  @IsDefined({ message: ValidationErrors.CONTACT_PERSON_REQUIRED, groups: ['claimant'] })
+  @IsNotBlank({ message: ValidationErrors.CONTACT_PERSON_REQUIRED, groups: ['claimant'] })
+  @MaxLength(35, { message: ValidationErrors.CONTACT_PERSON_NAME_TOO_LONG, groups: ['claimant'] })
   contactPerson?: string
 
   constructor () {
