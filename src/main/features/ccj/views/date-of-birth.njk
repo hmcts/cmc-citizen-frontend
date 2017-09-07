@@ -19,9 +19,8 @@
         "For example, if there are 2 people living at the same address with the same " +
         "name.") }}</p>
 
-
         {% set error = form.errorFor('known') %}
-        <fieldset class="form-group {% if error %} form-group-error {% endif %}">
+        <fieldset  id="known[label]" class="form-group {% if error %} form-group-error {% endif %}">
 
           <legend>
               <span class="form-label-bold">

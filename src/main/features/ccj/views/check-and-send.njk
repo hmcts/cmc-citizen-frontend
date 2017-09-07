@@ -24,8 +24,8 @@
     {{ tableEnd() }}
 
     {{ tableStart("payment", "Payment") }}
-    {{ row("Amount to be paid by defendant", details.paidAmount.amount | numeral, paidAmountUrl) }}
-    {{ row("When you want the defendant to pay", t(details.paymentOption.option.displayValue), paymentOptionUrl) }}
+    {{ row("Amount to be paid by defendant", amountToBePaid | numeral) }}
+    {{ row("When you want the defendant to pay", t(details.paymentOption.option.displayValue), paidAmountUrl) }}
     {{ tableEnd() }}
 
     <div class="form-group">

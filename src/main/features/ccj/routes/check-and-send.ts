@@ -7,8 +7,7 @@ import { Declaration } from 'ccj/form/models/declaration'
 function prepareUrls (externalId: string): object {
   return {
     addressUrl: Paths.theirDetailsPage.evaluateUri({ externalId: externalId }),
-    paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId }),
-    paymentOptionUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
+    paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId })
   }
 }
 
@@ -16,6 +15,7 @@ function renderView (form: Form<Declaration>, req: express.Request, res: express
   res.render(Paths.checkAndSendPage.associatedView, {
     form: form,
     details: res.locals.user.ccjDraft,
+    amountToBePaid: res.locals.user.claim.totalAmount - (res.locals.user.ccjDraft.paidAmount.amount || 0),
     ...prepareUrls(req.params.externalId)
   })
 }
