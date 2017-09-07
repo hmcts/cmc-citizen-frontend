@@ -1,10 +1,38 @@
 import { LocalDate } from 'forms/models/localDate'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
+import { IsDefined, IsIn, IsPositive, ValidateNested } from 'class-validator'
+import { isValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
+import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
+import { IsTodayOrInFuture } from 'app/forms/validation/validators/dateTodayOrInFutureConstraint'
+
+export class ValidationErrors {
+  static readonly FIRST_PAYMENT_AMOUNT_REQUIRED: string = 'Enter an amount for first payment'
+  static readonly INSTALMENTS_AMOUNT_REQUIRED: string = 'Enter an amount for equal instalments'
+  static readonly FIRST_PAYMENT_AMOUNT_INVALID: string = 'Enter a valid amount of first payment'
+  static readonly INSTALMENTS_AMOUNT_INVALID: string = 'Enter a valid amount for equal instalments'
+  static readonly FUTURE_DATE: string = 'Enter a first payment date in the future'
+  static readonly INVALID_DATE: string = 'Enter a valid date of first payment'
+  static readonly SELECT_PAYMENT_SCHEDULE: string = 'Select how often they should pay'
+}
+
 
 export class RepaymentPlan {
+
+  @IsDefined({ message: ValidationErrors.FIRST_PAYMENT_AMOUNT_REQUIRED })
+  @IsPositive({ message: ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
   firstPayment?: number
+
+  @IsDefined({ message: ValidationErrors.INSTALMENTS_AMOUNT_REQUIRED })
+  @IsPositive({ message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
   installmentAmount?: number
+
+  @ValidateNested()
+  @IsValidLocalDate({ message: ValidationErrors.INVALID_DATE })
+  @isValidYearFormat(4, { message: ValidationErrors.INVALID_DATE })
+  @IsTodayOrInFuture({ message: ValidationErrors.FUTURE_DATE })
   firstPaymentDate?: LocalDate
+
+  @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SELECT_PAYMENT_SCHEDULE })
   paymentSchedule?: PaymentSchedule
 
 
@@ -16,18 +44,14 @@ export class RepaymentPlan {
   }
 
   static fromObject (value?: any): RepaymentPlan {
-    if (value && value.option) {
+    if (value) {
       const firstPayment = value.firstPayment ? parseFloat(value.firstPayment) : undefined
       const installmentAmount = value.installmentAmount ? parseFloat(value.installmentAmount) : undefined
-      const firstPaymentDate = new LocalDate(
-        value.firstPaymentDate.year,
-        value.firstPaymentDate.month,
-        value.firstPaymentDate.day
-      )
-      const option = PaymentSchedule.all()
-        .filter(option => option.value === value.paymentSchedule.value)
+      const firstPaymentDate = LocalDate.fromObject(value.firstPaymentDate)
+      const paymentSchedule = PaymentSchedule.all()
+        .filter(option => option.value === value.paymentSchedule)
         .pop()
-      return new RepaymentPlan(firstPayment, installmentAmount, firstPaymentDate, option)
+      return new RepaymentPlan(firstPayment, installmentAmount, firstPaymentDate, paymentSchedule)
     } else {
       return new RepaymentPlan()
     }
@@ -38,8 +62,8 @@ export class RepaymentPlan {
       this.firstPayment = input.firstPayment
       this.installmentAmount = input.installmentAmount
       this.firstPaymentDate = new LocalDate().deserialize(input.firstPaymentDate)
-      this.paymentSchedule =  PaymentSchedule.all()
-        .filter(option => option.value === input.paymentSchedule.value)
+      this.paymentSchedule = PaymentSchedule.all()
+        .filter(option => input.paymentSchedule && option.value === input.paymentSchedule.value)
         .pop()
     }
 

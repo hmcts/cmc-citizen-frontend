@@ -15,6 +15,7 @@
       </p>
 
       <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
         <div class="form-group">
           <fieldset>
             <legend class="visually-hidden">{{ t('How much they pay following this instalment') }}</legend>
@@ -31,8 +32,9 @@
 
         <div class="form-group">
           <fieldset>
-            <legend class="form-label-bold">{{ t('When you want them to make the first payment') }}</legend>
-            {{ dateInput('firstPaymentDate', form, 'For example, 12 03 2017') }}
+            <legend class="visually-hidden">{{ t('When you want them to make the first payment') }}</legend>
+            {{ dateInput('firstPaymentDate', form, hint = 'For example, 12 03 2017',
+            label = 'When you want them to make the first payment') }}
           </fieldset>
         </div>
 
@@ -43,15 +45,18 @@
           [
           {
             label: 'Each week',
-            value: 'EACH_WEEK'
+            value: 'EACH_WEEK',
+            checked: form.valueFor('paymentSchedule').value === 'EACH_WEEK'
           },
           {
             label: 'Every 2 weeks',
-            value: 'EVERY_TWO_WEEKS'
+            value: 'EVERY_TWO_WEEKS',
+            checked: form.valueFor('paymentSchedule').value === 'EVERY_TWO_WEEKS'
           },
           {
             label: 'Every month',
-            value: 'EVERY_MONTH'
+            value: 'EVERY_MONTH',
+            checked: form.valueFor('paymentSchedule').value === 'EVERY_MONTH'
           }
           ],
           form

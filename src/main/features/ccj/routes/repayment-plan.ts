@@ -7,6 +7,8 @@ import { Form } from 'app/forms/form'
 import { DraftCCJService } from 'ccj/draft/DraftCCJService'
 import User from 'idam/user'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
+import { RepaymentPlan } from 'ccj/form/models/repaymentPlan'
+import { FormValidator } from 'forms/validation/formValidator'
 
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
   const user: User = res.locals.user
@@ -22,22 +24,23 @@ export default express.Router()
   .get(Paths.repaymentPlanPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
-      renderView(new Form(user.ccjDraft.paidAmount), res)
+      renderView(new Form(user.ccjDraft.repaymentPlan), res)
     }))
 
   .post(Paths.repaymentPlanPage.uri,
+    FormValidator.requestHandler(RepaymentPlan, RepaymentPlan.fromObject),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
 
-        const form: Form<PaidAmount> = req.body
+        const form: Form<RepaymentPlan> = req.body
         const user: User = res.locals.user
 
         if (form.hasErrors()) {
           renderView(form, res)
         } else {
           const { externalId } = req.params
-          user.ccjDraft.paidAmount = form.model
+          user.ccjDraft.repaymentPlan = form.model
           await DraftCCJService.save(res, next)
-          res.redirect(Paths.checkYourAnswerPage.evaluateUri({ externalId: externalId }))
+          res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
         }
       }))
