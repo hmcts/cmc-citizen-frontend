@@ -31,6 +31,11 @@ describe('DateTodayOrInFutureConstraint', () => {
       it('given an invalid structure', () => {
         expect(constraint.validate({ a: 1, b: 1, c: 2000 })).to.equal(false)
       })
+
+      it('given an date in the past', () => {
+        let inPast = moment().subtract(10, 'years')
+        expect(constraint.validate(new LocalDate(inPast.year(), 8, 8))).to.equal(undefined)
+      })
     })
   })
 })
