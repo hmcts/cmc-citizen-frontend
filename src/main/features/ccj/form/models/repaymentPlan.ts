@@ -15,7 +15,6 @@ export class ValidationErrors {
   static readonly SELECT_PAYMENT_SCHEDULE: string = 'Select how often they should pay'
 }
 
-
 export class RepaymentPlan {
 
   @IsDefined({ message: ValidationErrors.FIRST_PAYMENT_AMOUNT_REQUIRED })
@@ -34,7 +33,6 @@ export class RepaymentPlan {
 
   @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SELECT_PAYMENT_SCHEDULE })
   paymentSchedule?: PaymentSchedule
-
 
   constructor (firstPayment?: number, installmentAmount?: number, firstPaymentDate?: LocalDate, paymentSchedule?: PaymentSchedule) {
     this.firstPayment = firstPayment
