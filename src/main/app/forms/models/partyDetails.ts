@@ -63,15 +63,13 @@ export class PartyDetails implements Serializable<PartyDetails> {
       this.type = input.type
       this.name = input.name
       this.address = new Address().deserialize(input.address)
-      this.hasCorrespondenceAddress = input.hasCorrespondenceAddress === 'true' || input.hasCorrespondenceAddress === true
+      this.hasCorrespondenceAddress = input.hasCorrespondenceAddress
       this.correspondenceAddress = new CorrespondenceAddress().deserialize(input.correspondenceAddress)
     }
     return this
   }
 
   isCompleted (...groups: string[]): boolean {
-    const validationErrors = new Validator().validateSync(this, { groups: groups })
-    console.log(validationErrors)
-    return validationErrors.length === 0
+    return new Validator().validateSync(this, { groups: groups }).length === 0
   }
 }

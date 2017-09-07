@@ -23,7 +23,7 @@ describe('SoleTraderDetails', () => {
         line1: 'first line',
         postcode: 'bb127nq'
       },
-      hasCorrespondenceAddress: 'true',
+      hasCorrespondenceAddress: true,
       correspondenceAddress: {
         line1: 'another line',
         city: 'some city',

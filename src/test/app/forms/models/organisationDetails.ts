@@ -16,7 +16,6 @@ const aVeryLongString = (): string => {
 describe('OrganisationDetails', () => {
   let input
   let formInput
-  let organisationDetailsInput
 
   beforeEach(() => {
     input = {
@@ -24,7 +23,7 @@ describe('OrganisationDetails', () => {
         line1: 'first line',
         postcode: 'bb127nq'
       },
-      hasCorrespondenceAddress: 'true',
+      hasCorrespondenceAddress: true,
       correspondenceAddress: {
         line1: 'another line',
         city: 'some city',
@@ -34,7 +33,6 @@ describe('OrganisationDetails', () => {
     }
 
     formInput = { ...input, hasCorrespondenceAddress: 'true' }
-    organisationDetailsInput = {...input, organisationName: 'companyName'}
   })
 
   describe('constructor', () => {
@@ -160,7 +158,7 @@ describe('OrganisationDetails', () => {
     })
 
     it('should return object with values set from provided input json', () => {
-      let deserialized: OrganisationDetails = new OrganisationDetails().deserialize(organisationDetailsInput)
+      let deserialized: OrganisationDetails = new OrganisationDetails().deserialize(input)
       expect(deserialized.address.line1).to.equal('first line')
       expect(deserialized.address.postcode).to.equal('bb127nq')
       expect(deserialized.hasCorrespondenceAddress).to.equal(true)
@@ -178,7 +176,7 @@ describe('OrganisationDetails', () => {
     })
 
     it('should deserialize all fields', () => {
-      let deserialized: OrganisationDetails = OrganisationDetails.fromObject(organisationDetailsInput)
+      let deserialized: OrganisationDetails = OrganisationDetails.fromObject(formInput)
       expect(deserialized.address.line1).to.equal('first line')
       expect(deserialized.address.postcode).to.equal('bb127nq')
       expect(deserialized.hasCorrespondenceAddress).to.equal(true)

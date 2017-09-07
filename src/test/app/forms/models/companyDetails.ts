@@ -22,7 +22,7 @@ describe('CompanyDetails', () => {
         line1: 'first line',
         postcode: 'bb127nq'
       },
-      hasCorrespondenceAddress: 'true',
+      hasCorrespondenceAddress: true,
       correspondenceAddress: {
         line1: 'another line',
         city: 'some city',
@@ -177,7 +177,7 @@ describe('CompanyDetails', () => {
     })
 
     it('should deserialize all fields', () => {
-      let deserialized: CompanyDetails = CompanyDetails.fromObject(input)
+      let deserialized: CompanyDetails = CompanyDetails.fromObject(formInput)
       expect(deserialized.address.line1).to.equal('first line')
       expect(deserialized.address.postcode).to.equal('bb127nq')
       expect(deserialized.hasCorrespondenceAddress).to.equal(true)

@@ -1,9 +1,8 @@
 import { expect } from 'chai'
 
-import { ValidationErrors, PartyDetails } from 'forms/models/partyDetails'
-import { ValidationErrors as AddressValidationErrors } from 'forms/models/address'
+import { PartyDetails, ValidationErrors } from 'forms/models/partyDetails'
+import { Address, ValidationErrors as AddressValidationErrors } from 'forms/models/address'
 import { ValidationErrors as CorrespondenceAddressValidationErrors } from 'forms/models/correspondenceAddress'
-import { Address } from 'forms/models/address'
 import { ValidationError, Validator } from 'class-validator'
 import { expectValidationError } from './validationUtils'
 
@@ -19,7 +18,7 @@ describe('PartyDetails', () => {
         line1: 'first line',
         postcode: 'bb127nq'
       },
-      hasCorrespondenceAddress: 'true',
+      hasCorrespondenceAddress: true,
       correspondenceAddress: {
         line1: 'another line',
         city: 'some city',
@@ -27,7 +26,7 @@ describe('PartyDetails', () => {
       }
     }
 
-    formInput = { ...input}
+    formInput = { ...input, hasCorrespondenceAddress: 'true' }
   })
 
   describe('constructor', () => {
