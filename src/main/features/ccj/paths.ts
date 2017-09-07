@@ -8,7 +8,8 @@ export class Paths {
   static readonly paidAmountPage = new RoutablePath(`${ccjPath}/paid-amount`)
   static readonly paidAmountSummaryPage = new RoutablePath(`${ccjPath}/paid-amount-summary`)
   static readonly paymentOptionsPage = new RoutablePath(`${ccjPath}/payment-options`)
-  static readonly checkYourAnswerPage = new RoutablePath(`${ccjPath}/check-your-answer`)
+  static readonly checkAndSendPage = new RoutablePath(`${ccjPath}/check-and-send`)
   static readonly payBySetDatePage = new RoutablePath(`${ccjPath}/pay-by-set-date`)
   static readonly repaymentPlanPage = new RoutablePath(`${ccjPath}/repayment-plan`)
+  static readonly ccjRequestedConfirmationPage = new RoutablePath(`${ccjPath}/ccj-requested-confirmation`)
 }

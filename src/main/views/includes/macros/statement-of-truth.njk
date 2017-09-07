@@ -1,23 +1,31 @@
 {% from "includes/macros/form.njk" import checkboxGroup, submitButton %}
 
-{% macro statementOfTruth(form, statementOfTruthText = '') %}
-  <p class="bold-medium">{{ t('Statement of truth') }}</p>
+{%
+  macro statementOfTruth(
+    form,
+    title = "Statement of truth",
+    warningMessage = "You could be fined or go to prison if you deliberately give untrue or misleading information.",
+    label = "I confirm that I believe the details I have provided are correct."
+  )
+%}
+  <p class="bold-medium">{{ t(title) }}</p>
 
   <div class="notice notice-medium">
     <i class="icon icon-important">
       <span class="visually-hidden">{{ t('Warning') }}</span>
     </i>
     <strong class="bold-small">
-      {{ t("You could be fined or go to prison if you deliberately give untrue or misleading information.") }}
+      {{ t(warningMessage) }}
     </strong>
   </div>
 
-  {{ checkboxGroup(
-  t('Statement of truth'),
-  'signed',
-  [
-  { label: t(statementOfTruthText), value: true }
-  ],
-  form,
-  legendHidden = true) }}
+  {{
+    checkboxGroup(
+      label = label,
+      name = 'signed',
+      options = [ { label: label, value: true } ],
+      form = form,
+      legendHidden = true
+    )
+  }}
 {% endmacro %}

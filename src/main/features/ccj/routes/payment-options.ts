@@ -33,7 +33,7 @@ export default express.Router()
 
           switch (form.model.option) {
             case PaymentType.IMMEDIATELY:
-              res.redirect(Paths.checkYourAnswerPage.evaluateUri({ externalId: externalId }))
+              res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
               break
             case PaymentType.FULL:
               res.redirect(Paths.payBySetDatePage.evaluateUri({ externalId: externalId }))
