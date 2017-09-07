@@ -18,6 +18,6 @@ export class PartyTypeResponse {
     if (!value) {
       return value
     }
-    return new PartyTypeResponse(value.type ? PartyType.valueOf(value.type.value) : undefined)
+    return new PartyTypeResponse(value.type ? PartyType.valueOf(value.type) : undefined)
   }
 }

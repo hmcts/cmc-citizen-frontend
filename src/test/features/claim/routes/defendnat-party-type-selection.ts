@@ -46,7 +46,7 @@ describe('Claim issue: defendant party type selection page', () => {
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ type: { value: '', displayValue: '' } })
+          .send({ type: undefined })
           .expect(res => expect(res).to.be.successful.withText('About them', 'div class="error-summary"'))
       })
 
@@ -57,7 +57,7 @@ describe('Claim issue: defendant party type selection page', () => {
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ type: { value: 'individual', displayValue: 'Individual' } })
+          .send({ type: 'individual' })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -68,7 +68,7 @@ describe('Claim issue: defendant party type selection page', () => {
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ type: { value: 'individual', displayValue: 'Individual' } })
+          .send({ type: 'individual' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantIndividualDetailsPage.uri))
       })
 
@@ -79,7 +79,7 @@ describe('Claim issue: defendant party type selection page', () => {
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ type: { value: 'soleTrader', displayValue: 'soleTrader' } })
+          .send({ type: 'soleTrader' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri))
       })
 
@@ -90,7 +90,7 @@ describe('Claim issue: defendant party type selection page', () => {
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ type: { value: 'company', displayValue: 'company' } })
+          .send({ type: 'company' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantCompanyDetailsPage.uri))
       })
 
@@ -101,7 +101,7 @@ describe('Claim issue: defendant party type selection page', () => {
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ type: { value: 'organisation', displayValue: 'organisation' } })
+          .send({ type: 'organisation' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantOrganisationDetailsPage.uri))
       })
     })

@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import nameInput, csrfProtection, errorSummary, radioOption, saveAndContinueButton %}
+{% from "includes/macros/form.njk" import nameInput, csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 
 {% set title = t("Money claim") %}
 
@@ -10,33 +10,42 @@
     <form method="POST" novalidate>
       {{ csrfProtection(csrf) }}
 
-      {% set error = form.errorFor('type') %}
-      <div class="form-group {% if error %} form-group-error {% endif %}">
-        <fieldset id="type[label]">
-          <legend class="visually-hidden">{{ t("Who are you making the claim against?") }}</legend>
-          {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
-
-          {{ radioOption(form = form, name = 'type[value]', value = 'individual',
-            label = t("An individual"), bold = true,
-            hint = t("For example, someone you lent money")
-          )}}
-
-          {{ radioOption(form = form, name = 'type[value]', value = 'soleTrader',
-            label = t("A sole trader or self-employed person"), bold = true,
-            hint = t("For example, a tradesperson who did work for you")
-          )}}
-
-          {{ radioOption(form = form, name = 'type[value]', value = 'company',
-            label = t("On behalf of a company"), bold = true,
-            hint = t("For example, a company that sold you goods or services")
-          )}}
-
-          {{ radioOption(form = form, name = 'type[value]', value = 'organisation',
-            label = t("As another type of organisation"), bold = true,
-            hint = t("For example, a partnership, trust, charity, club or association")
-          )}}
-        </fieldset>
-      </div>
+      {{
+        radioGroup(
+          form = form,
+          name = 'type',
+          options = [
+            {
+              bold: true,
+              label: 'An individual',
+              hint: 'For example, someone you lent money',
+              value: 'individual',
+              checked: (form.valueFor('type').value === 'individual')
+            },
+            {
+              bold: true,
+              label: 'A sole trader or self-employed person',
+              hint: 'For example, a tradesperson who did work for you',
+              value: 'soleTrader',
+              checked: (form.valueFor('type').value === 'soleTrader')
+            },
+            {
+              bold: true,
+              label: 'On behalf of a company',
+              hint: 'For example, a company that sold you goods or services',
+              value: 'company',
+              checked: (form.valueFor('type').value === 'company')
+            },
+            {
+              bold: true,
+              label: 'As another type of organisation',
+              hint: 'For example, a partnership, trust, charity, club or association',
+              value: 'organisation',
+              checked: (form.valueFor('type').value === 'organisation')
+            }
+          ]
+        )
+      }}
 
       {{ saveAndContinueButton() }}
     </form>

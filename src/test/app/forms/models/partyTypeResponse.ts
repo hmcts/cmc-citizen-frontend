@@ -23,9 +23,7 @@ describe('PartyTypeResponse', () => {
 
     it('should deserialize all fields', () => {
       expect(PartyTypeResponse.fromObject({
-        type: {
-          value: PartyType.INDIVIDUAL.value
-        }
+        type: PartyType.INDIVIDUAL.value
       })).to.deep.equal(new PartyTypeResponse(PartyType.INDIVIDUAL))
     })
   })
