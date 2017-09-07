@@ -19,13 +19,13 @@
         <p>{{ t('Check their address is right. You can correct or update address.') }}</p>
         <div>
           <h2 class="heading-medium">{{ t('Full name') }}</h2>
-          <p>{{ claim.claimData.defendant.partyDetails.name }}</p>
+          <p>{{ claim.claimData.defendant.name }}</p>
 
           <h2 class="heading-medium">{{ t('Their address') }}</h2>
-          {{ addressFragment(form, name = 'address') }}
+          {{ addressFragment(form) }}
 
           <h2 class="heading-medium">{{ t('Email address') }}</h2>
-          <p>{{ claim.claimData.defendant.partyDetails.email.address }}</p>
+          <p>{{ claim.claimData.defendant.email }}</p>
 
           {{ saveAndContinueButton() }}
         </div>

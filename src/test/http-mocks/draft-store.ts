@@ -87,10 +87,6 @@ export const sampleClaimDraftObj = {
   } as Reason
 } as DraftClaim
 
-const sampleCCJDraftObj = {
-
-}
-
 const sampleResponseDraftObj = {
   lastUpdateTimestamp: 12345,
   response: {
@@ -127,6 +123,29 @@ const sampleResponseDraftObj = {
     } as IndividualDetails
   } as Defendant
 } as ResponseDraft
+
+const sampleCCJDraftObj = {
+  defendant: {
+    partyDetails: {
+      type: 'individual',
+      name: 'John Smith',
+      address: {
+        line1: 'Apartment 99',
+        line2: '',
+        city: 'London',
+        postcode: 'SE28 0JE'
+      },
+      dateOfBirth: {
+        known: true,
+        date: {
+          day: 31,
+          month: 12,
+          year: 1980
+        }
+      }
+    }
+  }
+}
 
 export function resolveRetrieve (draftType: string, draftOverride?: object) {
   let draft: object

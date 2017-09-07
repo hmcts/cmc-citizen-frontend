@@ -22,15 +22,10 @@ const dateOfBirthPage = Paths.dateOfBirthPage.evaluateUri({ externalId: external
 const theirDetailsPage = Paths.theirDetailsPage.evaluateUri({ externalId: externalId })
 
 const validFormData = {
-  type : 'individual',
-  name: 'Janice Henrieta Clark',
-  address: {
-    line1: 'Apt 99',
-    line2: '',
-    city: 'London',
-    postcode: 'E1'
-  },
-  hasCorrespondenceAddress: false
+  line1: 'Apt 99',
+  line2: '',
+  city: 'London',
+  postcode: 'E1'
 }
 
 describe('CCJ - their details', () => {

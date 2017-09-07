@@ -9,13 +9,21 @@ import { Form } from 'app/forms/form'
 import User from 'app/idam/user'
 import { DraftCCJService } from 'ccj/draft/DraftCCJService'
 import { Address } from 'forms/models/address'
+import { PartyDetailsFactory } from 'forms/models/partyDetailsFactory'
+import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
 
-function defaultToAddressProvidedByClaimant (providedByDefendant: PartyDetails, name: string, providedByClaimant: Address): PartyDetails {
+function defaultToAddressProvidedByClaimant (providedByDefendant: Address, providedByClaimant: Address): Address {
   if (providedByDefendant && providedByDefendant.isCompleted()) {
     return providedByDefendant
   } else {
-    return new PartyDetails(name, providedByClaimant)
+    return providedByClaimant
   }
+}
+
+function convertToPartyDetails (value: TheirDetails): PartyDetails {
+  const partyDetails = PartyDetailsFactory.createInstance(value.type)
+  partyDetails.deserialize(value)
+  return partyDetails
 }
 
 function renderView (form: Form<PartyDetails>, res: express.Response): void {
@@ -27,14 +35,14 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
 
-      const providedByDefendant: PartyDetails = user.ccjDraft.defendant.partyDetails
+      const providedByDefendant: Address = user.ccjDraft.defendant.partyDetails !== undefined ? user.ccjDraft.defendant.partyDetails.address : undefined
       const providedByClaimant: Address = Address.fromClaimAddress(user.claim.claimData.defendant.address)
 
-      renderView(new Form(defaultToAddressProvidedByClaimant(providedByDefendant, user.claim.claimData.claimant.name, providedByClaimant)), res)
+      renderView(new Form(defaultToAddressProvidedByClaimant(providedByDefendant, providedByClaimant)), res)
     }))
 
   .post(Paths.theirDetailsPage.uri,
-    FormValidator.requestHandler(PartyDetails, PartyDetails.fromObject),
+    FormValidator.requestHandler(Address, Address.fromObject),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
         const form: Form<PartyDetails> = req.body
@@ -44,7 +52,10 @@ export default express.Router()
         if (form.hasErrors()) {
           renderView(form, res)
         } else {
-          user.ccjDraft.defendant.partyDetails = form.model
+          if (user.ccjDraft.defendant.partyDetails === undefined) {
+            user.ccjDraft.defendant.partyDetails = convertToPartyDetails(user.claim.claimData.defendant)
+          }
+          user.ccjDraft.defendant.partyDetails.address = form.model
           await DraftCCJService.save(res, next)
           res.redirect(Paths.dateOfBirthPage.evaluateUri({ externalId: externalId }))
         }
