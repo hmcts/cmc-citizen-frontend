@@ -45,8 +45,9 @@ export class DefendantResponse implements Serializable<DefendantResponse> {
         case PartyType.ORGANISATION.value:
           return new Organisation().deserialize(defendant)
         default:
-          throw Error('Something went wrong, No defendant type is set')
+          throw Error(`Unknown party type: ${defendant.type}`)
       }
     }
+    return undefined
   }
 }
