@@ -41,11 +41,11 @@ export default express.Router()
           case PartyType.INDIVIDUAL.value:
             res.redirect(Paths.defendantIndividualDetailsPage.uri)
             break
-          case PartyType.COMPANY.value:
-            res.redirect(Paths.defendantCompanyDetailsPage.uri)
-            break
           case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
             res.redirect(Paths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)
+            break
+          case PartyType.COMPANY.value:
+            res.redirect(Paths.defendantCompanyDetailsPage.uri)
             break
           case PartyType.ORGANISATION.value:
             res.redirect(Paths.defendantOrganisationDetailsPage.uri)

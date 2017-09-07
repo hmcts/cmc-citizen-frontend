@@ -9,7 +9,6 @@ import { PartyType } from 'app/common/partyType'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
 import { IndividualDetails } from 'forms/models/individualDetails'
-import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 
 function renderView (form: Form<DateOfBirth>, res: express.Response) {
   res.render(Paths.defendantDateOfBirthPage.associatedView, {
@@ -22,9 +21,6 @@ export default express.Router()
     switch (res.locals.user.responseDraft.defendantDetails.partyDetails.type) {
       case PartyType.INDIVIDUAL.value:
         renderView(new Form((res.locals.user.responseDraft.defendantDetails.partyDetails as IndividualDetails).dateOfBirth), res)
-        break
-      case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
-        renderView(new Form((res.locals.user.responseDraft.defendantDetails.partyDetails as SoleTraderDetails).dateOfBirth), res)
         break
       default:
         res.redirect(Paths.defendantMobilePage.uri)
@@ -43,9 +39,6 @@ export default express.Router()
         switch (res.locals.user.responseDraft.defendantDetails.partyDetails.type) {
           case PartyType.INDIVIDUAL.value:
             (res.locals.user.responseDraft.defendantDetails.partyDetails as IndividualDetails).dateOfBirth = form.model
-            break
-          case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
-            (res.locals.user.responseDraft.defendantDetails.partyDetails as SoleTraderDetails).dateOfBirth = form.model
             break
           default:
             throw Error('Date of birth is only supported for defendant types individual and sole trader')

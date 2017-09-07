@@ -72,9 +72,9 @@ export default express.Router()
 
         switch (user.responseDraft.defendantDetails.partyDetails.type) {
           case PartyType.INDIVIDUAL.value:
-          case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
             res.redirect(Paths.defendantDateOfBirthPage.uri)
             break
+          case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
           case PartyType.COMPANY.value:
           case PartyType.ORGANISATION.value:
             res.redirect(Paths.defendantMobilePage.uri)

@@ -53,7 +53,7 @@ export class Defendant implements CompletableTask {
           return !!companyDetails && companyDetails.isCompleted() && emailCompleted
         case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
           const soleTraderDetails = this.partyDetails as SoleTraderDetails
-          return !!soleTraderDetails && soleTraderDetails.isCompleted(false) && emailCompleted
+          return !!soleTraderDetails && soleTraderDetails.isCompleted() && emailCompleted
         case PartyType.ORGANISATION.value:
           const organisationDetails = this.partyDetails as OrganisationDetails
           return !!organisationDetails && organisationDetails.isCompleted() && emailCompleted

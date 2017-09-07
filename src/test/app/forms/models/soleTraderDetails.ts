@@ -1,5 +1,4 @@
 import { expect } from 'chai'
-import DateOfBirth from 'app/forms/models/dateOfBirth'
 import { SoleTraderDetails, ValidationErrors as SoleTraderDetailsValidationErrors } from 'forms/models/soleTraderDetails'
 import { ValidationErrors as PartydDetailsValidationErrors } from 'forms/models/partyDetails'
 import { PartyType } from 'app/common/partyType'
@@ -8,7 +7,6 @@ import { ValidationErrors as CorrespondenceAddressValidationErrors } from 'forms
 import { Address } from 'forms/models/address'
 import { ValidationError, Validator } from 'class-validator'
 import { expectValidationError } from './validationUtils'
-import { LocalDate } from 'forms/models/localDate'
 const validAddress = new Address('line1', 'line2', 'city', 'postcode')
 
 const aVeryLongString = (): string => {
@@ -31,15 +29,7 @@ describe('SoleTraderDetails', () => {
         city: 'some city',
         postcode: 'bb127nq'
       },
-      name: 'claimantName',
-      dateOfBirth: {
-        known: 'true',
-        date: {
-          year: 2017,
-          month: 12,
-          day: 31
-        }
-      }
+      name: 'claimantName'
     }
 
     formInput = { ...input, hasCorrespondenceAddress: 'true' }
@@ -52,7 +42,6 @@ describe('SoleTraderDetails', () => {
       expect(soleTraderDetails.correspondenceAddress).to.be.instanceOf(Address)
       expect(soleTraderDetails.type).to.equal(PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value)
       expect(soleTraderDetails.name).to.equal(undefined)
-      expect(soleTraderDetails.dateOfBirth).to.equal(undefined)
       expect(soleTraderDetails.hasCorrespondenceAddress).to.equal(false)
     })
   })
@@ -112,25 +101,12 @@ describe('SoleTraderDetails', () => {
       expectValidationError(errors, SoleTraderDetailsValidationErrors.ORGANISATION_NAME_TOO_LONG.replace('$constraint1','35'))
     })
 
-    it('should return error when dataOfBirth is undefined', () => {
-      soleTraderDetails.dateOfBirth = undefined
-      let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
-      expectValidationError(errors, PartydDetailsValidationErrors.NAME_REQUIRED)
-    })
-
-    it('should return error when dataOfBirth is null', () => {
-      soleTraderDetails.dateOfBirth = null
-      let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
-      expectValidationError(errors, PartydDetailsValidationErrors.NAME_REQUIRED)
-    })
-
     describe('when "has correspondence address" flag is set to true', () => {
       beforeEach(() => {
         soleTraderDetails.address = validAddress
         soleTraderDetails.hasCorrespondenceAddress = true
         soleTraderDetails.name = 'ClaimantName'
         soleTraderDetails.businessName = 'test'
-        soleTraderDetails.dateOfBirth = new DateOfBirth()
       })
 
       it('should return error when correspondence address is undefined', () => {
@@ -172,7 +148,6 @@ describe('SoleTraderDetails', () => {
       expect(deserialized.correspondenceAddress).to.be.instanceOf(Address)
       expect(deserialized.type).to.equal(PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value)
       expect(deserialized.name).to.equal(undefined)
-      expect(deserialized.dateOfBirth).to.equal(undefined)
     })
 
     it('should return object with values set from provided input json', () => {
@@ -185,9 +160,6 @@ describe('SoleTraderDetails', () => {
       expect(deserialized.correspondenceAddress.postcode).to.equal('bb127nq')
       expect(deserialized.type).to.equal(PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value)
       expect(deserialized.name).to.equal('claimantName')
-      expect(deserialized.dateOfBirth.date.day).to.equal(31)
-      expect(deserialized.dateOfBirth.date.month).to.equal(12)
-      expect(deserialized.dateOfBirth.date.year).to.equal(2017)
     })
   })
 
@@ -206,9 +178,6 @@ describe('SoleTraderDetails', () => {
       expect(deserialized.correspondenceAddress.postcode).to.equal('bb127nq')
       expect(deserialized.type).to.equal(PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value)
       expect(deserialized.name).to.equal('claimantName')
-      expect(deserialized.dateOfBirth.date.day).to.equal(31)
-      expect(deserialized.dateOfBirth.date.month).to.equal(12)
-      expect(deserialized.dateOfBirth.date.year).to.equal(2017)
     })
 
     it('should set correspondence address to undefined if "has correspondence address flag is set to false"', () => {
@@ -241,7 +210,6 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.address = validAddress
       soleTraderDetails.hasCorrespondenceAddress = false
       soleTraderDetails.name = 'claimantName'
-      soleTraderDetails.dateOfBirth = new DateOfBirth(true, new LocalDate(2007, 1, 1))
       expect(soleTraderDetails.isCompleted()).to.equal(true)
     })
 
@@ -255,19 +223,9 @@ describe('SoleTraderDetails', () => {
     it('should return false when has name is undefined', () => {
       soleTraderDetails.address = validAddress
       soleTraderDetails.name = undefined
-      soleTraderDetails.dateOfBirth = new DateOfBirth(true, new LocalDate(2007, 1, 1))
       soleTraderDetails.hasCorrespondenceAddress = true
       soleTraderDetails.correspondenceAddress = validAddress
       expect(soleTraderDetails.isCompleted()).to.equal(false)
-    })
-
-    it('should return false when has dateOfBirth is undefined', () => {
-      soleTraderDetails.address = validAddress
-      soleTraderDetails.name = 'claimantName'
-      soleTraderDetails.dateOfBirth = undefined
-      soleTraderDetails.hasCorrespondenceAddress = true
-      soleTraderDetails.correspondenceAddress = validAddress
-      expect(soleTraderDetails.isCompleted(true)).to.equal(false)
     })
 
     it('should return false when has correspondence address and correspondence address is not completed', () => {
@@ -280,7 +238,6 @@ describe('SoleTraderDetails', () => {
     it('should return true when all the required fields are completed', () => {
       soleTraderDetails.address = validAddress
       soleTraderDetails.name = 'claimantName'
-      soleTraderDetails.dateOfBirth = new DateOfBirth(true, new LocalDate(2007, 1, 1))
       soleTraderDetails.hasCorrespondenceAddress = true
       soleTraderDetails.correspondenceAddress = validAddress
       expect(soleTraderDetails.isCompleted()).to.equal(true)

@@ -6,8 +6,6 @@ import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { SoleTraderDetails } from 'app/forms/models/soleTraderDetails'
-import DateOfBirth from 'app/forms/models/dateOfBirth'
-import { LocalDate } from 'forms/models/localDate'
 import { Paths as ClaimPaths } from 'claim/paths'
 import { Address } from 'forms/models/address'
 import { app } from '../../../../main/app'
@@ -21,14 +19,7 @@ const input = {
   name: 'John Smith',
   address: { line1: 'Apartment 99', line2: '', city: 'London', postcode: 'SE28 0JE' } as Address,
   hasCorrespondenceAddress: false,
-  businessName: 'businessName',
-  dateOfBirth: {
-    date: {
-      day: 31,
-      month: 12,
-      year: 1980
-    } as LocalDate
-  } as DateOfBirth
+  businessName: 'businessName'
 } as SoleTraderDetails
 
 describe('defendant as soleTrader details page', () => {

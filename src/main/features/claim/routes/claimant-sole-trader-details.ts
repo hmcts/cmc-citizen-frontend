@@ -27,6 +27,6 @@ export default express.Router()
       } else {
         res.locals.user.claimDraft.claimant.partyDetails = form.model
         await ClaimDraftMiddleware.save(res, next)
-        res.redirect(Paths.claimantDateOfBirthPage.uri)
+        res.redirect(Paths.claimantMobilePage.uri)
       }
     }))

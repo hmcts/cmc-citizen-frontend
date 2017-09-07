@@ -51,7 +51,7 @@
       )
     }}
 
-    {% if draft.defendantDetails.partyDetails.dateOfBirth %}
+    {% if draft.defendantDetails.partyDetailspartyType === 'individual' %}
       {{ row("Date of birth:", draft.defendantDetails.partyDetails.dateOfBirth.date.toMoment() | date, paths.defendantDateOfBirthPage.uri) }}
     {% endif %}
 

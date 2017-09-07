@@ -35,8 +35,6 @@ function getBusinessName (partyDetails: PartyDetails): string {
 function getDateOfBirth (partyDetails: PartyDetails): DateOfBirth {
   if (partyDetails.type === PartyType.INDIVIDUAL.value) {
     return (partyDetails as IndividualDetails).dateOfBirth
-  } else if (partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
-    return (partyDetails as SoleTraderDetails).dateOfBirth
   } else {
     return undefined
   }

@@ -50,13 +50,11 @@
         values = correspondenceAddressLines
       )
     }}
-    {% if (partyType === 'individual' or partyType === 'soleTrader') %}
+    {% if (partyType === 'individual') %}
       {{ row("Date of birth:", dateOfBirth.date.asString() | date) }}
     {% endif %}
     {{ row("Phone:", draftClaim.claimant.mobilePhone.number) }}
     {{ tableEnd() }}
-
-
 
     {{ tableStart("theirDetails", "Their details") }}
     {{ row('Name:', draftClaim.defendant.partyDetails.name) }}
