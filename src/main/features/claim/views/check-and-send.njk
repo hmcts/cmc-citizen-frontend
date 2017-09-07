@@ -102,7 +102,7 @@
     {{ tableEnd() }}
 
     <div class="form-group">
-      {{ statementOfTruth(form, 'I believe that the facts stated in this claim are true') }}
+      {{ statementOfTruth(form, label = 'I believe that the facts stated in this claim are true') }}
 
       {% set submitButtonLabel = t('Submit and continue to payment ') %}
       {{ submitButton(submitButtonLabel + '(' + (claimAmountTotal.feeAmount | numeral) + ')') }}

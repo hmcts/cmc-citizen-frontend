@@ -1,0 +1,37 @@
+{% extends "layout.njk" %}
+{% from "includes/macros/table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
+{% from "includes/macros/form.njk" import csrfProtection, submitButton, errorSummary, checkboxGroup %}
+{% from "includes/macros/statement-of-truth.njk" import statementOfTruth %}
+
+{% set title = t("Money claim") %}
+{% set heading = t("Check your answers") %}
+
+{% block content %}
+  <form novalidate method="post">
+    {{ csrfProtection(csrf) }}
+
+    {{ tableStart("theirDetails", "Their details") }}
+    {{ row('Full name:', user.claim.claimData.defendant.name) }}
+    {{
+      rowWithMultipleValue("Address:", [
+        details.defendant.partyDetails.address.line1,
+        details.defendant.partyDetails.address.line2,
+        details.defendant.partyDetails.address.city,
+        details.defendant.partyDetails.address.postcode
+      ], addressUrl)
+    }}
+    {{ row("Email:", user.claim.claimData.defendant.email) }}
+    {{ tableEnd() }}
+
+    {{ tableStart("payment", "Payment") }}
+    {{ row("Amount to be paid by defendant", amountToBePaid | numeral) }}
+    {{ row("When you want the defendant to pay", t(details.paymentOption.option.displayValue), paidAmountUrl) }}
+    {{ tableEnd() }}
+
+    <div class="form-group">
+      {{ statementOfTruth(form, title = 'Declaration', warningMessage = "Once you 'Sign and submit', you cannot change your answers.") }}
+
+      {{ submitButton('Sign and submit') }}
+    </div>
+  </form>
+{% endblock %}
