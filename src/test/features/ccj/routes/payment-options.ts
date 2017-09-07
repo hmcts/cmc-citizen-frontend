@@ -19,7 +19,7 @@ import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 const cookieName: string = config.get<string>('session.cookieName')
 
 const externalId = sampleClaimObj.externalId
-const paymentOptionsPage = Paths.paymentOptionsPage.uri.replace(':externalId', externalId)
+const paymentOptionsPage = Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
 
 const validFormData: object = {
   option: PaymentType.IMMEDIATELY.value
@@ -133,15 +133,15 @@ describe('CCJ - payment options', () => {
             }
 
             it('should redirect to check and send page for "IMMEDIATELY" option selected', async () => {
-              await checkThatSelectedPaymentOptionRedirectsToPage({ option: PaymentType.IMMEDIATELY.value }, Paths.checkYourAnswerPage.uri.replace(':externalId', externalId))
+              await checkThatSelectedPaymentOptionRedirectsToPage({ option: PaymentType.IMMEDIATELY.value }, Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
             })
 
             it('should redirect to repayment plan page for "BY_INSTALMENTS" option selected', async () => {
-              await checkThatSelectedPaymentOptionRedirectsToPage({ option: PaymentType.BY_INSTALMENTS.value }, Paths.repaymentPlanPage.uri.replace(':externalId', externalId))
+              await checkThatSelectedPaymentOptionRedirectsToPage({ option: PaymentType.BY_INSTALMENTS.value }, Paths.repaymentPlanPage.evaluateUri({ externalId: externalId }))
             })
 
             it('should redirect to pay by set date page for "FULL" option selected', async () => {
-              await checkThatSelectedPaymentOptionRedirectsToPage({ option: PaymentType.FULL.value }, Paths.payBySetDatePage.uri.replace(':externalId', externalId))
+              await checkThatSelectedPaymentOptionRedirectsToPage({ option: PaymentType.FULL.value }, Paths.payBySetDatePage.evaluateUri({ externalId: externalId }))
             })
           })
 

@@ -9,6 +9,8 @@ import { Form } from 'app/forms/form'
 import User from 'app/idam/user'
 import { DraftCCJService } from 'ccj/draft/DraftCCJService'
 import { Address } from 'forms/models/address'
+import { Name } from 'forms/models/name'
+import Email from 'forms/models/email'
 
 function defaultToAddressProvidedByClaimant (providedByDefendant: PartyDetails, providedByClaimant: Address): PartyDetails {
   if (providedByDefendant.isCompleted()) {
@@ -45,6 +47,8 @@ export default express.Router()
           renderView(form, res)
         } else {
           user.ccjDraft.defendant.partyDetails = form.model
+          user.ccjDraft.defendant.name = new Name(user.claim.claimData.defendant.name)
+          user.ccjDraft.defendant.email = new Email(user.claim.claimData.defendant.email)
           await DraftCCJService.save(res, next)
           res.redirect(Paths.dateOfBirthPage.uri.replace(':externalId', externalId))
         }

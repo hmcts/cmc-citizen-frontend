@@ -6,6 +6,52 @@ import { PaidAmount, ValidationErrors } from 'ccj/form/models/paidAmount'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 
 describe('PaidAmount', () => {
+  describe('deserialize', () => {
+    it('should not populate fields when object not given', () => {
+      const paidAmount: PaidAmount = new PaidAmount().deserialize({})
+
+      expect(paidAmount.amount).to.equal(undefined)
+      expect(paidAmount.option).to.equal(undefined)
+    })
+
+    it('should populate only option for "NO"', () => {
+      const paidAmount: PaidAmount = new PaidAmount().deserialize({ option: PaidAmountOption.NO })
+
+      expect(paidAmount.amount).to.equal(undefined)
+      expect(paidAmount.option).to.equal(PaidAmountOption.NO)
+    })
+
+    it('should populate all fields', () => {
+      const paidAmount: PaidAmount = new PaidAmount().deserialize({ option: PaidAmountOption.YES, amount: 10 })
+
+      expect(paidAmount.amount).to.equal(10)
+      expect(paidAmount.option).to.equal(PaidAmountOption.YES)
+    })
+  })
+
+  describe('fromObject', () => {
+    it('empty object should return unpopulated PaidAmount', () => {
+      const paidAmount: PaidAmount = PaidAmount.fromObject({})
+
+      expect(paidAmount.amount).to.equal(undefined)
+      expect(paidAmount.option).to.equal(undefined)
+    })
+
+    it('should not populate amount for option NO', () => {
+      const paidAmount: PaidAmount = PaidAmount.fromObject({ option: PaidAmountOption.NO.value })
+
+      expect(paidAmount.amount).to.equal(undefined)
+      expect(paidAmount.option).to.equal(PaidAmountOption.NO)
+    })
+
+    it('should populate amount for option YES', () => {
+      const paidAmount: PaidAmount = PaidAmount.fromObject({ option: PaidAmountOption.YES.value, amount: 10 })
+
+      expect(paidAmount.amount).to.equal(10)
+      expect(paidAmount.option).to.equal(PaidAmountOption.YES)
+    })
+  })
+
   describe('validation', () => {
     const validator: Validator = new Validator()
 

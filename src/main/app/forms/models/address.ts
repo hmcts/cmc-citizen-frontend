@@ -12,25 +12,33 @@ export class ValidationErrors {
 
   static readonly SECOND_LINE_TOO_LONG: string = 'The second address line must be no longer than $constraint1 characters'
 
+  static readonly CITY_REQUIRED: string = 'Enter a valid town/city'
   static readonly CITY_NOT_VALID: string = 'The city must be no longer than $constraint1 characters'
 
   static readonly POSTCODE_REQUIRED: string = 'Enter postcode'
   static readonly POSTCODE_NOT_VALID: string = 'The postcode must be no longer than $constraint1 characters'
 }
 
+export class ValidationConstants {
+  static readonly ADDRESS_MAX_LENGTH: number = 100
+  static readonly POSTCODE_MAX_LENGTH: number = 8
+}
+
 export class Address implements Serializable<Address>, CompletableTask {
 
   @IsDefined({ message: ValidationErrors.FIRST_LINE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.FIRST_LINE_REQUIRED })
-  @MaxLength(100, { message: ValidationErrors.FIRST_LINE_TOO_LONG })
+  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.FIRST_LINE_TOO_LONG })
   line1?: string
-  @MaxLength(100, { message: ValidationErrors.SECOND_LINE_TOO_LONG })
+  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.SECOND_LINE_TOO_LONG })
   line2?: string
-  @MaxLength(100, { message: ValidationErrors.CITY_NOT_VALID })
+  @IsDefined({ message: ValidationErrors.CITY_REQUIRED })
+  @IsNotBlank({ message: ValidationErrors.CITY_REQUIRED })
+  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.CITY_NOT_VALID })
   city?: string
   @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED })
-  @MaxLength(8, { message: ValidationErrors.POSTCODE_NOT_VALID })
+  @MaxLength(ValidationConstants.POSTCODE_MAX_LENGTH, { message: ValidationErrors.POSTCODE_NOT_VALID })
   postcode?: string
 
   constructor (line1?: string, line2?: string, city?: string, postcode?: string) {

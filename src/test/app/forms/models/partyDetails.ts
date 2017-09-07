@@ -60,6 +60,7 @@ describe('PartyDetails', () => {
     it('should return errors when required address fields are missing', () => {
       let errors: ValidationError[] = validator.validateSync(partyDetails)
       expectValidationError(errors, AddressValidationErrors.FIRST_LINE_REQUIRED)
+      expectValidationError(errors, AddressValidationErrors.CITY_REQUIRED)
       expectValidationError(errors, AddressValidationErrors.POSTCODE_REQUIRED)
     })
 
@@ -78,6 +79,14 @@ describe('PartyDetails', () => {
       it('should return errors when correspondence address required fields are missing', () => {
         let errors: ValidationError[] = validator.validateSync(partyDetails)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.FIRST_LINE_REQUIRED)
+        expectValidationError(errors, CorrespondenceAddressValidationErrors.CITY_REQUIRED)
+        expectValidationError(errors, CorrespondenceAddressValidationErrors.POSTCODE_REQUIRED)
+      })
+
+      it('should return errors when correspondence address fields have too long values', () => {
+        let errors: ValidationError[] = validator.validateSync(partyDetails)
+        expectValidationError(errors, CorrespondenceAddressValidationErrors.FIRST_LINE_REQUIRED)
+        expectValidationError(errors, CorrespondenceAddressValidationErrors.CITY_REQUIRED)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.POSTCODE_REQUIRED)
       })
 

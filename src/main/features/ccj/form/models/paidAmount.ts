@@ -39,7 +39,7 @@ export class PaidAmount implements Serializable <PaidAmount> {
   deserialize (input?: any): PaidAmount {
     if (input) {
       this.option = input.option
-      this.amount = input.amount
+      this.amount = (input.option && input.option.value === PaidAmountOption.YES.value) ? input.amount : undefined
     }
 
     return this

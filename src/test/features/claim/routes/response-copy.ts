@@ -21,7 +21,7 @@ describe('Defendant response copy', () => {
   attachDefaultHooks()
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ClaimPaths.defendantResponseCopy.uri.replace(':externalId', externalId))
+    checkAuthorizationGuards(app, 'get', ClaimPaths.defendantResponseCopy.evaluateUri({ externalId: externalId }))
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -33,16 +33,16 @@ describe('Defendant response copy', () => {
         claimStoreServiceMock.rejectRetrieveDefendantResponseCopy('Something went wrong')
 
         await request(app)
-          .get(ClaimPaths.defendantResponseCopy.uri.replace(':externalId', externalId))
+          .get(ClaimPaths.defendantResponseCopy.evaluateUri({ externalId: externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
       it('should return 500 and render error page when the user is not owner of claim', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId({ claimantId: 123 })
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId({ submitterId: 123 })
 
         await request(app)
-          .get(ClaimPaths.defendantResponseCopy.uri.replace(':externalId', externalId))
+          .get(ClaimPaths.defendantResponseCopy.evaluateUri({ externalId: externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -52,7 +52,7 @@ describe('Defendant response copy', () => {
         claimStoreServiceMock.resolveRetrieveDefendantResponseCopy()
 
         await request(app)
-          .get(ClaimPaths.defendantResponseCopy.uri.replace(':externalId', externalId))
+          .get(ClaimPaths.defendantResponseCopy.evaluateUri({ externalId: externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful)
       })

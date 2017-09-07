@@ -8,7 +8,7 @@ const serviceBaseURL: string = config.get<string>('claim-store.url')
 
 export const sampleClaimObj = {
   id: 1,
-  claimantId: 1,
+  submitterId: 1,
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
   referenceNumber: '000MC000',
   createdAt: '2017-07-25T22:45:51.785',

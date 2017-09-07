@@ -7,7 +7,7 @@ import { buildURL } from 'utils/CallbackBuilder'
 import ClaimReferenceMatchesGuard from 'first-contact/guards/claimReferenceMatchesGuard'
 
 function receiverPath (req: express.Request, letterHolderId: number): string {
-  const callbackPath = ResponsePaths.defendantLinkReceiver.uri.replace(':letterHolderId', letterHolderId + '')
+  const callbackPath = ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: letterHolderId + '' })
   return `${config.get<string>('idam.authentication-web.url')}/login/uplift?jwt=${req.query.jwt}&continue-url=${buildURL(req, callbackPath)}`
 }
 

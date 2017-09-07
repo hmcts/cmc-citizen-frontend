@@ -16,7 +16,7 @@ import * as pdfServiceMock from '../../../http-mocks/pdf-service'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const receiptPath = ResponsePaths.receiptReceiver.uri.replace(':externalId', 'b17af4d2-273f-4999-9895-bce382fa24c8')
+const receiptPath = ResponsePaths.receiptReceiver.evaluateUri({ externalId: 'b17af4d2-273f-4999-9895-bce382fa24c8' })
 
 describe('Defendant response: receipt', () => {
   attachDefaultHooks()
