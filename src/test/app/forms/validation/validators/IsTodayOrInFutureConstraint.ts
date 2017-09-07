@@ -34,7 +34,7 @@ describe('DateTodayOrInFutureConstraint', () => {
 
       it('given an date in the past', () => {
         let inPast = moment().subtract(10, 'years')
-        expect(constraint.validate(new LocalDate(inPast.year(), 8, 8))).to.equal(undefined)
+        expect(constraint.validate(new LocalDate(inPast.year(), 8, 8))).to.equal(false)
       })
     })
   })

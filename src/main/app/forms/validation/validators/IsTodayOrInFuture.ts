@@ -24,6 +24,8 @@ export class DateTodayOrInFutureConstraint implements ValidatorConstraintInterfa
     const now = MomentFactory.currentDate()
     if (date.isAfter(now) || date.isSame(now)) {
       return true
+    } else {
+      return false
     }
   }
 }
