@@ -7,17 +7,19 @@ export class YourDetails {
 
   static isDateOfBirthCompleted (partyDetails: PartyDetails): boolean {
     if (partyDetails.type === PartyType.INDIVIDUAL.value) {
-      return (partyDetails as IndividualDetails).dateOfBirth.isCompleted()
+      const dateOfBirth = (partyDetails as IndividualDetails).dateOfBirth
+      return dateOfBirth && dateOfBirth.isCompleted()
     } else {
       return true
     }
   }
+
   static isCompleted (response: ResponseDraft): boolean {
-    if (!response || !response.defendantDetails || !response.defendantDetails.partyDetails || !response.defendantDetails.partyDetails.name ) {
+    if (!response || !response.defendantDetails || !response.defendantDetails.partyDetails) {
       return false
     }
     return this.isDateOfBirthCompleted(response.defendantDetails.partyDetails)
-      && response.defendantDetails.partyDetails.isCompleted()
-      && response.defendantDetails.mobilePhone.isCompleted()
+      && response.defendantDetails.partyDetails.isCompleted('defendant')
+      && response.defendantDetails.mobilePhone && response.defendantDetails.mobilePhone.isCompleted()
   }
 }

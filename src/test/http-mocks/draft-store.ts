@@ -35,6 +35,7 @@ export const sampleClaimDraftObj = {
       name: 'John Smith',
       address: {
         line1: 'Apt 99',
+        line2: '',
         city: 'London',
         postcode: 'E1'
       } as Address,
@@ -63,6 +64,7 @@ export const sampleClaimDraftObj = {
       name: 'Rose Smith',
       address: {
         line1: 'Apt 99',
+        line2: '',
         city: 'London',
         postcode: 'E1'
       },

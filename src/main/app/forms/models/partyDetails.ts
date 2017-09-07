@@ -1,7 +1,6 @@
-import { IsDefined, MaxLength, ValidateIf, ValidateNested } from 'class-validator'
+import { IsDefined, MaxLength, ValidateIf, ValidateNested, Validator } from 'class-validator'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { Serializable } from 'models/serializable'
-import { CompletableTask } from 'app/models/task'
 import { Address } from 'forms/models/address'
 import { CorrespondenceAddress } from 'forms/models/correspondenceAddress'
 
@@ -12,7 +11,7 @@ export class ValidationErrors {
   static readonly NAME_TOO_LONG: string = 'Name must be no longer than $constraint1 characters'
 }
 
-export class PartyDetails implements Serializable<PartyDetails>, CompletableTask {
+export class PartyDetails implements Serializable<PartyDetails> {
   type?: string
 
   @IsDefined({ message: ValidationErrors.NAME_REQUIRED, groups: ['claimant', 'defendant'] })
@@ -70,11 +69,9 @@ export class PartyDetails implements Serializable<PartyDetails>, CompletableTask
     return this
   }
 
-  isCompleted (): boolean {
-    let isCompleted: boolean = this.address !== undefined && this.address.isCompleted() && !!this.name && this.name.length > 0
-    if (this.hasCorrespondenceAddress) {
-      isCompleted = isCompleted && this.correspondenceAddress !== undefined && this.correspondenceAddress.isCompleted()
-    }
-    return isCompleted
+  isCompleted (...groups: string[]): boolean {
+    const validationErrors = new Validator().validateSync(this, { groups: groups })
+    console.log(validationErrors)
+    return validationErrors.length === 0
   }
 }

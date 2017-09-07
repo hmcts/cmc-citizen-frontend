@@ -194,6 +194,7 @@ describe('SoleTraderDetails', () => {
 
     beforeEach(() => {
       soleTraderDetails = new SoleTraderDetails()
+      soleTraderDetails.businessName = ''
     })
 
     it('should return false when address is undefined', () => {

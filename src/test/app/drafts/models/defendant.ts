@@ -34,6 +34,7 @@ describe('Defendant', () => {
         name: 'John Smith',
         address: {
           line1: 'Flat 101',
+          line2: '',
           city: 'London',
           postcode: 'E10AA'
         },

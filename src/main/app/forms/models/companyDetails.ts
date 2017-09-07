@@ -1,4 +1,4 @@
-import { IsDefined, MaxLength, Validator } from 'class-validator'
+import { IsDefined, MaxLength } from 'class-validator'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { PartyDetails } from './partyDetails'
 import { PartyType } from 'app/common/partyType'
@@ -38,9 +38,5 @@ export class CompanyDetails extends PartyDetails {
       this.type = PartyType.COMPANY.value
     }
     return this
-  }
-
-  isCompleted (): boolean {
-    return new Validator().validateSync(this).length === 0
   }
 }

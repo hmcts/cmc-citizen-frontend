@@ -38,8 +38,4 @@ export class SoleTraderDetails extends PartyDetails {
     }
     return this
   }
-
-  isCompleted (isClaimant?: boolean): boolean {
-    return super.isCompleted() && !!this.name && this.name.length > 0
-  }
 }

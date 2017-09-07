@@ -45,19 +45,19 @@ export default class Claimant implements CompletableTask {
       switch (this.partyDetails.type) {
         case PartyType.INDIVIDUAL.value:
           const individualDetails = this.partyDetails as IndividualDetails
-          result = individualDetails.isCompleted(true)
+          result = individualDetails.isCompleted('claimant')
           break
         case PartyType.COMPANY.value:
           const companyDetails = this.partyDetails as CompanyDetails
-          result = companyDetails.isCompleted()
+          result = companyDetails.isCompleted('claimant')
           break
         case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
           const soleTraderDetails = this.partyDetails as SoleTraderDetails
-          result = soleTraderDetails.isCompleted()
+          result = soleTraderDetails.isCompleted('claimant')
           break
         case PartyType.ORGANISATION.value:
           const organisationDetails = this.partyDetails as OrganisationDetails
-          result = organisationDetails.isCompleted()
+          result = organisationDetails.isCompleted('claimant')
           break
       }
     }

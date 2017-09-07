@@ -39,8 +39,4 @@ export class OrganisationDetails extends PartyDetails {
     }
     return this
   }
-
-  isCompleted (): boolean {
-    return super.isCompleted() && !!this.contactPerson && this.contactPerson.length > 0
-  }
 }
