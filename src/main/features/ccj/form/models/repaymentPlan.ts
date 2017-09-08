@@ -3,7 +3,7 @@ import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { IsDefined, IsIn, IsPositive, ValidateNested } from 'class-validator'
 import { isValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
-import { IsTodayOrInFuture } from 'app/forms/validation/validators/dateTodayOrInFutureConstraint'
+import { IsFutureDate } from 'app/forms/validation/validators/dateFutureConstraint'
 
 export class ValidationErrors {
   static readonly FIRST_PAYMENT_AMOUNT_REQUIRED: string = 'Enter an amount for first payment'
@@ -28,7 +28,7 @@ export class RepaymentPlan {
   @ValidateNested()
   @IsValidLocalDate({ message: ValidationErrors.INVALID_DATE })
   @isValidYearFormat(4, { message: ValidationErrors.INVALID_DATE })
-  @IsTodayOrInFuture({ message: ValidationErrors.FUTURE_DATE })
+  @IsFutureDate({ message: ValidationErrors.FUTURE_DATE })
   firstPaymentDate?: LocalDate
 
   @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SELECT_PAYMENT_SCHEDULE })
