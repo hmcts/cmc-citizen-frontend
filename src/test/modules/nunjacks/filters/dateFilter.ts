@@ -5,15 +5,15 @@ import dateFilter from 'modules/nunjucks/filters/dateFilter'
 
 describe('dateFilter', () => {
   it('formats date (moment object) properly', () => {
-    expect(dateFilter(moment('2017-01-01'))).to.eq('1 Jan 2017')
+    expect(dateFilter(moment('2017-01-01'))).to.eq('1 January 2017')
   })
 
   it('formats date (string) properly', () => {
-    expect(dateFilter('2017-01-01')).to.eq('1 Jan 2017')
+    expect(dateFilter('2017-01-01')).to.eq('1 January 2017')
   })
 
   it('formats date properly (object with time)', () => {
-    expect(dateFilter(moment('2017-01-01 12:12:12'))).to.eq('1 Jan 2017')
+    expect(dateFilter(moment('2017-01-01 12:12:12'))).to.eq('1 January 2017')
   })
 
   describe('throws exception when', () => {

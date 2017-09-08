@@ -48,6 +48,6 @@ describe('DefendantMapper', () => {
   it('should map the date of birth', () => {
     let mapped = DefendantMapper.createDefendantDetails(defendant, 'test@mail.com')
 
-    expect(mapped['dateOfBirth']).to.equal('11 Mar 1990')
+    expect(mapped['dateOfBirth']).to.equal('11 March 1990')
   })
 })
