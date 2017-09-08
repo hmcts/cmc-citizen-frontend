@@ -1,9 +1,9 @@
 import { expect } from 'chai'
-import * as moment from 'moment'
 
 import { DateFutureConstraint } from 'forms/validation/validators/dateFutureConstraint'
 
 import { LocalDate } from 'app/forms/models/localDate'
+import { MomentFactory } from 'common/momentFactory'
 
 describe('DateFutureConstraint', () => {
   const constraint: DateFutureConstraint = new DateFutureConstraint()
@@ -16,12 +16,12 @@ describe('DateFutureConstraint', () => {
       })
 
       it('given a valid date in the future', () => {
-        let inFuture = moment().add(10, 'years')
+        const inFuture = MomentFactory.currentDate().add(10, 'years')
         expect(constraint.validate(new LocalDate(inFuture.year(), 1, 1))).to.equal(true)
       })
 
       it('given today date', () => {
-        let now = moment()
+        const now = MomentFactory.currentDate()
         expect(constraint.validate(new LocalDate(now.year(), now.month() + 1, now.date()))).to.equal(false)
       })
     })
@@ -32,7 +32,7 @@ describe('DateFutureConstraint', () => {
       })
 
       it('given a date in the past', () => {
-        let inPast = moment().subtract(10, 'years')
+        const inPast = MomentFactory.currentDate().subtract(10, 'years')
         expect(constraint.validate(new LocalDate(inPast.year(), 8, 8))).to.equal(false)
       })
     })

@@ -9,7 +9,12 @@ import {
 @ValidatorConstraint()
 export class IsLessThanConstraint implements ValidatorConstraintInterface {
   validate (value: any, args?: ValidationArguments) {
+    if (value === undefined) {
+      return true
+    }
+
     const [relatedPropertyName] = args.constraints
+
     const relatedValue = (args.object as any)[relatedPropertyName]
 
     return typeof value === 'number' && typeof relatedValue === 'number' && value < relatedValue

@@ -7,8 +7,6 @@ import { IsFutureDate } from 'app/forms/validation/validators/dateFutureConstrai
 import { IsLessThan } from 'forms/validation/validators/isLessThan'
 
 export class ValidationErrors {
-  static readonly FIRST_PAYMENT_AMOUNT_REQUIRED: string = 'Enter an amount for first payment'
-  static readonly INSTALMENTS_AMOUNT_REQUIRED: string = 'Enter an amount for equal instalments'
   static readonly FIRST_PAYMENT_AMOUNT_INVALID: string = 'Enter a valid amount of first payment'
   static readonly INSTALMENTS_AMOUNT_INVALID: string = 'Enter a valid amount for equal instalments'
   static readonly FUTURE_DATE: string = 'Enter a first payment date in the future'
@@ -19,17 +17,17 @@ export class ValidationErrors {
 export class RepaymentPlan {
 
   remainingAmount?: number
-  @IsDefined({ message: ValidationErrors.FIRST_PAYMENT_AMOUNT_REQUIRED })
+
   @IsPositive({ message: ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
   @IsLessThan('remainingAmount', { message: ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
   firstPayment?: number
 
-  @IsDefined({ message: ValidationErrors.INSTALMENTS_AMOUNT_REQUIRED })
   @IsPositive({ message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
   @IsLessThan('remainingAmount', { message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
   installmentAmount?: number
 
   @ValidateNested()
+  @IsDefined({ message: ValidationErrors.INVALID_DATE })
   @IsValidLocalDate({ message: ValidationErrors.INVALID_DATE })
   @isValidYearFormat(4, { message: ValidationErrors.INVALID_DATE })
   @IsFutureDate({ message: ValidationErrors.FUTURE_DATE })
@@ -48,10 +46,11 @@ export class RepaymentPlan {
 
   static fromObject (value?: any): RepaymentPlan {
     if (value) {
-      const remainingAmount = parseFloat(value.remainingAmount)
+      const remainingAmount = value.remainingAmount ? parseFloat(value.remainingAmount) : undefined
       const firstPayment = value.firstPayment ? parseFloat(value.firstPayment) : undefined
       const installmentAmount = value.installmentAmount ? parseFloat(value.installmentAmount) : undefined
       const firstPaymentDate = LocalDate.fromObject(value.firstPaymentDate)
+
       const paymentSchedule = PaymentSchedule.all()
         .filter(option => option.value === value.paymentSchedule)
         .pop()
