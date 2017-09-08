@@ -22,7 +22,7 @@ export class DateFutureConstraint implements ValidatorConstraintInterface {
 
     const date = value.toMoment()
     const now = MomentFactory.currentDate()
-    return date.isAfter(now);
+    return date.isAfter(now)
   }
 }
 

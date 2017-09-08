@@ -100,7 +100,7 @@
 {% macro option(label, name, form, value, type, hint = '', checked = false, bold = false) %}
   <div class="multiple-choice" data-target="{{ name }}-{{ value }}">
     {% set idValue = name + value | replace(' ', '') %}
-    <input id="{{ idValue }}" type="{{ type }}" name="{{ name }}" value="{{ value }}" {% if checked %} checked {% endif %}>
+    <input id="{{ idValue }}" type="{{ type }}" name="{{ name }}" value="{{ value }}" {% if checked %}checked{% endif %}>
     <label for="{{ idValue }}">
       {% if hint == '' %}
         {{ t(label) }}
