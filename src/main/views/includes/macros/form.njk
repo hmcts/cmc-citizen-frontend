@@ -144,13 +144,13 @@
   </div>
 {% endmacro %}
 
-{% macro radioGroup(label, name, options, form, isInline = false) %}
+{% macro radioGroup(label, name, options, form, isInline = false, labelForScreenReadersOnly = false) %}
   {% set error = form.errorFor(name) %}
   {% set selection = form.valueFor(name) %}
   <div class="form-group {% if error %} form-group-error {% endif %}">
     <fieldset id="{{ name }}[label]" {% if isInline %} class="inline" {% endif %}>
       <legend>
-        <span class="form-label-bold">
+        <span class="{% if labelForScreenReadersOnly %} visually-hidden {% else %} form-label-bold {% endif %}">
           {{ label }}
         </span>
         <span class="error-message">{{ t(error) }}</span>

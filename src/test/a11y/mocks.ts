@@ -18,8 +18,9 @@ import { MobilePhone } from 'app/forms/models/mobilePhone'
 import InterestDate from 'app/claims/models/interestDate'
 import InterestDateType from 'app/common/interestDateType'
 import Interest, { InterestType } from 'app/forms/models/interest'
-import { Defendant as DraftDefendant } from 'app/drafts/models/defendant'
+import { Defendant, Defendant as DraftDefendant } from 'app/drafts/models/defendant'
 import { TheirDetails } from 'app/claims/models/details/theirs/theirDetails'
+import { Company as CompanyDetails } from 'app/claims/models/details/theirs/company'
 import { Individual } from 'app/claims/models/details/yours/individual'
 import { default as DraftClaimant } from 'app/drafts/models/claimant'
 import { IndividualDetails } from 'forms/models/individualDetails'
@@ -76,7 +77,9 @@ function mockedResponseDraft () {
 function mockedClaim () {
   let claim = new Claim()
   claim.claimData = new ClaimData()
-  claim.claimData.defendants = [new TheirDetails()]
+  const companyDetails = new CompanyDetails()
+  companyDetails.address = new Address()
+  claim.claimData.defendants = [companyDetails]
   claim.claimData.claimant = new Individual()
   claim.claimData.interest = mockedInterest()
   claim.claimData.interestDate = mockedInterestDate()
@@ -119,7 +122,9 @@ function mockUser () {
 function mockCCJDraft (): DraftCCJ {
   const ccjDraft: DraftCCJ = new DraftCCJ()
   ccjDraft.paidAmount = new PaidAmount(PaidAmountOption.YES, 10)
-
+  const defendant = new Defendant()
+  defendant.partyDetails = new IndividualDetails()
+  ccjDraft.defendant = defendant
   return ccjDraft
 }
 
