@@ -6,13 +6,7 @@ export class YourDetails {
     if (!claim || !claim.claimant) {
       return false
     }
-    const claimant = claim.claimant
-    if (!claimant.name || !claimant.dateOfBirth || !claimant.partyDetails || !claimant.mobilePhone) {
-      return false
-    }
-
-    return claimant.name.isCompleted() && claimant.dateOfBirth.isCompleted() &&
-      claimant.partyDetails.isCompleted() && claimant.mobilePhone.isCompleted()
+    return claim.claimant.isCompleted()
   }
 
 }

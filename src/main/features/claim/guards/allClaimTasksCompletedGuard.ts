@@ -15,14 +15,12 @@ export default class AllClaimTasksCompletedGuard {
 
   static requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
     const claim: DraftClaim = res.locals.user.claimDraft
-
     const allTasksCompleted: boolean = ResolveDispute.isCompleted(claim) &&
       CompletingYourClaim.isCompleted(claim) &&
       YourDetails.isCompleted(claim) &&
       TheirDetails.isCompleted(claim) &&
       ClaimAmount.isCompleted(claim) &&
       ClaimDetails.isCompleted(claim)
-
     if (allTasksCompleted) {
       return next()
     }

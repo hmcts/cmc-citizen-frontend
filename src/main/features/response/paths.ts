@@ -7,7 +7,6 @@ export class Paths {
   static readonly defendantLinkReceiver = new RoutablePath('/response/:letterHolderId/receiver')
   static readonly taskListPage = new RoutablePath('/response/task-list')
   static readonly defendantYourDetailsPage = new RoutablePath('/response/your-details')
-  static readonly defendantAddressPage = new RoutablePath('/response/your-address')
   static readonly defendantDateOfBirthPage = new RoutablePath('/response/your-dob')
   static readonly defendantMobilePage = new RoutablePath('/response/your-mobile')
   static readonly moreTimeRequestPage = new RoutablePath('/response/more-time-request')

@@ -6,12 +6,12 @@
 {% set title = t("Money claim") %}
 {% set heading = t("Check your answers before submitting your response") %}
 
-{% if defendant.partyDetails.hasCorrespondenceAddress  %}
+{% if draft.defendantDetails.partyDetails.hasCorrespondenceAddress  %}
   {% set correspondenceAddressLines = [
-    defendant.partyDetails.correspondenceAddress.line1,
-    defendant.partyDetails.correspondenceAddress.line2,
-    defendant.partyDetails.correspondenceAddress.city,
-    defendant.partyDetails.correspondenceAddress.postcode
+    draft.defendantDetails.partyDetails.correspondenceAddress.line1,
+    draft.defendantDetails.partyDetails.correspondenceAddress.line2,
+    draft.defendantDetails.partyDetails.correspondenceAddress.city,
+    draft.defendantDetails.partyDetails.correspondenceAddress.postcode
   ] %}
 {% else %}
   {% set correspondenceAddressLines = [t('Same as address')] %}
@@ -22,15 +22,28 @@
     {{ csrfProtection(csrf) }}
 
     {{ tableStart("yourDetails", "Your details") }}
-    {{ row("Name:", defendant.fullName, paths.defendantYourDetailsPage.uri) }}
+
+    {{ row("Name:", draft.defendantDetails.partyDetails.name, paths.defendantYourDetailsPage.uri) }}
+
+    {% if draft.defendantDetails.partyDetails.type === 'company' or draft.defendantDetails.partyDetails.type === 'organisation' %}
+      {% if draft.defendantDetails.partyDetails.contactPerson %}
+        {{ row("Contact name:", draft.defendantDetails.partyDetails.contactPerson, paths.defendantYourDetailsPage.uri) }}
+      {% endif %}
+    {% endif %}
+
+    {% if draft.defendantDetails.partyDetails.type === 'soleTrader' %}
+      {{ row("Business name:", 'Trading as ' + draft.defendantDetails.partyDetails.businessName ) }}
+    {% endif %}
+
     {{
       rowWithMultipleValue(
         label = "Address:",
-        values = [ defendant.partyDetails.address.line1, defendant.partyDetails.address.line2, defendant.partyDetails.address.city, defendant.partyDetails.address.postcode ],
-        changeLink = paths.defendantAddressPage.uri,
+        values = [ draft.defendantDetails.partyDetails.address.line1, draft.defendantDetails.partyDetails.address.line2, draft.defendantDetails.partyDetails.address.city, draft.defendantDetails.partyDetails.address.postcode ],
+        changeLink = paths.defendantYourDetailsPage.uri,
         bottomBorder = false
       )
     }}
+
     {{
       rowWithMultipleValue(
         label = "Correspondence address:",
@@ -38,20 +51,24 @@
       )
     }}
 
-    {% set dateOfBirth = defendant.dateOfBirth.date.asString() | date %}
-    {{ row("Date of birth:", dateOfBirth, paths.defendantDateOfBirthPage.uri) }}
+    {% if draft.defendantDetails.partyDetailspartyType === 'individual' %}
+      {{ row("Date of birth:", draft.defendantDetails.partyDetails.dateOfBirth.date.toMoment() | date, paths.defendantDateOfBirthPage.uri) }}
+    {% endif %}
 
-    {% set mobilePhone = defendant.mobilePhone.number %}
-    {{ row("Phone:", mobilePhone, paths.defendantMobilePage.uri) }}
+    {{ row("Phone:", draft.defendantDetails.mobilePhone.number, paths.defendantMobilePage.uri) }}
 
     {{ tableEnd() }}
 
     {{ tableStart("yourResponse", "Your response") }}
-    {{ row('Do you owe the money claimed', response.response.type.displayValue, '/response/response-type') }}
-    {% if response.requireDefence() %}
-      {{ row('Your defence', response.defence.text, '/response/your-defence') }}
-      {{ row('Free mediation', t(response.freeMediation.option) | capitalize, '/response/free-mediation') }}
+
+    {{ row('Do you owe the money claimed', draft.response.type.displayValue, '/response/response-type') }}
+
+    {% if draft.requireDefence() %}
+      {{ row('Your defence', draft.defence.text, '/response/your-defence') }}
+
+      {{ row('Free mediation', t(draft.freeMediation.option) | capitalize, '/response/free-mediation') }}
     {% endif %}
+
     {{ tableEnd() }}
 
     <div class="form-group">

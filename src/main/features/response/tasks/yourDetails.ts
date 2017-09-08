@@ -1,25 +1,25 @@
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Defendant } from 'app/drafts/models/defendant'
+import { PartyType } from 'app/common/partyType'
+import { IndividualDetails } from 'forms/models/individualDetails'
+import { PartyDetails } from 'forms/models/partyDetails'
 
 export class YourDetails {
 
-  static isCompleted (response: ResponseDraft): boolean {
-    if (
-      !response ||
-      !response.defendantDetails ||
-      !response.defendantDetails.name ||
-      !response.defendantDetails.dateOfBirth ||
-      !response.defendantDetails.partyDetails ||
-      !response.defendantDetails.mobilePhone
-    ) {
-      return false
+  static isDateOfBirthCompleted (partyDetails: PartyDetails): boolean {
+    if (partyDetails.type === PartyType.INDIVIDUAL.value) {
+      const dateOfBirth = (partyDetails as IndividualDetails).dateOfBirth
+      return dateOfBirth && dateOfBirth.isCompleted()
+    } else {
+      return true
     }
-
-    const defendantDetails: Defendant = response.defendantDetails
-    return defendantDetails.name.isCompleted() &&
-      defendantDetails.dateOfBirth.isCompleted() &&
-      defendantDetails.partyDetails.isCompleted() &&
-      defendantDetails.mobilePhone.isCompleted()
   }
 
+  static isCompleted (response: ResponseDraft): boolean {
+    if (!response || !response.defendantDetails || !response.defendantDetails.partyDetails) {
+      return false
+    }
+    return this.isDateOfBirthCompleted(response.defendantDetails.partyDetails)
+      && response.defendantDetails.partyDetails.isCompleted('defendant')
+      && response.defendantDetails.mobilePhone && response.defendantDetails.mobilePhone.isCompleted()
+  }
 }

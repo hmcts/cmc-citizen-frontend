@@ -32,7 +32,7 @@ export default express.Router()
   .get(Paths.amountPage.uri, (req: express.Request, res: express.Response): void => {
     renderView(new Form(res.locals.user.claimDraft.amount), res)
   })
-  .post(Paths.amountPage.uri, FormValidator.requestHandler(ClaimAmountBreakdown, ClaimAmountBreakdown.fromObject, ['addRow']), actionHandler,
+  .post(Paths.amountPage.uri, FormValidator.requestHandler(ClaimAmountBreakdown, ClaimAmountBreakdown.fromObject, undefined, ['addRow']), actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<ClaimAmountBreakdown> = req.body
 
