@@ -4,6 +4,7 @@ import { IsDefined, IsIn, IsPositive, ValidateNested } from 'class-validator'
 import { isValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { IsFutureDate } from 'app/forms/validation/validators/dateFutureConstraint'
+import { IsLessThan } from 'forms/validation/validators/isLessThan'
 
 export class ValidationErrors {
   static readonly FIRST_PAYMENT_AMOUNT_REQUIRED: string = 'Enter an amount for first payment'
@@ -17,12 +18,15 @@ export class ValidationErrors {
 
 export class RepaymentPlan {
 
+  remainingAmount?: number
   @IsDefined({ message: ValidationErrors.FIRST_PAYMENT_AMOUNT_REQUIRED })
   @IsPositive({ message: ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
+  @IsLessThan('remainingAmount', { message: ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
   firstPayment?: number
 
   @IsDefined({ message: ValidationErrors.INSTALMENTS_AMOUNT_REQUIRED })
   @IsPositive({ message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
+  @IsLessThan('remainingAmount', { message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
   installmentAmount?: number
 
   @ValidateNested()
@@ -34,7 +38,8 @@ export class RepaymentPlan {
   @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SELECT_PAYMENT_SCHEDULE })
   paymentSchedule?: PaymentSchedule
 
-  constructor (firstPayment?: number, installmentAmount?: number, firstPaymentDate?: LocalDate, paymentSchedule?: PaymentSchedule) {
+  constructor (remainingAmount?: number, firstPayment?: number, installmentAmount?: number, firstPaymentDate?: LocalDate, paymentSchedule?: PaymentSchedule) {
+    this.remainingAmount = remainingAmount
     this.firstPayment = firstPayment
     this.installmentAmount = installmentAmount
     this.firstPaymentDate = firstPaymentDate
@@ -43,13 +48,14 @@ export class RepaymentPlan {
 
   static fromObject (value?: any): RepaymentPlan {
     if (value) {
+      const remainingAmount = parseFloat(value.remainingAmount)
       const firstPayment = value.firstPayment ? parseFloat(value.firstPayment) : undefined
       const installmentAmount = value.installmentAmount ? parseFloat(value.installmentAmount) : undefined
       const firstPaymentDate = LocalDate.fromObject(value.firstPaymentDate)
       const paymentSchedule = PaymentSchedule.all()
         .filter(option => option.value === value.paymentSchedule)
         .pop()
-      return new RepaymentPlan(firstPayment, installmentAmount, firstPaymentDate, paymentSchedule)
+      return new RepaymentPlan(remainingAmount, firstPayment, installmentAmount, firstPaymentDate, paymentSchedule)
     } else {
       return new RepaymentPlan()
     }
@@ -57,6 +63,7 @@ export class RepaymentPlan {
 
   deserialize (input?: any): RepaymentPlan {
     if (input) {
+      this.remainingAmount = input.remainingAmount
       this.firstPayment = input.firstPayment
       this.installmentAmount = input.installmentAmount
       this.firstPaymentDate = new LocalDate().deserialize(input.firstPaymentDate)

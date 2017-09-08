@@ -16,7 +16,7 @@ function renderView (form: Form<PaidAmount>, res: express.Response): void {
 
   res.render(Paths.repaymentPlanPage.associatedView, {
     form: form,
-    totalAmount: user.claim.totalAmount - alreadyPaid
+    remainingAmount: user.claim.totalAmount - alreadyPaid
   })
 }
 

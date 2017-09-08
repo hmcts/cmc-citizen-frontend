@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% set title = 'Money claim' %}
+{% set title = 'Repayment plan | Money claim' %}
 {% from "includes/macros/form.njk" import saveAndContinueButton, errorSummary, csrfProtection, radioGroup, poundInput %}
 {% from "includes/macros/date.njk" import dateInput %}
 
@@ -11,11 +11,13 @@
         {{ t("Order them to pay by instalments") }}
       </h1>
       <p class="">{{ t('Total amount payable by defendant is %s',
-        { postProcess: 'sprintf', sprintf: [ totalAmount | numeral ]}) }}
+        { postProcess: 'sprintf', sprintf: [ remainingAmount | numeral ]}) }}
       </p>
 
       <form method="post" novalidate>
         {{ csrfProtection(csrf) }}
+
+        <input type="hidden" name="remainingAmount" value="{{ remainingAmount }}"/>
         <div class="form-group">
           <fieldset>
             <legend class="visually-hidden">{{ t('How much they pay following this instalment') }}</legend>
