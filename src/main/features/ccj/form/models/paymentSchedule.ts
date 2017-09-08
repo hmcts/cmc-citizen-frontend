@@ -1,12 +1,11 @@
 export class PaymentSchedule {
-  static readonly EACH_WEEK = new PaymentSchedule('EACH_WEEK')
-  static readonly EVERY_TWO_WEEKS = new PaymentSchedule('EVERY_TWO_WEEKS')
-  static readonly EVERY_MONTH = new PaymentSchedule('EVERY_MONTH')
+  static readonly EACH_WEEK = new PaymentSchedule('EACH_WEEK', 'each week')
+  static readonly EVERY_TWO_WEEKS = new PaymentSchedule('EVERY_TWO_WEEKS', 'every two weeks')
+  static readonly EVERY_MONTH = new PaymentSchedule('EVERY_MONTH', 'every month')
 
-  readonly value: string
-
-  constructor (value: string) {
+  constructor (public readonly value: string, public readonly displayValue: string) {
     this.value = value
+    this.displayValue = displayValue
   }
 
   static all (): PaymentSchedule[] {
