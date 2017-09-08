@@ -17,7 +17,7 @@ import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = sampleClaimObj.externalId
-const paidAmountSummaryPage = Paths.paidAmountSummaryPage.uri.replace(':externalId', externalId)
+const paidAmountSummaryPage = Paths.paidAmountSummaryPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ - paid amount summary page', () => {
   attachDefaultHooks()

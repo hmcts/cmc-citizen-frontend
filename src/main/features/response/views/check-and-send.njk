@@ -56,7 +56,7 @@
 
     <div class="form-group">
       {% if isStatementOfTruthRequired %}
-        {{ statementOfTruth(form, 'I believe that the facts stated in this defence are true') }}
+        {{ statementOfTruth(form, label = 'I believe that the facts stated in this defence are true') }}
       {% endif %}
 
       {{ submitButton('Submit response') }}

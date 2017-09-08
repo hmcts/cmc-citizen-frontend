@@ -6,14 +6,16 @@ export class ValidationErrors {
 }
 
 export class PaymentType {
-  static readonly IMMEDIATELY = new PaymentType('immediately')
-  static readonly BY_INSTALMENTS = new PaymentType('instalments')
-  static readonly FULL = new PaymentType('full')
+  static readonly IMMEDIATELY = new PaymentType('immediately', 'Immediately')
+  static readonly BY_INSTALMENTS = new PaymentType('instalments', 'By instalments')
+  static readonly FULL = new PaymentType('full', 'The full amount by a set date')
 
   readonly value: string
+  readonly displayValue: string
 
-  constructor (value: string) {
+  constructor (value: string, displayValue: string) {
     this.value = value
+    this.displayValue = displayValue
   }
 
   static all (): PaymentType[] {
