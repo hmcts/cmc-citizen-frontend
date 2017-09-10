@@ -9,6 +9,6 @@ timestamps {
   node('slave') {
     notifyBuildFailure channel: channel
     notifyBuildFixed channel: channel
-    notifyBuildResult color: 'good', channel: channel
+    notifyBuildResult color: 'good', channel: channel, message: 'Testing 123'
   }
 }
