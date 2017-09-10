@@ -8,5 +8,7 @@ timestamps {
   milestone()
   node('slave') {
     notifyBuildFailure channel: channel
+    notifyBuildFixed channel: channel
+    notifyBuildResult color: 'good', channel: channel
   }
 }
