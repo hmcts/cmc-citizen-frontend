@@ -1,6 +1,6 @@
 {
   "name": "citizen-frontend",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "engines": {
     "node": ">=7.10.1"
