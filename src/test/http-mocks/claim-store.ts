@@ -1,7 +1,6 @@
 import * as config from 'config'
 import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
-
 import { InterestType } from 'app/forms/models/interest'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
@@ -10,7 +9,8 @@ export const sampleClaimObj = {
   id: 1,
   submitterId: 1,
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
-  referenceNumber: '000MC000',
+  defendantId: 123,
+  claimNumber: '000MC000',
   createdAt: '2017-07-25T22:45:51.785',
   issuedOn: '2017-07-25',
   claim: {
@@ -23,34 +23,36 @@ export const sampleClaimObj = {
         city: 'city',
         postcode: 'bb127nq'
       },
-      dateOfBirth: '1990-02-17',
-      payment: {
-        id: '12',
-        amount: 2500,
-        state: { status: 'failed' }
-      },
-      amount: {
-        type: 'breakdown',
-        rows: [{ reason: 'Reason', amount: 200 }]
-      },
-      interestDate: {
-        date: {
-          year: 2000,
-          month: 2,
-          day: 1
+      dateOfBirth: '1990-02-17'
+    },
+    defendants: [
+      {
+        type: 'individual',
+        name: 'John Doe',
+        address: {
+          line1: 'line1',
+          line2: 'line2',
+          city: 'city',
+          postcode: 'bb127nq'
         }
       }
+    ],
+    payment: {
+      id: '12',
+      amount: 2500,
+      state: { status: 'failed' }
     },
-    defendants: [{
-      type: 'individual',
-      name: 'John Doe',
-      address: {
-        line1: 'line1',
-        line2: 'line2',
-        city: 'city',
-        postcode: 'bb127nq'
+    amount: {
+      type: 'breakdown',
+      rows: [{ reason: 'Reason', amount: 200 }]
+    },
+    interestDate: {
+      date: {
+        year: 2000,
+        month: 2,
+        day: 1
       }
-    }],
+    },
     interest: {
       type: InterestType.NO_INTEREST
     },
@@ -63,19 +65,22 @@ const sampleDefendantResponseObj = {
   id: 1,
   claimId: 1,
   defendantId: 1,
+  respondedAt: {},
   response: {
+    type: 'OWE_ALL_PAID_SOME',
+    defence: '',
+    freeMediation: '',
     defendant: {
+      type: 'individual',
       name: 'full name',
       address: {
         line1: 'line1',
         line2: 'line2',
         city: 'city',
         postcode: 'bb127nq'
-      },
-      dateOfBirth: '1970-12-12'
+      }
     }
-  },
-  respondedAt: '2017-07-25T22:45:51.785'
+  }
 }
 
 export function resolveRetrieveClaimByExternalId (claimOverride?: object) {

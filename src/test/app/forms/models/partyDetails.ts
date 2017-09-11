@@ -1,9 +1,8 @@
 import { expect } from 'chai'
 
-import { ValidationErrors, PartyDetails } from 'forms/models/partyDetails'
-import { ValidationErrors as AddressValidationErrors } from 'forms/models/address'
+import { PartyDetails, ValidationErrors } from 'forms/models/partyDetails'
+import { Address, ValidationErrors as AddressValidationErrors } from 'forms/models/address'
 import { ValidationErrors as CorrespondenceAddressValidationErrors } from 'forms/models/correspondenceAddress'
-import { Address } from 'forms/models/address'
 import { ValidationError, Validator } from 'class-validator'
 import { expectValidationError } from './validationUtils'
 
@@ -92,6 +91,7 @@ describe('PartyDetails', () => {
 
       it('should return no errors when correspondence address is provided', () => {
         partyDetails.correspondenceAddress = validAddress
+        partyDetails.name = 'claimantName'
         expect(validator.validateSync(partyDetails).length).to.equal(0)
       })
     })
@@ -100,6 +100,7 @@ describe('PartyDetails', () => {
       it('should return no errors when correspondence address is not provided', () => {
         partyDetails.address = validAddress
         partyDetails.hasCorrespondenceAddress = false
+        partyDetails.name = 'claimantName'
         expect(validator.validateSync(partyDetails).length).to.equal(0)
       })
     })
@@ -137,6 +138,7 @@ describe('PartyDetails', () => {
       expect(deserialized.correspondenceAddress.line1).to.equal('another line')
       expect(deserialized.correspondenceAddress.city).to.equal('some city')
       expect(deserialized.correspondenceAddress.postcode).to.equal('bb127nq')
+      expect(deserialized.type).to.equal(undefined)
     })
 
     it('should set correspondence address to undefined if "has correspondence address flag is set to false"', () => {
@@ -168,6 +170,7 @@ describe('PartyDetails', () => {
     it('should return true when address is completed and does not have correspondence address', () => {
       partyDetails.address = validAddress
       partyDetails.hasCorrespondenceAddress = false
+      partyDetails.name = 'claimantName'
       expect(partyDetails.isCompleted()).to.equal(true)
     })
 
@@ -189,6 +192,7 @@ describe('PartyDetails', () => {
       partyDetails.address = validAddress
       partyDetails.hasCorrespondenceAddress = true
       partyDetails.correspondenceAddress = validAddress
+      partyDetails.name = 'claimantName'
       expect(partyDetails.isCompleted()).to.equal(true)
     })
   })

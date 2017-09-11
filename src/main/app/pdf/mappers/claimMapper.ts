@@ -9,7 +9,7 @@ export class ClaimMapper {
     const data = {
       submittedDate: MomentFormatter.formatLongDateAndTime(claim.createdAt),
       claimNumber: claim.claimNumber,
-      amount: NumberFormatter.formatMoney(claim.claimData.amount),
+      amount: NumberFormatter.formatMoney(claim.claimData.amount.totalAmount()),
       issueFee: NumberFormatter.formatMoney(claim.claimData.paidFeeAmount),
       totalAmount: NumberFormatter.formatMoney(claim.totalAmount),
       reason: claim.claimData.reason

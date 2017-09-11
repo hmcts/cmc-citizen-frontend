@@ -15,12 +15,29 @@ import * as payServiceMock from '../../../http-mocks/pay'
 
 import { attachDefaultHooks } from '../../../routes/hooks'
 import { checkAuthorizationGuards } from './checks/authorization-check'
+import { InterestType } from 'app/forms/models/interest'
+import { Defendant } from 'app/drafts/models/defendant'
+import Claimant from 'app/drafts/models/claimant'
+import DraftClaim from 'app/drafts/models/draftClaim'
+import { IndividualDetails } from 'app/forms/models/individualDetails'
+import { MobilePhone } from 'app/forms/models/mobilePhone'
+import Payment from 'app/pay/payment'
+import { Address } from 'forms/models/address'
+import DateOfBirth from 'app/forms/models/dateOfBirth'
+import { LocalDate } from 'forms/models/localDate'
+import ClaimAmountBreakdown from 'forms/models/claimAmountBreakdown'
+import ClaimAmountRow from 'forms/models/claimAmountRow'
+import Interest from 'forms/models/interest'
+import InterestDate from 'forms/models/interestDate'
+import Reason from 'forms/models/reason'
 
 const serviceToken = 'token'
 const draftType = 'claim'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const issueFeeCode: string = config.get<string>('fees.issueFee.code')
+
+let overrideClaimDraftObj
 
 describe('Claim issue: initiate payment receiver', () => {
   attachDefaultHooks()
@@ -29,6 +46,63 @@ describe('Claim issue: initiate payment receiver', () => {
 
   describe('for authorized user', () => {
     beforeEach(() => {
+      overrideClaimDraftObj = {
+        externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
+        readResolveDispute: true,
+        readCompletingClaim: true,
+        lastUpdateTimestamp: 12345,
+        claimant: {
+          partyDetails: {
+            type: 'individual',
+            name: 'John Smith',
+            address: {
+              line1: 'Apt 99',
+              city: 'London',
+              postcode: 'E1'
+            } as Address,
+            hasCorrespondenceAddress: false,
+            dateOfBirth: {
+              known: true,
+              date: {
+                day: 31,
+                month: 12,
+                year: 1980
+              } as LocalDate
+            } as DateOfBirth
+          } as IndividualDetails,
+          mobilePhone: {
+            number: '07000000000'
+          } as MobilePhone,
+          payment: {
+            id: '12',
+            amount: 2500,
+            state: { status: 'success' }
+          } as Payment
+        } as Claimant,
+        defendant: {
+          partyDetails: {
+            type: 'individual',
+            name: 'Rose Smith',
+            address: {
+              line1: 'Apt 99',
+              city: 'London',
+              postcode: 'E1'
+            },
+            hasCorrespondenceAddress: false
+          } as IndividualDetails,
+          email: {address: 'example@example.com' }
+        } as Defendant,
+        amount: {
+          rows: [{reason: 'Valid reason',amount: 1} as ClaimAmountRow]
+        } as ClaimAmountBreakdown,
+        interest: {
+          type: InterestType.NO_INTEREST
+        } as Interest,
+        interestDate: {} as InterestDate,
+        reason: {
+          reason: 'Valid reason'
+        } as Reason
+      } as DraftClaim
       idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
     })
 
@@ -42,7 +116,8 @@ describe('Claim issue: initiate payment receiver', () => {
     })
 
     it('should return 500 and error page when cannot calculate issue fee', async () => {
-      draftStoreServiceMock.resolveRetrieve(draftType, { claimant: { payment: undefined } })
+      overrideClaimDraftObj.claimant.payment = undefined
+      draftStoreServiceMock.resolveRetrieve(draftType, overrideClaimDraftObj)
       feesServiceMock.rejectCalculateFee(issueFeeCode)
 
       await request(app)
@@ -52,7 +127,8 @@ describe('Claim issue: initiate payment receiver', () => {
     })
 
     it('should return 500 and error page when cannot retrieve service token needed for payment service', async () => {
-      draftStoreServiceMock.resolveRetrieve(draftType, { claimant: { payment: undefined } })
+      overrideClaimDraftObj.claimant.payment = undefined
+      draftStoreServiceMock.resolveRetrieve(draftType, overrideClaimDraftObj )
       feesServiceMock.resolveCalculateFee(issueFeeCode)
       idamServiceMock.rejectRetrieveServiceToken()
 
@@ -63,7 +139,8 @@ describe('Claim issue: initiate payment receiver', () => {
     })
 
     it('should return 500 and error page when cannot create payment', async () => {
-      draftStoreServiceMock.resolveRetrieve(draftType, { claimant: { payment: undefined } })
+      overrideClaimDraftObj.claimant.payment = undefined
+      draftStoreServiceMock.resolveRetrieve(draftType, overrideClaimDraftObj)
       feesServiceMock.resolveCalculateFee(issueFeeCode)
       idamServiceMock.resolveRetrieveServiceToken(serviceToken)
       payServiceMock.rejectCreate()
@@ -75,7 +152,8 @@ describe('Claim issue: initiate payment receiver', () => {
     })
 
     it('should return 500 and error page when cannot save draft', async () => {
-      draftStoreServiceMock.resolveRetrieve(draftType, { claimant: { payment: undefined } })
+      overrideClaimDraftObj.claimant.payment = undefined
+      draftStoreServiceMock.resolveRetrieve(draftType, overrideClaimDraftObj)
       feesServiceMock.resolveCalculateFee(issueFeeCode)
       idamServiceMock.resolveRetrieveServiceToken(serviceToken)
       payServiceMock.resolveCreate()
@@ -88,7 +166,8 @@ describe('Claim issue: initiate payment receiver', () => {
     })
 
     it('should redirect to next page when everything is fine', async () => {
-      draftStoreServiceMock.resolveRetrieve(draftType, { claimant: { payment: undefined } })
+      overrideClaimDraftObj.claimant.payment = undefined
+      draftStoreServiceMock.resolveRetrieve(draftType, overrideClaimDraftObj)
       feesServiceMock.resolveCalculateFee(issueFeeCode)
       idamServiceMock.resolveRetrieveServiceToken(serviceToken)
       payServiceMock.resolveCreate()
@@ -120,34 +199,69 @@ describe('Claim issue: post payment callback receiver', () => {
 
   describe('for authorized user', () => {
     beforeEach(() => {
-      idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
-    })
-
-    function initiatedPayment (): object {
-      return {
+      overrideClaimDraftObj = {
+        externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
+        readResolveDispute: true,
+        readCompletingClaim: true,
+        lastUpdateTimestamp: 12345,
         claimant: {
-          name: { name: 'John Smith' },
-          mobilePhone: {
-            number: '0700000091'
-          },
           partyDetails: {
+            type: 'individual',
+            name: 'John Smith',
+            address: {
+              line1: 'Apt 99',
+              city: 'London',
+              postcode: 'E1'
+            } as Address,
+            hasCorrespondenceAddress: false,
+            dateOfBirth: {
+              known: true,
+              date: {
+                day: 31,
+                month: 12,
+                year: 1980
+              } as LocalDate
+            } as DateOfBirth
+          } as IndividualDetails,
+          mobilePhone: {
+            number: '07000000000'
+          } as MobilePhone,
+          payment: {
+            id: '12',
+            amount: 2500,
+            state: { status: 'success' }
+          } as Payment
+        } as Claimant,
+        defendant: {
+          partyDetails: {
+            type: 'individual',
+            name: 'Rose Smith',
             address: {
               line1: 'Apt 99',
               city: 'London',
               postcode: 'E1'
             },
             hasCorrespondenceAddress: false
-          },
-          payment: { id: 12, amount: 2500, state: { status: 'created' } },
-          dateOfBirth: {
-            date: {
-              day: '31',
-              month: '12',
-              year: '1980'
-            }
-          }
-        }
-      }
+          } as IndividualDetails,
+          email: {address: 'example@example.com' }
+        } as Defendant,
+        amount: {
+          rows: [{reason: 'Valid reason',amount: 1} as ClaimAmountRow]
+        } as ClaimAmountBreakdown,
+        interest: {
+          type: InterestType.NO_INTEREST
+        } as Interest,
+        interestDate: {} as InterestDate,
+        reason: {
+          reason: 'Valid reason'
+        } as Reason
+      } as DraftClaim
+      idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
+    })
+
+    function initiatedPayment (): object {
+      overrideClaimDraftObj.claimant.payment = { id: 12, amount: 2500, state: { status: 'created' } }
+      return overrideClaimDraftObj
     }
 
     it('should return 500 and error page when cannot retrieve service token needed for payment service', async () => {

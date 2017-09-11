@@ -63,4 +63,30 @@ describe('Email', () => {
       expect(errors.length).to.equal(0)
     })
   })
+
+  describe('task state', () => {
+    context('is incomplete', () => {
+      it('when address is undefined', () => {
+        const state = new Email(undefined)
+        expect(state.isCompleted()).to.be.false
+      })
+
+      it('when address is null', () => {
+        const state = new Email(null)
+        expect(state.isCompleted()).to.be.false
+      })
+
+      it('when address is invalid', () => {
+        const state = new Email('some-text')
+        expect(state.isCompleted()).to.be.false
+      })
+    })
+
+    context('is complete', () => {
+      it('when address is valid', () => {
+        const state = new Email('user@example.com')
+        expect(state.isCompleted()).to.be.true
+      })
+    })
+  })
 })

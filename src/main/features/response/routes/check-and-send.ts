@@ -15,17 +15,10 @@ import { ErrorHandling } from 'common/errorHandling'
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
   const user: User = res.locals.user
-
   res.render(Paths.checkAndSendPage.associatedView, {
-    form: form,
-    defendant: {
-      fullName: user.responseDraft.defendantDetails.name.name,
-      partyDetails: user.responseDraft.defendantDetails.partyDetails,
-      dateOfBirth: user.responseDraft.defendantDetails.dateOfBirth,
-      mobilePhone: user.responseDraft.defendantDetails.mobilePhone
-    },
     paths: Paths,
-    response: user.responseDraft,
+    form: form,
+    draft: user.responseDraft,
     isStatementOfTruthRequired: isStatementOfTruthRequired(user)
   })
 }
@@ -35,7 +28,7 @@ function defendantIsCounterClaiming (user: User): boolean {
     user.responseDraft.counterClaim.counterClaim
 }
 
-function isStatementOfTruthRequired (user: User) {
+function isStatementOfTruthRequired (user: User): boolean {
   const responseType: ResponseType = user.responseDraft.response.type
   return (responseType === ResponseType.OWE_NONE && !defendantIsCounterClaiming(user))
     || responseType === ResponseType.OWE_ALL_PAID_ALL
@@ -54,7 +47,6 @@ export default express.Router()
     FormValidator.requestHandler(StatementOfTruth, StatementOfTruth.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<StatementOfTruth> = req.body
-
       const user: User = res.locals.user
       if (isStatementOfTruthRequired(user) && form.hasErrors()) {
         renderView(form, res)

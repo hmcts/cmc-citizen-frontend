@@ -1,0 +1,29 @@
+{% extends "layout.njk" %}
+{% from "includes/macros/form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
+{% from "includes/macros/partyDetails.njk" import companyDetailsFragment %}
+
+{% set title = t('Money claim') %}
+{% set heading = t('Company details') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        {{
+          companyDetailsFragment(
+            form,
+            nameLabel = 'Company name',
+            contactPersonLabel = 'Contact person (optional)',
+            addressHeading = "Company address",
+            addressHint = "Enter the company’s registered office or a company address that has a connection with the claim.",
+            hasCorrespondenceAddress = false
+          )
+        }}
+
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

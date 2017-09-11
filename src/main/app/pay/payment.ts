@@ -21,6 +21,10 @@ export default class Payment implements Serializable<Payment> {
   date_created: number // tslint:disable-line variable-name allow snake_case
   state: PaymentState
 
+  static fromObject (input?: any): Payment {
+    return new Payment().deserialize(input)
+  }
+
   deserialize (input?: any): Payment {
     if (input) {
       this.id = input.id

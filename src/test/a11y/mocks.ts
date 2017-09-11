@@ -11,40 +11,48 @@ import { DefendantResponseData } from 'app/claims/models/defendantResponseData'
 import ServiceAuthToken from 'app/idam/serviceAuthToken'
 import DateOfBirth from 'app/forms/models/dateOfBirth'
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
-
+import Email from 'app/forms/models/email'
 import * as moment from 'moment'
 import { LocalDate } from 'app/forms/models/localDate'
 import { MobilePhone } from 'app/forms/models/mobilePhone'
 import InterestDate from 'app/claims/models/interestDate'
 import InterestDateType from 'app/common/interestDateType'
 import Interest, { InterestType } from 'app/forms/models/interest'
-import { Name } from 'app/forms/models/name'
-import { Defendant as DraftDefendant } from 'app/drafts/models/defendant'
-import { Defendant } from 'app/claims/models/defendant'
+import { Defendant, Defendant as DraftDefendant } from 'app/drafts/models/defendant'
+import { TheirDetails } from 'app/claims/models/details/theirs/theirDetails'
+import { Company as CompanyDetails } from 'app/claims/models/details/theirs/company'
+import { Individual } from 'app/claims/models/details/yours/individual'
 import { default as DraftClaimant } from 'app/drafts/models/claimant'
-import { Claimant } from 'app/claims/models/claimant'
-import { PartyDetails } from 'forms/models/partyDetails'
+import { IndividualDetails } from 'forms/models/individualDetails'
 import { Address } from 'claims/models/address'
 import { RangeGroup } from 'fees/models/rangeGroup'
 import { DraftCCJ } from 'ccj/draft/DraftCCJ'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
+import { PartyDetails } from 'forms/models/partyDetails'
 
 function mockedDraftClaim () {
   let draft = new DraftClaim()
   draft.readResolveDispute = true
   draft.claimant = new DraftClaimant()
-  draft.claimant.dateOfBirth = new DateOfBirth(true, new LocalDate(1980, 1, 1))
-  draft.claimant.name = new Name('John Smith')
+  let individualClaimant: IndividualDetails = draft.claimant.partyDetails = new IndividualDetails()
+  individualClaimant.dateOfBirth = new DateOfBirth(true, new LocalDate(1980, 1, 1))
+  individualClaimant.name = 'John Smith'
   draft.claimant.partyDetails = new PartyDetails()
   draft.claimant.partyDetails.address.postcode = 'postcode'
   draft.claimant.partyDetails.address.line1 = 'line1'
+  draft.claimant.mobilePhone = new MobilePhone('07873738765')
+
   draft.defendant = new DraftDefendant()
+  let individualDefendant: IndividualDetails = draft.defendant.partyDetails = new IndividualDetails()
+  draft.defendant.email = new Email('defendant@hmcts.com')
+  individualDefendant.address.postcode = 'postcode'
+  individualDefendant.address.line1 = 'line1'
+  individualDefendant.dateOfBirth = new DateOfBirth(true, new LocalDate(1980, 1, 1))
   draft.defendant.mobilePhone = new MobilePhone('07873738765')
   draft.defendant.partyDetails = new PartyDetails()
   draft.defendant.partyDetails.address.postcode = 'postcode'
   draft.defendant.partyDetails.address.line1 = 'line1'
-  draft.defendant.dateOfBirth = new DateOfBirth(true, new LocalDate(1980, 1, 1))
   draft.interestDate.date = new LocalDate(2017, 7, 21)
 
   return draft
@@ -55,24 +63,24 @@ function mockedResponseDraft () {
   draft.response = new Response(undefined)
   draft.freeMediation = new FreeMediation()
   draft.defendantDetails = new DraftDefendant()
-  draft.defendantDetails.mobilePhone = new MobilePhone('07873738765')
-  draft.defendantDetails.name = new Name('Pa11y Super Awesome-Tests')
-  draft.defendantDetails.dateOfBirth = new DateOfBirth(true, new LocalDate(1980, 1, 1))
-  draft.defendantDetails.partyDetails = new PartyDetails()
-  draft.defendantDetails.partyDetails.address.postcode = 'postcode'
-  draft.defendantDetails.partyDetails.address.line1 = 'line1'
-  draft.moreTimeNeeded = new MoreTimeNeeded(MoreTimeNeededOption.YES)
+  let individualDefendant: IndividualDetails = draft.defendantDetails.partyDetails = new IndividualDetails()
+  draft.defendantDetails.email = new Email('defendant@hmcts.com')
+  individualDefendant.name = 'Pa11y Super Awesome-Tests'
+  individualDefendant.dateOfBirth = new DateOfBirth(true, new LocalDate(1980, 1, 1))
+  individualDefendant.address.postcode = 'postcode'
+  individualDefendant.address.line1 = 'line1'
 
+  draft.moreTimeNeeded = new MoreTimeNeeded(MoreTimeNeededOption.YES)
   return draft
 }
 
 function mockedClaim () {
   let claim = new Claim()
   claim.claimData = new ClaimData()
-  const defendant: Defendant = new Defendant()
-  defendant.address = new Address()
-  claim.claimData.defendants = [defendant]
-  claim.claimData.claimant = new Claimant()
+  const companyDetails = new CompanyDetails()
+  companyDetails.address = new Address()
+  claim.claimData.defendants = [companyDetails]
+  claim.claimData.claimant = new Individual()
   claim.claimData.interest = mockedInterest()
   claim.claimData.interestDate = mockedInterestDate()
   claim.claimNumber = 'NNDD-NNDD'
@@ -98,12 +106,11 @@ function mockedDefendantResponse () {
   let response = new DefendantResponse()
   response.response = new DefendantResponseData()
   response.respondedAt = moment()
-  response.defendantDetails = new Defendant()
-  response.defendantDetails.dateOfBirth = moment('1970-12-12')
+  response.defendantDetails = new TheirDetails()
   response.defendantDetails.address = new Address()
   response.defendantDetails.address.postcode = 'postcode'
   response.defendantDetails.address.line1 = 'line1'
-  response.defendantDetails.mobilePhone = '07912312345'
+  response.defendantDetails.email = 'example@example.com'
 
   return response
 }
@@ -115,7 +122,9 @@ function mockUser () {
 function mockCCJDraft (): DraftCCJ {
   const ccjDraft: DraftCCJ = new DraftCCJ()
   ccjDraft.paidAmount = new PaidAmount(PaidAmountOption.YES, 10)
-
+  const defendant = new Defendant()
+  defendant.partyDetails = new IndividualDetails()
+  ccjDraft.defendant = defendant
   return ccjDraft
 }
 

@@ -11,6 +11,7 @@ export class ValidationErrors {
 }
 
 export default class ClaimAmountBreakdown implements Serializable<ClaimAmountBreakdown> {
+  readonly type: string = 'breakdown'
 
   @ValidateNested({ each: true })
   @MinTotal(0.01, { message: ValidationErrors.AMOUNT_REQUIRED })

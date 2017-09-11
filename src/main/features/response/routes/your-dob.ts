@@ -5,9 +5,10 @@ import { Paths } from 'response/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import DateOfBirth from 'forms/models/dateOfBirth'
-
+import { PartyType } from 'app/common/partyType'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
+import { IndividualDetails } from 'forms/models/individualDetails'
 
 function renderView (form: Form<DateOfBirth>, res: express.Response) {
   res.render(Paths.defendantDateOfBirthPage.associatedView, {
@@ -17,7 +18,14 @@ function renderView (form: Form<DateOfBirth>, res: express.Response) {
 
 export default express.Router()
   .get(Paths.defendantDateOfBirthPage.uri, (req: express.Request, res: express.Response) => {
-    renderView(new Form(res.locals.user.responseDraft.defendantDetails.dateOfBirth), res)
+    switch (res.locals.user.responseDraft.defendantDetails.partyDetails.type) {
+      case PartyType.INDIVIDUAL.value:
+        renderView(new Form((res.locals.user.responseDraft.defendantDetails.partyDetails as IndividualDetails).dateOfBirth), res)
+        break
+      default:
+        res.redirect(Paths.defendantMobilePage.uri)
+        break
+    }
   })
   .post(
     Paths.defendantDateOfBirthPage.uri,
@@ -28,7 +36,13 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.responseDraft.defendantDetails.dateOfBirth = form.model
+        switch (res.locals.user.responseDraft.defendantDetails.partyDetails.type) {
+          case PartyType.INDIVIDUAL.value:
+            (res.locals.user.responseDraft.defendantDetails.partyDetails as IndividualDetails).dateOfBirth = form.model
+            break
+          default:
+            throw Error('Date of birth is only supported for defendant types individual and sole trader')
+        }
         await ResponseDraftMiddleware.save(res, next)
         res.redirect(Paths.defendantMobilePage.uri)
       }

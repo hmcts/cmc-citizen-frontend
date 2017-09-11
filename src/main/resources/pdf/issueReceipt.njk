@@ -101,8 +101,7 @@
       </td>
     </tr>
     <tr>
-      <td><p><strong>Submitted on: </strong></p></td>
-      <td><p>{{ claim.submittedDate }}</p></td>
+      <td colspan="2"><p><strong>Submitted on: </strong> {{ claim.submittedDate }}</p></td>
     </tr>
   </table>
 </header>
@@ -121,6 +120,23 @@
           {{ claimant.fullName }}
         </td>
       </tr>
+      {% if claimant.contactPerson is not empty %}
+        <tr>
+          <td>Contact person:</td>
+          <td>
+            {{ claimant.contactPerson }}
+          </td>
+        </tr>
+      {% endif %}
+
+      {% if claimant.businessName is not empty %}
+        <tr>
+          <td>Business name:</td>
+          <td>
+            Trading as {{ claimant.businessName }}
+          </td>
+        </tr>
+      {% endif %}
       <tr>
         <td>Address:</td>
         <td>
@@ -173,6 +189,22 @@
           {{ defendant.fullName }}
         </td>
       </tr>
+      {% if defendant.contactPerson is not empty %}
+        <tr>
+          <td>Contact person:</td>
+          <td>
+            {{ defendant.contactPerson }}
+          </td>
+        </tr>
+      {% endif %}
+      {% if defendant.businessName is not empty %}
+        <tr>
+          <td>Business name:</td>
+          <td>
+            Trading as {{ defendant.businessName }}
+          </td>
+        </tr>
+      {% endif %}
       <tr>
         <td>Address:</td>
         <td>

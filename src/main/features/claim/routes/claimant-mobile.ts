@@ -14,12 +14,12 @@ function renderView (form: Form<MobilePhone>, res: express.Response): void {
 }
 
 export default express.Router()
-  .get(Paths.claimantMobilePage.uri, (req: express.Request, res: express.Response) => {
+  .get(Paths.claimantMobilePage.uri, (req: express.Request, res: express.Response, next: express.NextFunction) => {
     renderView(new Form(res.locals.user.claimDraft.claimant.mobilePhone), res)
   })
   .post(
     Paths.claimantMobilePage.uri,
-    FormValidator.requestHandler(MobilePhone),
+    FormValidator.requestHandler(MobilePhone, MobilePhone.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<MobilePhone> = req.body
 
