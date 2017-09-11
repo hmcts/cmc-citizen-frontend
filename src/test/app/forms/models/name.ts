@@ -57,7 +57,7 @@ describe('Name', () => {
     it('should reject name with more than 255 characters', () => {
       const errors = validator.validateSync(new Name(randomstring.generate(256)))
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.NAME_TOO_LONG)
+      expectValidationError(errors, ValidationErrors.NAME_TOO_LONG.replace('$constraint1','255'))
     })
 
     it('should accept name with 255 characters', () => {

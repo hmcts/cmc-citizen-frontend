@@ -101,8 +101,7 @@
       </td>
     </tr>
     <tr>
-      <td><p><strong>Defence submitted on: </strong></p></td>
-      <td><p>{{ defence.respondedAt }}</p></td>
+      <td colspan="2"><p><strong>Defence submitted on: </strong> {{ defence.respondedAt }}</p></td>
     </tr>
   </table>
 </header>
@@ -121,6 +120,22 @@
           {{ claimant.fullName }}
         </td>
       </tr>
+      {% if claimant.contactPerson is defined %}
+        <tr>
+          <td>Contact person:</td>
+          <td>
+            {{ claimant.contactPerson }}
+          </td>
+        </tr>
+      {% endif %}
+      {% if claimant.businessName is defined %}
+        <tr>
+          <td>Business name:</td>
+          <td>
+            {{ claimant.businessName }}
+          </td>
+        </tr>
+      {% endif %}
       <tr>
         <td>Address:</td>
         <td>
@@ -157,6 +172,22 @@
           {{ defendant.fullName }}
         </td>
       </tr>
+      {% if defendant.contactPerson is defined %}
+        <tr>
+          <td>Contact person:</td>
+          <td>
+            {{ defendant.contactPerson }}
+          </td>
+        </tr>
+      {% endif %}
+      {% if defendant.businessName is defined %}
+        <tr>
+          <td>Business name:</td>
+          <td>
+            {{ defendant.businessName }}
+          </td>
+        </tr>
+      {% endif %}
       <tr>
         <td>Address:</td>
         <td>
@@ -193,12 +224,14 @@
           {{ defendant.email }}
         </td>
       </tr>
+      {% if defendant.dateOfBirth is defined %}
       <tr>
         <td>Date of birth:</td>
         <td>
           {{ defendant.dateOfBirth }}
         </td>
       </tr>
+      {% endif %}
     </table>
   </div>
 </div>

@@ -5,7 +5,7 @@ import { CompletableTask } from 'app/models/task'
 
 export class ValidationErrors {
   static readonly NAME_REQUIRED: string = 'Enter name'
-  static readonly NAME_TOO_LONG: string = 'You’ve entered too many characters'
+  static readonly NAME_TOO_LONG: string = 'Name must be no longer than $constraint1 characters'
 }
 
 export class Name implements Serializable<Name>, CompletableTask {
@@ -17,6 +17,10 @@ export class Name implements Serializable<Name>, CompletableTask {
 
   constructor (name?: string) {
     this.name = name
+  }
+
+  static fromObject (input?: any): Name {
+    return new Name(input.name)
   }
 
   deserialize (input?: any): Name {

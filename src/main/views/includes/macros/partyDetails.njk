@@ -1,0 +1,61 @@
+{% from "includes/macros/form.njk" import csrfProtection, textInput, radioGroup, saveAndContinueButton %}
+{% from "includes/macros/address.njk" import addressFragment, correspondenceAddressFragment %}
+
+{% macro individualDetailsFragment(form, nameLabel = 'Full name', addressHeading = 'Address', addressHint, hasCorrespondenceAddress = false) %}
+  {{ textInput(t(nameLabel), 'name', form, autocomplete = 'name') }}
+
+  <h2 class="heading-medium">{{ t(addressHeading) }}</h2>
+  {% if addressHint %}
+    <p>{{ t(addressHint) }}</p>
+  {% endif %}
+  {{ addressFragment(form, name = 'address') }}
+
+  {% if hasCorrespondenceAddress == true %}
+    {{ correspondenceAddressFragment(form) }}
+  {% endif %}
+{% endmacro %}
+
+{% macro soleTraderDetailsFragment(form, nameLabel = 'Full name', addressHeading = 'Address', addressHint, hasCorrespondenceAddress = false) %}
+  {{ textInput(t(nameLabel), 'name', form, autocomplete = 'name') }}
+  {{ textInput(t('Business name (optional)'), 'businessName', form) }}
+
+  <h2 class="heading-medium">{{ t(addressHeading) }}</h2>
+  {% if addressHint %}
+    <p>{{ t(addressHint) }}</p>
+  {% endif %}
+  {{ addressFragment(form, name = 'address') }}
+
+  {% if hasCorrespondenceAddress == true %}
+    {{ correspondenceAddressFragment(form) }}
+  {% endif %}
+{% endmacro %}
+
+{% macro companyDetailsFragment(form, nameLabel = 'Company name', contactPersonLabel = 'Contact person', addressHeading = 'Company address', addressHint, hasCorrespondenceAddress = false) %}
+  {{ textInput(t(nameLabel), 'name', form, autocomplete = 'companyName') }}
+  {{ textInput(t(contactPersonLabel), 'contactPerson', form) }}
+
+  <h2 class="heading-medium">{{ t(addressHeading) }}</h2>
+  {% if addressHint %}
+    <p>{{ t(addressHint) }}</p>
+  {% endif %}
+  {{ addressFragment(form, name = 'address') }}
+
+  {% if hasCorrespondenceAddress == true %}
+    {{ correspondenceAddressFragment(form) }}
+  {% endif %}
+{% endmacro %}
+
+{% macro organisationDetailsFragment(form, nameLabel = 'Organisation name', contactPersonLabel = 'Contact person', addressHeading = 'Organisation address', addressHint, hasCorrespondenceAddress = false) %}
+  {{ textInput(t(nameLabel), 'name', form) }}
+  {{ textInput(t(contactPersonLabel), 'contactPerson', form) }}
+
+  <h2 class="heading-medium">{{ t(addressHeading) }}</h2>
+  {% if addressHint %}
+    <p>{{ t(addressHint) }}</p>
+  {% endif %}
+  {{ addressFragment(form, name = 'address') }}
+
+  {% if hasCorrespondenceAddress == true %}
+    {{ correspondenceAddressFragment(form) }}
+  {% endif %}
+{% endmacro %}

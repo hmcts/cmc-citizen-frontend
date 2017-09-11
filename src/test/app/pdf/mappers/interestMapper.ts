@@ -6,6 +6,7 @@ import Claim from 'app/claims/models/claim'
 import { MomentFactory } from 'common/momentFactory'
 import { InterestMapper } from 'app/pdf/mappers/interestMapper'
 import { MomentFormatter } from 'app/utils/momentFormatter'
+import ClaimAmountBreakdown from 'forms/models/claimAmountBreakdown'
 
 const creationDate = MomentFactory.currentDateTime()
 const customInterestDate = creationDate.subtract(10, 'days')
@@ -13,6 +14,7 @@ const customInterestDate = creationDate.subtract(10, 'days')
 const submissionInterestDateClaim = {
   createdAt: creationDate,
   claimData: {
+    amount: new ClaimAmountBreakdown(),
     interest: {
       type: InterestType.STANDARD
     },
@@ -24,6 +26,7 @@ const submissionInterestDateClaim = {
 
 const customInterestDateClaim = {
   claimData: {
+    amount: new ClaimAmountBreakdown(),
     interest: {
       type: InterestType.STANDARD
     },

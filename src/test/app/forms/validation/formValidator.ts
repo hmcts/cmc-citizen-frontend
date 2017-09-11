@@ -9,7 +9,7 @@ import { FormValidator } from 'app/forms/validation/formValidator'
 
 chai.use(spies)
 
-class Person {
+class Party {
   @IsDefined({ message: 'Name is required' })
   name?: string
 
@@ -17,11 +17,11 @@ class Person {
     this.name = name
   }
 
-  static fromObject (value?: any): Person {
+  static fromObject (value?: any): Party {
     if (value == null) {
       return value
     }
-    return new Person(value.name)
+    return new Party(value.name)
   }
 
 }
@@ -34,25 +34,25 @@ describe('FormValidator', () => {
   it('should deserialize request body to class instance using default mapper', () => {
     req.body = { name: 'John Smith' }
 
-    FormValidator.requestHandler(Person)(req, res, next)
+    FormValidator.requestHandler(Party)(req, res, next)
 
-    chai.expect(req.body.model).to.be.instanceof(Person)
+    chai.expect(req.body.model).to.be.instanceof(Party)
     chai.expect(req.body.model.name).to.be.equal('John Smith')
   })
 
   it('should deserialize request body to class instance using custom mapper', () => {
     req.body = { name: 'John Smith' }
 
-    FormValidator.requestHandler(Person, Person.fromObject)(req, res, next)
+    FormValidator.requestHandler(Party, Party.fromObject)(req, res, next)
 
-    chai.expect(req.body.model).to.be.instanceof(Person)
+    chai.expect(req.body.model).to.be.instanceof(Party)
     chai.expect(req.body.model.name).to.be.equal('John Smith')
   })
 
   it('should validate deserialized object', () => {
     req.body = {}
 
-    FormValidator.requestHandler(Person)(req, res, next)
+    FormValidator.requestHandler(Party)(req, res, next)
 
     chai.expect(req.body.errors.length).to.be.equal(1)
     chai.expect(req.body.errors[0].property).to.be.equal('name')
@@ -62,7 +62,7 @@ describe('FormValidator', () => {
   it('should not validate deserialized object when action is whitelisted', () => {
     req.body = { action: { reload: 'Reload page' } }
 
-    FormValidator.requestHandler(Person, null, ['reload'])(req, res, next)
+    FormValidator.requestHandler(Party, null, undefined, ['reload'])(req, res, next)
 
     chai.expect(req.body.errors.length).to.be.equal(0)
   })
@@ -70,7 +70,7 @@ describe('FormValidator', () => {
   it('should pass control to the next middleware', () => {
     const spy = sinon.spy(next)
 
-    FormValidator.requestHandler(Person)(req, res, spy)
+    FormValidator.requestHandler(Party)(req, res, spy)
 
     chai.expect(spy).to.have.been.called
   })

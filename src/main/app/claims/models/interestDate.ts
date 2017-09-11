@@ -14,7 +14,9 @@ export default class InterestDate implements Serializable<InterestDate> {
       if (input.date != null) {
         this.date = MomentFactory.parse(input.date)
       }
-      this.reason = input.reason
+      if (input.reason) {
+        this.reason = input.reason
+      }
     }
     return this
   }
