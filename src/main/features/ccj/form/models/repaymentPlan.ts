@@ -36,7 +36,13 @@ export class RepaymentPlan {
   @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SELECT_PAYMENT_SCHEDULE })
   paymentSchedule?: PaymentSchedule
 
-  constructor (remainingAmount?: number, firstPayment?: number, installmentAmount?: number, firstPaymentDate?: LocalDate, paymentSchedule?: PaymentSchedule) {
+  constructor (
+    remainingAmount?: number,
+    firstPayment?: number,
+    installmentAmount?: number,
+    firstPaymentDate?: LocalDate,
+    paymentSchedule?: PaymentSchedule
+  ) {
     this.remainingAmount = remainingAmount
     this.firstPayment = firstPayment
     this.installmentAmount = installmentAmount
