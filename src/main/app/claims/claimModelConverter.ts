@@ -58,8 +58,8 @@ export class ClaimModelConverter {
       delete draftClaim.defendant.mobilePhone
     }
 
-    if (draftClaim.defendant.email && draftClaim.defendant.email.address) {
-      draftClaim.defendant.email = draftClaim.defendant.email.address as any
+    if (draftClaim.defendant.email) {
+      draftClaim.defendant.email = (draftClaim.defendant.email.address || undefined) as any
     }
 
     draftClaim.defendant['type'] = 'individual'
