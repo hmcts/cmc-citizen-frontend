@@ -189,3 +189,8 @@
 {% macro nameInput(label = 'Your full name', form) %}
   {{ textInput(t(label), 'name', form, autocomplete='name') }}
 {% endmacro %}
+
+{% macro readOnlyField(label, value) %}
+  <h2 class="heading-medium">{{ t(label) }}</h2>
+  <p>{{ value }}</p>
+{% endmacro %}

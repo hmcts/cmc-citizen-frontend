@@ -1,5 +1,27 @@
-{% from "includes/macros/form.njk" import csrfProtection, textInput, radioGroup, saveAndContinueButton %}
+{% from "includes/macros/form.njk" import readOnlyField, csrfProtection, textInput, radioGroup, saveAndContinueButton %}
 {% from "includes/macros/address.njk" import addressFragment, correspondenceAddressFragment %}
+
+{% macro partyDetailsFragment(form, props, address, showCorrespondenceAddress = false) %}
+  {% for prop in props %}
+    {% if prop.readOnly %}
+      {{ readOnlyField(prop.label, prop.value) }}
+    {% else %}
+      {{ textInput(form, label = t(prop.label), name = prop.name, autocomplete = prop.autocomplete) }}
+    {% endif %}
+  {% endfor %}
+
+  {% if address %}
+    <h2 class="heading-medium">{{ t(address.heading) }}</h2>
+    {% if address.hint %}
+      <p>{{ t(address.hint) }}</p>
+    {% endif %}
+    {{ addressFragment(form, name = address.name) }}
+  {% endif %}
+
+  {% if showCorrespondenceAddress == true %}
+    {{ correspondenceAddressFragment(form) }}
+  {% endif %}
+{% endmacro %}
 
 {% macro individualDetailsFragment(form, nameLabel = 'Full name', addressHeading = 'Address', addressHint, hasCorrespondenceAddress = false) %}
   {{ textInput(t(nameLabel), 'name', form, autocomplete = 'name') }}
