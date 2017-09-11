@@ -36,9 +36,13 @@
 
     {% if details.paymentOption.option.value == 'instalments' %}
       {% set paymentOptionDisplayValue =
-      [ t(details.paymentOption.option.displayValue + ': %s '
-      + details.repaymentPlan.paymentSchedule.displayValue + '.',
-      { postProcess: 'sprintf', sprintf: [details.repaymentPlan.installmentAmount | numeral]}),
+      [  '%s: %s %s.',
+      { postProcess: 'sprintf', sprintf: [
+      t(details.paymentOption.option.displayValue),
+      details.repaymentPlan.installmentAmount | numeral,
+      t(details.repaymentPlan.paymentSchedule.displayValue)
+      ]}),
+
       t('First payment on %s', { postProcess: 'sprintf', sprintf: ['2017-12-12' | date]})
       ] %}
     {% endif %}
