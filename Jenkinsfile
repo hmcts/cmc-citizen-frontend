@@ -95,6 +95,9 @@ timestamps {
           onMaster {
             packager.publishNodeRPM('citizen-frontend')
           }
+          if (env.BRANCH_NAME.startsWith('hotfix')) {
+            packager.publishNodeRPM('citizen-frontend')
+          }
         }
 
 //        commented out only for bug fix. Tested manually
