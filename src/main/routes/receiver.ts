@@ -20,13 +20,15 @@ export default express.Router()
 
     const user: User = res.locals.user
     const atLeastOneClaimIssued: boolean = (await ClaimStoreClient.retrieveByClaimantId(user.id)).length > 0
-    const atLeastOneDefence: boolean = (await ClaimStoreClient.retrieveAllResponsesByDefendantId(user.id)).length > 0
+    const atLeastOneResponse: boolean = (await ClaimStoreClient.retrieveAllResponsesByDefendantId(user.id)).length > 0
 
-    if (atLeastOneClaimIssued || atLeastOneDefence) {
+    if (atLeastOneClaimIssued || atLeastOneResponse) {
       return res.redirect(DashboardPaths.dashboardPage.uri)
     }
     const draftClaimSaved: boolean = user.claimDraft && user.claimDraft.lastUpdateTimestamp !== undefined
     const draftResponseSaved: boolean = user.responseDraft && user.responseDraft.lastUpdateTimestamp !== undefined
+    const claimIssuedButNoResponse = (await ClaimStoreClient.retrieveByDefendantId(user.id)).length > 0
+      && !atLeastOneResponse
 
     if (draftResponseSaved && draftClaimSaved) {
       return res.redirect(DashboardPaths.dashboardPage.uri)
@@ -36,7 +38,7 @@ export default express.Router()
       return res.redirect(ClaimPaths.taskListPage.uri)
     }
 
-    if (draftResponseSaved) {
+    if (draftResponseSaved || claimIssuedButNoResponse) {
       return res.redirect(ResponsePaths.taskListPage.uri)
     }
 
