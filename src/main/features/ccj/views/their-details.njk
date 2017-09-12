@@ -20,27 +20,27 @@
         <p>{{ t('Check their address is right. You can correct or update address.') }}</p>
         {% if claim.claimData.defendant.type == 'individual' %}
           {%
-            set props = [
+            set fields = [
               { label: 'Full name', value: claim.claimData.defendant.name, readOnly: true }
             ]
           %}
         {% elseif claim.claimData.defendant.type == 'soleTrader' %}
           {%
-            set props = [
+            set fields = [
               { label: 'Full name', value: claim.claimData.defendant.name, readOnly: true },
               { label: 'Business name', value: claim.claimData.defendant.businessName, readOnly: true }
             ]
           %}
         {% elseif claim.claimData.defendant.type == 'company' %}
           {%
-            set props = [
+            set fields = [
               { label: 'Company name', value: claim.claimData.defendant.name, readOnly: true },
               { label: 'Contact person', value: claim.claimData.defendant.contactPerson, readOnly: true }
             ]
           %}
         {% elseif claim.claimData.defendant.type == 'organisation' %}
           {%
-            set props = [
+            set fields = [
               { label: 'Organisation name', value: claim.claimData.defendant.name, readOnly: true },
               { label: 'Contact person', value: claim.claimData.defendant.contactPerson, readOnly: true }
             ]
@@ -50,12 +50,12 @@
         {{
           partyDetailsFragment(
             form,
-            props = props,
-            address = {
+            fields = fields,
+            addressSection = {
               heading: 'Their address',
               name: undefined
             },
-            showCorrespondenceAddress = false
+            showCorrespondenceAddressSection = false
           )
         }}
 

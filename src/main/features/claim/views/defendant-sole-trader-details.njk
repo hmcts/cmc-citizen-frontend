@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "includes/macros/form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
-{% from "includes/macros/partyDetails.njk" import soleTraderDetailsFragment %}
+{% from "includes/macros/partyDetails.njk" import partyDetailsFragment %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Their details') %}
@@ -12,12 +12,18 @@
         {{ csrfProtection(csrf) }}
 
         {{
-          soleTraderDetailsFragment(
+          partyDetailsFragment(
             form,
-            nameLabel = "Full name",
-            addressHeading = "Their address",
-            addressHint = "You must enter the defendant's residential or trade address to make a claim against them.",
-            hasCorrespondenceAddress = false
+            fields = [
+              { label: 'Full name', name: 'name' },
+              { label: 'Business name (optional)', name: 'businessName' }
+            ],
+            addressSection = {
+              heading: 'Their address',
+              hint: "You must enter the defendant's residential or trade address to make a claim against them.",
+              name: 'address'
+            },
+            showCorrespondenceAddressSection = false
           )
         }}
 

@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "includes/macros/form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
-{% from "includes/macros/partyDetails.njk" import companyDetailsFragment %}
+{% from "includes/macros/partyDetails.njk" import partyDetailsFragment %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Company details') %}
@@ -12,13 +12,18 @@
         {{ csrfProtection(csrf) }}
 
         {{
-          companyDetailsFragment(
+          partyDetailsFragment(
             form,
-            nameLabel = 'Company name',
-            contactPersonLabel = 'Contact person (optional)',
-            addressHeading = "Company address",
-            addressHint = "Enter the company’s registered office or a company address that has a connection with the claim.",
-            hasCorrespondenceAddress = false
+            fields = [
+              { label: 'Company name', name: 'name' },
+              { label: 'Contact person (optional)', name: 'contactPerson' }
+            ],
+            addressSection = {
+              heading: 'Company address',
+              hint: "Enter the company's registered office or a company address that has a connection with the claim.",
+              name: 'address'
+            },
+            showCorrespondenceAddressSection = false
           )
         }}
 
