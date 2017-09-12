@@ -59,7 +59,6 @@ const excludedPaths: DefendantResponsePaths[] = [
   DefendantResponsePaths.receiptReceiver,
   DefendantResponsePaths.legacyDashboardRedirect,
   CCJPaths.repaymentPlanPage,
-  CCJPaths.payBySetDatePage,
   CCJPaths.ccjRequestedConfirmationPage
 ]
 
