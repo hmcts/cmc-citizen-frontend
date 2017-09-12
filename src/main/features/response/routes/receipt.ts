@@ -18,7 +18,6 @@ export default express.Router()
     const { externalId } = req.params
     const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId)
     const response: DefendantResponse = await ClaimStoreClient.retrieveResponse(res.locals.user.id, claim.id)
-
     new PdfClient().generate(ResponseReceipt.templatePath, new ResponseReceipt(claim, response, buildURL(req, 'dashboard')).data())
       .on('response', (response: http.IncomingMessage) => {
         if (response.statusCode !== 200) {

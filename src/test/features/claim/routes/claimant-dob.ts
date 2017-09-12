@@ -60,7 +60,7 @@ describe('Claim issue: claimant date of birth page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to claimant address page when form is valid and everything is fine', async () => {
+      it('should redirect to claimant mobile page when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveRetrieve('claim')
         draftStoreServiceMock.resolveSave('claim')
 
@@ -68,7 +68,7 @@ describe('Claim issue: claimant date of birth page', () => {
           .post(ClaimPaths.claimantDateOfBirthPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ known: 'true', date: { day: '31', month: '12', year: '1980' } })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.claimantAddressPage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.claimantMobilePage.uri))
       })
     })
   })

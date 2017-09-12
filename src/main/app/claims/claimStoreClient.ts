@@ -13,7 +13,6 @@ const claimStoreResponsesApiUrl = `${claimApiBaseUrl}/responses/claim`
 export default class ClaimStoreClient {
   static saveClaimForUser (user: User): Promise<Claim> {
     const convertedDraftClaim = ClaimModelConverter.convert(user.claimDraft)
-
     return request.post(`${claimStoreApiUrl}/${user.id}`, {
       body: convertedDraftClaim,
       headers: {

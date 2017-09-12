@@ -2,7 +2,8 @@
 
 {% set title = 'Money claim' %}
 
-{% from "includes/macros/form.njk" import saveAndContinueButton, csrfProtection, addressInput, errorSummary %}
+{% from "includes/macros/form.njk" import saveAndContinueButton, csrfProtection, errorSummary %}
+{% from "includes/macros/address.njk" import addressFragment %}
 
 {% block content %}
   <div class="grid-row">
@@ -21,8 +22,7 @@
           <p>{{ claim.claimData.defendant.name }}</p>
 
           <h2 class="heading-medium">{{ t('Their address') }}</h2>
-          {{ addressInput(form, 'address') }}
-
+          {{ addressFragment(form) }}
 
           <h2 class="heading-medium">{{ t('Email address') }}</h2>
           <p>{{ claim.claimData.defendant.email }}</p>

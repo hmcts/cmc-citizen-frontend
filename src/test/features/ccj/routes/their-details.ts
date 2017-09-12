@@ -22,12 +22,10 @@ const dateOfBirthPage = Paths.dateOfBirthPage.evaluateUri({ externalId: external
 const theirDetailsPage = Paths.theirDetailsPage.evaluateUri({ externalId: externalId })
 
 const validFormData = {
-  address: {
-    line1: 'Apt 99',
-    line2: '',
-    city: 'London',
-    postcode: 'E1'
-  }
+  line1: 'Apt 99',
+  line2: '',
+  city: 'London',
+  postcode: 'E1'
 }
 
 describe('CCJ - their details', () => {

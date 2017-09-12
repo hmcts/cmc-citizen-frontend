@@ -8,12 +8,13 @@ describe('Their details', () => {
     it('should return true when the task is completed', () => {
       const input = {
         defendant: {
-          name: {
-            name: 'Janice Henrieta Clark'
-          },
+          email: { address: 'example@example.com' },
           partyDetails: {
+            type : 'individual',
+            name: 'Janice Henrieta Clark',
             address: {
               line1: 'Another lane',
+              line2: '',
               city: 'Manchester',
               postcode: 'SW8 4DA'
             },

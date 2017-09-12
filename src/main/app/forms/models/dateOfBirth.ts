@@ -8,6 +8,7 @@ import { Serializable } from 'models/serializable'
 import { LocalDate } from 'forms/models/localDate'
 import { CompletableTask } from 'app/models/task'
 import { isValidYearFormat } from 'app/forms/validation/validators/isValidYearFormat'
+import * as toBoolean from 'to-boolean'
 
 export class ValidationErrors {
   static readonly DATE_NOT_VALID: string = 'Please enter a valid date'
@@ -37,7 +38,7 @@ export default class DateOfBirth implements Serializable<DateOfBirth>, Completab
       return value
     }
 
-    const dateOfBirth = new DateOfBirth(value.known !== undefined ? value.known === 'true' : undefined, LocalDate.fromObject(value.date))
+    const dateOfBirth = new DateOfBirth(value.known !== undefined ? toBoolean(value.known) === true : undefined, LocalDate.fromObject(value.date))
 
     if (!dateOfBirth.known) {
       dateOfBirth.date = undefined

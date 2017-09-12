@@ -21,7 +21,6 @@ export default class Claim implements Serializable<Claim> {
   moreTimeRequested: boolean
   respondedAt: Moment
   claimantEmail: string
-
   deserialize (input: any): Claim {
     if (input) {
       this.id = input.id
@@ -45,7 +44,7 @@ export default class Claim implements Serializable<Claim> {
   get totalAmount (): number {
     const interestRate = this.claimData.interest
     const interestDate = this.claimData.interestDate
-    const claimAmount: number = this.claimData.amount
+    let claimAmount: number = this.claimData.amount.totalAmount()
     const date = interestDate.type === InterestDateType.SUBMISSION ? this.createdAt : interestDate.date
 
     return claimAmount + this.claimData.paidFeeAmount + calculateInterest(claimAmount, interestRate, date)

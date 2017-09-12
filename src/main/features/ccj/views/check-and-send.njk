@@ -11,7 +11,7 @@
     {{ csrfProtection(csrf) }}
 
     {{ tableStart("theirDetails", "Their details") }}
-    {{ row('Full name:', details.defendant.name.name) }}
+    {{ row('Full name:', user.claim.claimData.defendant.name) }}
     {{
       rowWithMultipleValue("Address:", [
         details.defendant.partyDetails.address.line1,
@@ -20,7 +20,7 @@
         details.defendant.partyDetails.address.postcode
       ], addressUrl)
     }}
-    {{ row("Email:", details.defendant.email.address) }}
+    {{ row("Email:", user.claim.claimData.defendant.email) }}
     {{ tableEnd() }}
 
     {{ tableStart("payment", "Payment") }}

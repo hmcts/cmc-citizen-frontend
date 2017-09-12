@@ -1,13 +1,30 @@
-{% from "includes/macros/form.njk" import csrfProtection, textInput, saveAndContinueButton %}
+{% from "includes/macros/form.njk" import textInput, radioGroup %}
 
-{% macro addressForm(form, csrfToken) %}
-  <form method="post">
-    {{ csrfProtection(csrfToken) }}
+{% macro addressFragment(form, name) %}
+  {{ textInput(t('Address line 1'), name + '[line1]' if name else 'line1', form, autocomplete = 'address-line1') }}
+  {{ textInput(t('Address line 2 (optional)'), name + '[line2]' if name else 'line2', form, autocomplete = 'address-line2') }}
+  {{ textInput(t('Town or city'), name + '[city]' if name else 'city', form, autocomplete = 'address-level2') }}
+  {{ textInput(t('Postcode'), name + '[postcode]' if name else 'postcode', form, autocomplete = 'postal-code') }}
+{% endmacro %}
 
-    {{ textInput(t('Address line 1'), 'line1', form) }}
-    {{ textInput(t('Address line 2 (optional)'), 'line2', form) }}
-    {{ textInput(t('Town or city'), 'city', form) }}
-    {{ textInput(t('Postcode'), 'postcode', form, '', 'postcode') }}
-    {{ saveAndContinueButton() }}
-  </form>
+{% macro correspondenceAddressFragment(form) %}
+  <h2 class="heading-medium">{{ t('Correspondence address') }}</h2>
+
+  {{
+    radioGroup(
+      label = t('Would you like correspondence sent to a different address?'),
+      name = 'hasCorrespondenceAddress',
+      options = [
+        { label: 'No', value: false },
+        { label: 'Yes, add a correspondence address', value: true }
+      ],
+      isInline = false,
+      form = form
+    )
+  }}
+
+  <div class="panel panel-border-narrow js-hidden" id="hasCorrespondenceAddress-true" aria-hidden="false">
+    <p>{{ t('All correspondence will be sent to this address. This is sometimes known as an &lsquo;address for service&rsquo;.') | safe }}</p>
+    {{ addressFragment(form, name = 'correspondenceAddress') }}
+  </div>
 {% endmacro %}
