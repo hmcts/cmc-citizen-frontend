@@ -60,7 +60,7 @@ const excludedPaths: DefendantResponsePaths[] = [
   DefendantResponsePaths.legacyDashboardRedirect,
   CCJPaths.repaymentPlanPage,
   CCJPaths.payBySetDatePage,
-  CCJPaths.ccjRequestedConfirmationPage
+  CCJPaths.confirmationPage
 ]
 
 describe('Accessibility', () => {
