@@ -1,3 +1,5 @@
+/* tslint:disable:no-unused-expression */
+
 import { expect } from 'chai'
 
 import DraftClaim from 'drafts/models/draftClaim'
@@ -163,9 +165,18 @@ describe('ClaimModelConverter', () => {
       expect(converted.defendants[0].type).to.equal('individual')
     })
 
-    it('should flatten the email address', () => {
+    it('should flatten non blank email address', () => {
+      draftClaim.defendant.email.address = 'j.other@server.net'
+
       let converted = ClaimModelConverter.convert(draftClaim)
       expect(converted.defendants[0].email).to.equal('j.other@server.net')
+    })
+
+    it('should flatten blank email address', () => {
+      draftClaim.defendant.email.address = ''
+
+      let converted = ClaimModelConverter.convert(draftClaim)
+      expect(converted.defendants[0].email).to.be.undefined
     })
   })
 })
