@@ -31,6 +31,5 @@ export default express.Router()
         user.ccjDraft.payBySetDate = form.model
         await DraftCCJService.save(res, next)
         res.redirect(Paths.repaymentPlanPage.uri.replace(':externalId', externalId))
-
       }
     }))

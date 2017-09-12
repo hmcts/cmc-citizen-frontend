@@ -17,16 +17,12 @@
         </h1>
 
         <fieldset class="form-group {% if error %} form-group-error {% endif %}">
-
           <legend>
               <span class="form-label-bold">
                 {{ t("When you want them to pay the amount") }}
               </span>
           </legend>
-
         </fieldset>
-
-
         {{ dateInput('date', form) }}
 
         {{ saveAndContinueButton() }}
