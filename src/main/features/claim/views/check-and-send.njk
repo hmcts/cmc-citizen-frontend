@@ -32,7 +32,9 @@
       {% endif %}
     {% endif %}
     {% if (partyType === 'soleTrader') %}
-      {{ row("Business name:", 'Trading as ' + businessName ) }}
+      {% if businessName %}
+        {{ row("Business name:", 'Trading as ' + businessName ) }}
+      {% endif %}
     {% endif %}
     {{
       rowWithMultipleValue(
