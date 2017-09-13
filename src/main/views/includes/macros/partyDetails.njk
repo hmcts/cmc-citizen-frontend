@@ -25,17 +25,17 @@
 {% endmacro %}
 
 {% macro partyDetailsSummaryFragment(partyDetails, showCorrespondenceAddressSection = true, changeLinks = {}) %}
-  {{ row("Name:", partyDetails.name, changeLinks.partyDetails) }}
+  {{ row("Name:", partyDetails.name, changeLinks.partyDetails or changeLinks.name) }}
 
   {% if (partyDetails.type === 'company' or partyDetails.type === 'organisation') %}
     {% if partyDetails.contactPerson %}
-      {{ row("Contact person:", partyDetails.contactPerson, changeLinks.partyDetails) }}
+      {{ row("Contact person:", partyDetails.contactPerson, changeLinks.partyDetails or changeLinks.contactPerson) }}
     {% endif %}
   {% endif %}
 
   {% if (partyDetails.type === 'soleTrader') %}
     {% if partyDetails.businessName %}
-      {{ row("Business name:", 'Trading as ' + partyDetails.businessName, changeLinks.partyDetails) }}
+      {{ row("Business name:", 'Trading as ' + partyDetails.businessName, changeLinks.partyDetails or changeLinks.businessName) }}
     {% endif %}
   {% endif %}
 
@@ -49,7 +49,7 @@
         partyDetails.address.postcode
       ],
       bottomBorder = not showCorrespondenceAddressSection,
-      changeLink = changeLinks.partyDetails
+      changeLink = changeLinks.partyDetails or changeLinks.address
     )
   }}
 
@@ -69,8 +69,7 @@
     {{
       rowWithMultipleValue(
         label = "Correspondence address:",
-        values = correspondenceAddressLines,
-        changeLink = changeLinks.partyDetails
+        values = correspondenceAddressLines
       )
     }}
   {% endif %}
