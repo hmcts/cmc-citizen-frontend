@@ -27,7 +27,7 @@ export default express.Router()
     }
     const draftClaimSaved: boolean = user.claimDraft && user.claimDraft.lastUpdateTimestamp !== undefined
     const draftResponseSaved: boolean = user.responseDraft && user.responseDraft.lastUpdateTimestamp !== undefined
-    const claimIssuedButNoResponse = (await ClaimStoreClient.retrieveByDefendantId(user.id)).length > 0
+    const claimIssuedButNoResponse: boolean = (await ClaimStoreClient.retrieveByDefendantId(user.id)).length > 0
       && !atLeastOneResponse
 
     if (draftResponseSaved && draftClaimSaved) {
