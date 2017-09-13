@@ -5,7 +5,7 @@ import { IsTodayOrInFuture } from 'forms/validation/validators/IsTodayOrInFuture
 
 import { Serializable } from 'models/serializable'
 import { LocalDate } from 'forms/models/localDate'
-import { isValidYearFormat } from 'app/forms/validation/validators/isValidYearFormat'
+import { IsValidYearFormat } from 'app/forms/validation/validators/isValidYearFormat'
 
 export class ValidationErrors {
   static readonly DATE_REQUIRED: string = 'Enter a date'
@@ -19,7 +19,7 @@ export class PayBySetDate implements Serializable <PayBySetDate> {
 
   @ValidateNested()
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
-  @isValidYearFormat(4, { message: ValidationErrors.DATE_INVALID_YEAR })
+  @IsValidYearFormat({ message: ValidationErrors.DATE_INVALID_YEAR })
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID })
   @IsTodayOrInFuture({ message: ValidationErrors.DATE_TODAY_OR_IN_FUTURE })
 

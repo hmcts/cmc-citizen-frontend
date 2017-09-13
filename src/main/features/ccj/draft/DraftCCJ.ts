@@ -2,12 +2,14 @@ import { Defendant } from 'app/drafts/models/defendant'
 import { CCJPaymentOption } from 'ccj/form/models/ccjPaymentOption'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { PayBySetDate } from 'ccj/form/models/payBySetDate'
+import { RepaymentPlan } from 'ccj/form/models/repaymentPlan'
 
 export class DraftCCJ {
   defendant: Defendant = new Defendant()
   paymentOption: CCJPaymentOption = new CCJPaymentOption()
   paidAmount?: PaidAmount
   payBySetDate?: PayBySetDate
+  repaymentPlan?: RepaymentPlan
 
   deserialize (input: any): DraftCCJ {
     if (input) {
@@ -15,6 +17,7 @@ export class DraftCCJ {
       this.paymentOption = new CCJPaymentOption().deserialize(input.paymentOption)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
+      this.repaymentPlan = new RepaymentPlan().deserialize(input.repaymentPlan)
     }
     return this
   }
