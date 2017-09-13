@@ -1,6 +1,13 @@
 $report-problem-colour: #454a4c;
 
 .report-error {
+  @include media (tablet) {
+    margin: 50px auto -25px 0;
+  }
+  @include media (mobile) {
+    margin: 45px auto -20px 0;
+  }
+
   clear: both;
   color: $report-problem-colour;
   font-size: 16px;

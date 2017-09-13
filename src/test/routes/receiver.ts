@@ -65,6 +65,7 @@ describe('Login receiver', async () => {
           draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -79,11 +80,27 @@ describe('Login receiver', async () => {
           draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
 
           await request(app)
             .get(AppPaths.receiver.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
+        })
+      })
+
+      context('when claim as a defendant but no draft response', async () => {
+        it('should redirect to response task-list', async () => {
+          draftStoreServiceMock.resolveRetrieveNoDraftFound('claim')
+          draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
+          claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveByDefendantId('A', 1)
+
+          await request(app)
+            .get(AppPaths.receiver.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.taskListPage.uri))
         })
       })
 
@@ -93,6 +110,7 @@ describe('Login receiver', async () => {
           draftStoreServiceMock.resolveRetrieve('response')
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -107,6 +125,7 @@ describe('Login receiver', async () => {
           draftStoreServiceMock.resolveRetrieve('response')
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
 
           await request(app)
             .get(AppPaths.receiver.uri)
