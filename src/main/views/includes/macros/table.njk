@@ -18,7 +18,7 @@
     <div class="column-one-third">
       <span>{{ value }}</span>
     </div>
-    {% if changeLink !== undefined %}
+    {% if changeLink %}
     <div class="column-one-third change-link-column">
       <a href="{{ changeLink | safe }}" class="bold">{{ t('Change') }}</a>
     </div>
@@ -36,7 +36,7 @@
         <span class="block">{{ value }}</span>
        {% endfor %}
     </div>
-    {% if changeLink !== undefined %}
+    {% if changeLink %}
     <div class="column-one-third change-link-column">
       <a href="{{ changeLink | safe }}" class="bold">{{ t('Change') }}</a>
     </div>
