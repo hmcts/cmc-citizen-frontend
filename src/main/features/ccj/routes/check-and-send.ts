@@ -3,6 +3,10 @@ import { Paths } from 'ccj/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Declaration } from 'ccj/form/models/declaration'
+import { CCJClient } from 'claims/ccjClient'
+import { ErrorHandling } from 'common/errorHandling'
+import User from 'idam/user'
+import { DraftCCJService } from 'ccj/draft/DraftCCJService'
 
 function prepareUrls (externalId: string): object {
   return {
@@ -27,12 +31,15 @@ export default express.Router()
   .post(
     Paths.checkAndSendPage.uri,
     FormValidator.requestHandler(Declaration, Declaration.fromObject),
-    (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<Declaration> = req.body
+      const user: User = res.locals.user
 
       if (form.hasErrors()) {
         renderView(form, req, res)
       } else {
+        await CCJClient.save(user)
+        await DraftCCJService.delete(res, next)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }
-    })
+    }))

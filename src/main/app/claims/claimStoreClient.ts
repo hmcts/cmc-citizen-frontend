@@ -7,7 +7,7 @@ import { ClaimModelConverter } from 'claims/claimModelConverter'
 import { ResponseModelConverter } from 'claims/responseModelConverter'
 
 export const claimApiBaseUrl = `${config.get<string>('claim-store.url')}`
-const claimStoreApiUrl = `${claimApiBaseUrl}/claims`
+export const claimStoreApiUrl = `${claimApiBaseUrl}/claims`
 const claimStoreResponsesApiUrl = `${claimApiBaseUrl}/responses/claim`
 
 export default class ClaimStoreClient {
