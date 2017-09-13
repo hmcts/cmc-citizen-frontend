@@ -59,7 +59,9 @@
           )
         }}
 
-        {{ readOnlyField(label = 'Email address', value = claim.claimData.defendant.email) }}
+        {% if claim.claimData.defendant.email %}
+          {{ readOnlyField(label = 'Email address', value = claim.claimData.defendant.email) }}
+        {% endif %}
 
         {{ saveAndContinueButton() }}
       </form>
