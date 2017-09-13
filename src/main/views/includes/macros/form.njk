@@ -19,17 +19,17 @@
   {{ input(label, name, form, hint, 'text', inputClass, autocomplete) }}
 {% endmacro %}
 
-{% macro poundInput(label, name, form, hint = '') %}
+{% macro poundInput(label, name, form, hint = '', bold = false) %}
   {% set error = form.errorFor(name) %}
   <div class="form-group {% if error %} form-group-error {% endif %}">
-    <label for="{{ name }}" id="{{ name }}[label]" class="form-label">
-      {{ label }}
+    <label for="{{ name }}" id="{{ name }}[label]" class="form-label{% if bold %}-bold{% endif %}">
+      {{ t(label) }}
 
       {% if hint != '' %}
-      <span class="form-hint">{{ hint }}</span>
+      <span class="form-hint">{{ t(hint) }}</span>
       {% endif %}
     </label>
-    <span class="error-message">{{ error }}</span>
+    <span class="error-message">{{ t(error) }}</span>
     <span class="input-symbol-pound">
       <input id="{{ name }}"
              name="{{ name }}" value="{{ form.valueFor(name) }}"
@@ -44,7 +44,7 @@
   {% set error = form.errorFor(name) %}
   <label for="{{ name }}"></label>
   <span class="{{ prefixClass }}">
-    <input id="{{ name }}" name="{{ name }}" type="text" class="form-control {{ inputClass }} {% if error %} form-control-error {% endif %}" value="{{ form.valueFor(name) }}">
+    <input id="{{ name }}" name="{{ name }}" class="form-control {{ inputClass }} {% if error %} form-control-error {% endif %}" value="{{ form.valueFor(name) }}">
   </span>
 {% endmacro %}
 
@@ -100,7 +100,7 @@
 {% macro option(label, name, form, value, type, hint = '', checked = false, bold = false) %}
   <div class="multiple-choice" data-target="{{ name }}-{{ value }}">
     {% set idValue = name + value | replace(' ', '') %}
-    <input id="{{ idValue }}" type="{{ type }}" name="{{ name }}" value="{{ value }}" {% if checked %} checked="checked" {% endif %}>
+    <input id="{{ idValue }}" type="{{ type }}" name="{{ name }}" value="{{ value }}" {% if checked %}checked{% endif %}>
     <label for="{{ idValue }}">
       {% if hint == '' %}
         {{ t(label) }}

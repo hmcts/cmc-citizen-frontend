@@ -8,7 +8,7 @@ import { Serializable } from 'models/serializable'
 import { LocalDate } from 'forms/models/localDate'
 import { CompletableTask } from 'app/models/task'
 import InterestDateType from 'app/common/interestDateType'
-import { isValidYearFormat } from 'app/forms/validation/validators/isValidYearFormat'
+import { IsValidYearFormat } from 'app/forms/validation/validators/isValidYearFormat'
 
 export class ValidationErrors {
   static readonly TYPE_REQUIRED: string = 'Choose when to claim interest from'
@@ -32,7 +32,7 @@ export default class InterestDate implements Serializable<InterestDate>, Complet
   @ValidateNested()
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID })
-  @isValidYearFormat(4, { message: ValidationErrors.DATE_INVALID_YEAR })
+  @IsValidYearFormat({ message: ValidationErrors.DATE_INVALID_YEAR })
   @IsNotInFuture({ message: ValidationErrors.DATE_IN_FUTURE })
   date?: LocalDate
 

@@ -17,14 +17,14 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 
 const externalId = sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
-const cnsPage = CCJPaths.checkAndSendPage.evaluateUri({ externalId: externalId })
-const confirmationPage = CCJPaths.confirmationPage.evaluateUri({ externalId: externalId })
+const repaymentPlanPage = CCJPaths.repaymentPlanPage.evaluateUri({ externalId: externalId })
+const checkAndSendPage = CCJPaths.checkAndSendPage.evaluateUri({ externalId: externalId })
 
-describe('CCJ: check and send page', () => {
+describe('CCJ: repayment page', () => {
   attachDefaultHooks()
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', cnsPage)
+    checkAuthorizationGuards(app, 'get', repaymentPlanPage)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -36,7 +36,7 @@ describe('CCJ: check and send page', () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
-            .get(cnsPage)
+            .get(repaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -46,7 +46,7 @@ describe('CCJ: check and send page', () => {
           draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
 
           await request(app)
-            .get(cnsPage)
+            .get(repaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -56,18 +56,28 @@ describe('CCJ: check and send page', () => {
           draftStoreServiceMock.resolveRetrieve('ccj')
 
           await request(app)
-            .get(cnsPage)
+            .get(repaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Check your answers'))
+            .expect(res => expect(res).to.be.successful.withText('Order them to pay by instalments'))
         })
       })
     })
   })
 
   describe('on POST', () => {
-    const validFormData = { signed: 'true' }
+    const validFormData = {
+      remainingAmount: 77.36,
+      firstPayment: 77.32,
+      installmentAmount: 76,
+      paymentSchedule: 'EVERY_MONTH',
+      firstPaymentDate: {
+        day: 12,
+        month: 3,
+        year: 2050
+      }
+    }
 
-    checkAuthorizationGuards(app, 'post', cnsPage)
+    checkAuthorizationGuards(app, 'post', repaymentPlanPage)
 
     context('when user authorised', () => {
       beforeEach(() => {
@@ -78,7 +88,7 @@ describe('CCJ: check and send page', () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .post(cnsPage)
+          .post(repaymentPlanPage)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -89,7 +99,7 @@ describe('CCJ: check and send page', () => {
         draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
 
         await request(app)
-          .post(cnsPage)
+          .post(repaymentPlanPage)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -99,12 +109,13 @@ describe('CCJ: check and send page', () => {
         it('should redirect to confirmation page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveRetrieve('ccj')
+          draftStoreServiceMock.resolveSave('ccj')
 
           await request(app)
-            .post(cnsPage)
+            .post(repaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
-            .expect(res => expect(res).to.be.redirect.toLocation(confirmationPage))
+            .expect(res => expect(res).to.be.redirect.toLocation(checkAndSendPage))
         })
       })
 
@@ -114,10 +125,10 @@ describe('CCJ: check and send page', () => {
           draftStoreServiceMock.resolveRetrieve('ccj')
 
           await request(app)
-            .post(cnsPage)
+            .post(repaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ signed: undefined })
-            .expect(res => expect(res).to.be.successful.withText('Please select I confirm that I believe the details I have provided are correct.', 'div class="error-summary"'))
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid amount of first payment', 'div class="error-summary"'))
         })
       })
     })

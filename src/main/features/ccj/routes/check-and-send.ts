@@ -33,6 +33,6 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, req, res)
       } else {
-        res.redirect(Paths.ccjRequestedConfirmationPage.evaluateUri({ externalId: req.params.externalId }))
+        res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }
     })
