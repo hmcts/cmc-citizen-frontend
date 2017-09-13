@@ -1,5 +1,6 @@
 {% from "includes/macros/form.njk" import readOnlyField, csrfProtection, textInput, radioGroup, saveAndContinueButton %}
 {% from "includes/macros/address.njk" import addressFragment, correspondenceAddressFragment %}
+{% from "includes/macros/table.njk" import tableStart,tableEnd, row, rowWithMultipleValue %}
 
 {% macro partyDetailsFragment(form, fields, addressSection, showCorrespondenceAddressSection = false) %}
   {% for field in fields %}
@@ -20,5 +21,61 @@
 
   {% if showCorrespondenceAddressSection == true %}
     {{ correspondenceAddressFragment(form) }}
+  {% endif %}
+{% endmacro %}
+
+{% macro partyDetailsSummaryFragment(partyDetails, showCorrespondenceAddressSection = true, changeLinks = {}) %}
+  {{ row("Name:", partyDetails.name, changeLinks.partyDetails) }}
+
+  {% if (partyDetails.type === 'company' or partyDetails.type === 'organisation') %}
+    {% if partyDetails.contactPerson %}
+      {{ row("Contact person:", partyDetails.contactPerson, changeLinks.partyDetails) }}
+    {% endif %}
+  {% endif %}
+
+  {% if (partyDetails.type === 'soleTrader') %}
+    {% if partyDetails.businessName %}
+      {{ row("Business name:", 'Trading as ' + partyDetails.businessName, changeLinks.partyDetails) }}
+    {% endif %}
+  {% endif %}
+
+  {{
+    rowWithMultipleValue(
+      label = "Address:",
+      values = [
+        partyDetails.address.line1,
+        partyDetails.address.line2,
+        partyDetails.address.city,
+        partyDetails.address.postcode
+      ],
+      bottomBorder = not showCorrespondenceAddressSection,
+      changeLink = changeLinks.partyDetails
+    )
+  }}
+
+  {% if showCorrespondenceAddressSection %}
+    {% if partyDetails.hasCorrespondenceAddress %}
+      {%
+        set correspondenceAddressLines = [
+          partyDetails.correspondenceAddress.line1,
+          partyDetails.correspondenceAddress.line2,
+          partyDetails.correspondenceAddress.city,
+          partyDetails.correspondenceAddress.postcode
+        ]
+      %}
+    {% else %}
+      {% set correspondenceAddressLines = [t('Same as address')] %}
+    {% endif %}
+    {{
+      rowWithMultipleValue(
+        label = "Correspondence address:",
+        values = correspondenceAddressLines,
+        changeLink = changeLinks.partyDetails
+      )
+    }}
+  {% endif %}
+
+  {% if (partyDetails.type === 'individual' and partyDetails.dateOfBirth) %}
+    {{ row("Date of birth:", partyDetails.dateOfBirth.date.toMoment() | date, changeLinks.dateOfBirth) }}
   {% endif %}
 {% endmacro %}

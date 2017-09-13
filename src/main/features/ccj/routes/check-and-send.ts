@@ -7,6 +7,7 @@ import { Declaration } from 'ccj/form/models/declaration'
 function prepareUrls (externalId: string): object {
   return {
     addressUrl: Paths.theirDetailsPage.evaluateUri({ externalId: externalId }),
+    dateOfBirthUrl: Paths.dateOfBirthPage.evaluateUri({ externalId: externalId }),
     paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId })
   }
 }

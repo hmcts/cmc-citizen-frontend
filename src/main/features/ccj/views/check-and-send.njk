@@ -2,6 +2,7 @@
 {% from "includes/macros/table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
 {% from "includes/macros/form.njk" import csrfProtection, submitButton, errorSummary, checkboxGroup %}
 {% from "includes/macros/statement-of-truth.njk" import statementOfTruth %}
+{% from "includes/macros/partyDetails.njk" import partyDetailsSummaryFragment %}
 
 {% set title = t("Money claim") %}
 {% set heading = t("Check your answers") %}
@@ -11,14 +12,15 @@
     {{ csrfProtection(csrf) }}
 
     {{ tableStart("theirDetails", "Their details") }}
-    {{ row('Full name:', user.claim.claimData.defendant.name) }}
     {{
-      rowWithMultipleValue("Address:", [
-        details.defendant.partyDetails.address.line1,
-        details.defendant.partyDetails.address.line2,
-        details.defendant.partyDetails.address.city,
-        details.defendant.partyDetails.address.postcode
-      ], addressUrl)
+      partyDetailsSummaryFragment(
+        partyDetails = user.ccjDraft.defendant.partyDetails,
+        showCorrespondenceAddressSection = false,
+        changeLinks = {
+          partyDetails: addressUrl,
+          dateOfBirth: dateOfBirthUrl
+        }
+      )
     }}
     {{ row("Email:", user.claim.claimData.defendant.email) }}
     {{ tableEnd() }}
