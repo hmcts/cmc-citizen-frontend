@@ -6,14 +6,12 @@ import {
   ValidatorConstraintInterface
 } from 'class-validator'
 
+import { MomentFactory } from 'common/momentFactory'
 import { LocalDate } from 'forms/models/localDate'
 
-const numberOfDigitsInAYear = 4
-
 @ValidatorConstraint()
-export class IsValidYearFormatConstraint implements ValidatorConstraintInterface {
-
-  validate (value: any | LocalDate, args?: ValidationArguments): boolean {
+export class DateFutureConstraint implements ValidatorConstraintInterface {
+  validate (value: any, args?: ValidationArguments) {
     if (value === undefined) {
       return true
     }
@@ -22,22 +20,20 @@ export class IsValidYearFormatConstraint implements ValidatorConstraintInterface
       return false
     }
 
-    return Number(value.year).toString().length === numberOfDigitsInAYear
+    const date = value.toMoment()
+    const now = MomentFactory.currentDate()
+    return date.isAfter(now)
   }
-
 }
 
-/**
- * Verify is a valid year format in local date.
- */
-export function IsValidYearFormat (validationOptions?: ValidationOptions) {
+export function IsFutureDate (validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
       constraints: [],
-      validator: IsValidYearFormatConstraint
+      validator: DateFutureConstraint
     })
   }
 }

@@ -25,7 +25,30 @@
 
     {{ tableStart("payment", "Payment") }}
     {{ row("Amount to be paid by defendant", amountToBePaid | numeral) }}
-    {{ row("When you want the defendant to pay", t(details.paymentOption.option.displayValue), paidAmountUrl) }}
+
+    {% if details.paymentOption.option.value == 'immediately' %}
+      {% set paymentOptionDisplayValue = [details.paymentOption.option.displayValue] %}
+    {% endif %}
+
+    {% if details.paymentOption.option.value == 'full' %}
+      {# Add date to pay by once the code is on master #}
+      {% set paymentOptionDisplayValue = [details.paymentOption.option.displayValue] %}
+
+    {% endif %}
+
+    {% if details.paymentOption.option.value == 'instalments' %}
+      {% set paymentOptionDisplayValue =
+      [  t('%s: %s %s.',
+      { postProcess: 'sprintf', sprintf: [
+      t(details.paymentOption.option.displayValue),
+      details.repaymentPlan.installmentAmount | numeral,
+      t(details.repaymentPlan.paymentSchedule.displayValue)
+      ]}),
+      t('First payment on %s', { postProcess: 'sprintf', sprintf: ['2017-12-12' | date]})
+      ] %}
+    {% endif %}
+
+    {{ rowWithMultipleValue("When you want the defendant to pay", paymentOptionDisplayValue, paidAmountUrl) }}
     {{ tableEnd() }}
 
     <div class="form-group">

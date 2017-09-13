@@ -1,5 +1,5 @@
 import { LocalDate } from 'forms/models/localDate'
-import { isValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
+import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { IsDefined, ValidateNested } from 'class-validator'
 import { ValidationErrors as DateValidationErrors } from 'forms/models/interestDate'
@@ -17,7 +17,7 @@ export class UpdateResponseDeadlineRequest {
   @ValidateNested()
   @IsDefined({ message: DateValidationErrors.DATE_REQUIRED })
   @IsValidLocalDate({ message: DateValidationErrors.DATE_NOT_VALID })
-  @isValidYearFormat(4, { message: DateValidationErrors.DATE_INVALID_YEAR })
+  @IsValidYearFormat({ message: DateValidationErrors.DATE_INVALID_YEAR })
   date?: LocalDate
 
   constructor (claimNumber?: string, date?: LocalDate) {

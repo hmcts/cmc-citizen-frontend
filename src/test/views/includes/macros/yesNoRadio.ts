@@ -10,9 +10,9 @@ describe('yesNoRadio', () => {
 
   const label = 'Have you already tried to resolve this dispute with the other party?'
   const name = 'resolved'
-  const resolvedTrueChecked = '<input id="resolvedtrue" type="radio" name="' + name + '" value="true"  checked="checked" '
+  const resolvedTrueChecked = '<input id="resolvedtrue" type="radio" name="' + name + '" value="true" checked'
   const resolvedTrueUnchecked = '<input id="resolvedtrue" type="radio" name="' + name + '" value="true" >'
-  const resolvedFalseChecked = '<input id="resolvedfalse" type="radio" name="' + name + '" value="false"  checked="checked" >'
+  const resolvedFalseChecked = '<input id="resolvedfalse" type="radio" name="' + name + '" value="false" checked>'
   const resolvedFalseUnchecked = '<input id="resolvedfalse" type="radio" name="' + name + '" value="false" >'
 
   before(() => {

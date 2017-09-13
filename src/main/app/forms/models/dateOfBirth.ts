@@ -7,7 +7,7 @@ import { MinimumAgeValidator } from 'forms/validation/validators/minimumAgeValid
 import { Serializable } from 'models/serializable'
 import { LocalDate } from 'forms/models/localDate'
 import { CompletableTask } from 'app/models/task'
-import { isValidYearFormat } from 'app/forms/validation/validators/isValidYearFormat'
+import { IsValidYearFormat } from 'app/forms/validation/validators/isValidYearFormat'
 import * as toBoolean from 'to-boolean'
 
 export class ValidationErrors {
@@ -23,7 +23,7 @@ export default class DateOfBirth implements Serializable<DateOfBirth>, Completab
   @ValidateIf(o => o.known === true)
   @ValidateNested()
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID })
-  @isValidYearFormat(4, { message: ValidationErrors.DATE_INVALID_YEAR })
+  @IsValidYearFormat({ message: ValidationErrors.DATE_INVALID_YEAR })
   @MinimumAgeValidator(18, { message: ValidationErrors.DATE_UNDER_18 })
   @MaximumAgeValidator(150, { message: ValidationErrors.DATE_NOT_VALID })
   date: LocalDate
