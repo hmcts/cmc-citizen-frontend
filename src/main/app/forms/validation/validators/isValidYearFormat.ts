@@ -8,17 +8,13 @@ import {
 
 import { LocalDate } from 'forms/models/localDate'
 
+const numberOfDigitsInAYear = 4
+
 @ValidatorConstraint()
 export class IsValidYearFormatConstraint implements ValidatorConstraintInterface {
 
   validate (value: any | LocalDate, args?: ValidationArguments): boolean {
-    const [digits] = args.constraints
-
-    if (!digits || digits <= 0) {
-      throw new Error('Allowed digits in year have to be specified and positive value')
-    }
-
-    if (value == null) {
+    if (value === undefined) {
       return true
     }
 
@@ -26,7 +22,7 @@ export class IsValidYearFormatConstraint implements ValidatorConstraintInterface
       return false
     }
 
-    return new Number(value.year).toString().length === digits
+    return Number(value.year).toString().length === numberOfDigitsInAYear
   }
 
 }
@@ -34,13 +30,13 @@ export class IsValidYearFormatConstraint implements ValidatorConstraintInterface
 /**
  * Verify is a valid year format in local date.
  */
-export function isValidYearFormat (digits: number, validationOptions?: ValidationOptions) {
+export function IsValidYearFormat (validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
-      constraints: [digits],
+      constraints: [],
       validator: IsValidYearFormatConstraint
     })
   }
