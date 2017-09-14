@@ -2,6 +2,7 @@ import { Response } from 'response/form/models/response'
 import { Serializable } from 'models/serializable'
 import { FreeMediation } from 'response/form/models/freeMediation'
 import Defence from 'response/form/models/defence'
+import HowMuchIsPaid from 'features/response/form/models/howMuchPaid'
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import { CounterClaim } from 'response/form/models/counterClaim'
 import { ResponseType } from 'response/form/models/responseType'
@@ -17,6 +18,7 @@ export class ResponseDraft extends Draft implements Serializable<ResponseDraft> 
   moreTimeNeeded?: MoreTimeNeeded
   counterClaim?: CounterClaim
   defendantDetails?: Defendant = new Defendant()
+  howMuchIsPaid?: HowMuchIsPaid
 
   deserialize (input: any): ResponseDraft {
     if (input) {
@@ -26,6 +28,7 @@ export class ResponseDraft extends Draft implements Serializable<ResponseDraft> 
       this.moreTimeNeeded = new MoreTimeNeeded(input.moreTimeNeeded && input.moreTimeNeeded.option)
       this.counterClaim = CounterClaim.fromObject(input.counterClaim)
       this.defendantDetails = new Defendant().deserialize(input.defendantDetails)
+      this.howMuchIsPaid = HowMuchIsPaid.fromObject(input.howMuchIsPaid)
       this.lastUpdateTimestamp = input.lastUpdateTimestamp
     }
     return this
