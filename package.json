@@ -13,7 +13,8 @@
     "test:routes": "NODE_ENV=mocha LOG_LEVEL=OFF mocha --compilers ts:ts-node/register -r tsconfig-paths/register $(find src/test \\( -name '*.ts' -or -name '*.js' \\) -path '*/routes/*') --reporter mochawesome --reporter-options reportFilename=routes,inlineAssets=true,reportTitle=citizen-frontend-routes",
     "test:a11y": "NODE_ENV=mocha LOG_LEVEL=ERROR mocha --compilers ts:ts-node/register -r tsconfig-paths/register src/test/a11y --timeout 60000 --reporter mochawesome --reporter-options reportFilename=a11y,inlineAssets=true,reportTitle=citizen-frontend-a11y",
     "test:nsp": "nsp check",
-    "sonar-scanner": "sonar-scanner -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/**",
+    "test:coverage": "NODE_ENV=mocha LOG_LEVEL=OFF nyc mocha --compilers ts:ts-node/register -r tsconfig-paths/register $(find src/test \\( -name '*.ts' -or -name '*.js' \\) ! -path '*a11y*')",
+    "sonar-scanner": "sonar-scanner -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/** -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info",
     "precommit": "yarn lint",
     "prepush": "yarn test && yarn test:routes"
   },
@@ -96,6 +97,7 @@
     "mochawesome": "^2.2.0",
     "mock-require": "^2.0.1",
     "nsp": "^2.6.3",
+    "nyc": "^11.2.1",
     "pa11y": "^4.6.0",
     "sass-lint": "^1.10.2",
     "sinon": "^3.2.1",
@@ -105,5 +107,26 @@
     "supertest": "^3.0.0",
     "tslint": "^5.5.0",
     "tslint-config-standard": "^6.0.1"
+  },
+  "nyc": {
+    "extension": [
+      ".ts",
+      ".js"
+    ],
+    "include": [
+      "src/main"
+    ],
+    "exclude": [
+      "**/*.d.ts",
+      "src/main/public"
+    ],
+    "reporter": [
+      "html",
+      "lcov",
+      "text",
+      "text-summary"
+    ],
+    "report-dir": "coverage-report",
+    "all": true
   }
 }

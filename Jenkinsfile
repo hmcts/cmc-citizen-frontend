@@ -81,6 +81,14 @@ timestamps {
               archiveArtifacts 'mochawesome-report/a11y.html'
             }
           }
+
+          stage('Test coverage') {
+            try {
+              sh "yarn test:coverage"
+            } finally {
+              archiveArtifacts 'coverage-report/index.html'
+            }
+          }
         }
 
         stage('Sonar') {
