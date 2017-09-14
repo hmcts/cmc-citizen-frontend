@@ -1,76 +1,33 @@
 {% extends "layout.njk" %}
+
 {% from "table.njk" import tableStart,tableEnd, row, rowWithMultipleValue %}
 {% from "form.njk" import csrfProtection, submitButton, errorSummary, checkboxGroup %}
 {% from "statement-of-truth.njk" import statementOfTruth %}
+{% from "party/details.njk" import partyDetailsSummaryFragment %}
 
 {% set title = t("Money claim") %}
 {% set heading = t("Check your answers before submitting your claim") %}
-{% set partyType = draftClaim.claimant.partyDetails.type %}
-{% set claimantPartyType = draftClaim.claimant.partyDetails.type %}
-{% set defendantPartyType = draftClaim.defendant.partyDetails.type %}
-
-{% if draftClaim.claimant.partyDetails.hasCorrespondenceAddress %}
-  {% set correspondenceAddressLines = [
-    draftClaim.claimant.partyDetails.correspondenceAddress.line1,
-    draftClaim.claimant.partyDetails.correspondenceAddress.line2,
-    draftClaim.claimant.partyDetails.correspondenceAddress.city,
-    draftClaim.claimant.partyDetails.correspondenceAddress.postcode
-  ] %}
-{% else %}
-  {% set correspondenceAddressLines = [t('Same as address')] %}
-{% endif %}
 
 {% block content %}
   <form novalidate method="post">
     {{ csrfProtection(csrf) }}
 
     {{ tableStart("yourDetails", "Your details") }}
-    {{ row("Name:", draftClaim.claimant.partyDetails.name) }}
-    {% if (partyType === 'company' or partyType === 'organisation') %}
-      {% if (contactPerson) %}
-        {{ row("Contact Name:", contactPerson) }}
-      {% endif %}
-    {% endif %}
-    {% if (partyType === 'soleTrader') %}
-      {{ row("Business name:", 'Trading as ' + businessName ) }}
-    {% endif %}
     {{
-      rowWithMultipleValue(
-        label = "Address:",
-        values = [draftClaim.claimant.partyDetails.address.line1,
-          draftClaim.claimant.partyDetails.address.line2,
-          draftClaim.claimant.partyDetails.address.city,
-          draftClaim.claimant.partyDetails.address.postcode],
-        bottomBorder = false
+      partyDetailsSummaryFragment(
+        partyDetails = draftClaim.claimant.partyDetails
       )
     }}
-    {{
-      rowWithMultipleValue(
-        label = "Correspondence address:",
-        values = correspondenceAddressLines
-      )
-    }}
-    {% if (partyType === 'individual') %}
-      {{ row("Date of birth:", dateOfBirth.date.asString() | date) }}
-    {% endif %}
     {{ row("Phone:", draftClaim.claimant.mobilePhone.number) }}
     {{ tableEnd() }}
 
     {{ tableStart("theirDetails", "Their details") }}
-    {{ row('Name:', draftClaim.defendant.partyDetails.name) }}
-    {% if (defendantPartyType === 'company' or defendantPartyType === 'organisation') %}
-      {% if (defendantContactPerson) %}
-        {{ row("Contact Name:", defendantContactPerson) }}
-      {% endif %}
-    {% endif %}
-    {% if (defendantPartyType === 'soleTrader') %}
-      {{ row("Business name:", 'Trading as ' + defendantBusinessName ) }}
-    {% endif %}
-    {{ rowWithMultipleValue("Address:", [
-    draftClaim.defendant.partyDetails.address.line1,
-    draftClaim.defendant.partyDetails.address.line2,
-    draftClaim.defendant.partyDetails.address.city,
-    draftClaim.defendant.partyDetails.address.postcode]) }}
+    {{
+      partyDetailsSummaryFragment(
+        partyDetails = draftClaim.defendant.partyDetails,
+        showCorrespondenceAddressSection = false
+      )
+    }}
     {{ row("Email:", draftClaim.defendant.email.address) }}
     {{ tableEnd() }}
 

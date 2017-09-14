@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
+
 {% from "form.njk" import csrfProtection, textInput, radioGroup, saveAndContinueButton, errorSummary %}
-{% from "party/details.njk" import individualDetailsFragment, soleTraderDetailsFragment, companyDetailsFragment, organisationDetailsFragment %}
+{% from "party/details.njk" import partyDetailsFragment %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Confirm your details') %}
@@ -13,44 +14,49 @@
         <input type="hidden" name="type" value="{{ form.model.type }}">
 
         {% if form.model.type == 'individual' %}
-          {{
-            individualDetailsFragment(
-              form,
-              nameLabel = "Your full name",
-              addressHeading = "Your address",
-              hasCorrespondenceAddress = true
-            )
-          }}
+          {%
+            set fields = [
+              { label: 'Your full name', name: 'name' }
+            ]
+          %}
+          {% set addressSectionHeading = 'Your address' %}
         {% elif form.model.type == 'soleTrader' %}
-          {{
-            soleTraderDetailsFragment(
-              form,
-              nameLabel = "Your full name",
-              addressHeading = "Your address",
-              hasCorrespondenceAddress = true
-            )
-          }}
+          {%
+            set fields = [
+              { label: 'Your full name', name: 'name' },
+              { label: 'Business name (optional)', name: 'businessName' }
+            ]
+          %}
+          {% set addressSectionHeading = 'Your address' %}
         {% elif form.model.type == 'company' %}
-          {{
-            companyDetailsFragment(
-              form,
-              nameLabel = "Company name",
-              contactPersonLabel = 'Contact person (optional)',
-              addressHeading = "Company address",
-              hasCorrespondenceAddress = true
-              )
-            }}
+          {%
+            set fields = [
+              { label: 'Company name', name: 'name' },
+              { label: 'Contact person (optional)', name: 'contactPerson' }
+            ]
+          %}
+          {% set addressSectionHeading = 'Company address' %}
         {% elif form.model.type == 'organisation' %}
-          {{
-            organisationDetailsFragment(
-              form,
-              nameLabel = "Organisation name",
-              contactPersonLabel = 'Contact person (optional)',
-              addressHeading = "Organisation address",
-              hasCorrespondenceAddress = true
-            )
-          }}
+          {%
+            set fields = [
+              { label: 'Organisation name', name: 'name' },
+              { label: 'Contact person (optional)', name: 'contactPerson' }
+            ]
+          %}
+          {% set addressSectionHeading = 'Organisation address' %}
         {% endif %}
+
+        {{
+          partyDetailsFragment(
+            form,
+            fields = fields,
+            addressSection = {
+              heading: addressSectionHeading,
+              name: 'address'
+            },
+            showCorrespondenceAddressSection = true
+          )
+        }}
 
         {{ saveAndContinueButton() }}
       </form>

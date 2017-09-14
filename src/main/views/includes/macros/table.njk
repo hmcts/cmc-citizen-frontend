@@ -10,7 +10,7 @@
   </fieldset>
 {% endmacro %}
 
-{% macro row( label, value, changeLink = '' ) %}
+{% macro row( label, value, changeLink ) %}
   <div class="bottom-border">
     <div class="column-one-third">
       <span>{{ t( label ) }}</span>
@@ -18,7 +18,7 @@
     <div class="column-one-third">
       <span>{{ value }}</span>
     </div>
-    {% if changeLink !== '' %}
+    {% if changeLink %}
     <div class="column-one-third change-link-column">
       <a href="{{ changeLink | safe }}" class="bold">{{ t('Change') }}</a>
     </div>
@@ -26,7 +26,7 @@
   </div>
 {% endmacro %}
 
-{% macro rowWithMultipleValue( label, values, changeLink = '', bottomBorder = true) %}
+{% macro rowWithMultipleValue( label, values, changeLink, bottomBorder = true) %}
   <div class="{% if bottomBorder %}bottom-border{% else %}no-bottom-border{% endif %}">
     <div class="column-one-third">
       <span class="">{{ t( label ) }}</span>
@@ -36,7 +36,7 @@
         <span class="block">{{ value }}</span>
        {% endfor %}
     </div>
-    {% if changeLink !== '' %}
+    {% if changeLink %}
     <div class="column-one-third change-link-column">
       <a href="{{ changeLink | safe }}" class="bold">{{ t('Change') }}</a>
     </div>

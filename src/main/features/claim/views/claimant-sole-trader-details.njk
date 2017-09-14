@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
+
 {% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
-{% from "party/details.njk" import soleTraderDetailsFragment %}
+{% from "party/details.njk" import partyDetailsFragment %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Your details') %}
@@ -12,12 +13,18 @@
         {{ csrfProtection(csrf) }}
 
         {{
-          soleTraderDetailsFragment(
+          partyDetailsFragment(
             form,
-            nameLabel = 'Full name',
-            addressHeading = "Your address",
-            addressHint = "This must be the address where you live or trade.",
-            hasCorrespondenceAddress = true
+            fields = [
+              { label: 'Full name', name: 'name' },
+              { label: 'Business name (optional)', name: 'businessName' }
+            ],
+            addressSection = {
+              heading: 'Your address',
+              hint: 'This must be the address where you live or trade.',
+              name: 'address'
+            },
+            showCorrespondenceAddressSection = true
           )
         }}
 
