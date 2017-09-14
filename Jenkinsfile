@@ -41,7 +41,6 @@ timestamps {
           '''
         }
 
-
         stage('Node security check') {
           try {
             sh "yarn test:nsp 2> nsp-report.txt"
@@ -81,6 +80,26 @@ timestamps {
             } finally {
               archiveArtifacts 'mochawesome-report/a11y.html'
             }
+          }
+        }
+
+        stage('Sonar') {
+          onPR {
+            withCredentials([string(credentialsId: 'jenkins-github-api-text', variable: 'GITHUB_ACCESS_TOKEN')]) {
+              String prNumber = env.BRANCH_NAME.substring(3)
+              sh """
+                yarn sonar-scanner -- \
+                -Dsonar.analysis.mode=preview \
+                -Dsonar.github.pullRequest=$prNumber \
+                -Dsonar.github.repository=hmcts/cmc-citizen-frontend \
+                -Dsonar.github.oauth=$GITHUB_ACCESS_TOKEN \
+                -Dsonar.host.url=$SONARQUBE_URL
+              """
+            }
+          }
+
+          onMaster {
+            sh "yarn sonar-scanner -- -Dsonar.host.url=$SONARQUBE_URL"
           }
         }
 
