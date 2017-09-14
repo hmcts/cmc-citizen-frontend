@@ -17,12 +17,16 @@
   }
 }
 
-input.postcode {
-  width: 100%;
+input {
+  &.postcode {
+    width: 100%;
+  }
 }
 
 @media (min-width: 641px) {
-  input.postcode {
-    width: 25%;
+  input {
+    &.postcode {
+      width: 25%;
+    }
   }
 }
