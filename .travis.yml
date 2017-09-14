@@ -3,7 +3,7 @@ cache: yarn
 script:
   - yarn --version
   - yarn setup
-  - yarn check
+  - yarn check --integrity
   - yarn lint
   - yarn test
   - yarn test:routes
