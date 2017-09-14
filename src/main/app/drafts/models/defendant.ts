@@ -13,6 +13,12 @@ export class Defendant implements CompletableTask {
   email?: Email
   mobilePhone?: MobilePhone
 
+  constructor (partyDetails?: PartyDetails, email?: Email, mobilePhone?: MobilePhone) {
+    this.partyDetails = partyDetails
+    this.email = email
+    this.mobilePhone = mobilePhone
+  }
+
   deserialize (input: any): Defendant {
     if (input) {
       if (input.email) {

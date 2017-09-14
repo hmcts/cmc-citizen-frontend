@@ -6,6 +6,7 @@ import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 
 import { Paths } from 'ccj/paths'
+import { Paths as DashboardPaths } from 'dashboard/paths'
 
 import { app } from '../../../../main/app'
 
@@ -14,11 +15,26 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
+import { partyDetails } from '../../../data/draft/partyDetails'
+import { PartyType } from 'app/common/partyType'
 const externalId = sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
 const paidAmountPage = Paths.paidAmountPage.uri.replace(':externalId', externalId)
 const dateOfBirthPage = Paths.dateOfBirthPage.uri.replace(':externalId', externalId)
+
+function checkAccessGuard (app: any, method: string) {
+  PartyType.except(PartyType.INDIVIDUAL).forEach(partyType => {
+    it(`should redirect to dashboard page when defendant type is ${partyType.name.toLocaleLowerCase()}`, async () => {
+      claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+      draftStoreServiceMock.resolveRetrieve('ccj', {defendant: {partyDetails: partyDetails(partyType.value)}})
+
+      await request(app)[method](dateOfBirthPage)
+        .set('Cookie', `${cookieName}=ABC`)
+        .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
+    })
+  })
+}
 
 describe('CCJ - defendant date of birth', () => {
   attachDefaultHooks()
@@ -30,6 +46,8 @@ describe('CCJ - defendant date of birth', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
       })
+
+      checkAccessGuard(app, 'get')
 
       it('should return 500 and render error page when cannot retrieve claims', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
@@ -71,6 +89,8 @@ describe('CCJ - defendant date of birth', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
       })
+
+      checkAccessGuard(app, 'post')
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')

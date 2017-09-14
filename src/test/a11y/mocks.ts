@@ -259,6 +259,14 @@ mock('ccj/guards/ccjGuard', {
   }
 })
 
+mock('ccj/guards/individualDateOfBirthGuard', {
+  'IndividualDateOfBirthGuard': {
+    requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      next()
+    }
+  }
+})
+
 mock('ccj/draft/DraftCCJService', {
   'DraftCCJService': {
     retrieve: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
