@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
-{% from "includes/macros/table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
+{% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
+{% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
 
 {% set title = t("Money claim") %}
 

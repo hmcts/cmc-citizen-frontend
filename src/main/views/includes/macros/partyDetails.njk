@@ -1,5 +1,5 @@
-{% from "includes/macros/form.njk" import csrfProtection, textInput, radioGroup, saveAndContinueButton %}
-{% from "includes/macros/address.njk" import addressFragment, correspondenceAddressFragment %}
+{% from "form.njk" import csrfProtection, textInput, radioGroup, saveAndContinueButton %}
+{% from "address.njk" import addressFragment, correspondenceAddressFragment %}
 
 {% macro individualDetailsFragment(form, nameLabel = 'Full name', addressHeading = 'Address', addressHint, hasCorrespondenceAddress = false) %}
   {{ textInput(t(nameLabel), 'name', form, autocomplete = 'name') }}

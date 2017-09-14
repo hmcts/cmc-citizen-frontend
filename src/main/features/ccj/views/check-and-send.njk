@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
-{% from "includes/macros/form.njk" import csrfProtection, submitButton, errorSummary, checkboxGroup %}
-{% from "includes/macros/statement-of-truth.njk" import statementOfTruth %}
+{% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary, checkboxGroup %}
+{% from "statement-of-truth.njk" import statementOfTruth %}
 
 {% set title = t("Money claim") %}
 {% set heading = t("Check your answers") %}

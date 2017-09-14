@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import csrfProtection, textInput, radioOption, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, textInput, radioOption, saveAndContinueButton, errorSummary %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Interest') %}
@@ -62,14 +62,14 @@
 
           <div class="panel panel-border-narrow">
             <p>
-             {{ t('You can claim up to 8% interest on money owed to you. '+ 
-             'You might be able to claim a different rate. '+ 
+             {{ t('You can claim up to 8% interest on money owed to you. '+
+             'You might be able to claim a different rate. '+
              'For example, if a loan has not been repaid, '+
              'or if you had a contract which entitles you to a particular rate.') }}</p>
             <p>
              {{ t('The court will decide if you’re entitled to some or all of the interest claimed. '+
              'You might be asked to give reasons for why you should get interest.')}}</p>
-             
+
           </div>
 
         </details>
