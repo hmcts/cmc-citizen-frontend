@@ -32,7 +32,7 @@
 
     {% if details.paymentOption.option.value == 'full' %}
       {% set paymentOptionDisplayValue = [details.paymentOption.option.displayValue
-        + ' ' + details.payBySetDate.date.asString() | date] %}
+        + ' ' + details.payBySetDate.date.toMoment() | date] %}
 
     {% endif %}
 
