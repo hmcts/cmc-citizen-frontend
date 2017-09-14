@@ -74,6 +74,19 @@ For test coverage:
 $ yarn test:coverage
 ```
 
+## Troubleshooting
+
+### Warnings while running ```yarn install``` on yarn version 1.0.1
+
+There is currently an open issue : https://github.com/yarnpkg/yarn/issues/3751
+
+Example:
+
+```
+warning The case-insensitive file ..\cmc-citizen-frontend\node_modules\nyc\node_modules shouldn't be copied twice in one bulk copy
+warning The case-insensitive file ..\cmc-citizen-frontend\node_modules\nyc\node_modules\ansi-regex shouldn't be copied twice in one bulk copy
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details
