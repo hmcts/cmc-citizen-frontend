@@ -36,19 +36,25 @@ export default class DraftStoreClient<T> {
     }))
   }
 
+  retrieveById (userId: number, draftId: string, deserializationFn: (value: any) => T): Promise<T> {
+    return request.get(this.endpointURL, withAuthHeader(userId))
+      .then(draft => deserializationFn(draft))
+      .catch(err => {
+        if (err.statusCode === HttpStatus.NOT_FOUND) {
+          return undefined
+        } else {
+          throw err
+        }
+      })
+  }
+
   retrieve (userId: number, deserializationFn: (value: any) => T): Promise<T> {
     return request
       .get(this.endpointURL, withAuthHeader(userId))
-      .then(draft => {
-        if (draft) {
-          return deserializationFn(draft) // Will get removed when deserialization approach is sorted
-        } else {
-          throw new Error('Call was successful, but received an empty draft instance')
-        }
-      })
+      .then(draft => deserializationFn(draft))
       .catch(err => {
         if (err.statusCode === HttpStatus.NOT_FOUND) {
-          return null
+          return undefined
         } else {
           throw err
         }

@@ -35,7 +35,7 @@ export default express.Router()
       const sessionCookie = config.get<string>('session.cookieName')
       new Cookies(req, res).set(sessionCookie, req.query.jwt, { sameSite: 'lax' })
 
-      res.redirect(Paths.taskListPage.uri)
+      res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
     } catch (err) {
       next(err)
     }
