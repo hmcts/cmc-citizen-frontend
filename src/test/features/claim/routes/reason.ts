@@ -28,7 +28,7 @@ describe('Claim issue: reason page', () => {
       await request(app)
         .get(ClaimPaths.reasonPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Why you&#39;re owed the money'))
+        .expect(res => expect(res).to.be.successful.withText('Why you’re owed the money'))
     })
   })
 
@@ -46,7 +46,7 @@ describe('Claim issue: reason page', () => {
         await request(app)
           .post(ClaimPaths.reasonPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Why you&#39;re owed the money', 'div class="error-summary"'))
+          .expect(res => expect(res).to.be.successful.withText('Why you’re owed the money', 'div class="error-summary"'))
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {

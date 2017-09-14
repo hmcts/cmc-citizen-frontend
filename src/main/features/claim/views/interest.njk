@@ -40,17 +40,17 @@
               class="panel panel-border-narrow js-hidden {% if errorRate or errorReason %} form-group-error {% endif %} "
               id="different-rate">
 
-              <label class="form-label" for="rate[label]">{{ t("Rate you're claiming") }}</label>
+              <label class="form-label" for="rate[label]">{{ t('Rate you’re claiming') }}</label>
               {% if errorRate %}<span class="error-message">{{ t(errorRate) }}</span>{% endif %}
               <input class="form-control form-control-1-8 {% if errorRate %} form-control-error{% endif %}" name="rate"
                      id="rate[label]" value="{{ form.valueFor('rate') }}"> %
 
-              <label class="form-label" for="reason[label]">{{ t("Why you're entitled to this rate") }}</label>
+              <label class="form-label" for="reason[label]">{{ t('Why you’re entitled to this rate') }}</label>
               {% if errorReason %}<span class="error-message">{{ t(errorReason) }}</span>{% endif %}
               <input class="form-control {% if errorReason %} form-control-error{% endif %}" name="reason" type="text"
                      id="reason[label]" value="{{ form.valueFor('reason') }}">
             </div>
-            {{ radioOption(t("I don't want to claim interest"), 'type', form, 'no interest', checked = form.valueFor('type') == 'no interest') }}
+            {{ radioOption(t('I don’t want to claim interest'), 'type', form, 'no interest', checked = form.valueFor('type') == 'no interest') }}
           </fieldset>
         </div>
 
@@ -62,14 +62,14 @@
 
           <div class="panel panel-border-narrow">
             <p>
-             {{ t('You can claim up to 8% interest on money owed to you. '+ 
-             'You might be able to claim a different rate. '+ 
+             {{ t('You can claim up to 8% interest on money owed to you. '+
+             'You might be able to claim a different rate. '+
              'For example, if a loan has not been repaid, '+
              'or if you had a contract which entitles you to a particular rate.') }}</p>
             <p>
              {{ t('The court will decide if you’re entitled to some or all of the interest claimed. '+
              'You might be asked to give reasons for why you should get interest.')}}</p>
-             
+
           </div>
 
         </details>
