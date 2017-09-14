@@ -14,12 +14,15 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
+import { partyDetails } from '../../../data/draft/partyDetails'
+import { PartyType } from 'app/common/partyType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
 const externalId = sampleClaimObj.externalId
-const dateOfBirthPage = Paths.dateOfBirthPage.evaluateUri({ externalId: externalId })
 const theirDetailsPage = Paths.theirDetailsPage.evaluateUri({ externalId: externalId })
+const dateOfBirthPage = Paths.dateOfBirthPage.evaluateUri({ externalId: externalId })
+const paidAmountPage = Paths.paidAmountPage.evaluateUri({ externalId: externalId })
 
 const validFormData = {
   line1: 'Apt 99',
@@ -66,7 +69,7 @@ describe('CCJ - their details', () => {
         })
 
         context('when form is valid', async () => {
-          it('should redirect to claim amount page', async () => {
+          it('should redirect to defendant date of birth page when defendant is an individual', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('ccj')
             draftStoreServiceMock.resolveSave('ccj')
@@ -77,7 +80,22 @@ describe('CCJ - their details', () => {
               .send(validFormData)
               .expect(res => expect(res).to.be.redirect.toLocation(dateOfBirthPage))
           })
+
+          PartyType.except(PartyType.INDIVIDUAL).forEach(partyType => {
+            it(`should redirect to defendant amount paid page when defendant is ${partyType.name.toLocaleLowerCase()}`, async () => {
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+              draftStoreServiceMock.resolveRetrieve('ccj', {defendant: {partyDetails: partyDetails(partyType.value)}})
+              draftStoreServiceMock.resolveSave('ccj')
+
+              await request(app)
+                .post(theirDetailsPage)
+                .set('Cookie', `${cookieName}=ABC`)
+                .send(validFormData)
+                .expect(res => expect(res).to.be.redirect.toLocation(paidAmountPage))
+            })
+          })
         })
+
         context('when form is invalid', async () => {
           it('should render page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()

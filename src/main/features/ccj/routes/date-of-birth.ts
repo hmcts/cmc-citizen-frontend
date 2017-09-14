@@ -1,6 +1,7 @@
 import * as express from 'express'
 
 import { Paths } from 'ccj/paths'
+import { IndividualDateOfBirthGuard } from 'ccj/guards/individualDateOfBirthGuard'
 
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
@@ -16,13 +17,13 @@ function renderView (form: Form<DateOfBirth>, res: express.Response): void {
 }
 
 export default express.Router()
-  .get(Paths.dateOfBirthPage.uri, (req: express.Request, res: express.Response) => {
+  .get(Paths.dateOfBirthPage.uri, IndividualDateOfBirthGuard.requestHandler, (req: express.Request, res: express.Response) => {
     const user: User = res.locals.user
-    // Workaround: to make CCJ work for individuals until support for full range of party types is implemented
     renderView(new Form((user.ccjDraft.defendant.partyDetails as IndividualDetails).dateOfBirth), res)
   })
   .post(
     Paths.dateOfBirthPage.uri,
+    IndividualDateOfBirthGuard.requestHandler,
     FormValidator.requestHandler(DateOfBirth, DateOfBirth.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<DateOfBirth> = req.body
@@ -32,7 +33,6 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        // Workaround: to make CCJ work for individuals until support for full range of party types is implemented
         (user.ccjDraft.defendant.partyDetails as IndividualDetails).dateOfBirth = form.model
         await DraftCCJService.save(res, next)
         res.redirect(Paths.paidAmountPage.uri.replace(':externalId', externalId))
