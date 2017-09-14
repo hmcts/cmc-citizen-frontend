@@ -85,17 +85,11 @@ timestamps {
 
         stage('Sonar') {
           onPR {
-            withCredentials([usernamePassword(credentialsId: 'jenkins-public-github-api-token', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
-              String prNumber = env.BRANCH_NAME.substring(3)
-              sh """
-                yarn sonar-scanner -- \
-                -Dsonar.analysis.mode=preview \
-                -Dsonar.github.pullRequest=$prNumber \
-                -Dsonar.github.repository=hmcts/cmc-citizen-frontend \
-                -Dsonar.github.oauth=$GITHUB_ACCESS_TOKEN \
-                -Dsonar.host.url=$SONARQUBE_URL
-              """
-            }
+            sh """
+              yarn sonar-scanner -- \
+              -Dsonar.analysis.mode=preview \
+              -Dsonar.host.url=$SONARQUBE_URL
+            """
           }
 
           onMaster {
