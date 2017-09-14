@@ -82,3 +82,18 @@ export const organisationDetails = {
     postcode: 'B40A'
   }
 }
+
+export function partyDetails (partyType: string) {
+  switch (partyType) {
+    case PartyType.INDIVIDUAL.value:
+      return individualDetails
+    case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+      return soleTraderDetails
+    case PartyType.COMPANY.value:
+      return companyDetails
+    case PartyType.ORGANISATION.value:
+      return organisationDetails
+    default:
+      throw new Error(`Unknown party type: ${partyType}`)
+  }
+}

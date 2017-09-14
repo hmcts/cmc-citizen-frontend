@@ -74,7 +74,7 @@
     }}
   {% endif %}
 
-  {% if (partyDetails.type === 'individual' and partyDetails.dateOfBirth) %}
+  {% if (partyDetails.type === 'individual' and partyDetails.dateOfBirth and partyDetails.dateOfBirth.known ) %}
     {{ row("Date of birth:", partyDetails.dateOfBirth.date.toMoment() | date, changeLinks.dateOfBirth) }}
   {% endif %}
 {% endmacro %}
