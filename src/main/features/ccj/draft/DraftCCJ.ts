@@ -11,6 +11,13 @@ export class DraftCCJ {
   payBySetDate?: PayBySetDate
   repaymentPlan?: RepaymentPlan
 
+  constructor (defendant: Defendant = new Defendant(), paymentOption: CCJPaymentOption = new CCJPaymentOption(), paidAmount?: PaidAmount, repaymentPlan?: RepaymentPlan) {
+    this.defendant = defendant
+    this.paymentOption = paymentOption
+    this.paidAmount = paidAmount
+    this.repaymentPlan = repaymentPlan
+  }
+
   deserialize (input: any): DraftCCJ {
     if (input) {
       this.defendant = new Defendant().deserialize(input.defendant)
