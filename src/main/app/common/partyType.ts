@@ -21,6 +21,13 @@ export class PartyType {
     ]
   }
 
+  static except (partyType: PartyType): PartyType[] {
+    if (partyType === undefined) {
+      throw new Error('Party type is required')
+    }
+    return PartyType.all().filter(_ => _.value !== partyType.value)
+  }
+
   static valueOf (value: string): PartyType {
     return PartyType.all()
       .filter(type => type.value === value)

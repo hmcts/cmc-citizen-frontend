@@ -1,61 +1,85 @@
-{% from "includes/macros/form.njk" import csrfProtection, textInput, radioGroup, saveAndContinueButton %}
+{% from "includes/macros/form.njk" import readOnlyField, csrfProtection, textInput, radioGroup, saveAndContinueButton %}
 {% from "includes/macros/address.njk" import addressFragment, correspondenceAddressFragment %}
+{% from "includes/macros/table.njk" import tableStart,tableEnd, row, rowWithMultipleValue %}
 
-{% macro individualDetailsFragment(form, nameLabel = 'Full name', addressHeading = 'Address', addressHint, hasCorrespondenceAddress = false) %}
-  {{ textInput(t(nameLabel), 'name', form, autocomplete = 'name') }}
+{% macro partyDetailsFragment(form, fields, addressSection, showCorrespondenceAddressSection = false) %}
+  {% for field in fields %}
+    {% if field.readOnly %}
+      {{ readOnlyField(field.label, field.value) }}
+    {% else %}
+      {{ textInput(form = form, label = t(field.label), name = field.name, autocomplete = field.autocomplete) }}
+    {% endif %}
+  {% endfor %}
 
-  <h2 class="heading-medium">{{ t(addressHeading) }}</h2>
-  {% if addressHint %}
-    <p>{{ t(addressHint) }}</p>
+  {% if addressSection %}
+    <h2 class="heading-medium">{{ t(addressSection.heading) }}</h2>
+    {% if addressSection.hint %}
+      <p>{{ t(addressSection.hint) }}</p>
+    {% endif %}
+    {{ addressFragment(form = form, name = addressSection.name) }}
   {% endif %}
-  {{ addressFragment(form, name = 'address') }}
 
-  {% if hasCorrespondenceAddress == true %}
+  {% if showCorrespondenceAddressSection == true %}
     {{ correspondenceAddressFragment(form) }}
   {% endif %}
 {% endmacro %}
 
-{% macro soleTraderDetailsFragment(form, nameLabel = 'Full name', addressHeading = 'Address', addressHint, hasCorrespondenceAddress = false) %}
-  {{ textInput(t(nameLabel), 'name', form, autocomplete = 'name') }}
-  {{ textInput(t('Business name (optional)'), 'businessName', form) }}
+{% macro partyDetailsSummaryFragment(partyDetails, showCorrespondenceAddressSection = true, changeLinks = {}) %}
+  {{ row("Name:", partyDetails.name, changeLinks.partyDetails or changeLinks.name) }}
 
-  <h2 class="heading-medium">{{ t(addressHeading) }}</h2>
-  {% if addressHint %}
-    <p>{{ t(addressHint) }}</p>
+  {% if (partyDetails.type === 'company' or partyDetails.type === 'organisation') %}
+    {% if partyDetails.contactPerson %}
+      {{ row("Contact person:", partyDetails.contactPerson, changeLinks.partyDetails or changeLinks.contactPerson) }}
+    {% endif %}
   {% endif %}
-  {{ addressFragment(form, name = 'address') }}
 
-  {% if hasCorrespondenceAddress == true %}
-    {{ correspondenceAddressFragment(form) }}
+  {% if (partyDetails.type === 'soleTrader') %}
+    {% if partyDetails.businessName %}
+      {{ row("Business name:", 'Trading as ' + partyDetails.businessName, changeLinks.partyDetails or changeLinks.businessName) }}
+    {% endif %}
   {% endif %}
-{% endmacro %}
 
-{% macro companyDetailsFragment(form, nameLabel = 'Company name', contactPersonLabel = 'Contact person', addressHeading = 'Company address', addressHint, hasCorrespondenceAddress = false) %}
-  {{ textInput(t(nameLabel), 'name', form, autocomplete = 'companyName') }}
-  {{ textInput(t(contactPersonLabel), 'contactPerson', form) }}
+  {{
+    rowWithMultipleValue(
+      label = "Address:",
+      values = [
+        partyDetails.address.line1,
+        partyDetails.address.line2,
+        partyDetails.address.city,
+        partyDetails.address.postcode
+      ],
+      bottomBorder = not showCorrespondenceAddressSection,
+      changeLink = changeLinks.partyDetails or changeLinks.address
+    )
+  }}
 
-  <h2 class="heading-medium">{{ t(addressHeading) }}</h2>
-  {% if addressHint %}
-    <p>{{ t(addressHint) }}</p>
+  {% if showCorrespondenceAddressSection %}
+    {% if partyDetails.hasCorrespondenceAddress %}
+      {%
+        set correspondenceAddressLines = [
+          partyDetails.correspondenceAddress.line1,
+          partyDetails.correspondenceAddress.line2,
+          partyDetails.correspondenceAddress.city,
+          partyDetails.correspondenceAddress.postcode
+        ]
+      %}
+    {% else %}
+      {% set correspondenceAddressLines = [t('Same as address')] %}
+    {% endif %}
+    {{
+      rowWithMultipleValue(
+        label = "Correspondence address:",
+        values = correspondenceAddressLines
+      )
+    }}
   {% endif %}
-  {{ addressFragment(form, name = 'address') }}
 
-  {% if hasCorrespondenceAddress == true %}
-    {{ correspondenceAddressFragment(form) }}
-  {% endif %}
-{% endmacro %}
-
-{% macro organisationDetailsFragment(form, nameLabel = 'Organisation name', contactPersonLabel = 'Contact person', addressHeading = 'Organisation address', addressHint, hasCorrespondenceAddress = false) %}
-  {{ textInput(t(nameLabel), 'name', form) }}
-  {{ textInput(t(contactPersonLabel), 'contactPerson', form) }}
-
-  <h2 class="heading-medium">{{ t(addressHeading) }}</h2>
-  {% if addressHint %}
-    <p>{{ t(addressHint) }}</p>
-  {% endif %}
-  {{ addressFragment(form, name = 'address') }}
-
-  {% if hasCorrespondenceAddress == true %}
-    {{ correspondenceAddressFragment(form) }}
+  {% if (partyDetails.type === 'individual' and partyDetails.dateOfBirth ) %}
+    {% if partyDetails.dateOfBirth.known %}
+      {% set dateOfBirth = partyDetails.dateOfBirth.date.toMoment() | date %}
+    {% else %}
+      {% set dateOfBirth = 'Not sure' %}
+    {% endif %}
+    {{ row("Date of birth:", dateOfBirth, changeLinks.dateOfBirth) }}
   {% endif %}
 {% endmacro %}

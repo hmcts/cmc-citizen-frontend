@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "includes/macros/form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
-{% from "includes/macros/partyDetails.njk" import individualDetailsFragment %}
+{% from "includes/macros/partyDetails.njk" import partyDetailsFragment %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Your details') %}
@@ -12,12 +12,17 @@
         {{ csrfProtection(csrf) }}
 
         {{
-          individualDetailsFragment(
+          partyDetailsFragment(
             form,
-            nameLabel = 'Full name',
-            addressHeading = "Your residential address",
-            addressHint = "This must be the address where you live.",
-            hasCorrespondenceAddress = true
+            fields = [
+              { label: 'Full name', name: 'name' }
+            ],
+            addressSection = {
+              heading: 'Your residential address',
+              hint: 'This must be the address where you live.',
+              name: 'address'
+            },
+            showCorrespondenceAddressSection = true
           )
         }}
 
