@@ -85,7 +85,7 @@ timestamps {
 
         stage('Sonar') {
           onPR {
-            withCredentials([string(credentialsId: 'jenkins-github-api-text', variable: 'GITHUB_ACCESS_TOKEN')]) {
+            withCredentials([usernamePassword(credentialsId: 'jenkins-public-github-api-token', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
               String prNumber = env.BRANCH_NAME.substring(3)
               sh """
                 yarn sonar-scanner -- \
