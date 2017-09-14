@@ -49,14 +49,29 @@ Running the linting:
 ### Running the tests
 
 Mocha is used for writing tests.
+
 Run them with:
+
 ```bash
 $ yarn test
 ```
 
 For functional testing:
+
 ```bash
 $ yarn test:routes
+```
+
+For accessibility testing:
+
+```bash
+$ yarn test:a11y
+```
+
+For test coverage:
+
+```bash
+$ yarn test:coverage
 ```
 
 ## License
