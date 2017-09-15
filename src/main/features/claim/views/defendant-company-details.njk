@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
-{% from "includes/macros/partyDetails.njk" import partyDetailsFragment %}
+
+{% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
+{% from "party/details.njk" import partyDetailsFragment %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Company details') %}

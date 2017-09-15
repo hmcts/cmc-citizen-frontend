@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/task-list.njk" import task, taskListHeading, disabledTask %}
-{% from "includes/macros/timeRemaining.njk" import timeRemaining %}
+{% from "task-list.njk" import task, taskListHeading, disabledTask %}
+{% from "timeRemaining.njk" import timeRemaining %}
 
 {% set title = t('Task list | Money claim') %}
 {% set heading = t('Respond to a money claim') %}

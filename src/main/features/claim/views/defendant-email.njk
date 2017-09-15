@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import csrfProtection, emailInput, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, emailInput, saveAndContinueButton, errorSummary %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Their email address (optional)') %}
@@ -8,7 +8,7 @@
   <div class="grid-row">
       <div class="column-two-thirds">
 
-        <p>{{ t("We'll use this to tell them you've made a claim, as well as notifying them by post.") }}</p>
+        <p>{{ t('We’ll use this to tell them you’ve made a claim, as well as notifying them by post.') }}</p>
         <form novalidate method="post">
           {{ csrfProtection(csrf) }}
 

@@ -20,3 +20,6 @@ npm-debug.log.*
 
 .project
 .settings/
+
+coverage-report
+.scannerwork

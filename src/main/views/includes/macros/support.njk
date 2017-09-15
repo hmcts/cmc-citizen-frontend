@@ -1,9 +1,0 @@
-{% macro supportWidget(label = 'Help and support') %}
-  <h2 class="heading-medium">{{ t(label) }}</h2>
-  <pre>{{ t('Telephone: 0300 123 7050') }}</pre>
-  <pre>{{ t("Hours: 9am to 5pm, Monday to Friday") }}</pre>
-  <p>
-    <a href="https://www.gov.uk/call-charges">{{ t("Find out about call charges") }}</a>
-  </p>
-  <pre>{{ t("Email: " + supportEmailAddress) }}</pre>
-{% endmacro %}

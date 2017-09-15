@@ -2,9 +2,9 @@
 
 {% set title = 'Money claim' %}
 
-{% from "includes/macros/form.njk" import readOnlyField, saveAndContinueButton, csrfProtection, errorSummary %}
-{% from "includes/macros/address.njk" import addressFragment %}
-{% from "includes/macros/partyDetails.njk" import partyDetailsFragment %}
+{% from "form.njk" import readOnlyField, saveAndContinueButton, csrfProtection, errorSummary %}
+{% from "address.njk" import addressFragment %}
+{% from "party/details.njk" import partyDetailsFragment %}
 
 {% block content %}
   <div class="grid-row">
@@ -17,7 +17,7 @@
           {{ t('Confirm their details') }}
         </h1>
 
-        <p>{{ t('Check their address is right. You can correct or update address.') }}</p>
+        <p>{{ t('Check their address is right. You can correct or update their address.') }}</p>
         {% if claim.claimData.defendant.type == 'individual' %}
           {%
             set fields = [

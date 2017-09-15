@@ -3,7 +3,7 @@
 {% set title = t('Completing your claim | Money claim') %}
 {% set heading = t('Completing your claim') %}
 
-{% from "includes/macros/form.njk" import csrfProtection, yesNoRadio, submitButton %}
+{% from "form.njk" import csrfProtection, yesNoRadio, submitButton %}
 
 {% block content %}
 
@@ -30,11 +30,11 @@
               <span class="visually-hidden">{{ t('Warning') }}</span>
             </i>
             <strong class="bold-small">
-              {{ t("It's against the law to deliberately give untrue or misleading information") }}
+              {{ t('It’s against the law to deliberately give untrue or misleading information') }}
             </strong>
           </div>
         </div>
-        {{ submitButton("I confirm I've read this" ) }}
+        {{ submitButton('I confirm I’ve read this') }}
       </form>
     </div>
   </div>

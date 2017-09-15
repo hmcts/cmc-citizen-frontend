@@ -1,12 +1,12 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import nameInput, csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
+{% from "form.njk" import nameInput, csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 
 {% set title = t("Money claim") %}
 
 {% block content %}
   <div class="grid-row">
     <h1 class="heading-xlarge">{{ t("About you and this claim") }}</h1>
-    <p>{{ t("I'm claiming as:") }}</p>
+    <p>{{ t('I’m claiming as:') }}</p>
     <form method="POST" novalidate>
       {{ csrfProtection(csrf) }}
 

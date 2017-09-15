@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% set title = 'Money claim' %}
-{% from "includes/macros/form.njk" import submitButton %}
+{% from "form.njk" import submitButton %}
 
 {% block content %}
 <div class="grid-row">
@@ -12,7 +12,7 @@
 
     <div class="form-group">
       <p>
-        {{ t("Amount payable by defendant is calculated based on the amount you're claiming and any other costs minus any amount paid by defendant.") }}
+        {{ t('Amount payable by defendant is calculated based on the amount you’re claiming and any other costs minus any amount paid by defendant.') }}
       </p>
       <table class="table-form">
         <caption class="visuallyhidden">{{ t("Amount payable by defendant") }}</caption>
