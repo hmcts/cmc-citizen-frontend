@@ -34,8 +34,8 @@
     {% endif %}
 
     {% if details.paymentOption.option.value == 'full' %}
-      {# Add date to pay by once the code is on master #}
-      {% set paymentOptionDisplayValue = [details.paymentOption.option.displayValue] %}
+      {% set paymentOptionDisplayValue = [details.paymentOption.option.displayValue
+        + ' ' + details.payBySetDate.date.toMoment() | date] %}
 
     {% endif %}
 
@@ -51,7 +51,7 @@
       ] %}
     {% endif %}
 
-    {{ rowWithMultipleValue("When you want the defendant to pay", paymentOptionDisplayValue, paidAmountUrl) }}
+    {{ rowWithMultipleValue("When you want the defendant to pay", paymentOptionDisplayValue, paymentBySetDateValue, paidAmountUrl) }}
     {{ tableEnd() }}
 
     <div class="form-group">

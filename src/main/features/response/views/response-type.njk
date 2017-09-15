@@ -17,7 +17,7 @@
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
 
           {{ radioOption(form = form, name = 'type[value]', value = 'OWE_ALL_PAID_ALL',
-            label = t("I've already paid"), bold = true,
+            label = t('I’ve already paid'), bold = true,
             hint = t("You need to submit a defence explaining how much you’ve paid the claimant and when you paid.")
           )}}
 
@@ -28,7 +28,7 @@
 
           {{ radioOption(form = form, name = 'type[value]', value = 'OWE_SOME_PAID_NONE',
             label = t("I owe some of the money"), bold = true,
-            hint = t("You need to complete the admission and defence forms. Use these to offer the amount of money you believe you owe and explain why you don't owe the remaining amount.")
+            hint = t('You need to complete the admission and defence forms. Use these to offer the amount of money you believe you owe and explain why you don’t owe the remaining amount.')
           )}}
 
           {{ radioOption(form = form, name = 'type[value]', value = 'OWE_ALL_PAID_SOME',

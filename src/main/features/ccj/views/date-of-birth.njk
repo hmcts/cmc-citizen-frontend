@@ -7,12 +7,12 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <form method="post">
+      <form method="post" novalidate>
         {{ csrfProtection(csrf) }}
 
         <h1 class="heading-large">
           <span class="heading-secondary">{{ t('County Court Judgment') }}</span>
-          {{ t("Defendant's date of birth") }}
+          {{ t('Defendant’s date of birth') }}
         </h1>
 
         <p>{{ t("We use this to ensure legal proceedings are made against the right person. " +
@@ -24,7 +24,7 @@
         <fieldset id="known[label]" class="form-group {% if error %} form-group-error {% endif %}">
           <legend>
               <span class="form-label-bold">
-                {{ t("Do you know the defendant's date of birth?") }}
+                {{ t('Do you know the defendant’s date of birth?') }}
               </span>
           </legend>
 

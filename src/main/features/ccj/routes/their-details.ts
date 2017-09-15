@@ -11,6 +11,7 @@ import { DraftCCJService } from 'ccj/draft/DraftCCJService'
 import { Address } from 'forms/models/address'
 import { PartyDetailsFactory } from 'forms/models/partyDetailsFactory'
 import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
+import { PartyType } from 'app/common/partyType'
 
 function defaultToAddressProvidedByClaimant (providedByDefendant: Address, providedByClaimant: Address): Address {
   if (providedByDefendant && providedByDefendant.isCompleted()) {
@@ -57,6 +58,10 @@ export default express.Router()
           }
           user.ccjDraft.defendant.partyDetails.address = form.model
           await DraftCCJService.save(res, next)
-          res.redirect(Paths.dateOfBirthPage.evaluateUri({ externalId: externalId }))
+          if (user.ccjDraft.defendant.partyDetails.type === PartyType.INDIVIDUAL.value) {
+            res.redirect(Paths.dateOfBirthPage.evaluateUri({ externalId: externalId }))
+          } else {
+            res.redirect(Paths.paidAmountPage.evaluateUri({ externalId: externalId }))
+          }
         }
       }))

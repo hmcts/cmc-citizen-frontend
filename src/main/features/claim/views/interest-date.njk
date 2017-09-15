@@ -35,7 +35,7 @@
             <div class="panel panel-border-narrow js-hidden" id="claim-date" aria-hidden="false">
 
               {{ dateInput('date', form) }}
-              {{ textInput("Explain why you're claiming from this date", 'reason', form) }}
+              {{ textInput('Explain why you’re claiming from this date', 'reason', form) }}
 
             </div>
             {{ radioOption(t("Claim interest from the date I submit the claim"), 'type', form, 'submission', ' ', form.valueFor('type') == 'submission') }}

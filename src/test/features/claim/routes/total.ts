@@ -44,7 +44,7 @@ describe('Claim issue: total page', () => {
         await request(app)
           .get(ClaimPaths.totalPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Total amount you&#39;re claiming'))
+          .expect(res => expect(res).to.be.successful.withText('Total amount you’re claiming'))
       })
     })
   })
