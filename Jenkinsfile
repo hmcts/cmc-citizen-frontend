@@ -41,7 +41,6 @@ timestamps {
           '''
         }
 
-
         stage('Node security check') {
           try {
             sh "yarn test:nsp 2> nsp-report.txt"
@@ -81,6 +80,28 @@ timestamps {
             } finally {
               archiveArtifacts 'mochawesome-report/a11y.html'
             }
+          }
+
+          stage('Test coverage') {
+            try {
+              sh "yarn test:coverage"
+            } finally {
+              archiveArtifacts 'coverage-report/index.html'
+            }
+          }
+        }
+
+        stage('Sonar') {
+          onPR {
+            sh """
+              yarn sonar-scanner -- \
+              -Dsonar.analysis.mode=preview \
+              -Dsonar.host.url=$SONARQUBE_URL
+            """
+          }
+
+          onMaster {
+            sh "yarn sonar-scanner -- -Dsonar.host.url=$SONARQUBE_URL"
           }
         }
 
