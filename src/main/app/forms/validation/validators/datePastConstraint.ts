@@ -16,6 +16,9 @@ export class DatePastConstraint implements ValidatorConstraintInterface {
     if (value === undefined) {
       return true
     }
+    if (value == null) {
+      return true
+    }
 
     if (!(value instanceof LocalDate)) {
       return false

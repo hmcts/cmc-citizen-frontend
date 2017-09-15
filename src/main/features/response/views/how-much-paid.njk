@@ -1,0 +1,35 @@
+{% extends "layout.njk" %}
+{% from "includes/macros/form.njk" import csrfProtection, textInput, saveAndContinueButton, errorSummary %}
+{% from "includes/macros/date.njk" import dateInput %}
+
+{% set title = t('Money claim') %}
+{% set heading = t('How much have you paid the claimant?') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post">
+
+        {{ csrfProtection(csrf) }}
+        <p>{{ t('The amount being claimed is') }} {{ claim.claimData.amount }}</p>
+
+        <p>{{ t("How much have you paid the claimant?") }}</p>
+
+        <p>{{ t("When did you pay this amount?") }}</p>
+        {{ dateInput('date', form) }}
+
+        {{ textArea(label = t("Explain why you don't owe the full amount."), name = 'text', form = form, rows = 10) }}
+
+        <div class="panel panel-border-wide">
+          <p>
+            {{ t('Your response will be sent to the claimant %s',
+            { postProcess: 'sprintf', sprintf: [claim.claimData.claimant.name] }) }}
+            {{ t('A judge will not consider your response unless your case goes to a hearing. '}}
+            </p>
+        </div>
+
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}
