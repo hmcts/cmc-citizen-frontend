@@ -86,7 +86,7 @@ timestamps {
             try {
               sh "yarn test:coverage"
             } finally {
-              archiveArtifacts 'coverage-report/index.html'
+              archiveArtifacts 'coverage-report/lcov-report/index.html'
             }
           }
         }
