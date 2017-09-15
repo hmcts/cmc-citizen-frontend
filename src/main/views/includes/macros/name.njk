@@ -1,9 +1,0 @@
-{% from "includes/macros/form.njk" import csrfProtection, textInput, saveAndContinueButton %}
-
-{% macro nameForm(form, csrfToken) %}
-  <form method="post">
-    {{ csrfProtection(csrfToken) }}
-    {{ textInput(t('Full name'), 'name', form, autocomplete='name') }}
-    {{ saveAndContinueButton() }}
-  </form>
-{% endmacro %}
