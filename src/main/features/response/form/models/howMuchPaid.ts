@@ -6,7 +6,7 @@ import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 
 export class ValidationErrors {
   static readonly NOT_OWE_FULL_AMOUNT_REQUIRED: string = "You haven't explained why you don't owe the full amount"
-  static readonly DEFENCE_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
+  static readonly REASON_NOT_OWE_MONEY_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
   static readonly VALID_AMOUNT_REQUIRED: string = 'Enter a valid amount paid'
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount'
   static readonly DATE_REQUIRED: string = 'Enter a date'
@@ -23,7 +23,7 @@ export default class HowMuchPaid implements Serializable<HowMuchPaid> {
   date?: LocalDate
   @IsDefined({ message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })
-  @MaxLength(99000, { message: ValidationErrors.DEFENCE_TOO_LONG })
+  @MaxLength(99000, { message: ValidationErrors.REASON_NOT_OWE_MONEY_TOO_LONG })
   text?: string
   constructor (amount?: number, date?: LocalDate, text?: string) {
     this.amount = amount
