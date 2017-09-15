@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import csrfProtection, textInput, radioOption, saveAndContinueButton, errorSummary %}
-{% from "includes/macros/date.njk" import dateInput %}
+{% from "form.njk" import csrfProtection, textInput, radioOption, saveAndContinueButton, errorSummary %}
+{% from "date.njk" import dateInput %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('When are you claiming interest from?') %}
