@@ -10,9 +10,7 @@ $(function () {
       throw new Error('Event label is required')
     }
 
-    if (eventAction && eventLabel) {
-      ga('send', 'event', eventCategory, eventAction, eventLabel)
-    }
+    ga('send', 'event', eventCategory, eventAction, eventLabel)
   }
 
   function labelText(labelElement) {
