@@ -2,7 +2,7 @@
 {% from "includes/macros/form.njk" import csrfProtection, yesNoRadio, submitButton %}
 
 {% set title = t('Fees | Money claim') %}
-{% set heading = t("Fees you'll pay") %}
+{% set heading = t('Fees you’ll pay') %}
 
 {% block content %}
 
@@ -12,7 +12,7 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
         <p>
-          {{ t("You must pay the claim fee up front. However, we'll add it to the amount you're claiming back from the respondent.") }}
+          {{ t('You must pay the claim fee up front. However, we’ll add it to the amount you’re claiming back from the respondent.') }}
         </p>
 
         <table class="form-group">
@@ -48,7 +48,7 @@
 
           <div class="panel">
             <p>
-              {{ t("The court fee is based on the amount you're claiming, including any <a class='external' rel='external' href='%s'>interest</a>.", { postProcess: 'sprintf', sprintf: ['https://www.gov.uk/make-court-claim-for-money/work-out-interest']}) | safe }}
+              {{ t('The court fee is based on the amount you’re claiming, including any <a class="external" rel="external" href="%s">interest</a>.', { postProcess: 'sprintf', sprintf: ['https://www.gov.uk/make-court-claim-for-money/work-out-interest']}) | safe }}
             </p>
             <table>
               <thead>

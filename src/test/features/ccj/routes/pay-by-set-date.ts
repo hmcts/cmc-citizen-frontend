@@ -6,8 +6,13 @@ import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 
 import { Paths } from 'ccj/paths'
-import { Paths as DashboardPaths } from 'dashboard/paths'
+import { Validator } from 'class-validator'
+import { expectValidationError } from '../../../app/forms/models/validationUtils'
+import { LocalDate } from 'forms/models/localDate'
 
+import * as moment from 'moment'
+import { PayBySetDate } from 'ccj/form/models/payBySetDate'
+import { ValidationErrors } from 'ccj/form/models/payBySetDate'
 import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
@@ -15,45 +20,28 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
-import { partyDetails } from '../../../data/draft/partyDetails'
-import { PartyType } from 'app/common/partyType'
 const externalId = sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
-const paidAmountPage = Paths.paidAmountPage.uri.replace(':externalId', externalId)
-const dateOfBirthPage = Paths.dateOfBirthPage.uri.replace(':externalId', externalId)
+const payBySetDatePage = Paths.payBySetDatePage.uri.replace(':externalId', externalId)
+const repaymentPlanPage = Paths.repaymentPlanPage.uri.replace(':externalId', externalId)
 
-function checkAccessGuard (app: any, method: string) {
-  PartyType.except(PartyType.INDIVIDUAL).forEach(partyType => {
-    it(`should redirect to dashboard page when defendant type is ${partyType.name.toLocaleLowerCase()}`, async () => {
-      claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-      draftStoreServiceMock.resolveRetrieve('ccj', {defendant: {partyDetails: partyDetails(partyType.value)}})
-
-      await request(app)[method](dateOfBirthPage)
-        .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
-    })
-  })
-}
-
-describe('CCJ - defendant date of birth', () => {
+describe('CCJ - Pay by set date', () => {
   attachDefaultHooks()
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', dateOfBirthPage)
+    checkAuthorizationGuards(app, 'get', payBySetDatePage)
 
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
       })
 
-      checkAccessGuard(app, 'get')
-
       it('should return 500 and render error page when cannot retrieve claims', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .get(dateOfBirthPage)
+          .get(payBySetDatePage)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -63,7 +51,7 @@ describe('CCJ - defendant date of birth', () => {
         draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
 
         await request(app)
-          .get(dateOfBirthPage)
+          .get(payBySetDatePage)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -73,30 +61,28 @@ describe('CCJ - defendant date of birth', () => {
         draftStoreServiceMock.resolveRetrieve('ccj')
 
         await request(app)
-          .get(dateOfBirthPage)
+          .get(payBySetDatePage)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Defendant’s date of birth'))
+          .expect(res => expect(res).to.be.successful.withText('When you want them to pay the amount'))
       })
     })
   })
 
   describe('on POST', () => {
-    const validFormData = { known: 'true', date: { day: '31', month: '12', year: '1900' } }
+    const validFormData = { known: 'true', date: { day: '31', month: '12', year: '2018' } }
 
-    checkAuthorizationGuards(app, 'post', dateOfBirthPage)
+    checkAuthorizationGuards(app, 'post', payBySetDatePage)
 
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
       })
 
-      checkAccessGuard(app, 'post')
-
       it('should return 500 and render error page when cannot retrieve claim', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .post(dateOfBirthPage)
+          .post(payBySetDatePage)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -107,7 +93,7 @@ describe('CCJ - defendant date of birth', () => {
         draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
 
         await request(app)
-          .post(dateOfBirthPage)
+          .post(payBySetDatePage)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -120,36 +106,65 @@ describe('CCJ - defendant date of birth', () => {
           draftStoreServiceMock.rejectSave('ccj', 'Error')
 
           await request(app)
-            .post(dateOfBirthPage)
+            .post(payBySetDatePage)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should redirect to paid amount page', async () => {
+        it('should redirect to repayment plan page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveRetrieve('ccj')
           draftStoreServiceMock.resolveSave('ccj')
 
           await request(app)
-            .post(dateOfBirthPage)
+            .post(payBySetDatePage)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
-            .expect(res => expect(res).to.be.redirect.toLocation(paidAmountPage))
+            .expect(res => expect(res).to.be.redirect.toLocation(repaymentPlanPage))
         })
       })
 
       context('when form is invalid', async () => {
-        it('should render page when everything is fine', async () => {
+        it('should render page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveRetrieve('ccj')
 
           await request(app)
-            .post(dateOfBirthPage)
+            .post(payBySetDatePage)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ known: undefined })
-            .expect(res => expect(res).to.be.successful.withText('Defendant’s date of birth', 'div class="error-summary"'))
+            .expect(res => expect(res).to.be.successful.withText('When you want them to pay the amount', 'div class="error-summary"'))
         })
+      })
+    })
+  })
+
+  describe('validation', () => {
+    const validator: Validator = new Validator()
+
+    context('when pay by set date is known', () => {
+      it('should reject non existing date', () => {
+        const errors = validator.validateSync(new PayBySetDate(new LocalDate(2017, 2, 29)))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.DATE_NOT_VALID)
+      })
+
+      it('should reject past date', () => {
+        const today = moment()
+
+        const errors = validator.validateSync(new PayBySetDate(new LocalDate(today.year(), today.month() - 1, today.date())))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.DATE_TODAY_OR_IN_FUTURE)
+      })
+
+      it('should reject date with invalid digits in year', () => {
+        const errors = validator.validateSync(new PayBySetDate(new LocalDate(90, 12, 31)))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.DATE_INVALID_YEAR)
       })
     })
   })
