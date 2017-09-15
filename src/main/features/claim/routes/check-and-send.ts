@@ -61,7 +61,6 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
         contactPerson: getContactPerson(res.locals.user.claimDraft.claimant.partyDetails),
         businessName: getBusinessName(res.locals.user.claimDraft.claimant.partyDetails),
         dateOfBirth : getDateOfBirth(res.locals.user.claimDraft.claimant.partyDetails),
-        defendantContactPerson: getContactPerson(res.locals.user.claimDraft.defendant.partyDetails),
         defendantBusinessName: getBusinessName(res.locals.user.claimDraft.defendant.partyDetails),
         form: form
       })
