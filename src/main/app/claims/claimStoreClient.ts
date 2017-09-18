@@ -2,7 +2,6 @@ import request from 'client/request'
 import * as config from 'config'
 import Claim from 'app/claims/models/claim'
 import User from 'app/idam/user'
-import { DefendantResponse } from 'app/claims/models/defendantResponse'
 import { ClaimModelConverter } from 'claims/claimModelConverter'
 import { ResponseModelConverter } from 'claims/responseModelConverter'
 
@@ -43,23 +42,6 @@ export default class ClaimStoreClient {
       .then((claims: object[]) => {
         return claims.map((claim: object) => new Claim().deserialize(claim))
       })
-  }
-
-  static async retrieveResponse (defendantId: number, claimId: number): Promise<DefendantResponse | undefined> {
-    const allResponses: Array<DefendantResponse> = await ClaimStoreClient.retrieveAllResponsesByDefendantId(defendantId)
-    const responseForClaim: Array<DefendantResponse> = allResponses.filter(item => item.claimId === claimId)
-
-    if (!responseForClaim) {
-      return Promise.resolve(undefined)
-    }
-
-    return responseForClaim.pop()
-  }
-
-  static retrieveAllResponsesByDefendantId (defendantId: number): Promise<DefendantResponse[]> {
-    return request
-      .get(`${claimApiBaseUrl}/responses/defendant/${defendantId}`)
-      .then(response => response.map(item => new DefendantResponse().deserialize(item)))
   }
 
   static retrieveByLetterHolderId (letterHolderId: number): Promise<Claim> {

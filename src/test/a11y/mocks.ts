@@ -6,8 +6,8 @@ import ClaimData from 'claims/models/claimData'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Response } from 'response/form/models/response'
 import { FreeMediation } from 'response/form/models/freeMediation'
-import { DefendantResponse } from 'app/claims/models/defendantResponse'
-import { DefendantResponseData } from 'app/claims/models/defendantResponseData'
+import { DeleteMe } from 'app/claims/models/defendantResponse'
+import { DefendantResponse } from 'app/claims/models/defendantResponseData'
 import ServiceAuthToken from 'app/idam/serviceAuthToken'
 import DateOfBirth from 'app/forms/models/dateOfBirth'
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
@@ -103,8 +103,8 @@ function mockedInterestDate () {
 }
 
 function mockedDefendantResponse () {
-  let response = new DefendantResponse()
-  response.response = new DefendantResponseData()
+  let response = new DeleteMe()
+  response.response = new DefendantResponse()
   response.respondedAt = moment()
   response.defendantDetails = new TheirDetails()
   response.defendantDetails.address = new Address()

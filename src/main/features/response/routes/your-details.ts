@@ -72,12 +72,12 @@ export default express.Router()
 
         switch (user.responseDraft.defendantDetails.partyDetails.type) {
           case PartyType.INDIVIDUAL.value:
-            res.redirect(Paths.defendantDateOfBirthPage.uri)
+            res.redirect(Paths.defendantDateOfBirthPage.evaluateUri({ externalId: user.claim.externalId }))
             break
           case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
           case PartyType.COMPANY.value:
           case PartyType.ORGANISATION.value:
-            res.redirect(Paths.defendantMobilePage.uri)
+            res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: user.claim.externalId }))
             break
           default:
             throw new Error(`Unknown party type: ${user.responseDraft.defendantDetails.partyDetails.type}`)
