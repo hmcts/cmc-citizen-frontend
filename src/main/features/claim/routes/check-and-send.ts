@@ -17,6 +17,8 @@ import { OrganisationDetails } from 'forms/models/organisationDetails'
 import DateOfBirth from 'forms/models/dateOfBirth'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
+import User from 'idam/user'
+import DraftClaim from 'drafts/models/draftClaim'
 
 function getClaimAmountTotal (res: express.Response): Promise<ClaimAmountTotal> {
   return FeesClient.calculateIssueFee(claimAmountWithInterest(res.locals.user.claimDraft))
@@ -51,7 +53,18 @@ function getContactPerson (partyDetails: PartyDetails): string {
   }
 }
 
+function determineIfPartyIsCompanyOrOrganisation (user: User): boolean {
+  const claimDraft: DraftClaim = user.claimDraft
+  if (claimDraft.claimant && claimDraft.claimant.partyDetails) {
+    const type: string = claimDraft.claimant.partyDetails.type
+    return type === PartyType.COMPANY.value || type === PartyType.ORGANISATION.value
+  } else {
+    return false
+  }
+}
+
 function renderView (form: Form<StatementOfTruth>, res: express.Response, next: express.NextFunction) {
+  const user: User = res.locals.user
   getClaimAmountTotal(res)
     .then((claimAmountTotal: ClaimAmountTotal) => {
       res.render(Paths.checkAndSendPage.associatedView, {
@@ -63,6 +76,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
         businessName: getBusinessName(res.locals.user.claimDraft.claimant.partyDetails),
         dateOfBirth : getDateOfBirth(res.locals.user.claimDraft.claimant.partyDetails),
         defendantBusinessName: getBusinessName(res.locals.user.claimDraft.defendant.partyDetails),
+        partyAsCompanyOrOrganisation: determineIfPartyIsCompanyOrOrganisation(user),
         form: form
       })
     }).catch(next)

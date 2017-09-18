@@ -1,11 +1,11 @@
 import { Serializable } from 'app/models/serializable'
-import StatementOfTruthCompany from 'app/forms/models/statementOfTruthCompany'
+import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
 
 export class DefendantResponseData implements Serializable<DefendantResponseData> {
   type: string
   defence: string
   freeMediation: string
-  statementOfTruth?: StatementOfTruthCompany
+  statementOfTruth?: QualifiedStatementOfTruth
 
   deserialize (input: any): DefendantResponseData {
     if (input) {
@@ -13,7 +13,7 @@ export class DefendantResponseData implements Serializable<DefendantResponseData
       this.defence = input.defence
       this.freeMediation = input.freeMediation
       if (input.statementOfTruth) {
-        this.statementOfTruth = new StatementOfTruthCompany().deserialize(input.statementOfTruth)
+        this.statementOfTruth = new QualifiedStatementOfTruth().deserialize(input.statementOfTruth)
       }
     }
     return this

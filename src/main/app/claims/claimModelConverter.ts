@@ -37,8 +37,8 @@ export class ClaimModelConverter {
     claimData.payment = draftClaim.claimant.payment
     claimData.reason = draftClaim.reason.reason
     claimData.feeAmountInPennies = draftClaim.claimant.payment.amount
-    if (draftClaim.statementOfTruth && draftClaim.statementOfTruth.signerName) {
-      claimData.statementOfTruth = draftClaim.statementOfTruth
+    if (draftClaim.qualifiedStatementOfTruth && draftClaim.qualifiedStatementOfTruth.signerName) {
+      claimData.statementOfTruth = draftClaim.qualifiedStatementOfTruth
     } else {
       delete claimData.statementOfTruth
     }

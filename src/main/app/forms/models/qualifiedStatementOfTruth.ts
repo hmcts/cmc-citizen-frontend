@@ -1,6 +1,8 @@
 import { IsDefined, MaxLength } from 'class-validator'
 import { IsBooleanTrue } from 'forms/validation/validators/isBooleanTrue'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
+import * as toBoolean from 'to-boolean'
+
 export class ValidationErrors {
   static readonly STATEMENT_OF_TRUTH_REQUIRED_MESSAGE: string = 'Please select I believe that the facts stated in this claim are true.'
   static readonly SIGNER_NAME_REQUIRED: string = 'Enter Signers name'
@@ -9,19 +11,19 @@ export class ValidationErrors {
   static readonly SIGNER_ROLE_TOO_LONG: string = 'Signers role must be no longer than $constraint1 characters'
 }
 
-export default class StatementOfTruth {
+export class QualifiedStatementOfTruth {
   @IsDefined({ message: ValidationErrors.STATEMENT_OF_TRUTH_REQUIRED_MESSAGE })
   @IsBooleanTrue({ message: ValidationErrors.STATEMENT_OF_TRUTH_REQUIRED_MESSAGE })
   signed?: boolean
 
-  @IsDefined({ message: ValidationErrors.SIGNER_NAME_REQUIRED, groups: ['claimant'] })
-  @IsNotBlank({ message: ValidationErrors.SIGNER_NAME_REQUIRED, groups: ['claimant'] })
-  @MaxLength(70, { message: ValidationErrors.SIGNER_NAME_TOO_LONG, groups: ['claimant'] })
+  @IsDefined({ message: ValidationErrors.SIGNER_NAME_REQUIRED })
+  @IsNotBlank({ message: ValidationErrors.SIGNER_NAME_REQUIRED })
+  @MaxLength(70, { message: ValidationErrors.SIGNER_NAME_TOO_LONG })
   signerName?: string
 
-  @IsDefined({ message: ValidationErrors.SIGNER_ROLE_REQUIRED, groups: ['claimant'] })
-  @IsNotBlank({ message: ValidationErrors.SIGNER_ROLE_REQUIRED, groups: ['claimant'] })
-  @MaxLength(255, { message: ValidationErrors.SIGNER_ROLE_TOO_LONG, groups: ['claimant'] })
+  @IsDefined({ message: ValidationErrors.SIGNER_ROLE_REQUIRED })
+  @IsNotBlank({ message: ValidationErrors.SIGNER_ROLE_REQUIRED })
+  @MaxLength(255, { message: ValidationErrors.SIGNER_ROLE_TOO_LONG })
   signerRole?: string
 
   constructor (signed?: boolean, signerName?: string, signerRole?: string ) {
@@ -30,14 +32,14 @@ export default class StatementOfTruth {
     this.signerRole = signerRole
   }
 
-  static fromObject (value?: any): StatementOfTruth {
+  static fromObject (value?: any): QualifiedStatementOfTruth {
     if (!value) {
       return value
     }
-    return new StatementOfTruth(value.signed === 'true', value.signerName, value.signerRole )
+    return new QualifiedStatementOfTruth(toBoolean(value.signed) === true, value.signerName, value.signerRole )
   }
 
-  deserialize (input?: any): StatementOfTruth {
+  deserialize (input?: any): QualifiedStatementOfTruth {
     if (input) {
       this.signerName = input.signerName
       this.signerRole = input.signerRole
