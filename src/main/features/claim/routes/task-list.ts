@@ -12,12 +12,25 @@ import { TheirDetails } from 'app/drafts/tasks/theirDetails'
 import { ClaimAmount } from 'app/drafts/tasks/claimAmount'
 import { ClaimDetails } from 'app/drafts/tasks/claimDetails'
 import { PartyType } from 'app/common/partyType'
+import User from 'idam/user'
+import DraftClaim from 'drafts/models/draftClaim'
 
 function getCheckAndSendPageUri (res: express.Response): string {
-  if (res.locals.user.claimDraft.claimant.partyDetails.type === PartyType.COMPANY.value || res.locals.user.claimDraft.claimant.partyDetails.type === PartyType.ORGANISATION.value) {
+  let user: User = res.locals.user
+
+  if (isCompanyOrOrganisationClaimant(user.claimDraft)) {
     return Paths.checkAndSendCompanyPage.uri
   } else {
     return Paths.checkAndSendPage.uri
+  }
+}
+
+function isCompanyOrOrganisationClaimant (draftClaim: DraftClaim): boolean {
+  if (draftClaim.claimant && draftClaim.claimant.partyDetails) {
+    let type: string = draftClaim.claimant.partyDetails.type
+    return type === PartyType.COMPANY.value || type === PartyType.ORGANISATION.value
+  } else {
+    return false
   }
 }
 
