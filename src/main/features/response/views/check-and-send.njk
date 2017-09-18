@@ -39,7 +39,11 @@
     {{ tableEnd() }}
 
     <div class="form-group">
-      {% if isStatementOfTruthRequired %}
+      {% if signatureType == 'basic' %}
+        {{ statementOfTruth(form, label = 'I believe that the facts stated in this defence are true') }}
+      {% elif signatureType == 'qualified' %}
+        This will be qualified
+        <br/>
         {{ statementOfTruth(form, label = 'I believe that the facts stated in this defence are true') }}
       {% endif %}
 

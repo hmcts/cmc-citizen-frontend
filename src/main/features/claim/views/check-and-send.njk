@@ -59,34 +59,12 @@
     {{ tableEnd() }}
 
     <div class="form-group">
-    {% if (partyAsCompanyOrOrganisation === true) %}
-        
-        <details>
-            <summary>
-              <span class="summary">{{ t('Types of senior position') }}</span>
-            </summary>
-
-            <div class="panel panel-border-narrow">
-              <p>{{ t('A senior position could be a:') }}</p>
-              <ul class="list-bullet list">
-                <li>{{ t('director') }}</li>
-                <li>{{ t('treasurer') }} </li>
-                <li>{{ t('chief executive') }} </li>
-                <li>{{ t('manager or other officer of the company or corporation') }}</li>
-              </ul>
-            <p>{{ t("If your company isn't registered, a senior position could also be the:") }}</p>
-            <ul class="list-bullet list">
-              <li>{{ t('mayor') }}</li>
-              <li>{{ t('chairman') }}</li>
-              <li>{{ t('president') }}</li>
-              <li>{{ t('town clerk or other similar officer of the corporation.') }}</li>
-            </ul>
-          </div>
-        </details> 
-        {{ textInput(t('Full name'), 'signerName', form, autocomplete='signerName') }}
-        {{ textInput(t('Role'), 'signerRole', form, autocomplete='signerRole') }}
-      {% endif %}
-      {{ statementOfTruth(form, label = 'I believe that the facts stated in this claim are true') }}
+      {{ statementOfTruth(
+          form,
+          label = 'I believe that the facts stated in this claim are true',
+          isQualified = partyAsCompanyOrOrganisation
+        )
+      }}
 
       {% set submitButtonLabel = t('Submit and continue to payment ') %}
       {{ submitButton(submitButtonLabel + '(' + (claimAmountTotal.feeAmount | numeral) + ')') }}
