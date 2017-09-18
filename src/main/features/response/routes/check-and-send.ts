@@ -22,7 +22,6 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     paths: Paths,
     form: form,
     draft: user.responseDraft,
-    isStatementOfTruthRequired: isStatementOfTruthRequired(user),
     signatureType: determineSignatureType(user)
   })
 }
