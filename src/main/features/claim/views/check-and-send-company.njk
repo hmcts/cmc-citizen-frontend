@@ -86,7 +86,7 @@
         {{ textInput(t('Full name'), 'signerName', form, autocomplete='signerName') }}
         {{ textInput(t('Role'), 'signerRole', form, autocomplete='signerRole') }}
       {% endif %}
-      {{ statementOfTruth(form, label = 'I believe that the facts stated in this claim are true') }}
+      {{ statementOfTruth(form, label = 'The claimant believes that the facts stated in this claim are true') }}
 
       {% set submitButtonLabel = t('Submit and continue to payment ') %}
       {{ submitButton(submitButtonLabel + '(' + (claimAmountTotal.feeAmount | numeral) + ')') }}

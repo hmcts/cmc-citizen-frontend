@@ -14,6 +14,9 @@ import { ClaimDetails } from 'app/drafts/tasks/claimDetails'
 import { PartyType } from 'app/common/partyType'
 
 function getCheckAndSendPageUri (res: express.Response): string {
+  if (res.locals.user.claimDraft.claimant.partyDetails == null) {
+    return ''
+  }
   if (res.locals.user.claimDraft.claimant.partyDetails.type === PartyType.COMPANY.value || res.locals.user.claimDraft.claimant.partyDetails.type === PartyType.ORGANISATION.value) {
     return Paths.checkAndSendCompanyPage.uri
   } else {

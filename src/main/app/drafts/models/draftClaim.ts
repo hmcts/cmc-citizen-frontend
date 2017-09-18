@@ -20,7 +20,7 @@ export default class DraftClaim extends Draft implements Serializable<DraftClaim
   reason: Reason = new Reason()
   readResolveDispute: boolean = false
   readCompletingClaim: boolean = false
-  statementOfTruth: StatementOfTruthCompany
+  statementOfTruth?: StatementOfTruthCompany
 
   deserialize (input: any): DraftClaim {
     if (input) {
@@ -34,7 +34,9 @@ export default class DraftClaim extends Draft implements Serializable<DraftClaim
       this.readResolveDispute = input.readResolveDispute
       this.readCompletingClaim = input.readCompletingClaim
       this.lastUpdateTimestamp = input.lastUpdateTimestamp
-      this.statementOfTruth = new StatementOfTruthCompany().deserialize(input.statementOfTruth)
+      if (input.statementOfTruth) {
+        this.statementOfTruth = new StatementOfTruthCompany().deserialize(input.statementOfTruth)
+      }
     }
     return this
   }
