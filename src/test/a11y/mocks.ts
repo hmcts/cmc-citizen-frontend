@@ -80,7 +80,7 @@ function mockedClaim () {
   const companyDetails = new CompanyDetails()
   companyDetails.address = new Address()
   claim.claimData.defendants = [companyDetails]
-  let individual = new Individual()
+  const individual = new Individual()
   claim.claimData.claimants = [individual]
   claim.claimData.interest = mockedInterest()
   claim.claimData.interestDate = mockedInterestDate()
