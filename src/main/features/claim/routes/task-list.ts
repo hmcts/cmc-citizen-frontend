@@ -16,7 +16,7 @@ import User from 'idam/user'
 import DraftClaim from 'drafts/models/draftClaim'
 
 function getCheckAndSendPageUri (res: express.Response): string {
-  let user: User = res.locals.user
+  const user: User = res.locals.user
 
   if (isCompanyOrOrganisationClaimant(user.claimDraft)) {
     return Paths.checkAndSendCompanyPage.uri
@@ -27,7 +27,7 @@ function getCheckAndSendPageUri (res: express.Response): string {
 
 function isCompanyOrOrganisationClaimant (draftClaim: DraftClaim): boolean {
   if (draftClaim.claimant && draftClaim.claimant.partyDetails) {
-    let type: string = draftClaim.claimant.partyDetails.type
+    const type: string = draftClaim.claimant.partyDetails.type
     return type === PartyType.COMPANY.value || type === PartyType.ORGANISATION.value
   } else {
     return false
