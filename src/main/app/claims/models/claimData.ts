@@ -17,7 +17,7 @@ import Payment from 'app/pay/payment'
 
 export default class ClaimData implements Serializable<ClaimData> {
   externalId: string
-  claimant: Party
+  claimants: Party[]
   defendants: TheirDetails[]
   amount: ClaimAmountBreakdown = new ClaimAmountBreakdown()
   feeAmountInPennies: number
@@ -25,6 +25,14 @@ export default class ClaimData implements Serializable<ClaimData> {
   interest: Interest
   interestDate: InterestDate
   payment: Payment = new Payment()
+
+  get claimant (): Party {
+    if (this.claimants.length === 1) {
+      return this.claimants[0]
+    } else {
+      throw new Error('This claim has multiple claimants')
+    }
+  }
 
   get defendant (): TheirDetails {
     if (this.defendants.length === 1) {
@@ -40,7 +48,7 @@ export default class ClaimData implements Serializable<ClaimData> {
 
   deserialize (input: any): ClaimData {
     if (input) {
-      this.claimant = this.deserializeClaimant(input.claimant)
+      this.claimants = this.deserializeClaimants(input.claimants)
       this.defendants = this.deserializeDefendants(input.defendants)
       if (input.payment) {
         this.payment = new Payment().deserialize(input.payment)
@@ -66,20 +74,22 @@ export default class ClaimData implements Serializable<ClaimData> {
     return this
   }
 
-  private deserializeClaimant (claimant: any): Party {
-    if (claimant) {
-      switch (claimant.type) {
-        case PartyType.INDIVIDUAL.value:
-          return this.claimant = new ClaimantAsIndividual().deserialize(claimant)
-        case PartyType.COMPANY.value:
-          return this.claimant = new ClaimantAsCompany().deserialize(claimant)
-        case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
-          return this.claimant = new ClaimantAsSoleTrader().deserialize(claimant)
-        case PartyType.ORGANISATION.value:
-          return this.claimant = new ClaimantAsOrganisation().deserialize(claimant)
-        default:
-          throw Error('Something went wrong, No claimant type is set')
-      }
+  private deserializeClaimants (claimants: any): Party[] {
+    if (claimants) {
+      return claimants.map((claimant: any) => {
+        switch (claimant.type) {
+          case PartyType.INDIVIDUAL.value:
+            return new ClaimantAsIndividual().deserialize(claimant)
+          case PartyType.COMPANY.value:
+            return new ClaimantAsCompany().deserialize(claimant)
+          case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+            return new ClaimantAsSoleTrader().deserialize(claimant)
+          case PartyType.ORGANISATION.value:
+            return new ClaimantAsOrganisation().deserialize(claimant)
+          default:
+            throw Error('Something went wrong, No claimant type is set')
+        }
+      })
     }
   }
 
