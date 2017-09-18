@@ -2,7 +2,7 @@ import * as express from 'express'
 import { Paths } from 'claim/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import StatementOfTruth from 'forms/models/statementOfTruth'
+import StatementOfTruthCompany from 'forms/models/statementOfTruthCompany'
 import FeesClient from 'fees/feesClient'
 import ClaimAmountTotal from 'forms/models/claimInterestTotal'
 import InterestDateType from 'app/common/interestDateType'
@@ -10,11 +10,9 @@ import { claimAmountWithInterest, interestAmount } from 'utils/interestUtils'
 import { InterestType } from 'forms/models/interest'
 import { PartyType } from 'app/common/partyType'
 import AllClaimTasksCompletedGuard from 'claim/guards/allClaimTasksCompletedGuard'
-import { IndividualDetails } from 'forms/models/individualDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
-import DateOfBirth from 'forms/models/dateOfBirth'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
 
@@ -33,14 +31,6 @@ function getBusinessName (partyDetails: PartyDetails): string {
   }
 }
 
-function getDateOfBirth (partyDetails: PartyDetails): DateOfBirth {
-  if (partyDetails.type === PartyType.INDIVIDUAL.value) {
-    return (partyDetails as IndividualDetails).dateOfBirth
-  } else {
-    return undefined
-  }
-}
-
 function getContactPerson (partyDetails: PartyDetails): string {
   if (partyDetails.type === PartyType.COMPANY.value) {
     return (partyDetails as CompanyDetails).contactPerson
@@ -51,7 +41,11 @@ function getContactPerson (partyDetails: PartyDetails): string {
   }
 }
 
-function renderView (form: Form<StatementOfTruth>, res: express.Response, next: express.NextFunction) {
+function isCompanyOrOrganisation (partyDetails: PartyDetails): boolean {
+  return partyDetails.type === PartyType.COMPANY.value || partyDetails.type === PartyType.ORGANISATION.value
+}
+
+function renderView (form: Form<StatementOfTruthCompany>, res: express.Response, next: express.NextFunction) {
   getClaimAmountTotal(res)
     .then((claimAmountTotal: ClaimAmountTotal) => {
       res.render(Paths.checkAndSendPage.associatedView, {
@@ -61,22 +55,22 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
         interestClaimed: (res.locals.user.claimDraft.interest.type !== InterestType.NO_INTEREST),
         contactPerson: getContactPerson(res.locals.user.claimDraft.claimant.partyDetails),
         businessName: getBusinessName(res.locals.user.claimDraft.claimant.partyDetails),
-        dateOfBirth : getDateOfBirth(res.locals.user.claimDraft.claimant.partyDetails),
         defendantBusinessName: getBusinessName(res.locals.user.claimDraft.defendant.partyDetails),
+        partyAsCompanyOrOrganisation: isCompanyOrOrganisation(res.locals.user.claimDraft.claimant.partyDetails),
         form: form
       })
     }).catch(next)
 }
 
 export default express.Router()
-  .get(Paths.checkAndSendPage.uri, AllClaimTasksCompletedGuard.requestHandler, (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const statementOfTruth = new StatementOfTruth()
+  .get(Paths.checkAndSendCompanyPage.uri, AllClaimTasksCompletedGuard.requestHandler, (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const statementOfTruth = new StatementOfTruthCompany()
     renderView(new Form(statementOfTruth), res, next)
   })
-  .post(Paths.checkAndSendPage.uri, AllClaimTasksCompletedGuard.requestHandler,
-    FormValidator.requestHandler(StatementOfTruth, StatementOfTruth.fromObject),
+  .post(Paths.checkAndSendCompanyPage.uri, AllClaimTasksCompletedGuard.requestHandler,
+    FormValidator.requestHandler(StatementOfTruthCompany, StatementOfTruthCompany.fromObject),
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const form: Form<StatementOfTruth> = req.body
+      const form: Form<StatementOfTruthCompany> = req.body
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {

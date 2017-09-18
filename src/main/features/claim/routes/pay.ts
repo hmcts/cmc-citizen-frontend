@@ -14,7 +14,7 @@ import { CalculationOutcome } from 'app/fees/models/calculationOutcome'
 
 import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
 import ClaimStoreClient from 'app/claims/claimStoreClient'
-
+import { PartyType } from 'app/common/partyType'
 import { buildURL } from 'app/utils/CallbackBuilder'
 import { claimAmountWithInterest } from 'app/utils/interestUtils'
 import User from 'app/idam/user'
@@ -121,7 +121,11 @@ export default express.Router()
         case 'cancelled':
         case 'failed':
           logPaymentError(user.id, payment)
-          res.redirect(Paths.checkAndSendPage.uri)
+          if (user.claim.claimData.claimant.type === PartyType.COMPANY.value || user.claim.claimData.claimant.type === PartyType.ORGANISATION.value) {
+            res.redirect(Paths.checkAndSendCompanyPage.uri)
+          } else {
+            res.redirect(Paths.checkAndSendPage.uri)
+          }
           break
         case 'success':
           await successHandler(res, next)

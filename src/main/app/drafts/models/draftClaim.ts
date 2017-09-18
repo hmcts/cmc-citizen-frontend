@@ -7,6 +7,7 @@ import Reason from 'forms/models/reason'
 import * as uuid from 'uuid'
 import { Defendant } from 'app/drafts/models/defendant'
 import { Draft } from 'app/models/draft'
+import StatementOfTruthCompany from 'app/forms/models/statementOfTruthCompany'
 
 export default class DraftClaim extends Draft implements Serializable<DraftClaim> {
 
@@ -19,6 +20,7 @@ export default class DraftClaim extends Draft implements Serializable<DraftClaim
   reason: Reason = new Reason()
   readResolveDispute: boolean = false
   readCompletingClaim: boolean = false
+  statementOfTruth: StatementOfTruthCompany
 
   deserialize (input: any): DraftClaim {
     if (input) {
@@ -32,6 +34,7 @@ export default class DraftClaim extends Draft implements Serializable<DraftClaim
       this.readResolveDispute = input.readResolveDispute
       this.readCompletingClaim = input.readCompletingClaim
       this.lastUpdateTimestamp = input.lastUpdateTimestamp
+      this.statementOfTruth = new StatementOfTruthCompany().deserialize(input.statementOfTruth)
     }
     return this
   }

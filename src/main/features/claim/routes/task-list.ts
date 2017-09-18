@@ -11,6 +11,15 @@ import { YourDetails } from 'app/drafts/tasks/yourDetails'
 import { TheirDetails } from 'app/drafts/tasks/theirDetails'
 import { ClaimAmount } from 'app/drafts/tasks/claimAmount'
 import { ClaimDetails } from 'app/drafts/tasks/claimDetails'
+import { PartyType } from 'app/common/partyType'
+
+function getCheckAndSendPageUri (res: express.Response): string {
+  if (res.locals.user.claimDraft.claimant.partyDetails.type === PartyType.COMPANY.value || res.locals.user.claimDraft.claimant.partyDetails.type === PartyType.ORGANISATION.value) {
+    return Paths.checkAndSendCompanyPage.uri
+  } else {
+    return Paths.checkAndSendPage.uri
+  }
+}
 
 export default express.Router()
   .get(Paths.taskListPage.uri, (req: express.Request, res: express.Response) => {
@@ -27,9 +36,8 @@ export default express.Router()
     ])
 
     const submitSection: TaskList = new TaskList(3, 'Submit', [
-      new TaskListItem('Check and submit your claim', Paths.checkAndSendPage.uri, false)
+      new TaskListItem('Check and submit your claim', getCheckAndSendPageUri(res), false)
     ])
-
     const allTasksCompleted = beforeYouStartSection.isCompleted() && prepareYourClaimSection.isCompleted()
 
     res.render(Paths.taskListPage.associatedView,
