@@ -11,28 +11,6 @@ import { YourDetails } from 'app/drafts/tasks/yourDetails'
 import { TheirDetails } from 'app/drafts/tasks/theirDetails'
 import { ClaimAmount } from 'app/drafts/tasks/claimAmount'
 import { ClaimDetails } from 'app/drafts/tasks/claimDetails'
-import { PartyType } from 'app/common/partyType'
-import User from 'idam/user'
-import DraftClaim from 'drafts/models/draftClaim'
-
-function getCheckAndSendPageUri (res: express.Response): string {
-  const user: User = res.locals.user
-
-  if (isCompanyOrOrganisationClaimant(user.claimDraft)) {
-    return Paths.checkAndSendCompanyPage.uri
-  } else {
-    return Paths.checkAndSendPage.uri
-  }
-}
-
-function isCompanyOrOrganisationClaimant (draftClaim: DraftClaim): boolean {
-  if (draftClaim.claimant && draftClaim.claimant.partyDetails) {
-    const type: string = draftClaim.claimant.partyDetails.type
-    return type === PartyType.COMPANY.value || type === PartyType.ORGANISATION.value
-  } else {
-    return false
-  }
-}
 
 export default express.Router()
   .get(Paths.taskListPage.uri, (req: express.Request, res: express.Response) => {
@@ -49,7 +27,7 @@ export default express.Router()
     ])
 
     const submitSection: TaskList = new TaskList(3, 'Submit', [
-      new TaskListItem('Check and submit your claim', getCheckAndSendPageUri(res), false)
+      new TaskListItem('Check and submit your claim', Paths.checkAndSendPage.uri, false)
     ])
     const allTasksCompleted = beforeYouStartSection.isCompleted() && prepareYourClaimSection.isCompleted()
 
