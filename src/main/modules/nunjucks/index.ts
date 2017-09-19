@@ -33,7 +33,8 @@ export default class Nunjucks {
     app.set('view engine', 'njk')
     const nunjucksEnv = nunjucks.configure([
       path.join(__dirname, '..', '..', 'views'),
-      path.join(__dirname, '..', '..', 'features')
+      path.join(__dirname, '..', '..', 'features'),
+      path.join(__dirname, '..', '..', '..', '..', 'node_modules', '@hmcts', 'cmc-common-frontend', 'macros')
     ], {
       autoescape: true,
       express: app

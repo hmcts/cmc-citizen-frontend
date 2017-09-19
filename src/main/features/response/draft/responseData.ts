@@ -6,6 +6,7 @@ import { Company } from 'app/claims/models/details/yours/company'
 import { Organisation } from 'app/claims/models/details/yours/organisation'
 import { SoleTrader } from 'app/claims/models/details/yours/soleTrader'
 import { Draft } from 'app/models/draft'
+import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
 export class ResponseData extends Draft implements Serializable<ResponseData> {
 
@@ -14,18 +15,21 @@ export class ResponseData extends Draft implements Serializable<ResponseData> {
   freeMediation?: string
   moreTimeNeeded?: string
   defendant?: Party
+  statementOfTruth?: StatementOfTruth
 
   constructor (response?: string,
               defence?: string,
               freeMediation?: string,
               moreTimeNeeded?: string,
-              defendant?: Party) {
+              defendant?: Party,
+              statementOfTruth?: StatementOfTruth) {
     super()
     this.response = response
     this.defence = defence
     this.freeMediation = freeMediation
     this.moreTimeNeeded = moreTimeNeeded
     this.defendant = defendant
+    this.statementOfTruth = statementOfTruth
   }
 
   deserialize (input: any): ResponseData {

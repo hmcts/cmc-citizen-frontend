@@ -49,14 +49,42 @@ Running the linting:
 ### Running the tests
 
 Mocha is used for writing tests.
+
 Run them with:
+
 ```bash
 $ yarn test
 ```
 
 For functional testing:
+
 ```bash
 $ yarn test:routes
+```
+
+For accessibility testing:
+
+```bash
+$ yarn test:a11y
+```
+
+For test coverage:
+
+```bash
+$ yarn test:coverage
+```
+
+## Troubleshooting
+
+### Warnings while running ```yarn install``` on yarn version 1.0.1
+
+There is currently an open issue : https://github.com/yarnpkg/yarn/issues/3751
+
+Example:
+
+```
+warning The case-insensitive file ..\cmc-citizen-frontend\node_modules\nyc\node_modules shouldn't be copied twice in one bulk copy
+warning The case-insensitive file ..\cmc-citizen-frontend\node_modules\nyc\node_modules\ansi-regex shouldn't be copied twice in one bulk copy
 ```
 
 ## License

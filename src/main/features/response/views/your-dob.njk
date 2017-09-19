@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
-{% from "includes/macros/date.njk" import dateInput %}
+{% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
+{% from "date.njk" import dateInput %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('What is your date of birth?') %}
@@ -13,7 +13,7 @@
 
         {{ csrfProtection(csrf) }}
 
-        {{ dateInput('date', form) }}
+        {{ dateInput(form = form, name = 'date', hint = 'You must be over 18 to use this service') }}
 
         {{ saveAndContinueButton() }}
       </form>

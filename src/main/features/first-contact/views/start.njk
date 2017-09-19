@@ -2,8 +2,8 @@
 
 {% set title = t('Money claim') %}
 
-{% from "includes/macros/form.njk" import submitButton %}
-{% from "includes/macros/support.njk" import supportWidget %}
+{% from "form.njk" import submitButton %}
+{% from "support.njk" import supportWidget %}
 
 {% block content %}
 
@@ -59,7 +59,7 @@
         { postProcess: 'sprintf', sprintf: ['https://www.gov.uk/make-court-claim-for-money/court-fees'] }) | safe }}
       </p>
 
-      <h3 class="heading-small">{{ t("If you can't afford to pay the money back") }}</h3>
+      <h3 class="heading-small">{{ t('If you can’t afford to pay the money back') }}</h3>
       <p>
         {{ t('You might be able to get free legal advice to help you deal with debt from organisations like'
            + ' <a href="%s" target="_blank">StepChange</a>.',

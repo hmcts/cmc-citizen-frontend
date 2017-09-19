@@ -14,6 +14,7 @@ import { Company as DefendantAsCompany } from 'claims/models/details/theirs/comp
 import { SoleTrader as DefendantAsSoleTrader } from 'claims/models/details/theirs/soleTrader'
 import { Organisation as DefendantAsOrganisation } from 'claims/models/details/theirs/organisation'
 import Payment from 'app/pay/payment'
+import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
 export default class ClaimData implements Serializable<ClaimData> {
   externalId: string
@@ -25,6 +26,7 @@ export default class ClaimData implements Serializable<ClaimData> {
   interest: Interest
   interestDate: InterestDate
   payment: Payment = new Payment()
+  statementOfTruth?: StatementOfTruth
 
   get defendant (): TheirDetails {
     if (this.defendants.length === 1) {
@@ -61,6 +63,9 @@ export default class ClaimData implements Serializable<ClaimData> {
       }
       if (input.interestDate) {
         this.interestDate = new InterestDate().deserialize(input.interestDate)
+      }
+      if (input.statementOfTruth) {
+        this.statementOfTruth = new StatementOfTruth().deserialize(input.statementOfTruth)
       }
     }
     return this

@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import textInput, csrfProtection, submitButton, errorSummary %}
-{% from "includes/macros/date.njk" import dateInput %}
+{% from "form.njk" import textInput, csrfProtection, submitButton, errorSummary %}
+{% from "date.njk" import dateInput %}
 
 {% set title = 'Testing support' %}
 {% set heading = t('Update response deadline') %}

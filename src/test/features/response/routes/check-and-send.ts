@@ -15,6 +15,7 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { ResponseType } from 'response/form/models/responseType'
+import { SignatureType } from 'app/common/signatureType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -94,6 +95,7 @@ describe('Defendant response: check and send page', () => {
 
           await request(app)
             .post(ResponsePaths.checkAndSendPage.uri)
+            .send({ type: SignatureType.BASIC })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.taskListPage.uri))
         })
@@ -105,6 +107,7 @@ describe('Defendant response: check and send page', () => {
 
             await request(app)
               .post(ResponsePaths.checkAndSendPage.uri)
+              .send({ type: SignatureType.BASIC })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -115,6 +118,7 @@ describe('Defendant response: check and send page', () => {
 
             await request(app)
               .post(ResponsePaths.checkAndSendPage.uri)
+              .send({ type: SignatureType.BASIC })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting your response', 'div class="error-summary"'))
           })
@@ -128,24 +132,26 @@ describe('Defendant response: check and send page', () => {
             await request(app)
               .post(ResponsePaths.checkAndSendPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true' })
+              .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
           it('should return 500 and render error page when form is valid and cannot save response', async () => {
             draftStoreServiceMock.resolveRetrieve(draftType)
+            draftStoreServiceMock.resolveSave(draftType)
             claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
             claimStoreServiceMock.rejectSaveResponse('HTTP error')
 
             await request(app)
               .post(ResponsePaths.checkAndSendPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true' })
+              .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
           it('should return 500 and render error page when form is valid and cannot delete draft response', async () => {
             draftStoreServiceMock.resolveRetrieve(draftType)
+            draftStoreServiceMock.resolveSave(draftType)
             claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
             claimStoreServiceMock.resolveSaveResponse()
             draftStoreServiceMock.rejectDelete(draftType, 'HTTP error')
@@ -153,12 +159,13 @@ describe('Defendant response: check and send page', () => {
             await request(app)
               .post(ResponsePaths.checkAndSendPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true' })
+              .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
           it('should redirect to confirmation page when form is valid and a non handoff response type is picked', async () => {
             draftStoreServiceMock.resolveRetrieve(draftType)
+            draftStoreServiceMock.resolveSave(draftType)
             claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
             claimStoreServiceMock.resolveSaveResponse()
             draftStoreServiceMock.resolveDelete(draftType)
@@ -166,7 +173,7 @@ describe('Defendant response: check and send page', () => {
             await request(app)
               .post(ResponsePaths.checkAndSendPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true' })
+              .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.confirmationPage.uri))
           })
 
@@ -181,7 +188,7 @@ describe('Defendant response: check and send page', () => {
             await request(app)
               .post(ResponsePaths.checkAndSendPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true' })
+              .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.counterClaimPage.uri))
           })
 
@@ -195,7 +202,7 @@ describe('Defendant response: check and send page', () => {
             await request(app)
               .post(ResponsePaths.checkAndSendPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true' })
+              .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.fullAdmissionPage.uri))
           })
 
@@ -209,7 +216,7 @@ describe('Defendant response: check and send page', () => {
             await request(app)
               .post(ResponsePaths.checkAndSendPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true' })
+              .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.taskListPage.uri))
           })
 
@@ -223,7 +230,7 @@ describe('Defendant response: check and send page', () => {
             await request(app)
               .post(ResponsePaths.checkAndSendPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true' })
+              .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.partialAdmissionPage.uri))
           })
         })
