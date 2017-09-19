@@ -23,7 +23,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     paths: Paths,
     form: form,
     draft: user.responseDraft,
-    signatureType: determineSignatureType(user)
+    signatureType: signatureTypeFor(user)
   })
 }
 
@@ -48,7 +48,7 @@ function isCompanyOrOrganisationDefendant (user: User): boolean {
   }
 }
 
-function determineSignatureType (user: User): string {
+function signatureTypeFor (user: User): string {
   if (isStatementOfTruthRequired(user)) {
     if (isCompanyOrOrganisationDefendant(user)) {
       return SignatureType.QUALIFIED
@@ -72,7 +72,7 @@ function deserializerFunction (value: any): any {
 }
 
 function getStatementOfTruthClassFor (user: User): any {
-  if (determineSignatureType(user) === SignatureType.QUALIFIED) {
+  if (signatureTypeFor(user) === SignatureType.QUALIFIED) {
     return QualifiedStatementOfTruth
   } else {
     return StatementOfTruth
@@ -119,6 +119,10 @@ export default express.Router()
             next(new Error('Unknown response type: ' + responseType))
         }
 
+        if (signatureTypeFor(user) === SignatureType.QUALIFIED) {
+          user.responseDraft.qualifiedStatementOfTruth = form.model
+        }
+        await ResponseDraftMiddleware.save(res, next)
         await ClaimStoreClient.saveResponseForUser(user)
         await ResponseDraftMiddleware.delete(res, next)
         res.redirect(Paths.confirmationPage.uri)
