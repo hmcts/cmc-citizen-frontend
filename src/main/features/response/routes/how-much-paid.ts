@@ -10,13 +10,13 @@ import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
 
 function renderView (form: Form<HowMuchPaid>, res: express.Response): void {
-  res.render(Paths.defendantHowMuchPaid.associatedView, { form: form })
+  const name: string = res.locals.user.forename + ' ' + res.locals.user.surname
+  res.render(Paths.defendantHowMuchPaid.associatedView, { form: form, name: name })
 }
 
 export default express.Router()
   .get(Paths.defendantHowMuchPaid.uri, (req: express.Request, res: express.Response) => {
-    const user: User = res.locals.user
-    renderView(new Form(user.responseDraft.howMuchIsPaid), res)
+    renderView(new Form(res.locals.user.responseDraft.howMuchIsPaid), res)
   })
   .post(
     Paths.defendantHowMuchPaid.uri,
