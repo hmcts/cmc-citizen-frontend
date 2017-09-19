@@ -9,9 +9,9 @@ export class StatementOfTruth implements Serializable<StatementOfTruth> {
     this.signerRole = signerRole
   }
 
-  deserialize (obj: any): StatementOfTruth {
-    if (obj) {
-      return new StatementOfTruth(obj.signerName, obj.signerRole)
+  deserialize (input: any): StatementOfTruth {
+    if (input) {
+      return new StatementOfTruth(input.signerName, input.signerRole)
     }
     return undefined
   }
