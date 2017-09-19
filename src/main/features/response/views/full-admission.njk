@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import radioGroup, saveAndContinueButton, errorSummary %}
-{% from "includes/macros/support.njk" import supportWidget %}
+{% from "form.njk" import radioGroup, saveAndContinueButton, errorSummary %}
+{% from "support.njk" import supportWidget %}
 
 {% set title = t("Money claim") %}
 
@@ -13,7 +13,7 @@
         <div class="panel panel-border-wide">
           <p>{{ t('Complete and email the admission form N9A form by %s',
             { postProcess: 'sprintf', sprintf: [claim.responseDeadline | date]}) }}</p>
-          <p>{{ t("You'll need to state when you’re going to pay the money. You can suggest a repayment plan or a date when you can pay the money.") }}</p>
+          <p>{{ t('You’ll need to state when you’re going to pay the money. You can suggest a repayment plan or a date when you can pay the money.') }}</p>
         </div>
       </div>
 

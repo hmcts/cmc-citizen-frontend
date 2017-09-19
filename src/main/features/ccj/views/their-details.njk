@@ -2,8 +2,9 @@
 
 {% set title = 'Money claim' %}
 
-{% from "includes/macros/form.njk" import saveAndContinueButton, csrfProtection, errorSummary %}
-{% from "includes/macros/address.njk" import addressFragment %}
+{% from "form.njk" import readOnlyField, saveAndContinueButton, csrfProtection, errorSummary %}
+{% from "address.njk" import addressFragment %}
+{% from "party/details.njk" import partyDetailsFragment %}
 
 {% block content %}
   <div class="grid-row">
@@ -16,19 +17,53 @@
           {{ t('Confirm their details') }}
         </h1>
 
-        <p>{{ t('Check their address is right. You can correct or update address.') }}</p>
-        <div>
-          <h2 class="heading-medium">{{ t('Full name') }}</h2>
-          <p>{{ claim.claimData.defendant.name }}</p>
+        <p>{{ t('Check their address is right. You can correct or update their address.') }}</p>
+        {% if claim.claimData.defendant.type == 'individual' %}
+          {%
+            set fields = [
+              { label: 'Full name', value: claim.claimData.defendant.name, readOnly: true }
+            ]
+          %}
+        {% elseif claim.claimData.defendant.type == 'soleTrader' %}
+          {%
+            set fields = [
+              { label: 'Full name', value: claim.claimData.defendant.name, readOnly: true },
+              { label: 'Business name', value: claim.claimData.defendant.businessName, readOnly: true }
+            ]
+          %}
+        {% elseif claim.claimData.defendant.type == 'company' %}
+          {%
+            set fields = [
+              { label: 'Company name', value: claim.claimData.defendant.name, readOnly: true },
+              { label: 'Contact person', value: claim.claimData.defendant.contactPerson, readOnly: true }
+            ]
+          %}
+        {% elseif claim.claimData.defendant.type == 'organisation' %}
+          {%
+            set fields = [
+              { label: 'Organisation name', value: claim.claimData.defendant.name, readOnly: true },
+              { label: 'Contact person', value: claim.claimData.defendant.contactPerson, readOnly: true }
+            ]
+          %}
+        {% endif %}
 
-          <h2 class="heading-medium">{{ t('Their address') }}</h2>
-          {{ addressFragment(form) }}
+        {{
+          partyDetailsFragment(
+            form,
+            fields = fields,
+            addressSection = {
+              heading: 'Their address',
+              name: undefined
+            },
+            showCorrespondenceAddressSection = false
+          )
+        }}
 
-          <h2 class="heading-medium">{{ t('Email address') }}</h2>
-          <p>{{ claim.claimData.defendant.email }}</p>
+        {% if claim.claimData.defendant.email %}
+          {{ readOnlyField(label = 'Email address', value = claim.claimData.defendant.email) }}
+        {% endif %}
 
-          {{ saveAndContinueButton() }}
-        </div>
+        {{ saveAndContinueButton() }}
       </form>
     </div>
   </div>

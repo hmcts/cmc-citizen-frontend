@@ -89,7 +89,7 @@ describe('Claim issue: fees page', () => {
         await request(app)
           .get(ClaimPaths.feesPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Fees you&#39;ll pay'))
+          .expect(res => expect(res).to.be.successful.withText('Fees you’ll pay'))
       })
     })
   })

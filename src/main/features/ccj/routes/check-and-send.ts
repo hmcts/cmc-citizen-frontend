@@ -11,6 +11,7 @@ import { DraftCCJService } from 'ccj/draft/DraftCCJService'
 function prepareUrls (externalId: string): object {
   return {
     addressUrl: Paths.theirDetailsPage.evaluateUri({ externalId: externalId }),
+    dateOfBirthUrl: Paths.dateOfBirthPage.evaluateUri({ externalId: externalId }),
     paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId })
   }
 }

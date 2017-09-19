@@ -1,71 +1,72 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import submitButton, errorSummary %}
-{% from "includes/macros/support.njk" import supportWidget %}
+{% from "form.njk" import submitButton, errorSummary %}
+{% from "support.njk" import supportWidget %}
 {% set title = t('Claim confirmation') %}
 
 {% block content %}
 
   <div class="grid-row">
+    <div class="column-two-thirds">
+      <div class="govuk-box-highlight">
+        <h1 class="bold-xlarge">{{ t('Claim submitted') }}</h1>
+        <div class="reference-number">
+          <span>{{ t('Your claim number:') }}</span>
+          <h1 class="bold-large">{{ claimNumber }}</h1>
+        </div>
+        <p class="issue-receipt-download">
+          <a href="/claim/{{ externalId }}/receipt">{{ t('Download claim as pdf') }}</a>
+        </p>
 
-    <div class="govuk-box-highlight">
-      <h1 class="bold-xlarge">{{ t('Claim submitted') }}</h1>
-      <div class="reference-number">
-        <span>{{ t('Your claim number:') }}</span>
-        <h1 class="bold-large">{{ claimNumber }}</h1>
       </div>
-      <p class="issue-receipt-download">
-        <a href="/claim/{{ externalId }}/receipt">{{ t('Download claim as pdf') }}</a>
+
+      <h2 class="heading-medium">{{ t('What happens next') }}</h2>
+      <p>{{ t('%s needs to respond to your claim by %s',
+        {
+          postProcess: 'sprintf',
+          sprintf: [ defendantName, responseDeadline | date ]
+        }
+        ) | safe }}
+      </p>
+      <p>{{ t("We’ll send you an update by email if they do respond, and we’ll explain what to do if they don’t.") }}</p>
+
+      <p>{{ t('You can <a href="%s">view your claim</a> at any time.',
+        {
+          postProcess: 'sprintf',
+          sprintf: ['/dashboard']
+        }) | safe }}</p>
+
+      <h2 class="heading-medium">{{ t('What you can do') }}</h2>
+      <p>
+        {{ t('You can still contact %s directly while your claim progresses. ' +
+        'Many people are able to settle their claim by discussing what’s gone wrong. ' +
+        'If you can make an agreement you won’t need to go to a hearing.',
+        {
+          postProcess: 'sprintf',
+          sprintf: [defendantName]
+        }) }}
       </p>
 
+      <h2 class="heading-medium">{{ t('What to do if you get paid') }}</h2>
+      <p>
+        {{ t('Tell the defendant when you’ve received their payment. ' +
+        'You must also tell the court what date you were paid or were made an offer you’re happy with.') }}
+      </p>
+
+      <h2 class="heading-medium">{{ t('If you disagree with the response') }}</h2>
+      <p>
+        {{ t('You might have to go to a court hearing if:') }}
+      <ul class="list-bullet">
+        <li>{{ t("the defendant says they don’t owe you any money") }}</li>
+        <li>{{ t("they disagree with the amount you’ve claimed") }}</li>
+        <li>{{ t("you don’t agree with how they’ve offered to repay you") }}</li>
+      </ul>
+      </p>
+      <p>{{ t('The court may send you a questionnaire asking for more information on the case.') }}</p>
+
+      {{ supportWidget() }}
+
+      {% include "includes/service_survey_link.njk" %}
     </div>
-
-    <h2 class="heading-medium">{{ t('What happens next') }}</h2>
-    <p>{{ t('%s needs to respond to your claim by %s',
-      {
-        postProcess: 'sprintf',
-        sprintf: [ defendantName, responseDeadline | date ]
-      }
-      ) | safe }}
-    </p>
-    <p>{{ t("We’ll send you an update by email if they do respond, and we’ll explain what to do if they don’t.") }}</p>
-
-    <p>{{ t('You can <a href="%s">view your claim</a> at any time.',
-      {
-        postProcess: 'sprintf',
-        sprintf: ['/dashboard']
-      }) | safe }}</p>
-
-    <h2 class="heading-medium">{{ t('What you can do') }}</h2>
-    <p>
-      {{ t('You can still contact %s directly while your claim progresses. ' +
-      'Many people are able to settle their claim by discussing what’s gone wrong. ' +
-      'If you can make an agreement you won’t need to go to a hearing.',
-      {
-        postProcess: 'sprintf',
-        sprintf: [defendantName]
-      }) }}
-    </p>
-
-    <h2 class="heading-medium">{{ t('What to do if you get paid') }}</h2>
-    <p>
-      {{ t('Tell the defendant when you’ve received their payment. ' +
-      'You must also tell the court what date you were paid or were made an offer you’re happy with.') }}
-    </p>
-
-    <h2 class="heading-medium">{{ t('If you disagree with the response') }}</h2>
-    <p>
-      {{ t('You might have to go to a court hearing if:') }}
-    <ul class="list-bullet">
-      <li>{{ t("the defendant says they don’t owe you any money") }}</li>
-      <li>{{ t("they disagree with the amount you’ve claimed") }}</li>
-      <li>{{ t("you don’t agree with how they’ve offered to repay you") }}</li>
-    </ul>
-    </p>
-    <p>{{ t('The court may send you a questionnaire asking for more information on the case.') }}</p>
-
-    {{ supportWidget() }}
-
-    {% include "includes/service_survey_link.njk" %}
 
   </div>
 

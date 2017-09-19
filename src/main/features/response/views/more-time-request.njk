@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
-{% from "includes/macros/table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
+{% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
+{% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
 
 {% set title = t("Money claim") %}
 
@@ -24,11 +24,11 @@
               {
                 label: "Yes, I need an extra 14 days",
                 value: "yes",
-                hint: "You'll have 14 more days to submit your response",
+                hint: 'You’ll have 14 more days to submit your response',
                 bold: true
               },
               {
-                label: "No, I don't need more time",
+                label: 'No, I don’t need more time',
                 value: "no",
                 hint: "",
                 bold: true

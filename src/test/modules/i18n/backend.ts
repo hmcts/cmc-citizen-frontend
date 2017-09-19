@@ -1,13 +1,9 @@
-'use strict'
-/* global describe, it, beforeEach */
+/* tslint:disable:no-unused-expression */
+import * as chai from 'chai'
+import * as spies from 'sinon-chai'
+import * as path from 'path'
 
-const path = require('path')
-
-const chai = require('chai')
 const expect = chai.expect
-
-const spies = require('sinon-chai')
-
 chai.use(spies)
 
 const Backend = require('../../../main/modules/i18n/backend')

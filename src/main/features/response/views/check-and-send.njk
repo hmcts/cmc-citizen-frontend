@@ -1,60 +1,27 @@
 {% extends "layout.njk" %}
-{% from "includes/macros/table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
-{% from "includes/macros/form.njk" import csrfProtection, submitButton, errorSummary, checkboxGroup %}
-{% from "includes/macros/statement-of-truth.njk" import statementOfTruth %}
+
+{% from "table.njk" import tableStart,tableEnd, row, rowWithMultipleValue %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary, checkboxGroup %}
+{% from "statement-of-truth.njk" import statementOfTruth %}
+{% from "party/details.njk" import partyDetailsSummaryFragment %}
 
 {% set title = t("Money claim") %}
 {% set heading = t("Check your answers before submitting your response") %}
-
-{% if draft.defendantDetails.partyDetails.hasCorrespondenceAddress  %}
-  {% set correspondenceAddressLines = [
-    draft.defendantDetails.partyDetails.correspondenceAddress.line1,
-    draft.defendantDetails.partyDetails.correspondenceAddress.line2,
-    draft.defendantDetails.partyDetails.correspondenceAddress.city,
-    draft.defendantDetails.partyDetails.correspondenceAddress.postcode
-  ] %}
-{% else %}
-  {% set correspondenceAddressLines = [t('Same as address')] %}
-{% endif %}
 
 {% block content %}
   <form novalidate method="post">
     {{ csrfProtection(csrf) }}
 
     {{ tableStart("yourDetails", "Your details") }}
-
-    {{ row("Name:", draft.defendantDetails.partyDetails.name, paths.defendantYourDetailsPage.uri) }}
-
-    {% if draft.defendantDetails.partyDetails.type === 'company' or draft.defendantDetails.partyDetails.type === 'organisation' %}
-      {% if draft.defendantDetails.partyDetails.contactPerson %}
-        {{ row("Contact name:", draft.defendantDetails.partyDetails.contactPerson, paths.defendantYourDetailsPage.uri) }}
-      {% endif %}
-    {% endif %}
-
-    {% if draft.defendantDetails.partyDetails.type === 'soleTrader' %}
-      {{ row("Business name:", 'Trading as ' + draft.defendantDetails.partyDetails.businessName ) }}
-    {% endif %}
-
     {{
-      rowWithMultipleValue(
-        label = "Address:",
-        values = [ draft.defendantDetails.partyDetails.address.line1, draft.defendantDetails.partyDetails.address.line2, draft.defendantDetails.partyDetails.address.city, draft.defendantDetails.partyDetails.address.postcode ],
-        changeLink = paths.defendantYourDetailsPage.uri,
-        bottomBorder = false
+      partyDetailsSummaryFragment(
+        partyDetails = draft.defendantDetails.partyDetails,
+        changeLinks = {
+          partyDetails: paths.defendantYourDetailsPage.uri,
+          dateOfBirth: paths.defendantDateOfBirthPage.uri
+        }
       )
     }}
-
-    {{
-      rowWithMultipleValue(
-        label = "Correspondence address:",
-        values = correspondenceAddressLines
-      )
-    }}
-
-    {% if draft.defendantDetails.partyDetailspartyType === 'individual' %}
-      {{ row("Date of birth:", draft.defendantDetails.partyDetails.dateOfBirth.date.toMoment() | date, paths.defendantDateOfBirthPage.uri) }}
-    {% endif %}
-
     {{ row("Phone:", draft.defendantDetails.mobilePhone.number, paths.defendantMobilePage.uri) }}
 
     {{ tableEnd() }}

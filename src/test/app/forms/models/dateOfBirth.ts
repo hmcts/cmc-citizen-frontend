@@ -1,6 +1,10 @@
 /* Allow chai assertions which don't end in a function call, e.g. expect(thing).to.be.undefined */
 /* tslint:disable:no-unused-expression */
 
+import * as i18next from 'i18next'
+import * as postProcessor from 'i18next-sprintf-postprocessor'
+i18next.use(postProcessor).init()
+
 import { expect } from 'chai'
 import * as moment from 'moment'
 import { Validator } from 'class-validator'
@@ -9,6 +13,9 @@ import { expectValidationError } from './validationUtils'
 
 import DateOfBirth, { ValidationErrors } from 'forms/models/dateOfBirth'
 import { LocalDate } from 'forms/models/localDate'
+
+import { MomentFormatter } from 'utils/momentFormatter'
+import { Moment } from 'moment'
 
 describe('DateOfBirth', () => {
   describe('form object deserialization', () => {
@@ -53,7 +60,7 @@ describe('DateOfBirth', () => {
         const errors = validator.validateSync(dateOfBirth(today.year(), today.month() + 1, today.date()))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.DATE_UNDER_18)
+        expectValidationError(errors, ValidationErrors.DATE_UNDER_18.replace('%s', MomentFormatter.formatLongDate(ageLimit())))
       })
 
       it('should reject future date', () => {
@@ -62,7 +69,7 @@ describe('DateOfBirth', () => {
         const errors = validator.validateSync(dateOfBirth(tomorrow.year(), tomorrow.month() + 1, tomorrow.date()))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.DATE_UNDER_18)
+        expectValidationError(errors, ValidationErrors.DATE_UNDER_18.replace('%s', MomentFormatter.formatLongDate(ageLimit())))
       })
 
       it('should reject date of birth below 18', () => {
@@ -71,7 +78,7 @@ describe('DateOfBirth', () => {
         const errors = validator.validateSync(dateOfBirth(almost18YearsAgo.year(), almost18YearsAgo.month() + 1, almost18YearsAgo.date()))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.DATE_UNDER_18)
+        expectValidationError(errors, ValidationErrors.DATE_UNDER_18.replace('%s', MomentFormatter.formatLongDate(ageLimit())))
       })
 
       it('should reject date of birth with age over 150', () => {
@@ -142,4 +149,8 @@ describe('DateOfBirth', () => {
 
 function dateOfBirth (year: number, month: number, day: number): DateOfBirth {
   return new DateOfBirth(true, new LocalDate(year, month, day))
+}
+
+function ageLimit (): Moment {
+  return moment().subtract(18, 'years').add(1, 'day')
 }
