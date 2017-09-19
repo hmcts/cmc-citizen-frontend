@@ -2,7 +2,6 @@ import { Serializable } from 'app/models/serializable'
 import ClaimAmountBreakdown from 'app/forms/models/claimAmountBreakdown'
 import InterestDate from 'app/claims/models/interestDate'
 import Interest from 'app/forms/models/interest'
-import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
 import { Party } from 'claims/models/details/yours/party'
 import { Individual as ClaimantAsIndividual } from 'claims/models/details/yours/individual'
 import { Company as ClaimantAsCompany } from 'claims/models/details/yours/company'
@@ -15,6 +14,7 @@ import { Company as DefendantAsCompany } from 'claims/models/details/theirs/comp
 import { SoleTrader as DefendantAsSoleTrader } from 'claims/models/details/theirs/soleTrader'
 import { Organisation as DefendantAsOrganisation } from 'claims/models/details/theirs/organisation'
 import Payment from 'app/pay/payment'
+import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
 export default class ClaimData implements Serializable<ClaimData> {
   externalId: string
@@ -26,7 +26,7 @@ export default class ClaimData implements Serializable<ClaimData> {
   interest: Interest
   interestDate: InterestDate
   payment: Payment = new Payment()
-  statementOfTruth?: QualifiedStatementOfTruth
+  statementOfTruth?: StatementOfTruth
 
   get defendant (): TheirDetails {
     if (this.defendants.length === 1) {
@@ -65,7 +65,7 @@ export default class ClaimData implements Serializable<ClaimData> {
         this.interestDate = new InterestDate().deserialize(input.interestDate)
       }
       if (input.statementOfTruth) {
-        this.statementOfTruth = new QualifiedStatementOfTruth().deserialize(input.statementOfTruth)
+        this.statementOfTruth = new StatementOfTruth().deserialize(input.statementOfTruth)
       }
     }
     return this

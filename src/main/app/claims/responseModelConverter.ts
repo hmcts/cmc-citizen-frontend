@@ -12,16 +12,25 @@ import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { Defendant } from 'drafts/models/defendant'
+import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
 export class ResponseModelConverter {
 
   static convert (responseDraft: ResponseDraft): ResponseData {
+    let statementOfTruth: StatementOfTruth = undefined
+    if (responseDraft.qualifiedStatementOfTruth) {
+      statementOfTruth = new StatementOfTruth(
+        responseDraft.qualifiedStatementOfTruth.signerName,
+        responseDraft.qualifiedStatementOfTruth.signerRole
+      )
+    }
     return new ResponseData(
       responseDraft.response.type.value,
       responseDraft.defence.text,
       responseDraft.freeMediation === undefined ? undefined : responseDraft.freeMediation.option,
       responseDraft.moreTimeNeeded === undefined ? undefined : responseDraft.moreTimeNeeded.option,
-      this.convertPartyDetails(responseDraft.defendantDetails)
+      this.convertPartyDetails(responseDraft.defendantDetails),
+      statementOfTruth
     )
   }
 
