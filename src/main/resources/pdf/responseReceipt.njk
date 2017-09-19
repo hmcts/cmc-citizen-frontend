@@ -343,7 +343,7 @@
             I {{ defendant.fullName }} believe that the facts stated in this defence form are true.
           </td>
         {% endif %}
-        {% if defendant.statementOfTruth is not empty %}
+        {% if defence.statementOfTruth is not empty %}
           <td>
             The defendant believes that the facts stated in this defence form are true.
           </td>
@@ -360,27 +360,27 @@
       {% if defence.statementOfTruth is not empty %}
         <tr>
           <td>
-           Name: 
+           Name:
           </td>
           <td>{{ defence.statementOfTruth.signerName }}</td>
         </tr>
-        <tr>  
+        <tr>
           <td>
-            Company:
+            Organisation:
           </td>
           {% if defendant.fullName is not empty %}
             <td>{{ defendant.fullName }}</td>
           {% endif %}
-          {% if defendant.businessName is not empty %}  
+          {% if defendant.businessName is not empty %}
             <td>{{ defendant.businessName }}</td>
           {% endif %}
         </tr>
-        <tr>  
+        <tr>
           <td>
             Position held:
           </td>
           <td>{{ defence.statementOfTruth.signerRole }}</td>
-        </tr>  
+        </tr>
       {% endif %}
     </table>
   </div>
