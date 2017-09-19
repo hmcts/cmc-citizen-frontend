@@ -5,6 +5,7 @@ import { Paths } from 'response/paths'
 import ClaimStoreClient from 'claims/claimStoreClient'
 import Claim from 'claims/models/claim'
 import MoreTimeRequestRequiredGuard from 'response/guards/moreTimeRequestRequiredGuard'
+import User from 'idam/user'
 
 async function renderView (res: express.Response, next: express.NextFunction) {
   try {
@@ -29,5 +30,7 @@ export default express.Router()
     Paths.moreTimeConfirmationPage.uri,
     MoreTimeRequestRequiredGuard.requestHandler,
     (req: express.Request, res: express.Response) => {
-      res.redirect(Paths.taskListPage.uri)
+      const user: User = res.locals.user
+
+      res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
     })

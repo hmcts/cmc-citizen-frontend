@@ -9,6 +9,7 @@ import { Response } from 'response/form/models/response'
 import { ResponseType } from 'response/form/models/responseType'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
+import User from 'idam/user'
 
 function renderView (form: Form<Response>, res: express.Response, next: express.NextFunction) {
   try {
@@ -33,13 +34,14 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
-        res.locals.user.responseDraft.response = form.model
+        const user: User = res.locals.user
+        user.responseDraft.response = form.model
         await ResponseDraftMiddleware.save(res, next)
 
         if (ResponseType.OWE_NONE === form.model.type) {
-          res.redirect(Paths.defenceOptionsPage.uri)
+          res.redirect(Paths.defenceOptionsPage.evaluateUri({ externalId: user.claim.externalId }))
         } else {
-          res.redirect(Paths.taskListPage.uri)
+          res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
         }
       }
     }))

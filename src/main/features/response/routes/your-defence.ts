@@ -11,6 +11,7 @@ import Claim from 'app/claims/models/claim'
 import Defence from 'response/form/models/defence'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
+import User from 'idam/user'
 
 async function renderView (form: Form<Defence>, res: express.Response, next: express.NextFunction) {
   try {
@@ -38,8 +39,9 @@ export default express.Router()
       if (form.hasErrors()) {
         await renderView(form, res, next)
       } else {
-        res.locals.user.responseDraft.defence = form.model
+        const user: User = res.locals.user
+        user.responseDraft.defence = form.model
         await ResponseDraftMiddleware.save(res, next)
-        res.redirect(Paths.freeMediationPage.uri)
+        res.redirect(Paths.freeMediationPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

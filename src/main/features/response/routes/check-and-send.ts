@@ -17,6 +17,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   const user: User = res.locals.user
   res.render(Paths.checkAndSendPage.associatedView, {
     paths: Paths,
+    claim: user.claim,
     form: form,
     draft: user.responseDraft,
     isStatementOfTruthRequired: isStatementOfTruthRequired(user)

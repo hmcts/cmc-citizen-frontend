@@ -38,8 +38,9 @@ export default express.Router()
       if (form.hasErrors()) {
         await renderView(form, res, next)
       } else {
-        res.locals.user.responseDraft.freeMediation = form.model
+        const user = res.locals.user
+        user.responseDraft.freeMediation = form.model
         await ResponseDraftMiddleware.save(res, next)
-        res.redirect(Paths.taskListPage.uri)
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))
