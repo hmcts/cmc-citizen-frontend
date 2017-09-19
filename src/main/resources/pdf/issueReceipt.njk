@@ -338,27 +338,27 @@
       {% if claim.statementOfTruth is not empty %}
       <tr>
         <td>
-          Name: 
+          Name:
         </td>
         <td>{{ claim.statementOfTruth.signerName }}</td>
       </tr>
-      <tr>  
+      <tr>
         <td>
-          Company:
+          Organisation:
         </td>
         {% if claimant.fullName is not empty %}
           <td>{{ claimant.fullName }}</td>
         {% endif %}
-        {% if claimant.businessName is not empty %}  
+        {% if claimant.businessName is not empty %}
           <td>{{ claimant.businessName }}</td>
         {% endif %}
       </tr>
-      <tr>  
+      <tr>
         <td>
           Position held:
         </td>
         <td>{{ claim.statementOfTruth.signerRole }}</td>
-      </tr>  
+      </tr>
       {% endif %}
     </table>
   </div>
