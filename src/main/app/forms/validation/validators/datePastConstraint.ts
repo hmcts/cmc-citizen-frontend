@@ -13,10 +13,7 @@ import { LocalDate } from 'forms/models/localDate'
 @ValidatorConstraint()
 export class DatePastConstraint implements ValidatorConstraintInterface {
   validate (value: any, args?: ValidationArguments) {
-    if (value === undefined) {
-      return true
-    }
-    if (value == null) {
+    if (value === null || value === undefined) {
       return true
     }
 

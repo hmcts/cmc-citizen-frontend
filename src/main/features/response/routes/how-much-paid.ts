@@ -4,7 +4,7 @@ import { Paths } from 'features/response/paths'
 
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import HowMuchPaid from 'features/response/form/models/howMuchPaid'
+import { HowMuchPaid } from 'features/response/form/models/howMuchPaid'
 import User from 'idam/user'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'

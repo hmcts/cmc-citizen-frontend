@@ -5,7 +5,7 @@ import { expect } from 'chai'
 import * as randomstring from 'randomstring'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
-import HowMuchPaid, { ValidationErrors } from 'response/form/models/howMuchPaid'
+import { HowMuchPaid, ValidationErrors } from 'response/form/models/howMuchPaid'
 import { LocalDate } from 'forms/models/localDate'
 
 describe('HowMuchPaid', () => {
@@ -26,9 +26,9 @@ describe('HowMuchPaid', () => {
     })
 
     it('should return an instance from given object', () => {
-      const description = 'I do not owe this money'
-      const amount = 300
-      const result = new HowMuchPaid().deserialize({
+      const description: string = 'I do not owe this money'
+      const amount: number = 300
+      const result: HowMuchPaid = new HowMuchPaid().deserialize({
         amount: amount,
         text: description
       })
@@ -68,7 +68,7 @@ describe('HowMuchPaid', () => {
     })
 
     it('should reject when amount not specified', () => {
-      const errors = validator.validateSync(new HowMuchPaid(undefined, new LocalDate(2017, 2, 29), "i don't owe the amount of £300"))
+      const errors = validator.validateSync(new HowMuchPaid(undefined, new LocalDate(2017, 2, 29), 'i don’t owe the amount of £300'))
 
       expect(errors.length).to.equal(2)
       expectValidationError(errors, ValidationErrors.AMOUNT_REQUIRED)
@@ -90,19 +90,19 @@ describe('HowMuchPaid', () => {
     })
 
     it('should accept valid how much to pay text', () => {
-      const errors = validator.validateSync(new HowMuchPaid(300, new LocalDate(2017, 2, 29), "i don't owe the amount of £300"))
+      const errors = validator.validateSync(new HowMuchPaid(300, new LocalDate(2017, 2, 29), 'i don’t owe the amount of £300'))
       expect(errors.length).to.equal(1)
     })
 
     context('when pay by set date is known', () => {
       it('should reject non existing date', () => {
-        const errors = validator.validateSync(new HowMuchPaid(300, new LocalDate(2017, 2, 29), "i don't owe the amount of £300"))
+        const errors = validator.validateSync(new HowMuchPaid(300, new LocalDate(2017, 2, 29), 'i don’t owe the amount of £300'))
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.VALID_PAST_DATE)
       })
 
       it('should reject date with invalid digits in year', () => {
-        const errors = validator.validateSync(new HowMuchPaid(300, null, "i don't owe the amount of £300"))
+        const errors = validator.validateSync(new HowMuchPaid(300, null, 'i don’t owe the amount of £300'))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.DATE_REQUIRED)

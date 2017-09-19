@@ -5,7 +5,7 @@ import { LocalDate } from 'forms/models/localDate'
 import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 
 export class ValidationErrors {
-  static readonly NOT_OWE_FULL_AMOUNT_REQUIRED: string = "You haven't explained why you don't owe the full amount"
+  static readonly NOT_OWE_FULL_AMOUNT_REQUIRED: string = 'You haven’t explained why you don’t owe the full amount'
   static readonly REASON_NOT_OWE_MONEY_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
   static readonly VALID_AMOUNT_REQUIRED: string = 'Enter a valid amount paid'
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount'
@@ -13,7 +13,7 @@ export class ValidationErrors {
   static readonly VALID_PAST_DATE: string = 'Enter a valid date in the past'
 }
 
-export default class HowMuchPaid implements Serializable<HowMuchPaid> {
+export class HowMuchPaid implements Serializable<HowMuchPaid> {
 
   @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED })
   @IsPositive({ message: ValidationErrors.VALID_AMOUNT_REQUIRED })
@@ -49,4 +49,7 @@ export default class HowMuchPaid implements Serializable<HowMuchPaid> {
     }
     return this
   }
-}
+
+  isCompleted (): boolean {
+    return !!this.date.year && this.date.year.toString().length > 0
+  }}
