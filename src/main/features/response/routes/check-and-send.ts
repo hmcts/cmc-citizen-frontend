@@ -15,7 +15,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { SignatureType } from 'app/common/signatureType'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { PartyType } from 'app/common/partyType'
-import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
+import { QualifiedStatementOfTruth } from 'response/form/models/qualifiedStatementOfTruth'
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
   const user: User = res.locals.user
