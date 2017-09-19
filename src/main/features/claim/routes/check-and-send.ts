@@ -112,11 +112,12 @@ export default express.Router()
   .post(Paths.checkAndSendPage.uri, AllClaimTasksCompletedGuard.requestHandler,
     FormValidator.requestHandler(undefined, deserializerFunction),
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const form: Form<StatementOfTruth> = req.body
+      const user: User = res.locals.user
+      const form: Form<any> = req.body
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
-        res.locals.user.claimDraft.statementOfTruth = form.model
+        user.claimDraft.qualifiedStatementOfTruth = form.model
         await ClaimDraftMiddleware.save(res, next)
         res.redirect(Paths.startPaymentReceiver.uri)
       }

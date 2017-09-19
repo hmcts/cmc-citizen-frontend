@@ -15,6 +15,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { SignatureType } from 'app/common/signatureType'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { PartyType } from 'app/common/partyType'
+import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
   const user: User = res.locals.user
@@ -59,20 +60,41 @@ function determineSignatureType (user: User): string {
   }
 }
 
+function deserializerFunction (value: any): any {
+  switch (value.type) {
+    case SignatureType.BASIC:
+      return StatementOfTruth.fromObject(value)
+    case SignatureType.QUALIFIED:
+      return QualifiedStatementOfTruth.fromObject(value)
+    default:
+      throw new Error(`Unknown statement of truth type: ${value.type}`)
+  }
+}
+
+function getStatementOfTruthClassFor (user: User): any {
+  if (determineSignatureType(user) === SignatureType.QUALIFIED) {
+    return QualifiedStatementOfTruth
+  } else {
+    return StatementOfTruth
+  }
+}
+
 export default express.Router()
   .get(
     Paths.checkAndSendPage.uri,
     AllResponseTasksCompletedGuard.requestHandler,
     (req: express.Request, res: express.Response) => {
-      renderView(Form.empty(), res)
+      const user: User = res.locals.user
+      const StatementOfTruthClass = getStatementOfTruthClassFor(user)
+      renderView(new Form(new StatementOfTruthClass()), res)
     })
   .post(
     Paths.checkAndSendPage.uri,
     AllResponseTasksCompletedGuard.requestHandler,
-    FormValidator.requestHandler(StatementOfTruth, StatementOfTruth.fromObject),
+    FormValidator.requestHandler(undefined, deserializerFunction),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const form: Form<StatementOfTruth> = req.body
       const user: User = res.locals.user
+      const form: Form<any> = req.body
       if (isStatementOfTruthRequired(user) && form.hasErrors()) {
         renderView(form, res)
       } else {
