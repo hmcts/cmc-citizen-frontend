@@ -2,6 +2,7 @@ import { IsDefined, MaxLength } from 'class-validator'
 import { IsBooleanTrue } from 'forms/validation/validators/isBooleanTrue'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import * as toBoolean from 'to-boolean'
+import { SignatureType } from 'app/common/signatureType'
 
 export class ValidationErrors {
   static readonly STATEMENT_OF_TRUTH_REQUIRED_MESSAGE: string = 'Please select I believe that the facts stated in this claim are true.'
@@ -12,6 +13,8 @@ export class ValidationErrors {
 }
 
 export class QualifiedStatementOfTruth {
+  type: string = SignatureType.QUALIFIED
+
   @IsDefined({ message: ValidationErrors.STATEMENT_OF_TRUTH_REQUIRED_MESSAGE })
   @IsBooleanTrue({ message: ValidationErrors.STATEMENT_OF_TRUTH_REQUIRED_MESSAGE })
   signed?: boolean
@@ -36,7 +39,8 @@ export class QualifiedStatementOfTruth {
     if (!value) {
       return value
     }
-    return new QualifiedStatementOfTruth(toBoolean(value.signed) === true, value.signerName, value.signerRole )
+    console.log((value))
+    return new QualifiedStatementOfTruth((value.signed && toBoolean(value.signed) === true), value.signerName, value.signerRole )
   }
 
   deserialize (input?: any): QualifiedStatementOfTruth {

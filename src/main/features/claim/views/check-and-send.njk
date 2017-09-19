@@ -68,6 +68,8 @@
 
       {% set submitButtonLabel = t('Submit and continue to payment ') %}
       {{ submitButton(submitButtonLabel + '(' + (claimAmountTotal.feeAmount | numeral) + ')') }}
+      <input type="hidden" name="type" value="{{ form.model.type }}">
     </div>
+
   </form>
 {% endblock %}

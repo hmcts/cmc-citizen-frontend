@@ -19,6 +19,8 @@ import { PartyDetails } from 'forms/models/partyDetails'
 import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
 import User from 'idam/user'
 import DraftClaim from 'drafts/models/draftClaim'
+import { SignatureType } from 'app/common/signatureType'
+import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
 
 function getClaimAmountTotal (res: express.Response): Promise<ClaimAmountTotal> {
   return FeesClient.calculateIssueFee(claimAmountWithInterest(res.locals.user.claimDraft))
@@ -53,13 +55,32 @@ function getContactPerson (partyDetails: PartyDetails): string {
   }
 }
 
-function determineIfPartyIsCompanyOrOrganisation (user: User): boolean {
+function isPartyCompanyOrOrganisation (user: User): boolean {
   const claimDraft: DraftClaim = user.claimDraft
   if (claimDraft.claimant && claimDraft.claimant.partyDetails) {
     const type: string = claimDraft.claimant.partyDetails.type
     return type === PartyType.COMPANY.value || type === PartyType.ORGANISATION.value
   } else {
     return false
+  }
+}
+
+function deserializerFunction (value: any): any {
+  switch (value.type) {
+    case SignatureType.BASIC:
+      return StatementOfTruth.fromObject(value)
+    case SignatureType.QUALIFIED:
+      return QualifiedStatementOfTruth.fromObject(value)
+    default:
+      throw new Error(`Unknown statement of truth type: ${value.type}`)
+  }
+}
+
+function getStatementOfTruthClassFor (user: User): any {
+  if (isPartyCompanyOrOrganisation(user)) {
+    return QualifiedStatementOfTruth
+  } else {
+    return StatementOfTruth
   }
 }
 
@@ -76,7 +97,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
         businessName: getBusinessName(res.locals.user.claimDraft.claimant.partyDetails),
         dateOfBirth : getDateOfBirth(res.locals.user.claimDraft.claimant.partyDetails),
         defendantBusinessName: getBusinessName(res.locals.user.claimDraft.defendant.partyDetails),
-        partyAsCompanyOrOrganisation: determineIfPartyIsCompanyOrOrganisation(user),
+        partyAsCompanyOrOrganisation: isPartyCompanyOrOrganisation(user),
         form: form
       })
     }).catch(next)
@@ -84,11 +105,12 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
 
 export default express.Router()
   .get(Paths.checkAndSendPage.uri, AllClaimTasksCompletedGuard.requestHandler, (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const statementOfTruth = new StatementOfTruth()
-    renderView(new Form(statementOfTruth), res, next)
+    const user: User = res.locals.user
+    const StatementOfTruthClass = getStatementOfTruthClassFor(user)
+    renderView(new Form(new StatementOfTruthClass()), res, next)
   })
   .post(Paths.checkAndSendPage.uri, AllClaimTasksCompletedGuard.requestHandler,
-    FormValidator.requestHandler(StatementOfTruth, StatementOfTruth.fromObject),
+    FormValidator.requestHandler(undefined, deserializerFunction),
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<StatementOfTruth> = req.body
       if (form.hasErrors()) {

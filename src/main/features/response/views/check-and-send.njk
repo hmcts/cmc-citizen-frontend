@@ -47,6 +47,7 @@
       }}
 
       {{ submitButton('Submit response') }}
+      <input type="hidden" name="type" value="{{ form.model.type }}">
     </div>
   </form>
 {% endblock %}
