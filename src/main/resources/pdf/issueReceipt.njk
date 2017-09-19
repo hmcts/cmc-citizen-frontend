@@ -316,16 +316,50 @@
     <table>
       <tr>
         <td>Declaration:</td>
+        {% if claim.statementOfTruth is empty %}
         <td>
           I {{ claimant.fullName }} believe that the facts stated in this claim form are true.
         </td>
+        {% endif %}
+        {% if claim.statementOfTruth is not empty %}
+          <td>
+            The claimant believes that the facts stated in this claim are true.
+          </td>
+        {% endif %}
       </tr>
+      {% if claim.statementOfTruth is empty %}
       <tr>
         <td></td>
         <td>
           {{ claimant.fullName }}
         </td>
+        </tr>
+      {% endif %}
+      {% if claim.statementOfTruth is not empty %}
+      <tr>
+        <td>
+          Name:
+        </td>
+        <td>{{ claim.statementOfTruth.signerName }}</td>
       </tr>
+      <tr>
+        <td>
+          Organisation:
+        </td>
+        {% if claimant.fullName is not empty %}
+          <td>{{ claimant.fullName }}</td>
+        {% endif %}
+        {% if claimant.businessName is not empty %}
+          <td>{{ claimant.businessName }}</td>
+        {% endif %}
+      </tr>
+      <tr>
+        <td>
+          Position held:
+        </td>
+        <td>{{ claim.statementOfTruth.signerRole }}</td>
+      </tr>
+      {% endif %}
     </table>
   </div>
 </div>
