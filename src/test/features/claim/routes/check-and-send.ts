@@ -13,6 +13,7 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as feesServiceMock from '../../../http-mocks/fees'
+import { SignatureType } from 'app/common/signatureType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -71,6 +72,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
       })
@@ -81,6 +83,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -91,15 +94,18 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting your claim', 'div class="error-summary"'))
       })
 
       it('should redirect to payment page when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveSave('claim')
 
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
           .set('Cookie', `${cookieName}=ABC`)
           .send({ signed: 'true' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
