@@ -14,12 +14,12 @@
     "test:a11y": "NODE_ENV=mocha LOG_LEVEL=ERROR mocha --opts mocha.opts src/test/a11y --timeout 60000 --reporter-options reportFilename=a11y,inlineAssets=true,reportTitle=citizen-frontend-a11y",
     "test:nsp": "nsp check",
     "test:coverage": "NODE_ENV=mocha LOG_LEVEL=OFF nyc mocha --opts mocha.opts $(find src/test \\( -name '*.ts' -or -name '*.js' \\) ! -path '*a11y*')",
-    "sonar-scanner": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/** -Dsonar.ts.coverage.lcovReportPath=coverage-report/lcov.info",
+    "sonar-scanner": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/** -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info",
     "precommit": "yarn lint",
     "prepush": "yarn test && yarn test:routes"
   },
   "dependencies": {
-    "@hmcts/cmc-common-frontend": "^1.7.3",
+    "@hmcts/cmc-common-frontend": "^1.8.0",
     "@hmcts/nodejs-healthcheck": "^1.4.3",
     "@hmcts/nodejs-logging": "^1.2.0",
     "@types/config": "^0.0.32",

@@ -29,7 +29,6 @@ export default express.Router()
     const submitSection: TaskList = new TaskList(3, 'Submit', [
       new TaskListItem('Check and submit your claim', Paths.checkAndSendPage.uri, false)
     ])
-
     const allTasksCompleted = beforeYouStartSection.isCompleted() && prepareYourClaimSection.isCompleted()
 
     res.render(Paths.taskListPage.associatedView,
