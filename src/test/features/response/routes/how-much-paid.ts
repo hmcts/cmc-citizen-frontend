@@ -83,7 +83,7 @@ describe('Defendant response: how much have you paid', () => {
             await request(app)
               .post(ResponsePaths.defendantHowMuchPaid.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ amount: 300, date: { year: '1978', month: '1', day: '11' }, text: "I don't owe any money" })
+              .send({ amount: 300, date: { year: '1978', month: '1', day: '11' }, text: 'I don’t owe any money' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -94,7 +94,7 @@ describe('Defendant response: how much have you paid', () => {
             await request(app)
               .post(ResponsePaths.defendantHowMuchPaid.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ amount: 300, date: { year: '1978', month: '1', day: '11' }, text: "I don't owe any money" })
+              .send({ amount: 300, date: { year: '1978', month: '1', day: '11' }, text: 'I don’t owe any money' })
               .expect(res => expect(res).to.be.redirect.toLocation('toDo'))
           })
         })
