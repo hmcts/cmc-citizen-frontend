@@ -19,6 +19,8 @@ import { MoreTimeNeededTask } from 'response/tasks/moreTimeNeededTask'
 import { YourDetails } from 'response/tasks/yourDetails'
 import User from 'app/idam/user'
 import { isAfter4pm } from 'common/dateUtils'
+import { ResponseType } from 'response/form/models/responseType'
+import { HowMuchOwedTask } from 'response/tasks/howMuchOwedTask'
 
 export function buildBeforeYouStartSection (responseDraft: ResponseDraft): TaskList {
   const tasks: TaskListItem[] = []
@@ -37,6 +39,9 @@ export function buildRespondToClaimSection (draft: ResponseDraft, responseDeadli
 
   tasks.push(new TaskListItem('Do you owe the money claimed', Paths.responseTypePage.uri,
     OweMoneyTask.isCompleted(draft)))
+  if (draft.response.type === ResponseType.OWE_SOME_PAID_NONE) {
+    tasks.push(new TaskListItem('How much money do you believe you owe?', Paths.defendantHowMuchOwed.uri, HowMuchOwedTask.isCompleted(draft)))
+  }
 
   if (draft.requireDefence()) {
     tasks.push(new TaskListItem('Your defence', Paths.defencePage.uri, YourDefenceTask.isCompleted(draft)))
