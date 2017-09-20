@@ -8,10 +8,14 @@ import { HowMuchOwed } from 'features/response/form/models/howMuchOwed'
 import User from 'idam/user'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
+import ClaimStoreClient from 'claims/claimStoreClient'
+import Claim from 'claims/models/claim'
 
-function renderView (form: Form<HowMuchOwed>, res: express.Response): void {
-  const name: string = res.locals.user.forename + ' ' + res.locals.user.surname
-  res.render(Paths.defendantHowMuchOwed.associatedView, { form: form, name: name })
+async function renderView (form: Form<HowMuchOwed>, res: express.Response) {
+  const user: User = res.locals.user
+  const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(user.id)
+  const amount: number = claim.claimData.amount.totalAmount()
+  res.render(Paths.defendantHowMuchOwed.associatedView, { form: form, amount: amount, claim: claim })
 }
 
 export default express.Router()
