@@ -9,6 +9,7 @@ import { isNullOrUndefined } from 'util'
 import { Defendant } from 'app/drafts/models/defendant'
 import { Draft } from 'app/models/draft'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
+import { HowMuchOwed } from 'response/form/models/howMuchOwed'
 
 export class ResponseDraft extends Draft implements Serializable<ResponseDraft> {
 
@@ -19,6 +20,7 @@ export class ResponseDraft extends Draft implements Serializable<ResponseDraft> 
   counterClaim?: CounterClaim
   defendantDetails?: Defendant = new Defendant()
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
+  howMuchOwed?: HowMuchOwed
 
   deserialize (input: any): ResponseDraft {
     if (input) {
@@ -29,6 +31,7 @@ export class ResponseDraft extends Draft implements Serializable<ResponseDraft> 
       this.counterClaim = CounterClaim.fromObject(input.counterClaim)
       this.defendantDetails = new Defendant().deserialize(input.defendantDetails)
       this.lastUpdateTimestamp = input.lastUpdateTimestamp
+      this.howMuchOwed = HowMuchOwed.fromObject(input.howMuchOwed)
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }
