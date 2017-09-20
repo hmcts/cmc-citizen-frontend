@@ -12,6 +12,10 @@ import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ResponseType } from 'response/form/models/responseType'
 import AllResponseTasksCompletedGuard from 'response/guards/allResponseTasksCompletedGuard'
 import { ErrorHandling } from 'common/errorHandling'
+import { SignatureType } from 'app/common/signatureType'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { PartyType } from 'app/common/partyType'
+import { QualifiedStatementOfTruth } from 'response/form/models/qualifiedStatementOfTruth'
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
   const user: User = res.locals.user
@@ -19,7 +23,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     paths: Paths,
     form: form,
     draft: user.responseDraft,
-    isStatementOfTruthRequired: isStatementOfTruthRequired(user)
+    signatureType: signatureTypeFor(user)
   })
 }
 
@@ -34,20 +38,63 @@ function isStatementOfTruthRequired (user: User): boolean {
     || responseType === ResponseType.OWE_ALL_PAID_ALL
 }
 
+function isCompanyOrOrganisationDefendant (user: User): boolean {
+  const responseDraft: ResponseDraft = user.responseDraft
+  if (responseDraft.defendantDetails && responseDraft.defendantDetails.partyDetails) {
+    const type: string = responseDraft.defendantDetails.partyDetails.type
+    return type === PartyType.COMPANY.value || type === PartyType.ORGANISATION.value
+  } else {
+    return false
+  }
+}
+
+function signatureTypeFor (user: User): string {
+  if (isStatementOfTruthRequired(user)) {
+    if (isCompanyOrOrganisationDefendant(user)) {
+      return SignatureType.QUALIFIED
+    } else {
+      return SignatureType.BASIC
+    }
+  } else {
+    return SignatureType.NONE
+  }
+}
+
+function deserializerFunction (value: any): any {
+  switch (value.type) {
+    case SignatureType.BASIC:
+      return StatementOfTruth.fromObject(value)
+    case SignatureType.QUALIFIED:
+      return QualifiedStatementOfTruth.fromObject(value)
+    default:
+      throw new Error(`Unknown statement of truth type: ${value.type}`)
+  }
+}
+
+function getStatementOfTruthClassFor (user: User): any {
+  if (signatureTypeFor(user) === SignatureType.QUALIFIED) {
+    return QualifiedStatementOfTruth
+  } else {
+    return StatementOfTruth
+  }
+}
+
 export default express.Router()
   .get(
     Paths.checkAndSendPage.uri,
     AllResponseTasksCompletedGuard.requestHandler,
     (req: express.Request, res: express.Response) => {
-      renderView(new Form(undefined), res)
+      const user: User = res.locals.user
+      const StatementOfTruthClass = getStatementOfTruthClassFor(user)
+      renderView(new Form(new StatementOfTruthClass()), res)
     })
   .post(
     Paths.checkAndSendPage.uri,
     AllResponseTasksCompletedGuard.requestHandler,
-    FormValidator.requestHandler(StatementOfTruth, StatementOfTruth.fromObject),
+    FormValidator.requestHandler(undefined, deserializerFunction),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const form: Form<StatementOfTruth> = req.body
       const user: User = res.locals.user
+      const form: Form<any> = req.body
       if (isStatementOfTruthRequired(user) && form.hasErrors()) {
         renderView(form, res)
       } else {
@@ -72,6 +119,10 @@ export default express.Router()
             next(new Error('Unknown response type: ' + responseType))
         }
 
+        if (signatureTypeFor(user) === SignatureType.QUALIFIED) {
+          user.responseDraft.qualifiedStatementOfTruth = form.model
+        }
+        await ResponseDraftMiddleware.save(res, next)
         await ClaimStoreClient.saveResponseForUser(user)
         await ResponseDraftMiddleware.delete(res, next)
         res.redirect(Paths.confirmationPage.uri)

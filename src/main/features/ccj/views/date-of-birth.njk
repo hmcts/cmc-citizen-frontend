@@ -34,7 +34,7 @@
           }}
 
           <div class="form-group panel panel-border-narrow js-hidden " id="known-true" aria-hidden="false">
-            {{ dateInput('date', form) }}
+            {{ dateInput(form = form, name = 'date', hint = 'You can only request a CCJ against someone who is over 18') }}
           </div>
 
           {{
