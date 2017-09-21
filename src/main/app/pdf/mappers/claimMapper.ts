@@ -19,6 +19,13 @@ export class ClaimMapper {
       data['interest'] = InterestMapper.createInterestData(claim)
     }
 
+    if (claim.claimData.statementOfTruth) {
+      data['statementOfTruth'] = {
+        signerName: claim.claimData.statementOfTruth.signerName,
+        signerRole: claim.claimData.statementOfTruth.signerRole
+      }
+    }
+
     return data
   }
 }

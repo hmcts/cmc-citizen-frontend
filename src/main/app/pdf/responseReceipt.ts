@@ -21,7 +21,7 @@ export class ResponseReceipt {
   }
 
   data (): object {
-    return {
+    const data = {
       claim: ClaimMapper.createClaimDetails(this.claim),
       defence: {
         respondedAt: MomentFormatter.formatLongDateAndTime(this.defendantResponse.respondedAt),
@@ -38,5 +38,13 @@ export class ResponseReceipt {
       ),
       responseDashboardUrl: this.responseDashboardUrl
     }
+
+    if (this.defendantResponse.response.statementOfTruth) {
+      data.defence['statementOfTruth'] = {
+        signerName: this.defendantResponse.response.statementOfTruth.signerName,
+        signerRole: this.defendantResponse.response.statementOfTruth.signerRole
+      }
+    }
+    return data
   }
 }
