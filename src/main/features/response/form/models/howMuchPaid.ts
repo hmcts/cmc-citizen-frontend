@@ -3,14 +3,20 @@ import { IsDefined, IsPositive, MaxLength } from 'class-validator'
 import { IsPastDate } from 'forms/validation/validators/datePastConstraint'
 import { LocalDate } from 'forms/models/localDate'
 import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
+import { IsValidYearFormat } from 'app/forms/validation/validators/isValidYearFormat'
+import { MomentFactory } from 'common/momentFactory'
+import { MomentFormatter } from 'app/utils/momentFormatter'
+
+const currentDate = MomentFormatter.formatLongDate(MomentFactory.currentDate())
 
 export class ValidationErrors {
-  static readonly NOT_OWE_FULL_AMOUNT_REQUIRED: string = 'You haven’t explained why you don’t owe the full amount'
+  static readonly NOT_OWE_FULL_AMOUNT_REQUIRED: string = 'Explain why you don’t owe the full amount'
   static readonly REASON_NOT_OWE_MONEY_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
   static readonly VALID_AMOUNT_REQUIRED: string = 'Enter a valid amount paid'
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount'
   static readonly DATE_REQUIRED: string = 'Enter a date'
-  static readonly VALID_PAST_DATE: string = 'Enter a valid date in the past'
+  static readonly VALID_PAST_DATE: string = `Enter date before ${currentDate}`
+  static readonly DATE_INVALID_YEAR: string = 'Enter a 4 digit year'
 }
 
 export class HowMuchPaid implements Serializable<HowMuchPaid> {
@@ -20,6 +26,7 @@ export class HowMuchPaid implements Serializable<HowMuchPaid> {
   amount?: number
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
   @IsPastDate({ message: ValidationErrors.VALID_PAST_DATE })
+  @IsValidYearFormat({ message: ValidationErrors.DATE_INVALID_YEAR })
   date?: LocalDate
   @IsDefined({ message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })

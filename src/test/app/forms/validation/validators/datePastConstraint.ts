@@ -11,9 +11,8 @@ describe('DatePastConstraint', () => {
   describe('validate', () => {
 
     describe('should return true when ', () => {
-      it('given a date is undefined or null', () => {
+      it('given a date is undefined or empty', () => {
         expect(constraint.validate(undefined)).to.equal(true)
-        expect(constraint.validate(null)).to.equal(true)
       })
 
       it('given a date in the past', () => {

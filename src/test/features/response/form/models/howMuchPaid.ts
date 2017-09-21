@@ -21,10 +21,6 @@ describe('HowMuchPaid', () => {
       expect(new HowMuchPaid().deserialize(undefined)).to.eql(new HowMuchPaid())
     })
 
-    it('should return an instance initialised with defaults for null', () => {
-      expect(new HowMuchPaid().deserialize(null)).to.eql(new HowMuchPaid())
-    })
-
     it('should return an instance from given object', () => {
       const description: string = 'I do not owe this money'
       const amount: number = 300
@@ -47,7 +43,7 @@ describe('HowMuchPaid', () => {
     })
 
     it('should reject how much to pay text with null type', () => {
-      const errors = validator.validateSync(new HowMuchPaid(300, new LocalDate(2017, 2, 29), null))
+      const errors = validator.validateSync(new HowMuchPaid(300, new LocalDate(2017, 2, 29)))
 
       expect(errors.length).to.equal(2)
       expectValidationError(errors, ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED)
@@ -101,11 +97,18 @@ describe('HowMuchPaid', () => {
         expectValidationError(errors, ValidationErrors.VALID_PAST_DATE)
       })
 
-      it('should reject date with invalid digits in year', () => {
-        const errors = validator.validateSync(new HowMuchPaid(300, null, 'i don’t owe the amount of £300'))
+      it('should reject date not defined', () => {
+        const errors = validator.validateSync(new HowMuchPaid(300, undefined, 'i don’t owe the amount of £300'))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.DATE_REQUIRED)
+      })
+
+      it('should reject date with invalid digits in year', () => {
+        const errors = validator.validateSync(new HowMuchPaid(300, new LocalDate(20, 2, 29), 'i don’t owe the amount of £300'))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.DATE_INVALID_YEAR)
       })
     })
   })
