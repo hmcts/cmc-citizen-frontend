@@ -38,6 +38,7 @@ describe('Defendant response: how much have you paid', () => {
 
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveRetrieve('response')
+          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
 
           await request(app)
             .get(ResponsePaths.defendantHowMuchPaid.uri)
@@ -67,6 +68,7 @@ describe('Defendant response: how much have you paid', () => {
         context('when form is invalid', () => {
           it('should render page when everything is fine', async () => {
             draftStoreServiceMock.resolveRetrieve('response')
+            claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
 
             await request(app)
               .post(ResponsePaths.defendantHowMuchPaid.uri)
@@ -87,7 +89,7 @@ describe('Defendant response: how much have you paid', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to toDo page when form is valid and everything is fine', async () => {
+          it('should redirect to free mediation page when form is valid and everything is fine', async () => {
             draftStoreServiceMock.resolveRetrieve('response')
             draftStoreServiceMock.resolveSave('response')
 
@@ -95,7 +97,7 @@ describe('Defendant response: how much have you paid', () => {
               .post(ResponsePaths.defendantHowMuchPaid.uri)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ amount: 300, date: { year: '1978', month: '1', day: '11' }, text: 'I don’t owe any money' })
-              .expect(res => expect(res).to.be.redirect.toLocation('toDo'))
+              .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.freeMediationPage.uri))
           })
         })
       })
