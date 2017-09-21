@@ -27,15 +27,15 @@ $(function () {
     return undefined
   }
 
-  function formValue (formElement, inputName) {
-    if (!formElement) {
-      throw new Error('Form element is required')
+  function formValue (form, inputName) {
+    if (!form) {
+      throw new Error('Form is required')
     }
     if (!inputName) {
       throw new Error('Input name is required')
     }
 
-    var inputElement = formElement.find('input[name=' + inputName + ']')
+    var inputElement = form.find('input[name=' + inputName + ']')
     if (inputElement.length > 0) {
       switch (inputElement[0].type) {
         case 'radio':
@@ -43,7 +43,7 @@ $(function () {
             return undefined
           }
 
-          return labelText(formElement.find('label[for=' + inputElement.filter(':checked')[0].id + ']'))
+          return labelText(form.find('label[for=' + inputElement.filter(':checked')[0].id + ']'))
         default:
           throw new Error('Input type is not supported')
       }
@@ -60,10 +60,12 @@ $(function () {
   // Send a google analytics event when a form that has the 'analytics-click-event-trigger' class is submitted.
   // Example <form method="post" class="analytics-submit-event-trigger" data-event-action="Your GA action" data-event-label-from="Form element to extract GA label from"></form>
   $('.analytics-submit-event-trigger').on('submit', function () {
-    var formElement = $(this)
+    var form = $(this)
 
-    var action = formElement.data('eventAction')
-    var label = formValue(formElement, formElement.data('eventLabelFrom'))
-    sendEvent('Form', action, label)
+    var action = form.data('eventAction')
+    var label = formValue(form, form.data('eventLabelFrom'))
+    if (label) {
+      sendEvent('Form', action, label)
+    }
   })
 })
