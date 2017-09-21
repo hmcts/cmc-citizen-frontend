@@ -27,7 +27,7 @@ $(function () {
     return undefined
   }
 
-  function formValue (form, inputName) {
+  function findLabel (form, inputName) {
     if (!form) {
       throw new Error('Form is required')
     }
@@ -63,7 +63,7 @@ $(function () {
     var form = $(this)
 
     var action = form.data('eventAction')
-    var label = formValue(form, form.data('eventLabelFrom'))
+    var label = findLabel(form, form.data('eventLabelFrom'))
     if (label) {
       sendEvent('Form', action, label)
     }
