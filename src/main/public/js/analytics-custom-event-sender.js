@@ -1,5 +1,5 @@
 $(function () {
-  function sendEvent(eventCategory, eventAction, eventLabel) {
+  function sendEvent (eventCategory, eventAction, eventLabel) {
     if (!eventCategory) {
       throw new Error('Event category is required')
     }
@@ -13,7 +13,7 @@ $(function () {
     ga('send', 'event', eventCategory, eventAction, eventLabel)
   }
 
-  function labelText(labelElement) {
+  function labelText (labelElement) {
     if (!labelElement) {
       throw new Error('Label element is required')
     }
@@ -27,7 +27,7 @@ $(function () {
     return undefined
   }
 
-  function formValue(formElement, inputName) {
+  function formValue (formElement, inputName) {
     if (!formElement) {
       throw new Error('Form element is required')
     }
