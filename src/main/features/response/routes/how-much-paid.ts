@@ -33,7 +33,7 @@ export default express.Router()
       } else {
         user.responseDraft.howMuchIsPaid = form.model
         await ResponseDraftMiddleware.save(res, next)
-        res.redirect('toDo')
+        res.redirect(Paths.freeMediationPage.uri)
       }
     })
   )
