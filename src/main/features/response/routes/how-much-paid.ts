@@ -15,11 +15,12 @@ async function renderView (form: Form<HowMuchPaid>, res: express.Response) {
   const user: User = res.locals.user
   const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(user.id)
   res.render(Paths.defendantHowMuchPaid.associatedView, { form: form, claim: claim})
+
 }
 
 export default express.Router()
-  .get(Paths.defendantHowMuchPaid.uri, (req: express.Request, res: express.Response) => {
-    renderView(new Form(res.locals.user.responseDraft.howMuchIsPaid), res)
+  .get(Paths.defendantHowMuchPaid.uri, async (req: express.Request, res: express.Response) => {
+    await renderView(new Form(res.locals.user.responseDraft.howMuchIsPaid), res)
   })
   .post(
     Paths.defendantHowMuchPaid.uri,
@@ -28,7 +29,7 @@ export default express.Router()
       const form: Form<HowMuchPaid> = req.body
       const user: User = res.locals.user
       if (form.hasErrors()) {
-        renderView(form, res)
+        await renderView(form, res)
       } else {
         user.responseDraft.howMuchIsPaid = form.model
         await ResponseDraftMiddleware.save(res, next)
