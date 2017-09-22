@@ -47,7 +47,8 @@ timestamps {
           } catch (ignore) {
             sh "cat nsp-report.txt"
             archiveArtifacts 'nsp-report.txt'
-            error "Node security check failed see the report for the errors"
+            notifyBuildResult channel: channel, color: 'warning',
+              message: 'Node security check failed see the report for the errors'
           }
           sh "rm nsp-report.txt"
         }
@@ -86,7 +87,7 @@ timestamps {
             try {
               sh "yarn test:coverage"
             } finally {
-              archiveArtifacts 'coverage-report/index.html'
+              archiveArtifacts 'coverage-report/lcov-report/index.html'
             }
           }
         }

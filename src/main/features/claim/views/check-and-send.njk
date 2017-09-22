@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 
 {% from "table.njk" import tableStart,tableEnd, row, rowWithMultipleValue %}
-{% from "form.njk" import csrfProtection, submitButton, errorSummary, checkboxGroup %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary, checkboxGroup, textInput %}
 {% from "statement-of-truth.njk" import statementOfTruth %}
 {% from "party/details.njk" import partyDetailsSummaryFragment %}
 
@@ -59,10 +59,17 @@
     {{ tableEnd() }}
 
     <div class="form-group">
-      {{ statementOfTruth(form, label = 'I believe that the facts stated in this claim are true') }}
+      {{ statementOfTruth(
+          form,
+          label = 'I believe that the facts stated in this claim are true',
+          isQualified = partyAsCompanyOrOrganisation
+        )
+      }}
 
       {% set submitButtonLabel = t('Submit and continue to payment ') %}
       {{ submitButton(submitButtonLabel + '(' + (claimAmountTotal.feeAmount | numeral) + ')') }}
+      <input type="hidden" name="type" value="{{ form.model.type }}">
     </div>
+
   </form>
 {% endblock %}

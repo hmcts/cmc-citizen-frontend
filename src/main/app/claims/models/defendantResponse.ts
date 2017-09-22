@@ -5,22 +5,14 @@ import { Company } from 'app/claims/models/details/theirs/company'
 import { SoleTrader } from 'app/claims/models/details/theirs/soleTrader'
 import { Organisation } from 'app/claims/models/details/theirs/organisation'
 import { TheirDetails } from 'app/claims/models/details/theirs/theirDetails'
+import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
 export class DefendantResponse implements Serializable<DefendantResponse> {
   type: string
   defence: string
   freeMediation: string
   defendantDetails: TheirDetails
-
-  deserialize (input: any): DefendantResponse {
-    if (input) {
-      this.type = input.type
-      this.defence = input.defence
-      this.freeMediation = input.freeMediation
-      this.defendantDetails = DefendantResponse.deserializeDefendantDetails(input.response.defendant)
-    }
-    return this
-  }
+  statementOfTruth?: StatementOfTruth
 
   private static deserializeDefendantDetails (defendant: any): TheirDetails {
     if (defendant) {
@@ -38,6 +30,19 @@ export class DefendantResponse implements Serializable<DefendantResponse> {
       }
     }
     return undefined
+  }
+
+  deserialize (input: any): DefendantResponse {
+    if (input) {
+      this.type = input.type
+      this.defence = input.defence
+      this.freeMediation = input.freeMediation
+      this.defendantDetails = DefendantResponse.deserializeDefendantDetails(input.response.defendant)
+      if (input.statementOfTruth) {
+        this.statementOfTruth = new StatementOfTruth().deserialize(input.statementOfTruth)
+      }
+    }
+    return this
   }
 
 }

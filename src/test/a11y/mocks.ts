@@ -6,8 +6,6 @@ import ClaimData from 'claims/models/claimData'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Response } from 'response/form/models/response'
 import { FreeMediation } from 'response/form/models/freeMediation'
-import { DeleteMe } from 'app/claims/models/defendantResponse'
-import { DefendantResponse } from 'app/claims/models/defendantResponseData'
 import ServiceAuthToken from 'app/idam/serviceAuthToken'
 import DateOfBirth from 'app/forms/models/dateOfBirth'
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
@@ -19,7 +17,6 @@ import InterestDate from 'app/claims/models/interestDate'
 import InterestDateType from 'app/common/interestDateType'
 import Interest, { InterestType } from 'app/forms/models/interest'
 import { Defendant, Defendant as DraftDefendant } from 'app/drafts/models/defendant'
-import { TheirDetails } from 'app/claims/models/details/theirs/theirDetails'
 import { Company as CompanyDetails } from 'app/claims/models/details/theirs/company'
 import { Individual } from 'app/claims/models/details/yours/individual'
 import { default as DraftClaimant } from 'app/drafts/models/claimant'
@@ -80,7 +77,8 @@ function mockedClaim () {
   const companyDetails = new CompanyDetails()
   companyDetails.address = new Address()
   claim.claimData.defendants = [companyDetails]
-  claim.claimData.claimant = new Individual()
+  const individual = new Individual()
+  claim.claimData.claimants = [individual]
   claim.claimData.interest = mockedInterest()
   claim.claimData.interestDate = mockedInterestDate()
   claim.claimNumber = 'NNDD-NNDD'
@@ -100,19 +98,6 @@ function mockedInterestDate () {
   return new InterestDate().deserialize({
     type: InterestDateType.SUBMISSION
   })
-}
-
-function mockedDefendantResponse () {
-  let response = new DeleteMe()
-  response.response = new DefendantResponse()
-  response.respondedAt = moment()
-  response.defendantDetails = new TheirDetails()
-  response.defendantDetails.address = new Address()
-  response.defendantDetails.address.postcode = 'postcode'
-  response.defendantDetails.address.line1 = 'line1'
-  response.defendantDetails.email = 'example@example.com'
-
-  return response
 }
 
 function mockUser () {
@@ -179,8 +164,7 @@ mock('claims/claimStoreClient', {
     retrieveByLetterHolderId: (letterHolderId) => mockedClaim(),
     retrieveLatestClaimByDefendantId: (defendantId) => mockedClaim(),
     retrieveByDefendantId: (defendantId) => [mockedClaim()],
-    retrieveByExternalId: (externalId) => mockedClaim(),
-    retrieveResponse: (defendantId, claimId) => mockedDefendantResponse()
+    retrieveByExternalId: (externalId) => mockedClaim()
   }
 })
 

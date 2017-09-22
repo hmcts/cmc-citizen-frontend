@@ -17,8 +17,8 @@ export default class AllResponseTasksCompletedGuard {
       const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(user.id)
 
       const allTasksCompleted: boolean = [
-        buildBeforeYouStartSection(user.responseDraft),
-        buildRespondToClaimSection(user.responseDraft, claim.responseDeadline)
+        buildBeforeYouStartSection(user.responseDraft, claim.externalId),
+        buildRespondToClaimSection(user.responseDraft, claim.responseDeadline, claim.externalId)
       ].every((taskList: TaskList) => taskList.isCompleted())
 
       if (allTasksCompleted) {

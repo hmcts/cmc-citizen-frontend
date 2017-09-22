@@ -23,7 +23,7 @@ export default express.Router()
     const atLeastOneClaimIssued: boolean = (await ClaimStoreClient.retrieveByClaimantId(user.id)).length > 0
     const claimAgainstDefendant = await ClaimStoreClient.retrieveByDefendantId(user.id)
     const atLeastOneResponse: boolean = claimAgainstDefendant.length > 0 &&
-      claimAgainstDefendant.some((claim : Claim) => !!claim.response)
+      claimAgainstDefendant.some((claim: Claim) => !!claim.response)
 
     if (atLeastOneClaimIssued || atLeastOneResponse) {
       return res.redirect(DashboardPaths.dashboardPage.uri)
