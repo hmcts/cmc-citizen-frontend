@@ -33,7 +33,7 @@ export default express.Router()
       } else {
         user.responseDraft.howMuchOwed = form.model
         await ResponseDraftMiddleware.save(res, next)
-        res.redirect('toDo')
+        res.redirect(Paths.freeMediationPage.uri)
       }
     })
   )
