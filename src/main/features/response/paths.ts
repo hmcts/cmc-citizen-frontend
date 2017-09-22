@@ -23,6 +23,6 @@ export class Paths {
   static readonly receiptReceiver = new RoutablePath('/response/:externalId/receipt')
   // Added in case anyone has a printed copy of a PDF with the old URL
   static readonly legacyDashboardRedirect = new RoutablePath('/response/dashboard')
-  static readonly defendantHowMuchOwed = new RoutablePath('/response/how-much-owed')
+  static readonly defendantHowMuchOwed = new RoutablePath('/response/:externalId/how-much-owed')
 
 }

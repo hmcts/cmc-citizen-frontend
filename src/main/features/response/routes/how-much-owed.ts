@@ -19,9 +19,9 @@ async function renderView (form: Form<HowMuchOwed>, res: express.Response) {
 }
 
 export default express.Router()
-  .get(Paths.defendantHowMuchOwed.uri, (req: express.Request, res: express.Response) => {
+  .get(Paths.defendantHowMuchOwed.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
     renderView(new Form(res.locals.user.responseDraft.howMuchOwed), res)
-  })
+  }))
   .post(
     Paths.defendantHowMuchOwed.uri,
     FormValidator.requestHandler(HowMuchOwed, HowMuchOwed.fromObject),
