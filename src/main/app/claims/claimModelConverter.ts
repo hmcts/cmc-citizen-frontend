@@ -33,7 +33,7 @@ export class ClaimModelConverter {
     claimData.interestDate = this.convertInterestDate(draftClaim.interestDate)
     claimData.amount = new ClaimAmountBreakdown().deserialize(draftClaim.amount)
     claimData.feeAmountInPennies = draftClaim.claimant.payment.amount
-    claimData.claimant = this.convertClaimantDetails(draftClaim)
+    claimData.claimants = [this.convertClaimantDetails(draftClaim)]
     claimData.defendants = [this.convertDefendantDetails(draftClaim)]
     claimData.payment = draftClaim.claimant.payment
     claimData.reason = draftClaim.reason.reason
