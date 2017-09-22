@@ -6,9 +6,9 @@ export class ValidationErrors {
 }
 
 export class PaymentType {
-  static readonly IMMEDIATELY = new PaymentType('immediately', 'Immediately')
-  static readonly BY_INSTALMENTS = new PaymentType('instalments', 'By instalments')
-  static readonly FULL = new PaymentType('full', 'The full amount by')
+  static readonly IMMEDIATELY = new PaymentType('IMMEDIATELY', 'Immediately')
+  static readonly INSTALMENTS = new PaymentType('INSTALMENTS', 'By instalments')
+  static readonly FULL = new PaymentType('FULL_BY_SPECIFIED_DATE', 'The full amount by')
 
   readonly value: string
   readonly displayValue: string
@@ -21,7 +21,7 @@ export class PaymentType {
   static all (): PaymentType[] {
     return [
       PaymentType.IMMEDIATELY,
-      PaymentType.BY_INSTALMENTS,
+      PaymentType.INSTALMENTS,
       PaymentType.FULL
     ]
   }

@@ -38,7 +38,7 @@ export default express.Router()
             case PaymentType.FULL:
               res.redirect(Paths.payBySetDatePage.evaluateUri({ externalId: externalId }))
               break
-            case PaymentType.BY_INSTALMENTS:
+            case PaymentType.INSTALMENTS:
               res.redirect(Paths.repaymentPlanPage.evaluateUri({ externalId: externalId }))
               break
           }
