@@ -13,8 +13,9 @@
       {{ t("Payment options") }}
     </h1>
 
-    <form method="post" novalidate>
+    <form method="post" class="analytics-submit-event-trigger" data-event-action="CCJ: Select payment option" data-event-label-from="option" novalidate>
       {{ csrfProtection(csrf) }}
+
       {{
       radioGroup(
         'I would like the defendant to be ordered to pay:',

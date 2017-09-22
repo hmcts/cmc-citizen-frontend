@@ -14,17 +14,19 @@ export const sampleClaimObj = {
   createdAt: '2017-07-25T22:45:51.785',
   issuedOn: '2017-07-25',
   claim: {
-    claimant: {
-      type: 'individual',
-      name: 'John Smith',
-      address: {
-        line1: 'line1',
-        line2: 'line2',
-        city: 'city',
-        postcode: 'bb127nq'
-      },
-      dateOfBirth: '1990-02-17'
-    },
+    claimants: [
+      {
+        type: 'individual',
+        name: 'John Smith',
+        address: {
+          line1: 'line1',
+          line2: 'line2',
+          city: 'city',
+          postcode: 'bb127nq'
+        },
+        dateOfBirth: '1990-02-17'
+      }
+    ],
     defendants: [
       {
         type: 'individual',
