@@ -86,25 +86,6 @@ export default class ClaimStoreClient {
       .then((claims: object[]) => claims.map(claim => new Claim().deserialize(claim)))
   }
 
-  static retrieveLatestClaimByDefendantId (defendantId: number): Promise<Claim> {
-    if (!defendantId) {
-      return Promise.reject('Defendant ID is required')
-    }
-
-    return request
-      .get(`${claimStoreApiUrl}/defendant/${defendantId}`)
-      .then((claims: object[]) => {
-        if (claims) { // Workaround below till dashboard is implemented - temporarily client always return last claim
-          if (claims.length === 0) {
-            throw new Error('Call was successful, but received an empty claim instance')
-          }
-          return new Claim().deserialize(claims.pop())
-        } else {
-          throw new Error('Call was successful, but received an empty claim instance')
-        }
-      })
-  }
-
   static linkDefendant (claimId: number, defendantId: number): Promise<Claim> {
     if (!claimId) {
       return Promise.reject('Claim ID is required')

@@ -5,20 +5,17 @@ import { Paths } from 'response/paths'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 
-import ClaimStoreClient from 'claims/claimStoreClient'
-import Claim from 'claims/models/claim'
-
 import { FreeMediation } from 'response/form/models/freeMediation'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
+import User from 'idam/user'
 
 async function renderView (form: Form<FreeMediation>, res: express.Response, next: express.NextFunction) {
   try {
-    const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(res.locals.user.id)
-
+    const user: User = res.locals.user
     res.render(Paths.freeMediationPage.associatedView, {
       form: form,
-      claimantFullName: claim.claimData.claimant.name
+      claimantFullName: user.claim.claimData.claimant.name
     })
   } catch (err) {
     next(err)

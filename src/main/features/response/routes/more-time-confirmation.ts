@@ -2,17 +2,16 @@ import * as express from 'express'
 
 import { Paths } from 'response/paths'
 
-import ClaimStoreClient from 'claims/claimStoreClient'
-import Claim from 'claims/models/claim'
 import MoreTimeRequestRequiredGuard from 'response/guards/moreTimeRequestRequiredGuard'
 import User from 'idam/user'
 
 async function renderView (res: express.Response, next: express.NextFunction) {
   try {
-    const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(res.locals.user.id)
+    const user: User = res.locals.user
+
     res.render(Paths.moreTimeConfirmationPage.associatedView, {
-      newDeadline: claim.responseDeadline,
-      claimantFullName: claim.claimData.claimant.name
+      newDeadline: user.claim.responseDeadline,
+      claimantFullName: user.claim.claimData.claimant.name
     })
   } catch (err) {
     next(err)
