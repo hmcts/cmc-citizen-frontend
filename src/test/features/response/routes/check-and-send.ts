@@ -220,7 +220,7 @@ describe('Defendant response: check and send page', () => {
               .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.partialAdmissionPage.uri))
           })
 
-          it('should redirect to partial-admission page when response type is OWE_SOME_PAID_NONE', async () => {
+          it('should redirect to task list page when response type is OWE_SOME_PAID_NONE', async () => {
             draftStoreServiceMock.resolveRetrieve(draftType, {
               response: { type: ResponseType.OWE_SOME_PAID_NONE },
               counterClaim: undefined
@@ -231,7 +231,7 @@ describe('Defendant response: check and send page', () => {
               .post(ResponsePaths.checkAndSendPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ signed: 'true', type: SignatureType.BASIC })
-              .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.partialAdmissionPage.uri))
+              .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.taskListPage.uri))
           })
         })
       })
