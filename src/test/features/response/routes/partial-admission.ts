@@ -29,7 +29,7 @@ describe('Defendant response: partial admission page', () => {
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
         draftStoreServiceMock.resolveRetrieve('response')
-        claimStoreServiceMock.rejectRetrieveByDefendantId('HTTP error')
+        claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
           .get(ResponsePaths.partialAdmissionPage.uri)
@@ -39,7 +39,7 @@ describe('Defendant response: partial admission page', () => {
 
       it('should render page when everything is fine', async () => {
         draftStoreServiceMock.resolveRetrieve('response')
-        claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
         await request(app)
           .get(ResponsePaths.partialAdmissionPage.uri)

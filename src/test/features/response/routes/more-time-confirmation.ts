@@ -32,8 +32,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
       context('when response not submitted', () => {
         beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         })
 
         describe('should redirect to request more time page', () => {
@@ -91,8 +90,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
       context('when response not submitted', () => {
         beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         })
 
         describe('should redirect to request more time page', () => {

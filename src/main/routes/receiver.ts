@@ -29,11 +29,10 @@ export default express.Router()
       return res.redirect(DashboardPaths.dashboardPage.uri)
     }
     const draftClaimSaved: boolean = user.claimDraft && user.claimDraft.lastUpdateTimestamp !== undefined
-    const draftResponseSaved: boolean = user.responseDraft && user.responseDraft.lastUpdateTimestamp !== undefined
     const claimIssuedButNoResponse: boolean = (claimAgainstDefendant).length > 0
       && !atLeastOneResponse
 
-    if (draftResponseSaved && draftClaimSaved) {
+    if (claimIssuedButNoResponse && draftClaimSaved) {
       return res.redirect(DashboardPaths.dashboardPage.uri)
     }
 
@@ -41,8 +40,9 @@ export default express.Router()
       return res.redirect(ClaimPaths.taskListPage.uri)
     }
 
-    if (draftResponseSaved || claimIssuedButNoResponse) {
-      return res.redirect(ResponsePaths.taskListPage.uri)
+    if (claimIssuedButNoResponse) {
+      return res.redirect(ResponsePaths.taskListPage
+        .evaluateUri({ externalId: claimAgainstDefendant.pop().externalId }))
     }
 
     return res.redirect(ClaimPaths.startPage.uri)

@@ -32,13 +32,12 @@ describe('Defendant response: task list page', () => {
 
       context('when response not submitted', () => {
         beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         })
 
         it('should return 500 and render error page when cannot retrieve claim', async () => {
           draftStoreServiceMock.resolveRetrieve('response')
-          claimStoreServiceMock.rejectRetrieveByDefendantId('HTTP error')
+          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
             .get(ResponsePaths.taskListPage.uri)
@@ -48,7 +47,7 @@ describe('Defendant response: task list page', () => {
 
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveRetrieve('response')
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
             .get(ResponsePaths.taskListPage.uri)

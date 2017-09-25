@@ -7,16 +7,12 @@ import { Paths } from 'response/paths'
 import PdfClient from 'app/pdf/pdfClient'
 import { ResponseReceipt } from 'app/pdf/responseReceipt'
 
-import ClaimStoreClient from 'claims/claimStoreClient'
-import Claim from 'claims/models/claim'
 import { buildURL } from 'app/utils/CallbackBuilder'
 import { ErrorHandling } from 'common/errorHandling'
 
 export default express.Router()
   .get(Paths.receiptReceiver.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const { externalId } = req.params
-    const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId)
-    new PdfClient().generate(ResponseReceipt.templatePath, new ResponseReceipt(claim, buildURL(req, 'dashboard')).data())
+    new PdfClient().generate(ResponseReceipt.templatePath, new ResponseReceipt(res.locals.user.claim, buildURL(req, 'dashboard')).data())
       .on('response', (response: http.IncomingMessage) => {
         if (response.statusCode !== 200) {
           next(new Error('Unexpected error during PDF generation'))

@@ -33,8 +33,7 @@ describe('Defendant response: more time needed page', () => {
 
       context('when response not submitted', () => {
         beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         })
 
         describe('should render editable page', async () => {
@@ -81,8 +80,7 @@ describe('Defendant response: more time needed page', () => {
 
       context('when response not submitted', () => {
         beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         })
 
         it('should redirect to confirmation page when already submitted answer is "yes"', async () => {

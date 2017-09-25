@@ -6,7 +6,7 @@ const responsePath = '/case/:externalId/response'
 
 export class Paths {
   static readonly defendantLoginReceiver = AppPaths.receiver
-  static readonly defendantLinkReceiver = new RoutablePath(`${responsePath}/:letterHolderId/receiver`)
+  static readonly defendantLinkReceiver = new RoutablePath(`/response/:letterHolderId/receiver`)
   static readonly taskListPage = new RoutablePath(`${responsePath}/task-list`)
   static readonly defendantYourDetailsPage = new RoutablePath(`${responsePath}/your-details`)
   static readonly defendantDateOfBirthPage = new RoutablePath(`${responsePath}/your-dob`)

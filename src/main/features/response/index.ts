@@ -26,13 +26,14 @@ function defendantResponseRequestHandler (): express.RequestHandler {
 export class Feature {
   enableFor (app: express.Express) {
     app.all('/case/*/response/*', defendantResponseRequestHandler())
+    app.all(Paths.defendantLinkReceiver.evaluateUri({ letterHolderId: '*' }), defendantResponseRequestHandler())
     app.all(/^\/case\/.+\/response\/(?![\d]+\/receiver).*$/, ClaimMiddleware.retrieveByExternalId)
     app.all(
       /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|full-admission|partial-admission|counter-claim|receipt).*$/,
       AlreadyRespondedGuard.requestHandler
     )
     app.all(
-      /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|.*\/receipt).*$/,
+      /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|receipt).*$/,
       ResponseDraftMiddleware.retrieve
     )
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))

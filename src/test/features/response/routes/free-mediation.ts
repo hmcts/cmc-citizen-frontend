@@ -32,13 +32,12 @@ describe('Defendant response: free mediation page', () => {
 
       context('when response not submitted', () => {
         beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         })
 
         it('should return 500 and render error page when cannot retrieve claim', async () => {
           draftStoreServiceMock.resolveRetrieve('response')
-          claimStoreServiceMock.rejectRetrieveByDefendantId('HTTP error')
+          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
             .get(ResponsePaths.freeMediationPage.uri)
@@ -48,7 +47,7 @@ describe('Defendant response: free mediation page', () => {
 
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveRetrieve('response')
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
             .get(ResponsePaths.freeMediationPage.uri)
@@ -71,14 +70,13 @@ describe('Defendant response: free mediation page', () => {
 
       context('when response not submitted', () => {
         beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         })
 
         context('when form is invalid', () => {
           it('should return 500 and render error page when cannot retrieve claim', async () => {
             draftStoreServiceMock.resolveRetrieve('response')
-            claimStoreServiceMock.rejectRetrieveByDefendantId('HTTP error')
+            claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
               .post(ResponsePaths.freeMediationPage.uri)
@@ -88,7 +86,7 @@ describe('Defendant response: free mediation page', () => {
 
           it('should render page when everything is fine', async () => {
             draftStoreServiceMock.resolveRetrieve('response')
-            claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
               .post(ResponsePaths.freeMediationPage.uri)
