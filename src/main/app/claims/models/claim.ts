@@ -44,7 +44,7 @@ export default class Claim implements Serializable<Claim> {
       if (input.defendantEmail) {
         this.defendantEmail = input.defendantEmail
       }
-      if (input.defendantResponse) {
+      if (input.response) {
         this.response = new DefendantResponse().deserialize(input.response)
       }
       this.claimantEmail = input.submitterEmail

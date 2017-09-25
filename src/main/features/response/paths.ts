@@ -22,7 +22,7 @@ export class Paths {
   static readonly counterClaimPage = new RoutablePath(`${responsePath}/counter-claim`)
   static readonly partialAdmissionPage = new RoutablePath(`${responsePath}/partial-admission`)
   static readonly fullAdmissionPage = new RoutablePath(`${responsePath}/full-admission`)
-  static readonly receiptReceiver = new RoutablePath(`${responsePath}/:externalId/receipt`)
+  static readonly receiptReceiver = new RoutablePath(`${responsePath}/receipt`)
   // Added in case anyone has a printed copy of a PDF with the old URL
   static readonly legacyDashboardRedirect = new RoutablePath('/response/dashboard')
 }

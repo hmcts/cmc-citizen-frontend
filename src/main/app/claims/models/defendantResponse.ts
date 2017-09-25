@@ -8,7 +8,6 @@ import { TheirDetails } from 'app/claims/models/details/theirs/theirDetails'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
 export class DefendantResponse implements Serializable<DefendantResponse> {
-  type: string
   defence: string
   freeMediation: string
   defendantDetails: TheirDetails
@@ -34,10 +33,9 @@ export class DefendantResponse implements Serializable<DefendantResponse> {
 
   deserialize (input: any): DefendantResponse {
     if (input) {
-      this.type = input.type
       this.defence = input.defence
       this.freeMediation = input.freeMediation
-      this.defendantDetails = DefendantResponse.deserializeDefendantDetails(input.response.defendant)
+      this.defendantDetails = DefendantResponse.deserializeDefendantDetails(input.defendant)
       if (input.statementOfTruth) {
         this.statementOfTruth = new StatementOfTruth().deserialize(input.statementOfTruth)
       }

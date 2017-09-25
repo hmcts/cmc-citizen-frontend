@@ -17,8 +17,8 @@
       partyDetailsSummaryFragment(
         partyDetails = draft.defendantDetails.partyDetails,
         changeLinks = {
-          partyDetails: paths.defendantYourDetailsPage.uri,
-          dateOfBirth: paths.defendantDateOfBirthPage.uri
+          partyDetails: paths.defendantYourDetailsPage.evaluateUri({ externalId: claim.externalId }),
+          dateOfBirth: paths.defendantDateOfBirthPage.evaluateUri({ externalId: claim.externalId })
         }
       )
     }}
@@ -39,12 +39,14 @@
     {{ tableEnd() }}
 
     <div class="form-group">
-      {{ statementOfTruth(
-          form,
-          label = 'I believe that the facts stated in this defence are true',
-          isQualified = (signatureType == 'qualified')
-         )
-      }}
+      {% if signatureType != 'none' %}
+        {{ statementOfTruth(
+            form,
+            label = 'I believe that the facts stated in this defence are true',
+            isQualified = (signatureType == 'qualified')
+           )
+        }}
+      {% endif %}
 
       {{ submitButton('Submit response') }}
       <input type="hidden" name="type" value="{{ form.model.type }}">

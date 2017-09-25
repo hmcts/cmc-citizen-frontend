@@ -4,6 +4,8 @@ import Claim from 'claims/models/claim'
 
 import { Paths as DashboardPaths } from 'dashboard/paths'
 
+const logger = require('@hmcts/nodejs-logging').getLogger('response/guards/alreadyRespondedGuard')
+
 /**
  * Protects response journey from being accessed when response has been already submitted. Request in such scenario
  * will result in redirect to defendant dashboard. In opposite scenario where response has not been made yet,
@@ -15,6 +17,7 @@ export class AlreadyRespondedGuard {
     const claim: Claim = res.locals.user.claim
 
     if (claim.response) {
+      logger.debug('State guard: already responded - redirecting to dashboard')
       return res.redirect(DashboardPaths.dashboardPage.uri)
     }
     next()

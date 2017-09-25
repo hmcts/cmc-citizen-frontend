@@ -26,7 +26,7 @@ export default class AllResponseTasksCompletedGuard {
       }
 
       logger.debug('State guard: claim check and send page is disabled until all tasks are completed - redirecting to task list')
-      res.redirect(Paths.taskListPage.uri)
+      res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
     } catch (err) {
       next(err)
     }

@@ -7,12 +7,12 @@ export default express.Router()
 
     try {
       const user: User = res.locals.user
-      console.log(user.claim.response)
 
       res.render(Paths.confirmationPage.associatedView, {
         claim: user.claim,
         submittedOn: user.claim.respondedAt,
-        defendantEmail: user.email
+        defendantEmail: user.email,
+        paths: Paths
       })
     } catch (err) {
       next(err)
