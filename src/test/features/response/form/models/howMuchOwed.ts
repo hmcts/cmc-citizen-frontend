@@ -5,7 +5,8 @@ import { expect } from 'chai'
 import * as randomstring from 'randomstring'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
-import { HowMuchOwed, ValidationErrors } from 'response/form/models/howMuchOwed'
+import { HowMuchOwed } from 'features/response/form/models/howMuchOwed'
+import { ValidationErrors } from 'features/validationErrors'
 
 describe('HowMuchOwed', () => {
   describe('constructor', () => {
