@@ -15,7 +15,6 @@ async function renderView (form: Form<HowMuchPaid>, res: express.Response) {
   const user: User = res.locals.user
   const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(user.id)
   res.render(Paths.defendantHowMuchPaid.associatedView, { form: form, claim: claim})
-
 }
 
 export default express.Router()
