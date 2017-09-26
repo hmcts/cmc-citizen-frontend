@@ -63,7 +63,7 @@ describe('Defendant response: response type page', () => {
       context('when response not submitted', () => {
         context('when form is invalid', () => {
           it('should render page when everything is fine', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('response')
 
             await request(app)
@@ -75,6 +75,7 @@ describe('Defendant response: response type page', () => {
 
         context('when form is valid', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('response')
             draftStoreServiceMock.rejectSave('response', 'HTTP error')
 
@@ -86,6 +87,7 @@ describe('Defendant response: response type page', () => {
           })
 
           it('should redirect to task list page when everything is fine', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('response')
             draftStoreServiceMock.resolveSave('response')
 
@@ -93,10 +95,13 @@ describe('Defendant response: response type page', () => {
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ type: ResponseType.OWE_SOME_PAID_NONE })
-              .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.taskListPage.uri))
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.taskListPage
+                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
           it('should redirect to defence options page when everything is fine and OWE_NONE is selected', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('response')
             draftStoreServiceMock.resolveSave('response')
 
@@ -104,7 +109,9 @@ describe('Defendant response: response type page', () => {
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ type: ResponseType.OWE_NONE })
-              .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.defenceOptionsPage.uri))
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.defenceOptionsPage
+                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })
       })

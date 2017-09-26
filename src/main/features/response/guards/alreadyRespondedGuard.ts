@@ -17,7 +17,7 @@ export class AlreadyRespondedGuard {
     const claim: Claim = res.locals.user.claim
 
     if (claim.response) {
-      logger.debug('State guard: already responded - redirecting to dashboard')
+      logger.warn('State guard: already responded - redirecting to dashboard')
       return res.redirect(DashboardPaths.dashboardPage.uri)
     }
     next()
