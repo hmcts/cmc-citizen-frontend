@@ -16,7 +16,9 @@
     "test:coverage": "NODE_ENV=mocha LOG_LEVEL=OFF nyc mocha --opts mocha.opts $(find src/test \\( -name '*.ts' -or -name '*.js' \\) ! -path '*a11y*')",
     "sonar-scanner": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/** -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info",
     "precommit": "yarn lint",
-    "prepush": "yarn test && yarn test:routes"
+    "prepush": "yarn test && yarn test:routes",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
     "@hmcts/cmc-common-frontend": "^1.8.0",
@@ -76,7 +78,8 @@
     "tsconfig-paths": "^2.2.0",
     "typescript": "^2.4.2",
     "uuid": "^3.0.1",
-    "uuid-validate": "^0.0.2"
+    "uuid-validate": "^0.0.2",
+    "snyk": "^1.41.1"
   },
   "devDependencies": {
     "@types/chai": "^4.0.3",
@@ -127,5 +130,6 @@
     ],
     "report-dir": "coverage-report",
     "all": true
-  }
+  },
+  "snyk": true
 }
