@@ -9,9 +9,6 @@ export class CCJClient {
   static save (user: User): Promise<object> {
     const convertedDraft = CCJModelConverter.convert(user.ccjDraft)
 
-    console.log(`${claimStoreApiUrl}/${user.claim.id}/county-court-judgment`)
-    console.log(convertedDraft)
-
     return request.post(`${claimStoreApiUrl}/${user.claim.id}/county-court-judgment`, {
       body: convertedDraft,
       headers: {

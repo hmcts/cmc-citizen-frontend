@@ -13,5 +13,4 @@ export class Paths {
   static readonly repaymentPlanPage = new RoutablePath(`${ccjPath}/repayment-plan`)
   static readonly confirmationPage = new RoutablePath(`${ccjPath}/confirmation`)
   static readonly downloadJudgmentReceiver = new RoutablePath(`${ccjPath}/download-judgment`)
-
 }

@@ -27,7 +27,7 @@ function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan 
 }
 
 function convertPaidAmount (draftCcj: DraftCCJ): number {
-  return (draftCcj.paidAmount.option.value === PaidAmountOption.YES.value) ? draftCcj.paidAmount.amount : undefined
+  return (draftCcj.paidAmount.option === PaidAmountOption.YES) ? draftCcj.paidAmount.amount : undefined
 }
 
 function convertPayBySetDate (draftCcj: DraftCCJ): string {

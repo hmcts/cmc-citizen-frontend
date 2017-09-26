@@ -25,7 +25,7 @@ const externalId = sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
 const payBySetDatePage: string = Paths.payBySetDatePage.uri.replace(':externalId', externalId)
-// const checkAndSavePage: string = Paths.checkAndSendPage.uri.replace(':externalId', externalId)
+const checkAndSavePage: string = Paths.checkAndSendPage.uri.replace(':externalId', externalId)
 
 describe('CCJ - Pay by set date', () => {
   attachDefaultHooks()
@@ -113,17 +113,17 @@ describe('CCJ - Pay by set date', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        // it('should redirect to check and sand page', async () => {
-        //   claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        //   draftStoreServiceMock.resolveRetrieve('ccj')
-        //   draftStoreServiceMock.resolveSave('ccj')
-        //
-        //   await request(app)
-        //     .post(payBySetDatePage)
-        //     .set('Cookie', `${cookieName}=ABC`)
-        //     .send(validFormData)
-        //     .expect(res => expect(res).to.be.redirect.toLocation(checkAndSavePage))
-        // })
+        it('should redirect to check and send page', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveRetrieve('ccj')
+          draftStoreServiceMock.resolveSave('ccj')
+
+          await request(app)
+            .post(payBySetDatePage)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.redirect.toLocation(checkAndSavePage))
+        })
       })
 
       context('when form is invalid', async () => {
