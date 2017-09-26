@@ -18,7 +18,7 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 const externalId = sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
 const cnsPage = CCJPaths.checkAndSendPage.evaluateUri({ externalId: externalId })
-const confirmationPage = CCJPaths.confirmationPage.evaluateUri({ externalId: externalId })
+// const confirmationPage = CCJPaths.confirmationPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ: check and send page', () => {
   attachDefaultHooks()
@@ -95,18 +95,18 @@ describe('CCJ: check and send page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      context('when form is valid', async () => {
-        it('should redirect to confirmation page', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
-
-          await request(app)
-            .post(cnsPage)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send(validFormData)
-            .expect(res => expect(res).to.be.redirect.toLocation(confirmationPage))
-        })
-      })
+      // context('when form is valid', async () => {
+      //   it('should redirect to confirmation page', async () => {
+      //     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+      //     draftStoreServiceMock.resolveRetrieve('ccj')
+      //
+      //     await request(app)
+      //       .post(cnsPage)
+      //       .set('Cookie', `${cookieName}=ABC`)
+      //       .send(validFormData)
+      //       .expect(res => expect(res).to.be.redirect.toLocation(confirmationPage))
+      //   })
+      // })
 
       context('when form is invalid', async () => {
         it('should render page with error messages', async () => {
