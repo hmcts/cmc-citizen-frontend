@@ -25,11 +25,22 @@ describe('How much owed task', () => {
     expect(HowMuchOwedTask.isCompleted(responseDraft)).to.equal(false)
   })
 
-  it('should be undefined when amount is null', () => {
+  it('should be undefined when amount is undefined', () => {
     const input = {
       howMuchOwed: {
-        amount: null,
+        amount: undefined,
         text: 'I owe nothing'
+      }
+    }
+    const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
+    expect(HowMuchOwedTask.isCompleted(responseDraft)).to.equal(undefined)
+  })
+
+  it('should be undefined when amount is undefined and text is empty', () => {
+    const input = {
+      howMuchOwed: {
+        amount: undefined,
+        text: ''
       }
     }
     const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
