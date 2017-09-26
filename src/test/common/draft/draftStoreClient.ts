@@ -54,8 +54,8 @@ describe('DraftStoreClient', () => {
     const deserializationFn = (value => value)
 
     describe('when handling a request error', () => {
-      it('should return null for 404', async () => {
-        expect(await clientWithRequestMockedToThrow(HttpStatus.NOT_FOUND).retrieve(123, deserializationFn)).to.be.null
+      it('should return undefined for 404', async () => {
+        expect(await clientWithRequestMockedToThrow(HttpStatus.NOT_FOUND).retrieve(123, deserializationFn)).to.be.undefined
       })
 
       it('should throw/reject promise for 400', () => {

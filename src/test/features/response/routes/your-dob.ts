@@ -13,33 +13,34 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const pagePath = ResponsePaths.defendantDateOfBirthPage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
 describe('Defendant user details: your date of birth page', () => {
   attachDefaultHooks()
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ResponsePaths.defendantDateOfBirthPage.uri)
+    checkAuthorizationGuards(app, 'get', pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
       })
 
-      checkAlreadySubmittedGuard(app, 'get', ResponsePaths.defendantDateOfBirthPage.uri)
+      checkAlreadySubmittedGuard(app, 'get', pagePath)
 
       context('when response not submitted', () => {
         beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         })
 
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveRetrieve('response')
 
           await request(app)
-            .get(ResponsePaths.defendantDateOfBirthPage.uri)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('What is your date of birth?'))
         })
@@ -48,19 +49,18 @@ describe('Defendant user details: your date of birth page', () => {
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', ResponsePaths.defendantDateOfBirthPage.uri)
+    checkAuthorizationGuards(app, 'post', pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
       })
 
-      checkAlreadySubmittedGuard(app, 'post', ResponsePaths.defendantDateOfBirthPage.uri)
+      checkAlreadySubmittedGuard(app, 'post', pagePath)
 
       context('when response not submitted', () => {
         beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         })
 
         context('when form is invalid', () => {
@@ -68,7 +68,7 @@ describe('Defendant user details: your date of birth page', () => {
             draftStoreServiceMock.resolveRetrieve('response')
 
             await request(app)
-              .post(ResponsePaths.defendantDateOfBirthPage.uri)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('What is your date of birth?', 'div class="error-summary"'))
           })
@@ -80,7 +80,7 @@ describe('Defendant user details: your date of birth page', () => {
             draftStoreServiceMock.rejectSave('response', 'HTTP error')
 
             await request(app)
-              .post(ResponsePaths.defendantDateOfBirthPage.uri)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ known: 'true', date: { year: '1978', month: '1', day: '11' } })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -91,10 +91,12 @@ describe('Defendant user details: your date of birth page', () => {
             draftStoreServiceMock.resolveSave('response')
 
             await request(app)
-              .post(ResponsePaths.defendantDateOfBirthPage.uri)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ known: 'true', date: { year: '1978', month: '1', day: '11' } })
-              .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.defendantMobilePage.uri))
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.defendantMobilePage
+                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })
       })
