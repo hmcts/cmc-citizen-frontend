@@ -140,8 +140,8 @@ describe('CCJ - payment options', () => {
               await checkThatSelectedPaymentOptionRedirectsToPage({ option: PaymentType.INSTALMENTS.value }, Paths.repaymentPlanPage.evaluateUri({ externalId: externalId }))
             })
 
-            it('should redirect to pay by set date page for "FULL" option selected', async () => {
-              await checkThatSelectedPaymentOptionRedirectsToPage({ option: PaymentType.FULL.value }, Paths.payBySetDatePage.evaluateUri({ externalId: externalId }))
+            it('should redirect to pay by set date page for "FULL_BY_SPECIFIED_DATE" option selected', async () => {
+              await checkThatSelectedPaymentOptionRedirectsToPage({ option: PaymentType.FULL_BY_SPECIFIED_DATE.value }, Paths.payBySetDatePage.evaluateUri({ externalId: externalId }))
             })
           })
 
