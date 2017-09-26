@@ -18,7 +18,6 @@ export default express.Router()
       const { letterHolderId } = req.params
 
       const user: User = res.locals.user
-      console.log(user)
       if (!user.isInRoles(`letter-${letterHolderId}`)) {
         logger.error('User not in letter ID role - redirecting to access denied page')
         res.redirect(ErrorPaths.claimSummaryAccessDeniedPage.uri)

@@ -72,7 +72,7 @@ function mockedResponseDraft () {
 }
 
 function mockedClaim () {
-  let claim = new Claim()
+  const claim = new Claim()
   claim.claimData = new ClaimData()
   const companyDetails = new CompanyDetails()
   companyDetails.address = new Address()
@@ -85,6 +85,8 @@ function mockedClaim () {
   claim.externalId = 'uuid'
   claim.responseDeadline = moment()
   claim.createdAt = moment()
+
+  claim.respondedAt = moment()
   return claim
 }
 
@@ -133,20 +135,9 @@ mock('idam/authorizationMiddleware', {
 mock('claim/draft/claimDraftMiddleware', {
   'ClaimDraftMiddleware': {
     retrieve: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-      res.locals.user = {
-        claimDraft: mockedDraftClaim()
-      }
+      res.locals.user.claimDraft = mockedDraftClaim()
       next()
     }
-  }
-})
-
-mock('claims/retrieveClaimMiddleware', {
-  'default': (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-    res.locals.user = {
-      claim: mockedClaim()
-    }
-    next()
   }
 })
 
@@ -162,7 +153,6 @@ mock('claims/claimStoreClient', {
     retrieve: (userId) => mockedClaim(),
     retrieveByClaimantId: (claimantId) => [mockedClaim()],
     retrieveByLetterHolderId: (letterHolderId) => mockedClaim(),
-    retrieveLatestClaimByDefendantId: (defendantId) => mockedClaim(),
     retrieveByDefendantId: (defendantId) => [mockedClaim()],
     retrieveByExternalId: (externalId) => mockedClaim()
   }
@@ -180,9 +170,7 @@ mock('fees/feesClient', {
 mock('response/draft/responseDraftMiddleware', {
   'ResponseDraftMiddleware': {
     retrieve: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-      res.locals.user = {
-        responseDraft: mockedResponseDraft()
-      }
+      res.locals.user.responseDraft = mockedResponseDraft()
       next()
     }
   }

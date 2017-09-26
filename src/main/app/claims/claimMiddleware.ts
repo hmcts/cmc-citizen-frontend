@@ -1,5 +1,5 @@
 import * as express from 'express'
-import ClaimStoreClient from 'app/claims/claimStoreClient'
+import ClaimStoreClient from 'claims/claimStoreClient'
 import Claim from 'app/claims/models/claim'
 import * as uuidValidator from 'uuid-validate'
 

@@ -8,7 +8,7 @@ import { RouterFinder } from 'common/router/routerFinder'
 import { buildURL } from 'utils/CallbackBuilder'
 import { Paths } from 'response/paths'
 import { AlreadyRespondedGuard } from 'response/guards/alreadyRespondedGuard'
-import { ClaimMiddleware } from 'claims/claimMiddleware'
+import { ClaimMiddleware } from 'app/claims/claimMiddleware'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
