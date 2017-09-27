@@ -21,6 +21,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   const user: User = res.locals.user
   res.render(Paths.checkAndSendPage.associatedView, {
     paths: Paths,
+    claim: user.claim,
     form: form,
     draft: user.responseDraft,
     signatureType: signatureTypeFor(user)
@@ -102,16 +103,16 @@ export default express.Router()
         switch (responseType) {
           case ResponseType.OWE_NONE:
             if (defendantIsCounterClaiming(user)) {
-              res.redirect(Paths.counterClaimPage.uri)
+              res.redirect(Paths.counterClaimPage.evaluateUri({ externalId: user.claim.externalId }))
               return
             }
             break
           case ResponseType.OWE_SOME_PAID_NONE:
           case ResponseType.OWE_ALL_PAID_SOME:
-            res.redirect(Paths.partialAdmissionPage.uri)
+            res.redirect(Paths.partialAdmissionPage.evaluateUri({ externalId: user.claim.externalId }))
             return
           case ResponseType.OWE_ALL_PAID_NONE:
-            res.redirect(Paths.fullAdmissionPage.uri)
+            res.redirect(Paths.fullAdmissionPage.evaluateUri({ externalId: user.claim.externalId }))
             return
           case ResponseType.OWE_ALL_PAID_ALL:
             break
@@ -125,6 +126,6 @@ export default express.Router()
         await ResponseDraftMiddleware.save(res, next)
         await ClaimStoreClient.saveResponseForUser(user)
         await ResponseDraftMiddleware.delete(res, next)
-        res.redirect(Paths.confirmationPage.uri)
+        res.redirect(Paths.confirmationPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

@@ -7,6 +7,7 @@ export class HowMuchOwed implements Serializable<HowMuchOwed> {
 
   @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED })
   @IsPositive({ message: ValidationErrors.VALID_OWED_AMOUNT_REQUIRED })
+  @IsPositive({ message: ValidationErrors.VALID_AMOUNT_REQUIRED })
   amount?: number
   @IsDefined({ message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })

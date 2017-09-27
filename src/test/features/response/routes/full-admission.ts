@@ -13,14 +13,16 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const pagePath = ResponsePaths.fullAdmissionPage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
 describe('Defendant response: full admission page', () => {
   attachDefaultHooks()
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ResponsePaths.fullAdmissionPage.uri)
+    checkAuthorizationGuards(app, 'get', pagePath)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -28,21 +30,20 @@ describe('Defendant response: full admission page', () => {
       })
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
-        draftStoreServiceMock.resolveRetrieve('response')
-        claimStoreServiceMock.rejectRetrieveByDefendantId('HTTP error')
+        claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .get(ResponsePaths.fullAdmissionPage.uri)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
       it('should render page when everything is fine', async () => {
         draftStoreServiceMock.resolveRetrieve('response')
-        claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
         await request(app)
-          .get(ResponsePaths.fullAdmissionPage.uri)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.successful.withText('Complete and email the admission form N9A form by'))
       })

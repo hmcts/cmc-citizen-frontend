@@ -33,7 +33,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
       context('when response not submitted', () => {
         beforeEach(() => {
           claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
+          // claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
         })
 
         it('should render page when everything is fine', async () => {
@@ -62,7 +62,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
       context('when response not submitted', () => {
         beforeEach(() => {
           claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
+          // claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
         })
 
         context('when form is invalid', () => {

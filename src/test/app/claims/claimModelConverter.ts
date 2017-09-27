@@ -26,7 +26,7 @@ function prepareClaimDraft (claimantPartyDetails: object, defendantPartyDetails:
 function prepareClaimData (claimantParty: object, defendantParty: object): ClaimData {
   return new ClaimData().deserialize({
     ...entityTemplate,
-    claimant: { ...claimantParty, email: undefined, mobilePhone: '07000000000' },
+    claimants: [{ ...claimantParty, email: undefined, mobilePhone: '07000000000' }],
     defendants: [{ ...defendantParty, email: 'defendant@example.com', dateOfBirth: undefined }]
   })
 }

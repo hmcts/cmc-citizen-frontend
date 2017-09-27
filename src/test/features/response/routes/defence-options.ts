@@ -14,95 +14,88 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 import { ResponseType } from 'response/form/models/responseType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
+const defenceOptionsPage = ResponsePaths.defenceOptionsPage.evaluateUri({ externalId: sampleClaimObj.externalId })
+
 describe('Defendant response: defence options page', () => {
   attachDefaultHooks()
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ResponsePaths.defenceOptionsPage.uri)
+
+    checkAuthorizationGuards(app, 'get', defenceOptionsPage)
 
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
       })
 
-      checkAlreadySubmittedGuard(app, 'get', ResponsePaths.defenceOptionsPage.uri)
+      checkAlreadySubmittedGuard(app, 'get', defenceOptionsPage)
 
       context('when response not submitted', () => {
-        beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
-        })
-
         it('should return 500 and render error page when cannot retrieve claim', async () => {
-          draftStoreServiceMock.resolveRetrieve('response')
-          claimStoreServiceMock.rejectRetrieveByDefendantId('HTTP error')
+          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
-            .get(ResponsePaths.defenceOptionsPage.uri)
+            .get(defenceOptionsPage)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveRetrieve('response')
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
-            .get(ResponsePaths.defenceOptionsPage.uri)
+            .get(defenceOptionsPage)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.successful.withText('What do you want to do?'))
         })
 
         it('should redirect page when response type is not OWE_NONE', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveRetrieve('response', { response: { type: ResponseType.OWE_SOME_PAID_NONE } })
 
           await request(app)
-            .get(ResponsePaths.defenceOptionsPage.uri)
+            .get(defenceOptionsPage)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.redirect.toLocation(ResponsePaths.responseTypePage.uri))
+            .expect(res => expect(res).to.redirect.toLocation(ResponsePaths.responseTypePage.evaluateUri({ externalId: sampleClaimObj.externalId })))
         })
       })
     })
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', ResponsePaths.defenceOptionsPage.uri)
+    checkAuthorizationGuards(app, 'post', defenceOptionsPage)
 
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
       })
 
-      checkAlreadySubmittedGuard(app, 'post', ResponsePaths.defenceOptionsPage.uri)
+      checkAlreadySubmittedGuard(app, 'post', defenceOptionsPage)
 
       context('when response not submitted', () => {
-        beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
-        })
-
         context('when form is invalid', () => {
           it('should return 500 and render error page when cannot retrieve claim', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
-            claimStoreServiceMock.rejectRetrieveByDefendantId('HTTP error')
+            claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
-              .post(ResponsePaths.defenceOptionsPage.uri)
+              .post(defenceOptionsPage)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
           it('should render page when everything is fine', async () => {
             draftStoreServiceMock.resolveRetrieve('response')
-            claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(ResponsePaths.defenceOptionsPage.uri)
+              .post(defenceOptionsPage)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('What do you want to do?', 'div class="error-summary"'))
           })
@@ -111,10 +104,11 @@ describe('Defendant response: defence options page', () => {
         context('when form is valid', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
             draftStoreServiceMock.resolveRetrieve('response')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.rejectSave('response', 'HTTP error')
 
             await request(app)
-              .post(ResponsePaths.defenceOptionsPage.uri)
+              .post(defenceOptionsPage)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ counterClaim: false })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -123,22 +117,24 @@ describe('Defendant response: defence options page', () => {
           it('should redirect to task list page when everything is fine', async () => {
             draftStoreServiceMock.resolveRetrieve('response')
             draftStoreServiceMock.resolveSave('response')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(ResponsePaths.defenceOptionsPage.uri)
+              .post(defenceOptionsPage)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ counterClaim: true })
-              .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.taskListPage.uri))
+              .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
           it('should redirect page when response type is not OWE_NONE', async () => {
             draftStoreServiceMock.resolveRetrieve('response', { response: { type: ResponseType.OWE_SOME_PAID_NONE } })
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(ResponsePaths.defenceOptionsPage.uri)
+              .post(defenceOptionsPage)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ counterClaim: true })
-              .expect(res => expect(res).to.redirect.toLocation(ResponsePaths.responseTypePage.uri))
+              .expect(res => expect(res).to.redirect.toLocation(ResponsePaths.responseTypePage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })
       })
