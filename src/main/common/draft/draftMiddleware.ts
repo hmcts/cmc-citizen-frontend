@@ -1,5 +1,6 @@
 import * as express from 'express'
 import DraftStoreClient from 'common/draft/draftStoreClient'
+import User from 'idam/user'
 
 export class DraftMiddleware<T> {
   client: DraftStoreClient<T>
@@ -19,6 +20,7 @@ export class DraftMiddleware<T> {
           if (!draft) {
             draft = this.deserializeFn(undefined)
           }
+          this.setUserData(draft, res.locals.user)
           res.locals.user[`${this.draftType}Draft`] = draft
           next()
         })
@@ -36,5 +38,10 @@ export class DraftMiddleware<T> {
   delete (res: express.Response, next: express.NextFunction): Promise<void> {
     return this.client
       .delete(res.locals.user.id)
+  }
+
+  private setUserData (draft: any, user: User) {
+    draft.userEmail = user.email
+    draft.userName = `${user.forename} ${user.surname}`
   }
 }
