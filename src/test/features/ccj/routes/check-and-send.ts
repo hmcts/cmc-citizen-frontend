@@ -108,6 +108,18 @@ describe('CCJ: check and send page', () => {
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(confirmationPage))
         })
+
+        it('should return 500 when cannot save CCJ', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveRetrieve('ccj')
+          claimStoreServiceMock.rejectSaveCcjForUser()
+
+          await request(app)
+            .post(cnsPage)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
       })
 
       context('when form is invalid', async () => {

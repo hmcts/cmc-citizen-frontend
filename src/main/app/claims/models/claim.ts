@@ -21,6 +21,9 @@ export default class Claim implements Serializable<Claim> {
   moreTimeRequested: boolean
   respondedAt: Moment
   claimantEmail: string
+  countyCourtJudgment: object
+  countyCourtJudgmentRequestedAt: Moment
+
   deserialize (input: any): Claim {
     if (input) {
       this.id = input.id
@@ -37,6 +40,10 @@ export default class Claim implements Serializable<Claim> {
         this.respondedAt = MomentFactory.parse(input.respondedAt)
       }
       this.claimantEmail = input.submitterEmail
+      this.countyCourtJudgment = input.countyCourtJudgment
+      if (input.countyCourtJudgmentRequestedAt) {
+        this.countyCourtJudgmentRequestedAt = MomentFactory.parse(input.countyCourtJudgmentRequestedAt)
+      }
     }
     return this
   }

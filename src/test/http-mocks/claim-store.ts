@@ -61,8 +61,12 @@ export const sampleClaimObj = {
     reason: 'Because I can'
   },
   responseDeadline: '2017-08-08',
-  countyCourtJudgment: {},
-  countyCourtJudgmentRequestedAt: '2017-09-26T13:19:20.153954'
+  countyCourtJudgment: {
+    defendant: {
+      name: 'Little John'
+    }
+  },
+  countyCourtJudgmentRequestedAt: '2050-10-10T22:45:51.785'
 }
 
 const sampleDefendantResponseObj = {
@@ -217,6 +221,12 @@ export function resolveSaveCcjForUser () {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+/county-court-judgment'))
     .reply(HttpStatus.OK, { ...sampleClaimObj })
+}
+
+export function rejectSaveCcjForUser (reason: string = 'HTTP error') {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/[0-9]+/county-court-judgment'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
 export function rejectRetrieveDefendantResponseCopy (reason: string) {

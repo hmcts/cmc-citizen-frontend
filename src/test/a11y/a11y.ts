@@ -58,10 +58,6 @@ const excludedPaths: DefendantResponsePaths[] = [
   DefendantResponsePaths.defendantLinkReceiver,
   DefendantResponsePaths.receiptReceiver,
   DefendantResponsePaths.legacyDashboardRedirect,
-  CCJPaths.repaymentPlanPage,
-  CCJPaths.confirmationPage,
-  CCJPaths.payBySetDatePage,
-  CCJPaths.confirmationPage,
   CCJPaths.downloadJudgmentReceiver
 ]
 

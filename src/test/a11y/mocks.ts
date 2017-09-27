@@ -88,6 +88,13 @@ function mockedClaim () {
   claim.externalId = 'uuid'
   claim.responseDeadline = moment()
   claim.createdAt = moment()
+  claim.countyCourtJudgment = {
+    defendant: {
+      name: 'John Smith'
+    }
+  }
+  claim.countyCourtJudgmentRequestedAt = moment()
+
   return claim
 }
 
