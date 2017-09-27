@@ -24,7 +24,7 @@ const externalId = sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
 const payBySetDatePage = Paths.payBySetDatePage.uri.replace(':externalId', externalId)
-const checkAndSendPage = Paths.checkAndSendPage.uri.replace(':externalId', externalId)
+const checkAndSendPage = Paths.checkAndSendPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ - Pay by set date', () => {
   attachDefaultHooks()
