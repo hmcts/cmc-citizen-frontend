@@ -13,7 +13,7 @@
 
         {{ csrfProtection(csrf) }}
 
-        {{ dateInput('date', form) }}
+        {{ dateInput(form = form, name = 'date', hint = 'You must be over 18 to use this service') }}
 
         {{ saveAndContinueButton() }}
       </form>

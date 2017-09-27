@@ -1,7 +1,6 @@
 import * as path from 'path'
 
 import { MomentFormatter } from 'utils/momentFormatter'
-import { DefendantResponse } from 'claims/models/defendantResponse'
 import { PartyDetailsMapper } from 'app/pdf/mappers/partyDetailsMapper'
 import { ClaimMapper } from 'app/pdf/mappers/claimMapper'
 import Claim from 'claims/models/claim'
@@ -13,7 +12,7 @@ const responseTemplatePath = path.join(__dirname, '..', '..', 'resources', 'pdf'
 
 export class ResponseReceipt {
 
-  constructor (public claim: Claim, public defendantResponse: DefendantResponse, public responseDashboardUrl: string) {
+  constructor (public claim: Claim, public responseDashboardUrl: string) {
   }
 
   static get templatePath (): string {
@@ -21,22 +20,30 @@ export class ResponseReceipt {
   }
 
   data (): object {
-    return {
+    const data = {
       claim: ClaimMapper.createClaimDetails(this.claim),
       defence: {
-        respondedAt: MomentFormatter.formatLongDateAndTime(this.defendantResponse.respondedAt),
-        response: this.defendantResponse.response.defence,
-        freeMediation: this.defendantResponse.response.freeMediation
+        respondedAt: MomentFormatter.formatLongDateAndTime(this.claim.respondedAt),
+        response: this.claim.response.defence,
+        freeMediation: this.claim.response.freeMediation
       },
       claimant: PartyDetailsMapper.createPartyDetails(
         this.claim.claimData.claimant as Party,
         this.claim.claimantEmail
       ),
       defendant: DefendantMapper.createDefendantDetails(
-        this.defendantResponse.defendantDetails as Defendant,
-        this.defendantResponse.defendantEmail
+        this.claim.response.defendantDetails as Defendant,
+        this.claim.defendantEmail
       ),
       responseDashboardUrl: this.responseDashboardUrl
     }
+
+    if (this.claim.response.statementOfTruth) {
+      data.defence['statementOfTruth'] = {
+        signerName: this.claim.response.statementOfTruth.signerName,
+        signerRole: this.claim.response.statementOfTruth.signerRole
+      }
+    }
+    return data
   }
 }

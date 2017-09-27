@@ -22,6 +22,7 @@ import { Address as AddressForm } from 'forms/models/address'
 import ClaimAmountBreakdown from 'app/forms/models/claimAmountBreakdown'
 import DraftInterestDate from 'app/forms/models/interestDate'
 import InterestDateType from 'app/common/interestDateType'
+import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
 export class ClaimModelConverter {
 
@@ -32,11 +33,17 @@ export class ClaimModelConverter {
     claimData.interestDate = this.convertInterestDate(draftClaim.interestDate)
     claimData.amount = new ClaimAmountBreakdown().deserialize(draftClaim.amount)
     claimData.feeAmountInPennies = draftClaim.claimant.payment.amount
-    claimData.claimant = this.convertClaimantDetails(draftClaim)
+    claimData.claimants = [this.convertClaimantDetails(draftClaim)]
     claimData.defendants = [this.convertDefendantDetails(draftClaim)]
     claimData.payment = draftClaim.claimant.payment
     claimData.reason = draftClaim.reason.reason
     claimData.feeAmountInPennies = draftClaim.claimant.payment.amount
+    if (draftClaim.qualifiedStatementOfTruth && draftClaim.qualifiedStatementOfTruth.signerName) {
+      claimData.statementOfTruth = new StatementOfTruth(
+        draftClaim.qualifiedStatementOfTruth.signerName,
+        draftClaim.qualifiedStatementOfTruth.signerRole
+      )
+    }
     return claimData
   }
 

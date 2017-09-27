@@ -14,57 +14,55 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import { sampleClaimObj } from '../../../http-mocks/claim-store'
 import { ResponseType } from 'response/form/models/responseType'
+import { SignatureType } from 'app/common/signatureType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
 const draftType = 'response'
+const checkAndSendPage = ResponsePaths.checkAndSendPage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
 describe('Defendant response: check and send page', () => {
   attachDefaultHooks()
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ResponsePaths.checkAndSendPage.uri)
+    checkAuthorizationGuards(app, 'get', checkAndSendPage)
 
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
       })
 
-      checkAlreadySubmittedGuard(app, 'get', ResponsePaths.checkAndSendPage.uri)
+      checkAlreadySubmittedGuard(app, 'get', checkAndSendPage)
 
       context('when response not submitted', () => {
-        beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
-        })
-
         it('should redirect to task list when not all tasks are completed', async () => {
           draftStoreServiceMock.resolveRetrieve(draftType, { defendantDetails: undefined })
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
-            .get(ResponsePaths.checkAndSendPage.uri)
+            .get(checkAndSendPage)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.taskListPage.uri))
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
         })
 
         it('should return 500 and render error page when cannot retrieve claim', async () => {
-          draftStoreServiceMock.resolveRetrieve(draftType)
-          claimStoreServiceMock.rejectRetrieveByDefendantId('HTTP error')
+          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
-            .get(ResponsePaths.checkAndSendPage.uri)
+            .get(checkAndSendPage)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveRetrieve(draftType)
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
-            .get(ResponsePaths.checkAndSendPage.uri)
+            .get(checkAndSendPage)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting your response'))
         })
@@ -73,48 +71,46 @@ describe('Defendant response: check and send page', () => {
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', ResponsePaths.checkAndSendPage.uri)
+    checkAuthorizationGuards(app, 'post', checkAndSendPage)
 
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
       })
 
-      checkAlreadySubmittedGuard(app, 'post', ResponsePaths.checkAndSendPage.uri)
+      checkAlreadySubmittedGuard(app, 'post', checkAndSendPage)
 
       context('when response not submitted', () => {
-        beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
-        })
-
         it('should redirect to task list when not all tasks are completed', async () => {
           draftStoreServiceMock.resolveRetrieve(draftType, { defendantDetails: undefined })
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
-            .post(ResponsePaths.checkAndSendPage.uri)
+            .post(checkAndSendPage)
+            .send({ type: SignatureType.BASIC })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.taskListPage.uri))
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
         })
 
         context('when form is invalid', () => {
           it('should return 500 and render error page when cannot retrieve claim', async () => {
-            draftStoreServiceMock.resolveRetrieve(draftType)
-            claimStoreServiceMock.rejectRetrieveByDefendantId('HTTP error')
+            claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
-              .post(ResponsePaths.checkAndSendPage.uri)
+              .post(checkAndSendPage)
+              .send({ type: SignatureType.BASIC })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
           it('should render page when everything is fine', async () => {
             draftStoreServiceMock.resolveRetrieve(draftType)
-            claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(ResponsePaths.checkAndSendPage.uri)
+              .post(checkAndSendPage)
+              .send({ type: SignatureType.BASIC })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting your response', 'div class="error-summary"'))
           })
@@ -122,52 +118,55 @@ describe('Defendant response: check and send page', () => {
 
         context('when form is valid', () => {
           it('should return 500 and render error page when form is valid and cannot retrieve claim', async () => {
-            draftStoreServiceMock.resolveRetrieve(draftType)
-            claimStoreServiceMock.rejectRetrieveByDefendantId('HTTP error')
+            claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
-              .post(ResponsePaths.checkAndSendPage.uri)
+              .post(checkAndSendPage)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true' })
+              .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
           it('should return 500 and render error page when form is valid and cannot save response', async () => {
             draftStoreServiceMock.resolveRetrieve(draftType)
-            claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+            draftStoreServiceMock.resolveSave(draftType)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.rejectSaveResponse('HTTP error')
 
             await request(app)
-              .post(ResponsePaths.checkAndSendPage.uri)
+              .post(checkAndSendPage)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true' })
+              .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
           it('should return 500 and render error page when form is valid and cannot delete draft response', async () => {
             draftStoreServiceMock.resolveRetrieve(draftType)
-            claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+            draftStoreServiceMock.resolveSave(draftType)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolveSaveResponse()
             draftStoreServiceMock.rejectDelete(draftType, 'HTTP error')
 
             await request(app)
-              .post(ResponsePaths.checkAndSendPage.uri)
+              .post(checkAndSendPage)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true' })
+              .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
           it('should redirect to confirmation page when form is valid and a non handoff response type is picked', async () => {
             draftStoreServiceMock.resolveRetrieve(draftType)
-            claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+            draftStoreServiceMock.resolveSave(draftType)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolveSaveResponse()
             draftStoreServiceMock.resolveDelete(draftType)
 
             await request(app)
-              .post(ResponsePaths.checkAndSendPage.uri)
+              .post(checkAndSendPage)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true' })
-              .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.confirmationPage.uri))
+              .send({ signed: 'true', type: SignatureType.BASIC })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.confirmationPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
           it('should redirect to counter-claim page when defendant is counter claiming and response type is OWE_NONE', async () => {
@@ -176,13 +175,14 @@ describe('Defendant response: check and send page', () => {
                 counterClaim: true
               }
             })
-            claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(ResponsePaths.checkAndSendPage.uri)
+              .post(checkAndSendPage)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true' })
-              .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.counterClaimPage.uri))
+              .send({ signed: 'true', type: SignatureType.BASIC })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.counterClaimPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
           it('should redirect to full-admission page when response type is OWE_ALL_PAID_NONE', async () => {
@@ -190,13 +190,14 @@ describe('Defendant response: check and send page', () => {
               response: { type: ResponseType.OWE_ALL_PAID_NONE },
               counterClaim: undefined
             })
-            claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(ResponsePaths.checkAndSendPage.uri)
+              .post(checkAndSendPage)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true' })
-              .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.fullAdmissionPage.uri))
+              .send({ signed: 'true', type: SignatureType.BASIC })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.fullAdmissionPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
           it('should redirect to partial-admission page when response type is OWE_ALL_PAID_SOME', async () => {
@@ -204,13 +205,14 @@ describe('Defendant response: check and send page', () => {
               response: { type: ResponseType.OWE_ALL_PAID_SOME },
               counterClaim: undefined
             })
-            claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(ResponsePaths.checkAndSendPage.uri)
+              .post(checkAndSendPage)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true' })
-              .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.partialAdmissionPage.uri))
+              .send({ signed: 'true', type: SignatureType.BASIC })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.partialAdmissionPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
           it('should redirect to partial-admission page when response type is OWE_SOME_PAID_NONE', async () => {
@@ -218,13 +220,14 @@ describe('Defendant response: check and send page', () => {
               response: { type: ResponseType.OWE_SOME_PAID_NONE },
               counterClaim: undefined
             })
-            claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(ResponsePaths.checkAndSendPage.uri)
+              .post(checkAndSendPage)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true' })
-              .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.partialAdmissionPage.uri))
+              .send({ signed: 'true', type: SignatureType.BASIC })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.partialAdmissionPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })
       })

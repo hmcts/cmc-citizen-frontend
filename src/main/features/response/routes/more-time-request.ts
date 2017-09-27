@@ -8,9 +8,9 @@ import { Form } from 'forms/form'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import ClaimStoreClient from 'app/claims/claimStoreClient'
-import Claim from 'app/claims/models/claim'
 import MoreTimeAlreadyRequestedGuard from 'response/guards/moreTimeAlreadyRequestedGuard'
 import { ErrorHandling } from 'common/errorHandling'
+import User from 'idam/user'
 
 function renderView (form: Form<MoreTimeNeeded>, res: express.Response, next: express.NextFunction) {
   try {
@@ -39,15 +39,15 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
-        res.locals.user.responseDraft.moreTimeNeeded = form.model
+        const user: User = res.locals.user
+        user.responseDraft.moreTimeNeeded = form.model
         await ResponseDraftMiddleware.save(res, next)
         if (form.model.option === MoreTimeNeededOption.YES) {
-          const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(res.locals.user.id)
-          await ClaimStoreClient.requestForMoreTime(claim.id, res.locals.user)
+          await ClaimStoreClient.requestForMoreTime(user.claim.id, user)
 
-          res.redirect(Paths.moreTimeConfirmationPage.uri)
+          res.redirect(Paths.moreTimeConfirmationPage.evaluateUri({ externalId: user.claim.externalId }))
         } else {
-          res.redirect(Paths.taskListPage.uri)
+          res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
         }
       }
     }))

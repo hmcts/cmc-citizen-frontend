@@ -308,12 +308,14 @@
       </tr>
       {% endif %}
       {% endif %}
+      {% if claim.interest is defined %}
       <tr>
         <td>Accrued interest:</td>
         <td>
           Interest will accrue at the daily rate of {{ claim.interest.dailyAmount }} up to the date of judgment.
         </td>
       </tr>
+      {% endif %}
       <tr>
         <td>Claim fee:</td>
         <td>
@@ -338,16 +340,50 @@
     <table>
       <tr>
         <td>Declaration:</td>
-        <td>
-          I {{ defendant.fullName }} believe that the facts stated in this defence form are true.
-        </td>
+        {% if defence.statementOfTruth is empty %}
+          <td>
+            I {{ defendant.fullName }} believe that the facts stated in this defence form are true.
+          </td>
+        {% endif %}
+        {% if defence.statementOfTruth is not empty %}
+          <td>
+            The defendant believes that the facts stated in this defence form are true.
+          </td>
+        {% endif %}
       </tr>
-      <tr>
-        <td></td>
-        <td>
-          {{ defendant.fullName }}
-        </td>
-      </tr>
+      {% if defence.statementOfTruth is empty %}
+        <tr>
+          <td></td>
+          <td>
+            {{ defendant.fullName }}
+          </td>
+        </tr>
+      {% endif %}
+      {% if defence.statementOfTruth is not empty %}
+        <tr>
+          <td>
+           Name:
+          </td>
+          <td>{{ defence.statementOfTruth.signerName }}</td>
+        </tr>
+        <tr>
+          <td>
+            Organisation:
+          </td>
+          {% if defendant.fullName is not empty %}
+            <td>{{ defendant.fullName }}</td>
+          {% endif %}
+          {% if defendant.businessName is not empty %}
+            <td>{{ defendant.businessName }}</td>
+          {% endif %}
+        </tr>
+        <tr>
+          <td>
+            Position held:
+          </td>
+          <td>{{ defence.statementOfTruth.signerRole }}</td>
+        </tr>
+      {% endif %}
     </table>
   </div>
 </div>
