@@ -5,6 +5,7 @@ import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { IsFutureDate } from 'app/forms/validation/validators/dateFutureConstraint'
 import { IsLessThanOrEqualToSumOf } from 'forms/validation/validators/isLessThanOrEqualToSumOf'
+import { Fractions } from 'forms/validation/validators/fractions'
 
 export class ValidationErrors {
   static readonly FIRST_PAYMENT_AMOUNT_INVALID: string = 'Enter a valid amount of first payment'
@@ -12,6 +13,7 @@ export class ValidationErrors {
   static readonly FUTURE_DATE: string = 'Enter a first payment date in the future'
   static readonly INVALID_DATE: string = 'Enter a valid date of first payment'
   static readonly SELECT_PAYMENT_SCHEDULE: string = 'Select how often they should pay'
+  static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter valid amount, maximum two decimal places'
 }
 
 export class RepaymentPlan {
@@ -20,10 +22,12 @@ export class RepaymentPlan {
 
   @IsPositive({ message: ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
   @IsLessThanOrEqualToSumOf('installmentAmount', 'remainingAmount', { message: ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
+  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS })
   firstPayment?: number
 
   @IsPositive({ message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
   @IsLessThanOrEqualToSumOf('firstPayment', 'remainingAmount', { message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
+  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS })
   installmentAmount?: number
 
   @ValidateNested()
