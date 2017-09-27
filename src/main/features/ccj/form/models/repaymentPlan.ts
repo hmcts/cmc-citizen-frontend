@@ -4,7 +4,7 @@ import { IsDefined, IsIn, IsPositive, ValidateNested } from 'class-validator'
 import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { IsFutureDate } from 'app/forms/validation/validators/dateFutureConstraint'
-import { IsLessThan } from 'forms/validation/validators/isLessThan'
+import { IsLessThanOrEqualToSumOf } from 'forms/validation/validators/isLessThanOrEqualToSumOf'
 
 export class ValidationErrors {
   static readonly FIRST_PAYMENT_AMOUNT_INVALID: string = 'Enter a valid amount of first payment'
@@ -19,11 +19,11 @@ export class RepaymentPlan {
   remainingAmount?: number
 
   @IsPositive({ message: ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
-  @IsLessThan('remainingAmount', { message: ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
+  @IsLessThanOrEqualToSumOf('installmentAmount', 'remainingAmount', { message: ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
   firstPayment?: number
 
   @IsPositive({ message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
-  @IsLessThan('remainingAmount', { message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
+  @IsLessThanOrEqualToSumOf('firstPayment', 'remainingAmount', { message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
   installmentAmount?: number
 
   @ValidateNested()

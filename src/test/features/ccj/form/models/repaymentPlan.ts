@@ -74,7 +74,7 @@ describe('RepaymentPlan', () => {
       repaymentPlan.firstPayment = 101
       const errors = validator.validateSync(repaymentPlan)
 
-      expect(errors.length).to.equal(1)
+      expect(errors.length).to.equal(2)
       expectValidationError(errors, ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
     })
 
@@ -83,7 +83,7 @@ describe('RepaymentPlan', () => {
       repaymentPlan.installmentAmount = 101
       const errors = validator.validateSync(repaymentPlan)
 
-      expect(errors.length).to.equal(1)
+      expect(errors.length).to.equal(2)
       expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
     })
 
