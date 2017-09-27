@@ -12,19 +12,19 @@ export class DraftMiddleware<T> {
     this.client = new DraftStoreClient<T>(draftType)
   }
 
-  retrieve (res: express.Response, next: express.NextFunction): void {
+  async retrieve (res: express.Response, next: express.NextFunction): Promise<void> {
     if (res.locals.isLoggedIn) {
-      this.client
-        .retrieve(res.locals.user.id, this.deserializeFn)
-        .then(draft => {
-          if (!draft) {
-            draft = this.deserializeFn(undefined)
-          }
-          this.setUserData(draft, res.locals.user)
-          res.locals.user[`${this.draftType}Draft`] = draft
-          next()
-        })
-        .catch(next)
+      try {
+        let draft: any = await this.client.retrieve(res.locals.user.id, this.deserializeFn)
+        if (!draft) {
+          draft = this.deserializeFn(undefined)
+        }
+        this.setUserData(draft, res.locals.user)
+        res.locals.user[`${this.draftType}Draft`] = draft
+        next()
+      } catch (err) {
+        next(err)
+      }
     } else {
       next()
     }
