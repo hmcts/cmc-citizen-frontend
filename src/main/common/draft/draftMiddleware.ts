@@ -1,8 +1,9 @@
 import * as express from 'express'
 import DraftStoreClient from 'common/draft/draftStoreClient'
 import User from 'idam/user'
+import { Draft } from 'models/draft'
 
-export class DraftMiddleware<T> {
+export class DraftMiddleware<T extends Draft> {
   client: DraftStoreClient<T>
 
   constructor (public draftType: string, public deserializeFn: (value: any) => T = (value) => value) {
@@ -15,7 +16,7 @@ export class DraftMiddleware<T> {
   async retrieve (res: express.Response, next: express.NextFunction): Promise<void> {
     if (res.locals.isLoggedIn) {
       try {
-        let draft: any = await this.client.retrieve(res.locals.user.id, this.deserializeFn)
+        let draft: T = await this.client.retrieve(res.locals.user.id, this.deserializeFn)
         if (!draft) {
           draft = this.deserializeFn(undefined)
         }
@@ -40,7 +41,7 @@ export class DraftMiddleware<T> {
       .delete(res.locals.user.id)
   }
 
-  private setUserData (draft: any, user: User) {
+  private setUserData (draft: T, user: User) {
     draft.userEmail = user.email
     draft.userName = `${user.forename} ${user.surname}`
   }
