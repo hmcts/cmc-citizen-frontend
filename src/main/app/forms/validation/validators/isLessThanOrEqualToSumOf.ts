@@ -39,7 +39,7 @@ export class IsLessThanOrEqualToSumOfConstraint implements ValidatorConstraintIn
 export function IsLessThanOrEqualToSumOf (sum: string, lessThanAmount: string, validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
-      name: 'isLessThan',
+      name: 'IsLessThanOrEqualToSumOf',
       target: object.constructor,
       propertyName: propertyName,
       constraints: [sum, lessThanAmount],

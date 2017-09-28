@@ -36,7 +36,6 @@ export default express.Router()
         const user: User = res.locals.user
 
         if (form.hasErrors()) {
-          console.log(form.errors)
           renderView(form, res)
         } else {
           const { externalId } = req.params
