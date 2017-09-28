@@ -21,7 +21,6 @@ export class CountyCourtJudgment implements Serializable<CountyCourtJudgment> {
 
   public deserialize (input: any): CountyCourtJudgment {
     if (input) {
-
       this.paymentOption = input.paymentOption
       this.defendant = new TheirDetails().deserialize(input.defendant)
       this.paidAmount = input.paidAmount ? parseFloat(input.paidAmount) : undefined

@@ -37,20 +37,20 @@ function convertPayBySetDate (draftCcj: DraftCCJ): Moment {
 
 export class CCJModelConverter {
 
-  static convert (draftCcj: DraftCCJ): object {
+  static convert (draftCcj: DraftCCJ): CountyCourtJudgment {
 
     const email: string = draftCcj.defendant.email.address
     const defendant: PartyDetails = draftCcj.defendant.partyDetails
     const paidAmount: number = convertPaidAmount(draftCcj)
     const repaymentPlan: RepaymentPlan = convertRepaymentPlan(draftCcj.repaymentPlan)
-    const payBySetdate: Moment = convertPayBySetDate(draftCcj)
+    const payBySetDate: Moment = convertPayBySetDate(draftCcj)
 
     return new CountyCourtJudgment(
       convertDefendantDetails(defendant, email),
       draftCcj.paymentOption.option.value,
       paidAmount,
       repaymentPlan,
-      payBySetdate
+      payBySetDate
     )
   }
 }
