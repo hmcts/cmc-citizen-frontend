@@ -64,9 +64,10 @@ export const sampleClaimObj = {
   countyCourtJudgment: {
     defendant: {
       name: 'Little John'
-    }
+    },
+    paymentOption: 'IMMEDIATELY'
   },
-  countyCourtJudgmentRequestedAt: '2050-10-10T22:45:51.785'
+  countyCourtJudgmentRequestedAt: '2017-10-10T22:45:51.785'
 }
 
 const sampleDefendantResponseObj = {

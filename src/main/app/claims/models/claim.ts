@@ -7,6 +7,7 @@ import InterestDateType from 'app/common/interestDateType'
 import { calculateInterest } from 'app/common/calculateInterest'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
+import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 
 export default class Claim implements Serializable<Claim> {
   id: number
@@ -21,11 +22,12 @@ export default class Claim implements Serializable<Claim> {
   moreTimeRequested: boolean
   respondedAt: Moment
   claimantEmail: string
-  countyCourtJudgment: object
+  countyCourtJudgment: CountyCourtJudgment
   countyCourtJudgmentRequestedAt: Moment
 
   deserialize (input: any): Claim {
     if (input) {
+
       this.id = input.id
       this.claimantId = input.submitterId
       this.externalId = input.externalId
@@ -40,7 +42,7 @@ export default class Claim implements Serializable<Claim> {
         this.respondedAt = MomentFactory.parse(input.respondedAt)
       }
       this.claimantEmail = input.submitterEmail
-      this.countyCourtJudgment = input.countyCourtJudgment
+      this.countyCourtJudgment = CountyCourtJudgment.of(input.countyCourtJudgment)
       if (input.countyCourtJudgmentRequestedAt) {
         this.countyCourtJudgmentRequestedAt = MomentFactory.parse(input.countyCourtJudgmentRequestedAt)
       }

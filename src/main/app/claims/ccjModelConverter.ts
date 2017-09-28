@@ -2,14 +2,12 @@ import { DraftCCJ } from 'ccj/draft/DraftCCJ'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { RepaymentPlan as RepaymentPlanForm } from 'ccj/form/models/repaymentPlan'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
-import {
-  CountyCourtJudgmentImmediatePayment,
-  CountyCourtJudgmentPaidByInstalments,
-  CountyCourtJudgmentPaidFullBySetDate
-} from 'claims/models/countyCourtJudgment'
 import { convertDefendantDetails } from 'claims/converters/defendantDetails'
 import { RepaymentPlan } from 'claims/models/replaymentPlan'
 import { PartyDetails } from 'forms/models/partyDetails'
+import { CountyCourtJudgmentImmediatePayment } from 'claims/models/ccj/countyCourtJudgmentImmediatePayment'
+import { CountyCourtJudgmentPaidByInstalments } from 'claims/models/ccj/countyCourtJudgmentPaidByInstalments'
+import { CountyCourtJudgmentPaidFullBySetDate } from 'claims/models/ccj/countyCourtJudgmentPaidFullBySetDate'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {
 
@@ -27,7 +25,10 @@ function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan 
 }
 
 function convertPaidAmount (draftCcj: DraftCCJ): number {
-  return (draftCcj.paidAmount.option === PaidAmountOption.YES) ? draftCcj.paidAmount.amount : undefined
+  if (draftCcj.paidAmount.option && draftCcj.paidAmount.option.value === PaidAmountOption.YES.value) {
+    return draftCcj.paidAmount.amount
+  }
+  return undefined
 }
 
 function convertPayBySetDate (draftCcj: DraftCCJ): string {

@@ -92,7 +92,7 @@ function mockedClaim () {
     defendant: {
       name: 'John Smith'
     }
-  }
+  } as any
   claim.countyCourtJudgmentRequestedAt = moment()
 
   return claim
