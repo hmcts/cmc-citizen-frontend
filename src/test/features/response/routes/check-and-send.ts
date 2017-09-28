@@ -227,7 +227,7 @@ describe('Defendant response: check and send page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.partialAdmissionPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
+                .toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })
       })
