@@ -15,7 +15,7 @@ function validationArgs (fieldToSumValue: number, value: number): ValidationArgu
   }
 }
 
-describe('IsLessThanConstraint', () => {
+describe('IsLessThanOrEqualToSumOfConstraint', () => {
   const constraint: IsLessThanOrEqualToSumOfConstraint = new IsLessThanOrEqualToSumOfConstraint()
 
   describe('validate', () => {
