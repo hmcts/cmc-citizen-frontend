@@ -83,6 +83,12 @@ describe('PaidAmount', () => {
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.AMOUNT_NOT_VALID)
       })
+      it('valid option, but invalid amount (invalid decimals)', () => {
+        const errors = validator.validateSync(new PaidAmount(PaidAmountOption.YES, 10.523))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS)
+      })
 
       it('valid option, but invalid amount (zero)', () => {
         const errors = validator.validateSync(new PaidAmount(PaidAmountOption.YES, 0))
