@@ -20,14 +20,14 @@ export class PartyDetails implements Serializable<PartyDetails> {
   name?: string
 
   @IsDefined({ message: ValidationErrors.ADDRESS_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
-  @ValidateNested({ groups: ['claimant', 'defendant'] })
+  @ValidateNested({ groups: ['claimant', 'defendant', 'response'] })
   address?: Address = new Address()
 
   hasCorrespondenceAddress?: boolean
 
   @ValidateIf(partyDetails => partyDetails.hasCorrespondenceAddress === true, { groups: ['claimant', 'defendant', 'response'] })
   @IsDefined({ message: ValidationErrors.CORRESPONDENCE_ADDRESS_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
-  @ValidateNested({ groups: ['claimant', 'defendant'] })
+  @ValidateNested({ groups: ['claimant', 'defendant', 'response'] })
   correspondenceAddress?: CorrespondenceAddress
 
   constructor (name?: string,

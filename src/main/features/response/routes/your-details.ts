@@ -91,6 +91,7 @@ export default express.Router()
           (user.responseDraft.defendantDetails.partyDetails as SoleTraderDetails).businessName =
             (user.claim.claimData.defendant as SoleTrader).businessName
         }
+        console.log(form.model)
 
         await ResponseDraftMiddleware.save(res, next)
 
