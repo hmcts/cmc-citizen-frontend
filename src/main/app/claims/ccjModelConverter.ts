@@ -4,13 +4,12 @@ import { RepaymentPlan as RepaymentPlanForm } from 'ccj/form/models/repaymentPla
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 import { convertDefendantDetails } from 'claims/converters/defendantDetails'
 import { RepaymentPlan } from 'claims/models/replaymentPlan'
-import { PartyDetails } from 'forms/models/partyDetails'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { Moment } from 'moment'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {
 
-  if (repaymentPlan && repaymentPlan.remainingAmount !== undefined) {
+  if (repaymentPlan && repaymentPlan.remainingAmount) {
     return new RepaymentPlan(
       repaymentPlan.remainingAmount,
       repaymentPlan.firstPayment,
@@ -39,18 +38,12 @@ export class CCJModelConverter {
 
   static convert (draftCcj: DraftCCJ): CountyCourtJudgment {
 
-    const email: string = draftCcj.defendant.email.address
-    const defendant: PartyDetails = draftCcj.defendant.partyDetails
-    const paidAmount: number = convertPaidAmount(draftCcj)
-    const repaymentPlan: RepaymentPlan = convertRepaymentPlan(draftCcj.repaymentPlan)
-    const payBySetDate: Moment = convertPayBySetDate(draftCcj)
-
     return new CountyCourtJudgment(
-      convertDefendantDetails(defendant, email),
+      convertDefendantDetails(draftCcj.defendant.partyDetails, draftCcj.defendant.email.address),
       draftCcj.paymentOption.option.value,
-      paidAmount,
-      repaymentPlan,
-      payBySetDate
+      convertPaidAmount(draftCcj),
+      convertRepaymentPlan(draftCcj.repaymentPlan),
+      convertPayBySetDate(draftCcj)
     )
   }
 }
