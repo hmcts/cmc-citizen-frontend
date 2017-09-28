@@ -37,7 +37,8 @@ export class IsLessThanOrEqualToSumOfConstraint implements ValidatorConstraintIn
 }
 
 /**
- * This validator is for ensuring that a number added with another number is less than the 'lessThanAmount'.
+ * This validator is for ensuring that a validated value added with another number (at 'sum' property)
+ * is less than the maximum limit (at 'lessThanAmount' property).
  *
  * @param {string} sum the property name of the amount to sum with 'value'
  * @param {string} lessThanAmount the property name of the amount that 'value' + 'sum' has to be less than
