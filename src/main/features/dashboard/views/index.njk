@@ -107,9 +107,9 @@
           {% for claim in claimsAsDefendant %}
             <tr class="claims default">
               {% if claim.respondedAt %}
-                {% set url = '/dashboard/' + claim.externalId + '/defendant' %}
+                {% set url = paths.defendantPage.evaluateUri({ externalId: claim.externalId }) %}
               {% else %}
-                {% set url = '/response/task-list' %}
+                {% set url =  paths.responseTaskListPage.evaluateUri({ externalId: claim.externalId }) %}
               {% endif %}
               <td><a href="{{ url }}">{{ claim.claimNumber }}</a></td>
               <td>{{ claim.claimData.claimant.name }}</td>

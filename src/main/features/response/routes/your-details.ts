@@ -15,9 +15,6 @@ import { OrganisationDetails } from 'forms/models/organisationDetails'
 
 import User from 'app/idam/user'
 
-import ClaimStoreClient from 'claims/claimStoreClient'
-import Claim from 'claims/models/claim'
-
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 
 function renderView (form: Form<PartyDetails>, res: express.Response) {
@@ -45,9 +42,7 @@ export default express.Router()
   .get(Paths.defendantYourDetailsPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user: User = res.locals.user
 
-    const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(user.id)
-
-    const partyDetails: PartyDetails = plainToClass(PartyDetails, claim.claimData.defendant)
+    const partyDetails: PartyDetails = plainToClass(PartyDetails, user.claim.claimData.defendant)
     if (user.responseDraft.defendantDetails.partyDetails) {
       partyDetails.name = user.responseDraft.defendantDetails.partyDetails.name
       partyDetails.address = user.responseDraft.defendantDetails.partyDetails.address
@@ -72,12 +67,12 @@ export default express.Router()
 
         switch (user.responseDraft.defendantDetails.partyDetails.type) {
           case PartyType.INDIVIDUAL.value:
-            res.redirect(Paths.defendantDateOfBirthPage.uri)
+            res.redirect(Paths.defendantDateOfBirthPage.evaluateUri({ externalId: user.claim.externalId }))
             break
           case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
           case PartyType.COMPANY.value:
           case PartyType.ORGANISATION.value:
-            res.redirect(Paths.defendantMobilePage.uri)
+            res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: user.claim.externalId }))
             break
           default:
             throw new Error(`Unknown party type: ${user.responseDraft.defendantDetails.partyDetails.type}`)

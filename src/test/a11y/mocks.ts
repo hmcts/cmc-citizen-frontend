@@ -6,8 +6,6 @@ import ClaimData from 'claims/models/claimData'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Response } from 'response/form/models/response'
 import { FreeMediation } from 'response/form/models/freeMediation'
-import { DefendantResponse } from 'app/claims/models/defendantResponse'
-import { DefendantResponseData } from 'app/claims/models/defendantResponseData'
 import ServiceAuthToken from 'app/idam/serviceAuthToken'
 import DateOfBirth from 'app/forms/models/dateOfBirth'
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
@@ -19,7 +17,6 @@ import InterestDate from 'app/claims/models/interestDate'
 import InterestDateType from 'app/common/interestDateType'
 import Interest, { InterestType } from 'app/forms/models/interest'
 import { Defendant, Defendant as DraftDefendant } from 'app/drafts/models/defendant'
-import { TheirDetails } from 'app/claims/models/details/theirs/theirDetails'
 import { Company as CompanyDetails } from 'app/claims/models/details/theirs/company'
 import { Individual } from 'app/claims/models/details/yours/individual'
 import { default as DraftClaimant } from 'app/drafts/models/claimant'
@@ -75,7 +72,7 @@ function mockedResponseDraft () {
 }
 
 function mockedClaim () {
-  let claim = new Claim()
+  const claim = new Claim()
   claim.claimData = new ClaimData()
   const companyDetails = new CompanyDetails()
   companyDetails.address = new Address()
@@ -88,6 +85,8 @@ function mockedClaim () {
   claim.externalId = 'uuid'
   claim.responseDeadline = moment()
   claim.createdAt = moment()
+
+  claim.respondedAt = moment()
   return claim
 }
 
@@ -101,19 +100,6 @@ function mockedInterestDate () {
   return new InterestDate().deserialize({
     type: InterestDateType.SUBMISSION
   })
-}
-
-function mockedDefendantResponse () {
-  let response = new DefendantResponse()
-  response.response = new DefendantResponseData()
-  response.respondedAt = moment()
-  response.defendantDetails = new TheirDetails()
-  response.defendantDetails.address = new Address()
-  response.defendantDetails.address.postcode = 'postcode'
-  response.defendantDetails.address.line1 = 'line1'
-  response.defendantDetails.email = 'example@example.com'
-
-  return response
 }
 
 function mockUser () {
@@ -149,20 +135,9 @@ mock('idam/authorizationMiddleware', {
 mock('claim/draft/claimDraftMiddleware', {
   'ClaimDraftMiddleware': {
     retrieve: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-      res.locals.user = {
-        claimDraft: mockedDraftClaim()
-      }
+      res.locals.user.claimDraft = mockedDraftClaim()
       next()
     }
-  }
-})
-
-mock('claims/retrieveClaimMiddleware', {
-  'default': (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-    res.locals.user = {
-      claim: mockedClaim()
-    }
-    next()
   }
 })
 
@@ -178,10 +153,8 @@ mock('claims/claimStoreClient', {
     retrieve: (userId) => mockedClaim(),
     retrieveByClaimantId: (claimantId) => [mockedClaim()],
     retrieveByLetterHolderId: (letterHolderId) => mockedClaim(),
-    retrieveLatestClaimByDefendantId: (defendantId) => mockedClaim(),
     retrieveByDefendantId: (defendantId) => [mockedClaim()],
-    retrieveByExternalId: (externalId) => mockedClaim(),
-    retrieveResponse: (defendantId, claimId) => mockedDefendantResponse()
+    retrieveByExternalId: (externalId) => mockedClaim()
   }
 })
 
@@ -197,9 +170,7 @@ mock('fees/feesClient', {
 mock('response/draft/responseDraftMiddleware', {
   'ResponseDraftMiddleware': {
     retrieve: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-      res.locals.user = {
-        responseDraft: mockedResponseDraft()
-      }
+      res.locals.user.responseDraft = mockedResponseDraft()
       next()
     }
   }

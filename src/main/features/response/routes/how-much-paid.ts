@@ -8,12 +8,11 @@ import { HowMuchPaid } from 'features/response/form/models/howMuchPaid'
 import User from 'idam/user'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
-import ClaimStoreClient from 'claims/claimStoreClient'
 import Claim from 'claims/models/claim'
 
 async function renderView (form: Form<HowMuchPaid>, res: express.Response) {
   const user: User = res.locals.user
-  const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(user.id)
+  const claim: Claim = user.claim
   res.render(Paths.defendantHowMuchPaid.associatedView, { form: form, claim: claim})
 }
 

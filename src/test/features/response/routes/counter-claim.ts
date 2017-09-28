@@ -13,6 +13,7 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -20,7 +21,7 @@ describe('Defendant response: counter claim page', () => {
   attachDefaultHooks()
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ResponsePaths.counterClaimPage.uri)
+    checkAuthorizationGuards(app, 'get', ResponsePaths.counterClaimPage.evaluateUri({ externalId: sampleClaimObj.externalId }))
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -28,21 +29,20 @@ describe('Defendant response: counter claim page', () => {
       })
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
-        draftStoreServiceMock.resolveRetrieve('response')
-        claimStoreServiceMock.rejectRetrieveByDefendantId('HTTP error')
+        claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .get(ResponsePaths.counterClaimPage.uri)
+          .get(ResponsePaths.counterClaimPage.evaluateUri({ externalId: sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
       it('should render page when everything is fine', async () => {
         draftStoreServiceMock.resolveRetrieve('response')
-        claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
         await request(app)
-          .get(ResponsePaths.counterClaimPage.uri)
+          .get(ResponsePaths.counterClaimPage.evaluateUri({ externalId: sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.successful.withText('Complete and email the defence and counterclaim form by'))
       })

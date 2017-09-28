@@ -14,6 +14,7 @@ import { app } from '../../main/app'
 
 import * as idamServiceMock from '../http-mocks/idam'
 import * as claimStoreServiceMock from '../http-mocks/claim-store'
+import { sampleClaimObj } from '../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
@@ -31,7 +32,7 @@ describe('Login receiver', async () => {
         draftStoreServiceMock.resolveRetrieve('claim')
         draftStoreServiceMock.resolveRetrieve('response')
         claimStoreServiceMock.resolveRetrieveByClaimantId()
-        claimStoreServiceMock.resolveRetrieveResponsesByDefendantId()
+        claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
 
         await request(app)
           .get(`${AppPaths.receiver.uri}?jwt=ABC`)
@@ -42,7 +43,7 @@ describe('Login receiver', async () => {
         draftStoreServiceMock.resolveRetrieve('claim')
         draftStoreServiceMock.resolveRetrieve('response')
         claimStoreServiceMock.resolveRetrieveByClaimantId()
-        claimStoreServiceMock.resolveRetrieveResponsesByDefendantId()
+        claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
 
         await request(app)
           .get(AppPaths.receiver.uri)
@@ -64,7 +65,6 @@ describe('Login receiver', async () => {
           draftStoreServiceMock.resolveRetrieveNoDraftFound('claim')
           draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
 
           await request(app)
@@ -79,7 +79,6 @@ describe('Login receiver', async () => {
           draftStoreServiceMock.resolveRetrieve('claim')
           draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
 
           await request(app)
@@ -94,38 +93,22 @@ describe('Login receiver', async () => {
           draftStoreServiceMock.resolveRetrieveNoDraftFound('claim')
           draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantId('A', 1)
 
           await request(app)
             .get(AppPaths.receiver.uri)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.taskListPage.uri))
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
         })
       })
 
-      context('when draft response exists', async () => {
-        it('should redirect to response task-list', async () => {
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('claim')
-          draftStoreServiceMock.resolveRetrieve('response')
-          claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
-
-          await request(app)
-            .get(AppPaths.receiver.uri)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.taskListPage.uri))
-        })
-      })
-
-      context('when draft claim and draft response exists', async () => {
+      context('when draft claim and defendant has a claim against them', async () => {
         it('should redirect to dashboard', async () => {
           draftStoreServiceMock.resolveRetrieve('claim')
           draftStoreServiceMock.resolveRetrieve('response')
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -139,7 +122,7 @@ describe('Login receiver', async () => {
           draftStoreServiceMock.resolveRetrieveNoDraftFound('claim')
           draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
           claimStoreServiceMock.resolveRetrieveByClaimantId()
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -152,7 +135,7 @@ describe('Login receiver', async () => {
           draftStoreServiceMock.resolveRetrieveNoDraftFound('claim')
           draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantId()
+          claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -165,7 +148,7 @@ describe('Login receiver', async () => {
           draftStoreServiceMock.resolveRetrieveNoDraftFound('claim')
           draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
           claimStoreServiceMock.resolveRetrieveByClaimantId()
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantId()
+          claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
 
           await request(app)
             .get(AppPaths.receiver.uri)
