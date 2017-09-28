@@ -31,7 +31,7 @@ export class ResponseDraft extends Draft implements Serializable<ResponseDraft> 
       this.counterClaim = CounterClaim.fromObject(input.counterClaim)
       this.defendantDetails = new Defendant().deserialize(input.defendantDetails)
       this.lastUpdateTimestamp = input.lastUpdateTimestamp
-      this.howMuchOwed = HowMuchOwed.fromObject(input.howMuchOwed)
+      this.howMuchOwed = new HowMuchOwed().deserialize(input.howMuchOwed)
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }

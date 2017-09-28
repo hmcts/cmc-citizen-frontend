@@ -29,8 +29,8 @@ describe('HowMuchOwed', () => {
         amount: amount,
         text: description
       })
-      expect(result.amount).to.be.equals(amount)
-      expect(result.text).to.be.equals(description)
+      expect(result.amount).to.be.equal(amount)
+      expect(result.text).to.be.equal(description)
     })
   })
 

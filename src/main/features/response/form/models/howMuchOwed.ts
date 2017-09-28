@@ -28,6 +28,7 @@ export class HowMuchOwed implements Serializable<HowMuchOwed> {
       return new HowMuchOwed()
     }
   }
+
   deserialize (input: any): HowMuchOwed {
     if (input) {
       this.amount = input.amount
