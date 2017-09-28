@@ -90,6 +90,20 @@ describe('PaidAmount', () => {
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.AMOUNT_NOT_VALID)
       })
+
+      it('valid option, valid amount, but greater that total amount', () => {
+        const errors = validator.validateSync(new PaidAmount(PaidAmountOption.YES, 100, 10))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.PAID_AMOUNT_GREATER_THAN_TOTAL_AMOUNT)
+      })
+
+      it('valid option, valid amount, but equal total amount', () => {
+        const errors = validator.validateSync(new PaidAmount(PaidAmountOption.YES, 100, 100))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.PAID_AMOUNT_GREATER_THAN_TOTAL_AMOUNT)
+      })
     })
 
     describe('should accept when', () => {
@@ -100,7 +114,7 @@ describe('PaidAmount', () => {
       })
 
       it('option is YES and amount is valid', () => {
-        const errors = validator.validateSync(new PaidAmount(PaidAmountOption.YES, 100))
+        const errors = validator.validateSync(new PaidAmount(PaidAmountOption.YES, 100, 1000))
 
         expect(errors.length).to.equal(0)
       })
