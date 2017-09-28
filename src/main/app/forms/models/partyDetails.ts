@@ -19,14 +19,14 @@ export class PartyDetails implements Serializable<PartyDetails> {
   @MaxLength(255, { message: ValidationErrors.NAME_TOO_LONG, groups: ['claimant', 'defendant'] })
   name?: string
 
-  @IsDefined({ message: ValidationErrors.ADDRESS_REQUIRED, groups: ['claimant', 'defendant'] })
+  @IsDefined({ message: ValidationErrors.ADDRESS_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @ValidateNested({ groups: ['claimant', 'defendant'] })
   address?: Address = new Address()
 
   hasCorrespondenceAddress?: boolean
 
-  @ValidateIf(partyDetails => partyDetails.hasCorrespondenceAddress === true, { groups: ['claimant', 'defendant'] })
-  @IsDefined({ message: ValidationErrors.CORRESPONDENCE_ADDRESS_REQUIRED, groups: ['claimant', 'defendant'] })
+  @ValidateIf(partyDetails => partyDetails.hasCorrespondenceAddress === true, { groups: ['claimant', 'defendant', 'response'] })
+  @IsDefined({ message: ValidationErrors.CORRESPONDENCE_ADDRESS_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @ValidateNested({ groups: ['claimant', 'defendant'] })
   correspondenceAddress?: CorrespondenceAddress
 

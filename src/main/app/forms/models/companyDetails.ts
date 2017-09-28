@@ -12,7 +12,7 @@ export class CompanyDetails extends PartyDetails {
 
   @IsDefined({ message: ValidationErrors.CONTACT_PERSON_REQUIRED, groups: ['claimant'] })
   @IsNotBlank({ message: ValidationErrors.CONTACT_PERSON_REQUIRED, groups: ['claimant'] })
-  @MaxLength(35, { message: ValidationErrors.CONTACT_PERSON_NAME_TOO_LONG, groups: ['claimant'] })
+  @MaxLength(35, { message: ValidationErrors.CONTACT_PERSON_NAME_TOO_LONG, groups: ['claimant', 'response'] })
   contactPerson?: string
 
   constructor () {
@@ -21,7 +21,7 @@ export class CompanyDetails extends PartyDetails {
   }
 
   static fromObject (input?: any): CompanyDetails {
-    if (input == null) {
+    if (input === undefined) {
       return input
     }
     let deserialized = new CompanyDetails()

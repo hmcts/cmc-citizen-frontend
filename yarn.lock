@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@hmcts/cmc-common-frontend@^1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.8.0.tgz#36757fba80f5b1724652b2beedd4591893b98287"
+"@hmcts/cmc-common-frontend@^1.8.4":
+  version "1.8.4"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.8.4.tgz#21eb8e04372ad44172c7e8971e0cf97bb42b47df"
 
 "@hmcts/nodejs-healthcheck@^1.4.3":
   version "1.4.3"
