@@ -42,7 +42,7 @@ export default class Claim implements Serializable<Claim> {
         this.respondedAt = MomentFactory.parse(input.respondedAt)
       }
       this.claimantEmail = input.submitterEmail
-      this.countyCourtJudgment = CountyCourtJudgment.of(input.countyCourtJudgment)
+      this.countyCourtJudgment = new CountyCourtJudgment().deserialize(input.countyCourtJudgment)
       if (input.countyCourtJudgmentRequestedAt) {
         this.countyCourtJudgmentRequestedAt = MomentFactory.parse(input.countyCourtJudgmentRequestedAt)
       }

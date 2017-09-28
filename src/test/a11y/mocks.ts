@@ -30,6 +30,8 @@ import { DraftCCJ } from 'ccj/draft/DraftCCJ'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { PartyDetails } from 'forms/models/partyDetails'
+import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
+import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 
 function mockedDraftClaim () {
   let draft = new DraftClaim()
@@ -88,11 +90,7 @@ function mockedClaim () {
   claim.externalId = 'uuid'
   claim.responseDeadline = moment()
   claim.createdAt = moment()
-  claim.countyCourtJudgment = {
-    defendant: {
-      name: 'John Smith'
-    }
-  } as any
+  claim.countyCourtJudgment = mockCountyCourtJudgment()
   claim.countyCourtJudgmentRequestedAt = moment()
 
   return claim
@@ -134,6 +132,12 @@ function mockCCJDraft (): DraftCCJ {
   defendant.partyDetails = new IndividualDetails()
   ccjDraft.defendant = defendant
   return ccjDraft
+}
+
+function mockCountyCourtJudgment (): CountyCourtJudgment {
+  return new CountyCourtJudgment(
+    new TheirDetails('individual', 'John Potter'), PaymentType.IMMEDIATELY.value, 10
+  )
 }
 
 const justForwardRequestHandler = {

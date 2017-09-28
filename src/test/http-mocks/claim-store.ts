@@ -63,8 +63,18 @@ export const sampleClaimObj = {
   responseDeadline: '2017-08-08',
   countyCourtJudgment: {
     defendant: {
-      name: 'Little John'
+      name: 'asdsd',
+      type: 'individual',
+      email: 'd@w.pl',
+      address: {
+        city: 'sadasd',
+        line1: 'sadasd',
+        line2: 'dsas',
+        postcode: 'sdasd'
+      },
+      dateOfBirth: '1990-11-01'
     },
+    paidAmount: 2,
     paymentOption: 'IMMEDIATELY'
   },
   countyCourtJudgmentRequestedAt: '2017-10-10T22:45:51.785'

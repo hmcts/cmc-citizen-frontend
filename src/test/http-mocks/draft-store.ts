@@ -131,7 +131,6 @@ const sampleResponseDraftObj = {
 const sampleCCJDraftObj = {
   defendant: {
     email: { address: 'a@wp.pl' },
-    paidAmount: { option: PaidAmountOption.NO },
     partyDetails: {
       type: 'individual',
       name: 'John Smith',
@@ -149,6 +148,27 @@ const sampleCCJDraftObj = {
           year: 1980
         }
       }
+    }
+  },
+  paymentOption: {
+    option: {
+      value: 'INSTALMENTS',
+      displayValue: 'By instalments'
+    }
+  },
+  paidAmount: { option: PaidAmountOption.NO },
+  repaymentPlan: {
+    remainingAmount: 3685,
+    firstPayment: 100,
+    installmentAmount: 100,
+    firstPaymentDate: {
+      year: 2019,
+      month: 1,
+      day: 1
+    },
+    paymentSchedule: {
+      value: 'EVERY_MONTH',
+      displayValue: 'every month'
     }
   }
 }

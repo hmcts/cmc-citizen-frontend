@@ -5,9 +5,8 @@ import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 import { convertDefendantDetails } from 'claims/converters/defendantDetails'
 import { RepaymentPlan } from 'claims/models/replaymentPlan'
 import { PartyDetails } from 'forms/models/partyDetails'
-import { CountyCourtJudgmentImmediatePayment } from 'claims/models/ccj/countyCourtJudgmentImmediatePayment'
-import { CountyCourtJudgmentPaidByInstalments } from 'claims/models/ccj/countyCourtJudgmentPaidByInstalments'
-import { CountyCourtJudgmentPaidFullBySetDate } from 'claims/models/ccj/countyCourtJudgmentPaidFullBySetDate'
+import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
+import { Moment } from 'moment'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {
 
@@ -16,7 +15,7 @@ function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan 
       repaymentPlan.remainingAmount,
       repaymentPlan.firstPayment,
       repaymentPlan.installmentAmount,
-      repaymentPlan.firstPaymentDate.asString(),
+      repaymentPlan.firstPaymentDate.toMoment(),
       repaymentPlan.paymentSchedule.value
     )
   }
@@ -31,8 +30,9 @@ function convertPaidAmount (draftCcj: DraftCCJ): number {
   return undefined
 }
 
-function convertPayBySetDate (draftCcj: DraftCCJ): string {
-  return (draftCcj.paymentOption.option === PaymentType.FULL_BY_SPECIFIED_DATE) ? draftCcj.payBySetDate.date.asString() : undefined
+function convertPayBySetDate (draftCcj: DraftCCJ): Moment {
+  return (draftCcj.paymentOption.option === PaymentType.FULL_BY_SPECIFIED_DATE)
+    ? draftCcj.payBySetDate.date.toMoment() : undefined
 }
 
 export class CCJModelConverter {
@@ -42,26 +42,15 @@ export class CCJModelConverter {
     const email: string = draftCcj.defendant.email.address
     const defendant: PartyDetails = draftCcj.defendant.partyDetails
     const paidAmount: number = convertPaidAmount(draftCcj)
-    let result
+    const repaymentPlan: RepaymentPlan = convertRepaymentPlan(draftCcj.repaymentPlan)
+    const payBySetdate: Moment = convertPayBySetDate(draftCcj)
 
-    switch (draftCcj.paymentOption.option) {
-      case PaymentType.IMMEDIATELY:
-        result = new CountyCourtJudgmentImmediatePayment(convertDefendantDetails(defendant, email), paidAmount)
-        break
-
-      case PaymentType.INSTALMENTS:
-        result = new CountyCourtJudgmentPaidByInstalments(
-          convertDefendantDetails(defendant, email), paidAmount, convertRepaymentPlan(draftCcj.repaymentPlan)
-        )
-        break
-
-      case PaymentType.FULL_BY_SPECIFIED_DATE:
-        result = new CountyCourtJudgmentPaidFullBySetDate(
-          convertDefendantDetails(defendant, email), paidAmount, convertPayBySetDate(draftCcj)
-        )
-        break
-    }
-
-    return result
+    return new CountyCourtJudgment(
+      convertDefendantDetails(defendant, email),
+      draftCcj.paymentOption.option.value,
+      paidAmount,
+      repaymentPlan,
+      payBySetdate
+    )
   }
 }

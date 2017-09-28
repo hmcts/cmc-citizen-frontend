@@ -24,8 +24,8 @@ import { sampleClaimObj } from '../../../http-mocks/claim-store'
 const externalId = sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
-const payBySetDatePage: string = Paths.payBySetDatePage.uri.replace(':externalId', externalId)
-const checkAndSavePage: string = Paths.checkAndSendPage.uri.replace(':externalId', externalId)
+const payBySetDatePage: string = Paths.payBySetDatePage.evaluateUri({externalId : externalId})
+const checkAndSavePage: string = Paths.checkAndSendPage.evaluateUri({externalId : externalId})
 
 describe('CCJ - Pay by set date', () => {
   attachDefaultHooks()

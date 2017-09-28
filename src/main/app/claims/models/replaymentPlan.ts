@@ -8,7 +8,7 @@ export class RepaymentPlan implements Serializable<RepaymentPlan> {
   constructor (public remainingAmount?: number,
                public firstPayment?: number,
                public instalmentAmount?: number,
-               public firstPaymentDate?: string | Moment,
+               public firstPaymentDate?: Moment,
                public paymentSchedule?: string | PaymentSchedule) {
     this.remainingAmount = remainingAmount
     this.firstPayment = firstPayment
@@ -28,5 +28,4 @@ export class RepaymentPlan implements Serializable<RepaymentPlan> {
 
     return this
   }
-
 }

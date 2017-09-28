@@ -6,9 +6,9 @@ import { DefendantResponse } from 'app/claims/models/defendantResponse'
 import { ClaimModelConverter } from 'claims/claimModelConverter'
 import { ResponseModelConverter } from 'claims/responseModelConverter'
 
-export const claimApiBaseUrl = `${config.get<string>('claim-store.url')}`
-export const claimStoreApiUrl = `${claimApiBaseUrl}/claims`
-const claimStoreResponsesApiUrl = `${claimApiBaseUrl}/responses/claim`
+export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
+export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
+const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
 
 export default class ClaimStoreClient {
   static saveClaimForUser (user: User): Promise<Claim> {
