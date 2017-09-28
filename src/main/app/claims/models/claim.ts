@@ -71,4 +71,12 @@ export default class Claim implements Serializable<Claim> {
 
     return this.remainingDays < 0 && !this.respondedAt
   }
+
+  get isCountyCourtJudgmentSubmitted (): boolean {
+    if (!toBoolean(config.get<boolean>('featureToggles.countyCourtJudgment'))) {
+      return false
+    }
+
+    return !!this.countyCourtJudgmentRequestedAt
+  }
 }

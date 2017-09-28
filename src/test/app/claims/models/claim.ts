@@ -5,6 +5,18 @@ import { expect } from 'chai'
 const claim = new Claim()
 
 describe('Claim', () => {
+  describe('isCountyCourtJudgmentSubmitted', () => {
+    it('should return true when CCJ was submitted', () => {
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate().subtract(1, 'day')
+      expect(claim.isCountyCourtJudgmentSubmitted).to.be.equal(true)
+    })
+
+    it('should return false when CCJ was not submitted', () => {
+      claim.countyCourtJudgmentRequestedAt = undefined
+      expect(claim.isCountyCourtJudgmentSubmitted).to.be.equal(false)
+    })
+  })
+
   describe('eligibleForCCJ', () => {
     context('remainingDays < 0', () => {
       before('setup', () => {
