@@ -36,6 +36,15 @@ export class IsLessThanOrEqualToSumOfConstraint implements ValidatorConstraintIn
   }
 }
 
+/**
+ * This validator is for ensuring that a number added with another number is less than the 'lessThanAmount'.
+ *
+ * @param {string} sum the property name of the amount to sum with 'value'
+ * @param {string} lessThanAmount the property name of the amount that 'value' + 'sum' has to be less than
+ * @param {ValidationOptions} validationOptions the options
+ * @returns {(object: Object, propertyName: string) => any} the validation function
+ * @constructor
+ */
 export function IsLessThanOrEqualToSumOf (sum: string, lessThanAmount: string, validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
