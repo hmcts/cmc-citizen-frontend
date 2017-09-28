@@ -1,10 +1,10 @@
 import * as express from 'express'
 
-import ClaimStoreClient from 'claims/claimStoreClient'
 import Claim from 'claims/models/claim'
-import { DefendantResponse } from 'app/claims/models/defendantResponse'
 
 import { Paths as DashboardPaths } from 'dashboard/paths'
+
+const logger = require('@hmcts/nodejs-logging').getLogger('response/guards/alreadyRespondedGuard')
 
 /**
  * Protects response journey from being accessed when response has been already submitted. Request in such scenario
@@ -14,16 +14,12 @@ import { Paths as DashboardPaths } from 'dashboard/paths'
 export class AlreadyRespondedGuard {
 
   static async requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
-    try {
-      const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(res.locals.user.id)
-      const claimResponse: DefendantResponse = await ClaimStoreClient.retrieveResponse(res.locals.user.id, claim.id)
+    const claim: Claim = res.locals.user.claim
 
-      if (claimResponse) {
-        return res.redirect(DashboardPaths.dashboardPage.uri)
-      }
-      next()
-    } catch (err) {
-      next(err)
+    if (claim.response) {
+      logger.warn('State guard: already responded - redirecting to dashboard')
+      return res.redirect(DashboardPaths.dashboardPage.uri)
     }
+    next()
   }
 }

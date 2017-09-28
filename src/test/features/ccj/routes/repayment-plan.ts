@@ -66,7 +66,7 @@ describe('CCJ: repayment page', () => {
 
   describe('on POST', () => {
     const validFormData = {
-      remainingAmount: 77.36,
+      remainingAmount: 160,
       firstPayment: 77.32,
       installmentAmount: 76,
       paymentSchedule: 'EVERY_MONTH',

@@ -81,14 +81,11 @@ export const sampleClaimObj = {
 }
 
 const sampleDefendantResponseObj = {
-  id: 1,
-  claimId: 1,
-  defendantId: 1,
-  respondedAt: {},
+  respondedAt: '2017-07-25T22:45:51.785',
   response: {
-    type: 'OWE_ALL_PAID_SOME',
-    defence: '',
-    freeMediation: '',
+    type: 'OWE_NONE',
+    defence: 'I reject this money claim',
+    freeMediation: 'yes',
     defendant: {
       type: 'individual',
       name: 'full name',
@@ -106,6 +103,12 @@ export function resolveRetrieveClaimByExternalId (claimOverride?: object) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...claimOverride })
+}
+
+export function resolveRetrieveClaimByExternalIdWithResponse (override?: object) {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
+    .reply(HttpStatus.OK, { ...sampleClaimObj, ...sampleDefendantResponseObj, ...override })
 }
 
 export function rejectRetrieveClaimByExternalId (reason: string) {
@@ -156,6 +159,12 @@ export function resolveRetrieveByDefendantId (referenceNumber: string, defendant
     .reply(HttpStatus.OK, [{ ...sampleClaimObj, referenceNumber: referenceNumber, defendantId: defendantId }])
 }
 
+export function resolveRetrieveByDefendantIdWithResponse (override?: object) {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/defendant/[0-9]+'))
+    .reply(HttpStatus.OK, [{ ...sampleClaimObj, ...sampleDefendantResponseObj, ...override }])
+}
+
 export function rejectRetrieveByDefendantId (reason: string) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/defendant/[0-9]+'))
@@ -183,24 +192,6 @@ export function resolveSaveResponse () {
 export function rejectSaveResponse (reason: string) {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+/defendant/[0-9]+'))
-    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
-}
-
-export function resolveRetrieveResponsesByDefendantId (defendantResponseOverride?: object) {
-  mock(`${serviceBaseURL}/responses/defendant`)
-    .get(new RegExp('/[0-9]+'))
-    .reply(HttpStatus.OK, [{ ...sampleDefendantResponseObj, ...defendantResponseOverride }])
-}
-
-export function resolveRetrieveResponsesByDefendantIdToEmptyList () {
-  mock(`${serviceBaseURL}/responses/defendant`)
-    .get(new RegExp('/[0-9]+'))
-    .reply(HttpStatus.OK, [])
-}
-
-export function rejectRetrieveResponseByDefendantId (reason: string) {
-  mock(`${serviceBaseURL}/responses/defendant`)
-    .get(new RegExp('/[0-9]+'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 

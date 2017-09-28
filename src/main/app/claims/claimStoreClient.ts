@@ -2,7 +2,6 @@ import request from 'client/request'
 import * as config from 'config'
 import Claim from 'app/claims/models/claim'
 import User from 'app/idam/user'
-import { DefendantResponse } from 'app/claims/models/defendantResponse'
 import { ClaimModelConverter } from 'claims/claimModelConverter'
 import { ResponseModelConverter } from 'claims/responseModelConverter'
 
@@ -45,23 +44,6 @@ export default class ClaimStoreClient {
       })
   }
 
-  static async retrieveResponse (defendantId: number, claimId: number): Promise<DefendantResponse | undefined> {
-    const allResponses: Array<DefendantResponse> = await ClaimStoreClient.retrieveAllResponsesByDefendantId(defendantId)
-    const responseForClaim: Array<DefendantResponse> = allResponses.filter(item => item.claimId === claimId)
-
-    if (!responseForClaim) {
-      return Promise.resolve(undefined)
-    }
-
-    return responseForClaim.pop()
-  }
-
-  static retrieveAllResponsesByDefendantId (defendantId: number): Promise<DefendantResponse[]> {
-    return request
-      .get(`${claimApiBaseUrl}/responses/defendant/${defendantId}`)
-      .then(response => response.map(item => new DefendantResponse().deserialize(item)))
-  }
-
   static retrieveByLetterHolderId (letterHolderId: number): Promise<Claim> {
     if (!letterHolderId) {
       return Promise.reject('Letter holder id must be set')
@@ -102,25 +84,6 @@ export default class ClaimStoreClient {
     return request
       .get(`${claimStoreApiUrl}/defendant/${defendantId}`)
       .then((claims: object[]) => claims.map(claim => new Claim().deserialize(claim)))
-  }
-
-  static retrieveLatestClaimByDefendantId (defendantId: number): Promise<Claim> {
-    if (!defendantId) {
-      return Promise.reject('Defendant ID is required')
-    }
-
-    return request
-      .get(`${claimStoreApiUrl}/defendant/${defendantId}`)
-      .then((claims: object[]) => {
-        if (claims) { // Workaround below till dashboard is implemented - temporarily client always return last claim
-          if (claims.length === 0) {
-            throw new Error('Call was successful, but received an empty claim instance')
-          }
-          return new Claim().deserialize(claims.pop())
-        } else {
-          throw new Error('Call was successful, but received an empty claim instance')
-        }
-      })
   }
 
   static linkDefendant (claimId: number, defendantId: number): Promise<Claim> {

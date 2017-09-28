@@ -13,7 +13,7 @@
           <strong class="bold">{{ submittedOn | date }}</strong>
         </p>
         <p class="issue-receipt-download ">
-          <a href="/response/{{ claim.externalId }}/receipt">{{ t("Download defence as pdf") }}</a>
+          <a href="{{ paths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t("Download defence as pdf") }}</a>
         </p>
       </div>
 

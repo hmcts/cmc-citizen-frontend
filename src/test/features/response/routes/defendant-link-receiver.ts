@@ -12,6 +12,7 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -47,7 +48,9 @@ describe('Defendant link receiver', () => {
 
         await request(app)
           .get(`${ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: '1' })}?jwt=ABC`)
-          .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.taskListPage.uri))
+          .expect(res => expect(res).to.be.redirect
+            .toLocation(ResponsePaths.taskListPage
+              .evaluateUri({ externalId: sampleClaimObj.externalId })))
       })
 
       it('should return 500 and render error page when cannot link defendant to claim', async () => {
@@ -65,7 +68,9 @@ describe('Defendant link receiver', () => {
 
         await request(app)
           .get(`${ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: '1' })}?jwt=ABC`)
-          .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.taskListPage.uri))
+          .expect(res => expect(res).to.be.redirect
+            .toLocation(ResponsePaths.taskListPage
+              .evaluateUri({ externalId: sampleClaimObj.externalId })))
       })
 
       it('should set session cookie to token value passed as query parameter', async () => {

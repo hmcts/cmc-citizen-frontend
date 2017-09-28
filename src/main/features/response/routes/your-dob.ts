@@ -9,6 +9,7 @@ import { PartyType } from 'app/common/partyType'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
 import { IndividualDetails } from 'forms/models/individualDetails'
+import User from 'idam/user'
 
 function renderView (form: Form<DateOfBirth>, res: express.Response) {
   res.render(Paths.defendantDateOfBirthPage.associatedView, {
@@ -18,12 +19,13 @@ function renderView (form: Form<DateOfBirth>, res: express.Response) {
 
 export default express.Router()
   .get(Paths.defendantDateOfBirthPage.uri, (req: express.Request, res: express.Response) => {
-    switch (res.locals.user.responseDraft.defendantDetails.partyDetails.type) {
+    const user: User = res.locals.user
+    switch (user.responseDraft.defendantDetails.partyDetails.type) {
       case PartyType.INDIVIDUAL.value:
-        renderView(new Form((res.locals.user.responseDraft.defendantDetails.partyDetails as IndividualDetails).dateOfBirth), res)
+        renderView(new Form((user.responseDraft.defendantDetails.partyDetails as IndividualDetails).dateOfBirth), res)
         break
       default:
-        res.redirect(Paths.defendantMobilePage.uri)
+        res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: user.claim.externalId }))
         break
     }
   })
@@ -36,14 +38,15 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        switch (res.locals.user.responseDraft.defendantDetails.partyDetails.type) {
+        const user: User = res.locals.user
+        switch (user.responseDraft.defendantDetails.partyDetails.type) {
           case PartyType.INDIVIDUAL.value:
-            (res.locals.user.responseDraft.defendantDetails.partyDetails as IndividualDetails).dateOfBirth = form.model
+            (user.responseDraft.defendantDetails.partyDetails as IndividualDetails).dateOfBirth = form.model
             break
           default:
             throw Error('Date of birth is only supported for defendant types individual and sole trader')
         }
         await ResponseDraftMiddleware.save(res, next)
-        res.redirect(Paths.defendantMobilePage.uri)
+        res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

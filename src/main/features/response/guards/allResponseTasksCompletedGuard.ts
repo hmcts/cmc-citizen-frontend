@@ -1,6 +1,5 @@
 import * as express from 'express'
 
-import ClaimStoreClient from 'claims/claimStoreClient'
 import Claim from 'app/claims/models/claim'
 import { buildBeforeYouStartSection, buildRespondToClaimSection } from 'response/routes/task-list'
 import TaskList from 'app/drafts/tasks/taskList'
@@ -14,11 +13,11 @@ export default class AllResponseTasksCompletedGuard {
   static async requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
     try {
       const user: User = res.locals.user
-      const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(user.id)
+      const claim: Claim = user.claim
 
       const allTasksCompleted: boolean = [
-        buildBeforeYouStartSection(user.responseDraft),
-        buildRespondToClaimSection(user.responseDraft, claim.responseDeadline)
+        buildBeforeYouStartSection(user.responseDraft, claim.externalId),
+        buildRespondToClaimSection(user.responseDraft, claim.responseDeadline, claim.externalId)
       ].every((taskList: TaskList) => taskList.isCompleted())
 
       if (allTasksCompleted) {
@@ -27,7 +26,7 @@ export default class AllResponseTasksCompletedGuard {
       }
 
       logger.debug('State guard: claim check and send page is disabled until all tasks are completed - redirecting to task list')
-      res.redirect(Paths.taskListPage.uri)
+      res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
     } catch (err) {
       next(err)
     }

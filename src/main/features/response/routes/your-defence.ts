@@ -5,20 +5,18 @@ import { Paths } from 'response/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 
-import ClaimStoreClient from 'claims/claimStoreClient'
-import Claim from 'app/claims/models/claim'
-
 import Defence from 'response/form/models/defence'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
+import User from 'idam/user'
 
 async function renderView (form: Form<Defence>, res: express.Response, next: express.NextFunction) {
   try {
-    const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(res.locals.user.id)
+    const user: User = res.locals.user
 
     res.render(Paths.defencePage.associatedView, {
       form: form,
-      claim: claim
+      claim: user.claim
     })
   } catch (err) {
     next(err)
@@ -38,8 +36,9 @@ export default express.Router()
       if (form.hasErrors()) {
         await renderView(form, res, next)
       } else {
-        res.locals.user.responseDraft.defence = form.model
+        const user: User = res.locals.user
+        user.responseDraft.defence = form.model
         await ResponseDraftMiddleware.save(res, next)
-        res.redirect(Paths.freeMediationPage.uri)
+        res.redirect(Paths.freeMediationPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

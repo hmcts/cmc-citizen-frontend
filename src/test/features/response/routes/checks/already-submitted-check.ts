@@ -11,16 +11,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 
 export function checkAlreadySubmittedGuard (app: any, method: string, pagePath: string) {
   it('should return 500 and render error page when cannot retrieve claim in guard', async () => {
-    claimStoreServiceMock.rejectRetrieveByDefendantId('HTTP error')
-
-    await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
-      .expect(res => expect(res).to.be.serverError.withText('Error'))
-  })
-
-  it('should return 500 and render error page when cannot retrieve response in guard', async () => {
-    claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-    claimStoreServiceMock.rejectRetrieveResponseByDefendantId('HTTP error')
+    claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
     await request(app)[method](pagePath)
       .set('Cookie', `${cookieName}=ABC`)
@@ -28,8 +19,7 @@ export function checkAlreadySubmittedGuard (app: any, method: string, pagePath: 
   })
 
   it('should redirect to your dashboard page when defendant has already responded', async () => {
-    claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-    claimStoreServiceMock.resolveRetrieveResponsesByDefendantId()
+    claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
 
     await request(app)[method](pagePath)
       .set('Cookie', `${cookieName}=ABC`)

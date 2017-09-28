@@ -1,12 +1,14 @@
 import { IsDefined, IsIn, IsPositive, ValidateIf } from 'class-validator'
 import { Serializable } from 'models/serializable'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
+import { Fractions } from 'forms/validation/validators/fractions'
 import { IsLessThan } from 'forms/validation/validators/isLessThan'
 
 export class ValidationErrors {
   static readonly OPTION_REQUIRED: string = 'Choose option: yes or no'
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount'
   static readonly AMOUNT_NOT_VALID: string = 'Invalid amount'
+  static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter valid amount, maximum two decimal places'
   static readonly PAID_AMOUNT_GREATER_THAN_TOTAL_AMOUNT: string = 'Paid amount cannot be greater or equal than total amount'
 }
 
@@ -19,6 +21,7 @@ export class PaidAmount implements Serializable <PaidAmount> {
   @ValidateIf(o => o.option === PaidAmountOption.YES)
   @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED })
   @IsPositive({ message: ValidationErrors.AMOUNT_NOT_VALID })
+  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS })
   @IsLessThan('claimedAmount', { message: ValidationErrors.PAID_AMOUNT_GREATER_THAN_TOTAL_AMOUNT })
   amount?: number
 
