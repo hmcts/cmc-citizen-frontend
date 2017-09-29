@@ -42,6 +42,6 @@ export function convertDefendantDetails (defendant: PartyDetails, email: string)
         organisationDetails.name, convertAddress(organisationDetails.address), email, organisationDetails.contactPerson
       )
     default:
-      throw Error('Something went wrong, No defendant type is set')
+      throw Error(`Unknown defendant type ${defendant.type}`)
   }
 }
