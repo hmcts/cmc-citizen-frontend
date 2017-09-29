@@ -6,20 +6,25 @@
   <meta charset="utf-8" />
   <title>{{ t(title) }}</title>
 
-  <!--[if gt IE 8]><!--><link href="{{ asset_paths['style_vendor'] }}/govuk-template.css?{{ govuk_template_version }}" media="screen" rel="stylesheet" /><!--<![endif]-->
-  <!--[if IE 6]><link href="{{ asset_paths['style_vendor'] }}/govuk-template-ie6.css?{{ govuk_template_version }}" media="screen" rel="stylesheet" /><![endif]-->
-  <!--[if IE 7]><link href="{{ asset_paths['style_vendor'] }}/govuk-template-ie7.css?{{ govuk_template_version }}" media="screen" rel="stylesheet" /><![endif]-->
-  <!--[if IE 8]><link href="{{ asset_paths['style_vendor'] }}/govuk-template-ie8.css?{{ govuk_template_version }}" media="screen" rel="stylesheet" /><![endif]-->
-  <link href="{{ asset_paths['style_vendor'] }}/govuk-template-print.css?{{ govuk_template_version }}" media="print" rel="stylesheet" />
+  <!--[if gt IE 8]><!--><link rel="stylesheet" media="screen" href="{{ asset_paths['style_vendor'] }}stylesheets/govuk-template.css?{{ govuk_template_version }}"/><!--<![endif]-->
+  <!--[if IE 6]><link rel="stylesheet" media="screen" href="{{ asset_paths['style_vendor'] }}stylesheets/govuk-template-ie6.css?{{ govuk_template_version }}"/><![endif]-->
+  <!--[if IE 7]><link rel="stylesheet" media="screen" href="{{ asset_paths['style_vendor'] }}stylesheets/govuk-template-ie7.css?{{ govuk_template_version }}"/><![endif]-->
+  <!--[if IE 8]><link rel="stylesheet" media="screen" href="{{ asset_paths['style_vendor'] }}stylesheets/govuk-template-ie8.css?{{ govuk_template_version }}"/><![endif]-->
+  <link rel="stylesheet" media="print" href="{{ asset_paths['style_vendor'] }}stylesheets/govuk-template-print.css?{{ govuk_template_version }}"/>
 
-  <!--[if IE 8]><link href="{{ asset_paths['style_vendor'] }}/fonts-ie8.css?{{ govuk_template_version }}" media="all" rel="stylesheet" /><![endif]-->
-  <!--[if gte IE 9]><!--><link href="{{ asset_paths['style_vendor'] }}/fonts.css?{{ govuk_template_version }}" media="all" rel="stylesheet" /><!--<![endif]-->
+  <!--[if IE 8]><link rel="stylesheet" media="all" href="{{ asset_paths['style_vendor'] }}/fonts-ie8.css?{{ govuk_template_version }}"/><![endif]-->
+  <!--[if gte IE 9]><!--><link rel="stylesheet" media="all" href="{{ asset_paths['style_vendor'] }}/fonts.css?{{ govuk_template_version }}"/><!--<![endif]-->
+  <!--[if lt IE 9]><script src="{{ asset_paths['js_vendor'] }}/ie.js?{{ govuk_template_version }}"></script><![endif]-->
+
+  <link rel="shortcut icon" href="{{ asset_paths['images_vendor'] }}/favicon.ico?{{ govuk_template_version }}" type="image/x-icon" />
 
   <link rel="mask-icon" href="{{ asset_paths['images_vendor'] }}/gov.uk_logotype_crown.svg?{{ govuk_template_version }}" color="#0b0c0c">
-  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="{{ asset_paths['images_vendor'] }}/apple-touch-icon-152x152.png?{{ govuk_template_version }}">
-  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="{{ asset_paths['images_vendor'] }}/apple-touch-icon-120x120.png?{{ govuk_template_version }}">
-  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="{{ asset_paths['images_vendor'] }}/apple-touch-icon-76x76.png?{{ govuk_template_version }}">
-  <link rel="apple-touch-icon-precomposed" href="{{ asset_paths['images_vendor'] }}/apple-touch-icon-60x60.png?{{ govuk_template_version }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset_paths['images_vendor'] }}/apple-touch-icon-180x180.png?{{ govuk_template_version }}">
+  <link rel="apple-touch-icon" sizes="167x167" href="{{ asset_paths['images_vendor'] }}/apple-touch-icon-167x167.png?{{ govuk_template_version }}">
+  <link rel="apple-touch-icon" sizes="152x152" href="{{ asset_paths['images_vendor'] }}/apple-touch-icon-152x152.png?{{ govuk_template_version }}">
+  <link rel="apple-touch-icon" href="{{ asset_paths['images_vendor'] }}images/apple-touch-icon.png?{{ govuk_template_version }}">
+
+  <meta name="theme-color" content="#0b0c0c" />
 
   {% if development %}
     <link href="{{ asset_paths['style_vendor'] }}/HTMLCSAuditor.css" rel="stylesheet" />
