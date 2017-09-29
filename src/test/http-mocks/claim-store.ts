@@ -140,6 +140,17 @@ export function rejectRetrieveByClaimantId (reason: string) {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
+export function resolveIsClaimLinked (status: boolean) {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/.+/defendant-link-status'))
+    .reply(HttpStatus.OK, { status: status })
+}
+export function rejectIsClaimLinked () {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/.+/defendant-link-status'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'Internal server error')
+}
+
 export function resolveRetrieveByLetterHolderId (referenceNumber: string, defendantId?: number) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/letter/[0-9]+'))

@@ -120,4 +120,13 @@ export default class ClaimStoreClient {
       }
     })
   }
+
+  static isClaimLinked (reference: string): Promise<boolean> {
+    if (!reference) {
+      return Promise.reject(new Error('Claim reference is required'))
+    }
+
+    return request.get(`${claimStoreApiUrl}/${reference}/defendant-link-status`)
+      .then(linkStatus => linkStatus.status)
+  }
 }
