@@ -16,22 +16,22 @@
         {% if form.model.type == 'individual' %}
           {%
             set fields = [
-              { label: 'Your full name', name: 'name' }
+              { readOnly: true, label: 'Your full name', value: claim.claimData.defendant.name }
             ]
           %}
           {% set addressSectionHeading = 'Your address' %}
         {% elif form.model.type == 'soleTrader' %}
           {%
             set fields = [
-              { label: 'Your full name', name: 'name' },
-              { label: 'Business name (optional)', name: 'businessName' }
+              { readOnly: true, label: 'Your full name', value: claim.claimData.defendant.name },
+              { readOnly: true, label: 'Business name', value: claim.claimData.defendant.businessName }
             ]
           %}
           {% set addressSectionHeading = 'Your address' %}
         {% elif form.model.type == 'company' %}
           {%
             set fields = [
-              { label: 'Company name', name: 'name' },
+              { readOnly: true, label: 'Company name', value: claim.claimData.defendant.name },
               { label: 'Contact person (optional)', name: 'contactPerson' }
             ]
           %}
@@ -39,7 +39,7 @@
         {% elif form.model.type == 'organisation' %}
           {%
             set fields = [
-              { label: 'Organisation name', name: 'name' },
+              { readOnly: true, label: 'Organisation name', value: claim.claimData.defendant.name },
               { label: 'Contact person (optional)', name: 'contactPerson' }
             ]
           %}
