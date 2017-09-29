@@ -17,6 +17,7 @@ import InterestDate from 'app/claims/models/interestDate'
 import InterestDateType from 'app/common/interestDateType'
 import Interest, { InterestType } from 'app/forms/models/interest'
 import { Defendant, Defendant as DraftDefendant } from 'app/drafts/models/defendant'
+import { TheirDetails } from 'app/claims/models/details/theirs/theirDetails'
 import { Company as CompanyDetails } from 'app/claims/models/details/theirs/company'
 import { Individual } from 'app/claims/models/details/yours/individual'
 import { default as DraftClaimant } from 'app/drafts/models/claimant'
@@ -27,6 +28,8 @@ import { DraftCCJ } from 'ccj/draft/DraftCCJ'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { PartyDetails } from 'forms/models/partyDetails'
+import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
+import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 
 function mockedDraftClaim () {
   let draft = new DraftClaim()
@@ -85,6 +88,8 @@ function mockedClaim () {
   claim.externalId = 'uuid'
   claim.responseDeadline = moment()
   claim.createdAt = moment()
+  claim.countyCourtJudgment = mockCountyCourtJudgment()
+  claim.countyCourtJudgmentRequestedAt = moment()
 
   claim.respondedAt = moment()
   return claim
@@ -113,6 +118,12 @@ function mockCCJDraft (): DraftCCJ {
   defendant.partyDetails = new IndividualDetails()
   ccjDraft.defendant = defendant
   return ccjDraft
+}
+
+function mockCountyCourtJudgment (): CountyCourtJudgment {
+  return new CountyCourtJudgment(
+    new TheirDetails('individual', 'John Potter'), PaymentType.IMMEDIATELY.value, 10
+  )
 }
 
 const justForwardRequestHandler = {

@@ -40,6 +40,7 @@ export default express.Router()
         } else {
           const { externalId } = req.params
           user.ccjDraft.repaymentPlan = form.model
+          user.ccjDraft.payBySetDate = undefined
           await DraftCCJService.save(res, next)
           res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
         }

@@ -36,6 +36,11 @@
           </form>
 
         {% endif %}
+
+        {% if claim.countyCourtJudgmentRequestedAt %}
+          <p>{{ t('You have requested a County Court Judgment to be made against %s.',
+                    { postProcess: 'sprintf', sprintf: [claim.claimData.defendant.name] }) }}</p>
+        {% endif %}
       </div>
     </div>
 

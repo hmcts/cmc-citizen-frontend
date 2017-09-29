@@ -8,6 +8,7 @@ describe('Claim', () => {
   describe('eligibleForCCJ', () => {
     context('remainingDays < 0', () => {
       before('setup', () => {
+        claim.countyCourtJudgmentRequestedAt = undefined
         claim.responseDeadline = MomentFactory.currentDate().subtract(1, 'day')
       })
 
@@ -23,15 +24,28 @@ describe('Claim', () => {
 
     context('remainingDays = 0', () => {
       before('setup', () => {
+        claim.countyCourtJudgmentRequestedAt = undefined
         claim.responseDeadline = MomentFactory.currentDate()
       })
       it('should return false', () => {
         expect(claim.eligibleForCCJ).to.be.equal(false)
       })
     })
+
     context('remainingDays > 0', () => {
       before('setup', () => {
+        claim.countyCourtJudgmentRequestedAt = undefined
         claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
+      })
+
+      it('should return false', () => {
+        expect(claim.eligibleForCCJ).to.be.equal(false)
+      })
+    })
+
+    context('countyCourtJudgmentRequestedAt is not empty', () => {
+      before('setup', () => {
+        claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate().subtract(1, 'day')
       })
 
       it('should return false', () => {

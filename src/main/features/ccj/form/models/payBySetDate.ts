@@ -12,7 +12,6 @@ export class ValidationErrors {
   static readonly DATE_NOT_VALID: string = 'Enter a valid date'
   static readonly DATE_TODAY_OR_IN_FUTURE: string = 'Enter a date that is today or in the future'
   static readonly DATE_INVALID_YEAR: string = 'Enter a 4 digit year'
-
 }
 
 export class PayBySetDate implements Serializable <PayBySetDate> {
@@ -22,8 +21,8 @@ export class PayBySetDate implements Serializable <PayBySetDate> {
   @IsValidYearFormat({ message: ValidationErrors.DATE_INVALID_YEAR })
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID })
   @IsTodayOrInFuture({ message: ValidationErrors.DATE_TODAY_OR_IN_FUTURE })
-
   date?: LocalDate
+
   constructor (date?: LocalDate) {
     this.date = date
   }
@@ -33,8 +32,7 @@ export class PayBySetDate implements Serializable <PayBySetDate> {
       return value
     }
 
-    const instance = new PayBySetDate(LocalDate.fromObject(value.date))
-    return instance
+    return new PayBySetDate(LocalDate.fromObject(value.date))
   }
 
   deserialize (input?: any): PayBySetDate {
