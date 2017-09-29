@@ -18,7 +18,6 @@ import { MoreTimeNeededTask } from 'response/tasks/moreTimeNeededTask'
 import { YourDetails } from 'response/tasks/yourDetails'
 import User from 'app/idam/user'
 import { isAfter4pm } from 'common/dateUtils'
-import { ResponseType } from 'response/form/models/responseType'
 import { HowMuchPaidTask } from 'response/tasks/howMuchPaidTask'
 
 export function buildBeforeYouStartSection (responseDraft: ResponseDraft, externalId: string): TaskList {
@@ -32,6 +31,7 @@ export function buildBeforeYouStartSection (responseDraft: ResponseDraft, extern
 export function buildRespondToClaimSection (draft: ResponseDraft, responseDeadline: Moment, externalId: string): TaskList {
   const tasks: TaskListItem[] = []
   const now: Moment = MomentFactory.currentDateTime()
+
   if (responseDeadline.isAfter(now)) {
     tasks.push(new TaskListItem('More time needed to respond', Paths.moreTimeRequestPage
         .evaluateUri({ externalId: externalId }),
@@ -41,7 +41,8 @@ export function buildRespondToClaimSection (draft: ResponseDraft, responseDeadli
   tasks.push(new TaskListItem('Do you owe the money claimed', Paths.responseTypePage
       .evaluateUri({ externalId: externalId }),
     OweMoneyTask.isCompleted(draft)))
-  if (draft.response.type === ResponseType.OWE_ALL_PAID_SOME) {
+
+  if (draft.requireHowMuchPaid()) {
     tasks.push(new TaskListItem('How much have you paid the claimant?', Paths.defendantHowMuchPaid.
       evaluateUri({ externalId: externalId }),
     HowMuchPaidTask.isCompleted(draft)))

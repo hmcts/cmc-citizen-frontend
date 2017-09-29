@@ -67,7 +67,7 @@ export class HowMuchPaid implements Serializable<HowMuchPaid> {
   }
 
   isCompleted (): boolean {
-    return !!this.date.year && this.date.year.toString().length > 0 ||
-      !!this.text && this.text.length > 0 ||
+    return !!this.date.year && this.date.year.toString().length > 0 &&
+      !!this.text && this.text.length > 0 &&
       !!this.amount && this.amount > 0
   }}

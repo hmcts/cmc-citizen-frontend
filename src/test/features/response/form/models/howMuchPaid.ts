@@ -34,6 +34,42 @@ describe('HowMuchPaid', () => {
     })
   })
 
+  describe('isCompleted', () => {
+    let howMuchPaid: HowMuchPaid
+
+    beforeEach(() => {
+      howMuchPaid = new HowMuchPaid()
+    })
+
+    it('should return false when text is undefined', () => {
+      howMuchPaid.amount = 300
+      howMuchPaid.date = new LocalDate(27, 1, 12)
+      howMuchPaid.text = undefined
+      expect(howMuchPaid.isCompleted()).to.equal(false)
+    })
+
+    it('should return false when date is wrong format', () => {
+      howMuchPaid.amount = 300
+      howMuchPaid.date = new LocalDate(0, 1, 1)
+      howMuchPaid.text = 'text'
+      expect(howMuchPaid.isCompleted()).to.equal(false)
+    })
+
+    it('should return false when amount is undefined', () => {
+      howMuchPaid.amount = undefined
+      howMuchPaid.date = new LocalDate(2019, 1, 1)
+      howMuchPaid.text = 'text'
+      expect(howMuchPaid.isCompleted()).to.equal(false)
+    })
+
+    it('should return true when amount, text and date is defined', () => {
+      howMuchPaid.amount = 300
+      howMuchPaid.date = new LocalDate(2017, 1, 12)
+      howMuchPaid.text = 'text'
+      expect(howMuchPaid.isCompleted()).to.equal(true)
+    })
+  })
+
   describe('validation', () => {
     const validator: Validator = new Validator()
 

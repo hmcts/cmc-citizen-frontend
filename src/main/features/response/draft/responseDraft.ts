@@ -54,4 +54,16 @@ export class ResponseDraft extends Draft implements Serializable<ResponseDraft> 
 
     return !!(this.response.type === ResponseType.OWE_NONE && this.counterClaim && this.counterClaim.counterClaim === false)
   }
+
+  public requireHowMuchPaid (): boolean {
+    if (!(this.response && this.response.type)) {
+      return false
+    }
+
+    if (this.response.type === ResponseType.OWE_ALL_PAID_SOME) {
+      return true
+    }
+
+    return !!(this.response.type === ResponseType.OWE_ALL_PAID_SOME)
+  }
 }
