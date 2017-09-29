@@ -40,7 +40,9 @@ describe('CCJ: confirmation page', () => {
         })
 
         it('should render page when everything is fine', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(
+            { countyCourtJudgmentRequestedAt: '2017-10-10T22:45:51.785' }
+          )
 
           await request(app)
             .get(confirmationPage)

@@ -5,6 +5,9 @@ import { ErrorHandling } from 'common/errorHandling'
 import Claim from 'claims/models/claim'
 import { Moment } from 'moment'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
+import * as config from 'config'
+
+const timeForResponseInDays: number = config.get<number>('claim.countyCourtJudgment.timeForResponseInDays')
 
 export default express.Router()
   .get(Paths.confirmationPage.uri,
@@ -14,7 +17,7 @@ export default express.Router()
       const ccj: CountyCourtJudgment = claim.countyCourtJudgment
       const judgmentDeadline: Moment = ccj.payBySetDate
         || (ccj.repaymentPlan && ccj.repaymentPlan.firstPaymentDate)
-        || claim.countyCourtJudgmentRequestedAt.add(28, 'days')
+        || claim.countyCourtJudgmentRequestedAt.add(timeForResponseInDays, 'days')
 
       res.render(Paths.confirmationPage.associatedView,
         {

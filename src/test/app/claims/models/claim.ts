@@ -5,21 +5,10 @@ import { expect } from 'chai'
 const claim = new Claim()
 
 describe('Claim', () => {
-  describe('isCountyCourtJudgmentSubmitted', () => {
-    it('should return true when CCJ was submitted', () => {
-      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate().subtract(1, 'day')
-      expect(claim.isCountyCourtJudgmentSubmitted).to.be.equal(true)
-    })
-
-    it('should return false when CCJ was not submitted', () => {
-      claim.countyCourtJudgmentRequestedAt = undefined
-      expect(claim.isCountyCourtJudgmentSubmitted).to.be.equal(false)
-    })
-  })
-
   describe('eligibleForCCJ', () => {
     context('remainingDays < 0', () => {
       before('setup', () => {
+        claim.countyCourtJudgmentRequestedAt = undefined
         claim.responseDeadline = MomentFactory.currentDate().subtract(1, 'day')
       })
 
@@ -35,15 +24,28 @@ describe('Claim', () => {
 
     context('remainingDays = 0', () => {
       before('setup', () => {
+        claim.countyCourtJudgmentRequestedAt = undefined
         claim.responseDeadline = MomentFactory.currentDate()
       })
       it('should return false', () => {
         expect(claim.eligibleForCCJ).to.be.equal(false)
       })
     })
+
     context('remainingDays > 0', () => {
       before('setup', () => {
+        claim.countyCourtJudgmentRequestedAt = undefined
         claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
+      })
+
+      it('should return false', () => {
+        expect(claim.eligibleForCCJ).to.be.equal(false)
+      })
+    })
+
+    context('countyCourtJudgmentRequestedAt is not empty', () => {
+      before('setup', () => {
+        claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate().subtract(1, 'day')
       })
 
       it('should return false', () => {
