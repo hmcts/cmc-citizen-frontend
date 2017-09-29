@@ -19,7 +19,7 @@ export class YourDetails {
       return false
     }
     return this.isDateOfBirthCompleted(response.defendantDetails.partyDetails)
-      && response.defendantDetails.partyDetails.isCompleted('defendant')
+      && response.defendantDetails.partyDetails.isCompleted('response')
       && response.defendantDetails.mobilePhone && response.defendantDetails.mobilePhone.isCompleted()
   }
 }
