@@ -14,7 +14,7 @@ import { CalculationOutcome } from 'app/fees/models/calculationOutcome'
 
 import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
 import ClaimStoreClient from 'app/claims/claimStoreClient'
-import { buildURL } from 'app/utils/CallbackBuilder'
+import { buildURL } from 'app/utils/callbackBuilder'
 import { claimAmountWithInterest } from 'app/utils/interestUtils'
 import User from 'app/idam/user'
 

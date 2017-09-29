@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { DraftMiddleware } from 'common/draft/draftMiddleware'
-import { DraftCCJ } from 'ccj/draft/DraftCCJ'
+import { DraftCCJ } from 'ccj/draft/draftCCJ'
 
 const deserialize = (value: any): DraftCCJ => {
   return new DraftCCJ().deserialize(value)
