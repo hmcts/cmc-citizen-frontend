@@ -1,7 +1,9 @@
 import * as express from 'express'
 import DraftStoreClient from 'common/draft/draftStoreClient'
+import User from 'idam/user'
+import { Draft } from 'models/draft'
 
-export class DraftMiddleware<T> {
+export class DraftMiddleware<T extends Draft> {
   client: DraftStoreClient<T>
 
   constructor (public draftType: string, public deserializeFn: (value: any) => T = (value) => value) {
@@ -11,18 +13,19 @@ export class DraftMiddleware<T> {
     this.client = new DraftStoreClient<T>(draftType)
   }
 
-  retrieve (res: express.Response, next: express.NextFunction): void {
+  async retrieve (res: express.Response, next: express.NextFunction): Promise<void> {
     if (res.locals.isLoggedIn) {
-      this.client
-        .retrieve(res.locals.user.id, this.deserializeFn)
-        .then(draft => {
-          if (!draft) {
-            draft = this.deserializeFn(undefined)
-          }
-          res.locals.user[`${this.draftType}Draft`] = draft
-          next()
-        })
-        .catch(next)
+      try {
+        let draft: T = await this.client.retrieve(res.locals.user.id, this.deserializeFn)
+        if (!draft) {
+          draft = this.deserializeFn(undefined)
+        }
+        this.setUserData(draft, res.locals.user)
+        res.locals.user[`${this.draftType}Draft`] = draft
+        next()
+      } catch (err) {
+        next(err)
+      }
     } else {
       next()
     }
@@ -36,5 +39,10 @@ export class DraftMiddleware<T> {
   delete (res: express.Response, next: express.NextFunction): Promise<void> {
     return this.client
       .delete(res.locals.user.id)
+  }
+
+  private setUserData (draft: T, user: User) {
+    draft.userEmail = user.email
+    draft.userName = `${user.forename} ${user.surname}`
   }
 }

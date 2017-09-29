@@ -3,8 +3,9 @@ import { CCJPaymentOption } from 'ccj/form/models/ccjPaymentOption'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { PayBySetDate } from 'ccj/form/models/payBySetDate'
 import { RepaymentPlan } from 'ccj/form/models/repaymentPlan'
+import { Draft } from 'models/draft'
 
-export class DraftCCJ {
+export class DraftCCJ extends Draft {
   defendant: Defendant = new Defendant()
   paymentOption: CCJPaymentOption = new CCJPaymentOption()
   paidAmount?: PaidAmount
@@ -12,6 +13,7 @@ export class DraftCCJ {
   repaymentPlan?: RepaymentPlan
 
   constructor (defendant: Defendant = new Defendant(), paymentOption: CCJPaymentOption = new CCJPaymentOption(), paidAmount?: PaidAmount, repaymentPlan?: RepaymentPlan) {
+    super()
     this.defendant = defendant
     this.paymentOption = paymentOption
     this.paidAmount = paidAmount
