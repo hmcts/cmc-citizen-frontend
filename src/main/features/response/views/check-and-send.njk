@@ -17,7 +17,7 @@
       partyDetailsSummaryFragment(
         partyDetails = draft.defendantDetails.partyDetails,
         changeLinks = {
-          partyDetails: paths.defendantYourDetailsPage.evaluateUri({ externalId: claim.externalId }),
+          address: paths.defendantYourDetailsPage.evaluateUri({ externalId: claim.externalId }),
           dateOfBirth: paths.defendantDateOfBirthPage.evaluateUri({ externalId: claim.externalId })
         }
       )
