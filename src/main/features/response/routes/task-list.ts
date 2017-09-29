@@ -42,7 +42,9 @@ export function buildRespondToClaimSection (draft: ResponseDraft, responseDeadli
       .evaluateUri({ externalId: externalId }),
     OweMoneyTask.isCompleted(draft)))
   if (draft.response.type === ResponseType.OWE_ALL_PAID_SOME) {
-    tasks.push(new TaskListItem('How much have you paid the claimant?', Paths.defendantHowMuchPaid.uri, HowMuchPaidTask.isCompleted(draft)))
+    tasks.push(new TaskListItem('How much have you paid the claimant?', Paths.defendantHowMuchPaid.
+      evaluateUri({ externalId: externalId }),
+    HowMuchPaidTask.isCompleted(draft)))
   }
 
   if (draft.requireDefence()) {

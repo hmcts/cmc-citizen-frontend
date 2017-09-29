@@ -201,7 +201,7 @@ describe('Defendant response: check and send page', () => {
                 .toLocation(ResponsePaths.fullAdmissionPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
-          it('should redirect to task list page when response type is OWE_ALL_PAID_SOME', async () => {
+          it.skip('should redirect to task list page when response type is OWE_ALL_PAID_SOME', async () => {
             draftStoreServiceMock.resolveRetrieve(draftType, {
               response: { type: ResponseType.OWE_ALL_PAID_SOME },
               counterClaim: undefined
