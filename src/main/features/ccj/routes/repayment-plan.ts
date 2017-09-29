@@ -4,7 +4,7 @@ import { Paths } from 'ccj/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'app/forms/form'
-import { DraftCCJService } from 'ccj/draft/DraftCCJService'
+import { DraftCCJService } from 'ccj/draft/draftCCJService'
 import User from 'idam/user'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { RepaymentPlan } from 'ccj/form/models/repaymentPlan'

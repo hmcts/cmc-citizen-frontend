@@ -24,7 +24,7 @@ import { default as DraftClaimant } from 'app/drafts/models/claimant'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { Address } from 'claims/models/address'
 import { RangeGroup } from 'fees/models/rangeGroup'
-import { DraftCCJ } from 'ccj/draft/DraftCCJ'
+import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { PartyDetails } from 'forms/models/partyDetails'
@@ -250,7 +250,7 @@ mock('ccj/guards/individualDateOfBirthGuard', {
   }
 })
 
-mock('ccj/draft/DraftCCJService', {
+mock('ccj/draft/draftCCJService', {
   'DraftCCJService': {
     retrieve: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
       res.locals.user[`ccjDraft`] = mockCCJDraft()

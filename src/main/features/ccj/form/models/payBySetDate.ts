@@ -1,7 +1,7 @@
 import { IsDefined, ValidateNested } from 'class-validator'
 
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
-import { IsTodayOrInFuture } from 'forms/validation/validators/IsTodayOrInFuture'
+import { IsTodayOrInFuture } from 'forms/validation/validators/isTodayOrInFuture'
 
 import { Serializable } from 'models/serializable'
 import { LocalDate } from 'forms/models/localDate'

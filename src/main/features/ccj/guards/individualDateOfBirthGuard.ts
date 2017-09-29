@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { Paths } from 'dashboard/paths'
 
-import { DraftCCJ } from 'ccj/draft/DraftCCJ'
+import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { PartyType } from 'app/common/partyType'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('claim/guards/allTasksCompletedGuard')
