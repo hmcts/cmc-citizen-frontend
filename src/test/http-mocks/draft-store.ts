@@ -22,7 +22,7 @@ import InterestDate from 'forms/models/interestDate'
 import Reason from 'forms/models/reason'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import Email from 'app/forms/models/email'
-const serviceBaseURL: string = `${config.get('draft-store.url')}/api/${config.get('draft-store.apiVersion')}`
+const serviceBaseURL: string = `${config.get('draft-store.url')}/api/v2`
 
 export const sampleClaimDraftObj = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',

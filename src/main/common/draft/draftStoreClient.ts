@@ -7,10 +7,6 @@ import { Draft } from 'app/models/draft'
 
 const draftStoreConfig = config.get<any>('draft-store')
 
-if (draftStoreConfig.apiVersion !== 'v2') {
-  throw new Error(`Draft store API ${draftStoreConfig.apiVersion} is not supported by the client`)
-}
-
 function withAuthHeader (userId: number, other: any = {}) {
   return Object.assign({
     headers: {
@@ -26,7 +22,7 @@ export default class DraftStoreClient<T> {
     if (!draftType || draftType.trim() === '') {
       throw new Error('Draft type is required by the client')
     }
-    this.endpointURL = `${draftStoreConfig.url}/api/${draftStoreConfig.apiVersion}/draft/${draftType}`
+    this.endpointURL = `${draftStoreConfig.url}/api/v2/draft/${draftType}`
   }
 
   save (userId: number, draft: Draft): Promise<void> {
