@@ -76,8 +76,7 @@ export const sampleClaimObj = {
     },
     paidAmount: 2,
     paymentOption: 'IMMEDIATELY'
-  },
-  countyCourtJudgmentRequestedAt: ''
+  }
 }
 
 const sampleDefendantResponseObj = {
