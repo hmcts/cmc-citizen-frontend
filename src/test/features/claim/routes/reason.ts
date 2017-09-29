@@ -30,6 +30,16 @@ describe('Claim issue: reason page', () => {
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.successful.withText('Why you’re owed the money'))
     })
+
+    it('should render page when everything is fine without a name field', async () => {
+      idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
+      draftStoreServiceMock.resolveRetrieve('claim', { defendant: undefined })
+
+      await request(app)
+        .get(ClaimPaths.reasonPage.uri)
+        .set('Cookie', `${cookieName}=ABC`)
+        .expect(res => expect(res).to.be.successful.withText('Why you’re owed the money'))
+    })
   })
 
   describe('on POST', () => {
