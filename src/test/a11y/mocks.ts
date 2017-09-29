@@ -250,7 +250,7 @@ mock('ccj/guards/individualDateOfBirthGuard', {
   }
 })
 
-mock('ccj/draft/DraftCCJService', {
+mock('ccj/draft/draftCCJService', {
   'DraftCCJService': {
     retrieve: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
       res.locals.user[`ccjDraft`] = mockCCJDraft()
