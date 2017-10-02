@@ -1,4 +1,4 @@
-import { DraftCCJ } from 'ccj/draft/DraftCCJ'
+import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { RepaymentPlan as RepaymentPlanForm } from 'ccj/form/models/repaymentPlan'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'

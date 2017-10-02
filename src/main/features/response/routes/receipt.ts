@@ -7,7 +7,7 @@ import { Paths } from 'response/paths'
 import PdfClient from 'app/pdf/pdfClient'
 import { ResponseReceipt } from 'app/pdf/responseReceipt'
 
-import { buildURL } from 'app/utils/CallbackBuilder'
+import { buildURL } from 'app/utils/callbackBuilder'
 import { ErrorHandling } from 'common/errorHandling'
 
 export default express.Router()
