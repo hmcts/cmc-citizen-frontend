@@ -44,7 +44,7 @@ describe('Dashboard page', () => {
         })
 
         it('should render page with start claim button when everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('claim', { lastUpdateTimestamp: undefined })
+          draftStoreServiceMock.resolveRetrieveUnsaved('claim')
 
           await request(app)
             .get(Paths.dashboardPage.uri)
@@ -60,7 +60,7 @@ describe('Dashboard page', () => {
         })
 
         it('should render page with continue claim button when everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('claim', { lastUpdateTimestamp: 1 })
+          draftStoreServiceMock.resolveRetrieve('claim')
 
           await request(app)
             .get(Paths.dashboardPage.uri)
@@ -69,7 +69,7 @@ describe('Dashboard page', () => {
         })
 
         it('should render page with start claim button when everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('claim', { lastUpdateTimestamp: undefined })
+          draftStoreServiceMock.resolveRetrieveUnsaved('claim')
 
           await request(app)
             .get(Paths.dashboardPage.uri)

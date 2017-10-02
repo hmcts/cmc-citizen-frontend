@@ -28,7 +28,6 @@ export const sampleClaimDraftObj = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
   readResolveDispute: true,
   readCompletingClaim: true,
-  lastUpdateTimestamp: 12345,
   claimant: {
     partyDetails: {
       type: 'individual',
@@ -90,7 +89,6 @@ export const sampleClaimDraftObj = {
 } as DraftClaim
 
 const sampleResponseDraftObj = {
-  lastUpdateTimestamp: 12345,
   response: {
     type: ResponseType.OWE_NONE
   },
@@ -150,6 +148,14 @@ const sampleCCJDraftObj = {
 }
 
 export function resolveRetrieve (draftType: string, draftOverride?: object) {
+  return _resolveRetrieve(100, draftType, draftOverride)
+}
+
+export function resolveRetrieveUnsaved (draftType: string, draftOverride?: object) {
+  return _resolveRetrieve(undefined, draftType, draftOverride)
+}
+
+function _resolveRetrieve (draftId: number, draftType: string, draftOverride?: object) {
   let documentDocument: object
 
   switch (draftType) {
@@ -170,7 +176,7 @@ export function resolveRetrieve (draftType: string, draftOverride?: object) {
     .get('/drafts')
     .reply(HttpStatus.OK, {
       data: [{
-        id: 100,
+        id: draftId,
         type: draftType,
         document: documentDocument,
         created: '2017-10-01T12:00:00.000',

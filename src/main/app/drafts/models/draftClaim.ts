@@ -33,7 +33,6 @@ export default class DraftClaim extends Draft implements Serializable<DraftClaim
       this.reason = new Reason().deserialize(input.reason)
       this.readResolveDispute = input.readResolveDispute
       this.readCompletingClaim = input.readCompletingClaim
-      this.lastUpdateTimestamp = input.lastUpdateTimestamp
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }
