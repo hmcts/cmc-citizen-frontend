@@ -8,7 +8,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import DateOfBirth from 'forms/models/dateOfBirth'
 import User from 'app/idam/user'
 
-import { DraftCCJService } from 'ccj/draft/DraftCCJService'
+import { DraftService } from 'common/draft/draftService'
 import { ErrorHandling } from 'common/errorHandling'
 import { IndividualDetails } from 'forms/models/individualDetails'
 
@@ -34,7 +34,7 @@ export default express.Router()
         renderView(form, res)
       } else {
         (user.ccjDraft.document.defendant.partyDetails as IndividualDetails).dateOfBirth = form.model
-        await DraftCCJService.save(res, next)
+        await DraftService.save(user.ccjDraft, user.bearerToken)
         res.redirect(Paths.paidAmountPage.uri.replace(':externalId', externalId))
 
       }

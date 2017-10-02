@@ -4,7 +4,7 @@ import { Paths } from 'ccj/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'app/forms/form'
-import { DraftCCJService } from 'ccj/draft/DraftCCJService'
+import { DraftService } from 'common/draft/draftService'
 import User from 'idam/user'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { FormValidator } from 'forms/validation/formValidator'
@@ -33,7 +33,7 @@ export default express.Router()
         } else {
           const { externalId } = req.params
           user.ccjDraft.document.paidAmount = form.model
-          await DraftCCJService.save(res, next)
+          await DraftService.save(user.ccjDraft, user.bearerToken)
           res.redirect(Paths.paidAmountSummaryPage.evaluateUri({ externalId: externalId }))
         }
       }))

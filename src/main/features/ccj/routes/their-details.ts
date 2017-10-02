@@ -7,7 +7,7 @@ import { PartyDetails } from 'app/forms/models/partyDetails'
 import { FormValidator } from 'app/forms/validation/formValidator'
 import { Form } from 'app/forms/form'
 import User from 'app/idam/user'
-import { DraftCCJService } from 'ccj/draft/DraftCCJService'
+import { DraftService } from 'common/draft/draftService'
 import { Address } from 'forms/models/address'
 import { PartyDetailsFactory } from 'forms/models/partyDetailsFactory'
 import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
@@ -57,7 +57,7 @@ export default express.Router()
             user.ccjDraft.document.defendant.partyDetails = convertToPartyDetails(user.claim.claimData.defendant)
           }
           user.ccjDraft.document.defendant.partyDetails.address = form.model
-          await DraftCCJService.save(res, next)
+          await DraftService.save(user.ccjDraft, user.bearerToken)
           if (user.ccjDraft.document.defendant.partyDetails.type === PartyType.INDIVIDUAL.value) {
             res.redirect(Paths.dateOfBirthPage.evaluateUri({ externalId: externalId }))
           } else {

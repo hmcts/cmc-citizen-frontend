@@ -15,8 +15,8 @@ import { OrganisationDetails } from 'forms/models/organisationDetails'
 
 import User from 'app/idam/user'
 
-import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { SoleTrader } from 'claims/models/details/theirs/soleTrader'
+import { DraftService } from 'common/draft/draftService'
 
 function renderView (form: Form<PartyDetails>, res: express.Response) {
   const user: User = res.locals.user
@@ -92,7 +92,7 @@ export default express.Router()
             (user.claim.claimData.defendant as SoleTrader).businessName
         }
 
-        await ResponseDraftMiddleware.save(res, next)
+        await DraftService.save(user.responseDraft, user.bearerToken)
 
         switch (user.responseDraft.document.defendantDetails.partyDetails.type) {
           case PartyType.INDIVIDUAL.value:

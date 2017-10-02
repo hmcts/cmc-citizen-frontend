@@ -5,8 +5,8 @@ import { Paths } from 'claim/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { IndividualDetails } from 'forms/models/individualDetails'
-import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
+import { DraftService } from 'common/draft/draftService'
 
 function renderView (form: Form<IndividualDetails>, res: express.Response): void {
   res.render(Paths.defendantIndividualDetailsPage.associatedView, { form: form })
@@ -25,7 +25,7 @@ export default express.Router()
         renderView(form, res)
       } else {
         (res.locals.user.claimDraft.document.defendant.partyDetails as IndividualDetails) = form.model
-        await ClaimDraftMiddleware.save(res, next)
+        await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
         res.redirect(Paths.defendantEmailPage.uri)
       }
     }))

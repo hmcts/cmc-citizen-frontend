@@ -16,11 +16,11 @@ import { CompanyDetails } from 'forms/models/companyDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import DateOfBirth from 'forms/models/dateOfBirth'
 import { PartyDetails } from 'forms/models/partyDetails'
-import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
 import User from 'idam/user'
 import DraftClaim from 'drafts/models/draftClaim'
 import { SignatureType } from 'app/common/signatureType'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
+import { DraftService } from 'common/draft/draftService'
 
 function getClaimAmountTotal (res: express.Response): Promise<ClaimAmountTotal> {
   return FeesClient.calculateIssueFee(claimAmountWithInterest(res.locals.user.claimDraft.document))
@@ -118,7 +118,7 @@ export default express.Router()
         renderView(form, res, next)
       } else {
         user.claimDraft.document.qualifiedStatementOfTruth = form.model
-        await ClaimDraftMiddleware.save(res, next)
+        await DraftService.save(user.claimDraft, user.bearerToken)
         res.redirect(Paths.startPaymentReceiver.uri)
       }
     })

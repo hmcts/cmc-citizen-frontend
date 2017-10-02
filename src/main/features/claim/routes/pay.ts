@@ -12,11 +12,11 @@ import Payment from 'app/pay/payment'
 import FeesClient from 'app/fees/feesClient'
 import { CalculationOutcome } from 'app/fees/models/calculationOutcome'
 
-import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
 import ClaimStoreClient from 'app/claims/claimStoreClient'
 import { buildURL } from 'app/utils/CallbackBuilder'
 import { claimAmountWithInterest } from 'app/utils/interestUtils'
 import User from 'app/idam/user'
+import { DraftService } from 'common/draft/draftService'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('router/pay')
 const issueFeeCode = config.get<string>('fees.issueFee.code')
@@ -56,11 +56,11 @@ async function successHandler (res, next) {
     }
   }
   if (claimStatus) {
-    await ClaimDraftMiddleware.delete(res, next)
+    await DraftService.delete(res.locals.user.claimDraft, res.locals.user.bearerToken)
     res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
   } else {
     const claim = await ClaimStoreClient.saveClaimForUser(res.locals.user)
-    await ClaimDraftMiddleware.delete(res, next)
+    await DraftService.delete(res.locals.user.claimDraft, res.locals.user.bearerToken)
     res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
   }
 }
@@ -91,7 +91,7 @@ export default express.Router()
       const payClient: PayClient = await getPayClient()
       const payment: PaymentResponse = await payClient.create(res.locals.user, feeCalculationOutcome.fee.code, feeCalculationOutcome.amount, getReturnURL(req, user.claimDraft.document.externalId))
       res.locals.user.claimDraft.document.claimant.payment = payment
-      await ClaimDraftMiddleware.save(res, next)
+      await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
       res.redirect(payment._links.next_url.href)
     } catch (err) {
       logPaymentError(user.id, user.claimDraft.document.claimant.payment)
@@ -112,7 +112,7 @@ export default express.Router()
       const payment: Payment = await payClient.retrieve(user, paymentId)
       user.claimDraft.document.claimant.payment = new Payment().deserialize(payment)
 
-      await ClaimDraftMiddleware.save(res, next)
+      await DraftService.save(user.claimDraft, user.bearerToken)
       const status: string = payment.state.status
 
       // https://gds-payments.gelato.io/docs/versions/1.0.0/api-reference

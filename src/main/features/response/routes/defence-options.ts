@@ -5,11 +5,11 @@ import { Paths } from 'response/paths'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 
-import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { CounterClaim } from 'response/form/models/counterClaim'
 import OweNoneResponseRequiredGuard from 'response/guards/oweNoneResponseRequiredGuard'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'app/idam/user'
+import { DraftService } from 'common/draft/draftService'
 
 async function renderView (form: Form<CounterClaim>, res: express.Response, next: express.NextFunction) {
   try {
@@ -42,7 +42,7 @@ export default express.Router()
       } else {
         const user: User = res.locals.user
         user.responseDraft.document.counterClaim = form.model
-        await ResponseDraftMiddleware.save(res, next)
+        await DraftService.save(user.responseDraft, user.bearerToken)
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

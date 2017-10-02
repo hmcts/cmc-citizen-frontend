@@ -6,9 +6,9 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { MobilePhone } from 'forms/models/mobilePhone'
 
-import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
+import { DraftService } from 'common/draft/draftService'
 
 function renderView (form: Form<MobilePhone>, res: express.Response) {
   res.render(Paths.defendantMobilePage.associatedView, {
@@ -31,7 +31,7 @@ export default express.Router()
       } else {
         const user: User = res.locals.user
         user.responseDraft.document.defendantDetails.mobilePhone = form.model
-        await ResponseDraftMiddleware.save(res, next)
+        await DraftService.save(user.responseDraft, user.bearerToken)
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

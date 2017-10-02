@@ -8,7 +8,6 @@ import { StatementOfTruth } from 'response/form/models/statementOfTruth'
 
 import ClaimStoreClient from 'claims/claimStoreClient'
 import User from 'app/idam/user'
-import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ResponseType } from 'response/form/models/responseType'
 import AllResponseTasksCompletedGuard from 'response/guards/allResponseTasksCompletedGuard'
 import { ErrorHandling } from 'common/errorHandling'
@@ -16,6 +15,7 @@ import { SignatureType } from 'app/common/signatureType'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { PartyType } from 'app/common/partyType'
 import { QualifiedStatementOfTruth } from 'response/form/models/qualifiedStatementOfTruth'
+import { DraftService } from 'common/draft/draftService'
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
   const user: User = res.locals.user
@@ -123,9 +123,9 @@ export default express.Router()
         if (signatureTypeFor(user) === SignatureType.QUALIFIED) {
           user.responseDraft.document.qualifiedStatementOfTruth = form.model
         }
-        await ResponseDraftMiddleware.save(res, next)
+        await DraftService.save(user.responseDraft, user.bearerToken)
         await ClaimStoreClient.saveResponseForUser(user)
-        await ResponseDraftMiddleware.delete(res, next)
+        await DraftService.delete(user.responseDraft, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

@@ -7,7 +7,7 @@ import { CCJPaymentOption, PaymentType } from 'ccj/form/models/ccjPaymentOption'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import User from 'idam/user'
-import { DraftCCJService } from 'ccj/draft/DraftCCJService'
+import { DraftService } from 'common/draft/draftService'
 
 export default express.Router()
   .get(Paths.paymentOptionsPage.uri,
@@ -27,7 +27,7 @@ export default express.Router()
           res.render(Paths.paymentOptionsPage.associatedView, { form: form })
         } else {
           user.ccjDraft.document.paymentOption = form.model
-          await DraftCCJService.save(res, next)
+          await DraftService.save(user.ccjDraft, user.bearerToken)
 
           const { externalId } = req.params
 

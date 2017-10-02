@@ -7,9 +7,9 @@ import { Form } from 'forms/form'
 
 import { Response } from 'response/form/models/response'
 import { ResponseType } from 'response/form/models/responseType'
-import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
+import { DraftService } from 'common/draft/draftService'
 
 function renderView (form: Form<Response>, res: express.Response) {
   res.render(Paths.responseTypePage.associatedView, {
@@ -33,7 +33,7 @@ export default express.Router()
       } else {
         const user: User = res.locals.user
         user.responseDraft.document.response = form.model
-        await ResponseDraftMiddleware.save(res, next)
+        await DraftService.save(user.responseDraft, user.bearerToken)
 
         if (ResponseType.OWE_NONE === form.model.type) {
           res.redirect(Paths.defenceOptionsPage.evaluateUri({ externalId: externalId }))
