@@ -127,6 +127,6 @@ export default class ClaimStoreClient {
     }
 
     return request.get(`${claimStoreApiUrl}/${reference}/defendant-link-status`)
-      .then(linkStatus => linkStatus.status)
+      .then(linkStatus => linkStatus.linked)
   }
 }
