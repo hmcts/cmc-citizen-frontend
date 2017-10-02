@@ -7,10 +7,10 @@ import { CounterClaim } from 'response/form/models/counterClaim'
 import { ResponseType } from 'response/form/models/responseType'
 import { isNullOrUndefined } from 'util'
 import { Defendant } from 'app/drafts/models/defendant'
-import { Draft } from 'app/models/draft'
+import { DraftDocument } from 'app/models/draft'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
 
-export class ResponseDraft implements Draft, Serializable<ResponseDraft> {
+export class ResponseDraft implements DraftDocument, Serializable<ResponseDraft> {
 
   response?: Response
   defence?: Defence

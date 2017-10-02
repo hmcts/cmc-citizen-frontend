@@ -1,12 +1,12 @@
 import * as express from 'express'
 import DraftStoreClient from 'common/draft/draftStoreClient'
-import { Draft, DraftWrapper } from 'models/draft'
+import { DraftDocument, Draft } from 'models/draft'
 import { DraftStoreClientFactory } from 'common/draft/draftStoreClientFactory'
 import User from 'idam/user'
 
 export class DraftMiddleware {
 
-  static requestHandler<T extends Draft> (draftType: string, deserializeFn: (value: any) => T = (value) => value): express.RequestHandler {
+  static requestHandler<T extends DraftDocument> (draftType: string, deserializeFn: (value: any) => T = (value) => value): express.RequestHandler {
     return async function (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
       if (res.locals.isLoggedIn) {
         try {
@@ -15,7 +15,7 @@ export class DraftMiddleware {
           const user: User = res.locals.user
           client
             .find(user.bearerToken, draftType, deserializeFn)
-            .then((drafts: DraftWrapper<T>[]) => {
+            .then((drafts: Draft<T>[]) => {
               const matchingDrafts = drafts.filter(item => item.type === draftType)
 
               if (matchingDrafts.length > 1) {
@@ -23,7 +23,7 @@ export class DraftMiddleware {
               }
 
               if (matchingDrafts.length === 0) {
-                const draft = new DraftWrapper<T>()
+                const draft = new Draft<T>()
                 draft.type = draftType
                 draft.document = deserializeFn(undefined)
                 res.locals.user[`${draftType}Draft`] = draft

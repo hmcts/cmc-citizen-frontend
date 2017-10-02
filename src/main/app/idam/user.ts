@@ -2,7 +2,7 @@ import DraftClaim from 'app/drafts/models/draftClaim'
 import Claim from 'app/claims/models/claim'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { DraftCCJ } from 'ccj/draft/DraftCCJ'
-import { DraftWrapper } from 'models/draft'
+import { Draft } from 'models/draft'
 
 export default class User {
   id: number
@@ -12,10 +12,10 @@ export default class User {
   roles: string[]
   group: string
   bearerToken: string
-  claimDraft: DraftWrapper<DraftClaim>
+  claimDraft: Draft<DraftClaim>
   claim: Claim
-  responseDraft: DraftWrapper<ResponseDraft>
-  ccjDraft: DraftWrapper<DraftCCJ>
+  responseDraft: Draft<ResponseDraft>
+  ccjDraft: Draft<DraftCCJ>
 
   constructor (id: number,
                email: string,

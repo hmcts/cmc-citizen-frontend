@@ -1,19 +1,19 @@
 import * as config from 'config'
 import request from 'client/request'
 
-import { Draft, DraftWrapper } from 'app/models/draft'
+import { DraftDocument, Draft } from 'app/models/draft'
 import { MomentFactory } from 'common/momentFactory'
 
 const endpointURL: string = `${config.get<any>('draft-store').url}/drafts`
 
-export default class DraftStoreClient<T extends Draft> {
+export default class DraftStoreClient<T extends DraftDocument> {
   private serviceAuthToken: string
 
   constructor (serviceAuthToken: string) {
     this.serviceAuthToken = serviceAuthToken
   }
 
-  find (userAuthToken: string, type: string, deserializationFn: (value: any) => T): Promise<DraftWrapper<T>[]> {
+  find (userAuthToken: string, type: string, deserializationFn: (value: any) => T): Promise<Draft<T>[]> {
     return request
       .get(endpointURL, {
         headers: this.authHeaders(userAuthToken)
@@ -22,7 +22,7 @@ export default class DraftStoreClient<T extends Draft> {
         return response.data
           .filter(draft => type ? draft.type === type : true)
           .map(draft => {
-            const wrapper = new DraftWrapper()
+            const wrapper = new Draft()
             wrapper.id = draft.id
             wrapper.type = draft.type
             wrapper.document = deserializationFn(draft.document)
@@ -33,7 +33,7 @@ export default class DraftStoreClient<T extends Draft> {
       })
   }
 
-  save (draft: DraftWrapper<T>, userAuthToken: string): Promise<void> {
+  save (draft: Draft<T>, userAuthToken: string): Promise<void> {
     const options = {
       headers: this.authHeaders(userAuthToken),
       body: {
@@ -49,7 +49,7 @@ export default class DraftStoreClient<T extends Draft> {
     }
   }
 
-  delete (draft: DraftWrapper<T>, userAuthToken: string): Promise<void> {
+  delete (draft: Draft<T>, userAuthToken: string): Promise<void> {
     return request.delete(`${endpointURL}/${draft.id}`, {
       headers: this.authHeaders(userAuthToken)
     })

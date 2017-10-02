@@ -1,8 +1,8 @@
 import { Moment } from 'moment'
 
-export interface Draft {}
+export interface DraftDocument {}
 
-export class DraftWrapper<T extends Draft> {
+export class Draft<T extends DraftDocument> {
   id: number
   document: T
   type: string
