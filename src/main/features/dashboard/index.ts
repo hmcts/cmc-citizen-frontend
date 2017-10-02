@@ -13,10 +13,10 @@ import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
     const clientId = config.get<string>('oauth.clientId')
-    const continueUrl = `${buildURL(req, AppPaths.receiver.uri.substring(1))}`
+    const redirectUri = buildURL(req, AppPaths.receiver.uri.substring(1))
     const state = uuid()
 
-    res.redirect(`${config.get('idam.authentication-web.url')}/login?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${continueUrl}`)
+    res.redirect(`${config.get('idam.authentication-web.url')}/login?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}`)
   }
 
   const requiredRoles = ['cmc-private-beta']

@@ -17,11 +17,11 @@ import Claim from 'claims/models/claim'
 import { AuthToken } from 'idam/authToken'
 
 async function getAuthToken (req: express.Request) {
-  const code = req.query.code
+  const { code } = req.query
   const clientId = config.get<string>('oauth.clientId')
   const clientSecret = config.get<string>('oauth.clientSecret')
-  const continueUrl = `${buildURL(req, AppPaths.receiver.uri.substring(1))}`
-  const url = `${config.get('idam.api.url')}/oauth2/token?grant_type=authorization_code&code=${code}&client_secret=${clientSecret}&client_id=${clientId}&redirect_uri=${continueUrl}`
+  const redirectUri = buildURL(req, AppPaths.receiver.uri.substring(1))
+  const url = `${config.get('idam.api.url')}/oauth2/token?grant_type=authorization_code&code=${code}&client_secret=${clientSecret}&client_id=${clientId}&redirect_uri=${redirectUri}`
   return await IdamClient.retrieveAuthToken(url)
 }
 
