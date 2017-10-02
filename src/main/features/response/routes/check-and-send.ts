@@ -23,24 +23,24 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     paths: Paths,
     claim: user.claim,
     form: form,
-    draft: user.responseDraft,
+    draft: user.responseDraft.document,
     signatureType: signatureTypeFor(user)
   })
 }
 
 function defendantIsCounterClaiming (user: User): boolean {
-  return user.responseDraft.counterClaim &&
-    user.responseDraft.counterClaim.counterClaim
+  return user.responseDraft.document.counterClaim &&
+    user.responseDraft.document.counterClaim.counterClaim
 }
 
 function isStatementOfTruthRequired (user: User): boolean {
-  const responseType: ResponseType = user.responseDraft.response.type
+  const responseType: ResponseType = user.responseDraft.document.response.type
   return (responseType === ResponseType.OWE_NONE && !defendantIsCounterClaiming(user))
     || responseType === ResponseType.OWE_ALL_PAID_ALL
 }
 
 function isCompanyOrOrganisationDefendant (user: User): boolean {
-  const responseDraft: ResponseDraft = user.responseDraft
+  const responseDraft: ResponseDraft = user.responseDraft.document
   if (responseDraft.defendantDetails && responseDraft.defendantDetails.partyDetails) {
     const type: string = responseDraft.defendantDetails.partyDetails.type
     return type === PartyType.COMPANY.value || type === PartyType.ORGANISATION.value
@@ -99,7 +99,7 @@ export default express.Router()
       if (isStatementOfTruthRequired(user) && form.hasErrors()) {
         renderView(form, res)
       } else {
-        const responseType = user.responseDraft.response.type
+        const responseType = user.responseDraft.document.response.type
         switch (responseType) {
           case ResponseType.OWE_NONE:
             if (defendantIsCounterClaiming(user)) {
@@ -121,7 +121,7 @@ export default express.Router()
         }
 
         if (signatureTypeFor(user) === SignatureType.QUALIFIED) {
-          user.responseDraft.qualifiedStatementOfTruth = form.model
+          user.responseDraft.document.qualifiedStatementOfTruth = form.model
         }
         await ResponseDraftMiddleware.save(res, next)
         await ClaimStoreClient.saveResponseForUser(user)

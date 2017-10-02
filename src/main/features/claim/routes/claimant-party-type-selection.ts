@@ -18,7 +18,7 @@ function renderView (form: Form<PartyTypeResponse>, res: express.Response, next:
 
 export default express.Router()
   .get(Paths.claimantPartyTypeSelectionPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const partyDetails: PartyDetails = res.locals.user.claimDraft.claimant.partyDetails
+    const partyDetails: PartyDetails = res.locals.user.claimDraft.document.claimant.partyDetails
     renderView(new Form(new PartyTypeResponse(partyDetails ? PartyType.valueOf(partyDetails.type) : undefined)), res, next)
   })
   .post(
@@ -30,10 +30,10 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
-        let partyDetails: PartyDetails = res.locals.user.claimDraft.claimant.partyDetails
+        let partyDetails: PartyDetails = res.locals.user.claimDraft.document.claimant.partyDetails
 
         if (partyDetails === undefined || partyDetails.type !== form.model.type.value) {
-          partyDetails = res.locals.user.claimDraft.claimant.partyDetails = PartyDetailsFactory.createInstance(form.model.type.value)
+          partyDetails = res.locals.user.claimDraft.document.claimant.partyDetails = PartyDetailsFactory.createInstance(form.model.type.value)
           await ClaimDraftMiddleware.save(res, next)
         }
 

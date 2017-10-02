@@ -46,22 +46,22 @@ export default express.Router()
     const user: User = res.locals.user
 
     const partyDetails: PartyDetails = plainToClass(PartyDetails, user.claim.claimData.defendant)
-    if (user.responseDraft.defendantDetails.partyDetails) {
-      switch (user.responseDraft.defendantDetails.partyDetails.type) {
+    if (user.responseDraft.document.defendantDetails.partyDetails) {
+      switch (user.responseDraft.document.defendantDetails.partyDetails.type) {
         case PartyType.COMPANY.value:
           (partyDetails as CompanyDetails).contactPerson =
-            (user.responseDraft.defendantDetails.partyDetails as CompanyDetails).contactPerson
+            (user.responseDraft.document.defendantDetails.partyDetails as CompanyDetails).contactPerson
           break
         case PartyType.ORGANISATION.value:
           (partyDetails as OrganisationDetails).contactPerson =
-            (user.responseDraft.defendantDetails.partyDetails as OrganisationDetails).contactPerson
+            (user.responseDraft.document.defendantDetails.partyDetails as OrganisationDetails).contactPerson
           break
         default:
           break
       }
-      partyDetails.address = user.responseDraft.defendantDetails.partyDetails.address
-      partyDetails.hasCorrespondenceAddress = user.responseDraft.defendantDetails.partyDetails.hasCorrespondenceAddress
-      partyDetails.correspondenceAddress = user.responseDraft.defendantDetails.partyDetails.correspondenceAddress
+      partyDetails.address = user.responseDraft.document.defendantDetails.partyDetails.address
+      partyDetails.hasCorrespondenceAddress = user.responseDraft.document.defendantDetails.partyDetails.hasCorrespondenceAddress
+      partyDetails.correspondenceAddress = user.responseDraft.document.defendantDetails.partyDetails.correspondenceAddress
     }
 
     renderView(new Form(partyDetails), res)
@@ -76,25 +76,25 @@ export default express.Router()
         renderView(form, res)
       } else {
         const user: User = res.locals.user
-        const oldPartyDetails: PartyDetails = user.responseDraft.defendantDetails.partyDetails
-        user.responseDraft.defendantDetails.partyDetails = form.model
+        const oldPartyDetails: PartyDetails = user.responseDraft.document.defendantDetails.partyDetails
+        user.responseDraft.document.defendantDetails.partyDetails = form.model
 
         // Cache date of birth so we don't overwrite it
         if (oldPartyDetails && oldPartyDetails.type === PartyType.INDIVIDUAL.value && oldPartyDetails['dateOfBirth']) {
-          (user.responseDraft.defendantDetails.partyDetails as IndividualDetails).dateOfBirth =
+          (user.responseDraft.document.defendantDetails.partyDetails as IndividualDetails).dateOfBirth =
             (oldPartyDetails as IndividualDetails).dateOfBirth
         }
 
         // Store read only properties
-        user.responseDraft.defendantDetails.partyDetails.name = user.claim.claimData.defendant.name
+        user.responseDraft.document.defendantDetails.partyDetails.name = user.claim.claimData.defendant.name
         if (user.claim.claimData.defendant.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
-          (user.responseDraft.defendantDetails.partyDetails as SoleTraderDetails).businessName =
+          (user.responseDraft.document.defendantDetails.partyDetails as SoleTraderDetails).businessName =
             (user.claim.claimData.defendant as SoleTrader).businessName
         }
 
         await ResponseDraftMiddleware.save(res, next)
 
-        switch (user.responseDraft.defendantDetails.partyDetails.type) {
+        switch (user.responseDraft.document.defendantDetails.partyDetails.type) {
           case PartyType.INDIVIDUAL.value:
             res.redirect(Paths.defendantDateOfBirthPage.evaluateUri({ externalId: user.claim.externalId }))
             break
@@ -104,7 +104,7 @@ export default express.Router()
             res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: user.claim.externalId }))
             break
           default:
-            throw new Error(`Unknown party type: ${user.responseDraft.defendantDetails.partyDetails.type}`)
+            throw new Error(`Unknown party type: ${user.responseDraft.document.defendantDetails.partyDetails.type}`)
         }
       }
     }))

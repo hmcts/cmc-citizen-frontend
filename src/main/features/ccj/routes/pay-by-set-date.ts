@@ -16,7 +16,7 @@ function renderView (form: Form<PayBySetDate>, res: express.Response): void {
 export default express.Router()
   .get(Paths.payBySetDatePage.uri, (req: express.Request, res: express.Response) => {
     const user: User = res.locals.user
-    renderView(new Form(user.ccjDraft.payBySetDate), res)
+    renderView(new Form(user.ccjDraft.document.payBySetDate), res)
   })
   .post(
     Paths.payBySetDatePage.uri,
@@ -28,7 +28,7 @@ export default express.Router()
         renderView(form, res)
       } else {
         const { externalId } = req.params
-        user.ccjDraft.payBySetDate = form.model
+        user.ccjDraft.document.payBySetDate = form.model
         await DraftCCJService.save(res, next)
         res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
       }

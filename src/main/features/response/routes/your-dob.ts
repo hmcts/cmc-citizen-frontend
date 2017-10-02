@@ -20,9 +20,9 @@ function renderView (form: Form<DateOfBirth>, res: express.Response) {
 export default express.Router()
   .get(Paths.defendantDateOfBirthPage.uri, (req: express.Request, res: express.Response) => {
     const user: User = res.locals.user
-    switch (user.responseDraft.defendantDetails.partyDetails.type) {
+    switch (user.responseDraft.document.defendantDetails.partyDetails.type) {
       case PartyType.INDIVIDUAL.value:
-        renderView(new Form((user.responseDraft.defendantDetails.partyDetails as IndividualDetails).dateOfBirth), res)
+        renderView(new Form((user.responseDraft.document.defendantDetails.partyDetails as IndividualDetails).dateOfBirth), res)
         break
       default:
         res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: user.claim.externalId }))
@@ -39,9 +39,9 @@ export default express.Router()
         renderView(form, res)
       } else {
         const user: User = res.locals.user
-        switch (user.responseDraft.defendantDetails.partyDetails.type) {
+        switch (user.responseDraft.document.defendantDetails.partyDetails.type) {
           case PartyType.INDIVIDUAL.value:
-            (user.responseDraft.defendantDetails.partyDetails as IndividualDetails).dateOfBirth = form.model
+            (user.responseDraft.document.defendantDetails.partyDetails as IndividualDetails).dateOfBirth = form.model
             break
           default:
             throw Error('Date of birth is only supported for defendant types individual and sole trader')

@@ -24,7 +24,7 @@ async function renderView (form: Form<FreeMediation>, res: express.Response, nex
 
 export default express.Router()
   .get(Paths.freeMediationPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    await renderView(new Form(res.locals.user.responseDraft.freeMediation), res, next)
+    await renderView(new Form(res.locals.user.responseDraft.document.freeMediation), res, next)
   })
   .post(
     Paths.freeMediationPage.uri,
@@ -36,7 +36,7 @@ export default express.Router()
         await renderView(form, res, next)
       } else {
         const user = res.locals.user
-        user.responseDraft.freeMediation = form.model
+        user.responseDraft.document.freeMediation = form.model
         await ResponseDraftMiddleware.save(res, next)
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
       }

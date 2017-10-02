@@ -13,7 +13,7 @@ function renderView (form: Form<InterestDate>, res: express.Response): void {
 
 export default express.Router()
   .get(Paths.interestDatePage.uri, (req: express.Request, res: express.Response) => {
-    renderView(new Form(res.locals.user.claimDraft.interestDate), res)
+    renderView(new Form(res.locals.user.claimDraft.document.interestDate), res)
   })
   .post(
     Paths.interestDatePage.uri,
@@ -24,7 +24,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.claimDraft.interestDate = form.model
+        res.locals.user.claimDraft.document.interestDate = form.model
         await ClaimDraftMiddleware.save(res, next)
         res.redirect(Paths.feesPage.uri)
       }

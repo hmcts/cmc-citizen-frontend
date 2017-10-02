@@ -15,7 +15,7 @@ function renderView (form: Form<Email>, res: express.Response): void {
 
 export default express.Router()
   .get(Paths.defendantEmailPage.uri, (req: express.Request, res: express.Response) => {
-    renderView(new Form(res.locals.user.claimDraft.defendant.email), res)
+    renderView(new Form(res.locals.user.claimDraft.document.defendant.email), res)
   })
   .post(
     Paths.defendantEmailPage.uri,
@@ -26,7 +26,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.claimDraft.defendant.email = form.model
+        res.locals.user.claimDraft.document.defendant.email = form.model
         await ClaimDraftMiddleware.save(res, next)
         res.redirect(Paths.taskListPage.uri)
       }

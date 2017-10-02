@@ -15,7 +15,7 @@ function renderView (form: Form<MobilePhone>, res: express.Response): void {
 
 export default express.Router()
   .get(Paths.claimantMobilePage.uri, (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    renderView(new Form(res.locals.user.claimDraft.claimant.mobilePhone), res)
+    renderView(new Form(res.locals.user.claimDraft.document.claimant.mobilePhone), res)
   })
   .post(
     Paths.claimantMobilePage.uri,
@@ -26,7 +26,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.claimDraft.claimant.mobilePhone = form.model
+        res.locals.user.claimDraft.document.claimant.mobilePhone = form.model
         await ClaimDraftMiddleware.save(res, next)
         res.redirect(Paths.taskListPage.uri)
       }

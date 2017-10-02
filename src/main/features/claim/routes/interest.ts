@@ -15,7 +15,7 @@ function renderView (form: Form<Interest>, res: express.Response): void {
 
 export default express.Router()
   .get(Paths.interestPage.uri, (req: express.Request, res: express.Response): void => {
-    renderView(new Form(res.locals.user.claimDraft.interest), res)
+    renderView(new Form(res.locals.user.claimDraft.document.interest), res)
   })
   .post(
     Paths.interestPage.uri,
@@ -26,7 +26,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.claimDraft.interest = form.model
+        res.locals.user.claimDraft.document.interest = form.model
         await ClaimDraftMiddleware.save(res, next)
         if (form.model.type === InterestType.NO_INTEREST) {
           res.redirect(Paths.feesPage.uri)

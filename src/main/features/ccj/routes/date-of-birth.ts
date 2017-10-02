@@ -19,7 +19,7 @@ function renderView (form: Form<DateOfBirth>, res: express.Response): void {
 export default express.Router()
   .get(Paths.dateOfBirthPage.uri, IndividualDateOfBirthGuard.requestHandler, (req: express.Request, res: express.Response) => {
     const user: User = res.locals.user
-    renderView(new Form((user.ccjDraft.defendant.partyDetails as IndividualDetails).dateOfBirth), res)
+    renderView(new Form((user.ccjDraft.document.defendant.partyDetails as IndividualDetails).dateOfBirth), res)
   })
   .post(
     Paths.dateOfBirthPage.uri,
@@ -33,7 +33,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        (user.ccjDraft.defendant.partyDetails as IndividualDetails).dateOfBirth = form.model
+        (user.ccjDraft.document.defendant.partyDetails as IndividualDetails).dateOfBirth = form.model
         await DraftCCJService.save(res, next)
         res.redirect(Paths.paidAmountPage.uri.replace(':externalId', externalId))
 

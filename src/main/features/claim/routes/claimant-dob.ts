@@ -15,7 +15,7 @@ function renderView (form: Form<DateOfBirth>, res: express.Response): void {
 
 export default express.Router()
   .get(Paths.claimantDateOfBirthPage.uri, (req: express.Request, res: express.Response) => {
-    renderView(new Form(res.locals.user.claimDraft.claimant.partyDetails.dateOfBirth), res)
+    renderView(new Form(res.locals.user.claimDraft.document.claimant.partyDetails.dateOfBirth), res)
   })
   .post(
     Paths.claimantDateOfBirthPage.uri,
@@ -26,7 +26,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.claimDraft.claimant.partyDetails.dateOfBirth = form.model
+        res.locals.user.claimDraft.document.claimant.partyDetails.dateOfBirth = form.model
         await ClaimDraftMiddleware.save(res, next)
         res.redirect(Paths.claimantMobilePage.uri)
       }

@@ -12,7 +12,7 @@ export default express.Router()
   .post(
     Paths.completingClaimPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      res.locals.user.claimDraft.readCompletingClaim = true
+      res.locals.user.claimDraft.document.readCompletingClaim = true
       await ClaimDraftMiddleware.save(res, next)
       res.redirect(Paths.taskListPage.uri)
     }))

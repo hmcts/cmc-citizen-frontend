@@ -1,25 +1,21 @@
 import * as express from 'express'
 
-import { DraftMiddleware } from 'common/draft/draftMiddleware'
 import { DraftCCJ } from 'ccj/draft/DraftCCJ'
-
-const deserialize = (value: any): DraftCCJ => {
-  return new DraftCCJ().deserialize(value)
-}
-
-const middleware = new DraftMiddleware<DraftCCJ>('ccj', deserialize)
+import DraftStoreClient from 'common/draft/draftStoreClient'
+import { DraftStoreClientFactory } from 'common/draft/draftStoreClientFactory'
+import User from 'idam/user'
 
 export class DraftCCJService {
 
-  static retrieve (req: express.Request, res: express.Response, next: express.NextFunction): void {
-    middleware.retrieve(res, next)
+  static async save (res: express.Response, next: express.NextFunction): Promise<void> {
+    const client: DraftStoreClient<DraftCCJ> = await DraftStoreClientFactory.create<DraftCCJ>()
+    const user: User = res.locals.user
+    return client.save(user.ccjDraft, user.bearerToken)
   }
 
-  static save (res: express.Response, next: express.NextFunction): Promise<void> {
-    return middleware.save(res, next)
-  }
-
-  static delete (res: express.Response, next: express.NextFunction): Promise<void> {
-    return middleware.delete(res, next)
+  static async delete (res: express.Response, next: express.NextFunction): Promise<void> {
+    const client: DraftStoreClient<DraftCCJ> = await DraftStoreClientFactory.create<DraftCCJ>()
+    const user: User = res.locals.user
+    return client.delete(user.ccjDraft, user.bearerToken)
   }
 }

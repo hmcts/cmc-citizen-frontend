@@ -14,7 +14,7 @@ function renderView (form: Form<IndividualDetails>, res: express.Response): void
 
 export default express.Router()
   .get(Paths.defendantIndividualDetailsPage.uri, (req: express.Request, res: express.Response) => {
-    renderView(new Form(res.locals.user.claimDraft.defendant.partyDetails as IndividualDetails), res)
+    renderView(new Form(res.locals.user.claimDraft.document.defendant.partyDetails as IndividualDetails), res)
   })
   .post(
     Paths.defendantIndividualDetailsPage.uri,
@@ -24,7 +24,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        (res.locals.user.claimDraft.defendant.partyDetails as IndividualDetails) = form.model
+        (res.locals.user.claimDraft.document.defendant.partyDetails as IndividualDetails) = form.model
         await ClaimDraftMiddleware.save(res, next)
         res.redirect(Paths.defendantEmailPage.uri)
       }

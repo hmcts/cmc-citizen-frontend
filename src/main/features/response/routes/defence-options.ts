@@ -28,7 +28,7 @@ export default express.Router()
     Paths.defenceOptionsPage.uri,
     OweNoneResponseRequiredGuard.requestHandler,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      await renderView(new Form(res.locals.user.responseDraft.counterClaim), res, next)
+      await renderView(new Form(res.locals.user.responseDraft.document.counterClaim), res, next)
     })
   .post(
     Paths.defenceOptionsPage.uri,
@@ -41,7 +41,7 @@ export default express.Router()
         await renderView(form, res, next)
       } else {
         const user: User = res.locals.user
-        user.responseDraft.counterClaim = form.model
+        user.responseDraft.document.counterClaim = form.model
         await ResponseDraftMiddleware.save(res, next)
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
       }

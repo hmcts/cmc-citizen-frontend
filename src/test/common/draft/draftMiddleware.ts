@@ -3,7 +3,7 @@ import * as express from 'express'
 import * as chai from 'chai'
 import * as spies from 'sinon-chai'
 import * as sinon from 'sinon'
-import { mockRes } from 'sinon-express-mock'
+import { mockReq as req, mockRes } from 'sinon-express-mock'
 
 import { DraftMiddleware } from 'common/draft/draftMiddleware'
 
@@ -11,12 +11,12 @@ import DraftStoreClient from 'common/draft/draftStoreClient'
 
 chai.use(spies)
 
-describe('Draft', () => {
-  describe('retrieve middleware', () => {
+describe('Draft middleware', () => {
+  describe('request handler', () => {
     let spy
 
     beforeEach(() => {
-      spy = sinon.stub(DraftStoreClient.prototype, 'retrieve').callsFake(() => {
+      spy = sinon.stub(DraftStoreClient.prototype, 'find').callsFake(() => {
         return Promise.resolve({})
       })
     })
@@ -32,7 +32,7 @@ describe('Draft', () => {
         id: 123
       }
 
-      new DraftMiddleware('default').retrieve(res, sinon.spy())
+      DraftMiddleware.requestHandler('default')(req, res, sinon.spy())
       chai.expect(spy).to.have.been.called
     })
 
@@ -40,7 +40,7 @@ describe('Draft', () => {
       const res: express.Response = mockRes()
       res.locals.isLoggedIn = false
 
-      new DraftMiddleware('default').retrieve(res, sinon.spy())
+      DraftMiddleware.requestHandler('default')(req, res, sinon.spy())
       chai.expect(spy).to.not.have.been.called
     })
 
@@ -48,7 +48,7 @@ describe('Draft', () => {
       const res: express.Response = mockRes()
       res.locals.isLoggedIn = undefined
 
-      new DraftMiddleware('default').retrieve(res, sinon.spy())
+      DraftMiddleware.requestHandler('default')(req, res, sinon.spy())
       chai.expect(spy).to.not.have.been.called
     })
   })

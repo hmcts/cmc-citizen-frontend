@@ -23,9 +23,9 @@ import { SignatureType } from 'app/common/signatureType'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
 
 function getClaimAmountTotal (res: express.Response): Promise<ClaimAmountTotal> {
-  return FeesClient.calculateIssueFee(claimAmountWithInterest(res.locals.user.claimDraft))
+  return FeesClient.calculateIssueFee(claimAmountWithInterest(res.locals.user.claimDraft.document))
     .then((feeAmount: number) => {
-      return new ClaimAmountTotal(res.locals.user.claimDraft.amount.totalAmount(), interestAmount(res.locals.user.claimDraft), feeAmount)
+      return new ClaimAmountTotal(res.locals.user.claimDraft.document.amount.totalAmount(), interestAmount(res.locals.user.claimDraft.document), feeAmount)
     })
 }
 
@@ -56,7 +56,7 @@ function getContactPerson (partyDetails: PartyDetails): string {
 }
 
 function isPartyCompanyOrOrganisation (user: User): boolean {
-  const claimDraft: DraftClaim = user.claimDraft
+  const claimDraft: DraftClaim = user.claimDraft.document
   if (claimDraft.claimant && claimDraft.claimant.partyDetails) {
     const type: string = claimDraft.claimant.partyDetails.type
     return type === PartyType.COMPANY.value || type === PartyType.ORGANISATION.value
@@ -89,14 +89,14 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
   getClaimAmountTotal(res)
     .then((claimAmountTotal: ClaimAmountTotal) => {
       res.render(Paths.checkAndSendPage.associatedView, {
-        draftClaim: res.locals.user.claimDraft,
+        draftClaim: res.locals.user.claimDraft.document,
         claimAmountTotal: claimAmountTotal,
-        payAtSubmission: res.locals.user.claimDraft.interestDate.type === InterestDateType.SUBMISSION,
-        interestClaimed: (res.locals.user.claimDraft.interest.type !== InterestType.NO_INTEREST),
-        contactPerson: getContactPerson(res.locals.user.claimDraft.claimant.partyDetails),
-        businessName: getBusinessName(res.locals.user.claimDraft.claimant.partyDetails),
-        dateOfBirth : getDateOfBirth(res.locals.user.claimDraft.claimant.partyDetails),
-        defendantBusinessName: getBusinessName(res.locals.user.claimDraft.defendant.partyDetails),
+        payAtSubmission: res.locals.user.claimDraft.document.interestDate.type === InterestDateType.SUBMISSION,
+        interestClaimed: (res.locals.user.claimDraft.document.interest.type !== InterestType.NO_INTEREST),
+        contactPerson: getContactPerson(res.locals.user.claimDraft.document.claimant.partyDetails),
+        businessName: getBusinessName(res.locals.user.claimDraft.document.claimant.partyDetails),
+        dateOfBirth : getDateOfBirth(res.locals.user.claimDraft.document.claimant.partyDetails),
+        defendantBusinessName: getBusinessName(res.locals.user.claimDraft.document.defendant.partyDetails),
         partyAsCompanyOrOrganisation: isPartyCompanyOrOrganisation(user),
         form: form
       })
@@ -117,7 +117,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
-        user.claimDraft.qualifiedStatementOfTruth = form.model
+        user.claimDraft.document.qualifiedStatementOfTruth = form.model
         await ClaimDraftMiddleware.save(res, next)
         res.redirect(Paths.startPaymentReceiver.uri)
       }

@@ -19,7 +19,7 @@ function renderView (form: Form<Response>, res: express.Response) {
 
 export default express.Router()
   .get(Paths.responseTypePage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    renderView(new Form(res.locals.user.responseDraft.response), res)
+    renderView(new Form(res.locals.user.responseDraft.document.response), res)
   }))
   .post(
     Paths.responseTypePage.uri,
@@ -32,7 +32,7 @@ export default express.Router()
         renderView(form, res)
       } else {
         const user: User = res.locals.user
-        user.responseDraft.response = form.model
+        user.responseDraft.document.response = form.model
         await ResponseDraftMiddleware.save(res, next)
 
         if (ResponseType.OWE_NONE === form.model.type) {

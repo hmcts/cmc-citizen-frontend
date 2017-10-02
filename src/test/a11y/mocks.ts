@@ -135,7 +135,7 @@ mock('idam/authorizationMiddleware', {
 mock('claim/draft/claimDraftMiddleware', {
   'ClaimDraftMiddleware': {
     retrieve: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-      res.locals.user.claimDraft = mockedDraftClaim()
+      res.locals.user.claimDraft.document = mockedDraftClaim()
       next()
     }
   }
@@ -170,7 +170,7 @@ mock('fees/feesClient', {
 mock('response/draft/responseDraftMiddleware', {
   'ResponseDraftMiddleware': {
     retrieve: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-      res.locals.user.responseDraft = mockedResponseDraft()
+      res.locals.user.responseDraft.document = mockedResponseDraft()
       next()
     }
   }

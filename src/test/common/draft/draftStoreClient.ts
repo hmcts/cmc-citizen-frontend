@@ -55,19 +55,19 @@ describe('DraftStoreClient', () => {
 
     describe('when handling a request error', () => {
       it('should return undefined for 404', async () => {
-        expect(await clientWithRequestMockedToThrow(HttpStatus.NOT_FOUND).retrieve(123, deserializationFn)).to.be.undefined
+        expect(await clientWithRequestMockedToThrow(HttpStatus.NOT_FOUND).find('123','default', deserializationFn)).to.be.undefined
       })
 
       it('should throw/reject promise for 400', () => {
-        expect(clientWithRequestMockedToThrow(HttpStatus.BAD_REQUEST).retrieve(123, deserializationFn)).to.be.rejected
+        expect(clientWithRequestMockedToThrow(HttpStatus.BAD_REQUEST).find('123','default', deserializationFn)).to.be.rejected
       })
 
       it('should throw/reject promise for 500', () => {
-        expect(clientWithRequestMockedToThrow(HttpStatus.INTERNAL_SERVER_ERROR).retrieve(123, deserializationFn)).to.be.rejected
+        expect(clientWithRequestMockedToThrow(HttpStatus.INTERNAL_SERVER_ERROR).find('123','default', deserializationFn)).to.be.rejected
       })
 
       it('should throw/reject promise for undefined status', () => {
-        expect(clientWithRequestMockedToThrow(undefined).retrieve(123, deserializationFn)).to.be.rejected
+        expect(clientWithRequestMockedToThrow(undefined).find('123','default', deserializationFn)).to.be.rejected
       })
     })
 
@@ -75,16 +75,16 @@ describe('DraftStoreClient', () => {
       it('should deserialize object using provided deserialization function', async () => {
         const spy = sinon.spy(deserializationFn)
 
-        await clientWithRequestMockedToReturn({}).retrieve(123, spy)
+        await clientWithRequestMockedToReturn({}).find('123','default', spy)
         chai.expect(spy).to.have.been.called
       })
 
       it('should reject upon receiving undefined', () => {
-        expect(clientWithRequestMockedToReturn(undefined).retrieve(123, deserializationFn)).to.be.rejected
+        expect(clientWithRequestMockedToReturn(undefined).find('123','default', deserializationFn)).to.be.rejected
       })
 
       it('should reject upon receiving null', () => {
-        expect(clientWithRequestMockedToReturn(null).retrieve(123, deserializationFn)).to.be.rejected
+        expect(clientWithRequestMockedToReturn(null).find('123','default', deserializationFn)).to.be.rejected
       })
     })
   })

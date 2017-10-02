@@ -27,7 +27,7 @@ export default express.Router()
     Paths.moreTimeRequestPage.uri,
     MoreTimeAlreadyRequestedGuard.requestHandler,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      renderView(new Form(res.locals.user.responseDraft.moreTimeNeeded), res, next)
+      renderView(new Form(res.locals.user.responseDraft.document.moreTimeNeeded), res, next)
     })
   .post(
     Paths.moreTimeRequestPage.uri,
@@ -40,7 +40,7 @@ export default express.Router()
         renderView(form, res, next)
       } else {
         const user: User = res.locals.user
-        user.responseDraft.moreTimeNeeded = form.model
+        user.responseDraft.document.moreTimeNeeded = form.model
         await ResponseDraftMiddleware.save(res, next)
         if (form.model.option === MoreTimeNeededOption.YES) {
           await ClaimStoreClient.requestForMoreTime(user.claim.id, user)

@@ -30,7 +30,7 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 
 export default express.Router()
   .get(Paths.amountPage.uri, (req: express.Request, res: express.Response): void => {
-    renderView(new Form(res.locals.user.claimDraft.amount), res)
+    renderView(new Form(res.locals.user.claimDraft.document.amount), res)
   })
   .post(Paths.amountPage.uri, FormValidator.requestHandler(ClaimAmountBreakdown, ClaimAmountBreakdown.fromObject, undefined, ['addRow']), actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
@@ -39,7 +39,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.claimDraft.amount = form.model
+        res.locals.user.claimDraft.document.amount = form.model
         ClaimValidator.claimAmount(form.model.totalAmount())
         await ClaimDraftMiddleware.save(res, next)
         res.redirect(Paths.interestPage.uri)

@@ -36,7 +36,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
 
-      const providedByDefendant: Address = user.ccjDraft.defendant.partyDetails !== undefined ? user.ccjDraft.defendant.partyDetails.address : undefined
+      const providedByDefendant: Address = user.ccjDraft.document.defendant.partyDetails !== undefined ? user.ccjDraft.document.defendant.partyDetails.address : undefined
       const providedByClaimant: Address = Address.fromClaimAddress(user.claim.claimData.defendant.address)
 
       renderView(new Form(defaultToAddressProvidedByClaimant(providedByDefendant, providedByClaimant)), res)
@@ -53,12 +53,12 @@ export default express.Router()
         if (form.hasErrors()) {
           renderView(form, res)
         } else {
-          if (user.ccjDraft.defendant.partyDetails === undefined) {
-            user.ccjDraft.defendant.partyDetails = convertToPartyDetails(user.claim.claimData.defendant)
+          if (user.ccjDraft.document.defendant.partyDetails === undefined) {
+            user.ccjDraft.document.defendant.partyDetails = convertToPartyDetails(user.claim.claimData.defendant)
           }
-          user.ccjDraft.defendant.partyDetails.address = form.model
+          user.ccjDraft.document.defendant.partyDetails.address = form.model
           await DraftCCJService.save(res, next)
-          if (user.ccjDraft.defendant.partyDetails.type === PartyType.INDIVIDUAL.value) {
+          if (user.ccjDraft.document.defendant.partyDetails.type === PartyType.INDIVIDUAL.value) {
             res.redirect(Paths.dateOfBirthPage.evaluateUri({ externalId: externalId }))
           } else {
             res.redirect(Paths.paidAmountPage.evaluateUri({ externalId: externalId }))

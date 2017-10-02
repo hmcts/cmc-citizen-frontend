@@ -1,40 +1,45 @@
 import * as express from 'express'
 import DraftStoreClient from 'common/draft/draftStoreClient'
+import { Draft, DraftWrapper } from 'models/draft'
+import { DraftStoreClientFactory } from 'common/draft/draftStoreClientFactory'
+import User from 'idam/user'
 
-export class DraftMiddleware<T> {
-  client: DraftStoreClient<T>
+export class DraftMiddleware {
 
-  constructor (public draftType: string, public deserializeFn: (value: any) => T = (value) => value) {
-    if (!draftType || draftType.trim() === '') {
-      throw new Error('Draft type is required to instantiate middleware')
+  static requestHandler<T extends Draft> (draftType: string, deserializeFn: (value: any) => T = (value) => value): express.RequestHandler {
+    return async function (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+      if (res.locals.isLoggedIn) {
+        try {
+          const client: DraftStoreClient<T> = await DraftStoreClientFactory.create<T>()
+
+          const user: User = res.locals.user
+          client
+            .find(user.bearerToken, draftType, deserializeFn)
+            .then((drafts: DraftWrapper<T>[]) => {
+              const matchingDrafts = drafts.filter(item => item.type === draftType)
+
+              if (matchingDrafts.length > 1) {
+                throw new Error('More then one draft has been found')
+              }
+
+              if (matchingDrafts.length === 0) {
+                const draft = new DraftWrapper<T>()
+                draft.type = draftType
+                draft.document = deserializeFn(undefined)
+                res.locals.user[`${draftType}Draft`] = draft
+              } else {
+                res.locals.user[`${draftType}Draft`] = matchingDrafts[0]
+              }
+
+              next()
+            })
+            .catch(next)
+        } catch (err) {
+          next(err)
+        }
+      } else {
+        next()
+      }
     }
-    this.client = new DraftStoreClient<T>(draftType)
-  }
-
-  retrieve (res: express.Response, next: express.NextFunction): void {
-    if (res.locals.isLoggedIn) {
-      this.client
-        .retrieve(res.locals.user.id, this.deserializeFn)
-        .then(draft => {
-          if (!draft) {
-            draft = this.deserializeFn(undefined)
-          }
-          res.locals.user[`${this.draftType}Draft`] = draft
-          next()
-        })
-        .catch(next)
-    } else {
-      next()
-    }
-  }
-
-  save (res: express.Response, next: express.NextFunction): Promise<void> {
-    return this.client
-      .save(res.locals.user.id, res.locals.user[`${this.draftType}Draft`])
-  }
-
-  delete (res: express.Response, next: express.NextFunction): Promise<void> {
-    return this.client
-      .delete(res.locals.user.id)
   }
 }

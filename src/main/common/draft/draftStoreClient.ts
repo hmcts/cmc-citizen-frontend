@@ -1,51 +1,64 @@
 import * as config from 'config'
-import * as HttpStatus from 'http-status-codes'
 import request from 'client/request'
 
+import { Draft, DraftWrapper } from 'app/models/draft'
 import { MomentFactory } from 'common/momentFactory'
-import { Draft } from 'app/models/draft'
 
-const draftStoreConfig = config.get<any>('draft-store')
+const endpointURL: string = `${config.get<any>('draft-store').url}/drafts`
 
-function withAuthHeader (userId: number, other: any = {}) {
-  return Object.assign({
-    headers: {
-      'Authorization': `hmcts-id ${userId}`
-    }
-  }, other)
-}
+export default class DraftStoreClient<T extends Draft> {
+  private serviceAuthToken: string
 
-export default class DraftStoreClient<T> {
-  private endpointURL: string
-
-  constructor (draftType: string) {
-    if (!draftType || draftType.trim() === '') {
-      throw new Error('Draft type is required by the client')
-    }
-    this.endpointURL = `${draftStoreConfig.url}/api/v2/draft/${draftType}`
+  constructor (serviceAuthToken: string) {
+    this.serviceAuthToken = serviceAuthToken
   }
 
-  save (userId: number, draft: Draft): Promise<void> {
-    draft.lastUpdateTimestamp = MomentFactory.currentDateTime().unix()
-    return request.post(this.endpointURL, withAuthHeader(userId, {
-      body: draft
-    }))
-  }
-
-  retrieve (userId: number, deserializationFn: (value: any) => T): Promise<T> {
+  find (userAuthToken: string, type: string, deserializationFn: (value: any) => T): Promise<DraftWrapper<T>[]> {
     return request
-      .get(this.endpointURL, withAuthHeader(userId))
-      .then(draft => deserializationFn(draft))
-      .catch(err => {
-        if (err.statusCode === HttpStatus.NOT_FOUND) {
-          return undefined
-        } else {
-          throw err
-        }
+      .get(endpointURL, {
+        headers: this.authHeaders(userAuthToken)
+      })
+      .then((response: any) => {
+        return response.data
+          .filter(draft => type ? draft.type === type : true)
+          .map(draft => {
+            const wrapper = new DraftWrapper()
+            wrapper.id = draft.id
+            wrapper.type = draft.type
+            wrapper.document = deserializationFn(draft.document)
+            wrapper.created = MomentFactory.parse(draft.created)
+            wrapper.updated = MomentFactory.parse(draft.updated)
+            return wrapper
+          })
       })
   }
 
-  delete (userId: number): Promise<void> {
-    return request.delete(this.endpointURL, withAuthHeader(userId))
+  save (draft: DraftWrapper<T>, userAuthToken: string): Promise<void> {
+    const options = {
+      headers: this.authHeaders(userAuthToken),
+      body: {
+        type: draft.type,
+        document: draft.document
+      }
+    }
+
+    if (!draft.id) {
+      return request.post(endpointURL, options)
+    } else {
+      return request.put(`${endpointURL}/${draft.id}`, options)
+    }
+  }
+
+  delete (draft: DraftWrapper<T>, userAuthToken: string): Promise<void> {
+    return request.delete(`${endpointURL}/${draft.id}`, {
+      headers: this.authHeaders(userAuthToken)
+    })
+  }
+
+  private authHeaders (userAuthToken: string) {
+    return {
+      'Authorization': `Bearer ${userAuthToken}`,
+      'ServiceAuthorization': `Bearer ${this.serviceAuthToken}`
+    }
   }
 }

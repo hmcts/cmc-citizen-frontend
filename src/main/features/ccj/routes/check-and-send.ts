@@ -16,8 +16,8 @@ function prepareUrls (externalId: string): object {
 function renderView (form: Form<Declaration>, req: express.Request, res: express.Response): void {
   res.render(Paths.checkAndSendPage.associatedView, {
     form: form,
-    details: res.locals.user.ccjDraft,
-    amountToBePaid: res.locals.user.claim.totalAmount - (res.locals.user.ccjDraft.paidAmount.amount || 0),
+    details: res.locals.user.ccjDraft.document,
+    amountToBePaid: res.locals.user.claim.totalAmount - (res.locals.user.ccjDraft.document.paidAmount.amount || 0),
     ...prepareUrls(req.params.externalId)
   })
 }

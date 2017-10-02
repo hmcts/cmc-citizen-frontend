@@ -28,7 +28,7 @@ export default express.Router()
     if (atLeastOneClaimIssued || atLeastOneResponse) {
       return res.redirect(DashboardPaths.dashboardPage.uri)
     }
-    const draftClaimSaved: boolean = user.claimDraft && user.claimDraft.lastUpdateTimestamp !== undefined
+    const draftClaimSaved: boolean = user.claimDraft.document && user.claimDraft.document.lastUpdateTimestamp !== undefined
     const claimIssuedButNoResponse: boolean = (claimAgainstDefendant).length > 0
       && !atLeastOneResponse
 

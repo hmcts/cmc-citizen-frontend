@@ -1,25 +1,21 @@
 import * as express from 'express'
 
-import { DraftMiddleware } from 'common/draft/draftMiddleware'
 import DraftClaim from 'drafts/models/draftClaim'
-
-const deserialize = (value: any): DraftClaim => {
-  return new DraftClaim().deserialize(value)
-}
-
-const middleware = new DraftMiddleware<DraftClaim>('claim', deserialize)
+import { DraftStoreClientFactory } from 'common/draft/draftStoreClientFactory'
+import DraftStoreClient from 'common/draft/draftStoreClient'
+import User from 'idam/user'
 
 export class ClaimDraftMiddleware {
 
-  static retrieve (req: express.Request, res: express.Response, next: express.NextFunction): void {
-    middleware.retrieve(res, next)
+  static async save (res: express.Response, next: express.NextFunction): Promise<void> {
+    const client: DraftStoreClient<DraftClaim> = await DraftStoreClientFactory.create<DraftClaim>()
+    const user: User = res.locals.user
+    return client.save(user.claimDraft, user.bearerToken)
   }
 
-  static save (res: express.Response, next: express.NextFunction): Promise<void> {
-    return middleware.save(res, next)
-  }
-
-  static delete (res: express.Response, next: express.NextFunction): Promise<void> {
-    return middleware.delete(res, next)
+  static async delete (res: express.Response, next: express.NextFunction): Promise<void> {
+    const client: DraftStoreClient<DraftClaim> = await DraftStoreClientFactory.create<DraftClaim>()
+    const user: User = res.locals.user
+    return client.delete(user.claimDraft, user.bearerToken)
   }
 }

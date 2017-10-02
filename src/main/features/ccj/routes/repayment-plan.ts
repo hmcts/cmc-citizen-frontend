@@ -12,7 +12,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
   const user: User = res.locals.user
-  const alreadyPaid: number = user.ccjDraft.paidAmount.amount || 0
+  const alreadyPaid: number = user.ccjDraft.document.paidAmount.amount || 0
 
   res.render(Paths.repaymentPlanPage.associatedView, {
     form: form,
@@ -24,7 +24,7 @@ export default express.Router()
   .get(Paths.repaymentPlanPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
-      renderView(new Form(user.ccjDraft.repaymentPlan), res)
+      renderView(new Form(user.ccjDraft.document.repaymentPlan), res)
     }))
 
   .post(Paths.repaymentPlanPage.uri,
@@ -39,7 +39,7 @@ export default express.Router()
           renderView(form, res)
         } else {
           const { externalId } = req.params
-          user.ccjDraft.repaymentPlan = form.model
+          user.ccjDraft.document.repaymentPlan = form.model
           await DraftCCJService.save(res, next)
           res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
         }

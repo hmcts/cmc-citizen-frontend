@@ -40,7 +40,7 @@ function logError (id: number, payment: Payment, message: string) {
 }
 
 async function successHandler (res, next) {
-  const externalId = res.locals.user.claimDraft.externalId
+  const externalId = res.locals.user.claimDraft.document.externalId
 
   let claimStatus: boolean
   try {
@@ -50,7 +50,7 @@ async function successHandler (res, next) {
     if (err.toString().includes('Claim not found by external id')) {
       claimStatus = false
     } else {
-      logError(res.locals.user.id, res.locals.user.claimDraft.claimant.payment, `Payment processed successfully but there is problem retrieving claim from claim store externalId: ${res.locals.user.claimDraft.externalId},`)
+      logError(res.locals.user.id, res.locals.user.claimDraft.document.claimant.payment, `Payment processed successfully but there is problem retrieving claim from claim store externalId: ${res.locals.user.claimDraft.document.externalId},`)
       next(err)
       return
     }
@@ -69,32 +69,32 @@ export default express.Router()
   .get(Paths.startPaymentReceiver.uri, async (req, res, next) => {
     const user: User = res.locals.user
     try {
-      if (!user.claimDraft.externalId) {
+      if (!user.claimDraft.document.externalId) {
         throw new Error(`externalId is missing from the draft claim. User Id : ${user.id}`)
       }
-      const amount = claimAmountWithInterest(user.claimDraft)
+      const amount = claimAmountWithInterest(user.claimDraft.document)
       if (!amount) {
         throw new Error('No amount entered, you cannot pay yet')
       }
 
-      const paymentId = user.claimDraft.claimant.payment.id
+      const paymentId = user.claimDraft.document.claimant.payment.id
 
       if (paymentId) {
         const payClient: PayClient = await getPayClient()
         const payment: Payment = await payClient.retrieve(user, paymentId)
         switch (payment.state.status) {
           case 'success':
-            return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: user.claimDraft.externalId }))
+            return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: user.claimDraft.document.externalId }))
         }
       }
-      const feeCalculationOutcome: CalculationOutcome = await FeesClient.calculateFee(issueFeeCode, claimAmountWithInterest(res.locals.user.claimDraft))
+      const feeCalculationOutcome: CalculationOutcome = await FeesClient.calculateFee(issueFeeCode, claimAmountWithInterest(res.locals.user.claimDraft.document))
       const payClient: PayClient = await getPayClient()
-      const payment: PaymentResponse = await payClient.create(res.locals.user, feeCalculationOutcome.fee.code, feeCalculationOutcome.amount, getReturnURL(req, user.claimDraft.externalId))
-      res.locals.user.claimDraft.claimant.payment = payment
+      const payment: PaymentResponse = await payClient.create(res.locals.user, feeCalculationOutcome.fee.code, feeCalculationOutcome.amount, getReturnURL(req, user.claimDraft.document.externalId))
+      res.locals.user.claimDraft.document.claimant.payment = payment
       await ClaimDraftMiddleware.save(res, next)
       res.redirect(payment._links.next_url.href)
     } catch (err) {
-      logPaymentError(user.id, user.claimDraft.claimant.payment)
+      logPaymentError(user.id, user.claimDraft.document.claimant.payment)
       next(err)
     }
   })
@@ -103,14 +103,14 @@ export default express.Router()
     try {
       const { externalId } = req.params
 
-      const paymentId = user.claimDraft.claimant.payment.id
+      const paymentId = user.claimDraft.document.claimant.payment.id
       if (!paymentId) {
         return res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
       }
       const payClient = await getPayClient()
 
       const payment: Payment = await payClient.retrieve(user, paymentId)
-      user.claimDraft.claimant.payment = new Payment().deserialize(payment)
+      user.claimDraft.document.claimant.payment = new Payment().deserialize(payment)
 
       await ClaimDraftMiddleware.save(res, next)
       const status: string = payment.state.status
@@ -130,7 +130,7 @@ export default express.Router()
           next(new Error(`Payment failed. Status ${status} is returned by the service`))
       }
     } catch (err) {
-      logPaymentError(user.id, user.claimDraft.claimant.payment)
+      logPaymentError(user.id, user.claimDraft.document.claimant.payment)
       next(err)
     }
   })

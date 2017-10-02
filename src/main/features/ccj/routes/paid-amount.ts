@@ -17,7 +17,7 @@ export default express.Router()
   .get(Paths.paidAmountPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
-      renderView(new Form(user.ccjDraft.paidAmount), res)
+      renderView(new Form(user.ccjDraft.document.paidAmount), res)
     }))
 
   .post(Paths.paidAmountPage.uri,
@@ -32,7 +32,7 @@ export default express.Router()
           renderView(form, res)
         } else {
           const { externalId } = req.params
-          user.ccjDraft.paidAmount = form.model
+          user.ccjDraft.document.paidAmount = form.model
           await DraftCCJService.save(res, next)
           res.redirect(Paths.paidAmountSummaryPage.evaluateUri({ externalId: externalId }))
         }

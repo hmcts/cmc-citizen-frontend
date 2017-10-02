@@ -14,7 +14,7 @@ function renderView (form: Form<IndividualDetails>, res: express.Response): void
 
 export default express.Router()
   .get(Paths.claimantIndividualDetailsPage.uri, (req: express.Request, res: express.Response) => {
-    renderView(new Form(res.locals.user.claimDraft.claimant.partyDetails as IndividualDetails), res)
+    renderView(new Form(res.locals.user.claimDraft.document.claimant.partyDetails as IndividualDetails), res)
   })
   .post(
     Paths.claimantIndividualDetailsPage.uri,
@@ -25,8 +25,8 @@ export default express.Router()
         renderView(form, res)
       } else {
         // Workaround: reset date of birth which is erased in the process of form deserialization
-        form.model.dateOfBirth = (res.locals.user.claimDraft.claimant.partyDetails as IndividualDetails).dateOfBirth
-        res.locals.user.claimDraft.claimant.partyDetails = form.model
+        form.model.dateOfBirth = (res.locals.user.claimDraft.document.claimant.partyDetails as IndividualDetails).dateOfBirth
+        res.locals.user.claimDraft.document.claimant.partyDetails = form.model
         await ClaimDraftMiddleware.save(res, next)
         res.redirect(Paths.claimantDateOfBirthPage.uri)
       }

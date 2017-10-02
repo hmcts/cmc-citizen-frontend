@@ -12,7 +12,7 @@ export default express.Router()
   .post(
     Paths.resolvingThisDisputerPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      res.locals.user.claimDraft.readResolveDispute = true
+      res.locals.user.claimDraft.document.readResolveDispute = true
       await ClaimDraftMiddleware.save(res, next)
       res.redirect(Paths.taskListPage.uri)
     }))

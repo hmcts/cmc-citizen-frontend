@@ -12,14 +12,14 @@ import User from 'app/idam/user'
 
 function renderView (form: Form<Reason>, res: express.Response): void {
   const user: User = res.locals.user
-  const defendantName = user.claimDraft.defendant.partyDetails.name ? user.claimDraft.defendant.partyDetails.name : ''
+  const defendantName = user.claimDraft.document.defendant.partyDetails.name ? user.claimDraft.document.defendant.partyDetails.name : ''
 
   res.render(Paths.reasonPage.associatedView, { form: form, defendantName: defendantName })
 }
 
 export default express.Router()
   .get(Paths.reasonPage.uri, (req: express.Request, res: express.Response): void => {
-    renderView(new Form(res.locals.user.claimDraft.reason), res)
+    renderView(new Form(res.locals.user.claimDraft.document.reason), res)
   })
   .post(
     Paths.reasonPage.uri,
@@ -30,7 +30,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.claimDraft.reason = form.model
+        res.locals.user.claimDraft.document.reason = form.model
         await ClaimDraftMiddleware.save(res, next)
         res.redirect(Paths.taskListPage.uri)
       }
