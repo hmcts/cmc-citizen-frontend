@@ -65,6 +65,11 @@
   },
   "featureToggles": {
     "testingSupport": false,
-    "countyCourtJudgment": false
+    "countyCourtJudgment": false,
+    "idamOauth": false
+  },
+  "oauth": {
+    "clientId": "cmc",
+    "clientSecret": "123456"
   }
 }

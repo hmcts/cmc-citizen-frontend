@@ -4,6 +4,7 @@ import * as otp from 'otp'
 import request from 'client/request'
 import User from 'app/idam/user'
 import ServiceAuthToken from 'idam/serviceAuthToken'
+import { AuthToken } from 'idam/authToken'
 
 const s2sUrl = config.get<string>('idam.service-2-service-auth.url')
 const idamApiUrl = config.get<string>('idam.api.url')
@@ -48,5 +49,16 @@ export default class IdamClient {
         jwt
       )
     })
+  }
+
+  static retrieveAuthToken (url: string): Promise<AuthToken> {
+    return request.get({ uri: url })
+      .then((response: any) => {
+        return new AuthToken(
+          response.access_token,
+          response.token_type,
+          response.expires_in
+        )
+      })
   }
 }

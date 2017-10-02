@@ -1,6 +1,7 @@
 import * as express from 'express'
 import * as config from 'config'
 import * as path from 'path'
+import * as uuid from 'uuid'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
@@ -11,7 +12,11 @@ import { AlreadyRespondedGuard } from 'response/guards/alreadyRespondedGuard'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    res.redirect(`${config.get('idam.authentication-web.url')}/login?continue-url=${buildURL(req, Paths.defendantLoginReceiver.uri)}`)
+    const clientId = config.get<string>('oauth.clientId')
+    const continueUrl = `${buildURL(req, Paths.defendantLoginReceiver.uri.substring(1))}`
+    const state = uuid()
+
+    res.redirect(`${config.get('idam.authentication-web.url')}/login?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${continueUrl}`)
   }
 
   const requiredRoles = [
