@@ -143,7 +143,7 @@ export function rejectRetrieveByClaimantId (reason: string) {
 export function resolveIsClaimLinked (status: boolean) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/.+/defendant-link-status'))
-    .reply(HttpStatus.OK, { status: status })
+    .reply(HttpStatus.OK, { linked: status })
 }
 export function rejectIsClaimLinked () {
   mock(`${serviceBaseURL}/claims`)
