@@ -1,6 +1,8 @@
 import { Moment } from 'moment'
 
-export interface DraftDocument {}
+export class DraftDocument {
+  externalId: string
+}
 
 export class Draft<T extends DraftDocument> {
   id: number

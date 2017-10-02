@@ -1,8 +1,7 @@
 import * as express from 'express'
 import DraftStoreClient from 'common/draft/draftStoreClient'
-import { DraftDocument, Draft } from 'models/draft'
+import { Draft, DraftDocument } from 'models/draft'
 import { DraftStoreClientFactory } from 'common/draft/draftStoreClientFactory'
-import User from 'idam/user'
 
 export class DraftMiddleware {
 
@@ -12,9 +11,15 @@ export class DraftMiddleware {
         try {
           const client: DraftStoreClient<T> = await DraftStoreClientFactory.create<T>()
 
-          const user: User = res.locals.user
+          const query: { [key: string]: string } = { type: draftType }
+
+          const externalIds = req.path.match(/\/case\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/.*/)
+          if (externalIds !== null) {
+            query.externalId = externalIds[1]
+          }
+
           client
-            .find(user.bearerToken, draftType, deserializeFn)
+            .find(query, res.locals.user.bearerToken, deserializeFn)
             .then((drafts: Draft<T>[]) => {
               const matchingDrafts = drafts.filter(item => item.type === draftType)
 
@@ -26,6 +31,9 @@ export class DraftMiddleware {
                 const draft = new Draft<T>()
                 draft.type = draftType
                 draft.document = deserializeFn(undefined)
+                if (draft.document.externalId === undefined && externalIds !== null) {
+                  draft.document.externalId = externalIds[1]
+                }
                 res.locals.user[`${draftType}Draft`] = draft
               } else {
                 res.locals.user[`${draftType}Draft`] = matchingDrafts[0]

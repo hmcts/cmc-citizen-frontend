@@ -5,7 +5,7 @@ import { PayBySetDate } from 'ccj/form/models/payBySetDate'
 import { RepaymentPlan } from 'ccj/form/models/repaymentPlan'
 import { DraftDocument } from 'models/draft'
 
-export class DraftCCJ implements DraftDocument {
+export class DraftCCJ extends DraftDocument {
   defendant: Defendant = new Defendant()
   paymentOption: CCJPaymentOption = new CCJPaymentOption()
   paidAmount?: PaidAmount
@@ -13,6 +13,7 @@ export class DraftCCJ implements DraftDocument {
   repaymentPlan?: RepaymentPlan
 
   constructor (defendant: Defendant = new Defendant(), paymentOption: CCJPaymentOption = new CCJPaymentOption(), paidAmount?: PaidAmount, repaymentPlan?: RepaymentPlan) {
+    super()
     this.defendant = defendant
     this.paymentOption = paymentOption
     this.paidAmount = paidAmount
@@ -21,6 +22,7 @@ export class DraftCCJ implements DraftDocument {
 
   deserialize (input: any): DraftCCJ {
     if (input) {
+      this.externalId = input.externalId
       this.defendant = new Defendant().deserialize(input.defendant)
       this.paymentOption = new CCJPaymentOption().deserialize(input.paymentOption)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)

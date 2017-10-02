@@ -9,7 +9,7 @@ import { Defendant } from 'app/drafts/models/defendant'
 import { DraftDocument } from 'app/models/draft'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
 
-export default class DraftClaim implements DraftDocument, Serializable<DraftClaim> {
+export default class DraftClaim extends DraftDocument implements Serializable<DraftClaim> {
 
   externalId = uuid()
   claimant: Claimant = new Claimant()

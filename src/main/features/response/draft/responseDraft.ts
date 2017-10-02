@@ -10,7 +10,7 @@ import { Defendant } from 'app/drafts/models/defendant'
 import { DraftDocument } from 'app/models/draft'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
 
-export class ResponseDraft implements DraftDocument, Serializable<ResponseDraft> {
+export class ResponseDraft extends DraftDocument implements Serializable<ResponseDraft> {
 
   response?: Response
   defence?: Defence
@@ -22,6 +22,7 @@ export class ResponseDraft implements DraftDocument, Serializable<ResponseDraft>
 
   deserialize (input: any): ResponseDraft {
     if (input) {
+      this.externalId = input.externalId
       this.response = Response.fromObject(input.response)
       this.defence = new Defence().deserialize(input.defence)
       this.freeMediation = new FreeMediation(input.freeMediation && input.freeMediation.option)
