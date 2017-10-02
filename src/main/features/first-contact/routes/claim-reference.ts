@@ -7,7 +7,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 import { ClaimReference } from 'app/forms/models/claimReference'
 
-import { buildURL } from 'app/utils/CallbackBuilder'
+import { buildURL } from 'app/utils/callbackBuilder'
 
 function renderView (form: Form<ClaimReference>, res: express.Response): void {
   res.render(Paths.claimReferencePage.associatedView, { form: form })

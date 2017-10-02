@@ -3,7 +3,7 @@ import * as config from 'config'
 import { Paths } from 'first-contact/paths'
 import { Paths as ResponsePaths } from 'response/paths'
 import Claim from 'claims/models/claim'
-import { buildURL } from 'utils/CallbackBuilder'
+import { buildURL } from 'utils/callbackBuilder'
 import ClaimReferenceMatchesGuard from 'first-contact/guards/claimReferenceMatchesGuard'
 
 function receiverPath (req: express.Request, letterHolderId: number): string {

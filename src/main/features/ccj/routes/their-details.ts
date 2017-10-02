@@ -7,11 +7,12 @@ import { PartyDetails } from 'app/forms/models/partyDetails'
 import { FormValidator } from 'app/forms/validation/formValidator'
 import { Form } from 'app/forms/form'
 import User from 'app/idam/user'
-import { DraftCCJService } from 'ccj/draft/DraftCCJService'
+import { DraftCCJService } from 'ccj/draft/draftCCJService'
 import { Address } from 'forms/models/address'
 import { PartyDetailsFactory } from 'forms/models/partyDetailsFactory'
 import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
 import { PartyType } from 'app/common/partyType'
+import Email from 'forms/models/email'
 
 function defaultToAddressProvidedByClaimant (providedByDefendant: Address, providedByClaimant: Address): Address {
   if (providedByDefendant && providedByDefendant.isCompleted()) {
@@ -55,6 +56,7 @@ export default express.Router()
         } else {
           if (user.ccjDraft.defendant.partyDetails === undefined) {
             user.ccjDraft.defendant.partyDetails = convertToPartyDetails(user.claim.claimData.defendant)
+            user.ccjDraft.defendant.email = new Email(user.claim.claimData.defendant.email)
           }
           user.ccjDraft.defendant.partyDetails.address = form.model
           await DraftCCJService.save(res, next)

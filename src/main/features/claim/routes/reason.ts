@@ -1,18 +1,19 @@
 import * as express from 'express'
-
 import { Paths } from 'claim/paths'
-
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import Reason from 'forms/models/reason'
-
 import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'app/idam/user'
 
 function renderView (form: Form<Reason>, res: express.Response): void {
   const user: User = res.locals.user
-  const defendantName = user.claimDraft.defendant.partyDetails.name ? user.claimDraft.defendant.partyDetails.name : ''
+  const defendantName = (
+    user.claimDraft.defendant
+    && user.claimDraft.defendant.partyDetails
+    && user.claimDraft.defendant.partyDetails.name)
+    ? user.claimDraft.defendant.partyDetails.name : ''
 
   res.render(Paths.reasonPage.associatedView, { form: form, defendantName: defendantName })
 }

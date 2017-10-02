@@ -23,7 +23,8 @@ const paidAmountSummaryPage = Paths.paidAmountSummaryPage.evaluateUri({ external
 
 const validFormData = {
   option: PaidAmountOption.YES.value,
-  amount: 10
+  amount: 10,
+  claimedAmount: 100
 }
 
 describe('CCJ - paid amount page', () => {
@@ -133,6 +134,23 @@ describe('CCJ - paid amount page', () => {
               .post(paidAmountPage)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: undefined })
+              .expect(res => expect(res).to.be.successful.withText('Has the defendant paid some of the amount owed?', 'div class="error-summary"'))
+          })
+        })
+
+        context('when provided paid amount is greater than total amount', async () => {
+          it('should render page', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveRetrieve('ccj')
+
+            await request(app)
+              .post(paidAmountPage)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({
+                option: PaidAmountOption.YES.value,
+                amount: 101,
+                claimedAmount: 100
+              })
               .expect(res => expect(res).to.be.successful.withText('Has the defendant paid some of the amount owed?', 'div class="error-summary"'))
           })
         })

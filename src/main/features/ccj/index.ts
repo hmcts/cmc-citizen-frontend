@@ -4,10 +4,10 @@ import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
-import { buildURL } from 'utils/CallbackBuilder'
+import { buildURL } from 'utils/callbackBuilder'
 import { Paths as AppPaths } from 'app/paths'
 import { ClaimMiddleware } from 'app/claims/claimMiddleware'
-import { DraftCCJService } from 'ccj/draft/DraftCCJService'
+import { DraftCCJService } from 'ccj/draft/draftCCJService'
 import { CCJGuard } from 'ccj/guards/ccjGuard'
 
 function requestHandler (): express.RequestHandler {
@@ -24,8 +24,8 @@ export class CCJFeature {
   enableFor (app: express.Express) {
     app.all(/^\/case\/.+\/ccj\/.*$/, requestHandler())
     app.all(/^\/case\/.+\/ccj\/.*$/, ClaimMiddleware.retrieveByExternalId)
-    app.all(/^\/case\/.+\/ccj\/.*$/, CCJGuard.requestHandler)
-    app.all(/^\/case\/.+\/ccj\/.*$/, DraftCCJService.retrieve)
+    app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/, CCJGuard.requestHandler)
+    app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/, DraftCCJService.retrieve)
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }

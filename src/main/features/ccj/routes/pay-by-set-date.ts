@@ -6,7 +6,7 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { PayBySetDate } from 'ccj/form/models/payBySetDate'
 import User from 'idam/user'
-import { DraftCCJService } from 'ccj/draft/DraftCCJService'
+import { DraftCCJService } from 'ccj/draft/draftCCJService'
 import { ErrorHandling } from 'common/errorHandling'
 
 function renderView (form: Form<PayBySetDate>, res: express.Response): void {
@@ -29,6 +29,7 @@ export default express.Router()
       } else {
         const { externalId } = req.params
         user.ccjDraft.payBySetDate = form.model
+        user.ccjDraft.repaymentPlan = undefined
         await DraftCCJService.save(res, next)
         res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
       }
