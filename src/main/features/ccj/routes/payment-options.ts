@@ -7,7 +7,7 @@ import { CCJPaymentOption, PaymentType } from 'ccj/form/models/ccjPaymentOption'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import User from 'idam/user'
-import { DraftCCJService } from 'ccj/draft/DraftCCJService'
+import { DraftCCJService } from 'ccj/draft/draftCCJService'
 
 export default express.Router()
   .get(Paths.paymentOptionsPage.uri,

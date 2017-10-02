@@ -6,7 +6,7 @@ import { Declaration } from 'ccj/form/models/declaration'
 import { CCJClient } from 'claims/ccjClient'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
-import { DraftCCJService } from 'ccj/draft/DraftCCJService'
+import { DraftCCJService } from 'ccj/draft/draftCCJService'
 
 function prepareUrls (externalId: string): object {
   return {

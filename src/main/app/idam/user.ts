@@ -1,7 +1,7 @@
 import DraftClaim from 'app/drafts/models/draftClaim'
 import Claim from 'app/claims/models/claim'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { DraftCCJ } from 'ccj/draft/DraftCCJ'
+import { DraftCCJ } from 'ccj/draft/draftCCJ'
 
 export default class User {
   id: number
