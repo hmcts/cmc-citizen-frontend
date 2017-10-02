@@ -60,18 +60,31 @@ export const sampleClaimObj = {
     },
     reason: 'Because I can'
   },
-  responseDeadline: '2017-08-08'
+  responseDeadline: '2017-08-08',
+  countyCourtJudgment: {
+    defendant: {
+      name: 'asdsd',
+      type: 'individual',
+      email: 'd@w.pl',
+      address: {
+        city: 'sadasd',
+        line1: 'sadasd',
+        line2: 'dsas',
+        postcode: 'sdasd'
+      },
+      dateOfBirth: '1990-11-01'
+    },
+    paidAmount: 2,
+    paymentOption: 'IMMEDIATELY'
+  }
 }
 
 const sampleDefendantResponseObj = {
-  id: 1,
-  claimId: 1,
-  defendantId: 1,
-  respondedAt: {},
+  respondedAt: '2017-07-25T22:45:51.785',
   response: {
-    type: 'OWE_ALL_PAID_SOME',
-    defence: '',
-    freeMediation: '',
+    type: 'OWE_NONE',
+    defence: 'I reject this money claim',
+    freeMediation: 'yes',
     defendant: {
       type: 'individual',
       name: 'full name',
@@ -89,6 +102,12 @@ export function resolveRetrieveClaimByExternalId (claimOverride?: object) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...claimOverride })
+}
+
+export function resolveRetrieveClaimByExternalIdWithResponse (override?: object) {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
+    .reply(HttpStatus.OK, { ...sampleClaimObj, ...sampleDefendantResponseObj, ...override })
 }
 
 export function rejectRetrieveClaimByExternalId (reason: string) {
@@ -121,6 +140,17 @@ export function rejectRetrieveByClaimantId (reason: string) {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
+export function resolveIsClaimLinked (status: boolean) {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/.+/defendant-link-status'))
+    .reply(HttpStatus.OK, { linked: status })
+}
+export function rejectIsClaimLinked () {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/.+/defendant-link-status'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'Internal server error')
+}
+
 export function resolveRetrieveByLetterHolderId (referenceNumber: string, defendantId?: number) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/letter/[0-9]+'))
@@ -137,6 +167,12 @@ export function resolveRetrieveByDefendantId (referenceNumber: string, defendant
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/defendant/[0-9]+'))
     .reply(HttpStatus.OK, [{ ...sampleClaimObj, referenceNumber: referenceNumber, defendantId: defendantId }])
+}
+
+export function resolveRetrieveByDefendantIdWithResponse (override?: object) {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/defendant/[0-9]+'))
+    .reply(HttpStatus.OK, [{ ...sampleClaimObj, ...sampleDefendantResponseObj, ...override }])
 }
 
 export function rejectRetrieveByDefendantId (reason: string) {
@@ -169,24 +205,6 @@ export function rejectSaveResponse (reason: string) {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveRetrieveResponsesByDefendantId (defendantResponseOverride?: object) {
-  mock(`${serviceBaseURL}/responses/defendant`)
-    .get(new RegExp('/[0-9]+'))
-    .reply(HttpStatus.OK, [{ ...sampleDefendantResponseObj, ...defendantResponseOverride }])
-}
-
-export function resolveRetrieveResponsesByDefendantIdToEmptyList () {
-  mock(`${serviceBaseURL}/responses/defendant`)
-    .get(new RegExp('/[0-9]+'))
-    .reply(HttpStatus.OK, [])
-}
-
-export function rejectRetrieveResponseByDefendantId (reason: string) {
-  mock(`${serviceBaseURL}/responses/defendant`)
-    .get(new RegExp('/[0-9]+'))
-    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
-}
-
 export function resolveRequestForMoreTime () {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+/request-more-time'))
@@ -208,6 +226,18 @@ export function resolveSaveClaimForUser () {
 export function rejectSaveClaimForUser (reason: string = 'HTTP error') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
+export function resolveSaveCcjForUser () {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/[0-9]+/county-court-judgment'))
+    .reply(HttpStatus.OK, { ...sampleClaimObj })
+}
+
+export function rejectSaveCcjForUser (reason: string = 'HTTP error') {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/[0-9]+/county-court-judgment'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 

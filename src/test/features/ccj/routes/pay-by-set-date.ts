@@ -20,11 +20,12 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
+
 const externalId = sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
-const payBySetDatePage = Paths.payBySetDatePage.uri.replace(':externalId', externalId)
-const repaymentPlanPage = Paths.repaymentPlanPage.uri.replace(':externalId', externalId)
+const payBySetDatePage: string = Paths.payBySetDatePage.evaluateUri({externalId : externalId})
+const checkAndSavePage: string = Paths.checkAndSendPage.evaluateUri({externalId : externalId})
 
 describe('CCJ - Pay by set date', () => {
   attachDefaultHooks()
@@ -112,7 +113,7 @@ describe('CCJ - Pay by set date', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should redirect to repayment plan page', async () => {
+        it('should redirect to check and send page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveRetrieve('ccj')
           draftStoreServiceMock.resolveSave('ccj')
@@ -121,7 +122,7 @@ describe('CCJ - Pay by set date', () => {
             .post(payBySetDatePage)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
-            .expect(res => expect(res).to.be.redirect.toLocation(repaymentPlanPage))
+            .expect(res => expect(res).to.be.redirect.toLocation(checkAndSavePage))
         })
       })
 

@@ -7,6 +7,8 @@ import InterestDateType from 'app/common/interestDateType'
 import { calculateInterest } from 'app/common/calculateInterest'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
+import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
+import { DefendantResponse } from 'claims/models/defendantResponse'
 
 export default class Claim implements Serializable<Claim> {
   id: number
@@ -21,6 +23,11 @@ export default class Claim implements Serializable<Claim> {
   moreTimeRequested: boolean
   respondedAt: Moment
   claimantEmail: string
+  countyCourtJudgment: CountyCourtJudgment
+  countyCourtJudgmentRequestedAt: Moment
+  response: DefendantResponse
+  defendantEmail: string
+
   deserialize (input: any): Claim {
     if (input) {
       this.id = input.id
@@ -36,7 +43,17 @@ export default class Claim implements Serializable<Claim> {
       if (input.respondedAt) {
         this.respondedAt = MomentFactory.parse(input.respondedAt)
       }
+      if (input.defendantEmail) {
+        this.defendantEmail = input.defendantEmail
+      }
+      if (input.response) {
+        this.response = new DefendantResponse().deserialize(input.response)
+      }
       this.claimantEmail = input.submitterEmail
+      this.countyCourtJudgment = new CountyCourtJudgment().deserialize(input.countyCourtJudgment)
+      if (input.countyCourtJudgmentRequestedAt) {
+        this.countyCourtJudgmentRequestedAt = MomentFactory.parse(input.countyCourtJudgmentRequestedAt)
+      }
     }
     return this
   }
@@ -60,6 +77,6 @@ export default class Claim implements Serializable<Claim> {
       return false
     }
 
-    return this.remainingDays < 0 && !this.respondedAt
+    return !this.countyCourtJudgmentRequestedAt && this.remainingDays < 0 && !this.respondedAt
   }
 }

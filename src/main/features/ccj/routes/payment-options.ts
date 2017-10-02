@@ -7,7 +7,7 @@ import { CCJPaymentOption, PaymentType } from 'ccj/form/models/ccjPaymentOption'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import User from 'idam/user'
-import { DraftCCJService } from 'ccj/draft/DraftCCJService'
+import { DraftCCJService } from 'ccj/draft/draftCCJService'
 
 export default express.Router()
   .get(Paths.paymentOptionsPage.uri,
@@ -27,6 +27,9 @@ export default express.Router()
           res.render(Paths.paymentOptionsPage.associatedView, { form: form })
         } else {
           user.ccjDraft.paymentOption = form.model
+          if (form.model.option === PaymentType.IMMEDIATELY) {
+            user.ccjDraft.repaymentPlan = user.ccjDraft.payBySetDate = undefined
+          }
           await DraftCCJService.save(res, next)
 
           const { externalId } = req.params
@@ -35,10 +38,10 @@ export default express.Router()
             case PaymentType.IMMEDIATELY:
               res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
               break
-            case PaymentType.FULL:
+            case PaymentType.FULL_BY_SPECIFIED_DATE:
               res.redirect(Paths.payBySetDatePage.evaluateUri({ externalId: externalId }))
               break
-            case PaymentType.BY_INSTALMENTS:
+            case PaymentType.INSTALMENTS:
               res.redirect(Paths.repaymentPlanPage.evaluateUri({ externalId: externalId }))
               break
           }

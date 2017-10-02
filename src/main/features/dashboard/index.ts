@@ -6,7 +6,7 @@ import * as uuid from 'uuid'
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
-import { buildURL } from 'utils/CallbackBuilder'
+import { buildURL } from 'utils/callbackBuilder'
 import { Paths as AppPaths } from 'app/paths'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 

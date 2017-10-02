@@ -308,12 +308,14 @@
       </tr>
       {% endif %}
       {% endif %}
+      {% if claim.interest is defined %}
       <tr>
         <td>Accrued interest:</td>
         <td>
           Interest will accrue at the daily rate of {{ claim.interest.dailyAmount }} up to the date of judgment.
         </td>
       </tr>
+      {% endif %}
       <tr>
         <td>Claim fee:</td>
         <td>

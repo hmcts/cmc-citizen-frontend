@@ -8,7 +8,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import DateOfBirth from 'forms/models/dateOfBirth'
 import User from 'app/idam/user'
 
-import { DraftCCJService } from 'ccj/draft/DraftCCJService'
+import { DraftCCJService } from 'ccj/draft/draftCCJService'
 import { ErrorHandling } from 'common/errorHandling'
 import { IndividualDetails } from 'forms/models/individualDetails'
 
