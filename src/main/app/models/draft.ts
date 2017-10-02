@@ -1,6 +1,6 @@
 import { Moment } from 'moment'
 
-export class Draft {}
+export interface Draft {}
 
 export class DraftWrapper<T extends Draft> {
   id: number

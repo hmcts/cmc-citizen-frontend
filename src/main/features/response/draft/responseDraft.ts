@@ -10,7 +10,7 @@ import { Defendant } from 'app/drafts/models/defendant'
 import { Draft } from 'app/models/draft'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
 
-export class ResponseDraft extends Draft implements Serializable<ResponseDraft> {
+export class ResponseDraft implements Draft, Serializable<ResponseDraft> {
 
   response?: Response
   defence?: Defence
