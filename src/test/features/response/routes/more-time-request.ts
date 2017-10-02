@@ -112,7 +112,7 @@ describe('Defendant response: more time needed page', () => {
           it('should redirect to task list page when "no" is selected and everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: undefined } })
-            draftStoreServiceMock.resolveSave('response')
+            draftStoreServiceMock.resolveSave()
 
             await request(app)
               .post(pagePath)
@@ -126,7 +126,7 @@ describe('Defendant response: more time needed page', () => {
           it('should redirect to confirmation page page when "yes" is selected and everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: undefined } })
-            draftStoreServiceMock.resolveSave('response')
+            draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRequestForMoreTime()
 
             await request(app)
@@ -141,7 +141,7 @@ describe('Defendant response: more time needed page', () => {
           it('should return 500 and render error page when "yes" is selected and cannot save draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: undefined } })
-            draftStoreServiceMock.rejectSave('response', 'HTTP error')
+            draftStoreServiceMock.rejectSave()
 
             await request(app)
               .post(pagePath)
@@ -162,7 +162,7 @@ describe('Defendant response: more time needed page', () => {
 
           it('should return 500 when "yes" is selected and cannot request more time', async () => {
             draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: undefined } })
-            draftStoreServiceMock.resolveSave('response')
+            draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.rejectRequestForMoreTime('internal server error when requesting more time')
 

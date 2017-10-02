@@ -47,7 +47,7 @@ describe('CCJ - paid amount page', () => {
       })
 
       it('should return 500 and render error page when cannot retrieve CCJ draft', async () => {
-        draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+        draftStoreServiceMock.rejectRetrieve('Error')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
         await request(app)
@@ -87,7 +87,7 @@ describe('CCJ - paid amount page', () => {
           })
 
           it('should return 500 when cannot retrieve CCJ draft', async () => {
-            draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+            draftStoreServiceMock.rejectRetrieve('Error')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -102,7 +102,7 @@ describe('CCJ - paid amount page', () => {
           it('should redirect to claim amount page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('ccj')
-            draftStoreServiceMock.resolveSave('ccj')
+            draftStoreServiceMock.resolveSave()
 
             await request(app)
               .post(paidAmountPage)
@@ -114,7 +114,7 @@ describe('CCJ - paid amount page', () => {
           it('should return 500 and render error page when cannot save ccj draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('ccj')
-            draftStoreServiceMock.rejectSave('ccj', 'Error')
+            draftStoreServiceMock.rejectSave()
 
             await request(app)
               .post(paidAmountPage)

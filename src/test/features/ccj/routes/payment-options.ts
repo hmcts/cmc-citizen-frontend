@@ -48,7 +48,7 @@ describe('CCJ - payment options', () => {
 
         it('should return 500 and render error page when cannot retrieve CCJ draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+          draftStoreServiceMock.rejectRetrieve('Error')
 
           await request(app)
             .get(paymentOptionsPage)
@@ -91,7 +91,7 @@ describe('CCJ - payment options', () => {
 
           it('should return 500 when cannot retrieve CCJ draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+            draftStoreServiceMock.rejectRetrieve('Error')
 
             await request(app)
               .post(paymentOptionsPage)
@@ -103,7 +103,7 @@ describe('CCJ - payment options', () => {
           it('should return 500 when cannot save CCJ draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('ccj')
-            draftStoreServiceMock.rejectSave('ccj', 'Error')
+            draftStoreServiceMock.rejectSave()
 
             await request(app)
               .post(paymentOptionsPage)
@@ -121,7 +121,7 @@ describe('CCJ - payment options', () => {
 
           context('when form is valid', async () => {
             beforeEach(() => {
-              draftStoreServiceMock.resolveSave('ccj')
+              draftStoreServiceMock.resolveSave()
             })
 
             async function checkThatSelectedPaymentOptionRedirectsToPage (data: object, expectedToRedirect: string) {

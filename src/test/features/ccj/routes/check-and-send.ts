@@ -43,7 +43,7 @@ describe('CCJ: check and send page', () => {
 
         it('should return 500 and render error page when cannot retrieve CCJ draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+          draftStoreServiceMock.rejectRetrieve('Error')
 
           await request(app)
             .get(cnsPage)
@@ -86,7 +86,7 @@ describe('CCJ: check and send page', () => {
 
       it('should return 500 when cannot retrieve CCJ draft', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+        draftStoreServiceMock.rejectRetrieve('Error')
 
         await request(app)
           .post(cnsPage)

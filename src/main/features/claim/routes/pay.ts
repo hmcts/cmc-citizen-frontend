@@ -3,8 +3,6 @@ import * as config from 'config'
 
 import { Paths } from 'claim/paths'
 
-import IdamClient from 'idam/idamClient'
-
 import PayClient from 'app/pay/payClient'
 import PaymentResponse from 'app/pay/paymentResponse'
 import Payment from 'app/pay/payment'
@@ -17,12 +15,13 @@ import { buildURL } from 'app/utils/CallbackBuilder'
 import { claimAmountWithInterest } from 'app/utils/interestUtils'
 import User from 'app/idam/user'
 import { DraftService } from 'common/draft/draftService'
+import { ServiceAuthTokenFactory } from 'common/security/serviceTokenFactory'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('router/pay')
 const issueFeeCode = config.get<string>('fees.issueFee.code')
 
 const getPayClient = async (): Promise<PayClient> => {
-  const authToken = await IdamClient.retrieveServiceToken()
+  const authToken = await ServiceAuthTokenFactory.get()
 
   return new PayClient(authToken)
 }

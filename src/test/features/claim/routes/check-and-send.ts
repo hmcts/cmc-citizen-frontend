@@ -101,7 +101,7 @@ describe('Claim issue: check and send page', () => {
 
       it('should redirect to payment page when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveRetrieve('claim')
-        draftStoreServiceMock.resolveSave('claim')
+        draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)

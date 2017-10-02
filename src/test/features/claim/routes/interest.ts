@@ -52,7 +52,7 @@ describe('Claim issue: interest page', () => {
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
         draftStoreServiceMock.resolveRetrieve('claim')
-        draftStoreServiceMock.rejectSave('claim', 'HTTP error')
+        draftStoreServiceMock.rejectSave()
 
         await request(app)
           .post(ClaimPaths.interestPage.uri)
@@ -63,7 +63,7 @@ describe('Claim issue: interest page', () => {
 
       it('should redirect to interest date page when form is valid, standard interest selected and everything is fine', async () => {
         draftStoreServiceMock.resolveRetrieve('claim')
-        draftStoreServiceMock.resolveSave('claim')
+        draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(ClaimPaths.interestPage.uri)
@@ -74,7 +74,7 @@ describe('Claim issue: interest page', () => {
 
       it('should redirect to interest date page when form is valid, different interest selected and everything is fine', async () => {
         draftStoreServiceMock.resolveRetrieve('claim')
-        draftStoreServiceMock.resolveSave('claim')
+        draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(ClaimPaths.interestPage.uri)
@@ -85,7 +85,7 @@ describe('Claim issue: interest page', () => {
 
       it('should redirect to total page when form is valid, no interest selected and everything is fine', async () => {
         draftStoreServiceMock.resolveRetrieve('claim')
-        draftStoreServiceMock.resolveSave('claim')
+        draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(ClaimPaths.interestPage.uri)

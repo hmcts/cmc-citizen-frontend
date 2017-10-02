@@ -102,7 +102,7 @@ describe('defendant as soleTrader details page', () => {
 
       it('should redirect to data of birth page when everything is fine ', async () => {
         draftStoreServiceMock.resolveRetrieve('claim')
-        draftStoreServiceMock.resolveSave('claim')
+        draftStoreServiceMock.resolveSave()
         await request(app)
           .post(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)

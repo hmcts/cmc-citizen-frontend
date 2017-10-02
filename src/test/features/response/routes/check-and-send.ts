@@ -129,7 +129,7 @@ describe('Defendant response: check and send page', () => {
 
           it('should return 500 and render error page when form is valid and cannot save response', async () => {
             draftStoreServiceMock.resolveRetrieve(draftType)
-            draftStoreServiceMock.resolveSave(draftType)
+            draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.rejectSaveResponse('HTTP error')
 
@@ -142,10 +142,10 @@ describe('Defendant response: check and send page', () => {
 
           it('should return 500 and render error page when form is valid and cannot delete draft response', async () => {
             draftStoreServiceMock.resolveRetrieve(draftType)
-            draftStoreServiceMock.resolveSave(draftType)
+            draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolveSaveResponse()
-            draftStoreServiceMock.rejectDelete(draftType, 'HTTP error')
+            draftStoreServiceMock.rejectDelete()
 
             await request(app)
               .post(checkAndSendPage)
@@ -156,10 +156,10 @@ describe('Defendant response: check and send page', () => {
 
           it('should redirect to confirmation page when form is valid and a non handoff response type is picked', async () => {
             draftStoreServiceMock.resolveRetrieve(draftType)
-            draftStoreServiceMock.resolveSave(draftType)
+            draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolveSaveResponse()
-            draftStoreServiceMock.resolveDelete(draftType)
+            draftStoreServiceMock.resolveDelete()
 
             await request(app)
               .post(checkAndSendPage)

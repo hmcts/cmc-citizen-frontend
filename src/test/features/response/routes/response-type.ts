@@ -77,7 +77,7 @@ describe('Defendant response: response type page', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('response')
-            draftStoreServiceMock.rejectSave('response', 'HTTP error')
+            draftStoreServiceMock.rejectSave()
 
             await request(app)
               .post(pagePath)
@@ -89,7 +89,7 @@ describe('Defendant response: response type page', () => {
           it('should redirect to task list page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('response')
-            draftStoreServiceMock.resolveSave('response')
+            draftStoreServiceMock.resolveSave()
 
             await request(app)
               .post(pagePath)
@@ -103,7 +103,7 @@ describe('Defendant response: response type page', () => {
           it('should redirect to defence options page when everything is fine and OWE_NONE is selected', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('response')
-            draftStoreServiceMock.resolveSave('response')
+            draftStoreServiceMock.resolveSave()
 
             await request(app)
               .post(pagePath)

@@ -102,7 +102,7 @@ describe('defendant as company details page', () => {
 
       it('should redirect to mobile phone page when everything is fine ', async () => {
         draftStoreServiceMock.resolveRetrieve('claim')
-        draftStoreServiceMock.resolveSave('claim')
+        draftStoreServiceMock.resolveSave()
         await request(app)
           .post(ClaimPaths.defendantCompanyDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)

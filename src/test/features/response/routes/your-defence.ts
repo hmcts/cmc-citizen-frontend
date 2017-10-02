@@ -90,7 +90,7 @@ describe('Defendant response: defence page', () => {
         context('when form is valid', () => {
           it('should return 500 and render error page when form is valid and cannot save draft', async () => {
             draftStoreServiceMock.resolveRetrieve('response')
-            draftStoreServiceMock.rejectSave('response', 'HTTP error')
+            draftStoreServiceMock.rejectSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -102,7 +102,7 @@ describe('Defendant response: defence page', () => {
 
           it('should redirect to free mediation page when form is valid and everything is fine', async () => {
             draftStoreServiceMock.resolveRetrieve('response')
-            draftStoreServiceMock.resolveSave('response')
+            draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)

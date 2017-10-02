@@ -52,7 +52,7 @@ describe('Login receiver', async () => {
       })
 
       it('should return 500 and render error page when cannot retrieve draft', async () => {
-        draftStoreServiceMock.rejectRetrieve('claim', 'Cos')
+        draftStoreServiceMock.rejectRetrieve('Cos')
 
         await request(app)
           .get(AppPaths.receiver.uri)
@@ -62,8 +62,8 @@ describe('Login receiver', async () => {
 
       context('when no claim or response', async () => {
         it('should redirect to claim start', async () => {
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('claim')
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
+          draftStoreServiceMock.resolveRetrieveNoDraftFound()
+          draftStoreServiceMock.resolveRetrieveNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
 
@@ -77,7 +77,7 @@ describe('Login receiver', async () => {
       context('when draft claim exists', async () => {
         it('should redirect to claim task-list', async () => {
           draftStoreServiceMock.resolveRetrieve('claim')
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
+          draftStoreServiceMock.resolveRetrieveNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
 
@@ -90,8 +90,8 @@ describe('Login receiver', async () => {
 
       context('when claim as a defendant but no draft response', async () => {
         it('should redirect to response task-list', async () => {
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('claim')
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
+          draftStoreServiceMock.resolveRetrieveNoDraftFound()
+          draftStoreServiceMock.resolveRetrieveNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantId('A', 1)
 
@@ -119,8 +119,8 @@ describe('Login receiver', async () => {
 
       context('when claim exists', async () => {
         it('should redirect to dashboard', async () => {
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('claim')
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
+          draftStoreServiceMock.resolveRetrieveNoDraftFound()
+          draftStoreServiceMock.resolveRetrieveNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantId()
           claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
 
@@ -132,8 +132,8 @@ describe('Login receiver', async () => {
       })
       context('when response exists', async () => {
         it('should redirect to dashboard', async () => {
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('claim')
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
+          draftStoreServiceMock.resolveRetrieveNoDraftFound()
+          draftStoreServiceMock.resolveRetrieveNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
 
@@ -145,8 +145,8 @@ describe('Login receiver', async () => {
       })
       context('when claim and response exists', async () => {
         it('should redirect to dashboard', async () => {
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('claim')
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
+          draftStoreServiceMock.resolveRetrieveNoDraftFound()
+          draftStoreServiceMock.resolveRetrieveNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantId()
           claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
 

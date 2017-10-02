@@ -72,7 +72,7 @@ describe('CCJ - their details', () => {
           it('should redirect to defendant date of birth page when defendant is an individual', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('ccj')
-            draftStoreServiceMock.resolveSave('ccj')
+            draftStoreServiceMock.resolveSave()
 
             await request(app)
               .post(theirDetailsPage)
@@ -85,7 +85,7 @@ describe('CCJ - their details', () => {
             it(`should redirect to defendant amount paid page when defendant is ${partyType.name.toLocaleLowerCase()}`, async () => {
               claimStoreServiceMock.resolveRetrieveClaimByExternalId()
               draftStoreServiceMock.resolveRetrieve('ccj', {defendant: {partyDetails: partyDetails(partyType.value)}})
-              draftStoreServiceMock.resolveSave('ccj')
+              draftStoreServiceMock.resolveSave()
 
               await request(app)
                 .post(theirDetailsPage)

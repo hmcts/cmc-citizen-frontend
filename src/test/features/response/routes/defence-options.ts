@@ -105,7 +105,7 @@ describe('Defendant response: defence options page', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
             draftStoreServiceMock.resolveRetrieve('response')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.rejectSave('response', 'HTTP error')
+            draftStoreServiceMock.rejectSave()
 
             await request(app)
               .post(defenceOptionsPage)
@@ -116,7 +116,7 @@ describe('Defendant response: defence options page', () => {
 
           it('should redirect to task list page when everything is fine', async () => {
             draftStoreServiceMock.resolveRetrieve('response')
-            draftStoreServiceMock.resolveSave('response')
+            draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)

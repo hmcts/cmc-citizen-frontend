@@ -173,7 +173,7 @@ function _resolveRetrieve (draftId: number, draftType: string, draftOverride?: o
   }
 
   mock(serviceBaseURL)
-    .get('/drafts')
+    .get(new RegExp('/drafts.*'))
     .reply(HttpStatus.OK, {
       data: [{
         id: draftId,
@@ -185,40 +185,40 @@ function _resolveRetrieve (draftId: number, draftType: string, draftOverride?: o
     })
 }
 
-export function resolveRetrieveNoDraftFound (draftType: string) {
+export function resolveRetrieveNoDraftFound () {
   mock(serviceBaseURL)
-    .get('/drafts')
+    .get(new RegExp('/drafts.*'))
     .reply(HttpStatus.OK, {
       data: []
     })
 }
 
-export function rejectRetrieve (draftType: string, reason: string) {
+export function rejectRetrieve (reason: string = 'HTTP error') {
   mock(serviceBaseURL)
-    .get('/drafts')
+    .get(new RegExp('/drafts.*'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveSave (draftType: string) {
+export function resolveSave (id: number = 100) {
   mock(serviceBaseURL)
-    .put(new RegExp('/drafts/[0-9]+'))
+    .put(`/drafts/${id}`)
     .reply(HttpStatus.OK)
 }
 
-export function rejectSave (draftType: string, reason: string) {
+export function rejectSave (id: number = 100, reason: string = 'HTTP error') {
   mock(serviceBaseURL)
-    .put(new RegExp('/drafts/[0-9]+'))
+    .put(`/drafts/${id}`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveDelete (draftType: string) {
+export function resolveDelete (id: number = 100) {
   mock(serviceBaseURL)
-    .delete(new RegExp('/drafts/[0-9]+'))
+    .delete(`/drafts/${id}`)
     .reply(HttpStatus.OK)
 }
 
-export function rejectDelete (draftType: string, reason: string) {
+export function rejectDelete (id: number = 100, reason: string = 'HTTP error') {
   mock(serviceBaseURL)
-    .delete(new RegExp('/drafts/[0-9]+'))
+    .delete(`/drafts/${id}`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }

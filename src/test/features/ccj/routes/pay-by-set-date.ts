@@ -48,7 +48,7 @@ describe('CCJ - Pay by set date', () => {
 
       it('should return 500 and render error page when cannot retrieve CCJ draft', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+        draftStoreServiceMock.rejectRetrieve('Error')
 
         await request(app)
           .get(payBySetDatePage)
@@ -90,7 +90,7 @@ describe('CCJ - Pay by set date', () => {
 
       it('should return 500 when cannot retrieve CCJ draft', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+        draftStoreServiceMock.rejectRetrieve('Error')
 
         await request(app)
           .post(payBySetDatePage)
@@ -103,7 +103,7 @@ describe('CCJ - Pay by set date', () => {
         it('should return 500 and render error page when cannot save ccj draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveRetrieve('ccj')
-          draftStoreServiceMock.rejectSave('ccj', 'Error')
+          draftStoreServiceMock.rejectSave()
 
           await request(app)
             .post(payBySetDatePage)
@@ -115,7 +115,7 @@ describe('CCJ - Pay by set date', () => {
         it('should redirect to check and send page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveRetrieve('ccj')
-          draftStoreServiceMock.resolveSave('ccj')
+          draftStoreServiceMock.resolveSave()
 
           await request(app)
             .post(payBySetDatePage)
