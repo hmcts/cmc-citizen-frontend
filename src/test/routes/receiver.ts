@@ -28,17 +28,6 @@ describe('Login receiver', async () => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
       })
 
-      it('should save JWT token in cookie when JWT token exists in query string', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
-        draftStoreServiceMock.resolveRetrieve('response')
-        claimStoreServiceMock.resolveRetrieveByClaimantId()
-        claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
-
-        await request(app)
-          .get(`${AppPaths.receiver.uri}?jwt=ABC`)
-          .expect(res => expect(res).to.have.cookie(cookieName, 'ABC'))
-      })
-
       it('should not remove JWT token saved in cookie when JWT token does not exist in query string', async () => {
         draftStoreServiceMock.resolveRetrieve('claim')
         draftStoreServiceMock.resolveRetrieve('response')
