@@ -36,9 +36,9 @@ export default express.Router()
         await ResponseDraftMiddleware.save(res, next)
 
         if (ResponseType.OWE_NONE === form.model.type) {
-          res.redirect(Paths.defenceOptionsPage.evaluateUri({ externalId: externalId }))
+          res.redirect(Paths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: externalId }))
         } else {
-          res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
+          res.redirect(Paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: externalId }))
         }
       }
     }))

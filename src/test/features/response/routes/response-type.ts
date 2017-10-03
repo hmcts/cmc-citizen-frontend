@@ -86,7 +86,7 @@ describe('Defendant response: response type page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to task list page when everything is fine', async () => {
+          it('should redirect to reject part of claim page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('response')
             draftStoreServiceMock.resolveSave('response')
@@ -96,11 +96,11 @@ describe('Defendant response: response type page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ type: ResponseType.OWE_SOME_PAID_NONE })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.taskListPage
+                .toLocation(ResponsePaths.defenceRejectPartOfClaimPage
                   .evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
-          it('should redirect to defence options page when everything is fine and OWE_NONE is selected', async () => {
+          it('should redirect to reject all of claim page when everything is fine and OWE_NONE is selected', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('response')
             draftStoreServiceMock.resolveSave('response')
@@ -110,7 +110,7 @@ describe('Defendant response: response type page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ type: ResponseType.OWE_NONE })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.defenceOptionsPage
+                .toLocation(ResponsePaths.defenceRejectAllOfClaimPage
                   .evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })

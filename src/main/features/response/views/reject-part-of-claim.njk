@@ -1,0 +1,48 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
+{% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
+
+{% set title = t("Money claim") %}
+
+{% set heading = t("I reject part of the claim") %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
+        {% set error = form.errorFor('type') %}
+        <div class="form-group {% if error %} form-group-error {% endif %}">
+          <fieldset id="type[label]">
+            <legend class="visually-hidden">{{ t("I reject part of the claim") }}</legend>
+            {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+        {{
+        radioGroup(
+        label = "Why are you rejecting part of this claim?",
+        name = "option",
+        options = [
+        {
+          label: "The claim amount is too much",
+          value: "tooMuchAmount",
+          hint: "",
+          bold: true
+        },
+        {
+          label: "I've paid what I believe I owe",
+          value: "paidBelievedOwed",
+          hint: "",
+          bold: true
+        }
+        ],
+        form = form
+        )
+        }}</fieldset>
+        <div class="form-group">
+          {{ saveAndContinueButton() }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+

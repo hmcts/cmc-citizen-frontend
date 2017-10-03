@@ -1,6 +1,8 @@
 import { Response } from 'response/form/models/response'
 import { Serializable } from 'models/serializable'
 import { FreeMediation } from 'response/form/models/freeMediation'
+import { RejectPartOfClaim } from 'response/form/models/rejectPartOfClaim'
+import { RejectAllOfClaim } from 'response/form/models/rejectAllOfClaim'
 import Defence from 'response/form/models/defence'
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import { CounterClaim } from 'response/form/models/counterClaim'
@@ -19,6 +21,8 @@ export class ResponseDraft extends Draft implements Serializable<ResponseDraft> 
   counterClaim?: CounterClaim
   defendantDetails?: Defendant = new Defendant()
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
+  rejectPartOfClaim?: RejectPartOfClaim
+  rejectAllOfClaim?: RejectAllOfClaim
 
   deserialize (input: any): ResponseDraft {
     if (input) {
@@ -32,6 +36,8 @@ export class ResponseDraft extends Draft implements Serializable<ResponseDraft> 
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }
+      this.rejectPartOfClaim = new RejectPartOfClaim(input.rejectPartOfClaim && input.rejectPartOfClaim.option)
+      this.rejectAllOfClaim = new RejectPartOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
     }
     return this
   }
