@@ -8,7 +8,7 @@ import { mockReq as req, mockRes as res } from 'sinon-express-mock'
 import { IndividualDateOfBirthGuard } from 'ccj/guards/individualDateOfBirthGuard'
 import { Paths } from 'dashboard/paths'
 
-import { DraftCCJ } from 'ccj/draft/DraftCCJ'
+import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Defendant } from 'drafts/models/defendant'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { IndividualDetails } from 'forms/models/individualDetails'

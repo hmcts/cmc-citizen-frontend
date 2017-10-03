@@ -22,6 +22,8 @@ import InterestDate from 'forms/models/interestDate'
 import Reason from 'forms/models/reason'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import Email from 'app/forms/models/email'
+import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
+
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
 export const sampleClaimDraftObj = {
@@ -69,7 +71,7 @@ export const sampleClaimDraftObj = {
       },
       hasCorrespondenceAddress: false
     } as IndividualDetails,
-    email: {address: 'example@example.com' }
+    email: { address: 'example@example.com' }
   } as Defendant,
   amount: {
     rows: [
@@ -105,7 +107,7 @@ const sampleResponseDraftObj = {
     counterClaim: false
   },
   defendantDetails: {
-    email: {address: 'example@example.com'} as Email,
+    email: { address: 'example@example.com' } as Email,
     mobilePhone: { number: '01223344444' } as MobilePhone,
     partyDetails: {
       type: 'individual',
@@ -126,6 +128,7 @@ const sampleResponseDraftObj = {
 
 const sampleCCJDraftObj = {
   defendant: {
+    email: { address: 'a@wp.pl' },
     partyDetails: {
       type: 'individual',
       name: 'John Smith',
@@ -143,6 +146,27 @@ const sampleCCJDraftObj = {
           year: 1980
         }
       }
+    }
+  },
+  paymentOption: {
+    option: {
+      value: 'INSTALMENTS',
+      displayValue: 'By instalments'
+    }
+  },
+  paidAmount: { option: PaidAmountOption.NO },
+  repaymentPlan: {
+    remainingAmount: 3685,
+    firstPayment: 100,
+    installmentAmount: 100,
+    firstPaymentDate: {
+      year: 2019,
+      month: 1,
+      day: 1
+    },
+    paymentSchedule: {
+      value: 'EVERY_MONTH',
+      displayValue: 'every month'
     }
   }
 }

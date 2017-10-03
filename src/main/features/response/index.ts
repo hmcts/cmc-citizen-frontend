@@ -4,7 +4,7 @@ import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
-import { buildURL } from 'utils/CallbackBuilder'
+import { buildURL } from 'utils/callbackBuilder'
 import { Paths } from 'response/paths'
 import { AlreadyRespondedGuard } from 'response/guards/alreadyRespondedGuard'
 import { ClaimMiddleware } from 'app/claims/claimMiddleware'

@@ -109,7 +109,8 @@ export default express.Router()
     const StatementOfTruthClass = getStatementOfTruthClassFor(user)
     renderView(new Form(new StatementOfTruthClass()), res, next)
   })
-  .post(Paths.checkAndSendPage.uri, AllClaimTasksCompletedGuard.requestHandler,
+  .post(Paths.checkAndSendPage.uri,
+    AllClaimTasksCompletedGuard.requestHandler,
     FormValidator.requestHandler(undefined, deserializerFunction),
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const user: User = res.locals.user

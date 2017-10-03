@@ -11,7 +11,7 @@ import FeesClient from 'app/fees/feesClient'
 import { CalculationOutcome } from 'app/fees/models/calculationOutcome'
 
 import ClaimStoreClient from 'app/claims/claimStoreClient'
-import { buildURL } from 'app/utils/CallbackBuilder'
+import { buildURL } from 'app/utils/callbackBuilder'
 import { claimAmountWithInterest } from 'app/utils/interestUtils'
 import User from 'app/idam/user'
 import { DraftService } from 'common/draft/draftService'

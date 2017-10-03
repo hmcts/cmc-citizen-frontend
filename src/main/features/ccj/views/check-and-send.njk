@@ -12,7 +12,7 @@
   <form novalidate method="post">
     {{ csrfProtection(csrf) }}
 
-    {{ tableStart("theirDetails", "Their details") }}
+    {{ tableStart('theirDetails', 'Their details') }}
     {{
       partyDetailsSummaryFragment(
         partyDetails = user.ccjDraft.document.defendant.partyDetails,
@@ -23,23 +23,22 @@
         }
       )
     }}
-    {{ row("Email:", user.claim.claimData.defendant.email) }}
+    {{ row('Email:', user.claim.claimData.defendant.email) }}
     {{ tableEnd() }}
 
-    {{ tableStart("payment", "Payment") }}
+    {{ tableStart('payment', 'Payment') }}
     {{ row("Amount to be paid by defendant", amountToBePaid | numeral, changeLink = paidAmountUrl) }}
 
-    {% if details.paymentOption.option.value == 'immediately' %}
+    {% if details.paymentOption.option.value == 'IMMEDIATELY' %}
       {% set paymentOptionDisplayValue = [details.paymentOption.option.displayValue] %}
     {% endif %}
 
-    {% if details.paymentOption.option.value == 'full' %}
+    {% if details.paymentOption.option.value == 'FULL_BY_SPECIFIED_DATE' %}
       {% set paymentOptionDisplayValue = [details.paymentOption.option.displayValue
         + ' ' + details.payBySetDate.date.toMoment() | date] %}
-
     {% endif %}
 
-    {% if details.paymentOption.option.value == 'instalments' %}
+    {% if details.paymentOption.option.value == 'INSTALMENTS' %}
       {% set paymentOptionDisplayValue =
       [  t('%s: %s %s.',
           { postProcess: 'sprintf', sprintf: [
@@ -54,11 +53,11 @@
       %}
     {% endif %}
 
-    {{ rowWithMultipleValue("When you want the defendant to pay", paymentOptionDisplayValue, changeLink = paymentOptionUrl) }}
+    {{ rowWithMultipleValue('When you want the defendant to pay', paymentOptionDisplayValue, changeLink = paymentOptionUrl) }}
     {{ tableEnd() }}
 
     <div class="form-group">
-      {{ statementOfTruth(form, title = 'Declaration', warningMessage = "Once you 'Sign and submit', you cannot change your answers.") }}
+      {{ statementOfTruth(form, title = 'Declaration', warningMessage = 'Once you \'Sign and submit\', you cannot change your answers.') }}
 
       {{ submitButton('Sign and submit') }}
     </div>

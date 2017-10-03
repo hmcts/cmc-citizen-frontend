@@ -1,7 +1,5 @@
 import * as express from 'express'
-
 import { Paths } from 'claim/paths'
-
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import Reason from 'forms/models/reason'
@@ -12,7 +10,11 @@ import { DraftService } from 'common/draft/draftService'
 
 function renderView (form: Form<Reason>, res: express.Response): void {
   const user: User = res.locals.user
-  const defendantName = user.claimDraft.document.defendant.partyDetails.name ? user.claimDraft.document.defendant.partyDetails.name : ''
+  const defendantName = (
+    user.claimDraft.document.defendant
+    && user.claimDraft.document.defendant.partyDetails
+    && user.claimDraft.document.defendant.partyDetails.name)
+    ? user.claimDraft.document.defendant.partyDetails.name : ''
 
   res.render(Paths.reasonPage.associatedView, { form: form, defendantName: defendantName })
 }

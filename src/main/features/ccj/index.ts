@@ -4,7 +4,7 @@ import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
-import { buildURL } from 'utils/CallbackBuilder'
+import { buildURL } from 'utils/callbackBuilder'
 import { Paths as AppPaths } from 'app/paths'
 import { ClaimMiddleware } from 'app/claims/claimMiddleware'
 import { CCJGuard } from 'ccj/guards/ccjGuard'
@@ -25,8 +25,8 @@ export class CCJFeature {
   enableFor (app: express.Express) {
     app.all(/^\/case\/.+\/ccj\/.*$/, requestHandler())
     app.all(/^\/case\/.+\/ccj\/.*$/, ClaimMiddleware.retrieveByExternalId)
-    app.all(/^\/case\/.+\/ccj\/.*$/, CCJGuard.requestHandler)
-    app.all(/^\/case\/.+\/ccj\/.*$/, DraftMiddleware.requestHandler('ccj', (value: any): DraftCCJ => {
+    app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/, CCJGuard.requestHandler)
+    app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/, DraftMiddleware.requestHandler('ccj', (value: any): DraftCCJ => {
       return new DraftCCJ().deserialize(value)
     }))
 

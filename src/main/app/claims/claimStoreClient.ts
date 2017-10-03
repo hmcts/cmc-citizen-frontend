@@ -5,9 +5,9 @@ import User from 'app/idam/user'
 import { ClaimModelConverter } from 'claims/claimModelConverter'
 import { ResponseModelConverter } from 'claims/responseModelConverter'
 
-export const claimApiBaseUrl = `${config.get<string>('claim-store.url')}`
-const claimStoreApiUrl = `${claimApiBaseUrl}/claims`
-const claimStoreResponsesApiUrl = `${claimApiBaseUrl}/responses/claim`
+export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
+export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
+const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
 
 export default class ClaimStoreClient {
   static saveClaimForUser (user: User): Promise<Claim> {
@@ -119,5 +119,14 @@ export default class ClaimStoreClient {
         Authorization: `Bearer ${user.bearerToken}`
       }
     })
+  }
+
+  static isClaimLinked (reference: string): Promise<boolean> {
+    if (!reference) {
+      return Promise.reject(new Error('Claim reference is required'))
+    }
+
+    return request.get(`${claimStoreApiUrl}/${reference}/defendant-link-status`)
+      .then(linkStatus => linkStatus.linked)
   }
 }

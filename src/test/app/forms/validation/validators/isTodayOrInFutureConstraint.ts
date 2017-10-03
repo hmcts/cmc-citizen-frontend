@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import * as moment from 'moment'
 
-import { DateTodayOrInFutureConstraint } from 'forms/validation/validators/IsTodayOrInFuture'
+import { DateTodayOrInFutureConstraint } from 'forms/validation/validators/isTodayOrInFuture'
 
 import { LocalDate } from 'app/forms/models/localDate'
 

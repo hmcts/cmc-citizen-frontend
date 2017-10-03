@@ -27,6 +27,9 @@ export default express.Router()
           res.render(Paths.paymentOptionsPage.associatedView, { form: form })
         } else {
           user.ccjDraft.document.paymentOption = form.model
+          if (form.model.option === PaymentType.IMMEDIATELY) {
+            user.ccjDraft.document.repaymentPlan = user.ccjDraft.document.payBySetDate = undefined
+          }
           await DraftService.save(user.ccjDraft, user.bearerToken)
 
           const { externalId } = req.params
@@ -35,10 +38,10 @@ export default express.Router()
             case PaymentType.IMMEDIATELY:
               res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
               break
-            case PaymentType.FULL:
+            case PaymentType.FULL_BY_SPECIFIED_DATE:
               res.redirect(Paths.payBySetDatePage.evaluateUri({ externalId: externalId }))
               break
-            case PaymentType.BY_INSTALMENTS:
+            case PaymentType.INSTALMENTS:
               res.redirect(Paths.repaymentPlanPage.evaluateUri({ externalId: externalId }))
               break
           }
