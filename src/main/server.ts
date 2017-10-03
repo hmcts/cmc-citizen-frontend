@@ -7,7 +7,7 @@ import * as https from 'https'
 
 const port: number = parseInt(process.env.PORT, 10) || 3000
 
-if (app.locals.ENV === 'development') {
+if (app.locals.ENV === 'development' || app.locals.ENV === 'dockertests') {
   const sslDirectory = path.join(__dirname, 'resources', 'localhost-ssl')
   const sslOptions = {
     key: fs.readFileSync(path.join(sslDirectory, 'localhost.key')),
