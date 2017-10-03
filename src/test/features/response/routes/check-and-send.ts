@@ -182,7 +182,7 @@ describe('Defendant response: check and send page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.counterClaimPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
+                .toLocation(ResponsePaths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
           it('should redirect to full-admission page when response type is OWE_ALL_PAID_NONE', async () => {
@@ -197,12 +197,12 @@ describe('Defendant response: check and send page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.fullAdmissionPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
+                .toLocation(ResponsePaths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
-          it('should redirect to partial-admission page when response type is OWE_ALL_PAID_SOME', async () => {
+          it('should redirect to reject all of claim page when response type is OWE_NONE', async () => {
             draftStoreServiceMock.resolveRetrieve(draftType, {
-              response: { type: ResponseType.OWE_ALL_PAID_SOME },
+              response: { type: ResponseType.OWE_NONE },
               counterClaim: undefined
             })
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
@@ -212,10 +212,25 @@ describe('Defendant response: check and send page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.partialAdmissionPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
+                .toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
-          it('should redirect to partial-admission page when response type is OWE_SOME_PAID_NONE', async () => {
+          it('should redirect to reject part of claim page when response type is OWE_ALL_PAID_NONE', async () => {
+            draftStoreServiceMock.resolveRetrieve(draftType, {
+              response: { type: ResponseType.OWE_ALL_PAID_NONE },
+              counterClaim: undefined
+            })
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+            await request(app)
+              .post(checkAndSendPage)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ signed: 'true', type: SignatureType.BASIC })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
+          })
+
+          it('should redirect to reject part of claim page when response type is OWE_SOME_PAID_NONE', async () => {
             draftStoreServiceMock.resolveRetrieve(draftType, {
               response: { type: ResponseType.OWE_SOME_PAID_NONE },
               counterClaim: undefined
@@ -227,7 +242,7 @@ describe('Defendant response: check and send page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.partialAdmissionPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
+                .toLocation(ResponsePaths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })
       })

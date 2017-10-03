@@ -34,6 +34,14 @@ export default express.Router()
         const user: User = res.locals.user
         user.responseDraft.rejectAllOfClaim = form.model
         await ResponseDraftMiddleware.save(res, next)
-        res.redirect(Paths.freeMediationPage.evaluateUri({ externalId: externalId }))
+        if (user.responseDraft.rejectAllOfClaim.option === 'dispute') {
+          res.redirect(Paths.defencePage.evaluateUri({ externalId: externalId }))
+        }
+        if (user.responseDraft.rejectAllOfClaim.option === 'counterClaim') {
+          res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
+        }
+        if (user.responseDraft.rejectAllOfClaim.option === 'paid') {
+          res.redirect(Paths.freeMediationPage.evaluateUri({ externalId: externalId }))
+        }
       }
     }))

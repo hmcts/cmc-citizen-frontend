@@ -55,6 +55,6 @@ export class ResponseDraft extends Draft implements Serializable<ResponseDraft> 
       return true
     }
 
-    return !!(this.response.type === ResponseType.OWE_NONE && this.counterClaim && this.counterClaim.counterClaim === false)
+    return !!(this.response.type === ResponseType.OWE_NONE)
   }
 }

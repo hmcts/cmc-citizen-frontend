@@ -36,7 +36,6 @@ function defendantIsCounterClaiming (user: User): boolean {
 function isStatementOfTruthRequired (user: User): boolean {
   const responseType: ResponseType = user.responseDraft.response.type
   return (responseType === ResponseType.OWE_NONE && !defendantIsCounterClaiming(user))
-    || responseType === ResponseType.OWE_ALL_PAID_ALL
 }
 
 function isCompanyOrOrganisationDefendant (user: User): boolean {
@@ -103,19 +102,16 @@ export default express.Router()
         switch (responseType) {
           case ResponseType.OWE_NONE:
             if (defendantIsCounterClaiming(user)) {
-              res.redirect(Paths.counterClaimPage.evaluateUri({ externalId: user.claim.externalId }))
+              res.redirect(Paths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: user.claim.externalId }))
               return
             }
             break
           case ResponseType.OWE_SOME_PAID_NONE:
-          case ResponseType.OWE_ALL_PAID_SOME:
-            res.redirect(Paths.partialAdmissionPage.evaluateUri({ externalId: user.claim.externalId }))
+            res.redirect(Paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: user.claim.externalId }))
             return
           case ResponseType.OWE_ALL_PAID_NONE:
-            res.redirect(Paths.fullAdmissionPage.evaluateUri({ externalId: user.claim.externalId }))
+            res.redirect(Paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: user.claim.externalId }))
             return
-          case ResponseType.OWE_ALL_PAID_ALL:
-            break
           default:
             next(new Error('Unknown response type: ' + responseType))
         }
