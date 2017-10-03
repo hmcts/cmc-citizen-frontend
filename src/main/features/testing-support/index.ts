@@ -21,7 +21,7 @@ function defendantResponseRequestHandler (): express.RequestHandler {
 
 export class TestingSupportFeature {
   enableFor (app: express.Express) {
-    app.all('/testing-support/*', defendantResponseRequestHandler())
+    app.all('/testing-support*', defendantResponseRequestHandler())
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }
