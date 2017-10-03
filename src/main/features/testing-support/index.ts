@@ -11,7 +11,7 @@ import { Paths } from 'app/paths'
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
     const clientId = config.get<string>('oauth.clientId')
-    const redirectUri = buildURL(req, Paths.receiver.uri.substring(1))
+    const redirectUri = buildURL(req, Paths.oauth.uri.substring(1))
 
     const state = uuid()
 

@@ -72,7 +72,7 @@
     }
   },
   "oauth": {
-    "clientId": "cmc",
+    "clientId": "cmc_citizen",
     "clientSecret": "123456"
   }
 }
