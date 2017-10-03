@@ -40,13 +40,12 @@ export class CCJModelConverter {
   static convert (draftCcj: DraftCCJ): CountyCourtJudgment {
     let statementOfTruth: StatementOfTruth = undefined
     if (draftCcj.qualifiedDeclaration) {
+      // API model is called statement of truth
       statementOfTruth = new StatementOfTruth(
         draftCcj.qualifiedDeclaration.signerName,
         draftCcj.qualifiedDeclaration.signerRole
       )
     }
-
-    console.log(draftCcj.defendant)
 
     return new CountyCourtJudgment(
       convertDefendantDetails(draftCcj.defendant.partyDetails, draftCcj.defendant.email.address),
