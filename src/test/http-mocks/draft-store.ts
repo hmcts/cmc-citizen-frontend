@@ -1,5 +1,6 @@
 import * as config from 'config'
 import * as mock from 'nock'
+import { Scope } from 'nock'
 import * as HttpStatus from 'http-status-codes'
 
 import { ResponseType } from 'response/form/models/responseType'
@@ -171,15 +172,15 @@ const sampleCCJDraftObj = {
   }
 }
 
-export function resolveRetrieve (draftType: string, draftOverride?: object) {
+export function resolveRetrieve (draftType: string, draftOverride?: object): Scope {
   return _resolveRetrieve(100, draftType, draftOverride)
 }
 
-export function resolveRetrieveUnsaved (draftType: string, draftOverride?: object) {
+export function resolveRetrieveUnsaved (draftType: string, draftOverride?: object): Scope {
   return _resolveRetrieve(undefined, draftType, draftOverride)
 }
 
-function _resolveRetrieve (draftId: number, draftType: string, draftOverride?: object) {
+function _resolveRetrieve (draftId: number, draftType: string, draftOverride?: object): Scope {
   let documentDocument: object
 
   switch (draftType) {
@@ -193,10 +194,10 @@ function _resolveRetrieve (draftId: number, draftType: string, draftOverride?: o
       documentDocument = { ...sampleCCJDraftObj, ...draftOverride }
       break
     default:
-      throw new Error('Unsupported document type')
+      documentDocument = { ...draftOverride }
   }
 
-  mock(serviceBaseURL)
+  return mock(serviceBaseURL)
     .get(new RegExp('/drafts.*'))
     .reply(HttpStatus.OK, {
       data: [{
@@ -209,40 +210,40 @@ function _resolveRetrieve (draftId: number, draftType: string, draftOverride?: o
     })
 }
 
-export function resolveRetrieveNoDraftFound () {
-  mock(serviceBaseURL)
+export function resolveRetrieveNoDraftFound (): Scope {
+  return mock(serviceBaseURL)
     .get(new RegExp('/drafts.*'))
     .reply(HttpStatus.OK, {
       data: []
     })
 }
 
-export function rejectRetrieve (reason: string = 'HTTP error') {
-  mock(serviceBaseURL)
+export function rejectRetrieve (reason: string = 'HTTP error'): Scope {
+  return mock(serviceBaseURL)
     .get(new RegExp('/drafts.*'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveSave (id: number = 100) {
-  mock(serviceBaseURL)
+export function resolveSave (id: number = 100): Scope {
+  return mock(serviceBaseURL)
     .put(`/drafts/${id}`)
     .reply(HttpStatus.OK)
 }
 
-export function rejectSave (id: number = 100, reason: string = 'HTTP error') {
-  mock(serviceBaseURL)
+export function rejectSave (id: number = 100, reason: string = 'HTTP error'): Scope {
+  return mock(serviceBaseURL)
     .put(`/drafts/${id}`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveDelete (id: number = 100) {
-  mock(serviceBaseURL)
+export function resolveDelete (id: number = 100): Scope {
+  return mock(serviceBaseURL)
     .delete(`/drafts/${id}`)
     .reply(HttpStatus.OK)
 }
 
-export function rejectDelete (id: number = 100, reason: string = 'HTTP error') {
-  mock(serviceBaseURL)
+export function rejectDelete (id: number = 100, reason: string = 'HTTP error'): Scope {
+  return mock(serviceBaseURL)
     .delete(`/drafts/${id}`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }

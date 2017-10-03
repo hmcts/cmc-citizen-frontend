@@ -5,7 +5,7 @@ import * as HttpStatus from 'http-status-codes'
 const apiServiceBaseURL: string = config.get<string>('idam.api.url')
 const s2sAuthServiceBaseURL = config.get<string>('idam.service-2-service-auth.url')
 
-const defaultServiceAuthToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MDY5ODMyNjQsImp0aSI6IjM1NWUyNmRkLTE3NmQtNDkzMC1iMWY5LWMwYTM3Yjg2ZTk5OSIsImlhdCI6MTUwNjk3OTY2NH0.ODF45-4YrD8-nuX9IbWroQVHGcC-YnrGxLf62ONRTOU' // valid until 1st Jan 2100
+const defaultServiceAuthToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJpZGFtIiwiaWF0IjoxNDgzMjI4ODAwLCJleHAiOjQxMDI0NDQ4MDAsImF1ZCI6ImNtYyIsInN1YiI6ImNtYyJ9.Q9-gf315saUt007Gau0tBUxevcRwhEckLHzC82EVGIM' // valid until 1st Jan 2100
 
 export function resolveRetrieveUserFor (id: number, ...roles: string[]) {
   return mock(apiServiceBaseURL)
