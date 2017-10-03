@@ -8,6 +8,7 @@ import { mockReq as req, mockRes as res } from 'sinon-express-mock'
 import { IndividualDateOfBirthGuard } from 'ccj/guards/individualDateOfBirthGuard'
 import { Paths } from 'dashboard/paths'
 
+import { Draft } from 'models/draft'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Defendant } from 'drafts/models/defendant'
 import { PartyDetails } from 'forms/models/partyDetails'
@@ -23,9 +24,12 @@ describe('IndividualDateOfBirthGuard', () => {
   }
 
   beforeEach(() => {
+    const draft = new Draft<DraftCCJ>()
+    draft.document = new DraftCCJ(new Defendant(new PartyDetails()))
+
     res.locals = {
       user: {
-        ccjDraft: new DraftCCJ(new Defendant(new PartyDetails()))
+        ccjDraft: draft
       }
     }
     res.redirect = sinon.spy((location: string): void => {
