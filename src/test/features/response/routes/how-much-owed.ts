@@ -96,7 +96,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
             await request(app)
               .post(defendantHowMuchOwedPage)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ amount: 300, text: 'I don’t owe full amount' })
+              .send({ amount: 1, text: 'I don’t owe full amount' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -108,7 +108,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
             await request(app)
               .post(defendantHowMuchOwedPage)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ amount: 300, text: 'I don’t owe full amount' })
+              .send({ amount: 1, text: 'I don’t owe full amount' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.freeMediationPage
                   .evaluateUri({ externalId: sampleClaimObj.externalId })))
