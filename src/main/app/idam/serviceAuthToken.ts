@@ -8,6 +8,6 @@ export default class ServiceAuthToken {
 
   hasExpired (): boolean {
     const { exp } = JwtUtils.decodePayload(this.bearerToken)
-    return moment().unix() > exp
+    return moment().unix() >= exp
   }
 }
