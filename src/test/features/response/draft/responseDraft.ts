@@ -53,20 +53,20 @@ describe('ResponseDraft', () => {
 
         expect(responseDraftModel.requireDefence()).to.be.eq(false)
       })
-      it('should return false when response type is OWE_NONE and counter claim is true', () => {
+      it('should return true when response type is OWE_NONE and counter claim is false', () => {
         const responseDraftModel: ResponseDraft = new ResponseDraft()
         responseDraftModel.response = new Response(ResponseType.OWE_NONE)
         responseDraftModel.counterClaim = new CounterClaim(true)
 
-        expect(responseDraftModel.requireDefence()).to.be.eq(false)
+        expect(responseDraftModel.requireDefence()).to.be.eq(true)
 
       })
-      it('should return true when response type is OWE_NONE  and counter claim is false', () => {
+      it('should return false when response type is OWE_NONE  and counter claim is true', () => {
         const responseDraftModel: ResponseDraft = new ResponseDraft()
         responseDraftModel.response = new Response(ResponseType.OWE_NONE)
         responseDraftModel.counterClaim = new CounterClaim(false)
 
-        expect(responseDraftModel.requireDefence()).to.be.eq(true)
+        expect(responseDraftModel.requireDefence()).to.be.eq(false)
 
       })
       it('should return true when response type is OWE_ALL_PAID_ALL', () => {

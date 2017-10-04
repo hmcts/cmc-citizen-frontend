@@ -30,6 +30,7 @@ export function buildBeforeYouStartSection (responseDraft: ResponseDraft, extern
 export function buildRespondToClaimSection (draft: ResponseDraft, responseDeadline: Moment, externalId: string): TaskList {
   const tasks: TaskListItem[] = []
   const now: Moment = MomentFactory.currentDateTime()
+
   if (responseDeadline.isAfter(now)) {
     tasks.push(new TaskListItem('More time needed to respond', Paths.moreTimeRequestPage
         .evaluateUri({ externalId: externalId }),

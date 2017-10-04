@@ -11,7 +11,6 @@ import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
 
 function renderView (form: Form<RejectAllOfClaim>, res: express.Response) {
-  console.log(form.model)
   res.render(Paths.defenceRejectAllOfClaimPage.associatedView, {
     form: form
   })

@@ -22,7 +22,6 @@ export class RejectAllOfClaim {
   @IsDefined({ message: ValidationErrors.OPTION_REQUIRED })
   @IsIn(RejectAllOfClaimOption.all(), { message: ValidationErrors.OPTION_REQUIRED })
   option?: string
-  counterClaim?: boolean
 
   constructor (option?: string) {
     this.option = option
