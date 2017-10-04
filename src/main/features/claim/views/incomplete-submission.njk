@@ -1,0 +1,21 @@
+{% extends "layout.njk" %}
+
+{% set title = t('Incomplete submission') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ t('You need to complete all sections before you submit your claim') }}</h1>
+      <p>{{ t('You still need to complete:') }}</p>
+
+      <ul class="list list-bullet">
+        {% for item in tasks %}
+          <li>{{ item.name }}</li>
+        {% endfor %}
+      </ul>
+
+      <a href="{{ taskListUri }}">Back to task list</a>
+    </div>
+  </div>
+{% endblock %}
+

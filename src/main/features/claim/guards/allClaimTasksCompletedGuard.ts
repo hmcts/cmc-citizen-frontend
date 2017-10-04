@@ -25,8 +25,9 @@ export default class AllClaimTasksCompletedGuard {
       return next()
     }
 
-    logger.debug('State guard: claim check and send page is disabled until all tasks are completed - redirecting to task list')
-    res.redirect(Paths.taskListPage.uri)
+    logger.debug('State guard: claim check and send page is disabled until all tasks are completed ' +
+      '- redirecting to incomplete submission')
+    res.redirect(Paths.incompleteSubmissionPage.uri)
   }
 
 }
