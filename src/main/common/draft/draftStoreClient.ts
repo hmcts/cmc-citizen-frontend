@@ -1,8 +1,9 @@
 import * as config from 'config'
 import request from 'client/request'
 
-import { DraftDocument, Draft } from 'app/models/draft'
+import { Draft } from 'app/models/draft'
 import { MomentFactory } from 'common/momentFactory'
+import { DraftDocument } from 'models/draftDocument'
 
 const endpointURL: string = `${config.get<any>('draft-store').url}/drafts`
 
@@ -25,13 +26,13 @@ export default class DraftStoreClient<T extends DraftDocument> {
         return response.data
           .filter(draft => type ? draft.type === type : true)
           .map(draft => {
-            const wrapper = new Draft()
-            wrapper.id = draft.id
-            wrapper.type = draft.type
-            wrapper.document = deserializationFn(draft.document)
-            wrapper.created = MomentFactory.parse(draft.created)
-            wrapper.updated = MomentFactory.parse(draft.updated)
-            return wrapper
+            return new Draft(
+              draft.id,
+              draft.type,
+              deserializationFn(draft.document),
+              MomentFactory.parse(draft.created),
+              MomentFactory.parse(draft.updated)
+            )
           })
       })
   }
@@ -53,6 +54,10 @@ export default class DraftStoreClient<T extends DraftDocument> {
   }
 
   delete (draft: Draft<T>, userAuthToken: string): Promise<void> {
+    if (!draft.id) {
+      throw new Error('Draft does not have an ID - it cannot be deleted')
+    }
+
     return request.delete(`${endpointURL}/${draft.id}`, {
       headers: this.authHeaders(userAuthToken)
     })

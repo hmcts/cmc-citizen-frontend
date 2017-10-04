@@ -1,7 +1,8 @@
 import DraftStoreClient from 'common/draft/draftStoreClient'
 import { DraftStoreClientFactory } from 'common/draft/draftStoreClientFactory'
 
-import { Draft, DraftDocument } from 'models/draft'
+import { Draft } from 'models/draft'
+import { DraftDocument } from 'models/draftDocument'
 
 export class DraftService {
 

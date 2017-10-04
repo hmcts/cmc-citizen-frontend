@@ -24,12 +24,9 @@ describe('IndividualDateOfBirthGuard', () => {
   }
 
   beforeEach(() => {
-    const draft = new Draft<DraftCCJ>()
-    draft.document = new DraftCCJ(new Defendant(new PartyDetails()))
-
     res.locals = {
       user: {
-        ccjDraft: draft
+        ccjDraft: new Draft<DraftCCJ>(100, 'ccj', new DraftCCJ(new Defendant(new PartyDetails())))
       }
     }
     res.redirect = sinon.spy((location: string): void => {

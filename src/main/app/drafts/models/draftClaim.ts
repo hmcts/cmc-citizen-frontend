@@ -6,7 +6,7 @@ import InterestDate from 'forms/models/interestDate'
 import Reason from 'forms/models/reason'
 import * as uuid from 'uuid'
 import { Defendant } from 'app/drafts/models/defendant'
-import { DraftDocument } from 'app/models/draft'
+import { DraftDocument } from 'app/models/draftDocument'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
 
 export default class DraftClaim extends DraftDocument implements Serializable<DraftClaim> {

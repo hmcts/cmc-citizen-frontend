@@ -1,5 +1,5 @@
 import DraftStoreClient from 'common/draft/draftStoreClient'
-import { DraftDocument } from 'models/draft'
+import { DraftDocument } from 'models/draftDocument'
 import ServiceAuthToken from 'idam/serviceAuthToken'
 import { ServiceAuthTokenFactory } from 'common/security/serviceTokenFactory'
 

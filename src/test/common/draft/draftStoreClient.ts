@@ -16,12 +16,6 @@ chai.use(spies)
 chai.use(asPromised)
 const expect = chai.expect
 
-function newDraft (id: number): Draft<any> {
-  const draft = new Draft()
-  draft.id = id
-  return draft
-}
-
 describe('DraftStoreClient', () => {
   attachDefaultHooks()
 
@@ -69,7 +63,7 @@ describe('DraftStoreClient', () => {
 
         const client: DraftStoreClient<any> = await DraftStoreClientFactory.create()
         try {
-          await client.save(newDraft(100), 'jwt-token')
+          await client.save(new Draft(100, 'sample', undefined), 'jwt-token')
         } catch (err) {
           expect(err.name).to.equal('StatusCodeError')
           expect(err.statusCode).to.equal(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -82,7 +76,7 @@ describe('DraftStoreClient', () => {
         draftStoreServiceMock.resolveSave()
 
         const client: DraftStoreClient<any> = await DraftStoreClientFactory.create()
-        await client.save(newDraft(100), 'jwt-token')
+        await client.save(new Draft(100, 'sample', undefined), 'jwt-token')
       })
     })
   })
@@ -94,7 +88,7 @@ describe('DraftStoreClient', () => {
 
         const client: DraftStoreClient<any> = await DraftStoreClientFactory.create()
         try {
-          await client.delete(newDraft(100), 'jwt-token')
+          await client.delete(new Draft(100, 'sample', undefined), 'jwt-token')
         } catch (err) {
           expect(err.name).to.equal('StatusCodeError')
           expect(err.statusCode).to.equal(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -107,7 +101,7 @@ describe('DraftStoreClient', () => {
         draftStoreServiceMock.resolveDelete()
 
         const client: DraftStoreClient<any> = await DraftStoreClientFactory.create()
-        await client.delete(newDraft(100), 'jwt-token')
+        await client.delete(new Draft(100, 'sample', undefined), 'jwt-token')
       })
     })
   })

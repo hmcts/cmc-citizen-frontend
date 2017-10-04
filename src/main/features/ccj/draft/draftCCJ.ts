@@ -3,7 +3,7 @@ import { CCJPaymentOption } from 'ccj/form/models/ccjPaymentOption'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { PayBySetDate } from 'ccj/form/models/payBySetDate'
 import { RepaymentPlan } from 'ccj/form/models/repaymentPlan'
-import { DraftDocument } from 'models/draft'
+import { DraftDocument } from 'models/draftDocument'
 
 export class DraftCCJ extends DraftDocument {
   defendant: Defendant = new Defendant()

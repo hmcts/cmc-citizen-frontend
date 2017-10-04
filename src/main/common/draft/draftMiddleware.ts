@@ -1,20 +1,12 @@
 import * as express from 'express'
-import DraftStoreClient from 'common/draft/draftStoreClient'
-import { Draft, DraftDocument } from 'models/draft'
+
 import { DraftStoreClientFactory } from 'common/draft/draftStoreClientFactory'
+import DraftStoreClient from 'common/draft/draftStoreClient'
 
-/**
- * Extracts external ID from paths in the '/case/<external-id>.*' format
- */
-function extractExternalId (path: string): string {
-  const pattern = /\/case\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/.*/
+import { Draft } from 'models/draft'
+import { DraftDocument } from 'models/draftDocument'
 
-  const externalIds: RegExpMatchArray = path.match(pattern)
-  if (externalIds !== null) {
-    return externalIds[1]
-  }
-  return undefined
-}
+import { UUIDUtils } from 'common/utils/uuidUtils'
 
 /**
  * Filters list of drafts to return only these matching external ID. If none of the drafts has external ID set
@@ -39,7 +31,8 @@ export class DraftMiddleware {
           client
             .find({ type: draftType }, res.locals.user.bearerToken, deserializeFn)
             .then((drafts: Draft<T>[]) => {
-              const externalId = extractExternalId(req.path)
+              // req.params isn't populated here https://github.com/expressjs/express/issues/2088
+              const externalId: string = UUIDUtils.extractFrom(req.path)
 
               if (externalId !== undefined) {
                 drafts = tryFilterByExternalId(drafts, externalId)
@@ -53,9 +46,7 @@ export class DraftMiddleware {
               if (drafts.length === 1) {
                 draft = drafts[0]
               } else {
-                draft = new Draft<T>()
-                draft.type = draftType
-                draft.document = deserializeFn(undefined)
+                draft = new Draft<T>(undefined, draftType, deserializeFn(undefined))
               }
 
               if (draft.document.externalId === undefined && externalId !== undefined) {

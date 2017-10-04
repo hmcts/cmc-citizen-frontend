@@ -1,13 +1,7 @@
 import { Moment } from 'moment'
 
-export class DraftDocument {
-  externalId: string
-}
+import { DraftDocument } from 'models/draftDocument'
 
 export class Draft<T extends DraftDocument> {
-  id: number
-  document: T
-  type: string
-  created: Moment
-  updated: Moment
+  constructor (public id: number = undefined, public type: string, public document: T, public created?: Moment, public updated?: Moment) {}
 }

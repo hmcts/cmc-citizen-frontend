@@ -30,9 +30,10 @@ import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
-import { Draft, DraftDocument } from 'models/draft'
+import { Draft } from 'models/draft'
+import { DraftDocument } from 'models/draftDocument'
 
-function mockedDraftClaim () {
+function mockedClaimDraft () {
   let draft = new DraftClaim()
   draft.readResolveDispute = true
   draft.claimant = new DraftClaimant()
@@ -174,19 +175,15 @@ mock('common/draft/draftMiddleware', {
   'DraftMiddleware': {
     requestHandler: (draftType: string) => {
       return (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-        const draft = new Draft<DraftDocument>()
         switch (draftType) {
           case 'claim':
-            draft.document = mockedDraftClaim()
-            res.locals.user.claimDraft = draft
+            res.locals.user.claimDraft = new Draft<DraftDocument>(100, 'claim', mockedClaimDraft())
             break
           case 'response':
-            draft.document = mockedResponseDraft()
-            res.locals.user.responseDraft = draft
+            res.locals.user.responseDraft = new Draft<DraftDocument>(100, 'response', mockedResponseDraft())
             break
           case 'ccj':
-            draft.document = mockCCJDraft()
-            res.locals.user.ccjDraft = draft
+            res.locals.user.ccjDraft = new Draft<DraftDocument>(100, 'ccj', mockCCJDraft())
             break
         }
         next()
