@@ -30,6 +30,7 @@ import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
+import { Draft, DraftDocument } from 'models/draft'
 
 function mockedDraftClaim () {
   let draft = new DraftClaim()
@@ -143,15 +144,6 @@ mock('idam/authorizationMiddleware', {
   }
 })
 
-mock('claim/draft/claimDraftMiddleware', {
-  'ClaimDraftMiddleware': {
-    retrieve: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-      res.locals.user.claimDraft.document = mockedDraftClaim()
-      next()
-    }
-  }
-})
-
 mock('idam/idamClient', {
   'default': {
     retrieveUserFor: (jwtToken) => mockUser(),
@@ -178,11 +170,27 @@ mock('fees/feesClient', {
   }
 })
 
-mock('response/draft/responseDraftMiddleware', {
-  'ResponseDraftMiddleware': {
-    retrieve: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-      res.locals.user.responseDraft.document = mockedResponseDraft()
-      next()
+mock('common/draft/draftMiddleware', {
+  'DraftMiddleware': {
+    requestHandler: (draftType: string) => {
+      return (req: express.Request, res: express.Response, next: express.NextFunction): void => {
+        const draft = new Draft<DraftDocument>()
+        switch (draftType) {
+          case 'claim':
+            draft.document = mockedDraftClaim()
+            res.locals.user.claimDraft = draft
+            break
+          case 'response':
+            draft.document = mockedResponseDraft()
+            res.locals.user.responseDraft = draft
+            break
+          case 'ccj':
+            draft.document = mockCCJDraft()
+            res.locals.user.ccjDraft = draft
+            break
+        }
+        next()
+      }
     }
   }
 })
@@ -245,15 +253,6 @@ mock('ccj/guards/ccjGuard', {
 mock('ccj/guards/individualDateOfBirthGuard', {
   'IndividualDateOfBirthGuard': {
     requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      next()
-    }
-  }
-})
-
-mock('ccj/draft/draftCCJService', {
-  'DraftCCJService': {
-    retrieve: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-      res.locals.user[`ccjDraft`] = mockCCJDraft()
       next()
     }
   }
