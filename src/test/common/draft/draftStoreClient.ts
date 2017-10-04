@@ -30,7 +30,7 @@ describe('DraftStoreClient', () => {
 
     describe('when handling error responses', () => {
       it('should reject promise with HTTP error', async () => {
-        draftStoreServiceMock.rejectRetrieve()
+        draftStoreServiceMock.rejectFind()
 
         const client: DraftStoreClient<any> = await DraftStoreClientFactory.create()
         try {
@@ -44,7 +44,7 @@ describe('DraftStoreClient', () => {
 
     describe('when handling successful responses', () => {
       it('should filter drafts by type if such is provided in query object', async () => {
-        draftStoreServiceMock.resolveRetrieve('sample').persist()
+        draftStoreServiceMock.resolveFind('sample').persist()
 
         const client: DraftStoreClient<any> = await DraftStoreClientFactory.create()
         expect(await client.find({ type: 'sample' }, 'jwt-token', deserializationFn)).to.be.lengthOf(1)
@@ -52,7 +52,7 @@ describe('DraftStoreClient', () => {
       })
 
       it('should deserialize draft document using provided deserialization function', async () => {
-        draftStoreServiceMock.resolveRetrieve('sample')
+        draftStoreServiceMock.resolveFind('sample')
 
         const spy = sinon.spy(deserializationFn)
         const client: DraftStoreClient<any> = await DraftStoreClientFactory.create()

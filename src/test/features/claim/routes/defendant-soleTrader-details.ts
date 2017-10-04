@@ -30,7 +30,7 @@ describe('defendant as soleTrader details page', () => {
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
-      draftStoreServiceMock.resolveRetrieve('claim')
+      draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
         .get(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)
@@ -48,7 +48,7 @@ describe('defendant as soleTrader details page', () => {
       })
 
       it('should render page with error when claimant name is invalid', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         const nameMissingInput = {...input, ...{ name: ''}}
         await request(app)
           .post(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)
@@ -58,7 +58,7 @@ describe('defendant as soleTrader details page', () => {
       })
       describe('should render page with error when address is invalid', () => {
         beforeEach(() => {
-          draftStoreServiceMock.resolveRetrieve('claim')
+          draftStoreServiceMock.resolveFind('claim')
         })
         it('line 1 is missing', async () => {
           const invalidAddressInput = {...input, ...{ address: {line1: '', line2: '', city: 'London', postcode: 'SE28 0JE'}}}
@@ -80,7 +80,7 @@ describe('defendant as soleTrader details page', () => {
 
       describe('should render page with error when selected Correspondence address option and Correspondence entered is invalid', () => {
         beforeEach(() => {
-          draftStoreServiceMock.resolveRetrieve('claim')
+          draftStoreServiceMock.resolveFind('claim')
         })
         it('line 1 is missing', async () => {
           const invalidCorrespondenceAddressInput = {...input, ...{ hasCorrespondenceAddress: 'true', correspondenceAddress: {line1: '', line2: '', city: 'London', postcode: 'SE28 0JE'}}}
@@ -101,7 +101,7 @@ describe('defendant as soleTrader details page', () => {
       })
 
       it('should redirect to data of birth page when everything is fine ', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
         await request(app)
           .post(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)

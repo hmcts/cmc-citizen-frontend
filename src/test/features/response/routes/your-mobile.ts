@@ -37,7 +37,7 @@ describe('Defendant user details: your mobile page', () => {
         })
 
         it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('response')
+          draftStoreServiceMock.resolveFind('response')
 
           await request(app)
             .get(pagePath)
@@ -66,7 +66,7 @@ describe('Defendant user details: your mobile page', () => {
 
         context('when form is invalid', () => {
           it('should render page when everything is fine', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
+            draftStoreServiceMock.resolveFind('response')
 
             await request(app)
               .post(pagePath)
@@ -77,7 +77,7 @@ describe('Defendant user details: your mobile page', () => {
 
         context('when form is valid', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
+            draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.rejectSave()
 
             await request(app)
@@ -88,7 +88,7 @@ describe('Defendant user details: your mobile page', () => {
           })
 
           it('should redirect to task list page when everything is fine', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
+            draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveSave()
 
             await request(app)

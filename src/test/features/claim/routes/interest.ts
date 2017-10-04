@@ -24,7 +24,7 @@ describe('Claim issue: interest page', () => {
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
-      draftStoreServiceMock.resolveRetrieve('claim')
+      draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
         .get(ClaimPaths.interestPage.uri)
@@ -42,7 +42,7 @@ describe('Claim issue: interest page', () => {
       })
 
       it('should render page when form is invalid and everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
           .post(ClaimPaths.interestPage.uri)
@@ -51,7 +51,7 @@ describe('Claim issue: interest page', () => {
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.rejectSave()
 
         await request(app)
@@ -62,7 +62,7 @@ describe('Claim issue: interest page', () => {
       })
 
       it('should redirect to interest date page when form is valid, standard interest selected and everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)
@@ -73,7 +73,7 @@ describe('Claim issue: interest page', () => {
       })
 
       it('should redirect to interest date page when form is valid, different interest selected and everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)
@@ -84,7 +84,7 @@ describe('Claim issue: interest page', () => {
       })
 
       it('should redirect to total page when form is valid, no interest selected and everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)

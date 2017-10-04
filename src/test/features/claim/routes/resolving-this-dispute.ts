@@ -23,7 +23,7 @@ describe('Claim issue: resolving this dispute page', () => {
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
-      draftStoreServiceMock.resolveRetrieve('claim')
+      draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
         .get(ClaimPaths.resolvingThisDisputerPage.uri)
@@ -41,7 +41,7 @@ describe('Claim issue: resolving this dispute page', () => {
       })
 
       it('should return 500 and render error page when cannot save draft', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.rejectSave()
 
         await request(app)
@@ -51,7 +51,7 @@ describe('Claim issue: resolving this dispute page', () => {
       })
 
       it('should redirect to task list when everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)

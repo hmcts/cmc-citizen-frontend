@@ -27,7 +27,7 @@ function checkAccessGuard (app: any, method: string) {
   PartyType.except(PartyType.INDIVIDUAL).forEach(partyType => {
     it(`should redirect to dashboard page when defendant type is ${partyType.name.toLocaleLowerCase()}`, async () => {
       claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-      draftStoreServiceMock.resolveRetrieve('ccj', {defendant: {partyDetails: partyDetails(partyType.value)}})
+      draftStoreServiceMock.resolveFind('ccj', {defendant: {partyDetails: partyDetails(partyType.value)}})
 
       await request(app)[method](dateOfBirthPage)
         .set('Cookie', `${cookieName}=ABC`)
@@ -60,7 +60,7 @@ describe('CCJ - defendant date of birth', () => {
 
       it('should return 500 and render error page when cannot retrieve CCJ draft', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.rejectRetrieve('Error')
+        draftStoreServiceMock.rejectFind('Error')
 
         await request(app)
           .get(dateOfBirthPage)
@@ -70,7 +70,7 @@ describe('CCJ - defendant date of birth', () => {
 
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.resolveRetrieve('ccj')
+        draftStoreServiceMock.resolveFind('ccj')
 
         await request(app)
           .get(dateOfBirthPage)
@@ -104,7 +104,7 @@ describe('CCJ - defendant date of birth', () => {
 
       it('should return 500 when cannot retrieve CCJ draft', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.rejectRetrieve('Error')
+        draftStoreServiceMock.rejectFind('Error')
 
         await request(app)
           .post(dateOfBirthPage)
@@ -116,7 +116,7 @@ describe('CCJ - defendant date of birth', () => {
       context('when form is valid', async () => {
         it('should return 500 and render error page when cannot save ccj draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
+          draftStoreServiceMock.resolveFind('ccj')
           draftStoreServiceMock.rejectSave()
 
           await request(app)
@@ -128,7 +128,7 @@ describe('CCJ - defendant date of birth', () => {
 
         it('should redirect to paid amount page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
+          draftStoreServiceMock.resolveFind('ccj')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
@@ -142,7 +142,7 @@ describe('CCJ - defendant date of birth', () => {
       context('when form is invalid', async () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
+          draftStoreServiceMock.resolveFind('ccj')
 
           await request(app)
             .post(dateOfBirthPage)

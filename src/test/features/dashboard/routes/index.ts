@@ -28,7 +28,7 @@ describe('Dashboard page', () => {
       })
 
       it('should return 500 and render error page when cannot retrieve claims', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         claimStoreServiceMock.rejectRetrieveByClaimantId('HTTP error')
 
         await request(app)
@@ -44,7 +44,7 @@ describe('Dashboard page', () => {
         })
 
         it('should render page with start claim button when everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieveUnsaved('claim')
+          draftStoreServiceMock.resolveFindNoDraftFound()
 
           await request(app)
             .get(Paths.dashboardPage.uri)
@@ -60,7 +60,7 @@ describe('Dashboard page', () => {
         })
 
         it('should render page with continue claim button when everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('claim')
+          draftStoreServiceMock.resolveFind('claim')
 
           await request(app)
             .get(Paths.dashboardPage.uri)
@@ -69,7 +69,7 @@ describe('Dashboard page', () => {
         })
 
         it('should render page with start claim button when everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieveUnsaved('claim')
+          draftStoreServiceMock.resolveFindNoDraftFound()
 
           await request(app)
             .get(Paths.dashboardPage.uri)

@@ -105,7 +105,7 @@ describe('Claim issue: initiate payment receiver', () => {
     })
 
     it('should return 500 and error page when draft external ID does not exist', async () => {
-      draftStoreServiceMock.resolveRetrieve(draftType, { externalId: undefined, claimant: { payment: undefined } })
+      draftStoreServiceMock.resolveFind(draftType, { externalId: undefined, claimant: { payment: undefined } })
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
@@ -115,7 +115,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
     it('should return 500 and error page when cannot calculate issue fee', async () => {
       overrideClaimDraftObj.claimant.payment = undefined
-      draftStoreServiceMock.resolveRetrieve(draftType, overrideClaimDraftObj)
+      draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
       feesServiceMock.rejectCalculateFee(issueFeeCode)
 
       await request(app)
@@ -126,7 +126,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
     it('should return 500 and error page when cannot retrieve service token needed for payment service', async () => {
       overrideClaimDraftObj.claimant.payment = undefined
-      draftStoreServiceMock.resolveRetrieve(draftType, overrideClaimDraftObj )
+      draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj )
       feesServiceMock.resolveCalculateFee(issueFeeCode)
       idamServiceMock.rejectRetrieveServiceToken()
 
@@ -138,7 +138,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
     it('should return 500 and error page when cannot create payment', async () => {
       overrideClaimDraftObj.claimant.payment = undefined
-      draftStoreServiceMock.resolveRetrieve(draftType, overrideClaimDraftObj)
+      draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
       feesServiceMock.resolveCalculateFee(issueFeeCode)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.rejectCreate()
@@ -151,7 +151,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
     it('should return 500 and error page when cannot save draft', async () => {
       overrideClaimDraftObj.claimant.payment = undefined
-      draftStoreServiceMock.resolveRetrieve(draftType, overrideClaimDraftObj)
+      draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
       feesServiceMock.resolveCalculateFee(issueFeeCode)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.resolveCreate()
@@ -165,7 +165,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
     it('should redirect to next page when everything is fine', async () => {
       overrideClaimDraftObj.claimant.payment = undefined
-      draftStoreServiceMock.resolveRetrieve(draftType, overrideClaimDraftObj)
+      draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
       feesServiceMock.resolveCalculateFee(issueFeeCode)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.resolveCreate()
@@ -178,7 +178,7 @@ describe('Claim issue: initiate payment receiver', () => {
     })
 
     it('should redirect to pay receiver page when pay status is success', async () => {
-      draftStoreServiceMock.resolveRetrieve(draftType)
+      draftStoreServiceMock.resolveFind(draftType)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.resolveRetrieve('success')
 
@@ -262,7 +262,7 @@ describe('Claim issue: post payment callback receiver', () => {
     }
 
     it('should return 500 and error page when cannot retrieve service token needed for payment service', async () => {
-      draftStoreServiceMock.resolveRetrieve(draftType, initiatedPayment())
+      draftStoreServiceMock.resolveFind(draftType, initiatedPayment())
       idamServiceMock.rejectRetrieveServiceToken()
 
       await request(app)
@@ -272,7 +272,7 @@ describe('Claim issue: post payment callback receiver', () => {
     })
 
     it('should return 500 and error page when cannot retrieve payment', async () => {
-      draftStoreServiceMock.resolveRetrieve(draftType, initiatedPayment())
+      draftStoreServiceMock.resolveFind(draftType, initiatedPayment())
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.rejectRetrieve()
 
@@ -283,7 +283,7 @@ describe('Claim issue: post payment callback receiver', () => {
     })
 
     it('should return 500 and error page when cannot retrieve payment', async () => {
-      draftStoreServiceMock.resolveRetrieve(draftType, initiatedPayment())
+      draftStoreServiceMock.resolveFind(draftType, initiatedPayment())
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.resolveRetrieve('success')
       draftStoreServiceMock.rejectSave()
@@ -297,7 +297,7 @@ describe('Claim issue: post payment callback receiver', () => {
     describe('when retrieved payment', () => {
       describe('failed', () => {
         it('should redirect to the check and send page', async () => {
-          draftStoreServiceMock.resolveRetrieve(draftType, initiatedPayment())
+          draftStoreServiceMock.resolveFind(draftType, initiatedPayment())
           idamServiceMock.resolveRetrieveServiceToken()
           payServiceMock.resolveRetrieve('failed')
           draftStoreServiceMock.resolveSave()
@@ -311,7 +311,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
       describe('got cancelled', () => {
         it('should redirect to the check and send page', async () => {
-          draftStoreServiceMock.resolveRetrieve(draftType, initiatedPayment())
+          draftStoreServiceMock.resolveFind(draftType, initiatedPayment())
           idamServiceMock.resolveRetrieveServiceToken()
           payServiceMock.resolveRetrieve('cancelled')
           draftStoreServiceMock.resolveSave()
@@ -325,7 +325,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
       describe('succeeded', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
-          draftStoreServiceMock.resolveRetrieve(draftType, initiatedPayment())
+          draftStoreServiceMock.resolveFind(draftType, initiatedPayment())
           idamServiceMock.resolveRetrieveServiceToken()
           payServiceMock.resolveRetrieve('success')
           draftStoreServiceMock.resolveSave()
@@ -339,7 +339,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
         describe('when claim already exists', () => {
           it('should return 500 and render error page when cannot delete draft', async () => {
-            draftStoreServiceMock.resolveRetrieve(draftType, initiatedPayment())
+            draftStoreServiceMock.resolveFind(draftType, initiatedPayment())
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('success')
             draftStoreServiceMock.resolveSave()
@@ -353,7 +353,7 @@ describe('Claim issue: post payment callback receiver', () => {
           })
 
           it('should redirect to confirmation page when everything is fine', async () => {
-            draftStoreServiceMock.resolveRetrieve(draftType, initiatedPayment())
+            draftStoreServiceMock.resolveFind(draftType, initiatedPayment())
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('success')
             draftStoreServiceMock.resolveSave()
@@ -367,7 +367,7 @@ describe('Claim issue: post payment callback receiver', () => {
           })
 
           it('should redirect to confirmation page when payment is missing', async () => {
-            draftStoreServiceMock.resolveRetrieve(draftType, { claimant: undefined })
+            draftStoreServiceMock.resolveFind(draftType, { claimant: undefined })
 
             await request(app)
               .get(Paths.finishPaymentReceiver.evaluateUri({ externalId: sampleClaimDraftObj.externalId }))
@@ -378,7 +378,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
         describe('when claim does not exist', () => {
           it('should return 500 and render error page when cannot save claim', async () => {
-            draftStoreServiceMock.resolveRetrieve(draftType, initiatedPayment())
+            draftStoreServiceMock.resolveFind(draftType, initiatedPayment())
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('success')
             draftStoreServiceMock.resolveSave()
@@ -392,7 +392,7 @@ describe('Claim issue: post payment callback receiver', () => {
           })
 
           it('should return 500 and render error page when cannot delete draft', async () => {
-            draftStoreServiceMock.resolveRetrieve(draftType, initiatedPayment())
+            draftStoreServiceMock.resolveFind(draftType, initiatedPayment())
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('success')
             draftStoreServiceMock.resolveSave()
@@ -407,7 +407,7 @@ describe('Claim issue: post payment callback receiver', () => {
           })
 
           it('should redirect to confirmation page when everything is fine', async () => {
-            draftStoreServiceMock.resolveRetrieve(draftType, initiatedPayment())
+            draftStoreServiceMock.resolveFind(draftType, initiatedPayment())
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('success')
             draftStoreServiceMock.resolveSave()
@@ -425,7 +425,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
       describe('has unknown status', () => {
         it('should return 500 and render error page', async () => {
-          draftStoreServiceMock.resolveRetrieve(draftType, initiatedPayment())
+          draftStoreServiceMock.resolveFind(draftType, initiatedPayment())
           idamServiceMock.resolveRetrieveServiceToken()
           payServiceMock.resolveRetrieve('unknown')
           draftStoreServiceMock.resolveSave()

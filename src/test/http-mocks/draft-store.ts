@@ -172,15 +172,7 @@ const sampleCCJDraftObj = {
   }
 }
 
-export function resolveRetrieve (draftType: string, draftOverride?: object): Scope {
-  return _resolveRetrieve(100, draftType, draftOverride)
-}
-
-export function resolveRetrieveUnsaved (draftType: string, draftOverride?: object): Scope {
-  return _resolveRetrieve(undefined, draftType, draftOverride)
-}
-
-function _resolveRetrieve (draftId: number, draftType: string, draftOverride?: object): Scope {
+export function resolveFind (draftType: string, draftOverride?: object): Scope {
   let documentDocument: object
 
   switch (draftType) {
@@ -201,7 +193,7 @@ function _resolveRetrieve (draftId: number, draftType: string, draftOverride?: o
     .get(new RegExp('/drafts.*'))
     .reply(HttpStatus.OK, {
       data: [{
-        id: draftId,
+        id: 100,
         type: draftType,
         document: documentDocument,
         created: '2017-10-01T12:00:00.000',
@@ -210,7 +202,7 @@ function _resolveRetrieve (draftId: number, draftType: string, draftOverride?: o
     })
 }
 
-export function resolveRetrieveNoDraftFound (): Scope {
+export function resolveFindNoDraftFound (): Scope {
   return mock(serviceBaseURL)
     .get(new RegExp('/drafts.*'))
     .reply(HttpStatus.OK, {
@@ -218,7 +210,7 @@ export function resolveRetrieveNoDraftFound (): Scope {
     })
 }
 
-export function rejectRetrieve (reason: string = 'HTTP error'): Scope {
+export function rejectFind (reason: string = 'HTTP error'): Scope {
   return mock(serviceBaseURL)
     .get(new RegExp('/drafts.*'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)

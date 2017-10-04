@@ -28,7 +28,7 @@ describe('Claim issue: total page', () => {
       })
 
       it('should return 500 and render error page when cannot calculate issue fee', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.rejectCalculateIssueFee('HTTP error')
 
         await request(app)
@@ -38,7 +38,7 @@ describe('Claim issue: total page', () => {
       })
 
       it('should render page when everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -58,7 +58,7 @@ describe('Claim issue: total page', () => {
       })
 
       it('should redirect to task list when amount within limit and everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
           .post(ClaimPaths.totalPage.uri)
@@ -68,7 +68,7 @@ describe('Claim issue: total page', () => {
       })
 
       it('should redirect to amount exceeded page when amount above limit and everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
           .post(ClaimPaths.totalPage.uri)
