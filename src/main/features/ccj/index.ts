@@ -9,7 +9,7 @@ import { Paths as AppPaths } from 'app/paths'
 import { ClaimMiddleware } from 'app/claims/claimMiddleware'
 import { CCJGuard } from 'ccj/guards/ccjGuard'
 import { DraftMiddleware } from 'common/draft/draftMiddleware'
-import { DraftCCJ } from 'ccj/draft/DraftCCJ'
+import { DraftCCJ } from 'ccj/draft/draftCCJ'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
