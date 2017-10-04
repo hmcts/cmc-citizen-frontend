@@ -1,6 +1,7 @@
 {
   "featureToggles": {
     "testingSupport": true,
-    "countyCourtJudgment": true
+    "countyCourtJudgment": true,
+    "offer": true
   }
 }

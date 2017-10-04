@@ -1,0 +1,41 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, submitButton %}
+{% set title = t("Money claim") %}
+{% set heading = t("Your offer has been sent to the claimant") %}
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+        <p>
+        {{ t("We'll email the claimant %s confirming the offer.",
+        {
+          postProcess: 'sprintf',
+          sprintf: [claim.claimData.claimant.name]
+        }
+        ) }}
+      </p>
+        {{
+          t("The claimant can accept your suggestion, reject it or suggest an alternative."
+          +" If they accept you can settle the claim and won’t go to a hearing.")
+        }}
+      </p>
+      <div class="panel panel-border-wide">
+          <p>
+            {{ t("You still need to submit your response to this claim by %s .",
+            {
+              postProcess: 'sprintf',
+              sprintf: [responseDate]
+            }
+            )
+            }}
+          </p>
+      </div>
+      <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        <div class="form-group">
+          {{ submitButton('Continue') }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

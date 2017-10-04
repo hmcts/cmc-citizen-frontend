@@ -63,7 +63,8 @@
   },
   "featureToggles": {
     "testingSupport": false,
-    "countyCourtJudgment": false
+    "countyCourtJudgment": false,
+    "offer": false
   },
   "claim": {
     "countyCourtJudgment": {

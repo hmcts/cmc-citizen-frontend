@@ -11,9 +11,11 @@ import TaskListItem from 'drafts/tasks/taskListItem'
 import Claim from 'claims/models/claim'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { OfferDraft } from 'response/draft/offerDraft'
 import { OweMoneyTask } from 'response/tasks/oweMoneyTask'
 
 import { YourDefenceTask } from 'response/tasks/yourDefenceTask'
+import { YourOfferTask } from 'response/tasks/yourOfferTask'
 import { MoreTimeNeededTask } from 'response/tasks/moreTimeNeededTask'
 import { YourDetails } from 'response/tasks/yourDetails'
 import User from 'app/idam/user'
@@ -27,9 +29,11 @@ export function buildBeforeYouStartSection (responseDraft: ResponseDraft, extern
   return new TaskList(1, 'Before you start', tasks)
 }
 
-export function buildRespondToClaimSection (draft: ResponseDraft, responseDeadline: Moment, externalId: string): TaskList {
+export function buildRespondToClaimSection (user: User, responseDeadline: Moment, externalId: string): TaskList {
   const tasks: TaskListItem[] = []
   const now: Moment = MomentFactory.currentDateTime()
+  const draft: ResponseDraft = user.responseDraft
+  const offerDraft: OfferDraft = user.offerDraft
   if (responseDeadline.isAfter(now)) {
     tasks.push(new TaskListItem('More time needed to respond', Paths.moreTimeRequestPage
         .evaluateUri({ externalId: externalId }),
@@ -44,6 +48,12 @@ export function buildRespondToClaimSection (draft: ResponseDraft, responseDeadli
     tasks.push(new TaskListItem('Your defence', Paths.defencePage
         .evaluateUri({ externalId: externalId }),
       YourDefenceTask.isCompleted(draft)))
+  }
+
+  if (draft.canMakeOffer()) {
+    tasks.push(new TaskListItem('Make an offer to settle out of court', Paths.settleOutOfCourtPage
+        .evaluateUri({ externalId: externalId }),
+        YourOfferTask.isCompleted(offerDraft)))
   }
 
   return new TaskList(2, 'Respond to claim', tasks)
@@ -64,7 +74,7 @@ export default express.Router()
       const claim: Claim = user.claim
       const responseDeadline: Moment = claim.responseDeadline
       const beforeYouStartSection = buildBeforeYouStartSection(user.responseDraft, claim.externalId)
-      const respondToClaimSection = buildRespondToClaimSection(user.responseDraft, responseDeadline, claim.externalId)
+      const respondToClaimSection = buildRespondToClaimSection(user, responseDeadline, claim.externalId)
       const submitSection = buildSubmitSection(claim.externalId)
 
       res.render(Paths.taskListPage.associatedView,

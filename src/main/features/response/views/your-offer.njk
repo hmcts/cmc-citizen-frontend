@@ -1,0 +1,39 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary, textArea %}
+{% from "date.njk" import dateInput %}
+{% set heading = t("Make an offer") %}
+{% set title = t('Money claim') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <div class="description-block">
+        <h4 class="heading-small"> {{ t('Your offer') }}</h4>
+      </div>
+
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+
+        {{ textArea(label = t("You could offer a set amount, or to pay overdue rent, fix a problem, return goods."), 
+        hint= t("You could offer a set amount, or to pay overdue rent, fix a problem, return goods."), 
+        name = 'text', form = form, rows = 10) }}
+
+        {{ dateInput(form = form, name = 'date', label=t('By when'), hint = t('For example, 23 04 2017')) }}
+
+        <div class="panel panel-border-wide">
+          <p>
+            {{ t("You still need to submit your response to this claim by %s .",
+            {
+              postProcess: 'sprintf',
+              sprintf: [responseDeadline| date]
+            }
+            )
+            }}
+          </p>
+        </div>
+
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

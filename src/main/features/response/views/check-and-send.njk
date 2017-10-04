@@ -37,6 +37,13 @@
       {{ row('Free mediation', t(draft.freeMediation.option) | capitalize, paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })) }}
     {% endif %}
 
+    {% if draft.canMakeOffer() %}
+      {{ row('Do you want to make an offer', t(offerDraft.settleOutOfCourt.option) | capitalize, paths.settleOutOfCourtPage.evaluateUri({ externalId: claim.externalId })) }}
+      {% if offerDraft.isSettleOutOfCourt() %}
+        {{ row('Your Offer', offerDraft.offer.text, paths.offerPage.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('By When', offerDraft.offer.date.toMoment() | date, paths.offerPage.evaluateUri({ externalId: claim.externalId })) }}
+      {% endif %}
+    {% endif %}
     {{ tableEnd() }}
 
     <div class="form-group">

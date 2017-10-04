@@ -65,7 +65,8 @@
   },
   "featureToggles": {
     "testingSupport": "FEATURE_TESTING_SUPPORT",
-    "countyCourtJudgment": "FEATURE_CCJ"
+    "countyCourtJudgment": "FEATURE_CCJ",
+    "offer": "FEATURE_OFFER"
   },
   "claim": {
     "countyCourtJudgment": {

@@ -17,7 +17,7 @@ export default class AllResponseTasksCompletedGuard {
 
       const allTasksCompleted: boolean = [
         buildBeforeYouStartSection(user.responseDraft, claim.externalId),
-        buildRespondToClaimSection(user.responseDraft, claim.responseDeadline, claim.externalId)
+        buildRespondToClaimSection(user, claim.responseDeadline, claim.externalId)
       ].every((taskList: TaskList) => taskList.isCompleted())
 
       if (allTasksCompleted) {

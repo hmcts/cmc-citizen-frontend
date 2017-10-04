@@ -24,6 +24,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     claim: user.claim,
     form: form,
     draft: user.responseDraft,
+    offerDraft: user.offerDraft,
     signatureType: signatureTypeFor(user)
   })
 }

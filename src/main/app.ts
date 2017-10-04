@@ -18,6 +18,7 @@ import { Feature as DefendantResponseFeature } from 'response/index'
 import { CsrfProtection } from 'modules/csrf'
 import { DashboardFeature } from 'dashboard/index'
 import { CCJFeature } from 'ccj/index'
+import { Feature as OfferFeature } from 'response/index'
 import { TestingSupportFeature } from 'testing-support/index'
 import * as toBoolean from 'to-boolean'
 
@@ -68,6 +69,9 @@ new DefendantFirstContactFeature().enableFor(app)
 new DefendantResponseFeature().enableFor(app)
 if (toBoolean(config.get<boolean>('featureToggles.countyCourtJudgment'))) {
   new CCJFeature().enableFor(app)
+}
+if (toBoolean(config.get<boolean>('featureToggles.offer'))) {
+  new OfferFeature().enableFor(app)
 }
 if (toBoolean(config.get<boolean>('featureToggles.testingSupport'))) {
   logger.info('Testing support activated')
