@@ -22,7 +22,7 @@ describe('Defendant response: incomplete submission page', () => {
   describe('on GET', () => {
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
-      draftStoreServiceMock.resolveRetrieve('response')
+      draftStoreServiceMock.resolveFind('response')
       claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
       await request(app)

@@ -10,7 +10,7 @@ export default express.Router()
     res.render(Paths.incompleteSubmissionPage.associatedView,
       {
         taskListUri: Paths.taskListPage.uri,
-        tasks: TaskListBuilder.buildRemainingTasks(user.claimDraft)
+        tasks: TaskListBuilder.buildRemainingTasks(user.claimDraft.document)
       }
     )
   })

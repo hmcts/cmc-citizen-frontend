@@ -1,5 +1,6 @@
 import * as config from 'config'
 import * as mock from 'nock'
+import { Scope } from 'nock'
 import * as HttpStatus from 'http-status-codes'
 
 import { ResponseType } from 'response/form/models/responseType'
@@ -24,13 +25,12 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import Email from 'app/forms/models/email'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 
-const serviceBaseURL: string = `${config.get('draft-store.url')}/api/${config.get('draft-store.apiVersion')}`
+const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
 export const sampleClaimDraftObj = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
   readResolveDispute: true,
   readCompletingClaim: true,
-  lastUpdateTimestamp: 12345,
   claimant: {
     partyDetails: {
       type: 'individual',
@@ -92,7 +92,6 @@ export const sampleClaimDraftObj = {
 } as DraftClaim
 
 const sampleResponseDraftObj = {
-  lastUpdateTimestamp: 12345,
   response: {
     type: ResponseType.OWE_NONE
   },
@@ -173,60 +172,70 @@ const sampleCCJDraftObj = {
   }
 }
 
-export function resolveRetrieve (draftType: string, draftOverride?: object) {
-  let draft: object
+export function resolveFind (draftType: string, draftOverride?: object): Scope {
+  let documentDocument: object
 
   switch (draftType) {
     case 'claim':
-      draft = { ...sampleClaimDraftObj, ...draftOverride }
+      documentDocument = { ...sampleClaimDraftObj, ...draftOverride }
       break
     case 'response':
-      draft = { ...sampleResponseDraftObj, ...draftOverride }
+      documentDocument = { ...sampleResponseDraftObj, ...draftOverride }
       break
     case 'ccj':
-      draft = { ...sampleCCJDraftObj, ...draftOverride }
+      documentDocument = { ...sampleCCJDraftObj, ...draftOverride }
       break
     default:
-      throw new Error('Unsupported draft type')
+      documentDocument = { ...draftOverride }
   }
 
-  mock(serviceBaseURL)
-    .get(`/draft/${draftType}`)
-    .reply(HttpStatus.OK, draft)
+  return mock(serviceBaseURL)
+    .get(new RegExp('/drafts.*'))
+    .reply(HttpStatus.OK, {
+      data: [{
+        id: 100,
+        type: draftType,
+        document: documentDocument,
+        created: '2017-10-01T12:00:00.000',
+        updated: '2017-10-01T12:01:00.000'
+      }]
+    })
 }
 
-export function resolveRetrieveNoDraftFound (draftType: string) {
-  mock(serviceBaseURL)
-    .get(`/draft/${draftType}`)
-    .reply(HttpStatus.NOT_FOUND)
+export function resolveFindNoDraftFound (): Scope {
+  return mock(serviceBaseURL)
+    .get(new RegExp('/drafts.*'))
+    .reply(HttpStatus.OK, {
+      data: []
+    })
 }
 
-export function rejectRetrieve (draftType: string, reason: string) {
-  mock(serviceBaseURL)
-    .get(`/draft/${draftType}`)
+export function rejectFind (reason: string = 'HTTP error'): Scope {
+  return mock(serviceBaseURL)
+    .get(new RegExp('/drafts.*'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveSave (draftType: string) {
-  mock(serviceBaseURL)
-    .post(`/draft/${draftType}`)
+export function resolveSave (id: number = 100): Scope {
+  return mock(serviceBaseURL)
+    .put(`/drafts/${id}`)
     .reply(HttpStatus.OK)
 }
 
-export function rejectSave (draftType: string, reason: string) {
-  mock(serviceBaseURL)
-    .post(`/draft/${draftType}`)
+export function rejectSave (id: number = 100, reason: string = 'HTTP error'): Scope {
+  return mock(serviceBaseURL)
+    .put(`/drafts/${id}`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveDelete (draftType: string) {
-  mock(serviceBaseURL)
-    .delete(`/draft/${draftType}`)
+export function resolveDelete (id: number = 100): Scope {
+  return mock(serviceBaseURL)
+    .delete(`/drafts/${id}`)
     .reply(HttpStatus.OK)
 }
 
-export function rejectDelete (draftType: string, reason: string) {
-  mock(serviceBaseURL)
-    .delete(`/draft/${draftType}`)
+export function rejectDelete (id: number = 100, reason: string = 'HTTP error'): Scope {
+  return mock(serviceBaseURL)
+    .delete(`/drafts/${id}`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }

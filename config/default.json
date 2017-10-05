@@ -19,8 +19,7 @@
     "url": "http://localhost:4400"
   },
   "draft-store": {
-    "url": "http://localhost:8800",
-    "apiVersion": "v2"
+    "url": "http://localhost:8800"
   },
   "session": {
     "cookieName": "SESSION_ID"

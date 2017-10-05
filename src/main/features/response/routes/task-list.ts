@@ -15,8 +15,10 @@ export default express.Router()
       const user: User = res.locals.user
       const claim: Claim = user.claim
       const responseDeadline: Moment = claim.responseDeadline
-      const beforeYouStartSection = TaskListBuilder.buildBeforeYouStartSection(user.responseDraft, claim.externalId)
-      const respondToClaimSection = TaskListBuilder.buildRespondToClaimSection(user.responseDraft, responseDeadline, claim.externalId)
+      const beforeYouStartSection = TaskListBuilder
+        .buildBeforeYouStartSection(user.responseDraft.document, claim.externalId)
+      const respondToClaimSection = TaskListBuilder
+        .buildRespondToClaimSection(user.responseDraft.document, responseDeadline, claim.externalId)
       const submitSection = TaskListBuilder.buildSubmitSection(claim.externalId)
 
       res.render(Paths.taskListPage.associatedView,

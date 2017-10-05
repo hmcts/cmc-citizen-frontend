@@ -1,7 +1,6 @@
 import { individualDetails } from './partyDetails'
 
 export const responseDraft = {
-  lastUpdateTimestamp: 12345,
   defendantDetails: {
     partyDetails: individualDetails,
     mobilePhone: {

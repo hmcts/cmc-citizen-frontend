@@ -11,8 +11,8 @@ export default express.Router()
   .get(Paths.taskListPage.uri, (req: express.Request, res: express.Response) => {
     const user: User = res.locals.user
 
-    const beforeYouStartSection: TaskList = TaskListBuilder.buildBeforeYouStartSection(user.claimDraft)
-    const prepareYourClaimSection: TaskList = TaskListBuilder.buildPrepareYourClaimSection(user.claimDraft)
+    const beforeYouStartSection: TaskList = TaskListBuilder.buildBeforeYouStartSection(user.claimDraft.document)
+    const prepareYourClaimSection: TaskList = TaskListBuilder.buildPrepareYourClaimSection(user.claimDraft.document)
     const submitSection: TaskList = TaskListBuilder.buildSubmitSection()
 
     res.render(Paths.taskListPage.associatedView,

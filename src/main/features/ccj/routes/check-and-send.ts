@@ -6,7 +6,7 @@ import { Declaration } from 'ccj/form/models/declaration'
 import { CCJClient } from 'claims/ccjClient'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
-import { DraftCCJService } from 'ccj/draft/draftCCJService'
+import { DraftService } from 'common/draft/draftService'
 
 function prepareUrls (externalId: string): object {
   return {
@@ -20,8 +20,8 @@ function prepareUrls (externalId: string): object {
 function renderView (form: Form<Declaration>, req: express.Request, res: express.Response): void {
   res.render(Paths.checkAndSendPage.associatedView, {
     form: form,
-    details: res.locals.user.ccjDraft,
-    amountToBePaid: res.locals.user.claim.totalAmount - (res.locals.user.ccjDraft.paidAmount.amount || 0),
+    details: res.locals.user.ccjDraft.document,
+    amountToBePaid: res.locals.user.claim.totalAmount - (res.locals.user.ccjDraft.document.paidAmount.amount || 0),
     ...prepareUrls(req.params.externalId)
   })
 }
@@ -41,7 +41,7 @@ export default express.Router()
         renderView(form, req, res)
       } else {
         await CCJClient.save(user)
-        await DraftCCJService.delete(res, next)
+        await DraftService.delete(user.ccjDraft, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }
     }))

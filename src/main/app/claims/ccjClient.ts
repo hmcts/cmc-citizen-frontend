@@ -7,7 +7,7 @@ import Claim from 'claims/models/claim'
 
 export class CCJClient {
   static save (user: User): Promise<Claim> {
-    const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convert(user.ccjDraft)
+    const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convert(user.ccjDraft.document)
 
     return request.post(`${claimStoreApiUrl}/${user.claim.id}/county-court-judgment`, {
       body: countyCourtJudgment,

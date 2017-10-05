@@ -15,7 +15,7 @@ export default class AllResponseTasksCompletedGuard {
       const claim: Claim = user.claim
 
       const allTasksCompleted: boolean = TaskListBuilder
-        .buildRemainingTasks(user.responseDraft, claim.responseDeadline, claim.externalId).length === 0
+        .buildRemainingTasks(user.responseDraft.document, claim.responseDeadline, claim.externalId).length === 0
 
       if (allTasksCompleted) {
         return next()
