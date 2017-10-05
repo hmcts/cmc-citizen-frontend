@@ -28,7 +28,7 @@ function convertToPartyDetails (value: TheirDetails): PartyDetails {
   return partyDetails
 }
 
-function renderView (form: Form<PartyDetails>, res: express.Response): void {
+function renderView (form: Form<Address>, res: express.Response): void {
   res.render(Paths.theirDetailsPage.associatedView, { form: form, claim: res.locals.user.claim })
 }
 
@@ -47,7 +47,7 @@ export default express.Router()
     FormValidator.requestHandler(Address, Address.fromObject),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-        const form: Form<PartyDetails> = req.body
+        const form: Form<Address> = req.body
         const user: User = res.locals.user
         const { externalId } = req.params
 

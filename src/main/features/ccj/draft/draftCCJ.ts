@@ -3,6 +3,7 @@ import { CCJPaymentOption } from 'ccj/form/models/ccjPaymentOption'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { PayBySetDate } from 'ccj/form/models/payBySetDate'
 import { RepaymentPlan } from 'ccj/form/models/repaymentPlan'
+import { QualifiedDeclaration } from 'ccj/form/models/qualifiedDeclaration'
 import { DraftDocument } from 'models/draftDocument'
 
 export class DraftCCJ extends DraftDocument {
@@ -11,13 +12,19 @@ export class DraftCCJ extends DraftDocument {
   paidAmount?: PaidAmount
   payBySetDate?: PayBySetDate
   repaymentPlan?: RepaymentPlan
+  qualifiedDeclaration?: QualifiedDeclaration
 
-  constructor (defendant: Defendant = new Defendant(), paymentOption: CCJPaymentOption = new CCJPaymentOption(), paidAmount?: PaidAmount, repaymentPlan?: RepaymentPlan) {
+  constructor (defendant: Defendant = new Defendant(),
+               paymentOption: CCJPaymentOption = new CCJPaymentOption(),
+               paidAmount?: PaidAmount,
+               repaymentPlan?: RepaymentPlan,
+               qualifiedDeclaration?: QualifiedDeclaration) {
     super()
     this.defendant = defendant
     this.paymentOption = paymentOption
     this.paidAmount = paidAmount
     this.repaymentPlan = repaymentPlan
+    this.qualifiedDeclaration = qualifiedDeclaration
   }
 
   deserialize (input: any): DraftCCJ {
@@ -28,6 +35,7 @@ export class DraftCCJ extends DraftDocument {
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
       this.repaymentPlan = new RepaymentPlan().deserialize(input.repaymentPlan)
+      this.qualifiedDeclaration = new QualifiedDeclaration().deserialize(input.qualifiedDeclaration)
     }
     return this
   }

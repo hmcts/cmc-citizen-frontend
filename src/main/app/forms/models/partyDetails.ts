@@ -3,6 +3,7 @@ import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { Serializable } from 'models/serializable'
 import { Address } from 'forms/models/address'
 import { CorrespondenceAddress } from 'forms/models/correspondenceAddress'
+import { PartyType } from 'app/common/partyType'
 
 export class ValidationErrors {
   static readonly ADDRESS_REQUIRED = 'Enter an address'
@@ -71,5 +72,9 @@ export class PartyDetails implements Serializable<PartyDetails> {
 
   isCompleted (...groups: string[]): boolean {
     return new Validator().validateSync(this, { groups: groups }).length === 0
+  }
+
+  isBusiness (): boolean {
+    return this.type === PartyType.COMPANY.value || this.type === PartyType.ORGANISATION.value
   }
 }
