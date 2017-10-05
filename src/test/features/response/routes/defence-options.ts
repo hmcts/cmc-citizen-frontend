@@ -47,7 +47,7 @@ describe('Defendant response: defence options page', () => {
         })
 
         it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('response')
+          draftStoreServiceMock.resolveFind('response')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -58,7 +58,7 @@ describe('Defendant response: defence options page', () => {
 
         it('should redirect page when response type is not OWE_NONE', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('response', { response: { type: ResponseType.OWE_SOME_PAID_NONE } })
+          draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.OWE_SOME_PAID_NONE } })
 
           await request(app)
             .get(defenceOptionsPage)
@@ -91,7 +91,7 @@ describe('Defendant response: defence options page', () => {
           })
 
           it('should render page when everything is fine', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
+            draftStoreServiceMock.resolveFind('response')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -103,9 +103,9 @@ describe('Defendant response: defence options page', () => {
 
         context('when form is valid', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
+            draftStoreServiceMock.resolveFind('response')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.rejectSave('response', 'HTTP error')
+            draftStoreServiceMock.rejectSave()
 
             await request(app)
               .post(defenceOptionsPage)
@@ -115,8 +115,8 @@ describe('Defendant response: defence options page', () => {
           })
 
           it('should redirect to task list page when everything is fine', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
-            draftStoreServiceMock.resolveSave('response')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -127,7 +127,7 @@ describe('Defendant response: defence options page', () => {
           })
 
           it('should redirect page when response type is not OWE_NONE', async () => {
-            draftStoreServiceMock.resolveRetrieve('response', { response: { type: ResponseType.OWE_SOME_PAID_NONE } })
+            draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.OWE_SOME_PAID_NONE } })
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)

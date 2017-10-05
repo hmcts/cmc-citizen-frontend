@@ -40,7 +40,7 @@ export default express.Router()
   .get(Paths.paidAmountSummaryPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.user.claim
-      const alreadyPaid: number = res.locals.user.ccjDraft.paidAmount.amount || 0
+      const alreadyPaid: number = res.locals.user.ccjDraft.document.paidAmount.amount || 0
       const { externalId } = req.params
 
       res.render(

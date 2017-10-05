@@ -14,7 +14,7 @@ const logger = require('@hmcts/nodejs-logging').getLogger('claim/guards/allTasks
 export default class AllClaimTasksCompletedGuard {
 
   static requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
-    const claim: DraftClaim = res.locals.user.claimDraft
+    const claim: DraftClaim = res.locals.user.claimDraft.document
     const allTasksCompleted: boolean = ResolveDispute.isCompleted(claim) &&
       CompletingYourClaim.isCompleted(claim) &&
       YourDetails.isCompleted(claim) &&

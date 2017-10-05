@@ -1,5 +1,6 @@
 import { IsDefined } from 'class-validator'
 import { IsBooleanTrue } from 'forms/validation/validators/isBooleanTrue'
+import { SignatureType } from 'app/common/signatureType'
 
 /**
  * We cannot reuse StatementOfTruth class as for legal reason error message must be different.
@@ -9,6 +10,8 @@ export class ValidationErrors {
 }
 
 export class Declaration {
+  type: string = SignatureType.BASIC
+
   @IsDefined({ message: ValidationErrors.DECLARATION_REQUIRED })
   @IsBooleanTrue({ message: ValidationErrors.DECLARATION_REQUIRED })
   signed?: boolean
