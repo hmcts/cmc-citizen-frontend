@@ -13,9 +13,11 @@ export class DraftCCJ {
   repaymentPlan?: RepaymentPlan
   qualifiedDeclaration?: QualifiedDeclaration
 
-  constructor (defendant: Defendant = new Defendant(), paymentOption: CCJPaymentOption = new CCJPaymentOption(),
-               paidAmount?: PaidAmount, repaymentPlan?: RepaymentPlan, qualifiedDeclaration?: QualifiedDeclaration
-  ) {
+  constructor (defendant: Defendant = new Defendant(),
+               paymentOption: CCJPaymentOption = new CCJPaymentOption(),
+               paidAmount?: PaidAmount,
+               repaymentPlan?: RepaymentPlan,
+               qualifiedDeclaration?: QualifiedDeclaration) {
     this.defendant = defendant
     this.paymentOption = paymentOption
     this.paidAmount = paidAmount

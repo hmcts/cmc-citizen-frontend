@@ -7,8 +7,6 @@ import { CCJClient } from 'claims/ccjClient'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
 import { DraftCCJService } from 'ccj/draft/draftCCJService'
-import { PartyType } from 'app/common/partyType'
-import Claim from 'claims/models/claim'
 import { SignatureType } from 'app/common/signatureType'
 import { QualifiedDeclaration } from 'ccj/form/models/qualifiedDeclaration'
 
@@ -27,15 +25,9 @@ function renderView (form: Form<Declaration>, req: express.Request, res: express
     form: form,
     details: user.ccjDraft,
     amountToBePaid: user.claim.totalAmount - (user.ccjDraft.paidAmount.amount || 0),
-    partyAsCompanyOrOrganisation: isPartyCompanyOrOrganisation(user),
+    partyAsCompanyOrOrganisation: user.claim.claimData.claimant.isBusiness(),
     ...prepareUrls(req.params.externalId)
   })
-}
-
-function isPartyCompanyOrOrganisation (user: User): boolean {
-  const claim: Claim = user.claim
-  const type: string = claim.claimData.claimant.type
-  return type === PartyType.COMPANY.value || type === PartyType.ORGANISATION.value
 }
 
 function deserializerFunction (value: any): any {
@@ -50,7 +42,7 @@ function deserializerFunction (value: any): any {
 }
 
 function getStatementOfTruthClassFor (user: User): any {
-  if (isPartyCompanyOrOrganisation(user)) {
+  if (user.claim.claimData.claimant.isBusiness()) {
     return QualifiedDeclaration
   } else {
     return Declaration
@@ -58,7 +50,7 @@ function getStatementOfTruthClassFor (user: User): any {
 }
 
 function signatureTypeFor (user: User): string {
-  if (isPartyCompanyOrOrganisation(user)) {
+  if (user.claim.claimData.claimant.isBusiness()) {
     return SignatureType.QUALIFIED
   } else {
     return SignatureType.BASIC
