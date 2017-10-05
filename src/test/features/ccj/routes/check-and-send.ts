@@ -14,6 +14,9 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
+import { SignatureType } from 'app/common/signatureType'
+import { ValidationErrors as BasicValidationErrors } from 'ccj/form/models/declaration'
+import { ValidationErrors as QualifiedValidationErrors } from 'ccj/form/models/qualifiedDeclaration'
 
 const externalId = sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
@@ -65,7 +68,13 @@ describe('CCJ: check and send page', () => {
   })
 
   describe('on POST', () => {
-    const validFormData = { signed: 'true' }
+    const validBasicFormData = { signed: 'true', type: SignatureType.BASIC }
+    const validQualifiedFormData = {
+      signed: 'true',
+      type: SignatureType.QUALIFIED,
+      signerName: 'Jonny',
+      signerRole: 'Director'
+    }
 
     checkAuthorizationGuards(app, 'post', cnsPage)
 
@@ -80,7 +89,7 @@ describe('CCJ: check and send page', () => {
         await request(app)
           .post(cnsPage)
           .set('Cookie', `${cookieName}=ABC`)
-          .send(validFormData)
+          .send(validBasicFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -91,12 +100,12 @@ describe('CCJ: check and send page', () => {
         await request(app)
           .post(cnsPage)
           .set('Cookie', `${cookieName}=ABC`)
-          .send(validFormData)
+          .send(validBasicFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
       context('when form is valid', async () => {
-        it('should redirect to confirmation page', async () => {
+        it('should redirect to confirmation page when signature is basic', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
           claimStoreServiceMock.resolveSaveCcjForUser()
@@ -105,7 +114,20 @@ describe('CCJ: check and send page', () => {
           await request(app)
             .post(cnsPage)
             .set('Cookie', `${cookieName}=ABC`)
-            .send(validFormData)
+            .send(validBasicFormData)
+            .expect(res => expect(res).to.be.redirect.toLocation(confirmationPage))
+        })
+        it('should redirect to confirmation page when signature is qualified', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('ccj')
+          draftStoreServiceMock.resolveSave()
+          claimStoreServiceMock.resolveSaveCcjForUser()
+          draftStoreServiceMock.resolveDelete()
+
+          await request(app)
+            .post(cnsPage)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validQualifiedFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(confirmationPage))
         })
 
@@ -117,22 +139,35 @@ describe('CCJ: check and send page', () => {
           await request(app)
             .post(cnsPage)
             .set('Cookie', `${cookieName}=ABC`)
-            .send(validFormData)
+            .send(validBasicFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
 
       context('when form is invalid', async () => {
-        it('should render page with error messages', async () => {
+        it('should render page with error messages when signature is basic', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
 
           await request(app)
             .post(cnsPage)
             .set('Cookie', `${cookieName}=ABC`)
-            .send({ signed: undefined })
-            .expect(res => expect(res).to.be.successful.withText('Please select I confirm that I believe the details I have provided are correct.', 'div class="error-summary"'))
+            .send({ signed: undefined, type: SignatureType.BASIC })
+            .expect(res => expect(res).to.be.successful.withText(BasicValidationErrors.DECLARATION_REQUIRED,
+              'div class="error-summary"'))
         })
+        it('should render page with error messages when signature is qualified', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('ccj')
+
+          await request(app)
+            .post(cnsPage)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ signed: 'true', type: SignatureType.QUALIFIED, signerName: '', signerRole: '' })
+            .expect(res => expect(res).to.be.successful.withText(QualifiedValidationErrors.SIGNER_NAME_REQUIRED,
+              'div class="error-summary"'))
+        })
+
       })
     })
   })

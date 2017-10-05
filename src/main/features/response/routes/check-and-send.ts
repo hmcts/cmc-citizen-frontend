@@ -12,8 +12,6 @@ import { ResponseType } from 'response/form/models/responseType'
 import AllResponseTasksCompletedGuard from 'response/guards/allResponseTasksCompletedGuard'
 import { ErrorHandling } from 'common/errorHandling'
 import { SignatureType } from 'app/common/signatureType'
-import { ResponseDraft } from 'response/draft/responseDraft'
-import { PartyType } from 'app/common/partyType'
 import { QualifiedStatementOfTruth } from 'response/form/models/qualifiedStatementOfTruth'
 import { DraftService } from 'common/draft/draftService'
 
@@ -39,19 +37,9 @@ function isStatementOfTruthRequired (user: User): boolean {
     || responseType === ResponseType.OWE_ALL_PAID_ALL
 }
 
-function isCompanyOrOrganisationDefendant (user: User): boolean {
-  const responseDraft: ResponseDraft = user.responseDraft.document
-  if (responseDraft.defendantDetails && responseDraft.defendantDetails.partyDetails) {
-    const type: string = responseDraft.defendantDetails.partyDetails.type
-    return type === PartyType.COMPANY.value || type === PartyType.ORGANISATION.value
-  } else {
-    return false
-  }
-}
-
 function signatureTypeFor (user: User): string {
   if (isStatementOfTruthRequired(user)) {
-    if (isCompanyOrOrganisationDefendant(user)) {
+    if (user.claim.claimData.defendant.isBusiness()) {
       return SignatureType.QUALIFIED
     } else {
       return SignatureType.BASIC
@@ -61,7 +49,7 @@ function signatureTypeFor (user: User): string {
   }
 }
 
-function deserializerFunction (value: any): any {
+function deserializerFunction (value: any): StatementOfTruth | QualifiedStatementOfTruth {
   switch (value.type) {
     case SignatureType.BASIC:
       return StatementOfTruth.fromObject(value)
@@ -72,7 +60,7 @@ function deserializerFunction (value: any): any {
   }
 }
 
-function getStatementOfTruthClassFor (user: User): any {
+function getStatementOfTruthClassFor (user: User): { new(): StatementOfTruth | QualifiedStatementOfTruth } {
   if (signatureTypeFor(user) === SignatureType.QUALIFIED) {
     return QualifiedStatementOfTruth
   } else {
@@ -95,7 +83,7 @@ export default express.Router()
     FormValidator.requestHandler(undefined, deserializerFunction),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const user: User = res.locals.user
-      const form: Form<any> = req.body
+      const form: Form<StatementOfTruth | QualifiedStatementOfTruth> = req.body
       if (isStatementOfTruthRequired(user) && form.hasErrors()) {
         renderView(form, res)
       } else {
@@ -120,10 +108,10 @@ export default express.Router()
             next(new Error('Unknown response type: ' + responseType))
         }
 
-        if (signatureTypeFor(user) === SignatureType.QUALIFIED) {
-          user.responseDraft.document.qualifiedStatementOfTruth = form.model
+        if (form.model.type === SignatureType.QUALIFIED) {
+          user.responseDraft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
+          await DraftService.save(user.responseDraft, user.bearerToken)
         }
-        await DraftService.save(user.responseDraft, user.bearerToken)
         await ClaimStoreClient.saveResponseForUser(user)
         await DraftService.delete(user.responseDraft, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: user.claim.externalId }))

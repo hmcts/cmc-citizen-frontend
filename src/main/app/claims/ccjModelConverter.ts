@@ -6,6 +6,7 @@ import { convertDefendantDetails } from 'claims/converters/defendantDetails'
 import { RepaymentPlan } from 'claims/models/replaymentPlan'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { Moment } from 'moment'
+import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {
 
@@ -37,13 +38,22 @@ function convertPayBySetDate (draftCcj: DraftCCJ): Moment {
 export class CCJModelConverter {
 
   static convert (draftCcj: DraftCCJ): CountyCourtJudgment {
+    let statementOfTruth: StatementOfTruth = undefined
+    if (draftCcj.qualifiedDeclaration) {
+      // API model is called statement of truth
+      statementOfTruth = new StatementOfTruth(
+        draftCcj.qualifiedDeclaration.signerName,
+        draftCcj.qualifiedDeclaration.signerRole
+      )
+    }
 
     return new CountyCourtJudgment(
       convertDefendantDetails(draftCcj.defendant.partyDetails, draftCcj.defendant.email.address),
       draftCcj.paymentOption.option.value,
       convertPaidAmount(draftCcj),
       convertRepaymentPlan(draftCcj.repaymentPlan),
-      convertPayBySetDate(draftCcj)
+      convertPayBySetDate(draftCcj),
+      statementOfTruth
     )
   }
 }
