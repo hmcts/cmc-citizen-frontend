@@ -35,7 +35,9 @@ export class DraftCCJ extends DraftDocument {
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
       this.repaymentPlan = new RepaymentPlan().deserialize(input.repaymentPlan)
-      this.qualifiedDeclaration = new QualifiedDeclaration().deserialize(input.qualifiedDeclaration)
+      if (input.qualifiedDeclaration) {
+        this.qualifiedDeclaration = new QualifiedDeclaration().deserialize(input.qualifiedDeclaration)
+      }
     }
     return this
   }
