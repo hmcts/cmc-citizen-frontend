@@ -27,11 +27,7 @@
       {{ taskListHeading(submit.position, t(submit.name)) }}
 
       {% for item in submit.tasks %}
-        {% if allTasksCompleted %}
-          {{ task(item.startPageUrl, t(item.name), item.completed) }}
-        {% else %}
-          {{ disabledTask(t(item.name)) }}
-        {% endif %}
+        {{ task(item.startPageUrl, t(item.name), item.completed) }}
       {% endfor %}
     </div>
 </div>
