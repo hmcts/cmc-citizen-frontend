@@ -15,15 +15,21 @@
     <div class="column-two-thirds">
       <div>
         <h2 class="heading-medium">{{ t('Claim status') }}</h2>
-        <div class="panel panel-border-wide">
-          <p>
-            {{ t('The defendant %s has not responded to your claim. ',
-            { postProcess: 'sprintf', sprintf: [claim.claimData.defendant.name] }) }}
-            {% if claim.eligibleForCCJ %}
-              {{ t('You can request a County Court Judgment (CCJ)') }}
-            {% endif %}
-          </p>
-        </div>
+
+        {% if claim.respondedAt %}
+          <p>{{ t('The defendant %s has responded to your claim. ',
+                { postProcess: 'sprintf', sprintf: [ claim.claimData.defendant.name ] }) }}</p>
+        {% else %}
+          <div class="panel panel-border-wide">
+            <p>
+              {{ t('The defendant %s has not responded to your claim. ',
+              { postProcess: 'sprintf', sprintf: [ claim.claimData.defendant.name ] }) }}
+              {% if claim.eligibleForCCJ %}
+                {{ t('You can request a County Court Judgment (CCJ)') }}
+              {% endif %}
+            </p>
+          </div>
+        {% endif %}
 
         {% if claim.eligibleForCCJ %}
           <p>{{ t('You can only ask for a CCJ at this stage if the defendant has not responded to your claim.') }}</p>
@@ -38,8 +44,11 @@
         {% endif %}
 
         {% if claim.countyCourtJudgmentRequestedAt %}
-          <p>{{ t('You have requested a County Court Judgment to be made against %s.',
-                    { postProcess: 'sprintf', sprintf: [claim.claimData.defendant.name] }) }}</p>
+          <p>{{ t('Your request for a County Court Judgment was sent on %s. We will contact you within 5 days.',
+                  { postProcess: 'sprintf', sprintf: [ claim.countyCourtJudgmentRequestedAt | date ] }) }}</p>
+
+          <p>{{ t('%s can no longer respond to your claim.',
+                  { postProcess: 'sprintf', sprintf: [ claim.claimData.defendant.name ] }) }}</p>
         {% endif %}
       </div>
     </div>
