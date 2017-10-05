@@ -134,7 +134,6 @@ describe('CCJ: check and send page', () => {
         it('should return 500 when cannot save CCJ', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
-          draftStoreServiceMock.resolveSave()
           claimStoreServiceMock.rejectSaveCcjForUser()
 
           await request(app)
