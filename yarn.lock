@@ -3155,7 +3155,7 @@ jquery@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.0.0.tgz#95a2a9541291a9f819e016f85ba247116d03e4ab"
 
-js-base64@^2.1.8:
+js-base64@^2.1.8, js-base64@^2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.3.2.tgz#a79a923666372b580f8e27f51845c6f7e8fbfbaf"
 
