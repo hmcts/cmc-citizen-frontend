@@ -6,8 +6,8 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 
-import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
+import { DraftService } from 'common/draft/draftService'
 
 function renderView (form: Form<OrganisationDetails>, res: express.Response): void {
   res.render(Paths.defendantOrganisationDetailsPage.associatedView, { form: form })
@@ -15,7 +15,7 @@ function renderView (form: Form<OrganisationDetails>, res: express.Response): vo
 
 export default express.Router()
   .get(Paths.defendantOrganisationDetailsPage.uri, (req: express.Request, res: express.Response) => {
-    renderView(new Form(res.locals.user.claimDraft.defendant.partyDetails as OrganisationDetails), res)
+    renderView(new Form(res.locals.user.claimDraft.document.defendant.partyDetails as OrganisationDetails), res)
   })
   .post(
     Paths.defendantOrganisationDetailsPage.uri,
@@ -25,8 +25,8 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        (res.locals.user.claimDraft.defendant.partyDetails as OrganisationDetails) = form.model
-        await ClaimDraftMiddleware.save(res, next)
+        (res.locals.user.claimDraft.document.defendant.partyDetails as OrganisationDetails) = form.model
+        await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
         res.redirect(Paths.defendantEmailPage.uri)
       }
     }))
