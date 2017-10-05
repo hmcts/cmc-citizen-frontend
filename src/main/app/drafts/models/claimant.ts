@@ -39,6 +39,10 @@ export default class Claimant implements CompletableTask {
     return this
   }
 
+  isBusiness (): boolean {
+    return this.partyDetails && (this.partyDetails.type === PartyType.COMPANY.value || this.partyDetails.type === PartyType.ORGANISATION.value)
+  }
+
   isCompleted (): boolean {
     let result = false
     if (this.partyDetails && this.partyDetails.type) {

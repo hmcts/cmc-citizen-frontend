@@ -13,8 +13,6 @@ import { ResponseType } from 'response/form/models/responseType'
 import AllResponseTasksCompletedGuard from 'response/guards/allResponseTasksCompletedGuard'
 import { ErrorHandling } from 'common/errorHandling'
 import { SignatureType } from 'app/common/signatureType'
-import { ResponseDraft } from 'response/draft/responseDraft'
-import { PartyType } from 'app/common/partyType'
 import { QualifiedStatementOfTruth } from 'response/form/models/qualifiedStatementOfTruth'
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
@@ -39,19 +37,9 @@ function isStatementOfTruthRequired (user: User): boolean {
     || responseType === ResponseType.OWE_ALL_PAID_ALL
 }
 
-function isCompanyOrOrganisationDefendant (user: User): boolean {
-  const responseDraft: ResponseDraft = user.responseDraft
-  if (responseDraft.defendantDetails && responseDraft.defendantDetails.partyDetails) {
-    const type: string = responseDraft.defendantDetails.partyDetails.type
-    return type === PartyType.COMPANY.value || type === PartyType.ORGANISATION.value
-  } else {
-    return false
-  }
-}
-
 function signatureTypeFor (user: User): string {
   if (isStatementOfTruthRequired(user)) {
-    if (isCompanyOrOrganisationDefendant(user)) {
+    if (user.claim.claimData.defendant.isBusiness()) {
       return SignatureType.QUALIFIED
     } else {
       return SignatureType.BASIC
