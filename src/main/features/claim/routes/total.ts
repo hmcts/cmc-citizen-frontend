@@ -8,12 +8,12 @@ import ClaimValidator from 'app/utils/claimValidator'
 
 export default express.Router()
   .get(Paths.totalPage.uri, (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    FeesClient.calculateIssueFee(claimAmountWithInterest(res.locals.user.claimDraft))
+    FeesClient.calculateIssueFee(claimAmountWithInterest(res.locals.user.claimDraft.document))
       .then((feeAmount: number) => {
         res.render(Paths.totalPage.associatedView,
           {
-            interestTotal: new InterestTotal(res.locals.user.claimDraft.amount.totalAmount(), interestAmount(res.locals.user.claimDraft), feeAmount),
-            interestClaimed: (res.locals.user.claimDraft.interest.type !== InterestType.NO_INTEREST)
+            interestTotal: new InterestTotal(res.locals.user.claimDraft.document.amount.totalAmount(), interestAmount(res.locals.user.claimDraft.document), feeAmount),
+            interestClaimed: (res.locals.user.claimDraft.document.interest.type !== InterestType.NO_INTEREST)
           })
       })
       .catch(next)

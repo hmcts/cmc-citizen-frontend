@@ -6,9 +6,9 @@ import { Declaration } from 'ccj/form/models/declaration'
 import { CCJClient } from 'claims/ccjClient'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
-import { DraftCCJService } from 'ccj/draft/draftCCJService'
 import { SignatureType } from 'app/common/signatureType'
 import { QualifiedDeclaration } from 'ccj/form/models/qualifiedDeclaration'
+import { DraftService } from 'common/draft/draftService'
 
 function prepareUrls (externalId: string): object {
   return {
@@ -23,9 +23,9 @@ function renderView (form: Form<Declaration>, req: express.Request, res: express
   const user: User = res.locals.user
   res.render(Paths.checkAndSendPage.associatedView, {
     form: form,
-    details: user.ccjDraft,
-    amountToBePaid: user.claim.totalAmount - (user.ccjDraft.paidAmount.amount || 0),
     partyAsCompanyOrOrganisation: user.claim.claimData.claimant.isBusiness(),
+    details: user.ccjDraft.document,
+    amountToBePaid: user.claim.totalAmount - (user.ccjDraft.document.paidAmount.amount || 0),
     ...prepareUrls(req.params.externalId)
   })
 }
@@ -73,12 +73,12 @@ export default express.Router()
         renderView(form, req, res)
       } else {
         if (signatureTypeFor(user) === SignatureType.QUALIFIED) {
-          user.ccjDraft.qualifiedDeclaration = form.model
+          user.ccjDraft.document.qualifiedDeclaration = form.model
         }
 
-        await DraftCCJService.save(res, next)
+        await DraftService.save(user.ccjDraft, user.bearerToken)
         await CCJClient.save(user)
-        await DraftCCJService.delete(res, next)
+        await DraftService.delete(user.ccjDraft, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }
     }))

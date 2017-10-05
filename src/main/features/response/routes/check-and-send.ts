@@ -8,12 +8,12 @@ import { StatementOfTruth } from 'response/form/models/statementOfTruth'
 
 import ClaimStoreClient from 'claims/claimStoreClient'
 import User from 'app/idam/user'
-import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ResponseType } from 'response/form/models/responseType'
 import AllResponseTasksCompletedGuard from 'response/guards/allResponseTasksCompletedGuard'
 import { ErrorHandling } from 'common/errorHandling'
 import { SignatureType } from 'app/common/signatureType'
 import { QualifiedStatementOfTruth } from 'response/form/models/qualifiedStatementOfTruth'
+import { DraftService } from 'common/draft/draftService'
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
   const user: User = res.locals.user
@@ -21,18 +21,18 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     paths: Paths,
     claim: user.claim,
     form: form,
-    draft: user.responseDraft,
+    draft: user.responseDraft.document,
     signatureType: signatureTypeFor(user)
   })
 }
 
 function defendantIsCounterClaiming (user: User): boolean {
-  return user.responseDraft.counterClaim &&
-    user.responseDraft.counterClaim.counterClaim
+  return user.responseDraft.document.counterClaim &&
+    user.responseDraft.document.counterClaim.counterClaim
 }
 
 function isStatementOfTruthRequired (user: User): boolean {
-  const responseType: ResponseType = user.responseDraft.response.type
+  const responseType: ResponseType = user.responseDraft.document.response.type
   return (responseType === ResponseType.OWE_NONE && !defendantIsCounterClaiming(user))
     || responseType === ResponseType.OWE_ALL_PAID_ALL
 }
@@ -87,7 +87,7 @@ export default express.Router()
       if (isStatementOfTruthRequired(user) && form.hasErrors()) {
         renderView(form, res)
       } else {
-        const responseType = user.responseDraft.response.type
+        const responseType = user.responseDraft.document.response.type
         switch (responseType) {
           case ResponseType.OWE_NONE:
             if (defendantIsCounterClaiming(user)) {
@@ -109,11 +109,11 @@ export default express.Router()
         }
 
         if (signatureTypeFor(user) === SignatureType.QUALIFIED) {
-          user.responseDraft.qualifiedStatementOfTruth = form.model
+          user.responseDraft.document.qualifiedStatementOfTruth = form.model
         }
-        await ResponseDraftMiddleware.save(res, next)
+        await DraftService.save(user.responseDraft, user.bearerToken)
         await ClaimStoreClient.saveResponseForUser(user)
-        await ResponseDraftMiddleware.delete(res, next)
+        await DraftService.delete(user.responseDraft, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

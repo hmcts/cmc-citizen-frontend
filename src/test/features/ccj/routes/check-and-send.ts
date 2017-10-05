@@ -46,7 +46,7 @@ describe('CCJ: check and send page', () => {
 
         it('should return 500 and render error page when cannot retrieve CCJ draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+          draftStoreServiceMock.rejectFind('Error')
 
           await request(app)
             .get(cnsPage)
@@ -56,7 +56,7 @@ describe('CCJ: check and send page', () => {
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
+          draftStoreServiceMock.resolveFind('ccj')
 
           await request(app)
             .get(cnsPage)
@@ -95,7 +95,7 @@ describe('CCJ: check and send page', () => {
 
       it('should return 500 when cannot retrieve CCJ draft', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+        draftStoreServiceMock.rejectFind('Error')
 
         await request(app)
           .post(cnsPage)
@@ -107,10 +107,9 @@ describe('CCJ: check and send page', () => {
       context('when form is valid', async () => {
         it('should redirect to confirmation page when signature is basic', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
-          draftStoreServiceMock.resolveSave('ccj')
+          draftStoreServiceMock.resolveFind('ccj')
           claimStoreServiceMock.resolveSaveCcjForUser()
-          draftStoreServiceMock.resolveDelete('ccj')
+          draftStoreServiceMock.resolveDelete()
 
           await request(app)
             .post(cnsPage)
@@ -120,10 +119,10 @@ describe('CCJ: check and send page', () => {
         })
         it('should redirect to confirmation page when signature is qualified', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
-          draftStoreServiceMock.resolveSave('ccj')
+          draftStoreServiceMock.resolveFind('ccj')
+          draftStoreServiceMock.resolveSave()
           claimStoreServiceMock.resolveSaveCcjForUser()
-          draftStoreServiceMock.resolveDelete('ccj')
+          draftStoreServiceMock.resolveDelete()
 
           await request(app)
             .post(cnsPage)
@@ -134,8 +133,8 @@ describe('CCJ: check and send page', () => {
 
         it('should return 500 when cannot save CCJ', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
-          draftStoreServiceMock.resolveSave('ccj')
+          draftStoreServiceMock.resolveFind('ccj')
+          draftStoreServiceMock.resolveSave()
           claimStoreServiceMock.rejectSaveCcjForUser()
 
           await request(app)
@@ -149,7 +148,7 @@ describe('CCJ: check and send page', () => {
       context('when form is invalid', async () => {
         it('should render page with error messages when signature is basic', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
+          draftStoreServiceMock.resolveFind('ccj')
 
           await request(app)
             .post(cnsPage)
@@ -160,7 +159,7 @@ describe('CCJ: check and send page', () => {
         })
         it('should render page with error messages when signature is qualified', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
+          draftStoreServiceMock.resolveFind('ccj')
 
           await request(app)
             .post(cnsPage)

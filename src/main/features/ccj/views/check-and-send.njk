@@ -15,7 +15,7 @@
     {{ tableStart('theirDetails', 'Their details') }}
     {{
       partyDetailsSummaryFragment(
-        partyDetails = user.ccjDraft.defendant.partyDetails,
+        partyDetails = user.ccjDraft.document.defendant.partyDetails,
         showCorrespondenceAddressSection = false,
         changeLinks = {
           address: addressUrl,

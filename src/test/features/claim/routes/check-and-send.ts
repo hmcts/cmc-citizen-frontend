@@ -29,7 +29,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should redirect to task list when not all tasks are completed', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim', { readResolveDispute: false })
+        draftStoreServiceMock.resolveFind('claim', { readResolveDispute: false })
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
@@ -38,7 +38,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should return 500 and render error page when cannot calculate fee', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.rejectCalculateIssueFee('HTTP error')
 
         await request(app)
@@ -48,7 +48,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should render page when everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -68,7 +68,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should redirect to task list when not all tasks are completed', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim', { readResolveDispute: false })
+        draftStoreServiceMock.resolveFind('claim', { readResolveDispute: false })
 
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
@@ -78,7 +78,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should return 500 and render error page when form is invalid and cannot calculate fee', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.rejectCalculateIssueFee('HTTP error')
 
         await request(app)
@@ -89,7 +89,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should render page when form is invalid and everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -100,8 +100,8 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should redirect to payment page when form is valid and everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
-        draftStoreServiceMock.resolveSave('claim')
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
