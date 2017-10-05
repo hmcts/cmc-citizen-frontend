@@ -17,7 +17,6 @@ import { OrganisationDetails } from 'forms/models/organisationDetails'
 import DateOfBirth from 'forms/models/dateOfBirth'
 import { PartyDetails } from 'forms/models/partyDetails'
 import User from 'idam/user'
-import DraftClaim from 'drafts/models/draftClaim'
 import { SignatureType } from 'app/common/signatureType'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
 import { DraftService } from 'common/draft/draftService'
@@ -55,17 +54,7 @@ function getContactPerson (partyDetails: PartyDetails): string {
   }
 }
 
-function isPartyCompanyOrOrganisation (user: User): boolean {
-  const claimDraft: DraftClaim = user.claimDraft.document
-  if (claimDraft.claimant && claimDraft.claimant.partyDetails) {
-    const type: string = claimDraft.claimant.partyDetails.type
-    return type === PartyType.COMPANY.value || type === PartyType.ORGANISATION.value
-  } else {
-    return false
-  }
-}
-
-function deserializerFunction (value: any): any {
+function deserializerFunction (value: any): StatementOfTruth | QualifiedStatementOfTruth {
   switch (value.type) {
     case SignatureType.BASIC:
       return StatementOfTruth.fromObject(value)
@@ -76,8 +65,8 @@ function deserializerFunction (value: any): any {
   }
 }
 
-function getStatementOfTruthClassFor (user: User): any {
-  if (isPartyCompanyOrOrganisation(user)) {
+function getStatementOfTruthClassFor (user: User): { new(): StatementOfTruth | QualifiedStatementOfTruth } {
+  if (user.claimDraft.document.claimant.partyDetails.isBusiness()) {
     return QualifiedStatementOfTruth
   } else {
     return StatementOfTruth
@@ -95,9 +84,9 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
         interestClaimed: (res.locals.user.claimDraft.document.interest.type !== InterestType.NO_INTEREST),
         contactPerson: getContactPerson(res.locals.user.claimDraft.document.claimant.partyDetails),
         businessName: getBusinessName(res.locals.user.claimDraft.document.claimant.partyDetails),
-        dateOfBirth : getDateOfBirth(res.locals.user.claimDraft.document.claimant.partyDetails),
+        dateOfBirth: getDateOfBirth(res.locals.user.claimDraft.document.claimant.partyDetails),
         defendantBusinessName: getBusinessName(res.locals.user.claimDraft.document.defendant.partyDetails),
-        partyAsCompanyOrOrganisation: isPartyCompanyOrOrganisation(user),
+        partyAsCompanyOrOrganisation: user.claimDraft.document.claimant.partyDetails.isBusiness(),
         form: form
       })
     }).catch(next)
@@ -114,12 +103,14 @@ export default express.Router()
     FormValidator.requestHandler(undefined, deserializerFunction),
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const user: User = res.locals.user
-      const form: Form<any> = req.body
+      const form: Form<StatementOfTruth | QualifiedStatementOfTruth> = req.body
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
-        user.claimDraft.document.qualifiedStatementOfTruth = form.model
-        await DraftService.save(user.claimDraft, user.bearerToken)
+        if (form.model.type === SignatureType.QUALIFIED) {
+          user.claimDraft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
+          await DraftService.save(user.claimDraft, user.bearerToken)
+        }
         res.redirect(Paths.startPaymentReceiver.uri)
       }
     })

@@ -30,7 +30,7 @@ function renderView (form: Form<Declaration>, req: express.Request, res: express
   })
 }
 
-function deserializerFunction (value: any): any {
+function deserializerFunction (value: any): Declaration | QualifiedDeclaration {
   switch (value.type) {
     case SignatureType.BASIC:
       return Declaration.fromObject(value)
@@ -41,19 +41,11 @@ function deserializerFunction (value: any): any {
   }
 }
 
-function getStatementOfTruthClassFor (user: User): any {
+function getStatementOfTruthClassFor (user: User): { new(): Declaration | QualifiedDeclaration } {
   if (user.claim.claimData.claimant.isBusiness()) {
     return QualifiedDeclaration
   } else {
     return Declaration
-  }
-}
-
-function signatureTypeFor (user: User): string {
-  if (user.claim.claimData.claimant.isBusiness()) {
-    return SignatureType.QUALIFIED
-  } else {
-    return SignatureType.BASIC
   }
 }
 
@@ -66,17 +58,17 @@ export default express.Router()
     Paths.checkAndSendPage.uri,
     FormValidator.requestHandler(undefined, deserializerFunction),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const form: Form<any> = req.body
+      const form: Form<Declaration | QualifiedDeclaration> = req.body
       const user: User = res.locals.user
 
       if (form.hasErrors()) {
         renderView(form, req, res)
       } else {
-        if (signatureTypeFor(user) === SignatureType.QUALIFIED) {
-          user.ccjDraft.document.qualifiedDeclaration = form.model
+        if (form.model.type === SignatureType.QUALIFIED) {
+          user.ccjDraft.document.qualifiedDeclaration = form.model as QualifiedDeclaration
+          await DraftService.save(user.ccjDraft, user.bearerToken)
         }
 
-        await DraftService.save(user.ccjDraft, user.bearerToken)
         await CCJClient.save(user)
         await DraftService.delete(user.ccjDraft, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))

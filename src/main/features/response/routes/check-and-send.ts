@@ -49,7 +49,7 @@ function signatureTypeFor (user: User): string {
   }
 }
 
-function deserializerFunction (value: any): any {
+function deserializerFunction (value: any): StatementOfTruth | QualifiedStatementOfTruth {
   switch (value.type) {
     case SignatureType.BASIC:
       return StatementOfTruth.fromObject(value)
@@ -60,7 +60,7 @@ function deserializerFunction (value: any): any {
   }
 }
 
-function getStatementOfTruthClassFor (user: User): any {
+function getStatementOfTruthClassFor (user: User): { new(): StatementOfTruth | QualifiedStatementOfTruth } {
   if (signatureTypeFor(user) === SignatureType.QUALIFIED) {
     return QualifiedStatementOfTruth
   } else {
@@ -83,7 +83,7 @@ export default express.Router()
     FormValidator.requestHandler(undefined, deserializerFunction),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const user: User = res.locals.user
-      const form: Form<any> = req.body
+      const form: Form<StatementOfTruth | QualifiedStatementOfTruth> = req.body
       if (isStatementOfTruthRequired(user) && form.hasErrors()) {
         renderView(form, res)
       } else {
@@ -108,10 +108,10 @@ export default express.Router()
             next(new Error('Unknown response type: ' + responseType))
         }
 
-        if (signatureTypeFor(user) === SignatureType.QUALIFIED) {
-          user.responseDraft.document.qualifiedStatementOfTruth = form.model
+        if (form.model.type === SignatureType.QUALIFIED) {
+          user.responseDraft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
+          await DraftService.save(user.responseDraft, user.bearerToken)
         }
-        await DraftService.save(user.responseDraft, user.bearerToken)
         await ClaimStoreClient.saveResponseForUser(user)
         await DraftService.delete(user.responseDraft, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: user.claim.externalId }))

@@ -3,6 +3,7 @@ import { IsBooleanTrue } from 'forms/validation/validators/isBooleanTrue'
 import { SignatureType } from 'app/common/signatureType'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import * as toBoolean from 'to-boolean'
+import { Declaration } from 'ccj/form/models/declaration'
 
 /**
  * We cannot reuse StatementOfTruth class as for legal reason error message must be different.
@@ -15,9 +16,7 @@ export class ValidationErrors {
   static readonly SIGNER_ROLE_TOO_LONG: string = 'You’ve entered too many characters'
 }
 
-export class QualifiedDeclaration {
-  type: string = SignatureType.QUALIFIED
-
+export class QualifiedDeclaration extends Declaration {
   @IsDefined({ message: ValidationErrors.DECLARATION_REQUIRED })
   @IsBooleanTrue({ message: ValidationErrors.DECLARATION_REQUIRED })
   signed?: boolean
@@ -33,6 +32,8 @@ export class QualifiedDeclaration {
   signerRole?: string
 
   constructor (signed?: boolean, signerName?: string, signerRole?: string ) {
+    super()
+    this.type = SignatureType.QUALIFIED
     this.signed = signed
     this.signerName = signerName
     this.signerRole = signerRole
