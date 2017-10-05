@@ -17,7 +17,7 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = ResponsePaths.incompleteSubmissionPage.evaluateUri({ externalId: sampleClaimObj.externalId })
+const pagePath = ResponsePaths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
 describe('Defendant response: task list page', () => {
   attachDefaultHooks()

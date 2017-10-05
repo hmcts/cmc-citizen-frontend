@@ -28,13 +28,13 @@ describe('Claim issue: check and send page', () => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
       })
 
-      it('should redirect to task list when not all tasks are completed', async () => {
+      it('should redirect to incomplete submission when not all tasks are completed', async () => {
         draftStoreServiceMock.resolveFind('claim', { readResolveDispute: false })
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.incompleteSubmissionPage.uri))
       })
 
       it('should return 500 and render error page when cannot calculate fee', async () => {
@@ -67,14 +67,14 @@ describe('Claim issue: check and send page', () => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
       })
 
-      it('should redirect to task list when not all tasks are completed', async () => {
+      it('should redirect to incomplete submission when not all tasks are completed', async () => {
         draftStoreServiceMock.resolveFind('claim', { readResolveDispute: false })
 
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
           .send({ type: SignatureType.BASIC })
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.incompleteSubmissionPage.uri))
       })
 
       it('should return 500 and render error page when form is invalid and cannot calculate fee', async () => {

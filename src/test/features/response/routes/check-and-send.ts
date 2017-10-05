@@ -37,7 +37,7 @@ describe('Defendant response: check and send page', () => {
       checkAlreadySubmittedGuard(app, 'get', checkAndSendPage)
 
       context('when response not submitted', () => {
-        it('should redirect to task list when not all tasks are completed', async () => {
+        it('should redirect to incomplete submission when not all tasks are completed', async () => {
           draftStoreServiceMock.resolveFind(draftType, { defendantDetails: undefined })
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
@@ -45,7 +45,7 @@ describe('Defendant response: check and send page', () => {
             .get(checkAndSendPage)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
+              .toLocation(ResponsePaths.incompleteSubmissionPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
         })
 
         it('should return 500 and render error page when cannot retrieve claim', async () => {
@@ -81,7 +81,7 @@ describe('Defendant response: check and send page', () => {
       checkAlreadySubmittedGuard(app, 'post', checkAndSendPage)
 
       context('when response not submitted', () => {
-        it('should redirect to task list when not all tasks are completed', async () => {
+        it('should redirect to incomplete submission when not all tasks are completed', async () => {
           draftStoreServiceMock.resolveFind(draftType, { defendantDetails: undefined })
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
@@ -90,7 +90,7 @@ describe('Defendant response: check and send page', () => {
             .send({ type: SignatureType.BASIC })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
+              .toLocation(ResponsePaths.incompleteSubmissionPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
         })
 
         context('when form is invalid', () => {
