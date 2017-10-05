@@ -6,6 +6,7 @@ import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { checkAlreadySubmittedGuard } from './checks/already-submitted-check'
+import { checkCountyCourtJudgmentRequestedGuardGuard } from './checks/ccj-requested-check'
 
 import { Paths as ResponsePaths } from 'response/paths'
 
@@ -35,6 +36,7 @@ describe('Defendant response: defence options page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'get', defenceOptionsPage)
+      checkCountyCourtJudgmentRequestedGuardGuard(app, 'get', defenceOptionsPage)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
