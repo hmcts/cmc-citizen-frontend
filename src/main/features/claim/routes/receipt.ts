@@ -9,12 +9,15 @@ import Claim from 'app/claims/models/claim'
 
 import PdfClient from 'app/pdf/pdfClient'
 import IssueReceipt from 'app/pdf/issueReceipt'
+import OwnershipChecks from 'app/auth/ownershipChecks'
 
 export default express.Router()
   .get(Paths.receiptReceiver.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const { externalId } = req.params
     try {
       const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId)
+      OwnershipChecks.checkClaimOwner(res.locals.user, claim)
+
       new PdfClient().generate(IssueReceipt.templatePath, new IssueReceipt(claim).data())
         .on('response', (response: http.IncomingMessage) => {
           if (response.statusCode !== 200) {

@@ -17,6 +17,7 @@ export default express.Router()
     try {
       const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId)
       OwnershipChecks.checkClaimOwner(res.locals.user, claim)
+
       documentsClient.getResponseCopy(externalId)
         .on('response', (response: http.IncomingMessage) => {
           if (response.statusCode !== 200) {
