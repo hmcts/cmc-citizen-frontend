@@ -23,7 +23,7 @@
             {{ t("You still need to submit your response to this claim by %s .",
             {
               postProcess: 'sprintf',
-              sprintf: [responseDate]
+              sprintf: [claim.responseDeadline | date]
             }
             )
             }}

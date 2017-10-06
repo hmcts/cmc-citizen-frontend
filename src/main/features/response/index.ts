@@ -35,10 +35,7 @@ export class Feature {
     )
     app.all(
       /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|receipt).*$/,
-      ResponseDraftMiddleware.retrieve
-    )
-    app.all(
-      /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|receipt).*$/,
+      ResponseDraftMiddleware.retrieve,
       OfferDraftMiddleware.retrieve
     )
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
