@@ -29,7 +29,7 @@ export class DraftMiddleware {
           const client: DraftStoreClient<T> = await DraftStoreClientFactory.create<T>()
 
           client
-            .find({ type: draftType }, res.locals.user.bearerToken, deserializeFn)
+            .find({ type: draftType, limit: '100' }, res.locals.user.bearerToken, deserializeFn)
             .then((drafts: Draft<T>[]) => {
               // req.params isn't populated here https://github.com/expressjs/express/issues/2088
               const externalId: string = UUIDUtils.extractFrom(req.path)
