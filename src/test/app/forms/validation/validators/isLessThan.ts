@@ -30,10 +30,6 @@ describe('IsLessThanConstraint', () => {
     })
 
     describe('should return false when ', () => {
-      it('given an undefined related property', () => {
-        expect(constraint.validate(10, validationArgs(undefined))).to.equal(false)
-      })
-
       it('given an equal value', () => {
         expect(constraint.validate(DEFAULT_VALUE, validationArgs(DEFAULT_VALUE))).to.equal(false)
       })

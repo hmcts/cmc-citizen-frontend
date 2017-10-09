@@ -2,17 +2,16 @@ import request from 'client/request'
 import * as config from 'config'
 import Claim from 'app/claims/models/claim'
 import User from 'app/idam/user'
-import { DefendantResponse } from 'app/claims/models/defendantResponse'
 import { ClaimModelConverter } from 'claims/claimModelConverter'
 import { ResponseModelConverter } from 'claims/responseModelConverter'
 
-export const claimApiBaseUrl = `${config.get<string>('claim-store.url')}`
-const claimStoreApiUrl = `${claimApiBaseUrl}/claims`
-const claimStoreResponsesApiUrl = `${claimApiBaseUrl}/responses/claim`
+export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
+export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
+const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
 
 export default class ClaimStoreClient {
   static saveClaimForUser (user: User): Promise<Claim> {
-    const convertedDraftClaim = ClaimModelConverter.convert(user.claimDraft)
+    const convertedDraftClaim = ClaimModelConverter.convert(user.claimDraft.document)
     return request.post(`${claimStoreApiUrl}/${user.id}`, {
       body: convertedDraftClaim,
       headers: {
@@ -23,7 +22,7 @@ export default class ClaimStoreClient {
 
   static saveResponseForUser (user: User): Promise<void> {
     const claim: Claim = user.claim
-    const response = ResponseModelConverter.convert(user.responseDraft)
+    const response = ResponseModelConverter.convert(user.responseDraft.document)
 
     return request.post(`${claimStoreResponsesApiUrl}/${claim.id}/defendant/${user.id}`, {
       body: response,
@@ -43,23 +42,6 @@ export default class ClaimStoreClient {
       .then((claims: object[]) => {
         return claims.map((claim: object) => new Claim().deserialize(claim))
       })
-  }
-
-  static async retrieveResponse (defendantId: number, claimId: number): Promise<DefendantResponse | undefined> {
-    const allResponses: Array<DefendantResponse> = await ClaimStoreClient.retrieveAllResponsesByDefendantId(defendantId)
-    const responseForClaim: Array<DefendantResponse> = allResponses.filter(item => item.claimId === claimId)
-
-    if (!responseForClaim) {
-      return Promise.resolve(undefined)
-    }
-
-    return responseForClaim.pop()
-  }
-
-  static retrieveAllResponsesByDefendantId (defendantId: number): Promise<DefendantResponse[]> {
-    return request
-      .get(`${claimApiBaseUrl}/responses/defendant/${defendantId}`)
-      .then(response => response.map(item => new DefendantResponse().deserialize(item)))
   }
 
   static retrieveByLetterHolderId (letterHolderId: number): Promise<Claim> {
@@ -104,25 +86,6 @@ export default class ClaimStoreClient {
       .then((claims: object[]) => claims.map(claim => new Claim().deserialize(claim)))
   }
 
-  static retrieveLatestClaimByDefendantId (defendantId: number): Promise<Claim> {
-    if (!defendantId) {
-      return Promise.reject('Defendant ID is required')
-    }
-
-    return request
-      .get(`${claimStoreApiUrl}/defendant/${defendantId}`)
-      .then((claims: object[]) => {
-        if (claims) { // Workaround below till dashboard is implemented - temporarily client always return last claim
-          if (claims.length === 0) {
-            throw new Error('Call was successful, but received an empty claim instance')
-          }
-          return new Claim().deserialize(claims.pop())
-        } else {
-          throw new Error('Call was successful, but received an empty claim instance')
-        }
-      })
-  }
-
   static linkDefendant (claimId: number, defendantId: number): Promise<Claim> {
     if (!claimId) {
       return Promise.reject('Claim ID is required')
@@ -156,5 +119,14 @@ export default class ClaimStoreClient {
         Authorization: `Bearer ${user.bearerToken}`
       }
     })
+  }
+
+  static isClaimLinked (reference: string): Promise<boolean> {
+    if (!reference) {
+      return Promise.reject(new Error('Claim reference is required'))
+    }
+
+    return request.get(`${claimStoreApiUrl}/${reference}/defendant-link-status`)
+      .then(linkStatus => linkStatus.linked)
   }
 }

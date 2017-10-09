@@ -70,6 +70,11 @@
               <td>
                 {% if claim.eligibleForCCJ %}
                   {{ t('Request a County Court Judgment.') }}
+                {% elseif claim.countyCourtJudgmentRequestedAt %}
+                  {{
+                    t('You requested a County Court Judgment on %s. We will contact you within 5 days.',
+                      { postProcess: 'sprintf', sprintf: [ claim.countyCourtJudgmentRequestedAt | date ]})
+                  }}
                 {% else %}
                   {{ t('Your claim is being processed. We will email you to explain what to do next.') }}
                 {% endif %}
@@ -106,24 +111,29 @@
           {% endif %}
           {% for claim in claimsAsDefendant %}
             <tr class="claims default">
-              {% if claim.respondedAt %}
-                {% set url = '/dashboard/' + claim.externalId + '/defendant' %}
+              {% if claim.respondedAt or claim.countyCourtJudgmentRequestedAt %}
+                {% set url = paths.defendantPage.evaluateUri({ externalId: claim.externalId }) %}
               {% else %}
-                {% set url = '/response/task-list' %}
+                {% set url =  paths.responseTaskListPage.evaluateUri({ externalId: claim.externalId }) %}
               {% endif %}
               <td><a href="{{ url }}">{{ claim.claimNumber }}</a></td>
               <td>{{ claim.claimData.claimant.name }}</td>
               <td>{{ claim.totalAmount | numeral }}</td>
-              {% if claim.respondedAt %}
-                <td>{{ t('Your reponse is being processed. We will email you to explain what to do next.') }}</td>
-              {% else %}
-                <td>
-                  {{ t('Respond to claim') }}
-                  <span class="block">
-                    {{ timeRemaining(claim.remainingDays, isAfter4pm) }}
-                  </span>
+              <td>
+                {% if claim.respondedAt %}
+                  {{ t('Your response is being processed. We will email you to explain what to do next.') }}</td>
+                {% elseif claim.countyCourtJudgmentRequestedAt %}
+                  {{
+                    t('%s requested a County Court Judgment against you on %s. We will contact you both within 5 days.',
+                      { postProcess: 'sprintf', sprintf: [ claim.claimData.claimant.name, claim.countyCourtJudgmentRequestedAt | date ]})
+                  }}
+                {% else %}
+                    {{ t('Respond to claim') }}
+                    <span class="block">
+                      {{ timeRemaining(claim.remainingDays, isAfter4pm) }}
+                    </span>
+                {% endif %}
                 </td>
-              {% endif %}
             </tr>
           {% endfor %}
           </tbody>

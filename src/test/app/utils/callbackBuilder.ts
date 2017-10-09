@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { mockReq as req } from 'sinon-express-mock'
-import { buildURL } from 'app/utils/CallbackBuilder'
+import { buildURL } from 'app/utils/callbackBuilder'
 
 describe('CallbackBuilder', () => {
 

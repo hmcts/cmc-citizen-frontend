@@ -26,9 +26,7 @@
     "apiVersion": "DRAFT_STORE_API_VERSION"
   },
   "analytics": {
-    "gaTrackingId": "GA_TRACKING_ID",
-    "piwikTrackingId": "PIWIK_TRACKING_ID",
-    "piwikTrackingSite": "PIWIK_TRACKING_SITE"
+    "gaTrackingId": "GA_TRACKING_ID"
   },
   "session": {
     "cookieName": "JWT_COOKIE_NAME"
@@ -68,5 +66,10 @@
   "featureToggles": {
     "testingSupport": "FEATURE_TESTING_SUPPORT",
     "countyCourtJudgment": "FEATURE_CCJ"
+  },
+  "claim": {
+    "countyCourtJudgment": {
+      "timeForResponseInDays" : "CLAIM_CCJ_TIME_FOR_RESPONSE"
+    }
   }
 }

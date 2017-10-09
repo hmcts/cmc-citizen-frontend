@@ -1,5 +1,6 @@
 import { Serializable } from 'models/serializable'
 import { Address } from 'claims/models/address'
+import { PartyType } from 'app/common/partyType'
 
 export class TheirDetails implements Serializable<TheirDetails> {
   type: string
@@ -12,6 +13,10 @@ export class TheirDetails implements Serializable<TheirDetails> {
     this.name = name
     this.address = address
     this.email = email
+  }
+
+  isBusiness (): boolean {
+    return this.type === PartyType.COMPANY.value || this.type === PartyType.ORGANISATION.value
   }
 
   deserialize (input: any): TheirDetails {

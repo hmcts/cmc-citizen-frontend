@@ -30,6 +30,7 @@ export class Paths {
   static readonly defendantResponseCopy = new RoutablePath('/claim/:externalId/defendant-response')
   static readonly claimantPartyTypeSelectionPage = new RoutablePath('/claim/claimant-party-type-selection')
   static readonly defendantPartyTypeSelectionPage = new RoutablePath('/claim/defendant-party-type-selection')
+  static readonly incompleteSubmissionPage = new RoutablePath('/claim/incomplete-submission')
 }
 
 export class ErrorPaths {

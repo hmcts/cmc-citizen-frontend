@@ -10,6 +10,7 @@ import ClaimStoreClient from 'app/claims/claimStoreClient'
 import * as Cookies from 'cookies'
 import User from 'app/idam/user'
 import { ErrorHandling } from 'common/errorHandling'
+import Claim from 'claims/models/claim'
 
 export default express.Router()
   .get(AppPaths.receiver.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
@@ -20,17 +21,18 @@ export default express.Router()
 
     const user: User = res.locals.user
     const atLeastOneClaimIssued: boolean = (await ClaimStoreClient.retrieveByClaimantId(user.id)).length > 0
-    const atLeastOneResponse: boolean = (await ClaimStoreClient.retrieveAllResponsesByDefendantId(user.id)).length > 0
+    const claimAgainstDefendant = await ClaimStoreClient.retrieveByDefendantId(user.id)
+    const atLeastOneResponse: boolean = claimAgainstDefendant.length > 0 &&
+      claimAgainstDefendant.some((claim: Claim) => !!claim.response)
 
     if (atLeastOneClaimIssued || atLeastOneResponse) {
       return res.redirect(DashboardPaths.dashboardPage.uri)
     }
-    const draftClaimSaved: boolean = user.claimDraft && user.claimDraft.lastUpdateTimestamp !== undefined
-    const draftResponseSaved: boolean = user.responseDraft && user.responseDraft.lastUpdateTimestamp !== undefined
-    const claimIssuedButNoResponse: boolean = (await ClaimStoreClient.retrieveByDefendantId(user.id)).length > 0
+    const draftClaimSaved: boolean = user.claimDraft.document && user.claimDraft.id !== undefined
+    const claimIssuedButNoResponse: boolean = (claimAgainstDefendant).length > 0
       && !atLeastOneResponse
 
-    if (draftResponseSaved && draftClaimSaved) {
+    if (claimIssuedButNoResponse && draftClaimSaved) {
       return res.redirect(DashboardPaths.dashboardPage.uri)
     }
 
@@ -38,8 +40,9 @@ export default express.Router()
       return res.redirect(ClaimPaths.taskListPage.uri)
     }
 
-    if (draftResponseSaved || claimIssuedButNoResponse) {
-      return res.redirect(ResponsePaths.taskListPage.uri)
+    if (claimIssuedButNoResponse) {
+      return res.redirect(ResponsePaths.taskListPage
+        .evaluateUri({ externalId: claimAgainstDefendant.pop().externalId }))
     }
 
     return res.redirect(ClaimPaths.startPage.uri)

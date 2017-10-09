@@ -6,10 +6,10 @@ import InterestDate from 'forms/models/interestDate'
 import Reason from 'forms/models/reason'
 import * as uuid from 'uuid'
 import { Defendant } from 'app/drafts/models/defendant'
-import { Draft } from 'app/models/draft'
+import { DraftDocument } from 'app/models/draftDocument'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
 
-export default class DraftClaim extends Draft implements Serializable<DraftClaim> {
+export default class DraftClaim extends DraftDocument implements Serializable<DraftClaim> {
 
   externalId = uuid()
   claimant: Claimant = new Claimant()
@@ -33,7 +33,6 @@ export default class DraftClaim extends Draft implements Serializable<DraftClaim
       this.reason = new Reason().deserialize(input.reason)
       this.readResolveDispute = input.readResolveDispute
       this.readCompletingClaim = input.readCompletingClaim
-      this.lastUpdateTimestamp = input.lastUpdateTimestamp
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }

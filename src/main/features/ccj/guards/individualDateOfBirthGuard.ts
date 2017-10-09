@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { Paths } from 'dashboard/paths'
 
-import { DraftCCJ } from 'ccj/draft/DraftCCJ'
+import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { PartyType } from 'app/common/partyType'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('claim/guards/allTasksCompletedGuard')
@@ -10,7 +10,7 @@ const logger = require('@hmcts/nodejs-logging').getLogger('claim/guards/allTasks
 export class IndividualDateOfBirthGuard {
 
   static requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
-    const draft: DraftCCJ = res.locals.user.ccjDraft
+    const draft: DraftCCJ = res.locals.user.ccjDraft.document
 
     if (draft && draft.defendant && draft.defendant.partyDetails && draft.defendant.partyDetails.type === PartyType.INDIVIDUAL.value) {
       next()

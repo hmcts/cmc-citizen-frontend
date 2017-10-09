@@ -4,6 +4,8 @@ import { SoleTrader } from 'claims/models/details/theirs/soleTrader'
 import { Company } from 'claims/models/details/theirs/company'
 import { Organisation } from 'claims/models/details/theirs/organisation'
 import { PartyType } from 'app/common/partyType'
+import { MomentFormatter } from 'utils/momentFormatter'
+import { MomentFactory } from 'common/momentFactory'
 
 export class TheirDetailsMapper {
   static createTheirDetails (party: TheirDetails, email: string): object {
@@ -66,8 +68,14 @@ export class TheirDetailsMapper {
     if (partyDetails && partyDetails.type) {
       switch (partyDetails.type) {
         case PartyType.INDIVIDUAL.value:
-          return (partyDetails as Individual).dateOfBirth
+          const dateOfBirth = (partyDetails as Individual).dateOfBirth
+          if (dateOfBirth) {
+            return MomentFormatter.formatLongDate(MomentFactory.parse(dateOfBirth))
+          } else {
+            return undefined
+          }
       }
     }
+    return undefined
   }
 }

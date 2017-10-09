@@ -1,0 +1,35 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import submitButton, errorSummary %}
+{% from "support.njk" import supportWidget %}
+{% set title = t('CCJ requested') %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <div class="govuk-box-highlight">
+        <h1 class="bold-large">{{ t('County Court Judgment requested') }}</h1>
+      </div>
+
+      <h2 class="heading-medium">{{ t('What happens next') }}</h2>
+      <p>{{ t('The court has entered judgment in your favour, %s is no longer able to file a response.',
+        { postProcess: 'sprintf', sprintf: [ defendantName ]}) }}
+      </p>
+      <p>{{ t('You can ask the court to enforce the judgment if %s doesn’t pay as ordered by %s.',
+        { postProcess: 'sprintf', sprintf: [ defendantName, judgmentDeadline | date ]}) }}</p>
+
+      <p>{{ t('View your claim status on <a href="%s">your money claims account</a>.',
+        {
+          postProcess: 'sprintf',
+          sprintf: ['/dashboard']
+        }) | safe }}</p>
+
+      {{ supportWidget() }}
+
+      {% include "includes/service_survey_link.njk" %}
+
+    </div>
+  </div>
+
+{% endblock %}

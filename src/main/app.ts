@@ -45,7 +45,7 @@ new Helmet(config.get<HelmetConfig>('security'), developmentMode)
   .enableFor(app)
 
 app.enable('trust proxy')
-app.use(favicon(path.join(__dirname, '/public/img/favicon.ico')))
+app.use(favicon(path.join(__dirname, '/public/img/lib/favicon.ico')))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
   extended: true
@@ -91,7 +91,7 @@ app.use((err, req, res, next) => {
   } else if (err.associatedView) {
     res.render(err.associatedView)
   } else {
-    const view = (env === 'mocha' || env === 'development' || env === 'dev' || env === 'demo') ? 'error_dev' : 'error'
+    const view = (env === 'mocha' || env === 'development' || env === 'dev' || env === 'dockertests' || env === 'demo') ? 'error_dev' : 'error'
     res.render(view, {
       error: err,
       title: 'error'

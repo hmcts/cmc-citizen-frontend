@@ -15,4 +15,14 @@ export class PaymentSchedule {
       PaymentSchedule.EVERY_MONTH
     ]
   }
+
+  static of (value: string): PaymentSchedule {
+    const result: PaymentSchedule = PaymentSchedule.all().filter(item => item.value === value).pop()
+
+    if (result) {
+      return result
+    }
+
+    throw new Error (`There is no PaymentSchedule: '${value}'`)
+  }
 }

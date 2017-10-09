@@ -5,20 +5,17 @@ import { Paths } from 'response/paths'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 
-import ClaimStoreClient from 'claims/claimStoreClient'
-import Claim from 'claims/models/claim'
-
 import { FreeMediation } from 'response/form/models/freeMediation'
-import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
+import User from 'idam/user'
+import { DraftService } from 'common/draft/draftService'
 
 async function renderView (form: Form<FreeMediation>, res: express.Response, next: express.NextFunction) {
   try {
-    const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(res.locals.user.id)
-
+    const user: User = res.locals.user
     res.render(Paths.freeMediationPage.associatedView, {
       form: form,
-      claimantFullName: claim.claimData.claimant.name
+      claimantFullName: user.claim.claimData.claimant.name
     })
   } catch (err) {
     next(err)
@@ -27,7 +24,7 @@ async function renderView (form: Form<FreeMediation>, res: express.Response, nex
 
 export default express.Router()
   .get(Paths.freeMediationPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    await renderView(new Form(res.locals.user.responseDraft.freeMediation), res, next)
+    await renderView(new Form(res.locals.user.responseDraft.document.freeMediation), res, next)
   })
   .post(
     Paths.freeMediationPage.uri,
@@ -38,8 +35,9 @@ export default express.Router()
       if (form.hasErrors()) {
         await renderView(form, res, next)
       } else {
-        res.locals.user.responseDraft.freeMediation = form.model
-        await ResponseDraftMiddleware.save(res, next)
-        res.redirect(Paths.taskListPage.uri)
+        const user = res.locals.user
+        user.responseDraft.document.freeMediation = form.model
+        await DraftService.save(user.responseDraft, user.bearerToken)
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

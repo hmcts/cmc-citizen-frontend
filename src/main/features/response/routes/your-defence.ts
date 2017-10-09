@@ -5,20 +5,18 @@ import { Paths } from 'response/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 
-import ClaimStoreClient from 'claims/claimStoreClient'
-import Claim from 'app/claims/models/claim'
-
 import Defence from 'response/form/models/defence'
-import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
+import User from 'idam/user'
+import { DraftService } from 'common/draft/draftService'
 
 async function renderView (form: Form<Defence>, res: express.Response, next: express.NextFunction) {
   try {
-    const claim: Claim = await ClaimStoreClient.retrieveLatestClaimByDefendantId(res.locals.user.id)
+    const user: User = res.locals.user
 
     res.render(Paths.defencePage.associatedView, {
       form: form,
-      claim: claim
+      claim: user.claim
     })
   } catch (err) {
     next(err)
@@ -27,7 +25,7 @@ async function renderView (form: Form<Defence>, res: express.Response, next: exp
 
 export default express.Router()
   .get(Paths.defencePage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    await renderView(new Form(res.locals.user.responseDraft.defence), res, next)
+    await renderView(new Form(res.locals.user.responseDraft.document.defence), res, next)
   })
   .post(
     Paths.defencePage.uri,
@@ -38,8 +36,9 @@ export default express.Router()
       if (form.hasErrors()) {
         await renderView(form, res, next)
       } else {
-        res.locals.user.responseDraft.defence = form.model
-        await ResponseDraftMiddleware.save(res, next)
-        res.redirect(Paths.freeMediationPage.uri)
+        const user: User = res.locals.user
+        user.responseDraft.document.defence = form.model
+        await DraftService.save(user.responseDraft, user.bearerToken)
+        res.redirect(Paths.freeMediationPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))
