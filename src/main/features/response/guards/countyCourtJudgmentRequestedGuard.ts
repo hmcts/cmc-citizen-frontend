@@ -3,7 +3,7 @@ import { Paths as DashboardPaths } from 'dashboard/paths'
 import User from 'idam/user'
 const logger = require('@hmcts/nodejs-logging').getLogger('response/guards/countyCourtJudgmentRequestedGuard')
 
-export default class CountyCourtJudgmentRequestedGuard {
+export class CountyCourtJudgmentRequestedGuard {
 
   static requestHandler (req: express.Request, res: express.Response, next: express.NextFunction) {
     const user: User = res.locals.user

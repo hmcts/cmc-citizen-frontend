@@ -222,7 +222,7 @@ mock('response/guards/oweNoneResponseRequiredGuard', {
 })
 
 mock('response/guards/countyCourtJudgmentRequestedGuard', {
-  'default': justForwardRequestHandler
+  'CountyCourtJudgmentRequestedGuard': justForwardRequestHandler
 })
 
 mock('response/guards/allResponseTasksCompletedGuard', {

@@ -31,7 +31,6 @@ describe('Defendant response: counter claim page', () => {
       })
 
       checkCountyCourtJudgmentRequestedGuardGuard(app, 'get', pagePath)
-      checkCountyCourtJudgmentRequestedGuardGuard(app, 'post', pagePath)
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
