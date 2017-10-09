@@ -7,6 +7,13 @@ export class OweMoneyTask {
       return false
     }
 
+    if (responseDraft.response.type !== ResponseType.OWE_ALL_PAID_NONE) {
+      return true
+    }
+
+    if (responseDraft.response.type !== ResponseType.OWE_SOME_PAID_NONE) {
+      return true
+    }
     if (responseDraft.response.type !== ResponseType.OWE_NONE) {
       return true
     }

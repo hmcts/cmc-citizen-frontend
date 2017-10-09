@@ -102,15 +102,15 @@ export default express.Router()
         switch (responseType) {
           case ResponseType.OWE_NONE:
             if (defendantIsCounterClaiming(user)) {
-              res.redirect(Paths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: user.claim.externalId }))
+              res.redirect(Paths.counterClaimPage.evaluateUri({ externalId: user.claim.externalId }))
               return
             }
             break
           case ResponseType.OWE_SOME_PAID_NONE:
-            res.redirect(Paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: user.claim.externalId }))
+            res.redirect(Paths.partialAdmissionPage.evaluateUri({ externalId: user.claim.externalId }))
             return
           case ResponseType.OWE_ALL_PAID_NONE:
-            res.redirect(Paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: user.claim.externalId }))
+            res.redirect(Paths.fullAdmissionPage.evaluateUri({ externalId: user.claim.externalId }))
             return
           default:
             next(new Error('Unknown response type: ' + responseType))

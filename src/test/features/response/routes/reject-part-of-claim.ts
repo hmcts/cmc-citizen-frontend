@@ -96,11 +96,11 @@ describe('Defendant response: I reject part of the claim', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: 'tooMuchAmount' })
+              .send({ option: 'amountTooHigh' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to mediation page when everything is fine', async () => {
+          it('should redirect to task list page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('response')
             draftStoreServiceMock.resolveSave('response')
@@ -108,9 +108,9 @@ describe('Defendant response: I reject part of the claim', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: 'tooMuchAmount' })
+              .send({ option: 'amountTooHigh' })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.freeMediationPage
+                .toLocation(ResponsePaths.taskListPage
                   .evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })

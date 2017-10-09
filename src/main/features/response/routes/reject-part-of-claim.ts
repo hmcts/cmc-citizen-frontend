@@ -17,9 +17,11 @@ function renderView (form: Form<RejectPartOfClaim>, res: express.Response) {
 }
 
 export default express.Router()
-  .get(Paths.defenceRejectPartOfClaimPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    renderView(new Form(res.locals.user.responseDraft.rejectPartOfClaim), res)
-  }))
+  .get(
+    Paths.defenceRejectPartOfClaimPage.uri,
+    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      renderView(new Form(res.locals.user.responseDraft.rejectPartOfClaim), res)
+    }))
   .post(
     Paths.defenceRejectPartOfClaimPage.uri,
     FormValidator.requestHandler(RejectPartOfClaim),
@@ -33,7 +35,6 @@ export default express.Router()
         const user: User = res.locals.user
         user.responseDraft.rejectPartOfClaim = form.model
         await ResponseDraftMiddleware.save(res, next)
-        res.redirect(Paths.freeMediationPage.evaluateUri({ externalId: externalId }))
-
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
       }
     }))

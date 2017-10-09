@@ -100,6 +100,20 @@ describe('Defendant response: response type page', () => {
                   .evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
+          it('should redirect to task list page when everything is fine', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveRetrieve('response')
+            draftStoreServiceMock.resolveSave('response')
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ type: ResponseType.OWE_ALL_PAID_NONE })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.taskListPage
+                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
+          })
+
           it('should redirect to reject all of claim page when everything is fine and OWE_NONE is selected', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveRetrieve('response')

@@ -96,7 +96,7 @@ describe('Defendant response: I reject all of the claim', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: 'paid' })
+              .send({ option: 'alreadyPaid' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -108,9 +108,9 @@ describe('Defendant response: I reject all of the claim', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: 'paid' })
+              .send({ option: 'alreadyPaid' })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.freeMediationPage
+                .toLocation(ResponsePaths.taskListPage
                   .evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })

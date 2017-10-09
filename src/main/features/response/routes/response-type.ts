@@ -4,7 +4,6 @@ import { Paths } from 'response/paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
-
 import { Response } from 'response/form/models/response'
 import { ResponseType } from 'response/form/models/responseType'
 import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
@@ -18,9 +17,10 @@ function renderView (form: Form<Response>, res: express.Response) {
 }
 
 export default express.Router()
-  .get(Paths.responseTypePage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    renderView(new Form(res.locals.user.responseDraft.response), res)
-  }))
+  .get(Paths.responseTypePage.uri,
+    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      renderView(new Form(res.locals.user.responseDraft.response), res)
+    }))
   .post(
     Paths.responseTypePage.uri,
     FormValidator.requestHandler(Response, Response.fromObject),
@@ -37,7 +37,11 @@ export default express.Router()
 
         if (ResponseType.OWE_NONE === form.model.type) {
           res.redirect(Paths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: externalId }))
-        } else {
+        }
+        if (ResponseType.OWE_ALL_PAID_NONE === form.model.type) {
+          res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
+        }
+        if (ResponseType.OWE_SOME_PAID_NONE === form.model.type) {
           res.redirect(Paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: externalId }))
         }
       }

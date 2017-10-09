@@ -13,9 +13,8 @@
       <form method="post" novalidate>
         {{ csrfProtection(csrf) }}
 
-        {% set error = form.errorFor('type') %}
         <div class="form-group {% if error %} form-group-error {% endif %}">
-          <fieldset id="type[label]">
+
             <legend class="visually-hidden">{{ t("I reject all of the claim") }}</legend>
             {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
         {{
@@ -25,26 +24,23 @@
         options = [
         {
           label: "I've already paid the claim in full",
-          value: "paid",
-          hint: "",
-          bold: true
+          value: "alreadyPaid",
+          hint: ""
         },
         {
           label: "I dispute the claim",
           value: "dispute",
-          hint: "",
-          bold: true
+          hint: ""
         },
         {
           label: 'Defend now and also make a counterclaim',
           value: "counterClaim",
-          hint: 'You’ll need to complete the defence and counterclaim form.',
-          bold: false
+          hint: 'You’ll need to complete the defence and counterclaim form.'
         }
         ],
         form = form
         )
-        }}</fieldset>
+        }}
           <div class="form-group">
           {{ saveAndContinueButton() }}
         </div>

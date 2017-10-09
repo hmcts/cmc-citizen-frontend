@@ -5,13 +5,13 @@ export class ValidationErrors {
 }
 
 export class RejectAllOfClaimOption {
-  static readonly PAID = 'paid'
+  static readonly ALREADY_PAID = 'alreadyPaid'
   static readonly DISPUTE = 'dispute'
   static readonly COUNTER_CLAIM = 'counterClaim'
 
   static all (): string[] {
     return [
-      RejectAllOfClaimOption.PAID,
+      RejectAllOfClaimOption.ALREADY_PAID,
       RejectAllOfClaimOption.DISPUTE,
       RejectAllOfClaimOption.COUNTER_CLAIM
     ]

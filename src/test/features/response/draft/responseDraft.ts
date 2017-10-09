@@ -18,7 +18,7 @@ describe('ResponseDraft', () => {
     })
 
     it('should return a ResponseDraft instance initialised with valid data', () => {
-      const responseType: ResponseType = ResponseType.OWE_ALL_PAID_ALL
+      const responseType: ResponseType = ResponseType.OWE_SOME_PAID_NONE
 
       const responseDraftModel: ResponseDraft = new ResponseDraft().deserialize(
         prepareInputData(responseType, MoreTimeNeededOption.YES)
@@ -34,7 +34,7 @@ describe('ResponseDraft', () => {
   describe('isMoreTimeRequested', () => {
     it('should return false when more time was not requested', () => {
       const responseDraftModel: ResponseDraft = new ResponseDraft().deserialize(
-        prepareInputData(ResponseType.OWE_ALL_PAID_ALL, MoreTimeNeededOption.NO)
+        prepareInputData(ResponseType.OWE_ALL_PAID_NONE, MoreTimeNeededOption.NO)
       )
 
       expect(responseDraftModel.moreTimeNeeded.option).to.be.eq(MoreTimeNeededOption.NO)
@@ -69,11 +69,11 @@ describe('ResponseDraft', () => {
         expect(responseDraftModel.requireDefence()).to.be.eq(false)
 
       })
-      it('should return true when response type is OWE_ALL_PAID_ALL', () => {
+      it('should return false when response type is OWE_ALL_PAID_NONE', () => {
         const responseDraftModel: ResponseDraft = new ResponseDraft()
-        responseDraftModel.response = new Response(ResponseType.OWE_ALL_PAID_ALL)
+        responseDraftModel.response = new Response(ResponseType.OWE_ALL_PAID_NONE)
 
-        expect(responseDraftModel.requireDefence()).to.be.eq(true)
+        expect(responseDraftModel.requireDefence()).to.be.eq(false)
       })
     })
   })

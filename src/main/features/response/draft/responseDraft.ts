@@ -50,10 +50,6 @@ export class ResponseDraft extends Draft implements Serializable<ResponseDraft> 
     if (!(this.response && this.response.type)) {
       return false
     }
-
-    if (this.response.type === ResponseType.OWE_ALL_PAID_ALL) {
-      return true
-    }
     return !!(this.response.type === ResponseType.OWE_NONE && this.counterClaim && this.counterClaim.counterClaim === true)
   }
 }
