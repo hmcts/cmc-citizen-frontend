@@ -1,11 +1,8 @@
 import { RoutablePath } from 'common/router/routablePath'
 
-import { Paths as AppPaths } from 'app/paths'
-
 const responsePath = '/case/:externalId/response'
 
 export class Paths {
-  static readonly defendantLoginReceiver = AppPaths.oauth
   static readonly defendantLinkReceiver = new RoutablePath(`/response/:letterHolderId/receiver`)
   static readonly taskListPage = new RoutablePath(`${responsePath}/task-list`)
   static readonly defendantYourDetailsPage = new RoutablePath(`${responsePath}/your-details`)

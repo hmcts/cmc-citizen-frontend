@@ -1,21 +1,13 @@
 import * as express from 'express'
-import * as config from 'config'
 import * as path from 'path'
-import * as uuid from 'uuid'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
-import { buildURL } from 'utils/callbackBuilder'
-import { Paths } from 'app/paths'
+import { OAuthHelper } from 'idam/oAuthHelper'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    const clientId = config.get<string>('oauth.clientId')
-    const redirectUri = buildURL(req, Paths.oauth.uri.substring(1))
-
-    const state = uuid()
-
-    res.redirect(`${config.get('idam.authentication-web.url')}/login?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}`)
+    res.redirect(OAuthHelper.getRedirectUri(req, res))
   }
 
   const requiredRoles = [

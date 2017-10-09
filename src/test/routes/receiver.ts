@@ -27,8 +27,17 @@ describe('Login receiver', async () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
       })
-      
-      it('should not remove JWT token saved in cookie when JWT token does not exist in query string', async () => {
+
+      it('should save bearer token in cookie when auth token is retrieved from idam', async () => {
+        const token = 'I am dummy access token'
+        idamServiceMock.resolveRetrieveAuthTokenFor(token)
+
+        await request(app)
+          .get(`${AppPaths.receiver.uri}?code=ABC`)
+          .expect(res => expect(res).to.have.cookie(cookieName, token))
+      })
+
+      it('should not remove bearer token saved in cookie when code does not exist in query string', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveFind('response')
         claimStoreServiceMock.resolveRetrieveByClaimantId()
