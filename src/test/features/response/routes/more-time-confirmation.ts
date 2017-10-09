@@ -15,6 +15,7 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
 import { MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
+import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.moreTimeConfirmationPage.evaluateUri({ externalId: sampleClaimObj.externalId })
@@ -31,6 +32,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'get', pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, 'get', pagePath)
 
       context('when response not submitted', () => {
         describe('should redirect to request more time page', () => {
@@ -90,6 +92,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, 'post', pagePath)
 
       context('when response not submitted', () => {
         beforeEach(() => {
