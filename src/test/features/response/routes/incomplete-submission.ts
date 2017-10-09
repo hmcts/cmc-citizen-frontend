@@ -13,7 +13,7 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
-import { checkCountyCourtJudgmentRequestedGuardGuard } from './checks/ccj-requested-check'
+import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ResponsePaths.incompleteSubmissionPage.evaluateUri({ externalId: sampleClaimObj.externalId })
@@ -28,7 +28,7 @@ describe('Defendant response: incomplete submission page', () => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
       })
 
-      checkCountyCourtJudgmentRequestedGuardGuard(app, 'get', pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, 'get', pagePath)
     })
 
     it('should render page when everything is fine', async () => {

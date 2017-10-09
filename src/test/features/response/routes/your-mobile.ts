@@ -14,7 +14,7 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
-import { checkCountyCourtJudgmentRequestedGuardGuard } from './checks/ccj-requested-check'
+import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.defendantMobilePage.evaluateUri({ externalId: sampleClaimObj.externalId })
@@ -31,7 +31,7 @@ describe('Defendant user details: your mobile page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'get', pagePath)
-      checkCountyCourtJudgmentRequestedGuardGuard(app, 'get', pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, 'get', pagePath)
 
       context('when response not submitted', () => {
         beforeEach(() => {
@@ -60,7 +60,7 @@ describe('Defendant user details: your mobile page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', pagePath)
-      checkCountyCourtJudgmentRequestedGuardGuard(app, 'post', pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, 'post', pagePath)
 
       context('when response not submitted', () => {
         beforeEach(() => {

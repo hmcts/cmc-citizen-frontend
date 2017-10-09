@@ -6,7 +6,7 @@ import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { checkAlreadySubmittedGuard } from './checks/already-submitted-check'
-import { checkCountyCourtJudgmentRequestedGuardGuard } from './checks/ccj-requested-check'
+import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 import { Paths as ResponsePaths } from 'response/paths'
 
@@ -36,7 +36,7 @@ describe('Defendant response: check and send page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'get', checkAndSendPage)
-      checkCountyCourtJudgmentRequestedGuardGuard(app, 'get', checkAndSendPage)
+      checkCountyCourtJudgmentRequestedGuard(app, 'get', checkAndSendPage)
 
       context('when response not submitted', () => {
         it('should redirect to incomplete submission when not all tasks are completed', async () => {
@@ -81,7 +81,7 @@ describe('Defendant response: check and send page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', checkAndSendPage)
-      checkCountyCourtJudgmentRequestedGuardGuard(app, 'post', checkAndSendPage)
+      checkCountyCourtJudgmentRequestedGuard(app, 'post', checkAndSendPage)
 
       context('when response not submitted', () => {
         it('should redirect to incomplete submission when not all tasks are completed', async () => {

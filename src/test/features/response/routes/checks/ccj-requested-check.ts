@@ -9,7 +9,7 @@ import { Paths } from 'dashboard/paths'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-export function checkCountyCourtJudgmentRequestedGuardGuard (app: any, method: string, pagePath: string) {
+export function checkCountyCourtJudgmentRequestedGuard (app: any, method: string, pagePath: string) {
   it(`for ${method} should redirect to your dashboard page when claimant has already requested CCJ`, async () => {
     claimStoreServiceMock.resolveRetrieveClaimByExternalId({ countyCourtJudgmentRequestedAt: '2017-10-10' })
 

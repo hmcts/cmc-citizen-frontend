@@ -15,7 +15,7 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
-import { checkCountyCourtJudgmentRequestedGuardGuard } from './checks/ccj-requested-check'
+import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -32,7 +32,7 @@ describe('Defendant response: defence page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'get', defencePage)
-      checkCountyCourtJudgmentRequestedGuardGuard(app, 'get', defencePage)
+      checkCountyCourtJudgmentRequestedGuard(app, 'get', defencePage)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
@@ -66,7 +66,7 @@ describe('Defendant response: defence page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', defencePage)
-      checkCountyCourtJudgmentRequestedGuardGuard(app, 'post', defencePage)
+      checkCountyCourtJudgmentRequestedGuard(app, 'post', defencePage)
 
       context('when response not submitted', () => {
         context('when form is invalid', () => {
