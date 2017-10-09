@@ -17,34 +17,37 @@
       partyDetailsSummaryFragment(
         partyDetails = draft.defendantDetails.partyDetails,
         changeLinks = {
-          partyDetails: paths.defendantYourDetailsPage.uri,
-          dateOfBirth: paths.defendantDateOfBirthPage.uri
+          contactPerson: paths.defendantYourDetailsPage.evaluateUri({ externalId: claim.externalId }),
+          address: paths.defendantYourDetailsPage.evaluateUri({ externalId: claim.externalId }),
+          dateOfBirth: paths.defendantDateOfBirthPage.evaluateUri({ externalId: claim.externalId })
         }
       )
     }}
-    {{ row("Phone:", draft.defendantDetails.mobilePhone.number, paths.defendantMobilePage.uri) }}
+    {{ row("Phone:", draft.defendantDetails.mobilePhone.number, paths.defendantMobilePage.evaluateUri({ externalId: claim.externalId })) }}
 
     {{ tableEnd() }}
 
     {{ tableStart("yourResponse", "Your response") }}
 
-    {{ row('Do you owe the money claimed', draft.response.type.displayValue, '/response/response-type') }}
+    {{ row('Do you owe the money claimed', draft.response.type.displayValue, paths.responseTypePage.evaluateUri({ externalId: claim.externalId })) }}
 
     {% if draft.requireDefence() %}
       {{ row('Your defence', draft.defence.text, '/response/your-defence') }}
 
-      {{ row('Free mediation', t(draft.freeMediation.option) | capitalize, '/response/free-mediation') }}
+      {{ row('Free mediation', t(draft.freeMediation.option) | capitalize, paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })) }}
     {% endif %}
 
     {{ tableEnd() }}
 
     <div class="form-group">
-      {{ statementOfTruth(
-          form,
-          label = 'I believe that the facts stated in this defence are true',
-          isQualified = (signatureType == 'qualified')
-         )
-      }}
+      {% if signatureType != 'none' %}
+        {{ statementOfTruth(
+            form,
+            label = 'I believe that the facts stated in this defence are true',
+            isQualified = (signatureType == 'qualified')
+           )
+        }}
+      {% endif %}
 
       {{ submitButton('Submit response') }}
       <input type="hidden" name="type" value="{{ form.model.type }}">

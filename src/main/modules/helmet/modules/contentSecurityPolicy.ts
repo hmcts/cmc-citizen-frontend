@@ -9,7 +9,7 @@ export class ContentSecurityPolicy {
   constructor (public developmentMode: boolean) {}
 
   enableFor (app: express.Express) {
-    const scriptSrc = [self, '*.google-analytics.com', 'hmctspiwik.useconnect.co.uk']
+    const scriptSrc = [self, '*.google-analytics.com']
     const connectSrc = [self]
 
     if (this.developmentMode) {
@@ -21,7 +21,7 @@ export class ContentSecurityPolicy {
       directives: {
         defaultSrc: [none],
         fontSrc: [self, 'data:'],
-        imgSrc: [self, '*.google-analytics.com', 'hmctspiwik.useconnect.co.uk'],
+        imgSrc: [self, '*.google-analytics.com'],
         styleSrc: [self],
         scriptSrc: scriptSrc,
         connectSrc: connectSrc,

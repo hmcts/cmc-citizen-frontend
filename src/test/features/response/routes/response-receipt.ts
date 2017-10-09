@@ -39,8 +39,7 @@ describe('Defendant response: receipt', () => {
       })
 
       it('should return 500 and render error page when cannot retrieve response by defendant id', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        claimStoreServiceMock.rejectRetrieveResponseByDefendantId('HTTP error')
+        claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
           .get(receiptPath)
@@ -49,8 +48,7 @@ describe('Defendant response: receipt', () => {
       })
 
       it('should return 500 and render error page when cannot generate PDF', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        claimStoreServiceMock.resolveRetrieveResponsesByDefendantId()
+        claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
         pdfServiceMock.rejectGenerate('HTTP Error')
 
         await request(app)
@@ -60,8 +58,7 @@ describe('Defendant response: receipt', () => {
       })
 
       it('should return receipt when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        claimStoreServiceMock.resolveRetrieveResponsesByDefendantId()
+        claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
         pdfServiceMock.resolveGenerate()
 
         await request(app)

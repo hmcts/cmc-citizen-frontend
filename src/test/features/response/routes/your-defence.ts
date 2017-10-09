@@ -14,44 +14,40 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
+const defencePage = ResponsePaths.defencePage.evaluateUri({ externalId: sampleClaimObj.externalId })
 describe('Defendant response: defence page', () => {
   attachDefaultHooks()
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ResponsePaths.defencePage.uri)
+    checkAuthorizationGuards(app, 'get', defencePage)
 
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
       })
 
-      checkAlreadySubmittedGuard(app, 'get', ResponsePaths.defencePage.uri)
+      checkAlreadySubmittedGuard(app, 'get', defencePage)
 
       context('when response not submitted', () => {
-        beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
-        })
-
         it('should return 500 and render error page when cannot retrieve claim', async () => {
-          draftStoreServiceMock.resolveRetrieve('response')
-          claimStoreServiceMock.rejectRetrieveByDefendantId('HTTP error')
+          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
-            .get(ResponsePaths.defencePage.uri)
+            .get(defencePage)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
         it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('response')
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+          draftStoreServiceMock.resolveFind('response')
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
-            .get(ResponsePaths.defencePage.uri)
+            .get(defencePage)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Your defence'))
         })
@@ -60,38 +56,32 @@ describe('Defendant response: defence page', () => {
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', ResponsePaths.defencePage.uri)
+    checkAuthorizationGuards(app, 'post', defencePage)
 
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
       })
 
-      checkAlreadySubmittedGuard(app, 'post', ResponsePaths.defencePage.uri)
+      checkAlreadySubmittedGuard(app, 'post', defencePage)
 
       context('when response not submitted', () => {
-        beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
-        })
-
         context('when form is invalid', () => {
           it('should return 500 and render error page when cannot retrieve claim', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
-            claimStoreServiceMock.rejectRetrieveByDefendantId('HTTP error')
+            claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
-              .post(ResponsePaths.defencePage.uri)
+              .post(defencePage)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
           it('should render page when everything is fine', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
-            claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+            draftStoreServiceMock.resolveFind('response')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(ResponsePaths.defencePage.uri)
+              .post(defencePage)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Your defence', 'div class="error-summary"'))
           })
@@ -99,25 +89,29 @@ describe('Defendant response: defence page', () => {
 
         context('when form is valid', () => {
           it('should return 500 and render error page when form is valid and cannot save draft', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
-            draftStoreServiceMock.rejectSave('response', 'HTTP error')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.rejectSave()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(ResponsePaths.defencePage.uri)
+              .post(defencePage)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ text: 'Some valid defence' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
           it('should redirect to free mediation page when form is valid and everything is fine', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
-            draftStoreServiceMock.resolveSave('response')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(ResponsePaths.defencePage.uri)
+              .post(defencePage)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ text: 'Some valid defence' })
-              .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.freeMediationPage.uri))
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.freeMediationPage
+                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })
       })

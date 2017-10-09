@@ -14,6 +14,7 @@ import { app } from '../../main/app'
 
 import * as idamServiceMock from '../http-mocks/idam'
 import * as claimStoreServiceMock from '../http-mocks/claim-store'
+import { sampleClaimObj } from '../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
@@ -28,10 +29,10 @@ describe('Login receiver', async () => {
       })
 
       it('should save JWT token in cookie when JWT token exists in query string', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
-        draftStoreServiceMock.resolveRetrieve('response')
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveFind('response')
         claimStoreServiceMock.resolveRetrieveByClaimantId()
-        claimStoreServiceMock.resolveRetrieveResponsesByDefendantId()
+        claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
 
         await request(app)
           .get(`${AppPaths.receiver.uri}?jwt=ABC`)
@@ -39,10 +40,10 @@ describe('Login receiver', async () => {
       })
 
       it('should not remove JWT token saved in cookie when JWT token does not exist in query string', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
-        draftStoreServiceMock.resolveRetrieve('response')
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveFind('response')
         claimStoreServiceMock.resolveRetrieveByClaimantId()
-        claimStoreServiceMock.resolveRetrieveResponsesByDefendantId()
+        claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
 
         await request(app)
           .get(AppPaths.receiver.uri)
@@ -51,7 +52,7 @@ describe('Login receiver', async () => {
       })
 
       it('should return 500 and render error page when cannot retrieve draft', async () => {
-        draftStoreServiceMock.rejectRetrieve('claim', 'Cos')
+        draftStoreServiceMock.rejectFind('Cos')
 
         await request(app)
           .get(AppPaths.receiver.uri)
@@ -61,10 +62,9 @@ describe('Login receiver', async () => {
 
       context('when no claim or response', async () => {
         it('should redirect to claim start', async () => {
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('claim')
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
+          draftStoreServiceMock.resolveFindNoDraftFound()
+          draftStoreServiceMock.resolveFindNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
 
           await request(app)
@@ -76,10 +76,9 @@ describe('Login receiver', async () => {
 
       context('when draft claim exists', async () => {
         it('should redirect to claim task-list', async () => {
-          draftStoreServiceMock.resolveRetrieve('claim')
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
+          draftStoreServiceMock.resolveFind('claim')
+          draftStoreServiceMock.resolveFindNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
 
           await request(app)
@@ -91,41 +90,25 @@ describe('Login receiver', async () => {
 
       context('when claim as a defendant but no draft response', async () => {
         it('should redirect to response task-list', async () => {
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('claim')
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
+          draftStoreServiceMock.resolveFindNoDraftFound()
+          draftStoreServiceMock.resolveFindNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantId('A', 1)
 
           await request(app)
             .get(AppPaths.receiver.uri)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.taskListPage.uri))
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
         })
       })
 
-      context('when draft response exists', async () => {
-        it('should redirect to response task-list', async () => {
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('claim')
-          draftStoreServiceMock.resolveRetrieve('response')
-          claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
-
-          await request(app)
-            .get(AppPaths.receiver.uri)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.taskListPage.uri))
-        })
-      })
-
-      context('when draft claim and draft response exists', async () => {
+      context('when draft claim and defendant has a claim against them', async () => {
         it('should redirect to dashboard', async () => {
-          draftStoreServiceMock.resolveRetrieve('claim')
-          draftStoreServiceMock.resolveRetrieve('response')
+          draftStoreServiceMock.resolveFind('claim')
+          draftStoreServiceMock.resolveFind('response')
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -136,10 +119,10 @@ describe('Login receiver', async () => {
 
       context('when claim exists', async () => {
         it('should redirect to dashboard', async () => {
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('claim')
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
+          draftStoreServiceMock.resolveFindNoDraftFound()
+          draftStoreServiceMock.resolveFindNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantId()
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -149,10 +132,10 @@ describe('Login receiver', async () => {
       })
       context('when response exists', async () => {
         it('should redirect to dashboard', async () => {
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('claim')
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
+          draftStoreServiceMock.resolveFindNoDraftFound()
+          draftStoreServiceMock.resolveFindNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantId()
+          claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -162,10 +145,10 @@ describe('Login receiver', async () => {
       })
       context('when claim and response exists', async () => {
         it('should redirect to dashboard', async () => {
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('claim')
-          draftStoreServiceMock.resolveRetrieveNoDraftFound('response')
+          draftStoreServiceMock.resolveFindNoDraftFound()
+          draftStoreServiceMock.resolveFindNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantId()
-          claimStoreServiceMock.resolveRetrieveResponsesByDefendantId()
+          claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
 
           await request(app)
             .get(AppPaths.receiver.uri)

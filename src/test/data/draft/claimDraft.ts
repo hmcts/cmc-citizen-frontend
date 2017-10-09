@@ -3,7 +3,6 @@ import { InterestType } from 'forms/models/interest'
 import InterestDateType from 'app/common/interestDateType'
 
 export const claimDraft = {
-  lastUpdateTimestamp: 12345,
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
   readResolveDispute: true,
   readCompletingClaim: true,

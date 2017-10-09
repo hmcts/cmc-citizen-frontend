@@ -28,7 +28,7 @@ describe('Claim issue: fees page', () => {
       })
 
       it('should return 500 and render error page when cannot calculate issue fee', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.rejectCalculateIssueFee()
         feesServiceMock.resolveCalculateHearingFee()
         feesServiceMock.resolveGetIssueFeeRangeGroup()
@@ -41,7 +41,7 @@ describe('Claim issue: fees page', () => {
       })
 
       it('should return 500 and render error page when cannot calculate hearing fee', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.resolveCalculateIssueFee()
         feesServiceMock.rejectCalculateHearingFee()
         feesServiceMock.resolveGetIssueFeeRangeGroup()
@@ -54,7 +54,7 @@ describe('Claim issue: fees page', () => {
       })
 
       it('should return 500 and render error page when retrieving issue fee range group failed', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.resolveCalculateIssueFee()
         feesServiceMock.resolveCalculateHearingFee()
         feesServiceMock.rejectGetIssueFeeRangeGroup()
@@ -67,7 +67,7 @@ describe('Claim issue: fees page', () => {
       })
 
       it('should return 500 and render error page when retrieving hearing fee range group failed', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.resolveCalculateIssueFee()
         feesServiceMock.resolveCalculateHearingFee()
         feesServiceMock.resolveGetIssueFeeRangeGroup()
@@ -80,7 +80,7 @@ describe('Claim issue: fees page', () => {
       })
 
       it('should render page when everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.resolveCalculateIssueFee()
         feesServiceMock.resolveCalculateHearingFee()
         feesServiceMock.resolveGetIssueFeeRangeGroup()
@@ -99,7 +99,7 @@ describe('Claim issue: fees page', () => {
 
     it('should redirect to total page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
-      draftStoreServiceMock.resolveRetrieve('claim')
+      draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
         .post(ClaimPaths.feesPage.uri)

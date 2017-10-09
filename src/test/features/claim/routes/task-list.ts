@@ -19,11 +19,11 @@ describe('Claim issue: task list page', () => {
   attachDefaultHooks()
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ClaimPaths.taskListPage.uri)
+    checkAuthorizationGuards(app, 'get', ClaimPaths.incompleteSubmissionPage.uri)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
-      draftStoreServiceMock.resolveRetrieve('claim')
+      draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
         .get(ClaimPaths.taskListPage.uri)

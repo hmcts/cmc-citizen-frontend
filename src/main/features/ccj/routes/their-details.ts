@@ -7,11 +7,12 @@ import { PartyDetails } from 'app/forms/models/partyDetails'
 import { FormValidator } from 'app/forms/validation/formValidator'
 import { Form } from 'app/forms/form'
 import User from 'app/idam/user'
-import { DraftCCJService } from 'ccj/draft/DraftCCJService'
+import { DraftService } from 'common/draft/draftService'
 import { Address } from 'forms/models/address'
 import { PartyDetailsFactory } from 'forms/models/partyDetailsFactory'
 import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
 import { PartyType } from 'app/common/partyType'
+import Email from 'forms/models/email'
 
 function defaultToAddressProvidedByClaimant (providedByDefendant: Address, providedByClaimant: Address): Address {
   if (providedByDefendant && providedByDefendant.isCompleted()) {
@@ -27,7 +28,7 @@ function convertToPartyDetails (value: TheirDetails): PartyDetails {
   return partyDetails
 }
 
-function renderView (form: Form<PartyDetails>, res: express.Response): void {
+function renderView (form: Form<Address>, res: express.Response): void {
   res.render(Paths.theirDetailsPage.associatedView, { form: form, claim: res.locals.user.claim })
 }
 
@@ -36,7 +37,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
 
-      const providedByDefendant: Address = user.ccjDraft.defendant.partyDetails !== undefined ? user.ccjDraft.defendant.partyDetails.address : undefined
+      const providedByDefendant: Address = user.ccjDraft.document.defendant.partyDetails !== undefined ? user.ccjDraft.document.defendant.partyDetails.address : undefined
       const providedByClaimant: Address = Address.fromClaimAddress(user.claim.claimData.defendant.address)
 
       renderView(new Form(defaultToAddressProvidedByClaimant(providedByDefendant, providedByClaimant)), res)
@@ -46,19 +47,20 @@ export default express.Router()
     FormValidator.requestHandler(Address, Address.fromObject),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-        const form: Form<PartyDetails> = req.body
+        const form: Form<Address> = req.body
         const user: User = res.locals.user
         const { externalId } = req.params
 
         if (form.hasErrors()) {
           renderView(form, res)
         } else {
-          if (user.ccjDraft.defendant.partyDetails === undefined) {
-            user.ccjDraft.defendant.partyDetails = convertToPartyDetails(user.claim.claimData.defendant)
+          if (user.ccjDraft.document.defendant.partyDetails === undefined) {
+            user.ccjDraft.document.defendant.partyDetails = convertToPartyDetails(user.claim.claimData.defendant)
+            user.ccjDraft.document.defendant.email = new Email(user.claim.claimData.defendant.email)
           }
-          user.ccjDraft.defendant.partyDetails.address = form.model
-          await DraftCCJService.save(res, next)
-          if (user.ccjDraft.defendant.partyDetails.type === PartyType.INDIVIDUAL.value) {
+          user.ccjDraft.document.defendant.partyDetails.address = form.model
+          await DraftService.save(user.ccjDraft, user.bearerToken)
+          if (user.ccjDraft.document.defendant.partyDetails.type === PartyType.INDIVIDUAL.value) {
             res.redirect(Paths.dateOfBirthPage.evaluateUri({ externalId: externalId }))
           } else {
             res.redirect(Paths.paidAmountPage.evaluateUri({ externalId: externalId }))
