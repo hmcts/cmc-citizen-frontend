@@ -4,6 +4,7 @@ import { Paths, Paths as AppPaths } from 'app/paths'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 import { Paths as ClaimPaths } from 'claim/paths'
 import { Paths as ResponsePaths } from 'response/paths'
+import { Paths as FirstContactPaths } from 'first-contact/paths'
 import ClaimStoreClient from 'app/claims/claimStoreClient'
 import User from 'app/idam/user'
 import { ErrorHandling } from 'common/errorHandling'
@@ -34,9 +35,11 @@ export default express.Router()
         req.query.code,
         buildURL(req, Paths.receiver.uri.substring(1))
       )
-      res.clearCookie('state')
       cookies.set(sessionCookie, authToken.accessToken, { sameSite: 'lax' })
       authenticationToken = authToken.accessToken
+      if (req.query.state.match(/[0-9]{3}MC[0-9]{3}/)) {
+        return res.redirect(FirstContactPaths.claimSummaryPage.uri)
+      }
     }
 
     if (authenticationToken) {

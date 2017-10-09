@@ -4,7 +4,6 @@ import * as Cookies from 'cookies'
 import * as express from 'express'
 import { buildURL } from 'utils/callbackBuilder'
 import { Paths } from 'app/paths'
-import { Paths as FirstContactPaths } from 'first-contact/paths'
 
 export class OAuthHelper {
   static getRedirectUri (req: express.Request, res: express.Response): string {
@@ -18,7 +17,7 @@ export class OAuthHelper {
 
   static getRedirectUriForPin(req: express.Request,res: express.Response, claimReference: string): string {
     const clientId = config.get<string>('oauth.clientId')
-    const redirectUri = buildURL(req, FirstContactPaths.claimSummaryPage.uri.substring(1))
+    const redirectUri = buildURL(req, Paths.receiver.uri.substring(1))
     const state = claimReference
     this.storeStateCookie(req, res, state)
 
