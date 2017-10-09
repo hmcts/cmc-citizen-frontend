@@ -4,6 +4,7 @@ import Claim from 'app/claims/models/claim'
 import User from 'app/idam/user'
 import { ClaimModelConverter } from 'claims/claimModelConverter'
 import { ResponseModelConverter } from 'claims/responseModelConverter'
+import { ForbiddenError } from '../../errors'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -70,7 +71,7 @@ export default class ClaimStoreClient {
       .then(claim => {
         if (claim) {
           if (userId !== claim.submitterId) {
-            throw new Error('You are not allowed to access this resource')
+            throw new ForbiddenError()
           } else {
             return new Claim().deserialize(claim)
           }

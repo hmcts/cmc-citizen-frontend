@@ -59,6 +59,13 @@ Assertion.addProperty('serverError', statusCodeInRangeAssertion([
 ]))
 
 /**
+ * Checks whether response status code is within supported forbidden (403) range
+ */
+Assertion.addProperty('forbidden', statusCodeInRangeAssertion([
+  HttpStatus.FORBIDDEN
+]))
+
+/**
  * Checks whether response 'location' header matches specified location
  */
 Assertion.addMethod('toLocation', function (location: string | RegExp) {
