@@ -92,6 +92,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', pagePath)
+      checkCountyCourtJudgmentRequestedGuardGuard(app, 'post', pagePath)
 
       context('when response not submitted', () => {
         beforeEach(() => {

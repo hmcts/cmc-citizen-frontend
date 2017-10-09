@@ -66,6 +66,7 @@ describe('Defendant response: free mediation page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', pagePath)
+      checkCountyCourtJudgmentRequestedGuardGuard(app, 'post', pagePath)
 
       context('when response not submitted', () => {
         context('when form is invalid', () => {

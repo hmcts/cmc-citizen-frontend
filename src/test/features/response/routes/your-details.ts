@@ -17,7 +17,6 @@ import { sampleClaimObj } from '../../../http-mocks/claim-store'
 import { checkCountyCourtJudgmentRequestedGuardGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-
 const pagePath = ResponsePaths.defendantYourDetailsPage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
 describe('Defendant user details: your name page', () => {
@@ -66,6 +65,7 @@ describe('Defendant user details: your name page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', pagePath)
+      checkCountyCourtJudgmentRequestedGuardGuard(app, 'post', pagePath)
 
       context('when response not submitted', () => {
         beforeEach(() => {

@@ -59,6 +59,7 @@ describe('Defendant user details: your date of birth page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', pagePath)
+      checkCountyCourtJudgmentRequestedGuardGuard(app, 'post', pagePath)
 
       context('when response not submitted', () => {
         beforeEach(() => {

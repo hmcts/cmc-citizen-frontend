@@ -221,6 +221,10 @@ mock('response/guards/oweNoneResponseRequiredGuard', {
   'default': justForwardRequestHandler
 })
 
+mock('response/guards/countyCourtJudgmentRequestedGuard', {
+  'default': justForwardRequestHandler
+})
+
 mock('response/guards/allResponseTasksCompletedGuard', {
   'default': {
     requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction): void => {

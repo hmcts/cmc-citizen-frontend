@@ -80,6 +80,7 @@ describe('Defendant response: defence options page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', defenceOptionsPage)
+      checkCountyCourtJudgmentRequestedGuardGuard(app, 'post', defenceOptionsPage)
 
       context('when response not submitted', () => {
         context('when form is invalid', () => {

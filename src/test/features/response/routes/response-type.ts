@@ -61,6 +61,7 @@ describe('Defendant response: response type page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', pagePath)
+      checkCountyCourtJudgmentRequestedGuardGuard(app, 'post', pagePath)
 
       context('when response not submitted', () => {
         context('when form is invalid', () => {

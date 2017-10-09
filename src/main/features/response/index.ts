@@ -34,10 +34,7 @@ export class Feature {
       /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|full-admission|partial-admission|counter-claim|receipt).*$/,
       AlreadyRespondedGuard.requestHandler
     )
-    app.all(
-      /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|full-admission|partial-admission|counter-claim|receipt).*$/,
-      CountyCourtJudgmentRequestedGuard.requestHandler
-    )
+    app.all(/^\/case\/.+\/response\/.*$/, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(
       /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|receipt).*$/,
       DraftMiddleware.requestHandler('response', (value: any): ResponseDraft => {

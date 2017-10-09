@@ -81,6 +81,7 @@ describe('Defendant response: check and send page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', checkAndSendPage)
+      checkCountyCourtJudgmentRequestedGuardGuard(app, 'post', checkAndSendPage)
 
       context('when response not submitted', () => {
         it('should redirect to incomplete submission when not all tasks are completed', async () => {

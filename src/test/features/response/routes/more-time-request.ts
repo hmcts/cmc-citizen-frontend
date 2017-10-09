@@ -83,6 +83,7 @@ describe('Defendant response: more time needed page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', pagePath)
+      checkCountyCourtJudgmentRequestedGuardGuard(app, 'post', pagePath)
 
       context('when response not submitted', () => {
         it('should redirect to confirmation page when already submitted answer is "yes"', async () => {
