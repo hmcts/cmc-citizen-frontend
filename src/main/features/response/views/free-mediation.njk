@@ -24,7 +24,10 @@
         {{ t("Will you try mediation?") }}
       </h2>
 
-      <form method="post" novalidate>
+      <form method="post"
+            class="analytics-submit-event-trigger"
+            data-event-action="Response: Free mediation"
+            data-event-label-from="option" novalidate>
         {{ csrfProtection(csrf) }}
 
         <div class="form-group">

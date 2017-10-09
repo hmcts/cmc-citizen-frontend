@@ -6,7 +6,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 
 import { RejectPartOfClaim } from 'response/form/models/rejectPartOfClaim'
-import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
+import { DraftService } from 'common/draft/draftService'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
 
@@ -33,8 +33,8 @@ export default express.Router()
         renderView(form, res)
       } else {
         const user: User = res.locals.user
-        user.responseDraft.rejectPartOfClaim = form.model
-        await ResponseDraftMiddleware.save(res, next)
+        user.responseDraft.document.rejectPartOfClaim = form.model
+        await DraftService.save(user.responseDraft, user.bearerToken)
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
       }
     }))

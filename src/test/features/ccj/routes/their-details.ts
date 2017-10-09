@@ -53,7 +53,7 @@ describe('CCJ - their details', () => {
 
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.resolveRetrieve('ccj')
+        draftStoreServiceMock.resolveFind('ccj')
 
         await request(app)
           .get(theirDetailsPage)
@@ -71,8 +71,8 @@ describe('CCJ - their details', () => {
         context('when form is valid', async () => {
           it('should redirect to defendant date of birth page when defendant is an individual', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveRetrieve('ccj')
-            draftStoreServiceMock.resolveSave('ccj')
+            draftStoreServiceMock.resolveFind('ccj')
+            draftStoreServiceMock.resolveSave()
 
             await request(app)
               .post(theirDetailsPage)
@@ -84,8 +84,8 @@ describe('CCJ - their details', () => {
           PartyType.except(PartyType.INDIVIDUAL).forEach(partyType => {
             it(`should redirect to defendant amount paid page when defendant is ${partyType.name.toLocaleLowerCase()}`, async () => {
               claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-              draftStoreServiceMock.resolveRetrieve('ccj', {defendant: {partyDetails: partyDetails(partyType.value)}})
-              draftStoreServiceMock.resolveSave('ccj')
+              draftStoreServiceMock.resolveFind('ccj', {defendant: {partyDetails: partyDetails(partyType.value)}})
+              draftStoreServiceMock.resolveSave()
 
               await request(app)
                 .post(theirDetailsPage)
@@ -99,7 +99,7 @@ describe('CCJ - their details', () => {
         context('when form is invalid', async () => {
           it('should render page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveRetrieve('ccj')
+            draftStoreServiceMock.resolveFind('ccj')
 
             await request(app)
               .post(theirDetailsPage)

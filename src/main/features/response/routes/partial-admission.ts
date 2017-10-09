@@ -9,7 +9,7 @@ async function renderView (res: express.Response, next: express.NextFunction) {
     const user: User = res.locals.user
     res.render(Paths.partialAdmissionPage.associatedView, {
       claim: user.claim,
-      response: user.responseDraft
+      response: user.responseDraft.document
     })
   } catch (err) {
     next(err)

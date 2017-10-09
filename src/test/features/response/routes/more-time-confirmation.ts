@@ -36,7 +36,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
         describe('should redirect to request more time page', () => {
           it('when no option is selected', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: undefined } })
+            draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
 
             await request(app)
               .get(pagePath)
@@ -48,7 +48,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
           it('when answer is "no"', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: MoreTimeNeededOption.NO } })
+            draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: MoreTimeNeededOption.NO } })
 
             await request(app)
               .get(pagePath)
@@ -61,7 +61,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
         it('should render confirmation page when answer is "yes" and everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: MoreTimeNeededOption.YES } })
+          draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: MoreTimeNeededOption.YES } })
 
           await request(app)
             .get(pagePath)
@@ -98,7 +98,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
         describe('should redirect to request more time page', () => {
           it('when no option is selected', async () => {
-            draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: undefined } })
+            draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
 
             await request(app)
               .post(pagePath)
@@ -109,7 +109,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
           })
 
           it('when answer is "no', async () => {
-            draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: MoreTimeNeededOption.NO } })
+            draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: MoreTimeNeededOption.NO } })
 
             await request(app)
               .post(pagePath)
@@ -121,7 +121,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
         })
 
         it('should redirect to task list page when "yes" selected and everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: MoreTimeNeededOption.YES } })
+          draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: MoreTimeNeededOption.YES } })
 
           await request(app)
             .post(pagePath)

@@ -4,7 +4,7 @@ import { Paths } from 'ccj/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'app/forms/form'
-import { DraftCCJService } from 'ccj/draft/draftCCJService'
+import { DraftService } from 'common/draft/draftService'
 import User from 'idam/user'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { FormValidator } from 'forms/validation/formValidator'
@@ -17,7 +17,7 @@ export default express.Router()
   .get(Paths.paidAmountPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
-      renderView(new Form(user.ccjDraft.paidAmount), res)
+      renderView(new Form(user.ccjDraft.document.paidAmount), res)
     }))
 
   .post(Paths.paidAmountPage.uri,
@@ -32,8 +32,8 @@ export default express.Router()
           renderView(form, res)
         } else {
           const { externalId } = req.params
-          user.ccjDraft.paidAmount = form.model
-          await DraftCCJService.save(res, next)
+          user.ccjDraft.document.paidAmount = form.model
+          await DraftService.save(user.ccjDraft, user.bearerToken)
           res.redirect(Paths.paidAmountSummaryPage.evaluateUri({ externalId: externalId }))
         }
       }))

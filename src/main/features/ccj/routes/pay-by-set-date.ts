@@ -6,7 +6,7 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { PayBySetDate } from 'ccj/form/models/payBySetDate'
 import User from 'idam/user'
-import { DraftCCJService } from 'ccj/draft/draftCCJService'
+import { DraftService } from 'common/draft/draftService'
 import { ErrorHandling } from 'common/errorHandling'
 
 function renderView (form: Form<PayBySetDate>, res: express.Response): void {
@@ -16,7 +16,7 @@ function renderView (form: Form<PayBySetDate>, res: express.Response): void {
 export default express.Router()
   .get(Paths.payBySetDatePage.uri, (req: express.Request, res: express.Response) => {
     const user: User = res.locals.user
-    renderView(new Form(user.ccjDraft.payBySetDate), res)
+    renderView(new Form(user.ccjDraft.document.payBySetDate), res)
   })
   .post(
     Paths.payBySetDatePage.uri,
@@ -28,9 +28,9 @@ export default express.Router()
         renderView(form, res)
       } else {
         const { externalId } = req.params
-        user.ccjDraft.payBySetDate = form.model
-        user.ccjDraft.repaymentPlan = undefined
-        await DraftCCJService.save(res, next)
+        user.ccjDraft.document.payBySetDate = form.model
+        user.ccjDraft.document.repaymentPlan = undefined
+        await DraftService.save(user.ccjDraft, user.bearerToken)
         res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
       }
     }))

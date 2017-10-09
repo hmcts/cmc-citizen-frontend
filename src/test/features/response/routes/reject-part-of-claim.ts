@@ -43,7 +43,7 @@ describe('Defendant response: I reject part of the claim', () => {
         })
 
         it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('response')
+          draftStoreServiceMock.resolveFind('response')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -77,7 +77,7 @@ describe('Defendant response: I reject part of the claim', () => {
           })
 
           it('should render page when everything is fine', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
+            draftStoreServiceMock.resolveFind('response')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -90,8 +90,8 @@ describe('Defendant response: I reject part of the claim', () => {
         context('when form is valid', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveRetrieve('response')
-            draftStoreServiceMock.rejectSave('response', 'HTTP error')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.rejectSave()
 
             await request(app)
               .post(pagePath)
@@ -102,8 +102,8 @@ describe('Defendant response: I reject part of the claim', () => {
 
           it('should redirect to task list page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveRetrieve('response')
-            draftStoreServiceMock.resolveSave('response')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
 
             await request(app)
               .post(pagePath)

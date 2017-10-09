@@ -49,7 +49,7 @@ describe('CCJ - Pay by set date', () => {
 
       it('should return 500 and render error page when cannot retrieve CCJ draft', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+        draftStoreServiceMock.rejectFind('Error')
 
         await request(app)
           .get(payBySetDatePage)
@@ -59,7 +59,7 @@ describe('CCJ - Pay by set date', () => {
 
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.resolveRetrieve('ccj')
+        draftStoreServiceMock.resolveFind('ccj')
 
         await request(app)
           .get(payBySetDatePage)
@@ -91,7 +91,7 @@ describe('CCJ - Pay by set date', () => {
 
       it('should return 500 when cannot retrieve CCJ draft', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+        draftStoreServiceMock.rejectFind('Error')
 
         await request(app)
           .post(payBySetDatePage)
@@ -103,8 +103,8 @@ describe('CCJ - Pay by set date', () => {
       context('when form is valid', async () => {
         it('should return 500 and render error page when cannot save ccj draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
-          draftStoreServiceMock.rejectSave('ccj', 'Error')
+          draftStoreServiceMock.resolveFind('ccj')
+          draftStoreServiceMock.rejectSave()
 
           await request(app)
             .post(payBySetDatePage)
@@ -115,8 +115,8 @@ describe('CCJ - Pay by set date', () => {
 
         it('should redirect to check and send page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
-          draftStoreServiceMock.resolveSave('ccj')
+          draftStoreServiceMock.resolveFind('ccj')
+          draftStoreServiceMock.resolveSave()
 
           await request(app)
             .post(payBySetDatePage)
@@ -129,7 +129,7 @@ describe('CCJ - Pay by set date', () => {
       context('when form is invalid', async () => {
         it('should render page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
+          draftStoreServiceMock.resolveFind('ccj')
 
           await request(app)
             .post(payBySetDatePage)
