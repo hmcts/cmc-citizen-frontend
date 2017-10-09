@@ -19,7 +19,7 @@
     "prepush": "yarn test && yarn test:routes"
   },
   "dependencies": {
-    "@hmcts/cmc-common-frontend": "^1.9.0",
+    "@hmcts/cmc-common-frontend": "^1.10.0",
     "@hmcts/nodejs-healthcheck": "^1.4.3",
     "@hmcts/nodejs-logging": "^1.2.0",
     "@types/config": "^0.0.32",
