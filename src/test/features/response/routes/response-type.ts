@@ -16,6 +16,7 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
 import { ResponseType } from 'response/form/models/responseType'
+import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.responseTypePage.evaluateUri({ externalId: sampleClaimObj.externalId })
@@ -32,6 +33,7 @@ describe('Defendant response: response type page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'get', pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, 'get', pagePath)
 
       context('when response not submitted', () => {
         beforeEach(() => {
@@ -59,6 +61,7 @@ describe('Defendant response: response type page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, 'post', pagePath)
 
       context('when response not submitted', () => {
         context('when form is invalid', () => {
