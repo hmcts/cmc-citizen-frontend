@@ -13,7 +13,7 @@ export class ClaimMiddleware {
       throw new Error('Invalid UUID')
     }
 
-    ClaimStoreClient.retrieveByExternalId(externalId)
+    ClaimStoreClient.retrieveByExternalId(externalId, res.locals.user.id)
       .then((claim: Claim) => {
         res.locals.user.claim = claim
         next()

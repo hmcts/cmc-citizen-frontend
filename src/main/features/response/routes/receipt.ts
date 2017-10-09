@@ -16,8 +16,9 @@ import { ErrorHandling } from 'common/errorHandling'
 export default express.Router()
   .get(Paths.receiptReceiver.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const { externalId } = req.params
-    const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId)
+    const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId, res.locals.user.id)
     const response: DefendantResponse = await ClaimStoreClient.retrieveResponse(res.locals.user.id, claim.id)
+
     new PdfClient().generate(ResponseReceipt.templatePath, new ResponseReceipt(claim, response, buildURL(req, 'dashboard')).data())
       .on('response', (response: http.IncomingMessage) => {
         if (response.statusCode !== 200) {

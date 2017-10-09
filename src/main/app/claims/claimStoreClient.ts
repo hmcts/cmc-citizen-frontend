@@ -78,7 +78,7 @@ export default class ClaimStoreClient {
       })
   }
 
-  static retrieveByExternalId (externalId: string): Promise<Claim> {
+  static retrieveByExternalId (externalId: string, userId: number): Promise<Claim> {
     if (!externalId) {
       return Promise.reject(new Error('External id must be set'))
     }
@@ -87,7 +87,11 @@ export default class ClaimStoreClient {
       .get(`${claimStoreApiUrl}/${externalId}`)
       .then(claim => {
         if (claim) {
-          return new Claim().deserialize(claim)
+          if (userId !== claim.submitterId) {
+            throw new Error('You are not allowed to access this resource')
+          } else {
+            return new Claim().deserialize(claim)
+          }
         } else {
           throw new Error('Call was successful, but received an empty claim instance')
         }
