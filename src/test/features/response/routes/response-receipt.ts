@@ -13,6 +13,7 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as pdfServiceMock from '../../../http-mocks/pdf-service'
+import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -28,6 +29,8 @@ describe('Defendant response: receipt', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
       })
+
+      checkCountyCourtJudgmentRequestedGuard(app, 'get', receiptPath)
 
       it('should return 500 and render error page when cannot retrieve claim by defendant id', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
