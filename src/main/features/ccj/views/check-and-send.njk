@@ -15,7 +15,7 @@
     {{ tableStart('theirDetails', 'Their details') }}
     {{
       partyDetailsSummaryFragment(
-        partyDetails = user.ccjDraft.defendant.partyDetails,
+        partyDetails = user.ccjDraft.document.defendant.partyDetails,
         showCorrespondenceAddressSection = false,
         changeLinks = {
           address: addressUrl,
@@ -57,9 +57,15 @@
     {{ tableEnd() }}
 
     <div class="form-group">
-      {{ statementOfTruth(form, title = 'Declaration', warningMessage = 'Once you \'Sign and submit\', you cannot change your answers.') }}
+      {{ statementOfTruth(
+        form,
+        title = 'Declaration',
+        warningMessage = 'Once you \'Sign and submit\', you cannot change your answers.',
+        isQualified = partyAsCompanyOrOrganisation)
+      }}
 
       {{ submitButton('Sign and submit') }}
+      <input type="hidden" name="type" value="{{ form.model.type }}">
     </div>
   </form>
 {% endblock %}

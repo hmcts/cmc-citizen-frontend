@@ -4,12 +4,13 @@ import * as path from 'path'
 import * as uuid from 'uuid'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
-import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
 import { buildURL } from 'utils/callbackBuilder'
 import { Paths } from 'response/paths'
 import { AlreadyRespondedGuard } from 'response/guards/alreadyRespondedGuard'
 import { ClaimMiddleware } from 'app/claims/claimMiddleware'
+import { DraftMiddleware } from 'common/draft/draftMiddleware'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -39,7 +40,9 @@ export class Feature {
     )
     app.all(
       /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|receipt).*$/,
-      ResponseDraftMiddleware.retrieve
+      DraftMiddleware.requestHandler('response', (value: any): ResponseDraft => {
+        return new ResponseDraft().deserialize(value)
+      })
     )
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }

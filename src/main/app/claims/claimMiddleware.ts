@@ -1,17 +1,15 @@
 import * as express from 'express'
+
 import ClaimStoreClient from 'claims/claimStoreClient'
 import Claim from 'app/claims/models/claim'
-import * as uuidValidator from 'uuid-validate'
+
+import { UUIDUtils } from 'common/utils/uuidUtils'
 
 export class ClaimMiddleware {
 
   static retrieveByExternalId (req: express.Request, res: express.Response, next: express.NextFunction): void {
     // req.params isn't populated here https://github.com/expressjs/express/issues/2088
-    const externalId = req.path.split('/')[2]
-    const isValidUUID = uuidValidator(externalId)
-    if (!isValidUUID) {
-      throw new Error('Invalid UUID')
-    }
+    const externalId: string = UUIDUtils.extractFrom(req.path)
 
     ClaimStoreClient.retrieveByExternalId(externalId)
       .then((claim: Claim) => {

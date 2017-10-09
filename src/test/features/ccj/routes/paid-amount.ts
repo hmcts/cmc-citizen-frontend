@@ -48,7 +48,7 @@ describe('CCJ - paid amount page', () => {
       })
 
       it('should return 500 and render error page when cannot retrieve CCJ draft', async () => {
-        draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+        draftStoreServiceMock.rejectFind('Error')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
         await request(app)
@@ -59,7 +59,7 @@ describe('CCJ - paid amount page', () => {
 
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.resolveRetrieve('ccj')
+        draftStoreServiceMock.resolveFind('ccj')
 
         await request(app)
           .get(paidAmountPage)
@@ -88,7 +88,7 @@ describe('CCJ - paid amount page', () => {
           })
 
           it('should return 500 when cannot retrieve CCJ draft', async () => {
-            draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+            draftStoreServiceMock.rejectFind('Error')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -102,8 +102,8 @@ describe('CCJ - paid amount page', () => {
         context('when form is valid', async () => {
           it('should redirect to claim amount page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveRetrieve('ccj')
-            draftStoreServiceMock.resolveSave('ccj')
+            draftStoreServiceMock.resolveFind('ccj')
+            draftStoreServiceMock.resolveSave()
 
             await request(app)
               .post(paidAmountPage)
@@ -114,8 +114,8 @@ describe('CCJ - paid amount page', () => {
 
           it('should return 500 and render error page when cannot save ccj draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveRetrieve('ccj')
-            draftStoreServiceMock.rejectSave('ccj', 'Error')
+            draftStoreServiceMock.resolveFind('ccj')
+            draftStoreServiceMock.rejectSave()
 
             await request(app)
               .post(paidAmountPage)
@@ -128,7 +128,7 @@ describe('CCJ - paid amount page', () => {
         context('when form is invalid', async () => {
           it('should render page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveRetrieve('ccj')
+            draftStoreServiceMock.resolveFind('ccj')
 
             await request(app)
               .post(paidAmountPage)
@@ -141,7 +141,7 @@ describe('CCJ - paid amount page', () => {
         context('when provided paid amount is greater than total amount', async () => {
           it('should render page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveRetrieve('ccj')
+            draftStoreServiceMock.resolveFind('ccj')
 
             await request(app)
               .post(paidAmountPage)

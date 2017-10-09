@@ -1,10 +1,9 @@
 import * as express from 'express'
 
 import Claim from 'app/claims/models/claim'
-import { buildBeforeYouStartSection, buildRespondToClaimSection } from 'response/routes/task-list'
-import TaskList from 'app/drafts/tasks/taskList'
 import { Paths } from 'response/paths'
 import User from 'app/idam/user'
+import { TaskListBuilder } from 'response/helpers/taskListBuilder'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('router/response/check-and-send')
 
@@ -15,18 +14,15 @@ export default class AllResponseTasksCompletedGuard {
       const user: User = res.locals.user
       const claim: Claim = user.claim
 
-      const allTasksCompleted: boolean = [
-        buildBeforeYouStartSection(user.responseDraft, claim.externalId),
-        buildRespondToClaimSection(user.responseDraft, claim.responseDeadline, claim.externalId)
-      ].every((taskList: TaskList) => taskList.isCompleted())
+      const allTasksCompleted: boolean = TaskListBuilder
+        .buildRemainingTasks(user.responseDraft.document, claim.responseDeadline, claim.externalId).length === 0
 
       if (allTasksCompleted) {
-        user.claim = claim
         return next()
       }
 
       logger.debug('State guard: claim check and send page is disabled until all tasks are completed - redirecting to task list')
-      res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+      res.redirect(Paths.incompleteSubmissionPage.evaluateUri({ externalId: claim.externalId }))
     } catch (err) {
       next(err)
     }

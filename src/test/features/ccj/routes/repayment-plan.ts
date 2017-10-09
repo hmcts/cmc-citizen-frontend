@@ -43,7 +43,7 @@ describe('CCJ: repayment page', () => {
 
         it('should return 500 and render error page when cannot retrieve CCJ draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+          draftStoreServiceMock.rejectFind('Error')
 
           await request(app)
             .get(repaymentPlanPage)
@@ -53,7 +53,7 @@ describe('CCJ: repayment page', () => {
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
+          draftStoreServiceMock.resolveFind('ccj')
 
           await request(app)
             .get(repaymentPlanPage)
@@ -96,7 +96,7 @@ describe('CCJ: repayment page', () => {
 
       it('should return 500 when cannot retrieve CCJ draft', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+        draftStoreServiceMock.rejectFind('Error')
 
         await request(app)
           .post(repaymentPlanPage)
@@ -108,8 +108,8 @@ describe('CCJ: repayment page', () => {
       context('when form is valid', async () => {
         it('should redirect to confirmation page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
-          draftStoreServiceMock.resolveSave('ccj')
+          draftStoreServiceMock.resolveFind('ccj')
+          draftStoreServiceMock.resolveSave()
 
           await request(app)
             .post(repaymentPlanPage)
@@ -122,7 +122,7 @@ describe('CCJ: repayment page', () => {
       context('when form is invalid', async () => {
         it('should render page with error messages', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
+          draftStoreServiceMock.resolveFind('ccj')
 
           await request(app)
             .post(repaymentPlanPage)

@@ -3,24 +3,25 @@ import { Paths } from 'claim/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import Reason from 'forms/models/reason'
-import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
+
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'app/idam/user'
+import { DraftService } from 'common/draft/draftService'
 
 function renderView (form: Form<Reason>, res: express.Response): void {
   const user: User = res.locals.user
   const defendantName = (
-    user.claimDraft.defendant
-    && user.claimDraft.defendant.partyDetails
-    && user.claimDraft.defendant.partyDetails.name)
-    ? user.claimDraft.defendant.partyDetails.name : ''
+    user.claimDraft.document.defendant
+    && user.claimDraft.document.defendant.partyDetails
+    && user.claimDraft.document.defendant.partyDetails.name)
+    ? user.claimDraft.document.defendant.partyDetails.name : ''
 
   res.render(Paths.reasonPage.associatedView, { form: form, defendantName: defendantName })
 }
 
 export default express.Router()
   .get(Paths.reasonPage.uri, (req: express.Request, res: express.Response): void => {
-    renderView(new Form(res.locals.user.claimDraft.reason), res)
+    renderView(new Form(res.locals.user.claimDraft.document.reason), res)
   })
   .post(
     Paths.reasonPage.uri,
@@ -31,8 +32,8 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.claimDraft.reason = form.model
-        await ClaimDraftMiddleware.save(res, next)
+        res.locals.user.claimDraft.document.reason = form.model
+        await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
         res.redirect(Paths.taskListPage.uri)
       }
     }))

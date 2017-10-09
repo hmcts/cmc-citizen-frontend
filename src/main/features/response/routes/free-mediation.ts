@@ -6,9 +6,9 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 
 import { FreeMediation } from 'response/form/models/freeMediation'
-import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
+import { DraftService } from 'common/draft/draftService'
 
 async function renderView (form: Form<FreeMediation>, res: express.Response, next: express.NextFunction) {
   try {
@@ -24,7 +24,7 @@ async function renderView (form: Form<FreeMediation>, res: express.Response, nex
 
 export default express.Router()
   .get(Paths.freeMediationPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    await renderView(new Form(res.locals.user.responseDraft.freeMediation), res, next)
+    await renderView(new Form(res.locals.user.responseDraft.document.freeMediation), res, next)
   })
   .post(
     Paths.freeMediationPage.uri,
@@ -36,8 +36,8 @@ export default express.Router()
         await renderView(form, res, next)
       } else {
         const user = res.locals.user
-        user.responseDraft.freeMediation = form.model
-        await ResponseDraftMiddleware.save(res, next)
+        user.responseDraft.document.freeMediation = form.model
+        await DraftService.save(user.responseDraft, user.bearerToken)
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

@@ -40,7 +40,7 @@ describe('CCJ - paid amount summary page', () => {
       })
 
       it('should return 500 and render error page when cannot retrieve CCJ draft', async () => {
-        draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+        draftStoreServiceMock.rejectFind('Error')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
         await request(app)
@@ -50,7 +50,7 @@ describe('CCJ - paid amount summary page', () => {
       })
 
       it('should render page when everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('ccj')
+        draftStoreServiceMock.resolveFind('ccj')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
         await request(app)
