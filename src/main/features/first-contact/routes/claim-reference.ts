@@ -1,7 +1,7 @@
 import * as express from 'express'
-import * as config from 'config'
 
 import { Paths } from 'first-contact/paths'
+import { Paths as AppPaths } from 'app/paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
@@ -9,15 +9,10 @@ import { ClaimReference } from 'app/forms/models/claimReference'
 
 import ClaimStoreClient from 'claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'
-import { buildURL } from 'app/utils/callbackBuilder'
+import { OAuthHelper } from 'idam/oAuthHelper'
 
 function renderView (form: Form<ClaimReference>, res: express.Response): void {
   res.render(Paths.claimReferencePage.associatedView, { form: form })
-}
-
-function receiverPath (req: express.Request, reference: string): string {
-  const callbackPath = `${Paths.claimSummaryPage.uri}?ref=${reference}`
-  return `${config.get('idam.authentication-web.url')}/login/pin?continue-url=${buildURL(req, callbackPath)}`
 }
 
 export default express.Router()
@@ -34,8 +29,8 @@ export default express.Router()
         const linked: boolean = await ClaimStoreClient.isClaimLinked(form.model.reference)
 
         if (linked) {
-          return res.redirect('/')
+          return res.redirect(AppPaths.homePage.uri)
         }
-        res.redirect(receiverPath(req, form.model.reference))
+        res.redirect(OAuthHelper.getRedirectUriForPin(req, res, form.model.reference))
       }
     }))
