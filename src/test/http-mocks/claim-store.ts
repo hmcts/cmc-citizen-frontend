@@ -10,7 +10,7 @@ export const sampleClaimObj = {
   submitterId: 1,
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
   defendantId: 123,
-  claimNumber: '000MC000',
+  referenceNumber: '000MC000',
   createdAt: '2017-07-25T22:45:51.785',
   issuedOn: '2017-07-25',
   claim: {
