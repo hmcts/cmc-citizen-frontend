@@ -38,13 +38,13 @@ describe('Defendant response copy', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should return 403 and render error page when the user is not owner of claim', async () => {
+      it('should return 500 and render error page when the user is not owner of claim', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId({ submitterId: 123 })
 
         await request(app)
           .get(ClaimPaths.defendantResponseCopy.evaluateUri({ externalId: externalId }))
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.forbidden)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
       it('should return receipt when everything is fine', async () => {
