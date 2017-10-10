@@ -12,6 +12,8 @@ import { Paths as CCJPaths } from 'ccj/paths'
 import './mocks'
 import { app } from '../../main/app'
 
+app.locals.csrf = 'dummy-token'
+
 const agent = supertest.agent(app)
 const pa11yTest = pa11y()
 const test = promisify(pa11yTest.run, pa11yTest)
@@ -20,9 +22,10 @@ function check (url: string): void {
   describe(`Page ${url}`, () => {
 
     it('should have no accessibility errors', (done) => {
-      ensurePageCallWillSucceed(url)
+      const urlWithParams = `${url}?jwt=ABC&ref=000MC000`
+      ensurePageCallWillSucceed(urlWithParams)
         .then(() =>
-          test(agent.get(url).url)
+          test(agent.get(urlWithParams).url)
         )
         .then((messages) => {
           const errors = messages.filter((m) => m.type === 'error')
