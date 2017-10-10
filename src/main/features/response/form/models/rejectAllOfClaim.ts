@@ -10,6 +10,7 @@ export class RejectAllOfClaimOption {
   static readonly COUNTER_CLAIM = 'counterClaim'
 
   static all (): string[] {
+
     return [
       RejectAllOfClaimOption.ALREADY_PAID,
       RejectAllOfClaimOption.DISPUTE,

@@ -5,7 +5,7 @@ import { ResponseType } from 'response/form/models/responseType'
 
 describe('OweMoneyTask', () => {
   describe('when responseType OWE_NONE', () => {
-    it('should be true when counterClaim is true', () => {
+    it('should be true when counterClaim is true option already paid', () => {
       const input = {
         response: {
           type: {
@@ -14,6 +14,9 @@ describe('OweMoneyTask', () => {
         },
         counterClaim: {
           counterClaim: true
+        },
+        rejectAllOfClaim: {
+          option: 'alreadyPaid'
         }
       }
       const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
@@ -24,15 +27,15 @@ describe('OweMoneyTask', () => {
 
 describe('when responseType equal OWE_SOME_PAID_NONE', () => {
 
-  it('should be true when counterClaim is set', () => {
+  it('should be true when option is set', () => {
     const input = {
       response: {
         type: {
           value: ResponseType.OWE_SOME_PAID_NONE.value
         }
       },
-      counterClaim: {
-        counterClaim: true
+      rejectPartOfClaim: {
+        option: 'paidWhatBelievedWasOwed'
       }
     }
     const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
@@ -43,15 +46,18 @@ describe('when responseType equal OWE_SOME_PAID_NONE', () => {
 
 describe('when responseType equal OWE_ALL_PAID_NONE', () => {
 
-  it('should be true when counterClaim is true', () => {
+  it('should be true when option is set ', () => {
     const input = {
       response: {
         type: {
           value: ResponseType.OWE_ALL_PAID_NONE.value
         }
       },
-      counterClaim: {
-        counterClaim: true
+      rejectAllOfClaim: {
+        option: 'alreadyPaid'
+      },
+      rejectPartOfClaim: {
+        option: 'paidWhatBelievedWasOwed'
       }
     }
     const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)

@@ -13,10 +13,8 @@
       <form method="post" novalidate>
         {{ csrfProtection(csrf) }}
 
-        <div class="form-group {% if error %} form-group-error {% endif %}">
+        <legend class="visually-hidden">{{ t("I reject all of the claim") }}</legend>
 
-            <legend class="visually-hidden">{{ t("I reject all of the claim") }}</legend>
-            {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
         {{
         radioGroup(
         label = "Why do you reject all the claim?",
@@ -41,9 +39,7 @@
         form = form
         )
         }}
-          <div class="form-group">
           {{ saveAndContinueButton() }}
-        </div>
       </form>
     </div>
   </div>

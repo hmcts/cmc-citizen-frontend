@@ -37,7 +37,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }
       this.rejectPartOfClaim = new RejectPartOfClaim(input.rejectPartOfClaim && input.rejectPartOfClaim.option)
-      this.rejectAllOfClaim = new RejectPartOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
+      this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
     }
     return this
   }
@@ -50,6 +50,6 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
     if (!(this.response && this.response.type)) {
       return false
     }
-    return !!(this.response.type === ResponseType.OWE_NONE && this.counterClaim && this.counterClaim.counterClaim === true)
+    return !!(this.response.type === ResponseType.OWE_NONE && this.counterClaim && this.counterClaim.counterClaim === false)
   }
 }

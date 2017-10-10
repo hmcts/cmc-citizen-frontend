@@ -1,5 +1,4 @@
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { ResponseType } from 'response/form/models/responseType'
 
 export class OweMoneyTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
@@ -7,21 +6,13 @@ export class OweMoneyTask {
       return false
     }
 
-    if (responseDraft.response.type !== ResponseType.OWE_ALL_PAID_NONE) {
-      return true
-    }
+    const rejectAllCompleted: boolean = responseDraft.rejectAllOfClaim && responseDraft.rejectAllOfClaim.option !== undefined
+    const rejectPartCompleted: boolean = responseDraft.rejectPartOfClaim && responseDraft.rejectPartOfClaim.option !== undefined
 
-    if (responseDraft.response.type !== ResponseType.OWE_SOME_PAID_NONE) {
+    if (rejectAllCompleted || rejectPartCompleted) {
       return true
-    }
-    if (responseDraft.response.type !== ResponseType.OWE_NONE) {
-      return true
-    }
-    //noinspection RedundantIfStatementJS It's not redundant explicitly returning false instead of potentially undefined
-    if (!responseDraft.counterClaim) {
-      return false
     } else {
-      return true
+      return false
     }
   }
 }
