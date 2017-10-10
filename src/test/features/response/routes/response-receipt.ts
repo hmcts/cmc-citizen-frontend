@@ -41,7 +41,7 @@ describe('Defendant response: receipt', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should return 500 and render error page when cannot retrieve response by defendant id', async () => {
+      it('should return 500 and render error page when cannot retrieve claim by defendant id', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
