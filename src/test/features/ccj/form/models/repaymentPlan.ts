@@ -99,6 +99,7 @@ describe('RepaymentPlan', () => {
         expectValidationError(errors, ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
       })
     })
+
     it('instalment amount <= 0', () => {
       const repaymentPlan = validRepaymentPlan()
       const valuesToTest = [0, -1]
@@ -111,6 +112,7 @@ describe('RepaymentPlan', () => {
         expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
       })
     })
+
     it('instalment amount invalid decimal places', () => {
       const repaymentPlan = validRepaymentPlan()
       repaymentPlan.installmentAmount = 1.022
@@ -119,6 +121,7 @@ describe('RepaymentPlan', () => {
       expect(errors.length).to.equal(1)
       expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS)
     })
+
     it('first payment invalid decimal places', () => {
       const repaymentPlan = validRepaymentPlan()
       repaymentPlan.firstPayment = 1.022
@@ -131,12 +134,13 @@ describe('RepaymentPlan', () => {
     it('date is not future', () => {
       const repaymentPlan = validRepaymentPlan()
       const moment = MomentFactory.currentDate()
-      repaymentPlan.firstPaymentDate = new LocalDate(moment.year(), moment.month(), moment.day())
+      repaymentPlan.firstPaymentDate = new LocalDate(moment.year(), moment.month() + 1, moment.date())
       const errors = validator.validateSync(repaymentPlan)
 
       expect(errors.length).to.equal(1)
       expectValidationError(errors, ValidationErrors.FUTURE_DATE)
     })
+
     it('unknown payment schedule', () => {
       const repaymentPlan = validRepaymentPlan()
       repaymentPlan.paymentSchedule = { value: 'gibberish', displayValue: 'hi' }

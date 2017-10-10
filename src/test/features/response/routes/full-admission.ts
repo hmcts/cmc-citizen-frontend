@@ -14,6 +14,7 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
+import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.fullAdmissionPage.evaluateUri({ externalId: sampleClaimObj.externalId })
@@ -29,6 +30,8 @@ describe('Defendant response: full admission page', () => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
       })
 
+      checkCountyCourtJudgmentRequestedGuard(app, 'get', pagePath)
+
       it('should return 500 and render error page when cannot retrieve claim', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
@@ -39,7 +42,7 @@ describe('Defendant response: full admission page', () => {
       })
 
       it('should render page when everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('response')
+        draftStoreServiceMock.resolveFind('response')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
         await request(app)

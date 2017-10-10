@@ -11,7 +11,7 @@ const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
 
 export default class ClaimStoreClient {
   static saveClaimForUser (user: User): Promise<Claim> {
-    const convertedDraftClaim = ClaimModelConverter.convert(user.claimDraft)
+    const convertedDraftClaim = ClaimModelConverter.convert(user.claimDraft.document)
     return request.post(`${claimStoreApiUrl}/${user.id}`, {
       body: convertedDraftClaim,
       headers: {
@@ -22,7 +22,7 @@ export default class ClaimStoreClient {
 
   static saveResponseForUser (user: User): Promise<void> {
     const claim: Claim = user.claim
-    const response = ResponseModelConverter.convert(user.responseDraft)
+    const response = ResponseModelConverter.convert(user.responseDraft.document)
 
     return request.post(`${claimStoreResponsesApiUrl}/${claim.id}/defendant/${user.id}`, {
       body: response,
@@ -119,5 +119,14 @@ export default class ClaimStoreClient {
         Authorization: `Bearer ${user.bearerToken}`
       }
     })
+  }
+
+  static isClaimLinked (reference: string): Promise<boolean> {
+    if (!reference) {
+      return Promise.reject(new Error('Claim reference is required'))
+    }
+
+    return request.get(`${claimStoreApiUrl}/${reference}/defendant-link-status`)
+      .then(linkStatus => linkStatus.linked)
   }
 }

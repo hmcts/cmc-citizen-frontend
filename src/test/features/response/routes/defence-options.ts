@@ -6,6 +6,7 @@ import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { checkAlreadySubmittedGuard } from './checks/already-submitted-check'
+import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 import { Paths as ResponsePaths } from 'response/paths'
 
@@ -35,6 +36,7 @@ describe('Defendant response: defence options page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'get', defenceOptionsPage)
+      checkCountyCourtJudgmentRequestedGuard(app, 'get', defenceOptionsPage)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
@@ -47,7 +49,7 @@ describe('Defendant response: defence options page', () => {
         })
 
         it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('response')
+          draftStoreServiceMock.resolveFind('response')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -58,7 +60,7 @@ describe('Defendant response: defence options page', () => {
 
         it('should redirect page when response type is not OWE_NONE', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('response', { response: { type: ResponseType.OWE_SOME_PAID_NONE } })
+          draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.OWE_SOME_PAID_NONE } })
 
           await request(app)
             .get(defenceOptionsPage)
@@ -78,6 +80,7 @@ describe('Defendant response: defence options page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', defenceOptionsPage)
+      checkCountyCourtJudgmentRequestedGuard(app, 'post', defenceOptionsPage)
 
       context('when response not submitted', () => {
         context('when form is invalid', () => {
@@ -91,7 +94,7 @@ describe('Defendant response: defence options page', () => {
           })
 
           it('should render page when everything is fine', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
+            draftStoreServiceMock.resolveFind('response')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -103,9 +106,9 @@ describe('Defendant response: defence options page', () => {
 
         context('when form is valid', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
+            draftStoreServiceMock.resolveFind('response')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.rejectSave('response', 'HTTP error')
+            draftStoreServiceMock.rejectSave()
 
             await request(app)
               .post(defenceOptionsPage)
@@ -115,8 +118,8 @@ describe('Defendant response: defence options page', () => {
           })
 
           it('should redirect to task list page when everything is fine', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
-            draftStoreServiceMock.resolveSave('response')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -127,7 +130,7 @@ describe('Defendant response: defence options page', () => {
           })
 
           it('should redirect page when response type is not OWE_NONE', async () => {
-            draftStoreServiceMock.resolveRetrieve('response', { response: { type: ResponseType.OWE_SOME_PAID_NONE } })
+            draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.OWE_SOME_PAID_NONE } })
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
