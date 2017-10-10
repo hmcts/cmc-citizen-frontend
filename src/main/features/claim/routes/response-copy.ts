@@ -6,8 +6,6 @@ import { Paths } from 'claim/paths'
 
 import DocumentsClient from 'app/documents/documentsClient'
 import ClaimStoreClient from 'app/claims/claimStoreClient'
-import Claim from 'app/claims/models/claim'
-import OwnershipChecks from 'app/auth/ownershipChecks'
 
 const documentsClient: DocumentsClient = new DocumentsClient()
 
@@ -15,8 +13,8 @@ export default express.Router()
   .get(Paths.defendantResponseCopy.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const { externalId } = req.params
     try {
-      const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId)
-      OwnershipChecks.checkClaimOwner(res.locals.user, claim)
+      await ClaimStoreClient.retrieveByExternalId(externalId, res.locals.user.id)
+
       documentsClient.getResponseCopy(externalId)
         .on('response', (response: http.IncomingMessage) => {
           if (response.statusCode !== 200) {

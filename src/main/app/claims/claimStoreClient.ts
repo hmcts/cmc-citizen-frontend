@@ -4,6 +4,7 @@ import Claim from 'app/claims/models/claim'
 import User from 'app/idam/user'
 import { ClaimModelConverter } from 'claims/claimModelConverter'
 import { ResponseModelConverter } from 'claims/responseModelConverter'
+import { ForbiddenError } from '../../errors'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -60,7 +61,7 @@ export default class ClaimStoreClient {
       })
   }
 
-  static retrieveByExternalId (externalId: string): Promise<Claim> {
+  static retrieveByExternalId (externalId: string, userId: number): Promise<Claim> {
     if (!externalId) {
       return Promise.reject(new Error('External id must be set'))
     }
@@ -69,7 +70,11 @@ export default class ClaimStoreClient {
       .get(`${claimStoreApiUrl}/${externalId}`)
       .then(claim => {
         if (claim) {
-          return new Claim().deserialize(claim)
+          if (userId !== claim.submitterId) {
+            throw new ForbiddenError()
+          } else {
+            return new Claim().deserialize(claim)
+          }
         } else {
           throw new Error('Call was successful, but received an empty claim instance')
         }
