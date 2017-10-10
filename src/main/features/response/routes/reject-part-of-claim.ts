@@ -20,7 +20,7 @@ export default express.Router()
   .get(
     Paths.defenceRejectPartOfClaimPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      renderView(new Form(res.locals.user.responseDraft.rejectPartOfClaim), res)
+      renderView(new Form(res.locals.user.responseDraft.document.rejectPartOfClaim), res)
     }))
   .post(
     Paths.defenceRejectPartOfClaimPage.uri,
