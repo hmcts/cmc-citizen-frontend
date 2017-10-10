@@ -37,6 +37,7 @@ export default class Nunjucks {
       path.join(__dirname, '..', '..', '..', '..', 'node_modules', '@hmcts', 'cmc-common-frontend', 'macros')
     ], {
       autoescape: true,
+      throwOnUndefined: true,
       express: app
     })
 
