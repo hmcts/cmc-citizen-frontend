@@ -18,7 +18,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ResponsePaths.confirmationPage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
 describe('Defendant response: confirmation page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ResponsePaths.confirmationPage.evaluateUri({ externalId: sampleClaimObj.externalId }))

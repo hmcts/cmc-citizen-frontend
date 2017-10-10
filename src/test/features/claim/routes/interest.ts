@@ -17,7 +17,7 @@ import { InterestType } from 'app/forms/models/interest'
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Claim issue: interest page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.interestPage.uri)

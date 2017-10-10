@@ -11,7 +11,7 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { app } from '../../../../main/app'
 
 describe('Defendant first contact: claim reference page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     it('should render page when everything is fine', async () => {

@@ -16,7 +16,7 @@ import InterestDateType from 'app/common/interestDateType'
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Claim issue: interest date page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.interestDatePage.uri)
