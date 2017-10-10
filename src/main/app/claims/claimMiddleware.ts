@@ -11,7 +11,7 @@ export class ClaimMiddleware {
     // req.params isn't populated here https://github.com/expressjs/express/issues/2088
     const externalId: string = UUIDUtils.extractFrom(req.path)
 
-    ClaimStoreClient.retrieveByExternalId(externalId, res.locals.user.id)
+    ClaimStoreClient.retrieveByExternalId(externalId)
       .then((claim: Claim) => {
         res.locals.user.claim = claim
         next()

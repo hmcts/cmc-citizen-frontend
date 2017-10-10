@@ -43,7 +43,7 @@ async function successHandler (res, next) {
 
   let claimStatus: boolean
   try {
-    claimStatus = await ClaimStoreClient.retrieveByExternalId(externalId, res.locals.user.id)
+    claimStatus = await ClaimStoreClient.retrieveByExternalId(externalId)
       .then(() => true)
   } catch (err) {
     if (err.toString().includes('Claim not found by external id')) {

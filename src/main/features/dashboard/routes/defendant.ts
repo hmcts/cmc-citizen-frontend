@@ -9,7 +9,7 @@ import Claim from 'app/claims/models/claim'
 export default express.Router()
   .get(Paths.defendantPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
     const { externalId } = req.params
-    const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId, res.locals.user.id)
+    const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId)
 
     res.render(Paths.defendantPage.associatedView, {
       claim: claim,

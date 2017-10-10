@@ -14,8 +14,7 @@ export default express.Router()
   .get(Paths.receiptReceiver.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const { externalId } = req.params
     try {
-      const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId, res.locals.user.id)
-
+      const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId)
       new PdfClient().generate(IssueReceipt.templatePath, new IssueReceipt(claim).data())
         .on('response', (response: http.IncomingMessage) => {
           if (response.statusCode !== 200) {
