@@ -6,7 +6,7 @@ import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 
-import { ErrorPaths as ClaimErrorPaths, Paths as ClaimPaths } from 'claim/paths'
+import { Paths as ClaimPaths } from 'claim/paths'
 
 import { app } from '../../../../main/app'
 
@@ -28,7 +28,7 @@ describe('Claim issue: total page', () => {
       })
 
       it('should return 500 and render error page when cannot calculate issue fee', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.rejectCalculateIssueFee('HTTP error')
 
         await request(app)
@@ -38,7 +38,7 @@ describe('Claim issue: total page', () => {
       })
 
       it('should render page when everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -58,23 +58,13 @@ describe('Claim issue: total page', () => {
       })
 
       it('should redirect to task list when amount within limit and everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
           .post(ClaimPaths.totalPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ totalAmount: '299' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
-      })
-
-      it('should redirect to amount exceeded page when amount above limit and everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
-
-        await request(app)
-          .post(ClaimPaths.totalPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ totalAmount: '10000.01' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimErrorPaths.amountExceededPage.uri))
       })
     })
   })

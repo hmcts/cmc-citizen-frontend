@@ -4,7 +4,7 @@ import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
-import { buildURL } from 'utils/CallbackBuilder'
+import { buildURL } from 'utils/callbackBuilder'
 import { Paths } from 'app/paths'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
@@ -21,7 +21,7 @@ function defendantResponseRequestHandler (): express.RequestHandler {
 
 export class TestingSupportFeature {
   enableFor (app: express.Express) {
-    app.all('/testing-support/*', defendantResponseRequestHandler())
+    app.all('/testing-support*', defendantResponseRequestHandler())
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }

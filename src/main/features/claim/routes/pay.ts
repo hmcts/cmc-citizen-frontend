@@ -3,8 +3,6 @@ import * as config from 'config'
 
 import { Paths } from 'claim/paths'
 
-import IdamClient from 'idam/idamClient'
-
 import PayClient from 'app/pay/payClient'
 import PaymentResponse from 'app/pay/paymentResponse'
 import Payment from 'app/pay/payment'
@@ -12,17 +10,18 @@ import Payment from 'app/pay/payment'
 import FeesClient from 'app/fees/feesClient'
 import { CalculationOutcome } from 'app/fees/models/calculationOutcome'
 
-import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
 import ClaimStoreClient from 'app/claims/claimStoreClient'
-import { buildURL } from 'app/utils/CallbackBuilder'
+import { buildURL } from 'app/utils/callbackBuilder'
 import { claimAmountWithInterest } from 'app/utils/interestUtils'
 import User from 'app/idam/user'
+import { DraftService } from 'common/draft/draftService'
+import { ServiceAuthTokenFactory } from 'common/security/serviceTokenFactory'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('router/pay')
 const issueFeeCode = config.get<string>('fees.issueFee.code')
 
 const getPayClient = async (): Promise<PayClient> => {
-  const authToken = await IdamClient.retrieveServiceToken()
+  const authToken = await ServiceAuthTokenFactory.get()
 
   return new PayClient(authToken)
 }
@@ -40,7 +39,7 @@ function logError (id: number, payment: Payment, message: string) {
 }
 
 async function successHandler (res, next) {
-  const externalId = res.locals.user.claimDraft.externalId
+  const externalId = res.locals.user.claimDraft.document.externalId
 
   let claimStatus: boolean
   try {
@@ -50,17 +49,17 @@ async function successHandler (res, next) {
     if (err.toString().includes('Claim not found by external id')) {
       claimStatus = false
     } else {
-      logError(res.locals.user.id, res.locals.user.claimDraft.claimant.payment, `Payment processed successfully but there is problem retrieving claim from claim store externalId: ${res.locals.user.claimDraft.externalId},`)
+      logError(res.locals.user.id, res.locals.user.claimDraft.document.claimant.payment, `Payment processed successfully but there is problem retrieving claim from claim store externalId: ${res.locals.user.claimDraft.document.externalId},`)
       next(err)
       return
     }
   }
   if (claimStatus) {
-    await ClaimDraftMiddleware.delete(res, next)
+    await DraftService.delete(res.locals.user.claimDraft, res.locals.user.bearerToken)
     res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
   } else {
     const claim = await ClaimStoreClient.saveClaimForUser(res.locals.user)
-    await ClaimDraftMiddleware.delete(res, next)
+    await DraftService.delete(res.locals.user.claimDraft, res.locals.user.bearerToken)
     res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
   }
 }
@@ -69,32 +68,32 @@ export default express.Router()
   .get(Paths.startPaymentReceiver.uri, async (req, res, next) => {
     const user: User = res.locals.user
     try {
-      if (!user.claimDraft.externalId) {
+      if (!user.claimDraft.document.externalId) {
         throw new Error(`externalId is missing from the draft claim. User Id : ${user.id}`)
       }
-      const amount = claimAmountWithInterest(user.claimDraft)
+      const amount = claimAmountWithInterest(user.claimDraft.document)
       if (!amount) {
         throw new Error('No amount entered, you cannot pay yet')
       }
 
-      const paymentId = user.claimDraft.claimant.payment.id
+      const paymentId = user.claimDraft.document.claimant.payment.id
 
       if (paymentId) {
         const payClient: PayClient = await getPayClient()
         const payment: Payment = await payClient.retrieve(user, paymentId)
         switch (payment.state.status) {
           case 'success':
-            return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: user.claimDraft.externalId }))
+            return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: user.claimDraft.document.externalId }))
         }
       }
-      const feeCalculationOutcome: CalculationOutcome = await FeesClient.calculateFee(issueFeeCode, claimAmountWithInterest(res.locals.user.claimDraft))
+      const feeCalculationOutcome: CalculationOutcome = await FeesClient.calculateFee(issueFeeCode, claimAmountWithInterest(res.locals.user.claimDraft.document))
       const payClient: PayClient = await getPayClient()
-      const payment: PaymentResponse = await payClient.create(res.locals.user, feeCalculationOutcome.fee.code, feeCalculationOutcome.amount, getReturnURL(req, user.claimDraft.externalId))
-      res.locals.user.claimDraft.claimant.payment = payment
-      await ClaimDraftMiddleware.save(res, next)
+      const payment: PaymentResponse = await payClient.create(res.locals.user, feeCalculationOutcome.fee.code, feeCalculationOutcome.amount, getReturnURL(req, user.claimDraft.document.externalId))
+      res.locals.user.claimDraft.document.claimant.payment = payment
+      await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
       res.redirect(payment._links.next_url.href)
     } catch (err) {
-      logPaymentError(user.id, user.claimDraft.claimant.payment)
+      logPaymentError(user.id, user.claimDraft.document.claimant.payment)
       next(err)
     }
   })
@@ -103,16 +102,16 @@ export default express.Router()
     try {
       const { externalId } = req.params
 
-      const paymentId = user.claimDraft.claimant.payment.id
+      const paymentId = user.claimDraft.document.claimant.payment.id
       if (!paymentId) {
         return res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
       }
       const payClient = await getPayClient()
 
       const payment: Payment = await payClient.retrieve(user, paymentId)
-      user.claimDraft.claimant.payment = new Payment().deserialize(payment)
+      user.claimDraft.document.claimant.payment = new Payment().deserialize(payment)
 
-      await ClaimDraftMiddleware.save(res, next)
+      await DraftService.save(user.claimDraft, user.bearerToken)
       const status: string = payment.state.status
 
       // https://gds-payments.gelato.io/docs/versions/1.0.0/api-reference
@@ -130,7 +129,7 @@ export default express.Router()
           next(new Error(`Payment failed. Status ${status} is returned by the service`))
       }
     } catch (err) {
-      logPaymentError(user.id, user.claimDraft.claimant.payment)
+      logPaymentError(user.id, user.claimDraft.document.claimant.payment)
       next(err)
     }
   })

@@ -12,8 +12,10 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
+import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const pagePath: string = ResponsePaths.confirmationPage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
 describe('Defendant response: confirmation page', () => {
   attachDefaultHooks()
@@ -25,6 +27,8 @@ describe('Defendant response: confirmation page', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
       })
+
+      checkCountyCourtJudgmentRequestedGuard(app, 'get', pagePath)
 
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()

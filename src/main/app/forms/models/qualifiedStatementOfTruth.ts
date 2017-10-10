@@ -2,6 +2,7 @@ import { IsDefined, MaxLength } from 'class-validator'
 import { IsBooleanTrue } from 'forms/validation/validators/isBooleanTrue'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import * as toBoolean from 'to-boolean'
+import StatementOfTruth from 'forms/models/statementOfTruth'
 import { SignatureType } from 'app/common/signatureType'
 
 export class ValidationErrors {
@@ -12,9 +13,7 @@ export class ValidationErrors {
   static readonly SIGNER_ROLE_TOO_LONG: string = 'You’ve entered too many characters'
 }
 
-export class QualifiedStatementOfTruth {
-  type: string = SignatureType.QUALIFIED
-
+export class QualifiedStatementOfTruth extends StatementOfTruth {
   @IsDefined({ message: ValidationErrors.STATEMENT_OF_TRUTH_REQUIRED_MESSAGE })
   @IsBooleanTrue({ message: ValidationErrors.STATEMENT_OF_TRUTH_REQUIRED_MESSAGE })
   signed?: boolean
@@ -29,7 +28,9 @@ export class QualifiedStatementOfTruth {
   @MaxLength(255, { message: ValidationErrors.SIGNER_ROLE_TOO_LONG })
   signerRole?: string
 
-  constructor (signed?: boolean, signerName?: string, signerRole?: string ) {
+  constructor (signed?: boolean, signerName?: string, signerRole?: string) {
+    super()
+    this.type = SignatureType.QUALIFIED
     this.signed = signed
     this.signerName = signerName
     this.signerRole = signerRole
@@ -39,7 +40,7 @@ export class QualifiedStatementOfTruth {
     if (!value) {
       return value
     }
-    return new QualifiedStatementOfTruth((value.signed && toBoolean(value.signed) === true), value.signerName, value.signerRole )
+    return new QualifiedStatementOfTruth((value.signed && toBoolean(value.signed) === true), value.signerName, value.signerRole)
   }
 
   deserialize (input?: any): QualifiedStatementOfTruth {

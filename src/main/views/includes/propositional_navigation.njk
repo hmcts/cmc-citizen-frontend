@@ -4,8 +4,10 @@
     <nav id="proposition-menu">
       <a href="/" id="proposition-name">{% if serviceName %}{{ t(serviceName) }}{% endif %}</a>
       <ul id="proposition-links" class="pull-right">
-        <li><a href="/dashboard" >{{ t('My account') }}</a></li>
-        <li><a href="/logout">{{ t('Sign out') }}</a></li>
+        {% if isLoggedIn %}
+          <li><a href="/dashboard" >{{ t('My account') }}</a></li>
+          <li><a href="/logout">{{ t('Sign out') }}</a></li>
+        {% endif %}
       </ul>
     </nav>
   </div>

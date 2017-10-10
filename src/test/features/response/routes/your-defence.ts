@@ -15,6 +15,7 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
+import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -31,6 +32,7 @@ describe('Defendant response: defence page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'get', defencePage)
+      checkCountyCourtJudgmentRequestedGuard(app, 'get', defencePage)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
@@ -43,7 +45,7 @@ describe('Defendant response: defence page', () => {
         })
 
         it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('response')
+          draftStoreServiceMock.resolveFind('response')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -64,6 +66,7 @@ describe('Defendant response: defence page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', defencePage)
+      checkCountyCourtJudgmentRequestedGuard(app, 'post', defencePage)
 
       context('when response not submitted', () => {
         context('when form is invalid', () => {
@@ -77,7 +80,7 @@ describe('Defendant response: defence page', () => {
           })
 
           it('should render page when everything is fine', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
+            draftStoreServiceMock.resolveFind('response')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -89,8 +92,8 @@ describe('Defendant response: defence page', () => {
 
         context('when form is valid', () => {
           it('should return 500 and render error page when form is valid and cannot save draft', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
-            draftStoreServiceMock.rejectSave('response', 'HTTP error')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.rejectSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -101,8 +104,8 @@ describe('Defendant response: defence page', () => {
           })
 
           it('should redirect to free mediation page when form is valid and everything is fine', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
-            draftStoreServiceMock.resolveSave('response')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)

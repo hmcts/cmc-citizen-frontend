@@ -24,14 +24,16 @@ import { default as DraftClaimant } from 'app/drafts/models/claimant'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { Address } from 'claims/models/address'
 import { RangeGroup } from 'fees/models/rangeGroup'
-import { DraftCCJ } from 'ccj/draft/DraftCCJ'
+import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
+import { Draft } from 'models/draft'
+import { DraftDocument } from 'models/draftDocument'
 
-function mockedDraftClaim () {
+function mockedClaimDraft () {
   let draft = new DraftClaim()
   draft.readResolveDispute = true
   draft.claimant = new DraftClaimant()
@@ -143,15 +145,6 @@ mock('idam/authorizationMiddleware', {
   }
 })
 
-mock('claim/draft/claimDraftMiddleware', {
-  'ClaimDraftMiddleware': {
-    retrieve: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-      res.locals.user.claimDraft = mockedDraftClaim()
-      next()
-    }
-  }
-})
-
 mock('idam/idamClient', {
   'default': {
     retrieveUserFor: (jwtToken) => mockUser(),
@@ -178,11 +171,23 @@ mock('fees/feesClient', {
   }
 })
 
-mock('response/draft/responseDraftMiddleware', {
-  'ResponseDraftMiddleware': {
-    retrieve: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-      res.locals.user.responseDraft = mockedResponseDraft()
-      next()
+mock('common/draft/draftMiddleware', {
+  'DraftMiddleware': {
+    requestHandler: (draftType: string) => {
+      return (req: express.Request, res: express.Response, next: express.NextFunction): void => {
+        switch (draftType) {
+          case 'claim':
+            res.locals.user.claimDraft = new Draft<DraftDocument>(100, 'claim', mockedClaimDraft())
+            break
+          case 'response':
+            res.locals.user.responseDraft = new Draft<DraftDocument>(100, 'response', mockedResponseDraft())
+            break
+          case 'ccj':
+            res.locals.user.ccjDraft = new Draft<DraftDocument>(100, 'ccj', mockCCJDraft())
+            break
+        }
+        next()
+      }
     }
   }
 })
@@ -216,6 +221,10 @@ mock('response/guards/oweNoneResponseRequiredGuard', {
   'default': justForwardRequestHandler
 })
 
+mock('response/guards/countyCourtJudgmentRequestedGuard', {
+  'CountyCourtJudgmentRequestedGuard': justForwardRequestHandler
+})
+
 mock('response/guards/allResponseTasksCompletedGuard', {
   'default': {
     requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
@@ -245,15 +254,6 @@ mock('ccj/guards/ccjGuard', {
 mock('ccj/guards/individualDateOfBirthGuard', {
   'IndividualDateOfBirthGuard': {
     requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      next()
-    }
-  }
-})
-
-mock('ccj/draft/DraftCCJService', {
-  'DraftCCJService': {
-    retrieve: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-      res.locals.user[`ccjDraft`] = mockCCJDraft()
       next()
     }
   }

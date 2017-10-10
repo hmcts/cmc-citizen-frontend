@@ -23,6 +23,7 @@ import ClaimAmountBreakdown from 'app/forms/models/claimAmountBreakdown'
 import DraftInterestDate from 'app/forms/models/interestDate'
 import InterestDateType from 'app/common/interestDateType'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
+import StringUtils from 'utils/stringUtils'
 
 export class ClaimModelConverter {
 
@@ -111,7 +112,7 @@ export class ClaimModelConverter {
         return new DefendantAsIndividual(
           individualDetails.name,
           this.convertAddress(individualDetails.address),
-          draftClaim.defendant.email.address
+          StringUtils.trimToUndefined(draftClaim.defendant.email.address)
         )
 
       case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
@@ -120,7 +121,7 @@ export class ClaimModelConverter {
         return new DefendantAsSoleTrader(
           soleTraderDetails.name,
           this.convertAddress(soleTraderDetails.address),
-          draftClaim.defendant.email.address,
+          StringUtils.trimToUndefined(draftClaim.defendant.email.address),
           soleTraderDetails.businessName
         )
 
@@ -130,7 +131,7 @@ export class ClaimModelConverter {
         return new DefendantAsCompany(
           companyDetails.name,
           this.convertAddress(companyDetails.address),
-          draftClaim.defendant.email.address,
+          StringUtils.trimToUndefined(draftClaim.defendant.email.address),
           companyDetails.contactPerson
         )
       case PartyType.ORGANISATION.value:
@@ -139,7 +140,7 @@ export class ClaimModelConverter {
         return new DefendantAsOrganisation(
           organisationDetails.name,
           this.convertAddress(organisationDetails.address),
-          draftClaim.defendant.email.address,
+          StringUtils.trimToUndefined(draftClaim.defendant.email.address),
           organisationDetails.contactPerson
         )
       default:

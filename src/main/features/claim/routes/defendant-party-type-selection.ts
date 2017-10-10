@@ -8,7 +8,7 @@ import { PartyType } from 'app/common/partyType'
 import { ErrorHandling } from 'common/errorHandling'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { PartyDetailsFactory } from 'forms/models/partyDetailsFactory'
-import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
+import { DraftService } from 'common/draft/draftService'
 
 function renderView (form: Form<PartyTypeResponse>, res: express.Response, next: express.NextFunction) {
   res.render(Paths.defendantPartyTypeSelectionPage.associatedView, {
@@ -18,7 +18,7 @@ function renderView (form: Form<PartyTypeResponse>, res: express.Response, next:
 
 export default express.Router()
   .get(Paths.defendantPartyTypeSelectionPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const partyDetails: PartyDetails = res.locals.user.claimDraft.defendant.partyDetails
+    const partyDetails: PartyDetails = res.locals.user.claimDraft.document.defendant.partyDetails
     renderView(new Form(new PartyTypeResponse(partyDetails ? PartyType.valueOf(partyDetails.type) : undefined)), res, next)
   })
   .post(
@@ -30,11 +30,11 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
-        let partyDetails: PartyDetails = res.locals.user.claimDraft.defendant.partyDetails
+        let partyDetails: PartyDetails = res.locals.user.claimDraft.document.defendant.partyDetails
 
         if (partyDetails === undefined || partyDetails.type !== form.model.type.value) {
-          partyDetails = res.locals.user.claimDraft.defendant.partyDetails = PartyDetailsFactory.createInstance(form.model.type.value)
-          await ClaimDraftMiddleware.save(res, next)
+          partyDetails = res.locals.user.claimDraft.document.defendant.partyDetails = PartyDetailsFactory.createInstance(form.model.type.value)
+          await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
         }
 
         switch (partyDetails.type) {
