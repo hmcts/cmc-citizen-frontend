@@ -5,10 +5,11 @@ import * as express from 'express'
 import { buildURL } from 'utils/callbackBuilder'
 import { Paths } from 'app/paths'
 
+const clientId = config.get<string>('oauth.clientId')
+
 export class OAuthHelper {
   static getRedirectUri (req: express.Request, res: express.Response): string {
-    const clientId = config.get<string>('oauth.clientId')
-    const redirectUri = buildURL(req, Paths.receiver.uri.substring(1))
+    const redirectUri = buildURL(req, Paths.receiver.uri)
     const state = uuid()
     this.storeStateCookie(req, res, state)
 
@@ -16,12 +17,19 @@ export class OAuthHelper {
   }
 
   static getRedirectUriForPin(req: express.Request,res: express.Response, claimReference: string): string {
-    const clientId = config.get<string>('oauth.clientId')
-    const redirectUri = buildURL(req, Paths.receiver.uri.substring(1))
+    const redirectUri = buildURL(req, Paths.receiver.uri)
     const state = claimReference
     this.storeStateCookie(req, res, state)
 
     return `${config.get('idam.authentication-web.url')}/login/pin?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}`
+  }
+
+  static getRedirectUriForUplift (req: express.Request, res: express.Response): string {
+    const redirectUri = buildURL(req, Paths.linkDefendantReceiver.uri)
+    const state = res.locals.user.id
+    this.storeStateCookie(req, res, state)
+
+    return `${config.get('idam.authentication-web.url')}/login/uplift?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}`
   }
 
   static getStateCookie (req: express.Request): string {

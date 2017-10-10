@@ -1,15 +1,12 @@
 import * as express from 'express'
-import * as config from 'config'
 import { Paths } from 'first-contact/paths'
-import { Paths as ResponsePaths } from 'response/paths'
 import Claim from 'claims/models/claim'
-import { buildURL } from 'utils/callbackBuilder'
 import ClaimReferenceMatchesGuard from 'first-contact/guards/claimReferenceMatchesGuard'
 import JwtExtractor from 'idam/jwtExtractor'
+import { OAuthHelper } from 'idam/oAuthHelper'
 
-function receiverPath (req: express.Request, letterHolderId: number): string {
-  const callbackPath = ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: letterHolderId + '' })
-  return `${config.get<string>('idam.authentication-web.url')}/login/uplift?jwt=${JwtExtractor.extract(req)}&continue-url=${buildURL(req, callbackPath)}`
+function receiverPath (req: express.Request, res: express.Response): string {
+  return `${OAuthHelper.getRedirectUriForUplift(req, res)}&jwt=${JwtExtractor.extract(req)}`
 }
 
 export default express.Router()
@@ -18,6 +15,5 @@ export default express.Router()
     res.render(Paths.claimSummaryPage.associatedView, { claim: claim })
   })
   .post(Paths.claimSummaryPage.uri, (req: express.Request, res: express.Response): void => {
-
-    res.redirect(receiverPath(req, res.locals.user.id))
+    res.redirect(receiverPath(req, res))
   })

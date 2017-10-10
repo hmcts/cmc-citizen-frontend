@@ -30,14 +30,17 @@ describe('Login receiver', async () => {
 
       it('should save bearer token in cookie when auth token is retrieved from idam', async () => {
         const token = 'I am dummy access token'
-        idamServiceMock.resolveRetrieveAuthTokenFor(token)
+        idamServiceMock.resolveExchangeCode(token)
 
         await request(app)
-          .get(`${AppPaths.receiver.uri}?code=ABC`)
+          .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
+          .set('Cookie', `state=123`)
           .expect(res => expect(res).to.have.cookie(cookieName, token))
       })
 
       it('should not remove bearer token saved in cookie when code does not exist in query string', async () => {
+        const token = 'I am dummy access token'
+        idamServiceMock.resolveExchangeCode(token)
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveFind('response')
         claimStoreServiceMock.resolveRetrieveByClaimantId()
