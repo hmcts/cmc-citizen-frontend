@@ -6,16 +6,13 @@
 
 {% macro timelineRow(index, form) %}
 
-  {% set totalError = form.errorFor('rows').length > 0 %}
+  {% set dateValue = form.valueFor('rows[' + index + '][date]') %}
+  {% set descriptionValue = form.valueFor('rows[' + index + '][description]') %}
 
   {% set errorDate = form.errorFor('rows[' + index + '][date]').length > 0 %}
   {% set errorDescription = form.errorFor('rows[' + index + '][description]').length > 0 %}
-  {% set displayTotalError = totalError and index == 0 %}
 
-  <div class="timeline-row {% if error %} form-group-error {% endif %}">
-    {% if displayTotalError %}
-      <span class="error-message" id="rows[label]">{{ form.errorFor('rows') }}</span>
-    {% endif %}
+  <div class="timeline-row {% if errorDate or errorDescription %} form-group-error {% endif %}">
     {% if errorDate %}
       <span class="error-message" id="{{ 'rows[' + index + '][date][label]' }}">
         {{ form.errorFor('rows[' + index + '][date]') }}
@@ -28,12 +25,18 @@
     {% endif %}
 
     <label class="form-label-bold mobile-show" for="rows[{{ index }}][date]">{{ index + 1 }}{{ t('. Date') }}</label>
-    <span class="form-hint mobile-show {% if errorDate %}form-control-error{% endif %}">{{ t('For example, 1 May 2017') }}</span>
-    <input id="rows[{{ index }}][date]" name="rows[{{ index }}][date]" value="{{ form.valueFor('rows[' + index + '][date]') }}" class="form-control timeline-column-1" type="text">
+    <span class="form-hint mobile-show">{{ t('For example, 1 May 2017') }}</span>
 
-    <label for="rows[{{ index }}][description]" class="form-label-bold mobile-show {% if errorDescription %}form-control-error{% endif %}">{{ t('What happened') }}</label>
+    <input id="rows[{{ index }}][date]" name="rows[{{ index }}][date]" value="{{ dateValue if dateValue }}"
+           class="form-control timeline-column-1 {% if errorDate %}form-control-error{% endif %}" type="text">
+
+    <label for="rows[{{ index }}][description]" class="form-label-bold mobile-show">
+      {{ t('What happened') }}
+    </label>
     <span class="form-hint mobile-show">{{ t('For example, you might have signed a contract') }}</span>
-    <textarea id="rows[{{ index }}][description]" name="rows[{{ index }}][description]" class="timeline-column-text" rows="2">{{ form.valueFor('rows[' + index + '][description]') }}</textarea>
+    <textarea id="rows[{{ index }}][description]" name="rows[{{ index }}][description]"
+              class="timeline-column-text {% if errorDescription %}form-control-error{% endif %}"
+              rows="2">{{ descriptionValue if descriptionValue }}</textarea>
   </div>
 {% endmacro %}
 

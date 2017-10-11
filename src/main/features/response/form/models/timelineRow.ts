@@ -3,18 +3,18 @@ import { IsDefined, ValidateIf } from 'class-validator'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 
 export class ValidationErrors {
-  static readonly DATE_REQUIRED: string = 'Enter reason'
-  static readonly DESCRIPTION_REQUIRED: string = 'Enter amount'
+  static readonly DATE_REQUIRED: string = 'Enter date'
+  static readonly DESCRIPTION_REQUIRED: string = 'Enter description'
 }
 
 export class TimelineRow {
 
-  @ValidateIf(o => o.amount !== undefined)
+  @ValidateIf(o => o.description !== undefined)
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.DATE_REQUIRED })
   date?: string = undefined
 
-  @ValidateIf(o => o.reason !== undefined)
+  @ValidateIf(o => o.date !== undefined)
   @IsDefined({ message: ValidationErrors.DESCRIPTION_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.DESCRIPTION_REQUIRED })
   description?: string = undefined
