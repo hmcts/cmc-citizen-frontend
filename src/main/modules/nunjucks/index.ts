@@ -37,7 +37,13 @@ export default class Nunjucks {
       path.join(__dirname, '..', '..', '..', '..', 'node_modules', '@hmcts', 'cmc-common-frontend', 'macros')
     ], {
       autoescape: true,
+      throwOnUndefined: true,
       express: app
+    })
+
+    app.use((req, res, next) => {
+      res.locals.pagePath = req.path
+      next()
     })
 
     require('numeral/locales/en-gb')

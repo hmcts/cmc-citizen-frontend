@@ -15,7 +15,7 @@ import { RoutablePath } from 'common/router/routablePath'
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('CCJ guard', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
   describe('on GET', () => {
     context('when user authorised', () => {
       beforeEach(() => {

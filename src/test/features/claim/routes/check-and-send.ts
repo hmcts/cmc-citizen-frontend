@@ -18,7 +18,7 @@ import { SignatureType } from 'app/common/signatureType'
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Claim issue: check and send page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.checkAndSendPage.uri)

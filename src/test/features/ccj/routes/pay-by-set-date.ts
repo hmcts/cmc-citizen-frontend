@@ -28,7 +28,7 @@ const payBySetDatePage: string = Paths.payBySetDatePage.evaluateUri({externalId 
 const checkAndSavePage: string = Paths.checkAndSendPage.evaluateUri({externalId : externalId})
 
 describe('CCJ - Pay by set date', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', payBySetDatePage)

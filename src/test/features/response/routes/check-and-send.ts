@@ -6,6 +6,7 @@ import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { checkAlreadySubmittedGuard } from './checks/already-submitted-check'
+import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 import { Paths as ResponsePaths } from 'response/paths'
 
@@ -24,7 +25,7 @@ const draftType = 'response'
 const checkAndSendPage = ResponsePaths.checkAndSendPage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
 describe('Defendant response: check and send page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', checkAndSendPage)
@@ -35,6 +36,7 @@ describe('Defendant response: check and send page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'get', checkAndSendPage)
+      checkCountyCourtJudgmentRequestedGuard(app, 'get', checkAndSendPage)
 
       context('when response not submitted', () => {
         it('should redirect to incomplete submission when not all tasks are completed', async () => {
@@ -79,6 +81,7 @@ describe('Defendant response: check and send page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', checkAndSendPage)
+      checkCountyCourtJudgmentRequestedGuard(app, 'post', checkAndSendPage)
 
       context('when response not submitted', () => {
         it('should redirect to incomplete submission when not all tasks are completed', async () => {

@@ -39,7 +39,7 @@ const issueFeeCode: string = config.get<string>('fees.issueFee.code')
 let overrideClaimDraftObj
 
 describe('Claim issue: initiate payment receiver', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   checkAuthorizationGuards(app, 'get', Paths.startPaymentReceiver.uri)
 
@@ -191,7 +191,7 @@ describe('Claim issue: initiate payment receiver', () => {
 })
 
 describe('Claim issue: post payment callback receiver', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   checkAuthorizationGuards(app, 'get', Paths.finishPaymentReceiver.uri)
 

@@ -21,7 +21,7 @@ const repaymentPlanPage = CCJPaths.repaymentPlanPage.evaluateUri({ externalId: e
 const checkAndSendPage = CCJPaths.checkAndSendPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ: repayment page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', repaymentPlanPage)
