@@ -8,32 +8,32 @@
 
   {% set totalError = form.errorFor('rows').length > 0 %}
 
-  {% set error1 = form.errorFor('rows[' + index + '][date]').length > 0 %}
-  {% set error2 = form.errorFor('rows[' + index + '][description]').length > 0 %}
-  {% set displayTotalError = totalError and loop.index0 == 0 %}
+  {% set errorDate = form.errorFor('rows[' + index + '][date]').length > 0 %}
+  {% set errorDescription = form.errorFor('rows[' + index + '][description]').length > 0 %}
+  {% set displayTotalError = totalError and index == 0 %}
 
   <div class="timeline-row {% if error %} form-group-error {% endif %}">
     {% if displayTotalError %}
       <span class="error-message" id="rows[label]">{{ form.errorFor('rows') }}</span>
     {% endif %}
-    {% if error1 %}
+    {% if errorDate %}
       <span class="error-message" id="{{ 'rows[' + index + '][date][label]' }}">
         {{ form.errorFor('rows[' + index + '][date]') }}
       </span>
     {% endif %}
-    {% if error2 %}
+    {% if errorDescription %}
       <span class="error-message" id="{{ 'rows[' + index + '][description][label]' }}">
         {{ form.errorFor('rows[' + index + '][description]') }}
       </span>
     {% endif %}
 
-    <label class="form-label-bold mobile-show" for="timeline-date-{{ index }}">{{ index + 1 }}. Date</label>
-    <span class="form-hint mobile-show {% if error1 %}form-control-error{% endif %}">For example, 1 May 2017 </span>
-    <input class="form-control timeline-column-1" type="text" id="timeline-date-{{ index }}" name="timeline-date-{{ index }}" value="{{ form.valueFor(rows[' + index + '][date]) }}">
+    <label class="form-label-bold mobile-show" for="rows[{{ index }}][date]">{{ index + 1 }}{{ t('. Date') }}</label>
+    <span class="form-hint mobile-show {% if errorDate %}form-control-error{% endif %}">{{ t('For example, 1 May 2017') }}</span>
+    <input id="rows[{{ index }}][date]" name="rows[{{ index }}][date]" value="{{ form.valueFor('rows[' + index + '][date]') }}" class="form-control timeline-column-1" type="text">
 
-    <label for="timeline-description-{{ index }}" class="form-label-bold mobile-show {% if error2 %}form-control-error{% endif %}">What happened</label>
-    <span class="form-hint mobile-show">For example, you might have signed a contract</span>
-    <textarea class="timeline-column-text" name="timeline-description-{{ index }}" id="timeline-description-{{ index }}" rows="2">{{ form.valueFor(rows[' + index + '][description]) }}</textarea>
+    <label for="rows[{{ index }}][description]" class="form-label-bold mobile-show {% if errorDescription %}form-control-error{% endif %}">{{ t('What happened') }}</label>
+    <span class="form-hint mobile-show">{{ t('For example, you might have signed a contract') }}</span>
+    <textarea id="rows[{{ index }}][description]" name="rows[{{ index }}][description]" class="timeline-column-text" rows="2">{{ form.valueFor('rows[' + index + '][description]') }}</textarea>
   </div>
 {% endmacro %}
 
@@ -61,17 +61,9 @@
           </div>
         </div>
         <div class="timeline-rows">
-          {% set n = form.model.rows.length %}
-          {% if n %}
-            {% for row in form.model.rows %}
-              {{ timelineRow(loop.index0, form) }}
-            {% endfor %}
-          {% else %}
-            {{ timelineRow(0, form) }}
-            {{ timelineRow(1, form) }}
-            {{ timelineRow(2, form) }}
-            {{ timelineRow(3, form) }}
-          {% endif %}
+        {% for row in form.model.rows %}
+          {{ timelineRow(loop.index0, form) }}
+        {% endfor %}
         </div>
       </div>
 
