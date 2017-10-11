@@ -15,14 +15,14 @@ describe('RejectAllOfClaim', () => {
       expectValidationError(errors, ValidationErrors.OPTION_REQUIRED)
     })
 
-    it('should reject with invalid value', () => {
+    it('should reject when invalid option', () => {
       const errors = validator.validateSync(new RejectAllOfClaim('reject all'))
 
       expect(errors.length).to.equal(1)
       expectValidationError(errors, ValidationErrors.OPTION_REQUIRED)
     })
 
-    it('should accept mediation with recognised type', () => {
+    it('should accept when recognised option', () => {
       RejectAllOfClaimOption.all().forEach(type => {
         const errors = validator.validateSync(new RejectAllOfClaim(type))
 
