@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, linkButton, textInputInline, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, linkButton, saveAndContinueButton, errorSummary %}
 
-{% set title = t('Task list | Money claim') %}
+{% set title = t('Money claim') %}
 {% set heading = t('Add your timeline of events') %}
 
 {% macro timelineRow(index, form) %}
