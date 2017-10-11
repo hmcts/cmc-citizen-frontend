@@ -7,7 +7,7 @@
   <div class="grid-row">
     <h1 class="heading-xlarge">{{ t("Do you owe the money claimed?") }}</h1>
 
-      <form method="POST" class="analytics-submit-event-trigger" data-event-action="Defence: Select defence options" data-event-label-from="known" novalidate>
+      <form method="POST" class="analytics-submit-event-trigger" data-event-action="Defence: Select defence option" data-event-label-from="type[value]" novalidate>
 
       {{ csrfProtection(csrf) }}
 

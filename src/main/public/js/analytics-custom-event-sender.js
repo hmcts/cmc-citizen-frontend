@@ -13,6 +13,15 @@ $(function () {
     ga('send', 'event', eventCategory, eventAction, eventLabel)
   }
 
+  function escape (value) {
+    if (!value) {
+      throw new Error('Value is required to escape it')
+    }
+    return value
+      .replace('[', '\\[')
+      .replace(']', '\\]')
+  }
+
   function labelText (labelElement) {
     if (!labelElement) {
       throw new Error('Label element is required')
@@ -35,7 +44,7 @@ $(function () {
       throw new Error('Input name is required')
     }
 
-    var inputElement = form.find('input[name=' + inputName + ']')
+    var inputElement = form.find('input[name=' + escape(inputName) + ']')
     if (inputElement.length > 0) {
       switch (inputElement[0].type) {
         case 'radio':
@@ -43,7 +52,7 @@ $(function () {
             return undefined
           }
 
-          return labelText(form.find('label[for=' + inputElement.filter(':checked')[0].id + ']'))
+          return labelText(form.find('label[for=' + escape(inputElement.filter(':checked')[0].id) + ']'))
         default:
           throw new Error('Input type is not supported')
       }
