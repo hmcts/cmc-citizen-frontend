@@ -23,7 +23,7 @@ const input = {
 } as CompanyDetails
 
 describe('defendant as company details page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.defendantCompanyDetailsPage.uri)

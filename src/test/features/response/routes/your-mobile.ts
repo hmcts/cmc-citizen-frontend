@@ -20,7 +20,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.defendantMobilePage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
 describe('Defendant user details: your mobile page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', pagePath)

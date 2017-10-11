@@ -28,7 +28,7 @@ const validFormData = {
 }
 
 describe('CCJ - paid amount page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', paidAmountPage)

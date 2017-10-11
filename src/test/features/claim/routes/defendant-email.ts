@@ -16,7 +16,7 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Claim issue: defendant email page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.defendantEmailPage.uri)

@@ -1,10 +1,17 @@
 import { expect } from 'chai'
+import * as express from 'express'
 import * as mock from 'nock'
 
 import * as idamServiceMock from '../http-mocks/idam'
 
-export function attachDefaultHooks () {
+export function attachDefaultHooks (app?: express.Express) {
   let retrieveServiceTokenMock: any
+
+  before(() => {
+    if (app) {
+      app.locals.csrf = 'dummy-token'
+    }
+  })
 
   beforeEach(() => {
     mock.cleanAll()

@@ -23,7 +23,7 @@ const input = {
 } as SoleTraderDetails
 
 describe('claimant as soleTrader details page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri)
