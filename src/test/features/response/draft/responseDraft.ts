@@ -5,7 +5,7 @@ import { Response } from 'response/form/models/response'
 import { ResponseType } from 'response/form/models/responseType'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
-import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
+import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 
 describe('ResponseDraft', () => {
   describe('deserialization', () => {
@@ -47,25 +47,53 @@ describe('ResponseDraft', () => {
       expect(responseDraftModel.moreTimeNeeded).to.be.eql(undefined)
       expect(responseDraftModel.isMoreTimeRequested()).to.be.eq(false)
     })
-    describe('requireDefence', () => {
-      it('should return false when no response type set', () => {
-        const responseDraftModel: ResponseDraft = new ResponseDraft()
+  })
 
-        expect(responseDraftModel.requireDefence()).to.be.eq(false)
-      })
-      it('should return true when response type is OWE_NONE', () => {
-        const responseDraftModel: ResponseDraft = new ResponseDraft().deserialize(
-          prepareCounterClaimInputData(ResponseType.OWE_NONE)
-        )
-        console.log(responseDraftModel)
-        expect(responseDraftModel.requireDefence()).to.be.eq(true)
+  describe('requireDefence', () => {
+    it('should return false when no response type set', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = undefined
 
-      })
-      it('should return false when response type is OWE_ALL_PAID_NONE', () => {
-        const responseDraftModel: ResponseDraft = new ResponseDraft()
-        responseDraftModel.response = new Response(ResponseType.OWE_ALL_PAID_NONE)
+      expect(draft.requireDefence()).to.be.eq(false)
+    })
 
-        expect(responseDraftModel.requireDefence()).to.be.eq(false)
+    it('should return false when response is full admission', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.OWE_ALL_PAID_NONE)
+
+      expect(draft.requireDefence()).to.be.eq(false)
+    })
+
+    it('should return false when response is part admission', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
+
+      expect(draft.requireDefence()).to.be.eq(false)
+    })
+
+    it('should return false when response is full rejection without subtype selected', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.OWE_NONE)
+      draft.rejectAllOfClaim = new RejectAllOfClaim(undefined)
+
+      expect(draft.requireDefence()).to.be.eq(false)
+    })
+
+    it('should return false when response is full rejection with counter claim', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.OWE_NONE)
+      draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.COUNTER_CLAIM)
+
+      expect(draft.requireDefence()).to.be.eq(false)
+    })
+
+    it('should return true when response is full rejection without counter claim', () => {
+      RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).forEach(option => {
+        const draft: ResponseDraft = new ResponseDraft()
+        draft.response = new Response(ResponseType.OWE_NONE)
+        draft.rejectAllOfClaim = new RejectAllOfClaim(option)
+
+        expect(draft.requireDefence()).to.be.eq(true)
       })
     })
   })
@@ -85,26 +113,6 @@ describe('ResponseDraft', () => {
         option: moreTimeOption
       },
       counterClaim: {
-        option: RejectAllOfClaimOption.COUNTER_CLAIM
-      }
-    }
-  }
-
-  function prepareCounterClaimInputData (responseType: ResponseType): object {
-    return {
-      response: {
-        type: {
-          value: responseType.value,
-          displayValue: responseType.displayValue
-        }
-      },
-      freeMediation: {
-        option: FreeMediationOption.YES
-      },
-      moreTimeNeeded: {
-        option: MoreTimeNeededOption.NO
-      },
-      rejectAllOfClaim: {
         option: RejectAllOfClaimOption.COUNTER_CLAIM
       }
     }

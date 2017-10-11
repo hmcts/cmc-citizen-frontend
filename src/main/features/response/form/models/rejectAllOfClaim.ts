@@ -10,12 +10,18 @@ export class RejectAllOfClaimOption {
   static readonly COUNTER_CLAIM = 'counterClaim'
 
   static all (): string[] {
-
     return [
       RejectAllOfClaimOption.ALREADY_PAID,
       RejectAllOfClaimOption.DISPUTE,
       RejectAllOfClaimOption.COUNTER_CLAIM
     ]
+  }
+
+  static except (option: string): string[] {
+    if (option === undefined) {
+      throw new Error('Option is required')
+    }
+    return RejectAllOfClaimOption.all().filter(_ => _ !== option)
   }
 }
 

@@ -47,6 +47,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
     if (!(this.response && this.response.type)) {
       return false
     }
-    return !!(this.response.type === ResponseType.OWE_NONE && this.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM)
+    return this.response.type === ResponseType.OWE_NONE && this.rejectAllOfClaim !== undefined
+      && RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).includes(this.rejectAllOfClaim.option)
   }
 }
