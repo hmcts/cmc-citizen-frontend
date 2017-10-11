@@ -5,35 +5,29 @@ import { TimelineRow } from 'response/form/models/timelineRow'
 
 export const INIT_ROW_COUNT: number = 4
 
-export class TimelineBreakdown implements Serializable<TimelineBreakdown> {
+export class Timeline implements Serializable<Timeline> {
   readonly type: string = 'breakdown'
 
   @ValidateNested({ each: true })
   rows: TimelineRow[]
 
-  constructor (rows: TimelineRow[] = TimelineBreakdown.initialRows()) {
+  constructor (rows: TimelineRow[] = Timeline.initialRows()) {
     this.rows = rows
   }
 
   static initialRows (): TimelineRow[] {
-    let rows: TimelineRow[] = []
-
-    for (let i = 0; i < INIT_ROW_COUNT; i++) {
-      rows.push(TimelineRow.empty())
-    }
-
-    return rows
+    return new Array(INIT_ROW_COUNT).fill(TimelineRow.empty())
   }
 
-  static fromObject (value?: any): TimelineBreakdown {
+  static fromObject (value?: any): Timeline {
     if (!value) {
       return value
     }
 
-    return new TimelineBreakdown(value.rows ? value.rows.map(TimelineRow.fromObject) : [])
+    return new Timeline(value.rows ? value.rows.map(TimelineRow.fromObject) : [])
   }
 
-  deserialize (input?: any): TimelineBreakdown {
+  deserialize (input?: any): Timeline {
     if (input) {
       this.rows = this.deserializeRows(input.rows)
     }
@@ -47,14 +41,10 @@ export class TimelineBreakdown implements Serializable<TimelineBreakdown> {
 
   private deserializeRows (rows: any): TimelineRow[] {
     if (!rows) {
-      return TimelineBreakdown.initialRows()
+      return Timeline.initialRows()
     }
 
-    let timelineRows: TimelineRow[] = []
-
-    for (let row in rows) {
-      timelineRows.push(new TimelineRow().deserialize(rows[row]))
-    }
+    let timelineRows: TimelineRow[] = rows.map(row => new TimelineRow().deserialize(row))
 
     for (let i = 0; i < INIT_ROW_COUNT - rows.length; i++) {
       timelineRows.push(TimelineRow.empty())

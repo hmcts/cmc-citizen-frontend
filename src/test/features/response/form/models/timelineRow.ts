@@ -12,7 +12,7 @@ describe('TimelineRow', () => {
 
       const actual: TimelineRow = TimelineRow.empty()
 
-      expect(actual instanceof TimelineRow).to.eq(true)
+      expect(actual).instanceof(TimelineRow)
       expect(actual.date).to.eq(undefined)
       expect(actual.description).to.eq(undefined)
     })
