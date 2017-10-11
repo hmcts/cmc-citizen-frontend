@@ -51,6 +51,26 @@ function isDefendantFirstContactPinLogin (req: express.Request) {
   return useOauth && req.query && req.query.state && req.query.state.match(/[0-9]{3}MC[0-9]{3}/)
 }
 
+function getLetterHolderId (req: express.Request, user: User): string {
+  const roles: string[] = user.roles
+    .filter(
+      (role: string) =>
+        role.startsWith('letter') &&
+        role !== 'letter-holder' &&
+        !role.endsWith('loa1')
+    )
+
+  if (roles.length > 1) {
+    return req.query.state
+  }
+  // User’s on registration can only have one letter holder role
+  if (roles.length === 1) {
+    return roles.pop().replace('letter-', '')
+  }
+
+  throw new Error('User was logged in but didn’t have a letter holder role')
+}
+
 export default express.Router()
   .get(AppPaths.receiver.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
     const cookies = new Cookies(req, res)
@@ -108,7 +128,6 @@ export default express.Router()
     }
   }))
   .get(AppPaths.linkDefendantReceiver.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
-    const letterHolderId = req.query.state
     const cookies = new Cookies(req, res)
 
     let authenticationToken
@@ -134,17 +153,24 @@ export default express.Router()
     }
 
     const user: User = res.locals.user
-    if (!user.isInRoles(`letter-${letterHolderId}`)) {
-      logger.error('User not in letter ID role - redirecting to access denied page')
-      res.redirect(ErrorPaths.claimSummaryAccessDeniedPage.uri)
-      return
+    if (res.locals.isLoggedIn) {
+      const letterHolderId: string = getLetterHolderId(req, user)
+      console.log(letterHolderId)
+      console.log(user.roles)
+      if (!user.isInRoles(`letter-${letterHolderId}`)) {
+        logger.error('User not in letter ID role - redirecting to access denied page')
+        res.redirect(ErrorPaths.claimSummaryAccessDeniedPage.uri)
+        return
+      }
+
+      const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(letterHolderId)
+
+      if (!claim.defendantId) {
+        await ClaimStoreClient.linkDefendant(claim.id, user.id)
+      }
+
+      res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+    } else {
+      res.redirect(OAuthHelper.getRedirectUri(req, res, AppPaths.linkDefendantReceiver))
     }
-
-    const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(letterHolderId)
-
-    if (!claim.defendantId) {
-      await ClaimStoreClient.linkDefendant(claim.id, user.id)
-    }
-
-    res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
   }))
