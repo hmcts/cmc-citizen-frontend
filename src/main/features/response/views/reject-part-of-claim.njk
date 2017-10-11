@@ -2,9 +2,9 @@
 {% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
 {% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
 
-{% set title = t("Money claim") %}
+{% set title = t('Money claim') %}
 
-{% set heading = t("I reject part of the claim") %}
+{% set heading = t('I reject part of the claim') %}
 
 {% block content %}
   <div class="grid-row">
@@ -13,20 +13,20 @@
       <form method="post" class="analytics-submit-event-trigger" data-event-action="Defence: Select part admission option" data-event-label-from="option" novalidate>
         {{ csrfProtection(csrf) }}
 
-        <legend class="visually-hidden">{{ t("I reject part of the claim") }}</legend>
+        <legend class="visually-hidden">{{ t('I reject part of the claim') }}</legend>
 
         {{
           radioGroup(
-          label = "Why are you rejecting part of this claim?",
-          name = "option",
+          label = 'Why are you rejecting part of this claim?',
+          name = 'option',
           options = [
             {
-              label: "The claim amount is too much",
-              value: "amountTooHigh"
+              label: 'The claim amount is too much',
+              value: 'amountTooHigh'
             },
             {
-              label: "I've paid what I believe I owe",
-              value: "paidWhatBelievedWasOwed"
+              label: 'I’ve paid what I believe I owe',
+              value: 'paidWhatBelievedWasOwed'
             }
           ],
           form = form

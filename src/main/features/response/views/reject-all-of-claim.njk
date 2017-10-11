@@ -2,9 +2,9 @@
 {% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
 {% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
 
-{% set title = t("Money claim") %}
+{% set title = t('Money claim') %}
 
-{% set heading = t("I reject all of the claim") %}
+{% set heading = t('I reject all of the claim') %}
 
 {% block content %}
   <div class="grid-row">
@@ -13,24 +13,24 @@
       <form method="post" class="analytics-submit-event-trigger" data-event-action="Defence: Select full admission option" data-event-label-from="option" novalidate>
         {{ csrfProtection(csrf) }}
 
-        <legend class="visually-hidden">{{ t("I reject all of the claim") }}</legend>
+        <legend class="visually-hidden">{{ t('I reject all of the claim') }}</legend>
 
         {{
           radioGroup(
-          label = "Why do you reject all the claim?",
-          name = "option",
+          label = 'Why do you reject all the claim?',
+          name = 'option',
           options = [
             {
-              label: "I've already paid the claim in full",
-              value: "alreadyPaid"
+              label: 'I’ve already paid the claim in full',
+              value: 'alreadyPaid'
             },
             {
-              label: "I dispute the claim",
-              value: "dispute"
+              label: 'I dispute the claim',
+              value: 'dispute'
             },
             {
               label: 'Defend now and also make a counterclaim',
-              value: "counterClaim",
+              value: 'counterClaim',
               hint: 'You’ll need to complete the defence and counterclaim form.'
             }
           ],

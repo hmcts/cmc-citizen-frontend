@@ -1,11 +1,11 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, errorSummary, radioOption, saveAndContinueButton %}
 
-{% set title = t("Money claim") %}
+{% set title = t('Money claim') %}
 
 {% block content %}
   <div class="grid-row">
-    <h1 class="heading-xlarge">{{ t("Do you owe the money claimed?") }}</h1>
+    <h1 class="heading-xlarge">{{ t('Do you owe the money claimed?') }}</h1>
 
       <form method="POST" class="analytics-submit-event-trigger" data-event-action="Defence: Select defence option" data-event-label-from="type[value]" novalidate>
 
@@ -14,24 +14,24 @@
       {% set error = form.errorFor('type') %}
       <div class="form-group {% if error %} form-group-error {% endif %}">
         <fieldset id="type[label]">
-          <legend class="visually-hidden">{{ t("Do you owe the money claimed?") }}</legend>
+          <legend class="visually-hidden">{{ t('Do you owe the money claimed?') }}</legend>
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
 
-          <p>{{ t("You can make a counterclaim against the claimant after you submit your response.") }}</p>
+          <p>{{ t('You can make a counterclaim against the claimant after you submit your response.') }}</p>
 
           {{ radioOption(form = form, name = 'type[value]', value = 'OWE_ALL_PAID_NONE',
-              label = t('I admit all of the claim'), bold = true,
-            hint = t("You can either pay the claim amount in full or by instalments.")
+              label = 'I admit all of the claim', bold = true,
+            hint = 'You can either pay the claim amount in full or by instalments.'
           )}}
 
           {{ radioOption(form = form, name = 'type[value]', value = 'OWE_SOME_PAID_NONE',
-            label = t("I reject part of the claim "), bold = true,
-            hint = t("You have either paid what you you believe you owe or feel the claim amount is too much.")
+            label = 'I reject part of the claim', bold = true,
+            hint = 'You have either paid what you you believe you owe or feel the claim amount is too much.'
           )}}
 
           {{ radioOption(form = form, name = 'type[value]', value = 'OWE_NONE',
-            label = t("I reject all of the claim"), bold = true,
-            hint = t('You have either paid the claim in full or you reject the claim')
+            label = 'I reject all of the claim', bold = true,
+            hint = 'You have either paid the claim in full or you reject the claim'
           )}}
 
         </fieldset>
