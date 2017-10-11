@@ -63,10 +63,5 @@
   "featureToggles": {
     "testingSupport": false,
     "countyCourtJudgment": false
-  },
-  "claim": {
-    "countyCourtJudgment": {
-      "timeForResponseInDays" : 28
-    }
   }
 }
