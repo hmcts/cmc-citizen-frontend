@@ -13,11 +13,11 @@
       </div>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
-      <p>{{ t('The court has entered judgment in your favour, %s is no longer able to file a response.',
-        { postProcess: 'sprintf', sprintf: [ defendantName ]}) }}
+      <p>{{ t('You requested a County Court Judgment on %s. We will contact you within 5 days.',
+        { postProcess: 'sprintf', sprintf: [ ccjRequestedAt | date ]}) }}
       </p>
-      <p>{{ t('You can ask the court to enforce the judgment if %s doesn’t pay as ordered by %s.',
-        { postProcess: 'sprintf', sprintf: [ defendantName, judgmentDeadline | date ]}) }}</p>
+      <p>{{ t('%s can no longer respond to the claim.',
+        { postProcess: 'sprintf', sprintf: [ defendantName ]}) }}</p>
 
       <p>{{ t('View your claim status on <a href="%s">your money claims account</a>.',
         {
