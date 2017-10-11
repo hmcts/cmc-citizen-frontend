@@ -5,7 +5,7 @@ import { Response } from 'response/form/models/response'
 import { ResponseType } from 'response/form/models/responseType'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
-import { CounterClaim } from 'response/form/models/counterClaim'
+import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 
 describe('ResponseDraft', () => {
   describe('deserialization', () => {
@@ -53,20 +53,12 @@ describe('ResponseDraft', () => {
 
         expect(responseDraftModel.requireDefence()).to.be.eq(false)
       })
-      it('should return true when response type is OWE_NONE and counter claim is false', () => {
-        const responseDraftModel: ResponseDraft = new ResponseDraft()
-        responseDraftModel.response = new Response(ResponseType.OWE_NONE)
-        responseDraftModel.counterClaim = new CounterClaim(true)
-
+      it('should return true when response type is OWE_NONE', () => {
+        const responseDraftModel: ResponseDraft = new ResponseDraft().deserialize(
+          prepareCounterClaimInputData(ResponseType.OWE_NONE)
+        )
+        console.log(responseDraftModel)
         expect(responseDraftModel.requireDefence()).to.be.eq(true)
-
-      })
-      it('should return false when response type is OWE_NONE  and counter claim is true', () => {
-        const responseDraftModel: ResponseDraft = new ResponseDraft()
-        responseDraftModel.response = new Response(ResponseType.OWE_NONE)
-        responseDraftModel.counterClaim = new CounterClaim(false)
-
-        expect(responseDraftModel.requireDefence()).to.be.eq(false)
 
       })
       it('should return false when response type is OWE_ALL_PAID_NONE', () => {
@@ -91,6 +83,29 @@ describe('ResponseDraft', () => {
       },
       moreTimeNeeded: {
         option: moreTimeOption
+      },
+      counterClaim: {
+        option: RejectAllOfClaimOption.COUNTER_CLAIM
+      }
+    }
+  }
+
+  function prepareCounterClaimInputData (responseType: ResponseType): object {
+    return {
+      response: {
+        type: {
+          value: responseType.value,
+          displayValue: responseType.displayValue
+        }
+      },
+      freeMediation: {
+        option: FreeMediationOption.YES
+      },
+      moreTimeNeeded: {
+        option: MoreTimeNeededOption.NO
+      },
+      rejectAllOfClaim: {
+        option: RejectAllOfClaimOption.COUNTER_CLAIM
       }
     }
   }

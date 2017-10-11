@@ -5,6 +5,7 @@ import { Paths } from 'response/paths'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 import { StatementOfTruth } from 'response/form/models/statementOfTruth'
+import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 
 import ClaimStoreClient from 'claims/claimStoreClient'
 import User from 'app/idam/user'
@@ -27,8 +28,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
 }
 
 function defendantIsCounterClaiming (user: User): boolean {
-  return user.responseDraft.document.counterClaim &&
-    user.responseDraft.document.counterClaim.counterClaim
+  return user.responseDraft.document.rejectAllOfClaim &&
+    user.responseDraft.document.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM
 }
 
 function isStatementOfTruthRequired (user: User): boolean {

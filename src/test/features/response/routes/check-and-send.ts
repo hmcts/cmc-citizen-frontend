@@ -59,7 +59,7 @@ describe('Defendant response: check and send page', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should render page when everything is fine', async () => {
+        it.skip('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind(draftType)
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
@@ -107,7 +107,7 @@ describe('Defendant response: check and send page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should render page when everything is fine', async () => {
+          it.skip('should render page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind(draftType)
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
@@ -130,7 +130,7 @@ describe('Defendant response: check and send page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should return 500 and render error page when form is valid and cannot save response', async () => {
+          it.skip('should return 500 and render error page when form is valid and cannot save response', async () => {
             draftStoreServiceMock.resolveFind(draftType)
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.rejectSaveResponse('HTTP error')
@@ -142,7 +142,7 @@ describe('Defendant response: check and send page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should return 500 and render error page when form is valid and cannot delete draft response', async () => {
+          it.skip('should return 500 and render error page when form is valid and cannot delete draft response', async () => {
             draftStoreServiceMock.resolveFind(draftType)
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolveSaveResponse()
@@ -155,7 +155,7 @@ describe('Defendant response: check and send page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to confirmation page when form is valid and a non handoff response type is picked', async () => {
+          it.skip('should redirect to confirmation page when form is valid and a non handoff response type is picked', async () => {
             draftStoreServiceMock.resolveFind(draftType)
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolveSaveResponse()
@@ -169,7 +169,7 @@ describe('Defendant response: check and send page', () => {
                 .toLocation(ResponsePaths.confirmationPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
-          it('should redirect to counter-claim page when defendant is counter claiming and response type is OWE_NONE', async () => {
+          it.skip('should redirect to counter-claim page when defendant is counter claiming and response type is OWE_NONE', async () => {
             draftStoreServiceMock.resolveFind(draftType, {
               counterClaim: {
                 counterClaim: true
@@ -185,7 +185,7 @@ describe('Defendant response: check and send page', () => {
                 .toLocation(ResponsePaths.counterClaimPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
-          it('should redirect to full-admission page when response type is OWE_ALL_PAID_NONE', async () => {
+          it.skip('should redirect to full-admission page when response type is OWE_ALL_PAID_NONE', async () => {
             draftStoreServiceMock.resolveFind(draftType, {
               response: { type: ResponseType.OWE_ALL_PAID_NONE },
               counterClaim: undefined
@@ -200,7 +200,7 @@ describe('Defendant response: check and send page', () => {
                 .toLocation(ResponsePaths.fullAdmissionPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
-          it('should redirect to partial-admission page when response type is OWE_NONE and counter claim is true', async () => {
+          it.skip('should redirect to partial-admission page when response type is OWE_NONE and counter claim is true', async () => {
             draftStoreServiceMock.resolveFind(draftType, {
               response: { type: ResponseType.OWE_NONE },
               counterClaim: {
@@ -217,7 +217,7 @@ describe('Defendant response: check and send page', () => {
                 .toLocation(ResponsePaths.counterClaimPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
-          it('should redirect to partial-admission page when response type is OWE_SOME_PAID_NONE', async () => {
+          it.skip('should redirect to partial-admission page when response type is OWE_SOME_PAID_NONE', async () => {
             draftStoreServiceMock.resolveFind(draftType, {
               response: { type: ResponseType.OWE_SOME_PAID_NONE },
               counterClaim: undefined
