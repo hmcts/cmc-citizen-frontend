@@ -6,8 +6,8 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { MobilePhone } from 'forms/models/mobilePhone'
 
-import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
+import { DraftService } from 'common/draft/draftService'
 
 function renderView (form: Form<MobilePhone>, res: express.Response): void {
   res.render(Paths.claimantMobilePage.associatedView, { form: form })
@@ -15,7 +15,7 @@ function renderView (form: Form<MobilePhone>, res: express.Response): void {
 
 export default express.Router()
   .get(Paths.claimantMobilePage.uri, (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    renderView(new Form(res.locals.user.claimDraft.claimant.mobilePhone), res)
+    renderView(new Form(res.locals.user.claimDraft.document.claimant.mobilePhone), res)
   })
   .post(
     Paths.claimantMobilePage.uri,
@@ -26,8 +26,8 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.claimDraft.claimant.mobilePhone = form.model
-        await ClaimDraftMiddleware.save(res, next)
+        res.locals.user.claimDraft.document.claimant.mobilePhone = form.model
+        await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
         res.redirect(Paths.taskListPage.uri)
       }
     }))

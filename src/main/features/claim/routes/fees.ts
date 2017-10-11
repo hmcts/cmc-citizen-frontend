@@ -11,7 +11,7 @@ const supportedFeeLimitInPennies: number = 1000000
 
 export default express.Router()
   .get(Paths.feesPage.uri, (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-    const claimAmount = claimAmountWithInterest(res.locals.user.claimDraft)
+    const claimAmount = claimAmountWithInterest(res.locals.user.claimDraft.document)
     Promise.all(
       [
         FeesClient.calculateIssueFee(claimAmount),

@@ -3,13 +3,14 @@ import * as config from 'config'
 import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
-import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
-import { OfferDraftMiddleware } from 'response/draft/offerDraftMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
 import { buildURL } from 'utils/callbackBuilder'
 import { Paths } from 'response/paths'
 import { AlreadyRespondedGuard } from 'response/guards/alreadyRespondedGuard'
 import { ClaimMiddleware } from 'app/claims/claimMiddleware'
+import { DraftMiddleware } from 'common/draft/draftMiddleware'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { OfferDraft } from 'response/draft/offerDraft'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -35,8 +36,12 @@ export class Feature {
     )
     app.all(
       /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|receipt).*$/,
-      ResponseDraftMiddleware.retrieve,
-      OfferDraftMiddleware.retrieve
+      DraftMiddleware.requestHandler('response', (value: any): ResponseDraft => {
+        return new ResponseDraft().deserialize(value)
+      }),
+      DraftMiddleware.requestHandler('offer', (value: any): OfferDraft => {
+        return new OfferDraft().deserialize(value)
+      })
     )
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }

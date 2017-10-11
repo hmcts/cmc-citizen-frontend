@@ -4,7 +4,6 @@ import { Paths } from 'response/paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
-import { OfferDraftMiddleware } from 'response/draft/offerDraftMiddleware'
 import { SettleOutOfCourt, SettleOutOfCourtOption } from 'response/form/models/SettleOutOfCourt'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
@@ -36,8 +35,8 @@ export default express.Router()
         renderView(form, res, next)
       } else {
         const user: User = res.locals.user
-        user.offerDraft.settleOutOfCourt = form.model
-        await OfferDraftMiddleware.save(res, next)
+        user.offerDraft.document.settleOutOfCourt = form.model
+        await DraftMiddleware.save(res, next)
         if (form.model.option === SettleOutOfCourtOption.YES) {
           res.redirect(Paths.offerPage.evaluateUri({ externalId: user.claim.externalId }))
         } else {

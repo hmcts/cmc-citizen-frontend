@@ -10,7 +10,7 @@ async function renderView (res: express.Response, next: express.NextFunction) {
 
     res.render(Paths.counterClaimPage.associatedView, {
       claim: user.claim,
-      response: user.responseDraft
+      response: user.responseDraft.document
     })
   } catch (err) {
     next(err)

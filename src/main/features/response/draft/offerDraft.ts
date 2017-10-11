@@ -2,9 +2,9 @@ import { Serializable } from 'models/serializable'
 import { SettleOutOfCourt, SettleOutOfCourtOption } from 'response/form/models/settleOutOfCourt'
 import { isNullOrUndefined } from 'util'
 import Offer from 'response/form/models/offer'
-import { Draft } from 'app/models/draft'
+import { DraftDocument } from 'app/models/draftDocument'
 
-export class OfferDraft extends Draft implements Serializable<OfferDraft> {
+export class OfferDraft extends DraftDocument implements Serializable<OfferDraft> {
 
   offer?: Offer
   settleOutOfCourt?: SettleOutOfCourt
@@ -12,7 +12,6 @@ export class OfferDraft extends Draft implements Serializable<OfferDraft> {
   deserialize (input: any): OfferDraft {
     if (input) {
       this.offer = new Offer().deserialize(input.offer)
-      this.lastUpdateTimestamp = input.lastUpdateTimestamp
       this.settleOutOfCourt = new SettleOutOfCourt(input.settleOutOfCourt && input.settleOutOfCourt.option)
     }
     return this

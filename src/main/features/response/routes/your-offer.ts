@@ -6,7 +6,7 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import Offer from 'response/form/models/offer'
 import Defence from 'response/form/models/defence'
-import { OfferDraftMiddleware } from 'response/draft/offerDraftMiddleware'
+import { DraftMiddleware } from 'response/draft/draftMiddleware'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
 
@@ -35,8 +35,9 @@ export default express.Router()
         await renderView(form, res, next)
       } else {
         const user: User = res.locals.user
-        user.offerDraft.offer = form.model
-        await OfferDraftMiddleware.save(res, next)
+        user.offerDraft.document.offer = form.model
+        
+        await DraftMiddleware.save(res, next)
         res.redirect(Paths.offerSentConfirmationPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))
