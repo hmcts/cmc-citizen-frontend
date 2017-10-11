@@ -14,7 +14,7 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 
 describe('Defendant first contact: claim summary page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', `${Paths.claimSummaryPage.uri}?ref=000MC000`)

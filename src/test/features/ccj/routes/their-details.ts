@@ -32,7 +32,7 @@ const validFormData = {
 }
 
 describe('CCJ - their details', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', theirDetailsPage)

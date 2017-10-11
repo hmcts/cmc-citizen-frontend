@@ -23,7 +23,9 @@
         }
       )
     }}
-    {{ row('Email:', user.claim.claimData.defendant.email) }}
+    {% if claim.claimData.defendant.email %}
+      {{ row('Email:', user.claim.claimData.defendant.email) }}
+    {% endif %}
     {{ tableEnd() }}
 
     {{ tableStart('payment', 'Payment') }}

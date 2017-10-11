@@ -199,6 +199,32 @@ export function resolveFind (draftType: string, draftOverride?: object): Scope {
     })
 }
 
+export function resolveFindAllDrafts (): Scope {
+  return mock(serviceBaseURL)
+    .get(new RegExp('/drafts.*'))
+    .reply(HttpStatus.OK, {
+      data: [{
+        id: 200,
+        type: 'claim',
+        document: sampleClaimDraftObj,
+        created: '2017-10-01T12:00:00.000',
+        updated: '2017-10-01T12:01:00.000'
+      }, {
+        id: 201,
+        type: 'response',
+        document: sampleResponseDraftObj,
+        created: '2017-10-02T12:00:00.000',
+        updated: '2017-10-02T12:01:00.000'
+      }, {
+        id: 203,
+        type: 'ccj',
+        document: sampleCCJDraftObj,
+        created: '2017-10-03T12:00:00.000',
+        updated: '2017-10-03T12:01:00.000'
+      }]
+    })
+}
+
 export function resolveFindNoDraftFound (): Scope {
   return mock(serviceBaseURL)
     .get(new RegExp('/drafts.*'))

@@ -18,7 +18,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: '1' })
 
 describe('Defendant link receiver', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', pagePath)

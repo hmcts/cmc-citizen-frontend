@@ -20,7 +20,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.partialAdmissionPage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
 describe('Defendant response: partial admission page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', pagePath)
