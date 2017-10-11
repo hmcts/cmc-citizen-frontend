@@ -8,50 +8,73 @@
     <div class="column-two-thirds">
       <div class="govuk-box-highlight">
         <h1 class="bold-large">{{ t("Defence submitted") }}</h1>
-
-        <p>
+        <p class="response-date">
           <strong class="bold">{{ submittedOn | date }}</strong>
         </p>
         <p class="issue-receipt-download ">
-          <a href="{{ paths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t("Download defence as pdf") }}</a>
+          <a href="{{ paths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t("Download your response as PDF") }}</a>
         </p>
       </div>
 
-      <p>
-        {{ t("Your defence will be shared with %s and the court.",
-        {
-          postProcess: 'sprintf',
-          sprintf: [claim.claimData.claimant.name]
-        }
-        ) }}
-      </p>
-      <p>{{ t('We’ve also sent a copy to:') }} <strong>{{ defendantEmail }}</strong>.</p>
+      <div>
+        <h2 class="heading-medium">{{ t("Your response") }}</h2>
+        <p>
+          {{ t(
+            'We’ve emailed %s your defence, explaining why you disagree with the claim.',
+            {
+              postProcess: 'sprintf',
+              sprintf: [claimantName]
+            }
+          ) }}
+        </p>
+        <p>
+          {{ t(
+            'View the <a href="%s">claim against you and your response</a>.',
+            {
+              postProcess: 'sprintf',
+              sprintf: ['/dashboard/' + claim.externalId + '/defendant']
+            }
+          ) | safe }}
+        </p>
+      </div>
 
       <div>
         <h2 class="heading-medium">{{ t("What happens next") }}</h2>
         <p>
-          {{ t("The case will be reviewed by a judge and might go to a hearing. We’ll contact you if a hearing date is scheduled and explain what you need to do to prepare.") }}
-        </p>
-
-        <p>{{ t('You can <a href="%s">view the status of this claim</a> at any time.',
-          {
-            postProcess: 'sprintf',
-            sprintf: ['/dashboard']
-          }) | safe }}</p>
-
-
-        <h2 class="heading-medium">{{ t("What you can do to settle the claim") }}</h2>
-        <p>
-          {{ t("Unless you’ve been asked not to, you can still contact %s directly. If you can reach an agreement you won’t have to go to a hearing.",
-          {
-            postProcess: 'sprintf',
-            sprintf: [claim.claimData.claimant.name]
-          }
+          {{ t(
+            '%s has until %s to respond to your defence.',
+            {
+              postProcess: 'sprintf',
+              sprintf: [claimantName, '!!! TODO Calculate this date !!!']
+            }
           ) }}
         </p>
-
-        {{ supportWidget() }}
+        <p>
+          {{ t(
+            'If your defence is accepted %s must tell both you and the court that you have paid the money claim.',
+            {
+              postProcess: 'sprintf',
+              sprintf: [claimantName]
+            }
+          ) }}
+        </p>
+        <p>
+          {{ t(
+            'If your defence is rejected then the case will be reviewed by a judge and might go to a hearing. We\'ll contact you if a hearing date is scheduled and explain what you need to do to prepare.'
+          ) }}
+        </p>
+        <p>
+          {{ t(
+            'You can still contact %s to make a <a href="%s">settlement out of court</a>. If you agree a settlement then the claim is closed and you won\'t have to go to a hearing.',
+            {
+              postProcess: 'sprintf',
+              sprintf: [claimantName, '/offer/todo/add/the/page']
+            }
+          ) | safe }}
+        </p>
       </div>
+
+      {{ supportWidget() }}
 
       {% include "includes/service_survey_link.njk" %}
     </div>

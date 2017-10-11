@@ -9,9 +9,8 @@ export default express.Router()
       const user: User = res.locals.user
 
       res.render(Paths.confirmationPage.associatedView, {
-        claim: user.claim,
+        claimantName: user.claim.claimData.claimant.name,
         submittedOn: user.claim.respondedAt,
-        defendantEmail: user.email,
         paths: Paths
       })
     } catch (err) {
