@@ -3,8 +3,8 @@
 
 
 "@hmcts/cmc-common-frontend@^1.10.0":
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.10.0.tgz#e9a8a8c5491d49e3980335d9928d0f5ac33ce28e"
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.10.1.tgz#67a3a25f12b33903cbb14daa74ea4fc43215e754"
 
 "@hmcts/nodejs-healthcheck@^1.4.3":
   version "1.4.3"
