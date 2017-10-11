@@ -8,7 +8,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'common/draft/draftService'
 
 function renderView (form: Form<TimelineBreakdown>, res: express.Response): void {
-  res.render(Paths.timelinePage.associatedView, { form: form })
+  res.render(Paths.timelinePage.associatedView, { form: form, claimantName: res.locals.user.claim.claimData.claimant.name })
 }
 
 function actionHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
@@ -24,13 +24,7 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 
 export default express.Router()
   .get(Paths.timelinePage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-
-    const form = new Form(res.locals.user.responseDraft.document.timeline)
-
-    console.log(form.model.rows)
-    console.log(form.valueFor('rows[0][date]'))
-
-    res.render(Paths.timelinePage.associatedView, { form: new Form(res.locals.user.responseDraft.document.timeline) })
+    renderView(new Form(res.locals.user.responseDraft.document.timeline), res)
   })
   .post(
     Paths.timelinePage.uri,
@@ -45,7 +39,7 @@ export default express.Router()
         res.locals.user.responseDraft.document.timeline = form.model
 
         await DraftService.save(res.locals.user.responseDraft, res.locals.user.bearerToken)
-        res.render(Paths.timelinePage.associatedView, { form: form })
+        renderView(form, res)
       }
     })
   )
