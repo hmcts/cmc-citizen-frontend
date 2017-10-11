@@ -13,7 +13,8 @@ import User from 'idam/user'
 import { GuardFactory } from 'response/guards/guardFactory'
 
 function isRequestAllowed (res: express.Response): boolean {
-  return res.locals.user.responseDraft.document.response.type === ResponseType.OWE_NONE
+  return res.locals.user.responseDraft.document.response !== undefined
+    && res.locals.user.responseDraft.document.response.type === ResponseType.OWE_NONE
 }
 
 function accessDeniedCallback (req: express.Request, res: express.Response): void {
