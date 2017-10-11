@@ -22,7 +22,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.moreTimeRequestPage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
 describe('Defendant response: more time needed page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', pagePath)

@@ -1,3 +1,4 @@
+import * as config from 'config'
 import * as supertest from 'supertest'
 import * as pa11y from 'pa11y'
 import * as promisify from 'es6-promisify'
@@ -12,17 +13,28 @@ import { Paths as CCJPaths } from 'ccj/paths'
 import './mocks'
 import { app } from '../../main/app'
 
+app.locals.csrf = 'dummy-token'
+
+const cookieName: string = config.get<string>('session.cookieName')
+
 const agent = supertest.agent(app)
-const pa11yTest = pa11y()
+const pa11yTest = pa11y({
+  page: {
+    headers: {
+      Cookie: `${cookieName}=ABC`
+    }
+  }
+})
 const test = promisify(pa11yTest.run, pa11yTest)
 
 function check (url: string): void {
   describe(`Page ${url}`, () => {
 
     it('should have no accessibility errors', (done) => {
-      ensurePageCallWillSucceed(url)
+      const urlWithParams = `${url}?ref=000MC000`
+      ensurePageCallWillSucceed(urlWithParams)
         .then(() =>
-          test(agent.get(url).url)
+          test(agent.get(urlWithParams).url)
         )
         .then((messages) => {
           const errors = messages.filter((m) => m.type === 'error')
@@ -39,6 +51,7 @@ function check (url: string): void {
 
 function ensurePageCallWillSucceed (url: string): Promise<void> {
   return agent.get(url)
+    .set('Cookie', `${cookieName}=ABC`)
     .then((res: supertest.Response) => {
       if (res.redirect) {
         throw new Error(`Call to ${url} resulted in a redirect to ${res.get('Location')}`)

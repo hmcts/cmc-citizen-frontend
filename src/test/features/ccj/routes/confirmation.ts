@@ -19,7 +19,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const confirmationPage = CCJPaths.confirmationPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ: confirmation page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', confirmationPage)

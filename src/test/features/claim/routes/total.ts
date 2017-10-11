@@ -17,7 +17,7 @@ import * as feesServiceMock from '../../../http-mocks/fees'
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Claim issue: total page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.totalPage.uri)

@@ -9,7 +9,7 @@ import { Paths as DefendantFirstContactPaths } from 'first-contact/paths'
 import { app } from '../../../../main/app'
 
 describe('Defendant first contact: start page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     it('should render page when everything is fine', async () => {

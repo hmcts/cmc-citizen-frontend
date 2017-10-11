@@ -31,7 +31,7 @@ const input = {
 } as IndividualDetails
 
 describe('defendant as individual details page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.defendantIndividualDetailsPage.uri)
