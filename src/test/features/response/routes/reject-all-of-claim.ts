@@ -8,6 +8,7 @@ import { checkAuthorizationGuards } from './checks/authorization-check'
 import { checkAlreadySubmittedGuard } from './checks/already-submitted-check'
 
 import { Paths as ResponsePaths } from 'response/paths'
+import { ResponseType } from 'response/form/models/responseType'
 
 import { app } from '../../../../main/app'
 
@@ -19,8 +20,14 @@ import { sampleClaimObj } from '../../../http-mocks/claim-store'
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
-describe('Defendant response: I reject all of the claim', () => {
-  attachDefaultHooks()
+const draftOverride = {
+  response: {
+    type: ResponseType.OWE_NONE
+  }
+}
+
+describe('Defendant response: full admission options', () => {
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', pagePath)
@@ -42,8 +49,19 @@ describe('Defendant response: I reject all of the claim', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
+        it('should redirect to response type page when response type is not full admission', async () => {
+          draftStoreServiceMock.resolveFind('response', {response: { type: ResponseType.OWE_SOME_PAID_NONE }})
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.responseTypePage
+              .evaluateUri({ externalId: sampleClaimObj.externalId })))
+        })
+
         it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response', draftOverride)
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -66,6 +84,17 @@ describe('Defendant response: I reject all of the claim', () => {
       checkAlreadySubmittedGuard(app, 'post', pagePath)
 
       context('when response not submitted', () => {
+        it('should redirect to response type page when response type is not full admission', async () => {
+          draftStoreServiceMock.resolveFind('response', {response: { type: ResponseType.OWE_SOME_PAID_NONE }})
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.responseTypePage
+              .evaluateUri({ externalId: sampleClaimObj.externalId })))
+        })
+
         context('when form is invalid', () => {
           it('should return 500 and render error page when cannot retrieve claim', async () => {
             claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
@@ -77,7 +106,7 @@ describe('Defendant response: I reject all of the claim', () => {
           })
 
           it('should render page when everything is fine', async () => {
-            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('response', draftOverride)
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -90,7 +119,7 @@ describe('Defendant response: I reject all of the claim', () => {
         context('when form is valid', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('response', draftOverride)
             draftStoreServiceMock.rejectSave()
 
             await request(app)
@@ -102,7 +131,7 @@ describe('Defendant response: I reject all of the claim', () => {
 
           it('should redirect to mediation page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('response', draftOverride)
             draftStoreServiceMock.resolveSave()
 
             await request(app)

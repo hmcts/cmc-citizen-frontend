@@ -16,30 +16,31 @@
         <legend class="visually-hidden">{{ t("I reject all of the claim") }}</legend>
 
         {{
-        radioGroup(
-        label = "Why do you reject all the claim?",
-        name = "option",
-        options = [
-        {
-          label: "I've already paid the claim in full",
-          value: "alreadyPaid",
-          hint: ""
-        },
-        {
-          label: "I dispute the claim",
-          value: "dispute",
-          hint: ""
-        },
-        {
-          label: 'Defend now and also make a counterclaim',
-          value: "counterClaim",
-          hint: 'You’ll need to complete the defence and counterclaim form.'
-        }
-        ],
-        form = form
-        )
+          radioGroup(
+          label = "Why do you reject all the claim?",
+          name = "option",
+          options = [
+            {
+              label: "I've already paid the claim in full",
+              value: "alreadyPaid",
+              hint: ""
+            },
+            {
+              label: "I dispute the claim",
+              value: "dispute",
+              hint: ""
+            },
+            {
+              label: 'Defend now and also make a counterclaim',
+              value: "counterClaim",
+              hint: 'You’ll need to complete the defence and counterclaim form.'
+            }
+          ],
+          form = form
+          )
         }}
-          {{ saveAndContinueButton() }}
+
+        {{ saveAndContinueButton() }}
       </form>
     </div>
   </div>

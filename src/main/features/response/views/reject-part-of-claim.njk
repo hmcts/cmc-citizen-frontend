@@ -16,27 +16,28 @@
         <legend class="visually-hidden">{{ t("I reject part of the claim") }}</legend>
 
         {{
-        radioGroup(
-        label = "Why are you rejecting part of this claim?",
-        name = "option",
-        options = [
-        {
-          label: "The claim amount is too much",
-          value: "amountTooHigh",
-          hint: "",
-          bold: true
-        },
-        {
-          label: "I've paid what I believe I owe",
-          value: "paidWhatBelievedWasOwed",
-          hint: "",
-          bold: true
-        }
-        ],
-        form = form
-        )
+          radioGroup(
+          label = "Why are you rejecting part of this claim?",
+          name = "option",
+          options = [
+            {
+              label: "The claim amount is too much",
+              value: "amountTooHigh",
+              hint: "",
+              bold: true
+            },
+            {
+              label: "I've paid what I believe I owe",
+              value: "paidWhatBelievedWasOwed",
+              hint: "",
+              bold: true
+            }
+          ],
+          form = form
+          )
         }}
-          {{ saveAndContinueButton() }}
+
+        {{ saveAndContinueButton() }}
       </form>
     </div>
   </div>
