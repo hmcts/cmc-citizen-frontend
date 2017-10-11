@@ -3,7 +3,7 @@ import { ValidateNested } from 'class-validator'
 import { Serializable } from 'models/serializable'
 import { TimelineRow } from 'response/form/models/timelineRow'
 
-const INIT_ROW_COUNT: number = 4
+export const INIT_ROW_COUNT: number = 4
 
 export class TimelineBreakdown implements Serializable<TimelineBreakdown> {
   readonly type: string = 'breakdown'
@@ -30,8 +30,6 @@ export class TimelineBreakdown implements Serializable<TimelineBreakdown> {
       return value
     }
 
-    console.log(value)
-
     return new TimelineBreakdown(value.rows ? value.rows.map(TimelineRow.fromObject) : [])
   }
 
@@ -52,17 +50,17 @@ export class TimelineBreakdown implements Serializable<TimelineBreakdown> {
       return TimelineBreakdown.initialRows()
     }
 
-    let claimAmountRows: TimelineRow[] = []
+    let timelineRows: TimelineRow[] = []
 
     for (let row in rows) {
-      claimAmountRows.push(new TimelineRow().deserialize(rows[row]))
+      timelineRows.push(new TimelineRow().deserialize(rows[row]))
     }
 
     for (let i = 0; i < INIT_ROW_COUNT - rows.length; i++) {
-      claimAmountRows.push(TimelineRow.empty())
+      timelineRows.push(TimelineRow.empty())
     }
 
-    return claimAmountRows
+    return timelineRows
   }
 
 }
