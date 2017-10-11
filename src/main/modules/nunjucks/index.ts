@@ -40,6 +40,11 @@ export default class Nunjucks {
       express: app
     })
 
+    app.use((req, res, next) => {
+      res.locals.pagePath = req.path
+      next()
+    })
+
     require('numeral/locales/en-gb')
     numeral.locale('en-gb')
     numeral.defaultFormat(NUMBER_FORMAT)
