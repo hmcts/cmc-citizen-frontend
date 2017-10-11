@@ -16,6 +16,9 @@ import * as config from 'config'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import IdamClient from 'app/idam/idamClient'
 import { buildURL } from 'utils/callbackBuilder'
+import { DraftMiddleware } from 'common/draft/draftMiddleware'
+import DraftClaim from 'drafts/models/draftClaim'
+import JwtExtractor from 'idam/jwtExtractor'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('router/receiver')
 const useOauth = toBoolean(config.get<boolean>('featureToggles.idamOauth'))
@@ -38,6 +41,8 @@ async function getAuthToken (req: express.Request) {
     authenticationToken = req.query.jwt
   } else if (useOauth && req.query.code) {
     authenticationToken = await getOAuthAccessToken(req)
+  } else {
+    authenticationToken = JwtExtractor.extract(req)
   }
   return authenticationToken
 }
@@ -69,10 +74,17 @@ export default express.Router()
       const claimAgainstDefendant = await ClaimStoreClient.retrieveByDefendantId(user.id)
       const atLeastOneResponse: boolean = claimAgainstDefendant.length > 0 &&
         claimAgainstDefendant.some((claim: Claim) => !!claim.response)
+      const atLeastOneCCJ: boolean = claimAgainstDefendant.length > 0 &&
+        claimAgainstDefendant.some((claim: Claim) => !!claim.countyCourtJudgment)
 
-      if (atLeastOneClaimIssued || atLeastOneResponse) {
+      if (atLeastOneClaimIssued || atLeastOneResponse || atLeastOneCCJ) {
         return res.redirect(DashboardPaths.dashboardPage.uri)
       }
+
+      res.locals.user.claimDraft = DraftMiddleware.requestHandler('claim', (value: any): DraftClaim => {
+        return new DraftClaim().deserialize(value)
+      })
+
       const draftClaimSaved: boolean = user.claimDraft.document && user.claimDraft.id !== undefined
       const claimIssuedButNoResponse: boolean = (claimAgainstDefendant).length > 0
         && !atLeastOneResponse
@@ -121,10 +133,7 @@ export default express.Router()
       cookies.set(sessionCookie, authenticationToken, { sameSite: 'lax' })
     }
 
-
     const user: User = res.locals.user
-    console.log(user)
-    console.log(letterHolderId)
     if (!user.isInRoles(`letter-${letterHolderId}`)) {
       logger.error('User not in letter ID role - redirecting to access denied page')
       res.redirect(ErrorPaths.claimSummaryAccessDeniedPage.uri)
