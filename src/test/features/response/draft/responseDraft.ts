@@ -111,9 +111,6 @@ describe('ResponseDraft', () => {
       },
       moreTimeNeeded: {
         option: moreTimeOption
-      },
-      counterClaim: {
-        option: RejectAllOfClaimOption.COUNTER_CLAIM
       }
     }
   }
