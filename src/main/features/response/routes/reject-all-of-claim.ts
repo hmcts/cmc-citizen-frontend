@@ -10,7 +10,7 @@ import { RejectAllOfClaim } from 'response/form/models/rejectAllOfClaim'
 import { DraftService } from 'common/draft/draftService'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
-import { GenericGuard } from 'response/guards/genericResponseGuard'
+import { GuardFactory } from 'response/guards/guardFactory'
 
 function isRequestAllowed (res: express.Response): boolean {
   return res.locals.user.responseDraft.document.response.type === ResponseType.OWE_NONE
@@ -29,13 +29,13 @@ function renderView (form: Form<RejectAllOfClaim>, res: express.Response) {
 export default express.Router()
   .get(
     Paths.defenceRejectAllOfClaimPage.uri,
-    GenericGuard.create(isRequestAllowed, accessDeniedCallback),
+    GuardFactory.create(isRequestAllowed, accessDeniedCallback),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       renderView(new Form(res.locals.user.responseDraft.document.rejectAllOfClaim), res)
     }))
   .post(
     Paths.defenceRejectAllOfClaimPage.uri,
-    GenericGuard.create(isRequestAllowed, accessDeniedCallback),
+    GuardFactory.create(isRequestAllowed, accessDeniedCallback),
     FormValidator.requestHandler(RejectAllOfClaim),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const { externalId } = req.params
