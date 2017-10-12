@@ -1,5 +1,5 @@
 import { Serializable } from 'app/models/serializable'
-import { ClaimAmountBreakdown } from 'app/forms/models/claimAmountBreakdown'
+import { ClaimAmountBreakdown } from 'features/claim/form/models/claimAmountBreakdown'
 import InterestDate from 'app/claims/models/interestDate'
 import Interest from 'app/forms/models/interest'
 import { Party } from 'claims/models/details/yours/party'

@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 
 import { MinTotalConstraint } from 'app/forms/validation/validators/minTotal'
-import { ClaimAmountRow } from 'app/forms/models/claimAmountRow'
 import { ValidationArguments } from 'class-validator'
+import { ClaimAmountRow } from 'claim/form/models/claimAmountRow'
 
 class TestValidationArguments implements ValidationArguments {
   value: any

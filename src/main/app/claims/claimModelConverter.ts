@@ -19,7 +19,7 @@ import { Organisation as DefendantAsOrganisation } from 'claims/models/details/t
 import InterestDate from 'app/claims/models/interestDate'
 import { Address } from 'claims/models/address'
 import { Address as AddressForm } from 'forms/models/address'
-import { ClaimAmountBreakdown } from 'app/forms/models/claimAmountBreakdown'
+import { ClaimAmountBreakdown } from 'features/claim/form/models/claimAmountBreakdown'
 import DraftInterestDate from 'app/forms/models/interestDate'
 import InterestDateType from 'app/common/interestDateType'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'

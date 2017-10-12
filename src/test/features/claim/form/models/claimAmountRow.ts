@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
-import { expectValidationError, generateString } from './validationUtils'
+import { expectValidationError, generateString } from '../../../../app/forms/models/validationUtils'
 
-import { ClaimAmountRow, ValidationConstants, ValidationErrors } from 'forms/models/claimAmountRow'
+import { ClaimAmountRow, ValidationConstants, ValidationErrors } from 'claim/form/models/claimAmountRow'
 
 describe('ClaimAmountRow', () => {
 

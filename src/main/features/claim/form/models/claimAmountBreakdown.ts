@@ -1,11 +1,11 @@
 import { ValidateNested } from 'class-validator'
 
-import { Serializable } from 'models/serializable'
-import { ClaimAmountRow } from 'forms/models/claimAmountRow'
+import { Serializable } from 'app/models/serializable'
+import { ClaimAmountRow } from 'features/claim/form/models/claimAmountRow'
 import { MinTotal } from 'app/forms/validation/validators/minTotal'
 
 const INIT_ROW_COUNT: number = 4
-export const MAX_NUMBER_OF_EVENTS: number = 20
+export const MAX_NUMBER_OF_ROWS: number = 20
 
 export class ValidationErrors {
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount of money'
@@ -43,7 +43,7 @@ export class ClaimAmountBreakdown implements Serializable<ClaimAmountBreakdown> 
   }
 
   appendRow () {
-    if (this.rows.length < MAX_NUMBER_OF_EVENTS) {
+    if (this.rows.length < MAX_NUMBER_OF_ROWS) {
       this.rows.push(ClaimAmountRow.empty())
     }
   }

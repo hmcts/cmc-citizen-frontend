@@ -1,14 +1,14 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
 
-import { expectValidationError } from './validationUtils'
+import { expectValidationError } from '../../../../app/forms/models/validationUtils'
 
 import {
   ClaimAmountBreakdown,
-  MAX_NUMBER_OF_EVENTS,
+  MAX_NUMBER_OF_ROWS,
   ValidationErrors as BreakdownValidationErrors
-} from 'forms/models/claimAmountBreakdown'
-import { ClaimAmountRow, ValidationErrors } from 'forms/models/claimAmountRow'
+} from 'claim/form/models/claimAmountBreakdown'
+import { ClaimAmountRow, ValidationErrors } from 'claim/form/models/claimAmountRow'
 import { INIT_ROW_COUNT } from 'response/form/models/timeline'
 
 describe('ClaimAmountBreakdown', () => {
@@ -129,7 +129,7 @@ describe('ClaimAmountBreakdown', () => {
         actual.appendRow()
       }
 
-      expect(actual.rows.length).to.be.eq(MAX_NUMBER_OF_EVENTS)
+      expect(actual.rows.length).to.be.eq(MAX_NUMBER_OF_ROWS)
     })
   })
 
