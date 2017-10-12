@@ -10,7 +10,6 @@ import { AlreadyRespondedGuard } from 'response/guards/alreadyRespondedGuard'
 import { ClaimMiddleware } from 'app/claims/claimMiddleware'
 import { DraftMiddleware } from 'common/draft/draftMiddleware'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { OfferDraft } from 'response/draft/offerDraft'
 import { CountyCourtJudgmentRequestedGuard } from 'response/guards/countyCourtJudgmentRequestedGuard'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
@@ -40,9 +39,6 @@ export class Feature {
       /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|receipt).*$/,
       DraftMiddleware.requestHandler('response', (value: any): ResponseDraft => {
         return new ResponseDraft().deserialize(value)
-      }),
-      DraftMiddleware.requestHandler('offer', (value: any): OfferDraft => {
-        return new OfferDraft().deserialize(value)
       })
     )
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))

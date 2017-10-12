@@ -2,7 +2,6 @@ import DraftClaim from 'app/drafts/models/draftClaim'
 import Claim from 'app/claims/models/claim'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
-import { OfferDraft } from 'response/draft/offerDraft'
 import { Draft } from 'models/draft'
 
 export default class User {
@@ -14,7 +13,6 @@ export default class User {
   group: string
   bearerToken: string
   claimDraft: Draft<DraftClaim>
-  offerDraft: Draft<OfferDraft>
   claim: Claim
   responseDraft: Draft<ResponseDraft>
   ccjDraft: Draft<DraftCCJ>

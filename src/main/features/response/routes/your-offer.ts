@@ -6,7 +6,7 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import Offer from 'response/form/models/offer'
 import Defence from 'response/form/models/defence'
-import { DraftMiddleware } from 'response/draft/draftMiddleware'
+import ClaimStoreClient from 'claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
 
@@ -23,7 +23,7 @@ async function renderView (form: Form<Defence>, res: express.Response, next: exp
 
 export default express.Router()
   .get(Paths.offerPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    await renderView(new Form(res.locals.user.offerDraft.offer), res, next)
+    await renderView(Form.empty(), res, next)
   })
   .post(
     Paths.offerPage.uri,
@@ -35,9 +35,7 @@ export default express.Router()
         await renderView(form, res, next)
       } else {
         const user: User = res.locals.user
-        user.offerDraft.document.offer = form.model
-        
-        await DraftMiddleware.save(res, next)
+        ClaimStoreClient.saveOfferForUser(user, form.model)
         res.redirect(Paths.offerSentConfirmationPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

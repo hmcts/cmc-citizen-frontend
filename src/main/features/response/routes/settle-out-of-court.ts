@@ -23,7 +23,7 @@ export default express.Router()
   .get(
     Paths.settleOutOfCourtPage.uri,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      renderView(new Form(res.locals.user.offerDraft.settleOutOfCourt), res, next)
+      renderView(Form.empty(), res, next)
     })
   .post(
     Paths.settleOutOfCourtPage.uri,
@@ -35,8 +35,6 @@ export default express.Router()
         renderView(form, res, next)
       } else {
         const user: User = res.locals.user
-        user.offerDraft.document.settleOutOfCourt = form.model
-        await DraftMiddleware.save(res, next)
         if (form.model.option === SettleOutOfCourtOption.YES) {
           res.redirect(Paths.offerPage.evaluateUri({ externalId: user.claim.externalId }))
         } else {
