@@ -1,16 +1,17 @@
 import { ValidateNested } from 'class-validator'
 
 import { Serializable } from 'models/serializable'
-import ClaimAmountRow from 'forms/models/claimAmountRow'
+import { ClaimAmountRow } from 'forms/models/claimAmountRow'
 import { MinTotal } from 'app/forms/validation/validators/minTotal'
 
-const initialRowsCount: number = 4
+const INIT_ROW_COUNT: number = 4
+export const MAX_NUMBER_OF_EVENTS: number = 20
 
 export class ValidationErrors {
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount of money'
 }
 
-export default class ClaimAmountBreakdown implements Serializable<ClaimAmountBreakdown> {
+export class ClaimAmountBreakdown implements Serializable<ClaimAmountBreakdown> {
   readonly type: string = 'breakdown'
 
   @ValidateNested({ each: true })
@@ -21,22 +22,16 @@ export default class ClaimAmountBreakdown implements Serializable<ClaimAmountBre
     this.rows = rows
   }
 
-  static initialRows (): ClaimAmountRow[] {
-    let rows: ClaimAmountRow[] = []
-
-    for (let i = 0; i < initialRowsCount; i++) {
-      rows.push(ClaimAmountRow.empty())
-    }
-
-    return rows
-  }
-
   static fromObject (value?: any): ClaimAmountBreakdown {
     if (!value) {
       return value
     }
 
     return new ClaimAmountBreakdown(value.rows ? value.rows.map(ClaimAmountRow.fromObject) : [])
+  }
+
+  private static initialRows (rows: number = INIT_ROW_COUNT): ClaimAmountRow[] {
+    return new Array(rows).fill(ClaimAmountRow.empty())
   }
 
   deserialize (input?: any): ClaimAmountBreakdown {
@@ -48,7 +43,17 @@ export default class ClaimAmountBreakdown implements Serializable<ClaimAmountBre
   }
 
   appendRow () {
-    this.rows.push(ClaimAmountRow.empty())
+    if (this.rows.length < MAX_NUMBER_OF_EVENTS) {
+      this.rows.push(ClaimAmountRow.empty())
+    }
+  }
+
+  removeExcessRows () {
+    this.rows = this.rows.filter(item => !!item.amount && !!item.reason)
+
+    if (this.rows.length === 0) {
+      this.appendRow()
+    }
   }
 
   totalAmount () {
@@ -68,14 +73,10 @@ export default class ClaimAmountBreakdown implements Serializable<ClaimAmountBre
       return ClaimAmountBreakdown.initialRows()
     }
 
-    let claimAmountRows: ClaimAmountRow[] = []
+    let claimAmountRows: ClaimAmountRow[] = rows.map(row => new ClaimAmountRow().deserialize(row))
 
-    for (let row in rows) {
-      claimAmountRows.push(new ClaimAmountRow().deserialize(rows[row]))
-    }
-
-    for (let i = 0; i < initialRowsCount - rows.length; i++) {
-      claimAmountRows.push(ClaimAmountRow.empty())
+    if (rows.length < INIT_ROW_COUNT) {
+      claimAmountRows = claimAmountRows.concat(ClaimAmountBreakdown.initialRows(INIT_ROW_COUNT - rows.length))
     }
 
     return claimAmountRows

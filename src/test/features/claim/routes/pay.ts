@@ -25,8 +25,8 @@ import Payment from 'app/pay/payment'
 import { Address } from 'forms/models/address'
 import DateOfBirth from 'app/forms/models/dateOfBirth'
 import { LocalDate } from 'forms/models/localDate'
-import ClaimAmountBreakdown from 'forms/models/claimAmountBreakdown'
-import ClaimAmountRow from 'forms/models/claimAmountRow'
+import { ClaimAmountBreakdown } from 'forms/models/claimAmountBreakdown'
+import { ClaimAmountRow } from 'forms/models/claimAmountRow'
 import Interest from 'forms/models/interest'
 import InterestDate from 'forms/models/interestDate'
 import Reason from 'forms/models/reason'
@@ -88,10 +88,10 @@ describe('Claim issue: initiate payment receiver', () => {
             },
             hasCorrespondenceAddress: false
           } as IndividualDetails,
-          email: {address: 'example@example.com' }
+          email: { address: 'example@example.com' }
         } as Defendant,
         amount: {
-          rows: [{reason: 'Valid reason',amount: 1} as ClaimAmountRow]
+          rows: [{ reason: 'Valid reason', amount: 1 } as ClaimAmountRow]
         } as ClaimAmountBreakdown,
         interest: {
           type: InterestType.NO_INTEREST
@@ -126,7 +126,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
     it('should return 500 and error page when cannot retrieve service token needed for payment service', async () => {
       overrideClaimDraftObj.claimant.payment = undefined
-      draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj )
+      draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
       feesServiceMock.resolveCalculateFee(issueFeeCode)
       idamServiceMock.rejectRetrieveServiceToken()
 
@@ -240,10 +240,10 @@ describe('Claim issue: post payment callback receiver', () => {
             },
             hasCorrespondenceAddress: false
           } as IndividualDetails,
-          email: {address: 'example@example.com' }
+          email: { address: 'example@example.com' }
         } as Defendant,
         amount: {
-          rows: [{reason: 'Valid reason',amount: 1} as ClaimAmountRow]
+          rows: [{ reason: 'Valid reason', amount: 1 } as ClaimAmountRow]
         } as ClaimAmountBreakdown,
         interest: {
           type: InterestType.NO_INTEREST

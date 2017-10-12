@@ -4,8 +4,8 @@ import { Paths } from 'claim/paths'
 
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import ClaimValidator from 'app/utils/claimValidator'
-import ClaimAmountBreakdown from 'forms/models/claimAmountBreakdown'
+import { ClaimValidator } from 'app/utils/claimValidator'
+import { ClaimAmountBreakdown, MAX_NUMBER_OF_EVENTS } from 'forms/models/claimAmountBreakdown'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'common/draft/draftService'
@@ -13,7 +13,8 @@ import { DraftService } from 'common/draft/draftService'
 function renderView (form: Form<ClaimAmountBreakdown>, res: express.Response): void {
   res.render(Paths.amountPage.associatedView, {
     form: form,
-    totalAmount: form.model.totalAmount()
+    totalAmount: form.model.totalAmount(),
+    canAddMoreRows: form.model.rows.length < MAX_NUMBER_OF_EVENTS
   })
 }
 
@@ -39,6 +40,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        form.model.removeExcessRows()
         res.locals.user.claimDraft.document.amount = form.model
         ClaimValidator.claimAmount(form.model.totalAmount())
         await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)

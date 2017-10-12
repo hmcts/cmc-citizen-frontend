@@ -3,17 +3,23 @@ import { Validator } from 'class-validator'
 
 import { expectValidationError } from './validationUtils'
 
-import ClaimAmountBreakdown, { ValidationErrors as BreakdownValidationErrors } from 'forms/models/claimAmountBreakdown'
-import ClaimAmountRow, { ValidationErrors } from 'forms/models/claimAmountRow'
+import {
+  ClaimAmountBreakdown,
+  MAX_NUMBER_OF_EVENTS,
+  ValidationErrors as BreakdownValidationErrors
+} from 'forms/models/claimAmountBreakdown'
+import { ClaimAmountRow, ValidationErrors } from 'forms/models/claimAmountRow'
+import { INIT_ROW_COUNT } from 'response/form/models/timeline'
 
 describe('ClaimAmountBreakdown', () => {
-  describe('initialRows', () => {
+  describe('on init', () => {
     it('should return 4 rows by default', () => {
-      expect(ClaimAmountBreakdown.initialRows()).to.have.lengthOf(4)
+      expect(new ClaimAmountBreakdown().rows).to.have.lengthOf(4)
     })
 
     it('should return initiated objects', () => {
-      for (let row of ClaimAmountBreakdown.initialRows()) {
+      const actual: ClaimAmountBreakdown = new ClaimAmountBreakdown()
+      for (let row of actual.rows) {
         expect(row).to.eql(new ClaimAmountRow(undefined, undefined))
       }
     })
@@ -95,29 +101,96 @@ describe('ClaimAmountBreakdown', () => {
   })
 
   describe('appendRow', () => {
-    let rows
 
-    beforeEach(() => {
-      rows = [
-        {
-          reason: '',
-          amount: undefined
-        }
-      ]
-    })
+    it('adds empty element to list of rows', () => {
+      const actual: ClaimAmountBreakdown = new ClaimAmountBreakdown()
 
-    it('should append one row when called once', () => {
-      let breakdown = new ClaimAmountBreakdown(rows)
-      breakdown.appendRow()
-      expect(breakdown.rows).to.have.lengthOf(2)
+      expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
+
+      actual.appendRow()
+
+      expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT + 1)
     })
 
     it('should append three row when called thrice', () => {
-      let breakdown = new ClaimAmountBreakdown(rows)
+      let breakdown = new ClaimAmountBreakdown([])
       breakdown.appendRow()
       breakdown.appendRow()
       breakdown.appendRow()
-      expect(breakdown.rows).to.have.lengthOf(4)
+      expect(breakdown.rows).to.have.lengthOf(3)
+    })
+
+    it('adds only up to 20 elements', () => {
+      const actual: ClaimAmountBreakdown = new ClaimAmountBreakdown()
+
+      expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
+
+      for (let i = 0; i < 100; i++) {
+        actual.appendRow()
+      }
+
+      expect(actual.rows.length).to.be.eq(MAX_NUMBER_OF_EVENTS)
+    })
+  })
+
+  describe('removeExcessRows', () => {
+
+    it('should filter out all elements from list when empty', () => {
+      const actual: ClaimAmountBreakdown = new ClaimAmountBreakdown()
+
+      expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
+      actual.removeExcessRows()
+      expect(actual.rows.length).to.be.eq(1)
+      expectAllRowsToBeEmpty(actual.rows)
+    })
+
+    it('should not filter out any element from list when all populated', () => {
+      const actual: ClaimAmountBreakdown = new ClaimAmountBreakdown().deserialize({
+        rows: [
+          { amount: 1, reason: 'OK' },
+          { amount: 2, reason: 'OK' },
+          { amount: 3.1, reason: 'OK' },
+          { amount: 12.54, reason: 'OK' },
+          { amount: 10, reason: 'OK' }
+        ]
+      })
+
+      expect(actual.rows.length).to.be.eq(5)
+      actual.removeExcessRows()
+      expect(actual.rows.length).to.be.eq(5)
+      expectAllRowsToBePopulated(actual.rows)
+    })
+
+    it('should filter out some elements from list when some of them are populated', () => {
+      const actual: ClaimAmountBreakdown = new ClaimAmountBreakdown().deserialize({
+        rows: [
+          { amount: 11, reason: 'OK' },
+          { amount: 21, reason: 'OK' },
+          {},
+          {}
+        ]
+      })
+
+      expect(actual.rows.length).to.be.eq(4)
+      actual.removeExcessRows()
+      expect(actual.rows.length).to.be.eq(2)
+      expectAllRowsToBePopulated(actual.rows)
+    })
+
+    it('should filter out some elements from list when mixed', () => {
+      const actual: ClaimAmountBreakdown = new ClaimAmountBreakdown().deserialize({
+        rows: [
+          { amount: 1, reason: 'OK' },
+          {},
+          { amount: 2, reason: 'OK' },
+          {}
+        ]
+      })
+
+      expect(actual.rows.length).to.be.eq(4)
+      actual.removeExcessRows()
+      expect(actual.rows.length).to.be.eq(2)
+      expectAllRowsToBePopulated(actual.rows)
     })
   })
 
@@ -181,3 +254,18 @@ describe('ClaimAmountBreakdown', () => {
     })
   })
 })
+
+function expectAllRowsToBeEmpty (rows: ClaimAmountRow[]) {
+  rows.forEach(item => {
+    expect(item).instanceof(ClaimAmountRow)
+    expect(item.amount).to.eq(undefined)
+    expect(item.reason).to.eq(undefined)
+  })
+}
+
+function expectAllRowsToBePopulated (rows: ClaimAmountRow[]) {
+  rows.forEach(item => {
+    expect(!!item.amount).to.eq(true)
+    expect(!!item.reason).to.eq(true)
+  })
+}

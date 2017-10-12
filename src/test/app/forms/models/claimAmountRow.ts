@@ -1,9 +1,8 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
+import { expectValidationError, generateString } from './validationUtils'
 
-import { expectValidationError } from './validationUtils'
-
-import ClaimAmountRow, { ValidationErrors } from 'forms/models/claimAmountRow'
+import { ClaimAmountRow, ValidationConstants, ValidationErrors } from 'forms/models/claimAmountRow'
 
 describe('ClaimAmountRow', () => {
 
@@ -31,59 +30,74 @@ describe('ClaimAmountRow', () => {
   describe('validation', () => {
     const validator: Validator = new Validator()
 
-    it('should reject row with reason, no amount', () => {
-      const errors = validator.validateSync(new ClaimAmountRow('Something', undefined))
+    context('should reject when', () => {
+      it('row with reason, no amount', () => {
+        const errors = validator.validateSync(new ClaimAmountRow('Something', undefined))
 
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.AMOUNT_REQUIRED)
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.AMOUNT_REQUIRED)
+      })
+
+      it('row with amount, no reason', () => {
+        const errors = validator.validateSync(new ClaimAmountRow(undefined, 100.00))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.REASON_REQUIRED)
+      })
+
+      it('row with zero amount', () => {
+        const errors = validator.validateSync(new ClaimAmountRow('Something', 0))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.AMOUNT_NOT_VALID)
+      })
+
+      it('row with amount lesser then 0.01', () => {
+        const errors = validator.validateSync(new ClaimAmountRow('Something', 0.009))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.AMOUNT_NOT_VALID)
+      })
+
+      it('row with negative amount', () => {
+        const errors = validator.validateSync(new ClaimAmountRow('Something', -0.01))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.AMOUNT_NOT_VALID)
+      })
+
+      it('row with more than two decimal places in amount', () => {
+        const errors = validator.validateSync(new ClaimAmountRow('Something', 10.123))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS)
+      })
+
+      it('row with valid amount and too long reason', () => {
+        const errors = validator.validateSync(
+          new ClaimAmountRow(generateString(ValidationConstants.REASON_MAX_LENGTH + 1), 1.01)
+        )
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(
+          errors,
+          ValidationErrors.REASON_TOO_LONG.replace('$constraint1', ValidationConstants.REASON_MAX_LENGTH + '')
+        )
+      })
     })
 
-    it('should reject row with amount, no reason', () => {
-      const errors = validator.validateSync(new ClaimAmountRow(undefined, 100.00))
+    context('should accept', () => {
+      it('row with both reason and valid amount', () => {
+        const errors = validator.validateSync(new ClaimAmountRow('Something', 0.01))
 
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.REASON_REQUIRED)
-    })
+        expect(errors.length).to.equal(0)
+      })
 
-    it('should reject row with zero amount', () => {
-      const errors = validator.validateSync(new ClaimAmountRow('Something', 0))
+      it('empty row', () => {
+        const errors = validator.validateSync(ClaimAmountRow.empty())
 
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.AMOUNT_NOT_VALID)
-    })
-
-    it('should reject row with amount lesser then 0.01', () => {
-      const errors = validator.validateSync(new ClaimAmountRow('Something', 0.009))
-
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.AMOUNT_NOT_VALID)
-    })
-
-    it('should reject row with negative amount', () => {
-      const errors = validator.validateSync(new ClaimAmountRow('Something', -0.01))
-
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.AMOUNT_NOT_VALID)
-    })
-
-    it('should reject row with more than two decimal places in amount', () => {
-      const errors = validator.validateSync(new ClaimAmountRow('Something', 10.123))
-
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS)
-    })
-
-    it('should accept row with both reason and valid amount', () => {
-      const errors = validator.validateSync(new ClaimAmountRow('Something', 0.01))
-
-      expect(errors.length).to.equal(0)
-    })
-
-    it('should accept empty row', () => {
-      const errors = validator.validateSync(ClaimAmountRow.empty())
-
-      expect(errors.length).to.equal(0)
+        expect(errors.length).to.equal(0)
+      })
     })
   })
-
 })

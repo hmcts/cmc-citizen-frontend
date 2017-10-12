@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 
 import { MinTotalConstraint } from 'app/forms/validation/validators/minTotal'
-import ClaimAmountRow from 'app/forms/models/claimAmountRow'
+import { ClaimAmountRow } from 'app/forms/models/claimAmountRow'
 import { ValidationArguments } from 'class-validator'
 
 class TestValidationArguments implements ValidationArguments {
@@ -37,7 +37,7 @@ describe('MinTotalConstraint', () => {
       })
 
       it('given empty empty object', () => {
-        expect(() => constraint.validate({ }, validationArguments)).to.throw(Error, 'Expected validated element to be an array')
+        expect(() => constraint.validate({}, validationArguments)).to.throw(Error, 'Expected validated element to be an array')
       })
     })
 
@@ -89,7 +89,7 @@ describe('MinTotalConstraint', () => {
       })
 
       it('given row with empty object as amount', () => {
-        let value: any[] = [{ amount: { } }]
+        let value: any[] = [{ amount: {} }]
         expect(constraint.validate(value, validationArguments)).to.equal(false)
       })
 

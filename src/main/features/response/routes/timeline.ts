@@ -40,7 +40,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        form.model.clearUselessRows()
+        form.model.removeExcessRows()
         res.locals.user.responseDraft.document.timeline = form.model
 
         await DraftService.save(res.locals.user.responseDraft, res.locals.user.bearerToken)

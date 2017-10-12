@@ -13,15 +13,15 @@
 
         <p>{{ t('Your claim could be for a single amount or might be made up of multiple items') }}</p>
         <div class="panel panel-border-wide">
-          <p>{{ t("Don’t include interest - we’ll ask you about this next.") }}</p>
+          <p>{{ t('Don’t include interest - we’ll ask you about this next.') }}</p>
 
-          <p>{{ t("Don’t include your claim fee - we’ll add this for you.") }}</p>
+          <p>{{ t('Don’t include your claim fee - we’ll add this for you.') }}</p>
         </div>
         <div class="claim-amounts">
           <div id="claim-amount">
             <div>
               <div id="claim-amount-heading-1" class="claim-amount-column-1">
-                <span class="form-label-bold">{{ t("What you’re claiming for") }}</span>
+                <span class="form-label-bold">{{ t('What you’re claiming for') }}</span>
                 <span class="form-hint">{{ t('Briefly explain why you’re claiming for this - for example, "unpaid debt" or "house deposit not returned"') }}</span>
               </div>
               <div id="claim-amount-heading-2" class="claim-amount-column-2">
@@ -51,7 +51,9 @@
               {% endfor %}
             </div>
             <div class="claim-amount-foot">
-              {{ linkButton('Add another row', 'action[addRow]', 'button button-secondary') }}
+              {% if canAddMoreRows %}
+                {{ linkButton('Add another row', 'action[addRow]', 'button button-secondary') }}
+              {% endif %}
               {{ linkButton('Calculate total', 'action[calculate]', 'link-button calculate') }}
             </div>
             <div class="claim-amount-row  bold-medium total">

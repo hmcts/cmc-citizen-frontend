@@ -1,6 +1,6 @@
 import { Serializable } from 'models/serializable'
 import Claimant from 'drafts/models/claimant'
-import ClaimAmountBreakdown from 'forms/models/claimAmountBreakdown'
+import { ClaimAmountBreakdown } from 'forms/models/claimAmountBreakdown'
 import Interest from 'forms/models/interest'
 import InterestDate from 'forms/models/interestDate'
 import Reason from 'forms/models/reason'
