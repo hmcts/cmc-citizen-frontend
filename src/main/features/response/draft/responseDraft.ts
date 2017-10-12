@@ -10,6 +10,7 @@ import { isNullOrUndefined } from 'util'
 import { Defendant } from 'app/drafts/models/defendant'
 import { DraftDocument } from 'app/models/draftDocument'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
+import { Timeline } from 'response/form/models/timeline'
 
 export class ResponseDraft extends DraftDocument implements Serializable<ResponseDraft> {
 
@@ -18,6 +19,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   freeMediation?: FreeMediation
   moreTimeNeeded?: MoreTimeNeeded
   defendantDetails?: Defendant = new Defendant()
+  timeline: Timeline = new Timeline()
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
   rejectPartOfClaim?: RejectPartOfClaim
   rejectAllOfClaim?: RejectAllOfClaim
@@ -30,6 +32,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       this.freeMediation = new FreeMediation(input.freeMediation && input.freeMediation.option)
       this.moreTimeNeeded = new MoreTimeNeeded(input.moreTimeNeeded && input.moreTimeNeeded.option)
       this.defendantDetails = new Defendant().deserialize(input.defendantDetails)
+      this.timeline = new Timeline().deserialize(input.timeline)
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }
