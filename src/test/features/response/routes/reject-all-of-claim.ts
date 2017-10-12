@@ -6,9 +6,9 @@ import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { checkAlreadySubmittedGuard } from './checks/already-submitted-check'
-import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 import { Paths as ResponsePaths } from 'response/paths'
+import { ResponseType } from 'response/form/models/responseType'
 
 import { app } from '../../../../main/app'
 
@@ -17,127 +17,130 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
-import { ResponseType } from 'response/form/models/responseType'
-
 const cookieName: string = config.get<string>('session.cookieName')
+const pagePath = ResponsePaths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
-const defenceOptionsPage = ResponsePaths.defenceOptionsPage.evaluateUri({ externalId: sampleClaimObj.externalId })
+const draftOverride = {
+  response: {
+    type: ResponseType.OWE_NONE
+  }
+}
 
-describe('Defendant response: defence options page', () => {
+describe('Defendant response: full admission options', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-
-    checkAuthorizationGuards(app, 'get', defenceOptionsPage)
+    checkAuthorizationGuards(app, 'get', pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
       })
 
-      checkAlreadySubmittedGuard(app, 'get', defenceOptionsPage)
-      checkCountyCourtJudgmentRequestedGuard(app, 'get', defenceOptionsPage)
+      checkAlreadySubmittedGuard(app, 'get', pagePath)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
-            .get(defenceOptionsPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveFind('response')
+        it('should redirect to response type page when response type is not full admission', async () => {
+          draftStoreServiceMock.resolveFind('response', {response: { type: ResponseType.OWE_SOME_PAID_NONE }})
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
-            .get(defenceOptionsPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.successful.withText('What do you want to do?'))
+            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.responseTypePage
+              .evaluateUri({ externalId: sampleClaimObj.externalId })))
         })
 
-        it('should redirect page when response type is not OWE_NONE', async () => {
+        it('should render page when everything is fine', async () => {
+          draftStoreServiceMock.resolveFind('response', draftOverride)
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.OWE_SOME_PAID_NONE } })
 
           await request(app)
-            .get(defenceOptionsPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.redirect.toLocation(ResponsePaths.responseTypePage.evaluateUri({ externalId: sampleClaimObj.externalId })))
+            .expect(res => expect(res).to.be.successful.withText('I reject all of the claim'))
         })
       })
     })
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', defenceOptionsPage)
+    checkAuthorizationGuards(app, 'post', pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
       })
 
-      checkAlreadySubmittedGuard(app, 'post', defenceOptionsPage)
-      checkCountyCourtJudgmentRequestedGuard(app, 'post', defenceOptionsPage)
+      checkAlreadySubmittedGuard(app, 'post', pagePath)
 
       context('when response not submitted', () => {
+        it('should redirect to response type page when response type is not full admission', async () => {
+          draftStoreServiceMock.resolveFind('response', {response: { type: ResponseType.OWE_SOME_PAID_NONE }})
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.responseTypePage
+              .evaluateUri({ externalId: sampleClaimObj.externalId })))
+        })
+
         context('when form is invalid', () => {
           it('should return 500 and render error page when cannot retrieve claim', async () => {
             claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
-              .post(defenceOptionsPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
           it('should render page when everything is fine', async () => {
-            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('response', draftOverride)
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(defenceOptionsPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('What do you want to do?', 'div class="error-summary"'))
+              .expect(res => expect(res).to.be.successful.withText('I reject all of the claim', 'div class="error-summary"'))
           })
         })
 
         context('when form is valid', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
-            draftStoreServiceMock.resolveFind('response')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('response', draftOverride)
             draftStoreServiceMock.rejectSave()
 
             await request(app)
-              .post(defenceOptionsPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ counterClaim: false })
+              .send({ option: 'alreadyPaid' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to task list page when everything is fine', async () => {
-            draftStoreServiceMock.resolveFind('response')
+          it('should redirect to mediation page when everything is fine', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('response', draftOverride)
             draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(defenceOptionsPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ counterClaim: true })
-              .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
-          })
-
-          it('should redirect page when response type is not OWE_NONE', async () => {
-            draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.OWE_SOME_PAID_NONE } })
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-
-            await request(app)
-              .post(defenceOptionsPage)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ counterClaim: true })
-              .expect(res => expect(res).to.redirect.toLocation(ResponsePaths.responseTypePage.evaluateUri({ externalId: sampleClaimObj.externalId })))
+              .send({ option: 'alreadyPaid' })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.taskListPage
+                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })
       })

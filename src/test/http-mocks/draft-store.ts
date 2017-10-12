@@ -24,6 +24,7 @@ import Reason from 'forms/models/reason'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import Email from 'app/forms/models/email'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
+import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
@@ -95,6 +96,9 @@ const sampleResponseDraftObj = {
   response: {
     type: ResponseType.OWE_NONE
   },
+  rejectAllOfClaim: {
+    option: RejectAllOfClaimOption.DISPUTE
+  },
   defence: {
     text: 'Some valid defence'
   },
@@ -103,9 +107,6 @@ const sampleResponseDraftObj = {
   },
   moreTimeNeeded: {
     option: MoreTimeNeededOption.YES
-  },
-  counterClaim: {
-    counterClaim: false
   },
   defendantDetails: {
     email: { address: 'example@example.com' } as Email,
