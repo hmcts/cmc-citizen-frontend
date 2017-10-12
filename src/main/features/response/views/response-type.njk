@@ -7,7 +7,7 @@
   <div class="grid-row">
     <h1 class="heading-xlarge">{{ t('Do you owe the money claimed?') }}</h1>
 
-      <form method="POST" class="analytics-submit-event-trigger" data-event-action="Defence: Select defence option" data-event-label-from="type[value]" novalidate>
+      <form method="POST" class="analytics-submit-event-trigger" data-event-action="Response: Select defendant response option" data-event-label-from="type[value]" novalidate>
 
       {{ csrfProtection(csrf) }}
 
@@ -16,8 +16,6 @@
         <fieldset id="type[label]">
           <legend class="visually-hidden">{{ t('Do you owe the money claimed?') }}</legend>
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
-
-          <p>{{ t('You can make a counterclaim against the claimant after you submit your response.') }}</p>
 
           {{ radioOption(form = form, name = 'type[value]', value = 'OWE_ALL_PAID_NONE',
               label = 'I admit all of the claim', bold = true,
