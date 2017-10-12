@@ -1,0 +1,69 @@
+.timeline-column-1 {
+  display: inline-block;
+  margin-right: 10px;
+  vertical-align: top;
+  width: 28%;
+}
+
+.timeline-column-2 {
+  display: inline-block;
+  width: 67%;
+}
+
+.timeline-column-text {
+  display: inline-block;
+  height: auto;
+  width: 65%;
+}
+
+.timeline-row {
+  display: inline-block;
+  width: 100%;
+
+  .add-event-container {
+    float: left;
+  }
+
+  .calculate {
+    float: right;
+    padding-top: 26px;
+  }
+}
+
+.timeline-rows {
+  div {
+    :not(:first-child) {
+      margin-top: 15px;
+    }
+  }
+}
+
+.timeline-column-4 {
+  display: inline-block;
+  text-align: right;
+  width: 20%;
+}
+
+.timeline-column-3 {
+  display: inline-block;
+  margin-right: 10px;
+  width: 75%;
+}
+
+.add-event-container {
+  margin-top: 15px;
+}
+
+@media screen and (max-width: 480px) {
+
+  .timeline-column-4,
+  .timeline-column-1 {
+    margin-bottom: 5px;
+    width: 35%;
+  }
+
+  .timeline-column-3,
+  .timeline-column-text {
+    margin-bottom: 5px;
+  }
+}

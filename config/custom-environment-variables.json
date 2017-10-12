@@ -67,10 +67,5 @@
     "testingSupport": "FEATURE_TESTING_SUPPORT",
     "countyCourtJudgment": "FEATURE_CCJ",
     "offer": "FEATURE_OFFER"
-  },
-  "claim": {
-    "countyCourtJudgment": {
-      "timeForResponseInDays" : "CLAIM_CCJ_TIME_FOR_RESPONSE"
-    }
   }
 }
