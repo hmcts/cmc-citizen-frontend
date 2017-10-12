@@ -3,11 +3,11 @@ import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
-import { OAuthHelper } from 'idam/oAuthHelper'
+import { RedirectHelper } from 'utils/redirectHelper'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    res.redirect(OAuthHelper.getRedirectUri(req, res))
+    res.redirect(RedirectHelper.getRedirectUri(req, res))
   }
 
   const requiredRoles = [

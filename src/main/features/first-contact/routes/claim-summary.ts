@@ -3,10 +3,10 @@ import { Paths } from 'first-contact/paths'
 import Claim from 'claims/models/claim'
 import ClaimReferenceMatchesGuard from 'first-contact/guards/claimReferenceMatchesGuard'
 import JwtExtractor from 'idam/jwtExtractor'
-import { OAuthHelper } from 'idam/oAuthHelper'
+import { RedirectHelper } from 'utils/redirectHelper'
 
 function receiverPath (req: express.Request, res: express.Response): string {
-  return `${OAuthHelper.getRedirectUriForUplift(req, res)}&jwt=${JwtExtractor.extract(req)}`
+  return `${RedirectHelper.getRedirectUriForUplift(req, res)}&jwt=${JwtExtractor.extract(req)}`
 }
 
 export default express.Router()

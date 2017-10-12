@@ -19,35 +19,37 @@ import { buildURL } from 'utils/callbackBuilder'
 import { DraftMiddleware } from 'common/draft/draftMiddleware'
 import DraftClaim from 'drafts/models/draftClaim'
 import JwtExtractor from 'idam/jwtExtractor'
+import { RedirectHelper } from 'utils/redirectHelper'
+import { RoutablePath } from 'common/router/routablePath'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('router/receiver')
 const useOauth = toBoolean(config.get<boolean>('featureToggles.idamOauth'))
 const sessionCookie = config.get<string>('session.cookieName')
 
-async function getOAuthAccessToken (req: express.Request, receiver: string = Paths.receiver.uri) {
+async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath): Promise<string> {
   if (req.query.state !== OAuthHelper.getStateCookie(req)) {
     throw new Error('Invalid state')
   }
   const authToken: AuthToken = await IdamClient.exchangeCode(
     req.query.code,
-    buildURL(req, receiver)
+    buildURL(req, receiver.uri)
   )
   return authToken.accessToken
 }
 
-async function getAuthToken (req: express.Request) {
+async function getAuthToken (req: express.Request, receiver: RoutablePath = Paths.receiver, checkCookie = true): Promise<string> {
   let authenticationToken
   if (!useOauth && req.query.jwt) {
     authenticationToken = req.query.jwt
   } else if (useOauth && req.query.code) {
-    authenticationToken = await getOAuthAccessToken(req)
-  } else {
+    authenticationToken = await getOAuthAccessToken(req, receiver)
+  } else if (checkCookie) {
     authenticationToken = JwtExtractor.extract(req)
   }
   return authenticationToken
 }
 
-function isDefendantFirstContactPinLogin (req: express.Request) {
+function isDefendantFirstContactPinLogin (req: express.Request): boolean {
   return useOauth && req.query && req.query.state && req.query.state.match(/[0-9]{3}MC[0-9]{3}/)
 }
 
@@ -124,26 +126,13 @@ export default express.Router()
 
       return res.redirect(ClaimPaths.startPage.uri)
     } else {
-      res.redirect(OAuthHelper.getRedirectUri(req, res))
+      res.redirect(RedirectHelper.getRedirectUri(req, res))
     }
   }))
   .get(AppPaths.linkDefendantReceiver.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
     const cookies = new Cookies(req, res)
 
-    let authenticationToken
-    if (!useOauth && req.query.jwt) {
-      authenticationToken = req.query.jwt
-    } else if (useOauth && req.query.code) {
-      if (req.query.state !== OAuthHelper.getStateCookie(req)) {
-        throw new Error('Invalid state')
-      }
-      const authToken: AuthToken = await IdamClient.exchangeCode(
-        req.query.code,
-        buildURL(req, Paths.linkDefendantReceiver.uri)
-      )
-      authenticationToken = authToken.accessToken
-    }
-
+    const authenticationToken = await getAuthToken(req, Paths.linkDefendantReceiver,  false)
     if (authenticationToken) {
       const user = await IdamClient
         .retrieveUserFor(authenticationToken)
@@ -155,12 +144,9 @@ export default express.Router()
     const user: User = res.locals.user
     if (res.locals.isLoggedIn) {
       const letterHolderId: string = getLetterHolderId(req, user)
-      console.log(letterHolderId)
-      console.log(user.roles)
       if (!user.isInRoles(`letter-${letterHolderId}`)) {
         logger.error('User not in letter ID role - redirecting to access denied page')
-        res.redirect(ErrorPaths.claimSummaryAccessDeniedPage.uri)
-        return
+        return res.redirect(ErrorPaths.claimSummaryAccessDeniedPage.uri)
       }
 
       const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(letterHolderId)
@@ -171,6 +157,6 @@ export default express.Router()
 
       res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
     } else {
-      res.redirect(OAuthHelper.getRedirectUri(req, res, AppPaths.linkDefendantReceiver))
+      res.redirect(RedirectHelper.getRedirectUri(req, res, AppPaths.linkDefendantReceiver))
     }
   }))

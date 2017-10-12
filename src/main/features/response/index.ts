@@ -8,11 +8,11 @@ import { ClaimMiddleware } from 'app/claims/claimMiddleware'
 import { DraftMiddleware } from 'common/draft/draftMiddleware'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Paths as ResponsePaths} from 'response/paths'
-import { OAuthHelper } from 'idam/oAuthHelper'
+import { RedirectHelper } from 'app/utils/redirectHelper'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    res.redirect(OAuthHelper.getRedirectUri(req, res))
+    res.redirect(RedirectHelper.getRedirectUri(req, res))
   }
 
   const requiredRoles = [

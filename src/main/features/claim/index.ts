@@ -5,11 +5,11 @@ import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
 import { DraftMiddleware } from 'common/draft/draftMiddleware'
 import DraftClaim from 'drafts/models/draftClaim'
-import { OAuthHelper } from 'idam/oAuthHelper'
+import { RedirectHelper } from 'utils/redirectHelper'
 
 function claimIssueRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    res.redirect(OAuthHelper.getRedirectUri(req, res))
+    res.redirect(RedirectHelper.getRedirectUri(req, res))
   }
 
   const requiredRoles = [
