@@ -3,12 +3,16 @@ import * as express from 'express'
 import { Paths } from 'response/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'app/forms/validation/formValidator'
-import { Timeline } from 'response/form/models/timeline'
+import { MAX_NUMBER_OF_EVENTS, Timeline } from 'response/form/models/timeline'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'common/draft/draftService'
 
 function renderView (form: Form<Timeline>, res: express.Response): void {
-  res.render(Paths.timelinePage.associatedView, { form: form, claimantName: res.locals.user.claim.claimData.claimant.name })
+  res.render(Paths.timelinePage.associatedView, {
+    form: form,
+    claimantName: res.locals.user.claim.claimData.claimant.name,
+    canAddMoreEvents: form.model.rows.length < MAX_NUMBER_OF_EVENTS
+  })
 }
 
 function actionHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
@@ -36,6 +40,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        form.model.clearUselessRows()
         res.locals.user.responseDraft.document.timeline = form.model
 
         await DraftService.save(res.locals.user.responseDraft, res.locals.user.bearerToken)

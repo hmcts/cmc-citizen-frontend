@@ -1,15 +1,15 @@
 import { expect } from 'chai'
 
 import { TimelineRow } from 'response/form/models/timelineRow'
-import { INIT_ROW_COUNT, Timeline } from 'response/form/models/timeline'
+import { INIT_ROW_COUNT, MAX_NUMBER_OF_EVENTS, Timeline } from 'response/form/models/timeline'
 
 describe('Timeline', () => {
 
-  describe('initialRows', () => {
+  describe('on init', () => {
 
-    it('should return array of empty instances of TimelineRow', () => {
+    it('should create array of 4 empty instances of TimelineRow', () => {
 
-      const actual: TimelineRow[] = Timeline.initialRows()
+      const actual: TimelineRow[] = (new Timeline()).rows
 
       expect(actual.length).to.equal(4)
       expectAllRowsToBeEmpty(actual)
@@ -111,6 +111,79 @@ describe('Timeline', () => {
       actual.appendRow()
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT + 1)
+    })
+
+    it('adds only up to 20 elements', () => {
+      const actual: Timeline = new Timeline()
+
+      expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
+
+      for (let i = 0; i < 100; i++) {
+        actual.appendRow()
+      }
+
+      expect(actual.rows.length).to.be.eq(MAX_NUMBER_OF_EVENTS)
+    })
+  })
+
+  describe('clearUselessRows', () => {
+
+    it('should filter out all elements from list when empty', () => {
+      const actual: Timeline = new Timeline()
+
+      expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
+      actual.clearUselessRows()
+      expect(actual.rows.length).to.be.eq(1)
+      expectAllRowsToBeEmpty(actual.rows)
+    })
+
+    it('should not filter out any element from list when all populated', () => {
+      const actual: Timeline = new Timeline().deserialize({
+        rows: [
+          { date: 'Jan', description: 'OK' },
+          { date: 'Feb', description: 'OK' },
+          { date: 'Mar', description: 'OK' },
+          { date: 'Apr', description: 'OK' },
+          { date: 'May', description: 'OK' }
+        ]
+      })
+
+      expect(actual.rows.length).to.be.eq(5)
+      actual.clearUselessRows()
+      expect(actual.rows.length).to.be.eq(5)
+      expectAllRowsToBePopulated(actual.rows)
+    })
+
+    it('should filter out some elements from list when some of them are populated', () => {
+      const actual: Timeline = new Timeline().deserialize({
+        rows: [
+          { date: 'Jan', description: 'OK' },
+          { date: 'Feb', description: 'OK' },
+          { },
+          { }
+        ]
+      })
+
+      expect(actual.rows.length).to.be.eq(4)
+      actual.clearUselessRows()
+      expect(actual.rows.length).to.be.eq(2)
+      expectAllRowsToBePopulated(actual.rows)
+    })
+
+    it('should filter out some elements from list when mixed', () => {
+      const actual: Timeline = new Timeline().deserialize({
+        rows: [
+          { date: 'Jan', description: 'OK' },
+          { },
+          { date: 'Feb', description: 'OK' },
+          { }
+        ]
+      })
+
+      expect(actual.rows.length).to.be.eq(4)
+      actual.clearUselessRows()
+      expect(actual.rows.length).to.be.eq(2)
+      expectAllRowsToBePopulated(actual.rows)
     })
   })
 })

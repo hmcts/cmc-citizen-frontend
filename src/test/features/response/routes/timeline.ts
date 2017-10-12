@@ -129,7 +129,7 @@ describe('Defendant response: timeline', () => {
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ rows: [{ date: undefined, description: '299' }] })
-              .expect(res => expect(res).to.be.successful.withText('Enter date'))
+              .expect(res => expect(res).to.be.successful.withText('Enter a date'))
           })
 
           it('should render page when description undefined', async () => {
@@ -140,7 +140,7 @@ describe('Defendant response: timeline', () => {
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ rows: [{ date: 'May', description: undefined }] })
-              .expect(res => expect(res).to.be.successful.withText('Enter description'))
+              .expect(res => expect(res).to.be.successful.withText('Enter a description of what happened'))
           })
         })
       })

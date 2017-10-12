@@ -5,6 +5,8 @@ import { TimelineRow } from 'response/form/models/timelineRow'
 
 export const INIT_ROW_COUNT: number = 4
 
+export const MAX_NUMBER_OF_EVENTS: number = 20
+
 export class Timeline implements Serializable<Timeline> {
   readonly type: string = 'breakdown'
 
@@ -15,16 +17,16 @@ export class Timeline implements Serializable<Timeline> {
     this.rows = rows
   }
 
-  static initialRows (): TimelineRow[] {
-    return new Array(INIT_ROW_COUNT).fill(TimelineRow.empty())
-  }
-
   static fromObject (value?: any): Timeline {
     if (!value) {
       return value
     }
 
     return new Timeline(value.rows ? value.rows.map(TimelineRow.fromObject) : [])
+  }
+
+  private static initialRows (rows: number = INIT_ROW_COUNT): TimelineRow[] {
+    return new Array(rows).fill(TimelineRow.empty())
   }
 
   deserialize (input?: any): Timeline {
@@ -36,7 +38,17 @@ export class Timeline implements Serializable<Timeline> {
   }
 
   appendRow () {
-    this.rows.push(TimelineRow.empty())
+    if (this.rows.length < MAX_NUMBER_OF_EVENTS) {
+      this.rows.push(TimelineRow.empty())
+    }
+  }
+
+  clearUselessRows () {
+    this.rows = this.rows.filter(item => !!item.date && !!item.description)
+
+    if (this.rows.length === 0) {
+      this.appendRow()
+    }
   }
 
   private deserializeRows (rows: any): TimelineRow[] {
@@ -46,8 +58,8 @@ export class Timeline implements Serializable<Timeline> {
 
     let timelineRows: TimelineRow[] = rows.map(row => new TimelineRow().deserialize(row))
 
-    for (let i = 0; i < INIT_ROW_COUNT - rows.length; i++) {
-      timelineRows.push(TimelineRow.empty())
+    if (rows.length < INIT_ROW_COUNT) {
+      timelineRows = timelineRows.concat(Timeline.initialRows(INIT_ROW_COUNT - rows.length))
     }
 
     return timelineRows

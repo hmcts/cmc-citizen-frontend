@@ -1,6 +1,7 @@
-import { IsDefined, MaxLength, ValidateIf } from 'class-validator'
+import { IsDefined, ValidateIf } from 'class-validator'
 
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
+import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 
 export class ValidationErrors {
   static readonly DATE_REQUIRED: string = 'Enter a date'
