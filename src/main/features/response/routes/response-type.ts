@@ -48,7 +48,7 @@ export default express.Router()
             res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
             break
           default:
-            next(new Error('Unknown response type: ' + responseType))
+            next(new Error(`Unknown response type: ${responseType}`))
         }
       }
     }))

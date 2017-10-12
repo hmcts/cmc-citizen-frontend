@@ -17,6 +17,9 @@ $(function () {
     if (!value) {
       throw new Error('Value is required to escape it')
     }
+    if (!(typeof value === 'string' || value instanceof String)) {
+      throw new Error('Value has to be a string')
+    }
     return value
       .replace('[', '\\[')
       .replace(']', '\\]')

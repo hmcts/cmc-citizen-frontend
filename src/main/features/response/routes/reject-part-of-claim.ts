@@ -21,6 +21,8 @@ function accessDeniedCallback (req: express.Request, res: express.Response): voi
   res.redirect(Paths.responseTypePage.evaluateUri({ externalId: res.locals.user.claim.externalId }))
 }
 
+const guardRequestHandler: express.RequestHandler = GuardFactory.create(isRequestAllowed, accessDeniedCallback)
+
 function renderView (form: Form<RejectPartOfClaim>, res: express.Response) {
   res.render(Paths.defenceRejectPartOfClaimPage.associatedView, {
     form: form
@@ -30,13 +32,13 @@ function renderView (form: Form<RejectPartOfClaim>, res: express.Response) {
 export default express.Router()
   .get(
     Paths.defenceRejectPartOfClaimPage.uri,
-    GuardFactory.create(isRequestAllowed, accessDeniedCallback),
+    guardRequestHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       renderView(new Form(res.locals.user.responseDraft.document.rejectPartOfClaim), res)
     }))
   .post(
     Paths.defenceRejectPartOfClaimPage.uri,
-    GuardFactory.create(isRequestAllowed, accessDeniedCallback),
+    guardRequestHandler,
     FormValidator.requestHandler(RejectPartOfClaim),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const { externalId } = req.params

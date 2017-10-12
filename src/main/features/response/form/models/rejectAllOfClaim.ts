@@ -17,11 +17,11 @@ export class RejectAllOfClaimOption {
     ]
   }
 
-  static except (option: string): string[] {
-    if (option === undefined) {
+  static except (value: string): string[] {
+    if (value === undefined) {
       throw new Error('Option is required')
     }
-    return RejectAllOfClaimOption.all().filter(_ => _ !== option)
+    return RejectAllOfClaimOption.all().filter(option => option !== value)
   }
 }
 
