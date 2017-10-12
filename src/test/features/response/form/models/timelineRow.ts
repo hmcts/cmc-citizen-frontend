@@ -2,8 +2,7 @@ import { expect } from 'chai'
 
 import { TimelineRow, ValidationConstants, ValidationErrors } from 'response/form/models/timelineRow'
 import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../../app/forms/models/validationUtils'
-import * as randomstring from 'randomstring'
+import { expectValidationError, generateString } from '../../../../app/forms/models/validationUtils'
 
 describe('TimelineRow', () => {
 
@@ -62,7 +61,7 @@ describe('TimelineRow', () => {
 
       it('when date is too long', () => {
         const errors = validator.validateSync(
-          new TimelineRow(generateRandomString(ValidationConstants.DATE_MAX_LENGTH + 1), 'description')
+          new TimelineRow(generateString(ValidationConstants.DATE_MAX_LENGTH + 1), 'description')
         )
 
         expect(errors.length).to.equal(1)
@@ -73,7 +72,7 @@ describe('TimelineRow', () => {
 
       it('when description is too long', () => {
         const errors = validator.validateSync(
-          new TimelineRow('date', generateRandomString(ValidationConstants.DESCRIPTION_MAX_LENGTH + 1))
+          new TimelineRow('date', generateString(ValidationConstants.DESCRIPTION_MAX_LENGTH + 1))
         )
 
         expect(errors.length).to.equal(1)
@@ -84,10 +83,3 @@ describe('TimelineRow', () => {
     })
   })
 })
-
-function generateRandomString (len: number) {
-  return randomstring.generate({
-    length: len,
-    charset: 'alphabetic'
-  })
-}

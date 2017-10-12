@@ -3,27 +3,28 @@
 
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
-import { expectValidationError } from './validationUtils'
-import * as randomstring from 'randomstring'
+import { expectValidationError, generateString } from './validationUtils'
 import { Name, ValidationErrors } from 'app/forms/models/name'
 
 describe('Name', () => {
 
   describe('constructor', () => {
+
     it('should set the primitive fields to undefined', () => {
-      const name = new Name()
+      const name: Name = new Name()
       expect(name.name).to.be.undefined
     })
   })
 
   describe('deserialize', () => {
+
     it('should return an instance initialised with defaults for undefined', () => {
       expect(new Name().deserialize(undefined)).to.eql(new Name())
     })
 
     it('should return an instance from given object', () => {
-      const name = 'My Full Name'
-      const result = new Name().deserialize({
+      const name: string = 'My Full Name'
+      const result: Name = new Name().deserialize({
         name: name
       })
       expect(result.name).to.be.equals(name)
@@ -31,6 +32,7 @@ describe('Name', () => {
   })
 
   describe('validation', () => {
+
     const validator: Validator = new Validator()
 
     it('should reject name with undefined', () => {
@@ -55,13 +57,13 @@ describe('Name', () => {
     })
 
     it('should reject name with more than 255 characters', () => {
-      const errors = validator.validateSync(new Name(randomstring.generate(256)))
+      const errors = validator.validateSync(new Name(generateString(256)))
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.NAME_TOO_LONG.replace('$constraint1','255'))
+      expectValidationError(errors, ValidationErrors.NAME_TOO_LONG.replace('$constraint1', '255'))
     })
 
     it('should accept name with 255 characters', () => {
-      const errors = validator.validateSync(new Name(randomstring.generate(255)))
+      const errors = validator.validateSync(new Name(generateString(255)))
       expect(errors.length).to.equal(0)
     })
 

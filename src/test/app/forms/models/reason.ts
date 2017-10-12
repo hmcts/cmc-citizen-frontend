@@ -3,9 +3,8 @@
 
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
-import { expectValidationError } from './validationUtils'
+import { expectValidationError, generateString } from './validationUtils'
 import Reason, { ValidationErrors } from 'forms/models/reason'
-import * as randomstring from 'randomstring'
 
 describe('Reason', () => {
   describe('constructor', () => {
@@ -80,13 +79,13 @@ describe('Reason', () => {
     })
 
     it('should reject claim reason with more than 99000 characters', () => {
-      const errors = validator.validateSync(new Reason(randomstring.generate(99001)))
+      const errors = validator.validateSync(new Reason(generateString(99001)))
       expect(errors.length).to.equal(1)
       expectValidationError(errors, ValidationErrors.REASON_TOO_LONG.replace('$constraint1', '99000'))
     })
 
     it('should accept claim reason with 99000 characters', () => {
-      const errors = validator.validateSync(new Reason(randomstring.generate(9900)))
+      const errors = validator.validateSync(new Reason(generateString(9900)))
       expect(errors.length).to.equal(0)
     })
 
