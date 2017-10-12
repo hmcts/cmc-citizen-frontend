@@ -5,12 +5,12 @@ import { Paths } from 'response/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import Offer from 'response/form/models/offer'
-import Defence from 'response/form/models/defence'
 import ClaimStoreClient from 'claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
+import { OfferGuard } from 'response/guards/offerGuard'
 
-async function renderView (form: Form<Defence>, res: express.Response, next: express.NextFunction) {
+async function renderView (form: Form<Offer>, res: express.Response, next: express.NextFunction) {
   try {
     res.render(Paths.offerPage.associatedView, {
       form: form,
@@ -22,11 +22,12 @@ async function renderView (form: Form<Defence>, res: express.Response, next: exp
 }
 
 export default express.Router()
-  .get(Paths.offerPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  .get(Paths.offerPage.uri, OfferGuard.requestHandler, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     await renderView(Form.empty(), res, next)
   })
   .post(
     Paths.offerPage.uri,
+    OfferGuard.requestHandler,
     FormValidator.requestHandler(Offer, Offer.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Offer> = req.body
@@ -35,7 +36,8 @@ export default express.Router()
         await renderView(form, res, next)
       } else {
         const user: User = res.locals.user
-        ClaimStoreClient.saveOfferForUser(user, form.model)
+        const offer: Offer = form.model
+        ClaimStoreClient.saveOfferForUser(user, offer)
         res.redirect(Paths.offerSentConfirmationPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

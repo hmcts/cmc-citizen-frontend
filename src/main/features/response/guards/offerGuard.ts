@@ -13,9 +13,9 @@ export class OfferGuard {
     const claim: Claim = res.locals.user.claim
 
     if (!eligibleForOffer) {
-      logger.warn(`Claim ${claim.claimNumber} not eligible for a offer - redirecting to task page`)
+      logger.warn(`Claim ${claim.claimNumber} not eligible for a offer - redirecting confirmation page`)
       const user: User = res.locals.user
-      res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
+      res.redirect(Paths.confirmationPage.evaluateUri({ externalId: user.claim.externalId }))
     } else {
       next()
     }
