@@ -26,7 +26,7 @@ const validFormData: object = {
 }
 
 describe('CCJ - payment options', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', paymentOptionsPage)

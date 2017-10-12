@@ -15,12 +15,13 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const pagePath: string = ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: '1' })
 
 describe('Defendant link receiver', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: '1' }))
+    checkAuthorizationGuards(app, 'get', pagePath)
 
     it('should redirect to access denied page when user not in letter holder ID role', async () => {
       idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'letter-holder')
@@ -39,7 +40,7 @@ describe('Defendant link receiver', () => {
         claimStoreServiceMock.rejectRetrieveByLetterHolderId('HTTP error')
 
         await request(app)
-          .get(`${ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: '1' })}?jwt=ABC`)
+          .get(`${pagePath}?jwt=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -47,7 +48,7 @@ describe('Defendant link receiver', () => {
         claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001', 2)
 
         await request(app)
-          .get(`${ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: '1' })}?jwt=ABC`)
+          .get(`${pagePath}?jwt=ABC`)
           .expect(res => expect(res).to.be.redirect
             .toLocation(ResponsePaths.taskListPage
               .evaluateUri({ externalId: sampleClaimObj.externalId })))
@@ -58,7 +59,7 @@ describe('Defendant link receiver', () => {
         claimStoreServiceMock.rejectLinkDefendant('HTTP error')
 
         await request(app)
-          .get(`${ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: '1' })}?jwt=ABC`)
+          .get(`${pagePath}?jwt=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -67,7 +68,7 @@ describe('Defendant link receiver', () => {
         claimStoreServiceMock.resolveLinkDefendant()
 
         await request(app)
-          .get(`${ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: '1' })}?jwt=ABC`)
+          .get(`${pagePath}?jwt=ABC`)
           .expect(res => expect(res).to.be.redirect
             .toLocation(ResponsePaths.taskListPage
               .evaluateUri({ externalId: sampleClaimObj.externalId })))
@@ -78,7 +79,7 @@ describe('Defendant link receiver', () => {
         claimStoreServiceMock.resolveLinkDefendant()
 
         await request(app)
-          .get(`${ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: '1' })}?jwt=ABC`)
+          .get(`${pagePath}?jwt=ABC`)
           .expect(res => expect(res).to.have.cookie(cookieName, 'ABC'))
       })
     })

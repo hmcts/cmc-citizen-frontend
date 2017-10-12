@@ -20,7 +20,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const claimantPage = Paths.claimantPage.evaluateUri({ externalId: sampleClaimDraftObj.externalId })
 
 describe('Dashboard - claimant page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', claimantPage)

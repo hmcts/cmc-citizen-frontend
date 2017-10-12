@@ -20,7 +20,7 @@ import * as draftStoreServiceMock from '../http-mocks/draft-store'
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Login receiver', async () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', async () => {
     describe('for authorized user', async () => {

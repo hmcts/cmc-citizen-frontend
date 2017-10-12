@@ -10,7 +10,7 @@ const defaultServiceAuthToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOi
 export function resolveRetrieveUserFor (id: number, ...roles: string[]) {
   return mock(apiServiceBaseURL)
     .get('/details')
-    .reply(HttpStatus.OK, { id: id, roles: roles })
+    .reply(HttpStatus.OK, { id: id, roles: roles, email: 'user@example.com' })
 }
 
 export function resolveExchangeCode (token: string) {

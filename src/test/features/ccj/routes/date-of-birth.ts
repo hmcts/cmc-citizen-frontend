@@ -37,7 +37,7 @@ function checkAccessGuard (app: any, method: string) {
 }
 
 describe('CCJ - defendant date of birth', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', dateOfBirthPage)
