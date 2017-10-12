@@ -15,7 +15,7 @@ import * as payServiceMock from '../../../http-mocks/pay'
 
 import { attachDefaultHooks } from '../../../routes/hooks'
 import { checkAuthorizationGuards } from './checks/authorization-check'
-import { InterestType } from 'app/forms/models/interest'
+import { InterestType } from 'claim/form/models/interest'
 import { Defendant } from 'app/drafts/models/defendant'
 import Claimant from 'app/drafts/models/claimant'
 import DraftClaim from 'app/drafts/models/draftClaim'
@@ -27,8 +27,8 @@ import DateOfBirth from 'app/forms/models/dateOfBirth'
 import { LocalDate } from 'forms/models/localDate'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { ClaimAmountRow } from 'claim/form/models/claimAmountRow'
-import Interest from 'forms/models/interest'
-import InterestDate from 'forms/models/interestDate'
+import { Interest } from 'claim/form/models/interest'
+import { InterestDate } from 'claim/form/models/interestDate'
 import Reason from 'forms/models/reason'
 
 const draftType = 'claim'
@@ -39,11 +39,13 @@ const issueFeeCode: string = config.get<string>('fees.issueFee.code')
 let overrideClaimDraftObj
 
 describe('Claim issue: initiate payment receiver', () => {
+
   attachDefaultHooks(app)
 
   checkAuthorizationGuards(app, 'get', Paths.startPaymentReceiver.uri)
 
   describe('for authorized user', () => {
+
     beforeEach(() => {
       overrideClaimDraftObj = {
         externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
@@ -191,11 +193,13 @@ describe('Claim issue: initiate payment receiver', () => {
 })
 
 describe('Claim issue: post payment callback receiver', () => {
+
   attachDefaultHooks(app)
 
   checkAuthorizationGuards(app, 'get', Paths.finishPaymentReceiver.uri)
 
   describe('for authorized user', () => {
+
     beforeEach(() => {
       overrideClaimDraftObj = {
         externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
@@ -295,7 +299,9 @@ describe('Claim issue: post payment callback receiver', () => {
     })
 
     describe('when retrieved payment', () => {
+
       describe('failed', () => {
+
         it('should redirect to the check and send page', async () => {
           draftStoreServiceMock.resolveFind(draftType, initiatedPayment())
           idamServiceMock.resolveRetrieveServiceToken()
@@ -310,6 +316,7 @@ describe('Claim issue: post payment callback receiver', () => {
       })
 
       describe('got cancelled', () => {
+
         it('should redirect to the check and send page', async () => {
           draftStoreServiceMock.resolveFind(draftType, initiatedPayment())
           idamServiceMock.resolveRetrieveServiceToken()
@@ -324,6 +331,7 @@ describe('Claim issue: post payment callback receiver', () => {
       })
 
       describe('succeeded', () => {
+
         it('should return 500 and render error page when cannot retrieve claim', async () => {
           draftStoreServiceMock.resolveFind(draftType, initiatedPayment())
           idamServiceMock.resolveRetrieveServiceToken()
@@ -338,6 +346,7 @@ describe('Claim issue: post payment callback receiver', () => {
         })
 
         describe('when claim already exists', () => {
+
           it('should return 500 and render error page when cannot delete draft', async () => {
             draftStoreServiceMock.resolveFind(draftType, initiatedPayment())
             idamServiceMock.resolveRetrieveServiceToken()
@@ -377,6 +386,7 @@ describe('Claim issue: post payment callback receiver', () => {
         })
 
         describe('when claim does not exist', () => {
+
           it('should return 500 and render error page when cannot save claim', async () => {
             draftStoreServiceMock.resolveFind(draftType, initiatedPayment())
             idamServiceMock.resolveRetrieveServiceToken()
@@ -424,6 +434,7 @@ describe('Claim issue: post payment callback receiver', () => {
       })
 
       describe('has unknown status', () => {
+
         it('should return 500 and render error page', async () => {
           draftStoreServiceMock.resolveFind(draftType, initiatedPayment())
           idamServiceMock.resolveRetrieveServiceToken()

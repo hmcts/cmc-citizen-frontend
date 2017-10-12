@@ -1,4 +1,4 @@
-import InterestDateType from 'app/common/interestDateType'
+import { InterestDateType } from 'app/common/interestDateType'
 import { calculateInterest } from 'app/common/calculateInterest'
 import { MomentFactory } from 'common/momentFactory'
 import { ClaimAmountBreakdown } from 'features/claim/form/models/claimAmountBreakdown'

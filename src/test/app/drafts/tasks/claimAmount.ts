@@ -2,10 +2,12 @@ import { expect } from 'chai'
 
 import DraftClaim from 'app/drafts/models/draftClaim'
 import { ClaimAmount } from 'app/drafts/tasks/claimAmount'
-import { InterestType } from 'app/forms/models/interest'
+import { InterestType } from 'claim/form/models/interest'
 
 describe('Claim amount', () => {
+
   describe('isCompleted', () => {
+
     it('should return true when the task is completed and no interest has been selected', () => {
       const input = {
         amount: {

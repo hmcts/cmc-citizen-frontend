@@ -12,7 +12,7 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import { InterestType } from 'app/forms/models/interest'
+import { InterestType } from 'claim/form/models/interest'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
