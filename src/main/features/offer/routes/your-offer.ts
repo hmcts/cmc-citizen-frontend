@@ -8,7 +8,7 @@ import Offer from 'response/form/models/offer'
 import ClaimStoreClient from 'claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
-import { OfferGuard } from 'response/guards/offerGuard'
+import { OfferGuard } from 'offer/guards/offerGuard'
 
 async function renderView (form: Form<Offer>, res: express.Response, next: express.NextFunction) {
   try {

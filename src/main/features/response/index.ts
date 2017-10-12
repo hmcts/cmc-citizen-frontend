@@ -41,6 +41,7 @@ export class Feature {
         return new ResponseDraft().deserialize(value)
       })
     )
+    app.all(/^\/case\/.+\/offer\/(?![\d]+\/settle-out-of-court|confirmation|offer).*$/, ClaimMiddleware.retrieveByExternalId)
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }
 }
