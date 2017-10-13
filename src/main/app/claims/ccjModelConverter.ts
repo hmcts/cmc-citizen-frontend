@@ -2,7 +2,6 @@ import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { RepaymentPlan as RepaymentPlanForm } from 'ccj/form/models/repaymentPlan'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
-import { convertDefendantDetails } from 'claims/converters/defendantDetails'
 import { RepaymentPlan } from 'claims/models/replaymentPlan'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { Moment } from 'moment'
@@ -37,22 +36,22 @@ function convertPayBySetDate (draftCcj: DraftCCJ): Moment {
 
 export class CCJModelConverter {
 
-  static convert (draftCcj: DraftCCJ): CountyCourtJudgment {
+  static convert (draft: DraftCCJ): CountyCourtJudgment {
     let statementOfTruth: StatementOfTruth = undefined
-    if (draftCcj.qualifiedDeclaration) {
+    if (draft.qualifiedDeclaration) {
       // API model is called statement of truth
       statementOfTruth = new StatementOfTruth(
-        draftCcj.qualifiedDeclaration.signerName,
-        draftCcj.qualifiedDeclaration.signerRole
+        draft.qualifiedDeclaration.signerName,
+        draft.qualifiedDeclaration.signerRole
       )
     }
 
     return new CountyCourtJudgment(
-      convertDefendantDetails(draftCcj.defendant.partyDetails, draftCcj.defendant.email.address),
-      draftCcj.paymentOption.option.value,
-      convertPaidAmount(draftCcj),
-      convertRepaymentPlan(draftCcj.repaymentPlan),
-      convertPayBySetDate(draftCcj),
+      draft.defendantDateOfBirth.known ? draft.defendantDateOfBirth.date.toMoment() : undefined,
+      draft.paymentOption.option.value,
+      convertPaidAmount(draft),
+      convertRepaymentPlan(draft.repaymentPlan),
+      convertPayBySetDate(draft),
       statementOfTruth
     )
   }
