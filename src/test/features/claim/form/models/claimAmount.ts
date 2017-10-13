@@ -213,6 +213,7 @@ describe('ClaimAmountBreakdown', () => {
   })
 
   describe('totalAmount', () => {
+
     it('should return 0 if there are no rows', () => {
       let breakdown = new ClaimAmountBreakdown([])
       expect(breakdown.totalAmount()).to.equal(0)

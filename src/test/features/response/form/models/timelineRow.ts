@@ -76,9 +76,7 @@ describe('TimelineRow', () => {
         )
 
         expect(errors.length).to.equal(1)
-        expectValidationError(
-          errors, ValidationErrors.DESCRIPTION_TOO_LONG.replace('$constraint1', ValidationConstants.DESCRIPTION_MAX_LENGTH + '')
-        )
+        expectValidationError(errors, ValidationErrors.DESCRIPTION_TOO_LONG)
       })
     })
   })

@@ -79,10 +79,7 @@ describe('ClaimAmountRow', () => {
         )
 
         expect(errors.length).to.equal(1)
-        expectValidationError(
-          errors,
-          ValidationErrors.REASON_TOO_LONG.replace('$constraint1', ValidationConstants.REASON_MAX_LENGTH + '')
-        )
+        expectValidationError(errors, ValidationErrors.REASON_TOO_LONG)
       })
     })
 

@@ -7,7 +7,7 @@ export class ValidationErrors {
   static readonly DATE_REQUIRED: string = 'Enter a date'
   static readonly DATE_TOO_LONG: string = 'Enter a date no longer than $constraint1 characters'
   static readonly DESCRIPTION_REQUIRED: string = 'Enter a description of what happened'
-  static readonly DESCRIPTION_TOO_LONG: string = 'Enter a description no longer than $constraint1 characters'
+  static readonly DESCRIPTION_TOO_LONG: string = 'You’ve entered too many characters'
 }
 
 export class ValidationConstants {

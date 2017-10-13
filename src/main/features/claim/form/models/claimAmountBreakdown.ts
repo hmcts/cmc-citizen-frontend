@@ -57,15 +57,9 @@ export class ClaimAmountBreakdown implements Serializable<ClaimAmountBreakdown> 
   }
 
   totalAmount () {
-    let total: number = 0.00
+    const amounts: number[] = this.rows.filter(item => item.amount > 0).map(item => item.amount)
 
-    for (let row in this.rows) {
-      if (this.rows[row].amount && this.rows[row].amount > 0) {
-        total += this.rows[row].amount
-      }
-    }
-
-    return total
+    return amounts.length ? amounts.reduce((a, b) => a + b) : 0
   }
 
   private deserializeRows (rows: any): ClaimAmountRow[] {

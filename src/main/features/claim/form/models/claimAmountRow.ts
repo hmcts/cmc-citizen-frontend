@@ -7,9 +7,9 @@ import { MaxLength } from 'app/forms/validation/validators/maxLengthValidator'
 
 export class ValidationErrors {
   static readonly REASON_REQUIRED: string = 'Enter a reason'
-  static readonly REASON_TOO_LONG: string = 'Enter a reason no longer than $constraint1 characters'
+  static readonly REASON_TOO_LONG: string = 'You’ve entered too many characters'
 
-  static readonly AMOUNT_REQUIRED: string = 'Enter a amount'
+  static readonly AMOUNT_REQUIRED: string = 'Enter an amount'
   static readonly AMOUNT_NOT_VALID: string = 'Enter a valid amount'
   static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter a valid amount, maximum two decimal places'
 }
