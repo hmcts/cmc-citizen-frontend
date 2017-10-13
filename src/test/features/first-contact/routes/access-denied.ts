@@ -9,7 +9,7 @@ import { ErrorPaths as DefendantFirstContactErrorPaths } from 'first-contact/pat
 import { app } from '../../../../main/app'
 
 describe('Defendant first contact: access denied page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     it('should render page when everything is fine', async () => {

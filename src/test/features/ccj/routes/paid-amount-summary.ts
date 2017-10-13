@@ -20,7 +20,7 @@ const externalId = sampleClaimObj.externalId
 const paidAmountSummaryPage = Paths.paidAmountSummaryPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ - paid amount summary page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', paidAmountSummaryPage)

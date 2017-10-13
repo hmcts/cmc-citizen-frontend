@@ -24,6 +24,7 @@ import Reason from 'forms/models/reason'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import Email from 'app/forms/models/email'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
+import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
@@ -95,6 +96,9 @@ const sampleResponseDraftObj = {
   response: {
     type: ResponseType.OWE_NONE
   },
+  rejectAllOfClaim: {
+    option: RejectAllOfClaimOption.DISPUTE
+  },
   defence: {
     text: 'Some valid defence'
   },
@@ -103,9 +107,6 @@ const sampleResponseDraftObj = {
   },
   moreTimeNeeded: {
     option: MoreTimeNeededOption.YES
-  },
-  counterClaim: {
-    counterClaim: false
   },
   defendantDetails: {
     email: { address: 'example@example.com' } as Email,
@@ -198,6 +199,32 @@ export function resolveFind (draftType: string, draftOverride?: object): Scope {
         document: documentDocument,
         created: '2017-10-01T12:00:00.000',
         updated: '2017-10-01T12:01:00.000'
+      }]
+    })
+}
+
+export function resolveFindAllDrafts (): Scope {
+  return mock(serviceBaseURL)
+    .get(new RegExp('/drafts.*'))
+    .reply(HttpStatus.OK, {
+      data: [{
+        id: 200,
+        type: 'claim',
+        document: sampleClaimDraftObj,
+        created: '2017-10-01T12:00:00.000',
+        updated: '2017-10-01T12:01:00.000'
+      }, {
+        id: 201,
+        type: 'response',
+        document: sampleResponseDraftObj,
+        created: '2017-10-02T12:00:00.000',
+        updated: '2017-10-02T12:01:00.000'
+      }, {
+        id: 203,
+        type: 'ccj',
+        document: sampleCCJDraftObj,
+        created: '2017-10-03T12:00:00.000',
+        updated: '2017-10-03T12:01:00.000'
       }]
     })
 }

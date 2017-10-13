@@ -24,7 +24,7 @@ const cnsPage = CCJPaths.checkAndSendPage.evaluateUri({ externalId: externalId }
 const confirmationPage = CCJPaths.confirmationPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ: check and send page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', cnsPage)

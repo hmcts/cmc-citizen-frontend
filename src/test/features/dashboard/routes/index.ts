@@ -17,7 +17,7 @@ import { checkAuthorizationGuards } from './checks/authorization-check'
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Dashboard page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', Paths.dashboardPage.uri)

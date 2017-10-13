@@ -19,7 +19,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ResponsePaths.incompleteSubmissionPage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
 describe('Defendant response: incomplete submission page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
 
