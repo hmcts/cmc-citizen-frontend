@@ -37,18 +37,18 @@
       {{ row('Free mediation', t(draft.freeMediation.option) | capitalize, paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })) }}
     {% endif %}
 
-    <div class="form-group">
-      {% if signatureType != 'none' %}
-        {{ statementOfTruth(
-            form,
-            label = 'I believe that the facts stated in this defence are true',
-            isQualified = (signatureType == 'qualified')
-           )
-        }}
-      {% endif %}
+    {{ tableEnd() }}
 
-      {{ submitButton('Submit response') }}
-      <input type="hidden" name="type" value="{{ form.model.type }}">
-    </div>
+    {{
+      statementOfTruth(
+        form,
+        label = 'I believe that the facts stated in this claim are true',
+        isQualified = (signatureType === 'qualified')
+      )
+    }}
+
+    {{ submitButton('Submit response') }}
+
+    <input type="hidden" name="type" value="{{ form.model.type }}">
   </form>
 {% endblock %}

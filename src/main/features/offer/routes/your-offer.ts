@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths } from 'response/paths'
+import { Paths } from 'offer/paths'
 
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'

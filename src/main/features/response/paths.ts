@@ -3,7 +3,6 @@ import { RoutablePath } from 'common/router/routablePath'
 import { Paths as AppPaths } from 'app/paths'
 
 const responsePath = '/case/:externalId/response'
-const offerPath = '/case/:externalId/offer'
 
 export class Paths {
   static readonly defendantLoginReceiver = AppPaths.receiver
@@ -15,7 +14,6 @@ export class Paths {
   static readonly moreTimeRequestPage = new RoutablePath(`${responsePath}/more-time-request`)
   static readonly moreTimeConfirmationPage = new RoutablePath(`${responsePath}/more-time-confirmation`)
   static readonly responseTypePage = new RoutablePath(`${responsePath}/response-type`)
-  static readonly defenceOptionsPage = new RoutablePath(`${responsePath}/defence-options`)
   static readonly defencePage = new RoutablePath(`${responsePath}/your-defence`)
 
   static readonly freeMediationPage = new RoutablePath(`${responsePath}/free-mediation`)
@@ -29,8 +27,7 @@ export class Paths {
   static readonly receiptReceiver = new RoutablePath(`${responsePath}/receipt`)
   // Added in case anyone has a printed copy of a PDF with the old URL
   static readonly legacyDashboardRedirect = new RoutablePath('/response/dashboard')
+  static readonly defenceRejectAllOfClaimPage = new RoutablePath(`${responsePath}/reject-all-of-claim`)
+  static readonly defenceRejectPartOfClaimPage = new RoutablePath(`${responsePath}/reject-part-of-claim`)
 
-  static readonly offerPage = new RoutablePath(`${offerPath}/your-offer`)
-  static readonly settleOutOfCourtPage = new RoutablePath(`${offerPath}/settle-out-of-court`)
-  static readonly offerSentConfirmationPage = new RoutablePath(`${offerPath}/offer-sent-confirmation`)
 }

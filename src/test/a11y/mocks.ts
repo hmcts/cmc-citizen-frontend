@@ -63,3 +63,11 @@ mock('ccj/guards/ccjGuard', {
 mock('ccj/guards/individualDateOfBirthGuard', {
   'IndividualDateOfBirthGuard': justForwardRequestHandler
 })
+
+mock('response/guards/guardFactory', {
+  GuardFactory: {
+    create: () => {
+      return justForwardRequestHandler.requestHandler
+    }
+  }
+})
