@@ -10,7 +10,7 @@
         <span class="heading-secondary">{{ t("County Court Judgment") }}</span>
         {{ t("Order them to pay by instalments") }}
       </h1>
-      <p class="">{{ t('Total amount payable by defendant is %s',
+      <p>{{ t('Total amount payable by the defendant is %s',
         { postProcess: 'sprintf', sprintf: [ remainingAmount | numeral ]}) }}
       </p>
 

@@ -5,6 +5,7 @@ import { Paths } from 'response/paths'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 import { StatementOfTruth } from 'response/form/models/statementOfTruth'
+import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 
 import ClaimStoreClient from 'claims/claimStoreClient'
 import User from 'app/idam/user'
@@ -27,14 +28,13 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
 }
 
 function defendantIsCounterClaiming (user: User): boolean {
-  return user.responseDraft.document.counterClaim &&
-    user.responseDraft.document.counterClaim.counterClaim
+  return user.responseDraft.document.rejectAllOfClaim &&
+    user.responseDraft.document.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM
 }
 
 function isStatementOfTruthRequired (user: User): boolean {
   const responseType: ResponseType = user.responseDraft.document.response.type
   return (responseType === ResponseType.OWE_NONE && !defendantIsCounterClaiming(user))
-    || responseType === ResponseType.OWE_ALL_PAID_ALL
 }
 
 function signatureTypeFor (user: User): string {
@@ -96,14 +96,11 @@ export default express.Router()
             }
             break
           case ResponseType.OWE_SOME_PAID_NONE:
-          case ResponseType.OWE_ALL_PAID_SOME:
             res.redirect(Paths.partialAdmissionPage.evaluateUri({ externalId: user.claim.externalId }))
             return
           case ResponseType.OWE_ALL_PAID_NONE:
             res.redirect(Paths.fullAdmissionPage.evaluateUri({ externalId: user.claim.externalId }))
             return
-          case ResponseType.OWE_ALL_PAID_ALL:
-            break
           default:
             next(new Error('Unknown response type: ' + responseType))
         }
