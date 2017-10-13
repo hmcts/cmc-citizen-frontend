@@ -97,27 +97,13 @@ describe('Defendant response: response type page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ type: ResponseType.OWE_ALL_PAID_NONE })
+              .send({ type: ResponseType.OWE_SOME_PAID_NONE })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.taskListPage
                   .evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
-          it('should redirect to reject part of claim page when everything is fine and OWE_SOME_PAID_NONE is selected', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ type: ResponseType.OWE_SOME_PAID_NONE })
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.defenceRejectPartOfClaimPage
-                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
-          })
-
-          it('should redirect to reject all of claim page when everything is fine and OWE_NONE is selected', async () => {
+          it('should redirect to defence options page when everything is fine and OWE_NONE is selected', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveSave()
@@ -127,7 +113,7 @@ describe('Defendant response: response type page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ type: ResponseType.OWE_NONE })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.defenceRejectAllOfClaimPage
+                .toLocation(ResponsePaths.defenceOptionsPage
                   .evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })
