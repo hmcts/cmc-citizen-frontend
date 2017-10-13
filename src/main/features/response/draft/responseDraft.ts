@@ -54,20 +54,4 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
 
     return !!(this.response.type === ResponseType.OWE_NONE && this.counterClaim && this.counterClaim.counterClaim === false)
   }
-
-  public canMakeOffer (): boolean {
-    if (!(this.response && this.response.type)) {
-      return false
-    }
-
-    if (
-      this.response.type === ResponseType.OWE_NONE
-      || this.response.type === ResponseType.OWE_ALL_PAID_NONE
-      || this.response.type === ResponseType.OWE_SOME_PAID_NONE
-      || this.response.type === ResponseType.OWE_ALL_PAID_ALL
-      ) {
-      return true
-    }
-    return false
-  }
 }

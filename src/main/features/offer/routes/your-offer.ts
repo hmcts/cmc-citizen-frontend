@@ -22,9 +22,12 @@ async function renderView (form: Form<Offer>, res: express.Response, next: expre
 }
 
 export default express.Router()
-  .get(Paths.offerPage.uri, OfferGuard.requestHandler, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    await renderView(Form.empty(), res, next)
-  })
+  .get(
+    Paths.offerPage.uri,
+    OfferGuard.requestHandler,
+    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      await renderView(Form.empty(), res, next)
+    })
   .post(
     Paths.offerPage.uri,
     OfferGuard.requestHandler,
