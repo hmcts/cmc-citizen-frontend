@@ -19,6 +19,7 @@ import { sampleClaimObj } from '../../../http-mocks/claim-store'
 const cookieName: string = config.get<string>('session.cookieName')
 
 const defendantHowMuchOwedPage = ResponsePaths.defendantHowMuchOwed.evaluateUri({ externalId: sampleClaimObj.externalId })
+
 describe('Defendant response: how much money do you believe you owe', () => {
   attachDefaultHooks()
 
@@ -90,7 +91,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
         context('when form is valid', () => {
           it('should return 500 and render error page when form is valid and cannot save draft', async () => {
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.rejectSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -100,7 +101,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to free mediation page when form is valid and everything is fine', async () => {
+          it('should redirect to task list page when form is valid and everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
@@ -110,7 +111,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ amount: 1, text: 'I don’t owe full amount' })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.freeMediationPage
+                .toLocation(ResponsePaths.taskListPage
                   .evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })

@@ -8,7 +8,6 @@ import { MoreTimeNeededTask } from 'response/tasks/moreTimeNeededTask'
 import { OweMoneyTask } from 'response/tasks/oweMoneyTask'
 import { YourDefenceTask } from 'response/tasks/yourDefenceTask'
 import { YourDetails } from 'response/tasks/yourDetails'
-import { ResponseType } from 'response/form/models/responseType'
 import { HowMuchOwedTask } from 'response/tasks/howMuchOwedTask'
 
 export class TaskListBuilder {
@@ -33,7 +32,7 @@ export class TaskListBuilder {
         .evaluateUri({ externalId: externalId }),
       OweMoneyTask.isCompleted(draft)))
 
-    if (draft.response.type === ResponseType.OWE_SOME_PAID_NONE) {
+    if (draft.requireHowMuchOwed()) {
       tasks.push(new TaskListItem('How much money do you believe you owe?', Paths.defendantHowMuchOwed
           .evaluateUri({ externalId: externalId }),
         HowMuchOwedTask.isCompleted(draft)))

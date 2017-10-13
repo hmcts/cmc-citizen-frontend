@@ -1,7 +1,7 @@
 import { Response } from 'response/form/models/response'
 import { Serializable } from 'models/serializable'
 import { FreeMediation } from 'response/form/models/freeMediation'
-import { RejectPartOfClaim } from 'response/form/models/rejectPartOfClaim'
+import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import Defence from 'response/form/models/defence'
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
@@ -55,5 +55,13 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
     }
     return this.response.type === ResponseType.OWE_NONE && this.rejectAllOfClaim !== undefined
       && RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).includes(this.rejectAllOfClaim.option)
+  }
+
+  public requireHowMuchOwed (): boolean {
+    if (!(this.response && this.response.type)) {
+      return false
+    }
+    return this.response.type === ResponseType.OWE_SOME_PAID_NONE && this.rejectPartOfClaim !== undefined
+      && this.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED
   }
 }
