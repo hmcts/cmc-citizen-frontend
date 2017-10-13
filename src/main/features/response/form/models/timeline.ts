@@ -4,7 +4,6 @@ import { Serializable } from 'models/serializable'
 import { TimelineRow } from 'response/form/models/timelineRow'
 
 export const INIT_ROW_COUNT: number = 4
-
 export const MAX_NUMBER_OF_EVENTS: number = 20
 
 export class Timeline implements Serializable<Timeline> {
@@ -38,17 +37,21 @@ export class Timeline implements Serializable<Timeline> {
   }
 
   appendRow () {
-    if (this.rows.length < MAX_NUMBER_OF_EVENTS) {
+    if (this.canAddMoreRows()) {
       this.rows.push(TimelineRow.empty())
     }
   }
 
-  clearUselessRows () {
+  removeExcessRows () {
     this.rows = this.rows.filter(item => !!item.date && !!item.description)
 
     if (this.rows.length === 0) {
       this.appendRow()
     }
+  }
+
+  canAddMoreRows () {
+    return this.rows.length < MAX_NUMBER_OF_EVENTS
   }
 
   private deserializeRows (rows: any): TimelineRow[] {

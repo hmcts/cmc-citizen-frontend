@@ -1,7 +1,7 @@
-import InterestDateType from 'app/common/interestDateType'
+import { InterestDateType } from 'app/common/interestDateType'
 import { calculateInterest } from 'app/common/calculateInterest'
 import { MomentFactory } from 'common/momentFactory'
-import ClaimAmountBreakdown from 'app/forms/models/claimAmountBreakdown'
+import { ClaimAmountBreakdown } from 'features/claim/form/models/claimAmountBreakdown'
 import DraftClaim from 'app/drafts/models/draftClaim'
 
 export function interestAmount (claimDraft: DraftClaim): number {
@@ -17,7 +17,7 @@ export function interestAmount (claimDraft: DraftClaim): number {
   )
 }
 
-export function claimAmountWithInterest ( claimDraft: DraftClaim): number {
+export function claimAmountWithInterest (claimDraft: DraftClaim): number {
   const interest = interestAmount(claimDraft)
   const claimAmount: number = claimDraft.amount.totalAmount()
 
