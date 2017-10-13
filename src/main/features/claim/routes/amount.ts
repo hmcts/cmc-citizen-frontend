@@ -5,7 +5,7 @@ import { Paths } from 'claim/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ClaimValidator } from 'app/utils/claimValidator'
-import { ClaimAmountBreakdown, MAX_NUMBER_OF_ROWS } from 'claim/form/models/claimAmountBreakdown'
+import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'common/draft/draftService'
@@ -14,7 +14,7 @@ function renderView (form: Form<ClaimAmountBreakdown>, res: express.Response): v
   res.render(Paths.amountPage.associatedView, {
     form: form,
     totalAmount: form.model.totalAmount(),
-    canAddMoreRows: form.model.rows.length < MAX_NUMBER_OF_ROWS
+    canAddMoreRows: form.model.canAddMoreRows()
   })
 }
 
@@ -33,7 +33,10 @@ export default express.Router()
   .get(Paths.amountPage.uri, (req: express.Request, res: express.Response): void => {
     renderView(new Form(res.locals.user.claimDraft.document.amount), res)
   })
-  .post(Paths.amountPage.uri, FormValidator.requestHandler(ClaimAmountBreakdown, ClaimAmountBreakdown.fromObject, undefined, ['addRow']), actionHandler,
+  .post(
+    Paths.amountPage.uri,
+    FormValidator.requestHandler(ClaimAmountBreakdown, ClaimAmountBreakdown.fromObject, undefined, ['addRow']),
+    actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<ClaimAmountBreakdown> = req.body
 
@@ -46,5 +49,5 @@ export default express.Router()
         await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
         res.redirect(Paths.interestPage.uri)
       }
-    }
-  ))
+    })
+  )

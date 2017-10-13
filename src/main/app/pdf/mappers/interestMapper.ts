@@ -12,17 +12,19 @@ export class InterestMapper {
   public static createInterestData (claim: Claim): object {
     const claimData: ClaimData = claim.claimData
     const isNoInterest: boolean = claimData.interest.type === InterestType.NO_INTEREST
+
     if (isNoInterest) {
       return undefined
     }
-    {
-      const interestDate = claimData.interestDate.type === InterestDateType.SUBMISSION ? claim.createdAt : claimData.interestDate.date
-      return {
-        rate: claimData.interest.rate,
-        dateClaimedFrom: MomentFormatter.formatLongDate(interestDate),
-        claimedAtDateOfSubmission: NumberFormatter.formatMoney(InterestMapper.calculateInterest(claimData, interestDate)),
-        accruedInterest: NumberFormatter.formatMoney(InterestMapper.calculateDailyAmount(claimData))
-      }
+
+    const interestDate = claimData.interestDate.type === InterestDateType.SUBMISSION
+      ? claim.createdAt : claimData.interestDate.date
+
+    return {
+      rate: claimData.interest.rate,
+      dateClaimedFrom: MomentFormatter.formatLongDate(interestDate),
+      claimedAtDateOfSubmission: NumberFormatter.formatMoney(InterestMapper.calculateInterest(claimData, interestDate)),
+      accruedInterest: NumberFormatter.formatMoney(InterestMapper.calculateDailyAmount(claimData))
     }
   }
 

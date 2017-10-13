@@ -1,18 +1,19 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
-
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
 
 import {
   ClaimAmountBreakdown,
+  INIT_ROW_COUNT,
   MAX_NUMBER_OF_ROWS,
   ValidationErrors as BreakdownValidationErrors
 } from 'claim/form/models/claimAmountBreakdown'
 import { ClaimAmountRow, ValidationErrors } from 'claim/form/models/claimAmountRow'
-import { INIT_ROW_COUNT } from 'response/form/models/timeline'
 
 describe('ClaimAmountBreakdown', () => {
+
   describe('on init', () => {
+
     it('should return 4 rows by default', () => {
       expect(new ClaimAmountBreakdown().rows).to.have.lengthOf(4)
     })
@@ -26,6 +27,7 @@ describe('ClaimAmountBreakdown', () => {
   })
 
   describe('form object deserialization', () => {
+
     it('should return undefined when value is undefined', () => {
       expect(ClaimAmountBreakdown.fromObject(undefined)).to.be.equal(undefined)
     })
@@ -39,6 +41,7 @@ describe('ClaimAmountBreakdown', () => {
     })
 
     it('should deserialize all fields', () => {
+
       expect(ClaimAmountBreakdown.fromObject({
         rows: [
           {
@@ -51,6 +54,7 @@ describe('ClaimAmountBreakdown', () => {
   })
 
   describe('deserialize', () => {
+
     it('should return a ClaimAmountBreakdown instance', () => {
       let deserialized = new ClaimAmountBreakdown().deserialize({})
       expect(deserialized).to.be.instanceof(ClaimAmountBreakdown)
@@ -102,7 +106,7 @@ describe('ClaimAmountBreakdown', () => {
 
   describe('appendRow', () => {
 
-    it('adds empty element to list of rows', () => {
+    it('should add empty element to list of rows', () => {
       const actual: ClaimAmountBreakdown = new ClaimAmountBreakdown()
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
@@ -120,12 +124,12 @@ describe('ClaimAmountBreakdown', () => {
       expect(breakdown.rows).to.have.lengthOf(3)
     })
 
-    it('adds only up to 20 elements', () => {
+    it('should add only up to 20 elements', () => {
       const actual: ClaimAmountBreakdown = new ClaimAmountBreakdown()
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
 
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < MAX_NUMBER_OF_ROWS + 1; i++) {
         actual.appendRow()
       }
 
@@ -195,6 +199,7 @@ describe('ClaimAmountBreakdown', () => {
   })
 
   describe('validation', () => {
+
     const validator: Validator = new Validator()
 
     it('should reject breakdown if at least one row is invalid', () => {
@@ -252,6 +257,25 @@ describe('ClaimAmountBreakdown', () => {
         new ClaimAmountRow('', undefined)
       ])
       expect(breakdown.totalAmount).to.throw(Error)
+    })
+  })
+
+  describe('canAddMoreRows', () => {
+
+    it('should return true when number of elements is lower than max number', () => {
+      const actual: ClaimAmountBreakdown = new ClaimAmountBreakdown()
+
+      expect(actual.canAddMoreRows()).to.be.eq(true)
+    })
+
+    it('should return true when number of rows is equal max', () => {
+      const actual: ClaimAmountBreakdown = new ClaimAmountBreakdown()
+
+      for (let i = 0; i < MAX_NUMBER_OF_ROWS; i++) {
+        actual.appendRow()
+      }
+
+      expect(actual.canAddMoreRows()).to.be.eq(false)
     })
   })
 })

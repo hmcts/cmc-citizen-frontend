@@ -4,7 +4,7 @@ import { Address } from 'claims/models/address'
 import { convertAddress } from 'claims/converters/address'
 import { generateString } from '../../forms/models/validationUtils'
 
-describe('address converter', () => {
+describe('Address converter', () => {
 
   context('should convert form address model to address model', () => {
 

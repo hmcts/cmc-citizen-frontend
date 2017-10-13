@@ -37,7 +37,7 @@ export class Timeline implements Serializable<Timeline> {
   }
 
   appendRow () {
-    if (this.rows.length < MAX_NUMBER_OF_EVENTS) {
+    if (this.canAddMoreRows()) {
       this.rows.push(TimelineRow.empty())
     }
   }
@@ -48,6 +48,10 @@ export class Timeline implements Serializable<Timeline> {
     if (this.rows.length === 0) {
       this.appendRow()
     }
+  }
+
+  canAddMoreRows () {
+    return this.rows.length < MAX_NUMBER_OF_EVENTS
   }
 
   private deserializeRows (rows: any): TimelineRow[] {

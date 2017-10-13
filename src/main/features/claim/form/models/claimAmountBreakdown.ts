@@ -4,7 +4,7 @@ import { Serializable } from 'app/models/serializable'
 import { ClaimAmountRow } from 'features/claim/form/models/claimAmountRow'
 import { MinTotal } from 'app/forms/validation/validators/minTotal'
 
-const INIT_ROW_COUNT: number = 4
+export const INIT_ROW_COUNT: number = 4
 export const MAX_NUMBER_OF_ROWS: number = 20
 
 export class ValidationErrors {
@@ -43,7 +43,7 @@ export class ClaimAmountBreakdown implements Serializable<ClaimAmountBreakdown> 
   }
 
   appendRow () {
-    if (this.rows.length < MAX_NUMBER_OF_ROWS) {
+    if (this.canAddMoreRows()) {
       this.rows.push(ClaimAmountRow.empty())
     }
   }
@@ -54,6 +54,10 @@ export class ClaimAmountBreakdown implements Serializable<ClaimAmountBreakdown> 
     if (this.rows.length === 0) {
       this.appendRow()
     }
+  }
+
+  canAddMoreRows () {
+    return this.rows.length < MAX_NUMBER_OF_ROWS
   }
 
   totalAmount () {
