@@ -118,7 +118,7 @@ describe('Timeline', () => {
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
 
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < MAX_NUMBER_OF_EVENTS + 1; i++) {
         actual.appendRow()
       }
 
@@ -126,13 +126,13 @@ describe('Timeline', () => {
     })
   })
 
-  describe('clearUselessRows', () => {
+  describe('removeExcessRows', () => {
 
     it('should filter out all elements from list when empty', () => {
       const actual: Timeline = new Timeline()
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
-      actual.clearUselessRows()
+      actual.removeExcessRows()
       expect(actual.rows.length).to.be.eq(1)
       expectAllRowsToBeEmpty(actual.rows)
     })
@@ -149,7 +149,7 @@ describe('Timeline', () => {
       })
 
       expect(actual.rows.length).to.be.eq(5)
-      actual.clearUselessRows()
+      actual.removeExcessRows()
       expect(actual.rows.length).to.be.eq(5)
       expectAllRowsToBePopulated(actual.rows)
     })
@@ -159,13 +159,13 @@ describe('Timeline', () => {
         rows: [
           { date: 'Jan', description: 'OK' },
           { date: 'Feb', description: 'OK' },
-          { },
-          { }
+          {},
+          {}
         ]
       })
 
       expect(actual.rows.length).to.be.eq(4)
-      actual.clearUselessRows()
+      actual.removeExcessRows()
       expect(actual.rows.length).to.be.eq(2)
       expectAllRowsToBePopulated(actual.rows)
     })
@@ -174,16 +174,35 @@ describe('Timeline', () => {
       const actual: Timeline = new Timeline().deserialize({
         rows: [
           { date: 'Jan', description: 'OK' },
-          { },
+          {},
           { date: 'Feb', description: 'OK' },
-          { }
+          {}
         ]
       })
 
       expect(actual.rows.length).to.be.eq(4)
-      actual.clearUselessRows()
+      actual.removeExcessRows()
       expect(actual.rows.length).to.be.eq(2)
       expectAllRowsToBePopulated(actual.rows)
+    })
+  })
+
+  describe('canAddMoreRows', () => {
+
+    it('should return true when number of elements is lower than max number', () => {
+      const actual: Timeline = new Timeline()
+
+      expect(actual.canAddMoreRows()).to.be.eq(true)
+    })
+
+    it('should return true when number of rows is equal max', () => {
+      const actual: Timeline = new Timeline()
+
+      for (let i = 0; i < MAX_NUMBER_OF_EVENTS; i++) {
+        actual.appendRow()
+      }
+
+      expect(actual.canAddMoreRows()).to.be.eq(false)
     })
   })
 })
