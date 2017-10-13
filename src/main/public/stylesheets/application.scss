@@ -8,6 +8,7 @@ $path: '/img/lib/';
 @import 'components/form';
 @import 'components/table-form';
 @import 'components/claim-amount';
+@import 'components/timeline';
 @import 'components/task-list';
 @import 'components/check-answers';
 @import 'components/claim-confirmed';
@@ -16,6 +17,7 @@ $path: '/img/lib/';
 @import 'components/report_problem';
 @import 'components/dashboard';
 @import 'components/survey-links';
+@import 'components/mobile';
 
 .notice {
   margin-bottom: 1.5rem;

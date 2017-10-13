@@ -39,18 +39,16 @@
 
     {{ tableEnd() }}
 
-    <div class="form-group">
-      {% if signatureType != 'none' %}
-        {{ statementOfTruth(
-            form,
-            label = 'I believe that the facts stated in this defence are true',
-            isQualified = (signatureType == 'qualified')
-           )
-        }}
-      {% endif %}
+    {{
+      statementOfTruth(
+        form,
+        label = 'I believe that the facts stated in this claim are true',
+        isQualified = (signatureType === 'qualified')
+      )
+    }}
 
-      {{ submitButton('Submit response') }}
-      <input type="hidden" name="type" value="{{ form.model.type }}">
-    </div>
+    {{ submitButton('Submit response') }}
+
+    <input type="hidden" name="type" value="{{ form.model.type }}">
   </form>
 {% endblock %}

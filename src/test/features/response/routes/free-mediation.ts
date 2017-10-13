@@ -21,7 +21,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.freeMediationPage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
 describe('Defendant response: free mediation page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', pagePath)

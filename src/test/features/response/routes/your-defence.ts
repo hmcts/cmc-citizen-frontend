@@ -21,7 +21,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 
 const defencePage = ResponsePaths.defencePage.evaluateUri({ externalId: sampleClaimObj.externalId })
 describe('Defendant response: defence page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', defencePage)

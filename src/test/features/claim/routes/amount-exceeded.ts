@@ -15,7 +15,7 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Claim issue: amount exceeded page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimErrorPaths.amountExceededPage.uri)

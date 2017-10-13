@@ -23,7 +23,9 @@
         }
       )
     }}
-    {{ row('Email:', user.claim.claimData.defendant.email) }}
+    {% if claim.claimData.defendant.email %}
+      {{ row('Email:', user.claim.claimData.defendant.email) }}
+    {% endif %}
     {{ tableEnd() }}
 
     {{ tableStart('payment', 'Payment') }}
@@ -40,7 +42,7 @@
 
     {% if details.paymentOption.option.value == 'INSTALMENTS' %}
       {% set paymentOptionDisplayValue =
-      [  t('%s: %s %s.',
+      [  t('%s: %s %s',
           { postProcess: 'sprintf', sprintf: [
               t(details.paymentOption.option.displayValue),
               details.repaymentPlan.installmentAmount | numeral,
@@ -60,7 +62,6 @@
       {{ statementOfTruth(
         form,
         title = 'Declaration',
-        warningMessage = 'Once you \'Sign and submit\', you cannot change your answers.',
         label = 'I declare that the details I have given are true to the best of my knowledge.',
         isQualified = partyAsCompanyOrOrganisation,
         typeOfStatement = 'declaration')

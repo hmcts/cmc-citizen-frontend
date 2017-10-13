@@ -21,7 +21,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
 describe('Defendant response: task list page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', pagePath)
