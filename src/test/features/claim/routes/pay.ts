@@ -29,7 +29,7 @@ import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { ClaimAmountRow } from 'claim/form/models/claimAmountRow'
 import { Interest } from 'claim/form/models/interest'
 import { InterestDate } from 'claim/form/models/interestDate'
-import Reason from 'forms/models/reason'
+import { Reason } from 'claim/form/models/reason'
 
 const draftType = 'claim'
 

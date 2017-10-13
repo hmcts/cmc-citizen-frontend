@@ -4,10 +4,12 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from './validationUtils'
-import Reason, { ValidationErrors } from 'forms/models/reason'
+import { Reason, ValidationErrors } from 'claim/form/models/reason'
 
 describe('Reason', () => {
+
   describe('constructor', () => {
+
     it('should set the primitive fields to undefined', () => {
       const reason = new Reason()
       expect(reason.reason).to.be.undefined
@@ -15,6 +17,7 @@ describe('Reason', () => {
   })
 
   describe('deserialize', () => {
+
     it('should return an instance initialised with defaults for undefined', () => {
       expect(new Reason().deserialize(undefined)).to.eql(new Reason())
     })
@@ -33,14 +36,17 @@ describe('Reason', () => {
   })
 
   describe('isCompleted', () => {
+
     it('should return false for the undefined', () => {
       const reason = new Reason()
       expect(reason.isCompleted()).to.be.false
     })
+
     it('should return false for the empty string', () => {
       const reason = new Reason('')
       expect(reason.isCompleted()).to.be.false
     })
+
     it('should return true for the a given reason', () => {
       const reason = new Reason('Some reason')
       expect(reason.isCompleted()).to.be.true
@@ -48,6 +54,7 @@ describe('Reason', () => {
   })
 
   describe('validation', () => {
+
     const validator: Validator = new Validator()
 
     it('should reject claim reason with undefined reason', () => {
