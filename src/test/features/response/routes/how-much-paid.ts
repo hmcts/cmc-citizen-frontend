@@ -110,7 +110,7 @@ describe('Defendant response: how much have you paid', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ amount: 300, date: { year: '1978', month: '1', day: '11' }, text: 'I don’t owe any money' })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.freeMediationPage
+                .toLocation(ResponsePaths.taskListPage
                   .evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })
