@@ -1,7 +1,7 @@
 import * as config from 'config'
 import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
-import { InterestType } from 'app/forms/models/interest'
+import { InterestType } from 'app/../../main/features/claim/form/models/interest'
 import { Scope } from 'nock'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')

@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import * as moment from 'moment'
 
 import { calculateInterest } from 'app/common/calculateInterest'
-import Interest, { InterestType } from 'forms/models/interest'
+import { Interest, InterestType } from 'claim/form/models/interest'
 
 describe('calculateInterest', () => {
 

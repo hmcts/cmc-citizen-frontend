@@ -1,13 +1,13 @@
 import { IsDefined, IsIn, MaxLength, ValidateIf, ValidateNested } from 'class-validator'
 
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
-import { IsNotInFuture } from 'forms/validation/validators/notInFuture'
-import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
+import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
+import { IsNotInFuture } from 'app/forms/validation/validators/notInFuture'
+import { IsValidLocalDate } from 'app/forms/validation/validators/isValidLocalDate'
 
-import { Serializable } from 'models/serializable'
-import { LocalDate } from 'forms/models/localDate'
+import { Serializable } from 'app/models/serializable'
+import { LocalDate } from 'app/forms/models/localDate'
 import { CompletableTask } from 'app/models/task'
-import InterestDateType from 'app/common/interestDateType'
+import { InterestDateType } from 'app/common/interestDateType'
 import { IsValidYearFormat } from 'app/forms/validation/validators/isValidYearFormat'
 
 export class ValidationErrors {
@@ -22,7 +22,7 @@ export class ValidationErrors {
   static readonly REASON_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
 }
 
-export default class InterestDate implements Serializable<InterestDate>, CompletableTask {
+export class InterestDate implements Serializable<InterestDate>, CompletableTask {
 
   @IsDefined({ message: ValidationErrors.TYPE_REQUIRED })
   @IsIn(InterestDateType.all(), { message: ValidationErrors.TYPE_REQUIRED })
