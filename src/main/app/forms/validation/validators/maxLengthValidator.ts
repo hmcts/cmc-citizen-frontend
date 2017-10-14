@@ -21,6 +21,11 @@ export class MaxLengthValidatorConstraint implements ValidatorConstraintInterfac
 
 }
 
+/**
+ * We don't use default @MaxLength from class-validator lib as that validator expects string
+ * and returns invalid for `undefined` value (we have undefined value in our form models, at least
+ * ClaimAmountRow and TimelineRow).
+ */
 export function MaxLength (maxLength: number, validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({

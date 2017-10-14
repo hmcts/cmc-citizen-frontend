@@ -1,5 +1,5 @@
 import { MaxLength, IsDefined } from 'class-validator'
-import { Serializable } from 'models/serializable'
+import { Serializable } from 'app/models/serializable'
 import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 import { CompletableTask } from 'app/models/task'
 
@@ -8,7 +8,7 @@ export class ValidationErrors {
   static readonly REASON_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
 }
 
-export default class Reason implements Serializable<Reason>, CompletableTask {
+export class Reason implements Serializable<Reason>, CompletableTask {
   @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.REASON_REQUIRED })
   @MaxLength(99000, { message: ValidationErrors.REASON_TOO_LONG })

@@ -4,7 +4,7 @@ import { Paths } from 'claim/paths'
 
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import Interest, { InterestType } from 'forms/models/interest'
+import { Interest, InterestType } from 'claim/form/models/interest'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'common/draft/draftService'

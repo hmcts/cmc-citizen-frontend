@@ -2,9 +2,8 @@
 /* tslint:disable:no-unused-expression */
 
 import { expect } from 'chai'
-import * as randomstring from 'randomstring'
 import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../../app/forms/models/validationUtils'
+import { expectValidationError, generateString } from '../../../../app/forms/models/validationUtils'
 import Defence, { ValidationErrors } from 'response/form/models/defence'
 
 describe('Defence', () => {
@@ -65,17 +64,14 @@ describe('Defence', () => {
     })
 
     it('should reject defence text with more than 99000 characters', () => {
-      const text = randomstring.generate({
-        length: 99001,
-        charset: 'alphabetic'
-      })
+      const text: string = generateString(99001)
       const errors = validator.validateSync(new Defence(text))
       expect(errors.length).to.equal(1)
       expectValidationError(errors, ValidationErrors.DEFENCE_TOO_LONG.replace('$constraint1', '99000'))
     })
 
     it('should accept defence text with 99000 characters', () => {
-      const errors = validator.validateSync(new Defence(randomstring.generate(9900)))
+      const errors = validator.validateSync(new Defence(generateString(9900)))
       expect(errors.length).to.equal(0)
     })
 
