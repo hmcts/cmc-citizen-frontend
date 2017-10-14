@@ -1,7 +1,7 @@
 import { Response } from 'response/form/models/response'
 import { Serializable } from 'models/serializable'
 import { FreeMediation } from 'response/form/models/freeMediation'
-import { RejectPartOfClaim } from 'response/form/models/rejectPartOfClaim'
+import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import Defence from 'response/form/models/defence'
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
@@ -61,11 +61,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
     if (!(this.response && this.response.type)) {
       return false
     }
-
-    if (this.response.type === ResponseType.OWE_SOME_PAID_NONE) {
-      return true
-    }
-
-    return !!(this.response.type === ResponseType.OWE_SOME_PAID_NONE)
+    return this.response.type === ResponseType.OWE_SOME_PAID_NONE && this.rejectPartOfClaim !== undefined
+      && this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
   }
 }

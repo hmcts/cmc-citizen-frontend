@@ -190,7 +190,7 @@ describe('Defendant response: check and send page', () => {
           it('should redirect to partial-admission handoff page when defendant response is part admission', async () => {
             draftStoreServiceMock.resolveFind(draftType, {
               response: { type: ResponseType.OWE_SOME_PAID_NONE },
-              rejectPartOfClaim: { option: RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED }
+              rejectPartOfClaim: { option: RejectPartOfClaimOption.AMOUNT_TOO_HIGH }
             })
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
@@ -199,7 +199,7 @@ describe('Defendant response: check and send page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
+                .toLocation(ResponsePaths.partialAdmissionPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
           it('should redirect to full-admission handoff page when defendant response is full admission', async () => {

@@ -39,7 +39,7 @@ export default express.Router()
       } else {
         user.responseDraft.document.howMuchIsPaid = form.model
         await DraftService.save(user.responseDraft, user.bearerToken)
-        res.redirect(Paths.freeMediationPage.evaluateUri({ externalId: user.claim.externalId }))
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     })
   )
