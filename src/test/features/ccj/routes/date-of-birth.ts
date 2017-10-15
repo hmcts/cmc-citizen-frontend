@@ -15,7 +15,6 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
-import { partyDetails } from '../../../data/draft/partyDetails'
 import { PartyType } from 'app/common/partyType'
 const externalId = sampleClaimObj.externalId
 
@@ -26,8 +25,16 @@ const dateOfBirthPage = Paths.dateOfBirthPage.uri.replace(':externalId', externa
 function checkAccessGuard (app: any, method: string) {
   PartyType.except(PartyType.INDIVIDUAL).forEach(partyType => {
     it(`should redirect to dashboard page when defendant type is ${partyType.name.toLocaleLowerCase()}`, async () => {
-      claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-      draftStoreServiceMock.resolveFind('ccj', {defendant: {partyDetails: partyDetails(partyType.value)}})
+      claimStoreServiceMock.resolveRetrieveClaimByExternalId({
+        claim: {
+          ...sampleClaimObj.claim,
+          defendants: [{
+            ...sampleClaimObj.claim.defendants[0],
+            type: partyType.value
+          }]
+        }
+      })
+      draftStoreServiceMock.resolveFind('ccj')
 
       await request(app)[method](dateOfBirthPage)
         .set('Cookie', `${cookieName}=ABC`)
