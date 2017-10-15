@@ -8,8 +8,6 @@ import { mockReq as req, mockRes as res } from 'sinon-express-mock'
 import { Paths } from 'dashboard/paths'
 
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
-import { Defendant } from 'drafts/models/defendant'
-import { PartyDetails } from 'forms/models/partyDetails'
 import { CCJGuard } from 'ccj/guards/ccjGuard'
 
 chai.use(spies)
@@ -22,7 +20,7 @@ describe('CCJ guard', () => {
   beforeEach(() => {
     res.locals = {
       user: {
-        ccjDraft: new DraftCCJ(new Defendant(new PartyDetails()))
+        ccjDraft: new DraftCCJ()
       }
     }
     res.redirect = sinon.spy((location: string): void => {

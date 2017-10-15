@@ -60,10 +60,6 @@ mock('ccj/guards/ccjGuard', {
   'CCJGuard': justForwardRequestHandler
 })
 
-mock('ccj/guards/individualDateOfBirthGuard', {
-  'IndividualDateOfBirthGuard': justForwardRequestHandler
-})
-
 mock('response/guards/guardFactory', {
   GuardFactory: {
     create: () => {

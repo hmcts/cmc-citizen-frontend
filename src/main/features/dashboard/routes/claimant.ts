@@ -6,6 +6,7 @@ import { ErrorHandling } from 'common/errorHandling'
 
 import ClaimStoreClient from 'claims/claimStoreClient'
 import Claim from 'app/claims/models/claim'
+import { PartyType } from 'app/common/partyType'
 
 export default express.Router()
   .get(Paths.claimantPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
@@ -19,5 +20,11 @@ export default express.Router()
   }))
   .post(Paths.claimantPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
     const { externalId } = req.params
-    res.redirect(CCJPaths.theirDetailsPage.evaluateUri({ externalId: externalId }))
+    const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId)
+
+    if (claim.claimData.defendant.type === PartyType.INDIVIDUAL.value) {
+      res.redirect(CCJPaths.dateOfBirthPage.evaluateUri({ externalId: externalId }))
+    } else {
+      res.redirect(CCJPaths.paidAmountPage.evaluateUri({ externalId: externalId }))
+    }
   }))
