@@ -134,6 +134,7 @@ describe('DateOfBirth', () => {
 
     it('should set the values of given json on the deserialized instance', () => {
       let deserialized = new DateOfBirth().deserialize({
+        known: true,
         date: {
           day: 10,
           month: 11,
