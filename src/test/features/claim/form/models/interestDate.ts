@@ -3,11 +3,11 @@
 import { expect } from 'chai'
 import * as _ from 'lodash'
 import { Validator } from 'class-validator'
-import { expectValidationError } from './validationUtils'
+import { expectValidationError } from '../../../../app/forms/models/validationUtils'
 
-import InterestDate, { ValidationErrors } from 'forms/models/interestDate'
+import { InterestDate, ValidationErrors } from 'claim/form/models/interestDate'
 import { LocalDate } from 'forms/models/localDate'
-import InterestDateType from 'app/common/interestDateType'
+import { InterestDateType } from 'app/common/interestDateType'
 
 describe('InterestDate', () => {
 
