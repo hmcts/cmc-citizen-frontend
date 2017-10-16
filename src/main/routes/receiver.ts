@@ -16,11 +16,14 @@ import * as config from 'config'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import IdamClient from 'app/idam/idamClient'
 import { buildURL } from 'utils/callbackBuilder'
-import { DraftMiddleware } from 'common/draft/draftMiddleware'
 import DraftClaim from 'drafts/models/draftClaim'
 import JwtExtractor from 'idam/jwtExtractor'
 import { RedirectHelper } from 'utils/redirectHelper'
 import { RoutablePath } from 'common/router/routablePath'
+import { DraftStoreClientFactory } from 'common/draft/draftStoreClientFactory'
+import DraftStoreClient from 'common/draft/draftStoreClient'
+import { Draft } from 'models/draft'
+import { hasTokenExpired } from 'idam/authorizationMiddleware'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('router/receiver')
 const useOauth = toBoolean(config.get<boolean>('featureToggles.idamOauth'))
@@ -37,7 +40,9 @@ async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath
   return authToken.accessToken
 }
 
-async function getAuthToken (req: express.Request, receiver: RoutablePath = Paths.receiver, checkCookie = true): Promise<string> {
+async function getAuthToken (req: express.Request,
+                             receiver: RoutablePath = Paths.receiver,
+                             checkCookie = true): Promise<string> {
   let authenticationToken
   if (!useOauth && req.query.jwt) {
     authenticationToken = req.query.jwt
@@ -73,90 +78,108 @@ function getLetterHolderId (req: express.Request, user: User): string {
   throw new Error('User was logged in but didn’t have a letter holder role')
 }
 
+function loginErrorHandler (req: express.Request, res: express.Response, next: express.NextFunction, err: Error) {
+  if (hasTokenExpired(err)) {
+    res.clearCookie(sessionCookie)
+    logger.debug(`Protected path - expired auth token - access to ${req.path} rejected`)
+    return res.redirect(RedirectHelper.getRedirectUriForLogin(req, res))
+  }
+  return next(err)
+}
+
 export default express.Router()
-  .get(AppPaths.receiver.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
-    const cookies = new Cookies(req, res)
+  .get(AppPaths.receiver.uri,
+    ErrorHandling.apply(async (req: express.Request,
+                               res: express.Response,
+                               next: express.NextFunction): Promise<void> => {
+      const cookies = new Cookies(req, res)
 
-    const authenticationToken = await getAuthToken(req)
-    if (authenticationToken) {
-      const user = await IdamClient
-        .retrieveUserFor(authenticationToken)
-      res.locals.isLoggedIn = true
-      res.locals.user = user
-      cookies.set(sessionCookie, authenticationToken, { sameSite: 'lax' })
-    }
+      const authenticationToken = await getAuthToken(req)
+      if (authenticationToken) {
+        const user = await IdamClient
+          .retrieveUserFor(authenticationToken)
+          .catch(err => loginErrorHandler(req, res, next, err))
+        res.locals.isLoggedIn = true
+        res.locals.user = user
+        cookies.set(sessionCookie, authenticationToken, { sameSite: 'lax' })
+      }
 
-    if (isDefendantFirstContactPinLogin(req)) {
-      return res.redirect(FirstContactPaths.claimSummaryPage.uri)
-    }
+      if (isDefendantFirstContactPinLogin(req)) {
+        return res.redirect(FirstContactPaths.claimSummaryPage.uri)
+      }
 
-    if (res.locals.isLoggedIn) {
+      if (res.locals.isLoggedIn) {
+        const user: User = res.locals.user
+        const atLeastOneClaimIssued: boolean = (await ClaimStoreClient.retrieveByClaimantId(user.id)).length > 0
+        const claimAgainstDefendant = await ClaimStoreClient.retrieveByDefendantId(user.id)
+        const atLeastOneResponse: boolean = claimAgainstDefendant.length > 0 &&
+          claimAgainstDefendant.some((claim: Claim) => !!claim.response)
+        const atLeastOneCCJ: boolean = claimAgainstDefendant.length > 0 &&
+          claimAgainstDefendant.some((claim: Claim) => !!claim.countyCourtJudgment)
+
+        if (atLeastOneClaimIssued || atLeastOneResponse || atLeastOneCCJ) {
+          return res.redirect(DashboardPaths.dashboardPage.uri)
+        }
+
+        const draftClaimClient: DraftStoreClient<DraftClaim> = await DraftStoreClientFactory.create<DraftClaim>()
+        const draftClaims: Draft<DraftClaim>[] = await draftClaimClient.find({
+          type: 'claim',
+          limit: '100'
+        }, res.locals.user.bearerToken, (value: any): DraftClaim => {
+          return new DraftClaim().deserialize(value)
+        })
+
+        const draftClaimSaved: boolean = draftClaims.length > 0
+        const claimIssuedButNoResponse: boolean = (claimAgainstDefendant).length > 0
+          && !atLeastOneResponse
+
+        if (claimIssuedButNoResponse && draftClaimSaved) {
+          return res.redirect(DashboardPaths.dashboardPage.uri)
+        }
+
+        if (draftClaimSaved) {
+          return res.redirect(ClaimPaths.taskListPage.uri)
+        }
+
+        if (claimIssuedButNoResponse) {
+          return res.redirect(ResponsePaths.taskListPage
+            .evaluateUri({ externalId: claimAgainstDefendant.pop().externalId }))
+        }
+
+        return res.redirect(ClaimPaths.startPage.uri)
+      } else {
+        res.redirect(RedirectHelper.getRedirectUriForLogin(req, res))
+      }
+    }))
+  .get(AppPaths.linkDefendantReceiver.uri,
+    ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
+      const cookies = new Cookies(req, res)
+
+      const authenticationToken = await getAuthToken(req, Paths.linkDefendantReceiver, false)
+      if (authenticationToken) {
+        const user = await IdamClient
+          .retrieveUserFor(authenticationToken)
+        res.locals.isLoggedIn = true
+        res.locals.user = user
+        cookies.set(sessionCookie, authenticationToken, { sameSite: 'lax' })
+      }
+
       const user: User = res.locals.user
-      const atLeastOneClaimIssued: boolean = (await ClaimStoreClient.retrieveByClaimantId(user.id)).length > 0
-      const claimAgainstDefendant = await ClaimStoreClient.retrieveByDefendantId(user.id)
-      const atLeastOneResponse: boolean = claimAgainstDefendant.length > 0 &&
-        claimAgainstDefendant.some((claim: Claim) => !!claim.response)
-      const atLeastOneCCJ: boolean = claimAgainstDefendant.length > 0 &&
-        claimAgainstDefendant.some((claim: Claim) => !!claim.countyCourtJudgment)
+      if (res.locals.isLoggedIn) {
+        const letterHolderId: string = getLetterHolderId(req, user)
+        if (!user.isInRoles(`letter-${letterHolderId}`)) {
+          logger.error('User not in letter ID role - redirecting to access denied page')
+          return res.redirect(ErrorPaths.claimSummaryAccessDeniedPage.uri)
+        }
 
-      if (atLeastOneClaimIssued || atLeastOneResponse || atLeastOneCCJ) {
-        return res.redirect(DashboardPaths.dashboardPage.uri)
+        const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(letterHolderId)
+
+        if (!claim.defendantId) {
+          await ClaimStoreClient.linkDefendant(claim.id, user.id)
+        }
+
+        res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+      } else {
+        res.redirect(RedirectHelper.getRedirectUriForLogin(req, res, AppPaths.linkDefendantReceiver))
       }
-
-      res.locals.user.claimDraft = DraftMiddleware.requestHandler('claim', (value: any): DraftClaim => {
-        return new DraftClaim().deserialize(value)
-      })
-
-      const draftClaimSaved: boolean = user.claimDraft.document && user.claimDraft.id !== undefined
-      const claimIssuedButNoResponse: boolean = (claimAgainstDefendant).length > 0
-        && !atLeastOneResponse
-
-      if (claimIssuedButNoResponse && draftClaimSaved) {
-        return res.redirect(DashboardPaths.dashboardPage.uri)
-      }
-
-      if (draftClaimSaved) {
-        return res.redirect(ClaimPaths.taskListPage.uri)
-      }
-
-      if (claimIssuedButNoResponse) {
-        return res.redirect(ResponsePaths.taskListPage
-          .evaluateUri({ externalId: claimAgainstDefendant.pop().externalId }))
-      }
-
-      return res.redirect(ClaimPaths.startPage.uri)
-    } else {
-      res.redirect(RedirectHelper.getRedirectUri(req, res))
-    }
-  }))
-  .get(AppPaths.linkDefendantReceiver.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
-    const cookies = new Cookies(req, res)
-
-    const authenticationToken = await getAuthToken(req, Paths.linkDefendantReceiver,  false)
-    if (authenticationToken) {
-      const user = await IdamClient
-        .retrieveUserFor(authenticationToken)
-      res.locals.isLoggedIn = true
-      res.locals.user = user
-      cookies.set(sessionCookie, authenticationToken, { sameSite: 'lax' })
-    }
-
-    const user: User = res.locals.user
-    if (res.locals.isLoggedIn) {
-      const letterHolderId: string = getLetterHolderId(req, user)
-      if (!user.isInRoles(`letter-${letterHolderId}`)) {
-        logger.error('User not in letter ID role - redirecting to access denied page')
-        return res.redirect(ErrorPaths.claimSummaryAccessDeniedPage.uri)
-      }
-
-      const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(letterHolderId)
-
-      if (!claim.defendantId) {
-        await ClaimStoreClient.linkDefendant(claim.id, user.id)
-      }
-
-      res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
-    } else {
-      res.redirect(RedirectHelper.getRedirectUri(req, res, AppPaths.linkDefendantReceiver))
-    }
-  }))
+    }))

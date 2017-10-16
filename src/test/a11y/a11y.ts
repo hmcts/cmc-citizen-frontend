@@ -67,8 +67,6 @@ const excludedPaths: DefendantResponsePaths[] = [
   ClaimIssuePaths.finishPaymentReceiver,
   ClaimIssuePaths.receiptReceiver,
   ClaimIssuePaths.defendantResponseCopy,
-  DefendantResponsePaths.defendantLoginReceiver,
-  DefendantResponsePaths.defendantLinkReceiver,
   DefendantResponsePaths.receiptReceiver,
   DefendantResponsePaths.legacyDashboardRedirect
 ]

@@ -7,13 +7,12 @@ import { AlreadyRespondedGuard } from 'response/guards/alreadyRespondedGuard'
 import { ClaimMiddleware } from 'app/claims/claimMiddleware'
 import { DraftMiddleware } from 'common/draft/draftMiddleware'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Paths as ResponsePaths} from 'response/paths'
 import { RedirectHelper } from 'app/utils/redirectHelper'
 import { CountyCourtJudgmentRequestedGuard } from 'response/guards/countyCourtJudgmentRequestedGuard'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    res.redirect(RedirectHelper.getRedirectUri(req, res))
+    res.redirect(RedirectHelper.getRedirectUriForLogin(req, res))
   }
 
   const requiredRoles = [
@@ -27,8 +26,6 @@ function defendantResponseRequestHandler (): express.RequestHandler {
 export class Feature {
   enableFor (app: express.Express) {
     app.all('/case/*/response/*', defendantResponseRequestHandler())
-    app.all(ResponsePaths.defendantLinkReceiver.evaluateUri({ letterHolderId: '*' }),
-      defendantResponseRequestHandler())
     app.all(/^\/case\/.+\/response\/(?![\d]+\/receiver).*$/, ClaimMiddleware.retrieveByExternalId)
     app.all(
       /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|full-admission|partial-admission|counter-claim|receipt).*$/,

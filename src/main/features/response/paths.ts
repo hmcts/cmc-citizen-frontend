@@ -3,7 +3,6 @@ import { RoutablePath } from 'common/router/routablePath'
 const responsePath = '/case/:externalId/response'
 
 export class Paths {
-  static readonly defendantLinkReceiver = new RoutablePath(`/response/:letterHolderId/receiver`)
   static readonly taskListPage = new RoutablePath(`${responsePath}/task-list`)
   static readonly defendantYourDetailsPage = new RoutablePath(`${responsePath}/your-details`)
   static readonly defendantDateOfBirthPage = new RoutablePath(`${responsePath}/your-dob`)

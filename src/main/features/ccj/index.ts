@@ -11,7 +11,7 @@ import { RedirectHelper } from 'utils/redirectHelper'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    res.redirect(RedirectHelper.getRedirectUri(req, res))
+    res.redirect(RedirectHelper.getRedirectUriForLogin(req, res))
   }
 
   const requiredRoles = ['cmc-private-beta']

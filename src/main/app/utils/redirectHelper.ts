@@ -10,7 +10,7 @@ import { RoutablePath } from 'common/router/routablePath'
 const oauthEnabled = toBoolean(config.get('featureToggles.idamOauth'))
 
 export class RedirectHelper {
-  static getRedirectUriForPin(req: express.Request,res: express.Response, claimReference: string): string {
+  static getRedirectUriForPin (req: express.Request, res: express.Response, claimReference: string): string {
     if (oauthEnabled) {
       return OAuthHelper.getRedirectUriForPin(req, res, claimReference)
     }
@@ -18,7 +18,9 @@ export class RedirectHelper {
     return `${config.get('idam.authentication-web.url')}/login/pin?continue-url=${buildURL(req, callbackPath)}`
   }
 
-  static getRedirectUri (req: express.Request, res: express.Response, receiver: RoutablePath = AppPaths.receiver): string {
+  static getRedirectUriForLogin (req: express.Request,
+                                 res: express.Response,
+                                 receiver: RoutablePath = AppPaths.receiver): string {
     if (oauthEnabled) {
       return OAuthHelper.getRedirectUri(req, res, receiver)
     }
