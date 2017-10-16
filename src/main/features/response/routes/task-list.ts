@@ -21,9 +21,14 @@ export default express.Router()
         .buildRespondToClaimSection(user.responseDraft.document, responseDeadline, claim.externalId)
       const submitSection = TaskListBuilder.buildSubmitSection(claim.externalId)
 
+      console.log(beforeYouStartSection)
+      console.log(respondToClaimSection)
+      console.log(submitSection)
+      console.log(isAfter4pm())
+
       res.render(Paths.taskListPage.associatedView,
         {
-          beforYouStartSection: beforeYouStartSection,
+          beforeYouStartSection: beforeYouStartSection,
           submitSection: submitSection,
           respondToClaimSection: respondToClaimSection,
           claim: claim,

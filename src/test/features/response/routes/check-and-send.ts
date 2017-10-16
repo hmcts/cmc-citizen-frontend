@@ -186,10 +186,10 @@ describe('Defendant response: check and send page', () => {
                 .toLocation(ResponsePaths.counterClaimPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
 
-          it.skip('should redirect to partial-admission handoff page when defendant response is part admission', async () => {
+          it('should redirect to partial-admission handoff page when defendant response is part admission', async () => {
             draftStoreServiceMock.resolveFind(draftType, {
               response: { type: ResponseType.OWE_SOME_PAID_NONE },
-              rejectPartOfClaim: { option: RejectPartOfClaimOption.AMOUNT_TOO_HIGH }
+              rejectPartOfClaim: { option: RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED }
             })
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
