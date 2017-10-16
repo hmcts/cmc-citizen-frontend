@@ -1,70 +1,91 @@
 import { expect } from 'chai'
-
-import { OweMoneyTask } from 'response/tasks/oweMoneyTask'
-
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Response } from 'response/form/models/response'
+import { OweMoneyTask } from 'response/tasks/oweMoneyTask'
 import { ResponseType } from 'response/form/models/responseType'
-import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
-import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 
 describe('OweMoneyTask', () => {
-  describe('when no response', () => {
-    it('should be not completed', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = undefined
+  describe('when responseType OWE_NONE', () => {
+    it('should be false when counterClaim is undefined', () => {
+      const input = {
+        response: {
+          type: {
+            value: ResponseType.OWE_NONE.value
+          }
+        }
+      }
+      const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
+      expect(OweMoneyTask.isCompleted(responseDraft)).to.equal(false)
+    })
 
-      expect(OweMoneyTask.isCompleted(draft)).to.equal(false)
+    it('should be true when counterClaim is true', () => {
+      const input = {
+        response: {
+          type: {
+            value: ResponseType.OWE_NONE.value
+          }
+        },
+        counterClaim: {
+          counterClaim: true
+        }
+      }
+      const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
+      expect(OweMoneyTask.isCompleted(responseDraft)).to.equal(true)
+    })
+
+    it('should be true when counterClaim is false', () => {
+      const input = {
+        response: {
+          type: {
+            value: ResponseType.OWE_NONE.value
+          }
+        },
+        counterClaim: {
+          counterClaim: false
+        }
+      }
+      const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
+      expect(OweMoneyTask.isCompleted(responseDraft)).to.equal(true)
     })
   })
+})
 
-  describe('when full admission', () => {
-    it('should be completed when response is selected', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.OWE_ALL_PAID_NONE)
+describe('when responseType not equal OWE_NONE', () => {
 
-      expect(OweMoneyTask.isCompleted(draft)).to.equal(true)
-    })
-
+  it('should be true when counterClaim is undefined', () => {
+    const input = {
+      response: {
+        type: {
+          value: ResponseType.OWE_SOME_PAID_NONE.value
+        }
+      }
+    }
+    const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
+    expect(OweMoneyTask.isCompleted(responseDraft)).to.equal(true)
   })
 
-  describe('when part admission', () => {
-    it('should be not completed when type of part admission is not selected', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
-      draft.rejectPartOfClaim = new RejectPartOfClaim(undefined)
+  it('should be true when counterClaim is set', () => {
+    const input = {
+      response: {
+        type: {
+          value: ResponseType.OWE_SOME_PAID_NONE.value
+        }
+      },
+      counterClaim: {
+        counterClaim: true
+      }
+    }
+    const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
+    expect(OweMoneyTask.isCompleted(responseDraft)).to.equal(true)
 
-      expect(OweMoneyTask.isCompleted(draft)).to.equal(false)
-    })
-
-    it('should be completed when type of part admission is selected', () => {
-      RejectPartOfClaimOption.all().forEach(option => {
-        const draft: ResponseDraft = new ResponseDraft()
-        draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
-        draft.rejectPartOfClaim = new RejectPartOfClaim(option)
-
-        expect(OweMoneyTask.isCompleted(draft)).to.equal(true)
-      })
-    })
   })
+})
+describe('when response is undefined', () => {
 
-  describe('when full admission', () => {
-    it('should be not completed when type of full admission is not selected', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.OWE_NONE)
-      draft.rejectAllOfClaim = new RejectAllOfClaim(undefined)
+  it('should be false', () => {
+    const input = {
+    }
+    const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
+    expect(OweMoneyTask.isCompleted(responseDraft)).to.equal(false)
 
-      expect(OweMoneyTask.isCompleted(draft)).to.equal(false)
-    })
-
-    it('should be completed when type of part admission is selected', () => {
-      RejectAllOfClaimOption.all().forEach(option => {
-        const draft: ResponseDraft = new ResponseDraft()
-        draft.response = new Response(ResponseType.OWE_NONE)
-        draft.rejectAllOfClaim = new RejectAllOfClaim(option)
-
-        expect(OweMoneyTask.isCompleted(draft)).to.equal(true)
-      })
-    })
   })
 })

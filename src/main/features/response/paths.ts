@@ -14,6 +14,7 @@ export class Paths {
   static readonly moreTimeRequestPage = new RoutablePath(`${responsePath}/more-time-request`)
   static readonly moreTimeConfirmationPage = new RoutablePath(`${responsePath}/more-time-confirmation`)
   static readonly responseTypePage = new RoutablePath(`${responsePath}/response-type`)
+  static readonly defenceOptionsPage = new RoutablePath(`${responsePath}/defence-options`)
   static readonly defencePage = new RoutablePath(`${responsePath}/your-defence`)
   static readonly freeMediationPage = new RoutablePath(`${responsePath}/free-mediation`)
   static readonly checkAndSendPage = new RoutablePath(`${responsePath}/check-and-send`)
@@ -26,7 +27,4 @@ export class Paths {
   static readonly receiptReceiver = new RoutablePath(`${responsePath}/receipt`)
   // Added in case anyone has a printed copy of a PDF with the old URL
   static readonly legacyDashboardRedirect = new RoutablePath('/response/dashboard')
-  static readonly defenceRejectAllOfClaimPage = new RoutablePath(`${responsePath}/reject-all-of-claim`)
-  static readonly defenceRejectPartOfClaimPage = new RoutablePath(`${responsePath}/reject-part-of-claim`)
-
 }
