@@ -9,22 +9,37 @@ import User from 'idam/user'
 import { SignatureType } from 'app/common/signatureType'
 import { QualifiedDeclaration } from 'ccj/form/models/qualifiedDeclaration'
 import { DraftService } from 'common/draft/draftService'
+import { plainToClass } from 'class-transformer'
+import { PartyDetails } from 'forms/models/partyDetails'
+import { IndividualDetails } from 'forms/models/individualDetails'
+import { PartyType } from 'app/common/partyType'
+import { Party } from 'claims/models/details/yours/party'
 
 function prepareUrls (externalId: string): object {
   return {
-    addressUrl: Paths.theirDetailsPage.evaluateUri({ externalId: externalId }),
     dateOfBirthUrl: Paths.dateOfBirthPage.evaluateUri({ externalId: externalId }),
     paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId }),
     paymentOptionUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
   }
 }
 
+function convertToPartyDetails (party: Party): PartyDetails {
+  return plainToClass(PartyDetails, party)
+}
+
 function renderView (form: Form<Declaration>, req: express.Request, res: express.Response): void {
   const user: User = res.locals.user
+
+  const defendant = convertToPartyDetails(user.claim.claimData.defendant)
+  if (defendant.type === PartyType.INDIVIDUAL.value) {
+    (defendant as IndividualDetails).dateOfBirth = user.ccjDraft.document.defendantDateOfBirth
+  }
+
   res.render(Paths.checkAndSendPage.associatedView, {
     form: form,
-    partyAsCompanyOrOrganisation: user.claim.claimData.claimant.isBusiness(),
-    details: user.ccjDraft.document,
+    claim: user.claim,
+    draft: user.ccjDraft.document,
+    defendant: defendant,
     amountToBePaid: user.claim.totalAmount - (user.ccjDraft.document.paidAmount.amount || 0),
     ...prepareUrls(req.params.externalId)
   })
