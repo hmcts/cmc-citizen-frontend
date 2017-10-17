@@ -8,8 +8,12 @@ import './expectations'
 import * as idamServiceMock from '../http-mocks/idam'
 
 const cookieName: string = config.get<string>('session.cookieName')
+export const defaultAccessDeniedPagePattern = new RegExp(`${config.get('idam.authentication-web.url')}/login\\?response_type=code&state=[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}&client_id=cmc_citizen&redirect_uri=http://127.0.0.1:[0-9]{1,5}/receiver`)
 
-export function checkAuthorizationGuards (app: any, method: string, pagePath: string, accessDeniedPage: string | RegExp) {
+export function checkAuthorizationGuards (app: any,
+                                          method: string,
+                                          pagePath: string,
+                                          accessDeniedPage: string | RegExp = defaultAccessDeniedPagePattern) {
   it('should redirect to access denied page when JWT token is missing', async () => {
     await request(app)[method](pagePath)
       .expect(res => expect(res).redirect.toLocation(accessDeniedPage))
