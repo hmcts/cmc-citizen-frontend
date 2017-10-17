@@ -82,11 +82,15 @@ function getLetterHolderId (req: express.Request, user: User): string {
   throw new Error('User was logged in but didn’t have a letter holder role')
 }
 
-function loginErrorHandler (req: express.Request, res: express.Response, next: express.NextFunction, err: Error) {
+function loginErrorHandler (req: express.Request,
+                            res: express.Response,
+                            next: express.NextFunction,
+                            err: Error,
+                            receiver: RoutablePath = AppPaths.receiver) {
   if (hasTokenExpired(err)) {
     res.clearCookie(sessionCookie)
     logger.debug(`Protected path - expired auth token - access to ${req.path} rejected`)
-    return res.redirect(authenticationRedirect.forLogin(req, res))
+    return res.redirect(authenticationRedirect.forLogin(req, res, receiver))
   }
   return next(err)
 }
@@ -131,6 +135,10 @@ async function retrieveRedirectForLandingPage (user: User): Promise<string> {
   return ClaimPaths.startPage.uri
 }
 
+function setAuthCookie (cookies: any, authenticationToken: string): void {
+  cookies.set(sessionCookie, authenticationToken, { sameSite: 'lax' })
+}
+
 export default express.Router()
   .get(AppPaths.receiver.uri,
     ErrorHandling.apply(async (req: express.Request,
@@ -140,39 +148,44 @@ export default express.Router()
 
       const authenticationToken = await getAuthToken(req)
       if (authenticationToken) {
-        const user = await IdamClient
-          .retrieveUserFor(authenticationToken)
-          .catch(err => loginErrorHandler(req, res, next, err))
-        if (!user) {
-          return
+        try {
+          const user = await IdamClient.retrieveUserFor(authenticationToken)
+          res.locals.isLoggedIn = true
+          res.locals.user = user
+          setAuthCookie(cookies, authenticationToken)
+        } catch (err) {
+          return loginErrorHandler(req, res, next, err)
         }
-        res.locals.isLoggedIn = true
-        res.locals.user = user
-        cookies.set(sessionCookie, authenticationToken, { sameSite: 'lax' })
       }
-
 
       if (res.locals.isLoggedIn) {
         if (isDefendantFirstContactPinLogin(req)) {
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         }
 
-        res.redirect(await retrieveRedirectForLandingPage(res.locals.user))
+        res.redirect(await
+          retrieveRedirectForLandingPage(res.locals.user)
+        )
       } else {
         res.redirect(authenticationRedirect.forLogin(req, res))
       }
     }))
   .get(AppPaths.linkDefendantReceiver.uri,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
+    ErrorHandling.apply(async (req: express.Request,
+                               res: express.Response,
+                               next: express.NextFunction): Promise<void> => {
       const cookies = new Cookies(req, res)
 
       const authenticationToken = await getAuthToken(req, AppPaths.linkDefendantReceiver, false)
       if (authenticationToken) {
-        const user = await IdamClient
-          .retrieveUserFor(authenticationToken)
-        res.locals.isLoggedIn = true
-        res.locals.user = user
-        cookies.set(sessionCookie, authenticationToken, { sameSite: 'lax' })
+        try {
+          const user = await IdamClient.retrieveUserFor(authenticationToken)
+          res.locals.isLoggedIn = true
+          res.locals.user = user
+          setAuthCookie(cookies, authenticationToken)
+        } catch (err) {
+          return loginErrorHandler(req, res, next, err, AppPaths.linkDefendantReceiver)
+        }
       }
 
       const user: User = res.locals.user
