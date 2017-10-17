@@ -91,6 +91,46 @@ function loginErrorHandler (req: express.Request, res: express.Response, next: e
   return next(err)
 }
 
+async function retrieveRedirectForLandingPage (user: User): Promise<string> {
+  const atLeastOneClaimIssued: boolean = (await ClaimStoreClient.retrieveByClaimantId(user.id)).length > 0
+  const claimAgainstDefendant = await ClaimStoreClient.retrieveByDefendantId(user.id)
+  const atLeastOneResponse: boolean = claimAgainstDefendant.length > 0 &&
+    claimAgainstDefendant.some((claim: Claim) => !!claim.respondedAt)
+  const atLeastOneCCJ: boolean = claimAgainstDefendant.length > 0 &&
+    claimAgainstDefendant.some((claim: Claim) => !!claim.countyCourtJudgmentRequestedAt)
+
+  if (atLeastOneClaimIssued || atLeastOneResponse || atLeastOneCCJ) {
+    return DashboardPaths.dashboardPage.uri
+  }
+
+  const draftClaimClient: DraftStoreClient<DraftClaim> = await DraftStoreClientFactory.create<DraftClaim>()
+  const draftClaims: Draft<DraftClaim>[] = await draftClaimClient.find({
+    type: 'claim',
+    limit: '100'
+  }, user.bearerToken, (value: any): DraftClaim => {
+    return new DraftClaim().deserialize(value)
+  })
+
+  const draftClaimSaved: boolean = draftClaims.length > 0
+  const claimIssuedButNoResponse: boolean = (claimAgainstDefendant).length > 0
+    && !atLeastOneResponse
+
+  if (claimIssuedButNoResponse && draftClaimSaved) {
+    return DashboardPaths.dashboardPage.uri
+  }
+
+  if (draftClaimSaved) {
+    return ClaimPaths.taskListPage.uri
+  }
+
+  if (claimIssuedButNoResponse) {
+    return ResponsePaths.taskListPage
+      .evaluateUri({ externalId: claimAgainstDefendant.pop().externalId })
+  }
+
+  return ClaimPaths.startPage.uri
+}
+
 export default express.Router()
   .get(AppPaths.receiver.uri,
     ErrorHandling.apply(async (req: express.Request,
@@ -111,49 +151,13 @@ export default express.Router()
         cookies.set(sessionCookie, authenticationToken, { sameSite: 'lax' })
       }
 
-      if (isDefendantFirstContactPinLogin(req)) {
-        return res.redirect(FirstContactPaths.claimSummaryPage.uri)
-      }
 
       if (res.locals.isLoggedIn) {
-        const user: User = res.locals.user
-        const atLeastOneClaimIssued: boolean = (await ClaimStoreClient.retrieveByClaimantId(user.id)).length > 0
-        const claimAgainstDefendant = await ClaimStoreClient.retrieveByDefendantId(user.id)
-        const atLeastOneResponse: boolean = claimAgainstDefendant.length > 0 &&
-          claimAgainstDefendant.some((claim: Claim) => !!claim.respondedAt)
-        const atLeastOneCCJ: boolean = claimAgainstDefendant.length > 0 &&
-          claimAgainstDefendant.some((claim: Claim) => !!claim.countyCourtJudgmentRequestedAt)
-
-        if (atLeastOneClaimIssued || atLeastOneResponse || atLeastOneCCJ) {
-          return res.redirect(DashboardPaths.dashboardPage.uri)
+        if (isDefendantFirstContactPinLogin(req)) {
+          return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         }
 
-        const draftClaimClient: DraftStoreClient<DraftClaim> = await DraftStoreClientFactory.create<DraftClaim>()
-        const draftClaims: Draft<DraftClaim>[] = await draftClaimClient.find({
-          type: 'claim',
-          limit: '100'
-        }, res.locals.user.bearerToken, (value: any): DraftClaim => {
-          return new DraftClaim().deserialize(value)
-        })
-
-        const draftClaimSaved: boolean = draftClaims.length > 0
-        const claimIssuedButNoResponse: boolean = (claimAgainstDefendant).length > 0
-          && !atLeastOneResponse
-
-        if (claimIssuedButNoResponse && draftClaimSaved) {
-          return res.redirect(DashboardPaths.dashboardPage.uri)
-        }
-
-        if (draftClaimSaved) {
-          return res.redirect(ClaimPaths.taskListPage.uri)
-        }
-
-        if (claimIssuedButNoResponse) {
-          return res.redirect(ResponsePaths.taskListPage
-            .evaluateUri({ externalId: claimAgainstDefendant.pop().externalId }))
-        }
-
-        return res.redirect(ClaimPaths.startPage.uri)
+        res.redirect(await retrieveRedirectForLandingPage(res.locals.user))
       } else {
         res.redirect(authenticationRedirect.forLogin(req, res))
       }
