@@ -33,10 +33,9 @@ export default class ClaimStoreClient {
     })
   }
 
-  static saveOfferForUser (user: User, offer: Offer): Promise<void> {
+  static saveOfferForUser (madeBy: string, user: User, offer: Offer): Promise<void> {
     const claim: Claim = user.claim
-    console.log(`---------------------> ${claim}`)
-    return request.post(`${claimStoreOfferApiUrl}/${claim.id}/offers/defendant`, {
+    return request.post(`${claimStoreOfferApiUrl}/${claim.id}/offers/{madeBy}`, {
       body: offer,
       headers: {
         Authorization: `Bearer ${user.bearerToken}`

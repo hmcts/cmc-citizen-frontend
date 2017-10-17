@@ -36,7 +36,7 @@ export default express.Router()
       } else {
         const user: User = res.locals.user
         const offer: Offer = form.model
-        ClaimStoreClient.saveOfferForUser(user, offer)
+        ClaimStoreClient.saveOfferForUser('defendant', user, offer)
         res.redirect(Paths.offerSentConfirmationPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))
