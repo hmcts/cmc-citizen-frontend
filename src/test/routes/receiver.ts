@@ -16,7 +16,7 @@ import * as idamServiceMock from '../http-mocks/idam'
 import * as claimStoreServiceMock from '../http-mocks/claim-store'
 import { sampleClaimObj } from '../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../http-mocks/draft-store'
-import { accessDeniedPagePattern } from '../features/response/routes/checks/authorization-check'
+import { defaultAccessDeniedPagePattern } from './authorization-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -145,7 +145,7 @@ describe('Defendant link receiver', () => {
     it('should redirect to access denied page when user not in letter holder ID role', async () => {
       await request(app)
         .get(pagePath)
-        .expect(res => expect(res).to.be.redirect.toLocation(accessDeniedPagePattern))
+        .expect(res => expect(res).to.be.redirect.toLocation(defaultAccessDeniedPagePattern))
     })
 
     describe('for authorized user', () => {
