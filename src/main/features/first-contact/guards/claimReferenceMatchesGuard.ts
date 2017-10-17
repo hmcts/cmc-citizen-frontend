@@ -4,7 +4,7 @@ import * as config from 'config'
 import Claim from 'app/claims/models/claim'
 import ClaimStoreClient from 'app/claims/claimStoreClient'
 import { ErrorPaths } from 'first-contact/paths'
-import { OAuthHelper } from 'idam/oAuthHelper'
+import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('first-contact/guards/claimReferenceMatchesGuard')
 
@@ -32,7 +32,7 @@ export default class ClaimReferenceMatchesGuard {
 
   private static getClaimRef (req: express.Request): string {
     if (oauthEnabled) {
-      return OAuthHelper.getStateCookie(req)
+      return AuthenticationRedirectFactory.get().getStateCookie(req)
     }
     return req.query.ref
   }

@@ -9,7 +9,7 @@ import { ClaimReference } from 'app/forms/models/claimReference'
 
 import ClaimStoreClient from 'claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'
-import { RedirectHelper } from 'utils/redirectHelper'
+import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
 
 function renderView (form: Form<ClaimReference>, res: express.Response): void {
   res.render(Paths.claimReferencePage.associatedView, { form: form })
@@ -31,6 +31,6 @@ export default express.Router()
         if (linked) {
           return res.redirect(AppPaths.homePage.uri)
         }
-        res.redirect(RedirectHelper.getRedirectUriForPin(req, res, form.model.reference))
+        res.redirect(AuthenticationRedirectFactory.get().forPin(req, res, form.model.reference))
       }
     }))

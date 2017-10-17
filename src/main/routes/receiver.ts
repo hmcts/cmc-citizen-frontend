@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths, Paths as AppPaths } from 'app/paths'
+import { Paths as AppPaths } from 'app/paths'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 import { Paths as ClaimPaths } from 'claim/paths'
 import { Paths as ResponsePaths } from 'response/paths'
@@ -13,24 +13,26 @@ import * as toBoolean from 'to-boolean'
 import * as Cookies from 'cookies'
 import { AuthToken } from 'idam/authToken'
 import * as config from 'config'
-import { OAuthHelper } from 'idam/oAuthHelper'
 import IdamClient from 'app/idam/idamClient'
 import { buildURL } from 'utils/callbackBuilder'
 import DraftClaim from 'drafts/models/draftClaim'
 import JwtExtractor from 'idam/jwtExtractor'
-import { RedirectHelper } from 'utils/redirectHelper'
 import { RoutablePath } from 'common/router/routablePath'
 import { DraftStoreClientFactory } from 'common/draft/draftStoreClientFactory'
 import DraftStoreClient from 'common/draft/draftStoreClient'
 import { Draft } from 'models/draft'
 import { hasTokenExpired } from 'idam/authorizationMiddleware'
+import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
+import { AuthenticationRedirect } from 'utils/authenticationRedirect'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('router/receiver')
 const useOauth = toBoolean(config.get<boolean>('featureToggles.idamOauth'))
 const sessionCookie = config.get<string>('session.cookieName')
 
+const authenticationRedirect: AuthenticationRedirect = AuthenticationRedirectFactory.get()
+
 async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath): Promise<string> {
-  if (req.query.state !== OAuthHelper.getStateCookie(req)) {
+  if (req.query.state !== authenticationRedirect.getStateCookie(req)) {
     throw new Error('Invalid state')
   }
   const authToken: AuthToken = await IdamClient.exchangeCode(
@@ -41,7 +43,7 @@ async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath
 }
 
 async function getAuthToken (req: express.Request,
-                             receiver: RoutablePath = Paths.receiver,
+                             receiver: RoutablePath = AppPaths.receiver,
                              checkCookie = true): Promise<string> {
   let authenticationToken
   if (!useOauth && req.query.jwt) {
@@ -67,6 +69,8 @@ function getLetterHolderId (req: express.Request, user: User): string {
         !role.endsWith('loa1')
     )
 
+  // If the user has more than one role then they have come in with uplift via login flow
+  // Use their state as the letter holder id
   if (roles.length > 1) {
     return req.query.state
   }
@@ -82,7 +86,7 @@ function loginErrorHandler (req: express.Request, res: express.Response, next: e
   if (hasTokenExpired(err)) {
     res.clearCookie(sessionCookie)
     logger.debug(`Protected path - expired auth token - access to ${req.path} rejected`)
-    return res.redirect(RedirectHelper.getRedirectUriForLogin(req, res))
+    return res.redirect(authenticationRedirect.forLogin(req, res))
   }
   return next(err)
 }
@@ -99,6 +103,9 @@ export default express.Router()
         const user = await IdamClient
           .retrieveUserFor(authenticationToken)
           .catch(err => loginErrorHandler(req, res, next, err))
+        if (!user) {
+          return
+        }
         res.locals.isLoggedIn = true
         res.locals.user = user
         cookies.set(sessionCookie, authenticationToken, { sameSite: 'lax' })
@@ -148,14 +155,14 @@ export default express.Router()
 
         return res.redirect(ClaimPaths.startPage.uri)
       } else {
-        res.redirect(RedirectHelper.getRedirectUriForLogin(req, res))
+        res.redirect(authenticationRedirect.forLogin(req, res))
       }
     }))
   .get(AppPaths.linkDefendantReceiver.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const cookies = new Cookies(req, res)
 
-      const authenticationToken = await getAuthToken(req, Paths.linkDefendantReceiver, false)
+      const authenticationToken = await getAuthToken(req, AppPaths.linkDefendantReceiver, false)
       if (authenticationToken) {
         const user = await IdamClient
           .retrieveUserFor(authenticationToken)
@@ -180,6 +187,6 @@ export default express.Router()
 
         res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
       } else {
-        res.redirect(RedirectHelper.getRedirectUriForLogin(req, res, AppPaths.linkDefendantReceiver))
+        res.redirect(authenticationRedirect.forLogin(req, res, AppPaths.linkDefendantReceiver))
       }
     }))

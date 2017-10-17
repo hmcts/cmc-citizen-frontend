@@ -7,11 +7,11 @@ import { ClaimMiddleware } from 'app/claims/claimMiddleware'
 import { CCJGuard } from 'ccj/guards/ccjGuard'
 import { DraftMiddleware } from 'common/draft/draftMiddleware'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
-import { RedirectHelper } from 'utils/redirectHelper'
+import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    res.redirect(RedirectHelper.getRedirectUriForLogin(req, res))
+    res.redirect(AuthenticationRedirectFactory.get().forLogin(req, res))
   }
 
   const requiredRoles = ['cmc-private-beta']

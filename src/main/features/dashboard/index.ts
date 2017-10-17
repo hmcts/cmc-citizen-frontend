@@ -5,11 +5,11 @@ import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
 import { DraftMiddleware } from 'common/draft/draftMiddleware'
 import DraftClaim from 'drafts/models/draftClaim'
-import { RedirectHelper } from 'utils/redirectHelper'
+import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    res.redirect(RedirectHelper.getRedirectUriForLogin(req, res))
+    res.redirect(AuthenticationRedirectFactory.get().forLogin(req, res))
   }
 
   const requiredRoles = ['cmc-private-beta']
