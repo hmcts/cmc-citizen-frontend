@@ -13,6 +13,6 @@ before_install:
   - yarn global add greenkeeper-lockfile@1
 before_script: greenkeeper-lockfile-update
 after_script: greenkeeper-lockfile-upload
-# needed for newer yarn for a little bit: https://github.com/travis-ci/travis-ci/issues/7566#issuecomment-324138144
-group: edge
-sudo: required
+after_success:
+  - yarn test:codacy-upload
+  - yarn test:codecov-upload

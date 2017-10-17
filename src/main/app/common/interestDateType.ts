@@ -1,4 +1,4 @@
-export default class InterestDateType {
+export class InterestDateType {
   static readonly CUSTOM: string = 'custom'
   static readonly SUBMISSION: string = 'submission'
 

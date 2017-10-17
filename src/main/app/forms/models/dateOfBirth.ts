@@ -63,7 +63,9 @@ export default class DateOfBirth implements Serializable<DateOfBirth>, Completab
   deserialize (input?: any): DateOfBirth {
     if (input) {
       this.known = input.known
-      this.date = new LocalDate().deserialize(input.date)
+      if (input.known) {
+        this.date = new LocalDate().deserialize(input.date)
+      }
     }
     return this
   }

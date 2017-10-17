@@ -1,10 +1,12 @@
 import { expect } from 'chai'
 
-import { InterestType } from 'app/forms/models/interest'
-import Interest from 'app/forms/models/interest'
+import { InterestType } from 'claim/form/models/interest'
+import { Interest } from 'claim/form/models/interest'
 
 describe('Interest', () => {
+
   describe('isCompleted', () => {
+
     it('should return true when interest type is no interest', () => {
       const interest: Interest = new Interest(InterestType.NO_INTEREST)
       expect(interest.isCompleted()).to.equal(true)

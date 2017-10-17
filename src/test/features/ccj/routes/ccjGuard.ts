@@ -24,7 +24,7 @@ describe('CCJ guard', () => {
 
       context('should redirect to dashboard when claim not eligible for CCJ', () => {
         Object.values(Paths)
-          .filter(a => a !== Paths.confirmationPage)
+          .filter(path => path !== Paths.confirmationPage)
           .forEach((path: RoutablePath) => {
             const route: string = path.evaluateUri({ externalId: 'b17af4d2-273f-4999-9895-bce382fa24c8' })
 
