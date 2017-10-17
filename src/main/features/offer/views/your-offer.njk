@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary, textArea %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary, textArea %}
 {% from "date.njk" import dateInput %}
 {% set heading = t("Make an offer") %}
 {% set title = t('Money claim') %}
@@ -14,11 +14,14 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        {{ textArea(label = t("You could offer a set amount, or to pay overdue rent, fix a problem, return goods."), 
-        hint= t("You could offer a set amount, or to pay overdue rent, fix a problem, return goods."), 
-        name = 'text', form = form, rows = 10) }}
+        {{ textArea(hint= t("For example a payment, fix a problem or return goods."), name='text', form = form, rows = 10) }}
 
-        {{ dateInput(form = form, name = 'date', label=t('By when'), hint = t('For example, 23 04 2017')) }}
+        <div class="description-block">
+          <h4 class="heading-small"> {{ t('Completion date') }}</h4>
+          <p>{{ t('When will you pay in full or complete your offer?') }}</p>
+        </div>
+
+        {{ dateInput(form = form, name = 'date', hint = t('For example, 23 04 2017')) }}
 
         <div class="panel panel-border-wide">
           <p>
@@ -31,8 +34,7 @@
             }}
           </p>
         </div>
-
-        {{ saveAndContinueButton() }}
+        {{ submitButton('Submit offer') }}
       </form>
     </div>
   </div>

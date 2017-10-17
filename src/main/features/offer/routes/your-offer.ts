@@ -10,24 +10,21 @@ import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
 import { OfferGuard } from 'offer/guards/offerGuard'
 
-async function renderView (form: Form<Offer>, res: express.Response, next: express.NextFunction) {
-  try {
-    res.render(Paths.offerPage.associatedView, {
-      form: form,
-      responseDeadline : res.locals.user.claim.responseDeadline
-    })
-  } catch (err) {
-    next(err)
-  }
+async function renderView (
+  form: Form<Offer>, res: express.Response, next: express.NextFunction) {
+  res.render(Paths.offerPage.associatedView, {
+    form: form,
+    responseDeadline : res.locals.user.claim.responseDeadline
+  })
 }
 
 export default express.Router()
   .get(
     Paths.offerPage.uri,
     OfferGuard.requestHandler,
-    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       await renderView(Form.empty(), res, next)
-    })
+    }))
   .post(
     Paths.offerPage.uri,
     OfferGuard.requestHandler,

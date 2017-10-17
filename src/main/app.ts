@@ -70,7 +70,9 @@ new DefendantResponseFeature().enableFor(app)
 if (toBoolean(config.get<boolean>('featureToggles.countyCourtJudgment'))) {
   new CCJFeature().enableFor(app)
 }
-new OfferFeature().enableFor(app)
+if (toBoolean(config.get<boolean>('featureToggles.offer'))) {
+  new OfferFeature().enableFor(app)
+}
 
 if (toBoolean(config.get<boolean>('featureToggles.testingSupport'))) {
   logger.info('Testing support activated')
