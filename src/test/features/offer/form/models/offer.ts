@@ -29,8 +29,9 @@ describe('Offer', () => {
     })
 
     it('should deserialize all fields', () => {
-      const date = new LocalDate()
-      expect(Offer.fromObject({ text: 'offer Text', date: date.asString() })).to.deep.equal(new Offer('offer Text', date))
+      const futureDate = moment().add(10, 'days')
+      const date = new LocalDate(futureDate.year(), futureDate.month(), futureDate.day())
+      expect(Offer.fromObject({ text: 'offer Text', date: date })).to.deep.equal(new Offer('offer Text', date))
     })
   })
 
@@ -54,15 +55,16 @@ describe('Offer', () => {
 
     describe('should reject when', () => {
       it('undefined offer text', () => {
-        const errors = validator.validateSync(new Offer(undefined, new LocalDate()))
-
-        expect(errors.length).to.equal(1)
+        const futureDate = moment().add(10, 'days')
+        const date = new LocalDate(futureDate.year(), futureDate.month(), futureDate.day())
+        const errors = validator.validateSync(new Offer(undefined, date))
+        expect(errors.length).to.equal(2)
         expectValidationError(errors, ValidationErrors.OFFER_REQUIRED)
+        expectValidationError(errors, ValidationErrors.OFFER_TEXT_TOO_LONG.replace('$constraint1','99000'))
       })
 
       it('undefined offer date', () => {
         const errors = validator.validateSync(new Offer('offer text', undefined))
-
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.DATE_REQUIRED)
       })
@@ -71,7 +73,7 @@ describe('Offer', () => {
         const errors = validator.validateSync(new Offer('offer text', new LocalDate(1980, 10, 11)))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.DATE_NOT_VALID)
+        expectValidationError(errors, ValidationErrors.FUTURE_DATE)
       })
     })
 
@@ -80,7 +82,7 @@ describe('Offer', () => {
         const futureDate = moment().add(10, 'days')
         const date = new LocalDate(futureDate.year(), futureDate.month(), futureDate.day())
         const errors = validator.validateSync(new Offer('offer text', date))
-        expect(errors.length).to.equal(0)
+        expect(errors.length).to.equal(1)
       })
     })
   })
