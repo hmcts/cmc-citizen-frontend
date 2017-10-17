@@ -11,6 +11,7 @@ import { Defendant } from 'app/drafts/models/defendant'
 import { DraftDocument } from 'app/models/draftDocument'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
 import { HowMuchPaid } from 'response/form/models/howMuchPaid'
+import { HowMuchOwed } from 'response/form/models/howMuchOwed'
 import { Timeline } from 'response/form/models/timeline'
 
 export class ResponseDraft extends DraftDocument implements Serializable<ResponseDraft> {
@@ -23,6 +24,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   howMuchIsPaid?: HowMuchPaid
   timeline: Timeline = new Timeline()
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
+  howMuchOwed?: HowMuchOwed
   rejectPartOfClaim?: RejectPartOfClaim
   rejectAllOfClaim?: RejectAllOfClaim
 
@@ -35,6 +37,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       this.moreTimeNeeded = new MoreTimeNeeded(input.moreTimeNeeded && input.moreTimeNeeded.option)
       this.defendantDetails = new Defendant().deserialize(input.defendantDetails)
       this.howMuchIsPaid = new HowMuchPaid().deserialize(input.howMuchIsPaid)
+      this.howMuchOwed = new HowMuchOwed().deserialize(input.howMuchOwed)
       this.timeline = new Timeline().deserialize(input.timeline)
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
@@ -63,5 +66,13 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
     }
     return this.response.type === ResponseType.OWE_SOME_PAID_NONE && this.rejectPartOfClaim !== undefined
       && this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
+  }
+
+  public requireHowMuchOwed (): boolean {
+    if (!(this.response && this.response.type)) {
+      return false
+    }
+    return this.response.type === ResponseType.OWE_SOME_PAID_NONE && this.rejectPartOfClaim !== undefined
+      && this.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED
   }
 }
