@@ -101,7 +101,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to task list page when form is valid and everything is fine', async () => {
+          it('should redirect to timeline page when form is valid and everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
@@ -111,8 +111,10 @@ describe('Defendant response: how much money do you believe you owe', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ amount: 1, text: 'I don’t owe full amount' })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.taskListPage
-                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
+                .toLocation(
+                  ResponsePaths.timelinePage.evaluateUri({ externalId: sampleClaimObj.externalId })
+                )
+              )
           })
         })
       })
