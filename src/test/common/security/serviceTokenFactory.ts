@@ -1,13 +1,13 @@
 /* tslint:disable:no-unused-expression */
-delete require.cache[require.resolve('@hmcts/draft-store-client/dist/common/security/serviceTokenFactory')]
-
+import { ServiceAuthTokenFactoryImpl } from 'common/security/serviceTokenFactoryImpl'
 import * as chai from 'chai'
 import * as spies from 'sinon-chai'
 import * as sinon from 'sinon'
 
-import { ServiceAuthTokenFactory } from '@hmcts/draft-store-client/dist/common/security/serviceTokenFactory'
 import ServiceAuthToken from 'idam/serviceAuthToken'
 import IdamClient from 'idam/idamClient'
+
+delete require.cache[require.resolve('@hmcts/draft-store-client/dist/common/security/serviceTokenFactory')]
 
 chai.use(spies)
 
@@ -29,12 +29,12 @@ describe('ServiceAuthTokenFactory', () => {
   })
 
   it('should retrieve token from the API for the first time', async () => {
-    expect(await ServiceAuthTokenFactory.get()).to.be.deep.equal(new ServiceAuthToken(serviceAuthToken))
+    expect(await new ServiceAuthTokenFactoryImpl().get()).to.be.deep.equal(new ServiceAuthToken(serviceAuthToken))
     expect(retrieveServiceTokenFn).to.be.called
   })
 
   it('should retrieve token from the cache for the second time', async () => {
-    expect(await ServiceAuthTokenFactory.get()).to.be.deep.equal(new ServiceAuthToken(serviceAuthToken))
+    expect(await new ServiceAuthTokenFactoryImpl().get()).to.be.deep.equal(new ServiceAuthToken(serviceAuthToken))
     expect(retrieveServiceTokenFn).to.not.be.called
   })
 })
