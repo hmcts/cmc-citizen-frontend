@@ -44,7 +44,7 @@ export default express.Router()
         res.locals.user.responseDraft.document.timeline = form.model
 
         await DraftService.save(res.locals.user.responseDraft, res.locals.user.bearerToken)
-        renderView(form, res)
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: res.locals.user.claim.externalId }))
       }
     })
   )
