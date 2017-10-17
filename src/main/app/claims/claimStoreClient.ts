@@ -4,11 +4,11 @@ import Claim from 'app/claims/models/claim'
 import User from 'app/idam/user'
 import { ClaimModelConverter } from 'claims/claimModelConverter'
 import { ResponseModelConverter } from 'claims/responseModelConverter'
-import Offer from 'features/response/form/models/offer'
+import Offer from 'features/offer/form/models/offer'
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
 const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
-const claimStoreOfferApiUrl: string = `${claimApiBaseUrl}/offer/claim`
+const claimStoreOfferApiUrl: string = `${claimApiBaseUrl}/claim`
 
 export default class ClaimStoreClient {
   static saveClaimForUser (user: User): Promise<Claim> {
@@ -35,7 +35,8 @@ export default class ClaimStoreClient {
 
   static saveOfferForUser (user: User, offer: Offer): Promise<void> {
     const claim: Claim = user.claim
-    return request.post(`${claimStoreOfferApiUrl}/${claim.id}/defendant/${user.id}`, {
+    console.log(`---------------------> ${claim}`)
+    return request.post(`${claimStoreOfferApiUrl}/${claim.id}/offers/defendant`, {
       body: offer,
       headers: {
         Authorization: `Bearer ${user.bearerToken}`

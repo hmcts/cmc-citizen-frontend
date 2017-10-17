@@ -11,7 +11,6 @@ export class OfferGuard {
 
   static async requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
     const claim: Claim = res.locals.user.claim
-
     if (!eligibleForOffer) {
       logger.warn(`Claim ${claim.claimNumber} not eligible for a offer - redirecting confirmation page`)
       const user: User = res.locals.user

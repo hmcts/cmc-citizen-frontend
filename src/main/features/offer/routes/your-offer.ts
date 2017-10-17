@@ -4,7 +4,7 @@ import { Paths } from 'offer/paths'
 
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import Offer from 'response/form/models/offer'
+import Offer from 'offer/form/models/offer'
 import ClaimStoreClient from 'claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
@@ -34,7 +34,6 @@ export default express.Router()
     FormValidator.requestHandler(Offer, Offer.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Offer> = req.body
-      console.log(`${JSON.stringify(form.model)}`)
       if (form.hasErrors()) {
         await renderView(form, res, next)
       } else {
