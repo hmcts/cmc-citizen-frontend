@@ -15,42 +15,41 @@
     {{ tableStart('theirDetails', 'Their details') }}
     {{
       partyDetailsSummaryFragment(
-        partyDetails = user.ccjDraft.document.defendant.partyDetails,
+        partyDetails = defendant,
         showCorrespondenceAddressSection = false,
         changeLinks = {
-          address: addressUrl,
           dateOfBirth: dateOfBirthUrl
         }
       )
     }}
     {% if claim.claimData.defendant.email %}
-      {{ row('Email:', user.claim.claimData.defendant.email) }}
+      {{ row('Email:', claim.claimData.defendant.email) }}
     {% endif %}
     {{ tableEnd() }}
 
     {{ tableStart('payment', 'Payment') }}
     {{ row("Amount to be paid by defendant", amountToBePaid | numeral, changeLink = paidAmountUrl) }}
 
-    {% if details.paymentOption.option.value == 'IMMEDIATELY' %}
-      {% set paymentOptionDisplayValue = [details.paymentOption.option.displayValue] %}
+    {% if draft.paymentOption.option.value == 'IMMEDIATELY' %}
+      {% set paymentOptionDisplayValue = [draft.paymentOption.option.displayValue] %}
     {% endif %}
 
-    {% if details.paymentOption.option.value == 'FULL_BY_SPECIFIED_DATE' %}
-      {% set paymentOptionDisplayValue = [details.paymentOption.option.displayValue
-        + ' ' + details.payBySetDate.date.toMoment() | date] %}
+    {% if draft.paymentOption.option.value == 'FULL_BY_SPECIFIED_DATE' %}
+      {% set paymentOptionDisplayValue = [draft.paymentOption.option.displayValue
+        + ' ' + draft.payBySetDate.date.toMoment() | date] %}
     {% endif %}
 
-    {% if details.paymentOption.option.value == 'INSTALMENTS' %}
+    {% if draft.paymentOption.option.value == 'INSTALMENTS' %}
       {% set paymentOptionDisplayValue =
-      [  t('%s: %s %s.',
+      [  t('%s: %s %s',
           { postProcess: 'sprintf', sprintf: [
-              t(details.paymentOption.option.displayValue),
-              details.repaymentPlan.installmentAmount | numeral,
-              t(details.repaymentPlan.paymentSchedule.displayValue)
+              t(draft.paymentOption.option.displayValue),
+              draft.repaymentPlan.installmentAmount | numeral,
+              t(draft.repaymentPlan.paymentSchedule.displayValue)
             ]
           }),
           t('First payment on %s',
-            { postProcess: 'sprintf', sprintf: [details.repaymentPlan.firstPaymentDate.toMoment() | date]})
+            { postProcess: 'sprintf', sprintf: [draft.repaymentPlan.firstPaymentDate.toMoment() | date]})
       ]
       %}
     {% endif %}
@@ -62,9 +61,8 @@
       {{ statementOfTruth(
         form,
         title = 'Declaration',
-        warningMessage = 'Once you \'Sign and submit\', you cannot change your answers.',
         label = 'I declare that the details I have given are true to the best of my knowledge.',
-        isQualified = partyAsCompanyOrOrganisation,
+        isQualified = claim.claimData.claimant.isBusiness(),
         typeOfStatement = 'declaration')
       }}
 

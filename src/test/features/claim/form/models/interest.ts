@@ -4,12 +4,13 @@ import { expect } from 'chai'
 import * as _ from 'lodash'
 import { Validator } from 'class-validator'
 
-import { expectValidationError } from './validationUtils'
-
-import Interest, { InterestType, ValidationErrors } from 'forms/models/interest'
+import { expectValidationError } from '../../../../app/forms/models/validationUtils'
+import { Interest, InterestType, ValidationErrors } from 'claim/form/models/interest'
 
 describe('Interest', () => {
+
   describe('form object deserialization', () => {
+
     it('should return undefined when value is undefined', () => {
       expect(Interest.fromObject(undefined)).to.be.equal(undefined)
     })
@@ -56,6 +57,7 @@ describe('Interest', () => {
   })
 
   describe('deserialize', () => {
+
     it('should return a ClaimInterest instance', () => {
       let deserialized = new Interest().deserialize({})
       expect(deserialized).to.be.instanceof(Interest)
@@ -91,6 +93,7 @@ describe('Interest', () => {
   })
 
   describe('validation', () => {
+
     const validator: Validator = new Validator()
 
     it('should reject interest with undefined type', () => {

@@ -13,7 +13,9 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
+
 import { sampleClaimDraftObj } from '../../../http-mocks/draft-store'
+import { company, individual, organisation, soleTrader } from '../../../data/entity/party'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -55,18 +57,48 @@ describe('Dashboard - claimant page', () => {
   })
   describe('on POST for requesting a CCJ', () => {
     checkAuthorizationGuards(app, 'post', claimantPage)
+
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
       })
 
-      it('should redirect to county court judgment flow', async () => {
-        await request(app)
-          .post(claimantPage)
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.redirect.toLocation(
-            CCJPaths.theirDetailsPage.evaluateUri({ externalId: sampleClaimDraftObj.externalId })
-          ))
+      describe('when defendant is an individual', () => {
+        it('should redirect to CCJ / defendant date of birth page', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({
+            claim: {
+              ...claimStoreServiceMock.sampleClaimObj.claim,
+              defendants: [individual]
+            }
+          })
+
+          await request(app)
+            .post(claimantPage)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect.toLocation(
+              CCJPaths.dateOfBirthPage.evaluateUri({ externalId: sampleClaimDraftObj.externalId })
+            ))
+        })
+      })
+
+      describe('when defendant is not an individual', () => {
+        [soleTrader, company, organisation].forEach(party => {
+          it(`should redirect to CCJ paid amount page when defendant is ${party.type}`, async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId({
+              claim: {
+                ...claimStoreServiceMock.sampleClaimObj.claim,
+                defendants: [party]
+              }
+            })
+
+            await request(app)
+              .post(claimantPage)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.redirect.toLocation(
+                CCJPaths.paidAmountPage.evaluateUri({ externalId: sampleClaimDraftObj.externalId })
+              ))
+          })
+        })
       })
     })
   })

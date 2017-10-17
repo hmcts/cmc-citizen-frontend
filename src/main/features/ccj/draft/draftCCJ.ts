@@ -1,26 +1,26 @@
-import { Defendant } from 'app/drafts/models/defendant'
 import { CCJPaymentOption } from 'ccj/form/models/ccjPaymentOption'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { PayBySetDate } from 'ccj/form/models/payBySetDate'
 import { RepaymentPlan } from 'ccj/form/models/repaymentPlan'
 import { QualifiedDeclaration } from 'ccj/form/models/qualifiedDeclaration'
 import { DraftDocument } from 'models/draftDocument'
+import DateOfBirth from 'forms/models/dateOfBirth'
 
 export class DraftCCJ extends DraftDocument {
-  defendant: Defendant = new Defendant()
+  defendantDateOfBirth: DateOfBirth
   paymentOption: CCJPaymentOption = new CCJPaymentOption()
   paidAmount?: PaidAmount
   payBySetDate?: PayBySetDate
   repaymentPlan?: RepaymentPlan
   qualifiedDeclaration?: QualifiedDeclaration
 
-  constructor (defendant: Defendant = new Defendant(),
+  constructor (defendantDateOfBirth: DateOfBirth = new DateOfBirth(),
                paymentOption: CCJPaymentOption = new CCJPaymentOption(),
                paidAmount?: PaidAmount,
                repaymentPlan?: RepaymentPlan,
                qualifiedDeclaration?: QualifiedDeclaration) {
     super()
-    this.defendant = defendant
+    this.defendantDateOfBirth = defendantDateOfBirth
     this.paymentOption = paymentOption
     this.paidAmount = paidAmount
     this.repaymentPlan = repaymentPlan
@@ -30,7 +30,7 @@ export class DraftCCJ extends DraftDocument {
   deserialize (input: any): DraftCCJ {
     if (input) {
       this.externalId = input.externalId
-      this.defendant = new Defendant().deserialize(input.defendant)
+      this.defendantDateOfBirth = new DateOfBirth().deserialize(input.defendantDateOfBirth)
       this.paymentOption = new CCJPaymentOption().deserialize(input.paymentOption)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)

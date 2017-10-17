@@ -1,7 +1,7 @@
 import { IsDefined, IsIn, IsPositive, MaxLength, ValidateIf } from 'class-validator'
 
-import { Serializable } from 'models/serializable'
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
+import { Serializable } from 'app/models/serializable'
+import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 import { CompletableTask } from 'app/models/task'
 
 export class InterestType {
@@ -28,7 +28,7 @@ export class ValidationErrors {
   static readonly REASON_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
 }
 
-export default class Interest implements Serializable <Interest>, CompletableTask {
+export class Interest implements Serializable <Interest>, CompletableTask {
 
   static readonly STANDARD_RATE = 8
 

@@ -5,7 +5,7 @@ import { plainToClass } from 'class-transformer'
 import { CalculationOutcome } from 'app/fees/models/calculationOutcome'
 import { RangeGroup } from 'app/fees/models/rangeGroup'
 
-import ClaimValidator from 'app/utils/claimValidator'
+import { ClaimValidator } from 'app/utils/claimValidator'
 import StringUtils from 'utils/stringUtils'
 import MoneyConverter from 'app/fees/moneyConverter'
 

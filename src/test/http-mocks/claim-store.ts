@@ -2,7 +2,7 @@ import * as config from 'config'
 import * as mock from 'nock'
 import { Scope } from 'nock'
 import * as HttpStatus from 'http-status-codes'
-import { InterestType } from 'app/forms/models/interest'
+import { InterestType } from 'features/claim/form/models/interest'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
@@ -63,18 +63,7 @@ export const sampleClaimObj = {
   },
   responseDeadline: '2017-08-08',
   countyCourtJudgment: {
-    defendant: {
-      name: 'asdsd',
-      type: 'individual',
-      email: 'd@w.pl',
-      address: {
-        city: 'sadasd',
-        line1: 'sadasd',
-        line2: 'dsas',
-        postcode: 'sdasd'
-      },
-      dateOfBirth: '1990-11-01'
-    },
+    defendantDateOfBirth: '1990-11-01',
     paidAmount: 2,
     paymentOption: 'IMMEDIATELY'
   }

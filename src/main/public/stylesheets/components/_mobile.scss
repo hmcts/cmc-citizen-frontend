@@ -1,0 +1,28 @@
+.mobile-show,
+.mobile-table-status {
+  display: none;
+}
+
+@media screen and (max-width: 480px) {
+  .mobile-hide {
+    display: none;
+  }
+
+  .mobile-show {
+    display: block;
+  }
+
+  .mobile-table-status {
+    display: table-cell;
+  }
+
+  .mobile-table {
+    td {
+      border-bottom: 0;
+
+      :last-child {
+        display: none;
+      }
+    }
+  }
+}
