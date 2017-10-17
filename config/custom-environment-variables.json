@@ -68,11 +68,6 @@
     "countyCourtJudgment": "FEATURE_CCJ",
     "idamOauth": "FEATURE_IDAM_OAUTH"
   },
-  "claim": {
-    "countyCourtJudgment": {
-      "timeForResponseInDays" : "CLAIM_CCJ_TIME_FOR_RESPONSE"
-    }
-  },
   "oauth": {
     "clientId": "OAUTH_CLIENT_ID",
     "clientSecret": "OAUTH_CLIENT_SECRET"

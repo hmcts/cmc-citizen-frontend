@@ -65,11 +65,6 @@
     "countyCourtJudgment": false,
     "idamOauth": false
   },
-  "claim": {
-    "countyCourtJudgment": {
-      "timeForResponseInDays" : 28
-    }
-  },
   "oauth": {
     "clientId": "cmc_citizen",
     "clientSecret": "123456"
