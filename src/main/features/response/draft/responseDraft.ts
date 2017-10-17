@@ -1,7 +1,7 @@
 import { Response } from 'response/form/models/response'
 import { Serializable } from 'models/serializable'
 import { FreeMediation } from 'response/form/models/freeMediation'
-import { RejectPartOfClaim } from 'response/form/models/rejectPartOfClaim'
+import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import Defence from 'response/form/models/defence'
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
@@ -10,6 +10,7 @@ import { isNullOrUndefined } from 'util'
 import { Defendant } from 'app/drafts/models/defendant'
 import { DraftDocument } from 'app/models/draftDocument'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
+import { HowMuchOwed } from 'response/form/models/howMuchOwed'
 import { Timeline } from 'response/form/models/timeline'
 
 export class ResponseDraft extends DraftDocument implements Serializable<ResponseDraft> {
@@ -21,6 +22,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   defendantDetails?: Defendant = new Defendant()
   timeline: Timeline = new Timeline()
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
+  howMuchOwed?: HowMuchOwed
   rejectPartOfClaim?: RejectPartOfClaim
   rejectAllOfClaim?: RejectAllOfClaim
 
@@ -32,6 +34,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       this.freeMediation = new FreeMediation(input.freeMediation && input.freeMediation.option)
       this.moreTimeNeeded = new MoreTimeNeeded(input.moreTimeNeeded && input.moreTimeNeeded.option)
       this.defendantDetails = new Defendant().deserialize(input.defendantDetails)
+      this.howMuchOwed = new HowMuchOwed().deserialize(input.howMuchOwed)
       this.timeline = new Timeline().deserialize(input.timeline)
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
@@ -52,5 +55,13 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
     }
     return this.response.type === ResponseType.OWE_NONE && this.rejectAllOfClaim !== undefined
       && RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).includes(this.rejectAllOfClaim.option)
+  }
+
+  public requireHowMuchOwed (): boolean {
+    if (!(this.response && this.response.type)) {
+      return false
+    }
+    return this.response.type === ResponseType.OWE_SOME_PAID_NONE && this.rejectPartOfClaim !== undefined
+      && this.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED
   }
 }
