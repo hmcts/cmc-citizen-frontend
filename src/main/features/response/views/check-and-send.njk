@@ -61,10 +61,18 @@
 
     {{ tableEnd() }}
 
+    {% if draft.response.type.value === 'OWE_SOME_PAID_NONE' %}
     {{ tableStart("yourResponse", "Your response") }}
 
-    {{ row('Do you owe the money claimed', draft.response.type.displayValue, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
+    {% if draft.rejectPartOfClaim.option === 'amountTooHigh' %}
+      {{ row('How much money do you believe you owe?', draft.howMuchIsPaid.text, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
+    {% endif %}
 
+    {% if draft.rejectPartOfClaim.option === 'paidWhatBelievedWasOwed' %}
+      {{ row('Why this is what you owe?', draft.howMuchOwed.text, paths.defendantHowMuchOwed.evaluateUri({ externalId: claim.externalId })) }}
+    {% endif %}
+
+    {% endif %} 
 
     {% if draft.requireDefence() %}
       {{ row('Your defence', draft.defence.text, '/response/your-defence') }}

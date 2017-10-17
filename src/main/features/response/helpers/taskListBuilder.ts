@@ -34,15 +34,14 @@ export class TaskListBuilder {
       OweMoneyTask.isCompleted(draft)))
 
     if (draft.requireHowMuchPaid()) {
-      tasks.push(new TaskListItem('How much have you paid the claimant?', Paths.defendantHowMuchPaid.
-        evaluateUri({ externalId: externalId }),
+      tasks.push(new TaskListItem('How much money do you believe you owe?', Paths.defendantHowMuchOwed.evaluateUri({ externalId: externalId }),
         HowMuchPaidTask.isCompleted(draft)))
+    }
 
-      if (draft.requireHowMuchOwed()) {
-        tasks.push(new TaskListItem('How much money do you believe you owe?', Paths.defendantHowMuchOwed
+    if (draft.requireHowMuchOwed()) {
+      tasks.push(new TaskListItem('How much have you paid the claimant?', Paths.defendantHowMuchPaid
             .evaluateUri({ externalId: externalId }),
           HowMuchOwedTask.isCompleted(draft)))
-      }
     }
 
     if (draft.requireDefence()) {
