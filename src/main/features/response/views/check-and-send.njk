@@ -27,6 +27,38 @@
 
     {{ tableEnd() }}
 
+    {{ tableStart("moneyOwed", "Do you owe the money claimed?") }}
+
+    {{ row('Do you owe the money claimed?', t(draft.response.type.displayValue) | capitalize, paths.responseTypePage.evaluateUri({ externalId: claim.externalId })) }}
+
+    {% if draft.response.type.value === 'OWE_SOME_PAID_NONE' %}
+      {% if draft.rejectPartOfClaim.option === 'paidWhatBelievedWasOwed' %}
+        {{ row('Why are you rejecting part of this claim?', t('I’ve paid what I believe I owe') | capitalize, paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: claim.externalId })) }}
+      {% endif %}
+
+      {% if draft.rejectPartOfClaim.option === 'amountTooHigh' %}
+        {{ row('Why are you rejecting part of this claim?', t('The claim amount is too much') | capitalize, paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: claim.externalId })) }}
+      {% endif %}
+
+    {% endif %}
+
+    {% if draft.response.type.value === 'OWE_NONE' %}
+      {% if draft.rejectAllOfClaim.option === 'alreadyPaid' %}
+        {{ row('Why do you reject all of this claim?', t('I’ve already paid the claim in full') | capitalize, paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: claim.externalId })) }}
+      {% endif %}
+
+      {% if draft.rejectAllOfClaim.option === 'dispute' %}
+        {{ row('Why do you reject all of this claim?', t('I dispute the claim') | capitalize, paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: claim.externalId })) }}
+      {% endif %}
+
+      {% if draft.rejectAllOfClaim.option === 'counterClaim' %}
+        {{ row('Why do you reject all of this claim?', t('Defend now and also make a counterclaim') | capitalize, paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: claim.externalId })) }}
+      {% endif %}
+
+    {% endif %}
+
+    {{ tableEnd() }}
+
     {{ tableStart("yourResponse", "Your response") }}
 
     {{ row('Do you owe the money claimed', draft.response.type.displayValue, paths.responseTypePage.evaluateUri({ externalId: claim.externalId })) }}
