@@ -8,7 +8,8 @@ import ClaimValidator from 'app/utils/claimValidator'
 import ClaimAmountBreakdown from 'forms/models/claimAmountBreakdown'
 
 import { ErrorHandling } from 'common/errorHandling'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/DraftService'
+
 
 function renderView (form: Form<ClaimAmountBreakdown>, res: express.Response): void {
   res.render(Paths.amountPage.associatedView, {
@@ -34,15 +35,17 @@ export default express.Router()
   })
   .post(Paths.amountPage.uri, FormValidator.requestHandler(ClaimAmountBreakdown, ClaimAmountBreakdown.fromObject, undefined, ['addRow']), actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<ClaimAmountBreakdown> = req.body
+        const form: Form<ClaimAmountBreakdown> = req.body
 
-      if (form.hasErrors()) {
-        renderView(form, res)
-      } else {
-        res.locals.user.claimDraft.document.amount = form.model
-        ClaimValidator.claimAmount(form.model.totalAmount())
-        await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
-        res.redirect(Paths.interestPage.uri)
+        if (form.hasErrors()) {
+          renderView(form, res)
+        } else {
+          res.locals.user.claimDraft.document.amount = form.model
+          ClaimValidator.claimAmount(form.model.totalAmount())
+
+          await new DraftService()['save'](res.locals.user.claimDraft, res.locals.user.bearerToken)
+
+          res.redirect(Paths.interestPage.uri)
+        }
       }
-    }
-  ))
+    ))

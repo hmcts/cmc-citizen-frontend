@@ -4,6 +4,7 @@
     "noUnusedLocals": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
+    "allowJs": true,
     "lib": [
       "es6",
       "es2016.array.include",
@@ -72,6 +73,9 @@
       ],
       "testing-support/*": [
         "features/testing-support/*"
+      ],
+      "services/*": [
+        "services/*"
       ]
     },
     "typeRoots": [

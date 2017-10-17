@@ -29,7 +29,7 @@ export class DraftCCJ extends DraftDocument {
 
   deserialize (input: any): DraftCCJ {
     if (input) {
-      this.externalId = input.externalId
+      this.externalId = input['externalId']
       this.defendant = new Defendant().deserialize(input.defendant)
       this.paymentOption = new CCJPaymentOption().deserialize(input.paymentOption)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)

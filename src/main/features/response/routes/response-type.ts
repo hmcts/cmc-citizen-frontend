@@ -1,5 +1,4 @@
 import * as express from 'express'
-
 import { Paths } from 'response/paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
@@ -8,7 +7,8 @@ import { Response } from 'response/form/models/response'
 import { ResponseType } from 'response/form/models/responseType'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/DraftService'
+
 
 function renderView (form: Form<Response>, res: express.Response) {
   res.render(Paths.responseTypePage.associatedView, {
@@ -33,7 +33,8 @@ export default express.Router()
       } else {
         const user: User = res.locals.user
         user.responseDraft.document.response = form.model
-        await DraftService.save(user.responseDraft, user.bearerToken)
+
+        await new DraftService()['save'](user.responseDraft, user.bearerToken)
 
         const responseType = user.responseDraft.document.response.type
 

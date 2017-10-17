@@ -14,7 +14,8 @@ import AllResponseTasksCompletedGuard from 'response/guards/allResponseTasksComp
 import { ErrorHandling } from 'common/errorHandling'
 import { SignatureType } from 'app/common/signatureType'
 import { QualifiedStatementOfTruth } from 'response/form/models/qualifiedStatementOfTruth'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/DraftService'
+
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
   const user: User = res.locals.user
@@ -107,10 +108,10 @@ export default express.Router()
 
         if (form.model.type === SignatureType.QUALIFIED) {
           user.responseDraft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
-          await DraftService.save(user.responseDraft, user.bearerToken)
+          await new DraftService()['save'](user.responseDraft, user.bearerToken)
         }
         await ClaimStoreClient.saveResponseForUser(user)
-        await DraftService.delete(user.responseDraft, user.bearerToken)
+        await new DraftService()['delete'](user.responseDraft, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

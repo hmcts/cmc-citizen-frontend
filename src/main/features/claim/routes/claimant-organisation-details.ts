@@ -7,7 +7,8 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 
 import { ErrorHandling } from 'common/errorHandling'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/DraftService'
+
 
 function renderView (form: Form<OrganisationDetails>, res: express.Response): void {
   res.render(Paths.claimantOrganisationDetailsPage.associatedView, { form: form })
@@ -26,7 +27,9 @@ export default express.Router()
         renderView(form, res)
       } else {
         res.locals.user.claimDraft.document.claimant.partyDetails = form.model
-        await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+
+        await new DraftService()['save'](res.locals.user.claimDraft, res.locals.user.bearerToken)
+
         res.redirect(Paths.claimantMobilePage.uri)
       }
     }))

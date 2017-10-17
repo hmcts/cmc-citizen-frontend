@@ -1,4 +1,5 @@
 import * as express from 'express'
+
 import { Paths } from 'claim/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
@@ -6,7 +7,8 @@ import Reason from 'forms/models/reason'
 
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'app/idam/user'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/DraftService'
+
 
 function renderView (form: Form<Reason>, res: express.Response): void {
   const user: User = res.locals.user
@@ -33,7 +35,9 @@ export default express.Router()
         renderView(form, res)
       } else {
         res.locals.user.claimDraft.document.reason = form.model
-        await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+
+        await new DraftService()['save'](res.locals.user.claimDraft, res.locals.user.bearerToken)
+
         res.redirect(Paths.taskListPage.uri)
       }
     }))

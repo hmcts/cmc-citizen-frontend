@@ -5,7 +5,7 @@ import * as chai from 'chai'
 import * as spies from 'sinon-chai'
 import * as sinon from 'sinon'
 
-import { ServiceAuthTokenFactory } from 'common/security/serviceTokenFactory'
+import { ServiceAuthTokenFactory } from 'common/security/serviceTokenFactoryImpl'
 import ServiceAuthToken from 'idam/serviceAuthToken'
 import IdamClient from 'idam/idamClient'
 

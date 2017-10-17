@@ -7,7 +7,8 @@ import { CCJPaymentOption, PaymentType } from 'ccj/form/models/ccjPaymentOption'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import User from 'idam/user'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/DraftService'
+
 
 export default express.Router()
   .get(Paths.paymentOptionsPage.uri,
@@ -30,7 +31,7 @@ export default express.Router()
           if (form.model.option === PaymentType.IMMEDIATELY) {
             user.ccjDraft.document.repaymentPlan = user.ccjDraft.document.payBySetDate = undefined
           }
-          await DraftService.save(user.ccjDraft, user.bearerToken)
+          await new DraftService()['save'](user.ccjDraft, user.bearerToken)
 
           const { externalId } = req.params
 

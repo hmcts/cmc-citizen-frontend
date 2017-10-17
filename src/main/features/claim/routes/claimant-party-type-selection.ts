@@ -8,7 +8,8 @@ import { PartyType } from 'app/common/partyType'
 import { ErrorHandling } from 'common/errorHandling'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { PartyDetailsFactory } from 'forms/models/partyDetailsFactory'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/DraftService'
+
 
 function renderView (form: Form<PartyTypeResponse>, res: express.Response, next: express.NextFunction) {
   res.render(Paths.claimantPartyTypeSelectionPage.associatedView, {
@@ -34,7 +35,9 @@ export default express.Router()
 
         if (partyDetails === undefined || partyDetails.type !== form.model.type.value) {
           partyDetails = res.locals.user.claimDraft.document.claimant.partyDetails = PartyDetailsFactory.createInstance(form.model.type.value)
-          await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+
+          await new DraftService()['save'](res.locals.user.claimDraft, res.locals.user.bearerToken)
+
         }
 
         switch (partyDetails.type) {

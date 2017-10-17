@@ -1,5 +1,4 @@
 import * as express from 'express'
-
 import { Paths } from 'response/paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
@@ -10,7 +9,8 @@ import ClaimStoreClient from 'app/claims/claimStoreClient'
 import MoreTimeAlreadyRequestedGuard from 'response/guards/moreTimeAlreadyRequestedGuard'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/DraftService'
+
 
 function renderView (form: Form<MoreTimeNeeded>, res: express.Response, next: express.NextFunction) {
   try {
@@ -41,7 +41,9 @@ export default express.Router()
       } else {
         const user: User = res.locals.user
         user.responseDraft.document.moreTimeNeeded = form.model
-        await DraftService.save(user.responseDraft, user.bearerToken)
+
+        await new DraftService()['save'](user.responseDraft, user.bearerToken)
+
         if (form.model.option === MoreTimeNeededOption.YES) {
           await ClaimStoreClient.requestForMoreTime(user.claim.id, user)
 

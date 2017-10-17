@@ -7,7 +7,8 @@ import { FormValidator } from 'forms/validation/formValidator'
 import Interest, { InterestType } from 'forms/models/interest'
 
 import { ErrorHandling } from 'common/errorHandling'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/DraftService'
+
 
 function renderView (form: Form<Interest>, res: express.Response): void {
   res.render(Paths.interestPage.associatedView, { form: form })
@@ -27,7 +28,9 @@ export default express.Router()
         renderView(form, res)
       } else {
         res.locals.user.claimDraft.document.interest = form.model
-        await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+
+        await new DraftService()['save'](res.locals.user.claimDraft, res.locals.user.bearerToken)
+
         if (form.model.type === InterestType.NO_INTEREST) {
           res.redirect(Paths.feesPage.uri)
         } else {

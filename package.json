@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "private": true,
   "engines": {
-    "node": ">=7.10.1"
+    "node": ">=8.7.0"
   },
   "scripts": {
     "start": "./node_modules/.bin/ts-node -r tsconfig-paths/register src/main/server.ts",
@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@hmcts/cmc-common-frontend": "^1.10.0",
+    "@hmcts/draft-store-client": "^1.0.8",
     "@hmcts/nodejs-healthcheck": "^1.4.3",
     "@hmcts/nodejs-logging": "^1.2.0",
     "@types/config": "^0.0.32",

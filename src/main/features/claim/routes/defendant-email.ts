@@ -7,7 +7,8 @@ import { FormValidator } from 'forms/validation/formValidator'
 import Email from 'forms/models/email'
 
 import { ErrorHandling } from 'common/errorHandling'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/DraftService'
+
 
 function renderView (form: Form<Email>, res: express.Response): void {
   res.render(Paths.defendantEmailPage.associatedView, { form: form })
@@ -27,7 +28,9 @@ export default express.Router()
         renderView(form, res)
       } else {
         res.locals.user.claimDraft.document.defendant.email = form.model
-        await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+
+        await new DraftService()['save'](res.locals.user.claimDraft, res.locals.user.bearerToken)
+
         res.redirect(Paths.taskListPage.uri)
       }
     }))

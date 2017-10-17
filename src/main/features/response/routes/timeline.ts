@@ -5,7 +5,8 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'app/forms/validation/formValidator'
 import { MAX_NUMBER_OF_EVENTS, Timeline } from 'response/form/models/timeline'
 import { ErrorHandling } from 'common/errorHandling'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/DraftService'
+
 
 function renderView (form: Form<Timeline>, res: express.Response): void {
   res.render(Paths.timelinePage.associatedView, {
@@ -43,7 +44,8 @@ export default express.Router()
         form.model.clearUselessRows()
         res.locals.user.responseDraft.document.timeline = form.model
 
-        await DraftService.save(res.locals.user.responseDraft, res.locals.user.bearerToken)
+        await new DraftService()['save'](res.locals.user.responseDraft, res.locals.user.bearerToken)
+
         renderView(form, res)
       }
     })

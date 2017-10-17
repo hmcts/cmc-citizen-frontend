@@ -6,7 +6,9 @@ import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import InterestDate from 'forms/models/interestDate'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/DraftService'
+
+
 function renderView (form: Form<InterestDate>, res: express.Response): void {
   res.render(Paths.interestDatePage.associatedView, { form: form })
 }
@@ -25,7 +27,9 @@ export default express.Router()
         renderView(form, res)
       } else {
         res.locals.user.claimDraft.document.interestDate = form.model
-        await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+
+        await new DraftService()['save'](res.locals.user.claimDraft, res.locals.user.bearerToken)
+
         res.redirect(Paths.feesPage.uri)
       }
     }))

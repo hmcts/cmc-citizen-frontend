@@ -1,5 +1,4 @@
 import * as express from 'express'
-
 import { Paths } from 'ccj/paths'
 import { IndividualDateOfBirthGuard } from 'ccj/guards/individualDateOfBirthGuard'
 
@@ -8,9 +7,10 @@ import { FormValidator } from 'forms/validation/formValidator'
 import DateOfBirth from 'forms/models/dateOfBirth'
 import User from 'app/idam/user'
 
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/DraftService'
 import { ErrorHandling } from 'common/errorHandling'
 import { IndividualDetails } from 'forms/models/individualDetails'
+
 
 function renderView (form: Form<DateOfBirth>, res: express.Response): void {
   res.render(Paths.dateOfBirthPage.associatedView, { form: form })
@@ -34,7 +34,7 @@ export default express.Router()
         renderView(form, res)
       } else {
         (user.ccjDraft.document.defendant.partyDetails as IndividualDetails).dateOfBirth = form.model
-        await DraftService.save(user.ccjDraft, user.bearerToken)
+        await new DraftService()['save'](user.ccjDraft, user.bearerToken)
         res.redirect(Paths.paidAmountPage.uri.replace(':externalId', externalId))
 
       }
