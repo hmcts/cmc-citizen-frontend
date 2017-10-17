@@ -13,6 +13,16 @@ export function resolveRetrieveUserFor (id: number, ...roles: string[]) {
     .reply(HttpStatus.OK, { id: id, roles: roles, email: 'user@example.com' })
 }
 
+export function resolveExchangeCode (token: string) {
+  mock(apiServiceBaseURL)
+    .post(new RegExp('/oauth2/token.*'))
+    .reply(HttpStatus.OK, {
+      access_token: token,
+      token_type: 'Bearer',
+      expires_in: 28800
+    })
+}
+
 export function rejectRetrieveUserFor (reason: string) {
   return mock(apiServiceBaseURL)
     .get('/details')

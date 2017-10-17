@@ -16,6 +16,7 @@ import * as idamServiceMock from '../http-mocks/idam'
 import * as claimStoreServiceMock from '../http-mocks/claim-store'
 import { sampleClaimObj } from '../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../http-mocks/draft-store'
+import { defaultAccessDeniedPagePattern } from './authorization-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -28,30 +29,18 @@ describe('Login receiver', async () => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
       })
 
-      it('should save JWT token in cookie when JWT token exists in query string', async () => {
-        draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveFind('response')
-        claimStoreServiceMock.resolveRetrieveByClaimantId()
-        claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
+      it('should save bearer token in cookie when auth token is retrieved from idam', async () => {
+        const token = 'I am dummy access token'
+        idamServiceMock.resolveExchangeCode(token)
 
         await request(app)
-          .get(`${AppPaths.receiver.uri}?jwt=ABC`)
-          .expect(res => expect(res).to.have.cookie(cookieName, 'ABC'))
+          .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
+          .set('Cookie', `state=123`)
+          .expect(res => expect(res).to.have.cookie(cookieName, token))
       })
-
-      it('should not remove JWT token saved in cookie when JWT token does not exist in query string', async () => {
-        draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveFind('response')
-        claimStoreServiceMock.resolveRetrieveByClaimantId()
-        claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
-
-        await request(app)
-          .get(AppPaths.receiver.uri)
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.not.have.cookie(cookieName, ''))
-      })
-
       it('should return 500 and render error page when cannot retrieve draft', async () => {
+        claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+        claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
         draftStoreServiceMock.rejectFind('Cos')
 
         await request(app)
@@ -62,10 +51,9 @@ describe('Login receiver', async () => {
 
       context('when no claim or response', async () => {
         it('should redirect to claim start', async () => {
-          draftStoreServiceMock.resolveFindNoDraftFound()
-          draftStoreServiceMock.resolveFindNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+          draftStoreServiceMock.resolveFindNoDraftFound()
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -77,7 +65,6 @@ describe('Login receiver', async () => {
       context('when draft claim exists', async () => {
         it('should redirect to claim task-list', async () => {
           draftStoreServiceMock.resolveFind('claim')
-          draftStoreServiceMock.resolveFindNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
 
@@ -90,7 +77,6 @@ describe('Login receiver', async () => {
 
       context('when claim as a defendant but no draft response', async () => {
         it('should redirect to response task-list', async () => {
-          draftStoreServiceMock.resolveFindNoDraftFound()
           draftStoreServiceMock.resolveFindNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantId('A', 1)
@@ -105,8 +91,6 @@ describe('Login receiver', async () => {
 
       context('when draft claim and defendant has a claim against them', async () => {
         it('should redirect to dashboard', async () => {
-          draftStoreServiceMock.resolveFind('claim')
-          draftStoreServiceMock.resolveFind('response')
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
 
@@ -119,8 +103,6 @@ describe('Login receiver', async () => {
 
       context('when claim exists', async () => {
         it('should redirect to dashboard', async () => {
-          draftStoreServiceMock.resolveFindNoDraftFound()
-          draftStoreServiceMock.resolveFindNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantId()
           claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
 
@@ -132,8 +114,6 @@ describe('Login receiver', async () => {
       })
       context('when response exists', async () => {
         it('should redirect to dashboard', async () => {
-          draftStoreServiceMock.resolveFindNoDraftFound()
-          draftStoreServiceMock.resolveFindNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
 
@@ -145,8 +125,6 @@ describe('Login receiver', async () => {
       })
       context('when claim and response exists', async () => {
         it('should redirect to dashboard', async () => {
-          draftStoreServiceMock.resolveFindNoDraftFound()
-          draftStoreServiceMock.resolveFindNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantId()
           claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
 
@@ -156,7 +134,81 @@ describe('Login receiver', async () => {
             .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
         })
       })
+    })
+  })
+})
+describe('Defendant link receiver', () => {
+  const pagePath = AppPaths.linkDefendantReceiver.uri
+  attachDefaultHooks(app)
 
+  describe('on GET', () => {
+    it('should redirect to access denied page when user not in letter holder ID role', async () => {
+      await request(app)
+        .get(pagePath)
+        .expect(res => expect(res).to.be.redirect.toLocation(defaultAccessDeniedPagePattern))
+    })
+
+    describe('for authorized user', () => {
+      beforeEach(() => {
+        idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant', 'letter-1')
+      })
+
+      it('should return 500 and render error page when cannot retrieve claim', async () => {
+        const token = 'token'
+        idamServiceMock.resolveExchangeCode(token)
+        claimStoreServiceMock.rejectRetrieveByLetterHolderId('HTTP error')
+
+        await request(app)
+          .get(`${pagePath}?code=123`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should redirect to task list page when defendant is already set', async () => {
+        const token = 'token'
+        idamServiceMock.resolveExchangeCode(token)
+        claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001', 2)
+
+        await request(app)
+          .get(`${pagePath}?code=123`)
+          .expect(res => expect(res).to.be.redirect
+            .toLocation(ResponsePaths.taskListPage
+              .evaluateUri({ externalId: sampleClaimObj.externalId })))
+      })
+
+      it('should return 500 and render error page when cannot link defendant to claim', async () => {
+        const token = 'token'
+        idamServiceMock.resolveExchangeCode(token)
+        claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001')
+        claimStoreServiceMock.rejectLinkDefendant('HTTP error')
+
+        await request(app)
+          .get(`${pagePath}?code=123`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should redirect to task list page when everything is fine', async () => {
+        const token = 'token'
+        idamServiceMock.resolveExchangeCode(token)
+        claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001')
+        claimStoreServiceMock.resolveLinkDefendant()
+
+        await request(app)
+          .get(`${pagePath}?code=123`)
+          .expect(res => expect(res).to.be.redirect
+            .toLocation(ResponsePaths.taskListPage
+              .evaluateUri({ externalId: sampleClaimObj.externalId })))
+      })
+
+      it('should set session cookie to token value returned from idam', async () => {
+        const token = 'token'
+        idamServiceMock.resolveExchangeCode(token)
+        claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001')
+        claimStoreServiceMock.resolveLinkDefendant()
+
+        await request(app)
+          .get(`${pagePath}?code=123`)
+          .expect(res => expect(res).to.have.cookie(cookieName, token))
+      })
     })
   })
 })

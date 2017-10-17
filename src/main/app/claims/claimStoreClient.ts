@@ -44,7 +44,7 @@ export default class ClaimStoreClient {
       })
   }
 
-  static retrieveByLetterHolderId (letterHolderId: number): Promise<Claim> {
+  static retrieveByLetterHolderId (letterHolderId: string): Promise<Claim> {
     if (!letterHolderId) {
       return Promise.reject('Letter holder id must be set')
     }

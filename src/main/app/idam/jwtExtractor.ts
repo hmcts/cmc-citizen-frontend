@@ -1,4 +1,7 @@
 import * as config from 'config'
+import * as toBoolean from 'to-boolean'
+
+const oauthEnabled = toBoolean(config.get('featureToggles.idamOauth'))
 
 export default class JwtExtractor {
 
@@ -6,7 +9,7 @@ export default class JwtExtractor {
     if (!req) {
       return undefined
     }
-    if (req.query && req.query.jwt) {
+    if (!oauthEnabled && req.query && req.query.jwt) {
       return req.query.jwt
     }
     if (req.cookies) {

@@ -1,8 +1,8 @@
 import * as config from 'config'
 import * as mock from 'nock'
-import * as HttpStatus from 'http-status-codes'
-import { InterestType } from 'app/../../main/features/claim/form/models/interest'
 import { Scope } from 'nock'
+import * as HttpStatus from 'http-status-codes'
+import { InterestType } from 'features/claim/form/models/interest'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
@@ -135,6 +135,7 @@ export function resolveIsClaimLinked (status: boolean) {
     .get(new RegExp('/.+/defendant-link-status'))
     .reply(HttpStatus.OK, { linked: status })
 }
+
 export function rejectIsClaimLinked () {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/.+/defendant-link-status'))
