@@ -1,6 +1,7 @@
 import * as config from 'config'
 import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
+import { Scope } from 'nock'
 
 const serviceBaseURL: string = `${config.get('fees.url')}/range-groups`
 
@@ -33,58 +34,58 @@ const rangeGroup = {
 
 }
 
-export function resolveCalculateIssueFee () {
-  resolveCalculateFee(issueFeeCode)
+export function resolveCalculateIssueFee (): Scope {
+  return resolveCalculateFee(issueFeeCode)
 }
 
-export function rejectCalculateIssueFee (reason: string = 'HTTP error') {
-  rejectCalculateFee(issueFeeCode, reason)
+export function rejectCalculateIssueFee (reason: string = 'HTTP error'): Scope {
+  return rejectCalculateFee(issueFeeCode, reason)
 }
 
-export function resolveCalculateHearingFee () {
-  resolveCalculateFee(hearingFeeCode)
+export function resolveCalculateHearingFee (): Scope {
+  return resolveCalculateFee(hearingFeeCode)
 }
 
-export function rejectCalculateHearingFee (reason: string = 'HTTP error') {
-  rejectCalculateFee(hearingFeeCode, reason)
+export function rejectCalculateHearingFee (reason: string = 'HTTP error'): Scope {
+  return rejectCalculateFee(hearingFeeCode, reason)
 }
 
-export function resolveGetIssueFeeRangeGroup () {
-  resolveGetFeeRangeGroup(issueFeeCode)
+export function resolveGetIssueFeeRangeGroup (): Scope {
+  return resolveGetFeeRangeGroup(issueFeeCode)
 }
 
-export function rejectGetIssueFeeRangeGroup (reason: string = 'HTTP error') {
-  rejectGetFeeRangeGroup(issueFeeCode, reason)
+export function rejectGetIssueFeeRangeGroup (reason: string = 'HTTP error'): Scope {
+  return rejectGetFeeRangeGroup(issueFeeCode, reason)
 }
 
-export function resolveGetHearingFeeRangeGroup () {
-  resolveGetFeeRangeGroup(hearingFeeCode)
+export function resolveGetHearingFeeRangeGroup (): Scope {
+  return resolveGetFeeRangeGroup(hearingFeeCode)
 }
 
-export function rejectGetHearingFeeRangeGroup (reason: string = 'HTTP error') {
-  rejectGetFeeRangeGroup(hearingFeeCode, reason)
+export function rejectGetHearingFeeRangeGroup (reason: string = 'HTTP error'): Scope {
+  return rejectGetFeeRangeGroup(hearingFeeCode, reason)
 }
 
-export function resolveCalculateFee (code: string) {
-  mock(serviceBaseURL)
+export function resolveCalculateFee (code: string): Scope {
+  return mock(serviceBaseURL)
     .get(new RegExp(`/${code}/calculations\\?value=[0-9]+`))
     .reply(HttpStatus.OK, calculationOutcome)
 }
 
-export function rejectCalculateFee (code: string, reason: string = 'HTTP error') {
-  mock(serviceBaseURL)
+export function rejectCalculateFee (code: string, reason: string = 'HTTP error'): Scope {
+  return mock(serviceBaseURL)
     .get(new RegExp(`/${code}/calculations\\?value=[0-9]+`))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-function resolveGetFeeRangeGroup (code: string) {
-  mock(serviceBaseURL)
+function resolveGetFeeRangeGroup (code: string): Scope {
+  return mock(serviceBaseURL)
     .get(`/${code}`)
     .reply(HttpStatus.OK, rangeGroup)
 }
 
-function rejectGetFeeRangeGroup (code: string, reason: string = 'HTTP error') {
-  mock(serviceBaseURL)
+function rejectGetFeeRangeGroup (code: string, reason: string = 'HTTP error'): Scope {
+  return mock(serviceBaseURL)
     .get(`/${code}`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }

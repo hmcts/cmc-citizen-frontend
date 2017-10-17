@@ -16,14 +16,14 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Claim issue: defendant party type selection page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.defendantPartyTypeSelectionPage.uri)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
-      draftStoreServiceMock.resolveRetrieve('claim')
+      draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
         .get(ClaimPaths.defendantPartyTypeSelectionPage.uri)
@@ -41,7 +41,7 @@ describe('Claim issue: defendant party type selection page', () => {
       })
 
       it('should render page with error when form is invalid', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
@@ -51,8 +51,8 @@ describe('Claim issue: defendant party type selection page', () => {
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim', { defendant: undefined })
-        draftStoreServiceMock.rejectSave('claim', 'HTTP error')
+        draftStoreServiceMock.resolveFind('claim', { defendant: undefined })
+        draftStoreServiceMock.rejectSave()
 
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
@@ -62,8 +62,8 @@ describe('Claim issue: defendant party type selection page', () => {
       })
 
       it('should redirect to individual details page when Individual party type selected ', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim', { defendant: undefined })
-        draftStoreServiceMock.resolveSave('claim')
+        draftStoreServiceMock.resolveFind('claim', { defendant: undefined })
+        draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
@@ -73,8 +73,8 @@ describe('Claim issue: defendant party type selection page', () => {
       })
 
       it('should redirect to sole trader details page when soleTrader party type selected ', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim', { defendant: undefined })
-        draftStoreServiceMock.resolveSave('claim')
+        draftStoreServiceMock.resolveFind('claim', { defendant: undefined })
+        draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
@@ -84,8 +84,8 @@ describe('Claim issue: defendant party type selection page', () => {
       })
 
       it('should redirect to company details page when company party type selected ', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim', { defendant: undefined })
-        draftStoreServiceMock.resolveSave('claim')
+        draftStoreServiceMock.resolveFind('claim', { defendant: undefined })
+        draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
@@ -95,8 +95,8 @@ describe('Claim issue: defendant party type selection page', () => {
       })
 
       it('should redirect to organization details page when organization party type selected ', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim', { defendant: undefined })
-        draftStoreServiceMock.resolveSave('claim')
+        draftStoreServiceMock.resolveFind('claim', { defendant: undefined })
+        draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)

@@ -1,7 +1,8 @@
 import * as config from 'config'
 import * as mock from 'nock'
+import { Scope } from 'nock'
 import * as HttpStatus from 'http-status-codes'
-import { InterestType } from 'app/forms/models/interest'
+import { InterestType } from 'features/claim/form/models/interest'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
@@ -10,7 +11,7 @@ export const sampleClaimObj = {
   submitterId: 1,
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
   defendantId: 123,
-  claimNumber: '000MC000',
+  referenceNumber: '000MC000',
   createdAt: '2017-07-25T22:45:51.785',
   issuedOn: '2017-07-25',
   claim: {
@@ -60,7 +61,12 @@ export const sampleClaimObj = {
     },
     reason: 'Because I can'
   },
-  responseDeadline: '2017-08-08'
+  responseDeadline: '2017-08-08',
+  countyCourtJudgment: {
+    defendantDateOfBirth: '1990-11-01',
+    paidAmount: 2,
+    paymentOption: 'IMMEDIATELY'
+  }
 }
 
 const sampleDefendantResponseObj = {
@@ -82,8 +88,8 @@ const sampleDefendantResponseObj = {
   }
 }
 
-export function resolveRetrieveClaimByExternalId (claimOverride?: object) {
-  mock(`${serviceBaseURL}/claims`)
+export function resolveRetrieveClaimByExternalId (claimOverride?: object): Scope {
+  return mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...claimOverride })
 }
@@ -124,8 +130,20 @@ export function rejectRetrieveByClaimantId (reason: string) {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveRetrieveByLetterHolderId (referenceNumber: string, defendantId?: number) {
+export function resolveIsClaimLinked (status: boolean) {
   mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/.+/defendant-link-status'))
+    .reply(HttpStatus.OK, { linked: status })
+}
+
+export function rejectIsClaimLinked () {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/.+/defendant-link-status'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'Internal server error')
+}
+
+export function resolveRetrieveByLetterHolderId (referenceNumber: string, defendantId?: number): Scope {
+  return mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/letter/[0-9]+'))
     .reply(HttpStatus.OK, { ...sampleClaimObj, referenceNumber: referenceNumber, defendantId: defendantId })
 }
@@ -199,6 +217,18 @@ export function resolveSaveClaimForUser () {
 export function rejectSaveClaimForUser (reason: string = 'HTTP error') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
+export function resolveSaveCcjForUser () {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/[0-9]+/county-court-judgment'))
+    .reply(HttpStatus.OK, { ...sampleClaimObj })
+}
+
+export function rejectSaveCcjForUser (reason: string = 'HTTP error') {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/[0-9]+/county-court-judgment'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 

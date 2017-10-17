@@ -13,11 +13,13 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 
+const cookieName: string = config.get<string>('session.cookieName')
+
 describe('Defendant first contact: claim summary page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', `${Paths.claimSummaryPage.uri}?ref=000MC000`)
+    checkAuthorizationGuards(app, 'get', Paths.claimSummaryPage.uri)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -28,7 +30,8 @@ describe('Defendant first contact: claim summary page', () => {
         claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001')
 
         await request(app)
-          .get(`${Paths.claimSummaryPage.uri}?jwt=ABC&ref=000MC000`)
+          .get(Paths.claimSummaryPage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.redirect.toLocation(ErrorPaths.claimSummaryAccessDeniedPage.uri))
       })
 
@@ -36,7 +39,8 @@ describe('Defendant first contact: claim summary page', () => {
         claimStoreServiceMock.rejectRetrieveByLetterHolderId('HTTP error')
 
         await request(app)
-          .get(`${Paths.claimSummaryPage.uri}?jwt=ABC&ref=000MC000`)
+          .get(`${Paths.claimSummaryPage.uri}`)
+          .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -44,22 +48,24 @@ describe('Defendant first contact: claim summary page', () => {
         claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001')
 
         await request(app)
-          .get(`${Paths.claimSummaryPage.uri}?jwt=ABC&ref=000MC001`)
+          .get(Paths.claimSummaryPage.uri)
+          .set('Cookie', `${cookieName}=ABC;state=000MC001`)
           .expect(res => expect(res).to.be.successful.withText('View the claim'))
       })
     })
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', `${Paths.claimSummaryPage.uri}?ref=000MC000`)
+    checkAuthorizationGuards(app, 'post', Paths.claimSummaryPage.uri)
 
     it('should redirect to registration page when everything is fine', async () => {
-      const registrationPagePattern = new RegExp(`${config.get('idam.authentication-web.url')}/login/uplift\\?jwt=ABC&continue-url=http://127.0.0.1:[0-9]{1,5}/response/1/receiver`)
+      const registrationPagePattern = new RegExp(`${config.get('idam.authentication-web.url')}/login/uplift\\?response_type=code.+&redirect_uri=http://127.0.0.1:[0-9]{1,5}/receiver/link-defendant&jwt=ABC`)
 
       idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'letter-holder')
 
       await request(app)
-        .post(`${Paths.claimSummaryPage.uri}?jwt=ABC`)
+        .post(Paths.claimSummaryPage.uri)
+        .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.redirect.toLocation(registrationPagePattern))
     })
   })

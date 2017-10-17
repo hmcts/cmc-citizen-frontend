@@ -37,7 +37,13 @@ export default class Nunjucks {
       path.join(__dirname, '..', '..', '..', '..', 'node_modules', '@hmcts', 'cmc-common-frontend', 'macros')
     ], {
       autoescape: true,
+      throwOnUndefined: true,
       express: app
+    })
+
+    app.use((req, res, next) => {
+      res.locals.pagePath = req.path
+      next()
     })
 
     require('numeral/locales/en-gb')
@@ -50,8 +56,6 @@ export default class Nunjucks {
     nunjucksEnv.addGlobal('development', this.developmentMode)
     nunjucksEnv.addGlobal('govuk_template_version', packageDotJson.dependencies.govuk_template_jinja)
     nunjucksEnv.addGlobal('gaTrackingId', config.get<string>('analytics.gaTrackingId'))
-    nunjucksEnv.addGlobal('piwikTrackingId', config.get<string>('analytics.piwikTrackingId'))
-    nunjucksEnv.addGlobal('piwikTrackingSite', config.get<string>('analytics.piwikTrackingSite'))
     nunjucksEnv.addGlobal('t', (key: string, options?: TranslationOptions): string => this.i18next.t(key, options))
     nunjucksEnv.addFilter('date', dateFilter)
     nunjucksEnv.addFilter('pennies2pounds', convertToPoundsFilter)

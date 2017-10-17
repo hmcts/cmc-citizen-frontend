@@ -3,6 +3,7 @@ import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { Serializable } from 'models/serializable'
 import { Address } from 'forms/models/address'
 import { CorrespondenceAddress } from 'forms/models/correspondenceAddress'
+import { PartyType } from 'app/common/partyType'
 
 export class ValidationErrors {
   static readonly ADDRESS_REQUIRED = 'Enter an address'
@@ -19,15 +20,15 @@ export class PartyDetails implements Serializable<PartyDetails> {
   @MaxLength(255, { message: ValidationErrors.NAME_TOO_LONG, groups: ['claimant', 'defendant'] })
   name?: string
 
-  @IsDefined({ message: ValidationErrors.ADDRESS_REQUIRED, groups: ['claimant', 'defendant'] })
-  @ValidateNested({ groups: ['claimant', 'defendant'] })
+  @IsDefined({ message: ValidationErrors.ADDRESS_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
+  @ValidateNested({ groups: ['claimant', 'defendant', 'response'] })
   address?: Address = new Address()
 
   hasCorrespondenceAddress?: boolean
 
-  @ValidateIf(partyDetails => partyDetails.hasCorrespondenceAddress === true, { groups: ['claimant', 'defendant'] })
-  @IsDefined({ message: ValidationErrors.CORRESPONDENCE_ADDRESS_REQUIRED, groups: ['claimant', 'defendant'] })
-  @ValidateNested({ groups: ['claimant', 'defendant'] })
+  @ValidateIf(partyDetails => partyDetails.hasCorrespondenceAddress === true, { groups: ['claimant', 'defendant', 'response'] })
+  @IsDefined({ message: ValidationErrors.CORRESPONDENCE_ADDRESS_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
+  @ValidateNested({ groups: ['claimant', 'defendant', 'response'] })
   correspondenceAddress?: CorrespondenceAddress
 
   constructor (name?: string,
@@ -71,5 +72,9 @@ export class PartyDetails implements Serializable<PartyDetails> {
 
   isCompleted (...groups: string[]): boolean {
     return new Validator().validateSync(this, { groups: groups }).length === 0
+  }
+
+  isBusiness (): boolean {
+    return this.type === PartyType.COMPANY.value || this.type === PartyType.ORGANISATION.value
   }
 }

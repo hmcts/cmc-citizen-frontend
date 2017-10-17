@@ -1,15 +1,13 @@
 import * as express from 'express'
-import * as config from 'config'
 import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
-import { buildURL } from 'utils/CallbackBuilder'
-import { Paths } from 'app/paths'
+import { AuthenticationRedirectFactory } from 'app/utils/AuthenticationRedirectFactory'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    res.redirect(`${config.get('idam.authentication-web.url')}/login?continue-url=${buildURL(req, Paths.receiver.uri)}`)
+    res.redirect(AuthenticationRedirectFactory.get().forLogin(req, res))
   }
 
   const requiredRoles = [
@@ -21,7 +19,7 @@ function defendantResponseRequestHandler (): express.RequestHandler {
 
 export class TestingSupportFeature {
   enableFor (app: express.Express) {
-    app.all('/testing-support/*', defendantResponseRequestHandler())
+    app.all('/testing-support*', defendantResponseRequestHandler())
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }

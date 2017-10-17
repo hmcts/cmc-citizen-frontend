@@ -3,53 +3,59 @@ import * as express from 'express'
 import * as chai from 'chai'
 import * as spies from 'sinon-chai'
 import * as sinon from 'sinon'
-import { mockRes } from 'sinon-express-mock'
+import { mockReq as req, mockRes } from 'sinon-express-mock'
 
 import { DraftMiddleware } from 'common/draft/draftMiddleware'
 
 import DraftStoreClient from 'common/draft/draftStoreClient'
+import { DraftStoreClientFactory } from 'common/draft/draftStoreClientFactory'
 
 chai.use(spies)
 
-describe('Draft', () => {
-  describe('retrieve middleware', () => {
-    let spy
+describe('Draft middleware', () => {
+  describe('request handler', () => {
+    let factoryFn
+    let findFn
 
     beforeEach(() => {
-      spy = sinon.stub(DraftStoreClient.prototype, 'retrieve').callsFake(() => {
-        return Promise.resolve({})
+      factoryFn = sinon.stub(DraftStoreClientFactory, 'create').callsFake(() => {
+        return new DraftStoreClient('service-jwt-token')
+      })
+      findFn = sinon.stub(DraftStoreClient.prototype, 'find').callsFake((args, x, y) => {
+        return Promise.resolve([])
       })
     })
 
     afterEach(() => {
-      spy.restore()
+      factoryFn.restore()
+      findFn.restore()
     })
 
-    it('should retrieve draft if the user is logged in', () => {
+    it('should saerch for drafts if the user is logged in', async () => {
       const res: express.Response = mockRes()
       res.locals.isLoggedIn = true
       res.locals.user = {
-        id: 123
+        bearerToken: 'user-jwt-token'
       }
 
-      new DraftMiddleware('default').retrieve(res, sinon.spy())
-      chai.expect(spy).to.have.been.called
+      await DraftMiddleware.requestHandler('default')(req(), res, sinon.spy())
+      chai.expect(findFn).to.have.been.called
     })
 
-    it('should not retrieve draft if the user is not logged in', () => {
+    it('should not search for drafts if the user is not logged in', async () => {
       const res: express.Response = mockRes()
       res.locals.isLoggedIn = false
 
-      new DraftMiddleware('default').retrieve(res, sinon.spy())
-      chai.expect(spy).to.not.have.been.called
+      await DraftMiddleware.requestHandler('default')(req(), res, sinon.spy())
+      chai.expect(findFn).to.not.have.been.called
     })
 
-    it('should not retrieve draft if the isLoggedIn flag is not defined', () => {
+    it('should not search for drafts if the isLoggedIn flag is not defined', async () => {
       const res: express.Response = mockRes()
       res.locals.isLoggedIn = undefined
 
-      new DraftMiddleware('default').retrieve(res, sinon.spy())
-      chai.expect(spy).to.not.have.been.called
+      await DraftMiddleware.requestHandler('default')(req(), res, sinon.spy())
+      chai.expect(findFn).to.not.have.been.called
     })
   })
 })

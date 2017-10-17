@@ -15,12 +15,13 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
+import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.freeMediationPage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
 describe('Defendant response: free mediation page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', pagePath)
@@ -31,6 +32,7 @@ describe('Defendant response: free mediation page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'get', pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, 'get', pagePath)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
@@ -43,7 +45,7 @@ describe('Defendant response: free mediation page', () => {
         })
 
         it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('response')
+          draftStoreServiceMock.resolveFind('response')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -64,6 +66,7 @@ describe('Defendant response: free mediation page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, 'post', pagePath)
 
       context('when response not submitted', () => {
         context('when form is invalid', () => {
@@ -77,7 +80,7 @@ describe('Defendant response: free mediation page', () => {
           })
 
           it('should render page when everything is fine', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
+            draftStoreServiceMock.resolveFind('response')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -90,8 +93,8 @@ describe('Defendant response: free mediation page', () => {
         context('when form is valid', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveRetrieve('response')
-            draftStoreServiceMock.rejectSave('response', 'HTTP error')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.rejectSave()
 
             await request(app)
               .post(pagePath)
@@ -102,8 +105,8 @@ describe('Defendant response: free mediation page', () => {
 
           it('should redirect to task list page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveRetrieve('response')
-            draftStoreServiceMock.resolveSave('response')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
 
             await request(app)
               .post(pagePath)

@@ -1,17 +1,15 @@
 import * as express from 'express'
-import * as config from 'config'
 import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
-import { ClaimDraftMiddleware } from 'claim/draft/claimDraftMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
-import { buildURL } from 'utils/CallbackBuilder'
-import { Paths as AppPaths } from 'app/paths'
-import { ResponseDraftMiddleware } from 'response/draft/responseDraftMiddleware'
+import { DraftMiddleware } from 'common/draft/draftMiddleware'
+import DraftClaim from 'drafts/models/draftClaim'
+import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    res.redirect(`${config.get('idam.authentication-web.url')}/login?continue-url=${buildURL(req, AppPaths.receiver.uri)}`)
+    res.redirect(AuthenticationRedirectFactory.get().forLogin(req, res))
   }
 
   const requiredRoles = ['cmc-private-beta']
@@ -21,9 +19,10 @@ function requestHandler (): express.RequestHandler {
 
 export class DashboardFeature {
   enableFor (app: express.Express) {
-    app.all(/^\/(dashboard.*|receiver)$/, requestHandler())
-    app.all(/^\/(dashboard|receiver)$/, ClaimDraftMiddleware.retrieve)
-    app.all('/receiver', ResponseDraftMiddleware.retrieve)
+    app.all(/^\/dashboard.*$/, requestHandler())
+    app.all(/^\/dashboard$/, DraftMiddleware.requestHandler('claim', (value: any): DraftClaim => {
+      return new DraftClaim().deserialize(value)
+    }))
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }

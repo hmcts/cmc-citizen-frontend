@@ -16,14 +16,14 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Claim issue: amount page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.amountPage.uri)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
-      draftStoreServiceMock.resolveRetrieve('claim')
+      draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
         .get(ClaimPaths.amountPage.uri)
@@ -42,7 +42,7 @@ describe('Claim issue: amount page', () => {
 
       describe('add row action', () => {
         it('should render page when form is invalid and everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('claim')
+          draftStoreServiceMock.resolveFind('claim')
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
@@ -52,7 +52,7 @@ describe('Claim issue: amount page', () => {
         })
 
         it('should render page when form is valid, amount within limit and everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('claim')
+          draftStoreServiceMock.resolveFind('claim')
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
@@ -62,7 +62,7 @@ describe('Claim issue: amount page', () => {
         })
 
         it('should render page when form is valid, amount above limit and everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('claim')
+          draftStoreServiceMock.resolveFind('claim')
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
@@ -74,7 +74,7 @@ describe('Claim issue: amount page', () => {
 
       describe('calculate action', () => {
         it('should render page when form is invalid and everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('claim')
+          draftStoreServiceMock.resolveFind('claim')
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
@@ -84,7 +84,7 @@ describe('Claim issue: amount page', () => {
         })
 
         it('should render page when form is valid, amount within limit and everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('claim')
+          draftStoreServiceMock.resolveFind('claim')
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
@@ -94,7 +94,7 @@ describe('Claim issue: amount page', () => {
         })
 
         it('should render page when form is valid, amount above limit and everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('claim')
+          draftStoreServiceMock.resolveFind('claim')
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
@@ -106,7 +106,7 @@ describe('Claim issue: amount page', () => {
 
       describe('save action', () => {
         it('should render page when form is invalid and everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('claim')
+          draftStoreServiceMock.resolveFind('claim')
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
@@ -115,8 +115,8 @@ describe('Claim issue: amount page', () => {
         })
 
         it('should return 500 and render error page when form is valid, amount within limit and cannot save draft', async () => {
-          draftStoreServiceMock.resolveRetrieve('claim')
-          draftStoreServiceMock.rejectSave('claim', 'HTTP error')
+          draftStoreServiceMock.resolveFind('claim')
+          draftStoreServiceMock.rejectSave()
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
@@ -126,8 +126,8 @@ describe('Claim issue: amount page', () => {
         })
 
         it('should redirect to interest page when form is valid, amount within limit and everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('claim')
-          draftStoreServiceMock.resolveSave('claim')
+          draftStoreServiceMock.resolveFind('claim')
+          draftStoreServiceMock.resolveSave()
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
@@ -137,7 +137,7 @@ describe('Claim issue: amount page', () => {
         })
 
         it('should redirect to amount exceeded page when form is valid, amount above limit and everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('claim')
+          draftStoreServiceMock.resolveFind('claim')
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)

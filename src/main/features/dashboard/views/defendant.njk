@@ -12,7 +12,16 @@
     </div>
     <div class="column-two-thirds">
       <h2 class="heading-medium">{{ t('Claim status') }}</h2>
-      <p>{{ t('Your defence is being processed. We will email you to explain what to do next.') }}</p>
+      {% if claim.countyCourtJudgmentRequestedAt %}
+        <p>{{ t('%s requested a County Court Judgment against you on %s. We will contact you both within 5 days.',
+              { postProcess: 'sprintf', sprintf: [ claim.claimData.claimant.name, claim.countyCourtJudgmentRequestedAt | date ]}) }}</p>
+        <p>{{ t('<a href="%s" target="blank">Records of judgments</a> are kept for 6 years unless you pay the full amount within 28 days.',
+                { postProcess: 'sprintf', sprintf: [ 'https://www.gov.uk/county-court-judgments-ccj-for-debt/ccjs-and-your-credit-rating' ]}) | safe }}</p>
+        <p>{{ t('If you don’t owe the money you can <a href="%s" target="blank">ask the court to cancel</a> the judgment.',
+              { postProcess: 'sprintf', sprintf: [ 'https://www.gov.uk/county-court-judgments-ccj-for-debt/if-you-dont-owe-the-money' ]}) | safe }}</p>
+      {% else %}
+        <p>{{ t('Your defence is being processed. We will email you to explain what to do next.') }}</p>
+      {% endif %}
     </div>
 
     <div class="column-one-third">
@@ -30,10 +39,12 @@
             <strong class="bold">{{ t('Claim details:') }}</strong>
             <span class="block"><a href="{{ claimReceiptUri }}">{{ t('Download claim details') }}</a></span>
           </li>
-          <li>
-            <strong class="bold">{{ t('Your response:') }}</strong>
-            <span class="block"><a href="{{ responseReceiptUri }}">{{ t('Download your response') }}</a></span>
-          </li>
+          {% if claim.respondedAt %}
+            <li>
+              <strong class="bold">{{ t('Your response:') }}</strong>
+              <span class="block"><a href="{{ responseReceiptUri }}">{{ t('Download your response') }}</a></span>
+            </li>
+          {% endif %}
         </ul>
       </div>
     </div>

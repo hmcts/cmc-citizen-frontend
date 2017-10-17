@@ -16,12 +16,13 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
 import { MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
+import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.moreTimeRequestPage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
 describe('Defendant response: more time needed page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', pagePath)
@@ -32,6 +33,7 @@ describe('Defendant response: more time needed page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'get', pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, 'get', pagePath)
 
       context('when response not submitted', () => {
         beforeEach(() => {
@@ -40,7 +42,7 @@ describe('Defendant response: more time needed page', () => {
 
         describe('should render editable page', async () => {
           it('when no option selected', async () => {
-            draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: undefined } })
+            draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
 
             await request(app)
               .get(pagePath)
@@ -49,7 +51,7 @@ describe('Defendant response: more time needed page', () => {
           })
 
           it('when answer is "no"', async () => {
-            draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: MoreTimeNeededOption.NO } })
+            draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: MoreTimeNeededOption.NO } })
 
             await request(app)
               .get(pagePath)
@@ -59,7 +61,7 @@ describe('Defendant response: more time needed page', () => {
         })
 
         it('should redirect to confirmation page when answer is "yes"', async () => {
-          draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: MoreTimeNeededOption.YES } })
+          draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: MoreTimeNeededOption.YES } })
 
           await request(app)
             .get(pagePath)
@@ -81,11 +83,12 @@ describe('Defendant response: more time needed page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, 'post', pagePath)
 
       context('when response not submitted', () => {
         it('should redirect to confirmation page when already submitted answer is "yes"', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: MoreTimeNeededOption.YES } })
+          draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: MoreTimeNeededOption.YES } })
 
           await request(app)
             .post(pagePath)
@@ -98,7 +101,7 @@ describe('Defendant response: more time needed page', () => {
         context('when form is invalid', () => {
           it('should render page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: undefined } })
+            draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
 
             await request(app)
               .post(pagePath)
@@ -111,8 +114,8 @@ describe('Defendant response: more time needed page', () => {
         context('when form is valid', () => {
           it('should redirect to task list page when "no" is selected and everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: undefined } })
-            draftStoreServiceMock.resolveSave('response')
+            draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
+            draftStoreServiceMock.resolveSave()
 
             await request(app)
               .post(pagePath)
@@ -125,8 +128,8 @@ describe('Defendant response: more time needed page', () => {
 
           it('should redirect to confirmation page page when "yes" is selected and everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: undefined } })
-            draftStoreServiceMock.resolveSave('response')
+            draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
+            draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRequestForMoreTime()
 
             await request(app)
@@ -140,8 +143,8 @@ describe('Defendant response: more time needed page', () => {
 
           it('should return 500 and render error page when "yes" is selected and cannot save draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: undefined } })
-            draftStoreServiceMock.rejectSave('response', 'HTTP error')
+            draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
+            draftStoreServiceMock.rejectSave()
 
             await request(app)
               .post(pagePath)
@@ -161,8 +164,8 @@ describe('Defendant response: more time needed page', () => {
           })
 
           it('should return 500 when "yes" is selected and cannot request more time', async () => {
-            draftStoreServiceMock.resolveRetrieve('response', { moreTimeNeeded: { option: undefined } })
-            draftStoreServiceMock.resolveSave('response')
+            draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
+            draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.rejectRequestForMoreTime('internal server error when requesting more time')
 

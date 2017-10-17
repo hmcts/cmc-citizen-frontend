@@ -3,6 +3,7 @@ import * as config from 'config'
 import * as healthcheck from '@hmcts/nodejs-healthcheck'
 import * as fs from 'fs'
 import * as path from 'path'
+import { hostname } from 'os'
 
 export default express.Router()
   .get('/health', healthcheck.configure({
@@ -15,12 +16,16 @@ export default express.Router()
       'idam-service-2-service-auth': basicHealthCheck('idam.service-2-service-auth'),
       'idam-api': basicHealthCheck('idam.api'),
       'idam-authentication-web': basicHealthCheck('idam.authentication-web')
+    },
+    buildInfo: {
+      featureToggles: config.get('featureToggles'),
+      hostname: hostname()
     }
   }))
 
 function basicHealthCheck (serviceName) {
   const options = {}
-  if (process.env.NODE_ENV === 'development' || !process.env.NODE_ENV) {
+  if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'dockertests' || !process.env.NODE_ENV) {
     const sslDirectory = path.join(__dirname, '..', 'resources', 'localhost-ssl')
     options['ca'] = fs.readFileSync(path.join(sslDirectory, 'localhost-ca.crt'))
   }

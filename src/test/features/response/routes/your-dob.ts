@@ -14,12 +14,13 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
+import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.defendantDateOfBirthPage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
 describe('Defendant user details: your date of birth page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', pagePath)
@@ -30,6 +31,7 @@ describe('Defendant user details: your date of birth page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'get', pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, 'get', pagePath)
 
       context('when response not submitted', () => {
         beforeEach(() => {
@@ -37,7 +39,7 @@ describe('Defendant user details: your date of birth page', () => {
         })
 
         it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveRetrieve('response')
+          draftStoreServiceMock.resolveFind('response')
 
           await request(app)
             .get(pagePath)
@@ -57,6 +59,7 @@ describe('Defendant user details: your date of birth page', () => {
       })
 
       checkAlreadySubmittedGuard(app, 'post', pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, 'post', pagePath)
 
       context('when response not submitted', () => {
         beforeEach(() => {
@@ -65,7 +68,7 @@ describe('Defendant user details: your date of birth page', () => {
 
         context('when form is invalid', () => {
           it('should render page when everything is fine', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
+            draftStoreServiceMock.resolveFind('response')
 
             await request(app)
               .post(pagePath)
@@ -76,8 +79,8 @@ describe('Defendant user details: your date of birth page', () => {
 
         context('when form is valid', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
-            draftStoreServiceMock.rejectSave('response', 'HTTP error')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.rejectSave()
 
             await request(app)
               .post(pagePath)
@@ -87,8 +90,8 @@ describe('Defendant user details: your date of birth page', () => {
           })
 
           it('should redirect to your mobile page when everything is fine', async () => {
-            draftStoreServiceMock.resolveRetrieve('response')
-            draftStoreServiceMock.resolveSave('response')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
 
             await request(app)
               .post(pagePath)

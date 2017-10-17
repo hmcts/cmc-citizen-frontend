@@ -12,55 +12,62 @@
   <form novalidate method="post">
     {{ csrfProtection(csrf) }}
 
-    {{ tableStart("theirDetails", "Their details") }}
+    {{ tableStart('theirDetails', 'Their details') }}
     {{
       partyDetailsSummaryFragment(
-        partyDetails = user.ccjDraft.defendant.partyDetails,
+        partyDetails = defendant,
         showCorrespondenceAddressSection = false,
         changeLinks = {
-          address: addressUrl,
           dateOfBirth: dateOfBirthUrl
         }
       )
     }}
-    {{ row("Email:", user.claim.claimData.defendant.email) }}
+    {% if claim.claimData.defendant.email %}
+      {{ row('Email:', claim.claimData.defendant.email) }}
+    {% endif %}
     {{ tableEnd() }}
 
-    {{ tableStart("payment", "Payment") }}
+    {{ tableStart('payment', 'Payment') }}
     {{ row("Amount to be paid by defendant", amountToBePaid | numeral, changeLink = paidAmountUrl) }}
 
-    {% if details.paymentOption.option.value == 'immediately' %}
-      {% set paymentOptionDisplayValue = [details.paymentOption.option.displayValue] %}
+    {% if draft.paymentOption.option.value == 'IMMEDIATELY' %}
+      {% set paymentOptionDisplayValue = [draft.paymentOption.option.displayValue] %}
     {% endif %}
 
-    {% if details.paymentOption.option.value == 'full' %}
-      {% set paymentOptionDisplayValue = [details.paymentOption.option.displayValue
-        + ' ' + details.payBySetDate.date.toMoment() | date] %}
-
+    {% if draft.paymentOption.option.value == 'FULL_BY_SPECIFIED_DATE' %}
+      {% set paymentOptionDisplayValue = [draft.paymentOption.option.displayValue
+        + ' ' + draft.payBySetDate.date.toMoment() | date] %}
     {% endif %}
 
-    {% if details.paymentOption.option.value == 'instalments' %}
+    {% if draft.paymentOption.option.value == 'INSTALMENTS' %}
       {% set paymentOptionDisplayValue =
-      [  t('%s: %s %s.',
+      [  t('%s: %s %s',
           { postProcess: 'sprintf', sprintf: [
-              t(details.paymentOption.option.displayValue),
-              details.repaymentPlan.installmentAmount | numeral,
-              t(details.repaymentPlan.paymentSchedule.displayValue)
+              t(draft.paymentOption.option.displayValue),
+              draft.repaymentPlan.installmentAmount | numeral,
+              t(draft.repaymentPlan.paymentSchedule.displayValue)
             ]
           }),
           t('First payment on %s',
-            { postProcess: 'sprintf', sprintf: [details.repaymentPlan.firstPaymentDate.toMoment() | date]})
+            { postProcess: 'sprintf', sprintf: [draft.repaymentPlan.firstPaymentDate.toMoment() | date]})
       ]
       %}
     {% endif %}
 
-    {{ rowWithMultipleValue("When you want the defendant to pay", paymentOptionDisplayValue, changeLink = paymentOptionUrl) }}
+    {{ rowWithMultipleValue('When you want the defendant to pay', paymentOptionDisplayValue, changeLink = paymentOptionUrl) }}
     {{ tableEnd() }}
 
     <div class="form-group">
-      {{ statementOfTruth(form, title = 'Declaration', warningMessage = "Once you 'Sign and submit', you cannot change your answers.") }}
+      {{ statementOfTruth(
+        form,
+        title = 'Declaration',
+        label = 'I declare that the details I have given are true to the best of my knowledge.',
+        isQualified = claim.claimData.claimant.isBusiness(),
+        typeOfStatement = 'declaration')
+      }}
 
       {{ submitButton('Sign and submit') }}
+      <input type="hidden" name="type" value="{{ form.model.type }}">
     </div>
   </form>
 {% endblock %}

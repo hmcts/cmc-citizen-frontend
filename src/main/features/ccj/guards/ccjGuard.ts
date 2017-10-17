@@ -10,7 +10,7 @@ export class CCJGuard {
     const claim: Claim = res.locals.user.claim
 
     if (!claim.eligibleForCCJ) {
-      logger.warn(`Claim ${claim.claimNumber} not eligble for a CCJ - redirecting to dashboard page`)
+      logger.warn(`Claim ${claim.claimNumber} not eligible for a CCJ - redirecting to dashboard page`)
       res.redirect(Paths.dashboardPage.uri)
     } else {
       next()

@@ -12,18 +12,21 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import InterestDateType from 'app/common/interestDateType'
+import { InterestDateType } from 'app/common/interestDateType'
+
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Claim issue: interest date page', () => {
-  attachDefaultHooks()
+
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
+
     checkAuthorizationGuards(app, 'get', ClaimPaths.interestDatePage.uri)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
-      draftStoreServiceMock.resolveRetrieve('claim')
+      draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
         .get(ClaimPaths.interestDatePage.uri)
@@ -33,15 +36,17 @@ describe('Claim issue: interest date page', () => {
   })
 
   describe('on POST', () => {
+
     checkAuthorizationGuards(app, 'post', ClaimPaths.interestDatePage.uri)
 
     describe('for authorized user', () => {
+
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
       })
 
       it('should render page when form is invalid and everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
           .post(ClaimPaths.interestDatePage.uri)
@@ -50,8 +55,8 @@ describe('Claim issue: interest date page', () => {
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
-        draftStoreServiceMock.rejectSave('claim', 'HTTP error')
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.rejectSave()
 
         await request(app)
           .post(ClaimPaths.interestDatePage.uri)
@@ -61,8 +66,8 @@ describe('Claim issue: interest date page', () => {
       })
 
       it('should redirect to total page when form is valid, submission date selected and everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
-        draftStoreServiceMock.resolveSave('claim')
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(ClaimPaths.interestDatePage.uri)
@@ -72,8 +77,8 @@ describe('Claim issue: interest date page', () => {
       })
 
       it('should redirect to total page when form is valid, custom date selected and everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
-        draftStoreServiceMock.resolveSave('claim')
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(ClaimPaths.interestDatePage.uri)

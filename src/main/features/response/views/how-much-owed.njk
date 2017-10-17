@@ -1,0 +1,32 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, textInput, saveAndContinueButton, errorSummary, textArea, poundInput %}
+
+{% set title = t('Money claim') %}
+{% set heading = t('How much money do you believe you owe?') %}
+
+{% set claimantFullName = claim.claimData.claimant.name %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+        <p>{{ t('The amount being claimed is') }} {{ amount | numeral }}</p>
+
+        {{ poundInput(label = 'How much money do you believe you owe?', name = 'amount', form = form, bold = true) }}
+
+        {{ textArea(label = t('Explain why this is what you owe, rather than the full amount.'), name = 'text', form = form) }}
+
+        <div class="panel panel-border-wide">
+          <p>
+            {{ t('Your response will be sent to the claimant %s.',
+            { postProcess: 'sprintf', sprintf: [claimantFullName] }) }}
+            {{ t('A judge will not consider your response unless your case goes to a hearing.') }}
+          </p>
+        </div>
+
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

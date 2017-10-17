@@ -9,12 +9,12 @@
   <div class="column-two-thirds">
 
     <h1 class="heading-large">
-      <span class="heading-secondary">{{ t("County Court Judgment") }} </span>
+      <span class="heading-secondary">{{ t('County Court Judgment') }} </span>
 
-      {{ t("Has the defendant paid some of the amount owed?") }}
+      {{ t('Has the defendant paid some of the amount owed?') }}
     </h1>
 
-    <form method="post" novalidate>
+    <form method="post" class="analytics-submit-event-trigger" data-event-action="CCJ: Select whether defendant paid some of the amount owed" data-event-label-from="option" novalidate>
 
       {{ csrfProtection(csrf) }}
 
@@ -22,7 +22,7 @@
       {% set selection = form.valueFor('option').value %}
       <div class="form-group {% if error %} form-group-error {% endif %}">
         <fieldset id="option[label]">
-          <legend class="visually-hidden">{{ t("Has the defendant paid some of the amount owed?") }}</legend>
+          <legend class="visually-hidden">{{ t('Has the defendant paid some of the amount owed?') }}</legend>
 
           {{ radioOption(label = 'Yes', name = 'option', form = form, value = 'yes', checked = (selection == 'yes')) }}
 
@@ -30,13 +30,13 @@
 
             <p>
               {{
-                t("Total amount payable by defendant is %s", {
+                t('Total amount payable by the defendant is %s', {
                     postProcess: 'sprintf', sprintf: [ totalAmount | numeral ]
                   }
                 )
               }}
             </p>
-
+            <input type="hidden" name="claimedAmount" value="{{totalAmount}}" />
             {{ poundInput(label = 'Amount already paid', name = 'amount', form = form) }}
 
           </div>

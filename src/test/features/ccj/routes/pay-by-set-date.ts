@@ -20,14 +20,15 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
+
 const externalId = sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
-const payBySetDatePage = Paths.payBySetDatePage.uri.replace(':externalId', externalId)
-const repaymentPlanPage = Paths.repaymentPlanPage.uri.replace(':externalId', externalId)
+const payBySetDatePage: string = Paths.payBySetDatePage.evaluateUri({externalId : externalId})
+const checkAndSavePage: string = Paths.checkAndSendPage.evaluateUri({externalId : externalId})
 
 describe('CCJ - Pay by set date', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', payBySetDatePage)
@@ -48,7 +49,7 @@ describe('CCJ - Pay by set date', () => {
 
       it('should return 500 and render error page when cannot retrieve CCJ draft', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+        draftStoreServiceMock.rejectFind('Error')
 
         await request(app)
           .get(payBySetDatePage)
@@ -58,7 +59,7 @@ describe('CCJ - Pay by set date', () => {
 
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.resolveRetrieve('ccj')
+        draftStoreServiceMock.resolveFind('ccj')
 
         await request(app)
           .get(payBySetDatePage)
@@ -90,7 +91,7 @@ describe('CCJ - Pay by set date', () => {
 
       it('should return 500 when cannot retrieve CCJ draft', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.rejectRetrieve('ccj', 'Error')
+        draftStoreServiceMock.rejectFind('Error')
 
         await request(app)
           .post(payBySetDatePage)
@@ -102,8 +103,8 @@ describe('CCJ - Pay by set date', () => {
       context('when form is valid', async () => {
         it('should return 500 and render error page when cannot save ccj draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
-          draftStoreServiceMock.rejectSave('ccj', 'Error')
+          draftStoreServiceMock.resolveFind('ccj')
+          draftStoreServiceMock.rejectSave()
 
           await request(app)
             .post(payBySetDatePage)
@@ -112,23 +113,23 @@ describe('CCJ - Pay by set date', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should redirect to repayment plan page', async () => {
+        it('should redirect to check and send page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
-          draftStoreServiceMock.resolveSave('ccj')
+          draftStoreServiceMock.resolveFind('ccj')
+          draftStoreServiceMock.resolveSave()
 
           await request(app)
             .post(payBySetDatePage)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
-            .expect(res => expect(res).to.be.redirect.toLocation(repaymentPlanPage))
+            .expect(res => expect(res).to.be.redirect.toLocation(checkAndSavePage))
         })
       })
 
       context('when form is invalid', async () => {
         it('should render page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveRetrieve('ccj')
+          draftStoreServiceMock.resolveFind('ccj')
 
           await request(app)
             .post(payBySetDatePage)

@@ -20,7 +20,9 @@ function verifyDefaultValues (initialValue: any) {
 }
 
 describe('DraftClaim', () => {
+
   describe('constructor', () => {
+
     it('should have instance fields initialised where possible', () => {
       let draftClaim = new DraftClaim()
       expect(draftClaim.claimant).to.be.instanceof(Claimant)
@@ -29,6 +31,7 @@ describe('DraftClaim', () => {
   })
 
   describe('deserialize', () => {
+
     it('with undefined value should return a DraftClaim instance initialised with defaults', () => {
       verifyDefaultValues(undefined)
     })

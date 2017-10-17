@@ -13,15 +13,15 @@
 
         <p>{{ t('Your claim could be for a single amount or might be made up of multiple items') }}</p>
         <div class="panel panel-border-wide">
-          <p>{{ t("Don’t include interest - we’ll ask you about this next.") }}</p>
+          <p>{{ t('Don’t include interest - we’ll ask you about this next.') }}</p>
 
-          <p>{{ t("Don’t include your claim fee - we’ll add this for you.") }}</p>
+          <p>{{ t('Don’t include your claim fee - we’ll add this for you.') }}</p>
         </div>
         <div class="claim-amounts">
           <div id="claim-amount">
             <div>
               <div id="claim-amount-heading-1" class="claim-amount-column-1">
-                <span class="form-label-bold">{{ t("What you’re claiming for") }}</span>
+                <span class="form-label-bold">{{ t('What you’re claiming for') }}</span>
                 <span class="form-hint">{{ t('Briefly explain why you’re claiming for this - for example, "unpaid debt" or "house deposit not returned"') }}</span>
               </div>
               <div id="claim-amount-heading-2" class="claim-amount-column-2">
@@ -39,15 +39,21 @@
                   {% if displayTotalError %}
                   <span class="error-message" id="rows[label]">{{ form.errorFor('rows') }}</span>
                   {% endif %}
-                  <span class="{% if error1 %}error-message{% endif %}" id="{{ 'rows['+loop.index0+'][reason][label]' }}">{{ form.errorFor('rows['+loop.index0+'][reason]') }}</span>
-                  <span class="{% if error2 %}error-message{% endif %}" id="{{ 'rows['+loop.index0+'][amount][label]' }}">{{ form.errorFor('rows['+loop.index0+'][amount]') }}</span>
-                  {{ textInputInline('rows['+loop.index0+'][reason]',form, 'claim-amount-column-1 ' + ('form-control-error' if displayTotalError else '')) }}
-                  {{ textInputInline('rows['+loop.index0+'][amount]',form, 'claim-amount-column-2 ' + ('form-control-error' if displayTotalError else ''),'input-symbol-pound' ) }}
+                  {% if error1 %}
+                    <span class="error-message" id="{{ 'rows['+loop.index0+'][reason][label]' }}">{{ form.errorFor('rows['+loop.index0+'][reason]') }}</span>
+                  {% endif %}
+                  {% if error2 %}
+                    <span class="error-message" id="{{ 'rows['+loop.index0+'][amount][label]' }}">{{ form.errorFor('rows['+loop.index0+'][amount]') }}</span>
+                  {% endif %}
+                  {{ textInputInline('rows['+loop.index0+'][reason]', form, 'claim-amount-column-1 ' + ('form-control-error' if displayTotalError else '')) }}
+                  {{ textInputInline('rows['+loop.index0+'][amount]', form, 'claim-amount-column-2 ' + ('form-control-error' if displayTotalError else ''), 'input-symbol-pound' ) }}
                 </div>
               {% endfor %}
             </div>
             <div class="claim-amount-foot">
-              {{ linkButton('Add another row', 'action[addRow]', 'button button-secondary') }}
+              {% if canAddMoreRows %}
+                {{ linkButton('Add another row', 'action[addRow]', 'button button-secondary') }}
+              {% endif %}
               {{ linkButton('Calculate total', 'action[calculate]', 'link-button calculate') }}
             </div>
             <div class="claim-amount-row  bold-medium total">

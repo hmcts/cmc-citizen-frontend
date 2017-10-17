@@ -16,14 +16,14 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Claim issue: claimant mobile page', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.claimantMobilePage.uri)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
-      draftStoreServiceMock.resolveRetrieve('claim')
+      draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
         .get(ClaimPaths.claimantMobilePage.uri)
@@ -41,7 +41,7 @@ describe('Claim issue: claimant mobile page', () => {
       })
 
       it('should render page when form is invalid and everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
+        draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
           .post(ClaimPaths.claimantMobilePage.uri)
@@ -50,8 +50,8 @@ describe('Claim issue: claimant mobile page', () => {
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
-        draftStoreServiceMock.rejectSave('claim', 'HTTP error')
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.rejectSave()
 
         await request(app)
           .post(ClaimPaths.claimantMobilePage.uri)
@@ -61,8 +61,8 @@ describe('Claim issue: claimant mobile page', () => {
       })
 
       it('should redirect to task list when form is valid and everything is fine', async () => {
-        draftStoreServiceMock.resolveRetrieve('claim')
-        draftStoreServiceMock.resolveSave('claim')
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(ClaimPaths.claimantMobilePage.uri)
