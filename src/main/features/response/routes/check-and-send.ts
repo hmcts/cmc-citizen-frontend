@@ -16,7 +16,6 @@ import { SignatureType } from 'app/common/signatureType'
 import { QualifiedStatementOfTruth } from 'response/form/models/qualifiedStatementOfTruth'
 import { DraftService } from 'services/DraftService'
 
-
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
   const user: User = res.locals.user
   res.render(Paths.checkAndSendPage.associatedView, {

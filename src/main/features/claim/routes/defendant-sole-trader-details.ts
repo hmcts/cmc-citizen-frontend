@@ -9,7 +9,6 @@ import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/DraftService'
 
-
 function renderView (form: Form<SoleTraderDetails>, res: express.Response): void {
   res.render(Paths.defendantSoleTraderOrSelfEmployedDetailsPage.associatedView, { form: form })
 }

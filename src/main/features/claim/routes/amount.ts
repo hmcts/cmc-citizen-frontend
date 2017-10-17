@@ -10,7 +10,6 @@ import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/DraftService'
 
-
 function renderView (form: Form<ClaimAmountBreakdown>, res: express.Response): void {
   res.render(Paths.amountPage.associatedView, {
     form: form,

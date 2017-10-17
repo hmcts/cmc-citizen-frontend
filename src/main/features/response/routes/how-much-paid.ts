@@ -6,7 +6,7 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { HowMuchPaid } from 'features/response/form/models/howMuchPaid'
 import User from 'idam/user'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from '@hmcts/draft-store-client/dist/common/draft/draftService'
 import { ErrorHandling } from 'common/errorHandling'
 import Claim from 'claims/models/claim'
 

@@ -18,7 +18,6 @@ import User from 'app/idam/user'
 import { SoleTrader } from 'claims/models/details/theirs/soleTrader'
 import { DraftService } from 'services/DraftService'
 
-
 function renderView (form: Form<PartyDetails>, res: express.Response) {
   const user: User = res.locals.user
   res.render(Paths.defendantYourDetailsPage.associatedView, {

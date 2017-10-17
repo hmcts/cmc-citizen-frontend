@@ -8,7 +8,6 @@ import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { FormValidator } from 'forms/validation/formValidator'
 import { DraftService } from 'services/DraftService'
 
-
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
   res.render(Paths.paidAmountPage.associatedView, { form: form, totalAmount: res.locals.user.claim.totalAmount })
 }

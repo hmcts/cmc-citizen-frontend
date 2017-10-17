@@ -15,7 +15,6 @@ import { PartyType } from 'app/common/partyType'
 import { Party } from 'claims/models/details/yours/party'
 import { DraftService } from 'services/DraftService'
 
-
 function prepareUrls (externalId: string): object {
   return {
     dateOfBirthUrl: Paths.dateOfBirthPage.evaluateUri({ externalId: externalId }),

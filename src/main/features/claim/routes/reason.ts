@@ -9,7 +9,6 @@ import { ErrorHandling } from 'common/errorHandling'
 import User from 'app/idam/user'
 import { DraftService } from 'services/DraftService'
 
-
 function renderView (form: Form<Reason>, res: express.Response): void {
   const user: User = res.locals.user
   const defendantName = (

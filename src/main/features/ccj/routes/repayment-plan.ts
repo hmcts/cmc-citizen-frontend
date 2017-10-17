@@ -9,7 +9,6 @@ import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { RepaymentPlan } from 'ccj/form/models/repaymentPlan'
 import { FormValidator } from 'forms/validation/formValidator'
 
-
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
   const user: User = res.locals.user
   const alreadyPaid: number = user.ccjDraft.document.paidAmount.amount || 0

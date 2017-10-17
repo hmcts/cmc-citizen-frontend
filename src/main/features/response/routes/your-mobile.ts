@@ -9,7 +9,6 @@ import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
 import { DraftService } from 'services/DraftService'
 
-
 function renderView (form: Form<MobilePhone>, res: express.Response) {
   res.render(Paths.defendantMobilePage.associatedView, {
     form: form

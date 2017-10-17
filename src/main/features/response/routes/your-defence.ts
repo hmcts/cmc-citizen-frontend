@@ -9,7 +9,6 @@ import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
 import { DraftService } from 'services/DraftService'
 
-
 async function renderView (form: Form<Defence>, res: express.Response, next: express.NextFunction) {
   try {
     const user: User = res.locals.user

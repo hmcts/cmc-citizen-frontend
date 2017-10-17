@@ -9,7 +9,6 @@ import Email from 'forms/models/email'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/DraftService'
 
-
 function renderView (form: Form<Email>, res: express.Response): void {
   res.render(Paths.defendantEmailPage.associatedView, { form: form })
 }

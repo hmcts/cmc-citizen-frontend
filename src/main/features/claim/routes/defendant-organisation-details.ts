@@ -9,7 +9,6 @@ import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/DraftService'
 
-
 function renderView (form: Form<OrganisationDetails>, res: express.Response): void {
   res.render(Paths.defendantOrganisationDetailsPage.associatedView, { form: form })
 }

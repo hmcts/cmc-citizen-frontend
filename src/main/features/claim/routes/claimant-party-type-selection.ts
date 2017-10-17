@@ -10,7 +10,6 @@ import { PartyDetails } from 'forms/models/partyDetails'
 import { PartyDetailsFactory } from 'forms/models/partyDetailsFactory'
 import { DraftService } from 'services/DraftService'
 
-
 function renderView (form: Form<PartyTypeResponse>, res: express.Response, next: express.NextFunction) {
   res.render(Paths.claimantPartyTypeSelectionPage.associatedView, {
     form: form

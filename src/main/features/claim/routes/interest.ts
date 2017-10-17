@@ -9,7 +9,6 @@ import { Interest, InterestType } from 'claim/form/models/interest'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/DraftService'
 
-
 function renderView (form: Form<Interest>, res: express.Response): void {
   res.render(Paths.interestPage.associatedView, { form: form })
 }

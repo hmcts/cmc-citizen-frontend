@@ -8,7 +8,6 @@ import { CompanyDetails } from 'forms/models/companyDetails'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/DraftService'
 
-
 function renderView (form: Form<CompanyDetails>, res: express.Response): void {
   res.render(Paths.claimantCompanyDetailsPage.associatedView, { form: form })
 }

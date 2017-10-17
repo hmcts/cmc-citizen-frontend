@@ -8,7 +8,6 @@ import DateOfBirth from 'forms/models/dateOfBirth'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/DraftService'
 
-
 function renderView (form: Form<DateOfBirth>, res: express.Response): void {
   res.render(Paths.claimantDateOfBirthPage.associatedView, { form: form })
 }

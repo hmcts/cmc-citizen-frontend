@@ -17,7 +17,6 @@ import User from 'app/idam/user'
 import { DraftService } from 'services/DraftService'
 import { ServiceAuthTokenFactoryImpl } from 'common/security/serviceTokenFactoryImpl'
 
-
 const logger = require('@hmcts/nodejs-logging').getLogger('router/pay')
 const issueFeeCode = config.get<string>('fees.issueFee.code')
 

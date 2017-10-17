@@ -8,7 +8,6 @@ import User from 'idam/user'
 import { DraftService } from 'services/DraftService'
 import { ErrorHandling } from 'common/errorHandling'
 
-
 function renderView (form: Form<PayBySetDate>, res: express.Response): void {
   res.render(Paths.payBySetDatePage.associatedView, { form: form })
 }

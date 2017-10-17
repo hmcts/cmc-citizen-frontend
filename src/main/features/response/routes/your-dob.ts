@@ -10,7 +10,6 @@ import { IndividualDetails } from 'forms/models/individualDetails'
 import User from 'idam/user'
 import { DraftService } from 'services/DraftService'
 
-
 function renderView (form: Form<DateOfBirth>, res: express.Response) {
   res.render(Paths.defendantDateOfBirthPage.associatedView, {
     form: form

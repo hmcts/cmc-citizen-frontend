@@ -11,7 +11,6 @@ import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
 import { DraftService } from 'services/DraftService'
 
-
 function renderView (form: Form<MoreTimeNeeded>, res: express.Response, next: express.NextFunction) {
   try {
     res.render(Paths.moreTimeRequestPage.associatedView, {
