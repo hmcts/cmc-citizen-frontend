@@ -39,10 +39,12 @@
             <strong class="bold">{{ t('Claim details:') }}</strong>
             <span class="block"><a href="{{ claimReceiptUri }}">{{ t('Download claim details') }}</a></span>
           </li>
-          <li>
-            <strong class="bold">{{ t('Your response:') }}</strong>
-            <span class="block"><a href="{{ responseReceiptUri }}">{{ t('Download your response') }}</a></span>
-          </li>
+          {% if claim.respondedAt %}
+            <li>
+              <strong class="bold">{{ t('Your response:') }}</strong>
+              <span class="block"><a href="{{ responseReceiptUri }}">{{ t('Download your response') }}</a></span>
+            </li>
+          {% endif %}
         </ul>
       </div>
     </div>
