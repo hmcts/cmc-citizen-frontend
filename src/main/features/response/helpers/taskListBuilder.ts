@@ -8,6 +8,7 @@ import { MoreTimeNeededTask } from 'response/tasks/moreTimeNeededTask'
 import { OweMoneyTask } from 'response/tasks/oweMoneyTask'
 import { YourDefenceTask } from 'response/tasks/yourDefenceTask'
 import { YourDetails } from 'response/tasks/yourDetails'
+import { HowMuchOwedTask } from 'response/tasks/howMuchOwedTask'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, externalId: string): TaskList {
@@ -30,6 +31,12 @@ export class TaskListBuilder {
     tasks.push(new TaskListItem('Do you owe the money claimed', Paths.responseTypePage
         .evaluateUri({ externalId: externalId }),
       OweMoneyTask.isCompleted(draft)))
+
+    if (draft.requireHowMuchOwed()) {
+      tasks.push(new TaskListItem('How much money do you believe you owe?', Paths.defendantHowMuchOwed
+          .evaluateUri({ externalId: externalId }),
+        HowMuchOwedTask.isCompleted(draft)))
+    }
 
     if (draft.requireDefence()) {
       tasks.push(new TaskListItem('Your defence', Paths.defencePage

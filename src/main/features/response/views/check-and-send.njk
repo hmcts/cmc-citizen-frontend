@@ -63,7 +63,7 @@
 
     {{ tableStart("yourResponse", "Your response") }}
 
-    {{ row('Do you owe the money claimed', draft.response.type.displayValue, paths.responseTypePage.evaluateUri({ externalId: claim.externalId })) }}
+    {{ row('Do you owe the money claimed', draft.response.type.displayValue, paths.defendantHowMuchOwed.evaluateUri({ externalId: claim.externalId })) }}
 
     {% if draft.requireDefence() %}
       {{ row('Your defence', draft.defence.text, '/response/your-defence') }}
