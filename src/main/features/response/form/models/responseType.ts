@@ -1,7 +1,7 @@
 export class ResponseType {
-  static readonly OWE_ALL_PAID_NONE = new ResponseType('OWE_ALL_PAID_NONE', 'I owe all of the money')
-  static readonly OWE_SOME_PAID_NONE = new ResponseType('OWE_SOME_PAID_NONE', 'I owe some of the money')
-  static readonly OWE_NONE = new ResponseType('OWE_NONE', 'I reject the money claim')
+  static readonly OWE_ALL_PAID_NONE = new ResponseType('OWE_ALL_PAID_NONE', 'I admit all of the claim')
+  static readonly OWE_SOME_PAID_NONE = new ResponseType('OWE_SOME_PAID_NONE', 'I reject part of the claim')
+  static readonly OWE_NONE = new ResponseType('OWE_NONE', 'I reject all of the claim')
 
   readonly value: string
   readonly displayValue: string

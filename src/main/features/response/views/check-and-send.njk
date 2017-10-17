@@ -27,6 +27,40 @@
 
     {{ tableEnd() }}
 
+    {{ tableStart("moneyOwed", "Do you owe the money claimed?") }}
+
+    {{ row('Do you owe the money claimed?', t(draft.response.type.displayValue) | capitalize, paths.responseTypePage.evaluateUri({ externalId: claim.externalId })) }}
+
+    {% if draft.response.type.value === 'OWE_SOME_PAID_NONE' %}
+      {% if draft.rejectPartOfClaim.option === 'paidWhatBelievedWasOwed' %}
+        {% set rejectPartOption = 'I’ve paid what I believe I owe' %}
+      {% endif %}
+
+      {% if draft.rejectPartOfClaim.option === 'amountTooHigh' %}
+        {% set rejectPartOption = 'The claim amount is too much' %}
+      {% endif %}
+
+      {{ row('Why are you rejecting part of this claim?', t(rejectPartOption) | capitalize, paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: claim.externalId })) }}
+    {% endif %}
+
+    {% if draft.response.type.value === 'OWE_NONE' %}
+      {% if draft.rejectAllOfClaim.option === 'alreadyPaid' %}
+        {% set rejectAllOption = 'I’ve already paid the claim in full' %}
+      {% endif %}
+
+      {% if draft.rejectAllOfClaim.option === 'dispute' %}
+        {% set rejectAllOption = 'I dispute the claim' %}
+      {% endif %}
+
+      {% if draft.rejectAllOfClaim.option === 'counterClaim' %}
+        {% set rejectAllOption = 'Defend now and also make a counterclaim' %}
+      {% endif %}
+
+      {{ row('Why do you reject all of this claim?', t(rejectAllOption) | capitalize, paths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: claim.externalId })) }}
+    {% endif %}
+
+    {{ tableEnd() }}
+
     {{ tableStart("yourResponse", "Your response") }}
 
     {{ row('Do you owe the money claimed', draft.response.type.displayValue, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
