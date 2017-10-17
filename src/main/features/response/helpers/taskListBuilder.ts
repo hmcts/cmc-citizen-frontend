@@ -8,6 +8,7 @@ import { MoreTimeNeededTask } from 'response/tasks/moreTimeNeededTask'
 import { OweMoneyTask } from 'response/tasks/oweMoneyTask'
 import { YourDefenceTask } from 'response/tasks/yourDefenceTask'
 import { YourDetails } from 'response/tasks/yourDetails'
+import { HowMuchPaidTask } from 'response/tasks/howMuchPaidTask'
 import { HowMuchOwedTask } from 'response/tasks/howMuchOwedTask'
 
 export class TaskListBuilder {
@@ -32,10 +33,16 @@ export class TaskListBuilder {
         .evaluateUri({ externalId: externalId }),
       OweMoneyTask.isCompleted(draft)))
 
-    if (draft.requireHowMuchOwed()) {
-      tasks.push(new TaskListItem('How much money do you believe you owe?', Paths.defendantHowMuchOwed
-          .evaluateUri({ externalId: externalId }),
-        HowMuchOwedTask.isCompleted(draft)))
+    if (draft.requireHowMuchPaid()) {
+      tasks.push(new TaskListItem('How much have you paid the claimant?', Paths.defendantHowMuchPaid.
+        evaluateUri({ externalId: externalId }),
+        HowMuchPaidTask.isCompleted(draft)))
+
+      if (draft.requireHowMuchOwed()) {
+        tasks.push(new TaskListItem('How much money do you believe you owe?', Paths.defendantHowMuchOwed
+            .evaluateUri({ externalId: externalId }),
+          HowMuchOwedTask.isCompleted(draft)))
+      }
     }
 
     if (draft.requireDefence()) {
@@ -43,7 +50,6 @@ export class TaskListBuilder {
           .evaluateUri({ externalId: externalId }),
         YourDefenceTask.isCompleted(draft)))
     }
-
     return new TaskList(2, 'Respond to claim', tasks)
   }
 

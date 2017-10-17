@@ -99,6 +99,46 @@ describe('ResponseDraft', () => {
     })
   })
 
+  describe('requireHowMuchPaid', () => {
+    it('should return false when no response type set', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = undefined
+
+      expect(draft.requireHowMuchPaid()).to.be.eq(false)
+    })
+
+    it('should return false when response is part admission', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
+
+      expect(draft.requireHowMuchPaid()).to.be.eq(false)
+    })
+
+    it('should return false when response is part admission without subtype selected', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
+      draft.rejectPartOfClaim = new RejectPartOfClaim(undefined)
+
+      expect(draft.requireHowMuchPaid()).to.be.eq(false)
+    })
+
+    it('should return false when response is part admission with paid what believed was owed', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
+      draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)
+      console.log(draft.rejectPartOfClaim)
+      expect(draft.requireHowMuchPaid()).to.be.eq(false)
+    })
+
+    it('should return true when response is part admission with amount too high', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
+      draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
+      console.log(draft.rejectPartOfClaim)
+      expect(draft.requireHowMuchPaid()).to.be.eq(true)
+    })
+  })
+
   describe('requireHowMuchOwed', () => {
     it('should return false when no response type set', () => {
       const draft: ResponseDraft = new ResponseDraft()

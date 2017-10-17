@@ -10,6 +10,7 @@ import { isNullOrUndefined } from 'util'
 import { Defendant } from 'app/drafts/models/defendant'
 import { DraftDocument } from 'app/models/draftDocument'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
+import { HowMuchPaid } from 'response/form/models/howMuchPaid'
 import { HowMuchOwed } from 'response/form/models/howMuchOwed'
 import { Timeline } from 'response/form/models/timeline'
 
@@ -20,6 +21,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   freeMediation?: FreeMediation
   moreTimeNeeded?: MoreTimeNeeded
   defendantDetails?: Defendant = new Defendant()
+  howMuchIsPaid?: HowMuchPaid
   timeline: Timeline = new Timeline()
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
   howMuchOwed?: HowMuchOwed
@@ -34,6 +36,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       this.freeMediation = new FreeMediation(input.freeMediation && input.freeMediation.option)
       this.moreTimeNeeded = new MoreTimeNeeded(input.moreTimeNeeded && input.moreTimeNeeded.option)
       this.defendantDetails = new Defendant().deserialize(input.defendantDetails)
+      this.howMuchIsPaid = new HowMuchPaid().deserialize(input.howMuchIsPaid)
       this.howMuchOwed = new HowMuchOwed().deserialize(input.howMuchOwed)
       this.timeline = new Timeline().deserialize(input.timeline)
       if (input.qualifiedStatementOfTruth) {
@@ -55,6 +58,14 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
     }
     return this.response.type === ResponseType.OWE_NONE && this.rejectAllOfClaim !== undefined
       && RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).includes(this.rejectAllOfClaim.option)
+  }
+
+  public requireHowMuchPaid (): boolean {
+    if (!(this.response && this.response.type)) {
+      return false
+    }
+    return this.response.type === ResponseType.OWE_SOME_PAID_NONE && this.rejectPartOfClaim !== undefined
+      && this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
   }
 
   public requireHowMuchOwed (): boolean {
