@@ -1,0 +1,34 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, textInput, saveAndContinueButton, errorSummary, textArea, poundInput %}
+{% from "date.njk" import dateInput %}
+
+{% set title = t('Money claim') %}
+{% set heading = t('How much have you paid the claimant?') %}
+
+{% set claimantFullName = claim.claimData.claimant.name %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+
+        {{ poundInput(label = 'How much have you paid the claimant?', name = 'amount', form = form, bold = true) }}
+        <h4 class="heading-small">{{ t('When did you pay this amount?') }}</h4>
+        {{ dateInput('date', form) }}
+
+        {{ textArea(label = t('Explain why you don’t owe the full amount.'), name = 'text', form = form) }}
+
+        <div class="panel panel-border-wide">
+          <p>
+            {{ t('Your response will be sent to the claimant %s.',
+            { postProcess: 'sprintf', sprintf: [claimantFullName] }) }}
+            {{ t('A judge will not consider your response unless your case goes to a hearing.') }}
+            </p>
+        </div>
+
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}
