@@ -54,7 +54,7 @@ export default express.Router()
       } else {
         user.responseDraft.document.howMuchOwed = form.model
         await DraftService.save(user.responseDraft, user.bearerToken)
-        res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
+        res.redirect(Paths.timelinePage.evaluateUri({ externalId: user.claim.externalId }))
       }
     })
   )
