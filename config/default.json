@@ -63,6 +63,11 @@
   "featureToggles": {
     "testingSupport": false,
     "countyCourtJudgment": false,
+    "idamOauth": false,
     "offer": false
+  },
+  "oauth": {
+    "clientId": "cmc_citizen",
+    "clientSecret": "123456"
   }
 }

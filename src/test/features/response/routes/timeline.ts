@@ -115,7 +115,8 @@ describe('Defendant response: timeline', () => {
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ rows: [{ date: 'Damaged roof', description: '299' }] })
-              .expect(res => expect(res).to.be.successful.withText('Add your timeline of events'))
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(Paths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })
 

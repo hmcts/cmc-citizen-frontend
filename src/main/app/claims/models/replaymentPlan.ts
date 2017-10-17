@@ -5,12 +5,10 @@ import { Serializable } from 'models/serializable'
 
 export class RepaymentPlan implements Serializable<RepaymentPlan> {
 
-  constructor (public remainingAmount?: number,
-               public firstPayment?: number,
+  constructor (public firstPayment?: number,
                public instalmentAmount?: number,
                public firstPaymentDate?: Moment,
                public paymentSchedule?: string | PaymentSchedule) {
-    this.remainingAmount = remainingAmount
     this.firstPayment = firstPayment
     this.instalmentAmount = instalmentAmount
     this.firstPaymentDate = firstPaymentDate
@@ -19,7 +17,6 @@ export class RepaymentPlan implements Serializable<RepaymentPlan> {
 
   deserialize (input?: any): RepaymentPlan {
     if (input) {
-      this.remainingAmount = input.remainingAmount
       this.firstPayment = input.firstPayment
       this.instalmentAmount = input.instalmentAmount
       this.firstPaymentDate = MomentFactory.parse(input.firstPaymentDate)

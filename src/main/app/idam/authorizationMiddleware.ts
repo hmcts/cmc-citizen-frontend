@@ -16,7 +16,7 @@ const logger = require('@hmcts/nodejs-logging').getLogger('middleware/authorizat
  * But most likely if we get 401 or 403 then the user's token has expired
  * So make them login again
  */
-function hasTokenExpired (err) {
+export function hasTokenExpired (err) {
   return (err.statusCode === HttpStatus.FORBIDDEN || err.statusCode === HttpStatus.UNAUTHORIZED)
 }
 

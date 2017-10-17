@@ -187,12 +187,11 @@ describe('Defendant response: check and send page', () => {
           })
 
           it('should redirect to partial-admission handoff page when defendant response is part admission', async () => {
-            draftStoreServiceMock.resolveFind(draftType, {
+            draftStoreServiceMock.resolveFind('response', {
               response: { type: ResponseType.OWE_SOME_PAID_NONE },
               rejectPartOfClaim: { option: RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED }
             })
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-
             await request(app)
               .post(checkAndSendPage)
               .set('Cookie', `${cookieName}=ABC`)

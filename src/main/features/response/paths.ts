@@ -1,12 +1,8 @@
 import { RoutablePath } from 'common/router/routablePath'
 
-import { Paths as AppPaths } from 'app/paths'
-
 const responsePath = '/case/:externalId/response'
 
 export class Paths {
-  static readonly defendantLoginReceiver = AppPaths.receiver
-  static readonly defendantLinkReceiver = new RoutablePath(`/response/:letterHolderId/receiver`)
   static readonly taskListPage = new RoutablePath(`${responsePath}/task-list`)
   static readonly defendantYourDetailsPage = new RoutablePath(`${responsePath}/your-details`)
   static readonly defendantDateOfBirthPage = new RoutablePath(`${responsePath}/your-dob`)
@@ -27,7 +23,8 @@ export class Paths {
   static readonly receiptReceiver = new RoutablePath(`${responsePath}/receipt`)
   // Added in case anyone has a printed copy of a PDF with the old URL
   static readonly legacyDashboardRedirect = new RoutablePath('/response/dashboard')
+  static readonly defendantHowMuchPaid = new RoutablePath(`${responsePath}/how-much-paid`)
+  static readonly defendantHowMuchOwed = new RoutablePath(`${responsePath}/how-much-owed`)
   static readonly defenceRejectAllOfClaimPage = new RoutablePath(`${responsePath}/reject-all-of-claim`)
   static readonly defenceRejectPartOfClaimPage = new RoutablePath(`${responsePath}/reject-part-of-claim`)
-
 }

@@ -12,13 +12,16 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import InterestDateType from 'app/common/interestDateType'
+import { InterestDateType } from 'app/common/interestDateType'
+
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Claim issue: interest date page', () => {
+
   attachDefaultHooks(app)
 
   describe('on GET', () => {
+
     checkAuthorizationGuards(app, 'get', ClaimPaths.interestDatePage.uri)
 
     it('should render page when everything is fine', async () => {
@@ -33,9 +36,11 @@ describe('Claim issue: interest date page', () => {
   })
 
   describe('on POST', () => {
+
     checkAuthorizationGuards(app, 'post', ClaimPaths.interestDatePage.uri)
 
     describe('for authorized user', () => {
+
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
       })
