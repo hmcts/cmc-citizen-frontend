@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-expression */
-delete require.cache[require.resolve('common/security/serviceTokenFactory')]
+delete require.cache[require.resolve('@hmcts/draft-store-client/dist/common/security/serviceTokenFactory')]
 
 import * as chai from 'chai'
 import * as spies from 'sinon-chai'
