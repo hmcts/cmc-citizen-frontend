@@ -113,9 +113,9 @@ export default express.Router()
         const atLeastOneClaimIssued: boolean = (await ClaimStoreClient.retrieveByClaimantId(user.id)).length > 0
         const claimAgainstDefendant = await ClaimStoreClient.retrieveByDefendantId(user.id)
         const atLeastOneResponse: boolean = claimAgainstDefendant.length > 0 &&
-          claimAgainstDefendant.some((claim: Claim) => !!claim.response)
+          claimAgainstDefendant.some((claim: Claim) => !!claim.respondedAt)
         const atLeastOneCCJ: boolean = claimAgainstDefendant.length > 0 &&
-          claimAgainstDefendant.some((claim: Claim) => !!claim.countyCourtJudgment)
+          claimAgainstDefendant.some((claim: Claim) => !!claim.countyCourtJudgmentRequestedAt)
 
         if (atLeastOneClaimIssued || atLeastOneResponse || atLeastOneCCJ) {
           return res.redirect(DashboardPaths.dashboardPage.uri)
