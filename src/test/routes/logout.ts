@@ -6,7 +6,6 @@ import * as mock from 'nock'
 import './expectations'
 
 import { Paths as AppPaths } from 'app/paths'
-import { Paths as ResponsePaths } from 'response/paths'
 
 import { app } from '../../main/app'
 
@@ -20,29 +19,11 @@ describe('Logout receiver', () => {
   })
 
   describe('on GET', () => {
-    it('should redirect to claimant home page', async () => {
-      idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
-
-      await request(app)
-        .get(AppPaths.logoutReceiver.uri + '?from=claim')
-        .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.redirect.toLocation(AppPaths.homePage.uri))
-    })
-
-    it('should redirect to defendant home page', async () => {
-      idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
-
-      await request(app)
-        .get(AppPaths.logoutReceiver.uri + '?from=response')
-        .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.defendantLoginReceiver.uri))
-    })
-
     it('should remove session cookie', async () => {
-      idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
+      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'claimant')
 
       await request(app)
-        .get(AppPaths.logoutReceiver.uri + '?from=claim')
+        .get(AppPaths.logoutReceiver.uri)
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.not.have.cookie(cookieName, 'ABC'))
     })

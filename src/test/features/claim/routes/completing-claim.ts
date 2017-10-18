@@ -22,7 +22,7 @@ describe('Claim issue: completing claim page', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.completingClaimPage.uri)
 
     it('should render page when everything is fine', async () => {
-      idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
+      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'claimant')
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
@@ -37,7 +37,7 @@ describe('Claim issue: completing claim page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'claimant')
       })
 
       it('should return 500 and render error page when cannot save draft', async () => {

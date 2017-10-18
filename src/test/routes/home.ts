@@ -20,7 +20,7 @@ describe('Home page', () => {
 
   describe('on GET', () => {
     it('should redirect to start claim page', async () => {
-      idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
+      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'claimant')
 
       await request(app)
         .get(AppPaths.homePage.uri)
