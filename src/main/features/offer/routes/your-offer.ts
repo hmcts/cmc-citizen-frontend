@@ -4,7 +4,7 @@ import { Paths } from 'offer/paths'
 
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import Offer from 'offer/form/models/offer'
+import { Offer } from 'offer/form/models/offer'
 import ClaimStoreClient from 'claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
@@ -23,7 +23,7 @@ export default express.Router()
     Paths.offerPage.uri,
     OfferGuard.requestHandler,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      await renderView(new Form(new Offer()), res, next)
+      await renderView(Form.empty(), res, next)
     })
   .post(
     Paths.offerPage.uri,
@@ -36,7 +36,7 @@ export default express.Router()
       } else {
         const user: User = res.locals.user
         const offer: Offer = form.model
-        ClaimStoreClient.saveOfferForUser('defendant', user, offer)
-        res.redirect(Paths.offerSentConfirmationPage.evaluateUri({ externalId: user.claim.externalId }))
+        await ClaimStoreClient.saveOfferForUser('defendant', user, offer)
+        res.redirect(Paths.offerConfirmationPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

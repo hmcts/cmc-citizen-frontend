@@ -15,7 +15,7 @@ import { LocalDate } from 'forms/models/localDate'
 const externalId = sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
 const offerPage = OfferPaths.offerPage.evaluateUri({ externalId: externalId })
-const confirmationPage = OfferPaths.offerSentConfirmationPage.evaluateUri({ externalId: externalId })
+const confirmationPage = OfferPaths.offerConfirmationPage.evaluateUri({ externalId: externalId })
 
 describe.skip('Offer page', () => {
   attachDefaultHooks(app)

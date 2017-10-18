@@ -7,21 +7,22 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <div class="description-block">
-        <h4 class="heading-small"> {{ t('Your offer') }}</h4>
-      </div>
-
+      
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
+        <div class="description-block">
+          <h4 class="heading-small"> {{ t('Your offer') }}</h4>
+        </div>
 
-        {{ textArea(hint= t("For example a payment, fix a problem or return goods."), name='content', form = form, rows = 10) }}
-
+        <span class="form-hint">{{ t("For example a payment, fix a problem or return goods.") }}</span>
+        {{ textArea(label= '', name='content', form = form, rows = 10) }}
+        
         <div class="description-block">
           <h4 class="heading-small"> {{ t('Completion date') }}</h4>
           <p>{{ t('When will you pay in full or complete your offer?') }}</p>
         </div>
 
-        {{ dateInput(form = form, name = 'completionDate', hint = t('For example, 23 04 2017')) }}
+        {{ dateInput(form = form, name = 'completionDate',label = '', hint = t('For example, 23 04 2017')) }}
 
         <div class="panel panel-border-wide">
           <p>

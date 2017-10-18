@@ -6,10 +6,10 @@ import { ErrorHandling } from 'common/errorHandling'
 
 export default express.Router()
   .get(
-    Paths.offerSentConfirmationPage.uri,
+    Paths.offerConfirmationPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const user: User = res.locals.user
-      res.render(Paths.offerSentConfirmationPage.associatedView, {
+      res.render(Paths.offerConfirmationPage.associatedView, {
         claim: user.claim,
         submittedOn: user.claim.respondedAt,
         defendantEmail: user.email,
@@ -17,7 +17,7 @@ export default express.Router()
       })
     }))
   .post(
-    Paths.offerSentConfirmationPage.uri,
+    Paths.offerConfirmationPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
       res.redirect(ResponsePaths.confirmationPage.evaluateUri({ externalId: user.claim.externalId }))

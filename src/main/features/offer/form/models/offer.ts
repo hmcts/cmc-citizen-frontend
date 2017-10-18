@@ -13,7 +13,7 @@ export class ValidationErrors {
   static readonly OFFER_TEXT_TOO_LONG: string = 'Enter offer no longer than $constraint1 characters'
 }
 
-export default class Offer implements Serializable<Offer> {
+export class Offer implements Serializable<Offer> {
   @IsDefined({ message: ValidationErrors.OFFER_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.OFFER_REQUIRED })
   @MaxLength(99000, { message: ValidationErrors.OFFER_TEXT_TOO_LONG })

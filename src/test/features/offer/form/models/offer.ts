@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
-import Offer from 'offer/form/models/offer'
+import { Offer } from 'offer/form/models/offer'
 import { ValidationErrors } from 'offer/form/models/offer'
 import { LocalDate } from 'forms/models/localDate'
 import * as moment from 'moment'
