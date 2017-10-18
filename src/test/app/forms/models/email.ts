@@ -9,7 +9,9 @@ import { expectValidationError } from './validationUtils'
 import Email, { ValidationErrors } from 'forms/models/email'
 
 describe('Email', () => {
+
   describe('constructor', () => {
+
     it('should set the primitive fields to undefined', () => {
       let email = new Email()
       expect(email.address).to.be.undefined
@@ -17,6 +19,7 @@ describe('Email', () => {
   })
 
   describe('deserialize', () => {
+
     it('should return a Email instance initialised with defaults for undefined', () => {
       expect(new Email().deserialize(undefined)).to.eql(new Email())
     })
@@ -34,6 +37,7 @@ describe('Email', () => {
   })
 
   describe('validation', () => {
+
     const validator: Validator = new Validator()
 
     it('should reject undefined address', () => {
@@ -65,7 +69,9 @@ describe('Email', () => {
   })
 
   describe('task state', () => {
+
     context('is incomplete', () => {
+
       it('when address is undefined', () => {
         const state = new Email(undefined)
         expect(state.isCompleted()).to.be.false
@@ -83,6 +89,7 @@ describe('Email', () => {
     })
 
     context('is complete', () => {
+
       it('when address is valid', () => {
         const state = new Email('user@example.com')
         expect(state.isCompleted()).to.be.true
