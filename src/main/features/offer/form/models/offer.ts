@@ -17,31 +17,31 @@ export default class Offer implements Serializable<Offer> {
   @IsDefined({ message: ValidationErrors.OFFER_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.OFFER_REQUIRED })
   @MaxLength(99000, { message: ValidationErrors.OFFER_TEXT_TOO_LONG })
-  text?: string
+  content?: string
 
   @ValidateNested()
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID })
   @IsFutureDate({ message: ValidationErrors.FUTURE_DATE })
-  date?: LocalDate
+  completionDate?: LocalDate
 
-  constructor (text?: string, date?: LocalDate) {
-    this.text = text
-    this.date = date
+  constructor (content?: string, completionDate?: LocalDate) {
+    this.content = content
+    this.completionDate = completionDate
   }
 
   static fromObject (value?: any): Offer {
     if (!value) {
       return value
     }
-    const offer = new Offer(value.text, LocalDate.fromObject(value.date))
+    const offer = new Offer(value.content, LocalDate.fromObject(value.completionDate))
     return offer
   }
 
   deserialize (input: any): Offer {
     if (input) {
-      this.text = input.text
-      this.date = new LocalDate().deserialize(input.date)
+      this.content = input.content
+      this.completionDate = new LocalDate().deserialize(input.completionDate)
     }
     return this
   }

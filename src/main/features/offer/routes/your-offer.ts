@@ -14,7 +14,7 @@ async function renderView (
   form: Form<Offer>, res: express.Response, next: express.NextFunction) {
   res.render(Paths.offerPage.associatedView, {
     form: form,
-    responseDeadline : res.locals.user.claim.responseDeadline
+    claim : res.locals.user.claim
   })
 }
 
@@ -22,9 +22,9 @@ export default express.Router()
   .get(
     Paths.offerPage.uri,
     OfferGuard.requestHandler,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      await renderView(Form.empty(), res, next)
-    }))
+    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      await renderView(new Form(new Offer()), res, next)
+    })
   .post(
     Paths.offerPage.uri,
     OfferGuard.requestHandler,

@@ -10,8 +10,8 @@ describe('Offer', () => {
   describe('constructor', () => {
     it('should set the fields to undefined', () => {
       const offer = new Offer()
-      expect(offer.text).to.be.equal(undefined)
-      expect(offer.date).to.be.equal(undefined)
+      expect(offer.content).to.be.equal(undefined)
+      expect(offer.completionDate).to.be.equal(undefined)
     })
   })
 
@@ -31,7 +31,7 @@ describe('Offer', () => {
     it('should deserialize all fields', () => {
       const futureDate = moment().add(10, 'days')
       const date = new LocalDate(futureDate.year(), futureDate.month(), futureDate.day())
-      expect(Offer.fromObject({ text: 'offer Text', date: date })).to.deep.equal(new Offer('offer Text', date))
+      expect(Offer.fromObject({ content: 'offer Text', completionDate: date })).to.deep.equal(new Offer('offer Text', date))
     })
   })
 
@@ -46,7 +46,7 @@ describe('Offer', () => {
 
     it('should return instance with set fields from given object', () => {
       const date = new LocalDate()
-      expect(new Offer().deserialize({ text: 'offer Text', date: date.asString() })).to.deep.equal(new Offer('offer Text', date))
+      expect(new Offer().deserialize({ content: 'offer Text', completionDate: date.asString() })).to.deep.equal(new Offer('offer Text', date))
     })
   })
 
