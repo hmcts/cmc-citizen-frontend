@@ -19,7 +19,7 @@ describe('Claim issue: incomplete submission page', () => {
 
   describe('on GET', () => {
     it('should render page when everything is fine', async () => {
-      idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
+      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'claimant')
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)

@@ -33,7 +33,7 @@ describe('CCJ - payment options', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       })
 
       context('when service is unhealthy', () => {
@@ -75,7 +75,7 @@ describe('CCJ - payment options', () => {
 
       context('when user authorised', () => {
         beforeEach(() => {
-          idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
+          idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
         })
 
         context('when service is unhealthy', () => {
