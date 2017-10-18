@@ -34,7 +34,7 @@ describe('Defendant response: full admission options', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
       })
 
       checkAlreadySubmittedGuard(app, 'get', pagePath)
@@ -78,7 +78,7 @@ describe('Defendant response: full admission options', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
       })
 
       checkAlreadySubmittedGuard(app, 'post', pagePath)
