@@ -23,7 +23,7 @@ describe('Defendant first contact: claim summary page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'letter-holder')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'letter-holder')
       })
 
       it('should redirect to access denied page when claim reference number does not match', async () => {
@@ -61,7 +61,7 @@ describe('Defendant first contact: claim summary page', () => {
     it('should redirect to registration page when everything is fine', async () => {
       const registrationPagePattern = new RegExp(`${config.get('idam.authentication-web.url')}/login/uplift\\?response_type=code.+&redirect_uri=http://127.0.0.1:[0-9]{1,5}/receiver/link-defendant&jwt=ABC`)
 
-      idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'letter-holder')
+      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'letter-holder')
 
       await request(app)
         .post(Paths.claimSummaryPage.uri)

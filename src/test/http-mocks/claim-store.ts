@@ -8,9 +8,9 @@ const serviceBaseURL: string = config.get<string>('claim-store.url')
 
 export const sampleClaimObj = {
   id: 1,
-  submitterId: 1,
+  submitterId: '1',
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
-  defendantId: 123,
+  defendantId: '123',
   referenceNumber: '000MC000',
   createdAt: '2017-07-25T22:45:51.785',
   issuedOn: '2017-07-25',
@@ -142,7 +142,7 @@ export function rejectIsClaimLinked () {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'Internal server error')
 }
 
-export function resolveRetrieveByLetterHolderId (referenceNumber: string, defendantId?: number): Scope {
+export function resolveRetrieveByLetterHolderId (referenceNumber: string, defendantId?: string): Scope {
   return mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/letter/[0-9]+'))
     .reply(HttpStatus.OK, { ...sampleClaimObj, referenceNumber: referenceNumber, defendantId: defendantId })
@@ -154,7 +154,7 @@ export function rejectRetrieveByLetterHolderId (reason: string) {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveRetrieveByDefendantId (referenceNumber: string, defendantId?: number) {
+export function resolveRetrieveByDefendantId (referenceNumber: string, defendantId?: string) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/defendant/[0-9]+'))
     .reply(HttpStatus.OK, [{ ...sampleClaimObj, referenceNumber: referenceNumber, defendantId: defendantId }])
@@ -175,7 +175,7 @@ export function rejectRetrieveByDefendantId (reason: string) {
 export function resolveLinkDefendant () {
   mock(`${serviceBaseURL}/claims`)
     .put(new RegExp('/[0-9]+/defendant/[0-9]+'))
-    .reply(HttpStatus.OK, { ...sampleClaimObj, defendantId: 1 })
+    .reply(HttpStatus.OK, { ...sampleClaimObj, defendantId: '1' })
 }
 
 export function rejectLinkDefendant (reason: string) {
@@ -187,7 +187,7 @@ export function rejectLinkDefendant (reason: string) {
 export function resolveSaveResponse () {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+/defendant/[0-9]+'))
-    .reply(HttpStatus.OK, { ...sampleClaimObj, defendantId: 1 })
+    .reply(HttpStatus.OK, { ...sampleClaimObj, defendantId: '1' })
 }
 
 export function rejectSaveResponse (reason: string) {

@@ -30,11 +30,11 @@ const getReturnURL = (req: express.Request, externalId: string) => {
   return buildURL(req, Paths.finishPaymentReceiver.evaluateUri({ externalId: externalId }))
 }
 
-function logPaymentError (id: number, payment: Payment) {
+function logPaymentError (id: string, payment: Payment) {
   logError(id, payment, 'Payment might have failed, see payment information: ')
 }
 
-function logError (id: number, payment: Payment, message: string) {
+function logError (id: string, payment: Payment, message: string) {
   logger.error(`${message} (User Id : ${id}, Payment: ${JSON.stringify(payment)})`)
 }
 

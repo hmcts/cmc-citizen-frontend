@@ -32,7 +32,7 @@ export default class ClaimStoreClient {
     })
   }
 
-  static retrieveByClaimantId (claimantId: number): Promise<Claim[]> {
+  static retrieveByClaimantId (claimantId: string): Promise<Claim[]> {
     if (!claimantId) {
       return Promise.reject(new Error('Claimant ID is required'))
     }
@@ -76,7 +76,7 @@ export default class ClaimStoreClient {
       })
   }
 
-  static retrieveByDefendantId (defendantId: number): Promise<Claim[]> {
+  static retrieveByDefendantId (defendantId: string): Promise<Claim[]> {
     if (!defendantId) {
       return Promise.reject('Defendant ID is required')
     }
@@ -86,7 +86,7 @@ export default class ClaimStoreClient {
       .then((claims: object[]) => claims.map(claim => new Claim().deserialize(claim)))
   }
 
-  static linkDefendant (claimId: number, defendantId: number): Promise<Claim> {
+  static linkDefendant (claimId: number, defendantId: string): Promise<Claim> {
     if (!claimId) {
       return Promise.reject('Claim ID is required')
     }

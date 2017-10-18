@@ -24,7 +24,7 @@ describe('Dashboard page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       })
 
       it('should return 500 and render error page when cannot retrieve claims', async () => {
@@ -56,7 +56,7 @@ describe('Dashboard page', () => {
       context('when at least one claim issued', () => {
         beforeEach(() => {
           claimStoreServiceMock.resolveRetrieveByClaimantId()
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', 1)
+          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1')
         })
 
         it('should render page with continue claim button when everything is fine', async () => {
