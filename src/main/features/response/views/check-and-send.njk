@@ -72,7 +72,7 @@
       {{ row('Why this is what you owe?', draft.howMuchOwed.text, paths.defendantHowMuchOwed.evaluateUri({ externalId: claim.externalId })) }}
     {% endif %}
 
-    {% endif %} 
+    {% endif %}
 
     {% if draft.requireDefence() %}
       {{ row('Your defence', draft.defence.text, '/response/your-defence') }}
