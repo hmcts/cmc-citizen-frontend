@@ -12,9 +12,9 @@ import { DefendantResponse } from 'claims/models/defendantResponse'
 
 export default class Claim implements Serializable<Claim> {
   id: number
-  claimantId: number
+  claimantId: string
   externalId: string
-  defendantId: number
+  defendantId: string
   claimNumber: string
   responseDeadline: Moment
   createdAt: Moment

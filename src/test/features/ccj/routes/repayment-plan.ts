@@ -28,7 +28,7 @@ describe('CCJ: repayment page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'claimant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'claimant')
       })
 
       context('when user authorised', () => {
@@ -81,7 +81,7 @@ describe('CCJ: repayment page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       })
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {

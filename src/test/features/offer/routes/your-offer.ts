@@ -23,7 +23,7 @@ describe.skip('Offer page', () => {
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', offerPage)
     beforeEach(() => {
-      idamServiceMock.resolveRetrieveUserFor(1, 'defendant')
+      idamServiceMock.resolveRetrieveUserFor('1', 'defendant')
     })
 
     it('should render page when everything is fine', async () => {

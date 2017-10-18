@@ -25,14 +25,14 @@ describe('Defendant response: incomplete submission page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, 'get', pagePath)
     })
 
     it('should render page when everything is fine', async () => {
-      idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
+      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
       draftStoreServiceMock.resolveFind('response')
       claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
