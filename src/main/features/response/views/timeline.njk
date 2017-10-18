@@ -35,7 +35,7 @@
     </label>
     <span class="form-hint mobile-show">{{ t('For example, you might have signed a contract') }}</span>
     <textarea id="rows[{{ index }}][description]" name="rows[{{ index }}][description]"
-              class="timeline-column-text {% if errorDescription %}form-control-error{% endif %}"
+              class="form-control timeline-column-text {% if errorDescription %}form-control-error{% endif %}"
               rows="2">{{ descriptionValue if descriptionValue }}</textarea>
   </div>
 {% endmacro %}
