@@ -27,7 +27,7 @@ describe('Defendant response: counter claim page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, 'get', pagePath)

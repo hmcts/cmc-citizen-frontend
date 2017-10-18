@@ -27,7 +27,7 @@ describe('Defendant user details: your mobile page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
       })
 
       checkAlreadySubmittedGuard(app, 'get', pagePath)
@@ -56,7 +56,7 @@ describe('Defendant user details: your mobile page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
       })
 
       checkAlreadySubmittedGuard(app, 'post', pagePath)

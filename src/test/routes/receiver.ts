@@ -26,7 +26,7 @@ describe('Login receiver', async () => {
   describe('on GET', async () => {
     describe('for authorized user', async () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       })
 
       it('should save bearer token in cookie when auth token is retrieved from idam', async () => {
@@ -79,7 +79,7 @@ describe('Login receiver', async () => {
         it('should redirect to response task-list', async () => {
           draftStoreServiceMock.resolveFindNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveByDefendantId('A', 1)
+          claimStoreServiceMock.resolveRetrieveByDefendantId('A')
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -150,7 +150,7 @@ describe('Defendant link receiver', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant', 'letter-1')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant', 'letter-1')
       })
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
@@ -166,7 +166,7 @@ describe('Defendant link receiver', () => {
       it('should redirect to task list page when defendant is already set', async () => {
         const token = 'token'
         idamServiceMock.resolveExchangeCode(token)
-        claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001', 2)
+        claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001', '2')
 
         await request(app)
           .get(`${pagePath}?code=123`)

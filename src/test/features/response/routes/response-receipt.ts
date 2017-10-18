@@ -27,7 +27,7 @@ describe('Defendant response: receipt', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(1, 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, 'get', receiptPath)
