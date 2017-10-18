@@ -7,10 +7,10 @@ import { Form, FormValidationError } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { HowMuchOwed } from 'features/response/form/models/howMuchOwed'
 import User from 'idam/user'
-import { DraftService } from '@hmcts/draft-store-client/dist/common/draft/draftService'
 import { ErrorHandling } from 'common/errorHandling'
 import Claim from 'claims/models/claim'
 import { ValidationError } from 'class-validator'
+import { DraftService } from 'services/DraftService'
 
 async function renderView (form: Form<HowMuchOwed>, res: express.Response, next: express.NextFunction) {
   try {
