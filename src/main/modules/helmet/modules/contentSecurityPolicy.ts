@@ -9,7 +9,7 @@ export class ContentSecurityPolicy {
   constructor (public developmentMode: boolean) {}
 
   enableFor (app: express.Express) {
-    const scriptSrc = [self, '*.google-analytics.com']
+    const scriptSrc = [self, 'https://vcc-eu3.8x8.com/' , '*.google-analytics.com']
     const connectSrc = [self]
 
     if (this.developmentMode) {
