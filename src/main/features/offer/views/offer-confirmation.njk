@@ -33,14 +33,13 @@
       </p>
       
       {{ supportWidget() }}
-          
-      <form method="post" novalidate>
-        {{ csrfProtection(csrf) }}
 
-        <div class="form-group">
-          {{ submitButton('Finished') }}
-        </div>
-      </form>
+      {{ t('<a href="%s" class="button">Finished</a>',
+        {
+            postProcess: 'sprintf',
+            sprintf: [responsePaths.confirmationPage.evaluateUri({ externalId: claim.externalId })]
+        }
+      ) | safe }}
     </div>
   </div>
 {% endblock %}

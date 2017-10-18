@@ -13,12 +13,7 @@ export default express.Router()
         claim: user.claim,
         submittedOn: user.claim.respondedAt,
         defendantEmail: user.email,
-        paths: Paths
+        paths: Paths,
+        responsePaths: ResponsePaths
       })
-    }))
-  .post(
-    Paths.offerConfirmationPage.uri,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const user: User = res.locals.user
-      res.redirect(ResponsePaths.confirmationPage.evaluateUri({ externalId: user.claim.externalId }))
     }))
