@@ -65,11 +65,6 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       return false
     }
 
-    console.log('this.response.type', this.response.type)
-    console.log(this.response.type === ResponseType.OWE_SOME_PAID_NONE)
-    console.log('this.rejectPartOfClaim.option', this.rejectPartOfClaim.option)
-    console.log(this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
-
     return this.response.type === ResponseType.OWE_SOME_PAID_NONE
       && this.rejectPartOfClaim !== undefined
       && this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
