@@ -63,10 +63,14 @@
   "featureToggles": {
     "testingSupport": false,
     "countyCourtJudgment": false,
-    "idamOauth": false
+    "idamOauth": false,
+    "webchat": false
   },
   "oauth": {
     "clientId": "cmc_citizen",
     "clientSecret": "123456"
+  },
+  "webchat": {
+    "url": "https://vcc-eu3.8x8.com/"
   }
 }

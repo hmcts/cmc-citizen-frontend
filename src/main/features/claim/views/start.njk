@@ -4,6 +4,11 @@
 
 {% from "form.njk" import submitButton %}
 {% from "support.njk" import supportWidget %}
+{% block additional_scripts %}
+  {% if toBoolean(featureToggles.webchat) %}
+    <script src="{{ asset_paths['js'] }}/webchat.js"></script>
+  {% endif %}
+{% endblock %}
 
 {% block content %}
 
@@ -80,5 +85,5 @@
       </aside>
     </div>
   </div>
-
+  <div id="__8x8-chat-button-container-script_88114366159e5eec4ee5885.55246840"></div>
 {% endblock %}

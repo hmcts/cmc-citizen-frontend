@@ -66,7 +66,8 @@
   "featureToggles": {
     "testingSupport": "FEATURE_TESTING_SUPPORT",
     "countyCourtJudgment": "FEATURE_CCJ",
-    "idamOauth": "FEATURE_IDAM_OAUTH"
+    "idamOauth": "FEATURE_IDAM_OAUTH",
+    "webchat": "FEATURE_WEBCHAT"
   },
   "oauth": {
     "clientId": "OAUTH_CLIENT_ID",
