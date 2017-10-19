@@ -5,7 +5,9 @@ import { Defendant } from 'app/drafts/models/defendant'
 /* tslint:disable:no-unused-expression */
 
 describe('Defendant', () => {
+
   describe('constructor', () => {
+
     it('should have undefined email', () => {
       const defendant = new Defendant()
       expect(defendant.email).to.be.undefined
@@ -18,6 +20,7 @@ describe('Defendant', () => {
   })
 
   describe('deserialize', () => {
+
     it('should return a Defendant instance initialised with defaults for undefined', () => {
       expect(new Defendant().deserialize(undefined)).to.eql(new Defendant())
     })
@@ -28,6 +31,7 @@ describe('Defendant', () => {
   })
 
   describe('task state', () => {
+
     const defendant: object = {
       partyDetails: {
         type: 'individual',
@@ -46,17 +50,19 @@ describe('Defendant', () => {
     }
 
     context('is incomplete', () => {
+
       it('when email is defined and invalid', () => {
         const state = new Defendant().deserialize({ ...defendant, email: { address: 'some-text' } })
+        expect(state.isCompleted()).to.be.false
+      })
+
+      it('when email is undefined', () => {
+        const state = new Defendant().deserialize({ ...defendant, email: undefined })
         expect(state.isCompleted()).to.be.false
       })
     })
 
     context('is complete', () => {
-      it('when email is undefined', () => {
-        const state = new Defendant().deserialize({ ...defendant, email: undefined })
-        expect(state.isCompleted()).to.be.true
-      })
 
       it('when email is defined and valid', () => {
         const state = new Defendant().deserialize({ ...defendant, email: { address: 'user@example.com' } })
