@@ -13,8 +13,7 @@ export class ContentSecurityPolicy {
   constructor (public developmentMode: boolean) {}
 
   enableFor (app: express.Express) {
-
-    const imgSrc = [self, '*.google-analytics.com'];
+    const imgSrc = [self, '*.google-analytics.com']
     const scriptSrc = [self, '*.google-analytics.com']
     const connectSrc = imgSrc
     const frameSrc = []
@@ -25,13 +24,11 @@ export class ContentSecurityPolicy {
     }
 
     if (webchatEnabled) {
-      const webChatUrl: string = config.get('webchat.url');
+      const webChatUrl: string = config.get('webchat.url')
       scriptSrc.push(webChatUrl)
       frameSrc.push(webChatUrl)
       imgSrc.push(webChatUrl)
     }
-
-
 
     app.use(helmet.contentSecurityPolicy({
       directives: {
