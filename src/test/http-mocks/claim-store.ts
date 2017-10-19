@@ -226,6 +226,16 @@ export function resolveSaveCcjForUser () {
     .reply(HttpStatus.OK, { ...sampleClaimObj })
 }
 
+export function rejectSaveOfferForDefendant (reason: string = 'HTTP error') {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/[0-9]+/offers/defendant'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+export function resolveSaveOffer () {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/[0-9]+/offers/defendant'))
+    .reply(HttpStatus.OK)
+}
 export function rejectSaveCcjForUser (reason: string = 'HTTP error') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+/county-court-judgment'))
