@@ -16,7 +16,7 @@ export class ContentSecurityPolicy {
     const imgSrc = [self, '*.google-analytics.com']
     const scriptSrc = [self, '*.google-analytics.com']
     const connectSrc = imgSrc
-    const frameSrc = []
+    const frameSrc = ["'none'"]
 
     if (this.developmentMode) {
       scriptSrc.push('http://localhost:35729')
