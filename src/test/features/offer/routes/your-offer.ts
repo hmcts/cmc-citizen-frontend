@@ -40,7 +40,7 @@ describe.skip('Offer page', () => {
     it('should render page with errors when form is invalid', async () => {
       await request(app)
         .post(offerPage)
-        .send({ content: '', completionDate: '' })
+        .send({ offerText: '', completionDate: '' })
         .expect(res => expect(res).to.be.successful.withText("You haven't made your offer", 'div class="error-summary"'))
     })
 
@@ -49,7 +49,7 @@ describe.skip('Offer page', () => {
       const date = new LocalDate(futureDate.year(), futureDate.month(), futureDate.day())
       await request(app)
         .post(offerPage)
-        .send({ content: 'offer text', completionDate: date })
+        .send({ offerText: 'offer text', completionDate: date })
         .expect(res => expect(res).to.be.redirect.toLocation(confirmationPage))
     })
   })

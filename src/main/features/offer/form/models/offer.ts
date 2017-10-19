@@ -17,7 +17,7 @@ export class Offer implements Serializable<Offer> {
   @IsDefined({ message: ValidationErrors.OFFER_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.OFFER_REQUIRED })
   @MaxLength(99000, { message: ValidationErrors.OFFER_TEXT_TOO_LONG })
-  content?: string
+  offerText?: string
 
   @ValidateNested()
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
@@ -25,8 +25,8 @@ export class Offer implements Serializable<Offer> {
   @IsFutureDate({ message: ValidationErrors.FUTURE_DATE })
   completionDate?: LocalDate
 
-  constructor (content?: string, completionDate?: LocalDate) {
-    this.content = content
+  constructor (offerText?: string, completionDate?: LocalDate) {
+    this.offerText = offerText
     this.completionDate = completionDate
   }
 
@@ -34,13 +34,13 @@ export class Offer implements Serializable<Offer> {
     if (!value) {
       return value
     }
-    const offer = new Offer(value.content, LocalDate.fromObject(value.completionDate))
+    const offer = new Offer(value.offerText, LocalDate.fromObject(value.completionDate))
     return offer
   }
 
   deserialize (input: any): Offer {
     if (input) {
-      this.content = input.content
+      this.offerText = input.offerText
       this.completionDate = new LocalDate().deserialize(input.completionDate)
     }
     return this
