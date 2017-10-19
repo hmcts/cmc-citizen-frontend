@@ -64,7 +64,14 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
     if (!(this.response && this.response.type)) {
       return false
     }
-    return this.response.type === ResponseType.OWE_SOME_PAID_NONE && this.rejectPartOfClaim !== undefined
+
+    console.log('this.response.type', this.response.type)
+    console.log(this.response.type === ResponseType.OWE_SOME_PAID_NONE)
+    console.log('this.rejectPartOfClaim.option', this.rejectPartOfClaim.option)
+    console.log(this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
+
+    return this.response.type === ResponseType.OWE_SOME_PAID_NONE
+      && this.rejectPartOfClaim !== undefined
       && this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
   }
 
@@ -72,7 +79,8 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
     if (!(this.response && this.response.type)) {
       return false
     }
-    return this.response.type === ResponseType.OWE_SOME_PAID_NONE && this.rejectPartOfClaim !== undefined
+    return this.response.type === ResponseType.OWE_SOME_PAID_NONE
+      && this.rejectPartOfClaim !== undefined
       && this.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED
   }
 }

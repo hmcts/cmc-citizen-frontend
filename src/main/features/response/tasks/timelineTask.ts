@@ -1,8 +1,8 @@
 import { ResponseDraft } from 'response/draft/responseDraft'
 
-export class HowMuchOwedTask {
+export class TimelineTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
 
-    return (responseDraft.howMuchOwed.amount && responseDraft.howMuchOwed.text.length > 0)
+    return !!responseDraft.timeline && !!responseDraft.timeline.rows
   }
 }
