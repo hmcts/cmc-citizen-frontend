@@ -75,7 +75,7 @@
     {% endif %}
 
     {% if draft.requireDefence() %}
-      {{ row('Your defence', draft.defence.text, '/response/your-defence') }}
+      {{ row('Your defence', draft.defence.text, paths.defencePage.evaluateUri({ externalId: claim.externalId })) }}
 
       {{ row('Free mediation', t(draft.freeMediation.option) | capitalize, paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })) }}
     {% endif %}
