@@ -5,6 +5,7 @@ import * as config from 'config'
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
+import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { Paths as OfferPaths } from 'offer/paths'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { app } from '../../../../main/app'
@@ -23,10 +24,11 @@ describe.skip('Offer page', () => {
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', offerPage)
     beforeEach(() => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'defendant')
+      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
     })
 
     it('should render page when everything is fine', async () => {
+      claimStoreServiceMock.resolveRetrieveClaimByExternalId()
       await request(app)
         .get(offerPage)
         .set('Cookie', `${cookieName}=ABC`)
