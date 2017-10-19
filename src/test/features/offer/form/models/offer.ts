@@ -29,8 +29,7 @@ describe('Offer', () => {
     })
 
     it('should deserialize all fields', () => {
-      const futureDate = moment().add(10, 'days')
-      const date = new LocalDate(futureDate.year(), futureDate.month(), futureDate.day())
+      const date = new LocalDate()
       expect(Offer.fromObject({ content: 'offer Text', completionDate: date })).to.deep.equal(new Offer('offer Text', date))
     })
   })
