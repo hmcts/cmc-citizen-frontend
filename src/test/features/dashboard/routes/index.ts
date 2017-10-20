@@ -49,7 +49,7 @@ describe('Dashboard page', () => {
           await request(app)
             .get(Paths.dashboardPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Start now'))
+            .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
         })
       })
 
@@ -65,7 +65,7 @@ describe('Dashboard page', () => {
           await request(app)
             .get(Paths.dashboardPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Continue with new claim'))
+            .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Continue with claim'))
         })
 
         it('should render page with start claim button when everything is fine', async () => {
@@ -74,7 +74,7 @@ describe('Dashboard page', () => {
           await request(app)
             .get(Paths.dashboardPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Start now'))
+            .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
         })
       })
     })
