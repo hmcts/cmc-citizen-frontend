@@ -4,7 +4,7 @@ var __8x8Chat = {
   channel: "CMC-ROC-2527",
   domain: "https://vcc-eu3.8x8.com",
   path: "/.",
-  buttonContainerId: "__8x8-chat-button-container-script_88114366159e5eec4ee5885.55246840",
+  buttonContainerId: "__8x8-chat-button-container-script_1694841233595a2e07c98430.42238318",
   align: "right"
 };
 
@@ -17,4 +17,3 @@ var __8x8Chat = {
   var os = document.getElementsByTagName("script")[0];
   os.parentNode.insertBefore(se, os);
 })();
-
