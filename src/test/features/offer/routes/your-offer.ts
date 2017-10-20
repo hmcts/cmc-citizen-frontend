@@ -100,17 +100,6 @@ describe('Offer page', () => {
           })
         })
 
-        context('when form is invalid', async () => {
-          it('should render page with error', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            await request(app)
-              .post(offerPage)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ offerText: '', completionDate: undefined})
-              .expect(res => expect(res).to.be.successful.withText('When will you pay in full or complete your offer?', 'div class="error-summary"'))
-          })
-        })
-
         context('when provided date is in past', async () => {
           it('should render page with error', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
