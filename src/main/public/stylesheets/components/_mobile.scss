@@ -19,10 +19,10 @@
   .mobile-table {
     td {
       border-bottom: 0;
-
-      :last-child {
-        display: none;
-      }
     }
+  }
+
+  .mobile-inline {
+    display: inline;
   }
 }
