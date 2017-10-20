@@ -34,8 +34,7 @@ export class Offer implements Serializable<Offer> {
     if (!value) {
       return value
     }
-    const offer = new Offer(value.offerText, LocalDate.fromObject(value.completionDate))
-    return offer
+    return new Offer(value.offerText, LocalDate.fromObject(value.completionDate))
   }
 
   deserialize (input: any): Offer {

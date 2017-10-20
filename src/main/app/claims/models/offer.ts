@@ -1,11 +1,13 @@
 
 import { Serializable } from 'models/serializable'
+import { Moment } from 'moment'
+import { MomentFactory } from 'common/momentFactory'
 
 export class Offer implements Serializable<Offer> {
-  content?: string
-  completionDate?: string
+  content: string
+  completionDate: Moment
 
-  constructor (content?: string, completionDate?: string) {
+  constructor (content: string, completionDate: Moment) {
     this.content = content
     this.completionDate = completionDate
   }
@@ -13,7 +15,7 @@ export class Offer implements Serializable<Offer> {
   deserialize (input: any): Offer {
     if (input) {
       this.content = input.content
-      this.completionDate = input.completionDate
+      this.completionDate = MomentFactory.parse(input.completionDate)
     }
     return this
   }

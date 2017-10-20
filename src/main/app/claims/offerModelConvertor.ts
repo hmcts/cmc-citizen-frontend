@@ -7,7 +7,7 @@ export class OfferModelConverter {
     if (offerForm && offerForm.offerText) {
       return new Offer(
                 offerForm.offerText,
-                offerForm.completionDate.asString()
+                offerForm.completionDate.toMoment()
             )
     }
     return undefined

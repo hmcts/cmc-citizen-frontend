@@ -21,9 +21,9 @@ export default express.Router()
   .get(
     Paths.offerPage.uri,
     OfferGuard.requestHandler,
-    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       await renderView(Form.empty(), res, next)
-    })
+    }))
   .post(
     Paths.offerPage.uri,
     OfferGuard.requestHandler,
@@ -31,7 +31,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Offer> = req.body
       if (form.hasErrors()) {
-        await renderView(form, res, next)
+        renderView(form, res, next)
       } else {
         const user: User = res.locals.user
         const offer: Offer = form.model
