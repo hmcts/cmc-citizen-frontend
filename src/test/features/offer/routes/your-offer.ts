@@ -106,8 +106,8 @@ describe('Offer page', () => {
             await request(app)
               .post(offerPage)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ offerText: undefined, completionDate: undefined})
-              .expect(res => expect(res).to.be.successful.withText('Enter offer no longer than 99000 characters', 'div class="error-summary"'))
+              .send({ offerText: '', completionDate: undefined})
+              .expect(res => expect(res).to.be.successful.withText('When will you pay in full or complete your offer?', 'div class="error-summary"'))
           })
         })
 
@@ -121,7 +121,7 @@ describe('Offer page', () => {
                 offerText: 'Offer Text',
                 completionDate: new LocalDate(1980, 1, 1)
               })
-              .expect(res => expect(res).to.be.successful.withText('Enter a offer date in the future', 'div class="error-summary"'))
+              .expect(res => expect(res).to.be.successful.withText('Enter an offer date in the future', 'div class="error-summary"'))
           })
         })
       })

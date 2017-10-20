@@ -20,10 +20,6 @@ describe('Offer', () => {
       expect(Offer.fromObject(undefined)).to.be.equal(undefined)
     })
 
-    it('should return null when value is null', () => {
-      expect(Offer.fromObject(null)).to.be.equal(null)
-    })
-
     it('should leave missing fields undefined', () => {
       expect(Offer.fromObject({})).to.deep.equal(new Offer())
     })
@@ -39,10 +35,6 @@ describe('Offer', () => {
       expect(new Offer().deserialize(undefined)).to.deep.equal(new Offer())
     })
 
-    it('should return instance initialised with defaults when given null', () => {
-      expect(new Offer().deserialize(null)).to.deep.equal(new Offer())
-    })
-
     it('should return instance with set fields from given object', () => {
       const date = new LocalDate()
       expect(new Offer().deserialize({ offerText: 'offer Text', completionDate: date.asString() })).to.deep.equal(new Offer('offer Text', date))
@@ -56,10 +48,9 @@ describe('Offer', () => {
       it('undefined offer text', () => {
         const futureDate = moment().add(10, 'days')
         const date = new LocalDate(futureDate.year(), futureDate.month(), futureDate.day())
-        const errors = validator.validateSync(new Offer(undefined, date))
+        const errors = validator.validateSync(new Offer('', date))
         expect(errors.length).to.equal(2)
         expectValidationError(errors, ValidationErrors.OFFER_REQUIRED)
-        expectValidationError(errors, ValidationErrors.OFFER_TEXT_TOO_LONG.replace('$constraint1','99000'))
       })
 
       it('undefined offer date', () => {
