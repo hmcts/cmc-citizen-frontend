@@ -41,7 +41,6 @@ describe('How much owed task', () => {
       }
     }
     const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
-    console.log(HowMuchPaidTask.isCompleted(responseDraft))
     expect(HowMuchPaidTask.isCompleted(responseDraft)).to.equal(undefined)
   })
 
