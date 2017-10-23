@@ -9,8 +9,8 @@ export class ValidationErrors {
   static readonly DATE_REQUIRED: string = 'Please enter a valid date'
   static readonly DATE_NOT_VALID: string = 'Please enter a valid date'
   static readonly FUTURE_DATE: string = 'Enter an offer date in the future'
-  static readonly OFFER_REQUIRED: string = "You haven't made your offer"
-  static readonly OFFER_TEXT_TOO_LONG: string = "You've entered too many characters"
+  static readonly OFFER_REQUIRED: string = 'You haven’t made your offer'
+  static readonly OFFER_TEXT_TOO_LONG: string = 'You’ve entered too many characters'
 }
 
 export class Offer implements Serializable<Offer> {
