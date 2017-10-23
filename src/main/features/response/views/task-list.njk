@@ -6,48 +6,52 @@
 
 {% block content %}
 
-  <div class="column-two-thirds">
-    <h1 class="heading-large">{{ t('Respond to a money claim') }}</h1>
-    <div class="task-group">
-      {{ taskListHeading(beforeYouStartSection.position, t(beforeYouStartSection.name)) }}
+  <div class="grid-row">
+    <div class="column-full">
+      <h1 class="heading-large">{{ t('Respond to a money claim') }}</h1>
+    </div>
+    <div class="column-two-thirds">
+      <div class="task-group">
+        {{ taskListHeading(beforeYouStartSection.position, t(beforeYouStartSection.name)) }}
 
-      {% for item in beforeYouStartSection.tasks %}
-        {{ task(item.startPageUrl, t(item.name), item.completed) }}
-      {% endfor %}
+        {% for item in beforeYouStartSection.tasks %}
+          {{ task(item.startPageUrl, t(item.name), item.completed) }}
+        {% endfor %}
+      </div>
+
+      <div class="task-group">
+        {{ taskListHeading(respondToClaimSection.position, t(respondToClaimSection.name)) }}
+
+        {% for item in respondToClaimSection.tasks %}
+          {{ task(item.startPageUrl, t(item.name), item.completed) }}
+        {% endfor %}
+      </div>
+
+      <div class="task-group">
+        {{ taskListHeading(submitSection.position, t(submitSection.name)) }}
+
+        {% for item in submitSection.tasks %}
+          {{ task(item.startPageUrl, t(item.name), item.completed) }}
+        {% endfor %}
+      </div>
     </div>
 
-    <div class="task-group">
-      {{ taskListHeading(respondToClaimSection.position, t(respondToClaimSection.name)) }}
-
-      {% for item in respondToClaimSection.tasks %}
-        {{ task(item.startPageUrl, t(item.name), item.completed) }}
-      {% endfor %}
-    </div>
-
-    <div class="task-group">
-      {{ taskListHeading(submitSection.position, t(submitSection.name)) }}
-
-      {% for item in submitSection.tasks %}
-        {{ task(item.startPageUrl, t(item.name), item.completed) }}
-      {% endfor %}
-    </div>
-  </div>
-
-  <div class="column-one-third">
-    <div class="meta-data">
-      <ul class="font-xsmall list">
-        <li>
-          <strong class="bold">{{ t('Response deadline:') }}</strong>
-          <span class="block">
+    <div class="column-one-third">
+      <div class="meta-data">
+        <ul class="font-xsmall list">
+          <li>
+            <strong class="bold">{{ t('Response deadline:') }}</strong>
+            <span class="block">
             {{ t('%s at 4pm', { postProcess: 'sprintf', sprintf: [ claim.responseDeadline | date ] }) }} <br/>
-            {{ timeRemaining(claim.remainingDays) }}
+              {{ timeRemaining(claim.remainingDays) }}
           </span>
-        </li>
-        <li>
-          <strong class="bold">{{ t('Claim number:') }}</strong>
-          <span class="block">{{ claim.claimNumber }}</span>
-        </li>
-      </ul>
+          </li>
+          <li>
+            <strong class="bold">{{ t('Claim number:') }}</strong>
+            <span class="block">{{ claim.claimNumber }}</span>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
