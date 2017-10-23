@@ -3,6 +3,10 @@
 }
 
 .task-number {
+  @include media (mobile) {
+    margin-right: 0;
+  }
+
   margin-right: 32px;
 }
 
@@ -25,13 +29,29 @@
 }
 
 .task-name {
+  @include media (mobile) {
+    margin-left: 0;
+  }
+
   margin-left: 70px;
+
+  &.task-finished {
+    @include media (mobile) {
+      display: inline-block;
+      max-width: 59%;
+    }
+  }
 }
 
-.task-finished {
+
+div.task-finished {
   float: right;
 
   strong {
+    @include media (mobile) {
+      font-size: 14px;
+    }
+
     background-color: $link-colour;
     color: $white;
     display: inline-block;

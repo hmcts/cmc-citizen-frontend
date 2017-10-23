@@ -3,7 +3,7 @@
   display: none;
 }
 
-@media screen and (max-width: 480px) {
+@include media (mobile) {
   .mobile-hide {
     display: none;
   }
