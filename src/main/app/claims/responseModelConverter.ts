@@ -13,6 +13,8 @@ import { CompanyDetails } from 'forms/models/companyDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { Defendant } from 'drafts/models/defendant'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
+import { ResponseType } from 'response/form/models/responseType'
+import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 
 export class ResponseModelConverter {
 
@@ -25,13 +27,24 @@ export class ResponseModelConverter {
       )
     }
     return new ResponseData(
-      responseDraft.response.type.value,
+      this.inferResponseType(responseDraft),
       responseDraft.defence.text,
       responseDraft.freeMediation === undefined ? undefined : responseDraft.freeMediation.option,
       responseDraft.moreTimeNeeded === undefined ? undefined : responseDraft.moreTimeNeeded.option,
       this.convertPartyDetails(responseDraft.defendantDetails),
       statementOfTruth
     )
+  }
+
+  // TODO A workaround for Claim Store staff notifications logic to work.
+  // Should be removed once partial admission feature is fully done and frontend and backend models are aligned properly.
+  private static inferResponseType (draft: ResponseDraft): string {
+    if (draft.response.type === ResponseType.OWE_NONE
+      && draft.rejectAllOfClaim && draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID) {
+      return 'OWE_ALL_PAID_ALL'
+    } else {
+      return draft.response.type.value
+    }
   }
 
   private static convertPartyDetails (defendant: Defendant): Party {
