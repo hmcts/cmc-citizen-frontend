@@ -40,7 +40,7 @@
         {% set rejectPartOption = 'The claim amount is too much' %}
       {% endif %}
 
-      {{ row('Why are you rejecting part of this claim?', t(rejectPartOption) | capitalize, paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: claim.externalId })) }}
+      {{ row('Why are you rejecting part of this claim?', t(rejectPartOption), paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: claim.externalId })) }}
     {% endif %}
 
     {% if draft.response.type.value === 'OWE_NONE' %}
@@ -56,12 +56,12 @@
         {% set rejectAllOption = 'Defend now and also make a counterclaim' %}
       {% endif %}
 
-      {{ row('Why do you reject all of this claim?', t(rejectAllOption) | capitalize, paths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: claim.externalId })) }}
+      {{ row('Why do you reject all of this claim?', t(rejectAllOption), paths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: claim.externalId })) }}
     {% endif %}
 
     {{ tableEnd() }}
 
-    {% if draft.response.type.value === 'OWE_SOME_PAID_NONE' %}
+    {% if draft.response.type.value === 'OWE_SOME_PAID_NONE' and toBoolean(featureToggles.partialAdmission) %}
     {{ tableStart("yourResponse", "Your response") }}
 
     {% if draft.rejectPartOfClaim.option === 'amountTooHigh' %}
