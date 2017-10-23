@@ -43,27 +43,28 @@
   }
 }
 
+div {
+  &.task-finished {
+    float: right;
 
-div.task-finished {
-  float: right;
+    strong {
+      @include media (mobile) {
+        font-size: 14px;
+      }
 
-  strong {
-    @include media (mobile) {
-      font-size: 14px;
+      background-color: $link-colour;
+      color: $white;
+      display: inline-block;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      line-height: 1.25;
+      padding: 3px 6px 0;
     }
-
-    background-color: $link-colour;
-    color: $white;
-    display: inline-block;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    line-height: 1.25;
-    padding: 3px 6px 0;
   }
-}
 
-.due-or-overdue {
-  color: $error-colour;
-  font-weight: bold;
+  .due-or-overdue {
+    color: $error-colour;
+    font-weight: bold;
+  }
 }
