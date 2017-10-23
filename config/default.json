@@ -64,6 +64,7 @@
     "testingSupport": false,
     "countyCourtJudgment": false,
     "idamOauth": false,
+    "partialAdmission": false,
     "offer": false
   },
   "oauth": {
