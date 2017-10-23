@@ -21,6 +21,6 @@ if (app.locals.ENV === 'development' || app.locals.ENV === 'dockertests') {
   })
 } else {
   app.listen(port, () => {
-    logger.log(`Application started: http://localhost:${port}`)
+    logger.info(`Application started: http://localhost:${port}`)
   })
 }
