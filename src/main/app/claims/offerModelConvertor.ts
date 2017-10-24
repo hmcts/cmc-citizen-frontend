@@ -4,13 +4,9 @@ import { Offer } from 'claims/models/offer'
 export class OfferModelConverter {
 
   static convert (offerForm: OfferForm): Offer {
-    if (offerForm && offerForm.offerText) {
-      return new Offer(
-                offerForm.offerText,
-                offerForm.completionDate.toMoment()
-            )
-    }
-    return undefined
+    return new Offer(
+              offerForm.offerText,
+              offerForm.completionDate.toMoment()
+          )
   }
-
 }

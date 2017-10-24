@@ -7,7 +7,7 @@
   <div class="grid-row">
     <div class="column-two-thirds">
         <div class="govuk-box-highlight">
-          <h1 class="bold-large">{{ t('Your offer has been sent to the %s',
+          <h1 class="bold-large">{{ t('Your offer has been sent to %s',
           {
           postProcess: 'sprintf',
           sprintf: [claim.claimData.claimant.name]
@@ -34,12 +34,7 @@
       
       {{ supportWidget() }}
 
-      {{ t('<a href="%s" class="button">Finished</a>',
-        {
-            postProcess: 'sprintf',
-            sprintf: [responsePaths.confirmationPage.evaluateUri({ externalId: claim.externalId })]
-        }
-      ) | safe }}
+      {% include "includes/service_survey_link.njk" %}
     </div>
   </div>
 {% endblock %}
