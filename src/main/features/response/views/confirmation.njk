@@ -42,12 +42,12 @@
 
         <h2 class="heading-medium">{{ t("What you can do to settle the claim") }}</h2>
         <p>
-          {{ t("Unless you’ve been asked not to, you can still contact %s directly. If you can reach an agreement you won’t have to go to a hearing.",
+          {{ t('Unless you’ve been asked not to, you can still contact %s directly to make a <a href="%s">settlement out of court</a>. If you can reach an agreement you won’t have to go to a hearing.',
           {
             postProcess: 'sprintf',
-            sprintf: [claim.claimData.claimant.name]
+            sprintf: [claim.claimData.claimant.name, offerPaths.settleOutOfCourtPage.evaluateUri({ externalId: claim.externalId })]
           }
-          ) }}
+          ) | safe }}
         </p>
 
         {{ supportWidget() }}

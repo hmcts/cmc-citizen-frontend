@@ -64,6 +64,9 @@
       "response/*": [
         "features/response/*"
       ],
+      "offer/*": [
+        "features/offer/*"
+      ],
       "dashboard/*": [
         "features/dashboard/*"
       ],

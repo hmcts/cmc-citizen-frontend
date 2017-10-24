@@ -3,6 +3,7 @@
     "testingSupport": true,
     "countyCourtJudgment": true,
     "idamOauth": true,
-    "partialAdmission": true
+    "partialAdmission": true,
+    "offer": true
   }
 }

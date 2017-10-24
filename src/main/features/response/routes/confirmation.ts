@@ -1,5 +1,6 @@
 import * as express from 'express'
 import { Paths } from 'response/paths'
+import { Paths as OfferPaths } from 'offer/paths'
 import User from 'idam/user'
 
 export default express.Router()
@@ -12,7 +13,8 @@ export default express.Router()
         claim: user.claim,
         submittedOn: user.claim.respondedAt,
         defendantEmail: user.email,
-        paths: Paths
+        paths: Paths,
+        offerPaths: OfferPaths
       })
     } catch (err) {
       next(err)

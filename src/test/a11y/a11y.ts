@@ -11,6 +11,7 @@ import { ErrorPaths as ClaimIssueErrorPaths, Paths as ClaimIssuePaths } from 'cl
 import { ErrorPaths as DefendantFirstContactErrorPaths, Paths as DefendantFirstContactPaths } from 'first-contact/paths'
 import { Paths as DefendantResponsePaths } from 'response/paths'
 import { Paths as CCJPaths } from 'ccj/paths'
+import { Paths as OfferPaths } from 'offer/paths'
 
 import './mocks'
 import { app } from '../../main/app'
@@ -89,4 +90,5 @@ describe('Accessibility', () => {
   checkPaths(DefendantFirstContactErrorPaths)
   checkPaths(DefendantResponsePaths)
   checkPaths(CCJPaths)
+  checkPaths(OfferPaths)
 })
