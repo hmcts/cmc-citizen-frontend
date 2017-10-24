@@ -1,0 +1,12 @@
+{% extends "layout.njk" %}
+
+{% set title = t('Forbidden | Money Claim') %}
+{% set heading = t('Forbidden') %}
+
+{% block content %}
+  <p>
+    {{ t('You can return to <a href="/">Civil Money Claims</a> and start your claim or defence again.') | safe }}
+  </p>
+
+  <a class="button" href="/">{{ t('Start again') }}</a>
+{% endblock %}
