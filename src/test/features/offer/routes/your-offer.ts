@@ -76,7 +76,7 @@ describe('Offer page', () => {
           it('should redirect to offer confirmation page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolveSaveOffer()
-            const futureDate = moment().add(4, 'month')
+            const futureDate = moment().day(1).add(4, 'month')
             const formData = {
               offerText: 'Offer Text',
               completionDate: new LocalDate(futureDate.year(), futureDate.month(), futureDate.days())
