@@ -6,9 +6,9 @@
   version "1.10.3"
   resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.10.3.tgz#e4977d9f6219a05059eedeadd6438f6c73c94d53"
 
-"@hmcts/draft-store-client@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/draft-store-client/-/draft-store-client-1.1.0.tgz#eb3df4af41e6917d5c2e61376196a77c11ada4ef"
+"@hmcts/draft-store-client@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@hmcts/draft-store-client/-/draft-store-client-1.1.1.tgz#fc993aa202e47221ddc3f4c2c71849b06ca6bd48"
   dependencies:
     moment "^2.18.1"
     request "^2.81.0"
