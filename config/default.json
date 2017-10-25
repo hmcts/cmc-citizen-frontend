@@ -63,7 +63,9 @@
   "featureToggles": {
     "testingSupport": false,
     "countyCourtJudgment": false,
-    "idamOauth": false
+    "idamOauth": false,
+    "partialAdmission": false,
+    "offer": false
   },
   "oauth": {
     "clientId": "cmc_citizen",

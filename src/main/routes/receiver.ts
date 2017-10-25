@@ -149,16 +149,16 @@ export default express.Router()
                                next: express.NextFunction): Promise<void> => {
       const cookies = new Cookies(req, res)
 
-      const authenticationToken = await getAuthToken(req)
-      if (authenticationToken) {
-        try {
+      try {
+        const authenticationToken = await getAuthToken(req)
+        if (authenticationToken) {
           const user = await IdamClient.retrieveUserFor(authenticationToken)
           res.locals.isLoggedIn = true
           res.locals.user = user
           setAuthCookie(cookies, authenticationToken)
-        } catch (err) {
-          return loginErrorHandler(req, res, next, err)
         }
+      } catch (err) {
+        return loginErrorHandler(req, res, next, err)
       }
 
       if (res.locals.isLoggedIn) {
@@ -179,16 +179,16 @@ export default express.Router()
                                next: express.NextFunction): Promise<void> => {
       const cookies = new Cookies(req, res)
 
-      const authenticationToken = await getAuthToken(req, AppPaths.linkDefendantReceiver, false)
-      if (authenticationToken) {
-        try {
+      try {
+        const authenticationToken = await getAuthToken(req, AppPaths.linkDefendantReceiver, false)
+        if (authenticationToken) {
           const user = await IdamClient.retrieveUserFor(authenticationToken)
           res.locals.isLoggedIn = true
           res.locals.user = user
           setAuthCookie(cookies, authenticationToken)
-        } catch (err) {
-          return loginErrorHandler(req, res, next, err, AppPaths.linkDefendantReceiver)
         }
+      } catch (err) {
+        return loginErrorHandler(req, res, next, err, AppPaths.linkDefendantReceiver)
       }
 
       const user: User = res.locals.user

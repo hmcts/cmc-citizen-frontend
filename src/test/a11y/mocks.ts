@@ -60,6 +60,9 @@ mock('ccj/guards/ccjGuard', {
   'CCJGuard': justForwardRequestHandler
 })
 
+mock('offer/guards/offerGuard', {
+  'OfferGuard': justForwardRequestHandler
+})
 mock('response/guards/guardFactory', {
   GuardFactory: {
     create: () => {

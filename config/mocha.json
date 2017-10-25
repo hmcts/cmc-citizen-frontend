@@ -28,6 +28,8 @@
   "featureToggles": {
     "testingSupport": true,
     "countyCourtJudgment": true,
-    "idamOauth": true
+    "idamOauth": true,
+    "partialAdmission": true,
+    "offer": true
   }
 }

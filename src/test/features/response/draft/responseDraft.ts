@@ -126,7 +126,6 @@ describe('ResponseDraft', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
       draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)
-      console.log(draft.rejectPartOfClaim)
       expect(draft.requireHowMuchPaid()).to.be.eq(false)
     })
 
@@ -134,7 +133,6 @@ describe('ResponseDraft', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
       draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
-      console.log(draft.rejectPartOfClaim)
       expect(draft.requireHowMuchPaid()).to.be.eq(true)
     })
   })
@@ -166,7 +164,6 @@ describe('ResponseDraft', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
       draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
-      console.log(draft.rejectPartOfClaim)
       expect(draft.requireHowMuchOwed()).to.be.eq(false)
     })
 
@@ -174,7 +171,6 @@ describe('ResponseDraft', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
       draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)
-      console.log(draft.rejectPartOfClaim)
       expect(draft.requireHowMuchOwed()).to.be.eq(true)
     })
   })

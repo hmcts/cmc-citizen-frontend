@@ -2,35 +2,34 @@
 {% from "task-list.njk" import task, taskListHeading, disabledTask %}
 
 {% set title = t('Task list | Money claim') %}
-{% set heading = t('Make a money claim') %}
 
 {% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ t('Make a money claim') }}</h1>
+      <div class="task-group">
+        {{ taskListHeading(beforeYouStart.position, t(beforeYouStart.name)) }}
 
-<div class="column-two-thirds">
-    <div class="task-group">
-      {{ taskListHeading(beforeYouStart.position, t(beforeYouStart.name)) }}
+        {% for item in beforeYouStart.tasks %}
+          {{ task(item.startPageUrl, t(item.name), item.completed) }}
+        {% endfor %}
+      </div>
 
-      {% for item in beforeYouStart.tasks %}
-        {{ task(item.startPageUrl, t(item.name), item.completed) }}
-      {% endfor %}
+      <div class="task-group">
+        {{ taskListHeading(prepareYourClaim.position, t(prepareYourClaim.name)) }}
+
+        {% for item in prepareYourClaim.tasks %}
+          {{ task(item.startPageUrl, t(item.name), item.completed) }}
+        {% endfor %}
+      </div>
+
+      <div class="task-group">
+        {{ taskListHeading(submit.position, t(submit.name)) }}
+
+        {% for item in submit.tasks %}
+          {{ task(item.startPageUrl, t(item.name), item.completed) }}
+        {% endfor %}
+      </div>
     </div>
-
-    <div class="task-group">
-      {{ taskListHeading(prepareYourClaim.position, t(prepareYourClaim.name)) }}
-
-      {% for item in prepareYourClaim.tasks %}
-        {{ task(item.startPageUrl, t(item.name), item.completed) }}
-      {% endfor %}
-    </div>
-
-    <div class="task-group">
-      {{ taskListHeading(submit.position, t(submit.name)) }}
-
-      {% for item in submit.tasks %}
-        {{ task(item.startPageUrl, t(item.name), item.completed) }}
-      {% endfor %}
-    </div>
-</div>
-
-
+  </div>
 {% endblock %}

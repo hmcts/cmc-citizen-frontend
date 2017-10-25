@@ -7,6 +7,8 @@ import * as https from 'https'
 
 const port: number = parseInt(process.env.PORT, 10) || 3000
 
+const logger = require('@hmcts/nodejs-logging').getLogger('server')
+
 if (app.locals.ENV === 'development' || app.locals.ENV === 'dockertests') {
   const sslDirectory = path.join(__dirname, 'resources', 'localhost-ssl')
   const sslOptions = {
@@ -15,10 +17,10 @@ if (app.locals.ENV === 'development' || app.locals.ENV === 'dockertests') {
   }
   const server = https.createServer(sslOptions, app)
   server.listen(port, () => {
-    console.log(`Application started: https://localhost:${port}`)
+    logger.info(`Application started: https://localhost:${port}`)
   })
 } else {
   app.listen(port, () => {
-    console.log(`Application started: http://localhost:${port}`)
+    logger.info(`Application started: http://localhost:${port}`)
   })
 }
