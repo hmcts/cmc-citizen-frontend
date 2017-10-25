@@ -1,7 +1,7 @@
 import { ResponseDraft } from 'response/draft/responseDraft'
 
-export class YourDefenceTask {
+export class FreeMediationTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
-    return !!(responseDraft.defence && responseDraft.defence.text)
+    return !!(responseDraft.freeMediation && responseDraft.freeMediation.option)
   }
 }
