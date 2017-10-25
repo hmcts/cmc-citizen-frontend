@@ -8,7 +8,7 @@ import { ClaimValidator } from 'app/utils/claimValidator'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 
 import { ErrorHandling } from 'common/errorHandling'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<ClaimAmountBreakdown>, res: express.Response): void {
   res.render(Paths.amountPage.associatedView, {

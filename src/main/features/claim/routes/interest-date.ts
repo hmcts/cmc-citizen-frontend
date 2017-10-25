@@ -4,7 +4,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { InterestDate } from 'claim/form/models/interestDate'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<InterestDate>, res: express.Response): void {
   res.render(Paths.interestDatePage.associatedView, { form: form })

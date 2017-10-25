@@ -8,7 +8,7 @@ import { PartyType } from 'app/common/partyType'
 import { ErrorHandling } from 'common/errorHandling'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import User from 'idam/user'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<DateOfBirth>, res: express.Response) {
   res.render(Paths.defendantDateOfBirthPage.associatedView, {

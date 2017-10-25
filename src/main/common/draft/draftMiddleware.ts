@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { UUIDUtils } from 'common/utils/uuidUtils'
 import { Draft } from '@hmcts/draft-store-client/dist/draft/draft'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 import { DraftDocument } from 'models/draftDocument'
 
 /**

@@ -9,7 +9,7 @@ import ClaimStoreClient from 'app/claims/claimStoreClient'
 import MoreTimeAlreadyRequestedGuard from 'response/guards/moreTimeAlreadyRequestedGuard'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<MoreTimeNeeded>, res: express.Response, next: express.NextFunction) {
   try {

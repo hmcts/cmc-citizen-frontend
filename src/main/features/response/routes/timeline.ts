@@ -5,7 +5,7 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'app/forms/validation/formValidator'
 import { Timeline } from 'response/form/models/timeline'
 import { ErrorHandling } from 'common/errorHandling'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<Timeline>, res: express.Response): void {
   res.render(Paths.timelinePage.associatedView, {

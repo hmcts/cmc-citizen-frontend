@@ -7,7 +7,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 
 import { ErrorHandling } from 'common/errorHandling'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<SoleTraderDetails>, res: express.Response): void {
   res.render(Paths.claimantSoleTraderOrSelfEmployedDetailsPage.associatedView, { form: form })

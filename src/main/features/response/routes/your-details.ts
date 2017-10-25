@@ -16,7 +16,7 @@ import { OrganisationDetails } from 'forms/models/organisationDetails'
 import User from 'app/idam/user'
 
 import { SoleTrader } from 'claims/models/details/theirs/soleTrader'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<PartyDetails>, res: express.Response) {
   const user: User = res.locals.user

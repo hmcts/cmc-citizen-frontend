@@ -10,7 +10,7 @@ import { RejectPartOfClaim } from 'response/form/models/rejectPartOfClaim'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
 import { GuardFactory } from 'response/guards/guardFactory'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 function isRequestAllowed (res: express.Response): boolean {
   return res.locals.user.responseDraft.document.response !== undefined

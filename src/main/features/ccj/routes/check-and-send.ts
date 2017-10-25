@@ -13,7 +13,7 @@ import { PartyDetails } from 'forms/models/partyDetails'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { PartyType } from 'app/common/partyType'
 import { Party } from 'claims/models/details/yours/party'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 function prepareUrls (externalId: string): object {
   return {

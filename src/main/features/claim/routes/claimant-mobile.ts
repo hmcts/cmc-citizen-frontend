@@ -7,7 +7,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { MobilePhone } from 'forms/models/mobilePhone'
 
 import { ErrorHandling } from 'common/errorHandling'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<MobilePhone>, res: express.Response): void {
   res.render(Paths.claimantMobilePage.associatedView, { form: form })

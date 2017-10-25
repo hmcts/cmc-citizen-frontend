@@ -6,7 +6,7 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { ErrorHandling } from 'common/errorHandling'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<CompanyDetails>, res: express.Response): void {
   res.render(Paths.defendantCompanyDetailsPage.associatedView, { form: form })

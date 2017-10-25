@@ -5,7 +5,7 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { PayBySetDate } from 'ccj/form/models/payBySetDate'
 import User from 'idam/user'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 import { ErrorHandling } from 'common/errorHandling'
 
 function renderView (form: Form<PayBySetDate>, res: express.Response): void {

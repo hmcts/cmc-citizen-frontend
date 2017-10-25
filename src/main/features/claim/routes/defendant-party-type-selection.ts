@@ -8,7 +8,7 @@ import { PartyType } from 'app/common/partyType'
 import { ErrorHandling } from 'common/errorHandling'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { PartyDetailsFactory } from 'forms/models/partyDetailsFactory'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<PartyTypeResponse>, res: express.Response, next: express.NextFunction) {
   res.render(Paths.defendantPartyTypeSelectionPage.associatedView, {

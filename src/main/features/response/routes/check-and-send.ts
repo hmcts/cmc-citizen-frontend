@@ -14,7 +14,7 @@ import AllResponseTasksCompletedGuard from 'response/guards/allResponseTasksComp
 import { ErrorHandling } from 'common/errorHandling'
 import { SignatureType } from 'app/common/signatureType'
 import { QualifiedStatementOfTruth } from 'response/form/models/qualifiedStatementOfTruth'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
   const user: User = res.locals.user

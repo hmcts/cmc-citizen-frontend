@@ -11,7 +11,7 @@ import DateOfBirth from 'forms/models/dateOfBirth'
 import { PartyType } from 'app/common/partyType'
 
 import { ErrorHandling } from 'common/errorHandling'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('ccj/guards/individualDateOfBirth')
 

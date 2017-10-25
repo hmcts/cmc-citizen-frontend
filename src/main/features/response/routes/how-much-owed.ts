@@ -10,7 +10,7 @@ import User from 'idam/user'
 import { ErrorHandling } from 'common/errorHandling'
 import Claim from 'claims/models/claim'
 import { ValidationError } from 'class-validator'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 async function renderView (form: Form<HowMuchOwed>, res: express.Response, next: express.NextFunction) {
   try {

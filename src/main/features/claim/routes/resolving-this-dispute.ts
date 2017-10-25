@@ -3,7 +3,7 @@ import * as express from 'express'
 import { Paths } from 'claim/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 export default express.Router()
   .get(Paths.resolvingThisDisputerPage.uri, (req: express.Request, res: express.Response) => {

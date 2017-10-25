@@ -7,7 +7,7 @@ import { Response } from 'response/form/models/response'
 import { ResponseType } from 'response/form/models/responseType'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<Response>, res: express.Response) {
   res.render(Paths.responseTypePage.associatedView, {

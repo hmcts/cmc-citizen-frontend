@@ -14,7 +14,7 @@ import ClaimStoreClient from 'app/claims/claimStoreClient'
 import { buildURL } from 'app/utils/callbackBuilder'
 import { claimAmountWithInterest } from 'app/utils/interestUtils'
 import User from 'app/idam/user'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 import { ServiceAuthTokenFactoryImpl } from 'common/security/serviceTokenFactoryImpl'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('router/pay')

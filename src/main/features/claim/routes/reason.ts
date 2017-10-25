@@ -7,7 +7,7 @@ import { Reason } from 'claim/form/models/reason'
 
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'app/idam/user'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<Reason>, res: express.Response): void {
   const user: User = res.locals.user

@@ -7,7 +7,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import Email from 'forms/models/email'
 
 import { ErrorHandling } from 'common/errorHandling'
-import { DraftService } from 'services/DraftService'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<Email>, res: express.Response): void {
   res.render(Paths.defendantEmailPage.associatedView, { form: form })
