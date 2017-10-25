@@ -14,6 +14,15 @@ export class NotFoundError extends Error implements ViewError {
   }
 }
 
+export class ForbiddenError extends Error implements ViewError {
+  statusCode: number = 403
+  associatedView: string = 'forbidden'
+
+  constructor () {
+    super(`You are not allowed to access this resource`)
+  }
+}
+
 export class ClaimAmountExceedsLimitError extends Error implements ViewError {
   public static AMOUNT_EXCEED_ALLOWED_CLAIM_LIMIT: string = 'The total claim amount exceeds the stated limit of 10000'
   statusCode: number = 302

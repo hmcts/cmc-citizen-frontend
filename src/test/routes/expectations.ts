@@ -52,6 +52,13 @@ Assertion.addProperty('redirect', statusCodeInRangeAssertion([
 ]))
 
 /**
+ * Checks whether response status code is forbidden
+ */
+Assertion.addProperty('forbidden', statusCodeInRangeAssertion([
+  HttpStatus.FORBIDDEN
+]))
+
+/**
  * Checks whether response status code is within supported server error (5xx) range
  */
 Assertion.addProperty('serverError', statusCodeInRangeAssertion([
