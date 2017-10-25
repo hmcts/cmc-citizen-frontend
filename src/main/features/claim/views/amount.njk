@@ -20,13 +20,14 @@
         <div class="claim-amounts">
           <div id="claim-amount">
             <div>
-              <div id="claim-amount-heading-1" class="claim-amount-column-1">
+              <div id="claim-amount-heading-1" class="claim-amount-column-1 mobile-hide">
                 <span class="form-label-bold">{{ t('What you’re claiming for') }}</span>
-                <span class="form-hint">{{ t('Briefly explain why you’re claiming for this - for example, "unpaid debt" or "house deposit not returned"') }}</span>
+                <span class="form-hint">
+                  {{ t('Briefly explain why you’re claiming for this - for example, "unpaid debt" or "house deposit not returned"') }}
+                </span>
               </div>
-              <div id="claim-amount-heading-2" class="claim-amount-column-2">
+              <div id="claim-amount-heading-2" class="claim-amount-column-2 mobile-hide">
                 <span class="form-label-bold">{{ t('Amount') }}</span>
-                <span class="form-hint"></span>
               </div>
             </div>
             {% set totalError = form.errorFor('rows').length > 0 %}
@@ -37,16 +38,32 @@
                 {% set displayTotalError = totalError and loop.index0 == 0 %}
                 <div class="claim-amount-row {% if error1 or error2 or displayTotalError %}form-group-error{% endif %}">
                   {% if displayTotalError %}
-                  <span class="error-message" id="rows[label]">{{ form.errorFor('rows') }}</span>
+                    <span class="error-message" id="rows[label]">{{ form.errorFor('rows') }}</span>
                   {% endif %}
                   {% if error1 %}
-                    <span class="error-message" id="{{ 'rows['+loop.index0+'][reason][label]' }}">{{ form.errorFor('rows['+loop.index0+'][reason]') }}</span>
+                    <span class="error-message" id="{{ 'rows['+loop.index0+'][reason][label]' }}">
+                      {{ form.errorFor('rows['+loop.index0+'][reason]') }}
+                    </span>
                   {% endif %}
                   {% if error2 %}
-                    <span class="error-message" id="{{ 'rows['+loop.index0+'][amount][label]' }}">{{ form.errorFor('rows['+loop.index0+'][amount]') }}</span>
+                    <span class="error-message" id="{{ 'rows['+loop.index0+'][amount][label]' }}">
+                      {{ form.errorFor('rows['+loop.index0+'][amount]') }}
+                    </span>
                   {% endif %}
-                  {{ textInputInline('rows['+loop.index0+'][reason]', form, 'claim-amount-column-1 ' + ('form-control-error' if displayTotalError else '')) }}
-                  {{ textInputInline('rows['+loop.index0+'][amount]', form, 'claim-amount-column-2 ' + ('form-control-error' if displayTotalError else ''), 'input-symbol-pound' ) }}
+
+                  <span class="form-label-bold claim-amount-numbered mobile-show">
+                    {{ t('What you’re claiming for') }}
+                  </span>
+
+                  {% if loop.index0 == 0 %}
+                    <span class="form-hint mobile-show">
+                      {{ t('Briefly explain why you’re claiming for this - for example, "unpaid debt" or "house deposit not returned"') }}
+                    </span>
+                  {% endif %}
+
+                  {{ textInputInline('rows['+loop.index0+'][reason]', form, 'claim-amount-column-1' + (' form-control-error' if displayTotalError else '')) }}
+                  <span class="form-label-bold mobile-show">{{ t('Amount') }}</span>
+                  {{ textInputInline('rows['+loop.index0+'][amount]', form, 'claim-amount-column-2' + (' form-control-error' if displayTotalError else ''), ' input-symbol-pound' ) }}
                 </div>
               {% endfor %}
             </div>
