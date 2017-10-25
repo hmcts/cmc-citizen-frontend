@@ -110,8 +110,8 @@ async function retrieveRedirectForLandingPage (user: User): Promise<string> {
   }
 
   const draftStoreClientFactory = new DraftStoreClientFactory(new ServiceAuthTokenFactoryImpl())
-  const draftClaimClient: DraftStoreClient<DraftClaim> = await draftStoreClientFactory['create']<DraftClaim>(config.get<any>('draft-store').url, request)
-  const draftClaims: Draft<DraftClaim>[] = await draftClaimClient['find']({
+  const draftClaimClient: DraftStoreClient<DraftClaim> = await draftStoreClientFactory.create<DraftClaim>(config.get<any>('draft-store').url, request)
+  const draftClaims: Draft<DraftClaim>[] = await draftClaimClient.find({
     type: 'claim',
     limit: '100'
   }, user.bearerToken, (value: any): DraftClaim => {

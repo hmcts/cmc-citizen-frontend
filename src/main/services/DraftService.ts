@@ -6,6 +6,6 @@ import { ServiceAuthTokenFactoryImpl } from 'common/security/serviceTokenFactory
 
 export class DraftService extends BaseDraftService {
   constructor () {
-    super(config.get<any>('draft-store').url, request, new ServiceAuthTokenFactoryImpl())
+    super(config.get<string>('draft-store.url'), request, new ServiceAuthTokenFactoryImpl())
   }
 }
