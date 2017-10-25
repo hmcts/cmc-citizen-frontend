@@ -1,10 +1,9 @@
-import { IsDefined, IsIn } from 'class-validator'
+import { IsDefined, IsIn, ValidateIf } from 'class-validator'
 
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 
 export class ValidationErrors {
   static readonly TYPE_REQUIRED: string = 'Choose type of evidence'
-  static readonly DESCRIPTION_REQUIRED: string = 'Enter a description'
   static readonly DESCRIPTION_TOO_LONG: string = 'You’ve entered too many characters'
 }
 
@@ -40,6 +39,7 @@ export class EvidenceType {
 
 export class EvidenceRow {
 
+  @ValidateIf(o => o.type !== undefined)
   @IsDefined({ message: ValidationErrors.TYPE_REQUIRED })
   @IsIn(EvidenceType.all(), { message: ValidationErrors.TYPE_REQUIRED })
   type?: string
