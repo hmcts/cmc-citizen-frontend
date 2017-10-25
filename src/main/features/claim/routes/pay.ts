@@ -92,7 +92,7 @@ export default express.Router()
       const payment: PaymentResponse = await payClient.create(res.locals.user, feeCalculationOutcome.fee.code, feeCalculationOutcome.amount, getReturnURL(req, user.claimDraft.document.externalId))
       res.locals.user.claimDraft.document.claimant.payment = payment
 
-      await new DraftService()['save'](res.locals.user.claimDraft, res.locals.user.bearerToken)
+      await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
 
       res.redirect(payment._links.next_url.href)
     } catch (err) {
@@ -114,7 +114,7 @@ export default express.Router()
       const payment: Payment = await payClient.retrieve(user, paymentId)
       user.claimDraft.document.claimant.payment = new Payment().deserialize(payment)
 
-      await new DraftService()['save'](res.locals.user.claimDraft, res.locals.user.bearerToken)
+      await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
 
       const status: string = payment.state.status
 

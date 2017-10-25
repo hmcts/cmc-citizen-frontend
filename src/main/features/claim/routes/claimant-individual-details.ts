@@ -28,7 +28,7 @@ export default express.Router()
         form.model.dateOfBirth = (res.locals.user.claimDraft.document.claimant.partyDetails as IndividualDetails).dateOfBirth
         res.locals.user.claimDraft.document.claimant.partyDetails = form.model
 
-        await new DraftService()['save'](res.locals.user.claimDraft, res.locals.user.bearerToken)
+        await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
 
         res.redirect(Paths.claimantDateOfBirthPage.uri)
       }

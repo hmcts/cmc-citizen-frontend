@@ -24,7 +24,7 @@ export default express.Router()
         renderView(form, res)
       } else {
         res.locals.user.claimDraft.document.interestDate = form.model
-        await new DraftService()['save'](res.locals.user.claimDraft, res.locals.user.bearerToken)
+        await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
         res.redirect(Paths.feesPage.uri)
       }
     }))

@@ -27,7 +27,7 @@ export default express.Router()
       } else {
         (res.locals.user.claimDraft.document.defendant.partyDetails as SoleTraderDetails) = form.model
 
-        await new DraftService()['save'](res.locals.user.claimDraft, res.locals.user.bearerToken)
+        await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
 
         res.redirect(Paths.defendantEmailPage.uri)
       }

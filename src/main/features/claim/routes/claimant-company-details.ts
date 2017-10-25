@@ -26,7 +26,7 @@ export default express.Router()
       } else {
         res.locals.user.claimDraft.document.claimant.partyDetails = form.model
 
-        await new DraftService()['save'](res.locals.user.claimDraft, res.locals.user.bearerToken)
+        await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
 
         res.redirect(Paths.claimantMobilePage.uri)
       }

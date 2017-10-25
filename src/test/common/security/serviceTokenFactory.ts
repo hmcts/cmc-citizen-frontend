@@ -7,7 +7,7 @@ import * as sinon from 'sinon'
 import ServiceAuthToken from 'idam/serviceAuthToken'
 import IdamClient from 'idam/idamClient'
 
-delete require.cache[require.resolve('@hmcts/draft-store-client/dist/common/security/serviceTokenFactory')]
+delete require.cache[require.resolve('@hmcts/draft-store-client/dist/security/serviceAuthTokenFactory')]
 
 chai.use(spies)
 

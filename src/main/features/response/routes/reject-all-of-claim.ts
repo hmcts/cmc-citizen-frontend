@@ -49,7 +49,7 @@ export default express.Router()
         const user: User = res.locals.user
         user.responseDraft.document.rejectAllOfClaim = form.model
 
-        await new DraftService()['save'](user.responseDraft, user.bearerToken)
+        await new DraftService().save(user.responseDraft, user.bearerToken)
 
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
       }

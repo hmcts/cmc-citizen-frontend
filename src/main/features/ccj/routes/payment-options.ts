@@ -30,7 +30,7 @@ export default express.Router()
           if (form.model.option === PaymentType.IMMEDIATELY) {
             user.ccjDraft.document.repaymentPlan = user.ccjDraft.document.payBySetDate = undefined
           }
-          await new DraftService()['save'](user.ccjDraft, user.bearerToken)
+          await new DraftService().save(user.ccjDraft, user.bearerToken)
 
           const { externalId } = req.params
 

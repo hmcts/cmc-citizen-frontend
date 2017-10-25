@@ -38,7 +38,7 @@ export default express.Router()
         const user: User = res.locals.user
         user.responseDraft.document.defence = form.model
 
-        await new DraftService()['save'](res.locals.user.responseDraft, res.locals.user.bearerToken)
+        await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
 
         res.redirect(Paths.freeMediationPage.evaluateUri({ externalId: user.claim.externalId }))
       }

@@ -81,7 +81,7 @@ export default express.Router()
       } else {
         if (form.model.type === SignatureType.QUALIFIED) {
           user.ccjDraft.document.qualifiedDeclaration = form.model as QualifiedDeclaration
-          await new DraftService()['save'](user.ccjDraft, user.bearerToken)
+          await new DraftService().save(user.ccjDraft, user.bearerToken)
         }
 
         await CCJClient.save(user)

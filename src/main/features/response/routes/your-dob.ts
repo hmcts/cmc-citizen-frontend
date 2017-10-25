@@ -46,7 +46,7 @@ export default express.Router()
             throw Error('Date of birth is only supported for defendant types individual and sole trader')
         }
 
-        await new DraftService()['save'](res.locals.user.responseDraft, res.locals.user.bearerToken)
+        await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
 
         res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: user.claim.externalId }))
       }

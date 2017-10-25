@@ -33,7 +33,7 @@ export default express.Router()
         const user: User = res.locals.user
         user.responseDraft.document.response = form.model
 
-        await new DraftService()['save'](user.responseDraft, user.bearerToken)
+        await new DraftService().save(user.responseDraft, user.bearerToken)
 
         const responseType = user.responseDraft.document.response.type
 

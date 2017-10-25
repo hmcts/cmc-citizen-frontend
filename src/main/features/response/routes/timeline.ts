@@ -43,7 +43,7 @@ export default express.Router()
         form.model.removeExcessRows()
         res.locals.user.responseDraft.document.timeline = form.model
 
-        await new DraftService()['save'](res.locals.user.responseDraft, res.locals.user.bearerToken)
+        await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: res.locals.user.claim.externalId }))
       }
     })

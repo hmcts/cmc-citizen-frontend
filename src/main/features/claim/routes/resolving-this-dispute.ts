@@ -14,7 +14,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       res.locals.user.claimDraft.document.readResolveDispute = true
 
-      await new DraftService()['save'](res.locals.user.claimDraft, res.locals.user.bearerToken)
+      await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
 
       res.redirect(Paths.taskListPage.uri)
     }))

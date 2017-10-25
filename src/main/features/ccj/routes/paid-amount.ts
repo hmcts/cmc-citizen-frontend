@@ -32,7 +32,7 @@ export default express.Router()
         } else {
           const { externalId } = req.params
           user.ccjDraft.document.paidAmount = form.model
-          await new DraftService()['save'](user.ccjDraft, user.bearerToken)
+          await new DraftService().save(user.ccjDraft, user.bearerToken)
           res.redirect(Paths.paidAmountSummaryPage.evaluateUri({ externalId: externalId }))
         }
       }))

@@ -35,7 +35,7 @@ export default express.Router()
         if (partyDetails === undefined || partyDetails.type !== form.model.type.value) {
           partyDetails = res.locals.user.claimDraft.document.claimant.partyDetails = PartyDetailsFactory.createInstance(form.model.type.value)
 
-          await new DraftService()['save'](res.locals.user.claimDraft, res.locals.user.bearerToken)
+          await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
 
         }
 

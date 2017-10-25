@@ -110,7 +110,7 @@ export default express.Router()
       } else {
         if (form.model.type === SignatureType.QUALIFIED) {
           user.claimDraft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
-          await new DraftService()['save'](res.locals.user.claimDraft, res.locals.user.bearerToken)
+          await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
         }
         res.redirect(Paths.startPaymentReceiver.uri)
       }

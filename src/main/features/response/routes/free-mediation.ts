@@ -36,7 +36,7 @@ export default express.Router()
       } else {
         const user = res.locals.user
         user.responseDraft.document.freeMediation = form.model
-        await new DraftService()['save'](user.responseDraft, user.bearerToken)
+        await new DraftService().save(user.responseDraft, user.bearerToken)
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

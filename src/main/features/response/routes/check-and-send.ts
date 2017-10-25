@@ -107,7 +107,7 @@ export default express.Router()
 
         if (form.model.type === SignatureType.QUALIFIED) {
           user.responseDraft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
-          await new DraftService()['save'](user.responseDraft, user.bearerToken)
+          await new DraftService().save(user.responseDraft, user.bearerToken)
         }
         await ClaimStoreClient.saveResponseForUser(user)
         await new DraftService()['delete'](user.responseDraft['id'], user.bearerToken)

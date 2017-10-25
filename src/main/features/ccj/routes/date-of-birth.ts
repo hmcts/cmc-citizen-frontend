@@ -46,7 +46,7 @@ export default express.Router()
         renderView(form, res)
       } else {
         user.ccjDraft.document.defendantDateOfBirth = form.model
-        await new DraftService()['save'](user.ccjDraft, user.bearerToken)
+        await new DraftService().save(user.ccjDraft, user.bearerToken)
         res.redirect(Paths.paidAmountPage.uri.replace(':externalId', externalId))
 
       }

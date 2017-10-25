@@ -46,7 +46,7 @@ export default express.Router()
         form.model.removeExcessRows()
         res.locals.user.claimDraft.document.amount = form.model
         ClaimValidator.claimAmount(form.model.totalAmount())
-        await new DraftService()['save'](res.locals.user.claimDraft, res.locals.user.bearerToken)
+        await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
         res.redirect(Paths.interestPage.uri)
       }
     })

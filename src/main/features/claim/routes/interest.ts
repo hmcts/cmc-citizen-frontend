@@ -28,7 +28,7 @@ export default express.Router()
       } else {
         res.locals.user.claimDraft.document.interest = form.model
 
-        await new DraftService()['save'](res.locals.user.claimDraft, res.locals.user.bearerToken)
+        await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
 
         if (form.model.type === InterestType.NO_INTEREST) {
           res.redirect(Paths.feesPage.uri)

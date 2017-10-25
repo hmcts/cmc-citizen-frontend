@@ -92,7 +92,7 @@ export default express.Router()
             (user.claim.claimData.defendant as SoleTrader).businessName
         }
 
-        await new DraftService()['save'](res.locals.user.responseDraft, res.locals.user.bearerToken)
+        await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
 
         switch (user.responseDraft.document.defendantDetails.partyDetails.type) {
           case PartyType.INDIVIDUAL.value:

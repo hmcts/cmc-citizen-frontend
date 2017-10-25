@@ -41,7 +41,7 @@ export default express.Router()
         const user: User = res.locals.user
         user.responseDraft.document.moreTimeNeeded = form.model
 
-        await new DraftService()['save'](user.responseDraft, user.bearerToken)
+        await new DraftService().save(user.responseDraft, user.bearerToken)
 
         if (form.model.option === MoreTimeNeededOption.YES) {
           await ClaimStoreClient.requestForMoreTime(user.claim.id, user)

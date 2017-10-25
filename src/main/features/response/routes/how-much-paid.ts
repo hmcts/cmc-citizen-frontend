@@ -38,7 +38,7 @@ export default express.Router()
         await renderView(form, res, next)
       } else {
         user.responseDraft.document.howMuchIsPaid = form.model
-        await new DraftService()['save'](user.responseDraft, user.bearerToken)
+        await new DraftService().save(user.responseDraft, user.bearerToken)
         res.redirect(Paths.timelinePage.evaluateUri({ externalId: user.claim.externalId }))
       }
     })
