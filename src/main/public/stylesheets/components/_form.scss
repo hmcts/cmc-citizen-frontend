@@ -16,17 +16,3 @@
     @include button($grey-3);
   }
 }
-
-input {
-  &.postcode {
-    width: 100%;
-  }
-}
-
-@media (min-width: 641px) {
-  input {
-    &.postcode {
-      width: 25%;
-    }
-  }
-}
