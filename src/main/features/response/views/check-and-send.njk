@@ -73,17 +73,21 @@
         {{ row('Why this is what you owe?', draft.howMuchIsPaid.text, paths.defendantHowMuchOwed.evaluateUri({ externalId: claim.externalId })) }}
       {% endif %}
 
-      {% set timelineCode = '' %}
+      {% set timelineCode = '<ul>' %}
       {% for row in draft.timeline.rows %}
-        {% set timelineCode = timelineCode + row.date + ': ' + row.description + ' <br>' %}
+        {% set timelineCode = timelineCode + '<li><div class="bold">' + row.date + '</div>' + row.description + ' </li>' %}
       {% endfor %}
+      {% set timelineCode = timelineCode+ '</ul>' %}
 
       {{ row('Your timeline of events (optional)', timelineCode | safe, paths.timelinePage.evaluateUri({ externalId: claim.externalId })) }}
 
-      {% set evidenceCode = '' %}
+      {% set evidenceCode = '<ul>' %}
       {% for row in draft.evidence.rows %}
-        {% set evidenceCode = evidenceCode + row.type + ': ' + row.description + ' <br>' %}
+        {% if row.type %}
+          {% set evidenceCode = evidenceCode + '<li><div class="bold">' + row.type + '</div>' + row.description + ' </li>' %}
+        {% endif %}
       {% endfor %}
+      {% set evidenceCode = evidenceCode + '</ul>' %}
 
       {{ row('Your evidence (optional)', evidenceCode | safe, paths.evidencePage.evaluateUri({ externalId: claim.externalId })) }}
 
