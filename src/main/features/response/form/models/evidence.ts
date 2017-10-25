@@ -4,7 +4,7 @@ import { Serializable } from 'models/serializable'
 import { EvidenceRow, EvidenceType } from 'response/form/models/evidenceRow'
 
 export const INIT_ROW_COUNT: number = 4
-export const MAX_NUMBER_OF_EVENTS: number = 20
+export const MAX_NUMBER_OF_ROWS: number = 20
 
 export class Evidence implements Serializable<Evidence> {
   readonly type: string = 'breakdown'
@@ -51,7 +51,7 @@ export class Evidence implements Serializable<Evidence> {
   }
 
   canAddMoreRows () {
-    return this.rows.length < MAX_NUMBER_OF_EVENTS
+    return this.rows.length < MAX_NUMBER_OF_ROWS
   }
 
   private deserializeRows (rows: any): EvidenceRow[] {

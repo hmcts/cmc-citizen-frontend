@@ -1,6 +1,5 @@
-import { IsDefined, IsIn, ValidateIf } from 'class-validator'
+import { IsDefined, IsIn } from 'class-validator'
 
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 
 export class ValidationErrors {
@@ -41,14 +40,10 @@ export class EvidenceType {
 
 export class EvidenceRow {
 
-  @ValidateIf(o => EvidenceType.isValid(o))
   @IsDefined({ message: ValidationErrors.TYPE_REQUIRED })
   @IsIn(EvidenceType.all(), { message: ValidationErrors.TYPE_REQUIRED })
   type?: string
 
-  @ValidateIf(o => EvidenceType.isValid(o))
-  @IsDefined({ message: ValidationErrors.DESCRIPTION_REQUIRED })
-  @IsNotBlank({ message: ValidationErrors.DESCRIPTION_REQUIRED })
   @MaxLength(ValidationConstants.DESCRIPTION_MAX_LENGTH, { message: ValidationErrors.DESCRIPTION_TOO_LONG })
   description?: string
 

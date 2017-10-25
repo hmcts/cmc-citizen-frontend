@@ -9,10 +9,9 @@
   {% set typeValue = form.valueFor('rows[' + index + '][type]') %}
   {% set descriptionValue = form.valueFor('rows[' + index + '][description]') %}
 
-  {% set errorDate = form.errorFor('rows[' + index + '][date]').length > 0 %}
   {% set errorDescription = form.errorFor('rows[' + index + '][description]').length > 0 %}
 
-  <div class="timeline-row">
+  <div class="timeline-row {% if errorDescription %} form-group-error {% endif %}">
     <label class="visually-hidden" for="rows[{{ index }}][type]">{{ index + 1 }}{{ t('. Evidence') }}</label>
     <select class="form-control-select" name="rows[{{ index }}][type]" id="rows[{{ index }}][type]">
       <option>-- Please make a selection --</option>
@@ -26,8 +25,14 @@
     </select>
     <div class="panel panel-border-narrow other">
       <label for="rows[{{ index }}][description]">Describe this evidence in more detail (optional).</label>
+      {% if errorDescription %}
+        <span class="error-message" id="{{ 'rows[' + index + '][description][label]' }}">
+          {{ form.errorFor('rows[' + index + '][description]') }}
+        </span>
+      {% endif %}
       <textarea name="rows[{{ index }}][description]" id="rows[{{ index }}][description]"
-        class="form-control timeline-column-text" rows="2">{{ descriptionValue if descriptionValue }}</textarea>
+        class="form-control timeline-column-text {% if errorDescription %}form-control-error{% endif %}"
+        rows="2">{{ descriptionValue if descriptionValue }}</textarea>
     </div>
   </div>
 {% endmacro %}
