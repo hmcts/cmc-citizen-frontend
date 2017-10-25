@@ -85,7 +85,7 @@ export default express.Router()
         }
 
         await CCJClient.save(user)
-        await new DraftService()['delete'](user.ccjDraft['id'], user.bearerToken)
+        await new DraftService().delete(user.ccjDraft['id'], user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }
     }))

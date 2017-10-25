@@ -56,11 +56,11 @@ async function successHandler (res, next) {
   }
 
   if (claimStatus) {
-    await new DraftService()['delete'](res.locals.user.claimDraft['id'], res.locals.user.bearerToken)
+    await new DraftService().delete(res.locals.user.claimDraft['id'], res.locals.user.bearerToken)
     res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
   } else {
     const claim = await ClaimStoreClient.saveClaimForUser(res.locals.user)
-    await new DraftService()['delete'](res.locals.user.claimDraft['id'], res.locals.user.bearerToken)
+    await new DraftService().delete(res.locals.user.claimDraft['id'], res.locals.user.bearerToken)
     res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
   }
 }

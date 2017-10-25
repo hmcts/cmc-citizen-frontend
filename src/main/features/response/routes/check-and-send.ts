@@ -110,7 +110,7 @@ export default express.Router()
           await new DraftService().save(user.responseDraft, user.bearerToken)
         }
         await ClaimStoreClient.saveResponseForUser(user)
-        await new DraftService()['delete'](user.responseDraft['id'], user.bearerToken)
+        await new DraftService().delete(user.responseDraft['id'], user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))
