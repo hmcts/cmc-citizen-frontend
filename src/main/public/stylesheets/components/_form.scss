@@ -23,6 +23,17 @@ input {
   }
 }
 
+.form-control-select {
+  font-size: 19px;
+  line-height: 1.31579;
+  font-weight: 400;
+  text-transform: none;
+  background-color: #fff;
+  border: 2px solid #0b0c0c;
+  padding: 5px 4px 4px;
+  box-sizing: border-box;
+}
+
 @media (min-width: 641px) {
   input {
     &.postcode {

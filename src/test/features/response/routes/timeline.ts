@@ -116,7 +116,7 @@ describe('Defendant response: timeline', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ rows: [{ date: 'Damaged roof', description: '299' }] })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
+                .toLocation(Paths.evidencePage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })
 
