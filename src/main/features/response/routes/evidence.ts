@@ -43,8 +43,6 @@ export default express.Router()
         form.model.removeExcessRows()
         res.locals.user.responseDraft.document.evidence = form.model
 
-        console.log(form.model)
-
         await DraftService.save(res.locals.user.responseDraft, res.locals.user.bearerToken)
         renderView(form, res)
         // res.redirect(Paths.taskListPage.evaluateUri({ externalId: res.locals.user.claim.externalId }))
