@@ -84,7 +84,7 @@
       {% set evidenceCode = '<ul>' %}
       {% for row in draft.evidence.rows %}
         {% if row.type %}
-          {% set evidenceCode = evidenceCode + '<li><div class="bold">' + row.type + '</div>' + row.description + ' </li>' %}
+          {% set evidenceCode = evidenceCode + '<li><div class="bold">' + row.type.displayValue + '</div>' + row.description + ' </li>' %}
         {% endif %}
       {% endfor %}
       {% set evidenceCode = evidenceCode + '</ul>' %}

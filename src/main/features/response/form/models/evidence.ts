@@ -1,7 +1,7 @@
 import { ValidateNested } from 'class-validator'
 
 import { Serializable } from 'models/serializable'
-import { EvidenceRow, EvidenceType } from 'response/form/models/evidenceRow'
+import { EvidenceRow } from 'response/form/models/evidenceRow'
 
 export const INIT_ROW_COUNT: number = 4
 export const MAX_NUMBER_OF_ROWS: number = 20
@@ -43,7 +43,7 @@ export class Evidence implements Serializable<Evidence> {
   }
 
   removeExcessRows () {
-    this.rows = this.rows.filter(item => EvidenceType.isValid(item.type))
+    this.rows = this.rows.filter(item => !!item.type)
 
     if (this.rows.length === 0) {
       this.appendRow()

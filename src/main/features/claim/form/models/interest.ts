@@ -21,10 +21,10 @@ export class InterestType {
 export class ValidationErrors {
   static readonly TYPE_REQUIRED: string = 'Choose a rate of interest'
 
-  static readonly RATE_REQUIRED: string = 'You haven\'t entered a rate'
-  static readonly RATE_NOT_VALID: string = 'Correct the rate you\'ve entered'
+  static readonly RATE_REQUIRED: string = 'You haven’t entered a rate'
+  static readonly RATE_NOT_VALID: string = 'Correct the rate you’ve entered'
 
-  static readonly REASON_REQUIRED: string = 'You haven\'t explained why you\'re claiming this rate'
+  static readonly REASON_REQUIRED: string = 'You haven’t explained why you’re claiming this rate'
   static readonly REASON_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
 }
 

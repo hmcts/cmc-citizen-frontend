@@ -6,7 +6,7 @@
 
 {% macro evidenceRow(index, form) %}
 
-  {% set typeValue = form.valueFor('rows[' + index + '][type]') %}
+  {% set typeValue = form.valueFor('rows[' + index + '][type]').value %}
   {% set descriptionValue = form.valueFor('rows[' + index + '][description]') %}
 
   {% set errorType = form.errorFor('rows[' + index + '][type]').length > 0 %}
@@ -21,14 +21,11 @@
     {% endif %}
     <select name="rows[{{ index }}][type]" id="rows[{{ index }}][type]"
       class="form-control-select {% if errorType %}form-control-error{% endif %}" >
+
       <option value="">-- Please make a selection --</option>
-      <option value="CONTRACTS_AND_AGREEMENTS" {% if typeValue == 'CONTRACTS_AND_AGREEMENTS' %}selected{% endif %}>Contracts and agreements</option>
-      <option value="EXPERT_WITNESS" {% if typeValue == 'EXPERT_WITNESS' %}selected{% endif %}>Expert witness</option>
-      <option value="CORRESPONDENCE" {% if typeValue == 'CORRESPONDENCE' %}selected{% endif %}>Letters, emails and other correspondence</option>
-      <option value="PHOTO" {% if typeValue == 'PHOTO' %}selected{% endif %}>Photo evidence</option>
-      <option value="RECEIPTS" {% if typeValue == 'RECEIPTS' %}selected{% endif %}>Receipts</option>
-      <option value="STATEMENT_OF_ACCOUNT" {% if typeValue == 'STATEMENT_OF_ACCOUNT' %}selected{% endif %}>Statements of account</option>
-      <option value="OTHER" {% if typeValue == 'OTHER' %}selected{% endif %}>Other</option>
+      {% for row in allEvidenceTypes %}
+        <option value="{{ row.value }}" {% if typeValue == row.value %}selected{% endif %}>{{ row.displayValue }}</option>
+      {% endfor %}
     </select>
     <div class="panel panel-border-narrow">
       {{ textArea(

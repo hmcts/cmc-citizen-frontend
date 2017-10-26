@@ -1,7 +1,8 @@
 import { expect } from 'chai'
 
-import { EvidenceRow, EvidenceType } from 'response/form/models/evidenceRow'
+import { EvidenceRow } from 'response/form/models/evidenceRow'
 import { Evidence, INIT_ROW_COUNT, MAX_NUMBER_OF_ROWS } from 'response/form/models/evidence'
+import { EvidenceType } from 'response/form/models/evidenceType'
 
 describe('Evidence', () => {
 
@@ -31,18 +32,24 @@ describe('Evidence', () => {
     })
 
     it('should return Evidence with first element on list populated', () => {
-      const actual: Evidence = Evidence.fromObject({ rows: [item()] })
+      const actual: Evidence = Evidence.fromObject({ rows: [{ type: EvidenceType.OTHER.value, description: 'OK' }] })
 
       const populatedItem: EvidenceRow = actual.rows.pop()
 
-      expect(populatedItem.type).to.eq('OTHER')
+      expect(populatedItem.type.value).to.eq('OTHER')
       expect(populatedItem.description).to.eq('OK')
 
       expectAllRowsToBeEmpty(actual.rows)
     })
 
     it('should return object with list of EvidenceRow longer than default', () => {
-      const actual: Evidence = Evidence.fromObject({ rows: [item(), item(), item(), item(), item(), item()] })
+      const actual: Evidence = Evidence.fromObject({ rows: [
+        { type: EvidenceType.OTHER.value, description: 'OK' },
+        { type: EvidenceType.OTHER.value, description: 'OK' },
+        { type: EvidenceType.OTHER.value, description: 'OK' },
+        { type: EvidenceType.OTHER.value, description: 'OK' },
+        { type: EvidenceType.OTHER.value, description: 'OK' }
+      ] })
 
       expect(actual.rows.length).to.be.greaterThan(INIT_ROW_COUNT)
       expectAllRowsToBePopulated(actual.rows)
@@ -51,27 +58,27 @@ describe('Evidence', () => {
 
   describe('deserialize', () => {
 
-    it('should return valid Timeline object with list of empty EvidenceRow', () => {
+    it('should return valid Evidence object with list of empty EvidenceRow', () => {
       const actual: Evidence = new Evidence().deserialize({})
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
       expectAllRowsToBeEmpty(actual.rows)
     })
 
-    it('should return valid Timeline object with populated first EvidenceRow', () => {
+    it('should return valid Evidence object with populated first EvidenceRow', () => {
       const actual: Evidence = new Evidence().deserialize({ rows: [item()] })
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
 
       const populatedItem: EvidenceRow = actual.rows[0]
 
-      expect(populatedItem.type).to.eq('OTHER')
+      expect(populatedItem.type.value).to.eq('OTHER')
       expect(populatedItem.description).to.eq('OK')
 
       expectAllRowsToBeEmpty(actual.rows.slice(1))
     })
 
-    it('should return valid Timeline object with list of row longer than default length', () => {
+    it('should return valid Evidence object with list of row longer than default length', () => {
       const actual: Evidence = new Evidence().deserialize({ rows: [item(), item(), item(), item(), item()] })
 
       expectAllRowsToBePopulated(actual.rows)
@@ -168,8 +175,8 @@ describe('Evidence', () => {
   })
 })
 
-function item (type: string = EvidenceType.OTHER, desc: string = 'OK'): object {
-  return { type: type, description: desc }
+function item (type: string = EvidenceType.OTHER.value, desc: string = 'OK'): object {
+  return { type: { value: type }, description: desc }
 }
 
 function expectAllRowsToBeEmpty (rows: EvidenceRow[]) {

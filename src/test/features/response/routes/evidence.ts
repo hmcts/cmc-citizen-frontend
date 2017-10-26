@@ -12,8 +12,9 @@ import { sampleClaimObj } from '../../../http-mocks/claim-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { checkAlreadySubmittedGuard } from './checks/already-submitted-check'
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
-import { EvidenceType, ValidationConstants } from 'response/form/models/evidenceRow'
+import { ValidationConstants } from 'response/form/models/evidenceRow'
 import { generateString } from '../../../app/forms/models/validationUtils'
+import { EvidenceType } from 'response/form/models/evidenceType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.evidencePage.evaluateUri({ externalId: sampleClaimObj.externalId })
@@ -116,7 +117,7 @@ describe('Defendant response: evidence', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS, description: 'Bla bla' }] })
+              .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value, description: 'Bla bla' }] })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(Paths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
@@ -133,7 +134,7 @@ describe('Defendant response: evidence', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({
                 rows: [{
-                  type: EvidenceType.CONTRACTS_AND_AGREEMENTS,
+                  type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value,
                   description: generateString(ValidationConstants.DESCRIPTION_MAX_LENGTH + 1)
                 }]
               })

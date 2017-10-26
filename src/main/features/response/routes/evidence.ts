@@ -6,7 +6,7 @@ import { FormValidator } from 'app/forms/validation/formValidator'
 import { Evidence } from 'response/form/models/evidence'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'common/draft/draftService'
-import { EvidenceType } from 'response/form/models/evidenceRow'
+import { EvidenceType } from 'response/form/models/evidenceType'
 
 function renderView (form: Form<Evidence>, res: express.Response): void {
   res.render(Paths.evidencePage.associatedView, {

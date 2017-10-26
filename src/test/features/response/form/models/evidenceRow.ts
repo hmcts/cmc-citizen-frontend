@@ -2,7 +2,8 @@ import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from '../../../../app/forms/models/validationUtils'
-import { EvidenceRow, EvidenceType, ValidationConstants, ValidationErrors } from 'response/form/models/evidenceRow'
+import { EvidenceRow, ValidationConstants, ValidationErrors } from 'response/form/models/evidenceRow'
+import { EvidenceType } from 'response/form/models/evidenceType'
 
 describe('EvidenceRow', () => {
 
@@ -41,11 +42,10 @@ describe('EvidenceRow', () => {
 
       it('when description is too long', () => {
         const errors = validator.validateSync(
-          new EvidenceRow('unknown type!!!', generateString(ValidationConstants.DESCRIPTION_MAX_LENGTH + 1))
+          new EvidenceRow(EvidenceType.OTHER, generateString(ValidationConstants.DESCRIPTION_MAX_LENGTH + 1))
         )
 
-        expect(errors.length).to.equal(2)
-        expectValidationError(errors, ValidationErrors.TYPE_REQUIRED)
+        expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.DESCRIPTION_TOO_LONG)
       })
     })
