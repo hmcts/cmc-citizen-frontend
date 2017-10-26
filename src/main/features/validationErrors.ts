@@ -3,4 +3,5 @@ export class ValidationErrors {
   static readonly REASON_NOT_OWE_MONEY_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
   static readonly VALID_OWED_AMOUNT_REQUIRED: string = 'Enter a valid amount owed'
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount'
+  static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter valid amount, maximum two decimal places'
 }
