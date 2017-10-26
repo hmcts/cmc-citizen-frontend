@@ -66,12 +66,13 @@
       {{ tableStart('yourResponse', 'Your response') }}
 
       {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH %}
-        {{ row('How much money do you believe you owe?', draft.howMuchOwed.text, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('How much money do you believe you owe?', draft.howMuchOwed.amount | numeral, paths.defendantHowMuchOwed.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('Why this is what you owe?', draft.howMuchOwed.text, paths.defendantHowMuchOwed.evaluateUri({ externalId: claim.externalId })) }}
       {% endif %}
 
       {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED %}
         {{ row('How much have you paid the claimant?', draft.howMuchIsPaid.amount | numeral, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
-        {{ row('When did you pay this amount?', draft.howMuchIsPaid.date.asString() | date, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('When did you pay this amount?', draft.howMuchIsPaid.date.toMoment() | date, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
         {{ row("Explain why you don't owe the full amount", draft.howMuchIsPaid.text, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
       {% endif %}
 
