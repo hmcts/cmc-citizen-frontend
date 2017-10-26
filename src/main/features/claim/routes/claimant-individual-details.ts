@@ -6,7 +6,7 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { ErrorHandling } from 'common/errorHandling'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<IndividualDetails>, res: express.Response): void {
   res.render(Paths.claimantIndividualDetailsPage.associatedView, { form: form })
@@ -27,7 +27,9 @@ export default express.Router()
         // Workaround: reset date of birth which is erased in the process of form deserialization
         form.model.dateOfBirth = (res.locals.user.claimDraft.document.claimant.partyDetails as IndividualDetails).dateOfBirth
         res.locals.user.claimDraft.document.claimant.partyDetails = form.model
-        await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+
+        await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+
         res.redirect(Paths.claimantDateOfBirthPage.uri)
       }
     }))

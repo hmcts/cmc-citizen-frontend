@@ -18,12 +18,11 @@ import { buildURL } from 'utils/callbackBuilder'
 import DraftClaim from 'drafts/models/draftClaim'
 import JwtExtractor from 'idam/jwtExtractor'
 import { RoutablePath } from 'common/router/routablePath'
-import { DraftStoreClientFactory } from 'common/draft/draftStoreClientFactory'
-import DraftStoreClient from 'common/draft/draftStoreClient'
-import { Draft } from 'models/draft'
+import { Draft } from '@hmcts/draft-store-client/dist/draft/draft'
 import { hasTokenExpired } from 'idam/authorizationMiddleware'
 import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
 import { AuthenticationRedirect } from 'utils/authenticationRedirect'
+import { DraftService } from 'services/draftService'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('router/receiver')
 const useOauth = toBoolean(config.get<boolean>('featureToggles.idamOauth'))
@@ -107,11 +106,7 @@ async function retrieveRedirectForLandingPage (user: User): Promise<string> {
     return DashboardPaths.dashboardPage.uri
   }
 
-  const draftClaimClient: DraftStoreClient<DraftClaim> = await DraftStoreClientFactory.create<DraftClaim>()
-  const draftClaims: Draft<DraftClaim>[] = await draftClaimClient.find({
-    type: 'claim',
-    limit: '100'
-  }, user.bearerToken, (value: any): DraftClaim => {
+  const draftClaims: Draft<DraftClaim>[] = await new DraftService().find('claim', '100', user.bearerToken, (value: any): DraftClaim => {
     return new DraftClaim().deserialize(value)
   })
 

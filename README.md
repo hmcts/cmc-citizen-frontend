@@ -14,7 +14,7 @@ Service delegates most of the non UI responsibilities to underlying services e.g
 
 ### Prerequisites
 
-* [Node.js](https://nodejs.org/) >= v7.2.0
+* [Node.js](https://nodejs.org/) >= v8.0.0
 * [yarn](https://yarnpkg.com/)
 * [Gulp](http://gulpjs.com/)
 * [Docker](https://www.docker.com)
