@@ -25,7 +25,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   moreTimeNeeded?: MoreTimeNeeded
   defendantDetails?: Defendant = new Defendant()
   howMuchIsPaid?: HowMuchPaid
-  timeline: Timeline = new Timeline()
+  timeline: Timeline
   evidence: Evidence
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
   howMuchOwed?: HowMuchOwed
