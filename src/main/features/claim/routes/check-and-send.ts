@@ -1,4 +1,5 @@
 import * as express from 'express'
+
 import { Paths } from 'claim/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
@@ -19,7 +20,7 @@ import { PartyDetails } from 'forms/models/partyDetails'
 import User from 'idam/user'
 import { SignatureType } from 'app/common/signatureType'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/draftService'
 
 function getClaimAmountTotal (res: express.Response): Promise<ClaimAmountTotal> {
   return FeesClient.calculateIssueFee(claimAmountWithInterest(res.locals.user.claimDraft.document))
@@ -109,7 +110,7 @@ export default express.Router()
       } else {
         if (form.model.type === SignatureType.QUALIFIED) {
           user.claimDraft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
-          await DraftService.save(user.claimDraft, user.bearerToken)
+          await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
         }
         res.redirect(Paths.startPaymentReceiver.uri)
       }

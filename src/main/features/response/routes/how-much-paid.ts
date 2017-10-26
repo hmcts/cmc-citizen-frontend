@@ -6,9 +6,9 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { HowMuchPaid } from 'features/response/form/models/howMuchPaid'
 import User from 'idam/user'
-import { DraftService } from 'common/draft/draftService'
 import { ErrorHandling } from 'common/errorHandling'
 import Claim from 'claims/models/claim'
+import { DraftService } from 'services/draftService'
 
 async function renderView (form: Form<HowMuchPaid>, res: express.Response, next: express.NextFunction) {
   try {
@@ -38,7 +38,7 @@ export default express.Router()
         await renderView(form, res, next)
       } else {
         user.responseDraft.document.howMuchIsPaid = form.model
-        await DraftService.save(user.responseDraft, user.bearerToken)
+        await new DraftService().save(user.responseDraft, user.bearerToken)
         res.redirect(Paths.timelinePage.evaluateUri({ externalId: user.claim.externalId }))
       }
     })

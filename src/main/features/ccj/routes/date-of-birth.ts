@@ -10,8 +10,8 @@ import User from 'app/idam/user'
 import DateOfBirth from 'forms/models/dateOfBirth'
 import { PartyType } from 'app/common/partyType'
 
-import { DraftService } from 'common/draft/draftService'
 import { ErrorHandling } from 'common/errorHandling'
+import { DraftService } from 'services/draftService'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('ccj/guards/individualDateOfBirth')
 
@@ -46,7 +46,7 @@ export default express.Router()
         renderView(form, res)
       } else {
         user.ccjDraft.document.defendantDateOfBirth = form.model
-        await DraftService.save(user.ccjDraft, user.bearerToken)
+        await new DraftService().save(user.ccjDraft, user.bearerToken)
         res.redirect(Paths.paidAmountPage.uri.replace(':externalId', externalId))
 
       }

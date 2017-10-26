@@ -1,13 +1,12 @@
 import * as express from 'express'
-
 import { Paths } from 'ccj/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'app/forms/form'
-import { DraftService } from 'common/draft/draftService'
 import User from 'idam/user'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { FormValidator } from 'forms/validation/formValidator'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
   res.render(Paths.paidAmountPage.associatedView, { form: form, totalAmount: res.locals.user.claim.totalAmount })
@@ -33,7 +32,7 @@ export default express.Router()
         } else {
           const { externalId } = req.params
           user.ccjDraft.document.paidAmount = form.model
-          await DraftService.save(user.ccjDraft, user.bearerToken)
+          await new DraftService().save(user.ccjDraft, user.bearerToken)
           res.redirect(Paths.paidAmountSummaryPage.evaluateUri({ externalId: externalId }))
         }
       }))
