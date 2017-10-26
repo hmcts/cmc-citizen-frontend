@@ -85,7 +85,7 @@
       {% set timelineCode = timelineCode+ '</ul>' %}
 
       {% if atLeastOneRow === false %}
-        {% set timelineCode = '&nbsp;' %}
+        {% set timelineCode = '-' %}
       {% endif %}
       {{ row('Your timeline of events (optional)', timelineCode | safe, paths.timelinePage.evaluateUri({ externalId: claim.externalId })) }}
 
@@ -100,7 +100,7 @@
       {% set evidenceCode = evidenceCode + '</ul>' %}
 
       {% if atLeastOneRow === false %}
-        {% set evidenceCode = '&nbsp;' %}
+        {% set evidenceCode = '-' %}
       {% endif %}
       {{ row('Your evidence (optional)', evidenceCode | safe, paths.evidencePage.evaluateUri({ externalId: claim.externalId })) }}
 
