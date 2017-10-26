@@ -16,8 +16,7 @@ function defendantResponseRequestHandler (): express.RequestHandler {
   }
 
   const requiredRoles = [
-    'cmc-private-beta',
-    'defendant'
+    'cmc-private-beta'
   ]
   const unprotectedPaths = []
   return AuthorizationMiddleware.requestHandler(requiredRoles, accessDeniedCallback, unprotectedPaths)

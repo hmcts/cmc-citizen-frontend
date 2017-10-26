@@ -28,7 +28,7 @@ describe('Defendant response: task list page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       })
 
       checkAlreadySubmittedGuard(app, 'get', pagePath)

@@ -13,8 +13,7 @@ function claimIssueRequestHandler (): express.RequestHandler {
   }
 
   const requiredRoles = [
-    'cmc-private-beta',
-    'claimant'
+    'cmc-private-beta'
   ]
   const unprotectedPaths = []
   return AuthorizationMiddleware.requestHandler(requiredRoles, accessDeniedCallback, unprotectedPaths)
