@@ -12,11 +12,14 @@ import { sampleClaimObj } from '../../../http-mocks/claim-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { checkAlreadySubmittedGuard } from './checks/already-submitted-check'
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
+import { ValidationConstants } from 'response/form/models/evidenceRow'
+import { generateString } from '../../../app/forms/models/validationUtils'
+import { EvidenceType } from 'response/form/models/evidenceType'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = Paths.timelinePage.evaluateUri({ externalId: sampleClaimObj.externalId })
+const pagePath: string = Paths.evidencePage.evaluateUri({ externalId: sampleClaimObj.externalId })
 
-describe('Defendant response: timeline', () => {
+describe('Defendant response: evidence', () => {
 
   attachDefaultHooks(app)
 
@@ -27,7 +30,7 @@ describe('Defendant response: timeline', () => {
     context('when user authorised', () => {
 
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
       })
 
       checkAlreadySubmittedGuard(app, 'get', pagePath)
@@ -74,7 +77,7 @@ describe('Defendant response: timeline', () => {
     describe('for authorized user', () => {
 
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
       })
 
       checkAlreadySubmittedGuard(app, 'post', pagePath)
@@ -114,24 +117,13 @@ describe('Defendant response: timeline', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ rows: [{ date: 'Damaged roof', description: '299' }] })
+              .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value, description: 'Bla bla' }] })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.evidencePage.evaluateUri({ externalId: sampleClaimObj.externalId })))
+                .toLocation(Paths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })
 
         context('invalid form', () => {
-
-          it('should render page when date undefined', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ rows: [{ date: undefined, description: '299' }] })
-              .expect(res => expect(res).to.be.successful.withText('Enter a date'))
-          })
 
           it('should render page when description undefined', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
@@ -140,8 +132,13 @@ describe('Defendant response: timeline', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ rows: [{ date: 'May', description: undefined }] })
-              .expect(res => expect(res).to.be.successful.withText('Enter a description of what happened'))
+              .send({
+                rows: [{
+                  type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value,
+                  description: generateString(ValidationConstants.DESCRIPTION_MAX_LENGTH + 1)
+                }]
+              })
+              .expect(res => expect(res).to.be.successful.withText('You’ve entered too many characters'))
           })
         })
       })

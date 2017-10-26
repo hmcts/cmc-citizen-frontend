@@ -3,21 +3,23 @@ import * as express from 'express'
 import { Paths } from 'response/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'app/forms/validation/formValidator'
-import { Timeline } from 'response/form/models/timeline'
+import { Evidence } from 'response/form/models/evidence'
 import { ErrorHandling } from 'common/errorHandling'
+import { EvidenceType } from 'response/form/models/evidenceType'
 import { DraftService } from 'services/draftService'
 
-function renderView (form: Form<Timeline>, res: express.Response): void {
-  res.render(Paths.timelinePage.associatedView, {
+function renderView (form: Form<Evidence>, res: express.Response): void {
+  res.render(Paths.evidencePage.associatedView, {
     form: form,
     claimantName: res.locals.user.claim.claimData.claimant.name,
-    canAddMoreEvents: form.model.canAddMoreRows()
+    canAddMoreEvidence: form.model.canAddMoreRows(),
+    allEvidenceTypes: EvidenceType.all()
   })
 }
 
 function actionHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
   if (req.body.action) {
-    const form: Form<Timeline> = req.body
+    const form: Form<Evidence> = req.body
     if (req.body.action.addRow) {
       form.model.appendRow()
     }
@@ -27,24 +29,24 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 }
 
 export default express.Router()
-  .get(Paths.timelinePage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    renderView(new Form(res.locals.user.responseDraft.document.timeline), res)
+  .get(Paths.evidencePage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    renderView(new Form(res.locals.user.responseDraft.document.evidence), res)
   })
   .post(
-    Paths.timelinePage.uri,
-    FormValidator.requestHandler(Timeline, Timeline.fromObject, undefined, ['addRow']),
+    Paths.evidencePage.uri,
+    FormValidator.requestHandler(Evidence, Evidence.fromObject, undefined, ['addRow']),
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<Timeline> = req.body
+      const form: Form<Evidence> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
         form.model.removeExcessRows()
-        res.locals.user.responseDraft.document.timeline = form.model
+        res.locals.user.responseDraft.document.evidence = form.model
 
         await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
-        res.redirect(Paths.evidencePage.evaluateUri({ externalId: res.locals.user.claim.externalId }))
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: res.locals.user.claim.externalId }))
       }
     })
   )
