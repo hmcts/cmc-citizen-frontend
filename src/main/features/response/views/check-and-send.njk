@@ -83,9 +83,10 @@
       {% endfor %}
       {% set timelineCode = timelineCode+ '</ul>' %}
 
-      {% if atLeastOneRow %}
-        {{ row('Your timeline of events (optional)', timelineCode | safe, paths.timelinePage.evaluateUri({ externalId: claim.externalId })) }}
+      {% if atLeastOneRow === false %}
+        {% set timelineCode = '&nbsp;' %}
       {% endif %}
+      {{ row('Your timeline of events (optional)', timelineCode | safe, paths.timelinePage.evaluateUri({ externalId: claim.externalId })) }}
 
       {% set atLeastOneRow = false %}
       {% set evidenceCode = '<ul>' %}
@@ -97,9 +98,10 @@
       {% endfor %}
       {% set evidenceCode = evidenceCode + '</ul>' %}
 
-      {% if atLeastOneRow %}
-        {{ row('Your evidence (optional)', evidenceCode | safe, paths.evidencePage.evaluateUri({ externalId: claim.externalId })) }}
+      {% if atLeastOneRow === false %}
+        {% set evidenceCode = '&nbsp;' %}
       {% endif %}
+      {{ row('Your evidence (optional)', evidenceCode | safe, paths.evidencePage.evaluateUri({ externalId: claim.externalId })) }}
 
       {% if draft.requireDefence() %}
         {{ row('Your defence', draft.defence.text, paths.defencePage.evaluateUri({ externalId: claim.externalId })) }}
