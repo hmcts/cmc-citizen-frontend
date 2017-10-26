@@ -13,6 +13,11 @@ import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOf
 import { HowMuchPaid } from 'response/form/models/howMuchPaid'
 import { HowMuchOwed } from 'response/form/models/howMuchOwed'
 import { Timeline } from 'response/form/models/timeline'
+import { DefendantPaymentOption } from 'response/form/models/defendantPaymentOption'
+import { PaymentPlan } from 'response/form/models/paymentPlan'
+import { PaidAmount } from 'ccj/form/models/paidAmount'
+import { PayBySetDate } from 'ccj/form/models/payBySetDate'
+
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 
@@ -29,6 +34,10 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   howMuchOwed?: HowMuchOwed
   rejectPartOfClaim?: RejectPartOfClaim
   rejectAllOfClaim?: RejectAllOfClaim
+  defendantPaymentOption: DefendantPaymentOption = new DefendantPaymentOption()
+  paymentPlan?: PaymentPlan
+  paidAmount?: PaidAmount
+  payBySetDate?: PayBySetDate
 
   deserialize (input: any): ResponseDraft {
     if (input) {
@@ -46,6 +55,10 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       }
       this.rejectPartOfClaim = new RejectPartOfClaim(input.rejectPartOfClaim && input.rejectPartOfClaim.option)
       this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
+      this.defendantPaymentOption = new DefendantPaymentOption().deserialize(input.paymentOption)
+      this.paymentPlan = new PaymentPlan().deserialize(input.repaymentPlan)
+      this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
+      this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
     }
     return this
   }

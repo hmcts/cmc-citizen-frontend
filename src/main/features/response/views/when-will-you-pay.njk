@@ -1,0 +1,33 @@
+{% extends "layout.njk" %}
+
+{% set title = 'Money claim' %}
+
+{% from "form.njk" import saveAndContinueButton, csrfProtection, radioGroup, errorSummary %}
+
+{% block content %}
+  <div class="column-two-thirds">
+
+    <h1 class="heading-large">
+      {{ t("When will you pay?") }}
+    </h1>
+
+    <form method="post" class="analytics-submit-event-trigger" data-event-action="Defendant: Select payment option" data-event-label-from="option" novalidate>
+      {{ csrfProtection(csrf) }}
+
+      {{
+      radioGroup(
+      'I would like the defendant to be ordered to pay:',
+      'option',
+      [
+      {'label': 'The full amount on set date', value: 'FULL_BY_SPECIFIED_DATE', checked: (form.valueFor('option').value === 'FULL_BY_SPECIFIED_DATE')},
+      {'label': 'By instalments', value: 'INSTALMENTS', checked: (form.valueFor('option').value === 'INSTALMENTS')}
+      ],
+      form = form
+      )
+      }}
+
+      {{ saveAndContinueButton() }}
+    </form>
+
+  </div>
+{% endblock %}
