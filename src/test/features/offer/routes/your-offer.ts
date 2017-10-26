@@ -31,7 +31,7 @@ describe('Offer page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       })
 
       it('should return 500 and render error page when cannot retrieve claims', async () => {
@@ -57,7 +57,7 @@ describe('Offer page', () => {
 
       context('when user authorised', () => {
         beforeEach(() => {
-          idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
+          idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
         })
 
         context('when middleware failure', () => {
@@ -76,10 +76,10 @@ describe('Offer page', () => {
           it('should redirect to offer confirmation page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolveSaveOffer()
-            const futureDate = moment().add(4, 'month')
+            const futureDate = moment().add(1, 'day')
             const formData = {
               offerText: 'Offer Text',
-              completionDate: new LocalDate(futureDate.year(), futureDate.month(), futureDate.days())
+              completionDate: new LocalDate(futureDate.year(), futureDate.month() + 1, futureDate.date())
             }
             await request(app)
               .post(offerPage)

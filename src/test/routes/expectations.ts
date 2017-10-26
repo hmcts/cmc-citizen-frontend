@@ -17,7 +17,7 @@ function errorMessageWithResponseExtract (msg: string, res: any): string {
   const responseExtract = {
     statusCode: res.statusCode,
     headers: res.headers,
-    text: res.text.replace(/\n+\s*/g, '')
+    text: res.text ? res.text.replace(/\n+\s*/g, '') : undefined
   }
 
   return `${msg} - see response extract below:\n${stringifyWithoutPropertyQuotes(responseExtract, true)}`
@@ -49,6 +49,13 @@ Assertion.addProperty('successful', statusCodeInRangeAssertion([
  */
 Assertion.addProperty('redirect', statusCodeInRangeAssertion([
   HttpStatus.MOVED_TEMPORARILY
+]))
+
+/**
+ * Checks whether response status code is forbidden
+ */
+Assertion.addProperty('forbidden', statusCodeInRangeAssertion([
+  HttpStatus.FORBIDDEN
 ]))
 
 /**

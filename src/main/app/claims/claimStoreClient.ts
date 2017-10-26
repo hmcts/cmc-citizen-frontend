@@ -7,6 +7,7 @@ import { ResponseModelConverter } from 'claims/responseModelConverter'
 import { OfferModelConverter } from 'claims/offerModelConvertor'
 import { Offer } from 'claims/models/offer'
 import { Offer as OfferForm } from 'features/offer/form/models/offer'
+import { ForbiddenError } from '../../errors'
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
 const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
@@ -72,7 +73,7 @@ export default class ClaimStoreClient {
       })
   }
 
-  static retrieveByExternalId (externalId: string): Promise<Claim> {
+  static retrieveByExternalId (externalId: string, userId: string): Promise<Claim> {
     if (!externalId) {
       return Promise.reject(new Error('External id must be set'))
     }
@@ -80,6 +81,9 @@ export default class ClaimStoreClient {
     return request
       .get(`${claimStoreApiUrl}/${externalId}`)
       .then(claim => {
+        if (userId !== claim.submitterId && userId !== claim.defendantId) {
+          throw new ForbiddenError()
+        }
         if (claim) {
           return new Claim().deserialize(claim)
         } else {

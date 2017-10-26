@@ -27,7 +27,7 @@ describe('Defendant response: timeline', () => {
     context('when user authorised', () => {
 
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       })
 
       checkAlreadySubmittedGuard(app, 'get', pagePath)
@@ -74,7 +74,7 @@ describe('Defendant response: timeline', () => {
     describe('for authorized user', () => {
 
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       })
 
       checkAlreadySubmittedGuard(app, 'post', pagePath)
@@ -116,7 +116,7 @@ describe('Defendant response: timeline', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ rows: [{ date: 'Damaged roof', description: '299' }] })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
+                .toLocation(Paths.evidencePage.evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })
 

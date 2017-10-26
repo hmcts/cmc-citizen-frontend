@@ -4,7 +4,7 @@ import { Paths } from 'response/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'app/forms/form'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/draftService'
 import User from 'idam/user'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { PaymentPlan } from 'response/form/models/paymentPlan'
@@ -41,7 +41,7 @@ export default express.Router()
           const { externalId } = req.params
           user.responseDraft.document.paymentPlan = form.model
           user.responseDraft.document.payBySetDate = undefined
-          await DraftService.save(user.responseDraft, user.bearerToken)
+          await new DraftService().save(user.responseDraft, user.bearerToken)
           res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
         }
       }))

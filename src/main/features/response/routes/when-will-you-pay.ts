@@ -7,7 +7,7 @@ import { DefendantPaymentOption, PaymentType } from 'response/form/models/defend
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import User from 'idam/user'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/draftService'
 
 export default express.Router()
   .get(Paths.defenceFullPartialPaymentOptionsPage.uri,
@@ -27,7 +27,7 @@ export default express.Router()
           res.render(Paths.defenceFullPartialPaymentOptionsPage.associatedView, { form: form })
         } else {
           user.responseDraft.document.defendantPaymentOption = form.model
-          await DraftService.save(user.responseDraft, user.bearerToken)
+          await new DraftService().save(user.responseDraft, user.bearerToken)
 
           const { externalId } = req.params
 

@@ -10,7 +10,6 @@ import { YourDefenceTask } from 'response/tasks/yourDefenceTask'
 import { YourDetails } from 'response/tasks/yourDetails'
 import { HowMuchPaidTask } from 'response/tasks/howMuchPaidTask'
 import { HowMuchOwedTask } from 'response/tasks/howMuchOwedTask'
-import { TimelineTask } from 'response/tasks/timelineTask'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, externalId: string): TaskList {
@@ -52,7 +51,7 @@ export class TaskListBuilder {
         new TaskListItem(
           'How much money do you believe you owe?',
           Paths.defendantHowMuchOwed.evaluateUri({ externalId: externalId }),
-          HowMuchOwedTask.isCompleted(draft) && TimelineTask.isCompleted(draft)
+          HowMuchOwedTask.isCompleted(draft)
         )
       )
     }
@@ -62,7 +61,7 @@ export class TaskListBuilder {
         new TaskListItem(
           'How much have you paid the claimant?',
           Paths.defendantHowMuchPaid.evaluateUri({ externalId: externalId }),
-          HowMuchPaidTask.isCompleted(draft) && TimelineTask.isCompleted(draft)
+          HowMuchPaidTask.isCompleted(draft)
         )
       )
     }

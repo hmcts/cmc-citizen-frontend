@@ -6,7 +6,7 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { ErrorHandling } from 'common/errorHandling'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<CompanyDetails>, res: express.Response): void {
   res.render(Paths.defendantCompanyDetailsPage.associatedView, { form: form })
@@ -25,7 +25,9 @@ export default express.Router()
         renderView(form, res)
       } else {
         res.locals.user.claimDraft.document.defendant.partyDetails = form.model
-        await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+
+        await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+
         res.redirect(Paths.defendantEmailPage.uri)
       }
     }))

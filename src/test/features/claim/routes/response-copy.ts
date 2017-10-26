@@ -25,7 +25,7 @@ describe('Defendant response copy', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'claimant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       })
 
       it('should return 500 and render error page when cannot download the response copy', async () => {
@@ -38,13 +38,13 @@ describe('Defendant response copy', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should return 500 and render error page when the user is not owner of claim', async () => {
+      it('should return 403 and render error page when the user is not owner of claim', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId({ submitterId: 123 })
 
         await request(app)
           .get(ClaimPaths.defendantResponseCopy.evaluateUri({ externalId: externalId }))
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.serverError.withText('Error'))
+          .expect(res => expect(res).to.be.forbidden)
       })
 
       it('should return receipt when everything is fine', async () => {

@@ -20,6 +20,7 @@ export class Paths {
   static readonly fullAdmissionPage = new RoutablePath(`${responsePath}/full-admission`)
   static readonly incompleteSubmissionPage = new RoutablePath(`${responsePath}/incomplete-submission`)
   static readonly timelinePage = new RoutablePath(`${responsePath}/timeline`)
+  static readonly evidencePage = new RoutablePath(`${responsePath}/evidence`)
   static readonly receiptReceiver = new RoutablePath(`${responsePath}/receipt`)
   // Added in case anyone has a printed copy of a PDF with the old URL
   static readonly legacyDashboardRedirect = new RoutablePath('/response/dashboard')
