@@ -5,8 +5,8 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'app/forms/validation/formValidator'
 import { Evidence } from 'response/form/models/evidence'
 import { ErrorHandling } from 'common/errorHandling'
-import { DraftService } from 'common/draft/draftService'
 import { EvidenceType } from 'response/form/models/evidenceType'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<Evidence>, res: express.Response): void {
   res.render(Paths.evidencePage.associatedView, {
@@ -45,7 +45,7 @@ export default express.Router()
         form.model.removeExcessRows()
         res.locals.user.responseDraft.document.evidence = form.model
 
-        await DraftService.save(res.locals.user.responseDraft, res.locals.user.bearerToken)
+        await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: res.locals.user.claim.externalId }))
       }
     })
