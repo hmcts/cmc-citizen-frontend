@@ -27,7 +27,7 @@ describe('Defendant response: partial admission page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, 'get', pagePath)

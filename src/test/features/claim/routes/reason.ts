@@ -22,7 +22,7 @@ describe('Claim issue: reason page', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.reasonPage.uri)
 
     it('should render page when everything is fine', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'claimant')
+      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
@@ -32,7 +32,7 @@ describe('Claim issue: reason page', () => {
     })
 
     it('should render page when everything is fine without a name field', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'claimant')
+      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       draftStoreServiceMock.resolveFind('claim', { defendant: undefined })
 
       await request(app)
@@ -47,7 +47,7 @@ describe('Claim issue: reason page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'claimant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       })
 
       it('should render page when form is invalid and everything is fine', async () => {
