@@ -10,6 +10,9 @@ import * as numeral from 'numeral'
 import * as toBoolean from 'to-boolean'
 
 import { NUMBER_FORMAT } from 'app/utils/numberFormatter'
+import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
+import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { SignatureType } from 'app/common/signatureType'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -66,5 +69,8 @@ export default class Nunjucks {
 
     nunjucksEnv.addGlobal('toBoolean', toBoolean)
     nunjucksEnv.addGlobal('featureToggles', config.get('featureToggles'))
+    nunjucksEnv.addGlobal('RejectAllOfClaimOption', RejectAllOfClaimOption)
+    nunjucksEnv.addGlobal('RejectPartOfClaimOption', RejectPartOfClaimOption)
+    nunjucksEnv.addGlobal('SignatureType', SignatureType)
   }
 }

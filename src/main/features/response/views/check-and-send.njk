@@ -5,8 +5,8 @@
 {% from "statement-of-truth.njk" import statementOfTruth %}
 {% from "party/details.njk" import partyDetailsSummaryFragment %}
 
-{% set title = t("Money claim") %}
-{% set heading = t("Check your answers before submitting your response") %}
+{% set title = t('Money claim') %}
+{% set heading = t('Check your answers before submitting your response') %}
 
 {% block content %}
   <form novalidate method="post">
@@ -32,11 +32,11 @@
     {{ row('Do you owe the money claimed?', t(draft.response.type.displayValue) | capitalize, paths.responseTypePage.evaluateUri({ externalId: claim.externalId })) }}
 
     {% if draft.response.type.value === 'OWE_SOME_PAID_NONE' %}
-      {% if draft.rejectPartOfClaim.option === 'paidWhatBelievedWasOwed' %}
+      {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED %}
         {% set rejectPartOption = 'I’ve paid what I believe I owe' %}
       {% endif %}
 
-      {% if draft.rejectPartOfClaim.option === 'amountTooHigh' %}
+      {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH %}
         {% set rejectPartOption = 'The claim amount is too much' %}
       {% endif %}
 
@@ -44,15 +44,15 @@
     {% endif %}
 
     {% if draft.response.type.value === 'OWE_NONE' %}
-      {% if draft.rejectAllOfClaim.option === 'alreadyPaid' %}
+      {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
         {% set rejectAllOption = 'I’ve already paid the claim in full' %}
       {% endif %}
 
-      {% if draft.rejectAllOfClaim.option === 'dispute' %}
+      {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE %}
         {% set rejectAllOption = 'I dispute the claim' %}
       {% endif %}
 
-      {% if draft.rejectAllOfClaim.option === 'counterClaim' %}
+      {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
         {% set rejectAllOption = 'Defend now and also make a counterclaim' %}
       {% endif %}
 
@@ -65,11 +65,11 @@
 
       {{ tableStart('yourResponse', 'Your response') }}
 
-      {% if draft.rejectPartOfClaim.option === 'amountTooHigh' %}
+      {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH %}
         {{ row('How much money do you believe you owe?', draft.howMuchOwed.text, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
       {% endif %}
 
-      {% if draft.rejectPartOfClaim.option === 'paidWhatBelievedWasOwed' %}
+      {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED %}
         {{ row('Why this is what you owe?', draft.howMuchIsPaid.text, paths.defendantHowMuchOwed.evaluateUri({ externalId: claim.externalId })) }}
       {% endif %}
 
@@ -105,7 +105,7 @@
       statementOfTruth(
         form,
         label = 'I believe that the facts stated in this claim are true',
-        isQualified = (signatureType === 'qualified')
+        isQualified = (signatureType === SignatureType.QUALIFIED)
       )
     }}
 
