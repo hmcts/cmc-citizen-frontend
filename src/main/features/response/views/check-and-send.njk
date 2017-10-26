@@ -66,11 +66,12 @@
       {{ tableStart('yourResponse', 'Your response') }}
 
       {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH %}
-        {{ row('How much money do you believe you owe?', draft.howMuchOwed.text, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('How much money do you believe you owe?', draft.howMuchOwed.amount | numeral, paths.defendantHowMuchOwed.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('Why this is what you owe?', draft.howMuchOwed.text, paths.defendantHowMuchOwed.evaluateUri({ externalId: claim.externalId })) }}
       {% endif %}
 
       {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED %}
-        {{ row('Why this is what you owe?', draft.howMuchIsPaid.text, paths.defendantHowMuchOwed.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('Why this is what you owe?', draft.howMuchIsPaid.text, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
       {% endif %}
 
       {% set timelineCode = '<ul>' %}
