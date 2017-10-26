@@ -13,6 +13,7 @@ import { NUMBER_FORMAT } from 'app/utils/numberFormatter'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { SignatureType } from 'app/common/signatureType'
+import { ResponseType } from 'response/form/models/responseType'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -72,5 +73,6 @@ export default class Nunjucks {
     nunjucksEnv.addGlobal('RejectAllOfClaimOption', RejectAllOfClaimOption)
     nunjucksEnv.addGlobal('RejectPartOfClaimOption', RejectPartOfClaimOption)
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
+    nunjucksEnv.addGlobal('ResponseType', ResponseType)
   }
 }
