@@ -103,7 +103,7 @@ describe('Defendant response: defence page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to free mediation list page when form is valid and everything is fine', async () => {
+          it('should redirect to task list page when form is valid and everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
@@ -113,7 +113,7 @@ describe('Defendant response: defence page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ text: 'Some valid defence' })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.freeMediationPage
+                .toLocation(ResponsePaths.taskListPage
                   .evaluateUri({ externalId: sampleClaimObj.externalId })))
           })
         })
