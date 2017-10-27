@@ -10,7 +10,7 @@ import { YourDefenceTask } from 'response/tasks/yourDefenceTask'
 import { YourDetails } from 'response/tasks/yourDetails'
 import { HowMuchPaidTask } from 'response/tasks/howMuchPaidTask'
 import { HowMuchOwedTask } from 'response/tasks/howMuchOwedTask'
-import {FreeMediationTask} from "response/tasks/freeMediationTask";
+import { FreeMediationTask } from 'response/tasks/freeMediationTask'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, externalId: string): TaskList {
@@ -31,9 +31,9 @@ export class TaskListBuilder {
         MoreTimeNeededTask.isCompleted(draft)))
     }
 
-    if (draft.requireMediation()){
+    if (draft.requireMediation()) {
       tasks.push(new TaskListItem('Free mediation', Paths.freeMediationPage
-        .evaluateUri({externalId: externalId}),
+          .evaluateUri({ externalId: externalId }),
         FreeMediationTask.isCompleted(draft)))
     }
     tasks.push(new TaskListItem('Do you owe the money claimed', Paths.responseTypePage
@@ -41,8 +41,7 @@ export class TaskListBuilder {
       OweMoneyTask.isCompleted(draft)))
 
     if (draft.requireHowMuchPaid()) {
-      tasks.push(new TaskListItem('How much have you paid the claimant?', Paths.defendantHowMuchPaid.
-        evaluateUri({ externalId: externalId }),
+      tasks.push(new TaskListItem('How much have you paid the claimant?', Paths.defendantHowMuchPaid.evaluateUri({ externalId: externalId }),
         HowMuchPaidTask.isCompleted(draft)))
 
       if (draft.requireHowMuchOwed()) {
