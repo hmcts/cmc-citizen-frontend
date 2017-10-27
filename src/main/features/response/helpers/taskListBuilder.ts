@@ -10,19 +10,13 @@ import { YourDefenceTask } from 'response/tasks/yourDefenceTask'
 import { YourDetails } from 'response/tasks/yourDetails'
 import { HowMuchPaidTask } from 'response/tasks/howMuchPaidTask'
 import { HowMuchOwedTask } from 'response/tasks/howMuchOwedTask'
-import { TimelineTask } from 'response/tasks/timelineTask'
-import { FreeMediationTask } from 'response/tasks/freeMediationTask'
+import {FreeMediationTask} from "response/tasks/freeMediationTask";
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, externalId: string): TaskList {
     const tasks: TaskListItem[] = []
-    tasks.push(
-      new TaskListItem(
-        'Confirm your details',
-        Paths.defendantYourDetailsPage.evaluateUri({ externalId: externalId }),
-        YourDetails.isCompleted(draft)
-      )
-    )
+    tasks.push(new TaskListItem('Confirm your details', Paths.defendantYourDetailsPage
+      .evaluateUri({ externalId: externalId }), YourDetails.isCompleted(draft)))
 
     return new TaskList(1, 'Before you start', tasks)
   }
@@ -32,71 +26,44 @@ export class TaskListBuilder {
     const now: Moment = MomentFactory.currentDateTime()
 
     if (responseDeadline.isAfter(now)) {
-      tasks.push(
-        new TaskListItem(
-          'More time needed to respond',
-          Paths.moreTimeRequestPage.evaluateUri({ externalId: externalId }),
-          MoreTimeNeededTask.isCompleted(draft)
-        )
-      )
+      tasks.push(new TaskListItem('More time needed to respond', Paths.moreTimeRequestPage
+          .evaluateUri({ externalId: externalId }),
+        MoreTimeNeededTask.isCompleted(draft)))
     }
 
-    tasks.push(
-      new TaskListItem(
-        'Do you owe the money claimed',
-        Paths.responseTypePage.evaluateUri({ externalId: externalId }),
-        OweMoneyTask.isCompleted(draft)
-      )
-    )
+    if (draft.requireMediation()){
+      tasks.push(new TaskListItem('Free mediation', Paths.freeMediationPage
+        .evaluateUri({externalId: externalId}),
+        FreeMediationTask.isCompleted(draft)))
+    }
+    tasks.push(new TaskListItem('Do you owe the money claimed', Paths.responseTypePage
+        .evaluateUri({ externalId: externalId }),
+      OweMoneyTask.isCompleted(draft)))
 
     if (draft.requireHowMuchPaid()) {
-      tasks.push(
-        new TaskListItem(
-          'How much money do you believe you owe?',
-          Paths.defendantHowMuchOwed.evaluateUri({ externalId: externalId }),
-          HowMuchOwedTask.isCompleted(draft) && TimelineTask.isCompleted(draft)
-        )
-      )
-    }
+      tasks.push(new TaskListItem('How much have you paid the claimant?', Paths.defendantHowMuchPaid.
+        evaluateUri({ externalId: externalId }),
+        HowMuchPaidTask.isCompleted(draft)))
 
-    if (draft.requireHowMuchOwed()) {
-      tasks.push(
-        new TaskListItem(
-          'How much have you paid the claimant?',
-          Paths.defendantHowMuchPaid.evaluateUri({ externalId: externalId }),
-          HowMuchPaidTask.isCompleted(draft) && TimelineTask.isCompleted(draft)
-        )
-      )
+      if (draft.requireHowMuchOwed()) {
+        tasks.push(new TaskListItem('How much money do you believe you owe?', Paths.defendantHowMuchOwed
+            .evaluateUri({ externalId: externalId }),
+          HowMuchOwedTask.isCompleted(draft)))
+      }
     }
 
     if (draft.requireDefence()) {
-      tasks.push(
-        new TaskListItem(
-          'Your defence',
-          Paths.defencePage.evaluateUri({ externalId: externalId }),
-          YourDefenceTask.isCompleted(draft)
-        )
-      )
-    }
-
-    if (draft.requireMediation()) {
-      tasks.push(new TaskListItem('Free mediation', Paths.freeMediationPage
+      tasks.push(new TaskListItem('Your defence', Paths.defencePage
           .evaluateUri({ externalId: externalId }),
-        FreeMediationTask.isCompleted(draft)))
+        YourDefenceTask.isCompleted(draft)))
     }
-
     return new TaskList(2, 'Respond to claim', tasks)
   }
 
   static buildSubmitSection (externalId: string): TaskList {
     const tasks: TaskListItem[] = []
-    tasks.push(
-      new TaskListItem(
-        'Check and submit your response',
-        Paths.checkAndSendPage.evaluateUri({ externalId: externalId }),
-        false
-      )
-    )
+    tasks.push(new TaskListItem('Check and submit your response', Paths.checkAndSendPage
+      .evaluateUri({ externalId: externalId }), false))
 
     return new TaskList(3, 'Submit', tasks)
   }

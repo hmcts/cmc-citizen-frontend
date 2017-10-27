@@ -1,20 +1,18 @@
-import { Response } from 'response/form/models/response'
-import { Serializable } from 'models/serializable'
-import { FreeMediation } from 'response/form/models/freeMediation'
-import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
-import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
+import {Response} from 'response/form/models/response'
+import {Serializable} from 'models/serializable'
+import {FreeMediation} from 'response/form/models/freeMediation'
+import {RejectPartOfClaim, RejectPartOfClaimOption} from 'response/form/models/rejectPartOfClaim'
+import {RejectAllOfClaim, RejectAllOfClaimOption} from 'response/form/models/rejectAllOfClaim'
 import Defence from 'response/form/models/defence'
-import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
-import { ResponseType } from 'response/form/models/responseType'
-import { isNullOrUndefined } from 'util'
-import { Defendant } from 'app/drafts/models/defendant'
-import { DraftDocument } from 'app/models/draftDocument'
-import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
-import { HowMuchPaid } from 'response/form/models/howMuchPaid'
-import { HowMuchOwed } from 'response/form/models/howMuchOwed'
-import { Timeline } from 'response/form/models/timeline'
-import * as config from 'config'
-import * as toBoolean from 'to-boolean'
+import {MoreTimeNeeded, MoreTimeNeededOption} from 'response/form/models/moreTimeNeeded'
+import {ResponseType} from 'response/form/models/responseType'
+import {isNullOrUndefined} from 'util'
+import {Defendant} from 'app/drafts/models/defendant'
+import {DraftDocument} from 'app/models/draftDocument'
+import {QualifiedStatementOfTruth} from 'app/forms/models/qualifiedStatementOfTruth'
+import {HowMuchPaid} from 'response/form/models/howMuchPaid'
+import {HowMuchOwed} from 'response/form/models/howMuchOwed'
+import {Timeline} from 'response/form/models/timeline'
 
 export class ResponseDraft extends DraftDocument implements Serializable<ResponseDraft> {
 
@@ -30,7 +28,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   rejectPartOfClaim?: RejectPartOfClaim
   rejectAllOfClaim?: RejectAllOfClaim
 
-  deserialize (input: any): ResponseDraft {
+  deserialize(input: any): ResponseDraft {
     if (input) {
       this.externalId = input.externalId
       this.response = Response.fromObject(input.response)
@@ -50,11 +48,11 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
     return this
   }
 
-  public isMoreTimeRequested (): boolean {
+  public isMoreTimeRequested(): boolean {
     return !isNullOrUndefined(this.moreTimeNeeded) && this.moreTimeNeeded.option === MoreTimeNeededOption.YES
   }
 
-  public requireDefence (): boolean {
+  public requireDefence(): boolean {
     if (!(this.response && this.response.type)) {
       return false
     }
@@ -62,37 +60,34 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       && RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).includes(this.rejectAllOfClaim.option)
   }
 
-  public requireHowMuchPaid (): boolean {
-    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission')) || !(this.response && this.response.type)) {
+  public requireHowMuchPaid(): boolean {
+    if (!(this.response && this.response.type)) {
       return false
     }
-
-    return this.response.type === ResponseType.OWE_SOME_PAID_NONE
-      && this.rejectPartOfClaim !== undefined
+    return this.response.type === ResponseType.OWE_SOME_PAID_NONE && this.rejectPartOfClaim !== undefined
       && this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
   }
 
-  public requireHowMuchOwed (): boolean {
-    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission')) || !(this.response && this.response.type)) {
+  public requireHowMuchOwed(): boolean {
+    if (!(this.response && this.response.type)) {
       return false
     }
-
-    return this.response.type === ResponseType.OWE_SOME_PAID_NONE
-      && this.rejectPartOfClaim !== undefined
+    return this.response.type === ResponseType.OWE_SOME_PAID_NONE && this.rejectPartOfClaim !== undefined
       && this.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED
   }
 
-  public requireMediation (): boolean {
+  public requireMediation(): boolean {
     if (!(this.response && this.response.type)) {
       return false
     }
     if (this.response.type === ResponseType.OWE_NONE && this.rejectAllOfClaim &&
-      this.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE) {
+      this.rejectAllOfClaim === RejectAllOfClaimOption.DISPUTE) {
       return true
     }
     return this.response.type === ResponseType.OWE_SOME_PAID_NONE && this.rejectPartOfClaim &&
-      (this.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED ||
-        this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
+      (this.rejectPartOfClaim == RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED ||
+        this.rejectPartOfClaim === RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
+
   }
 
 }
