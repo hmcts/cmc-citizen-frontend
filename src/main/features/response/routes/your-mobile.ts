@@ -1,5 +1,4 @@
 import * as express from 'express'
-
 import { Paths } from 'response/paths'
 
 import { Form } from 'forms/form'
@@ -8,7 +7,7 @@ import { MobilePhone } from 'forms/models/mobilePhone'
 
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<MobilePhone>, res: express.Response) {
   res.render(Paths.defendantMobilePage.associatedView, {
@@ -31,7 +30,9 @@ export default express.Router()
       } else {
         const user: User = res.locals.user
         user.responseDraft.document.defendantDetails.mobilePhone = form.model
-        await DraftService.save(user.responseDraft, user.bearerToken)
+
+        await new DraftService().save(user.responseDraft, user.bearerToken)
+
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

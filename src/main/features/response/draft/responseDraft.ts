@@ -13,6 +13,7 @@ import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOf
 import { HowMuchPaid } from 'response/form/models/howMuchPaid'
 import { HowMuchOwed } from 'response/form/models/howMuchOwed'
 import { Timeline } from 'response/form/models/timeline'
+import { Evidence } from 'response/form/models/evidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 
@@ -24,7 +25,8 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   moreTimeNeeded?: MoreTimeNeeded
   defendantDetails?: Defendant = new Defendant()
   howMuchIsPaid?: HowMuchPaid
-  timeline: Timeline = new Timeline()
+  timeline: Timeline
+  evidence: Evidence
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
   howMuchOwed?: HowMuchOwed
   rejectPartOfClaim?: RejectPartOfClaim
@@ -41,6 +43,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       this.howMuchIsPaid = new HowMuchPaid().deserialize(input.howMuchIsPaid)
       this.howMuchOwed = new HowMuchOwed().deserialize(input.howMuchOwed)
       this.timeline = new Timeline().deserialize(input.timeline)
+      this.evidence = new Evidence().deserialize(input.evidence)
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }

@@ -150,7 +150,7 @@ describe('Defendant link receiver', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant', 'letter-1')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'letter-1')
       })
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {

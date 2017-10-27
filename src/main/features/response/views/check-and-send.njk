@@ -1,18 +1,18 @@
 {% extends "layout.njk" %}
 
-{% from "table.njk" import tableStart,tableEnd, row, rowWithMultipleValue %}
+{% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
 {% from "form.njk" import csrfProtection, submitButton, errorSummary, checkboxGroup %}
 {% from "statement-of-truth.njk" import statementOfTruth %}
 {% from "party/details.njk" import partyDetailsSummaryFragment %}
 
-{% set title = t("Money claim") %}
-{% set heading = t("Check your answers before submitting your response") %}
+{% set title = t('Money claim') %}
+{% set heading = t('Check your answers before submitting your response') %}
 
 {% block content %}
   <form novalidate method="post">
     {{ csrfProtection(csrf) }}
 
-    {{ tableStart("yourDetails", "Your details") }}
+    {{ tableStart('yourDetails', 'Your details') }}
     {{
       partyDetailsSummaryFragment(
         partyDetails = draft.defendantDetails.partyDetails,
@@ -23,36 +23,36 @@
         }
       )
     }}
-    {{ row("Phone:", draft.defendantDetails.mobilePhone.number, paths.defendantMobilePage.evaluateUri({ externalId: claim.externalId })) }}
+    {{ row('Phone:', draft.defendantDetails.mobilePhone.number, paths.defendantMobilePage.evaluateUri({ externalId: claim.externalId })) }}
 
     {{ tableEnd() }}
 
-    {{ tableStart("moneyOwed", "Do you owe the money claimed?") }}
+    {{ tableStart('moneyOwed', 'Do you owe the money claimed?') }}
 
     {{ row('Do you owe the money claimed?', t(draft.response.type.displayValue) | capitalize, paths.responseTypePage.evaluateUri({ externalId: claim.externalId })) }}
 
-    {% if draft.response.type.value === 'OWE_SOME_PAID_NONE' %}
-      {% if draft.rejectPartOfClaim.option === 'paidWhatBelievedWasOwed' %}
+    {% if draft.response.type === ResponseType.OWE_SOME_PAID_NONE %}
+      {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED %}
         {% set rejectPartOption = 'I’ve paid what I believe I owe' %}
       {% endif %}
 
-      {% if draft.rejectPartOfClaim.option === 'amountTooHigh' %}
+      {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH %}
         {% set rejectPartOption = 'The claim amount is too much' %}
       {% endif %}
 
       {{ row('Why are you rejecting part of this claim?', t(rejectPartOption), paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: claim.externalId })) }}
     {% endif %}
 
-    {% if draft.response.type.value === 'OWE_NONE' %}
-      {% if draft.rejectAllOfClaim.option === 'alreadyPaid' %}
+    {% if draft.response.type === ResponseType.OWE_NONE %}
+      {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
         {% set rejectAllOption = 'I’ve already paid the claim in full' %}
       {% endif %}
 
-      {% if draft.rejectAllOfClaim.option === 'dispute' %}
+      {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE %}
         {% set rejectAllOption = 'I dispute the claim' %}
       {% endif %}
 
-      {% if draft.rejectAllOfClaim.option === 'counterClaim' %}
+      {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
         {% set rejectAllOption = 'Defend now and also make a counterclaim' %}
       {% endif %}
 
@@ -61,32 +61,66 @@
 
     {{ tableEnd() }}
 
-    {% if draft.response.type.value === 'OWE_SOME_PAID_NONE' and toBoolean(featureToggles.partialAdmission) %}
-    {{ tableStart("yourResponse", "Your response") }}
+    {% if draft.response.type === ResponseType.OWE_SOME_PAID_NONE and toBoolean(featureToggles.partialAdmission) %}
 
-    {% if draft.rejectPartOfClaim.option === 'amountTooHigh' %}
-      {{ row('How much money do you believe you owe?', draft.howMuchIsPaid.text, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
+      {{ tableStart('yourResponse', 'Your response') }}
+
+      {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH %}
+        {{ row('How much money do you believe you owe?', draft.howMuchOwed.amount | numeral, paths.defendantHowMuchOwed.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('Why this is what you owe?', draft.howMuchOwed.text, paths.defendantHowMuchOwed.evaluateUri({ externalId: claim.externalId })) }}
+      {% endif %}
+
+      {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED %}
+        {{ row('How much have you paid the claimant?', draft.howMuchIsPaid.amount | numeral, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('When did you pay this amount?', draft.howMuchIsPaid.date.toMoment() | date, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row("Explain why you don't owe the full amount", draft.howMuchIsPaid.text, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
+      {% endif %}
+
+      {% set atLeastOneRow = false %}
+      {% set timelineCode = '<ul>' %}
+      {% for row in draft.timeline.rows %}
+        {% if row.date %}
+          {% set atLeastOneRow = true %}
+          {% set timelineCode = timelineCode + '<li><div class="bold">' + row.date + '</div>' + row.description + ' </li>' %}
+        {% endif %}
+      {% endfor %}
+      {% set timelineCode = timelineCode+ '</ul>' %}
+
+      {% if atLeastOneRow === false %}
+        {% set timelineCode = '-' %}
+      {% endif %}
+      {{ row('Your timeline of events (optional)', timelineCode | safe, paths.timelinePage.evaluateUri({ externalId: claim.externalId })) }}
+
+      {% set atLeastOneRow = false %}
+      {% set evidenceCode = '<ul>' %}
+      {% for row in draft.evidence.rows %}
+        {% if row.type %}
+          {% set atLeastOneRow = true %}
+          {% set evidenceCode = evidenceCode + '<li><div class="bold">' + row.type.displayValue + '</div>' + row.description + ' </li>' %}
+        {% endif %}
+      {% endfor %}
+      {% set evidenceCode = evidenceCode + '</ul>' %}
+
+      {% if atLeastOneRow === false %}
+        {% set evidenceCode = '-' %}
+      {% endif %}
+      {{ row('Your evidence (optional)', evidenceCode | safe, paths.evidencePage.evaluateUri({ externalId: claim.externalId })) }}
+
+      {% if draft.requireDefence() %}
+        {{ row('Your defence', draft.defence.text, paths.defencePage.evaluateUri({ externalId: claim.externalId })) }}
+
+        {{ row('Free mediation', t(draft.freeMediation.option) | capitalize, paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })) }}
+      {% endif %}
+
+      {{ tableEnd() }}
+
     {% endif %}
-
-    {% if draft.rejectPartOfClaim.option === 'paidWhatBelievedWasOwed' %}
-      {{ row('Why this is what you owe?', draft.howMuchOwed.text, paths.defendantHowMuchOwed.evaluateUri({ externalId: claim.externalId })) }}
-    {% endif %}
-
-    {% endif %}
-
-    {% if draft.requireDefence() %}
-      {{ row('Your defence', draft.defence.text, paths.defencePage.evaluateUri({ externalId: claim.externalId })) }}
-
-      {{ row('Free mediation', t(draft.freeMediation.option) | capitalize, paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })) }}
-    {% endif %}
-
-    {{ tableEnd() }}
 
     {{
       statementOfTruth(
         form,
         label = 'I believe that the facts stated in this claim are true',
-        isQualified = (signatureType === 'qualified')
+        isQualified = (signatureType === SignatureType.QUALIFIED)
       )
     }}
 

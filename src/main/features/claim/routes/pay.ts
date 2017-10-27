@@ -14,14 +14,14 @@ import ClaimStoreClient from 'app/claims/claimStoreClient'
 import { buildURL } from 'app/utils/callbackBuilder'
 import { claimAmountWithInterest } from 'app/utils/interestUtils'
 import User from 'app/idam/user'
-import { DraftService } from 'common/draft/draftService'
-import { ServiceAuthTokenFactory } from 'common/security/serviceTokenFactory'
+import { DraftService } from 'services/draftService'
+import { ServiceAuthTokenFactoryImpl } from 'common/security/serviceTokenFactoryImpl'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('router/pay')
 const issueFeeCode = config.get<string>('fees.issueFee.code')
 
 const getPayClient = async (): Promise<PayClient> => {
-  const authToken = await ServiceAuthTokenFactory.get()
+  const authToken = await new ServiceAuthTokenFactoryImpl().get()
 
   return new PayClient(authToken)
 }
@@ -54,12 +54,13 @@ async function successHandler (res, next) {
       return
     }
   }
+
   if (claimStatus) {
-    await DraftService.delete(res.locals.user.claimDraft, res.locals.user.bearerToken)
+    await new DraftService().delete(res.locals.user.claimDraft.id, res.locals.user.bearerToken)
     res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
   } else {
     const claim = await ClaimStoreClient.saveClaimForUser(res.locals.user)
-    await DraftService.delete(res.locals.user.claimDraft, res.locals.user.bearerToken)
+    await new DraftService().delete(res.locals.user.claimDraft.id, res.locals.user.bearerToken)
     res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
   }
 }
@@ -90,7 +91,9 @@ export default express.Router()
       const payClient: PayClient = await getPayClient()
       const payment: PaymentResponse = await payClient.create(res.locals.user, feeCalculationOutcome.fee.code, feeCalculationOutcome.amount, getReturnURL(req, user.claimDraft.document.externalId))
       res.locals.user.claimDraft.document.claimant.payment = payment
-      await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+
+      await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+
       res.redirect(payment._links.next_url.href)
     } catch (err) {
       logPaymentError(user.id, user.claimDraft.document.claimant.payment)
@@ -111,7 +114,8 @@ export default express.Router()
       const payment: Payment = await payClient.retrieve(user, paymentId)
       user.claimDraft.document.claimant.payment = new Payment().deserialize(payment)
 
-      await DraftService.save(user.claimDraft, user.bearerToken)
+      await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+
       const status: string = payment.state.status
 
       // https://gds-payments.gelato.io/docs/versions/1.0.0/api-reference

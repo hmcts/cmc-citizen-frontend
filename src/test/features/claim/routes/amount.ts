@@ -22,7 +22,7 @@ describe('Claim issue: amount page', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.amountPage.uri)
 
     it('should render page when everything is fine', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'claimant')
+      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
@@ -37,7 +37,7 @@ describe('Claim issue: amount page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'claimant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       })
 
       describe('add row action', () => {

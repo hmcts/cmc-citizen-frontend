@@ -6,7 +6,7 @@ import * as draftStoreMock from '../http-mocks/draft-store'
 import * as claimStoreMock from '../http-mocks/claim-store'
 import * as feesMock from '../http-mocks/fees'
 
-idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'letter-holder', 'claimant', 'defendant').persist()
+idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'letter-holder').persist()
 idamServiceMock.resolveRetrieveServiceToken().persist()
 
 draftStoreMock.resolveFindAllDrafts().persist()
