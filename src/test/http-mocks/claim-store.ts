@@ -66,6 +66,10 @@ export const sampleClaimObj = {
     defendantDateOfBirth: '1990-11-01',
     paidAmount: 2,
     paymentOption: 'IMMEDIATELY'
+  },
+  settlement: {
+    partyStatements:
+        [ { type: 'type', madeBy: 'defendant' , offer: { content: 'offer text', completionDate: '2017-08-08'}}]
   }
 }
 

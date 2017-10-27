@@ -7,12 +7,18 @@ import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
 import { OfferGuard } from 'offer/guards/offerGuard'
 
+function getOffer (claim: any): any {
+  if (!claim.settlement || !claim.settlement.partyStatements) {
+    return undefined
+  }
+  return claim.settlement.partyStatements[0].offer
+}
 async function renderView (
   form: Form<DefendantResponse>, res: express.Response, next: express.NextFunction) {
   res.render(Paths.defendantResponsePage.associatedView, {
     form: form,
     claim : res.locals.user.claim,
-    offer: res.locals.user.claim.settlement.partyStatements[0].offer
+    offer: getOffer(res.locals.user.claim)
   })
 }
 

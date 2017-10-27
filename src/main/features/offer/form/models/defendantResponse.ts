@@ -1,4 +1,4 @@
-import { IsDefined } from 'class-validator'
+import { IsDefined, IsIn } from 'class-validator'
 import { Serializable } from 'models/serializable'
 
 export class ValidationErrors {
@@ -7,9 +7,10 @@ export class ValidationErrors {
 
 export class DefendantResponse implements Serializable<DefendantResponse> {
   @IsDefined({ message: ValidationErrors.OPTION_REQUIRED })
-  option?: boolean
+  @IsIn(['yes', 'no', 'makeAnCounterOffer'], { message: ValidationErrors.OPTION_REQUIRED })
+  option?: string
 
-  constructor (option?: boolean) {
+  constructor (option?: string) {
     this.option = option
   }
 

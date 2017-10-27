@@ -15,7 +15,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const externalId = sampleClaimObj.externalId
 const defendantResponsePage = OfferPaths.defendantResponsePage.evaluateUri({ externalId: externalId })
 
-describe.skip('defendant response page', () => {
+describe('defendant response page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -23,7 +23,7 @@ describe.skip('defendant response page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       })
 
       it('should return 500 and render error page when cannot retrieve claims', async () => {
@@ -40,7 +40,7 @@ describe.skip('defendant response page', () => {
         await request(app)
           .get(defendantResponsePage)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Defendant’s response'))
+          .expect(res => expect(res).to.be.successful.withText('Do you accept the offer?'))
       })
     })
 
@@ -61,6 +61,34 @@ describe.skip('defendant response page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({})
               .expect(res => expect(res).to.be.serverError.withText('Error'))
+          })
+        })
+
+        context('when form is valid', async () => {
+          it('should display defendantResponsePage', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            const formData = {
+              option: 'yes'
+            }
+            await request(app)
+              .post(defendantResponsePage)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(formData)
+              .expect(res => expect(res).to.be.redirect.toLocation(defendantResponsePage))
+          })
+        })
+
+        context('when form is invalid', async () => {
+          it('should display defendantResponsePage with errors', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            const formData = {
+              option: undefined
+            }
+            await request(app)
+              .post(defendantResponsePage)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(formData)
+              .expect(res => expect(res).to.be.successful.withText('Choose option: yes or no or make an offer', 'div class="error-summary"'))
           })
         })
       })
