@@ -7,16 +7,16 @@ import { Form, FormValidationError } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { HowMuchOwed } from 'features/response/form/models/howMuchOwed'
 import User from 'idam/user'
-import { DraftService } from 'common/draft/draftService'
 import { ErrorHandling } from 'common/errorHandling'
 import Claim from 'claims/models/claim'
 import { ValidationError } from 'class-validator'
+import { DraftService } from 'services/draftService'
 
 async function renderView (form: Form<HowMuchOwed>, res: express.Response, next: express.NextFunction) {
   try {
     const user: User = res.locals.user
     const claim: Claim = user.claim
-    const amount: number = claim.claimData.amount.totalAmount()
+    const amount: number = claim.totalAmount
 
     res.render(Paths.defendantHowMuchOwed.associatedView, {
       form: form,
@@ -53,7 +53,7 @@ export default express.Router()
         await renderView(form, res, next)
       } else {
         user.responseDraft.document.howMuchOwed = form.model
-        await DraftService.save(user.responseDraft, user.bearerToken)
+        await new DraftService().save(user.responseDraft, user.bearerToken)
         res.redirect(Paths.timelinePage.evaluateUri({ externalId: user.claim.externalId }))
       }
     })

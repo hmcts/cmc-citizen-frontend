@@ -8,7 +8,7 @@ import { ClaimValidator } from 'app/utils/claimValidator'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 
 import { ErrorHandling } from 'common/errorHandling'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<ClaimAmountBreakdown>, res: express.Response): void {
   res.render(Paths.amountPage.associatedView, {
@@ -46,7 +46,7 @@ export default express.Router()
         form.model.removeExcessRows()
         res.locals.user.claimDraft.document.amount = form.model
         ClaimValidator.claimAmount(form.model.totalAmount())
-        await DraftService.save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+        await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
         res.redirect(Paths.interestPage.uri)
       }
     })

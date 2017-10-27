@@ -29,7 +29,7 @@ describe('claimant as organisation details page', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.claimantOrganisationDetailsPage.uri)
 
     it('should render page when everything is fine', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'claimant')
+      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
@@ -44,7 +44,7 @@ describe('claimant as organisation details page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'claimant', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       })
 
       it('should render page with error when claimant name is invalid', async () => {

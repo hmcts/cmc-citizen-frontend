@@ -8,12 +8,12 @@ import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
 import { SignatureType } from 'app/common/signatureType'
 import { QualifiedDeclaration } from 'ccj/form/models/qualifiedDeclaration'
-import { DraftService } from 'common/draft/draftService'
 import { plainToClass } from 'class-transformer'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { PartyType } from 'app/common/partyType'
 import { Party } from 'claims/models/details/yours/party'
+import { DraftService } from 'services/draftService'
 
 function prepareUrls (externalId: string): object {
   return {
@@ -81,11 +81,11 @@ export default express.Router()
       } else {
         if (form.model.type === SignatureType.QUALIFIED) {
           user.ccjDraft.document.qualifiedDeclaration = form.model as QualifiedDeclaration
-          await DraftService.save(user.ccjDraft, user.bearerToken)
+          await new DraftService().save(user.ccjDraft, user.bearerToken)
         }
 
         await CCJClient.save(user)
-        await DraftService.delete(user.ccjDraft, user.bearerToken)
+        await new DraftService().delete(user.ccjDraft.id, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }
     }))

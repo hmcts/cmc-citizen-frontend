@@ -1,0 +1,26 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import linkButton, csrfProtection, errorSummary %}
+{% from "date.njk" import dateInput %}
+
+{% set title = 'Drafts | Testing support' %}
+{% set heading = t('Delete drafts') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        <div class="notice">
+          {{ linkButton('Delete claim draft', 'action[claim]', 'button button-secondary') }}
+        </div>
+        <div class="notice">
+          {{ linkButton('Delete response drafts', 'action[response]', 'button button-secondary') }}
+        </div>
+        <div class="notice">
+          {{ linkButton('Delete ccj drafts', 'action[ccj]', 'button button-secondary') }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

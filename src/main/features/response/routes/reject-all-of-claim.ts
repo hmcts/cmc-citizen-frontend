@@ -1,5 +1,4 @@
 import * as express from 'express'
-
 import { Paths } from 'response/paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
@@ -7,10 +6,10 @@ import { Form } from 'forms/form'
 
 import { ResponseType } from 'response/form/models/responseType'
 import { RejectAllOfClaim } from 'response/form/models/rejectAllOfClaim'
-import { DraftService } from 'common/draft/draftService'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
 import { GuardFactory } from 'response/guards/guardFactory'
+import { DraftService } from 'services/draftService'
 
 function isRequestAllowed (res: express.Response): boolean {
   return res.locals.user.responseDraft.document.response !== undefined
@@ -49,7 +48,9 @@ export default express.Router()
       } else {
         const user: User = res.locals.user
         user.responseDraft.document.rejectAllOfClaim = form.model
-        await DraftService.save(user.responseDraft, user.bearerToken)
+
+        await new DraftService().save(user.responseDraft, user.bearerToken)
+
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
       }
     }))

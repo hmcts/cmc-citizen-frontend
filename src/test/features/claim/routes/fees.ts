@@ -24,7 +24,7 @@ describe('Claim issue: fees page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'claimant')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       })
 
       it('should return 500 and render error page when cannot calculate issue fee', async () => {
@@ -98,7 +98,7 @@ describe('Claim issue: fees page', () => {
     checkAuthorizationGuards(app, 'post', ClaimPaths.feesPage.uri)
 
     it('should redirect to total page when everything is fine', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'claimant')
+      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)

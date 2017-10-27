@@ -1,10 +1,9 @@
 import * as express from 'express'
-
 import { Paths } from 'ccj/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'app/forms/form'
-import { DraftService } from 'common/draft/draftService'
+import { DraftService } from 'services/draftService'
 import User from 'idam/user'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { RepaymentPlan } from 'ccj/form/models/repaymentPlan'
@@ -41,7 +40,7 @@ export default express.Router()
           const { externalId } = req.params
           user.ccjDraft.document.repaymentPlan = form.model
           user.ccjDraft.document.payBySetDate = undefined
-          await DraftService.save(user.ccjDraft, user.bearerToken)
+          await new DraftService().save(user.ccjDraft, user.bearerToken)
           res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
         }
       }))
