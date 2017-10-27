@@ -23,9 +23,10 @@ function claimIssueRequestHandler (): express.RequestHandler {
 export class Feature {
   enableFor (app: express.Express) {
     app.all('/claim/*', claimIssueRequestHandler())
-    app.all(/^\/claim\/(?!start|amount-exceeded|.+\/confirmation|.+\/receipt|.+\/defendant-response).*$/, DraftMiddleware.requestHandler(new DraftService(), 'claim', 100,(value: any): DraftClaim => {
-      return new DraftClaim().deserialize(value)
-    }))
+    app.all(/^\/claim\/(?!start|amount-exceeded|.+\/confirmation|.+\/receipt|.+\/defendant-response).*$/,
+      DraftMiddleware.requestHandler(new DraftService(), 'claim', 100, (value: any): DraftClaim => {
+        return new DraftClaim().deserialize(value)
+      }))
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }

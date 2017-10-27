@@ -34,7 +34,7 @@ export class Feature {
     app.all(/^\/case\/.+\/response\/.*$/, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(
       /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|receipt).*$/,
-      DraftMiddleware.requestHandler(new DraftService(), 'response', 100,(value: any): ResponseDraft => {
+      DraftMiddleware.requestHandler(new DraftService(), 'response', 100, (value: any): ResponseDraft => {
         return new ResponseDraft().deserialize(value)
       })
     )

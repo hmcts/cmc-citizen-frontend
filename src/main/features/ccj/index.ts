@@ -25,9 +25,10 @@ export class CCJFeature {
     app.all(/^\/case\/.+\/ccj\/.*$/, requestHandler())
     app.all(/^\/case\/.+\/ccj\/.*$/, ClaimMiddleware.retrieveByExternalId)
     app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/, CCJGuard.requestHandler)
-    app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/, DraftMiddleware.requestHandler(new DraftService(), 'ccj', 100, (value: any): DraftCCJ => {
-      return new DraftCCJ().deserialize(value)
-    }))
+    app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/,
+      DraftMiddleware.requestHandler(new DraftService(), 'ccj', 100, (value: any): DraftCCJ => {
+        return new DraftCCJ().deserialize(value)
+      }))
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }
