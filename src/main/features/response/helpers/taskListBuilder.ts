@@ -40,8 +40,10 @@ export class TaskListBuilder {
     }
 
     if (draft.requireMediation()) {
-      tasks.push(new TaskListItem('Free mediation', Paths.freeMediationPage
-          .evaluateUri({ externalId: externalId }),
+      tasks.push(
+        new TaskListItem(
+          'Free mediation',
+          Paths.freeMediationPage.evaluateUri({ externalId: externalId }),
         FreeMediationTask.isCompleted(draft)))
     }
     tasks.push(new TaskListItem('Do you owe the money claimed', Paths.responseTypePage

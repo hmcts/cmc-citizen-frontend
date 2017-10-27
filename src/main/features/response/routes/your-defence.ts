@@ -41,6 +41,6 @@ export default express.Router()
 
         await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
 
-        res.redirect(Paths.freeMediationPage.evaluateUri({ externalId: user.claim.externalId }))
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

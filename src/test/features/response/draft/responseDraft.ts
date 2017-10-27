@@ -174,25 +174,11 @@ describe('ResponseDraft', () => {
       expect(draft.requireHowMuchOwed()).to.be.eq(true)
     })
   })
-  // ------------
+  // ------------WIP
   describe('requireMediation', () => {
     it('should return false when no response type set', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = undefined
-
-      expect(draft.requireMediation()).to.be.eq(false)
-    })
-
-    it('should return false when response is full admission', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.OWE_ALL_PAID_NONE)
-
-      expect(draft.requireMediation()).to.be.eq(false)
-    })
-
-    it('should return false when response is part admission', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
 
       expect(draft.requireMediation()).to.be.eq(false)
     })
@@ -205,24 +191,21 @@ describe('ResponseDraft', () => {
       expect(draft.requireMediation()).to.be.eq(false)
     })
 
-    it('should return false when response is full rejection with counter claim', () => {
+    it('should return true when response is full admission', () => {
       const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.OWE_NONE)
-      draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.COUNTER_CLAIM)
+      draft.response = new Response(ResponseType.OWE_ALL_PAID_NONE)
 
-      expect(draft.requireMediation()).to.be.eq(false)
+      expect(draft.requireMediation()).to.be.eq(true)
     })
 
-    it('should return true when response is full rejection without counter claim', () => {
-      RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).forEach(option => {
-        const draft: ResponseDraft = new ResponseDraft()
-        draft.response = new Response(ResponseType.OWE_NONE)
-        draft.rejectAllOfClaim = new RejectAllOfClaim(option)
+    it('should return true when response is part admission', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
 
-        expect(draft.requireMediation()).to.be.eq(true)
-      })
+      expect(draft.requireMediation()).to.be.eq(true)
     })
   })
+
   // ------------
 
   function prepareInputData (responseType: ResponseType, moreTimeOption: string): object {
