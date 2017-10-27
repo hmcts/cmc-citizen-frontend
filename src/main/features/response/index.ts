@@ -5,7 +5,8 @@ import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
 import { AlreadyRespondedGuard } from 'response/guards/alreadyRespondedGuard'
 import { ClaimMiddleware } from 'app/claims/claimMiddleware'
-import { DraftMiddleware } from 'common/draft/draftMiddleware'
+import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware/dist/middleware/draftMiddleware'
+import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { CountyCourtJudgmentRequestedGuard } from 'response/guards/countyCourtJudgmentRequestedGuard'
 import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
@@ -33,7 +34,7 @@ export class Feature {
     app.all(/^\/case\/.+\/response\/.*$/, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(
       /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|receipt).*$/,
-      DraftMiddleware.requestHandler('response', (value: any): ResponseDraft => {
+      DraftMiddleware.requestHandler(new DraftService(), 'response', 100,(value: any): ResponseDraft => {
         return new ResponseDraft().deserialize(value)
       })
     )

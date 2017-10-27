@@ -5,7 +5,8 @@ import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
 import { ClaimMiddleware } from 'app/claims/claimMiddleware'
 import { CCJGuard } from 'ccj/guards/ccjGuard'
-import { DraftMiddleware } from 'common/draft/draftMiddleware'
+import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware/dist/middleware/draftMiddleware'
+import { DraftService } from 'services/draftService'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
 
@@ -24,7 +25,7 @@ export class CCJFeature {
     app.all(/^\/case\/.+\/ccj\/.*$/, requestHandler())
     app.all(/^\/case\/.+\/ccj\/.*$/, ClaimMiddleware.retrieveByExternalId)
     app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/, CCJGuard.requestHandler)
-    app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/, DraftMiddleware.requestHandler('ccj', (value: any): DraftCCJ => {
+    app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/, DraftMiddleware.requestHandler(new DraftService(), 'ccj', 100, (value: any): DraftCCJ => {
       return new DraftCCJ().deserialize(value)
     }))
 
