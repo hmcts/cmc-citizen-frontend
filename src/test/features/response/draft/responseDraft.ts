@@ -191,19 +191,13 @@ describe('ResponseDraft', () => {
       expect(draft.requireMediation()).to.be.eq(false)
     })
 
-    it('should return true when response is full admission', () => {
+    it('should return false when response is full admission', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_ALL_PAID_NONE)
 
-      expect(draft.requireMediation()).to.be.eq(true)
+      expect(draft.requireMediation()).to.be.eq(false)
     })
 
-    it('should return true when response is part admission', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
-
-      expect(draft.requireMediation()).to.be.eq(true)
-    })
   })
 
   // ------------
