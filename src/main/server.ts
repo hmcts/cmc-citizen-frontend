@@ -46,7 +46,7 @@ function forkListenerProcesses (numberOfCores: number) {
     cluster.fork()
   }
   cluster.on('online', (worker) => {
-    logger.info(`Worker ${worker.process.pid} is online`)
+    logger.info(`Worker process running on ${worker.process.pid}`)
   })
   cluster.on('exit', (worker, code, signal) => {
     logger.info(`Worker ${worker.process.pid} exited with ${code ? code : signal}`)
@@ -55,10 +55,10 @@ function forkListenerProcesses (numberOfCores: number) {
 
 bootstrapTypeScriptPaths(tsConfig)
 
-import { app } from './app'
-
 if (cluster.isMaster) {
+  logger.info(`Master process running on ${process.pid}`)
   forkListenerProcesses(numberOfCores)
 } else {
+  const app: express.Application = require('./app').app
   listen(app, port)
 }
