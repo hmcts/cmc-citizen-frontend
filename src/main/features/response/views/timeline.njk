@@ -71,11 +71,10 @@
       </div>
 
       {% if canAddMoreEvents %}
-        <div id="add-event-container form-group">
+        <div id="add-event-container" class="form-group">
           {{ linkButton('Add another event', 'action[addRow]', 'button button-secondary') }}
         </div>
       {% endif %}
-      <br>
 
       <div class="panel panel-border-wide">
         <p>{{
