@@ -183,6 +183,13 @@ describe('ResponseDraft', () => {
       expect(draft.requireMediation()).to.be.eq(false)
     })
 
+    it('should return false when response is full admission', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.OWE_ALL_PAID_NONE)
+
+      expect(draft.requireMediation()).to.be.eq(false)
+    })
+
     it('should return false when response is full rejection without subtype selected', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_NONE)
@@ -191,9 +198,10 @@ describe('ResponseDraft', () => {
       expect(draft.requireMediation()).to.be.eq(false)
     })
 
-    it('should return false when response is full admission', () => {
+    it('should return false when response is part rejection without subtype selected', () => {
       const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.OWE_ALL_PAID_NONE)
+      draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
+      draft.rejectPartOfClaim = new RejectPartOfClaim(undefined)
 
       expect(draft.requireMediation()).to.be.eq(false)
     })
@@ -202,6 +210,7 @@ describe('ResponseDraft', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
       draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)
+
       expect(draft.requireMediation()).to.be.eq(true)
     })
 
@@ -209,6 +218,7 @@ describe('ResponseDraft', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
       draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
+
       expect(draft.requireMediation()).to.be.eq(true)
     })
 
@@ -216,6 +226,7 @@ describe('ResponseDraft', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_NONE)
       draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.ALREADY_PAID)
+
       expect(draft.requireMediation()).to.be.eq(false)
     })
 
@@ -223,6 +234,7 @@ describe('ResponseDraft', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_NONE)
       draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.DISPUTE)
+
       expect(draft.requireMediation()).to.be.eq(true)
     })
 
@@ -230,6 +242,7 @@ describe('ResponseDraft', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_NONE)
       draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.COUNTER_CLAIM)
+
       expect(draft.requireMediation()).to.be.eq(true)
     })
   })
