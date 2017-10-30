@@ -6,7 +6,6 @@ export default class Settlement implements Serializable<Settlement> {
 
   deserialize (input: any): Settlement {
     if (input) {
-      this.partyStatements = input.partyStatements
       this.partyStatements = this.deserializePartyStatement(input.partyStatements)
     }
     return this
