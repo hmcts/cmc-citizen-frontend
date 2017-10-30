@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import * as tsConfigPaths from 'tsconfig-paths'
+import './ts-paths-bootstrap'
 import { cpus } from 'os'
 import * as express from 'express'
 import * as fs from 'fs'
@@ -8,15 +8,7 @@ import * as path from 'path'
 import * as https from 'https'
 import * as cluster from 'cluster'
 
-const tsConfig = require('../../tsconfig.json')
 const logger = require('@hmcts/nodejs-logging').getLogger('server')
-
-function bootstrapTypeScriptPaths (tsConfig: any) {
-  tsConfigPaths.register({
-    baseUrl: tsConfig.compilerOptions.baseUrl,
-    paths: tsConfig.compilerOptions.paths
-  })
-}
 
 function listen (app: express.Application, port: number) {
   if (app.locals.ENV === 'development' || app.locals.ENV === 'dockertests') {
@@ -50,8 +42,6 @@ function forkListenerProcesses (numberOfCores: number) {
     logger.info(`Worker ${worker.process.pid} exited with ${code ? code : signal}`)
   })
 }
-
-bootstrapTypeScriptPaths(tsConfig)
 
 if (cluster.isMaster) {
   logger.info(`Master process running on ${process.pid}`)
