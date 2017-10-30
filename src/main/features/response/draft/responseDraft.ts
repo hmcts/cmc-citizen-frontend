@@ -96,4 +96,10 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       && this.rejectPartOfClaim !== undefined
       && this.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED
   }
+
+  public requireWhenWillYouPay (): boolean {
+    return this.response.type === ResponseType.OWE_SOME_PAID_NONE
+      && this.rejectPartOfClaim !== undefined
+      && this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
+  }
 }
