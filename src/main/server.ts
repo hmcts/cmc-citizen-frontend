@@ -9,8 +9,6 @@ import * as https from 'https'
 import * as cluster from 'cluster'
 
 const tsConfig = require('../../tsconfig.json')
-const numberOfCores = cpus().length
-const port: number = parseInt(process.env.PORT, 10) || 3000
 const logger = require('@hmcts/nodejs-logging').getLogger('server')
 
 function bootstrapTypeScriptPaths (tsConfig: any) {
@@ -57,8 +55,10 @@ bootstrapTypeScriptPaths(tsConfig)
 
 if (cluster.isMaster) {
   logger.info(`Master process running on ${process.pid}`)
+  const numberOfCores = cpus().length
   forkListenerProcesses(numberOfCores)
 } else {
   const app: express.Application = require('./app').app
+  const port: number = parseInt(process.env.PORT, 10) || 3000
   listen(app, port)
 }
