@@ -12,8 +12,8 @@ export default express.Router()
   .get(Paths.dashboardPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
     const user: User = res.locals.user
     const claimsAsClaimant: Claim[] = await ClaimStoreClient.retrieveByClaimantId(user.id)
-    const claimDraftSaved: boolean = user.claimDraft.document && user.claimDraft.id !== undefined
-    const responseDraftSaved = user.responseDraft && user.responseDraft.document && user.responseDraft.id !== undefined // TODO: apply response draft middleware
+    const claimDraftSaved: boolean = user.claimDraft.document && user.claimDraft.id !== 0
+    const responseDraftSaved = user.responseDraft && user.responseDraft.document && user.responseDraft.id !== 0 // TODO: apply response draft middleware
 
     const claimsAsDefendant: Claim[] = await ClaimStoreClient.retrieveByDefendantId(user.id)
 
