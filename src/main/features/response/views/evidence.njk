@@ -10,21 +10,20 @@
 
 {% macro evidenceRow(index, form) %}
 
-  {% set typeValue = form.valueFor('rows[' + index + '][type]').value %}
-  {% set descriptionValue = form.valueFor('rows[' + index + '][description]') %}
+  {% set typeKey = 'rows[' + index + '][type]' %}
 
-  {% set errorType = form.errorFor('rows[' + index + '][type]').length > 0 %}
-  {% set errorDescription = form.errorFor('rows[' + index + '][description]').length > 0 %}
+  {% set typeValue = form.valueFor(typeKey).value %}
+  {% set typeErrorExist = form.errorFor('rows[' + index + '][type]').length > 0 %}
 
-  <div class="timeline-row {% if errorType %} form-group-error {% endif %}">
+  <div class="timeline-row {% if typeErrorExist %} form-group-error {% endif %}">
     <label class="visually-hidden" for="rows[{{ index }}][type]">{{ index + 1 }}{{ t('. Evidence') }}</label>
-    {% if errorType %}
-      <span class="error-message" id="{{ 'rows[' + index + '][type][label]' }}">
-        {{ form.errorFor('rows[' + index + '][type]') }}
+    {% if typeErrorExist %}
+      <span class="error-message" id="{{ typeKey }}[label]">
+        {{ t(form.errorFor(typeKey)) }}
       </span>
     {% endif %}
     <select name="rows[{{ index }}][type]" id="rows[{{ index }}][type]"
-      class="form-control-select {% if errorType %}form-control-error{% endif %}" >
+      class="form-control-select {% if typeErrorExist %}form-control-error{% endif %}" >
 
       <option value="">{{ t('-- Please make a selection --') }}</option>
       {% for row in allEvidenceTypes %}
@@ -32,11 +31,11 @@
       {% endfor %}
     </select>
     <div class="panel panel-border-narrow {% if not typeValue %} js-hidden {% endif %}">
-      {% set name = 'rows[' + index + '][description]' %}
-      {% set valueDescription = form.valueFor(name) %}
-      {% set errorDescription = form.errorFor(name) %}
+      {% set descriptionKey = 'rows[' + index + '][description]' %}
+      {% set valueDescription = form.valueFor(descriptionKey) %}
+      {% set errorDescription = form.errorFor(descriptionKey) %}
       <div class="form-group {% if errorDescription %} form-group-error {% endif %}">
-        <label for="{{ name }}" id="{{ name }}[label]" class="form-label">
+        <label for="{{ descriptionKey }}" id="{{ descriptionKey }}[label]" class="form-label">
           {{ t('Describe this evidence in more detail (optional).') }}
 
           <span class="evidence-message evidence-message-CONTRACTS_AND_AGREEMENTS {% if typeValue !== EvidenceType.CONTRACTS_AND_AGREEMENTS.value %}visually-hidden{% endif %}">
@@ -59,10 +58,10 @@
           </span>
         </label>
         {% if errorDescription %}
-          <span class="error-message">{{ t(error) }}</span>
+          <span class="error-message">{{ t(errorDescription) }}</span>
         {% endif %}
         <textarea
-          id="{{ name }}" name="{{ name }}"
+          id="{{ descriptionKey }}" name="{{ descriptionKey }}"
           class="form-control timeline-column-text {% if errorDescription %}form-control-error{% endif %}"
           rows="3">{{ valueDescription | default('') }}</textarea>
       </div>
