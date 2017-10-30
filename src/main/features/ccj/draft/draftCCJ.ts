@@ -3,7 +3,7 @@ import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { PayBySetDate } from 'ccj/form/models/payBySetDate'
 import { RepaymentPlan } from 'ccj/form/models/repaymentPlan'
 import { QualifiedDeclaration } from 'ccj/form/models/qualifiedDeclaration'
-import { DraftDocument } from 'models/draftDocument'
+import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import DateOfBirth from 'forms/models/dateOfBirth'
 
 export class DraftCCJ extends DraftDocument {
