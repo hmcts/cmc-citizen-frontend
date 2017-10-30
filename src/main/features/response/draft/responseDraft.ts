@@ -16,7 +16,6 @@ import { Timeline } from 'response/form/models/timeline'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 
-
 export class ResponseDraft extends DraftDocument implements Serializable<ResponseDraft> {
 
   response?: Response
