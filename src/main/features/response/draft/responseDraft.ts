@@ -87,7 +87,8 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       return false
     }
     if (this.response.type === ResponseType.OWE_NONE && this.rejectAllOfClaim &&
-      this.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE) {
+      (this.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE ||
+      this.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM)) {
       return true
     }
     return this.response.type === ResponseType.OWE_SOME_PAID_NONE && this.rejectPartOfClaim &&

@@ -198,7 +198,7 @@ describe('ResponseDraft', () => {
       expect(draft.requireMediation()).to.be.eq(false)
     })
 
-    it('should return true when response is part admission with `I’ve paid what I believe I owe `', () => {
+    it('should return true when response is part admission and paid what they believe they owe', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
       draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)
@@ -212,9 +212,27 @@ describe('ResponseDraft', () => {
       expect(draft.requireMediation()).to.be.eq(true)
     })
 
-  })
+    it('should return false when response is rejected and already paid the claim in full', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.OWE_NONE)
+      draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.ALREADY_PAID)
+      expect(draft.requireMediation()).to.be.eq(false)
+    })
 
-  // ------------
+    it('should return true when response is rejected and disputed', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.OWE_NONE)
+      draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.DISPUTE)
+      expect(draft.requireMediation()).to.be.eq(true)
+    })
+
+    it('should return true when response is rejected and counter claim is made', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.OWE_NONE)
+      draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.COUNTER_CLAIM)
+      expect(draft.requireMediation()).to.be.eq(true)
+    })
+  })
 
   function prepareInputData (responseType: ResponseType, moreTimeOption: string): object {
     return {
