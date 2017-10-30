@@ -30,9 +30,6 @@ logging.config({
   environment: process.env.NODE_ENV
 })
 
-const logger = require('@hmcts/nodejs-logging')
-  .getLogger('app')
-
 const env = process.env.NODE_ENV || 'development'
 app.locals.ENV = env
 
@@ -75,7 +72,6 @@ if (toBoolean(config.get<boolean>('featureToggles.offer'))) {
 }
 
 if (toBoolean(config.get<boolean>('featureToggles.testingSupport'))) {
-  logger.info('Testing support activated')
   new TestingSupportFeature().enableFor(app)
 }
 
