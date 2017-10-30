@@ -121,7 +121,8 @@ timestamps {
 
         stage('Integration Tests') {
           integrationTests.execute([
-            'CITIZEN_FRONTEND_VERSION': citizenFrontendVersion
+            'CITIZEN_FRONTEND_VERSION': citizenFrontendVersion,
+            'INTEGRATION_TESTS_VERSION': '0465025653b7557caa2da38e8e94be3ab742c6e3'
           ])
         }
 
