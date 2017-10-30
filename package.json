@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@hmcts/cmc-common-frontend": "^1.10.3",
+    "@hmcts/cmc-draft-store-middleware": "^1.0.0",
     "@hmcts/draft-store-client": "^1.1.1",
     "@hmcts/nodejs-healthcheck": "^1.4.3",
     "@hmcts/nodejs-logging": "^1.2.0",
