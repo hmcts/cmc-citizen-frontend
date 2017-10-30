@@ -39,16 +39,13 @@ export class TaskListBuilder {
       )
     }
 
-    if (draft.requireMediation()) {
-      tasks.push(
-        new TaskListItem(
-          'Free mediation',
-          Paths.freeMediationPage.evaluateUri({ externalId: externalId }),
-        FreeMediationTask.isCompleted(draft)))
-    }
-    tasks.push(new TaskListItem('Do you owe the money claimed', Paths.responseTypePage
-        .evaluateUri({ externalId: externalId }),
-      OweMoneyTask.isCompleted(draft)))
+    tasks.push(
+      new TaskListItem(
+        'Do you owe the money claimed',
+        Paths.responseTypePage.evaluateUri({ externalId: externalId }),
+        OweMoneyTask.isCompleted(draft)
+      )
+    )
 
     if (draft.requireHowMuchPaid()) {
       tasks.push(
@@ -79,6 +76,17 @@ export class TaskListBuilder {
         )
       )
     }
+
+    if (draft.requireMediation()) {
+      tasks.push(
+        new TaskListItem(
+          'Free mediation',
+          Paths.freeMediationPage.evaluateUri({ externalId: externalId }),
+          FreeMediationTask.isCompleted(draft)
+        )
+      )
+    }
+
     return new TaskList(2, 'Respond to claim', tasks)
   }
 

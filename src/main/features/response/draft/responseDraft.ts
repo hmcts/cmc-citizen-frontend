@@ -16,6 +16,7 @@ import { Timeline } from 'response/form/models/timeline'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 
+
 export class ResponseDraft extends DraftDocument implements Serializable<ResponseDraft> {
 
   response?: Response
@@ -87,12 +88,12 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       return false
     }
     if (this.response.type === ResponseType.OWE_NONE && this.rejectAllOfClaim &&
-      this.rejectAllOfClaim === RejectAllOfClaimOption.DISPUTE) {
+      this.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE) {
       return true
     }
     return this.response.type === ResponseType.OWE_SOME_PAID_NONE && this.rejectPartOfClaim &&
-      (this.rejectPartOfClaim === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED ||
-        this.rejectPartOfClaim === RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
+      (this.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED ||
+        this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
 
   }
 

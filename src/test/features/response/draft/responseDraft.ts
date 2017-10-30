@@ -174,7 +174,7 @@ describe('ResponseDraft', () => {
       expect(draft.requireHowMuchOwed()).to.be.eq(true)
     })
   })
-  // ------------WIP
+
   describe('requireMediation', () => {
     it('should return false when no response type set', () => {
       const draft: ResponseDraft = new ResponseDraft()
@@ -196,6 +196,20 @@ describe('ResponseDraft', () => {
       draft.response = new Response(ResponseType.OWE_ALL_PAID_NONE)
 
       expect(draft.requireMediation()).to.be.eq(false)
+    })
+
+    it('should return true when response is part admission with `I’ve paid what I believe I owe `', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
+      draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)
+      expect(draft.requireMediation()).to.be.eq(true)
+    })
+
+    it('should return true when response is part admission with amount too high', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
+      draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
+      expect(draft.requireMediation()).to.be.eq(true)
     })
 
   })
