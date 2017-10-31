@@ -5,7 +5,7 @@ import { Draft, DraftService as BaseDraftService, Secrets } from '@hmcts/draft-s
 import { ServiceAuthTokenFactoryImpl } from 'common/security/serviceTokenFactoryImpl'
 
 export class DraftService extends BaseDraftService {
-  private secrets?: Secrets
+  private secrets: Secrets
 
   constructor () {
     super(config.get<string>('draft-store.url'), request, new ServiceAuthTokenFactoryImpl())
