@@ -24,6 +24,7 @@ timestamps {
   lock(resource: "citizen-frontend-${env.BRANCH_NAME}", inversePrecedence: true) {
     node('slave') {
       try {
+        currentBuild.result = 'SUCCESS'
         def version
         def citizenFrontendRPMVersion
         def citizenFrontendVersion
@@ -158,22 +159,17 @@ timestamps {
         }
       } catch (Throwable err) {
         notifyBuildFailure channel: channel
+        currentBuild.result = 'FAILURE'
         throw err
+      } finally {
+        step([$class: 'InfluxDbPublisher',
+            customData: null,
+            customDataMap: null,
+            customPrefix: null,
+            target: 'Jenkins Data'])
       }
     }
     milestone()
   }
-  notifyBuildFixed channel: channel
-
-  if (exit_status != 0) {
-    currentBuild.result = 'FAILURE'
-  }else {
-    currentBuild.result = 'SUCCESS'
-  }
-  
-  step([$class: 'InfluxDbPublisher',
-    customData: null,
-    customDataMap: null,
-    customPrefix: null,
-    target: 'Jenkins Data'])
+  notifyBuildFixed channel: channel  
 }
