@@ -58,7 +58,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   }
 
   public requireDefence (): boolean {
-    if (!(this.response && this.response.type)) {
+    if (!this.isResponsePopulated()) {
       return false
     }
     return this.response.type === ResponseType.OWE_NONE && this.rejectAllOfClaim !== undefined
@@ -66,7 +66,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   }
 
   public requireHowMuchPaid (): boolean {
-    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission')) || !(this.response && this.response.type)) {
+    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission')) || !this.isResponsePopulated()) {
       return false
     }
 
@@ -76,7 +76,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   }
 
   public requireHowMuchOwed (): boolean {
-    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission')) || !(this.response && this.response.type)) {
+    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission')) || !this.isResponsePopulated()) {
       return false
     }
 
