@@ -108,13 +108,15 @@
 
       {% if draft.requireDefence() %}
         {{ row('Your defence', draft.defence.text, paths.defencePage.evaluateUri({ externalId: claim.externalId })) }}
-
-        {{ row('Free mediation', t(draft.freeMediation.option) | capitalize, paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })) }}
       {% endif %}
 
       {{ tableEnd() }}
 
     {% endif %}
+
+    {{ tableStart('freeMediation', 'Free mediation') }}
+    {{ row('Free mediation', t(draft.freeMediation.option) | capitalize, paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })) }}
+    {{ tableEnd() }}
 
     {{
       statementOfTruth(
