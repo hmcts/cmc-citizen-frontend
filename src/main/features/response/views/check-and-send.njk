@@ -114,9 +114,11 @@
 
     {% endif %}
 
-    {{ tableStart('freeMediation', 'Free mediation') }}
-    {{ row('Free mediation', t(draft.freeMediation.option) | capitalize, paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })) }}
-    {{ tableEnd() }}
+    {% if draft.requireMediation() %}
+      {{ tableStart('freeMediation', 'Free mediation') }}
+      {{ row('Free mediation', t(draft.freeMediation.option) | capitalize, paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })) }}
+      {{ tableEnd() }}
+    {% endif %}
 
     {{
       statementOfTruth(
