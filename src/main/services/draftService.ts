@@ -10,12 +10,11 @@ export class DraftService extends BaseDraftService {
   constructor () {
     super(config.get<string>('draft-store.url'), request, new ServiceAuthTokenFactoryImpl())
 
-    const primarySecret: string = config.get<string>('draft-store.secrets.primary')
-    const secondarySecret: string = config.get<string>('draft-store.secrets.secondary')
-
-    if (primarySecret) {
-      this.secrets = new Secrets(primarySecret, secondarySecret)
-    }
+    this.secrets =
+      new Secrets(
+        config.get<string>('draft-store.secrets.primary'),
+        config.get<string>('draft-store.secrets.secondary')
+      )
   }
 
   find<T> (draftType: string, limit: string | any, userToken: string, deserializationFn: (value: any) => T): Promise<Draft<T>[]> {
