@@ -5,38 +5,41 @@
 
 {% block content %}
   <div class="grid-row">
-    <h1 class="heading-xlarge">{{ t('Do you owe the money claimed?') }}</h1>
+    <div class="column-two-thirds">
 
-      <form method="POST" class="analytics-submit-event-trigger" data-event-action="Response: Select defendant response option" data-event-label-from="type[value]" novalidate>
+      <h1 class="heading-large">{{ t('Do you owe the money claimed?') }}</h1>
 
-      {{ csrfProtection(csrf) }}
+        <form method="POST" class="analytics-submit-event-trigger" data-event-action="Response: Select defendant response option" data-event-label-from="type[value]" novalidate>
 
-      {% set error = form.errorFor('type') %}
-      <div class="form-group {% if error %} form-group-error {% endif %}">
-        <fieldset id="type[label]">
-          <legend class="visually-hidden">{{ t('Do you owe the money claimed?') }}</legend>
-          {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+        {{ csrfProtection(csrf) }}
 
-          {{ radioOption(form = form, name = 'type[value]', value = 'OWE_ALL_PAID_NONE',
-              label = 'I admit all of the claim', bold = true,
-            hint = 'You can either pay the claim amount in full or by instalments.'
-          )}}
+        {% set error = form.errorFor('type') %}
+        <div class="form-group {% if error %} form-group-error {% endif %}">
+          <fieldset id="type[label]">
+            <legend class="visually-hidden">{{ t('Do you owe the money claimed?') }}</legend>
+            {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
 
-          {{ radioOption(form = form, name = 'type[value]', value = 'OWE_SOME_PAID_NONE',
-            label = 'I reject part of the claim', bold = true,
-            hint = 'You have either paid what you you believe you owe or feel the claim amount is too much.'
-          )}}
+            {{ radioOption(form = form, name = 'type[value]', value = 'OWE_ALL_PAID_NONE',
+                label = 'I admit all of the claim', bold = true,
+              hint = 'You can either pay the claim amount in full or by instalments.'
+            )}}
 
-          {{ radioOption(form = form, name = 'type[value]', value = 'OWE_NONE',
-            label = 'I reject all of the claim', bold = true,
-            hint = 'You have either paid the claim in full or you reject the claim'
-          )}}
+            {{ radioOption(form = form, name = 'type[value]', value = 'OWE_SOME_PAID_NONE',
+              label = 'I reject part of the claim', bold = true,
+              hint = 'You have either paid what you you believe you owe or feel the claim amount is too much.'
+            )}}
 
-        </fieldset>
-      </div>
+            {{ radioOption(form = form, name = 'type[value]', value = 'OWE_NONE',
+              label = 'I reject all of the claim', bold = true,
+              hint = 'You have either paid the claim in full or you reject the claim'
+            )}}
 
-      {{ saveAndContinueButton() }}
-    </form>
+          </fieldset>
+        </div>
+
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
   </div>
 {% endblock %}
 

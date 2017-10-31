@@ -57,19 +57,19 @@
     {{ tableStart("claimDetails", "Claim details") }}
     {{ row('Why you’re owed the money:', draftClaim.reason.reason ) }}
     {{ tableEnd() }}
+    <div class="column-two-thirds">
+      <div class="form-group">
+        {{ statementOfTruth(
+            form,
+            label = 'I believe that the facts stated in this claim are true',
+            isQualified = partyAsCompanyOrOrganisation
+          )
+        }}
 
-    <div class="form-group">
-      {{ statementOfTruth(
-          form,
-          label = 'I believe that the facts stated in this claim are true',
-          isQualified = partyAsCompanyOrOrganisation
-        )
-      }}
-
-      {% set submitButtonLabel = t('Submit and continue to payment ') %}
-      {{ submitButton(submitButtonLabel + '(' + (claimAmountTotal.feeAmount | numeral) + ')') }}
-      <input type="hidden" name="type" value="{{ form.model.type }}">
+        {% set submitButtonLabel = t('Submit and continue to payment ') %}
+        {{ submitButton(submitButtonLabel + '(' + (claimAmountTotal.feeAmount | numeral) + ')') }}
+        <input type="hidden" name="type" value="{{ form.model.type }}">
+      </div>
     </div>
-
   </form>
 {% endblock %}
