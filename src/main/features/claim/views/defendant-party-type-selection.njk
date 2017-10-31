@@ -5,51 +5,53 @@
 
 {% block content %}
   <div class="grid-row">
-    <h1 class="heading-xlarge">{{ t("About them") }}</h1>
-    <p>{{ t("Who are you making the claim against?") }}</p>
-    <form method="POST" novalidate>
-      {{ csrfProtection(csrf) }}
+    <div class="column-two-thirds">
+      <h1 class="heading-xlarge">{{ t("About them") }}</h1>
+      <p>{{ t("Who are you making the claim against?") }}</p>
+      <form method="POST" novalidate>
+        {{ csrfProtection(csrf) }}
 
-      {{
-        radioGroup(
-          form = form,
-          label = 'Who are you making the claim against?',
-          labelForScreenReadersOnly = true,
-          name = 'type',
-          options = [
-            {
-              bold: true,
-              label: 'An individual',
-              hint: 'For example, someone you lent money',
-              value: 'individual',
-              checked: (form.valueFor('type').value === 'individual')
-            },
-            {
-              bold: true,
-              label: 'A sole trader or self-employed person',
-              hint: 'For example, a tradesperson who did work for you',
-              value: 'soleTrader',
-              checked: (form.valueFor('type').value === 'soleTrader')
-            },
-            {
-              bold: true,
-              label: 'On behalf of a company',
-              hint: 'For example, a company that sold you goods or services',
-              value: 'company',
-              checked: (form.valueFor('type').value === 'company')
-            },
-            {
-              bold: true,
-              label: 'As another type of organisation',
-              hint: 'For example, a partnership, trust, charity, club or association',
-              value: 'organisation',
-              checked: (form.valueFor('type').value === 'organisation')
-            }
-          ]
-        )
-      }}
+        {{
+          radioGroup(
+            form = form,
+            label = 'Who are you making the claim against?',
+            labelForScreenReadersOnly = true,
+            name = 'type',
+            options = [
+              {
+                bold: true,
+                label: 'An individual',
+                hint: 'For example, someone you lent money',
+                value: 'individual',
+                checked: (form.valueFor('type').value === 'individual')
+              },
+              {
+                bold: true,
+                label: 'A sole trader or self-employed person',
+                hint: 'For example, a tradesperson who did work for you',
+                value: 'soleTrader',
+                checked: (form.valueFor('type').value === 'soleTrader')
+              },
+              {
+                bold: true,
+                label: 'On behalf of a company',
+                hint: 'For example, a company that sold you goods or services',
+                value: 'company',
+                checked: (form.valueFor('type').value === 'company')
+              },
+              {
+                bold: true,
+                label: 'As another type of organisation',
+                hint: 'For example, a partnership, trust, charity, club or association',
+                value: 'organisation',
+                checked: (form.valueFor('type').value === 'organisation')
+              }
+            ]
+          )
+        }}
 
-      {{ saveAndContinueButton() }}
-    </form>
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
   </div>
 {% endblock %}

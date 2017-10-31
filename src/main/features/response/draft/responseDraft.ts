@@ -21,12 +21,12 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
 
   response?: Response
   defence?: Defence
-  evidence: Evidence
   freeMediation?: FreeMediation
   moreTimeNeeded?: MoreTimeNeeded
   defendantDetails?: Defendant = new Defendant()
   howMuchIsPaid?: HowMuchPaid
-  timeline: Timeline = new Timeline()
+  timeline: Timeline
+  evidence: Evidence
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
   howMuchOwed?: HowMuchOwed
   rejectPartOfClaim?: RejectPartOfClaim
@@ -43,6 +43,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       this.howMuchIsPaid = new HowMuchPaid().deserialize(input.howMuchIsPaid)
       this.howMuchOwed = new HowMuchOwed().deserialize(input.howMuchOwed)
       this.timeline = new Timeline().deserialize(input.timeline)
+      this.evidence = new Evidence().deserialize(input.evidence)
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }
@@ -90,7 +91,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
     }
     if (this.response.type === ResponseType.OWE_NONE && this.rejectAllOfClaim &&
       (this.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE ||
-      this.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM)) {
+        this.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM)) {
       return true
     }
     return this.response.type === ResponseType.OWE_SOME_PAID_NONE && this.rejectPartOfClaim &&
@@ -98,5 +99,4 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
         this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
 
   }
-
 }
