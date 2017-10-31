@@ -10,7 +10,7 @@
     "setup": "gulp sass copy-files",
     "lint": "tslint --project tsconfig.json --type-check && sass-lint -v -q",
     "test": "NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' -or -name '*.js' \\) ! -path '*a11y*' ! -path '*/routes/*') --reporter-options reportFilename=unit,inlineAssets=true,reportTitle=citizen-frontend-unit",
-    "test:routes": "NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' -or -name '*.js' \\) -path '*/routes/*') --reporter-options reportFilename=routes,inlineAssets=true,reportTitle=citizen-frontend-routes",
+    "test:routes": "NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' -or -name '*.js' \\) -path '*/routes/*') --timeout 4000 --reporter-options reportFilename=routes,inlineAssets=true,reportTitle=citizen-frontend-routes",
     "test:a11y": "NODE_ENV=mocha LOG_LEVEL=ERROR mocha --opts mocha.opts src/test/a11y --timeout 60000 --reporter-options reportFilename=a11y,inlineAssets=true,reportTitle=citizen-frontend-a11y",
     "test:nsp": "nsp check",
     "test:coverage": "NODE_ENV=mocha LOG_LEVEL=OFF nyc mocha --opts mocha.opts $(find src/test \\( -name '*.ts' -or -name '*.js' \\) ! -path '*a11y*')",
@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@hmcts/cmc-common-frontend": "^1.12.0",
+    "@hmcts/cmc-draft-store-middleware": "^1.0.0",
     "@hmcts/draft-store-client": "^1.1.1",
     "@hmcts/nodejs-healthcheck": "^1.4.3",
     "@hmcts/nodejs-logging": "^1.2.0",

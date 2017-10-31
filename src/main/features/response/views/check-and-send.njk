@@ -66,29 +66,44 @@
       {{ tableStart('yourResponse', 'Your response') }}
 
       {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH %}
-        {{ row('How much money do you believe you owe?', draft.howMuchOwed.text, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('How much money do you believe you owe?', draft.howMuchOwed.amount | numeral, paths.defendantHowMuchOwed.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('Why this is what you owe?', draft.howMuchOwed.text, paths.defendantHowMuchOwed.evaluateUri({ externalId: claim.externalId })) }}
       {% endif %}
 
       {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED %}
-        {{ row('Why this is what you owe?', draft.howMuchIsPaid.text, paths.defendantHowMuchOwed.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('How much have you paid the claimant?', draft.howMuchIsPaid.amount | numeral, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('When did you pay this amount?', draft.howMuchIsPaid.date.toMoment() | date, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row("Explain why you don't owe the full amount", draft.howMuchIsPaid.text, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
       {% endif %}
 
+      {% set atLeastOneRow = false %}
       {% set timelineCode = '<ul>' %}
       {% for row in draft.timeline.rows %}
-        {% set timelineCode = timelineCode + '<li><div class="bold">' + row.date + '</div>' + row.description + ' </li>' %}
+        {% if row.date %}
+          {% set atLeastOneRow = true %}
+          {% set timelineCode = timelineCode + '<li><div class="bold">' + row.date + '</div>' + row.description + ' </li>' %}
+        {% endif %}
       {% endfor %}
       {% set timelineCode = timelineCode+ '</ul>' %}
 
+      {% if atLeastOneRow === false %}
+        {% set timelineCode = '-' %}
+      {% endif %}
       {{ row('Your timeline of events (optional)', timelineCode | safe, paths.timelinePage.evaluateUri({ externalId: claim.externalId })) }}
 
+      {% set atLeastOneRow = false %}
       {% set evidenceCode = '<ul>' %}
       {% for row in draft.evidence.rows %}
         {% if row.type %}
+          {% set atLeastOneRow = true %}
           {% set evidenceCode = evidenceCode + '<li><div class="bold">' + row.type.displayValue + '</div>' + row.description + ' </li>' %}
         {% endif %}
       {% endfor %}
       {% set evidenceCode = evidenceCode + '</ul>' %}
 
+      {% if atLeastOneRow === false %}
+        {% set evidenceCode = '-' %}
+      {% endif %}
       {{ row('Your evidence (optional)', evidenceCode | safe, paths.evidencePage.evaluateUri({ externalId: claim.externalId })) }}
 
       {% if draft.requireDefence() %}

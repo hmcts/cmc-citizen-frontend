@@ -16,7 +16,7 @@ async function renderView (form: Form<HowMuchOwed>, res: express.Response, next:
   try {
     const user: User = res.locals.user
     const claim: Claim = user.claim
-    const amount: number = claim.claimData.amount.totalAmount()
+    const amount: number = claim.totalAmount
 
     res.render(Paths.defendantHowMuchOwed.associatedView, {
       form: form,

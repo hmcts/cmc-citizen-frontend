@@ -36,6 +36,12 @@
       margin-top: 15px;
     }
   }
+
+  .timeline-row {
+    &:last-of-type {
+      margin-bottom: .78947em;
+    }
+  }
 }
 
 .timeline-column-4 {
