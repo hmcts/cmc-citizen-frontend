@@ -86,17 +86,22 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   }
 
   public requireMediation (): boolean {
-    if (!(this.response && this.response.type)) {
-      return false
-    }
-    if (this.response.type === ResponseType.OWE_NONE && this.rejectAllOfClaim &&
+    return this.isResponsePopulated() && (this.isResponseRejectedFully() || this.isResponseRejectedPartially())
+  }
+
+  private isResponsePopulated (): boolean {
+    return !!this.response && !!this.response.type
+  }
+
+  private isResponseRejectedFully (): boolean {
+    return this.response.type === ResponseType.OWE_NONE && this.rejectAllOfClaim &&
       (this.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE ||
-        this.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM)) {
-      return true
-    }
+        this.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM)
+  }
+
+  private isResponseRejectedPartially (): boolean {
     return this.response.type === ResponseType.OWE_SOME_PAID_NONE && this.rejectPartOfClaim &&
       (this.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED ||
         this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
-
   }
 }
