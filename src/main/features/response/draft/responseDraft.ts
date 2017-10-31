@@ -13,6 +13,7 @@ import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOf
 import { HowMuchPaid } from 'response/form/models/howMuchPaid'
 import { HowMuchOwed } from 'response/form/models/howMuchOwed'
 import { Timeline } from 'response/form/models/timeline'
+import { Evidence } from 'response/form/models/evidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 
@@ -20,6 +21,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
 
   response?: Response
   defence?: Defence
+  evidence: Evidence
   freeMediation?: FreeMediation
   moreTimeNeeded?: MoreTimeNeeded
   defendantDetails?: Defendant = new Defendant()
