@@ -6,6 +6,6 @@ const validator = new Validator()
 
 export class FreeMediationTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
-    return !!(responseDraft.freeMediation && validator.validateSync(responseDraft.freeMediation).length === 0)
+    return responseDraft.freeMediation !== undefined && validator.validateSync(responseDraft.freeMediation).length === 0
   }
 }
