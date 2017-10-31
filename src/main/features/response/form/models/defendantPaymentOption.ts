@@ -5,9 +5,9 @@ export class ValidationErrors {
   static readonly OPTION_REQUIRED: string = 'Choose option'
 }
 
-export class PaymentType {
-  static readonly INSTALMENTS = new PaymentType('INSTALMENTS', 'By instalments')
-  static readonly FULL_BY_SPECIFIED_DATE = new PaymentType('FULL_BY_SPECIFIED_DATE', 'The full amount by')
+export class DefendantPaymentType {
+  static readonly INSTALMENTS = new DefendantPaymentType('INSTALMENTS', 'By instalments')
+  static readonly FULL_BY_SPECIFIED_DATE = new DefendantPaymentType('FULL_BY_SPECIFIED_DATE', 'The full amount by')
 
   readonly value: string
   readonly displayValue: string
@@ -17,15 +17,15 @@ export class PaymentType {
     this.displayValue = displayValue
   }
 
-  static all (): PaymentType[] {
+  static all (): DefendantPaymentType[] {
     return [
-      PaymentType.INSTALMENTS,
-      PaymentType.FULL_BY_SPECIFIED_DATE
+      DefendantPaymentType.FULL_BY_SPECIFIED_DATE,
+      DefendantPaymentType.INSTALMENTS
     ]
   }
 
-  static valueOf (value: string): PaymentType {
-    return PaymentType.all()
+  static valueOf (value: string): DefendantPaymentType {
+    return DefendantPaymentType.all()
       .filter(type => type.value === value)
       .pop()
   }
@@ -34,10 +34,10 @@ export class PaymentType {
 export class DefendantPaymentOption implements Serializable <DefendantPaymentOption> {
 
   @IsDefined({ message: ValidationErrors.OPTION_REQUIRED })
-  @IsIn(PaymentType.all(), { message: ValidationErrors.OPTION_REQUIRED })
-  option?: PaymentType
+  @IsIn(DefendantPaymentType.all(), { message: ValidationErrors.OPTION_REQUIRED })
+  option?: DefendantPaymentType
 
-  constructor (option?: PaymentType) {
+  constructor (option?: DefendantPaymentType) {
     this.option = option
   }
 
@@ -46,7 +46,7 @@ export class DefendantPaymentOption implements Serializable <DefendantPaymentOpt
       return value
     }
     if (value.option) {
-      const option: PaymentType = PaymentType.valueOf(value.option)
+      const option: DefendantPaymentType = DefendantPaymentType.valueOf(value.option)
       return new DefendantPaymentOption(option)
     } else {
       return new DefendantPaymentOption()
@@ -55,7 +55,7 @@ export class DefendantPaymentOption implements Serializable <DefendantPaymentOpt
 
   deserialize (input?: any): DefendantPaymentOption {
     if (input && input.option) {
-      this.option = PaymentType.valueOf(input.option.value)
+      this.option = DefendantPaymentType.valueOf(input.option.value)
     }
     return this
   }

@@ -14,7 +14,7 @@ import { HowMuchPaid } from 'response/form/models/howMuchPaid'
 import { HowMuchOwed } from 'response/form/models/howMuchOwed'
 import { Timeline } from 'response/form/models/timeline'
 import { DefendantPaymentOption } from 'response/form/models/defendantPaymentOption'
-import { PaymentPlan } from 'response/form/models/paymentPlan'
+import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { PayBySetDate } from 'ccj/form/models/payBySetDate'
 import { Evidence } from 'response/form/models/evidence'
@@ -36,7 +36,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   rejectPartOfClaim?: RejectPartOfClaim
   rejectAllOfClaim?: RejectAllOfClaim
   defendantPaymentOption: DefendantPaymentOption = new DefendantPaymentOption()
-  paymentPlan?: PaymentPlan
+  defendantPaymentPlan?: DefendantPaymentPlan
   paidAmount?: PaidAmount
   payBySetDate?: PayBySetDate
 
@@ -57,8 +57,8 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       }
       this.rejectPartOfClaim = new RejectPartOfClaim(input.rejectPartOfClaim && input.rejectPartOfClaim.option)
       this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
-      this.defendantPaymentOption = new DefendantPaymentOption().deserialize(input.paymentOption)
-      this.paymentPlan = new PaymentPlan().deserialize(input.repaymentPlan)
+      this.defendantPaymentOption = new DefendantPaymentOption().deserialize(input.defendantPaymentOption && input.defendantPaymentOption.option)
+      this.defendantPaymentPlan = new DefendantPaymentPlan().deserialize(input.defendantPaymentPlan)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
     }

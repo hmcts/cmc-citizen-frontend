@@ -2,7 +2,7 @@ import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
-import { DefendantPaymentOption, PaymentType, ValidationErrors } from 'response/form/models/defendantPaymentOption'
+import { DefendantPaymentOption, DefendantPaymentType, ValidationErrors } from 'response/form/models/defendantPaymentOption'
 
 describe('DefendantPaymentOption', () => {
   describe('form object deserialization', () => {
@@ -19,7 +19,7 @@ describe('DefendantPaymentOption', () => {
     })
 
     it('should deserialize all fields', () => {
-      expect(DefendantPaymentOption.fromObject({ option: PaymentType.INSTALMENTS.value })).to.deep.equal(new DefendantPaymentOption(PaymentType.INSTALMENTS))
+      expect(DefendantPaymentOption.fromObject({ option: DefendantPaymentType.INSTALMENTS.value })).to.deep.equal(new DefendantPaymentOption(DefendantPaymentType.INSTALMENTS))
     })
   })
 
@@ -33,7 +33,7 @@ describe('DefendantPaymentOption', () => {
     })
 
     it('should return instance with set fields from given object', () => {
-      expect(new DefendantPaymentOption().deserialize({ option: { value: PaymentType.INSTALMENTS.value } })).to.deep.equal(new DefendantPaymentOption(PaymentType.INSTALMENTS))
+      expect(new DefendantPaymentOption().deserialize({ option: { value: DefendantPaymentType.INSTALMENTS.value } })).to.deep.equal(new DefendantPaymentOption(DefendantPaymentType.INSTALMENTS))
     })
   })
 
@@ -49,7 +49,7 @@ describe('DefendantPaymentOption', () => {
       })
 
       it('invalid option', () => {
-        const errors = validator.validateSync(new DefendantPaymentOption(new PaymentType('unknown', '')))
+        const errors = validator.validateSync(new DefendantPaymentOption(new DefendantPaymentType('unknown', '')))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.OPTION_REQUIRED)
@@ -58,7 +58,7 @@ describe('DefendantPaymentOption', () => {
 
     describe('should accept when', () => {
       it('option is known', () => {
-        PaymentType.all().forEach(type => {
+        DefendantPaymentType.all().forEach(type => {
           const errors = validator.validateSync(new DefendantPaymentOption(type))
 
           expect(errors.length).to.equal(0)

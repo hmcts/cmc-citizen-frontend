@@ -16,7 +16,7 @@ export class ValidationErrors {
   static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter valid amount, maximum two decimal places'
 }
 
-export class PaymentPlan {
+export class DefendantPaymentPlan {
 
   remainingAmount?: number
 
@@ -54,7 +54,7 @@ export class PaymentPlan {
     this.paymentSchedule = paymentSchedule
   }
 
-  static fromObject (value?: any): PaymentPlan {
+  static fromObject (value?: any): DefendantPaymentPlan {
     if (value) {
       const remainingAmount = value.remainingAmount ? parseFloat(value.remainingAmount) : undefined
       const firstPayment = value.firstPayment ? parseFloat(value.firstPayment) : undefined
@@ -64,13 +64,13 @@ export class PaymentPlan {
       const paymentSchedule = PaymentSchedule.all()
         .filter(option => option.value === value.paymentSchedule)
         .pop()
-      return new PaymentPlan(remainingAmount, firstPayment, installmentAmount, firstPaymentDate, paymentSchedule)
+      return new DefendantPaymentPlan(remainingAmount, firstPayment, installmentAmount, firstPaymentDate, paymentSchedule)
     } else {
-      return new PaymentPlan()
+      return new DefendantPaymentPlan()
     }
   }
 
-  deserialize (input?: any): PaymentPlan {
+  deserialize (input?: any): DefendantPaymentPlan {
     if (input) {
       this.remainingAmount = input.remainingAmount
       this.firstPayment = input.firstPayment

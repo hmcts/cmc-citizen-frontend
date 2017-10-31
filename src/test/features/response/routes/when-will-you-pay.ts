@@ -14,7 +14,7 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { sampleClaimObj } from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
-import { PaymentType } from 'response/form/models/defendantPaymentOption'
+import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -22,7 +22,7 @@ const externalId = sampleClaimObj.externalId
 const defenceFullPartialPaymentOptionsPage = Paths.defenceFullPartialPaymentOptionsPage.evaluateUri({ externalId: externalId })
 
 const validFormData: object = {
-  option: PaymentType.INSTALMENTS.value
+  option: DefendantPaymentType.INSTALMENTS.value
 }
 
 describe('Defendant - when will you pay options', () => {
@@ -133,11 +133,11 @@ describe('Defendant - when will you pay options', () => {
             }
 
             it('should redirect to repayment plan page for "INSTALMENTS" option selected', async () => {
-              await checkThatSelectedPaymentOptionRedirectsToPage({ option: PaymentType.INSTALMENTS.value }, Paths.defenceFullPartialPaymentPlanPage.evaluateUri({ externalId: externalId }))
+              await checkThatSelectedPaymentOptionRedirectsToPage({ option: DefendantPaymentType.INSTALMENTS.value }, Paths.defenceFullPartialPaymentPlanPage.evaluateUri({ externalId: externalId }))
             })
 
             it('should redirect to pay by set date page for "FULL_BY_SPECIFIED_DATE" option selected', async () => {
-              await checkThatSelectedPaymentOptionRedirectsToPage({ option: PaymentType.FULL_BY_SPECIFIED_DATE.value }, Paths.defenceFullPartialPaymentOptionsPage.evaluateUri({ externalId: externalId }))
+              await checkThatSelectedPaymentOptionRedirectsToPage({ option: DefendantPaymentType.FULL_BY_SPECIFIED_DATE.value }, Paths.defenceFullPartialPaymentOptionsPage.evaluateUri({ externalId: externalId }))
             })
           })
 

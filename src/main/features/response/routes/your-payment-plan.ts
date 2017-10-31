@@ -7,7 +7,7 @@ import { Form } from 'app/forms/form'
 import { DraftService } from 'services/draftService'
 import User from 'idam/user'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
-import { PaymentPlan } from 'response/form/models/paymentPlan'
+import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { FormValidator } from 'forms/validation/formValidator'
 
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
@@ -24,22 +24,22 @@ export default express.Router()
   .get(Paths.defenceFullPartialPaymentPlanPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
-      renderView(new Form(user.responseDraft.document.paymentPlan), res)
+      renderView(new Form(user.responseDraft.document.defendantPaymentPlan), res)
     }))
 
   .post(Paths.defenceFullPartialPaymentPlanPage.uri,
-    FormValidator.requestHandler(PaymentPlan, PaymentPlan.fromObject),
+    FormValidator.requestHandler(DefendantPaymentPlan, DefendantPaymentPlan.fromObject),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
 
-        const form: Form<PaymentPlan> = req.body
+        const form: Form<DefendantPaymentPlan> = req.body
         const user: User = res.locals.user
 
         if (form.hasErrors()) {
           renderView(form, res)
         } else {
           const { externalId } = req.params
-          user.responseDraft.document.paymentPlan = form.model
+          user.responseDraft.document.defendantPaymentPlan = form.model
           user.responseDraft.document.payBySetDate = undefined
           await new DraftService().save(user.responseDraft, user.bearerToken)
           res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
