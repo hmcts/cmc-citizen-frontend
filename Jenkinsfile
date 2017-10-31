@@ -24,7 +24,6 @@ timestamps {
   lock(resource: "citizen-frontend-${env.BRANCH_NAME}", inversePrecedence: true) {
     node('slave') {
       try {
-        currentBuild.result = 'SUCCESS'
         def version
         def citizenFrontendRPMVersion
         def citizenFrontendVersion
@@ -157,6 +156,7 @@ timestamps {
           }
           milestone()
         }
+        currentBuild.result = 'SUCCESS'
       } catch (Throwable err) {
         notifyBuildFailure channel: channel
         currentBuild.result = 'FAILURE'
