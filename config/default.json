@@ -16,14 +16,14 @@
     }
   },
   "claim-store": {
-    "url": "http://localhost:4400",
+    "url": "http://localhost:4400"
+  },
+  "draft-store": {
+    "url": "http://localhost:8800",
     "secrets": {
       "primary": "not-a-real-primary-secret",
       "secondary": "not-a-real-secondary-secret"
     }
-  },
-  "draft-store": {
-    "url": "http://localhost:8800"
   },
   "session": {
     "cookieName": "SESSION_ID"
