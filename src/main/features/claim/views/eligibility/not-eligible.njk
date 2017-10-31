@@ -1,0 +1,17 @@
+{% extends "layout.njk" %}
+
+{% set title = t('Not eligible | Money claim') %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ t('You can’t use this service') }}</h1>
+
+      <p class="lede">
+        {{ reason_not_eligible }}
+      </p>
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
+
+{% set title = t('Claim value | Money claim') %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ t('Total amount you’re claiming') }}</h1>
+      <p>{{ t('Please include any additional interest in your claim amount.') }}</p>
+
+      {% set name = 'claimValue' %}
+
+      <form novalidate method="post" class="analytics-submit-event-trigger"
+            data-event-action="Eligibility: Select claim value option"
+            data-event-label-from="{{ name }}">
+        {{ csrfProtection(csrf) }}
+
+        {{
+        radioGroup(
+        form = form,
+        label = 'Total amount you’re claiming',
+        labelForScreenReadersOnly = true,
+        name = name,
+        options = [
+          {
+            bold: false,
+            label: 'Above £10,000',
+            value: 'yes',
+            checked: (form.valueFor(name) === YesNoOption.YES)
+          },
+          {
+            bold: false,
+            label: 'Less than £10,000',
+            value: 'no',
+            checked: (form.valueFor(name) === YesNoOption.NO)
+          }
+        ]
+        )
+        }}
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

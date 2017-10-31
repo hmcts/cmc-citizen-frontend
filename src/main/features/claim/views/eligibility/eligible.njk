@@ -1,0 +1,19 @@
+{% extends "layout.njk" %}
+
+{% set title = t('Eligible | Money claim') %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ t('You can use this service') }}</h1>
+
+      <p class="lede">
+        {{ t('Based on your answers, you are eligible to make a money claim using this beta service.') }}
+      </p>
+
+      <a href="{{ nextPage }}" class="button">{{ t('Continue') }}</a>
+    </div>
+  </div>
+
+{% endblock %}

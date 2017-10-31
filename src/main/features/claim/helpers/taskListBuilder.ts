@@ -12,6 +12,7 @@ import { TheirDetails } from 'app/drafts/tasks/theirDetails'
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: DraftClaim): TaskList {
     return new TaskList(1, 'Before you start', [
+      new TaskListItem('Check eligibility', Paths.eligibilityStartPage.uri, true),
       new TaskListItem('Resolving this dispute', Paths.resolvingThisDisputerPage.uri, ResolveDispute.isCompleted(draft))
     ])
   }

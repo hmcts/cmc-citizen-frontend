@@ -1,0 +1,40 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
+
+{% set title = t('Over 18 | Money claim') %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ t('Are you 18 or over?') }}</h1>
+      <p>{{ t('You must be 18 or over to use the service.') }}</p>
+
+      {% set name = 'eighteenOrOver' %}
+
+      <form novalidate method="post" class="analytics-submit-event-trigger"
+            data-event-action="Eligibility: Select 18 or over option"
+            data-event-label-from="{{ name }}">
+        {{ csrfProtection(csrf) }}
+
+        {{
+          radioGroup(
+            'Are you 18 or over?',
+            name,
+            [
+              {'label': 'Yes', value: 'yes', checked: (form.valueFor(name) === YesNoOption.YES)},
+              {'label': 'No', value: 'no', checked: (form.valueFor(name) === YesNoOption.NO)}
+            ],
+            form = form,
+            labelForScreenReadersOnly = true
+          )
+        }}
+
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

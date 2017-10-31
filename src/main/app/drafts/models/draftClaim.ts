@@ -8,6 +8,7 @@ import * as uuid from 'uuid'
 import { Defendant } from 'app/drafts/models/defendant'
 import { DraftDocument } from 'models/draftDocument'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
+import { Eligibility } from 'drafts/models/eligibility/Eligibility'
 
 export default class DraftClaim extends DraftDocument implements Serializable<DraftClaim> {
 
@@ -21,6 +22,7 @@ export default class DraftClaim extends DraftDocument implements Serializable<Dr
   readResolveDispute: boolean = false
   readCompletingClaim: boolean = false
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
+  eligibility: Eligibility = new Eligibility()
 
   deserialize (input: any): DraftClaim {
     if (input) {
@@ -36,6 +38,7 @@ export default class DraftClaim extends DraftDocument implements Serializable<Dr
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }
+      this.eligibility = new Eligibility().deserialize(input.eligibility)
     }
     return this
   }
