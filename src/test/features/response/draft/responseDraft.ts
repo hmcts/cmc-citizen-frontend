@@ -9,7 +9,9 @@ import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/r
 import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 
 describe('ResponseDraft', () => {
+
   describe('deserialization', () => {
+
     it('should return a ResponseDraft instance initialised with defaults for undefined', () => {
       expect(new ResponseDraft().deserialize(undefined)).to.eql(new ResponseDraft())
     })
@@ -33,6 +35,7 @@ describe('ResponseDraft', () => {
   })
 
   describe('isMoreTimeRequested', () => {
+
     it('should return false when more time was not requested', () => {
       const responseDraftModel: ResponseDraft = new ResponseDraft().deserialize(
         prepareInputData(ResponseType.OWE_ALL_PAID_NONE, MoreTimeNeededOption.NO)
@@ -51,6 +54,7 @@ describe('ResponseDraft', () => {
   })
 
   describe('requireDefence', () => {
+
     it('should return false when no response type set', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = undefined
@@ -100,6 +104,7 @@ describe('ResponseDraft', () => {
   })
 
   describe('requireHowMuchPaid', () => {
+
     it('should return false when no response type set', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = undefined
@@ -138,6 +143,7 @@ describe('ResponseDraft', () => {
   })
 
   describe('requireHowMuchOwed', () => {
+
     it('should return false when no response type set', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = undefined
@@ -176,6 +182,7 @@ describe('ResponseDraft', () => {
   })
 
   describe('requireMediation', () => {
+
     it('should return false when no response type set', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = undefined
