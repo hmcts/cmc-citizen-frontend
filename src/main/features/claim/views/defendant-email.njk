@@ -12,7 +12,7 @@
         <form novalidate method="post">
           {{ csrfProtection(csrf) }}
 
-          {{ emailInput(t(''), 'address', form) }}
+          {{ emailInput('', 'address', form) }}
           {{ saveAndContinueButton() }}
         </form>
       </div>
