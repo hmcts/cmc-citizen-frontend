@@ -2,6 +2,7 @@ import { Serializable } from 'models/serializable'
 import { YesNoOption } from 'models/yesNoOption'
 import { IsIn } from 'class-validator'
 import { ValidationErrors } from 'features/validationErrors'
+import { ClaimValue } from 'drafts/models/eligibility/claimValue'
 
 export class Eligibility implements Serializable<Eligibility> {
 
@@ -9,32 +10,37 @@ export class Eligibility implements Serializable<Eligibility> {
   claimantAddress?: YesNoOption
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['defendant-address'] })
   defendantAddress?: YesNoOption
-  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['claim-value'] })
-  claimValue?: YesNoOption
+  @IsIn(ClaimValue.all(), { message: ValidationErrors.SELECT_AN_OPTION, groups: ['claim-value'] })
+  claimValue?: ClaimValue
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['18-or-over'] })
   eighteenOrOver?: YesNoOption
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['government-department'] })
   governmentDepartment?: YesNoOption
+  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['help-with-fees'] })
+  helpWithFees?: YesNoOption
 
   constructor (claimantAddress?: YesNoOption,
                defendantAddress?: YesNoOption,
-               claimValue?: YesNoOption,
+               claimValue?: ClaimValue,
                eighteenOrOver?: YesNoOption,
-               governmentDepartment?: YesNoOption) {
+               governmentDepartment?: YesNoOption,
+               helpWithFees?: YesNoOption) {
     this.claimantAddress = claimantAddress
     this.defendantAddress = defendantAddress
     this.claimValue = claimValue
     this.eighteenOrOver = eighteenOrOver
     this.governmentDepartment = governmentDepartment
+    this.helpWithFees = helpWithFees
   }
 
   static fromObject (input: any): Eligibility {
     return new Eligibility(
       YesNoOption.fromObject(input.claimantAddress),
       YesNoOption.fromObject(input.defendantAddress),
-      YesNoOption.fromObject(input.claimValue),
+      ClaimValue.fromObject(input.claimValue),
       YesNoOption.fromObject(input.eighteenOrOver),
-      YesNoOption.fromObject(input.governmentDepartment)
+      YesNoOption.fromObject(input.governmentDepartment),
+      YesNoOption.fromObject(input.helpWithFees)
     )
   }
 
@@ -46,13 +52,16 @@ export class Eligibility implements Serializable<Eligibility> {
       this.defendantAddress = YesNoOption.fromObject(input.defendantAddress.option)
     }
     if (input.claimValue) {
-      this.claimValue = YesNoOption.fromObject(input.claimValue.option)
+      this.claimValue = ClaimValue.fromObject(input.claimValue.option)
     }
     if (input.eighteenOrOver) {
       this.eighteenOrOver = YesNoOption.fromObject(input.eighteenOrOver.option)
     }
     if (input.governmentDepartment) {
       this.governmentDepartment = YesNoOption.fromObject(input.governmentDepartment.option)
+    }
+    if (input.helpWithFees) {
+      this.helpWithFees = YesNoOption.fromObject(input.helpWithFees.option)
     }
 
     return this

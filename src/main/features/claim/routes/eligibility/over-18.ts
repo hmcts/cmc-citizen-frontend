@@ -36,7 +36,7 @@ export default express.Router()
         if (user.claimDraft.document.eligibility.eighteenOrOver === YesNoOption.NO) {
           res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=over-18`)
         } else {
-          res.redirect(Paths.eligibilityClaimantAddressPage.uri)
+          res.redirect(Paths.eligibilityHelpWithFeesPage.uri)
         }
       }
     })

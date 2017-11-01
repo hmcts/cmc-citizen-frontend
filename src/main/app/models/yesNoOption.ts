@@ -2,11 +2,7 @@ export class YesNoOption {
   static readonly YES = new YesNoOption('yes')
   static readonly NO = new YesNoOption('no')
 
-  readonly option: string
-
-  constructor (option?: string) {
-    this.option = option
-  }
+  constructor (readonly option?: string) {}
 
   static fromObject (input?: any): YesNoOption {
     if (!input) {

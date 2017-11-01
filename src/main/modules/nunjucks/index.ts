@@ -16,6 +16,7 @@ import { SignatureType } from 'app/common/signatureType'
 import { ResponseType } from 'response/form/models/responseType'
 import { YesNoOption } from 'models/yesNoOption'
 import { EvidenceType } from 'response/form/models/evidenceType'
+import { ClaimValue } from 'drafts/models/eligibility/claimValue'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -77,6 +78,7 @@ export default class Nunjucks {
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('ResponseType', ResponseType)
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)
+    nunjucksEnv.addGlobal('ClaimValue', ClaimValue)
     nunjucksEnv.addGlobal('EvidenceType', EvidenceType)
   }
 }
