@@ -71,4 +71,13 @@ export class Eligibility implements Serializable<Eligibility> {
     return this
   }
 
+  get eligible (): boolean {
+    return this.claimantAddress === YesNoOption.YES &&
+      this.defendantAddress === YesNoOption.YES &&
+      this.claimValue === ClaimValue.UNDER_10000 &&
+      this.eighteenOrOver === YesNoOption.YES &&
+      this.governmentDepartment === YesNoOption.NO &&
+      this.helpWithFees === YesNoOption.NO
+  }
+
 }
