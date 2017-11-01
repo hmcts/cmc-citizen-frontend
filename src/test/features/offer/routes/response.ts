@@ -6,6 +6,7 @@ import '../../../routes/expectations'
 
 import { app } from '../../../../main/app'
 import { Paths as OfferPaths } from 'offer/paths'
+import { StatementType } from 'offer/form/models/statementType'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
@@ -68,7 +69,7 @@ describe('defendant response page', () => {
           it('should render page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             const formData = {
-              option: 'yes'
+              option: StatementType.ACCEPTATION.value
             }
             await request(app)
               .post(responsePage)
