@@ -9,6 +9,7 @@ import User from 'idam/user'
 import { Eligibility } from 'drafts/models/eligibility/Eligibility'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ClaimValue } from 'drafts/models/eligibility/claimValue'
+import { NotEligibleReason } from 'claim/helpers/notEligibleReason'
 
 function renderView (form: Form<Eligibility>, res: express.Response): void {
   res.render(Paths.eligibilityClaimValuePage.associatedView, { form: form })
@@ -36,10 +37,10 @@ export default express.Router()
         const claimValue: ClaimValue = user.claimDraft.document.eligibility.claimValue
         switch (claimValue) {
           case ClaimValue.NOT_KNOWN:
-            res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=claim-value-not-known`)
+            res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_VALUE_NOT_KNOWN}`)
             break
           case ClaimValue.OVER_10000:
-            res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=claim-value-over-10000`)
+            res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_VALUE_OVER_10000}`)
             break
           case ClaimValue.UNDER_10000:
             res.redirect(Paths.eligibilityOver18Page.uri)

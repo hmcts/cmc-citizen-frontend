@@ -9,6 +9,7 @@ import { DraftService } from 'services/draftService'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Eligibility } from 'drafts/models/eligibility/Eligibility'
 import { YesNoOption } from 'models/yesNoOption'
+import { NotEligibleReason } from 'claim/helpers/notEligibleReason'
 
 function renderView (form: Form<Eligibility>, res: express.Response): void {
   res.render(Paths.eligibilityClaimantAddressPage.associatedView, { form: form })
@@ -34,7 +35,7 @@ export default express.Router()
         await new DraftService().save(user.claimDraft, user.bearerToken)
 
         if (user.claimDraft.document.eligibility.claimantAddress === YesNoOption.NO) {
-          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=claimant-address`)
+          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIMANT_ADDRESS}`)
         } else {
           res.redirect(Paths.eligibilityDefendantAddressPage.uri)
         }

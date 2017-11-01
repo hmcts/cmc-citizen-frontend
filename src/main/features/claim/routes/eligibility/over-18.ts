@@ -9,6 +9,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import User from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { YesNoOption } from 'app/models/yesNoOption'
+import { NotEligibleReason } from 'claim/helpers/notEligibleReason'
 
 function renderView (form: Form<Eligibility>, res: express.Response): void {
   res.render(Paths.eligibilityOver18Page.associatedView, { form: form })
@@ -34,7 +35,7 @@ export default express.Router()
         await new DraftService().save(user.claimDraft, user.bearerToken)
 
         if (user.claimDraft.document.eligibility.eighteenOrOver === YesNoOption.NO) {
-          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=over-18`)
+          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.OVER_18}`)
         } else {
           res.redirect(Paths.eligibilityHelpWithFeesPage.uri)
         }

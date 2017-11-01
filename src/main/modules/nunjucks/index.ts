@@ -17,6 +17,7 @@ import { ResponseType } from 'response/form/models/responseType'
 import { YesNoOption } from 'models/yesNoOption'
 import { EvidenceType } from 'response/form/models/evidenceType'
 import { ClaimValue } from 'drafts/models/eligibility/claimValue'
+import { NotEligibleReason } from 'claim/helpers/notEligibleReason'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -80,5 +81,6 @@ export default class Nunjucks {
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)
     nunjucksEnv.addGlobal('ClaimValue', ClaimValue)
     nunjucksEnv.addGlobal('EvidenceType', EvidenceType)
+    nunjucksEnv.addGlobal('NotEligibleReason', NotEligibleReason)
   }
 }

@@ -9,6 +9,7 @@ import { Eligibility } from 'drafts/models/eligibility/eligibility'
 import { YesNoOption } from 'models/yesNoOption'
 import User from 'idam/user'
 import { DraftService } from 'services/draftService'
+import { NotEligibleReason } from 'claim/helpers/notEligibleReason'
 
 function renderView (form: Form<Eligibility>, res: express.Response): void {
   res.render(Paths.eligibilityGovernmentDepartmentPage.associatedView, { form: form })
@@ -34,7 +35,7 @@ export default express.Router()
         await new DraftService().save(user.claimDraft, user.bearerToken)
 
         if (user.claimDraft.document.eligibility.governmentDepartment === YesNoOption.YES) {
-          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=government-department`)
+          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.GOVERNMENT_DEPARTMENT}`)
         } else {
           res.redirect(Paths.eligibilityEligiblePage.uri)
         }

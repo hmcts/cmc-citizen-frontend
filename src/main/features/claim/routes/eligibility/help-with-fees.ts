@@ -9,6 +9,7 @@ import User from 'idam/user'
 import { Eligibility } from 'drafts/models/eligibility/Eligibility'
 import { FormValidator } from 'forms/validation/formValidator'
 import { YesNoOption } from 'models/yesNoOption'
+import { NotEligibleReason } from 'claim/helpers/notEligibleReason'
 
 function renderView (form: Form<Eligibility>, res: express.Response): void {
   res.render(Paths.eligibilityHelpWithFeesPage.associatedView, { form: form })
@@ -37,7 +38,7 @@ export default express.Router()
         if (option === YesNoOption.NO) {
           res.redirect(Paths.eligibilityClaimantAddressPage.uri)
         } else {
-          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=help-with-fees`)
+          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.HELP_WITH_FEES}`)
         }
 
       }
