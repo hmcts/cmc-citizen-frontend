@@ -2,16 +2,59 @@
 
 {% set title = t('Not eligible | Money claim') %}
 
+{% macro newWindow() %}<span class="font-xsmall">{{ t('(opens in new window)') }}</span>{% endmacro %}
+
 {% block content %}
+
+  {% set n1FormUrl = 'https://formfinder.hmctsformfinder.justice.gov.uk/n1-eng.pdf' %}
+  {% set n510Url = 'http://formfinder.hmctsformfinder.justice.gov.uk/n510-eng.pdf' %}
+  {% set citizensAdviceUrl = 'https://www.citizensadvice.org.uk/about-us/contact-us/' %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
       <h1 class="heading-large">{{ t('You can’t use this service') }}</h1>
 
-      <p class="lede">
-        {{ reason_not_eligible }}
-      </p>
+      {% if reason === 'claim-value-not-known' %}
+        <p>{{ t('Your claim including any interest must be a fixed amount of under £10,000.') }}</p>
+        <p>{{ t('If you’re claiming for an unspecified amount, for example damages or compensation, use '
+          + '<a target="_blank" href="%s">form N1</a> ' + newWindow() + '.',
+          { postProcess: 'sprintf', sprintf: [ n1FormUrl ]}) | safe }}
+        </p>
+      {% elseif reason === 'claim-value-over-10000' %}
+        <p>{{ t('Claims including any interest must be under £10,000.') }}</p>
+        <p>
+          {{ t('Use <a target="_blank" href="%s">Money Claim Online</a> ' + newWindow() + ', '
+          + 'if you’re claiming more than £10,000.',
+          { postProcess: 'sprintf', sprintf: [ 'https://www.moneyclaim.gov.uk/web/mcol/welcome' ]}) | safe }}</p>
+        <p>{{ t('If your claim is over £100,000, use <a target="_blank" href="%s">form N1</a> ' + newWindow() + '.',
+          { postProcess: 'sprintf', sprintf: [ n1FormUrl ]}) | safe }}</p>
+      {% elseif reason === 'over-18' %}
+        <p>{{ t('You must be 18 or over to use the service') }}</p>
+        <p>{{ t('You might be able to get free legal advice from organisations like ' +
+          '<a target="_blank" href="%s">Citizens Advice</a> ' + newWindow() + ' about making a claim.',
+          { postProcess: 'sprintf', sprintf: [ citizensAdviceUrl ]}) | safe }}</p>
+      {% elseif reason === 'help-with-fees' %}
+        <p>{{ t('You won’t get your claim fee refunded if you use this service.') }}</p>
+        <p>{{ t('If you need help with fees, use <a target="_blank" href="%s">form N1</a> '
+          + newWindow() + ' to make a claim by post.',
+          { postProcess: 'sprintf', sprintf: [ n1FormUrl ]}) | safe }}</p>
+      {% elseif reason === 'claimant-address' %}
+        <p>{{ t('You must live in the UK to issue a money claim.') }}</p>
+        <p>{{ t('You might be able to make a claim using <a target="_blank" href="%s">form N510</a> ' + newWindow() +
+          ' or <a target="_blank" href="%s">form N1</a> ' + newWindow() + '.',
+          { postProcess: 'sprintf', sprintf: [ n510Url, n1FormUrl ]}) | safe }}</p>
+      {% elseif reason === 'defendant-address' %}
+        <p>{{ t('You can only make a claim against an person or organisation within England or Wales.') }}</p>
+        <p>{{ t('You might be able to make a claim using <a target="_blank" href="%s">form N510</a> ' + newWindow() + '.',
+          { postProcess: 'sprintf', sprintf: [ n510Url ]}) | safe }}</p>
+      {% elseif reason === 'government-department' %}
+        <p>{{ t('You can’t make a claim against a government department - eg HM Revenue and Customs.') }}</p>
+        <p>{{ t('You might be able to get free legal advice from organisations like '
+         + '<a target="_blank" href="%s">Citizens Advice</a> ' + newWindow() + ' about making a claim.',
+          { postProcess: 'sprintf', sprintf: [ citizensAdviceUrl ]}) | safe }}</p>
+      {% endif %}
     </div>
+
   </div>
 
 {% endblock %}
