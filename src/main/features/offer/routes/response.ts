@@ -7,15 +7,27 @@ import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
 import { OfferGuard } from 'offer/guards/offerGuard'
 
-function getOffer (claim: any): any {
+function getPartyStatement (claim: any): any[] {
   if (!claim.settlement || !claim.settlement.partyStatements) {
-    return undefined
+    throw Error('Something went wrong, No offer present')
   }
-  return claim.settlement.partyStatements[0].offer
+
+  return claim.settlement.partyStatements.map(partyStatement => {
+    if (partyStatement.type === 'OFFER' && partyStatement.madeBy === 'DEFENDANT') {
+      return partyStatement
+    }
+  })
+}
+function getOffer (claim: any): any[] {
+  const partyStatements: any[] = getPartyStatement(claim)
+  if (!partyStatements || partyStatements.length <= 0) {
+    throw Error('Something went wrong, No offer present')
+  }
+  return partyStatements[partyStatements.length - 1].offer
 }
 async function renderView (
   form: Form<DefendantResponse>, res: express.Response, next: express.NextFunction) {
-  res.render(Paths.defendantResponsePage.associatedView, {
+  res.render(Paths.responsePage.associatedView, {
     form: form,
     claim : res.locals.user.claim,
     offer: getOffer(res.locals.user.claim)
@@ -24,13 +36,13 @@ async function renderView (
 
 export default express.Router()
   .get(
-    Paths.defendantResponsePage.uri,
+    Paths.responsePage.uri,
     OfferGuard.requestHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       await renderView(Form.empty(), res, next)
     }))
   .post(
-    Paths.defendantResponsePage.uri,
+    Paths.responsePage.uri,
     OfferGuard.requestHandler,
     FormValidator.requestHandler(DefendantResponse, DefendantResponse.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
@@ -39,6 +51,6 @@ export default express.Router()
         renderView(form, res, next)
       } else {
         const user: User = res.locals.user
-        res.redirect(Paths.defendantResponsePage.evaluateUri({ externalId: user.claim.externalId }))
+        res.redirect(Paths.responsePage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

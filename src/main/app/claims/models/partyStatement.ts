@@ -3,9 +3,9 @@ import { Serializable } from 'models/serializable'
 import { Offer } from 'claims/models/offer'
 
 export class PartyStatement implements Serializable<PartyStatement> {
-  type: string
-  madeBy: string
-  offer: Offer
+  type?: string
+  madeBy?: string
+  offer?: Offer
 
   constructor (type?: string, madeBy?: string, offer?: Offer) {
     this.type = type

@@ -69,7 +69,7 @@ export const sampleClaimObj = {
   },
   settlement: {
     partyStatements:
-        [ { type: 'type', madeBy: 'defendant' , offer: { content: 'offer text', completionDate: '2017-08-08'}}]
+        [ { type: 'OFFER', madeBy: 'DEFENDANT' , offer: { content: 'offer text', completionDate: '2017-08-08'}}]
   }
 }
 

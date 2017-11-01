@@ -7,7 +7,7 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large form-hint">{{ t("Defendant's response") }} </h1>
+      <h1 class="heading-large form-hint">{{ t('Defendant’s response') }} </h1>
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
         <div class="description-block">
@@ -17,12 +17,12 @@
               sprintf: [claim.claimData.defendant.name]
             }) }}</h2>
         </div>
-        <table class="claim-dashboard">
-          <tr class="claims default mobile-table">
+        <table class="offer-table">
+          <tr>
               <td>{{ t('The offer') }}</td>
               <td>{{ offer.content }}</td>
             </tr>
-            <tr class="claims default mobile-table">
+            <tr>
               <td>{{ t('By when') }}</td>
               <td>{{ offer.completionDate | date }}</td>
             </tr>
@@ -33,7 +33,6 @@
         {{
         radioGroup(
           form = form,
-          label = 'Yes',
           labelForScreenReadersOnly = true,
           name = 'option',
           options = [
@@ -44,20 +43,20 @@
                 { postProcess: 'sprintf',
                 sprintf:[claim.claimData.defendant.name]
                 }),
-              value: 'yes',
-              checked: (form.valueFor('option').value === 'yes')
+              value: 'StatementType.ACCEPTATION.value',
+              checked: (form.valueFor('option').value === 'StatementType.ACCEPTATION.value')
             },
             {
               bold: false,
               label: 'No',
-              value: 'no',
-              checked: (form.valueFor('option').value === 'no')
+              value: 'StatementType.REJECTION.value',
+              checked: (form.valueFor('option').value === 'StatementType.REJECTION.value')
             },
             {
               bold: false,
               label: 'Make a counter offer',
-              value: 'makeAnCounterOffer',
-              checked: (form.valueFor('option').value === 'makeAnCounterOffer')
+              value: 'StatementType.OFFER.value',
+              checked: (form.valueFor('option').value === 'StatementType.OFFER.value')
             }
           ]
         )

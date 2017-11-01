@@ -57,7 +57,7 @@
               { postProcess: 'sprintf', 
               sprintf: 
                       [ claim.claimData.defendant.name,  
-                        offerPaths.defendantResponsePage.evaluateUri({ externalId: claim.externalId })
+                        offerPaths.responsePage.evaluateUri({ externalId: claim.externalId })
                       ]
               }) | safe%}  
             {% else %}

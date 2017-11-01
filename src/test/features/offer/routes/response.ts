@@ -13,13 +13,13 @@ import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = sampleClaimObj.externalId
-const defendantResponsePage = OfferPaths.defendantResponsePage.evaluateUri({ externalId: externalId })
+const responsePage = OfferPaths.responsePage.evaluateUri({ externalId: externalId })
 
 describe('defendant response page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', defendantResponsePage)
+    checkAuthorizationGuards(app, 'get', responsePage)
 
     context('when user authorised', () => {
       beforeEach(() => {
@@ -30,7 +30,7 @@ describe('defendant response page', () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .get(defendantResponsePage)
+          .get(responsePage)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -38,14 +38,14 @@ describe('defendant response page', () => {
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         await request(app)
-          .get(defendantResponsePage)
+          .get(responsePage)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Do you accept the offer?'))
       })
     })
 
     describe('on POST', () => {
-      checkAuthorizationGuards(app, 'post', defendantResponsePage)
+      checkAuthorizationGuards(app, 'post', responsePage)
 
       context('when user authorised', () => {
         beforeEach(() => {
@@ -57,7 +57,7 @@ describe('defendant response page', () => {
             claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
-              .post(defendantResponsePage)
+              .post(responsePage)
               .set('Cookie', `${cookieName}=ABC`)
               .send({})
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -65,27 +65,27 @@ describe('defendant response page', () => {
         })
 
         context('when form is valid', async () => {
-          it('should display defendantResponsePage', async () => {
+          it('should render page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             const formData = {
               option: 'yes'
             }
             await request(app)
-              .post(defendantResponsePage)
+              .post(responsePage)
               .set('Cookie', `${cookieName}=ABC`)
               .send(formData)
-              .expect(res => expect(res).to.be.redirect.toLocation(defendantResponsePage))
+              .expect(res => expect(res).to.be.redirect.toLocation(responsePage))
           })
         })
 
         context('when form is invalid', async () => {
-          it('should display defendantResponsePage with errors', async () => {
+          it('should render page with errors', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             const formData = {
               option: undefined
             }
             await request(app)
-              .post(defendantResponsePage)
+              .post(responsePage)
               .set('Cookie', `${cookieName}=ABC`)
               .send(formData)
               .expect(res => expect(res).to.be.successful.withText('Choose option: yes or no or make an offer', 'div class="error-summary"'))

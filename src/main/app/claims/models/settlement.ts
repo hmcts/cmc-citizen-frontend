@@ -11,7 +11,7 @@ export default class Settlement implements Serializable<Settlement> {
     return this
   }
 
-  private deserializePartyStatement (settlements: any): PartyStatement[] {
+  private deserializePartyStatement (settlements: any[]): PartyStatement[] {
     if (!settlements) {
       return settlements
     }
