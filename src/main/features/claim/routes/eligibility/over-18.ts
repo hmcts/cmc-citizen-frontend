@@ -9,7 +9,8 @@ import { FormValidator } from 'forms/validation/formValidator'
 import User from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { YesNoOption } from 'app/models/yesNoOption'
-import { NotEligibleReason } from 'claim/helpers/notEligibleReason'
+import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
+import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
 
 function renderView (form: Form<Eligibility>, res: express.Response): void {
   res.render(Paths.eligibilityOver18Page.associatedView, { form: form })
@@ -22,7 +23,7 @@ export default express.Router()
   })
   .post(
     Paths.eligibilityOver18Page.uri,
-    FormValidator.requestHandler(undefined, Eligibility.fromObject, '18-or-over'),
+    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.OVER_18),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Eligibility> = req.body
 

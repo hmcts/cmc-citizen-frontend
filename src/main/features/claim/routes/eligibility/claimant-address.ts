@@ -9,7 +9,8 @@ import { DraftService } from 'services/draftService'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Eligibility } from 'drafts/models/eligibility/Eligibility'
 import { YesNoOption } from 'models/yesNoOption'
-import { NotEligibleReason } from 'claim/helpers/notEligibleReason'
+import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
+import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
 
 function renderView (form: Form<Eligibility>, res: express.Response): void {
   res.render(Paths.eligibilityClaimantAddressPage.associatedView, { form: form })
@@ -22,7 +23,7 @@ export default express.Router()
   })
   .post(
     Paths.eligibilityClaimantAddressPage.uri,
-    FormValidator.requestHandler(undefined, Eligibility.fromObject, 'claimant-address'),
+    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.CLAIMANT_ADDRESS),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Eligibility> = req.body
 

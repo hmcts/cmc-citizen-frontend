@@ -17,7 +17,7 @@ import { ResponseType } from 'response/form/models/responseType'
 import { YesNoOption } from 'models/yesNoOption'
 import { EvidenceType } from 'response/form/models/evidenceType'
 import { ClaimValue } from 'drafts/models/eligibility/claimValue'
-import { NotEligibleReason } from 'claim/helpers/notEligibleReason'
+import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 
 const packageDotJson = require('../../../../package.json')
 

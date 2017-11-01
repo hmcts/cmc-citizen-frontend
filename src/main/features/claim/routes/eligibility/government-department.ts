@@ -9,7 +9,8 @@ import { Eligibility } from 'drafts/models/eligibility/eligibility'
 import { YesNoOption } from 'models/yesNoOption'
 import User from 'idam/user'
 import { DraftService } from 'services/draftService'
-import { NotEligibleReason } from 'claim/helpers/notEligibleReason'
+import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
+import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
 
 function renderView (form: Form<Eligibility>, res: express.Response): void {
   res.render(Paths.eligibilityGovernmentDepartmentPage.associatedView, { form: form })
@@ -22,7 +23,7 @@ export default express.Router()
   })
   .post(
     Paths.eligibilityGovernmentDepartmentPage.uri,
-    FormValidator.requestHandler(undefined, Eligibility.fromObject, 'government-department'),
+    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.GOVERNMENT_DEPARTMENT),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Eligibility> = req.body
 

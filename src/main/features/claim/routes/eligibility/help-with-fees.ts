@@ -9,7 +9,8 @@ import User from 'idam/user'
 import { Eligibility } from 'drafts/models/eligibility/Eligibility'
 import { FormValidator } from 'forms/validation/formValidator'
 import { YesNoOption } from 'models/yesNoOption'
-import { NotEligibleReason } from 'claim/helpers/notEligibleReason'
+import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
+import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 
 function renderView (form: Form<Eligibility>, res: express.Response): void {
   res.render(Paths.eligibilityHelpWithFeesPage.associatedView, { form: form })
@@ -22,7 +23,7 @@ export default express.Router()
   })
   .post(
     Paths.eligibilityHelpWithFeesPage.uri,
-    FormValidator.requestHandler(undefined, Eligibility.fromObject, 'help-with-fees'),
+    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.HELP_WITH_FEES),
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<Eligibility> = req.body
 

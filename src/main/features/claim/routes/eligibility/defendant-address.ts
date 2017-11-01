@@ -9,7 +9,8 @@ import { FormValidator } from 'app/forms/validation/formValidator'
 import { Eligibility } from 'app/drafts/models/eligibility/Eligibility'
 import User from 'idam/user'
 import { DraftService } from 'services/draftService'
-import { NotEligibleReason } from 'claim/helpers/notEligibleReason'
+import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
+import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 
 function renderView (form: Form<Eligibility>, res: express.Response): void {
   res.render(Paths.eligibilityDefendantAddressPage.associatedView, { form: form })
@@ -22,7 +23,7 @@ export default express.Router()
   })
   .post(
     Paths.eligibilityDefendantAddressPage.uri,
-    FormValidator.requestHandler(undefined, Eligibility.fromObject, 'defendant-address'),
+    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.DEFENDANT_ADDRESS),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Eligibility> = req.body
 

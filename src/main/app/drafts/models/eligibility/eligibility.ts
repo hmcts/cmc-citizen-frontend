@@ -3,20 +3,24 @@ import { YesNoOption } from 'models/yesNoOption'
 import { IsIn } from 'class-validator'
 import { ValidationErrors } from 'features/validationErrors'
 import { ClaimValue } from 'drafts/models/eligibility/claimValue'
+import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
 
 export class Eligibility implements Serializable<Eligibility> {
 
-  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['claimant-address'] })
+  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.CLAIMANT_ADDRESS] })
   claimantAddress?: YesNoOption
-  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['defendant-address'] })
+  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.DEFENDANT_ADDRESS] })
   defendantAddress?: YesNoOption
-  @IsIn(ClaimValue.all(), { message: ValidationErrors.SELECT_AN_OPTION, groups: ['claim-value'] })
+  @IsIn(ClaimValue.all(), { message: ValidationErrors.SELECT_AN_OPTION, groups: [ValidationGroups.CLAIM_VALUE] })
   claimValue?: ClaimValue
-  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['18-or-over'] })
+  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.OVER_18] })
   eighteenOrOver?: YesNoOption
-  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['government-department'] })
+  @IsIn(YesNoOption.all(), {
+    message: ValidationErrors.YES_NO_REQUIRED,
+    groups: [ValidationGroups.GOVERNMENT_DEPARTMENT]
+  })
   governmentDepartment?: YesNoOption
-  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['help-with-fees'] })
+  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.HELP_WITH_FEES] })
   helpWithFees?: YesNoOption
 
   constructor (claimantAddress?: YesNoOption,
