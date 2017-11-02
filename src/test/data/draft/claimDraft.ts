@@ -1,11 +1,21 @@
 import { individualDetails } from './partyDetails'
 import { InterestType } from 'claim/form/models/interest'
 import { InterestDateType } from 'app/common/interestDateType'
+import { YesNoOption } from 'models/yesNoOption'
+import { ClaimValue } from 'drafts/models/eligibility/claimValue'
 
 export const claimDraft = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
   readResolveDispute: true,
   readCompletingClaim: true,
+  eligibility: {
+    claimantAddress: YesNoOption.YES,
+    defendantAddress: YesNoOption.YES,
+    claimValue: ClaimValue.UNDER_10000,
+    eighteenOrOver: YesNoOption.YES,
+    governmentDepartment: YesNoOption.NO,
+    helpWithFees: YesNoOption.NO
+  },
   claimant: {
     payment: {
       id: 12,

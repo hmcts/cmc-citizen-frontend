@@ -7,12 +7,22 @@ import { MobilePhone } from 'forms/models/mobilePhone'
 import DraftClaim from 'drafts/models/draftClaim'
 import { Defendant } from 'app/drafts/models/defendant'
 import { IndividualDetails } from 'forms/models/individualDetails'
+import { YesNoOption } from 'models/yesNoOption'
+import { ClaimValue } from 'drafts/models/eligibility/claimValue'
 
 describe('DraftClaim deserialization', () => {
   let input
 
   beforeEach(() => {
     input = {
+      eligibility: {
+        claimantAddress: YesNoOption.YES,
+        defendantAddress: YesNoOption.YES,
+        claimValue: ClaimValue.UNDER_10000,
+        eighteenOrOver: YesNoOption.YES,
+        governmentDepartment: YesNoOption.NO,
+        helpWithFees: YesNoOption.NO
+      },
       claimant: {
         mobilePhone: {
           number: '7123123123'
@@ -68,6 +78,13 @@ describe('DraftClaim deserialization', () => {
     expect(deserialized.defendant.partyDetails.address.city).to.equal('Manchester')
     expect(deserialized.defendant.partyDetails.address.postcode).to.equal('SW8 4DA')
     expect(deserialized.defendant.email.address).to.equal('j.clark@mailserver.com')
+
+    expect(deserialized.eligibility.helpWithFees).to.equal(YesNoOption.NO)
+    expect(deserialized.eligibility.governmentDepartment).to.equal(YesNoOption.NO)
+    expect(deserialized.eligibility.claimantAddress).to.equal(YesNoOption.YES)
+    expect(deserialized.eligibility.defendantAddress).to.equal(YesNoOption.YES)
+    expect(deserialized.eligibility.eighteenOrOver).to.equal(YesNoOption.YES)
+    expect(deserialized.eligibility.claimValue).to.equal(ClaimValue.UNDER_10000)
   })
 
   it('should initialize the fields with appropriate class instances', () => {

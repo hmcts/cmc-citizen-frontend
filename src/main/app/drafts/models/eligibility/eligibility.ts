@@ -49,23 +49,25 @@ export class Eligibility implements Serializable<Eligibility> {
   }
 
   deserialize (input: any): Eligibility {
-    if (input.claimantAddress) {
-      this.claimantAddress = YesNoOption.fromObject(input.claimantAddress.option)
-    }
-    if (input.defendantAddress) {
-      this.defendantAddress = YesNoOption.fromObject(input.defendantAddress.option)
-    }
-    if (input.claimValue) {
-      this.claimValue = ClaimValue.fromObject(input.claimValue.option)
-    }
-    if (input.eighteenOrOver) {
-      this.eighteenOrOver = YesNoOption.fromObject(input.eighteenOrOver.option)
-    }
-    if (input.governmentDepartment) {
-      this.governmentDepartment = YesNoOption.fromObject(input.governmentDepartment.option)
-    }
-    if (input.helpWithFees) {
-      this.helpWithFees = YesNoOption.fromObject(input.helpWithFees.option)
+    if (input) {
+      if (input.claimantAddress) {
+        this.claimantAddress = YesNoOption.fromObject(input.claimantAddress.option)
+      }
+      if (input.defendantAddress) {
+        this.defendantAddress = YesNoOption.fromObject(input.defendantAddress.option)
+      }
+      if (input.claimValue) {
+        this.claimValue = ClaimValue.fromObject(input.claimValue.option)
+      }
+      if (input.eighteenOrOver) {
+        this.eighteenOrOver = YesNoOption.fromObject(input.eighteenOrOver.option)
+      }
+      if (input.governmentDepartment) {
+        this.governmentDepartment = YesNoOption.fromObject(input.governmentDepartment.option)
+      }
+      if (input.helpWithFees) {
+        this.helpWithFees = YesNoOption.fromObject(input.helpWithFees.option)
+      }
     }
 
     return this
