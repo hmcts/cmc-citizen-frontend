@@ -29,9 +29,9 @@
     js-yaml "^3.8.4"
     superagent "^3.5.1"
 
-"@hmcts/nodejs-logging@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/nodejs-logging/-/nodejs-logging-1.4.0.tgz#0e4103ec65f899a65ec5b734d1aad340c4cbcb3b"
+"@hmcts/nodejs-logging@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@hmcts/nodejs-logging/-/nodejs-logging-1.4.1.tgz#c380ef358d7d522dec5cf9053802dba599a56001"
   dependencies:
     lodash.merge "^4.6.0"
     log4js "^2.3.5"
