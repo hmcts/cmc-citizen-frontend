@@ -57,10 +57,7 @@ export class ApiLogger {
   }
 
   private resolveLoggingLevel () {
-    const currentLevel = this.loggingConfig.currentLevel
-    if (typeof currentLevel === 'object') {
-      return currentLevel.levelStr
-    }
+    const currentLevel = process.env.LOG_LEVEL || 'INFO'
     return currentLevel.toUpperCase()
   }
 }
