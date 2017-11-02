@@ -11,7 +11,7 @@ export class ClaimValue {
     if (!input) {
       return input
     }
-    return this.all().filter(needle => needle.option === input).pop()
+    return this.all().filter(claimValue => claimValue.option === input).pop()
   }
 
   static all (): ClaimValue[] {

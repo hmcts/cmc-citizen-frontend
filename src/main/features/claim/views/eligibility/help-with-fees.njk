@@ -22,8 +22,8 @@
           'Do you need help with fees?',
           name,
           [
-            {'label': 'Yes', value: 'yes', checked: (form.valueFor(name) === YesNoOption.YES)},
-            {'label': 'No', value: 'no', checked: (form.valueFor(name) === YesNoOption.NO)}
+            {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
+            {'label': 'No', value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO)}
           ],
           form = form,
           labelForScreenReadersOnly = true
