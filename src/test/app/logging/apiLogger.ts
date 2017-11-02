@@ -2,11 +2,13 @@ import { expect } from 'chai'
 
 import { ApiLogger } from 'logging/apiLogger'
 
+process.env.LOG_LEVEL = 'DEBUG'
+
 describe('ApiLogger', () => {
   let apiLogger
 
   beforeEach(() => {
-    apiLogger = new ApiLogger({}, { currentLevel: 'DEBUG' })
+    apiLogger = new ApiLogger({})
   })
 
   describe('_buildRequestEntry', () => {
