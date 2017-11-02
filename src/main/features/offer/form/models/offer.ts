@@ -37,7 +37,7 @@ export class Offer implements Serializable<Offer> {
     if (!value) {
       return value
     }
-    return this.create(value.offerText, LocalDate.fromObject(value.completionDate))
+    return Offer.create(value.offerText, LocalDate.fromObject(value.completionDate))
   }
 
   deserialize (input: any): Offer {

@@ -17,7 +17,7 @@
               sprintf: [claim.claimData.defendant.name]
             }) }}</h2>
         </div>
-        <table class="offer-table">
+        <table>
           <tr>
               <td>{{ t('The offer') }}</td>
               <td>{{ offer.content }}</td>
@@ -43,20 +43,20 @@
                 { postProcess: 'sprintf',
                 sprintf:[claim.claimData.defendant.name]
                 }),
-              value: 'StatementType.ACCEPTATION.value',
-              checked: (form.valueFor('option').value === 'StatementType.ACCEPTATION.value')
+              value: 'StatementType.ACCEPTATION',
+              checked: (form.valueFor('option').value === 'StatementType.ACCEPTATION')
             },
             {
               bold: false,
               label: 'No',
-              value: 'StatementType.REJECTION.value',
-              checked: (form.valueFor('option').value === 'StatementType.REJECTION.value')
+              value: 'StatementType.REJECTION',
+              checked: (form.valueFor('option').value === 'StatementType.REJECTION')
             },
             {
               bold: false,
               label: 'Make a counter offer',
-              value: 'StatementType.OFFER.value',
-              checked: (form.valueFor('option').value === 'StatementType.OFFER.value')
+              value: 'StatementType.OFFER',
+              checked: (form.valueFor('option').value === 'StatementType.OFFER')
             }
           ]
         )

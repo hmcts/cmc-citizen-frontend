@@ -15,6 +15,6 @@ export default class Settlement implements Serializable<Settlement> {
     if (!settlements) {
       return settlements
     }
-    return settlements.map(settlement => new PartyStatement().deserialize(settlement))
+    return settlements.map(settlement => new PartyStatement(undefined, undefined).deserialize(settlement))
   }
 }

@@ -3,6 +3,8 @@ import * as mock from 'nock'
 import { Scope } from 'nock'
 import * as HttpStatus from 'http-status-codes'
 import { InterestType } from 'features/claim/form/models/interest'
+import { StatementType } from 'features/offer/form/models/statementType'
+import { MadeBy } from 'features/offer/form/models/madeBy'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
@@ -69,7 +71,7 @@ export const sampleClaimObj = {
   },
   settlement: {
     partyStatements:
-        [ { type: 'OFFER', madeBy: 'DEFENDANT' , offer: { content: 'offer text', completionDate: '2017-08-08'}}]
+        [ { type: StatementType.OFFER.value, madeBy: MadeBy.DEFENDANT.value , offer: { content: 'offer text', completionDate: '2017-08-08'}}]
   }
 }
 
