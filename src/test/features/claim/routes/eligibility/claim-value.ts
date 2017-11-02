@@ -12,8 +12,8 @@ import { app } from '../../../../../main/app'
 
 import * as idamServiceMock from '../../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
-import { ClaimValue } from 'drafts/models/eligibility/claimValue'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
+import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 
 const cookieName: string = config.get<string>('session.cookieName')
 

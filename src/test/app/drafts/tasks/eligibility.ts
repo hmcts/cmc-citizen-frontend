@@ -2,7 +2,7 @@ import { expect } from 'chai'
 
 import DraftClaim from 'app/drafts/models/draftClaim'
 import { YesNoOption } from 'models/yesNoOption'
-import { ClaimValue } from 'drafts/models/eligibility/claimValue'
+import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { Eligibility } from 'drafts/tasks/eligibility'
 
 describe('Check eligibility', () => {

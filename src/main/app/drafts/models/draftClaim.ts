@@ -8,7 +8,7 @@ import * as uuid from 'uuid'
 import { Defendant } from 'app/drafts/models/defendant'
 import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
-import { Eligibility } from 'drafts/models/eligibility/Eligibility'
+import { Eligibility } from 'claim/form/models/eligibility/eligibility'
 
 export default class DraftClaim extends DraftDocument implements Serializable<DraftClaim> {
 

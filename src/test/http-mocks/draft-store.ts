@@ -26,7 +26,7 @@ import Email from 'app/forms/models/email'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { YesNoOption } from 'models/yesNoOption'
-import { ClaimValue } from 'drafts/models/eligibility/claimValue'
+import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 

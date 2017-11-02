@@ -6,11 +6,11 @@ import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'forms/form'
 import { DraftService } from 'services/draftService'
 import User from 'idam/user'
-import { Eligibility } from 'drafts/models/eligibility/Eligibility'
 import { FormValidator } from 'forms/validation/formValidator'
-import { ClaimValue } from 'drafts/models/eligibility/claimValue'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
+import { Eligibility } from 'claim/form/models/eligibility/eligibility'
+import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 
 function renderView (form: Form<Eligibility>, res: express.Response): void {
   res.render(Paths.eligibilityClaimValuePage.associatedView, { form: form })

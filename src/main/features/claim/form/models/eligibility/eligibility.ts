@@ -2,8 +2,8 @@ import { Serializable } from 'models/serializable'
 import { YesNoOption } from 'models/yesNoOption'
 import { IsIn } from 'class-validator'
 import { ValidationErrors } from 'features/validationErrors'
-import { ClaimValue } from 'drafts/models/eligibility/claimValue'
 import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
+import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 
 export class Eligibility implements Serializable<Eligibility> {
 

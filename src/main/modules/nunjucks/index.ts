@@ -16,8 +16,8 @@ import { SignatureType } from 'app/common/signatureType'
 import { ResponseType } from 'response/form/models/responseType'
 import { YesNoOption } from 'models/yesNoOption'
 import { EvidenceType } from 'response/form/models/evidenceType'
-import { ClaimValue } from 'drafts/models/eligibility/claimValue'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
+import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 
 const packageDotJson = require('../../../../package.json')
 

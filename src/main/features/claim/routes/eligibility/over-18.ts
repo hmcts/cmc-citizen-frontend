@@ -4,7 +4,7 @@ import { Paths } from 'claim/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'forms/form'
-import { Eligibility } from 'drafts/models/eligibility/eligibility'
+import { Eligibility } from 'claim/form/models/eligibility/eligibility'
 import { FormValidator } from 'forms/validation/formValidator'
 import User from 'idam/user'
 import { DraftService } from 'services/draftService'

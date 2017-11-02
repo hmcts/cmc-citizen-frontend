@@ -8,7 +8,7 @@ import DraftClaim from 'drafts/models/draftClaim'
 import { Defendant } from 'app/drafts/models/defendant'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { YesNoOption } from 'models/yesNoOption'
-import { ClaimValue } from 'drafts/models/eligibility/claimValue'
+import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 
 describe('DraftClaim deserialization', () => {
   let input
