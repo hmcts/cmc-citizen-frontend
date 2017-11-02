@@ -1,4 +1,5 @@
 {% extends "layout.njk" %}
+{% from "responseStatus.njk" import responseStatusForDefendant %}
 
 {% set title = t('Money claim') %}
 
@@ -12,6 +13,7 @@
     </div>
     <div class="column-two-thirds">
       <h2 class="heading-medium">{{ t('Claim status') }}</h2>
+
       {% if claim.countyCourtJudgmentRequestedAt %}
         <p>{{ t('%s requested a County Court Judgment against you on %s. We will contact you both within 5 days.',
               { postProcess: 'sprintf', sprintf: [ claim.claimData.claimant.name, claim.countyCourtJudgmentRequestedAt | date ]}) }}</p>
@@ -20,13 +22,13 @@
         <p>{{ t('If you don’t owe the money you can <a href="%s" target="blank">ask the court to cancel</a> the judgment.',
               { postProcess: 'sprintf', sprintf: [ 'https://www.gov.uk/county-court-judgments-ccj-for-debt/if-you-dont-owe-the-money' ]}) | safe }}</p>
       {% else %}
-        <p>{{ t('Your defence is being processed. We will email you to explain what to do next.') }}</p>
+        {{ responseStatusForDefendant(claim, url = paths.responseTaskListPage.evaluateUri({ externalId: claim.externalId }), isAfter4pm) }}
         <h2 class="heading-medium">{{ t('More options') }}</h2>
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
         <p>{{ t('You can still <a href="%s">make an offer</a> to settle the claim out of court. You will avoid a hearing and a County Court Judgment against you.',
-                { postProcess: 'sprintf', 
-                  sprintf: [ offerPageUri ] 
-                }) | safe 
+                { postProcess: 'sprintf',
+                  sprintf: [ offerPageUri ]
+                }) | safe
             }}
         </p>
       {% endif %}

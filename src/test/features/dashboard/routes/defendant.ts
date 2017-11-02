@@ -46,7 +46,7 @@ describe('Dashboard - defendant page', () => {
           await request(app)
             .get(defendantPage)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Claim number', 'Your defence is being processed'))
+            .expect(res => expect(res).to.be.successful.withText('Claim number', 'Respond to claim'))
         })
       })
     })

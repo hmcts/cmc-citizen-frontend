@@ -85,7 +85,7 @@
             {% if claim.respondedAt or claim.countyCourtJudgmentRequestedAt %}
               {% set url = paths.defendantPage.evaluateUri({ externalId: claim.externalId }) %}
             {% else %}
-              {% set url =  paths.responseTaskListPage.evaluateUri({ externalId: claim.externalId }) %}
+              {% set url = paths.responseTaskListPage.evaluateUri({ externalId: claim.externalId }) %}
             {% endif %}
 
             <tr class="mobile-table">

@@ -1,4 +1,5 @@
 {% extends "layout.njk" %}
+{% from "responseStatus.njk" import responseStatusForClaimant %}
 
 {% set title = 'Money claim' %}
 
@@ -16,20 +17,7 @@
       <div>
         <h2 class="heading-medium">{{ t('Claim status') }}</h2>
 
-        {% if claim.respondedAt %}
-          <p>{{ t('The defendant %s has responded to your claim. ',
-                { postProcess: 'sprintf', sprintf: [ claim.claimData.defendant.name ] }) }}</p>
-        {% else %}
-          <div class="panel panel-border-wide">
-            <p>
-              {{ t('The defendant %s has not responded to your claim. ',
-              { postProcess: 'sprintf', sprintf: [ claim.claimData.defendant.name ] }) }}
-              {% if claim.eligibleForCCJ %}
-                {{ t('You can request a County Court Judgment (CCJ)') }}
-              {% endif %}
-            </p>
-          </div>
-        {% endif %}
+        {{ responseStatusForClaimant(claim) }}
 
         {% if claim.eligibleForCCJ %}
           <p>{{ t('You can only ask for a CCJ at this stage if the defendant has not responded to your claim.') }}</p>
