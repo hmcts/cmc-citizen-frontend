@@ -1,0 +1,13 @@
+{% macro responseStatusForDefendant(claim) %}
+
+  {% if claim.response.type === ResponseType.OWE_ALL_PAID_NONE %}
+    OWE_ALL_PAID_NONE
+  {% else if draft.response.type === ResponseType.OWE_SOME_PAID_NONE %}
+    OWE_SOME_PAID_NONE
+  {% else if draft.response.type === ResponseType.OWE_NONE %}
+    OWE_NONE
+  {% else %}
+    unknown
+  {% endif %}
+
+{% endmacro %}

@@ -1,5 +1,6 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import submitButton, errorSummary %}
+{% from "responseStatus.njk" import responseStatusForDefendant, responseStatusForClaimant %}
 {% from "timeRemaining.njk" import timeRemaining %}
 {% from "support.njk" import supportWidget %}
 
@@ -44,25 +45,13 @@
             </tr>
           {% endif %}
           {% for claim in claimsAsClaimant %}
-            {% if claim.eligibleForCCJ %}
-              {% set status = t('Request a County Court Judgment.') %}
-            {% elseif claim.countyCourtJudgmentRequestedAt %}
-              {% set status =
-              t('You requested a County Court Judgment on %s. We will contact you within 5 days.',
-              { postProcess: 'sprintf', sprintf: [ claim.countyCourtJudgmentRequestedAt | date ]})
-              %}
-            {% else %}
-              {% set status = t('Your claim is being processed. We will email you to explain what to do next.') %}
-            {% endif %}
-
-
             <tr class="claims default mobile-table">
               <td><a href="/dashboard/{{ claim.externalId }}/claimant">{{ claim.claimNumber }}</a></td>
               <td>{{ claim.claimData.defendant.name }}</td>
               <td>{{ claim.totalAmount | numeral }}</td>
-              <td class="mobile-hide">{{ status }}</td>
+              <td class="mobile-hide">{{ responseStatusForClaimant(claim) }}</td>
             </tr>
-            <tr><td colspan="3" class="mobile-table-status">{{ t('Status: ') + status }}</td></tr>
+            <tr><td colspan="3" class="mobile-table-status">{{ t('Status: ') + responseStatusForClaimant(claim) }}</td></tr>
           {% endfor %}
           </tbody>
         </table>
@@ -72,6 +61,7 @@
     {% if claimsAsDefendant | length or responseDraftSaved %}
       <div class="column-full">
         <h2 class="heading-medium"> {{ t('Claims made against you') }}</h2>
+
         <table class="claim-dashboard">
           <thead>
           <tr class="mobile-table">
@@ -99,30 +89,16 @@
               {% set url =  paths.responseTaskListPage.evaluateUri({ externalId: claim.externalId }) %}
             {% endif %}
 
-            {% if claim.respondedAt %}
-              {% set status = t('Your response is being processed. We will email you to explain what to do next.') %}
-            {% elseif claim.countyCourtJudgmentRequestedAt %}
-              {% set status =
-              t('%s requested a County Court Judgment against you on %s. We will contact you both within 5 days.',
-              { postProcess: 'sprintf', sprintf: [ claim.claimData.claimant.name, claim.countyCourtJudgmentRequestedAt | date ]})
-              %}
-            {% else %}
-              {% set status %}
-                {{ t('<a href="%s">Respond to claim</a>', { postProcess: 'sprintf', sprintf: [url] }) | safe }}
-                <span class="block mobile-inline">
-                  {{ timeRemaining(claim.remainingDays, isAfter4pm) }}
-                </span>
-              {% endset %}
-            {% endif %}
-
             <tr class="mobile-table">
               <td><a href="{{ url }}">{{ claim.claimNumber }}</a></td>
               <td>{{ claim.claimData.claimant.name }}</td>
               <td>{{ claim.totalAmount | numeral }}</td>
-              <td class="mobile-hide">{{ status | safe }}</td>
+              <td class="mobile-hide">{{ responseStatusForDefendant(claim, url, isAfter4pm) }}</td>
             </tr>
             <tr>
-              <td colspan="3" class="mobile-table-status">{{ t('Status: ') }}{{ status | safe }}</td>
+              <td colspan="3" class="mobile-table-status">
+                {{ t('Status: ') }} {{ responseStatusForDefendant(claim, url, isAfter4pm) }}
+              </td>
             </tr>
           {% endfor %}
           </tbody>
