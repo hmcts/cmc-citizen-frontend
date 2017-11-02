@@ -23,7 +23,7 @@ function claimIssueRequestHandler (): express.RequestHandler {
 export class Feature {
   enableFor (app: express.Express) {
     app.all('/claim/*', claimIssueRequestHandler())
-    app.all(/^\/claim\/(?!start|amount-exceeded|.+\/confirmation|.+\/receipt|.+\/defendant-response).*$/,
+    app.all(/^\/claim\/(?!start|amount-exceeded|.+\/confirmation|.+\/receipt|.+\/defendant-response|eligibility).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'claim', 100, (value: any): DraftClaim => {
         return new DraftClaim().deserialize(value)
       }))
