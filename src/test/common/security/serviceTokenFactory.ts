@@ -1,5 +1,4 @@
 /* tslint:disable:no-unused-expression */
-import { ServiceAuthTokenFactoryImpl } from 'common/security/serviceTokenFactoryImpl'
 import * as chai from 'chai'
 import * as spies from 'sinon-chai'
 import * as sinon from 'sinon'
@@ -7,7 +6,10 @@ import * as sinon from 'sinon'
 import ServiceAuthToken from 'idam/serviceAuthToken'
 import IdamClient from 'idam/idamClient'
 
-delete require.cache[require.resolve('@hmcts/draft-store-client')]
+import { RequireUtils } from '../../requireUtils'
+
+RequireUtils.removeModuleFromCache('common/security/serviceTokenFactoryImpl')
+import { ServiceAuthTokenFactoryImpl } from 'common/security/serviceTokenFactoryImpl'
 
 chai.use(spies)
 
