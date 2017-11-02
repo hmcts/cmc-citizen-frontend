@@ -1,6 +1,6 @@
 {% from "main/views/form.njk" import submitButton %}
 {% if label %}
-  {{ submitButton(t(label)) }}
+  {{ submitButton(label) }}
 {% else %}
   {{ submitButton() }}
 {% endif %}
