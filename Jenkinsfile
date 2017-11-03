@@ -30,8 +30,8 @@ def channel = '#cmc-tech-notification'
 timestamps {
   milestone()
   lock(resource: "citizen-frontend-${env.BRANCH_NAME}", inversePrecedence: true) {
-    wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
-      node('slave') {
+    node('slave') {
+      wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
         try {
           def version
           def citizenFrontendRPMVersion
