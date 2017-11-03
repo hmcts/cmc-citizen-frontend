@@ -5,20 +5,20 @@ ignore:
   'npm:ip:20170304':
     - '@hmcts/nodejs-logging > log4js > mailgun-js > proxy-agent > pac-proxy-agent > pac-resolver > ip':
         reason: Waiting for fix
-        expires: '2017-12-03T13:58:24.014Z'
+        expires: '2017-12-03T14:10:27.012Z'
   'npm:timespan:20170907':
     - '@hmcts/nodejs-logging > log4js > loggly > timespan':
         reason: Waiting for fix
-        expires: '2017-12-03T13:58:24.014Z'
+        expires: '2017-12-03T14:10:27.012Z'
   'npm:tunnel-agent:20170305':
     - '@hmcts/nodejs-logging > log4js > loggly > request > tunnel-agent':
         reason: Waiting for fix
-        expires: '2017-12-03T13:58:24.014Z'
+        expires: '2017-12-03T14:10:27.012Z'
 # patches apply the minimum changes required to fix a vulnerability
 patch:
   'npm:debug:20170905':
     - '@hmcts/nodejs-logging > log4js > mailgun-js > debug':
-        patched: '2017-11-03T13:57:10.793Z'
+        patched: '2017-11-03T14:08:24.206Z'
   'npm:ms:20170412':
     - '@hmcts/nodejs-logging > log4js > mailgun-js > debug > ms':
-        patched: '2017-11-03T13:57:10.793Z'
+        patched: '2017-11-03T14:08:24.206Z'
