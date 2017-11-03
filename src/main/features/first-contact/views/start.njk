@@ -14,7 +14,7 @@
       <p>{{ t('You need to respond to the money claim within 14 days of receiving the claim.') }}</p>
 
       <p>{{ t('Your response will be sent to the claimant (the person or organisation who says you owe them money).'
-        + ' The claimant can apply for a <a href="%s">County Court Judgment (CCJ)</a> against you if you don’t respond'
+        + ' The claimant can apply for a <a target="_blank" href="%s">County Court Judgment (CCJ)</a> against you if you don’t respond'
         + ' in time. They can then use this to get the money from you. For example, they could hire bailiffs.'
         , { postProcess: 'sprintf', sprintf: ['https://www.gov.uk/county-court-judgments-ccj-for-debt'] }) | safe }}</p>
 
@@ -55,7 +55,7 @@
         { postProcess: 'sprintf', sprintf: ['http://hmctsformfinder.justice.gov.uk/HMCTS/GetForm.do?court_forms_id=659'] }) | safe }}
       </p>
       <p>
-        {{ t('You might have to pay a <a href="%s">claim fee</a>.',
+        {{ t('You might have to pay a <a target="_blank" href="%s">claim fee</a>.',
         { postProcess: 'sprintf', sprintf: ['https://www.gov.uk/make-court-claim-for-money/court-fees'] }) | safe }}
       </p>
 
