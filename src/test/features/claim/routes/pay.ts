@@ -370,16 +370,16 @@ describe('Claim issue: post payment callback receiver', () => {
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${sampleClaimDraftObj.externalId}/confirmation`))
+              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${draftStoreServiceMock.sampleClaimDraftObj.externalId}/confirmation`))
           })
 
           it('should redirect to confirmation page when payment is missing', async () => {
             draftStoreServiceMock.resolveFind(draftType, { claimant: undefined })
 
             await request(app)
-              .get(Paths.finishPaymentReceiver.evaluateUri({ externalId: sampleClaimDraftObj.externalId }))
+              .get(Paths.finishPaymentReceiver.evaluateUri({ externalId: draftStoreServiceMock.sampleClaimDraftObj.externalId }))
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${sampleClaimDraftObj.externalId}/confirmation`))
+              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${draftStoreServiceMock.sampleClaimDraftObj.externalId}/confirmation`))
           })
         })
 
