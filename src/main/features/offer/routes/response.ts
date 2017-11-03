@@ -13,13 +13,9 @@ import { OfferGuard } from 'offer/guards/offerGuard'
 import { StatementType } from 'offer/form/models/statementType'
 import { MadeBy } from 'offer/form/models/madeBy'
 
-function redirectToDashBoardPage (res: express.Response) {
-  const user: User = res.locals.user
-  res.redirect(DashboardPaths.claimantPage.evaluateUri({ externalId: user.claim.externalId }))
-}
-function getPartyStatement (claim: Claim, res: express.Response): PartyStatement[] {
+function getPartyStatement (claim: Claim): PartyStatement[] {
   if (!claim.settlement || !claim.settlement.partyStatements) {
-    redirectToDashBoardPage(res)
+    return undefined
   }
 
   return claim.settlement.partyStatements.map(partyStatement => {
@@ -28,20 +24,26 @@ function getPartyStatement (claim: Claim, res: express.Response): PartyStatement
     }
   })
 }
-function getOffer (claim: any, res: express.Response): Offer {
-  const partyStatements: any[] = getPartyStatement(claim, res)
+function getOffer (claim: Claim): Offer {
+  const partyStatements: any[] = getPartyStatement(claim)
   if (!partyStatements || partyStatements.length <= 0) {
-    redirectToDashBoardPage(res)
+    return undefined
   }
   return partyStatements[partyStatements.length - 1].offer
 }
 async function renderView (
   form: Form<DefendantResponse>, res: express.Response, next: express.NextFunction) {
-  res.render(Paths.responsePage.associatedView, {
-    form: form,
-    claim : res.locals.user.claim,
-    offer: getOffer(res.locals.user.claim, res)
-  })
+  const offer: Offer = getOffer(res.locals.user.claim)
+  if (!offer) {
+    const user: User = res.locals.user
+    res.redirect(DashboardPaths.claimantPage.evaluateUri({ externalId: user.claim.externalId }))
+  } else {
+    res.render(Paths.responsePage.associatedView, {
+      form: form,
+      claim : res.locals.user.claim,
+      offer: offer
+    })
+  }
 }
 
 export default express.Router()

@@ -18,8 +18,6 @@ export class DefendantResponse implements Serializable<DefendantResponse> {
     if (!value) {
       return value
     }
-    // tslint:disable-next-line:no-console
-    console.log(`------------> ${StatementType.valueOf(value.option)}`)
     return new DefendantResponse(StatementType.valueOf(value.option))
   }
 
