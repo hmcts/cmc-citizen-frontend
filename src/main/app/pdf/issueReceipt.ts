@@ -4,7 +4,6 @@ import Claim from 'claims/models/claim'
 import { PartyDetailsMapper } from 'app/pdf/mappers/partyDetailsMapper'
 import { TheirDetailsMapper } from 'app/pdf/mappers/theirDetailsMapper'
 import { ClaimMapper } from 'app/pdf/mappers/claimMapper'
-import { Party } from 'claims/models/details/yours/party'
 
 const issueTemplatePath = path.join(__dirname, '..', '..', 'resources', 'pdf', 'issueReceipt.njk')
 
@@ -21,7 +20,7 @@ export default class IssueReceipt {
     return {
       claim: ClaimMapper.createClaimDetails(this.claim),
       claimant: PartyDetailsMapper.createPartyDetails(
-        this.claim.claimData.claimant as Party,
+        this.claim.claimData.claimant,
         this.claim.claimantEmail
       ),
       defendant: TheirDetailsMapper.createTheirDetails(

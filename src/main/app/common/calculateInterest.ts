@@ -25,5 +25,5 @@ export function calculateInterest (amount: number, interest: Interest, interestD
   const rate = calculateRate(interest)
   const noOfDays = calculateNumberOfDays(interestDate)
 
-  return parseFloat(((amount * noOfDays * rate) / (365 * 100) ).toFixed(2))
+  return parseFloat(((amount * noOfDays * rate) / (365 * 100)).toFixed(2))
 }

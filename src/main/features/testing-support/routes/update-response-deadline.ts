@@ -26,7 +26,7 @@ export default express.Router()
         renderView(form, res)
       } else {
         await TestingSupportClient.updateResponseDeadline(
-          form.model as UpdateResponseDeadlineRequest,
+          form.model,
           res.locals.user as User
         )
 

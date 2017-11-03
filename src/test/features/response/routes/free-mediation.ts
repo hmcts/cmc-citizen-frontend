@@ -14,11 +14,11 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
+
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = ResponsePaths.freeMediationPage.evaluateUri({ externalId: sampleClaimObj.externalId })
+const pagePath = ResponsePaths.freeMediationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: free mediation page', () => {
   attachDefaultHooks(app)
@@ -114,7 +114,7 @@ describe('Defendant response: free mediation page', () => {
               .send({ option: 'yes' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.taskListPage
-                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })
       })
