@@ -16,6 +16,7 @@ import { checkAuthorizationGuards } from './checks/authorization-check'
 
 import { sampleClaimDraftObj } from '../../../http-mocks/draft-store'
 import { company, individual, organisation, soleTrader } from '../../../data/entity/party'
+import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -50,7 +51,7 @@ describe('Dashboard - claimant page', () => {
           await request(app)
             .get(claimantPage)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Claim number', 'Request a County Court Judgment'))
+            .expect(res => expect(res).to.be.successful.withText('Claim number', sampleClaimObj.referenceNumber))
         })
       })
     })
