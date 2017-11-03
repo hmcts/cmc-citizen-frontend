@@ -14,7 +14,7 @@
       <form method="post">
         {{ csrfProtection(csrf) }}
 
-        {{ textInput(t('Claim number'), 'reference', form) }}
+        {{ textInput('Claim number', 'reference', form) }}
         {{ submitButton('Continue') }}
       </form>
 
