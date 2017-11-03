@@ -16,7 +16,7 @@
 
       <ul class="list list-bullet">
         <li>
-          {{ t('Contact them - you can just speak to them, or <a href="%s">send an email or letter</a> if you’d like to have a record.',
+          {{ t('Contact them - you can just speak to them, or <a target="_blank" href="%s">send an email or letter</a> if you’d like to have a record.',
           { postProcess: 'sprintf', sprintf: [
             'http://www.which.co.uk/consumer-rights/letter/letter-before-small-claims-court-claim'
             ] }) | safe }}
@@ -26,8 +26,8 @@
           {{ t("Explain that if you can’t reach an agreement (such as a timetable for paying the money) you’ll make an official money claim.") }}
         </li>
         <li>
-          {{ t('Tell them that they might have to pay the full amount as well as <a href="%s">fees and other costs</a>'
-           + ' if they ‘defend the claim’, and that they could get a <a href="%s">County Court Judgment (CCJ)</a>.'
+          {{ t('Tell them that they might have to pay the full amount as well as <a target="_blank" href="%s">fees and other costs</a>'
+           + ' if they ‘defend the claim’, and that they could get a <a target="_blank" href="%s">County Court Judgment (CCJ)</a>.'
           , { postProcess: 'sprintf', sprintf: [
             'https://www.gov.uk/court-fees-what-they-are',
             'https://www.gov.uk/county-court-judgments-ccj-for-debt/overview'
@@ -51,7 +51,7 @@
         </a>
       </p>
       <p>
-        {{ t('You might be able to use <a href="%s">Resolver</a> which will guide you through reclaiming money from'
+        {{ t('You might be able to use <a target="_blank" href="%s">Resolver</a> which will guide you through reclaiming money from'
           + ' organisations like utility companies, airlines and shops.',
         { postProcess: 'sprintf', sprintf: [
           'https://www.resolver.co.uk/'
@@ -60,7 +60,7 @@
 
       <h2 class="heading-medium">{{ t('Mediation') }}</h2>
       <p>
-        {{ t('A <a href="%s">mediation service</a> could be quicker and cheaper than going to court.',
+        {{ t('A <a target="_blank" href="%s">mediation service</a> could be quicker and cheaper than going to court.',
         { postProcess: 'sprintf', sprintf: [
           'http://civilmediation.justice.gov.uk/'
           ] }) | safe }}

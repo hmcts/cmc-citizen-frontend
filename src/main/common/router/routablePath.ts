@@ -1,7 +1,7 @@
 const pathParameterRegex = /\/:[^\/]+/g
 
 export class RoutablePath {
-  _uri: string
+  private _uri: string
 
   constructor (uri: string, public feature: boolean = true) {
     if (!uri || uri.trim() === '') {
