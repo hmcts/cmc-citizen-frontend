@@ -41,7 +41,7 @@ describe('DefendantResponse', () => {
 
     describe('should reject when', () => {
       it('undefined option', () => {
-        const errors = validator.validateSync(new DefendantResponse())
+        const errors = validator.validateSync(new DefendantResponse(undefined))
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.OPTION_REQUIRED)
       })
