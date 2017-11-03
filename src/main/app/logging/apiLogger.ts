@@ -23,7 +23,7 @@ export class ApiLogger {
   _buildResponseEntry (responseData) {
     const logMessage = {
       message: `API: Response ${responseData.responseCode} from ${responseData.uri} ` +
-      ((responseData.responseBody && this.isDebugLevel() ) ? `| Body: ${this._stringifyObject(responseData.responseBody)} ` : '') +
+      ((responseData.responseBody && this.isDebugLevel()) ? `| Body: ${this._stringifyObject(responseData.responseBody)} ` : '') +
       ((responseData.error) ? `| Error: ${this._stringifyObject(responseData.error)} ` : ''),
       responseCode: responseData.responseCode
     }
@@ -57,10 +57,7 @@ export class ApiLogger {
   }
 
   private resolveLoggingLevel () {
-    const currentLevel = this.loggingConfig.currentLevel
-    if (typeof currentLevel === 'object') {
-      return currentLevel.levelStr
-    }
+    const currentLevel = process.env.LOG_LEVEL || 'INFO'
     return currentLevel.toUpperCase()
   }
 }

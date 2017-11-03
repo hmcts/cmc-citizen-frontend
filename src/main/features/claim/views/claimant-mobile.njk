@@ -12,7 +12,7 @@
         <form method="post">
           {{ csrfProtection(csrf) }}
 
-          {{ textInput(t('Mobile number'), 'number', form) }}
+          {{ textInput('Mobile number', 'number', form) }}
           {{ saveAndContinueButton() }}
         </form>
       </div>

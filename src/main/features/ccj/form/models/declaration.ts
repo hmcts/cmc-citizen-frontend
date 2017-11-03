@@ -24,6 +24,6 @@ export class Declaration {
     if (!value) {
       return value
     }
-    return new Declaration(value.signed === 'true' )
+    return new Declaration(value.signed === 'true')
   }
 }

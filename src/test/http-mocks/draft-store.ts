@@ -1,6 +1,5 @@
 import * as config from 'config'
 import * as mock from 'nock'
-import { Scope } from 'nock'
 import * as HttpStatus from 'http-status-codes'
 
 import { ResponseType } from 'response/form/models/responseType'
@@ -25,6 +24,8 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import Email from 'app/forms/models/email'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
+import { YesNoOption } from 'models/yesNoOption'
+import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
@@ -32,6 +33,14 @@ export const sampleClaimDraftObj = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
   readResolveDispute: true,
   readCompletingClaim: true,
+  eligibility: {
+    claimantAddress: YesNoOption.YES,
+    defendantAddress: YesNoOption.YES,
+    claimValue: ClaimValue.UNDER_10000,
+    eighteenOrOver: YesNoOption.YES,
+    governmentDepartment: YesNoOption.NO,
+    helpWithFees: YesNoOption.NO
+  },
   claimant: {
     partyDetails: {
       type: 'individual',
@@ -173,7 +182,7 @@ const sampleCCJDraftObj = {
   }
 }
 
-export function resolveFind (draftType: string, draftOverride?: object): Scope {
+export function resolveFind (draftType: string, draftOverride?: object): mock.Scope {
   let documentDocument: object
 
   switch (draftType) {
@@ -203,7 +212,7 @@ export function resolveFind (draftType: string, draftOverride?: object): Scope {
     })
 }
 
-export function resolveFindAllDrafts (): Scope {
+export function resolveFindAllDrafts (): mock.Scope {
   return mock(serviceBaseURL)
     .get(new RegExp('/drafts.*'))
     .reply(HttpStatus.OK, {
@@ -229,7 +238,7 @@ export function resolveFindAllDrafts (): Scope {
     })
 }
 
-export function resolveFindNoDraftFound (): Scope {
+export function resolveFindNoDraftFound (): mock.Scope {
   return mock(serviceBaseURL)
     .get(new RegExp('/drafts.*'))
     .reply(HttpStatus.OK, {
@@ -237,31 +246,31 @@ export function resolveFindNoDraftFound (): Scope {
     })
 }
 
-export function rejectFind (reason: string = 'HTTP error'): Scope {
+export function rejectFind (reason: string = 'HTTP error'): mock.Scope {
   return mock(serviceBaseURL)
     .get(new RegExp('/drafts.*'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveSave (id: number = 100): Scope {
+export function resolveSave (id: number = 100): mock.Scope {
   return mock(serviceBaseURL)
     .put(`/drafts/${id}`)
     .reply(HttpStatus.OK)
 }
 
-export function rejectSave (id: number = 100, reason: string = 'HTTP error'): Scope {
+export function rejectSave (id: number = 100, reason: string = 'HTTP error'): mock.Scope {
   return mock(serviceBaseURL)
     .put(`/drafts/${id}`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveDelete (id: number = 100): Scope {
+export function resolveDelete (id: number = 100): mock.Scope {
   return mock(serviceBaseURL)
     .delete(`/drafts/${id}`)
     .reply(HttpStatus.OK)
 }
 
-export function rejectDelete (id: number = 100, reason: string = 'HTTP error'): Scope {
+export function rejectDelete (id: number = 100, reason: string = 'HTTP error'): mock.Scope {
   return mock(serviceBaseURL)
     .delete(`/drafts/${id}`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)

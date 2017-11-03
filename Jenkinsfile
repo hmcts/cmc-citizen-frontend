@@ -121,7 +121,8 @@ timestamps {
 
         stage('Integration Tests') {
           integrationTests.execute([
-            'CITIZEN_FRONTEND_VERSION': citizenFrontendVersion
+            'CITIZEN_FRONTEND_VERSION': citizenFrontendVersion,
+            'TESTS_TAG'               : '@citizen'
           ])
         }
 

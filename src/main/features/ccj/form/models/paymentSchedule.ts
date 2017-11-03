@@ -23,6 +23,6 @@ export class PaymentSchedule {
       return result
     }
 
-    throw new Error (`There is no PaymentSchedule: '${value}'`)
+    throw new Error(`There is no PaymentSchedule: '${value}'`)
   }
 }

@@ -1,10 +1,10 @@
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { Validator } from 'class-validator'
+
+const validator = new Validator()
 
 export class YourDefenceTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
-    if (!(responseDraft.defence && responseDraft.defence.text)) {
-      return false
-    }
-    return !!(responseDraft.freeMediation && responseDraft.freeMediation.option)
+    return !!(responseDraft.defence && validator.validateSync(responseDraft.defence).length === 0)
   }
 }
