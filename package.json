@@ -8,7 +8,7 @@
   "scripts": {
     "start": "./node_modules/.bin/ts-node -r tsconfig-paths/register src/main/server.ts",
     "setup": "gulp sass copy-files",
-    "lint": "tslint --project tsconfig.json --type-check && sass-lint -v -q",
+    "lint": "tslint --project tsconfig.json && sass-lint -v -q",
     "test": "NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' -or -name '*.js' \\) ! -path '*a11y*' ! -path '*/routes/*') --reporter-options reportFilename=unit,inlineAssets=true,reportTitle=citizen-frontend-unit",
     "test:routes": "NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' -or -name '*.js' \\) -path '*/routes/*') --timeout 4000 --reporter-options reportFilename=routes,inlineAssets=true,reportTitle=citizen-frontend-routes",
     "test:a11y": "NODE_ENV=mocha LOG_LEVEL=ERROR mocha --opts mocha.opts src/test/a11y --timeout 60000 --reporter-options reportFilename=a11y,inlineAssets=true,reportTitle=citizen-frontend-a11y",

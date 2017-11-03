@@ -15,10 +15,9 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = ResponsePaths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: sampleClaimObj.externalId })
+const pagePath = ResponsePaths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 const draftOverride = {
   response: {
@@ -50,14 +49,14 @@ describe('Defendant response: part admission options', () => {
         })
 
         it('should redirect to response type page when response type is not part admission', async () => {
-          draftStoreServiceMock.resolveFind('response', {response: { type: ResponseType.OWE_NONE }})
+          draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.OWE_NONE } })
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.responseTypePage
-              .evaluateUri({ externalId: sampleClaimObj.externalId })))
+              .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
 
         it('should render page when everything is fine', async () => {
@@ -85,14 +84,14 @@ describe('Defendant response: part admission options', () => {
 
       context('when response not submitted', () => {
         it('should redirect to response type page when response type is not part admission', async () => {
-          draftStoreServiceMock.resolveFind('response', {response: { type: ResponseType.OWE_NONE }})
+          draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.OWE_NONE } })
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.responseTypePage
-              .evaluateUri({ externalId: sampleClaimObj.externalId })))
+              .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
 
         context('when form is invalid', () => {
@@ -140,7 +139,7 @@ describe('Defendant response: part admission options', () => {
               .send({ option: 'amountTooHigh' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.taskListPage
-                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })
       })

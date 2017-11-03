@@ -8,14 +8,13 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import { sampleClaimDraftObj } from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as feesServiceMock from '../../../http-mocks/fees'
 import * as payServiceMock from '../../../http-mocks/pay'
 
 import { attachDefaultHooks } from '../../../routes/hooks'
 import { checkAuthorizationGuards } from './checks/authorization-check'
-import { InterestType } from 'claim/form/models/interest'
+import { Interest, InterestType } from 'claim/form/models/interest'
 import { Defendant } from 'app/drafts/models/defendant'
 import Claimant from 'app/drafts/models/claimant'
 import DraftClaim from 'app/drafts/models/draftClaim'
@@ -27,7 +26,6 @@ import DateOfBirth from 'app/forms/models/dateOfBirth'
 import { LocalDate } from 'forms/models/localDate'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { ClaimAmountRow } from 'claim/form/models/claimAmountRow'
-import { Interest } from 'claim/form/models/interest'
 import { InterestDate } from 'claim/form/models/interestDate'
 import { Reason } from 'claim/form/models/reason'
 
@@ -187,7 +185,7 @@ describe('Claim issue: initiate payment receiver', () => {
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.redirect.toLocation(Paths.finishPaymentReceiver.evaluateUri({ externalId: sampleClaimDraftObj.externalId })))
+        .expect(res => expect(res).to.be.redirect.toLocation(Paths.finishPaymentReceiver.evaluateUri({ externalId: draftStoreServiceMock.sampleClaimDraftObj.externalId })))
     })
   })
 })
