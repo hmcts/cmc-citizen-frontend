@@ -1,7 +1,6 @@
 import { expect } from 'chai'
 
-import { InterestType } from 'claim/form/models/interest'
-import { Interest } from 'claim/form/models/interest'
+import { Interest, InterestType } from 'claim/form/models/interest'
 
 describe('Interest', () => {
 

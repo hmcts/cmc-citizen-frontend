@@ -14,7 +14,6 @@ import { app } from '../../main/app'
 
 import * as idamServiceMock from '../http-mocks/idam'
 import * as claimStoreServiceMock from '../http-mocks/claim-store'
-import { sampleClaimObj } from '../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../http-mocks/draft-store'
 import { defaultAccessDeniedPagePattern } from './authorization-check'
 
@@ -85,7 +84,7 @@ describe('Login receiver', async () => {
             .get(AppPaths.receiver.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
+              .toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
       })
 
@@ -172,7 +171,7 @@ describe('Defendant link receiver', () => {
           .get(`${pagePath}?code=123`)
           .expect(res => expect(res).to.be.redirect
             .toLocation(ResponsePaths.taskListPage
-              .evaluateUri({ externalId: sampleClaimObj.externalId })))
+              .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
       })
 
       it('should return 500 and render error page when cannot link defendant to claim', async () => {
@@ -196,7 +195,7 @@ describe('Defendant link receiver', () => {
           .get(`${pagePath}?code=123`)
           .expect(res => expect(res).to.be.redirect
             .toLocation(ResponsePaths.taskListPage
-              .evaluateUri({ externalId: sampleClaimObj.externalId })))
+              .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
       })
 
       it('should set session cookie to token value returned from idam', async () => {

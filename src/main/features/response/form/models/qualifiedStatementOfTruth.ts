@@ -29,7 +29,7 @@ export class QualifiedStatementOfTruth {
   @MaxLength(255, { message: ValidationErrors.SIGNER_ROLE_TOO_LONG })
   signerRole?: string
 
-  constructor (signed?: boolean, signerName?: string, signerRole?: string ) {
+  constructor (signed?: boolean, signerName?: string, signerRole?: string) {
     this.signed = signed
     this.signerName = signerName
     this.signerRole = signerRole
@@ -39,7 +39,7 @@ export class QualifiedStatementOfTruth {
     if (!value) {
       return value
     }
-    return new QualifiedStatementOfTruth((value.signed && toBoolean(value.signed) === true), value.signerName, value.signerRole )
+    return new QualifiedStatementOfTruth((value.signed && toBoolean(value.signed) === true), value.signerName, value.signerRole)
   }
 
   deserialize (input?: any): QualifiedStatementOfTruth {
