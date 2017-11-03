@@ -22,7 +22,7 @@ describe('DefendantResponse', () => {
     })
 
     it('should deserialize all fields', () => {
-      expect(DefendantResponse.fromObject({ option: StatementType.ACCEPTATION.value})).to.deep.equal(new DefendantResponse(StatementType.ACCEPTATION))
+      expect(DefendantResponse.fromObject({ option: StatementType.ACCEPTATION.value })).to.deep.equal(new DefendantResponse(StatementType.ACCEPTATION))
     })
   })
 
@@ -32,7 +32,7 @@ describe('DefendantResponse', () => {
     })
 
     it('should return instance with set fields from given object', () => {
-      expect(new DefendantResponse().deserialize({ option: StatementType.ACCEPTATION.value})).to.deep.equal(new DefendantResponse(StatementType.ACCEPTATION))
+      expect(new DefendantResponse().deserialize({ option: StatementType.ACCEPTATION.value })).to.deep.equal(new DefendantResponse(StatementType.ACCEPTATION))
     })
   })
 

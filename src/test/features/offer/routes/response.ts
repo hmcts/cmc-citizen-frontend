@@ -10,10 +10,9 @@ import { StatementType } from 'offer/form/models/statementType'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const externalId = sampleClaimObj.externalId
+const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 const responsePage = OfferPaths.responsePage.evaluateUri({ externalId: externalId })
 
 describe('defendant response page', () => {
