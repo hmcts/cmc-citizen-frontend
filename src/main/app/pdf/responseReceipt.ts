@@ -5,8 +5,6 @@ import { PartyDetailsMapper } from 'app/pdf/mappers/partyDetailsMapper'
 import { ClaimMapper } from 'app/pdf/mappers/claimMapper'
 import Claim from 'claims/models/claim'
 import { DefendantMapper } from 'app/pdf/mappers/defendantMapper'
-import { Party } from 'claims/models/details/yours/party'
-import { TheirDetails as Defendant } from 'app/claims/models/details/theirs/theirDetails'
 
 const responseTemplatePath = path.join(__dirname, '..', '..', 'resources', 'pdf', 'responseReceipt.njk')
 
@@ -28,11 +26,11 @@ export class ResponseReceipt {
         freeMediation: this.claim.response.freeMediation
       },
       claimant: PartyDetailsMapper.createPartyDetails(
-        this.claim.claimData.claimant as Party,
+        this.claim.claimData.claimant,
         this.claim.claimantEmail
       ),
       defendant: DefendantMapper.createDefendantDetails(
-        this.claim.response.defendantDetails as Defendant,
+        this.claim.response.defendantDetails,
         this.claim.defendantEmail
       ),
       responseDashboardUrl: this.responseDashboardUrl

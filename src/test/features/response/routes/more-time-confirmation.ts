@@ -13,12 +13,12 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
+
 import { MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = ResponsePaths.moreTimeConfirmationPage.evaluateUri({ externalId: sampleClaimObj.externalId })
+const pagePath = ResponsePaths.moreTimeConfirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: more time needed - confirmation page', () => {
   attachDefaultHooks(app)
@@ -45,7 +45,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.redirect
                 .toLocation(ResponsePaths.moreTimeRequestPage
-                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
           it('when answer is "no"', async () => {
@@ -57,7 +57,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.redirect
                 .toLocation(ResponsePaths.moreTimeRequestPage
-                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })
 
@@ -108,7 +108,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.redirect
                 .toLocation(ResponsePaths.moreTimeRequestPage
-                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
           it('when answer is "no', async () => {
@@ -119,7 +119,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.redirect
                 .toLocation(ResponsePaths.moreTimeRequestPage
-                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })
 
@@ -131,7 +131,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.redirect
               .toLocation(ResponsePaths.taskListPage
-                .evaluateUri({ externalId: sampleClaimObj.externalId })))
+                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
       })
     })

@@ -3,8 +3,7 @@ import { expect } from 'chai'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
 
-import { ValidationErrors } from 'response/form/models/response'
-import { Response } from 'response/form/models/response'
+import { Response, ValidationErrors } from 'response/form/models/response'
 import { ResponseType } from 'response/form/models/responseType'
 
 describe('Response', () => {

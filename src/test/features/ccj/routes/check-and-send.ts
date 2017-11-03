@@ -12,13 +12,12 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { SignatureType } from 'app/common/signatureType'
 import { ValidationErrors as BasicValidationErrors } from 'ccj/form/models/declaration'
 import { ValidationErrors as QualifiedValidationErrors } from 'ccj/form/models/qualifiedDeclaration'
 
-const externalId = sampleClaimObj.externalId
+const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
 const cnsPage = CCJPaths.checkAndSendPage.evaluateUri({ externalId: externalId })
 const confirmationPage = CCJPaths.confirmationPage.evaluateUri({ externalId: externalId })

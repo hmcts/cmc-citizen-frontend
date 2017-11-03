@@ -31,7 +31,7 @@ export class QualifiedDeclaration extends Declaration {
   @MaxLength(255, { message: ValidationErrors.SIGNER_ROLE_TOO_LONG })
   signerRole?: string
 
-  constructor (signed?: boolean, signerName?: string, signerRole?: string ) {
+  constructor (signed?: boolean, signerName?: string, signerRole?: string) {
     super()
     this.type = SignatureType.QUALIFIED
     this.signed = signed
@@ -43,7 +43,7 @@ export class QualifiedDeclaration extends Declaration {
     if (!value) {
       return value
     }
-    return new QualifiedDeclaration((value.signed && toBoolean(value.signed) === true), value.signerName, value.signerRole )
+    return new QualifiedDeclaration((value.signed && toBoolean(value.signed) === true), value.signerName, value.signerRole)
   }
 
   deserialize (input?: any): QualifiedDeclaration {
