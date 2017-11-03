@@ -84,7 +84,6 @@
     "@types/sinon-chai": "^2.7.28",
     "@types/supertest": "*",
     "HTML_CodeSniffer": "https://github.com/squizlabs/HTML_CodeSniffer/archive/2.0.7.tar.gz",
-    "async_hooks": "^1.0.0",
     "chai": "^4.1.1",
     "chai-as-promised": "^7.1.1",
     "codacy-coverage": "^2.0.3",
