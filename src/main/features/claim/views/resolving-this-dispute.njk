@@ -3,7 +3,7 @@
 {% set title = t('Resolving dispute | Money claim') %}
 {% set heading = t('Resolving this dispute') %}
 
-{% from "form.njk" import csrfProtection, yesNoRadio, submitButton, errorSummary %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
 
 {% block content %}
 
@@ -18,7 +18,7 @@
       <li>{{ t("Telling them that they might have to pay the full amount as well as") }}
         <a href="http://hmctsformfinder.justice.gov.uk/HMCTS/GetLeaflet.do?court_leaflets_id=264">
           {{ t("fees and other costs") }}</a>
-        {{ t('if they ‘defend the claim’, and that they could get a <a href="%s"> County Court Judgment (CCJ) </a> registered against them',
+        {{ t('if they ‘defend the claim’, and that they could get a <a target="_blank" href="%s"> County Court Judgment (CCJ) </a> registered against them',
           {
             postProcess: 'sprintf',
             sprintf: ['https://www.gov.uk/county-court-judgments-ccj-for-debt']

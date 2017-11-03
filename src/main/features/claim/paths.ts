@@ -31,6 +31,16 @@ export class Paths {
   static readonly claimantPartyTypeSelectionPage = new RoutablePath('/claim/claimant-party-type-selection')
   static readonly defendantPartyTypeSelectionPage = new RoutablePath('/claim/defendant-party-type-selection')
   static readonly incompleteSubmissionPage = new RoutablePath('/claim/incomplete-submission')
+
+  static readonly eligibilityStartPage = new RoutablePath('/claim/eligibility/index')
+  static readonly eligibilityClaimValuePage = new RoutablePath('/claim/eligibility/claim-value')
+  static readonly eligibilityHelpWithFeesPage = new RoutablePath('/claim/eligibility/help-with-fees')
+  static readonly eligibilityClaimantAddressPage = new RoutablePath('/claim/eligibility/claimant-address')
+  static readonly eligibilityDefendantAddressPage = new RoutablePath('/claim/eligibility/defendant-address')
+  static readonly eligibilityOver18Page = new RoutablePath('/claim/eligibility/over-18')
+  static readonly eligibilityGovernmentDepartmentPage = new RoutablePath('/claim/eligibility/government-department')
+  static readonly eligibilityEligiblePage = new RoutablePath('/claim/eligibility/eligible')
+  static readonly eligibilityNotEligiblePage = new RoutablePath('/claim/eligibility/not-eligible')
 }
 
 export class ErrorPaths {

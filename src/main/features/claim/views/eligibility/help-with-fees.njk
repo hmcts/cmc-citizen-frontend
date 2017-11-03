@@ -1,0 +1,39 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioGroup, errorSummary, saveAndContinueButton %}
+
+{% set title = t('Claimant address | Money claim') %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ t('Do you need help with fees?') }}</h1>
+      <p>{{ t('You can’t get help with fees to use this online service.') }}</p>
+
+      {% set name = 'helpWithFees' %}
+
+      <form novalidate method="post" class="analytics-submit-event-trigger"
+            data-event-action="Eligibility: Select claimant address option"
+            data-event-label-from="{{ name }}">
+        {{ csrfProtection(csrf) }}
+
+        {{
+        radioGroup(
+          'Do you need help with fees?',
+          name,
+          [
+            {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
+            {'label': 'No', value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO)}
+          ],
+          form = form,
+          labelForScreenReadersOnly = true
+          )
+        }}
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
