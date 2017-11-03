@@ -6,6 +6,7 @@ import { Form } from 'forms/form'
 import { DefendantResponse } from 'offer/form/models/defendantResponse'
 import { Offer } from 'offer/form/models/offer'
 import { PartyStatement } from 'app/claims/models/partyStatement'
+import Claim from 'app/claims/models/claim'
 import { ErrorHandling } from 'common/errorHandling'
 import User from 'idam/user'
 import { OfferGuard } from 'offer/guards/offerGuard'
@@ -16,7 +17,7 @@ function redirectToDashBoardPage (res: express.Response) {
   const user: User = res.locals.user
   res.redirect(DashboardPaths.claimantPage.evaluateUri({ externalId: user.claim.externalId }))
 }
-function getPartyStatement (claim: any, res: express.Response): PartyStatement[] {
+function getPartyStatement (claim: Claim, res: express.Response): PartyStatement[] {
   if (!claim.settlement || !claim.settlement.partyStatements) {
     redirectToDashBoardPage(res)
   }

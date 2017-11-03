@@ -26,7 +26,7 @@ describe('Offer', () => {
 
     it('should deserialize all fields', () => {
       const date = new LocalDate()
-      expect(Offer.fromObject({ offerText: 'offer Text', completionDate: date })).to.deep.equal(Offer.create('offer Text', date))
+      expect(Offer.fromObject({ offerText: 'offer Text', completionDate: date })).to.deep.equal(new Offer('offer Text', date))
     })
   })
 
@@ -37,7 +37,7 @@ describe('Offer', () => {
 
     it('should return instance with set fields from given object', () => {
       const date = new LocalDate()
-      expect(new Offer().deserialize({ offerText: 'offer Text', completionDate: date.asString() })).to.deep.equal(Offer.create('offer Text', date))
+      expect(new Offer().deserialize({ offerText: 'offer Text', completionDate: date.asString() })).to.deep.equal(new Offer('offer Text', date))
     })
   })
 
@@ -48,19 +48,19 @@ describe('Offer', () => {
       it('undefined offer text', () => {
         const futureDate = moment().add(10, 'days')
         const date = new LocalDate(futureDate.year(), futureDate.month(), futureDate.day())
-        const errors = validator.validateSync(Offer.create('', date))
+        const errors = validator.validateSync(new Offer('', date))
         expect(errors.length).to.equal(2)
         expectValidationError(errors, ValidationErrors.OFFER_REQUIRED)
       })
 
       it('undefined offer date', () => {
-        const errors = validator.validateSync(Offer.create('offer text', undefined))
+        const errors = validator.validateSync(new Offer('offer text', undefined))
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.DATE_REQUIRED)
       })
 
       it('date in past', () => {
-        const errors = validator.validateSync(Offer.create('offer text', new LocalDate(1980, 10, 11)))
+        const errors = validator.validateSync(new Offer('offer text', new LocalDate(1980, 10, 11)))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.FUTURE_DATE)
@@ -71,7 +71,7 @@ describe('Offer', () => {
       it('offer text and future date', () => {
         const futureDate = moment().add(10, 'month')
         const date = new LocalDate(futureDate.year(), futureDate.month(), 15)
-        const errors = validator.validateSync(Offer.create('offer text', date))
+        const errors = validator.validateSync(new Offer('offer text', date))
         expect(errors.length).to.equal(0)
       })
     })

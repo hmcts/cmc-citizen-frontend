@@ -22,7 +22,7 @@ describe('DefendantResponse', () => {
     })
 
     it('should deserialize all fields', () => {
-      expect(DefendantResponse.fromObject({ option: StatementType.ACCEPTATION.value})).to.deep.equal(new DefendantResponse(StatementType.ACCEPTATION.value))
+      expect(DefendantResponse.fromObject({ option: StatementType.ACCEPTATION.value})).to.deep.equal(new DefendantResponse(StatementType.ACCEPTATION))
     })
   })
 
@@ -32,7 +32,7 @@ describe('DefendantResponse', () => {
     })
 
     it('should return instance with set fields from given object', () => {
-      expect(new DefendantResponse().deserialize({ option: StatementType.ACCEPTATION.value})).to.deep.equal(new DefendantResponse(StatementType.ACCEPTATION.value))
+      expect(new DefendantResponse().deserialize({ option: StatementType.ACCEPTATION.value})).to.deep.equal(new DefendantResponse(StatementType.ACCEPTATION))
     })
   })
 
@@ -48,9 +48,19 @@ describe('DefendantResponse', () => {
     })
 
     describe('should accept when', () => {
-      it('valid form', () => {
-        const errors = validator.validateSync(new DefendantResponse(StatementType.ACCEPTATION.value))
-        expect(errors.length).to.equal(0)
+      context('valid form with selected option', () => {
+        it('Acceptation', () => {
+          const errors = validator.validateSync(new DefendantResponse(StatementType.ACCEPTATION))
+          expect(errors.length).to.equal(0)
+        })
+        it('Rejection', () => {
+          const errors = validator.validateSync(new DefendantResponse(StatementType.REJECTION))
+          expect(errors.length).to.equal(0)
+        })
+        it('Make Counter Offer', () => {
+          const errors = validator.validateSync(new DefendantResponse(StatementType.OFFER))
+          expect(errors.length).to.equal(0)
+        })
       })
     })
   })

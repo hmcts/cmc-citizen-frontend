@@ -7,10 +7,10 @@ export class ValidationErrors {
 
 export class DefendantResponse implements Serializable<DefendantResponse> {
   @IsDefined({ message: ValidationErrors.OPTION_REQUIRED })
-  @IsIn([StatementType.ACCEPTATION.value, StatementType.REJECTION.value, StatementType.OFFER.value], { message: ValidationErrors.OPTION_REQUIRED })
-  option?: string
+  @IsIn(StatementType.all(), { message: ValidationErrors.OPTION_REQUIRED })
+  option?: StatementType
 
-  constructor (option?: string) {
+  constructor (option?: StatementType) {
     this.option = option
   }
 
@@ -18,12 +18,14 @@ export class DefendantResponse implements Serializable<DefendantResponse> {
     if (!value) {
       return value
     }
-    return new DefendantResponse(value.option)
+    // tslint:disable-next-line:no-console
+    console.log(`------------> ${StatementType.valueOf(value.option)}`)
+    return new DefendantResponse(StatementType.valueOf(value.option))
   }
 
   deserialize (input: any): DefendantResponse {
     if (input) {
-      this.option = input.option
+      this.option = StatementType.valueOf(input.option)
     }
     return this
   }

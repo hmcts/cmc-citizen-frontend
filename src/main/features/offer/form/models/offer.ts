@@ -25,19 +25,15 @@ export class Offer implements Serializable<Offer> {
   @IsFutureDate({ message: ValidationErrors.FUTURE_DATE })
   completionDate: LocalDate
 
-  static create (offerText: string, completionDate: LocalDate) {
-    const offer = new Offer()
-    if (offerText || completionDate) {
-      offer.offerText = offerText
-      offer.completionDate = completionDate
-    }
-    return offer
+  constructor (offerText?: string, completionDate?: LocalDate) {
+    this.offerText = offerText
+    this.completionDate = completionDate
   }
   static fromObject (value?: any): Offer {
     if (!value) {
       return value
     }
-    return Offer.create(value.offerText, LocalDate.fromObject(value.completionDate))
+    return new Offer(value.offerText, LocalDate.fromObject(value.completionDate))
   }
 
   deserialize (input: any): Offer {

@@ -17,7 +17,9 @@ export class PartyStatement implements Serializable<PartyStatement> {
     if (input) {
       this.type = input.type
       this.madeBy = input.madeBy
-      this.offer = new Offer().deserialize(input.offer)
+      if (input.offer) {
+        this.offer = new Offer().deserialize(input.offer)
+      }
     }
     return this
   }
