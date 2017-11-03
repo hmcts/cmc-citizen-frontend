@@ -14,12 +14,12 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
+
 import { MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = ResponsePaths.moreTimeRequestPage.evaluateUri({ externalId: sampleClaimObj.externalId })
+const pagePath = ResponsePaths.moreTimeRequestPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: more time needed page', () => {
   attachDefaultHooks(app)
@@ -68,7 +68,7 @@ describe('Defendant response: more time needed page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.redirect
               .toLocation(ResponsePaths.moreTimeConfirmationPage
-                .evaluateUri({ externalId: sampleClaimObj.externalId })))
+                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
       })
     })
@@ -95,7 +95,7 @@ describe('Defendant response: more time needed page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.redirect
               .toLocation(ResponsePaths.moreTimeConfirmationPage
-                .evaluateUri({ externalId: sampleClaimObj.externalId })))
+                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
 
         context('when form is invalid', () => {
@@ -123,7 +123,7 @@ describe('Defendant response: more time needed page', () => {
               .send({ option: 'no' })
               .expect(res => expect(res).to.redirect
                 .toLocation(ResponsePaths.taskListPage
-                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
           it('should redirect to confirmation page page when "yes" is selected and everything is fine', async () => {
@@ -138,7 +138,7 @@ describe('Defendant response: more time needed page', () => {
               .send({ option: 'yes' })
               .expect(res => expect(res).to.redirect
                 .toLocation(ResponsePaths.moreTimeConfirmationPage
-                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
           it('should return 500 and render error page when "yes" is selected and cannot save draft', async () => {

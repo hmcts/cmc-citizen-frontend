@@ -29,7 +29,7 @@ describe('DraftClaim deserialization', () => {
         },
         partyDetails: {
           type: 'individual',
-          address: {line1: 'Here',line2: 'There',city: 'London',postcode: 'BB12 7NQ'},
+          address: { line1: 'Here',line2: 'There',city: 'London',postcode: 'BB12 7NQ' },
           name: 'John Doe',
           dateOfBirth: {
             known: 'true',

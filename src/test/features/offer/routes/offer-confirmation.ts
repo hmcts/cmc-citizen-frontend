@@ -9,10 +9,9 @@ import { Paths as OfferPaths } from 'offer/paths'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const externalId = sampleClaimObj.externalId
+const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const confirmationPage = OfferPaths.offerConfirmationPage.evaluateUri({ externalId: externalId })
 
 describe('Offer confirmation page', () => {
