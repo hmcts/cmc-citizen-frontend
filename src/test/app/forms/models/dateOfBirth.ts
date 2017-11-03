@@ -15,7 +15,6 @@ import DateOfBirth, { ValidationErrors } from 'forms/models/dateOfBirth'
 import { LocalDate } from 'forms/models/localDate'
 
 import { MomentFormatter } from 'utils/momentFormatter'
-import { Moment } from 'moment'
 
 describe('DateOfBirth', () => {
   describe('form object deserialization', () => {
@@ -152,6 +151,6 @@ function dateOfBirth (year: number, month: number, day: number): DateOfBirth {
   return new DateOfBirth(true, new LocalDate(year, month, day))
 }
 
-function ageLimit (): Moment {
+function ageLimit (): moment.Moment {
   return moment().subtract(18, 'years').add(1, 'day')
 }

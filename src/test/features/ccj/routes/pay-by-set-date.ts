@@ -11,21 +11,19 @@ import { expectValidationError } from '../../../app/forms/models/validationUtils
 import { LocalDate } from 'forms/models/localDate'
 
 import * as moment from 'moment'
-import { PayBySetDate } from 'ccj/form/models/payBySetDate'
-import { ValidationErrors } from 'ccj/form/models/payBySetDate'
+import { PayBySetDate, ValidationErrors } from 'ccj/form/models/payBySetDate'
 import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
-const externalId = sampleClaimObj.externalId
+const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
-const payBySetDatePage: string = Paths.payBySetDatePage.evaluateUri({externalId : externalId})
-const checkAndSavePage: string = Paths.checkAndSendPage.evaluateUri({externalId : externalId})
+const payBySetDatePage: string = Paths.payBySetDatePage.evaluateUri({ externalId : externalId })
+const checkAndSavePage: string = Paths.checkAndSendPage.evaluateUri({ externalId : externalId })
 
 describe('CCJ - Pay by set date', () => {
   attachDefaultHooks(app)

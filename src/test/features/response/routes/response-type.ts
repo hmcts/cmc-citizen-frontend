@@ -14,12 +14,12 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
+
 import { ResponseType } from 'response/form/models/responseType'
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = ResponsePaths.responseTypePage.evaluateUri({ externalId: sampleClaimObj.externalId })
+const pagePath = ResponsePaths.responseTypePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: response type page', () => {
   attachDefaultHooks(app)
@@ -100,7 +100,7 @@ describe('Defendant response: response type page', () => {
               .send({ type: ResponseType.OWE_ALL_PAID_NONE })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.taskListPage
-                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
           it('should redirect to reject part of claim page when everything is fine and OWE_SOME_PAID_NONE is selected', async () => {
@@ -114,7 +114,7 @@ describe('Defendant response: response type page', () => {
               .send({ type: ResponseType.OWE_SOME_PAID_NONE })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.defenceRejectPartOfClaimPage
-                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
           it('should redirect to reject all of claim page when everything is fine and OWE_NONE is selected', async () => {
@@ -128,7 +128,7 @@ describe('Defendant response: response type page', () => {
               .send({ type: ResponseType.OWE_NONE })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.defenceRejectAllOfClaimPage
-                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })
       })
