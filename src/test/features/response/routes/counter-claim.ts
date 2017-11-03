@@ -13,17 +13,17 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
+
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ResponsePaths.counterClaimPage.evaluateUri({ externalId: sampleClaimObj.externalId })
+const pagePath: string = ResponsePaths.counterClaimPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: counter claim page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ResponsePaths.counterClaimPage.evaluateUri({ externalId: sampleClaimObj.externalId }))
+    checkAuthorizationGuards(app, 'get', ResponsePaths.counterClaimPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
 
     describe('for authorized user', () => {
       beforeEach(() => {

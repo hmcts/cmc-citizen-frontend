@@ -11,17 +11,17 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
+
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ResponsePaths.confirmationPage.evaluateUri({ externalId: sampleClaimObj.externalId })
+const pagePath: string = ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: confirmation page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ResponsePaths.confirmationPage.evaluateUri({ externalId: sampleClaimObj.externalId }))
+    checkAuthorizationGuards(app, 'get', ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -34,7 +34,7 @@ describe('Defendant response: confirmation page', () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
 
         await request(app)
-          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: sampleClaimObj.externalId }))
+          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Defence submitted'))
       })
@@ -43,7 +43,7 @@ describe('Defendant response: confirmation page', () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('internal service error when retrieving response')
 
         await request(app)
-          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: sampleClaimObj.externalId }))
+          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })

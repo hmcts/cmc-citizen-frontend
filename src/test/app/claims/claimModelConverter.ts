@@ -19,7 +19,7 @@ function prepareClaimDraft (claimantPartyDetails: object, defendantPartyDetails:
   return new DraftClaim().deserialize({
     ...draftTemplate,
     claimant: { ...draftTemplate.claimant, partyDetails: claimantPartyDetails },
-    defendant: { ...draftTemplate.defendant, partyDetails: { ...defendantPartyDetails, hasCorrespondenceAddress: false, correspondenceAddress: undefined} }
+    defendant: { ...draftTemplate.defendant, partyDetails: { ...defendantPartyDetails, hasCorrespondenceAddress: false, correspondenceAddress: undefined } }
   })
 }
 

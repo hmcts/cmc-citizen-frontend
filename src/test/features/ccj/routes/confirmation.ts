@@ -12,9 +12,8 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
-const externalId = sampleClaimObj.externalId
+const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
 const confirmationPage = CCJPaths.confirmationPage.evaluateUri({ externalId: externalId })
 
