@@ -12,6 +12,14 @@ properties(
    pipelineTriggers([[$class: 'GitHubPushTrigger']])]
 )
 
+def secrets = [
+  [$class: 'VaultSecret', path: 'secret/dev/cmc/snyk/api-token', secretValues:
+    [
+      [$class: 'VaultSecretValue', envVar: 'SNYK_TOKEN', vaultKey: 'value']
+    ]
+  ]
+]
+
 Ansible ansible = new Ansible(this, 'cmc')
 Packager packager = new Packager(this, 'cmc')
 
@@ -22,144 +30,146 @@ def channel = '#cmc-tech-notification'
 timestamps {
   milestone()
   lock(resource: "citizen-frontend-${env.BRANCH_NAME}", inversePrecedence: true) {
-    node('slave') {
-      try {
-        def version
-        def citizenFrontendRPMVersion
-        def citizenFrontendVersion
-        def ansibleCommitId
+    wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
+      node('slave') {
+        try {
+          def version
+          def citizenFrontendRPMVersion
+          def citizenFrontendVersion
+          def ansibleCommitId
 
-        stage('Checkout') {
-          deleteDir()
-          checkout scm
-        }
+          stage('Checkout') {
+            deleteDir()
+            checkout scm
+          }
 
-        stage('Setup') {
-          sh '''
+          stage('Setup') {
+            sh '''
             yarn install
             yarn setup
           '''
-        }
-
-        stage('Node security check') {
-          try {
-            sh "yarn test:nsp 2> nsp-report.txt"
-          } catch (ignore) {
-            sh "cat nsp-report.txt"
-            archiveArtifacts 'nsp-report.txt'
-            notifyBuildResult channel: channel, color: 'warning',
-              message: 'Node security check failed see the report for the errors'
-          }
-          sh "rm nsp-report.txt"
-        }
-
-        // Travis runs all linting and unit testing, no need to do this twice (but run on master to be safe)
-        onMaster {
-          stage('Lint') {
-            sh "yarn lint"
           }
 
-          stage('Test') {
+          stage('Node security check') {
             try {
-              sh "yarn test"
-            } finally {
-              archiveArtifacts 'mochawesome-report/unit.html'
+              sh "yarn test:nsp 2> nsp-report.txt"
+            } catch (ignore) {
+              sh "cat nsp-report.txt"
+              archiveArtifacts 'nsp-report.txt'
+              notifyBuildResult channel: channel, color: 'warning',
+                message: 'Node security check failed see the report for the errors'
+            }
+            sh "rm nsp-report.txt"
+          }
+
+          // Travis runs all linting and unit testing, no need to do this twice (but run on master to be safe)
+          onMaster {
+            stage('Lint') {
+              sh "yarn lint"
+            }
+
+            stage('Test') {
+              try {
+                sh "yarn test"
+              } finally {
+                archiveArtifacts 'mochawesome-report/unit.html'
+              }
+            }
+
+            stage('Test routes') {
+              try {
+                sh "yarn test:routes"
+              } finally {
+                archiveArtifacts 'mochawesome-report/routes.html'
+              }
+            }
+
+            stage('Test a11y') {
+              try {
+                sh "yarn test:a11y"
+              } finally {
+                archiveArtifacts 'mochawesome-report/a11y.html'
+              }
+            }
+
+            stage('Test coverage') {
+              try {
+                sh "yarn test:coverage"
+              } finally {
+                archiveArtifacts 'coverage-report/lcov-report/index.html'
+              }
             }
           }
 
-          stage('Test routes') {
-            try {
-              sh "yarn test:routes"
-            } finally {
-              archiveArtifacts 'mochawesome-report/routes.html'
-            }
-          }
-
-          stage('Test a11y') {
-            try {
-              sh "yarn test:a11y"
-            } finally {
-              archiveArtifacts 'mochawesome-report/a11y.html'
-            }
-          }
-
-          stage('Test coverage') {
-            try {
-              sh "yarn test:coverage"
-            } finally {
-              archiveArtifacts 'coverage-report/lcov-report/index.html'
-            }
-          }
-        }
-
-        stage('Sonar') {
-          onPR {
-            sh """
+          stage('Sonar') {
+            onPR {
+              sh """
               yarn sonar-scanner -- \
               -Dsonar.analysis.mode=preview \
               -Dsonar.host.url=$SONARQUBE_URL
             """
+            }
+
+            onMaster {
+              sh "yarn sonar-scanner -- -Dsonar.host.url=$SONARQUBE_URL"
+            }
           }
+
+          stage('Package application (Docker)') {
+            citizenFrontendVersion = dockerImage imageName: 'cmc/citizen-frontend'
+          }
+
+          stage('Package application (RPM)') {
+            citizenFrontendRPMVersion = packager.nodeRPM('citizen-frontend')
+            version = "{citizen_frontend_buildnumber: ${citizenFrontendRPMVersion}}"
+
+            onMaster {
+              packager.publishNodeRPM('citizen-frontend')
+            }
+          }
+
+          stage('Integration Tests') {
+            integrationTests.execute([
+              'CITIZEN_FRONTEND_VERSION': citizenFrontendVersion,
+              'TESTS_TAG'               : '@citizen'
+            ])
+          }
+
+          //noinspection GroovyVariableNotAssigned It is guaranteed to be assigned
+          RPMTagger rpmTagger = new RPMTagger(this,
+            'citizen-frontend',
+            packager.rpmName('citizen-frontend', citizenFrontendRPMVersion),
+            'cmc-local'
+          )
 
           onMaster {
-            sh "yarn sonar-scanner -- -Dsonar.host.url=$SONARQUBE_URL"
-          }
-        }
-
-        stage('Package application (Docker)') {
-          citizenFrontendVersion = dockerImage imageName: 'cmc/citizen-frontend'
-        }
-
-        stage('Package application (RPM)') {
-          citizenFrontendRPMVersion = packager.nodeRPM('citizen-frontend')
-          version = "{citizen_frontend_buildnumber: ${citizenFrontendRPMVersion}}"
-
-          onMaster {
-            packager.publishNodeRPM('citizen-frontend')
-          }
-        }
-
-        stage('Integration Tests') {
-          integrationTests.execute([
-            'CITIZEN_FRONTEND_VERSION': citizenFrontendVersion,
-            'TESTS_TAG'               : '@citizen'
-          ])
-        }
-
-        //noinspection GroovyVariableNotAssigned It is guaranteed to be assigned
-        RPMTagger rpmTagger = new RPMTagger(this,
-          'citizen-frontend',
-          packager.rpmName('citizen-frontend', citizenFrontendRPMVersion),
-          'cmc-local'
-        )
-
-        onMaster {
-          milestone()
-          lock(resource: "CMC-deploy-dev", inversePrecedence: true) {
-            stage('Deploy (Dev)') {
-              ansibleCommitId = ansible.runDeployPlaybook(version, 'dev')
-              rpmTagger.tagDeploymentSuccessfulOn('dev')
-              rpmTagger.tagAnsibleCommit(ansibleCommitId)
+            milestone()
+            lock(resource: "CMC-deploy-dev", inversePrecedence: true) {
+              stage('Deploy (Dev)') {
+                ansibleCommitId = ansible.runDeployPlaybook(version, 'dev')
+                rpmTagger.tagDeploymentSuccessfulOn('dev')
+                rpmTagger.tagAnsibleCommit(ansibleCommitId)
+              }
+              stage('Smoke test (Dev)') {
+                smokeTests.executeAgainst(env.CMC_DEV_APPLICATION_URL)
+                rpmTagger.tagTestingPassedOn('dev')
+              }
             }
-            stage('Smoke test (Dev)') {
-              smokeTests.executeAgainst(env.CMC_DEV_APPLICATION_URL)
-              rpmTagger.tagTestingPassedOn('dev')
+            milestone()
+            lock(resource: "CMC-deploy-demo", inversePrecedence: true) {
+              stage('Deploy (Demo)') {
+                ansible.runDeployPlaybook(version, 'demo')
+              }
+              stage('Smoke test (Demo)') {
+                smokeTests.executeAgainst(env.CMC_DEMO_APPLICATION_URL)
+              }
             }
+            milestone()
           }
-          milestone()
-          lock(resource: "CMC-deploy-demo", inversePrecedence: true) {
-            stage('Deploy (Demo)') {
-              ansible.runDeployPlaybook(version, 'demo')
-            }
-            stage('Smoke test (Demo)') {
-              smokeTests.executeAgainst(env.CMC_DEMO_APPLICATION_URL)
-            }
-          }
-          milestone()
+        } catch (Throwable err) {
+          notifyBuildFailure channel: channel
+          throw err
         }
-      } catch (Throwable err) {
-        notifyBuildFailure channel: channel
-        throw err
       }
     }
     milestone()
