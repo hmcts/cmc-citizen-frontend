@@ -4,7 +4,7 @@ import * as postProcessor from 'i18next-sprintf-postprocessor'
 import * as middleware from 'i18next-express-middleware'
 import * as express from 'express'
 
-const Backend = require('./backend')
+import { Backend } from './backend'
 
 /**
  * Module that enables i18n support for Express.js applications
