@@ -19,7 +19,7 @@
     "sonar-scanner": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/** -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info",
     "precommit": "yarn lint",
     "prepush": "yarn test && yarn test:routes",
-    "snyk-protect": "snyk protect",
+    "snyk-protect": "snyk protect --debug",
     "prepare": "yarn snyk-protect"
   },
   "dependencies": {
