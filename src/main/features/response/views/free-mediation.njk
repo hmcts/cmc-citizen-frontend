@@ -1,27 +1,27 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary %}
 
-{% set title = t("Money claim") %}
+{% set title = t('Money claim') %}
 
-{% set heading = t("Free mediation") %}
+{% set heading = t('Free mediation') %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
 
       <p class="lede">
-        {{ t("You might feel you need to go to a hearing now. However, many people resolve their dispute before a hearing by taking part in telephone mediation.") }}</p>
+        {{ t('You might feel you need to go to a hearing now. However, many people resolve their dispute before a hearing by taking part in telephone mediation.') }}</p>
 
-      <p>{{ t("A mediator will:") }}</p>
+      <p>{{ t('A mediator will:') }}</p>
 
       <ul class="list list-bullet">
-        <li>{{ t("listen to each side separately - you won’t talk to directly to the other side") }}</li>
-        <li>{{ t("ask you to consider what the other side says, but won’t make you compromise") }}</li>
-        <li>{{ t("help you reach an agreement, if possible") }}</li>
+        <li>{{ t('listen to each side separately - you won’t talk to directly to the other side') }}</li>
+        <li>{{ t('ask you to consider what the other side says, but won’t make you compromise') }}</li>
+        <li>{{ t('help you reach an agreement, if possible') }}</li>
       </ul>
 
       <h2 class="heading-medium">
-        {{ t("Will you try mediation?") }}
+        {{ t('Will you try mediation?') }}
       </h2>
 
       <form method="post"
@@ -33,13 +33,13 @@
         <div class="form-group">
           <fieldset>
 
-            <legend id="option[label]" class="visually-hidden">{{ t("Will you try mediation?") }}</legend>
+            <legend id="option[label]" class="visually-hidden">{{ t('Will you try mediation?') }}</legend>
 
-            <p>{{ t("Over 68% of people who use our Mediation Service settle on the day.*") }}</p>
+            <p>{{ t('Over 68% of people who use our Mediation Service settle on the day.*') }}</p>
 
             {{
               radioOption(
-                label = t("Yes, I want help to resolve this dispute"),
+                label = t('Yes, I want help to resolve this dispute'),
                 name = 'option',
                 form = form,
                 value = 'yes'
@@ -86,7 +86,7 @@
           {{ saveAndContinueButton() }}
         </div>
       </form>
-      <p>{{ t("* Source: Money Claim Mediation Service statistics, April 2015 to March 2016.") }}</p>
+      <p>{{ t('* Source: Money Claim Mediation Service statistics, April 2015 to March 2016.') }}</p>
     </div>
   </div>
 {% endblock %}
