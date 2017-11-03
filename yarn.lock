@@ -452,6 +452,10 @@ async@~2.1.2, async@~2.1.5:
   dependencies:
     lodash "^4.14.0"
 
+async_hooks@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/async_hooks/-/async_hooks-1.0.0.tgz#815f5e861fe73f64eb29fd942c32e95c8064052f"
+
 asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"

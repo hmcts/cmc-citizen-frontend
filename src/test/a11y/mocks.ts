@@ -5,6 +5,7 @@ import * as idamServiceMock from '../http-mocks/idam'
 import * as draftStoreMock from '../http-mocks/draft-store'
 import * as claimStoreMock from '../http-mocks/claim-store'
 import * as feesMock from '../http-mocks/fees'
+import Claim from 'claims/models/claim'
 
 idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'letter-holder').persist()
 idamServiceMock.resolveRetrieveServiceToken().persist()
@@ -30,6 +31,15 @@ const justForwardRequestHandler = {
 
 mock('response/guards/alreadyRespondedGuard', {
   AlreadyRespondedGuard: justForwardRequestHandler
+})
+
+mock('first-contact/guards/claimReferenceMatchesGuard', {
+  'default': {
+    requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
+      res.locals.user.claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
+      next()
+    }
+  }
 })
 
 mock('claim/guards/allClaimTasksCompletedGuard', {
