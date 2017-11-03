@@ -12,7 +12,6 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -47,7 +46,7 @@ describe('Dashboard - defendant page', () => {
           await request(app)
             .get(defendantPage)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Claim number', sampleClaimObj.referenceNumber))
+            .expect(res => expect(res).to.be.successful.withText('Claim number', claimStoreServiceMock.sampleClaimObj.referenceNumber))
         })
       })
     })
