@@ -1,0 +1,22 @@
+{% extends "layout.njk" %}
+
+{% set title = t('Eligibility | Money claim') %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ t('Check eligibility') }}</h1>
+
+      <p class="lede">{{ t('Find out if you’re eligible to use this service') }}</p>
+
+      <p class="panel panel-border-wide">
+        {{ t('We can tell you if you can use this service but can’t say if your claim is valid. ' +
+        'For example, there are time limits for some types of claim.') }}
+      </p>
+
+      <a href="{{ nextPage }}" class="button">{{ t('Continue to questions') }}</a>
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
+
+{% set title = t('Defendant address | Money claim') %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">
+        {{ t('Is the person or organisation you’re claiming against based in England or Wales?') }}
+      </h1>
+      <p>{{ t('You can only make a claim against an address in England or Wales.') }}</p>
+
+      {% set name = 'defendantAddress' %}
+
+      <form novalidate method="post" class="analytics-submit-event-trigger"
+            data-event-action="Eligibility: Select defendant address option"
+            data-event-label-from="{{ name }}">
+        {{ csrfProtection(csrf) }}
+
+        {{
+          radioGroup(
+            'Is the person or organisation you’re claiming against based in England or Wales?',
+            name,
+            [
+              {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
+              {'label': 'No', value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO)}
+            ],
+            form = form,
+            labelForScreenReadersOnly = true
+          )
+        }}
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
