@@ -1,0 +1,69 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary, radioGroup %}
+{% from "date.njk" import dateInput %}
+
+{% set title = t('Money claim') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large form-hint">{{ t('Defendant’s response') }} </h1>
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+        <div class="description-block">
+          <h2 class="heading-large"> 
+          {{ t('%s’s offer',{
+              postProcess: 'sprintf',
+              sprintf: [claim.claimData.defendant.name]
+            }) }}</h2>
+        </div>
+        <table>
+          <tr>
+              <td>{{ t('The offer') }}</td>
+              <td>{{ offer.content }}</td>
+            </tr>
+            <tr>
+              <td>{{ t('By when') }}</td>
+              <td>{{ offer.completionDate | date }}</td>
+            </tr>
+        </table>
+
+        <h2 class="heading-medium"> {{ t('Do you accept the offer?') }} </h2>
+
+        {{
+        radioGroup(
+          label = 'Do you accept the offer?',
+          form = form,
+          labelForScreenReadersOnly = true,
+          name = 'option',
+          options = [
+            {
+              bold: false,
+              label: 'Yes',
+              hint: t('You can make a legal agreement between you and %s.',
+                { postProcess: 'sprintf',
+                sprintf:[claim.claimData.defendant.name]
+                }),
+              value: 'ACCEPTATION',
+              checked: (form.valueFor('option').value === 'ACCEPTATION')
+            },
+            {
+              bold: false,
+              label: 'No',
+              value: 'REJECTION',
+              checked: (form.valueFor('option').value === 'REJECTION')
+            },
+            {
+              bold: false,
+              label: 'Make a counter offer',
+              value: 'OFFER',
+              checked: (form.valueFor('option').value === 'OFFER')
+            }
+          ]
+        )
+      }}
+      {{ submitButton('Continue') }}
+      </form>
+    </div>
+  </div>
+{% endblock %}
