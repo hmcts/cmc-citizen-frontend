@@ -17,19 +17,18 @@ export class Offer implements Serializable<Offer> {
   @IsDefined({ message: ValidationErrors.OFFER_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.OFFER_REQUIRED })
   @MaxLength(99000, { message: ValidationErrors.OFFER_TEXT_TOO_LONG })
-  offerText?: string
+  offerText: string
 
   @ValidateNested()
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID })
   @IsFutureDate({ message: ValidationErrors.FUTURE_DATE })
-  completionDate?: LocalDate
+  completionDate: LocalDate
 
   constructor (offerText?: string, completionDate?: LocalDate) {
     this.offerText = offerText
     this.completionDate = completionDate
   }
-
   static fromObject (value?: any): Offer {
     if (!value) {
       return value
