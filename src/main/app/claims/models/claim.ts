@@ -9,6 +9,7 @@ import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { DefendantResponse } from 'claims/models/defendantResponse'
+import Settlement from 'claims/models/settlement'
 
 export default class Claim implements Serializable<Claim> {
   id: number
@@ -27,6 +28,7 @@ export default class Claim implements Serializable<Claim> {
   countyCourtJudgmentRequestedAt: Moment
   response: DefendantResponse
   defendantEmail: string
+  settlement: Settlement
 
   deserialize (input: any): Claim {
     if (input) {
@@ -53,6 +55,9 @@ export default class Claim implements Serializable<Claim> {
       this.countyCourtJudgment = new CountyCourtJudgment().deserialize(input.countyCourtJudgment)
       if (input.countyCourtJudgmentRequestedAt) {
         this.countyCourtJudgmentRequestedAt = MomentFactory.parse(input.countyCourtJudgmentRequestedAt)
+      }
+      if (input.settlement) {
+        this.settlement = new Settlement().deserialize(input.settlement)
       }
     }
     return this

@@ -14,11 +14,10 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const defendantHowMuchPaid = ResponsePaths.defendantHowMuchPaid.evaluateUri({ externalId: sampleClaimObj.externalId })
+const defendantHowMuchPaid = ResponsePaths.defendantHowMuchPaid.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 describe('Defendant response: how much have you paid', () => {
   attachDefaultHooks()
 
@@ -111,7 +110,7 @@ describe('Defendant response: how much have you paid', () => {
               .send({ amount: 300, date: { year: '1978', month: '1', day: '11' }, text: 'I don’t owe any money' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(
-                  ResponsePaths.timelinePage.evaluateUri({ externalId: sampleClaimObj.externalId })
+                  ResponsePaths.timelinePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
                 )
               )
           })

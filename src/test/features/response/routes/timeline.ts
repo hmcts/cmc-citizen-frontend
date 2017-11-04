@@ -8,13 +8,13 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
+
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { checkAlreadySubmittedGuard } from './checks/already-submitted-check'
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = Paths.timelinePage.evaluateUri({ externalId: sampleClaimObj.externalId })
+const pagePath: string = Paths.timelinePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: timeline', () => {
 
@@ -116,7 +116,7 @@ describe('Defendant response: timeline', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ rows: [{ date: 'Damaged roof', description: '299' }] })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.evidencePage.evaluateUri({ externalId: sampleClaimObj.externalId })))
+                .toLocation(Paths.evidencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })
 

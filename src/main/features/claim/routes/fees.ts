@@ -26,10 +26,10 @@ export default express.Router()
 
         const supportedIssueFees: Range[] = issueFeeRangeGroup.ranges
           .filter(range => range.from < supportedFeeLimitInPennies)
-          .map(range => range.copy({to: Math.min(range.to, supportedFeeLimitInPennies)}))
+          .map(range => range.copy({ to: Math.min(range.to, supportedFeeLimitInPennies) }))
         const supportedHearingFees: Range[] = hearingFeeRangeGroup.ranges
           .filter(range => range.from < supportedFeeLimitInPennies)
-          .map(range => range.copy({to: Math.min(range.to, supportedFeeLimitInPennies)}))
+          .map(range => range.copy({ to: Math.min(range.to, supportedFeeLimitInPennies) }))
 
         res.render(Paths.feesPage.associatedView,
           {

@@ -1,33 +1,25 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
-import * as moment from 'moment'
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 
 import { app } from '../../../../main/app'
 import { Paths as OfferPaths } from 'offer/paths'
+import { StatementType } from 'offer/form/models/statementType'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 
-import { LocalDate } from 'forms/models/localDate'
-
 const cookieName: string = config.get<string>('session.cookieName')
-const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const confirmationPage = OfferPaths.offerConfirmationPage.evaluateUri({ externalId: externalId })
-const offerPage = OfferPaths.offerPage.evaluateUri({ externalId: externalId })
+const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
+const responsePage = OfferPaths.responsePage.evaluateUri({ externalId: externalId })
 
-const validFormData = {
-  offerText: 'Offer Text',
-  completionDate: new LocalDate(2030, 11, 11)
-}
-
-describe('Offer page', () => {
+describe('defendant response page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', offerPage)
+    checkAuthorizationGuards(app, 'get', responsePage)
 
     context('when user authorised', () => {
       beforeEach(() => {
@@ -38,7 +30,7 @@ describe('Offer page', () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .get(offerPage)
+          .get(responsePage)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -46,18 +38,18 @@ describe('Offer page', () => {
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         await request(app)
-          .get(offerPage)
+          .get(responsePage)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Your offer'))
+          .expect(res => expect(res).to.be.successful.withText('Do you accept the offer?'))
       })
     })
 
     describe('on POST', () => {
-      checkAuthorizationGuards(app, 'post', offerPage)
+      checkAuthorizationGuards(app, 'post', responsePage)
 
       context('when user authorised', () => {
         beforeEach(() => {
-          idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+          idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
         })
 
         context('when middleware failure', () => {
@@ -65,52 +57,38 @@ describe('Offer page', () => {
             claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
-              .post(offerPage)
+              .post(responsePage)
               .set('Cookie', `${cookieName}=ABC`)
-              .send(validFormData)
+              .send({})
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
         })
 
         context('when form is valid', async () => {
-          it('should redirect to offer confirmation page', async () => {
+          it('should render page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            claimStoreServiceMock.resolveSaveOffer()
-            const futureDate = moment().add(1, 'day')
             const formData = {
-              offerText: 'Offer Text',
-              completionDate: new LocalDate(futureDate.year(), futureDate.month() + 1, futureDate.date())
+              option: StatementType.ACCEPTATION.value
             }
             await request(app)
-              .post(offerPage)
+              .post(responsePage)
               .set('Cookie', `${cookieName}=ABC`)
               .send(formData)
-              .expect(res => expect(res).to.be.redirect.toLocation(confirmationPage))
-          })
-
-          it('should return 500 and render error page when cannot save offer', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            claimStoreServiceMock.rejectSaveOfferForDefendant()
-
-            await request(app)
-              .post(offerPage)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(validFormData)
-              .expect(res => expect(res).to.be.serverError.withText('Error'))
+              .expect(res => expect(res).to.be.redirect.toLocation(responsePage))
           })
         })
 
-        context('when provided date is in past', async () => {
-          it('should render page with error', async () => {
+        context('when form is invalid', async () => {
+          it('should render page with errors', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            const formData = {
+              option: undefined
+            }
             await request(app)
-              .post(offerPage)
+              .post(responsePage)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({
-                offerText: 'Offer Text',
-                completionDate: new LocalDate(1980, 1, 1)
-              })
-              .expect(res => expect(res).to.be.successful.withText('Enter an offer date in the future', 'div class="error-summary"'))
+              .send(formData)
+              .expect(res => expect(res).to.be.successful.withText('Choose option: yes or no or make an offer', 'div class="error-summary"'))
           })
         })
       })
