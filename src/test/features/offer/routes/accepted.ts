@@ -12,13 +12,13 @@ import { checkAuthorizationGuards } from './checks/authorization-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
-const makeLegalAgreementPage = OfferPaths.makeAgreementPage.evaluateUri({ externalId: externalId })
+const page = OfferPaths.acceptedPage.evaluateUri({ externalId: externalId })
 
-describe('Make a legal agreement page', () => {
+describe('Offer accepted page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', makeLegalAgreementPage)
+    checkAuthorizationGuards(app, 'get', page)
 
     context('when user authorised', () => {
       beforeEach(() => {
@@ -29,7 +29,7 @@ describe('Make a legal agreement page', () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .get(makeLegalAgreementPage)
+          .get(page)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -37,9 +37,9 @@ describe('Make a legal agreement page', () => {
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         await request(app)
-          .get(makeLegalAgreementPage)
+          .get(page)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Make a legal agreement'))
+          .expect(res => expect(res).to.be.successful.withText('You’ve signed the agreement'))
       })
     })
   })
