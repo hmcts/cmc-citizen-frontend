@@ -63,6 +63,14 @@ export default express.Router()
         renderView(form, res, next)
       } else {
         const user: User = res.locals.user
-        res.redirect(Paths.responsePage.evaluateUri({ externalId: user.claim.externalId }))
+        switch (form.model.option) {
+          case StatementType.ACCEPTATION:
+            res.redirect(Paths.makeAgreementPage.evaluateUri({ externalId: user.claim.externalId }))
+            break
+
+          default:
+            res.redirect(Paths.responsePage.evaluateUri({ externalId: user.claim.externalId }))
+        }
+
       }
     }))

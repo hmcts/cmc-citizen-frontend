@@ -14,6 +14,7 @@ import { checkAuthorizationGuards } from './checks/authorization-check'
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 const responsePage = OfferPaths.responsePage.evaluateUri({ externalId: externalId })
+const makeLegalAgreementPage = OfferPaths.makeAgreementPage.evaluateUri({ externalId: externalId })
 
 describe('defendant response page', () => {
   attachDefaultHooks(app)
@@ -74,7 +75,7 @@ describe('defendant response page', () => {
               .post(responsePage)
               .set('Cookie', `${cookieName}=ABC`)
               .send(formData)
-              .expect(res => expect(res).to.be.redirect.toLocation(responsePage))
+              .expect(res => expect(res).to.be.redirect.toLocation(makeLegalAgreementPage))
           })
         })
 

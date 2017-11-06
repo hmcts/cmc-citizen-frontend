@@ -7,4 +7,6 @@ export class Paths {
   static readonly offerConfirmationPage = new RoutablePath(`${offerPath}/offer-confirmation`)
   static readonly settleOutOfCourtPage = new RoutablePath(`${offerPath}/settle-out-of-court`)
   static readonly responsePage = new RoutablePath(`${offerPath}/response`)
+  static readonly makeAgreementPage = new RoutablePath(`${offerPath}/make-agreement`)
+  static readonly declarationPage = new RoutablePath(`${offerPath}/declaration`)
 }
