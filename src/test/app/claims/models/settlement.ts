@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import Settlement from 'claims/models/settlement'
+import { Settlement } from 'claims/models/settlement'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { StatementType } from 'offer/form/models/statementType'
 import { Offer } from 'claims/models/offer'

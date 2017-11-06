@@ -9,7 +9,7 @@ import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { DefendantResponse } from 'claims/models/defendantResponse'
-import Settlement from 'claims/models/settlement'
+import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 
 export default class Claim implements Serializable<Claim> {

@@ -1,7 +1,7 @@
 import Claim from 'claims/models/claim'
 import { MomentFactory } from 'common/momentFactory'
 import { expect } from 'chai'
-import Settlement from 'claims/models/settlement'
+import { Settlement } from 'claims/models/settlement'
 import { StatementType } from 'offer/form/models/statementType'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { Offer } from 'claims/models/offer'
