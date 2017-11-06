@@ -19,6 +19,6 @@ export class StatementOfTruth {
   }
 
   static fromObject (input: any) {
-    return new StatementOfTruth(input && input.signed === 'true' )
+    return new StatementOfTruth(input && input.signed === 'true')
   }
 }

@@ -8,7 +8,7 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
+
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { checkAlreadySubmittedGuard } from './checks/already-submitted-check'
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
@@ -17,7 +17,7 @@ import { generateString } from '../../../app/forms/models/validationUtils'
 import { EvidenceType } from 'response/form/models/evidenceType'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = Paths.evidencePage.evaluateUri({ externalId: sampleClaimObj.externalId })
+const pagePath: string = Paths.evidencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: evidence', () => {
 
@@ -64,7 +64,7 @@ describe('Defendant response: evidence', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Add your timeline of events'))
+            .expect(res => expect(res).to.be.successful.withText('List your evidence (optional)'))
         })
       })
     })
@@ -119,7 +119,7 @@ describe('Defendant response: evidence', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value, description: 'Bla bla' }] })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.taskListPage.evaluateUri({ externalId: sampleClaimObj.externalId })))
+                .toLocation(Paths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })
 
@@ -153,7 +153,7 @@ describe('Defendant response: evidence', () => {
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ action: { addRow: 'Add row' } })
-            .expect(res => expect(res).to.be.successful.withText('Add your timeline of events'))
+            .expect(res => expect(res).to.be.successful.withText('List your evidence (optional)'))
         })
       })
     })

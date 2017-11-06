@@ -1,8 +1,9 @@
 import * as config from 'config'
 import * as mock from 'nock'
-import { Scope } from 'nock'
 import * as HttpStatus from 'http-status-codes'
 import { InterestType } from 'features/claim/form/models/interest'
+import { StatementType } from 'features/offer/form/models/statementType'
+import { MadeBy } from 'features/offer/form/models/madeBy'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
@@ -66,6 +67,10 @@ export const sampleClaimObj = {
     defendantDateOfBirth: '1990-11-01',
     paidAmount: 2,
     paymentOption: 'IMMEDIATELY'
+  },
+  settlement: {
+    partyStatements:
+        [ { type: StatementType.OFFER.value, madeBy: MadeBy.DEFENDANT.value , offer: { content: 'offer text', completionDate: '2017-08-08' } }]
   }
 }
 
@@ -88,7 +93,7 @@ const sampleDefendantResponseObj = {
   }
 }
 
-export function resolveRetrieveClaimByExternalId (claimOverride?: object): Scope {
+export function resolveRetrieveClaimByExternalId (claimOverride?: object): mock.Scope {
   return mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...claimOverride })
@@ -142,7 +147,7 @@ export function rejectIsClaimLinked () {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'Internal server error')
 }
 
-export function resolveRetrieveByLetterHolderId (referenceNumber: string, defendantId?: string): Scope {
+export function resolveRetrieveByLetterHolderId (referenceNumber: string, defendantId?: string): mock.Scope {
   return mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/letter/[0-9]+'))
     .reply(HttpStatus.OK, { ...sampleClaimObj, referenceNumber: referenceNumber, defendantId: defendantId })

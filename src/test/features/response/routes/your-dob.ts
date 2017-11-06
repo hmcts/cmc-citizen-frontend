@@ -13,11 +13,11 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
+
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = ResponsePaths.defendantDateOfBirthPage.evaluateUri({ externalId: sampleClaimObj.externalId })
+const pagePath = ResponsePaths.defendantDateOfBirthPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant user details: your date of birth page', () => {
   attachDefaultHooks(app)
@@ -99,7 +99,7 @@ describe('Defendant user details: your date of birth page', () => {
               .send({ known: 'true', date: { year: '1978', month: '1', day: '11' } })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.defendantMobilePage
-                  .evaluateUri({ externalId: sampleClaimObj.externalId })))
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })
       })

@@ -23,7 +23,11 @@
   },
   "draft-store": {
     "url": "DRAFT_STORE_URL",
-    "apiVersion": "DRAFT_STORE_API_VERSION"
+    "apiVersion": "DRAFT_STORE_API_VERSION",
+    "secrets": {
+      "primary": "DRAFT_STORE_SECRET_PRIMARY",
+      "secondary": "DRAFT_STORE_SECRET_SECONDARY"
+    }
   },
   "analytics": {
     "gaTrackingId": "GA_TRACKING_ID"

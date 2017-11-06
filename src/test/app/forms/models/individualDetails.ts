@@ -1,11 +1,10 @@
 import { expect } from 'chai'
 import DateOfBirth from 'app/forms/models/dateOfBirth'
 import { IndividualDetails } from 'forms/models/individualDetails'
-import { ValidationErrors as PartydDetailsValidationErrors } from 'forms/models/partyDetails'
+import { ValidationErrors as PartyDetailsValidationErrors } from 'forms/models/partyDetails'
 import { PartyType } from 'app/common/partyType'
-import { ValidationErrors as AddressValidationErrors } from 'forms/models/address'
+import { Address, ValidationErrors as AddressValidationErrors } from 'forms/models/address'
 import { ValidationErrors as CorrespondenceAddressValidationErrors } from 'forms/models/correspondenceAddress'
-import { Address } from 'forms/models/address'
 import { ValidationError, Validator } from 'class-validator'
 import { expectValidationError } from './validationUtils'
 import { LocalDate } from 'forms/models/localDate'
@@ -68,7 +67,7 @@ describe('IndividualDetails', () => {
     it('should return error when address is undefined', () => {
       individualDetails.address = undefined
       let errors: ValidationError[] = validator.validateSync(individualDetails)
-      expectValidationError(errors, PartydDetailsValidationErrors.ADDRESS_REQUIRED)
+      expectValidationError(errors, PartyDetailsValidationErrors.ADDRESS_REQUIRED)
     })
 
     it('should return errors when required address fields are missing', () => {
@@ -80,31 +79,31 @@ describe('IndividualDetails', () => {
     it('should return error when name is undefined', () => {
       individualDetails.name = undefined
       let errors: ValidationError[] = validator.validateSync(individualDetails)
-      expectValidationError(errors, PartydDetailsValidationErrors.NAME_REQUIRED)
+      expectValidationError(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
     })
 
     it('should return error when name is blank', () => {
       individualDetails.name = '  '
       let errors: ValidationError[] = validator.validateSync(individualDetails)
-      expectValidationError(errors, PartydDetailsValidationErrors.NAME_REQUIRED)
+      expectValidationError(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
     })
 
     it('should return error when name got more than 255 character', () => {
       individualDetails.name = aVeryLongString()
       let errors: ValidationError[] = validator.validateSync(individualDetails)
-      expectValidationError(errors, PartydDetailsValidationErrors.NAME_TOO_LONG.replace('$constraint1','255'))
+      expectValidationError(errors, PartyDetailsValidationErrors.NAME_TOO_LONG.replace('$constraint1','255'))
     })
 
     it('should return error when dataOfBirth is undefined', () => {
       individualDetails.dateOfBirth = undefined
       let errors: ValidationError[] = validator.validateSync(individualDetails)
-      expectValidationError(errors, PartydDetailsValidationErrors.NAME_REQUIRED)
+      expectValidationError(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
     })
 
     it('should return error when dataOfBirth is null', () => {
       individualDetails.dateOfBirth = null
       let errors: ValidationError[] = validator.validateSync(individualDetails)
-      expectValidationError(errors, PartydDetailsValidationErrors.NAME_REQUIRED)
+      expectValidationError(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
     })
 
     describe('when "has correspondence address" flag is set to true', () => {
@@ -118,7 +117,7 @@ describe('IndividualDetails', () => {
       it('should return error when correspondence address is undefined', () => {
         individualDetails.correspondenceAddress = undefined
         let errors: ValidationError[] = validator.validateSync(individualDetails)
-        expectValidationError(errors, PartydDetailsValidationErrors.CORRESPONDENCE_ADDRESS_REQUIRED)
+        expectValidationError(errors, PartyDetailsValidationErrors.CORRESPONDENCE_ADDRESS_REQUIRED)
       })
 
       it('should return errors when correspondence address required fields are missing', () => {

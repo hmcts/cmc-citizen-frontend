@@ -70,7 +70,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   }
 
   public requireDefence (): boolean {
-    if (!(this.response && this.response.type)) {
+    if (!this.isResponsePopulated()) {
       return false
     }
     return this.response.type === ResponseType.OWE_NONE && this.rejectAllOfClaim !== undefined
@@ -78,7 +78,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   }
 
   public requireHowMuchPaid (): boolean {
-    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission')) || !(this.response && this.response.type)) {
+    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission')) || !this.isResponsePopulated()) {
       return false
     }
 
@@ -88,7 +88,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   }
 
   public requireHowMuchOwed (): boolean {
-    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission')) || !(this.response && this.response.type)) {
+    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission')) || !this.isResponsePopulated()) {
       return false
     }
 
@@ -101,5 +101,25 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
     return this.response.type === ResponseType.OWE_SOME_PAID_NONE
       && this.rejectPartOfClaim !== undefined
       && this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
+  }
+
+  public requireMediation (): boolean {
+    return this.isResponsePopulated() && (this.isResponseRejectedFully() || this.isResponseRejectedPartially())
+  }
+
+  private isResponsePopulated (): boolean {
+    return !!this.response && !!this.response.type
+  }
+
+  private isResponseRejectedFully (): boolean {
+    return this.response.type === ResponseType.OWE_NONE && this.rejectAllOfClaim &&
+      (this.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE ||
+        this.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM)
+  }
+
+  private isResponseRejectedPartially (): boolean {
+    return this.response.type === ResponseType.OWE_SOME_PAID_NONE && this.rejectPartOfClaim &&
+      (this.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED ||
+        this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
   }
 }

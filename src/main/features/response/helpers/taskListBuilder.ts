@@ -11,6 +11,7 @@ import { YourDetails } from 'response/tasks/yourDetails'
 import { HowMuchPaidTask } from 'response/tasks/howMuchPaidTask'
 import { HowMuchOwedTask } from 'response/tasks/howMuchOwedTask'
 import { WhenWillYouPayTask } from 'response/tasks/whenWillYouPayTask'
+import { FreeMediationTask } from 'response/tasks/freeMediationTask'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, externalId: string): TaskList {
@@ -86,6 +87,17 @@ export class TaskListBuilder {
         )
       )
     }
+
+    if (draft.requireMediation()) {
+      tasks.push(
+        new TaskListItem(
+          'Free mediation',
+          Paths.freeMediationPage.evaluateUri({ externalId: externalId }),
+          FreeMediationTask.isCompleted(draft)
+        )
+      )
+    }
+
     return new TaskList(2, 'Respond to claim', tasks)
   }
 
