@@ -13,14 +13,13 @@ import { checkAuthorizationGuards } from './checks/authorization-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
-const responsePage = OfferPaths.responsePage.evaluateUri({ externalId: externalId })
-const makeLegalAgreementPage = OfferPaths.makeAgreementPage.evaluateUri({ externalId: externalId })
+const declarationPage = OfferPaths.declarationPage.evaluateUri({ externalId: externalId })
 
-describe('defendant response page', () => {
+describe('declaration page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', responsePage)
+    checkAuthorizationGuards(app, 'get', declarationPage)
 
     context('when user authorised', () => {
       beforeEach(() => {
@@ -31,7 +30,7 @@ describe('defendant response page', () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .get(responsePage)
+          .get(declarationPage)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -39,14 +38,14 @@ describe('defendant response page', () => {
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         await request(app)
-          .get(responsePage)
+          .get(declarationPage)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Do you accept the offer?'))
+          .expect(res => expect(res).to.be.successful.withText('Your agreement'))
       })
     })
 
     describe('on POST', () => {
-      checkAuthorizationGuards(app, 'post', responsePage)
+      checkAuthorizationGuards(app, 'post', declarationPage)
 
       context('when user authorised', () => {
         beforeEach(() => {
@@ -54,12 +53,11 @@ describe('defendant response page', () => {
         })
 
         context('when middleware failure', () => {
-
           it('should return 500 when cannot retrieve claim by external id', async () => {
             claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
-              .post(responsePage)
+              .post(declarationPage)
               .set('Cookie', `${cookieName}=ABC`)
               .send({})
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -67,32 +65,30 @@ describe('defendant response page', () => {
         })
 
         context('when form is valid', async () => {
-
           it('should render page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             const formData = {
               option: StatementType.ACCEPTATION.value
             }
             await request(app)
-              .post(responsePage)
+              .post(declarationPage)
               .set('Cookie', `${cookieName}=ABC`)
               .send(formData)
-              .expect(res => expect(res).to.be.redirect.toLocation(makeLegalAgreementPage))
+              .expect(res => expect(res).to.be.successful.withText('Your agreement'))
           })
         })
 
         context('when form is invalid', async () => {
-
           it('should render page with errors', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             const formData = {
-              option: undefined
+              signed: undefined
             }
             await request(app)
-              .post(responsePage)
+              .post(declarationPage)
               .set('Cookie', `${cookieName}=ABC`)
               .send(formData)
-              .expect(res => expect(res).to.be.successful.withText('Choose option: yes or no or make an offer', 'div class="error-summary"'))
+              .expect(res => expect(res).to.be.successful.withText('Please select I confirm that I believe the details I have provided are correct.', 'div class="error-summary"'))
           })
         })
       })

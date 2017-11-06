@@ -19,10 +19,10 @@ export default class Settlement implements Serializable<Settlement> {
       return undefined
     }
 
-    const partyStatements: PartyStatement[] = this.partyStatements
-      .map(o => this.isOfferMadeByDefendant(o) ? o : undefined)
+    const partyStatement: PartyStatement = this.partyStatements
+      .map(o => this.isOfferMadeByDefendant(o) ? o : undefined).pop()
 
-    return partyStatements ? partyStatements.pop().offer : undefined
+    return partyStatement ? partyStatement.offer : undefined
   }
 
   private isOfferMadeByDefendant (partyStatement: PartyStatement): boolean {
