@@ -16,4 +16,4 @@ RUN yarn install \
 COPY config /usr/src/app/config
 
 EXPOSE 3000
-CMD [ "yarn", "start-prod" ]
+CMD [ "yarn", "start" ]
