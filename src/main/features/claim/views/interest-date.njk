@@ -38,7 +38,7 @@
               {{ textInput('Explain why you’re claiming from this date', 'reason', form) }}
 
             </div>
-            {{ radioOption('Claim interest from the date I submit the claim', 'type', form, 'submission', ' ', form.valueFor('type') == 'submission') }}
+            {{ radioOption('Claim interest from the date I submit the claim', 'type', form, 'submission', ' ', form.valueFor('type') == 'submission', true) }}
           </fieldset>
         </div>
 
