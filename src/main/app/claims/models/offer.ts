@@ -7,7 +7,7 @@ export class Offer implements Serializable<Offer> {
   content: string
   completionDate: Moment
 
-  constructor (content: string, completionDate: Moment) {
+  constructor (content?: string, completionDate?: Moment) {
     this.content = content
     this.completionDate = completionDate
   }
