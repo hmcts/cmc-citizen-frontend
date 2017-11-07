@@ -5,7 +5,7 @@ import { Paths } from 'response/paths'
 import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'app/forms/form'
 import { DraftService } from 'services/draftService'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { FormValidator } from 'forms/validation/formValidator'
@@ -20,6 +20,7 @@ function renderView (form: Form<PaidAmount>, res: express.Response): void {
   })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defenceFullPartialPaymentPlanPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {

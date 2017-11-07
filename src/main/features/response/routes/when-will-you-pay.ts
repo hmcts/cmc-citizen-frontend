@@ -6,9 +6,10 @@ import { ErrorHandling } from 'common/errorHandling'
 import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defenceFullPartialPaymentOptionsPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
