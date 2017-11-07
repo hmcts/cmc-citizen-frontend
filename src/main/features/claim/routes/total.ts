@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { Paths } from 'claim/paths'
 import { InterestType } from 'features/claim/form/models/interest'
-import { InterestTotal } from 'forms/models/claimInterestTotal'
+import { InterestTotal } from 'forms/models/interestTotal'
 import { claimAmountWithInterest, interestAmount } from 'app/utils/interestUtils'
 import { FeesClient } from 'fees/feesClient'
 
