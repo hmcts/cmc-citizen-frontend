@@ -8,7 +8,7 @@ export class ValidationErrors {
   static readonly DEFENCE_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
 }
 
-export default class Defence implements Serializable<Defence> {
+export class Defence implements Serializable<Defence> {
   @IsDefined({ message: ValidationErrors.DEFENCE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.DEFENCE_REQUIRED })
   @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.DEFENCE_TOO_LONG })

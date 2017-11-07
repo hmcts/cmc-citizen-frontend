@@ -1,9 +1,9 @@
 import { MomentFormatter } from 'utils/momentFormatter'
 import { NumberFormatter } from 'utils/numberFormatter'
-import ClaimData from 'claims/models/claimData'
+import { ClaimData } from 'claims/models/claimData'
 import { calculateInterest } from 'app/common/calculateInterest'
 import { InterestType } from 'features/claim/form/models/interest'
-import Claim from 'app/claims/models/claim'
+import { Claim } from 'app/claims/models/claim'
 import { InterestDateType } from 'app/common/interestDateType'
 import { Moment } from 'moment'
 

@@ -5,7 +5,7 @@ import { CompletableTask } from 'app/models/task'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {
-  static readonly REASON_REQUIRED: string = "You need to explain why you're owed the money"
+  static readonly REASON_REQUIRED: string = 'You need to explain why you’re owed the money'
   static readonly REASON_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
 }
 

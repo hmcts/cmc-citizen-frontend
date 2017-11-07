@@ -1,4 +1,4 @@
-export default class InterestTotal {
+export class InterestTotal {
   claimAmount: number
   interestAmount: number
   feeAmount: number

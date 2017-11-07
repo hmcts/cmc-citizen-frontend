@@ -5,10 +5,10 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
-import ClaimStoreClient from 'app/claims/claimStoreClient'
-import MoreTimeAlreadyRequestedGuard from 'response/guards/moreTimeAlreadyRequestedGuard'
+import { ClaimStoreClient } from 'app/claims/claimStoreClient'
+import { MoreTimeAlreadyRequestedGuard } from 'response/guards/moreTimeAlreadyRequestedGuard'
 import { ErrorHandling } from 'common/errorHandling'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<MoreTimeNeeded>, res: express.Response, next: express.NextFunction) {
@@ -21,6 +21,7 @@ function renderView (form: Form<MoreTimeNeeded>, res: express.Response, next: ex
   }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.moreTimeRequestPage.uri,

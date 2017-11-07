@@ -21,7 +21,7 @@ export class ValidationErrors {
   static readonly DATE_UNDER_18: string = 'Please enter a date of birth before %s'
 }
 
-export default class DateOfBirth implements Serializable<DateOfBirth>, CompletableTask {
+export class DateOfBirth implements Serializable<DateOfBirth>, CompletableTask {
   @IsDefined({ message: 'Select an option' })
   known: boolean
 

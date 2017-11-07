@@ -2,10 +2,10 @@ import * as express from 'express'
 import * as config from 'config'
 import * as HttpStatus from 'http-status-codes'
 
-import JwtExtractor from 'idam/jwtExtractor'
+import { JwtExtractor } from 'idam/jwtExtractor'
 
-import IdamClient from 'idam/idamClient'
-import User from 'app/idam/user'
+import { IdamClient } from 'idam/idamClient'
+import { User } from 'app/idam/user'
 
 const sessionCookieName = config.get<string>('session.cookieName')
 

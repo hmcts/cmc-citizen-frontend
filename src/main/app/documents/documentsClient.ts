@@ -1,11 +1,11 @@
 import * as config from 'config'
 import { requestNonPromise } from 'app/client/request'
 import * as http from 'http'
-import StringUtils from 'app/utils/stringUtils'
+import { StringUtils } from 'app/utils/stringUtils'
 
 const claimStoreBaseUrl = config.get<string>('claim-store.url')
 
-export default class DocumentsClient {
+export class DocumentsClient {
 
   constructor (public documentsUrl: string = `${claimStoreBaseUrl}/documents`) {
   }

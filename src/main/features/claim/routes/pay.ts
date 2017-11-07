@@ -3,17 +3,17 @@ import * as config from 'config'
 
 import { Paths } from 'claim/paths'
 
-import PayClient from 'app/pay/payClient'
-import PaymentResponse from 'app/pay/paymentResponse'
-import Payment from 'app/pay/payment'
+import { PayClient } from 'app/pay/payClient'
+import { PaymentResponse } from 'app/pay/paymentResponse'
+import { Payment } from 'app/pay/payment'
 
-import FeesClient from 'app/fees/feesClient'
+import { FeesClient } from 'app/fees/feesClient'
 import { CalculationOutcome } from 'app/fees/models/calculationOutcome'
 
-import ClaimStoreClient from 'app/claims/claimStoreClient'
+import { ClaimStoreClient } from 'app/claims/claimStoreClient'
 import { buildURL } from 'app/utils/callbackBuilder'
 import { claimAmountWithInterest } from 'app/utils/interestUtils'
-import User from 'app/idam/user'
+import { User } from 'app/idam/user'
 import { DraftService } from 'services/draftService'
 import { ServiceAuthTokenFactoryImpl } from 'common/security/serviceTokenFactoryImpl'
 
@@ -65,6 +65,7 @@ async function successHandler (res, next) {
   }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.startPaymentReceiver.uri, async (req, res, next) => {
     const user: User = res.locals.user

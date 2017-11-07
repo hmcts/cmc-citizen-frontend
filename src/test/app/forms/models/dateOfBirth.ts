@@ -11,7 +11,7 @@ import { Validator } from 'class-validator'
 
 import { expectValidationError } from './validationUtils'
 
-import DateOfBirth, { ValidationErrors } from 'forms/models/dateOfBirth'
+import { DateOfBirth, ValidationErrors } from 'forms/models/dateOfBirth'
 import { LocalDate } from 'forms/models/localDate'
 
 import { MomentFormatter } from 'utils/momentFormatter'

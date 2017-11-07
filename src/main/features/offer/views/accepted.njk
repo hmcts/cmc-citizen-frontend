@@ -1,0 +1,29 @@
+{% extends "layout.njk" %}
+{% from "support.njk" import supportWidget %}
+
+{% set title = t('Money claim | Offer accepted - confirmation page') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <div class="govuk-box-highlight">
+        <h1 class="bold-large">{{ t('You’ve signed the agreement') }}</h1>
+      </div>
+
+      <h2 class="heading-medium">{{ t('What happens next') }}</h2>
+      <p>
+        {{ t('%s will also be asked to sign. Once signed this agreement replaces the court claim.', {
+              postProcess: 'sprintf', sprintf: [ claim.claimData.defendant.name ]}) }}
+      </p>
+      <p>
+        {{ t('View your claim status on <a href="%s">your money claims account</a>.', {
+              postProcess: 'sprintf', sprintf: [ '/dashboard' ]}) | safe }}
+      </p>
+
+      {{ supportWidget() }}
+
+      <br>
+      <a href="#" class="button">Finished</a>
+    </div>
+  </div>
+{% endblock %}

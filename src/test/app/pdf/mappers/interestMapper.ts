@@ -2,7 +2,7 @@ import { expect } from 'chai'
 
 import { InterestType } from 'claim/form/models/interest'
 import { InterestDateType } from 'app/common/interestDateType'
-import Claim from 'app/claims/models/claim'
+import { Claim } from 'app/claims/models/claim'
 import { MomentFactory } from 'common/momentFactory'
 import { InterestMapper } from 'app/pdf/mappers/interestMapper'
 import { MomentFormatter } from 'app/utils/momentFormatter'

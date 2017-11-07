@@ -2,7 +2,7 @@ import { Serializable } from 'models/serializable'
 import { Moment } from 'moment'
 import { MomentFactory } from 'common/momentFactory'
 
-export default class InterestDate implements Serializable<InterestDate> {
+export class InterestDate implements Serializable<InterestDate> {
 
   type: string
   date?: Moment

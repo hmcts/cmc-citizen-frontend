@@ -1,22 +1,24 @@
-'use strict'
-
-const {readFile} = require('fs')
-
-const converter = require('i18next-conv')
+import { readFile } from 'fs'
+import * as converter from 'i18next-conv'
 
 /**
-  A gettext backend for i18next framework
+ * A gettext backend for i18next framework
  */
-class Backend {
+export class Backend {
+  static readonly type = 'backend'
+
+  services: any
+  options: any
+  coreOptions: any
+
+  constructor (services, options = {}) {
+    this.init(services, options)
+  }
 
   static defaultsOptions () {
     return {
       loadPath: '/locales/{{lng}}/{{ns}}.po'
     }
-  }
-
-  constructor (services, options = {}) {
-    this.init(services, options)
   }
 
   /**
@@ -50,7 +52,3 @@ class Backend {
     })
   }
 }
-
-Backend.type = 'backend'
-
-module.exports = Backend
