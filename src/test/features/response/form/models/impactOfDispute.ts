@@ -45,4 +45,24 @@ describe('ImpactOfDispute', () => {
       expectValidationError(errors, ValidationErrors.IMPACT_OF_DISPUTE_TOO_LONG)
     })
   })
+
+  context('deserialisation', () => {
+    it('should use the text from provided object', () => {
+      const testContent = 'I a test string'
+      const impactOfDispute: ImpactOfDispute = new ImpactOfDispute().deserialize({ text: testContent })
+      expect(impactOfDispute.text).to.equal(testContent)
+    })
+
+    it('should set text to undefined if given undefined as input', () => {
+      const impactOfDispute: ImpactOfDispute = new ImpactOfDispute().deserialize(undefined)
+      expect(impactOfDispute.text).to.be.undefined
+    })
+  })
+
+  context('new instance creation', () => {
+    it('should set the text to undefined for new instance', () => {
+      const impactOfDispute: ImpactOfDispute = new ImpactOfDispute()
+      expect(impactOfDispute.text).to.be.undefined
+    })
+  })
 })
