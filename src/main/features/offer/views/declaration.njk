@@ -1,0 +1,48 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+{% from "table.njk" import row %}
+{% from "statement-of-truth.njk" import statementOfTruth %}
+
+{% set title = t('Money claim | Declaration') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <h1 class="heading-large">{{ t('Your agreement') }}</h1>
+
+      <p>
+        {{
+          t('You and %s need to sign the agreement.', {
+             postProcess: 'sprintf', sprintf: [ claim.claimData.defendant.name ]
+           }
+          )
+        }}
+      </p>
+
+      {{
+         row( 'The offer',
+              t('%s: %s', { postProcess: 'sprintf', sprintf: [ claim.claimData.defendant.name, offer.content ] })
+         )
+      }}
+      {{ row('Completion date', offer.completionDate | date) }}
+
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+
+        <div class="form-group">
+          {{
+            statementOfTruth(
+              form,
+              title = 'Declaration',
+              label = 'By signing this you confirm that you accept the terms of the agreement.',
+              typeOfStatement = 'declaration'
+            )
+          }}
+
+          {{ submitButton('Sign and submit') }}
+        </div>
+       </form>
+    </div>
+  </div>
+{% endblock %}

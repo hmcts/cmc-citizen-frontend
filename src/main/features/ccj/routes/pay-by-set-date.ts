@@ -4,7 +4,7 @@ import { Paths } from 'ccj/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { PayBySetDate } from 'ccj/form/models/payBySetDate'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { ErrorHandling } from 'common/errorHandling'
 
@@ -12,6 +12,7 @@ function renderView (form: Form<PayBySetDate>, res: express.Response): void {
   res.render(Paths.payBySetDatePage.associatedView, { form: form })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.payBySetDatePage.uri, (req: express.Request, res: express.Response) => {
     const user: User = res.locals.user

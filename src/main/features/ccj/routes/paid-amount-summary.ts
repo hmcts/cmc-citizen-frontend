@@ -3,7 +3,7 @@ import * as express from 'express'
 import { Paths } from 'ccj/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
-import Claim from 'claims/models/claim'
+import { Claim } from 'claims/models/claim'
 import { MomentFactory } from 'common/momentFactory'
 import { InterestType } from 'claim/form/models/interest'
 import { InterestDateType } from 'app/common/interestDateType'
@@ -36,6 +36,7 @@ function getInterestDetails (claim: Claim): object {
   }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.paidAmountSummaryPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {

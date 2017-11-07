@@ -1,7 +1,7 @@
 import * as moment from 'moment'
 import { JwtUtils } from 'common/utils/jwtUtils'
 
-export default class ServiceAuthToken {
+export class ServiceAuthToken {
   constructor (public bearerToken: string) {
     this.bearerToken = bearerToken
   }

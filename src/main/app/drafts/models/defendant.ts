@@ -1,4 +1,4 @@
-import Email from 'app/forms/models/email'
+import { Email } from 'app/forms/models/email'
 import { CompletableTask } from 'app/models/task'
 import { PartyType } from 'app/common/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'

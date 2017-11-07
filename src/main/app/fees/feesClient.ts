@@ -1,20 +1,20 @@
 import * as config from 'config'
-import request from 'client/request'
+import { request } from 'client/request'
 import { plainToClass } from 'class-transformer'
 
 import { CalculationOutcome } from 'app/fees/models/calculationOutcome'
 import { RangeGroup } from 'app/fees/models/rangeGroup'
 
 import { ClaimValidator } from 'app/utils/claimValidator'
-import StringUtils from 'utils/stringUtils'
-import MoneyConverter from 'app/fees/moneyConverter'
+import { StringUtils } from 'utils/stringUtils'
+import { MoneyConverter } from 'app/fees/moneyConverter'
 
 const feesUrl = config.get('fees.url')
 
 const issueFeeCode = config.get<string>('fees.issueFee.code')
 const hearingFeeCode = config.get<string>('fees.hearingFee.code')
 
-export default class FeesClient {
+export class FeesClient {
 
   /**
    * Calculates the issue fee a claimant should pay

@@ -13,7 +13,7 @@ import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 
-import User from 'app/idam/user'
+import { User } from 'app/idam/user'
 
 import { SoleTrader } from 'claims/models/details/theirs/soleTrader'
 import { DraftService } from 'services/draftService'
@@ -41,6 +41,7 @@ function deserializeFn (value: any): PartyDetails {
   }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantYourDetailsPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user: User = res.locals.user

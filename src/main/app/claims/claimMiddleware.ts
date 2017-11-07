@@ -1,7 +1,7 @@
 import * as express from 'express'
 
-import ClaimStoreClient from 'claims/claimStoreClient'
-import Claim from 'app/claims/models/claim'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { Claim } from 'app/claims/models/claim'
 
 import { UUIDUtils } from 'common/utils/uuidUtils'
 

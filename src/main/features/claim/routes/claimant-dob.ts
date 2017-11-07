@@ -3,7 +3,7 @@ import { Paths } from 'claim/paths'
 
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import DateOfBirth from 'forms/models/dateOfBirth'
+import { DateOfBirth } from 'forms/models/dateOfBirth'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
@@ -12,6 +12,7 @@ function renderView (form: Form<DateOfBirth>, res: express.Response): void {
   res.render(Paths.claimantDateOfBirthPage.associatedView, { form: form })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.claimantDateOfBirthPage.uri, (req: express.Request, res: express.Response) => {
     renderView(new Form(res.locals.user.claimDraft.document.claimant.partyDetails.dateOfBirth), res)

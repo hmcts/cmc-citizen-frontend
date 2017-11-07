@@ -1,10 +1,10 @@
 import { expect } from 'chai'
 
-import Claimant from 'drafts/models/claimant'
+import { Claimant } from 'drafts/models/claimant'
 import { Address } from 'forms/models/address'
-import DateOfBirth from 'forms/models/dateOfBirth'
+import { DateOfBirth } from 'forms/models/dateOfBirth'
 import { MobilePhone } from 'forms/models/mobilePhone'
-import DraftClaim from 'drafts/models/draftClaim'
+import { DraftClaim } from 'drafts/models/draftClaim'
 import { Defendant } from 'app/drafts/models/defendant'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { YesNoOption } from 'models/yesNoOption'

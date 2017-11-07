@@ -3,7 +3,7 @@ import * as moment from 'moment'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('modules/nunjucks/dateFilter')
 
-export default function dateFilter (value: moment.Moment | string): string {
+export function dateFilter (value: moment.Moment | string): string {
   try {
     if (!value || !(typeof value === 'string' || value instanceof moment)) {
       throw new Error('Input should be moment or string, cannot be empty')
