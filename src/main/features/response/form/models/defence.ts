@@ -1,6 +1,7 @@
 import { MaxLength, IsDefined } from 'class-validator'
 import { Serializable } from 'models/serializable'
 import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {
   static readonly DEFENCE_REQUIRED: string = "You need to explain why you don't owe the money"
@@ -10,7 +11,7 @@ export class ValidationErrors {
 export default class Defence implements Serializable<Defence> {
   @IsDefined({ message: ValidationErrors.DEFENCE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.DEFENCE_REQUIRED })
-  @MaxLength(99000, { message: ValidationErrors.DEFENCE_TOO_LONG })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.DEFENCE_TOO_LONG })
   text?: string
 
   constructor (text?: string) {

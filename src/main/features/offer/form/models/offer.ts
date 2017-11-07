@@ -4,6 +4,7 @@ import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
 import { LocalDate } from 'forms/models/localDate'
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {
   static readonly DATE_REQUIRED: string = 'Please enter a valid date'
@@ -16,7 +17,7 @@ export class ValidationErrors {
 export class Offer implements Serializable<Offer> {
   @IsDefined({ message: ValidationErrors.OFFER_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.OFFER_REQUIRED })
-  @MaxLength(99000, { message: ValidationErrors.OFFER_TEXT_TOO_LONG })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.OFFER_TEXT_TOO_LONG })
   offerText: string
 
   @ValidateNested()

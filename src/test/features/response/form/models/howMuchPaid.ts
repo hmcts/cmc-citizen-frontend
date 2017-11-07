@@ -8,6 +8,7 @@ import { expectValidationError } from '../../../../app/forms/models/validationUt
 import { HowMuchPaid, ValidationErrors } from 'response/form/models/howMuchPaid'
 import { LocalDate } from 'forms/models/localDate'
 import * as moment from 'moment'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 describe('HowMuchPaid', () => {
   describe('constructor', () => {
@@ -124,22 +125,22 @@ describe('HowMuchPaid', () => {
       expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS)
     })
 
-    it('should reject how much to pay text with more than 99000 characters', () => {
+    it('should reject how much to pay text with more than max allowed characters', () => {
       const text = randomstring.generate({
-        length: 99001,
+        length: ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1,
         charset: 'alphabetic'
       })
       const now = moment()
       const pastDate = new LocalDate(now.year(), now.month() - 1, now.day())
       const errors = validator.validateSync(new HowMuchPaid(300, pastDate, text))
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.REASON_NOT_OWE_MONEY_TOO_LONG.replace('$constraint1', '99000'))
+      expectValidationError(errors, ValidationErrors.REASON_NOT_OWE_MONEY_TOO_LONG.replace('$constraint1', ValidationConstraints.FREE_TEXT_MAX_LENGTH.toString()))
     })
 
-    it('should accept how much to pay text with 99000 characters', () => {
+    it('should accept how much to pay text with max allowed characters', () => {
       const now = moment()
       const pastDate = new LocalDate(now.year(), now.month() - 1, now.day())
-      const errors = validator.validateSync(new HowMuchPaid(300, pastDate), randomstring.generate(9900))
+      const errors = validator.validateSync(new HowMuchPaid(300, pastDate), randomstring.generate(ValidationConstraints.FREE_TEXT_MAX_LENGTH))
       expect(errors.length).to.equal(1)
     })
 

@@ -7,6 +7,7 @@ import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
 import { HowMuchOwed } from 'features/response/form/models/howMuchOwed'
 import { ValidationErrors } from 'features/validationErrors'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 describe('HowMuchOwed', () => {
   describe('constructor', () => {
@@ -78,18 +79,18 @@ describe('HowMuchOwed', () => {
       expectValidationError(errors, ValidationErrors.VALID_OWED_AMOUNT_REQUIRED)
     })
 
-    it('should reject how much owed text with more than 99000 characters', () => {
+    it('should reject how much owed text with more than max allowed characters', () => {
       const text = randomstring.generate({
-        length: 99001,
+        length: ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1,
         charset: 'alphabetic'
       })
       const errors = validator.validateSync(new HowMuchOwed(300, text))
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.REASON_NOT_OWE_MONEY_TOO_LONG.replace('$constraint1', '99000'))
+      expectValidationError(errors, ValidationErrors.REASON_NOT_OWE_MONEY_TOO_LONG.replace('$constraint1', ValidationConstraints.FREE_TEXT_MAX_LENGTH.toString()))
     })
 
-    it('should accept how much owed text with 99000 characters', () => {
-      const errors = validator.validateSync(new HowMuchOwed(300, randomstring.generate(9900)))
+    it('should accept how much owed text with max allowed characters', () => {
+      const errors = validator.validateSync(new HowMuchOwed(300, randomstring.generate(ValidationConstraints.FREE_TEXT_MAX_LENGTH)))
       expect(errors.length).to.equal(0)
     })
 
