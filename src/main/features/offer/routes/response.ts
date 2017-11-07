@@ -6,9 +6,9 @@ import { Form } from 'forms/form'
 import { DefendantResponse } from 'offer/form/models/defendantResponse'
 import { Offer } from 'offer/form/models/offer'
 import { PartyStatement } from 'app/claims/models/partyStatement'
-import Claim from 'app/claims/models/claim'
+import { Claim } from 'app/claims/models/claim'
 import { ErrorHandling } from 'common/errorHandling'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { OfferGuard } from 'offer/guards/offerGuard'
 import { StatementType } from 'offer/form/models/statementType'
 import { MadeBy } from 'offer/form/models/madeBy'
@@ -24,6 +24,7 @@ function getPartyStatement (claim: Claim): PartyStatement[] {
     }
   })
 }
+
 function getOffer (claim: Claim): Offer {
   const partyStatements: any[] = getPartyStatement(claim)
   if (!partyStatements || partyStatements.length <= 0) {
@@ -31,8 +32,8 @@ function getOffer (claim: Claim): Offer {
   }
   return partyStatements[partyStatements.length - 1].offer
 }
-async function renderView (
-  form: Form<DefendantResponse>, res: express.Response, next: express.NextFunction) {
+
+async function renderView (form: Form<DefendantResponse>, res: express.Response, next: express.NextFunction) {
   const offer: Offer = getOffer(res.locals.user.claim)
   if (!offer) {
     const user: User = res.locals.user
@@ -40,12 +41,13 @@ async function renderView (
   } else {
     res.render(Paths.responsePage.associatedView, {
       form: form,
-      claim : res.locals.user.claim,
+      claim: res.locals.user.claim,
       offer: offer
     })
   }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.responsePage.uri,

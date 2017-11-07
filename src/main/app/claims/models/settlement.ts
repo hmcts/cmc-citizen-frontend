@@ -1,7 +1,7 @@
 import { Serializable } from 'app/models/serializable'
 import { PartyStatement } from 'claims/models/partyStatement'
 
-export default class Settlement implements Serializable<Settlement> {
+export class Settlement implements Serializable<Settlement> {
   partyStatements: PartyStatement[]
 
   deserialize (input: any): Settlement {
