@@ -69,9 +69,9 @@ describe('Offer', () => {
     describe('should accept when', () => {
       it('offer text and future date', () => {
         const futureDate = moment().add(10, 'days')
-        const date = new LocalDate(futureDate.year(), futureDate.month(), futureDate.day())
+        const date = new LocalDate(futureDate.year(), futureDate.month() + 1, futureDate.date())
         const errors = validator.validateSync(new Offer('offer text', date))
-        expect(errors.length).to.equal(1)
+        expect(errors.length).to.equal(0)
       })
     })
   })
