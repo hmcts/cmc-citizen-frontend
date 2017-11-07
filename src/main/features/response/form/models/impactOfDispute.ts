@@ -1,7 +1,7 @@
 import { Serializable } from 'models/serializable'
-import { IsDefined } from 'class-validator'
+import { IsDefined, MaxLength } from 'class-validator'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
-import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {
   static readonly IMPACT_OF_DISPUTE_REQUIRED: string = 'Explain how has this dispute affected you'
@@ -12,7 +12,7 @@ export class ImpactOfDispute implements Serializable<ImpactOfDispute> {
 
   @IsDefined({ message: ValidationErrors.IMPACT_OF_DISPUTE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.IMPACT_OF_DISPUTE_REQUIRED })
-  @MaxLength(99000, { message: ValidationErrors.IMPACT_OF_DISPUTE_TOO_LONG })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.IMPACT_OF_DISPUTE_TOO_LONG })
   text?: string
 
   constructor (text?: string) {
