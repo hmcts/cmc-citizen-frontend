@@ -5,7 +5,7 @@ import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
-import DraftClaim from 'drafts/models/draftClaim'
+import { DraftClaim } from 'drafts/models/draftClaim'
 import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
 
 function requestHandler (): express.RequestHandler {

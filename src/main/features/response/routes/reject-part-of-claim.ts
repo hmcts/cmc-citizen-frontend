@@ -8,7 +8,7 @@ import { Form } from 'forms/form'
 import { ResponseType } from 'response/form/models/responseType'
 import { RejectPartOfClaim } from 'response/form/models/rejectPartOfClaim'
 import { ErrorHandling } from 'common/errorHandling'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { GuardFactory } from 'response/guards/guardFactory'
 import { DraftService } from 'services/draftService'
 
@@ -29,6 +29,7 @@ function renderView (form: Form<RejectPartOfClaim>, res: express.Response) {
   })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.defenceRejectPartOfClaimPage.uri,

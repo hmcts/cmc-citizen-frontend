@@ -2,8 +2,8 @@ import * as express from 'express'
 
 import { Paths } from 'response/paths'
 
-import MoreTimeRequestRequiredGuard from 'response/guards/moreTimeRequestRequiredGuard'
-import User from 'idam/user'
+import { MoreTimeRequestRequiredGuard } from 'response/guards/moreTimeRequestRequiredGuard'
+import { User } from 'idam/user'
 
 async function renderView (res: express.Response, next: express.NextFunction) {
   try {
@@ -18,6 +18,7 @@ async function renderView (res: express.Response, next: express.NextFunction) {
   }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.moreTimeConfirmationPage.uri,

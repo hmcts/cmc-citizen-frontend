@@ -5,7 +5,7 @@ import { Paths } from 'claim/paths'
 import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'forms/form'
 import { DraftService } from 'services/draftService'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { FormValidator } from 'forms/validation/formValidator'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
@@ -16,6 +16,7 @@ function renderView (form: Form<Eligibility>, res: express.Response): void {
   res.render(Paths.eligibilityClaimValuePage.associatedView, { form: form })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.eligibilityClaimValuePage.uri, (req: express.Request, res: express.Response): void => {
     const user: User = res.locals.user

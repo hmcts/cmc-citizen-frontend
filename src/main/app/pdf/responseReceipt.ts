@@ -3,7 +3,7 @@ import * as path from 'path'
 import { MomentFormatter } from 'utils/momentFormatter'
 import { PartyDetailsMapper } from 'app/pdf/mappers/partyDetailsMapper'
 import { ClaimMapper } from 'app/pdf/mappers/claimMapper'
-import Claim from 'claims/models/claim'
+import { Claim } from 'claims/models/claim'
 import { DefendantMapper } from 'app/pdf/mappers/defendantMapper'
 
 const responseTemplatePath = path.join(__dirname, '..', '..', 'resources', 'pdf', 'responseReceipt.njk')

@@ -4,13 +4,14 @@ import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'forms/form'
 import { UpdateResponseDeadlineRequest } from 'testing-support/models/updateResponseDeadlineRequest'
 import { FormValidator } from 'app/forms/validation/formValidator'
-import User from 'app/idam/user'
+import { User } from 'app/idam/user'
 import { TestingSupportClient } from 'testing-support/testingSupportClient'
 
 function renderView (form: Form<UpdateResponseDeadlineRequest>, res: express.Response): void {
   res.render(Paths.updateResponseDeadlinePage.associatedView, { form: form })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.updateResponseDeadlinePage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {

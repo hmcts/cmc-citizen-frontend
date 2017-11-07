@@ -1,4 +1,4 @@
-export default class PaymentRequest {
+export class PaymentRequest {
   // tslint:disable-next-line variable-name allow snake_case
   constructor (public amount: number, public reference: string, public description: string, public return_url: string) {
     this.amount = amount

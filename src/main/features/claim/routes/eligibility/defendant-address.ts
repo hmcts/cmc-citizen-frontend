@@ -7,7 +7,7 @@ import { Form } from 'forms/form'
 import { YesNoOption } from 'models/yesNoOption'
 import { FormValidator } from 'app/forms/validation/formValidator'
 import { Eligibility } from 'claim/form/models/eligibility/eligibility'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
@@ -16,6 +16,7 @@ function renderView (form: Form<Eligibility>, res: express.Response): void {
   res.render(Paths.eligibilityDefendantAddressPage.associatedView, { form: form })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.eligibilityDefendantAddressPage.uri, (req: express.Request, res: express.Response): void => {
     const user: User = res.locals.user

@@ -6,12 +6,11 @@ import { Form } from 'forms/form'
 import { DefendantResponse } from 'offer/form/models/defendantResponse'
 import { Offer } from 'offer/form/models/offer'
 import { ErrorHandling } from 'common/errorHandling'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { OfferGuard } from 'offer/guards/offerGuard'
 import { StatementType } from 'offer/form/models/statementType'
 
-function renderView (
-  form: Form<DefendantResponse>, res: express.Response, next: express.NextFunction) {
+function renderView (form: Form<DefendantResponse>, res: express.Response, next: express.NextFunction) {
   const offer: Offer = res.locals.user.claim.defendantOffer
   if (!offer) {
     const user: User = res.locals.user
@@ -19,12 +18,13 @@ function renderView (
   } else {
     res.render(Paths.responsePage.associatedView, {
       form: form,
-      claim : res.locals.user.claim,
+      claim: res.locals.user.claim,
       offer: offer
     })
   }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.responsePage.uri,
