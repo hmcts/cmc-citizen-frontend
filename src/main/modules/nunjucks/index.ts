@@ -46,6 +46,7 @@ export default class Nunjucks {
     ], {
       autoescape: true,
       throwOnUndefined: true,
+      watch: this.developmentMode,
       express: app
     })
 
