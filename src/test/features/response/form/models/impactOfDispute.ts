@@ -3,6 +3,7 @@
 
 import { expect } from 'chai'
 import { ImpactOfDispute, ValidationErrors } from 'response/form/models/impactOfDispute'
+import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
 import * as randomstring from 'randomstring'
@@ -42,7 +43,7 @@ describe('ImpactOfDispute', () => {
       const impactOfDispute: ImpactOfDispute = new ImpactOfDispute(randomstring.generate(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1))
       const errors = validator.validateSync(impactOfDispute)
       expect(errors).to.have.lengthOf(1)
-      expectValidationError(errors, ValidationErrors.IMPACT_OF_DISPUTE_TOO_LONG)
+      expectValidationError(errors, DefaultValidationErrors.FREE_TEXT_TOO_LONG)
     })
   })
 
