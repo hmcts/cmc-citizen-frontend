@@ -9,7 +9,7 @@
 
     <form novalidate method="post">
       {{ csrfProtection(csrf) }}
-      {{ textArea(label = t('How this dispute has affected you? (optional)'), name = 'impact', form = form) }}
+      {{ textArea(label = t('How this dispute has affected you? (optional)'), name = 'text', form = form) }}
 
       <div class="panel panel-border-wide">
         <p>
