@@ -11,14 +11,12 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
-
-const externalId = sampleClaimObj.externalId
+const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const defenceFullPartialPaymentOptionsPage = Paths.defenceFullPartialPaymentOptionsPage.evaluateUri({ externalId: externalId })
 
 const validFormData: object = {

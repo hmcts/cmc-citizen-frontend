@@ -57,7 +57,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       }
       this.rejectPartOfClaim = new RejectPartOfClaim(input.rejectPartOfClaim && input.rejectPartOfClaim.option)
       this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
-      this.defendantPaymentOption = new DefendantPaymentOption().deserialize(input.defendantPaymentOption && input.defendantPaymentOption.option)
+      this.defendantPaymentOption = new DefendantPaymentOption().deserialize(input.defendantPaymentOption)
       this.defendantPaymentPlan = new DefendantPaymentPlan().deserialize(input.defendantPaymentPlan)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
@@ -77,30 +77,14 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       && RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).includes(this.rejectAllOfClaim.option)
   }
 
-  public requireHowMuchPaid (): boolean {
+  isResponsePartiallyRejectedDueTo (option: String): boolean {
     if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission')) || !this.isResponsePopulated()) {
       return false
     }
 
     return this.response.type === ResponseType.OWE_SOME_PAID_NONE
       && this.rejectPartOfClaim !== undefined
-      && this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
-  }
-
-  public requireHowMuchOwed (): boolean {
-    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission')) || !this.isResponsePopulated()) {
-      return false
-    }
-
-    return this.response.type === ResponseType.OWE_SOME_PAID_NONE
-      && this.rejectPartOfClaim !== undefined
-      && this.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED
-  }
-
-  public requireWhenWillYouPay (): boolean {
-    return this.response.type === ResponseType.OWE_SOME_PAID_NONE
-      && this.rejectPartOfClaim !== undefined
-      && this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
+      && this.rejectPartOfClaim.option === option
   }
 
   public requireMediation (): boolean {

@@ -12,11 +12,10 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 
-const externalId = sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
+const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const defenceFullPartialPaymentPlanPage = Paths.defenceFullPartialPaymentPlanPage.evaluateUri({ externalId: externalId })
 const checkAndSendPage = Paths.checkAndSendPage.evaluateUri({ externalId: externalId })
 
@@ -53,7 +52,7 @@ describe('Defendant: payment page', () => {
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('ccj')
+          draftStoreServiceMock.resolveFind('response')
 
           await request(app)
             .get(defenceFullPartialPaymentPlanPage)
@@ -68,12 +67,13 @@ describe('Defendant: payment page', () => {
     const validFormData = {
       remainingAmount: 160,
       firstPayment: 77.32,
-      paymentSchedule: 'EVERY_MONTH',
+      installmentAmount: 30.00,
       firstPaymentDate: {
         day: 12,
         month: 3,
         year: 2050
-      }
+      },
+      paymentSchedule: 'EVERY_MONTH'
     }
 
     checkAuthorizationGuards(app, 'post', defenceFullPartialPaymentPlanPage)
@@ -107,7 +107,7 @@ describe('Defendant: payment page', () => {
       context('when form is valid', async () => {
         it('should redirect to confirmation page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('ccj')
+          draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
@@ -127,7 +127,7 @@ describe('Defendant: payment page', () => {
             .post(defenceFullPartialPaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ signed: undefined })
-            .expect(res => expect(res).to.be.successful.withText('The first payment will be:', 'div class="error-summary"'))
+            .expect(res => expect(res).to.be.successful.withText('Your payment plan', 'div class="error-summary"'))
         })
       })
     })
