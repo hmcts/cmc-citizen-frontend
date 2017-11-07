@@ -6,13 +6,13 @@ import * as path from 'path'
 const expect = chai.expect
 chai.use(spies)
 
-const Backend = require('../../../main/modules/i18n/backend')
+import { Backend } from 'modules/i18n/backend'
 
 describe('A gettext backend for i18next', () => {
   let backend
 
   beforeEach(() => {
-    backend = new Backend()
+    backend = new Backend(undefined, undefined)
   })
 
   it('should read all translations from PO file', (done) => {
