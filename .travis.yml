@@ -2,8 +2,8 @@ language: node_js
 cache: yarn
 script:
   - yarn --version
-  - yarn setup
   - yarn check --integrity
+  - yarn setup
   - yarn lint
   - yarn test
   - yarn test:routes

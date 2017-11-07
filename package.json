@@ -7,7 +7,8 @@
   },
   "scripts": {
     "compile": "tsc --project tsconfig.prod.json",
-    "setup": "gulp sass copy-files",
+    "copy-assets": "gulp sass copy-files",
+    "setup": "yarn compile && yarn copy-assets",
     "start": "node -r tsconfig-paths/register src/main/server.js",
     "start-dev": "./node_modules/.bin/ts-node -r tsconfig-paths/register src/main/server.ts",
     "lint": "tslint --project tsconfig.json && sass-lint -v -q",

@@ -10,8 +10,7 @@ COPY config /usr/src/app/config
 COPY tsconfig.json tsconfig.prod.json gulpfile.js /usr/src/app/
 COPY src/main /usr/src/app/src/main
 
-RUN yarn compile \
-    && yarn setup
+RUN yarn setup
 
 RUN rm -rf node_modules \
     && yarn install --production \
