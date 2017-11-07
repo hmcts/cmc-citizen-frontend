@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { Paths } from 'claim/paths'
 import { claimAmountWithInterest } from 'app/utils/interestUtils'
-import FeesClient from 'fees/feesClient'
+import { FeesClient } from 'fees/feesClient'
 import { Range } from 'fees/models/range'
 import { RangeGroup } from 'app/fees/models/rangeGroup'
 import { FeesTableViewHelper } from 'claim/helpers/feesTableViewHelper'

@@ -4,7 +4,7 @@ import * as HttpStatus from 'http-status-codes'
 
 import { Paths } from 'response/paths'
 
-import PdfClient from 'app/pdf/pdfClient'
+import { PdfClient } from 'app/pdf/pdfClient'
 import { ResponseReceipt } from 'app/pdf/responseReceipt'
 
 import { buildURL } from 'app/utils/callbackBuilder'

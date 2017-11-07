@@ -13,7 +13,7 @@ import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 
-import User from 'app/idam/user'
+import { User } from 'app/idam/user'
 
 import { SoleTrader } from 'claims/models/details/theirs/soleTrader'
 import { DraftService } from 'services/draftService'

@@ -1,5 +1,5 @@
 import * as config from 'config'
-import request from 'client/request'
+import { request } from 'client/request'
 import { DraftService as BaseDraftService } from '@hmcts/draft-store-client'
 
 import { ServiceAuthTokenFactoryImpl } from 'common/security/serviceTokenFactoryImpl'

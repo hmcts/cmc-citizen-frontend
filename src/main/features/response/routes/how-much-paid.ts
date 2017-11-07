@@ -5,9 +5,9 @@ import { Paths } from 'features/response/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { HowMuchPaid } from 'features/response/form/models/howMuchPaid'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { ErrorHandling } from 'common/errorHandling'
-import Claim from 'claims/models/claim'
+import { Claim } from 'claims/models/claim'
 import { DraftService } from 'services/draftService'
 
 async function renderView (form: Form<HowMuchPaid>, res: express.Response, next: express.NextFunction) {

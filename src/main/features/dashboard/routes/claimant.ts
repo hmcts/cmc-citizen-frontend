@@ -4,8 +4,8 @@ import { Paths } from 'dashboard/paths'
 import { Paths as CCJPaths } from 'ccj/paths'
 import { ErrorHandling } from 'common/errorHandling'
 
-import ClaimStoreClient from 'claims/claimStoreClient'
-import Claim from 'app/claims/models/claim'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { Claim } from 'app/claims/models/claim'
 import { PartyType } from 'app/common/partyType'
 
 export default express.Router()

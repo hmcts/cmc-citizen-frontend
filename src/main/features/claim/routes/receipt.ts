@@ -4,11 +4,11 @@ import * as HttpStatus from 'http-status-codes'
 
 import { Paths } from 'claim/paths'
 
-import ClaimStoreClient from 'app/claims/claimStoreClient'
-import Claim from 'app/claims/models/claim'
+import { ClaimStoreClient } from 'app/claims/claimStoreClient'
+import { Claim } from 'app/claims/models/claim'
 
-import PdfClient from 'app/pdf/pdfClient'
-import IssueReceipt from 'app/pdf/issueReceipt'
+import { PdfClient } from 'app/pdf/pdfClient'
+import { IssueReceipt } from 'app/pdf/issueReceipt'
 
 export default express.Router()
   .get(Paths.receiptReceiver.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {

@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { Paths } from 'claim/paths'
 import { TaskListBuilder } from 'claim/helpers/taskListBuilder'
-import User from 'idam/user'
+import { User } from 'idam/user'
 
 export default express.Router()
   .get(Paths.incompleteSubmissionPage.uri, (req: express.Request, res: express.Response) => {

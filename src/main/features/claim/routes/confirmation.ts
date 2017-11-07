@@ -1,8 +1,8 @@
 import * as express from 'express'
 import { Paths } from 'claim/paths'
 
-import ClaimStoreClient from 'claims/claimStoreClient'
-import Claim from 'claims/models/claim'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { Claim } from 'claims/models/claim'
 
 export default express.Router()
   .get(Paths.confirmationPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {

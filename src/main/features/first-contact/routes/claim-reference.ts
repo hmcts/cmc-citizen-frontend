@@ -7,7 +7,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 import { ClaimReference } from 'app/forms/models/claimReference'
 
-import ClaimStoreClient from 'claims/claimStoreClient'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'
 import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
 

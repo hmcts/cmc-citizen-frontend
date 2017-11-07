@@ -1,17 +1,17 @@
 import * as config from 'config'
 
-import PaymentRequest from 'app/pay/paymentRequest'
-import PaymentResponse from 'app/pay/paymentResponse'
-import PaymentStatus from 'app/pay/payment'
-import request from 'client/request'
-import User from 'app/idam/user'
-import ServiceAuthToken from 'app/idam/serviceAuthToken'
+import { PaymentRequest } from 'app/pay/paymentRequest'
+import { PaymentResponse } from 'app/pay/paymentResponse'
+import { PaymentState } from 'app/pay/payment'
+import { request } from 'client/request'
+import { User } from 'app/idam/user'
+import { ServiceAuthToken } from 'app/idam/serviceAuthToken'
 
 import * as uuid from 'uuid/v4'
 
 const payUrl = config.get('pay.url')
 
-export default class PayClient {
+export class PayClient {
   constructor (public serviceAuthToken: ServiceAuthToken) {
     this.serviceAuthToken = serviceAuthToken
   }
@@ -38,7 +38,7 @@ export default class PayClient {
     })
   }
 
-  retrieve (user: User, paymentId: string): Promise<PaymentStatus> {
+  retrieve (user: User, paymentId: string): Promise<PaymentState> {
     if (!paymentId) {
       return Promise.reject(new Error('Payment id must be set'))
     }

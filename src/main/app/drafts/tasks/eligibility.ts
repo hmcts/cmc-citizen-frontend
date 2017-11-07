@@ -1,4 +1,4 @@
-import DraftClaim from 'drafts/models/draftClaim'
+import { DraftClaim } from 'drafts/models/draftClaim'
 import { Validator } from 'class-validator'
 
 export class Eligibility {

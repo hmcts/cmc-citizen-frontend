@@ -2,10 +2,10 @@ import * as express from 'express'
 
 import { Paths } from 'claim/paths'
 
-import TaskList from 'app/drafts/tasks/taskList'
+import { TaskList } from 'app/drafts/tasks/taskList'
 
 import { TaskListBuilder } from 'claim/helpers/taskListBuilder'
-import User from 'idam/user'
+import { User } from 'idam/user'
 
 export default express.Router()
   .get(Paths.taskListPage.uri, (req: express.Request, res: express.Response) => {

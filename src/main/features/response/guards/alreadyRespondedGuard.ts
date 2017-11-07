@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import Claim from 'claims/models/claim'
+import { Claim } from 'claims/models/claim'
 
 import { Paths as DashboardPaths } from 'dashboard/paths'
 

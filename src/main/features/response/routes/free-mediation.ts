@@ -6,7 +6,7 @@ import { Form } from 'forms/form'
 
 import { FreeMediation } from 'response/form/models/freeMediation'
 import { ErrorHandling } from 'common/errorHandling'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 
 async function renderView (form: Form<FreeMediation>, res: express.Response, next: express.NextFunction) {

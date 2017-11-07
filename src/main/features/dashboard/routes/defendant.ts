@@ -4,8 +4,8 @@ import { Paths } from 'dashboard/paths'
 import { Paths as OfferPaths } from 'offer/paths'
 import { ErrorHandling } from 'common/errorHandling'
 
-import ClaimStoreClient from 'claims/claimStoreClient'
-import Claim from 'app/claims/models/claim'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { Claim } from 'app/claims/models/claim'
 
 export default express.Router()
   .get(Paths.defendantPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {

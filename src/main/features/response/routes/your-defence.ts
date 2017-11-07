@@ -5,9 +5,9 @@ import { Paths } from 'response/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 
-import Defence from 'response/form/models/defence'
+import { Defence } from 'response/form/models/defence'
 import { ErrorHandling } from 'common/errorHandling'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 
 async function renderView (form: Form<Defence>, res: express.Response, next: express.NextFunction) {

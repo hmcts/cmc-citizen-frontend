@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { Paths } from 'response/paths'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { TaskListBuilder } from 'response/helpers/taskListBuilder'
 
 export default express.Router()

@@ -9,7 +9,7 @@ const Backend = require('./backend')
 /**
  * Module that enables i18n support for Express.js applications
  */
-export default class I18Next {
+export class I18Next {
 
   static enableFor (app: express.Express) {
     i18next

@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { Paths } from 'response/paths'
 
-import User from 'app/idam/user'
+import { User } from 'app/idam/user'
 
 async function renderView (res: express.Response, next: express.NextFunction) {
   try {

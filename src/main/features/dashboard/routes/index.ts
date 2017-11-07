@@ -2,9 +2,9 @@ import * as express from 'express'
 
 import { Paths } from 'dashboard/paths'
 
-import ClaimStoreClient from 'claims/claimStoreClient'
-import Claim from 'app/claims/models/claim'
-import User from 'app/idam/user'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { Claim } from 'app/claims/models/claim'
+import { User } from 'app/idam/user'
 import { ErrorHandling } from 'common/errorHandling'
 import { isAfter4pm } from 'common/dateUtils'
 

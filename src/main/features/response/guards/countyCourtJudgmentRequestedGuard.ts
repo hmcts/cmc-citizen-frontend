@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { Paths as DashboardPaths } from 'dashboard/paths'
-import User from 'idam/user'
+import { User } from 'idam/user'
 const logger = require('@hmcts/nodejs-logging').getLogger('response/guards/countyCourtJudgmentRequestedGuard')
 
 export class CountyCourtJudgmentRequestedGuard {

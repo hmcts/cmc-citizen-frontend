@@ -1,8 +1,8 @@
 import * as express from 'express'
 import { Paths } from 'first-contact/paths'
-import Claim from 'claims/models/claim'
-import ClaimReferenceMatchesGuard from 'first-contact/guards/claimReferenceMatchesGuard'
-import JwtExtractor from 'idam/jwtExtractor'
+import { Claim } from 'claims/models/claim'
+import { ClaimReferenceMatchesGuard } from 'first-contact/guards/claimReferenceMatchesGuard'
+import { JwtExtractor } from 'idam/jwtExtractor'
 import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
 
 function receiverPath (req: express.Request, res: express.Response): string {

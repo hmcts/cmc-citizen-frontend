@@ -3,11 +3,11 @@ import { Paths } from 'response/paths'
 
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import DateOfBirth from 'forms/models/dateOfBirth'
+import { DateOfBirth } from 'forms/models/dateOfBirth'
 import { PartyType } from 'app/common/partyType'
 import { ErrorHandling } from 'common/errorHandling'
 import { IndividualDetails } from 'forms/models/individualDetails'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<DateOfBirth>, res: express.Response) {

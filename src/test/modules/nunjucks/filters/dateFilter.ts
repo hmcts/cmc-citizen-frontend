@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import * as moment from 'moment'
 
-import dateFilter from 'modules/nunjucks/filters/dateFilter'
+import { dateFilter } from 'modules/nunjucks/filters/dateFilter'
 
 describe('dateFilter', () => {
   it('formats date (moment object) properly', () => {

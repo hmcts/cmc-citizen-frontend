@@ -6,8 +6,8 @@ import { GuardFactory } from 'response/guards/guardFactory'
 
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import User from 'app/idam/user'
-import DateOfBirth from 'forms/models/dateOfBirth'
+import { User } from 'app/idam/user'
+import { DateOfBirth } from 'forms/models/dateOfBirth'
 import { PartyType } from 'app/common/partyType'
 
 import { ErrorHandling } from 'common/errorHandling'

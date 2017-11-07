@@ -1,4 +1,4 @@
-export default class StringUtils {
+export class StringUtils {
 
   static isBlank (value: string): boolean {
     return !(value && value.length > 0)

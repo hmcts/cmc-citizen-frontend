@@ -1,13 +1,13 @@
 import * as path from 'path'
 
-import Claim from 'claims/models/claim'
+import { Claim } from 'claims/models/claim'
 import { PartyDetailsMapper } from 'app/pdf/mappers/partyDetailsMapper'
 import { TheirDetailsMapper } from 'app/pdf/mappers/theirDetailsMapper'
 import { ClaimMapper } from 'app/pdf/mappers/claimMapper'
 
 const issueTemplatePath = path.join(__dirname, '..', '..', 'resources', 'pdf', 'issueReceipt.njk')
 
-export default class IssueReceipt {
+export class IssueReceipt {
 
   constructor (public claim: Claim) {
   }
