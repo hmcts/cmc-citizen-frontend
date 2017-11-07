@@ -10,6 +10,7 @@ import * as toBoolean from 'to-boolean'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { DefendantResponse } from 'claims/models/defendantResponse'
 import { Settlement } from 'claims/models/settlement'
+import { Offer } from 'claims/models/offer'
 
 export class Claim implements Serializable<Claim> {
   id: number
@@ -61,6 +62,14 @@ export class Claim implements Serializable<Claim> {
       }
     }
     return this
+  }
+
+  get defendantOffer (): Offer {
+    if (!this.settlement) {
+      return undefined
+    }
+
+    return this.settlement.getDefendantOffer()
   }
 
   get totalAmount (): number {
