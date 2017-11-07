@@ -1,7 +1,7 @@
 import * as config from 'config'
 import { expect } from 'chai'
 
-import JwtExtractor from 'app/idam/jwtExtractor'
+import { JwtExtractor } from 'app/idam/jwtExtractor'
 
 const sessionCookieName = config.get<string>('session.cookieName')
 

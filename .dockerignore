@@ -9,6 +9,7 @@
 
 !gulpfile.js
 !tsconfig.json
+!tsconfig.prod.json
 
 !src/main/**
 !config/**

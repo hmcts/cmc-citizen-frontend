@@ -4,9 +4,9 @@ import { Paths } from 'offer/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Offer } from 'offer/form/models/offer'
-import ClaimStoreClient from 'claims/claimStoreClient'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { OfferGuard } from 'offer/guards/offerGuard'
 
 async function renderView (
@@ -17,6 +17,7 @@ async function renderView (
   })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.offerPage.uri,

@@ -2,8 +2,8 @@
 /* tslint:disable:no-unused-expression */
 
 import { expect } from 'chai'
-import DraftClaim from 'drafts/models/draftClaim'
-import Claimant from 'drafts/models/claimant'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { Claimant } from 'drafts/models/claimant'
 import { Defendant } from 'app/drafts/models/defendant'
 
 function verifyDefaultValues (initialValue: any) {

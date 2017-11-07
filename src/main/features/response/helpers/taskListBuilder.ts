@@ -1,5 +1,5 @@
-import TaskList from 'drafts/tasks/taskList'
-import TaskListItem from 'drafts/tasks/taskListItem'
+import { TaskList } from 'drafts/tasks/taskList'
+import { TaskListItem } from 'drafts/tasks/taskListItem'
 import { Paths } from 'response/paths'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Moment } from 'moment'

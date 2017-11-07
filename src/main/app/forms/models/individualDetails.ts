@@ -1,5 +1,5 @@
 import { PartyDetails } from './partyDetails'
-import DateOfBirth from 'app/forms/models/dateOfBirth'
+import { DateOfBirth } from 'app/forms/models/dateOfBirth'
 import { PartyType } from 'app/common/partyType'
 
 export class IndividualDetails extends PartyDetails {

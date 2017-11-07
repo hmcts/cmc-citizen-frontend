@@ -1,7 +1,7 @@
 import { Serializable } from 'models/serializable'
 
 import { Moment } from 'moment'
-import ClaimData from 'app/claims/models/claimData'
+import { ClaimData } from 'app/claims/models/claimData'
 import { MomentFactory } from 'common/momentFactory'
 import { InterestDateType } from 'app/common/interestDateType'
 import { calculateInterest } from 'app/common/calculateInterest'
@@ -9,9 +9,10 @@ import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { DefendantResponse } from 'claims/models/defendantResponse'
-import Settlement from 'claims/models/settlement'
+import { Settlement } from 'claims/models/settlement'
+import { Offer } from 'claims/models/offer'
 
-export default class Claim implements Serializable<Claim> {
+export class Claim implements Serializable<Claim> {
   id: number
   claimantId: string
   externalId: string
@@ -61,6 +62,14 @@ export default class Claim implements Serializable<Claim> {
       }
     }
     return this
+  }
+
+  get defendantOffer (): Offer {
+    if (!this.settlement) {
+      return undefined
+    }
+
+    return this.settlement.getDefendantOffer()
   }
 
   get totalAmount (): number {

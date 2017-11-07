@@ -3,7 +3,7 @@ import * as path from 'path'
 import * as express from 'express'
 import * as config from 'config'
 import * as nunjucks from 'nunjucks'
-import dateFilter from 'modules/nunjucks/filters/dateFilter'
+import { dateFilter } from 'modules/nunjucks/filters/dateFilter'
 import { convertToPoundsFilter } from 'modules/nunjucks/filters/convertToPounds'
 import * as numeralFilter from 'nunjucks-numeral-filter'
 import * as numeral from 'numeral'
@@ -30,7 +30,7 @@ const appAssetPaths = {
   pdf: '/pdf'
 }
 
-export default class Nunjucks {
+export class Nunjucks {
 
   constructor (public developmentMode: boolean, public i18next) {
     this.developmentMode = developmentMode
@@ -46,6 +46,7 @@ export default class Nunjucks {
     ], {
       autoescape: true,
       throwOnUndefined: true,
+      watch: this.developmentMode,
       express: app
     })
 
