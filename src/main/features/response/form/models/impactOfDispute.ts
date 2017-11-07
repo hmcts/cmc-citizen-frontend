@@ -4,7 +4,7 @@ import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {
-  static readonly IMPACT_OF_DISPUTE_REQUIRED: string = 'Explain how has this dispute affected you'
+  static readonly IMPACT_OF_DISPUTE_REQUIRED: string = 'Explain how this dispute has affected you'
   static readonly IMPACT_OF_DISPUTE_TOO_LONG: string = 'You’ve entered too many characters'
 }
 
