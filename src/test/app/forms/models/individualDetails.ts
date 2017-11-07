@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import DateOfBirth from 'app/forms/models/dateOfBirth'
+import { DateOfBirth } from 'app/forms/models/dateOfBirth'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { ValidationErrors as PartyDetailsValidationErrors } from 'forms/models/partyDetails'
 import { PartyType } from 'app/common/partyType'

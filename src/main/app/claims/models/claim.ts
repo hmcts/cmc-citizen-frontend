@@ -1,7 +1,7 @@
 import { Serializable } from 'models/serializable'
 
 import { Moment } from 'moment'
-import ClaimData from 'app/claims/models/claimData'
+import { ClaimData } from 'app/claims/models/claimData'
 import { MomentFactory } from 'common/momentFactory'
 import { InterestDateType } from 'app/common/interestDateType'
 import { calculateInterest } from 'app/common/calculateInterest'
@@ -12,7 +12,7 @@ import { DefendantResponse } from 'claims/models/defendantResponse'
 import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 
-export default class Claim implements Serializable<Claim> {
+export class Claim implements Serializable<Claim> {
   id: number
   claimantId: string
   externalId: string

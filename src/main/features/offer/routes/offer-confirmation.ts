@@ -1,9 +1,10 @@
 import * as express from 'express'
 import { Paths } from 'offer/paths'
 import { Paths as ResponsePaths } from 'response/paths'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { ErrorHandling } from 'common/errorHandling'
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.offerConfirmationPage.uri,

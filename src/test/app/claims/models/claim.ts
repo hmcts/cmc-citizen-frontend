@@ -1,4 +1,4 @@
-import Claim from 'claims/models/claim'
+import { Claim } from 'claims/models/claim'
 import { MomentFactory } from 'common/momentFactory'
 import { expect } from 'chai'
 import { Settlement } from 'claims/models/settlement'

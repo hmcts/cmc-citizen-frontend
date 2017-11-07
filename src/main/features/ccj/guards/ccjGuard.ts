@@ -1,5 +1,5 @@
 import * as express from 'express'
-import Claim from 'claims/models/claim'
+import { Claim } from 'claims/models/claim'
 import { Paths } from 'dashboard/paths'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('ccj/guards/ccjGuard')

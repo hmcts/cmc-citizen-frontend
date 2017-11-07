@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import DateOfBirth from 'app/forms/models/dateOfBirth'
+import { DateOfBirth } from 'app/forms/models/dateOfBirth'
 import { LocalDate } from 'app/forms/models/localDate'
 
 describe('Date of Birth', () => {

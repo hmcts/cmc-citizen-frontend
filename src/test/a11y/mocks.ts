@@ -5,7 +5,7 @@ import * as idamServiceMock from '../http-mocks/idam'
 import * as draftStoreMock from '../http-mocks/draft-store'
 import * as claimStoreMock from '../http-mocks/claim-store'
 import * as feesMock from '../http-mocks/fees'
-import Claim from 'claims/models/claim'
+import { Claim } from 'claims/models/claim'
 
 idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'letter-holder').persist()
 idamServiceMock.resolveRetrieveServiceToken().persist()
@@ -34,7 +34,7 @@ mock('response/guards/alreadyRespondedGuard', {
 })
 
 mock('first-contact/guards/claimReferenceMatchesGuard', {
-  'default': {
+  ClaimReferenceMatchesGuard: {
     requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
       res.locals.user.claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
       next()
@@ -43,36 +43,37 @@ mock('first-contact/guards/claimReferenceMatchesGuard', {
 })
 
 mock('claim/guards/allClaimTasksCompletedGuard', {
-  'default': justForwardRequestHandler
+  AllClaimTasksCompletedGuard: justForwardRequestHandler
 })
 
 mock('response/guards/moreTimeAlreadyRequestedGuard', {
-  'default': justForwardRequestHandler
+  MoreTimeAlreadyRequestedGuard: justForwardRequestHandler
 })
 
 mock('response/guards/moreTimeRequestRequiredGuard', {
-  'default': justForwardRequestHandler
+  MoreTimeRequestRequiredGuard: justForwardRequestHandler
 })
 
 mock('response/guards/oweNoneResponseRequiredGuard', {
-  'default': justForwardRequestHandler
+  OweNoneResponseRequiredGuard: justForwardRequestHandler
 })
 
 mock('response/guards/countyCourtJudgmentRequestedGuard', {
-  'CountyCourtJudgmentRequestedGuard': justForwardRequestHandler
+  CountyCourtJudgmentRequestedGuard: justForwardRequestHandler
 })
 
 mock('response/guards/allResponseTasksCompletedGuard', {
-  'default': justForwardRequestHandler
+  AllResponseTasksCompletedGuard: justForwardRequestHandler
 })
 
 mock('ccj/guards/ccjGuard', {
-  'CCJGuard': justForwardRequestHandler
+  CCJGuard: justForwardRequestHandler
 })
 
 mock('offer/guards/offerGuard', {
-  'OfferGuard': justForwardRequestHandler
+  OfferGuard: justForwardRequestHandler
 })
+
 mock('response/guards/guardFactory', {
   GuardFactory: {
     create: () => {

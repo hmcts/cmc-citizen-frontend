@@ -1,5 +1,5 @@
 import * as express from 'express'
-import StringUtils from 'utils/stringUtils'
+import { StringUtils } from 'utils/stringUtils'
 
 export function buildURL (req: express.Request, path: string): string {
   if (StringUtils.isBlank(path)) {

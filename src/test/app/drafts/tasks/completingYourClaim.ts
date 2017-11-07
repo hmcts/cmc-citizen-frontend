@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import DraftClaim from 'app/drafts/models/draftClaim'
+import { DraftClaim } from 'app/drafts/models/draftClaim'
 import { CompletingYourClaim } from 'app/drafts/tasks/completingYourClaim'
 
 describe('Completing your claim', () => {
