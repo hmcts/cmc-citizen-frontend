@@ -34,7 +34,7 @@ mock('response/guards/alreadyRespondedGuard', {
 })
 
 mock('first-contact/guards/claimReferenceMatchesGuard', {
-  'default': {
+  ClaimReferenceMatchesGuard: {
     requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
       res.locals.user.claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
       next()
@@ -43,36 +43,37 @@ mock('first-contact/guards/claimReferenceMatchesGuard', {
 })
 
 mock('claim/guards/allClaimTasksCompletedGuard', {
-  'default': justForwardRequestHandler
+  AllClaimTasksCompletedGuard: justForwardRequestHandler
 })
 
 mock('response/guards/moreTimeAlreadyRequestedGuard', {
-  'default': justForwardRequestHandler
+  MoreTimeAlreadyRequestedGuard: justForwardRequestHandler
 })
 
 mock('response/guards/moreTimeRequestRequiredGuard', {
-  'default': justForwardRequestHandler
+  MoreTimeRequestRequiredGuard: justForwardRequestHandler
 })
 
 mock('response/guards/oweNoneResponseRequiredGuard', {
-  'default': justForwardRequestHandler
+  OweNoneResponseRequiredGuard: justForwardRequestHandler
 })
 
 mock('response/guards/countyCourtJudgmentRequestedGuard', {
-  'CountyCourtJudgmentRequestedGuard': justForwardRequestHandler
+  CountyCourtJudgmentRequestedGuard: justForwardRequestHandler
 })
 
 mock('response/guards/allResponseTasksCompletedGuard', {
-  'default': justForwardRequestHandler
+  AllResponseTasksCompletedGuard: justForwardRequestHandler
 })
 
 mock('ccj/guards/ccjGuard', {
-  'CCJGuard': justForwardRequestHandler
+  CCJGuard: justForwardRequestHandler
 })
 
 mock('offer/guards/offerGuard', {
-  'OfferGuard': justForwardRequestHandler
+  OfferGuard: justForwardRequestHandler
 })
+
 mock('response/guards/guardFactory', {
   GuardFactory: {
     create: () => {
