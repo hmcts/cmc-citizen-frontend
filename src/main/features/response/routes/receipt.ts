@@ -10,6 +10,7 @@ import { ResponseReceipt } from 'app/pdf/responseReceipt'
 import { buildURL } from 'app/utils/callbackBuilder'
 import { ErrorHandling } from 'common/errorHandling'
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.receiptReceiver.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     new PdfClient().generate(ResponseReceipt.templatePath, new ResponseReceipt(res.locals.user.claim, buildURL(req, 'dashboard')).data())

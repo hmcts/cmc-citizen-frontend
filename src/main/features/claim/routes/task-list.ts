@@ -7,6 +7,7 @@ import { TaskList } from 'app/drafts/tasks/taskList'
 import { TaskListBuilder } from 'claim/helpers/taskListBuilder'
 import { User } from 'idam/user'
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.taskListPage.uri, (req: express.Request, res: express.Response) => {
     const user: User = res.locals.user

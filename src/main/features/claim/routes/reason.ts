@@ -20,6 +20,7 @@ function renderView (form: Form<Reason>, res: express.Response): void {
   res.render(Paths.reasonPage.associatedView, { form: form, defendantName: defendantName })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.reasonPage.uri, (req: express.Request, res: express.Response): void => {
     renderView(new Form(res.locals.user.claimDraft.document.reason), res)

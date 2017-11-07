@@ -8,6 +8,7 @@ import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { Claim } from 'app/claims/models/claim'
 import { PartyType } from 'app/common/partyType'
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.claimantPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
     const { externalId } = req.params

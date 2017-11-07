@@ -18,6 +18,7 @@ async function renderView (res: express.Response, next: express.NextFunction) {
   }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.moreTimeConfirmationPage.uri,

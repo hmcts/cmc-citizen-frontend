@@ -19,6 +19,7 @@ function renderView (form: Form<PaidAmount>, res: express.Response): void {
   })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.repaymentPlanPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {

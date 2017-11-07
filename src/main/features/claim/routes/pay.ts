@@ -65,6 +65,7 @@ async function successHandler (res, next) {
   }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.startPaymentReceiver.uri, async (req, res, next) => {
     const user: User = res.locals.user

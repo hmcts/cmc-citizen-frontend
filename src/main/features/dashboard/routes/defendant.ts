@@ -7,6 +7,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { Claim } from 'app/claims/models/claim'
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
     const { externalId } = req.params

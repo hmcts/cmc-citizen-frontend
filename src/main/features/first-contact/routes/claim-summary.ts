@@ -9,6 +9,7 @@ function receiverPath (req: express.Request, res: express.Response): string {
   return `${AuthenticationRedirectFactory.get().forUplift(req, res)}&jwt=${JwtExtractor.extract(req)}`
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.claimSummaryPage.uri, ClaimReferenceMatchesGuard.requestHandler,
     async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {

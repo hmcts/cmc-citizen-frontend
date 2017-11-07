@@ -134,6 +134,7 @@ function setAuthCookie (cookies: any, authenticationToken: string): void {
   cookies.set(sessionCookie, authenticationToken, { sameSite: 'lax' })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(AppPaths.receiver.uri,
     ErrorHandling.apply(async (req: express.Request,

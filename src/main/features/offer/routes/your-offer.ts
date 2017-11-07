@@ -17,6 +17,7 @@ async function renderView (
   })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.offerPage.uri,

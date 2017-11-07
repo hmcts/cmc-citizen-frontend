@@ -12,6 +12,7 @@ function renderView (form: Form<DateOfBirth>, res: express.Response): void {
   res.render(Paths.claimantDateOfBirthPage.associatedView, { form: form })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.claimantDateOfBirthPage.uri, (req: express.Request, res: express.Response) => {
     renderView(new Form(res.locals.user.claimDraft.document.claimant.partyDetails.dateOfBirth), res)

@@ -9,6 +9,7 @@ import { User } from 'app/idam/user'
 import { isAfter4pm } from 'common/dateUtils'
 import { TaskListBuilder } from 'response/helpers/taskListBuilder'
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.taskListPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {

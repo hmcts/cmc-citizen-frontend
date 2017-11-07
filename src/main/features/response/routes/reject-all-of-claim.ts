@@ -28,6 +28,7 @@ function renderView (form: Form<RejectAllOfClaim>, res: express.Response) {
   })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.defenceRejectAllOfClaimPage.uri,

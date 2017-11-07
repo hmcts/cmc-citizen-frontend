@@ -15,6 +15,7 @@ function renderView (form: Form<MobilePhone>, res: express.Response) {
   })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantMobilePage.uri, (req: express.Request, res: express.Response) => {
     renderView(new Form(res.locals.user.responseDraft.document.defendantDetails.mobilePhone), res)

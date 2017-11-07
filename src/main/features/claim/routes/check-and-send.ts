@@ -93,6 +93,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
     }).catch(next)
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.checkAndSendPage.uri, AllClaimTasksCompletedGuard.requestHandler, (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user: User = res.locals.user

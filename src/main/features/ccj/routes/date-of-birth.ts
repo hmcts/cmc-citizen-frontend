@@ -26,6 +26,7 @@ function renderView (form: Form<DateOfBirth>, res: express.Response): void {
   res.render(Paths.dateOfBirthPage.associatedView, { form: form })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.dateOfBirthPage.uri,
     accessGuardRequestHandler,

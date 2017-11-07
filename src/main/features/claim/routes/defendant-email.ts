@@ -13,6 +13,7 @@ function renderView (form: Form<Email>, res: express.Response): void {
   res.render(Paths.defendantEmailPage.associatedView, { form: form })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantEmailPage.uri, (req: express.Request, res: express.Response) => {
     renderView(new Form(res.locals.user.claimDraft.document.defendant.email), res)

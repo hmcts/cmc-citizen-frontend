@@ -10,6 +10,7 @@ import { ErrorHandling } from 'common/errorHandling'
 
 const documentsClient: DocumentsClient = new DocumentsClient()
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantResponseCopy.uri,
     ErrorHandling.apply(

@@ -28,6 +28,7 @@ async function renderView (form: Form<HowMuchOwed>, res: express.Response, next:
   }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantHowMuchOwed.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     await renderView(new Form(res.locals.user.responseDraft.document.howMuchOwed), res, next)

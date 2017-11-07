@@ -4,6 +4,7 @@ import { Paths } from 'claim/paths'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { Claim } from 'claims/models/claim'
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.confirmationPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const { externalId } = req.params

@@ -68,6 +68,7 @@ function getStatementOfTruthClassFor (user: User): { new(): StatementOfTruth | Q
   }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.checkAndSendPage.uri,

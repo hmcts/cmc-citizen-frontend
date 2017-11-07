@@ -17,6 +17,7 @@ async function renderView (res: express.Response, next: express.NextFunction) {
   }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.counterClaimPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     await renderView(res, next)

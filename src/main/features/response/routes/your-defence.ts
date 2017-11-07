@@ -23,6 +23,7 @@ async function renderView (form: Form<Defence>, res: express.Response, next: exp
   }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defencePage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     await renderView(new Form(res.locals.user.responseDraft.document.defence), res, next)

@@ -21,6 +21,7 @@ function renderView (form: Form<MoreTimeNeeded>, res: express.Response, next: ex
   }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.moreTimeRequestPage.uri,

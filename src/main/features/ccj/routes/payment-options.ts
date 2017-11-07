@@ -9,6 +9,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.paymentOptionsPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {

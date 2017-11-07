@@ -12,6 +12,7 @@ function renderView (form: Form<PaidAmount>, res: express.Response): void {
   res.render(Paths.paidAmountPage.associatedView, { form: form, totalAmount: res.locals.user.claim.totalAmount })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.paidAmountPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {

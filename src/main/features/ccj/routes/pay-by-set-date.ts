@@ -12,6 +12,7 @@ function renderView (form: Form<PayBySetDate>, res: express.Response): void {
   res.render(Paths.payBySetDatePage.associatedView, { form: form })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.payBySetDatePage.uri, (req: express.Request, res: express.Response) => {
     const user: User = res.locals.user

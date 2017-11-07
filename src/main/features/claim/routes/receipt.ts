@@ -10,6 +10,7 @@ import { Claim } from 'app/claims/models/claim'
 import { PdfClient } from 'app/pdf/pdfClient'
 import { IssueReceipt } from 'app/pdf/issueReceipt'
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.receiptReceiver.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const { externalId } = req.params

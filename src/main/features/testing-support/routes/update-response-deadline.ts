@@ -11,6 +11,7 @@ function renderView (form: Form<UpdateResponseDeadlineRequest>, res: express.Res
   res.render(Paths.updateResponseDeadlinePage.associatedView, { form: form })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.updateResponseDeadlinePage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {

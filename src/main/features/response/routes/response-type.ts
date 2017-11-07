@@ -15,6 +15,7 @@ function renderView (form: Form<Response>, res: express.Response) {
   })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.responseTypePage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {

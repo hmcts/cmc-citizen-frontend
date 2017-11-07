@@ -16,6 +16,7 @@ function renderView (form: Form<Eligibility>, res: express.Response): void {
   res.render(Paths.eligibilityHelpWithFeesPage.associatedView, { form: form })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.eligibilityHelpWithFeesPage.uri, (req: express.Request, res: express.Response): void => {
     const user: User = res.locals.user

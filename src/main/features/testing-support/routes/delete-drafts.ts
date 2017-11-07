@@ -11,6 +11,7 @@ function getDraftType (req: express.Request): string {
   return Object.keys(req.body.action)[0]
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.deleteDraftsPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {

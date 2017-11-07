@@ -21,6 +21,7 @@ async function renderView (form: Form<FreeMediation>, res: express.Response, nex
   }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.freeMediationPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     await renderView(new Form(res.locals.user.responseDraft.document.freeMediation), res, next)

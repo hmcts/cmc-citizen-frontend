@@ -5,6 +5,7 @@ import { InterestTotal } from 'forms/models/interestTotal'
 import { claimAmountWithInterest, interestAmount } from 'app/utils/interestUtils'
 import { FeesClient } from 'fees/feesClient'
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.totalPage.uri, (req: express.Request, res: express.Response, next: express.NextFunction) => {
     FeesClient.calculateIssueFee(claimAmountWithInterest(res.locals.user.claimDraft.document))

@@ -16,6 +16,7 @@ function renderView (form: Form<DateOfBirth>, res: express.Response) {
   })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantDateOfBirthPage.uri, (req: express.Request, res: express.Response) => {
     const user: User = res.locals.user
