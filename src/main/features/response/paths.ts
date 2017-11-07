@@ -28,4 +28,5 @@ export class Paths {
   static readonly defendantHowMuchOwed = new RoutablePath(`${responsePath}/how-much-owed`)
   static readonly defenceRejectAllOfClaimPage = new RoutablePath(`${responsePath}/reject-all-of-claim`)
   static readonly defenceRejectPartOfClaimPage = new RoutablePath(`${responsePath}/reject-part-of-claim`)
+  static readonly impactOfDisputePage = new RoutablePath(`${responsePath}/impact-of-dispute`)
 }

@@ -1,0 +1,26 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, textArea, errorSummary, saveAndContinueButton %}
+
+{% set heading = t('How has this dispute has affected you?') %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+
+    <form novalidate method="post">
+      {{ csrfProtection(csrf) }}
+      {{ textArea(label = t('How this dispute has affected you? (optional)'), name = 'impact', form = form) }}
+
+      <div class="panel panel-border-wide">
+        <p>
+          {{ t('Your response will be sent to the claimant %s.',
+          { postProcess: 'sprintf', sprintf: ['pass a variable here'] }) }}
+        </p>
+      </div>
+
+      {{ saveAndContinueButton() }}
+    </form>
+
+  </div>
+</div>
+{% endblock %}
