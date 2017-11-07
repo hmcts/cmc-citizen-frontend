@@ -1,5 +1,4 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, submitButton %}
 {% from "support.njk" import supportWidget %}
 {% set title = t('Money claim') %}
 
@@ -10,7 +9,7 @@
           <h1 class="bold-large">{{ t('Your offer has been sent to %s',
           {
           postProcess: 'sprintf',
-          sprintf: [claim.claimData.claimant.name]
+          sprintf: [ claim.claimData.claimant.name ]
           }
           ) }}</h1>
         </div>
@@ -19,7 +18,7 @@
         {{ t("%s can accept, reject or make a counter offer. We’ll let you know when they respond.",
         {
           postProcess: 'sprintf',
-          sprintf: [claim.claimData.claimant.name]
+          sprintf: [ claim.claimData.claimant.name ]
         }
         ) }}
       </p>
@@ -31,7 +30,7 @@
           }
         ) | safe }}
       </p>
-      
+
       {{ supportWidget() }}
 
       {% include "includes/service_survey_link.njk" %}
