@@ -76,7 +76,7 @@ gulp.task('develop', () => {
   setTimeout(() => {
     livereload.listen()
     nodemon({
-      ext: 'ts js njk po',
+      ext: 'ts js po',
       stdout: true
     }).on('readable', () => {
       this.stdout.on('data', function (chunk) {
