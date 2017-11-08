@@ -10,7 +10,7 @@ import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<ImpactOfDispute>, res: express.Response): void {
   res.render(Paths.impactOfDisputePage.associatedView, {
-    form: new Form(form)
+    form: form
   })
 }
 
@@ -18,7 +18,8 @@ function renderView (form: Form<ImpactOfDispute>, res: express.Response): void {
 export default express.Router()
   .get(Paths.impactOfDisputePage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      renderView(Form.empty(), res)
+      const user: User = res.locals.user
+      renderView(new Form(user.responseDraft.document.impactOfDispute), res)
     }))
   .post(Paths.impactOfDisputePage.uri,
     FormValidator.requestHandler(ImpactOfDispute),
