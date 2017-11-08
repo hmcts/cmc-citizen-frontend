@@ -1,6 +1,6 @@
 import { LocalDate } from 'forms/models/localDate'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
-import { IsDefined, IsIn, IsPositive, ValidateNested } from 'class-validator'
+import { IsDefined, IsIn, IsPositive, ValidateNested, MaxLength } from 'class-validator'
 import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { IsFutureDate } from 'app/forms/validation/validators/dateFutureConstraint'
@@ -14,6 +14,7 @@ export class ValidationErrors {
   static readonly INVALID_DATE: string = 'Enter a valid date of first payment'
   static readonly SELECT_PAYMENT_SCHEDULE: string = 'Select how often they should pay'
   static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter valid amount, maximum two decimal places'
+  static readonly NOT_OWE_FULL_AMOUNT_REQUIRED: string = 'Explain why you don’t owe the full amount'
 }
 
 export class DefendantPaymentPlan {
@@ -40,18 +41,23 @@ export class DefendantPaymentPlan {
   @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SELECT_PAYMENT_SCHEDULE })
   paymentSchedule?: PaymentSchedule
 
+  @MaxLength(99000, { message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })
+  text?: string
+
   constructor (
     remainingAmount?: number,
     firstPayment?: number,
     installmentAmount?: number,
     firstPaymentDate?: LocalDate,
-    paymentSchedule?: PaymentSchedule
+    paymentSchedule?: PaymentSchedule,
+    text?: string
   ) {
     this.remainingAmount = remainingAmount
     this.firstPayment = firstPayment
     this.installmentAmount = installmentAmount
     this.firstPaymentDate = firstPaymentDate
     this.paymentSchedule = paymentSchedule
+    this.text = text
   }
 
   static fromObject (value?: any): DefendantPaymentPlan {
@@ -64,7 +70,8 @@ export class DefendantPaymentPlan {
       const paymentSchedule = PaymentSchedule.all()
         .filter(option => option.value === value.paymentSchedule)
         .pop()
-      return new DefendantPaymentPlan(remainingAmount, firstPayment, installmentAmount, firstPaymentDate, paymentSchedule)
+      const text = value.text
+      return new DefendantPaymentPlan(remainingAmount, firstPayment, installmentAmount, firstPaymentDate, paymentSchedule, text)
     } else {
       return new DefendantPaymentPlan()
     }
@@ -79,6 +86,7 @@ export class DefendantPaymentPlan {
       this.paymentSchedule = PaymentSchedule.all()
         .filter(option => input.paymentSchedule && option.value === input.paymentSchedule.value)
         .pop()
+      this.text = input.text
     }
 
     return this
