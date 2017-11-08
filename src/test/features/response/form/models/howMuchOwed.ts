@@ -86,7 +86,7 @@ describe('HowMuchOwed', () => {
       })
       const errors = validator.validateSync(new HowMuchOwed(300, text))
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.REASON_NOT_OWE_MONEY_TOO_LONG.replace('$constraint1', ValidationConstraints.FREE_TEXT_MAX_LENGTH.toString()))
+      expectValidationError(errors, ValidationErrors.FREE_TEXT_TOO_LONG)
     })
 
     it('should accept how much owed text with max allowed characters', () => {

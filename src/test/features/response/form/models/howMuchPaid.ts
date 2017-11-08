@@ -9,6 +9,7 @@ import { HowMuchPaid, ValidationErrors } from 'response/form/models/howMuchPaid'
 import { LocalDate } from 'forms/models/localDate'
 import * as moment from 'moment'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
+import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 
 describe('HowMuchPaid', () => {
   describe('constructor', () => {
@@ -134,7 +135,7 @@ describe('HowMuchPaid', () => {
       const pastDate = new LocalDate(now.year(), now.month() - 1, now.day())
       const errors = validator.validateSync(new HowMuchPaid(300, pastDate, text))
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.REASON_NOT_OWE_MONEY_TOO_LONG.replace('$constraint1', ValidationConstraints.FREE_TEXT_MAX_LENGTH.toString()))
+      expectValidationError(errors, DefaultValidationErrors.FREE_TEXT_TOO_LONG)
     })
 
     it('should accept how much to pay text with max allowed characters', () => {
