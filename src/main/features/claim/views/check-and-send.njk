@@ -17,8 +17,7 @@
         partyDetailsSummaryFragment(
           partyDetails = draftClaim.claimant.partyDetails,
           changeLinks = {
-            name: paths.defendantIndividualDetailsPage.uri,
-            contactPerson: paths.defendantIndividualDetailsPage.uri,
+            name: paths.claimantIndividualDetailsPage.uri,
             address: paths.claimantIndividualDetailsPage.uri,
             dateOfBirth: paths.claimantDateOfBirthPage.uri
           }
@@ -33,7 +32,7 @@
             partyDetails = draftClaim.defendant.partyDetails,
             showCorrespondenceAddressSection = false,
               changeLinks = {
-              contactPerson: paths.defendantIndividualDetailsPage.uri,
+              name: paths.defendantIndividualDetailsPage.uri,
               address: paths.defendantIndividualDetailsPage.uri
            }
         )
