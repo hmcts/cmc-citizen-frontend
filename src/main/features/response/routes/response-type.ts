@@ -6,7 +6,7 @@ import { Form } from 'forms/form'
 import { Response } from 'response/form/models/response'
 import { ResponseType } from 'response/form/models/responseType'
 import { ErrorHandling } from 'common/errorHandling'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<Response>, res: express.Response) {
@@ -15,6 +15,7 @@ function renderView (form: Form<Response>, res: express.Response) {
   })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.responseTypePage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {

@@ -1,5 +1,5 @@
 import { Serializable } from 'models/serializable'
-import Claimant from 'drafts/models/claimant'
+import { Claimant } from 'drafts/models/claimant'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { Interest } from 'claim/form/models/interest'
 import { InterestDate } from 'claim/form/models/interestDate'
@@ -10,7 +10,7 @@ import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
 import { Eligibility } from 'claim/form/models/eligibility/eligibility'
 
-export default class DraftClaim extends DraftDocument implements Serializable<DraftClaim> {
+export class DraftClaim extends DraftDocument implements Serializable<DraftClaim> {
 
   externalId = uuid()
   claimant: Claimant = new Claimant()

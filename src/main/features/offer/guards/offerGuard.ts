@@ -1,9 +1,9 @@
 import * as express from 'express'
-import Claim from 'claims/models/claim'
+import { Claim } from 'claims/models/claim'
 import { Paths } from 'response/paths'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
-import User from 'idam/user'
+import { User } from 'idam/user'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('response/guards/offerGuard')
 const eligibleForOffer = toBoolean(config.get<boolean>('featureToggles.offer'))

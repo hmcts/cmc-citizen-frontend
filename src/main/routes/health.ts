@@ -5,6 +5,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { hostname } from 'os'
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get('/health', healthcheck.configure({
     checks: {

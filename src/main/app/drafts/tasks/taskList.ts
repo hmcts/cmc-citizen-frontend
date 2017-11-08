@@ -1,6 +1,6 @@
-import TaskListItem from 'app/drafts/tasks/taskListItem'
+import { TaskListItem } from 'app/drafts/tasks/taskListItem'
 
-export default class TaskList {
+export class TaskList {
   constructor (public position: number, public name: string, public tasks: TaskListItem[]) {
     this.name = name
     this.position = position

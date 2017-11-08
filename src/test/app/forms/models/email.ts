@@ -6,7 +6,7 @@ import { Validator } from 'class-validator'
 
 import { expectValidationError } from './validationUtils'
 
-import Email, { ValidationErrors } from 'forms/models/email'
+import { Email, ValidationErrors } from 'forms/models/email'
 
 describe('Email', () => {
 

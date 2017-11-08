@@ -1,7 +1,7 @@
 import { MomentFormatter } from 'utils/momentFormatter'
 import { NumberFormatter } from 'utils/numberFormatter'
 import { InterestMapper } from 'app/pdf/mappers/interestMapper'
-import Claim from 'claims/models/claim'
+import { Claim } from 'claims/models/claim'
 
 export class ClaimMapper {
 
