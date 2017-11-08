@@ -39,7 +39,7 @@
     "@types/lodash": "^4.14.52",
     "@types/nock": "^8.2.1",
     "@types/node": "^8.0.24",
-    "@types/nunjucks": "^0.0.33",
+    "@types/nunjucks": "^3.0.0",
     "@types/request-promise-native": "^1.0.2",
     "@types/shortid": "^0.0.29",
     "body-parser": "^1.13.3",
