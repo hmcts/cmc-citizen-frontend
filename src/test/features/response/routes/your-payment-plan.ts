@@ -73,7 +73,8 @@ describe('Defendant: payment page', () => {
         month: 3,
         year: 2050
       },
-      paymentSchedule: 'EVERY_MONTH'
+      paymentSchedule: 'EVERY_MONTH',
+      text: 'I owe nothing'
     }
 
     checkAuthorizationGuards(app, 'post', defenceFullPartialPaymentPlanPage)
