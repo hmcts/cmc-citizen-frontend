@@ -14,40 +14,49 @@
 
     {{ tableStart("yourDetails", "Your details") }}
     {{
-      partyDetailsSummaryFragment(
-        partyDetails = draftClaim.claimant.partyDetails
-      )
+        partyDetailsSummaryFragment(
+          partyDetails = draftClaim.claimant.partyDetails,
+          changeLinks = {
+            address: paths.claimantIndividualDetailsPage.uri,
+            dateOfBirth: paths.claimantDateOfBirthPage.uri
+          }
+        )
     }}
-    {{ row("Phone:", draftClaim.claimant.mobilePhone.number) }}
+    {{ row("Phone:", draftClaim.claimant.mobilePhone.number, paths.claimantMobilePage.uri) }}
     {{ tableEnd() }}
 
     {{ tableStart("theirDetails", "Their details") }}
-    {{
-      partyDetailsSummaryFragment(
-        partyDetails = draftClaim.defendant.partyDetails,
-        showCorrespondenceAddressSection = false
+      {{
+          partyDetailsSummaryFragment(
+          partyDetails = draftClaim.defendant.partyDetails,
+          showCorrespondenceAddressSection = false,
+          changeLinks = {
+            contactPerson: paths.defendantIndividualDetailsPage.uri,
+            address: paths.defendantIndividualDetailsPage.uri
+          }
       )
     }}
-    {{ row("Email:", draftClaim.defendant.email.address) }}
+
+    {{ row("Email:", draftClaim.defendant.email.address , paths.defendantEmailPage.uri) }}
     {{ tableEnd() }}
 
     {{ tableStart("claimAmount", "Claim amount") }}
-    {{ row("Claim amount:", claimAmountTotal.claimAmount | numeral) }}
+    {{ row("Claim amount:", claimAmountTotal.claimAmount | numeral , paths.amountPage.uri )}}
 
     {% if (interestClaimed === true) %}
       {% if (draftClaim.interest.rate) %}
-        {{ row("Interest rate:", draftClaim.interest.rate | numeral("0,0.00") + "\% \(" + draftClaim.interest.type + "\)" ) }}
+        {{ row("Interest rate:", draftClaim.interest.rate | numeral("0,0.00") + "\% \(" + draftClaim.interest.type + "\)" , paths.interestPage.uri) }}
       {% endif %}
       {% if payAtSubmission === false %}
-        {{ row("Date interest is claimed from:", draftClaim.interestDate.date.asString() | date ) }}
+        {{ row("Date interest is claimed from:", draftClaim.interestDate.date.asString() | date , paths.interestDatePage.uri) }}
       {% else %}
-        {{ row("Date interest is claimed from:", t( 'Date you submit the claim' )) }}
+        {{ row("Date interest is claimed from:", t( 'Date you submit the claim' ), paths.interestDatePage.uri) }}
       {% endif %}
       {% if (claimAmountTotal.interestAmount) %}
-        {{ row("Interest:", claimAmountTotal.interestAmount | numeral) }}
+        {{ row("Interest:", claimAmountTotal.interestAmount | numeral , paths.interestPage.uri) }}
       {% endif %}
     {% else %}
-      {{ row("Interest rate:", t('I don’t want to claim interest')) }}
+      {{ row("Interest rate:", t('I don’t want to claim interest') , paths.interestPage.uri )}}
     {% endif %}
 
     {{ row("Claim fee:", claimAmountTotal.feeAmount | numeral) }}
@@ -55,7 +64,7 @@
     {{ tableEnd() }}
 
     {{ tableStart("claimDetails", "Claim details") }}
-    {{ row('Why you’re owed the money:', draftClaim.reason.reason ) }}
+    {{ row('Why you’re owed the money:', draftClaim.reason.reason , paths.reasonPage.uri ) }}
     {{ tableEnd() }}
     <div class="column-two-thirds">
       <div class="form-group">
