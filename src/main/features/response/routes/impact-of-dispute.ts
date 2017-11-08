@@ -7,10 +7,13 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
+import { Claim } from 'claims/models/claim'
 
 function renderView (form: Form<ImpactOfDispute>, res: express.Response): void {
+  const claim: Claim = res.locals.user.claim
   res.render(Paths.impactOfDisputePage.associatedView, {
-    form: form
+    form: form,
+    claimantName: claim.claimData.claimant.name
   })
 }
 
