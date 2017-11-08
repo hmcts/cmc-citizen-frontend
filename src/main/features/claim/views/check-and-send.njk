@@ -17,6 +17,8 @@
         partyDetailsSummaryFragment(
           partyDetails = draftClaim.claimant.partyDetails,
           changeLinks = {
+            name: paths.defendantIndividualDetailsPage.uri,
+            contactPerson: paths.defendantIndividualDetailsPage.uri,
             address: paths.claimantIndividualDetailsPage.uri,
             dateOfBirth: paths.claimantDateOfBirthPage.uri
           }
@@ -28,13 +30,13 @@
     {{ tableStart("theirDetails", "Their details") }}
       {{
           partyDetailsSummaryFragment(
-          partyDetails = draftClaim.defendant.partyDetails,
-          showCorrespondenceAddressSection = false,
-          changeLinks = {
-            contactPerson: paths.defendantIndividualDetailsPage.uri,
-            address: paths.defendantIndividualDetailsPage.uri
-          }
-      )
+            partyDetails = draftClaim.defendant.partyDetails,
+            showCorrespondenceAddressSection = false,
+              changeLinks = {
+              contactPerson: paths.defendantIndividualDetailsPage.uri,
+              address: paths.defendantIndividualDetailsPage.uri
+           }
+        )
     }}
 
     {{ row("Email:", draftClaim.defendant.email.address , paths.defendantEmailPage.uri) }}
@@ -60,7 +62,7 @@
     {% endif %}
 
     {{ row("Claim fee:", claimAmountTotal.feeAmount | numeral) }}
-    {{ row('Total amount you’re claiming:',  claimAmountTotal.totalAmount | numeral) }}
+    {{ row('Total amount you’re claiming:',  claimAmountTotal.totalAmount | numeral, paths.totalPage.uri) }}
     {{ tableEnd() }}
 
     {{ tableStart("claimDetails", "Claim details") }}
