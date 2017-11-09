@@ -54,12 +54,12 @@
             {% elseif claim.settlement %}
               {% set status =
               t('%s wants to settle out of court. View <a href="%s">their offer</a>.',
-              { postProcess: 'sprintf', 
-              sprintf: 
-                      [ claim.claimData.defendant.name,  
+              { postProcess: 'sprintf',
+              sprintf:
+                      [ claim.claimData.defendant.name,
                         offerPaths.responsePage.evaluateUri({ externalId: claim.externalId })
                       ]
-              }) | safe%}  
+              }) | safe%}
             {% else %}
               {% set status = t('Your claim is being processed. We will email you to explain what to do next.') %}
             {% endif %}
@@ -68,7 +68,7 @@
             <tr class="claims default mobile-table">
               <td><a href="/dashboard/{{ claim.externalId }}/claimant">{{ claim.claimNumber }}</a></td>
               <td>{{ claim.claimData.defendant.name }}</td>
-              <td>{{ claim.totalAmount | numeral }}</td>
+              <td>{{ claim.totalAmountTillToday | numeral }}</td>
               <td class="mobile-hide">{{ status }}</td>
             </tr>
             <tr><td colspan="3" class="mobile-table-status">{{ t('Status: ') + status }}</td></tr>
@@ -127,7 +127,7 @@
             <tr class="mobile-table">
               <td><a href="{{ url }}">{{ claim.claimNumber }}</a></td>
               <td>{{ claim.claimData.claimant.name }}</td>
-              <td>{{ claim.totalAmount | numeral }}</td>
+              <td>{{ claim.totalAmountTillToday | numeral }}</td>
               <td class="mobile-hide">{{ status | safe }}</td>
             </tr>
             <tr>

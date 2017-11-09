@@ -40,7 +40,7 @@ function renderView (form: Form<Declaration>, req: express.Request, res: express
     claim: user.claim,
     draft: user.ccjDraft.document,
     defendant: defendant,
-    amountToBePaid: user.claim.totalAmountTillToday - (user.ccjDraft.document.paidAmount.amount || 0),
+    amountToBePaid: user.claim.totalAmount - (user.ccjDraft.document.paidAmount.amount || 0),
     ...prepareUrls(req.params.externalId)
   })
 }

@@ -24,9 +24,9 @@
         <h2 class="heading-medium">{{ t('More options') }}</h2>
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
         <p>{{ t('You can still <a href="%s">make an offer</a> to settle the claim out of court. You will avoid a hearing and a County Court Judgment against you.',
-                { postProcess: 'sprintf', 
-                  sprintf: [ offerPageUri ] 
-                }) | safe 
+                { postProcess: 'sprintf',
+                  sprintf: [ offerPageUri ]
+                }) | safe
             }}
         </p>
       {% endif %}
@@ -41,7 +41,7 @@
           </li>
           <li>
             <strong class="bold">{{ t('Claim amount:') }}</strong>
-            <span class="block">{{ claim.totalAmount | numeral }}</span>
+            <span class="block">{{ claim.totalAmountTillToday | numeral }}</span>
           </li>
           <li>
             <strong class="bold">{{ t('Claim details:') }}</strong>

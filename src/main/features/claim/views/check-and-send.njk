@@ -61,7 +61,7 @@
     {% endif %}
 
     {{ row("Claim fee:", claimAmountTotal.feeAmount | numeral) }}
-    {{ row('Total amount you’re claiming:',  claimAmountTotal.totalAmount | numeral) }}
+    {{ row('Total amount you’re claiming:',  claimAmountTotal.totalAmountTillToday | numeral) }}
     {{ tableEnd() }}
 
     {{ tableStart("claimDetails", "Claim details") }}
