@@ -4,14 +4,11 @@ import { Claim } from 'app/claims/models/claim'
 import { User } from 'app/idam/user'
 import { ClaimModelConverter } from 'claims/claimModelConverter'
 import { ResponseModelConverter } from 'claims/responseModelConverter'
-import { OfferModelConverter } from 'claims/offerModelConvertor'
-import { Offer } from 'claims/models/offer'
-import { Offer as OfferForm } from 'features/offer/form/models/offer'
 import { ForbiddenError } from '../../errors'
+
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
 const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
-const claimStoreOfferApiUrl: string = `${claimApiBaseUrl}/claims`
 
 export class ClaimStoreClient {
   static saveClaimForUser (user: User): Promise<Claim> {
@@ -35,16 +32,7 @@ export class ClaimStoreClient {
       }
     })
   }
-  static saveOfferForUser (madeBy: string, user: User, offerForm: OfferForm): Promise<void> {
-    const claim: Claim = user.claim
-    const offer: Offer = OfferModelConverter.convert(offerForm)
-    return request.post(`${claimStoreOfferApiUrl}/${claim.id}/offers/${madeBy}`, {
-      body: offer,
-      headers: {
-        Authorization: `Bearer ${user.bearerToken}`
-      }
-    })
-  }
+
   static retrieveByClaimantId (claimantId: string): Promise<Claim[]> {
     if (!claimantId) {
       return Promise.reject(new Error('Claimant ID is required'))
