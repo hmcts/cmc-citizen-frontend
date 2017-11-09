@@ -2,13 +2,13 @@
 {% from "form.njk" import csrfProtection, submitButton %}
 {% from "support.njk" import supportWidget %}
 {% set title = t('Money claim') %}
-{% set heading = t("Make an offer to settle out of court") %}
+{% set heading = t('Make an offer to settle out of court') %}
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
         <p>{{ t('You can avoid going to a hearing if you settle out of court.') }}</p>
         <p>
-        {{ t("If %s accepts your offer you’ll both sign a legal agreement. This agreement will replace the claim.",
+        {{ t('If %s accepts your offer you’ll both sign a legal agreement. This agreement will replace the claim.',
         {
           postProcess: 'sprintf',
           sprintf: [claim.claimData.claimant.name]
@@ -16,7 +16,7 @@
         ) }}
       </p>
       <p>
-        {{ t("You can ask the court to make a Judgment if %s breaks the agreement.",
+        {{ t('You can ask the court to make a Judgment if %s breaks the agreement.',
         {
           postProcess: 'sprintf',
           sprintf: [claim.claimData.claimant.name]
@@ -24,7 +24,7 @@
         ) }}
       </p>
       <p>
-        {{ t("Out of court offers can’t be mentioned in court if you don’t reach an agreement.") }}
+        {{ t('Out of court offers can’t be mentioned in court if you don’t reach an agreement.') }}
       </p>
       
       {{ t('<a href="%s" class="button">Continue</a>',
