@@ -5,10 +5,17 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">You need to answer some financial questions</h1>
+      <h1 class="heading-large">{{ t('You need to answer some financial questions') }}</h1>
 
       <div class="panel panel-border-wide">
-        <p>Your answers will be sent to {{ claimantName }} to explain why you can't pay the full amount now.</p>
+        <p>
+          {{ t('Your answers will be sent to %s to explain why you can’t pay the full amount now.',
+            {
+              postProcess: 'sprintf',
+              sprintf: [ claimantName ]
+            }
+          ) }}
+        </p>
       </div>
 
       <div>
