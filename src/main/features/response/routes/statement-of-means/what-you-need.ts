@@ -5,10 +5,9 @@ import { Claim } from 'claims/models/claim'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.startPage.uri, (req: express.Request, res: express.Response) => {
+  .get(Paths.whatYouNeedPage.uri, (req: express.Request, res: express.Response) => {
     const claim: Claim = res.locals.user.claim
-    res.render(Paths.startPage.associatedView, {
-      claimantName: claim.claimData.claimant.name,
-      nextPageLink: Paths.whatYouNeedPage.evaluateUri({ externalId: claim.externalId })
+    res.render(Paths.whatYouNeedPage.associatedView, {
+      nextPageLink: Paths.residencePage.evaluateUri({ externalId: claim.externalId })
     })
   })
