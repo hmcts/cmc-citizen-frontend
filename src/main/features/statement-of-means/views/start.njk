@@ -1,0 +1,19 @@
+{% extends "layout.njk" %}
+
+{% set title = t('Money claim') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">You need to answer some financial questions</h1>
+
+      <div class="panel panel-border-wide">
+        <p>Your answers will be sent to {{ claimantName }} to explain why you can't pay the full amount now.</p>
+      </div>
+
+      <div>
+        <a class="button" href="{{ nextPageLink }}" role="button">{{ t('Continue') }}</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
