@@ -9,7 +9,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { OfferGuard } from 'offer/guards/offerGuard'
 import { StatementType } from 'offer/form/models/statementType'
-import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { OfferClient } from 'claims/offerClient'
 
 function renderView (form: Form<DefendantResponse>, res: express.Response, next: express.NextFunction) {
   const offer: Offer = res.locals.user.claim.defendantOffer
@@ -48,7 +48,7 @@ export default express.Router()
             res.redirect(Paths.makeAgreementPage.evaluateUri({ externalId: user.claim.externalId }))
             break
           case StatementType.REJECTION:
-            await ClaimStoreClient.rejectOfferByUser('claimant', user)
+            await OfferClient.rejectOffer(user)
             res.redirect(Paths.rejectedPage.evaluateUri({ externalId: user.claim.externalId }))
             break
 
