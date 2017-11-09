@@ -1,6 +1,7 @@
 import { RoutablePath } from 'common/router/routablePath'
 
 const responsePath = '/case/:externalId/response'
+const statementOfMeansPath = `${responsePath}/statement-of-means`
 
 export class Paths {
   static readonly taskListPage = new RoutablePath(`${responsePath}/task-list`)
@@ -28,4 +29,9 @@ export class Paths {
   static readonly defendantHowMuchOwed = new RoutablePath(`${responsePath}/how-much-owed`)
   static readonly defenceRejectAllOfClaimPage = new RoutablePath(`${responsePath}/reject-all-of-claim`)
   static readonly defenceRejectPartOfClaimPage = new RoutablePath(`${responsePath}/reject-part-of-claim`)
+}
+
+export class StatementOfMeansPaths {
+  static readonly startPage = new RoutablePath(`${statementOfMeansPath}/start`)
+  static readonly whatYouNeedPage = new RoutablePath(`${statementOfMeansPath}/what-you-need`)
 }

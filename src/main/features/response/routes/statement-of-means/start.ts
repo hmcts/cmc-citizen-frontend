@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths } from 'statement-of-means/paths'
+import { StatementOfMeansPaths as Paths } from 'response/paths'
 import { Claim } from 'claims/models/claim'
 
 /* tslint:disable:no-default-export */
