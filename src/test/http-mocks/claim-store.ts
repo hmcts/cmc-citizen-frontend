@@ -69,12 +69,13 @@ export const sampleClaimObj = {
     paymentOption: 'IMMEDIATELY'
   },
   settlement: {
-    partyStatements:
-      [{
+    partyStatements: [
+      {
         type: StatementType.OFFER.value,
         madeBy: MadeBy.DEFENDANT.value,
         offer: { content: 'offer text', completionDate: '2017-08-08' }
-      }]
+      }
+    ]
   }
 }
 
