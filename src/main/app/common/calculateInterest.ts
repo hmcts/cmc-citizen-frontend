@@ -16,14 +16,9 @@ function calculateRate (interest: Interest): number {
   }
 }
 
-function calculateNumberOfDays (date: Moment): number {
-  const today = MomentFactory.currentDateTime()
-  return today.diff(date, 'days')
-}
-
-export function calculateInterest (amount: number, interest: Interest, interestDate: Moment) {
+export function calculateInterest (amount: number, interest: Interest, interestFromDate: Moment, interestToDate: Moment = MomentFactory.currentDateTime()) {
   const rate = calculateRate(interest)
-  const noOfDays = calculateNumberOfDays(interestDate)
+  const noOfDays = interestToDate.diff(interestFromDate, 'days')
 
   return parseFloat(((amount * noOfDays * rate) / (365 * 100)).toFixed(2))
 }

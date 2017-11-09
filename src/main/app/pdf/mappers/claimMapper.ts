@@ -11,7 +11,7 @@ export class ClaimMapper {
       claimNumber: claim.claimNumber,
       amount: NumberFormatter.formatMoney(claim.claimData.amount.totalAmount()),
       issueFee: NumberFormatter.formatMoney(claim.claimData.paidFeeAmount),
-      totalAmount: NumberFormatter.formatMoney(claim.totalAmount),
+      totalAmount: NumberFormatter.formatMoney(claim.totalAmountTillToday),
       reason: claim.claimData.reason
     }
 

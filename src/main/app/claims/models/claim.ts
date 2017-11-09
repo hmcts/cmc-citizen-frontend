@@ -72,13 +72,21 @@ export class Claim implements Serializable<Claim> {
     return this.settlement.getDefendantOffer()
   }
 
-  get totalAmount (): number {
+  get totalAmountTillToday (): number {
+    return this.calculateTotalAmountTillDate(MomentFactory.currentDateTime())
+  }
+
+  get totalAmountTillDateOfIssue (): number {
+    return this.calculateTotalAmountTillDate(this.createdAt)
+  }
+
+  private calculateTotalAmountTillDate (toDate: Moment): number {
     const interestRate = this.claimData.interest
     const interestDate = this.claimData.interestDate
     let claimAmount: number = this.claimData.amount.totalAmount()
     const date = interestDate.type === InterestDateType.SUBMISSION ? this.createdAt : interestDate.date
 
-    return claimAmount + this.claimData.paidFeeAmount + calculateInterest(claimAmount, interestRate, date)
+    return claimAmount + this.claimData.paidFeeAmount + calculateInterest(claimAmount, interestRate, date, this.createdAt)
   }
 
   // noinspection JSUnusedGlobalSymbols Called in the view
