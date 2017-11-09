@@ -25,7 +25,7 @@
             </legend>
 
             <div class="multiple-choice" data-target="claim-date">
-              <input id="typecustom" type="radio" name="type" value="custom" {% if form.valueFor('type') == 'custom' %} checked {% endif %}>
+              <input id="typecustom" type="radio" name="type" value="{{ InterestDateType.CUSTOM }}" {% if form.valueFor('type') == InterestDateType.CUSTOM %} checked {% endif %}>
               <label for="typecustom">
                 <span class="bold-small">{{ t('Claim interest from a particular date') }}</span>
                 <br>
@@ -42,9 +42,9 @@
               label = 'Claim interest from the date I submit the claim',
               name = 'type',
               form = form,
-              value = 'submission',
+              value = InterestDateType.SUBMISSION,
               hint = ' ',
-              checked = form.valueFor('type') == 'submission',
+              checked = form.valueFor('type') == InterestDateType.SUBMISSION,
               bold = true
             ) }}
           </fieldset>
