@@ -70,7 +70,11 @@ export const sampleClaimObj = {
   },
   settlement: {
     partyStatements:
-        [ { type: StatementType.OFFER.value, madeBy: MadeBy.DEFENDANT.value , offer: { content: 'offer text', completionDate: '2017-08-08' } }]
+      [{
+        type: StatementType.OFFER.value,
+        madeBy: MadeBy.DEFENDANT.value,
+        offer: { content: 'offer text', completionDate: '2017-08-08' }
+      }]
   }
 }
 
@@ -236,11 +240,25 @@ export function rejectSaveOfferForDefendant (reason: string = 'HTTP error') {
     .post(new RegExp('/[0-9]+/offers/defendant'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
+
 export function resolveSaveOffer () {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+/offers/defendant'))
-    .reply(HttpStatus.OK)
+    .reply(HttpStatus.CREATED)
 }
+
+export function resolveAcceptOffer (by: string = 'claimant') {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp(`/[0-9]+/offers/${by}/accept`))
+    .reply(HttpStatus.CREATED)
+}
+
+export function resolveRejectOffer (by: string = 'claimant') {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp(`/[0-9]+/offers/${by}/reject`))
+    .reply(HttpStatus.CREATED)
+}
+
 export function rejectSaveCcjForUser (reason: string = 'HTTP error') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+/county-court-judgment'))
