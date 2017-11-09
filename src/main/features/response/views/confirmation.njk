@@ -1,24 +1,24 @@
 {% extends "layout.njk" %}
 
-{% set title = t("Money claim") %}
+{% set title = t('Money claim') %}
 {% from "support.njk" import supportWidget %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
       <div class="govuk-box-highlight">
-        <h1 class="bold-large">{{ t("Defence submitted") }}</h1>
+        <h1 class="bold-large">{{ t('Defence submitted') }}</h1>
 
         <p>
           <strong class="bold">{{ submittedOn | date }}</strong>
         </p>
         <p class="issue-receipt-download ">
-          <a href="{{ paths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t("Download defence as pdf") }}</a>
+          <a href="{{ paths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download defence as pdf') }}</a>
         </p>
       </div>
 
       <p>
-        {{ t("Your defence will be shared with %s and the court.",
+        {{ t('Your defence will be shared with %s and the court.',
         {
           postProcess: 'sprintf',
           sprintf: [claim.claimData.claimant.name]
@@ -28,9 +28,9 @@
       <p>{{ t('We’ve also sent a copy to:') }} <strong>{{ defendantEmail }}</strong>.</p>
 
       <div>
-        <h2 class="heading-medium">{{ t("What happens next") }}</h2>
+        <h2 class="heading-medium">{{ t('What happens next') }}</h2>
         <p>
-          {{ t("The case will be reviewed by a judge and might go to a hearing. We’ll contact you if a hearing date is scheduled and explain what you need to do to prepare.") }}
+          {{ t('The case will be reviewed by a judge and might go to a hearing. We’ll contact you if a hearing date is scheduled and explain what you need to do to prepare.') }}
         </p>
 
         <p>{{ t('You can <a href="%s">view the status of this claim</a> at any time.',
@@ -40,7 +40,7 @@
           }) | safe }}</p>
 
 
-        <h2 class="heading-medium">{{ t("What you can do to settle the claim") }}</h2>
+        <h2 class="heading-medium">{{ t('What you can do to settle the claim') }}</h2>
         <p>
           {{ t('Unless you’ve been asked not to, you can still contact %s directly to make a <a href="%s">settlement out of court</a>. If you can reach an agreement you won’t have to go to a hearing.',
           {
