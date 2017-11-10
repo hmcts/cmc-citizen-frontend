@@ -26,7 +26,7 @@
         <tr>
           <th scope="row">{{ t("Claim amount") }}</th>
           <td class="numeric last">
-            <span class="font-small">{{ claim.claimData.amount.totalAmountTillToday() | numeral }}</span>
+            <span class="font-small">{{ claim.claimData.amount.totalAmount() | numeral }}</span>
           </td>
         </tr>
         {% if interestDetails %}
