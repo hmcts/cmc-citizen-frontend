@@ -72,7 +72,8 @@
     "countyCourtJudgment": "FEATURE_CCJ",
     "idamOauth": "FEATURE_IDAM_OAUTH",
     "partialAdmission": "FEATURE_PARTIAL_ADMISSION",
-    "offer": "FEATURE_OFFER"
+    "offer": "FEATURE_OFFER",
+    "statementOfMeans": "FEATURE_STATEMENT_OF_MEANS"
   },
   "oauth": {
     "clientId": "OAUTH_CLIENT_ID",
