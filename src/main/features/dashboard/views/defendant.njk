@@ -21,14 +21,16 @@
               { postProcess: 'sprintf', sprintf: [ 'https://www.gov.uk/county-court-judgments-ccj-for-debt/if-you-dont-owe-the-money' ]}) | safe }}</p>
       {% else %}
         <p>{{ t('Your defence is being processed. We will email you to explain what to do next.') }}</p>
-        <h2 class="heading-medium">{{ t('More options') }}</h2>
-        <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
-        <p>{{ t('You can still <a href="%s">make an offer</a> to settle the claim out of court. You will avoid a hearing and a County Court Judgment against you.',
-                { postProcess: 'sprintf',
-                  sprintf: [ OfferPaths.offerPage.evaluateUri({ externalId: claim.externalId }) ]
-                }) | safe
-            }}
-        </p>
+        {% if featureToggles.offer %}
+          <h2 class="heading-medium">{{ t('More options') }}</h2>
+          <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
+          <p>{{ t('You can still <a href="%s">make an offer</a> to settle the claim out of court. You will avoid a hearing and a County Court Judgment against you.',
+                  { postProcess: 'sprintf',
+                    sprintf: [ OfferPaths.offerPage.evaluateUri({ externalId: claim.externalId }) ]
+                  }) | safe
+              }}
+          </p>
+        {% endif %}
       {% endif %}
     </div>
 
