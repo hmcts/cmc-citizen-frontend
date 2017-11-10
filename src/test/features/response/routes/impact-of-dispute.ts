@@ -8,27 +8,24 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import * as randomstring from 'randomstring'
 
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { checkAlreadySubmittedGuard } from './checks/already-submitted-check'
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
-import { generateString } from '../../../app/forms/models/validationUtils'
-import { EvidenceType } from 'response/form/models/evidenceType'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
+import { ValidationErrors } from 'forms/validation/validationErrors'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = Paths.evidencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath: string = Paths.impactOfDisputePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
-describe('Defendant response: evidence', () => {
-
+describe('Defendant response: impact of dispute page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-
     checkAuthorizationGuards(app, 'get', pagePath)
 
     context('when user authorised', () => {
-
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
       })
@@ -37,9 +34,8 @@ describe('Defendant response: evidence', () => {
       checkCountyCourtJudgmentRequestedGuard(app, 'get', pagePath)
 
       context('when response and CCJ not submitted', () => {
-
         it('should return 500 and render error page when cannot retrieve claim', async () => {
-          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+          claimStoreServiceMock.rejectRetrieveClaimByExternalId()
 
           await request(app)
             .get(pagePath)
@@ -49,7 +45,7 @@ describe('Defendant response: evidence', () => {
 
         it('should return 500 and render error page when cannot retrieve draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.rejectFind('Error')
+          draftStoreServiceMock.rejectFind()
 
           await request(app)
             .get(pagePath)
@@ -64,18 +60,24 @@ describe('Defendant response: evidence', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('List your evidence (optional)'))
+            .expect(res => expect(res).to.be.successful.withText('How this dispute has affected you?'))
         })
       })
     })
   })
 
   describe('on POST', () => {
+    const validFormData = {
+      text: 'Valid text'
+    }
+
+    const invalidFormData = {
+      text: randomstring.generate(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1)
+    }
 
     checkAuthorizationGuards(app, 'post', pagePath)
 
     describe('for authorized user', () => {
-
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
       })
@@ -83,10 +85,9 @@ describe('Defendant response: evidence', () => {
       checkAlreadySubmittedGuard(app, 'post', pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, 'post', pagePath)
 
-      describe('errors are handled propely', () => {
-
+      context('when response and CCJ not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
-          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+          claimStoreServiceMock.rejectRetrieveClaimByExternalId()
 
           await request(app)
             .post(pagePath)
@@ -96,64 +97,51 @@ describe('Defendant response: evidence', () => {
 
         it('should return 500 and render error page when cannot retrieve draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.rejectFind('Error')
+          draftStoreServiceMock.rejectFind()
 
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
-      })
 
-      describe('update row action', () => {
+        it('should return 500 and render error page when cannot save draft', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.rejectSave()
 
-        context('valid form', () => {
-
-          it('should render page when form is valid, amount within limit and everything is fine', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave(100)
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value, description: 'Bla bla' }] })
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.impactOfDisputePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-          })
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        context('invalid form', () => {
-
-          it('should render page when description undefined', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({
-                rows: [{
-                  type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value,
-                  description: generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1)
-                }]
-              })
-              .expect(res => expect(res).to.be.successful.withText('You’ve entered too many characters'))
-          })
-        })
-      })
-
-      describe('add row action', () => {
-
-        it('should render page when valid input', async () => {
+        it('should return render page and display validation error when invalid data is sent', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
 
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send({ action: { addRow: 'Add row' } })
-            .expect(res => expect(res).to.be.successful.withText('List your evidence (optional)'))
+            .send(invalidFormData)
+            .expect(res => expect(res).to.be.successful.withText(ValidationErrors.FREE_TEXT_TOO_LONG))
+        })
+
+        it('should redirect to task list page and save draft when all if fine and data is valid', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveSave()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(
+                Paths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+              )
+            )
         })
       })
     })

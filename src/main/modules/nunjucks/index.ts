@@ -19,6 +19,7 @@ import { EvidenceType } from 'response/form/models/evidenceType'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { StatementType } from 'offer/form/models/statementType'
+import { InterestDateType } from 'app/common/interestDateType'
 const packageDotJson = require('../../../../package.json')
 
 const appAssetPaths = {
@@ -84,5 +85,6 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('EvidenceType', EvidenceType)
     nunjucksEnv.addGlobal('StatementType', StatementType)
     nunjucksEnv.addGlobal('NotEligibleReason', NotEligibleReason)
+    nunjucksEnv.addGlobal('InterestDateType', InterestDateType)
   }
 }
