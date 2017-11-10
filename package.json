@@ -20,7 +20,7 @@
     "precommit": "yarn lint",
     "prepush": "yarn test && yarn test:routes",
     "snyk-protect": "snyk protect --org=hmcts --debug",
-    "prepare": "yarn snyk-protect"
+    "install": "yarn snyk-protect"
   },
   "dependencies": {
     "@hmcts/cmc-common-frontend": "^1.16.0",
