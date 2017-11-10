@@ -28,7 +28,6 @@
               <input id="typecustom" type="radio" name="type" value="{{ InterestDateType.CUSTOM }}" {% if form.valueFor('type') == InterestDateType.CUSTOM %} checked {% endif %}>
               <label for="typecustom">
                 <span class="bold-small">{{ t('Claim interest from a particular date') }}</span>
-                <br>
                 <span class="form-hint">{{ t('For example, the date an invoice was overdue or that you told someone they owed you the money.') }}</span>
               </label>
             </div>
