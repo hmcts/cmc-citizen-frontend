@@ -23,7 +23,7 @@
     "postinstall": "if-env NODE_ENV=production && yarn snyk-protect || exit 0",
     "precommit": "yarn lint",
     "prepush": "yarn test && yarn test:routes",
-    "snyk-protect": "snyk protect --org=hmcts"
+    "snyk-protect": "snyk protect --org=hmcts --debug"
   },
   "dependencies": {
     "@hmcts/cmc-common-frontend": "^1.18.1",
