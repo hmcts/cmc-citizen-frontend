@@ -24,9 +24,9 @@
         <h2 class="heading-medium">{{ t('More options') }}</h2>
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
         <p>{{ t('You can still <a href="%s">make an offer</a> to settle the claim out of court. You will avoid a hearing and a County Court Judgment against you.',
-                { postProcess: 'sprintf', 
-                  sprintf: [ offerPageUri ] 
-                }) | safe 
+                { postProcess: 'sprintf',
+                  sprintf: [ OfferPaths.offerPage.evaluateUri({ externalId: claim.externalId }) ]
+                }) | safe
             }}
         </p>
       {% endif %}

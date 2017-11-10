@@ -1,7 +1,6 @@
 import * as express from 'express'
 
 import { Paths } from 'dashboard/paths'
-import { Paths as OfferPaths } from 'features/offer/paths'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { Claim } from 'app/claims/models/claim'
 import { User } from 'app/idam/user'
@@ -20,7 +19,6 @@ export default express.Router()
 
     res.render(Paths.dashboardPage.associatedView, {
       paths: Paths,
-      offerPaths: OfferPaths,
       claimsAsClaimant: claimsAsClaimant,
       claimDraftSaved: claimDraftSaved,
       claimsAsDefendant: claimsAsDefendant,
