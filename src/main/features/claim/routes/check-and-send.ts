@@ -88,6 +88,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
         dateOfBirth: getDateOfBirth(res.locals.user.claimDraft.document.claimant.partyDetails),
         defendantBusinessName: getBusinessName(res.locals.user.claimDraft.document.defendant.partyDetails),
         partyAsCompanyOrOrganisation: user.claimDraft.document.claimant.partyDetails.isBusiness(),
+        paths: Paths,
         form: form
       })
     }).catch(next)

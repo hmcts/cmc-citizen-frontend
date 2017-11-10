@@ -47,7 +47,7 @@ export default express.Router()
         res.locals.user.responseDraft.document.evidence = form.model
 
         await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
-        res.redirect(Paths.taskListPage.evaluateUri({ externalId: res.locals.user.claim.externalId }))
+        res.redirect(Paths.impactOfDisputePage.evaluateUri({ externalId: res.locals.user.claim.externalId }))
       }
     })
   )

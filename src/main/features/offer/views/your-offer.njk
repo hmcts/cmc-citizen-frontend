@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, submitButton, errorSummary, textArea %}
 {% from "date.njk" import dateInput %}
-{% set heading = t("Make an offer") %}
+{% set heading = t('Make an offer') %}
 {% set title = t('Money claim') %}
 
 {% block content %}
@@ -14,7 +14,7 @@
           <h4 class="heading-small"> {{ t('Your offer') }}</h4>
         </div>
 
-        <span class="form-hint">{{ t("For example a payment, fix a problem or return goods.") }}</span>
+        <span class="form-hint">{{ t('For example a payment, fix a problem or return goods.') }}</span>
         {{ textArea(id='offerText', label= '', name='offerText', form = form, rows = 10) }}
         
         <div class="description-block">
@@ -26,7 +26,7 @@
 
         <div class="panel panel-border-wide">
           <p>
-            {{ t("%s can accept, reject or make a counter offer.",
+            {{ t('%s can accept, reject or make a counter offer.',
             {
               postProcess: 'sprintf',
               sprintf: [claim.claimData.claimant.name]

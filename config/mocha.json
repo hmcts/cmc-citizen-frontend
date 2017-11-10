@@ -30,6 +30,7 @@
     "countyCourtJudgment": true,
     "idamOauth": true,
     "partialAdmission": true,
-    "offer": true
+    "offer": true,
+    "statementOfMeans": true
   }
 }
