@@ -7,7 +7,6 @@ import { DefendantResponse } from 'offer/form/models/defendantResponse'
 import { Offer } from 'offer/form/models/offer'
 import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
-import { OfferGuard } from 'offer/guards/offerGuard'
 import { StatementType } from 'offer/form/models/statementType'
 import { OfferClient } from 'claims/offerClient'
 
@@ -29,13 +28,11 @@ function renderView (form: Form<DefendantResponse>, res: express.Response, next:
 export default express.Router()
   .get(
     Paths.responsePage.uri,
-    OfferGuard.requestHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       renderView(Form.empty(), res, next)
     }))
   .post(
     Paths.responsePage.uri,
-    OfferGuard.requestHandler,
     FormValidator.requestHandler(DefendantResponse, DefendantResponse.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<DefendantResponse> = req.body
@@ -51,9 +48,8 @@ export default express.Router()
             await OfferClient.rejectOffer(user)
             res.redirect(Paths.rejectedPage.evaluateUri({ externalId: user.claim.externalId }))
             break
-
           default:
-            res.redirect(Paths.responsePage.evaluateUri({ externalId: user.claim.externalId }))
+            throw new Error(`Option ${form.model.option} is not supported`)
         }
       }
     }))
