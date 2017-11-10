@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 
-import { TimelineRow, ValidationConstants, ValidationErrors } from 'response/form/models/timelineRow'
+import { TimelineRow, ValidationErrors, ValidationConstraints } from 'response/form/models/timelineRow'
+import { ValidationConstraints as DefaultValidationConstraints } from 'forms/validation/validationConstraints'
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from '../../../../app/forms/models/validationUtils'
 
@@ -61,18 +62,18 @@ describe('TimelineRow', () => {
 
       it('when date is too long', () => {
         const errors = validator.validateSync(
-          new TimelineRow(generateString(ValidationConstants.DATE_MAX_LENGTH + 1), 'description')
+          new TimelineRow(generateString(ValidationConstraints.DATE_MAX_LENGTH + 1), 'description')
         )
 
         expect(errors.length).to.equal(1)
         expectValidationError(
-          errors, ValidationErrors.DATE_TOO_LONG.replace('$constraint1', ValidationConstants.DATE_MAX_LENGTH + '')
+          errors, ValidationErrors.DATE_TOO_LONG.replace('$constraint1', ValidationConstraints.DATE_MAX_LENGTH.toString())
         )
       })
 
       it('when description is too long', () => {
         const errors = validator.validateSync(
-          new TimelineRow('date', generateString(ValidationConstants.DESCRIPTION_MAX_LENGTH + 1))
+          new TimelineRow('date', generateString(DefaultValidationConstraints.FREE_TEXT_MAX_LENGTH + 1))
         )
 
         expect(errors.length).to.equal(1)

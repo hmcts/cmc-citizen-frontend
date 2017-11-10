@@ -110,7 +110,7 @@ export function resolveRetrieveClaimByExternalIdWithResponse (override?: object)
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...sampleDefendantResponseObj, ...override })
 }
 
-export function rejectRetrieveClaimByExternalId (reason: string) {
+export function rejectRetrieveClaimByExternalId (reason: string = 'Error') {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)

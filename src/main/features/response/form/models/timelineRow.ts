@@ -2,6 +2,7 @@ import { IsDefined, ValidateIf } from 'class-validator'
 
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
+import { ValidationConstraints as DefaultValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {
   static readonly DATE_REQUIRED: string = 'Enter a date'
@@ -10,9 +11,8 @@ export class ValidationErrors {
   static readonly DESCRIPTION_TOO_LONG: string = 'You’ve entered too many characters'
 }
 
-export class ValidationConstants {
+export class ValidationConstraints {
   static readonly DATE_MAX_LENGTH: number = 25
-  static readonly DESCRIPTION_MAX_LENGTH: number = 99000
 }
 
 export class TimelineRow {
@@ -20,13 +20,13 @@ export class TimelineRow {
   @ValidateIf(o => o.description !== undefined)
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.DATE_REQUIRED })
-  @MaxLength(ValidationConstants.DATE_MAX_LENGTH, { message: ValidationErrors.DATE_TOO_LONG })
+  @MaxLength(ValidationConstraints.DATE_MAX_LENGTH, { message: ValidationErrors.DATE_TOO_LONG })
   date?: string = undefined
 
   @ValidateIf(o => o.date !== undefined)
   @IsDefined({ message: ValidationErrors.DESCRIPTION_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.DESCRIPTION_REQUIRED })
-  @MaxLength(ValidationConstants.DESCRIPTION_MAX_LENGTH, { message: ValidationErrors.DESCRIPTION_TOO_LONG })
+  @MaxLength(DefaultValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.DESCRIPTION_TOO_LONG })
   description?: string = undefined
 
   constructor (date?: string, description?: string) {

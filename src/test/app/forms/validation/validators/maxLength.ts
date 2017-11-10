@@ -36,6 +36,10 @@ describe('MaxLengthValidatorConstraint', () => {
       it('given string is shorter than max length', () => {
         expect(constraint.validate('my text', validationArgs(DEFAULT_VALUE))).to.equal(true)
       })
+
+      it('given empty string', () => {
+        expect(constraint.validate('', validationArgs(DEFAULT_VALUE))).to.equal(true)
+      })
     })
 
     describe('should return false when ', () => {
