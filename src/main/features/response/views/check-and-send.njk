@@ -73,7 +73,7 @@
       {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED %}
         {{ row('How much have you paid the claimant?', draft.howMuchIsPaid.amount | numeral, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
         {{ row('When did you pay this amount?', draft.howMuchIsPaid.date.toMoment() | date, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
-        {{ row("Explain why you don't owe the full amount", draft.howMuchIsPaid.text, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('Explain why you don’t owe the full amount', draft.howMuchIsPaid.text, paths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId })) }}
       {% endif %}
 
       {% set atLeastOneRow = false %}
