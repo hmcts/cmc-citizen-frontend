@@ -3,29 +3,29 @@ import * as express from 'express'
 import { Paths } from 'claim/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import StatementOfTruth from 'forms/models/statementOfTruth'
-import FeesClient from 'fees/feesClient'
-import ClaimAmountTotal from 'forms/models/claimInterestTotal'
+import { StatementOfTruth } from 'forms/models/statementOfTruth'
+import { FeesClient } from 'fees/feesClient'
+import { InterestTotal } from 'forms/models/interestTotal'
 import { InterestDateType } from 'app/common/interestDateType'
 import { claimAmountWithInterest, interestAmount } from 'utils/interestUtils'
 import { InterestType } from 'claim/form/models/interest'
 import { PartyType } from 'app/common/partyType'
-import AllClaimTasksCompletedGuard from 'claim/guards/allClaimTasksCompletedGuard'
+import { AllClaimTasksCompletedGuard } from 'claim/guards/allClaimTasksCompletedGuard'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
-import DateOfBirth from 'forms/models/dateOfBirth'
+import { DateOfBirth } from 'forms/models/dateOfBirth'
 import { PartyDetails } from 'forms/models/partyDetails'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { SignatureType } from 'app/common/signatureType'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
 import { DraftService } from 'services/draftService'
 
-function getClaimAmountTotal (res: express.Response): Promise<ClaimAmountTotal> {
+function getClaimAmountTotal (res: express.Response): Promise<InterestTotal> {
   return FeesClient.calculateIssueFee(claimAmountWithInterest(res.locals.user.claimDraft.document))
     .then((feeAmount: number) => {
-      return new ClaimAmountTotal(res.locals.user.claimDraft.document.amount.totalAmount(), interestAmount(res.locals.user.claimDraft.document), feeAmount)
+      return new InterestTotal(res.locals.user.claimDraft.document.amount.totalAmount(), interestAmount(res.locals.user.claimDraft.document), feeAmount)
     })
 }
 
@@ -77,10 +77,10 @@ function getStatementOfTruthClassFor (user: User): { new(): StatementOfTruth | Q
 function renderView (form: Form<StatementOfTruth>, res: express.Response, next: express.NextFunction) {
   const user: User = res.locals.user
   getClaimAmountTotal(res)
-    .then((claimAmountTotal: ClaimAmountTotal) => {
+    .then((interestTotal: InterestTotal) => {
       res.render(Paths.checkAndSendPage.associatedView, {
         draftClaim: res.locals.user.claimDraft.document,
-        claimAmountTotal: claimAmountTotal,
+        claimAmountTotal: interestTotal,
         payAtSubmission: res.locals.user.claimDraft.document.interestDate.type === InterestDateType.SUBMISSION,
         interestClaimed: (res.locals.user.claimDraft.document.interest.type !== InterestType.NO_INTEREST),
         contactPerson: getContactPerson(res.locals.user.claimDraft.document.claimant.partyDetails),
@@ -88,11 +88,13 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
         dateOfBirth: getDateOfBirth(res.locals.user.claimDraft.document.claimant.partyDetails),
         defendantBusinessName: getBusinessName(res.locals.user.claimDraft.document.defendant.partyDetails),
         partyAsCompanyOrOrganisation: user.claimDraft.document.claimant.partyDetails.isBusiness(),
+        paths: Paths,
         form: form
       })
     }).catch(next)
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.checkAndSendPage.uri, AllClaimTasksCompletedGuard.requestHandler, (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user: User = res.locals.user

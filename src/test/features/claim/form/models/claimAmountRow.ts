@@ -2,7 +2,8 @@ import { expect } from 'chai'
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from '../../../../app/forms/models/validationUtils'
 
-import { ClaimAmountRow, ValidationConstants, ValidationErrors } from 'claim/form/models/claimAmountRow'
+import { ClaimAmountRow, ValidationErrors } from 'claim/form/models/claimAmountRow'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 describe('ClaimAmountRow', () => {
 
@@ -75,7 +76,7 @@ describe('ClaimAmountRow', () => {
 
       it('row with valid amount and too long reason', () => {
         const errors = validator.validateSync(
-          new ClaimAmountRow(generateString(ValidationConstants.REASON_MAX_LENGTH + 1), 1.01)
+          new ClaimAmountRow(generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1), 1.01)
         )
 
         expect(errors.length).to.equal(1)

@@ -3,8 +3,8 @@ import * as chai from 'chai'
 import * as spies from 'sinon-chai'
 import * as sinon from 'sinon'
 
-import ServiceAuthToken from 'idam/serviceAuthToken'
-import IdamClient from 'idam/idamClient'
+import { ServiceAuthToken } from 'idam/serviceAuthToken'
+import { IdamClient } from 'idam/idamClient'
 
 import { RequireUtils } from '../../requireUtils'
 

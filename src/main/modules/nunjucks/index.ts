@@ -3,7 +3,7 @@ import * as path from 'path'
 import * as express from 'express'
 import * as config from 'config'
 import * as nunjucks from 'nunjucks'
-import dateFilter from 'modules/nunjucks/filters/dateFilter'
+import { dateFilter } from 'modules/nunjucks/filters/dateFilter'
 import { convertToPoundsFilter } from 'modules/nunjucks/filters/convertToPounds'
 import * as numeralFilter from 'nunjucks-numeral-filter'
 import * as numeral from 'numeral'
@@ -19,6 +19,7 @@ import { EvidenceType } from 'response/form/models/evidenceType'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { StatementType } from 'offer/form/models/statementType'
+import { InterestDateType } from 'app/common/interestDateType'
 const packageDotJson = require('../../../../package.json')
 
 const appAssetPaths = {
@@ -30,7 +31,7 @@ const appAssetPaths = {
   pdf: '/pdf'
 }
 
-export default class Nunjucks {
+export class Nunjucks {
 
   constructor (public developmentMode: boolean, public i18next) {
     this.developmentMode = developmentMode
@@ -46,6 +47,7 @@ export default class Nunjucks {
     ], {
       autoescape: true,
       throwOnUndefined: true,
+      watch: this.developmentMode,
       express: app
     })
 
@@ -83,5 +85,6 @@ export default class Nunjucks {
     nunjucksEnv.addGlobal('EvidenceType', EvidenceType)
     nunjucksEnv.addGlobal('StatementType', StatementType)
     nunjucksEnv.addGlobal('NotEligibleReason', NotEligibleReason)
+    nunjucksEnv.addGlobal('InterestDateType', InterestDateType)
   }
 }

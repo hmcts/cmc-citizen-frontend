@@ -7,7 +7,7 @@ import { Form } from 'forms/form'
 import { ResponseType } from 'response/form/models/responseType'
 import { RejectAllOfClaim } from 'response/form/models/rejectAllOfClaim'
 import { ErrorHandling } from 'common/errorHandling'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { GuardFactory } from 'response/guards/guardFactory'
 import { DraftService } from 'services/draftService'
 
@@ -28,6 +28,7 @@ function renderView (form: Form<RejectAllOfClaim>, res: express.Response) {
   })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.defenceRejectAllOfClaimPage.uri,

@@ -4,7 +4,7 @@ import * as sinon from 'sinon'
 
 import { TaskListBuilder } from 'response/helpers/taskListBuilder'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import TaskList from 'drafts/tasks/taskList'
+import { TaskList } from 'drafts/tasks/taskList'
 import moment = require('moment')
 
 describe('TaskListBuilder', () => {

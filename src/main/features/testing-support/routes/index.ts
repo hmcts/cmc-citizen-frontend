@@ -2,6 +2,7 @@ import * as express from 'express'
 import { Paths } from 'testing-support/paths'
 import { ErrorHandling } from 'common/errorHandling'
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.indexPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {

@@ -28,6 +28,7 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
   next()
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.evidencePage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     renderView(new Form(res.locals.user.responseDraft.document.evidence), res)
@@ -46,7 +47,7 @@ export default express.Router()
         res.locals.user.responseDraft.document.evidence = form.model
 
         await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
-        res.redirect(Paths.taskListPage.evaluateUri({ externalId: res.locals.user.claim.externalId }))
+        res.redirect(Paths.impactOfDisputePage.evaluateUri({ externalId: res.locals.user.claim.externalId }))
       }
     })
   )

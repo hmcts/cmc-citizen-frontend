@@ -1,4 +1,4 @@
-export default class TaskListItem {
+export class TaskListItem {
   name: string
   startPageUrl: string
   completed: boolean

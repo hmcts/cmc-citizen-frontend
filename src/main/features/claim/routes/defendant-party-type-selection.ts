@@ -16,6 +16,7 @@ function renderView (form: Form<PartyTypeResponse>, res: express.Response, next:
   })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantPartyTypeSelectionPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const partyDetails: PartyDetails = res.locals.user.claimDraft.document.defendant.partyDetails

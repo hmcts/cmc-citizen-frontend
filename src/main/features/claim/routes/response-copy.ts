@@ -4,12 +4,13 @@ import * as HttpStatus from 'http-status-codes'
 
 import { Paths } from 'claim/paths'
 
-import DocumentsClient from 'app/documents/documentsClient'
-import ClaimStoreClient from 'app/claims/claimStoreClient'
+import { DocumentsClient } from 'app/documents/documentsClient'
+import { ClaimStoreClient } from 'app/claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'
 
 const documentsClient: DocumentsClient = new DocumentsClient()
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantResponseCopy.uri,
     ErrorHandling.apply(

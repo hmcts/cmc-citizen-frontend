@@ -16,7 +16,7 @@ export class MaxLengthValidatorConstraint implements ValidatorConstraintInterfac
       throw new Error('Max length must be > 0')
     }
 
-    return (value === undefined) || (value && value.length <= maxLength)
+    return value === undefined || value.length <= maxLength
   }
 
 }

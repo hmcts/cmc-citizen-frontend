@@ -1,8 +1,8 @@
 import * as express from 'express'
 import { Paths } from 'response/paths'
-import User from 'idam/user'
+import { User } from 'idam/user'
 
-export default class MoreTimeAlreadyRequestedGuard {
+export class MoreTimeAlreadyRequestedGuard {
 
   static requestHandler (req: express.Request, res: express.Response, next: express.NextFunction) {
     const user: User = res.locals.user

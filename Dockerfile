@@ -1,4 +1,4 @@
-FROM node:8.1.4
+FROM node:8.9.0-alpine
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
@@ -6,11 +6,15 @@ WORKDIR /usr/src/app
 COPY package.json yarn.lock /usr/src/app/
 RUN yarn install
 
-COPY src/main /usr/src/app/src/main
 COPY config /usr/src/app/config
+COPY tsconfig.json tsconfig.prod.json gulpfile.js /usr/src/app/
+COPY src/main /usr/src/app/src/main
 
-COPY gulpfile.js tsconfig.json /usr/src/app/
 RUN yarn setup
+
+RUN rm -rf node_modules \
+    && yarn install --production \
+    && yarn cache clean
 
 EXPOSE 3000
 CMD [ "yarn", "start" ]
