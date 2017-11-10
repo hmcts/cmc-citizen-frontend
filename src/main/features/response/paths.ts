@@ -37,4 +37,5 @@ export class StatementOfMeansPaths {
   static readonly startPage = new RoutablePath(`${statementOfMeansPath}/start`)
   static readonly whatYouNeedPage = new RoutablePath(`${statementOfMeansPath}/what-you-need`)
   static readonly residencePage = new RoutablePath(`${statementOfMeansPath}/residence`)
+  static readonly dependantsPage = new RoutablePath(`${statementOfMeansPath}/dependants`)
 }
