@@ -31,6 +31,7 @@ describe('ResponseDraft', () => {
       expect(responseDraftModel.freeMediation.option).to.eql(FreeMediationOption.YES)
       expect(responseDraftModel.moreTimeNeeded.option).to.eql(MoreTimeNeededOption.YES)
       expect(responseDraftModel.isMoreTimeRequested()).to.be.eql(true)
+      expect(responseDraftModel.impactOfDispute.text).to.equal('This dispute has affected me badly, I cried')
     })
   })
 
@@ -267,6 +268,9 @@ describe('ResponseDraft', () => {
       },
       moreTimeNeeded: {
         option: moreTimeOption
+      },
+      impactOfDispute: {
+        text: 'This dispute has affected me badly, I cried'
       }
     }
   }
