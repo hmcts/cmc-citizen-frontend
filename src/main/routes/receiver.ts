@@ -163,6 +163,8 @@ export default express.Router()
 
       if (res.locals.isLoggedIn) {
         if (isDefendantFirstContactPinLogin(req)) {
+          // re-set state cookie as it was cleared above, we need it in this case
+          cookies.set(stateCookieName, req.query.state, { sameSite: 'lax' })
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         }
 
