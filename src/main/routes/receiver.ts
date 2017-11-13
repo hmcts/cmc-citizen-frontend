@@ -27,6 +27,8 @@ import { DraftService } from 'services/draftService'
 const logger = require('@hmcts/nodejs-logging').getLogger('router/receiver')
 const useOauth = toBoolean(config.get<boolean>('featureToggles.idamOauth'))
 const sessionCookie = config.get<string>('session.cookieName')
+const stateCookieName = 'state'
+const sameSite = { sameSite: 'lax' }
 
 const authenticationRedirect: AuthenticationRedirect = AuthenticationRedirectFactory.get()
 
@@ -83,13 +85,17 @@ function getLetterHolderId (req: express.Request, user: User): string {
 
 function loginErrorHandler (req: express.Request,
                             res: express.Response,
+                            cookies: Cookies,
                             next: express.NextFunction,
                             err: Error,
                             receiver: RoutablePath = AppPaths.receiver) {
   if (hasTokenExpired(err)) {
-    res.clearCookie(sessionCookie)
+    cookies.set(sessionCookie, '', sameSite)
     logger.debug(`Protected path - expired auth token - access to ${req.path} rejected`)
     return res.redirect(authenticationRedirect.forLogin(req, res, receiver))
+  }
+  if (useOauth) {
+    cookies.set(stateCookieName, '', sameSite)
   }
   return next(err)
 }
@@ -130,8 +136,11 @@ async function retrieveRedirectForLandingPage (user: User): Promise<string> {
   return ClaimPaths.startPage.uri
 }
 
-function setAuthCookie (cookies: any, authenticationToken: string): void {
-  cookies.set(sessionCookie, authenticationToken, { sameSite: 'lax' })
+function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
+  cookies.set(sessionCookie, authenticationToken, sameSite)
+  if (useOauth) {
+    cookies.set(stateCookieName, '', sameSite)
+  }
 }
 
 /* tslint:disable:no-default-export */
@@ -151,7 +160,7 @@ export default express.Router()
           setAuthCookie(cookies, authenticationToken)
         }
       } catch (err) {
-        return loginErrorHandler(req, res, next, err)
+        return loginErrorHandler(req, res, cookies, next, err)
       }
 
       if (res.locals.isLoggedIn) {
@@ -181,7 +190,7 @@ export default express.Router()
           setAuthCookie(cookies, authenticationToken)
         }
       } catch (err) {
-        return loginErrorHandler(req, res, next, err, AppPaths.linkDefendantReceiver)
+        return loginErrorHandler(req, res, cookies, next, err, AppPaths.linkDefendantReceiver)
       }
 
       const user: User = res.locals.user
