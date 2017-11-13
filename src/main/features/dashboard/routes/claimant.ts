@@ -2,6 +2,7 @@ import * as express from 'express'
 
 import { Paths } from 'dashboard/paths'
 import { Paths as CCJPaths } from 'ccj/paths'
+import { Paths as OfferPaths } from 'offer/paths'
 import { ErrorHandling } from 'common/errorHandling'
 
 import { ClaimStoreClient } from 'claims/claimStoreClient'
@@ -16,7 +17,8 @@ export default express.Router()
 
     res.render(Paths.claimantPage.associatedView, {
       claim: claim,
-      receiptUri: Paths.claimReceiptReceiver.evaluateUri({ externalId: externalId })
+      receiptUri: Paths.claimReceiptReceiver.evaluateUri({ externalId: externalId }),
+      responseOfferPage: OfferPaths.responsePage
     })
   }))
   .post(Paths.claimantPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
