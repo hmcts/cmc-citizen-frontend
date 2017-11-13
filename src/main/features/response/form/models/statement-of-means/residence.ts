@@ -16,11 +16,11 @@ export class Residence implements Serializable<Residence> {
   @ValidateIf(o => o.type && o.type.value === ResidenceType.OTHER.value)
   @IsDefined({ message: ValidationErrors.DESCRIBE_YOUR_HOUSING })
   @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: DefaultValidationErrors.FREE_TEXT_TOO_LONG })
-  otherTypeDetails?: string
+  housingDetails?: string
 
   constructor (type?: ResidenceType, otherTypeDetails?: string) {
     this.type = type
-    this.otherTypeDetails = otherTypeDetails
+    this.housingDetails = otherTypeDetails
   }
 
   static fromObject (input?: any) {
@@ -30,14 +30,14 @@ export class Residence implements Serializable<Residence> {
     const type: ResidenceType = ResidenceType.valueOf(input.type)
     return new Residence(
       type,
-      type.value === ResidenceType.OTHER.value ? input.otherTypeDetails : undefined
+      type.value === ResidenceType.OTHER.value ? input.housingDetails : undefined
     )
   }
 
   deserialize (input: any): Residence {
     if (input) {
       this.type = input.type
-      this.otherTypeDetails = input.otherTypeDetails
+      this.housingDetails = input.housingDetails
     }
     return this
   }

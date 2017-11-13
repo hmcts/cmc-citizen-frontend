@@ -15,16 +15,16 @@ describe('Residence', () => {
     it('should return an instance with blank fields when given undefined', () => {
       const residence: Residence = new Residence().deserialize(undefined)
       expect(residence.type).to.be.undefined
-      expect(residence.otherTypeDetails).to.be.undefined
+      expect(residence.housingDetails).to.be.undefined
     })
 
     it('should return with given values when given an object', () => {
       const residence: Residence = new Residence().deserialize({
         type: ResidenceType.OTHER,
-        otherTypeDetails: 'Squat'
+        housingDetails: 'Squat'
       })
       expect(residence.type.value).to.equal(ResidenceType.OTHER.value)
-      expect(residence.otherTypeDetails).to.equal('Squat')
+      expect(residence.housingDetails).to.equal('Squat')
     })
   })
 
@@ -36,18 +36,18 @@ describe('Residence', () => {
     it('should return Residence instance build based on given form input', () => {
       const residence: Residence = Residence.fromObject({
         type: 'OTHER',
-        otherTypeDetails: 'Squat'
+        housingDetails: 'Squat'
       })
       expect(residence.type.value).to.equal(ResidenceType.OTHER.value)
-      expect(residence.otherTypeDetails).to.equal('Squat')
+      expect(residence.housingDetails).to.equal('Squat')
     })
 
-    it('should set otherTypeDetails to undefined if type different to OTHER is provided', () => {
+    it('should set housingDetails to undefined if type different to OTHER is provided', () => {
       const residence: Residence = Residence.fromObject({
         type: 'OWN_HOME',
         otherTypeDetails: 'Some details'
       })
-      expect(residence.otherTypeDetails).to.be.undefined
+      expect(residence.housingDetails).to.be.undefined
     })
   })
 
