@@ -2,14 +2,11 @@ import { IsDefined, IsIn, ValidateIf } from 'class-validator'
 
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 import { EvidenceType } from 'response/form/models/evidenceType'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {
   static readonly TYPE_REQUIRED: string = 'Choose type of evidence'
   static readonly DESCRIPTION_TOO_LONG: string = 'You’ve entered too many characters'
-}
-
-export class ValidationConstants {
-  static readonly DESCRIPTION_MAX_LENGTH: number = 99000
 }
 
 export class EvidenceRow {
@@ -19,7 +16,7 @@ export class EvidenceRow {
   @IsIn(EvidenceType.all(), { message: ValidationErrors.TYPE_REQUIRED })
   type?: EvidenceType
 
-  @MaxLength(ValidationConstants.DESCRIPTION_MAX_LENGTH, { message: ValidationErrors.DESCRIPTION_TOO_LONG })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.DESCRIPTION_TOO_LONG })
   description?: string
 
   constructor (type?: EvidenceType, description?: string) {

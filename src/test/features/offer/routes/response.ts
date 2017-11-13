@@ -15,6 +15,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 const responsePage = OfferPaths.responsePage.evaluateUri({ externalId: externalId })
 const makeLegalAgreementPage = OfferPaths.makeAgreementPage.evaluateUri({ externalId: externalId })
+const rejectedOfferPage = OfferPaths.rejectedPage.evaluateUri({ externalId: externalId })
 
 describe('defendant response page', () => {
   attachDefaultHooks(app)
@@ -68,7 +69,7 @@ describe('defendant response page', () => {
 
         context('when form is valid', async () => {
 
-          it('should render page', async () => {
+          it('should redirect to make a legal agreement page when offer is accepted', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             const formData = {
               option: StatementType.ACCEPTATION.value
@@ -78,6 +79,19 @@ describe('defendant response page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send(formData)
               .expect(res => expect(res).to.be.redirect.toLocation(makeLegalAgreementPage))
+          })
+
+          it('should submit rejection and redirect to confirmation page', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolveRejectOffer()
+            const formData = {
+              option: StatementType.REJECTION.value
+            }
+            await request(app)
+              .post(responsePage)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(formData)
+              .expect(res => expect(res).to.be.redirect.toLocation(rejectedOfferPage))
           })
         })
 

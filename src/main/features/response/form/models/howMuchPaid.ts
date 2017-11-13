@@ -7,12 +7,13 @@ import { IsValidYearFormat } from 'app/forms/validation/validators/isValidYearFo
 import { MomentFactory } from 'common/momentFactory'
 import { MomentFormatter } from 'app/utils/momentFormatter'
 import { Fractions } from 'forms/validation/validators/fractions'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
+import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 
 const currentDate = MomentFormatter.formatLongDate(MomentFactory.currentDate())
 
 export class ValidationErrors {
   static readonly NOT_OWE_FULL_AMOUNT_REQUIRED: string = 'Explain why you don’t owe the full amount'
-  static readonly REASON_NOT_OWE_MONEY_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
   static readonly VALID_AMOUNT_REQUIRED: string = 'Enter a valid amount paid'
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount'
   static readonly AMOUNT_NOT_VALID: string = 'Enter valid amount'
@@ -37,7 +38,7 @@ export class HowMuchPaid implements Serializable<HowMuchPaid> {
 
   @IsDefined({ message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })
-  @MaxLength(99000, { message: ValidationErrors.REASON_NOT_OWE_MONEY_TOO_LONG })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: DefaultValidationErrors.FREE_TEXT_TOO_LONG })
   text?: string
 
   constructor (amount?: number, date?: LocalDate, text?: string) {

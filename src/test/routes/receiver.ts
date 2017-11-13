@@ -31,12 +31,28 @@ describe('Login receiver', async () => {
       it('should save bearer token in cookie when auth token is retrieved from idam', async () => {
         const token = 'I am dummy access token'
         idamServiceMock.resolveExchangeCode(token)
+        claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+        claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+        draftStoreServiceMock.resolveFindNoDraftFound()
 
         await request(app)
           .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
-          .set('Cookie', `state=123`)
+          .set('Cookie', 'state=123')
           .expect(res => expect(res).to.have.cookie(cookieName, token))
       })
+      it('should clear state cookie when auth token is retrieved from idam', async () => {
+        const token = 'I am dummy access token'
+        idamServiceMock.resolveExchangeCode(token)
+        claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+        claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+        draftStoreServiceMock.resolveFindNoDraftFound()
+
+        await request(app)
+          .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
+          .set('Cookie', 'state=123')
+          .expect(res => expect(res).to.have.cookie('state', ''))
+      })
+
       it('should return 500 and render error page when cannot retrieve draft', async () => {
         claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
         claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()

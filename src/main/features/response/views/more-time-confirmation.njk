@@ -1,16 +1,16 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, submitButton %}
 
-{% set title = t("Money claim") %}
+{% set title = t('Money claim') %}
 
-{% set heading = t("You have an extra 14 days to respond") %}
+{% set heading = t('You have an extra 14 days to respond') %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
 
       <p>
-        {{ t("Your claim response deadline is now %s.", { postProcess: 'sprintf', sprintf: [newDeadline | date] }) }}
+        {{ t('Your claim response deadline is now %s.', { postProcess: 'sprintf', sprintf: [newDeadline | date] }) }}
       </p>
 
       <p>

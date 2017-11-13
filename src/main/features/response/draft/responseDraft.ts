@@ -20,6 +20,7 @@ import { PayBySetDate } from 'ccj/form/models/payBySetDate'
 import { Evidence } from 'response/form/models/evidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
+import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
 
 export class ResponseDraft extends DraftDocument implements Serializable<ResponseDraft> {
 
@@ -39,6 +40,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   defendantPaymentPlan?: DefendantPaymentPlan
   paidAmount?: PaidAmount
   payBySetDate?: PayBySetDate
+  impactOfDispute?: ImpactOfDispute
 
   deserialize (input: any): ResponseDraft {
     if (input) {
@@ -61,6 +63,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       this.defendantPaymentPlan = new DefendantPaymentPlan().deserialize(input.defendantPaymentPlan)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
+      this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
     }
     return this
   }
