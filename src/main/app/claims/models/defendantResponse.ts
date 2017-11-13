@@ -6,8 +6,10 @@ import { SoleTrader } from 'app/claims/models/details/theirs/soleTrader'
 import { Organisation } from 'app/claims/models/details/theirs/organisation'
 import { TheirDetails } from 'app/claims/models/details/theirs/theirDetails'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
+import { ResponseType } from 'response/form/models/responseType'
 
 export class DefendantResponse implements Serializable<DefendantResponse> {
+  type: ResponseType
   defence: string
   freeMediation: string
   defendantDetails: TheirDetails
@@ -33,6 +35,7 @@ export class DefendantResponse implements Serializable<DefendantResponse> {
 
   deserialize (input: any): DefendantResponse {
     if (input) {
+      this.type = ResponseType.valueOf(input.response)
       this.defence = input.defence
       this.freeMediation = input.freeMediation
       this.defendantDetails = DefendantResponse.deserializeDefendantDetails(input.defendant)

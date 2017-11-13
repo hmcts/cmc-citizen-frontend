@@ -68,3 +68,8 @@ div {
     font-weight: bold;
   }
 }
+
+// Stop collapsing divs when empty
+.if-empty {
+  min-height: 1rem;
+}
