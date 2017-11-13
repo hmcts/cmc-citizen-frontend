@@ -78,6 +78,14 @@ describe('Residence', () => {
       expectValidationError(errors, ValidationErrors.DESCRIBE_YOUR_HOUSING)
     })
 
+    it('should have an error when type is OTHER and housing details are is blank', () => {
+      const errors: ValidationError[] = validator.validateSync(new Residence(
+        ResidenceType.OTHER,
+        ''
+      ))
+      expectValidationError(errors, ValidationErrors.DESCRIBE_YOUR_HOUSING)
+    })
+
     it('should have an error when provided details are too long', () => {
       const errors: ValidationError[] = validator.validateSync(new Residence(
         ResidenceType.OTHER,

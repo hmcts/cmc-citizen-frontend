@@ -1,3 +1,6 @@
+/* Allow chai assertions which don't end in a function call, e.g. expect(thing).to.be.undefined */
+/* tslint:disable:no-unused-expression */
+
 import { expect } from 'chai'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 
@@ -21,8 +24,8 @@ describe('ResidenceType', () => {
       })
     })
 
-    it('should throw an error when given an unknown value', () => {
-      expect(() => ResidenceType.valueOf('I am not a valid type')).to.throw(Error)
+    it('should return undefined when given undefined as input', () => {
+      expect(ResidenceType.valueOf(undefined)).to.be.undefined
     })
   })
 })

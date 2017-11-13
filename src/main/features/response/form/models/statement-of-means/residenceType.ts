@@ -14,11 +14,7 @@ export class ResidenceType {
   }
 
   static valueOf (value: string): ResidenceType {
-    const type: ResidenceType = ResidenceType.all().filter(type => type.value === value).pop()
-    if (!type) {
-      throw new Error(`Given value '${value}' does not denote a known residence type`)
-    }
-    return type
+    return ResidenceType.all().filter(type => type.value === value).pop()
   }
 
   static all (): ResidenceType[] {
