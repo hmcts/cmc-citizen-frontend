@@ -14,8 +14,7 @@ function renderView (form: Form<Declaration>, claim: Claim, res: express.Respons
     {
       claim: claim,
       form: form,
-      offer: claim.defendantOffer,
-      paths: Paths
+      offer: claim.defendantOffer
     }
   )
 }

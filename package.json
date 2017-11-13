@@ -24,12 +24,13 @@
     "prepush": "yarn test && yarn test:routes"
   },
   "dependencies": {
-    "@hmcts/cmc-common-frontend": "^1.18.1",
+    "@hmcts/cmc-common-frontend": "^1.19.0",
     "@hmcts/cmc-draft-store-middleware": "^1.0.0",
     "@hmcts/draft-store-client": "^1.1.1",
     "@hmcts/nodejs-healthcheck": "^1.4.3",
     "@hmcts/nodejs-logging": "^1.4.2",
     "@types/config": "^0.0.33",
+    "@types/cookies": "^0.7.1",
     "@types/csurf": "^1.9.33",
     "@types/express": "^4.0.35",
     "@types/http-status-codes": "^1.0.29",

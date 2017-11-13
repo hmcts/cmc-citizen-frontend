@@ -5,6 +5,7 @@ import { RouterFinder } from 'common/router/routerFinder'
 import { ClaimMiddleware } from 'app/claims/claimMiddleware'
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
+import { Paths } from 'offer/paths'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -20,6 +21,10 @@ function requestHandler (): express.RequestHandler {
 
 export class Feature {
   enableFor (app: express.Express) {
+    if (app.settings.nunjucksEnv && app.settings.nunjucksEnv.globals) {
+      app.settings.nunjucksEnv.globals.OfferPaths = Paths
+    }
+
     app.all(/^\/case\/.+\/offer\/.*$/, requestHandler())
     app.all(/^\/case\/.+\/offer\/.*$/, ClaimMiddleware.retrieveByExternalId)
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))

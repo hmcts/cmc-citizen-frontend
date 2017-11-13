@@ -68,5 +68,13 @@ describe('Defendant first contact: claim summary page', () => {
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.redirect.toLocation(registrationPagePattern))
     })
+    it('should clear session cookie when everything is fine', async () => {
+      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'letter-holder')
+
+      await request(app)
+        .post(Paths.claimSummaryPage.uri)
+        .set('Cookie', `${cookieName}=ABC`)
+        .expect(res => expect(res).to.have.cookie(cookieName, ''))
+    })
   })
 })
