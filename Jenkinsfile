@@ -1,5 +1,5 @@
 #!groovy
-@Library(['CMC', 'Reform'])
+@Library(['CMC', 'Reform@feature/docker-build-branch-property'])
 import uk.gov.hmcts.Ansible
 import uk.gov.hmcts.Packager
 import uk.gov.hmcts.RPMTagger
