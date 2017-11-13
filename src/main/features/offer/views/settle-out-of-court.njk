@@ -26,11 +26,11 @@
       <p>
         {{ t('Out of court offers can’t be mentioned in court if you don’t reach an agreement.') }}
       </p>
-      
+
       {{ t('<a href="%s" class="button">Continue</a>',
         {
             postProcess: 'sprintf',
-            sprintf: [paths.offerPage.evaluateUri({ externalId: claim.externalId })]
+            sprintf: [OfferPaths.offerPage.evaluateUri({ externalId: claim.externalId })]
         }
       ) | safe }}
     </div>

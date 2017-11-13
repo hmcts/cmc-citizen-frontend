@@ -14,7 +14,6 @@ export default express.Router()
         claim: user.claim,
         submittedOn: user.claim.respondedAt,
         defendantEmail: user.email,
-        paths: Paths,
         responsePaths: ResponsePaths
       })
     }))

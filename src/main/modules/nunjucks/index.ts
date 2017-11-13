@@ -74,8 +74,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('reportProblemSurveyUrl', config.get('feedback.reportProblemSurvey.url'))
     nunjucksEnv.addGlobal('customerSurveyUrl', config.get('feedback.serviceSurvey.url'))
 
-    nunjucksEnv.addGlobal('toBoolean', toBoolean)
-    nunjucksEnv.addGlobal('featureToggles', config.get('featureToggles'))
+    nunjucksEnv.addGlobal('featureToggles', this.convertPropertiesToBoolean(config.get('featureToggles')))
     nunjucksEnv.addGlobal('RejectAllOfClaimOption', RejectAllOfClaimOption)
     nunjucksEnv.addGlobal('RejectPartOfClaimOption', RejectPartOfClaimOption)
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
@@ -86,5 +85,15 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('StatementType', StatementType)
     nunjucksEnv.addGlobal('NotEligibleReason', NotEligibleReason)
     nunjucksEnv.addGlobal('InterestDateType', InterestDateType)
+  }
+
+  private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {
+    if (!featureToggles) {
+      throw new Error('Feature toggles are not defined')
+    }
+    return Object.keys(featureToggles).reduce((result: { [key: string]: boolean }, property: string) => {
+      result[property] = toBoolean(Object.getOwnPropertyDescriptor(featureToggles, property).value)
+      return result
+    }, {})
   }
 }
