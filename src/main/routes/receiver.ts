@@ -28,8 +28,6 @@ const logger = require('@hmcts/nodejs-logging').getLogger('router/receiver')
 const useOauth = toBoolean(config.get<boolean>('featureToggles.idamOauth'))
 const sessionCookie = config.get<string>('session.cookieName')
 const stateCookieName = 'state'
-const sameSite = { sameSite: 'lax' }
-
 const authenticationRedirect: AuthenticationRedirect = AuthenticationRedirectFactory.get()
 
 async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath): Promise<string> {
@@ -90,12 +88,12 @@ function loginErrorHandler (req: express.Request,
                             err: Error,
                             receiver: RoutablePath = AppPaths.receiver) {
   if (hasTokenExpired(err)) {
-    cookies.set(sessionCookie, '', sameSite)
+    cookies.set(sessionCookie, '', { sameSite: 'lax' })
     logger.debug(`Protected path - expired auth token - access to ${req.path} rejected`)
     return res.redirect(authenticationRedirect.forLogin(req, res, receiver))
   }
   if (useOauth) {
-    cookies.set(stateCookieName, '', sameSite)
+    cookies.set(stateCookieName, '', { sameSite: 'lax' })
   }
   return next(err)
 }
@@ -137,9 +135,9 @@ async function retrieveRedirectForLandingPage (user: User): Promise<string> {
 }
 
 function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
-  cookies.set(sessionCookie, authenticationToken, sameSite)
+  cookies.set(sessionCookie, authenticationToken, { sameSite: 'lax' })
   if (useOauth) {
-    cookies.set(stateCookieName, '', sameSite)
+    cookies.set(stateCookieName, '', { sameSite: 'lax' })
   }
 }
 
