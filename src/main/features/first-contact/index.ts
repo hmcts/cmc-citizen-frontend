@@ -8,7 +8,7 @@ import { RouterFinder } from 'common/router/routerFinder'
 
 function defendantFirstContactRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    res.redirect(ErrorPaths.claimSummaryAccessDeniedPage.uri)
+    res.redirect(Paths.startPage.uri)
   }
 
   // IDAM doesn't set cmc-private-beta yet so we don't check for it
