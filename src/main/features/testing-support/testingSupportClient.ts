@@ -1,8 +1,8 @@
 import { UpdateResponseDeadlineRequest } from 'testing-support/models/updateResponseDeadlineRequest'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import * as config from 'config'
 import { claimApiBaseUrl } from 'claims/claimStoreClient'
-import request from 'client/request'
+import { request } from 'client/request'
 
 const testingSupportUrl = `${claimApiBaseUrl}/testing-support/claims`
 

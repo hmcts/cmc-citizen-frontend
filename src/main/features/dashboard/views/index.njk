@@ -48,9 +48,16 @@
               <td><a href="/dashboard/{{ claim.externalId }}/claimant">{{ claim.claimNumber }}</a></td>
               <td>{{ claim.claimData.defendant.name }}</td>
               <td>{{ claim.totalAmount | numeral }}</td>
-              <td class="mobile-hide">{{ responseStatusForClaimant(claim) }}</td>
+              <td class="mobile-hide">
+                {{ responseStatusForClaimant(claim, responseOfferPage.evaluateUri({ externalId: claim.externalId })) }}
+              </td>
             </tr>
-            <tr><td colspan="3" class="mobile-table-status">{{ t('Status: ') + responseStatusForClaimant(claim) }}</td></tr>
+            <tr>
+              <td colspan="3" class="mobile-table-status">
+                {{ t('Status: ') }}
+                {{ responseStatusForClaimant(claim, responseOfferPage.evaluateUri({ externalId: claim.externalId })) }}
+              </td>
+            </tr>
           {% endfor %}
           </tbody>
         </table>
@@ -92,7 +99,9 @@
               <td><a href="{{ url }}">{{ claim.claimNumber }}</a></td>
               <td>{{ claim.claimData.claimant.name }}</td>
               <td>{{ claim.totalAmount | numeral }}</td>
-              <td class="mobile-hide">{{ responseStatusForDefendant(claim, url, isAfter4pm) }}</td>
+              <td class="mobile-hide">
+                {{ responseStatusForDefendant(claim, url, isAfter4pm) }}
+              </td>
             </tr>
             <tr>
               <td colspan="3" class="mobile-table-status">

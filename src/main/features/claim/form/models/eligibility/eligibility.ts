@@ -1,7 +1,7 @@
 import { Serializable } from 'models/serializable'
 import { YesNoOption } from 'models/yesNoOption'
 import { IsIn } from 'class-validator'
-import { ValidationErrors } from 'features/validationErrors'
+import { ValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 

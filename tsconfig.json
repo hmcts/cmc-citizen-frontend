@@ -67,6 +67,9 @@
       "offer/*": [
         "features/offer/*"
       ],
+      "statement-of-means/*": [
+        "features/statement-of-means/*"
+      ],
       "dashboard/*": [
         "features/dashboard/*"
       ],

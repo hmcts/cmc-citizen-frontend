@@ -17,7 +17,7 @@
       <div>
         <h2 class="heading-medium">{{ t('Claim status') }}</h2>
 
-        {{ responseStatusForClaimant(claim) }}
+        {{ responseStatusForClaimant(claim, responseOfferPage.evaluateUri({ externalId: claim.externalId })) }}
 
         {% if claim.eligibleForCCJ %}
           <p>{{ t('You can only ask for a CCJ at this stage if the defendant has not responded to your claim.') }}</p>
@@ -32,9 +32,6 @@
         {% endif %}
 
         {% if claim.countyCourtJudgmentRequestedAt %}
-          <p>{{ t('Your request for a County Court Judgment was sent on %s. We will contact you within 5 days.',
-                  { postProcess: 'sprintf', sprintf: [ claim.countyCourtJudgmentRequestedAt | date ] }) }}</p>
-
           <p>{{ t('%s can no longer respond to your claim.',
                   { postProcess: 'sprintf', sprintf: [ claim.claimData.defendant.name ] }) }}</p>
         {% endif %}

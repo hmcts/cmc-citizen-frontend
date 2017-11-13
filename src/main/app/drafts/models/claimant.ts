@@ -5,10 +5,10 @@ import { IndividualDetails } from 'forms/models/individualDetails'
 import { PartyType } from 'app/common/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { MobilePhone } from 'app/forms/models/mobilePhone'
-import Payment from 'app/pay/payment'
+import { Payment } from 'app/pay/payment'
 import { CompletableTask } from 'app/models/task'
 
-export default class Claimant implements CompletableTask {
+export class Claimant implements CompletableTask {
   partyDetails?: PartyDetails
   mobilePhone?: MobilePhone
   payment: Payment = new Payment()

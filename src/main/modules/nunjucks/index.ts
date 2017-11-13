@@ -3,7 +3,7 @@ import * as path from 'path'
 import * as express from 'express'
 import * as config from 'config'
 import * as nunjucks from 'nunjucks'
-import dateFilter from 'modules/nunjucks/filters/dateFilter'
+import { dateFilter } from 'modules/nunjucks/filters/dateFilter'
 import { convertToPoundsFilter } from 'modules/nunjucks/filters/convertToPounds'
 import * as numeralFilter from 'nunjucks-numeral-filter'
 import * as numeral from 'numeral'
@@ -18,7 +18,8 @@ import { YesNoOption } from 'models/yesNoOption'
 import { EvidenceType } from 'response/form/models/evidenceType'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
-
+import { StatementType } from 'offer/form/models/statementType'
+import { InterestDateType } from 'app/common/interestDateType'
 const packageDotJson = require('../../../../package.json')
 
 const appAssetPaths = {
@@ -30,7 +31,7 @@ const appAssetPaths = {
   pdf: '/pdf'
 }
 
-export default class Nunjucks {
+export class Nunjucks {
 
   constructor (public developmentMode: boolean, public i18next) {
     this.developmentMode = developmentMode
@@ -46,6 +47,7 @@ export default class Nunjucks {
     ], {
       autoescape: true,
       throwOnUndefined: true,
+      watch: this.developmentMode,
       express: app
     })
 
@@ -72,8 +74,7 @@ export default class Nunjucks {
     nunjucksEnv.addGlobal('reportProblemSurveyUrl', config.get('feedback.reportProblemSurvey.url'))
     nunjucksEnv.addGlobal('customerSurveyUrl', config.get('feedback.serviceSurvey.url'))
 
-    nunjucksEnv.addGlobal('toBoolean', toBoolean)
-    nunjucksEnv.addGlobal('featureToggles', config.get('featureToggles'))
+    nunjucksEnv.addGlobal('featureToggles', this.convertPropertiesToBoolean(config.get('featureToggles')))
     nunjucksEnv.addGlobal('RejectAllOfClaimOption', RejectAllOfClaimOption)
     nunjucksEnv.addGlobal('RejectPartOfClaimOption', RejectPartOfClaimOption)
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
@@ -81,6 +82,18 @@ export default class Nunjucks {
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)
     nunjucksEnv.addGlobal('ClaimValue', ClaimValue)
     nunjucksEnv.addGlobal('EvidenceType', EvidenceType)
+    nunjucksEnv.addGlobal('StatementType', StatementType)
     nunjucksEnv.addGlobal('NotEligibleReason', NotEligibleReason)
+    nunjucksEnv.addGlobal('InterestDateType', InterestDateType)
+  }
+
+  private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {
+    if (!featureToggles) {
+      throw new Error('Feature toggles are not defined')
+    }
+    return Object.keys(featureToggles).reduce((result: { [key: string]: boolean }, property: string) => {
+      result[property] = toBoolean(Object.getOwnPropertyDescriptor(featureToggles, property).value)
+      return result
+    }, {})
   }
 }

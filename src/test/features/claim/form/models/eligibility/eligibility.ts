@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../../app/forms/models/validationUtils'
 import { Eligibility } from 'claim/form/models/eligibility/eligibility'
-import { ValidationErrors } from 'features/validationErrors'
+import { ValidationErrors } from 'forms/validation/validationErrors'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 

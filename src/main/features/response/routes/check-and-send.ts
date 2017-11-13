@@ -7,10 +7,10 @@ import { Form } from 'forms/form'
 import { StatementOfTruth } from 'response/form/models/statementOfTruth'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 
-import ClaimStoreClient from 'claims/claimStoreClient'
-import User from 'app/idam/user'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { User } from 'app/idam/user'
 import { ResponseType } from 'response/form/models/responseType'
-import AllResponseTasksCompletedGuard from 'response/guards/allResponseTasksCompletedGuard'
+import { AllResponseTasksCompletedGuard } from 'response/guards/allResponseTasksCompletedGuard'
 import { ErrorHandling } from 'common/errorHandling'
 import { SignatureType } from 'app/common/signatureType'
 import { QualifiedStatementOfTruth } from 'response/form/models/qualifiedStatementOfTruth'
@@ -68,6 +68,7 @@ function getStatementOfTruthClassFor (user: User): { new(): StatementOfTruth | Q
   }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.checkAndSendPage.uri,

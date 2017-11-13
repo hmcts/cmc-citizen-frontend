@@ -26,6 +26,7 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
   next()
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.timelinePage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     renderView(new Form(res.locals.user.responseDraft.document.timeline), res)

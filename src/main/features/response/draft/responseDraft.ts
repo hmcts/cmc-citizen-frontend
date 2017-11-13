@@ -3,7 +3,7 @@ import { Serializable } from 'models/serializable'
 import { FreeMediation } from 'response/form/models/freeMediation'
 import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
-import Defence from 'response/form/models/defence'
+import { Defence } from 'response/form/models/defence'
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import { ResponseType } from 'response/form/models/responseType'
 import { isNullOrUndefined } from 'util'
@@ -16,6 +16,7 @@ import { Timeline } from 'response/form/models/timeline'
 import { Evidence } from 'response/form/models/evidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
+import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
 
 export class ResponseDraft extends DraftDocument implements Serializable<ResponseDraft> {
 
@@ -31,6 +32,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   howMuchOwed?: HowMuchOwed
   rejectPartOfClaim?: RejectPartOfClaim
   rejectAllOfClaim?: RejectAllOfClaim
+  impactOfDispute?: ImpactOfDispute
 
   deserialize (input: any): ResponseDraft {
     if (input) {
@@ -49,6 +51,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       }
       this.rejectPartOfClaim = new RejectPartOfClaim(input.rejectPartOfClaim && input.rejectPartOfClaim.option)
       this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
+      this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
     }
     return this
   }

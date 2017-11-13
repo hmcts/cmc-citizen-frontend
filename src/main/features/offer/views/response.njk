@@ -1,0 +1,65 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary, radioGroupWithHintPanel %}
+{% from "date.njk" import dateInput %}
+
+{% set title = t('Money claim | Accept or reject the offer') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">
+        <span class="heading-secondary">{{ t('Defendant’s response') }}</span>
+        {{ t('%s’s offer', { postProcess: 'sprintf', sprintf: [ claim.claimData.defendant.name ] } ) }}
+      </h1>
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+        <table>
+          <tr>
+            <td>{{ t('The offer') }}</td>
+            <td>{{ offer.content }}</td>
+          </tr>
+          <tr>
+            <td>{{ t('By when') }}</td>
+            <td>{{ offer.completionDate | date }}</td>
+          </tr>
+        </table>
+
+        <h2 class="heading-medium"> {{ t('Do you accept the offer?') }} </h2>
+
+        {{
+        radioGroupWithHintPanel(
+          label = 'Do you accept the offer?',
+          form = form,
+          labelForScreenReadersOnly = true,
+          name = 'option',
+          options = [
+            {
+              bold: false,
+              label: 'Yes',
+              hint: t('You can make a legal agreement between you and %s.',
+                { postProcess: 'sprintf',
+                sprintf:[ claim.claimData.defendant.name ]
+                }),
+              value: StatementType.ACCEPTATION.value,
+              checked: (form.valueFor('option').value === StatementType.ACCEPTATION)
+            },
+            {
+              bold: false,
+              label: 'No',
+              value: StatementType.REJECTION.value,
+              checked: (form.valueFor('option').value === StatementType.REJECTION)
+            },
+            {
+              bold: false,
+              label: 'Make a counter offer',
+              value: StatementType.OFFER.value,
+              checked: (form.valueFor('option').value === StatementType.OFFER)
+            }
+          ]
+        )
+      }}
+{{ submitButton('Continue') }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -1,11 +1,11 @@
 import * as express from 'express'
 import * as config from 'config'
 import * as HttpStatus from 'http-status-codes'
+import * as Cookies from 'cookies'
 
-import JwtExtractor from 'idam/jwtExtractor'
-
-import IdamClient from 'idam/idamClient'
-import User from 'app/idam/user'
+import { JwtExtractor } from 'idam/jwtExtractor'
+import { IdamClient } from 'idam/idamClient'
+import { User } from 'app/idam/user'
 
 const sessionCookieName = config.get<string>('session.cookieName')
 
@@ -54,7 +54,8 @@ export class AuthorizationMiddleware {
           })
           .catch((err) => {
             if (hasTokenExpired(err)) {
-              res.clearCookie(sessionCookieName)
+              const cookies = new Cookies(req, res)
+              cookies.set(sessionCookieName, '', { sameSite: 'lax' })
               logger.debug(`Protected path - invalid JWT - access to ${req.path} rejected`)
               return accessDeniedCallback(req, res)
             }

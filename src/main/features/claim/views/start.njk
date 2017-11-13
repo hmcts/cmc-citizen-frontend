@@ -5,50 +5,48 @@
 {% from "form.njk" import submitButton %}
 {% from "support.njk" import supportWidget %}
 
-
-
 {% block content %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-xlarge">{{ t('Make a money claim') }}</h1>
+      <h1 class="heading-large">{{ t('Make a money claim') }}</h1>
 
-      <p>{{ t("You can make a money claim if someone owes you money and won’t agree to pay you back.") }}</p>
+      <p>{{ t('You can make a money claim if someone owes you money and won’t agree to pay you back.') }}</p>
 
-      <p class="panel panel-border-wide">{{ t("A money claim might not be your only or best option. Find out about") }}
-        <a href="/other-options">{{ t("other ways to get your money") }}</a>.</p>
+      <p class="panel panel-border-wide">{{ t('A money claim might not be your only or best option. Find out about') }}
+        <a href="/other-options">{{ t('other ways to get your money') }}</a>.</p>
 
-      <p>{{ t("You might have to go to a hearing in front of a judge if the person says they don’t owe you. It can take
-                up to 7 months to get a hearing date.") }}</p>
+      <p>{{ t('You might have to go to a hearing in front of a judge if the person says they don’t owe you. It can take
+                up to 7 months to get a hearing date.') }}</p>
 
-      <p>{{ t("Find out more about") }} <a
-          href="https://www.gov.uk/make-court-claim-for-money">{{ t("making a money claim") }}</a>,
-        {{ t("such as the") }} <a
-          href="https://www.gov.uk/make-court-claim-for-money/court-fees">{{ t(" fees you’ll pay") }}</a>.</p>
+      <p>{{ t('Find out more about') }} <a
+          href="https://www.gov.uk/make-court-claim-for-money">{{ t('making a money claim') }}</a>,
+        {{ t('such as the') }} <a
+          href="https://www.gov.uk/make-court-claim-for-money/court-fees">{{ t(' fees you’ll pay') }}</a>.</p>
 
       <h2 class="heading-medium">{{ t('What you’ll need') }}</h2>
 
       <ul class="list list-bullet">
-        <li>{{ t("Current address and any other contact details of the person or company you’re claiming against.") }}</li>
-        <li>{{ t("A credit or debit card to pay the") }} <a
-            href="https://www.gov.uk/make-court-claim-for-money/court-fees">{{ t("claim fee") }}</a>.
+        <li>{{ t('Current address and any other contact details of the person or company you’re claiming against.') }}</li>
+        <li>{{ t('A credit or debit card to pay the') }} <a
+            href="https://www.gov.uk/make-court-claim-for-money/court-fees">{{ t('claim fee') }}</a>.
         </li>
-        <li>{{ t("Around 30 minutes to make your claim.") }}</li>
+        <li>{{ t('Around 30 minutes to make your claim.') }}</li>
       </ul>
 
-      <p class="panel panel-border-wide">{{ t("You can save your claim and return to it at any time.") }}</p>
+      <p class="panel panel-border-wide">{{ t('You can save your claim and return to it at any time.') }}</p>
 
       <div class="clearfix">
-        <a class="button button-start" href="{{ startLink }}" role="button">{{ t("Start now") }}</a>
+        <a class="button button-start" href="{{ startLink }}" role="button">{{ t('Start now') }}</a>
       </div>
 
       <br>
 
-      <h2 class="heading-medium">{{ t("Other ways to claim") }}</h2>
+      <h2 class="heading-medium">{{ t('Other ways to claim') }}</h2>
 
-      <p>{{ t("You can print and fill in a") }} <a
-          href="http://hmctsformfinder.justice.gov.uk/HMCTS/GetForm.do?court_forms_id=338">{{ t("paper claim
-                form.") }}</a> {{ t("Send it and a cheque for your claim fee to the the address on the form.") }}</p>
+      <p>{{ t('You can print and fill in a') }} <a
+          href="http://hmctsformfinder.justice.gov.uk/HMCTS/GetForm.do?court_forms_id=338">{{ t('paper claim
+                form.') }}</a> {{ t('Send it and a cheque for your claim fee to the the address on the form.') }}</p>
 
       {{ supportWidget('Help to use this service') }}
 
@@ -60,23 +58,23 @@
           'http://www.advicenow.org.uk/'
           ] }) | safe }}
       </p>
-      <p>{{ t("You don’t have to use a lawyer to make a money claim but some people choose to, for example, if there’s"
-        + " a lot of money involved.") }}
+      <p>{{ t('You don’t have to use a lawyer to make a money claim but some people choose to, for example, if there’s'
+        + ' a lot of money involved.') }}
       </p>
 
     </div>
 
     <div class="column-third">
       <aside class="govuk-related-items" role="complementary">
-        <h2 class="heading-medium" id="subsection-title">{{ t("Support") }}</h2>
+        <h2 class="heading-medium" id="subsection-title">{{ t('Support') }}</h2>
         <nav role="navigation" aria-labelledby="subsection-title">
           <ul class="font-xsmall">
-            <li><a href="https://www.gov.uk/make-court-claim-for-money">{{ t("Make a court claim for money") }}</a></li>
-            <li><a href="https://www.gov.uk/make-court-claim-for-money/court-fees">{{ t("Money claim fees") }}</a></li>
-            <li><a href="/other-options">{{ t("Other options") }}</a></li>
+            <li><a href="https://www.gov.uk/make-court-claim-for-money">{{ t('Make a court claim for money') }}</a></li>
+            <li><a href="https://www.gov.uk/make-court-claim-for-money/court-fees">{{ t('Money claim fees') }}</a></li>
+            <li><a href="/other-options">{{ t('Other options') }}</a></li>
             <li><a class="external" rel="external"
                    href="https://courttribunalfinder.service.gov.uk/courts/county-court-business-centre-ccbc"
-                   target="_blank">{{ t("Contact us") }}</a></li>
+                   target="_blank">{{ t('Contact us') }}</a></li>
           </ul>
         </nav>
       </aside>

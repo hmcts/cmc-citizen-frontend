@@ -3,7 +3,7 @@ import * as toBoolean from 'to-boolean'
 
 const oauthEnabled = toBoolean(config.get('featureToggles.idamOauth'))
 
-export default class JwtExtractor {
+export class JwtExtractor {
 
   static extract (req: any): string {
     if (!req) {

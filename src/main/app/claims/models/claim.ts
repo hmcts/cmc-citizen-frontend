@@ -1,7 +1,7 @@
 import { Serializable } from 'models/serializable'
 
 import { Moment } from 'moment'
-import ClaimData from 'app/claims/models/claimData'
+import { ClaimData } from 'app/claims/models/claimData'
 import { MomentFactory } from 'common/momentFactory'
 import { InterestDateType } from 'app/common/interestDateType'
 import { calculateInterest } from 'app/common/calculateInterest'
@@ -9,8 +9,10 @@ import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { DefendantResponse } from 'claims/models/defendantResponse'
+import { Settlement } from 'claims/models/settlement'
+import { Offer } from 'claims/models/offer'
 
-export default class Claim implements Serializable<Claim> {
+export class Claim implements Serializable<Claim> {
   id: number
   claimantId: string
   externalId: string
@@ -27,6 +29,7 @@ export default class Claim implements Serializable<Claim> {
   countyCourtJudgmentRequestedAt: Moment
   response: DefendantResponse
   defendantEmail: string
+  settlement: Settlement
 
   deserialize (input: any): Claim {
     if (input) {
@@ -54,8 +57,19 @@ export default class Claim implements Serializable<Claim> {
       if (input.countyCourtJudgmentRequestedAt) {
         this.countyCourtJudgmentRequestedAt = MomentFactory.parse(input.countyCourtJudgmentRequestedAt)
       }
+      if (input.settlement) {
+        this.settlement = new Settlement().deserialize(input.settlement)
+      }
     }
     return this
+  }
+
+  get defendantOffer (): Offer {
+    if (!this.settlement) {
+      return undefined
+    }
+
+    return this.settlement.getDefendantOffer()
   }
 
   get totalAmount (): number {

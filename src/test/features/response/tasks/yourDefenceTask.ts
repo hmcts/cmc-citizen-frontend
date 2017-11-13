@@ -2,7 +2,7 @@
 import { expect } from 'chai'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
-import Defence from 'response/form/models/defence'
+import { Defence } from 'response/form/models/defence'
 
 import { YourDefenceTask } from 'response/tasks/yourDefenceTask'
 

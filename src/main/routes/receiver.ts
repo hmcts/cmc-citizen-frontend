@@ -5,18 +5,18 @@ import { Paths as DashboardPaths } from 'dashboard/paths'
 import { Paths as ClaimPaths } from 'claim/paths'
 import { Paths as ResponsePaths } from 'response/paths'
 import { ErrorPaths, Paths as FirstContactPaths } from 'first-contact/paths'
-import ClaimStoreClient from 'app/claims/claimStoreClient'
-import User from 'app/idam/user'
+import { ClaimStoreClient } from 'app/claims/claimStoreClient'
+import { User } from 'app/idam/user'
 import { ErrorHandling } from 'common/errorHandling'
-import Claim from 'claims/models/claim'
+import { Claim } from 'claims/models/claim'
 import * as toBoolean from 'to-boolean'
 import * as Cookies from 'cookies'
 import { AuthToken } from 'idam/authToken'
 import * as config from 'config'
-import IdamClient from 'app/idam/idamClient'
+import { IdamClient } from 'app/idam/idamClient'
 import { buildURL } from 'utils/callbackBuilder'
-import DraftClaim from 'drafts/models/draftClaim'
-import JwtExtractor from 'idam/jwtExtractor'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { JwtExtractor } from 'idam/jwtExtractor'
 import { RoutablePath } from 'common/router/routablePath'
 import { Draft } from '@hmcts/draft-store-client'
 import { hasTokenExpired } from 'idam/authorizationMiddleware'
@@ -27,7 +27,7 @@ import { DraftService } from 'services/draftService'
 const logger = require('@hmcts/nodejs-logging').getLogger('router/receiver')
 const useOauth = toBoolean(config.get<boolean>('featureToggles.idamOauth'))
 const sessionCookie = config.get<string>('session.cookieName')
-
+const stateCookieName = 'state'
 const authenticationRedirect: AuthenticationRedirect = AuthenticationRedirectFactory.get()
 
 async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath): Promise<string> {
@@ -83,13 +83,17 @@ function getLetterHolderId (req: express.Request, user: User): string {
 
 function loginErrorHandler (req: express.Request,
                             res: express.Response,
+                            cookies: Cookies,
                             next: express.NextFunction,
                             err: Error,
                             receiver: RoutablePath = AppPaths.receiver) {
   if (hasTokenExpired(err)) {
-    res.clearCookie(sessionCookie)
+    cookies.set(sessionCookie, '', { sameSite: 'lax' })
     logger.debug(`Protected path - expired auth token - access to ${req.path} rejected`)
     return res.redirect(authenticationRedirect.forLogin(req, res, receiver))
+  }
+  if (useOauth) {
+    cookies.set(stateCookieName, '', { sameSite: 'lax' })
   }
   return next(err)
 }
@@ -130,10 +134,14 @@ async function retrieveRedirectForLandingPage (user: User): Promise<string> {
   return ClaimPaths.startPage.uri
 }
 
-function setAuthCookie (cookies: any, authenticationToken: string): void {
+function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
   cookies.set(sessionCookie, authenticationToken, { sameSite: 'lax' })
+  if (useOauth) {
+    cookies.set(stateCookieName, '', { sameSite: 'lax' })
+  }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(AppPaths.receiver.uri,
     ErrorHandling.apply(async (req: express.Request,
@@ -150,11 +158,13 @@ export default express.Router()
           setAuthCookie(cookies, authenticationToken)
         }
       } catch (err) {
-        return loginErrorHandler(req, res, next, err)
+        return loginErrorHandler(req, res, cookies, next, err)
       }
 
       if (res.locals.isLoggedIn) {
         if (isDefendantFirstContactPinLogin(req)) {
+          // re-set state cookie as it was cleared above, we need it in this case
+          cookies.set(stateCookieName, req.query.state, { sameSite: 'lax' })
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         }
 
@@ -180,7 +190,7 @@ export default express.Router()
           setAuthCookie(cookies, authenticationToken)
         }
       } catch (err) {
-        return loginErrorHandler(req, res, next, err, AppPaths.linkDefendantReceiver)
+        return loginErrorHandler(req, res, cookies, next, err, AppPaths.linkDefendantReceiver)
       }
 
       const user: User = res.locals.user

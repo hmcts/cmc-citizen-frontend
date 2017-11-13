@@ -6,7 +6,7 @@ import { Form } from 'forms/form'
 
 import { FreeMediation } from 'response/form/models/freeMediation'
 import { ErrorHandling } from 'common/errorHandling'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 
 async function renderView (form: Form<FreeMediation>, res: express.Response, next: express.NextFunction) {
@@ -21,6 +21,7 @@ async function renderView (form: Form<FreeMediation>, res: express.Response, nex
   }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.freeMediationPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     await renderView(new Form(res.locals.user.responseDraft.document.freeMediation), res, next)
