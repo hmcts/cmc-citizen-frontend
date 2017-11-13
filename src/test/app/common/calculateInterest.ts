@@ -47,6 +47,15 @@ describe('calculateInterest', () => {
         expect(calculateInterest(100, interest, interestDate)).to.equal(0)
       })
     })
+
+    describe('interest type is STANDARD and', () => {
+      it('amount is greater than 0 and the date is NOT current date', () => {
+        const interest = buildInterest(InterestType.STANDARD)
+        const interestDate = moment().subtract(5, 'years')
+        const interestToDate = moment().subtract(5, 'years')
+        expect(calculateInterest(100, interest, interestDate, interestToDate)).to.equal(0)
+      })
+    })
   })
 
   describe('should return positive number when', () => {

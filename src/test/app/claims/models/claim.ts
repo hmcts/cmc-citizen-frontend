@@ -5,6 +5,9 @@ import { Settlement } from 'claims/models/settlement'
 import { StatementType } from 'offer/form/models/statementType'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { Offer } from 'claims/models/offer'
+import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+
+const sampleClaimObj: Claim = new Claim().deserialize(claimStoreServiceMock.sampleClaimObj)
 
 const claim = new Claim()
 
@@ -61,6 +64,20 @@ describe('Claim', () => {
 
       it('should return false', () => {
         expect(claim.eligibleForCCJ).to.be.equal(false)
+      })
+    })
+
+    context('totalAmountTillToday', () => {
+      it('should return the correct amount with interest until today', () => {
+        expect(sampleClaimObj.totalAmountTillToday).to.equal(225)
+      })
+    })
+
+    context('totalAmountTillDateOfIssue', () => {
+      const inPast = MomentFactory.currentDate().subtract(200, 'weeks')
+      sampleClaimObj.createdAt = inPast
+      it('should return the correct amount with interest until date of issue', () => {
+        expect(sampleClaimObj.totalAmountTillDateOfIssue).to.equal(225)
       })
     })
   })

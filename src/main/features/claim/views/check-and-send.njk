@@ -60,7 +60,7 @@
       {{ row('Interest rate:', t('I don’t want to claim interest'), paths.interestPage.uri )}}
     {% endif %}
 
-    {{ row("Claim fee:", claimAmountTotal.feeAmount | numeral) }}
+    {{ row('Claim fee:', claimAmountTotal.feeAmount | numeral) }}
     {{ row('Total amount you’re claiming:',  claimAmountTotal.totalAmountTillToday | numeral) }}
     {{ tableEnd() }}
 
