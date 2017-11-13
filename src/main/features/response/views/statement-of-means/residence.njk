@@ -21,50 +21,17 @@
           <fieldset id="type[label]">
             <legend class="visually-hidden">{{ t('Where are you living?') }}</legend>
 
-            {{ radioOption(
-              form = form,
-              name = 'type[value]',
-              value = 'OWN_HOME',
-              label = 'Home you own yourself (including if you have a mortgage)',
-              bold = false,
-              hint = ''
-            ) }}
+            {% for type in ResidenceType.all() %}
+              {{ radioOption(
+                form = form,
+                name = 'type[value]',
+                value = type.value,
+                label = type.displayValue,
+                bold = false,
+                hint = ''
+              ) }}
+            {% endfor %}
 
-            {{ radioOption(
-              form = form,
-              name = 'type[value]',
-              value = 'JOINT_OWN_HOME',
-              label = 'Jointly-owned home (including if you have a mortgage)',
-              bold = false,
-              hint = ''
-            ) }}
-
-            {{ radioOption(
-              form = form,
-              name = 'type[value]',
-              value = 'PRIVATE_RENTAL',
-              label = 'Private rental',
-              bold = false,
-              hint = ''
-            ) }}
-
-            {{ radioOption(
-              form = form,
-              name = 'type[value]',
-              value = 'COUNCIL_OR_HOUSING_ASSN_HOME',
-              label = 'Council or housing association home',
-              bold = false,
-              hint = ''
-            ) }}
-
-            {{ radioOption(
-              form = form,
-              name = 'type[value]',
-              value = 'OTHER',
-              label = 'Other',
-              bold = false,
-              hint = ''
-            ) }}
           </fieldset>
         </div>
 
