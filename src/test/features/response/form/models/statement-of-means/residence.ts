@@ -2,9 +2,13 @@
 /* tslint:disable:no-unused-expression */
 
 import { expect } from 'chai'
+import { expectValidationError, generateString } from '../../../../../app/forms/models/validationUtils'
 
-import { Residence } from 'response/form/models/statement-of-means/residence'
+import { Residence, ValidationErrors } from 'response/form/models/statement-of-means/residence'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
+import { ValidationError, Validator } from 'class-validator'
+import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 describe('Residence', () => {
   context('draft object deserialisation', () => {
@@ -44,6 +48,50 @@ describe('Residence', () => {
         otherTypeDetails: 'Some details'
       })
       expect(residence.otherTypeDetails).to.be.undefined
+    })
+  })
+
+  context('validation', () => {
+    const validator: Validator = new Validator()
+
+    it('should have no validation errors when the object is valid', () => {
+      const errors: ValidationError[] = validator.validateSync(new Residence(ResidenceType.OTHER, 'Some description'))
+      expect(errors).to.be.empty
+    })
+
+    it('should have an error when residence type is not provided', () => {
+      const errors: ValidationError[] = validator.validateSync(new Residence())
+      expectValidationError(errors, DefaultValidationErrors.SELECT_AN_OPTION)
+    })
+
+    it('should have an error when unknown residence type is provided', () => {
+      const errors: ValidationError[] = validator.validateSync(new Residence(
+        new ResidenceType('whoa', 'Whoa!')
+      ))
+      expectValidationError(errors, DefaultValidationErrors.SELECT_AN_OPTION)
+    })
+
+    it('should have an error when type is OTHER and housing details are not provided', () => {
+      const errors: ValidationError[] = validator.validateSync(new Residence(
+        ResidenceType.OTHER
+      ))
+      expectValidationError(errors, ValidationErrors.DESCRIBE_YOUR_HOUSING)
+    })
+
+    it('should have an error when provided details are too long', () => {
+      const errors: ValidationError[] = validator.validateSync(new Residence(
+        ResidenceType.OTHER,
+        generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1)
+      ))
+      expectValidationError(errors, DefaultValidationErrors.FREE_TEXT_TOO_LONG)
+    })
+
+    it('should not validate housing details when type is not OTHER', () => {
+      const errors: ValidationError[] = validator.validateSync(new Residence(
+        ResidenceType.OWN_HOME,
+        generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 100)
+      ))
+      expect(errors).to.be.empty
     })
   })
 })
