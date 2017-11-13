@@ -51,13 +51,13 @@
               t('You requested a County Court Judgment on %s. We will contact you within 5 days.',
               { postProcess: 'sprintf', sprintf: [ claim.countyCourtJudgmentRequestedAt | date ]})
               %}
-            {% elseif claim.settlement %}
+            {% elseif featureToggles.offer and claim.settlement %}
               {% set status =
               t('%s wants to settle out of court. View <a href="%s">their offer</a>.',
               { postProcess: 'sprintf',
               sprintf:
                       [ claim.claimData.defendant.name,
-                        offerPaths.responsePage.evaluateUri({ externalId: claim.externalId })
+                        OfferPaths.responsePage.evaluateUri({ externalId: claim.externalId })
                       ]
               }) | safe%}
             {% else %}

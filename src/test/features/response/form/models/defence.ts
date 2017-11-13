@@ -4,7 +4,9 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from '../../../../app/forms/models/validationUtils'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { Defence, ValidationErrors } from 'response/form/models/defence'
+import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 
 describe('Defence', () => {
   describe('constructor', () => {
@@ -63,15 +65,15 @@ describe('Defence', () => {
       expectValidationError(errors, ValidationErrors.DEFENCE_REQUIRED)
     })
 
-    it('should reject defence text with more than 99000 characters', () => {
-      const text: string = generateString(99001)
+    it('should reject defence text with more than max allowed characters', () => {
+      const text: string = generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1)
       const errors = validator.validateSync(new Defence(text))
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.DEFENCE_TOO_LONG.replace('$constraint1', '99000'))
+      expectValidationError(errors, DefaultValidationErrors.FREE_TEXT_TOO_LONG)
     })
 
-    it('should accept defence text with 99000 characters', () => {
-      const errors = validator.validateSync(new Defence(generateString(9900)))
+    it('should accept defence text with max allowed characters', () => {
+      const errors = validator.validateSync(new Defence(generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH)))
       expect(errors.length).to.equal(0)
     })
 

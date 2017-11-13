@@ -10,7 +10,6 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const user: User = res.locals.user
       res.render(Paths.makeAgreementPage.associatedView, {
-        claim: user.claim,
-        paths: Paths
+        claim: user.claim
       })
     }))

@@ -12,9 +12,9 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { checkAlreadySubmittedGuard } from './checks/already-submitted-check'
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
-import { ValidationConstants } from 'response/form/models/evidenceRow'
 import { generateString } from '../../../app/forms/models/validationUtils'
 import { EvidenceType } from 'response/form/models/evidenceType'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.evidencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -119,7 +119,7 @@ describe('Defendant response: evidence', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value, description: 'Bla bla' }] })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+                .toLocation(Paths.impactOfDisputePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })
 
@@ -135,7 +135,7 @@ describe('Defendant response: evidence', () => {
               .send({
                 rows: [{
                   type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value,
-                  description: generateString(ValidationConstants.DESCRIPTION_MAX_LENGTH + 1)
+                  description: generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1)
                 }]
               })
               .expect(res => expect(res).to.be.successful.withText('You’ve entered too many characters'))

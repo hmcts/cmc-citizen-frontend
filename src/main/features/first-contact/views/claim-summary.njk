@@ -3,7 +3,7 @@
 {% from "form.njk" import csrfProtection, submitButton %}
 
 {% set title = t('Money claim') %}
-{% set heading = t("View the claim") %}
+{% set heading = t('View the claim') %}
 
 {% set claimantFullName = claim.claimData.claimant.name %}
 {% set responseDeadline = claim.responseDeadline.format('LL') %}

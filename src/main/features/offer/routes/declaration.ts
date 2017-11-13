@@ -6,6 +6,7 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Declaration } from 'ccj/form/models/declaration'
 import { Claim } from 'claims/models/claim'
+import { OfferClient } from 'claims/offerClient'
 
 function renderView (form: Form<Declaration>, claim: Claim, res: express.Response) {
   res.render(
@@ -13,8 +14,7 @@ function renderView (form: Form<Declaration>, claim: Claim, res: express.Respons
     {
       claim: claim,
       form: form,
-      offer: claim.defendantOffer,
-      paths: Paths
+      offer: claim.defendantOffer
     }
   )
 }
@@ -40,7 +40,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, user.claim, res)
       } else {
-        // TODO: persist and redirect to confirmation page
-        renderView(form, user.claim, res)
+        await OfferClient.acceptOffer(user)
+        res.redirect(Paths.acceptedPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))
