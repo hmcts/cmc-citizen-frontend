@@ -7,6 +7,7 @@ import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 
 describe('ResponseDraft', () => {
 
@@ -32,6 +33,7 @@ describe('ResponseDraft', () => {
       expect(responseDraftModel.moreTimeNeeded.option).to.eql(MoreTimeNeededOption.YES)
       expect(responseDraftModel.isMoreTimeRequested()).to.be.eql(true)
       expect(responseDraftModel.impactOfDispute.text).to.equal('This dispute has affected me badly, I cried')
+      expect(responseDraftModel.statementOfMeans.residence.type.value).to.equal(ResidenceType.OTHER.value)
     })
   })
 
@@ -271,6 +273,15 @@ describe('ResponseDraft', () => {
       },
       impactOfDispute: {
         text: 'This dispute has affected me badly, I cried'
+      },
+      statementOfMeans: {
+        residence: {
+          type: {
+            value: ResidenceType.OTHER.value,
+            displayValue: ResidenceType.OTHER.displayValue
+          },
+          housingDetails: 'Squat'
+        }
       }
     }
   }
