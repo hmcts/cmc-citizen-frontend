@@ -50,7 +50,7 @@ describe('Dashboard - claimant page', () => {
           await request(app)
             .get(claimantPage)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Claim number', 'The defendant'))
+            .expect(res => expect(res).to.be.successful.withText('Claim number', claimStoreServiceMock.sampleClaimObj.referenceNumber))
         })
       })
     })
