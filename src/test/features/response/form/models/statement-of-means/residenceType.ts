@@ -20,5 +20,9 @@ describe('ResidenceType', () => {
         expect(ResidenceType.valueOf(element.value).value).to.equal(element.value)
       })
     })
+
+    it('should throw an error when given an unknown value', () => {
+      expect(() => ResidenceType.valueOf('I am not a valid type')).to.throw(Error)
+    })
   })
 })
