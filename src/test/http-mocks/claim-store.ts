@@ -2,6 +2,8 @@ import * as config from 'config'
 import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
 import { InterestType } from 'features/claim/form/models/interest'
+import { StatementType } from 'features/offer/form/models/statementType'
+import { MadeBy } from 'features/offer/form/models/madeBy'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
@@ -65,6 +67,15 @@ export const sampleClaimObj = {
     defendantDateOfBirth: '1990-11-01',
     paidAmount: 2,
     paymentOption: 'IMMEDIATELY'
+  },
+  settlement: {
+    partyStatements: [
+      {
+        type: StatementType.OFFER.value,
+        madeBy: MadeBy.DEFENDANT.value,
+        offer: { content: 'offer text', completionDate: '2017-08-08' }
+      }
+    ]
   }
 }
 
@@ -99,7 +110,7 @@ export function resolveRetrieveClaimByExternalIdWithResponse (override?: object)
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...sampleDefendantResponseObj, ...override })
 }
 
-export function rejectRetrieveClaimByExternalId (reason: string) {
+export function rejectRetrieveClaimByExternalId (reason: string = 'Error') {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
@@ -230,11 +241,25 @@ export function rejectSaveOfferForDefendant (reason: string = 'HTTP error') {
     .post(new RegExp('/[0-9]+/offers/defendant'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
+
 export function resolveSaveOffer () {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+/offers/defendant'))
-    .reply(HttpStatus.OK)
+    .reply(HttpStatus.CREATED)
 }
+
+export function resolveAcceptOffer (by: string = 'claimant') {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp(`/[0-9]+/offers/${by}/accept`))
+    .reply(HttpStatus.CREATED)
+}
+
+export function resolveRejectOffer (by: string = 'claimant') {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp(`/[0-9]+/offers/${by}/reject`))
+    .reply(HttpStatus.CREATED)
+}
+
 export function rejectSaveCcjForUser (reason: string = 'HTTP error') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+/county-court-judgment'))

@@ -1,6 +1,6 @@
 import { Serializable } from 'app/models/serializable'
 import { ClaimAmountBreakdown } from 'features/claim/form/models/claimAmountBreakdown'
-import InterestDate from 'app/claims/models/interestDate'
+import { InterestDate } from 'app/claims/models/interestDate'
 import { Interest } from 'features/claim/form/models/interest'
 import { Party } from 'claims/models/details/yours/party'
 import { Individual as ClaimantAsIndividual } from 'claims/models/details/yours/individual'
@@ -13,10 +13,10 @@ import { Individual as DefendantAsIndividual } from 'claims/models/details/their
 import { Company as DefendantAsCompany } from 'claims/models/details/theirs/company'
 import { SoleTrader as DefendantAsSoleTrader } from 'claims/models/details/theirs/soleTrader'
 import { Organisation as DefendantAsOrganisation } from 'claims/models/details/theirs/organisation'
-import Payment from 'app/pay/payment'
+import { Payment } from 'app/pay/payment'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
-export default class ClaimData implements Serializable<ClaimData> {
+export class ClaimData implements Serializable<ClaimData> {
   externalId: string
   claimants: Party[]
   defendants: TheirDetails[]

@@ -19,7 +19,11 @@
     "url": "http://localhost:4400"
   },
   "draft-store": {
-    "url": "http://localhost:8800"
+    "url": "http://localhost:8800",
+    "secrets": {
+      "primary": "not-a-real-primary-secret",
+      "secondary": "not-a-real-secondary-secret"
+    }
   },
   "session": {
     "cookieName": "SESSION_ID"
@@ -65,7 +69,8 @@
     "countyCourtJudgment": false,
     "idamOauth": false,
     "partialAdmission": false,
-    "offer": false
+    "offer": false,
+    "statementOfMeans": false
   },
   "oauth": {
     "clientId": "cmc_citizen",

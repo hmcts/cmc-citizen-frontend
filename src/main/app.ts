@@ -9,8 +9,8 @@ import { NotFoundError } from './errors'
 import { ErrorLogger } from 'logging/errorLogger'
 import { RouterFinder } from 'common/router/routerFinder'
 import { Config as HelmetConfig, Helmet } from 'modules/helmet'
-import I18Next from 'modules/i18n'
-import Nunjucks from 'modules/nunjucks'
+import { I18Next } from 'modules/i18n'
+import { Nunjucks } from 'modules/nunjucks'
 
 import { Feature as ClaimIssueFeature } from 'claim/index'
 import { Feature as DefendantFirstContactFeature } from 'first-contact/index'
@@ -29,9 +29,6 @@ logging.config({
   team: 'cmc',
   environment: process.env.NODE_ENV
 })
-
-const logger = require('@hmcts/nodejs-logging')
-  .getLogger('app')
 
 const env = process.env.NODE_ENV || 'development'
 app.locals.ENV = env
@@ -75,7 +72,6 @@ if (toBoolean(config.get<boolean>('featureToggles.offer'))) {
 }
 
 if (toBoolean(config.get<boolean>('featureToggles.testingSupport'))) {
-  logger.info('Testing support activated')
   new TestingSupportFeature().enableFor(app)
 }
 

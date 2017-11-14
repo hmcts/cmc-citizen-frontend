@@ -13,6 +13,7 @@ function renderView (form: Form<SoleTraderDetails>, res: express.Response): void
   res.render(Paths.defendantSoleTraderOrSelfEmployedDetailsPage.associatedView, { form: form })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantSoleTraderOrSelfEmployedDetailsPage.uri, (req: express.Request, res: express.Response) => {
     renderView(new Form(res.locals.user.claimDraft.document.defendant.partyDetails as SoleTraderDetails), res)

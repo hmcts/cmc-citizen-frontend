@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import DraftClaim from 'app/drafts/models/draftClaim'
+import { DraftClaim } from 'app/drafts/models/draftClaim'
 import { ClaimAmount } from 'app/drafts/tasks/claimAmount'
 import { InterestType } from 'claim/form/models/interest'
 

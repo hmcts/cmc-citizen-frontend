@@ -1,8 +1,8 @@
 import * as express from 'express'
 import * as toBoolean from 'to-boolean'
 import * as config from 'config'
-import Claim from 'app/claims/models/claim'
-import ClaimStoreClient from 'app/claims/claimStoreClient'
+import { Claim } from 'app/claims/models/claim'
+import { ClaimStoreClient } from 'app/claims/claimStoreClient'
 import { ErrorPaths } from 'first-contact/paths'
 import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
 
@@ -10,7 +10,7 @@ const logger = require('@hmcts/nodejs-logging').getLogger('first-contact/guards/
 
 const oauthEnabled = toBoolean(config.get('featureToggles.idamOauth'))
 
-export default class ClaimReferenceMatchesGuard {
+export class ClaimReferenceMatchesGuard {
 
   static async requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
     try {

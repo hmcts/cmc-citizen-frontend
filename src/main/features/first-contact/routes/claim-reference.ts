@@ -7,7 +7,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 import { ClaimReference } from 'app/forms/models/claimReference'
 
-import ClaimStoreClient from 'claims/claimStoreClient'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'
 import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
 
@@ -15,6 +15,7 @@ function renderView (form: Form<ClaimReference>, res: express.Response): void {
   res.render(Paths.claimReferencePage.associatedView, { form: form })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.claimReferencePage.uri, (req: express.Request, res: express.Response) => {
     renderView(Form.empty<ClaimReference>(), res)

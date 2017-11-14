@@ -5,7 +5,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { Declaration } from 'ccj/form/models/declaration'
 import { CCJClient } from 'claims/ccjClient'
 import { ErrorHandling } from 'common/errorHandling'
-import User from 'idam/user'
+import { User } from 'idam/user'
 import { SignatureType } from 'app/common/signatureType'
 import { QualifiedDeclaration } from 'ccj/form/models/qualifiedDeclaration'
 import { plainToClass } from 'class-transformer'
@@ -64,6 +64,7 @@ function getStatementOfTruthClassFor (user: User): { new(): Declaration | Qualif
   }
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.checkAndSendPage.uri, (req: express.Request, res: express.Response) => {
     const StatementOfTruthClass = getStatementOfTruthClassFor(res.locals.user)

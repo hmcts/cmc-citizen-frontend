@@ -6,7 +6,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { Reason } from 'claim/form/models/reason'
 
 import { ErrorHandling } from 'common/errorHandling'
-import User from 'app/idam/user'
+import { User } from 'app/idam/user'
 import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<Reason>, res: express.Response): void {
@@ -20,6 +20,7 @@ function renderView (form: Form<Reason>, res: express.Response): void {
   res.render(Paths.reasonPage.associatedView, { form: form, defendantName: defendantName })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.reasonPage.uri, (req: express.Request, res: express.Response): void => {
     renderView(new Form(res.locals.user.claimDraft.document.reason), res)

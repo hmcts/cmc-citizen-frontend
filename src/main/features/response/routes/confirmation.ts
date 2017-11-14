@@ -1,8 +1,8 @@
 import * as express from 'express'
 import { Paths } from 'response/paths'
-import { Paths as OfferPaths } from 'offer/paths'
-import User from 'idam/user'
+import { User } from 'idam/user'
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.confirmationPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
@@ -13,8 +13,7 @@ export default express.Router()
         claim: user.claim,
         submittedOn: user.claim.respondedAt,
         defendantEmail: user.email,
-        paths: Paths,
-        offerPaths: OfferPaths
+        paths: Paths
       })
     } catch (err) {
       next(err)

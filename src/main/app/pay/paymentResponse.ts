@@ -13,7 +13,7 @@ class LinkedUrl {
   method: string
 }
 
-export default class PaymentResponse {
+export class PaymentResponse {
   id: string
   amount: number
   state: PaymentState

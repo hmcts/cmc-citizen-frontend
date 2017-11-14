@@ -78,7 +78,7 @@
   {% endif %}
 
   {% if heading %}
-    <h1 class="heading-{{ headingSize | default('xlarge') }}">
+    <h1 class="heading-{{ headingSize | default('large') }}">
       {{ t(heading) }}
     {% if headingSecondary %}
       <span class="heading-secondary">{{ t(headingSecondary) }}</span>
