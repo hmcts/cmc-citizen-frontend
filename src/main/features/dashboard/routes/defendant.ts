@@ -1,11 +1,11 @@
 import * as express from 'express'
 
 import { Paths } from 'dashboard/paths'
-import { Paths as OfferPaths } from 'offer/paths'
 import { ErrorHandling } from 'common/errorHandling'
 
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { Claim } from 'app/claims/models/claim'
+import { isAfter4pm } from 'common/dateUtils'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -14,9 +14,10 @@ export default express.Router()
     const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId, res.locals.user.id)
 
     res.render(Paths.defendantPage.associatedView, {
+      paths: Paths,
+      isAfter4pm: isAfter4pm(),
       claim: claim,
       claimReceiptUri: Paths.claimReceiptReceiver.evaluateUri({ externalId: externalId }),
-      responseReceiptUri: Paths.responseReceiptReceiver.evaluateUri({ externalId: externalId }),
-      offerPageUri: OfferPaths.offerPage.evaluateUri({ externalId: externalId })
+      responseReceiptUri: Paths.responseReceiptReceiver.evaluateUri({ externalId: externalId })
     })
   }))

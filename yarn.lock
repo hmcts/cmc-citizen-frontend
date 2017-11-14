@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@hmcts/cmc-common-frontend@^1.18.1":
-  version "1.18.1"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.18.1.tgz#d692d26e07069e4a6e33c9ceb5faf920d8b18dfe"
+"@hmcts/cmc-common-frontend@^1.21.0":
+  version "1.21.0"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.21.0.tgz#93994be04fb31b70ca068143753bf95b86db81b0"
 
 "@hmcts/cmc-draft-store-middleware@^1.0.0":
   version "1.0.0"
@@ -65,6 +65,21 @@
   version "0.0.33"
   resolved "https://registry.yarnpkg.com/@types/config/-/config-0.0.33.tgz#2b256fe9744e9a3f913f551a9aa4660c41f28c4b"
 
+"@types/connect@*":
+  version "3.4.31"
+  resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.31.tgz#1f92d6b117ecc05076c49ecd024f7976e528bad9"
+  dependencies:
+    "@types/node" "*"
+
+"@types/cookies@^0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@types/cookies/-/cookies-0.7.1.tgz#f9f204bd6767d389eea3b87609e30c090c77a540"
+  dependencies:
+    "@types/connect" "*"
+    "@types/express" "*"
+    "@types/keygrip" "*"
+    "@types/node" "*"
+
 "@types/csurf@^1.9.33":
   version "1.9.35"
   resolved "https://registry.yarnpkg.com/@types/csurf/-/csurf-1.9.35.tgz#cecf3a9c09a9eb235d368ddf70b7c80588f29f72"
@@ -122,6 +137,10 @@
   resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-7.2.3.tgz#483c8f39945e1e6d308dcc51fd4aeca5208d4dca"
   dependencies:
     "@types/node" "*"
+
+"@types/keygrip@*":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/keygrip/-/keygrip-1.0.1.tgz#ff540462d2fb4d0a88441ceaf27d287b01c3d878"
 
 "@types/lodash@^4.14.52":
   version "4.14.84"

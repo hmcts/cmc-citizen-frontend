@@ -18,4 +18,8 @@ export class ResponseType {
       ResponseType.OWE_NONE
     ]
   }
+
+  static valueOf (value: string): ResponseType {
+    return ResponseType.all().filter(item => item.value === value).pop()
+  }
 }

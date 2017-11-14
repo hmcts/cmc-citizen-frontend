@@ -6,7 +6,7 @@ import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
 import { StatementOfTruth, ValidationErrors } from 'response/form/models/statementOfTruth'
 
-describe('StatementOftruth', () => {
+describe('StatementOfTruth', () => {
   describe('constructor', () => {
     it('should set signed to undefined', () => {
       const model = new StatementOfTruth()
