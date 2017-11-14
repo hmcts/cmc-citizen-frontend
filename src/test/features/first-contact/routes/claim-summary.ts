@@ -5,6 +5,7 @@ import * as config from 'config'
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
+import { Paths as DefendantFirstContactPaths } from 'first-contact/paths'
 
 import { ErrorPaths, Paths } from 'first-contact/paths'
 
@@ -12,6 +13,7 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import { MomentFactory } from 'common/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -75,6 +77,18 @@ describe('Defendant first contact: claim summary page', () => {
         .post(Paths.claimSummaryPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.have.cookie(cookieName, ''))
+    })
+  })
+
+  describe('CCJ was requested', () => {
+    it('should redirect to ccj error page', async () => {
+      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'letter-holder')
+      claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC000', { countyCourtJudgmentRequestedAt: MomentFactory.parse('2010-10-10') })
+
+      await request(app)
+        .get(DefendantFirstContactPaths.claimSummaryPage.uri)
+        .set('Cookie', `${cookieName}=ABC;state = 000MC000`)
+        .expect(res => expect(res).to.be.redirect.toLocation(ErrorPaths.ccjRequestedAccessDeniedPage.uri))
     })
   })
 })

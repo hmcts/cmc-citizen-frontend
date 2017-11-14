@@ -181,7 +181,7 @@ describe('Defendant link receiver', () => {
       it('should redirect to task list page when defendant is already set', async () => {
         const token = 'token'
         idamServiceMock.resolveExchangeCode(token)
-        claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001', '2')
+        claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001', { defendantId: '2' })
 
         await request(app)
           .get(`${pagePath}?code=123`)

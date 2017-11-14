@@ -1,0 +1,12 @@
+{% extends "layout.njk" %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ t('A County Court Judgment (CCJ) has been requested against you') }}</h1>
+      <p>{{ t('You can’t use this service. Find out <a href="{{ url }}">how to pay or challenge the CCJ</a>.',
+        { url: "https://www.gov.uk/county-court-judgments-ccj-for-debt" }) | safe }}
+      </p>
+    </div>
+  </div>
+{% endblock %}
