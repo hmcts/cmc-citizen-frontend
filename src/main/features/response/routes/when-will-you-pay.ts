@@ -9,13 +9,22 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 
+function renderView (form: Form<DefendantPaymentOption>, res: express.Response) {
+  const user: User = res.locals.user
+  res.render(Paths.defenceFullPartialPaymentOptionsPage.associatedView, {
+    form: form,
+    claim: user.claim
+  })
+}
+
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defenceFullPartialPaymentOptionsPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const defendantPaymentOption: DefendantPaymentOption = res.locals.user.responseDraft.document.defendantPaymentOption
+      const user: User = res.locals.user
+      const defendantPaymentOption: DefendantPaymentOption = user.responseDraft.document.defendantPaymentOption
 
-      res.render(Paths.defenceFullPartialPaymentOptionsPage.associatedView, { form: new Form(defendantPaymentOption) })
+      renderView(new Form(defendantPaymentOption), res)
     }))
   .post(Paths.defenceFullPartialPaymentOptionsPage.uri,
     FormValidator.requestHandler(DefendantPaymentOption, DefendantPaymentOption.fromObject),
@@ -25,7 +34,7 @@ export default express.Router()
         const user: User = res.locals.user
 
         if (form.hasErrors()) {
-          res.render(Paths.defenceFullPartialPaymentOptionsPage.associatedView, { form: form })
+          renderView(form, res)
         } else {
           user.responseDraft.document.defendantPaymentOption = form.model
           await new DraftService().save(user.responseDraft, user.bearerToken)

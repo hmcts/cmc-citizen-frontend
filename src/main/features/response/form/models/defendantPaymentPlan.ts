@@ -6,16 +6,7 @@ import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { IsFutureDate } from 'app/forms/validation/validators/dateFutureConstraint'
 import { IsLessThanOrEqualToSumOf } from 'forms/validation/validators/isLessThanOrEqualToSumOf'
 import { Fractions } from 'forms/validation/validators/fractions'
-
-export class ValidationErrors {
-  static readonly FIRST_PAYMENT_AMOUNT_INVALID: string = 'Enter a valid amount of first payment'
-  static readonly INSTALMENTS_AMOUNT_INVALID: string = 'Enter a valid amount for equal instalments'
-  static readonly FUTURE_DATE: string = 'Enter a first payment date in the future'
-  static readonly INVALID_DATE: string = 'Enter a valid date of first payment'
-  static readonly SELECT_PAYMENT_SCHEDULE: string = 'Select how often they should pay'
-  static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter valid amount, maximum two decimal places'
-  static readonly NOT_OWE_FULL_AMOUNT_REQUIRED: string = 'Explain why you don’t owe the full amount'
-}
+import { ValidationErrors } from 'forms/validation/validationErrors'
 
 export class DefendantPaymentPlan {
 

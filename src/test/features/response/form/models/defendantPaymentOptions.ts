@@ -2,16 +2,13 @@ import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
-import { DefendantPaymentOption, DefendantPaymentType, ValidationErrors } from 'response/form/models/defendantPaymentOption'
+import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { ValidationErrors } from 'forms/validation/validationErrors'
 
 describe('DefendantPaymentOption', () => {
   describe('form object deserialization', () => {
     it('should return undefined when value is undefined', () => {
       expect(DefendantPaymentOption.fromObject(undefined)).to.be.equal(undefined)
-    })
-
-    it('should return null when value is null', () => {
-      expect(DefendantPaymentOption.fromObject(null)).to.be.equal(null)
     })
 
     it('should leave missing fields undefined', () => {

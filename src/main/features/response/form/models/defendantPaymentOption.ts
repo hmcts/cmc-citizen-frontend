@@ -1,9 +1,6 @@
 import { IsDefined, IsIn } from 'class-validator'
 import { Serializable } from 'models/serializable'
-
-export class ValidationErrors {
-  static readonly OPTION_REQUIRED: string = 'Choose option'
-}
+import { ValidationErrors } from 'forms/validation/validationErrors'
 
 export class DefendantPaymentType {
   static readonly INSTALMENTS = new DefendantPaymentType('INSTALMENTS', 'By instalments')

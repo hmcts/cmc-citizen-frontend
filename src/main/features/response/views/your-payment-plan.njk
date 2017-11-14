@@ -9,6 +9,7 @@
       <h1 class="heading-large">
         {{ t("Your payment plan") }}
       </h1>
+
       <p>{{ t('You believe you owe %s',
         { postProcess: 'sprintf', sprintf: [ remainingAmount | numeral ]}) }}
       </p>

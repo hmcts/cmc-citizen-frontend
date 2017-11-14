@@ -12,7 +12,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
   const user: User = res.locals.user
-  const alreadyPaid: number = user.responseDraft.document.paidAmount.amount || 0
+  const alreadyPaid: number = user.responseDraft.document.paidAmount.amount
 
   res.render(Paths.defenceFullPartialPaymentPlanPage.associatedView, {
     form: form,
@@ -41,7 +41,6 @@ export default express.Router()
         } else {
           const { externalId } = req.params
           user.responseDraft.document.defendantPaymentPlan = form.model
-          user.responseDraft.document.payBySetDate = undefined
           await new DraftService().save(user.responseDraft, user.bearerToken)
           res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
         }
