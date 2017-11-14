@@ -12,8 +12,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
   const user: User = res.locals.user
-  const alreadyPaid: number = user.responseDraft.document.paidAmount.amount
-
+  const alreadyPaid: number = user.responseDraft.document.paidAmount.amount || 0
   res.render(Paths.defenceFullPartialPaymentPlanPage.associatedView, {
     form: form,
     remainingAmount: user.claim.totalAmount - alreadyPaid
