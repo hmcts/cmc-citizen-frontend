@@ -41,20 +41,33 @@ timestamps {
           '''
         }
 
-        stage('Node security check') {
-          try {
-            sh "yarn test:nsp 2> nsp-report.txt"
-          } catch (ignore) {
-            sh "cat nsp-report.txt"
-            archiveArtifacts 'nsp-report.txt'
-            notifyBuildResult channel: channel, color: 'warning',
-              message: 'Node security check failed see the report for the errors'
+        onPR {
+          stage('Package application (Docker)') {
+            citizenFrontendVersion = dockerImage imageName: 'cmc/citizen-frontend'
           }
-          sh "rm nsp-report.txt"
+
+          stage('Integration Tests') {
+            integrationTests.execute([
+              'CITIZEN_FRONTEND_VERSION': citizenFrontendVersion,
+              'TESTS_TAG'               : '@citizen'
+            ])
+          }
         }
 
-        // Travis runs all linting and unit testing, no need to do this twice (but run on master to be safe)
+        // Travis runs everything except integration tests, no need to do this twice (but run on master to be safe)
         onMaster {
+          stage('Node security check') {
+            try {
+              sh "yarn test:nsp 2> nsp-report.txt"
+            } catch (ignore) {
+              sh "cat nsp-report.txt"
+              archiveArtifacts 'nsp-report.txt'
+              notifyBuildResult channel: channel, color: 'warning',
+                message: 'Node security check failed see the report for the errors'
+            }
+            sh "rm nsp-report.txt"
+          }
+
           stage('Lint') {
             sh "yarn lint"
           }
@@ -90,50 +103,24 @@ timestamps {
               archiveArtifacts 'coverage-report/lcov-report/index.html'
             }
           }
-        }
-
-        stage('Sonar') {
-          onPR {
-            sh """
-              yarn sonar-scanner -- \
-              -Dsonar.analysis.mode=preview \
-              -Dsonar.host.url=$SONARQUBE_URL
-            """
-          }
-
-          onMaster {
+          stage('Sonar') {
             sh "yarn sonar-scanner -- -Dsonar.host.url=$SONARQUBE_URL"
           }
-        }
 
-        stage('Package application (Docker)') {
-          citizenFrontendVersion = dockerImage imageName: 'cmc/citizen-frontend'
-        }
+          stage('Package application (RPM)') {
+            citizenFrontendRPMVersion = packager.nodeRPM('citizen-frontend')
+            version = "{citizen_frontend_buildnumber: ${citizenFrontendRPMVersion}}"
 
-        stage('Package application (RPM)') {
-          citizenFrontendRPMVersion = packager.nodeRPM('citizen-frontend')
-          version = "{citizen_frontend_buildnumber: ${citizenFrontendRPMVersion}}"
-
-          onMaster {
             packager.publishNodeRPM('citizen-frontend')
           }
-        }
 
-        stage('Integration Tests') {
-          integrationTests.execute([
-            'CITIZEN_FRONTEND_VERSION': citizenFrontendVersion,
-            'TESTS_TAG'               : '@citizen'
-          ])
-        }
+          //noinspection GroovyVariableNotAssigned It is guaranteed to be assigned
+          RPMTagger rpmTagger = new RPMTagger(this,
+            'citizen-frontend',
+            packager.rpmName('citizen-frontend', citizenFrontendRPMVersion),
+            'cmc-local'
+          )
 
-        //noinspection GroovyVariableNotAssigned It is guaranteed to be assigned
-        RPMTagger rpmTagger = new RPMTagger(this,
-          'citizen-frontend',
-          packager.rpmName('citizen-frontend', citizenFrontendRPMVersion),
-          'cmc-local'
-        )
-
-        onMaster {
           milestone()
           lock(resource: "CMC-deploy-dev", inversePrecedence: true) {
             stage('Deploy (Dev)') {
