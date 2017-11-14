@@ -12,6 +12,7 @@ import * as toBoolean from 'to-boolean'
 import { NUMBER_FORMAT } from 'app/utils/numberFormatter'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { DefendantPaymentOption } from 'response/form/models/defendantPaymentOption'
 import { SignatureType } from 'app/common/signatureType'
 import { ResponseType } from 'response/form/models/responseType'
 import { YesNoOption } from 'models/yesNoOption'
@@ -77,6 +78,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('featureToggles', this.convertPropertiesToBoolean(config.get('featureToggles')))
     nunjucksEnv.addGlobal('RejectAllOfClaimOption', RejectAllOfClaimOption)
     nunjucksEnv.addGlobal('RejectPartOfClaimOption', RejectPartOfClaimOption)
+    nunjucksEnv.addGlobal('DefendantPaymentOption', DefendantPaymentOption)
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('ResponseType', ResponseType)
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)

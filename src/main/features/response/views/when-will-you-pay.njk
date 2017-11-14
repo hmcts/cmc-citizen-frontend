@@ -27,12 +27,12 @@
           {
             label: 'The full amount on set date',
             value: 'FULL_BY_SPECIFIED_DATE',
-            checked: (form.valueFor('option').value === 'FULL_BY_SPECIFIED_DATE')
+            checked: (form.valueFor('option').value === DefendantPaymentOption.FULL_BY_SPECIFIED_DATE.value)
           },
           {
             label: 'By instalments',
             value: 'INSTALMENTS',
-            checked: (form.valueFor('option').value === 'INSTALMENTS'),
+            checked: (form.valueFor('option').value === DefendantPaymentOption.INSTALMENTS.value),
             hint: t('You will need to give details of your finances to {{ claimantFullName }} to explain why.',
                     { claimantFullName: user.claim.claimData.claimant.name })
           }

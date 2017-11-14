@@ -6,7 +6,7 @@ import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { IsFutureDate } from 'app/forms/validation/validators/dateFutureConstraint'
 import { IsLessThanOrEqualToSumOf } from 'forms/validation/validators/isLessThanOrEqualToSumOf'
 import { Fractions } from 'forms/validation/validators/fractions'
-import { ValidationErrors } from 'forms/validation/validationErrors'
+import { ValidationErrors } from 'app/forms/validation/validationErrors'
 
 export class DefendantPaymentPlan {
 
