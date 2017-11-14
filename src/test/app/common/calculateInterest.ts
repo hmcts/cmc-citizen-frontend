@@ -48,7 +48,7 @@ describe('calculateInterest', () => {
       })
     })
 
-    describe('interest type is STANDARD and', () => {
+    describe('interest type is STANDARD', () => {
       it('amount is greater than 0 and the date is NOT current date', () => {
         const interest = buildInterest(InterestType.STANDARD)
         const interestDate = moment().subtract(5, 'years')

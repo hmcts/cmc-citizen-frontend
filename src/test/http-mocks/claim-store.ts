@@ -58,7 +58,7 @@ export const sampleClaimObj = {
       }
     },
     interest: {
-      type: InterestType.NO_INTEREST
+      type: InterestType.STANDARD
     },
     reason: 'Because I can'
   },

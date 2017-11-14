@@ -6,6 +6,7 @@ import { StatementType } from 'offer/form/models/statementType'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { Offer } from 'claims/models/offer'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import { InterestDate } from 'claims/models/interestDate'
 
 const sampleClaimObj: Claim = new Claim().deserialize(claimStoreServiceMock.sampleClaimObj)
 
@@ -69,15 +70,23 @@ describe('Claim', () => {
 
     context('totalAmountTillToday', () => {
       it('should return the correct amount with interest until today', () => {
-        expect(sampleClaimObj.totalAmountTillToday).to.equal(225)
+        expect(sampleClaimObj.totalAmountTillToday).to.equal(227.85)
       })
     })
 
     context('totalAmountTillDateOfIssue', () => {
-      const inPast = MomentFactory.currentDate().subtract(200, 'weeks')
-      sampleClaimObj.createdAt = inPast
+      let interestDate = new InterestDate().deserialize({
+        type: 'type',
+        date: {
+          day: 10,
+          month: 8,
+          year: 2017
+        },
+        reason: 'reason'
+      })
+      sampleClaimObj.claimData.interestDate = interestDate
       it('should return the correct amount with interest until date of issue', () => {
-        expect(sampleClaimObj.totalAmountTillDateOfIssue).to.equal(225)
+        expect(sampleClaimObj.totalAmountTillDateOfIssue).to.equal(222.98)
       })
     })
   })
