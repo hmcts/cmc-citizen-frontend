@@ -20,7 +20,7 @@
     "test:codacy-upload": "cat ./coverage-report/lcov.info | codacy-coverage",
     "test:codecov-upload": "nyc report --reporter=json && codecov -f coverage-report/*.json",
     "sonar-scanner": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/** -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info",
-    "postinstall": "if-env NODE_ENV=production && yarn snyk-protect || exit 0",
+    "postinstall": "if [[ ${NODE_ENV} == 'production' ]]; then yarn snyk-protect; fi",
     "precommit": "yarn lint",
     "prepush": "yarn test && yarn test:routes",
     "snyk-protect": "snyk protect --org=hmcts --debug"
@@ -63,7 +63,6 @@
     "i18next-conv": "^5.0.0",
     "i18next-express-middleware": "^1.0.2",
     "i18next-sprintf-postprocessor": "^0.2.2",
-    "if-env": "^1.0.0",
     "jquery": "3.2.1",
     "js-base64": "^2.3.2",
     "mime": "^2.0.3",
