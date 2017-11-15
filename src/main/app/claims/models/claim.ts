@@ -89,7 +89,7 @@ export class Claim implements Serializable<Claim> {
     let interest: number = 0
     if (interestRate.type !== InterestType.NO_INTEREST) {
       const interestDate: InterestDate = this.claimData.interestDate
-      const fromDate = interestDate.type === InterestDateType.SUBMISSION ? this.createdAt : interestDate.date
+      const fromDate: Moment = interestDate.type === InterestDateType.SUBMISSION ? this.createdAt : interestDate.date
 
       interest = calculateInterest(claimAmount, interestRate, fromDate, toDate)
     }
