@@ -6,7 +6,7 @@ import { attachDefaultHooks } from '../../../../routes/hooks'
 import { checkAuthorizationGuards } from '../checks/authorization-check'
 import { checkAlreadySubmittedGuard } from '../checks/already-submitted-check'
 
-import { PayBySetDatePaths } from 'response/paths'
+import { Paths, PayBySetDatePaths } from 'response/paths'
 
 import { app } from '../../../../../main/app'
 
@@ -15,6 +15,8 @@ import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../../http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from '../checks/ccj-requested-check'
+import * as moment from 'moment'
+import { ValidationErrors } from 'forms/models/payBySetDate'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = PayBySetDatePaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -38,6 +40,15 @@ describe('Pay by set date', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         })
 
+        it('should render error page when unable to retrieve draft', async () => {
+          draftStoreServiceMock.rejectFind('Error')
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('response')
 
@@ -45,6 +56,78 @@ describe('Pay by set date', () => {
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('What date will you pay on?'))
+        })
+      })
+    })
+  })
+
+  describe('on POST', () => {
+    checkAuthorizationGuards(app, 'post', pagePath)
+
+    context('when user authorised', () => {
+      beforeEach(() => {
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+      })
+
+      checkAlreadySubmittedGuard(app, 'post', pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, 'post', pagePath)
+
+      context('when guards are satisfied', () => {
+        const validFormData = {
+          date: {
+            year: moment().add(1, 'years').year().toString(),
+            month: '02',
+            day: '10'
+          }
+        }
+
+        beforeEach(() => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        })
+
+        it('should render error page when unable to retrieve draft', async () => {
+          draftStoreServiceMock.rejectFind('Error')
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+
+        it('should render error page when unable to save draft', async () => {
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.rejectSave()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+
+        it('should render trigger validation when invalid data is given', async () => {
+          draftStoreServiceMock.resolveFind('response')
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ })
+            .expect(res => expect(res).to.be.successful.withText(ValidationErrors.DATE_REQUIRED))
+        })
+
+        it('should redirect to task list when data is valid', async () => {
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveSave()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(
+                Paths.checkAndSendPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+              )
+            )
         })
       })
     })
