@@ -2,13 +2,13 @@ import * as express from 'express'
 import { ErrorPaths } from 'first-contact/paths'
 import { User } from 'idam/user'
 
-const logger = require('@hmcts/nodejs-logging').getLogger('first-contact/guards/claimReferenceMatchesGuard')
+const logger = require('@hmcts/nodejs-logging').getLogger('first-contact/guards/ClaimantRequestedCCJGuard')
 
-export class ClaimExpiredGuard {
+export class ClaimantRequestedCCJGuard {
   static async requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
     const user: User = res.locals.user
     if (user.claim.countyCourtJudgmentRequestedAt !== undefined) {
-      logger.error('Defendant cannot counter claim with a CCJ against them - redirect to request denied page ')
+      logger.error('Defendant cannot respond to the claim with a CCJ against them - redirecting to handoff page. ')
       res.redirect(ErrorPaths.ccjRequestedAccessDeniedPage.uri)
     } else {
       next()
