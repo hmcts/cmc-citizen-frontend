@@ -17,7 +17,7 @@ Packager packager = new Packager(this, 'cmc')
 
 SmokeTests smokeTests = new SmokeTests(this)
 IntegrationTests integrationTests = new IntegrationTests(env, this)
-def channel = '#cmc-tech-notification'
+String channel = '#cmc-tech-notification'
 
 timestamps {
   milestone()
@@ -34,28 +34,15 @@ timestamps {
           checkout scm
         }
 
-        stage('Setup') {
-          sh '''
-            yarn install
-            yarn setup
-          '''
-        }
-
-        onPR {
-          stage('Package application (Docker)') {
-            citizenFrontendVersion = dockerImage imageName: 'cmc/citizen-frontend'
-          }
-
-          stage('Integration Tests') {
-            integrationTests.execute([
-              'CITIZEN_FRONTEND_VERSION': citizenFrontendVersion,
-              'TESTS_TAG'               : '@citizen'
-            ])
-          }
-        }
-
         // Travis runs everything except integration tests, no need to do this twice (but run on master to be safe)
         onMaster {
+          stage('Setup') {
+            sh '''
+              yarn install
+              yarn setup
+            '''
+          }
+
           stage('Node security check') {
             try {
               sh "yarn test:nsp 2> nsp-report.txt"
@@ -107,7 +94,23 @@ timestamps {
             sh "yarn sonar-scanner -- -Dsonar.host.url=$SONARQUBE_URL"
           }
 
+        }
+
+        stage('Package application (Docker)') {
+          citizenFrontendVersion = dockerImage imageName: 'cmc/citizen-frontend'
+        }
+
+        stage('Integration Tests') {
+          integrationTests.execute([
+            'CITIZEN_FRONTEND_VERSION': citizenFrontendVersion,
+            'TESTS_TAG'               : '@citizen'
+          ])
+        }
+
+
+        onMaster {
           stage('Package application (RPM)') {
+            sh "rm -rf it-tests*" // Don't package integration tests
             citizenFrontendRPMVersion = packager.nodeRPM('citizen-frontend')
             version = "{citizen_frontend_buildnumber: ${citizenFrontendRPMVersion}}"
 
