@@ -5,9 +5,8 @@ import * as config from 'config'
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
-import { Paths as DefendantFirstContactPaths } from 'first-contact/paths'
 
-import { ErrorPaths, Paths } from 'first-contact/paths'
+import { ErrorPaths, Paths as DefendantFirstContactPaths } from 'first-contact/paths'
 
 import { app } from '../../../../main/app'
 
@@ -21,7 +20,7 @@ describe('Defendant first contact: claim summary page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', Paths.claimSummaryPage.uri)
+    checkAuthorizationGuards(app, 'get', DefendantFirstContactPaths.claimSummaryPage.uri)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -32,7 +31,7 @@ describe('Defendant first contact: claim summary page', () => {
         claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001')
 
         await request(app)
-          .get(Paths.claimSummaryPage.uri)
+          .get(DefendantFirstContactPaths.claimSummaryPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.redirect.toLocation(ErrorPaths.claimSummaryAccessDeniedPage.uri))
       })
@@ -41,7 +40,7 @@ describe('Defendant first contact: claim summary page', () => {
         claimStoreServiceMock.rejectRetrieveByLetterHolderId('HTTP error')
 
         await request(app)
-          .get(`${Paths.claimSummaryPage.uri}`)
+          .get(`${DefendantFirstContactPaths.claimSummaryPage.uri}`)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -50,7 +49,7 @@ describe('Defendant first contact: claim summary page', () => {
         claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001')
 
         await request(app)
-          .get(Paths.claimSummaryPage.uri)
+          .get(DefendantFirstContactPaths.claimSummaryPage.uri)
           .set('Cookie', `${cookieName}=ABC;state=000MC001`)
           .expect(res => expect(res).to.be.successful.withText('View the claim'))
       })
@@ -58,7 +57,7 @@ describe('Defendant first contact: claim summary page', () => {
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', Paths.claimSummaryPage.uri)
+    checkAuthorizationGuards(app, 'post', DefendantFirstContactPaths.claimSummaryPage.uri)
 
     it('should redirect to registration page when everything is fine', async () => {
       const registrationPagePattern = new RegExp(`${config.get('idam.authentication-web.url')}/login/uplift\\?response_type=code.+&redirect_uri=http://127.0.0.1:[0-9]{1,5}/receiver/link-defendant&jwt=ABC`)
@@ -66,7 +65,7 @@ describe('Defendant first contact: claim summary page', () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'letter-holder')
 
       await request(app)
-        .post(Paths.claimSummaryPage.uri)
+        .post(DefendantFirstContactPaths.claimSummaryPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.redirect.toLocation(registrationPagePattern))
     })
@@ -74,7 +73,7 @@ describe('Defendant first contact: claim summary page', () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'letter-holder')
 
       await request(app)
-        .post(Paths.claimSummaryPage.uri)
+        .post(DefendantFirstContactPaths.claimSummaryPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.have.cookie(cookieName, ''))
     })
@@ -83,7 +82,9 @@ describe('Defendant first contact: claim summary page', () => {
   describe('CCJ was requested', () => {
     it('should redirect to ccj error page', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'letter-holder')
-      claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC000', { countyCourtJudgmentRequestedAt: MomentFactory.parse('2010-10-10') })
+      claimStoreServiceMock.resolveRetrieveByLetterHolderId(
+        '000MC000', { countyCourtJudgmentRequestedAt: MomentFactory.parse('2010-10-10') }
+      )
 
       await request(app)
         .get(DefendantFirstContactPaths.claimSummaryPage.uri)
