@@ -7,6 +7,8 @@ import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { PayBySetDate } from 'response/form/models/payBySetDate'
+// import { LocalDate } from 'forms/models/localDate'
 
 describe('ResponseDraft', () => {
 
@@ -22,16 +24,17 @@ describe('ResponseDraft', () => {
 
     it('should return a ResponseDraft instance initialised with valid data', () => {
       const responseType: ResponseType = ResponseType.OWE_SOME_PAID_NONE
+      const inputData = prepareInputData(responseType, MoreTimeNeededOption.YES)
 
-      const responseDraftModel: ResponseDraft = new ResponseDraft().deserialize(
-        prepareInputData(responseType, MoreTimeNeededOption.YES)
-      )
+      const responseDraftModel: ResponseDraft = new ResponseDraft().deserialize(inputData)
 
       expect(responseDraftModel.response.type).to.eql(responseType)
       expect(responseDraftModel.freeMediation.option).to.eql(FreeMediationOption.YES)
       expect(responseDraftModel.moreTimeNeeded.option).to.eql(MoreTimeNeededOption.YES)
       expect(responseDraftModel.isMoreTimeRequested()).to.be.eql(true)
       expect(responseDraftModel.impactOfDispute.text).to.equal('This dispute has affected me badly, I cried')
+      assertPayBySetDateEquals(responseDraftModel.payBySetDate, inputData.payBySetDate)
+      expect(responseDraftModel.payBySetDate.explanation).to.equal(inputData.payBySetDate.explanation)
     })
   })
 
@@ -255,7 +258,7 @@ describe('ResponseDraft', () => {
     })
   })
 
-  function prepareInputData (responseType: ResponseType, moreTimeOption: string): object {
+  function prepareInputData (responseType: ResponseType, moreTimeOption: string): any {
     return {
       response: {
         type: {
@@ -271,7 +274,22 @@ describe('ResponseDraft', () => {
       },
       impactOfDispute: {
         text: 'This dispute has affected me badly, I cried'
+      },
+      payBySetDate: {
+        date: {
+          year: 1988,
+          month: 2,
+          day: 10
+        },
+        explanation: 'I can not pay now'
       }
     }
+  }
+
+  function assertPayBySetDateEquals(actual: PayBySetDate, expected: any) {
+    expect(actual.date.year).to.equal(expected.date.year)
+    expect(actual.date.month).to.equal(expected.date.month)
+    expect(actual.date.day).to.equal(expected.date.day)
+    expect(actual.explanation).to.equal(expected.explanation)
   }
 })

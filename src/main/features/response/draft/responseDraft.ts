@@ -17,6 +17,7 @@ import { Evidence } from 'response/form/models/evidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
+import { PayBySetDate } from 'response/form/models/payBySetDate'
 
 export class ResponseDraft extends DraftDocument implements Serializable<ResponseDraft> {
 
@@ -33,6 +34,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   rejectPartOfClaim?: RejectPartOfClaim
   rejectAllOfClaim?: RejectAllOfClaim
   impactOfDispute?: ImpactOfDispute
+  payBySetDate?: PayBySetDate
 
   deserialize (input: any): ResponseDraft {
     if (input) {
@@ -52,6 +54,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       this.rejectPartOfClaim = new RejectPartOfClaim(input.rejectPartOfClaim && input.rejectPartOfClaim.option)
       this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
+      this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
     }
     return this
   }
