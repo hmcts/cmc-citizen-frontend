@@ -29,7 +29,6 @@ export class Paths {
   static readonly defenceRejectAllOfClaimPage = new RoutablePath(`${responsePath}/reject-all-of-claim`)
   static readonly defenceRejectPartOfClaimPage = new RoutablePath(`${responsePath}/reject-part-of-claim`)
   static readonly impactOfDisputePage = new RoutablePath(`${responsePath}/impact-of-dispute`)
-  static readonly payBySetDatePage = new RoutablePath(`${responsePath}/pay-by-set-date`)
 }
 
 const statementOfMeansPath = `${responsePath}/statement-of-means`
@@ -38,4 +37,11 @@ export class StatementOfMeansPaths {
   static readonly startPage = new RoutablePath(`${statementOfMeansPath}/start`)
   static readonly whatYouNeedPage = new RoutablePath(`${statementOfMeansPath}/what-you-need`)
   static readonly residencePage = new RoutablePath(`${statementOfMeansPath}/residence`)
+}
+
+const payBySetDatePath = `${responsePath}/pay-by-set-date`
+
+export class PayBySetDatePaths {
+  static readonly paymentDatePage: RoutablePath = new RoutablePath(`${payBySetDatePath}`)
+  static readonly explanationPage = new RoutablePath(`${payBySetDatePath}/explanation`)
 }

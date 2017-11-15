@@ -7,8 +7,7 @@ import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
-import { PayBySetDate } from 'response/form/models/payBySetDate'
-// import { LocalDate } from 'forms/models/localDate'
+import { PayBySetDate } from 'response/draft/payBySetDate'
 
 describe('ResponseDraft', () => {
 
@@ -34,7 +33,6 @@ describe('ResponseDraft', () => {
       expect(responseDraftModel.isMoreTimeRequested()).to.be.eql(true)
       expect(responseDraftModel.impactOfDispute.text).to.equal('This dispute has affected me badly, I cried')
       assertPayBySetDateEquals(responseDraftModel.payBySetDate, inputData.payBySetDate)
-      expect(responseDraftModel.payBySetDate.explanation).to.equal(inputData.payBySetDate.explanation)
     })
   })
 
@@ -276,20 +274,20 @@ describe('ResponseDraft', () => {
         text: 'This dispute has affected me badly, I cried'
       },
       payBySetDate: {
-        date: {
-          year: 1988,
-          month: 2,
-          day: 10
-        },
-        explanation: 'I can not pay now'
+        paymentDate: {
+          date: {
+            year: 1988,
+            month: 2,
+            day: 10
+          }
+        }
       }
     }
   }
 
-  function assertPayBySetDateEquals(actual: PayBySetDate, expected: any) {
-    expect(actual.date.year).to.equal(expected.date.year)
-    expect(actual.date.month).to.equal(expected.date.month)
-    expect(actual.date.day).to.equal(expected.date.day)
-    expect(actual.explanation).to.equal(expected.explanation)
+  function assertPayBySetDateEquals (actual: PayBySetDate, expected: any) {
+    expect(actual.paymentDate.date.year).to.equal(expected.paymentDate.date.year)
+    expect(actual.paymentDate.date.month).to.equal(expected.paymentDate.date.month)
+    expect(actual.paymentDate.date.day).to.equal(expected.paymentDate.date.day)
   }
 })

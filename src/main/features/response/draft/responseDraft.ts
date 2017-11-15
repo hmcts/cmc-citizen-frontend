@@ -17,7 +17,7 @@ import { Evidence } from 'response/form/models/evidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
-import { PayBySetDate } from 'response/form/models/payBySetDate'
+import { PayBySetDate } from 'response/draft/payBySetDate'
 
 export class ResponseDraft extends DraftDocument implements Serializable<ResponseDraft> {
 
