@@ -145,7 +145,7 @@ describe('Defendant - when will you pay options', () => {
                 .post(defenceFullPartialPaymentOptionsPage)
                 .set('Cookie', `${cookieName}=ABC`)
                 .send({ name: 'John Smith' })
-                .expect(res => expect(res).to.be.successful.withText('When will you pay?', 'div class="error-summary"'))
+                .expect(res => expect(res).to.be.successful.withText('When will you pay?'))
             })
           })
         })

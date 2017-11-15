@@ -7,7 +7,6 @@ export class ValidationErrors {
   static readonly VALID_OWED_AMOUNT_REQUIRED: string = 'Enter a valid amount owed'
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount'
   static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter valid amount, maximum two decimal places'
-  static readonly OPTION_REQUIRED: string = 'Choose option'
 }
 
 export class RepaymentValidationErrors {
@@ -17,4 +16,5 @@ export class RepaymentValidationErrors {
   static readonly FUTURE_DATE: string = 'Enter a first payment date in the future'
   static readonly INVALID_DATE: string = 'Enter a valid date of first payment'
   static readonly SELECT_PAYMENT_SCHEDULE: string = 'Select how often they should pay'
+  static readonly OPTION_REQUIRED: string = 'Choose option'
 }

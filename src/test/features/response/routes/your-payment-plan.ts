@@ -128,7 +128,7 @@ describe('Defendant: payment page', () => {
             .post(defenceFullPartialPaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ signed: undefined })
-            .expect(res => expect(res).to.be.successful.withText('Your payment plan', 'div class="error-summary"'))
+            .expect(res => expect(res).to.be.successful.withText('Your payment plan'))
         })
       })
     })
