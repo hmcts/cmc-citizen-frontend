@@ -34,7 +34,7 @@
       </p>
       {{ subheading( t('Claim details')) }}
       <p><span class="bold">{{ t('Number:') }}</span> {{ referenceNumber }}</p>
-      <p><span class="bold">{{ t('Amount:') }}</span> {{ claim.totalAmount | numeral }}</p>
+      <p><span class="bold">{{ t('Amount:') }}</span> {{ claim.totalAmountTillToday | numeral }}</p>
 
       <p class="bold">{{ t('Reason for claim:') }}</p>
       <p>
