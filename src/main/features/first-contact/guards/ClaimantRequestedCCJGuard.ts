@@ -9,7 +9,7 @@ export class ClaimantRequestedCCJGuard {
     const user: User = res.locals.user
     if (user.claim.countyCourtJudgmentRequestedAt !== undefined) {
       logger.error('Defendant cannot respond to the claim with a CCJ against them - redirecting to handoff page. ')
-      res.redirect(ErrorPaths.ccjRequestedAccessDeniedPage.uri)
+      res.redirect(ErrorPaths.ccjRequestedHandoffPage.uri)
     } else {
       next()
     }

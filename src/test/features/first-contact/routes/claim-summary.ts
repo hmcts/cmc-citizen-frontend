@@ -89,7 +89,7 @@ describe('Defendant first contact: claim summary page', () => {
       await request(app)
         .get(DefendantFirstContactPaths.claimSummaryPage.uri)
         .set('Cookie', `${cookieName}=ABC;state = 000MC000`)
-        .expect(res => expect(res).to.be.redirect.toLocation(ErrorPaths.ccjRequestedAccessDeniedPage.uri))
+        .expect(res => expect(res).to.be.redirect.toLocation(ErrorPaths.ccjRequestedHandoffPage.uri))
     })
   })
 })
