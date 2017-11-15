@@ -8,7 +8,7 @@ export class ValidationErrors {
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount'
   static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter valid amount, maximum two decimal places'
   static readonly OPTION_REQUIRED: string = 'Choose option'
-
+  static readonly WHEN_WILL_YOU_PAY_OPTION_REQUIRED: string = 'Please select when you will pay'
   static readonly FIRST_PAYMENT_AMOUNT_INVALID: string = 'Enter a valid amount of first payment'
   static readonly INSTALMENTS_AMOUNT_INVALID: string = 'Enter a valid amount for equal instalments'
   static readonly FUTURE_DATE: string = 'Enter a first payment date in the future'

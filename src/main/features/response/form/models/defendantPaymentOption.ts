@@ -30,8 +30,8 @@ export class DefendantPaymentType {
 
 export class DefendantPaymentOption implements Serializable <DefendantPaymentOption> {
 
-  @IsDefined({ message: ValidationErrors.OPTION_REQUIRED })
-  @IsIn(DefendantPaymentType.all(), { message: ValidationErrors.OPTION_REQUIRED })
+  @IsDefined({ message: ValidationErrors.WHEN_WILL_YOU_PAY_OPTION_REQUIRED })
+  @IsIn(DefendantPaymentType.all(), { message: ValidationErrors.WHEN_WILL_YOU_PAY_OPTION_REQUIRED })
   option?: DefendantPaymentType
 
   constructor (option?: DefendantPaymentType) {
