@@ -2,22 +2,22 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
-import { checkAuthorizationGuards } from './checks/authorization-check'
-import { checkAlreadySubmittedGuard } from './checks/already-submitted-check'
+import { attachDefaultHooks } from '../../../../routes/hooks'
+import { checkAuthorizationGuards } from '../checks/authorization-check'
+import { checkAlreadySubmittedGuard } from '../checks/already-submitted-check'
 
-import { Paths as ResponsePaths } from 'response/paths'
+import { PayBySetDatePaths } from 'response/paths'
 
-import { app } from '../../../../main/app'
+import { app } from '../../../../../main/app'
 
-import * as idamServiceMock from '../../../http-mocks/idam'
-import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import * as idamServiceMock from '../../../../http-mocks/idam'
+import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
+import * as claimStoreServiceMock from '../../../../http-mocks/claim-store'
 
-import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
+import { checkCountyCourtJudgmentRequestedGuard } from '../checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = ResponsePaths.payBySetDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath = PayBySetDatePaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Pay by set date', () => {
   attachDefaultHooks(app)
