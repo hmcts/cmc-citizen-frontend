@@ -6,7 +6,7 @@ import { Claim } from 'claims/models/claim'
 import { ClaimReferenceMatchesGuard } from 'first-contact/guards/claimReferenceMatchesGuard'
 import { JwtExtractor } from 'idam/jwtExtractor'
 import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
-import { ClaimantRequestedCCJGuard } from 'first-contact/guards/ClaimantRequestedCCJGuard'
+import { ClaimantRequestedCCJGuard } from 'first-contact/guards/claimantRequestedCCJGuard'
 
 const sessionCookie = config.get<string>('session.cookieName')
 
