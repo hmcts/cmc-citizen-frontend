@@ -69,7 +69,7 @@
 
         {% if alreadyPaid %}
         <tr>
-          <th scope="col" class="bold-small">{{ t("Sub total") }}</th>
+          <th scope="col" class="bold-small">{{ t('Sub total') }}</th>
           <td class="numeric last bold-small"><span id="sub-total">{{ claim.totalAmountTillToday | numeral }}</span></td>
         </tr>
         <tr>
@@ -81,7 +81,7 @@
         {% endif %}
 
         <tr>
-          <th scope="col" class="bold-medium">{{ t("Total") }}</th>
+          <th scope="col" class="bold-medium">{{ t('Total') }}</th>
           <td class="numeric last bold-medium"><span id="total">{{ (claim.totalAmountTillToday - alreadyPaid) | numeral }}</span></td>
         </tr>
         </tbody>
