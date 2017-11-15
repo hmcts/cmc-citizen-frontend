@@ -25,7 +25,7 @@ import { DraftService } from 'services/draftService'
 function getClaimAmountTotal (res: express.Response): Promise<InterestTotal> {
   return FeesClient.calculateIssueFee(claimAmountWithInterest(res.locals.user.claimDraft.document))
     .then((feeAmount: number) => {
-      return new InterestTotal(res.locals.user.claimDraft.document.amount.totalAmount(), interestAmount(res.locals.user.claimDraft.document), feeAmount)
+      return new InterestTotal(res.locals.user.claimDraft.document.amount.totalAmountTillToday, interestAmount(res.locals.user.claimDraft.document), feeAmount)
     })
 }
 
