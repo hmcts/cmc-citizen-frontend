@@ -48,7 +48,7 @@
 
           <div class="panel">
             <p>
-              {{ t('The court fee is based on the amount you’re claiming, including any <a class="external" rel="external" href="%s">interest</a>.', { postProcess: 'sprintf', sprintf: ['https://www.gov.uk/make-court-claim-for-money/work-out-interest']}) | safe }}
+              {{ t('The court fee is based on the amount you’re claiming, including any <a class="external" target="_blank" rel="external" href="%s">interest</a>.', { postProcess: 'sprintf', sprintf: ['https://www.gov.uk/make-court-claim-for-money/work-out-interest']}) | safe }}
             </p>
             <table>
               <thead>
@@ -70,7 +70,7 @@
         </details>
 
         <p>
-          {{ t('If you’re on a low income or get certain benefits you might be able to get <a href="%s">help with fees</a>. Do this before you make your claim.', { postProcess: 'sprintf', sprintf: ['https://www.gov.uk/get-help-with-court-fees']}) | safe }}
+          {{ t('If you’re on a low income or get certain benefits you might be able to get <a target="_blank" href="%s">help with fees</a>. Do this before you make your claim.', { postProcess: 'sprintf', sprintf: ['https://www.gov.uk/get-help-with-court-fees']}) | safe }}
         </p>
 
         <div class="form-group">
