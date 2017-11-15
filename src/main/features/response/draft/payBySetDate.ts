@@ -1,5 +1,5 @@
-import { PaymentDate } from 'response/form/models/pay-by-set-date/paymentDate'
 import { Serializable } from 'models/serializable'
+import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 
 export class PayBySetDate implements Serializable<PayBySetDate> {
   paymentDate: PaymentDate
