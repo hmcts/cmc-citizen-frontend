@@ -4,6 +4,6 @@ import { ErrorPaths } from 'first-contact/paths'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(ErrorPaths.ccjRequestedAccessDeniedPage.uri, (req: express.Request, res: express.Response) => {
+  .get(ErrorPaths.ccjRequestedHandoffPage.uri, (req: express.Request, res: express.Response) => {
     res.render(ErrorPaths.ccjRequestedHandoffPage.associatedView)
   })

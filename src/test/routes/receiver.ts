@@ -193,7 +193,7 @@ describe('Defendant link receiver', () => {
       it('should return 500 and render error page when cannot link defendant to claim', async () => {
         const token = 'token'
         idamServiceMock.resolveExchangeCode(token)
-        claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001')
+        claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001', { defendantId: undefined })
         claimStoreServiceMock.rejectLinkDefendant('HTTP error')
 
         await request(app)
@@ -204,7 +204,7 @@ describe('Defendant link receiver', () => {
       it('should redirect to task list page when everything is fine', async () => {
         const token = 'token'
         idamServiceMock.resolveExchangeCode(token)
-        claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001')
+        claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001', { defendantId: undefined })
         claimStoreServiceMock.resolveLinkDefendant()
 
         await request(app)
@@ -217,7 +217,7 @@ describe('Defendant link receiver', () => {
       it('should set session cookie to token value returned from idam', async () => {
         const token = 'token'
         idamServiceMock.resolveExchangeCode(token)
-        claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001')
+        claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001', { defendantId: undefined })
         claimStoreServiceMock.resolveLinkDefendant()
 
         await request(app)
