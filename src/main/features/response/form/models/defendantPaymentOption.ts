@@ -1,6 +1,6 @@
 import { IsDefined, IsIn } from 'class-validator'
 import { Serializable } from 'models/serializable'
-import { ValidationErrors } from 'forms/validation/validationErrors'
+import { RepaymentValidationErrors } from 'app/forms/validation/validationErrors'
 
 export class DefendantPaymentType {
   static readonly INSTALMENTS = new DefendantPaymentType('INSTALMENTS', 'By instalments')
@@ -30,8 +30,8 @@ export class DefendantPaymentType {
 
 export class DefendantPaymentOption implements Serializable <DefendantPaymentOption> {
 
-  @IsDefined({ message: ValidationErrors.WHEN_WILL_YOU_PAY_OPTION_REQUIRED })
-  @IsIn(DefendantPaymentType.all(), { message: ValidationErrors.WHEN_WILL_YOU_PAY_OPTION_REQUIRED })
+  @IsDefined({ message: RepaymentValidationErrors.WHEN_WILL_YOU_PAY_OPTION_REQUIRED })
+  @IsIn(DefendantPaymentType.all(), { message: RepaymentValidationErrors.WHEN_WILL_YOU_PAY_OPTION_REQUIRED })
   option?: DefendantPaymentType
 
   constructor (option?: DefendantPaymentType) {

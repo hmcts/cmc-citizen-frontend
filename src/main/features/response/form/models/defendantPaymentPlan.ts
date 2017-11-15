@@ -6,33 +6,34 @@ import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { IsFutureDate } from 'app/forms/validation/validators/dateFutureConstraint'
 import { IsLessThanOrEqualToSumOf } from 'forms/validation/validators/isLessThanOrEqualToSumOf'
 import { Fractions } from 'forms/validation/validators/fractions'
-import { ValidationErrors } from 'app/forms/validation/validationErrors'
+import { ValidationErrors, RepaymentValidationErrors } from 'app/forms/validation/validationErrors'
+import { ValidationConstraints } from 'app/forms/validation/validationConstraints'
 
 export class DefendantPaymentPlan {
 
   remainingAmount?: number
 
-  @IsPositive({ message: ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
-  @IsLessThanOrEqualToSumOf('installmentAmount', 'remainingAmount', { message: ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
+  @IsPositive({ message: RepaymentValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
+  @IsLessThanOrEqualToSumOf('installmentAmount', 'remainingAmount', { message: RepaymentValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
   @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS })
   firstPayment?: number
 
-  @IsPositive({ message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
-  @IsLessThanOrEqualToSumOf('firstPayment', 'remainingAmount', { message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
+  @IsPositive({ message: RepaymentValidationErrors.INSTALMENTS_AMOUNT_INVALID })
+  @IsLessThanOrEqualToSumOf('firstPayment', 'remainingAmount', { message: RepaymentValidationErrors.INSTALMENTS_AMOUNT_INVALID })
   @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS })
   installmentAmount?: number
 
   @ValidateNested()
-  @IsDefined({ message: ValidationErrors.INVALID_DATE })
-  @IsValidLocalDate({ message: ValidationErrors.INVALID_DATE })
-  @IsValidYearFormat({ message: ValidationErrors.INVALID_DATE })
-  @IsFutureDate({ message: ValidationErrors.FUTURE_DATE })
+  @IsDefined({ message: RepaymentValidationErrors.INVALID_DATE })
+  @IsValidLocalDate({ message: RepaymentValidationErrors.INVALID_DATE })
+  @IsValidYearFormat({ message: RepaymentValidationErrors.INVALID_DATE })
+  @IsFutureDate({ message: RepaymentValidationErrors.FUTURE_DATE })
   firstPaymentDate?: LocalDate
 
-  @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SELECT_PAYMENT_SCHEDULE })
+  @IsIn(PaymentSchedule.all(), { message: RepaymentValidationErrors.SELECT_PAYMENT_SCHEDULE })
   paymentSchedule?: PaymentSchedule
 
-  @MaxLength(99000, { message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })
   text?: string
 
   constructor (
