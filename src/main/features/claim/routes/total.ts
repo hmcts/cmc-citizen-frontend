@@ -12,7 +12,7 @@ export default express.Router()
       .then((feeAmount: number) => {
         res.render(Paths.totalPage.associatedView,
           {
-            interestTotal: new InterestTotal(res.locals.user.claimDraft.document.amount.totalAmount(), interestAmount(res.locals.user.claimDraft.document), feeAmount),
+            interestTotal: new InterestTotal(res.locals.user.claimDraft.document.amount.totalAmountTillToday, interestAmount(res.locals.user.claimDraft.document), feeAmount),
             interestClaimed: (res.locals.user.claimDraft.document.interest.type !== InterestType.NO_INTEREST)
           })
       })

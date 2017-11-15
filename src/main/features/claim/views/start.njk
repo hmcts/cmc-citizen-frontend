@@ -51,10 +51,10 @@
       {{ supportWidget('Help to use this service') }}
 
       <h2 class="heading-medium">{{ t('Legal advice') }}</h2>
-      <p>{{ t('You might be able to get free legal advice from organisations like <a href="%s">Citizens Advice</a>'
+      <p>{{ t('You might be able to get free legal advice from organisations like <a target="_blank" href="%s">Citizens Advice</a>'
         + ' and <a target="_blank" href="%s">Advicenow</a>.',
         { postProcess: 'sprintf', sprintf: [
-          'https://www.citizensadvice.org.uk/law-and-rights/legal-system/taking-legal-action/do-you-need-legal-advice/',
+          'https://www.citizensadvice.org.uk/about-us/how-we-provide-advice/advice/',
           'http://www.advicenow.org.uk/'
           ] }) | safe }}
       </p>
