@@ -99,7 +99,7 @@
               <td><a href="{{ url }}">{{ claim.claimNumber }}</a></td>
               <td>{{ claim.claimData.claimant.name }}</td>
               <td>{{ claim.totalAmountTillToday | numeral }}</td>
-              <td class="mobile-hide">{{ status | safe }}</td>
+              <td class="mobile-hide">
                 {{ responseStatusForDefendant(claim, url, isAfter4pm) }}
               </td>
             </tr>
