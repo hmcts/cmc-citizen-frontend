@@ -29,7 +29,7 @@ export class Paths {
   static readonly defenceRejectAllOfClaimPage = new RoutablePath(`${responsePath}/reject-all-of-claim`)
   static readonly defenceRejectPartOfClaimPage = new RoutablePath(`${responsePath}/reject-part-of-claim`)
   static readonly defenceFullPartialPaymentOptionsPage = new RoutablePath(`${responsePath}/when-will-you-pay`)
-  static readonly defenceFullPartialPaymentPlanPage = new RoutablePath(`${responsePath}/your-payment-plan`)
+  static readonly defencePaymentPlanPage = new RoutablePath(`${responsePath}/your-payment-plan`)
   static readonly impactOfDisputePage = new RoutablePath(`${responsePath}/impact-of-dispute`)
 }
 

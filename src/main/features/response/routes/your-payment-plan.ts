@@ -13,7 +13,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
   const user: User = res.locals.user
   const alreadyPaid: number = user.responseDraft.document.paidAmount.amount || 0
-  res.render(Paths.defenceFullPartialPaymentPlanPage.associatedView, {
+  res.render(Paths.defencePaymentPlanPage.associatedView, {
     form: form,
     remainingAmount: user.claim.totalAmount - alreadyPaid
   })
@@ -21,13 +21,13 @@ function renderView (form: Form<PaidAmount>, res: express.Response): void {
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.defenceFullPartialPaymentPlanPage.uri,
+  .get(Paths.defencePaymentPlanPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
       renderView(new Form(user.responseDraft.document.defendantPaymentPlan), res)
     }))
 
-  .post(Paths.defenceFullPartialPaymentPlanPage.uri,
+  .post(Paths.defencePaymentPlanPage.uri,
     FormValidator.requestHandler(DefendantPaymentPlan, DefendantPaymentPlan.fromObject),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
@@ -41,6 +41,6 @@ export default express.Router()
           const { externalId } = req.params
           user.responseDraft.document.defendantPaymentPlan = form.model
           await new DraftService().save(user.responseDraft, user.bearerToken)
-          res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
+          res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
         }
       }))

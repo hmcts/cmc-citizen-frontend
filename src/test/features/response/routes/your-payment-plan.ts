@@ -16,14 +16,14 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const defenceFullPartialPaymentPlanPage = Paths.defenceFullPartialPaymentPlanPage.evaluateUri({ externalId: externalId })
-const checkAndSendPage = Paths.checkAndSendPage.evaluateUri({ externalId: externalId })
+const defencePaymentPlanPage = Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId })
+const taskListPage = Paths.taskListPage.evaluateUri({ externalId: externalId })
 
 describe('Defendant: payment page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', defenceFullPartialPaymentPlanPage)
+    checkAuthorizationGuards(app, 'get', defencePaymentPlanPage)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -35,7 +35,7 @@ describe('Defendant: payment page', () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
-            .get(defenceFullPartialPaymentPlanPage)
+            .get(defencePaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -45,7 +45,7 @@ describe('Defendant: payment page', () => {
           draftStoreServiceMock.rejectFind('Error')
 
           await request(app)
-            .get(defenceFullPartialPaymentPlanPage)
+            .get(defencePaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -55,7 +55,7 @@ describe('Defendant: payment page', () => {
           draftStoreServiceMock.resolveFind('response')
 
           await request(app)
-            .get(defenceFullPartialPaymentPlanPage)
+            .get(defencePaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Your payment plan'))
         })
@@ -77,7 +77,7 @@ describe('Defendant: payment page', () => {
       text: 'I owe nothing'
     }
 
-    checkAuthorizationGuards(app, 'post', defenceFullPartialPaymentPlanPage)
+    checkAuthorizationGuards(app, 'post', defencePaymentPlanPage)
 
     context('when user authorised', () => {
       beforeEach(() => {
@@ -88,7 +88,7 @@ describe('Defendant: payment page', () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .post(defenceFullPartialPaymentPlanPage)
+          .post(defencePaymentPlanPage)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -99,7 +99,7 @@ describe('Defendant: payment page', () => {
         draftStoreServiceMock.rejectFind('Error')
 
         await request(app)
-          .post(defenceFullPartialPaymentPlanPage)
+          .post(defencePaymentPlanPage)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -112,10 +112,10 @@ describe('Defendant: payment page', () => {
           draftStoreServiceMock.resolveSave()
 
           await request(app)
-            .post(defenceFullPartialPaymentPlanPage)
+            .post(defencePaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
-            .expect(res => expect(res).to.be.redirect.toLocation(checkAndSendPage))
+            .expect(res => expect(res).to.be.redirect.toLocation(taskListPage))
         })
       })
 
@@ -125,7 +125,7 @@ describe('Defendant: payment page', () => {
           draftStoreServiceMock.resolveFind('response')
 
           await request(app)
-            .post(defenceFullPartialPaymentPlanPage)
+            .post(defencePaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ signed: undefined })
             .expect(res => expect(res).to.be.successful.withText('Your payment plan'))

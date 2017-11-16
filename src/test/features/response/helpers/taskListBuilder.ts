@@ -6,6 +6,8 @@ import { TaskListBuilder } from 'response/helpers/taskListBuilder'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { TaskList } from 'drafts/tasks/taskList'
 import moment = require('moment')
+import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { LocalDate } from 'forms/models/localDate'
 
 describe('TaskListBuilder', () => {
   let stub: sinon.SinonStub
@@ -32,6 +34,55 @@ describe('TaskListBuilder', () => {
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), moment(), undefined)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('Free mediation')
+      })
+    })
+
+    describe('Is Response Partially Rejected Due To task', () => {
+      beforeEach(() => {
+        stub = sinon.stub(ResponseDraft.prototype, 'isResponsePartiallyRejectedDueTo')
+      })
+
+      it('should be enabled when, when will you pay is available', () => {
+        stub.withArgs(RejectPartOfClaimOption.AMOUNT_TOO_HIGH).returns(true)
+
+        const input = {
+          howMuchOwed: {
+            amount: 200,
+            text: 'I owe nothing'
+          }
+        }
+        const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, moment(), undefined)
+        expect(taskList.tasks.map(task => task.name)).to.contain('When will you pay?')
+      })
+
+      it('should be disabled when, when will you pay is not available', () => {
+        stub.returns(false)
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), moment(), undefined)
+        expect(taskList.tasks.map(task => task.name)).to.not.contain('When will you pay?')
+      })
+
+      it('should be enabled when how much paid the claimant is available', () => {
+        stub.withArgs(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED).returns(true)
+
+        const input = {
+          howMuchIsPaid: {
+            amount: 300,
+            date : new LocalDate(20, 1, 12),
+            text: 'I owe nothing'
+          }
+        }
+        const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, moment(), undefined)
+        expect(taskList.tasks.map(task => task.name)).to.contain('How much have you paid the claimant?')
+      })
+
+      it('should be disabled when how much paid the claimant is not available', () => {
+        stub.returns(false)
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), moment(), undefined)
+        expect(taskList.tasks.map(task => task.name)).to.not.contain('How much have you paid the claimant?')
       })
     })
   })

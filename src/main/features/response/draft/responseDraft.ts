@@ -80,9 +80,13 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       && RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).includes(this.rejectAllOfClaim.option)
   }
 
-  isResponsePartiallyRejectedDueTo (option: String): boolean {
+  public isResponsePartiallyRejectedDueTo (option: String): boolean {
     if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission')) || !this.isResponsePopulated()) {
       return false
+    }
+
+    if (option === undefined || this.response === undefined) {
+      throw new Error('option is required')
     }
 
     return this.response.type === ResponseType.OWE_SOME_PAID_NONE

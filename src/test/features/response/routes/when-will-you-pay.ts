@@ -59,7 +59,6 @@ describe('Defendant - when will you pay options', () => {
         it('should render page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
-
           await request(app)
             .get(defenceFullPartialPaymentOptionsPage)
             .set('Cookie', `${cookieName}=ABC`)
@@ -131,7 +130,7 @@ describe('Defendant - when will you pay options', () => {
             }
 
             it('should redirect to repayment plan page for "INSTALMENTS" option selected', async () => {
-              await checkThatSelectedPaymentOptionRedirectsToPage({ option: DefendantPaymentType.INSTALMENTS.value }, Paths.defenceFullPartialPaymentPlanPage.evaluateUri({ externalId: externalId }))
+              await checkThatSelectedPaymentOptionRedirectsToPage({ option: DefendantPaymentType.INSTALMENTS.value }, Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))
             })
 
             it('should redirect to pay by set date page for "FULL_BY_SPECIFIED_DATE" option selected', async () => {

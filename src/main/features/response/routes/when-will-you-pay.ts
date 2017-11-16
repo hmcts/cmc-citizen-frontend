@@ -46,7 +46,7 @@ export default express.Router()
               res.redirect(Paths.defenceFullPartialPaymentOptionsPage.evaluateUri({ externalId: externalId }))
               break
             case DefendantPaymentType.INSTALMENTS:
-              res.redirect(Paths.defenceFullPartialPaymentPlanPage.evaluateUri({ externalId: externalId }))
+              res.redirect(Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))
               break
           }
         }
