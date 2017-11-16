@@ -6,6 +6,8 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
+import moment = require('moment')
+import { PaymentDateChecker } from 'response/helpers/paymentDateChecker'
 
 function renderView (form: Form<PaymentDate>, res: express.Response) {
   res.render(PayBySetDatePaths.paymentDatePage.associatedView, {
@@ -32,6 +34,12 @@ export default express.Router()
         await new DraftService().save(user.responseDraft, user.bearerToken)
 
         const { externalId } = req.params
-        res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
+
+        const paymentDate: moment.Moment = user.responseDraft.document.payBySetDate.paymentDate.date.toMoment()
+        if (PaymentDateChecker.isLaterThan28DaysFromNow(paymentDate)) {
+          res.redirect(PayBySetDatePaths.explanationPage.evaluateUri({ externalId: externalId }))
+        } else {
+          res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
+        }
       }
     }))
