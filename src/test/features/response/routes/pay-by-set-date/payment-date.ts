@@ -119,7 +119,7 @@ describe('Pay by set date : payment date', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should render trigger validation when invalid data is given', async () => {
+        it('should trigger validation when invalid data is given', async () => {
           draftStoreServiceMock.resolveFind('response')
 
           await request(app)
