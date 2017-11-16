@@ -17,6 +17,7 @@ import { Evidence } from 'response/form/models/evidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
+import { Employers } from 'response/form/models/employers'
 
 export class ResponseDraft extends DraftDocument implements Serializable<ResponseDraft> {
 
@@ -28,6 +29,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   howMuchIsPaid?: HowMuchPaid
   timeline: Timeline
   evidence: Evidence
+  employers: Employers
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
   howMuchOwed?: HowMuchOwed
   rejectPartOfClaim?: RejectPartOfClaim
@@ -52,6 +54,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       this.rejectPartOfClaim = new RejectPartOfClaim(input.rejectPartOfClaim && input.rejectPartOfClaim.option)
       this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
+      this.employers = new Employers().deserialize(input.employers)
     }
     return this
   }
