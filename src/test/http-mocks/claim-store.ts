@@ -58,7 +58,7 @@ export const sampleClaimObj = {
       }
     },
     interest: {
-      type: InterestType.NO_INTEREST
+      type: InterestType.STANDARD
     },
     reason: 'Because I can'
   },
@@ -152,10 +152,10 @@ export function rejectIsClaimLinked () {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'Internal server error')
 }
 
-export function resolveRetrieveByLetterHolderId (referenceNumber: string, defendantId?: string): mock.Scope {
+export function resolveRetrieveByLetterHolderId (referenceNumber: string, claimOverride?: any): mock.Scope {
   return mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/letter/[0-9]+'))
-    .reply(HttpStatus.OK, { ...sampleClaimObj, referenceNumber: referenceNumber, defendantId: defendantId })
+    .reply(HttpStatus.OK, { ...sampleClaimObj, referenceNumber: referenceNumber, ...claimOverride })
 }
 
 export function rejectRetrieveByLetterHolderId (reason: string) {

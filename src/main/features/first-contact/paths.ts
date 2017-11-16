@@ -8,4 +8,5 @@ export class Paths {
 
 export class ErrorPaths {
   static readonly claimSummaryAccessDeniedPage = new RoutablePath('/first-contact/access-denied')
+  static readonly ccjRequestedHandoffPage = new RoutablePath('/first-contact/claimant-has-requested-ccj')
 }
