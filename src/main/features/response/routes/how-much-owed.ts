@@ -16,11 +16,9 @@ async function renderView (form: Form<HowMuchOwed>, res: express.Response, next:
   try {
     const user: User = res.locals.user
     const claim: Claim = user.claim
-    const amount: number = claim.totalAmount
-
     res.render(Paths.defendantHowMuchOwed.associatedView, {
       form: form,
-      amount: amount,
+      amount: claim.totalAmountTillToday,
       claim: claim
     })
   } catch (err) {
@@ -43,10 +41,10 @@ export default express.Router()
       const claim: Claim = user.claim
 
       if (form.model.amount > claim.claimData.amount.totalAmount()) {
-        let totalAmount: string = NumberFormatter.formatMoney(claim.claimData.amount.totalAmount())
+        let totalAmount: string = NumberFormatter.formatMoney(claim.totalAmountTillToday)
         let error = new ValidationError()
         error.property = 'amount'
-        error.constraints = { 'amount': 'Enter a valid amount between £1 and ' + totalAmount }
+        error.constraints = { amount: 'Enter a valid amount between £1 and ' + totalAmount }
         form.errors.push(new FormValidationError(error))
       }
 

@@ -6,6 +6,7 @@ import { Claim } from 'claims/models/claim'
 import { ClaimReferenceMatchesGuard } from 'first-contact/guards/claimReferenceMatchesGuard'
 import { JwtExtractor } from 'idam/jwtExtractor'
 import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
+import { ClaimantRequestedCCJGuard } from 'first-contact/guards/claimantRequestedCCJGuard'
 
 const sessionCookie = config.get<string>('session.cookieName')
 
@@ -15,7 +16,9 @@ function receiverPath (req: express.Request, res: express.Response): string {
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.claimSummaryPage.uri, ClaimReferenceMatchesGuard.requestHandler,
+  .get(Paths.claimSummaryPage.uri,
+    ClaimReferenceMatchesGuard.requestHandler,
+    ClaimantRequestedCCJGuard.requestHandler,
     async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const claim: Claim = res.locals.user.claim
       res.render(Paths.claimSummaryPage.associatedView, { claim: claim })

@@ -1,0 +1,16 @@
+{% extends "layout.njk" %}
+
+{% set title = 'CCJ Requested against you' %}
+{% set heading = 'A County Court Judgment (CCJ) has been requested against you' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+        <p>
+        {{ t('You can’t use this service. Find out <a target="_blank" href="%s">how to pay or challenge the CCJ</a>.', { postProcess: 'sprintf', sprintf: ['https://www.gov.uk/county-court-judgments-ccj-for-debt']}) | safe }}
+        </p>
+
+      </p>
+    </div>
+  </div>
+{% endblock %}
