@@ -42,6 +42,6 @@ export class StatementOfMeansPaths {
 const payBySetDatePath = `${responsePath}/pay-by-set-date`
 
 export class PayBySetDatePaths {
-  static readonly paymentDatePage: RoutablePath = new RoutablePath(`${payBySetDatePath}`)
+  static readonly paymentDatePage: RoutablePath = new RoutablePath(`${payBySetDatePath}/payment-date`)
   static readonly explanationPage = new RoutablePath(`${payBySetDatePath}/explanation`)
 }
