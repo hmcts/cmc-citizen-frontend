@@ -43,7 +43,7 @@ function date29DaysFromToday () {
   }
 }
 
-describe('Pay by set date', () => {
+describe('Pay by set date : payment date', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
