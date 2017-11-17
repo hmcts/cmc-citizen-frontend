@@ -91,5 +91,25 @@ describe('TaskListBuilder', () => {
         expect(taskList.tasks.map(task => task.name)).to.not.contain('How much have you paid the claimant?')
       })
     })
+
+    describe('Is Response fully Rejected', () => {
+      beforeEach(() => {
+        stub = sinon.stub(ResponseDraft.prototype, 'requireWhenWillPayForFullAdmission')
+      })
+
+      it('should be enabled when claim is fully rejected and disputed', () => {
+        stub.returns(true)
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), moment(), undefined)
+        expect(taskList.tasks.map(task => task.name)).to.contain('When will you pay?')
+      })
+
+      it('should be disabled in remaining cases', () => {
+        stub.returns(false)
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), moment(), undefined)
+        expect(taskList.tasks.map(task => task.name)).to.not.contain('When will you pay?')
+      })
+    })
   })
 })
