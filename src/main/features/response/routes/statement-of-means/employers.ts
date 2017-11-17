@@ -6,6 +6,7 @@ import { FormValidator } from 'app/forms/validation/formValidator'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { Employers } from 'response/form/models/statement-of-means/employers'
+import { User } from 'idam/user'
 
 function renderView (form: Form<Employers>, res: express.Response): void {
   res.render(StatementOfMeansPaths.employersPage.associatedView, {
@@ -28,7 +29,8 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(StatementOfMeansPaths.employersPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    renderView(new Form(res.locals.user.responseDraft.document.employers), res)
+    const user: User = res.locals.user
+    renderView(new Form(user.responseDraft.document.statementOfMeans.employers), res)
   })
   .post(
     StatementOfMeansPaths.employersPage.uri,
@@ -36,15 +38,17 @@ export default express.Router()
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Employers> = req.body
+      const user: User = res.locals.user
+      const { externalId } = req.params
 
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
         form.model.removeExcessRows()
-        res.locals.user.responseDraft.document.employers = form.model
+        user.responseDraft.document.statementOfMeans.employers = form.model
 
-        await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
-        res.redirect(StatementOfMeansPaths.employersPage.evaluateUri({ externalId: res.locals.user.claim.externalId }))
+        await new DraftService().save(user.responseDraft, user.bearerToken)
+        res.redirect(StatementOfMeansPaths.selfEmployedPage.evaluateUri({ externalId: externalId }))
       }
     })
   )

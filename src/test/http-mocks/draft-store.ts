@@ -117,6 +117,12 @@ const sampleResponseDraftObj = {
   moreTimeNeeded: {
     option: MoreTimeNeededOption.YES
   },
+  statementOfMeans: {
+    residence: {},
+    employment: {},
+    employers: {},
+    selfEmployed: {}
+  },
   defendantDetails: {
     email: { address: 'example@example.com' } as Email,
     mobilePhone: { number: '01223344444' } as MobilePhone,

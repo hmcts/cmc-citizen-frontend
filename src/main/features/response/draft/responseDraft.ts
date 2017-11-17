@@ -54,7 +54,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       this.rejectPartOfClaim = new RejectPartOfClaim(input.rejectPartOfClaim && input.rejectPartOfClaim.option)
       this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
-      this.statementOfMeans = new StatementOfMeans().deserialize(input.employers)
+      this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
     }
     return this
   }
