@@ -6,15 +6,23 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { DefendantPaymentType, DefendantPaymentOption } from 'response/form/models/defendantPaymentOption'
 
 describe('WhenWillYouPayTask', () => {
-  describe('when no response', () => {
-    it('should be not completed', () => {
+
+  describe('when response', () => {
+    it('should be completed when option is selected', () => {
       const draft: ResponseDraft = new ResponseDraft()
-      draft.response = undefined
+      draft.defendantPaymentOption = new DefendantPaymentOption().deserialize({ option: { value: DefendantPaymentType.INSTALMENTS.value } })
+      expect(WhenWillYouPayTask.isCompleted(draft)).to.equal(true)
+    })
+
+    it('should be completed when option is undefined', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.defendantPaymentOption = new DefendantPaymentOption().deserialize(undefined)
+
       expect(WhenWillYouPayTask.isCompleted(draft)).to.equal(false)
     })
   })
 
-  describe('when respnse', () => {
+  describe('when response', () => {
     it('should be completed when option is selected', () => {
       DefendantPaymentType.all().forEach(option => {
         const draft = new ResponseDraft()

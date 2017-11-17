@@ -1,7 +1,8 @@
 export class ValidationErrors {
   static readonly FREE_TEXT_TOO_LONG: string = 'You’ve entered too many characters'
 
-  static readonly NOT_OWE_FULL_AMOUNT_REQUIRED: string = 'Explain why you don’t owe the full amount'
+  // static readonly NOT_OWE_FULL_AMOUNT_REQUIRED: string = 'Explain why you don’t owe the full amount'
+  static readonly WHY_NOT_OWE_FULL_AMOUNT_REQUIRED: string = 'Explain why you don’t owe the full amount'
   static readonly YES_NO_REQUIRED: string = 'Please select yes or no'
   static readonly SELECT_AN_OPTION: string = 'Select an option'
   static readonly VALID_OWED_AMOUNT_REQUIRED: string = 'Enter a valid amount owed'

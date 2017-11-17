@@ -7,7 +7,7 @@ import { RepaymentPlan } from 'ccj/form/models/repaymentPlan'
 
 export class DefendantPaymentPlan extends RepaymentPlan {
 
-  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED })
   text?: string
 
   constructor (
@@ -24,7 +24,7 @@ export class DefendantPaymentPlan extends RepaymentPlan {
 
   static fromObject (value?: any): DefendantPaymentPlan {
     if (value) {
-      let deserialized = new DefendantPaymentPlan()
+      const deserialized = new DefendantPaymentPlan()
       Object.assign(deserialized, RepaymentPlan.fromObject(value))
       deserialized.text = value.text
       return deserialized

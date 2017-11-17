@@ -42,7 +42,7 @@ describe('TaskListBuilder', () => {
         stub = sinon.stub(ResponseDraft.prototype, 'isResponsePartiallyRejectedDueTo')
       })
 
-      it('should be enabled when, when will you pay is available', () => {
+      it('should be enabled when claim is partially rejected due to amount being too high', () => {
         stub.withArgs(RejectPartOfClaimOption.AMOUNT_TOO_HIGH).returns(true)
 
         const input = {
@@ -56,14 +56,41 @@ describe('TaskListBuilder', () => {
         expect(taskList.tasks.map(task => task.name)).to.contain('When will you pay?')
       })
 
-      it('should be disabled when, when will you pay is not available', () => {
+      it('should be disabled in remaining cases', () => {
+        stub.returns(false)
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), moment(), undefined)
+        expect(taskList.tasks.map(task => task.name)).to.not.contain('When will you pay?')
+      })
+    })
+
+    describe('Is Response Partially Rejected Due To task', () => {
+      beforeEach(() => {
+        stub = sinon.stub(ResponseDraft.prototype, 'isResponsePartiallyRejectedDueTo')
+      })
+
+      it('should be enabled when claim is partially rejected due to amount being too high', () => {
+        stub.withArgs(RejectPartOfClaimOption.AMOUNT_TOO_HIGH).returns(true)
+
+        const input = {
+          howMuchOwed: {
+            amount: 200,
+            text: 'I owe nothing'
+          }
+        }
+        const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, moment(), undefined)
+        expect(taskList.tasks.map(task => task.name)).to.contain('When will you pay?')
+      })
+
+      it('should be disabled in remaining cases', () => {
         stub.returns(false)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), moment(), undefined)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('When will you pay?')
       })
 
-      it('should be enabled when how much paid the claimant is available', () => {
+      it('should be enabled in remaining cases', () => {
         stub.withArgs(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED).returns(true)
 
         const input = {

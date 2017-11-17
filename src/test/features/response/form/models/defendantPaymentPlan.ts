@@ -67,7 +67,7 @@ describe('DefendantPaymentPlan', () => {
         expectValidationError(errors, RepaymentValidationErrors.INSTALMENTS_AMOUNT_INVALID)
         expectValidationError(errors, RepaymentValidationErrors.SELECT_PAYMENT_SCHEDULE)
         expectValidationError(errors, RepaymentValidationErrors.INVALID_DATE)
-        expectValidationError(errors, ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED)
+        expectValidationError(errors, ValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED)
       })
 
     })

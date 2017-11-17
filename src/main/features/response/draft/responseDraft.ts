@@ -36,7 +36,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   howMuchOwed?: HowMuchOwed
   rejectPartOfClaim?: RejectPartOfClaim
   rejectAllOfClaim?: RejectAllOfClaim
-  defendantPaymentOption: DefendantPaymentOption = new DefendantPaymentOption()
+  defendantPaymentOption: DefendantPaymentOption
   defendantPaymentPlan?: DefendantPaymentPlan
   paidAmount?: PaidAmount
   payBySetDate?: PayBySetDate
@@ -86,7 +86,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
     }
 
     if (option === undefined || this.response === undefined) {
-      throw new Error('option is required')
+      throw new Error('Option or response is undefined')
     }
 
     return this.response.type === ResponseType.OWE_SOME_PAID_NONE

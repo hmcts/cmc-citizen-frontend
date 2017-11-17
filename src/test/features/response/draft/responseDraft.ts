@@ -117,7 +117,7 @@ describe('ResponseDraft', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
 
-      expect(() => draft.isResponsePartiallyRejectedDueTo(undefined)).to.throw(Error, 'option is required')
+      expect(() => draft.isResponsePartiallyRejectedDueTo(undefined)).to.throw(Error, 'Option or response is undefined')
     })
 
     it('should return false when response is part admission without subtype selected', () => {
@@ -125,7 +125,7 @@ describe('ResponseDraft', () => {
       draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
       draft.rejectPartOfClaim = new RejectPartOfClaim(undefined)
 
-      expect(draft.isResponsePartiallyRejectedDueTo('foo')).to.be.eq(false)
+      expect(() => draft.isResponsePartiallyRejectedDueTo(undefined)).to.throw(Error, 'Option or response is undefined')
     })
 
     it('should return false when response is part admission with paid what believed was owed', () => {

@@ -15,7 +15,7 @@ function renderView (form: Form<PaidAmount>, res: express.Response): void {
   const alreadyPaid: number = user.responseDraft.document.paidAmount.amount || 0
   res.render(Paths.defencePaymentPlanPage.associatedView, {
     form: form,
-    remainingAmount: user.claim.totalAmount - alreadyPaid
+    remainingAmount: user.claim.totalAmountTillToday - alreadyPaid
   })
 }
 
