@@ -113,7 +113,7 @@ describe('ResponseDraft', () => {
       expect(draft.isResponsePartiallyRejectedDueTo(undefined)).to.be.eq(false)
     })
 
-    it('should return error message when response is part admission', () => {
+    it('should return error message when response is part admission and option is undefined ', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
 
