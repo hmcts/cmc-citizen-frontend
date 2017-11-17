@@ -25,9 +25,18 @@ describe('FractionsConstraint', () => {
         expect(constraint.validate(10, validationArgs(0, 2))).to.equal(true)
       })
 
+      it('given a valid negative decimal with no decimal place ', () => {
+        expect(constraint.validate(-10, validationArgs(0, 2))).to.equal(true)
+      })
+
+      it('given a valid negative decimal up to two decimal places ', () => {
+        expect(constraint.validate(-10.12, validationArgs(0, 2))).to.equal(true)
+      })
+
     })
 
     describe('should return false when ', () => {
+
       it('given an more than allowed decimals', () => {
         expect(constraint.validate(10.12, validationArgs(1, 1))).to.equal(false)
       })
@@ -35,9 +44,14 @@ describe('FractionsConstraint', () => {
       it('given an less than allowed decimals', () => {
         expect(constraint.validate(10.1, validationArgs(2, 3))).to.equal(false)
       })
+
+      it('given negative number with less than allowed decimals', () => {
+        expect(constraint.validate(-10.12, validationArgs(3, 8))).to.equal(false)
+      })
     })
 
     describe('should throw an error ', () => {
+
       it('if min constraint is not set', () => {
         expect(() => constraint.validate(10.12, validationArgs(undefined, 2))).to.throw(Error,
           'Minimum allowed decimal places has to be specified and positive value')

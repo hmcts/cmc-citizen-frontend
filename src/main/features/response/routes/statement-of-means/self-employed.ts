@@ -4,7 +4,7 @@ import { StatementOfMeansPaths } from 'response/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'common/errorHandling'
-import { SelfEmployed } from 'response/form/models/selfEmployed'
+import { SelfEmployed } from 'response/form/models/statement-of-means/selfEmployed'
 
 /* tslint:disable:no-default-export */
 export default express.Router()

@@ -56,9 +56,9 @@ export class SelfEmployed implements Serializable<SelfEmployed> {
 
   constructor (jobTitle?: string, annualTurnover?: number, areYouBehindOnTax?: boolean, amountYouOwe?: number, reason?: string) {
     this.jobTitle = jobTitle
-    this.annualTurnover = _.toNumber(annualTurnover)
+    this.annualTurnover = annualTurnover !== undefined ? _.toNumber(annualTurnover) : undefined
     this.areYouBehindOnTax = areYouBehindOnTax !== undefined ? !!areYouBehindOnTax : undefined
-    this.amountYouOwe = _.toNumber(amountYouOwe)
+    this.amountYouOwe = amountYouOwe !== undefined ? _.toNumber(amountYouOwe) : undefined
     this.reason = reason
   }
 

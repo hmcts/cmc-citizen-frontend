@@ -5,7 +5,7 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'app/forms/validation/formValidator'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
-import { Employers } from 'response/form/models/employers'
+import { Employers } from 'response/form/models/statement-of-means/employers'
 
 function renderView (form: Form<Employers>, res: express.Response): void {
   res.render(StatementOfMeansPaths.employersPage.associatedView, {

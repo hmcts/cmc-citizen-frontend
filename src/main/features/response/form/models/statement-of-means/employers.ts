@@ -1,7 +1,7 @@
 import { ValidateNested } from 'class-validator'
 
 import { Serializable } from 'models/serializable'
-import { EmployerRow } from 'response/form/models/employerRow'
+import { EmployerRow } from 'features/response/form/models/statement-of-means/employerRow'
 
 export const INIT_ROW_COUNT: number = 1
 export const MAX_NUMBER_OF_JOBS: number = 20
