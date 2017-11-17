@@ -5,6 +5,15 @@ import uk.gov.hmcts.Packager
 import uk.gov.hmcts.RPMTagger
 import uk.gov.hmcts.cmc.integrationtests.IntegrationTests
 import uk.gov.hmcts.cmc.smoketests.SmokeTests
+import uk.gov.hmcts.InfluxDbPublisher
+
+def influxDbPublisher = new InfluxDbPublisher(
+this, 
+currentBuild,
+'cmc',
+'http://reformmgmtgrafana01.reform.hmcts.net:8086/write?db=jenkins'
+)
+
 
 //noinspection GroovyAssignabilityCheck this is how Jenkins does it
 properties(
@@ -150,6 +159,8 @@ timestamps {
       } catch (Throwable err) {
         notifyBuildFailure channel: channel
         throw err
+      } finally {
+        influxDbPublisher.publish()
       }
     }
     milestone()
