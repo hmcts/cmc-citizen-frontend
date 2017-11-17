@@ -79,6 +79,16 @@ export class TaskListBuilder {
       )
     }
 
+    if (draft.requireWhenWillPayForFullAdmission()) {
+      tasks.push(
+        new TaskListItem(
+          'When will you pay?',
+          Paths.defenceFullPartialPaymentOptionsPage.evaluateUri({ externalId: externalId }),
+          WhenWillYouPayTask.isCompleted(draft)
+        )
+      )
+    }
+
     if (draft.requireDefence()) {
       tasks.push(
         new TaskListItem(

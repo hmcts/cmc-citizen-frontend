@@ -98,6 +98,10 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
     return this.isResponsePopulated() && (this.isResponseRejectedFully() || this.isResponseRejectedPartially())
   }
 
+  public requireWhenWillPayForFullAdmission (): boolean {
+    return this.isResponsePopulated() && (this.isResponseRejectedFully())
+  }
+
   private isResponsePopulated (): boolean {
     return !!this.response && !!this.response.type
   }
