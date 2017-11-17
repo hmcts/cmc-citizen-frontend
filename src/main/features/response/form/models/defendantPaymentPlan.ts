@@ -1,13 +1,16 @@
 import { LocalDate } from 'forms/models/localDate'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
-import { MaxLength } from 'class-validator'
-import { RepaymentValidationErrors } from 'app/forms/validation/validationErrors'
+import { IsDefined, MaxLength } from 'class-validator'
+import { RepaymentValidationErrors, ValidationErrors } from 'app/forms/validation/validationErrors'
 import { ValidationConstraints } from 'app/forms/validation/validationConstraints'
 import { RepaymentPlan } from 'ccj/form/models/repaymentPlan'
+import { IsNotBlank } from 'forms/validation/validators/isBlank'
 
 export class DefendantPaymentPlan extends RepaymentPlan {
 
-  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: RepaymentValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED })
+  @IsDefined({ message: RepaymentValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED })
+  @IsNotBlank({ message: RepaymentValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.FREE_TEXT_TOO_LONG })
   text?: string
 
   constructor (

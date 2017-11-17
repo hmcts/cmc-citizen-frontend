@@ -1,12 +1,13 @@
 import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../../app/forms/models/validationUtils'
+import { expectValidationError, generateString } from '../../../../app/forms/models/validationUtils'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { ValidationErrors, RepaymentValidationErrors } from 'app/forms/validation/validationErrors'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { LocalDate } from 'forms/models/localDate'
 import { MomentFactory } from 'common/momentFactory'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 const FUTURE_YEAR = MomentFactory.currentDate().add(10, 'years').year()
 const DEFAULT_PAYMENT_PLAN = {
@@ -70,85 +71,111 @@ describe('DefendantPaymentPlan', () => {
         expectValidationError(errors, ValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED)
       })
 
-    })
-
-    it('first amount > remainingAmount', () => {
-      const paymentPlan = validPaymentPlan()
-      paymentPlan.firstPayment = 101
-      const errors = validator.validateSync(paymentPlan)
-      expect(errors.length).to.equal(2)
-      expectValidationError(errors, RepaymentValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
-      expectValidationError(errors, RepaymentValidationErrors.INSTALMENTS_AMOUNT_INVALID)
-    })
-
-    it('instalment amount > remainingAmount', () => {
-      const paymentPlan = validPaymentPlan()
-      paymentPlan.installmentAmount = 101
-      const errors = validator.validateSync(paymentPlan)
-      expect(errors.length).to.equal(2)
-      expectValidationError(errors, RepaymentValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
-      expectValidationError(errors, RepaymentValidationErrors.INSTALMENTS_AMOUNT_INVALID)
-    })
-
-    it('first amount <= 0', () => {
-      const paymentPlan = validPaymentPlan()
-      const valuesToTest = [0, -1]
-
-      valuesToTest.forEach(amount => {
-        paymentPlan.firstPayment = amount
+      it('first amount > remainingAmount', () => {
+        const paymentPlan = validPaymentPlan()
+        paymentPlan.firstPayment = 101
         const errors = validator.validateSync(paymentPlan)
-        expect(errors.length).to.equal(1)
+        expect(errors.length).to.equal(2)
         expectValidationError(errors, RepaymentValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
-      })
-    })
-
-    it('instalment amount <= 0', () => {
-      const paymentPlan = validPaymentPlan()
-      const valuesToTest = [0, -1]
-
-      valuesToTest.forEach(amount => {
-        paymentPlan.installmentAmount = amount
-        const errors = validator.validateSync(paymentPlan)
-        expect(errors.length).to.equal(1)
         expectValidationError(errors, RepaymentValidationErrors.INSTALMENTS_AMOUNT_INVALID)
       })
-    })
 
-    it('instalment amount invalid decimal places', () => {
-      const paymentPlan = validPaymentPlan()
-      paymentPlan.installmentAmount = 1.022
-      const errors = validator.validateSync(paymentPlan)
+      it('instalment amount > remainingAmount', () => {
+        const paymentPlan = validPaymentPlan()
+        paymentPlan.installmentAmount = 101
+        const errors = validator.validateSync(paymentPlan)
+        expect(errors.length).to.equal(2)
+        expectValidationError(errors, RepaymentValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
+        expectValidationError(errors, RepaymentValidationErrors.INSTALMENTS_AMOUNT_INVALID)
+      })
 
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS)
-    })
+      it('first amount <= 0', () => {
+        const paymentPlan = validPaymentPlan()
+        const valuesToTest = [0, -1]
 
-    it('first payment invalid decimal places', () => {
-      const paymentPlan = validPaymentPlan()
-      paymentPlan.firstPayment = 1.022
-      const errors = validator.validateSync(paymentPlan)
+        valuesToTest.forEach(amount => {
+          paymentPlan.firstPayment = amount
+          const errors = validator.validateSync(paymentPlan)
+          expect(errors.length).to.equal(1)
+          expectValidationError(errors, RepaymentValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
+        })
+      })
 
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS)
-    })
+      it('instalment amount <= 0', () => {
+        const paymentPlan = validPaymentPlan()
+        const valuesToTest = [0, -1]
 
-    it('date is not future', () => {
-      const paymentPlan = validPaymentPlan()
-      const moment = MomentFactory.currentDate()
-      paymentPlan.firstPaymentDate = new LocalDate(moment.year(), moment.month() + 1, moment.date())
-      const errors = validator.validateSync(paymentPlan)
+        valuesToTest.forEach(amount => {
+          paymentPlan.installmentAmount = amount
+          const errors = validator.validateSync(paymentPlan)
+          expect(errors.length).to.equal(1)
+          expectValidationError(errors, RepaymentValidationErrors.INSTALMENTS_AMOUNT_INVALID)
+        })
+      })
 
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, RepaymentValidationErrors.FUTURE_DATE)
-    })
+      it('instalment amount invalid decimal places', () => {
+        const paymentPlan = validPaymentPlan()
+        paymentPlan.installmentAmount = 1.022
+        const errors = validator.validateSync(paymentPlan)
 
-    it('unknown payment schedule', () => {
-      const paymentPlan = validPaymentPlan()
-      paymentPlan.paymentSchedule = { value: 'gibberish', displayValue: 'hi' }
-      const errors = validator.validateSync(paymentPlan)
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS)
+      })
 
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, RepaymentValidationErrors.SELECT_PAYMENT_SCHEDULE)
+      it('first payment invalid decimal places', () => {
+        const paymentPlan = validPaymentPlan()
+        paymentPlan.firstPayment = 1.022
+        const errors = validator.validateSync(paymentPlan)
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS)
+      })
+
+      it('date is not future', () => {
+        const paymentPlan = validPaymentPlan()
+        const moment = MomentFactory.currentDate()
+        paymentPlan.firstPaymentDate = new LocalDate(moment.year(), moment.month() + 1, moment.date())
+        const errors = validator.validateSync(paymentPlan)
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, RepaymentValidationErrors.FUTURE_DATE)
+      })
+
+      it('unknown payment schedule', () => {
+        const paymentPlan = validPaymentPlan()
+        paymentPlan.paymentSchedule = { value: 'gibberish', displayValue: 'hi' }
+        const errors = validator.validateSync(paymentPlan)
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, RepaymentValidationErrors.SELECT_PAYMENT_SCHEDULE)
+      })
+
+      it('explanation text is undefined', () => {
+        const paymentPlan = validPaymentPlan()
+        paymentPlan.text = undefined
+        const errors = validator.validateSync(paymentPlan)
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, RepaymentValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED)
+      })
+
+      it('explanation text is a blank string', () => {
+        const paymentPlan = validPaymentPlan()
+        paymentPlan.text = ''
+        const errors = validator.validateSync(paymentPlan)
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, RepaymentValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED)
+      })
+
+      it('explanation text is too long', () => {
+        const paymentPlan = validPaymentPlan()
+        paymentPlan.text = generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1)
+        const errors = validator.validateSync(paymentPlan)
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.FREE_TEXT_TOO_LONG)
+      })
     })
 
     describe('should accept when everything is valid', () => {
