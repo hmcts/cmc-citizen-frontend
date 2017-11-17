@@ -89,8 +89,8 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       return false
     }
 
-    if (option === undefined || this.response === undefined) {
-      throw new Error('Option or response is undefined')
+    if (option === undefined) {
+      throw new Error('Option is undefined')
     }
 
     return this.response.type === ResponseType.OWE_SOME_PAID_NONE

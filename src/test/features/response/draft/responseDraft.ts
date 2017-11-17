@@ -135,14 +135,23 @@ describe('ResponseDraft', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = undefined
 
-      expect(draft.isResponsePartiallyRejectedDueTo(undefined)).to.be.eq(false)
+      expect(draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)).to.be.eq(false)
     })
 
-    it('should return error message when response is part admission and option is undefined ', () => {
+    it('should return error message when option argument is undefined', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
 
-      expect(() => draft.isResponsePartiallyRejectedDueTo(undefined)).to.throw(Error, 'Option or response is undefined')
+      expect(() => draft.isResponsePartiallyRejectedDueTo(undefined)).to.throw(Error, 'Option is undefined')
+    })
+
+    it('should return false message when response type is not a part rejection', () => {
+      ResponseType.except(ResponseType.OWE_SOME_PAID_NONE).forEach(responseType => {
+        const draft: ResponseDraft = new ResponseDraft()
+        draft.response = new Response(responseType)
+
+        expect(draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)).to.be.equal(false)
+      })
     })
 
     it('should return false when response is part admission without subtype selected', () => {
@@ -150,20 +159,22 @@ describe('ResponseDraft', () => {
       draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
       draft.rejectPartOfClaim = new RejectPartOfClaim(undefined)
 
-      expect(() => draft.isResponsePartiallyRejectedDueTo(undefined)).to.throw(Error, 'Option or response is undefined')
+      expect(draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)).to.be.equal(false)
     })
 
-    it('should return false when response is part admission with paid what believed was owed', () => {
+    it('should return false when response is part admission with paid what believed was owed (match)', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
       draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)
+
       expect(draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)).to.be.eq(true)
     })
 
-    it('should return true when response is part admission with amount too high', () => {
+    it('should return true when response is part admission with amount too high (match)', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
       draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
+
       expect(draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)).to.be.eq(true)
     })
 
@@ -171,6 +182,7 @@ describe('ResponseDraft', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
       draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
+
       expect(draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)).to.be.eq(false)
     })
 
@@ -178,6 +190,7 @@ describe('ResponseDraft', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
       draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)
+
       expect(draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)).to.be.eq(false)
     })
   })
