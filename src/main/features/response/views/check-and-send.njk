@@ -123,7 +123,7 @@
 
     {% endif %}
 
-    {% if draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH) or draft.requireWhenWillPayForFullAdmission() %}
+    {% if draft.isResponseFullyAdmitted() or draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH) %}
       {{ tableStart('whenWillYouPay', 'When will you pay?') }}
 
       {{ row('When will you pay', t(draft.defendantPaymentOption.option.value) | capitalize, paths.defenceFullPartialPaymentOptionsPage.evaluateUri({ externalId: claim.externalId })) }}

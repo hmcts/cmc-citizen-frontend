@@ -104,6 +104,31 @@ describe('ResponseDraft', () => {
     })
   })
 
+  describe('isResponseFullyAdmitted', () => {
+    it('should return false when no response type set', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = undefined
+
+      expect(draft.isResponseFullyAdmitted()).to.be.eq(false)
+    })
+
+    it('should return false when response is not full admission', () => {
+      ResponseType.except(ResponseType.OWE_ALL_PAID_NONE).forEach(responseType => {
+        const draft: ResponseDraft = new ResponseDraft()
+        draft.response = new Response(responseType)
+
+        expect(draft.isResponseFullyAdmitted()).to.be.eq(false)
+      })
+    })
+
+    it('should return true when response is a full admission', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.OWE_ALL_PAID_NONE)
+
+      expect(draft.isResponseFullyAdmitted()).to.be.eq(true)
+    })
+  })
+
   describe('isResponsePartiallyRejectedDueTo', () => {
 
     it('should return false when no response type set', () => {

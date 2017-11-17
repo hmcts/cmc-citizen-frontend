@@ -69,17 +69,7 @@ export class TaskListBuilder {
       )
     }
 
-    if (draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)) {
-      tasks.push(
-        new TaskListItem(
-          'When will you pay?',
-          Paths.defenceFullPartialPaymentOptionsPage.evaluateUri({ externalId: externalId }),
-          WhenWillYouPayTask.isCompleted(draft)
-        )
-      )
-    }
-
-    if (draft.requireWhenWillPayForFullAdmission()) {
+    if (draft.isResponseFullyAdmitted() || draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)) {
       tasks.push(
         new TaskListItem(
           'When will you pay?',

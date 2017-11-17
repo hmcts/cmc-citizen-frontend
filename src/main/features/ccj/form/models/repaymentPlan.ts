@@ -6,39 +6,45 @@ import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { IsFutureDate } from 'app/forms/validation/validators/dateFutureConstraint'
 import { IsLessThanOrEqualToSumOf } from 'forms/validation/validators/isLessThanOrEqualToSumOf'
 import { Fractions } from 'forms/validation/validators/fractions'
-import { ValidationErrors, RepaymentValidationErrors } from 'app/forms/validation/validationErrors'
+import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
+
+export class ValidationErrors {
+  static readonly FIRST_PAYMENT_AMOUNT_INVALID: string = 'Enter a valid payment amount'
+  static readonly INSTALMENTS_AMOUNT_INVALID: string = 'Enter a valid amount for equal instalments'
+  static readonly INVALID_DATE: string = 'Enter a valid first payment date'
+  static readonly FUTURE_DATE: string = 'Enter a first payment date in the future'
+  static readonly SELECT_PAYMENT_SCHEDULE: string = 'Select how often they should pay'
+}
 
 export class RepaymentPlan {
 
   remainingAmount?: number
 
-  @IsPositive({ message: RepaymentValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
-  @IsLessThanOrEqualToSumOf('installmentAmount', 'remainingAmount', { message: RepaymentValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS })
+  @IsPositive({ message: ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
+  @IsLessThanOrEqualToSumOf('installmentAmount', 'remainingAmount', { message: ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
+  @Fractions(0, 2, { message: CommonValidationErrors.AMOUNT_INVALID_DECIMALS })
   firstPayment?: number
 
-  @IsPositive({ message: RepaymentValidationErrors.INSTALMENTS_AMOUNT_INVALID })
-  @IsLessThanOrEqualToSumOf('firstPayment', 'remainingAmount', { message: RepaymentValidationErrors.INSTALMENTS_AMOUNT_INVALID })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS })
+  @IsPositive({ message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
+  @IsLessThanOrEqualToSumOf('firstPayment', 'remainingAmount', { message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
+  @Fractions(0, 2, { message: CommonValidationErrors.AMOUNT_INVALID_DECIMALS })
   installmentAmount?: number
 
   @ValidateNested()
-  @IsDefined({ message: RepaymentValidationErrors.INVALID_DATE })
-  @IsValidLocalDate({ message: RepaymentValidationErrors.INVALID_DATE })
-  @IsValidYearFormat({ message: RepaymentValidationErrors.INVALID_DATE })
-  @IsFutureDate({ message: RepaymentValidationErrors.FUTURE_DATE })
+  @IsDefined({ message: ValidationErrors.INVALID_DATE })
+  @IsValidLocalDate({ message: ValidationErrors.INVALID_DATE })
+  @IsValidYearFormat({ message: ValidationErrors.INVALID_DATE })
+  @IsFutureDate({ message: ValidationErrors.FUTURE_DATE })
   firstPaymentDate?: LocalDate
 
-  @IsIn(PaymentSchedule.all(), { message: RepaymentValidationErrors.SELECT_PAYMENT_SCHEDULE })
+  @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SELECT_PAYMENT_SCHEDULE })
   paymentSchedule?: PaymentSchedule
 
-  constructor (
-    remainingAmount?: number,
-    firstPayment?: number,
-    installmentAmount?: number,
-    firstPaymentDate?: LocalDate,
-    paymentSchedule?: PaymentSchedule
-  ) {
+  constructor (remainingAmount?: number,
+               firstPayment?: number,
+               installmentAmount?: number,
+               firstPaymentDate?: LocalDate,
+               paymentSchedule?: PaymentSchedule) {
     this.remainingAmount = remainingAmount
     this.firstPayment = firstPayment
     this.installmentAmount = installmentAmount

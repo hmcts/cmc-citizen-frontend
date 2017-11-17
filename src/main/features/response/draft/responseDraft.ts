@@ -80,6 +80,10 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       && RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).includes(this.rejectAllOfClaim.option)
   }
 
+  public isResponseFullyAdmitted (): boolean {
+    return this.isResponsePopulated() && this.response.type === ResponseType.OWE_ALL_PAID_NONE
+  }
+
   public isResponsePartiallyRejectedDueTo (option: String): boolean {
     if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission')) || !this.isResponsePopulated()) {
       return false
@@ -96,10 +100,6 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
 
   public requireMediation (): boolean {
     return this.isResponsePopulated() && (this.isResponseRejectedFully() || this.isResponseRejectedPartially())
-  }
-
-  public requireWhenWillPayForFullAdmission (): boolean {
-    return this.isResponsePopulated() && (this.isResponseRejectedFully())
   }
 
   private isResponsePopulated (): boolean {

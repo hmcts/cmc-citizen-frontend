@@ -2,11 +2,11 @@ import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
-import { RepaymentPlan } from 'ccj/form/models/repaymentPlan'
+import { RepaymentPlan, ValidationErrors } from 'ccj/form/models/repaymentPlan'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { LocalDate } from 'forms/models/localDate'
 import { MomentFactory } from 'common/momentFactory'
-import { ValidationErrors, RepaymentValidationErrors } from 'app/forms/validation/validationErrors'
+import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
 
 const FUTURE_YEAR = MomentFactory.currentDate().add(10, 'years').year()
 const DEFAULT_REPAYMENT_PLAN = {
@@ -62,10 +62,10 @@ describe('RepaymentPlan', () => {
         const errors = validator.validateSync(new RepaymentPlan(undefined))
 
         expect(errors.length).to.equal(4)
-        expectValidationError(errors, RepaymentValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
-        expectValidationError(errors, RepaymentValidationErrors.INSTALMENTS_AMOUNT_INVALID)
-        expectValidationError(errors, RepaymentValidationErrors.SELECT_PAYMENT_SCHEDULE)
-        expectValidationError(errors, RepaymentValidationErrors.INVALID_DATE)
+        expectValidationError(errors, ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
+        expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
+        expectValidationError(errors, ValidationErrors.SELECT_PAYMENT_SCHEDULE)
+        expectValidationError(errors, ValidationErrors.INVALID_DATE)
       })
 
     })
@@ -76,7 +76,7 @@ describe('RepaymentPlan', () => {
       const errors = validator.validateSync(repaymentPlan)
 
       expect(errors.length).to.equal(2)
-      expectValidationError(errors, RepaymentValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
+      expectValidationError(errors, ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
     })
 
     it('instalment amount > remainingAmount', () => {
@@ -85,7 +85,7 @@ describe('RepaymentPlan', () => {
       const errors = validator.validateSync(repaymentPlan)
 
       expect(errors.length).to.equal(2)
-      expectValidationError(errors, RepaymentValidationErrors.INSTALMENTS_AMOUNT_INVALID)
+      expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
     })
 
     it('first amount <= 0', () => {
@@ -97,7 +97,7 @@ describe('RepaymentPlan', () => {
         const errors = validator.validateSync(repaymentPlan)
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, RepaymentValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
+        expectValidationError(errors, ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
       })
     })
 
@@ -110,7 +110,7 @@ describe('RepaymentPlan', () => {
         const errors = validator.validateSync(repaymentPlan)
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, RepaymentValidationErrors.INSTALMENTS_AMOUNT_INVALID)
+        expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
       })
     })
 
@@ -120,7 +120,7 @@ describe('RepaymentPlan', () => {
       const errors = validator.validateSync(repaymentPlan)
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS)
+      expectValidationError(errors, CommonValidationErrors.AMOUNT_INVALID_DECIMALS)
     })
 
     it('first payment invalid decimal places', () => {
@@ -129,7 +129,7 @@ describe('RepaymentPlan', () => {
       const errors = validator.validateSync(repaymentPlan)
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS)
+      expectValidationError(errors, CommonValidationErrors.AMOUNT_INVALID_DECIMALS)
     })
 
     it('date is not future', () => {
@@ -139,7 +139,7 @@ describe('RepaymentPlan', () => {
       const errors = validator.validateSync(repaymentPlan)
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, RepaymentValidationErrors.FUTURE_DATE)
+      expectValidationError(errors, ValidationErrors.FUTURE_DATE)
     })
 
     it('unknown payment schedule', () => {
@@ -148,7 +148,7 @@ describe('RepaymentPlan', () => {
       const errors = validator.validateSync(repaymentPlan)
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, RepaymentValidationErrors.SELECT_PAYMENT_SCHEDULE)
+      expectValidationError(errors, ValidationErrors.SELECT_PAYMENT_SCHEDULE)
     })
 
     describe('should accept when everything is valid', () => {

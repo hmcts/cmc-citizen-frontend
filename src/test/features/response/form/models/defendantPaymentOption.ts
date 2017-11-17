@@ -2,8 +2,7 @@ import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
-import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
-import { RepaymentValidationErrors } from 'app/forms/validation/validationErrors'
+import { DefendantPaymentOption, DefendantPaymentType, ValidationErrors } from 'response/form/models/defendantPaymentOption'
 
 describe('DefendantPaymentOption', () => {
   describe('form object deserialization', () => {
@@ -42,14 +41,14 @@ describe('DefendantPaymentOption', () => {
         const errors = validator.validateSync(new DefendantPaymentOption(undefined))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, RepaymentValidationErrors.WHEN_WILL_YOU_PAY_OPTION_REQUIRED)
+        expectValidationError(errors, ValidationErrors.WHEN_WILL_YOU_PAY_OPTION_REQUIRED)
       })
 
       it('invalid option', () => {
         const errors = validator.validateSync(new DefendantPaymentOption(new DefendantPaymentType('unknown', '')))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, RepaymentValidationErrors.WHEN_WILL_YOU_PAY_OPTION_REQUIRED)
+        expectValidationError(errors, ValidationErrors.WHEN_WILL_YOU_PAY_OPTION_REQUIRED)
       })
     })
 
