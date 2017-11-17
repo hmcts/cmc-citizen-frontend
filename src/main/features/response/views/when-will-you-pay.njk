@@ -20,26 +20,25 @@
 
       {{
       radioGroupWithHintPanel(
-        label = 'I would like the defendant to be ordered to pay:',
         form = form,
+        label = 'I would like the defendant to be ordered to pay:',
         name = 'option',
         options = [
           {
-            label: 'The full amount on set date',
-            value: 'FULL_BY_SPECIFIED_DATE',
-            checked: (form.valueFor('option').value === 'FULL_BY_SPECIFIED_DATE')
+            label: DefendantPaymentType.FULL_BY_SPECIFIED_DATE.displayValue,
+            value: DefendantPaymentType.FULL_BY_SPECIFIED_DATE.value,
+            checked: (form.valueFor('option') === DefendantPaymentType.FULL_BY_SPECIFIED_DATE)
           },
           {
-            label: 'By instalments',
-            value: 'INSTALMENTS',
-            checked: (form.valueFor('option').value === 'INSTALMENTS'),
+            label: DefendantPaymentType.INSTALMENTS.displayValue,
+            value: DefendantPaymentType.INSTALMENTS.value,
+            checked: (form.valueFor('option') === DefendantPaymentType.INSTALMENTS),
             hint: t('You will need to give details of your finances to {{ claimantFullName }} to explain why.',
                     { claimantFullName: user.claim.claimData.claimant.name })
           }
         ]
       )
       }}
-
 
       {{ saveAndContinueButton() }}
     </form>

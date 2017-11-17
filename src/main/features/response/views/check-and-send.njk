@@ -125,12 +125,12 @@
 
     {% if draft.isResponseFullyAdmitted() or draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH) %}
       {{ tableStart('whenWillYouPay', 'When will you pay?') }}
-
-      {{ row('When will you pay', t(draft.defendantPaymentOption.option.value) | capitalize, paths.defenceFullPartialPaymentOptionsPage.evaluateUri({ externalId: claim.externalId })) }}
-      {{ row('The first payment of', t(draft.defendantPaymentPlan.firstPayment | numeral))  }}
-      {{ row('Followed by equal instalments of', t(draft.defendantPaymentPlan.installmentAmount | numeral))  }}
+      {{ row('When will you pay', t(draft.defendantPaymentOption.option.displayValue) | capitalize, paths.defencePaymentOptionsPage.evaluateUri({ externalId: claim.externalId })) }}
+      {{ row('The first payment of', t(draft.defendantPaymentPlan.firstPayment | numeral)) }}
+      {{ row('Followed by equal instalments of', t(draft.defendantPaymentPlan.installmentAmount | numeral)) }}
       {{ row('Make the first payment on', t(draft.defendantPaymentPlan.firstPaymentDate.toMoment() | date)) }}
-      {{ row('Frequency of payments', t(draft.defendantPaymentPlan.paymentSchedule.displayValue))  }}
+      {{ row('Frequency of payments', t(draft.defendantPaymentPlan.paymentSchedule.displayValue)) }}
+      {{ tableEnd() }}
     {% endif %}
 
     {% if draft.requireMediation() %}

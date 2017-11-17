@@ -3,7 +3,7 @@ import { Serializable } from 'models/serializable'
 
 export class DefendantPaymentType {
   static readonly INSTALMENTS = new DefendantPaymentType('INSTALMENTS', 'By instalments')
-  static readonly FULL_BY_SPECIFIED_DATE = new DefendantPaymentType('FULL_BY_SPECIFIED_DATE', 'The full amount by')
+  static readonly FULL_BY_SPECIFIED_DATE = new DefendantPaymentType('FULL_BY_SPECIFIED_DATE', 'Full amount on set date')
 
   readonly value: string
   readonly displayValue: string
