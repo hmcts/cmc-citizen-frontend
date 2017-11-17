@@ -10,9 +10,7 @@
         {{ t('Your payment plan') }}
       </h1>
 
-      <p>{{ t('You believe you owe %s',
-        { postProcess: 'sprintf', sprintf: [ remainingAmount | numeral ]}) }}
-      </p>
+      <p>{{ t('You believe you owe {{ remainingAmount }}', { remainingAmount: remainingAmount | numeral }) }}</p>
 
       <form method="post" novalidate>
         {{ csrfProtection(csrf) }}
@@ -35,8 +33,7 @@
         <div class="form-group">
           <fieldset>
             <legend class="visually-hidden">{{ t('When you want them to make the first payment') }}</legend>
-            {{ dateInput('firstPaymentDate', form, hint = 'For example, 12 03 2017',
-            label = 'When will you make the first payment?') }}
+            {{ dateInput('firstPaymentDate', form, hint = 'For example, 12 03 2017', label = 'When will you make the first payment?') }}
           </fieldset>
         </div>
 
