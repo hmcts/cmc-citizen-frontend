@@ -147,9 +147,17 @@ timestamps {
           }
           milestone()
         }
+        currentBuild.result = 'SUCCESS'
       } catch (Throwable err) {
         notifyBuildFailure channel: channel
+        currentBuild.result = 'FAILURE'
         throw err
+      } finally {
+        step([$class: 'InfluxDbPublisher',
+            customData: null,
+            customDataMap: null,
+            customPrefix: null,
+            target: 'Jenkins Data'])
       }
     }
     milestone()
