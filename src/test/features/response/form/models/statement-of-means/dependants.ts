@@ -68,7 +68,7 @@ describe('Dependants', () => {
 
     it('should return fully populated Dependants', () => {
       const actual = Dependants.fromObject(
-        { hasAnyChildren: true, under11: 1, between11and15: 2, between16and19: 3 }
+        { hasAnyChildren: true, under11: '1', between11and15: '2', between16and19: '3' }
       )
 
       expect(actual.hasAnyChildren).to.be.eq(true)
@@ -79,7 +79,7 @@ describe('Dependants', () => {
 
     it('should NOT populate other fields when hasAnyChildren = false', () => {
       const actual = Dependants.fromObject(
-        { hasAnyChildren: false, under11: 1, between11and15: 2, between16and19: 3 }
+        { hasAnyChildren: false, under11: '1', between11and15: '2', between16and19: '3' }
       )
 
       expect(actual.hasAnyChildren).to.be.eq(false)

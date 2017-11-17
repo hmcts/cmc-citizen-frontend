@@ -15,7 +15,7 @@ export class ValidationErrors {
   static readonly AMOUNT_YOU_OWE_REQUIRED: string = 'Enter an amount you owe'
   static readonly REASON_REQUIRED: string = 'Enter a reason'
   static readonly REASON_TOO_LONG: string = 'You’ve entered too many characters'
-  static readonly AMOUNT_YOU_OWE_NOT_VALID: string = 'Invalid an amount, minimum £$constraint1'
+  static readonly AMOUNT_YOU_OWE_NOT_VALID: string = 'Enater an invalid amount, minimum £$constraint1'
   static readonly INVALID_DECIMALS: string = 'Enter a valid amount, maximum two decimal places'
   static readonly TOO_MUCH: string = 'Are you sure this is a valid value?'
 }

@@ -1,8 +1,8 @@
 import { IsDefined, IsInt, Min, ValidateIf } from 'class-validator'
 
 import { Serializable } from 'models/serializable'
-import * as _ from 'lodash'
 import * as toBoolean from 'to-boolean'
+import { NumericUtils } from 'common/utils/numericUtils'
 
 export class ValidationErrors {
   static readonly HAS_ANY_CHILDREN_NOT_SELECTED: string = 'Select an option'
@@ -37,9 +37,9 @@ export class Dependants implements Serializable<Dependants> {
 
   constructor (hasAnyChildren?: boolean, under11?: number, between11and15?: number, between16and19?: number) {
     this.hasAnyChildren = hasAnyChildren
-    this.under11 = under11 !== undefined ? _.toNumber(under11) : undefined
-    this.between11and15 = between11and15 !== undefined ? _.toNumber(between11and15) : undefined
-    this.between16and19 = between16and19 !== undefined ? _.toNumber(between16and19) : undefined
+    this.under11 = NumericUtils.toNumberOrUndefined(under11)
+    this.between11and15 = NumericUtils.toNumberOrUndefined(between11and15)
+    this.between16and19 = NumericUtils.toNumberOrUndefined(between16and19)
   }
 
   static fromObject (value?: any): Dependants {
