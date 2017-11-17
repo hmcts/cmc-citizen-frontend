@@ -81,11 +81,15 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   }
 
   public isResponseFullyAdmitted (): boolean {
+    if (!toBoolean(config.get<boolean>('featureToggles.fullAdmission'))) {
+      return false
+    }
+
     return this.isResponsePopulated() && this.response.type === ResponseType.OWE_ALL_PAID_NONE
   }
 
   public isResponsePartiallyRejectedDueTo (option: String): boolean {
-    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission')) || !this.isResponsePopulated()) {
+    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission'))) {
       return false
     }
 
@@ -93,7 +97,8 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       throw new Error('Option is undefined')
     }
 
-    return this.response.type === ResponseType.OWE_SOME_PAID_NONE
+    return this.isResponsePopulated()
+      && this.response.type === ResponseType.OWE_SOME_PAID_NONE
       && this.rejectPartOfClaim !== undefined
       && this.rejectPartOfClaim.option === option
   }
