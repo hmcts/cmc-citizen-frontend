@@ -17,7 +17,7 @@ import { DefendantPaymentType } from 'response/form/models/defendantPaymentOptio
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const defenceFullPartialPaymentOptionsPage = Paths.defenceFullPartialPaymentOptionsPage.evaluateUri({ externalId: externalId })
+const defenceFullPartialPaymentOptionsPage = Paths.defencePaymentOptionsPage.evaluateUri({ externalId: externalId })
 
 const validFormData: object = {
   option: DefendantPaymentType.INSTALMENTS.value
@@ -134,7 +134,7 @@ describe('Defendant - when will you pay options', () => {
             })
 
             it('should redirect to pay by set date page for "FULL_BY_SPECIFIED_DATE" option selected', async () => {
-              await checkThatSelectedPaymentOptionRedirectsToPage({ option: DefendantPaymentType.FULL_BY_SPECIFIED_DATE.value }, Paths.defenceFullPartialPaymentOptionsPage.evaluateUri({ externalId: externalId }))
+              await checkThatSelectedPaymentOptionRedirectsToPage({ option: DefendantPaymentType.FULL_BY_SPECIFIED_DATE.value }, Paths.defencePaymentOptionsPage.evaluateUri({ externalId: externalId }))
             })
           })
 

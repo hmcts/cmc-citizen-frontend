@@ -11,7 +11,7 @@ import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<DefendantPaymentOption>, res: express.Response) {
   const user: User = res.locals.user
-  res.render(Paths.defenceFullPartialPaymentOptionsPage.associatedView, {
+  res.render(Paths.defencePaymentOptionsPage.associatedView, {
     form: form,
     claim: user.claim
   })
@@ -19,14 +19,13 @@ function renderView (form: Form<DefendantPaymentOption>, res: express.Response) 
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.defenceFullPartialPaymentOptionsPage.uri,
+  .get(Paths.defencePaymentOptionsPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
-      const defendantPaymentOption: DefendantPaymentOption = user.responseDraft.document.defendantPaymentOption
 
-      renderView(new Form(defendantPaymentOption), res)
+      renderView(new Form(user.responseDraft.document.defendantPaymentOption), res)
     }))
-  .post(Paths.defenceFullPartialPaymentOptionsPage.uri,
+  .post(Paths.defencePaymentOptionsPage.uri,
     FormValidator.requestHandler(DefendantPaymentOption, DefendantPaymentOption.fromObject),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
@@ -43,7 +42,7 @@ export default express.Router()
 
           switch (form.model.option) {
             case DefendantPaymentType.FULL_BY_SPECIFIED_DATE:
-              res.redirect(Paths.defenceFullPartialPaymentOptionsPage.evaluateUri({ externalId: externalId }))
+              res.redirect(Paths.defencePaymentOptionsPage.evaluateUri({ externalId: externalId }))
               break
             case DefendantPaymentType.INSTALMENTS:
               res.redirect(Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))
