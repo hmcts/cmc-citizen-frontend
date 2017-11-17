@@ -4,9 +4,7 @@ import { MomentFactory } from 'common/momentFactory'
 
 export class InterestDate implements Serializable<InterestDate> {
 
-  type: string
-  date?: Moment
-  reason?: string
+  constructor (public type?: string, public date?: Moment, public reason?: string) {}
 
   deserialize (input?: any): InterestDate {
     if (input) {

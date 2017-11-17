@@ -20,16 +20,16 @@
                 up to 7 months to get a hearing date.') }}</p>
 
       <p>{{ t('Find out more about') }} <a
-          href="https://www.gov.uk/make-court-claim-for-money">{{ t('making a money claim') }}</a>,
+         target="_blank" href="https://www.gov.uk/make-court-claim-for-money">{{ t('making a money claim') }}</a>,
         {{ t('such as the') }} <a
-          href="https://www.gov.uk/make-court-claim-for-money/court-fees">{{ t(' fees you’ll pay') }}</a>.</p>
+          target="_blank" href="https://www.gov.uk/make-court-claim-for-money/court-fees">{{ t(' fees you’ll pay') }}</a>.</p>
 
       <h2 class="heading-medium">{{ t('What you’ll need') }}</h2>
 
       <ul class="list list-bullet">
         <li>{{ t('Current address and any other contact details of the person or company you’re claiming against.') }}</li>
         <li>{{ t('A credit or debit card to pay the') }} <a
-            href="https://www.gov.uk/make-court-claim-for-money/court-fees">{{ t('claim fee') }}</a>.
+            target="_blank" href="https://www.gov.uk/make-court-claim-for-money/court-fees">{{ t('claim fee') }}</a>.
         </li>
         <li>{{ t('Around 30 minutes to make your claim.') }}</li>
       </ul>
@@ -44,17 +44,17 @@
 
       <h2 class="heading-medium">{{ t('Other ways to claim') }}</h2>
 
-      <p>{{ t('You can print and fill in a') }} <a
+      <p>{{ t('You can print and fill in a') }} <a target="_blank"
           href="http://hmctsformfinder.justice.gov.uk/HMCTS/GetForm.do?court_forms_id=338">{{ t('paper claim
                 form.') }}</a> {{ t('Send it and a cheque for your claim fee to the the address on the form.') }}</p>
 
       {{ supportWidget('Help to use this service') }}
 
       <h2 class="heading-medium">{{ t('Legal advice') }}</h2>
-      <p>{{ t('You might be able to get free legal advice from organisations like <a href="%s">Citizens Advice</a>'
-        + ' and <a href="%s">Advicenow</a>.',
+      <p>{{ t('You might be able to get free legal advice from organisations like <a target="_blank" href="%s">Citizens Advice</a>'
+        + ' and <a target="_blank" href="%s">Advicenow</a>.',
         { postProcess: 'sprintf', sprintf: [
-          'https://www.citizensadvice.org.uk/law-and-rights/legal-system/taking-legal-action/do-you-need-legal-advice/',
+          'https://www.citizensadvice.org.uk/about-us/how-we-provide-advice/advice/',
           'http://www.advicenow.org.uk/'
           ] }) | safe }}
       </p>
@@ -69,8 +69,8 @@
         <h2 class="heading-medium" id="subsection-title">{{ t('Support') }}</h2>
         <nav role="navigation" aria-labelledby="subsection-title">
           <ul class="font-xsmall">
-            <li><a href="https://www.gov.uk/make-court-claim-for-money">{{ t('Make a court claim for money') }}</a></li>
-            <li><a href="https://www.gov.uk/make-court-claim-for-money/court-fees">{{ t('Money claim fees') }}</a></li>
+            <li><a target="_blank" href="https://www.gov.uk/make-court-claim-for-money">{{ t('Make a court claim for money') }}</a></li>
+            <li><a target="_blank" href="https://www.gov.uk/make-court-claim-for-money/court-fees">{{ t('Money claim fees') }}</a></li>
             <li><a href="/other-options">{{ t('Other options') }}</a></li>
             <li><a class="external" rel="external"
                    href="https://courttribunalfinder.service.gov.uk/courts/county-court-business-centre-ccbc"

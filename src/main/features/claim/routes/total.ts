@@ -4,16 +4,18 @@ import { InterestType } from 'features/claim/form/models/interest'
 import { InterestTotal } from 'forms/models/interestTotal'
 import { claimAmountWithInterest, interestAmount } from 'app/utils/interestUtils'
 import { FeesClient } from 'fees/feesClient'
+import { User } from 'idam/user'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.totalPage.uri, (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    FeesClient.calculateIssueFee(claimAmountWithInterest(res.locals.user.claimDraft.document))
+    const user: User = res.locals.user
+    FeesClient.calculateIssueFee(claimAmountWithInterest(user.claimDraft.document))
       .then((feeAmount: number) => {
         res.render(Paths.totalPage.associatedView,
           {
-            interestTotal: new InterestTotal(res.locals.user.claimDraft.document.amount.totalAmount(), interestAmount(res.locals.user.claimDraft.document), feeAmount),
-            interestClaimed: (res.locals.user.claimDraft.document.interest.type !== InterestType.NO_INTEREST)
+            interestTotal: new InterestTotal(user.claimDraft.document.amount.totalAmount(), interestAmount(user.claimDraft.document), feeAmount),
+            interestClaimed: (user.claimDraft.document.interest.type !== InterestType.NO_INTEREST)
           })
       })
       .catch(next)

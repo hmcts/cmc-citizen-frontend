@@ -9,7 +9,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
-  res.render(Paths.paidAmountPage.associatedView, { form: form, totalAmount: res.locals.user.claim.totalAmount })
+  res.render(Paths.paidAmountPage.associatedView, { form: form, totalAmount: res.locals.user.claim.totalAmountTillToday })
 }
 
 /* tslint:disable:no-default-export */
