@@ -5,6 +5,7 @@ import { PartyDetailsMapper } from 'app/pdf/mappers/partyDetailsMapper'
 import { ClaimMapper } from 'app/pdf/mappers/claimMapper'
 import { Claim } from 'claims/models/claim'
 import { DefendantMapper } from 'app/pdf/mappers/defendantMapper'
+import { NumberFormatter } from 'utils/numberFormatter'
 
 const responseTemplatePath = path.join(__dirname, '..', '..', 'resources', 'pdf', 'responseReceipt.njk')
 
@@ -20,6 +21,7 @@ export class ResponseReceipt {
   data (): object {
     const data = {
       claim: ClaimMapper.createClaimDetails(this.claim),
+      totalClaimAmount: NumberFormatter.formatMoney(this.claim.totalAmountTillToday),
       defence: {
         respondedAt: MomentFormatter.formatLongDateAndTime(this.claim.respondedAt),
         response: this.claim.response.defence,
