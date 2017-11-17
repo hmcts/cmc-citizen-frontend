@@ -75,7 +75,7 @@
     "request-promise-native": "^1.0.3",
     "require-directory": "^2.1.1",
     "serve-favicon": "^2.3.0",
-    "snyk": "^1.47.0",
+    "snyk": "^1.49.3",
     "to-boolean": "^1.0.0",
     "ts-node": "^3.3.0",
     "tsconfig-paths": "^2.2.0",
