@@ -72,7 +72,7 @@ export class DefendantPaymentPlan {
       value.firstPayment ? parseFloat(value.firstPayment) : undefined,
       value.installmentAmount ? parseFloat(value.installmentAmount) : undefined,
       LocalDate.fromObject(value.firstPaymentDate),
-      PaymentSchedule.all().filter(option => option.value === value.paymentSchedule).pop(),
+      value.paymentSchedule ? PaymentSchedule.of(value.paymentSchedule) : undefined,
       value.text)
   }
 
@@ -82,9 +82,7 @@ export class DefendantPaymentPlan {
       this.firstPayment = input.firstPayment
       this.installmentAmount = input.installmentAmount
       this.firstPaymentDate = new LocalDate().deserialize(input.firstPaymentDate)
-      this.paymentSchedule = PaymentSchedule.all()
-        .filter(option => input.paymentSchedule && option.value === input.paymentSchedule.value)
-        .pop()
+      this.paymentSchedule = input.paymentSchedule ? PaymentSchedule.of(input.paymentSchedule.value) : undefined
       this.text = input.text
     }
     return this
