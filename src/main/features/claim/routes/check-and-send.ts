@@ -25,10 +25,9 @@ import { DraftService } from 'services/draftService'
 function getClaimAmountTotal (res: express.Response): Promise<InterestTotal> {
   return FeesClient.calculateIssueFee(claimAmountWithInterest(res.locals.user.claimDraft.document))
     .then((feeAmount: number) => {
-      return new InterestTotal(res.locals.user.claimDraft.document.amount.totalAmountTillToday, interestAmount(res.locals.user.claimDraft.document), feeAmount)
+      return new InterestTotal(res.locals.user.claimDraft.document.amount.totalAmount(), interestAmount(res.locals.user.claimDraft.document), feeAmount)
     })
 }
-
 function getBusinessName (partyDetails: PartyDetails): string {
   if (partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
     return (partyDetails as SoleTraderDetails).businessName

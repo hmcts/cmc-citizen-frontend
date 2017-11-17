@@ -25,7 +25,8 @@ export class ContentSecurityPolicy {
         styleSrc: [self],
         scriptSrc: scriptSrc,
         connectSrc: connectSrc,
-        objectSrc: [self]
+        objectSrc: [self],
+        frameAncestors: [none]
       }
     }))
   }
