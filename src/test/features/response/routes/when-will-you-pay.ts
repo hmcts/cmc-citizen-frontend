@@ -132,10 +132,6 @@ describe('Defendant - when will you pay options', () => {
             it('should redirect to repayment plan page for "INSTALMENTS" option selected', async () => {
               await checkThatSelectedPaymentOptionRedirectsToPage({ option: DefendantPaymentType.INSTALMENTS.value }, Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))
             })
-
-            it('should redirect to pay by set date page for "FULL_BY_SPECIFIED_DATE" option selected', async () => {
-              await checkThatSelectedPaymentOptionRedirectsToPage({ option: DefendantPaymentType.FULL_BY_SPECIFIED_DATE.value }, Paths.defencePaymentOptionsPage.evaluateUri({ externalId: externalId }))
-            })
           })
 
           context('when form is invalid', async () => {

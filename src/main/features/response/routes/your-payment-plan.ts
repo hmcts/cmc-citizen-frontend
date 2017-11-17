@@ -13,6 +13,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
   const user: User = res.locals.user
   const alreadyPaid: number = user.responseDraft.document.paidAmount.amount || 0
+
   res.render(Paths.defencePaymentPlanPage.associatedView, {
     form: form,
     remainingAmount: user.claim.totalAmountTillToday - alreadyPaid
@@ -24,6 +25,7 @@ export default express.Router()
   .get(Paths.defencePaymentPlanPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
+
       renderView(new Form(user.responseDraft.document.defendantPaymentPlan), res)
     }))
 
@@ -31,16 +33,16 @@ export default express.Router()
     FormValidator.requestHandler(DefendantPaymentPlan, DefendantPaymentPlan.fromObject),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-
         const form: Form<DefendantPaymentPlan> = req.body
         const user: User = res.locals.user
 
         if (form.hasErrors()) {
           renderView(form, res)
         } else {
-          const { externalId } = req.params
           user.responseDraft.document.defendantPaymentPlan = form.model
           await new DraftService().save(user.responseDraft, user.bearerToken)
+
+          const { externalId } = req.params
           res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
         }
       }))

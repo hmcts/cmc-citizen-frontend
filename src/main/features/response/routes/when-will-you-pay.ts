@@ -38,13 +38,12 @@ export default express.Router()
           user.responseDraft.document.defendantPaymentOption = form.model
           await new DraftService().save(user.responseDraft, user.bearerToken)
 
-          const { externalId } = req.params
-
           switch (form.model.option) {
             case DefendantPaymentType.FULL_BY_SPECIFIED_DATE:
-              res.redirect(Paths.defencePaymentOptionsPage.evaluateUri({ externalId: externalId }))
+              res.redirect('/not-implemented-yet')
               break
             case DefendantPaymentType.INSTALMENTS:
+              const { externalId } = req.params
               res.redirect(Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))
               break
           }
