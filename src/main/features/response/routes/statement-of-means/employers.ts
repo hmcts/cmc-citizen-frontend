@@ -7,9 +7,12 @@ import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { Employers } from 'response/form/models/statement-of-means/employers'
 import { User } from 'idam/user'
+import { RoutablePath } from 'common/router/routablePath'
+
+const page: RoutablePath = StatementOfMeansPaths.employersPage
 
 function renderView (form: Form<Employers>, res: express.Response): void {
-  res.render(StatementOfMeansPaths.employersPage.associatedView, {
+  res.render(page.associatedView, {
     form: form,
     canAddMoreJobs: form.model.canAddMoreRows()
   })
@@ -28,12 +31,12 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(StatementOfMeansPaths.employersPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  .get(page.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user: User = res.locals.user
     renderView(new Form(user.responseDraft.document.statementOfMeans.employers), res)
   })
   .post(
-    StatementOfMeansPaths.employersPage.uri,
+    page.uri,
     FormValidator.requestHandler(Employers, Employers.fromObject, undefined, ['addRow']),
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {

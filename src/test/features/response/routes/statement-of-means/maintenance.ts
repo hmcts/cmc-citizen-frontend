@@ -13,11 +13,11 @@ import { checkCountyCourtJudgmentRequestedGuard } from '../checks/ccj-requested-
 import { app } from '../../../../../main/app'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = StatementOfMeansPaths.educationPage.evaluateUri(
+const pagePath: string = StatementOfMeansPaths.maintenancePage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
 
-describe('Defendant response: Statement of means: education', () => {
+describe('Defendant response: Statement of means: maintenance', () => {
 
   attachDefaultHooks(app)
 
@@ -62,7 +62,7 @@ describe('Defendant response: Statement of means: education', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Children aged 16 to 19 living with you'))
+            .expect(res => expect(res).to.be.successful.withText('Do you or your partner pay maintenance for any children?'))
         })
       })
     })
@@ -112,10 +112,10 @@ describe('Defendant response: Statement of means: education', () => {
 
           await request(app)
             .post(pagePath)
-            .send({ value: '1' })
+            .send({ option: 'true', value: '1' })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.maintenancePage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.employmentPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )

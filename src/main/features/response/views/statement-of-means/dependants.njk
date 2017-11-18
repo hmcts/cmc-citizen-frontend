@@ -26,11 +26,7 @@
             radioOption(form = form, label = 'Yes', name = 'hasAnyChildren', value = 'true', checked = form.valueFor('hasAnyChildren') === true)
           }}
 
-          {% set error = form.errorFor('hasAnyChildren') %}
-
-          <div class="form-group panel panel-border-narrow js-hidden {% if errorCheckbox %} form-group-error {% endif %}"
-            id="hasAnyChildren-true"
-            aria-hidden="false">
+          <div class="form-group panel panel-border-narrow js-hidden" id="hasAnyChildren-true" aria-hidden="false">
 
             <p>{{ t('Enter number for each age group.') }}</p>
             {{ textInput('Under 11', 'under11', form) }}
@@ -40,7 +36,7 @@
           </div>
 
           {{
-            radioOption(form = form, label = 'No', name = 'isCurrentlyEmployed', value = 'false', checked = form.valueFor('isCurrentlyEmployed') === false)
+            radioOption(form = form, label = 'No', name = 'hasAnyChildren', value = 'false', checked = form.valueFor('hasAnyChildren') === false)
           }}
 
         </fieldset>

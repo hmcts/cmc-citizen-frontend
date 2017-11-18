@@ -15,7 +15,7 @@ export class Education implements Serializable<Education> {
   value: number
 
   constructor (value?: number) {
-    this.value = NumericUtils.toNumberOrUndefined(value)
+    this.value = value
   }
 
   static fromObject (value?: any): Education {
@@ -23,7 +23,7 @@ export class Education implements Serializable<Education> {
       return value
     }
 
-    return new Education(value.value)
+    return new Education(NumericUtils.toNumberOrUndefined(value.value))
   }
 
   deserialize (input?: any): Education {

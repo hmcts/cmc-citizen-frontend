@@ -5,7 +5,7 @@ import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 import { ValidationConstraints as GlobalValidationConstants } from 'forms/validation/validationConstraints'
 import { Fractions } from 'forms/validation/validators/fractions'
 import * as toBoolean from 'to-boolean'
-import * as _ from 'lodash'
+import { NumericUtils } from 'common/utils/numericUtils'
 
 export class ValidationErrors {
   static readonly JOB_TITLE_REQUIRED: string = 'Enter a job title'
@@ -15,7 +15,7 @@ export class ValidationErrors {
   static readonly AMOUNT_YOU_OWE_REQUIRED: string = 'Enter an amount you owe'
   static readonly REASON_REQUIRED: string = 'Enter a reason'
   static readonly REASON_TOO_LONG: string = 'You’ve entered too many characters'
-  static readonly AMOUNT_YOU_OWE_NOT_VALID: string = 'Enater an invalid amount, minimum £$constraint1'
+  static readonly AMOUNT_YOU_OWE_NOT_VALID: string = 'Enter a amount, minimum £$constraint1'
   static readonly INVALID_DECIMALS: string = 'Enter a valid amount, maximum two decimal places'
   static readonly TOO_MUCH: string = 'Are you sure this is a valid value?'
 }
@@ -56,9 +56,9 @@ export class SelfEmployed implements Serializable<SelfEmployed> {
 
   constructor (jobTitle?: string, annualTurnover?: number, areYouBehindOnTax?: boolean, amountYouOwe?: number, reason?: string) {
     this.jobTitle = jobTitle
-    this.annualTurnover = annualTurnover !== undefined ? _.toNumber(annualTurnover) : undefined
+    this.annualTurnover = annualTurnover
     this.areYouBehindOnTax = areYouBehindOnTax !== undefined ? !!areYouBehindOnTax : undefined
-    this.amountYouOwe = amountYouOwe !== undefined ? _.toNumber(amountYouOwe) : undefined
+    this.amountYouOwe = amountYouOwe
     this.reason = reason
   }
 
@@ -69,9 +69,9 @@ export class SelfEmployed implements Serializable<SelfEmployed> {
 
     const selfEmployed = new SelfEmployed(
       value.jobTitle || undefined,
-      value.annualTurnover,
+      NumericUtils.toNumberOrUndefined(value.annualTurnover),
       value.areYouBehindOnTax !== undefined ? toBoolean(value.areYouBehindOnTax) === true : undefined,
-      value.amountYouOwe,
+      NumericUtils.toNumberOrUndefined(value.amountYouOwe),
       value.reason || undefined
     )
 

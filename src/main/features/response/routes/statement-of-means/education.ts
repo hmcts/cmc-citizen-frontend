@@ -24,7 +24,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<Education> = req.body
       const user: User = res.locals.user
-      // const { externalId } = req.params
+      const { externalId } = req.params
 
       if (form.hasErrors()) {
         res.render(page.associatedView, { form: form })
@@ -32,8 +32,7 @@ export default express.Router()
         user.responseDraft.document.statementOfMeans.education = form.model
 
         await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
-        res.render(page.associatedView, { form: form })
-        // res.redirect(Paths.employersPage.evaluateUri({ externalId: externalId }))
+        res.redirect(Paths.maintenancePage.evaluateUri({ externalId: externalId }))
       }
     })
   )

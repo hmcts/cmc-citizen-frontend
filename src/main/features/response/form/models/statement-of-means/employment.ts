@@ -21,8 +21,10 @@ export class Employment implements Serializable<Employment> {
 
   constructor (isCurrentlyEmployed?: boolean, employed?: boolean, selfEmployed?: boolean) {
     this.isCurrentlyEmployed = isCurrentlyEmployed
-    this.employed = employed
-    this.selfEmployed = selfEmployed
+    if (this.isCurrentlyEmployed) {
+      this.employed = employed
+      this.selfEmployed = selfEmployed
+    }
   }
 
   static fromObject (value?: any): Employment {
