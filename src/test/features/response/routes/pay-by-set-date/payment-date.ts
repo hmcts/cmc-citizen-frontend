@@ -139,7 +139,7 @@ describe('Pay by set date : payment date', () => {
             .send(nextDay())
             .expect(res => expect(res).to.be.redirect
               .toLocation(
-                Paths.checkAndSendPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+                Paths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )
         })

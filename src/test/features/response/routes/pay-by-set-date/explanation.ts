@@ -120,7 +120,7 @@ describe('Pay by set date : explanation', () => {
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect
               .toLocation(
-                Paths.checkAndSendPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+                Paths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )
         })
