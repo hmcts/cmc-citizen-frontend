@@ -5,7 +5,7 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { StatementOfTruth } from 'forms/models/statementOfTruth'
 import { FeesClient } from 'fees/feesClient'
-import { InterestTotal } from 'forms/models/interestTotal'
+import { TotalAmount } from 'forms/models/totalAmount'
 import { InterestDateType } from 'app/common/interestDateType'
 import { claimAmountWithInterest, interestAmount } from 'utils/interestUtils'
 import { InterestType } from 'claim/form/models/interest'
@@ -22,13 +22,12 @@ import { SignatureType } from 'app/common/signatureType'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
 import { DraftService } from 'services/draftService'
 
-function getClaimAmountTotal (res: express.Response): Promise<InterestTotal> {
+function getClaimAmountTotal (res: express.Response): Promise<TotalAmount> {
   return FeesClient.calculateIssueFee(claimAmountWithInterest(res.locals.user.claimDraft.document))
     .then((feeAmount: number) => {
-      return new InterestTotal(res.locals.user.claimDraft.document.amount.totalAmountTillToday, interestAmount(res.locals.user.claimDraft.document), feeAmount)
+      return new TotalAmount(res.locals.user.claimDraft.document.amount.totalAmount(), interestAmount(res.locals.user.claimDraft.document), feeAmount)
     })
 }
-
 function getBusinessName (partyDetails: PartyDetails): string {
   if (partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
     return (partyDetails as SoleTraderDetails).businessName
@@ -77,7 +76,7 @@ function getStatementOfTruthClassFor (user: User): { new(): StatementOfTruth | Q
 function renderView (form: Form<StatementOfTruth>, res: express.Response, next: express.NextFunction) {
   const user: User = res.locals.user
   getClaimAmountTotal(res)
-    .then((interestTotal: InterestTotal) => {
+    .then((interestTotal: TotalAmount) => {
       res.render(Paths.checkAndSendPage.associatedView, {
         draftClaim: res.locals.user.claimDraft.document,
         claimAmountTotal: interestTotal,
