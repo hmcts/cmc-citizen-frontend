@@ -6,6 +6,7 @@ import { RepaymentPlan, ValidationErrors } from 'ccj/form/models/repaymentPlan'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { LocalDate } from 'forms/models/localDate'
 import { MomentFactory } from 'common/momentFactory'
+import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
 
 const FUTURE_YEAR = MomentFactory.currentDate().add(10, 'years').year()
 const DEFAULT_REPAYMENT_PLAN = {
@@ -119,7 +120,7 @@ describe('RepaymentPlan', () => {
       const errors = validator.validateSync(repaymentPlan)
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS)
+      expectValidationError(errors, CommonValidationErrors.AMOUNT_INVALID_DECIMALS)
     })
 
     it('first payment invalid decimal places', () => {
@@ -128,7 +129,7 @@ describe('RepaymentPlan', () => {
       const errors = validator.validateSync(repaymentPlan)
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS)
+      expectValidationError(errors, CommonValidationErrors.AMOUNT_INVALID_DECIMALS)
     })
 
     it('date is not future', () => {
