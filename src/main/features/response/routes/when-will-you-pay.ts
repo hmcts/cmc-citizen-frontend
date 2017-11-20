@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths } from 'response/paths'
+import { Paths, PayBySetDatePaths } from 'response/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
@@ -41,12 +41,12 @@ export default express.Router()
           user.responseDraft.document.defendantPaymentOption = form.model
           await new DraftService().save(user.responseDraft, user.bearerToken)
 
+          const { externalId } = req.params
           switch (form.model.option) {
             case DefendantPaymentType.FULL_BY_SPECIFIED_DATE:
-              res.redirect('/not-implemented-yet')
+              res.redirect(PayBySetDatePaths.paymentDatePage.evaluateUri({ externalId: externalId }))
               break
             case DefendantPaymentType.INSTALMENTS:
-              const { externalId } = req.params
               res.redirect(Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))
               break
           }

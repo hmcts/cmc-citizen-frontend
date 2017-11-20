@@ -5,7 +5,7 @@ import * as config from 'config'
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 
-import { Paths } from 'response/paths'
+import { Paths, PayBySetDatePaths } from 'response/paths'
 
 import { app } from '../../../../main/app'
 
@@ -130,7 +130,15 @@ describe('Defendant - when will you pay options', () => {
             }
 
             it('should redirect to repayment plan page for "INSTALMENTS" option selected', async () => {
-              await checkThatSelectedPaymentOptionRedirectsToPage({ option: DefendantPaymentType.INSTALMENTS.value }, Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))
+              await checkThatSelectedPaymentOptionRedirectsToPage(
+                { option: DefendantPaymentType.INSTALMENTS.value },
+                Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))
+            })
+
+            it('should redirect to payment date page for "FULL_BY_SPECIFIED_DATE" option selected', async () => {
+              await checkThatSelectedPaymentOptionRedirectsToPage(
+                { option: DefendantPaymentType.FULL_BY_SPECIFIED_DATE.value },
+                PayBySetDatePaths.paymentDatePage.evaluateUri({ externalId: externalId }))
             })
           })
 
