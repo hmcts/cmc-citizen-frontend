@@ -6,7 +6,7 @@ import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 
-import { Paths as CCJPaths } from 'ccj/paths'
+import { Paths as Paths } from 'response/paths'
 
 import { app } from '../../../../main/app'
 
@@ -14,20 +14,20 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 
-const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
-const repaymentPlanPage = CCJPaths.repaymentPlanPage.evaluateUri({ externalId: externalId })
-const checkAndSendPage = CCJPaths.checkAndSendPage.evaluateUri({ externalId: externalId })
+const externalId = claimStoreServiceMock.sampleClaimObj.externalId
+const defencePaymentPlanPage = Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId })
+const taskListPage = Paths.taskListPage.evaluateUri({ externalId: externalId })
 
-describe('CCJ: repayment page', () => {
+describe('Defendant: payment page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', repaymentPlanPage)
+    checkAuthorizationGuards(app, 'get', defencePaymentPlanPage)
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'claimant')
       })
 
       context('when user authorised', () => {
@@ -35,29 +35,29 @@ describe('CCJ: repayment page', () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
-            .get(repaymentPlanPage)
+            .get(defencePaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should return 500 and render error page when cannot retrieve CCJ draft', async () => {
+        it('should return 500 and render error page when cannot retrieve response draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.rejectFind('Error')
 
           await request(app)
-            .get(repaymentPlanPage)
+            .get(defencePaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('ccj')
+          draftStoreServiceMock.resolveFind('response')
 
           await request(app)
-            .get(repaymentPlanPage)
+            .get(defencePaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Order them to pay by instalments'))
+            .expect(res => expect(res).to.be.successful.withText('Your payment plan'))
         })
       })
     })
@@ -67,16 +67,17 @@ describe('CCJ: repayment page', () => {
     const validFormData = {
       remainingAmount: 160,
       firstPayment: 77.32,
-      installmentAmount: 76,
-      paymentSchedule: 'EVERY_MONTH',
+      installmentAmount: 30.00,
       firstPaymentDate: {
         day: 12,
         month: 3,
         year: 2050
-      }
+      },
+      paymentSchedule: 'EVERY_MONTH',
+      text: 'I owe nothing'
     }
 
-    checkAuthorizationGuards(app, 'post', repaymentPlanPage)
+    checkAuthorizationGuards(app, 'post', defencePaymentPlanPage)
 
     context('when user authorised', () => {
       beforeEach(() => {
@@ -87,18 +88,18 @@ describe('CCJ: repayment page', () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .post(repaymentPlanPage)
+          .post(defencePaymentPlanPage)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should return 500 when cannot retrieve CCJ draft', async () => {
+      it('should return 500 when cannot retrieve response draft', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         draftStoreServiceMock.rejectFind('Error')
 
         await request(app)
-          .post(repaymentPlanPage)
+          .post(defencePaymentPlanPage)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -107,27 +108,27 @@ describe('CCJ: repayment page', () => {
       context('when form is valid', async () => {
         it('should redirect to confirmation page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('ccj')
+          draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
-            .post(repaymentPlanPage)
+            .post(defencePaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
-            .expect(res => expect(res).to.be.redirect.toLocation(checkAndSendPage))
+            .expect(res => expect(res).to.be.redirect.toLocation(taskListPage))
         })
       })
 
       context('when form is invalid', async () => {
         it('should render page with error messages', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('ccj')
+          draftStoreServiceMock.resolveFind('response')
 
           await request(app)
-            .post(repaymentPlanPage)
+            .post(defencePaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ signed: undefined })
-            .expect(res => expect(res).to.be.successful.withText('Enter a valid payment amount', 'div class="error-summary"'))
+            .expect(res => expect(res).to.be.successful.withText('Your payment plan'))
         })
       })
     })
