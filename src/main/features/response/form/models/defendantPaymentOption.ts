@@ -5,7 +5,7 @@ import { ResponseType } from 'response/form/models/responseType'
 export class DefendantPaymentTypeLabels {
   static readonly INSTALLMENTS: string = 'By installments'
   static readonly FULL_ADMIT_BY_SPECIFIED_DATE: string = 'Full amount on a set date'
-  static readonly PART_ADMIT_BY_SPECIFIED_DATE: string = 'On a set date'
+  static readonly BY_SET_DATE: string = 'On a set date'
 }
 
 export class DefendantPaymentType {
@@ -43,13 +43,10 @@ export class DefendantPaymentType {
   }
 
   private bySetDateLabelFor (responseType: ResponseType): string {
-    switch (responseType.value) {
-      case ResponseType.OWE_ALL_PAID_NONE.value:
-        return DefendantPaymentTypeLabels.FULL_ADMIT_BY_SPECIFIED_DATE
-      case ResponseType.OWE_SOME_PAID_NONE.value:
-        return DefendantPaymentTypeLabels.PART_ADMIT_BY_SPECIFIED_DATE
-      default:
-        throw new Error('Unsupported response type!')
+    if (responseType.value === ResponseType.OWE_ALL_PAID_NONE.value) {
+      return DefendantPaymentTypeLabels.FULL_ADMIT_BY_SPECIFIED_DATE
+    } else {
+      return DefendantPaymentTypeLabels.BY_SET_DATE
     }
   }
 }

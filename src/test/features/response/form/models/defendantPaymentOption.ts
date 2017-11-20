@@ -93,15 +93,9 @@ describe('DefendantPaymentType', () => {
           .to.equal(DefendantPaymentTypeLabels.INSTALLMENTS)
       })
 
-      it(`should return '${DefendantPaymentTypeLabels.PART_ADMIT_BY_SPECIFIED_DATE}' for BY_SET_DATE`, () => {
+      it(`should return '${DefendantPaymentTypeLabels.BY_SET_DATE}' for BY_SET_DATE`, () => {
         expect(DefendantPaymentType.FULL_BY_SPECIFIED_DATE.displayValueFor(ResponseType.OWE_SOME_PAID_NONE))
-          .to.equal(DefendantPaymentTypeLabels.PART_ADMIT_BY_SPECIFIED_DATE)
-      })
-    })
-
-    context('on rejection', () => {
-      it('by set date should throw an error as it is unsupported', () => {
-        expect(() => DefendantPaymentType.FULL_BY_SPECIFIED_DATE.displayValueFor(ResponseType.OWE_NONE)).to.throw(Error)
+          .to.equal(DefendantPaymentTypeLabels.BY_SET_DATE)
       })
     })
   })
