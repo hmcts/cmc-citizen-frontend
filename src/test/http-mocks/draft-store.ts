@@ -119,8 +119,7 @@ const sampleResponseDraftObj = {
   },
   defendantPaymentOption: {
     option: {
-      value: 'INSTALMENTS',
-      displayValue: 'By instalments'
+      value: 'INSTALMENTS'
     }
   },
   defendantPaymentPlan: {

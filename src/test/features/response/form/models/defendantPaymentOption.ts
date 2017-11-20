@@ -2,7 +2,11 @@ import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
-import { DefendantPaymentOption, DefendantPaymentType, ValidationErrors } from 'response/form/models/defendantPaymentOption'
+import {
+  DefendantPaymentOption, DefendantPaymentType, DefendantPaymentTypeLabels,
+  ValidationErrors
+} from 'response/form/models/defendantPaymentOption'
+import { ResponseType } from 'response/form/models/responseType'
 
 describe('DefendantPaymentOption', () => {
   describe('form object deserialization', () => {
@@ -45,7 +49,7 @@ describe('DefendantPaymentOption', () => {
       })
 
       it('invalid option', () => {
-        const errors = validator.validateSync(new DefendantPaymentOption(new DefendantPaymentType('unknown', '')))
+        const errors = validator.validateSync(new DefendantPaymentOption(new DefendantPaymentType('unknown')))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.WHEN_WILL_YOU_PAY_OPTION_REQUIRED)
@@ -59,6 +63,45 @@ describe('DefendantPaymentOption', () => {
 
           expect(errors.length).to.equal(0)
         })
+      })
+    })
+  })
+})
+
+describe('DefendantPaymentType', () => {
+  describe('displayValueFor', () => {
+    it('should throw error on unknown payment type', () => {
+      const unknown: DefendantPaymentType = new DefendantPaymentType('unknown')
+      expect(() => unknown.displayValueFor({ } as ResponseType)).to.throw(Error)
+    })
+
+    context('on full admission', () => {
+      it(`should return '${DefendantPaymentTypeLabels.INSTALLMENTS}' for BY_INSTALLMENTS`, () => {
+        expect(DefendantPaymentType.INSTALMENTS.displayValueFor(ResponseType.OWE_ALL_PAID_NONE))
+          .to.equal(DefendantPaymentTypeLabels.INSTALLMENTS)
+      })
+
+      it(`should return '${DefendantPaymentTypeLabels.FULL_ADMIT_BY_SPECIFIED_DATE}' for BY_SET_DATE`, () => {
+        expect(DefendantPaymentType.FULL_BY_SPECIFIED_DATE.displayValueFor(ResponseType.OWE_ALL_PAID_NONE))
+          .to.equal(DefendantPaymentTypeLabels.FULL_ADMIT_BY_SPECIFIED_DATE)
+      })
+    })
+
+    context('on partial admission', () => {
+      it(`should return '${DefendantPaymentTypeLabels.INSTALLMENTS}' for BY_INSTALLMENTS`, () => {
+        expect(DefendantPaymentType.INSTALMENTS.displayValueFor(ResponseType.OWE_SOME_PAID_NONE))
+          .to.equal(DefendantPaymentTypeLabels.INSTALLMENTS)
+      })
+
+      it(`should return '${DefendantPaymentTypeLabels.PART_ADMIT_BY_SPECIFIED_DATE}' for BY_SET_DATE`, () => {
+        expect(DefendantPaymentType.FULL_BY_SPECIFIED_DATE.displayValueFor(ResponseType.OWE_SOME_PAID_NONE))
+          .to.equal(DefendantPaymentTypeLabels.PART_ADMIT_BY_SPECIFIED_DATE)
+      })
+    })
+
+    context('on rejection', () => {
+      it('by set date should throw an error as it is unsupported', () => {
+        expect(() => DefendantPaymentType.FULL_BY_SPECIFIED_DATE.displayValueFor(ResponseType.OWE_NONE)).to.throw(Error)
       })
     })
   })

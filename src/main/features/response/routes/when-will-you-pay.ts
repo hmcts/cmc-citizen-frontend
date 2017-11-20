@@ -9,12 +9,30 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { DisabledFeatureGuard } from 'response/guards/disabledFeatureGuard'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { ResponseType } from 'response/form/models/responseType'
+import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+
+function isAmountTooHighPartialResponse (responseDraft: ResponseDraft): boolean {
+  return responseDraft.response.type.value === ResponseType.OWE_SOME_PAID_NONE.value
+    && responseDraft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
+}
+
+function formLabelFor (responseDraft: ResponseDraft): string {
+  if (isAmountTooHighPartialResponse(responseDraft)) {
+    return 'When will you pay the amount you admit you owe?'
+  } else {
+    return 'When will you pay?'
+  }
+}
 
 function renderView (form: Form<DefendantPaymentOption>, res: express.Response) {
   const user: User = res.locals.user
   res.render(Paths.defencePaymentOptionsPage.associatedView, {
     form: form,
-    claim: user.claim
+    claim: user.claim,
+    responseType: user.responseDraft.document.response.type,
+    formLabel: formLabelFor(user.responseDraft.document)
   })
 }
 
@@ -31,7 +49,7 @@ export default express.Router()
     DisabledFeatureGuard.createHandlerThrowingNotFoundError('featureToggles.fullAdmission'),
     FormValidator.requestHandler(DefendantPaymentOption, DefendantPaymentOption.fromObject),
     ErrorHandling.apply(
-      async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+      async (req: express.Request, res: express.Response): Promise<void> => {
         const form: Form<DefendantPaymentOption> = req.body
         const user: User = res.locals.user
 
