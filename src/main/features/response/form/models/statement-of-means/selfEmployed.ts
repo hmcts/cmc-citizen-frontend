@@ -2,24 +2,20 @@ import { IsDefined, Max, Min, ValidateIf } from 'class-validator'
 import { Serializable } from 'models/serializable'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
-import { ValidationConstraints as GlobalValidationConstants } from 'forms/validation/validationConstraints'
 import { Fractions } from 'forms/validation/validators/fractions'
 import * as toBoolean from 'to-boolean'
 import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
+import { ValidationConstraints as GlobalValidationConstants } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {
   static readonly JOB_TITLE_REQUIRED: string = 'Enter a job title'
   static readonly ANNUAL_TURNOVER_REQUIRED: string = 'Enter an annual turnover'
-  static readonly AMOUNT_YOU_OWE_REQUIRED: string = 'Enter an amount you owe'
   static readonly REASON_REQUIRED: string = 'Enter a reason'
-  static readonly AMOUNT_YOU_OWE_NOT_VALID: string = 'Enter a amount, minimum £$constraint1'
   static readonly TOO_MUCH: string = 'Are you sure this is a valid value?'
 }
 
 export class ValidationConstraints {
-  static readonly JOB_TITLE_MAX_LENGTH: number = 100
-  static readonly MAX_VALUE: number = 999999999999999
   static readonly AMOUNT_YOU_OWE_MIN_VALUE: number = 1
 }
 
@@ -27,22 +23,23 @@ export class SelfEmployed implements Serializable<SelfEmployed> {
 
   @IsDefined({ message: ValidationErrors.JOB_TITLE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.JOB_TITLE_REQUIRED })
-  @MaxLength(ValidationConstraints.JOB_TITLE_MAX_LENGTH, { message: GlobalValidationErrors.TOO_LONG_INPUT })
+  @MaxLength(GlobalValidationConstants.STANDARD_TEXT_INPUT_MAX_LENGTH,
+    { message: GlobalValidationErrors.TOO_LONG_INPUT })
   jobTitle?: string
 
   @IsDefined({ message: ValidationErrors.ANNUAL_TURNOVER_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Max(ValidationConstraints.MAX_VALUE, { message: ValidationErrors.TOO_MUCH })
+  @Max(GlobalValidationConstants.MAX_VALUE, { message: ValidationErrors.TOO_MUCH })
   annualTurnover?: number
 
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
   areYouBehindOnTax: boolean
 
   @ValidateIf(o => o.areYouBehindOnTax === true)
-  @IsDefined({ message: ValidationErrors.AMOUNT_YOU_OWE_REQUIRED })
+  @IsDefined({ message: GlobalValidationErrors.VALID_OWED_AMOUNT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
   @Min(ValidationConstraints.AMOUNT_YOU_OWE_MIN_VALUE, { message: GlobalValidationErrors.VALID_OWED_AMOUNT_REQUIRED })
-  @Max(ValidationConstraints.MAX_VALUE, { message: ValidationErrors.TOO_MUCH })
+  @Max(GlobalValidationConstants.MAX_VALUE, { message: ValidationErrors.TOO_MUCH })
   amountYouOwe: number
 
   @ValidateIf(o => o.areYouBehindOnTax === true)

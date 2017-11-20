@@ -136,7 +136,9 @@ describe('SelfEmployed', () => {
 
       it('too long role name', () => {
         const errors = validator.validateSync(
-          new SelfEmployed(generateString(ValidationConstraints.JOB_TITLE_MAX_LENGTH + 1), 1000, false)
+          new SelfEmployed(
+            generateString(GlobalValidationConstants.STANDARD_TEXT_INPUT_MAX_LENGTH + 1), 1000, false
+          )
         )
 
         expect(errors.length).to.equal(1)
@@ -165,7 +167,7 @@ describe('SelfEmployed', () => {
           )
 
           expect(errors.length).to.equal(2)
-          expectValidationError(errors, ValidationErrors.AMOUNT_YOU_OWE_REQUIRED)
+          expectValidationError(errors, GlobalValidationErrors.VALID_OWED_AMOUNT_REQUIRED)
           expectValidationError(errors, ValidationErrors.REASON_REQUIRED)
         })
 
