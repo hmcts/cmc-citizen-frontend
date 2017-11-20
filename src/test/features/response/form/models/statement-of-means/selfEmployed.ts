@@ -1,8 +1,5 @@
 import { expect } from 'chai'
-import {
-  SelfEmployed, ValidationConstraints,
-  ValidationErrors
-} from 'response/form/models/statement-of-means/selfEmployed'
+import { SelfEmployed, ValidationErrors } from 'response/form/models/statement-of-means/selfEmployed'
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from '../../../../../app/forms/models/validationUtils'
 import { ValidationConstraints as GlobalValidationConstants } from 'forms/validation/validationConstraints'
@@ -153,7 +150,9 @@ describe('SelfEmployed', () => {
       })
 
       it('too much annualTurnover', () => {
-        const errors = validator.validateSync(new SelfEmployed('my role', ValidationConstraints.MAX_VALUE + 1, false))
+        const errors = validator.validateSync(
+          new SelfEmployed('my role', GlobalValidationConstants.MAX_VALUE + 1, false)
+        )
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.TOO_MUCH)
@@ -191,7 +190,7 @@ describe('SelfEmployed', () => {
 
         it('too much amountYouOwe', () => {
           const errors = validator.validateSync(
-            new SelfEmployed('my role', 111, true, ValidationConstraints.MAX_VALUE + 1, 'my reason')
+            new SelfEmployed('my role', 111, true, GlobalValidationConstants.MAX_VALUE + 1, 'my reason')
           )
 
           expect(errors.length).to.equal(1)
