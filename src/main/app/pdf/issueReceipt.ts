@@ -4,7 +4,6 @@ import { Claim } from 'claims/models/claim'
 import { PartyDetailsMapper } from 'app/pdf/mappers/partyDetailsMapper'
 import { TheirDetailsMapper } from 'app/pdf/mappers/theirDetailsMapper'
 import { ClaimMapper } from 'app/pdf/mappers/claimMapper'
-import { NumberFormatter } from 'utils/numberFormatter'
 
 const issueTemplatePath = path.join(__dirname, '..', '..', 'resources', 'pdf', 'issueReceipt.njk')
 
@@ -20,7 +19,6 @@ export class IssueReceipt {
   data (): object {
     return {
       claim: ClaimMapper.createClaimDetails(this.claim),
-      totalClaimAmount: NumberFormatter.formatMoney(this.claim.totalAmountTillToday),
       claimant: PartyDetailsMapper.createPartyDetails(
         this.claim.claimData.claimant,
         this.claim.claimantEmail
