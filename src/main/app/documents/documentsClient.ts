@@ -19,4 +19,13 @@ export class DocumentsClient {
     })
   }
 
+  getSettlementAgreementCopy (claimExternalId: string): http.IncomingMessage {
+    if (StringUtils.isBlank(claimExternalId)) {
+      throw new Error('Claim external ID cannot be blank')
+    }
+    return requestNonPromise.get({
+      uri: `${this.documentsUrl}/settlementAgreement/${claimExternalId}`
+    })
+  }
+
 }

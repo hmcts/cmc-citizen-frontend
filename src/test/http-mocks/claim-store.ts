@@ -266,14 +266,14 @@ export function rejectSaveCcjForUser (reason: string = 'HTTP error') {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function rejectRetrieveDefendantResponseCopy (reason: string) {
+export function rejectRetrieveDocument (reason: string) {
   mock(`${serviceBaseURL}/documents`)
-    .get(new RegExp('/defendantResponseCopy/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
+    .get(new RegExp('/.+/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveRetrieveDefendantResponseCopy () {
+export function resolveRetrieveDocument () {
   mock(`${serviceBaseURL}/documents`)
-    .get(new RegExp('/defendantResponseCopy/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
+    .get(new RegExp('/.+/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
     .reply(HttpStatus.OK, [])
 }
