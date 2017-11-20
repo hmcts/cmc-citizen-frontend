@@ -21,6 +21,7 @@ import { Evidence } from 'response/form/models/evidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
+import { StatementOfMeans } from 'response/draft/statementOfMeans'
 
 export class ResponseDraft extends DraftDocument implements Serializable<ResponseDraft> {
 
@@ -41,6 +42,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   paidAmount?: PaidAmount
   payBySetDate?: PayBySetDate
   impactOfDispute?: ImpactOfDispute
+  statementOfMeans?: StatementOfMeans
 
   deserialize (input: any): ResponseDraft {
     if (input) {
@@ -64,6 +66,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
+      this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
     }
     return this
   }

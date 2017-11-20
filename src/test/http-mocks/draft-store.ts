@@ -117,6 +117,12 @@ const sampleResponseDraftObj = {
   moreTimeNeeded: {
     option: MoreTimeNeededOption.YES
   },
+  statementOfMeans: {
+    residence: {},
+    employment: {},
+    employers: {},
+    selfEmployed: {}
+  },
   defendantPaymentOption: {
     option: {
       value: 'INSTALMENTS',
