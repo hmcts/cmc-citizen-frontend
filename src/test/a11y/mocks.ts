@@ -78,9 +78,6 @@ mock('response/guards/guardFactory', {
   GuardFactory: {
     create: () => {
       return justForwardRequestHandler.requestHandler
-    },
-    createForFeatureToggle: () => {
-      return justForwardRequestHandler.requestHandler
     }
   }
 })

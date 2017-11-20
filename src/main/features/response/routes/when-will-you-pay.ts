@@ -1,7 +1,6 @@
 import * as express from 'express'
 
 import { Paths } from 'response/paths'
-import { GuardFactory } from 'response/guards/guardFactory'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
@@ -9,12 +8,7 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
-import { NotFoundError } from '../../../errors'
-
-const accessGuardRequestHandler: express.RequestHandler = GuardFactory.createForFeatureToggle('featureToggles.fullAdmission',
-  (req: express.Request, res: express.Response): void => {
-    throw new NotFoundError(Paths.defencePaymentOptionsPage.uri)
-  })
+import { DisabledFeatureGuard } from 'response/guards/disabledFeatureGuard'
 
 function renderView (form: Form<DefendantPaymentOption>, res: express.Response) {
   const user: User = res.locals.user
@@ -27,14 +21,14 @@ function renderView (form: Form<DefendantPaymentOption>, res: express.Response) 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defencePaymentOptionsPage.uri,
-    accessGuardRequestHandler,
+    DisabledFeatureGuard.createHandlerThrowingNotFoundError('featureToggles.fullAdmission'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
 
       renderView(new Form(user.responseDraft.document.defendantPaymentOption), res)
     }))
   .post(Paths.defencePaymentOptionsPage.uri,
-    accessGuardRequestHandler,
+    DisabledFeatureGuard.createHandlerThrowingNotFoundError('featureToggles.fullAdmission'),
     FormValidator.requestHandler(DefendantPaymentOption, DefendantPaymentOption.fromObject),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {

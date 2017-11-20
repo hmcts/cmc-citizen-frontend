@@ -1,6 +1,4 @@
 import * as express from 'express'
-import * as config from 'config'
-import * as toBoolean from 'to-boolean'
 
 export class GuardFactory {
 
@@ -13,9 +11,4 @@ export class GuardFactory {
       }
     }
   }
-
-  static createForFeatureToggle (feature: string, accessDeniedCallback: (req: express.Request, res: express.Response) => void): express.RequestHandler {
-    return GuardFactory.create(() => toBoolean(config.get<boolean>(feature)), accessDeniedCallback)
-  }
-
 }
