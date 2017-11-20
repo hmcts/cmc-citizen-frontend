@@ -163,9 +163,9 @@ describe('Defendant - when will you pay options', () => {
                 Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))
             })
 
-            it('should redirect to payment date page for "FULL_BY_SPECIFIED_DATE" option selected', async () => {
+            it('should redirect to payment date page for "BY_SET_DATE" option selected', async () => {
               await checkThatSelectedPaymentOptionRedirectsToPage(
-                { option: DefendantPaymentType.FULL_BY_SPECIFIED_DATE.value },
+                { option: DefendantPaymentType.BY_SET_DATE.value },
                 PayBySetDatePaths.paymentDatePage.evaluateUri({ externalId: externalId }))
             })
           })

@@ -61,7 +61,7 @@ export default express.Router()
 
           const { externalId } = req.params
           switch (form.model.option) {
-            case DefendantPaymentType.FULL_BY_SPECIFIED_DATE:
+            case DefendantPaymentType.BY_SET_DATE:
               res.redirect(PayBySetDatePaths.paymentDatePage.evaluateUri({ externalId: externalId }))
               break
             case DefendantPaymentType.INSTALMENTS:

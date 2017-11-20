@@ -83,16 +83,16 @@ describe('DefendantPaymentOption', () => {
 
     it('should return true if option is instalments and by set date is passed', () => {
       const paymentOption: DefendantPaymentOption = new DefendantPaymentOption(DefendantPaymentType.INSTALMENTS)
-      expect(paymentOption.isOfType(DefendantPaymentType.FULL_BY_SPECIFIED_DATE)).to.be.false
+      expect(paymentOption.isOfType(DefendantPaymentType.BY_SET_DATE)).to.be.false
     })
 
     it('should return true if option is by set date and by set date is passed', () => {
-      const paymentOption: DefendantPaymentOption = new DefendantPaymentOption(DefendantPaymentType.FULL_BY_SPECIFIED_DATE)
-      expect(paymentOption.isOfType(DefendantPaymentType.FULL_BY_SPECIFIED_DATE)).to.be.true
+      const paymentOption: DefendantPaymentOption = new DefendantPaymentOption(DefendantPaymentType.BY_SET_DATE)
+      expect(paymentOption.isOfType(DefendantPaymentType.BY_SET_DATE)).to.be.true
     })
 
     it('should return true if option is by set date and by instalments is passed', () => {
-      const paymentOption: DefendantPaymentOption = new DefendantPaymentOption(DefendantPaymentType.FULL_BY_SPECIFIED_DATE)
+      const paymentOption: DefendantPaymentOption = new DefendantPaymentOption(DefendantPaymentType.BY_SET_DATE)
       expect(paymentOption.isOfType(DefendantPaymentType.INSTALMENTS)).to.be.false
     })
   })
@@ -112,7 +112,7 @@ describe('DefendantPaymentType', () => {
       })
 
       it(`should return '${DefendantPaymentTypeLabels.FULL_ADMIT_BY_SPECIFIED_DATE}' for BY_SET_DATE`, () => {
-        expect(DefendantPaymentType.FULL_BY_SPECIFIED_DATE.displayValueFor(ResponseType.OWE_ALL_PAID_NONE))
+        expect(DefendantPaymentType.BY_SET_DATE.displayValueFor(ResponseType.OWE_ALL_PAID_NONE))
           .to.equal(DefendantPaymentTypeLabels.FULL_ADMIT_BY_SPECIFIED_DATE)
       })
     })
@@ -124,7 +124,7 @@ describe('DefendantPaymentType', () => {
       })
 
       it(`should return '${DefendantPaymentTypeLabels.BY_SET_DATE}' for BY_SET_DATE`, () => {
-        expect(DefendantPaymentType.FULL_BY_SPECIFIED_DATE.displayValueFor(ResponseType.OWE_SOME_PAID_NONE))
+        expect(DefendantPaymentType.BY_SET_DATE.displayValueFor(ResponseType.OWE_SOME_PAID_NONE))
           .to.equal(DefendantPaymentTypeLabels.BY_SET_DATE)
       })
     })

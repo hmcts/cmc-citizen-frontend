@@ -4,13 +4,13 @@ import { ResponseType } from 'response/form/models/responseType'
 
 export class DefendantPaymentTypeLabels {
   static readonly INSTALMENTS: string = 'By instalments'
-  static readonly FULL_ADMIT_BY_SPECIFIED_DATE: string = 'Full amount on a set date'
-  static readonly BY_SET_DATE: string = 'On a set date'
+  static readonly FULL_ADMIT_BY_SPECIFIED_DATE: string = 'Full amount by a set date'
+  static readonly BY_SET_DATE: string = 'By a set date'
 }
 
 export class DefendantPaymentType {
   static readonly INSTALMENTS = new DefendantPaymentType('INSTALMENTS')
-  static readonly FULL_BY_SPECIFIED_DATE = new DefendantPaymentType('FULL_BY_SPECIFIED_DATE')
+  static readonly BY_SET_DATE = new DefendantPaymentType('BY_SET_DATE')
 
   readonly value: string
 
@@ -20,7 +20,7 @@ export class DefendantPaymentType {
 
   static all (): DefendantPaymentType[] {
     return [
-      DefendantPaymentType.FULL_BY_SPECIFIED_DATE,
+      DefendantPaymentType.BY_SET_DATE,
       DefendantPaymentType.INSTALMENTS
     ]
   }
@@ -35,7 +35,7 @@ export class DefendantPaymentType {
     switch (this.value) {
       case DefendantPaymentType.INSTALMENTS.value:
         return DefendantPaymentTypeLabels.INSTALMENTS
-      case DefendantPaymentType.FULL_BY_SPECIFIED_DATE.value:
+      case DefendantPaymentType.BY_SET_DATE.value:
         return this.bySetDateLabelFor(responseType)
       default:
         throw new Error('Unknown defendant payment option!')

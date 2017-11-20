@@ -23,9 +23,9 @@
         name = 'option',
         options = [
           {
-            label: DefendantPaymentType.FULL_BY_SPECIFIED_DATE.displayValueFor(responseType),
-            value: DefendantPaymentType.FULL_BY_SPECIFIED_DATE.value,
-            checked: (form.valueFor('option') === DefendantPaymentType.FULL_BY_SPECIFIED_DATE)
+            label: DefendantPaymentType.BY_SET_DATE.displayValueFor(responseType),
+            value: DefendantPaymentType.BY_SET_DATE.value,
+            checked: (form.valueFor('option') === DefendantPaymentType.BY_SET_DATE)
           },
           {
             label: DefendantPaymentType.INSTALMENTS.displayValueFor(responseType),
