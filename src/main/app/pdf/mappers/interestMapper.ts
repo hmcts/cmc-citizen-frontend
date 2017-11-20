@@ -23,13 +23,13 @@ export class InterestMapper {
     return {
       rate: claimData.interest.rate,
       dateClaimedFrom: MomentFormatter.formatLongDate(interestDate),
-      claimedAtDateOfSubmission: NumberFormatter.formatMoney(InterestMapper.calculateInterest(claimData, interestDate)),
+      claimedAtDateOfSubmission: NumberFormatter.formatMoney(InterestMapper.calculateInterest(claimData, interestDate, claim.createdAt)),
       accruedInterest: NumberFormatter.formatMoney(InterestMapper.calculateDailyAmount(claimData))
     }
   }
 
-  public static calculateInterest (claimData: ClaimData, interestDate: Moment): number {
-    return calculateInterest(claimData.amount.totalAmount(), claimData.interest, interestDate)
+  public static calculateInterest (claimData: ClaimData, interestFromDate: Moment, interestToDate: Moment): number {
+    return calculateInterest(claimData.amount.totalAmount(), claimData.interest, interestFromDate, interestToDate)
   }
 
   private static calculateDailyAmount (claimData: ClaimData): number {
