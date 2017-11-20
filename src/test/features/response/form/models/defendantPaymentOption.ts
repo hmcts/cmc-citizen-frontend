@@ -1,3 +1,6 @@
+/* Allow chai assertions which don't end in a function call, e.g. expect(thing).to.be.undefined */
+/* tslint:disable:no-unused-expression */
+
 import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
@@ -66,6 +69,33 @@ describe('DefendantPaymentOption', () => {
       })
     })
   })
+
+  describe('isOfType', () => {
+    it('should return false if option is not set', () => {
+      const paymentOption: DefendantPaymentOption = new DefendantPaymentOption()
+      expect(paymentOption.isOfType(DefendantPaymentType.INSTALMENTS)).to.be.false
+    })
+
+    it('should return true if option is instalments and instalments is passed', () => {
+      const paymentOption: DefendantPaymentOption = new DefendantPaymentOption(DefendantPaymentType.INSTALMENTS)
+      expect(paymentOption.isOfType(DefendantPaymentType.INSTALMENTS)).to.be.true
+    })
+
+    it('should return true if option is instalments and by set date is passed', () => {
+      const paymentOption: DefendantPaymentOption = new DefendantPaymentOption(DefendantPaymentType.INSTALMENTS)
+      expect(paymentOption.isOfType(DefendantPaymentType.FULL_BY_SPECIFIED_DATE)).to.be.false
+    })
+
+    it('should return true if option is by set date and by set date is passed', () => {
+      const paymentOption: DefendantPaymentOption = new DefendantPaymentOption(DefendantPaymentType.FULL_BY_SPECIFIED_DATE)
+      expect(paymentOption.isOfType(DefendantPaymentType.FULL_BY_SPECIFIED_DATE)).to.be.true
+    })
+
+    it('should return true if option is by set date and by instalments is passed', () => {
+      const paymentOption: DefendantPaymentOption = new DefendantPaymentOption(DefendantPaymentType.FULL_BY_SPECIFIED_DATE)
+      expect(paymentOption.isOfType(DefendantPaymentType.INSTALMENTS)).to.be.false
+    })
+  })
 })
 
 describe('DefendantPaymentType', () => {
@@ -76,9 +106,9 @@ describe('DefendantPaymentType', () => {
     })
 
     context('on full admission', () => {
-      it(`should return '${DefendantPaymentTypeLabels.INSTALLMENTS}' for BY_INSTALLMENTS`, () => {
+      it(`should return '${DefendantPaymentTypeLabels.INSTALMENTS}' for BY_INSTALMENTS`, () => {
         expect(DefendantPaymentType.INSTALMENTS.displayValueFor(ResponseType.OWE_ALL_PAID_NONE))
-          .to.equal(DefendantPaymentTypeLabels.INSTALLMENTS)
+          .to.equal(DefendantPaymentTypeLabels.INSTALMENTS)
       })
 
       it(`should return '${DefendantPaymentTypeLabels.FULL_ADMIT_BY_SPECIFIED_DATE}' for BY_SET_DATE`, () => {
@@ -88,9 +118,9 @@ describe('DefendantPaymentType', () => {
     })
 
     context('on partial admission', () => {
-      it(`should return '${DefendantPaymentTypeLabels.INSTALLMENTS}' for BY_INSTALLMENTS`, () => {
+      it(`should return '${DefendantPaymentTypeLabels.INSTALMENTS}' for BY_INSTALMENTS`, () => {
         expect(DefendantPaymentType.INSTALMENTS.displayValueFor(ResponseType.OWE_SOME_PAID_NONE))
-          .to.equal(DefendantPaymentTypeLabels.INSTALLMENTS)
+          .to.equal(DefendantPaymentTypeLabels.INSTALMENTS)
       })
 
       it(`should return '${DefendantPaymentTypeLabels.BY_SET_DATE}' for BY_SET_DATE`, () => {

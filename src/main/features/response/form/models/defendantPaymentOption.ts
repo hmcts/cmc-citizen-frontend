@@ -3,7 +3,7 @@ import { Serializable } from 'models/serializable'
 import { ResponseType } from 'response/form/models/responseType'
 
 export class DefendantPaymentTypeLabels {
-  static readonly INSTALLMENTS: string = 'By installments'
+  static readonly INSTALMENTS: string = 'By instalments'
   static readonly FULL_ADMIT_BY_SPECIFIED_DATE: string = 'Full amount on a set date'
   static readonly BY_SET_DATE: string = 'On a set date'
 }
@@ -34,7 +34,7 @@ export class DefendantPaymentType {
   displayValueFor (responseType: ResponseType): string {
     switch (this.value) {
       case DefendantPaymentType.INSTALMENTS.value:
-        return DefendantPaymentTypeLabels.INSTALLMENTS
+        return DefendantPaymentTypeLabels.INSTALMENTS
       case DefendantPaymentType.FULL_BY_SPECIFIED_DATE.value:
         return this.bySetDateLabelFor(responseType)
       default:
@@ -82,5 +82,12 @@ export class DefendantPaymentOption implements Serializable <DefendantPaymentOpt
       this.option = DefendantPaymentType.valueOf(input.option.value)
     }
     return this
+  }
+
+  isOfType (defendantPaymentType: DefendantPaymentType): boolean {
+    if (!this.option) {
+      return false
+    }
+    return this.option.value === defendantPaymentType.value
   }
 }

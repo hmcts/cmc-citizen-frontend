@@ -13,7 +13,7 @@ const FUTURE_YEAR = MomentFactory.currentDate().add(10, 'years').year()
 const DEFAULT_PAYMENT_PLAN = {
   remainingAmount: 100,
   firstPayment: 50,
-  installmentAmount: 50,
+  instalmentAmount: 50,
   firstPaymentDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   paymentSchedule: PaymentSchedule.EVERY_MONTH.value,
   text: 'I owe nothing'
@@ -22,7 +22,7 @@ const DEFAULT_PAYMENT_PLAN = {
 const DEFENDANT_PAYMENT_PLAN_FOR_DESERIALISATION = {
   remainingAmount: 100,
   firstPayment: 50,
-  installmentAmount: 50,
+  instalmentAmount: 50,
   firstPaymentDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   paymentSchedule: { value: PaymentSchedule.EVERY_MONTH.value, displayValue: PaymentSchedule.EVERY_MONTH.displayValue },
   text: 'I owe nothing'
@@ -82,7 +82,7 @@ describe('DefendantPaymentPlan', () => {
 
       it('instalment amount > remainingAmount', () => {
         const paymentPlan = validPaymentPlan()
-        paymentPlan.installmentAmount = 101
+        paymentPlan.instalmentAmount = 101
         const errors = validator.validateSync(paymentPlan)
         expect(errors.length).to.equal(2)
         expectValidationError(errors, ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
@@ -106,7 +106,7 @@ describe('DefendantPaymentPlan', () => {
         const valuesToTest = [0, -1]
 
         valuesToTest.forEach(amount => {
-          paymentPlan.installmentAmount = amount
+          paymentPlan.instalmentAmount = amount
           const errors = validator.validateSync(paymentPlan)
           expect(errors.length).to.equal(1)
           expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
@@ -115,7 +115,7 @@ describe('DefendantPaymentPlan', () => {
 
       it('instalment amount invalid decimal places', () => {
         const paymentPlan = validPaymentPlan()
-        paymentPlan.installmentAmount = 1.022
+        paymentPlan.instalmentAmount = 1.022
         const errors = validator.validateSync(paymentPlan)
 
         expect(errors.length).to.equal(1)
