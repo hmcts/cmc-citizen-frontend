@@ -1,22 +1,25 @@
 import { LocalDate } from 'forms/models/localDate'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
-import { IsDefined, IsIn, IsPositive, ValidateNested } from 'class-validator'
+import { IsDefined, IsIn, IsPositive, MaxLength, ValidateNested } from 'class-validator'
+import { IsLessThanOrEqualToSumOf } from 'forms/validation/validators/isLessThanOrEqualToSumOf'
+import { Fractions } from 'forms/validation/validators/fractions'
 import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { IsFutureDate } from 'app/forms/validation/validators/dateFutureConstraint'
-import { IsLessThanOrEqualToSumOf } from 'forms/validation/validators/isLessThanOrEqualToSumOf'
-import { Fractions } from 'forms/validation/validators/fractions'
 import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
+import { ValidationConstraints } from 'app/forms/validation/validationConstraints'
+import { IsNotBlank } from 'forms/validation/validators/isBlank'
 
 export class ValidationErrors {
   static readonly FIRST_PAYMENT_AMOUNT_INVALID: string = 'Enter a valid payment amount'
   static readonly INSTALMENTS_AMOUNT_INVALID: string = 'Enter a valid amount for equal instalments'
   static readonly INVALID_DATE: string = 'Enter a valid first payment date'
   static readonly FUTURE_DATE: string = 'Enter a first payment date in the future'
-  static readonly SELECT_PAYMENT_SCHEDULE: string = 'Select how often they should pay'
+  static readonly SELECT_PAYMENT_SCHEDULE: string = 'Select how often you wish to pay'
+  static readonly WHY_NOT_OWE_FULL_AMOUNT_REQUIRED: string = 'Explain why you can’t pay the full amount now'
 }
 
-export class RepaymentPlan {
+export class DefendantPaymentPlan {
 
   remainingAmount?: number
 
@@ -40,45 +43,48 @@ export class RepaymentPlan {
   @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SELECT_PAYMENT_SCHEDULE })
   paymentSchedule?: PaymentSchedule
 
+  @IsDefined({ message: ValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED })
+  @IsNotBlank({ message: ValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: CommonValidationErrors.FREE_TEXT_TOO_LONG })
+  text?: string
+
   constructor (remainingAmount?: number,
                firstPayment?: number,
                installmentAmount?: number,
                firstPaymentDate?: LocalDate,
-               paymentSchedule?: PaymentSchedule) {
+               paymentSchedule?: PaymentSchedule,
+               text?: string) {
     this.remainingAmount = remainingAmount
     this.firstPayment = firstPayment
     this.installmentAmount = installmentAmount
     this.firstPaymentDate = firstPaymentDate
     this.paymentSchedule = paymentSchedule
+    this.text = text
   }
 
-  static fromObject (value?: any): RepaymentPlan {
-    if (value) {
-      const remainingAmount = value.remainingAmount ? parseFloat(value.remainingAmount) : undefined
-      const firstPayment = value.firstPayment ? parseFloat(value.firstPayment) : undefined
-      const installmentAmount = value.installmentAmount ? parseFloat(value.installmentAmount) : undefined
-      const firstPaymentDate = LocalDate.fromObject(value.firstPaymentDate)
-
-      const paymentSchedule = PaymentSchedule.all()
-        .filter(option => option.value === value.paymentSchedule)
-        .pop()
-      return new RepaymentPlan(remainingAmount, firstPayment, installmentAmount, firstPaymentDate, paymentSchedule)
-    } else {
-      return new RepaymentPlan()
+  static fromObject (value?: any): DefendantPaymentPlan {
+    if (!value) {
+      return undefined
     }
+
+    return new DefendantPaymentPlan(
+      value.remainingAmount ? parseFloat(value.remainingAmount) : undefined,
+      value.firstPayment ? parseFloat(value.firstPayment) : undefined,
+      value.installmentAmount ? parseFloat(value.installmentAmount) : undefined,
+      LocalDate.fromObject(value.firstPaymentDate),
+      value.paymentSchedule ? PaymentSchedule.of(value.paymentSchedule) : undefined,
+      value.text)
   }
 
-  deserialize (input?: any): RepaymentPlan {
+  deserialize (input?: any): DefendantPaymentPlan {
     if (input) {
       this.remainingAmount = input.remainingAmount
       this.firstPayment = input.firstPayment
       this.installmentAmount = input.installmentAmount
       this.firstPaymentDate = new LocalDate().deserialize(input.firstPaymentDate)
-      this.paymentSchedule = PaymentSchedule.all()
-        .filter(option => input.paymentSchedule && option.value === input.paymentSchedule.value)
-        .pop()
+      this.paymentSchedule = input.paymentSchedule ? PaymentSchedule.of(input.paymentSchedule.value) : undefined
+      this.text = input.text
     }
-
     return this
   }
 }
