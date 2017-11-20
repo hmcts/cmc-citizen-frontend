@@ -31,6 +31,6 @@ export default express.Router()
       } else {
         user.responseDraft.document.payBySetDate.explanation = form.model
         await new DraftService().save(user.responseDraft, user.bearerToken)
-        res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: req.params.externalId }))
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: req.params.externalId }))
       }
     }))

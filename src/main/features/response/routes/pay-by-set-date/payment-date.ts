@@ -38,7 +38,7 @@ export default express.Router()
           nextPage = PayBySetDatePaths.explanationPage
         } else {
           user.responseDraft.document.payBySetDate.clearExplanation()
-          nextPage = Paths.checkAndSendPage
+          nextPage = Paths.taskListPage
         }
 
         await new DraftService().save(user.responseDraft, user.bearerToken)
