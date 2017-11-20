@@ -1,12 +1,10 @@
 import { expect } from 'chai'
 
-import { ValidationConstraints as DefaultValidationConstraints } from 'forms/validation/validationConstraints'
 import { Validator } from 'class-validator'
-import {
-  EmployerRow, ValidationConstraints,
-  ValidationErrors
-} from 'response/form/models/statement-of-means/employerRow'
+import { EmployerRow, ValidationErrors } from 'response/form/models/statement-of-means/employerRow'
 import { expectValidationError, generateString } from '../../../../../app/forms/models/validationUtils'
+import { ValidationConstraints as GlobalValidationConstraints } from 'forms/validation/validationConstraints'
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 describe('EmployerRow', () => {
 
@@ -66,20 +64,20 @@ describe('EmployerRow', () => {
 
       it('when employerName is too long', () => {
         const errors = validator.validateSync(
-          new EmployerRow(generateString(ValidationConstraints.EMPLOYER_NAME_MAX_LENGTH + 1), 'jobTitle')
+          new EmployerRow(generateString(GlobalValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH + 1), 'dev')
         )
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.EMPLOYER_NAME_TOO_LONG)
+        expectValidationError(errors, GlobalValidationErrors.TOO_LONG_INPUT)
       })
 
       it('when jobTitle is too long', () => {
         const errors = validator.validateSync(
-          new EmployerRow('employer', generateString(DefaultValidationConstraints.FREE_TEXT_MAX_LENGTH + 1))
+          new EmployerRow('employer', generateString(GlobalValidationConstraints.FREE_TEXT_MAX_LENGTH + 1))
         )
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.JOB_TITLE_TOO_LONG)
+        expectValidationError(errors, GlobalValidationErrors.TOO_LONG_INPUT)
       })
     })
   })

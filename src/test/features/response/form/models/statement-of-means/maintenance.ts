@@ -1,7 +1,8 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../../app/forms/models/validationUtils'
-import { Maintenance, ValidationErrors } from 'response/form/models/statement-of-means/maintenance'
+import { Maintenance } from 'response/form/models/statement-of-means/maintenance'
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 describe('Maintenance', () => {
 
@@ -86,7 +87,7 @@ describe('Maintenance', () => {
           const errors = validator.validateSync(new Maintenance())
 
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.OPTION_NOT_SELECTED)
+          expectValidationError(errors, GlobalValidationErrors.YES_NO_REQUIRED)
         })
       })
 
@@ -98,28 +99,28 @@ describe('Maintenance', () => {
             const errors = validator.validateSync(new Maintenance(true, undefined))
 
             expect(errors.length).to.equal(1)
-            expectValidationError(errors, ValidationErrors.INVALID_NUMBER)
+            expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
           })
 
           it('value < 0 given', () => {
             const errors = validator.validateSync(new Maintenance(true, -1))
 
             expect(errors.length).to.equal(1)
-            expectValidationError(errors, ValidationErrors.INVALID_NUMBER)
+            expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
           })
 
           it('value = 0 given', () => {
             const errors = validator.validateSync(new Maintenance(true, 0))
 
             expect(errors.length).to.equal(1)
-            expectValidationError(errors, ValidationErrors.INVALID_NUMBER)
+            expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
           })
 
           it('value is not an integer', () => {
             const errors = validator.validateSync(new Maintenance(true, 1.5))
 
             expect(errors.length).to.equal(1)
-            expectValidationError(errors, ValidationErrors.INVALID_NUMBER)
+            expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
           })
         })
 

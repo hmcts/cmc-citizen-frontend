@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../../app/forms/models/validationUtils'
 import { Dependants, ValidationErrors } from 'response/form/models/statement-of-means/dependants'
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 describe('Dependants', () => {
 
@@ -100,7 +101,7 @@ describe('Dependants', () => {
           const errors = validator.validateSync(new Dependants())
 
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.HAS_ANY_CHILDREN_NOT_SELECTED)
+          expectValidationError(errors, GlobalValidationErrors.YES_NO_REQUIRED)
         })
       })
 
@@ -128,14 +129,14 @@ describe('Dependants', () => {
             const errors = validator.validateSync(new Dependants(true, -1, 2, 0))
 
             expect(errors.length).to.equal(1)
-            expectValidationError(errors, ValidationErrors.INVALID_NUMBER_OF_CHILDREN)
+            expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
           })
 
           it('one of other fields has not integer given', () => {
             const errors = validator.validateSync(new Dependants(true, 0, 1.5, 0))
 
             expect(errors.length).to.equal(1)
-            expectValidationError(errors, ValidationErrors.INVALID_NUMBER_OF_CHILDREN)
+            expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
           })
         })
 

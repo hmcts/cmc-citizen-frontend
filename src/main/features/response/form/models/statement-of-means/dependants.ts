@@ -2,11 +2,10 @@ import { IsDefined, IsInt, Min, ValidateIf } from 'class-validator'
 
 import { Serializable } from 'models/serializable'
 import * as toBoolean from 'to-boolean'
-import { NumericUtils } from 'common/utils/numericUtils'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 export class ValidationErrors {
-  static readonly HAS_ANY_CHILDREN_NOT_SELECTED: string = 'Select an option'
-  static readonly INVALID_NUMBER_OF_CHILDREN: string = 'Enter a valid number'
   static readonly UNDER_11_REQUIRED: string = 'Enter a number of children under 11'
   static readonly BETWEEN_11_AND_15_REQUIRED: string = 'Enter a number of children between 11 and 15'
   static readonly BETWEEN_16_AND_19_REQUIRED: string = 'Enter a number of children between 19 and 19'
@@ -14,25 +13,25 @@ export class ValidationErrors {
 
 export class Dependants implements Serializable<Dependants> {
 
-  @IsDefined({ message: ValidationErrors.HAS_ANY_CHILDREN_NOT_SELECTED })
+  @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
   hasAnyChildren: boolean
 
   @ValidateIf(o => o.hasAnyChildren === true)
   @IsDefined({ message: ValidationErrors.UNDER_11_REQUIRED })
-  @IsInt({ message: ValidationErrors.INVALID_NUMBER_OF_CHILDREN })
-  @Min(0, { message: ValidationErrors.INVALID_NUMBER_OF_CHILDREN })
+  @IsInt({ message: GlobalValidationErrors.NUMBER_REQUIRED })
+  @Min(0, { message: GlobalValidationErrors.NUMBER_REQUIRED })
   under11: number
 
   @ValidateIf(o => o.hasAnyChildren === true)
   @IsDefined({ message: ValidationErrors.BETWEEN_11_AND_15_REQUIRED })
-  @IsInt({ message: ValidationErrors.INVALID_NUMBER_OF_CHILDREN })
-  @Min(0, { message: ValidationErrors.INVALID_NUMBER_OF_CHILDREN })
+  @IsInt({ message: GlobalValidationErrors.NUMBER_REQUIRED })
+  @Min(0, { message: GlobalValidationErrors.NUMBER_REQUIRED })
   between11and15: number
 
   @ValidateIf(o => o.hasAnyChildren === true)
   @IsDefined({ message: ValidationErrors.BETWEEN_16_AND_19_REQUIRED })
-  @IsInt({ message: ValidationErrors.INVALID_NUMBER_OF_CHILDREN })
-  @Min(0, { message: ValidationErrors.INVALID_NUMBER_OF_CHILDREN })
+  @IsInt({ message: GlobalValidationErrors.NUMBER_REQUIRED })
+  @Min(0, { message: GlobalValidationErrors.NUMBER_REQUIRED })
   between16and19: number
 
   constructor (hasAnyChildren?: boolean, under11?: number, between11and15?: number, between16and19?: number) {
@@ -49,9 +48,9 @@ export class Dependants implements Serializable<Dependants> {
 
     const dependants = new Dependants(
       value.hasAnyChildren !== undefined ? toBoolean(value.hasAnyChildren) === true : undefined,
-      NumericUtils.toNumberOrUndefined(value.under11),
-      NumericUtils.toNumberOrUndefined(value.between11and15),
-      NumericUtils.toNumberOrUndefined(value.between16and19)
+      toNumberOrUndefined(value.under11),
+      toNumberOrUndefined(value.between11and15),
+      toNumberOrUndefined(value.between16and19)
     )
 
     if (!dependants.hasAnyChildren) {

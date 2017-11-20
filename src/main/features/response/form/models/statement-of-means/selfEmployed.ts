@@ -5,18 +5,15 @@ import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 import { ValidationConstraints as GlobalValidationConstants } from 'forms/validation/validationConstraints'
 import { Fractions } from 'forms/validation/validators/fractions'
 import * as toBoolean from 'to-boolean'
-import { NumericUtils } from 'common/utils/numericUtils'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 export class ValidationErrors {
   static readonly JOB_TITLE_REQUIRED: string = 'Enter a job title'
-  static readonly JOB_TITLE_TOO_LONG: string = 'You’ve entered too many characters'
   static readonly ANNUAL_TURNOVER_REQUIRED: string = 'Enter an annual turnover'
-  static readonly ARE_YOU_BEHIND_ON_TAX_REQUIRED: string = 'Select an option'
   static readonly AMOUNT_YOU_OWE_REQUIRED: string = 'Enter an amount you owe'
   static readonly REASON_REQUIRED: string = 'Enter a reason'
-  static readonly REASON_TOO_LONG: string = 'You’ve entered too many characters'
   static readonly AMOUNT_YOU_OWE_NOT_VALID: string = 'Enter a amount, minimum £$constraint1'
-  static readonly INVALID_DECIMALS: string = 'Enter a valid amount, maximum two decimal places'
   static readonly TOO_MUCH: string = 'Are you sure this is a valid value?'
 }
 
@@ -30,28 +27,28 @@ export class SelfEmployed implements Serializable<SelfEmployed> {
 
   @IsDefined({ message: ValidationErrors.JOB_TITLE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.JOB_TITLE_REQUIRED })
-  @MaxLength(ValidationConstraints.JOB_TITLE_MAX_LENGTH, { message: ValidationErrors.JOB_TITLE_TOO_LONG })
+  @MaxLength(ValidationConstraints.JOB_TITLE_MAX_LENGTH, { message: GlobalValidationErrors.TOO_LONG_INPUT })
   jobTitle?: string
 
   @IsDefined({ message: ValidationErrors.ANNUAL_TURNOVER_REQUIRED })
-  @Fractions(0, 2, { message: ValidationErrors.INVALID_DECIMALS })
+  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
   @Max(ValidationConstraints.MAX_VALUE, { message: ValidationErrors.TOO_MUCH })
   annualTurnover?: number
 
-  @IsDefined({ message: ValidationErrors.ARE_YOU_BEHIND_ON_TAX_REQUIRED })
+  @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
   areYouBehindOnTax: boolean
 
   @ValidateIf(o => o.areYouBehindOnTax === true)
   @IsDefined({ message: ValidationErrors.AMOUNT_YOU_OWE_REQUIRED })
-  @Fractions(0, 2, { message: ValidationErrors.INVALID_DECIMALS })
-  @Min(ValidationConstraints.AMOUNT_YOU_OWE_MIN_VALUE, { message: ValidationErrors.AMOUNT_YOU_OWE_NOT_VALID })
+  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
+  @Min(ValidationConstraints.AMOUNT_YOU_OWE_MIN_VALUE, { message: GlobalValidationErrors.VALID_OWED_AMOUNT_REQUIRED })
   @Max(ValidationConstraints.MAX_VALUE, { message: ValidationErrors.TOO_MUCH })
   amountYouOwe: number
 
   @ValidateIf(o => o.areYouBehindOnTax === true)
   @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.REASON_REQUIRED })
-  @MaxLength(GlobalValidationConstants.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.REASON_TOO_LONG })
+  @MaxLength(GlobalValidationConstants.FREE_TEXT_MAX_LENGTH, { message: GlobalValidationErrors.TOO_LONG_INPUT })
   reason: string
 
   constructor (jobTitle?: string, annualTurnover?: number, areYouBehindOnTax?: boolean, amountYouOwe?: number, reason?: string) {
@@ -69,9 +66,9 @@ export class SelfEmployed implements Serializable<SelfEmployed> {
 
     const selfEmployed = new SelfEmployed(
       value.jobTitle || undefined,
-      NumericUtils.toNumberOrUndefined(value.annualTurnover),
+      toNumberOrUndefined(value.annualTurnover),
       value.areYouBehindOnTax !== undefined ? toBoolean(value.areYouBehindOnTax) === true : undefined,
-      NumericUtils.toNumberOrUndefined(value.amountYouOwe),
+      toNumberOrUndefined(value.amountYouOwe),
       value.reason || undefined
     )
 

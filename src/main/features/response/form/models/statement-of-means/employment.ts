@@ -3,14 +3,14 @@ import { IsDefined, ValidateIf } from 'class-validator'
 import { Serializable } from 'models/serializable'
 import * as toBoolean from 'to-boolean'
 import { IsBooleanTrue } from 'forms/validation/validators/isBooleanTrue'
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 export class ValidationErrors {
-  static readonly IS_CURRENTLY_EMPLOYED_NOT_SELECTED: string = 'Select an option'
   static readonly SELECT_AT_LEAST_ONE_OPTION: string = 'You must check at least one option'
 }
 
 export class Employment implements Serializable<Employment> {
-  @IsDefined({ message: ValidationErrors.IS_CURRENTLY_EMPLOYED_NOT_SELECTED })
+  @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
   isCurrentlyEmployed: boolean
 
   @ValidateIf(o => o.isCurrentlyEmployed === true && !o.selfEmployed && !o.employed)

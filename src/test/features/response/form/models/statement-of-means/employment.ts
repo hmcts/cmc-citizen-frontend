@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import { Employment, ValidationErrors } from 'response/form/models/statement-of-means/employment'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../../app/forms/models/validationUtils'
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 describe('Employment', () => {
 
@@ -91,7 +92,7 @@ describe('Employment', () => {
           const errors = validator.validateSync(new Employment())
 
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.IS_CURRENTLY_EMPLOYED_NOT_SELECTED)
+          expectValidationError(errors, GlobalValidationErrors.YES_NO_REQUIRED)
         })
 
       })

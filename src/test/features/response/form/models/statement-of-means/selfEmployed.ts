@@ -6,6 +6,7 @@ import {
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from '../../../../../app/forms/models/validationUtils'
 import { ValidationConstraints as GlobalValidationConstants } from 'forms/validation/validationConstraints'
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 describe('SelfEmployed', () => {
 
@@ -130,7 +131,7 @@ describe('SelfEmployed', () => {
         expect(errors.length).to.equal(3)
         expectValidationError(errors, ValidationErrors.JOB_TITLE_REQUIRED)
         expectValidationError(errors, ValidationErrors.ANNUAL_TURNOVER_REQUIRED)
-        expectValidationError(errors, ValidationErrors.ARE_YOU_BEHIND_ON_TAX_REQUIRED)
+        expectValidationError(errors, GlobalValidationErrors.YES_NO_REQUIRED)
       })
 
       it('too long role name', () => {
@@ -139,14 +140,14 @@ describe('SelfEmployed', () => {
         )
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.JOB_TITLE_TOO_LONG)
+        expectValidationError(errors, GlobalValidationErrors.TOO_LONG_INPUT)
       })
 
       it('too many decimal digits for annualTurnover', () => {
         const errors = validator.validateSync(new SelfEmployed('my role', 10.111, false))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.INVALID_DECIMALS)
+        expectValidationError(errors, GlobalValidationErrors.AMOUNT_INVALID_DECIMALS)
       })
 
       it('too much annualTurnover', () => {
@@ -174,11 +175,7 @@ describe('SelfEmployed', () => {
           )
 
           expect(errors.length).to.equal(1)
-          expectValidationError(
-            errors,
-            ValidationErrors.AMOUNT_YOU_OWE_NOT_VALID
-              .replace('$constraint1', ValidationConstraints.AMOUNT_YOU_OWE_MIN_VALUE.toLocaleString())
-          )
+          expectValidationError(errors, GlobalValidationErrors.VALID_OWED_AMOUNT_REQUIRED)
         })
 
         it('too many decimal digits for amountYouOwe', () => {
@@ -187,7 +184,7 @@ describe('SelfEmployed', () => {
           )
 
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.INVALID_DECIMALS)
+          expectValidationError(errors, GlobalValidationErrors.AMOUNT_INVALID_DECIMALS)
         })
 
         it('too much amountYouOwe', () => {
@@ -205,7 +202,7 @@ describe('SelfEmployed', () => {
           )
 
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.REASON_TOO_LONG)
+          expectValidationError(errors, GlobalValidationErrors.TOO_LONG_INPUT)
         })
       })
     })

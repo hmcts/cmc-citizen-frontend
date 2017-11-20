@@ -2,17 +2,12 @@ import { IsDefined, ValidateIf } from 'class-validator'
 
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {
   static readonly EMPLOYER_NAME_REQUIRED: string = 'Enter an employer name'
-  static readonly EMPLOYER_NAME_TOO_LONG: string = 'You’ve entered too many characters'
   static readonly JOB_TITLE_REQUIRED: string = 'Enter a job title'
-  static readonly JOB_TITLE_TOO_LONG: string = 'You’ve entered too many characters'
-}
-
-export class ValidationConstraints {
-  static readonly EMPLOYER_NAME_MAX_LENGTH: number = 50
-  static readonly JOB_TITLE_MAX_LENGTH: number = 50
 }
 
 export class EmployerRow {
@@ -20,13 +15,13 @@ export class EmployerRow {
   @ValidateIf(o => o.jobTitle !== undefined)
   @IsDefined({ message: ValidationErrors.EMPLOYER_NAME_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.EMPLOYER_NAME_REQUIRED })
-  @MaxLength(ValidationConstraints.EMPLOYER_NAME_MAX_LENGTH, { message: ValidationErrors.EMPLOYER_NAME_TOO_LONG })
+  @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: GlobalValidationErrors.TOO_LONG_INPUT })
   employerName?: string
 
   @ValidateIf(o => o.employerName !== undefined)
   @IsDefined({ message: ValidationErrors.JOB_TITLE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.JOB_TITLE_REQUIRED })
-  @MaxLength(ValidationConstraints.JOB_TITLE_MAX_LENGTH, { message: ValidationErrors.JOB_TITLE_TOO_LONG })
+  @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: GlobalValidationErrors.TOO_LONG_INPUT })
   jobTitle?: string = undefined
 
   constructor (employerName?: string, jobTitle?: string) {

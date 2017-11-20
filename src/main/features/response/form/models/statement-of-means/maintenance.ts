@@ -1,23 +1,19 @@
 import { IsDefined, IsInt, Min, ValidateIf } from 'class-validator'
 
 import { Serializable } from 'models/serializable'
-import { NumericUtils } from 'common/utils/numericUtils'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import * as toBoolean from 'to-boolean'
-
-export class ValidationErrors {
-  static readonly OPTION_NOT_SELECTED: string = 'Select an option'
-  static readonly INVALID_NUMBER: string = 'Enter a valid number'
-}
+import { ValidationErrors } from 'forms/validation/validationErrors'
 
 export class Maintenance implements Serializable<Maintenance> {
 
-  @IsDefined({ message: ValidationErrors.OPTION_NOT_SELECTED })
+  @IsDefined({ message: ValidationErrors.YES_NO_REQUIRED })
   option: boolean
 
   @ValidateIf(o => o.option === true)
-  @IsDefined({ message: ValidationErrors.INVALID_NUMBER })
-  @IsInt({ message: ValidationErrors.INVALID_NUMBER })
-  @Min(1, { message: ValidationErrors.INVALID_NUMBER })
+  @IsDefined({ message: ValidationErrors.NUMBER_REQUIRED })
+  @IsInt({ message: ValidationErrors.NUMBER_REQUIRED })
+  @Min(1, { message: ValidationErrors.NUMBER_REQUIRED })
   value: number
 
   constructor (option?: boolean, value?: number) {
@@ -32,7 +28,7 @@ export class Maintenance implements Serializable<Maintenance> {
 
     const maintenance = new Maintenance(
       value.option !== undefined ? toBoolean(value.option) === true : undefined,
-      NumericUtils.toNumberOrUndefined(value.value)
+      toNumberOrUndefined(value.value)
     )
 
     if (!maintenance.option) {

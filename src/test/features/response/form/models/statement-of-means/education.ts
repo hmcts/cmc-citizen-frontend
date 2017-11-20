@@ -1,7 +1,8 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../../app/forms/models/validationUtils'
-import { Education, ValidationErrors } from 'response/form/models/statement-of-means/education'
+import { Education } from 'response/form/models/statement-of-means/education'
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 describe('Education', () => {
 
@@ -60,42 +61,42 @@ describe('Education', () => {
         const errors = validator.validateSync(new Education('' as any))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.INVALID_NUMBER)
+        expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
       })
 
       it('blank string given', () => {
         const errors = validator.validateSync(new Education('    ' as any))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.INVALID_NUMBER)
+        expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
       })
 
       it('string given', () => {
         const errors = validator.validateSync(new Education('this is invalid value!' as any))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.INVALID_NUMBER)
+        expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
       })
 
       it('decimal number given', () => {
         const errors = validator.validateSync(new Education(1.1))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.INVALID_NUMBER)
+        expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
       })
 
       it('negative number given', () => {
         const errors = validator.validateSync(new Education(-1))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.INVALID_NUMBER)
+        expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
       })
 
       it('negative decimal number given', () => {
         const errors = validator.validateSync(new Education(-1.1))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.INVALID_NUMBER)
+        expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
       })
     })
   })
