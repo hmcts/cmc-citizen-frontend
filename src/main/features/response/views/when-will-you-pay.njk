@@ -1,15 +1,12 @@
 {% extends "layout.njk" %}
 
 {% set title = 'Money claim' %}
+{% set heading = 'When will you pay?' %}
 
 {% from "form.njk" import saveAndContinueButton, csrfProtection, radioGroup, radioGroupWithHintPanel, errorSummary %}
 
 {% block content %}
   <div class="column-two-thirds">
-
-    <h1 class="heading-large">
-      {{ t('When will you pay?') }}
-    </h1>
 
     <form method="post"
           class="analytics-submit-event-trigger"
