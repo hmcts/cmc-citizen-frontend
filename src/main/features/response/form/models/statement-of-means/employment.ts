@@ -6,7 +6,7 @@ import { IsBooleanTrue } from 'forms/validation/validators/isBooleanTrue'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 export class ValidationErrors {
-  static readonly SELECT_AT_LEAST_ONE_OPTION: string = 'You must check at least one option'
+  static readonly SELECT_AT_LEAST_ONE_OPTION: string = 'You must select at least one option'
 }
 
 export class Employment implements Serializable<Employment> {
