@@ -22,6 +22,7 @@ import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { StatementType } from 'offer/form/models/statementType'
 import { InterestDateType } from 'app/common/interestDateType'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
+import { DashboardUrlHelper } from 'dashboard/helpers/dashboardUrlHelper'
 const packageDotJson = require('../../../../package.json')
 
 const appAssetPaths = {
@@ -90,6 +91,8 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('NotEligibleReason', NotEligibleReason)
     nunjucksEnv.addGlobal('InterestDateType', InterestDateType)
     nunjucksEnv.addGlobal('PaymentSchedule', PaymentSchedule)
+    nunjucksEnv.addGlobal('DashboardUrlHelper', DashboardUrlHelper)
+
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

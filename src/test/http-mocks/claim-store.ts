@@ -79,7 +79,7 @@ export const sampleClaimObj = {
   }
 }
 
-const sampleDefendantResponseObj = {
+export const sampleDefendantResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: {
     type: 'OWE_NONE',
