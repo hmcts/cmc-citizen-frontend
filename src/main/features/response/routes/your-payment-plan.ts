@@ -24,7 +24,7 @@ function renderView (form: Form<PaidAmount>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defencePaymentPlanPage.uri,
-    DisabledFeatureGuard.createHandlerThrowingNotFoundError('featureToggles.fullAdmission'),
+    DisabledFeatureGuard.anyFeatureEnabledGuard('featureToggles.fullAdmission', 'featureToggles.partialAdmission'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
 
@@ -32,7 +32,7 @@ export default express.Router()
     }))
 
   .post(Paths.defencePaymentPlanPage.uri,
-    DisabledFeatureGuard.createHandlerThrowingNotFoundError('featureToggles.fullAdmission'),
+    DisabledFeatureGuard.anyFeatureEnabledGuard('featureToggles.fullAdmission', 'featureToggles.partialAdmission'),
     FormValidator.requestHandler(DefendantPaymentPlan, DefendantPaymentPlan.fromObject),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {

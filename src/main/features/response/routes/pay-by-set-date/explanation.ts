@@ -7,6 +7,7 @@ import { Explanation } from 'response/form/models/pay-by-set-date/explanation'
 import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
+import { DisabledFeatureGuard } from 'response/guards/disabledFeatureGuard'
 
 function renderView (form: Form<PaymentDate>, res: express.Response) {
   res.render(PayBySetDatePaths.explanationPage.associatedView, {
@@ -16,12 +17,16 @@ function renderView (form: Form<PaymentDate>, res: express.Response) {
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(PayBySetDatePaths.explanationPage.uri, (req: express.Request, res: express.Response) => {
-    const user: User = res.locals.user
-    renderView(new Form(user.responseDraft.document.payBySetDate.explanation), res)
-  })
+  .get(
+    PayBySetDatePaths.explanationPage.uri,
+    DisabledFeatureGuard.anyFeatureEnabledGuard('featureToggles.fullAdmission', 'featureToggles.partialAdmission'),
+    (req: express.Request, res: express.Response) => {
+      const user: User = res.locals.user
+      renderView(new Form(user.responseDraft.document.payBySetDate.explanation), res)
+    })
   .post(
     PayBySetDatePaths.explanationPage.uri,
+    DisabledFeatureGuard.anyFeatureEnabledGuard('featureToggles.fullAdmission', 'featureToggles.partialAdmission'),
     FormValidator.requestHandler(Explanation),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<Explanation> = req.body
