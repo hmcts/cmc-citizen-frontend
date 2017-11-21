@@ -9,7 +9,7 @@ import { User } from 'idam/user'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { FormValidator } from 'forms/validation/formValidator'
-import { DisabledFeatureGuard } from 'response/guards/disabledFeatureGuard'
+import { FeatureToggleGuard } from 'response/guards/disabledFeatureGuard'
 
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
   const user: User = res.locals.user
@@ -24,7 +24,7 @@ function renderView (form: Form<PaidAmount>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defencePaymentPlanPage.uri,
-    DisabledFeatureGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
 
@@ -32,7 +32,7 @@ export default express.Router()
     }))
 
   .post(Paths.defencePaymentPlanPage.uri,
-    DisabledFeatureGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     FormValidator.requestHandler(DefendantPaymentPlan, DefendantPaymentPlan.fromObject),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {

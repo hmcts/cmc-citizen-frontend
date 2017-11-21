@@ -8,7 +8,7 @@ import { DraftService } from 'services/draftService'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { PaymentDateChecker } from 'response/helpers/paymentDateChecker'
 import { RoutablePath } from 'common/router/routablePath'
-import { DisabledFeatureGuard } from 'response/guards/disabledFeatureGuard'
+import { FeatureToggleGuard } from 'response/guards/disabledFeatureGuard'
 
 function renderView (form: Form<PaymentDate>, res: express.Response) {
   res.render(PayBySetDatePaths.paymentDatePage.associatedView, {
@@ -20,14 +20,14 @@ function renderView (form: Form<PaymentDate>, res: express.Response) {
 export default express.Router()
   .get(
     PayBySetDatePaths.paymentDatePage.uri,
-    DisabledFeatureGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
       renderView(new Form(user.responseDraft.document.payBySetDate.paymentDate), res)
     })
   .post(
     PayBySetDatePaths.paymentDatePage.uri,
-    DisabledFeatureGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     FormValidator.requestHandler(PaymentDate, PaymentDate.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<PaymentDate> = req.body

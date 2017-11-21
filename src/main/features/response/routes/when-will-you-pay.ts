@@ -8,7 +8,7 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
-import { DisabledFeatureGuard } from 'response/guards/disabledFeatureGuard'
+import { FeatureToggleGuard } from 'response/guards/disabledFeatureGuard'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { ResponseType } from 'response/form/models/responseType'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
@@ -39,14 +39,14 @@ function renderView (form: Form<DefendantPaymentOption>, res: express.Response) 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defencePaymentOptionsPage.uri,
-    DisabledFeatureGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
 
       renderView(new Form(user.responseDraft.document.defendantPaymentOption), res)
     }))
   .post(Paths.defencePaymentOptionsPage.uri,
-    DisabledFeatureGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     FormValidator.requestHandler(DefendantPaymentOption, DefendantPaymentOption.fromObject),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response): Promise<void> => {
