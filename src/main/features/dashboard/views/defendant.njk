@@ -14,13 +14,7 @@
     <div class="column-two-thirds">
       <h2 class="heading-medium">{{ t('Claim status') }}</h2>
 
-      {% if claim.settlementReachedAt %}
-        {% set url = paths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) %}
-      {% else %}
-        {% set url = paths.responseTaskListPage.evaluateUri({ externalId: claim.externalId }) %}
-      {% endif %}
-
-      {{ responseStatusForDefendant(claim, url, isAfter4pm) }}
+      {{ responseStatusForDefendant(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
 
       {% if featureToggles.offer and not claim.settlementReachedAt  %}
         <h2 class="heading-medium">{{ t('More options') }}</h2>
