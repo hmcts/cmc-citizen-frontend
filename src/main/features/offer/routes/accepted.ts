@@ -10,6 +10,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const user: User = res.locals.user
       res.render(Paths.acceptedPage.associatedView, {
-        claim: user.claim
+        claim: user.claim,
+        agreementLink: Paths.agreementReceiver.evaluateUri({ externalId: user.claim.externalId })
       })
     }))
