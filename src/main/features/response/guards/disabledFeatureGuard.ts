@@ -8,7 +8,7 @@ export class FeatureToggleGuard {
   /**
    * Throws NotFound error when all features are toggled off
    *
-   * @param {string} feature
+   * @param {string} features a list of toggle names
    * @returns {express.RequestHandler} - request handler middleware
    */
   static anyFeatureEnabledGuard (...features: string[]): express.RequestHandler {
