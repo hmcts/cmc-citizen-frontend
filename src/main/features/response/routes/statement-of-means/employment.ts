@@ -36,7 +36,6 @@ export default express.Router()
         await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
 
         if (form.model.isCurrentlyEmployed === false) {
-          // TODO: when ROC-2559 is delivered this should redirect to the next page
           res.render(page.associatedView, { form: form })
         } else {
           if (form.model.employed) {

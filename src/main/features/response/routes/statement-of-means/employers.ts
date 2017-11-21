@@ -55,7 +55,6 @@ export default express.Router()
         if (user.responseDraft.document.statementOfMeans.employment.selfEmployed) {
           res.redirect(StatementOfMeansPaths.selfEmployedPage.evaluateUri({ externalId: externalId }))
         } else {
-          // TODO: when ROC-2559 is delivered this should redirect to the next page
           renderView(form, res)
         }
 

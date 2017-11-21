@@ -54,7 +54,7 @@ describe('Education', () => {
         expect(errors.length).to.equal(0)
       })
 
-      it('number i equal maxValue given', () => {
+      it('number is equal maxValue given', () => {
         const errors = validator.validateSync(new Education(2, 2))
 
         expect(errors.length).to.equal(0)
