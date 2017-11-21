@@ -32,7 +32,12 @@ export default express.Router()
         user.responseDraft.document.statementOfMeans.dependants = form.model
 
         await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
-        res.redirect(Paths.educationPage.evaluateUri({ externalId: externalId }))
+
+        if (form.model.between16and19) {
+          res.redirect(Paths.educationPage.evaluateUri({ externalId: externalId }))
+        } else {
+          res.redirect(Paths.maintenancePage.evaluateUri({ externalId: externalId }))
+        }
       }
     })
   )

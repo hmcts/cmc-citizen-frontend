@@ -103,9 +103,9 @@ describe('Defendant response: Statement of means: employment', () => {
         })
       })
 
-      describe('update', () => {
+      describe('should update draft store and redirect', () => {
 
-        it('should update draft store and redirect', async () => {
+        it('to employers page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.resolveSave()
@@ -116,6 +116,22 @@ describe('Defendant response: Statement of means: employment', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.employersPage.evaluateUri(
+                { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+              )
+            )
+        })
+
+        it('to self-employment page', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveSave()
+
+          await request(app)
+            .post(pagePath)
+            .send({ isCurrentlyEmployed: true, selfEmployed: true, employed: false })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(StatementOfMeansPaths.selfEmployedPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )

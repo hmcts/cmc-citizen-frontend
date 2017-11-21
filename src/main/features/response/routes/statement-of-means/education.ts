@@ -11,12 +11,22 @@ import { Education } from 'response/form/models/statement-of-means/education'
 
 const page: RoutablePath = Paths.educationPage
 
+function renderView (form: Form<Education>, res: express.Response): void {
+  const user: User = res.locals.user
+  const between16and19: number = user.responseDraft.document.statementOfMeans.dependants.between16and19
+
+  res.render(page.associatedView, {
+    form: form,
+    between16and19: between16and19
+  })
+}
+
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(page.uri,
     (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
-      res.render(page.associatedView, { form: new Form(user.responseDraft.document.statementOfMeans.education) })
+      renderView(new Form(user.responseDraft.document.statementOfMeans.education), res)
     })
   .post(
     page.uri,
@@ -27,7 +37,7 @@ export default express.Router()
       const { externalId } = req.params
 
       if (form.hasErrors()) {
-        res.render(page.associatedView, { form: form })
+        renderView(form, res)
       } else {
         user.responseDraft.document.statementOfMeans.education = form.model
 

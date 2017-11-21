@@ -103,16 +103,48 @@ describe('Defendant response: Statement of means: dependants', () => {
         })
       })
 
-      describe('update', () => {
+      describe('should update draft store and redirect to ', () => {
 
-        it('should update draft store and redirect', async () => {
+        it('maintenance page when no children', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
             .post(pagePath)
-            .send({ hasAnyChildren: false })
+            .send({ hasAnyChildren: 'false' })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(StatementOfMeansPaths.maintenancePage.evaluateUri(
+                { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+              )
+            )
+        })
+
+        it('maintenance page when 0 children between 16 and 19', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveSave()
+
+          await request(app)
+            .post(pagePath)
+            .send({ hasAnyChildren: 'true', under11: '1', between11and15: '2', between16and19: '0' })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(StatementOfMeansPaths.maintenancePage.evaluateUri(
+                { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+              )
+            )
+        })
+
+        it('education page when > 0 children between 16 and 19', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveSave()
+
+          await request(app)
+            .post(pagePath)
+            .send({ hasAnyChildren: 'true', under11: '0', between11and15: '0', between16and19: '3' })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.educationPage.evaluateUri(

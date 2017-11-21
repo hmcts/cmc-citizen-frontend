@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../../app/forms/models/validationUtils'
-import { Education } from 'response/form/models/statement-of-means/education'
+import { Education, ValidationErrors } from 'response/form/models/statement-of-means/education'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 describe('Education', () => {
@@ -43,13 +43,19 @@ describe('Education', () => {
     describe('valid when', () => {
 
       it('0 given', () => {
-        const errors = validator.validateSync(new Education(0))
+        const errors = validator.validateSync(new Education(0, 1))
 
         expect(errors.length).to.equal(0)
       })
 
       it('positive number given', () => {
-        const errors = validator.validateSync(new Education(10))
+        const errors = validator.validateSync(new Education(10, 11))
+
+        expect(errors.length).to.equal(0)
+      })
+
+      it('number is equal maxValue given', () => {
+        const errors = validator.validateSync(new Education(2, 2))
 
         expect(errors.length).to.equal(0)
       })
@@ -97,6 +103,13 @@ describe('Education', () => {
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
+      })
+
+      it('valid value but is greater than maxValue', () => {
+        const errors = validator.validateSync(new Education(2, 1))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.INVALID_NUMBER_OF_CHILDREN)
       })
     })
   })
