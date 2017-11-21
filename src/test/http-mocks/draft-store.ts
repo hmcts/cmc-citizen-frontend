@@ -119,7 +119,7 @@ const sampleResponseDraftObj = {
   },
   statementOfMeans: {
     residence: {},
-    employment: {},
+    employment: { isCurrentlyEmployed: true, selfEmployed: true },
     employers: {},
     selfEmployed: {}
   },

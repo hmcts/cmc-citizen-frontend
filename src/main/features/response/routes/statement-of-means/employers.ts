@@ -51,7 +51,14 @@ export default express.Router()
         user.responseDraft.document.statementOfMeans.employers = form.model
 
         await new DraftService().save(user.responseDraft, user.bearerToken)
-        res.redirect(StatementOfMeansPaths.selfEmployedPage.evaluateUri({ externalId: externalId }))
+
+        if (user.responseDraft.document.statementOfMeans.employment.selfEmployed) {
+          res.redirect(StatementOfMeansPaths.selfEmployedPage.evaluateUri({ externalId: externalId }))
+        } else {
+          // TODO: when ROC-2559 is delivered this should redirect to the next page
+          renderView(form, res)
+        }
+
       }
     })
   )
