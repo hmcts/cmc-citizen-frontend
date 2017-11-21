@@ -22,4 +22,8 @@ export class PayBySetDate implements Serializable<PayBySetDate> {
   clearExplanation (): void {
     this.explanation = undefined
   }
+
+  hasExplanation (): boolean {
+    return !!(this.explanation && this.explanation.text && this.explanation.text.trim())
+  }
 }
