@@ -39,14 +39,14 @@ function renderView (form: Form<DefendantPaymentOption>, res: express.Response) 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defencePaymentOptionsPage.uri,
-    DisabledFeatureGuard.anyFeatureEnabledGuard('featureToggles.fullAdmission', 'featureToggles.partialAdmission'),
+    DisabledFeatureGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
 
       renderView(new Form(user.responseDraft.document.defendantPaymentOption), res)
     }))
   .post(Paths.defencePaymentOptionsPage.uri,
-    DisabledFeatureGuard.anyFeatureEnabledGuard('featureToggles.fullAdmission', 'featureToggles.partialAdmission'),
+    DisabledFeatureGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     FormValidator.requestHandler(DefendantPaymentOption, DefendantPaymentOption.fromObject),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response): Promise<void> => {
