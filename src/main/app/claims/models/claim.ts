@@ -32,6 +32,7 @@ export class Claim implements Serializable<Claim> {
   response: DefendantResponse
   defendantEmail: string
   settlement: Settlement
+  settlementReachedAt: Moment
 
   deserialize (input: any): Claim {
     if (input) {
@@ -61,6 +62,9 @@ export class Claim implements Serializable<Claim> {
       }
       if (input.settlement) {
         this.settlement = new Settlement().deserialize(input.settlement)
+      }
+      if (input.settlementReachedAt) {
+        this.settlementReachedAt = MomentFactory.parse(input.settlementReachedAt)
       }
     }
     return this
