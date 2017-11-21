@@ -20,6 +20,7 @@
           <li>{{ t('not married or in a civil partnership') }}</li>
         </ul>
 
+        <input type="hidden" name="maxValue" value="{{ between16and19 | default(0) }}">
         {{ textInput('Enter number', 'value', form) }}
 
         {{ saveAndContinueButton() }}

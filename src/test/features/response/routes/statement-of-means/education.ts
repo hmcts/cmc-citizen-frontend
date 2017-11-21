@@ -112,7 +112,7 @@ describe('Defendant response: Statement of means: education', () => {
 
           await request(app)
             .post(pagePath)
-            .send({ value: '1' })
+            .send({ value: '1', maxValue: '2' })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.maintenancePage.evaluateUri(
