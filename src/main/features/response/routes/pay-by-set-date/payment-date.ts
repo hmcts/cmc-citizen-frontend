@@ -8,7 +8,7 @@ import { DraftService } from 'services/draftService'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { PaymentDateChecker } from 'response/helpers/paymentDateChecker'
 import { RoutablePath } from 'common/router/routablePath'
-import { FeatureToggleGuard } from 'response/guards/disabledFeatureGuard'
+import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 
 function renderView (form: Form<PaymentDate>, res: express.Response) {
   res.render(PayBySetDatePaths.paymentDatePage.associatedView, {

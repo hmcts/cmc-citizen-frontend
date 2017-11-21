@@ -9,7 +9,7 @@ import { User } from 'idam/user'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { FormValidator } from 'forms/validation/formValidator'
-import { FeatureToggleGuard } from 'response/guards/disabledFeatureGuard'
+import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
   const user: User = res.locals.user

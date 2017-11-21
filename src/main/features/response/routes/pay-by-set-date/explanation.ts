@@ -7,7 +7,7 @@ import { Explanation } from 'response/form/models/pay-by-set-date/explanation'
 import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
-import { FeatureToggleGuard } from 'response/guards/disabledFeatureGuard'
+import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 
 function renderView (form: Form<PaymentDate>, res: express.Response) {
   res.render(PayBySetDatePaths.explanationPage.associatedView, {
