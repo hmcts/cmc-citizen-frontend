@@ -16,7 +16,7 @@ export class Dependants implements Serializable<Dependants> {
   hasAnyChildren: boolean
 
   @ValidateIf(o => o.hasAnyChildren === true)
-  @ValidateNested({ each: true })
+  @ValidateNested()
   @AtLeastOneFieldIsPopulated({ message: ValidationErrors.ENTER_AT_LEAST_ONE })
   numberOfChildren: NumberOfChildren
 
@@ -30,16 +30,12 @@ export class Dependants implements Serializable<Dependants> {
       return value
     }
 
-    const dependants = new Dependants(
-      value.hasAnyChildren !== undefined ? toBoolean(value.hasAnyChildren) === true : undefined,
-      NumberOfChildren.fromObject(value.numberOfChildren)
+    const hasAnyChildren: boolean = value.hasAnyChildren !== undefined ? toBoolean(value.hasAnyChildren) : undefined
+
+    return new Dependants(
+      hasAnyChildren,
+      hasAnyChildren ? NumberOfChildren.fromObject(value.numberOfChildren) : undefined
     )
-
-    if (!dependants.hasAnyChildren) {
-      dependants.numberOfChildren = undefined
-    }
-
-    return dependants
   }
 
   deserialize (input?: any): Dependants {
