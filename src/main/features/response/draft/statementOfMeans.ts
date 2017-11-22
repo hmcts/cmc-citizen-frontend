@@ -6,6 +6,8 @@ import { SelfEmployed } from 'response/form/models/statement-of-means/selfEmploy
 import { Dependants } from 'response/form/models/statement-of-means/dependants'
 import { Education } from 'response/form/models/statement-of-means/education'
 import { Maintenance } from 'response/form/models/statement-of-means/maintenance'
+import { FeatureToggles } from 'utils/featureToggles'
+import { TheirDetails } from 'app/claims/models/details/theirs/theirDetails'
 
 export class StatementOfMeans implements Serializable<StatementOfMeans> {
   residence?: Residence
@@ -15,6 +17,16 @@ export class StatementOfMeans implements Serializable<StatementOfMeans> {
   employment?: Employment
   employers?: Employers
   selfEmployed?: SelfEmployed
+
+  static isApplicableFor (defendant: TheirDetails): boolean {
+    if (!FeatureToggles.isEnabled('statementOfMeans')) {
+      return false
+    }
+    if (!defendant) {
+      throw new Error('Party has to be provided as input')
+    }
+    return !defendant.isBusiness()
+  }
 
   deserialize (input: any): StatementOfMeans {
     if (input) {

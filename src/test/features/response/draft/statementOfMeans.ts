@@ -8,6 +8,10 @@ import { Employment } from 'response/form/models/statement-of-means/employment'
 import { Employers } from 'response/form/models/statement-of-means/employers'
 import { SelfEmployed } from 'response/form/models/statement-of-means/selfEmployed'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
+import { Individual } from 'claims/models/details/theirs/individual'
+import { SoleTrader } from 'claims/models/details/theirs/soleTrader'
+import { Company } from 'app/claims/models/details/theirs/company'
+import { Organisation } from 'claims/models/details/theirs/organisation'
 
 describe('StatementOfMeans', () => {
   describe('deserialize', () => {
@@ -58,6 +62,28 @@ describe('StatementOfMeans', () => {
       expect(actual.employment).to.be.instanceof(Employment)
       expect(actual.employers).to.be.instanceof(Employers)
       expect(actual.selfEmployed).to.be.instanceof(SelfEmployed)
+    })
+  })
+
+  describe('isApplicableFor', () => {
+    it('should throw an error if undefined is provided as input', () => {
+      expect(() => StatementOfMeans.isApplicableFor(undefined)).to.throw(Error)
+    })
+
+    it('should return true for individual', () => {
+      expect(StatementOfMeans.isApplicableFor(new Individual())).to.be.true
+    })
+
+    it('should return true for sole trader', () => {
+      expect(StatementOfMeans.isApplicableFor(new SoleTrader())).to.be.true
+    })
+
+    it('should return false for company', () => {
+      expect(StatementOfMeans.isApplicableFor(new Company())).to.be.false
+    })
+
+    it('should return false for organisation', () => {
+      expect(StatementOfMeans.isApplicableFor(new Organisation())).to.be.false
     })
   })
 })

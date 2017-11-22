@@ -13,11 +13,13 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
+import { PartyType } from 'app/common/partyType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const defencePaymentPlanPage = Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId })
 const statementOfMeansStartPage = StatementOfMeansPaths.startPage.evaluateUri({ externalId: externalId })
+const taskListPage = Paths.taskListPage.evaluateUri({ externalId: externalId })
 
 describe('Defendant: payment page', () => {
   attachDefaultHooks(app)
@@ -106,16 +108,48 @@ describe('Defendant: payment page', () => {
       })
 
       context('when form is valid', async () => {
-        it('should redirect to statement of means start page', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
+        [PartyType.INDIVIDUAL, PartyType.SOLE_TRADER_OR_SELF_EMPLOYED].forEach((partyType) => {
+          it(`should redirect to statement of means start page if defendant is an ${partyType.value}`, async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId({
+              claim: {
+                defendants: [
+                  {
+                    type: partyType.value
+                  }
+                ]
+              }
+            })
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
 
-          await request(app)
-            .post(defencePaymentPlanPage)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send(validFormData)
-            .expect(res => expect(res).to.be.redirect.toLocation(statementOfMeansStartPage))
+            await request(app)
+              .post(defencePaymentPlanPage)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(validFormData)
+              .expect(res => expect(res).to.be.redirect.toLocation(statementOfMeansStartPage))
+          })
+        });
+
+        [PartyType.COMPANY, PartyType.ORGANISATION].forEach((partyType) => {
+          it(`should redirect to task list page if defendant is ${partyType.value}`, async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId({
+              claim: {
+                defendants: [
+                  {
+                    type: partyType.value
+                  }
+                ]
+              }
+            })
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
+
+            await request(app)
+              .post(defencePaymentPlanPage)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(validFormData)
+              .expect(res => expect(res).to.be.redirect.toLocation(taskListPage))
+          })
         })
       })
 

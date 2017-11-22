@@ -8,11 +8,12 @@ import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
-import { FeatureToggles } from 'utils/featureToggles'
 import { RoutablePath } from 'common/router/routablePath'
+import { StatementOfMeans } from 'response/draft/statementOfMeans'
+import { TheirDetails } from 'app/claims/models/details/theirs/theirDetails'
 
-function nextPage (): RoutablePath {
-  if (FeatureToggles.isEnabled('statementOfMeans')) {
+function nextPageFor (defendant: TheirDetails): RoutablePath {
+  if (StatementOfMeans.isApplicableFor(defendant)) {
     return StatementOfMeansPaths.startPage
   } else {
     return Paths.taskListPage
@@ -46,6 +47,6 @@ export default express.Router()
       } else {
         user.responseDraft.document.payBySetDate.explanation = form.model
         await new DraftService().save(user.responseDraft, user.bearerToken)
-        res.redirect(nextPage().evaluateUri({ externalId: req.params.externalId }))
+        res.redirect(nextPageFor(user.claim.claimData.defendant).evaluateUri({ externalId: req.params.externalId }))
       }
     }))

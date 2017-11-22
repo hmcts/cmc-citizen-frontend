@@ -11,10 +11,11 @@ import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { FormValidator } from 'forms/validation/formValidator'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { RoutablePath } from 'common/router/routablePath'
-import { FeatureToggles } from 'utils/featureToggles'
+import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
+import { StatementOfMeans } from 'response/draft/statementOfMeans'
 
-function nextPage (): RoutablePath {
-  if (FeatureToggles.isEnabled('statementOfMeans')) {
+function nextPageFor (defendant: TheirDetails): RoutablePath {
+  if (StatementOfMeans.isApplicableFor(defendant)) {
     return StatementOfMeansPaths.startPage
   } else {
     return Paths.taskListPage
@@ -45,7 +46,7 @@ export default express.Router()
     FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     FormValidator.requestHandler(DefendantPaymentPlan, DefendantPaymentPlan.fromObject),
     ErrorHandling.apply(
-      async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+      async (req: express.Request, res: express.Response): Promise<void> => {
         const form: Form<DefendantPaymentPlan> = req.body
         const user: User = res.locals.user
 
@@ -56,6 +57,6 @@ export default express.Router()
           await new DraftService().save(user.responseDraft, user.bearerToken)
 
           const { externalId } = req.params
-          res.redirect(nextPage().evaluateUri({ externalId: externalId }))
+          res.redirect(nextPageFor(user.claim.claimData.defendant).evaluateUri({ externalId: externalId }))
         }
       }))
