@@ -16,14 +16,7 @@
     <div class="column-two-thirds">
       <div>
         <h2 class="heading-medium">{{ t('Claim status') }}</h2>
-
-        {% if claim.settlementReachedAt %}
-          {% set url = paths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) %}
-        {% else %}
-          {% set url = paths.offerResponsePage.evaluateUri({ externalId: claim.externalId }) %}
-        {% endif %}
-
-        {{ responseStatusForClaimant(claim, url) }}
+        {{ responseStatusForClaimant(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
 
         {% if claim.eligibleForCCJ %}
           <p>{{ t('You can only ask for a CCJ at this stage if the defendant has not responded to your claim.') }}</p>

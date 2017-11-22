@@ -16,8 +16,7 @@ export default express.Router()
 
     res.render(Paths.claimantPage.associatedView, {
       claim: claim,
-      receiptUri: Paths.claimReceiptReceiver.evaluateUri({ externalId: externalId }),
-      paths: Paths
+      receiptUri: Paths.claimReceiptReceiver.evaluateUri({ externalId: externalId })
     })
   }))
   .post(Paths.claimantPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
