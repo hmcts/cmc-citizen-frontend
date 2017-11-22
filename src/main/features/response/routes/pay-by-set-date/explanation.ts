@@ -11,6 +11,7 @@ import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { RoutablePath } from 'common/router/routablePath'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { TheirDetails } from 'app/claims/models/details/theirs/theirDetails'
+import { Claim } from 'claims/models/claim'
 
 function nextPageFor (defendant: TheirDetails): RoutablePath {
   if (StatementOfMeans.isApplicableFor(defendant)) {
@@ -21,8 +22,10 @@ function nextPageFor (defendant: TheirDetails): RoutablePath {
 }
 
 function renderView (form: Form<PaymentDate>, res: express.Response) {
+  const claim: Claim = res.locals.user.claim
   res.render(PayBySetDatePaths.explanationPage.associatedView, {
-    form: form
+    form: form,
+    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(claim.claimData.defendant)
   })
 }
 
