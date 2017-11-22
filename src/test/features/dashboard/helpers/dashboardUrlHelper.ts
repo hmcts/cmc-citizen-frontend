@@ -17,8 +17,14 @@ describe('DashboardUrlHelper', () => {
         .to.equal(Paths.agreementReceiver.evaluateUri({ externalId: claim.externalId }))
 
     })
-    it('should return offer response page when there is no settlement', () => {
+    it('should return response task-list page when there is no response', () => {
       const claim = new Claim().deserialize(sampleClaimObj)
+
+      expect(DashboardUrlHelper.getStatusUrl(claim))
+        .to.equal(Paths.responseTaskListPage.evaluateUri({ externalId: claim.externalId }))
+    })
+    it('should return offer response page when there is a response and no settlement', () => {
+      const claim = new Claim().deserialize({ ...sampleClaimObj, ...sampleDefendantResponseObj })
 
       expect(DashboardUrlHelper.getStatusUrl(claim))
         .to.equal(Paths.offerResponsePage.evaluateUri({ externalId: claim.externalId }))
