@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths } from 'response/paths'
+import { Paths, StatementOfMeansPaths } from 'response/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'app/forms/form'
@@ -10,6 +10,16 @@ import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { FormValidator } from 'forms/validation/formValidator'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
+import { RoutablePath } from 'common/router/routablePath'
+import { FeatureToggles } from 'utils/featureToggles'
+
+function nextPage (): RoutablePath {
+  if (FeatureToggles.isEnabled('statementOfMeans')) {
+    return StatementOfMeansPaths.startPage
+  } else {
+    return Paths.taskListPage
+  }
+}
 
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
   const user: User = res.locals.user
@@ -46,6 +56,6 @@ export default express.Router()
           await new DraftService().save(user.responseDraft, user.bearerToken)
 
           const { externalId } = req.params
-          res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
+          res.redirect(nextPage().evaluateUri({ externalId: externalId }))
         }
       }))

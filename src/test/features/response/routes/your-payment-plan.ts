@@ -6,7 +6,7 @@ import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 
-import { Paths as Paths } from 'response/paths'
+import { Paths, StatementOfMeansPaths } from 'response/paths'
 
 import { app } from '../../../../main/app'
 
@@ -17,7 +17,7 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const defencePaymentPlanPage = Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId })
-const taskListPage = Paths.taskListPage.evaluateUri({ externalId: externalId })
+const statementOfMeansStartPage = StatementOfMeansPaths.startPage.evaluateUri({ externalId: externalId })
 
 describe('Defendant: payment page', () => {
   attachDefaultHooks(app)
@@ -106,7 +106,7 @@ describe('Defendant: payment page', () => {
       })
 
       context('when form is valid', async () => {
-        it('should redirect to confirmation page', async () => {
+        it('should redirect to statement of means start page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.resolveSave()
@@ -115,7 +115,7 @@ describe('Defendant: payment page', () => {
             .post(defencePaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
-            .expect(res => expect(res).to.be.redirect.toLocation(taskListPage))
+            .expect(res => expect(res).to.be.redirect.toLocation(statementOfMeansStartPage))
         })
       })
 

@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { PayBySetDatePaths, Paths } from 'response/paths'
+import { PayBySetDatePaths, Paths, StatementOfMeansPaths } from 'response/paths'
 import { Form } from 'forms/form'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { FormValidator } from 'forms/validation/formValidator'
@@ -8,6 +8,16 @@ import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
+import { FeatureToggles } from 'utils/featureToggles'
+import { RoutablePath } from 'common/router/routablePath'
+
+function nextPage (): RoutablePath {
+  if (FeatureToggles.isEnabled('statementOfMeans')) {
+    return StatementOfMeansPaths.startPage
+  } else {
+    return Paths.taskListPage
+  }
+}
 
 function renderView (form: Form<PaymentDate>, res: express.Response) {
   res.render(PayBySetDatePaths.explanationPage.associatedView, {
@@ -36,6 +46,6 @@ export default express.Router()
       } else {
         user.responseDraft.document.payBySetDate.explanation = form.model
         await new DraftService().save(user.responseDraft, user.bearerToken)
-        res.redirect(Paths.taskListPage.evaluateUri({ externalId: req.params.externalId }))
+        res.redirect(nextPage().evaluateUri({ externalId: req.params.externalId }))
       }
     }))

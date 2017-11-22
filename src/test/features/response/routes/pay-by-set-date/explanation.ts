@@ -6,7 +6,7 @@ import { attachDefaultHooks } from '../../../../routes/hooks'
 import { checkAuthorizationGuards } from '../checks/authorization-check'
 import { checkAlreadySubmittedGuard } from '../checks/already-submitted-check'
 
-import { PayBySetDatePaths, Paths } from 'response/paths'
+import { PayBySetDatePaths, StatementOfMeansPaths } from 'response/paths'
 
 import { app } from '../../../../../main/app'
 
@@ -110,7 +110,7 @@ describe('Pay by set date : explanation', () => {
             .expect(res => expect(res).to.be.successful.withText(ValidationErrors.EXPLAIN_WHY_YOU_CANT_PAY_NOW))
         })
 
-        it('should redirect to task list when data is valid and user provides a date within 28 days from today', async () => {
+        it('should redirect to task list when data is valid', async () => {
           draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.resolveSave()
 
@@ -120,7 +120,7 @@ describe('Pay by set date : explanation', () => {
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect
               .toLocation(
-                Paths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+                StatementOfMeansPaths.startPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )
         })
