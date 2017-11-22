@@ -11,6 +11,8 @@ import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { DefendantResponse } from 'claims/models/defendantResponse'
 import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
+import { Interest, InterestType } from 'claim/form/models/interest'
+import { InterestDate } from 'claims/models/interestDate'
 
 export class Claim implements Serializable<Claim> {
   id: number
@@ -30,6 +32,7 @@ export class Claim implements Serializable<Claim> {
   response: DefendantResponse
   defendantEmail: string
   settlement: Settlement
+  settlementReachedAt: Moment
 
   deserialize (input: any): Claim {
     if (input) {
@@ -60,6 +63,9 @@ export class Claim implements Serializable<Claim> {
       if (input.settlement) {
         this.settlement = new Settlement().deserialize(input.settlement)
       }
+      if (input.settlementReachedAt) {
+        this.settlementReachedAt = MomentFactory.parse(input.settlementReachedAt)
+      }
     }
     return this
   }
@@ -72,13 +78,27 @@ export class Claim implements Serializable<Claim> {
     return this.settlement.getDefendantOffer()
   }
 
-  get totalAmount (): number {
-    const interestRate = this.claimData.interest
-    const interestDate = this.claimData.interestDate
-    let claimAmount: number = this.claimData.amount.totalAmount()
-    const date = interestDate.type === InterestDateType.SUBMISSION ? this.createdAt : interestDate.date
+  get totalAmountTillToday (): number {
+    return this.calculateTotalAmountTillDate(MomentFactory.currentDateTime())
+  }
 
-    return claimAmount + this.claimData.paidFeeAmount + calculateInterest(claimAmount, interestRate, date)
+  get totalAmountTillDateOfIssue (): number {
+    return this.calculateTotalAmountTillDate(this.createdAt)
+  }
+
+  private calculateTotalAmountTillDate (toDate: Moment): number {
+    const claimAmount: number = this.claimData.amount.totalAmount()
+    const interestRate: Interest = this.claimData.interest
+
+    let interest: number = 0
+    if (interestRate.type !== InterestType.NO_INTEREST) {
+      const interestDate: InterestDate = this.claimData.interestDate
+      const fromDate: Moment = interestDate.type === InterestDateType.SUBMISSION ? this.createdAt : interestDate.date
+
+      interest = calculateInterest(claimAmount, interestRate, fromDate, toDate)
+    }
+
+    return claimAmount + this.claimData.paidFeeAmount + interest
   }
 
   // noinspection JSUnusedGlobalSymbols Called in the view

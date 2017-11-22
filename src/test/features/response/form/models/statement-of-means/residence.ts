@@ -33,6 +33,12 @@ describe('Residence', () => {
       expect(Residence.fromObject(undefined)).to.be.undefined
     })
 
+    it('should return instance with fields set to undefined if given empty object', () => {
+      const residence: Residence = Residence.fromObject({ })
+      expect(residence.type).to.be.undefined
+      expect(residence.housingDetails).to.be.undefined
+    })
+
     it('should return Residence instance build based on given form input', () => {
       const residence: Residence = Residence.fromObject({
         type: 'OTHER',

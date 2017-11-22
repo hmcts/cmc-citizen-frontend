@@ -14,7 +14,6 @@ export default express.Router()
     const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId, res.locals.user.id)
 
     res.render(Paths.defendantPage.associatedView, {
-      paths: Paths,
       isAfter4pm: isAfter4pm(),
       claim: claim,
       claimReceiptUri: Paths.claimReceiptReceiver.evaluateUri({ externalId: externalId }),

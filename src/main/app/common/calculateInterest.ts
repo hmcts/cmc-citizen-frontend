@@ -4,7 +4,7 @@ import { MomentFactory } from 'common/momentFactory'
 
 const STANDARD_RATE = 8.0
 
-function calculateRate (interest: Interest): number {
+function getRate (interest: Interest): number {
   if (interest.type === InterestType.NO_INTEREST) {
     return 0.00
   }
@@ -16,14 +16,8 @@ function calculateRate (interest: Interest): number {
   }
 }
 
-function calculateNumberOfDays (date: Moment): number {
-  const today = MomentFactory.currentDateTime()
-  return today.diff(date, 'days')
-}
+export function calculateInterest (amount: number, interest: Interest, interestFromDate: Moment, interestToDate: Moment = MomentFactory.currentDateTime()) {
+  const noOfDays = interestToDate.diff(interestFromDate, 'days')
 
-export function calculateInterest (amount: number, interest: Interest, interestDate: Moment) {
-  const rate = calculateRate(interest)
-  const noOfDays = calculateNumberOfDays(interestDate)
-
-  return parseFloat(((amount * noOfDays * rate) / (365 * 100)).toFixed(2))
+  return parseFloat(((amount * noOfDays * getRate(interest)) / (365 * 100)).toFixed(2))
 }

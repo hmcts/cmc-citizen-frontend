@@ -117,6 +117,32 @@ const sampleResponseDraftObj = {
   moreTimeNeeded: {
     option: MoreTimeNeededOption.YES
   },
+  statementOfMeans: {
+    residence: {},
+    employment: { isCurrentlyEmployed: true, selfEmployed: true },
+    employers: {},
+    selfEmployed: {}
+  },
+  defendantPaymentOption: {
+    option: {
+      value: 'INSTALMENTS'
+    }
+  },
+  defendantPaymentPlan: {
+    remainingAmount: 3685,
+    firstPayment: 100,
+    instalmentAmount: 100,
+    firstPaymentDate: {
+      year: 2019,
+      month: 1,
+      day: 1
+    },
+    paymentSchedule: {
+      value: 'EVERY_MONTH',
+      displayValue: 'every month'
+    },
+    text: 'I owe nothing'
+  },
   defendantDetails: {
     email: { address: 'example@example.com' } as Email,
     mobilePhone: { number: '01223344444' } as MobilePhone,
@@ -169,7 +195,7 @@ const sampleCCJDraftObj = {
   repaymentPlan: {
     remainingAmount: 3685,
     firstPayment: 100,
-    installmentAmount: 100,
+    instalmentAmount: 100,
     firstPaymentDate: {
       year: 2019,
       month: 1,

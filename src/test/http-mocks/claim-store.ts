@@ -58,7 +58,7 @@ export const sampleClaimObj = {
       }
     },
     interest: {
-      type: InterestType.NO_INTEREST
+      type: InterestType.STANDARD
     },
     reason: 'Because I can'
   },
@@ -79,7 +79,7 @@ export const sampleClaimObj = {
   }
 }
 
-const sampleDefendantResponseObj = {
+export const sampleDefendantResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: {
     type: 'OWE_NONE',
@@ -152,10 +152,10 @@ export function rejectIsClaimLinked () {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'Internal server error')
 }
 
-export function resolveRetrieveByLetterHolderId (referenceNumber: string, defendantId?: string): mock.Scope {
+export function resolveRetrieveByLetterHolderId (referenceNumber: string, claimOverride?: any): mock.Scope {
   return mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/letter/[0-9]+'))
-    .reply(HttpStatus.OK, { ...sampleClaimObj, referenceNumber: referenceNumber, defendantId: defendantId })
+    .reply(HttpStatus.OK, { ...sampleClaimObj, referenceNumber: referenceNumber, ...claimOverride })
 }
 
 export function rejectRetrieveByLetterHolderId (reason: string) {
@@ -266,14 +266,14 @@ export function rejectSaveCcjForUser (reason: string = 'HTTP error') {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function rejectRetrieveDefendantResponseCopy (reason: string) {
+export function rejectRetrieveDocument (reason: string) {
   mock(`${serviceBaseURL}/documents`)
-    .get(new RegExp('/defendantResponseCopy/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
+    .get(new RegExp('/.+/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveRetrieveDefendantResponseCopy () {
+export function resolveRetrieveDocument () {
   mock(`${serviceBaseURL}/documents`)
-    .get(new RegExp('/defendantResponseCopy/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
+    .get(new RegExp('/.+/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
     .reply(HttpStatus.OK, [])
 }

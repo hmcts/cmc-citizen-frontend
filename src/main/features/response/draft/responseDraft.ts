@@ -13,10 +13,14 @@ import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOf
 import { HowMuchPaid } from 'response/form/models/howMuchPaid'
 import { HowMuchOwed } from 'response/form/models/howMuchOwed'
 import { Timeline } from 'response/form/models/timeline'
+import { DefendantPaymentOption } from 'response/form/models/defendantPaymentOption'
+import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
+import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { Evidence } from 'response/form/models/evidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
+import { PayBySetDate } from 'response/draft/payBySetDate'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 
 export class ResponseDraft extends DraftDocument implements Serializable<ResponseDraft> {
@@ -33,6 +37,10 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   howMuchOwed?: HowMuchOwed
   rejectPartOfClaim?: RejectPartOfClaim
   rejectAllOfClaim?: RejectAllOfClaim
+  defendantPaymentOption: DefendantPaymentOption
+  defendantPaymentPlan?: DefendantPaymentPlan
+  paidAmount?: PaidAmount
+  payBySetDate?: PayBySetDate
   impactOfDispute?: ImpactOfDispute
   statementOfMeans?: StatementOfMeans
 
@@ -53,7 +61,12 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       }
       this.rejectPartOfClaim = new RejectPartOfClaim(input.rejectPartOfClaim && input.rejectPartOfClaim.option)
       this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
+      this.defendantPaymentOption = new DefendantPaymentOption().deserialize(input.defendantPaymentOption)
+      this.defendantPaymentPlan = new DefendantPaymentPlan().deserialize(input.defendantPaymentPlan)
+      this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
+      this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
+      this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
       this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
     }
     return this
@@ -71,24 +84,27 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       && RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).includes(this.rejectAllOfClaim.option)
   }
 
-  public requireHowMuchPaid (): boolean {
-    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission')) || !this.isResponsePopulated()) {
+  public isResponseFullyAdmitted (): boolean {
+    if (!toBoolean(config.get<boolean>('featureToggles.fullAdmission'))) {
       return false
     }
 
-    return this.response.type === ResponseType.OWE_SOME_PAID_NONE
-      && this.rejectPartOfClaim !== undefined
-      && this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
+    return this.isResponsePopulated() && this.response.type === ResponseType.OWE_ALL_PAID_NONE
   }
 
-  public requireHowMuchOwed (): boolean {
-    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission')) || !this.isResponsePopulated()) {
+  public isResponsePartiallyRejectedDueTo (option: String): boolean {
+    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission'))) {
       return false
     }
 
-    return this.response.type === ResponseType.OWE_SOME_PAID_NONE
+    if (option === undefined) {
+      throw new Error('Option is undefined')
+    }
+
+    return this.isResponsePopulated()
+      && this.response.type === ResponseType.OWE_SOME_PAID_NONE
       && this.rejectPartOfClaim !== undefined
-      && this.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED
+      && this.rejectPartOfClaim.option === option
   }
 
   public requireMediation (): boolean {

@@ -28,6 +28,8 @@ export class Paths {
   static readonly defendantHowMuchOwed = new RoutablePath(`${responsePath}/how-much-owed`)
   static readonly defenceRejectAllOfClaimPage = new RoutablePath(`${responsePath}/reject-all-of-claim`)
   static readonly defenceRejectPartOfClaimPage = new RoutablePath(`${responsePath}/reject-part-of-claim`)
+  static readonly defencePaymentOptionsPage = new RoutablePath(`${responsePath}/when-will-you-pay`)
+  static readonly defencePaymentPlanPage = new RoutablePath(`${responsePath}/your-payment-plan`)
   static readonly impactOfDisputePage = new RoutablePath(`${responsePath}/impact-of-dispute`)
 }
 
@@ -38,4 +40,16 @@ export class StatementOfMeansPaths {
   static readonly whatYouNeedPage = new RoutablePath(`${statementOfMeansPath}/what-you-need`)
   static readonly residencePage = new RoutablePath(`${statementOfMeansPath}/residence`)
   static readonly dependantsPage = new RoutablePath(`${statementOfMeansPath}/dependants`)
+  static readonly educationPage = new RoutablePath(`${statementOfMeansPath}/education`)
+  static readonly maintenancePage = new RoutablePath(`${statementOfMeansPath}/maintenance`)
+  static readonly employmentPage = new RoutablePath(`${statementOfMeansPath}/employment`)
+  static readonly employersPage = new RoutablePath(`${statementOfMeansPath}/employers`)
+  static readonly selfEmployedPage = new RoutablePath(`${statementOfMeansPath}/self-employed`)
+}
+
+const payBySetDatePath = `${responsePath}/pay-by-set-date`
+
+export class PayBySetDatePaths {
+  static readonly paymentDatePage: RoutablePath = new RoutablePath(`${payBySetDatePath}/payment-date`)
+  static readonly explanationPage = new RoutablePath(`${payBySetDatePath}/explanation`)
 }

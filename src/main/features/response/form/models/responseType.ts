@@ -19,6 +19,13 @@ export class ResponseType {
     ]
   }
 
+  static except (responseType: ResponseType): ResponseType[] {
+    if (responseType === undefined) {
+      throw new Error('Response type is required')
+    }
+    return ResponseType.all().filter(item => item !== responseType)
+  }
+
   static valueOf (value: string): ResponseType {
     return ResponseType.all().filter(item => item.value === value).pop()
   }

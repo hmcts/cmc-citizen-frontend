@@ -41,28 +41,28 @@ describe('HowMuchOwed', () => {
     it('should reject how much owed text with undefined', () => {
       const errors = validator.validateSync(new HowMuchOwed(300, undefined))
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED)
+      expectValidationError(errors, ValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED)
     })
 
     it('should reject how much owed text with text not defined', () => {
       const errors = validator.validateSync(new HowMuchOwed(300))
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED)
+      expectValidationError(errors, ValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED)
     })
 
     it('should reject how much owed text with empty string', () => {
       const errors = validator.validateSync(new HowMuchOwed(300, ''))
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED)
+      expectValidationError(errors, ValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED)
     })
 
     it('should reject how much owed text with white spaces string', () => {
       const errors = validator.validateSync(new HowMuchOwed(300, '    '))
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED)
+      expectValidationError(errors, ValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED)
     })
 
     it('should reject when amount not specified', () => {

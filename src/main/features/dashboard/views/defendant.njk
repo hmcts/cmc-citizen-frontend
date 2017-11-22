@@ -14,9 +14,9 @@
     <div class="column-two-thirds">
       <h2 class="heading-medium">{{ t('Claim status') }}</h2>
 
-      {{ responseStatusForDefendant(claim, url = paths.responseTaskListPage.evaluateUri({ externalId: claim.externalId }), isAfter4pm) }}
+      {{ responseStatusForDefendant(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
 
-      {% if featureToggles.offer %}
+      {% if featureToggles.offer and not claim.settlementReachedAt  %}
         <h2 class="heading-medium">{{ t('More options') }}</h2>
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
         <p>{{ t('You can still <a href="%s">make an offer</a> to settle the claim out of court. You will avoid a hearing and a County Court Judgment against you.',
@@ -37,7 +37,7 @@
           </li>
           <li>
             <strong class="bold">{{ t('Claim amount:') }}</strong>
-            <span class="block">{{ claim.totalAmount | numeral }}</span>
+            <span class="block">{{ claim.totalAmountTillToday | numeral }}</span>
           </li>
           <li>
             <strong class="bold">{{ t('Claim details:') }}</strong>

@@ -1,7 +1,6 @@
 import * as express from 'express'
 
 import { Paths } from 'dashboard/paths'
-import { Paths as OfferPaths } from 'offer/paths'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { Claim } from 'app/claims/models/claim'
 import { User } from 'app/idam/user'
@@ -24,7 +23,6 @@ export default express.Router()
       claimDraftSaved: claimDraftSaved,
       claimsAsDefendant: claimsAsDefendant,
       responseDraftSaved: responseDraftSaved,
-      isAfter4pm: isAfter4pm(),
-      responseOfferPage: OfferPaths.responsePage
+      isAfter4pm: isAfter4pm()
     })
   }))
