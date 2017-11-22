@@ -115,7 +115,7 @@ describe('Pay by set date : explanation', () => {
         });
 
         [PartyType.INDIVIDUAL, PartyType.SOLE_TRADER_OR_SELF_EMPLOYED].forEach((partyType) => {
-          it(`should redirect to statement of means start page if defendant is an ${partyType.value}`, async () => {
+          it(`should redirect to statement of means start page if defendant is ${partyType.value}`, async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId({
               claim: {
                 defendants: [
