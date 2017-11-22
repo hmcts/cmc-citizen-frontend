@@ -151,7 +151,7 @@ describe('Dependants', () => {
             expectValidationError(errors, GlobalValidationErrors.INTEGER_REQUIRED)
           })
 
-          it('between16and19', () => {
+          it('between16and19 is decimal', () => {
             const errors = validator.validateSync(new Dependants(true, new NumberOfChildren(0, 1, 1.2)))
 
             expect(errors.length).to.equal(1)

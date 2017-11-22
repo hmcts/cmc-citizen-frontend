@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, radioOption, textInput, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, radioOption, numericInput, saveAndContinueButton, errorSummary %}
 {% from "date.njk" import dateInput %}
 
 {% set title = 'Money claim' %}
@@ -39,9 +39,9 @@
             <p>{{ t('Enter number for each age group.') }}</p>
           {% endif %}
 
-            {{ textInput('Under 11', 'numberOfChildren[under11]', form) }}
-            {{ textInput('11 to 15', 'numberOfChildren[between11and15]', form) }}
-            {{ textInput('16 to 19', 'numberOfChildren[between16and19]', form) }}
+            {{ numericInput('Under 11', 'numberOfChildren[under11]', form) }}
+            {{ numericInput('11 to 15', 'numberOfChildren[between11and15]', form) }}
+            {{ numericInput('16 to 19', 'numberOfChildren[between16and19]', form) }}
 
           </div>
 
