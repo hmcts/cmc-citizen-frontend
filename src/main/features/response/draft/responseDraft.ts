@@ -16,11 +16,11 @@ import { Timeline } from 'response/form/models/timeline'
 import { DefendantPaymentOption } from 'response/form/models/defendantPaymentOption'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
-import { PayBySetDate } from 'ccj/form/models/payBySetDate'
 import { Evidence } from 'response/form/models/evidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
+import { PayBySetDate } from 'response/draft/payBySetDate'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 
 export class ResponseDraft extends DraftDocument implements Serializable<ResponseDraft> {
@@ -66,6 +66,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
+      this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
       this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
     }
     return this

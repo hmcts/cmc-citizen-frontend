@@ -1,21 +1,26 @@
 import { IsDefined, IsIn } from 'class-validator'
 import { Serializable } from 'models/serializable'
+import { ResponseType } from 'response/form/models/responseType'
+
+export class DefendantPaymentTypeLabels {
+  static readonly INSTALMENTS: string = 'By instalments'
+  static readonly FULL_ADMIT_BY_SPECIFIED_DATE: string = 'Full amount by a set date'
+  static readonly BY_SET_DATE: string = 'By a set date'
+}
 
 export class DefendantPaymentType {
-  static readonly INSTALMENTS = new DefendantPaymentType('INSTALMENTS', 'By instalments')
-  static readonly FULL_BY_SPECIFIED_DATE = new DefendantPaymentType('FULL_BY_SPECIFIED_DATE', 'Full amount on set date')
+  static readonly INSTALMENTS = new DefendantPaymentType('INSTALMENTS')
+  static readonly BY_SET_DATE = new DefendantPaymentType('BY_SET_DATE')
 
   readonly value: string
-  readonly displayValue: string
 
-  constructor (value: string, displayValue: string) {
+  constructor (value: string) {
     this.value = value
-    this.displayValue = displayValue
   }
 
   static all (): DefendantPaymentType[] {
     return [
-      DefendantPaymentType.FULL_BY_SPECIFIED_DATE,
+      DefendantPaymentType.BY_SET_DATE,
       DefendantPaymentType.INSTALMENTS
     ]
   }
@@ -24,6 +29,25 @@ export class DefendantPaymentType {
     return DefendantPaymentType.all()
       .filter(type => type.value === value)
       .pop()
+  }
+
+  displayValueFor (responseType: ResponseType): string {
+    switch (this.value) {
+      case DefendantPaymentType.INSTALMENTS.value:
+        return DefendantPaymentTypeLabels.INSTALMENTS
+      case DefendantPaymentType.BY_SET_DATE.value:
+        return this.bySetDateLabelFor(responseType)
+      default:
+        throw new Error('Unknown defendant payment option!')
+    }
+  }
+
+  private bySetDateLabelFor (responseType: ResponseType): string {
+    if (responseType.value === ResponseType.OWE_ALL_PAID_NONE.value) {
+      return DefendantPaymentTypeLabels.FULL_ADMIT_BY_SPECIFIED_DATE
+    } else {
+      return DefendantPaymentTypeLabels.BY_SET_DATE
+    }
   }
 }
 
@@ -58,5 +82,12 @@ export class DefendantPaymentOption implements Serializable <DefendantPaymentOpt
       this.option = DefendantPaymentType.valueOf(input.option.value)
     }
     return this
+  }
+
+  isOfType (defendantPaymentType: DefendantPaymentType): boolean {
+    if (!this.option) {
+      return false
+    }
+    return this.option.value === defendantPaymentType.value
   }
 }

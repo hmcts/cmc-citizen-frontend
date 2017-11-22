@@ -125,14 +125,13 @@ const sampleResponseDraftObj = {
   },
   defendantPaymentOption: {
     option: {
-      value: 'INSTALMENTS',
-      displayValue: 'By instalments'
+      value: 'INSTALMENTS'
     }
   },
   defendantPaymentPlan: {
     remainingAmount: 3685,
     firstPayment: 100,
-    installmentAmount: 100,
+    instalmentAmount: 100,
     firstPaymentDate: {
       year: 2019,
       month: 1,
@@ -196,7 +195,7 @@ const sampleCCJDraftObj = {
   repaymentPlan: {
     remainingAmount: 3685,
     firstPayment: 100,
-    installmentAmount: 100,
+    instalmentAmount: 100,
     firstPaymentDate: {
       year: 2019,
       month: 1,
