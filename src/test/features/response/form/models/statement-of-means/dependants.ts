@@ -116,15 +116,43 @@ describe('Dependants', () => {
             expectValidationError(errors, ValidationErrors.ENTER_AT_LEAST_ONE)
           })
 
-          it('one of other fields has < 0 given', () => {
+          it('under11 is < 0', () => {
             const errors = validator.validateSync(new Dependants(true, new NumberOfChildren(-1, 2, 0)))
 
             expect(errors.length).to.equal(1)
             expectValidationError(errors, GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED)
           })
 
-          it('one of other fields has not integer given', () => {
+          it('between11and15 is < 0', () => {
+            const errors = validator.validateSync(new Dependants(true, new NumberOfChildren(1, -1, 0)))
+
+            expect(errors.length).to.equal(1)
+            expectValidationError(errors, GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED)
+          })
+
+          it('between16and19 is < 0', () => {
+            const errors = validator.validateSync(new Dependants(true, new NumberOfChildren(1, 1, -1)))
+
+            expect(errors.length).to.equal(1)
+            expectValidationError(errors, GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED)
+          })
+
+          it('under11 is decimal', () => {
+            const errors = validator.validateSync(new Dependants(true, new NumberOfChildren(1.1, 0, 0)))
+
+            expect(errors.length).to.equal(1)
+            expectValidationError(errors, GlobalValidationErrors.INTEGER_REQUIRED)
+          })
+
+          it('between11and15 is decimal', () => {
             const errors = validator.validateSync(new Dependants(true, new NumberOfChildren(0, 1.5, 0)))
+
+            expect(errors.length).to.equal(1)
+            expectValidationError(errors, GlobalValidationErrors.INTEGER_REQUIRED)
+          })
+
+          it('between16and19', () => {
+            const errors = validator.validateSync(new Dependants(true, new NumberOfChildren(0, 1, 1.2)))
 
             expect(errors.length).to.equal(1)
             expectValidationError(errors, GlobalValidationErrors.INTEGER_REQUIRED)

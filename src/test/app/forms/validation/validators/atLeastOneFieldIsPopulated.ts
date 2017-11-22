@@ -1,7 +1,6 @@
 import { expect } from 'chai'
 
 import { AtLeastOneFieldIsPopulatedConstraint } from 'forms/validation/validators/atLeastOneFieldIsPopulated'
-import { NumberOfChildren } from 'response/form/models/statement-of-means/numberOfChildren'
 
 describe('AtLeastOneFieldIsPopulatedConstraint', () => {
   const constraint: AtLeastOneFieldIsPopulatedConstraint = new AtLeastOneFieldIsPopulatedConstraint()
@@ -14,27 +13,47 @@ describe('AtLeastOneFieldIsPopulatedConstraint', () => {
         expect(constraint.validate(undefined)).to.equal(true)
       })
 
-      it('all fields are populated (INVALID values)', () => {
-        expect(constraint.validate(new NumberOfChildren(-1, ' ' as any, 1.1))).to.be.eq(true)
+      it('all fields are populated with positive numbers', () => {
+        expect(constraint.validate({ a: 1, b: 100, c: 1.1 })).to.be.eq(true)
       })
 
-      it('all fields are populated', () => {
-        expect(constraint.validate(new NumberOfChildren(1, 1, 1))).to.be.eq(true)
+      it('all fields are populated with negative numbers', () => {
+        expect(constraint.validate({ a: -1, b: -100, c: -1.1 })).to.be.eq(true)
+      })
+
+      it('all fields are populated with blank strings', () => {
+        expect(constraint.validate({ a: '\t', b: '\n', c: '    ' })).to.be.eq(true)
+      })
+
+      it('all fields are populated with nested objects', () => {
+        expect(constraint.validate({ a: {}, b: [] })).to.be.eq(true)
+      })
+
+      it('only one field is populated', () => {
+        expect(constraint.validate({ a: 1, b: undefined, c: '' })).to.be.eq(true)
+      })
+
+      it('object has keys with special characters in name', () => {
+        expect(constraint.validate({ 'thi%s*my^^key': 1, b: undefined, c: '' })).to.be.eq(true)
       })
     })
 
     describe('should return false when ', () => {
 
-      it('given empty strings', () => {
-        expect(constraint.validate(new NumberOfChildren('' as any, '' as any, '' as any))).to.equal(false)
+      it('empty strings given', () => {
+        expect(constraint.validate({ a: '', b: '', c: '' })).to.equal(false)
       })
 
       it('undefined values given', () => {
-        expect(constraint.validate(new NumberOfChildren(undefined, undefined, undefined))).to.equal(false)
+        expect(constraint.validate({ a: undefined, b: undefined })).to.equal(false)
       })
 
       it('all field populated with zeros', () => {
-        expect(constraint.validate(new NumberOfChildren(0, 0, 0))).to.equal(false)
+        expect(constraint.validate({ a: 0, b: 0, c: 0 })).to.equal(false)
+      })
+
+      it('empty object', () => {
+        expect(constraint.validate({})).to.be.eq(false)
       })
     })
   })
