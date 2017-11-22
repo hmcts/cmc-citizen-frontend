@@ -8,18 +8,22 @@ import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { RoutablePath } from 'common/router/routablePath'
 import { Dependants } from 'response/form/models/statement-of-means/dependants'
+import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 
 const page: RoutablePath = Paths.dependantsPage
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(page.uri,
+  .get(
+    page.uri,
+    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
       res.render(page.associatedView, { form: new Form(user.responseDraft.document.statementOfMeans.dependants) })
     })
   .post(
     page.uri,
+    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     FormValidator.requestHandler(Dependants, Dependants.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<Dependants> = req.body

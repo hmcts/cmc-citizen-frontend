@@ -7,6 +7,7 @@ import { Residence } from 'response/form/models/statement-of-means/residence'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
+import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 
 function renderView (form: Form<Residence>, res: express.Response): void {
   res.render(Paths.residencePage.associatedView, {
@@ -16,11 +17,16 @@ function renderView (form: Form<Residence>, res: express.Response): void {
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.residencePage.uri, (req: express.Request, res: express.Response) => {
-    const user: User = res.locals.user
-    renderView(new Form(user.responseDraft.document.statementOfMeans.residence), res)
-  })
-  .post(Paths.residencePage.uri,
+  .get(
+    Paths.residencePage.uri,
+    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
+    (req: express.Request, res: express.Response) => {
+      const user: User = res.locals.user
+      renderView(new Form(user.responseDraft.document.statementOfMeans.residence), res)
+    })
+  .post(
+    Paths.residencePage.uri,
+    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     FormValidator.requestHandler(Residence, Residence.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<Residence> = req.body
