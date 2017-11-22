@@ -33,7 +33,7 @@ describe('ResponseDraft', () => {
       expect(responseDraftModel.moreTimeNeeded.option).to.eql(MoreTimeNeededOption.YES)
       expect(responseDraftModel.isMoreTimeRequested()).to.be.eql(true)
       expect(responseDraftModel.impactOfDispute.text).to.equal('This dispute has affected me badly, I cried')
-      expect(responseDraftModel.statementOfMeans.residence.type.value).to.equal(ResidenceType.OTHER.value)
+      expect(responseDraftModel.statementOfMeans.residence.type).to.eql(ResidenceType.OTHER)
       assertPaymentDateEquals(responseDraftModel.payBySetDate.paymentDate, inputData.payBySetDate.paymentDate)
       expect(responseDraftModel.payBySetDate.explanation.text).to.equal(inputData.payBySetDate.explanation.text)
     })

@@ -28,4 +28,19 @@ describe('ResidenceType', () => {
       expect(ResidenceType.valueOf(undefined)).to.be.undefined
     })
   })
+
+  describe('except', () => {
+    it('should throw error where no exception is provided', () => {
+      expect(() => ResidenceType.except(undefined)).to.throw(Error)
+    })
+
+    it('should return all items except for the provided one', () => {
+      const filtered: ResidenceType[] = ResidenceType.except(ResidenceType.OTHER)
+      expect(filtered).to.contain(ResidenceType.OWN_HOME)
+      expect(filtered).to.contain(ResidenceType.JOINT_OWN_HOME)
+      expect(filtered).to.contain(ResidenceType.PRIVATE_RENTAL)
+      expect(filtered).to.contain(ResidenceType.COUNCIL_OR_HOUSING_ASSN_HOME)
+      expect(filtered).not.to.contain(ResidenceType.OTHER)
+    })
+  })
 })

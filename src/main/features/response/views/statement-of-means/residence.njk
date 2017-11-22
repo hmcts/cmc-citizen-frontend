@@ -11,7 +11,7 @@
       <form
         method="POST"
         class="analytics-submit-event-trigger"
-        data-event-action="Response: Statement of means: Select defendant response option"
+        data-event-action="SoM: Where are you living?"
         data-event-label-from="type"
         novalidate>
 
@@ -23,18 +23,16 @@
             <legend class="visually-hidden">{{ t('Where are you living?') }}</legend>
             {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
 
-            {% for type in ResidenceType.all() %}
-              {% if type.value !== ResidenceType.OTHER.value %}
-                {{ radioOption(
-                  form = form,
-                  name = 'type',
-                  value = type.value,
-                  label = type.displayValue,
-                  bold = false,
-                  hint = '',
-                  checked = form.valueFor('type').value == type.value
-                ) }}
-              {% endif %}
+            {% for type in ResidenceType.except(ResidenceType.OTHER) %}
+              {{ radioOption(
+                form = form,
+                name = 'type',
+                value = type.value,
+                label = type.displayValue,
+                bold = false,
+                hint = '',
+                checked = form.valueFor('type').value == type.value
+              ) }}
             {% endfor %}
             <div class="multiple-choice" data-target="housing-details">
               <input id="typeOTHER" type="radio" name="type" value="{{ ResidenceType.OTHER.value }}" {% if form.valueFor('type').value == ResidenceType.OTHER.value %} checked {% endif %}>

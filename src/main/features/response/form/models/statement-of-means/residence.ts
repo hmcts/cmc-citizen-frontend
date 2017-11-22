@@ -32,7 +32,7 @@ export class Residence implements Serializable<Residence> {
     const type: ResidenceType = ResidenceType.valueOf(input.type)
     return new Residence(
       type,
-      (type && type.value === ResidenceType.OTHER.value) ? input.housingDetails : undefined
+      type === ResidenceType.OTHER ? input.housingDetails : undefined
     )
   }
 
