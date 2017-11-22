@@ -30,7 +30,7 @@ describe('Defendant response copy', () => {
 
       it('should return 500 and render error page when cannot download the response copy', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        claimStoreServiceMock.rejectRetrieveDefendantResponseCopy('Something went wrong')
+        claimStoreServiceMock.rejectRetrieveDocument('Something went wrong')
 
         await request(app)
           .get(ClaimPaths.defendantResponseCopy.evaluateUri({ externalId: externalId }))
@@ -49,7 +49,7 @@ describe('Defendant response copy', () => {
 
       it('should return receipt when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        claimStoreServiceMock.resolveRetrieveDefendantResponseCopy()
+        claimStoreServiceMock.resolveRetrieveDocument()
 
         await request(app)
           .get(ClaimPaths.defendantResponseCopy.evaluateUri({ externalId: externalId }))

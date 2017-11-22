@@ -1,0 +1,44 @@
+{% extends "layout.njk" %}
+
+{% set title = 'Money claim' %}
+{% set heading = 'When will you pay?' %}
+
+{% from "form.njk" import saveAndContinueButton, csrfProtection, radioGroup, radioGroupWithHintPanel, errorSummary %}
+
+{% block content %}
+  <div class="column-two-thirds">
+
+    <form method="post"
+          class="analytics-submit-event-trigger"
+          data-event-action="Defendant: Select payment option"
+          data-event-label-from="option"
+          novalidate>
+      {{ csrfProtection(csrf) }}
+
+      {{
+      radioGroupWithHintPanel(
+        form = form,
+        label = 'I would like the defendant to be ordered to pay:',
+        name = 'option',
+        options = [
+          {
+            label: DefendantPaymentType.FULL_BY_SPECIFIED_DATE.displayValue,
+            value: DefendantPaymentType.FULL_BY_SPECIFIED_DATE.value,
+            checked: (form.valueFor('option') === DefendantPaymentType.FULL_BY_SPECIFIED_DATE)
+          },
+          {
+            label: DefendantPaymentType.INSTALMENTS.displayValue,
+            value: DefendantPaymentType.INSTALMENTS.value,
+            checked: (form.valueFor('option') === DefendantPaymentType.INSTALMENTS),
+            hint: t('You will need to give details of your finances to {{ claimantFullName }} to explain why.',
+                    { claimantFullName: user.claim.claimData.claimant.name })
+          }
+        ]
+      )
+      }}
+
+      {{ saveAndContinueButton() }}
+    </form>
+
+  </div>
+{% endblock %}

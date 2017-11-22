@@ -44,18 +44,20 @@
             </tr>
           {% endif %}
           {% for claim in claimsAsClaimant %}
+            {% set statusUrl = DashboardUrlHelper.getStatusUrl(claim) %}
+
             <tr class="claims default mobile-table">
               <td><a href="/dashboard/{{ claim.externalId }}/claimant">{{ claim.claimNumber }}</a></td>
               <td>{{ claim.claimData.defendant.name }}</td>
               <td>{{ claim.totalAmountTillToday | numeral }}</td>
               <td class="mobile-hide">
-                {{ responseStatusForClaimant(claim, responseOfferPage.evaluateUri({ externalId: claim.externalId })) }}
+                {{ responseStatusForClaimant(claim, statusUrl) }}
               </td>
             </tr>
             <tr>
               <td colspan="3" class="mobile-table-status">
                 {{ t('Status: ') }}
-                {{ responseStatusForClaimant(claim, responseOfferPage.evaluateUri({ externalId: claim.externalId })) }}
+                {{ responseStatusForClaimant(claim, statusUrl) }}
               </td>
             </tr>
           {% endfor %}
@@ -89,23 +91,20 @@
             </tr>
           {% endif %}
           {% for claim in claimsAsDefendant %}
-            {% if claim.respondedAt or claim.countyCourtJudgmentRequestedAt %}
-              {% set url = paths.defendantPage.evaluateUri({ externalId: claim.externalId }) %}
-            {% else %}
-              {% set url = paths.responseTaskListPage.evaluateUri({ externalId: claim.externalId }) %}
-            {% endif %}
+            {% set statusUrl = DashboardUrlHelper.getStatusUrl(claim) %}
+            {% set nextPageUrl = DashboardUrlHelper.getNextResponseUrl(claim) %}
 
             <tr class="mobile-table">
-              <td><a href="{{ url }}">{{ claim.claimNumber }}</a></td>
+              <td><a href="{{ nextPageUrl }}">{{ claim.claimNumber }}</a></td>
               <td>{{ claim.claimData.claimant.name }}</td>
               <td>{{ claim.totalAmountTillToday | numeral }}</td>
               <td class="mobile-hide">
-                {{ responseStatusForDefendant(claim, url, isAfter4pm) }}
+                {{ responseStatusForDefendant(claim, statusUrl, isAfter4pm) }}
               </td>
             </tr>
             <tr>
               <td colspan="3" class="mobile-table-status">
-                {{ t('Status: ') }} {{ responseStatusForDefendant(claim, url, isAfter4pm) }}
+                {{ t('Status: ') }} {{ responseStatusForDefendant(claim, statusUrl, isAfter4pm) }}
               </td>
             </tr>
           {% endfor %}

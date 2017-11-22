@@ -12,6 +12,7 @@ import * as toBoolean from 'to-boolean'
 import { NUMBER_FORMAT } from 'app/utils/numberFormatter'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { SignatureType } from 'app/common/signatureType'
 import { ResponseType } from 'response/form/models/responseType'
 import { YesNoOption } from 'models/yesNoOption'
@@ -20,6 +21,8 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { StatementType } from 'offer/form/models/statementType'
 import { InterestDateType } from 'app/common/interestDateType'
+import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
+import { DashboardUrlHelper } from 'dashboard/helpers/dashboardUrlHelper'
 const packageDotJson = require('../../../../package.json')
 
 const appAssetPaths = {
@@ -77,6 +80,8 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('featureToggles', this.convertPropertiesToBoolean(config.get('featureToggles')))
     nunjucksEnv.addGlobal('RejectAllOfClaimOption', RejectAllOfClaimOption)
     nunjucksEnv.addGlobal('RejectPartOfClaimOption', RejectPartOfClaimOption)
+    nunjucksEnv.addGlobal('DefendantPaymentType', DefendantPaymentType)
+    nunjucksEnv.addGlobal('DefendantPaymentOption', DefendantPaymentOption)
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('ResponseType', ResponseType)
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)
@@ -85,6 +90,9 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('StatementType', StatementType)
     nunjucksEnv.addGlobal('NotEligibleReason', NotEligibleReason)
     nunjucksEnv.addGlobal('InterestDateType', InterestDateType)
+    nunjucksEnv.addGlobal('PaymentSchedule', PaymentSchedule)
+    nunjucksEnv.addGlobal('DashboardUrlHelper', DashboardUrlHelper)
+
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

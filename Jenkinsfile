@@ -5,6 +5,7 @@ import uk.gov.hmcts.Packager
 import uk.gov.hmcts.RPMTagger
 import uk.gov.hmcts.cmc.integrationtests.IntegrationTests
 import uk.gov.hmcts.cmc.smoketests.SmokeTests
+import uk.gov.hmcts.InfluxDbPublisher
 
 //noinspection GroovyAssignabilityCheck this is how Jenkins does it
 properties(
@@ -25,6 +26,13 @@ Packager packager = new Packager(this, 'cmc')
 
 SmokeTests smokeTests = new SmokeTests(this)
 IntegrationTests integrationTests = new IntegrationTests(env, this)
+
+InfluxDbPublisher influxDbPublisher = new InfluxDbPublisher(
+  this,
+  currentBuild,
+  'cmc'
+)
+
 String channel = '#cmc-tech-notification'
 
 timestamps {
@@ -159,6 +167,8 @@ timestamps {
         } catch (Throwable err) {
           notifyBuildFailure channel: channel
           throw err
+        } finally {
+          influxDbPublisher.publish()
         }
       }
     }

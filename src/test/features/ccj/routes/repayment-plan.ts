@@ -127,7 +127,7 @@ describe('CCJ: repayment page', () => {
             .post(repaymentPlanPage)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ signed: undefined })
-            .expect(res => expect(res).to.be.successful.withText('Enter a valid amount of first payment', 'div class="error-summary"'))
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid payment amount', 'div class="error-summary"'))
         })
       })
     })

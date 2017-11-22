@@ -16,8 +16,7 @@
     <div class="column-two-thirds">
       <div>
         <h2 class="heading-medium">{{ t('Claim status') }}</h2>
-
-        {{ responseStatusForClaimant(claim, responseOfferPage.evaluateUri({ externalId: claim.externalId })) }}
+        {{ responseStatusForClaimant(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
 
         {% if claim.eligibleForCCJ %}
           <p>{{ t('You can only ask for a CCJ at this stage if the defendant has not responded to your claim.') }}</p>
