@@ -1,45 +1,47 @@
 {% extends "layout.njk" %}
 
 {% set title = 'Money claim' %}
-{% set heading = formLabel %}
 
 {% from "form.njk" import saveAndContinueButton, csrfProtection, radioGroup, radioGroupWithHintPanel, errorSummary %}
 
 {% block content %}
-  <div class="column-two-thirds">
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ t(formLabel) }}</h1>
 
-    <form method="post"
-          class="analytics-submit-event-trigger"
-          data-event-action="Defendant: Select payment option"
-          data-event-label-from="option"
-          novalidate>
-      {{ csrfProtection(csrf) }}
+      <form method="post"
+            class="analytics-submit-event-trigger"
+            data-event-action="Defendant: Select payment option"
+            data-event-label-from="option"
+            novalidate>
+        {{ csrfProtection(csrf) }}
 
-      {{
-      radioGroupWithHintPanel(
-        form = form,
-        label = formLabel,
-        labelForScreenReadersOnly = true,
-        name = 'option',
-        options = [
-          {
-            label: DefendantPaymentType.BY_SET_DATE.displayValueFor(responseType),
-            value: DefendantPaymentType.BY_SET_DATE.value,
-            checked: (form.valueFor('option') === DefendantPaymentType.BY_SET_DATE)
-          },
-          {
-            label: DefendantPaymentType.INSTALMENTS.displayValueFor(responseType),
-            value: DefendantPaymentType.INSTALMENTS.value,
-            checked: (form.valueFor('option') === DefendantPaymentType.INSTALMENTS),
-            hint: t('You will need to give details of your finances to {{ claimantFullName }} to explain why.',
-                    { claimantFullName: user.claim.claimData.claimant.name })
-          }
-        ]
-      )
-      }}
+        {{
+        radioGroupWithHintPanel(
+          form = form,
+          label = formLabel,
+          labelForScreenReadersOnly = true,
+          name = 'option',
+          options = [
+            {
+              label: DefendantPaymentType.BY_SET_DATE.displayValueFor(responseType),
+              value: DefendantPaymentType.BY_SET_DATE.value,
+              checked: (form.valueFor('option') === DefendantPaymentType.BY_SET_DATE)
+            },
+            {
+              label: DefendantPaymentType.INSTALMENTS.displayValueFor(responseType),
+              value: DefendantPaymentType.INSTALMENTS.value,
+              checked: (form.valueFor('option') === DefendantPaymentType.INSTALMENTS),
+              hint: t('You will need to give details of your finances to {{ claimantFullName }} to explain why.',
+                      { claimantFullName: user.claim.claimData.claimant.name })
+            }
+          ]
+        )
+        }}
 
-      {{ saveAndContinueButton() }}
-    </form>
+        {{ saveAndContinueButton() }}
+      </form>
 
+    </div>
   </div>
 {% endblock %}

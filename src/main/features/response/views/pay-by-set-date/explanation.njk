@@ -2,11 +2,12 @@
 {% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary, textArea %}
 
 {% set title = 'Money claim' %}
-{% set heading = 'Explain why you can’t pay now' %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
+      <h1 class="heading-large">{{ t('Explain why you can’t pay now') }}</h1>
+
       <form method="post">
         {{ csrfProtection(csrf) }}
 
