@@ -2935,9 +2935,9 @@ husky@^0.14.3:
     normalize-path "^1.0.0"
     strip-indent "^2.0.0"
 
-i18next-conv@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/i18next-conv/-/i18next-conv-5.0.0.tgz#d8fcd9ea69af7f2cf110fb69f64927101b89b2c7"
+i18next-conv@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/i18next-conv/-/i18next-conv-6.0.0.tgz#875a27bfb069db894f7b0a1484e0052100bc9383"
   dependencies:
     bluebird "^3.5.1"
     chalk "^2.1.0"
@@ -2945,8 +2945,6 @@ i18next-conv@^5.0.0:
     gettext-parser "^1.3.0"
     mkdirp "^0.5.1"
     node-gettext "^2.0.0"
-    object-assign "^4.1.1"
-    pkginfo "^0.4.1"
 
 i18next-express-middleware@^1.0.2:
   version "1.0.7"
@@ -4935,10 +4933,6 @@ pkg-dir@^1.0.0:
   resolved "https://registry.yarnpkg.com/pkg-dir/-/pkg-dir-1.0.0.tgz#7a4b508a8d5bb2d629d447056ff4e9c9314cf3d4"
   dependencies:
     find-up "^1.0.0"
-
-pkginfo@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/pkginfo/-/pkginfo-0.4.1.tgz#b5418ef0439de5425fc4995042dced14fb2a84ff"
 
 platform@1.3.4:
   version "1.3.4"
