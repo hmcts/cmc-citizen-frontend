@@ -1,4 +1,4 @@
-import { IsDefined, IsInt, Min, ValidateIf } from 'class-validator'
+import { IsDefined, IsInt, IsPositive, ValidateIf } from 'class-validator'
 
 import { Serializable } from 'models/serializable'
 import { toNumberOrUndefined } from 'common/utils/numericUtils'
@@ -13,7 +13,7 @@ export class Maintenance implements Serializable<Maintenance> {
   @ValidateIf(o => o.option === true)
   @IsDefined({ message: GlobalValidationErrors.NUMBER_REQUIRED })
   @IsInt({ message: GlobalValidationErrors.INTEGER_REQUIRED })
-  @Min(1, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
+  @IsPositive({ message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
   value: number
 
   constructor (option?: boolean, value?: number) {
