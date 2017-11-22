@@ -109,41 +109,39 @@ describe('Dependants', () => {
 
         context('should reject when', () => {
 
-          it('one of other field is not given', () => {
-            const errors = validator.validateSync(new Dependants(true, 10, 10, undefined))
-
-            expect(errors.length).to.equal(1)
-            expectValidationError(errors, ValidationErrors.BETWEEN_16_AND_19_REQUIRED)
-          })
-
           it('all are not given', () => {
             const errors = validator.validateSync(new Dependants(true, undefined, undefined, undefined))
 
-            expect(errors.length).to.equal(3)
-            expectValidationError(errors, ValidationErrors.UNDER_11_REQUIRED)
-            expectValidationError(errors, ValidationErrors.BETWEEN_11_AND_15_REQUIRED)
-            expectValidationError(errors, ValidationErrors.BETWEEN_16_AND_19_REQUIRED)
+            expect(errors.length).to.equal(1)
+            expectValidationError(errors, ValidationErrors.ENTER_AT_LEAST_ONE)
+          })
+
+          it('all field set 0', () => {
+            const errors = validator.validateSync(new Dependants(true, 0, 0, 0))
+
+            expect(errors.length).to.equal(1)
+            expectValidationError(errors, ValidationErrors.ENTER_AT_LEAST_ONE)
           })
 
           it('one of other fields has < 0 given', () => {
             const errors = validator.validateSync(new Dependants(true, -1, 2, 0))
 
             expect(errors.length).to.equal(1)
-            expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
+            expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
           })
 
           it('one of other fields has not integer given', () => {
             const errors = validator.validateSync(new Dependants(true, 0, 1.5, 0))
 
             expect(errors.length).to.equal(1)
-            expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
+            expectValidationError(errors, GlobalValidationErrors.INTEGER_REQUIRED)
           })
         })
 
         context('should accept when', () => {
 
-          it('all field set 0', () => {
-            const errors = validator.validateSync(new Dependants(true, 0, 0, 0))
+          it('one of other field is not given', () => {
+            const errors = validator.validateSync(new Dependants(true, 10, 10, undefined))
 
             expect(errors.length).to.equal(0)
           })

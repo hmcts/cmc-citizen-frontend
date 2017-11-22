@@ -6,9 +6,7 @@ import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 export class ValidationErrors {
-  static readonly UNDER_11_REQUIRED: string = 'Enter a number of children under 11'
-  static readonly BETWEEN_11_AND_15_REQUIRED: string = 'Enter a number of children between 11 and 15'
-  static readonly BETWEEN_16_AND_19_REQUIRED: string = 'Enter a number of children between 19 and 19'
+  static readonly ENTER_AT_LEAST_ONE: string = 'Enter a  number for at least one field'
 }
 
 export class Dependants implements Serializable<Dependants> {
@@ -16,22 +14,23 @@ export class Dependants implements Serializable<Dependants> {
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
   hasAnyChildren: boolean
 
-  @ValidateIf(o => o.hasAnyChildren === true)
-  @IsDefined({ message: ValidationErrors.UNDER_11_REQUIRED })
-  @IsInt({ message: GlobalValidationErrors.NUMBER_REQUIRED })
-  @Min(0, { message: GlobalValidationErrors.NUMBER_REQUIRED })
+  @ValidateIf(o => o.hasAnyChildren === true && !o.under11 && !o.between11and15 && !o.between16and19)
+  @IsInt({ message: ValidationErrors.ENTER_AT_LEAST_ONE })
+  crossFieldError: number
+
+  @ValidateIf(o => o.hasAnyChildren === true && o.under11 !== undefined)
+  @IsInt({ message: GlobalValidationErrors.INTEGER_REQUIRED })
+  @Min(0, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
   under11: number
 
-  @ValidateIf(o => o.hasAnyChildren === true)
-  @IsDefined({ message: ValidationErrors.BETWEEN_11_AND_15_REQUIRED })
-  @IsInt({ message: GlobalValidationErrors.NUMBER_REQUIRED })
-  @Min(0, { message: GlobalValidationErrors.NUMBER_REQUIRED })
+  @ValidateIf(o => o.hasAnyChildren === true && o.between11and15 !== undefined)
+  @IsInt({ message: GlobalValidationErrors.INTEGER_REQUIRED })
+  @Min(0, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
   between11and15: number
 
-  @ValidateIf(o => o.hasAnyChildren === true)
-  @IsDefined({ message: ValidationErrors.BETWEEN_16_AND_19_REQUIRED })
-  @IsInt({ message: GlobalValidationErrors.NUMBER_REQUIRED })
-  @Min(0, { message: GlobalValidationErrors.NUMBER_REQUIRED })
+  @ValidateIf(o => o.hasAnyChildren === true && o.between16and19 !== undefined)
+  @IsInt({ message: GlobalValidationErrors.INTEGER_REQUIRED })
+  @Min(0, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
   between16and19: number
 
   constructor (hasAnyChildren?: boolean, under11?: number, between11and15?: number, between16and19?: number) {

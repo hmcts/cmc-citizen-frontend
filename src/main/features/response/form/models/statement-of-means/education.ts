@@ -6,8 +6,7 @@ import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/val
 import { IsLessThanOrEqualTo } from 'forms/validation/validators/isLessThanOrEqualTo'
 
 export class ValidationErrors {
-  static readonly INVALID_NUMBER_OF_CHILDREN: string =
-    'You can’t have more children aged 16-19 than you gave on previous page'
+  static readonly INVALID_NUMBER_OF_CHILDREN: string = 'Number can’t be higher than on previous page'
 }
 
 export class Education implements Serializable<Education> {

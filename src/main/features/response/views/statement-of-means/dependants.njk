@@ -26,9 +26,19 @@
             radioOption(form = form, label = 'Yes', name = 'hasAnyChildren', value = 'true', checked = form.valueFor('hasAnyChildren') === true)
           }}
 
-          <div class="form-group panel panel-border-narrow js-hidden" id="hasAnyChildren-true" aria-hidden="false">
+          {% set atLeastOfNumberShouldBeEnteredError = form.errorFor('crossFieldError') %}
 
+          <div class="form-group panel panel-border-narrow js-hidden {% if atLeastOfNumberShouldBeEnteredError %} form-group-error {% endif %}"
+               id="hasAnyChildren-true" aria-hidden="false">
+
+          {% if atLeastOfNumberShouldBeEnteredError %}
+            <p id="crossFieldError[label]" class="error-message">
+              {{ t(atLeastOfNumberShouldBeEnteredError) }}
+            </p>
+          {% else %}
             <p>{{ t('Enter number for each age group.') }}</p>
+          {% endif %}
+
             {{ textInput('Under 11', 'under11', form) }}
             {{ textInput('11 to 15', 'between11and15', form) }}
             {{ textInput('16 to 19', 'between16and19', form) }}
