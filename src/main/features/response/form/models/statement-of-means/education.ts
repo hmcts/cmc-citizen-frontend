@@ -12,9 +12,9 @@ export class ValidationErrors {
 export class Education implements Serializable<Education> {
 
   @IsDefined({ message: GlobalValidationErrors.NUMBER_REQUIRED })
-  @IsInt({ message: GlobalValidationErrors.NUMBER_REQUIRED })
+  @IsInt({ message: GlobalValidationErrors.INTEGER_REQUIRED })
   @IsLessThanOrEqualTo('maxValue', { message: ValidationErrors.INVALID_NUMBER_OF_CHILDREN })
-  @Min(0, { message: GlobalValidationErrors.NUMBER_REQUIRED })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
   value: number
 
   maxValue: number

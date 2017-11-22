@@ -9,6 +9,7 @@ export class ValidationErrors {
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount'
   static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter valid amount, maximum two decimal places'
   static readonly TOO_LONG_INPUT: string = 'You’ve entered too many characters'
-  static readonly POSITIVE_NUMBER_REQUIRED: string = 'Enter a positive number'
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED: string = 'Don’t put a negative number'
+  static readonly POSITIVE_NUMBER_REQUIRED: string = 'Enter a number higher than 0'
   static readonly INTEGER_REQUIRED: string = 'Enter a numeric number eg. 3'
 }

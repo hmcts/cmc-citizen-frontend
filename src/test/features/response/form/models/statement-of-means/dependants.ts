@@ -127,7 +127,7 @@ describe('Dependants', () => {
             const errors = validator.validateSync(new Dependants(true, -1, 2, 0))
 
             expect(errors.length).to.equal(1)
-            expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
+            expectValidationError(errors, GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED)
           })
 
           it('one of other fields has not integer given', () => {

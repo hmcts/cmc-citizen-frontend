@@ -6,7 +6,7 @@ import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 export class ValidationErrors {
-  static readonly ENTER_AT_LEAST_ONE: string = 'Enter a  number for at least one field'
+  static readonly ENTER_AT_LEAST_ONE: string = 'Enter a number for at least one field'
 }
 
 export class Dependants implements Serializable<Dependants> {
@@ -20,17 +20,17 @@ export class Dependants implements Serializable<Dependants> {
 
   @ValidateIf(o => o.hasAnyChildren === true && o.under11 !== undefined)
   @IsInt({ message: GlobalValidationErrors.INTEGER_REQUIRED })
-  @Min(0, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
   under11: number
 
   @ValidateIf(o => o.hasAnyChildren === true && o.between11and15 !== undefined)
   @IsInt({ message: GlobalValidationErrors.INTEGER_REQUIRED })
-  @Min(0, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
   between11and15: number
 
   @ValidateIf(o => o.hasAnyChildren === true && o.between16and19 !== undefined)
   @IsInt({ message: GlobalValidationErrors.INTEGER_REQUIRED })
-  @Min(0, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
   between16and19: number
 
   constructor (hasAnyChildren?: boolean, under11?: number, between11and15?: number, between16and19?: number) {
