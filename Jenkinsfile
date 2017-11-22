@@ -1,5 +1,5 @@
 #!groovy
-@Library(['CMC', 'Reform'])
+@Library(['CMC@feature/run-only-necessary-services', 'Reform'])
 import uk.gov.hmcts.Ansible
 import uk.gov.hmcts.Packager
 import uk.gov.hmcts.RPMTagger
