@@ -10,13 +10,6 @@ import { SelfEmployed } from 'response/form/models/statement-of-means/selfEmploy
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 
 describe('StatementOfMeans', () => {
-  context('when creating a new instance', () => {
-    it('should set fields to blanks', () => {
-      const statementOfMeans: StatementOfMeans = new StatementOfMeans()
-      expect(statementOfMeans.residence).to.be.undefined
-    })
-  })
-
   describe('deserialize', () => {
     it('should return empty StatementOfMeans for undefined given as input', () => {
       const actual = new StatementOfMeans().deserialize(undefined)
