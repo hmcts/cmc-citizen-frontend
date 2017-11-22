@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../../app/forms/models/validationUtils'
-import { PayBySetDate, ValidationErrors } from 'ccj/form/models/payBySetDate'
+import { expectValidationError } from './validationUtils'
+import { PayBySetDate, ValidationErrors } from 'forms/models/payBySetDate'
 import { LocalDate } from 'forms/models/localDate'
 
 describe('PayBySetDate', () => {

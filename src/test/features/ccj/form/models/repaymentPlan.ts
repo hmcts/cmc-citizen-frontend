@@ -12,7 +12,7 @@ const FUTURE_YEAR = MomentFactory.currentDate().add(10, 'years').year()
 const DEFAULT_REPAYMENT_PLAN = {
   remainingAmount: 100,
   firstPayment: 50,
-  installmentAmount: 50,
+  instalmentAmount: 50,
   firstPaymentDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   paymentSchedule: PaymentSchedule.EVERY_MONTH.value
 }
@@ -20,7 +20,7 @@ const DEFAULT_REPAYMENT_PLAN = {
 const REPAYMENT_PLAN_FOR_DESERIALISATION = {
   remainingAmount: 100,
   firstPayment: 50,
-  installmentAmount: 50,
+  instalmentAmount: 50,
   firstPaymentDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   paymentSchedule: { value: PaymentSchedule.EVERY_MONTH.value, displayValue: PaymentSchedule.EVERY_MONTH.displayValue }
 }
@@ -81,7 +81,7 @@ describe('RepaymentPlan', () => {
 
     it('instalment amount > remainingAmount', () => {
       const repaymentPlan = validRepaymentPlan()
-      repaymentPlan.installmentAmount = 101
+      repaymentPlan.instalmentAmount = 101
       const errors = validator.validateSync(repaymentPlan)
 
       expect(errors.length).to.equal(2)
@@ -106,7 +106,7 @@ describe('RepaymentPlan', () => {
       const valuesToTest = [0, -1]
 
       valuesToTest.forEach(amount => {
-        repaymentPlan.installmentAmount = amount
+        repaymentPlan.instalmentAmount = amount
         const errors = validator.validateSync(repaymentPlan)
 
         expect(errors.length).to.equal(1)
@@ -116,7 +116,7 @@ describe('RepaymentPlan', () => {
 
     it('instalment amount invalid decimal places', () => {
       const repaymentPlan = validRepaymentPlan()
-      repaymentPlan.installmentAmount = 1.022
+      repaymentPlan.instalmentAmount = 1.022
       const errors = validator.validateSync(repaymentPlan)
 
       expect(errors.length).to.equal(1)

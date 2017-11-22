@@ -11,7 +11,7 @@ import { expectValidationError } from '../../../app/forms/models/validationUtils
 import { LocalDate } from 'forms/models/localDate'
 
 import * as moment from 'moment'
-import { PayBySetDate, ValidationErrors } from 'ccj/form/models/payBySetDate'
+import { PayBySetDate, ValidationErrors } from 'forms/models/payBySetDate'
 import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'

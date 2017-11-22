@@ -5,7 +5,7 @@ import * as config from 'config'
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 
-import { Paths } from 'response/paths'
+import { Paths, PayBySetDatePaths } from 'response/paths'
 
 import { app } from '../../../../main/app'
 
@@ -13,7 +13,9 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
+import { ResponseType } from 'response/form/models/responseType'
 import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -56,13 +58,35 @@ describe('Defendant - when will you pay options', () => {
       })
 
       context('when service is healthy', () => {
-        it('should render page', async () => {
+        const fullAdmissionQuestion: string = 'When will you pay?'
+        it(`should render page asking '${fullAdmissionQuestion}' when full admission was selected`, async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response', {
+            response: {
+              type: ResponseType.OWE_ALL_PAID_NONE
+            }
+          })
           await request(app)
             .get(defenceFullPartialPaymentOptionsPage)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('When will you pay?'))
+            .expect(res => expect(res).to.be.successful.withText(fullAdmissionQuestion))
+        })
+
+        const partAdmissionQuestion: string = 'When will you pay the amount you admit you owe?'
+        it(`should render page asking '${partAdmissionQuestion}' when partial admission was selected`, async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response', {
+            response: {
+              type: ResponseType.OWE_SOME_PAID_NONE
+            },
+            rejectPartOfClaim: {
+              option: RejectPartOfClaimOption.AMOUNT_TOO_HIGH
+            }
+          })
+          await request(app)
+            .get(defenceFullPartialPaymentOptionsPage)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText(partAdmissionQuestion))
         })
       })
     })
@@ -113,7 +137,11 @@ describe('Defendant - when will you pay options', () => {
         context('when service is healthy', () => {
           beforeEach(() => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('response', {
+              response: {
+                type: ResponseType.OWE_ALL_PAID_NONE
+              }
+            })
           })
 
           context('when form is valid', async () => {
@@ -130,7 +158,15 @@ describe('Defendant - when will you pay options', () => {
             }
 
             it('should redirect to repayment plan page for "INSTALMENTS" option selected', async () => {
-              await checkThatSelectedPaymentOptionRedirectsToPage({ option: DefendantPaymentType.INSTALMENTS.value }, Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))
+              await checkThatSelectedPaymentOptionRedirectsToPage(
+                { option: DefendantPaymentType.INSTALMENTS.value },
+                Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))
+            })
+
+            it('should redirect to payment date page for "BY_SET_DATE" option selected', async () => {
+              await checkThatSelectedPaymentOptionRedirectsToPage(
+                { option: DefendantPaymentType.BY_SET_DATE.value },
+                PayBySetDatePaths.paymentDatePage.evaluateUri({ externalId: externalId }))
             })
           })
 
