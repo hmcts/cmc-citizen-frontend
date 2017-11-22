@@ -4,6 +4,7 @@ import { Paths } from 'claim/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
+import { User } from 'idam/user'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -13,9 +14,10 @@ export default express.Router()
   .post(
     Paths.completingClaimPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      res.locals.user.claimDraft.document.readCompletingClaim = true
+      const user: User = res.locals.user
 
-      await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+      user.claimDraft.document.readCompletingClaim = true
+      await new DraftService().save(user.claimDraft, user.bearerToken)
 
       res.redirect(Paths.taskListPage.uri)
     }))

@@ -39,28 +39,28 @@ function logError (id: string, payment: Payment, message: string) {
 }
 
 async function successHandler (res, next) {
-  const externalId = res.locals.user.claimDraft.document.externalId
+  const user: User = res.locals.user
 
   let claimStatus: boolean
   try {
-    claimStatus = await ClaimStoreClient.retrieveByExternalId(externalId, res.locals.user.id)
+    claimStatus = await ClaimStoreClient.retrieveByExternalId(user.claimDraft.document.externalId, user.id)
       .then(() => true)
   } catch (err) {
     if (err.toString().includes('Claim not found by external id')) {
       claimStatus = false
     } else {
-      logError(res.locals.user.id, res.locals.user.claimDraft.document.claimant.payment, `Payment processed successfully but there is problem retrieving claim from claim store externalId: ${res.locals.user.claimDraft.document.externalId},`)
+      logError(user.id, user.claimDraft.document.claimant.payment, `Payment processed successfully but there is problem retrieving claim from claim store externalId: ${user.claimDraft.document.externalId},`)
       next(err)
       return
     }
   }
 
   if (claimStatus) {
-    await new DraftService().delete(res.locals.user.claimDraft.id, res.locals.user.bearerToken)
-    res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
+    await new DraftService().delete(user.claimDraft.id, user.bearerToken)
+    res.redirect(Paths.confirmationPage.evaluateUri({ externalId: user.claimDraft.document.externalId }))
   } else {
-    const claim = await ClaimStoreClient.saveClaimForUser(res.locals.user)
-    await new DraftService().delete(res.locals.user.claimDraft.id, res.locals.user.bearerToken)
+    const claim = await ClaimStoreClient.saveClaimForUser(user)
+    await new DraftService().delete(user.claimDraft.id, user.bearerToken)
     res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
   }
 }
@@ -88,12 +88,12 @@ export default express.Router()
             return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: user.claimDraft.document.externalId }))
         }
       }
-      const feeCalculationOutcome: CalculationOutcome = await FeesClient.calculateFee(issueFeeCode, claimAmountWithInterest(res.locals.user.claimDraft.document))
+      const feeCalculationOutcome: CalculationOutcome = await FeesClient.calculateFee(issueFeeCode, claimAmountWithInterest(user.claimDraft.document))
       const payClient: PayClient = await getPayClient()
       const payment: PaymentResponse = await payClient.create(res.locals.user, feeCalculationOutcome.fee.code, feeCalculationOutcome.amount, getReturnURL(req, user.claimDraft.document.externalId))
-      res.locals.user.claimDraft.document.claimant.payment = payment
+      user.claimDraft.document.claimant.payment = payment
 
-      await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+      await new DraftService().save(user.claimDraft, user.bearerToken)
 
       res.redirect(payment._links.next_url.href)
     } catch (err) {
@@ -115,7 +115,7 @@ export default express.Router()
       const payment: Payment = await payClient.retrieve(user, paymentId)
       user.claimDraft.document.claimant.payment = new Payment().deserialize(payment)
 
-      await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+      await new DraftService().save(user.claimDraft, user.bearerToken)
 
       const status: string = payment.state.status
 

@@ -25,19 +25,19 @@ export default express.Router()
     FormValidator.requestHandler(Employment, Employment.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<Employment> = req.body
-      const user: User = res.locals.user
-      const { externalId } = req.params
 
       if (form.hasErrors()) {
         res.render(page.associatedView, { form: form })
       } else {
-        user.responseDraft.document.statementOfMeans.employment = form.model
+        const user: User = res.locals.user
 
-        await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
+        user.responseDraft.document.statementOfMeans.employment = form.model
+        await new DraftService().save(user.responseDraft, user.bearerToken)
 
         if (form.model.isCurrentlyEmployed === false) {
           res.render(page.associatedView, { form: form })
         } else {
+          const { externalId } = req.params
           if (form.model.employed) {
             res.redirect(StatementOfMeansPaths.employersPage.evaluateUri({ externalId: externalId }))
           } else {

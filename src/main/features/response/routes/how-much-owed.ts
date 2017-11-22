@@ -11,6 +11,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { Claim } from 'claims/models/claim'
 import { ValidationError } from 'class-validator'
 import { DraftService } from 'services/draftService'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 async function renderView (form: Form<HowMuchOwed>, res: express.Response, next: express.NextFunction) {
   try {
@@ -29,19 +30,19 @@ async function renderView (form: Form<HowMuchOwed>, res: express.Response, next:
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantHowMuchOwed.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    await renderView(new Form(res.locals.user.responseDraft.document.howMuchOwed), res, next)
+    const draft: ResponseDraft = res.locals.user.responseDraft.document
+
+    await renderView(new Form(draft.howMuchOwed), res, next)
   }))
   .post(
     Paths.defendantHowMuchOwed.uri,
     FormValidator.requestHandler(HowMuchOwed, HowMuchOwed.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<HowMuchOwed> = req.body
-
       const user: User = res.locals.user
-      const claim: Claim = user.claim
 
-      if (form.model.amount > claim.claimData.amount.totalAmount()) {
-        let totalAmount: string = NumberFormatter.formatMoney(claim.totalAmountTillToday)
+      if (form.model.amount > user.claim.claimData.amount.totalAmount()) {
+        let totalAmount: string = NumberFormatter.formatMoney(user.claim.totalAmountTillToday)
         let error = new ValidationError()
         error.property = 'amount'
         error.constraints = { amount: 'Enter a valid amount between £1 and ' + totalAmount }

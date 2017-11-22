@@ -8,6 +8,7 @@ import { MobilePhone } from 'forms/models/mobilePhone'
 import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 function renderView (form: Form<MobilePhone>, res: express.Response) {
   res.render(Paths.defendantMobilePage.associatedView, {
@@ -18,7 +19,9 @@ function renderView (form: Form<MobilePhone>, res: express.Response) {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantMobilePage.uri, (req: express.Request, res: express.Response) => {
-    renderView(new Form(res.locals.user.responseDraft.document.defendantDetails.mobilePhone), res)
+    const draft: ResponseDraft = res.locals.user.responseDraft.document
+
+    renderView(new Form(draft.defendantDetails.mobilePhone), res)
   })
   .post(
     Paths.defendantMobilePage.uri,
@@ -30,8 +33,8 @@ export default express.Router()
         renderView(form, res)
       } else {
         const user: User = res.locals.user
-        user.responseDraft.document.defendantDetails.mobilePhone = form.model
 
+        user.responseDraft.document.defendantDetails.mobilePhone = form.model
         await new DraftService().save(user.responseDraft, user.bearerToken)
 
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))

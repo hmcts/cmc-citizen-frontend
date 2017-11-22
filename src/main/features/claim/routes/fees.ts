@@ -6,13 +6,15 @@ import { FeesClient } from 'fees/feesClient'
 import { Range } from 'fees/models/range'
 import { RangeGroup } from 'app/fees/models/rangeGroup'
 import { FeesTableViewHelper } from 'claim/helpers/feesTableViewHelper'
+import { DraftClaim } from 'drafts/models/draftClaim'
 
 const supportedFeeLimitInPennies: number = 1000000
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.feesPage.uri, (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-    const claimAmount = claimAmountWithInterest(res.locals.user.claimDraft.document)
+    const draft: DraftClaim = res.locals.user.claimDraft.document
+    const claimAmount = claimAmountWithInterest(draft)
     Promise.all(
       [
         FeesClient.calculateIssueFee(claimAmount),

@@ -7,11 +7,14 @@ import { Offer } from 'offer/form/models/offer'
 import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { OfferClient } from 'claims/offerClient'
+import { Claim } from 'claims/models/claim'
 
 async function renderView (form: Form<Offer>, res: express.Response, next: express.NextFunction) {
+  const claim: Claim = res.locals.user.claim
+
   res.render(Paths.offerPage.associatedView, {
     form: form,
-    claim: res.locals.user.claim
+    claim: claim
   })
 }
 

@@ -9,6 +9,7 @@ import { InterestType } from 'claim/form/models/interest'
 import { InterestDateType } from 'app/common/interestDateType'
 import { Moment } from 'moment'
 import { calculateInterest } from 'app/common/calculateInterest'
+import { DraftCCJ } from 'ccj/draft/draftCCJ'
 
 function getInterestDetails (claim: Claim): object {
   if (claim.claimData.interest.type === InterestType.NO_INTEREST) {
@@ -41,13 +42,13 @@ export default express.Router()
   .get(Paths.paidAmountSummaryPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.user.claim
-      const alreadyPaid: number = res.locals.user.ccjDraft.document.paidAmount.amount || 0
+      const draft: DraftCCJ = res.locals.user.ccjDraft.document
       const { externalId } = req.params
 
       res.render(
         Paths.paidAmountSummaryPage.associatedView, {
           claim: claim,
-          alreadyPaid: alreadyPaid,
+          alreadyPaid: draft.paidAmount.amount || 0,
           interestDetails: getInterestDetails(claim),
           nextPageUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
         }

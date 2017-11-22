@@ -8,14 +8,15 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
+import { DraftCCJ } from 'ccj/draft/draftCCJ'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.paymentOptionsPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const paymentOption: CCJPaymentOption = res.locals.user.ccjDraft.document.paymentOption
+      const draft: DraftCCJ = res.locals.user.ccjDraft.document
 
-      res.render(Paths.paymentOptionsPage.associatedView, { form: new Form(paymentOption) })
+      res.render(Paths.paymentOptionsPage.associatedView, { form: new Form(draft.paymentOption) })
     }))
   .post(Paths.paymentOptionsPage.uri,
     FormValidator.requestHandler(CCJPaymentOption, CCJPaymentOption.fromObject),

@@ -9,11 +9,14 @@ import { ResponseReceipt } from 'app/pdf/responseReceipt'
 
 import { buildURL } from 'app/utils/callbackBuilder'
 import { ErrorHandling } from 'common/errorHandling'
+import { Claim } from 'claims/models/claim'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.receiptReceiver.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    new PdfClient().generate(ResponseReceipt.templatePath, new ResponseReceipt(res.locals.user.claim, buildURL(req, 'dashboard')).data())
+    const claim: Claim = res.locals.user.claim
+
+    new PdfClient().generate(ResponseReceipt.templatePath, new ResponseReceipt(claim, buildURL(req, 'dashboard')).data())
       .on('response', (response: http.IncomingMessage) => {
         if (response.statusCode !== 200) {
           next(new Error('Unexpected error during PDF generation'))

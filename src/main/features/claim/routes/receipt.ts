@@ -9,13 +9,15 @@ import { Claim } from 'app/claims/models/claim'
 
 import { PdfClient } from 'app/pdf/pdfClient'
 import { IssueReceipt } from 'app/pdf/issueReceipt'
+import { User } from 'idam/user'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.receiptReceiver.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const { externalId } = req.params
+    const user: User = res.locals.user
     try {
-      const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId, res.locals.user.id)
+      const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId, user.id)
       new PdfClient().generate(IssueReceipt.templatePath, new IssueReceipt(claim).data())
         .on('response', (response: http.IncomingMessage) => {
           if (response.statusCode !== 200) {

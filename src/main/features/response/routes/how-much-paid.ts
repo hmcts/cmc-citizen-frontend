@@ -9,6 +9,7 @@ import { User } from 'idam/user'
 import { ErrorHandling } from 'common/errorHandling'
 import { Claim } from 'claims/models/claim'
 import { DraftService } from 'services/draftService'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 async function renderView (form: Form<HowMuchPaid>, res: express.Response, next: express.NextFunction) {
   try {
@@ -27,7 +28,9 @@ async function renderView (form: Form<HowMuchPaid>, res: express.Response, next:
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantHowMuchPaid.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    await renderView(new Form(res.locals.user.responseDraft.document.howMuchIsPaid), res, next)
+    const draft: ResponseDraft = res.locals.user.responseDraft.document
+
+    await renderView(new Form(draft.howMuchIsPaid), res, next)
   }))
   .post(
     Paths.defendantHowMuchPaid.uri,

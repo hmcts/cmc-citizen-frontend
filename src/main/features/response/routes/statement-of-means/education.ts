@@ -33,15 +33,16 @@ export default express.Router()
     FormValidator.requestHandler(Education, Education.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<Education> = req.body
-      const user: User = res.locals.user
-      const { externalId } = req.params
 
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        user.responseDraft.document.statementOfMeans.education = form.model
+        const user: User = res.locals.user
 
-        await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
+        user.responseDraft.document.statementOfMeans.education = form.model
+        await new DraftService().save(user.responseDraft, user.bearerToken)
+
+        const { externalId } = req.params
         res.redirect(Paths.maintenancePage.evaluateUri({ externalId: externalId }))
       }
     })

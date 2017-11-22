@@ -8,6 +8,8 @@ import { OrganisationDetails } from 'forms/models/organisationDetails'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { User } from 'idam/user'
 
 function renderView (form: Form<OrganisationDetails>, res: express.Response): void {
   res.render(Paths.claimantOrganisationDetailsPage.associatedView, { form: form })
@@ -16,7 +18,9 @@ function renderView (form: Form<OrganisationDetails>, res: express.Response): vo
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.claimantOrganisationDetailsPage.uri, (req: express.Request, res: express.Response) => {
-    renderView(new Form(res.locals.user.claimDraft.document.claimant.partyDetails as OrganisationDetails), res)
+    const draft: DraftClaim = res.locals.user.claimDraft.document
+
+    renderView(new Form(draft.claimant.partyDetails as OrganisationDetails), res)
   })
   .post(
     Paths.claimantOrganisationDetailsPage.uri,
@@ -26,9 +30,10 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.claimDraft.document.claimant.partyDetails = form.model
+        const user: User = res.locals.user
 
-        await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+        user.claimDraft.document.claimant.partyDetails = form.model
+        await new DraftService().save(user.claimDraft, user.bearerToken)
 
         res.redirect(Paths.claimantMobilePage.uri)
       }

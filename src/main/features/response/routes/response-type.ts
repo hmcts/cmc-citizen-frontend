@@ -8,6 +8,7 @@ import { ResponseType } from 'response/form/models/responseType'
 import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 function renderView (form: Form<Response>, res: express.Response) {
   res.render(Paths.responseTypePage.associatedView, {
@@ -19,7 +20,9 @@ function renderView (form: Form<Response>, res: express.Response) {
 export default express.Router()
   .get(Paths.responseTypePage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      renderView(new Form(res.locals.user.responseDraft.document.response), res)
+      const draft: ResponseDraft = res.locals.user.responseDraft.document
+
+      renderView(new Form(draft.response), res)
     }))
   .post(
     Paths.responseTypePage.uri,
@@ -32,8 +35,8 @@ export default express.Router()
         renderView(form, res)
       } else {
         const user: User = res.locals.user
-        user.responseDraft.document.response = form.model
 
+        user.responseDraft.document.response = form.model
         await new DraftService().save(user.responseDraft, user.bearerToken)
 
         const responseType = user.responseDraft.document.response.type

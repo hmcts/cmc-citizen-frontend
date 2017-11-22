@@ -6,11 +6,16 @@ import { FormValidator } from 'app/forms/validation/formValidator'
 import { Timeline } from 'response/form/models/timeline'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
+import { Claim } from 'claims/models/claim'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { User } from 'idam/user'
 
 function renderView (form: Form<Timeline>, res: express.Response): void {
+  const claim: Claim = res.locals.user.claim
+
   res.render(Paths.timelinePage.associatedView, {
     form: form,
-    claimantName: res.locals.user.claim.claimData.claimant.name,
+    claimantName: claim.claimData.claimant.name,
     canAddMoreEvents: form.model.canAddMoreRows()
   })
 }
@@ -29,7 +34,9 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.timelinePage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    renderView(new Form(res.locals.user.responseDraft.document.timeline), res)
+    const draft: ResponseDraft = res.locals.user.responseDraft.document
+
+    renderView(new Form(draft.timeline), res)
   })
   .post(
     Paths.timelinePage.uri,
@@ -42,10 +49,12 @@ export default express.Router()
         renderView(form, res)
       } else {
         form.model.removeExcessRows()
-        res.locals.user.responseDraft.document.timeline = form.model
+        const user: User = res.locals.user
 
-        await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
-        res.redirect(Paths.evidencePage.evaluateUri({ externalId: res.locals.user.claim.externalId }))
+        user.responseDraft.document.timeline = form.model
+        await new DraftService().save(user.responseDraft, user.bearerToken)
+
+        res.redirect(Paths.evidencePage.evaluateUri({ externalId: user.claim.externalId }))
       }
     })
   )

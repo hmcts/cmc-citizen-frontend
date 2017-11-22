@@ -10,6 +10,7 @@ import { MoreTimeAlreadyRequestedGuard } from 'response/guards/moreTimeAlreadyRe
 import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 function renderView (form: Form<MoreTimeNeeded>, res: express.Response, next: express.NextFunction) {
   try {
@@ -27,7 +28,9 @@ export default express.Router()
     Paths.moreTimeRequestPage.uri,
     MoreTimeAlreadyRequestedGuard.requestHandler,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      renderView(new Form(res.locals.user.responseDraft.document.moreTimeNeeded), res, next)
+      const draft: ResponseDraft = res.locals.user.responseDraft.document
+
+      renderView(new Form(draft.moreTimeNeeded), res, next)
     })
   .post(
     Paths.moreTimeRequestPage.uri,
@@ -40,8 +43,8 @@ export default express.Router()
         renderView(form, res, next)
       } else {
         const user: User = res.locals.user
-        user.responseDraft.document.moreTimeNeeded = form.model
 
+        user.responseDraft.document.moreTimeNeeded = form.model
         await new DraftService().save(user.responseDraft, user.bearerToken)
 
         if (form.model.option === MoreTimeNeededOption.YES) {

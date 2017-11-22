@@ -9,6 +9,7 @@ import { Defence } from 'response/form/models/defence'
 import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 async function renderView (form: Form<Defence>, res: express.Response, next: express.NextFunction) {
   try {
@@ -26,7 +27,9 @@ async function renderView (form: Form<Defence>, res: express.Response, next: exp
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defencePage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    await renderView(new Form(res.locals.user.responseDraft.document.defence), res, next)
+    const draft: ResponseDraft = res.locals.user.responseDraft.document
+
+    await renderView(new Form(draft.defence), res, next)
   })
   .post(
     Paths.defencePage.uri,
@@ -38,9 +41,9 @@ export default express.Router()
         await renderView(form, res, next)
       } else {
         const user: User = res.locals.user
-        user.responseDraft.document.defence = form.model
 
-        await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
+        user.responseDraft.document.defence = form.model
+        await new DraftService().save(user.responseDraft, user.bearerToken)
 
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
       }

@@ -7,6 +7,8 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { User } from 'idam/user'
 
 function renderView (form: Form<CompanyDetails>, res: express.Response): void {
   res.render(Paths.defendantCompanyDetailsPage.associatedView, { form: form })
@@ -15,7 +17,9 @@ function renderView (form: Form<CompanyDetails>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantCompanyDetailsPage.uri, (req: express.Request, res: express.Response) => {
-    renderView(new Form(res.locals.user.claimDraft.document.defendant.partyDetails as CompanyDetails), res)
+    const draft: DraftClaim = res.locals.user.claimDraft.document
+
+    renderView(new Form(draft.defendant.partyDetails as CompanyDetails), res)
   })
   .post(
     Paths.defendantCompanyDetailsPage.uri,
@@ -25,9 +29,10 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.claimDraft.document.defendant.partyDetails = form.model
+        const user: User = res.locals.user
 
-        await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+        user.claimDraft.document.defendant.partyDetails = form.model
+        await new DraftService().save(user.claimDraft, user.bearerToken)
 
         res.redirect(Paths.defendantEmailPage.uri)
       }

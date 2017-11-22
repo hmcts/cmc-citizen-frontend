@@ -7,6 +7,9 @@ import { DateOfBirth } from 'forms/models/dateOfBirth'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { IndividualDetails } from 'forms/models/individualDetails'
+import { User } from 'idam/user'
 
 function renderView (form: Form<DateOfBirth>, res: express.Response): void {
   res.render(Paths.claimantDateOfBirthPage.associatedView, { form: form })
@@ -15,7 +18,9 @@ function renderView (form: Form<DateOfBirth>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.claimantDateOfBirthPage.uri, (req: express.Request, res: express.Response) => {
-    renderView(new Form(res.locals.user.claimDraft.document.claimant.partyDetails.dateOfBirth), res)
+    const draft: DraftClaim = res.locals.user.claimDraft.document
+
+    renderView(new Form((draft.claimant.partyDetails as IndividualDetails).dateOfBirth), res)
   })
   .post(
     Paths.claimantDateOfBirthPage.uri,
@@ -26,9 +31,10 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.claimDraft.document.claimant.partyDetails.dateOfBirth = form.model
+        const user: User = res.locals.user;
 
-        await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+        (user.claimDraft.document.claimant.partyDetails as IndividualDetails).dateOfBirth = form.model
+        await new DraftService().save(user.claimDraft, user.bearerToken)
 
         res.redirect(Paths.claimantMobilePage.uri)
       }

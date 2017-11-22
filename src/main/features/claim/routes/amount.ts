@@ -9,6 +9,8 @@ import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { User } from 'idam/user'
 
 function renderView (form: Form<ClaimAmountBreakdown>, res: express.Response): void {
   res.render(Paths.amountPage.associatedView, {
@@ -32,7 +34,9 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.amountPage.uri, (req: express.Request, res: express.Response): void => {
-    renderView(new Form(res.locals.user.claimDraft.document.amount), res)
+    const draft: DraftClaim = res.locals.user.claimDraft.document
+
+    renderView(new Form(draft.amount), res)
   })
   .post(
     Paths.amountPage.uri,
@@ -45,9 +49,12 @@ export default express.Router()
         renderView(form, res)
       } else {
         form.model.removeExcessRows()
-        res.locals.user.claimDraft.document.amount = form.model
         ClaimValidator.claimAmount(form.model.totalAmount())
-        await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+        const user: User = res.locals.user
+
+        user.claimDraft.document.amount = form.model
+        await new DraftService().save(user.claimDraft, user.bearerToken)
+
         res.redirect(Paths.interestPage.uri)
       }
     })

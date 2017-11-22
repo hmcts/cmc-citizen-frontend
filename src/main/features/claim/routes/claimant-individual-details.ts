@@ -7,6 +7,8 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { User } from 'idam/user'
 
 function renderView (form: Form<IndividualDetails>, res: express.Response): void {
   res.render(Paths.claimantIndividualDetailsPage.associatedView, { form: form })
@@ -15,7 +17,9 @@ function renderView (form: Form<IndividualDetails>, res: express.Response): void
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.claimantIndividualDetailsPage.uri, (req: express.Request, res: express.Response) => {
-    renderView(new Form(res.locals.user.claimDraft.document.claimant.partyDetails as IndividualDetails), res)
+    const draft: DraftClaim = res.locals.user.claimDraft.document
+
+    renderView(new Form(draft.claimant.partyDetails as IndividualDetails), res)
   })
   .post(
     Paths.claimantIndividualDetailsPage.uri,
@@ -25,11 +29,12 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        // Workaround: reset date of birth which is erased in the process of form deserialization
-        form.model.dateOfBirth = (res.locals.user.claimDraft.document.claimant.partyDetails as IndividualDetails).dateOfBirth
-        res.locals.user.claimDraft.document.claimant.partyDetails = form.model
+        const user: User = res.locals.user
 
-        await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+        // Workaround: reset date of birth which is erased in the process of form deserialization
+        form.model.dateOfBirth = (user.claimDraft.document.claimant.partyDetails as IndividualDetails).dateOfBirth
+        user.claimDraft.document.claimant.partyDetails = form.model
+        await new DraftService().save(user.claimDraft, user.bearerToken)
 
         res.redirect(Paths.claimantDateOfBirthPage.uri)
       }

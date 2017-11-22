@@ -23,14 +23,15 @@ export default express.Router()
     FormValidator.requestHandler(SelfEmployed, SelfEmployed.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<SelfEmployed> = req.body
-      const user: User = res.locals.user
 
       if (form.hasErrors()) {
         res.render(page.associatedView, { form: form })
       } else {
-        user.responseDraft.document.statementOfMeans.selfEmployed = form.model
+        const user: User = res.locals.user
 
-        await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
+        user.responseDraft.document.statementOfMeans.selfEmployed = form.model
+        await new DraftService().save(user.responseDraft, user.bearerToken)
+
         res.render(page.associatedView, { form: form })
       }
     })

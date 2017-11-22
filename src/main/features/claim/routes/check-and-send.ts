@@ -21,13 +21,15 @@ import { User } from 'idam/user'
 import { SignatureType } from 'app/common/signatureType'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
 import { DraftService } from 'services/draftService'
+import { DraftClaim } from 'drafts/models/draftClaim'
 
-function getClaimAmountTotal (res: express.Response): Promise<TotalAmount> {
-  return FeesClient.calculateIssueFee(claimAmountWithInterest(res.locals.user.claimDraft.document))
+function getClaimAmountTotal (draft: DraftClaim): Promise<TotalAmount> {
+  return FeesClient.calculateIssueFee(claimAmountWithInterest(draft))
     .then((feeAmount: number) => {
-      return new TotalAmount(res.locals.user.claimDraft.document.amount.totalAmount(), interestAmount(res.locals.user.claimDraft.document), feeAmount)
+      return new TotalAmount(draft.amount.totalAmount(), interestAmount(draft), feeAmount)
     })
 }
+
 function getBusinessName (partyDetails: PartyDetails): string {
   if (partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
     return (partyDetails as SoleTraderDetails).businessName
@@ -74,19 +76,20 @@ function getStatementOfTruthClassFor (user: User): { new(): StatementOfTruth | Q
 }
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response, next: express.NextFunction) {
-  const user: User = res.locals.user
-  getClaimAmountTotal(res)
+  const draft: DraftClaim = res.locals.user.claimDraft.document
+
+  getClaimAmountTotal(draft)
     .then((interestTotal: TotalAmount) => {
       res.render(Paths.checkAndSendPage.associatedView, {
-        draftClaim: res.locals.user.claimDraft.document,
+        draftClaim: draft,
         claimAmountTotal: interestTotal,
-        payAtSubmission: res.locals.user.claimDraft.document.interestDate.type === InterestDateType.SUBMISSION,
-        interestClaimed: (res.locals.user.claimDraft.document.interest.type !== InterestType.NO_INTEREST),
-        contactPerson: getContactPerson(res.locals.user.claimDraft.document.claimant.partyDetails),
-        businessName: getBusinessName(res.locals.user.claimDraft.document.claimant.partyDetails),
-        dateOfBirth: getDateOfBirth(res.locals.user.claimDraft.document.claimant.partyDetails),
-        defendantBusinessName: getBusinessName(res.locals.user.claimDraft.document.defendant.partyDetails),
-        partyAsCompanyOrOrganisation: user.claimDraft.document.claimant.partyDetails.isBusiness(),
+        payAtSubmission: draft.interestDate.type === InterestDateType.SUBMISSION,
+        interestClaimed: draft.interest.type !== InterestType.NO_INTEREST,
+        contactPerson: getContactPerson(draft.claimant.partyDetails),
+        businessName: getBusinessName(draft.claimant.partyDetails),
+        dateOfBirth: getDateOfBirth(draft.claimant.partyDetails),
+        defendantBusinessName: getBusinessName(draft.defendant.partyDetails),
+        partyAsCompanyOrOrganisation: draft.claimant.partyDetails.isBusiness(),
         paths: Paths,
         form: form
       })
@@ -104,14 +107,16 @@ export default express.Router()
     AllClaimTasksCompletedGuard.requestHandler,
     FormValidator.requestHandler(undefined, deserializerFunction),
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const user: User = res.locals.user
       const form: Form<StatementOfTruth | QualifiedStatementOfTruth> = req.body
+
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
         if (form.model.type === SignatureType.QUALIFIED) {
+          const user: User = res.locals.user
+
           user.claimDraft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
-          await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+          await new DraftService().save(user.claimDraft, user.bearerToken)
         }
         res.redirect(Paths.startPaymentReceiver.uri)
       }

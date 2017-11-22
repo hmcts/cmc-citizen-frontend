@@ -12,11 +12,14 @@ import { PartyType } from 'app/common/partyType'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
+import { Claim } from 'claims/models/claim'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('ccj/guards/individualDateOfBirth')
 
 const accessGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
-  return res.locals.user.claim.claimData.defendant.type === PartyType.INDIVIDUAL.value
+  const claim: Claim = res.locals.user.claim
+
+  return claim.claimData.defendant.type === PartyType.INDIVIDUAL.value
 }, (req: express.Request, res: express.Response): void => {
   logger.warn(`CCJ state guard: defendant date of birth is only available for individual defendants - redirecting to dashboard page`)
   res.redirect(DashboardPaths.dashboardPage.uri)
