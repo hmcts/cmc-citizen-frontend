@@ -18,8 +18,7 @@ export class AtLeastOneFieldIsPopulatedConstraint implements ValidatorConstraint
 }
 
 /**
- * Validates if one of the fields in object is populated. It doesn't matter which one as long as one
- * as long as at least one of them has any value. It doesn't matter what is the value as long as it's no falsy.
+ * Verifies if at least one of the fields in given object is populated with "truthy" value.
  */
 export function AtLeastOneFieldIsPopulated (validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
