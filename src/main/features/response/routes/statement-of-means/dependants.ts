@@ -33,7 +33,7 @@ export default express.Router()
 
         await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
 
-        if (form.model.between16and19) {
+        if (form.model.numberOfChildren && form.model.numberOfChildren.between16and19) {
           res.redirect(Paths.educationPage.evaluateUri({ externalId: externalId }))
         } else {
           res.redirect(Paths.maintenancePage.evaluateUri({ externalId: externalId }))
