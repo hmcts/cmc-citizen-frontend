@@ -138,7 +138,7 @@
         {{ row('When will you pay', t(draft.defendantPaymentOption.option.displayValueFor(draft.response.type)) | capitalize, paths.defencePaymentOptionsPage.evaluateUri({ externalId: claim.externalId })) }}
         {{ row('When you’ll pay the amount', draft.payBySetDate.paymentDate.date.toMoment() | date, payBySetDatePaths.paymentDatePage.evaluateUri({ externalId: claim.externalId }), bottomBorder = (not draft.payBySetDate.hasExplanation())) }}
         {% if draft.payBySetDate.hasExplanation() %}
-          {{ row('Explain why you can’t pay immediately', draft.payBySetDate.explanation.text, '') }}
+          {{ row('Explain why you can’t pay immediately', draft.payBySetDate.explanation.text, payBySetDatePaths.explanationPage.evaluateUri({ externalId: claim.externalId })) }}
         {% endif %}
         {{ tableEnd() }}
       {% endif %}
