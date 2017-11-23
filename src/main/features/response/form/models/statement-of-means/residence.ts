@@ -36,9 +36,20 @@ export class Residence implements Serializable<Residence> {
     )
   }
 
+  /**
+   * Used in the UI
+   */
+  get residenceType () {
+    if (this.type === ResidenceType.OTHER) {
+      return this.housingDetails
+    } else {
+      return this.type.displayValue
+    }
+  }
+
   deserialize (input: any): Residence {
     if (input) {
-      this.type = input.type
+      this.type = input.type ? ResidenceType.valueOf(input.type.value) : undefined
       this.housingDetails = input.housingDetails
     }
     return this

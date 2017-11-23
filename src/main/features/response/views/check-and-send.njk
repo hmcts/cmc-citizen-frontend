@@ -61,6 +61,12 @@
 
     {{ tableEnd() }}
 
+    {% if statementOfMeansIsApplicable %}
+      {{ tableStart('statementOfMeans', 'Your financial details') }}
+      {{ row('Where are you living?	', draft.statementOfMeans.residence.residenceType, statementOfMeansPaths.residencePage.evaluateUri({ externalId: claim.externalId })) }}
+      {{ tableEnd() }}
+    {% endif %}
+
     {% if draft.response.type === ResponseType.OWE_SOME_PAID_NONE and featureToggles.partialAdmission %}
 
       {{ tableStart('yourResponse', 'Your response') }}
