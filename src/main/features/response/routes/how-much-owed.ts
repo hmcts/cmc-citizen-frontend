@@ -40,7 +40,7 @@ export default express.Router()
       const user: User = res.locals.user
       const claim: Claim = user.claim
 
-      if (form.model.amount > claim.claimData.amount.totalAmount()) {
+      if (form.model.amount > claim.totalAmountTillToday) {
         let totalAmount: string = NumberFormatter.formatMoney(claim.totalAmountTillToday)
         let error = new ValidationError()
         error.property = 'amount'
