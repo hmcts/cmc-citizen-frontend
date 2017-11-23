@@ -106,21 +106,21 @@ describe('Maintenance', () => {
             const errors = validator.validateSync(new Maintenance(true, -1))
 
             expect(errors.length).to.equal(1)
-            expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
+            expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
           })
 
           it('value = 0 given', () => {
             const errors = validator.validateSync(new Maintenance(true, 0))
 
             expect(errors.length).to.equal(1)
-            expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
+            expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
           })
 
           it('value is not an integer', () => {
             const errors = validator.validateSync(new Maintenance(true, 1.5))
 
             expect(errors.length).to.equal(1)
-            expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
+            expectValidationError(errors, GlobalValidationErrors.INTEGER_REQUIRED)
           })
         })
 
