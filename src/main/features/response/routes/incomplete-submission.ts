@@ -11,7 +11,7 @@ export default express.Router()
     res.render(Paths.incompleteSubmissionPage.associatedView,
       {
         taskListUri: Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }),
-        tasks: TaskListBuilder.buildRemainingTasks(user.responseDraft.document, user.claim.responseDeadline, user.claim.externalId)
+        tasks: TaskListBuilder.buildRemainingTasks(user.responseDraft.document, user.claim)
       }
     )
   })
