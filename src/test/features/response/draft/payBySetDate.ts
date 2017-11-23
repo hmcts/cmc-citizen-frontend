@@ -7,22 +7,17 @@ import { PayBySetDate } from 'response/draft/payBySetDate'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { LocalDate } from 'forms/models/localDate'
 import { Explanation } from 'response/form/models/pay-by-set-date/explanation'
+import { MomentFactory } from 'common/momentFactory'
+import { localDateFrom } from '../../../localDateUtils'
 
 describe('PayBySetDate', () => {
   let payBySetDate: PayBySetDate
 
   beforeEach(() => {
     payBySetDate = new PayBySetDate(
-      new PaymentDate(new LocalDate(2017, 11, 16)),
+      new PaymentDate(localDateFrom(MomentFactory.currentDate())),
       new Explanation('I can not pay now')
     )
-  })
-
-  describe('constructor', () => {
-    it('should set the fields', () => {
-      expect(payBySetDate.paymentDate).to.not.be.undefined
-      expect(payBySetDate.explanation).to.not.be.undefined
-    })
   })
 
   describe('clearExplanation', () => {
@@ -55,6 +50,27 @@ describe('PayBySetDate', () => {
     it('should return false when explanation with whitespace only string is provided', () => {
       payBySetDate.explanation.text = '      '
       expect(payBySetDate.hasExplanation()).to.be.false
+    })
+  })
+
+  describe('requiresExplanation', () => {
+    it('should not require explanation if payment date is not provided', () => {
+      payBySetDate.paymentDate.date = undefined
+      expect(payBySetDate.requiresExplanation()).to.be.false
+    })
+
+    it('should not require explanation if payment date is invalid', () => {
+      payBySetDate.paymentDate.date = new LocalDate()
+      expect(payBySetDate.requiresExplanation()).to.be.false
+    })
+
+    it('should not require explanation if payment date is today', () => {
+      expect(payBySetDate.requiresExplanation()).to.be.false
+    })
+
+    it('should require explanation if payment date month away', () => {
+      payBySetDate.paymentDate.date = localDateFrom(MomentFactory.currentDate().add(1, 'month'))
+      expect(payBySetDate.requiresExplanation()).to.be.true
     })
   })
 })
