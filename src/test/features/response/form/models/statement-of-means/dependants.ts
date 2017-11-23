@@ -3,6 +3,7 @@ import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../../app/forms/models/validationUtils'
 import { Dependants, ValidationErrors } from 'response/form/models/statement-of-means/dependants'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
+import { NumberOfChildren } from 'response/form/models/statement-of-means/numberOfChildren'
 
 describe('Dependants', () => {
 
@@ -13,40 +14,34 @@ describe('Dependants', () => {
 
       expect(actual).to.be.instanceof(Dependants)
       expect(actual.hasAnyChildren).to.be.eq(undefined)
-      expect(actual.under11).to.be.eq(undefined)
-      expect(actual.between11and15).to.be.eq(undefined)
-      expect(actual.between16and19).to.be.eq(undefined)
+      expect(actual.numberOfChildren).to.be.eq(undefined)
     })
 
     it('should return Dependants with populated only hasAnyChildren', () => {
       const actual = new Dependants().deserialize({ hasAnyChildren: false })
 
       expect(actual.hasAnyChildren).to.be.eq(false)
-      expect(actual.under11).to.be.eq(undefined)
-      expect(actual.between11and15).to.be.eq(undefined)
-      expect(actual.between16and19).to.be.eq(undefined)
+      expect(actual.numberOfChildren).to.be.eq(undefined)
     })
 
     it('should return fully populated Dependants', () => {
       const actual = new Dependants().deserialize(
-        { hasAnyChildren: true, under11: 1, between11and15: 2, between16and19: 3 }
+        { hasAnyChildren: true, numberOfChildren: { under11: 1, between11and15: 2, between16and19: 3 } }
       )
 
       expect(actual.hasAnyChildren).to.be.eq(true)
-      expect(actual.under11).to.be.eq(1)
-      expect(actual.between11and15).to.be.eq(2)
-      expect(actual.between16and19).to.be.eq(3)
+      expect(actual.numberOfChildren.under11).to.be.eq(1)
+      expect(actual.numberOfChildren.between11and15).to.be.eq(2)
+      expect(actual.numberOfChildren.between16and19).to.be.eq(3)
     })
 
     it('should NOT populate other fields when hasAnyChildren = false', () => {
       const actual = new Dependants().deserialize(
-        { hasAnyChildren: false, under11: 1, between11and15: 2, between16and19: 3 }
+        { hasAnyChildren: false, numberOfChildren: { under11: 1, between11and15: 2, between16and19: 3 } }
       )
 
       expect(actual.hasAnyChildren).to.be.eq(false)
-      expect(actual.under11).to.be.eq(undefined)
-      expect(actual.between11and15).to.be.eq(undefined)
-      expect(actual.between16and19).to.be.eq(undefined)
+      expect(actual.numberOfChildren).to.be.eq(undefined)
     })
   })
 
@@ -62,31 +57,27 @@ describe('Dependants', () => {
       const actual = Dependants.fromObject({ hasAnyChildren: false })
 
       expect(actual.hasAnyChildren).to.be.eq(false)
-      expect(actual.under11).to.be.eq(undefined)
-      expect(actual.between11and15).to.be.eq(undefined)
-      expect(actual.between16and19).to.be.eq(undefined)
+      expect(actual.numberOfChildren).to.be.eq(undefined)
     })
 
     it('should return fully populated Dependants', () => {
       const actual = Dependants.fromObject(
-        { hasAnyChildren: true, under11: '1', between11and15: '2', between16and19: '3' }
+        { hasAnyChildren: true, numberOfChildren: { under11: '1', between11and15: '2', between16and19: '3' } }
       )
 
       expect(actual.hasAnyChildren).to.be.eq(true)
-      expect(actual.under11).to.be.eq(1)
-      expect(actual.between11and15).to.be.eq(2)
-      expect(actual.between16and19).to.be.eq(3)
+      expect(actual.numberOfChildren.under11).to.be.eq(1)
+      expect(actual.numberOfChildren.between11and15).to.be.eq(2)
+      expect(actual.numberOfChildren.between16and19).to.be.eq(3)
     })
 
     it('should NOT populate other fields when hasAnyChildren = false', () => {
       const actual = Dependants.fromObject(
-        { hasAnyChildren: false, under11: '1', between11and15: '2', between16and19: '3' }
+        { hasAnyChildren: false, numberOfChildren: { under11: '1', between11and15: '2', between16and19: '3' } }
       )
 
       expect(actual.hasAnyChildren).to.be.eq(false)
-      expect(actual.under11).to.be.eq(undefined)
-      expect(actual.between11and15).to.be.eq(undefined)
-      expect(actual.between16and19).to.be.eq(undefined)
+      expect(actual.numberOfChildren).to.be.eq(undefined)
     })
   })
 
@@ -109,47 +100,75 @@ describe('Dependants', () => {
 
         context('should reject when', () => {
 
-          it('one of other field is not given', () => {
-            const errors = validator.validateSync(new Dependants(true, 10, 10, undefined))
-
-            expect(errors.length).to.equal(1)
-            expectValidationError(errors, ValidationErrors.BETWEEN_16_AND_19_REQUIRED)
-          })
-
           it('all are not given', () => {
-            const errors = validator.validateSync(new Dependants(true, undefined, undefined, undefined))
-
-            expect(errors.length).to.equal(3)
-            expectValidationError(errors, ValidationErrors.UNDER_11_REQUIRED)
-            expectValidationError(errors, ValidationErrors.BETWEEN_11_AND_15_REQUIRED)
-            expectValidationError(errors, ValidationErrors.BETWEEN_16_AND_19_REQUIRED)
-          })
-
-          it('one of other fields has < 0 given', () => {
-            const errors = validator.validateSync(new Dependants(true, -1, 2, 0))
+            const errors = validator.validateSync(
+              new Dependants(true, new NumberOfChildren(undefined, undefined, undefined))
+            )
 
             expect(errors.length).to.equal(1)
-            expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
+            expectValidationError(errors, ValidationErrors.ENTER_AT_LEAST_ONE)
           })
 
-          it('one of other fields has not integer given', () => {
-            const errors = validator.validateSync(new Dependants(true, 0, 1.5, 0))
+          it('all field set 0', () => {
+            const errors = validator.validateSync(new Dependants(true, new NumberOfChildren(0, 0, 0)))
 
             expect(errors.length).to.equal(1)
-            expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
+            expectValidationError(errors, ValidationErrors.ENTER_AT_LEAST_ONE)
+          })
+
+          it('under11 is < 0', () => {
+            const errors = validator.validateSync(new Dependants(true, new NumberOfChildren(-1, 2, 0)))
+
+            expect(errors.length).to.equal(1)
+            expectValidationError(errors, GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED)
+          })
+
+          it('between11and15 is < 0', () => {
+            const errors = validator.validateSync(new Dependants(true, new NumberOfChildren(1, -1, 0)))
+
+            expect(errors.length).to.equal(1)
+            expectValidationError(errors, GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED)
+          })
+
+          it('between16and19 is < 0', () => {
+            const errors = validator.validateSync(new Dependants(true, new NumberOfChildren(1, 1, -1)))
+
+            expect(errors.length).to.equal(1)
+            expectValidationError(errors, GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED)
+          })
+
+          it('under11 is decimal', () => {
+            const errors = validator.validateSync(new Dependants(true, new NumberOfChildren(1.1, 0, 0)))
+
+            expect(errors.length).to.equal(1)
+            expectValidationError(errors, GlobalValidationErrors.INTEGER_REQUIRED)
+          })
+
+          it('between11and15 is decimal', () => {
+            const errors = validator.validateSync(new Dependants(true, new NumberOfChildren(0, 1.5, 0)))
+
+            expect(errors.length).to.equal(1)
+            expectValidationError(errors, GlobalValidationErrors.INTEGER_REQUIRED)
+          })
+
+          it('between16and19 is decimal', () => {
+            const errors = validator.validateSync(new Dependants(true, new NumberOfChildren(0, 1, 1.2)))
+
+            expect(errors.length).to.equal(1)
+            expectValidationError(errors, GlobalValidationErrors.INTEGER_REQUIRED)
           })
         })
 
         context('should accept when', () => {
 
-          it('all field set 0', () => {
-            const errors = validator.validateSync(new Dependants(true, 0, 0, 0))
+          it('one of other field is not given', () => {
+            const errors = validator.validateSync(new Dependants(true, new NumberOfChildren(10, 10, undefined)))
 
             expect(errors.length).to.equal(0)
           })
 
           it('positive number', () => {
-            const errors = validator.validateSync(new Dependants(true, 1, 1, 1))
+            const errors = validator.validateSync(new Dependants(true, new NumberOfChildren(1, 1, 1)))
 
             expect(errors.length).to.equal(0)
           })
@@ -159,7 +178,7 @@ describe('Dependants', () => {
       context('isCurrentlyEmployed = false', () => {
 
         it('should not validate other fields', () => {
-          const errors = validator.validateSync(new Dependants(false, -10, -10, -10))
+          const errors = validator.validateSync(new Dependants(false, new NumberOfChildren(-10, -10, -10)))
 
           expect(errors.length).to.equal(0)
         })

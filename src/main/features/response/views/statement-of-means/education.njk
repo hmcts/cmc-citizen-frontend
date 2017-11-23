@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, radioOption, textInput, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, radioOption, numericInput, saveAndContinueButton, errorSummary %}
 {% from "date.njk" import dateInput %}
 
 {% set title = 'Money claim' %}
@@ -21,7 +21,7 @@
         </ul>
 
         <input type="hidden" name="maxValue" value="{{ between16and19 | default(0) }}">
-        {{ textInput('Enter number', 'value', form) }}
+        {{ numericInput('Enter number', 'value', form) }}
 
         {{ saveAndContinueButton() }}
 

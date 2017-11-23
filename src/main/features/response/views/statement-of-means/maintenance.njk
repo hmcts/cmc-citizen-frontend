@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, radioOption, textInput, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, radioOption, numericInput, saveAndContinueButton, errorSummary %}
 {% from "date.njk" import dateInput %}
 
 {% set title = 'Money claim' %}
@@ -30,7 +30,7 @@
             id="option-true"
             aria-hidden="false">
 
-            {{ textInput('Number of children', 'value', form) }}
+            {{ numericInput('Number of children', 'value', form) }}
 
           </div>
 

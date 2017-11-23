@@ -133,7 +133,10 @@ describe('Defendant response: Statement of means: dependants', () => {
 
           await request(app)
             .post(pagePath)
-            .send({ hasAnyChildren: 'true', under11: '1', between11and15: '2', between16and19: '0' })
+            .send({
+              hasAnyChildren: 'true',
+              numberOfChildren: { under11: '1', between11and15: '2', between16and19: '0' }
+            })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.maintenancePage.evaluateUri(
@@ -149,7 +152,10 @@ describe('Defendant response: Statement of means: dependants', () => {
 
           await request(app)
             .post(pagePath)
-            .send({ hasAnyChildren: 'true', under11: '0', between11and15: '0', between16and19: '3' })
+            .send({
+              hasAnyChildren: 'true',
+              numberOfChildren: { under11: '0', between11and15: '0', between16and19: '3' }
+            })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.educationPage.evaluateUri(
