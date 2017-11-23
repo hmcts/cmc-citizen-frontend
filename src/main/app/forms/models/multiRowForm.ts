@@ -1,7 +1,7 @@
 import { Serializable } from 'models/serializable'
-import { ItemInMultiRowForm } from 'forms/models/itemInMultiRowForm'
+import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
 
-export abstract class MultiRowForm<T extends ItemInMultiRowForm> implements Serializable<MultiRowForm<T>> {
+export abstract class MultiRowForm<T extends MultiRowFormItem> implements Serializable<MultiRowForm<T>> {
 
   rows: T[]
 

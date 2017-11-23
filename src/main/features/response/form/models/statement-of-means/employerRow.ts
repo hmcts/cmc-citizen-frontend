@@ -4,14 +4,14 @@ import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
-import { ItemInMultiRowForm } from 'forms/models/itemInMultiRowForm'
+import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
 
 export class ValidationErrors {
   static readonly EMPLOYER_NAME_REQUIRED: string = 'Enter an employer name'
   static readonly JOB_TITLE_REQUIRED: string = 'Enter a job title'
 }
 
-export class EmployerRow extends ItemInMultiRowForm {
+export class EmployerRow extends MultiRowFormItem {
 
   @ValidateIf(o => o.jobTitle !== undefined)
   @IsDefined({ message: ValidationErrors.EMPLOYER_NAME_REQUIRED })
