@@ -1,18 +1,18 @@
 import { ValidateNested } from 'class-validator'
 
-import { Serializable } from 'models/serializable'
 import { EmployerRow } from 'features/response/form/models/statement-of-means/employerRow'
+import { MultiRowForm } from 'forms/models/multiRowForm'
 
 export const INIT_ROW_COUNT: number = 1
 export const MAX_NUMBER_OF_JOBS: number = 20
 
-export class Employers implements Serializable<Employers> {
-  readonly type: string = 'breakdown'
+export class Employers extends MultiRowForm<EmployerRow> {
 
   @ValidateNested({ each: true })
   rows: EmployerRow[]
 
   constructor (rows: EmployerRow[] = Employers.initialRows()) {
+    super()
     this.rows = rows
   }
 
@@ -28,33 +28,11 @@ export class Employers implements Serializable<Employers> {
     return new Array(rows).fill(EmployerRow.empty())
   }
 
-  deserialize (input?: any): Employers {
-    if (input) {
-      this.rows = this.deserializeRows(input.rows)
-    }
-
-    return this
+  getMaxNumberOfRows (): number {
+    return MAX_NUMBER_OF_JOBS
   }
 
-  appendRow () {
-    if (this.canAddMoreRows()) {
-      this.rows.push(EmployerRow.empty())
-    }
-  }
-
-  removeExcessRows () {
-    this.rows = this.rows.filter(item => !!item.jobTitle && !!item.employerName)
-
-    if (this.rows.length === 0) {
-      this.appendRow()
-    }
-  }
-
-  canAddMoreRows () {
-    return this.rows.length < MAX_NUMBER_OF_JOBS
-  }
-
-  private deserializeRows (rows: any): EmployerRow[] {
+  deserializeRows (rows: any): EmployerRow[] {
     if (!rows) {
       return Employers.initialRows()
     }
@@ -68,4 +46,7 @@ export class Employers implements Serializable<Employers> {
     return employerRows
   }
 
+  createEmptyRow (): EmployerRow {
+    return new EmployerRow(undefined, undefined)
+  }
 }
