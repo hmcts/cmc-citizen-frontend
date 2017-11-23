@@ -29,10 +29,11 @@ export class TaskListBuilder {
     return new TaskList(1, 'Before you start', tasks)
   }
 
-  static buildRespondToClaimSection (draft: ResponseDraft, responseDeadline: Moment, externalId: string): TaskList {
+  static buildRespondToClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
+    const externalId: string = claim.externalId
     const tasks: TaskListItem[] = []
     const now: Moment = MomentFactory.currentDateTime()
-    if (responseDeadline.isAfter(now)) {
+    if (claim.responseDeadline.isAfter(now)) {
       tasks.push(
         new TaskListItem(
           'More time needed to respond',
@@ -75,7 +76,7 @@ export class TaskListBuilder {
         new TaskListItem(
           'When will you pay?',
           Paths.defencePaymentOptionsPage.evaluateUri({ externalId: externalId }),
-          WhenWillYouPayTask.isCompleted(draft)
+          WhenWillYouPayTask.isCompleted(draft, claim.claimData.defendant)
         )
       )
     }
@@ -119,7 +120,7 @@ export class TaskListBuilder {
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {
     return [].concat(
       TaskListBuilder.buildBeforeYouStartSection(draft, claim.externalId).tasks,
-      TaskListBuilder.buildRespondToClaimSection(draft, claim.responseDeadline, claim.externalId).tasks
+      TaskListBuilder.buildRespondToClaimSection(draft, claim).tasks
     )
       .filter(item => !item.completed)
   }
