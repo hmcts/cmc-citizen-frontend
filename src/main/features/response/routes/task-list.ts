@@ -1,5 +1,4 @@
 import * as express from 'express'
-import { Moment } from 'moment'
 
 import { Paths } from 'response/paths'
 
@@ -15,12 +14,11 @@ export default express.Router()
     try {
       const user: User = res.locals.user
       const claim: Claim = user.claim
-      const responseDeadline: Moment = claim.responseDeadline
 
       const beforeYouStartSection = TaskListBuilder
         .buildBeforeYouStartSection(user.responseDraft.document, claim.externalId)
       const respondToClaimSection = TaskListBuilder
-        .buildRespondToClaimSection(user.responseDraft.document, responseDeadline, claim.externalId)
+        .buildRespondToClaimSection(user.responseDraft.document, claim)
       const submitSection = TaskListBuilder.buildSubmitSection(claim.externalId)
 
       res.render(Paths.taskListPage.associatedView,
