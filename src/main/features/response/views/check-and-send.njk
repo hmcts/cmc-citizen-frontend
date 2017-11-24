@@ -131,6 +131,7 @@
         {{ row('Followed by equal instalments of', t(draft.defendantPaymentPlan.instalmentAmount | numeral), paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
         {{ row('Make the first payment on', t(draft.defendantPaymentPlan.firstPaymentDate.toMoment() | date), paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
         {{ row('Frequency of payments', t(draft.defendantPaymentPlan.paymentSchedule.displayValue), paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('Explain why you can’t pay the full amount now', draft.defendantPaymentPlan.text, paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
         {{ tableEnd() }}
       {% endif %}
       {% if draft.defendantPaymentOption.isOfType(DefendantPaymentType.BY_SET_DATE) %}
