@@ -54,8 +54,4 @@ export class EmployerRow extends MultiRowFormItem {
 
     return this
   }
-
-  isEmpty (): boolean {
-    return !this.employerName && !this.jobTitle
-  }
 }

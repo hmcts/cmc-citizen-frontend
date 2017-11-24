@@ -2,5 +2,11 @@ export abstract class MultiRowFormItem {
 
   abstract deserialize (input?: any): MultiRowFormItem
 
-  abstract isEmpty (): boolean
+  isEmpty (): boolean {
+    const that = this
+    let result: boolean = true
+    Object.keys(this).forEach(key => result = result && !that[key])
+
+    return result
+  }
 }
