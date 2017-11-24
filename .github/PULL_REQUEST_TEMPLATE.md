@@ -10,6 +10,7 @@
 
 - [ ] Unit tests added where applicable
 - [ ] Route tests added for new pages
+- [ ] New pages included in a11y tests
 - [ ] Task list and task completeness checks updated
 - [ ] Check and send page updated
 - [ ] Routes, page content and page flows of new features are toggled 
