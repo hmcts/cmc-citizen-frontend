@@ -132,8 +132,7 @@ describe('Employers', () => {
 
       expect(actual.rows.length).to.be.eq(actual.getInitialNumberOfRows())
       actual.removeExcessRows()
-      expect(actual.rows.length).to.be.eq(1)
-      expectAllRowsToBeEmpty(actual.rows)
+      expect(actual.rows.length).to.be.eq(0)
     })
 
     it('should not filter out any element from list when all populated', () => {

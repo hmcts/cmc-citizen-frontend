@@ -39,13 +39,13 @@ export abstract class MultiRowForm<T extends MultiRowFormItem> implements Serial
       return this.initialRows()
     }
 
-    let employerRows: T[] = rows.map(row => this.createEmptyRow().deserialize(row))
+    let deserialisedRows: T[] = rows.map(row => this.createEmptyRow().deserialize(row))
 
     if (rows.length < this.getInitialNumberOfRows()) {
-      employerRows = employerRows.concat(this.initialRows(this.getInitialNumberOfRows() - rows.length))
+      deserialisedRows = deserialisedRows.concat(this.initialRows(this.getInitialNumberOfRows() - rows.length))
     }
 
-    return employerRows
+    return deserialisedRows
   }
 
   getInitialNumberOfRows (): number {
@@ -66,9 +66,5 @@ export abstract class MultiRowForm<T extends MultiRowFormItem> implements Serial
 
   removeExcessRows () {
     this.rows = this.getPopulatedRowsOnly()
-
-    if (this.rows.length === 0) {
-      this.appendRow()
-    }
   }
 }
