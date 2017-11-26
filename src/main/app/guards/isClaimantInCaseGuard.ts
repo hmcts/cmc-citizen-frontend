@@ -6,7 +6,7 @@ import { User } from 'idam/user'
 
 export class IsClaimantInCaseGuard {
   /**
-   * Throws NotFound error user is not defendant in the case
+   * Throws Forbidden error if user is not the claimant in the case
    *
    * @returns {express.RequestHandler} - request handler middleware
    */
