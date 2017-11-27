@@ -7,20 +7,36 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-
-      <p>{{ t('Briefly explain why you are owed the money.') }}</p>
-      <div class="panel panel-border-wide">
-        <p>{{ t('Your claim will be sent to the defendant %1$s - a judge will not consider your explanation unless the defendant %1$s rejects your claim.',
-        {
-          postProcess: 'sprintf',
-          sprintf: [defendantName]
-        })
-        }}</p>
-      </div>
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        {{ textArea(label = '', name = 'reason', form = form, rows = 10) }}
+        {% set name = 'reason' %}
+        {% set error = form.errorFor(name) %}
+        <div class="form-group {% if error %} form-group-error {% endif %}">
+          <label for="{{ name }}" id="{{ name }}[label]">
+            <span class="form-label">
+              {{ t('Briefly explain why you are owed the money.') }}
+            </span>
+
+            <div class="panel panel-border-wide">
+              <p>{{
+                t('Your claim will be sent to the defendant {{defendantName}} - a judge will not consider your explanation unless the defendant {{defendantName}} rejects your claim.',
+                  {
+                    postProcess: 'sprintf',
+                    sprintf: [defendantName]
+                  }
+                )
+              }}</p>
+            </div>
+
+            {% if error %}
+              <span class="error-message">{{ t(error) }}</span>
+            {% endif %}
+          </label>
+
+          <textarea id="{{ name }}" name="{{ name }}" rows="5" class="form-control form-control-3-4 {% if error %}form-control-error{% endif %}">{{ form.valueFor(name) | default('') }}</textarea>
+        </div>
+
         {{ saveAndContinueButton() }}
       </form>
     </div>
