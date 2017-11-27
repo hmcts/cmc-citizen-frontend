@@ -13,17 +13,20 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
+import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
-const repaymentPlanPage = CCJPaths.repaymentPlanPage.evaluateUri({ externalId: externalId })
+const pagePath = CCJPaths.repaymentPlanPage.evaluateUri({ externalId: externalId })
 const checkAndSendPage = CCJPaths.checkAndSendPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ: repayment page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', repaymentPlanPage)
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -35,7 +38,7 @@ describe('CCJ: repayment page', () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
-            .get(repaymentPlanPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -45,7 +48,7 @@ describe('CCJ: repayment page', () => {
           draftStoreServiceMock.rejectFind('Error')
 
           await request(app)
-            .get(repaymentPlanPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -55,7 +58,7 @@ describe('CCJ: repayment page', () => {
           draftStoreServiceMock.resolveFind('ccj')
 
           await request(app)
-            .get(repaymentPlanPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Order them to pay by instalments'))
         })
@@ -76,7 +79,9 @@ describe('CCJ: repayment page', () => {
       }
     }
 
-    checkAuthorizationGuards(app, 'post', repaymentPlanPage)
+    const method = 'post'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
@@ -87,7 +92,7 @@ describe('CCJ: repayment page', () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .post(repaymentPlanPage)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -98,7 +103,7 @@ describe('CCJ: repayment page', () => {
         draftStoreServiceMock.rejectFind('Error')
 
         await request(app)
-          .post(repaymentPlanPage)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -111,7 +116,7 @@ describe('CCJ: repayment page', () => {
           draftStoreServiceMock.resolveSave()
 
           await request(app)
-            .post(repaymentPlanPage)
+            .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(checkAndSendPage))
@@ -124,7 +129,7 @@ describe('CCJ: repayment page', () => {
           draftStoreServiceMock.resolveFind('ccj')
 
           await request(app)
-            .post(repaymentPlanPage)
+            .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ signed: undefined })
             .expect(res => expect(res).to.be.successful.withText('Enter a valid payment amount', 'div class="error-summary"'))
