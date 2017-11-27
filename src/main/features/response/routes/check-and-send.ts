@@ -27,7 +27,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     form: form,
     draft: user.responseDraft.document,
     signatureType: signatureTypeFor(user),
-    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(user.claim.claimData.defendant)
+    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(user.responseDraft.document)
   })
 }
 

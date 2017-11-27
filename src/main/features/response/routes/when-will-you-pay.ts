@@ -34,7 +34,7 @@ function renderView (form: Form<DefendantPaymentOption>, res: express.Response) 
     claim: user.claim,
     responseType: user.responseDraft.document.response.type,
     formLabel: formLabelFor(user.responseDraft.document),
-    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(user.claim.claimData.defendant)
+    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(user.responseDraft.document)
   })
 }
 

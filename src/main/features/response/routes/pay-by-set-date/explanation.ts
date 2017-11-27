@@ -10,11 +10,10 @@ import { DraftService } from 'services/draftService'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { RoutablePath } from 'common/router/routablePath'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
-import { TheirDetails } from 'app/claims/models/details/theirs/theirDetails'
-import { Claim } from 'claims/models/claim'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
-function nextPageFor (defendant: TheirDetails): RoutablePath {
-  if (StatementOfMeans.isApplicableFor(defendant)) {
+function nextPageFor (responseDraft: ResponseDraft): RoutablePath {
+  if (StatementOfMeans.isApplicableFor(responseDraft)) {
     return StatementOfMeansPaths.startPage
   } else {
     return Paths.taskListPage
@@ -22,10 +21,10 @@ function nextPageFor (defendant: TheirDetails): RoutablePath {
 }
 
 function renderView (form: Form<PaymentDate>, res: express.Response) {
-  const claim: Claim = res.locals.user.claim
+  const user: User = res.locals.user
   res.render(PayBySetDatePaths.explanationPage.associatedView, {
     form: form,
-    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(claim.claimData.defendant)
+    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(user.responseDraft.document)
   })
 }
 
@@ -50,6 +49,6 @@ export default express.Router()
       } else {
         user.responseDraft.document.payBySetDate.explanation = form.model
         await new DraftService().save(user.responseDraft, user.bearerToken)
-        res.redirect(nextPageFor(user.claim.claimData.defendant).evaluateUri({ externalId: req.params.externalId }))
+        res.redirect(nextPageFor(user.responseDraft.document).evaluateUri({ externalId: req.params.externalId }))
       }
     }))

@@ -11,11 +11,11 @@ import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { FormValidator } from 'forms/validation/formValidator'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { RoutablePath } from 'common/router/routablePath'
-import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
-function nextPageFor (defendant: TheirDetails): RoutablePath {
-  if (StatementOfMeans.isApplicableFor(defendant)) {
+function nextPageFor (responseDraft: ResponseDraft): RoutablePath {
+  if (StatementOfMeans.isApplicableFor(responseDraft)) {
     return StatementOfMeansPaths.startPage
   } else {
     return Paths.taskListPage
@@ -57,6 +57,6 @@ export default express.Router()
           await new DraftService().save(user.responseDraft, user.bearerToken)
 
           const { externalId } = req.params
-          res.redirect(nextPageFor(user.claim.claimData.defendant).evaluateUri({ externalId: externalId }))
+          res.redirect(nextPageFor(user.responseDraft.document).evaluateUri({ externalId: externalId }))
         }
       }))

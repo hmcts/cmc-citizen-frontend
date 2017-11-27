@@ -3,7 +3,6 @@ import { Validator } from 'class-validator'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { PayBySetDate } from 'response/draft/payBySetDate'
-import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 
 const validator = new Validator()
@@ -13,10 +12,10 @@ function isValid (input): boolean {
 }
 
 export class WhenWillYouPayTask {
-  static isCompleted (responseDraft: ResponseDraft, defendant: TheirDetails): boolean {
+  static isCompleted (responseDraft: ResponseDraft): boolean {
     return isValid(responseDraft.defendantPaymentOption)
       && this.paymentDetailsAreProvidedFor(responseDraft)
-      && this.statementOfMeansIsCompletedIfApplicable(responseDraft, defendant)
+      && this.statementOfMeansIsCompletedIfApplicable(responseDraft)
   }
 
   private static paymentDetailsAreProvidedFor (responseDraft: ResponseDraft): boolean {
@@ -39,8 +38,8 @@ export class WhenWillYouPayTask {
     }
   }
 
-  private static statementOfMeansIsCompletedIfApplicable (responseDraft: ResponseDraft, defendant: TheirDetails): boolean {
-    if (StatementOfMeans.isApplicableFor(defendant)) {
+  private static statementOfMeansIsCompletedIfApplicable (responseDraft: ResponseDraft): boolean {
+    if (StatementOfMeans.isApplicableFor(responseDraft)) {
       return responseDraft.statementOfMeans !== undefined
         && isValid(responseDraft.statementOfMeans.residence)
     }

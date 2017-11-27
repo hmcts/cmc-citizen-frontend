@@ -18,6 +18,7 @@ import { checkCountyCourtJudgmentRequestedGuard } from '../checks/ccj-requested-
 import { ValidationErrors } from 'response/form/models/pay-by-set-date/explanation'
 import { checkNotDefendantInCaseGuard } from '../checks/not-defendant-in-case-check'
 import { PartyType } from 'app/common/partyType'
+import { ResponseType } from 'response/form/models/responseType'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const statementOfMeansStartPage = StatementOfMeansPaths.startPage.evaluateUri({ externalId: externalId })
@@ -117,50 +118,48 @@ describe('Pay by set date : explanation', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .send({ text: '' })
             .expect(res => expect(res).to.be.successful.withText(ValidationErrors.EXPLAIN_WHY_YOU_CANT_PAY_NOW))
-        });
+        })
 
-        [PartyType.INDIVIDUAL, PartyType.SOLE_TRADER_OR_SELF_EMPLOYED].forEach((partyType) => {
-          it(`should redirect to statement of means start page if defendant is ${partyType.value}`, async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId({
-              claim: {
-                defendants: [
-                  {
-                    type: partyType.value
-                  }
-                ]
+        it('should redirect to statement of means start page if defendant is individual', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response', {
+            response: {
+              type: ResponseType.OWE_ALL_PAID_NONE
+            },
+            defendantDetails: {
+              partyDetails: {
+                type: PartyType.INDIVIDUAL.value
               }
-            })
-            draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(validFormData)
-              .expect(res => expect(res).to.be.redirect.toLocation(statementOfMeansStartPage))
+            }
           })
-        });
+          draftStoreServiceMock.resolveSave()
 
-        [PartyType.COMPANY, PartyType.ORGANISATION].forEach((partyType) => {
-          it(`should redirect to task list page if defendant is ${partyType.value}`, async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId({
-              claim: {
-                defendants: [
-                  {
-                    type: partyType.value
-                  }
-                ]
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.redirect.toLocation(statementOfMeansStartPage))
+        })
+
+        it('should redirect to task list page if defendant is company', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response', {
+            response: {
+              type: ResponseType.OWE_ALL_PAID_NONE
+            },
+            defendantDetails: {
+              partyDetails: {
+                type: PartyType.COMPANY.value
               }
-            })
-            draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(validFormData)
-              .expect(res => expect(res).to.be.redirect.toLocation(taskListPage))
+            }
           })
+          draftStoreServiceMock.resolveSave()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.redirect.toLocation(taskListPage))
         })
       })
     })
