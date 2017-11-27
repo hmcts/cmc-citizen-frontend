@@ -17,6 +17,7 @@ import * as claimStoreServiceMock from '../../../../http-mocks/claim-store'
 import { checkCountyCourtJudgmentRequestedGuard } from '../checks/ccj-requested-check'
 import * as moment from 'moment'
 import { ValidationErrors } from 'forms/models/payBySetDate'
+import { checkNotDefendantInCaseGuard } from '../checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = PayBySetDatePaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -47,15 +48,17 @@ describe('Pay by set date : payment date', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', pagePath)
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
       })
 
-      checkAlreadySubmittedGuard(app, 'get', pagePath)
-      checkCountyCourtJudgmentRequestedGuard(app, 'get', pagePath)
+      checkAlreadySubmittedGuard(app, method, pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       context('when guards are satisfied', () => {
         beforeEach(() => {
@@ -84,15 +87,17 @@ describe('Pay by set date : payment date', () => {
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', pagePath)
+    const method = 'post'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
       })
 
-      checkAlreadySubmittedGuard(app, 'post', pagePath)
-      checkCountyCourtJudgmentRequestedGuard(app, 'post', pagePath)
+      checkAlreadySubmittedGuard(app, method, pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       context('when guards are satisfied', () => {
         beforeEach(() => {

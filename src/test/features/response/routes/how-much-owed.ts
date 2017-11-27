@@ -14,30 +14,33 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const defendantHowMuchOwedPage = ResponsePaths.defendantHowMuchOwed.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath = ResponsePaths.defendantHowMuchOwed.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: how much money do you believe you owe', () => {
   attachDefaultHooks()
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', defendantHowMuchOwedPage)
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
       })
 
-      checkAlreadySubmittedGuard(app, 'get', defendantHowMuchOwedPage)
+      checkAlreadySubmittedGuard(app, method, pagePath)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
-            .get(defendantHowMuchOwedPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -47,7 +50,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
-            .get(defendantHowMuchOwedPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('How much money do you believe you owe?'))
         })
@@ -56,14 +59,15 @@ describe('Defendant response: how much money do you believe you owe', () => {
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', defendantHowMuchOwedPage)
+    const method = 'post'
+    checkAuthorizationGuards(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
       })
 
-      checkAlreadySubmittedGuard(app, 'post', defendantHowMuchOwedPage)
+      checkAlreadySubmittedGuard(app, method, pagePath)
 
       context('when response not submitted', () => {
         context('when form is invalid', () => {
@@ -71,7 +75,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
             claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
-              .post(defendantHowMuchOwedPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -81,7 +85,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(defendantHowMuchOwedPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('How much money do you believe you owe?', 'div class="error-summary"'))
           })
@@ -94,7 +98,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(defendantHowMuchOwedPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ amount: 1, text: 'I don’t owe full amount' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -106,7 +110,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(defendantHowMuchOwedPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ amount: 1, text: 'I don’t owe full amount' })
               .expect(res => expect(res).to.be.redirect
