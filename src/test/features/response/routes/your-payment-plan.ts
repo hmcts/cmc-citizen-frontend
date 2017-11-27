@@ -5,19 +5,22 @@ import * as config from 'config'
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
+import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
 
-import { Paths as Paths } from 'response/paths'
+import { Paths, StatementOfMeansPaths } from 'response/paths'
 
 import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
+import { PartyType } from 'app/common/partyType'
+import { ResponseType } from 'response/form/models/responseType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId })
+const statementOfMeansStartPage = StatementOfMeansPaths.startPage.evaluateUri({ externalId: externalId })
 const taskListPage = Paths.taskListPage.evaluateUri({ externalId: externalId })
 
 describe('Defendant: payment page', () => {
@@ -111,9 +114,39 @@ describe('Defendant: payment page', () => {
       })
 
       context('when form is valid', async () => {
-        it('should redirect to confirmation page', async () => {
+        it('should redirect to statement of means start page if defendant is individual', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response', {
+            response: {
+              type: ResponseType.OWE_ALL_PAID_NONE
+            },
+            defendantDetails: {
+              partyDetails: {
+                type: PartyType.INDIVIDUAL.value
+              }
+            }
+          })
+          draftStoreServiceMock.resolveSave()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.redirect.toLocation(statementOfMeansStartPage))
+        })
+
+        it('should redirect to task list page if defendant is company', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response', {
+            response: {
+              type: ResponseType.OWE_ALL_PAID_NONE
+            },
+            defendantDetails: {
+              partyDetails: {
+                type: PartyType.COMPANY.value
+              }
+            }
+          })
           draftStoreServiceMock.resolveSave()
 
           await request(app)

@@ -8,6 +8,7 @@ import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { RoutablePath } from 'common/router/routablePath'
 import { Education } from 'response/form/models/statement-of-means/education'
+import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { NumberOfChildren } from 'response/form/models/statement-of-means/numberOfChildren'
 
 const page: RoutablePath = Paths.educationPage
@@ -25,15 +26,18 @@ function renderView (form: Form<Education>, res: express.Response): void {
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(page.uri,
+  .get(
+    page.uri,
+    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
       renderView(new Form(user.responseDraft.document.statementOfMeans.education), res)
     })
   .post(
     page.uri,
+    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     FormValidator.requestHandler(Education, Education.fromObject),
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<Education> = req.body
       const user: User = res.locals.user
       const { externalId } = req.params

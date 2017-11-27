@@ -12,6 +12,7 @@ import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { ResponseType } from 'response/form/models/responseType'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { StatementOfMeans } from 'response/draft/statementOfMeans'
 
 function isAmountTooHighPartialResponse (responseDraft: ResponseDraft): boolean {
   return responseDraft.response.type.value === ResponseType.OWE_SOME_PAID_NONE.value
@@ -32,7 +33,8 @@ function renderView (form: Form<DefendantPaymentOption>, res: express.Response) 
     form: form,
     claim: user.claim,
     responseType: user.responseDraft.document.response.type,
-    formLabel: formLabelFor(user.responseDraft.document)
+    formLabel: formLabelFor(user.responseDraft.document),
+    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(user.responseDraft.document)
   })
 }
 

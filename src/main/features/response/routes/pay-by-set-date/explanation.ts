@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { PayBySetDatePaths, Paths } from 'response/paths'
+import { PayBySetDatePaths, Paths, StatementOfMeansPaths } from 'response/paths'
 import { Form } from 'forms/form'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { FormValidator } from 'forms/validation/formValidator'
@@ -8,10 +8,23 @@ import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
+import { RoutablePath } from 'common/router/routablePath'
+import { StatementOfMeans } from 'response/draft/statementOfMeans'
+import { ResponseDraft } from 'response/draft/responseDraft'
+
+function nextPageFor (responseDraft: ResponseDraft): RoutablePath {
+  if (StatementOfMeans.isApplicableFor(responseDraft)) {
+    return StatementOfMeansPaths.startPage
+  } else {
+    return Paths.taskListPage
+  }
+}
 
 function renderView (form: Form<PaymentDate>, res: express.Response) {
+  const user: User = res.locals.user
   res.render(PayBySetDatePaths.explanationPage.associatedView, {
-    form: form
+    form: form,
+    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(user.responseDraft.document)
   })
 }
 
@@ -36,6 +49,6 @@ export default express.Router()
       } else {
         user.responseDraft.document.payBySetDate.explanation = form.model
         await new DraftService().save(user.responseDraft, user.bearerToken)
-        res.redirect(Paths.taskListPage.evaluateUri({ externalId: req.params.externalId }))
+        res.redirect(nextPageFor(user.responseDraft.document).evaluateUri({ externalId: req.params.externalId }))
       }
     }))

@@ -18,11 +18,13 @@
           bold = true
         ) }}
 
-        <div class="panel panel-border-wide">
-          <p>
-            {{ t('You’ll also need to answer some questions about your finances') }}
-          </p>
-        </div>
+        {% if statementOfMeansIsApplicable %}
+          <div class="panel panel-border-wide">
+            <p>
+              {{ t('You’ll also need to answer some questions about your finances') }}
+            </p>
+          </div>
+        {% endif %}
 
         {{ saveAndContinueButton() }}
       </form>
