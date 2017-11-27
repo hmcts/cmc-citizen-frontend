@@ -29,7 +29,7 @@ describe('Statement of means', () => {
 
       context('when user authorised', () => {
         beforeEach(() => {
-          idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
         })
 
         it('should return error page when unable to retrieve claim', async () => {
@@ -72,7 +72,7 @@ describe('Statement of means', () => {
 
       context('when user authorised', () => {
         beforeEach(() => {
-          idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
         })
 
         it('should return error page when unable to retrieve claim', async () => {
