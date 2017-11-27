@@ -76,7 +76,7 @@ export class TaskListBuilder {
         new TaskListItem(
           'When will you pay?',
           Paths.defencePaymentOptionsPage.evaluateUri({ externalId: externalId }),
-          WhenWillYouPayTask.isCompleted(draft, claim.claimData.defendant)
+          WhenWillYouPayTask.isCompleted(draft)
         )
       )
     }
