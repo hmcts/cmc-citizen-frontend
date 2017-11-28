@@ -15,12 +15,19 @@
   {% set isJointValue = form.valueFor(isJointKey) %}
   {% set isJointError = form.errorFor(isJointKey) %}
 
-  {% set anyErrorOccured = form.errorFor(prefix + '[balance]') or typeOfAccountError or isJointError %}
+  {% set balanceKey = prefix + '[balance]' %}
+  {% set balanceValue = form.valueFor(balanceKey) %}
+  {% set balanceError = form.errorFor(balanceKey) %}
 
-  <div class="triple-column{% if anyErrorOccured %} form-group-error {% endif %}">
+  {% set anyErrorOccurred = balanceError or typeOfAccountError or isJointError %}
+  <div class="triple-column{% if anyErrorOccurred %} form-group-error {% endif %}">
 
-    <label for="{{ typeOfAccountKey }}" class="visuallyhidden">Select type</label>
     {% if typeOfAccountError %}<span id="{{ typeOfAccountKey }}[label]" class="error-message">{{ t(typeOfAccountError) }}</span>{% endif %}
+    {% if isJointError %}<span id="{{ isJointKey }}[label]" class="error-message">{{ t(isJointError) }}</span>{% endif %}
+    {% if balanceError %}<span id="{{ balanceKey }}[label]" class="error-message">{{ t(balanceError) }}</span>{% endif %}
+
+    <label class="form-label-bold mobile-show" for="{{ typeOfAccountKey }}">{{ index + 1 }} {{ t('. Type of account') }}</label>
+
     <select name="{{ typeOfAccountKey }}" id="{{ typeOfAccountKey }}" class="form-control column-1{% if typeOfAccountError %} form-group-error {% endif %}" style="width:30%">
       <option value="">Choose</option>
       <option value="{{ BankAccountType.CURRENT_ACCOUNT.value }}" {% if typeOfAccountValue === BankAccountType.CURRENT_ACCOUNT %} selected{% endif %}>{{ BankAccountType.CURRENT_ACCOUNT.displayValue }}</option>
@@ -29,15 +36,21 @@
       <option value="{{ BankAccountType.OTHER.value }}" {% if typeOfAccountValue === BankAccountType.OTHER %} selected{% endif %}>{{ BankAccountType.OTHER.displayValue }}</option>
     </select>
 
-    {{ poundInput(name = prefix + '[balance]', form = form) }}
-
-    <label for="{{ isJointKey }}" class="visuallyhidden">Select an option</label>
-    {% if isJointError %}<span id="{{ isJointKey }}[label]" class="error-message">{{ t(isJointError) }}</span>{% endif %}
+    <label class="form-label-bold mobile-show" for="{{ isJointKey }}" >{{ t('Joint account') }}</label>
     <select name="{{ isJointKey }}" id="{{ isJointKey }}" class="form-control column-3 {% if isJointError %} form-group-error {% endif %}">
       <option value="">Choose</option>
       <option value="yes" {% if isJointValue === true %} selected{% endif %}>Yes </option>
       <option value="no" {% if isJointValue === false %} selected{% endif %}>No</option>
     </select>
+
+    <label class="form-label-bold mobile-show">{{ t('Balance') }}</label>
+
+    <span class="input-symbol-pound">
+      <input id="{{ balanceKey }}" name="{{ balanceKey }}"
+             class="form-control column-2 {% if balanceError %} form-group-error {% endif %}""
+             type="number"
+             value="{{ balanceValue | default('') }}">
+    </span>
   </div>
 
 {% endmacro %}
@@ -51,35 +64,43 @@
     <form method="post" novalidate>
       {{ csrfProtection(csrf) }}
 
-      <div class="triple-column">
-        <div id="timeline-heading-1" class="column-1">
-          <label class="form-label-bold" for="event-form-control">
-            {{ t('Type of account') }}
-          </label>
+      <div id="timeline" class="timeline">
+
+        <div class="triple-column mobile-hide">
+          <div id="timeline-heading-1" class="column-1 mobile-hide">
+            <label class="form-label-bold" for="event-form-control">
+             {{ t('Type of account') }}
+            </label>
+          </div>
+
+          <div id="timeline-heading-3 mobile-hide" class="column-2 ">
+            <label class="form-label-bold" for="timeline-heading-2">
+              {{ t('Joint account') }}
+            </label>
+          </div>
+
+          <div id="timeline-heading-2 mobile-hide" class="column-3 ">
+            <label class="form-label-bold" for="timeline-heading-3">
+              {{ t('Balance') }}
+            </label>
+            <span class="form-hint"> </span>
+          </div>
         </div>
 
-        <div id="timeline-heading-3" class="column-3 ">
-          <label class="form-label-bold" for="timeline-heading-3">
-            {{ t('Joint account') }}
-          </label>
+        <div class="timeline-rows">
+        {% for row in form.model.rows %}
+          {{ bankAccountRow(loop.index0, form) }}
+        {% endfor %}
         </div>
 
-        <div id="timeline-heading-2" class="column-2 ">
-          <label class="form-label-bold" for="timeline-heading-2">
-            {{ t('Balance') }}
-          </label>
+        {% if form.model and form.model.canAddMoreRows() %}
+        <div class="timeline-row">
+          <div id="add-event-container" class="form-group">
+            {{ linkButton('Add another account', 'action[addRow]', 'button button-secondary') }}
+          </div>
         </div>
+        {% endif %}
       </div>
-
-      {% for row in form.model.rows %}
-        {{ bankAccountRow(loop.index0, form) }}
-      {% endfor %}
-
-      {% if form.model and form.model.canAddMoreRows() %}
-        <div id="add-event-container" class="form-group">
-          {{ linkButton('Add another account', 'action[addRow]', 'button button-secondary') }}
-        </div>
-      {% endif %}
 
       {{ saveAndContinueButton() }}
 

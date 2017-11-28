@@ -35,6 +35,10 @@
     :not(:first-child) {
       margin-top: 15px;
     }
+
+    :last-child {
+      margin-bottom: 15px;
+    }
   }
 
   .timeline-row {

@@ -34,6 +34,19 @@
     margin-right: 10px;
     width: 49%;
   }
+
+  .column-2 {
+    display: inline-block;
+    float: none;
+    width: 20%;
+  }
+
+  .column-3 {
+    display: inline-block;
+    margin-right: 10px;
+    text-align: right;
+    width: 20%;
+  }
 }
 
 select {
