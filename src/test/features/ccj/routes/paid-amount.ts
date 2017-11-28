@@ -14,10 +14,11 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
+import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const paidAmountPage = Paths.paidAmountPage.evaluateUri({ externalId: externalId })
+const pagePath = Paths.paidAmountPage.evaluateUri({ externalId: externalId })
 const paidAmountSummaryPage = Paths.paidAmountSummaryPage.evaluateUri({ externalId: externalId })
 
 const validFormData = {
@@ -30,7 +31,9 @@ describe('CCJ - paid amount page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', paidAmountPage)
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
@@ -41,7 +44,7 @@ describe('CCJ - paid amount page', () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .get(paidAmountPage)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -51,7 +54,7 @@ describe('CCJ - paid amount page', () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
         await request(app)
-          .get(paidAmountPage)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -61,14 +64,16 @@ describe('CCJ - paid amount page', () => {
         draftStoreServiceMock.resolveFind('ccj')
 
         await request(app)
-          .get(paidAmountPage)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Has the defendant paid some of the amount owed?'))
       })
     })
 
     describe('on POST', () => {
-      checkAuthorizationGuards(app, 'post', paidAmountPage)
+      const method = 'post'
+      checkAuthorizationGuards(app, method, pagePath)
+      checkNotClaimantInCaseGuard(app, method, pagePath)
 
       context('when user authorised', () => {
         beforeEach(() => {
@@ -80,7 +85,7 @@ describe('CCJ - paid amount page', () => {
             claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
-              .post(paidAmountPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -91,7 +96,7 @@ describe('CCJ - paid amount page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(paidAmountPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -105,7 +110,7 @@ describe('CCJ - paid amount page', () => {
             draftStoreServiceMock.resolveSave()
 
             await request(app)
-              .post(paidAmountPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
               .expect(res => expect(res).to.be.redirect.toLocation(paidAmountSummaryPage))
@@ -117,7 +122,7 @@ describe('CCJ - paid amount page', () => {
             draftStoreServiceMock.rejectSave()
 
             await request(app)
-              .post(paidAmountPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -130,7 +135,7 @@ describe('CCJ - paid amount page', () => {
             draftStoreServiceMock.resolveFind('ccj')
 
             await request(app)
-              .post(paidAmountPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: undefined })
               .expect(res => expect(res).to.be.successful.withText('Has the defendant paid some of the amount owed?', 'div class="error-summary"'))
@@ -143,7 +148,7 @@ describe('CCJ - paid amount page', () => {
             draftStoreServiceMock.resolveFind('ccj')
 
             await request(app)
-              .post(paidAmountPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({
                 option: PaidAmountOption.YES.value,

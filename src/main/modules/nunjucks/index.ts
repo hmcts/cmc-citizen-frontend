@@ -21,6 +21,7 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { StatementType } from 'offer/form/models/statementType'
 import { InterestDateType } from 'app/common/interestDateType'
+import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { DashboardUrlHelper } from 'dashboard/helpers/dashboardUrlHelper'
 import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
@@ -91,10 +92,10 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('StatementType', StatementType)
     nunjucksEnv.addGlobal('NotEligibleReason', NotEligibleReason)
     nunjucksEnv.addGlobal('InterestDateType', InterestDateType)
+    nunjucksEnv.addGlobal('ResidenceType', ResidenceType)
     nunjucksEnv.addGlobal('PaymentSchedule', PaymentSchedule)
     nunjucksEnv.addGlobal('DashboardUrlHelper', DashboardUrlHelper)
     nunjucksEnv.addGlobal('BankAccountType', BankAccountType)
-
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

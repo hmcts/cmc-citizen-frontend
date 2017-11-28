@@ -13,6 +13,7 @@ import { HowMuchOwedTask } from 'response/tasks/howMuchOwedTask'
 import { WhenWillYouPayTask } from 'response/tasks/whenWillYouPayTask'
 import { FreeMediationTask } from 'response/tasks/freeMediationTask'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { Claim } from 'claims/models/claim'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, externalId: string): TaskList {
@@ -28,10 +29,11 @@ export class TaskListBuilder {
     return new TaskList(1, 'Before you start', tasks)
   }
 
-  static buildRespondToClaimSection (draft: ResponseDraft, responseDeadline: Moment, externalId: string): TaskList {
+  static buildRespondToClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
+    const externalId: string = claim.externalId
     const tasks: TaskListItem[] = []
     const now: Moment = MomentFactory.currentDateTime()
-    if (responseDeadline.isAfter(now)) {
+    if (claim.responseDeadline.isAfter(now)) {
       tasks.push(
         new TaskListItem(
           'More time needed to respond',
@@ -115,10 +117,10 @@ export class TaskListBuilder {
     return new TaskList(3, 'Submit', tasks)
   }
 
-  static buildRemainingTasks (draft: ResponseDraft, responseDeadline: Moment, externalId: string): TaskListItem[] {
+  static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {
     return [].concat(
-      TaskListBuilder.buildBeforeYouStartSection(draft, externalId).tasks,
-      TaskListBuilder.buildRespondToClaimSection(draft, responseDeadline, externalId).tasks
+      TaskListBuilder.buildBeforeYouStartSection(draft, claim.externalId).tasks,
+      TaskListBuilder.buildRespondToClaimSection(draft, claim).tasks
     )
       .filter(item => !item.completed)
   }

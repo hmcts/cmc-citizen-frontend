@@ -7,6 +7,10 @@ import { Dependants } from 'response/form/models/statement-of-means/dependants'
 import { Education } from 'response/form/models/statement-of-means/education'
 import { Maintenance } from 'response/form/models/statement-of-means/maintenance'
 import { BankAccounts } from 'response/form/models/statement-of-means/bankAccounts'
+import { FeatureToggles } from 'utils/featureToggles'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { ResponseType } from 'response/form/models/responseType'
+import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 
 export class StatementOfMeans implements Serializable<StatementOfMeans> {
   residence?: Residence
@@ -17,6 +21,24 @@ export class StatementOfMeans implements Serializable<StatementOfMeans> {
   employers?: Employers
   selfEmployed?: SelfEmployed
   bankAccounts?: BankAccounts
+
+  static isApplicableFor (responseDraft?: ResponseDraft): boolean {
+    if (!FeatureToggles.isEnabled('statementOfMeans')) {
+      return false
+    }
+    if (!responseDraft) {
+      throw new Error('Response draft has to be provided as input')
+    }
+    return this.isResponseApplicable(responseDraft) && !responseDraft.defendantDetails.partyDetails.isBusiness()
+  }
+
+  private static isResponseApplicable (responseDraft: ResponseDraft) {
+    return responseDraft.response.type === ResponseType.OWE_ALL_PAID_NONE
+      || (responseDraft.response.type === ResponseType.OWE_SOME_PAID_NONE
+        && responseDraft.rejectPartOfClaim
+        && responseDraft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
+      )
+  }
 
   deserialize (input: any): StatementOfMeans {
     if (input) {

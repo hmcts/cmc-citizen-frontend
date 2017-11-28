@@ -16,10 +16,11 @@ import { checkAuthorizationGuards } from './checks/authorization-check'
 import { ResponseType } from 'response/form/models/responseType'
 import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const defenceFullPartialPaymentOptionsPage = Paths.defencePaymentOptionsPage.evaluateUri({ externalId: externalId })
+const pagePath = Paths.defencePaymentOptionsPage.evaluateUri({ externalId: externalId })
 
 const validFormData: object = {
   option: DefendantPaymentType.INSTALMENTS.value
@@ -29,11 +30,13 @@ describe('Defendant - when will you pay options', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', defenceFullPartialPaymentOptionsPage)
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
       })
 
       context('when service is unhealthy', () => {
@@ -41,7 +44,7 @@ describe('Defendant - when will you pay options', () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
-            .get(defenceFullPartialPaymentOptionsPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -51,7 +54,7 @@ describe('Defendant - when will you pay options', () => {
           draftStoreServiceMock.rejectFind('Error')
 
           await request(app)
-            .get(defenceFullPartialPaymentOptionsPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -67,7 +70,7 @@ describe('Defendant - when will you pay options', () => {
             }
           })
           await request(app)
-            .get(defenceFullPartialPaymentOptionsPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText(fullAdmissionQuestion))
         })
@@ -84,7 +87,7 @@ describe('Defendant - when will you pay options', () => {
             }
           })
           await request(app)
-            .get(defenceFullPartialPaymentOptionsPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText(partAdmissionQuestion))
         })
@@ -92,11 +95,13 @@ describe('Defendant - when will you pay options', () => {
     })
 
     describe('on POST', () => {
-      checkAuthorizationGuards(app, 'post', defenceFullPartialPaymentOptionsPage)
+      const method = 'post'
+      checkAuthorizationGuards(app, method, pagePath)
+      checkNotDefendantInCaseGuard(app, method, pagePath)
 
       context('when user authorised', () => {
         beforeEach(() => {
-          idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
         })
 
         context('when service is unhealthy', () => {
@@ -104,7 +109,7 @@ describe('Defendant - when will you pay options', () => {
             claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
-              .post(defenceFullPartialPaymentOptionsPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -115,7 +120,7 @@ describe('Defendant - when will you pay options', () => {
             draftStoreServiceMock.rejectFind('Error')
 
             await request(app)
-              .post(defenceFullPartialPaymentOptionsPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -127,7 +132,7 @@ describe('Defendant - when will you pay options', () => {
             draftStoreServiceMock.rejectSave()
 
             await request(app)
-              .post(defenceFullPartialPaymentOptionsPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -151,7 +156,7 @@ describe('Defendant - when will you pay options', () => {
 
             async function checkThatSelectedPaymentOptionRedirectsToPage (data: object, expectedToRedirect: string) {
               await request(app)
-                .post(defenceFullPartialPaymentOptionsPage)
+                .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
                 .send(data)
                 .expect(res => expect(res).to.be.redirect.toLocation(expectedToRedirect))
@@ -173,7 +178,7 @@ describe('Defendant - when will you pay options', () => {
           context('when form is invalid', async () => {
             it('should render page', async () => {
               await request(app)
-                .post(defenceFullPartialPaymentOptionsPage)
+                .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
                 .send({ name: 'John Smith' })
                 .expect(res => expect(res).to.be.successful.withText('When will you pay?'))

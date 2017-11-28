@@ -26,6 +26,7 @@ import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
+import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
@@ -118,7 +119,9 @@ const sampleResponseDraftObj = {
     option: MoreTimeNeededOption.YES
   },
   statementOfMeans: {
-    residence: {},
+    residence: {
+      type: ResidenceType.OWN_HOME
+    },
     employment: { isCurrentlyEmployed: true, selfEmployed: true },
     employers: {},
     selfEmployed: {}

@@ -1,6 +1,7 @@
 import { Serializable } from 'models/serializable'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { Explanation } from 'response/form/models/pay-by-set-date/explanation'
+import { PaymentDateChecker } from 'response/helpers/paymentDateChecker'
 
 export class PayBySetDate implements Serializable<PayBySetDate> {
   paymentDate: PaymentDate
@@ -25,5 +26,15 @@ export class PayBySetDate implements Serializable<PayBySetDate> {
 
   hasExplanation (): boolean {
     return !!(this.explanation && this.explanation.text && this.explanation.text.trim())
+  }
+
+  requiresExplanation (): boolean {
+    try {
+      return this.paymentDate !== undefined
+        && this.paymentDate.date !== undefined
+        && PaymentDateChecker.isLaterThan28DaysFromNow(this.paymentDate.date.toMoment())
+    } catch (error) {
+      return false
+    }
   }
 }
