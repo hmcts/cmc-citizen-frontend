@@ -11,13 +11,14 @@ import { checkAuthorizationGuards } from '../checks/authorization-check'
 import { checkAlreadySubmittedGuard } from '../checks/already-submitted-check'
 import { checkCountyCourtJudgmentRequestedGuard } from '../checks/ccj-requested-check'
 import { app } from '../../../../../main/app'
+import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = StatementOfMeansPaths.employmentPage.evaluateUri(
+const pagePath: string = StatementOfMeansPaths.bankAccountsPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
 
-describe('Defendant response: Statement of means: employment', () => {
+describe('Defendant response: Statement of means: employers', () => {
 
   attachDefaultHooks(app)
 
@@ -62,7 +63,7 @@ describe('Defendant response: Statement of means: employment', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Are you currently working?'))
+            .expect(res => expect(res).to.be.successful.withText('List your bank and savings accounts'))
         })
       })
     })
@@ -103,54 +104,32 @@ describe('Defendant response: Statement of means: employment', () => {
         })
       })
 
-      describe('should update draft store and redirect', () => {
+      describe('save and continue', () => {
 
-        it('to employers page', async () => {
+        it('should update draft store and redirect', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
             .post(pagePath)
-            .send({ isCurrentlyEmployed: true, selfEmployed: true, employed: true })
+            .send({ rows: [{ typeOfAccount: BankAccountType.SAVING_ACCOUNT.value, isJoint: false, balance: 10 }] })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.employersPage.evaluateUri(
-                { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
-              )
-            )
+            .expect(res => expect(res).to.be.successful.withText('List your bank and savings accounts'))
         })
+      })
 
-        it('to self-employment page', async () => {
+      describe('add a new row', () => {
+
+        it('should update draft store and redirect', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
 
           await request(app)
             .post(pagePath)
-            .send({ isCurrentlyEmployed: true, selfEmployed: true, employed: false })
+            .send({ action: { addRow: 'Add row' } })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.selfEmployedPage.evaluateUri(
-                { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
-              )
-            )
-        })
-
-        it('to bank-accounts page', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
-
-          await request(app)
-            .post(pagePath)
-            .send({ isCurrentlyEmployed: false })
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.bankAccountsPage.evaluateUri(
-                { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
-              )
-            )
+            .expect(res => expect(res).to.be.successful.withText('List your bank and savings accounts'))
         })
       })
     })

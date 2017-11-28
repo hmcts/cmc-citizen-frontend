@@ -27,3 +27,19 @@
   padding: 5px 4px 4px;
   text-transform: none;
 }
+
+.triple-column {
+  .column-1 {
+    display: inline-block;
+    margin-right: 10px;
+    width: 49%;
+  }
+}
+
+select {
+  .form-control {
+    float: left;
+    margin-left: 0;
+    width: 50%;
+  }
+}

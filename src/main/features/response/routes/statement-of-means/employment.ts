@@ -36,7 +36,7 @@ export default express.Router()
         await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
 
         if (form.model.isCurrentlyEmployed === false) {
-          res.render(page.associatedView, { form: form })
+          res.redirect(StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: externalId }))
         } else {
           if (form.model.employed) {
             res.redirect(StatementOfMeansPaths.employersPage.evaluateUri({ externalId: externalId }))

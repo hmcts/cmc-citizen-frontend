@@ -114,7 +114,11 @@ describe('Defendant response: Statement of means: self-employment', () => {
             .post(pagePath)
             .send({ jobTitle: 'my role', annualTurnover: 10, areYouBehindOnTax: false })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('What are you self-employed as?'))
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(StatementOfMeansPaths.bankAccountsPage.evaluateUri(
+                { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+              )
+            )
         })
       })
     })
