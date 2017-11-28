@@ -1,6 +1,4 @@
-import { Serializable } from 'models/serializable'
-
-export class StatementOfTruth implements Serializable<StatementOfTruth> {
+export class StatementOfTruth {
   signerName: string
   signerRole: string
 

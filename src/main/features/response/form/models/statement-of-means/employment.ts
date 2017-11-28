@@ -1,6 +1,5 @@
 import { IsDefined, ValidateIf } from 'class-validator'
 
-import { Serializable } from 'models/serializable'
 import * as toBoolean from 'to-boolean'
 import { IsBooleanTrue } from 'forms/validation/validators/isBooleanTrue'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
@@ -9,7 +8,7 @@ export class ValidationErrors {
   static readonly SELECT_AT_LEAST_ONE_OPTION: string = 'You must select at least one option'
 }
 
-export class Employment implements Serializable<Employment> {
+export class Employment {
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
   isCurrentlyEmployed: boolean
 
