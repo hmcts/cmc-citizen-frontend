@@ -1,4 +1,3 @@
-import { Serializable } from 'models/serializable'
 import { Residence } from 'response/form/models/statement-of-means/residence'
 import { Employment } from 'response/form/models/statement-of-means/employment'
 import { Employers } from 'response/form/models/statement-of-means/employers'
@@ -11,7 +10,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { ResponseType } from 'response/form/models/responseType'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 
-export class StatementOfMeans implements Serializable<StatementOfMeans> {
+export class StatementOfMeans {
   residence?: Residence
   dependants?: Dependants
   maintenance?: Maintenance

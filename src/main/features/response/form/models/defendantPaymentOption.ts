@@ -1,5 +1,4 @@
 import { IsDefined, IsIn } from 'class-validator'
-import { Serializable } from 'models/serializable'
 import { ResponseType } from 'response/form/models/responseType'
 
 export class DefendantPaymentTypeLabels {
@@ -55,7 +54,7 @@ export class ValidationErrors {
   static readonly WHEN_WILL_YOU_PAY_OPTION_REQUIRED: string = 'Please select when you will pay'
 }
 
-export class DefendantPaymentOption implements Serializable <DefendantPaymentOption> {
+export class DefendantPaymentOption {
 
   @IsDefined({ message: ValidationErrors.WHEN_WILL_YOU_PAY_OPTION_REQUIRED })
   @IsIn(DefendantPaymentType.all(), { message: ValidationErrors.WHEN_WILL_YOU_PAY_OPTION_REQUIRED })

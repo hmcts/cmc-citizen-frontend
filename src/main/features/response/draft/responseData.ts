@@ -1,4 +1,3 @@
-import { Serializable } from 'models/serializable'
 import { PartyType } from 'app/common/partyType'
 import { Party } from 'app/claims/models/details/yours/party'
 import { Individual } from 'app/claims/models/details/yours/individual'
@@ -7,7 +6,7 @@ import { Organisation } from 'app/claims/models/details/yours/organisation'
 import { SoleTrader } from 'app/claims/models/details/yours/soleTrader'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
-export class ResponseData implements Serializable<ResponseData> {
+export class ResponseData {
 
   response?: string
   defence?: string

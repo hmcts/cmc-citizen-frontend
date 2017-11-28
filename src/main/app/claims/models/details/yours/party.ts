@@ -1,8 +1,7 @@
-import { Serializable } from 'models/serializable'
 import { Address } from 'claims/models/address'
 import { PartyType } from 'app/common/partyType'
 
-export class Party implements Serializable<Party> {
+export class Party {
   type: string
   name: string
   address: Address
