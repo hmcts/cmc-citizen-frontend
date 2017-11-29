@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { StatementOfMeansPaths } from 'response/paths'
+import { Paths, StatementOfMeansPaths } from 'response/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'app/forms/validation/formValidator'
 import { ErrorHandling } from 'common/errorHandling'
@@ -47,8 +47,7 @@ export default express.Router()
         user.responseDraft.document.statementOfMeans.bankAccounts = form.model
 
         await new DraftService().save(user.responseDraft, user.bearerToken)
-
-        renderView(form, res)
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     })
   )
