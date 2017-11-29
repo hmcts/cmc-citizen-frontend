@@ -55,9 +55,11 @@ function ensurePageCallWillSucceed (url: string): Promise<void> {
       if (res.redirect) {
         throw new Error(`Call to ${url} resulted in a redirect to ${res.get('Location')}`)
       }
-      if (res.serverError) {
-        throw new Error(`Call to ${url} resulted in internal server error`)
+
+      if (!res.ok) {
+        throw new Error(`Call to ${url} resulted in ${res.status}`)
       }
+
     })
 }
 
