@@ -35,8 +35,11 @@ export default express.Router()
       if (form.hasErrors()) {
         res.render(page.associatedView, { form: form })
       } else {
-        user.responseDraft.document.statementOfMeans.supportedByYou = form.model
+        if (form.model.doYouSupportAnyone === false) {
+          form.model.numberOfPeople = undefined
+        }
 
+        user.responseDraft.document.statementOfMeans.supportedByYou = form.model
         await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
 
         res.redirect(Paths.employmentPage.evaluateUri({ externalId: externalId }))
