@@ -27,7 +27,6 @@
     {% if balanceError %}<span id="{{ balanceKey }}[label]" class="error-message">{{ t(balanceError) }}</span>{% endif %}
 
     <label class="form-label-bold mobile-show" for="{{ typeOfAccountKey }}">{{ index + 1 }} {{ t('. Type of account') }}</label>
-
     <select name="{{ typeOfAccountKey }}" id="{{ typeOfAccountKey }}" class="form-control column-1{% if typeOfAccountError %} form-group-error {% endif %}" style="width:30%">
       <option value="">Choose</option>
       <option value="{{ BankAccountType.CURRENT_ACCOUNT.value }}" {% if typeOfAccountValue === BankAccountType.CURRENT_ACCOUNT %} selected{% endif %}>{{ BankAccountType.CURRENT_ACCOUNT.displayValue }}</option>
@@ -43,8 +42,7 @@
       <option value="no" {% if isJointValue === false %} selected{% endif %}>No</option>
     </select>
 
-    <label class="form-label-bold mobile-show">{{ t('Balance') }}</label>
-
+    <label class="form-label-bold mobile-show" for="{{ balanceKey }}">{{ t('Balance') }}</label>
     <span class="input-symbol-pound">
       <input id="{{ balanceKey }}" name="{{ balanceKey }}"
              class="form-control column-2 {% if balanceError %} form-group-error {% endif %}""
