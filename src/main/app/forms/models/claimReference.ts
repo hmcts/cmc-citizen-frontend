@@ -1,5 +1,4 @@
 import { IsDefined, Matches } from 'class-validator'
-import { Serializable } from 'models/serializable'
 import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 
 export class ValidationErrors {
@@ -7,7 +6,7 @@ export class ValidationErrors {
   static readonly CLAIM_REFERENCE_INVALID: string = 'You need to enter valid claim number'
 }
 
-export class ClaimReference implements Serializable<ClaimReference> {
+export class ClaimReference {
 
   @IsDefined({ message: ValidationErrors.CLAIM_REFERENCE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.CLAIM_REFERENCE_REQUIRED })

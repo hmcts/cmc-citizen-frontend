@@ -1,6 +1,4 @@
-import { Serializable } from 'app/models/serializable'
-
-export class PaymentState implements Serializable<PaymentState> {
+export class PaymentState {
   status: string
   finished: boolean
 
@@ -13,7 +11,7 @@ export class PaymentState implements Serializable<PaymentState> {
   }
 }
 
-export class Payment implements Serializable<Payment> {
+export class Payment {
   id: string
   amount: number
   reference: string

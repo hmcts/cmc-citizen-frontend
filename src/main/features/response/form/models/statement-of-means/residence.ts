@@ -1,5 +1,4 @@
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
-import { Serializable } from 'models/serializable'
 import { IsDefined, IsIn, MaxLength, ValidateIf } from 'class-validator'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
@@ -9,7 +8,7 @@ export class ValidationErrors {
   static readonly DESCRIBE_YOUR_HOUSING: string = 'Describe your housing'
 }
 
-export class Residence implements Serializable<Residence> {
+export class Residence {
   @IsDefined({ message: DefaultValidationErrors.SELECT_AN_OPTION })
   @IsIn(ResidenceType.all(), { message: DefaultValidationErrors.SELECT_AN_OPTION })
   type?: ResidenceType

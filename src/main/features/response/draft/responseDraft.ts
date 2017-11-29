@@ -1,5 +1,4 @@
 import { Response } from 'response/form/models/response'
-import { Serializable } from 'models/serializable'
 import { FreeMediation } from 'response/form/models/freeMediation'
 import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
@@ -23,7 +22,7 @@ import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
 import { PayBySetDate } from 'response/draft/payBySetDate'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 
-export class ResponseDraft extends DraftDocument implements Serializable<ResponseDraft> {
+export class ResponseDraft extends DraftDocument {
 
   response?: Response
   defence?: Defence

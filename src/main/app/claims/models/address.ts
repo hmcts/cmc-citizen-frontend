@@ -1,6 +1,4 @@
-import { Serializable } from 'models/serializable'
-
-export class Address implements Serializable<Address> {
+export class Address {
 
   line1: string
   line2?: string

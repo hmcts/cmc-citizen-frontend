@@ -1,12 +1,11 @@
 import { ValidateNested } from 'class-validator'
 
-import { Serializable } from 'models/serializable'
 import { TimelineRow } from 'response/form/models/timelineRow'
 
 export const INIT_ROW_COUNT: number = 4
 export const MAX_NUMBER_OF_EVENTS: number = 20
 
-export class Timeline implements Serializable<Timeline> {
+export class Timeline {
   readonly type: string = 'breakdown'
 
   @ValidateNested({ each: true })

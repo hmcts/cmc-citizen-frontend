@@ -1,11 +1,10 @@
-import { Serializable } from 'models/serializable'
 import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
 import { ValidateNested } from 'class-validator'
 
 export const MAX_NUMBER_OF_ROWS: number = 20
 export const INIT_ROW_COUNT: number = 1
 
-export abstract class MultiRowForm<T extends MultiRowFormItem> implements Serializable<MultiRowForm<T>> {
+export abstract class MultiRowForm<T extends MultiRowFormItem> {
 
   @ValidateNested({ each: true })
   rows: T[]

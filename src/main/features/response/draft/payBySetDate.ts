@@ -1,9 +1,8 @@
-import { Serializable } from 'models/serializable'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { Explanation } from 'response/form/models/pay-by-set-date/explanation'
 import { PaymentDateChecker } from 'response/helpers/paymentDateChecker'
 
-export class PayBySetDate implements Serializable<PayBySetDate> {
+export class PayBySetDate {
   paymentDate: PaymentDate
   explanation?: Explanation
 
