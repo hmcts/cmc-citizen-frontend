@@ -1,5 +1,7 @@
 {
   "exceptions": [
+    // not patched yet
+    https://nodesecurity.io/advisories/532,
     // not patched yet and doesn't affect us
     "https://nodesecurity.io/advisories/533",
     // patched but dependencies haven't upgraded yet, doesn't affect us

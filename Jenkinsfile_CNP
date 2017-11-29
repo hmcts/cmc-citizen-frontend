@@ -10,6 +10,10 @@ withPipeline("nodejs", product, component) {
     echo 'citizen-frontend checked out'
   }
 
+  after('build') {
+    sh 'yarn setup'
+  }
+
   onSuccess {
     echo '<<<<<< Success'
   }
