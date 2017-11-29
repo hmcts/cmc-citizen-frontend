@@ -9,6 +9,7 @@ import { FeatureToggles } from 'utils/featureToggles'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { ResponseType } from 'response/form/models/responseType'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { SupportedByYou } from 'response/form/models/statement-of-means/supportedByYou'
 
 export class StatementOfMeans {
   residence?: Residence
@@ -18,6 +19,7 @@ export class StatementOfMeans {
   employment?: Employment
   employers?: Employers
   selfEmployed?: SelfEmployed
+  supportedByYou?: SupportedByYou
 
   static isApplicableFor (responseDraft?: ResponseDraft): boolean {
     if (!FeatureToggles.isEnabled('statementOfMeans')) {
@@ -46,6 +48,7 @@ export class StatementOfMeans {
       this.employment = new Employment().deserialize(input.employment)
       this.employers = new Employers().deserialize(input.employers)
       this.selfEmployed = new SelfEmployed().deserialize(input.selfEmployed)
+      this.supportedByYou = new SupportedByYou().deserialize(input.supportedByYou)
     }
     return this
   }
