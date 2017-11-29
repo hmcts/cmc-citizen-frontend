@@ -21,7 +21,7 @@ describe('BankAccountRow', () => {
 
     it('should return populated object', () => {
       const actual: BankAccountRow = new BankAccountRow().deserialize({
-        typeOfAccount: BankAccountType.SAVING_ACCOUNT.value, isJoint: false, balance: 10
+        typeOfAccount: BankAccountType.SAVING_ACCOUNT, isJoint: false, balance: 10
       })
 
       expect(actual).instanceof(BankAccountRow)
