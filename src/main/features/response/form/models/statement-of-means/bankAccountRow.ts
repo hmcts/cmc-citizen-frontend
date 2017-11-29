@@ -52,7 +52,7 @@ export class BankAccountRow extends MultiRowFormItem {
 
   deserialize (input?: any): BankAccountRow {
     if (input) {
-      this.typeOfAccount = BankAccountType.valueOf(input.typeOfAccount)
+      this.typeOfAccount = BankAccountType.valueOf(input.typeOfAccount && input.typeOfAccount.value)
       this.isJoint = input.isJoint
       this.balance = input.balance
     }
