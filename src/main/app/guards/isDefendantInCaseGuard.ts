@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { GuardFactory } from 'features/response/guards/guardFactory'
+import { GuardFactory } from 'response/guards/guardFactory'
 import { ForbiddenError } from '../../errors'
 import { User } from 'idam/user'
 
