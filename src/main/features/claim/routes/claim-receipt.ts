@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { Paths } from 'response/paths'
+import { Paths } from 'claim/paths'
 import { ErrorHandling } from 'common/errorHandling'
 import { DocumentsClient } from 'app/documents/documentsClient'
 import * as http from 'http'
@@ -17,7 +17,7 @@ export default express.Router()
         const { externalId } = req.params
         const claim: Claim = res.locals.user.claim
 
-        documentsClient.getDefendantResponseReceipt(externalId)
+        documentsClient.getClaimIssueCopy(externalId)
           .on('response', (response: http.IncomingMessage) => {
             if (response.statusCode !== 200) {
               return next(new Error('Unexpected error during document retrieval'))
@@ -30,7 +30,7 @@ export default express.Router()
               const pdf = Buffer.concat(buffers)
               res.writeHead(HttpStatus.OK, {
                 'Content-Type': 'application/pdf',
-                'Content-Disposition': `attachment; filename=${claim.claimNumber}-Response-Receipt.pdf`,
+                'Content-Disposition': `attachment; filename=${claim.claimNumber}-Claim-Receipt.pdf`,
                 'Content-Length': pdf.length
               })
 

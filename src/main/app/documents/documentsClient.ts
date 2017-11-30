@@ -28,4 +28,21 @@ export class DocumentsClient {
     })
   }
 
+  getClaimIssueCopy (claimExternalId: string): http.IncomingMessage {
+    if (StringUtils.isBlank(claimExternalId)) {
+      throw new Error('Claim external ID cannot be blank')
+    }
+    return requestNonPromise.get({
+      uri: `${this.documentsUrl}/claimIssueReceipt/${claimExternalId}`
+    })
+  }
+  getDefendantResponseReceipt (claimExternalId: string): http.IncomingMessage {
+    if (StringUtils.isBlank(claimExternalId)) {
+      throw new Error('Claim external ID cannot be blank')
+    }
+    return requestNonPromise.get({
+      uri: `${this.documentsUrl}/defendantResponseReceipt/${claimExternalId}`
+    })
+  }
+
 }
