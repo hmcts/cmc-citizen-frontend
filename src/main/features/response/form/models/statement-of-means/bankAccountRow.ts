@@ -13,16 +13,16 @@ export class ValidationErrors {
 
 export class BankAccountRow extends MultiRowFormItem {
 
-  @ValidateIf(o => o.typeOfAccount !== undefined || o.isJoint !== undefined || o.balance !== undefined)
+  @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: ValidationErrors.TYPE_OF_ACCOUNT_REQUIRED })
   @IsIn(BankAccountType.all(), { message: ValidationErrors.TYPE_OF_ACCOUNT_REQUIRED })
   typeOfAccount?: BankAccountType
 
-  @ValidateIf(o => o.typeOfAccount !== undefined || o.isJoint !== undefined || o.balance !== undefined)
+  @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: GlobalValidationErrors.SELECT_AN_OPTION })
   isJoint?: boolean = undefined
 
-  @ValidateIf(o => o.typeOfAccount !== undefined || o.isJoint !== undefined || o.balance !== undefined)
+  @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: GlobalValidationErrors.NUMBER_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
   balance?: number
@@ -58,5 +58,9 @@ export class BankAccountRow extends MultiRowFormItem {
     }
 
     return this
+  }
+
+  isAtLeastOneFieldPopulated (): boolean {
+    return this.typeOfAccount !== undefined || this.isJoint !== undefined || this.balance !== undefined
   }
 }

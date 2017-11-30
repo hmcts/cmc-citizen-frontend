@@ -8,6 +8,7 @@ import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { RoutablePath } from 'common/router/routablePath'
 import { BankAccounts } from 'response/form/models/statement-of-means/bankAccounts'
+import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 
 const page: RoutablePath = StatementOfMeansPaths.bankAccountsPage
 
@@ -28,12 +29,16 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(page.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user: User = res.locals.user
-    renderView(new Form(user.responseDraft.document.statementOfMeans.bankAccounts), res)
-  })
+  .get(
+    page.uri,
+    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
+    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      const user: User = res.locals.user
+      renderView(new Form(user.responseDraft.document.statementOfMeans.bankAccounts), res)
+    })
   .post(
     page.uri,
+    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     FormValidator.requestHandler(BankAccounts, BankAccounts.fromObject, undefined, ['addRow']),
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {

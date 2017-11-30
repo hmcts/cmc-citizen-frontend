@@ -97,7 +97,7 @@ describe('Defendant response: Statement of means: employers', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        xit('should return 500 and render error page when cannot retrieve draft', async () => {
+        it('should return 500 and render error page when cannot retrieve draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.rejectFind('Error')
 
