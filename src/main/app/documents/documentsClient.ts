@@ -36,6 +36,7 @@ export class DocumentsClient {
       uri: `${this.documentsUrl}/claimIssueReceipt/${claimExternalId}`
     })
   }
+
   getDefendantResponseReceipt (claimExternalId: string): http.IncomingMessage {
     if (StringUtils.isBlank(claimExternalId)) {
       throw new Error('Claim external ID cannot be blank')
