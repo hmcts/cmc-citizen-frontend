@@ -82,7 +82,7 @@ describe('SupportedByYou', () => {
   describe('validation', () => {
     const validator: Validator = new Validator()
 
-    describe('when doYouSupportAnyone is', () => {
+    context('when doYouSupportAnyone is', () => {
 
       context('undefined', () => {
 
@@ -134,21 +134,28 @@ describe('SupportedByYou', () => {
           })
         })
 
-        context('should accept when all required fields are valid', () => {
+        it('should accept when all required fields are valid', () => {
+          const errors = validator.validateSync(new SupportedByYou(true, new NumberOfPeople(10, 'my story')))
 
-          it('when doYouSupportAnyone = true)', () => {
-            const errors = validator.validateSync(new SupportedByYou(true, new NumberOfPeople(10, 'my story')))
-
-            expect(errors.length).to.equal(0)
-          })
-
-          it('when doYouSupportAnyone = false)', () => {
-            const errors = validator.validateSync(new SupportedByYou(false, undefined))
-
-            expect(errors.length).to.equal(0)
-          })
+          expect(errors.length).to.equal(0)
         })
       })
+
+      context('doYouSupportAnyone = false', () => {
+
+        it('should accept when other fields empty', () => {
+          const errors = validator.validateSync(new SupportedByYou(false, undefined))
+
+          expect(errors.length).to.equal(0)
+        })
+
+        it('should accept when other fields populated', () => {
+          const errors = validator.validateSync(new SupportedByYou(false, new NumberOfPeople(10, 'my story')))
+
+          expect(errors.length).to.equal(0)
+        })
+      })
+
     })
   })
 })

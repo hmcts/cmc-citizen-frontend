@@ -38,7 +38,7 @@
             <p>{{ t('Enter number for each age group.') }}</p>
           {% endif %}
 
-            {{ numericInput('Number of people', 'numberOfPeople[value]', form) }}
+            {{ numericInput(label = 'Number of people', name = 'numberOfPeople[value]', form = form) }}
             {{ textArea(label = 'Give details', name = 'numberOfPeople[details]', form = form) }}
 
           </div>

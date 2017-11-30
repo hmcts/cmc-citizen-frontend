@@ -16,13 +16,11 @@
 
         {{ csrfProtection(csrf) }}
 
-{{ form.valueFor('option').value | default('bral') }}
-
-        {% set error = form.errorFor('option') %}
-        <fieldset id="option[label]" class="form-group {% if error %} form-group-error {% endif %}">
+        {% set optionError = form.errorFor('option') %}
+        <fieldset id="option[label]" class="form-group {% if optionError %} form-group-error {% endif %}">
           <legend class="visually-hidden">{{ t('Are you unemployed or retired?') }}</legend>
 
-          {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+          {% if optionError %}<span class="error-message">{{ t(optionError) }}</span>{% endif %}
 
           {{
             radioOption(form = form, label = UnemploymentType.UNEMPLOYED.displayValue, name = 'option', value = UnemploymentType.UNEMPLOYED.value, checked = form.valueFor('option') === UnemploymentType.UNEMPLOYED)
@@ -33,9 +31,8 @@
                id="option-{{ UnemploymentType.UNEMPLOYED.value }}" aria-hidden="false">
 
             <p>{{ t('How long have you been unemployed?') }}</p>
-            {{ numericInput('Years', 'unemploymentDetails[years]', form) }}
-            {{ numericInput('Months', 'unemploymentDetails[months]', form) }}
-
+            {{ numericInput(label = 'Years', name = 'unemploymentDetails[years]', form = form) }}
+            {{ numericInput(label = 'Months', name = 'unemploymentDetails[months]', form = form) }}
           </div>
 
           {{
@@ -45,13 +42,14 @@
           {{
             radioOption(form = form, label = UnemploymentType.OTHER.displayValue, name = 'option', value = UnemploymentType.OTHER.value, checked = form.valueFor('option') === UnemploymentType.OTHER)
           }}
+
           {% set otherDetailsError = form.errorFor('otherDetails') %}
           <div class="form-group panel panel-border-narrow js-hidden {% if otherDetailsError %} form-group-error {% endif %}"
                id="option-{{ UnemploymentType.OTHER.value }}" aria-hidden="false">
 
-          {{ textInput('Give details', 'otherDetails[details]', form) }}
-
+            {{ textInput(label = 'Give details', name = 'otherDetails[details]', form = form) }}
           </div>
+
         </fieldset>
 
         {{ saveAndContinueButton() }}

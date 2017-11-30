@@ -19,7 +19,7 @@ export class NumberOfPeople {
 
   @IsDefined({ message: ValidationErrors.DETAILS_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.DETAILS_REQUIRED })
-  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: GlobalValidationErrors.TOO_LONG_INPUT })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: GlobalValidationErrors.TEXT_TOO_LONG })
   details: string
 
   constructor (value?: number, details?: string) {

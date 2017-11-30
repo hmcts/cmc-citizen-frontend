@@ -12,7 +12,7 @@ export class OtherDetails {
 
   @IsDefined({ message: ValidationErrors.DETAILS_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.DETAILS_REQUIRED })
-  @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: GlobalValidationErrors.TOO_LONG_INPUT })
+  @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: GlobalValidationErrors.TEXT_TOO_LONG })
   details: string
 
   constructor (details?: string) {
