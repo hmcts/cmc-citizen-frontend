@@ -10,5 +10,5 @@ withPipeline("nodejs", product, component) {
     sh 'yarn setup'
   }
 
-  enableSlackNotifications('#cmc-tech-notifications')
+  enableSlackNotifications('#cmc-tech-cnp')
 }
