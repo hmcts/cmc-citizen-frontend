@@ -43,8 +43,8 @@ export class Unemployed {
   deserialize (input?: any): Unemployed {
     if (input) {
       this.option = UnemploymentType.valueOf(input.option && input.option.value)
-      this.unemploymentDetails = input.unemploymentDetails
-      this.otherDetails = input.otherDetails
+      this.unemploymentDetails = input.unemploymentDetails && new UnemploymentDetails().deserialize(input.unemploymentDetails)
+      this.otherDetails = input.otherDetails && new OtherDetails().deserialize(input.otherDetails)
     }
     return this
   }
