@@ -1,25 +1,13 @@
 #!groovy
 
-@Library("Infrastructure@feature/add-slack-integration")
+@Library("Infrastructure")
 
 def product = "cmc"
 def component = "citizen-frontend"
 
 withPipeline("nodejs", product, component) {
-  after('checkout') {
-    echo 'citizen-frontend checked out'
-  }
-
   after('build') {
     sh 'yarn setup'
-  }
-
-  onSuccess {
-    echo '<<<<<< Success'
-  }
-
-  onFailure {
-    echo '>>>>>> Failed'
   }
 
   enableSlackNotifications('#cmc-tech-notifications')
