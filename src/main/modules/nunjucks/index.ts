@@ -24,6 +24,7 @@ import { InterestDateType } from 'app/common/interestDateType'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { DashboardUrlHelper } from 'dashboard/helpers/dashboardUrlHelper'
+import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 const packageDotJson = require('../../../../package.json')
 
 const appAssetPaths = {
@@ -94,6 +95,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('ResidenceType', ResidenceType)
     nunjucksEnv.addGlobal('PaymentSchedule', PaymentSchedule)
     nunjucksEnv.addGlobal('DashboardUrlHelper', DashboardUrlHelper)
+    nunjucksEnv.addGlobal('UnemploymentType', UnemploymentType)
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

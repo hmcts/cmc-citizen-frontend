@@ -9,6 +9,7 @@ export class ValidationErrors {
   static readonly NUMBER_OF_PEOPLE_REQUIRED: string = 'Enter a number of people you support'
   static readonly DETAILS_REQUIRED: string = 'Enter details'
 }
+
 export class NumberOfPeople {
 
   @IsDefined({ message: ValidationErrors.NUMBER_OF_PEOPLE_REQUIRED })

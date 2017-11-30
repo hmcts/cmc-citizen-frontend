@@ -10,16 +10,18 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { ResponseType } from 'response/form/models/responseType'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { SupportedByYou } from 'response/form/models/statement-of-means/supportedByYou'
+import { Unemployed } from 'response/form/models/statement-of-means/unemployed'
 
 export class StatementOfMeans {
   residence?: Residence
   dependants?: Dependants
   maintenance?: Maintenance
+  supportedByYou?: SupportedByYou
   education?: Education
   employment?: Employment
   employers?: Employers
   selfEmployed?: SelfEmployed
-  supportedByYou?: SupportedByYou
+  unemployed?: Unemployed
 
   static isApplicableFor (responseDraft?: ResponseDraft): boolean {
     if (!FeatureToggles.isEnabled('statementOfMeans')) {
@@ -45,10 +47,11 @@ export class StatementOfMeans {
       this.dependants = new Dependants().deserialize(input.dependants)
       this.education = new Education().deserialize(input.education)
       this.maintenance = new Maintenance().deserialize(input.maintenance)
+      this.supportedByYou = new SupportedByYou().deserialize(input.supportedByYou)
       this.employment = new Employment().deserialize(input.employment)
       this.employers = new Employers().deserialize(input.employers)
       this.selfEmployed = new SelfEmployed().deserialize(input.selfEmployed)
-      this.supportedByYou = new SupportedByYou().deserialize(input.supportedByYou)
+      this.unemployed = new Unemployed().deserialize(input.unemployed)
     }
     return this
   }
