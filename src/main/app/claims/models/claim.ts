@@ -1,5 +1,3 @@
-import { Serializable } from 'models/serializable'
-
 import { Moment } from 'moment'
 import { ClaimData } from 'app/claims/models/claimData'
 import { MomentFactory } from 'common/momentFactory'
@@ -14,7 +12,7 @@ import { Offer } from 'claims/models/offer'
 import { Interest, InterestType } from 'claim/form/models/interest'
 import { InterestDate } from 'claims/models/interestDate'
 
-export class Claim implements Serializable<Claim> {
+export class Claim {
   id: number
   claimantId: string
   externalId: string

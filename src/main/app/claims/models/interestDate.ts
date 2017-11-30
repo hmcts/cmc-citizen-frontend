@@ -1,8 +1,7 @@
-import { Serializable } from 'models/serializable'
 import { Moment } from 'moment'
 import { MomentFactory } from 'common/momentFactory'
 
-export class InterestDate implements Serializable<InterestDate> {
+export class InterestDate {
 
   constructor (public type?: string, public date?: Moment, public reason?: string) {}
 

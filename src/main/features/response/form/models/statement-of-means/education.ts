@@ -1,6 +1,5 @@
 import { IsDefined, IsInt, Min } from 'class-validator'
 
-import { Serializable } from 'models/serializable'
 import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { IsLessThanOrEqualTo } from 'forms/validation/validators/isLessThanOrEqualTo'
@@ -9,7 +8,7 @@ export class ValidationErrors {
   static readonly INVALID_NUMBER_OF_CHILDREN: string = 'Number can’t be higher than on previous page'
 }
 
-export class Education implements Serializable<Education> {
+export class Education {
 
   @IsDefined({ message: GlobalValidationErrors.NUMBER_REQUIRED })
   @IsInt({ message: GlobalValidationErrors.INTEGER_REQUIRED })

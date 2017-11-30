@@ -2,7 +2,6 @@ import { IsDefined, MaxLength } from 'class-validator'
 
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 
-import { Serializable } from 'models/serializable'
 import { CompletableTask } from 'app/models/task'
 import { Address as ClaimAddress } from 'claims/models/address'
 
@@ -24,7 +23,7 @@ export class ValidationConstants {
   static readonly POSTCODE_MAX_LENGTH: number = 8
 }
 
-export class Address implements Serializable<Address>, CompletableTask {
+export class Address implements CompletableTask {
 
   @IsDefined({ message: ValidationErrors.FIRST_LINE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.FIRST_LINE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })

@@ -28,6 +28,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<SelfEmployed> = req.body
       const user: User = res.locals.user
+      const { externalId } = req.params
 
       if (form.hasErrors()) {
         res.render(page.associatedView, { form: form })
@@ -35,7 +36,7 @@ export default express.Router()
         user.responseDraft.document.statementOfMeans.selfEmployed = form.model
 
         await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
-        res.render(page.associatedView, { form: form })
+        res.redirect(StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: externalId }))
       }
     })
   )

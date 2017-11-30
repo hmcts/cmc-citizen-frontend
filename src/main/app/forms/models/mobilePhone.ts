@@ -1,6 +1,5 @@
 import { IsDefined } from 'class-validator'
 
-import { Serializable } from 'models/serializable'
 import { IsMobilePhone } from 'forms/validation/validators/mobilePhone'
 import { CompletableTask } from 'app/models/task'
 
@@ -9,7 +8,7 @@ export class ValidationErrors {
   static readonly NUMBER_NOT_VALID: string = 'Enter valid UK mobile number'
 }
 
-export class MobilePhone implements Serializable<MobilePhone>, CompletableTask {
+export class MobilePhone implements CompletableTask {
 
   @IsDefined({ message: ValidationErrors.NUMBER_REQUIRED })
   @IsMobilePhone({ message: ValidationErrors.NUMBER_NOT_VALID })

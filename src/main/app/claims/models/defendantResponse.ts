@@ -1,4 +1,3 @@
-import { Serializable } from 'app/models/serializable'
 import { PartyType } from 'app/common/partyType'
 import { Individual } from 'app/claims/models/details/theirs/individual'
 import { Company } from 'app/claims/models/details/theirs/company'
@@ -8,7 +7,7 @@ import { TheirDetails } from 'app/claims/models/details/theirs/theirDetails'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { ResponseType } from 'response/form/models/responseType'
 
-export class DefendantResponse implements Serializable<DefendantResponse> {
+export class DefendantResponse {
   type: ResponseType
   defence: string
   freeMediation: string

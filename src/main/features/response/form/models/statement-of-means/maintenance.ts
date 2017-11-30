@@ -1,11 +1,10 @@
 import { IsDefined, IsInt, IsPositive, ValidateIf } from 'class-validator'
 
-import { Serializable } from 'models/serializable'
 import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import * as toBoolean from 'to-boolean'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
-export class Maintenance implements Serializable<Maintenance> {
+export class Maintenance {
 
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
   option: boolean

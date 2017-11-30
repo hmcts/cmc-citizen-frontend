@@ -1,6 +1,5 @@
 import { IsDefined, ValidateIf, ValidateNested } from 'class-validator'
 
-import { Serializable } from 'models/serializable'
 import * as toBoolean from 'to-boolean'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { NumberOfChildren } from 'response/form/models/statement-of-means/numberOfChildren'
@@ -10,7 +9,7 @@ export class ValidationErrors {
   static readonly ENTER_AT_LEAST_ONE: string = 'Enter a number for at least one field'
 }
 
-export class Dependants implements Serializable<Dependants> {
+export class Dependants {
 
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
   hasAnyChildren: boolean
