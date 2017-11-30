@@ -28,24 +28,26 @@
   text-transform: none;
 }
 
-.triple-column {
-  .column-1 {
-    display: inline-block;
-    margin-right: 10px;
-    width: 49%;
-  }
+.statement-of-means-container {
+  .triple-column {
+    .column-1 {
+      display: inline-block;
+      margin-right: 10px;
+      width: 49%;
+    }
 
-  .column-2 {
-    display: inline-block;
-    float: none;
-    width: 20%;
-  }
+    .column-2 {
+      display: inline-block;
+      float: none;
+      width: 20%;
+    }
 
-  .column-3 {
-    display: inline-block;
-    margin-right: 10px;
-    text-align: right;
-    width: 20%;
+    .column-3 {
+      display: inline-block;
+      margin-right: 10px;
+      text-align: right;
+      width: 20%;
+    }
   }
 }
 

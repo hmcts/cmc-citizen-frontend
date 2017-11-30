@@ -62,23 +62,23 @@
     <form method="post" novalidate>
       {{ csrfProtection(csrf) }}
 
-      <div id="timeline" class="timeline">
+      <div class="statement-of-means-container">
 
         <div class="triple-column mobile-hide">
-          <div id="timeline-heading-1" class="column-1 mobile-hide">
-            <label class="form-label-bold" for="event-form-control">
+          <div class="column-1 mobile-hide">
+            <label class="form-label-bold">
              {{ t('Type of account') }}
             </label>
           </div>
 
-          <div id="timeline-heading-3 mobile-hide" class="column-2 ">
-            <label class="form-label-bold" for="timeline-heading-2">
+          <div class="column-2 mobile-hide">
+            <label class="form-label-bold">
               {{ t('Joint account') }}
             </label>
           </div>
 
-          <div id="timeline-heading-2 mobile-hide" class="column-3 ">
-            <label class="form-label-bold" for="timeline-heading-3">
+          <div class="column-3 mobile-hide">
+            <label class="form-label-bold">
               {{ t('Balance') }}
             </label>
             <span class="form-hint"> </span>
@@ -92,10 +92,8 @@
         </div>
 
         {% if form.model and form.model.canAddMoreRows() %}
-        <div class="timeline-row">
-          <div id="add-event-container" class="form-group">
-            {{ linkButton('Add another account', 'action[addRow]', 'button button-secondary') }}
-          </div>
+        <div id="add-event-container" class="form-group">
+          {{ linkButton('Add another account', 'action[addRow]', 'button button-secondary') }}
         </div>
         {% endif %}
       </div>
