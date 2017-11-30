@@ -1,9 +1,8 @@
 import { Moment } from 'moment'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { MomentFactory } from 'common/momentFactory'
-import { Serializable } from 'models/serializable'
 
-export class RepaymentPlan implements Serializable<RepaymentPlan> {
+export class RepaymentPlan {
 
   constructor (public firstPayment?: number,
                public instalmentAmount?: number,

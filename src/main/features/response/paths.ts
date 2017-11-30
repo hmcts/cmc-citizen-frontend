@@ -46,3 +46,10 @@ export class StatementOfMeansPaths {
   static readonly employersPage = new RoutablePath(`${statementOfMeansPath}/employers`)
   static readonly selfEmployedPage = new RoutablePath(`${statementOfMeansPath}/self-employed`)
 }
+
+const payBySetDatePath = `${responsePath}/pay-by-set-date`
+
+export class PayBySetDatePaths {
+  static readonly paymentDatePage: RoutablePath = new RoutablePath(`${payBySetDatePath}/payment-date`)
+  static readonly explanationPage = new RoutablePath(`${payBySetDatePath}/explanation`)
+}

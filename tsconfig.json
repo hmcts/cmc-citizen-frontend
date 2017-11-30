@@ -31,6 +31,9 @@
       "forms/*": [
         "app/forms/*"
       ],
+      "guards/*": [
+        "app/guards/*"
+      ],
       "health/*": [
         "app/health/*"
       ],

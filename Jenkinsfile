@@ -20,7 +20,7 @@ SmokeTests smokeTests = new SmokeTests(this)
 IntegrationTests integrationTests = new IntegrationTests(env, this)
 
 InfluxDbPublisher influxDbPublisher = new InfluxDbPublisher(
-  this, 
+  this,
   currentBuild,
   'cmc'
 )
@@ -99,7 +99,7 @@ timestamps {
             }
           }
           stage('Sonar') {
-            sh "yarn sonar-scanner -- -Dsonar.host.url=$SONARQUBE_URL"
+            sh "yarn sonar-scan -- -Dsonar.host.url=$SONARQUBE_URL"
           }
 
         }

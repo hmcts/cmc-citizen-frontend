@@ -1,4 +1,3 @@
-import { Serializable } from 'models/serializable'
 import { IsDefined, IsPositive, MaxLength, Min } from 'class-validator'
 import { IsPastDate } from 'forms/validation/validators/datePastConstraint'
 import { LocalDate } from 'forms/models/localDate'
@@ -23,7 +22,7 @@ export class ValidationErrors {
   static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter valid amount, maximum two decimal places'
 }
 
-export class HowMuchPaid implements Serializable<HowMuchPaid> {
+export class HowMuchPaid {
 
   @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED })
   @IsPositive({ message: ValidationErrors.VALID_AMOUNT_REQUIRED })

@@ -13,29 +13,32 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
+import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const receiptPath = ResponsePaths.receiptReceiver.evaluateUri({ externalId: 'b17af4d2-273f-4999-9895-bce382fa24c8' })
+const pagePath = ResponsePaths.receiptReceiver.evaluateUri({ externalId: 'b17af4d2-273f-4999-9895-bce382fa24c8' })
 
 describe('Defendant response: receipt', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', receiptPath)
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
       })
 
-      checkCountyCourtJudgmentRequestedGuard(app, 'get', receiptPath)
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       it('should return 500 and render error page when cannot retrieve claim by defendant id', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .get(receiptPath)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -44,7 +47,7 @@ describe('Defendant response: receipt', () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .get(receiptPath)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -54,7 +57,7 @@ describe('Defendant response: receipt', () => {
         claimStoreServiceMock.rejectRetrieveDocument('HTTP Error')
 
         await request(app)
-          .get(receiptPath)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -64,7 +67,7 @@ describe('Defendant response: receipt', () => {
         claimStoreServiceMock.resolveRetrieveDocument()
 
         await request(app)
-          .get(receiptPath)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful)
       })

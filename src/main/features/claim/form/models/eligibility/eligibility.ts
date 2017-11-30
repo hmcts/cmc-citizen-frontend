@@ -1,11 +1,10 @@
-import { Serializable } from 'models/serializable'
 import { YesNoOption } from 'models/yesNoOption'
 import { IsIn } from 'class-validator'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 
-export class Eligibility implements Serializable<Eligibility> {
+export class Eligibility {
 
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.CLAIMANT_ADDRESS] })
   claimantAddress?: YesNoOption

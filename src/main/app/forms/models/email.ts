@@ -1,13 +1,12 @@
 import { IsEmail } from 'forms/validation/validators/isEmail'
 import { CompletableTask } from 'app/models/task'
-import { Serializable } from 'models/serializable'
 import { Validator } from 'class-validator'
 
 export class ValidationErrors {
   static readonly ADDRESS_NOT_VALID: string = 'Enter valid email address'
 }
 
-export class Email implements Serializable<Email>, CompletableTask {
+export class Email implements CompletableTask {
 
   @IsEmail({ message: ValidationErrors.ADDRESS_NOT_VALID })
   address?: string

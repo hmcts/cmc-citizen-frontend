@@ -11,10 +11,11 @@ import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
 
 import { StatementOfMeansPaths as Paths } from 'response/paths'
 import { app } from '../../../../../main/app'
+import { checkNotDefendantInCaseGuard } from '../checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const startPage = Paths.startPage.evaluateUri({
+const pagePath = Paths.startPage.evaluateUri({
   externalId: claimStoreServiceMock.sampleClaimObj.externalId
 })
 
@@ -23,18 +24,21 @@ describe('Statement of means', () => {
     attachDefaultHooks(app)
 
     describe('on GET', () => {
-      checkAuthorizationGuards(app, 'get', startPage)
+
+      const method = 'get'
+      checkAuthorizationGuards(app, method, pagePath)
+      checkNotDefendantInCaseGuard(app, method, pagePath)
 
       context('when user authorised', () => {
         beforeEach(() => {
-          idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
         })
 
         it('should return error page when unable to retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('Error')
 
           await request(app)
-            .get(startPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -44,7 +48,7 @@ describe('Statement of means', () => {
           draftStoreServiceMock.rejectFind()
 
           await request(app)
-            .get(startPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -54,7 +58,7 @@ describe('Statement of means', () => {
           draftStoreServiceMock.resolveFind('response')
 
           await request(app)
-            .get(startPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText(
               'You need to answer some financial questions',

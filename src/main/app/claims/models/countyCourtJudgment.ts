@@ -1,10 +1,9 @@
 import { RepaymentPlan } from 'claims/models/replaymentPlan'
 import { MomentFactory } from 'common/momentFactory'
-import { Serializable } from 'models/serializable'
 import { Moment } from 'moment'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
-export class CountyCourtJudgment implements Serializable<CountyCourtJudgment> {
+export class CountyCourtJudgment {
 
   constructor (public defendantDateOfBirth?: Moment,
                public paymentOption?: string,

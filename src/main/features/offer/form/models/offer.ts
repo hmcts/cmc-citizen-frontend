@@ -1,5 +1,4 @@
 import { MaxLength, IsDefined, ValidateNested } from 'class-validator'
-import { Serializable } from 'models/serializable'
 import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
 import { LocalDate } from 'forms/models/localDate'
@@ -14,7 +13,7 @@ export class ValidationErrors {
   static readonly OFFER_TEXT_TOO_LONG: string = 'You’ve entered too many characters'
 }
 
-export class Offer implements Serializable<Offer> {
+export class Offer {
   @IsDefined({ message: ValidationErrors.OFFER_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.OFFER_REQUIRED })
   @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.OFFER_TEXT_TOO_LONG })
