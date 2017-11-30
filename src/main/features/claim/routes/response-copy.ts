@@ -7,6 +7,7 @@ import { Paths } from 'claim/paths'
 import { DocumentsClient } from 'app/documents/documentsClient'
 import { ClaimStoreClient } from 'app/claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'
+import { Claim } from 'claims/models/claim'
 
 const documentsClient: DocumentsClient = new DocumentsClient()
 
@@ -16,6 +17,7 @@ export default express.Router()
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         const { externalId } = req.params
+        const claim: Claim = res.locals.user.claim
         // Check we are allowed to retrieve the document
         await ClaimStoreClient.retrieveByExternalId(externalId, res.locals.user.id)
         documentsClient.getResponseCopy(externalId)
@@ -31,7 +33,7 @@ export default express.Router()
               const pdf = Buffer.concat(buffers)
               res.writeHead(HttpStatus.OK, {
                 'Content-Type': 'application/pdf',
-                'Content-Disposition': 'attachment; filename=defendant-response-copy.pdf',
+                'Content-Disposition': `attachment; filename=${claim.claimNumber}-Defendant-Response-Copy.pdf`,
                 'Content-Length': pdf.length
               })
 
