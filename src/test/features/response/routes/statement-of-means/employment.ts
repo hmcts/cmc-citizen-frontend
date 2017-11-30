@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 import '../../../../routes/expectations'
-import { StatementOfMeansPaths, Paths } from 'response/paths'
+import { StatementOfMeansPaths } from 'response/paths'
 import * as idamServiceMock from '../../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../../http-mocks/claim-store'
@@ -120,7 +120,7 @@ describe('Defendant response: Statement of means: employment', () => {
             .send({ isCurrentlyEmployed: false })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(Paths.taskListPage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.bankAccountsPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )
@@ -153,6 +153,22 @@ describe('Defendant response: Statement of means: employment', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.selfEmployedPage.evaluateUri(
+                { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+              )
+            )
+        })
+
+        it('to bank-accounts page', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveSave()
+
+          await request(app)
+            .post(pagePath)
+            .send({ isCurrentlyEmployed: false })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(StatementOfMeansPaths.bankAccountsPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )

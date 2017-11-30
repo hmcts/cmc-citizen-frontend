@@ -5,6 +5,7 @@ import { SelfEmployed } from 'response/form/models/statement-of-means/selfEmploy
 import { Dependants } from 'response/form/models/statement-of-means/dependants'
 import { Education } from 'response/form/models/statement-of-means/education'
 import { Maintenance } from 'response/form/models/statement-of-means/maintenance'
+import { BankAccounts } from 'response/form/models/statement-of-means/bankAccounts'
 import { FeatureToggles } from 'utils/featureToggles'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { ResponseType } from 'response/form/models/responseType'
@@ -18,6 +19,7 @@ export class StatementOfMeans {
   employment?: Employment
   employers?: Employers
   selfEmployed?: SelfEmployed
+  bankAccounts?: BankAccounts
 
   static isApplicableFor (responseDraft?: ResponseDraft): boolean {
     if (!FeatureToggles.isEnabled('statementOfMeans')) {
@@ -46,6 +48,7 @@ export class StatementOfMeans {
       this.employment = new Employment().deserialize(input.employment)
       this.employers = new Employers().deserialize(input.employers)
       this.selfEmployed = new SelfEmployed().deserialize(input.selfEmployed)
+      this.bankAccounts = new BankAccounts().deserialize(input.bankAccounts)
     }
     return this
   }
