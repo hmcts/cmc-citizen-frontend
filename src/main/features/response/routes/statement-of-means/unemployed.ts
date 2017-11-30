@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { StatementOfMeansPaths as Paths } from 'response/paths'
+import { StatementOfMeansPaths, Paths } from 'response/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'common/errorHandling'
@@ -10,7 +10,7 @@ import { RoutablePath } from 'common/router/routablePath'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { Unemployed } from 'response/form/models/statement-of-means/unemployed'
 
-const page: RoutablePath = Paths.unemployedPage
+const page: RoutablePath = StatementOfMeansPaths.unemployedPage
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -38,7 +38,7 @@ export default express.Router()
         user.responseDraft.document.statementOfMeans.unemployed = form.model
         await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
 
-        res.redirect(Paths.employmentPage.evaluateUri({ externalId: externalId }))
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
       }
     })
   )
