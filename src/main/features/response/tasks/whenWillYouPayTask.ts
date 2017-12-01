@@ -53,15 +53,16 @@ export class WhenWillYouPayTask {
   }
 
   private static isDependantsCompleted (statementOfMeans: StatementOfMeans): boolean {
-    const dependantValid = !!statementOfMeans.dependants && isValid(statementOfMeans.dependants)
-    const noChildrenValid: boolean = dependantValid && (statementOfMeans.dependants.hasAnyChildren === false)
-    const childrenUnder16Valid: boolean = dependantValid && statementOfMeans.dependants.hasAnyChildren === true
-      && !statementOfMeans.dependants.numberOfChildren.between16and19
-    const childrenValid: boolean = dependantValid && statementOfMeans.dependants.hasAnyChildren === true
-      && statementOfMeans.dependants.numberOfChildren.between16and19 > 0
-      && isValid(statementOfMeans.education)
-    const maintenanceValid: boolean = !!statementOfMeans.maintenance && isValid(statementOfMeans.maintenance)
+    const dependantValid = isValid(statementOfMeans.dependants)
 
-    return dependantValid && (noChildrenValid || childrenUnder16Valid || childrenValid) && maintenanceValid
+    if (!dependantValid) {
+      return false
+    }
+
+    if (statementOfMeans.dependants.hasAnyChildren && statementOfMeans.dependants.numberOfChildren.between16and19 > 0) {
+      return isValid(statementOfMeans.education) && isValid(statementOfMeans.maintenance)
+    } else {
+      return isValid(statementOfMeans.maintenance)
+    }
   }
 }
