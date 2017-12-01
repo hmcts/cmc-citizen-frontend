@@ -1,5 +1,47 @@
 {% from "table.njk" import tableStart, tableEnd, row %}
 
+{% macro singularOrPlural(value, noun) %}
+
+  {% set result =  value + ' ' + noun %}
+  {% if value > 1 %}
+    {% set result = result + 's' %}
+  {% endif %}
+
+  {{ result }}
+
+{% endmacro %}
+
+{% macro employmentStatus(statementOfMeans) %}
+
+  {% if statementOfMeans.employment.isCurrentlyEmployed %}
+    {% set employmentStatus = 'Employed' if statementOfMeans.employment.employed %}
+    {% if statementOfMeans.employment.selfEmployed %}
+      {% if employmentStatus %}
+        {% set employmentStatus = employmentStatus + ' and ' %}
+      {% endif %}
+      {% set employmentStatus = employmentStatus + ' Self-employed ' %}
+    {% endif %}
+    {{ row('Employment status', employmentStatus, '') }}
+  {% else %}
+    {% if statementOfMeans.unemployed.option === UnemploymentType.UNEMPLOYED %}
+      {% set years = statementOfMeans.unemployed.unemploymentDetails.years %}
+      {% set months = statementOfMeans.unemployed.unemploymentDetails.months %}
+
+      {% set status = statementOfMeans.unemployed.option.displayValue + ' for ' %}
+      {% set status = status + singularOrPlural(years, 'year') if years %}
+      {% set status = status + singularOrPlural(months, 'month') if months %}
+
+      {{ row('Employment status', status, '') }}
+    {% elseif statementOfMeans.unemployed.option === UnemploymentType.OTHER %}
+      {{ row('Employment status', statementOfMeans.unemployed.otherDetails.details, '') }}
+    {% else %}
+      {{ row('Employment status', statementOfMeans.unemployed.option.displayValue, '') }}
+    {% endif %}
+
+  {% endif %}
+
+{% endmacro %}
+
 {{ tableStart('statementOfMeans', 'Your financial details') }}
 {{ row('Where are you living?	', draft.statementOfMeans.residence.residenceType, statementOfMeansPaths.residencePage.evaluateUri({ externalId: claim.externalId })) }}
 
@@ -24,32 +66,7 @@
 {{ row('Employment', '', statementOfMeansPaths.employmentPage.evaluateUri({ externalId: claim.externalId }), false) }}
 {{ row('Are you currently working?', 'Yes' if draft.statementOfMeans.employment.isCurrentlyEmployed else 'No', '', false) }}
 
-{% if draft.statementOfMeans.employment.isCurrentlyEmployed %}
-  {% set employmentStatus = 'Employed' if draft.statementOfMeans.employment.employed %}
-  {% if draft.statementOfMeans.employment.selfEmployed %}
-    {% if employmentStatus %}
-      {% set employmentStatus = employmentStatus + ' and ' %}
-    {% endif %}
-    {% set employmentStatus = employmentStatus + ' Self-employed ' %}
-  {% endif %}
-  {{ row('Employment status', employmentStatus, '') }}
-{% else %}
-  {% set employmentStatus = draft.statementOfMeans.unemployed.option.displayValue %}
-  {% if draft.statementOfMeans.unemployed.option === UnemploymentType.UNEMPLOYED %}
-    {% set employmentStatus = employmentStatus + ' for ' %}
-    {% if draft.statementOfMeans.unemployed.unemploymentDetails.years %}
-      {% set employmentStatus = employmentStatus + draft.statementOfMeans.unemployed.unemploymentDetails.years + ' years(s)' %}
-    {% endif %}
-    {% if draft.statementOfMeans.unemployed.unemploymentDetails.months %}
-      {% set employmentStatus = employmentStatus + ' ' + draft.statementOfMeans.unemployed.unemploymentDetails.months + ' month(s)' %}
-    {% endif %}
-  {% endif %}
-  {% if draft.statementOfMeans.unemployed.option === UnemploymentType.OTHER %}
-    {% set employmentStatus = employmentStatus + ': ' + draft.statementOfMeans.unemployed.otherDetails.details %}
-  {% endif %}
-
-  {{ row('Employment status', employmentStatus, '') }}
-{% endif %}
+{{ employmentStatus(draft.statementOfMeans) }}
 
 {% if draft.statementOfMeans.employment.employed %}
   {{ row('Why employs you?', '', statementOfMeansPaths.employersPage.evaluateUri({ externalId: claim.externalId }), false) }}

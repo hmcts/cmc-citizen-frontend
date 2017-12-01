@@ -20,7 +20,7 @@ export default express.Router()
     (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
       res.render(page.associatedView, {
-        form: new Form(user.responseDraft.document.statementOfMeans.supportedByYou)
+        form: new Form(user.responseDraft.document.statementOfMeans.unemployed)
       })
     })
   .post(
