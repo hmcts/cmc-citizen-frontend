@@ -128,6 +128,7 @@ const sampleResponseDraftObj = {
     selfEmployed: undefined,
     unemployed: { option: { value: UnemploymentType.RETIRED.value } },
     dependants: { hasAnyChildren: false },
+    supportedByYou: { doYouSupportAnyone: false },
     maintenance: { option: false },
     bankAccounts: { rows: [] }
   },
