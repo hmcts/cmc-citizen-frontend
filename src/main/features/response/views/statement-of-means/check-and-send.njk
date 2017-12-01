@@ -1,0 +1,83 @@
+{% from "table.njk" import tableStart, tableEnd, row %}
+
+{{ tableStart('statementOfMeans', 'Your financial details') }}
+{{ row('Where are you living?	', draft.statementOfMeans.residence.residenceType, statementOfMeansPaths.residencePage.evaluateUri({ externalId: claim.externalId })) }}
+
+{{ row('Children', '', statementOfMeansPaths.dependantsPage.evaluateUri({ externalId: claim.externalId }), false) }}
+{{ row('Do any children live with you?', 'Yes' if draft.statementOfMeans.dependants.hasAnyChildren else 'No', '', false) }}
+
+{% if draft.statementOfMeans.dependants.hasAnyChildren %}
+  {{ row('16 to 19', draft.statementOfMeans.dependants.numberOfChildren.between16and19, '') }}
+
+  {% if draft.statementOfMeans.education %}
+    {{ row('Number of children aged 16 to 19 full-time education or training', draft.statementOfMeans.education.value, statementOfMeansPaths.educationPage.evaluateUri({ externalId: claim.externalId })) }}
+  {% endif %}
+{% endif %}
+
+{{ row('Maintenance', '', statementOfMeansPaths.maintenancePage.evaluateUri({ externalId: claim.externalId }), false) }}
+{{ row('Do you or your partner pay maintenance for any children?', 'Yes' if draft.statementOfMeans.maintenance.option else 'No', '', false) }}
+
+{% if draft.statementOfMeans.maintenance.option %}
+  {{ row('Number of children', draft.statementOfMeans.maintenance.value, '') }}
+{% endif %}
+
+{{ row('Employment', '', statementOfMeansPaths.employmentPage.evaluateUri({ externalId: claim.externalId }), false) }}
+{{ row('Are you currently working?', 'Yes' if draft.statementOfMeans.employment.isCurrentlyEmployed else 'No', '', false) }}
+
+{% if draft.statementOfMeans.employment.isCurrentlyEmployed %}
+  {% set employmentStatus = 'Employed' if draft.statementOfMeans.employment.employed %}
+  {% if draft.statementOfMeans.employment.selfEmployed %}
+    {% if employmentStatus %}
+      {% set employmentStatus = employmentStatus + ' and ' %}
+    {% endif %}
+    {% set employmentStatus = employmentStatus + ' Self-employed ' %}
+  {% endif %}
+  {{ row('Employment status', employmentStatus, '') }}
+{% else %}
+  {% set employmentStatus = draft.statementOfMeans.unemployed.option.displayValue %}
+  {% if draft.statementOfMeans.unemployed.option === UnemploymentType.UNEMPLOYED %}
+    {% set employmentStatus = employmentStatus + ' for ' %}
+    {% if draft.statementOfMeans.unemployed.unemploymentDetails.years %}
+      {% set employmentStatus = employmentStatus + draft.statementOfMeans.unemployed.unemploymentDetails.years + ' years(s)' %}
+    {% endif %}
+    {% if draft.statementOfMeans.unemployed.unemploymentDetails.months %}
+      {% set employmentStatus = employmentStatus + ' ' + draft.statementOfMeans.unemployed.unemploymentDetails.months + ' month(s)' %}
+    {% endif %}
+  {% endif %}
+  {% if draft.statementOfMeans.unemployed.option === UnemploymentType.OTHER %}
+    {% set employmentStatus = employmentStatus + ': ' + draft.statementOfMeans.unemployed.otherDetails.details %}
+  {% endif %}
+
+  {{ row('Employment status', employmentStatus, '') }}
+{% endif %}
+
+{% if draft.statementOfMeans.employment.employed %}
+  {{ row('Why employs you?', '', statementOfMeansPaths.employersPage.evaluateUri({ externalId: claim.externalId }), false) }}
+  {% set indexOfLastRow = draft.statementOfMeans.employers.rows.length - 1 %}
+  {% for employer in draft.statementOfMeans.employers.rows %}
+    {{ row('Employer name', employer.employerName, '', false ) }}
+    {{ row('Job title', employer.jobTitle, '', loop.index0 === indexOfLastRow ) }}
+  {% endfor %}
+{% endif %}
+
+{% if draft.statementOfMeans.employment.selfEmployed %}
+  {{ row('What are you self-employed as?', '', statementOfMeansPaths.selfEmployedPage.evaluateUri({ externalId: claim.externalId }), false) }}
+  {{ row('Job title', draft.statementOfMeans.selfEmployed.jobTitle, '', false ) }}
+  {{ row('Annual turnover', draft.statementOfMeans.selfEmployed.annualTurnover | numeral, '', not draft.statementOfMeans.selfEmployed.areYouBehindOnTax ) }}
+  {% if draft.statementOfMeans.selfEmployed.areYouBehindOnTax %}
+    {{ row('Are you behind on tax', 'Yes' if draft.statementOfMeans.selfEmployed.areYouBehindOnTax else 'No', '', false ) }}
+    {{ row('Amount you owe?', draft.statementOfMeans.selfEmployed.amountYouOwe | numeral, '', false ) }}
+    {{ row('Reason', draft.statementOfMeans.selfEmployed.reason) }}
+  {% endif %}
+{% endif %}
+
+{{ row('Bank accounts and savings', '', statementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: claim.externalId }), false) }}
+{% set indexOfLastRow = draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly().length - 1 %}
+
+{% for account in draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly() %}
+  {{ row('Type of account', account.typeOfAccount.displayValue, '', false ) }}
+  {{ row('Balance', account.balance | numeral, '', false) }}
+  {{ row('Is joint', 'Yes' if account.isJoint else 'No', '', loop.index0 === indexOfLastRow ) }}
+{% endfor %}
+
+{{ tableEnd() }}
