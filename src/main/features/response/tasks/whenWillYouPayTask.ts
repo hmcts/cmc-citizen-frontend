@@ -60,10 +60,12 @@ export class WhenWillYouPayTask {
     }
 
     if (statementOfMeans.dependants.hasAnyChildren && statementOfMeans.dependants.numberOfChildren.between16and19 > 0) {
-      return isValid(statementOfMeans.education) && isValid(statementOfMeans.maintenance)
+      return isValid(statementOfMeans.education)
+        && isValid(statementOfMeans.maintenance)
+        && isValid(statementOfMeans.supportedByYou)
     }
 
-    return isValid(statementOfMeans.maintenance)
+    return isValid(statementOfMeans.maintenance) && isValid(statementOfMeans.supportedByYou)
   }
 
   private static isEmploymentCompleted (som: StatementOfMeans): boolean {

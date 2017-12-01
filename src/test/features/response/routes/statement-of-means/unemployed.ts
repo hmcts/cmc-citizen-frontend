@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 import '../../../../routes/expectations'
-import { Paths, StatementOfMeansPaths } from 'response/paths'
+import { StatementOfMeansPaths } from 'response/paths'
 import * as idamServiceMock from '../../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../../http-mocks/claim-store'
@@ -14,10 +14,10 @@ import { app } from '../../../../../main/app'
 import { checkNotDefendantInCaseGuard } from '../checks/not-defendant-in-case-check'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 
+const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = StatementOfMeansPaths.unemployedPage.evaluateUri(
-  { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
-)
+const pagePath: string = StatementOfMeansPaths.unemployedPage.evaluateUri({ externalId: externalId })
+const nextPagePath: string = StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: externalId })
 
 describe('Defendant response: Statement of means: unemployed page', () => {
 
@@ -119,11 +119,7 @@ describe('Defendant response: Statement of means: unemployed page', () => {
               .post(pagePath)
               .send({ option: UnemploymentType.UNEMPLOYED.value, unemploymentDetails: { years: 0, months: 1 } })
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.taskListPage.evaluateUri(
-                  { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
-                )
-              )
+              .expect(res => expect(res).to.be.redirect.toLocation(nextPagePath))
           })
 
           it('RETIRED selected', async () => {
@@ -135,11 +131,7 @@ describe('Defendant response: Statement of means: unemployed page', () => {
               .post(pagePath)
               .send({ option: UnemploymentType.RETIRED.value })
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.taskListPage.evaluateUri(
-                  { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
-                )
-              )
+              .expect(res => expect(res).to.be.redirect.toLocation(nextPagePath))
           })
 
           it('OTHER selected', async () => {
@@ -151,11 +143,7 @@ describe('Defendant response: Statement of means: unemployed page', () => {
               .post(pagePath)
               .send({ option: UnemploymentType.OTHER.value, otherDetails: { details: 'story' } })
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.taskListPage.evaluateUri(
-                  { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
-                )
-              )
+              .expect(res => expect(res).to.be.redirect.toLocation(nextPagePath))
           })
         })
       })
