@@ -124,7 +124,10 @@ const sampleResponseDraftObj = {
     },
     employment: { isCurrentlyEmployed: true, selfEmployed: true },
     employers: {},
-    selfEmployed: {}
+    selfEmployed: {},
+    dependants: { hasAnyChildren: false },
+    maintenance: { option: false },
+    bankAccounts: { rows: [] }
   },
   defendantPaymentOption: {
     option: {
