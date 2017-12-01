@@ -9,6 +9,7 @@ import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { RoutablePath } from 'common/router/routablePath'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
+import { StatementOfMeans } from 'response/draft/statementOfMeans'
 
 const page: RoutablePath = StatementOfMeansPaths.employmentPage
 
@@ -35,7 +36,14 @@ export default express.Router()
       if (form.hasErrors()) {
         res.render(page.associatedView, { form: form })
       } else {
-        user.responseDraft.document.statementOfMeans.employment = form.model
+        const statementOfMeans: StatementOfMeans = user.responseDraft.document.statementOfMeans
+        statementOfMeans.employment = form.model
+
+        if (statementOfMeans.employment.isCurrentlyEmployed === true) {
+          statementOfMeans.unemployed = undefined
+        } else if (statementOfMeans.employment.isCurrentlyEmployed === false) {
+          statementOfMeans.selfEmployed = statementOfMeans.employers = undefined
+        }
 
         await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
 
