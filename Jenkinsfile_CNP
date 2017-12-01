@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure@feature/Enable-deployments-for-cnp-branch")
+@Library("Infrastructure")
 
 def product = "cmc"
 def component = "citizen-frontend"
