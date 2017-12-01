@@ -47,6 +47,7 @@ export class StatementOfMeansPaths {
   static readonly employersPage = new RoutablePath(`${statementOfMeansPath}/employers`)
   static readonly selfEmployedPage = new RoutablePath(`${statementOfMeansPath}/self-employed`)
   static readonly unemployedPage = new RoutablePath(`${statementOfMeansPath}/unemployed`)
+  static readonly bankAccountsPage = new RoutablePath(`${statementOfMeansPath}/bank-accounts`)
 }
 
 const payBySetDatePath = `${responsePath}/pay-by-set-date`

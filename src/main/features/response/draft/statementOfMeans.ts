@@ -5,12 +5,13 @@ import { SelfEmployed } from 'response/form/models/statement-of-means/selfEmploy
 import { Dependants } from 'response/form/models/statement-of-means/dependants'
 import { Education } from 'response/form/models/statement-of-means/education'
 import { Maintenance } from 'response/form/models/statement-of-means/maintenance'
+import { SupportedByYou } from 'response/form/models/statement-of-means/supportedByYou'
+import { Unemployed } from 'response/form/models/statement-of-means/unemployed'
+import { BankAccounts } from 'response/form/models/statement-of-means/bankAccounts'
 import { FeatureToggles } from 'utils/featureToggles'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { ResponseType } from 'response/form/models/responseType'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
-import { SupportedByYou } from 'response/form/models/statement-of-means/supportedByYou'
-import { Unemployed } from 'response/form/models/statement-of-means/unemployed'
 
 export class StatementOfMeans {
   residence?: Residence
@@ -22,6 +23,7 @@ export class StatementOfMeans {
   employers?: Employers
   selfEmployed?: SelfEmployed
   unemployed?: Unemployed
+  bankAccounts?: BankAccounts
 
   static isApplicableFor (responseDraft?: ResponseDraft): boolean {
     if (!FeatureToggles.isEnabled('statementOfMeans')) {
@@ -52,6 +54,7 @@ export class StatementOfMeans {
       this.employers = new Employers().deserialize(input.employers)
       this.selfEmployed = new SelfEmployed().deserialize(input.selfEmployed)
       this.unemployed = new Unemployed().deserialize(input.unemployed)
+      this.bankAccounts = new BankAccounts().deserialize(input.bankAccounts)
     }
     return this
   }

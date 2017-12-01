@@ -40,9 +40,29 @@ export class WhenWillYouPayTask {
 
   private static statementOfMeansIsCompletedIfApplicable (responseDraft: ResponseDraft): boolean {
     if (StatementOfMeans.isApplicableFor(responseDraft)) {
-      return responseDraft.statementOfMeans !== undefined
-        && isValid(responseDraft.statementOfMeans.residence)
+      const statementOfMeans: StatementOfMeans = responseDraft.statementOfMeans
+
+      return statementOfMeans !== undefined
+        && isValid(statementOfMeans.residence)
+        && WhenWillYouPayTask.isDependantsCompleted(statementOfMeans)
+        && isValid(statementOfMeans.employment)
+        && isValid(statementOfMeans.bankAccounts)
     }
+
     return true
+  }
+
+  private static isDependantsCompleted (statementOfMeans: StatementOfMeans): boolean {
+    const dependantValid = isValid(statementOfMeans.dependants)
+
+    if (!dependantValid) {
+      return false
+    }
+
+    if (statementOfMeans.dependants.hasAnyChildren && statementOfMeans.dependants.numberOfChildren.between16and19 > 0) {
+      return isValid(statementOfMeans.education) && isValid(statementOfMeans.maintenance)
+    }
+
+    return isValid(statementOfMeans.maintenance)
   }
 }
