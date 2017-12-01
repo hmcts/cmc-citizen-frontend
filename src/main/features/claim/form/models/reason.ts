@@ -11,7 +11,7 @@ export class ValidationErrors {
 export class Reason implements CompletableTask {
   @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.REASON_REQUIRED })
-  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: DefaultValidationErrors.FREE_TEXT_TOO_LONG })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
   reason?: string
 
   constructor (reason?: string) {

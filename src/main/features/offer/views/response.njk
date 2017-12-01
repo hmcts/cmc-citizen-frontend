@@ -9,7 +9,7 @@
     <div class="column-two-thirds">
       <h1 class="heading-large">
         <span class="heading-secondary">{{ t('Defendant’s response') }}</span>
-        {{ t('%s’s offer', { postProcess: 'sprintf', sprintf: [ claim.claimData.defendant.name ] } ) }}
+        {{ t('{{ defendantName }}’s offer', { defendantName: claim.claimData.defendant.name } ) }}
       </h1>
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
@@ -36,10 +36,8 @@
             {
               bold: false,
               label: 'Yes',
-              hint: t('You can make a legal agreement between you and %s.',
-                { postProcess: 'sprintf',
-                sprintf:[ claim.claimData.defendant.name ]
-                }),
+              hint: t('Next you can make a legal agreement between you and {{ defendantName }}.',
+                     { defendantName: claim.claimData.defendant.name }),
               value: StatementType.ACCEPTATION.value,
               checked: (form.valueFor('option').value === StatementType.ACCEPTATION)
             },

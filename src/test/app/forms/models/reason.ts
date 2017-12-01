@@ -90,7 +90,7 @@ describe('Reason', () => {
     it('should reject claim reason with more than max allowed characters', () => {
       const errors = validator.validateSync(new Reason(generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1)))
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, DefaultValidationErrors.FREE_TEXT_TOO_LONG)
+      expectValidationError(errors, DefaultValidationErrors.TEXT_TOO_LONG)
     })
 
     it('should accept claim reason with max allowed characters', () => {

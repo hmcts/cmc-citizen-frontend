@@ -135,7 +135,7 @@ describe('HowMuchPaid', () => {
       const pastDate = new LocalDate(now.year(), now.month() - 1, now.day())
       const errors = validator.validateSync(new HowMuchPaid(300, pastDate, text))
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, DefaultValidationErrors.FREE_TEXT_TOO_LONG)
+      expectValidationError(errors, DefaultValidationErrors.TEXT_TOO_LONG)
     })
 
     it('should accept how much to pay text with max allowed characters', () => {

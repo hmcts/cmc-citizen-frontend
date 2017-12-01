@@ -10,7 +10,7 @@ export class ValidationErrors {
 export class Explanation {
   @IsDefined({ message: ValidationErrors.EXPLAIN_WHY_YOU_CANT_PAY_NOW })
   @IsNotBlank({ message: ValidationErrors.EXPLAIN_WHY_YOU_CANT_PAY_NOW })
-  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: DefaultValidationErrors.FREE_TEXT_TOO_LONG })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
   text: string
 
   constructor (text?: string) {
