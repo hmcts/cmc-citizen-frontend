@@ -27,6 +27,7 @@ import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
+import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
@@ -122,9 +123,10 @@ const sampleResponseDraftObj = {
     residence: {
       type: ResidenceType.OWN_HOME
     },
-    employment: { isCurrentlyEmployed: true, selfEmployed: true },
-    employers: {},
-    selfEmployed: {},
+    employment: { isCurrentlyEmployed: false },
+    employers: undefined,
+    selfEmployed: undefined,
+    unemployed: { option: { value: UnemploymentType.RETIRED.value } },
     dependants: { hasAnyChildren: false },
     maintenance: { option: false },
     bankAccounts: { rows: [] }
