@@ -42,9 +42,11 @@ export class StatementOfMeansPaths {
   static readonly dependantsPage = new RoutablePath(`${statementOfMeansPath}/dependants`)
   static readonly educationPage = new RoutablePath(`${statementOfMeansPath}/education`)
   static readonly maintenancePage = new RoutablePath(`${statementOfMeansPath}/maintenance`)
+  static readonly supportedByYouPage = new RoutablePath(`${statementOfMeansPath}/supported-by-you`)
   static readonly employmentPage = new RoutablePath(`${statementOfMeansPath}/employment`)
   static readonly employersPage = new RoutablePath(`${statementOfMeansPath}/employers`)
   static readonly selfEmployedPage = new RoutablePath(`${statementOfMeansPath}/self-employed`)
+  static readonly unemployedPage = new RoutablePath(`${statementOfMeansPath}/unemployed`)
   static readonly bankAccountsPage = new RoutablePath(`${statementOfMeansPath}/bank-accounts`)
 }
 

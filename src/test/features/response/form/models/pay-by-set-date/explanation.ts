@@ -25,7 +25,7 @@ describe('Explanation', () => {
 
     it('should have validation errors if given too many characters', () => {
       const errors: ValidationError[] = validator.validateSync(new Explanation(generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1)))
-      expectValidationError(errors, DefaultValidationErrors.FREE_TEXT_TOO_LONG)
+      expectValidationError(errors, DefaultValidationErrors.TEXT_TOO_LONG)
     })
   })
 })

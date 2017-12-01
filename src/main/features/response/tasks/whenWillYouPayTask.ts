@@ -45,7 +45,7 @@ export class WhenWillYouPayTask {
       return statementOfMeans !== undefined
         && isValid(statementOfMeans.residence)
         && WhenWillYouPayTask.isDependantsCompleted(statementOfMeans)
-        && isValid(statementOfMeans.employment)
+        && WhenWillYouPayTask.isEmploymentCompleted(statementOfMeans)
         && isValid(statementOfMeans.bankAccounts)
     }
 
@@ -60,9 +60,35 @@ export class WhenWillYouPayTask {
     }
 
     if (statementOfMeans.dependants.hasAnyChildren && statementOfMeans.dependants.numberOfChildren.between16and19 > 0) {
-      return isValid(statementOfMeans.education) && isValid(statementOfMeans.maintenance)
+      return isValid(statementOfMeans.education)
+        && isValid(statementOfMeans.maintenance)
+        && isValid(statementOfMeans.supportedByYou)
     }
 
-    return isValid(statementOfMeans.maintenance)
+    return isValid(statementOfMeans.maintenance) && isValid(statementOfMeans.supportedByYou)
+  }
+
+  private static isEmploymentCompleted (som: StatementOfMeans): boolean {
+    const employmentValid = isValid(som.employment)
+
+    if (!employmentValid) {
+      return false
+    }
+
+    if (!som.employment.isCurrentlyEmployed) {
+      return isValid(som.unemployed)
+    }
+
+    let result: boolean = true
+
+    if (som.employment.selfEmployed) {
+      result = result && isValid(som.selfEmployed)
+    }
+
+    if (som.employment.employed) {
+      result = result && isValid(som.employers)
+    }
+
+    return result
   }
 }
