@@ -12,6 +12,8 @@ import * as https from 'https'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('server')
 
+const DEFAULT_PORT = 3000
+
 function listen (app: express.Application, port: number) {
   if (app.locals.ENV === 'development' || app.locals.ENV === 'dockertests') {
     const server = https.createServer(getSSLOptions(), app)
@@ -31,6 +33,15 @@ function getSSLOptions (): any {
     key: fs.readFileSync(path.join(sslDirectory, 'localhost.key')),
     cert: fs.readFileSync(path.join(sslDirectory, 'localhost.crt'))
   }
+}
+
+function applicationPort (): number {
+  let port: number = parseInt(process.env.PORT, 10)
+  if (port === undefined || isNaN(port)) {
+    logger.info(`Port value was not set using PORT env variable, using the default of ${DEFAULT_PORT}`)
+    port = DEFAULT_PORT
+  }
+  return port
 }
 
 // function forkListenerProcesses (numberOfCores: number) {
@@ -53,6 +64,5 @@ function getSSLOptions (): any {
 //   forkListenerProcesses(numberOfCores)
 // } else {
 const app: express.Application = require('./app').app
-const port: number = parseInt(process.env.PORT, 10) || 3000
-listen(app, port)
+listen(app, applicationPort())
 // }
