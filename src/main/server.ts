@@ -35,9 +35,9 @@ function getSSLOptions (): any {
   }
 }
 
-function applicationPort (): number {
-  let port: number = parseInt(process.env.PORT, 10)
-  if (port === undefined || isNaN(port)) {
+function applicationPort (): any {
+  let port: any = process.env.PORT
+  if (port === undefined) {
     logger.info(`Port value was not set using PORT env variable, using the default of ${DEFAULT_PORT}`)
     port = DEFAULT_PORT
   }
