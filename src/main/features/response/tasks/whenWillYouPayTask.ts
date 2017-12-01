@@ -40,9 +40,28 @@ export class WhenWillYouPayTask {
 
   private static statementOfMeansIsCompletedIfApplicable (responseDraft: ResponseDraft): boolean {
     if (StatementOfMeans.isApplicableFor(responseDraft)) {
-      return responseDraft.statementOfMeans !== undefined
-        && isValid(responseDraft.statementOfMeans.residence)
+      const statementOfMeans: StatementOfMeans = responseDraft.statementOfMeans
+
+      return statementOfMeans !== undefined
+        && isValid(statementOfMeans.residence)
+        && WhenWillYouPayTask.isDependantsCompleted(statementOfMeans)
+        && isValid(statementOfMeans.employment)
+        && isValid(statementOfMeans.bankAccounts)
     }
+
     return true
+  }
+
+  private static isDependantsCompleted (statementOfMeans: StatementOfMeans): boolean {
+    const dependantValid = !!statementOfMeans.dependants && isValid(statementOfMeans.dependants)
+    const noChildrenValid: boolean = dependantValid && (statementOfMeans.dependants.hasAnyChildren === false)
+    const childrenUnder16Valid: boolean = dependantValid && statementOfMeans.dependants.hasAnyChildren === true
+      && !statementOfMeans.dependants.numberOfChildren.between16and19
+    const childrenValid: boolean = dependantValid && statementOfMeans.dependants.hasAnyChildren === true
+      && statementOfMeans.dependants.numberOfChildren.between16and19 > 0
+      && isValid(statementOfMeans.education)
+    const maintenanceValid: boolean = !!statementOfMeans.maintenance && isValid(statementOfMeans.maintenance)
+
+    return dependantValid && (noChildrenValid || childrenUnder16Valid || childrenValid) && maintenanceValid
   }
 }
