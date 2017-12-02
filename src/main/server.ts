@@ -48,8 +48,7 @@ function applicationPort (): any {
 const entryPoint = () => listen(app, applicationPort())
 
 if (toBoolean(config.get<boolean>('featureToggles.clusterMode'))) {
-  const cluster: ApplicationCluster = new ApplicationCluster()
-  cluster.run(entryPoint)
+  ApplicationCluster.execute(entryPoint)
 } else {
   entryPoint()
 }
