@@ -29,7 +29,7 @@ export class ApplicationRunner {
   }
 
   /**
-   * Return type number or string because Azure PaaS communicates with the application
+   * Return type is number or string because Azure PaaS communicates with the application
    * through a named pipe and not a TCP port.
    */
   private static applicationPort (): number | string {
