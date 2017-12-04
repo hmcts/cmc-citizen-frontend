@@ -10,7 +10,7 @@
     "copy-assets": "gulp sass copy-files",
     "setup": "yarn compile && yarn copy-assets",
     "start": "node src/main/server.js",
-    "start-dev": "./node_modules/.bin/ts-node -r tsconfig-paths/register src/main/server.ts",
+    "start-dev": "./node_modules/.bin/ts-node src/main/server.ts",
     "lint": "tslint --project tsconfig.json && sass-lint -v -q",
     "test": "NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*') --reporter-options reportFilename=unit,inlineAssets=true,reportTitle=citizen-frontend-unit",
     "test:routes": "NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) -path '*/routes/*') --timeout 4000 --reporter-options reportFilename=routes,inlineAssets=true,reportTitle=citizen-frontend-routes",
