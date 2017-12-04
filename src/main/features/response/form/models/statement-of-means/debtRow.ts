@@ -9,7 +9,9 @@ import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {
-  static readonly DEBT_REQUIRED: string = 'Enter a value'
+  static readonly DEBT_REQUIRED: string = 'Enter a debt'
+  static readonly TOTAL_OWED_REQUIRED: string = 'Enter the total owed'
+  static readonly MONTHLY_PAYMENT_REQUIRED: string = 'Enter a monthly payment'
 }
 
 export class DebtRow extends MultiRowFormItem {
@@ -21,17 +23,15 @@ export class DebtRow extends MultiRowFormItem {
   debt?: string
 
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
-  @IsDefined({ message: GlobalValidationErrors.NUMBER_REQUIRED })
-  @IsDefined({ message: GlobalValidationErrors.NUMBER_REQUIRED })
+  @IsDefined({ message: ValidationErrors.TOTAL_OWED_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
   totalOwed?: number
 
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
-  @IsDefined({ message: GlobalValidationErrors.NUMBER_REQUIRED })
-  @IsDefined({ message: GlobalValidationErrors.NUMBER_REQUIRED })
+  @IsDefined({ message: ValidationErrors.MONTHLY_PAYMENT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
   monthlyPayments?: number
 
   constructor (debt?: string, totalOwed?: number, monthlyPayment?: number) {

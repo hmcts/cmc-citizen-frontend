@@ -1,12 +1,12 @@
 import { expect } from 'chai'
 
-import { MinNumberOfPopulatedRowsConstraint } from 'forms/validation/validators/minNumberOfPopulatedRows'
+import { AtLeastOnePopulatedRowConstraint } from 'forms/validation/validators/atLeastOnePopulatedRow'
 
 const EMPTY: boolean = true
 const POPULATED: boolean = false
 
-describe('MinNumberOfPopulatedRowsConstraint', () => {
-  const constraint: MinNumberOfPopulatedRowsConstraint = new MinNumberOfPopulatedRowsConstraint()
+describe('AtLeastOnePopulatedRowConstraint', () => {
+  const constraint: AtLeastOnePopulatedRowConstraint = new AtLeastOnePopulatedRowConstraint()
 
   describe('validate', () => {
 

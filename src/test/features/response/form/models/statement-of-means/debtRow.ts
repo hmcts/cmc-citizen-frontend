@@ -145,14 +145,28 @@ describe('DebtRow', () => {
         const errors = validator.validateSync(new DebtRow('credit card', -10, 1))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
+        expectValidationError(errors, GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED)
       })
 
       it('when negative monthlyPayments', () => {
         const errors = validator.validateSync(new DebtRow('credit card', -10, 1))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
+        expectValidationError(errors, GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED)
+      })
+
+      it('when empty total owed', () => {
+        const errors = validator.validateSync(new DebtRow('card', undefined, 1))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.TOTAL_OWED_REQUIRED)
+      })
+
+      it('when empty monthly payments', () => {
+        const errors = validator.validateSync(new DebtRow('card', 1, undefined))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.MONTHLY_PAYMENT_REQUIRED)
       })
 
       it('when empty description', () => {

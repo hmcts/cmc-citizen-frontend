@@ -3,7 +3,7 @@ import { IsDefined, ValidateIf } from 'class-validator'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import * as toBoolean from 'to-boolean'
 import { DebtRow } from 'response/form/models/statement-of-means/debtRow'
-import { MinNumberOfPopulatedRows } from 'forms/validation/validators/minNumberOfPopulatedRows'
+import { AtLeastOnePopulatedRow } from 'forms/validation/validators/atLeastOnePopulatedRow'
 
 export class ValidationErrors {
   static readonly ENTER_AT_LEAST_ONE_ROW: string = 'Enter at least one debt'
@@ -15,7 +15,7 @@ export class Debts extends MultiRowForm<DebtRow> {
   hasAnyDebts: boolean
 
   @ValidateIf(o => o.hasAnyDebts === true)
-  @MinNumberOfPopulatedRows({ message: ValidationErrors.ENTER_AT_LEAST_ONE_ROW })
+  @AtLeastOnePopulatedRow({ message: ValidationErrors.ENTER_AT_LEAST_ONE_ROW })
   rows: DebtRow[]
 
   constructor (hasAnyDebts?: boolean, rows?: DebtRow[]) {

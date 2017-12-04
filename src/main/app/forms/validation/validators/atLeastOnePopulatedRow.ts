@@ -10,7 +10,7 @@ import { MultiRowForm } from 'forms/models/multiRowForm'
 import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
 
 @ValidatorConstraint()
-export class MinNumberOfPopulatedRowsConstraint implements ValidatorConstraintInterface {
+export class AtLeastOnePopulatedRowConstraint implements ValidatorConstraintInterface {
 
   validate (value: any | MultiRowForm<MultiRowFormItem>, args?: ValidationArguments): boolean {
     if (value == null) {
@@ -28,14 +28,14 @@ export class MinNumberOfPopulatedRowsConstraint implements ValidatorConstraintIn
 /**
  * Verify there is at least one populated row in multi-row form.
  */
-export function MinNumberOfPopulatedRows (validationOptions?: ValidationOptions) {
+export function AtLeastOnePopulatedRow (validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
       constraints: [],
-      validator: MinNumberOfPopulatedRowsConstraint
+      validator: AtLeastOnePopulatedRowConstraint
     })
   }
 }
