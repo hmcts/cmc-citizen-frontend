@@ -32,7 +32,7 @@ describe('Debts', () => {
     it('should return Debts with list of empty DebtRow[] when hasAnyDebts = false', () => {
       const actual: Debts = new Debts().deserialize({ hasAnyDebts: false })
 
-      expect(actual.rows.length).to.eql(0)
+      expect(actual.rows.length).to.eql(INIT_ROW_COUNT)
       expectAllRowsToBeEmpty(actual.rows)
     })
 

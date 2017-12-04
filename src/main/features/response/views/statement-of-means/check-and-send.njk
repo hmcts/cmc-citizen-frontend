@@ -97,4 +97,15 @@
   {{ row('Is joint', 'Yes' if account.isJoint else 'No', '', loop.index0 === indexOfLastRow ) }}
 {% endfor %}
 
+{{ row('Debts', '', statementOfMeansPaths.debtsPage.evaluateUri({ externalId: claim.externalId }), false) }}
+{{ row('Do you have any debts?', 'Yes' if draft.statementOfMeans.debts.hasAnyDebts else 'No', '', not draft.statementOfMeans.debts.hasAnyDebts) }}
+{% set debtRows = draft.statementOfMeans.debts.getPopulatedRowsOnly() %}
+{% set indexOfLastRow = debtRows.length - 1 %}
+
+{% for debtRow in debtRows %}
+  {{ row('Debt', debtRow.debt, '', false ) }}
+  {{ row('Total owed', debtRow.totalOwed | numeral, '', false) }}
+  {{ row('Monthly Payments', debtRow.monthlyPayments | numeral, '', loop.index0 === indexOfLastRow ) }}
+{% endfor %}
+
 {{ tableEnd() }}

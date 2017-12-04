@@ -17,7 +17,7 @@ export class DebtRow extends MultiRowFormItem {
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: ValidationErrors.DEBT_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.DEBT_REQUIRED })
-  @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: GlobalValidationErrors.FREE_TEXT_TOO_LONG })
+  @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: GlobalValidationErrors.TEXT_TOO_LONG })
   debt?: string
 
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())

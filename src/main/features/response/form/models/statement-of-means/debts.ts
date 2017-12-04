@@ -40,7 +40,7 @@ export class Debts extends MultiRowForm<DebtRow> {
   deserialize (input?: any): Debts {
     if (input) {
       this.hasAnyDebts = input.hasAnyDebts
-      this.rows = this.hasAnyDebts ? this.deserializeRows(input.rows) : []
+      this.rows = this.deserializeRows(input.rows)
     }
 
     return this

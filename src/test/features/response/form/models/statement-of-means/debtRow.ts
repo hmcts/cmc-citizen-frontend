@@ -168,7 +168,7 @@ describe('DebtRow', () => {
         )
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.FREE_TEXT_TOO_LONG)
+        expectValidationError(errors, GlobalValidationErrors.TEXT_TOO_LONG)
       })
     })
   })

@@ -47,6 +47,7 @@ export class WhenWillYouPayTask {
         && WhenWillYouPayTask.isDependantsCompleted(statementOfMeans)
         && WhenWillYouPayTask.isEmploymentCompleted(statementOfMeans)
         && isValid(statementOfMeans.bankAccounts)
+        && isValid(statementOfMeans.debts)
     }
 
     return true
