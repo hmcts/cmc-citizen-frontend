@@ -16,7 +16,7 @@ export class ApplicationCluster {
     }
   }
 
-  private static forkListenerProcesses (numberOfCores: number) {
+  private static forkListenerProcesses (numberOfCores: number): void {
     for (let i = 0; i < numberOfCores; i++) {
       cluster.fork()
     }

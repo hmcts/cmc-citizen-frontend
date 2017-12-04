@@ -29,12 +29,12 @@ export class ApplicationRunner {
   }
 
   /**
-   * Return type is number or string because Azure PaaS communicates with the application
+   * Return type is string because Azure PaaS communicates with the application
    * through a named pipe and not a TCP port.
    */
-  private static applicationPort (): number | string {
-    const defaultPort = 3000
-    let port: number | string = process.env.PORT
+  private static applicationPort (): string {
+    const defaultPort = '3000'
+    let port: string = process.env.PORT
     if (port === undefined) {
       logger.info(`Port value was not set using PORT env variable, using the default of ${defaultPort}`)
       port = defaultPort
