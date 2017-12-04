@@ -17,6 +17,10 @@ export class MinNumberOfPopulatedRowsConstraint implements ValidatorConstraintIn
       return true
     }
 
+    if (!(value instanceof Array)) {
+      return false
+    }
+
     return value.filter(item => !item.isEmpty()).length >= 1
   }
 }

@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 import '../../../../routes/expectations'
-import { StatementOfMeansPaths } from 'response/paths'
+import { Paths, StatementOfMeansPaths } from 'response/paths'
 import * as idamServiceMock from '../../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../../http-mocks/claim-store'
@@ -12,14 +12,13 @@ import { checkAlreadySubmittedGuard } from '../checks/already-submitted-check'
 import { checkCountyCourtJudgmentRequestedGuard } from '../checks/ccj-requested-check'
 import { app } from '../../../../../main/app'
 import { checkNotDefendantInCaseGuard } from '../checks/not-defendant-in-case-check'
-import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = StatementOfMeansPaths.bankAccountsPage.evaluateUri(
+const pagePath: string = StatementOfMeansPaths.debtsPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
 
-describe('Defendant response: Statement of means: account-banks', () => {
+describe('Defendant response: Statement of means: debts', () => {
 
   attachDefaultHooks(app)
 
@@ -66,7 +65,7 @@ describe('Defendant response: Statement of means: account-banks', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('List your bank and savings accounts'))
+            .expect(res => expect(res).to.be.successful.withText('Do you have any debts?'))
         })
       })
     })
@@ -111,20 +110,39 @@ describe('Defendant response: Statement of means: account-banks', () => {
 
       describe('save and continue', () => {
 
-        it('should update draft store and redirect', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
+        context('should update draft store and redirect', () => {
 
-          await request(app)
-            .post(pagePath)
-            .send({ rows: [{ typeOfAccount: BankAccountType.ISA.value, isJoint: false, balance: 10 }] })
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.debtsPage.evaluateUri(
-                { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+          it('when valid debt provided', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
+
+            await request(app)
+              .post(pagePath)
+              .send({ hasAnyDebts: true, rows: [{ debt: 'my debt', totalOwed: '100', monthlyPayments: '10' }] })
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(Paths.taskListPage.evaluateUri(
+                  { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+                )
               )
-            )
+          })
+
+          it('when no selected', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
+
+            await request(app)
+              .post(pagePath)
+              .send({ hasAnyDebts: false })
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(Paths.taskListPage.evaluateUri(
+                  { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+                )
+              )
+          })
         })
       })
 
@@ -138,7 +156,7 @@ describe('Defendant response: Statement of means: account-banks', () => {
             .post(pagePath)
             .send({ action: { addRow: 'Add row' } })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('List your bank and savings accounts'))
+            .expect(res => expect(res).to.be.successful.withText('Do you have any debts?'))
         })
       })
     })
