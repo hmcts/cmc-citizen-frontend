@@ -14,11 +14,11 @@ import { app } from '../../../../../main/app'
 import { checkNotDefendantInCaseGuard } from '../checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = StatementOfMeansPaths.employmentPage.evaluateUri(
+const pagePath: string = StatementOfMeansPaths.supportedByYouPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
 
-describe('Defendant response: Statement of means: employment', () => {
+describe('Defendant response: Statement of means: do you support anyone', () => {
 
   attachDefaultHooks(app)
 
@@ -65,7 +65,7 @@ describe('Defendant response: Statement of means: employment', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Are you currently working?'))
+            .expect(res => expect(res).to.be.successful.withText('Do you support anyone else financially?'))
         })
       })
     })
@@ -108,51 +108,38 @@ describe('Defendant response: Statement of means: employment', () => {
         })
       })
 
-      describe('should update draft store and redirect', () => {
+      context('should redirect to Employment page when', () => {
 
-        it('to unemployed page', async () => {
+        it('"no" selected', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
             .post(pagePath)
-            .send({ isCurrentlyEmployed: false })
+            .send({ doYouSupportAnyone: 'false' })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.unemployedPage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.employmentPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )
         })
 
-        it('to employers page', async () => {
+        it('"yes" selected', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
             .post(pagePath)
-            .send({ isCurrentlyEmployed: true, selfEmployed: true, employed: true })
+            .send({
+              doYouSupportAnyone: 'false',
+              numberOfPeople: { value: 1, details: 'It is my story' }
+            })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.employersPage.evaluateUri(
-                { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
-              )
-            )
-        })
-
-        it('to self-employment page', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
-
-          await request(app)
-            .post(pagePath)
-            .send({ isCurrentlyEmployed: true, selfEmployed: true, employed: false })
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.selfEmployedPage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.employmentPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )
