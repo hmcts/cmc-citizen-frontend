@@ -1,27 +1,24 @@
 import * as express from 'express'
 
-import { StatementOfMeansPaths } from 'response/paths'
+import { Paths, StatementOfMeansPaths } from 'response/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'app/forms/validation/formValidator'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
-import { Employers } from 'response/form/models/statement-of-means/employers'
 import { User } from 'idam/user'
 import { RoutablePath } from 'common/router/routablePath'
+import { BankAccounts } from 'response/form/models/statement-of-means/bankAccounts'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 
-const page: RoutablePath = StatementOfMeansPaths.employersPage
+const page: RoutablePath = StatementOfMeansPaths.bankAccountsPage
 
-function renderView (form: Form<Employers>, res: express.Response): void {
-  res.render(page.associatedView, {
-    form: form,
-    canAddMoreJobs: form.model.canAddMoreRows()
-  })
+function renderView (form: Form<BankAccounts>, res: express.Response): void {
+  res.render(page.associatedView, { form: form })
 }
 
 function actionHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
   if (req.body.action) {
-    const form: Form<Employers> = req.body
+    const form: Form<BankAccounts> = req.body
     if (req.body.action.addRow) {
       form.model.appendRow()
     }
@@ -37,31 +34,25 @@ export default express.Router()
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const user: User = res.locals.user
-      renderView(new Form(user.responseDraft.document.statementOfMeans.employers), res)
+      renderView(new Form(user.responseDraft.document.statementOfMeans.bankAccounts), res)
     })
   .post(
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
-    FormValidator.requestHandler(Employers, Employers.fromObject, undefined, ['addRow']),
+    FormValidator.requestHandler(BankAccounts, BankAccounts.fromObject, undefined, ['addRow']),
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<Employers> = req.body
+      const form: Form<BankAccounts> = req.body
       const user: User = res.locals.user
-      const { externalId } = req.params
 
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
         form.model.removeExcessRows()
-        user.responseDraft.document.statementOfMeans.employers = form.model
+        user.responseDraft.document.statementOfMeans.bankAccounts = form.model
 
         await new DraftService().save(user.responseDraft, user.bearerToken)
-
-        if (user.responseDraft.document.statementOfMeans.employment.selfEmployed) {
-          res.redirect(StatementOfMeansPaths.selfEmployedPage.evaluateUri({ externalId: externalId }))
-        } else {
-          res.redirect(StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: externalId }))
-        }
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     })
   )

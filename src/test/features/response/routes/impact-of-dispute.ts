@@ -130,7 +130,7 @@ describe('Defendant response: impact of dispute page', () => {
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidFormData)
-            .expect(res => expect(res).to.be.successful.withText(ValidationErrors.FREE_TEXT_TOO_LONG))
+            .expect(res => expect(res).to.be.successful.withText(ValidationErrors.TEXT_TOO_LONG))
         })
 
         it('should redirect to task list page and save draft when all if fine and data is valid', async () => {

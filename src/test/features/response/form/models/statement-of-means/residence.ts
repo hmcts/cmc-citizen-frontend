@@ -97,7 +97,7 @@ describe('Residence', () => {
         ResidenceType.OTHER,
         generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1)
       ))
-      expectValidationError(errors, DefaultValidationErrors.FREE_TEXT_TOO_LONG)
+      expectValidationError(errors, DefaultValidationErrors.TEXT_TOO_LONG)
     })
 
     it('should not validate housing details when type is not OTHER', () => {
