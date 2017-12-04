@@ -6,7 +6,7 @@ import { DebtRow } from 'response/form/models/statement-of-means/debtRow'
 import { MinNumberOfPopulatedRows } from 'forms/validation/validators/minNumberOfPopulatedRows'
 
 export class ValidationErrors {
-  static readonly ENTER_AT_LEAST_ONE_ROW: string = 'Enter at least one populated row or select no'
+  static readonly ENTER_AT_LEAST_ONE_ROW: string = 'Enter at least one debt'
 }
 
 export class Debts extends MultiRowForm<DebtRow> {
