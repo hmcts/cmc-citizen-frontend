@@ -60,9 +60,8 @@ export default express.Router()
         if (user.responseDraft.document.statementOfMeans.employment.selfEmployed) {
           res.redirect(StatementOfMeansPaths.selfEmployedPage.evaluateUri({ externalId: externalId }))
         } else {
-          renderView(form, res)
+          res.redirect(StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: externalId }))
         }
-
       }
     })
   )

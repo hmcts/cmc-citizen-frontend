@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 import '../../../../routes/expectations'
-import { StatementOfMeansPaths, Paths } from 'response/paths'
+import { StatementOfMeansPaths } from 'response/paths'
 import * as idamServiceMock from '../../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../../http-mocks/claim-store'
@@ -110,7 +110,7 @@ describe('Defendant response: Statement of means: employment', () => {
 
       describe('should update draft store and redirect', () => {
 
-        it('to task list page', async () => {
+        it('to unemployed page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.resolveSave()
@@ -120,7 +120,7 @@ describe('Defendant response: Statement of means: employment', () => {
             .send({ isCurrentlyEmployed: false })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(Paths.taskListPage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.unemployedPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )

@@ -36,7 +36,7 @@ export default express.Router()
         user.responseDraft.document.statementOfMeans.maintenance = form.model
 
         await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
-        res.redirect(Paths.employmentPage.evaluateUri({ externalId: externalId }))
+        res.redirect(Paths.supportedByYouPage.evaluateUri({ externalId: externalId }))
       }
     })
   )
