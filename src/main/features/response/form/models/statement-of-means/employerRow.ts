@@ -16,13 +16,13 @@ export class EmployerRow extends MultiRowFormItem {
   @ValidateIf(o => o.jobTitle !== undefined)
   @IsDefined({ message: ValidationErrors.EMPLOYER_NAME_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.EMPLOYER_NAME_REQUIRED })
-  @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: GlobalValidationErrors.TOO_LONG_INPUT })
+  @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: GlobalValidationErrors.TEXT_TOO_LONG })
   employerName?: string
 
   @ValidateIf(o => o.employerName !== undefined)
   @IsDefined({ message: ValidationErrors.JOB_TITLE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.JOB_TITLE_REQUIRED })
-  @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: GlobalValidationErrors.TOO_LONG_INPUT })
+  @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: GlobalValidationErrors.TEXT_TOO_LONG })
   jobTitle?: string = undefined
 
   constructor (employerName?: string, jobTitle?: string) {

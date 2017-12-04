@@ -120,7 +120,7 @@ describe('Defendant response: Statement of means: maintenance', () => {
             .send({ option: 'true', value: '1' })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.employmentPage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.supportedByYouPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )

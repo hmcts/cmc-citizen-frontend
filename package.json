@@ -9,8 +9,8 @@
     "compile": "tsc --project tsconfig.prod.json",
     "copy-assets": "gulp sass copy-files",
     "setup": "yarn compile && yarn copy-assets",
-    "start": "node -r tsconfig-paths/register src/main/server.js",
-    "start-dev": "./node_modules/.bin/ts-node -r tsconfig-paths/register src/main/server.ts",
+    "start": "node src/main/server.js",
+    "start-dev": "./node_modules/.bin/ts-node src/main/server.ts",
     "lint": "tslint --project tsconfig.json && sass-lint -v -q",
     "test": "NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*') --reporter-options reportFilename=unit,inlineAssets=true,reportTitle=citizen-frontend-unit",
     "test:routes": "NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) -path '*/routes/*') --timeout 4000 --reporter-options reportFilename=routes,inlineAssets=true,reportTitle=citizen-frontend-routes",
@@ -24,10 +24,10 @@
     "prepush": "yarn test && yarn test:routes"
   },
   "dependencies": {
-    "@hmcts/cmc-common-frontend": "^1.24.1",
+    "@hmcts/cmc-common-frontend": "^1.25.1",
     "@hmcts/cmc-draft-store-middleware": "^1.0.0",
     "@hmcts/draft-store-client": "^1.1.1",
-    "@hmcts/nodejs-healthcheck": "^1.4.3",
+    "@hmcts/nodejs-healthcheck": "^1.4.5",
     "@hmcts/nodejs-logging": "^1.4.2",
     "@types/config": "^0.0.33",
     "@types/cookies": "^0.7.1",

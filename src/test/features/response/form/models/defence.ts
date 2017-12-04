@@ -69,7 +69,7 @@ describe('Defence', () => {
       const text: string = generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1)
       const errors = validator.validateSync(new Defence(text))
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, GlobalValidationErrors.FREE_TEXT_TOO_LONG)
+      expectValidationError(errors, GlobalValidationErrors.TEXT_TOO_LONG)
     })
 
     it('should accept defence text with max allowed characters', () => {
