@@ -9,6 +9,7 @@ import { DraftService } from 'services/draftService'
 import { RoutablePath } from 'common/router/routablePath'
 import { Dependants } from 'response/form/models/statement-of-means/dependants'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
+import { StatementOfMeans } from 'response/draft/statementOfMeans'
 
 const page: RoutablePath = Paths.dependantsPage
 
@@ -33,7 +34,12 @@ export default express.Router()
       if (form.hasErrors()) {
         res.render(page.associatedView, { form: form })
       } else {
-        user.responseDraft.document.statementOfMeans.dependants = form.model
+        const statementOfMeans: StatementOfMeans = user.responseDraft.document.statementOfMeans
+        statementOfMeans.dependants = form.model
+
+        if (statementOfMeans.dependants.hasAnyChildren === false) {
+          statementOfMeans.education = undefined
+        }
 
         await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
 

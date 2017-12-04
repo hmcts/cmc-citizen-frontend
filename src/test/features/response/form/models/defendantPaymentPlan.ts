@@ -174,7 +174,7 @@ describe('DefendantPaymentPlan', () => {
         const errors = validator.validateSync(paymentPlan)
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, CommonValidationErrors.FREE_TEXT_TOO_LONG)
+        expectValidationError(errors, CommonValidationErrors.TEXT_TOO_LONG)
       })
     })
 

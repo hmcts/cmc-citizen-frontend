@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@hmcts/cmc-common-frontend@^1.24.1":
-  version "1.24.1"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.24.1.tgz#5a98aff40e092545fbf207925048f5f4595fea2e"
+"@hmcts/cmc-common-frontend@^1.25.1":
+  version "1.25.1"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.25.1.tgz#1f6e28006109ef01803a33e8ffb74c2ad21540c9"
 
 "@hmcts/cmc-draft-store-middleware@^1.0.0":
   version "1.0.0"
@@ -21,11 +21,11 @@
     request "^2.81.0"
     request-promise-native "^1.0.3"
 
-"@hmcts/nodejs-healthcheck@^1.4.3":
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/@hmcts/nodejs-healthcheck/-/nodejs-healthcheck-1.4.3.tgz#d26b72106411bd820b4ae43cf1a7ec9814ca8f58"
+"@hmcts/nodejs-healthcheck@^1.4.5":
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/@hmcts/nodejs-healthcheck/-/nodejs-healthcheck-1.4.5.tgz#386b9775fa5f603e3da5833f6dcce86eae5f4bd4"
   dependencies:
-    fs-extra "^3.0.1"
+    fs-extra "^4.0.1"
     js-yaml "^3.8.4"
     superagent "^3.5.1"
 
