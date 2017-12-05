@@ -6,9 +6,10 @@ import {
 export class MinTotalConstraint implements ValidatorConstraintInterface {
 
   validate (value: any, validationArguments?: ValidationArguments): boolean {
-    if (value == null) {
+    if (value === undefined) {
       return true
     }
+
     if (!Array.isArray(value)) {
       throw new Error('Expected validated element to be an array')
     }
@@ -20,6 +21,7 @@ export class MinTotalConstraint implements ValidatorConstraintInterface {
         total += row.amount
       }
     }
+
     return total >= minValue
   }
 
@@ -28,9 +30,9 @@ export class MinTotalConstraint implements ValidatorConstraintInterface {
     if (typeof minValue !== 'number') {
       throw new Error('Minimal required value parameter not given')
     }
+
     return minValue
   }
-
 }
 
 export function MinTotal (minValue: number, validationOptions?: ValidationOptions) {
