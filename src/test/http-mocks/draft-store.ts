@@ -130,7 +130,8 @@ const sampleResponseDraftObj = {
     dependants: { hasAnyChildren: false },
     supportedByYou: { doYouSupportAnyone: false },
     maintenance: { option: false },
-    bankAccounts: { rows: [] }
+    bankAccounts: { rows: [] },
+    debts: { hasAnyDebts: false }
   },
   defendantPaymentOption: {
     option: {

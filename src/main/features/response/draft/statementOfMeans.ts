@@ -12,6 +12,7 @@ import { FeatureToggles } from 'utils/featureToggles'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { ResponseType } from 'response/form/models/responseType'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { Debts } from 'response/form/models/statement-of-means/debts'
 
 export class StatementOfMeans {
   residence?: Residence
@@ -24,6 +25,7 @@ export class StatementOfMeans {
   selfEmployed?: SelfEmployed
   unemployed?: Unemployed
   bankAccounts?: BankAccounts
+  debts?: Debts
 
   static isApplicableFor (responseDraft?: ResponseDraft): boolean {
     if (!FeatureToggles.isEnabled('statementOfMeans')) {
@@ -55,6 +57,7 @@ export class StatementOfMeans {
       this.selfEmployed = new SelfEmployed().deserialize(input.selfEmployed)
       this.unemployed = new Unemployed().deserialize(input.unemployed)
       this.bankAccounts = new BankAccounts().deserialize(input.bankAccounts)
+      this.debts = new Debts().deserialize(input.debts)
     }
     return this
   }
