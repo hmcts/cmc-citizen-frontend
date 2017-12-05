@@ -131,7 +131,8 @@ const sampleResponseDraftObj = {
     supportedByYou: { doYouSupportAnyone: false },
     maintenance: { option: false },
     bankAccounts: { rows: [] },
-    debts: { hasAnyDebts: false }
+    debts: { hasAnyDebts: false },
+    courtOrders: { hasAnyCourtOrders: false }
   },
   defendantPaymentOption: {
     option: {

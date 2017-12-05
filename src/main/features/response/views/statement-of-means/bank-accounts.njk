@@ -27,7 +27,7 @@
     {% if balanceError %}<span id="{{ balanceKey }}[label]" class="error-message">{{ t(balanceError) }}</span>{% endif %}
 
     <label class="form-label-bold mobile-show" for="{{ typeOfAccountKey }}">{{ index + 1 }} {{ t('. Type of account') }}</label>
-    <select name="{{ typeOfAccountKey }}" id="{{ typeOfAccountKey }}" class="form-control column-1{% if typeOfAccountError %} form-group-error {% endif %}" style="width:30%">
+    <select name="{{ typeOfAccountKey }}" id="{{ typeOfAccountKey }}" class="form-control column-1{% if typeOfAccountError %} form-control-error {% endif %}">
       <option value="">{{ t('Choose') }}</option>
       <option value="{{ BankAccountType.CURRENT_ACCOUNT.value }}" {% if typeOfAccountValue === BankAccountType.CURRENT_ACCOUNT %} selected{% endif %}>{{ t(BankAccountType.CURRENT_ACCOUNT.displayValue) }}</option>
       <option value="{{ BankAccountType.SAVING_ACCOUNT.value }}" {% if typeOfAccountValue === BankAccountType.SAVING_ACCOUNT  %} selected{% endif %}>{{ t(BankAccountType.SAVING_ACCOUNT.displayValue) }}</option>
@@ -36,7 +36,7 @@
     </select>
 
     <label class="form-label-bold mobile-show" for="{{ isJointKey }}" >{{ t('Joint account') }}</label>
-    <select name="{{ isJointKey }}" id="{{ isJointKey }}" class="form-control column-3 {% if isJointError %} form-group-error {% endif %}">
+    <select name="{{ isJointKey }}" id="{{ isJointKey }}" class="form-control column-3 {% if isJointError %} form-control-error {% endif %}">
       <option value="">Choose</option>
       <option value="yes" {% if isJointValue === true %} selected{% endif %}>{{ t('Yes') }}</option>
       <option value="no" {% if isJointValue === false %} selected{% endif %}>{{ t('No') }}</option>
@@ -45,7 +45,7 @@
     <label class="form-label-bold mobile-show" for="{{ balanceKey }}">{{ t('Balance') }}</label>
     <span class="input-symbol-pound">
       <input id="{{ balanceKey }}" name="{{ balanceKey }}"
-             class="form-control column-2 {% if balanceError %} form-group-error {% endif %}""
+             class="form-control column-2 {% if balanceError %} form-control-error {% endif %}""
              type="number"
              value="{{ balanceValue | default('') }}">
     </span>

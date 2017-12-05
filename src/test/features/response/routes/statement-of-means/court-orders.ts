@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 import '../../../../routes/expectations'
-import { StatementOfMeansPaths } from 'response/paths'
+import { Paths, StatementOfMeansPaths } from 'response/paths'
 import * as idamServiceMock from '../../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../../http-mocks/claim-store'
@@ -14,7 +14,7 @@ import { app } from '../../../../../main/app'
 import { checkNotDefendantInCaseGuard } from '../checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = StatementOfMeansPaths.debtsPage.evaluateUri(
+const pagePath: string = StatementOfMeansPaths.courtOrdersPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
 
@@ -65,7 +65,7 @@ describe('Defendant response: Statement of means: debts', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Do you have any debts?'))
+            .expect(res => expect(res).to.be.successful.withText('Are you paying any other court orders?'))
         })
       })
     })
@@ -119,10 +119,10 @@ describe('Defendant response: Statement of means: debts', () => {
 
             await request(app)
               .post(pagePath)
-              .send({ hasAnyDebts: 'true', rows: [{ debt: 'my debt', totalOwed: '100', monthlyPayments: '10' }] })
+              .send({ hasAnyCourtOrders: 'true', rows: [{ details: 'my debt', amount: '100' }] })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
-                .toLocation(StatementOfMeansPaths.courtOrdersPage.evaluateUri(
+                .toLocation(Paths.taskListPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
                 )
               )
@@ -135,10 +135,10 @@ describe('Defendant response: Statement of means: debts', () => {
 
             await request(app)
               .post(pagePath)
-              .send({ hasAnyDebts: 'false' })
+              .send({ hasAnyCourtOrders: 'false' })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
-                .toLocation(StatementOfMeansPaths.courtOrdersPage.evaluateUri(
+                .toLocation(Paths.taskListPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
                 )
               )
@@ -148,7 +148,7 @@ describe('Defendant response: Statement of means: debts', () => {
 
       describe('add a new row', () => {
 
-        it('should add one more row', async () => {
+        it('should add more rows', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
 
@@ -156,7 +156,7 @@ describe('Defendant response: Statement of means: debts', () => {
             .post(pagePath)
             .send({ action: { addRow: 'Add row' } })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Do you have any debts?'))
+            .expect(res => expect(res).to.be.successful.withText('Are you paying any other court orders?'))
         })
       })
     })
