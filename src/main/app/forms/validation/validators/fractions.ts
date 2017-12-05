@@ -13,11 +13,11 @@ export class FractionsConstraint implements ValidatorConstraintInterface {
 
   validate (value: any, args?: ValidationArguments): boolean {
     const [min, max] = args.constraints
-    if (min == null || min < 0) {
+    if (min === undefined || min < 0) {
       throw new Error('Minimum allowed decimal places has to be specified and positive value')
     }
 
-    if (max == null || max < 0) {
+    if (max === undefined || max < 0) {
       throw new Error('Maximum allowed decimal places has to be specified and positive value')
     }
 

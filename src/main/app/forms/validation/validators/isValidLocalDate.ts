@@ -12,7 +12,7 @@ import { LocalDate } from 'forms/models/localDate'
 export class IsValidLocalDateConstraint implements ValidatorConstraintInterface {
 
   validate (value: any | LocalDate, args?: ValidationArguments): boolean {
-    if (value == null) {
+    if (value === undefined) {
       return true
     }
 

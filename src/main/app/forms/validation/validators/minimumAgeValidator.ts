@@ -19,7 +19,7 @@ export class MinimumAgeValidatorConstraint implements ValidatorConstraintInterfa
       throw new Error('Min Years in the past has to be specified and positive value')
     }
 
-    if (value == null) {
+    if (value === undefined) {
       return true
     }
 
@@ -30,6 +30,7 @@ export class MinimumAgeValidatorConstraint implements ValidatorConstraintInterfa
     const today = MomentFactory.currentDate()
     const date = value.toMoment()
     const years = today.diff(date, 'years')
+
     return years >= minYears
   }
 
