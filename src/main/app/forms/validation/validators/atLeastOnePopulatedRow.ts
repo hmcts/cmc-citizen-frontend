@@ -13,7 +13,7 @@ import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
 export class AtLeastOnePopulatedRowConstraint implements ValidatorConstraintInterface {
 
   validate (value: any | MultiRowForm<MultiRowFormItem>, args?: ValidationArguments): boolean {
-    if (value == null) {
+    if (value === undefined) {
       return true
     }
 

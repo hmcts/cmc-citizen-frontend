@@ -12,8 +12,8 @@ describe('AtLeastOnePopulatedRowConstraint', () => {
 
     context('should accept', () => {
 
-      it('should accept null value', () => {
-        expect(constraint.validate(null)).to.be.equal(true)
+      it('should accept undefined value', () => {
+        expect(constraint.validate(undefined)).to.be.equal(true)
       })
 
       it('array of populated objects', () => {
