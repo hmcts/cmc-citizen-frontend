@@ -25,13 +25,13 @@ export class DebtRow extends MultiRowFormItem {
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: ValidationErrors.TOTAL_OWED_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @Min(1, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
   totalOwed?: number
 
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: ValidationErrors.MONTHLY_PAYMENT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @Min(0, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
   monthlyPayments?: number
 
   constructor (debt?: string, totalOwed?: number, monthlyPayment?: number) {

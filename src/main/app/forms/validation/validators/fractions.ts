@@ -21,10 +21,12 @@ export class FractionsConstraint implements ValidatorConstraintInterface {
       throw new Error('Maximum allowed decimal places has to be specified and positive value')
     }
 
-    if (value == null) {
+    if (value === undefined) {
       return true
     }
+
     const regex = '^[-]?\\d+\\.*\\d{' + min + ',' + max + '}\$'
+
     return validator.matches(value.toString(), new RegExp(regex))
   }
 }
