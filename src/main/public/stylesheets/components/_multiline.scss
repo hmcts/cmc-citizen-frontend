@@ -1,27 +1,40 @@
-.timeline-column-1 {
+.multiline-column-1 {
   display: inline-block;
   margin-right: 10px;
   vertical-align: top;
   width: 28%;
 }
 
-.timeline-column-2 {
+.multiline-column-2 {
   display: inline-block;
   width: 67%;
 }
 
-.timeline-column-text {
+.multiline-column-3 {
+  display: inline-block;
+  margin-right: 10px;
+  width: 75%;
+}
+
+.multiline-column-4 {
+  display: inline-block;
+  text-align: right;
+  width: 20%;
+}
+
+.multiline-column-text {
   display: inline-block;
   height: auto;
   width: 65%;
 }
 
-.timeline-row {
+.multiline-row {
   display: inline-block;
   width: 100%;
 
   .add-event-container {
     float: left;
+    margin-top: 15px;
   }
 
   .calculate {
@@ -30,7 +43,7 @@
   }
 }
 
-.timeline-rows {
+.multiline-rows {
   div {
     :not(:first-child) {
       margin-top: 15px;
@@ -45,39 +58,23 @@
     }
   }
 
-  .timeline-row {
+  .multiline-row {
     &:last-of-type {
       margin-bottom: .78947em;
     }
   }
 }
 
-.timeline-column-4 {
-  display: inline-block;
-  text-align: right;
-  width: 20%;
-}
-
-.timeline-column-3 {
-  display: inline-block;
-  margin-right: 10px;
-  width: 75%;
-}
-
-.add-event-container {
-  margin-top: 15px;
-}
-
 @media screen and (max-width: 480px) {
 
-  .timeline-column-4,
-  .timeline-column-1 {
+  .multiline-column-4,
+  .multiline-column-1 {
     margin-bottom: 5px;
     width: 35%;
   }
 
-  .timeline-column-3,
-  .timeline-column-text {
+  .multiline-column-3,
+  .multiline-column-text {
     margin-bottom: 5px;
   }
 }
