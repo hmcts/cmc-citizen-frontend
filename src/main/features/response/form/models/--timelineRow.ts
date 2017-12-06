@@ -2,10 +2,7 @@ import { IsDefined, ValidateIf } from 'class-validator'
 
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
-import {
-  ValidationConstraints as DefaultValidationConstraints
-} from 'forms/validation/validationConstraints'
-import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
+import { ValidationConstraints as DefaultValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {
   static readonly DATE_REQUIRED: string = 'Enter a date'
@@ -18,7 +15,7 @@ export class ValidationConstraints {
   static readonly DATE_MAX_LENGTH: number = 25
 }
 
-export class TimelineRow extends MultiRowFormItem {
+export class TimelineRow {
 
   @ValidateIf(o => o.description !== undefined)
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
@@ -33,7 +30,6 @@ export class TimelineRow extends MultiRowFormItem {
   description?: string = undefined
 
   constructor (date?: string, description?: string) {
-    super()
     this.date = date
     this.description = description
   }
