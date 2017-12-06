@@ -5,7 +5,7 @@ import { hostname } from 'os'
 import * as path from 'path'
 import { RequestPromiseOptions } from 'request-promise-native'
 
-import { InfoContributor, InfoContributorConfig, infoRequestHandler  } from '@hmcts/info-provider'
+import { InfoContributor, InfoContributorConfig, infoRequestHandler } from '@hmcts/info-provider'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
