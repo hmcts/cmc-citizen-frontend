@@ -1,0 +1,77 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, poundInput, textArea, radioOption, linkButton, saveAndContinueButton, errorSummary %}
+
+{% set title = t('Money claim') %}
+{% set heading = t('Are you paying any other court orders?') %}
+
+{% macro courtOrdersRow(index, form) %}
+
+  {% set prefix = 'rows[' + index + ']' %}
+  {% set detailsKey = prefix + '[details]' %}
+  {% set amountKey = prefix + '[amount]' %}
+
+  <div class="form-group {% if form.errorFor(detailsKey) or form.errorFor(amountKey) %} form-group-error {% endif %}">
+
+    {{
+      textArea(
+        label = 'Give details - for example how you’re paying and the claim number',
+        name = detailsKey,
+        form = form
+      )
+    }}
+    {{ poundInput(label = 'Amount you owe', name = amountKey, form = form) }}
+
+  </div>
+
+{% endmacro %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+
+    <form method="post" novalidate
+          class="analytics-submit-event-trigger"
+          data-event-action="SoM: Are you paying any other court orders?"
+          data-event-label-from="hasAnyCourtOrders">
+
+      {{ csrfProtection(csrf) }}
+
+      {% set errorHasAnyCourtOrders = form.errorFor('hasAnyCourtOrders') %}
+      <div class="statement-of-means-container">
+        <fieldset id="hasAnyCourtOrders[label]" class="form-group {% if errorHasAnyCourtOrders %} form-group-error {% endif %}">
+          <legend class="visually-hidden">{{ t('Are you paying any other court orders?') }}</legend>
+
+          {{
+            radioOption(form = form, label = 'Yes', name = 'hasAnyCourtOrders', value = 'true', checked = form.valueFor('hasAnyCourtOrders') === true)
+          }}
+
+          {% set noRowsError = form.errorFor('rows') %}
+          <div class="form-group panel panel-border-narrow js-hidden {% if noRowsError %} form-group-error {% endif %}"
+               id="hasAnyCourtOrders-true" aria-hidden="false">
+
+            {% if noRowsError %}<span class="error-message" id="rows[label]">{{ t(noRowsError) }}</span>{% endif %}
+
+            {% for row in form.model.rows %}
+              {{ courtOrdersRow(loop.index0, form) }}
+            {% endfor %}
+
+            {% if form.model and form.model.canAddMoreRows() %}
+            <div id="add-event-container" class="form-group">
+              {{ linkButton('Add another court order', 'action[addRow]', 'button button-secondary') }}
+            </div>
+            {% endif %}
+
+          </div>
+
+          {{
+            radioOption(form = form, label = 'No', name = 'hasAnyCourtOrders', value = 'false', checked = form.valueFor('hasAnyCourtOrders') === false)
+          }}
+        </fieldset>
+      </div>
+
+      {{ saveAndContinueButton() }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

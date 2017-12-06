@@ -19,7 +19,7 @@ export class MaximumAgeValidatorConstraint implements ValidatorConstraintInterfa
       throw new Error('Max Years in the past has to be specified and positive value')
     }
 
-    if (value == null) {
+    if (value === undefined) {
       return true
     }
 

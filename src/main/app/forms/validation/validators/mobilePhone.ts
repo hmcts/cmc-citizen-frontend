@@ -10,7 +10,7 @@ import {
 export class IsMobilePhoneConstraint implements ValidatorConstraintInterface {
 
   validate (value?: any, args?: ValidationArguments): boolean {
-    if (value == null) {
+    if (value === undefined) {
       return true
     }
 
@@ -19,6 +19,7 @@ export class IsMobilePhoneConstraint implements ValidatorConstraintInterface {
     }
 
     value = value.replace(/\(|\)| |-|\+/g, '').replace(/^(00)?44/, '').replace(/^0/, '')
+
     return value.startsWith('7') && value.length === 10
   }
 
