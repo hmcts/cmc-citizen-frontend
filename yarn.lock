@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@hmcts/cmc-common-frontend@^1.25.1":
-  version "1.25.1"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.25.1.tgz#1f6e28006109ef01803a33e8ffb74c2ad21540c9"
+"@hmcts/cmc-common-frontend@^1.26.0":
+  version "1.26.0"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.26.0.tgz#3878eb43c0f49a223a3b8db403916d33fdb55140"
 
 "@hmcts/cmc-draft-store-middleware@^1.0.0":
   version "1.0.0"
@@ -2193,6 +2193,14 @@ fs-extra@^3.0.1:
   dependencies:
     graceful-fs "^4.1.2"
     jsonfile "^3.0.0"
+    universalify "^0.1.0"
+
+fs-extra@^4.0.1:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-4.0.3.tgz#0d852122e5bc5beb453fb028e9c0c9bf36340c94"
+  dependencies:
+    graceful-fs "^4.1.2"
+    jsonfile "^4.0.0"
     universalify "^0.1.0"
 
 fs-extra@^4.0.2:
