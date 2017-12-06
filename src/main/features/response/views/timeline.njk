@@ -70,7 +70,7 @@
         </div>
       </div>
 
-      {% if canAddMoreEvents %}
+      {% if form.model and form.model.canAddMoreRows() %}
         <div id="add-event-container" class="form-group">
           {{ linkButton('Add another event', 'action[addRow]', 'button button-secondary') }}
         </div>
