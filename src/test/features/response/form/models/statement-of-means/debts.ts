@@ -87,6 +87,15 @@ describe('Debts', () => {
     })
   })
 
+  describe('createEmptyRow', () => {
+
+    it('should create DebtRow object with empty fields', () => {
+      const emptyItem: DebtRow = new Debts().createEmptyRow()
+
+      expect(emptyItem.isEmpty()).to.be.eq(true)
+    })
+  })
+
   describe('validation', () => {
 
     const validator: Validator = new Validator()
@@ -113,7 +122,7 @@ describe('Debts', () => {
       })
 
       it('when hasAnyDebts = true and one valid row and many many empty ones given', () => {
-        const o: DebtRow = new DebtRow(undefined, undefined, undefined) // empty row
+        const o: DebtRow = DebtRow.empty()
         const errors = validator.validateSync(new Debts(true, [o, o, o, o, new DebtRow('card', 1, 1), o, o, o, o]))
 
         expect(errors.length).to.equal(0)
@@ -143,7 +152,7 @@ describe('Debts', () => {
       })
 
       it('when hasAnyDebts = true and many empty rows and one invalid given', () => {
-        const o: DebtRow = new DebtRow(undefined, undefined, undefined) // empty row
+        const o: DebtRow = DebtRow.empty()
         const errors = validator.validateSync(new Debts(true, [o, o, o, o, o, o, new DebtRow('my card', -100, 10), o]))
 
         expect(errors.length).to.equal(1)
