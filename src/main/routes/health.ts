@@ -3,7 +3,6 @@ import * as config from 'config'
 import * as healthcheck from '@hmcts/nodejs-healthcheck'
 import * as fs from 'fs'
 import * as path from 'path'
-import { hostname } from 'os'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
