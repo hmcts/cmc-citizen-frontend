@@ -153,7 +153,7 @@ timestamps {
         throw err
       } finally {
         step([$class: 'InfluxDbPublisher',
-               customProjectName: 'DNS - Apply',
+               customProjectName: 'CMC Citizen Frontend',
                target: 'Jenkins Data'])
       }
     }
