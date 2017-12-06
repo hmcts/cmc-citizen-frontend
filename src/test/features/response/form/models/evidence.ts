@@ -1,8 +1,9 @@
 import { expect } from 'chai'
 
 import { EvidenceRow } from 'response/form/models/evidenceRow'
-import { Evidence, INIT_ROW_COUNT, MAX_NUMBER_OF_ROWS } from 'response/form/models/evidence'
+import { Evidence, INIT_ROW_COUNT } from 'response/form/models/evidence'
 import { EvidenceType } from 'response/form/models/evidenceType'
+import { MAX_NUMBER_OF_ROWS } from 'forms/models/multiRowForm'
 
 describe('Evidence', () => {
 
@@ -12,7 +13,7 @@ describe('Evidence', () => {
 
       const actual: EvidenceRow[] = (new Evidence()).rows
 
-      expect(actual.length).to.equal(4)
+      expect(actual.length).to.equal(INIT_ROW_COUNT)
       expectAllRowsToBeEmpty(actual)
     })
   })
@@ -117,8 +118,7 @@ describe('Evidence', () => {
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
       actual.removeExcessRows()
-      expect(actual.rows.length).to.be.eq(1)
-      expectAllRowsToBeEmpty(actual.rows)
+      expect(actual.rows.length).to.be.eq(0)
     })
 
     it('should not filter out any element from list when all populated', () => {
@@ -182,8 +182,7 @@ function item (type: string = EvidenceType.OTHER.value, desc: string = 'OK'): ob
 function expectAllRowsToBeEmpty (rows: EvidenceRow[]) {
   rows.forEach(item => {
     expect(item).instanceof(EvidenceRow)
-    expect(item.type).to.eq(undefined)
-    expect(item.description).to.eq(undefined)
+    expect(item.isEmpty()).to.eq(true)
   })
 }
 
