@@ -20,17 +20,17 @@ export class ValidationConstraints {
 
 export class TimelineRow extends MultiRowFormItem {
 
-  @ValidateIf(o => o.description !== undefined)
+  @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.DATE_REQUIRED })
   @MaxLength(ValidationConstraints.DATE_MAX_LENGTH, { message: ValidationErrors.DATE_TOO_LONG })
-  date?: string = undefined
+  date?: string
 
-  @ValidateIf(o => o.date !== undefined)
+  @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: ValidationErrors.DESCRIPTION_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.DESCRIPTION_REQUIRED })
   @MaxLength(DefaultValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.DESCRIPTION_TOO_LONG })
-  description?: string = undefined
+  description?: string
 
   constructor (date?: string, description?: string) {
     super()
