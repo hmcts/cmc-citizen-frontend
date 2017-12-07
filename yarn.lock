@@ -40,13 +40,13 @@
     js-yaml "^3.8.4"
     superagent "^3.5.1"
 
-"@hmcts/nodejs-logging@^1.4.2":
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/@hmcts/nodejs-logging/-/nodejs-logging-1.4.2.tgz#cef8c6bccb13b19f73d73cf4bc2ab9b376383709"
+"@hmcts/nodejs-logging@^1.4.3":
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/@hmcts/nodejs-logging/-/nodejs-logging-1.4.3.tgz#7815e885c6e009e6ea54aa7836da45497bc40c8f"
   dependencies:
     lodash.merge "^4.6.0"
     log4js "^2.3.5"
-    moment "^2.19.1"
+    moment "^2.19.3"
     on-finished "^2.3.0"
 
 "@types/body-parser@*":
@@ -4249,6 +4249,10 @@ mock-require@^2.0.1:
 moment@2.x.x, moment@^2.18.1, moment@^2.19.1:
   version "2.19.2"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.19.2.tgz#8a7f774c95a64550b4c7ebd496683908f9419dbe"
+
+moment@^2.19.3:
+  version "2.19.3"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.19.3.tgz#bdb99d270d6d7fda78cc0fbace855e27fe7da69f"
 
 ms@0.7.1:
   version "0.7.1"
