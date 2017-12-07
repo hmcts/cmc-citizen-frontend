@@ -66,8 +66,4 @@ export class DebtRow extends MultiRowFormItem {
 
     return this
   }
-
-  isAtLeastOneFieldPopulated (): boolean {
-    return this.debt !== undefined || this.totalOwed !== undefined || this.monthlyPayments !== undefined
-  }
 }

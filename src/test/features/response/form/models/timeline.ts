@@ -7,7 +7,7 @@ describe('Timeline', () => {
 
   describe('on init', () => {
 
-    it('should create array of 4 empty instances of TimelineRow', () => {
+    it(`should create array of ${INIT_ROW_COUNT} empty instances of TimelineRow`, () => {
 
       const actual: TimelineRow[] = (new Timeline()).rows
 
@@ -113,7 +113,7 @@ describe('Timeline', () => {
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT + 1)
     })
 
-    it('adds only up to 20 elements', () => {
+    it(`adds only up to ${MAX_NUMBER_OF_ROWS} elements`, () => {
       const actual: Timeline = new Timeline()
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)

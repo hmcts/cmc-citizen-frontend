@@ -9,7 +9,7 @@ describe('Evidence', () => {
 
   describe('on init', () => {
 
-    it('should create array of 4 empty instances of EvidenceRow', () => {
+    it(`should create array of ${INIT_ROW_COUNT} empty instances of EvidenceRow`, () => {
 
       const actual: EvidenceRow[] = (new Evidence()).rows
 
@@ -98,7 +98,7 @@ describe('Evidence', () => {
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT + 1)
     })
 
-    it('adds only up to 20 elements', () => {
+    it(`adds only up to ${MAX_NUMBER_OF_ROWS} elements`, () => {
       const actual: Evidence = new Evidence()
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
