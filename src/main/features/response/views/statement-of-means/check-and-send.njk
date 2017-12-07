@@ -115,7 +115,7 @@
 
 {% for courtOrderRow in courtOrdersRows %}
   {{ row('Details about court orders', courtOrderRow.details, '', false ) }}
-  {{ row('Amount you owe', debtRow.amount | numeral, '', loop.index0 === indexOfLastRow) }}
+  {{ row('Amount you owe', courtOrderRow.amount | numeral, '', loop.index0 === indexOfLastRow) }}
 {% endfor %}
 
 {{ tableEnd() }}
