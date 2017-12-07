@@ -132,9 +132,9 @@
       {% if draft.defendantPaymentOption.isOfType(DefendantPaymentType.INSTALMENTS) %}
         {{ tableStart('whenWillYouPay', 'When will you pay?') }}
         {{ row('When will you pay', t(draft.defendantPaymentOption.option.displayValueFor(draft.responseType)) | capitalize, paths.defencePaymentOptionsPage.evaluateUri({ externalId: claim.externalId })) }}
-        {{ row('The first payment of', t(draft.defendantPaymentPlan.firstPayment | numeral), paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
-        {{ row('Followed by equal instalments of', t(draft.defendantPaymentPlan.instalmentAmount | numeral), paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
-        {{ row('Make the first payment on', t(draft.defendantPaymentPlan.firstPaymentDate.toMoment() | date), paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('The first payment of', draft.defendantPaymentPlan.firstPayment | numeral , paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('Followed by equal instalments of', draft.defendantPaymentPlan.instalmentAmount | numeral, paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('Make the first payment on', draft.defendantPaymentPlan.firstPaymentDate.toMoment() | date, paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
         {{ row('Frequency of payments', t(draft.defendantPaymentPlan.paymentSchedule.displayValue), paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
         {{ row('Explain why you can’t pay the full amount now', draft.defendantPaymentPlan.text, paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
         {{ tableEnd() }}
