@@ -59,8 +59,4 @@ export class BankAccountRow extends MultiRowFormItem {
 
     return this
   }
-
-  isAtLeastOneFieldPopulated (): boolean {
-    return this.typeOfAccount !== undefined || this.isJoint !== undefined || this.balance !== undefined
-  }
 }

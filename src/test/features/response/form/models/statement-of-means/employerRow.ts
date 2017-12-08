@@ -25,13 +25,13 @@ describe('EmployerRow', () => {
     context('should return true when', () => {
 
       it('both fields are undefined', () => {
-        const actual: EmployerRow = new EmployerRow(undefined, undefined)
+        const actual: EmployerRow = EmployerRow.fromObject({ employerName: undefined, jobTitle: undefined })
 
         expect(actual.isEmpty()).to.eq(true)
       })
 
       it('both fields are empty string', () => {
-        const actual: EmployerRow = new EmployerRow('', '')
+        const actual: EmployerRow = EmployerRow.fromObject({ employerName: '', jobTitle: '' })
 
         expect(actual.isEmpty()).to.eq(true)
       })

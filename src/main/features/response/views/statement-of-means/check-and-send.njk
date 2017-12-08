@@ -97,4 +97,25 @@
   {{ row('Is joint', 'Yes' if account.isJoint else 'No', '', loop.index0 === indexOfLastRow ) }}
 {% endfor %}
 
+{{ row('Debts', '', statementOfMeansPaths.debtsPage.evaluateUri({ externalId: claim.externalId }), false) }}
+{{ row('Do you have any debts?', 'Yes' if draft.statementOfMeans.debts.hasAnyDebts else 'No', '', not draft.statementOfMeans.debts.hasAnyDebts) }}
+{% set debtRows = draft.statementOfMeans.debts.getPopulatedRowsOnly() %}
+{% set indexOfLastRow = debtRows.length - 1 %}
+
+{% for debtRow in debtRows %}
+  {{ row('Debt', debtRow.debt, '', false ) }}
+  {{ row('Total owed', debtRow.totalOwed | numeral, '', false) }}
+  {{ row('Monthly Payments', debtRow.monthlyPayments | numeral, '', loop.index0 === indexOfLastRow ) }}
+{% endfor %}
+
+{{ row('Court orders', '', statementOfMeansPaths.courtOrdersPage.evaluateUri({ externalId: claim.externalId }), false) }}
+{{ row('Are you paying any other court orders?', 'Yes' if draft.statementOfMeans.courtOrders.hasAnyCourtOrders else 'No', '', not draft.statementOfMeans.courtOrders.hasAnyCourtOrders) }}
+{% set courtOrdersRows = draft.statementOfMeans.courtOrders.getPopulatedRowsOnly() %}
+{% set indexOfLastRow = courtOrdersRows.length - 1 %}
+
+{% for courtOrderRow in courtOrdersRows %}
+  {{ row('Details about court orders', courtOrderRow.details, '', false ) }}
+  {{ row('Amount you owe', courtOrderRow.amount | numeral, '', loop.index0 === indexOfLastRow) }}
+{% endfor %}
+
 {{ tableEnd() }}

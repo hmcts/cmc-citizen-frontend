@@ -12,7 +12,7 @@ import { LocalDate } from 'forms/models/localDate'
 @ValidatorConstraint()
 export class DateNotInFutureConstraint implements ValidatorConstraintInterface {
   validate (value: any, args?: ValidationArguments) {
-    if (value == null) {
+    if (value === undefined) {
       return true
     }
 
