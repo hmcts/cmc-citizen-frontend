@@ -180,7 +180,7 @@ describe('Unemployed', () => {
 
           expect(errors.length).to.equal(1)
           expectValidationError(
-            errors, UDValidationErrors.TOO_MANY.replace('$constraint1', UDValidationConstraints.MAX_NUMBER_OF_MONTHS)
+            errors, UDValidationErrors.TOO_MANY.replace('$constraint1', UDValidationConstraints.MAX_NUMBER_OF_MONTHS.toString())
           )
         })
 
@@ -194,7 +194,7 @@ describe('Unemployed', () => {
 
           expect(errors.length).to.equal(1)
           expectValidationError(
-            errors, UDValidationErrors.TOO_MANY.replace('$constraint1', UDValidationConstraints.MAX_NUMBER_OF_YEARS)
+            errors, UDValidationErrors.TOO_MANY.replace('$constraint1', UDValidationConstraints.MAX_NUMBER_OF_YEARS.toString())
           )
         })
       })
