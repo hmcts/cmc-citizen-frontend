@@ -40,6 +40,7 @@ export const sampleClaimDraftObj = {
     defendantAddress: YesNoOption.YES,
     claimValue: ClaimValue.UNDER_10000,
     eighteenOrOver: YesNoOption.YES,
+    singleClaimant: YesNoOption.YES,
     governmentDepartment: YesNoOption.NO,
     helpWithFees: YesNoOption.NO
   },

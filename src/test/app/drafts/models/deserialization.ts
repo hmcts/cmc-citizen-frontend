@@ -84,6 +84,7 @@ describe('DraftClaim deserialization', () => {
     expect(deserialized.eligibility.claimantAddress).to.equal(YesNoOption.YES)
     expect(deserialized.eligibility.defendantAddress).to.equal(YesNoOption.YES)
     expect(deserialized.eligibility.eighteenOrOver).to.equal(YesNoOption.YES)
+    expect(deserialized.eligibility.singleClaimant).to.equal(YesNoOption.YES)
     expect(deserialized.eligibility.claimValue).to.equal(ClaimValue.UNDER_10000)
   })
 

@@ -14,14 +14,7 @@ describe('Eligibility', () => {
 
     it('should reject eligibility if not complete', () => {
       const errors = validator.validateSync(
-        new Eligibility(
-          YesNoOption.YES,
-          YesNoOption.YES,
-          ClaimValue.UNDER_10000,
-          YesNoOption.YES,
-          YesNoOption.NO,
-          undefined
-        )
+        new Eligibility(YesNoOption.YES, YesNoOption.YES, ClaimValue.UNDER_10000, YesNoOption.NO, YesNoOption.YES, undefined)
       )
 
       expect(errors.length).to.equal(1)
@@ -30,14 +23,7 @@ describe('Eligibility', () => {
 
     it('should be valid if all eligibility provided', () => {
       const errors = validator.validateSync(
-        new Eligibility(
-          YesNoOption.YES,
-          YesNoOption.YES,
-          ClaimValue.UNDER_10000,
-          YesNoOption.YES,
-          YesNoOption.NO,
-          YesNoOption.NO
-        )
+        new Eligibility(YesNoOption.YES, YesNoOption.YES, ClaimValue.UNDER_10000, YesNoOption.NO, YesNoOption.YES, YesNoOption.NO)
       )
 
       expect(errors.length).to.equal(0)

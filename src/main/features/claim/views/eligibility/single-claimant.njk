@@ -1,0 +1,40 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
+
+{% set title = t('Single Claimant | Money claim') %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ t('Are you the only person or business making the claim?') }}</h1>
+      <p>{{ t('You can’t use this service if more than one person or business is making the claim') }}</p>
+
+      {% set name = 'singleClaimant' %}
+
+      <form novalidate method="post" class="analytics-submit-event-trigger"
+            data-event-action="Eligibility: Select 18 or over option"
+            data-event-label-from="{{ name }}">
+        {{ csrfProtection(csrf) }}
+
+        {{
+          radioGroup(
+            'Are you the only person or business making the claim?',
+            name,
+            [
+              {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
+              {'label': 'No', value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO)}
+            ],
+            form = form,
+            labelForScreenReadersOnly = true
+          )
+        }}
+
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

@@ -18,6 +18,9 @@ export class Eligibility {
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.OVER_18] })
   eighteenOrOver?: YesNoOption
 
+  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.SINGLE_CLAIMANT] })
+  singleClaimant?: YesNoOption
+
   @IsIn(YesNoOption.all(), {
     message: ValidationErrors.YES_NO_REQUIRED,
     groups: [ValidationGroups.GOVERNMENT_DEPARTMENT]
@@ -27,15 +30,17 @@ export class Eligibility {
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.HELP_WITH_FEES] })
   helpWithFees?: YesNoOption
 
-  constructor (claimantAddress?: YesNoOption,
-               defendantAddress?: YesNoOption,
-               claimValue?: ClaimValue,
-               eighteenOrOver?: YesNoOption,
-               governmentDepartment?: YesNoOption,
-               helpWithFees?: YesNoOption) {
+  constructor (claimantAddress: YesNoOption,
+               defendantAddress: YesNoOption,
+               claimValue: ClaimValue,
+               singleClaimant: YesNoOption,
+               eighteenOrOver: YesNoOption,
+               governmentDepartment: YesNoOption,
+               helpWithFees: YesNoOption) {
     this.claimantAddress = claimantAddress
     this.defendantAddress = defendantAddress
     this.claimValue = claimValue
+    this.singleClaimant = singleClaimant
     this.eighteenOrOver = eighteenOrOver
     this.governmentDepartment = governmentDepartment
     this.helpWithFees = helpWithFees
@@ -46,10 +51,10 @@ export class Eligibility {
       YesNoOption.fromObject(input.claimantAddress),
       YesNoOption.fromObject(input.defendantAddress),
       ClaimValue.fromObject(input.claimValue),
+      YesNoOption.fromObject(input.singleClaimant),
       YesNoOption.fromObject(input.eighteenOrOver),
       YesNoOption.fromObject(input.governmentDepartment),
-      YesNoOption.fromObject(input.helpWithFees)
-    )
+      YesNoOption.fromObject(input.helpWithFees))
   }
 
   deserialize (input: any): Eligibility {
@@ -62,6 +67,9 @@ export class Eligibility {
       }
       if (input.claimValue) {
         this.claimValue = ClaimValue.fromObject(input.claimValue.option)
+      }
+      if (input.singleClaimant) {
+        this.singleClaimant = YesNoOption.fromObject(input.singleClaimant.option)
       }
       if (input.eighteenOrOver) {
         this.eighteenOrOver = YesNoOption.fromObject(input.eighteenOrOver.option)
@@ -81,6 +89,7 @@ export class Eligibility {
     return this.claimantAddress === YesNoOption.YES &&
       this.defendantAddress === YesNoOption.YES &&
       this.claimValue === ClaimValue.UNDER_10000 &&
+      this.singleClaimant === YesNoOption.YES &&
       this.eighteenOrOver === YesNoOption.YES &&
       this.governmentDepartment === YesNoOption.NO &&
       this.helpWithFees === YesNoOption.NO
