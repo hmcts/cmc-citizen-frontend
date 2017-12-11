@@ -79,14 +79,6 @@ gulp.task('develop', () => {
       exec: 'yarn start-dev',
       ext: 'ts js po',
       stdout: true
-    }).on('readable', () => {
-      this.stdout.on('data', function (chunk) {
-        if (/^Application started on port/.test(chunk)) {
-          livereload.changed(__dirname)
-        }
-      })
-      this.stdout.pipe(process.stdout)
-      this.stderr.pipe(process.stderr)
     })
   }, 500)
 })
