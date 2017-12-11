@@ -76,6 +76,12 @@ For test coverage:
 $ yarn test:coverage
 ```
 
+For unit test coverage only:
+
+```bash
+$ yarn test:coverage-unit
+```
+
 ## Troubleshooting
 
 ### Warnings while running ```yarn install``` on yarn version 1.0.1
