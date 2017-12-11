@@ -50,9 +50,10 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(cookieParser())
 
-if (!developmentMode) {
-  app.use(logging.express.accessLogger())
-}
+app.use(logging.RequestTracing.middleware)
+// if (!developmentMode) {
+app.use(logging.express.accessLogger())
+// }
 
 app.use(express.static(path.join(__dirname, 'public')))
 
