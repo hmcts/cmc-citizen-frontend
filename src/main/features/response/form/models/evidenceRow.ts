@@ -3,23 +3,25 @@ import { IsDefined, IsIn, ValidateIf } from 'class-validator'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 import { EvidenceType } from 'response/form/models/evidenceType'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
+import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
 
 export class ValidationErrors {
   static readonly TYPE_REQUIRED: string = 'Choose type of evidence'
-  static readonly DESCRIPTION_TOO_LONG: string = 'You’ve entered too many characters'
 }
 
-export class EvidenceRow {
+export class EvidenceRow extends MultiRowFormItem {
 
   @ValidateIf(o => o.type !== undefined)
   @IsDefined({ message: ValidationErrors.TYPE_REQUIRED })
   @IsIn(EvidenceType.all(), { message: ValidationErrors.TYPE_REQUIRED })
   type?: EvidenceType
 
-  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.DESCRIPTION_TOO_LONG })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: GlobalValidationErrors.TEXT_TOO_LONG })
   description?: string
 
   constructor (type?: EvidenceType, description?: string) {
+    super()
     this.type = type
     this.description = description
   }

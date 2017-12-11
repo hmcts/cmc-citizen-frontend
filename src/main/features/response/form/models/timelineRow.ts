@@ -2,7 +2,10 @@ import { IsDefined, ValidateIf } from 'class-validator'
 
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
-import { ValidationConstraints as DefaultValidationConstraints } from 'forms/validation/validationConstraints'
+import {
+  ValidationConstraints as DefaultValidationConstraints
+} from 'forms/validation/validationConstraints'
+import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
 
 export class ValidationErrors {
   static readonly DATE_REQUIRED: string = 'Enter a date'
@@ -15,21 +18,22 @@ export class ValidationConstraints {
   static readonly DATE_MAX_LENGTH: number = 25
 }
 
-export class TimelineRow {
+export class TimelineRow extends MultiRowFormItem {
 
-  @ValidateIf(o => o.description !== undefined)
+  @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.DATE_REQUIRED })
   @MaxLength(ValidationConstraints.DATE_MAX_LENGTH, { message: ValidationErrors.DATE_TOO_LONG })
-  date?: string = undefined
+  date?: string
 
-  @ValidateIf(o => o.date !== undefined)
+  @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: ValidationErrors.DESCRIPTION_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.DESCRIPTION_REQUIRED })
   @MaxLength(DefaultValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.DESCRIPTION_TOO_LONG })
-  description?: string = undefined
+  description?: string
 
   constructor (date?: string, description?: string) {
+    super()
     this.date = date
     this.description = description
   }

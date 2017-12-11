@@ -55,8 +55,4 @@ export class CourtOrderRow extends MultiRowFormItem {
 
     return this
   }
-
-  isAtLeastOneFieldPopulated (): boolean {
-    return !this.isEmpty()
-  }
 }
