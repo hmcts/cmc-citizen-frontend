@@ -2,11 +2,11 @@ document.querySelectorAll('.postcode-lookup')
   .forEach(function (postcodeLookupButton) {
     postcodeLookupButton.addEventListener('click', function (evt) {
       evt.preventDefault()
-      lookupPostcode(this.previousElementSibling.value, this.parentElement.id)
+      lookupPostcode(this.previousElementSibling.value, this.parentElement)
     })
   })
 
-function lookupPostcode (postcode, parentElementSelector) {
+function lookupPostcode (postcode, parentElement) {
   var xhr = new XMLHttpRequest()
   xhr.open('GET', '/postcode-lookup?postcode=' + encodeURIComponent(postcode))
   xhr.onload = function () {
@@ -17,7 +17,27 @@ function lookupPostcode (postcode, parentElementSelector) {
       alert('Request failed.  Returned status of ' + xhr.status)
     }
 
-    console.log(xhr.responseText)
+
+    var postcodeResponse = JSON.parse(xhr.responseText)
+
+    console.log(postcodeResponse.valid)
+
+    var selectDropdown = '<option>' + postcodeResponse.addresses.length + ' addresses found </option>'
+
+    postcodeResponse.addresses.forEach(function(address) {
+
+      var formatted_address = [
+      (address.organisationName || address.subBuildingName) + ' ' + (address.buildingNumber || address.buildingName || undefined),
+      address.thoroughfareName || address.dependentLocality,
+        address.postTown,
+        address.postcode
+    ]
+      selectDropdown += '<option value="' + formatted_address.join(', ').trim() + '">' + formatted_address.join(', ').trim() + '</option>'
+    })
+
+    parentElement.parentElement.querySelector('select').innerHTML = selectDropdown
+
+
   }
   xhr.send()
 }
@@ -42,8 +62,6 @@ function showSelectAddress () {
       method: "GET",
       success: function (data, status, xhr) {
         if (status === "success" && data.length) {
-
-          var html = '<option>' + data.length + ' addresses found </option>'
 
           jQuery.each(data, function (key, value) {
             var formatted_address = [

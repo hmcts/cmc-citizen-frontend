@@ -1,6 +1,6 @@
 import * as config from 'config'
 import * as express from 'express'
-import { PostcodeInfoClient } from '@hmcts/postcodeinfo-client'
+import { PostcodeInfoClient, PostcodeInfoResponse } from '@hmcts/postcodeinfo-client'
 
 import { Paths as AppPaths } from 'app/paths'
 import { request } from 'client/request'
@@ -11,10 +11,9 @@ const logger = Logging.getLogger('postcode-lookup')
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(AppPaths.postcodeLookupProxy.uri, function (req, res) {
+  .get(AppPaths.postcodeLookupProxy.uri, (req, res) => {
     postcodeClient.lookupPostcode(req.query.postcode)
-      .then((postcodeInfoResponse) => {
-        console.log(postcodeInfoResponse)
+      .then((postcodeInfoResponse: PostcodeInfoResponse) => {
         res.json(postcodeInfoResponse)
       }).catch((err: Error) => {
       logger.error(err.stack)
