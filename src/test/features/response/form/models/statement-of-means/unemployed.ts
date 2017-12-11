@@ -4,7 +4,11 @@ import { expectValidationError, generateString } from '../../../../../app/forms/
 import { Unemployed } from 'response/form/models/statement-of-means/unemployed'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
-import { UnemploymentDetails } from 'response/form/models/statement-of-means/unemploymentDetails'
+import {
+  UnemploymentDetails,
+  ValidationConstraints as UDValidationConstraints,
+  ValidationErrors as UDValidationErrors
+} from 'response/form/models/statement-of-means/unemploymentDetails'
 import { OtherDetails, ValidationErrors } from 'response/form/models/statement-of-means/otherDetails'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
@@ -149,6 +153,7 @@ describe('Unemployed', () => {
     describe('should reject when', () => {
 
       context('invalid unemployment details', () => {
+
         it('invalid years in unemployment details', () => {
           const errors = validator.validateSync(
             new Unemployed(UnemploymentType.UNEMPLOYED, new UnemploymentDetails(-1, 0))
@@ -163,6 +168,34 @@ describe('Unemployed', () => {
           )
 
           expectValidationError(errors, GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED)
+        })
+
+        it('too many months in unemployment details', () => {
+          const errors = validator.validateSync(
+            new Unemployed(
+              UnemploymentType.UNEMPLOYED,
+              new UnemploymentDetails(1, UDValidationConstraints.MAX_NUMBER_OF_MONTHS + 1)
+            )
+          )
+
+          expect(errors.length).to.equal(1)
+          expectValidationError(
+            errors, UDValidationErrors.TOO_MANY.replace('$constraint1', UDValidationConstraints.MAX_NUMBER_OF_MONTHS.toString())
+          )
+        })
+
+        it('too many years in unemployment details', () => {
+          const errors = validator.validateSync(
+            new Unemployed(
+              UnemploymentType.UNEMPLOYED,
+              new UnemploymentDetails(UDValidationConstraints.MAX_NUMBER_OF_YEARS + 1, 0)
+            )
+          )
+
+          expect(errors.length).to.equal(1)
+          expectValidationError(
+            errors, UDValidationErrors.TOO_MANY.replace('$constraint1', UDValidationConstraints.MAX_NUMBER_OF_YEARS.toString())
+          )
         })
       })
 
