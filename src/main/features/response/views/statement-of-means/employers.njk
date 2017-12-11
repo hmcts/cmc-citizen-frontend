@@ -20,7 +20,11 @@
     <form method="post" novalidate>
       {{ csrfProtection(csrf) }}
 
-      <div class="multiline">
+      {% set noRowsError = form.errorFor('rows') %}
+      <div class="multiline {% if noRowsError %} form-group-error {% endif %}">
+
+      {% if noRowsError %}<span class="error-message" id="rows[label]">{{ t(noRowsError) }}</span>{% endif %}
+
         <div class="multiline-rows">
           {% for row in form.model.rows %}
             {{ employerRow(loop.index0, form) }}
