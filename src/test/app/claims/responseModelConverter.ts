@@ -35,9 +35,7 @@ describe('ResponseModelConverter', () => {
     [soleTraderDetails, soleTrader],
     [companyDetails, company],
     [organisationDetails, organisation]
-  ].forEach(entry => {
-    const [partyDetails, party] = entry
-
+  ].forEach(([partyDetails, party]) => {
     it(`should convert response submitted by ${partyDetails.type}`, () => {
       const responseDraft = prepareResponseDraft(partyDetails)
       const responseData = prepareResponseData(party)
