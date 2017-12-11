@@ -3,7 +3,7 @@ import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 export class ValidationErrors {
-  static readonly TOO_MANY: string = 'Please enter a number between 0 and $constraint1'
+  static readonly TOO_MANY: string = 'Enter a number between 0 and $constraint1'
 }
 
 export class ValidationConstraints {
