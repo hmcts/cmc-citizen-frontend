@@ -35,6 +35,8 @@ app.locals.ENV = env
 
 const developmentMode = env === 'development'
 
+app.use(logging.RequestTracing.middleware)
+
 const i18next = I18Next.enableFor(app)
 
 new Nunjucks(developmentMode, i18next)
@@ -50,7 +52,6 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(cookieParser())
 
-app.use(logging.RequestTracing.middleware)
 // if (!developmentMode) {
 app.use(logging.express.accessLogger())
 // }
