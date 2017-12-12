@@ -6,7 +6,7 @@ const httpCallMethods = ['get', 'post', 'put', 'patch', 'delete', 'del', 'head']
 
 export class RequestTracingHandler {
   constructor (private request, private requestTracing = RequestTracing) {
-    if (!this.request || !this.requestTracing) {
+    if (!this.request) {
       throw new Error('Initialised request instance is required')
     }
   }
