@@ -1,23 +1,8 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, textInputInline, poundInput, linkButton, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, textInputInline, poundInputInline, poundInput, linkButton, saveAndContinueButton, errorSummary %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Monthly expenses') %}
-
-{% macro poundInputInline(name, label, form, inputClass = 'column-2') %}
-
-{% set value = form.valueFor(name) %}
-{% set error = form.errorFor(name) %}
-
-<label class="form-label-bold mobile-show" for="{{ name }}">{{ t(label) }}</label>
-<span class="input-symbol-pound">
-  <input id="{{ name }}" name="{{ name }}"
-         class="form-control {{ inputClass }} {% if error %} form-control-error {% endif %}"
-         type="number"
-         value="{{ value | default('') }}">
-</span>
-
-{% endmacro %}
 
 {% macro expenseRow(index, form) %}
 

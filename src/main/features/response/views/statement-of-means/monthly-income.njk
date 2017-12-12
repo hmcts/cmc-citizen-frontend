@@ -1,23 +1,8 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, textInputInline, poundInput, linkButton, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, textInputInline, poundInputInline, poundInput, linkButton, saveAndContinueButton, errorSummary %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Monthly income') %}
-
-{% macro multiRowPoundInput(name, label, form, cssClass) %}
-
-{% set value = form.valueFor(name) %}
-{% set error = form.errorFor(name) %}
-
-<label class="form-label-bold mobile-show" for="{{ name }}">{{ t(label) }}</label>
-<span class="input-symbol-pound">
-  <input id="{{ name }}" name="{{ name }}"
-         class="form-control {{ cssClass }} {% if error %} form-control-error {% endif %}"
-         type="number"
-         value="{{ value | default('') }}">
-</span>
-
-{% endmacro %}
 
 {% macro incomeRow(index, form) %}
 
@@ -39,7 +24,7 @@
 
     <label class="form-label-bold mobile-show" for="{{ amountKey }}">{{ index + 1 }} {{ t('. What') }}</label>
     {{ textInputInline(name = descriptionKey, form = form, inputClass='column-1') }}
-    {{ multiRowPoundInput(name = amountKey, label = (index + 1) + '. how much?', form = form,  cssClass = 'column-2') }}
+    {{ poundInputInline(name = amountKey, label = (index + 1) + '. How much?', form = form) }}
 
   </div>
 
