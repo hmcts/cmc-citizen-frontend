@@ -13,7 +13,7 @@ export class RequestTracingHandler {
     if (contains(httpCallMethods, key)) {
       const originalMethod = target[key]
       return (...args) => {
-        this.setTracingHeaders(args[0])
+        this.setTracingHeaders(args)
         return originalMethod.apply(this.request, args)
       }
     } else {
@@ -21,18 +21,28 @@ export class RequestTracingHandler {
     }
   }
 
-  private setTracingHeaders (options: any): any {
-    if (typeof options === 'string' || options instanceof String) {
-      return {
-        uri: options,
-        headers: this.setTracingHeadersInternal({ })
+  private setTracingHeaders (args: any): void {
+    // console.log(`>>> ${JSON.stringify(args)}`)
+    const firstArg = args[0]
+    if (typeof firstArg === 'string' || firstArg instanceof String) {
+      let options
+      if (args[1] !== undefined) {
+        options = args[1]
+      } else {
+        options = { }
       }
-    } else {
+      options.uri = firstArg
       if (options.headers === undefined) {
         options['headers'] = { }
       }
       this.setTracingHeadersInternal(options.headers)
-      return options
+      args[0] = options
+      delete args[1]
+    } else {
+      if (firstArg.headers === undefined) {
+        firstArg['headers'] = { }
+      }
+      this.setTracingHeadersInternal(firstArg.headers)
     }
   }
 
