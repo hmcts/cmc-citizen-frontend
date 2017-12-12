@@ -38,6 +38,10 @@ describe('RequestLoggingHandler', () => {
     proxy = new Proxy(requestPromise, handler)
   })
 
+  it('should throw an error when initialised without request', () => {
+    expect(() => new RequestLoggingHandler(undefined)).to.throw(Error)
+  })
+
   describe('request-promise http calls proxy', () => {
     let logRequestCall
 

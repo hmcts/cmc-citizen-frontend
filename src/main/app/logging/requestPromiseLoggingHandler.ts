@@ -4,6 +4,9 @@ const httpCallMethods = ['get', 'post', 'put', 'patch', 'delete', 'del', 'head']
 
 export class RequestLoggingHandler {
   constructor (private request, private apiLogger = new ApiLogger()) {
+    if (!this.request) {
+      throw new Error('Initialised request instance is required')
+    }
   }
 
   static proxy (request) {

@@ -9,8 +9,9 @@ const expect = chai.expect
 import { RequestTracingHandler } from 'logging/requestTracingHandler'
 
 describe('RequestTracingHandler', () => {
-  let proxy
-  let handler
+  const existingHeaders = {
+    'Existing-Header': 'Some value'
+  }
 
   const requestPromise = {
     get: sinon.stub(),
@@ -34,12 +35,19 @@ describe('RequestTracingHandler', () => {
     'Origin-Request-Id': MockedRequestTracing.getCurrentRequestId()
   }
 
+  let proxy
+  let handler
+
   beforeEach(() => {
     Object.keys(requestPromise).forEach((httpMethod) => {
       requestPromise[httpMethod].reset()
     })
     handler = new RequestTracingHandler(requestPromise, MockedRequestTracing)
     proxy = new Proxy(requestPromise, handler)
+  })
+
+  it('should throw an error when initialised without request', () => {
+    expect(() => new RequestTracingHandler(undefined)).to.throw(Error)
   })
 
   context('when calling the proxy by providing URI as a string', () => {
@@ -57,10 +65,6 @@ describe('RequestTracingHandler', () => {
   })
 
   context('when calling the proxy by providing options object with existing headers', () => {
-    const existingHeaders = {
-      'Existing-Header': 'Some value'
-    }
-
     Object
       .keys(requestPromise)
       .forEach((httpMethod) => {
@@ -80,11 +84,7 @@ describe('RequestTracingHandler', () => {
       })
   })
 
-  context('when calling the proxy by providing uri string and options object with existing headers', () => {
-    const existingHeaders = {
-      'Existing-Header': 'Some value'
-    }
-
+  context('when calling the proxy by providing URI string and options object with existing headers', () => {
     Object
       .keys(requestPromise)
       .forEach((httpMethod) => {
