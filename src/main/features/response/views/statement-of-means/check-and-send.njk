@@ -27,9 +27,16 @@
       {% set years = statementOfMeans.unemployed.unemploymentDetails.years %}
       {% set months = statementOfMeans.unemployed.unemploymentDetails.months %}
 
-      {% set status = statementOfMeans.unemployed.option.displayValue + ' for ' %}
-      {% set status = status + singularOrPlural(years, 'year') if years %}
-      {% set status = status + singularOrPlural(months, 'month') if months %}
+      {% set status = statementOfMeans.unemployed.option.displayValue %}
+      {% if years or months %}
+        {% set status = status + ' for ' %}
+        {% if years %}
+          {% set status = status + singularOrPlural(years, 'year') %}
+        {% endif %}
+        {% if months %}
+          {% set status = status + singularOrPlural(months, 'month') %}
+        {% endif %}
+      {% endif %}
 
       {{ row('Employment status', status, '') }}
     {% elseif statementOfMeans.unemployed.option === UnemploymentType.OTHER %}
