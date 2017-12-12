@@ -10,7 +10,7 @@ export type DefenceType
   = 'DISPUTE'
   | 'ALREADY_PAID'
 
-export class DefendantResponse {
+export class Response {
   responseType: 'FULL_DEFENCE'
   defenceType: DefenceType
   defence: string
@@ -54,14 +54,14 @@ export class DefendantResponse {
     return undefined
   }
 
-  deserialize (input: any): DefendantResponse {
+  deserialize (input: any): Response {
     if (input) {
       this.responseType = input.responseType
       this.defenceType = input.defenceType
       this.defence = input.defence
       this.freeMediation = input.freeMediation
       this.moreTimeNeeded = input.moreTimeNeeded
-      this.defendant = DefendantResponse.deserializeDefendantDetails(input.defendant)
+      this.defendant = Response.deserializeDefendantDetails(input.defendant)
       if (input.statementOfTruth) {
         this.statementOfTruth = new StatementOfTruth().deserialize(input.statementOfTruth)
       }

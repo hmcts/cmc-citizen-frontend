@@ -11,7 +11,7 @@ import {
   soleTraderDetails
 } from '../../data/draft/partyDetails'
 
-import { DefendantResponse } from 'claims/models/defendantResponse'
+import { Response } from 'claims/models/response'
 import { responseData as entityTemplate } from '../../data/entity/responseData'
 import { company, individual, organisation, soleTrader } from '../../data/entity/party'
 
@@ -23,7 +23,7 @@ function prepareResponseDraft (partyDetails: object) {
 }
 
 function prepareResponseData (party: object) {
-  return new DefendantResponse().deserialize({
+  return new Response().deserialize({
     ...entityTemplate,
     defendant: { ...party, email: 'user@example.com', mobilePhone: '0700000000' }
   })

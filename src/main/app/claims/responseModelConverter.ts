@@ -1,5 +1,5 @@
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { DefendantResponse, DefenceType } from 'claims/models/defendantResponse'
+import { Response, DefenceType } from 'claims/models/response'
 import { PartyType } from 'app/common/partyType'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { Party } from 'app/claims/models/details/yours/party'
@@ -18,7 +18,7 @@ import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 
 export class ResponseModelConverter {
 
-  static convert (responseDraft: ResponseDraft): DefendantResponse {
+  static convert (responseDraft: ResponseDraft): Response {
     let statementOfTruth: StatementOfTruth = undefined
     if (responseDraft.qualifiedStatementOfTruth) {
       statementOfTruth = new StatementOfTruth(
@@ -26,7 +26,7 @@ export class ResponseModelConverter {
         responseDraft.qualifiedStatementOfTruth.signerRole
       )
     }
-    return new DefendantResponse(
+    return new Response(
       this.inferDefenceType(responseDraft),
       responseDraft.defence.text,
       responseDraft.freeMediation === undefined ? undefined : responseDraft.freeMediation.option,
