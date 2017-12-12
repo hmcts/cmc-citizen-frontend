@@ -7,7 +7,17 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { TaskList } from 'drafts/tasks/taskList'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { LocalDate } from 'forms/models/localDate'
-import moment = require('moment')
+import { MomentFactory } from 'common/momentFactory'
+import { Claim } from 'claims/models/claim'
+import { Individual } from 'app/claims/models/details/theirs/individual'
+
+const claim = {
+  responseDeadline: MomentFactory.currentDateTime(),
+  externalId: undefined,
+  claimData: {
+    defendant: new Individual()
+  }
+} as Claim
 
 describe('Defendant response task list builder', () => {
   describe('"Respond to claim" section', () => {
@@ -25,14 +35,14 @@ describe('Defendant response task list builder', () => {
       it('should be enabled when mediation is available', () => {
         stub.returns(true)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), moment(), undefined)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('Free mediation')
       })
 
       it('should be disabled when mediation is not available', () => {
         stub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), moment(), undefined)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('Free mediation')
       })
     })
@@ -59,14 +69,14 @@ describe('Defendant response task list builder', () => {
           }
         }
         const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, moment(), undefined)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('How much have you paid the claimant?')
       })
 
       it('should be disabled in remaining cases', () => {
         stub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), moment(), undefined)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('How much have you paid the claimant?')
       })
     })
@@ -89,7 +99,7 @@ describe('Defendant response task list builder', () => {
         isResponseFullyAdmittedStub.returns(true)
         isResponsePartiallyRejectedDueToStub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), moment(), undefined)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('When will you pay?')
       })
 
@@ -104,7 +114,7 @@ describe('Defendant response task list builder', () => {
             text: 'I owe nothing'
           }
         }
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft().deserialize(input), moment(), undefined)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft().deserialize(input), claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('When will you pay?')
       })
 
@@ -112,7 +122,7 @@ describe('Defendant response task list builder', () => {
         isResponseFullyAdmittedStub.returns(false)
         isResponsePartiallyRejectedDueToStub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), moment(), undefined)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('When will you pay?')
       })
     })

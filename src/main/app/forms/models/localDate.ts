@@ -2,7 +2,6 @@ import { Max, Min } from 'class-validator'
 import * as _ from 'lodash'
 import * as moment from 'moment'
 
-import { Serializable } from 'models/serializable'
 import { DATE_FORMAT } from 'app/utils/momentFormatter'
 
 export class ValidationErrors {
@@ -11,7 +10,7 @@ export class ValidationErrors {
   static readonly DAY_NOT_VALID: string = 'Enter a valid day'
 }
 
-export class LocalDate implements Serializable<LocalDate> {
+export class LocalDate {
 
   @Min(1, { message: ValidationErrors.YEAR_NOT_VALID })
   @Max(9999, { message: ValidationErrors.YEAR_NOT_VALID })

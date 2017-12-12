@@ -1,5 +1,4 @@
 import { IsDefined, IsIn, IsPositive, ValidateIf } from 'class-validator'
-import { Serializable } from 'models/serializable'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { Fractions } from 'forms/validation/validators/fractions'
 import { IsLessThan } from 'forms/validation/validators/isLessThan'
@@ -12,7 +11,7 @@ export class ValidationErrors {
   static readonly PAID_AMOUNT_GREATER_THAN_TOTAL_AMOUNT: string = 'Paid amount cannot be greater than or equal to total amount'
 }
 
-export class PaidAmount implements Serializable <PaidAmount> {
+export class PaidAmount {
 
   @IsDefined({ message: ValidationErrors.OPTION_REQUIRED })
   @IsIn(PaidAmountOption.all(), { message: ValidationErrors.OPTION_REQUIRED })

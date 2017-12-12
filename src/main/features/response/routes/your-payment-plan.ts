@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths } from 'response/paths'
+import { Paths, StatementOfMeansPaths } from 'response/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'app/forms/form'
@@ -9,7 +9,18 @@ import { User } from 'idam/user'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { FormValidator } from 'forms/validation/formValidator'
-import { DisabledFeatureGuard } from 'response/guards/disabledFeatureGuard'
+import { FeatureToggleGuard } from 'guards/featureToggleGuard'
+import { RoutablePath } from 'common/router/routablePath'
+import { StatementOfMeans } from 'response/draft/statementOfMeans'
+import { ResponseDraft } from 'response/draft/responseDraft'
+
+function nextPageFor (responseDraft: ResponseDraft): RoutablePath {
+  if (StatementOfMeans.isApplicableFor(responseDraft)) {
+    return StatementOfMeansPaths.startPage
+  } else {
+    return Paths.taskListPage
+  }
+}
 
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
   const user: User = res.locals.user
@@ -24,7 +35,7 @@ function renderView (form: Form<PaidAmount>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defencePaymentPlanPage.uri,
-    DisabledFeatureGuard.createHandlerThrowingNotFoundError('featureToggles.fullAdmission'),
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
 
@@ -32,10 +43,10 @@ export default express.Router()
     }))
 
   .post(Paths.defencePaymentPlanPage.uri,
-    DisabledFeatureGuard.createHandlerThrowingNotFoundError('featureToggles.fullAdmission'),
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     FormValidator.requestHandler(DefendantPaymentPlan, DefendantPaymentPlan.fromObject),
     ErrorHandling.apply(
-      async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+      async (req: express.Request, res: express.Response): Promise<void> => {
         const form: Form<DefendantPaymentPlan> = req.body
         const user: User = res.locals.user
 
@@ -46,6 +57,6 @@ export default express.Router()
           await new DraftService().save(user.responseDraft, user.bearerToken)
 
           const { externalId } = req.params
-          res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
+          res.redirect(nextPageFor(user.responseDraft.document).evaluateUri({ externalId: externalId }))
         }
       }))

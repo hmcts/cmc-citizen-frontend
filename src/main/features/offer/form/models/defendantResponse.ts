@@ -1,11 +1,10 @@
 import { IsDefined, IsIn } from 'class-validator'
-import { Serializable } from 'models/serializable'
 import { StatementType } from './statementType'
 export class ValidationErrors {
   static readonly OPTION_REQUIRED: string = 'Choose option: yes or no or make an offer'
 }
 
-export class DefendantResponse implements Serializable<DefendantResponse> {
+export class DefendantResponse {
   @IsDefined({ message: ValidationErrors.OPTION_REQUIRED })
   @IsIn(StatementType.all(), { message: ValidationErrors.OPTION_REQUIRED })
   option?: StatementType

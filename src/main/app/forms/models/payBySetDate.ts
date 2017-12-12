@@ -3,7 +3,6 @@ import { IsDefined, ValidateNested } from 'class-validator'
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { IsTodayOrInFuture } from 'forms/validation/validators/isTodayOrInFuture'
 
-import { Serializable } from 'models/serializable'
 import { LocalDate } from 'forms/models/localDate'
 import { IsValidYearFormat } from 'app/forms/validation/validators/isValidYearFormat'
 
@@ -14,7 +13,7 @@ export class ValidationErrors {
   static readonly DATE_INVALID_YEAR: string = 'Enter a 4 digit year'
 }
 
-export class PayBySetDate implements Serializable <PayBySetDate> {
+export class PayBySetDate {
 
   @ValidateNested()
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })

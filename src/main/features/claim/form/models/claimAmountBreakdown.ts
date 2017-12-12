@@ -1,6 +1,5 @@
 import { ValidateNested } from 'class-validator'
 
-import { Serializable } from 'app/models/serializable'
 import { ClaimAmountRow } from 'features/claim/form/models/claimAmountRow'
 import { MinTotal } from 'app/forms/validation/validators/minTotal'
 
@@ -11,7 +10,7 @@ export class ValidationErrors {
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount of money'
 }
 
-export class ClaimAmountBreakdown implements Serializable<ClaimAmountBreakdown> {
+export class ClaimAmountBreakdown {
   readonly type: string = 'breakdown'
 
   @ValidateNested({ each: true })

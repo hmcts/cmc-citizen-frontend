@@ -1,5 +1,4 @@
 import { IsDefined, Max, Min, ValidateIf } from 'class-validator'
-import { Serializable } from 'models/serializable'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 import { Fractions } from 'forms/validation/validators/fractions'
@@ -19,7 +18,7 @@ export class ValidationConstraints {
   static readonly AMOUNT_YOU_OWE_MIN_VALUE: number = 1
 }
 
-export class SelfEmployed implements Serializable<SelfEmployed> {
+export class SelfEmployed {
 
   @IsDefined({ message: ValidationErrors.JOB_TITLE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.JOB_TITLE_REQUIRED })

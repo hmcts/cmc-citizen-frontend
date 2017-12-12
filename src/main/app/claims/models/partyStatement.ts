@@ -1,8 +1,7 @@
 
-import { Serializable } from 'models/serializable'
 import { Offer } from 'claims/models/offer'
 
-export class PartyStatement implements Serializable<PartyStatement> {
+export class PartyStatement {
   type: string
   madeBy: string
   offer?: Offer

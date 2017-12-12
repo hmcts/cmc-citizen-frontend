@@ -12,16 +12,19 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
-const confirmationPage = CCJPaths.confirmationPage.evaluateUri({ externalId: externalId })
+const pagePath = CCJPaths.confirmationPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ: confirmation page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', confirmationPage)
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -33,7 +36,7 @@ describe('CCJ: confirmation page', () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
-            .get(confirmationPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -44,7 +47,7 @@ describe('CCJ: confirmation page', () => {
           )
 
           await request(app)
-            .get(confirmationPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('CCJ'))
         })

@@ -1,4 +1,3 @@
-src/**/*.js
 !src/main/public/js/*.js
 
 node_modules/
