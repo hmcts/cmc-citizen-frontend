@@ -5,7 +5,6 @@ import * as HttpStatus from 'http-status-codes'
 import { Paths } from 'claim/paths'
 
 import { DocumentsClient } from 'app/documents/documentsClient'
-import { ClaimStoreClient } from 'app/claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'
 import { Claim } from 'claims/models/claim'
 
@@ -16,11 +15,11 @@ export default express.Router()
   .get(Paths.defendantResponseCopy.uri,
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+
         const { externalId } = req.params
         const claim: Claim = res.locals.user.claim
-        // Check we are allowed to retrieve the document
-        await ClaimStoreClient.retrieveByExternalId(externalId, res.locals.user.id)
-        documentsClient.getResponseCopy(externalId)
+
+        documentsClient.getPDF(externalId, 'defendantResponseCopy')
           .on('response', (response: http.IncomingMessage) => {
             if (response.statusCode !== 200) {
               return next(new Error('Unexpected error during document retrieval'))
