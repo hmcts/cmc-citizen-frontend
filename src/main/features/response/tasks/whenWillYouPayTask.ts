@@ -48,6 +48,7 @@ export class WhenWillYouPayTask {
         && WhenWillYouPayTask.isEmploymentCompleted(statementOfMeans)
         && isValid(statementOfMeans.bankAccounts)
         && isValid(statementOfMeans.debts)
+        && isValid(statementOfMeans.monthlyIncome)
         && isValid(statementOfMeans.courtOrders)
     }
 
