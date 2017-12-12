@@ -1,9 +1,7 @@
 const httpCallMethods = ['get', 'post', 'put', 'patch', 'delete', 'del', 'head']
 
 export class RequestLoggingHandler {
-  constructor (public request, public apiLogger) {
-    this.request = request
-    this.apiLogger = apiLogger
+  constructor (private request, private apiLogger) {
   }
 
   get (target, key) {
