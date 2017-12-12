@@ -5,8 +5,7 @@ const RequestTracing = logging.RequestTracing
 const httpCallMethods = ['get', 'post', 'put', 'patch', 'delete', 'del', 'head']
 
 export class RequestTracingHandler {
-  constructor (public request) {
-    this.request = request
+  constructor (private request, private requestTracing = RequestTracing) {
   }
 
   get (target, key) {
@@ -22,7 +21,6 @@ export class RequestTracingHandler {
   }
 
   private setTracingHeaders (args: any): void {
-    // console.log(`>>> ${JSON.stringify(args)}`)
     const firstArg = args[0]
     if (typeof firstArg === 'string' || firstArg instanceof String) {
       let options
@@ -47,9 +45,9 @@ export class RequestTracingHandler {
   }
 
   private setTracingHeadersInternal (headers: any): void {
-    headers['Root-Request-Id'] = RequestTracing.getRootRequestId()
-    headers['Request-Id'] = RequestTracing.createNextRequestId()
-    headers['Origin-Request-Id'] = RequestTracing.getCurrentRequestId()
+    headers['Root-Request-Id'] = this.requestTracing.getRootRequestId()
+    headers['Request-Id'] = this.requestTracing.createNextRequestId()
+    headers['Origin-Request-Id'] = this.requestTracing.getCurrentRequestId()
   }
 }
 
