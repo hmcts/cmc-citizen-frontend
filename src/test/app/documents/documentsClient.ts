@@ -9,24 +9,31 @@ describe('DocumentsClient', () => {
 
   describe('getPDF', () => {
 
-    it('shouldThrowErrorWhenGivenUndefinedExternalId', () => {
+    it('should throw error when given undefined ExternalId', () => {
       expect(() => client.getPDF(
         undefined,
         'defendantResponseCopy'))
         .to.throw(Error, 'Claim external ID cannot be blank')
     })
 
-    it('shouldThrowErrorWhenGivenEmptyExternalId', () => {
+    it('should throw error when given empty ExternalId', () => {
       expect(() => client.getPDF('',
         'defendantResponseCopy'))
         .to.throw(Error, 'Claim external ID cannot be blank')
     })
 
-    it('shouldThrowErrorWhenGivenEmptyDocumentTemplate', () => {
+    it('should throw error when given empty Document Template', () => {
       expect(() => client.getPDF(
         externalId,
         ''))
         .to.throw(Error, 'Document template cannot be blank')
+    })
+
+    it('shouldThrowErrorWhenGivenUndefinedDocumentTemplate', () => {
+      expect(() => client.getPDF(
+        externalId,
+        undefined))
+        .to.throw(Error, 'Document template is undefined')
     })
   })
 })
