@@ -1,4 +1,4 @@
-import { RequestTracing } from '@hmcts/nodejs-logging'
+import { RequestTracing, RequestTracingHeaders as Headers } from '@hmcts/nodejs-logging'
 
 const httpCallMethods = ['get', 'post', 'put', 'patch', 'delete', 'del', 'head']
 
@@ -50,9 +50,9 @@ export class RequestTracingHandler {
   }
 
   private setTracingHeadersInternal (headers: any): void {
-    headers['Root-Request-Id'] = this.requestTracing.getRootRequestId()
-    headers['Request-Id'] = this.requestTracing.createNextRequestId()
-    headers['Origin-Request-Id'] = this.requestTracing.getCurrentRequestId()
+    headers[Headers.ROOT_REQUEST_ID_HEADER] = this.requestTracing.getRootRequestId()
+    headers[Headers.REQUEST_ID_HEADER] = this.requestTracing.createNextRequestId()
+    headers[Headers.ORIGIN_REQUEST_ID_HEADER] = this.requestTracing.getCurrentRequestId()
   }
 }
 

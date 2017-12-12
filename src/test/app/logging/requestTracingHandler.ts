@@ -6,6 +6,8 @@ import * as spies from 'sinon-chai'
 chai.use(spies)
 const expect = chai.expect
 
+import { RequestTracingHeaders as Headers } from '@hmcts/nodejs-logging'
+
 import { RequestTracingHandler } from 'logging/requestTracingHandler'
 
 describe('RequestTracingHandler', () => {
@@ -29,11 +31,10 @@ describe('RequestTracingHandler', () => {
     getCurrentRequestId: () => 'test-current-request-id'
   }
 
-  const tracingHeaders = {
-    'Request-Id': MockedRequestTracing.createNextRequestId(),
-    'Root-Request-Id': MockedRequestTracing.getRootRequestId(),
-    'Origin-Request-Id': MockedRequestTracing.getCurrentRequestId()
-  }
+  const tracingHeaders = { }
+  tracingHeaders[Headers.REQUEST_ID_HEADER] = MockedRequestTracing.createNextRequestId()
+  tracingHeaders[Headers.ROOT_REQUEST_ID_HEADER] = MockedRequestTracing.getRootRequestId()
+  tracingHeaders[Headers.ORIGIN_REQUEST_ID_HEADER] = MockedRequestTracing.getCurrentRequestId()
 
   let proxy
   let handler
