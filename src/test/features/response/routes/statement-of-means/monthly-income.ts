@@ -14,11 +14,11 @@ import { app } from '../../../../../main/app'
 import { checkNotDefendantInCaseGuard } from '../checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = StatementOfMeansPaths.debtsPage.evaluateUri(
+const pagePath: string = StatementOfMeansPaths.monthlyIncomePage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
 
-describe('Defendant response: Statement of means: debts', () => {
+describe('Defendant response: Statement of means: monthly-income', () => {
 
   attachDefaultHooks(app)
 
@@ -65,7 +65,7 @@ describe('Defendant response: Statement of means: debts', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Do you have any debts?'))
+            .expect(res => expect(res).to.be.successful.withText('Monthly income'))
         })
       })
     })
@@ -110,45 +110,39 @@ describe('Defendant response: Statement of means: debts', () => {
 
       describe('save and continue', () => {
 
-        context('should update draft store and redirect', () => {
+        it('should update draft store and redirect', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveSave()
 
-          it('when valid debt provided', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
-
-            await request(app)
-              .post(pagePath)
-              .send({ hasAnyDebts: 'true', rows: [{ debt: 'my debt', totalOwed: '100', monthlyPayments: '10' }] })
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(StatementOfMeansPaths.monthlyIncomePage.evaluateUri(
-                  { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
-                )
+          await request(app)
+            .post(pagePath)
+            .send({
+              salary: '1',
+              universalCredit: '1',
+              jobSeekerAllowanceIncome: '1',
+              jobSeekerAllowanceContribution: '1',
+              incomeSupport: '1',
+              workingTaxCredit: '1',
+              childTaxCredit: '1',
+              childBenefit: '1',
+              councilTaxSupport: '1',
+              pension: '1',
+              maintenance: '1',
+              rows: [{ amount: '10', description: 'bla bla bla' }]
+            })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(StatementOfMeansPaths.courtOrdersPage.evaluateUri(
+                { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
-          })
-
-          it('when no selected', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
-
-            await request(app)
-              .post(pagePath)
-              .send({ hasAnyDebts: 'false' })
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(StatementOfMeansPaths.monthlyIncomePage.evaluateUri(
-                  { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
-                )
-              )
-          })
+            )
         })
       })
 
       describe('add a new row', () => {
 
-        it('should add one more row', async () => {
+        it('should update draft store and redirect', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
 
@@ -156,7 +150,7 @@ describe('Defendant response: Statement of means: debts', () => {
             .post(pagePath)
             .send({ action: { addRow: 'Add row' } })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Do you have any debts?'))
+            .expect(res => expect(res).to.be.successful.withText('Monthly income'))
         })
       })
     })

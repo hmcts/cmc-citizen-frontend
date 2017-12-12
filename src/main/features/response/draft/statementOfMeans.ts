@@ -14,6 +14,7 @@ import { ResponseType } from 'response/form/models/responseType'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { Debts } from 'response/form/models/statement-of-means/debts'
 import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders'
+import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
 
 export class StatementOfMeans {
   residence?: Residence
@@ -27,6 +28,7 @@ export class StatementOfMeans {
   unemployed?: Unemployed
   bankAccounts?: BankAccounts
   debts?: Debts
+  monthlyIncome?: MonthlyIncome
   courtOrders?: CourtOrders
 
   static isApplicableFor (responseDraft?: ResponseDraft): boolean {
@@ -60,6 +62,7 @@ export class StatementOfMeans {
       this.unemployed = new Unemployed().deserialize(input.unemployed)
       this.bankAccounts = new BankAccounts().deserialize(input.bankAccounts)
       this.debts = new Debts().deserialize(input.debts)
+      this.monthlyIncome = new MonthlyIncome().deserialize(input.monthlyIncome)
       this.courtOrders = new CourtOrders().deserialize(input.courtOrders)
     }
     return this

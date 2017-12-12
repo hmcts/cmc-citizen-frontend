@@ -132,6 +132,20 @@ const sampleResponseDraftObj = {
     maintenance: { option: false },
     bankAccounts: { rows: [] },
     debts: { hasAnyDebts: false },
+    monthlyIncome: {
+      salary: 1,
+      universalCredit: 1,
+      jobSeekerAllowanceIncome: 1,
+      jobSeekerAllowanceContribution: 1,
+      incomeSupport: 1,
+      workingTaxCredit: 1,
+      childTaxCredit: 1,
+      childBenefit: 1,
+      councilTaxSupport: 1,
+      pension: 1,
+      maintenance: 1,
+      rows: [{ amount: 10, description: 'bla bla bla' }]
+    },
     courtOrders: { hasAnyCourtOrders: false }
   },
   defendantPaymentOption: {
