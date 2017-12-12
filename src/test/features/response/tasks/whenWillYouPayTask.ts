@@ -34,6 +34,7 @@ import { SupportedByYou } from 'response/form/models/statement-of-means/supporte
 import { NumberOfPeople } from 'response/form/models/statement-of-means/numberOfPeople'
 import { Debts } from 'response/form/models/statement-of-means/debts'
 import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders'
+import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
 
 function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDraft {
   const responseDraft: ResponseDraft = new ResponseDraft()
@@ -66,6 +67,7 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
   responseDraft.statementOfMeans.unemployed = new Unemployed(UnemploymentType.RETIRED)
   responseDraft.statementOfMeans.bankAccounts = new BankAccounts()
   responseDraft.statementOfMeans.debts = new Debts(false)
+  responseDraft.statementOfMeans.monthlyIncome = new MonthlyIncome(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, [])
   responseDraft.statementOfMeans.courtOrders = new CourtOrders(false)
 
   return responseDraft
@@ -367,6 +369,12 @@ describe('WhenWillYouPayTask', () => {
 
         it('debts not submitted', () => {
           responseDraft.statementOfMeans.debts = undefined
+
+          expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+        })
+
+        it('monthlyIncome not submitted', () => {
+          responseDraft.statementOfMeans.monthlyIncome = undefined
 
           expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
         })
