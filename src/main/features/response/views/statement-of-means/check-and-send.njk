@@ -98,8 +98,9 @@
   {% endif %}
 {% endif %}
 
-{{ row('Bank accounts and savings', '', statementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: claim.externalId }), false) }}
-{% set indexOfLastRow = draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly().length - 1 %}
+{% set numberOfBankAccounts = draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly().length %}
+{{ row('Bank accounts and savings', '', statementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: claim.externalId }), not numberOfBankAccounts) }}
+{% set indexOfLastRow = numberOfBankAccounts - 1 %}
 
 {% for account in draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly() %}
   {{ row('Type of account', account.typeOfAccount.displayValue, '', false ) }}

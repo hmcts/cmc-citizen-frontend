@@ -5,23 +5,27 @@ import { Company } from 'app/claims/models/details/yours/company'
 import { Organisation } from 'app/claims/models/details/yours/organisation'
 import { SoleTrader } from 'app/claims/models/details/yours/soleTrader'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
+import { DefenceType } from 'claims/models/defendantResponse'
 
 export class ResponseData {
-
-  response?: string
+  responseType: 'FULL_DEFENCE'
+  defenceType: DefenceType
   defence?: string
   freeMediation?: string
   moreTimeNeeded?: string
   defendant?: Party
   statementOfTruth?: StatementOfTruth
 
-  constructor (response?: string,
-              defence?: string,
-              freeMediation?: string,
-              moreTimeNeeded?: string,
-              defendant?: Party,
-              statementOfTruth?: StatementOfTruth) {
-    this.response = response
+  constructor (
+    defenceType?: DefenceType,
+    defence?: string,
+    freeMediation?: string,
+    moreTimeNeeded?: string,
+    defendant?: Party,
+    statementOfTruth?: StatementOfTruth
+  ) {
+    this.responseType = 'FULL_DEFENCE'
+    this.defenceType = defenceType
     this.defence = defence
     this.freeMediation = freeMediation
     this.moreTimeNeeded = moreTimeNeeded
@@ -31,7 +35,8 @@ export class ResponseData {
 
   deserialize (input: any): ResponseData {
     if (input) {
-      this.response = input.response
+      this.responseType = input.responseType
+      this.defenceType = input.defenceType
       this.defence = input.defence
       this.freeMediation = input.freeMediation
       this.moreTimeNeeded = input.moreTimeNeeded
