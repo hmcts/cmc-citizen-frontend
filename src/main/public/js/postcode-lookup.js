@@ -1,10 +1,18 @@
-document.querySelectorAll('.postcode-lookup')
-  .forEach(function (postcodeLookupButton) {
-    postcodeLookupButton.addEventListener('click', function (evt) {
-      evt.preventDefault()
-      lookupPostcode(this.previousElementSibling.value, this.parentElement)
+
+document.addEventListener('DOMContentLoaded', function(event) {
+  document.querySelectorAll('.js-visible')
+    .forEach(function (hiddenElement) {
+      hiddenElement.classList.remove('hidden')
     })
-  })
+
+  document.querySelectorAll('.postcode-lookup')
+    .forEach(function (postcodeLookupButton) {
+      postcodeLookupButton.addEventListener('click', function (event) {
+        event.preventDefault()
+        lookupPostcode(this.previousElementSibling.value, this.parentElement)
+      })
+    })
+})
 
 function lookupPostcode (postcode, parentElement) {
   var xhr = new XMLHttpRequest()
@@ -15,23 +23,23 @@ function lookupPostcode (postcode, parentElement) {
     }
     else {
       alert('Request failed.  Returned status of ' + xhr.status)
+      return
     }
-
 
     var postcodeResponse = JSON.parse(xhr.responseText)
 
     console.log(postcodeResponse.valid)
 
-    var selectDropdown = '<option>' + postcodeResponse.addresses.length + ' addresses found </option>'
+    var selectDropdown = '<option>' + postcodeResponse.addresses + ' addresses found </option>'
 
-    postcodeResponse.addresses.forEach(function(address) {
+    postcodeResponse.addresses.forEach(function (address) {
 
       var formatted_address = [
-      (address.organisationName || address.subBuildingName) + ' ' + (address.buildingNumber || address.buildingName || undefined),
-      address.thoroughfareName || address.dependentLocality,
+        (address.organisationName || address.subBuildingName) + ' ' + (address.buildingNumber || address.buildingName || undefined),
+        address.thoroughfareName || address.dependentLocality,
         address.postTown,
         address.postcode
-    ]
+      ]
       selectDropdown += '<option value="' + formatted_address.join(', ').trim() + '">' + formatted_address.join(', ').trim() + '</option>'
     })
 
@@ -41,6 +49,7 @@ function lookupPostcode (postcode, parentElement) {
   }
   xhr.send()
 }
+
 
 function showSelectAddress () {
 
