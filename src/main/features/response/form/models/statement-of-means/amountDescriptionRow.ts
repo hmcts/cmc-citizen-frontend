@@ -11,7 +11,7 @@ export class ValidationErrors {
   static readonly DESCRIPTION_REQUIRED: string = 'Enter a description'
 }
 
-export class MonthlyIncomeRow extends MultiRowFormItem {
+export class AmountDescriptionRow extends MultiRowFormItem {
 
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: ValidationErrors.DESCRIPTION_REQUIRED })
@@ -22,7 +22,7 @@ export class MonthlyIncomeRow extends MultiRowFormItem {
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
+  @Min(1, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
   amount?: number
 
   constructor (description?: string, amount?: number) {
@@ -31,19 +31,19 @@ export class MonthlyIncomeRow extends MultiRowFormItem {
     this.amount = amount
   }
 
-  static empty (): MonthlyIncomeRow {
-    return new MonthlyIncomeRow(undefined, undefined)
+  static empty (): AmountDescriptionRow {
+    return new AmountDescriptionRow(undefined, undefined)
   }
 
-  static fromObject (value?: any): MonthlyIncomeRow {
+  static fromObject (value?: any): AmountDescriptionRow {
     if (!value) {
       return value
     }
 
-    return new MonthlyIncomeRow(value.description || undefined, toNumberOrUndefined(value.amount))
+    return new AmountDescriptionRow(value.description || undefined, toNumberOrUndefined(value.amount))
   }
 
-  deserialize (input?: any): MonthlyIncomeRow {
+  deserialize (input?: any): AmountDescriptionRow {
     if (input) {
       this.amount = input.amount
       this.description = input.description

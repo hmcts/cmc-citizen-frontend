@@ -1,67 +1,65 @@
-import { MonthlyIncomeRow } from 'features/response/form/models/statement-of-means/monthlyIncomeRow'
+import { AmountDescriptionRow } from 'features/response/form/models/statement-of-means/amountDescriptionRow'
 import { MultiRowForm } from 'forms/models/multiRowForm'
 import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import { IsDefined, Min } from 'class-validator'
 import { Fractions } from 'forms/validation/validators/fractions'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
-export class ValidationErrors {
-  static readonly REQUIRED_FIELD: string = 'Enter a value'
-}
+export const MAX_NUMBER_OF_ROWS: number = 10
 
-export class MonthlyIncome extends MultiRowForm<MonthlyIncomeRow> {
+export class MonthlyIncome extends MultiRowForm<AmountDescriptionRow> {
 
-  @IsDefined({ message: ValidationErrors.REQUIRED_FIELD })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
   @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
   salary?: number
 
-  @IsDefined({ message: ValidationErrors.REQUIRED_FIELD })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
   @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
   universalCredit?: number
 
-  @IsDefined({ message: ValidationErrors.REQUIRED_FIELD })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
   @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
   jobSeekerAllowanceIncome?: number
 
-  @IsDefined({ message: ValidationErrors.REQUIRED_FIELD })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
   @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
   jobSeekerAllowanceContribution?: number
 
-  @IsDefined({ message: ValidationErrors.REQUIRED_FIELD })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
   @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
   incomeSupport?: number
 
-  @IsDefined({ message: ValidationErrors.REQUIRED_FIELD })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
   @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
   workingTaxCredit?: number
 
-  @IsDefined({ message: ValidationErrors.REQUIRED_FIELD })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
   @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
   childTaxCredit?: number
 
-  @IsDefined({ message: ValidationErrors.REQUIRED_FIELD })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
   @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
   childBenefit?: number
 
-  @IsDefined({ message: ValidationErrors.REQUIRED_FIELD })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
   @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
   councilTaxSupport?: number
 
-  @IsDefined({ message: ValidationErrors.REQUIRED_FIELD })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
   @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
   pension?: number
 
-  @IsDefined({ message: ValidationErrors.REQUIRED_FIELD })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
   @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
   maintenance?: number
@@ -77,7 +75,7 @@ export class MonthlyIncome extends MultiRowForm<MonthlyIncomeRow> {
                councilTaxSupport?: number,
                pension?: number,
                maintenance?: number,
-               rows?: MonthlyIncomeRow[]) {
+               rows?: AmountDescriptionRow[]) {
     super(rows)
     this.salary = salary
     this.universalCredit = universalCredit
@@ -109,12 +107,12 @@ export class MonthlyIncome extends MultiRowForm<MonthlyIncomeRow> {
       toNumberOrUndefined(value.councilTaxSupport),
       toNumberOrUndefined(value.pension),
       toNumberOrUndefined(value.maintenance),
-      value.rows ? value.rows.map(MonthlyIncomeRow.fromObject) : []
+      value.rows ? value.rows.map(AmountDescriptionRow.fromObject) : []
     )
   }
 
-  createEmptyRow (): MonthlyIncomeRow {
-    return new MonthlyIncomeRow(undefined)
+  createEmptyRow (): AmountDescriptionRow {
+    return new AmountDescriptionRow(undefined)
   }
 
   deserialize (input?: any): MonthlyIncome {
@@ -135,5 +133,9 @@ export class MonthlyIncome extends MultiRowForm<MonthlyIncomeRow> {
     }
 
     return this
+  }
+
+  getMaxNumberOfRows (): number {
+    return MAX_NUMBER_OF_ROWS
   }
 }
