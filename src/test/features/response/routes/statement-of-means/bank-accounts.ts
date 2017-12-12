@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 import '../../../../routes/expectations'
-import { Paths, StatementOfMeansPaths } from 'response/paths'
+import { StatementOfMeansPaths } from 'response/paths'
 import * as idamServiceMock from '../../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../../http-mocks/claim-store'
@@ -121,7 +121,7 @@ describe('Defendant response: Statement of means: account-banks', () => {
             .send({ rows: [{ typeOfAccount: BankAccountType.ISA.value, isJoint: false, balance: 10 }] })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(Paths.taskListPage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.debtsPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )

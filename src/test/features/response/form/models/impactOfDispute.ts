@@ -35,7 +35,7 @@ describe('ImpactOfDispute', () => {
       const impactOfDispute: ImpactOfDispute = new ImpactOfDispute(randomstring.generate(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1))
       const errors = validator.validateSync(impactOfDispute)
       expect(errors).to.have.lengthOf(1)
-      expectValidationError(errors, DefaultValidationErrors.FREE_TEXT_TOO_LONG)
+      expectValidationError(errors, DefaultValidationErrors.TEXT_TOO_LONG)
     })
   })
 

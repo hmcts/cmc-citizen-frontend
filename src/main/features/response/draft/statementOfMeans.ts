@@ -5,21 +5,29 @@ import { SelfEmployed } from 'response/form/models/statement-of-means/selfEmploy
 import { Dependants } from 'response/form/models/statement-of-means/dependants'
 import { Education } from 'response/form/models/statement-of-means/education'
 import { Maintenance } from 'response/form/models/statement-of-means/maintenance'
+import { SupportedByYou } from 'response/form/models/statement-of-means/supportedByYou'
+import { Unemployed } from 'response/form/models/statement-of-means/unemployed'
 import { BankAccounts } from 'response/form/models/statement-of-means/bankAccounts'
 import { FeatureToggles } from 'utils/featureToggles'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { ResponseType } from 'response/form/models/responseType'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { Debts } from 'response/form/models/statement-of-means/debts'
+import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders'
 
 export class StatementOfMeans {
   residence?: Residence
   dependants?: Dependants
   maintenance?: Maintenance
+  supportedByYou?: SupportedByYou
   education?: Education
   employment?: Employment
   employers?: Employers
   selfEmployed?: SelfEmployed
+  unemployed?: Unemployed
   bankAccounts?: BankAccounts
+  debts?: Debts
+  courtOrders?: CourtOrders
 
   static isApplicableFor (responseDraft?: ResponseDraft): boolean {
     if (!FeatureToggles.isEnabled('statementOfMeans')) {
@@ -45,10 +53,14 @@ export class StatementOfMeans {
       this.dependants = new Dependants().deserialize(input.dependants)
       this.education = new Education().deserialize(input.education)
       this.maintenance = new Maintenance().deserialize(input.maintenance)
+      this.supportedByYou = new SupportedByYou().deserialize(input.supportedByYou)
       this.employment = new Employment().deserialize(input.employment)
       this.employers = new Employers().deserialize(input.employers)
       this.selfEmployed = new SelfEmployed().deserialize(input.selfEmployed)
+      this.unemployed = new Unemployed().deserialize(input.unemployed)
       this.bankAccounts = new BankAccounts().deserialize(input.bankAccounts)
+      this.debts = new Debts().deserialize(input.debts)
+      this.courtOrders = new CourtOrders().deserialize(input.courtOrders)
     }
     return this
   }

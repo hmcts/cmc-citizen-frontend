@@ -6,7 +6,7 @@
 
 {% macro employerRow(index, form) %}
 
-  <div class="timeline-rows">
+  <div class="multiline-rows">
     {{ textInput('Employer name', 'rows[' + index + '][employerName]', form) }}
     {{ textInput('Job title', 'rows[' + index + '][jobTitle]', form) }}
   </div>
@@ -20,8 +20,12 @@
     <form method="post" novalidate>
       {{ csrfProtection(csrf) }}
 
-      <div class="timeline">
-        <div class="timeline-rows">
+      {% set noRowsError = form.errorFor('rows') %}
+      <div class="multiline {% if noRowsError %} form-group-error {% endif %}">
+
+      {% if noRowsError %}<span class="error-message" id="rows[label]">{{ t(noRowsError) }}</span>{% endif %}
+
+        <div class="multiline-rows">
           {% for row in form.model.rows %}
             {{ employerRow(loop.index0, form) }}
           {% endfor %}

@@ -6,8 +6,10 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-xlarge">{{ t('About them') }}</h1>
-      <p>{{ t('Who are you making the claim against?') }}</p>
+      <h1 class="heading-large">{{ t('Who are you making the claim against?') }}</h1>
+      <p>{{ t('We need to know if you’re claiming against them as an individual, or if the dispute relates to their work or business.') }}</p>
+     <p class="bold-medium"></p>
+
       <form method="POST" novalidate>
         {{ csrfProtection(csrf) }}
 
@@ -21,28 +23,28 @@
               {
                 bold: true,
                 label: 'An individual',
-                hint: 'For example, someone you lent money',
+                hint: 'For example someone you lent money to',
                 value: 'individual',
                 checked: (form.valueFor('type').value === 'individual')
               },
               {
                 bold: true,
                 label: 'A sole trader or self-employed person',
-                hint: 'For example, a tradesperson who did work for you',
+                hint: 'For example a tradesperson who did work for you',
                 value: 'soleTrader',
                 checked: (form.valueFor('type').value === 'soleTrader')
               },
               {
                 bold: true,
-                label: 'On behalf of a company',
-                hint: 'For example, a company that sold you goods or services',
+                label: 'A company',
+                hint: 'For example a company that sold you goods or services',
                 value: 'company',
                 checked: (form.valueFor('type').value === 'company')
               },
               {
                 bold: true,
-                label: 'As another type of organisation',
-                hint: 'For example, a partnership, trust, charity, club or association',
+                label: 'Another type of organisation',
+                hint: 'For example a partnership, trust, charity, club or association',
                 value: 'organisation',
                 checked: (form.valueFor('type').value === 'organisation')
               }

@@ -15,7 +15,7 @@
   {% set typeValue = form.valueFor(typeKey).value %}
   {% set typeErrorExist = form.errorFor('rows[' + index + '][type]').length > 0 %}
 
-  <div class="timeline-row {% if typeErrorExist %} form-group-error {% endif %}">
+  <div class="multiline-row {% if typeErrorExist %} form-group-error {% endif %}">
     <label class="visually-hidden" for="rows[{{ index }}][type]">{{ index + 1 }}{{ t('. Evidence') }}</label>
     {% if typeErrorExist %}
       <span class="error-message" id="{{ typeKey }}[label]">
@@ -62,7 +62,7 @@
         {% endif %}
         <textarea
           id="{{ descriptionKey }}" name="{{ descriptionKey }}"
-          class="form-control timeline-column-text {% if errorDescription %}form-control-error{% endif %}"
+          class="form-control multiline-column-text {% if errorDescription %}form-control-error{% endif %}"
           rows="3">{{ valueDescription | default('') }}</textarea>
       </div>
     </div>
@@ -82,15 +82,15 @@
             + ' happens and what evidence you will need. You can, however, list any evidence you have at this stage.')
         }}
       </p>
-      <div class="timeline">
-        <div class="timeline-rows">
+      <div class="multiline">
+        <div class="multiline-rows">
         {% for row in form.model.rows %}
           {{ evidenceRow(loop.index0, form) }}
         {% endfor %}
         </div>
       </div>
 
-      {% if canAddMoreEvidence %}
+      {% if form.model and form.model.canAddMoreRows() %}
         <div id="add-event-container" class="form-group">
           {{ linkButton('Add more evidence', 'action[addRow]', 'button button-secondary') }}
         </div>
