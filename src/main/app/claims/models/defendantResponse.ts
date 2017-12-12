@@ -15,7 +15,7 @@ export class DefendantResponse {
   defenceType: DefenceType
   defence: string
   freeMediation: string
-  defendantDetails: TheirDetails
+  defendant: TheirDetails
   statementOfTruth?: StatementOfTruth
 
   private static deserializeDefendantDetails (defendant: any): TheirDetails {
@@ -42,7 +42,7 @@ export class DefendantResponse {
       this.defenceType = input.defenceType
       this.defence = input.defence
       this.freeMediation = input.freeMediation
-      this.defendantDetails = DefendantResponse.deserializeDefendantDetails(input.defendant)
+      this.defendant = DefendantResponse.deserializeDefendantDetails(input.defendant)
       if (input.statementOfTruth) {
         this.statementOfTruth = new StatementOfTruth().deserialize(input.statementOfTruth)
       }
