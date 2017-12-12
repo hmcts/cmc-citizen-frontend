@@ -27,9 +27,16 @@
       {% set years = statementOfMeans.unemployed.unemploymentDetails.years %}
       {% set months = statementOfMeans.unemployed.unemploymentDetails.months %}
 
-      {% set status = statementOfMeans.unemployed.option.displayValue + ' for ' %}
-      {% set status = status + singularOrPlural(years, 'year') if years %}
-      {% set status = status + singularOrPlural(months, 'month') if months %}
+      {% set status = statementOfMeans.unemployed.option.displayValue %}
+      {% if years or months %}
+        {% set status = status + ' for ' %}
+        {% if years %}
+          {% set status = status + singularOrPlural(years, 'year') %}
+        {% endif %}
+        {% if months %}
+          {% set status = status + singularOrPlural(months, 'month') %}
+        {% endif %}
+      {% endif %}
 
       {{ row('Employment status', status, '') }}
     {% elseif statementOfMeans.unemployed.option === UnemploymentType.OTHER %}
@@ -91,8 +98,9 @@
   {% endif %}
 {% endif %}
 
-{{ row('Bank accounts and savings', '', statementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: claim.externalId }), false) }}
-{% set indexOfLastRow = draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly().length - 1 %}
+{% set numberOfBankAccounts = draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly().length %}
+{{ row('Bank accounts and savings', '', statementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: claim.externalId }), not numberOfBankAccounts) }}
+{% set indexOfLastRow = numberOfBankAccounts - 1 %}
 
 {% for account in draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly() %}
   {{ row('Type of account', account.typeOfAccount.displayValue, '', false ) }}
