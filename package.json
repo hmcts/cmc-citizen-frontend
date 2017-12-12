@@ -16,15 +16,16 @@
     "test:routes": "NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) -path '*/routes/*') --timeout 4000 --reporter-options reportFilename=routes,inlineAssets=true,reportTitle=citizen-frontend-routes",
     "test:a11y": "NODE_ENV=mocha LOG_LEVEL=ERROR mocha --exit --opts mocha.opts src/test/a11y/a11y.ts --timeout 60000 --reporter-options reportFilename=a11y,inlineAssets=true,reportTitle=citizen-frontend-a11y",
     "test:nsp": "nsp check",
-    "test:coverage": "NODE_ENV=mocha LOG_LEVEL=OFF nyc mocha --opts mocha.opts $(find src/test \\( -name '*.ts' -or -name '*.js' \\) ! -path '*a11y*')",
+    "test:coverage": "NODE_ENV=mocha LOG_LEVEL=OFF nyc mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*')",
+    "test:coverage-unit": "NODE_ENV=mocha LOG_LEVEL=OFF nyc mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*')",
     "test:codacy-upload": "cat ./coverage-report/lcov.info | codacy-coverage",
-    "test:codecov-upload": "nyc report --reporter=json && codecov -f coverage-report/*.json",
+    "test:codecov-upload": "codecov -f ./coverage-report/lcov.info",
     "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/** -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info",
     "precommit": "yarn lint",
     "prepush": "yarn test && yarn test:routes"
   },
   "dependencies": {
-    "@hmcts/cmc-common-frontend": "^1.26.0",
+    "@hmcts/cmc-common-frontend": "^1.27.0",
     "@hmcts/cmc-draft-store-middleware": "^1.0.0",
     "@hmcts/draft-store-client": "^1.1.1",
     "@hmcts/info-provider": "^1.0.0",
@@ -76,7 +77,7 @@
     "require-directory": "^2.1.1",
     "serve-favicon": "^2.3.0",
     "to-boolean": "^1.0.0",
-    "ts-node": "^4.0.0",
+    "ts-node": "^3.3.0",
     "tsconfig-paths": "^2.2.0",
     "typescript": "^2.4.2",
     "uuid": "^3.0.1"
@@ -122,8 +123,7 @@
   },
   "nyc": {
     "extension": [
-      ".ts",
-      ".js"
+      ".ts"
     ],
     "include": [
       "src/main"

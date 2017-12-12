@@ -5,10 +5,14 @@ import { SoleTrader } from 'app/claims/models/details/theirs/soleTrader'
 import { Organisation } from 'app/claims/models/details/theirs/organisation'
 import { TheirDetails } from 'app/claims/models/details/theirs/theirDetails'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
-import { ResponseType } from 'response/form/models/responseType'
+
+export type DefenceType
+  = 'DISPUTE'
+  | 'ALREADY_PAID'
 
 export class DefendantResponse {
-  type: ResponseType
+  responseType: 'FULL_DEFENCE'
+  defenceType: DefenceType
   defence: string
   freeMediation: string
   defendantDetails: TheirDetails
@@ -34,7 +38,8 @@ export class DefendantResponse {
 
   deserialize (input: any): DefendantResponse {
     if (input) {
-      this.type = ResponseType.valueOf(input.response)
+      this.responseType = input.responseType
+      this.defenceType = input.defenceType
       this.defence = input.defence
       this.freeMediation = input.freeMediation
       this.defendantDetails = DefendantResponse.deserializeDefendantDetails(input.defendant)
@@ -44,5 +49,4 @@ export class DefendantResponse {
     }
     return this
   }
-
 }

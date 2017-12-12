@@ -27,9 +27,16 @@
       {% set years = statementOfMeans.unemployed.unemploymentDetails.years %}
       {% set months = statementOfMeans.unemployed.unemploymentDetails.months %}
 
-      {% set status = statementOfMeans.unemployed.option.displayValue + ' for ' %}
-      {% set status = status + singularOrPlural(years, 'year') if years %}
-      {% set status = status + singularOrPlural(months, 'month') if months %}
+      {% set status = statementOfMeans.unemployed.option.displayValue %}
+      {% if years or months %}
+        {% set status = status + ' for ' %}
+        {% if years %}
+          {% set status = status + singularOrPlural(years, 'year') %}
+        {% endif %}
+        {% if months %}
+          {% set status = status + singularOrPlural(months, 'month') %}
+        {% endif %}
+      {% endif %}
 
       {{ row('Employment status', status, '') }}
     {% elseif statementOfMeans.unemployed.option === UnemploymentType.OTHER %}
@@ -49,7 +56,10 @@
 {{ row('Do any children live with you?', 'Yes' if draft.statementOfMeans.dependants.hasAnyChildren else 'No', '', not draft.statementOfMeans.dependants.hasAnyChildren) }}
 
 {% if draft.statementOfMeans.dependants.hasAnyChildren %}
-  {{ row('16 to 19', draft.statementOfMeans.dependants.numberOfChildren.between16and19, '') }}
+  {% set noOfKids = draft.statementOfMeans.dependants.numberOfChildren %}
+  {{ row('Under 11', noOfKids.under11, '', not (noOfKids.between11and15 or noOfKids.between16and19)) }}
+  {{ row('11 to 15', noOfKids.between11and15, '', not noOfKids.between16and19) }}
+  {{ row('16 to 19', noOfKids.between16and19, '') }}
 
   {% if draft.statementOfMeans.education %}
     {{ row('Number of children aged 16 to 19 full-time education or training', draft.statementOfMeans.education.value, statementOfMeansPaths.educationPage.evaluateUri({ externalId: claim.externalId })) }}
@@ -69,7 +79,7 @@
 {{ employmentStatus(draft.statementOfMeans) }}
 
 {% if draft.statementOfMeans.employment.employed %}
-  {{ row('Why employs you?', '', statementOfMeansPaths.employersPage.evaluateUri({ externalId: claim.externalId }), false) }}
+  {{ row('Who employs you?', '', statementOfMeansPaths.employersPage.evaluateUri({ externalId: claim.externalId }), false) }}
   {% set indexOfLastRow = draft.statementOfMeans.employers.rows.length - 1 %}
   {% for employer in draft.statementOfMeans.employers.rows %}
     {{ row('Employer name', employer.employerName, '', false ) }}
@@ -88,8 +98,9 @@
   {% endif %}
 {% endif %}
 
-{{ row('Bank accounts and savings', '', statementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: claim.externalId }), false) }}
-{% set indexOfLastRow = draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly().length - 1 %}
+{% set numberOfBankAccounts = draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly().length %}
+{{ row('Bank accounts and savings', '', statementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: claim.externalId }), not numberOfBankAccounts) }}
+{% set indexOfLastRow = numberOfBankAccounts - 1 %}
 
 {% for account in draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly() %}
   {{ row('Type of account', account.typeOfAccount.displayValue, '', false ) }}
