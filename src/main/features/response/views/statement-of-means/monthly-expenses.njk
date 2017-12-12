@@ -39,8 +39,7 @@
 
     <label class="form-label-bold mobile-show" for="{{ descriptionKey }}">{{ index + 1 }} {{ t('. What') }}</label>
     {{ textInputInline(name = descriptionKey, form = form, inputClass='column-1') }}
-    <label class="form-label-bold mobile-show" for="{{ descriptionKey }}">{{ index + 1 }} {{ t('. How much?') }}</label>
-    {{ poundInputInline(name = amountKey, form = form) }}
+    {{ poundInputInline(name = amountKey, label = (index + 1) + '. How much?', form = form) }}
 
   </div>
 
