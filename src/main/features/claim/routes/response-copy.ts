@@ -19,7 +19,7 @@ export default express.Router()
         const { externalId } = req.params
         const claim: Claim = res.locals.user.claim
 
-        documentsClient.getPDF(externalId, 'defendantResponseCopy')
+        documentsClient.getDefendantResponseCopyPDF(externalId)
           .on('response', (response: http.IncomingMessage) => {
             if (response.statusCode !== 200) {
               return next(new Error('Unexpected error during document retrieval'))

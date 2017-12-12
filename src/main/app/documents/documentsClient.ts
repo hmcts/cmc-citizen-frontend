@@ -9,7 +9,24 @@ export class DocumentsClient {
 
   constructor (public documentsUrl: string = `${claimStoreBaseUrl}/documents`) {
   }
-  getPDF (claimExternalId: string, documentTemplate: string): http.IncomingMessage {
+
+  getClaimIssueReceiptPDF (claimExternalId: string): http.IncomingMessage {
+    return this.getPDF(claimExternalId, 'claimIssueReceipt')
+  }
+
+  getDefendantResponseReceiptPDF (claimExternalId: string): http.IncomingMessage {
+    return this.getPDF(claimExternalId, 'defendantResponseReceipt')
+  }
+
+  getDefendantResponseCopyPDF (claimExternalId: string): http.IncomingMessage {
+    return this.getPDF(claimExternalId, 'defendantResponseCopy')
+  }
+
+  getSettlementAgreementPDF (claimExternalId: string): http.IncomingMessage {
+    return this.getPDF(claimExternalId, 'settlementAgreement')
+  }
+
+  private getPDF (claimExternalId: string, documentTemplate: string): http.IncomingMessage {
     if (StringUtils.isBlank(claimExternalId)) {
       throw new Error('Claim external ID cannot be blank')
     }
