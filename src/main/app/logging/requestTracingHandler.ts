@@ -8,6 +8,10 @@ export class RequestTracingHandler {
   constructor (private request, private requestTracing = RequestTracing) {
   }
 
+  static proxy (request) {
+    return new Proxy(request, new RequestTracingHandler(request))
+  }
+
   get (target, key) {
     if (contains(httpCallMethods, key)) {
       const originalMethod = target[key]

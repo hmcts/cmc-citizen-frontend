@@ -6,6 +6,10 @@ export class RequestLoggingHandler {
   constructor (private request, private apiLogger = new ApiLogger()) {
   }
 
+  static proxy (request) {
+    return new Proxy(request, new RequestLoggingHandler(request))
+  }
+
   get (target, key) {
     if (contains(httpCallMethods, key)) {
       const originalMethod = target[key]

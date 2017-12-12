@@ -7,6 +7,7 @@ chai.use(spies)
 const expect = chai.expect
 
 import { RequestLoggingHandler } from 'logging/requestPromiseLoggingHandler'
+import { ApiLogger } from 'logging/apiLogger'
 
 describe('RequestLoggingHandler', () => {
   let handler
@@ -33,7 +34,7 @@ describe('RequestLoggingHandler', () => {
 
   beforeEach(() => {
     options = {}
-    handler = new RequestLoggingHandler(requestPromise, apiLogger)
+    handler = new RequestLoggingHandler(requestPromise, apiLogger as ApiLogger)
     proxy = new Proxy(requestPromise, handler)
   })
 
