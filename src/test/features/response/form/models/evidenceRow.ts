@@ -2,9 +2,10 @@ import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from '../../../../app/forms/models/validationUtils'
-import { EvidenceRow, ValidationErrors } from 'response/form/models/evidenceRow'
+import { EvidenceRow } from 'response/form/models/evidenceRow'
 import { EvidenceType } from 'response/form/models/evidenceType'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 describe('EvidenceRow', () => {
 
@@ -47,7 +48,7 @@ describe('EvidenceRow', () => {
         )
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.DESCRIPTION_TOO_LONG)
+        expectValidationError(errors, GlobalValidationErrors.TEXT_TOO_LONG)
       })
     })
   })

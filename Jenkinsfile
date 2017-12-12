@@ -5,7 +5,6 @@ import uk.gov.hmcts.Packager
 import uk.gov.hmcts.RPMTagger
 import uk.gov.hmcts.cmc.integrationtests.IntegrationTests
 import uk.gov.hmcts.cmc.smoketests.SmokeTests
-import uk.gov.hmcts.InfluxDbPublisher
 
 //noinspection GroovyAssignabilityCheck this is how Jenkins does it
 properties(
@@ -18,12 +17,6 @@ Packager packager = new Packager(this, 'cmc')
 
 SmokeTests smokeTests = new SmokeTests(this)
 IntegrationTests integrationTests = new IntegrationTests(env, this)
-
-InfluxDbPublisher influxDbPublisher = new InfluxDbPublisher(
-  this,
-  currentBuild,
-  'cmc'
-)
 
 String channel = '#cmc-tech-notification'
 
@@ -47,7 +40,7 @@ timestamps {
           stage('Setup') {
             sh '''
               yarn install
-              yarn setup
+              yarn copy-assets
             '''
           }
 
@@ -98,6 +91,7 @@ timestamps {
               archiveArtifacts 'coverage-report/lcov-report/index.html'
             }
           }
+
           stage('Sonar') {
             sh "yarn sonar-scan -- -Dsonar.host.url=$SONARQUBE_URL"
           }
@@ -159,7 +153,9 @@ timestamps {
         notifyBuildFailure channel: channel
         throw err
       } finally {
-        influxDbPublisher.publish()
+        step([$class: 'InfluxDbPublisher',
+               customProjectName: 'CMC Citizen Frontend',
+               target: 'Jenkins Data'])
       }
     }
     milestone()

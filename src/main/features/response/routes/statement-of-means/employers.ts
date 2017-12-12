@@ -62,7 +62,6 @@ export default express.Router()
         } else {
           res.redirect(StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: externalId }))
         }
-
       }
     })
   )

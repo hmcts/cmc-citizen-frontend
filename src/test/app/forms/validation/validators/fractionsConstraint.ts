@@ -13,10 +13,6 @@ describe('FractionsConstraint', () => {
         expect(constraint.validate(undefined, validationArgs(1, 2))).to.be.equal(true)
       })
 
-      it('given null value', () => {
-        expect(constraint.validate(null, validationArgs(1, 2))).to.be.equal(true)
-      })
-
       it('given a valid decimal up to three decimal places ', () => {
         expect(constraint.validate(10.123, validationArgs(0, 3))).to.equal(true)
       })

@@ -16,7 +16,7 @@ export class Residence {
   @ValidateIf(o => o.type && o.type.value === ResidenceType.OTHER.value)
   @IsDefined({ message: ValidationErrors.DESCRIBE_YOUR_HOUSING })
   @IsNotBlank({ message: ValidationErrors.DESCRIBE_YOUR_HOUSING })
-  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: DefaultValidationErrors.FREE_TEXT_TOO_LONG })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
   housingDetails?: string
 
   constructor (type?: ResidenceType, otherTypeDetails?: string) {

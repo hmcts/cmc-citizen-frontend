@@ -1,0 +1,118 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, textInputInline, radioOption, linkButton, saveAndContinueButton, errorSummary %}
+
+{% set title = t('Money claim') %}
+{% set heading = t('Do you have any debts?') %}
+
+{% macro multiRowPoundInput(name, label, form, cssClass) %}
+
+{% set value = form.valueFor(name) %}
+{% set error = form.errorFor(name) %}
+
+<label class="form-label-bold mobile-show" for="{{ name }}">{{ t(label) }}</label>
+<span class="input-symbol-pound">
+  <input id="{{ name }}" name="{{ name }}"
+         class="form-control {{ cssClass }} {% if error %} form-control-error {% endif %}"
+         type="number"
+         value="{{ value | default('') }}">
+</span>
+
+{% endmacro %}
+
+{% macro debtRow(index, form) %}
+
+  {% set prefix = 'rows[' + index + ']' %}
+
+  {% set debtKey = prefix + '[debt]' %}
+  {% set debtValue = form.valueFor(debtKey) %}
+  {% set debtError = form.errorFor(debtKey) %}
+
+  {% set totalOwedKey = prefix + '[totalOwed]' %}
+  {% set totalOwedValue = form.valueFor(totalOwedKey) %}
+  {% set totalOwedError = form.errorFor(totalOwedKey) %}
+
+  {% set monthlyPaymentsKey = prefix + '[monthlyPayments]' %}
+  {% set monthlyPaymentsValue = form.valueFor(monthlyPaymentsKey) %}
+  {% set monthlyPaymentsError = form.errorFor(monthlyPaymentsKey) %}
+
+  {% set anyErrorOccurred = debtError or totalOwedError or monthlyPaymentsError %}
+  <div class="triple-column{% if anyErrorOccurred %} form-group-error {% endif %}">
+
+    {% if debtError %}<span id="{{ debtKey }}[label]" class="error-message">{{ t(debtError) }}</span>{% endif %}
+    {% if totalOwedError %}<span id="{{ totalOwedKey }}[label]" class="error-message">{{ t(totalOwedError) }}</span>{% endif %}
+    {% if monthlyPaymentsError %}<span id="{{ monthlyPaymentsKey }}[label]" class="error-message">{{ t(monthlyPaymentsError) }}</span>{% endif %}
+
+    <label class="form-label-bold mobile-show" for="{{ debtKey }}">{{ index + 1 }} {{ t('. List each debt') }}</label>
+    {{ textInputInline(name = debtKey, form = form, inputClass='column-1') }}
+    {{ multiRowPoundInput(name = totalOwedKey, label = (index + 1) + '. Total owed', form = form,  cssClass = 'column-4') }}
+    {{ multiRowPoundInput(name = monthlyPaymentsKey, label = (index + 1) + '. Monthly payments', form = form, cssClass = 'column-3') }}
+  </div>
+
+{% endmacro %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+
+    <p>{{ t('For example credit cards, loans or if you’re behind on rent or utility bills.') }}</p>
+
+    <form method="post" novalidate
+          class="analytics-submit-event-trigger"
+          data-event-action="SoM: Do you have any debts?"
+          data-event-label-from="hasAnyDebts">
+
+      {{ csrfProtection(csrf) }}
+
+      {% set errorHasAnyDebts = form.errorFor('hasAnyDebts') %}
+      <div class="statement-of-means-container">
+        <fieldset id="hasAnyDebts[label]" class="form-group {% if errorHasAnyDebts %} form-group-error {% endif %}">
+          <legend class="visually-hidden">{{ t('Do you have any debts?') }}</legend>
+
+          {{
+            radioOption(form = form, label = 'Yes', name = 'hasAnyDebts', value = 'true', checked = form.valueFor('hasAnyDebts') === true)
+          }}
+
+          {% set noRowsError = form.errorFor('rows') %}
+          <div class="form-group panel panel-border-narrow js-hidden {% if noRowsError %} form-group-error {% endif %}"
+               id="hasAnyDebts-true" aria-hidden="false">
+
+            {% if noRowsError %}<span class="error-message" id="rows[label]">{{ t(noRowsError) }}</span>{% endif %}
+
+            <div class="multiline-rows">
+              <div class="triple-column mobile-hide">
+                <div class="column-1 mobile-hide">
+                  <label class="form-label-bold">{{ t('List each debt') }}</label>
+                </div>
+                <div class="column-4 mobile-hide">
+                  <label class="form-label-bold">{{ t('Total owed') }}</label>
+                </div>
+                <div class="column-3 mobile-hide">
+                  <label class="form-label-bold">{{ t('Monthly payments') }}</label>
+                </div>
+              </div>
+
+              {% for row in form.model.rows %}
+                {{ debtRow(loop.index0, form) }}
+              {% endfor %}
+            </div>
+
+            {% if form.model and form.model.canAddMoreRows() %}
+            <div id="add-event-container" class="form-group">
+              {{ linkButton('Add a debt', 'action[addRow]', 'button button-secondary') }}
+            </div>
+            {% endif %}
+
+          </div>
+
+          {{
+            radioOption(form = form, label = 'No', name = 'hasAnyDebts', value = 'false', checked = form.valueFor('hasAnyDebts') === false)
+          }}
+        </fieldset>
+      </div>
+
+      {{ saveAndContinueButton() }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}
