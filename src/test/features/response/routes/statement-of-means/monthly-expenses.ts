@@ -14,11 +14,11 @@ import { app } from '../../../../../main/app'
 import { checkNotDefendantInCaseGuard } from '../checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = StatementOfMeansPaths.monthlyIncomePage.evaluateUri(
+const pagePath: string = StatementOfMeansPaths.monthlyExpensesPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
 
-describe('Defendant response: Statement of means: monthly-income', () => {
+describe('Defendant response: Statement of means: monthly-expenses', () => {
 
   attachDefaultHooks(app)
 
@@ -65,7 +65,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Monthly income'))
+            .expect(res => expect(res).to.be.successful.withText('Monthly expenses'))
         })
       })
     })
@@ -118,22 +118,23 @@ describe('Defendant response: Statement of means: monthly-income', () => {
           await request(app)
             .post(pagePath)
             .send({
-              salary: '1',
-              universalCredit: '1',
-              jobSeekerAllowanceIncome: '1',
-              jobSeekerAllowanceContribution: '1',
-              incomeSupport: '1',
-              workingTaxCredit: '1',
-              childTaxCredit: '1',
-              childBenefit: '1',
-              councilTaxSupport: '1',
-              pension: '1',
-              maintenance: '1',
-              rows: [{ amount: '10', description: 'bla bla bla' }]
+              mortgage: 1,
+              rent: 1,
+              councilTax: 1,
+              gas: 1,
+              electricity: 1,
+              water: 1,
+              travel: 1,
+              schoolCosts: 1,
+              foodAndHousekeeping: 1,
+              tvAndBroadband: 1,
+              mobilePhone: 1,
+              maintenance: 1,
+              rows: [{ amount: 10, description: 'bla bla bla' }]
             })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.monthlyExpensesPage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.courtOrdersPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )
@@ -150,7 +151,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
             .post(pagePath)
             .send({ action: { addRow: 'Add row' } })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Monthly income'))
+            .expect(res => expect(res).to.be.successful.withText('Monthly expenses'))
         })
       })
     })
