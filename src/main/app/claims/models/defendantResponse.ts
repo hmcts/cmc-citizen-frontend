@@ -1,9 +1,9 @@
 import { PartyType } from 'app/common/partyType'
-import { Individual } from 'app/claims/models/details/theirs/individual'
-import { Company } from 'app/claims/models/details/theirs/company'
-import { SoleTrader } from 'app/claims/models/details/theirs/soleTrader'
-import { Organisation } from 'app/claims/models/details/theirs/organisation'
-import { TheirDetails } from 'app/claims/models/details/theirs/theirDetails'
+import { Party } from 'app/claims/models/details/yours/party'
+import { Individual } from 'app/claims/models/details/yours/individual'
+import { Company } from 'app/claims/models/details/yours/company'
+import { SoleTrader } from 'app/claims/models/details/yours/soleTrader'
+import { Organisation } from 'app/claims/models/details/yours/organisation'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
 export type DefenceType
@@ -15,10 +15,28 @@ export class DefendantResponse {
   defenceType: DefenceType
   defence: string
   freeMediation: string
-  defendant: TheirDetails
+  moreTimeNeeded?: string
+  defendant: Party
   statementOfTruth?: StatementOfTruth
 
-  private static deserializeDefendantDetails (defendant: any): TheirDetails {
+  constructor (
+    defenceType?: DefenceType,
+    defence?: string,
+    freeMediation?: string,
+    moreTimeNeeded?: string,
+    defendant?: Party,
+    statementOfTruth?: StatementOfTruth
+  ) {
+    this.responseType = 'FULL_DEFENCE'
+    this.defenceType = defenceType
+    this.defence = defence
+    this.freeMediation = freeMediation
+    this.moreTimeNeeded = moreTimeNeeded
+    this.defendant = defendant
+    this.statementOfTruth = statementOfTruth
+  }
+
+  private static deserializeDefendantDetails (defendant: any): Party {
     if (defendant) {
       switch (defendant.type) {
         case PartyType.INDIVIDUAL.value:
@@ -42,6 +60,7 @@ export class DefendantResponse {
       this.defenceType = input.defenceType
       this.defence = input.defence
       this.freeMediation = input.freeMediation
+      this.moreTimeNeeded = input.moreTimeNeeded
       this.defendant = DefendantResponse.deserializeDefendantDetails(input.defendant)
       if (input.statementOfTruth) {
         this.statementOfTruth = new StatementOfTruth().deserialize(input.statementOfTruth)
