@@ -1,7 +1,9 @@
+import { ApiLogger } from 'logging/apiLogger'
+
 const httpCallMethods = ['get', 'post', 'put', 'patch', 'delete', 'del', 'head']
 
 export class RequestLoggingHandler {
-  constructor (private request, private apiLogger) {
+  constructor (private request, private apiLogger = new ApiLogger()) {
   }
 
   get (target, key) {
