@@ -4,8 +4,9 @@ import { Claim } from 'app/claims/models/claim'
 import { Paths } from 'response/paths'
 import { User } from 'app/idam/user'
 import { TaskListBuilder } from 'response/helpers/taskListBuilder'
+import { Logger } from '@hmcts/nodejs-logging'
 
-const logger = require('@hmcts/nodejs-logging').getLogger('router/response/check-and-send')
+const logger = Logger.getLogger('router/response/check-and-send')
 
 export class AllResponseTasksCompletedGuard {
 

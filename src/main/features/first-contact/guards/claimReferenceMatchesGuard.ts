@@ -5,8 +5,9 @@ import { Claim } from 'app/claims/models/claim'
 import { ClaimStoreClient } from 'app/claims/claimStoreClient'
 import { ErrorPaths } from 'first-contact/paths'
 import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
+import { Logger } from '@hmcts/nodejs-logging'
 
-const logger = require('@hmcts/nodejs-logging').getLogger('first-contact/guards/claimReferenceMatchesGuard')
+const logger = Logger.getLogger('first-contact/guards/claimReferenceMatchesGuard')
 
 const oauthEnabled = toBoolean(config.get('featureToggles.idamOauth'))
 

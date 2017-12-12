@@ -1,6 +1,4 @@
-import * as logging from '@hmcts/nodejs-logging'
-
-const RequestTracing = logging.RequestTracing
+import { RequestTracing } from '@hmcts/nodejs-logging'
 
 const httpCallMethods = ['get', 'post', 'put', 'patch', 'delete', 'del', 'head']
 
