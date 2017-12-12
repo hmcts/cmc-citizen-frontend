@@ -23,7 +23,8 @@ export class RequestLoggingHandler {
       method: method,
       uri: options.uri,
       requestBody: options.body,
-      query: options.qs
+      query: options.qs,
+      headers: options.headers
     })
     let originalCallback = intercept(options.callback)
     options.callback = (err, response, body) => {
@@ -32,7 +33,8 @@ export class RequestLoggingHandler {
         uri: options.uri,
         responseCode: ((response) ? response.statusCode : undefined),
         responseBody: body,
-        error: err
+        error: err,
+        requestHeaders: options.headers
       })
     }
   }

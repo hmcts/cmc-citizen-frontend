@@ -12,7 +12,11 @@ export class ApiLogger {
     return {
       message: `API: ${requestData.method} ${requestData.uri} ` +
       ((requestData.query) ? `| Query: ${this._stringifyObject(requestData.query)} ` : '') +
-      ((requestData.requestBody) ? `| Body: ${this._stringifyObject(requestData.requestBody)} ` : '')
+      ((requestData.requestBody) ? `| Body: ${this._stringifyObject(requestData.requestBody)} ` : '') +
+      ((requestData.headers) ? `| Headers: ${this._stringifyObject(requestData.headers)} ` : ''),
+      requestId: (requestData.headers) ? requestData.headers['Request-Id'] : '',
+      rootRequestId: (requestData.headers) ? requestData.headers['Root-Request-Id'] : '',
+      originRequestId: (requestData.headers) ? requestData.headers['Origin-Request-Id'] : ''
     }
   }
 
@@ -25,7 +29,10 @@ export class ApiLogger {
       message: `API: Response ${responseData.responseCode} from ${responseData.uri} ` +
       ((responseData.responseBody && this.isDebugLevel()) ? `| Body: ${this._stringifyObject(responseData.responseBody)} ` : '') +
       ((responseData.error) ? `| Error: ${this._stringifyObject(responseData.error)} ` : ''),
-      responseCode: responseData.responseCode
+      responseCode: responseData.responseCode,
+      requestId: (responseData.requestHeaders) ? responseData.requestHeaders['Request-Id'] : '',
+      rootRequestId: (responseData.requestHeaders) ? responseData.requestHeaders['Root-Request-Id'] : '',
+      originRequestId: (responseData.requestHeaders) ? responseData.requestHeaders['Origin-Request-Id'] : ''
     }
     return logMessage
   }

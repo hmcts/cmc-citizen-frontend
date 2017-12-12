@@ -1,4 +1,5 @@
 import { RequestLoggingHandler } from 'logging/requestPromiseLoggingHandler'
+import { RequestTracingHandler } from 'logging/requestTracingHandler'
 import { ApiLogger } from 'logging/apiLogger'
 import * as config from 'config'
 import * as requestBase from 'request'
@@ -14,7 +15,10 @@ const wrappedRequestPromise = requestPromise
     timeout: timeout
   })
 
-const request = new Proxy(wrappedRequestPromise, new RequestLoggingHandler(wrappedRequestPromise, logger))
-const requestNonPromise = new Proxy(requestBase, new RequestLoggingHandler(requestBase, logger))
+const requestPromiseWithLogging = new Proxy(wrappedRequestPromise, new RequestLoggingHandler(wrappedRequestPromise, logger))
+const requestBaseWithLogging = new Proxy(requestBase, new RequestLoggingHandler(requestBase, logger))
+
+const request = new Proxy(requestPromiseWithLogging, new RequestTracingHandler(wrappedRequestPromise))
+const requestNonPromise = new Proxy(requestBaseWithLogging, new RequestTracingHandler(requestBase))
 
 export { request, requestNonPromise }
