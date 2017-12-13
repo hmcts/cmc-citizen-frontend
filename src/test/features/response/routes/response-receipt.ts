@@ -12,7 +12,6 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import * as pdfServiceMock from '../../../http-mocks/pdf-service'
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
 
@@ -55,7 +54,7 @@ describe('Defendant response: receipt', () => {
 
       it('should return 500 and render error page when cannot generate PDF', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
-        pdfServiceMock.rejectGenerate('HTTP Error')
+        claimStoreServiceMock.rejectRetrieveDocument('HTTP Error')
 
         await request(app)
           .get(pagePath)
@@ -65,7 +64,7 @@ describe('Defendant response: receipt', () => {
 
       it('should return receipt when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
-        pdfServiceMock.resolveGenerate()
+        claimStoreServiceMock.resolveRetrieveDocument()
 
         await request(app)
           .get(pagePath)
