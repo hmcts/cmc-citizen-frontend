@@ -17,7 +17,6 @@ export default express.Router()
       async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
         const { externalId } = req.params
-        const claim: Claim = res.locals.user.claim
 
         documentsClient.getDefendantResponseCopyPDF(externalId)
           .on('response', (response: http.IncomingMessage) => {
@@ -30,6 +29,7 @@ export default express.Router()
             })
             response.on('end', () => {
               const pdf = Buffer.concat(buffers)
+              const claim: Claim = res.locals.user.claim
               res.writeHead(HttpStatus.OK, {
                 'Content-Type': 'application/pdf',
                 'Content-Disposition': `attachment; filename=${claim.claimNumber}-defendant-response-copy.pdf`,

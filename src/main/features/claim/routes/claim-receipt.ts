@@ -15,8 +15,6 @@ export default express.Router()
       async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
         const { externalId } = req.params
-        const claim: Claim = res.locals.user.claim
-
         documentsClient.getClaimIssueReceiptPDF(externalId)
           .on('response', (response: http.IncomingMessage) => {
             if (response.statusCode !== 200) {
@@ -27,6 +25,7 @@ export default express.Router()
               buffers.push(chunk)
             })
             response.on('end', () => {
+              const claim: Claim = res.locals.user.claim
               const pdf = Buffer.concat(buffers)
               res.writeHead(HttpStatus.OK, {
                 'Content-Type': 'application/pdf',
