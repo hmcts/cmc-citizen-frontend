@@ -7,7 +7,7 @@
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Is this claim against one individual or business?') }}</h1>
+      <h1 class="heading-large">{{ t('Is this claim against only one individual or business?') }}</h1>
       <p>{{ t('You can’t use this service if this claim is against more than one person or business.') }}</p>
 
       {% set name = 'singleDefendant' %}
@@ -19,7 +19,7 @@
 
         {{
           radioGroup(
-            'Is this claim against one individual or business?',
+            'Is this claim against only one individual or business?',
             name,
             [
               {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
