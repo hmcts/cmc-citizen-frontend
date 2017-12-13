@@ -23,7 +23,7 @@ function prepareResponseDraft (partyDetails: object) {
 }
 
 function prepareResponseData (party: object) {
-  return new Response().deserialize({
+  return Response.deserialize({
     ...entityTemplate,
     defendant: { ...party, email: 'user@example.com', mobilePhone: '0700000000' }
   })

@@ -51,7 +51,7 @@ export class Claim {
         this.defendantEmail = input.defendantEmail
       }
       if (input.response) {
-        this.response = new Response().deserialize(input.response)
+        this.response = Response.deserialize(input.response)
       }
       this.claimantEmail = input.submitterEmail
       this.countyCourtJudgment = new CountyCourtJudgment().deserialize(input.countyCourtJudgment)
