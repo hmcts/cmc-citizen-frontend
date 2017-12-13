@@ -9,10 +9,6 @@ script:
   - yarn test:routes
   - yarn test:a11y
   - yarn test:coverage-unit
-before_install:
-  - yarn global add greenkeeper-lockfile@1
-before_script: greenkeeper-lockfile-update
-after_script: greenkeeper-lockfile-upload
 after_success:
   - yarn test:codacy-upload
   - yarn test:codecov-upload
