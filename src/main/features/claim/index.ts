@@ -25,11 +25,11 @@ export class Feature {
   enableFor (app: express.Express) {
     app.all('/claim/*', claimIssueRequestHandler())
     app.all(
-      /^\/claim\/(?!start|amount-exceeded|.+\/confirmation|.+\/receipt|.+\/defendant-response|eligibility$|eligibility\/eligible).*$/,
+      /^\/claim\/(?!start|amount-exceeded|.+\/confirmation|.+\/receipt|.+\/eligibility$|eligibility\/eligible).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'claim', 100, (value: any): DraftClaim => {
         return new DraftClaim().deserialize(value)
       }))
-    app.all(/^\/claim\/.+\/(receipt|defendant-response)$/, ClaimMiddleware.retrieveByExternalId)
+    app.all(/^\/claim\/.+\/receipt$/, ClaimMiddleware.retrieveByExternalId)
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }
 }
