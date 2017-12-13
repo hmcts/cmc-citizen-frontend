@@ -1,6 +1,5 @@
 import { ApiLogger } from 'logging/apiLogger'
-
-const httpCallMethods = ['get', 'post', 'put', 'patch', 'delete', 'del', 'head']
+import { HttpProxyCallInterceptor } from 'logging/httpProxyCallInterceptor'
 
 export class RequestLoggingHandler {
   constructor (private request, private apiLogger = new ApiLogger()) {
@@ -14,15 +13,9 @@ export class RequestLoggingHandler {
   }
 
   get (target, key) {
-    if (httpCallMethods.includes(key)) {
-      const originalMethod = target[key]
-      return (...args) => {
-        this.handleLogging(key.toUpperCase(), asOptions(args[0]))
-        return originalMethod.apply(this.request, args)
-      }
-    } else {
-      return target[key]
-    }
+    return HttpProxyCallInterceptor.intercept(target, key, (callTarget: Object, methodName: string, methodArgs: any[]) => {
+      this.handleLogging(methodName.toUpperCase(), asOptions(methodArgs[0]))
+    })
   }
 
   handleLogging (method, options) {

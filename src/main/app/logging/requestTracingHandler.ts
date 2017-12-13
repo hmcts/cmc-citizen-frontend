@@ -1,6 +1,5 @@
 import { RequestTracing, RequestTracingHeaders as Headers } from '@hmcts/nodejs-logging'
-
-const httpCallMethods = ['get', 'post', 'put', 'patch', 'delete', 'del', 'head']
+import { HttpProxyCallInterceptor } from 'logging/httpProxyCallInterceptor'
 
 export class RequestTracingHandler {
   constructor (private request, private requestTracing = RequestTracing) {
@@ -14,15 +13,9 @@ export class RequestTracingHandler {
   }
 
   get (target, key) {
-    if (httpCallMethods.includes(key)) {
-      const originalMethod = target[key]
-      return (...args) => {
-        this.setTracingHeaders(args)
-        return originalMethod.apply(this.request, args)
-      }
-    } else {
-      return target[key]
-    }
+    return HttpProxyCallInterceptor.intercept(target, key, (callTarget: Object, methodName: string, methodArgs: any[]) => {
+      this.setTracingHeaders(methodArgs)
+    })
   }
 
   private setTracingHeaders (args: any[]): void {
