@@ -52,9 +52,9 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(cookieParser())
 
-// if (!developmentMode) {
-app.use(Express.accessLogger())
-// }
+if (!developmentMode) {
+  app.use(Express.accessLogger())
+}
 
 app.use(express.static(path.join(__dirname, 'public')))
 
