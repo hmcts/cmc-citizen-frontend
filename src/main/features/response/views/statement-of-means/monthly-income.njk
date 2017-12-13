@@ -50,14 +50,15 @@
       {{ poundInput(label = 'Maintenance payments (paid to you)', name = 'maintenance', form = form) }}
 
       <div class="statement-of-means-container">
+        {% if form.model and form.model.rows.length > 0 %}
         <div class="multiline">
           <div class="multiline-rows">
             <div class="triple-column mobile-hide">
               <div class="column-1 mobile-hide">
-                <label class="form-label-bold">{{ t('What') }}</label>
+                <label class="form-label-bold">{{ t('Description of income') }}</label>
               </div>
               <div class="column-4 mobile-hide">
-                <label class="form-label-bold">{{ t('How much') }}</label>
+                <label class="form-label-bold">{{ t('Amount') }}</label>
               </div>
             </div>
 
@@ -66,6 +67,7 @@
             {% endfor %}
           </div>
         </div>
+        {% endif %}
 
         {% if form.model and form.model.canAddMoreRows() %}
           <div id="add-event-container" class="form-group">

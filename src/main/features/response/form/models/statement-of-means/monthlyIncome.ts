@@ -1,11 +1,13 @@
 import { AmountDescriptionRow } from 'features/response/form/models/statement-of-means/amountDescriptionRow'
 import { MultiRowForm } from 'forms/models/multiRowForm'
 import { toNumberOrUndefined } from 'common/utils/numericUtils'
-import { IsDefined, Min } from 'class-validator'
+import { IsDefined } from 'class-validator'
 import { Fractions } from 'forms/validation/validators/fractions'
+import { Min } from 'forms/validation/validators/min'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 export const MAX_NUMBER_OF_ROWS: number = 10
+export const INIT_ROW_COUNT: number = 0
 
 export class MonthlyIncome extends MultiRowForm<AmountDescriptionRow> {
 
@@ -133,6 +135,10 @@ export class MonthlyIncome extends MultiRowForm<AmountDescriptionRow> {
     }
 
     return this
+  }
+
+  getInitialNumberOfRows (): number {
+    return INIT_ROW_COUNT
   }
 
   getMaxNumberOfRows (): number {
