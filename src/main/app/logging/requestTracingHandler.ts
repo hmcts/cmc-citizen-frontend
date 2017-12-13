@@ -14,7 +14,7 @@ export class RequestTracingHandler {
   }
 
   get (target, key) {
-    if (contains(httpCallMethods, key)) {
+    if (httpCallMethods.includes(key)) {
       const originalMethod = target[key]
       return (...args) => {
         this.setTracingHeaders(args)
@@ -54,8 +54,4 @@ export class RequestTracingHandler {
     headers[Headers.REQUEST_ID_HEADER] = this.requestTracing.createNextRequestId()
     headers[Headers.ORIGIN_REQUEST_ID_HEADER] = this.requestTracing.getCurrentRequestId()
   }
-}
-
-function contains (array, value) {
-  return array.indexOf(value) >= 0
 }

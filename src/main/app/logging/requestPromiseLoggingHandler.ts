@@ -14,7 +14,7 @@ export class RequestLoggingHandler {
   }
 
   get (target, key) {
-    if (contains(httpCallMethods, key)) {
+    if (httpCallMethods.includes(key)) {
       const originalMethod = target[key]
       return (...args) => {
         this.handleLogging(key.toUpperCase(), asOptions(args[0]))
@@ -45,10 +45,6 @@ export class RequestLoggingHandler {
       })
     }
   }
-}
-
-function contains (array, value) {
-  return array.indexOf(value) >= 0
 }
 
 /**
