@@ -25,31 +25,45 @@ export class RequestTracingHandler {
     }
   }
 
-  private setTracingHeaders (args: any): void {
+  private setTracingHeaders (args: any[]): void {
     const firstArg = args[0]
     if (typeof firstArg === 'string' || firstArg instanceof String) {
-      let options
-      if (args[1] !== undefined) {
-        options = args[1]
-      } else {
-        options = { }
-      }
-      options.uri = firstArg
-      if (options.headers === undefined) {
-        options['headers'] = { }
-      }
-      this.setTracingHeadersInternal(options.headers)
-      args[0] = options
-      delete args[1]
+      this.handleURIStringAsFirstArgumentCall(args)
     } else {
-      if (firstArg.headers === undefined) {
-        firstArg['headers'] = { }
-      }
-      this.setTracingHeadersInternal(firstArg.headers)
+      this.handleOptionsAsFirstArgumentCall(args)
     }
   }
 
-  private setTracingHeadersInternal (headers: any): void {
+  private handleURIStringAsFirstArgumentCall (args: any[]): void {
+    const options = this.extractOptionsObject(args)
+    options.uri = args[0]
+    if (options.headers === undefined) {
+      options['headers'] = { }
+    }
+    this.addTracingHeaders(options.headers)
+    args[0] = options
+  }
+
+  private extractOptionsObject (args: any[]): any {
+    let options
+    if (args[1] !== undefined) {
+      options = args[1]
+      delete args[1]
+    } else {
+      options = { }
+    }
+    return options
+  }
+
+  private handleOptionsAsFirstArgumentCall (args: any[]): void {
+    const options = args[0]
+    if (options.headers === undefined) {
+      options['headers'] = { }
+    }
+    this.addTracingHeaders(options.headers)
+  }
+
+  private addTracingHeaders (headers: any): void {
     headers[Headers.ROOT_REQUEST_ID_HEADER] = this.requestTracing.getRootRequestId()
     headers[Headers.REQUEST_ID_HEADER] = this.requestTracing.createNextRequestId()
     headers[Headers.ORIGIN_REQUEST_ID_HEADER] = this.requestTracing.getCurrentRequestId()
