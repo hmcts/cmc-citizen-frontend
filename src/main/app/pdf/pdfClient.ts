@@ -1,7 +1,7 @@
 import * as config from 'config'
 import * as fs from 'fs'
-import * as http from 'http'
 import { requestNonPromise } from 'client/request'
+import { Request } from 'request'
 
 const pdfServiceBaseUrl = config.get<string>('pdf-service.url')
 const pdfServiceVersion = config.get<string>('pdf-service.apiVersion')
@@ -12,7 +12,7 @@ export class PdfClient {
     this.pdfUrl = pdfUrl
   }
 
-  generate (templatePath: string, data: object): http.IncomingMessage {
+  generate (templatePath: string, data: object): Request {
     return requestNonPromise.post({
       uri: this.pdfUrl,
       formData: {

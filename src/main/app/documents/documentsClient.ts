@@ -1,7 +1,7 @@
 import * as config from 'config'
-import { requestNonPromise } from 'app/client/request'
-import * as http from 'http'
-import { StringUtils } from 'app/utils/stringUtils'
+import { requestNonPromise } from 'client/request'
+import { Request } from 'request'
+import { StringUtils } from 'utils/stringUtils'
 
 const claimStoreBaseUrl = config.get<string>('claim-store.url')
 
@@ -10,7 +10,7 @@ export class DocumentsClient {
   constructor (public documentsUrl: string = `${claimStoreBaseUrl}/documents`) {
   }
 
-  getResponseCopy (claimExternalId: string): http.IncomingMessage {
+  getResponseCopy (claimExternalId: string): Request {
     if (StringUtils.isBlank(claimExternalId)) {
       throw new Error('Claim external ID cannot be blank')
     }
@@ -19,7 +19,7 @@ export class DocumentsClient {
     })
   }
 
-  getSettlementAgreementCopy (claimExternalId: string): http.IncomingMessage {
+  getSettlementAgreementCopy (claimExternalId: string): Request {
     if (StringUtils.isBlank(claimExternalId)) {
       throw new Error('Claim external ID cannot be blank')
     }
