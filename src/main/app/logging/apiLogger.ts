@@ -1,4 +1,4 @@
-import { Logger, LoggingConfig } from '@hmcts/nodejs-logging'
+import { Logger, LoggingConfig, RequestTracingHeaders as Headers } from '@hmcts/nodejs-logging'
 
 export class ApiLogger {
   constructor (public logger = Logger.getLogger('apiLogger.js'), public loggingConfig = LoggingConfig.logging) {
@@ -11,13 +11,14 @@ export class ApiLogger {
   }
 
   _buildRequestEntry (requestData) {
-    return {
+    const logEntry = {
       message: `API: ${requestData.method} ${requestData.uri} ` +
       ((requestData.query) ? `| Query: ${this._stringifyObject(requestData.query)} ` : '') +
-      ((requestData.requestBody) ? `| Body: ${this._stringifyObject(requestData.requestBody)} ` : ''),
-      requestId: requestData.headers['Request-Id'],
-      rootRequestId: requestData.headers['Root-Request-Id'],
-      originRequestId: requestData.headers['Origin-Request-Id']
+      ((requestData.requestBody) ? `| Body: ${this._stringifyObject(requestData.requestBody)} ` : '')
+    }
+    return {
+      ...logEntry,
+      ...this.tracingInformation(requestData.headers)
     }
   }
 
@@ -30,12 +31,12 @@ export class ApiLogger {
       message: `API: Response ${responseData.responseCode} from ${responseData.uri} ` +
       ((responseData.responseBody && this.isDebugLevel()) ? `| Body: ${this._stringifyObject(responseData.responseBody)} ` : '') +
       ((responseData.error) ? `| Error: ${this._stringifyObject(responseData.error)} ` : ''),
-      responseCode: responseData.responseCode,
-      requestId: responseData.requestHeaders['Request-Id'],
-      rootRequestId: responseData.requestHeaders['Root-Request-Id'],
-      originRequestId: responseData.requestHeaders['Origin-Request-Id']
+      responseCode: responseData.responseCode
     }
-    return logMessage
+    return {
+      ...logMessage,
+      ...this.tracingInformation(responseData.requestHeaders)
+    }
   }
 
   _stringifyObject (object) {
@@ -67,5 +68,15 @@ export class ApiLogger {
   private resolveLoggingLevel () {
     const currentLevel = process.env.LOG_LEVEL || 'INFO'
     return currentLevel.toUpperCase()
+  }
+
+  private tracingInformation (headers) {
+    const fields = { }
+    if (headers) {
+      fields['requestId'] = headers[Headers.REQUEST_ID_HEADER]
+      fields['rootRequestId'] = headers[Headers.ROOT_REQUEST_ID_HEADER]
+      fields['originRequestId'] = headers[Headers.ORIGIN_REQUEST_ID_HEADER]
+    }
+    return fields
   }
 }
