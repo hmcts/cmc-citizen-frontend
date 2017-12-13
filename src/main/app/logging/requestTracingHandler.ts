@@ -3,17 +3,17 @@ import { HttpProxyCallInterceptor } from 'logging/httpProxyCallInterceptor'
 import { RequestAPI } from 'client/request'
 
 export class RequestTracingHandler {
-  constructor (private request, private requestTracing = RequestTracing) {
+  constructor (private request: RequestAPI, private requestTracing = RequestTracing) {
     if (!this.request) {
       throw new Error('Initialised request instance is required')
     }
   }
 
   static proxy<T extends RequestAPI> (request: T): T {
-    return new Proxy(request, new RequestTracingHandler(request))
+    return new Proxy(request, new RequestTracingHandler(request)) as T
   }
 
-  get (target, key) {
+  get (target: Object, key: string) {
     return HttpProxyCallInterceptor.intercept(target, key, (callTarget: Object, methodName: string, methodArgs: any[]) => {
       this.setTracingHeaders(methodArgs)
     })
