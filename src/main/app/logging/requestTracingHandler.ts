@@ -1,5 +1,6 @@
 import { RequestTracing, RequestTracingHeaders as Headers } from '@hmcts/nodejs-logging'
 import { HttpProxyCallInterceptor } from 'logging/httpProxyCallInterceptor'
+import { RequestAPI } from 'client/request'
 
 export class RequestTracingHandler {
   constructor (private request, private requestTracing = RequestTracing) {
@@ -8,7 +9,7 @@ export class RequestTracingHandler {
     }
   }
 
-  static proxy (request) {
+  static proxy<T extends RequestAPI> (request: T): T {
     return new Proxy(request, new RequestTracingHandler(request))
   }
 

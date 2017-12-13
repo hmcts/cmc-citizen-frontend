@@ -1,5 +1,6 @@
 import { ApiLogger } from 'logging/apiLogger'
 import { HttpProxyCallInterceptor } from 'logging/httpProxyCallInterceptor'
+import { RequestAPI } from 'client/request'
 
 export class RequestLoggingHandler {
   constructor (private request, private apiLogger = new ApiLogger()) {
@@ -8,7 +9,7 @@ export class RequestLoggingHandler {
     }
   }
 
-  static proxy (request) {
+  static proxy<T extends RequestAPI> (request: T): T {
     return new Proxy(request, new RequestLoggingHandler(request))
   }
 
