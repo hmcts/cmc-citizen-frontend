@@ -5,14 +5,14 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'app/forms/validation/formValidator'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
-import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
+import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
 import { User } from 'idam/user'
 import { RoutablePath } from 'common/router/routablePath'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 
-const page: RoutablePath = StatementOfMeansPaths.monthlyIncomePage
+const page: RoutablePath = StatementOfMeansPaths.monthlyExpensesPage
 
-function renderView (form: Form<MonthlyIncome>, res: express.Response): void {
+function renderView (form: Form<MonthlyExpenses>, res: express.Response): void {
   res.render(page.associatedView, {
     form: form
   })
@@ -20,7 +20,7 @@ function renderView (form: Form<MonthlyIncome>, res: express.Response): void {
 
 function actionHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
   if (req.body.action) {
-    const form: Form<MonthlyIncome> = req.body
+    const form: Form<MonthlyExpenses> = req.body
     if (req.body.action.addRow) {
       form.model.appendRow()
     }
@@ -36,15 +36,15 @@ export default express.Router()
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const user: User = res.locals.user
-      renderView(new Form(user.responseDraft.document.statementOfMeans.monthlyIncome), res)
+      renderView(new Form(user.responseDraft.document.statementOfMeans.monthlyExpenses), res)
     })
   .post(
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
-    FormValidator.requestHandler(MonthlyIncome, MonthlyIncome.fromObject, undefined, ['addRow']),
+    FormValidator.requestHandler(MonthlyExpenses, MonthlyExpenses.fromObject, undefined, ['addRow']),
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<MonthlyIncome> = req.body
+      const form: Form<MonthlyExpenses> = req.body
       const user: User = res.locals.user
       const { externalId } = req.params
 
@@ -52,10 +52,10 @@ export default express.Router()
         renderView(form, res)
       } else {
         form.model.removeExcessRows()
-        user.responseDraft.document.statementOfMeans.monthlyIncome = form.model
+        user.responseDraft.document.statementOfMeans.monthlyExpenses = form.model
 
         await new DraftService().save(user.responseDraft, user.bearerToken)
-        res.redirect(StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: externalId }))
+        res.redirect(StatementOfMeansPaths.courtOrdersPage.evaluateUri({ externalId: externalId }))
       }
     })
   )

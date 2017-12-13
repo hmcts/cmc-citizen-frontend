@@ -2,9 +2,9 @@
 {% from "form.njk" import csrfProtection, textInputInline, poundInputInline, poundInput, linkButton, saveAndContinueButton, errorSummary %}
 
 {% set title = t('Money claim') %}
-{% set heading = t('Monthly income') %}
+{% set heading = t('Monthly expenses') %}
 
-{% macro incomeRow(index, form) %}
+{% macro expenseRow(index, form) %}
 
   {% set prefix = 'rows[' + index + ']' %}
 
@@ -22,7 +22,7 @@
     {% if amountError %}<span id="{{ amountKey }}[label]" class="error-message">{{ t(amountError) }}</span>{% endif %}
     {% if descriptionError %}<span id="{{ descriptionKey }}[label]" class="error-message">{{ t(descriptionError) }}</span>{% endif %}
 
-    <label class="form-label-bold mobile-show" for="{{ amountKey }}">{{ index + 1 }} {{ t('. What') }}</label>
+    <label class="form-label-bold mobile-show" for="{{ descriptionKey }}">{{ index + 1 }} {{ t('. What') }}</label>
     {{ textInputInline(name = descriptionKey, form = form, inputClass='column-1') }}
     {{ poundInputInline(name = amountKey, label = (index + 1) + '. How much?', form = form) }}
 
@@ -37,17 +37,18 @@
     <form method="post" novalidate>
       {{ csrfProtection(csrf) }}
 
-      {{ poundInput(label = 'Salary (take home pay)', name = 'salary', form = form, hint = 'Include overtime, commission, bonuses') }}
-      {{ poundInput(label = 'Universal Credit', name = 'universalCredit', form = form) }}
-      {{ poundInput(label = 'Jobseeker’s Allowance (income based)', name = 'jobSeekerAllowanceIncome', form = form) }}
-      {{ poundInput(label = 'Jobseeker’s Allowance (contribution based)', name = 'jobSeekerAllowanceContribution', form = form) }}
-      {{ poundInput(label = 'Income Support', name = 'incomeSupport', form = form) }}
-      {{ poundInput(label = 'Working Tax Credit', name = 'workingTaxCredit', form = form) }}
-      {{ poundInput(label = 'Child Tax Credit', name = 'childTaxCredit', form = form) }}
-      {{ poundInput(label = 'Child Benefit', name = 'childBenefit', form = form) }}
-      {{ poundInput(label = 'Council Tax Support', name = 'councilTaxSupport', form = form) }}
-      {{ poundInput(label = 'Pension (paid to you)', name = 'pension', form = form) }}
-      {{ poundInput(label = 'Maintenance payments (paid to you)', name = 'maintenance', form = form) }}
+      {{ poundInput(label = 'Mortgage', name = 'mortgage', form = form, hint = 'Include all mortgages') }}
+      {{ poundInput(label = 'Rent', name = 'rent', form = form) }}
+      {{ poundInput(label = 'Council Tax', name = 'councilTax', form = form) }}
+      {{ poundInput(label = 'Gas', name = 'gas', form = form) }}
+      {{ poundInput(label = 'Electricity', name = 'electricity', form = form) }}
+      {{ poundInput(label = 'Water', name = 'water', form = form) }}
+      {{ poundInput(label = 'Travel (school or work)', name = 'travel', form = form) }}
+      {{ poundInput(label = 'School costs (include clothing)', name = 'schoolCosts', form = form) }}
+      {{ poundInput(label = 'Food and Housekeeping', name = 'foodAndHousekeeping', form = form) }}
+      {{ poundInput(label = 'TV and Broadband', name = 'tvAndBroadband', form = form) }}
+      {{ poundInput(label = 'Mobile phone', name = 'mobilePhone', form = form) }}
+      {{ poundInput(label = 'Maintenance payments', name = 'maintenance', form = form) }}
 
       <div class="statement-of-means-container">
         <div class="multiline">
@@ -62,7 +63,7 @@
             </div>
 
             {% for row in form.model.rows %}
-              {{ incomeRow(loop.index0, form) }}
+              {{ expenseRow(loop.index0, form) }}
             {% endfor %}
           </div>
         </div>
