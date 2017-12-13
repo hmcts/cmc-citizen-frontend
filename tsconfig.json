@@ -11,6 +11,7 @@
       "dom"
     ],
     "target": "es6",
+    "module": "commonjs",
     "baseUrl": "src/main",
     "paths": {
       "app/*": [
