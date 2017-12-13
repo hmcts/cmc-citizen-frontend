@@ -146,6 +146,21 @@ const sampleResponseDraftObj = {
       maintenance: 1,
       rows: [{ amount: 10, description: 'bla bla bla' }]
     },
+    monthlyExpenses: {
+      mortgage: 1,
+      rent: 1,
+      councilTax: 1,
+      gas: 1,
+      electricity: 1,
+      water: 1,
+      travel: 1,
+      schoolCosts: 1,
+      foodAndHousekeeping: 1,
+      tvAndBroadband: 1,
+      mobilePhone: 1,
+      maintenance: 1,
+      rows: [{ amount: 10, description: 'bla bla bla' }]
+    },
     courtOrders: { hasAnyCourtOrders: false }
   },
   defendantPaymentOption: {
