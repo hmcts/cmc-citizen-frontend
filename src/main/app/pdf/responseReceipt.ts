@@ -30,7 +30,7 @@ export class ResponseReceipt {
         this.claim.claimantEmail
       ),
       defendant: DefendantMapper.createDefendantDetails(
-        this.claim.response.defendantDetails,
+        this.claim.response.defendant,
         this.claim.defendantEmail
       ),
       responseDashboardUrl: this.responseDashboardUrl
