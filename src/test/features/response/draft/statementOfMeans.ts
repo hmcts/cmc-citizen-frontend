@@ -109,7 +109,7 @@ describe('StatementOfMeans', () => {
     context('when response is full admission', () => {
       const responseDraft: ResponseDraft = {
         response: {
-          type: ResponseType.OWE_ALL_PAID_NONE
+          type: ResponseType.FULL_ADMISSION
         }
       } as ResponseDraft
 
@@ -119,7 +119,7 @@ describe('StatementOfMeans', () => {
     context('when response is part admission - claim amount too much', () => {
       const responseDraft: ResponseDraft = {
         response: {
-          type: ResponseType.OWE_SOME_PAID_NONE
+          type: ResponseType.PART_ADMISSION
         },
         rejectPartOfClaim: new RejectPartOfClaim(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
       } as ResponseDraft
@@ -130,7 +130,7 @@ describe('StatementOfMeans', () => {
     context('when response is part admission - I paid what I believe I owe', () => {
       const responseDraft: ResponseDraft = {
         response: {
-          type: ResponseType.OWE_SOME_PAID_NONE
+          type: ResponseType.PART_ADMISSION
         },
         rejectPartOfClaim: new RejectPartOfClaim(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)
       } as ResponseDraft
@@ -141,7 +141,7 @@ describe('StatementOfMeans', () => {
     context('when response is rejection', () => {
       const responseDraft: ResponseDraft = {
         response: {
-          type: ResponseType.OWE_NONE
+          type: ResponseType.DEFENCE
         }
       } as ResponseDraft
 

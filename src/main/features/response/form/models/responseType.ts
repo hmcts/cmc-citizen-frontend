@@ -1,7 +1,7 @@
 export class ResponseType {
-  static readonly OWE_ALL_PAID_NONE = new ResponseType('OWE_ALL_PAID_NONE', 'I admit all of the claim')
-  static readonly OWE_SOME_PAID_NONE = new ResponseType('OWE_SOME_PAID_NONE', 'I reject part of the claim')
-  static readonly OWE_NONE = new ResponseType('OWE_NONE', 'I reject all of the claim')
+  static readonly FULL_ADMISSION = new ResponseType('FULL_ADMISSION', 'I admit all of the claim')
+  static readonly PART_ADMISSION = new ResponseType('PART_ADMISSION', 'I reject part of the claim')
+  static readonly DEFENCE = new ResponseType('DEFENCE', 'I reject all of the claim')
 
   readonly value: string
   readonly displayValue: string
@@ -13,9 +13,9 @@ export class ResponseType {
 
   static all (): ResponseType[] {
     return [
-      ResponseType.OWE_ALL_PAID_NONE,
-      ResponseType.OWE_SOME_PAID_NONE,
-      ResponseType.OWE_NONE
+      ResponseType.FULL_ADMISSION,
+      ResponseType.PART_ADMISSION,
+      ResponseType.DEFENCE
     ]
   }
 
