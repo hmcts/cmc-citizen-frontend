@@ -40,7 +40,7 @@ timestamps {
           stage('Setup') {
             sh '''
               yarn install
-              yarn copy-assets
+              yarn setup
             '''
           }
 
@@ -108,7 +108,6 @@ timestamps {
             'TESTS_TAG'               : '@citizen'
           ])
         }
-
 
         onMaster {
           stage('Package application (RPM)') {
