@@ -10,6 +10,10 @@ import { RequestTracingHeaders as Headers } from '@hmcts/nodejs-logging'
 
 import { RequestTracingHandler } from 'logging/requestTracingHandler'
 
+function httpMethods (requestPromise) {
+  return Object.keys(requestPromise).filter((method) => method !== 'otherMethod')
+}
+
 describe('RequestTracingHandler', () => {
   const existingHeaders = {
     'Existing-Header': 'Some value'
@@ -22,7 +26,8 @@ describe('RequestTracingHandler', () => {
     del: sinon.stub(),
     delete: sinon.stub(),
     patch: sinon.stub(),
-    head: sinon.stub()
+    head: sinon.stub(),
+    otherMethod: sinon.stub()
   }
 
   const MockedRequestTracing = {
@@ -51,9 +56,13 @@ describe('RequestTracingHandler', () => {
     expect(() => new RequestTracingHandler(undefined)).to.throw(Error)
   })
 
+  it('should not alter the call when calling a non-http method function', () => {
+    proxy.otherMethod(123, '456', [789])
+    expect(proxy.otherMethod).to.have.been.calledWith(123, '456', [789])
+  })
+
   context('when calling the proxy by providing URI as a string', () => {
-    Object
-      .keys(requestPromise)
+    httpMethods(requestPromise)
       .forEach((httpMethod) => {
         it(`should pass tracing headers to the internal object on ${httpMethod} call`, () => {
           proxy[httpMethod]('http://google.com')
@@ -65,40 +74,42 @@ describe('RequestTracingHandler', () => {
       })
   })
 
-  context('when calling the proxy by providing options object with existing headers', () => {
-    Object
-      .keys(requestPromise)
+  context('when calling the proxy by providing options object with existing properties', () => {
+    httpMethods(requestPromise)
       .forEach((httpMethod) => {
         it(`should add tracing headers to the internal object on ${httpMethod} call`, () => {
           proxy[httpMethod]({
             uri: 'http://google.com',
-            headers: existingHeaders
+            headers: existingHeaders,
+            qs: '?key=value'
           })
           expect(requestPromise[httpMethod]).to.have.been.calledWith({
             uri: 'http://google.com',
             headers: {
               ...existingHeaders,
               ...tracingHeaders
-            }
+            },
+            qs: '?key=value'
           })
         })
       })
   })
 
-  context('when calling the proxy by providing URI string and options object with existing headers', () => {
-    Object
-      .keys(requestPromise)
+  context('when calling the proxy by providing URI string and options object with existing properties', () => {
+    httpMethods(requestPromise)
       .forEach((httpMethod) => {
         it(`should add tracing headers to the internal object on ${httpMethod} call`, () => {
           proxy[httpMethod]('http://google.com', {
-            headers: existingHeaders
+            headers: existingHeaders,
+            qs: '?key=value'
           })
           expect(requestPromise[httpMethod]).to.have.been.calledWith({
             uri: 'http://google.com',
             headers: {
               ...existingHeaders,
               ...tracingHeaders
-            }
+            },
+            qs: '?key=value'
           })
         })
       })
