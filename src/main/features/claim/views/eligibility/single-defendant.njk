@@ -1,16 +1,16 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 
-{% set title = t('Single Claimant | Money claim') %}
+{% set title = t('Single Defendant | Money claim') %}
 
 {% block content %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Are you the only person or business making this claim?') }}</h1>
-      <p>{{ t('You can’t use this service if more than one person or business is making this claim') }}</p>
+      <h1 class="heading-large">{{ t('Is this claim against one individual or business?') }}</h1>
+      <p>{{ t('You can’t use this service if this claim is against more than one person or business.') }}</p>
 
-      {% set name = 'singleClaimant' %}
+      {% set name = 'singleDefendant' %}
 
       <form novalidate method="post" class="analytics-submit-event-trigger"
             data-event-action="Eligibility: Select Yes"
@@ -19,7 +19,7 @@
 
         {{
           radioGroup(
-            'Are you the only person or business making the claim?',
+            'Is this claim against one individual or business?',
             name,
             [
               {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},

@@ -21,6 +21,9 @@ export class Eligibility {
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.SINGLE_CLAIMANT] })
   singleClaimant?: YesNoOption
 
+  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.SINGLE_DEFENDANT] })
+  singleDefendant?: YesNoOption
+
   @IsIn(YesNoOption.all(), {
     message: ValidationErrors.YES_NO_REQUIRED,
     groups: [ValidationGroups.GOVERNMENT_DEPARTMENT]
@@ -34,6 +37,7 @@ export class Eligibility {
                defendantAddress: YesNoOption,
                claimValue: ClaimValue,
                singleClaimant: YesNoOption,
+               singleDefendant: YesNoOption,
                eighteenOrOver: YesNoOption,
                governmentDepartment: YesNoOption,
                helpWithFees: YesNoOption) {
@@ -41,6 +45,7 @@ export class Eligibility {
     this.defendantAddress = defendantAddress
     this.claimValue = claimValue
     this.singleClaimant = singleClaimant
+    this.singleDefendant = singleDefendant
     this.eighteenOrOver = eighteenOrOver
     this.governmentDepartment = governmentDepartment
     this.helpWithFees = helpWithFees
@@ -52,6 +57,7 @@ export class Eligibility {
       YesNoOption.fromObject(input.defendantAddress),
       ClaimValue.fromObject(input.claimValue),
       YesNoOption.fromObject(input.singleClaimant),
+      YesNoOption.fromObject(input.singleDefendant),
       YesNoOption.fromObject(input.eighteenOrOver),
       YesNoOption.fromObject(input.governmentDepartment),
       YesNoOption.fromObject(input.helpWithFees))
@@ -70,6 +76,9 @@ export class Eligibility {
       }
       if (input.singleClaimant) {
         this.singleClaimant = YesNoOption.fromObject(input.singleClaimant.option)
+      }
+      if (input.singleDefendant) {
+        this.singleDefendant = YesNoOption.fromObject(input.singleDefendant.option)
       }
       if (input.eighteenOrOver) {
         this.eighteenOrOver = YesNoOption.fromObject(input.eighteenOrOver.option)
@@ -90,6 +99,7 @@ export class Eligibility {
       this.defendantAddress === YesNoOption.YES &&
       this.claimValue === ClaimValue.UNDER_10000 &&
       this.singleClaimant === YesNoOption.YES &&
+      this.singleDefendant === YesNoOption.YES &&
       this.eighteenOrOver === YesNoOption.YES &&
       this.governmentDepartment === YesNoOption.NO &&
       this.helpWithFees === YesNoOption.NO

@@ -20,6 +20,16 @@
           + '<a target="_blank" href="%s">form N1</a> ' + newWindow() + '.',
           { postProcess: 'sprintf', sprintf: [ n1FormUrl ]}) | safe }}
         </p>
+      {% elseif reason === NotEligibleReason.MULTIPLE_CLAIMANTS %}
+        <p>{{ t('[WIP CONTENT] Unavailable 1') }}</p>
+        <p>{{ t('This service is not eligible for multiple partys to be on one claim',
+          { postProcess: 'sprintf', sprintf: [ n1FormUrl ]}) | safe }}
+        </p>
+      {% elseif reason === NotEligibleReason.MULTIPLE_DEFENDANTS %}
+        <p>{{ t('[WIP CONTENT] Unavailable 2') }}</p>
+        <p>{{ t('This service is not eligible to claim against multiple partys in one claim',
+          { postProcess: 'sprintf', sprintf: [ n1FormUrl ]}) | safe }}
+        </p>
       {% elseif reason === NotEligibleReason.CLAIM_VALUE_OVER_10000 %}
         <p>{{ t('Claims including any interest must be under £10,000.') }}</p>
         <p>

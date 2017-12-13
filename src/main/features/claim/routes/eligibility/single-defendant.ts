@@ -13,18 +13,18 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
 
 function renderView (form: Form<Eligibility>, res: express.Response): void {
-  res.render(Paths.eligibilitySingleClaimantPage.associatedView, { form: form })
+  res.render(Paths.eligibilitySingleDefendantPage.associatedView, { form: form })
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.eligibilitySingleClaimantPage.uri, (req: express.Request, res: express.Response): void => {
+  .get(Paths.eligibilitySingleDefendantPage.uri, (req: express.Request, res: express.Response): void => {
     const user: User = res.locals.user
     renderView(new Form(user.claimDraft.document.eligibility), res)
   })
   .post(
-    Paths.eligibilitySingleClaimantPage.uri,
-    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.SINGLE_CLAIMANT),
+    Paths.eligibilitySingleDefendantPage.uri,
+    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.SINGLE_DEFENDANT),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Eligibility> = req.body
 
@@ -32,14 +32,14 @@ export default express.Router()
         renderView(form, res)
       } else {
         const user: User = res.locals.user
-        user.claimDraft.document.eligibility.singleClaimant = form.model.singleClaimant
+        user.claimDraft.document.eligibility.singleDefendant = form.model.singleDefendant
 
         await new DraftService().save(user.claimDraft, user.bearerToken)
 
-        if (user.claimDraft.document.eligibility.singleClaimant === YesNoOption.NO) {
-          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`)
+        if (user.claimDraft.document.eligibility.singleDefendant === YesNoOption.NO) {
+          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_DEFENDANTS}`)
         } else {
-          res.redirect(Paths.eligibilitySingleDefendantPage.uri)
+          res.redirect(Paths.eligibilityOver18Page.uri)
         }
       }
     })
