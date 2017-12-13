@@ -6,7 +6,7 @@ import { calculateInterest } from 'app/common/calculateInterest'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
-import { DefendantResponse } from 'claims/models/defendantResponse'
+import { Response } from 'claims/models/response'
 import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 import { Interest, InterestType } from 'claim/form/models/interest'
@@ -27,7 +27,7 @@ export class Claim {
   claimantEmail: string
   countyCourtJudgment: CountyCourtJudgment
   countyCourtJudgmentRequestedAt: Moment
-  response: DefendantResponse
+  response: Response
   defendantEmail: string
   settlement: Settlement
   settlementReachedAt: Moment
@@ -51,7 +51,7 @@ export class Claim {
         this.defendantEmail = input.defendantEmail
       }
       if (input.response) {
-        this.response = new DefendantResponse().deserialize(input.response)
+        this.response = Response.deserialize(input.response)
       }
       this.claimantEmail = input.submitterEmail
       this.countyCourtJudgment = new CountyCourtJudgment().deserialize(input.countyCourtJudgment)

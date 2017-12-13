@@ -105,7 +105,48 @@
 {% for account in draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly() %}
   {{ row('Type of account', account.typeOfAccount.displayValue, '', false ) }}
   {{ row('Balance', account.balance | numeral, '', false) }}
-  {{ row('Is joint', 'Yes' if account.isJoint else 'No', '', loop.index0 === indexOfLastRow ) }}
+  {{ row('Joint account', 'Yes' if account.isJoint else 'No', '', loop.index0 === indexOfLastRow ) }}
+{% endfor %}
+
+{% set income = draft.statementOfMeans.monthlyIncome %}
+{% set otherIncome = income.getPopulatedRowsOnly() %}
+{{ row('Monthly income', '', statementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), false) }}
+{{ row('Take home pay', income.salary | numeral, '', false) }}
+{{ row('Universal Credit', income.universalCredit | numeral, '', false) }}
+{{ row('Jobseeker’s Allowance (income based)', income.jobSeekerAllowanceIncome | numeral, '', false) }}
+{{ row('Jobseeker’s Allowance (contribution based)', income.jobSeekerAllowanceContribution | numeral, '', false) }}
+{{ row('Income Support', income.incomeSupport | numeral, '', false) }}
+{{ row('Working Tax Credit', income.workingTaxCredit | numeral, '', false) }}
+{{ row('Child Tax Credit', income.childTaxCredit | numeral, '', false) }}
+{{ row('Child Benefit', income.childBenefit | numeral, '', false) }}
+{{ row('Council Tax Support', income.councilTaxSupport | numeral, '', false) }}
+{{ row('Pension (paid to you)', income.pension | numeral, '', false) }}
+{{ row('Maintenance payments (paid to you)', income.maintenance | numeral, '', otherIncome.length === 0) }}
+
+{% set indexOfLastRow = otherIncome.length - 1 %}
+{% for incomeRow in otherIncome %}
+  {{ row(incomeRow.description, incomeRow.amount | numeral, '', loop.index0 === indexOfLastRow ) }}
+{% endfor %}
+
+{% set expenses = draft.statementOfMeans.monthlyExpenses %}
+{% set otherExpenses = expenses.getPopulatedRowsOnly() %}
+{{ row('Monthly expenses', '', statementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), false) }}
+{{ row('Mortgage', expenses.mortgage | numeral, '', false) }}
+{{ row('Rent', expenses.rent | numeral, '', false) }}
+{{ row('Council Tax', expenses.councilTax | numeral, '', false) }}
+{{ row('Gas', expenses.gas | numeral, '', false) }}
+{{ row('Electricity', expenses.electricity | numeral, '', false) }}
+{{ row('Water', expenses.water | numeral, '', false) }}
+{{ row('Travel (school or work)', expenses.travel | numeral, '', false) }}
+{{ row('School costs (include clothing)', expenses.schoolCosts | numeral, '', false) }}
+{{ row('Food and Housekeeping', expenses.foodAndHousekeeping | numeral, '', false) }}
+{{ row('TV and Broadband', expenses.tvAndBroadband | numeral, '', false) }}
+{{ row('Mobile phone', expenses.mobilePhone | numeral, '', false) }}
+{{ row('Maintenance payments', expenses.maintenance | numeral, '', otherIncome.length === 0) }}
+
+{% set indexOfLastRow = otherExpenses.length - 1 %}
+{% for expenseRow in otherExpenses %}
+  {{ row(expenseRow.description, expenseRow.amount | numeral, '', loop.index0 === indexOfLastRow ) }}
 {% endfor %}
 
 {{ row('Debts', '', statementOfMeansPaths.debtsPage.evaluateUri({ externalId: claim.externalId }), false) }}

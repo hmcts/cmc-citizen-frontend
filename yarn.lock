@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@hmcts/cmc-common-frontend@^1.27.0":
-  version "1.27.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.27.0.tgz#a1165bf2852d2c55b378e84d204a6122b4e23c14"
+"@hmcts/cmc-common-frontend@^1.29.0":
+  version "1.29.0"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.29.0.tgz#ab35f94fa402caf04a03ed0e2e2a7087caf712cd"
 
 "@hmcts/cmc-draft-store-middleware@^1.0.0":
   version "1.0.0"
@@ -213,8 +213,8 @@
     "@types/sinon" "*"
 
 "@types/sinon@*":
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/@types/sinon/-/sinon-4.1.1.tgz#1adf3c8a9359bfa1750a4152cb538cfae4748118"
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/@types/sinon/-/sinon-4.1.2.tgz#9085db9cc3288b0f12daceee20a26c4afd9c2dcd"
 
 "@types/superagent@*":
   version "3.5.6"
@@ -3345,10 +3345,8 @@ is-relative@^0.2.1:
     is-unc-path "^0.1.1"
 
 is-resolvable@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/is-resolvable/-/is-resolvable-1.0.0.tgz#8df57c61ea2e3c501408d100fb013cf8d6e0cc62"
-  dependencies:
-    tryit "^1.0.1"
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/is-resolvable/-/is-resolvable-1.0.1.tgz#acca1cd36dbe44b974b924321555a70ba03b1cf4"
 
 is-retry-allowed@^1.0.0:
   version "1.1.0"
@@ -4502,8 +4500,8 @@ nodemailer@^2.5.0:
     socks "1.1.9"
 
 nodemon@^1.10.2:
-  version "1.12.5"
-  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-1.12.5.tgz#bd34afa1aa855f1996b561147848519f136de620"
+  version "1.12.6"
+  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-1.12.6.tgz#aa0ca0f3b9ea0f09e970e8135b2c9c9aa84eb711"
   dependencies:
     chokidar "^1.7.0"
     debug "^2.6.8"
@@ -6377,10 +6375,6 @@ truffler@^3.1.0:
     hasbin "~1.2.3"
     node-phantom-simple "~2.2.4"
     node.extend "~1.1.6"
-
-tryit@^1.0.1:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/tryit/-/tryit-1.0.3.tgz#393be730a9446fd1ead6da59a014308f36c289cb"
 
 ts-node@^3.3.0:
   version "3.3.0"

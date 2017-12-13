@@ -1,23 +1,8 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, textInputInline, radioOption, linkButton, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, textInputInline, poundInputInline, radioOption, linkButton, saveAndContinueButton, errorSummary %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Do you have any debts?') %}
-
-{% macro multiRowPoundInput(name, label, form, cssClass) %}
-
-{% set value = form.valueFor(name) %}
-{% set error = form.errorFor(name) %}
-
-<label class="form-label-bold mobile-show" for="{{ name }}">{{ t(label) }}</label>
-<span class="input-symbol-pound">
-  <input id="{{ name }}" name="{{ name }}"
-         class="form-control {{ cssClass }} {% if error %} form-control-error {% endif %}"
-         type="number"
-         value="{{ value | default('') }}">
-</span>
-
-{% endmacro %}
 
 {% macro debtRow(index, form) %}
 
@@ -44,8 +29,8 @@
 
     <label class="form-label-bold mobile-show" for="{{ debtKey }}">{{ index + 1 }} {{ t('. List each debt') }}</label>
     {{ textInputInline(name = debtKey, form = form, inputClass='column-1') }}
-    {{ multiRowPoundInput(name = totalOwedKey, label = (index + 1) + '. Total owed', form = form,  cssClass = 'column-4') }}
-    {{ multiRowPoundInput(name = monthlyPaymentsKey, label = (index + 1) + '. Monthly payments', form = form, cssClass = 'column-3') }}
+    {{ poundInputInline(name = totalOwedKey, label = (index + 1) + '. Total owed', form = form,  inputClass = 'column-4') }}
+    {{ poundInputInline(name = monthlyPaymentsKey, label = (index + 1) + '. Monthly payments', form = form,  inputClass = 'column-3') }}
   </div>
 
 {% endmacro %}
