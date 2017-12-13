@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { MonthlyExpenses } from 'response/form/models/statement-of-means/MonthlyExpenses'
+import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
 import { AmountDescriptionRow, ValidationErrors } from 'response/form/models/statement-of-means/amountDescriptionRow'
 import { INIT_ROW_COUNT } from 'forms/models/multiRowForm'
 import { Validator } from 'class-validator'
