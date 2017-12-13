@@ -40,14 +40,16 @@
     js-yaml "^3.8.4"
     superagent "^3.5.1"
 
-"@hmcts/nodejs-logging@^1.4.3":
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/@hmcts/nodejs-logging/-/nodejs-logging-1.4.3.tgz#7815e885c6e009e6ea54aa7836da45497bc40c8f"
+"@hmcts/nodejs-logging@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@hmcts/nodejs-logging/-/nodejs-logging-2.0.0.tgz#3010b18780e5ddc42e0308f57b6e46f6ee098cf7"
   dependencies:
+    continuation-local-storage "^3.2.1"
     lodash.merge "^4.6.0"
     log4js "^2.3.5"
     moment "^2.19.3"
     on-finished "^2.3.0"
+    uuid "^3.1.0"
 
 "@types/body-parser@*":
   version "1.16.8"
