@@ -18,10 +18,6 @@ export class DocumentsClient {
     return this.getPDF(claimExternalId, 'defendantResponseReceipt')
   }
 
-  getDefendantResponseCopyPDF (claimExternalId: string): http.IncomingMessage {
-    return this.getPDF(claimExternalId, 'defendantResponseCopy')
-  }
-
   getSettlementAgreementPDF (claimExternalId: string): http.IncomingMessage {
     return this.getPDF(claimExternalId, 'settlementAgreement')
   }

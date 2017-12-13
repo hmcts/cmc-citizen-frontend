@@ -14,7 +14,7 @@ describe('DocumentsClient', () => {
     })
 
     it('should throw error when given empty ExternalId', () => {
-      expect(() => client.getDefendantResponseCopyPDF(''))
+      expect(() => client.getDefendantResponseReceiptPDF(''))
         .to.throw(Error, 'Claim external ID cannot be blank')
     })
   })
