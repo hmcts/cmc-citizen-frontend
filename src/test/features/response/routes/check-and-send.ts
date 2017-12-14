@@ -178,7 +178,7 @@ describe('Defendant response: check and send page', () => {
 
           it('should redirect to counter-claim handoff page when defendant is counter claiming', async () => {
             draftStoreServiceMock.resolveFind(draftType, {
-              response: { type: ResponseType.OWE_NONE },
+              response: { type: ResponseType.DEFENCE },
               rejectAllOfClaim: { option: RejectAllOfClaimOption.COUNTER_CLAIM }
             })
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
@@ -193,7 +193,7 @@ describe('Defendant response: check and send page', () => {
 
           it('should redirect to partial-admission handoff page when defendant response is part admission', async () => {
             draftStoreServiceMock.resolveFind('response', {
-              response: { type: ResponseType.OWE_SOME_PAID_NONE },
+              response: { type: ResponseType.PART_ADMISSION },
               rejectPartOfClaim: { option: RejectPartOfClaimOption.all() }
             })
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
@@ -207,7 +207,7 @@ describe('Defendant response: check and send page', () => {
 
           it('should redirect to full-admission handoff page when defendant response is full admission', async () => {
             draftStoreServiceMock.resolveFind(draftType, {
-              response: { type: ResponseType.OWE_ALL_PAID_NONE }
+              response: { type: ResponseType.FULL_ADMISSION }
             })
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 

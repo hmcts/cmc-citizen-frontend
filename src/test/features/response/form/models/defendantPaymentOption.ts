@@ -107,24 +107,24 @@ describe('DefendantPaymentType', () => {
 
     context('on full admission', () => {
       it(`should return '${DefendantPaymentTypeLabels.INSTALMENTS}' for BY_INSTALMENTS`, () => {
-        expect(DefendantPaymentType.INSTALMENTS.displayValueFor(ResponseType.OWE_ALL_PAID_NONE))
+        expect(DefendantPaymentType.INSTALMENTS.displayValueFor(ResponseType.FULL_ADMISSION))
           .to.equal(DefendantPaymentTypeLabels.INSTALMENTS)
       })
 
       it(`should return '${DefendantPaymentTypeLabels.FULL_ADMIT_BY_SPECIFIED_DATE}' for BY_SET_DATE`, () => {
-        expect(DefendantPaymentType.BY_SET_DATE.displayValueFor(ResponseType.OWE_ALL_PAID_NONE))
+        expect(DefendantPaymentType.BY_SET_DATE.displayValueFor(ResponseType.FULL_ADMISSION))
           .to.equal(DefendantPaymentTypeLabels.FULL_ADMIT_BY_SPECIFIED_DATE)
       })
     })
 
     context('on partial admission', () => {
       it(`should return '${DefendantPaymentTypeLabels.INSTALMENTS}' for BY_INSTALMENTS`, () => {
-        expect(DefendantPaymentType.INSTALMENTS.displayValueFor(ResponseType.OWE_SOME_PAID_NONE))
+        expect(DefendantPaymentType.INSTALMENTS.displayValueFor(ResponseType.PART_ADMISSION))
           .to.equal(DefendantPaymentTypeLabels.INSTALMENTS)
       })
 
       it(`should return '${DefendantPaymentTypeLabels.BY_SET_DATE}' for BY_SET_DATE`, () => {
-        expect(DefendantPaymentType.BY_SET_DATE.displayValueFor(ResponseType.OWE_SOME_PAID_NONE))
+        expect(DefendantPaymentType.BY_SET_DATE.displayValueFor(ResponseType.PART_ADMISSION))
           .to.equal(DefendantPaymentTypeLabels.BY_SET_DATE)
       })
     })

@@ -38,7 +38,7 @@ function defendantIsCounterClaiming (user: User): boolean {
 
 function isStatementOfTruthRequired (user: User): boolean {
   const responseType: ResponseType = user.responseDraft.document.response.type
-  return (responseType === ResponseType.OWE_NONE && !defendantIsCounterClaiming(user))
+  return (responseType === ResponseType.DEFENCE && !defendantIsCounterClaiming(user))
 }
 
 function signatureTypeFor (user: User): string {
@@ -94,16 +94,16 @@ export default express.Router()
       } else {
         const responseType = user.responseDraft.document.response.type
         switch (responseType) {
-          case ResponseType.OWE_NONE:
+          case ResponseType.DEFENCE:
             if (defendantIsCounterClaiming(user)) {
               res.redirect(Paths.counterClaimPage.evaluateUri({ externalId: user.claim.externalId }))
               return
             }
             break
-          case ResponseType.OWE_SOME_PAID_NONE:
+          case ResponseType.PART_ADMISSION:
             res.redirect(Paths.partialAdmissionPage.evaluateUri({ externalId: user.claim.externalId }))
             return
-          case ResponseType.OWE_ALL_PAID_NONE:
+          case ResponseType.FULL_ADMISSION:
             res.redirect(Paths.fullAdmissionPage.evaluateUri({ externalId: user.claim.externalId }))
             return
           default:
