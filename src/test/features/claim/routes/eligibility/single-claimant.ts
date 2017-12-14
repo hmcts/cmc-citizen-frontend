@@ -13,29 +13,31 @@ import { app } from '../../../../../main/app'
 import * as idamServiceMock from '../../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
-import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
+import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const pagePath: string = ClaimPaths.eligibilitySingleClaimantPage.uri
+const pageRedirect: string = ClaimPaths.eligibilitySingleDefendantPage.uri
 
-describe('Claim eligibility: claim value page', () => {
+describe('Claim eligibility: single claimant page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ClaimPaths.eligibilityClaimValuePage.uri)
+    checkAuthorizationGuards(app, 'get', pagePath)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
-        .get(ClaimPaths.eligibilityClaimValuePage.uri)
+        .get(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Total amount you’re claiming'))
+        .expect(res => expect(res).to.be.successful.withText('Are you the only person or business making the claim?'))
     })
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', ClaimPaths.eligibilityClaimValuePage.uri)
+    checkAuthorizationGuards(app, 'post', pagePath)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -46,9 +48,9 @@ describe('Claim eligibility: claim value page', () => {
         draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
-          .post(ClaimPaths.eligibilityClaimValuePage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Total amount you’re claiming', 'div class="error-summary"'))
+          .expect(res => expect(res).to.be.successful.withText('Please select yes or no', 'div class="error-summary"'))
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
@@ -56,31 +58,32 @@ describe('Claim eligibility: claim value page', () => {
         draftStoreServiceMock.rejectSave()
 
         await request(app)
-          .post(ClaimPaths.eligibilityClaimValuePage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ claimValue: ClaimValue.UNDER_10000.option })
+          .send({ singleClaimant: YesNoOption.YES.option })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to single claimant page when form is valid and everything is fine', async () => {
+      it('should redirect to single defendant page when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)
-          .post(ClaimPaths.eligibilityClaimValuePage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ claimValue: ClaimValue.UNDER_10000.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.eligibilitySingleClaimantPage.uri))
+          .send({ singleClaimant: YesNoOption.YES.option })
+          .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
       })
+
       it('should redirect to not eligible page when form is valid and not eligible option selected', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)
-          .post(ClaimPaths.eligibilityClaimValuePage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ claimValue: ClaimValue.NOT_KNOWN.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_VALUE_NOT_KNOWN}`))
+          .send({ singleClaimant: YesNoOption.NO.option })
+          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`))
       })
     })
   })

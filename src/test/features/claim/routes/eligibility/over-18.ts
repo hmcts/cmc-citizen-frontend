@@ -62,7 +62,7 @@ describe('Claim eligibility: claim value page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to over 18 page when form is valid and everything is fine', async () => {
+      it('should redirect to single claimant page when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
@@ -70,7 +70,7 @@ describe('Claim eligibility: claim value page', () => {
           .post(ClaimPaths.eligibilityClaimValuePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ claimValue: ClaimValue.UNDER_10000.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.eligibilityOver18Page.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.eligibilitySingleClaimantPage.uri))
       })
       it('should redirect to not eligible page when form is valid and not eligible option selected', async () => {
         draftStoreServiceMock.resolveFind('claim')
