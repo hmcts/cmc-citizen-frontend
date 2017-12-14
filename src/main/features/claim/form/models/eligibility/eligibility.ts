@@ -33,14 +33,14 @@ export class Eligibility {
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.HELP_WITH_FEES] })
   helpWithFees?: YesNoOption
 
-  constructor (claimantAddress: YesNoOption,
-               defendantAddress: YesNoOption,
-               claimValue: ClaimValue,
-               singleClaimant: YesNoOption,
-               singleDefendant: YesNoOption,
-               eighteenOrOver: YesNoOption,
-               governmentDepartment: YesNoOption,
-               helpWithFees: YesNoOption) {
+  constructor (claimantAddress?: YesNoOption,
+               defendantAddress?: YesNoOption,
+               claimValue?: ClaimValue,
+               singleClaimant?: YesNoOption,
+               singleDefendant?: YesNoOption,
+               eighteenOrOver?: YesNoOption,
+               governmentDepartment?: YesNoOption,
+               helpWithFees?: YesNoOption) {
     this.claimantAddress = claimantAddress
     this.defendantAddress = defendantAddress
     this.claimValue = claimValue
