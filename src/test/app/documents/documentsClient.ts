@@ -5,13 +5,17 @@ import { DocumentsClient } from 'app/documents/documentsClient'
 describe('DocumentsClient', () => {
   const client: DocumentsClient = new DocumentsClient()
 
-  describe('getResponseCopy', () => {
-    it('shouldThrowErrorWhenGivenUndefinedExternalId', () => {
-      expect(() => client.getResponseCopy(undefined)).to.throw(Error, 'Claim external ID cannot be blank')
+  describe('DocumentClient', () => {
+
+    it('should throw error when given undefined ExternalId', () => {
+      expect(() => client.getDefendantResponseReceiptPDF(
+        undefined))
+        .to.throw(Error, 'Claim external ID cannot be blank')
     })
 
-    it('shouldThrowErrorWhenGivenEmptyExternalId', () => {
-      expect(() => client.getResponseCopy('')).to.throw(Error, 'Claim external ID cannot be blank')
+    it('should throw error when given empty ExternalId', () => {
+      expect(() => client.getDefendantResponseReceiptPDF(''))
+        .to.throw(Error, 'Claim external ID cannot be blank')
     })
   })
 })
