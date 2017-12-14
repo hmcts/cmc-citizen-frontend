@@ -19,7 +19,7 @@
 
         {{
           radioGroup(
-            'Are you the only person or business making the claim?',
+            label = 'Are you the only person or business making the claim?',
             name,
             [
               {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
@@ -29,7 +29,6 @@
             labelForScreenReadersOnly = true
           )
         }}
-
 
         {{ saveAndContinueButton() }}
 

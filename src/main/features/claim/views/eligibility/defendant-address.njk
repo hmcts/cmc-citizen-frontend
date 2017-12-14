@@ -21,7 +21,7 @@
 
         {{
           radioGroup(
-            'Is the person or organisation you’re claiming against based in England or Wales?',
+            label = 'Is the person or organisation you’re claiming against based in England or Wales?',
             name,
             [
               {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},

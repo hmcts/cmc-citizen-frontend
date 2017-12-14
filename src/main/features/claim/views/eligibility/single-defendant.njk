@@ -13,13 +13,13 @@
       {% set name = 'singleDefendant' %}
 
       <form novalidate method="post" class="analytics-submit-event-trigger"
-            data-event-action="Eligibility: Select Yes"
+            data-event-action="Eligibility: Single Claimant"
             data-event-label-from="{{ name }}">
         {{ csrfProtection(csrf) }}
 
         {{
           radioGroup(
-            'Is this claim against only one individual or business?',
+            label = 'Is this claim against only one individual or business?',
             name,
             [
               {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
@@ -29,7 +29,6 @@
             labelForScreenReadersOnly = true
           )
         }}
-
 
         {{ saveAndContinueButton() }}
 
