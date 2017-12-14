@@ -16,9 +16,11 @@ import { Claim } from 'claims/models/claim'
 const page: RoutablePath = Paths.timelinePage
 
 function renderView (form: Form<Timeline>, res: express.Response): void {
+  const claim: Claim = res.locals.claim
+
   res.render(page.associatedView, {
     form: form,
-    claimantName: res.locals.claim.claimData.claimant.name
+    claimantName: claim.claimData.claimant.name
   })
 }
 
