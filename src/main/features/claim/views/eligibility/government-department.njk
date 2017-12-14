@@ -22,8 +22,8 @@
         {{
           radioGroup(
             label = 'Are you claiming against a government department?',
-            name,
-            [
+            name = name,
+            options = [
               {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
               {'label': 'No', value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO)}
             ],

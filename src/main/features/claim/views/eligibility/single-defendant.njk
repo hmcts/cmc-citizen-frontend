@@ -20,10 +20,10 @@
         {{
           radioGroup(
             label = 'Is this claim against only one individual or business?',
-            name,
-            [
-              {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
-              {'label': 'No', value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO)}
+            name = name,
+            options = [
+              {'label': 'Yes', value: YesNoOption.YES.option, checked: form.valueFor(name) === YesNoOption.YES},
+              {'label': 'No', value: YesNoOption.NO.option, checked: form.valueFor(name) === YesNoOption.NO}
             ],
             form = form,
             labelForScreenReadersOnly = true
