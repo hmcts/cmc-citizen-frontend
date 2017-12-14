@@ -91,6 +91,7 @@ function lookupPostcode (postcode, postcodeLookupWidget) {
   xhr.onload = function () {
     if (xhr.status !== 200) {
       showAddressError(false, postcodeLookupWidget)
+      showAddressEntry(postcodeLookupWidget)
       return
     }
 
