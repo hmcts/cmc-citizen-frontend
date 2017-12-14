@@ -60,7 +60,8 @@ export class Eligibility {
       YesNoOption.fromObject(input.singleDefendant),
       YesNoOption.fromObject(input.eighteenOrOver),
       YesNoOption.fromObject(input.governmentDepartment),
-      YesNoOption.fromObject(input.helpWithFees))
+      YesNoOption.fromObject(input.helpWithFees)
+    )
   }
 
   deserialize (input: any): Eligibility {
