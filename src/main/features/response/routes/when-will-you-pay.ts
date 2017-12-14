@@ -14,6 +14,7 @@ import { ResponseType } from 'response/form/models/responseType'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { Draft } from '@hmcts/draft-store-client'
+import { Claim } from 'claims/models/claim'
 
 function isAmountTooHighPartialResponse (responseDraft: ResponseDraft): boolean {
   return responseDraft.response.type.value === ResponseType.OWE_SOME_PAID_NONE.value
@@ -30,10 +31,10 @@ function formLabelFor (responseDraft: ResponseDraft): string {
 
 function renderView (form: Form<DefendantPaymentOption>, res: express.Response) {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
-  const user: User = res.locals.user
+  const claim: Claim = res.locals.claim
   res.render(Paths.defencePaymentOptionsPage.associatedView, {
     form: form,
-    claim: user.claim,
+    claim: claim,
     responseType: draft.document.response.type,
     formLabel: formLabelFor(draft.document),
     statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(draft.document)

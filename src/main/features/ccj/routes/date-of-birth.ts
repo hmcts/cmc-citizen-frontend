@@ -19,7 +19,7 @@ import { Draft } from '@hmcts/draft-store-client'
 const logger = require('@hmcts/nodejs-logging').getLogger('ccj/guards/individualDateOfBirth')
 
 const accessGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
-  const claim: Claim = res.locals.user.claim
+  const claim: Claim = res.locals.claim
 
   return claim.claimData.defendant.type === PartyType.INDIVIDUAL.value
 }, (req: express.Request, res: express.Response): void => {

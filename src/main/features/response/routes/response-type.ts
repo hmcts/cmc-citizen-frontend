@@ -10,6 +10,7 @@ import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
+import { Claim } from 'claims/models/claim'
 
 function renderView (form: Form<Response>, res: express.Response) {
   res.render(Paths.responseTypePage.associatedView, {
@@ -35,6 +36,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const claim: Claim = res.locals.claim
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
@@ -48,10 +50,10 @@ export default express.Router()
             res.redirect(Paths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: externalId }))
             break
           case ResponseType.OWE_SOME_PAID_NONE:
-            res.redirect(Paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: user.claim.externalId }))
+            res.redirect(Paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: claim.externalId }))
             break
           case ResponseType.OWE_ALL_PAID_NONE:
-            res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
+            res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
             break
           default:
             next(new Error(`Unknown response type: ${responseType}`))

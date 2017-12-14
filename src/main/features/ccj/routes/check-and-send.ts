@@ -16,6 +16,7 @@ import { Party } from 'claims/models/details/yours/party'
 import { DraftService } from 'services/draftService'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
+import { Claim } from 'claims/models/claim'
 
 function prepareUrls (externalId: string): object {
   return {
@@ -30,20 +31,20 @@ function convertToPartyDetails (party: Party): PartyDetails {
 }
 
 function renderView (form: Form<Declaration>, req: express.Request, res: express.Response): void {
+  const claim: Claim = res.locals.claim
   const draft: Draft<DraftCCJ> = res.locals.ccjDraft
-  const user: User = res.locals.user
 
-  const defendant = convertToPartyDetails(user.claim.claimData.defendant)
+  const defendant = convertToPartyDetails(claim.claimData.defendant)
   if (defendant.type === PartyType.INDIVIDUAL.value) {
     (defendant as IndividualDetails).dateOfBirth = draft.document.defendantDateOfBirth
   }
 
   res.render(Paths.checkAndSendPage.associatedView, {
     form: form,
-    claim: user.claim,
+    claim: claim,
     draft: draft.document,
     defendant: defendant,
-    amountToBePaid: user.claim.totalAmountTillToday - (draft.document.paidAmount.amount || 0),
+    amountToBePaid: claim.totalAmountTillToday - (draft.document.paidAmount.amount || 0),
     ...prepareUrls(req.params.externalId)
   })
 }
@@ -59,8 +60,8 @@ function deserializerFunction (value: any): Declaration | QualifiedDeclaration {
   }
 }
 
-function getStatementOfTruthClassFor (user: User): { new(): Declaration | QualifiedDeclaration } {
-  if (user.claim.claimData.claimant.isBusiness()) {
+function getStatementOfTruthClassFor (claim: Claim): { new(): Declaration | QualifiedDeclaration } {
+  if (claim.claimData.claimant.isBusiness()) {
     return QualifiedDeclaration
   } else {
     return Declaration
@@ -70,7 +71,8 @@ function getStatementOfTruthClassFor (user: User): { new(): Declaration | Qualif
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.checkAndSendPage.uri, (req: express.Request, res: express.Response) => {
-    const StatementOfTruthClass = getStatementOfTruthClassFor(res.locals.user)
+    const claim: Claim = res.locals.claim
+    const StatementOfTruthClass = getStatementOfTruthClassFor(claim)
     renderView(new Form(new StatementOfTruthClass()), req, res)
   })
   .post(
@@ -82,6 +84,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, req, res)
       } else {
+        const claim: Claim = res.locals.claim
         const draft: Draft<DraftCCJ> = res.locals.ccjDraft
         const user: User = res.locals.user
 
@@ -90,7 +93,7 @@ export default express.Router()
           await new DraftService().save(draft, user.bearerToken)
         }
 
-        await CCJClient.save(draft, user)
+        await CCJClient.save(claim.id, draft, user)
         await new DraftService().delete(draft.id, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }

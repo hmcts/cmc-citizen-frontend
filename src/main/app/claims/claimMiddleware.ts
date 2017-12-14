@@ -15,7 +15,7 @@ export class ClaimMiddleware {
     const user: User = res.locals.user
     ClaimStoreClient.retrieveByExternalId(externalId, user.id)
       .then((claim: Claim) => {
-        user.claim = claim
+        res.locals.claim = claim
         next()
       })
       .catch(next)

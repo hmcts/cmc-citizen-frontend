@@ -11,6 +11,7 @@ import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { Claim } from 'claims/models/claim'
 
 const page: RoutablePath = StatementOfMeansPaths.courtOrdersPage
 
@@ -49,6 +50,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const claim: Claim = res.locals.claim
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
@@ -56,7 +58,7 @@ export default express.Router()
         draft.document.statementOfMeans.courtOrders = form.model
 
         await new DraftService().save(draft, user.bearerToken)
-        res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )

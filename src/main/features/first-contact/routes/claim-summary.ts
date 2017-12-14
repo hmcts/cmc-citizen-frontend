@@ -20,7 +20,7 @@ export default express.Router()
     ClaimReferenceMatchesGuard.requestHandler,
     ClaimantRequestedCCJGuard.requestHandler,
     async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const claim: Claim = res.locals.user.claim
+      const claim: Claim = res.locals.claim
       res.render(Paths.claimSummaryPage.associatedView, { claim: claim })
     })
   .post(Paths.claimSummaryPage.uri, (req: express.Request, res: express.Response): void => {

@@ -12,11 +12,11 @@ import { Claim } from 'claims/models/claim'
 import { Offer } from 'app/claims/models/offer'
 
 function renderView (form: Form<DefendantResponse>, res: express.Response, next: express.NextFunction) {
-  const claim: Claim = res.locals.user.claim
+  const claim: Claim = res.locals.claim
   const offer: Offer = claim.defendantOffer
   if (!offer) {
-    const user: User = res.locals.user
-    res.redirect(DashboardPaths.claimantPage.evaluateUri({ externalId: user.claim.externalId }))
+    const claim: Claim = res.locals.claim
+    res.redirect(DashboardPaths.claimantPage.evaluateUri({ externalId: claim.externalId }))
   } else {
     res.render(Paths.responsePage.associatedView, {
       form: form,
@@ -41,14 +41,15 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
+        const claim: Claim = res.locals.claim
         const user: User = res.locals.user
         switch (form.model.option) {
           case StatementType.ACCEPTATION:
-            res.redirect(Paths.makeAgreementPage.evaluateUri({ externalId: user.claim.externalId }))
+            res.redirect(Paths.makeAgreementPage.evaluateUri({ externalId: claim.externalId }))
             break
           case StatementType.REJECTION:
-            await OfferClient.rejectOffer(user)
-            res.redirect(Paths.rejectedPage.evaluateUri({ externalId: user.claim.externalId }))
+            await OfferClient.rejectOffer(claim.id, user)
+            res.redirect(Paths.rejectedPage.evaluateUri({ externalId: claim.externalId }))
             break
           default:
             throw new Error(`Option ${form.model.option} is not supported`)

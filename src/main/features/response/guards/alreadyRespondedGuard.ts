@@ -14,7 +14,7 @@ const logger = require('@hmcts/nodejs-logging').getLogger('response/guards/alrea
 export class AlreadyRespondedGuard {
 
   static async requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
-    const claim: Claim = res.locals.user.claim
+    const claim: Claim = res.locals.claim
 
     if (claim.response) {
       logger.warn('State guard: already responded - redirecting to dashboard')

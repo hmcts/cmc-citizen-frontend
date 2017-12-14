@@ -17,7 +17,7 @@
         {{ csrfProtection(csrf) }}
 
         {% if statementOfMeansIsApplicable %}
-          {% set hintText = t('You will need to give details of your finances to {{ claimantFullName }} to explain why.', { claimantFullName: user.claim.claimData.claimant.name }) %}
+          {% set hintText = t('You will need to give details of your finances to {{ claimantFullName }} to explain why.', { claimantFullName: claim.claimData.claimant.name }) %}
         {% endif %}
         {{
         radioGroupWithHintPanel(

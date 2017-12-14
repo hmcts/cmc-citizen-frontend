@@ -16,8 +16,7 @@ import { Draft } from '@hmcts/draft-store-client'
 
 async function renderView (form: Form<HowMuchOwed>, res: express.Response, next: express.NextFunction) {
   try {
-    const user: User = res.locals.user
-    const claim: Claim = user.claim
+    const claim: Claim = res.locals.claim
     res.render(Paths.defendantHowMuchOwed.associatedView, {
       form: form,
       amount: claim.totalAmountTillToday,
@@ -40,10 +39,11 @@ export default express.Router()
     FormValidator.requestHandler(HowMuchOwed, HowMuchOwed.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<HowMuchOwed> = req.body
+      const claim: Claim = res.locals.claim
       const user: User = res.locals.user
 
-      if (form.model.amount > user.claim.totalAmountTillToday) {
-        let totalAmount: string = NumberFormatter.formatMoney(user.claim.totalAmountTillToday)
+      if (form.model.amount > claim.totalAmountTillToday) {
+        let totalAmount: string = NumberFormatter.formatMoney(claim.totalAmountTillToday)
         let error = new ValidationError()
         error.property = 'amount'
         error.constraints = { amount: 'Enter a valid amount between £1 and ' + totalAmount }
@@ -58,7 +58,7 @@ export default express.Router()
         draft.document.howMuchOwed = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.timelinePage.evaluateUri({ externalId: user.claim.externalId }))
+        res.redirect(Paths.timelinePage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )

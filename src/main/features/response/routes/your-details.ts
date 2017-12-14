@@ -19,12 +19,14 @@ import { SoleTrader } from 'claims/models/details/theirs/soleTrader'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
+import { Claim } from 'claims/models/claim'
 
 function renderView (form: Form<PartyDetails>, res: express.Response) {
-  const user: User = res.locals.user
+  const claim: Claim = res.locals.claim
+
   res.render(Paths.defendantYourDetailsPage.associatedView, {
     form: form,
-    claim: user.claim
+    claim: claim
   })
 }
 
@@ -47,9 +49,9 @@ function deserializeFn (value: any): PartyDetails {
 export default express.Router()
   .get(Paths.defendantYourDetailsPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const draft: Draft<ResponseDraft> = res.locals.responseDraft
-    const user: User = res.locals.user
+    const claim: Claim = res.locals.claim
 
-    const partyDetails: PartyDetails = plainToClass(PartyDetails, user.claim.claimData.defendant)
+    const partyDetails: PartyDetails = plainToClass(PartyDetails, claim.claimData.defendant)
     if (draft.document.defendantDetails.partyDetails) {
       switch (draft.document.defendantDetails.partyDetails.type) {
         case PartyType.COMPANY.value:
@@ -79,6 +81,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const claim: Claim = res.locals.claim
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
         const oldPartyDetails: PartyDetails = draft.document.defendantDetails.partyDetails
@@ -91,22 +94,22 @@ export default express.Router()
         }
 
         // Store read only properties
-        draft.document.defendantDetails.partyDetails.name = user.claim.claimData.defendant.name
-        if (user.claim.claimData.defendant.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
+        draft.document.defendantDetails.partyDetails.name = claim.claimData.defendant.name
+        if (claim.claimData.defendant.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
           (draft.document.defendantDetails.partyDetails as SoleTraderDetails).businessName =
-            (user.claim.claimData.defendant as SoleTrader).businessName
+            (claim.claimData.defendant as SoleTrader).businessName
         }
 
         await new DraftService().save(draft, user.bearerToken)
 
         switch (draft.document.defendantDetails.partyDetails.type) {
           case PartyType.INDIVIDUAL.value:
-            res.redirect(Paths.defendantDateOfBirthPage.evaluateUri({ externalId: user.claim.externalId }))
+            res.redirect(Paths.defendantDateOfBirthPage.evaluateUri({ externalId: claim.externalId }))
             break
           case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
           case PartyType.COMPANY.value:
           case PartyType.ORGANISATION.value:
-            res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: user.claim.externalId }))
+            res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: claim.externalId }))
             break
           default:
             throw new Error(`Unknown party type: ${draft.document.defendantDetails.partyDetails.type}`)

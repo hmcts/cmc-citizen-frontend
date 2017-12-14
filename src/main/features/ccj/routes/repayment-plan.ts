@@ -10,15 +10,16 @@ import { RepaymentPlan } from 'ccj/form/models/repaymentPlan'
 import { FormValidator } from 'forms/validation/formValidator'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Draft } from '@hmcts/draft-store-client'
+import { Claim } from 'claims/models/claim'
 
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
+  const claim: Claim = res.locals.claim
   const draft: Draft<DraftCCJ> = res.locals.ccjDraft
-  const user: User = res.locals.user
   const alreadyPaid: number = draft.document.paidAmount.amount || 0
 
   res.render(Paths.repaymentPlanPage.associatedView, {
     form: form,
-    remainingAmount: user.claim.totalAmountTillToday - alreadyPaid
+    remainingAmount: claim.totalAmountTillToday - alreadyPaid
   })
 }
 

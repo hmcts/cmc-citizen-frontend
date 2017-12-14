@@ -11,13 +11,16 @@ import { RoutablePath } from 'common/router/routablePath'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { Claim } from 'app/claims/models/claim'
 
 const page: RoutablePath = Paths.evidencePage
 
 function renderView (form: Form<Evidence>, res: express.Response): void {
+  const claim: Claim = res.locals.claim
+
   res.render(page.associatedView, {
     form: form,
-    claimantName: res.locals.user.claim.claimData.claimant.name,
+    claimantName: claim.claimData.claimant.name,
     allEvidenceTypes: EvidenceType.all()
   })
 }
@@ -51,6 +54,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const claim: Claim = res.locals.claim
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
@@ -58,7 +62,7 @@ export default express.Router()
         draft.document.evidence = form.model
 
         await new DraftService().save(draft, user.bearerToken)
-        res.redirect(Paths.impactOfDisputePage.evaluateUri({ externalId: user.claim.externalId }))
+        res.redirect(Paths.impactOfDisputePage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )

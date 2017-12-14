@@ -12,7 +12,7 @@ import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Draft } from '@hmcts/draft-store-client'
 
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
-  const claim: Claim = res.locals.user.claim
+  const claim: Claim = res.locals.claim
 
   res.render(Paths.paidAmountPage.associatedView, { form: form, totalAmount: claim.totalAmountTillToday })
 }

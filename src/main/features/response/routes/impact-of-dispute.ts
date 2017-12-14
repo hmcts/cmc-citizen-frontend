@@ -12,7 +12,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 
 function renderView (form: Form<ImpactOfDispute>, res: express.Response): void {
-  const claim: Claim = res.locals.user.claim
+  const claim: Claim = res.locals.claim
   res.render(Paths.impactOfDisputePage.associatedView, {
     form: form,
     claimantName: claim.claimData.claimant.name
@@ -33,13 +33,14 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const claim: Claim = res.locals.claim
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
         draft.document.impactOfDispute = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )

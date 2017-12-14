@@ -49,6 +49,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const claim: Claim = res.locals.claim
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
@@ -56,7 +57,7 @@ export default express.Router()
         draft.document.statementOfMeans.debts = form.model
 
         await new DraftService().save(draft, user.bearerToken)
-        res.redirect(StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: user.claim.externalId }))
+        res.redirect(StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )

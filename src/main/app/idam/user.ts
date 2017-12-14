@@ -1,4 +1,3 @@
-import { Claim } from 'app/claims/models/claim'
 
 export class User {
   id: string
@@ -8,7 +7,6 @@ export class User {
   roles: string[]
   group: string
   bearerToken: string
-  claim: Claim
 
   constructor (id: string,
                email: string,

@@ -4,7 +4,6 @@ import { Paths } from 'response/paths'
 
 import { Claim } from 'claims/models/claim'
 
-import { User } from 'app/idam/user'
 import { isAfter4pm } from 'common/dateUtils'
 import { TaskListBuilder } from 'response/helpers/taskListBuilder'
 import { ResponseDraft } from 'response/draft/responseDraft'
@@ -15,8 +14,7 @@ export default express.Router()
   .get(Paths.taskListPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      const user: User = res.locals.user
-      const claim: Claim = user.claim
+      const claim: Claim = res.locals.claim
 
       const beforeYouStartSection = TaskListBuilder
         .buildBeforeYouStartSection(draft.document, claim.externalId)

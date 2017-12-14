@@ -19,7 +19,7 @@ export class ClaimReferenceMatchesGuard {
 
       const user: User = res.locals.user
       const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(user.id)
-      user.claim = claim
+      res.locals.claim = claim
 
       if (claim.claimNumber !== reference) {
         logger.error('Claim reference mismatch - redirecting to access denied page')

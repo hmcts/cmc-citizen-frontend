@@ -10,6 +10,7 @@ import { DraftService } from 'services/draftService'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
+import { Claim } from 'claims/models/claim'
 
 function renderView (form: Form<Residence>, res: express.Response): void {
   res.render(Paths.residencePage.associatedView, {
@@ -35,13 +36,14 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const claim: Claim = res.locals.claim
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
         draft.document.statementOfMeans.residence = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.dependantsPage.evaluateUri({ externalId: user.claim.externalId }))
+        res.redirect(Paths.dependantsPage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )

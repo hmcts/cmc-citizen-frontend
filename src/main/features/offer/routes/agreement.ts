@@ -27,7 +27,7 @@ export default express.Router()
             })
             response.on('end', () => {
               const pdf = Buffer.concat(buffers)
-              const claim: Claim = res.locals.user.claim
+              const claim: Claim = res.locals.claim
               res.writeHead(HttpStatus.OK, {
                 'Content-Type': 'application/pdf',
                 'Content-Disposition': `attachment; filename=${claim.claimNumber}-settlement-agreement.pdf`,

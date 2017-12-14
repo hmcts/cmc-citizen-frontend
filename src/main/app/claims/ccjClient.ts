@@ -8,10 +8,10 @@ import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Draft } from '@hmcts/draft-store-client'
 
 export class CCJClient {
-  static save (draft: Draft<DraftCCJ>, user: User): Promise<Claim> {
+  static save (claimId: number, draft: Draft<DraftCCJ>, user: User): Promise<Claim> {
     const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convert(draft.document)
 
-    return request.post(`${claimStoreApiUrl}/${user.claim.id}/county-court-judgment`, {
+    return request.post(`${claimStoreApiUrl}/${claimId}/county-court-judgment`, {
       body: countyCourtJudgment,
       headers: {
         Authorization: `Bearer ${user.bearerToken}`

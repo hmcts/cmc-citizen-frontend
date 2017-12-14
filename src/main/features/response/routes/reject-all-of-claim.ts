@@ -22,7 +22,7 @@ function isRequestAllowed (res: express.Response): boolean {
 }
 
 function accessDeniedCallback (req: express.Request, res: express.Response): void {
-  const claim: Claim = res.locals.user.claim
+  const claim: Claim = res.locals.claim
 
   res.redirect(Paths.responseTypePage.evaluateUri({ externalId: claim.externalId }))
 }

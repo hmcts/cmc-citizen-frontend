@@ -12,6 +12,7 @@ import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
+import { Claim } from 'claims/models/claim'
 
 function renderView (form: Form<MoreTimeNeeded>, res: express.Response, next: express.NextFunction) {
   try {
@@ -43,6 +44,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
+        const claim: Claim = res.locals.claim
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
@@ -50,11 +52,11 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         if (form.model.option === MoreTimeNeededOption.YES) {
-          await ClaimStoreClient.requestForMoreTime(user.claim.id, user)
+          await ClaimStoreClient.requestForMoreTime(claim.id, user)
 
-          res.redirect(Paths.moreTimeConfirmationPage.evaluateUri({ externalId: user.claim.externalId }))
+          res.redirect(Paths.moreTimeConfirmationPage.evaluateUri({ externalId: claim.externalId }))
         } else {
-          res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
+          res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
         }
       }
     }))

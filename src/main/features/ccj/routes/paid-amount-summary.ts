@@ -42,7 +42,7 @@ function getInterestDetails (claim: Claim): object {
 export default express.Router()
   .get(Paths.paidAmountSummaryPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const claim: Claim = res.locals.user.claim
+      const claim: Claim = res.locals.claim
       const draft: Draft<DraftCCJ> = res.locals.ccjDraft
       const { externalId } = req.params
 

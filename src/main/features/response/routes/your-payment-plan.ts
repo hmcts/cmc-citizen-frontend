@@ -14,6 +14,7 @@ import { RoutablePath } from 'common/router/routablePath'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
+import { Claim } from 'claims/models/claim'
 
 function nextPageFor (responseDraft: ResponseDraft): RoutablePath {
   if (StatementOfMeans.isApplicableFor(responseDraft)) {
@@ -24,13 +25,13 @@ function nextPageFor (responseDraft: ResponseDraft): RoutablePath {
 }
 
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
+  const claim: Claim = res.locals.claim
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
-  const user: User = res.locals.user
   const alreadyPaid: number = draft.document.paidAmount.amount || 0
 
   res.render(Paths.defencePaymentPlanPage.associatedView, {
     form: form,
-    remainingAmount: user.claim.totalAmountTillToday - alreadyPaid
+    remainingAmount: claim.totalAmountTillToday - alreadyPaid
   })
 }
 

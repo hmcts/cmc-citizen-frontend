@@ -10,6 +10,7 @@ import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
+import { Claim } from 'claims/models/claim'
 
 function renderView (form: Form<MobilePhone>, res: express.Response) {
   res.render(Paths.defendantMobilePage.associatedView, {
@@ -33,12 +34,13 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const claim: Claim = res.locals.claim
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
         draft.document.defendantDetails.mobilePhone = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
       }
     }))

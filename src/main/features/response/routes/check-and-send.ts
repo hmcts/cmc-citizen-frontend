@@ -18,18 +18,20 @@ import { DraftService } from 'services/draftService'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { Claim } from 'claims/models/claim'
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
+  const claim: Claim = res.locals.claim
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
-  const user: User = res.locals.user
+
   res.render(Paths.checkAndSendPage.associatedView, {
     paths: Paths,
     statementOfMeansPaths: StatementOfMeansPaths,
     payBySetDatePaths: PayBySetDatePaths,
-    claim: user.claim,
+    claim: claim,
     form: form,
     draft: draft.document,
-    signatureType: signatureTypeFor(user, draft),
+    signatureType: signatureTypeFor(claim, draft),
     statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(draft.document)
   })
 }
@@ -44,9 +46,9 @@ function isStatementOfTruthRequired (draft: Draft<ResponseDraft>): boolean {
   return (responseType === ResponseType.OWE_NONE && !defendantIsCounterClaiming(draft))
 }
 
-function signatureTypeFor (user: User, draft: Draft<ResponseDraft>): string {
+function signatureTypeFor (claim: Claim, draft: Draft<ResponseDraft>): string {
   if (isStatementOfTruthRequired(draft)) {
-    if (user.claim.claimData.defendant.isBusiness()) {
+    if (claim.claimData.defendant.isBusiness()) {
       return SignatureType.QUALIFIED
     } else {
       return SignatureType.BASIC
@@ -67,8 +69,8 @@ function deserializerFunction (value: any): StatementOfTruth | QualifiedStatemen
   }
 }
 
-function getStatementOfTruthClassFor (user: User, draft: Draft<ResponseDraft>): { new(): StatementOfTruth | QualifiedStatementOfTruth } {
-  if (signatureTypeFor(user, draft) === SignatureType.QUALIFIED) {
+function getStatementOfTruthClassFor (claim: Claim, draft: Draft<ResponseDraft>): { new(): StatementOfTruth | QualifiedStatementOfTruth } {
+  if (signatureTypeFor(claim, draft) === SignatureType.QUALIFIED) {
     return QualifiedStatementOfTruth
   } else {
     return StatementOfTruth
@@ -81,9 +83,9 @@ export default express.Router()
     Paths.checkAndSendPage.uri,
     AllResponseTasksCompletedGuard.requestHandler,
     (req: express.Request, res: express.Response) => {
+      const claim: Claim = res.locals.claim
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      const user: User = res.locals.user
-      const StatementOfTruthClass = getStatementOfTruthClassFor(user, draft)
+      const StatementOfTruthClass = getStatementOfTruthClassFor(claim, draft)
       renderView(new Form(new StatementOfTruthClass()), res)
     })
   .post(
@@ -91,6 +93,7 @@ export default express.Router()
     AllResponseTasksCompletedGuard.requestHandler,
     FormValidator.requestHandler(undefined, deserializerFunction),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      const claim: Claim = res.locals.claim
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       const user: User = res.locals.user
       const form: Form<StatementOfTruth | QualifiedStatementOfTruth> = req.body
@@ -101,15 +104,15 @@ export default express.Router()
         switch (responseType) {
           case ResponseType.OWE_NONE:
             if (defendantIsCounterClaiming(draft)) {
-              res.redirect(Paths.counterClaimPage.evaluateUri({ externalId: user.claim.externalId }))
+              res.redirect(Paths.counterClaimPage.evaluateUri({ externalId: claim.externalId }))
               return
             }
             break
           case ResponseType.OWE_SOME_PAID_NONE:
-            res.redirect(Paths.partialAdmissionPage.evaluateUri({ externalId: user.claim.externalId }))
+            res.redirect(Paths.partialAdmissionPage.evaluateUri({ externalId: claim.externalId }))
             return
           case ResponseType.OWE_ALL_PAID_NONE:
-            res.redirect(Paths.fullAdmissionPage.evaluateUri({ externalId: user.claim.externalId }))
+            res.redirect(Paths.fullAdmissionPage.evaluateUri({ externalId: claim.externalId }))
             return
           default:
             next(new Error('Unknown response type: ' + responseType))
@@ -119,8 +122,8 @@ export default express.Router()
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
           await new DraftService().save(draft, user.bearerToken)
         }
-        await ClaimStoreClient.saveResponseForUser(draft, user)
+        await ClaimStoreClient.saveResponseForUser(claim.id, draft, user)
         await new DraftService().delete(draft.id, user.bearerToken)
-        res.redirect(Paths.confirmationPage.evaluateUri({ externalId: user.claim.externalId }))
+        res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
       }
     }))
