@@ -3,7 +3,7 @@ import { Paths } from 'ccj/paths'
 
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import { PayBySetDate } from 'ccj/form/models/payBySetDate'
+import { PayBySetDate } from 'forms/models/payBySetDate'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { ErrorHandling } from 'common/errorHandling'

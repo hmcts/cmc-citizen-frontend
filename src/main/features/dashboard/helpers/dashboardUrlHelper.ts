@@ -6,6 +6,8 @@ export class DashboardUrlHelper {
   static getStatusUrl (claim: Claim): string {
     if (claim.settlementReachedAt) {
       return Paths.agreementReceiver.evaluateUri({ externalId: claim.externalId })
+    } else if (!claim.respondedAt) {
+      return Paths.responseTaskListPage.evaluateUri({ externalId: claim.externalId })
     } else {
       return Paths.offerResponsePage.evaluateUri({ externalId: claim.externalId })
     }

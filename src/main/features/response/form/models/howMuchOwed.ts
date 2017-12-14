@@ -1,11 +1,10 @@
-import { Serializable } from 'models/serializable'
 import { IsDefined, IsPositive, MaxLength } from 'class-validator'
 import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { Fractions } from 'forms/validation/validators/fractions'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
-export class HowMuchOwed implements Serializable<HowMuchOwed> {
+export class HowMuchOwed {
 
   @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED })
   @IsPositive({ message: ValidationErrors.VALID_OWED_AMOUNT_REQUIRED })
@@ -13,7 +12,7 @@ export class HowMuchOwed implements Serializable<HowMuchOwed> {
   amount?: number
   @IsDefined({ message: ValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED })
-  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.FREE_TEXT_TOO_LONG })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.TEXT_TOO_LONG })
   text?: string
 
   constructor (amount?: number, text?: string) {

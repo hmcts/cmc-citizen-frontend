@@ -1,47 +1,42 @@
 import * as express from 'express'
+import { Paths } from 'claim/paths'
+import { ErrorHandling } from 'common/errorHandling'
+import { DocumentsClient } from 'app/documents/documentsClient'
 import * as http from 'http'
 import * as HttpStatus from 'http-status-codes'
+import { Claim } from 'claims/models/claim'
 
-import { Paths } from 'claim/paths'
-
-import { ClaimStoreClient } from 'app/claims/claimStoreClient'
-import { Claim } from 'app/claims/models/claim'
-
-import { PdfClient } from 'app/pdf/pdfClient'
-import { IssueReceipt } from 'app/pdf/issueReceipt'
-import { User } from 'idam/user'
+const documentsClient: DocumentsClient = new DocumentsClient()
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.receiptReceiver.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const { externalId } = req.params
-    const user: User = res.locals.user
-    try {
-      const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId, user.id)
-      new PdfClient().generate(IssueReceipt.templatePath, new IssueReceipt(claim).data())
-        .on('response', (response: http.IncomingMessage) => {
-          if (response.statusCode !== 200) {
-            return next(new Error('Unexpected error during PDF generation'))
-          }
-          const buffers: Buffer[] = []
-          response.on('data', (chunk: Buffer) => {
-            buffers.push(chunk)
-          })
-          response.on('end', () => {
-            const pdf = Buffer.concat(buffers)
-            res.writeHead(HttpStatus.OK, {
-              'Content-Type': 'application/pdf',
-              'Content-Disposition': 'attachment; filename=moneyclaim-issue-receipt.pdf',
-              'Content-Length': pdf.length
-            })
+  .get(Paths.receiptReceiver.uri,
+    ErrorHandling.apply(
+      async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-            res.end(pdf)
+        const { externalId } = req.params
+        documentsClient.getClaimIssueReceiptPDF(externalId)
+          .on('response', (response: http.IncomingMessage) => {
+            if (response.statusCode !== 200) {
+              return next(new Error('Unexpected error during document retrieval'))
+            }
+            const buffers: Buffer[] = []
+            response.on('data', (chunk: Buffer) => {
+              buffers.push(chunk)
+            })
+            response.on('end', () => {
+              const claim: Claim = res.locals.user.claim
+              const pdf = Buffer.concat(buffers)
+              res.writeHead(HttpStatus.OK, {
+                'Content-Type': 'application/pdf',
+                'Content-Disposition': `attachment; filename=${claim.claimNumber}-claim-receipt.pdf`,
+                'Content-Length': pdf.length
+              })
+
+              res.end(pdf)
+            })
           })
-        })
-        .on('error', (err: Error) => {
-          next(err)
-        })
-    } catch (err) {
-      next(err)
-    }
-  })
+          .on('error', (err: Error) => {
+            next(err)
+          })
+      }))

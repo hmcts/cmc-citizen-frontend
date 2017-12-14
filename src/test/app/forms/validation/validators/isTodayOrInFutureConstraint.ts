@@ -11,9 +11,9 @@ describe('DateTodayOrInFutureConstraint', () => {
   describe('validate', () => {
 
     describe('should return true when ', () => {
-      it('given a date is undefined or null', () => {
+
+      it('given a date is undefined', () => {
         expect(constraint.validate(undefined)).to.equal(true)
-        expect(constraint.validate(null)).to.equal(true)
       })
 
       it('given a valid date in the future', () => {
@@ -28,6 +28,7 @@ describe('DateTodayOrInFutureConstraint', () => {
     })
 
     describe('should return false when ', () => {
+
       it('given an invalid structure', () => {
         expect(constraint.validate({ a: 1, b: 1, c: 2000 })).to.equal(false)
       })

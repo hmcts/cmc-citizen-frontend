@@ -1,9 +1,8 @@
 
-import { Serializable } from 'models/serializable'
 import { Moment } from 'moment'
 import { MomentFactory } from 'common/momentFactory'
 
-export class Offer implements Serializable<Offer> {
+export class Offer {
   content: string
   completionDate: Moment
 

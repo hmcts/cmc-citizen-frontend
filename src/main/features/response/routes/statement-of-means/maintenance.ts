@@ -8,18 +8,22 @@ import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { RoutablePath } from 'common/router/routablePath'
 import { Maintenance } from 'response/form/models/statement-of-means/maintenance'
+import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 
 const page: RoutablePath = Paths.maintenancePage
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(page.uri,
+  .get(
+    page.uri,
+    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
       res.render(page.associatedView, { form: new Form(user.responseDraft.document.statementOfMeans.maintenance) })
     })
   .post(
     page.uri,
+    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     FormValidator.requestHandler(Maintenance, Maintenance.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<Maintenance> = req.body
@@ -33,7 +37,7 @@ export default express.Router()
         await new DraftService().save(user.responseDraft, user.bearerToken)
 
         const { externalId } = req.params
-        res.redirect(Paths.employmentPage.evaluateUri({ externalId: externalId }))
+        res.redirect(Paths.supportedByYouPage.evaluateUri({ externalId: externalId }))
       }
     })
   )

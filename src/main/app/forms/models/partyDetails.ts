@@ -1,6 +1,5 @@
 import { IsDefined, MaxLength, ValidateIf, ValidateNested, Validator } from 'class-validator'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
-import { Serializable } from 'models/serializable'
 import { Address } from 'forms/models/address'
 import { CorrespondenceAddress } from 'forms/models/correspondenceAddress'
 import { PartyType } from 'app/common/partyType'
@@ -12,7 +11,7 @@ export class ValidationErrors {
   static readonly NAME_TOO_LONG: string = 'Name must be no longer than $constraint1 characters'
 }
 
-export class PartyDetails implements Serializable<PartyDetails> {
+export class PartyDetails {
   type?: string
 
   @IsDefined({ message: ValidationErrors.NAME_REQUIRED, groups: ['claimant', 'defendant'] })

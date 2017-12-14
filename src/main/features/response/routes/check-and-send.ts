@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths } from 'response/paths'
+import { Paths, PayBySetDatePaths, StatementOfMeansPaths } from 'response/paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
@@ -15,15 +15,19 @@ import { ErrorHandling } from 'common/errorHandling'
 import { SignatureType } from 'app/common/signatureType'
 import { QualifiedStatementOfTruth } from 'response/form/models/qualifiedStatementOfTruth'
 import { DraftService } from 'services/draftService'
+import { StatementOfMeans } from 'response/draft/statementOfMeans'
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
   const user: User = res.locals.user
   res.render(Paths.checkAndSendPage.associatedView, {
     paths: Paths,
+    statementOfMeansPaths: StatementOfMeansPaths,
+    payBySetDatePaths: PayBySetDatePaths,
     claim: user.claim,
     form: form,
     draft: user.responseDraft.document,
-    signatureType: signatureTypeFor(user)
+    signatureType: signatureTypeFor(user),
+    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(user.responseDraft.document)
   })
 }
 

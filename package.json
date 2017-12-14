@@ -6,28 +6,27 @@
     "node": ">=8.0.0"
   },
   "scripts": {
-    "compile": "tsc --project tsconfig.prod.json",
-    "copy-assets": "gulp sass copy-files",
-    "setup": "yarn compile && yarn copy-assets",
-    "start": "node -r tsconfig-paths/register src/main/server.js",
-    "start-dev": "./node_modules/.bin/ts-node -r tsconfig-paths/register src/main/server.ts",
+    "setup": "gulp sass copy-files",
+    "start": "TS_NODE_FAST=true ./node_modules/.bin/ts-node src/main/server.ts",
     "lint": "tslint --project tsconfig.json && sass-lint -v -q",
-    "test": "NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*') --reporter-options reportFilename=unit,inlineAssets=true,reportTitle=citizen-frontend-unit",
-    "test:routes": "NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) -path '*/routes/*') --timeout 4000 --reporter-options reportFilename=routes,inlineAssets=true,reportTitle=citizen-frontend-routes",
-    "test:a11y": "NODE_ENV=mocha LOG_LEVEL=ERROR mocha --exit --opts mocha.opts src/test/a11y/a11y.ts --timeout 60000 --reporter-options reportFilename=a11y,inlineAssets=true,reportTitle=citizen-frontend-a11y",
+    "test": "TS_NODE_FAST=true NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*') --reporter-options reportFilename=unit,inlineAssets=true,reportTitle=citizen-frontend-unit",
+    "test:routes": "TS_NODE_FAST=true NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) -path '*/routes/*') --timeout 4000 --reporter-options reportFilename=routes,inlineAssets=true,reportTitle=citizen-frontend-routes",
+    "test:a11y": "TS_NODE_FAST=true NODE_ENV=mocha LOG_LEVEL=ERROR mocha --exit --opts mocha.opts src/test/a11y/a11y.ts --timeout 60000 --reporter-options reportFilename=a11y,inlineAssets=true,reportTitle=citizen-frontend-a11y",
     "test:nsp": "nsp check",
-    "test:coverage": "NODE_ENV=mocha LOG_LEVEL=OFF nyc mocha --opts mocha.opts $(find src/test \\( -name '*.ts' -or -name '*.js' \\) ! -path '*a11y*')",
+    "test:coverage": "TS_NODE_FAST=true NODE_ENV=mocha LOG_LEVEL=OFF nyc mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*')",
+    "test:coverage-unit": "TS_NODE_FAST=true NODE_ENV=mocha LOG_LEVEL=OFF nyc mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*')",
     "test:codacy-upload": "cat ./coverage-report/lcov.info | codacy-coverage",
-    "test:codecov-upload": "nyc report --reporter=json && codecov -f coverage-report/*.json",
-    "sonar-scanner": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/** -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info",
+    "test:codecov-upload": "codecov -f ./coverage-report/lcov.info",
+    "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/** -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info",
     "precommit": "yarn lint",
     "prepush": "yarn test && yarn test:routes"
   },
   "dependencies": {
-    "@hmcts/cmc-common-frontend": "^1.22.0",
+    "@hmcts/cmc-common-frontend": "^1.29.0",
     "@hmcts/cmc-draft-store-middleware": "^1.0.0",
     "@hmcts/draft-store-client": "^1.1.1",
-    "@hmcts/nodejs-healthcheck": "^1.4.3",
+    "@hmcts/info-provider": "^1.0.0",
+    "@hmcts/nodejs-healthcheck": "^1.4.5",
     "@hmcts/nodejs-logging": "^1.4.2",
     "@types/config": "^0.0.33",
     "@types/cookies": "^0.7.1",
@@ -58,7 +57,7 @@
     "helmet": "^3.1.0",
     "http-status-codes": "^1.1.6",
     "i18next": "^10.0.7",
-    "i18next-conv": "^5.0.0",
+    "i18next-conv": "^6.0.0",
     "i18next-express-middleware": "^1.0.2",
     "i18next-sprintf-postprocessor": "^0.2.2",
     "jquery": "3.2.1",
@@ -102,7 +101,7 @@
     "husky": "^0.14.3",
     "jsonwebtoken": "^8.0.1",
     "mocha": "^4.0.1",
-    "mochawesome": "^2.2.0",
+    "mochawesome": "^3.0.0",
     "mock-require": "^2.0.1",
     "nock": "^9.0.22",
     "nsp": "^3.0.0",
@@ -120,8 +119,7 @@
   },
   "nyc": {
     "extension": [
-      ".ts",
-      ".js"
+      ".ts"
     ],
     "include": [
       "src/main"

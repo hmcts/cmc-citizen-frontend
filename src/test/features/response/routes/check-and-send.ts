@@ -20,25 +20,28 @@ import { ResponseType } from 'response/form/models/responseType'
 import { SignatureType } from 'app/common/signatureType'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
 const draftType = 'response'
-const checkAndSendPage = ResponsePaths.checkAndSendPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath = ResponsePaths.checkAndSendPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: check and send page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', checkAndSendPage)
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
       })
 
-      checkAlreadySubmittedGuard(app, 'get', checkAndSendPage)
-      checkCountyCourtJudgmentRequestedGuard(app, 'get', checkAndSendPage)
+      checkAlreadySubmittedGuard(app, method, pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       context('when response not submitted', () => {
         it('should redirect to incomplete submission when not all tasks are completed', async () => {
@@ -46,7 +49,7 @@ describe('Defendant response: check and send page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
-            .get(checkAndSendPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(ResponsePaths.incompleteSubmissionPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
@@ -56,7 +59,7 @@ describe('Defendant response: check and send page', () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
-            .get(checkAndSendPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -66,7 +69,7 @@ describe('Defendant response: check and send page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
-            .get(checkAndSendPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting your response'))
         })
@@ -75,15 +78,17 @@ describe('Defendant response: check and send page', () => {
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', checkAndSendPage)
+    const method = 'post'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
       })
 
-      checkAlreadySubmittedGuard(app, 'post', checkAndSendPage)
-      checkCountyCourtJudgmentRequestedGuard(app, 'post', checkAndSendPage)
+      checkAlreadySubmittedGuard(app, method, pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       context('when response not submitted', () => {
         it('should redirect to incomplete submission when not all tasks are completed', async () => {
@@ -91,7 +96,7 @@ describe('Defendant response: check and send page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
-            .post(checkAndSendPage)
+            .post(pagePath)
             .send({ type: SignatureType.BASIC })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
@@ -103,7 +108,7 @@ describe('Defendant response: check and send page', () => {
             claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
-              .post(checkAndSendPage)
+              .post(pagePath)
               .send({ type: SignatureType.BASIC })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -114,7 +119,7 @@ describe('Defendant response: check and send page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(checkAndSendPage)
+              .post(pagePath)
               .send({ type: SignatureType.BASIC })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting your response', 'div class="error-summary"'))
@@ -126,7 +131,7 @@ describe('Defendant response: check and send page', () => {
             claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
-              .post(checkAndSendPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -138,7 +143,7 @@ describe('Defendant response: check and send page', () => {
             claimStoreServiceMock.rejectSaveResponse('HTTP error')
 
             await request(app)
-              .post(checkAndSendPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -151,7 +156,7 @@ describe('Defendant response: check and send page', () => {
             draftStoreServiceMock.rejectDelete()
 
             await request(app)
-              .post(checkAndSendPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -164,7 +169,7 @@ describe('Defendant response: check and send page', () => {
             draftStoreServiceMock.resolveDelete()
 
             await request(app)
-              .post(checkAndSendPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect
@@ -179,7 +184,7 @@ describe('Defendant response: check and send page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(checkAndSendPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect
@@ -193,7 +198,7 @@ describe('Defendant response: check and send page', () => {
             })
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             await request(app)
-              .post(checkAndSendPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect
@@ -207,7 +212,7 @@ describe('Defendant response: check and send page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(checkAndSendPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect

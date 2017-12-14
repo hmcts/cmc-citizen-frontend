@@ -8,12 +8,16 @@ import { Employment } from 'response/form/models/statement-of-means/employment'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { RoutablePath } from 'common/router/routablePath'
+import { FeatureToggleGuard } from 'guards/featureToggleGuard'
+import { StatementOfMeans } from 'response/draft/statementOfMeans'
 
 const page: RoutablePath = StatementOfMeansPaths.employmentPage
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(page.uri,
+  .get(
+    page.uri,
+    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
       res.render(page.associatedView,
@@ -22,6 +26,7 @@ export default express.Router()
     })
   .post(
     page.uri,
+    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     FormValidator.requestHandler(Employment, Employment.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<Employment> = req.body
@@ -30,14 +35,22 @@ export default express.Router()
         res.render(page.associatedView, { form: form })
       } else {
         const user: User = res.locals.user
+        const statementOfMeans: StatementOfMeans = user.responseDraft.document.statementOfMeans
+        statementOfMeans.employment = form.model
+
+        if (statementOfMeans.employment.isCurrentlyEmployed === true) {
+          statementOfMeans.unemployed = undefined
+        } else if (statementOfMeans.employment.isCurrentlyEmployed === false) {
+          statementOfMeans.selfEmployed = statementOfMeans.employers = undefined
+        }
 
         user.responseDraft.document.statementOfMeans.employment = form.model
         await new DraftService().save(user.responseDraft, user.bearerToken)
 
+        const { externalId } = req.params
         if (form.model.isCurrentlyEmployed === false) {
-          res.render(page.associatedView, { form: form })
+          res.redirect(StatementOfMeansPaths.unemployedPage.evaluateUri({ externalId: externalId }))
         } else {
-          const { externalId } = req.params
           if (form.model.employed) {
             res.redirect(StatementOfMeansPaths.employersPage.evaluateUri({ externalId: externalId }))
           } else {

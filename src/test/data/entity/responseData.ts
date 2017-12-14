@@ -3,7 +3,8 @@ import { individual } from './party'
 export const responseData = {
   defendant: individual,
   moreTimeNeeded: 'no',
-  response: 'OWE_NONE',
+  responseType: 'FULL_DEFENCE',
+  defenceType: 'DISPUTE',
   defence: 'My defence',
   freeMediation: 'no'
 }
