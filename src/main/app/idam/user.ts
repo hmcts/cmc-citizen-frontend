@@ -1,6 +1,4 @@
 import { Claim } from 'app/claims/models/claim'
-import { DraftCCJ } from 'ccj/draft/draftCCJ'
-import { Draft } from '@hmcts/draft-store-client'
 
 export class User {
   id: string
@@ -11,7 +9,6 @@ export class User {
   group: string
   bearerToken: string
   claim: Claim
-  ccjDraft: Draft<DraftCCJ>
 
   constructor (id: string,
                email: string,

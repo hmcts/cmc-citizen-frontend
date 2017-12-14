@@ -4,10 +4,12 @@ import { CCJModelConverter } from 'claims/ccjModelConverter'
 import { claimStoreApiUrl } from 'claims/claimStoreClient'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { Claim } from 'claims/models/claim'
+import { DraftCCJ } from 'ccj/draft/draftCCJ'
+import { Draft } from '@hmcts/draft-store-client'
 
 export class CCJClient {
-  static save (user: User): Promise<Claim> {
-    const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convert(user.ccjDraft.document)
+  static save (draft: Draft<DraftCCJ>, user: User): Promise<Claim> {
+    const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convert(draft.document)
 
     return request.post(`${claimStoreApiUrl}/${user.claim.id}/county-court-judgment`, {
       body: countyCourtJudgment,

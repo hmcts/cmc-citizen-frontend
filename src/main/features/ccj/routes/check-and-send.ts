@@ -14,6 +14,8 @@ import { IndividualDetails } from 'forms/models/individualDetails'
 import { PartyType } from 'app/common/partyType'
 import { Party } from 'claims/models/details/yours/party'
 import { DraftService } from 'services/draftService'
+import { Draft } from '@hmcts/draft-store-client'
+import { DraftCCJ } from 'ccj/draft/draftCCJ'
 
 function prepareUrls (externalId: string): object {
   return {
@@ -28,19 +30,20 @@ function convertToPartyDetails (party: Party): PartyDetails {
 }
 
 function renderView (form: Form<Declaration>, req: express.Request, res: express.Response): void {
+  const draft: Draft<DraftCCJ> = res.locals.ccjDraft
   const user: User = res.locals.user
 
   const defendant = convertToPartyDetails(user.claim.claimData.defendant)
   if (defendant.type === PartyType.INDIVIDUAL.value) {
-    (defendant as IndividualDetails).dateOfBirth = user.ccjDraft.document.defendantDateOfBirth
+    (defendant as IndividualDetails).dateOfBirth = draft.document.defendantDateOfBirth
   }
 
   res.render(Paths.checkAndSendPage.associatedView, {
     form: form,
     claim: user.claim,
-    draft: user.ccjDraft.document,
+    draft: draft.document,
     defendant: defendant,
-    amountToBePaid: user.claim.totalAmountTillToday - (user.ccjDraft.document.paidAmount.amount || 0),
+    amountToBePaid: user.claim.totalAmountTillToday - (draft.document.paidAmount.amount || 0),
     ...prepareUrls(req.params.externalId)
   })
 }
@@ -75,18 +78,20 @@ export default express.Router()
     FormValidator.requestHandler(undefined, deserializerFunction),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<Declaration | QualifiedDeclaration> = req.body
-      const user: User = res.locals.user
 
       if (form.hasErrors()) {
         renderView(form, req, res)
       } else {
+        const draft: Draft<DraftCCJ> = res.locals.ccjDraft
+        const user: User = res.locals.user
+
         if (form.model.type === SignatureType.QUALIFIED) {
-          user.ccjDraft.document.qualifiedDeclaration = form.model as QualifiedDeclaration
-          await new DraftService().save(user.ccjDraft, user.bearerToken)
+          draft.document.qualifiedDeclaration = form.model as QualifiedDeclaration
+          await new DraftService().save(draft, user.bearerToken)
         }
 
-        await CCJClient.save(user)
-        await new DraftService().delete(user.ccjDraft.id, user.bearerToken)
+        await CCJClient.save(draft, user)
+        await new DraftService().delete(draft.id, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }
     }))

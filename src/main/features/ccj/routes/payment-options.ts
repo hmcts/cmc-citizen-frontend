@@ -9,12 +9,13 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
+import { Draft } from '@hmcts/draft-store-client'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.paymentOptionsPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const draft: DraftCCJ = res.locals.user.ccjDraft.document
+      const draft: DraftCCJ = res.locals.draft.document
 
       res.render(Paths.paymentOptionsPage.associatedView, { form: new Form(draft.paymentOption) })
     }))
@@ -23,16 +24,18 @@ export default express.Router()
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
         const form: Form<CCJPaymentOption> = req.body
-        const user: User = res.locals.user
 
         if (form.hasErrors()) {
           res.render(Paths.paymentOptionsPage.associatedView, { form: form })
         } else {
-          user.ccjDraft.document.paymentOption = form.model
+          const draft: Draft<DraftCCJ> = res.locals.ccjDraft
+          const user: User = res.locals.user
+
+          draft.document.paymentOption = form.model
           if (form.model.option === PaymentType.IMMEDIATELY) {
-            user.ccjDraft.document.repaymentPlan = user.ccjDraft.document.payBySetDate = undefined
+            draft.document.repaymentPlan = draft.document.payBySetDate = undefined
           }
-          await new DraftService().save(user.ccjDraft, user.bearerToken)
+          await new DraftService().save(draft, user.bearerToken)
 
           const { externalId } = req.params
 

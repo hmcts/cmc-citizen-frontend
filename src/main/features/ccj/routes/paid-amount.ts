@@ -8,6 +8,8 @@ import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { FormValidator } from 'forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
 import { Claim } from 'claims/models/claim'
+import { DraftCCJ } from 'ccj/draft/draftCCJ'
+import { Draft } from '@hmcts/draft-store-client'
 
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
   const claim: Claim = res.locals.user.claim
@@ -19,9 +21,9 @@ function renderView (form: Form<PaidAmount>, res: express.Response): void {
 export default express.Router()
   .get(Paths.paidAmountPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const user: User = res.locals.user
+      const draft: Draft<DraftCCJ> = res.locals.ccjDraft
 
-      renderView(new Form(user.ccjDraft.document.paidAmount), res)
+      renderView(new Form(draft.document.paidAmount), res)
     }))
 
   .post(Paths.paidAmountPage.uri,
@@ -33,10 +35,11 @@ export default express.Router()
         if (form.hasErrors()) {
           renderView(form, res)
         } else {
+          const draft: Draft<DraftCCJ> = res.locals.ccjDraft
           const user: User = res.locals.user
 
-          user.ccjDraft.document.paidAmount = form.model
-          await new DraftService().save(user.ccjDraft, user.bearerToken)
+          draft.document.paidAmount = form.model
+          await new DraftService().save(draft, user.bearerToken)
 
           const { externalId } = req.params
           res.redirect(Paths.paidAmountSummaryPage.evaluateUri({ externalId: externalId }))

@@ -13,6 +13,8 @@ import { PartyType } from 'app/common/partyType'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { Claim } from 'claims/models/claim'
+import { DraftCCJ } from 'ccj/draft/draftCCJ'
+import { Draft } from '@hmcts/draft-store-client'
 
 const logger = require('@hmcts/nodejs-logging').getLogger('ccj/guards/individualDateOfBirth')
 
@@ -34,8 +36,8 @@ export default express.Router()
   .get(Paths.dateOfBirthPage.uri,
     accessGuardRequestHandler,
     (req: express.Request, res: express.Response) => {
-      const user: User = res.locals.user
-      renderView(new Form(user.ccjDraft.document.defendantDateOfBirth), res)
+      const draft: Draft<DraftCCJ> = res.locals.ccjDraft
+      renderView(new Form(draft.document.defendantDateOfBirth), res)
     })
   .post(
     Paths.dateOfBirthPage.uri,
@@ -43,15 +45,17 @@ export default express.Router()
     FormValidator.requestHandler(DateOfBirth, DateOfBirth.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<DateOfBirth> = req.body
-      const user: User = res.locals.user
-      const { externalId } = req.params
 
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        user.ccjDraft.document.defendantDateOfBirth = form.model
-        await new DraftService().save(user.ccjDraft, user.bearerToken)
-        res.redirect(Paths.paidAmountPage.uri.replace(':externalId', externalId))
+        const draft: Draft<DraftCCJ> = res.locals.ccjDraft
+        const user: User = res.locals.user
 
+        draft.document.defendantDateOfBirth = form.model
+        await new DraftService().save(draft, user.bearerToken)
+
+        const { externalId } = req.params
+        res.redirect(Paths.paidAmountPage.uri.replace(':externalId', externalId))
       }
     }))
