@@ -91,6 +91,7 @@ timestamps {
               archiveArtifacts 'coverage-report/lcov-report/index.html'
             }
           }
+
           stage('Sonar') {
             sh "yarn sonar-scan -- -Dsonar.host.url=$SONARQUBE_URL"
           }
@@ -107,7 +108,6 @@ timestamps {
             'TESTS_TAG'               : '@citizen'
           ])
         }
-
 
         onMaster {
           stage('Package application (RPM)') {

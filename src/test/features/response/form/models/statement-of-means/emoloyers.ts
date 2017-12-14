@@ -1,6 +1,11 @@
 import { expect } from 'chai'
-import { Employers } from 'response/form/models/statement-of-means/employers'
-import { EmployerRow } from 'response/form/models/statement-of-means/employerRow'
+import { Employers, ValidationErrors } from 'response/form/models/statement-of-means/employers'
+import {
+  EmployerRow,
+  ValidationErrors as RowValidationErrors
+} from 'response/form/models/statement-of-means/employerRow'
+import { expectValidationError } from '../../../../../app/forms/models/validationUtils'
+import { Validator } from 'class-validator'
 
 describe('Employers', () => {
 
@@ -201,6 +206,44 @@ describe('Employers', () => {
       }
 
       expect(actual.canAddMoreRows()).to.be.eq(false)
+    })
+  })
+
+  describe('validate', () => {
+
+    const validator: Validator = new Validator()
+
+    context('should reject when ', () => {
+
+      it('0 rows given', () => {
+        const errors = validator.validateSync(new Employers([]))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.ENTER_AT_LEAST_ONE_ROW)
+      })
+
+      it('more than 0 empty rows given', () => {
+        const errors = validator.validateSync(new Employers([EmployerRow.empty(), EmployerRow.empty()]))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.ENTER_AT_LEAST_ONE_ROW)
+      })
+
+      it('more than 0 invalid rows given', () => {
+        const errors = validator.validateSync(new Employers([new EmployerRow('company', undefined)]))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, RowValidationErrors.JOB_TITLE_REQUIRED)
+      })
+    })
+
+    context('should accept when', () => {
+
+      it('at least one valid row given', () => {
+        const errors = validator.validateSync(new Employers([new EmployerRow('company', 'dev')]))
+
+        expect(errors.length).to.equal(0)
+      })
     })
   })
 })
