@@ -29,14 +29,15 @@ export default express.Router()
     FormValidator.requestHandler(Unemployed, Unemployed.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<Unemployed> = req.body
-      const user: User = res.locals.user
       const { externalId } = req.params
 
       if (form.hasErrors()) {
         res.render(page.associatedView, { form: form })
       } else {
+        const user: User = res.locals.user
+
         user.responseDraft.document.statementOfMeans.unemployed = form.model
-        await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
+        await new DraftService().save(user.responseDraft, user.bearerToken)
 
         res.redirect(StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: externalId }))
       }
