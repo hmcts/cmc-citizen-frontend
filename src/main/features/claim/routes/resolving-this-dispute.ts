@@ -5,6 +5,8 @@ import { Paths } from 'claim/paths'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
+import { Draft } from '@hmcts/draft-store-client'
+import { DraftClaim } from 'drafts/models/draftClaim'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -14,10 +16,11 @@ export default express.Router()
   .post(
     Paths.resolvingThisDisputerPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+      const draft: Draft<DraftClaim> = res.locals.claimDraft
       const user: User = res.locals.user
 
-      user.claimDraft.document.readResolveDispute = true
-      await new DraftService().save(user.claimDraft, user.bearerToken)
+      draft.document.readResolveDispute = true
+      await new DraftService().save(draft, user.bearerToken)
 
       res.redirect(Paths.taskListPage.uri)
     }))

@@ -11,7 +11,7 @@ import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 
 function renderView (form: Form<Reason>, res: express.Response): void {
-  const draft = res.locals.user.claimDraft.document
+  const draft = res.locals.draft.document
   const defendantName = (
     draft.defendant
     && draft.defendant.partyDetails
@@ -24,7 +24,7 @@ function renderView (form: Form<Reason>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.reasonPage.uri, (req: express.Request, res: express.Response): void => {
-    const draft: DraftClaim = res.locals.user.claimDraft.document
+    const draft: DraftClaim = res.locals.draft.document
 
     renderView(new Form(draft.reason), res)
   })
@@ -39,8 +39,8 @@ export default express.Router()
       } else {
         const user: User = res.locals.user
 
-        user.claimDraft.document.reason = form.model
-        await new DraftService().save(user.claimDraft, user.bearerToken)
+        draft.document.reason = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
         res.redirect(Paths.taskListPage.uri)
       }

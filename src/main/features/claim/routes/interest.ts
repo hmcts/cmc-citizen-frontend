@@ -10,6 +10,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { User } from 'idam/user'
+import { Draft } from '@hmcts/draft-store-client'
 
 function renderView (form: Form<Interest>, res: express.Response): void {
   res.render(Paths.interestPage.associatedView, { form: form })
@@ -18,7 +19,7 @@ function renderView (form: Form<Interest>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.interestPage.uri, (req: express.Request, res: express.Response): void => {
-    const draft: DraftClaim = res.locals.user.claimDraft.document
+    const draft: DraftClaim = res.locals.draft.document
 
     renderView(new Form(draft.interest), res)
   })
@@ -31,10 +32,11 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
 
-        user.claimDraft.document.interest = form.model
-        await new DraftService().save(user.claimDraft, user.bearerToken)
+        draft.document.interest = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
         if (form.model.type === InterestType.NO_INTEREST) {
           res.redirect(Paths.feesPage.uri)

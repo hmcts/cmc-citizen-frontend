@@ -6,13 +6,16 @@ import { Claim } from 'app/claims/models/claim'
 import { User } from 'app/idam/user'
 import { ErrorHandling } from 'common/errorHandling'
 import { isAfter4pm } from 'common/dateUtils'
+import { Draft } from '@hmcts/draft-store-client'
+import { DraftClaim } from 'drafts/models/draftClaim'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.dashboardPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+    const draft: Draft<DraftClaim> = res.locals.claimDraft
     const user: User = res.locals.user
     const claimsAsClaimant: Claim[] = await ClaimStoreClient.retrieveByClaimantId(user.id)
-    const claimDraftSaved: boolean = user.claimDraft.document && user.claimDraft.id !== 0
+    const claimDraftSaved: boolean = draft.document && draft.id !== 0
     const responseDraftSaved = user.responseDraft && user.responseDraft.document && user.responseDraft.id !== 0 // TODO: apply response draft middleware
 
     const claimsAsDefendant: Claim[] = await ClaimStoreClient.retrieveByDefendantId(user.id)

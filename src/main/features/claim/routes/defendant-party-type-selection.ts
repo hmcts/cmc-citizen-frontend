@@ -11,6 +11,7 @@ import { PartyDetailsFactory } from 'forms/models/partyDetailsFactory'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { User } from 'idam/user'
+import { Draft } from '@hmcts/draft-store-client'
 
 function renderView (form: Form<PartyTypeResponse>, res: express.Response, next: express.NextFunction) {
   res.render(Paths.defendantPartyTypeSelectionPage.associatedView, {
@@ -21,7 +22,7 @@ function renderView (form: Form<PartyTypeResponse>, res: express.Response, next:
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantPartyTypeSelectionPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const draft: DraftClaim = res.locals.user.claimDraft.document
+    const draft: DraftClaim = res.locals.draft.document
 
     renderView(new Form(new PartyTypeResponse(draft.defendant.partyDetails ? PartyType.valueOf(draft.defendant.partyDetails.type) : undefined)), res, next)
   })
@@ -34,12 +35,13 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
+        const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
 
-        let partyDetails: PartyDetails = user.claimDraft.document.defendant.partyDetails
+        let partyDetails: PartyDetails = draft.document.defendant.partyDetails
         if (partyDetails === undefined || partyDetails.type !== form.model.type.value) {
-          partyDetails = user.claimDraft.document.defendant.partyDetails = PartyDetailsFactory.createInstance(form.model.type.value)
-          await new DraftService().save(user.claimDraft, user.bearerToken)
+          partyDetails = draft.document.defendant.partyDetails = PartyDetailsFactory.createInstance(form.model.type.value)
+          await new DraftService().save(draft, user.bearerToken)
         }
 
         switch (partyDetails.type) {

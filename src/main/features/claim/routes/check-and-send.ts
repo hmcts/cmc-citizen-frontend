@@ -22,6 +22,7 @@ import { SignatureType } from 'app/common/signatureType'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
+import { Draft } from '@hmcts/draft-store-client'
 
 function getClaimAmountTotal (draft: DraftClaim): Promise<TotalAmount> {
   return FeesClient.calculateIssueFee(claimAmountWithInterest(draft))
@@ -67,8 +68,8 @@ function deserializerFunction (value: any): StatementOfTruth | QualifiedStatemen
   }
 }
 
-function getStatementOfTruthClassFor (user: User): { new(): StatementOfTruth | QualifiedStatementOfTruth } {
-  if (user.claimDraft.document.claimant.partyDetails.isBusiness()) {
+function getStatementOfTruthClassFor (draft: Draft<DraftClaim>): { new(): StatementOfTruth | QualifiedStatementOfTruth } {
+  if (draft.document.claimant.partyDetails.isBusiness()) {
     return QualifiedStatementOfTruth
   } else {
     return StatementOfTruth
@@ -76,7 +77,7 @@ function getStatementOfTruthClassFor (user: User): { new(): StatementOfTruth | Q
 }
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response, next: express.NextFunction) {
-  const draft: DraftClaim = res.locals.user.claimDraft.document
+  const draft: DraftClaim = res.locals.draft.document
 
   getClaimAmountTotal(draft)
     .then((interestTotal: TotalAmount) => {
@@ -99,8 +100,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.checkAndSendPage.uri, AllClaimTasksCompletedGuard.requestHandler, (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user: User = res.locals.user
-    const StatementOfTruthClass = getStatementOfTruthClassFor(user)
+    const draft: Draft<DraftClaim> = res.locals.claimDraft
+    const StatementOfTruthClass = getStatementOfTruthClassFor(draft)
     renderView(new Form(new StatementOfTruthClass()), res, next)
   })
   .post(Paths.checkAndSendPage.uri,
@@ -113,10 +114,11 @@ export default express.Router()
         renderView(form, res, next)
       } else {
         if (form.model.type === SignatureType.QUALIFIED) {
+          const draft: Draft<DraftClaim> = res.locals.claimDraft
           const user: User = res.locals.user
 
-          user.claimDraft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
-          await new DraftService().save(user.claimDraft, user.bearerToken)
+          draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
+          await new DraftService().save(draft, user.bearerToken)
         }
         res.redirect(Paths.startPaymentReceiver.uri)
       }

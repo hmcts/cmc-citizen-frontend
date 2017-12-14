@@ -11,6 +11,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { User } from 'idam/user'
+import { Draft } from '@hmcts/draft-store-client'
 
 function renderView (form: Form<ClaimAmountBreakdown>, res: express.Response): void {
   res.render(Paths.amountPage.associatedView, {
@@ -34,7 +35,7 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.amountPage.uri, (req: express.Request, res: express.Response): void => {
-    const draft: DraftClaim = res.locals.user.claimDraft.document
+    const draft: DraftClaim = res.locals.draft.document
 
     renderView(new Form(draft.amount), res)
   })
@@ -50,10 +51,11 @@ export default express.Router()
       } else {
         form.model.removeExcessRows()
         ClaimValidator.claimAmount(form.model.totalAmount())
+        const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
 
-        user.claimDraft.document.amount = form.model
-        await new DraftService().save(user.claimDraft, user.bearerToken)
+        draft.document.amount = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
         res.redirect(Paths.interestPage.uri)
       }

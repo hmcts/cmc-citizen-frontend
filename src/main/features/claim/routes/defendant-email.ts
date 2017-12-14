@@ -10,6 +10,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { User } from 'idam/user'
+import { Draft } from '@hmcts/draft-store-client'
 
 function renderView (form: Form<Email>, res: express.Response): void {
   res.render(Paths.defendantEmailPage.associatedView, { form: form })
@@ -18,7 +19,7 @@ function renderView (form: Form<Email>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantEmailPage.uri, (req: express.Request, res: express.Response) => {
-    const draft: DraftClaim = res.locals.user.claimDraft.document
+    const draft: DraftClaim = res.locals.draft.document
 
     renderView(new Form(draft.defendant.email), res)
   })
@@ -31,10 +32,11 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
 
-        user.claimDraft.document.defendant.email = form.model
-        await new DraftService().save(user.claimDraft, user.bearerToken)
+        draft.document.defendant.email = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
         res.redirect(Paths.taskListPage.uri)
       }

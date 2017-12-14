@@ -9,6 +9,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { User } from 'idam/user'
+import { Draft } from '@hmcts/draft-store-client'
 
 function renderView (form: Form<IndividualDetails>, res: express.Response): void {
   res.render(Paths.claimantIndividualDetailsPage.associatedView, { form: form })
@@ -17,7 +18,7 @@ function renderView (form: Form<IndividualDetails>, res: express.Response): void
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.claimantIndividualDetailsPage.uri, (req: express.Request, res: express.Response) => {
-    const draft: DraftClaim = res.locals.user.claimDraft.document
+    const draft: DraftClaim = res.locals.draft.document
 
     renderView(new Form(draft.claimant.partyDetails as IndividualDetails), res)
   })
@@ -29,12 +30,13 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
 
         // Workaround: reset date of birth which is erased in the process of form deserialization
-        form.model.dateOfBirth = (user.claimDraft.document.claimant.partyDetails as IndividualDetails).dateOfBirth
-        user.claimDraft.document.claimant.partyDetails = form.model
-        await new DraftService().save(user.claimDraft, user.bearerToken)
+        form.model.dateOfBirth = (draft.document.claimant.partyDetails as IndividualDetails).dateOfBirth
+        draft.document.claimant.partyDetails = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
         res.redirect(Paths.claimantDateOfBirthPage.uri)
       }
