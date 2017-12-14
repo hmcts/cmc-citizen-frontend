@@ -13,6 +13,7 @@ import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { RoutablePath } from 'common/router/routablePath'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { Draft } from '@hmcts/draft-store-client'
 
 function nextPageFor (responseDraft: ResponseDraft): RoutablePath {
   if (StatementOfMeans.isApplicableFor(responseDraft)) {
@@ -23,8 +24,9 @@ function nextPageFor (responseDraft: ResponseDraft): RoutablePath {
 }
 
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
+  const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const user: User = res.locals.user
-  const alreadyPaid: number = user.responseDraft.document.paidAmount.amount || 0
+  const alreadyPaid: number = draft.document.paidAmount.amount || 0
 
   res.render(Paths.defencePaymentPlanPage.associatedView, {
     form: form,
@@ -37,9 +39,9 @@ export default express.Router()
   .get(Paths.defencePaymentPlanPage.uri,
     FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const user: User = res.locals.user
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-      renderView(new Form(user.responseDraft.document.defendantPaymentPlan), res)
+      renderView(new Form(draft.document.defendantPaymentPlan), res)
     }))
 
   .post(Paths.defencePaymentPlanPage.uri,
@@ -48,15 +50,17 @@ export default express.Router()
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response): Promise<void> => {
         const form: Form<DefendantPaymentPlan> = req.body
-        const user: User = res.locals.user
 
         if (form.hasErrors()) {
           renderView(form, res)
         } else {
-          user.responseDraft.document.defendantPaymentPlan = form.model
-          await new DraftService().save(user.responseDraft, user.bearerToken)
+          const draft: Draft<ResponseDraft> = res.locals.responseDraft
+          const user: User = res.locals.user
+
+          draft.document.defendantPaymentPlan = form.model
+          await new DraftService().save(draft, user.bearerToken)
 
           const { externalId } = req.params
-          res.redirect(nextPageFor(user.responseDraft.document).evaluateUri({ externalId: externalId }))
+          res.redirect(nextPageFor(draft.document).evaluateUri({ externalId: externalId }))
         }
       }))

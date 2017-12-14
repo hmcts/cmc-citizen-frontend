@@ -16,8 +16,11 @@ import { SignatureType } from 'app/common/signatureType'
 import { QualifiedStatementOfTruth } from 'response/form/models/qualifiedStatementOfTruth'
 import { DraftService } from 'services/draftService'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
+import { Draft } from '@hmcts/draft-store-client'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
+  const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const user: User = res.locals.user
   res.render(Paths.checkAndSendPage.associatedView, {
     paths: Paths,
@@ -25,24 +28,24 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     payBySetDatePaths: PayBySetDatePaths,
     claim: user.claim,
     form: form,
-    draft: user.responseDraft.document,
-    signatureType: signatureTypeFor(user),
-    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(user.responseDraft.document)
+    draft: draft.document,
+    signatureType: signatureTypeFor(user, draft),
+    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(draft.document)
   })
 }
 
-function defendantIsCounterClaiming (user: User): boolean {
-  return user.responseDraft.document.rejectAllOfClaim &&
-    user.responseDraft.document.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM
+function defendantIsCounterClaiming (draft: Draft<ResponseDraft>): boolean {
+  return draft.document.rejectAllOfClaim &&
+    draft.document.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM
 }
 
-function isStatementOfTruthRequired (user: User): boolean {
-  const responseType: ResponseType = user.responseDraft.document.response.type
-  return (responseType === ResponseType.OWE_NONE && !defendantIsCounterClaiming(user))
+function isStatementOfTruthRequired (draft: Draft<ResponseDraft>): boolean {
+  const responseType: ResponseType = draft.document.response.type
+  return (responseType === ResponseType.OWE_NONE && !defendantIsCounterClaiming(draft))
 }
 
-function signatureTypeFor (user: User): string {
-  if (isStatementOfTruthRequired(user)) {
+function signatureTypeFor (user: User, draft: Draft<ResponseDraft>): string {
+  if (isStatementOfTruthRequired(draft)) {
     if (user.claim.claimData.defendant.isBusiness()) {
       return SignatureType.QUALIFIED
     } else {
@@ -64,8 +67,8 @@ function deserializerFunction (value: any): StatementOfTruth | QualifiedStatemen
   }
 }
 
-function getStatementOfTruthClassFor (user: User): { new(): StatementOfTruth | QualifiedStatementOfTruth } {
-  if (signatureTypeFor(user) === SignatureType.QUALIFIED) {
+function getStatementOfTruthClassFor (user: User, draft: Draft<ResponseDraft>): { new(): StatementOfTruth | QualifiedStatementOfTruth } {
+  if (signatureTypeFor(user, draft) === SignatureType.QUALIFIED) {
     return QualifiedStatementOfTruth
   } else {
     return StatementOfTruth
@@ -78,8 +81,9 @@ export default express.Router()
     Paths.checkAndSendPage.uri,
     AllResponseTasksCompletedGuard.requestHandler,
     (req: express.Request, res: express.Response) => {
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
       const user: User = res.locals.user
-      const StatementOfTruthClass = getStatementOfTruthClassFor(user)
+      const StatementOfTruthClass = getStatementOfTruthClassFor(user, draft)
       renderView(new Form(new StatementOfTruthClass()), res)
     })
   .post(
@@ -87,15 +91,16 @@ export default express.Router()
     AllResponseTasksCompletedGuard.requestHandler,
     FormValidator.requestHandler(undefined, deserializerFunction),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
       const user: User = res.locals.user
       const form: Form<StatementOfTruth | QualifiedStatementOfTruth> = req.body
-      if (isStatementOfTruthRequired(user) && form.hasErrors()) {
+      if (isStatementOfTruthRequired(draft) && form.hasErrors()) {
         renderView(form, res)
       } else {
-        const responseType = user.responseDraft.document.response.type
+        const responseType = draft.document.response.type
         switch (responseType) {
           case ResponseType.OWE_NONE:
-            if (defendantIsCounterClaiming(user)) {
+            if (defendantIsCounterClaiming(draft)) {
               res.redirect(Paths.counterClaimPage.evaluateUri({ externalId: user.claim.externalId }))
               return
             }
@@ -111,11 +116,11 @@ export default express.Router()
         }
 
         if (form.model.type === SignatureType.QUALIFIED) {
-          user.responseDraft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
-          await new DraftService().save(user.responseDraft, user.bearerToken)
+          draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
+          await new DraftService().save(draft, user.bearerToken)
         }
-        await ClaimStoreClient.saveResponseForUser(user)
-        await new DraftService().delete(user.responseDraft.id, user.bearerToken)
+        await ClaimStoreClient.saveResponseForUser(draft, user)
+        await new DraftService().delete(draft.id, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: user.claim.externalId }))
       }
     }))

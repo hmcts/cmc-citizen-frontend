@@ -10,6 +10,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { Draft } from '@hmcts/draft-store-client'
 
 async function renderView (form: Form<Defence>, res: express.Response, next: express.NextFunction) {
   try {
@@ -27,7 +28,7 @@ async function renderView (form: Form<Defence>, res: express.Response, next: exp
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defencePage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const draft: ResponseDraft = res.locals.user.responseDraft.document
+    const draft: ResponseDraft = res.locals.draft.document
 
     await renderView(new Form(draft.defence), res, next)
   })
@@ -40,10 +41,11 @@ export default express.Router()
       if (form.hasErrors()) {
         await renderView(form, res, next)
       } else {
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        user.responseDraft.document.defence = form.model
-        await new DraftService().save(user.responseDraft, user.bearerToken)
+        draft.document.defence = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
       }

@@ -1,5 +1,4 @@
 import { Claim } from 'app/claims/models/claim'
-import { ResponseDraft } from 'response/draft/responseDraft'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Draft } from '@hmcts/draft-store-client'
 
@@ -12,7 +11,6 @@ export class User {
   group: string
   bearerToken: string
   claim: Claim
-  responseDraft: Draft<ResponseDraft>
   ccjDraft: Draft<DraftCCJ>
 
   constructor (id: string,

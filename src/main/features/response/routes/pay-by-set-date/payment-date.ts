@@ -9,6 +9,8 @@ import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { PaymentDateChecker } from 'response/helpers/paymentDateChecker'
 import { RoutablePath } from 'common/router/routablePath'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
+import { Draft } from '@hmcts/draft-store-client'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 function renderView (form: Form<PaymentDate>, res: express.Response) {
   res.render(PayBySetDatePaths.paymentDatePage.associatedView, {
@@ -22,8 +24,8 @@ export default express.Router()
     PayBySetDatePaths.paymentDatePage.uri,
     FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     (req: express.Request, res: express.Response) => {
-      const user: User = res.locals.user
-      renderView(new Form(user.responseDraft.document.payBySetDate.paymentDate), res)
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      renderView(new Form(draft.document.payBySetDate.paymentDate), res)
     })
   .post(
     PayBySetDatePaths.paymentDatePage.uri,
@@ -31,22 +33,24 @@ export default express.Router()
     FormValidator.requestHandler(PaymentDate, PaymentDate.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<PaymentDate> = req.body
-      const user: User = res.locals.user
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
+        const user: User = res.locals.user
+
         const paymentDate: PaymentDate = form.model
-        user.responseDraft.document.payBySetDate.paymentDate = paymentDate
+        draft.document.payBySetDate.paymentDate = paymentDate
 
         let nextPage: RoutablePath
         if (PaymentDateChecker.isLaterThan28DaysFromNow(paymentDate.date.toMoment())) {
           nextPage = PayBySetDatePaths.explanationPage
         } else {
-          user.responseDraft.document.payBySetDate.clearExplanation()
+          draft.document.payBySetDate.clearExplanation()
           nextPage = Paths.taskListPage
         }
 
-        await new DraftService().save(user.responseDraft, user.bearerToken)
+        await new DraftService().save(draft, user.bearerToken)
         res.redirect(nextPage.evaluateUri({ externalId: req.params.externalId }))
       }
     }))

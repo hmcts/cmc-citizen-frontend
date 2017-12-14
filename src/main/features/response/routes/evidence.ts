@@ -9,6 +9,8 @@ import { EvidenceType } from 'response/form/models/evidenceType'
 import { DraftService } from 'services/draftService'
 import { RoutablePath } from 'common/router/routablePath'
 import { User } from 'idam/user'
+import { Draft } from '@hmcts/draft-store-client'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 const page: RoutablePath = Paths.evidencePage
 
@@ -36,8 +38,8 @@ export default express.Router()
   .get(
     page.uri,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const user: User = res.locals.user
-      renderView(new Form(user.responseDraft.document.evidence), res)
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      renderView(new Form(draft.document.evidence), res)
     })
   .post(
     page.uri,
@@ -45,15 +47,17 @@ export default express.Router()
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Evidence> = req.body
-      const user: User = res.locals.user
 
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        form.model.removeExcessRows()
-        user.responseDraft.document.evidence = form.model
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
+        const user: User = res.locals.user
 
-        await new DraftService().save(user.responseDraft, user.bearerToken)
+        form.model.removeExcessRows()
+        draft.document.evidence = form.model
+
+        await new DraftService().save(draft, user.bearerToken)
         res.redirect(Paths.impactOfDisputePage.evaluateUri({ externalId: user.claim.externalId }))
       }
     })

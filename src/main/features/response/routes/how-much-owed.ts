@@ -12,6 +12,7 @@ import { Claim } from 'claims/models/claim'
 import { ValidationError } from 'class-validator'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { Draft } from '@hmcts/draft-store-client'
 
 async function renderView (form: Form<HowMuchOwed>, res: express.Response, next: express.NextFunction) {
   try {
@@ -30,7 +31,7 @@ async function renderView (form: Form<HowMuchOwed>, res: express.Response, next:
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantHowMuchOwed.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const draft: ResponseDraft = res.locals.user.responseDraft.document
+    const draft: ResponseDraft = res.locals.draft.document
 
     await renderView(new Form(draft.howMuchOwed), res, next)
   }))
@@ -52,8 +53,11 @@ export default express.Router()
       if (form.hasErrors()) {
         await renderView(form, res, next)
       } else {
-        user.responseDraft.document.howMuchOwed = form.model
-        await new DraftService().save(user.responseDraft, user.bearerToken)
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
+
+        draft.document.howMuchOwed = form.model
+        await new DraftService().save(draft, user.bearerToken)
+
         res.redirect(Paths.timelinePage.evaluateUri({ externalId: user.claim.externalId }))
       }
     })

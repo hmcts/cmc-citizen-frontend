@@ -9,6 +9,8 @@ import { DraftService } from 'services/draftService'
 import { RoutablePath } from 'common/router/routablePath'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { SupportedByYou } from 'response/form/models/statement-of-means/supportedByYou'
+import { Draft } from '@hmcts/draft-store-client'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 const page: RoutablePath = Paths.supportedByYouPage
 
@@ -18,9 +20,9 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     (req: express.Request, res: express.Response) => {
-      const user: User = res.locals.user
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
       res.render(page.associatedView, {
-        form: new Form(user.responseDraft.document.statementOfMeans.supportedByYou)
+        form: new Form(draft.document.statementOfMeans.supportedByYou)
       })
     })
   .post(
@@ -34,10 +36,11 @@ export default express.Router()
       if (form.hasErrors()) {
         res.render(page.associatedView, { form: form })
       } else {
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        user.responseDraft.document.statementOfMeans.supportedByYou = form.model
-        await new DraftService().save(user.responseDraft, user.bearerToken)
+        draft.document.statementOfMeans.supportedByYou = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
         res.redirect(Paths.employmentPage.evaluateUri({ externalId: externalId }))
       }

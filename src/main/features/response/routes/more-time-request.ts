@@ -11,6 +11,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { Draft } from '@hmcts/draft-store-client'
 
 function renderView (form: Form<MoreTimeNeeded>, res: express.Response, next: express.NextFunction) {
   try {
@@ -28,7 +29,7 @@ export default express.Router()
     Paths.moreTimeRequestPage.uri,
     MoreTimeAlreadyRequestedGuard.requestHandler,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const draft: ResponseDraft = res.locals.user.responseDraft.document
+      const draft: ResponseDraft = res.locals.draft.document
 
       renderView(new Form(draft.moreTimeNeeded), res, next)
     })
@@ -42,10 +43,11 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        user.responseDraft.document.moreTimeNeeded = form.model
-        await new DraftService().save(user.responseDraft, user.bearerToken)
+        draft.document.moreTimeNeeded = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
         if (form.model.option === MoreTimeNeededOption.YES) {
           await ClaimStoreClient.requestForMoreTime(user.claim.id, user)

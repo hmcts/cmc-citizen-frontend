@@ -10,6 +10,8 @@ import { RoutablePath } from 'common/router/routablePath'
 import { Dependants } from 'response/form/models/statement-of-means/dependants'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { Draft } from '@hmcts/draft-store-client'
 
 const page: RoutablePath = Paths.dependantsPage
 
@@ -19,8 +21,8 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     (req: express.Request, res: express.Response) => {
-      const user: User = res.locals.user
-      res.render(page.associatedView, { form: new Form(user.responseDraft.document.statementOfMeans.dependants) })
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      res.render(page.associatedView, { form: new Form(draft.document.statementOfMeans.dependants) })
     })
   .post(
     page.uri,
@@ -32,16 +34,17 @@ export default express.Router()
       if (form.hasErrors()) {
         res.render(page.associatedView, { form: form })
       } else {
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
-        const statementOfMeans: StatementOfMeans = user.responseDraft.document.statementOfMeans
+        const statementOfMeans: StatementOfMeans = draft.document.statementOfMeans
         statementOfMeans.dependants = form.model
 
         if (statementOfMeans.dependants.hasAnyChildren === false) {
           statementOfMeans.education = undefined
         }
 
-        user.responseDraft.document.statementOfMeans.dependants = form.model
-        await new DraftService().save(user.responseDraft, user.bearerToken)
+        draft.document.statementOfMeans.dependants = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params
         if (form.model.numberOfChildren && form.model.numberOfChildren.between16and19) {

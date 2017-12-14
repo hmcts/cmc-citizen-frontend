@@ -12,9 +12,10 @@ import { GuardFactory } from 'response/guards/guardFactory'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
+import { Draft } from '@hmcts/draft-store-client'
 
 function isRequestAllowed (res: express.Response): boolean {
-  const draft: ResponseDraft = res.locals.user.responseDraft.document
+  const draft: ResponseDraft = res.locals.draft.document
 
   return draft.response !== undefined
     && draft.response.type === ResponseType.OWE_NONE
@@ -40,7 +41,7 @@ export default express.Router()
     Paths.defenceRejectAllOfClaimPage.uri,
     guardRequestHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const draft: ResponseDraft = res.locals.user.responseDraft.document
+      const draft: ResponseDraft = res.locals.draft.document
 
       renderView(new Form(draft.rejectAllOfClaim), res)
     }))
@@ -54,10 +55,11 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        user.responseDraft.document.rejectAllOfClaim = form.model
-        await new DraftService().save(user.responseDraft, user.bearerToken)
+        draft.document.rejectAllOfClaim = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))

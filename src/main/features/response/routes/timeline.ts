@@ -9,6 +9,8 @@ import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { RoutablePath } from 'common/router/routablePath'
 import { Timeline } from 'response/form/models/timeline'
+import { Draft } from '@hmcts/draft-store-client'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 const page: RoutablePath = Paths.timelinePage
 
@@ -35,8 +37,8 @@ export default express.Router()
   .get(
     page.uri,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const user: User = res.locals.user
-      renderView(new Form(user.responseDraft.document.timeline), res)
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      renderView(new Form(draft.document.timeline), res)
     })
   .post(
     page.uri,
@@ -44,16 +46,17 @@ export default express.Router()
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Timeline> = req.body
-      const user: User = res.locals.user
 
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
+        const user: User = res.locals.user
+
         form.model.removeExcessRows()
+        draft.document.timeline = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
-        user.responseDraft.document.timeline = form.model
-
-        await new DraftService().save(user.responseDraft, user.bearerToken)
         res.redirect(Paths.evidencePage.evaluateUri({ externalId: user.claim.externalId }))
       }
     })

@@ -9,6 +9,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { Draft } from '@hmcts/draft-store-client'
 
 function renderView (form: Form<Response>, res: express.Response) {
   res.render(Paths.responseTypePage.associatedView, {
@@ -20,7 +21,7 @@ function renderView (form: Form<Response>, res: express.Response) {
 export default express.Router()
   .get(Paths.responseTypePage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const draft: ResponseDraft = res.locals.user.responseDraft.document
+      const draft: ResponseDraft = res.locals.draft.document
 
       renderView(new Form(draft.response), res)
     }))
@@ -34,12 +35,13 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        user.responseDraft.document.response = form.model
-        await new DraftService().save(user.responseDraft, user.bearerToken)
+        draft.document.response = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
-        const responseType = user.responseDraft.document.response.type
+        const responseType = draft.document.response.type
 
         switch (responseType) {
           case ResponseType.OWE_NONE:

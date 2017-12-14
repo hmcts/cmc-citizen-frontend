@@ -10,6 +10,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { Claim } from 'claims/models/claim'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { Draft } from '@hmcts/draft-store-client'
 
 async function renderView (form: Form<HowMuchPaid>, res: express.Response, next: express.NextFunction) {
   try {
@@ -28,7 +29,7 @@ async function renderView (form: Form<HowMuchPaid>, res: express.Response, next:
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantHowMuchPaid.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const draft: ResponseDraft = res.locals.user.responseDraft.document
+    const draft: ResponseDraft = res.locals.draft.document
 
     await renderView(new Form(draft.howMuchIsPaid), res, next)
   }))
@@ -37,12 +38,15 @@ export default express.Router()
     FormValidator.requestHandler(HowMuchPaid, HowMuchPaid.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<HowMuchPaid> = req.body
-      const user: User = res.locals.user
       if (form.hasErrors()) {
         await renderView(form, res, next)
       } else {
-        user.responseDraft.document.howMuchIsPaid = form.model
-        await new DraftService().save(user.responseDraft, user.bearerToken)
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
+        const user: User = res.locals.user
+
+        draft.document.howMuchIsPaid = form.model
+        await new DraftService().save(draft, user.bearerToken)
+
         res.redirect(Paths.timelinePage.evaluateUri({ externalId: user.claim.externalId }))
       }
     })

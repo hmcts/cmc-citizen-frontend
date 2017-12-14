@@ -13,6 +13,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { ResponseType } from 'response/form/models/responseType'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
+import { Draft } from '@hmcts/draft-store-client'
 
 function isAmountTooHighPartialResponse (responseDraft: ResponseDraft): boolean {
   return responseDraft.response.type.value === ResponseType.OWE_SOME_PAID_NONE.value
@@ -28,13 +29,14 @@ function formLabelFor (responseDraft: ResponseDraft): string {
 }
 
 function renderView (form: Form<DefendantPaymentOption>, res: express.Response) {
+  const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const user: User = res.locals.user
   res.render(Paths.defencePaymentOptionsPage.associatedView, {
     form: form,
     claim: user.claim,
-    responseType: user.responseDraft.document.response.type,
-    formLabel: formLabelFor(user.responseDraft.document),
-    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(user.responseDraft.document)
+    responseType: draft.document.response.type,
+    formLabel: formLabelFor(draft.document),
+    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(draft.document)
   })
 }
 
@@ -43,9 +45,9 @@ export default express.Router()
   .get(Paths.defencePaymentOptionsPage.uri,
     FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const user: User = res.locals.user
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-      renderView(new Form(user.responseDraft.document.defendantPaymentOption), res)
+      renderView(new Form(draft.document.defendantPaymentOption), res)
     }))
   .post(Paths.defencePaymentOptionsPage.uri,
     FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
@@ -53,13 +55,15 @@ export default express.Router()
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response): Promise<void> => {
         const form: Form<DefendantPaymentOption> = req.body
-        const user: User = res.locals.user
 
         if (form.hasErrors()) {
           renderView(form, res)
         } else {
-          user.responseDraft.document.defendantPaymentOption = form.model
-          await new DraftService().save(user.responseDraft, user.bearerToken)
+          const draft: Draft<ResponseDraft> = res.locals.responseDraft
+          const user: User = res.locals.user
+
+          draft.document.defendantPaymentOption = form.model
+          await new DraftService().save(draft, user.bearerToken)
 
           const { externalId } = req.params
           switch (form.model.option) {
