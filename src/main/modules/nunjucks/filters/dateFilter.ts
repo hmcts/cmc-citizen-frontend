@@ -1,7 +1,8 @@
 import { MomentFormatter } from 'utils/momentFormatter'
 import * as moment from 'moment'
+import { Logger } from '@hmcts/nodejs-logging'
 
-const logger = require('@hmcts/nodejs-logging').getLogger('modules/nunjucks/dateFilter')
+const logger = Logger.getLogger('modules/nunjucks/dateFilter')
 
 export function dateFilter (value: moment.Moment | string): string {
   try {
