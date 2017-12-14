@@ -16,8 +16,9 @@ import { claimAmountWithInterest } from 'app/utils/interestUtils'
 import { User } from 'app/idam/user'
 import { DraftService } from 'services/draftService'
 import { ServiceAuthTokenFactoryImpl } from 'common/security/serviceTokenFactoryImpl'
+import { Logger } from '@hmcts/nodejs-logging'
 
-const logger = require('@hmcts/nodejs-logging').getLogger('router/pay')
+const logger = Logger.getLogger('router/pay')
 const issueFeeCode = config.get<string>('fees.issueFee.code')
 
 const getPayClient = async (): Promise<PayClient> => {

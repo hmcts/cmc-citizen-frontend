@@ -1,21 +1,22 @@
-const httpCallMethods = ['get', 'post', 'put', 'patch', 'delete', 'del', 'head']
+import { ApiLogger } from 'logging/apiLogger'
+import { HttpProxyCallInterceptor } from 'logging/httpProxyCallInterceptor'
+import { RequestAPI } from 'client/request'
 
 export class RequestLoggingHandler {
-  constructor (public request, public apiLogger) {
-    this.request = request
-    this.apiLogger = apiLogger
+  constructor (private request, private apiLogger = new ApiLogger()) {
+    if (!this.request) {
+      throw new Error('Initialised request instance is required')
+    }
+  }
+
+  static proxy<T extends RequestAPI> (request: T): T {
+    return new Proxy(request, new RequestLoggingHandler(request))
   }
 
   get (target, key) {
-    if (contains(httpCallMethods, key)) {
-      const originalMethod = target[key]
-      return (...args) => {
-        this.handleLogging(key.toUpperCase(), asOptions(args[0]))
-        return originalMethod.apply(this.request, args)
-      }
-    } else {
-      return target[key]
-    }
+    return HttpProxyCallInterceptor.intercept(target, key, (callTarget: Object, methodName: string, methodArgs: any[]) => {
+      this.handleLogging(methodName.toUpperCase(), asOptions(methodArgs[0]))
+    })
   }
 
   handleLogging (method, options) {
@@ -23,7 +24,8 @@ export class RequestLoggingHandler {
       method: method,
       uri: options.uri,
       requestBody: options.body,
-      query: options.qs
+      query: options.qs,
+      headers: options.headers
     })
     let originalCallback = intercept(options.callback)
     options.callback = (err, response, body) => {
@@ -32,14 +34,11 @@ export class RequestLoggingHandler {
         uri: options.uri,
         responseCode: ((response) ? response.statusCode : undefined),
         responseBody: body,
-        error: err
+        error: err,
+        requestHeaders: options.headers
       })
     }
   }
-}
-
-function contains (array, value) {
-  return array.indexOf(value) >= 0
 }
 
 /**
