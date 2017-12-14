@@ -10,21 +10,27 @@ export class DocumentsClient {
   constructor (public documentsUrl: string = `${claimStoreBaseUrl}/documents`) {
   }
 
-  getResponseCopy (claimExternalId: string): Request {
-    if (StringUtils.isBlank(claimExternalId)) {
-      throw new Error('Claim external ID cannot be blank')
-    }
-    return requestNonPromise.get({
-      uri: `${this.documentsUrl}/defendantResponseCopy/${claimExternalId}`
-    })
+  getClaimIssueReceiptPDF (claimExternalId: string): Request {
+    return this.getPDF(claimExternalId, 'claimIssueReceipt')
   }
 
-  getSettlementAgreementCopy (claimExternalId: string): Request {
+  getDefendantResponseReceiptPDF (claimExternalId: string): Request {
+    return this.getPDF(claimExternalId, 'defendantResponseReceipt')
+  }
+
+  getSettlementAgreementPDF (claimExternalId: string): Request {
+    return this.getPDF(claimExternalId, 'settlementAgreement')
+  }
+
+  private getPDF (claimExternalId: string, documentTemplate: string): Request {
     if (StringUtils.isBlank(claimExternalId)) {
       throw new Error('Claim external ID cannot be blank')
     }
+    if (StringUtils.isBlank(documentTemplate)) {
+      throw new Error('Document template cannot be blank')
+    }
     return requestNonPromise.get({
-      uri: `${this.documentsUrl}/settlementAgreement/${claimExternalId}`
+      uri: `${this.documentsUrl}/${documentTemplate}/${claimExternalId}`
     })
   }
 

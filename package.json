@@ -6,11 +6,8 @@
     "node": ">=8.0.0"
   },
   "scripts": {
-    "compile": "tsc --project tsconfig.prod.json",
-    "copy-assets": "gulp sass copy-files",
-    "setup": "yarn compile && yarn copy-assets",
-    "start": "node src/main/server.js",
-    "start-dev": "TS_NODE_FAST=true ./node_modules/.bin/ts-node src/main/server.ts",
+    "setup": "gulp sass copy-files",
+    "start": "TS_NODE_FAST=true ./node_modules/.bin/ts-node src/main/server.ts",
     "lint": "tslint --project tsconfig.json && sass-lint -v -q",
     "test": "TS_NODE_FAST=true NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*') --reporter-options reportFilename=unit,inlineAssets=true,reportTitle=citizen-frontend-unit",
     "test:routes": "TS_NODE_FAST=true NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) -path '*/routes/*') --timeout 4000 --reporter-options reportFilename=routes,inlineAssets=true,reportTitle=citizen-frontend-routes",
@@ -40,7 +37,7 @@
     "@types/i18next-express-middleware": "^0.0.32",
     "@types/i18next-sprintf-postprocessor": "^0.0.29",
     "@types/lodash": "^4.14.52",
-    "@types/nock": "^8.2.1",
+    "@types/nock": "^9.1.0",
     "@types/node": "^8.0.24",
     "@types/nunjucks": "^3.0.0",
     "@types/request-promise-native": "^1.0.2",

@@ -76,7 +76,6 @@ gulp.task('develop', () => {
   setTimeout(() => {
     livereload.listen()
     nodemon({
-      exec: 'yarn start-dev',
       ext: 'ts js po',
       stdout: true
     }).on('readable', () => {
