@@ -23,7 +23,7 @@
     {% if descriptionError %}<span id="{{ descriptionKey }}[label]" class="error-message">{{ t(descriptionError) }}</span>{% endif %}
 
     <label class="form-label-bold mobile-show" for="{{ amountKey }}">{{ index + 1 }} {{ t('. What') }}</label>
-    {{ textInputInline(name = descriptionKey, form = form, inputClass='column-1', ariaLabelledBy='description-label') }}) }}
+    {{ textInputInline(name = descriptionKey, form = form, inputClass='column-1', ariaLabelledBy='description-label') }}
     {{ poundInputInline(name = amountKey, label = (index + 1) + '. How much?', form = form, ariaLabelledBy='amount-label') }}
 
   </div>
@@ -55,7 +55,7 @@
           <div class="multiline-rows">
             <div class="triple-column mobile-hide">
               <div class="column-1 mobile-hide">
-                <label id="description-label"  class="form-label-bold">{{ t('Description of income') }}</label>
+                <label id="description-label"  class="form-label-bold">{{ t('Name of income') }}</label>
               </div>
               <div class="column-4 mobile-hide">
                 <label id="amount-label"  class="form-label-bold">{{ t('Amount') }}</label>
