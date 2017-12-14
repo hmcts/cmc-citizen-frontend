@@ -1,11 +1,13 @@
 import { AmountDescriptionRow } from 'features/response/form/models/statement-of-means/amountDescriptionRow'
 import { MultiRowForm } from 'forms/models/multiRowForm'
 import { toNumberOrUndefined } from 'common/utils/numericUtils'
-import { IsDefined, Min } from 'class-validator'
+import { IsDefined } from 'class-validator'
 import { Fractions } from 'forms/validation/validators/fractions'
+import { Min } from 'forms/validation/validators/min'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 export const MAX_NUMBER_OF_ROWS: number = 10
+export const INIT_ROW_COUNT: number = 0
 
 export class MonthlyExpenses extends MultiRowForm<AmountDescriptionRow> {
 
@@ -65,8 +67,8 @@ export class MonthlyExpenses extends MultiRowForm<AmountDescriptionRow> {
   mobilePhone?: number
 
   @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
   @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
   maintenance?: number
 
   constructor (mortgage?: number,
@@ -142,6 +144,10 @@ export class MonthlyExpenses extends MultiRowForm<AmountDescriptionRow> {
     }
 
     return this
+  }
+
+  getInitialNumberOfRows (): number {
+    return INIT_ROW_COUNT
   }
 
   getMaxNumberOfRows (): number {
