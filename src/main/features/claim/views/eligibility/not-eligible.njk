@@ -35,7 +35,7 @@
         <p>
           {{ t('Use <a target="_blank" href="%s">Money Claim Online</a> ' + newWindow() + ', '
           + 'if you’re claiming more than £10,000.',
-          { postProcess: 'sprintf', sprintf: [ 'https://www.moneyclaim.gov.uk/web/mcol/welcome' ]}) | safe }}</p>
+          { postProcess: 'sprintf', sprintf: [ moneyClaimOnline ]}) | safe }}</p>
         <p>{{ t('If your claim is over £100,000, use <a target="_blank" href="%s">form N1</a> ' + newWindow() + '.',
           { postProcess: 'sprintf', sprintf: [ n1FormUrl ]}) | safe }}</p>
       {% elseif reason === NotEligibleReason.OVER_18 %}
