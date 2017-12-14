@@ -56,7 +56,7 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
       'I am not able to pay immediately'
     )
   }
-  responseDraft.response = new Response(ResponseType.OWE_ALL_PAID_NONE)
+  responseDraft.response = new Response(ResponseType.FULL_ADMISSION)
   responseDraft.defendantDetails = new Defendant(new IndividualDetails())
   responseDraft.statementOfMeans = new StatementOfMeans()
   // this is the simplest valid structure
@@ -185,7 +185,7 @@ describe('WhenWillYouPayTask', () => {
     context('when it does not apply', () => {
 
       beforeEach(() => {
-        responseDraft.response = new Response(ResponseType.OWE_NONE)
+        responseDraft.response = new Response(ResponseType.DEFENCE)
       })
 
       it('should be complete when statement of means is undefined', () => {

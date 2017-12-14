@@ -14,7 +14,7 @@ import { DraftService } from 'services/draftService'
 
 function isRequestAllowed (res: express.Response): boolean {
   return res.locals.user.responseDraft.document.response !== undefined
-    && res.locals.user.responseDraft.document.response.type === ResponseType.OWE_SOME_PAID_NONE
+    && res.locals.user.responseDraft.document.response.type === ResponseType.PART_ADMISSION
 }
 
 function accessDeniedCallback (req: express.Request, res: express.Response): void {

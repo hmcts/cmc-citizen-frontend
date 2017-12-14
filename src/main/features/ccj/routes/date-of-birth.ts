@@ -13,7 +13,9 @@ import { PartyType } from 'app/common/partyType'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 
-const logger = require('@hmcts/nodejs-logging').getLogger('ccj/guards/individualDateOfBirth')
+import { Logger } from '@hmcts/nodejs-logging'
+
+const logger = Logger.getLogger('ccj/guards/individualDateOfBirth')
 
 const accessGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
   return res.locals.user.claim.claimData.defendant.type === PartyType.INDIVIDUAL.value

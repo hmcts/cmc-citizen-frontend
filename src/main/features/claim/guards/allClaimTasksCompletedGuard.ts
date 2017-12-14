@@ -3,8 +3,9 @@ import * as express from 'express'
 import { Paths } from 'claim/paths'
 import { TaskListBuilder } from 'claim/helpers/taskListBuilder'
 import { User } from 'idam/user'
+import { Logger } from '@hmcts/nodejs-logging'
 
-const logger = require('@hmcts/nodejs-logging').getLogger('claim/guards/allTasksCompletedGuard')
+const logger = Logger.getLogger('claim/guards/allTasksCompletedGuard')
 
 export class AllClaimTasksCompletedGuard {
 

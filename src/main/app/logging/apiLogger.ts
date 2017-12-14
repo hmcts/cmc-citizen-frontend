@@ -1,5 +1,7 @@
+import { Logger, LoggingConfig, RequestTracingHeaders as Headers } from '@hmcts/nodejs-logging'
+
 export class ApiLogger {
-  constructor (public logger = require('@hmcts/nodejs-logging').getLogger('apiLogger.js'), public loggingConfig = require('@hmcts/nodejs-logging/log/config').logging) {
+  constructor (public logger = Logger.getLogger('apiLogger.js'), public loggingConfig = LoggingConfig.logging) {
     this.logger = logger
     this.loggingConfig = loggingConfig
   }
@@ -9,10 +11,14 @@ export class ApiLogger {
   }
 
   _buildRequestEntry (requestData) {
-    return {
+    const logEntry = {
       message: `API: ${requestData.method} ${requestData.uri} ` +
       ((requestData.query) ? `| Query: ${this._stringifyObject(requestData.query)} ` : '') +
       ((requestData.requestBody) ? `| Body: ${this._stringifyObject(requestData.requestBody)} ` : '')
+    }
+    return {
+      ...logEntry,
+      ...this.tracingInformation(requestData.headers)
     }
   }
 
@@ -27,7 +33,10 @@ export class ApiLogger {
       ((responseData.error) ? `| Error: ${this._stringifyObject(responseData.error)} ` : ''),
       responseCode: responseData.responseCode
     }
-    return logMessage
+    return {
+      ...logMessage,
+      ...this.tracingInformation(responseData.requestHeaders)
+    }
   }
 
   _stringifyObject (object) {
@@ -59,5 +68,15 @@ export class ApiLogger {
   private resolveLoggingLevel () {
     const currentLevel = process.env.LOG_LEVEL || 'INFO'
     return currentLevel.toUpperCase()
+  }
+
+  private tracingInformation (headers) {
+    const fields = { }
+    if (headers) {
+      fields['requestId'] = headers[Headers.REQUEST_ID_HEADER]
+      fields['rootRequestId'] = headers[Headers.ROOT_REQUEST_ID_HEADER]
+      fields['originRequestId'] = headers[Headers.ORIGIN_REQUEST_ID_HEADER]
+    }
+    return fields
   }
 }

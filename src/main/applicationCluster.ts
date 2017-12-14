@@ -1,7 +1,8 @@
 import { cpus } from 'os'
 import * as cluster from 'cluster'
+import { Logger } from '@hmcts/nodejs-logging'
 
-const logger = require('@hmcts/nodejs-logging').getLogger('applicationCluster')
+const logger = Logger.getLogger('applicationCluster')
 
 export type EntryPoint = () => void
 

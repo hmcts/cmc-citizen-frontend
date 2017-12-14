@@ -106,7 +106,7 @@ export const sampleClaimDraftObj = {
 
 const sampleResponseDraftObj = {
   response: {
-    type: ResponseType.OWE_NONE
+    type: ResponseType.DEFENCE
   },
   rejectAllOfClaim: {
     option: RejectAllOfClaimOption.DISPUTE

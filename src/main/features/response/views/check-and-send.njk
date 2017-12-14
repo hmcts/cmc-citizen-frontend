@@ -31,7 +31,7 @@
 
     {{ row('Do you owe the money claimed?', t(draft.response.type.displayValue) | capitalize, paths.responseTypePage.evaluateUri({ externalId: claim.externalId })) }}
 
-    {% if draft.response.type === ResponseType.OWE_SOME_PAID_NONE %}
+    {% if draft.response.type === ResponseType.PART_ADMISSION %}
       {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED %}
         {% set rejectPartOption = 'I’ve paid what I believe I owe' %}
       {% endif %}
@@ -43,7 +43,7 @@
       {{ row('Why are you rejecting part of this claim?', t(rejectPartOption), paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: claim.externalId })) }}
     {% endif %}
 
-    {% if draft.response.type === ResponseType.OWE_NONE %}
+    {% if draft.response.type === ResponseType.DEFENCE %}
       {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
         {% set rejectAllOption = 'I’ve already paid the claim in full' %}
       {% endif %}
@@ -65,7 +65,7 @@
       {% include "./statement-of-means/check-and-send.njk" %}
     {% endif %}
 
-    {% if draft.response.type === ResponseType.OWE_SOME_PAID_NONE and featureToggles.partialAdmission %}
+    {% if draft.response.type === ResponseType.PART_ADMISSION and featureToggles.partialAdmission %}
 
       {{ tableStart('yourResponse', 'Your response') }}
 

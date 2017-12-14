@@ -8,11 +8,11 @@ export class OweMoneyTask {
     }
 
     switch (responseDraft.response.type) {
-      case ResponseType.OWE_ALL_PAID_NONE:
+      case ResponseType.FULL_ADMISSION:
         return true
-      case ResponseType.OWE_SOME_PAID_NONE:
+      case ResponseType.PART_ADMISSION:
         return responseDraft.rejectPartOfClaim && responseDraft.rejectPartOfClaim.option !== undefined
-      case ResponseType.OWE_NONE:
+      case ResponseType.DEFENCE:
         return responseDraft.rejectAllOfClaim && responseDraft.rejectAllOfClaim.option !== undefined
       default:
         throw new Error(`Unknown response type: ${responseDraft.response.type}`)
