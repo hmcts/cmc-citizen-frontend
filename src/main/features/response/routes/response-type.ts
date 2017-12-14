@@ -39,13 +39,13 @@ export default express.Router()
         const responseType = user.responseDraft.document.response.type
 
         switch (responseType) {
-          case ResponseType.OWE_NONE:
+          case ResponseType.DEFENCE:
             res.redirect(Paths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: externalId }))
             break
-          case ResponseType.OWE_SOME_PAID_NONE:
+          case ResponseType.PART_ADMISSION:
             res.redirect(Paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: user.claim.externalId }))
             break
-          case ResponseType.OWE_ALL_PAID_NONE:
+          case ResponseType.FULL_ADMISSION:
             res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
             break
           default:

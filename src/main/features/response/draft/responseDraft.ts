@@ -79,7 +79,7 @@ export class ResponseDraft extends DraftDocument {
     if (!this.isResponsePopulated()) {
       return false
     }
-    return this.response.type === ResponseType.OWE_NONE && this.rejectAllOfClaim !== undefined
+    return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim !== undefined
       && RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).includes(this.rejectAllOfClaim.option)
   }
 
@@ -88,7 +88,7 @@ export class ResponseDraft extends DraftDocument {
       return false
     }
 
-    return this.isResponsePopulated() && this.response.type === ResponseType.OWE_ALL_PAID_NONE
+    return this.isResponsePopulated() && this.response.type === ResponseType.FULL_ADMISSION
   }
 
   public isResponsePartiallyRejectedDueTo (option: String): boolean {
@@ -101,7 +101,7 @@ export class ResponseDraft extends DraftDocument {
     }
 
     return this.isResponsePopulated()
-      && this.response.type === ResponseType.OWE_SOME_PAID_NONE
+      && this.response.type === ResponseType.PART_ADMISSION
       && this.rejectPartOfClaim !== undefined
       && this.rejectPartOfClaim.option === option
   }
@@ -115,13 +115,13 @@ export class ResponseDraft extends DraftDocument {
   }
 
   private isResponseRejectedFully (): boolean {
-    return this.response.type === ResponseType.OWE_NONE && this.rejectAllOfClaim &&
+    return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim &&
       (this.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE ||
         this.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM)
   }
 
   private isResponseRejectedPartially (): boolean {
-    return this.response.type === ResponseType.OWE_SOME_PAID_NONE && this.rejectPartOfClaim &&
+    return this.response.type === ResponseType.PART_ADMISSION && this.rejectPartOfClaim &&
       (this.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED ||
         this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
   }
