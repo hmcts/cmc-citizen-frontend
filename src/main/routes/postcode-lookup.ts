@@ -12,11 +12,17 @@ const logger = Logging.getLogger('postcode-lookup')
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(AppPaths.postcodeLookupProxy.uri, (req, res) => {
+
     postcodeClient.lookupPostcode(req.query.postcode)
       .then((postcodeInfoResponse: PostcodeInfoResponse) => {
         res.json(postcodeInfoResponse)
-      }).catch((err: Error) => {
+      }).catch(err => {
       logger.error(err.stack)
-      res.status(500).json(err.message)
+      res.status(500).json({
+        error: {
+          status: 500,
+          message: err.message
+        }
+      })
     })
   })

@@ -49,6 +49,13 @@
     moment "^2.19.1"
     on-finished "^2.3.0"
 
+"@hmcts/postcodeinfo-client@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@hmcts/postcodeinfo-client/-/postcodeinfo-client-0.0.1.tgz#a03cf1ede5dd9502f02a01759ef5ca65f32d0486"
+  dependencies:
+    request "^2.83.0"
+    request-promise-native "^1.0.5"
+
 "@types/body-parser@*":
   version "1.16.8"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.16.8.tgz#687ec34140624a3bec2b1a8ea9268478ae8f3be3"
@@ -5354,7 +5361,7 @@ request-promise@^0.x:
     lodash "^3.10.0"
     request "^2.34"
 
-request@2, request@^2.0.0, request@^2.34, request@^2.74.0, request@^2.81.0:
+request@2, request@^2.0.0, request@^2.34, request@^2.74.0, request@^2.81.0, request@^2.83.0:
   version "2.83.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.83.0.tgz#ca0b65da02ed62935887808e6f510381034e3356"
   dependencies:

@@ -1,186 +1,133 @@
-
-document.addEventListener('DOMContentLoaded', function(event) {
+document.addEventListener('DOMContentLoaded', function (event) {
   document.querySelectorAll('.js-visible')
     .forEach(function (hiddenElement) {
       hiddenElement.classList.remove('hidden')
     })
 
   document.querySelectorAll('.postcode-lookup')
-    .forEach(function (postcodeLookupButton) {
-      postcodeLookupButton.addEventListener('click', function (event) {
-        event.preventDefault()
-        lookupPostcode(this.previousElementSibling.value, this.parentElement)
-      })
+    .forEach(function (postcodeLookupWidget) {
+      postcodeLookupWidget.querySelector('.postcode-search')
+        .addEventListener('click', function (event) {
+          event.preventDefault()
+
+          clearPostcodeDropdown(postcodeLookupWidget)
+          hidePostcodeDropdown(postcodeLookupWidget)
+          clearAddressFields(postcodeLookupWidget)
+          lookupPostcode(this.previousElementSibling.value, postcodeLookupWidget)
+        })
+
+      postcodeLookupWidget.querySelector('.postcode-select')
+        .addEventListener('change', function (event) {
+          var addressDetails = this.value.split(', ')
+          var addressSelector = postcodeLookupWidget.querySelector('.address')
+          addressSelector.querySelector('.address-line1').value = addressDetails[0]
+          addressSelector.querySelector('.address-line2').value = addressDetails[1]
+          addressSelector.querySelector('.address-town-or-city').value = addressDetails[2]
+          addressSelector.querySelector('.postcode').value = addressDetails[3]
+          showAddressEntry(postcodeLookupWidget)
+        })
+
+      if (isAnyAddressFieldPopulated(postcodeLookupWidget)) {
+        showAddressEntry(postcodeLookupWidget)
+      }
     })
 })
 
-function lookupPostcode (postcode, parentElement) {
+function isNorthernIrelandPostcode (postcode) {
+  return postcode.startsWith('BT')
+}
+
+function showAddressEntry (postcodeLookupWidget) {
+  postcodeLookupWidget.querySelector('.address').classList.remove('js-hidden')
+}
+
+function clearPostcodeDropdown (postcodeLookupWidget) {
+  postcodeLookupWidget.querySelector('select').innerHTML = ''
+}
+
+function hidePostcodeDropdown (postcodeLookupWidget) {
+  postcodeLookupWidget.querySelector('.postcode-address-picker').classList.add('hidden')
+}
+
+function showPostcodeDropdown (postcodeLookupWidget) {
+  postcodeLookupWidget.querySelector('.postcode-address-picker').classList.remove('hidden')
+}
+
+function clearAddressFields (postcodeLookupWidget) {
+  var addressSelector = postcodeLookupWidget.querySelector('.address')
+  addressSelector.querySelector('.address-line1').value = ''
+  addressSelector.querySelector('.address-line2').value = ''
+  addressSelector.querySelector('.address-town-or-city').value = ''
+  addressSelector.querySelector('.postcode').value = ''
+}
+
+function isAnyAddressFieldPopulated(postcodeLookupWidget) {
+  var addressSelector = postcodeLookupWidget.querySelector('.address')
+
+  return addressSelector.querySelector('.address-line1').value !== '' ||
+    addressSelector.querySelector('.address-line2').value !== '' ||
+    addressSelector.querySelector('.address-town-or-city').value !== '' ||
+    addressSelector.querySelector('.postcode').value !== ''
+}
+
+function showAddressError(isNorthernIrelandPostcode, postcodeLookupWidget) {
+  var northernIrelandErrorMessage = postcodeLookupWidget.querySelector('.postcode-search-error-ni')
+  var genericErrorMessage = postcodeLookupWidget.querySelector('.postcode-search-error')
+
+  if (isNorthernIrelandPostcode) {
+    northernIrelandErrorMessage.classList.remove('hidden')
+    genericErrorMessage.classList.add('hidden')
+  } else {
+    northernIrelandErrorMessage.classList.add('hidden')
+    genericErrorMessage.classList.remove('hidden')
+  }
+
+  postcodeLookupWidget.querySelector('.postcode-search-container').classList.add('form-group-error')
+}
+
+function lookupPostcode (postcode, postcodeLookupWidget) {
   var xhr = new XMLHttpRequest()
   xhr.open('GET', '/postcode-lookup?postcode=' + encodeURIComponent(postcode))
   xhr.onload = function () {
-    if (xhr.status === 200) {
-      console.log('status:' + 200)
-    }
-    else {
-      alert('Request failed.  Returned status of ' + xhr.status)
+    if (xhr.status !== 200) {
+      showAddressError(false, postcodeLookupWidget)
       return
     }
 
     var postcodeResponse = JSON.parse(xhr.responseText)
 
-    console.log(postcodeResponse.valid)
+    if (!postcodeResponse.valid) {
+      var ni = isNorthernIrelandPostcode(postcode)
+      showAddressError(ni, postcodeLookupWidget)
+      showAddressEntry(postcodeLookupWidget)
+      return
+    }
 
-    var selectDropdown = '<option>' + postcodeResponse.addresses + ' addresses found </option>'
+    var postcodeSelectDropdown = postcodeLookupWidget.querySelector('select')
+
+    var nonSelectableOption = document.createElement("option")
+    nonSelectableOption.text = postcodeResponse.addresses.length + ' addresses found'
+    postcodeSelectDropdown.appendChild(nonSelectableOption)
 
     postcodeResponse.addresses.forEach(function (address) {
-
-      var formatted_address = [
+      var valueFormattedAddress = [
         (address.organisationName || address.subBuildingName) + ' ' + (address.buildingNumber || address.buildingName || undefined),
         address.thoroughfareName || address.dependentLocality,
         address.postTown,
         address.postcode
-      ]
-      selectDropdown += '<option value="' + formatted_address.join(', ').trim() + '">' + formatted_address.join(', ').trim() + '</option>'
+      ].join(', ')
+
+      var option = document.createElement('option')
+      var formattedAddress = address.formattedAddress.replace(/\r?\n|\r/g, ', ')
+      option.value = valueFormattedAddress
+      option.text = formattedAddress
+      postcodeSelectDropdown.appendChild(option)
     })
 
-    parentElement.parentElement.querySelector('select').innerHTML = selectDropdown
-
+    showPostcodeDropdown(postcodeLookupWidget)
+    postcodeLookupWidget.querySelector('.postcode-search-container')
+      .classList.remove('form-group-error')
 
   }
   xhr.send()
-}
-
-
-function showSelectAddress () {
-
-  $('#address-select-container').removeClass('error')
-  $('#address-select-container .error-message').hide()
-  $('#enter-manually').show()
-
-  if ($('#postcode').val().toUpperCase().indexOf('BT') === 0) {
-
-    $('#country').val('Northern Ireland')
-    $('#postcode-seach-ni-error').show()
-    $('#select-address').hide()
-    showManualEntry()
-
-  } else {
-
-    $.ajax({
-      url: "/postcode-lookup?postcode=" + encodeURIComponent($('#postcode').val()),
-      method: "GET",
-      success: function (data, status, xhr) {
-        if (status === "success" && data.length) {
-
-          jQuery.each(data, function (key, value) {
-            var formatted_address = [
-              (value.organisation_name || value.sub_building_name) + ' ' + (value.building_number || value.building_name || null),
-              value.thoroughfare_name || value.dependent_locality,
-              value.post_town,
-              value.postcode
-            ]
-            html += '<option value="' + formatted_address.join(', ').trim() + '">' + formatted_address.join(', ').trim() + '</option>'
-          })
-
-          $('#addressList').html(html)
-
-          $('.postcode-as-text p').html($('#postcode').val())
-          $('#enter-postcode').hide()
-          $('#select-address').show()
-          $('#selected-address').hide()
-          $('#manual-address').hide()
-          $('#postcode-seach-error').hide()
-          $('#postcode-seach-ni-error').hide()
-          $('#continue-button').unbind('click').click(function (e) {
-            e.preventDefault()
-            $('#address-select-container').addClass('error')
-            $('#address-select-container .error-message').show()
-          })
-
-        } else {
-
-          $('#postcode-seach-error').show()
-          $('#postcode-seach-ni-error').hide()
-          showManualEntry()
-
-        }
-
-      },
-      dataType: 'JSON'
-    })
-
-    $.ajax({
-      url: "/country-lookup?postcode=" + encodeURIComponent($('#postcode').val()),
-      method: "GET",
-      success: function (data, status, xhr) {
-
-        $('#country').val(data.country.name)
-      },
-      dataType: 'JSON'
-
-    })
-  }
-}
-
-function showSelectedAddress () {
-  $('#address-select-container').removeClass('error')
-  $('#address-select-container .error-message').hide()
-  $('#enter-postcode').hide()
-  $('#select-address').show()
-  $('#selected-address').hide()
-  $('#manual-address').show()
-}
-
-function updateAddress (address) {
-  showSelectedAddress()
-  var addresses = $('#addressList').val().split(', ')
-  $("#street-1").val(addresses[0])
-  $("#street-2").val(addresses[1])
-  $("#town").val(addresses[2])
-  $("#postcode-full, #postcode-full-auto").val(addresses[3])
-  $('#continue-button').unbind('click')
-  $('#find-button').addClass('secondary-button')
-  $('#continue-button').removeClass('secondary-button')
-  $('#continue-button').addClass('button')
-  $('#enter-manually').show()
-}
-
-function showAbroadAddress () {
-  $('#street-label').html('Address')
-  $('#postcode-label').html('Postal/ZIP code')
-  $('#manual-address').show()
-  $('#country').attr('type', 'text')
-  $('#manual-address').addClass('abroad')
-  $('#enter-manually').hide()
-  $('#postcode-finder').hide()
-  $('#enter-automatic').show()
-  $('#select-address').hide()
-
-  $('#continue-button').unbind('click')
-  $('#continue-button').removeClass('secondary-button')
-  $('#continue-button').addClass('button')
-  return false
-}
-
-function showPostcodeLookup () {
-  $('#manual-address').hide()
-  $('#enter-manually').show()
-  $('#postcode-finder').show()
-  $('#enter-automatic').hide()
-
-  return false
-}
-
-
-function showManualEntry () {
-  $('#manual-address').show()
-
-  $("#postcode-full").val($('#postcode').val())
-
-  $('#continue-button').unbind('click')
-  $('#find-button').addClass('secondary-button')
-  $('#continue-button').removeClass('secondary-button')
-  $('#continue-button').addClass('button')
-  return false
-
 }
