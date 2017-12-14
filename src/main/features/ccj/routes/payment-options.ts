@@ -15,9 +15,9 @@ import { Draft } from '@hmcts/draft-store-client'
 export default express.Router()
   .get(Paths.paymentOptionsPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const draft: DraftCCJ = res.locals.draft.document
+      const draft: Draft<DraftCCJ> = res.locals.ccjDraft
 
-      res.render(Paths.paymentOptionsPage.associatedView, { form: new Form(draft.paymentOption) })
+      res.render(Paths.paymentOptionsPage.associatedView, { form: new Form(draft.document.paymentOption) })
     }))
   .post(Paths.paymentOptionsPage.uri,
     FormValidator.requestHandler(CCJPaymentOption, CCJPaymentOption.fromObject),

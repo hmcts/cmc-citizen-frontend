@@ -19,9 +19,9 @@ function renderView (form: Form<MobilePhone>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.claimantMobilePage.uri, (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const draft: DraftClaim = res.locals.draft.document
+    const draft: Draft<DraftClaim> = res.locals.claimDraft
 
-    renderView(new Form(draft.claimant.mobilePhone), res)
+    renderView(new Form(draft.document.claimant.mobilePhone), res)
   })
   .post(
     Paths.claimantMobilePage.uri,

@@ -28,9 +28,9 @@ async function renderView (form: Form<Defence>, res: express.Response, next: exp
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defencePage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const draft: ResponseDraft = res.locals.draft.document
+    const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-    await renderView(new Form(draft.defence), res, next)
+    await renderView(new Form(draft.document.defence), res, next)
   })
   .post(
     Paths.defencePage.uri,

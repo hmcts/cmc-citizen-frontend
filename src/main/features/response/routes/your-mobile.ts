@@ -20,9 +20,9 @@ function renderView (form: Form<MobilePhone>, res: express.Response) {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantMobilePage.uri, (req: express.Request, res: express.Response) => {
-    const draft: ResponseDraft = res.locals.draft.document
+    const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-    renderView(new Form(draft.defendantDetails.mobilePhone), res)
+    renderView(new Form(draft.document.defendantDetails.mobilePhone), res)
   })
   .post(
     Paths.defendantMobilePage.uri,

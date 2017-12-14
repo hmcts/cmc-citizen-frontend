@@ -77,20 +77,20 @@ function getStatementOfTruthClassFor (draft: Draft<DraftClaim>): { new(): Statem
 }
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response, next: express.NextFunction) {
-  const draft: DraftClaim = res.locals.draft.document
+  const draft: Draft<DraftClaim> = res.locals.claimDraft
 
-  getClaimAmountTotal(draft)
+  getClaimAmountTotal(draft.document)
     .then((interestTotal: TotalAmount) => {
       res.render(Paths.checkAndSendPage.associatedView, {
-        draftClaim: draft,
+        draftClaim: draft.document,
         claimAmountTotal: interestTotal,
-        payAtSubmission: draft.interestDate.type === InterestDateType.SUBMISSION,
-        interestClaimed: draft.interest.type !== InterestType.NO_INTEREST,
-        contactPerson: getContactPerson(draft.claimant.partyDetails),
-        businessName: getBusinessName(draft.claimant.partyDetails),
-        dateOfBirth: getDateOfBirth(draft.claimant.partyDetails),
-        defendantBusinessName: getBusinessName(draft.defendant.partyDetails),
-        partyAsCompanyOrOrganisation: draft.claimant.partyDetails.isBusiness(),
+        payAtSubmission: draft.document.interestDate.type === InterestDateType.SUBMISSION,
+        interestClaimed: draft.document.interest.type !== InterestType.NO_INTEREST,
+        contactPerson: getContactPerson(draft.document.claimant.partyDetails),
+        businessName: getBusinessName(draft.document.claimant.partyDetails),
+        dateOfBirth: getDateOfBirth(draft.document.claimant.partyDetails),
+        defendantBusinessName: getBusinessName(draft.document.defendant.partyDetails),
+        partyAsCompanyOrOrganisation: draft.document.claimant.partyDetails.isBusiness(),
         paths: Paths,
         form: form
       })

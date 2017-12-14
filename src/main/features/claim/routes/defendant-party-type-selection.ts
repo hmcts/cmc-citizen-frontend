@@ -22,9 +22,9 @@ function renderView (form: Form<PartyTypeResponse>, res: express.Response, next:
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantPartyTypeSelectionPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const draft: DraftClaim = res.locals.draft.document
+    const draft: Draft<DraftClaim> = res.locals.claimDraft
 
-    renderView(new Form(new PartyTypeResponse(draft.defendant.partyDetails ? PartyType.valueOf(draft.defendant.partyDetails.type) : undefined)), res, next)
+    renderView(new Form(new PartyTypeResponse(draft.document.defendant.partyDetails ? PartyType.valueOf(draft.document.defendant.partyDetails.type) : undefined)), res, next)
   })
   .post(
     Paths.defendantPartyTypeSelectionPage.uri,

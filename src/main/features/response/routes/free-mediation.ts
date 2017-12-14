@@ -26,9 +26,9 @@ async function renderView (form: Form<FreeMediation>, res: express.Response, nex
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.freeMediationPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const draft: ResponseDraft = res.locals.draft.document
+    const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-    await renderView(new Form(draft.freeMediation), res, next)
+    await renderView(new Form(draft.document.freeMediation), res, next)
   })
   .post(
     Paths.freeMediationPage.uri,

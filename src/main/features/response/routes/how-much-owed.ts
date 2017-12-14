@@ -31,9 +31,9 @@ async function renderView (form: Form<HowMuchOwed>, res: express.Response, next:
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantHowMuchOwed.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const draft: ResponseDraft = res.locals.draft.document
+    const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-    await renderView(new Form(draft.howMuchOwed), res, next)
+    await renderView(new Form(draft.document.howMuchOwed), res, next)
   }))
   .post(
     Paths.defendantHowMuchOwed.uri,

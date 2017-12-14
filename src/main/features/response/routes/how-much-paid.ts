@@ -29,9 +29,9 @@ async function renderView (form: Form<HowMuchPaid>, res: express.Response, next:
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantHowMuchPaid.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const draft: ResponseDraft = res.locals.draft.document
+    const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-    await renderView(new Form(draft.howMuchIsPaid), res, next)
+    await renderView(new Form(draft.document.howMuchIsPaid), res, next)
   }))
   .post(
     Paths.defendantHowMuchPaid.uri,

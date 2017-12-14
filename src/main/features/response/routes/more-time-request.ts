@@ -29,9 +29,9 @@ export default express.Router()
     Paths.moreTimeRequestPage.uri,
     MoreTimeAlreadyRequestedGuard.requestHandler,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const draft: ResponseDraft = res.locals.draft.document
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-      renderView(new Form(draft.moreTimeNeeded), res, next)
+      renderView(new Form(draft.document.moreTimeNeeded), res, next)
     })
   .post(
     Paths.moreTimeRequestPage.uri,

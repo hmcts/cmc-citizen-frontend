@@ -19,9 +19,9 @@ function renderView (form: Form<Interest>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.interestPage.uri, (req: express.Request, res: express.Response): void => {
-    const draft: DraftClaim = res.locals.draft.document
+    const draft: Draft<DraftClaim> = res.locals.claimDraft
 
-    renderView(new Form(draft.interest), res)
+    renderView(new Form(draft.document.interest), res)
   })
   .post(
     Paths.interestPage.uri,

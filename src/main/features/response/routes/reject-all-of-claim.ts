@@ -15,10 +15,10 @@ import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
 
 function isRequestAllowed (res: express.Response): boolean {
-  const draft: ResponseDraft = res.locals.draft.document
+  const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-  return draft.response !== undefined
-    && draft.response.type === ResponseType.OWE_NONE
+  return draft.document.response !== undefined
+    && draft.document.response.type === ResponseType.OWE_NONE
 }
 
 function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -41,9 +41,9 @@ export default express.Router()
     Paths.defenceRejectAllOfClaimPage.uri,
     guardRequestHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const draft: ResponseDraft = res.locals.draft.document
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-      renderView(new Form(draft.rejectAllOfClaim), res)
+      renderView(new Form(draft.document.rejectAllOfClaim), res)
     }))
   .post(
     Paths.defenceRejectAllOfClaimPage.uri,

@@ -19,9 +19,9 @@ function renderView (form: Form<Email>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantEmailPage.uri, (req: express.Request, res: express.Response) => {
-    const draft: DraftClaim = res.locals.draft.document
+    const draft: Draft<DraftClaim> = res.locals.claimDraft
 
-    renderView(new Form(draft.defendant.email), res)
+    renderView(new Form(draft.document.defendant.email), res)
   })
   .post(
     Paths.defendantEmailPage.uri,

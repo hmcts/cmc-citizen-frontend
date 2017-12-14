@@ -21,9 +21,9 @@ function renderView (form: Form<Response>, res: express.Response) {
 export default express.Router()
   .get(Paths.responseTypePage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const draft: ResponseDraft = res.locals.draft.document
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-      renderView(new Form(draft.response), res)
+      renderView(new Form(draft.document.response), res)
     }))
   .post(
     Paths.responseTypePage.uri,
