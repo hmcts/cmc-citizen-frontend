@@ -1,7 +1,6 @@
 import { expect } from 'chai'
-import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
+import { MonthlyIncome, INIT_ROW_COUNT } from 'response/form/models/statement-of-means/monthlyIncome'
 import { AmountDescriptionRow, ValidationErrors } from 'response/form/models/statement-of-means/amountDescriptionRow'
-import { INIT_ROW_COUNT } from 'forms/models/multiRowForm'
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from '../../../../../app/forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
@@ -137,6 +136,13 @@ describe('MonthlyIncome', () => {
 
       it('all fields empty', () => {
         const errors = validator.validateSync(new MonthlyIncome())
+
+        expect(errors.length).to.equal(11)
+        expectValidationError(errors, GlobalValidationErrors.AMOUNT_REQUIRED)
+      })
+
+      it('all fields negative', () => {
+        const errors = validator.validateSync(new MonthlyIncome(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, []))
 
         expect(errors.length).to.equal(11)
         expectValidationError(errors, GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED)
