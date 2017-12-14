@@ -22,7 +22,7 @@ const pagePath = ResponsePaths.defenceRejectAllOfClaimPage.evaluateUri({ externa
 
 const draftOverride = {
   response: {
-    type: ResponseType.OWE_NONE
+    type: ResponseType.DEFENCE
   }
 }
 
@@ -52,7 +52,7 @@ describe('Defendant response: full admission options', () => {
         })
 
         it('should redirect to response type page when response type is not full admission', async () => {
-          draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.OWE_SOME_PAID_NONE } })
+          draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.PART_ADMISSION } })
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -89,7 +89,7 @@ describe('Defendant response: full admission options', () => {
 
       context('when response not submitted', () => {
         it('should redirect to response type page when response type is not full admission', async () => {
-          draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.OWE_SOME_PAID_NONE } })
+          draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.PART_ADMISSION } })
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)

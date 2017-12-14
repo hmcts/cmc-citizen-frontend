@@ -15,7 +15,7 @@ import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 
 function isAmountTooHighPartialResponse (responseDraft: ResponseDraft): boolean {
-  return responseDraft.response.type.value === ResponseType.OWE_SOME_PAID_NONE.value
+  return responseDraft.response.type.value === ResponseType.PART_ADMISSION.value
     && responseDraft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
 }
 

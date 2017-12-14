@@ -44,8 +44,8 @@ export class StatementOfMeans {
   }
 
   private static isResponseApplicable (responseDraft: ResponseDraft) {
-    return responseDraft.response.type === ResponseType.OWE_ALL_PAID_NONE
-      || (responseDraft.response.type === ResponseType.OWE_SOME_PAID_NONE
+    return responseDraft.response.type === ResponseType.FULL_ADMISSION
+      || (responseDraft.response.type === ResponseType.PART_ADMISSION
         && responseDraft.rejectPartOfClaim
         && responseDraft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
       )
