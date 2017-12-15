@@ -8,8 +8,7 @@ import { Claim } from 'claims/models/claim'
 export default express.Router()
   .get(Paths.confirmationPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-
-      const claim: Claim = res.locals.user.claim
+      const claim: Claim = res.locals.claim
 
       res.render(Paths.confirmationPage.associatedView,
         {

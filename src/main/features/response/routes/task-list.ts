@@ -4,21 +4,22 @@ import { Paths } from 'response/paths'
 
 import { Claim } from 'claims/models/claim'
 
-import { User } from 'app/idam/user'
 import { isAfter4pm } from 'common/dateUtils'
 import { TaskListBuilder } from 'response/helpers/taskListBuilder'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { Draft } from '@hmcts/draft-store-client'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.taskListPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
-      const user: User = res.locals.user
-      const claim: Claim = user.claim
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      const claim: Claim = res.locals.claim
 
       const beforeYouStartSection = TaskListBuilder
-        .buildBeforeYouStartSection(user.responseDraft.document, claim.externalId)
+        .buildBeforeYouStartSection(draft.document, claim.externalId)
       const respondToClaimSection = TaskListBuilder
-        .buildRespondToClaimSection(user.responseDraft.document, claim)
+        .buildRespondToClaimSection(draft.document, claim)
       const submitSection = TaskListBuilder.buildSubmitSection(claim.externalId)
 
       res.render(Paths.taskListPage.associatedView,

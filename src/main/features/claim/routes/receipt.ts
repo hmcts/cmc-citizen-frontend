@@ -25,7 +25,7 @@ export default express.Router()
               buffers.push(chunk)
             })
             response.on('end', () => {
-              const claim: Claim = res.locals.user.claim
+              const claim: Claim = res.locals.claim
               const pdf = Buffer.concat(buffers)
               res.writeHead(HttpStatus.OK, {
                 'Content-Type': 'application/pdf',

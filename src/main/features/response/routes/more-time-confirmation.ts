@@ -3,15 +3,15 @@ import * as express from 'express'
 import { Paths } from 'response/paths'
 
 import { MoreTimeRequestRequiredGuard } from 'response/guards/moreTimeRequestRequiredGuard'
-import { User } from 'idam/user'
+import { Claim } from 'claims/models/claim'
 
 async function renderView (res: express.Response, next: express.NextFunction) {
   try {
-    const user: User = res.locals.user
+    const claim: Claim = res.locals.claim
 
     res.render(Paths.moreTimeConfirmationPage.associatedView, {
-      newDeadline: user.claim.responseDeadline,
-      claimantFullName: user.claim.claimData.claimant.name
+      newDeadline: claim.responseDeadline,
+      claimantFullName: claim.claimData.claimant.name
     })
   } catch (err) {
     next(err)
@@ -30,7 +30,7 @@ export default express.Router()
     Paths.moreTimeConfirmationPage.uri,
     MoreTimeRequestRequiredGuard.requestHandler,
     (req: express.Request, res: express.Response) => {
-      const user: User = res.locals.user
+      const claim: Claim = res.locals.claim
 
-      res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
+      res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
     })

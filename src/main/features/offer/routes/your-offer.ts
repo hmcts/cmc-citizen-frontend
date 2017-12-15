@@ -7,11 +7,14 @@ import { Offer } from 'offer/form/models/offer'
 import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { OfferClient } from 'claims/offerClient'
+import { Claim } from 'claims/models/claim'
 
 async function renderView (form: Form<Offer>, res: express.Response, next: express.NextFunction) {
+  const claim: Claim = res.locals.claim
+
   res.render(Paths.offerPage.associatedView, {
     form: form,
-    claim: res.locals.user.claim
+    claim: claim
   })
 }
 
@@ -30,9 +33,10 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
+        const claim: Claim = res.locals.claim
         const user: User = res.locals.user
         const offer: Offer = form.model
-        await OfferClient.makeOffer(user, offer)
-        res.redirect(Paths.offerConfirmationPage.evaluateUri({ externalId: user.claim.externalId }))
+        await OfferClient.makeOffer(claim.id, user, offer)
+        res.redirect(Paths.offerConfirmationPage.evaluateUri({ externalId: claim.externalId }))
       }
     }))

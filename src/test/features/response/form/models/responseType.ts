@@ -6,9 +6,9 @@ describe('ResponseType', () => {
   describe('valueOf', () => {
 
     it('should return ResponseType for corresponding value', () => {
-      expect(ResponseType.valueOf(ResponseType.OWE_ALL_PAID_NONE.value)).to.be.eq(ResponseType.OWE_ALL_PAID_NONE)
-      expect(ResponseType.valueOf(ResponseType.OWE_NONE.value)).to.be.eq(ResponseType.OWE_NONE)
-      expect(ResponseType.valueOf(ResponseType.OWE_SOME_PAID_NONE.value)).to.be.eq(ResponseType.OWE_SOME_PAID_NONE)
+      expect(ResponseType.valueOf(ResponseType.FULL_ADMISSION.value)).to.be.eq(ResponseType.FULL_ADMISSION)
+      expect(ResponseType.valueOf(ResponseType.DEFENCE.value)).to.be.eq(ResponseType.DEFENCE)
+      expect(ResponseType.valueOf(ResponseType.PART_ADMISSION.value)).to.be.eq(ResponseType.PART_ADMISSION)
     })
 
     it('should return undefined for incorrect value', () => {

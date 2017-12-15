@@ -21,7 +21,7 @@ describe('OweMoneyTask', () => {
   describe('when full admission', () => {
     it('should be completed when response is selected', () => {
       const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.OWE_ALL_PAID_NONE)
+      draft.response = new Response(ResponseType.FULL_ADMISSION)
 
       expect(OweMoneyTask.isCompleted(draft)).to.equal(true)
     })
@@ -31,7 +31,7 @@ describe('OweMoneyTask', () => {
   describe('when part admission', () => {
     it('should be not completed when type of part admission is not selected', () => {
       const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
+      draft.response = new Response(ResponseType.PART_ADMISSION)
       draft.rejectPartOfClaim = new RejectPartOfClaim(undefined)
 
       expect(OweMoneyTask.isCompleted(draft)).to.equal(false)
@@ -40,7 +40,7 @@ describe('OweMoneyTask', () => {
     it('should be completed when type of part admission is selected', () => {
       RejectPartOfClaimOption.all().forEach(option => {
         const draft: ResponseDraft = new ResponseDraft()
-        draft.response = new Response(ResponseType.OWE_SOME_PAID_NONE)
+        draft.response = new Response(ResponseType.PART_ADMISSION)
         draft.rejectPartOfClaim = new RejectPartOfClaim(option)
 
         expect(OweMoneyTask.isCompleted(draft)).to.equal(true)
@@ -51,7 +51,7 @@ describe('OweMoneyTask', () => {
   describe('when full admission', () => {
     it('should be not completed when type of full admission is not selected', () => {
       const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.OWE_NONE)
+      draft.response = new Response(ResponseType.DEFENCE)
       draft.rejectAllOfClaim = new RejectAllOfClaim(undefined)
 
       expect(OweMoneyTask.isCompleted(draft)).to.equal(false)
@@ -60,7 +60,7 @@ describe('OweMoneyTask', () => {
     it('should be completed when type of part admission is selected', () => {
       RejectAllOfClaimOption.all().forEach(option => {
         const draft: ResponseDraft = new ResponseDraft()
-        draft.response = new Response(ResponseType.OWE_NONE)
+        draft.response = new Response(ResponseType.DEFENCE)
         draft.rejectAllOfClaim = new RejectAllOfClaim(option)
 
         expect(OweMoneyTask.isCompleted(draft)).to.equal(true)

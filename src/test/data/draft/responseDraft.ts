@@ -15,7 +15,7 @@ export const responseDraft = {
   },
   response: {
     type: {
-      value: 'OWE_NONE'
+      value: 'DEFENCE'
     }
   },
   defence: {

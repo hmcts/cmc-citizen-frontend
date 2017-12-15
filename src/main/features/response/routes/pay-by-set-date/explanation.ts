@@ -11,6 +11,7 @@ import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { RoutablePath } from 'common/router/routablePath'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { Draft } from '@hmcts/draft-store-client'
 
 function nextPageFor (responseDraft: ResponseDraft): RoutablePath {
   if (StatementOfMeans.isApplicableFor(responseDraft)) {
@@ -21,10 +22,10 @@ function nextPageFor (responseDraft: ResponseDraft): RoutablePath {
 }
 
 function renderView (form: Form<PaymentDate>, res: express.Response) {
-  const user: User = res.locals.user
+  const draft: Draft<ResponseDraft> = res.locals.responseDraft
   res.render(PayBySetDatePaths.explanationPage.associatedView, {
     form: form,
-    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(user.responseDraft.document)
+    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(draft.document)
   })
 }
 
@@ -34,8 +35,8 @@ export default express.Router()
     PayBySetDatePaths.explanationPage.uri,
     FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     (req: express.Request, res: express.Response) => {
-      const user: User = res.locals.user
-      renderView(new Form(user.responseDraft.document.payBySetDate.explanation), res)
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      renderView(new Form(draft.document.payBySetDate.explanation), res)
     })
   .post(
     PayBySetDatePaths.explanationPage.uri,
@@ -43,12 +44,15 @@ export default express.Router()
     FormValidator.requestHandler(Explanation),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<Explanation> = req.body
-      const user: User = res.locals.user
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        user.responseDraft.document.payBySetDate.explanation = form.model
-        await new DraftService().save(user.responseDraft, user.bearerToken)
-        res.redirect(nextPageFor(user.responseDraft.document).evaluateUri({ externalId: req.params.externalId }))
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
+        const user: User = res.locals.user
+
+        draft.document.payBySetDate.explanation = form.model
+        await new DraftService().save(draft, user.bearerToken)
+
+        res.redirect(nextPageFor(draft.document).evaluateUri({ externalId: req.params.externalId }))
       }
     }))

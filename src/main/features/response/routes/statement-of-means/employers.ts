@@ -9,6 +9,8 @@ import { Employers } from 'response/form/models/statement-of-means/employers'
 import { User } from 'idam/user'
 import { RoutablePath } from 'common/router/routablePath'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
+import { Draft } from '@hmcts/draft-store-client'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 const page: RoutablePath = StatementOfMeansPaths.employersPage
 
@@ -36,8 +38,8 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const user: User = res.locals.user
-      renderView(new Form(user.responseDraft.document.statementOfMeans.employers), res)
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      renderView(new Form(draft.document.statementOfMeans.employers), res)
     })
   .post(
     page.uri,
@@ -46,18 +48,19 @@ export default express.Router()
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Employers> = req.body
-      const user: User = res.locals.user
-      const { externalId } = req.params
 
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
+        const user: User = res.locals.user
         form.model.removeExcessRows()
-        user.responseDraft.document.statementOfMeans.employers = form.model
 
-        await new DraftService().save(user.responseDraft, user.bearerToken)
+        draft.document.statementOfMeans.employers = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
-        if (user.responseDraft.document.statementOfMeans.employment.selfEmployed) {
+        const { externalId } = req.params
+        if (draft.document.statementOfMeans.employment.selfEmployed) {
           res.redirect(StatementOfMeansPaths.selfEmployedPage.evaluateUri({ externalId: externalId }))
         } else {
           res.redirect(StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: externalId }))

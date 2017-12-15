@@ -21,13 +21,16 @@ import { User } from 'idam/user'
 import { SignatureType } from 'app/common/signatureType'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
 import { DraftService } from 'services/draftService'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { Draft } from '@hmcts/draft-store-client'
 
-function getClaimAmountTotal (res: express.Response): Promise<TotalAmount> {
-  return FeesClient.calculateIssueFee(claimAmountWithInterest(res.locals.user.claimDraft.document))
+function getClaimAmountTotal (draft: DraftClaim): Promise<TotalAmount> {
+  return FeesClient.calculateIssueFee(claimAmountWithInterest(draft))
     .then((feeAmount: number) => {
-      return new TotalAmount(res.locals.user.claimDraft.document.amount.totalAmount(), interestAmount(res.locals.user.claimDraft.document), feeAmount)
+      return new TotalAmount(draft.amount.totalAmount(), interestAmount(draft), feeAmount)
     })
 }
+
 function getBusinessName (partyDetails: PartyDetails): string {
   if (partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
     return (partyDetails as SoleTraderDetails).businessName
@@ -65,8 +68,8 @@ function deserializerFunction (value: any): StatementOfTruth | QualifiedStatemen
   }
 }
 
-function getStatementOfTruthClassFor (user: User): { new(): StatementOfTruth | QualifiedStatementOfTruth } {
-  if (user.claimDraft.document.claimant.partyDetails.isBusiness()) {
+function getStatementOfTruthClassFor (draft: Draft<DraftClaim>): { new(): StatementOfTruth | QualifiedStatementOfTruth } {
+  if (draft.document.claimant.partyDetails.isBusiness()) {
     return QualifiedStatementOfTruth
   } else {
     return StatementOfTruth
@@ -74,19 +77,20 @@ function getStatementOfTruthClassFor (user: User): { new(): StatementOfTruth | Q
 }
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response, next: express.NextFunction) {
-  const user: User = res.locals.user
-  getClaimAmountTotal(res)
+  const draft: Draft<DraftClaim> = res.locals.claimDraft
+
+  getClaimAmountTotal(draft.document)
     .then((interestTotal: TotalAmount) => {
       res.render(Paths.checkAndSendPage.associatedView, {
-        draftClaim: res.locals.user.claimDraft.document,
+        draftClaim: draft.document,
         claimAmountTotal: interestTotal,
-        payAtSubmission: res.locals.user.claimDraft.document.interestDate.type === InterestDateType.SUBMISSION,
-        interestClaimed: (res.locals.user.claimDraft.document.interest.type !== InterestType.NO_INTEREST),
-        contactPerson: getContactPerson(res.locals.user.claimDraft.document.claimant.partyDetails),
-        businessName: getBusinessName(res.locals.user.claimDraft.document.claimant.partyDetails),
-        dateOfBirth: getDateOfBirth(res.locals.user.claimDraft.document.claimant.partyDetails),
-        defendantBusinessName: getBusinessName(res.locals.user.claimDraft.document.defendant.partyDetails),
-        partyAsCompanyOrOrganisation: user.claimDraft.document.claimant.partyDetails.isBusiness(),
+        payAtSubmission: draft.document.interestDate.type === InterestDateType.SUBMISSION,
+        interestClaimed: draft.document.interest.type !== InterestType.NO_INTEREST,
+        contactPerson: getContactPerson(draft.document.claimant.partyDetails),
+        businessName: getBusinessName(draft.document.claimant.partyDetails),
+        dateOfBirth: getDateOfBirth(draft.document.claimant.partyDetails),
+        defendantBusinessName: getBusinessName(draft.document.defendant.partyDetails),
+        partyAsCompanyOrOrganisation: draft.document.claimant.partyDetails.isBusiness(),
         paths: Paths,
         form: form
       })
@@ -96,22 +100,25 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.checkAndSendPage.uri, AllClaimTasksCompletedGuard.requestHandler, (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user: User = res.locals.user
-    const StatementOfTruthClass = getStatementOfTruthClassFor(user)
+    const draft: Draft<DraftClaim> = res.locals.claimDraft
+    const StatementOfTruthClass = getStatementOfTruthClassFor(draft)
     renderView(new Form(new StatementOfTruthClass()), res, next)
   })
   .post(Paths.checkAndSendPage.uri,
     AllClaimTasksCompletedGuard.requestHandler,
     FormValidator.requestHandler(undefined, deserializerFunction),
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const user: User = res.locals.user
       const form: Form<StatementOfTruth | QualifiedStatementOfTruth> = req.body
+
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
         if (form.model.type === SignatureType.QUALIFIED) {
-          user.claimDraft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
-          await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+          const draft: Draft<DraftClaim> = res.locals.claimDraft
+          const user: User = res.locals.user
+
+          draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
+          await new DraftService().save(draft, user.bearerToken)
         }
         res.redirect(Paths.startPaymentReceiver.uri)
       }
