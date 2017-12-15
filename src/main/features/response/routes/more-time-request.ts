@@ -10,6 +10,9 @@ import { MoreTimeAlreadyRequestedGuard } from 'response/guards/moreTimeAlreadyRe
 import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { Draft } from '@hmcts/draft-store-client'
+import { Claim } from 'claims/models/claim'
 
 function renderView (form: Form<MoreTimeNeeded>, res: express.Response, next: express.NextFunction) {
   try {
@@ -27,7 +30,9 @@ export default express.Router()
     Paths.moreTimeRequestPage.uri,
     MoreTimeAlreadyRequestedGuard.requestHandler,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      renderView(new Form(res.locals.user.responseDraft.document.moreTimeNeeded), res, next)
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+
+      renderView(new Form(draft.document.moreTimeNeeded), res, next)
     })
   .post(
     Paths.moreTimeRequestPage.uri,
@@ -39,17 +44,19 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
+        const claim: Claim = res.locals.claim
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
-        user.responseDraft.document.moreTimeNeeded = form.model
 
-        await new DraftService().save(user.responseDraft, user.bearerToken)
+        draft.document.moreTimeNeeded = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
         if (form.model.option === MoreTimeNeededOption.YES) {
-          await ClaimStoreClient.requestForMoreTime(user.claim.id, user)
+          await ClaimStoreClient.requestForMoreTime(claim.id, user)
 
-          res.redirect(Paths.moreTimeConfirmationPage.evaluateUri({ externalId: user.claim.externalId }))
+          res.redirect(Paths.moreTimeConfirmationPage.evaluateUri({ externalId: claim.externalId }))
         } else {
-          res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
+          res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
         }
       }
     }))

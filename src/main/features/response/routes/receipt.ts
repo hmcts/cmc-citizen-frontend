@@ -15,7 +15,6 @@ export default express.Router()
       async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
         const { externalId } = req.params
-
         documentsClient.getDefendantResponseReceiptPDF(externalId)
           .on('response', (response: http.IncomingMessage) => {
             if (response.statusCode !== 200) {
@@ -27,7 +26,7 @@ export default express.Router()
             })
             response.on('end', () => {
               const pdf = Buffer.concat(buffers)
-              const claim: Claim = res.locals.user.claim
+              const claim: Claim = res.locals.claim
               res.writeHead(HttpStatus.OK, {
                 'Content-Type': 'application/pdf',
                 'Content-Disposition': `attachment; filename=${claim.claimNumber}-response-receipt.pdf`,

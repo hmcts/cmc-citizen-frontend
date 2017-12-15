@@ -9,6 +9,8 @@ import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { RoutablePath } from 'common/router/routablePath'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { Draft } from '@hmcts/draft-store-client'
 
 const page: RoutablePath = StatementOfMeansPaths.selfEmployedPage
 
@@ -18,8 +20,8 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     (req: express.Request, res: express.Response) => {
-      const user: User = res.locals.user
-      res.render(page.associatedView, { form: new Form(user.responseDraft.document.statementOfMeans.selfEmployed) })
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      res.render(page.associatedView, { form: new Form(draft.document.statementOfMeans.selfEmployed) })
     })
   .post(
     page.uri,
@@ -27,15 +29,17 @@ export default express.Router()
     FormValidator.requestHandler(SelfEmployed, SelfEmployed.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<SelfEmployed> = req.body
-      const user: User = res.locals.user
-      const { externalId } = req.params
 
       if (form.hasErrors()) {
         res.render(page.associatedView, { form: form })
       } else {
-        user.responseDraft.document.statementOfMeans.selfEmployed = form.model
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
+        const user: User = res.locals.user
 
-        await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
+        draft.document.statementOfMeans.selfEmployed = form.model
+        await new DraftService().save(draft, user.bearerToken)
+
+        const { externalId } = req.params
         res.redirect(StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: externalId }))
       }
     })

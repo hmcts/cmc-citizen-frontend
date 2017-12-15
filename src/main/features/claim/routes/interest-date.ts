@@ -5,6 +5,9 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { InterestDate } from 'claim/form/models/interestDate'
 import { DraftService } from 'services/draftService'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { User } from 'idam/user'
+import { Draft } from '@hmcts/draft-store-client'
 
 function renderView (form: Form<InterestDate>, res: express.Response): void {
   res.render(Paths.interestDatePage.associatedView, { form: form })
@@ -13,7 +16,9 @@ function renderView (form: Form<InterestDate>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.interestDatePage.uri, (req: express.Request, res: express.Response) => {
-    renderView(new Form(res.locals.user.claimDraft.document.interestDate), res)
+    const draft: Draft<DraftClaim> = res.locals.claimDraft
+
+    renderView(new Form(draft.document.interestDate), res)
   })
   .post(
     Paths.interestDatePage.uri,
@@ -24,8 +29,12 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.claimDraft.document.interestDate = form.model
-        await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+        const draft: Draft<DraftClaim> = res.locals.claimDraft
+        const user: User = res.locals.user
+
+        draft.document.interestDate = form.model
+        await new DraftService().save(draft, user.bearerToken)
+
         res.redirect(Paths.feesPage.uri)
       }
     }))

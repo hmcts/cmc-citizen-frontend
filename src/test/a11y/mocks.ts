@@ -36,7 +36,7 @@ mock('response/guards/alreadyRespondedGuard', {
 mock('first-contact/guards/claimReferenceMatchesGuard', {
   ClaimReferenceMatchesGuard: {
     requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-      res.locals.user.claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
+      res.locals.claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
       next()
     }
   }

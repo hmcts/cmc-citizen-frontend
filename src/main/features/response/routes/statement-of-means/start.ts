@@ -10,7 +10,7 @@ export default express.Router()
     Paths.startPage.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     (req: express.Request, res: express.Response) => {
-      const claim: Claim = res.locals.user.claim
+      const claim: Claim = res.locals.claim
       res.render(Paths.startPage.associatedView, {
         claimantName: claim.claimData.claimant.name,
         nextPageLink: Paths.whatYouNeedPage.evaluateUri({ externalId: claim.externalId })

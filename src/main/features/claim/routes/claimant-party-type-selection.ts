@@ -9,6 +9,9 @@ import { ErrorHandling } from 'common/errorHandling'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { PartyDetailsFactory } from 'forms/models/partyDetailsFactory'
 import { DraftService } from 'services/draftService'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { User } from 'idam/user'
+import { Draft } from '@hmcts/draft-store-client'
 
 function renderView (form: Form<PartyTypeResponse>, res: express.Response, next: express.NextFunction) {
   res.render(Paths.claimantPartyTypeSelectionPage.associatedView, {
@@ -19,8 +22,9 @@ function renderView (form: Form<PartyTypeResponse>, res: express.Response, next:
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.claimantPartyTypeSelectionPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const partyDetails: PartyDetails = res.locals.user.claimDraft.document.claimant.partyDetails
-    renderView(new Form(new PartyTypeResponse(partyDetails ? PartyType.valueOf(partyDetails.type) : undefined)), res, next)
+    const draft: Draft<DraftClaim> = res.locals.claimDraft
+
+    renderView(new Form(new PartyTypeResponse(draft.document.claimant.partyDetails ? PartyType.valueOf(draft.document.claimant.partyDetails.type) : undefined)), res, next)
   })
   .post(
     Paths.claimantPartyTypeSelectionPage.uri,
@@ -31,13 +35,13 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
-        let partyDetails: PartyDetails = res.locals.user.claimDraft.document.claimant.partyDetails
+        const draft: Draft<DraftClaim> = res.locals.claimDraft
+        const user: User = res.locals.user
+        let partyDetails: PartyDetails = draft.document.claimant.partyDetails
 
         if (partyDetails === undefined || partyDetails.type !== form.model.type.value) {
-          partyDetails = res.locals.user.claimDraft.document.claimant.partyDetails = PartyDetailsFactory.createInstance(form.model.type.value)
-
-          await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
-
+          partyDetails = draft.document.claimant.partyDetails = PartyDetailsFactory.createInstance(form.model.type.value)
+          await new DraftService().save(draft, user.bearerToken)
         }
 
         switch (partyDetails.type) {
