@@ -4,10 +4,10 @@ import { PostcodeInfoClient, PostcodeInfoResponse } from '@hmcts/postcodeinfo-cl
 
 import { Paths as AppPaths } from 'app/paths'
 import { request } from 'client/request'
-import * as Logging from '@hmcts/nodejs-logging'
+import { Logger } from '@hmcts/nodejs-logging'
 
 const postcodeClient = new PostcodeInfoClient(config.get<string>('postcodeLookup.apiKey'), request)
-const logger = Logging.getLogger('postcode-lookup')
+const logger = Logger.getLogger('postcode-lookup')
 
 /* tslint:disable:no-default-export */
 export default express.Router()
