@@ -40,6 +40,10 @@ export class Address implements CompletableTask {
   @MaxLength(ValidationConstants.POSTCODE_MAX_LENGTH, { message: ValidationErrors.POSTCODE_NOT_VALID, groups: ['claimant', 'defendant', 'response'] })
   postcode?: string
 
+  postcodeLookup?: string
+  addressVisible?: string
+  addressSelectorVisible: string
+
   constructor (line1?: string, line2?: string, city?: string, postcode?: string) {
     this.line1 = line1
     this.line2 = line2
@@ -55,13 +59,12 @@ export class Address implements CompletableTask {
     if (input == null) {
       return input
     }
-    let deserialized: Address = new Address(
+    return new Address(
         input.line1,
         input.line2,
         input.city,
         input.postcode
     )
-    return deserialized
   }
 
   deserialize (input?: any): Address {
@@ -70,6 +73,12 @@ export class Address implements CompletableTask {
       this.line2 = input.line2
       this.city = input.city
       this.postcode = input.postcode
+      this.postcodeLookup = input.postcodeLookup
+      this.addressVisible = input.addressVisible
+      this.addressSelectorVisible = input.addressSelectorVisible
+
+      console.log(this.postcodeLookup)
+      console.log(this.addressVisible)
     }
     return this
   }

@@ -1,3 +1,5 @@
+
+(function() {
 document.addEventListener('DOMContentLoaded', function (event) {
   document.querySelectorAll('.js-visible')
     .forEach(function (hiddenElement) {
@@ -31,6 +33,15 @@ document.addEventListener('DOMContentLoaded', function (event) {
         showAddressEntry(postcodeLookupWidget)
       }
     })
+
+  document.querySelector('#saveAndContinue')
+    .addEventListener('click', function (event) {
+      document.querySelectorAll('.postcode-lookup')
+        .forEach(function(postcodeLookupWidget) {
+          postcodeLookupWidget.querySelector('')
+        })
+    })
+
 })
 
 function isNorthernIrelandPostcode (postcode) {
@@ -108,6 +119,8 @@ function lookupPostcode (postcode, postcodeLookupWidget) {
 
     var nonSelectableOption = document.createElement("option")
     nonSelectableOption.text = postcodeResponse.addresses.length + ' addresses found'
+    nonSelectableOption.disabled = true
+    nonSelectableOption.selected = true
     postcodeSelectDropdown.appendChild(nonSelectableOption)
 
     postcodeResponse.addresses.forEach(function (address) {
@@ -132,3 +145,7 @@ function lookupPostcode (postcode, postcodeLookupWidget) {
   }
   xhr.send()
 }
+
+})()
+
+console.log('woo this is cool')
