@@ -28,8 +28,15 @@
             showAddressEntry(postcodeLookupWidget)
           })
 
-        if (isAnyAddressFieldPopulated(postcodeLookupWidget)) {
+        var anyAddressFieldPopulated = isAnyAddressFieldPopulated(postcodeLookupWidget)
+        if (anyAddressFieldPopulated) {
           showAddressEntry(postcodeLookupWidget)
+        }
+
+        // Show postcode dropdown on postback in case of validation error
+        if (postcodeAddressPickerHiddenInput(postcodeLookupWidget).value === 'true' && !anyAddressFieldPopulated) {
+          showPostcodeDropdown(postcodeLookupWidget)
+          lookupPostcode(postcodeSearchButton(postcodeLookupWidget).previousElementSibling.value, postcodeLookupWidget)
         }
       })
 
@@ -48,8 +55,16 @@
       })
   })
 
+  function postcodeSearchButton(postcodeLookupWidget) {
+    return postcodeLookupWidget.querySelector('.postcode-search')
+  }
+
   function allPostcodeLookupWidgets () {
     return document.querySelectorAll('.postcode-lookup')
+  }
+
+  function postcodeAddressPickerHiddenInput (postcodeLookupWidget) {
+    return postcodeLookupWidget.querySelector('.address-selector-visible')
   }
 
   function isNorthernIrelandPostcode (postcode) {

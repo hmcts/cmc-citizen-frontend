@@ -17,6 +17,7 @@ export class ValidationErrors {
 
   static readonly POSTCODE_REQUIRED: string = 'Enter postcode'
   static readonly POSTCODE_NOT_VALID: string = 'The postcode must be no longer than $constraint1 characters'
+  static readonly ADDRESS_DROPDOWN_REQUIRED: string = 'Select an address'
 }
 
 export class ValidationConstants {
@@ -66,6 +67,11 @@ export class Address implements CompletableTask {
   addressVisible?: boolean
   addressSelectorVisible: boolean
 
+  @ValidateIf((o) => !o.addressVisible && o.addressSelectorVisible)
+  @IsDefined({ message: ValidationErrors.ADDRESS_DROPDOWN_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
+  @IsNotBlank({ message: ValidationErrors.ADDRESS_DROPDOWN_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
+  addressList?: string
+
   constructor (line1?: string,
                line2?: string,
                city?: string,
@@ -105,6 +111,7 @@ export class Address implements CompletableTask {
       this.postcodeLookup = input.postcodeLookup
       this.addressVisible = input.addressVisible ? toBoolean(input.addressVisible) : true
       this.addressSelectorVisible = input.addressSelectorVisible ? toBoolean(input.addressSelectorVisible) : false
+      this.addressList = input.addressList
     }
     return this
   }
