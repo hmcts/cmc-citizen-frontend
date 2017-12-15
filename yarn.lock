@@ -49,9 +49,9 @@
     moment "^2.19.1"
     on-finished "^2.3.0"
 
-"@hmcts/postcodeinfo-client@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@hmcts/postcodeinfo-client/-/postcodeinfo-client-0.0.1.tgz#a03cf1ede5dd9502f02a01759ef5ca65f32d0486"
+"@hmcts/postcodeinfo-client@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@hmcts/postcodeinfo-client/-/postcodeinfo-client-1.0.0.tgz#398447fdf3f2c6ba01370bf9fdac86398355841e"
   dependencies:
     request "^2.83.0"
     request-promise-native "^1.0.5"
