@@ -38,7 +38,7 @@
           { postProcess: 'sprintf', sprintf: [ legacyServiceUrl ]}) | safe }}</p>
         <p>{{ t('If your claim is over £100,000, use <a target="_blank" href="%s">form N1</a> ' + newWindow() + '.',
           { postProcess: 'sprintf', sprintf: [ n1FormUrl ]}) | safe }}</p>
-      {% elseif reason === NotEligibleReason.OVER_18 %}
+      {% elseif reason === NotEligibleReason.UNDER_18 %}
         <p>{{ t('You must be 18 or over to use the service') }}</p>
         <p>{{ t('You might be able to get free legal advice from organisations like ' +
           '<a target="_blank" href="%s">Citizens Advice</a> ' + newWindow() + ' about making a claim.',

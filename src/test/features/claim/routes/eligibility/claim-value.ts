@@ -72,6 +72,7 @@ describe('Claim eligibility: claim value page', () => {
           .send({ claimValue: ClaimValue.UNDER_10000.option })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.eligibilitySingleClaimantPage.uri))
       })
+
       it('should redirect to not eligible page when form is valid and not eligible option selected', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()

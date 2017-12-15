@@ -1,4 +1,5 @@
 import { expect } from 'chai'
+import { YesNoOption } from 'models/yesNoOption'
 import * as request from 'supertest'
 import * as config from 'config'
 
@@ -12,30 +13,29 @@ import { app } from '../../../../../main/app'
 
 import * as idamServiceMock from '../../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
-import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-describe('Claim eligibility: claim value page', () => {
+describe('Claim eligibility: over 18 page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ClaimPaths.eligibilityClaimValuePage.uri)
+    checkAuthorizationGuards(app, 'get', ClaimPaths.eligibilityOver18Page.uri)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
-        .get(ClaimPaths.eligibilityClaimValuePage.uri)
+        .get(ClaimPaths.eligibilityOver18Page.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Total amount you’re claiming'))
+        .expect(res => expect(res).to.be.successful.withText('Are you 18 or over?'))
     })
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', ClaimPaths.eligibilityClaimValuePage.uri)
+    checkAuthorizationGuards(app, 'post', ClaimPaths.eligibilityOver18Page.uri)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -46,9 +46,9 @@ describe('Claim eligibility: claim value page', () => {
         draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
-          .post(ClaimPaths.eligibilityClaimValuePage.uri)
+          .post(ClaimPaths.eligibilityOver18Page.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Total amount you’re claiming', 'div class="error-summary"'))
+          .expect(res => expect(res).to.be.successful.withText('Are you 18 or over?', 'div class="error-summary"'))
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
@@ -56,9 +56,9 @@ describe('Claim eligibility: claim value page', () => {
         draftStoreServiceMock.rejectSave()
 
         await request(app)
-          .post(ClaimPaths.eligibilityClaimValuePage.uri)
+          .post(ClaimPaths.eligibilityOver18Page.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ claimValue: ClaimValue.UNDER_10000.option })
+          .send({ eighteenOrOver: YesNoOption.YES.option })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -67,20 +67,21 @@ describe('Claim eligibility: claim value page', () => {
         draftStoreServiceMock.resolveSave()
 
         await request(app)
-          .post(ClaimPaths.eligibilityClaimValuePage.uri)
+          .post(ClaimPaths.eligibilityOver18Page.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ claimValue: ClaimValue.UNDER_10000.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.eligibilitySingleClaimantPage.uri))
+          .send({ eighteenOrOver: YesNoOption.YES.option })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.eligibilityHelpWithFeesPage.uri))
       })
+
       it('should redirect to not eligible page when form is valid and not eligible option selected', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)
-          .post(ClaimPaths.eligibilityClaimValuePage.uri)
+          .post(ClaimPaths.eligibilityOver18Page.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ claimValue: ClaimValue.NOT_KNOWN.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_VALUE_NOT_KNOWN}`))
+          .send({ eighteenOrOver: YesNoOption.NO.option })
+          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.UNDER_18}`))
       })
     })
   })

@@ -40,7 +40,7 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         if (draft.document.eligibility.eighteenOrOver === YesNoOption.NO) {
-          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.OVER_18}`)
+          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.UNDER_18}`)
         } else {
           res.redirect(Paths.eligibilityHelpWithFeesPage.uri)
         }
