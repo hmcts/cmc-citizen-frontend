@@ -62,7 +62,7 @@ describe('Claim eligibility: over 18 page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to single claimant page when form is valid and everything is fine', async () => {
+      it('should redirect to help with fees page when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
