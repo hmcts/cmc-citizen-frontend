@@ -19,6 +19,8 @@ describe('DraftClaim deserialization', () => {
         claimantAddress: YesNoOption.YES,
         defendantAddress: YesNoOption.YES,
         claimValue: ClaimValue.UNDER_10000,
+        singleClaimant: YesNoOption.YES,
+        singleDefendant: YesNoOption.YES,
         eighteenOrOver: YesNoOption.YES,
         governmentDepartment: YesNoOption.NO,
         helpWithFees: YesNoOption.NO
@@ -79,12 +81,14 @@ describe('DraftClaim deserialization', () => {
     expect(deserialized.defendant.partyDetails.address.postcode).to.equal('SW8 4DA')
     expect(deserialized.defendant.email.address).to.equal('j.clark@mailserver.com')
 
-    expect(deserialized.eligibility.helpWithFees).to.equal(YesNoOption.NO)
-    expect(deserialized.eligibility.governmentDepartment).to.equal(YesNoOption.NO)
     expect(deserialized.eligibility.claimantAddress).to.equal(YesNoOption.YES)
     expect(deserialized.eligibility.defendantAddress).to.equal(YesNoOption.YES)
-    expect(deserialized.eligibility.eighteenOrOver).to.equal(YesNoOption.YES)
     expect(deserialized.eligibility.claimValue).to.equal(ClaimValue.UNDER_10000)
+    expect(deserialized.eligibility.singleClaimant).to.equal(YesNoOption.YES)
+    expect(deserialized.eligibility.singleDefendant).to.equal(YesNoOption.YES)
+    expect(deserialized.eligibility.eighteenOrOver).to.equal(YesNoOption.YES)
+    expect(deserialized.eligibility.governmentDepartment).to.equal(YesNoOption.NO)
+    expect(deserialized.eligibility.helpWithFees).to.equal(YesNoOption.NO)
   })
 
   it('should initialize the fields with appropriate class instances', () => {

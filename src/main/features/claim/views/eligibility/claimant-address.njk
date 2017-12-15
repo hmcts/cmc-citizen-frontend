@@ -19,9 +19,9 @@
 
         {{
         radioGroup(
-          'Do you live in the UK?',
-          name,
-          [
+          label = 'Do you live in the UK?',
+          name = name,
+          options = [
             {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
             {'label': 'No', value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO)}
           ],

@@ -1,25 +1,25 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 
-{% set title = t('Over 18 | Money claim') %}
+{% set title = t('Single Claimant | Money claim') %}
 
 {% block content %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Are you 18 or over?') }}</h1>
-      <p>{{ t('You must be 18 or over to use the service.') }}</p>
+      <h1 class="heading-large">{{ t('Are you the only person or business making the claim?') }}</h1>
+      <p>{{ t('You can’t use this service if more than one person or business is making the claim') }}</p>
 
-      {% set name = 'eighteenOrOver' %}
+      {% set name = 'singleClaimant' %}
 
       <form novalidate method="post" class="analytics-submit-event-trigger"
-            data-event-action="Eligibility: Select 18 or over option"
+            data-event-action="Eligibility: Single claimant"
             data-event-label-from="{{ name }}">
         {{ csrfProtection(csrf) }}
 
         {{
           radioGroup(
-            label = 'Are you 18 or over?',
+            label = 'Are you the only person or business making the claim?',
             name = name,
             options = [
               {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
