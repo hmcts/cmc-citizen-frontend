@@ -60,8 +60,6 @@ describe('OrganisationDetails', () => {
     })
 
     it('should return errors when required address fields are missing', () => {
-      organisationDetails.address.addressVisible = true
-
       let errors: ValidationError[] = validator.validateSync(organisationDetails)
       expectValidationError(errors, AddressValidationErrors.FIRST_LINE_REQUIRED)
       expectValidationError(errors, AddressValidationErrors.POSTCODE_REQUIRED)
@@ -124,8 +122,6 @@ describe('OrganisationDetails', () => {
       })
 
       it('should return errors when correspondence address required fields are missing', () => {
-        organisationDetails.correspondenceAddress.addressVisible = true
-
         let errors: ValidationError[] = validator.validateSync(organisationDetails)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.FIRST_LINE_REQUIRED)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.POSTCODE_REQUIRED)

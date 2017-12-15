@@ -57,7 +57,6 @@ describe('PartyDetails', () => {
     })
 
     it('should return errors when required address fields are missing', () => {
-      partyDetails.address.addressVisible = true
       let errors: ValidationError[] = validator.validateSync(partyDetails)
       expectValidationError(errors, AddressValidationErrors.FIRST_LINE_REQUIRED)
       expectValidationError(errors, AddressValidationErrors.CITY_REQUIRED)
@@ -77,8 +76,6 @@ describe('PartyDetails', () => {
       })
 
       it('should return errors when correspondence address required fields are missing', () => {
-        partyDetails.correspondenceAddress.addressVisible = true
-
         let errors: ValidationError[] = validator.validateSync(partyDetails)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.FIRST_LINE_REQUIRED)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.CITY_REQUIRED)
@@ -86,8 +83,6 @@ describe('PartyDetails', () => {
       })
 
       it('should return errors when correspondence address fields have too long values', () => {
-        partyDetails.correspondenceAddress.addressVisible = true
-
         let errors: ValidationError[] = validator.validateSync(partyDetails)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.FIRST_LINE_REQUIRED)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.CITY_REQUIRED)
