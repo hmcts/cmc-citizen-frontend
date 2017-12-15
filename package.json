@@ -74,7 +74,7 @@
     "require-directory": "^2.1.1",
     "serve-favicon": "^2.3.0",
     "to-boolean": "^1.0.0",
-    "ts-node": "^3.3.0",
+    "ts-node": "^4.0.2",
     "tsconfig-paths": "^2.2.0",
     "typescript": "^2.4.2",
     "uuid": "^3.0.1"
