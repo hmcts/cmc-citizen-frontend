@@ -13,8 +13,8 @@ export class ContentSecurityPolicy {
     const connectSrc = [self]
 
     if (this.developmentMode) {
-      scriptSrc.push('http://localhost:35729')
-      connectSrc.push('ws://localhost:35729')
+      scriptSrc.push('https://localhost:35729')
+      connectSrc.push('wss://localhost:35729')
     }
 
     app.use(helmet.contentSecurityPolicy({
