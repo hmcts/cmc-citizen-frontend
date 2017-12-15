@@ -1,3 +1,5 @@
+import { Draft } from '@hmcts/draft-store-client'
+import { DraftClaim } from 'drafts/models/draftClaim'
 import * as express from 'express'
 
 import { Paths } from 'claim/paths'
@@ -19,8 +21,8 @@ function renderView (form: Form<Eligibility>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.eligibilitySingleClaimantPage.uri, (req: express.Request, res: express.Response): void => {
-    const user: User = res.locals.user
-    renderView(new Form(user.claimDraft.document.eligibility), res)
+    const draft: Draft<DraftClaim> = res.locals.claimDraft
+    renderView(new Form(draft.document.eligibility), res)
   })
   .post(
     Paths.eligibilitySingleClaimantPage.uri,
@@ -31,12 +33,13 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
-        user.claimDraft.document.eligibility.singleClaimant = form.model.singleClaimant
 
-        await new DraftService().save(user.claimDraft, user.bearerToken)
+        draft.document.eligibility.singleClaimant = form.model.singleClaimant
+        await new DraftService().save(draft, user.bearerToken)
 
-        if (user.claimDraft.document.eligibility.singleClaimant === YesNoOption.NO) {
+        if (draft.document.eligibility.singleClaimant === YesNoOption.NO) {
           res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`)
         } else {
           res.redirect(Paths.eligibilitySingleDefendantPage.uri)

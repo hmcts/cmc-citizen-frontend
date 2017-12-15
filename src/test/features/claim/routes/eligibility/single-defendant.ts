@@ -19,7 +19,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ClaimPaths.eligibilitySingleDefendantPage.uri
 const pageRedirect: string = ClaimPaths.eligibilityOver18Page.uri
 
-describe('Claim eligibility: single claimant page', () => {
+describe('Claim eligibility: single defendant page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
