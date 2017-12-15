@@ -3,7 +3,7 @@ import * as mock from 'mock-require'
 mock('@hmcts/postcodeinfo-client', './mockPostcodeInfoClient')
 
 export class PostcodeInfoClient {
-  constructor (apikey: string, request?, apiLocation?) {
+  constructor (public readonly apikey: string, public readonly request?, apiLocation?) {
   }
 
   lookupPostcode (postcode) {
