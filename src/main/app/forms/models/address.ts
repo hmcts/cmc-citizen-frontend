@@ -66,11 +66,18 @@ export class Address implements CompletableTask {
   addressVisible?: boolean
   addressSelectorVisible: boolean
 
-  constructor (line1?: string, line2?: string, city?: string, postcode?: string) {
+  constructor (line1?: string,
+               line2?: string,
+               city?: string,
+               postcode?: string,
+               addressVisible: boolean = true,
+               addressSelectorVisible: boolean = false) {
     this.line1 = line1
     this.line2 = line2
     this.city = city
     this.postcode = postcode
+    this.addressVisible = addressVisible
+    this.addressSelectorVisible = addressSelectorVisible
   }
 
   static fromClaimAddress (address: ClaimAddress): Address {
@@ -96,7 +103,7 @@ export class Address implements CompletableTask {
       this.city = input.city
       this.postcode = input.postcode
       this.postcodeLookup = input.postcodeLookup
-      this.addressVisible = input.addressVisible ? toBoolean(input.addressVisible) : false
+      this.addressVisible = input.addressVisible ? toBoolean(input.addressVisible) : true
       this.addressSelectorVisible = input.addressSelectorVisible ? toBoolean(input.addressSelectorVisible) : false
     }
     return this
