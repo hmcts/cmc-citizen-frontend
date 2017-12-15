@@ -1,9 +1,10 @@
-import { IsDefined, MaxLength } from 'class-validator'
+import { IsDefined, MaxLength, ValidateIf } from 'class-validator'
 
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 
 import { CompletableTask } from 'app/models/task'
 import { Address as ClaimAddress } from 'claims/models/address'
+import * as toBoolean from 'to-boolean'
 
 export class ValidationErrors {
   static readonly FIRST_LINE_REQUIRED: string = 'Enter first address line'
@@ -25,24 +26,46 @@ export class ValidationConstants {
 
 export class Address implements CompletableTask {
 
+  @ValidateIf(o => o.addressVisible)
   @IsDefined({ message: ValidationErrors.FIRST_LINE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.FIRST_LINE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
-  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.FIRST_LINE_TOO_LONG, groups: ['claimant', 'defendant', 'response'] })
+  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, {
+    message: ValidationErrors.FIRST_LINE_TOO_LONG,
+    groups: ['claimant', 'defendant', 'response']
+  })
   line1?: string
-  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.SECOND_LINE_TOO_LONG, groups: ['claimant', 'defendant', 'response'] })
+
+  @ValidateIf(o => o.addressVisible)
+  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, {
+    message: ValidationErrors.SECOND_LINE_TOO_LONG,
+    groups: ['claimant', 'defendant', 'response']
+  })
   line2?: string
+
+  @ValidateIf(o => o.addressVisible)
   @IsDefined({ message: ValidationErrors.CITY_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.CITY_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
-  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.CITY_NOT_VALID, groups: ['claimant', 'defendant', 'response'] })
+  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, {
+    message: ValidationErrors.CITY_NOT_VALID,
+    groups: ['claimant', 'defendant', 'response']
+  })
   city?: string
+
+  @ValidateIf(o => o.addressVisible)
   @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
-  @MaxLength(ValidationConstants.POSTCODE_MAX_LENGTH, { message: ValidationErrors.POSTCODE_NOT_VALID, groups: ['claimant', 'defendant', 'response'] })
+  @MaxLength(ValidationConstants.POSTCODE_MAX_LENGTH, {
+    message: ValidationErrors.POSTCODE_NOT_VALID,
+    groups: ['claimant', 'defendant', 'response']
+  })
   postcode?: string
 
+
+  @ValidateIf((o) => !o.addressVisible && !o.addressSelectorVisible)
+  @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   postcodeLookup?: string
-  addressVisible?: string
-  addressSelectorVisible: string
+  addressVisible?: boolean
+  addressSelectorVisible: boolean
 
   constructor (line1?: string, line2?: string, city?: string, postcode?: string) {
     this.line1 = line1
@@ -60,10 +83,10 @@ export class Address implements CompletableTask {
       return input
     }
     return new Address(
-        input.line1,
-        input.line2,
-        input.city,
-        input.postcode
+      input.line1,
+      input.line2,
+      input.city,
+      input.postcode
     )
   }
 
@@ -74,11 +97,8 @@ export class Address implements CompletableTask {
       this.city = input.city
       this.postcode = input.postcode
       this.postcodeLookup = input.postcodeLookup
-      this.addressVisible = input.addressVisible
-      this.addressSelectorVisible = input.addressSelectorVisible
-
-      console.log(this.postcodeLookup)
-      console.log(this.addressVisible)
+      this.addressVisible = input.addressVisible ? toBoolean(input.addressVisible) : false
+      this.addressSelectorVisible = input.addressSelectorVisible ? toBoolean(input.addressSelectorVisible) : false
     }
     return this
   }

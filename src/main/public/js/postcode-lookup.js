@@ -38,7 +38,16 @@ document.addEventListener('DOMContentLoaded', function (event) {
     .addEventListener('click', function (event) {
       document.querySelectorAll('.postcode-lookup')
         .forEach(function(postcodeLookupWidget) {
-          postcodeLookupWidget.querySelector('')
+          var addressInputsVisible = !postcodeLookupWidget.querySelector('.address')
+            .classList.contains('js-hidden')
+          console.log('address', addressInputsVisible)
+          postcodeLookupWidget.querySelector('.postcode-address-visible').value = addressInputsVisible
+
+
+          var addressPickerVisible = !postcodeLookupWidget.querySelector('.postcode-address-picker')
+            .classList.contains('hidden')
+          console.log('picker', addressPickerVisible)
+          postcodeLookupWidget.querySelector('.address-selector-visible').value = addressPickerVisible
         })
     })
 
@@ -147,5 +156,3 @@ function lookupPostcode (postcode, postcodeLookupWidget) {
 }
 
 })()
-
-console.log('woo this is cool')
