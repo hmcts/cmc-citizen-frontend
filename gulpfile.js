@@ -1,10 +1,11 @@
-let gulp = require('gulp')
-let nodemon = require('gulp-nodemon')
-let plumber = require('gulp-plumber')
-let livereload = require('gulp-livereload')
-let sass = require('gulp-sass')
-let path = require('path')
-let replace = require('gulp-replace')
+const gulp = require('gulp')
+const nodemon = require('gulp-nodemon')
+const plumber = require('gulp-plumber')
+const livereload = require('gulp-livereload')
+const sass = require('gulp-sass')
+const path = require('path')
+const replace = require('gulp-replace')
+const fs = require('fs')
 
 const repoRoot = path.join(__dirname, '/')
 const govUkFrontendToolkitRoot = path.join(repoRoot, 'node_modules/govuk_frontend_toolkit/stylesheets')
@@ -74,7 +75,10 @@ gulp.task('watch', () => {
 
 gulp.task('develop', () => {
   setTimeout(() => {
-    livereload.listen()
+    livereload.listen({
+      key: fs.readFileSync(path.join(__dirname, 'src', 'main', 'resources', 'localhost-ssl', 'localhost.key'), 'utf-8'),
+      cert: fs.readFileSync(path.join(__dirname, 'src', 'main', 'resources', 'localhost-ssl', 'localhost.crt'), 'utf-8'),
+    })
     nodemon({
       ext: 'ts js po',
       stdout: true
