@@ -42,7 +42,7 @@ export class DefendantPaymentType {
   }
 
   private bySetDateLabelFor (responseType: ResponseType): string {
-    if (responseType.value === ResponseType.OWE_ALL_PAID_NONE.value) {
+    if (responseType.value === ResponseType.FULL_ADMISSION.value) {
       return DefendantPaymentTypeLabels.FULL_ADMIT_BY_SPECIFIED_DATE
     } else {
       return DefendantPaymentTypeLabels.BY_SET_DATE

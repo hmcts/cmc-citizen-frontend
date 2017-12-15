@@ -1,8 +1,9 @@
 import * as express from 'express'
 import { ErrorPaths } from 'first-contact/paths'
 import { Claim } from 'claims/models/claim'
+import { Logger } from '@hmcts/nodejs-logging'
 
-const logger = require('@hmcts/nodejs-logging').getLogger('first-contact/guards/claimantRequestedCCJGuard')
+const logger = Logger.getLogger('first-contact/guards/claimantRequestedCCJGuard')
 
 export class ClaimantRequestedCCJGuard {
   static async requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {

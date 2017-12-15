@@ -23,8 +23,8 @@
     {% if descriptionError %}<span id="{{ descriptionKey }}[label]" class="error-message">{{ t(descriptionError) }}</span>{% endif %}
 
     <label class="form-label-bold mobile-show" for="{{ amountKey }}">{{ index + 1 }} {{ t('. What') }}</label>
-    {{ textInputInline(name = descriptionKey, form = form, inputClass='column-1') }}
-    {{ poundInputInline(name = amountKey, label = (index + 1) + '. How much?', form = form) }}
+    {{ textInputInline(name = descriptionKey, form = form, inputClass='column-1', ariaLabelledBy = 'description-label') }}
+    {{ poundInputInline(name = amountKey, label = (index + 1) + '. How much?', form = form, ariaLabelledBy = 'amount-label') }}
 
   </div>
 
@@ -50,14 +50,15 @@
       {{ poundInput(label = 'Maintenance payments (paid to you)', name = 'maintenance', form = form) }}
 
       <div class="statement-of-means-container">
+        {% if form.model and form.model.rows.length > 0 %}
         <div class="multiline">
           <div class="multiline-rows">
             <div class="triple-column mobile-hide">
               <div class="column-1 mobile-hide">
-                <label class="form-label-bold">{{ t('What') }}</label>
+                <label id="description-label"  class="form-label-bold">{{ t('Name the income') }}</label>
               </div>
               <div class="column-4 mobile-hide">
-                <label class="form-label-bold">{{ t('How much') }}</label>
+                <label id="amount-label"  class="form-label-bold">{{ t('Amount') }}</label>
               </div>
             </div>
 
@@ -66,6 +67,7 @@
             {% endfor %}
           </div>
         </div>
+        {% endif %}
 
         {% if form.model and form.model.canAddMoreRows() %}
           <div id="add-event-container" class="form-group">

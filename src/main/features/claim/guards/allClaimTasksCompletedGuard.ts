@@ -4,8 +4,9 @@ import { Paths } from 'claim/paths'
 import { TaskListBuilder } from 'claim/helpers/taskListBuilder'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
+import { Logger } from '@hmcts/nodejs-logging'
 
-const logger = require('@hmcts/nodejs-logging').getLogger('claim/guards/allTasksCompletedGuard')
+const logger = Logger.getLogger('claim/guards/allTasksCompletedGuard')
 
 export class AllClaimTasksCompletedGuard {
 

@@ -5,8 +5,9 @@ import { Paths } from 'response/paths'
 import { TaskListBuilder } from 'response/helpers/taskListBuilder'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { Logger } from '@hmcts/nodejs-logging'
 
-const logger = require('@hmcts/nodejs-logging').getLogger('router/response/check-and-send')
+const logger = Logger.getLogger('router/response/check-and-send')
 
 export class AllResponseTasksCompletedGuard {
 

@@ -22,7 +22,7 @@ const pagePath = ResponsePaths.defenceRejectPartOfClaimPage.evaluateUri({ extern
 
 const draftOverride = {
   response: {
-    type: ResponseType.OWE_SOME_PAID_NONE
+    type: ResponseType.PART_ADMISSION
   }
 }
 
@@ -52,7 +52,7 @@ describe('Defendant response: part admission options', () => {
         })
 
         it('should redirect to response type page when response type is not part admission', async () => {
-          draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.OWE_NONE } })
+          draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.DEFENCE } })
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -89,7 +89,7 @@ describe('Defendant response: part admission options', () => {
 
       context('when response not submitted', () => {
         it('should redirect to response type page when response type is not part admission', async () => {
-          draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.OWE_NONE } })
+          draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.DEFENCE } })
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)

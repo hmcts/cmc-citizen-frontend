@@ -18,7 +18,7 @@ function isRequestAllowed (res: express.Response): boolean {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
   return draft.document.response !== undefined
-    && draft.document.response.type === ResponseType.OWE_NONE
+    && draft.document.response.type === ResponseType.DEFENCE
 }
 
 function accessDeniedCallback (req: express.Request, res: express.Response): void {

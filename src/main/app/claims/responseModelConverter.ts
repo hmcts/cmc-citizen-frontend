@@ -43,7 +43,7 @@ export class ResponseModelConverter {
   // TODO A workaround for Claim Store staff notifications logic to work.
   // Should be removed once partial admission feature is fully done and frontend and backend models are aligned properly.
   private static inferDefenceType (draft: ResponseDraft): DefenceType {
-    if (draft.response.type === FormResponseType.OWE_NONE) {
+    if (draft.response.type === FormResponseType.DEFENCE) {
       return draft.rejectAllOfClaim && draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID
         ? DefenceType.ALREADY_PAID
         : DefenceType.DISPUTE

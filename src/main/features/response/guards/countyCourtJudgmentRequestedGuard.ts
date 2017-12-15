@@ -1,7 +1,9 @@
 import * as express from 'express'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 import { Claim } from 'claims/models/claim'
-const logger = require('@hmcts/nodejs-logging').getLogger('response/guards/countyCourtJudgmentRequestedGuard')
+import { Logger } from '@hmcts/nodejs-logging'
+
+const logger = Logger.getLogger('response/guards/countyCourtJudgmentRequestedGuard')
 
 export class CountyCourtJudgmentRequestedGuard {
 

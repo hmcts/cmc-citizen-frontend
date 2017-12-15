@@ -1,10 +1,10 @@
 import * as express from 'express'
 
 import { Claim } from 'claims/models/claim'
-
 import { Paths as DashboardPaths } from 'dashboard/paths'
+import { Logger } from '@hmcts/nodejs-logging'
 
-const logger = require('@hmcts/nodejs-logging').getLogger('response/guards/alreadyRespondedGuard')
+const logger = Logger.getLogger('response/guards/alreadyRespondedGuard')
 
 /**
  * Protects response journey from being accessed when response has been already submitted. Request in such scenario

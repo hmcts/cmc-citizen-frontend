@@ -1,10 +1,16 @@
 import { expect } from 'chai'
 
+import { RequestTracingHeaders as Headers } from '@hmcts/nodejs-logging'
 import { ApiLogger } from 'logging/apiLogger'
 
 process.env.LOG_LEVEL = 'DEBUG'
 
 describe('ApiLogger', () => {
+  const headers = { }
+  headers[Headers.REQUEST_ID_HEADER] = 'test-request-id'
+  headers[Headers.ROOT_REQUEST_ID_HEADER] = 'test-root-request-id'
+  headers[Headers.ORIGIN_REQUEST_ID_HEADER] = 'test-origin-request-id'
+
   let apiLogger
 
   beforeEach(() => {
@@ -57,6 +63,16 @@ describe('ApiLogger', () => {
       expect(logEntry.message)
         .to.contain('{"formField":"formValue"}')
         .and.to.contain('{"key":"value"}')
+    })
+
+    it('should include request ids if they are available', () => {
+      requestData.headers = headers
+
+      const logEntry = apiLogger._buildRequestEntry(requestData)
+
+      expect(logEntry.requestId).to.equal('test-request-id')
+      expect(logEntry.rootRequestId).to.equal('test-root-request-id')
+      expect(logEntry.originRequestId).to.equal('test-origin-request-id')
     })
   })
 
@@ -116,6 +132,16 @@ describe('ApiLogger', () => {
       expect(logEntry.message)
         .to.contain('{"field":"value"}')
         .and.to.contain('{"message":"Something bad happened"}')
+    })
+
+    it('should include request ids if they are available', () => {
+      responseData.requestHeaders = headers
+
+      const logEntry = apiLogger._buildResponseEntry(responseData)
+
+      expect(logEntry.requestId).to.equal('test-request-id')
+      expect(logEntry.rootRequestId).to.equal('test-root-request-id')
+      expect(logEntry.originRequestId).to.equal('test-origin-request-id')
     })
   })
 })

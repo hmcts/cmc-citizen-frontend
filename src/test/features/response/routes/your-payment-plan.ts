@@ -118,7 +118,7 @@ describe('Defendant: payment page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response', {
             response: {
-              type: ResponseType.OWE_ALL_PAID_NONE
+              type: ResponseType.FULL_ADMISSION
             },
             defendantDetails: {
               partyDetails: {
@@ -139,7 +139,7 @@ describe('Defendant: payment page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response', {
             response: {
-              type: ResponseType.OWE_ALL_PAID_NONE
+              type: ResponseType.FULL_ADMISSION
             },
             defendantDetails: {
               partyDetails: {

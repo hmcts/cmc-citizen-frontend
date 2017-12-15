@@ -66,7 +66,7 @@ describe('Defendant - when will you pay options', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response', {
             response: {
-              type: ResponseType.OWE_ALL_PAID_NONE
+              type: ResponseType.FULL_ADMISSION
             }
           })
           await request(app)
@@ -80,7 +80,7 @@ describe('Defendant - when will you pay options', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response', {
             response: {
-              type: ResponseType.OWE_SOME_PAID_NONE
+              type: ResponseType.PART_ADMISSION
             },
             rejectPartOfClaim: {
               option: RejectPartOfClaimOption.AMOUNT_TOO_HIGH
@@ -144,7 +144,7 @@ describe('Defendant - when will you pay options', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', {
               response: {
-                type: ResponseType.OWE_ALL_PAID_NONE
+                type: ResponseType.FULL_ADMISSION
               }
             })
           })

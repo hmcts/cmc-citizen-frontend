@@ -16,7 +16,9 @@ import { Claim } from 'claims/models/claim'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Draft } from '@hmcts/draft-store-client'
 
-const logger = require('@hmcts/nodejs-logging').getLogger('ccj/guards/individualDateOfBirth')
+import { Logger } from '@hmcts/nodejs-logging'
+
+const logger = Logger.getLogger('ccj/guards/individualDateOfBirth')
 
 const accessGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
   const claim: Claim = res.locals.claim

@@ -17,7 +17,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
 
 function isAmountTooHighPartialResponse (responseDraft: ResponseDraft): boolean {
-  return responseDraft.response.type.value === ResponseType.OWE_SOME_PAID_NONE.value
+  return responseDraft.response.type.value === ResponseType.PART_ADMISSION.value
     && responseDraft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
 }
 
