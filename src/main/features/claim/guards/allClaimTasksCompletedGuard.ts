@@ -2,7 +2,8 @@ import * as express from 'express'
 
 import { Paths } from 'claim/paths'
 import { TaskListBuilder } from 'claim/helpers/taskListBuilder'
-import { User } from 'idam/user'
+import { Draft } from '@hmcts/draft-store-client'
+import { DraftClaim } from 'drafts/models/draftClaim'
 import { Logger } from '@hmcts/nodejs-logging'
 
 const logger = Logger.getLogger('claim/guards/allTasksCompletedGuard')
@@ -10,8 +11,8 @@ const logger = Logger.getLogger('claim/guards/allTasksCompletedGuard')
 export class AllClaimTasksCompletedGuard {
 
   static requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
-    const user: User = res.locals.user
-    const allTasksCompleted: boolean = TaskListBuilder.buildRemainingTasks(user.claimDraft.document).length === 0
+    const draft: Draft<DraftClaim> = res.locals.claimDraft
+    const allTasksCompleted: boolean = TaskListBuilder.buildRemainingTasks(draft.document).length === 0
 
     if (allTasksCompleted) {
       return next()

@@ -11,6 +11,8 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { YesNoOption } from 'models/yesNoOption'
 import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
+import { Draft } from '@hmcts/draft-store-client'
+import { DraftClaim } from 'drafts/models/draftClaim'
 
 function renderView (form: Form<Eligibility>, res: express.Response): void {
   res.render(Paths.eligibilityHelpWithFeesPage.associatedView, { form: form })
@@ -19,8 +21,8 @@ function renderView (form: Form<Eligibility>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.eligibilityHelpWithFeesPage.uri, (req: express.Request, res: express.Response): void => {
-    const user: User = res.locals.user
-    renderView(new Form(user.claimDraft.document.eligibility), res)
+    const draft: Draft<DraftClaim> = res.locals.claimDraft
+    renderView(new Form(draft.document.eligibility), res)
   })
   .post(
     Paths.eligibilityHelpWithFeesPage.uri,
@@ -31,12 +33,13 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
-        user.claimDraft.document.eligibility.helpWithFees = form.model.helpWithFees
 
-        await new DraftService().save(user.claimDraft, user.bearerToken)
+        draft.document.eligibility.helpWithFees = form.model.helpWithFees
+        await new DraftService().save(draft, user.bearerToken)
 
-        const option: YesNoOption = user.claimDraft.document.eligibility.helpWithFees
+        const option: YesNoOption = draft.document.eligibility.helpWithFees
         if (option === YesNoOption.NO) {
           res.redirect(Paths.eligibilityClaimantAddressPage.uri)
         } else {

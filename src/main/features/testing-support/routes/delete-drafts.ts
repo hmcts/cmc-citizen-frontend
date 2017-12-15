@@ -4,6 +4,7 @@ import { Paths } from 'testing-support/paths'
 import { ErrorHandling } from 'common/errorHandling'
 
 import { DraftService } from 'services/draftService'
+import { User } from 'idam/user'
 
 const draftService = new DraftService()
 
@@ -20,12 +21,11 @@ export default express.Router()
   )
   .post(Paths.deleteDraftsPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const userAuthToken: string = res.locals.user.bearerToken
-
-      const drafts = await draftService.find(getDraftType(req), '100', userAuthToken, (value) => value)
+      const user: User = res.locals.user
+      const drafts = await draftService.find(getDraftType(req), '100', user.bearerToken, (value) => value)
 
       drafts.forEach(async draft => {
-        await new DraftService().delete(draft.id, userAuthToken)
+        await new DraftService().delete(draft.id, user.bearerToken)
       })
 
       res.redirect(Paths.indexPage.uri)

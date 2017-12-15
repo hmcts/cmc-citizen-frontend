@@ -5,14 +5,17 @@ import { User } from 'app/idam/user'
 import { ClaimModelConverter } from 'claims/claimModelConverter'
 import { ResponseModelConverter } from 'claims/responseModelConverter'
 import { ForbiddenError } from '../../errors'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { Draft } from '@hmcts/draft-store-client'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
 const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
 
 export class ClaimStoreClient {
-  static saveClaimForUser (user: User): Promise<Claim> {
-    const convertedDraftClaim = ClaimModelConverter.convert(user.claimDraft.document)
+  static saveClaimForUser (draft: Draft<DraftClaim>, user: User): Promise<Claim> {
+    const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
     return request.post(`${claimStoreApiUrl}/${user.id}`, {
       body: convertedDraftClaim,
       headers: {
@@ -21,11 +24,10 @@ export class ClaimStoreClient {
     })
   }
 
-  static saveResponseForUser (user: User): Promise<void> {
-    const claim: Claim = user.claim
-    const response = ResponseModelConverter.convert(user.responseDraft.document)
+  static saveResponseForUser (claimId: number, draft: Draft<ResponseDraft>, user: User): Promise<void> {
+    const response = ResponseModelConverter.convert(draft.document)
 
-    return request.post(`${claimStoreResponsesApiUrl}/${claim.id}/defendant/${user.id}`, {
+    return request.post(`${claimStoreResponsesApiUrl}/${claimId}/defendant/${user.id}`, {
       body: response,
       headers: {
         Authorization: `Bearer ${user.bearerToken}`

@@ -5,6 +5,7 @@ import { Claim } from 'app/claims/models/claim'
 import { ClaimStoreClient } from 'app/claims/claimStoreClient'
 import { ErrorPaths } from 'first-contact/paths'
 import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
+import { User } from 'idam/user'
 import { Logger } from '@hmcts/nodejs-logging'
 
 const logger = Logger.getLogger('first-contact/guards/claimReferenceMatchesGuard')
@@ -17,8 +18,9 @@ export class ClaimReferenceMatchesGuard {
     try {
       const reference = ClaimReferenceMatchesGuard.getClaimRef(req)
 
-      const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(res.locals.user.id)
-      res.locals.user.claim = claim
+      const user: User = res.locals.user
+      const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(user.id)
+      res.locals.claim = claim
 
       if (claim.claimNumber !== reference) {
         logger.error('Claim reference mismatch - redirecting to access denied page')
