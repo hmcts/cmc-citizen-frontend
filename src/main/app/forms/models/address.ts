@@ -64,8 +64,9 @@ export class Address implements CompletableTask {
   @ValidateIf((o) => !o.addressVisible && !o.addressSelectorVisible)
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   postcodeLookup?: string
-  addressVisible?: boolean
+  addressVisible: boolean
   addressSelectorVisible: boolean
+  enterManually: boolean
 
   @ValidateIf((o) => !o.addressVisible && o.addressSelectorVisible)
   @IsDefined({ message: ValidationErrors.ADDRESS_DROPDOWN_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
@@ -77,13 +78,15 @@ export class Address implements CompletableTask {
                city?: string,
                postcode?: string,
                addressVisible: boolean = true,
-               addressSelectorVisible: boolean = false) {
+               addressSelectorVisible: boolean = false,
+               enterManually: boolean = false) {
     this.line1 = line1
     this.line2 = line2
     this.city = city
     this.postcode = postcode
     this.addressVisible = addressVisible
     this.addressSelectorVisible = addressSelectorVisible
+    this.enterManually = enterManually
   }
 
   static fromClaimAddress (address: ClaimAddress): Address {
@@ -111,6 +114,7 @@ export class Address implements CompletableTask {
       this.postcodeLookup = input.postcodeLookup
       this.addressVisible = input.addressVisible ? toBoolean(input.addressVisible) : true
       this.addressSelectorVisible = input.addressSelectorVisible ? toBoolean(input.addressSelectorVisible) : false
+      this.enterManually = input.enterManually ? toBoolean(input.enterManually) : false
       this.addressList = input.addressList
     }
     return this

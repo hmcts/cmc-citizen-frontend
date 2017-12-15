@@ -28,6 +28,15 @@
             showAddressEntry(postcodeLookupWidget)
           })
 
+        postcodeLookupWidget.querySelector('.postcode-enter-manually')
+          .addEventListener('click', function (event) {
+            event.preventDefault()
+
+            showAddressEntry(postcodeLookupWidget)
+            this.classList.add('hidden')
+            enterManuallyHiddenInput(postcodeLookupWidget).value = 'true'
+          })
+
         var anyAddressFieldPopulated = isAnyAddressFieldPopulated(postcodeLookupWidget)
         if (anyAddressFieldPopulated) {
           showAddressEntry(postcodeLookupWidget)
@@ -37,6 +46,11 @@
         if (postcodeAddressPickerHiddenInput(postcodeLookupWidget).value === 'true' && !anyAddressFieldPopulated) {
           showPostcodeDropdown(postcodeLookupWidget)
           lookupPostcode(postcodeSearchButton(postcodeLookupWidget).previousElementSibling.value, postcodeLookupWidget)
+        }
+
+        // Show fields if manual entry was previously clicked
+        if (enterManuallyHiddenInput(postcodeLookupWidget).value === 'true') {
+          showAddressEntry(postcodeLookupWidget)
         }
       })
 
@@ -95,6 +109,7 @@
     return addressElement.querySelector('.address-town-or-city')
   }
 
+
   function addressPostcode (addressElement) {
     return addressElement.querySelector('.postcode')
   }
@@ -130,6 +145,10 @@
       addressLine2(addressElement).value !== '' ||
       addressTownOrCity(addressElement).value !== '' ||
       addressPostcode(addressElement).value !== ''
+  }
+
+  function enterManuallyHiddenInput (postcodeLookupWidget) {
+    return postcodeLookupWidget.querySelector('.postcode-enter-manually-visible')
   }
 
   function showAddressError (isNorthernIrelandPostcode, postcodeLookupWidget) {
