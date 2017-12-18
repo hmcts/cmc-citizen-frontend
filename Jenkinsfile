@@ -23,7 +23,7 @@ String channel = '#cmc-tech-notification'
 timestamps {
   milestone()
   lock(resource: "citizen-frontend-${env.BRANCH_NAME}", inversePrecedence: true) {
-    node('slave') {
+    node('agent07') {
       try {
         def version
         def citizenFrontendRPMVersion
