@@ -19,7 +19,6 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { ResponseType } from 'response/form/models/responseType'
 import { SignatureType } from 'app/common/signatureType'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
-import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
@@ -189,20 +188,6 @@ describe('Defendant response: check and send page', () => {
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.counterClaimPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-          })
-
-          it('should redirect to partial-admission handoff page when defendant response is part admission', async () => {
-            draftStoreServiceMock.resolveFind('response', {
-              response: { type: ResponseType.PART_ADMISSION },
-              rejectPartOfClaim: { option: RejectPartOfClaimOption.all() }
-            })
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true', type: SignatureType.BASIC })
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.partialAdmissionPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
           it('should redirect to full-admission handoff page when defendant response is full admission', async () => {
