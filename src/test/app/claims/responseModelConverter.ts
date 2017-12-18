@@ -40,7 +40,7 @@ describe('ResponseModelConverter', () => {
       const responseDraft = prepareResponseDraft(partyDetails)
       const responseData = prepareResponseData(party)
 
-      expect(ResponseModelConverter.convert(responseDraft)).to.deep.equal(responseData)
+      expect(ResponseModelConverter.fromDraft(responseDraft)).to.deep.equal(responseData)
     })
   })
 })

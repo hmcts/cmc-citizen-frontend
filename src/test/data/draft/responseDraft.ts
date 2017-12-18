@@ -18,6 +18,9 @@ export const responseDraft = {
       value: 'DEFENCE'
     }
   },
+  rejectAllOfClaim: {
+    option: 'dispute'
+  },
   defence: {
     text: 'My defence'
   },
