@@ -24,6 +24,14 @@ export const responseDraft = {
   rejectPartOfClaim: {
     option: 'amountTooHigh'
   },
+  howMuchOwed: {
+    amount: 42,
+    text: 'reasons'
+  },
   timeline: [],
-  evidence: []
+  evidence: [],
+  qualifiedStatementOfTruth: {
+    signerName: 'Signy McSignface',
+    signerRole: 'signer'
+  }
 }

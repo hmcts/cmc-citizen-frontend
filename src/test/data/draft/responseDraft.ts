@@ -26,5 +26,9 @@ export const responseDraft = {
   },
   freeMediation: {
     option: 'no'
+  },
+  qualifiedStatementOfTruth: {
+    signerName: 'Signy McSignface',
+    signerRole: 'signer'
   }
 }

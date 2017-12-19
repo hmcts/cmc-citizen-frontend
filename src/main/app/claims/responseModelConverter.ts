@@ -59,7 +59,7 @@ function convertPartAdmission (draft: ResponseDraft): PartAdmissionResponse {
     ...convertCommon(draft),
     responseType: ResponseType.PART_ADMISSION,
     partAdmissionType: convertPartAdmissionType(draft.rejectPartOfClaim),
-    howMuchOwed: convertHowMuchOwed(draft.howMuchIsPaid),
+    howMuchOwed: convertHowMuchOwed(draft.howMuchOwed),
     timeline: convertTimeline(draft.timeline),
     evidence: convertEvidence(draft.evidence),
     paymentPlan: mapOptional(convertPaymentPlan)(draft.defendantPaymentPlan)
@@ -71,15 +71,11 @@ function convertCommon (draft: ResponseDraft) {
     defendant: convertPartyDetails(draft.defendantDetails),
     freeMediation: draft.freeMediation && draft.freeMediation.option,
     moreTimeNeeded: draft.moreTimeNeeded && draft.moreTimeNeeded.option,
-    statementOfTruth: mapOptional(convertStatementOfTruth)(draft.qualifiedStatementOfTruth)
+    statementOfTruth: convertStatementOfTruth(draft.qualifiedStatementOfTruth)
   }
 }
 
 function convertStatementOfTruth (draft: QualifiedStatementOfTruth): StatementOfTruth {
-  if (validator.validateSync(draft).length > 0) {
-    return undefined
-  }
-
   return new StatementOfTruth(
     draft.signerName,
     draft.signerRole
@@ -149,10 +145,6 @@ function convertPartAdmissionType (draft: RejectPartOfClaim): PartAdmissionType 
 }
 
 function convertHowMuchOwed (draft: DraftHowMuchOwed): HowMuchOwed {
-  if (validator.validateSync(draft).length > 0) {
-    return undefined
-  }
-
   return {
     amount: draft.amount,
     reason: draft.text

@@ -6,6 +6,14 @@ export const responseData = {
   freeMediation: 'no',
   responseType: 'PART_ADMISSION',
   partAdmissionType: 'AMOUNT_TOO_HIGH',
+  howMuchOwed: {
+    amount: 42,
+    reason: 'reasons'
+  },
   timeline: [],
-  evidence: []
+  evidence: [],
+  statementOfTruth: {
+    signerName: 'Signy McSignface',
+    signerRole: 'signer'
+  }
 }
