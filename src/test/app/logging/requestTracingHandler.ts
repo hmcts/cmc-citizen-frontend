@@ -45,7 +45,7 @@ describe('RequestTracingHandler', () => {
     Object.keys(requestPromise).forEach((httpMethod) => {
       requestPromise[httpMethod].reset()
     })
-    handler = new RequestTracingHandler(requestPromise, MockedRequestTracing)
+    handler = new RequestTracingHandler(requestPromise as any, MockedRequestTracing)
     proxy = new Proxy(requestPromise, handler)
   })
 
