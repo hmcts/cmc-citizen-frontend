@@ -10,6 +10,7 @@ import { RoutablePath } from 'common/router/routablePath'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { Debts } from 'response/form/models/statement-of-means/debts'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
 
 const page: RoutablePath = StatementOfMeansPaths.debtsPage
