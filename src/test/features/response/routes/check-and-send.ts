@@ -162,18 +162,52 @@ describe('Defendant response: check and send page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to confirmation page when form is valid and a non handoff response type is picked', async () => {
-            draftStoreServiceMock.resolveFind(draftType)
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            claimStoreServiceMock.resolveSaveResponse()
-            draftStoreServiceMock.resolveDelete()
+          context('when defence response type is picked and not counter claiming', () => {
+            beforeEach(() => {
+              draftStoreServiceMock.resolveFind(draftType, {
+                response: { type: ResponseType.DEFENCE },
+                rejectAllOfClaim: { option: RejectAllOfClaimOption.DISPUTE }
+              })
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+              claimStoreServiceMock.resolveSaveResponse()
+              draftStoreServiceMock.resolveDelete()
+            })
 
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true', type: SignatureType.BASIC })
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+            it('redirects to confirmation page', async () => {
+              await request(app)
+                .post(pagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .send({ signed: 'true', type: SignatureType.BASIC })
+                .expect(res => expect(res).to.be.redirect
+                  .toLocation(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+            })
+          })
+
+          context('when part admission response type is picked', () => {
+            beforeEach(() => {
+              draftStoreServiceMock.resolveFind(draftType, {
+                response: { type: ResponseType.PART_ADMISSION },
+                rejectPartOfClaim: { option: RejectPartOfClaimOption.AMOUNT_TOO_HIGH },
+                howMuchOwed: {
+                  amount: 1,
+                  text: 'reasons'
+                },
+                timeline: [],
+                evidence: []
+              })
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+              claimStoreServiceMock.resolveSaveResponse()
+              draftStoreServiceMock.resolveDelete()
+            })
+
+            it('redirects to confirmation page', async () => {
+              await request(app)
+                .post(pagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .send({ signed: 'true', type: SignatureType.BASIC })
+                .expect(res => expect(res).to.be.redirect
+                  .toLocation(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+            })
           })
 
           it('should redirect to counter-claim handoff page when defendant is counter claiming', async () => {
@@ -189,20 +223,6 @@ describe('Defendant response: check and send page', () => {
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.counterClaimPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-          })
-
-          it('should redirect to partial-admission handoff page when defendant response is part admission', async () => {
-            draftStoreServiceMock.resolveFind('response', {
-              response: { type: ResponseType.PART_ADMISSION },
-              rejectPartOfClaim: { option: RejectPartOfClaimOption.all() }
-            })
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true', type: SignatureType.BASIC })
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.partialAdmissionPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
           it('should redirect to full-admission handoff page when defendant response is full admission', async () => {

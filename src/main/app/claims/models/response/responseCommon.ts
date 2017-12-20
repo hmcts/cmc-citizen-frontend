@@ -7,7 +7,8 @@ import { Organisation } from 'app/claims/models/details/yours/organisation'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
 export enum ResponseType {
-  FULL_DEFENCE = 'FULL_DEFENCE'
+  FULL_DEFENCE = 'FULL_DEFENCE',
+  PART_ADMISSION = 'PART_ADMISSION'
 }
 
 export interface ResponseCommon {

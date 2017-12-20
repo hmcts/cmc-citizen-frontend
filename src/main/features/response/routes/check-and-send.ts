@@ -109,8 +109,7 @@ export default express.Router()
             }
             break
           case ResponseType.PART_ADMISSION:
-            res.redirect(Paths.partialAdmissionPage.evaluateUri({ externalId: claim.externalId }))
-            return
+            break
           case ResponseType.FULL_ADMISSION:
             res.redirect(Paths.fullAdmissionPage.evaluateUri({ externalId: claim.externalId }))
             return

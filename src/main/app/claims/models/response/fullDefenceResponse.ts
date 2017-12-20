@@ -15,6 +15,7 @@ export namespace FullDefenceResponse {
   export function deserialize (input: any): FullDefenceResponse {
     return {
       ...ResponseCommon.deserialize(input),
+      responseType: ResponseType.FULL_DEFENCE,
       defenceType: input.defenceType,
       defence: input.defence
     }
