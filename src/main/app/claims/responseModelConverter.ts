@@ -71,7 +71,7 @@ function convertCommon (draft: ResponseDraft) {
     defendant: convertPartyDetails(draft.defendantDetails),
     freeMediation: draft.freeMediation && draft.freeMediation.option,
     moreTimeNeeded: draft.moreTimeNeeded && draft.moreTimeNeeded.option,
-    statementOfTruth: convertStatementOfTruth(draft.qualifiedStatementOfTruth)
+    statementOfTruth: mapOptional(convertStatementOfTruth)(draft.qualifiedStatementOfTruth)
   }
 }
 

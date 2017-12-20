@@ -185,10 +185,6 @@ const sampleResponseDraftObj = {
     },
     text: 'I owe nothing'
   },
-  qualifiedStatementOfTruth: {
-    signerName: 'Signy McSignface',
-    signerRole: 'signer'
-  },
   defendantDetails: {
     email: { address: 'example@example.com' } as Email,
     mobilePhone: { number: '01223344444' } as MobilePhone,

@@ -6,9 +6,5 @@ export const responseData = {
   responseType: 'FULL_DEFENCE',
   defenceType: 'DISPUTE',
   defence: 'My defence',
-  freeMediation: 'no',
-  statementOfTruth: {
-    signerName: 'Signy McSignface',
-    signerRole: 'signer'
-  }
+  freeMediation: 'no'
 }
