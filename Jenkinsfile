@@ -152,8 +152,11 @@ timestamps {
         notifyBuildFailure channel: channel
         throw err
       } finally {
+        def customDataMap = [:]
+        customDataMap['branchName'] = env.BRANCH_NAME
         step([$class: 'InfluxDbPublisher',
                customProjectName: 'CMC Citizen Frontend',
+               customData: customDataMap,
                target: 'Jenkins Data'])
       }
     }
