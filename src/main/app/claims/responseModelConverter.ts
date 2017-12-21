@@ -60,6 +60,7 @@ function convertPartAdmission (draft: ResponseDraft): PartAdmissionResponse {
     responseType: ResponseType.PART_ADMISSION,
     partAdmissionType: convertPartAdmissionType(draft.rejectPartOfClaim),
     howMuchOwed: convertHowMuchOwed(draft.howMuchOwed),
+    impactOfDispute: draft.impactOfDispute.text,
     timeline: convertTimeline(draft.timeline),
     evidence: convertEvidence(draft.evidence),
     paymentPlan: mapOptional(convertPaymentPlan)(draft.defendantPaymentPlan)
@@ -147,7 +148,7 @@ function convertPartAdmissionType (draft: RejectPartOfClaim): PartAdmissionType 
 function convertHowMuchOwed (draft: DraftHowMuchOwed): HowMuchOwed {
   return {
     amount: draft.amount,
-    reason: draft.text
+    explanation: draft.text
   }
 }
 

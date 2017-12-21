@@ -8,8 +8,9 @@ export const responseData = {
   partAdmissionType: 'AMOUNT_TOO_HIGH',
   howMuchOwed: {
     amount: 42,
-    reason: 'reasons'
+    explanation: 'reasons'
   },
+  impactOfDispute: 'very much',
   timeline: [],
   evidence: [],
   statementOfTruth: {

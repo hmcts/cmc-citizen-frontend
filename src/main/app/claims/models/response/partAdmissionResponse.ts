@@ -13,6 +13,7 @@ export interface PartAdmissionResponse extends ResponseCommon {
   responseType: ResponseType.PART_ADMISSION
   partAdmissionType: PartAdmissionType
   howMuchOwed: HowMuchOwed
+  impactOfDispute: string
   timeline: Timeline
   evidence: Evidence
   paymentPlan?: PaymentPlan
@@ -25,6 +26,7 @@ export namespace PartAdmissionResponse {
       responseType: ResponseType.PART_ADMISSION,
       partAdmissionType: input.partAdmissionType,
       howMuchOwed: input.howMuchOwed,
+      impactOfDispute: input.impactOfDispute,
       timeline: input.timeline,
       evidence: input.evidence,
       paymentPlan: PaymentPlan.deserialize(input.paymentPlan)

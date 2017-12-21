@@ -1,4 +1,4 @@
 export interface HowMuchOwed {
   amount: number
-  reason: string
+  explanation: string
 }

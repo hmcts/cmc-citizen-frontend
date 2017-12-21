@@ -28,6 +28,9 @@ export const responseDraft = {
     amount: 42,
     text: 'reasons'
   },
+  impactOfDispute: {
+    text: 'very much'
+  },
   timeline: [],
   evidence: [],
   qualifiedStatementOfTruth: {
