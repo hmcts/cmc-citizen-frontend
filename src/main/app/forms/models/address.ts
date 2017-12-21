@@ -27,7 +27,7 @@ export class ValidationConstants {
 
 export class Address implements CompletableTask {
 
-  @ValidateIf(o => o.addressVisible)
+  @ValidateIf(o => o.addressVisible, { groups: ['claimant', 'defendant', 'response'] })
   @IsDefined({ message: ValidationErrors.FIRST_LINE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.FIRST_LINE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, {
@@ -36,14 +36,14 @@ export class Address implements CompletableTask {
   })
   line1?: string
 
-  @ValidateIf(o => o.addressVisible)
+  @ValidateIf(o => o.addressVisible, { groups: ['claimant', 'defendant', 'response'] })
   @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, {
     message: ValidationErrors.SECOND_LINE_TOO_LONG,
     groups: ['claimant', 'defendant', 'response']
   })
   line2?: string
 
-  @ValidateIf(o => o.addressVisible)
+  @ValidateIf(o => o.addressVisible, { groups: ['claimant', 'defendant', 'response'] })
   @IsDefined({ message: ValidationErrors.CITY_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.CITY_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, {
@@ -52,7 +52,7 @@ export class Address implements CompletableTask {
   })
   city?: string
 
-  @ValidateIf(o => o.addressVisible)
+  @ValidateIf(o => o.addressVisible, { groups: ['claimant', 'defendant', 'response'] })
   @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @MaxLength(ValidationConstants.POSTCODE_MAX_LENGTH, {
@@ -61,14 +61,14 @@ export class Address implements CompletableTask {
   })
   postcode?: string
 
-  @ValidateIf((o) => !o.addressVisible && !o.addressSelectorVisible)
+  @ValidateIf(o => !o.addressVisible && !o.addressSelectorVisible, { groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   postcodeLookup?: string
   addressVisible: boolean
   addressSelectorVisible: boolean
   enterManually: boolean
 
-  @ValidateIf((o) => !o.addressVisible && o.addressSelectorVisible)
+  @ValidateIf(o => !o.addressVisible && o.addressSelectorVisible, { groups: ['claimant', 'defendant', 'response'] })
   @IsDefined({ message: ValidationErrors.ADDRESS_DROPDOWN_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.ADDRESS_DROPDOWN_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   addressList?: string
