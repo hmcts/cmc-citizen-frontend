@@ -40,9 +40,9 @@
     js-yaml "^3.8.4"
     superagent "^3.5.1"
 
-"@hmcts/nodejs-logging@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/nodejs-logging/-/nodejs-logging-2.0.0.tgz#3010b18780e5ddc42e0308f57b6e46f6ee098cf7"
+"@hmcts/nodejs-logging@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@hmcts/nodejs-logging/-/nodejs-logging-2.2.0.tgz#53370e39e7585c7a95073e913d6a128dd8b96bcf"
   dependencies:
     continuation-local-storage "^3.2.1"
     lodash.merge "^4.6.0"
