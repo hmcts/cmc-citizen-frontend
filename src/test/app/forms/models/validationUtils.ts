@@ -10,17 +10,17 @@ class Violation {
 }
 
 export function expectNumberOfValidationErrors (errors: ValidationError[], expectation: number) {
-  expect(errors.length).to.be.equal(expectation, `Number of errors found (${errors.length}) is not equal ${expectation}. The following errors has been triggered: ${stringifyViolations(extractViolationsFrom(errors))}\n`)
+  expect(errors.length).to.be.equal(expectation, `Number of errors found (${errors.length}) is not equal ${expectation}. ${stringifyViolations(extractViolationsFrom(errors))}`)
 }
 
 export function expectValidationError (errors: ValidationError[], message: string) {
   const violations: Violation[] = extractViolationsFrom(errors)
-  expect(violations.map(violation => violation.message)).to.include(message, `Error '${message}' has not been found. The following errors has been triggered: ${stringifyViolations(violations)}\n`)
+  expect(violations.map(violation => violation.message)).to.include(message, `Error '${message}' has not been found. ${stringifyViolations(violations)}`)
 }
 
 export function expectPropertyValidationError (errors: ValidationError[], property: string, message: string) {
   const violations: Violation[] = extractViolationsFrom(errors)
-  expect(violations).to.deep.include(new Violation(property, message), `Error '${message}' on property '${property}' has not been found. The following errors has been triggered: ${stringifyViolations(violations)}\n`)
+  expect(violations).to.deep.include(new Violation(property, message), `Error '${message}' on property '${property}' has not been found. ${stringifyViolations(violations)}`)
 }
 
 function extractViolationsFrom (errors: ValidationError[], parentProperty?: string): Violation[] {
@@ -57,12 +57,16 @@ function extractViolationsFrom (errors: ValidationError[], parentProperty?: stri
  * </ul>
  */
 function stringifyViolations (violations: Violation[]): string {
-  return _(violations)
+  const errors: string = _(violations)
     .groupBy((violation: Violation) => violation.property)
     .map((violations: Violation[], property: string) => {
-      return `\n - property '${property}': ${violations.map(violation => `\n  - '${violation.message}'`)}`
+      return ` - property '${property}':\n${violations.map((violation: Violation) => {
+        return `  - '${violation.message}'\n`
+      })}`
     })
     .join('')
+
+  return `\n\nThe following errors has been triggered:\n${errors}\n`
 }
 
 export function generateString (length: number): string {
