@@ -12,6 +12,7 @@ import { breakdownOf } from '../../../data/entity/amount-breakdown'
 import { Interest, InterestType } from 'claim/form/models/interest'
 import { InterestDateType } from 'app/common/interestDateType'
 import moment = require('moment')
+import { ClaimStatus } from 'claims/models/claimStatus'
 
 describe('Claim', () => {
 
@@ -146,6 +147,14 @@ describe('Claim', () => {
     it('should return undefined when settlement not set', () => {
       claim.settlement = undefined
       expect(claim.defendantOffer).to.be.eq(undefined)
+    })
+  })
+
+  describe('status', () => {
+
+    it('should return eligible for ccj', () => {
+      const claim = new Claim()
+      expect(claim.status).to.be.eql(ClaimStatus.ELIGIBLE_FOR_CCJ)
     })
   })
 })

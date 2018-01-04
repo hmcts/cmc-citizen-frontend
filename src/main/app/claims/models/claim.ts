@@ -11,6 +11,7 @@ import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 import { Interest, InterestType } from 'claim/form/models/interest'
 import { InterestDate } from 'claims/models/interestDate'
+import { ClaimStatus } from 'claims/models/claimStatus'
 
 export class Claim {
   id: number
@@ -110,5 +111,9 @@ export class Claim {
     }
 
     return !this.countyCourtJudgmentRequestedAt && this.remainingDays < 0 && !this.respondedAt
+  }
+
+  get status () {
+    return ClaimStatus.ELIGIBLE_FOR_CCJ
   }
 }
