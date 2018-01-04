@@ -6,12 +6,6 @@ import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 
 import { Paths } from 'ccj/paths'
-import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../app/forms/models/validationUtils'
-import { LocalDate } from 'forms/models/localDate'
-
-import * as moment from 'moment'
-import { PayBySetDate, ValidationErrors } from 'forms/models/payBySetDate'
 import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
@@ -140,35 +134,6 @@ describe('CCJ - Pay by set date', () => {
             .send({ known: undefined })
             .expect(res => expect(res).to.be.successful.withText('When you want them to pay the amount', 'div class="error-summary"'))
         })
-      })
-    })
-  })
-
-  describe('validation', () => {
-    const validator: Validator = new Validator()
-
-    context('when pay by set date is known', () => {
-      it('should reject non existing date', () => {
-        const errors = validator.validateSync(new PayBySetDate(new LocalDate(2017, 2, 29)))
-
-        expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.DATE_NOT_VALID)
-      })
-
-      it('should reject past date', () => {
-        const today = moment()
-
-        const errors = validator.validateSync(new PayBySetDate(new LocalDate(today.year(), today.month() - 1, today.date())))
-
-        expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.DATE_TODAY_OR_IN_FUTURE)
-      })
-
-      it('should reject date with invalid digits in year', () => {
-        const errors = validator.validateSync(new PayBySetDate(new LocalDate(90, 12, 31)))
-
-        expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.DATE_INVALID_YEAR)
       })
     })
   })
