@@ -109,7 +109,6 @@
     return addressElement.querySelector('.address-town-or-city')
   }
 
-
   function addressPostcode (addressElement) {
     return addressElement.querySelector('.postcode')
   }
@@ -151,27 +150,26 @@
     return postcodeLookupWidget.querySelector('.postcode-enter-manually-visible')
   }
 
-  function showAddressError (isNorthernIrelandPostcode, postcodeLookupWidget) {
-    var northernIrelandErrorMessage = postcodeLookupWidget.querySelector('.postcode-search-error-ni')
-    var genericErrorMessage = postcodeLookupWidget.querySelector('.postcode-search-error')
+  function showAddressError (errorCode, postcodeLookupWidget) {
+    postcodeLookupWidget.querySelectorAll('.search-error').forEach(function (errorMessageSelector) {
+      errorMessageSelector.classList.add('hidden')
+    })
 
-    if (isNorthernIrelandPostcode) {
-      northernIrelandErrorMessage.classList.remove('hidden')
-      genericErrorMessage.classList.add('hidden')
-    } else {
-      northernIrelandErrorMessage.classList.add('hidden')
-      genericErrorMessage.classList.remove('hidden')
-    }
-
+    postcodeLookupWidget.querySelector('.search-error.' + errorCode.toLowerCase().replace(/_/g, '-')).classList.remove('hidden')
     postcodeLookupWidget.querySelector('.postcode-search-container').classList.add('form-group-error')
   }
 
   function lookupPostcode (postcode, postcodeLookupWidget) {
+    if (!postcode || postcode.trim().length === 0) {
+      showAddressError('MISSING_POSTCODE_ERROR', postcodeLookupWidget)
+      return
+    }
+
     var xhr = new XMLHttpRequest()
     xhr.open('GET', '/postcode-lookup?postcode=' + encodeURIComponent(postcode))
     xhr.onload = function () {
       if (xhr.status !== 200) {
-        showAddressError(false, postcodeLookupWidget)
+        showAddressError('UNKNOWN_ERROR', postcodeLookupWidget)
         showAddressEntry(postcodeLookupWidget)
         return
       }
@@ -180,7 +178,7 @@
 
       if (!postcodeResponse.valid) {
         var ni = isNorthernIrelandPostcode(postcode)
-        showAddressError(ni, postcodeLookupWidget)
+        showAddressError(ni ? 'UNSUPPORTED_POSTCODE_ERROR' : 'UNKNOWN_ERROR', postcodeLookupWidget)
         showAddressEntry(postcodeLookupWidget)
         return
       }
