@@ -48,6 +48,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('response')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          claimStoreServiceMock.mockCalculateInterestRate(1)
 
           await request(app)
             .get(pagePath)
@@ -83,6 +84,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
           it('should render page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.mockCalculateInterestRate(1)
 
             await request(app)
               .post(pagePath)
@@ -96,6 +98,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.rejectSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.mockCalculateInterestRate(1)
 
             await request(app)
               .post(pagePath)
@@ -108,6 +111,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.mockCalculateInterestRate(1)
 
             await request(app)
               .post(pagePath)

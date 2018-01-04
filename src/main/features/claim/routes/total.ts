@@ -9,13 +9,13 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.totalPage.uri, (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  .get(Paths.totalPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
-    FeesClient.calculateIssueFee(claimAmountWithInterest(draft.document))
-      .then((feeAmount: number) => {
+    FeesClient.calculateIssueFee(await claimAmountWithInterest(draft.document))
+      .then(async (feeAmount: number) => {
         res.render(Paths.totalPage.associatedView,
           {
-            interestTotal: new TotalAmount(draft.document.amount.totalAmount(), interestAmount(draft.document), feeAmount),
+            interestTotal: new TotalAmount(draft.document.amount.totalAmount(), await interestAmount(draft.document), feeAmount),
             interestClaimed: (draft.document.interest.type !== InterestType.NO_INTEREST)
           })
       })

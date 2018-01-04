@@ -76,15 +76,15 @@ export class Claim {
     return this.settlement.getDefendantOffer()
   }
 
-  get totalAmountTillToday (): number {
+  get totalAmountTillToday (): Promise<number> {
     return this.calculateTotalAmountTillDate(MomentFactory.currentDateTime())
   }
 
-  get totalAmountTillDateOfIssue (): number {
+  get totalAmountTillDateOfIssue (): Promise<number> {
     return this.calculateTotalAmountTillDate(this.createdAt)
   }
 
-  private calculateTotalAmountTillDate (toDate: Moment): number {
+  private async calculateTotalAmountTillDate (toDate: Moment): Promise<number> {
     const claimAmount: number = this.claimData.amount.totalAmount()
     const interestRate: Interest = this.claimData.interest
 
@@ -93,7 +93,7 @@ export class Claim {
       const interestDate: InterestDate = this.claimData.interestDate
       const fromDate: Moment = interestDate.type === InterestDateType.SUBMISSION ? this.createdAt : interestDate.date
 
-      interest = calculateInterest(claimAmount, interestRate, fromDate, toDate)
+      interest = await calculateInterest(claimAmount, interestRate, fromDate, toDate)
     }
 
     return claimAmount + this.claimData.paidFeeAmount + interest

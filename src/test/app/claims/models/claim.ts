@@ -12,6 +12,8 @@ import { breakdownOf } from '../../../data/entity/amount-breakdown'
 import { Interest, InterestType } from 'claim/form/models/interest'
 import { InterestDateType } from 'app/common/interestDateType'
 import moment = require('moment')
+import { mockCalculateInterestRate } from '../../../http-mocks/claim-store'
+import { Moment } from 'moment'
 
 describe('Claim', () => {
 
@@ -21,25 +23,34 @@ describe('Claim', () => {
     claim.claimData.amount = breakdownOf(100)
     claim.claimData.payment = paymentOf(25)
 
-    it('should return total of claim amount and payment amount if interest is not claimed', () => {
+    it('should return total of claim amount and payment amount if interest is not claimed', async () => {
       claim.claimData.interest = new Interest(InterestType.NO_INTEREST)
 
-      expect(claim.totalAmountTillToday).to.be.equal(125)
+      const actual: number = await claim.totalAmountTillToday
+      expect(actual).to.be.equal(125)
     })
 
-    it('should return total of claim amount, payment amount and interest calculated from date of issue till today if interest is claimed from submission date', () => {
+    it('should return total of claim amount, payment amount and interest calculated from date of issue till today if interest is claimed from submission date', async () => {
+      const today: Moment = moment()
+
       claim.claimData.interest = new Interest(InterestType.STANDARD)
       claim.claimData.interestDate = new InterestDate(InterestDateType.SUBMISSION)
-      claim.createdAt = moment().subtract(10, 'days')
+      claim.createdAt = today.subtract(10, 'days')
 
-      expect(claim.totalAmountTillToday).to.equal(125.22)
+      mockCalculateInterestRate(0.22)
+
+      const actual: number = await claim.totalAmountTillToday
+      expect(actual).to.equal(125.22)
     })
 
-    it('should return total of claim amount, payment amount and interest calculated from selected date till today if interest is claimed from selected date', () => {
+    it('should return total of claim amount, payment amount and interest calculated from selected date till today if interest is claimed from selected date', async () => {
       claim.claimData.interest = new Interest(InterestType.STANDARD)
       claim.claimData.interestDate = new InterestDate(InterestDateType.CUSTOM, moment().subtract(10, 'days'))
 
-      expect(claim.totalAmountTillToday).to.equal(125.22)
+      mockCalculateInterestRate(0.22)
+
+      const actual: number = await claim.totalAmountTillToday
+      expect(actual).to.equal(125.22)
     })
   })
 
@@ -49,26 +60,33 @@ describe('Claim', () => {
     claim.claimData.amount = breakdownOf(100)
     claim.claimData.payment = paymentOf(25)
 
-    it('should return total of claim amount and payment amount if interest is not claimed', () => {
+    it('should return total of claim amount and payment amount if interest is not claimed', async () => {
       claim.claimData.interest = new Interest(InterestType.NO_INTEREST)
 
-      expect(claim.totalAmountTillDateOfIssue).to.be.equal(125)
+      const actual: number = await claim.totalAmountTillDateOfIssue
+      expect(actual).to.be.equal(125)
     })
 
-    it('should return total of claim amount and payment amount if interest is claimed from submission date', () => {
+    it('should return total of claim amount and payment amount if interest is claimed from submission date', async () => {
       claim.claimData.interest = new Interest(InterestType.STANDARD)
       claim.claimData.interestDate = new InterestDate(InterestDateType.SUBMISSION)
       claim.createdAt = moment().subtract(10, 'days')
 
-      expect(claim.totalAmountTillDateOfIssue).to.equal(125)
+      mockCalculateInterestRate(0)
+
+      const actual: number = await claim.totalAmountTillDateOfIssue
+      expect(actual).to.equal(125)
     })
 
-    it('should return total of claim amount, payment amount and interest calculated from selected date till today if interest is claimed from selected date', () => {
+    it('should return total of claim amount, payment amount and interest calculated from selected date till today if interest is claimed from selected date', async () => {
       claim.claimData.interest = new Interest(InterestType.STANDARD)
       claim.claimData.interestDate = new InterestDate(InterestDateType.CUSTOM, moment().subtract(10, 'days'))
       claim.createdAt = moment()
 
-      expect(claim.totalAmountTillDateOfIssue).to.equal(125.22)
+      mockCalculateInterestRate(0.22)
+
+      const actual: number = await claim.totalAmountTillDateOfIssue
+      expect(actual).to.equal(125.22)
     })
   })
 

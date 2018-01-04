@@ -24,10 +24,10 @@ import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
 
-function getClaimAmountTotal (draft: DraftClaim): Promise<TotalAmount> {
-  return FeesClient.calculateIssueFee(claimAmountWithInterest(draft))
-    .then((feeAmount: number) => {
-      return new TotalAmount(draft.amount.totalAmount(), interestAmount(draft), feeAmount)
+async function getClaimAmountTotal (draft: DraftClaim): Promise<TotalAmount> {
+  return FeesClient.calculateIssueFee(await claimAmountWithInterest(draft))
+    .then(async (feeAmount: number) => {
+      return new TotalAmount(draft.amount.totalAmount(), await interestAmount(draft), feeAmount)
     })
 }
 

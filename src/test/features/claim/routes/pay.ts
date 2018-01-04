@@ -114,6 +114,8 @@ describe('Claim issue: initiate payment receiver', () => {
     })
 
     it('should return 500 and error page when cannot calculate issue fee', async () => {
+      claimStoreServiceMock.mockCalculateInterestRate(0)
+      claimStoreServiceMock.mockCalculateInterestRate(0)
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
       feesServiceMock.rejectCalculateFee(issueFeeCode)
@@ -125,6 +127,8 @@ describe('Claim issue: initiate payment receiver', () => {
     })
 
     it('should return 500 and error page when cannot retrieve service token needed for payment service', async () => {
+      claimStoreServiceMock.mockCalculateInterestRate(0)
+      claimStoreServiceMock.mockCalculateInterestRate(0)
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
       feesServiceMock.resolveCalculateFee(issueFeeCode)
@@ -137,6 +141,8 @@ describe('Claim issue: initiate payment receiver', () => {
     })
 
     it('should return 500 and error page when cannot create payment', async () => {
+      claimStoreServiceMock.mockCalculateInterestRate(0)
+      claimStoreServiceMock.mockCalculateInterestRate(0)
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
       feesServiceMock.resolveCalculateFee(issueFeeCode)
@@ -150,6 +156,8 @@ describe('Claim issue: initiate payment receiver', () => {
     })
 
     it('should return 500 and error page when cannot save draft', async () => {
+      claimStoreServiceMock.mockCalculateInterestRate(0)
+      claimStoreServiceMock.mockCalculateInterestRate(0)
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
       feesServiceMock.resolveCalculateFee(issueFeeCode)
@@ -164,6 +172,8 @@ describe('Claim issue: initiate payment receiver', () => {
     })
 
     it('should redirect to next page when everything is fine', async () => {
+      claimStoreServiceMock.mockCalculateInterestRate(0)
+      claimStoreServiceMock.mockCalculateInterestRate(0)
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
       feesServiceMock.resolveCalculateFee(issueFeeCode)
@@ -178,6 +188,7 @@ describe('Claim issue: initiate payment receiver', () => {
     })
 
     it('should redirect to pay receiver page when pay status is success', async () => {
+      claimStoreServiceMock.mockCalculateInterestRate(0)
       draftStoreServiceMock.resolveFind(draftType)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.resolveRetrieve('success')

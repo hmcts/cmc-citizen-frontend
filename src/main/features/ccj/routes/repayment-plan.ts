@@ -12,14 +12,15 @@ import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
 
-function renderView (form: Form<PaidAmount>, res: express.Response): void {
+async function renderView (form: Form<PaidAmount>, res: express.Response): Promise<void> {
   const claim: Claim = res.locals.claim
   const draft: Draft<DraftCCJ> = res.locals.ccjDraft
   const alreadyPaid: number = draft.document.paidAmount.amount || 0
+  const totalAmountTillToday: number = await claim.totalAmountTillToday
 
   res.render(Paths.repaymentPlanPage.associatedView, {
     form: form,
-    remainingAmount: claim.totalAmountTillToday - alreadyPaid
+    remainingAmount: totalAmountTillToday - alreadyPaid
   })
 }
 
@@ -28,7 +29,7 @@ export default express.Router()
   .get(Paths.repaymentPlanPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DraftCCJ> = res.locals.ccjDraft
-      renderView(new Form(draft.document.repaymentPlan), res)
+      await renderView(new Form(draft.document.repaymentPlan), res)
     }))
 
   .post(Paths.repaymentPlanPage.uri,
@@ -38,7 +39,7 @@ export default express.Router()
         const form: Form<RepaymentPlan> = req.body
 
         if (form.hasErrors()) {
-          renderView(form, res)
+          await renderView(form, res)
         } else {
           const draft: Draft<DraftCCJ> = res.locals.ccjDraft
           const user: User = res.locals.user

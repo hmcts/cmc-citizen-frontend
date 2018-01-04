@@ -13,6 +13,7 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as feesServiceMock from '../../../http-mocks/fees'
+import { mockCalculateInterestRate } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -24,6 +25,7 @@ describe('Claim issue: fees page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
+        mockCalculateInterestRate(0)
         idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       })
 

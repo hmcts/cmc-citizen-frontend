@@ -59,6 +59,7 @@ describe('Defendant: payment page', () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
+          claimStoreServiceMock.mockCalculateInterestRate(0)
 
           await request(app)
             .get(pagePath)
@@ -161,6 +162,7 @@ describe('Defendant: payment page', () => {
         it('should render page with error messages', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
+          claimStoreServiceMock.mockCalculateInterestRate(0)
 
           await request(app)
             .post(pagePath)

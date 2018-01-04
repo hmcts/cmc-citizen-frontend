@@ -24,14 +24,15 @@ function nextPageFor (responseDraft: ResponseDraft): RoutablePath {
   }
 }
 
-function renderView (form: Form<PaidAmount>, res: express.Response): void {
+async function renderView (form: Form<PaidAmount>, res: express.Response): Promise<void> {
   const claim: Claim = res.locals.claim
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const alreadyPaid: number = draft.document.paidAmount.amount || 0
+  const totalAmountTillToday: number = await claim.totalAmountTillToday
 
   res.render(Paths.defencePaymentPlanPage.associatedView, {
     form: form,
-    remainingAmount: claim.totalAmountTillToday - alreadyPaid
+    remainingAmount: totalAmountTillToday - alreadyPaid
   })
 }
 
@@ -42,7 +43,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-      renderView(new Form(draft.document.defendantPaymentPlan), res)
+      await renderView(new Form(draft.document.defendantPaymentPlan), res)
     }))
 
   .post(Paths.defencePaymentPlanPage.uri,
@@ -53,7 +54,7 @@ export default express.Router()
         const form: Form<DefendantPaymentPlan> = req.body
 
         if (form.hasErrors()) {
-          renderView(form, res)
+          await renderView(form, res)
         } else {
           const draft: Draft<ResponseDraft> = res.locals.responseDraft
           const user: User = res.locals.user

@@ -13,9 +13,10 @@ const supportedFeeLimitInPennies: number = 1000000
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.feesPage.uri, (req: express.Request, res: express.Response, next: express.NextFunction): void => {
+  .get(Paths.feesPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
-    const claimAmount = claimAmountWithInterest(draft.document)
+    const claimAmount = await claimAmountWithInterest(draft.document)
+
     Promise.all(
       [
         FeesClient.calculateIssueFee(claimAmount),
