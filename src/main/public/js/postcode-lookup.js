@@ -19,6 +19,8 @@
 
         postcodeLookupWidget.querySelector('.postcode-select')
           .addEventListener('change', function (event) {
+            enterManuallyLink(postcodeLookupWidget).classList.add('hidden')
+
             var addressDetails = this.value.split(', ')
             var addressElement = postcodeLookupWidget.querySelector('.address')
             addressLine1(addressElement).value = addressDetails[0]
@@ -28,7 +30,7 @@
             showAddressEntry(postcodeLookupWidget)
           })
 
-        postcodeLookupWidget.querySelector('.postcode-enter-manually')
+        enterManuallyLink(postcodeLookupWidget)
           .addEventListener('click', function (event) {
             event.preventDefault()
 
@@ -68,6 +70,10 @@
           })
       })
   })
+
+  function enterManuallyLink(postcodeLookupWidget) {
+    return postcodeLookupWidget.querySelector('.postcode-enter-manually')
+  }
 
   function postcodeSearchButton(postcodeLookupWidget) {
     return postcodeLookupWidget.querySelector('.postcode-search')
