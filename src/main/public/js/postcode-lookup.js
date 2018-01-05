@@ -114,8 +114,7 @@
   function addressTownOrCity (addressElement) {
     return addressElement.querySelector('.address-town-or-city')
   }
-
-
+  
   function addressPostcode (addressElement) {
     return addressElement.querySelector('.postcode')
   }
