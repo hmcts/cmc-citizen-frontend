@@ -13,6 +13,7 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as feesServiceMock from '../../../http-mocks/fees'
+import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -29,6 +30,7 @@ describe('Claim issue: total page', () => {
 
       it('should return 500 and render error page when cannot calculate issue fee', async () => {
         draftStoreServiceMock.resolveFind('claim')
+        claimStoreServiceMock.mockCalculateInterestRate(1)
         feesServiceMock.rejectCalculateIssueFee('HTTP error')
 
         await request(app)
@@ -39,6 +41,8 @@ describe('Claim issue: total page', () => {
 
       it('should render page when everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
+        claimStoreServiceMock.mockCalculateInterestRate(1)
+        claimStoreServiceMock.mockCalculateInterestRate(1)
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)

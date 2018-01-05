@@ -56,6 +56,7 @@ describe('CCJ: repayment page', () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
+          claimStoreServiceMock.mockCalculateInterestRate(1)
 
           await request(app)
             .get(pagePath)
@@ -127,6 +128,7 @@ describe('CCJ: repayment page', () => {
         it('should render page with error messages', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
+          claimStoreServiceMock.mockCalculateInterestRate(1)
 
           await request(app)
             .post(pagePath)

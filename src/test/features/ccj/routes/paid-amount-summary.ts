@@ -54,6 +54,11 @@ describe('CCJ - paid amount summary page', () => {
       it('should render page when everything is fine', async () => {
         draftStoreServiceMock.resolveFind('ccj')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        claimStoreServiceMock.mockCalculateInterestRate(1)
+        claimStoreServiceMock.mockCalculateInterestRate(1)
+        claimStoreServiceMock.mockCalculateInterestRate(1)
+        claimStoreServiceMock.mockCalculateInterestRate(1)
+        claimStoreServiceMock.mockCalculateInterestRate(1)
 
         await request(app)
           .get(pagePath)

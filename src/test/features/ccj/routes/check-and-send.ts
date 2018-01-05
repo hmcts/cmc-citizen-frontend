@@ -59,6 +59,7 @@ describe('CCJ: check and send page', () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
+          claimStoreServiceMock.mockCalculateInterestRate(1)
 
           await request(app)
             .get(pagePath)
@@ -70,6 +71,7 @@ describe('CCJ: check and send page', () => {
   })
 
   describe('on POST', () => {
+
     const validBasicFormData = { signed: 'true', type: SignatureType.BASIC }
     const validQualifiedFormData = {
       signed: 'true',
@@ -83,6 +85,7 @@ describe('CCJ: check and send page', () => {
     checkNotClaimantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
+
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
       })
@@ -109,6 +112,7 @@ describe('CCJ: check and send page', () => {
       })
 
       context('when form is valid', async () => {
+
         it('should redirect to confirmation page when signature is basic', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
@@ -121,6 +125,7 @@ describe('CCJ: check and send page', () => {
             .send(validBasicFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(confirmationPage))
         })
+
         it('should redirect to confirmation page when signature is qualified', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
@@ -149,9 +154,11 @@ describe('CCJ: check and send page', () => {
       })
 
       context('when form is invalid', async () => {
+
         it('should render page with error messages when signature is basic', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
+          claimStoreServiceMock.mockCalculateInterestRate(1)
 
           await request(app)
             .post(pagePath)
@@ -160,9 +167,11 @@ describe('CCJ: check and send page', () => {
             .expect(res => expect(res).to.be.successful.withText(BasicValidationErrors.DECLARATION_REQUIRED,
               'div class="error-summary"'))
         })
+
         it('should render page with error messages when signature is qualified', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
+          claimStoreServiceMock.mockCalculateInterestRate(1)
 
           await request(app)
             .post(pagePath)
@@ -171,7 +180,6 @@ describe('CCJ: check and send page', () => {
             .expect(res => expect(res).to.be.successful.withText(QualifiedValidationErrors.SIGNER_NAME_REQUIRED,
               'div class="error-summary"'))
         })
-
       })
     })
   })

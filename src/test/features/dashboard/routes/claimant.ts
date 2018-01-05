@@ -44,6 +44,10 @@ describe('Dashboard - claimant page', () => {
       context('when at least one claim issued', () => {
         beforeEach(() => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          claimStoreServiceMock.mockCalculateInterestRate(1)
+          claimStoreServiceMock.mockCalculateInterestRate(1)
+          claimStoreServiceMock.mockCalculateInterestRate(1)
+          claimStoreServiceMock.mockCalculateInterestRate(1)
         })
 
         it('should render page when everything is fine', async () => {
@@ -55,6 +59,7 @@ describe('Dashboard - claimant page', () => {
       })
     })
   })
+
   describe('on POST for requesting a CCJ', () => {
     checkAuthorizationGuards(app, 'post', claimantPage)
 
