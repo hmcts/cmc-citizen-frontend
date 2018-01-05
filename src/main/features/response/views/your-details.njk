@@ -6,6 +6,10 @@
 {% set title = t('Money claim') %}
 {% set heading = t('Confirm your details') %}
 
+{% block additional_scripts %}
+  <script src="{{ asset_paths['js'] }}/postcode-lookup.js"></script>
+{% endblock %}
+
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
