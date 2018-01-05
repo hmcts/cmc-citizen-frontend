@@ -24,14 +24,14 @@ export class DefendantPaymentPlan {
   remainingAmount?: number
 
   @IsPositive({ message: ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
-  @IsLessThanOrEqualToSumOf('installmentAmount', 'remainingAmount', { message: ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
+  @IsLessThanOrEqualToSumOf('instalmentAmount', 'remainingAmount', { message: ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID })
   @Fractions(0, 2, { message: CommonValidationErrors.AMOUNT_INVALID_DECIMALS })
   firstPayment?: number
 
   @IsPositive({ message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
   @IsLessThanOrEqualToSumOf('firstPayment', 'remainingAmount', { message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
   @Fractions(0, 2, { message: CommonValidationErrors.AMOUNT_INVALID_DECIMALS })
-  installmentAmount?: number
+  instalmentAmount?: number
 
   @ValidateNested()
   @IsDefined({ message: ValidationErrors.INVALID_DATE })
@@ -45,18 +45,18 @@ export class DefendantPaymentPlan {
 
   @IsDefined({ message: ValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED })
-  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: CommonValidationErrors.FREE_TEXT_TOO_LONG })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: CommonValidationErrors.TEXT_TOO_LONG })
   text?: string
 
   constructor (remainingAmount?: number,
                firstPayment?: number,
-               installmentAmount?: number,
+               instalmentAmount?: number,
                firstPaymentDate?: LocalDate,
                paymentSchedule?: PaymentSchedule,
                text?: string) {
     this.remainingAmount = remainingAmount
     this.firstPayment = firstPayment
-    this.installmentAmount = installmentAmount
+    this.instalmentAmount = instalmentAmount
     this.firstPaymentDate = firstPaymentDate
     this.paymentSchedule = paymentSchedule
     this.text = text
@@ -70,7 +70,7 @@ export class DefendantPaymentPlan {
     return new DefendantPaymentPlan(
       value.remainingAmount ? parseFloat(value.remainingAmount) : undefined,
       value.firstPayment ? parseFloat(value.firstPayment) : undefined,
-      value.installmentAmount ? parseFloat(value.installmentAmount) : undefined,
+      value.instalmentAmount ? parseFloat(value.instalmentAmount) : undefined,
       LocalDate.fromObject(value.firstPaymentDate),
       value.paymentSchedule ? PaymentSchedule.of(value.paymentSchedule) : undefined,
       value.text)
@@ -80,7 +80,7 @@ export class DefendantPaymentPlan {
     if (input) {
       this.remainingAmount = input.remainingAmount
       this.firstPayment = input.firstPayment
-      this.installmentAmount = input.installmentAmount
+      this.instalmentAmount = input.instalmentAmount
       this.firstPaymentDate = new LocalDate().deserialize(input.firstPaymentDate)
       this.paymentSchedule = input.paymentSchedule ? PaymentSchedule.of(input.paymentSchedule.value) : undefined
       this.text = input.text

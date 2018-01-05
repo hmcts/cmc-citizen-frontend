@@ -1,5 +1,4 @@
 import { Response } from 'response/form/models/response'
-import { Serializable } from 'models/serializable'
 import { FreeMediation } from 'response/form/models/freeMediation'
 import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
@@ -16,14 +15,14 @@ import { Timeline } from 'response/form/models/timeline'
 import { DefendantPaymentOption } from 'response/form/models/defendantPaymentOption'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
-import { PayBySetDate } from 'ccj/form/models/payBySetDate'
 import { Evidence } from 'response/form/models/evidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
+import { PayBySetDate } from 'response/draft/payBySetDate'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 
-export class ResponseDraft extends DraftDocument implements Serializable<ResponseDraft> {
+export class ResponseDraft extends DraftDocument {
 
   response?: Response
   defence?: Defence
@@ -66,6 +65,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
+      this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
       this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
     }
     return this
@@ -79,7 +79,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
     if (!this.isResponsePopulated()) {
       return false
     }
-    return this.response.type === ResponseType.OWE_NONE && this.rejectAllOfClaim !== undefined
+    return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim !== undefined
       && RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).includes(this.rejectAllOfClaim.option)
   }
 
@@ -88,7 +88,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
       return false
     }
 
-    return this.isResponsePopulated() && this.response.type === ResponseType.OWE_ALL_PAID_NONE
+    return this.isResponsePopulated() && this.response.type === ResponseType.FULL_ADMISSION
   }
 
   public isResponsePartiallyRejectedDueTo (option: String): boolean {
@@ -101,7 +101,7 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
     }
 
     return this.isResponsePopulated()
-      && this.response.type === ResponseType.OWE_SOME_PAID_NONE
+      && this.response.type === ResponseType.PART_ADMISSION
       && this.rejectPartOfClaim !== undefined
       && this.rejectPartOfClaim.option === option
   }
@@ -115,13 +115,13 @@ export class ResponseDraft extends DraftDocument implements Serializable<Respons
   }
 
   private isResponseRejectedFully (): boolean {
-    return this.response.type === ResponseType.OWE_NONE && this.rejectAllOfClaim &&
+    return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim &&
       (this.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE ||
         this.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM)
   }
 
   private isResponseRejectedPartially (): boolean {
-    return this.response.type === ResponseType.OWE_SOME_PAID_NONE && this.rejectPartOfClaim &&
+    return this.response.type === ResponseType.PART_ADMISSION && this.rejectPartOfClaim &&
       (this.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED ||
         this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
   }

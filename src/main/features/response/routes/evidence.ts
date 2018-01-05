@@ -7,12 +7,20 @@ import { Evidence } from 'response/form/models/evidence'
 import { ErrorHandling } from 'common/errorHandling'
 import { EvidenceType } from 'response/form/models/evidenceType'
 import { DraftService } from 'services/draftService'
+import { RoutablePath } from 'common/router/routablePath'
+import { User } from 'idam/user'
+import { Draft } from '@hmcts/draft-store-client'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { Claim } from 'app/claims/models/claim'
+
+const page: RoutablePath = Paths.evidencePage
 
 function renderView (form: Form<Evidence>, res: express.Response): void {
-  res.render(Paths.evidencePage.associatedView, {
+  const claim: Claim = res.locals.claim
+
+  res.render(page.associatedView, {
     form: form,
-    claimantName: res.locals.user.claim.claimData.claimant.name,
-    canAddMoreEvidence: form.model.canAddMoreRows(),
+    claimantName: claim.claimData.claimant.name,
     allEvidenceTypes: EvidenceType.all()
   })
 }
@@ -30,11 +38,14 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.evidencePage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    renderView(new Form(res.locals.user.responseDraft.document.evidence), res)
-  })
+  .get(
+    page.uri,
+    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      renderView(new Form(draft.document.evidence), res)
+    })
   .post(
-    Paths.evidencePage.uri,
+    page.uri,
     FormValidator.requestHandler(Evidence, Evidence.fromObject, undefined, ['addRow']),
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
@@ -43,11 +54,15 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        form.model.removeExcessRows()
-        res.locals.user.responseDraft.document.evidence = form.model
+        const claim: Claim = res.locals.claim
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
+        const user: User = res.locals.user
 
-        await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
-        res.redirect(Paths.impactOfDisputePage.evaluateUri({ externalId: res.locals.user.claim.externalId }))
+        form.model.removeExcessRows()
+        draft.document.evidence = form.model
+
+        await new DraftService().save(draft, user.bearerToken)
+        res.redirect(Paths.impactOfDisputePage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )

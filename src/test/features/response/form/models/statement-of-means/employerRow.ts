@@ -20,6 +20,45 @@ describe('EmployerRow', () => {
     })
   })
 
+  describe('isEmpty', () => {
+
+    context('should return true when', () => {
+
+      it('both fields are undefined', () => {
+        const actual: EmployerRow = EmployerRow.fromObject({ employerName: undefined, jobTitle: undefined })
+
+        expect(actual.isEmpty()).to.eq(true)
+      })
+
+      it('both fields are empty string', () => {
+        const actual: EmployerRow = EmployerRow.fromObject({ employerName: '', jobTitle: '' })
+
+        expect(actual.isEmpty()).to.eq(true)
+      })
+    })
+
+    context('should return false when', () => {
+
+      it('both fields are populated', () => {
+        const actual: EmployerRow = new EmployerRow('a', 'b')
+
+        expect(actual.isEmpty()).to.eq(false)
+      })
+
+      it('only employerName is populated', () => {
+        const actual: EmployerRow = new EmployerRow('a', 'b')
+
+        expect(actual.isEmpty()).to.eq(false)
+      })
+
+      it('only jobTitle is populated', () => {
+        const actual: EmployerRow = new EmployerRow('', 'a')
+
+        expect(actual.isEmpty()).to.eq(false)
+      })
+    })
+  })
+
   describe('validation', () => {
 
     const validator: Validator = new Validator()
@@ -68,7 +107,7 @@ describe('EmployerRow', () => {
         )
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.TOO_LONG_INPUT)
+        expectValidationError(errors, GlobalValidationErrors.TEXT_TOO_LONG)
       })
 
       it('when jobTitle is too long', () => {
@@ -77,7 +116,7 @@ describe('EmployerRow', () => {
         )
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.TOO_LONG_INPUT)
+        expectValidationError(errors, GlobalValidationErrors.TEXT_TOO_LONG)
       })
     })
   })

@@ -11,7 +11,7 @@ import {
   soleTraderDetails
 } from '../../data/draft/partyDetails'
 
-import { ResponseData } from 'response/draft/responseData'
+import { Response } from 'claims/models/response'
 import { responseData as entityTemplate } from '../../data/entity/responseData'
 import { company, individual, organisation, soleTrader } from '../../data/entity/party'
 
@@ -23,7 +23,7 @@ function prepareResponseDraft (partyDetails: object) {
 }
 
 function prepareResponseData (party: object) {
-  return new ResponseData().deserialize({
+  return Response.deserialize({
     ...entityTemplate,
     defendant: { ...party, email: 'user@example.com', mobilePhone: '0700000000' }
   })
@@ -35,9 +35,7 @@ describe('ResponseModelConverter', () => {
     [soleTraderDetails, soleTrader],
     [companyDetails, company],
     [organisationDetails, organisation]
-  ].forEach(entry => {
-    const [partyDetails, party] = entry
-
+  ].forEach(([partyDetails, party]) => {
     it(`should convert response submitted by ${partyDetails.type}`, () => {
       const responseDraft = prepareResponseDraft(partyDetails)
       const responseData = prepareResponseData(party)

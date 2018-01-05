@@ -4,18 +4,19 @@ import { InterestType } from 'features/claim/form/models/interest'
 import { TotalAmount } from 'forms/models/totalAmount'
 import { claimAmountWithInterest, interestAmount } from 'app/utils/interestUtils'
 import { FeesClient } from 'fees/feesClient'
-import { User } from 'idam/user'
+import { Draft } from '@hmcts/draft-store-client'
+import { DraftClaim } from 'drafts/models/draftClaim'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.totalPage.uri, (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user: User = res.locals.user
-    FeesClient.calculateIssueFee(claimAmountWithInterest(user.claimDraft.document))
+    const draft: Draft<DraftClaim> = res.locals.claimDraft
+    FeesClient.calculateIssueFee(claimAmountWithInterest(draft.document))
       .then((feeAmount: number) => {
         res.render(Paths.totalPage.associatedView,
           {
-            interestTotal: new TotalAmount(user.claimDraft.document.amount.totalAmount(), interestAmount(user.claimDraft.document), feeAmount),
-            interestClaimed: (user.claimDraft.document.interest.type !== InterestType.NO_INTEREST)
+            interestTotal: new TotalAmount(draft.document.amount.totalAmount(), interestAmount(draft.document), feeAmount),
+            interestClaimed: (draft.document.interest.type !== InterestType.NO_INTEREST)
           })
       })
       .catch(next)

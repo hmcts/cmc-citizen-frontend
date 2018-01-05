@@ -9,7 +9,7 @@ COPY package.json yarn.lock .snyk /usr/src/app/
 RUN yarn install
 
 COPY config /usr/src/app/config
-COPY tsconfig.json tsconfig.prod.json gulpfile.js /usr/src/app/
+COPY tsconfig.json gulpfile.js /usr/src/app/
 COPY src/main /usr/src/app/src/main
 
 RUN yarn setup

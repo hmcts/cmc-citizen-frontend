@@ -5,29 +5,35 @@ import * as config from 'config'
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
+import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
 
-import { Paths as Paths } from 'response/paths'
+import { Paths, StatementOfMeansPaths } from 'response/paths'
 
 import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
+import { PartyType } from 'app/common/partyType'
+import { ResponseType } from 'response/form/models/responseType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const defencePaymentPlanPage = Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId })
+const pagePath = Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId })
+const statementOfMeansStartPage = StatementOfMeansPaths.startPage.evaluateUri({ externalId: externalId })
 const taskListPage = Paths.taskListPage.evaluateUri({ externalId: externalId })
 
 describe('Defendant: payment page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', defencePaymentPlanPage)
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'claimant')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta', 'claimant')
       })
 
       context('when user authorised', () => {
@@ -35,7 +41,7 @@ describe('Defendant: payment page', () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
-            .get(defencePaymentPlanPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -45,7 +51,7 @@ describe('Defendant: payment page', () => {
           draftStoreServiceMock.rejectFind('Error')
 
           await request(app)
-            .get(defencePaymentPlanPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -55,7 +61,7 @@ describe('Defendant: payment page', () => {
           draftStoreServiceMock.resolveFind('response')
 
           await request(app)
-            .get(defencePaymentPlanPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Your payment plan'))
         })
@@ -67,7 +73,7 @@ describe('Defendant: payment page', () => {
     const validFormData = {
       remainingAmount: 160,
       firstPayment: 77.32,
-      installmentAmount: 30.00,
+      instalmentAmount: 30.00,
       firstPaymentDate: {
         day: 12,
         month: 3,
@@ -77,18 +83,20 @@ describe('Defendant: payment page', () => {
       text: 'I owe nothing'
     }
 
-    checkAuthorizationGuards(app, 'post', defencePaymentPlanPage)
+    const method = 'post'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
       })
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .post(defencePaymentPlanPage)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -99,20 +107,50 @@ describe('Defendant: payment page', () => {
         draftStoreServiceMock.rejectFind('Error')
 
         await request(app)
-          .post(defencePaymentPlanPage)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
       context('when form is valid', async () => {
-        it('should redirect to confirmation page', async () => {
+        it('should redirect to statement of means start page if defendant is individual', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response', {
+            response: {
+              type: ResponseType.FULL_ADMISSION
+            },
+            defendantDetails: {
+              partyDetails: {
+                type: PartyType.INDIVIDUAL.value
+              }
+            }
+          })
           draftStoreServiceMock.resolveSave()
 
           await request(app)
-            .post(defencePaymentPlanPage)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.redirect.toLocation(statementOfMeansStartPage))
+        })
+
+        it('should redirect to task list page if defendant is company', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response', {
+            response: {
+              type: ResponseType.FULL_ADMISSION
+            },
+            defendantDetails: {
+              partyDetails: {
+                type: PartyType.COMPANY.value
+              }
+            }
+          })
+          draftStoreServiceMock.resolveSave()
+
+          await request(app)
+            .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(taskListPage))
@@ -125,7 +163,7 @@ describe('Defendant: payment page', () => {
           draftStoreServiceMock.resolveFind('response')
 
           await request(app)
-            .post(defencePaymentPlanPage)
+            .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ signed: undefined })
             .expect(res => expect(res).to.be.successful.withText('Your payment plan'))

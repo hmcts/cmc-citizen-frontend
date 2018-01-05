@@ -67,42 +67,42 @@ describe('Education', () => {
         const errors = validator.validateSync(new Education('' as any))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
+        expectValidationError(errors, GlobalValidationErrors.INTEGER_REQUIRED)
       })
 
       it('blank string given', () => {
         const errors = validator.validateSync(new Education('    ' as any))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
+        expectValidationError(errors, GlobalValidationErrors.INTEGER_REQUIRED)
       })
 
       it('string given', () => {
         const errors = validator.validateSync(new Education('this is invalid value!' as any))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
+        expectValidationError(errors, GlobalValidationErrors.INTEGER_REQUIRED)
       })
 
       it('decimal number given', () => {
         const errors = validator.validateSync(new Education(1.1))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
+        expectValidationError(errors, GlobalValidationErrors.INTEGER_REQUIRED)
       })
 
       it('negative number given', () => {
         const errors = validator.validateSync(new Education(-1))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
+        expectValidationError(errors, GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED)
       })
 
       it('negative decimal number given', () => {
         const errors = validator.validateSync(new Education(-1.1))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.NUMBER_REQUIRED)
+        expectValidationError(errors, GlobalValidationErrors.INTEGER_REQUIRED)
       })
 
       it('valid value but is greater than maxValue', () => {

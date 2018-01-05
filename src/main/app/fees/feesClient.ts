@@ -53,7 +53,7 @@ export class FeesClient {
     }
 
     return request.get(`${feesUrl}/range-groups/${feeCode}/calculations?value=${amountInPennies}`)
-      .then((body: any) => plainToClass(CalculationOutcome, body))
+      .then((body: Object) => plainToClass(CalculationOutcome, body))
   }
   /**
    * Get the issue fee range group
@@ -76,7 +76,7 @@ export class FeesClient {
       throw new Error('Fee code is required')
     }
     return request.get(`${feesUrl}/range-groups/${code}`)
-      .then((body: any) => {
+      .then((body: Object) => {
         return plainToClass(RangeGroup, body)
       })
   }

@@ -27,8 +27,8 @@ describe('MinimumAgeValidatorConstraint', () => {
       expect(constraint.validate(undefined, yearsLimit(1))).to.be.equal(true)
     })
 
-    it('should accept null value', () => {
-      expect(constraint.validate(null, yearsLimit(1))).to.be.equal(true)
+    it('should accept undefined value', () => {
+      expect(constraint.validate(undefined, yearsLimit(1))).to.be.equal(true)
     })
 
     it('should reject values other then LocalDate', () => {
@@ -72,8 +72,8 @@ describe('MaximumAgeValidatorConstraint', () => {
       expect(constraint.validate(undefined, yearsLimit(1))).to.be.equal(true)
     })
 
-    it('should accept null value', () => {
-      expect(constraint.validate(null, yearsLimit(1))).to.be.equal(true)
+    it('should accept undefined value', () => {
+      expect(constraint.validate(undefined, yearsLimit(1))).to.be.equal(true)
     })
 
     it('should reject values other then LocalDate', () => {

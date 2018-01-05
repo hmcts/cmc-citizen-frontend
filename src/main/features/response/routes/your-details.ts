@@ -17,12 +17,16 @@ import { User } from 'app/idam/user'
 
 import { SoleTrader } from 'claims/models/details/theirs/soleTrader'
 import { DraftService } from 'services/draftService'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { Draft } from '@hmcts/draft-store-client'
+import { Claim } from 'claims/models/claim'
 
 function renderView (form: Form<PartyDetails>, res: express.Response) {
-  const user: User = res.locals.user
+  const claim: Claim = res.locals.claim
+
   res.render(Paths.defendantYourDetailsPage.associatedView, {
     form: form,
-    claim: user.claim
+    claim: claim
   })
 }
 
@@ -44,25 +48,26 @@ function deserializeFn (value: any): PartyDetails {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantYourDetailsPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user: User = res.locals.user
+    const draft: Draft<ResponseDraft> = res.locals.responseDraft
+    const claim: Claim = res.locals.claim
 
-    const partyDetails: PartyDetails = plainToClass(PartyDetails, user.claim.claimData.defendant)
-    if (user.responseDraft.document.defendantDetails.partyDetails) {
-      switch (user.responseDraft.document.defendantDetails.partyDetails.type) {
+    const partyDetails: PartyDetails = plainToClass(PartyDetails, claim.claimData.defendant)
+    if (draft.document.defendantDetails.partyDetails) {
+      switch (draft.document.defendantDetails.partyDetails.type) {
         case PartyType.COMPANY.value:
           (partyDetails as CompanyDetails).contactPerson =
-            (user.responseDraft.document.defendantDetails.partyDetails as CompanyDetails).contactPerson
+            (draft.document.defendantDetails.partyDetails as CompanyDetails).contactPerson
           break
         case PartyType.ORGANISATION.value:
           (partyDetails as OrganisationDetails).contactPerson =
-            (user.responseDraft.document.defendantDetails.partyDetails as OrganisationDetails).contactPerson
+            (draft.document.defendantDetails.partyDetails as OrganisationDetails).contactPerson
           break
         default:
           break
       }
-      partyDetails.address = user.responseDraft.document.defendantDetails.partyDetails.address
-      partyDetails.hasCorrespondenceAddress = user.responseDraft.document.defendantDetails.partyDetails.hasCorrespondenceAddress
-      partyDetails.correspondenceAddress = user.responseDraft.document.defendantDetails.partyDetails.correspondenceAddress
+      partyDetails.address = draft.document.defendantDetails.partyDetails.address
+      partyDetails.hasCorrespondenceAddress = draft.document.defendantDetails.partyDetails.hasCorrespondenceAddress
+      partyDetails.correspondenceAddress = draft.document.defendantDetails.partyDetails.correspondenceAddress
     }
 
     renderView(new Form(partyDetails), res)
@@ -76,36 +81,38 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const claim: Claim = res.locals.claim
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
-        const oldPartyDetails: PartyDetails = user.responseDraft.document.defendantDetails.partyDetails
-        user.responseDraft.document.defendantDetails.partyDetails = form.model
+        const oldPartyDetails: PartyDetails = draft.document.defendantDetails.partyDetails
+        draft.document.defendantDetails.partyDetails = form.model
 
         // Cache date of birth so we don't overwrite it
         if (oldPartyDetails && oldPartyDetails.type === PartyType.INDIVIDUAL.value && oldPartyDetails['dateOfBirth']) {
-          (user.responseDraft.document.defendantDetails.partyDetails as IndividualDetails).dateOfBirth =
+          (draft.document.defendantDetails.partyDetails as IndividualDetails).dateOfBirth =
             (oldPartyDetails as IndividualDetails).dateOfBirth
         }
 
         // Store read only properties
-        user.responseDraft.document.defendantDetails.partyDetails.name = user.claim.claimData.defendant.name
-        if (user.claim.claimData.defendant.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
-          (user.responseDraft.document.defendantDetails.partyDetails as SoleTraderDetails).businessName =
-            (user.claim.claimData.defendant as SoleTrader).businessName
+        draft.document.defendantDetails.partyDetails.name = claim.claimData.defendant.name
+        if (claim.claimData.defendant.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
+          (draft.document.defendantDetails.partyDetails as SoleTraderDetails).businessName =
+            (claim.claimData.defendant as SoleTrader).businessName
         }
 
-        await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
+        await new DraftService().save(draft, user.bearerToken)
 
-        switch (user.responseDraft.document.defendantDetails.partyDetails.type) {
+        switch (draft.document.defendantDetails.partyDetails.type) {
           case PartyType.INDIVIDUAL.value:
-            res.redirect(Paths.defendantDateOfBirthPage.evaluateUri({ externalId: user.claim.externalId }))
+            res.redirect(Paths.defendantDateOfBirthPage.evaluateUri({ externalId: claim.externalId }))
             break
           case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
           case PartyType.COMPANY.value:
           case PartyType.ORGANISATION.value:
-            res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: user.claim.externalId }))
+            res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: claim.externalId }))
             break
           default:
-            throw new Error(`Unknown party type: ${user.responseDraft.document.defendantDetails.partyDetails.type}`)
+            throw new Error(`Unknown party type: ${draft.document.defendantDetails.partyDetails.type}`)
         }
       }
     }))

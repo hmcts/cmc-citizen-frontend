@@ -5,6 +5,7 @@ import { Paths, Paths as AppPaths } from 'app/paths'
 import { Paths as FirstContactPaths } from 'first-contact/paths'
 import { RoutablePath } from 'common/router/routablePath'
 import { AuthenticationRedirect } from 'utils/authenticationRedirect'
+import { User } from 'idam/user'
 
 export class TacticalIdamRedirectHelper implements AuthenticationRedirect {
   getStateCookie (req: express.Request): string {
@@ -21,7 +22,8 @@ export class TacticalIdamRedirectHelper implements AuthenticationRedirect {
   }
 
   forUplift (req: express.Request, res: express.Response): string {
-    const callbackPath = `${AppPaths.linkDefendantReceiver.uri}?state=${res.locals.user.id}`
+    const user: User = res.locals.user
+    const callbackPath = `${AppPaths.linkDefendantReceiver.uri}?state=${user.id}`
     return `${config.get<string>('idam.authentication-web.url')}/login/uplift?continue-url=${buildURL(req, callbackPath)}`
   }
 

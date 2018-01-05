@@ -2,14 +2,17 @@ import * as express from 'express'
 
 import { Paths } from 'response/paths'
 
-import { User } from 'app/idam/user'
+import { Draft } from '@hmcts/draft-store-client'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { Claim } from 'claims/models/claim'
 
 async function renderView (res: express.Response, next: express.NextFunction) {
   try {
-    const user: User = res.locals.user
+    const claim: Claim = res.locals.claim
+    const draft: Draft<ResponseDraft> = res.locals.responseDraft
     res.render(Paths.partialAdmissionPage.associatedView, {
-      claim: user.claim,
-      response: user.responseDraft.document
+      claim: claim,
+      response: draft.document
     })
   } catch (err) {
     next(err)

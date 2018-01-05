@@ -11,6 +11,7 @@ import { checkAuthorizationGuards } from '../checks/authorization-check'
 import { checkAlreadySubmittedGuard } from '../checks/already-submitted-check'
 import { checkCountyCourtJudgmentRequestedGuard } from '../checks/ccj-requested-check'
 import { app } from '../../../../../main/app'
+import { checkNotDefendantInCaseGuard } from '../checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = StatementOfMeansPaths.selfEmployedPage.evaluateUri(
@@ -23,16 +24,18 @@ describe('Defendant response: Statement of means: self-employment', () => {
 
   describe('on GET', () => {
 
-    checkAuthorizationGuards(app, 'get', pagePath)
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
 
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
       })
 
-      checkAlreadySubmittedGuard(app, 'get', pagePath)
-      checkCountyCourtJudgmentRequestedGuard(app, 'get', pagePath)
+      checkAlreadySubmittedGuard(app, method, pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       context('when response and CCJ not submitted', () => {
 
@@ -70,16 +73,18 @@ describe('Defendant response: Statement of means: self-employment', () => {
 
   describe('on POST', () => {
 
-    checkAuthorizationGuards(app, 'post', pagePath)
+    const method = 'post'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     describe('for authorized user', () => {
 
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
       })
 
-      checkAlreadySubmittedGuard(app, 'post', pagePath)
-      checkCountyCourtJudgmentRequestedGuard(app, 'post', pagePath)
+      checkAlreadySubmittedGuard(app, method, pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       describe('errors are handled properly', () => {
 
@@ -114,7 +119,11 @@ describe('Defendant response: Statement of means: self-employment', () => {
             .post(pagePath)
             .send({ jobTitle: 'my role', annualTurnover: 10, areYouBehindOnTax: false })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('What are you self-employed as?'))
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(StatementOfMeansPaths.bankAccountsPage.evaluateUri(
+                { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+              )
+            )
         })
       })
     })

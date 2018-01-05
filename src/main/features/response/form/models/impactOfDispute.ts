@@ -1,11 +1,10 @@
-import { Serializable } from 'models/serializable'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 
-export class ImpactOfDispute implements Serializable<ImpactOfDispute> {
+export class ImpactOfDispute {
 
-  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.FREE_TEXT_TOO_LONG })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: ValidationErrors.TEXT_TOO_LONG })
   text?: string
 
   constructor (text?: string) {

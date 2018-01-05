@@ -1,5 +1,4 @@
 import { IsDefined, IsIn } from 'class-validator'
-import { Serializable } from 'models/serializable'
 
 export class ValidationErrors {
   static readonly OPTION_REQUIRED: string = 'Choose option'
@@ -33,7 +32,7 @@ export class PaymentType {
   }
 }
 
-export class CCJPaymentOption implements Serializable <CCJPaymentOption> {
+export class CCJPaymentOption {
 
   @IsDefined({ message: ValidationErrors.OPTION_REQUIRED })
   @IsIn(PaymentType.all(), { message: ValidationErrors.OPTION_REQUIRED })

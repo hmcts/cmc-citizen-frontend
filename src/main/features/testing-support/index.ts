@@ -4,6 +4,9 @@ import * as path from 'path'
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
 import { AuthenticationRedirectFactory } from 'app/utils/AuthenticationRedirectFactory'
+import { Logger } from '@hmcts/nodejs-logging'
+
+const logger = Logger.getLogger('testing-support')
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -19,8 +22,8 @@ function defendantResponseRequestHandler (): express.RequestHandler {
 
 export class TestingSupportFeature {
   enableFor (app: express.Express) {
+    logger.info('Testing support activated')
     app.all('/testing-support*', defendantResponseRequestHandler())
-
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }
 }

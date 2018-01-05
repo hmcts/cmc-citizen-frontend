@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths } from 'response/paths'
+import { Paths, PayBySetDatePaths } from 'response/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
@@ -8,45 +8,70 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
-import { DisabledFeatureGuard } from 'response/guards/disabledFeatureGuard'
+import { FeatureToggleGuard } from 'guards/featureToggleGuard'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { ResponseType } from 'response/form/models/responseType'
+import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { StatementOfMeans } from 'response/draft/statementOfMeans'
+import { Draft } from '@hmcts/draft-store-client'
+import { Claim } from 'claims/models/claim'
+
+function isAmountTooHighPartialResponse (responseDraft: ResponseDraft): boolean {
+  return responseDraft.response.type.value === ResponseType.PART_ADMISSION.value
+    && responseDraft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
+}
+
+function formLabelFor (responseDraft: ResponseDraft): string {
+  if (isAmountTooHighPartialResponse(responseDraft)) {
+    return 'When will you pay the amount you admit you owe?'
+  } else {
+    return 'When will you pay?'
+  }
+}
 
 function renderView (form: Form<DefendantPaymentOption>, res: express.Response) {
-  const user: User = res.locals.user
+  const draft: Draft<ResponseDraft> = res.locals.responseDraft
+  const claim: Claim = res.locals.claim
   res.render(Paths.defencePaymentOptionsPage.associatedView, {
     form: form,
-    claim: user.claim
+    claim: claim,
+    responseType: draft.document.response.type,
+    formLabel: formLabelFor(draft.document),
+    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(draft.document)
   })
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defencePaymentOptionsPage.uri,
-    DisabledFeatureGuard.createHandlerThrowingNotFoundError('featureToggles.fullAdmission'),
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const user: User = res.locals.user
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-      renderView(new Form(user.responseDraft.document.defendantPaymentOption), res)
+      renderView(new Form(draft.document.defendantPaymentOption), res)
     }))
   .post(Paths.defencePaymentOptionsPage.uri,
-    DisabledFeatureGuard.createHandlerThrowingNotFoundError('featureToggles.fullAdmission'),
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     FormValidator.requestHandler(DefendantPaymentOption, DefendantPaymentOption.fromObject),
     ErrorHandling.apply(
-      async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+      async (req: express.Request, res: express.Response): Promise<void> => {
         const form: Form<DefendantPaymentOption> = req.body
-        const user: User = res.locals.user
 
         if (form.hasErrors()) {
           renderView(form, res)
         } else {
-          user.responseDraft.document.defendantPaymentOption = form.model
-          await new DraftService().save(user.responseDraft, user.bearerToken)
+          const draft: Draft<ResponseDraft> = res.locals.responseDraft
+          const user: User = res.locals.user
 
+          draft.document.defendantPaymentOption = form.model
+          await new DraftService().save(draft, user.bearerToken)
+
+          const { externalId } = req.params
           switch (form.model.option) {
-            case DefendantPaymentType.FULL_BY_SPECIFIED_DATE:
-              res.redirect('/not-implemented-yet')
+            case DefendantPaymentType.BY_SET_DATE:
+              res.redirect(PayBySetDatePaths.paymentDatePage.evaluateUri({ externalId: externalId }))
               break
             case DefendantPaymentType.INSTALMENTS:
-              const { externalId } = req.params
               res.redirect(Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))
               break
           }

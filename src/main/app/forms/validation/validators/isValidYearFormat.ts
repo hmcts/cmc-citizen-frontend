@@ -8,7 +8,7 @@ import {
 
 import { LocalDate } from 'forms/models/localDate'
 
-const numberOfDigitsInAYear = 4
+const numberOfDigitsInAYear: number = 4
 
 @ValidatorConstraint()
 export class IsValidYearFormatConstraint implements ValidatorConstraintInterface {

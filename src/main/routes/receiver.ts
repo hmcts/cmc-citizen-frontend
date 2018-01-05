@@ -23,8 +23,9 @@ import { hasTokenExpired } from 'idam/authorizationMiddleware'
 import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
 import { AuthenticationRedirect } from 'utils/authenticationRedirect'
 import { DraftService } from 'services/draftService'
+import { Logger } from '@hmcts/nodejs-logging'
 
-const logger = require('@hmcts/nodejs-logging').getLogger('router/receiver')
+const logger = Logger.getLogger('router/receiver')
 const useOauth = toBoolean(config.get<boolean>('featureToggles.idamOauth'))
 const sessionCookie = config.get<string>('session.cookieName')
 const stateCookieName = 'state'

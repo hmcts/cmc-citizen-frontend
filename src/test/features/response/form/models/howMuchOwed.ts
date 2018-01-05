@@ -86,7 +86,7 @@ describe('HowMuchOwed', () => {
       })
       const errors = validator.validateSync(new HowMuchOwed(300, text))
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.FREE_TEXT_TOO_LONG)
+      expectValidationError(errors, ValidationErrors.TEXT_TOO_LONG)
     })
 
     it('should accept how much owed text with max allowed characters', () => {

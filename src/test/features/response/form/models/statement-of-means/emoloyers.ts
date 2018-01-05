@@ -1,6 +1,11 @@
 import { expect } from 'chai'
-import { Employers, INIT_ROW_COUNT, MAX_NUMBER_OF_JOBS } from 'response/form/models/statement-of-means/employers'
-import { EmployerRow } from 'response/form/models/statement-of-means/employerRow'
+import { Employers, ValidationErrors } from 'response/form/models/statement-of-means/employers'
+import {
+  EmployerRow,
+  ValidationErrors as RowValidationErrors
+} from 'response/form/models/statement-of-means/employerRow'
+import { expectValidationError } from '../../../../../app/forms/models/validationUtils'
+import { Validator } from 'class-validator'
 
 describe('Employers', () => {
 
@@ -54,7 +59,7 @@ describe('Employers', () => {
         }
       )
 
-      expect(actual.rows.length).to.be.greaterThan(INIT_ROW_COUNT)
+      expect(actual.rows.length).to.be.greaterThan(actual.getInitialNumberOfRows())
       expectAllRowsToBePopulated(actual.rows)
     })
   })
@@ -64,7 +69,7 @@ describe('Employers', () => {
     it('should return valid Employers object with list of empty EmployerRow', () => {
       const actual: Employers = new Employers().deserialize({})
 
-      expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
+      expect(actual.rows.length).to.be.eq(actual.getInitialNumberOfRows())
       expectAllRowsToBeEmpty(actual.rows)
     })
 
@@ -73,7 +78,7 @@ describe('Employers', () => {
         { rows: [{ employerName: 'Comp', jobTitle: 'dev' }] }
       )
 
-      expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
+      expect(actual.rows.length).to.be.eq(actual.getInitialNumberOfRows())
 
       const populatedItem: EmployerRow = actual.rows[0]
 
@@ -105,23 +110,23 @@ describe('Employers', () => {
     it('adds empty element to list of rows', () => {
       const actual: Employers = new Employers()
 
-      expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
+      expect(actual.rows.length).to.be.eq(actual.getInitialNumberOfRows())
 
       actual.appendRow()
 
-      expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT + 1)
+      expect(actual.rows.length).to.be.eq(actual.getInitialNumberOfRows() + 1)
     })
 
     it('adds only up to 20 elements', () => {
       const actual: Employers = new Employers()
 
-      expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
+      expect(actual.rows.length).to.be.eq(actual.getInitialNumberOfRows())
 
-      for (let i = 0; i < MAX_NUMBER_OF_JOBS + 1; i++) {
+      for (let i = 0; i < actual.getMaxNumberOfRows() + 1; i++) {
         actual.appendRow()
       }
 
-      expect(actual.rows.length).to.be.eq(MAX_NUMBER_OF_JOBS)
+      expect(actual.rows.length).to.be.eq(actual.getMaxNumberOfRows())
     })
   })
 
@@ -130,10 +135,9 @@ describe('Employers', () => {
     it('should filter out all elements from list when empty', () => {
       const actual: Employers = new Employers()
 
-      expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
+      expect(actual.rows.length).to.be.eq(actual.getInitialNumberOfRows())
       actual.removeExcessRows()
-      expect(actual.rows.length).to.be.eq(1)
-      expectAllRowsToBeEmpty(actual.rows)
+      expect(actual.rows.length).to.be.eq(0)
     })
 
     it('should not filter out any element from list when all populated', () => {
@@ -197,11 +201,49 @@ describe('Employers', () => {
     it('should return true when number of rows is equal max', () => {
       const actual: Employers = new Employers()
 
-      for (let i = 0; i < MAX_NUMBER_OF_JOBS; i++) {
+      for (let i = 0; i < actual.getMaxNumberOfRows(); i++) {
         actual.appendRow()
       }
 
       expect(actual.canAddMoreRows()).to.be.eq(false)
+    })
+  })
+
+  describe('validate', () => {
+
+    const validator: Validator = new Validator()
+
+    context('should reject when ', () => {
+
+      it('0 rows given', () => {
+        const errors = validator.validateSync(new Employers([]))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.ENTER_AT_LEAST_ONE_ROW)
+      })
+
+      it('more than 0 empty rows given', () => {
+        const errors = validator.validateSync(new Employers([EmployerRow.empty(), EmployerRow.empty()]))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.ENTER_AT_LEAST_ONE_ROW)
+      })
+
+      it('more than 0 invalid rows given', () => {
+        const errors = validator.validateSync(new Employers([new EmployerRow('company', undefined)]))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, RowValidationErrors.JOB_TITLE_REQUIRED)
+      })
+    })
+
+    context('should accept when', () => {
+
+      it('at least one valid row given', () => {
+        const errors = validator.validateSync(new Employers([new EmployerRow('company', 'dev')]))
+
+        expect(errors.length).to.equal(0)
+      })
     })
   })
 })

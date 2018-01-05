@@ -4,7 +4,6 @@ import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 import { IsNotInFuture } from 'app/forms/validation/validators/notInFuture'
 import { IsValidLocalDate } from 'app/forms/validation/validators/isValidLocalDate'
 
-import { Serializable } from 'app/models/serializable'
 import { LocalDate } from 'app/forms/models/localDate'
 import { CompletableTask } from 'app/models/task'
 import { InterestDateType } from 'app/common/interestDateType'
@@ -22,7 +21,7 @@ export class ValidationErrors {
   static readonly REASON_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
 }
 
-export class InterestDate implements Serializable<InterestDate>, CompletableTask {
+export class InterestDate implements CompletableTask {
 
   @IsDefined({ message: ValidationErrors.TYPE_REQUIRED })
   @IsIn(InterestDateType.all(), { message: ValidationErrors.TYPE_REQUIRED })

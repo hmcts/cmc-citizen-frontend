@@ -31,7 +31,7 @@
 
     {{ row('Do you owe the money claimed?', t(draft.response.type.displayValue) | capitalize, paths.responseTypePage.evaluateUri({ externalId: claim.externalId })) }}
 
-    {% if draft.response.type === ResponseType.OWE_SOME_PAID_NONE %}
+    {% if draft.response.type === ResponseType.PART_ADMISSION %}
       {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED %}
         {% set rejectPartOption = 'I’ve paid what I believe I owe' %}
       {% endif %}
@@ -43,7 +43,7 @@
       {{ row('Why are you rejecting part of this claim?', t(rejectPartOption), paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: claim.externalId })) }}
     {% endif %}
 
-    {% if draft.response.type === ResponseType.OWE_NONE %}
+    {% if draft.response.type === ResponseType.DEFENCE %}
       {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
         {% set rejectAllOption = 'I’ve already paid the claim in full' %}
       {% endif %}
@@ -61,7 +61,11 @@
 
     {{ tableEnd() }}
 
-    {% if draft.response.type === ResponseType.OWE_SOME_PAID_NONE and featureToggles.partialAdmission %}
+    {% if statementOfMeansIsApplicable %}
+      {% include "./statement-of-means/check-and-send.njk" %}
+    {% endif %}
+
+    {% if draft.response.type === ResponseType.PART_ADMISSION and featureToggles.partialAdmission %}
 
       {{ tableStart('yourResponse', 'Your response') }}
 
@@ -114,23 +118,36 @@
         {% endif %}
         {{ row('How this dispute has affected you (optional)', impactOfDisputeText, paths.impactOfDisputePage.evaluateUri({ externalId: claim.externalId })) }}
       {% endif %}
-
-      {% if draft.requireDefence() %}
-        {{ row('Your defence', draft.defence.text, paths.defencePage.evaluateUri({ externalId: claim.externalId })) }}
-      {% endif %}
-
       {{ tableEnd() }}
 
     {% endif %}
 
-    {% if draft.isResponseFullyAdmitted() or draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH) %}
-      {{ tableStart('whenWillYouPay', 'When will you pay?') }}
-      {{ row('When will you pay', t(draft.defendantPaymentOption.option.displayValue) | capitalize, paths.defencePaymentOptionsPage.evaluateUri({ externalId: claim.externalId })) }}
-      {{ row('The first payment of', t(draft.defendantPaymentPlan.firstPayment | numeral), paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
-      {{ row('Followed by equal instalments of', t(draft.defendantPaymentPlan.installmentAmount | numeral), paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
-      {{ row('Make the first payment on', t(draft.defendantPaymentPlan.firstPaymentDate.toMoment() | date), paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
-      {{ row('Frequency of payments', t(draft.defendantPaymentPlan.paymentSchedule.displayValue), paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
+    {% if draft.requireDefence() %}
+      {{ tableStart('yourDefence', 'Your defence') }}
+      {{ row('Your defence', draft.defence.text, paths.defencePage.evaluateUri({ externalId: claim.externalId })) }}
       {{ tableEnd() }}
+    {% endif %}
+
+    {% if draft.isResponseFullyAdmitted() or draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH) %}
+      {% if draft.defendantPaymentOption.isOfType(DefendantPaymentType.INSTALMENTS) %}
+        {{ tableStart('whenWillYouPay', 'When will you pay?') }}
+        {{ row('When will you pay', t(draft.defendantPaymentOption.option.displayValueFor(draft.responseType)) | capitalize, paths.defencePaymentOptionsPage.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('The first payment of', draft.defendantPaymentPlan.firstPayment | numeral , paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('Followed by equal instalments of', draft.defendantPaymentPlan.instalmentAmount | numeral, paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('Make the first payment on', draft.defendantPaymentPlan.firstPaymentDate.toMoment() | date, paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('Frequency of payments', t(draft.defendantPaymentPlan.paymentSchedule.displayValue), paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('Explain why you can’t pay the full amount now', draft.defendantPaymentPlan.text, paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
+        {{ tableEnd() }}
+      {% endif %}
+      {% if draft.defendantPaymentOption.isOfType(DefendantPaymentType.BY_SET_DATE) %}
+        {{ tableStart('whenWillYouPay', 'When will you pay?') }}
+        {{ row('When will you pay', t(draft.defendantPaymentOption.option.displayValueFor(draft.response.type)) | capitalize, paths.defencePaymentOptionsPage.evaluateUri({ externalId: claim.externalId })) }}
+        {{ row('When you’ll pay the amount', draft.payBySetDate.paymentDate.date.toMoment() | date, payBySetDatePaths.paymentDatePage.evaluateUri({ externalId: claim.externalId }), bottomBorder = (not draft.payBySetDate.hasExplanation())) }}
+        {% if draft.payBySetDate.hasExplanation() %}
+          {{ row('Explain why you can’t pay immediately', draft.payBySetDate.explanation.text, payBySetDatePaths.explanationPage.evaluateUri({ externalId: claim.externalId })) }}
+        {% endif %}
+        {{ tableEnd() }}
+      {% endif %}
     {% endif %}
 
     {% if draft.requireMediation() %}

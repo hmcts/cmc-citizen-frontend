@@ -139,7 +139,7 @@ describe('SelfEmployed', () => {
         )
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.TOO_LONG_INPUT)
+        expectValidationError(errors, GlobalValidationErrors.TEXT_TOO_LONG)
       })
 
       it('too many decimal digits for annualTurnover', () => {
@@ -203,7 +203,7 @@ describe('SelfEmployed', () => {
           )
 
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, GlobalValidationErrors.TOO_LONG_INPUT)
+          expectValidationError(errors, GlobalValidationErrors.TEXT_TOO_LONG)
         })
       })
     })

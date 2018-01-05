@@ -17,6 +17,7 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 
 import { ResponseType } from 'response/form/models/responseType'
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
+import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.responseTypePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -25,15 +26,17 @@ describe('Defendant response: response type page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', pagePath)
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
       })
 
-      checkAlreadySubmittedGuard(app, 'get', pagePath)
-      checkCountyCourtJudgmentRequestedGuard(app, 'get', pagePath)
+      checkAlreadySubmittedGuard(app, method, pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       context('when response not submitted', () => {
         beforeEach(() => {
@@ -53,15 +56,17 @@ describe('Defendant response: response type page', () => {
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', pagePath)
+    const method = 'post'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
       })
 
-      checkAlreadySubmittedGuard(app, 'post', pagePath)
-      checkCountyCourtJudgmentRequestedGuard(app, 'post', pagePath)
+      checkAlreadySubmittedGuard(app, method, pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       context('when response not submitted', () => {
         context('when form is invalid', () => {
@@ -85,7 +90,7 @@ describe('Defendant response: response type page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ type: ResponseType.OWE_NONE })
+              .send({ type: ResponseType.DEFENCE })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -97,13 +102,13 @@ describe('Defendant response: response type page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ type: ResponseType.OWE_ALL_PAID_NONE })
+              .send({ type: ResponseType.FULL_ADMISSION })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.taskListPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
-          it('should redirect to reject part of claim page when everything is fine and OWE_SOME_PAID_NONE is selected', async () => {
+          it('should redirect to reject part of claim page when everything is fine and PART_ADMISSION is selected', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveSave()
@@ -111,13 +116,13 @@ describe('Defendant response: response type page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ type: ResponseType.OWE_SOME_PAID_NONE })
+              .send({ type: ResponseType.PART_ADMISSION })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.defenceRejectPartOfClaimPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
-          it('should redirect to reject all of claim page when everything is fine and OWE_NONE is selected', async () => {
+          it('should redirect to reject all of claim page when everything is fine and DEFENCE is selected', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveSave()
@@ -125,7 +130,7 @@ describe('Defendant response: response type page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ type: ResponseType.OWE_NONE })
+              .send({ type: ResponseType.DEFENCE })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.defenceRejectAllOfClaimPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))

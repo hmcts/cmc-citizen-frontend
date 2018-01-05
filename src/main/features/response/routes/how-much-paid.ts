@@ -9,11 +9,12 @@ import { User } from 'idam/user'
 import { ErrorHandling } from 'common/errorHandling'
 import { Claim } from 'claims/models/claim'
 import { DraftService } from 'services/draftService'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { Draft } from '@hmcts/draft-store-client'
 
 async function renderView (form: Form<HowMuchPaid>, res: express.Response, next: express.NextFunction) {
   try {
-    const user: User = res.locals.user
-    const claim: Claim = user.claim
+    const claim: Claim = res.locals.claim
 
     res.render(Paths.defendantHowMuchPaid.associatedView, {
       form: form,
@@ -27,20 +28,26 @@ async function renderView (form: Form<HowMuchPaid>, res: express.Response, next:
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantHowMuchPaid.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    await renderView(new Form(res.locals.user.responseDraft.document.howMuchIsPaid), res, next)
+    const draft: Draft<ResponseDraft> = res.locals.responseDraft
+
+    await renderView(new Form(draft.document.howMuchIsPaid), res, next)
   }))
   .post(
     Paths.defendantHowMuchPaid.uri,
     FormValidator.requestHandler(HowMuchPaid, HowMuchPaid.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<HowMuchPaid> = req.body
-      const user: User = res.locals.user
       if (form.hasErrors()) {
         await renderView(form, res, next)
       } else {
-        user.responseDraft.document.howMuchIsPaid = form.model
-        await new DraftService().save(user.responseDraft, user.bearerToken)
-        res.redirect(Paths.timelinePage.evaluateUri({ externalId: user.claim.externalId }))
+        const claim: Claim = res.locals.claim
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
+        const user: User = res.locals.user
+
+        draft.document.howMuchIsPaid = form.model
+        await new DraftService().save(draft, user.bearerToken)
+
+        res.redirect(Paths.timelinePage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )

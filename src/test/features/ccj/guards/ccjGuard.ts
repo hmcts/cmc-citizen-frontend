@@ -29,7 +29,7 @@ describe('CCJ guard', () => {
   })
 
   it('should redirect to dashboard page when eligibleForCCJ is false', () => {
-    res.locals.user.claim = { eligibleForCCJ: false }
+    res.locals.claim = { eligibleForCCJ: false }
 
     CCJGuard.requestHandler(req, res, next)
     chai.expect(res.redirect).to.have.been.calledWith(Paths.dashboardPage.uri)
@@ -38,7 +38,7 @@ describe('CCJ guard', () => {
   it('should pass when eligibleForCCJ is true', () => {
     const spy = sinon.spy(next)
 
-    res.locals.user.claim = { eligibleForCCJ: true }
+    res.locals.claim = { eligibleForCCJ: true }
 
     CCJGuard.requestHandler(req, res, spy)
 

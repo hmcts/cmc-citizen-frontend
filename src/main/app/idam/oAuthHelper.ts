@@ -6,6 +6,7 @@ import { buildURL } from 'utils/callbackBuilder'
 import { Paths } from 'app/paths'
 import { RoutablePath } from 'common/router/routablePath'
 import { AuthenticationRedirect } from 'utils/authenticationRedirect'
+import { User } from 'idam/user'
 
 const clientId = config.get<string>('oauth.clientId')
 
@@ -38,10 +39,10 @@ export class OAuthHelper implements AuthenticationRedirect {
 
   forUplift (req: express.Request, res: express.Response): string {
     const redirectUri = buildURL(req, Paths.linkDefendantReceiver.uri)
-    const state = res.locals.user.id
-    OAuthHelper.storeStateCookie(req, res, state)
+    const user: User = res.locals.user
+    OAuthHelper.storeStateCookie(req, res, user.id)
 
-    return `${loginPath}/uplift?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}`
+    return `${loginPath}/uplift?response_type=code&state=${user.id}&client_id=${clientId}&redirect_uri=${redirectUri}`
   }
 
   getStateCookie (req: express.Request): string {
