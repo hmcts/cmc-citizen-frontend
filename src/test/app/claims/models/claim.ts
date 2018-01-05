@@ -14,8 +14,10 @@ import { InterestDateType } from 'app/common/interestDateType'
 import moment = require('moment')
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { ResponseType } from 'response/form/models/responseType'
+// or ? import { ResponseType } from 'claims/models/response/responseCommon'
 import { Response } from 'claims/models/response'
 import { FreeMediation, FreeMediationOption } from 'response/form/models/freeMediation'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 describe('Claim', () => {
 
@@ -194,18 +196,25 @@ describe('Claim', () => {
       const claim = buildClaim()
       // Is the line below best practice?
       claim.response = { responseType: ResponseType.OWE_ALL_PAID_ALL } as Response
+      // Or do this below?
+      claim.response.responseType = 'FULL_DEFENCE'
+      claim.response.defenceType = 'ALREADY_PAID'
 
       expect(claim.status).to.be.eql(ClaimStatus.CLAIM_REJECTED)
     })
-    // Todo find out what ResponseType.DEFENCE is. ResponseType remains undefined.
+    // todo find out what Response Type.DEFENCE is. ResponseType remains undefined.
     xit('should return true when defendant has rejected the claim and asked for free mediation', () => {
       const claim = buildClaim()
-      claim.response = { responseType: ResponseType.DEFENCE } as Response
-      claim.response = { freeMediation: FreeMediationOption.YES } as FreeMediation
+      claim.response.responseType = 'FULL_DEFENCE'
+      claim.response.defenceType = 'ALREADY_PAID'
 
-      expect(claim.status).to.be.eql(ClaimStatus.FREE_MEDIATION)
+      FreeMediationOption.all().forEach(option => {
+        const draft = new ResponseDraft()
+        draft.freeMediation = new FreeMediation(option)
+
+        expect(FreeMediationOption.YES).to.be.eql(ClaimStatus.FREE_MEDIATION)
+      })
     })
-
   })
 })
 

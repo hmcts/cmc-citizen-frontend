@@ -123,6 +123,8 @@ export class Claim {
       return ClaimStatus.CCJ_REQUESTED
       // Claimant ('You requested a County Court Judgment on %s. We will contact you within 5 working days.')
       //  -  need to return date
+      // Defendant - '[claim.claimData.claimant.name] requested a County Court Judgment against you on
+      // [claim.countyCourtJudgmentRequestedAt]. We will contact you both within 5 working days.
     }
     /* MISSING
     {% elseif claim.settlementReachedAt  %}
@@ -130,19 +132,23 @@ export class Claim {
      */
     if (toBoolean(config.get<boolean>('featureToggles.offer')) && this.settlement) {
       return ClaimStatus.OFFER_SUBMITTED
-      // '[claim.claimData.defendant.name] wants to settle out of court. View <a href="URL">their offer
+      // Claimant - '[claim.claimData.defendant.name] wants to settle out of court. View <a href="URL">their offer
+      // Defendant - Todo Dont have offer message for defendant
     }
 
     if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
       // Claimant - ('[claim.claimData.defendant.name] has requested an extra 14 days to respond.
-      // They need to respond by [claim.responseDeadline].')
+      // Defendant - TODO - dont have more time requested message
+      // They need to respond by [claim.responseDeadline])
     }
 
     if (this.response && this.response.type === ResponseType.OWE_ALL_PAID_ALL) {
       return ClaimStatus.CLAIM_REJECTED
       // Claimant -  ('[claim.claimData.defendant.name ] has rejected the claim. The case will be reviewed by a judge
       // and might go to court.',
+      // Defendant - 'You’ve rejected the claim. The case will be reviewed by a judge and might go to court.'
+      // Todo -
     }
 
     if (this.response && this.response.type === ResponseType.OWE_NONE && claim.response.freeMediation === 'yes') {
