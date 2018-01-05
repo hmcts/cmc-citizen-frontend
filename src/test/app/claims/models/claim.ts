@@ -13,6 +13,9 @@ import { Interest, InterestType } from 'claim/form/models/interest'
 import { InterestDateType } from 'app/common/interestDateType'
 import moment = require('moment')
 import { ClaimStatus } from 'claims/models/claimStatus'
+import { ResponseType } from 'response/form/models/responseType'
+import { Response } from 'claims/models/response'
+import { FreeMediation, FreeMediationOption } from 'response/form/models/freeMediation'
 
 describe('Claim', () => {
 
@@ -150,11 +153,65 @@ describe('Claim', () => {
     })
   })
 
-  describe('status', () => {
+  describe('claimStatus', () => {
 
-    it('should return eligible for ccj', () => {
-      const claim = new Claim()
+    it('should return true if eligible for ccj', () => {
+      const claim = buildClaim()
+      claim.responseDeadline = moment().subtract(2, 'days')
+
       expect(claim.status).to.be.eql(ClaimStatus.ELIGIBLE_FOR_CCJ)
     })
+
+    it('should return true if a CCJ has been requested', () => {
+      const claim = buildClaim()
+      claim.countyCourtJudgmentRequestedAt = moment()
+
+      expect(claim.status).to.be.eql(ClaimStatus.CCJ_REQUESTED)
+    })
+    it('should return true if an offer has been submitted', () => {
+      const claim = buildClaim()
+      claim.settlement = new Settlement()
+      // feature toggle for offer should be true
+
+      expect(claim.status).to.be.eql(ClaimStatus.OFFER_SUBMITTED)
+    })
+    it('should return true when more time is requested', () => {
+      const claim = buildClaim()
+      claim.moreTimeRequested = true
+
+      expect(claim.status).to.be.eql(ClaimStatus.MORE_TIME_REQUESTED)
+    })
+
+    it('should return true when more time is requested', () => {
+      const claim = buildClaim()
+      claim.moreTimeRequested = true
+
+      expect(claim.status).to.be.eql(ClaimStatus.MORE_TIME_REQUESTED)
+    })
+
+    // TODO Ask radek why he didnt update 'OWE_ALL_PAID_ALL'
+    xit('should return true when defendant has rejected the claim as they have paid all they owe', () => {
+      const claim = buildClaim()
+      // Is the line below best practice?
+      claim.response = { responseType: ResponseType.OWE_ALL_PAID_ALL } as Response
+
+      expect(claim.status).to.be.eql(ClaimStatus.CLAIM_REJECTED)
+    })
+    // Todo find out what ResponseType.DEFENCE is. ResponseType remains undefined.
+    xit('should return true when defendant has rejected the claim and asked for free mediation', () => {
+      const claim = buildClaim()
+      claim.response = { responseType: ResponseType.DEFENCE } as Response
+      claim.response = { freeMediation: FreeMediationOption.YES } as FreeMediation
+
+      expect(claim.status).to.be.eql(ClaimStatus.FREE_MEDIATION)
+    })
+
   })
 })
+
+function buildClaim (): Claim {
+  const claim = new Claim()
+  claim.responseDeadline = moment()
+
+  return claim
+}

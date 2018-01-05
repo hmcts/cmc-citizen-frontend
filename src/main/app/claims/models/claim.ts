@@ -113,7 +113,60 @@ export class Claim {
     return !this.countyCourtJudgmentRequestedAt && this.remainingDays < 0 && !this.respondedAt
   }
 
-  get status () {
-    return ClaimStatus.ELIGIBLE_FOR_CCJ
+  get status (): ClaimStatus {
+    if (this.eligibleForCCJ) {
+      return ClaimStatus.ELIGIBLE_FOR_CCJ
+      // Claimant ('Request a County Court Judgment.')
+    }
+
+    if (this.countyCourtJudgmentRequestedAt) {
+      return ClaimStatus.CCJ_REQUESTED
+      // Claimant ('You requested a County Court Judgment on %s. We will contact you within 5 working days.')
+      //  -  need to return date
+    }
+    /* MISSING
+    {% elseif claim.settlementReachedAt  %}
+    {{ claimSettledStatus(url) }}
+     */
+    if (toBoolean(config.get<boolean>('featureToggles.offer')) && this.settlement) {
+      return ClaimStatus.OFFER_SUBMITTED
+      // '[claim.claimData.defendant.name] wants to settle out of court. View <a href="URL">their offer
+    }
+
+    if (this.moreTimeRequested) {
+      return ClaimStatus.MORE_TIME_REQUESTED
+      // Claimant - ('[claim.claimData.defendant.name] has requested an extra 14 days to respond.
+      // They need to respond by [claim.responseDeadline].')
+    }
+
+    if (this.response && this.response.type === ResponseType.OWE_ALL_PAID_ALL) {
+      return ClaimStatus.CLAIM_REJECTED
+      // Claimant -  ('[claim.claimData.defendant.name ] has rejected the claim. The case will be reviewed by a judge
+      // and might go to court.',
+    }
+
+    if (this.response && this.response.type === ResponseType.OWE_NONE && claim.response.freeMediation === 'yes') {
+
+      // Claimant - '[claim.response.defendant.name] has rejected the claim.
+      // They’ve suggested free mediation on [claim.respondedAt]. You need to respond within 5 working days.')
+    }
+
+    if (this.response) {
+      return ClaimStatus.CLAIM_REJECTED
+      // Claimant - [claim.response.defendant.name] rejected the claim.
+      // The case will be reviewed by a judge and might go to court.'
+    }
+
+    if (!this.response) {
+      return ClaimStatus.NO_RESPONSE
+      // Claimant - (Your claim is being processed. We will email you to explain what to do next.')
+      /*
+      The original below seems wrong Todo check with Damian
+      {% elseif claim.response %}
+         {{ t('%s rejected the claim. The case will be reviewed by a judge and might go to court.',
+        { postProcess: 'sprintf', sprintf: [ claim.response.defendant.name ]})
+       }}
+       */
+    }
   }
 }
