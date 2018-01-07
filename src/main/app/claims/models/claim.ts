@@ -7,6 +7,7 @@ import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { Response } from 'claims/models/response'
+import { ResponseType } from 'claims/models/response/responseCommon'
 import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 import { Interest, InterestType } from 'claim/form/models/interest'
@@ -121,10 +122,6 @@ export class Claim {
 
     if (this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.CCJ_REQUESTED
-      // Claimant ('You requested a County Court Judgment on %s. We will contact you within 5 working days.')
-      //  -  need to return date
-      // Defendant - '[claim.claimData.claimant.name] requested a County Court Judgment against you on
-      // [claim.countyCourtJudgmentRequestedAt]. We will contact you both within 5 working days.
     }
     /* MISSING
     {% elseif claim.settlementReachedAt  %}
@@ -132,47 +129,23 @@ export class Claim {
      */
     if (toBoolean(config.get<boolean>('featureToggles.offer')) && this.settlement) {
       return ClaimStatus.OFFER_SUBMITTED
-      // Claimant - '[claim.claimData.defendant.name] wants to settle out of court. View <a href="URL">their offer
-      // Defendant - Todo Dont have offer message for defendant
     }
 
     if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
-      // Claimant - ('[claim.claimData.defendant.name] has requested an extra 14 days to respond.
-      // Defendant - TODO - dont have more time requested message
-      // They need to respond by [claim.responseDeadline])
     }
 
-    if (this.response && this.response.type === ResponseType.OWE_ALL_PAID_ALL) {
+    if (this.response && this.response.responseType === ResponseType.FULL_DEFENCE && this.response.freeMediation === 'yes') {
+      return ClaimStatus.FREE_MEDIATION
+    }
+
+    if (this.response && this.response.responseType === ResponseType.FULL_DEFENCE) {
       return ClaimStatus.CLAIM_REJECTED
-      // Claimant -  ('[claim.claimData.defendant.name ] has rejected the claim. The case will be reviewed by a judge
-      // and might go to court.',
-      // Defendant - 'You’ve rejected the claim. The case will be reviewed by a judge and might go to court.'
-      // Todo -
     }
-
-    if (this.response && this.response.type === ResponseType.OWE_NONE && claim.response.freeMediation === 'yes') {
-
-      // Claimant - '[claim.response.defendant.name] has rejected the claim.
-      // They’ve suggested free mediation on [claim.respondedAt]. You need to respond within 5 working days.')
-    }
-
-    if (this.response) {
-      return ClaimStatus.CLAIM_REJECTED
-      // Claimant - [claim.response.defendant.name] rejected the claim.
-      // The case will be reviewed by a judge and might go to court.'
-    }
+    // Todo check why im getting redlined
 
     if (!this.response) {
       return ClaimStatus.NO_RESPONSE
-      // Claimant - (Your claim is being processed. We will email you to explain what to do next.')
-      /*
-      The original below seems wrong Todo check with Damian
-      {% elseif claim.response %}
-         {{ t('%s rejected the claim. The case will be reviewed by a judge and might go to court.',
-        { postProcess: 'sprintf', sprintf: [ claim.response.defendant.name ]})
-       }}
-       */
     }
   }
 }

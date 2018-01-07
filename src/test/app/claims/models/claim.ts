@@ -161,60 +161,55 @@ describe('Claim', () => {
       const claim = buildClaim()
       claim.responseDeadline = moment().subtract(2, 'days')
 
-      expect(claim.status).to.be.eql(ClaimStatus.ELIGIBLE_FOR_CCJ)
+      expect(claim.status).to.be.equal(ClaimStatus.ELIGIBLE_FOR_CCJ)
     })
 
     it('should return true if a CCJ has been requested', () => {
       const claim = buildClaim()
       claim.countyCourtJudgmentRequestedAt = moment()
 
-      expect(claim.status).to.be.eql(ClaimStatus.CCJ_REQUESTED)
+      expect(claim.status).to.be.equal(ClaimStatus.CCJ_REQUESTED)
     })
     it('should return true if an offer has been submitted', () => {
       const claim = buildClaim()
       claim.settlement = new Settlement()
       // feature toggle for offer should be true
 
-      expect(claim.status).to.be.eql(ClaimStatus.OFFER_SUBMITTED)
+      expect(claim.status).to.be.equal(ClaimStatus.OFFER_SUBMITTED)
     })
     it('should return true when more time is requested', () => {
       const claim = buildClaim()
       claim.moreTimeRequested = true
 
-      expect(claim.status).to.be.eql(ClaimStatus.MORE_TIME_REQUESTED)
+      expect(claim.status).to.be.equal(ClaimStatus.MORE_TIME_REQUESTED)
     })
 
     it('should return true when more time is requested', () => {
       const claim = buildClaim()
       claim.moreTimeRequested = true
 
-      expect(claim.status).to.be.eql(ClaimStatus.MORE_TIME_REQUESTED)
+      expect(claim.status).to.be.equal(ClaimStatus.MORE_TIME_REQUESTED)
     })
 
-    // TODO Ask radek why he didnt update 'OWE_ALL_PAID_ALL'
-    xit('should return true when defendant has rejected the claim as they have paid all they owe', () => {
+    it('should return true when defendant has rejected the claim and asked for free mediation', () => {
       const claim = buildClaim()
-      // Is the line below best practice?
-      claim.response = { responseType: ResponseType.OWE_ALL_PAID_ALL } as Response
-      // Or do this below?
-      claim.response.responseType = 'FULL_DEFENCE'
-      claim.response.defenceType = 'ALREADY_PAID'
-
-      expect(claim.status).to.be.eql(ClaimStatus.CLAIM_REJECTED)
+      claim.response = {
+        responseType: 'FULL_DEFENCE',
+        defenceType: 'DISPUTE',
+        freeMediation: FreeMediationOption.YES
+      }
+      expect(claim.status).to.be.equal(ClaimStatus.FREE_MEDIATION)
     })
-    // todo find out what Response Type.DEFENCE is. ResponseType remains undefined.
-    xit('should return true when defendant has rejected the claim and asked for free mediation', () => {
+
+    it('should return true when defendant has rejected the claim', () => {
       const claim = buildClaim()
-      claim.response.responseType = 'FULL_DEFENCE'
-      claim.response.defenceType = 'ALREADY_PAID'
-
-      FreeMediationOption.all().forEach(option => {
-        const draft = new ResponseDraft()
-        draft.freeMediation = new FreeMediation(option)
-
-        expect(FreeMediationOption.YES).to.be.eql(ClaimStatus.FREE_MEDIATION)
-      })
+      claim.response = {
+        responseType: 'FULL_DEFENCE',
+        defenceType: 'DISPUTE'
+      }
+      expect(claim.status).to.be.equal(ClaimStatus.CLAIM_REJECTED)
     })
+    // Todo why am i getting redlined in tests
   })
 })
 

@@ -51,11 +51,7 @@
               <td>{{ claim.claimData.defendant.name }}</td>
               <td>{{ claim.totalAmountTillToday | numeral }}</td>
               <td class="mobile-hide">
-                {% if claim.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
-                  Example of Enum Working
-                {% endif %}
-                <hr />
-                {{ responseStatusForClaimant(claim, statusUrl) }}
+                  {{ responseStatusForClaimant(claim, statusUrl) }}
               </td>
             </tr>
             <tr>
