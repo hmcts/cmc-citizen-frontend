@@ -79,5 +79,8 @@
   "oauth": {
     "clientId": "OAUTH_CLIENT_ID",
     "clientSecret": "OAUTH_CLIENT_SECRET"
+  },
+  "postcodeLookup": {
+    "apiKey": "POSTCODE_LOOKUP_API_KEY"
   }
 }

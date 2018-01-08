@@ -6,6 +6,10 @@
 {% set title = t('Money claim') %}
 {% set heading = t('Your details') %}
 
+{% block additional_scripts %}
+  <script src="{{ asset_paths['js'] }}/postcode-lookup.js"></script>
+{% endblock %}
+
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
@@ -22,7 +26,8 @@
             addressSection = {
               heading: 'Your address',
               hint: 'This must be the address where you live or trade.',
-              name: 'address'
+              name: 'address',
+              postcodeLookup: true
             },
             showCorrespondenceAddressSection = true
           )

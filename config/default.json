@@ -76,5 +76,8 @@
   "oauth": {
     "clientId": "cmc_citizen",
     "clientSecret": "123456"
+  },
+  "postcodeLookup": {
+    "apiKey": "AAAAAAA"
   }
 }
