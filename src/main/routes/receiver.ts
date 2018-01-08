@@ -9,7 +9,6 @@ import { ClaimStoreClient } from 'app/claims/claimStoreClient'
 import { User } from 'app/idam/user'
 import { ErrorHandling } from 'common/errorHandling'
 import { Claim } from 'claims/models/claim'
-import * as toBoolean from 'to-boolean'
 import * as Cookies from 'cookies'
 import { AuthToken } from 'idam/authToken'
 import * as config from 'config'
@@ -20,16 +19,14 @@ import { JwtExtractor } from 'idam/jwtExtractor'
 import { RoutablePath } from 'common/router/routablePath'
 import { Draft } from '@hmcts/draft-store-client'
 import { hasTokenExpired } from 'idam/authorizationMiddleware'
-import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
-import { AuthenticationRedirect } from 'utils/authenticationRedirect'
 import { DraftService } from 'services/draftService'
 import { Logger } from '@hmcts/nodejs-logging'
+import { OAuthHelper } from 'idam/oAuthHelper'
 
 const logger = Logger.getLogger('router/receiver')
-const useOauth = toBoolean(config.get<boolean>('featureToggles.idamOauth'))
 const sessionCookie = config.get<string>('session.cookieName')
 const stateCookieName = 'state'
-const authenticationRedirect: AuthenticationRedirect = AuthenticationRedirectFactory.get()
+const authenticationRedirect = OAuthHelper
 
 async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath): Promise<string> {
   if (req.query.state !== authenticationRedirect.getStateCookie(req)) {
@@ -46,9 +43,7 @@ async function getAuthToken (req: express.Request,
                              receiver: RoutablePath = AppPaths.receiver,
                              checkCookie = true): Promise<string> {
   let authenticationToken
-  if (!useOauth && req.query.jwt) {
-    authenticationToken = req.query.jwt
-  } else if (useOauth && req.query.code) {
+  if (req.query.code) {
     authenticationToken = await getOAuthAccessToken(req, receiver)
   } else if (checkCookie) {
     authenticationToken = JwtExtractor.extract(req)
@@ -57,7 +52,7 @@ async function getAuthToken (req: express.Request,
 }
 
 function isDefendantFirstContactPinLogin (req: express.Request): boolean {
-  return useOauth && req.query && req.query.state && req.query.state.match(/[0-9]{3}MC[0-9]{3}/)
+  return req.query && req.query.state && req.query.state.match(/[0-9]{3}MC[0-9]{3}/)
 }
 
 function getLetterHolderId (req: express.Request, user: User): string {
@@ -93,9 +88,7 @@ function loginErrorHandler (req: express.Request,
     logger.debug(`Protected path - expired auth token - access to ${req.path} rejected`)
     return res.redirect(authenticationRedirect.forLogin(req, res, receiver))
   }
-  if (useOauth) {
-    cookies.set(stateCookieName, '', { sameSite: 'lax' })
-  }
+  cookies.set(stateCookieName, '', { sameSite: 'lax' })
   return next(err)
 }
 
@@ -137,9 +130,7 @@ async function retrieveRedirectForLandingPage (user: User): Promise<string> {
 
 function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
   cookies.set(sessionCookie, authenticationToken, { sameSite: 'lax' })
-  if (useOauth) {
-    cookies.set(stateCookieName, '', { sameSite: 'lax' })
-  }
+  cookies.set(stateCookieName, '', { sameSite: 'lax' })
 }
 
 /* tslint:disable:no-default-export */
