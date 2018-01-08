@@ -13,11 +13,11 @@ import { Interest, InterestType } from 'claim/form/models/interest'
 import { InterestDateType } from 'app/common/interestDateType'
 import moment = require('moment')
 import { ClaimStatus } from 'claims/models/claimStatus'
-import { ResponseType } from 'response/form/models/responseType'
-// or ? import { ResponseType } from 'claims/models/response/responseCommon'
-import { Response } from 'claims/models/response'
-import { FreeMediation, FreeMediationOption } from 'response/form/models/freeMediation'
-import { ResponseDraft } from 'response/draft/responseDraft'
+import { ResponseType } from 'claims/models/response/responseCommon'
+import { FreeMediationOption } from 'response/form/models/freeMediation'
+import { individual } from '../../../data/entity/party'
+import { DefenceType } from 'claims/models/response/fullDefenceResponse'
+import { Individual } from 'claims/models/details/yours/individual'
 
 describe('Claim', () => {
 
@@ -190,26 +190,28 @@ describe('Claim', () => {
 
       expect(claim.status).to.be.equal(ClaimStatus.MORE_TIME_REQUESTED)
     })
-
     it('should return true when defendant has rejected the claim and asked for free mediation', () => {
       const claim = buildClaim()
       claim.response = {
-        responseType: 'FULL_DEFENCE',
-        defenceType: 'DISPUTE',
-        freeMediation: FreeMediationOption.YES
+        responseType: ResponseType.FULL_DEFENCE,
+        defenceType: DefenceType.DISPUTE,
+        defence: 'defence reasoning',
+        freeMediation: FreeMediationOption.YES,
+        defendant: new Individual().deserialize(individual)
       }
       expect(claim.status).to.be.equal(ClaimStatus.FREE_MEDIATION)
     })
-
     it('should return true when defendant has rejected the claim', () => {
       const claim = buildClaim()
       claim.response = {
-        responseType: 'FULL_DEFENCE',
-        defenceType: 'DISPUTE'
+        responseType: ResponseType.FULL_DEFENCE,
+        defenceType: DefenceType.DISPUTE,
+        defence: 'defence reasoning',
+        freeMediation: FreeMediationOption.NO,
+        defendant: new Individual().deserialize(individual)
       }
       expect(claim.status).to.be.equal(ClaimStatus.CLAIM_REJECTED)
     })
-    // Todo Talk to Damian. Free Mediation is not applicable or referenced here
   })
 })
 
