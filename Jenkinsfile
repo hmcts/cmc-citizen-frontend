@@ -152,9 +152,9 @@ timestamps {
         notifyBuildFailure channel: channel
         throw err
       } finally {
-        step([$class: 'InfluxDbPublisher',
-               customProjectName: 'CMC Citizen Frontend',
-               target: 'Jenkins Data'])
+        //step([$class: 'InfluxDbPublisher',
+               //customProjectName: 'CMC Citizen Frontend',
+               //target: 'Jenkins Data'])
       }
     }
     milestone()

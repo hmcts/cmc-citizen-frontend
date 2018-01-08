@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@hmcts/cmc-common-frontend@^1.29.0":
-  version "1.29.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.29.0.tgz#ab35f94fa402caf04a03ed0e2e2a7087caf712cd"
+"@hmcts/cmc-common-frontend@^1.31.3":
+  version "1.31.3"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.31.3.tgz#1fa328edd55ab94d3eddc7bcbd5187cb7153adfc"
 
 "@hmcts/cmc-draft-store-middleware@^2.0.0":
   version "2.0.0"
@@ -50,6 +50,13 @@
     moment "^2.19.3"
     on-finished "^2.3.0"
     uuid "^3.1.0"
+
+"@hmcts/postcodeinfo-client@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@hmcts/postcodeinfo-client/-/postcodeinfo-client-1.0.0.tgz#398447fdf3f2c6ba01370bf9fdac86398355841e"
+  dependencies:
+    request "^2.83.0"
+    request-promise-native "^1.0.5"
 
 "@types/body-parser@*":
   version "1.16.8"
@@ -5387,7 +5394,7 @@ request-promise@^0.x:
     lodash "^3.10.0"
     request "^2.34"
 
-request@2, request@^2.0.0, request@^2.34, request@^2.74.0, request@^2.81.0:
+request@2, request@^2.0.0, request@^2.34, request@^2.74.0, request@^2.81.0, request@^2.83.0:
   version "2.83.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.83.0.tgz#ca0b65da02ed62935887808e6f510381034e3356"
   dependencies:
