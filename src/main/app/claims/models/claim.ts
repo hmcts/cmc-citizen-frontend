@@ -115,36 +115,20 @@ export class Claim {
   }
 
   get status (): ClaimStatus {
-    if (this.eligibleForCCJ) {
-      return ClaimStatus.ELIGIBLE_FOR_CCJ
-      // Claimant ('Request a County Court Judgment.')
-    }
 
     if (this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.CCJ_REQUESTED
-    }
-    /* MISSING
-    {% elseif claim.settlementReachedAt  %}
-    {{ claimSettledStatus(url) }}
-     */
-    if (toBoolean(config.get<boolean>('featureToggles.offer')) && this.settlement) {
-      return ClaimStatus.OFFER_SUBMITTED
-    }
-
-    if (this.moreTimeRequested) {
-      return ClaimStatus.MORE_TIME_REQUESTED
-    }
-
-    if (this.response && this.response.responseType === ResponseType.FULL_DEFENCE && this.response.freeMediation === 'yes') {
+    } else if (this.eligibleForCCJ) {
+      return ClaimStatus.ELIGIBLE_FOR_CCJ
+    } else if (this.response && this.response.responseType === ResponseType.FULL_DEFENCE && this.response.freeMediation === 'yes') {
       return ClaimStatus.FREE_MEDIATION
-    }
-
-    if (this.response && this.response.responseType === ResponseType.FULL_DEFENCE) {
+    } else if (this.response && this.response.responseType === ResponseType.FULL_DEFENCE) {
       return ClaimStatus.CLAIM_REJECTED
-    }
-    // Todo check why im getting redlined
-
-    if (!this.response) {
+    } else if (toBoolean(config.get<boolean>('featureToggles.offer')) && this.settlement) {
+      return ClaimStatus.OFFER_SUBMITTED
+    } else if (this.moreTimeRequested) {
+      return ClaimStatus.MORE_TIME_REQUESTED
+    } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
     }
   }

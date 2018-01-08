@@ -209,7 +209,7 @@ describe('Claim', () => {
       }
       expect(claim.status).to.be.equal(ClaimStatus.CLAIM_REJECTED)
     })
-    // Todo why am i getting redlined in tests
+    // Todo Talk to Damian. Free Mediation is not applicable or referenced here
   })
 })
 
