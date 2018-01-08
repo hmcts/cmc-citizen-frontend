@@ -47,19 +47,22 @@ export class Form<Model> {
 
   @ValidateNested()
   model: Model
+  rawData: object
   errors: FormValidationError[]
 
   /**
    * @param model - a object used to fill the form
+   * @param rawData - a raw data used to create model instance
    * @param errors - an array of error objects
    */
-  constructor (model: Model, errors: ValidationError[] = []) {
+  constructor (model: Model, rawData: object = undefined, errors: ValidationError[] = []) {
     this.model = model
+    this.rawData = rawData
     this.errors = this.flatMapDeep(errors)
   }
 
   static empty<Model> (): Form<Model> {
-    return new Form<Model>(null, [])
+    return new Form<Model>(undefined, undefined,[])
   }
 
   hasErrors (): boolean {
@@ -67,14 +70,20 @@ export class Form<Model> {
   }
 
   /**
-   * Get error message associated with first constraint violated for given field name.
+   * Get raw data for given field name.
    *
    * @param fieldName - field name / model property
    */
-  errorFor (fieldName: string): string {
-    return this.errors
-      .filter((error: FormValidationError) => error.fieldName === fieldName)
-      .map((error: FormValidationError) => error.message)[0]
+  rawDataFor (fieldName: string): object {
+    if (this.rawData) {
+      let value: any = this.rawData
+      Converter.asProperty(fieldName).split('.').forEach(property => {
+        value = value ? value[property] : value
+      })
+      return value
+    } else {
+      return undefined
+    }
   }
 
   /**
@@ -92,6 +101,17 @@ export class Form<Model> {
     } else {
       return undefined
     }
+  }
+
+  /**
+   * Get error message associated with first constraint violated for given field name.
+   *
+   * @param fieldName - field name / model property
+   */
+  errorFor (fieldName: string): string {
+    return this.errors
+      .filter((error: FormValidationError) => error.fieldName === fieldName)
+      .map((error: FormValidationError) => error.message)[0]
   }
 
   /**

@@ -27,17 +27,32 @@ export class Address implements CompletableTask {
 
   @IsDefined({ message: ValidationErrors.FIRST_LINE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.FIRST_LINE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
-  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.FIRST_LINE_TOO_LONG, groups: ['claimant', 'defendant', 'response'] })
+  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, {
+    message: ValidationErrors.FIRST_LINE_TOO_LONG,
+    groups: ['claimant', 'defendant', 'response']
+  })
   line1?: string
-  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.SECOND_LINE_TOO_LONG, groups: ['claimant', 'defendant', 'response'] })
+
+  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, {
+    message: ValidationErrors.SECOND_LINE_TOO_LONG,
+    groups: ['claimant', 'defendant', 'response']
+  })
   line2?: string
+
   @IsDefined({ message: ValidationErrors.CITY_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.CITY_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
-  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.CITY_NOT_VALID, groups: ['claimant', 'defendant', 'response'] })
+  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, {
+    message: ValidationErrors.CITY_NOT_VALID,
+    groups: ['claimant', 'defendant', 'response']
+  })
   city?: string
+
   @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
-  @MaxLength(ValidationConstants.POSTCODE_MAX_LENGTH, { message: ValidationErrors.POSTCODE_NOT_VALID, groups: ['claimant', 'defendant', 'response'] })
+  @MaxLength(ValidationConstants.POSTCODE_MAX_LENGTH, {
+    message: ValidationErrors.POSTCODE_NOT_VALID,
+    groups: ['claimant', 'defendant', 'response']
+  })
   postcode?: string
 
   constructor (line1?: string, line2?: string, city?: string, postcode?: string) {
@@ -55,13 +70,12 @@ export class Address implements CompletableTask {
     if (input == null) {
       return input
     }
-    let deserialized: Address = new Address(
-        input.line1,
-        input.line2,
-        input.city,
-        input.postcode
+    return new Address(
+      input.line1,
+      input.line2,
+      input.city,
+      input.postcode
     )
-    return deserialized
   }
 
   deserialize (input?: any): Address {
