@@ -126,7 +126,7 @@ export class Claim {
       return ClaimStatus.CLAIM_REJECTED
     } else if (toBoolean(config.get<boolean>('featureToggles.offer')) && this.settlement) {
       return ClaimStatus.OFFER_SUBMITTED
-    } else if (this.moreTimeRequested) {
+    } else if (this.response === this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE

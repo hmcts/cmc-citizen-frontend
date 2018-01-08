@@ -190,6 +190,7 @@ describe('Claim', () => {
 
       expect(claim.status).to.be.equal(ClaimStatus.MORE_TIME_REQUESTED)
     })
+
     it('should return true when defendant has rejected the claim and asked for free mediation', () => {
       const claim = buildClaim()
       claim.response = {
@@ -201,7 +202,8 @@ describe('Claim', () => {
       }
       expect(claim.status).to.be.equal(ClaimStatus.FREE_MEDIATION)
     })
-    it('should return true when defendant has rejected the claim', () => {
+
+    it('should return true when an individual defendant has rejected the claim with no free mediation', () => {
       const claim = buildClaim()
       claim.response = {
         responseType: ResponseType.FULL_DEFENCE,
