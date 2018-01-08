@@ -26,10 +26,9 @@ import { OAuthHelper } from 'idam/oAuthHelper'
 const logger = Logger.getLogger('router/receiver')
 const sessionCookie = config.get<string>('session.cookieName')
 const stateCookieName = 'state'
-const authenticationRedirect = OAuthHelper
 
 async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath): Promise<string> {
-  if (req.query.state !== authenticationRedirect.getStateCookie(req)) {
+  if (req.query.state !== OAuthHelper.getStateCookie(req)) {
     throw new Error('Invalid state')
   }
   const authToken: AuthToken = await IdamClient.exchangeCode(
@@ -86,7 +85,7 @@ function loginErrorHandler (req: express.Request,
   if (hasTokenExpired(err)) {
     cookies.set(sessionCookie, '', { sameSite: 'lax' })
     logger.debug(`Protected path - expired auth token - access to ${req.path} rejected`)
-    return res.redirect(authenticationRedirect.forLogin(req, res, receiver))
+    return res.redirect(OAuthHelper.forLogin(req, res, receiver))
   }
   cookies.set(stateCookieName, '', { sameSite: 'lax' })
   return next(err)
@@ -164,7 +163,7 @@ export default express.Router()
           retrieveRedirectForLandingPage(res.locals.user)
         )
       } else {
-        res.redirect(authenticationRedirect.forLogin(req, res))
+        res.redirect(OAuthHelper.forLogin(req, res))
       }
     }))
   .get(AppPaths.linkDefendantReceiver.uri,
@@ -201,6 +200,6 @@ export default express.Router()
 
         res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
       } else {
-        res.redirect(authenticationRedirect.forLogin(req, res, AppPaths.linkDefendantReceiver))
+        res.redirect(OAuthHelper.forLogin(req, res, AppPaths.linkDefendantReceiver))
       }
     }))
