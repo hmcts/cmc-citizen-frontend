@@ -16,7 +16,6 @@ export class ValidationErrors {
 
   static readonly POSTCODE_REQUIRED: string = 'Enter postcode'
   static readonly POSTCODE_NOT_VALID: string = 'The postcode must be no longer than $constraint1 characters'
-  static readonly ADDRESS_DROPDOWN_REQUIRED: string = 'Select an address'
 }
 
 export class ValidationConstants {

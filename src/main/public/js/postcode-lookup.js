@@ -7,6 +7,20 @@
     var addressDropdown
     var addressContainer
     var enterAddressManuallyLink
+    var stateHolder
+
+    var State = {
+      PRISTINE: 'PRISTINE',
+      ADDRESS_FOUND: 'ADDRESS_FOUND',
+      ADDRESS_ENTERED: 'ADDRESS_ENTERED'
+    }
+
+    var Error = {
+      MISSING_POSTCODE_ERROR: 'MISSING_POSTCODE_ERROR',
+      UNSUPPORTED_POSTCODE_ERROR: 'UNSUPPORTED_POSTCODE_ERROR',
+      MISSING_ADDRESS_ERROR: 'MISSING_ADDRESS_ERROR',
+      UNKNOWN_ERROR: 'UNKNOWN_ERROR'
+    }
 
     // Private methods
 
@@ -18,28 +32,44 @@
       element.classList.add('hidden')
     }
 
-    function showError (errorCode) {
-      widget.querySelectorAll('.search-error').forEach(function (errorMessage) {
-        errorMessage.classList.add('hidden')
-      })
+    function showError (errorCode, global) {
+      var error = widget.querySelector('.js-error.' + errorCode.toLowerCase().replace(/_/g, '-'));
+      show(error)
 
-      widget.querySelector('.search-error.' + errorCode.toLowerCase().replace(/_/g, '-')).classList.remove('hidden')
-      widget.querySelector('.postcode-search-container').classList.add('form-group-error')
+      var formGroup = error.closest('.form-group');
+      formGroup.classList.add('form-group-error')
+      formGroup.querySelector('input,select').classList.add('form-control-error')
+
+      if (global) {
+        var globalErrors = document.querySelector('.error-summary-list')
+
+        var errorLink = document.createElement("a")
+        errorLink.href = '#' + error.dataset.label
+        errorLink.textContent = error.textContent.trim()
+
+        var globalError = document.createElement("li")
+        globalError.appendChild(errorLink)
+        globalErrors.appendChild(globalError)
+      }
     }
 
-    function clearErrors () {
-      widget.querySelectorAll('.form-group-error').forEach(function (element) {
-        element.classList.remove('form-group-error')
+    function clearErrors (global) {
+      widget.querySelectorAll('.form-group-error,.form-control-error').forEach(function (element) {
+        element.classList.remove('form-group-error', 'form-control-error')
       })
-      widget.querySelectorAll('.form-control-error').forEach(function (element) {
-        element.classList.remove('form-control-error')
-      })
-      widget.querySelectorAll('.error-message').forEach(function (element) {
+      addressContainer.querySelectorAll('.error-message').forEach(function (element) {
         element.remove()
       })
-      widget.querySelectorAll('.search-error').forEach(function (element) {
-        element.classList.add('hidden')
+      widget.querySelectorAll('.js-error').forEach(function (element) {
+        hide(element)
       })
+
+      if (global) {
+        var globalErrors = document.querySelector('.error-summary-list')
+        addressContainer.querySelectorAll('label').forEach(function (label) {
+          globalErrors.querySelector('li a[href="#' + label.id  + '"]').remove()
+        })
+      }
     }
 
     function setAddress (address) {
@@ -56,19 +86,37 @@
       addressContainer.querySelector('.postcode').value = getValueOrEmpty('postcode')
     }
 
-    function lookupPostcode (postcode) {
-      if (!postcode || postcode.trim().length === 0) {
-        showError('MISSING_POSTCODE_ERROR')
-        return
+    function setUserInterfaceState (state) {
+      switch (state) {
+        case State.PRISTINE:
+          hide(addressDropdownContainer)
+          hide(addressContainer)
+          setAddress(undefined)
+          show(enterAddressManuallyLink)
+          break
+        case State.ADDRESS_FOUND:
+          show(addressDropdownContainer)
+          break
+        case State.ADDRESS_ENTERED:
+          show(addressContainer)
+          hide(enterAddressManuallyLink)
+          break
       }
 
-      clearErrors()
+      stateHolder.value = state
+    }
+
+    function lookupPostcode (postcode) {
+      if (!postcode || postcode.trim().length === 0) {
+        showError(Error.MISSING_POSTCODE_ERROR)
+        return
+      }
 
       var xhr = new XMLHttpRequest()
       xhr.open('GET', '/postcode-lookup?postcode=' + encodeURIComponent(postcode))
       xhr.onload = function () {
         if (xhr.status !== 200) {
-          showError('UNKNOWN_ERROR')
+          showError(Error.UNKNOWN_ERROR)
           return
         }
 
@@ -79,7 +127,7 @@
             return postcode.startsWith('BT')
           }
 
-          showError(isNorthernIrelandPostcode(postcode) ? 'UNSUPPORTED_POSTCODE_ERROR' : 'UNKNOWN_ERROR')
+          showError(isNorthernIrelandPostcode(postcode) ? Error.UNSUPPORTED_POSTCODE_ERROR : Error.UNKNOWN_ERROR)
           return
         }
 
@@ -104,7 +152,7 @@
           addressDropdown.appendChild(option)
         })
 
-        show(addressDropdownContainer)
+        setUserInterfaceState(State.ADDRESS_FOUND)
       }
       xhr.send()
     }
@@ -119,20 +167,19 @@
         searchButton.addEventListener('click', function (event) {
           event.preventDefault()
 
-          hide(addressDropdownContainer)
-          hide(addressContainer)
-          show(enterAddressManuallyLink)
+          clearErrors()
+          setUserInterfaceState(State.PRISTINE)
           lookupPostcode(this.previousElementSibling.value)
         })
-
         show(searchContainer)
       }
 
       function initAddressSelectionCapability () {
-        addressDropdownContainer = element.querySelector('.postcode-address-picker')
+        addressDropdownContainer = element.querySelector('.address-picker-container')
 
         addressDropdown = element.querySelector('.postcode-select')
         addressDropdown.addEventListener('change', function () {
+          clearErrors()
           var address = this.value.split(', ')
           setAddress({
             line1: address[0],
@@ -140,35 +187,57 @@
             city: address[2],
             postcode: address[3]
           })
-          show(addressContainer)
-          hide(enterAddressManuallyLink)
+          setUserInterfaceState(State.ADDRESS_ENTERED)
         })
       }
 
       function initEnterAddressManuallyCapability () {
         enterAddressManuallyLink = element.querySelector('.enter-address-manually-link')
-        enterAddressManuallyLink.addEventListener('click', function () {
+        enterAddressManuallyLink.addEventListener('click', function (event) {
+          event.preventDefault()
+
+          clearErrors()
           setAddress(undefined)
-          show(addressContainer)
-          hide(enterAddressManuallyLink)
+          hide(addressDropdownContainer)
+          setUserInterfaceState(State.ADDRESS_ENTERED)
         })
         show(enterAddressManuallyLink)
       }
 
       function restoreState() {
-        function isAnyAddressFieldPopulated () {
-          var result = false
-          addressContainer.querySelectorAll('input').forEach(function (input) {
-            if (input.value !== '') {
-              result = true
-            }
-          })
-          return result
+        if (!stateHolder.value) {
+          function isAnyAddressFieldPopulated () {
+            var result = false
+            addressContainer.querySelectorAll('input').forEach(function (input) {
+              if (input.value !== '') {
+                result = true
+              }
+            })
+            return result
+          }
+
+          if (isAnyAddressFieldPopulated()) {
+            setUserInterfaceState(State.ADDRESS_ENTERED)
+          } else {
+            setUserInterfaceState(State.PRISTINE)
+          }
+          return
         }
 
-        if (isAnyAddressFieldPopulated()) {
-          show(addressContainer)
-          hide(enterAddressManuallyLink)
+        switch (stateHolder.value) {
+          case State.PRISTINE:
+            clearErrors(true)
+            showError(Error.MISSING_POSTCODE_ERROR, true)
+            return
+          case State.ADDRESS_FOUND:
+            clearErrors(true)
+            showError(Error.MISSING_ADDRESS_ERROR, true)
+            lookupPostcode(searchContainer.querySelector('input').value)
+            return
+          case State.ADDRESS_ENTERED:
+            show(addressContainer)
+            hide(enterAddressManuallyLink)
+            return
         }
       }
 
@@ -177,6 +246,7 @@
       initEnterAddressManuallyCapability()
 
       addressContainer = element.querySelector('.address')
+      stateHolder = element.querySelector('input.state-holder')
       widget = element
 
       restoreState()

@@ -31,7 +31,7 @@ export class FormValidator {
       const errors: ValidationError[] = isValidationEnabledFor(req) ? validator.validateSync(model, { groups: validationGroup !== undefined ? [validationGroup] : [] }) : []
       const action: object = req.body.action
 
-      req.body = new Form<T>(model, errors)
+      req.body = new Form<T>(model, req.body, errors)
       if (action) {
         req.body.action = action // Workaround to expose action to request handlers
       }
