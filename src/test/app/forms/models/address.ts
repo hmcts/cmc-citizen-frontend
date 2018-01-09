@@ -159,6 +159,7 @@ describe('Address/CorrespondenceAddress', () => {
           expect(errors.length).to.equal(1)
         })
       })
+      
       context('addressVisible is false and addressSelectorVisible is true', () => {
         it('should reject when address is not selected', () => {
           const address = new ClassFunction()
@@ -168,6 +169,7 @@ describe('Address/CorrespondenceAddress', () => {
           expect(errors.length).to.equal(1)
         })
       })
+
       context('addressVisible is true and addressSelectorVisible is true', () => {
         it('should accept when address is provided', () => {
           const address = new ClassFunction('line1', '', 'city', 'postcode')
