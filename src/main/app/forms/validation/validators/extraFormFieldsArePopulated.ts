@@ -7,23 +7,23 @@ import {
 } from 'class-validator'
 
 @ValidatorConstraint()
-export class AllFieldsArePopulatedConstraint implements ValidatorConstraintInterface {
+export class ExtraFormFieldsArePopulatedConstraint implements ValidatorConstraintInterface {
   validate (value: any, args?: ValidationArguments) {
-    return args.constraints.every(field => args.object[field] && !!args.object[field].trim())
+    return args.constraints.every(field => !!args.object[field])
   }
 }
 
 /**
  * Verifies if all of the fields in given object are populated with "truthy" value.
  */
-export function AllFieldsArePopulated (fields: string[], validationOptions?: ValidationOptions) {
+export function ExtraFormFieldsArePopulated (fields: string[], validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
       constraints: fields,
-      validator: AllFieldsArePopulatedConstraint
+      validator: ExtraFormFieldsArePopulatedConstraint
     })
   }
 }

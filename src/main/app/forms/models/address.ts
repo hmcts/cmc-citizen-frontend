@@ -5,7 +5,7 @@ import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { CompletableTask } from 'app/models/task'
 import { Address as ClaimAddress } from 'claims/models/address'
 import * as toBoolean from 'to-boolean'
-import { AllFieldsArePopulated } from 'forms/validation/validators/allFieldsArePopulated'
+import { ExtraFormFieldsArePopulated } from 'forms/validation/validators/extraFormFieldsArePopulated'
 
 export class ValidationErrors {
   static readonly FIRST_LINE_REQUIRED: string = 'Enter first address line'
@@ -63,7 +63,7 @@ export class Address implements CompletableTask {
   postcode?: string
 
   @ValidateIf(o => !o.addressVisible && !o.addressSelectorVisible, { groups: ['claimant', 'defendant', 'response'] })
-  @AllFieldsArePopulated(['postcode', 'postcodeLookup'], {
+  @ExtraFormFieldsArePopulated(['postcode', 'postcodeLookup'], {
     message: ValidationErrors.POSTCODE_REQUIRED,
     groups: ['claimant', 'defendant', 'response']
   })

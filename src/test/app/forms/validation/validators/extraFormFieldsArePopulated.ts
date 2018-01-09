@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { AllFieldsArePopulatedConstraint } from 'forms/validation/validators/allFieldsArePopulated'
+import { ExtraFormFieldsArePopulatedConstraint } from 'forms/validation/validators/extraFormFieldsArePopulated'
 import { ValidationArguments } from 'class-validator'
 
 function validationArgs (field1: string, field2: string): ValidationArguments {
@@ -12,8 +12,8 @@ function validationArgs (field1: string, field2: string): ValidationArguments {
   }
 }
 
-describe('AllFieldsArePopulatedConstraint', () => {
-  const constraint: AllFieldsArePopulatedConstraint = new AllFieldsArePopulatedConstraint()
+describe('ExtraFormFieldsArePopulatedConstraint', () => {
+  const constraint: ExtraFormFieldsArePopulatedConstraint = new ExtraFormFieldsArePopulatedConstraint()
 
   describe('validate', () => {
 
@@ -34,10 +34,6 @@ describe('AllFieldsArePopulatedConstraint', () => {
 
       it('all fields are unpopulated', () => {
         expect(constraint.validate(undefined, validationArgs(undefined, undefined))).to.equal(false)
-      })
-
-      it('fields are blank', () => {
-        expect(constraint.validate(undefined, validationArgs(' ', '  '))).to.equal(false)
       })
     })
   })
