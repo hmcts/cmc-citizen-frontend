@@ -28,7 +28,7 @@ describe('Claim issue: defendant party type selection page', () => {
       await request(app)
         .get(ClaimPaths.defendantPartyTypeSelectionPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('About them'))
+        .expect(res => expect(res).to.be.successful.withText('Who are you making the claim against?'))
     })
   })
 
@@ -47,7 +47,7 @@ describe('Claim issue: defendant party type selection page', () => {
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ type: undefined })
-          .expect(res => expect(res).to.be.successful.withText('About them', 'div class="error-summary"'))
+          .expect(res => expect(res).to.be.successful.withText('Who are you making the claim against?', 'div class="error-summary"'))
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {

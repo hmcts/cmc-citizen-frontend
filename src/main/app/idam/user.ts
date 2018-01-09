@@ -1,8 +1,3 @@
-import { DraftClaim } from 'app/drafts/models/draftClaim'
-import { Claim } from 'app/claims/models/claim'
-import { ResponseDraft } from 'response/draft/responseDraft'
-import { DraftCCJ } from 'ccj/draft/draftCCJ'
-import { Draft } from '@hmcts/draft-store-client'
 
 export class User {
   id: string
@@ -12,10 +7,6 @@ export class User {
   roles: string[]
   group: string
   bearerToken: string
-  claimDraft: Draft<DraftClaim>
-  claim: Claim
-  responseDraft: Draft<ResponseDraft>
-  ccjDraft: Draft<DraftCCJ>
 
   constructor (id: string,
                email: string,

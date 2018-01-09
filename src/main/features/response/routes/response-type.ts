@@ -8,6 +8,9 @@ import { ResponseType } from 'response/form/models/responseType'
 import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { Draft } from '@hmcts/draft-store-client'
+import { Claim } from 'claims/models/claim'
 
 function renderView (form: Form<Response>, res: express.Response) {
   res.render(Paths.responseTypePage.associatedView, {
@@ -19,7 +22,9 @@ function renderView (form: Form<Response>, res: express.Response) {
 export default express.Router()
   .get(Paths.responseTypePage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      renderView(new Form(res.locals.user.responseDraft.document.response), res)
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+
+      renderView(new Form(draft.document.response), res)
     }))
   .post(
     Paths.responseTypePage.uri,
@@ -31,22 +36,24 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const claim: Claim = res.locals.claim
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
-        user.responseDraft.document.response = form.model
 
-        await new DraftService().save(user.responseDraft, user.bearerToken)
+        draft.document.response = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
-        const responseType = user.responseDraft.document.response.type
+        const responseType = draft.document.response.type
 
         switch (responseType) {
-          case ResponseType.OWE_NONE:
+          case ResponseType.DEFENCE:
             res.redirect(Paths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: externalId }))
             break
-          case ResponseType.OWE_SOME_PAID_NONE:
-            res.redirect(Paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: user.claim.externalId }))
+          case ResponseType.PART_ADMISSION:
+            res.redirect(Paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: claim.externalId }))
             break
-          case ResponseType.OWE_ALL_PAID_NONE:
-            res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
+          case ResponseType.FULL_ADMISSION:
+            res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
             break
           default:
             next(new Error(`Unknown response type: ${responseType}`))

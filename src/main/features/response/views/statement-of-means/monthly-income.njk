@@ -1,0 +1,84 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, textInputInline, poundInputInline, poundInput, linkButton, saveAndContinueButton, errorSummary %}
+
+{% set title = t('Money claim') %}
+{% set heading = t('Monthly income') %}
+
+{% macro incomeRow(index, form) %}
+
+  {% set prefix = 'rows[' + index + ']' %}
+
+  {% set amountKey = prefix + '[amount]' %}
+  {% set amountValue = form.valueFor(amountKey) %}
+  {% set amountError = form.errorFor(amountKey) %}
+
+  {% set descriptionKey = prefix + '[description]' %}
+  {% set descriptionValue = form.valueFor(descriptionKey) %}
+  {% set descriptionError = form.errorFor(descriptionKey) %}
+
+  {% set anyErrorOccurred = amountError or descriptionError %}
+  <div class="triple-column{% if anyErrorOccurred %} form-group-error {% endif %}">
+
+    {% if amountError %}<span id="{{ amountKey }}[label]" class="error-message">{{ t(amountError) }}</span>{% endif %}
+    {% if descriptionError %}<span id="{{ descriptionKey }}[label]" class="error-message">{{ t(descriptionError) }}</span>{% endif %}
+
+    <label class="form-label-bold mobile-show" for="{{ amountKey }}">{{ index + 1 }} {{ t('. What') }}</label>
+    {{ textInputInline(name = descriptionKey, form = form, inputClass='column-1', ariaLabelledBy = 'description-label') }}
+    {{ poundInputInline(name = amountKey, label = (index + 1) + '. How much?', form = form, ariaLabelledBy = 'amount-label') }}
+
+  </div>
+
+{% endmacro %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+
+    <form method="post" novalidate>
+      {{ csrfProtection(csrf) }}
+
+      {{ poundInput(label = 'Salary (take home pay)', name = 'salary', form = form, hint = 'Include overtime, commission, bonuses') }}
+      {{ poundInput(label = 'Universal Credit', name = 'universalCredit', form = form) }}
+      {{ poundInput(label = 'Jobseeker’s Allowance (income based)', name = 'jobSeekerAllowanceIncome', form = form) }}
+      {{ poundInput(label = 'Jobseeker’s Allowance (contribution based)', name = 'jobSeekerAllowanceContribution', form = form) }}
+      {{ poundInput(label = 'Income Support', name = 'incomeSupport', form = form) }}
+      {{ poundInput(label = 'Working Tax Credit', name = 'workingTaxCredit', form = form) }}
+      {{ poundInput(label = 'Child Tax Credit', name = 'childTaxCredit', form = form) }}
+      {{ poundInput(label = 'Child Benefit', name = 'childBenefit', form = form) }}
+      {{ poundInput(label = 'Council Tax Support', name = 'councilTaxSupport', form = form) }}
+      {{ poundInput(label = 'Pension (paid to you)', name = 'pension', form = form) }}
+      {{ poundInput(label = 'Maintenance payments (paid to you)', name = 'maintenance', form = form) }}
+
+      <div class="statement-of-means-container">
+        {% if form.model and form.model.rows.length > 0 %}
+        <div class="multiline">
+          <div class="multiline-rows">
+            <div class="triple-column mobile-hide">
+              <div class="column-1 mobile-hide">
+                <label id="description-label"  class="form-label-bold">{{ t('Name the income') }}</label>
+              </div>
+              <div class="column-4 mobile-hide">
+                <label id="amount-label"  class="form-label-bold">{{ t('Amount') }}</label>
+              </div>
+            </div>
+
+            {% for row in form.model.rows %}
+              {{ incomeRow(loop.index0, form) }}
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        {% if form.model and form.model.canAddMoreRows() %}
+          <div id="add-event-container" class="form-group">
+            {{ linkButton('Add another income', 'action[addRow]', 'button button-secondary') }}
+          </div>
+        {% endif %}
+      </div>
+
+      {{ saveAndContinueButton() }}
+
+    </form>
+  </div>
+</div>
+{% endblock %}

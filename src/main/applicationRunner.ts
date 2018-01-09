@@ -2,8 +2,9 @@ import * as express from 'express'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as https from 'https'
+import { Logger } from '@hmcts/nodejs-logging'
 
-const logger = require('@hmcts/nodejs-logging').getLogger('applicationRunner')
+const logger = Logger.getLogger('applicationRunner')
 
 export class ApplicationRunner {
   static run (app: express.Application): void {

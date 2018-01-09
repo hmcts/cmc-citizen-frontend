@@ -3,13 +3,14 @@ import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
-import { AuthenticationRedirectFactory } from 'app/utils/AuthenticationRedirectFactory'
+import { Logger } from '@hmcts/nodejs-logging'
+import { OAuthHelper } from 'idam/oAuthHelper'
 
-const logger = require('@hmcts/nodejs-logging').getLogger('testing-support')
+const logger = Logger.getLogger('testing-support')
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    res.redirect(AuthenticationRedirectFactory.get().forLogin(req, res))
+    res.redirect(OAuthHelper.forLogin(req, res))
   }
 
   const requiredRoles = [

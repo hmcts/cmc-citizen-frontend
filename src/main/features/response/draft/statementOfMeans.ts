@@ -14,6 +14,8 @@ import { ResponseType } from 'response/form/models/responseType'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { Debts } from 'response/form/models/statement-of-means/debts'
 import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders'
+import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
+import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
 
 export class StatementOfMeans {
   residence?: Residence
@@ -27,6 +29,8 @@ export class StatementOfMeans {
   unemployed?: Unemployed
   bankAccounts?: BankAccounts
   debts?: Debts
+  monthlyIncome?: MonthlyIncome
+  monthlyExpenses?: MonthlyExpenses
   courtOrders?: CourtOrders
 
   static isApplicableFor (responseDraft?: ResponseDraft): boolean {
@@ -40,8 +44,8 @@ export class StatementOfMeans {
   }
 
   private static isResponseApplicable (responseDraft: ResponseDraft) {
-    return responseDraft.response.type === ResponseType.OWE_ALL_PAID_NONE
-      || (responseDraft.response.type === ResponseType.OWE_SOME_PAID_NONE
+    return responseDraft.response.type === ResponseType.FULL_ADMISSION
+      || (responseDraft.response.type === ResponseType.PART_ADMISSION
         && responseDraft.rejectPartOfClaim
         && responseDraft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
       )
@@ -60,6 +64,8 @@ export class StatementOfMeans {
       this.unemployed = new Unemployed().deserialize(input.unemployed)
       this.bankAccounts = new BankAccounts().deserialize(input.bankAccounts)
       this.debts = new Debts().deserialize(input.debts)
+      this.monthlyIncome = new MonthlyIncome().deserialize(input.monthlyIncome)
+      this.monthlyExpenses = new MonthlyExpenses().deserialize(input.monthlyExpenses)
       this.courtOrders = new CourtOrders().deserialize(input.courtOrders)
     }
     return this

@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
+import * as moment from 'moment'
 import { expectValidationError } from './validationUtils'
 import { PayBySetDate, ValidationErrors } from 'forms/models/payBySetDate'
 import { LocalDate } from 'forms/models/localDate'
@@ -65,6 +66,31 @@ describe('PayBySetDate', () => {
             month: 1,
             year: 40
           })))
+
+          expect(errors.length).to.equal(1)
+          expectValidationError(errors, ValidationErrors.DATE_INVALID_YEAR)
+        })
+      })
+
+      context('when pay by set date is known', () => {
+        it('should reject non existing date', () => {
+          const errors = validator.validateSync(new PayBySetDate(new LocalDate(2017, 2, 29)))
+
+          expect(errors.length).to.equal(1)
+          expectValidationError(errors, ValidationErrors.DATE_NOT_VALID)
+        })
+
+        it('should reject past date', () => {
+          const today = moment()
+
+          const errors = validator.validateSync(new PayBySetDate(new LocalDate(today.year(), today.month() + 1, today.date() - 1)))
+
+          expect(errors.length).to.equal(1)
+          expectValidationError(errors, ValidationErrors.DATE_TODAY_OR_IN_FUTURE)
+        })
+
+        it('should reject date with invalid digits in year', () => {
+          const errors = validator.validateSync(new PayBySetDate(new LocalDate(90, 12, 31)))
 
           expect(errors.length).to.equal(1)
           expectValidationError(errors, ValidationErrors.DATE_INVALID_YEAR)

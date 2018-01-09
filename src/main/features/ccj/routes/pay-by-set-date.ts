@@ -7,6 +7,8 @@ import { PayBySetDate } from 'forms/models/payBySetDate'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { ErrorHandling } from 'common/errorHandling'
+import { DraftCCJ } from 'ccj/draft/draftCCJ'
+import { Draft } from '@hmcts/draft-store-client'
 
 function renderView (form: Form<PayBySetDate>, res: express.Response): void {
   res.render(Paths.payBySetDatePage.associatedView, { form: form })
@@ -15,22 +17,25 @@ function renderView (form: Form<PayBySetDate>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.payBySetDatePage.uri, (req: express.Request, res: express.Response) => {
-    const user: User = res.locals.user
-    renderView(new Form(user.ccjDraft.document.payBySetDate), res)
+    const draft: Draft<DraftCCJ> = res.locals.ccjDraft
+    renderView(new Form(draft.document.payBySetDate), res)
   })
   .post(
     Paths.payBySetDatePage.uri,
     FormValidator.requestHandler(PayBySetDate, PayBySetDate.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<PayBySetDate> = req.body
-      const user: User = res.locals.user
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const draft: Draft<DraftCCJ> = res.locals.ccjDraft
+        const user: User = res.locals.user
+
+        draft.document.payBySetDate = form.model
+        draft.document.repaymentPlan = undefined
+        await new DraftService().save(draft, user.bearerToken)
+
         const { externalId } = req.params
-        user.ccjDraft.document.payBySetDate = form.model
-        user.ccjDraft.document.repaymentPlan = undefined
-        await new DraftService().save(user.ccjDraft, user.bearerToken)
         res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
       }
     }))

@@ -17,9 +17,4 @@ describe('Extracting JWT', () => {
 
     expect(JwtExtractor.extract(req)).to.equal(jwtValue)
   })
-
-  it('should return undefined if no cookie', () => {
-    const req = {}
-    expect(JwtExtractor.extract(req)).to.equal(undefined)
-  })
 })

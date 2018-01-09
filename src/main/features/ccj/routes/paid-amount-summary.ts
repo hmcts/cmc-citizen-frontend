@@ -9,6 +9,8 @@ import { InterestType } from 'claim/form/models/interest'
 import { InterestDateType } from 'app/common/interestDateType'
 import { Moment } from 'moment'
 import { calculateInterest } from 'app/common/calculateInterest'
+import { DraftCCJ } from 'ccj/draft/draftCCJ'
+import { Draft } from '@hmcts/draft-store-client'
 
 function getInterestDetails (claim: Claim): object {
   if (claim.claimData.interest.type === InterestType.NO_INTEREST) {
@@ -40,14 +42,14 @@ function getInterestDetails (claim: Claim): object {
 export default express.Router()
   .get(Paths.paidAmountSummaryPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const claim: Claim = res.locals.user.claim
-      const alreadyPaid: number = res.locals.user.ccjDraft.document.paidAmount.amount || 0
+      const claim: Claim = res.locals.claim
+      const draft: Draft<DraftCCJ> = res.locals.ccjDraft
       const { externalId } = req.params
 
       res.render(
         Paths.paidAmountSummaryPage.associatedView, {
           claim: claim,
-          alreadyPaid: alreadyPaid,
+          alreadyPaid: draft.document.paidAmount.amount || 0,
           interestDetails: getInterestDetails(claim),
           nextPageUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
         }

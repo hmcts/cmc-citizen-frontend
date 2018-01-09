@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, poundInput, linkButton, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, poundInputInline, linkButton, saveAndContinueButton, errorSummary %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('List your bank and savings accounts') %}
@@ -35,20 +35,14 @@
       <option value="{{ BankAccountType.OTHER.value }}" {% if typeOfAccountValue === BankAccountType.OTHER %} selected{% endif %}>{{ t(BankAccountType.OTHER.displayValue) }}</option>
     </select>
 
-    <label class="form-label-bold mobile-show" for="{{ isJointKey }}" >{{ t('Joint account') }}</label>
+    <label class="form-label-bold mobile-show" for="{{ isJointKey }}">{{ index + 1 }} {{ t('. Joint account') }}</label>
     <select name="{{ isJointKey }}" id="{{ isJointKey }}" class="form-control column-3 {% if isJointError %} form-control-error {% endif %}">
       <option value="">Choose</option>
       <option value="yes" {% if isJointValue === true %} selected{% endif %}>{{ t('Yes') }}</option>
       <option value="no" {% if isJointValue === false %} selected{% endif %}>{{ t('No') }}</option>
     </select>
 
-    <label class="form-label-bold mobile-show" for="{{ balanceKey }}">{{ t('Balance') }}</label>
-    <span class="input-symbol-pound">
-      <input id="{{ balanceKey }}" name="{{ balanceKey }}"
-             class="form-control column-2 {% if balanceError %} form-control-error {% endif %}""
-             type="number"
-             value="{{ balanceValue | default('') }}">
-    </span>
+    {{ poundInputInline(name = balanceKey, label = ( index + 1 ) + '. Balance', form = form, ariaLabelledBy='account-balance-label') }}
   </div>
 
 {% endmacro %}
@@ -78,10 +72,9 @@
           </div>
 
           <div class="column-3 mobile-hide">
-            <label class="form-label-bold">
+            <label id="account-balance-label" class="form-label-bold">
               {{ t('Balance') }}
             </label>
-            <span class="form-hint"> </span>
           </div>
         </div>
 

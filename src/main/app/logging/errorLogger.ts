@@ -1,7 +1,8 @@
 import * as HttpStatus from 'http-status-codes'
+import { Logger } from '@hmcts/nodejs-logging'
 
 export class ErrorLogger {
-  constructor (public logger = require('@hmcts/nodejs-logging').getLogger('errorLogger.js')) {
+  constructor (public logger = Logger.getLogger('errorLogger.js')) {
     this.logger = logger
   }
 

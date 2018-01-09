@@ -71,7 +71,6 @@
     "clusterMode": "FEATURE_CLUSTER_MODE",
     "testingSupport": "FEATURE_TESTING_SUPPORT",
     "countyCourtJudgment": "FEATURE_CCJ",
-    "idamOauth": "FEATURE_IDAM_OAUTH",
     "fullAdmission": "FEATURE_FULL_ADMISSION",
     "partialAdmission": "FEATURE_PARTIAL_ADMISSION",
     "offer": "FEATURE_OFFER",
@@ -80,5 +79,8 @@
   "oauth": {
     "clientId": "OAUTH_CLIENT_ID",
     "clientSecret": "OAUTH_CLIENT_SECRET"
+  },
+  "postcodeLookup": {
+    "apiKey": "POSTCODE_LOOKUP_API_KEY"
   }
 }

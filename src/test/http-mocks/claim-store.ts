@@ -82,7 +82,8 @@ export const sampleClaimObj = {
 export const sampleDefendantResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: {
-    type: 'OWE_NONE',
+    responseType: 'FULL_DEFENCE',
+    defenceType: 'DISPUTE',
     defence: 'I reject this money claim',
     freeMediation: 'yes',
     defendant: {

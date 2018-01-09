@@ -9,12 +9,9 @@
 <script src="{{ asset_paths['js'] }}/analytics-custom-event-sender.js?2017-10-11"></script>
 
 {% if development %}
-  <script src="http://localhost:35729/livereload.js"></script>
+  <script src="https://localhost:35729/livereload.js"></script>
 
   <script src="{{ asset_paths['js'] }}/lib/htmlcs/HTMLCS.js"></script>
   <script src="{{ asset_paths['js'] }}/lib/htmlcs/Auditor/HTMLCSAuditor.js"></script>
   <script src="{{ asset_paths['js'] }}/a11y.js"></script>
 {% endif %}
-
-{% block additionalScripts %}
-{% endblock %}

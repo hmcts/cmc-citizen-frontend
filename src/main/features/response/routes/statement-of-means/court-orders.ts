@@ -9,6 +9,9 @@ import { User } from 'idam/user'
 import { RoutablePath } from 'common/router/routablePath'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders'
+import { Draft } from '@hmcts/draft-store-client'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { Claim } from 'claims/models/claim'
 
 const page: RoutablePath = StatementOfMeansPaths.courtOrdersPage
 
@@ -33,8 +36,8 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const user: User = res.locals.user
-      renderView(new Form(user.responseDraft.document.statementOfMeans.courtOrders), res)
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      renderView(new Form(draft.document.statementOfMeans.courtOrders), res)
     })
   .post(
     page.uri,
@@ -43,16 +46,19 @@ export default express.Router()
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<CourtOrders> = req.body
-      const user: User = res.locals.user
 
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        form.model.removeExcessRows()
-        user.responseDraft.document.statementOfMeans.courtOrders = form.model
+        const claim: Claim = res.locals.claim
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
+        const user: User = res.locals.user
 
-        await new DraftService().save(user.responseDraft, user.bearerToken)
-        res.redirect(Paths.taskListPage.evaluateUri({ externalId: user.claim.externalId }))
+        form.model.removeExcessRows()
+        draft.document.statementOfMeans.courtOrders = form.model
+
+        await new DraftService().save(draft, user.bearerToken)
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )

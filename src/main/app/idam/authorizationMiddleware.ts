@@ -6,10 +6,11 @@ import * as Cookies from 'cookies'
 import { JwtExtractor } from 'idam/jwtExtractor'
 import { IdamClient } from 'idam/idamClient'
 import { User } from 'app/idam/user'
+import { Logger } from '@hmcts/nodejs-logging'
 
 const sessionCookieName = config.get<string>('session.cookieName')
 
-const logger = require('@hmcts/nodejs-logging').getLogger('middleware/authorization')
+const logger = Logger.getLogger('middleware/authorization')
 
 /**
  * IDAM doesn't tell us what is wrong

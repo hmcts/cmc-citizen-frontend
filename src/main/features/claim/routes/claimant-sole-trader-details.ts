@@ -8,6 +8,9 @@ import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { User } from 'idam/user'
+import { Draft } from '@hmcts/draft-store-client'
 
 function renderView (form: Form<SoleTraderDetails>, res: express.Response): void {
   res.render(Paths.claimantSoleTraderOrSelfEmployedDetailsPage.associatedView, { form: form })
@@ -16,7 +19,9 @@ function renderView (form: Form<SoleTraderDetails>, res: express.Response): void
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.claimantSoleTraderOrSelfEmployedDetailsPage.uri, (req: express.Request, res: express.Response) => {
-    renderView(new Form(res.locals.user.claimDraft.document.claimant.partyDetails as SoleTraderDetails), res)
+    const draft: Draft<DraftClaim> = res.locals.claimDraft
+
+    renderView(new Form(draft.document.claimant.partyDetails as SoleTraderDetails), res)
   })
   .post(
     Paths.claimantSoleTraderOrSelfEmployedDetailsPage.uri,
@@ -26,9 +31,11 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.claimDraft.document.claimant.partyDetails = form.model
+        const draft: Draft<DraftClaim> = res.locals.claimDraft
+        const user: User = res.locals.user
 
-        await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+        draft.document.claimant.partyDetails = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
         res.redirect(Paths.claimantMobilePage.uri)
       }
