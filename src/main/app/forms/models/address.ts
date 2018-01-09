@@ -63,7 +63,7 @@ export class Address implements CompletableTask {
   postcode?: string
 
   @ValidateIf(o => !o.addressVisible && !o.addressSelectorVisible, { groups: ['claimant', 'defendant', 'response'] })
-  @AllFieldsArePopulated(['postcode', 'line1'], {
+  @AllFieldsArePopulated(['postcode', 'postcodeLookup'], {
     message: ValidationErrors.POSTCODE_REQUIRED,
     groups: ['claimant', 'defendant', 'response']
   })
