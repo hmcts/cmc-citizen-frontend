@@ -68,7 +68,6 @@
     "clusterMode": false,
     "testingSupport": false,
     "countyCourtJudgment": false,
-    "idamOauth": false,
     "fullAdmission": false,
     "partialAdmission": false,
     "offer": false,
