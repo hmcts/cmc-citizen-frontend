@@ -115,7 +115,6 @@ export class Claim {
   }
 
   get status (): ClaimStatus {
-
     if (this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.CCJ_REQUESTED
     } else if (this.eligibleForCCJ) {
@@ -126,9 +125,9 @@ export class Claim {
       return ClaimStatus.FREE_MEDIATION
     } else if (this.response && this.response.responseType === ResponseType.FULL_DEFENCE) {
       return ClaimStatus.CLAIM_REJECTED
-    } else if (this.response === this.moreTimeRequested) {
+    } else if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
-    } else if (!this.response) {
+    } else {
       return ClaimStatus.NO_RESPONSE
     }
   }

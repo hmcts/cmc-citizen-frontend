@@ -170,18 +170,19 @@ describe('Claim', () => {
 
       expect(claim.status).to.be.equal(ClaimStatus.CCJ_REQUESTED)
     })
+
     it('should return true if an offer has been submitted', () => {
       const claim = buildClaim()
       claim.settlement = new Settlement()
-      // feature toggle for offer should be true
+      claim.response = {
+        responseType: ResponseType.FULL_DEFENCE,
+        defenceType: DefenceType.DISPUTE,
+        defence: 'defence reasoning',
+        freeMediation: FreeMediationOption.YES,
+        defendant: new Individual().deserialize(individual)
+      }
 
       expect(claim.status).to.be.equal(ClaimStatus.OFFER_SUBMITTED)
-    })
-    it('should return true when more time is requested', () => {
-      const claim = buildClaim()
-      claim.moreTimeRequested = true
-
-      expect(claim.status).to.be.equal(ClaimStatus.MORE_TIME_REQUESTED)
     })
 
     it('should return true when more time is requested', () => {
