@@ -11,7 +11,6 @@
           .addEventListener('click', function (event) {
             event.preventDefault()
 
-            clearPostcodeDropdown(postcodeLookupWidget)
             hidePostcodeDropdown(postcodeLookupWidget)
             clearAddressFields(postcodeLookupWidget)
             lookupPostcode(this.previousElementSibling.value, postcodeLookupWidget)
@@ -114,7 +113,7 @@
   function addressTownOrCity (addressElement) {
     return addressElement.querySelector('.address-town-or-city')
   }
-  
+
   function addressPostcode (addressElement) {
     return addressElement.querySelector('.postcode')
   }
@@ -196,6 +195,7 @@
       nonSelectableOption.text = postcodeResponse.addresses.length + ' addresses found'
       nonSelectableOption.disabled = true
       nonSelectableOption.selected = true
+      clearPostcodeDropdown(postcodeLookupWidget)
       postcodeSelectDropdown.appendChild(nonSelectableOption)
 
       postcodeResponse.addresses.forEach(function (address) {
