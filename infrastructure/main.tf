@@ -1,5 +1,5 @@
 module "citizen-frontend" {
-  source = "git@github.com:contino/moj-module-webapp.git?ref=private-ase"
+  source = "git@github.com:contino/moj-module-webapp.git"
   product = "${var.product}-${var.microservice}"
   location = "${var.location}"
   env = "${var.env}"
