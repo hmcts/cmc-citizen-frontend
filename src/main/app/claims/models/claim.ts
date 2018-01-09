@@ -120,12 +120,12 @@ export class Claim {
       return ClaimStatus.CCJ_REQUESTED
     } else if (this.eligibleForCCJ) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
+    } else if (toBoolean(config.get<boolean>('featureToggles.offer')) && this.settlement && this.response.responseType === ResponseType.FULL_DEFENCE) {
+      return ClaimStatus.OFFER_SUBMITTED
     } else if (this.response && this.response.responseType === ResponseType.FULL_DEFENCE && this.response.freeMediation === 'yes') {
       return ClaimStatus.FREE_MEDIATION
     } else if (this.response && this.response.responseType === ResponseType.FULL_DEFENCE) {
       return ClaimStatus.CLAIM_REJECTED
-    } else if (toBoolean(config.get<boolean>('featureToggles.offer')) && this.settlement) {
-      return ClaimStatus.OFFER_SUBMITTED
     } else if (this.response === this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
     } else if (!this.response) {
