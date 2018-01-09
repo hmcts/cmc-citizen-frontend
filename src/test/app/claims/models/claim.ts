@@ -157,21 +157,21 @@ describe('Claim', () => {
 
   describe('claimStatus', () => {
 
-    it('should return true if eligible for ccj', () => {
+    it('should return ELIGIBLE_FOR_CCJ if defendant has not responded before the deadline', () => {
       const claim = buildClaim()
       claim.responseDeadline = moment().subtract(2, 'days')
 
       expect(claim.status).to.be.equal(ClaimStatus.ELIGIBLE_FOR_CCJ)
     })
 
-    it('should return true if a CCJ has been requested', () => {
+    it('should return CCJ_REQUESTED when a claimant requests a CCJ', () => {
       const claim = buildClaim()
       claim.countyCourtJudgmentRequestedAt = moment()
 
       expect(claim.status).to.be.equal(ClaimStatus.CCJ_REQUESTED)
     })
 
-    it('should return true if an offer has been submitted', () => {
+    it('should return OFFER_SUBMITTED if an offer has been submitted', () => {
       const claim = buildClaim()
       claim.settlement = new Settlement()
       claim.response = {
@@ -185,14 +185,14 @@ describe('Claim', () => {
       expect(claim.status).to.be.equal(ClaimStatus.OFFER_SUBMITTED)
     })
 
-    it('should return true when more time is requested', () => {
+    it('should return MORE_TIME_REQUESTED when more time is requested', () => {
       const claim = buildClaim()
       claim.moreTimeRequested = true
 
       expect(claim.status).to.be.equal(ClaimStatus.MORE_TIME_REQUESTED)
     })
 
-    it('should return true when defendant has rejected the claim and asked for free mediation', () => {
+    it('should return FREE_MEDIATION when defendant has rejected the claim and asked for free mediation', () => {
       const claim = buildClaim()
       claim.response = {
         responseType: ResponseType.FULL_DEFENCE,
@@ -204,7 +204,7 @@ describe('Claim', () => {
       expect(claim.status).to.be.equal(ClaimStatus.FREE_MEDIATION)
     })
 
-    it('should return true when an individual defendant has rejected the claim with no free mediation', () => {
+    it('should return CLAIM_REJECTED when an individual defendant has rejected the claim with no free mediation', () => {
       const claim = buildClaim()
       claim.response = {
         responseType: ResponseType.FULL_DEFENCE,
