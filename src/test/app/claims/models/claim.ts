@@ -156,23 +156,26 @@ describe('Claim', () => {
   })
 
   describe('claimStatus', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim()
+      claim.responseDeadline = moment()
+    })
 
     it('should return ELIGIBLE_FOR_CCJ if defendant has not responded before the deadline', () => {
-      const claim = buildClaim()
       claim.responseDeadline = moment().subtract(2, 'days')
 
       expect(claim.status).to.be.equal(ClaimStatus.ELIGIBLE_FOR_CCJ)
     })
 
     it('should return CCJ_REQUESTED when a claimant requests a CCJ', () => {
-      const claim = buildClaim()
       claim.countyCourtJudgmentRequestedAt = moment()
 
       expect(claim.status).to.be.equal(ClaimStatus.CCJ_REQUESTED)
     })
 
     it('should return OFFER_SUBMITTED if an offer has been submitted', () => {
-      const claim = buildClaim()
       claim.settlement = new Settlement()
       claim.response = {
         responseType: ResponseType.FULL_DEFENCE,
@@ -185,15 +188,20 @@ describe('Claim', () => {
       expect(claim.status).to.be.equal(ClaimStatus.OFFER_SUBMITTED)
     })
 
+    it('should return OFFER_SETTLEMENT_REACHED if an offer has been accepted', () => {
+      claim.settlement = new Settlement()
+      claim.settlementReachedAt = moment()
+
+      expect(claim.status).to.be.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
+    })
+
     it('should return MORE_TIME_REQUESTED when more time is requested', () => {
-      const claim = buildClaim()
       claim.moreTimeRequested = true
 
       expect(claim.status).to.be.equal(ClaimStatus.MORE_TIME_REQUESTED)
     })
 
     it('should return FREE_MEDIATION when defendant has rejected the claim and asked for free mediation', () => {
-      const claim = buildClaim()
       claim.response = {
         responseType: ResponseType.FULL_DEFENCE,
         defenceType: DefenceType.DISPUTE,
@@ -205,7 +213,6 @@ describe('Claim', () => {
     })
 
     it('should return CLAIM_REJECTED when an individual defendant has rejected the claim with no free mediation', () => {
-      const claim = buildClaim()
       claim.response = {
         responseType: ResponseType.FULL_DEFENCE,
         defenceType: DefenceType.DISPUTE,
@@ -215,12 +222,10 @@ describe('Claim', () => {
       }
       expect(claim.status).to.be.equal(ClaimStatus.CLAIM_REJECTED)
     })
+
+    it('should return NO_RESPONSE when a defendant has not responded to the claim yet', () => {
+
+      expect(claim.status).to.be.equal(ClaimStatus.NO_RESPONSE)
+    })
   })
 })
-
-function buildClaim (): Claim {
-  const claim = new Claim()
-  claim.responseDeadline = moment()
-
-  return claim
-}

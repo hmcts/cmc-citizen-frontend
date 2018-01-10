@@ -119,6 +119,8 @@ export class Claim {
       return ClaimStatus.CCJ_REQUESTED
     } else if (this.eligibleForCCJ) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
+    } else if (toBoolean(config.get<boolean>('featureToggles.offer')) && this.settlement && this.settlementReachedAt) {
+      return ClaimStatus.OFFER_SETTLEMENT_REACHED
     } else if (toBoolean(config.get<boolean>('featureToggles.offer')) && this.settlement && this.response.responseType === ResponseType.FULL_DEFENCE) {
       return ClaimStatus.OFFER_SUBMITTED
     } else if (this.response && this.response.responseType === ResponseType.FULL_DEFENCE && this.response.freeMediation === 'yes') {
@@ -127,8 +129,10 @@ export class Claim {
       return ClaimStatus.CLAIM_REJECTED
     } else if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
-    } else {
+    } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
+    } else {
+      throw new Error()
     }
   }
 }
