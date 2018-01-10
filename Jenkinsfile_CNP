@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@feature/fast")
 
 def product = "cmc"
 def component = "citizen-frontend"
