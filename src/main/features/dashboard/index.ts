@@ -6,11 +6,11 @@ import { RouterFinder } from 'common/router/routerFinder'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
-import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
+import { OAuthHelper } from 'idam/oAuthHelper'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    res.redirect(AuthenticationRedirectFactory.get().forLogin(req, res))
+    res.redirect(OAuthHelper.forLogin(req, res))
   }
 
   const requiredRoles = ['cmc-private-beta']
