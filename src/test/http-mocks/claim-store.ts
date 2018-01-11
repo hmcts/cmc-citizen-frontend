@@ -15,6 +15,8 @@ export const sampleClaimObj = {
   referenceNumber: '000MC000',
   createdAt: '2017-07-25T22:45:51.785',
   issuedOn: '2017-07-25',
+  totalAmountTillToday: 200,
+  totalAmountTillDateOfIssue: 200,
   claim: {
     claimants: [
       {
