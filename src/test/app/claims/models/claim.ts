@@ -163,9 +163,9 @@ describe('Claim', () => {
       claim.responseDeadline = moment()
     });
 
-    [true, false].forEach(obj => {
-      it(`should return ELIGIBLE_FOR_CCJ if defendant has not responded before the deadline, more time requested = ${obj.isMoreTimeRequested}`, () => {
-        claim.moreTimeRequested = obj.isMoreTimeRequested
+    [true, false].forEach(isMoreTimeRequested => {
+      it(`should return ELIGIBLE_FOR_CCJ if defendant has not responded before the deadline, more time requested = ${isMoreTimeRequested}`, () => {
+        claim.moreTimeRequested = isMoreTimeRequested
         claim.responseDeadline = moment().subtract(10, 'days')
 
         expect(claim.status).to.be.equal(ClaimStatus.ELIGIBLE_FOR_CCJ)
@@ -173,100 +173,90 @@ describe('Claim', () => {
     });
 
     [true, false].forEach(isMoreTimeRequested => {
-      it(`should return CCJ_REQUESTED when a claimant requests a CCJ and more time requested = ${isMoreTimeRequested}`, () => {
+      it(`should return CCJ_REQUESTED when a claimant requests a CCJ and more time requested = ${isMoreTimeRequested}.`, () => {
         claim.moreTimeRequested = isMoreTimeRequested
         claim.responseDeadline = moment().subtract(10, 'days')
 
         claim.countyCourtJudgmentRequestedAt = moment()
         expect(claim.status).to.be.equal(ClaimStatus.CCJ_REQUESTED)
-      });
-
-      [
-        { isMoreTimeRequested: false, isEligibleForCCJ: false },
-        { isMoreTimeRequested: false, isEligibleForCCJ: true },
-        { isMoreTimeRequested: true, isEligibleForCCJ: false },
-        { isMoreTimeRequested: true, isEligibleForCCJ: true }
-      ].forEach(obj => {
-        it(`should return OFFER_SUBMITTED if an offer has been submitted. More time requested = ${isMoreTimeRequested} and eligibility for a CCJ is ${obj.isEligibleForCCJ}`, () => {
-          claim.moreTimeRequested = obj.isMoreTimeRequested
-          if (obj.isEligibleForCCJ) {
-            claim.responseDeadline = moment().subtract(2, 'days')
-          } else {
-            claim.responseDeadline = moment().add(2, 'days')
-          }
-          claim.settlement = new Settlement()
-          claim.response = {
-            responseType: ResponseType.FULL_DEFENCE,
-            defenceType: DefenceType.DISPUTE,
-            defence: 'defence reasoning',
-            freeMediation: FreeMediationOption.YES,
-            defendant: new Individual().deserialize(individual)
-          }
-
-          expect(claim.status).to.be.equal(ClaimStatus.OFFER_SUBMITTED)
-        });
-
-        [
-          { isMoreTimeRequested: false, isEligibleForCCJ: false },
-          { isMoreTimeRequested: false, isEligibleForCCJ: true },
-          { isMoreTimeRequested: true, isEligibleForCCJ: false },
-          { isMoreTimeRequested: true, isEligibleForCCJ: true }
-        ].forEach(obj => {
-          it(`should return OFFER_SETTLEMENT_REACHED if an offer has been accepted, more time requested = ${obj.isMoreTimeRequested} and eligibility for a CCJ is ${obj.isEligibleForCCJ} `, () => {
-            claim.moreTimeRequested = obj.isMoreTimeRequested
-            if (obj.isEligibleForCCJ) {
-              claim.responseDeadline = moment().subtract(2, 'days')
-            } else {
-              claim.responseDeadline = moment().add(2, 'days')
-            }
-            claim.settlement = new Settlement()
-            claim.settlementReachedAt = moment()
-
-            expect(claim.status).to.be.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
-          })
-        })
-
-        it('should return MORE_TIME_REQUESTED when more time is requested', () => {
-          claim.moreTimeRequested = true
-
-          expect(claim.status).to.be.equal(ClaimStatus.MORE_TIME_REQUESTED)
-        });
-
-        [true, false].forEach(isMoreTimeRequested => {
-          it(`should return FREE_MEDIATION when defendant has rejected the claim and asked for free mediation and more time requested = ${isMoreTimeRequested}`, () => {
-            claim.moreTimeRequested = isMoreTimeRequested
-            claim.response = {
-              responseType: ResponseType.FULL_DEFENCE,
-              defenceType: DefenceType.DISPUTE,
-              defence: 'defence reasoning',
-              freeMediation: FreeMediationOption.YES,
-              defendant: new Individual().deserialize(individual)
-            }
-            expect(claim.status).to.be.equal(ClaimStatus.FREE_MEDIATION)
-          })
-        });
-
-        [true, false].forEach(isMoreTimeRequested => {
-          it(`should return CLAIM_REJECTED when an individual defendant has rejected the claim with no free mediation and more time requested = ${isMoreTimeRequested}`, () => {
-            claim.moreTimeRequested = isMoreTimeRequested
-            claim.response = {
-              responseType: ResponseType.FULL_DEFENCE,
-              defenceType: DefenceType.DISPUTE,
-              defence: 'defence reasoning',
-              freeMediation: FreeMediationOption.NO,
-              defendant: new Individual().deserialize(individual)
-            }
-            expect(claim.status).to.be.equal(ClaimStatus.CLAIM_REJECTED)
-          })
-        })
-
-        it('should return NO_RESPONSE when a defendant has not responded to the claim yet', () => {
-          claim.response = undefined
-
-          expect(claim.status).to.be.equal(ClaimStatus.NO_RESPONSE)
-        })
-
       })
+    });
+
+    [
+      { isMoreTimeRequested: false, isEligibleForCCJ: false },
+      { isMoreTimeRequested: false, isEligibleForCCJ: true },
+      { isMoreTimeRequested: true, isEligibleForCCJ: false },
+      { isMoreTimeRequested: true, isEligibleForCCJ: true }
+    ].forEach(obj => {
+      it(`should return OFFER_SUBMITTED if an offer has been submitted. More time requested = ${obj.isMoreTimeRequested} and eligibility for a CCJ is ${obj.isEligibleForCCJ}`, () => {
+        claim.moreTimeRequested = obj.isMoreTimeRequested
+        if (obj.isEligibleForCCJ) {
+          claim.responseDeadline = moment().subtract(2, 'days')
+        } else {
+          claim.responseDeadline = moment().add(2, 'days')
+        }
+        claim.settlement = new Settlement()
+        claim.response = {
+          responseType: ResponseType.FULL_DEFENCE,
+          defenceType: DefenceType.DISPUTE,
+          defence: 'defence reasoning',
+          freeMediation: FreeMediationOption.YES,
+          defendant: new Individual().deserialize(individual)
+        }
+
+        expect(claim.status).to.be.equal(ClaimStatus.OFFER_SUBMITTED)
+      })
+    });
+
+    [true, false].forEach(isMoreTimeRequested => {
+      it(`should return OFFER_SETTLEMENT_REACHED if an offer has been accepted and more time requested = ${isMoreTimeRequested}`, () => {
+        claim.moreTimeRequested = isMoreTimeRequested
+
+        claim.settlement = new Settlement()
+        claim.settlementReachedAt = moment()
+
+        expect(claim.status).to.be.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
+      })
+    })
+
+    it('should return MORE_TIME_REQUESTED when more time is requested', () => {
+      claim.moreTimeRequested = true
+
+      expect(claim.status).to.be.equal(ClaimStatus.MORE_TIME_REQUESTED)
+    });
+
+    [true, false].forEach(isMoreTimeRequested => {
+      it(`should return FREE_MEDIATION when defendant has rejected the claim and asked for free mediation and more time requested = ${isMoreTimeRequested}`, () => {
+        claim.moreTimeRequested = isMoreTimeRequested
+        claim.response = {
+          responseType: ResponseType.FULL_DEFENCE,
+          defenceType: DefenceType.DISPUTE,
+          defence: 'defence reasoning',
+          freeMediation: FreeMediationOption.YES,
+          defendant: new Individual().deserialize(individual)
+        }
+        expect(claim.status).to.be.equal(ClaimStatus.FREE_MEDIATION)
+      })
+    });
+
+    [true, false].forEach(isMoreTimeRequested => {
+      it(`should return CLAIM_REJECTED when the defendant has rejected the claim with no free mediation and more time requested = ${isMoreTimeRequested}`, () => {
+        claim.moreTimeRequested = isMoreTimeRequested
+        claim.response = {
+          responseType: ResponseType.FULL_DEFENCE,
+          defenceType: DefenceType.DISPUTE,
+          defence: 'defence reasoning',
+          freeMediation: FreeMediationOption.NO,
+          defendant: new Individual().deserialize(individual)
+        }
+        expect(claim.status).to.be.equal(ClaimStatus.CLAIM_REJECTED)
+      })
+    })
+
+    it('should return NO_RESPONSE when a defendant has not responded to the claim yet', () => {
+      claim.response = undefined
+
+      expect(claim.status).to.be.equal(ClaimStatus.NO_RESPONSE)
     })
   })
 })
