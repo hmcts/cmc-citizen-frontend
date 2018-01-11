@@ -1,0 +1,59 @@
+{% extends "layout.njk" %}
+
+{% set title = t('Money claim') %}
+{% from "support.njk" import supportWidget %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <div class="govuk-box-highlight">
+      <h1 class="bold-large">{{ t('Response submitted') }}</h1>
+
+      <p>
+        <strong class="bold">{{ submittedOn | date }}</strong>
+      </p>
+      <p class="issue-receipt-download ">
+        <a href="{{ paths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response as pdf') }}</a>
+      </p>
+    </div>
+
+    <h2 class="heading-medium">{{ t('Your response') }}</h2>
+    <p>
+      {{ t('You admit part of the claim. We`ve emailed %s your response. They can accept or reject it', {
+        postProcess: 'sprintf', sprintf: [ claim.claimData.claimant.name ]}) }}
+    </p>
+    <p>
+      {{ t('View the <a href="%s">claim against you and your response</a>.', {
+        postProcess: 'sprintf', sprintf: [ '/dashboard' ]}) | safe }}
+    </p>
+
+    <h2 class="heading-medium">{{ t('What happens next') }}</h2>
+    <p>
+      {{ t('If they accept your response we`ll email you to explain how you can pay.') }}
+    </p>
+    <p>
+      {{ t('If they reject it the case will be reviewed and might go to a hearing.', ) }}
+    </p>
+    <p>
+      {{ t('We`ll contact you if a hearing date is set and explain how to prepare.', ) }}
+    </p>
+
+    <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
+    <p>
+      {{ t('You can still <a href="%s">settlement the claim out of court</a>. For example, you could offer to fix faulty goods you sold the claimant or suggest a payment.',
+      {
+        postProcess: 'sprintf',
+        sprintf: [OfferPaths.settleOutOfCourtPage.evaluateUri({ externalId: claim.externalId })]
+      }
+      ) | safe }}
+    </p>
+    <p>
+      {{ t('You can avoid getting County Court Judgment if the claimant accepts your offer. The court claim is then closed', ) }}
+    </p>
+    {{ supportWidget() }}
+
+    <br>
+    <a href="#" class="button">Finished</a>
+  </div>
+</div>
+{% endblock %}
