@@ -16,6 +16,7 @@ export class Paths {
   static readonly checkAndSendPage = new RoutablePath(`${responsePath}/check-and-send`)
   static readonly confirmationPage = new RoutablePath(`${responsePath}/confirmation`)
   static readonly counterClaimPage = new RoutablePath(`${responsePath}/counter-claim`)
+  static readonly partialAdmissionPage = new RoutablePath(`${responsePath}/partial-admission`)
   static readonly fullAdmissionPage = new RoutablePath(`${responsePath}/full-admission`)
   static readonly incompleteSubmissionPage = new RoutablePath(`${responsePath}/incomplete-submission`)
   static readonly timelinePage = new RoutablePath(`${responsePath}/timeline`)

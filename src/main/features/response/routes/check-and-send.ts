@@ -19,6 +19,7 @@ import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
+import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
   const claim: Claim = res.locals.claim
@@ -109,7 +110,11 @@ export default express.Router()
             }
             break
           case ResponseType.PART_ADMISSION:
-            break
+            if (draft.document.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH) {
+              break
+            }
+            res.redirect(Paths.partialAdmissionPage.evaluateUri({ externalId: claim.externalId }))
+            return
           case ResponseType.FULL_ADMISSION:
             res.redirect(Paths.fullAdmissionPage.evaluateUri({ externalId: claim.externalId }))
             return
