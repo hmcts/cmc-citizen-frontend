@@ -198,10 +198,21 @@
       clearPostcodeDropdown(postcodeLookupWidget)
       postcodeSelectDropdown.appendChild(nonSelectableOption)
 
+      function line2(address) {
+        var line2 = ''
+        // advance building number to the next line if a building name is also present
+        if (address.buildingName && address.buildingNumber) {
+          line2 += address.buildingNumber + ' '
+        }
+        line2 += address.thoroughfareName || address.dependentLocality
+
+        return line2
+      }
+
       postcodeResponse.addresses.forEach(function (address) {
         var valueFormattedAddress = [
-          (address.organisationName || address.subBuildingName) + ' ' + (address.buildingNumber || address.buildingName || undefined),
-          address.thoroughfareName || address.dependentLocality,
+          (address.organisationName || address.subBuildingName) + ' ' + (address.buildingName || address.buildingNumber || undefined),
+          line2(address),
           address.postTown,
           address.postcode
         ].join(', ')
