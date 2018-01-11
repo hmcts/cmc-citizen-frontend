@@ -7,6 +7,7 @@ import { MomentFactory } from 'common/momentFactory'
 import { InterestMapper } from 'app/pdf/mappers/interestMapper'
 import { MomentFormatter } from 'app/utils/momentFormatter'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
+import { mockCalculateInterestRate } from '../../../http-mocks/claim-store'
 
 const creationDate = MomentFactory.currentDateTime()
 const customInterestDate = creationDate.subtract(10, 'days')
@@ -38,7 +39,13 @@ const customInterestDateClaim = {
 } as Claim
 
 describe('InterestMapper', () => {
+
   describe('createInterestData', () => {
+
+    beforeEach(() => {
+      mockCalculateInterestRate(1)
+    })
+
     it('should use Claim createdAt date if submission interest date is used', () => {
       let mapped: any = InterestMapper.createInterestData(submissionInterestDateClaim)
       expect(mapped.dateClaimedFrom).to.equal(MomentFormatter.formatLongDate(creationDate))
