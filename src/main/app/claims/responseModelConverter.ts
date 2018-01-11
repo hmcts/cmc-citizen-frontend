@@ -13,7 +13,6 @@ import { Company } from 'app/claims/models/details/yours/company'
 import { Address } from 'app/claims/models/address'
 import { Organisation } from 'app/claims/models/details/yours/organisation'
 import { SoleTrader } from 'app/claims/models/details/yours/soleTrader'
-import { HowMuchOwed } from 'claims/models/response/howMuchOwed'
 import { Timeline } from 'claims/models/response/timeline'
 import { Evidence, EvidenceType } from 'claims/models/response/evidence'
 import { PaymentPlan, PaymentSchedule } from 'app/claims/models/response/paymentPlan'
@@ -26,6 +25,11 @@ import { ResponseType as DraftResponseType } from 'response/form/models/response
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { HowMuchOwed as DraftHowMuchOwed } from 'response/form/models/howMuchOwed'
+import { HowMuchOwed } from 'claims/models/response/howMuchOwed'
+import { HowMuchPaid } from 'claims/models/response/howMuchPaid'
+import { PayBySetDate } from 'claims/models/response/payBySetDate'
+import { HowMuchPaid as DraftHowMuchPaid } from 'response/form/models/howMuchPaid'
+import { PayBySetDate as DraftPaymentDate } from 'response/draft/payBySetDate'
 import { Timeline as DraftTimeline } from 'response/form/models/timeline'
 import { Evidence as DraftEvidence } from 'response/form/models/evidence'
 import { EvidenceType as DraftEvidenceType } from 'response/form/models/evidenceType'
@@ -55,15 +59,38 @@ function convertFullDefence (draft: ResponseDraft): FullDefenceResponse {
 }
 
 function convertPartAdmission (draft: ResponseDraft): PartAdmissionResponse {
+  const partAdmissionType = convertPartAdmissionType(draft.rejectPartOfClaim)
+
   return {
     ...convertCommon(draft),
     responseType: ResponseType.PART_ADMISSION,
-    partAdmissionType: convertPartAdmissionType(draft.rejectPartOfClaim),
-    howMuchOwed: convertHowMuchOwed(draft.howMuchOwed),
+    partAdmissionType,
+    ...inferHowMuchOwedOrPaid(),
+    ...inferPayBySetDate(),
     impactOfDispute: draft.impactOfDispute.text,
     timeline: convertTimeline(draft.timeline),
     evidence: convertEvidence(draft.evidence),
     paymentPlan: mapOptional(convertPaymentPlan)(draft.defendantPaymentPlan)
+  }
+
+  function inferHowMuchOwedOrPaid () {
+    switch (partAdmissionType) {
+      case PartAdmissionType.AMOUNT_TOO_HIGH:
+        return { howMuchOwed: convertHowMuchOwed(draft.howMuchOwed) }
+      case PartAdmissionType.PAID_WHAT_BELIEVED_WAS_OWED:
+        return { howMuchPaid: convertHowMuchPaid(draft.howMuchIsPaid) }
+    }
+  }
+  function inferPayBySetDate () {
+    if (
+      draft.payBySetDate &&
+      draft.payBySetDate.paymentDate &&
+      validator.validateSync(draft.payBySetDate.paymentDate).length === 0
+    ) {
+      return { payBySetDate: convertPayBySetDate(draft.payBySetDate) }
+    }
+
+    return {}
   }
 }
 
@@ -143,12 +170,29 @@ function convertPartAdmissionType (draft: RejectPartOfClaim): PartAdmissionType 
     case RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED:
       return PartAdmissionType.PAID_WHAT_BELIEVED_WAS_OWED
   }
+
+  throw new Error(`Unsupported part response type: ${draft.option}`)
 }
 
 function convertHowMuchOwed (draft: DraftHowMuchOwed): HowMuchOwed {
   return {
     amount: draft.amount,
     explanation: draft.text
+  }
+}
+
+function convertHowMuchPaid (draft: DraftHowMuchPaid): HowMuchPaid {
+  return {
+    amount: draft.amount,
+    pastDate: draft.date.toMoment(),
+    explanation: draft.text
+  }
+}
+
+function convertPayBySetDate (draft: DraftPaymentDate): PayBySetDate {
+  return {
+    paymentDate: draft.paymentDate.date.toMoment(),
+    explanation: draft.explanation.text
   }
 }
 

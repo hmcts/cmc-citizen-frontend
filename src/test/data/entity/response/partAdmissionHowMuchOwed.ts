@@ -1,4 +1,5 @@
 import { individual } from '../party'
+import { EvidenceType } from 'claims/models/response/evidence'
 
 export const responseData = {
   defendant: individual,
@@ -11,8 +12,18 @@ export const responseData = {
     explanation: 'reasons'
   },
   impactOfDispute: 'very much',
-  timeline: [],
-  evidence: [],
+  timeline: [
+    {
+      date: 'Jan',
+      description: 'OK'
+    }
+  ],
+  evidence: [
+    {
+      type: EvidenceType.OTHER,
+      description: 'OK'
+    }
+  ],
   statementOfTruth: {
     signerName: 'Signy McSignface',
     signerRole: 'signer'

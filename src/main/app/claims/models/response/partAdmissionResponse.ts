@@ -1,6 +1,8 @@
 import { ResponseCommon, ResponseType } from './responseCommon'
 import { Evidence } from './evidence'
 import { HowMuchOwed } from './howMuchOwed'
+import { HowMuchPaid } from './howMuchPaid'
+import { PayBySetDate } from './payBySetDate'
 import { Timeline } from './timeline'
 import { PaymentPlan } from './paymentPlan'
 
@@ -12,7 +14,9 @@ export enum PartAdmissionType {
 export interface PartAdmissionResponse extends ResponseCommon {
   responseType: ResponseType.PART_ADMISSION
   partAdmissionType: PartAdmissionType
-  howMuchOwed: HowMuchOwed
+  howMuchOwed?: HowMuchOwed
+  howMuchPaid?: HowMuchPaid
+  payBySetDate?: PayBySetDate
   impactOfDispute: string
   timeline: Timeline
   evidence: Evidence
@@ -25,11 +29,21 @@ export namespace PartAdmissionResponse {
       ...ResponseCommon.deserialize(input),
       responseType: ResponseType.PART_ADMISSION,
       partAdmissionType: input.partAdmissionType,
-      howMuchOwed: input.howMuchOwed,
+      ...deserializeHowMuchOwedOrPaid(),
+      ...(input.payBySetDate ? { payBySetDate: input.payBySetDate } : {}),
       impactOfDispute: input.impactOfDispute,
       timeline: input.timeline,
       evidence: input.evidence,
       paymentPlan: PaymentPlan.deserialize(input.paymentPlan)
+    }
+
+    function deserializeHowMuchOwedOrPaid () {
+      switch (input.partAdmissionType) {
+        case PartAdmissionType.AMOUNT_TOO_HIGH:
+          return { howMuchOwed: input.howMuchOwed }
+        case PartAdmissionType.PAID_WHAT_BELIEVED_WAS_OWED:
+          return { howMuchPaid: input.howMuchPaid }
+      }
     }
   }
 }

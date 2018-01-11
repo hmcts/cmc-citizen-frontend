@@ -1,4 +1,5 @@
 import { individualDetails } from '../partyDetails'
+import { EvidenceType } from 'response/form/models/evidenceType'
 
 export const responseDraft = {
   defendantDetails: {
@@ -14,7 +15,7 @@ export const responseDraft = {
     option: 'no'
   },
   freeMediation: {
-    option: 'no'
+    option: 'yes'
   },
   response: {
     type: {
@@ -22,17 +23,36 @@ export const responseDraft = {
     }
   },
   rejectPartOfClaim: {
-    option: 'amountTooHigh'
+    option: 'paidWhatBelievedWasOwed'
   },
-  howMuchOwed: {
+  howMuchPaid: {
     amount: 42,
+    date: {
+      year: 1999,
+      month: 1,
+      day: 1
+    },
     text: 'reasons'
   },
   impactOfDispute: {
     text: 'very much'
   },
-  timeline: [],
-  evidence: [],
+  timeline: {
+    rows: [
+      {
+        date: 'Jan',
+        description: 'OK'
+      }
+    ]
+  },
+  evidence: {
+    rows: [
+      {
+        type: EvidenceType.OTHER,
+        description: 'OK'
+      }
+    ]
+  },
   qualifiedStatementOfTruth: {
     signerName: 'Signy McSignface',
     signerRole: 'signer'

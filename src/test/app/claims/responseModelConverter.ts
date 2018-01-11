@@ -4,7 +4,8 @@ import { ResponseModelConverter } from 'app/claims/responseModelConverter'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { responseDraft as draftTemplate } from '../../data/draft/responseDraft'
-import { responseDraft as partAdmissionDraft } from '../../data/draft/response/partAdmission'
+import { responseDraft as partAdmissionDraftHowMuchOwed } from '../../data/draft/response/partAdmissionHowMuchOwed'
+
 import {
   companyDetails,
   individualDetails,
@@ -14,7 +15,7 @@ import {
 
 import { Response } from 'claims/models/response'
 import { responseData as entityTemplate } from '../../data/entity/responseData'
-import { responseData as partAdmissionResponse } from '../../data/entity/response/partAdmission'
+import { responseData as partAdmissionResponseHowMuchOwed } from '../../data/entity/response/partAdmissionHowMuchOwed'
 import { company, individual, organisation, soleTrader } from '../../data/entity/party'
 
 function prepareResponseDraft (partyDetails: object) {
@@ -46,9 +47,9 @@ describe('ResponseModelConverter', () => {
     })
   })
 
-  it('converts part admission response', () => {
-    const draft = new ResponseDraft().deserialize(partAdmissionDraft)
-    const response = Response.deserialize(partAdmissionResponse)
+  it('converts part admission response when reject part of claim is amountTooHigh', () => {
+    const draft = new ResponseDraft().deserialize(partAdmissionDraftHowMuchOwed)
+    const response = Response.deserialize(partAdmissionResponseHowMuchOwed)
 
     expect(ResponseModelConverter.fromDraft(draft)).to.deep.equal(response)
   })
