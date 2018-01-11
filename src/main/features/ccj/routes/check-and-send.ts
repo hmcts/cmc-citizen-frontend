@@ -30,7 +30,7 @@ function convertToPartyDetails (party: Party): PartyDetails {
   return plainToClass(PartyDetails, party)
 }
 
-function renderView (form: Form<Declaration>, req: express.Request, res: express.Response): void {
+async function renderView (form: Form<Declaration>, req: express.Request, res: express.Response): Promise<void> {
   const claim: Claim = res.locals.claim
   const draft: Draft<DraftCCJ> = res.locals.ccjDraft
 
@@ -39,12 +39,14 @@ function renderView (form: Form<Declaration>, req: express.Request, res: express
     (defendant as IndividualDetails).dateOfBirth = draft.document.defendantDateOfBirth
   }
 
+  const totalAmountTillToday: number = await claim.totalAmountTillToday
+
   res.render(Paths.checkAndSendPage.associatedView, {
     form: form,
     claim: claim,
     draft: draft.document,
     defendant: defendant,
-    amountToBePaid: claim.totalAmountTillToday - (draft.document.paidAmount.amount || 0),
+    amountToBePaid: totalAmountTillToday - (draft.document.paidAmount.amount || 0),
     ...prepareUrls(req.params.externalId)
   })
 }
@@ -70,10 +72,10 @@ function getStatementOfTruthClassFor (claim: Claim): { new(): Declaration | Qual
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.checkAndSendPage.uri, (req: express.Request, res: express.Response) => {
+  .get(Paths.checkAndSendPage.uri, async (req: express.Request, res: express.Response) => {
     const claim: Claim = res.locals.claim
     const StatementOfTruthClass = getStatementOfTruthClassFor(claim)
-    renderView(new Form(new StatementOfTruthClass()), req, res)
+    await renderView(new Form(new StatementOfTruthClass()), req, res)
   })
   .post(
     Paths.checkAndSendPage.uri,
@@ -82,7 +84,7 @@ export default express.Router()
       const form: Form<Declaration | QualifiedDeclaration> = req.body
 
       if (form.hasErrors()) {
-        renderView(form, req, res)
+        await renderView(form, req, res)
       } else {
         const claim: Claim = res.locals.claim
         const draft: Draft<DraftCCJ> = res.locals.ccjDraft

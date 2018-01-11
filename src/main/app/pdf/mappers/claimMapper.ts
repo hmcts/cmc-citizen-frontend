@@ -5,18 +5,18 @@ import { Claim } from 'claims/models/claim'
 
 export class ClaimMapper {
 
-  static createClaimDetails (claim: Claim): object {
+  static async createClaimDetails (claim: Claim): Promise<object> {
     const data = {
       submittedDate: MomentFormatter.formatLongDateAndTime(claim.createdAt),
       claimNumber: claim.claimNumber,
       amount: NumberFormatter.formatMoney(claim.claimData.amount.totalAmount()),
       issueFee: NumberFormatter.formatMoney(claim.claimData.paidFeeAmount),
-      totalAmountTillDateOfIssue: NumberFormatter.formatMoney(claim.totalAmountTillDateOfIssue),
+      totalAmountTillDateOfIssue: NumberFormatter.formatMoney(await claim.totalAmountTillDateOfIssue),
       reason: claim.claimData.reason
     }
 
     if (claim.claimData.interest) {
-      data['interest'] = InterestMapper.createInterestData(claim)
+      data['interest'] = await InterestMapper.createInterestData(claim)
     }
 
     if (claim.claimData.statementOfTruth) {

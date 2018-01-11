@@ -18,6 +18,8 @@ claimStoreMock.resolveRetrieveClaimByExternalId({
   countyCourtJudgmentRequestedAt: '2017-08-09T11:51:28.144'
 }).persist()
 
+claimStoreMock.mockCalculateInterestRate(1).persist()
+
 feesMock.resolveCalculateIssueFee().persist()
 feesMock.resolveCalculateHearingFee().persist()
 feesMock.resolveGetIssueFeeRangeGroup().persist()

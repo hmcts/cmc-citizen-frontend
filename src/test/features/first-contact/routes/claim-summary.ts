@@ -47,6 +47,10 @@ describe('Defendant first contact: claim summary page', () => {
 
       it('should return 200 and render view when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001')
+        claimStoreServiceMock.mockCalculateInterestRate(1)
+        claimStoreServiceMock.mockCalculateInterestRate(1)
+        claimStoreServiceMock.mockCalculateInterestRate(1)
+        claimStoreServiceMock.mockCalculateInterestRate(1)
 
         await request(app)
           .get(Paths.claimSummaryPage.uri)
