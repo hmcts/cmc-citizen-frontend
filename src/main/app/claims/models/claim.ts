@@ -13,6 +13,7 @@ import { Offer } from 'claims/models/offer'
 import { Interest, InterestType } from 'claim/form/models/interest'
 import { InterestDate } from 'claims/models/interestDate'
 import { ClaimStatus } from 'claims/models/claimStatus'
+import { FeatureToggles } from 'utils/featureToggles'
 
 export class Claim {
   id: number
@@ -117,12 +118,12 @@ export class Claim {
   get status (): ClaimStatus {
     if (this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.CCJ_REQUESTED
+    } else if (FeatureToggles.isEnabled('offer') && this.settlement && this.settlementReachedAt) {
+      return ClaimStatus.OFFER_SETTLEMENT_REACHED
+    } else if (FeatureToggles.isEnabled('offer') && this.settlement && this.response.responseType === ResponseType.FULL_DEFENCE) {
+      return ClaimStatus.OFFER_SUBMITTED
     } else if (this.eligibleForCCJ) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
-    } else if (toBoolean(config.get<boolean>('featureToggles.offer')) && this.settlement && this.settlementReachedAt) {
-      return ClaimStatus.OFFER_SETTLEMENT_REACHED
-    } else if (toBoolean(config.get<boolean>('featureToggles.offer')) && this.settlement && this.response.responseType === ResponseType.FULL_DEFENCE) {
-      return ClaimStatus.OFFER_SUBMITTED
     } else if (this.response && this.response.responseType === ResponseType.FULL_DEFENCE && this.response.freeMediation === 'yes') {
       return ClaimStatus.FREE_MEDIATION
     } else if (this.response && this.response.responseType === ResponseType.FULL_DEFENCE) {
@@ -132,7 +133,7 @@ export class Claim {
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
     } else {
-      throw new Error()
+      throw new Error('Unknown Status')
     }
   }
 }
