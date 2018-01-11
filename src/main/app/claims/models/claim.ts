@@ -14,6 +14,7 @@ import { Interest, InterestType } from 'claim/form/models/interest'
 import { InterestDate } from 'claims/models/interestDate'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { FeatureToggles } from 'utils/featureToggles'
+import { FreeMediationOption } from 'response/form/models/freeMediation'
 
 export class Claim {
   id: number
@@ -118,15 +119,15 @@ export class Claim {
   get status (): ClaimStatus {
     if (this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.CCJ_REQUESTED
-    } else if (FeatureToggles.isEnabled('offer') && this.settlement && this.settlementReachedAt) {
+    } else if (this.isSettlementReached()) {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
-    } else if (FeatureToggles.isEnabled('offer') && this.settlement && this.response.responseType === ResponseType.FULL_DEFENCE) {
+    } else if (this.isOfferSubmitted()) {
       return ClaimStatus.OFFER_SUBMITTED
     } else if (this.eligibleForCCJ) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
-    } else if (this.response && this.response.responseType === ResponseType.FULL_DEFENCE && this.response.freeMediation === 'yes') {
+    } else if (this.isFreeMediationRequested()) {
       return ClaimStatus.FREE_MEDIATION
-    } else if (this.response && this.response.responseType === ResponseType.FULL_DEFENCE) {
+    } else if (this.isClaimRejected()) {
       return ClaimStatus.CLAIM_REJECTED
     } else if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
@@ -135,5 +136,23 @@ export class Claim {
     } else {
       throw new Error('Unknown Status')
     }
+  }
+
+  private isFreeMediationRequested () {
+    return this.response && this.response.responseType === ResponseType.FULL_DEFENCE
+      && this.response.freeMediation === FreeMediationOption.YES
+  }
+
+  private isOfferSubmitted () {
+    return FeatureToggles.isEnabled('offer')
+      && this.settlement && this.response && this.response.responseType === ResponseType.FULL_DEFENCE
+  }
+
+  private isSettlementReached () {
+    return FeatureToggles.isEnabled('offer') && this.settlement && this.settlementReachedAt
+  }
+
+  private isClaimRejected () {
+    return this.response && this.response.responseType === ResponseType.FULL_DEFENCE
   }
 }
