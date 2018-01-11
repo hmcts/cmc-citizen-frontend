@@ -183,7 +183,7 @@ describe('Defendant response: check and send page', () => {
             })
           })
 
-          context('when part admission response type is picked', () => {
+          context('when response is part admission - amount too high', () => {
             beforeEach(() => {
               draftStoreServiceMock.resolveFind(draftType, {
                 response: { type: ResponseType.PART_ADMISSION },
@@ -223,6 +223,21 @@ describe('Defendant response: check and send page', () => {
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.counterClaimPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          })
+
+          it('should redirect to partial-admission handoff page when defendant response is part admission - paid what I believe I owe', async () => {
+            draftStoreServiceMock.resolveFind('response', {
+              response: { type: ResponseType.PART_ADMISSION },
+              rejectPartOfClaim: { option: RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED },
+              howMuchIsPaid: { amount: 1, text: 'reason', date: { year: 2013, month: 9, day: 17 } }
+            })
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ signed: 'true', type: SignatureType.BASIC })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.partialAdmissionPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
           it('should redirect to full-admission handoff page when defendant response is full admission', async () => {
