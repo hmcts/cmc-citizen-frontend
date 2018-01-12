@@ -46,13 +46,13 @@ describe('InterestMapper', () => {
       mockCalculateInterestRate(1)
     })
 
-    it('should use Claim createdAt date if submission interest date is used', () => {
-      let mapped: any = InterestMapper.createInterestData(submissionInterestDateClaim)
+    it('should use Claim createdAt date if submission interest date is used', async () => {
+      let mapped: any = await InterestMapper.createInterestData(submissionInterestDateClaim)
       expect(mapped.dateClaimedFrom).to.equal(MomentFormatter.formatLongDate(creationDate))
     })
 
-    it('should use provided interest date if specific interest date is used', () => {
-      let mapped: any = InterestMapper.createInterestData(customInterestDateClaim)
+    it('should use provided interest date if specific interest date is used', async () => {
+      let mapped: any = await InterestMapper.createInterestData(customInterestDateClaim)
       expect(mapped.dateClaimedFrom).to.equal(MomentFormatter.formatLongDate(customInterestDate))
     })
   })

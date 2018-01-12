@@ -5,14 +5,14 @@ import { ClaimAmountBreakdown } from 'features/claim/form/models/claimAmountBrea
 import { DraftClaim } from 'app/drafts/models/draftClaim'
 
 export async function interestAmount (claimDraft: DraftClaim): Promise<number> {
-  const interestRate = claimDraft.interest
+  const interest = claimDraft.interest
   const breakdown: ClaimAmountBreakdown = claimDraft.amount
   const interestDate = claimDraft.interestDate
   const claimAmount: number = breakdown.totalAmount()
 
   return calculateInterest(
     claimAmount,
-    interestRate,
+    interest,
     interestDate.type === InterestDateType.CUSTOM ? interestDate.date.toMoment() : MomentFactory.currentDate()
   )
 }
