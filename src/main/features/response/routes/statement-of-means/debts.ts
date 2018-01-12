@@ -12,17 +12,12 @@ import { Debts } from 'response/form/models/statement-of-means/debts'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
+import { makeSureThereIsAtLeastOneRow } from 'forms/utils/multiRowFormUtils'
 
 const page: RoutablePath = StatementOfMeansPaths.debtsPage
 
-function makeSureThereIsAtLeastOneRow (form: Form<Debts>) {
-  if (form.model.getPopulatedRowsOnly().length === 0) {
-    form.model.appendRow()
-  }
-}
-
 function renderView (form: Form<Debts>, res: express.Response): void {
-  makeSureThereIsAtLeastOneRow(form)
+  makeSureThereIsAtLeastOneRow(form.model)
   res.render(page.associatedView, { form: form })
 }
 
