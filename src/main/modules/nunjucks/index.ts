@@ -26,6 +26,7 @@ import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { DashboardUrlHelper } from 'dashboard/helpers/dashboardUrlHelper'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
+import { ClaimStatus } from 'claims/models/claimStatus'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -99,6 +100,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('DashboardUrlHelper', DashboardUrlHelper)
     nunjucksEnv.addGlobal('UnemploymentType', UnemploymentType)
     nunjucksEnv.addGlobal('BankAccountType', BankAccountType)
+    nunjucksEnv.addGlobal('ClaimStatus', ClaimStatus)
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

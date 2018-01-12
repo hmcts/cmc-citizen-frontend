@@ -7,6 +7,7 @@ export type Response
 const deserializers = {
   [ResponseType.FULL_DEFENCE]: FullDefenceResponse.deserialize
 }
+
 export namespace Response {
   export function deserialize (input: any): Response {
     return deserializers[input.responseType](input)
