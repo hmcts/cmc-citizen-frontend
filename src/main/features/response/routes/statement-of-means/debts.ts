@@ -15,7 +15,14 @@ import { Draft } from '@hmcts/draft-store-client'
 
 const page: RoutablePath = StatementOfMeansPaths.debtsPage
 
+function makeSureThereIsAtLeastOneRow (form: Form<Debts>) {
+  if (form.model.getPopulatedRowsOnly().length === 0) {
+    form.model.appendRow()
+  }
+}
+
 function renderView (form: Form<Debts>, res: express.Response): void {
+  makeSureThereIsAtLeastOneRow(form)
   res.render(page.associatedView, { form: form })
 }
 
