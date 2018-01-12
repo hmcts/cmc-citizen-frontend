@@ -29,18 +29,18 @@ export const responseDraft = {
     amount: 42,
     text: 'reasons'
   },
-  // payBySetDate: {
-  //   paymentDate: {
-  //     date: {
-  //       year: 1988,
-  //       month: 2,
-  //       day: 10
-  //     }
-  //   },
-  //   explanation: {
-  //     text: 'I can not pay now'
-  //   }
-  // },
+  payBySetDate: {
+    paymentDate: {
+      date: {
+        year: 1988,
+        month: 2,
+        day: 10
+      }
+    },
+    explanation: {
+      text: 'I can not pay now'
+    }
+  },
   impactOfDispute: {
     text: 'very much'
   },
