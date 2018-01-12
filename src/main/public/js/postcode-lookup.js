@@ -73,7 +73,7 @@
       })
   })
 
-  function show(element) {
+  function show (element) {
     element.classList.remove('hidden', 'js-hidden')
   }
 
@@ -173,6 +173,16 @@
     postcodeLookupWidget.querySelector('.postcode-search-container').classList.add('form-group-error')
   }
 
+  function hideAddressError (postcodeLookupWidget) {
+    var northernIrelandErrorMessage = postcodeLookupWidget.querySelector('.postcode-search-error-ni')
+    var genericErrorMessage = postcodeLookupWidget.querySelector('.postcode-search-error')
+
+    hide(northernIrelandErrorMessage)
+    hide(genericErrorMessage)
+
+    postcodeLookupWidget.querySelector('.postcode-search-container').classList.remove('form-group-error')
+  }
+
   function handlePostcodeError (isNorthernIrelandPostcode, postcodeLookupWidget) {
     showAddressError(isNorthernIrelandPostcode, postcodeLookupWidget)
     show(addressSection(postcodeLookupWidget))
@@ -206,7 +216,7 @@
       clearPostcodeDropdown(postcodeLookupWidget)
       postcodeSelectDropdown.appendChild(nonSelectableOption)
 
-      function line2(address) {
+      function line2 (address) {
         var line2 = ''
         // advance building number to the next line if a building name is also present
         if (address.buildingName && address.buildingNumber) {
@@ -233,9 +243,7 @@
       })
 
       show(postcodeAddressPicker(postcodeLookupWidget))
-      postcodeLookupWidget.querySelector('.postcode-search-container')
-        .classList.remove('form-group-error')
-
+      hideAddressError(postcodeLookupWidget)
     }
     xhr.send()
   }
