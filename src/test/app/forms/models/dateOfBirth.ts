@@ -84,7 +84,6 @@ describe('DateOfBirth', () => {
         const over150YearsAgo = moment().subtract(151, 'years')
 
         const errors = validator.validateSync(dateOfBirth(over150YearsAgo.year(), over150YearsAgo.month() + 1, over150YearsAgo.date()))
-
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.DATE_NOT_VALID)
       })

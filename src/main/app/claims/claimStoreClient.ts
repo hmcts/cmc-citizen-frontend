@@ -25,7 +25,7 @@ export class ClaimStoreClient {
   }
 
   static saveResponseForUser (claimId: number, draft: Draft<ResponseDraft>, user: User): Promise<void> {
-    const response = ResponseModelConverter.convert(draft.document)
+    const response = ResponseModelConverter.fromDraft(draft.document)
 
     return request.post(`${claimStoreResponsesApiUrl}/${claimId}/defendant/${user.id}`, {
       body: response,

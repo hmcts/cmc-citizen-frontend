@@ -2,6 +2,7 @@ import * as express from 'express'
 import { Paths } from 'response/paths'
 import { User } from 'idam/user'
 import { Claim } from 'claims/models/claim'
+import { ResponseType } from 'claims/models/response/responseCommon'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -10,7 +11,12 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const user: User = res.locals.user
 
-      res.render(Paths.confirmationPage.associatedView, {
+      const views = {
+        [ResponseType.FULL_DEFENCE]: Paths.confirmationPage.associatedView,
+        [ResponseType.PART_ADMISSION]: Paths.partAdmissionAmountTooHigh.associatedView
+      }
+
+      res.render(views[claim.response.responseType], {
         claim: claim,
         submittedOn: claim.respondedAt,
         defendantEmail: user.email,
