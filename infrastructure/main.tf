@@ -1,3 +1,7 @@
+locals {
+  aseName = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
+}
+
 module "citizen-frontend" {
   source = "git@github.com:contino/moj-module-webapp.git"
   product = "${var.product}-${var.microservice}"
@@ -34,7 +38,7 @@ module "citizen-frontend" {
     DRAFT_STORE_URL = "${var.draft-store-api-url}"
 
     // Our service dependencies
-    CLAIM_STORE_URL = "${var.claim-store-api-url}"
-    PDF_SERVICE_URL = "${var.pdf-service-api-url}"
+    CLAIM_STORE_URL = "http://cmc-claim-store-${var.env}.service.${local.aseName}.internal"
+    PDF_SERVICE_URL = "http://cmc-pdf-service-${var.env}.service.${local.aseName}.internal"
   }
 }

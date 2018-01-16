@@ -31,47 +31,32 @@ variable "node-uv-threadpool-size" {
   default = "64"
 }
 
-// Our service dependencies
-variable "claim-store-api-url" {
-  type = "string"
-  default = "https://unknown-claim-store-api-url.reform.hmcts.net"
-}
-
-variable "pdf-service-api-url" {
-  type = "string"
-  default = "https://unknown-pdf-service-api-url.reform.hmcts.net"
-}
-
-// Draft store
 variable "draft-store-api-url" {
   type = "string"
-  default = "https://unknown-draft-store-api-url.reform.hmcts.net"
+  default = "https://testdraftstorelb.moneyclaim.reform.hmcts.net:4302"
 }
 
-// Payments
 variable "payments-api-url" {
   type = "string"
-  default = "https://unknown-payments-api-url.reform.hmcts.net"
+  default = "https://test.payments.reform.hmcts.net:4421"
 }
 
-// Fees
 variable "fees-api-url" {
   type = "string"
-  default = "https://unknown-fees-api-url.reform.hmcts.net"
+  default = "https://test.fees-register.reform.hmcts.net:4431"
 }
 
-// IDAM
 variable "idam-api-url" {
   type = "string"
-  default = "https://unknown-idam-api-url.reform.hmcts.net"
+  default = "http://betaDevBccidamAppLB.reform.hmcts.net:4551"
 }
 
 variable "authentication-web-url" {
   type = "string"
-  default = "https://unknown-authentication-web-url.reform.hmcts.net"
+  default = "https://idam-test.dev.ccidam.reform.hmcts.net"
 }
 
 variable "service-2-service-auth-url" {
   type = "string"
-  default = "https://unknown-service-2-service-auth-url.reform.hmcts.net"
+  default = "http://betaDevBccidamAppLB.reform.hmcts.net:4552"
 }
