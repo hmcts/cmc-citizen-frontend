@@ -13,7 +13,7 @@ variable "location" {
 
 variable "env" { }
 
-variable "ilbIp"{}
+variable "ilbIp" { }
 
 // Module configuration
 variable "node-uv-threadpool-size" {
