@@ -23,7 +23,8 @@ describe('DraftClaim deserialization', () => {
         singleDefendant: YesNoOption.YES,
         eighteenOrOver: YesNoOption.YES,
         governmentDepartment: YesNoOption.NO,
-        helpWithFees: YesNoOption.NO
+        helpWithFees: YesNoOption.NO,
+        claimIsForTenancyDeposit: YesNoOption.NO
       },
       claimant: {
         mobilePhone: {
@@ -89,6 +90,7 @@ describe('DraftClaim deserialization', () => {
     expect(deserialized.eligibility.eighteenOrOver).to.equal(YesNoOption.YES)
     expect(deserialized.eligibility.governmentDepartment).to.equal(YesNoOption.NO)
     expect(deserialized.eligibility.helpWithFees).to.equal(YesNoOption.NO)
+    expect(deserialized.eligibility.claimIsForTenancyDeposit).to.equal(YesNoOption.NO)
   })
 
   it('should initialize the fields with appropriate class instances', () => {
