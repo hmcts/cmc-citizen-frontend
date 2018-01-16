@@ -1,13 +1,11 @@
 import { IsDefined, MaxLength } from 'class-validator'
 import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
 
-import { CompletableTask } from 'app/models/task'
-
 export class ValidationErrors {
   static readonly NUMBER_REQUIRED: string = 'Enter UK phone number'
 }
 
-export class MobilePhone implements CompletableTask {
+export class MobilePhone {
 
   @IsDefined({ message: ValidationErrors.NUMBER_REQUIRED })
   @MaxLength(30, { message: CommonValidationErrors.TEXT_TOO_LONG })
@@ -28,7 +26,4 @@ export class MobilePhone implements CompletableTask {
     return this
   }
 
-  isCompleted (): boolean {
-    return !!this.number && this.number.length > 0
-  }
 }
