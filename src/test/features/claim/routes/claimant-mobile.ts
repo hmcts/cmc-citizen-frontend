@@ -14,6 +14,7 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const headerText: string = 'Contact number'
 
 describe('Claim issue: claimant mobile page', () => {
   attachDefaultHooks(app)
@@ -28,7 +29,7 @@ describe('Claim issue: claimant mobile page', () => {
       await request(app)
         .get(ClaimPaths.claimantMobilePage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('What is your mobile number?'))
+        .expect(res => expect(res).to.be.successful.withText(headerText))
     })
   })
 
@@ -46,7 +47,7 @@ describe('Claim issue: claimant mobile page', () => {
         await request(app)
           .post(ClaimPaths.claimantMobilePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('What is your mobile number?', 'div class="error-summary"'))
+          .expect(res => expect(res).to.be.successful.withText(headerText, 'div class="error-summary"'))
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {

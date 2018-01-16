@@ -1,17 +1,16 @@
-import { IsDefined } from 'class-validator'
+import { IsDefined, MaxLength } from 'class-validator'
+import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
 
-import { IsMobilePhone } from 'forms/validation/validators/mobilePhone'
 import { CompletableTask } from 'app/models/task'
 
 export class ValidationErrors {
-  static readonly NUMBER_REQUIRED: string = 'Enter UK mobile number'
-  static readonly NUMBER_NOT_VALID: string = 'Enter valid UK mobile number'
+  static readonly NUMBER_REQUIRED: string = 'Enter UK phone number'
 }
 
 export class MobilePhone implements CompletableTask {
 
   @IsDefined({ message: ValidationErrors.NUMBER_REQUIRED })
-  @IsMobilePhone({ message: ValidationErrors.NUMBER_NOT_VALID })
+  @MaxLength(30, { message: CommonValidationErrors.TEXT_TOO_LONG })
   number?: string
 
   constructor (num?: string) {
