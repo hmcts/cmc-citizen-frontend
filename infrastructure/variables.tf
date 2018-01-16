@@ -13,10 +13,6 @@ variable "location" {
 
 variable "env" { }
 
-variable "ssenv" {
-  default = "prd"
-}
-
 variable "ilbIp"{}
 
 // Module configuration
