@@ -78,7 +78,7 @@ export default express.Router()
       if (!draft.document.externalId) {
         throw new Error(`externalId is missing from the draft claim. User Id : ${user.id}`)
       }
-      const amount = claimAmountWithInterest(draft.document)
+      const amount: number = await claimAmountWithInterest(draft.document)
       if (!amount) {
         throw new Error('No amount entered, you cannot pay yet')
       }
@@ -93,9 +93,14 @@ export default express.Router()
             return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: draft.document.externalId }))
         }
       }
-      const feeCalculationOutcome: CalculationOutcome = await FeesClient.calculateFee(issueFeeCode, claimAmountWithInterest(draft.document))
+      const feeCalculationOutcome: CalculationOutcome = await FeesClient.calculateFee(issueFeeCode, amount)
       const payClient: PayClient = await getPayClient()
-      const payment: PaymentResponse = await payClient.create(res.locals.user, feeCalculationOutcome.fee.code, feeCalculationOutcome.amount, getReturnURL(req, draft.document.externalId))
+      const payment: PaymentResponse = await payClient.create(
+        res.locals.user,
+        feeCalculationOutcome.fee.code,
+        feeCalculationOutcome.amount,
+        getReturnURL(req, draft.document.externalId)
+      )
       draft.document.claimant.payment = payment
 
       await new DraftService().save(draft, user.bearerToken)

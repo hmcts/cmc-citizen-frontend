@@ -4,11 +4,11 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
 
-import { expectValidationError, generateString, evaluateErrorMsg } from './validationUtils'
+import { evaluateErrorMsg, expectValidationError, generateString } from './validationUtils'
 import {
   Address,
-  ValidationErrors as AddressValidationErrors,
-  ValidationConstants as AddressValidationConstants
+  ValidationConstants as AddressValidationConstants,
+  ValidationErrors as AddressValidationErrors
 } from 'forms/models/address'
 import {
   CorrespondenceAddress,
@@ -147,6 +147,37 @@ describe('Address/CorrespondenceAddress', () => {
         const errors = validator.validateSync(new ClassFunction('Apartment 99', '', 'Town', 'SA1'))
 
         expect(errors.length).to.equal(0)
+      })
+
+      context('address list is not visible and address inputs are not visible', () => {
+        it('should reject when postcode fields are not populated', () => {
+          const address = new ClassFunction()
+          address.addressVisible = false
+          address.addressSelectorVisible = false
+          const errors = validator.validateSync(address)
+
+          expect(errors.length).to.equal(1)
+        })
+      })
+
+      context('address list is visible but none selected', () => {
+        it('should reject when address is not selected', () => {
+          const address = new ClassFunction()
+          address.addressVisible = false
+          address.addressSelectorVisible = true
+          const errors = validator.validateSync(address)
+          expect(errors.length).to.equal(1)
+        })
+      })
+
+      context('address list is visible and address selected', () => {
+        it('should accept when address is provided', () => {
+          const address = new ClassFunction('line1', '', 'city', 'postcode')
+          address.addressVisible = true
+          address.addressSelectorVisible = true
+          const errors = validator.validateSync(address)
+          expect(errors.length).to.equal(0)
+        })
       })
     })
   })

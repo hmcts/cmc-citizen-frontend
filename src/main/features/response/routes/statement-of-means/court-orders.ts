@@ -12,10 +12,12 @@ import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
+import { makeSureThereIsAtLeastOneRow } from 'forms/utils/multiRowFormUtils'
 
 const page: RoutablePath = StatementOfMeansPaths.courtOrdersPage
 
 function renderView (form: Form<CourtOrders>, res: express.Response): void {
+  makeSureThereIsAtLeastOneRow(form.model)
   res.render(page.associatedView, { form: form })
 }
 

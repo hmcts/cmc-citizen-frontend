@@ -142,7 +142,7 @@
 {{ row('Food and Housekeeping', expenses.foodAndHousekeeping | numeral, '', false) }}
 {{ row('TV and Broadband', expenses.tvAndBroadband | numeral, '', false) }}
 {{ row('Mobile phone', expenses.mobilePhone | numeral, '', false) }}
-{{ row('Maintenance payments', expenses.maintenance | numeral, '', otherIncome.length === 0) }}
+{{ row('Maintenance payments', expenses.maintenance | numeral, '', otherExpenses.length === 0) }}
 
 {% set indexOfLastRow = otherExpenses.length - 1 %}
 {% for expenseRow in otherExpenses %}
