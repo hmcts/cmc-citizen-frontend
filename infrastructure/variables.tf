@@ -15,11 +15,6 @@ variable "env" { }
 
 variable "ilbIp" { }
 
-// Module configuration
-variable "node-uv-threadpool-size" {
-  default = "64"
-}
-
 variable "draft-store-api-url" {
   default = "https://testdraftstorelb.moneyclaim.reform.hmcts.net:4302"
 }

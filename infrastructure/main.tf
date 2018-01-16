@@ -40,7 +40,7 @@ module "citizen-frontend" {
 
     // Node specific vars
     NODE_ENV = "${var.env}"
-    UV_THREADPOOL_SIZE = "${var.node-uv-threadpool-size}"
+    UV_THREADPOOL_SIZE = "64"
     NODE_CONFIG_DIR = "D:\\home\\site\\wwwroot\\config"
     TS_BASE_URL = "..\\..\\src\\main"
 
