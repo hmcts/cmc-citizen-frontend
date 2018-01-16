@@ -80,6 +80,7 @@ gulp.task('develop', () => {
       cert: fs.readFileSync(path.join(__dirname, 'src', 'main', 'resources', 'localhost-ssl', 'localhost.crt'), 'utf-8'),
     })
     nodemon({
+      exec: 'yarn start-dev',
       ext: 'ts js po',
       stdout: true
     }).on('readable', () => {

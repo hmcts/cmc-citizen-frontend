@@ -6,8 +6,11 @@
     "node": ">=8.0.0"
   },
   "scripts": {
-    "setup": "gulp sass copy-files",
-    "start": "TS_NODE_FAST=true ./node_modules/.bin/ts-node src/main/server.ts",
+    "compile": "tsc --project tsconfig.prod.json",
+    "generate-assets": "gulp sass copy-files",
+    "setup": "yarn compile && yarn generate-assets",
+    "start": "node src/main/server.js",
+    "start-dev": "TS_NODE_FAST=true ts-node src/main/server.ts",
     "lint": "tsc --noEmit && tslint --project tsconfig.json && sass-lint -v -q",
     "test": "TS_NODE_FAST=true NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*') --reporter-options reportFilename=unit,inlineAssets=true,reportTitle=citizen-frontend-unit",
     "test:routes": "TS_NODE_FAST=true NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) -path '*/routes/*') --timeout 4000 --reporter-options reportFilename=routes,inlineAssets=true,reportTitle=citizen-frontend-routes",
