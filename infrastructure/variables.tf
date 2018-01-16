@@ -24,10 +24,6 @@ variable "node-uv-threadpool-size" {
   default = "64"
 }
 
-variable "ga-tracking-id" {
-  default = "UA-97111056-1"
-}
-
 variable "draft-store-api-url" {
   default = "https://testdraftstorelb.moneyclaim.reform.hmcts.net:4302"
 }

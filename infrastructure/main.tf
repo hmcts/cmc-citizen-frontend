@@ -50,7 +50,7 @@ module "citizen-frontend" {
     REFORM_ENVIRONMENT = "${var.env}"
 
     // Application vars
-    GA_TRACKING_ID = "${var.ga-tracking-id}"
+    GA_TRACKING_ID = "UA-97111056-1"
     POSTCODE_LOOKUP_API_KEY = "${data.vault_generic_secret.s2s_secret.data["value"]}"
 
     // IDAM
