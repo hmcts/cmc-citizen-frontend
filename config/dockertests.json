@@ -5,6 +5,7 @@
     "fullAdmission": true,
     "partialAdmission": true,
     "offer": true,
-    "statementOfMeans": true
+    "statementOfMeans": true,
+    "finePrint": true
   }
 }

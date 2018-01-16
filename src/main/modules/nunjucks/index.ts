@@ -27,6 +27,7 @@ import { DashboardUrlHelper } from 'dashboard/helpers/dashboardUrlHelper'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
 import { ClaimStatus } from 'claims/models/claimStatus'
+import { FeatureToggles } from 'utils/featureToggles'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -101,6 +102,9 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('UnemploymentType', UnemploymentType)
     nunjucksEnv.addGlobal('BankAccountType', BankAccountType)
     nunjucksEnv.addGlobal('ClaimStatus', ClaimStatus)
+    if (FeatureToggles.isEnabled('finePrint')) {
+      nunjucksEnv.addGlobal('cookieText', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.')
+    }
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

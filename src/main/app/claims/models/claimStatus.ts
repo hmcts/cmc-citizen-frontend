@@ -1,4 +1,4 @@
-export enum ClaimStatus {
+export enum  ClaimStatus {
   ELIGIBLE_FOR_CCJ,
   CCJ_REQUESTED,
   OFFER_SUBMITTED,
