@@ -7,4 +7,6 @@ export class Paths {
   static readonly linkDefendantReceiver = new RoutablePath('/receiver/link-defendant', false)
   static readonly logoutReceiver = new RoutablePath('/logout', false)
   static readonly postcodeLookupProxy = new RoutablePath('/postcode-lookup', false)
+  static readonly privacyPolicyPage = new RoutablePath('/privacy-policy', false)
+  static readonly termsAndConditionsPage = new RoutablePath('/terms-and-conditions', false)
 }

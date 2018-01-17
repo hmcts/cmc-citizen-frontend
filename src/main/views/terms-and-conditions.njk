@@ -1,0 +1,188 @@
+{% extends "layout.njk" %}
+{% set heading = t('Terms and conditions') %}
+
+{% set title = t('Money claim') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('By using this service you’re agreeing to the following terms of use.') }}</p>
+
+      <p> {{ t('This includes the <a href="{{  privacyPolicy }}">privacy policy</a>.',
+        { privacyPolicy: 'privacy-policy' }) | safe }}
+      </p>
+
+      <h2 class="heading-medium">{{ t('Who we are') }}</h2>
+
+      <p>
+        {{ t('This service is managed by Her Majesty’s Courts and Tribunals Service and will be referred to as we from now on.') }}
+      </p>
+
+      <h2 class="heading-medium">{{ t('Information provided by this service') }}</h2>
+
+      <p>
+        {{ t('This service provides information to support you. HMCTS cannot give legal advice on individual cases.') }}
+      </p>
+
+      <p>
+        {{ t('You should answer the questions in the service based on your circumstances, and seek legal advice if you need it.') }}
+      </p>
+
+      <h2 class="heading-medium">{{ t('Applicable law') }}</h2>
+
+      <p>{{ t('Your use of this service and any dispute arising from its use will be governed by and construed in accordance with the laws of England and Wales,
+      including but not limited to the:') }}</p>
+
+      <ul class="list list-bullet">
+        <li>{{ t('Computer Misuse Act 1990') }}</li>
+        <li>{{ t('Data Protection Act 1998') }}</li>
+        <li>{{ t('Mental Capacity Act 2005') }}</li>
+      </ul>
+
+
+      <h2 class="heading-medium">{{ t('Responsible use of this service') }}</h2>
+
+      <p>
+        {{ t('The service is designed for people who need to use it or by others on their behalf and only with their consent.') }}
+      </p>
+
+      <p>
+        {{ t('There are risks in using a shared computer (for example in an internet café) to access this service.
+        It’s your responsibility to be aware of these risks and to avoid using any computer which may leave your
+        personal information accessible to others. You’re responsible if you choose to leave a computer unprotected
+        while using this service.') }}
+      </p>
+
+      <p>
+        {{ t('You must take your own precautions to ensure that the way you access this service does not expose you to the risk of:') }}
+      </p>
+
+      <ul class="list list-bullet">
+        <li>{{ t('viruses') }}</li>
+        <li>{{ t('malicious computer code') }}</li>
+        <li>{{ t('other forms of interference which may damage your computer system') }}</li>
+      </ul>
+
+      <p>
+        {{ t('You must not misuse this service by knowingly introducing viruses, trojans, worms, logic bombs or other material which is malicious or technologically harmful.
+        You must not attempt to gain unauthorised access to this service, the system on which it is stored or any server, computer or database connected to it.
+        You must not attack this site via a denial-of-service attack or a distributed denial-of-service attack.') }}
+      </p>
+
+      <p>
+        {{ t('This online service contains several free-text fields in which you will need to enter certain types of information.
+        You should not enter sensitive information into these free-text fields.
+        Sensitive information may include, but is not limited to, details of religious beliefs and financial information.
+        Entering sensitive information is done so at your own risk.') }}
+      </p>
+
+
+      <h2 class="heading-medium">{{ t('Information about you and your visits to GOV.UK') }}</h2>
+
+      <p>
+        {{ t('We collect information about you in accordance with our privacy policy and our cookie policy') }}
+      </p>
+
+
+
+      <h2 class="heading-medium">{{ t('Disclaimer') }}</h2>
+
+      <p>
+        {{ t('While we make every effort to keep GOV.UK up to date, we don’t provide any guarantees,
+        conditions or warranties that the information will be:') }}
+      </p>
+
+      <ul class="list list-bullet">
+        <li>{{ t('current') }}</li>
+        <li>{{ t('secure') }}</li>
+        <li>{{ t('accurate') }}</li>
+        <li>{{ t('complete') }}</li>
+        <li>{{ t('free from bugs or viruses') }}</li>
+      </ul>
+
+      <p>
+        {{ t('We don’t publish advice on GOV.UK. You should get professional or specialist advice before doing anything
+         on the basis of the content.') }}
+      </p>
+
+      <p>
+        {{ t('We’re not liable for any loss or damage that may come from using GOV.UK. This includes:') }}
+      </p>
+
+      <ul class="list list-bullet">
+        <li>{{ t('any direct, indirect or consequential losses') }}</li>
+        <li>{{ t('any loss or damage caused by civil wrongs
+        (‘tort’, including negligence), breach of contract or otherwise') }}</li>
+        <li>{{ t('the use of GOV.UK and any websites that are linked to or from it') }}</li>
+        <li>{{ t('the inability to use GOV.UK and any websites that are linked to or from it') }}</li>
+      </ul>
+
+      <p>
+        {{ t('This applies if the loss or damage was foreseeable, arose in the normal course of things or you advised us that it might happen.') }}
+      </p>
+
+      <p>
+        {{ t('This includes (but isn’t limited to) the loss of your:') }}
+      </p>
+
+      <ul class="list list-bullet">
+        <li>{{ t('income or revenue') }}</li>
+        <li>{{ t('salary, benefits or other payments') }}</li>
+        <li>{{ t('business') }}</li>
+        <li>{{ t('profits or contracts') }}</li>
+        <li>{{ t('opportunity') }}</li>
+        <li>{{ t('anticipated savings') }}</li>
+        <li>{{ t('data') }}</li>
+        <li>{{ t('goodwill or reputation') }}</li>
+        <li>{{ t('intangible property, including loss,
+        corruption or damage to data or any computer system') }}</li>
+        <li>{{ t('wasted management or office time') }}</li>
+      </ul>
+        <p>
+          {{ t('We may still be liable for:') }}
+        </p>
+
+
+        <ul class="list list-bullet">
+          <li>{{ t('death or personal injury arising from our negligence') }}</li>
+          <li>{{ t('fraudulent misrepresentation') }}</li>
+          <li>{{ t('any other liability which cannot be excluded or limited under applicable law') }}</li>
+        </ul>
+
+
+        <h2 class="heading-medium">{{ t('Changes to these terms and conditions') }}</h2>
+
+        <p>
+          {{ t('Please check these terms and conditions regularly.
+           HMCTS may and can update them at any time without notice.') }}
+        </p>
+
+        <p>
+          {{ t('You’ll agree to any changes if you continue to use this service after
+          the terms and conditions have been updated.') }}
+        </p>
+
+        <h2 class="heading-medium">{{ t('Contact us') }}</h2>
+
+        <p> {{ t('Civil Money Claims') }}</p>
+
+        <p>{{ t('Email: ') + 'moneyclaims@hmcts.gsi.gov.uk' }}
+          <br>{{ t('Telephone:  0300 123 1057') }}
+          <br>{{ t('Hours: 9am to 5pm, Monday to Friday ') }}
+
+          <br>
+          {{ t('<a href="{{ charges }}">Find out about call charges</a>',
+          { charges: 'not-found' }) | safe }}
+          {#TODO: get tage for call charges from UX team#}
+
+        </p>
+
+
+
+    </div>
+
+
+  </div>
+
+  </div>
+{% endblock %}
