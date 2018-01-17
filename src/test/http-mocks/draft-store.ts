@@ -191,7 +191,7 @@ const sampleResponseDraftObj = {
     partyDetails: {
       type: 'individual',
       name: 'John Smith',
-      address: { line1: 'Apartment 99', line2: '', city: 'London', postcode: 'SE28 0JE' } as Address,
+      address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
       hasCorrespondenceAddress: false,
       dateOfBirth: {
         known: true,
