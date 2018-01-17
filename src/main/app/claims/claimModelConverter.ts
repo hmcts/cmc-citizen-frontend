@@ -154,6 +154,9 @@ export class ClaimModelConverter {
     if (addressForm.line2) {
       address.line2 = addressForm.line2
     }
+    if (addressForm.line3) {
+      address.line3 = addressForm.line3
+    }
     address.city = addressForm.city
     address.postcode = addressForm.postcode
     return address
