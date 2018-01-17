@@ -14,6 +14,7 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as feesServiceMock from '../../../http-mocks/fees'
 import { SignatureType } from 'app/common/signatureType'
+import { mockCalculateInterestRate } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -40,6 +41,7 @@ describe('Claim issue: check and send page', () => {
       it('should return 500 and render error page when cannot calculate fee', async () => {
         draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.rejectCalculateIssueFee('HTTP error')
+        mockCalculateInterestRate(0)
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
@@ -50,6 +52,7 @@ describe('Claim issue: check and send page', () => {
       it('should render page when everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.resolveCalculateIssueFee()
+        mockCalculateInterestRate(0)
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
@@ -80,6 +83,7 @@ describe('Claim issue: check and send page', () => {
       it('should return 500 and render error page when form is invalid and cannot calculate fee', async () => {
         draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.rejectCalculateIssueFee('HTTP error')
+        mockCalculateInterestRate(0)
 
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
@@ -91,6 +95,7 @@ describe('Claim issue: check and send page', () => {
       it('should render page when form is invalid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.resolveCalculateIssueFee()
+        mockCalculateInterestRate(0)
 
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)

@@ -10,11 +10,11 @@ COPY config /usr/src/app/config
 COPY tsconfig.json gulpfile.js /usr/src/app/
 COPY src/main /usr/src/app/src/main
 
-RUN yarn setup
+RUN yarn generate-assets
 
 RUN rm -rf node_modules \
     && yarn install --production \
     && yarn cache clean
 
 EXPOSE 3000
-CMD [ "yarn", "start" ]
+CMD [ "yarn", "start-dev" ]
