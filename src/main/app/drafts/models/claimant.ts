@@ -61,6 +61,6 @@ export class Claimant implements CompletableTask {
           break
       }
     }
-    return result && !!this.mobilePhone && this.mobilePhone.isCompleted()
+    return result && !!this.mobilePhone
   }
 }
