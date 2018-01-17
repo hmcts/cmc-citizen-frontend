@@ -73,7 +73,7 @@ function getLetterHolderId (req: express.Request, user: User): string {
     return roles.pop().replace('letter-', '')
   }
 
-  throw new Error('User was logged in but didn’t have a letter holder role')
+  return undefined
 }
 
 function loginErrorHandler (req: express.Request,
@@ -139,11 +139,12 @@ export default express.Router()
                                res: express.Response,
                                next: express.NextFunction): Promise<void> => {
       const cookies = new Cookies(req, res)
+      let user
 
       try {
         const authenticationToken = await getAuthToken(req)
         if (authenticationToken) {
-          const user = await IdamClient.retrieveUserFor(authenticationToken)
+          user = await IdamClient.retrieveUserFor(authenticationToken)
           res.locals.isLoggedIn = true
           res.locals.user = user
           setAuthCookie(cookies, authenticationToken)
@@ -157,11 +158,18 @@ export default express.Router()
           // re-set state cookie as it was cleared above, we need it in this case
           cookies.set(stateCookieName, req.query.state, { sameSite: 'lax' })
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
+        } else {
+          const letterHolderId: string = getLetterHolderId(req, user)
+          if (letterHolderId && user.isInRoles(`letter-${letterHolderId}`)) {
+            const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(letterHolderId)
+            logger.debug(`Linking user ${user.id} claim ${claim.id}`)
+            if (!claim.defendantId) {
+              await ClaimStoreClient.linkDefendant(claim.id, user.id)
+            }
+          }
         }
 
-        res.redirect(await
-          retrieveRedirectForLandingPage(res.locals.user)
-        )
+        res.redirect(await retrieveRedirectForLandingPage(res.locals.user))
       } else {
         res.redirect(OAuthHelper.forLogin(req, res))
       }
@@ -187,8 +195,11 @@ export default express.Router()
       const user: User = res.locals.user
       if (res.locals.isLoggedIn) {
         const letterHolderId: string = getLetterHolderId(req, user)
+        if (!letterHolderId) {
+          throw new Error(`User ${user.id} was logged in but didn’t have a letter holder role`)
+        }
         if (!user.isInRoles(`letter-${letterHolderId}`)) {
-          logger.error('User not in letter ID role - redirecting to access denied page')
+          logger.error(`User ${user.id} not in letter ID role - redirecting to access denied page`)
           return res.redirect(ErrorPaths.claimSummaryAccessDeniedPage.uri)
         }
 
