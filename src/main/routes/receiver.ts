@@ -162,7 +162,7 @@ export default express.Router()
           const letterHolderId: string = getLetterHolderId(req, user)
           if (letterHolderId && user.isInRoles(`letter-${letterHolderId}`)) {
             const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(letterHolderId)
-            logger.debug(`Linking user ${user.id} claim ${claim.id}`)
+            logger.debug(`Linking user ${user.id} to claim ${claim.id}`)
             if (!claim.defendantId) {
               await ClaimStoreClient.linkDefendant(claim.id, user.id)
             }
