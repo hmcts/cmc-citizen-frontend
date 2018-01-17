@@ -107,7 +107,7 @@
     "jsonwebtoken": "^8.0.1",
     "mocha": "^4.0.1",
     "mochawesome": "^3.0.0",
-    "mock-require": "^2.0.1",
+    "mock-require": "^3.0.0",
     "nock": "^9.0.22",
     "nsp": "^3.0.0",
     "nyc": "^11.2.1",
