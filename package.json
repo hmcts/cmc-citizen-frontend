@@ -6,9 +6,8 @@
     "node": ">=8.0.0"
   },
   "scripts": {
-    "compile": "tsc --project tsconfig.prod.json",
     "generate-assets": "gulp sass copy-files",
-    "setup": "yarn compile && yarn generate-assets",
+    "setup": "yarn generate-assets",
     "start": "node server.js",
     "lint": "tsc --noEmit && tslint --project tsconfig.json && sass-lint -v -q",
     "test": "TS_NODE_FAST=true NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*') --reporter-options reportFilename=unit,inlineAssets=true,reportTitle=citizen-frontend-unit",
