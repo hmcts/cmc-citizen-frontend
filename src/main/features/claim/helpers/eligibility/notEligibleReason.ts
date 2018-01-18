@@ -8,4 +8,5 @@ export class NotEligibleReason {
   static readonly CLAIMANT_ADDRESS: string = 'claimant-address'
   static readonly DEFENDANT_ADDRESS: string = 'defendant-address'
   static readonly GOVERNMENT_DEPARTMENT: string = 'government-department'
+  static readonly CLAIM_IS_FOR_TENANCY_DEPOSIT: string = 'claim-is-for-tenancy-deposit'
 }
