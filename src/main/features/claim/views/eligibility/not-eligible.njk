@@ -62,6 +62,15 @@
         <p>{{ t('You might be able to get free legal advice from organisations like '
          + '<a target="_blank" href="%s">Citizens Advice</a> ' + newWindow() + ' about making a claim.',
           { postProcess: 'sprintf', sprintf: [ citizensAdviceUrl ]}) | safe }}</p>
+      {% elseif reason === NotEligibleReason.CLAIM_IS_FOR_TENANCY_DEPOSIT %}
+        <p>{{ t('You can’t make a claim for a tenancy deposit using this service.') }}</p>
+        <p>{{ t('Contact the deposit protection scheme that holds the deposit. They provide free dispute resolution.') }}</p>
+        <p>{{ t('If you still need to make a claim contact your local county court. You should use the paper service and request a judge’s order.') }}</p>
+        <p>
+          <a target="_blank" href="https://courttribunalfinder.service.gov.uk/search/">{{
+            t('Find you local county court.')
+          }}</a> {{ newWindow() }}
+        </p>
       {% endif %}
     </div>
 

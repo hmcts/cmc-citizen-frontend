@@ -9,6 +9,7 @@ export class ValidationErrors {
   static readonly FIRST_LINE_TOO_LONG: string = 'The correspondence address line must be no longer than $constraint1 characters'
 
   static readonly SECOND_LINE_TOO_LONG: string = 'The second correspondence address line must be no longer than $constraint1 characters'
+  static readonly THIRD_LINE_TOO_LONG: string = 'The third correspondence address line must be no longer than $constraint1 characters'
 
   static readonly CITY_REQUIRED: string = 'Enter correspondence town/city'
   static readonly CITY_NOT_VALID: string = 'The correspondence address city must be no longer than $constraint1 characters'
@@ -30,6 +31,8 @@ export class CorrespondenceAddress extends Address {
   line1?: string
   @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.SECOND_LINE_TOO_LONG, groups: ['claimant', 'defendant', 'response'] })
   line2?: string
+  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.THIRD_LINE_TOO_LONG, groups: ['claimant', 'defendant', 'response'] })
+  line3?: string
   @IsDefined({ message: ValidationErrors.CITY_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.CITY_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.CITY_NOT_VALID, groups: ['claimant', 'defendant', 'response'] })

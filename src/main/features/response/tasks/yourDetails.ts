@@ -20,6 +20,5 @@ export class YourDetails {
     }
     return this.isDateOfBirthCompleted(response.defendantDetails.partyDetails)
       && response.defendantDetails.partyDetails.isCompleted('response')
-      && response.defendantDetails.mobilePhone && response.defendantDetails.mobilePhone.isCompleted()
   }
 }

@@ -25,8 +25,9 @@
             var addressElement = postcodeLookupWidget.querySelector('.address')
             addressLine1(addressElement).value = addressDetails[0]
             addressLine2(addressElement).value = addressDetails[1]
-            addressTownOrCity(addressElement).value = addressDetails[2]
-            addressPostcode(addressElement).value = addressDetails[3]
+            addressLine3(addressElement).value = addressDetails[2]
+            addressTownOrCity(addressElement).value = addressDetails[3]
+            addressPostcode(addressElement).value = addressDetails[4]
             show(addressSection(postcodeLookupWidget))
           })
 
@@ -125,6 +126,10 @@
     return addressElement.querySelector('.address-line2')
   }
 
+  function addressLine3 (addressElement) {
+    return addressElement.querySelector('.address-line3')
+  }
+
   function addressTownOrCity (addressElement) {
     return addressElement.querySelector('.address-town-or-city')
   }
@@ -141,6 +146,7 @@
     var addressElement = addressSection(postcodeLookupWidget)
     addressLine1(addressElement).value = ''
     addressLine2(addressElement).value = ''
+    addressLine3(addressElement).value = ''
     addressTownOrCity(addressElement).value = ''
     addressPostcode(addressElement).value = ''
   }
@@ -150,6 +156,7 @@
 
     return addressLine1(addressElement).value !== '' ||
       addressLine2(addressElement).value !== '' ||
+      addressLine3(addressElement).value !== '' ||
       addressTownOrCity(addressElement).value !== '' ||
       addressPostcode(addressElement).value !== ''
   }
@@ -216,27 +223,18 @@
       clearPostcodeDropdown(postcodeLookupWidget)
       postcodeSelectDropdown.appendChild(nonSelectableOption)
 
-      function line2 (address) {
-        var line2 = ''
-        // advance building number to the next line if a building name is also present
-        if (address.buildingName && address.buildingNumber) {
-          line2 += address.buildingNumber + ' '
-        }
-        line2 += address.thoroughfareName || address.dependentLocality
-
-        return line2
-      }
-
       postcodeResponse.addresses.forEach(function (address) {
-        var valueFormattedAddress = [
-          (address.organisationName || address.subBuildingName) + ' ' + (address.buildingName || address.buildingNumber || undefined),
-          line2(address),
-          address.postTown,
-          address.postcode
-        ].join(', ')
-
-        var option = document.createElement('option')
         var formattedAddress = address.formattedAddress.replace(/\r?\n|\r/g, ', ')
+        var lines = formattedAddress.split(',')
+
+        var valueFormattedAddress = [
+          lines[0].trim(),
+          lines.length > 3 ? lines[1].trim() : '',
+          lines.length > 4 ? lines[2].trim() : '',
+          lines[lines.length-2].trim(),
+          lines[lines.length-1].trim()
+        ].join(', ')
+        var option = document.createElement('option')
         option.value = valueFormattedAddress
         option.text = formattedAddress
         postcodeSelectDropdown.appendChild(option)
