@@ -39,6 +39,7 @@ describe('Defendant', () => {
         address: {
           line1: 'Flat 101',
           line2: '',
+          line3: '',
           city: 'London',
           postcode: 'E10AA'
         },
