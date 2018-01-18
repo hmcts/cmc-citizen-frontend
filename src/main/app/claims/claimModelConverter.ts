@@ -24,6 +24,7 @@ import { InterestDate as DraftInterestDate } from 'claim/form/models/interestDat
 import { InterestDateType } from 'app/common/interestDateType'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { StringUtils } from 'utils/stringUtils'
+import { InterestType } from 'claim/form/models/interest'
 
 export class ClaimModelConverter {
 
@@ -31,7 +32,9 @@ export class ClaimModelConverter {
     const claimData: ClaimData = new ClaimData()
     claimData.interest = draftClaim.interest
     claimData.externalId = draftClaim.externalId
-    claimData.interestDate = this.convertInterestDate(draftClaim.interestDate)
+    if (claimData.interest.type !== InterestType.NO_INTEREST) {
+      claimData.interestDate = this.convertInterestDate(draftClaim.interestDate)
+    }
     claimData.amount = new ClaimAmountBreakdown().deserialize(draftClaim.amount)
     claimData.feeAmountInPennies = draftClaim.claimant.payment.amount
     claimData.claimants = [this.convertClaimantDetails(draftClaim)]
