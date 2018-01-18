@@ -228,11 +228,11 @@
         var lines = formattedAddress.split(',')
 
         var valueFormattedAddress = [
-          lines[0],
-          (lines.length>3) ? lines[1] : '',
-          (lines.length>4) ? lines[2] : '',
-          lines[lines.length-2],
-          lines[lines.length-1]
+          lines[0].trim(),
+          lines.length > 3 ? lines[1].trim() : '',
+          lines.length > 4 ? lines[2].trim() : '',
+          lines[lines.length-2].trim(),
+          lines[lines.length-1].trim()
         ].join(', ')
         var option = document.createElement('option')
         option.value = valueFormattedAddress
