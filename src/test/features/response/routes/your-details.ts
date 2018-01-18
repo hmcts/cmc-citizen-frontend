@@ -97,7 +97,7 @@ describe('Defendant user details: your name page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ type: 'individual', name: 'John Smith', address: { line1: 'Apartment 99', line2: '', city: 'London', postcode: 'E10AA' } })
+              .send({ type: 'individual', name: 'John Smith', address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'E10AA' } })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -108,7 +108,7 @@ describe('Defendant user details: your name page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ type: 'individual', name: 'John Smith', address: { line1: 'Apartment 99', line2: '', city: 'London', postcode: 'E10AA' } })
+              .send({ type: 'individual', name: 'John Smith', address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'E10AA' } })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.defendantDateOfBirthPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
