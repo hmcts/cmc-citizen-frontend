@@ -6,12 +6,14 @@ export const individual = {
   address: {
     line1: 'Flat 1',
     line2: 'Street 1',
+    line3: 'Cool house name',
     city: 'London',
     postcode: 'E1A'
   },
   correspondenceAddress: {
     line1: 'Flat 10',
     line2: 'Street 10',
+    line3: 'Cooler house name',
     city: 'Belfast',
     postcode: 'B10A'
   },
@@ -27,12 +29,14 @@ export const soleTrader = {
   address: {
     line1: 'Flat 2',
     line2: 'Street 2',
+    line3: 'Cool house name',
     city: 'London',
     postcode: 'E2A'
   },
   correspondenceAddress: {
     line1: 'Flat 20',
     line2: 'Street 20',
+    line3: 'Cooler house name',
     city: 'Belfast',
     postcode: 'B20A'
   },
@@ -47,12 +51,14 @@ export const company = {
   address: {
     line1: 'Flat 3',
     line2: 'Street 3',
+    line3: 'Cool house name',
     city: 'London',
     postcode: 'E3A'
   },
   correspondenceAddress: {
     line1: 'Flat 30',
     line2: 'Street 30',
+    line3: 'Cooler house name',
     city: 'Belfast',
     postcode: 'B30A'
   },
@@ -67,12 +73,14 @@ export const organisation = {
   address: {
     line1: 'Flat 4',
     line2: 'Street 4',
+    line3: 'Cool house name',
     city: 'London',
     postcode: 'E4A'
   },
   correspondenceAddress: {
     line1: 'Flat 40',
     line2: 'Street 40',
+    line3: 'Cooler house name',
     city: 'Belfast',
     postcode: 'B40A'
   },

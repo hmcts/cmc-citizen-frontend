@@ -38,6 +38,7 @@ function expectAllFieldsMappedCorrectly (expected: FormAddress, actual: Address)
   expect(actual).to.be.instanceof(Address)
   expect(actual.line1).to.be.equal(expected.line1)
   expect(actual.line2).to.be.equal(expected.line2)
+  expect(actual.line3).to.be.equal(expected.line3)
   expect(actual.postcode).to.be.equal(expected.postcode)
   expect(actual.city).to.be.equal(expected.city)
 }
