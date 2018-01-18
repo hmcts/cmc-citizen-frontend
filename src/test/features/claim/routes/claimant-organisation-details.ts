@@ -18,7 +18,7 @@ const input = {
   name: 'Anirudha Inc.',
   type: 'organisation',
   contactPerson: 'John Snow',
-  address: { line1: 'Apartment 99', line2: '', city: 'London', postcode: 'SE28 0JE' } as Address,
+  address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
   hasCorrespondenceAddress: false
 } as OrganisationDetails
 
@@ -61,7 +61,7 @@ describe('claimant as organisation details page', () => {
           draftStoreServiceMock.resolveFind('claim')
         })
         it('line 1 is missing', async () => {
-          const invalidAddressInput = { ...input, ...{ address: { line1: '', line2: '', city: 'London', postcode: 'SE28 0JE' } } }
+          const invalidAddressInput = { ...input, ...{ address: { line1: '', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } } }
           await request(app)
             .post(ClaimPaths.claimantOrganisationDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
@@ -69,7 +69,7 @@ describe('claimant as organisation details page', () => {
             .expect(res => expect(res).to.be.successful.withText('Organisation details', 'div class="error-summary"', 'Enter first address line'))
         })
         it('postcode is missing', async () => {
-          const invalidAddressInput = { ...input, ...{ address: { line1: 'Apartment 99', line2: '', city: 'London', postcode: '' } } }
+          const invalidAddressInput = { ...input, ...{ address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: '' } } }
           await request(app)
             .post(ClaimPaths.claimantOrganisationDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
@@ -83,7 +83,7 @@ describe('claimant as organisation details page', () => {
           draftStoreServiceMock.resolveFind('claim')
         })
         it('line 1 is missing', async () => {
-          const invalidCorrespondenceAddressInput = { ...input, ...{ hasCorrespondenceAddress: 'true', correspondenceAddress: { line1: '', line2: '', city: 'London', postcode: 'SE28 0JE' } } }
+          const invalidCorrespondenceAddressInput = { ...input, ...{ hasCorrespondenceAddress: 'true', correspondenceAddress: { line1: '', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } } }
           await request(app)
             .post(ClaimPaths.claimantOrganisationDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
@@ -91,7 +91,7 @@ describe('claimant as organisation details page', () => {
             .expect(res => expect(res).to.be.successful.withText('Organisation details', 'div class="error-summary"', 'Enter first correspondence address line'))
         })
         it('postcode is missing', async () => {
-          const invalidCorrespondenceAddressInput = { ...input, ...{ hasCorrespondenceAddress: 'true', correspondenceAddress: { line1: 'Apartment 99', line2: '', city: 'London', postcode: '' } } }
+          const invalidCorrespondenceAddressInput = { ...input, ...{ hasCorrespondenceAddress: 'true', correspondenceAddress: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: '' } } }
           await request(app)
             .post(ClaimPaths.claimantOrganisationDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)

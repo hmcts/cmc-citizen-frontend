@@ -12,7 +12,7 @@ import { calculateInterest } from 'app/common/calculateInterest'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Draft } from '@hmcts/draft-store-client'
 
-function getInterestDetails (claim: Claim): object {
+async function getInterestDetails (claim: Claim): Promise<object> {
   if (claim.claimData.interest.type === InterestType.NO_INTEREST) {
     return undefined
   }
@@ -31,7 +31,7 @@ function getInterestDetails (claim: Claim): object {
 
   return {
     numberOfDays: noOfDays,
-    interest: calculateInterest(claim.claimData.amount.totalAmount(), claim.claimData.interest, interestDate),
+    interest: await calculateInterest(claim.claimData.amount.totalAmount(), claim.claimData.interest, interestDate),
     rate: rate,
     interestDate: interestDate,
     defaultJudgmentDate: todayDate
@@ -50,7 +50,7 @@ export default express.Router()
         Paths.paidAmountSummaryPage.associatedView, {
           claim: claim,
           alreadyPaid: draft.document.paidAmount.amount || 0,
-          interestDetails: getInterestDetails(claim),
+          interestDetails: await getInterestDetails(claim),
           nextPageUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
         }
       )
