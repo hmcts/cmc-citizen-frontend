@@ -4,9 +4,10 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
 
-import { expectValidationError } from './validationUtils'
+import { expectValidationError, generateString } from './validationUtils'
 
 import { MobilePhone, ValidationErrors } from 'forms/models/mobilePhone'
+import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
 
 describe('MobilePhone', () => {
 
@@ -44,8 +45,21 @@ describe('MobilePhone', () => {
       expectValidationError(errors, ValidationErrors.NUMBER_REQUIRED)
     })
 
+    it('should reject max allowed characters in phone number', () => {
+      const errors = validator.validateSync(new MobilePhone(generateString(31)))
+
+      expect(errors.length).to.equal(1)
+      expectValidationError(errors, CommonValidationErrors.TEXT_TOO_LONG)
+    })
+
     it('should accepts valid mobile number', () => {
       const errors = validator.validateSync(new MobilePhone('07555055505'))
+
+      expect(errors.length).to.equal(0)
+    })
+
+    it('should accepts valid land line number', () => {
+      const errors = validator.validateSync(new MobilePhone('0203 010 3512'))
 
       expect(errors.length).to.equal(0)
     })

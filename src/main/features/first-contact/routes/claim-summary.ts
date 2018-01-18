@@ -5,13 +5,13 @@ import { Paths } from 'first-contact/paths'
 import { Claim } from 'claims/models/claim'
 import { ClaimReferenceMatchesGuard } from 'first-contact/guards/claimReferenceMatchesGuard'
 import { JwtExtractor } from 'idam/jwtExtractor'
-import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
 import { ClaimantRequestedCCJGuard } from 'first-contact/guards/claimantRequestedCCJGuard'
+import { OAuthHelper } from 'idam/oAuthHelper'
 
 const sessionCookie = config.get<string>('session.cookieName')
 
 function receiverPath (req: express.Request, res: express.Response): string {
-  return `${AuthenticationRedirectFactory.get().forUplift(req, res)}&jwt=${JwtExtractor.extract(req)}`
+  return `${OAuthHelper.forUplift(req, res)}&jwt=${JwtExtractor.extract(req)}`
 }
 
 /* tslint:disable:no-default-export */

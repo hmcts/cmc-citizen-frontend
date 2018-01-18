@@ -11,9 +11,9 @@
           .addEventListener('click', function (event) {
             event.preventDefault()
 
-            clearPostcodeDropdown(postcodeLookupWidget)
-            hidePostcodeDropdown(postcodeLookupWidget)
+            hide(postcodeAddressPicker(postcodeLookupWidget))
             clearAddressFields(postcodeLookupWidget)
+            hide(addressSection(postcodeLookupWidget))
             lookupPostcode(this.previousElementSibling.value, postcodeLookupWidget)
           })
 
@@ -25,34 +25,39 @@
             var addressElement = postcodeLookupWidget.querySelector('.address')
             addressLine1(addressElement).value = addressDetails[0]
             addressLine2(addressElement).value = addressDetails[1]
-            addressTownOrCity(addressElement).value = addressDetails[2]
-            addressPostcode(addressElement).value = addressDetails[3]
-            showAddressEntry(postcodeLookupWidget)
+            addressLine3(addressElement).value = addressDetails[2]
+            addressTownOrCity(addressElement).value = addressDetails[3]
+            addressPostcode(addressElement).value = addressDetails[4]
+            show(addressSection(postcodeLookupWidget))
           })
 
         enterManuallyLink(postcodeLookupWidget)
           .addEventListener('click', function (event) {
             event.preventDefault()
 
-            showAddressEntry(postcodeLookupWidget)
+            show(addressSection(postcodeLookupWidget))
             this.classList.add('hidden')
             enterManuallyHiddenInput(postcodeLookupWidget).value = 'true'
           })
 
         var anyAddressFieldPopulated = isAnyAddressFieldPopulated(postcodeLookupWidget)
         if (anyAddressFieldPopulated) {
-          showAddressEntry(postcodeLookupWidget)
+          show(addressSection(postcodeLookupWidget))
         }
 
         // Show postcode dropdown on postback in case of validation error
         if (postcodeAddressPickerHiddenInput(postcodeLookupWidget).value === 'true' && !anyAddressFieldPopulated) {
-          showPostcodeDropdown(postcodeLookupWidget)
+          show(postcodeAddressPicker(postcodeLookupWidget))
           lookupPostcode(postcodeSearchButton(postcodeLookupWidget).previousElementSibling.value, postcodeLookupWidget)
         }
 
         // Show fields if manual entry was previously clicked
         if (enterManuallyHiddenInput(postcodeLookupWidget).value === 'true') {
-          showAddressEntry(postcodeLookupWidget)
+          show(addressSection(postcodeLookupWidget))
+        }
+
+        if (isNotHidden(addressSection(postcodeLookupWidget))) {
+          hide(enterManuallyLink(postcodeLookupWidget))
         }
       })
 
@@ -61,21 +66,31 @@
         allPostcodeLookupWidgets()
           .forEach(function (postcodeLookupWidget) {
             postcodeLookupWidget.querySelector('.postcode-address-visible').value =
-              !addressSection(postcodeLookupWidget)
-                .classList.contains('js-hidden')
+              isNotHidden(addressSection(postcodeLookupWidget))
 
             postcodeLookupWidget.querySelector('.address-selector-visible').value =
-              !postcodeAddressPicker(postcodeLookupWidget)
-                .classList.contains('hidden')
+              isNotHidden(postcodeAddressPicker(postcodeLookupWidget))
           })
       })
   })
 
-  function enterManuallyLink(postcodeLookupWidget) {
+  function show (element) {
+    element.classList.remove('hidden', 'js-hidden')
+  }
+
+  function hide (element) {
+    element.classList.add('hidden')
+  }
+
+  function isNotHidden (element) {
+    return !(element.classList.contains('js-hidden') || element.classList.contains('hidden'))
+  }
+
+  function enterManuallyLink (postcodeLookupWidget) {
     return postcodeLookupWidget.querySelector('.postcode-enter-manually')
   }
 
-  function postcodeSearchButton(postcodeLookupWidget) {
+  function postcodeSearchButton (postcodeLookupWidget) {
     return postcodeLookupWidget.querySelector('.postcode-search')
   }
 
@@ -111,34 +126,27 @@
     return addressElement.querySelector('.address-line2')
   }
 
+  function addressLine3 (addressElement) {
+    return addressElement.querySelector('.address-line3')
+  }
+
   function addressTownOrCity (addressElement) {
     return addressElement.querySelector('.address-town-or-city')
   }
-  
+
   function addressPostcode (addressElement) {
     return addressElement.querySelector('.postcode')
-  }
-
-  function showAddressEntry (postcodeLookupWidget) {
-    addressSection(postcodeLookupWidget).classList.remove('js-hidden')
   }
 
   function clearPostcodeDropdown (postcodeLookupWidget) {
     postcodeDropdown(postcodeLookupWidget).innerHTML = ''
   }
 
-  function hidePostcodeDropdown (postcodeLookupWidget) {
-    postcodeAddressPicker(postcodeLookupWidget).classList.add('hidden')
-  }
-
-  function showPostcodeDropdown (postcodeLookupWidget) {
-    postcodeAddressPicker(postcodeLookupWidget).classList.remove('hidden')
-  }
-
   function clearAddressFields (postcodeLookupWidget) {
     var addressElement = addressSection(postcodeLookupWidget)
     addressLine1(addressElement).value = ''
     addressLine2(addressElement).value = ''
+    addressLine3(addressElement).value = ''
     addressTownOrCity(addressElement).value = ''
     addressPostcode(addressElement).value = ''
   }
@@ -148,6 +156,7 @@
 
     return addressLine1(addressElement).value !== '' ||
       addressLine2(addressElement).value !== '' ||
+      addressLine3(addressElement).value !== '' ||
       addressTownOrCity(addressElement).value !== '' ||
       addressPostcode(addressElement).value !== ''
   }
@@ -171,13 +180,29 @@
     postcodeLookupWidget.querySelector('.postcode-search-container').classList.add('form-group-error')
   }
 
+  function hideAddressError (postcodeLookupWidget) {
+    var northernIrelandErrorMessage = postcodeLookupWidget.querySelector('.postcode-search-error-ni')
+    var genericErrorMessage = postcodeLookupWidget.querySelector('.postcode-search-error')
+
+    hide(northernIrelandErrorMessage)
+    hide(genericErrorMessage)
+
+    postcodeLookupWidget.querySelector('.postcode-search-container').classList.remove('form-group-error')
+  }
+
+  function handlePostcodeError (isNorthernIrelandPostcode, postcodeLookupWidget) {
+    showAddressError(isNorthernIrelandPostcode, postcodeLookupWidget)
+    show(addressSection(postcodeLookupWidget))
+    enterManuallyHiddenInput(postcodeLookupWidget).value = 'true'
+    hide(enterManuallyLink(postcodeLookupWidget))
+  }
+
   function lookupPostcode (postcode, postcodeLookupWidget) {
     var xhr = new XMLHttpRequest()
     xhr.open('GET', '/postcode-lookup?postcode=' + encodeURIComponent(postcode))
     xhr.onload = function () {
       if (xhr.status !== 200) {
-        showAddressError(false, postcodeLookupWidget)
-        showAddressEntry(postcodeLookupWidget)
+        handlePostcodeError(false, postcodeLookupWidget)
         return
       }
 
@@ -185,8 +210,7 @@
 
       if (!postcodeResponse.valid) {
         var ni = isNorthernIrelandPostcode(postcode)
-        showAddressError(ni, postcodeLookupWidget)
-        showAddressEntry(postcodeLookupWidget)
+        handlePostcodeError(ni, postcodeLookupWidget)
         return
       }
 
@@ -196,27 +220,28 @@
       nonSelectableOption.text = postcodeResponse.addresses.length + ' addresses found'
       nonSelectableOption.disabled = true
       nonSelectableOption.selected = true
+      clearPostcodeDropdown(postcodeLookupWidget)
       postcodeSelectDropdown.appendChild(nonSelectableOption)
 
       postcodeResponse.addresses.forEach(function (address) {
-        var valueFormattedAddress = [
-          (address.organisationName || address.subBuildingName) + ' ' + (address.buildingNumber || address.buildingName || undefined),
-          address.thoroughfareName || address.dependentLocality,
-          address.postTown,
-          address.postcode
-        ].join(', ')
-
-        var option = document.createElement('option')
         var formattedAddress = address.formattedAddress.replace(/\r?\n|\r/g, ', ')
+        var lines = formattedAddress.split(',')
+
+        var valueFormattedAddress = [
+          lines[0],
+          (lines.length>3) ? lines[1] : '',
+          (lines.length>4) ? lines[2] : '',
+          lines[lines.length-2],
+          lines[lines.length-1]
+        ].join(', ')
+        var option = document.createElement('option')
         option.value = valueFormattedAddress
         option.text = formattedAddress
         postcodeSelectDropdown.appendChild(option)
       })
 
-      showPostcodeDropdown(postcodeLookupWidget)
-      postcodeLookupWidget.querySelector('.postcode-search-container')
-        .classList.remove('form-group-error')
-
+      show(postcodeAddressPicker(postcodeLookupWidget))
+      hideAddressError(postcodeLookupWidget)
     }
     xhr.send()
   }
