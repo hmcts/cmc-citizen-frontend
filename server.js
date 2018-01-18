@@ -1,7 +1,4 @@
-const { execSync } = require('child_process')
-const { StringDecoder } = require('string_decoder')
-const output = execSync('pwd')
-console.log(`>>> ${new StringDecoder('utf8').write(output)}`)
+console.log(`>>> ${process.cwd()}`)
 
 process.env.TS_NODE_FAST = "true"
 require('ts-node/register')
