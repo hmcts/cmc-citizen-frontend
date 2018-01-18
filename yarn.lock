@@ -6369,9 +6369,9 @@ ts-node@^3.3.0:
     v8flags "^3.0.0"
     yn "^2.0.0"
 
-tsconfig-paths@^2.2.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-2.6.0.tgz#ddb8c86af54ef92bd71370461897f3b0292ff49e"
+tsconfig-paths@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-3.1.1.tgz#368478faed54a247f2c8e59e44cb81418b2ae515"
   dependencies:
     deepmerge "^2.0.1"
     strip-bom "^3.0.0"
