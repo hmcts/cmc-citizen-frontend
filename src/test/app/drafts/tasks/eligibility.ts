@@ -17,7 +17,8 @@ describe('Check eligibility', () => {
           singleClaimant: YesNoOption.YES,
           singleDefendant: YesNoOption.YES,
           governmentDepartment: YesNoOption.NO,
-          helpWithFees: YesNoOption.NO
+          helpWithFees: YesNoOption.NO,
+          claimIsForTenancyDeposit: YesNoOption.NO
         }
       }
       const claim: DraftClaim = new DraftClaim().deserialize(input)
@@ -38,7 +39,8 @@ describe('Check eligibility', () => {
           singleClaimant: YesNoOption.YES,
           singleDefendant: YesNoOption.YES,
           governmentDepartment: YesNoOption.NO,
-          helpWithFees: YesNoOption.NO
+          helpWithFees: YesNoOption.NO,
+          claimIsForTenancyDeposit: YesNoOption.YES
         }
       }
       const claim: DraftClaim = new DraftClaim().deserialize(input)

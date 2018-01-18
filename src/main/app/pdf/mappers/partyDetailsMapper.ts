@@ -14,6 +14,7 @@ export class PartyDetailsMapper {
       address: {
         lineOne: party.address.line1,
         lineTwo: party.address.line2,
+        lineThree: party.address.line3,
         townOrCity: party.address.city,
         postcode: party.address.postcode
       },
@@ -23,6 +24,7 @@ export class PartyDetailsMapper {
       data['correspondenceAddress'] = {
         lineOne: party.correspondenceAddress.line1,
         lineTwo: party.correspondenceAddress.line2,
+        lineThree: party.correspondenceAddress.line3,
         townOrCity: party.correspondenceAddress.city,
         postcode: party.correspondenceAddress.postcode
       }
