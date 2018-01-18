@@ -15,6 +15,7 @@ describe('Their details', () => {
             address: {
               line1: 'Another lane',
               line2: '',
+              line3: '',
               city: 'Manchester',
               postcode: 'SW8 4DA'
             },
