@@ -6,7 +6,7 @@ import { ValidationErrors as CorrespondenceAddressValidationErrors } from 'forms
 import { ValidationError, Validator } from 'class-validator'
 import { expectValidationError } from './validationUtils'
 
-const validAddress = new Address('line1', 'line2', 'city', 'postcode')
+const validAddress = new Address('line1', 'line2', 'line3', 'city', 'postcode')
 
 describe('PartyDetails', () => {
   let input

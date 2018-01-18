@@ -15,6 +15,8 @@ export const sampleClaimObj = {
   referenceNumber: '000MC000',
   createdAt: '2017-07-25T22:45:51.785',
   issuedOn: '2017-07-25',
+  totalAmountTillToday: 200,
+  totalAmountTillDateOfIssue: 200,
   claim: {
     claimants: [
       {
@@ -97,6 +99,12 @@ export const sampleDefendantResponseObj = {
       }
     }
   }
+}
+
+export function mockCalculateInterestRate (expected: number): mock.Scope {
+  return mock(`${serviceBaseURL}/interest/calculate`)
+    .get(new RegExp('.+'))
+    .reply(HttpStatus.OK, { amount: expected })
 }
 
 export function resolveRetrieveClaimByExternalId (claimOverride?: object): mock.Scope {

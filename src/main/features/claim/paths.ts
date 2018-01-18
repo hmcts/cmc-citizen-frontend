@@ -40,6 +40,7 @@ export class Paths {
   static readonly eligibilityDefendantAddressPage = new RoutablePath('/claim/eligibility/defendant-address')
   static readonly eligibilityOver18Page = new RoutablePath('/claim/eligibility/over-18')
   static readonly eligibilityGovernmentDepartmentPage = new RoutablePath('/claim/eligibility/government-department')
+  static readonly eligibilityClaimIsForTenancyDepositPage = new RoutablePath('/claim/eligibility/claim-is-for-tenancy-deposit')
   static readonly eligibilityEligiblePage = new RoutablePath('/claim/eligibility/eligible')
   static readonly eligibilityNotEligiblePage = new RoutablePath('/claim/eligibility/not-eligible')
 }

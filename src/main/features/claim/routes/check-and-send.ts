@@ -7,7 +7,7 @@ import { StatementOfTruth } from 'forms/models/statementOfTruth'
 import { FeesClient } from 'fees/feesClient'
 import { TotalAmount } from 'forms/models/totalAmount'
 import { InterestDateType } from 'app/common/interestDateType'
-import { claimAmountWithInterest, interestAmount } from 'utils/interestUtils'
+import { interestAmount } from 'utils/interestUtils'
 import { InterestType } from 'claim/form/models/interest'
 import { PartyType } from 'app/common/partyType'
 import { AllClaimTasksCompletedGuard } from 'claim/guards/allClaimTasksCompletedGuard'
@@ -24,11 +24,12 @@ import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
 
-function getClaimAmountTotal (draft: DraftClaim): Promise<TotalAmount> {
-  return FeesClient.calculateIssueFee(claimAmountWithInterest(draft))
-    .then((feeAmount: number) => {
-      return new TotalAmount(draft.amount.totalAmount(), interestAmount(draft), feeAmount)
-    })
+async function getClaimAmountTotal (draft: DraftClaim): Promise<TotalAmount> {
+  const interest: number = await interestAmount(draft)
+  const totalAmount: number = draft.amount.totalAmount()
+
+  return FeesClient.calculateIssueFee(totalAmount + interest)
+    .then((feeAmount: number) => new TotalAmount(totalAmount, interest, feeAmount))
 }
 
 function getBusinessName (partyDetails: PartyDetails): string {
