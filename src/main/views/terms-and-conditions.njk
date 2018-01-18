@@ -171,9 +171,8 @@
           <br>{{ t('Hours: 9am to 5pm, Monday to Friday ') }}
 
           <br>
-          {{ t('<a href="{{ charges }}">Find out about call charges</a>',
-          { charges: 'not-found' }) | safe }}
-          {#TODO: get tage for call charges from UX team#}
+          {{ t('<a href="{{ callCharges }}">Find out about call charges</a>',
+          { callCharges: 'https://www.gov.uk/call-charges' }) | safe }}
 
         </p>
 
