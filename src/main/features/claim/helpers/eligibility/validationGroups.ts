@@ -1,4 +1,5 @@
 export class ValidationGroups {
+  static readonly CITIZEN_CLAIMANT: string = 'citizen_claimant'
   static readonly CLAIM_VALUE: string = 'claim-value'
   static readonly SINGLE_CLAIMANT: string = 'single-claimant'
   static readonly SINGLE_DEFENDANT: string = 'single-defendant'

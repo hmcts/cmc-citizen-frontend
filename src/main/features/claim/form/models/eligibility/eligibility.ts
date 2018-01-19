@@ -6,6 +6,9 @@ import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 
 export class Eligibility {
 
+  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.CITIZEN_CLAIMANT] })
+  claimOnBehalf?: YesNoOption
+
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.CLAIMANT_ADDRESS] })
   claimantAddress?: YesNoOption
 
@@ -33,20 +36,23 @@ export class Eligibility {
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.HELP_WITH_FEES] })
   helpWithFees?: YesNoOption
 
-  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.CLAIM_IS_FOR_TENANCY_DEPOSIT] })
+  @IsIn(YesNoOption.all(), {
+    message: ValidationErrors.YES_NO_REQUIRED,
+    groups: [ValidationGroups.CLAIM_IS_FOR_TENANCY_DEPOSIT]
+  })
   claimIsForTenancyDeposit?: YesNoOption
 
-  constructor (
-    claimantAddress?: YesNoOption,
-    defendantAddress?: YesNoOption,
-    claimValue?: ClaimValue,
-    singleClaimant?: YesNoOption,
-    singleDefendant?: YesNoOption,
-    eighteenOrOver?: YesNoOption,
-    governmentDepartment?: YesNoOption,
-    helpWithFees?: YesNoOption,
-    claimIsForTenancyDeposit?: YesNoOption
-  ) {
+  constructor (claimOnBehalf?: YesNoOption,
+               claimantAddress?: YesNoOption,
+               defendantAddress?: YesNoOption,
+               claimValue?: ClaimValue,
+               singleClaimant?: YesNoOption,
+               singleDefendant?: YesNoOption,
+               eighteenOrOver?: YesNoOption,
+               governmentDepartment?: YesNoOption,
+               helpWithFees?: YesNoOption,
+               claimIsForTenancyDeposit?: YesNoOption) {
+    this.claimOnBehalf = claimOnBehalf
     this.claimantAddress = claimantAddress
     this.defendantAddress = defendantAddress
     this.claimValue = claimValue
@@ -60,6 +66,7 @@ export class Eligibility {
 
   static fromObject (input: any): Eligibility {
     return new Eligibility(
+      YesNoOption.fromObject(input.claimOnBehalf),
       YesNoOption.fromObject(input.claimantAddress),
       YesNoOption.fromObject(input.defendantAddress),
       ClaimValue.fromObject(input.claimValue),
@@ -74,6 +81,9 @@ export class Eligibility {
 
   deserialize (input: any): Eligibility {
     if (input) {
+      if (input.claimOnBehalf) {
+        this.claimOnBehalf = YesNoOption.fromObject(input.claimOnBehalf.option)
+      }
       if (input.claimantAddress) {
         this.claimantAddress = YesNoOption.fromObject(input.claimantAddress.option)
       }
@@ -107,7 +117,8 @@ export class Eligibility {
   }
 
   get eligible (): boolean {
-    return this.claimantAddress === YesNoOption.YES &&
+    return this.claimOnBehalf === YesNoOption.NO &&
+      this.claimantAddress === YesNoOption.YES &&
       this.defendantAddress === YesNoOption.YES &&
       this.claimValue === ClaimValue.UNDER_10000 &&
       this.singleClaimant === YesNoOption.YES &&

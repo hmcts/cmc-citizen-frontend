@@ -16,6 +16,7 @@ describe('DraftClaim deserialization', () => {
   beforeEach(() => {
     input = {
       eligibility: {
+        claimOnBehalf: YesNoOption.YES,
         claimantAddress: YesNoOption.YES,
         defendantAddress: YesNoOption.YES,
         claimValue: ClaimValue.UNDER_10000,
@@ -82,6 +83,7 @@ describe('DraftClaim deserialization', () => {
     expect(deserialized.defendant.partyDetails.address.postcode).to.equal('SW8 4DA')
     expect(deserialized.defendant.email.address).to.equal('j.clark@mailserver.com')
 
+    expect(deserialized.eligibility.citii).to.equal(YesNoOption.YES)
     expect(deserialized.eligibility.claimantAddress).to.equal(YesNoOption.YES)
     expect(deserialized.eligibility.defendantAddress).to.equal(YesNoOption.YES)
     expect(deserialized.eligibility.claimValue).to.equal(ClaimValue.UNDER_10000)
