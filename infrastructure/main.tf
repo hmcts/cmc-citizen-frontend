@@ -39,7 +39,7 @@ module "citizen-frontend" {
     WEBSITE_NODE_DEFAULT_VERSION = "8.9.0"
 
     // Node specific vars
-    NODE_ENV = "${var.env == "prod" ? var.env : "dev"}"
+    NODE_ENV = "${var.env == "prod" ? "prod" : "dev"}"
     UV_THREADPOOL_SIZE = "64"
     NODE_CONFIG_DIR = "D:\\home\\site\\wwwroot\\config"
     TS_BASE_URL = "./src/main"
