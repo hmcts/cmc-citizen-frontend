@@ -92,8 +92,8 @@ function loginErrorHandler (req: express.Request,
 }
 
 async function retrieveRedirectForLandingPage (user: User): Promise<string> {
-  const atLeastOneClaimIssued: boolean = (await ClaimStoreClient.retrieveByClaimantId(user.id)).length > 0
-  const claimAgainstDefendant = await ClaimStoreClient.retrieveByDefendantId(user.id)
+  const atLeastOneClaimIssued: boolean = (await ClaimStoreClient.retrieveByClaimantId(user)).length > 0
+  const claimAgainstDefendant = await ClaimStoreClient.retrieveByDefendantId(user)
   const atLeastOneResponse: boolean = claimAgainstDefendant.length > 0 &&
     claimAgainstDefendant.some((claim: Claim) => !!claim.respondedAt)
   const atLeastOneCCJ: boolean = claimAgainstDefendant.length > 0 &&
@@ -203,10 +203,10 @@ export default express.Router()
           return res.redirect(ErrorPaths.claimSummaryAccessDeniedPage.uri)
         }
 
-        const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(letterHolderId)
+        const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(letterHolderId, user.bearerToken)
 
         if (!claim.defendantId) {
-          await ClaimStoreClient.linkDefendant(claim.id, user.id)
+          await ClaimStoreClient.linkDefendant(claim.id, user)
         }
 
         res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }))

@@ -14,7 +14,7 @@ export default express.Router()
   .get(Paths.claimantPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
     const { externalId } = req.params
     const user: User = res.locals.user
-    const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId, user.id)
+    const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId, user)
 
     res.render(Paths.claimantPage.associatedView, {
       claim: claim,
@@ -24,7 +24,7 @@ export default express.Router()
   .post(Paths.claimantPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
     const { externalId } = req.params
     const user: User = res.locals.user
-    const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId, user.id)
+    const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId, user)
 
     if (claim.claimData.defendant.type === PartyType.INDIVIDUAL.value) {
       res.redirect(CCJPaths.dateOfBirthPage.evaluateUri({ externalId: externalId }))
