@@ -81,10 +81,17 @@ export class ResponseDraft extends DraftDocument {
     return !isNullOrUndefined(this.moreTimeNeeded) && this.moreTimeNeeded.option === MoreTimeNeededOption.YES
   }
 
+  public hideCheckAndSubmitYourResponse (): boolean {
+    if (!this.isResponsePopulated()) {
+      return true
+    }
+  }
+
   public requireDefence (): boolean {
     if (!this.isResponsePopulated()) {
       return false
     }
+
     return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim !== undefined
       && RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).includes(this.rejectAllOfClaim.option)
   }
@@ -138,7 +145,7 @@ export class ResponseDraft extends DraftDocument {
 
   private showWhenDidYouPayWhenAmountClaimed (): boolean {
     return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim && this.howMuchPaidClaimant &&
-      (this.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID ||
+      (this.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID &&
         this.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.AMOUNT_CLAIMED)
   }
 }
