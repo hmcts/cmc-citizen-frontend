@@ -5,7 +5,6 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 
 import { ResponseType } from 'response/form/models/responseType'
-import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { GuardFactory } from 'response/guards/guardFactory'
@@ -13,6 +12,7 @@ import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
+import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 
 function isRequestAllowed (res: express.Response): boolean {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -29,48 +29,50 @@ function accessDeniedCallback (req: express.Request, res: express.Response): voi
 
 const guardRequestHandler: express.RequestHandler = GuardFactory.create(isRequestAllowed, accessDeniedCallback)
 
-function renderView (form: Form<RejectAllOfClaim>, res: express.Response) {
-  res.render(Paths.defenceRejectAllOfClaimPage.associatedView, {
-    form: form
-  })
+async function renderView (form: Form<HowMuchPaidClaimant>, res: express.Response, next: express.NextFunction) {
+  try {
+    const claim: Claim = res.locals.claim
+    res.render(Paths.defendantHowMuchPaidClaimant.associatedView, {
+      form: form,
+      amount: claim.totalAmountTillToday
+    })
+  } catch (err) {
+    next(err)
+  }
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
-    Paths.defenceRejectAllOfClaimPage.uri,
+    Paths.defendantHowMuchPaidClaimant.uri,
     guardRequestHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-      renderView(new Form(draft.document.rejectAllOfClaim), res)
+      renderView(new Form(draft.document.howMuchPaidClaimant), res, next)
     }))
   .post(
-    Paths.defenceRejectAllOfClaimPage.uri,
+    Paths.defendantHowMuchPaidClaimant.uri,
     guardRequestHandler,
-    FormValidator.requestHandler(RejectAllOfClaim),
+    FormValidator.requestHandler(HowMuchPaidClaimant),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<RejectAllOfClaim> = req.body
+      const form: Form<HowMuchPaidClaimant> = req.body
 
       if (form.hasErrors()) {
-        renderView(form, res)
+        renderView(form, res, next)
       } else {
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        draft.document.rejectAllOfClaim = form.model
+        draft.document.howMuchPaidClaimant = form.model
         await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params
 
-        if (draft.document.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM) {
+        if (draft.document.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.LESS_THAN_AMOUNT_CLAIMED) {
           res.redirect(Paths.sendYourResponseByEmail.evaluateUri({ externalId: externalId }))
         } else {
-          if (draft.document.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID) {
-            res.redirect(Paths.defendantHowMuchPaidClaimant.evaluateUri({ externalId: externalId }))
-          } else {
-            res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
-          }
+          res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
         }
       }
     }))

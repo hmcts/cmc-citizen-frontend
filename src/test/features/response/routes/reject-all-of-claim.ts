@@ -69,7 +69,7 @@ describe('Defendant response: full admission options', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('I reject all of the claim'))
+            .expect(res => expect(res).to.be.successful.withText('Why do you reject the claim?'))
         })
       })
     })
@@ -116,7 +116,7 @@ describe('Defendant response: full admission options', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('I reject all of the claim', 'div class="error-summary"'))
+              .expect(res => expect(res).to.be.successful.withText('Why do you reject the claim?', 'div class="error-summary"'))
           })
         })
 
@@ -133,7 +133,7 @@ describe('Defendant response: full admission options', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to mediation page when everything is fine', async () => {
+          it('should redirect to how much paid claimant page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', draftOverride)
             draftStoreServiceMock.resolveSave()
@@ -143,7 +143,7 @@ describe('Defendant response: full admission options', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: 'alreadyPaid' })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.taskListPage
+                .toLocation(ResponsePaths.defendantHowMuchPaidClaimant
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })

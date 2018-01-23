@@ -21,6 +21,8 @@ import * as toBoolean from 'to-boolean'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
 import { PayBySetDate } from 'response/draft/payBySetDate'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
+import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
+import { HowMuchPaidClaimantOption, HowMuchPaidClaimant } from 'response/form/models/howMuchPaidClaimant'
 
 export class ResponseDraft extends DraftDocument {
 
@@ -42,6 +44,8 @@ export class ResponseDraft extends DraftDocument {
   payBySetDate?: PayBySetDate
   impactOfDispute?: ImpactOfDispute
   statementOfMeans?: StatementOfMeans
+  whenDidYouPay?: WhenDidYouPay
+  howMuchPaidClaimant?: HowMuchPaidClaimant
 
   deserialize (input: any): ResponseDraft {
     if (input) {
@@ -67,6 +71,8 @@ export class ResponseDraft extends DraftDocument {
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
       this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
       this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
+      this.whenDidYouPay = new WhenDidYouPay().deserialize(input.whenDidYouPay)
+      this.howMuchPaidClaimant = new HowMuchPaidClaimant(input.howMuchPaidClaimant && input.howMuchPaidClaimant.option)
     }
     return this
   }
@@ -110,6 +116,10 @@ export class ResponseDraft extends DraftDocument {
     return this.isResponsePopulated() && (this.isResponseRejectedFully() || this.isResponseRejectedPartially())
   }
 
+  public requireWhenDidYouPay (): boolean {
+    return this.isResponsePopulated() && (this.showWhenDidYouPayWhenAmountClaimed())
+  }
+
   private isResponsePopulated (): boolean {
     return !!this.response && !!this.response.type
   }
@@ -124,5 +134,11 @@ export class ResponseDraft extends DraftDocument {
     return this.response.type === ResponseType.PART_ADMISSION && this.rejectPartOfClaim &&
       (this.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED ||
         this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
+  }
+
+  private showWhenDidYouPayWhenAmountClaimed (): boolean {
+    return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim && this.howMuchPaidClaimant &&
+      (this.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID ||
+        this.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.AMOUNT_CLAIMED)
   }
 }
