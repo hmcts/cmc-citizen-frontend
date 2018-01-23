@@ -5,7 +5,7 @@ import * as favicon from 'serve-favicon'
 import * as cookieParser from 'cookie-parser'
 import * as bodyParser from 'body-parser'
 import { RequestTracing, Express, Logger } from '@hmcts/nodejs-logging'
-import { NotFoundError } from './errors'
+import { ForbiddenError, NotFoundError } from './errors'
 import { ErrorLogger } from 'logging/errorLogger'
 import { RouterFinder } from 'common/router/routerFinder'
 import { Config as HelmetConfig, Helmet } from 'modules/helmet'
@@ -93,6 +93,8 @@ app.use((err, req, res, next) => {
     res.redirect(err.associatedView)
   } else if (err.associatedView) {
     res.render(err.associatedView)
+  } else if (err.statusCode === 403) {
+    res.render(new ForbiddenError().associatedView)
   } else {
     const view = (env === 'mocha' || env === 'development' || env === 'dev' || env === 'dockertests' || env === 'demo') ? 'error_dev' : 'error'
     res.render(view, {
