@@ -159,14 +159,15 @@ export default express.Router()
           cookies.set(stateCookieName, req.query.state, { sameSite: 'lax' })
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
-          const letterHolderId: string = getLetterHolderId(req, user)
-          if (letterHolderId && user.isInRoles(`letter-${letterHolderId}`)) {
-            const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(letterHolderId)
-            logger.debug(`Linking user ${user.id} to claim ${claim.id}`)
-            if (!claim.defendantId) {
-              await ClaimStoreClient.linkDefendant(claim.id, user.id)
+          (user as User).getLetterHolderIdList().forEach(async (letterHolderId) => {
+            if (letterHolderId && user.isInRoles(`letter-${letterHolderId}`)) {
+              const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(letterHolderId, user.bearerToken)
+              logger.debug(`Linking user ${user.id} to claim ${claim.id}`)
+              if (!claim.defendantId) {
+                await ClaimStoreClient.linkDefendant(claim.id, user)
+              }
             }
-          }
+          })
         }
 
         res.redirect(await retrieveRedirectForLandingPage(res.locals.user))
