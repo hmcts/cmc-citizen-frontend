@@ -27,7 +27,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        const linked: boolean = await ClaimStoreClient.isClaimLinked(form.model.reference)
+        const linked: boolean = await ClaimStoreClient.isClaimLinked(form.model.reference, res.locals.user)
 
         if (linked) {
           return res.redirect(AppPaths.homePage.uri)

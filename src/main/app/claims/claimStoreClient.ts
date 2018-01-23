@@ -147,12 +147,17 @@ export class ClaimStoreClient {
     })
   }
 
-  static isClaimLinked (reference: string): Promise<boolean> {
+  static isClaimLinked (reference: string, user: User): Promise<boolean> {
     if (!reference) {
       return Promise.reject(new Error('Claim reference is required'))
     }
 
-    return request.get(`${claimStoreApiUrl}/${reference}/defendant-link-status`)
+    return request
+      .get(`${claimStoreApiUrl}/${reference}/defendant-link-status`, {
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
       .then(linkStatus => linkStatus.linked)
   }
 }
