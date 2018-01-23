@@ -81,12 +81,6 @@ export class ResponseDraft extends DraftDocument {
     return !isNullOrUndefined(this.moreTimeNeeded) && this.moreTimeNeeded.option === MoreTimeNeededOption.YES
   }
 
-  public hideCheckAndSubmitYourResponse (): boolean {
-    if (!this.isResponsePopulated()) {
-      return true
-    }
-  }
-
   public requireDefence (): boolean {
     if (!this.isResponsePopulated()) {
       return false
