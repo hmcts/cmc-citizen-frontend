@@ -28,7 +28,7 @@ variable "fees-api-url" {
 }
 
 variable "idam-api-url" {
-  default = "http://betaDevBccidamAppLB.reform.hmcts.net:4551"
+  default = "http://betaDevBccidamAppLB.reform.hmcts.net"
 }
 
 variable "authentication-web-url" {
@@ -36,5 +36,5 @@ variable "authentication-web-url" {
 }
 
 variable "service-2-service-auth-url" {
-  default = "http://betaDevBccidamAppLB.reform.hmcts.net:4552"
+  default = "http://betaDevBccidamS2SLB.reform.hmcts.net"
 }
