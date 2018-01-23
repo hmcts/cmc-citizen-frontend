@@ -15,7 +15,7 @@ export class ClaimReferenceMatchesGuard {
       const reference = ClaimReferenceMatchesGuard.getClaimRef(req)
 
       const user: User = res.locals.user
-      const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(user.id)
+      const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(user.id, user.bearerToken)
       res.locals.claim = claim
 
       if (claim.claimNumber !== reference) {
