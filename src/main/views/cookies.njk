@@ -1,16 +1,17 @@
 {% extends "layout.njk" %}
-{% set heading = t('Cookies') %}
+{% from "support.njk" import supportWidget %}
+{% set heading = 'Cookies' %}
 
-{% set title = t('Money claim') %}
+{% set title = 'Money claim' %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
 
       <p>
-        {{ t('A cookie is a small piece of data that’s stored on your computer,
-        tablet, or phone when you visit a website.
-        Most websites need cookies to work properly.') }}
+        {{ t('A cookie is a small piece of data that’s stored on your computer, '
+        + 'tablet, or phone when you visit a website. '
+        + 'Most websites need cookies to work properly.') }}
       </p>
 
       <p> {{ t('This service uses them to:') }}</p>
@@ -30,9 +31,9 @@
       <h2 class="heading-small">{{ t('To measure website usage') }}</h2>
 
       <p>
-        {{ t('We use Google Analytics software to collect information about how you use this service.
-        We do this to help make sure the service is meeting the needs of its users
-        and to help us make improvements, for example improving site search.') }}
+        {{ t('We use Google Analytics software to collect information about how you use this service.'
+        + 'We do this to help make sure the service is meeting the needs of its users'
+        +' and to help us make improvements, for example improving site search.') }}
       </p>
 
       <p> {{ t('Google Analytics stores information about:') }}</p>
@@ -45,47 +46,29 @@
       </ul>
 
       <p>
-        {{ t('We allow Google to use or share our analytics data. You can find out more
-        about how Google use this information in their <a href="{{ privacyPolicy }}">privacy policy</a>.',
+        {{ t('We allow Google to use or share our analytics data. You can find out more '
+        + 'about how Google use this information in their <a href="{{ privacyPolicy }}">privacy policy</a>.',
         { privacyPolicy : 'privacy-policy'}) | safe }}
       </p>
 
       <p>
-        {{ t('You can opt out of <a href="{{ optOutOfAnalytics }}">opt out of Google Analytics</a> if you do not want Google
-        to have access to your information.',
+        {{ t('You can opt out of <a href="{{ optOutOfAnalytics }}">opt out of Google Analytics</a>'
+        + ' if you do not want Google to have access to your information.',
         { optOutOfAnalytics : 'https://tools.google.com/dlpage/gaoptout'}) | safe }}
       </p>
 
-
       <h2
-        class="heading-small">{{ t('To store the answers you’ve given during your visit (known as a ‘session’)') }}</h2>
+        class="heading-small">{{ t('To store the answers you’ve given during your visit (known as a ‘session’)') }}
+      </h2>
 
       <p>
-        {{ t('Session cookies are stored on your computer as you travel through a website,
-      and let the website know what you’ve seen and done so far.
-      These are temporary cookies and are automatically deleted a short while after you leave the website.') }}
+        {{ t('Session cookies are stored on your computer as you travel through a website, '
+        + 'and let the website know what you’ve seen and done so far. '
+        + 'These are temporary cookies and are automatically deleted a short while after you leave the website.') }}
       </p>
 
-      <h2 class="heading-medium">{{ t('Contact us') }}</h2>
-
-      <p> {{ t('Civil Money Claims') }}</p>
-
-      <p>{{ t('Email: ') + 'moneyclaims@hmcts.gsi.gov.uk' }}
-        <br>{{ t('Telephone:  0300 123 1057') }}
-        <br>{{ t('Hours: 9am to 5pm, Monday to Friday ') }}
-
-        <br>
-        {{ t('<a href="{{ callCharges }}">Find out about call charges</a>',
-        { callCharges: 'https://www.gov.uk/call-charges' }) | safe }}
-
-      </p>
+      {{ supportWidget() }}
 
     </div>
-
-  </div>
-
-
-  </div>
-
   </div>
 {% endblock %}

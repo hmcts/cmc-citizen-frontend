@@ -1,4 +1,5 @@
 {% extends "layout.njk" %}
+{% from "support.njk" import supportWidget %}
 {% set heading = t('Privacy policy') %}
 
 {% set title = t('Money claim') %}
@@ -14,7 +15,7 @@
       </p>
 
       <p> {{ t('More information about how to use the service is in the <a href="{{  termsAndConditions }}">terms and conditions</a>.',
-        { termsAndConditions: 'http://www.gov.co.uk' }) | safe }}
+        { termsAndConditions: '/terms-and-conditions' }) | safe }}
       </p>
 
       <h2 class="heading-medium">{{ t('Why we need your personal data') }}</h2>
@@ -31,16 +32,15 @@
         <li>{{ t('your name, address and contact details') }}</li>
         <li>{{ t('information that tells us if you open an email from us, or click on a link in an email') }}</li>
         <li>{{ t('information about how you use this service, like your IP address and the web browser you use. We do this by using <a href="{{ cookieUrl }}">cookies</a>.',
-          { cookieUrl: 'http://www.gov.co.uk'}) | safe }}
+          { cookieUrl: '/cookies'}) | safe }}
         </li>
-        {# todo link to cookies page #}
       </uL>
 
       <h2 class="heading-medium">{{ t('What we do with your data') }}</h2>
 
       <p>
         {{ t('HMCTS is an executive agency of the Ministry of Justice and their <a href="{{ personalInformationCharter }}">personal information charter</a> explains how we process data.',
-        { personalInformationCharter: 'http://www.google.com'}) | safe }}
+        { personalInformationCharter: 'https://www.gov.uk/government/organisations/home-office/about/personal-information-charter'}) | safe }}
       </p>
 
       <p>
@@ -111,23 +111,8 @@
         <li>{{ t('free from bugs or viruses') }}</li>
       </ul>
 
-      <h2 class="heading-medium">{{ t('Contact us') }}</h2>
-
-      <p> {{ t('Civil Money Claims') }}</p>
-
-      <p>{{ t('Email: ') + 'moneyclaims@hmcts.gsi.gov.uk' }}
-        <br>{{ t('Telephone:  0300 123 1057') }}
-        <br>{{ t('Hours: 9am to 5pm, Monday to Friday ') }}
-
-        <br>
-        {{ t('<a href="{{ callCharges }}">Find out about call charges</a>',
-        { callCharges: 'https://www.gov.uk/call-charges' }) | safe }}
-
-      </p>
-
+      {{ supportWidget() }}
 
     </div>
-
-
   </div>
 {% endblock %}

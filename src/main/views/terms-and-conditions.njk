@@ -1,4 +1,6 @@
 {% extends "layout.njk" %}
+{% from "support.njk" import supportWidget %}
+
 {% set heading = t('Terms and conditions') %}
 
 {% set title = t('Money claim') %}
@@ -76,14 +78,11 @@
         Entering sensitive information is done so at your own risk.') }}
       </p>
 
-
       <h2 class="heading-medium">{{ t('Information about you and your visits to GOV.UK') }}</h2>
 
       <p>
         {{ t('We collect information about you in accordance with our privacy policy and our cookie policy') }}
       </p>
-
-
 
       <h2 class="heading-medium">{{ t('Disclaimer') }}</h2>
 
@@ -142,13 +141,11 @@
           {{ t('We may still be liable for:') }}
         </p>
 
-
         <ul class="list list-bullet">
           <li>{{ t('death or personal injury arising from our negligence') }}</li>
           <li>{{ t('fraudulent misrepresentation') }}</li>
           <li>{{ t('any other liability which cannot be excluded or limited under applicable law') }}</li>
         </ul>
-
 
         <h2 class="heading-medium">{{ t('Changes to these terms and conditions') }}</h2>
 
@@ -162,26 +159,8 @@
           the terms and conditions have been updated.') }}
         </p>
 
-        <h2 class="heading-medium">{{ t('Contact us') }}</h2>
-
-        <p> {{ t('Civil Money Claims') }}</p>
-
-        <p>{{ t('Email: ') + 'moneyclaims@hmcts.gsi.gov.uk' }}
-          <br>{{ t('Telephone:  0300 123 1057') }}
-          <br>{{ t('Hours: 9am to 5pm, Monday to Friday ') }}
-
-          <br>
-          {{ t('<a href="{{ callCharges }}">Find out about call charges</a>',
-          { callCharges: 'https://www.gov.uk/call-charges' }) | safe }}
-
-        </p>
-
-
+      {{ supportWidget() }}
 
     </div>
-
-
-  </div>
-
   </div>
 {% endblock %}
