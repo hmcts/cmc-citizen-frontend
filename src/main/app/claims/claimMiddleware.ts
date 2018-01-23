@@ -13,7 +13,7 @@ export class ClaimMiddleware {
     const externalId: string = UUIDUtils.extractFrom(req.path)
 
     const user: User = res.locals.user
-    ClaimStoreClient.retrieveByExternalId(externalId, user.id)
+    ClaimStoreClient.retrieveByExternalId(externalId, user)
       .then((claim: Claim) => {
         res.locals.claim = claim
         next()

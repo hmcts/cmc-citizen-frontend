@@ -16,11 +16,11 @@ export default express.Router()
     const claimDraft: Draft<DraftClaim> = res.locals.claimDraft
     const responseDraft: Draft<ResponseDraft> = res.locals.responseDraft
     const user: User = res.locals.user
-    const claimsAsClaimant: Claim[] = await ClaimStoreClient.retrieveByClaimantId(user.id)
+    const claimsAsClaimant: Claim[] = await ClaimStoreClient.retrieveByClaimantId(user)
     const claimDraftSaved: boolean = claimDraft.document && claimDraft.id !== 0
-    const responseDraftSaved = responseDraft && responseDraft.document && responseDraft.id !== 0 // TODO: apply response draft middleware
+    const responseDraftSaved = responseDraft && responseDraft.document && responseDraft.id !== 0
 
-    const claimsAsDefendant: Claim[] = await ClaimStoreClient.retrieveByDefendantId(user.id)
+    const claimsAsDefendant: Claim[] = await ClaimStoreClient.retrieveByDefendantId(user)
 
     res.render(Paths.dashboardPage.associatedView, {
       paths: Paths,
