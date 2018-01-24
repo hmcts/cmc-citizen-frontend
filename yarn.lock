@@ -2660,7 +2660,7 @@ gulp-plumber@^1.0.0:
     gulp-util "^3"
     through2 "^2"
 
-gulp-rename@^1.2.0:
+gulp-rename@^1.2.0, gulp-rename@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/gulp-rename/-/gulp-rename-1.2.2.tgz#3ad4428763f05e2764dec1c67d868db275687817"
 
@@ -4450,6 +4450,10 @@ node.extend@^1.1.6, node.extend@~1.1.6:
   resolved "https://registry.yarnpkg.com/node.extend/-/node.extend-1.1.6.tgz#a7b882c82d6c93a4863a5504bd5de8ec86258b96"
   dependencies:
     is "^3.1.0"
+
+nodelist-foreach-polyfill@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/nodelist-foreach-polyfill/-/nodelist-foreach-polyfill-1.2.0.tgz#92bca739959af68271734087e48474c2fef5152c"
 
 nodemailer-direct-transport@3.3.2:
   version "3.3.2"
