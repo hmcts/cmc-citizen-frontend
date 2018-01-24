@@ -75,7 +75,9 @@
   })
 
   function show (element) {
-    element.classList.remove('hidden', 'js-hidden')
+    // IE doesn't support multiple arguments to classList
+    element.classList.remove('hidden')
+    element.classList.remove('js-hidden')
   }
 
   function hide (element) {
