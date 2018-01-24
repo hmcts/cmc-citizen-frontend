@@ -28,7 +28,7 @@ export default express.Router()
   })
   .post(
     path.uri,
-    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.CITIZEN_CLAIMANT),
+    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.CLAIM_ON_BEHALF),
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<Eligibility> = req.body
 

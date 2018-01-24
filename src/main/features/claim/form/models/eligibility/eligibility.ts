@@ -6,7 +6,7 @@ import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 
 export class Eligibility {
 
-  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.CITIZEN_CLAIMANT] })
+  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.CLAIM_ON_BEHALF] })
   claimOnBehalf?: YesNoOption
 
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.CLAIMANT_ADDRESS] })
