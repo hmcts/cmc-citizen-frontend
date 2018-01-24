@@ -54,17 +54,6 @@ describe('Login receiver', async () => {
           .expect(res => expect(res).to.have.cookie('state', ''))
       })
 
-      it('should return 500 and render error page when cannot retrieve draft', async () => {
-        claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-        claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
-        draftStoreServiceMock.rejectFind('Cos')
-
-        await request(app)
-          .get(AppPaths.receiver.uri)
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.serverError.withText('Error'))
-      })
-
       context('when no claim or response', async () => {
 
         it('should redirect to claim start', async () => {

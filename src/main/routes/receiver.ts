@@ -110,14 +110,17 @@ function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
   cookies.set(stateCookieName, '', { sameSite: 'lax' })
 }
 
-async function linkDefendantWithClaimByLetterHolderId (letterHolderId, user) {
+async function linkDefendantWithClaimByLetterHolderId (letterHolderId, user): Promise<Claim> {
   if (user.isInRoles(`letter-${letterHolderId}`)) {
     const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(letterHolderId, user.bearerToken)
     logger.debug(`Linking user ${user.id} to claim ${claim.id}`)
+
     if (!claim.defendantId) {
-      await ClaimStoreClient.linkDefendant(claim.id, user)
+      return ClaimStoreClient.linkDefendant(claim.id, user)
     }
   }
+
+  return Promise.reject(new Error('This claim cannot be linked'))
 }
 
 /* tslint:disable:no-default-export */
@@ -147,12 +150,13 @@ export default express.Router()
           cookies.set(stateCookieName, req.query.state, { sameSite: 'lax' })
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
-          (user as User).getLetterHolderIdList()
-            .forEach(async (letterHolderId) => {
-              return linkDefendantWithClaimByLetterHolderId(letterHolderId, user)
-            })
+          Promise.all((user as User).getLetterHolderIdList().map(
+            (letterHolderId) => linkDefendantWithClaimByLetterHolderId(letterHolderId, user)
+            )
+          )
+            .then(async () => res.redirect(await retrieveRedirectForLandingPage(res.locals.user)))
+            .catch(async () => res.redirect(await retrieveRedirectForLandingPage(res.locals.user)))
         }
-        res.redirect(await retrieveRedirectForLandingPage(res.locals.user))
       } else {
         res.redirect(OAuthHelper.forLogin(req, res))
       }
