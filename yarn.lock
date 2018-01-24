@@ -976,11 +976,11 @@ class-transformer@^0.1.7:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.1.8.tgz#be04dd2afb7b301e4c8c79c5349fedaac3d5a7e1"
 
-class-validator@^0.7.0:
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/class-validator/-/class-validator-0.7.3.tgz#3c2821b8cf35fd8d5f4fcb8063bc57fb50049e7e"
+class-validator@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/class-validator/-/class-validator-0.8.0.tgz#3b08c3b882981bb0de9e3c67adbc035ee5730446"
   dependencies:
-    validator "^7.0.0"
+    validator "9.2.0"
 
 cli-boxes@^1.0.0:
   version "1.0.0"
@@ -6638,11 +6638,7 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "~1.0.0"
     spdx-expression-parse "~1.0.0"
 
-validator@^7.0.0:
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/validator/-/validator-7.2.0.tgz#a63dcbaba51d4350bf8df20988e0d5a54d711791"
-
-validator@^9.1.2:
+validator@9.2.0, validator@^9.1.2:
   version "9.2.0"
   resolved "https://registry.yarnpkg.com/validator/-/validator-9.2.0.tgz#ad216eed5f37cac31a6fe00ceab1f6b88bded03e"
 
