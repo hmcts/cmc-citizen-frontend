@@ -7,21 +7,24 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <p>{{ t('When you use the money claims service we will ask you for some personal data.
-      This privacy policy explains why we collect your personal data, what we do with it and your rights.') }}
+      <p>{{ t('When you use the money claims service we will ask you for some personal data.' +
+        'This privacy policy explains why we collect your personal data, what we do with it and your rights.') }}
       </p>
       <p>
-        {{ t('The money claim service is managed by Her Majesty’s Courts and Tribunals Service and will be referred to as we from now on.') }}
+        {{ t('The money claim service is managed by Her Majesty’s Courts and Tribunals Service and '
+        + 'will be referred to as we from now on.') }}
       </p>
 
-      <p> {{ t('More information about how to use the service is in the <a href="{{  termsAndConditions }}">terms and conditions</a>.',
+      <p> {{ t('More information about how to use the service is in the '
+        +'<a href="{{  termsAndConditions }}">terms and conditions</a>.',
         { termsAndConditions: '/terms-and-conditions' }) | safe }}
       </p>
 
       <h2 class="heading-medium">{{ t('Why we need your personal data') }}</h2>
 
       <p>
-        {{ t('We collect your personal data to process your application and to meet legal requirements. We also collect data to improve the service.') }}
+        {{ t('We collect your personal data to process your application and to meet legal requirements. '
+        + 'We also collect data to improve the service.') }}
       </p>
 
       <p>
@@ -31,7 +34,8 @@
       <ul class="list list-bullet">
         <li>{{ t('your name, address and contact details') }}</li>
         <li>{{ t('information that tells us if you open an email from us, or click on a link in an email') }}</li>
-        <li>{{ t('information about how you use this service, like your IP address and the web browser you use. We do this by using <a href="{{ cookieUrl }}">cookies</a>.',
+        <li>{{ t('information about how you use this service, like your IP address and the web browser you use. '
+          + 'We do this by using <a href="{{ cookieUrl }}">cookies</a>.',
           { cookieUrl: '/cookies'}) | safe }}
         </li>
       </uL>
@@ -39,7 +43,8 @@
       <h2 class="heading-medium">{{ t('What we do with your data') }}</h2>
 
       <p>
-        {{ t('HMCTS is an executive agency of the Ministry of Justice and their <a href="{{ personalInformationCharter }}">personal information charter</a> explains how we process data.',
+        {{ t('HMCTS is an executive agency of the Ministry of Justice and their '
+        + '<a href="{{ personalInformationCharter }}">personal information charter</a> explains how we process data.',
         { personalInformationCharter: 'https://www.gov.uk/government/organisations/home-office/about/personal-information-charter'}) | safe }}
       </p>
 
@@ -58,12 +63,13 @@
       <h2 class="heading-medium">{{ t('What we would also like to do with your data') }}</h2>
 
       <p>
-        {{ t('As part of your claim we’ll ask if you want to receive notifications to let you know how your application is proceeding.
-        We’ll ask for your name and preferred contact details.') }}
+        {{ t('As part of your claim we’ll ask if you want to receive notifications to let you know how '
+        + 'your application is proceeding. We’ll ask for your name and preferred contact details.') }}
       </p>
 
       <p>
-        {{ t('This information is not shared with third parties and you can unsubscribe at any time by phoning 0203 123 1234 or emailing mydata@hmcts.net.') }}
+        {{ t('This information is not shared with third parties and you can unsubscribe at any time '
+        + 'by phoning 0203 123 1234 or emailing mydata@hmcts.net.') }}
       </p>
 
       <h2 class="heading-medium">{{ t('Your rights') }}</h2>
@@ -99,7 +105,8 @@
       <p> {{ t('If you want to complain about how we have handled your personal data email mydata@hmcts.net.') }}</p>
 
       <p>
-        {{ t('You can complain to the <a href="{{ informationCommissionerOffice }}">Information Commissioner’s Office </a> if you: ',
+        {{ t('You can complain to the '
+        + '<a href="{{ informationCommissionerOffice }}">Information Commissioner’s Office </a> if you: ',
         { informationCommissionerOffice: 'https://ico.org.uk/global/contact-us' }) | safe }}
       </p>
 
