@@ -115,17 +115,20 @@ export class TaskListBuilder {
     return new TaskList(2, 'Respond to claim', tasks)
   }
 
-  static buildSubmitSection (externalId: string): TaskList {
+  static buildSubmitSection (draft: ResponseDraft, externalId: string): TaskList {
     const tasks: TaskListItem[] = []
-    tasks.push(
-      new TaskListItem(
-        'Check and submit your response',
-        Paths.checkAndSendPage.evaluateUri({ externalId: externalId }),
-        false
+    if (draft.requireSubmitSection()) {
+      tasks.push(
+        new TaskListItem(
+          'Check and submit your response',
+          Paths.checkAndSendPage.evaluateUri({ externalId: externalId }),
+          false
+        )
       )
-    )
-
-    return new TaskList(3, 'Submit', tasks)
+      return new TaskList(3, 'Submit', tasks)
+    } else {
+      return undefined
+    }
   }
 
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {

@@ -88,6 +88,7 @@ export class ResponseDraft extends DraftDocument {
 
     return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim !== undefined
       && RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).includes(this.rejectAllOfClaim.option)
+      && this.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE
   }
 
   public isResponseFullyAdmitted (): boolean {
@@ -121,6 +122,10 @@ export class ResponseDraft extends DraftDocument {
     return this.isResponsePopulated() && (this.showWhenDidYouPayWhenAmountClaimed())
   }
 
+  public requireSubmitSection (): boolean {
+    return this.showTaskListSubmitSection()
+  }
+
   private isResponsePopulated (): boolean {
     return !!this.response && !!this.response.type
   }
@@ -140,6 +145,13 @@ export class ResponseDraft extends DraftDocument {
   private showWhenDidYouPayWhenAmountClaimed (): boolean {
     return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim && this.howMuchPaidClaimant &&
       (this.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID &&
+        this.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.AMOUNT_CLAIMED)
+  }
+
+  private showTaskListSubmitSection (): boolean {
+    return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim
+      && this.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE ||
+        (this.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID &&
         this.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.AMOUNT_CLAIMED)
   }
 }
