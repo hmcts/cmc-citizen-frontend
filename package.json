@@ -62,7 +62,7 @@
     "i18next-conv": "^6.0.0",
     "i18next-express-middleware": "^1.0.2",
     "i18next-sprintf-postprocessor": "^0.2.2",
-    "jquery": "3.2.1",
+    "jquery": "3.3.1",
     "js-base64": "^2.3.2",
     "mime": "^2.0.3",
     "moment": "^2.18.1",
