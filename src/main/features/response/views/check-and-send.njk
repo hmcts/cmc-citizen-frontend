@@ -65,6 +65,15 @@
       {% include "./statement-of-means/check-and-send.njk" %}
     {% endif %}
 
+
+    {% if draft.requireWhenDidYouPay() %}
+          {{ tableStart('yourResponse', 'Your response') }}
+            {{ row('When did you pay this amount?', draft.whenDidYouPay.date.toMoment() | date, paths.whenDidYouPay.evaluateUri({ externalId: claim.externalId })) }}
+            {{ row('How did you pay the amount claimed?', draft.whenDidYouPay.text, paths.whenDidYouPay.evaluateUri({ externalId: claim.externalId })) }}
+          {{ tableEnd() }}
+    {% endif %}
+
+
     {% if draft.response.type === ResponseType.PART_ADMISSION and featureToggles.partialAdmission %}
 
       {{ tableStart('yourResponse', 'Your response') }}

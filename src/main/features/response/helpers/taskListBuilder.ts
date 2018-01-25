@@ -44,17 +44,6 @@ export class TaskListBuilder {
   static buildRespondToClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
     const externalId: string = claim.externalId
     const tasks: TaskListItem[] = []
-    // const now: Moment = MomentFactory.currentDateTime()
-    // if (claim.responseDeadline.isAfter(now)) {
-    //   tasks.push(
-    //     new TaskListItem(
-    //       'More time needed to respond',
-    //       Paths.moreTimeRequestPage.evaluateUri({ externalId: externalId }),
-    //       MoreTimeNeededTask.isCompleted(draft)
-    //     )
-    //   )
-    // }
-
     tasks.push(
       new TaskListItem(
         'Do you owe the money claimed',
@@ -73,7 +62,7 @@ export class TaskListBuilder {
       )
     }
 
-    if (draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)) {
+    if (draft.requirePartialAdmitHandOff()) {
       tasks.push(
         new TaskListItem(
           'How much have you paid the claimant?',

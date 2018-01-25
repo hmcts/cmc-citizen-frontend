@@ -96,16 +96,6 @@ describe('ResponseDraft', () => {
 
       expect(draft.requireDefence()).to.be.eq(false)
     })
-
-    it('should return true when response is full rejection without counter claim', () => {
-      RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).forEach(option => {
-        const draft: ResponseDraft = new ResponseDraft()
-        draft.response = new Response(ResponseType.DEFENCE)
-        draft.rejectAllOfClaim = new RejectAllOfClaim(option)
-
-        expect(draft.requireDefence()).to.be.eq(true)
-      })
-    })
   })
 
   describe('isResponseFullyAdmitted', () => {

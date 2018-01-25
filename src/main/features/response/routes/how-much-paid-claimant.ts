@@ -30,10 +30,8 @@ function accessDeniedCallback (req: express.Request, res: express.Response): voi
 const guardRequestHandler: express.RequestHandler = GuardFactory.create(isRequestAllowed, accessDeniedCallback)
 
 async function renderView (form: Form<HowMuchPaidClaimant>, res: express.Response, next: express.NextFunction) {
-  const claim: Claim = res.locals.claim
   res.render(Paths.defendantHowMuchPaidClaimant.associatedView, {
-    form: form,
-    amount: claim.totalAmountTillToday
+    form: form
   })
 }
 

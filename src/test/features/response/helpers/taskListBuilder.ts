@@ -70,7 +70,7 @@ describe('Defendant response task list builder', () => {
         }
         const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.contain('How much have you paid the claimant?')
+        expect(taskList.tasks.map(task => task.name)).to.not.contain('How much have you paid the claimant?')
       })
 
       it('should be disabled in remaining cases', () => {

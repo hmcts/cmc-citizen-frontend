@@ -104,10 +104,6 @@ export class ResponseDraft extends DraftDocument {
       return false
     }
 
-    if (this.response.type === ResponseType.PART_ADMISSION) {
-      return false
-    }
-
     if (option === undefined) {
       throw new Error('Option is undefined')
     }
@@ -116,6 +112,12 @@ export class ResponseDraft extends DraftDocument {
       && this.response.type === ResponseType.PART_ADMISSION
       && this.rejectPartOfClaim !== undefined
       && this.rejectPartOfClaim.option === option
+  }
+
+  public requirePartialAdmitHandOff (): boolean {
+    if (this.isResponsePopulated() && this.response.type === ResponseType.PART_ADMISSION) {
+      return false
+    }
   }
 
   public requireMediation (): boolean {
