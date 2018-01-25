@@ -32,7 +32,7 @@ export class OAuthHelper {
   }
 
   static forUplift (req: express.Request, res: express.Response): string {
-    const redirectUri = buildURL(req, Paths.linkDefendantReceiver.uri)
+    const redirectUri = buildURL(req, Paths.receiver.uri)
     const user: User = res.locals.user
     OAuthHelper.storeStateCookie(req, res, user.id)
 
