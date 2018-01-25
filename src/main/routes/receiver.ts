@@ -4,7 +4,7 @@ import { Paths as AppPaths } from 'app/paths'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 import { Paths as ClaimPaths } from 'claim/paths'
 import { Paths as ResponsePaths } from 'response/paths'
-import { ErrorPaths, Paths as FirstContactPaths } from 'first-contact/paths'
+import { Paths as FirstContactPaths } from 'first-contact/paths'
 import { ClaimStoreClient } from 'app/claims/claimStoreClient'
 import { User } from 'app/idam/user'
 import { ErrorHandling } from 'common/errorHandling'
@@ -52,28 +52,6 @@ async function getAuthToken (req: express.Request,
 
 function isDefendantFirstContactPinLogin (req: express.Request): boolean {
   return req.query && req.query.state && req.query.state.match(/[0-9]{3}MC[0-9]{3}/)
-}
-
-function getLetterHolderId (req: express.Request, user: User): string {
-  const roles: string[] = user.roles
-    .filter(
-      (role: string) =>
-        role.startsWith('letter') &&
-        role !== 'letter-holder' &&
-        !role.endsWith('loa1')
-    )
-
-  // If the user has more than one role then they have come in with uplift via login flow
-  // Use their state as the letter holder id
-  if (roles.length > 1) {
-    return req.query.state
-  }
-  // User’s on registration can only have one letter holder role
-  if (roles.length === 1) {
-    return roles.pop().replace('letter-', '')
-  }
-
-  throw new Error('User was logged in but didn’t have a letter holder role')
 }
 
 function loginErrorHandler (req: express.Request,
@@ -132,6 +110,19 @@ function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
   cookies.set(stateCookieName, '', { sameSite: 'lax' })
 }
 
+async function linkDefendantWithClaimByLetterHolderId (letterHolderId, user): Promise<Claim> {
+  if (user.isInRoles(`letter-${letterHolderId}`)) {
+    const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(letterHolderId, user.bearerToken)
+    logger.debug(`Linking user ${user.id} to claim ${claim.id}`)
+
+    if (!claim.defendantId) {
+      return ClaimStoreClient.linkDefendant(claim.id, user)
+    }
+  }
+
+  return Promise.reject(new Error('This claim cannot be linked'))
+}
+
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(AppPaths.receiver.uri,
@@ -139,11 +130,12 @@ export default express.Router()
                                res: express.Response,
                                next: express.NextFunction): Promise<void> => {
       const cookies = new Cookies(req, res)
+      let user
 
       try {
         const authenticationToken = await getAuthToken(req)
         if (authenticationToken) {
-          const user = await IdamClient.retrieveUserFor(authenticationToken)
+          user = await IdamClient.retrieveUserFor(authenticationToken)
           res.locals.isLoggedIn = true
           res.locals.user = user
           setAuthCookie(cookies, authenticationToken)
@@ -157,11 +149,14 @@ export default express.Router()
           // re-set state cookie as it was cleared above, we need it in this case
           cookies.set(stateCookieName, req.query.state, { sameSite: 'lax' })
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
+        } else {
+          Promise.all((user as User).getLetterHolderIdList().map(
+            (letterHolderId) => linkDefendantWithClaimByLetterHolderId(letterHolderId, user)
+            )
+          )
+            .then(async () => res.redirect(await retrieveRedirectForLandingPage(res.locals.user)))
+            .catch(async () => res.redirect(await retrieveRedirectForLandingPage(res.locals.user)))
         }
-
-        res.redirect(await
-          retrieveRedirectForLandingPage(res.locals.user)
-        )
       } else {
         res.redirect(OAuthHelper.forLogin(req, res))
       }
@@ -175,31 +170,15 @@ export default express.Router()
       try {
         const authenticationToken = await getAuthToken(req, AppPaths.linkDefendantReceiver, false)
         if (authenticationToken) {
-          const user = await IdamClient.retrieveUserFor(authenticationToken)
+          res.locals.user = await IdamClient.retrieveUserFor(authenticationToken)
           res.locals.isLoggedIn = true
-          res.locals.user = user
           setAuthCookie(cookies, authenticationToken)
+          res.redirect(AppPaths.receiver.uri)
+          return
         }
       } catch (err) {
         return loginErrorHandler(req, res, cookies, next, err, AppPaths.linkDefendantReceiver)
       }
 
-      const user: User = res.locals.user
-      if (res.locals.isLoggedIn) {
-        const letterHolderId: string = getLetterHolderId(req, user)
-        if (!user.isInRoles(`letter-${letterHolderId}`)) {
-          logger.error('User not in letter ID role - redirecting to access denied page')
-          return res.redirect(ErrorPaths.claimSummaryAccessDeniedPage.uri)
-        }
-
-        const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(letterHolderId, user.bearerToken)
-
-        if (!claim.defendantId) {
-          await ClaimStoreClient.linkDefendant(claim.id, user)
-        }
-
-        res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
-      } else {
-        res.redirect(OAuthHelper.forLogin(req, res, AppPaths.linkDefendantReceiver))
-      }
+      res.redirect(OAuthHelper.forLogin(req, res, AppPaths.linkDefendantReceiver))
     }))
