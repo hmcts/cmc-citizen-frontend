@@ -5,6 +5,7 @@ const livereload = require('gulp-livereload')
 const sass = require('gulp-sass')
 const path = require('path')
 const replace = require('gulp-replace')
+const rename = require('gulp-rename')
 const fs = require('fs')
 
 const repoRoot = path.join(__dirname, '/')
@@ -35,6 +36,10 @@ gulp.task('copy-files', () => {
     './node_modules/govuk_template_jinja/assets/javascripts/**/*.js'
   ])
   .pipe(gulp.dest(`${assetsDirectory}/js/lib/`))
+
+  gulp.src('./node_modules/nodelist-foreach-polyfill/index.js')
+    .pipe(rename('nodelist-foreach-polyfill.js'))
+    .pipe(gulp.dest(`${assetsDirectory}/js/lib/`))
 
   gulp.src([
     './node_modules/HTML_CodeSniffer/HTMLCS.js'
