@@ -38,13 +38,27 @@ export class ClaimAmountRow {
     return new ClaimAmountRow(undefined, undefined)
   }
 
+  static translateToNumber (input?: any): any {
+    const numberValue = _.toNumber(input)
+    const isExponential = numberValue.toString().match(new RegExp('\\d*[Ee][+-]?\\d*?'))
+
+    if (!isNaN(numberValue) && !isExponential) {
+      return numberValue
+    } else {
+      return input
+    }
+  }
+
   static fromObject (value?: any): ClaimAmountRow {
     if (!value) {
       return value
     }
 
     const reason = value.reason || undefined
-    const amount = value.amount ? _.toNumber(value.amount) : undefined
+    const amount = value.amount
+      ? ClaimAmountRow.translateToNumber(value.amount.replace(new RegExp(/,/g), ''))
+      : undefined
+
     return new ClaimAmountRow(reason, amount)
   }
 

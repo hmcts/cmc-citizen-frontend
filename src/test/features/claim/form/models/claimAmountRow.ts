@@ -26,6 +26,13 @@ describe('ClaimAmountRow', () => {
         amount: 100.01
       })).to.deep.equal(new ClaimAmountRow('Something', 100.01))
     })
+
+    it('should deserialize amount containing comma', () => {
+      expect(ClaimAmountRow.fromObject({
+        reason: 'Something',
+        amount: '1,100'
+      })).to.deep.equal(new ClaimAmountRow('Something', 1100))
+    })
   })
 
   describe('validation', () => {
@@ -87,6 +94,12 @@ describe('ClaimAmountRow', () => {
     context('should accept', () => {
       it('row with both reason and valid amount', () => {
         const errors = validator.validateSync(new ClaimAmountRow('Something', 0.01))
+
+        expect(errors.length).to.equal(0)
+      })
+
+      it('row with amount containing comma', () => {
+        const errors = validator.validateSync({ reason: 'Something', amount: '1,100' })
 
         expect(errors.length).to.equal(0)
       })
