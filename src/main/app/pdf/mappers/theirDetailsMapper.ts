@@ -17,7 +17,9 @@ export class TheirDetailsMapper {
       address: {
         lineOne: party.address.line1,
         lineTwo: party.address.line2,
+        lineThree: party.address.line3,
         townOrCity: party.address.city,
+        country: party.address.country,
         postcode: party.address.postcode
       },
       dateOfBirth: this.dateOfBirth(party),

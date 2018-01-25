@@ -11,6 +11,7 @@ import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
+import { Country } from 'app/common/country'
 
 function renderView (form: Form<OrganisationDetails>, res: express.Response): void {
   res.render(Paths.claimantOrganisationDetailsPage.associatedView, { form: form })
@@ -27,7 +28,9 @@ export default express.Router()
     Paths.claimantOrganisationDetailsPage.uri,
     FormValidator.requestHandler(OrganisationDetails, OrganisationDetails.fromObject, 'claimant'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const form: Form<OrganisationDetails> = req.body
+      let form: Form<OrganisationDetails> = req.body
+      form = Country.isValidClaimantAddress(form)
+
       if (form.hasErrors()) {
         renderView(form, res)
       } else {

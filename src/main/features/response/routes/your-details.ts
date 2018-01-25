@@ -20,6 +20,7 @@ import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
+import { Country } from 'app/common/country'
 
 function renderView (form: Form<PartyDetails>, res: express.Response) {
   const claim: Claim = res.locals.claim
@@ -76,7 +77,8 @@ export default express.Router()
     Paths.defendantYourDetailsPage.uri,
     FormValidator.requestHandler(PartyDetails, deserializeFn, 'response'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<PartyDetails> = req.body
+      let form: Form<PartyDetails> = req.body
+      form = Country.isValidDefendantAddress(form)
 
       if (form.hasErrors()) {
         renderView(form, res)

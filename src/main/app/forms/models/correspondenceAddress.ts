@@ -14,6 +14,9 @@ export class ValidationErrors {
   static readonly CITY_REQUIRED: string = 'Enter correspondence town/city'
   static readonly CITY_NOT_VALID: string = 'The correspondence address city must be no longer than $constraint1 characters'
 
+  static readonly COUNTRY_REQUIRED: string = 'Enter correspondence country'
+  static readonly COUNTRY_NOT_VALID: string = 'The correspondence address country must be no longer than $constraint1 characters'
+
   static readonly POSTCODE_REQUIRED: string = 'Enter correspondence address postcode'
   static readonly POSTCODE_NOT_VALID: string = 'The correspondence address postcode must be no longer than $constraint1 characters'
 }
@@ -37,6 +40,10 @@ export class CorrespondenceAddress extends Address {
   @IsNotBlank({ message: ValidationErrors.CITY_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.CITY_NOT_VALID, groups: ['claimant', 'defendant', 'response'] })
   city?: string
+  @IsDefined({ message: ValidationErrors.COUNTRY_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
+  @IsNotBlank({ message: ValidationErrors.COUNTRY_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
+  @MaxLength(ValidationConstants.ADDRESS_MAX_LENGTH, { message: ValidationErrors.COUNTRY_NOT_VALID, groups: ['claimant', 'defendant', 'response'] })
+  country?: string
   @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @MaxLength(ValidationConstants.POSTCODE_MAX_LENGTH, { message: ValidationErrors.POSTCODE_NOT_VALID, groups: ['claimant', 'defendant', 'response'] })

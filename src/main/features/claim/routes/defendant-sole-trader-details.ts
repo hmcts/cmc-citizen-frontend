@@ -11,6 +11,7 @@ import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
+import { Country } from 'app/common/country'
 
 function renderView (form: Form<SoleTraderDetails>, res: express.Response): void {
   res.render(Paths.defendantSoleTraderOrSelfEmployedDetailsPage.associatedView, { form: form })
@@ -27,7 +28,9 @@ export default express.Router()
     Paths.defendantSoleTraderOrSelfEmployedDetailsPage.uri,
     FormValidator.requestHandler(SoleTraderDetails, SoleTraderDetails.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const form: Form<SoleTraderDetails> = req.body
+      let form: Form<SoleTraderDetails> = req.body
+      form = Country.isValidDefendantAddress(form)
+
       if (form.hasErrors()) {
         renderView(form, res)
       } else {

@@ -16,6 +16,7 @@ export class PartyDetailsMapper {
         lineTwo: party.address.line2,
         lineThree: party.address.line3,
         townOrCity: party.address.city,
+        country: party.address.country,
         postcode: party.address.postcode
       },
       email: email
@@ -26,6 +27,7 @@ export class PartyDetailsMapper {
         lineTwo: party.correspondenceAddress.line2,
         lineThree: party.correspondenceAddress.line3,
         townOrCity: party.correspondenceAddress.city,
+        country: party.correspondenceAddress.country,
         postcode: party.correspondenceAddress.postcode
       }
     }

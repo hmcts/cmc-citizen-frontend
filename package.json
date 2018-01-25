@@ -22,7 +22,7 @@
     "prepush": "yarn test && yarn test:routes"
   },
   "dependencies": {
-    "@hmcts/cmc-common-frontend": "^1.36.1",
+    "@hmcts/cmc-common-frontend": "file:../cmc-common-frontend",
     "@hmcts/cmc-draft-store-middleware": "^2.0.0",
     "@hmcts/draft-store-client": "^1.1.1",
     "@hmcts/info-provider": "^1.0.0",
