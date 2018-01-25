@@ -28,7 +28,7 @@ export default express.Router()
     FormValidator.requestHandler(IndividualDetails, IndividualDetails.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       let form: Form<IndividualDetails> = req.body
-      form = Country.isValidDefendantAddress(form, 'England')
+      form = Country.isValidDefendantAddress(form)
 
       if (form.hasErrors()) {
         renderView(form, res)
