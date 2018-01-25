@@ -17,7 +17,7 @@ export default express.Router()
       const claim: Claim = res.locals.claim
 
       const beforeYouStartSection = TaskListBuilder
-        .buildBeforeYouStartSection(draft.document, claim.externalId)
+        .buildBeforeYouStartSection(draft.document, claim)
       const respondToClaimSection = TaskListBuilder
         .buildRespondToClaimSection(draft.document, claim)
       const submitSection = TaskListBuilder.buildSubmitSection(draft.document, claim.externalId)

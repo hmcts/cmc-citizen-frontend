@@ -30,15 +30,11 @@ function accessDeniedCallback (req: express.Request, res: express.Response): voi
 const guardRequestHandler: express.RequestHandler = GuardFactory.create(isRequestAllowed, accessDeniedCallback)
 
 async function renderView (form: Form<HowMuchPaidClaimant>, res: express.Response, next: express.NextFunction) {
-  try {
-    const claim: Claim = res.locals.claim
-    res.render(Paths.defendantHowMuchPaidClaimant.associatedView, {
-      form: form,
-      amount: claim.totalAmountTillToday
-    })
-  } catch (err) {
-    next(err)
-  }
+  const claim: Claim = res.locals.claim
+  res.render(Paths.defendantHowMuchPaidClaimant.associatedView, {
+    form: form,
+    amount: claim.totalAmountTillToday
+  })
 }
 
 /* tslint:disable:no-default-export */
@@ -48,7 +44,6 @@ export default express.Router()
     guardRequestHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-
       renderView(new Form(draft.document.howMuchPaidClaimant), res, next)
     }))
   .post(

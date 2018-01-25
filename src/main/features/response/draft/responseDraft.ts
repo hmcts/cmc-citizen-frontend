@@ -104,6 +104,10 @@ export class ResponseDraft extends DraftDocument {
       return false
     }
 
+    if (this.response.type === ResponseType.PART_ADMISSION) {
+      return false
+    }
+
     if (option === undefined) {
       throw new Error('Option is undefined')
     }
