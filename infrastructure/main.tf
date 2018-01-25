@@ -51,7 +51,7 @@ module "citizen-frontend" {
 
     // Application vars
     GA_TRACKING_ID = "UA-97111056-1"
-    POSTCODE_LOOKUP_API_KEY = "${data.vault_generic_secret.s2s_secret.data["value"]}"
+    POSTCODE_LOOKUP_API_KEY = "${data.vault_generic_secret.postcode-lookup-api-key.data["value"]}"
 
     // IDAM
     IDAM_API_URL = "${var.idam-api-url}"
