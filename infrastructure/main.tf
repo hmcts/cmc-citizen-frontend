@@ -57,7 +57,7 @@ module "citizen-frontend" {
     IDAM_API_URL = "${var.idam-api-url}"
     IDAM_AUTHENTICATION_WEB_URL = "${var.authentication-web-url}"
     IDAM_S2S_AUTH = "${var.service-2-service-auth-url}"
-    IDAM_S2S_TOTP_SECRET = "${data.vault_generic_secret.postcode-lookup-api-key.data["value"]}"
+    IDAM_S2S_TOTP_SECRET = "${data.vault_generic_secret.s2s_secret.data["value"]}"
     OAUTH_CLIENT_SECRET = "${data.vault_generic_secret.oauth-client-secret.data["value"]}"
 
     // Payments API
