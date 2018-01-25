@@ -16,7 +16,7 @@ export default express.Router()
 
         const { externalId } = req.params
 
-        documentsClient.getSettlementAgreementPDF(externalId)
+        documentsClient.getSettlementAgreementPDF(externalId, res.locals.user)
           .on('response', (response: http.IncomingMessage) => {
             if (response.statusCode !== 200) {
               return next(new Error('Unexpected error during document retrieval'))

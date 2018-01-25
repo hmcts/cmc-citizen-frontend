@@ -15,7 +15,7 @@ export default express.Router()
       async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
         const { externalId } = req.params
-        documentsClient.getClaimIssueReceiptPDF(externalId)
+        documentsClient.getClaimIssueReceiptPDF(externalId, res.locals.user)
           .on('response', (response: http.IncomingMessage) => {
             if (response.statusCode !== HttpStatus.OK) {
               return next(

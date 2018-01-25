@@ -9,7 +9,7 @@ describe('DocumentsClient', () => {
 
     it('should throw error when given undefined ExternalId', () => {
       expect(() => client.getDefendantResponseReceiptPDF(
-        undefined))
+        undefined,))
         .to.throw(Error, 'Claim external ID cannot be blank')
     })
 
