@@ -2,7 +2,6 @@ import * as config from 'config'
 import { requestNonPromise } from 'client/request'
 import { Request } from 'request'
 import { StringUtils } from 'utils/stringUtils'
-import { User } from 'idam/user'
 
 const claimStoreBaseUrl = config.get<string>('claim-store.url')
 
@@ -11,16 +10,16 @@ export class DocumentsClient {
   constructor (public documentsUrl: string = `${claimStoreBaseUrl}/documents`) {
   }
 
-  getClaimIssueReceiptPDF (claimExternalId: string, user: User): Request {
-    return this.getPDF(claimExternalId, 'claimIssueReceipt', user.bearerToken)
+  getClaimIssueReceiptPDF (claimExternalId: string, bearerToken: string): Request {
+    return this.getPDF(claimExternalId, 'claimIssueReceipt', bearerToken)
   }
 
-  getDefendantResponseReceiptPDF (claimExternalId: string, user: User): Request {
-    return this.getPDF(claimExternalId, 'defendantResponseReceipt', user.bearerToken)
+  getDefendantResponseReceiptPDF (claimExternalId: string, bearerToken: string): Request {
+    return this.getPDF(claimExternalId, 'defendantResponseReceipt', bearerToken)
   }
 
-  getSettlementAgreementPDF (claimExternalId: string, user: User): Request {
-    return this.getPDF(claimExternalId, 'settlementAgreement', user.bearerToken)
+  getSettlementAgreementPDF (claimExternalId: string, bearerToken: string): Request {
+    return this.getPDF(claimExternalId, 'settlementAgreement', bearerToken)
   }
 
   private getPDF (claimExternalId: string, documentTemplate: string, bearerToken: string): Request {

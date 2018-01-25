@@ -5,6 +5,7 @@ import { DocumentsClient } from 'app/documents/documentsClient'
 import * as http from 'http'
 import * as HttpStatus from 'http-status-codes'
 import { Claim } from 'claims/models/claim'
+import { User } from 'idam/user'
 
 const documentsClient: DocumentsClient = new DocumentsClient()
 
@@ -15,7 +16,8 @@ export default express.Router()
       async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
         const { externalId } = req.params
-        documentsClient.getDefendantResponseReceiptPDF(externalId, res.locals.user)
+        const user: User = res.locals.user
+        documentsClient.getDefendantResponseReceiptPDF(externalId, user.bearerToken)
           .on('response', (response: http.IncomingMessage) => {
             if (response.statusCode !== HttpStatus.OK) {
               return next(
