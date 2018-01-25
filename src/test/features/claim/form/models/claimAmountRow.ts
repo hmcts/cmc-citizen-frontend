@@ -23,7 +23,7 @@ describe('ClaimAmountRow', () => {
     it('should deserialize all fields', () => {
       expect(ClaimAmountRow.fromObject({
         reason: 'Something',
-        amount: 100.01
+        amount: '100.01'
       })).to.deep.equal(new ClaimAmountRow('Something', 100.01))
     })
 
