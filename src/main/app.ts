@@ -21,6 +21,7 @@ import { CCJFeature } from 'ccj/index'
 import { Feature as OfferFeature } from 'offer/index'
 import { TestingSupportFeature } from 'testing-support/index'
 import * as toBoolean from 'to-boolean'
+import { Paths } from 'app/paths'
 
 export const app: express.Express = express()
 
@@ -77,6 +78,9 @@ if (toBoolean(config.get<boolean>('featureToggles.testingSupport'))) {
   new TestingSupportFeature().enableFor(app)
 }
 
+if (app.settings.nunjucksEnv && app.settings.nunjucksEnv.globals) {
+  app.settings.nunjucksEnv.globals.AppPaths = Paths
+}
 app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
 
 // Below will match all routes not covered by the router, which effectively translates to a 404 response

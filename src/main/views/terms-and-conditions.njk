@@ -10,8 +10,8 @@
     <div class="column-two-thirds">
       <p>{{ t('By using this service you’re agreeing to the following terms of use.') }}</p>
 
-      <p> {{ t('This includes the <a href="{{  privacyPolicy }}">privacy policy</a>.',
-        { privacyPolicy: 'privacy-policy' }) | safe }}
+      <p> {{ t('This includes the <a href="{{ uri }}">privacy policy</a>.',
+        { uri: AppPaths.privacyPolicyPage.uri }) | safe }}
       </p>
 
       <h2 class="heading-medium">{{ t('Who we are') }}</h2>
