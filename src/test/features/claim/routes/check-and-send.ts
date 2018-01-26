@@ -26,7 +26,7 @@ describe('Claim issue: check and send page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       it('should redirect to incomplete submission when not all tasks are completed', async () => {
@@ -67,7 +67,7 @@ describe('Claim issue: check and send page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       it('should redirect to incomplete submission when not all tasks are completed', async () => {
