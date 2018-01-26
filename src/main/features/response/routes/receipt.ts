@@ -15,7 +15,7 @@ export default express.Router()
       async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
         const { externalId } = req.params
-        documentsClient.getDefendantResponseReceiptPDF(externalId)
+        documentsClient.getDefendantResponseReceiptPDF(externalId, res.locals.user.bearerToken)
           .on('response', (response: http.IncomingMessage) => {
             if (response.statusCode !== HttpStatus.OK) {
               return next(
