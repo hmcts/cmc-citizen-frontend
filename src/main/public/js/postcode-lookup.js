@@ -27,8 +27,7 @@
             addressLine2(addressElement).value = addressDetails[1]
             addressLine3(addressElement).value = addressDetails[2]
             addressTownOrCity(addressElement).value = addressDetails[3]
-            addressCountry(addressElement).value = addressDetails[4]
-            addressPostcode(addressElement).value = addressDetails[5]
+            addressPostcode(addressElement).value = addressDetails[4]
             show(addressSection(postcodeLookupWidget))
           })
 
@@ -137,10 +136,6 @@
     return addressElement.querySelector('.address-town-or-city')
   }
 
-  function addressCountry (addressElement) {
-    return addressElement.querySelector('.address-country')
-  }
-
   function addressPostcode (addressElement) {
     return addressElement.querySelector('.postcode')
   }
@@ -155,7 +150,6 @@
     addressLine2(addressElement).value = ''
     addressLine3(addressElement).value = ''
     addressTownOrCity(addressElement).value = ''
-    addressCountry(addressElement).value = ''
     addressPostcode(addressElement).value = ''
   }
 
@@ -166,7 +160,6 @@
       addressLine2(addressElement).value !== '' ||
       addressLine3(addressElement).value !== '' ||
       addressTownOrCity(addressElement).value !== '' ||
-      addressCountry(addressElement).value !== '' ||
       addressPostcode(addressElement).value !== ''
   }
 
@@ -241,7 +234,6 @@
           lines.length > 3 ? lines[1].trim() : '',
           lines.length > 4 ? lines[2].trim() : '',
           lines[lines.length-2].trim(),
-          postcodeResponse.country.name,
           lines[lines.length-1].trim()
         ].join(', ')
         var option = document.createElement('option')

@@ -29,17 +29,21 @@ export default express.Router()
     FormValidator.requestHandler(OrganisationDetails, OrganisationDetails.fromObject, 'claimant'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       let form: Form<OrganisationDetails> = req.body
-      form = Country.isValidClaimantAddress(form)
 
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        const draft: Draft<DraftClaim> = res.locals.claimDraft
-        const user: User = res.locals.user
+        form = await Country.isValidClaimantAddress(form)
+        if (form.hasErrors()) {
+          renderView(form, res)
+        } else {
+          const draft: Draft<DraftClaim> = res.locals.claimDraft
+          const user: User = res.locals.user
 
-        draft.document.claimant.partyDetails = form.model
-        await new DraftService().save(draft, user.bearerToken)
+          draft.document.claimant.partyDetails = form.model
+          await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.claimantMobilePage.uri)
+          res.redirect(Paths.claimantMobilePage.uri)
+        }
       }
     }))

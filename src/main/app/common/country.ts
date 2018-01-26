@@ -7,6 +7,11 @@ import { PostcodeInfoClient, PostcodeInfoResponse } from '@hmcts/postcodeinfo-cl
 
 const postcodeClient = new PostcodeInfoClient(config.get<string>('postcodeLookup.apiKey'), request)
 
+export class PostcodeInfoCountry {
+  readonly GSS_CODE: string
+  readonly name: string
+}
+
 export class Country {
   static readonly WALES = new Country('wales', 'Wales')
   static readonly ENGLAND = new Country('england', 'England')
@@ -37,21 +42,21 @@ export class Country {
     ]
   }
 
-  static isValidClaimantAddress (form: Form<PartyDetails>): Form<PartyDetails> {
-    this.getCountry(form.model.address.postcode).then(function(country) {
-      if (!this.isClaimantCountry(country)) {
+  static async isValidClaimantAddress (form: Form<PartyDetails>): Promise<Form<PartyDetails>> {
+    await this.getCountry(form.model.address.postcode).then((country: string) => {
+      if (country.length > 0 && !Country.isClaimantCountry(country)) {
         let error = new ValidationError()
-        error.property = 'address[country]'
+        error.property = 'address[postcode]'
         error.constraints = { amount: 'The country must be England, Wales, Scotland or Northern Ireland' }
         form.errors.push(new FormValidationError(error))
       }
     })
 
     if (form.model.hasCorrespondenceAddress) {
-      this.getCountry(form.model.correspondenceAddress.postcode).then(function(country) {
-        if (!this.isClaimantCountry(country)) {
+      await this.getCountry(form.model.address.postcode).then((country: string) => {
+        if (country.length > 0 && !Country.isClaimantCountry(country)) {
           let error = new ValidationError()
-          error.property = 'correspondenceAddress[country]'
+          error.property = 'correspondenceAddress[postcode]'
           error.constraints = { amount: 'The country must be England, Wales, Scotland or Northern Ireland' }
           form.errors.push(new FormValidationError(error))
         }
@@ -61,21 +66,21 @@ export class Country {
     return form
   }
 
-  static isValidDefendantAddress (form: Form<PartyDetails>): Form<PartyDetails> {
-    this.getCountry(form.model.address.postcode).then(function(country) {
-      if (!this.isDefendantCountry(country)) {
+  static async isValidDefendantAddress (form: Form<PartyDetails>): Promise<Form<PartyDetails>> {
+    await this.getCountry(form.model.address.postcode).then((country: string) => {
+      if (country.length > 0 && !Country.isDefendantCountry(country)) {
         let error = new ValidationError()
-        error.property = 'address[country]'
+        error.property = 'address[postcode]'
         error.constraints = { amount: 'The country must be England or Wales' }
         form.errors.push(new FormValidationError(error))
       }
     })
 
     if (form.model.hasCorrespondenceAddress) {
-      this.getCountry(form.model.correspondenceAddress.postcode).then(function(country) {
-        if (!this.isDefendantCountry(country)) {
+      await this.getCountry(form.model.address.postcode).then((country: string) => {
+        if (country.length > 0 && !Country.isDefendantCountry(country)) {
           let error = new ValidationError()
-          error.property = 'correspondenceAddress[country]'
+          error.property = 'correspondenceAddress[postcode]'
           error.constraints = { amount: 'The country must be England or Wales' }
           form.errors.push(new FormValidationError(error))
         }
@@ -94,10 +99,19 @@ export class Country {
   }
 
   static async getCountry (postcode: string): Promise<string> {
-    return await postcodeClient.lookupPostcode(postcode)
-      .then((postcodeInfoResponse: PostcodeInfoResponse) => {
-        return postcodeInfoResponse.country
-      })
+    if (postcode === undefined || postcode.length === 0) {
+      return ''
+    } else {
+      let country = ''
+      await postcodeClient.lookupPostcode(postcode)
+        .then((postcodeInfoResponse: PostcodeInfoResponse) => {
+          if (postcodeInfoResponse.valid) {
+            const object: PostcodeInfoCountry = postcodeInfoResponse.country as any as PostcodeInfoCountry
+            country = object.name
+          }
+        })
+      return country
+    }
   }
 
   static valueOf (value: string): Country {

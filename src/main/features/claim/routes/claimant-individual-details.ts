@@ -28,19 +28,23 @@ export default express.Router()
     FormValidator.requestHandler(IndividualDetails, IndividualDetails.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       let form: Form<IndividualDetails> = req.body
-      form = Country.isValidClaimantAddress(form)
 
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        const draft: Draft<DraftClaim> = res.locals.claimDraft
-        const user: User = res.locals.user
+        form = await Country.isValidClaimantAddress(form)
+        if (form.hasErrors()) {
+          renderView(form, res)
+        } else {
+          const draft: Draft<DraftClaim> = res.locals.claimDraft
+          const user: User = res.locals.user
 
-        // Workaround: reset date of birth which is erased in the process of form deserialization
-        form.model.dateOfBirth = (draft.document.claimant.partyDetails as IndividualDetails).dateOfBirth
-        draft.document.claimant.partyDetails = form.model
-        await new DraftService().save(draft, user.bearerToken)
+          // Workaround: reset date of birth which is erased in the process of form deserialization
+          form.model.dateOfBirth = (draft.document.claimant.partyDetails as IndividualDetails).dateOfBirth
+          draft.document.claimant.partyDetails = form.model
+          await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.claimantDateOfBirthPage.uri)
+          res.redirect(Paths.claimantDateOfBirthPage.uri)
+        }
       }
     }))
