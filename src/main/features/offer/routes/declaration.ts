@@ -42,7 +42,7 @@ export default express.Router()
         const claim: Claim = res.locals.claim
         const user: User = res.locals.user
 
-        await OfferClient.acceptOffer(claim.id, user)
+        await OfferClient.acceptOffer(claim.externalId, user)
 
         res.redirect(Paths.acceptedPage.evaluateUri({ externalId: claim.externalId }))
       }

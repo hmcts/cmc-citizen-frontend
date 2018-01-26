@@ -36,7 +36,7 @@ export default express.Router()
         const claim: Claim = res.locals.claim
         const user: User = res.locals.user
         const offer: Offer = form.model
-        await OfferClient.makeOffer(claim.id, user, offer)
+        await OfferClient.makeOffer(claim.externalId, user, offer)
         res.redirect(Paths.offerConfirmationPage.evaluateUri({ externalId: claim.externalId }))
       }
     }))
