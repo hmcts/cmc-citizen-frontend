@@ -129,7 +129,7 @@ export class ResponseDraft extends DraftDocument {
   }
 
   public requireSubmitSection (): boolean {
-    return this.showTaskListSubmitSection()
+    return this.isResponsePopulated() && this.showTaskListSubmitSection()
   }
 
   private isResponsePopulated (): boolean {

@@ -9,6 +9,7 @@ import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/r
 import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
+import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 
 describe('ResponseDraft', () => {
 
@@ -259,6 +260,62 @@ describe('ResponseDraft', () => {
       draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.COUNTER_CLAIM)
 
       expect(draft.requireMediation()).to.be.eq(true)
+    })
+  })
+
+  describe('requireWhenDidYouPay', () => {
+
+    it('should return false when no response type set', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = undefined
+
+      expect(draft.requireWhenDidYouPay()).to.be.eq(false)
+    })
+
+    it('should return true when response is full admission with already paid and amount claimed', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.DEFENCE)
+      draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.ALREADY_PAID)
+      draft.howMuchPaidClaimant = new HowMuchPaidClaimant(HowMuchPaidClaimantOption.AMOUNT_CLAIMED)
+
+      expect(draft.requireWhenDidYouPay()).to.be.eq(true)
+    })
+  })
+
+  describe('requireSubmitSection', () => {
+
+    it('should return false when no response type set', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = undefined
+
+      expect(draft.requireSubmitSection()).to.be.eq(false)
+    })
+
+    it('should return true when response is full admission with dispute and already paid and amount claimed', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.DEFENCE)
+      draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.DISPUTE)
+      draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.ALREADY_PAID)
+      draft.howMuchPaidClaimant = new HowMuchPaidClaimant(HowMuchPaidClaimantOption.AMOUNT_CLAIMED)
+
+      expect(draft.requireSubmitSection()).to.be.eq(true)
+    })
+  })
+
+  describe('requirePartialAdmitHandOff', () => {
+
+    it('should return undefined when no response type set', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = undefined
+
+      expect(draft.requirePartialAdmitHandOff()).to.be.eq(undefined)
+    })
+
+    it('should return false when response type set with part admission', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.PART_ADMISSION)
+
+      expect(draft.requirePartialAdmitHandOff()).to.be.eq(false)
     })
   })
 
