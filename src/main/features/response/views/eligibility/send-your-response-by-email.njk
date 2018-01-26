@@ -1,0 +1,99 @@
+{% extends "layout.njk" %}
+{% from "support.njk" import supportWidget %}
+{% from "form.njk" import csrfProtection, submitButton %}
+
+{% set title = t('Fees | Money claim') %}
+{% set heading = t('Send your response by email') %}
+
+{% macro newWindow() %}<span class="font-xsmall">{{ t('(opens in a new window)') }}</span>{% endmacro %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <div class="panel-indent">
+        <div class="panel panel-border-wide">
+          <p>{{ t('You must email your response by ') }}
+            <span class="bold">{{ t('%s', { postProcess: 'sprintf', sprintf: [claim.responseDeadline | date]}) }}</span>
+          </p>
+        </div>
+      </div>
+
+      {% if draft.response.type === ResponseType.DEFENCE %}
+        {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
+
+        <h2 class="heading-medium">{{ t('Counterclaim fee') }}</h2>
+        <p>
+          {{ t('You`ll need to pay a court fee if you make a counterclaim.')}}
+        </p>
+        <details class="notice">
+          <summary>{{ t('How these fees are calculated') }}</summary>
+
+          <div class="panel">
+            <p>
+              {{ t('The fee is based on the amount you`re claiming, including interest.') }}
+            </p>
+            <table>
+              <thead>
+              <tr>
+                <th scope="col">Claim amount</th>
+                <th scope="col">Fee</th>
+              </tr>
+              </thead>
+              {% for row in rows %}
+                <tr>
+                  <td>{{ row.from | pennies2pounds | numeral }} to {{ row.to | pennies2pounds | numeral }}</td>
+                  <td>{{ row.fees[1] | pennies2pounds | numeral }}</td>
+                </tr>
+              {% endfor %}
+            </table>
+          </div>
+        </details>
+        {% endif %}
+      {% endif %}
+
+      <h2 class="heading-medium">{{ t('How to complete and send your response') }}</h2>
+      <ul class="list list-number">
+        <li>
+
+          {% if draft.response.type === ResponseType.FULL_ADMISSION %}
+            {{ t('Open <a href="%s" target="_blank">admission form N9A</a> ' + newWindow() + ' and complete using:',
+            { postProcess: 'sprintf', sprintf: [asset_paths["pdf"] + '/OCON9A.pdf']}) | safe }}
+          {% endif %}
+
+          {% if draft.response.type === ResponseType.PART_ADMISSION %}
+            {{ t('Complete both <a href="%s" target="_blank">admission form N9A</a> and <a href="%s" target="_blank">defence and counterclaim N9B</a> ' + newWindow() + ' using:',
+            { postProcess: 'sprintf', sprintf: [asset_paths["pdf"] + '/OCON9A.pdf', asset_paths["pdf"] + '/OCON9B.pdf']}) | safe }}
+          {% endif %}
+
+          {% if draft.response.type === ResponseType.DEFENCE %}
+            {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
+              {{ t('Complete both <a href="%s" target="_blank">defence and counterclaim form N9B</a> ' + newWindow() + ' using:',
+              { postProcess: 'sprintf', sprintf: [asset_paths["pdf"] + '/OCON9B.pdf']}) | safe }}
+
+            {% elseif draft.howMuchPaidClaimant.option === 'lessThanClaimed' %}
+              {{ t('Complete both <a href="%s" target="_blank">admission form N9A</a> and <a href="%s" target="_blank">defence and counterclaim N9B</a> ' + newWindow() + ' using:',
+              { postProcess: 'sprintf', sprintf: [asset_paths["pdf"] + '/OCON9A.pdf', asset_paths["pdf"] + '/OCON9B.pdf']}) | safe }}
+              {% endif %}
+          {% endif %}
+
+
+          <ul class="list list-bullet">
+            <li>{{ t('Claim No.') }} {{ claim.claimNumber }}</li>
+            <li>{{ t('Claimant') }} {{ claim.claimData.claimant.name }}</li>
+            <li>{{ t('Defendant') }} {{ draft.defendantDetails.partyDetails.name }}</li>
+          </ul>
+        </li>
+        <li>{{ t('Save the completed form to your device') }}</li>
+        <li>{{ t('Email the forms to') }} <a
+            href="mailto:{{ supportEmailAddress }}?Subject={{ claim.claimNumber }}">{{ supportEmailAddress }}</a></li>
+      </ul>
+
+      {{ supportWidget() }}
+      {% include "includes/service_survey_link.njk" %}
+
+    </div>
+
+  </div>
+
+{% endblock %}
+
