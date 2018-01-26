@@ -21,7 +21,7 @@ describe('Claim eligibility: eligible page', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.eligibilityEligiblePage.uri)
 
     it('should render page when everything is fine', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
 
       await request(app)
         .get(ClaimPaths.eligibilityEligiblePage.uri)

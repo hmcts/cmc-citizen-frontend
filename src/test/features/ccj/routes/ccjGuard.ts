@@ -19,7 +19,7 @@ describe('CCJ guard', () => {
   describe('on GET', () => {
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       context('should redirect to dashboard when claim not eligible for CCJ', () => {
