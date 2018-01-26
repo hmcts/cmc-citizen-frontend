@@ -84,7 +84,6 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, req, res)
       } else {
-        const claim: Claim = res.locals.claim
         const draft: Draft<DraftCCJ> = res.locals.ccjDraft
         const user: User = res.locals.user
 
@@ -93,7 +92,7 @@ export default express.Router()
           await new DraftService().save(draft, user.bearerToken)
         }
 
-        await CCJClient.save(claim.externalId, draft, user)
+        await CCJClient.save(req.params.externalId, draft, user)
         await new DraftService().delete(draft.id, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }
