@@ -33,7 +33,7 @@ describe('CCJ: check and send page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       context('when user authorised', () => {
@@ -84,7 +84,7 @@ describe('CCJ: check and send page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
@@ -112,7 +112,7 @@ describe('CCJ: check and send page', () => {
         it('should redirect to confirmation page when signature is basic', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
-          claimStoreServiceMock.resolveSaveCcjForUser()
+          claimStoreServiceMock.resolveSaveCcjForExternalId()
           draftStoreServiceMock.resolveDelete()
 
           await request(app)
@@ -125,7 +125,7 @@ describe('CCJ: check and send page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
           draftStoreServiceMock.resolveSave()
-          claimStoreServiceMock.resolveSaveCcjForUser()
+          claimStoreServiceMock.resolveSaveCcjForExternalId()
           draftStoreServiceMock.resolveDelete()
 
           await request(app)
@@ -138,7 +138,7 @@ describe('CCJ: check and send page', () => {
         it('should return 500 when cannot save CCJ', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
-          claimStoreServiceMock.rejectSaveCcjForUser()
+          claimStoreServiceMock.rejectSaveCcjForExternalId()
 
           await request(app)
             .post(pagePath)

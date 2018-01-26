@@ -56,7 +56,7 @@ describe('CCJ - defendant date of birth', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       checkAccessGuard(app, method)
@@ -101,7 +101,7 @@ describe('CCJ - defendant date of birth', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       checkAccessGuard(app, method)

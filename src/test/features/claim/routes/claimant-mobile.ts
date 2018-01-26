@@ -23,7 +23,7 @@ describe('Claim issue: claimant mobile page', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.claimantMobilePage.uri)
 
     it('should render page when everything is fine', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
@@ -38,7 +38,7 @@ describe('Claim issue: claimant mobile page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       it('should render page when form is invalid and everything is fine', async () => {
