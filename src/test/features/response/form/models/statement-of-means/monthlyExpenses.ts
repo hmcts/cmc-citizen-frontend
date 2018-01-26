@@ -141,14 +141,14 @@ describe('MonthlyExpenses', () => {
         const errors = validator.validateSync(new MonthlyExpenses())
 
         expect(errors.length).to.equal(12)
-        expectValidationError(errors, GlobalValidationErrors.AMOUNT_REQUIRED)
+        expectValidationError(errors, GlobalValidationErrors.AMOUNT_REQUIRED + ' for Mortgage (Include all mortgages)')
       })
 
       it('all fields negative', () => {
         const errors = validator.validateSync(new MonthlyExpenses(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, []))
 
         expect(errors.length).to.equal(12)
-        expectValidationError(errors, GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED)
+        expectValidationError(errors, GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Mortgage (Include all mortgages)')
       })
 
       context('all mandatory fields valid and invalid input for populated row', () => {
