@@ -112,7 +112,7 @@ describe('CCJ: check and send page', () => {
         it('should redirect to confirmation page when signature is basic', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
-          claimStoreServiceMock.resolveSaveCcjForUser()
+          claimStoreServiceMock.resolveSaveCcjForExternalId()
           draftStoreServiceMock.resolveDelete()
 
           await request(app)
@@ -125,7 +125,7 @@ describe('CCJ: check and send page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
           draftStoreServiceMock.resolveSave()
-          claimStoreServiceMock.resolveSaveCcjForUser()
+          claimStoreServiceMock.resolveSaveCcjForExternalId()
           draftStoreServiceMock.resolveDelete()
 
           await request(app)
@@ -138,7 +138,7 @@ describe('CCJ: check and send page', () => {
         it('should return 500 when cannot save CCJ', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
-          claimStoreServiceMock.rejectSaveCcjForUser()
+          claimStoreServiceMock.rejectSaveCcjForExternalId()
 
           await request(app)
             .post(pagePath)

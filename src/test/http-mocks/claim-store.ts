@@ -239,9 +239,10 @@ export function rejectSaveClaimForUser (reason: string = 'HTTP error') {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveSaveCcjForUser () {
+export function resolveSaveCcjForExternalId () {
   mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp('/[0-9]+/county-court-judgment'))
+    .post(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}' +
+      '/county-court-judgment'))
     .reply(HttpStatus.OK, { ...sampleClaimObj })
 }
 
@@ -269,9 +270,10 @@ export function resolveRejectOffer (by: string = 'claimant') {
     .reply(HttpStatus.CREATED)
 }
 
-export function rejectSaveCcjForUser (reason: string = 'HTTP error') {
+export function rejectSaveCcjForExternalId (reason: string = 'HTTP error') {
   mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp('/[0-9]+/county-court-judgment'))
+    .post(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}' +
+      '/county-court-judgment'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
