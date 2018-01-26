@@ -6,8 +6,7 @@
 {% set heading = t('Company details') %}
 
 {% block additional_scripts %}
-  <script src="{{ asset_paths['js_vendor'] }}/nodelist-foreach-polyfill.js"></script>
-  <script src="{{ asset_paths['js'] }}/postcode-lookup.js"></script>
+  {% include "postcode-lookup-client-scripts.njk" %}
 {% endblock %}
 
 {% block content %}
