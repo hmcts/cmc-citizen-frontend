@@ -25,7 +25,7 @@ describe('Login receiver', async () => {
 
     describe('for authorized user', async () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       it('should save bearer token in cookie when auth token is retrieved from idam', async () => {
@@ -160,7 +160,7 @@ describe('Defendant link receiver', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'letter-1')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
       })
 
       it('should redirect to /receiver', async () => {

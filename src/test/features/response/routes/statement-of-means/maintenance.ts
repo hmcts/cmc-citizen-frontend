@@ -31,7 +31,7 @@ describe('Defendant response: Statement of means: maintenance', () => {
     context('when user authorised', () => {
 
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen', 'defendant')
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)
@@ -80,7 +80,7 @@ describe('Defendant response: Statement of means: maintenance', () => {
     describe('for authorized user', () => {
 
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen', 'defendant')
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)
