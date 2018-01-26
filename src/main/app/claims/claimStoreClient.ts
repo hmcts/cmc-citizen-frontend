@@ -108,16 +108,16 @@ export class ClaimStoreClient {
       .then((claims: object[]) => claims.map(claim => new Claim().deserialize(claim)))
   }
 
-  static linkDefendant (claimId: number, user: User): Promise<Claim> {
-    if (!claimId) {
-      return Promise.reject(new Error('Claim ID is required'))
+  static linkDefendant (externalId: string, user: User): Promise<Claim> {
+    if (!externalId) {
+      return Promise.reject(new Error('External ID is required'))
     }
     if (!user.id) {
       return Promise.reject(new Error('User is required'))
     }
 
     return request
-      .put(`${claimStoreApiUrl}/${claimId}/defendant/${user.id}`, {
+      .put(`${claimStoreApiUrl}/${externalId}/defendant/${user.id}`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }
