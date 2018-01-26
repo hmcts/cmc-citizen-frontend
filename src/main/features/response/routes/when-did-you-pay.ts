@@ -13,13 +13,9 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 
 async function renderView (form: Form<WhenDidYouPay>, res: express.Response, next: express.NextFunction) {
-  try {
-    res.render(Paths.whenDidYouPay.associatedView, {
-      form: form
-    })
-  } catch (err) {
-    next(err)
-  }
+  res.render(Paths.whenDidYouPay.associatedView, {
+    form: form
+  })
 }
 
 /* tslint:disable:no-default-export */
