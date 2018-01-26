@@ -41,6 +41,10 @@ gulp.task('copy-files', () => {
     .pipe(rename('nodelist-foreach-polyfill.js'))
     .pipe(gulp.dest(`${assetsDirectory}/js/lib/`))
 
+  gulp.src('./node_modules/classlist-polyfill/src/index.js')
+    .pipe(rename('classlist-polyfill.js'))
+    .pipe(gulp.dest(`${assetsDirectory}/js/lib/`))
+
   gulp.src([
     './node_modules/HTML_CodeSniffer/HTMLCS.js'
   ])
