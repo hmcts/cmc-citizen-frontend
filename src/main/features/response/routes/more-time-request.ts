@@ -52,7 +52,7 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         if (form.model.option === MoreTimeNeededOption.YES) {
-          await ClaimStoreClient.requestForMoreTime(claim.id, user)
+          await ClaimStoreClient.requestForMoreTime(claim.externalId, user)
 
           res.redirect(Paths.moreTimeConfirmationPage.evaluateUri({ externalId: claim.externalId }))
         } else {

@@ -122,7 +122,7 @@ export default express.Router()
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
           await new DraftService().save(draft, user.bearerToken)
         }
-        await ClaimStoreClient.saveResponseForUser(claim.id, draft, user)
+        await ClaimStoreClient.saveResponseForUser(claim.externalId, draft, user)
         await new DraftService().delete(draft.id, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
       }
