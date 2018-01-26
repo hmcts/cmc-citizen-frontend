@@ -21,7 +21,7 @@ describe('Claim issue: amount exceeded page', () => {
     checkAuthorizationGuards(app, 'get', ClaimErrorPaths.amountExceededPage.uri)
 
     it('should render page when everything is fine', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
 
       await request(app)
         .get(ClaimErrorPaths.amountExceededPage.uri)

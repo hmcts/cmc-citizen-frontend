@@ -25,7 +25,7 @@ describe('Claim issue: total page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
         mockCalculateInterestRate(0)
       })
 
@@ -56,7 +56,7 @@ describe('Claim issue: total page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       it('should redirect to task list when amount within limit and everything is fine', async () => {

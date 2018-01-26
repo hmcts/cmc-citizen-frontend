@@ -12,7 +12,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 export function checkNotDefendantInCaseGuard (app: any, method: string, pagePath: string) {
   it(`for ${method} should return 403 and render forbidden error page not defendant in case`, async () => {
     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-    idamServiceMock.resolveRetrieveUserFor('2', 'cmc-private-beta')
+    idamServiceMock.resolveRetrieveUserFor('2', 'citizen')
 
     await request(app)[method](pagePath)
       .set('Cookie', `${cookieName}=ABC`)

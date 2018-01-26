@@ -36,7 +36,7 @@ describe('Defendant - when will you pay options', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
       context('when service is unhealthy', () => {
@@ -101,7 +101,7 @@ describe('Defendant - when will you pay options', () => {
 
       context('when user authorised', () => {
         beforeEach(() => {
-          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
+          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
 
         context('when service is unhealthy', () => {
