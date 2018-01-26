@@ -116,7 +116,7 @@ async function linkDefendantWithClaimByLetterHolderId (letterHolderId, user): Pr
     logger.debug(`Linking user ${user.id} to claim ${claim.id}`)
 
     if (!claim.defendantId) {
-      return ClaimStoreClient.linkDefendant(claim.id, user)
+      return ClaimStoreClient.linkDefendant(claim.externalId, user)
     }
   }
 
