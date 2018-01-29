@@ -21,7 +21,6 @@ import { CCJFeature } from 'ccj/index'
 import { Feature as OfferFeature } from 'offer/index'
 import { TestingSupportFeature } from 'testing-support/index'
 import * as toBoolean from 'to-boolean'
-import { Paths } from 'app/paths'
 
 export const app: express.Express = express()
 
