@@ -23,7 +23,7 @@ describe('declaration page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       it('should return 500 and render error page when cannot retrieve claims', async () => {
@@ -49,7 +49,7 @@ describe('declaration page', () => {
 
       context('when user authorised', () => {
         beforeEach(() => {
-          idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'defendant')
         })
 
         context('when middleware failure', () => {
