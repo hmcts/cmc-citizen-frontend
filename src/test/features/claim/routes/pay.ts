@@ -101,7 +101,7 @@ describe('Claim issue: initiate payment receiver', () => {
           reason: 'Valid reason'
         } as Reason
       } as DraftClaim
-      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
     })
 
     it('should return 500 and error page when draft external ID does not exist', async () => {
@@ -261,7 +261,7 @@ describe('Claim issue: post payment callback receiver', () => {
           reason: 'Valid reason'
         } as Reason
       } as DraftClaim
-      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
     })
 
     function initiatedPayment (): object {
