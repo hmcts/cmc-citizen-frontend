@@ -48,7 +48,7 @@ export default express.Router()
             res.redirect(Paths.makeAgreementPage.evaluateUri({ externalId: claim.externalId }))
             break
           case StatementType.REJECTION:
-            await OfferClient.rejectOffer(claim.id, user)
+            await OfferClient.rejectOffer(claim.externalId, user)
             res.redirect(Paths.rejectedPage.evaluateUri({ externalId: claim.externalId }))
             break
           default:
