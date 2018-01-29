@@ -45,6 +45,10 @@ gulp.task('copy-files', () => {
     .pipe(rename('classlist-polyfill.js'))
     .pipe(gulp.dest(`${assetsDirectory}/js/lib/`))
 
+  gulp.src('./node_modules/string.prototype.startswith/startswith.js')
+    .pipe(rename('startswith-polyfill.js'))
+    .pipe(gulp.dest(`${assetsDirectory}/js/lib/`))
+
   gulp.src([
     './node_modules/HTML_CodeSniffer/HTMLCS.js'
   ])
