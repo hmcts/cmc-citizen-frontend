@@ -1,4 +1,3 @@
-
 export class User {
   id: string
   email: string
@@ -28,4 +27,14 @@ export class User {
     return requiredRoles.every(requiredRole => this.roles.indexOf(requiredRole) > -1)
   }
 
+  getLetterHolderIdList (): string[] {
+    return this.roles
+      .filter(
+        (role: string) =>
+          role.startsWith('letter') &&
+          role !== 'letter-holder' &&
+          !role.endsWith('loa1')
+      )
+      .map(role => role.replace('letter-', ''))
+  }
 }

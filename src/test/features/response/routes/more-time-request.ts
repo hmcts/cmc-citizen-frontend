@@ -32,7 +32,7 @@ describe('Defendant response: more time needed page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)
@@ -84,7 +84,7 @@ describe('Defendant response: more time needed page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)

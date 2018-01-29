@@ -30,7 +30,7 @@ describe('Defendant response: counter claim page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
