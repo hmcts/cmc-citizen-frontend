@@ -31,7 +31,7 @@ describe('Defendant response: Statement of means: self-employment', () => {
     context('when user authorised', () => {
 
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)
@@ -80,7 +80,7 @@ describe('Defendant response: Statement of means: self-employment', () => {
     describe('for authorized user', () => {
 
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)

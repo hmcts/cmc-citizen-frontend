@@ -20,7 +20,7 @@ describe('Logout receiver', () => {
 
   describe('on GET', () => {
     it('should remove session cookie', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
 
       await request(app)
         .get(AppPaths.logoutReceiver.uri)

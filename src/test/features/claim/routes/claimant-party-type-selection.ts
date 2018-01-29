@@ -22,7 +22,7 @@ describe('Claim issue: claimant party type selection page', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.claimantPartyTypeSelectionPage.uri)
 
     it('should render page when everything is fine', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
@@ -37,7 +37,7 @@ describe('Claim issue: claimant party type selection page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       it('should render page with error when form is invalid', async () => {
