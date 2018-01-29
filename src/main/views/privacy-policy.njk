@@ -17,7 +17,7 @@
 
       <p> {{ t('More information about how to use the service is in the '
         +'<a href="{{  termsAndConditions }}">terms and conditions</a>.',
-        { termsAndConditions: '/terms-and-conditions' }) | safe }}
+        { termsAndConditions:  AppPaths.termsAndConditionsPage.uri }) | safe }}
       </p>
 
       <h2 class="heading-medium">{{ t('Why we need your personal data') }}</h2>
@@ -36,7 +36,7 @@
         <li>{{ t('information that tells us if you open an email from us, or click on a link in an email') }}</li>
         <li>{{ t('information about how you use this service, like your IP address and the web browser you use. '
           + 'We do this by using <a href="{{ cookieUrl }}">cookies</a>.',
-          { cookieUrl: '/cookies'}) | safe }}
+          { cookieUrl:  AppPaths.cookiesPage.uri}) | safe }}
         </li>
       </uL>
 

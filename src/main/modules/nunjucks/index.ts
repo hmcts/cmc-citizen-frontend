@@ -28,6 +28,7 @@ import { UnemploymentType } from 'response/form/models/statement-of-means/unempl
 import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { FeatureToggles } from 'utils/featureToggles'
+import { Paths as AppPaths } from 'app/paths'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -102,6 +103,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('UnemploymentType', UnemploymentType)
     nunjucksEnv.addGlobal('BankAccountType', BankAccountType)
     nunjucksEnv.addGlobal('ClaimStatus', ClaimStatus)
+    nunjucksEnv.addGlobal('AppPaths', AppPaths)
     if (FeatureToggles.isEnabled('finePrint')) {
       nunjucksEnv.addGlobal('cookieText', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.')
     }
