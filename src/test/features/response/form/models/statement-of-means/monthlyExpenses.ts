@@ -6,7 +6,6 @@ import {
 import { AmountDescriptionRow, ValidationErrors } from 'response/form/models/statement-of-means/amountDescriptionRow'
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from '../../../../../app/forms/models/validationUtils'
-import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 describe('MonthlyExpenses', () => {
@@ -198,7 +197,7 @@ describe('MonthlyExpenses', () => {
           )
 
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, GlobalValidationErrors.TEXT_TOO_LONG)
+          expectValidationError(errors, ValidationErrors.DESCRIPTION_TOO_LONG)
         })
 
         it('amount not populated', () => {
@@ -207,7 +206,7 @@ describe('MonthlyExpenses', () => {
           )
 
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, GlobalValidationErrors.AMOUNT_REQUIRED)
+          expectValidationError(errors, ValidationErrors.AMOUNT_REQUIRED)
         })
 
         it('amount less than zero', () => {
@@ -216,7 +215,7 @@ describe('MonthlyExpenses', () => {
           )
 
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
+          expectValidationError(errors, ValidationErrors.POSITIVE_NUMBER_REQUIRED)
         })
 
         it('amount = 0', () => {
@@ -225,7 +224,7 @@ describe('MonthlyExpenses', () => {
           )
 
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
+          expectValidationError(errors, ValidationErrors.POSITIVE_NUMBER_REQUIRED)
         })
 
         it('invalid format of amount', () => {
@@ -234,7 +233,7 @@ describe('MonthlyExpenses', () => {
           )
 
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, GlobalValidationErrors.AMOUNT_INVALID_DECIMALS)
+          expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS)
         })
       })
     })
