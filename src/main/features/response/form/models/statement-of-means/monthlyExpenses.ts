@@ -11,64 +11,64 @@ export const INIT_ROW_COUNT: number = 0
 
 export class MonthlyExpenses extends MultiRowForm<AmountDescriptionRow> {
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED + ' for Mortgage (Include all mortgages)' })
+  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Mortgage (Include all mortgages)' })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Mortgage (Include all mortgages)' })
   mortgage?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED + ' for Rent' })
+  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Rent' })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Rent' })
   rent?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED + ' for Council Tax' })
+  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Council Tax' })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Council Tax' })
   councilTax?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED + ' for Gas' })
+  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Gas' })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Gas' })
   gas?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED + ' for Electricity' })
+  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Electricity' })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Electricity' })
   electricity?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED + ' for Water' })
+  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Water' })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Water' })
   water?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED + ' for Travel (school or work)' })
+  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Travel (school or work)' })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Travel (school or work)' })
   travel?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED + ' for School Costs (include clothing)' })
+  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for School Costs (include clothing)' })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for School Costs (include clothing)' })
   schoolCosts?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED + ' for Food and Housekeeping' })
+  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Food and Housekeeping' })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Food and Housekeeping' })
   foodAndHousekeeping?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED + ' for TV and Broadband' })
+  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for TV and Broadband' })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for TV and Broadband' })
   tvAndBroadband?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED + ' for Mobile Phone' })
+  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Mobile Phone' })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Mobile Phone' })
   mobilePhone?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED + ' for Maintenance payments' })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Maintenance payments' })
+  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Maintenance payments' })
   maintenance?: number
 
   constructor (mortgage?: number,

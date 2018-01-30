@@ -8,7 +8,10 @@ import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 
 export class ValidationErrors {
-  static readonly DESCRIPTION_REQUIRED: string = 'Enter a description'
+  static readonly DESCRIPTION_REQUIRED: string = 'Enter a description for the income you added'//   static readonly AMOUNT_REQUIRED: string = 'Enter an amount for the income you added'
+  static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter valid amount, maximum two decimal places for the income you added'
+  static readonly POSITIVE_NUMBER_REQUIRED: string = 'Enter a number higher than 0 for the field you added'
+  static readonly TEXT_TOO_LONG: string = 'You’ve entered too many characters for the field you added'
 }
 
 export class AmountDescriptionRow extends MultiRowFormItem {
