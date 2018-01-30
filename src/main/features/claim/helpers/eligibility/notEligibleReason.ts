@@ -1,4 +1,5 @@
 export class NotEligibleReason {
+  static readonly CLAIM_ON_BEHALF: string = 'claim-on-behalf'
   static readonly CLAIM_VALUE_NOT_KNOWN: string = 'claim-value-not-known'
   static readonly CLAIM_VALUE_OVER_10000: string = 'claim-value-over-10000'
   static readonly UNDER_18: string = 'under-18'
