@@ -16,7 +16,7 @@ function requestHandler (): express.RequestHandler {
     res.redirect(OAuthHelper.forLogin(req, res))
   }
 
-  const requiredRoles = ['cmc-private-beta']
+  const requiredRoles = ['citizen']
   const unprotectedPaths = []
   return AuthorizationMiddleware.requestHandler(requiredRoles, accessDeniedCallback, unprotectedPaths)
 }
