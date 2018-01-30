@@ -38,14 +38,23 @@ export class ClaimAmountRow {
     return new ClaimAmountRow(undefined, undefined)
   }
 
+  static hasAValidCommaInNumber (input: string): boolean {
+    const output: string[] = input.split(',')
+
+    return output[output.length - 1].length >= 3
+  }
+
   static translateToNumber (input?: any): any {
-    const numberValue = _.toNumber(input)
+
+    const output: string = this.hasAValidCommaInNumber(input) ? input.replace(new RegExp(/,/g), '') : input
+
+    const numberValue = _.toNumber(output)
     const isExponential = numberValue.toString().match(new RegExp('\\d*[Ee][+-]?\\d*?'))
 
     if (!isNaN(numberValue) && !isExponential) {
       return numberValue
     } else {
-      return input
+      return output
     }
   }
 
@@ -55,9 +64,7 @@ export class ClaimAmountRow {
     }
 
     const reason = value.reason || undefined
-    const amount = value.amount
-      ? ClaimAmountRow.translateToNumber(value.amount.replace(new RegExp(/,/g), ''))
-      : undefined
+    const amount = value.amount ? ClaimAmountRow.translateToNumber(value.amount) : undefined
 
     return new ClaimAmountRow(reason, amount)
   }

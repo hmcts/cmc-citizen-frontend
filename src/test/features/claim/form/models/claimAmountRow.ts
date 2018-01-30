@@ -89,6 +89,20 @@ describe('ClaimAmountRow', () => {
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.REASON_TOO_LONG)
       })
+
+      it('row with amount having invalid comma', () => {
+        const errors = validator.validateSync(
+          ClaimAmountRow.fromObject(
+            {
+              reason: 'Something',
+              amount: '11,00'
+            })
+        )
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.AMOUNT_NOT_VALID)
+      })
+
     })
 
     context('should accept', () => {
@@ -100,6 +114,18 @@ describe('ClaimAmountRow', () => {
 
       it('row with amount containing comma', () => {
         const errors = validator.validateSync({ reason: 'Something', amount: '1,100' })
+
+        expect(errors.length).to.equal(0)
+      })
+
+      it('row with amount having valid comma', () => {
+        const errors = validator.validateSync(
+          ClaimAmountRow.fromObject(
+            {
+              reason: 'Something',
+              amount: '1,100'
+            })
+        )
 
         expect(errors.length).to.equal(0)
       })

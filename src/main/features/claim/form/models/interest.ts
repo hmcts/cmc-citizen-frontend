@@ -52,12 +52,29 @@ export class Interest implements CompletableTask {
     this.reason = reason
   }
 
+  static hasCommaInNumber (input: string): boolean {
+    return input.includes(',')
+  }
+
+  static translateToNumber (input?: any): any {
+    const numberValue = parseFloat(input)
+    const isExponential = numberValue.toString().match(new RegExp('\\d*[Ee][+-]?\\d*?'))
+
+    if (!this.hasCommaInNumber(input) && !isNaN(numberValue) && !isExponential) {
+      return numberValue
+    } else {
+      return input
+    }
+  }
+
   static fromObject (value?: any): Interest {
     if (value == null) {
       return value
     }
 
-    const instance = new Interest(value.type, value.rate ? parseFloat(value.rate) : undefined, value.reason)
+    const instance = new Interest(value.type,
+      value.rate ? Interest.translateToNumber(value.rate) : undefined,
+      value.reason)
 
     switch (instance.type) {
       case InterestType.STANDARD:
