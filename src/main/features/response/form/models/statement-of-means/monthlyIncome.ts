@@ -10,49 +10,49 @@ export const MAX_NUMBER_OF_ROWS: number = 10
 export const INIT_ROW_COUNT: number = 0
 
 export class ValidationErrors {
-  static readonly AMOUNT_REQUIRED_SALARY: string = GlobalValidationErrors.AMOUNT_REQUIRED + ' for Salary'
-  static readonly AMOUNT_INVALID_DECIMALS_SALARY: string = GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Salary'
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_SALARY: string = GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Salary'
+  static readonly AMOUNT_REQUIRED_SALARY: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Salary`
+  static readonly AMOUNT_INVALID_DECIMALS_SALARY: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Salary`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_SALARY: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Salary`
 
-  static readonly AMOUNT_REQUIRED_CREDIT: string = GlobalValidationErrors.AMOUNT_REQUIRED + ' for Universal Credit'
-  static readonly AMOUNT_INVALID_DECIMALS_CREDIT: string = GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Rent'
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_CREDIT: string = GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Rent'
+  static readonly AMOUNT_REQUIRED_CREDIT: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Universal Credit`
+  static readonly AMOUNT_INVALID_DECIMALS_CREDIT: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Rent`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_CREDIT: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Rent`
 
-  static readonly AMOUNT_REQUIRED_JOB_SEEK_INCOME: string = GlobalValidationErrors.AMOUNT_REQUIRED + ' for Jobseeker’s Allowance (income based)'
-  static readonly AMOUNT_INVALID_DECIMALS_JOB_SEEK_INCOME: string = GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Jobseeker’s Allowance (income based)'
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_JOB_SEEK_INCOME: string = GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Jobseeker’s Allowance (income based)'
+  static readonly AMOUNT_REQUIRED_JOB_SEEK_INCOME: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Jobseeker’s Allowance (income based)`
+  static readonly AMOUNT_INVALID_DECIMALS_JOB_SEEK_INCOME: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Jobseeker’s Allowance (income based)`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_JOB_SEEK_INCOME: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Jobseeker’s Allowance (income based)`
 
-  static readonly AMOUNT_REQUIRED_JOB_SEEK_CONTRIBUTION: string = GlobalValidationErrors.AMOUNT_REQUIRED + ' for Jobseeker’s Allowance (contribution based)'
-  static readonly AMOUNT_INVALID_DECIMALS_JOB_SEEK_CONTRIBUTION: string = GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Jobseeker’s Allowance (contribution based)'
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_JOB_SEEK_CONTRIBUTION: string = GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Jobseeker’s Allowance (contribution based)'
+  static readonly AMOUNT_REQUIRED_JOB_SEEK_CONTRIBUTION: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Jobseeker’s Allowance (contribution based)`
+  static readonly AMOUNT_INVALID_DECIMALS_JOB_SEEK_CONTRIBUTION: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Jobseeker’s Allowance (contribution based)`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_JOB_SEEK_CONTRIBUTION: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Jobseeker’s Allowance (contribution based)`
 
-  static readonly AMOUNT_REQUIRED_INCOME: string = GlobalValidationErrors.AMOUNT_REQUIRED + ' for Income Support'
-  static readonly AMOUNT_INVALID_DECIMALS_INCOME: string = GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Income Support'
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_INCOME: string = GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Income Support'
+  static readonly AMOUNT_REQUIRED_INCOME: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Income Support`
+  static readonly AMOUNT_INVALID_DECIMALS_INCOME: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Income Support`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_INCOME: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Income Support`
 
-  static readonly AMOUNT_REQUIRED_WORKING_TAX_CREDIT: string = GlobalValidationErrors.AMOUNT_REQUIRED + ' for Working Tax Credit'
-  static readonly AMOUNT_INVALID_DECIMALS_WORKING_TAX_CREDIT: string = GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Working Tax Credit'
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_WORKING_TAX_CREDIT: string = GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Working Tax Credit'
+  static readonly AMOUNT_REQUIRED_WORKING_TAX_CREDIT: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Working Tax Credit`
+  static readonly AMOUNT_INVALID_DECIMALS_WORKING_TAX_CREDIT: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Working Tax Credit`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_WORKING_TAX_CREDIT: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Working Tax Credit`
 
-  static readonly AMOUNT_REQUIRED_CHILD_TAX_CREDIT: string = GlobalValidationErrors.AMOUNT_REQUIRED + ' for Child Tax Credit'
-  static readonly AMOUNT_INVALID_DECIMALS_CHILD_TAX_CREDIT: string = GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Child Tax Credit'
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_CHILD_TAX_CREDIT: string = GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Child Tax Credit'
+  static readonly AMOUNT_REQUIRED_CHILD_TAX_CREDIT: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Child Tax Credit`
+  static readonly AMOUNT_INVALID_DECIMALS_CHILD_TAX_CREDIT: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Child Tax Credit`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_CHILD_TAX_CREDIT: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Child Tax Credit`
 
-  static readonly AMOUNT_REQUIRED_CHILD_BENEFIT: string = GlobalValidationErrors.AMOUNT_REQUIRED + ' for Child Benefit'
-  static readonly AMOUNT_INVALID_DECIMALS_CHILD_BENEFIT: string = GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Child Benefit'
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_CHILD_BENEFIT: string = GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Child Benefit'
+  static readonly AMOUNT_REQUIRED_CHILD_BENEFIT: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Child Benefit`
+  static readonly AMOUNT_INVALID_DECIMALS_CHILD_BENEFIT: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Child Benefit`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_CHILD_BENEFIT: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Child Benefit`
 
-  static readonly AMOUNT_REQUIRED_COUNCIL_TAX_SUPPORT: string = GlobalValidationErrors.AMOUNT_REQUIRED + ' for Council Tax Support'
-  static readonly AMOUNT_INVALID_DECIMALS_COUNCIL_TAX_SUPPORT: string = GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Council Tax Support'
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_COUNCIL_TAX_SUPPORT: string = GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Council Tax Support'
+  static readonly AMOUNT_REQUIRED_COUNCIL_TAX_SUPPORT: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Council Tax Support`
+  static readonly AMOUNT_INVALID_DECIMALS_COUNCIL_TAX_SUPPORT: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Council Tax Support`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_COUNCIL_TAX_SUPPORT: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Council Tax Support`
 
-  static readonly AMOUNT_REQUIRED_PENSION: string = GlobalValidationErrors.AMOUNT_REQUIRED + ' for Pension (paid to you)'
-  static readonly AMOUNT_INVALID_DECIMALS_PENSION: string = GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Pension (paid to you)'
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_PENSION: string = GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Pension (paid to you)'
+  static readonly AMOUNT_REQUIRED_PENSION: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Pension (paid to you)`
+  static readonly AMOUNT_INVALID_DECIMALS_PENSION: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Pension (paid to you)`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_PENSION: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Pension (paid to you)`
 
-  static readonly AMOUNT_REQUIRED_MAINTENANCE: string = GlobalValidationErrors.AMOUNT_REQUIRED + ' for Maintenance payments (paid to you)'
-  static readonly AMOUNT_INVALID_DECIMALS_MAINTENANCE: string = GlobalValidationErrors.AMOUNT_INVALID_DECIMALS + ' for Maintenance payments (paid to you)'
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_MAINTENANCE: string = GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED + ' for Maintenance payments (paid to you)'
+  static readonly AMOUNT_REQUIRED_MAINTENANCE: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Maintenance payments (paid to you)`
+  static readonly AMOUNT_INVALID_DECIMALS_MAINTENANCE: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Maintenance payments (paid to you)`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_MAINTENANCE: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Maintenance payments (paid to you)`
 }
 
 export class MonthlyIncome extends MultiRowForm<AmountDescriptionRow> {
