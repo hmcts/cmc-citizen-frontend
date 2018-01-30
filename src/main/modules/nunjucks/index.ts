@@ -104,8 +104,9 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('BankAccountType', BankAccountType)
     nunjucksEnv.addGlobal('ClaimStatus', ClaimStatus)
     nunjucksEnv.addGlobal('AppPaths', AppPaths)
+    nunjucksEnv.addGlobal('AppPaths', AppPaths)
     if (FeatureToggles.isEnabled('finePrint')) {
-      nunjucksEnv.addGlobal('cookieText', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.')
+      nunjucksEnv.addGlobal('cookieText', 'GOV.UK uses cookies to make the site simpler.')
     }
   }
 
