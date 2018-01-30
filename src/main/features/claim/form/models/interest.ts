@@ -52,8 +52,8 @@ export class Interest implements CompletableTask {
     this.reason = reason
   }
 
-  static hasCommaInNumber (input: string): boolean {
-    return input.includes(',')
+  static hasCommaInNumber (input: any): boolean {
+    return input.toString().includes(',')
   }
 
   static translateToNumber (input?: any): any {
