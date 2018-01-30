@@ -2,6 +2,7 @@ import { IsDefined, IsIn, IsPositive, MaxLength, ValidateIf } from 'class-valida
 
 import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 import { CompletableTask } from 'app/models/task'
+import { toAValidFloatOrOriginalValue } from 'common/utils/numericUtils'
 
 export class InterestType {
   static readonly NO_INTEREST: string = 'no interest'
@@ -52,28 +53,13 @@ export class Interest implements CompletableTask {
     this.reason = reason
   }
 
-  static hasCommaInNumber (input: any): boolean {
-    return input.toString().includes(',')
-  }
-
-  static translateToNumber (input?: any): any {
-    const numberValue = parseFloat(input)
-    const isExponential = numberValue.toString().match(new RegExp('\\d*[Ee][+-]?\\d*?'))
-
-    if (!this.hasCommaInNumber(input) && !isNaN(numberValue) && !isExponential) {
-      return numberValue
-    } else {
-      return input
-    }
-  }
-
   static fromObject (value?: any): Interest {
     if (value == null) {
       return value
     }
 
     const instance = new Interest(value.type,
-      value.rate ? Interest.translateToNumber(value.rate) : undefined,
+      value.rate ? toAValidFloatOrOriginalValue(value.rate.toString()) : undefined,
       value.reason)
 
     switch (instance.type) {

@@ -1,10 +1,10 @@
-import * as _ from 'lodash'
 import { IsDefined, Min, ValidateIf } from 'class-validator'
 
 import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 import { Fractions } from 'app/forms/validation/validators/fractions'
 import { MaxLength } from 'app/forms/validation/validators/maxLengthValidator'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
+import { toAValidNumberOrOriginalValue } from 'common/utils/numericUtils'
 
 export class ValidationErrors {
   static readonly REASON_REQUIRED: string = 'Enter a reason'
@@ -38,33 +38,13 @@ export class ClaimAmountRow {
     return new ClaimAmountRow(undefined, undefined)
   }
 
-  static hasAValidCommaInNumber (input: string): boolean {
-    const output: string[] = input.split(',')
-
-    return output[output.length - 1].length >= 3
-  }
-
-  static translateToNumber (input?: any): any {
-
-    const output: string = this.hasAValidCommaInNumber(input) ? input.replace(new RegExp(/,/g), '') : input
-
-    const numberValue = _.toNumber(output)
-    const isExponential = numberValue.toString().match(new RegExp('\\d*[Ee][+-]?\\d*?'))
-
-    if (!isNaN(numberValue) && !isExponential) {
-      return numberValue
-    } else {
-      return output
-    }
-  }
-
   static fromObject (value?: any): ClaimAmountRow {
     if (!value) {
       return value
     }
 
     const reason = value.reason || undefined
-    const amount = value.amount ? ClaimAmountRow.translateToNumber(value.amount) : undefined
+    const amount = value.amount ? toAValidNumberOrOriginalValue(value.amount.toString()) : undefined
 
     return new ClaimAmountRow(reason, amount)
   }
