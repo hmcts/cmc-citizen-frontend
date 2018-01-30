@@ -1,5 +1,8 @@
 import { expect } from 'chai'
-import { MonthlyExpenses, INIT_ROW_COUNT } from 'response/form/models/statement-of-means/monthlyExpenses'
+import {
+  MonthlyExpenses, INIT_ROW_COUNT,
+  ValidationErrors as MonthlyExpensesValidationErrors
+} from 'response/form/models/statement-of-means/monthlyExpenses'
 import { AmountDescriptionRow, ValidationErrors } from 'response/form/models/statement-of-means/amountDescriptionRow'
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from '../../../../../app/forms/models/validationUtils'
@@ -141,14 +144,36 @@ describe('MonthlyExpenses', () => {
         const errors = validator.validateSync(new MonthlyExpenses())
 
         expect(errors.length).to.equal(12)
-        expectValidationError(errors, GlobalValidationErrors.AMOUNT_REQUIRED)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_COUNCIL)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_MAINTENANCE)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_MOBILE)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_MORTGAGE)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_SCHOOL)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_TRAVEL)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_RENT)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_ELECTRICITY)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_FOOD)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_GAS)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_TV)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_WATER)
       })
 
       it('all fields negative', () => {
         const errors = validator.validateSync(new MonthlyExpenses(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, []))
 
         expect(errors.length).to.equal(12)
-        expectValidationError(errors, GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_COUNCIL)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_MAINTENANCE)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_MOBILE)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_MORTGAGE)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_SCHOOL)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_TRAVEL)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_RENT)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_ELECTRICITY)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_FOOD)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_GAS)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_TV)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_WATER)
       })
 
       context('all mandatory fields valid and invalid input for populated row', () => {
