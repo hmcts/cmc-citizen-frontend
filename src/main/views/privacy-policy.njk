@@ -1,0 +1,125 @@
+{% extends "layout.njk" %}
+{% from "support.njk" import supportWidget %}
+{% set heading = t('Privacy policy') %}
+
+{% set title = t('Money claim') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('When you use the money claims service we will ask you for some personal data. ' +
+        'This privacy policy explains why we collect your personal data, what we do with it and your rights.') }}
+      </p>
+      <p>
+        {{ t('The money claim service is managed by Her Majesty’s Courts and Tribunals Service and '
+        + 'will be referred to as we from now on.') }}
+      </p>
+
+      <p> {{ t('More information about how to use the service is in the '
+        +'<a href="{{  termsAndConditions }}">terms and conditions</a>.',
+        { termsAndConditions: AppPaths.termsAndConditionsPage.uri }) | safe }}
+      </p>
+
+      <h2 class="heading-medium">{{ t('Why we need your personal data') }}</h2>
+
+      <p>
+        {{ t('We collect your personal data to process your application and to meet legal requirements. '
+        + 'We also collect data to improve the service.') }}
+      </p>
+
+      <p>
+        {{ t('The personal data we need to collect includes:') }}
+      </p>
+
+      <ul class="list list-bullet">
+        <li>{{ t('your name, address and contact details') }}</li>
+        <li>{{ t('information that tells us if you open an email from us, or click on a link in an email') }}</li>
+        <li>{{ t('information about how you use this service, like your IP address and the web browser you use. '
+          + 'We do this by using <a href="{{ cookieUrl }}">cookies</a>.',
+          { cookieUrl: AppPaths.cookiesPage.uri}) | safe }}
+        </li>
+      </uL>
+
+      <h2 class="heading-medium">{{ t('What we do with your data') }}</h2>
+
+      <p>
+        {{ t('HMCTS is an executive agency of the Ministry of Justice and their '
+        + '<a href="{{ personalInformationCharterUri }}">personal information charter</a> explains how we process data.',
+        { personalInformationCharterUri: 'https://www.gov.uk/government/organisations/home-office/about/personal-information-charter'}) | safe }}
+      </p>
+
+      <p>
+        {{ t('Your personal data is processed by our staff in the UK, and the data is stored in the UK.') }}
+      </p>
+      <p>
+        {{ t('We use GOV.UK Notify to send emails. '
+        + 'These are processed within the EEA until the point where emails are handed over to your email provider.') }}
+      </p>
+
+      <h2 class="heading-medium">{{ t('How long we keep your data') }}</h2>
+
+      <p>{{ t('Your data is stored for one month and is then deleted.') }}</p>
+
+      <h2 class="heading-medium">{{ t('What we would also like to do with your data') }}</h2>
+
+      <p>
+        {{ t('As part of your claim we’ll ask if you want to receive notifications to let you know how '
+        + 'your application is proceeding. We’ll ask for your name and preferred contact details.') }}
+      </p>
+
+      <p>
+        {{ t('This information is not shared with third parties and you can unsubscribe at any time '
+        + 'by phoning 0203 123 1234 or emailing mydata@hmcts.net.') }}
+      </p>
+
+      <h2 class="heading-medium">{{ t('Your rights') }}</h2>
+
+      <p> {{ t('You can ask:') }}</p>
+
+      <ul class="list list-bullet">
+        <li>{{ t('to see the personal data that we hold on you') }}</li>
+        <li>{{ t('to have the personal data corrected, removed or deleted') }}</li>
+        <li>{{ t('that access to this data is restricted (for example made temporarily unavailable)') }}</li>
+        <li>{{ t('that we hold your data for longer') }}</li>
+      </ul>
+
+      <h2 class="heading-medium">{{ t('Disclaimer') }}</h2>
+
+      <p>
+        {{ t('While we make every effort to keep GOV.UK up to date, we don’t provide any guarantees, '
+        + 'conditions or warranties that the information will be:') }}
+      </p>
+
+      <ul class="list list-bullet">
+        <li>{{ t('current') }}</li>
+        <li>{{ t('secure') }}</li>
+        <li>{{ t('accurate') }}</li>
+        <li>{{ t('complete') }}</li>
+        <li>{{ t('free from bugs or viruses') }}</li>
+      </ul>
+
+      <p> {{ t('Email mydata@hmcts.net if you want to see any of this information.') }}</p>
+
+      <h2 class="heading-medium">{{ t('How to complain') }}</h2>
+
+      <p> {{ t('If you want to complain about how we have handled your personal data email mydata@hmcts.net.') }}</p>
+
+      <p>
+        {{ t('You can complain to the '
+        + '<a href="{{ informationCommissionerOffice }}">Information Commissioner’s Office </a> if you: ',
+        { informationCommissionerOffice: 'https://ico.org.uk/global/contact-us' }) | safe }}
+      </p>
+
+      <ul class="list list-bullet">
+        <li>{{ t('are unsatisfied with our response') }}</li>
+        <li>{{ t('believe we are not legally processing your personal data') }}</li>
+        <li>{{ t('accurate') }}</li>
+        <li>{{ t('complete') }}</li>
+        <li>{{ t('free from bugs or viruses') }}</li>
+      </ul>
+
+      {{ supportWidget() }}
+
+    </div>
+  </div>
+{% endblock %}
