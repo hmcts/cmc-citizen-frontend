@@ -1,8 +1,10 @@
 import { IsDefined, IsIn, IsPositive, MaxLength, ValidateIf } from 'class-validator'
 
+import * as numeral from 'numeral'
+
 import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 import { CompletableTask } from 'app/models/task'
-import { toAValidFloatOrOriginalValue } from 'common/utils/numericUtils'
+import { containsAThousandSeparator } from 'common/utils/numericUtils'
 
 export class InterestType {
   static readonly NO_INTEREST: string = 'no interest'
@@ -58,8 +60,15 @@ export class Interest implements CompletableTask {
       return value
     }
 
+    let rate = value.rate
+      ? containsAThousandSeparator(value.rate.toString())
+        ? numeral(value.rate).value()
+        : value.rate
+      : undefined
+
     const instance = new Interest(value.type,
-      value.rate ? toAValidFloatOrOriginalValue(value.rate.toString()) : undefined,
+      rate
+      ,
       value.reason)
 
     switch (instance.type) {

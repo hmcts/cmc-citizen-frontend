@@ -4,7 +4,8 @@ import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 import { Fractions } from 'app/forms/validation/validators/fractions'
 import { MaxLength } from 'app/forms/validation/validators/maxLengthValidator'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
-import { toAValidNumberOrOriginalValue } from 'common/utils/numericUtils'
+import * as numeral from 'numeral'
+import { containsAThousandSeparator } from 'common/utils/numericUtils'
 
 export class ValidationErrors {
   static readonly REASON_REQUIRED: string = 'Enter a reason'
@@ -44,7 +45,11 @@ export class ClaimAmountRow {
     }
 
     const reason = value.reason || undefined
-    const amount = value.amount ? toAValidNumberOrOriginalValue(value.amount.toString()) : undefined
+    const amount = value.amount
+      ? containsAThousandSeparator(value.amount.toString())
+        ? numeral(value.amount).value()
+        : value.amount
+      : undefined
 
     return new ClaimAmountRow(reason, amount)
   }

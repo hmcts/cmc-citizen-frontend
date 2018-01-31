@@ -95,7 +95,7 @@ describe('ClaimAmountRow', () => {
           ClaimAmountRow.fromObject(
             {
               reason: 'Something',
-              amount: '11,00'
+              amount: '11,10'
             })
         )
 
