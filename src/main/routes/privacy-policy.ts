@@ -7,6 +7,6 @@ import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 export default express.Router()
   .get(AppPaths.privacyPolicyPage.uri,
     FeatureToggleGuard.featureEnabledGuard('finePrint'),
-    function (req, res) {
+    (req: express.Request, res: express.Response) => {
       res.render(AppPaths.privacyPolicyPage.associatedView)
     })
