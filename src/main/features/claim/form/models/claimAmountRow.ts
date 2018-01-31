@@ -46,7 +46,7 @@ export class ClaimAmountRow {
 
     const reason = value.reason || undefined
     const amount = value.amount
-      ? containsAThousandSeparator(value.amount.toString())
+      ? !value.amount.toString().includes(',') || containsAThousandSeparator(value.amount.toString())
         ? numeral(value.amount).value()
         : value.amount
       : undefined

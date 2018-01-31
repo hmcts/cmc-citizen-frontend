@@ -33,6 +33,13 @@ describe('ClaimAmountRow', () => {
         amount: '1,100'
       })).to.deep.equal(new ClaimAmountRow('Something', 1100))
     })
+
+    it('should deserialize amount containing multiple comma', () => {
+      expect(ClaimAmountRow.fromObject({
+        reason: 'Something',
+        amount: '1,111,100'
+      })).to.deep.equal(new ClaimAmountRow('Something', 1111100))
+    })
   })
 
   describe('validation', () => {

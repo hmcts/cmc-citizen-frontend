@@ -16,10 +16,6 @@ export function toNumberOrUndefined (value: any): number {
 }
 
 export function containsAThousandSeparator (input: string): boolean {
-  if (!input.includes(',')) {
-    return true
-  }
-
   const output: string[] = input.split(',')
   return output[output.length - 1].length >= 3
 }

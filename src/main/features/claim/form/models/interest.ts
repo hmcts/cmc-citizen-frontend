@@ -60,16 +60,13 @@ export class Interest implements CompletableTask {
       return value
     }
 
-    let rate = value.rate
-      ? containsAThousandSeparator(value.rate.toString())
+    const rate = value.rate
+      ? !value.rate.toString().includes(',') || containsAThousandSeparator(value.rate.toString())
         ? numeral(value.rate).value()
         : value.rate
       : undefined
 
-    const instance = new Interest(value.type,
-      rate
-      ,
-      value.reason)
+    const instance = new Interest(value.type, rate, value.reason)
 
     switch (instance.type) {
       case InterestType.STANDARD:
