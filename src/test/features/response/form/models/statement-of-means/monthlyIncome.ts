@@ -1,9 +1,8 @@
 import { expect } from 'chai'
-import { MonthlyIncome, INIT_ROW_COUNT } from 'response/form/models/statement-of-means/monthlyIncome'
+import { MonthlyIncome, INIT_ROW_COUNT, ValidationErrors as MonthlyIncomeValidationErrors } from 'response/form/models/statement-of-means/monthlyIncome'
 import { AmountDescriptionRow, ValidationErrors } from 'response/form/models/statement-of-means/amountDescriptionRow'
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from '../../../../../app/forms/models/validationUtils'
-import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 describe('MonthlyIncome', () => {
@@ -138,14 +137,34 @@ describe('MonthlyIncome', () => {
         const errors = validator.validateSync(new MonthlyIncome())
 
         expect(errors.length).to.equal(11)
-        expectValidationError(errors, GlobalValidationErrors.AMOUNT_REQUIRED)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_CHILD_BENEFIT)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_JOB_SEEK_CONTRIBUTION)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_JOB_SEEK_INCOME)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_MAINTENANCE)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_CHILD_TAX_CREDIT)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_INCOME)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_SALARY)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_CREDIT)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_WORKING_TAX_CREDIT)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_COUNCIL_TAX_SUPPORT)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_PENSION)
       })
 
       it('all fields negative', () => {
         const errors = validator.validateSync(new MonthlyIncome(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, []))
 
         expect(errors.length).to.equal(11)
-        expectValidationError(errors, GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_CHILD_BENEFIT)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_JOB_SEEK_CONTRIBUTION)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_JOB_SEEK_INCOME)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_MAINTENANCE)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_CHILD_TAX_CREDIT)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_INCOME)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_SALARY)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_CREDIT)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_WORKING_TAX_CREDIT)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_COUNCIL_TAX_SUPPORT)
+        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_PENSION)
       })
 
       context('all mandatory fields valid and invalid input for populated row', () => {
@@ -170,7 +189,7 @@ describe('MonthlyIncome', () => {
           )
 
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, GlobalValidationErrors.TEXT_TOO_LONG)
+          expectValidationError(errors, ValidationErrors.DESCRIPTION_TOO_LONG)
         })
 
         it('amount not populated', () => {
@@ -179,7 +198,7 @@ describe('MonthlyIncome', () => {
           )
 
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, GlobalValidationErrors.AMOUNT_REQUIRED)
+          expectValidationError(errors, ValidationErrors.AMOUNT_REQUIRED)
         })
 
         it('amount less than zero', () => {
@@ -188,7 +207,7 @@ describe('MonthlyIncome', () => {
           )
 
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
+          expectValidationError(errors, ValidationErrors.POSITIVE_NUMBER_REQUIRED)
         })
 
         it('amount = 0', () => {
@@ -197,7 +216,7 @@ describe('MonthlyIncome', () => {
           )
 
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
+          expectValidationError(errors, ValidationErrors.POSITIVE_NUMBER_REQUIRED)
         })
 
         it('invalid format of amount', () => {
@@ -206,7 +225,7 @@ describe('MonthlyIncome', () => {
           )
 
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, GlobalValidationErrors.AMOUNT_INVALID_DECIMALS)
+          expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS)
         })
       })
     })
