@@ -16,9 +16,14 @@ describe('FeatureToggles', () => {
   })
 
   describe('isEnabled', () => {
-    it('should return toggle value if toggle exists', () => {
+    it('should return toggle value if  testingSupport toggle exists', () => {
       const expectedToggleValue: boolean = toBoolean(config.get<boolean>(`featureToggles.testingSupport`))
       expect(FeatureToggles.isEnabled('testingSupport')).to.equal(expectedToggleValue)
+    })
+
+    it('should return toggle value if finePrint toggle exists', () => {
+      const expectedToggleValue: boolean = toBoolean(config.get<boolean>(`featureToggles.finePrint`))
+      expect(FeatureToggles.isEnabled('finePrint')).to.equal(expectedToggleValue)
     })
 
     it('should throw an error if toggle does not exist', () => {
