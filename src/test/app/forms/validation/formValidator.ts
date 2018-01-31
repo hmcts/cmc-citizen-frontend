@@ -49,6 +49,34 @@ describe('FormValidator', () => {
     chai.expect(req.body.model.name).to.be.equal('John Smith')
   })
 
+  it('should strip control characters from all string values', () => {
+    req.body = {
+      someString: 'abc\f\ndef',
+      someArray: [
+        'as\vdf',
+        'ghjk\b'
+      ],
+      someObject: {
+        someProperty: 'z\x1Bxc\x1Av',
+        someOtherProperty: 'tyu\ri'
+      }
+    }
+
+    FormValidator.requestHandler(Object)(req, res, next)
+
+    chai.expect(req.body.model).to.deep.equal({
+      someString: 'abc\ndef',
+      someArray: [
+        'asdf',
+        'ghjk'
+      ],
+      someObject: {
+        someProperty: 'zxcv',
+        someOtherProperty: 'tyu\ri'
+      }
+    })
+  })
+
   it('should validate deserialized object', () => {
     req.body = {}
 
