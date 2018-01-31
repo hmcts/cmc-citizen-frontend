@@ -76,7 +76,7 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
 }
 
 function dateMoreThan28DaysFromNow () {
-  return localDateFrom(MomentFactory.currentDate().add(1, 'months'))
+  return localDateFrom(MomentFactory.currentDate().add(29, 'days'))
 }
 
 describe('WhenWillYouPayTask', () => {
