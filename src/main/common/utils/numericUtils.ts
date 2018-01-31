@@ -14,3 +14,8 @@ export function toNumberOrUndefined (value: any): number {
 
   return isNaN(numberVal) ? undefined : numberVal
 }
+
+export function containsAThousandSeparator (input: string): boolean {
+  const output: string[] = input.split(',')
+  return output[output.length - 1].length >= 3
+}
