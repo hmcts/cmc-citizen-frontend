@@ -33,7 +33,7 @@ describe('Defendant response: evidence', () => {
     context('when user authorised', () => {
 
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen', 'defendant')
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)
@@ -82,13 +82,13 @@ describe('Defendant response: evidence', () => {
     describe('for authorized user', () => {
 
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen', 'defendant')
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
-      describe('errors are handled propely', () => {
+      describe('errors are handled properly', () => {
 
         it('should return 500 and render error page when cannot retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')

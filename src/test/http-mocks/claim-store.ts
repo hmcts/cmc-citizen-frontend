@@ -185,45 +185,27 @@ export function resolveRetrieveByDefendantIdWithResponse (override?: object) {
     .reply(HttpStatus.OK, [{ ...sampleClaimObj, ...sampleDefendantResponseObj, ...override }])
 }
 
-export function rejectRetrieveByDefendantId (reason: string) {
-  mock(`${serviceBaseURL}/claims`)
-    .get(new RegExp('/defendant/[0-9]+'))
-    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
-}
-
-export function resolveLinkDefendant () {
-  mock(`${serviceBaseURL}/claims`)
-    .put(new RegExp('/[0-9]+/defendant/[0-9]+'))
-    .reply(HttpStatus.OK, { ...sampleClaimObj, defendantId: '1' })
-}
-
-export function rejectLinkDefendant (reason: string) {
-  mock(`${serviceBaseURL}/claims`)
-    .put(new RegExp('/[0-9]+/defendant/[0-9]+'))
-    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
-}
-
 export function resolveSaveResponse () {
   mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp('/[0-9]+/defendant/[0-9]+'))
+    .post(new RegExp('/.+/defendant/[0-9]+'))
     .reply(HttpStatus.OK, { ...sampleClaimObj, defendantId: '1' })
 }
 
 export function rejectSaveResponse (reason: string) {
   mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp('/[0-9]+/defendant/[0-9]+'))
+    .post(new RegExp('/.+/defendant/[0-9]+'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
 export function resolveRequestForMoreTime () {
   mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp('/[0-9]+/request-more-time'))
+    .post(new RegExp('/.+/request-more-time'))
     .reply(HttpStatus.OK)
 }
 
 export function rejectRequestForMoreTime (reason: string) {
   mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp('/[0-9]+/request-more-time'))
+    .post(new RegExp('/.+/request-more-time'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
@@ -239,39 +221,41 @@ export function rejectSaveClaimForUser (reason: string = 'HTTP error') {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveSaveCcjForUser () {
+export function resolveSaveCcjForExternalId () {
   mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp('/[0-9]+/county-court-judgment'))
+    .post(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}' +
+      '/county-court-judgment'))
     .reply(HttpStatus.OK, { ...sampleClaimObj })
 }
 
 export function rejectSaveOfferForDefendant (reason: string = 'HTTP error') {
   mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp('/[0-9]+/offers/defendant'))
+    .post(new RegExp('/.+/offers/defendant'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
 export function resolveSaveOffer () {
   mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp('/[0-9]+/offers/defendant'))
+    .post(new RegExp('/.+/offers/defendant'))
     .reply(HttpStatus.CREATED)
 }
 
 export function resolveAcceptOffer (by: string = 'claimant') {
   mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp(`/[0-9]+/offers/${by}/accept`))
+    .post(new RegExp(`/.+/offers/${by}/accept`))
     .reply(HttpStatus.CREATED)
 }
 
 export function resolveRejectOffer (by: string = 'claimant') {
   mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp(`/[0-9]+/offers/${by}/reject`))
+    .post(new RegExp(`/.+/offers/${by}/reject`))
     .reply(HttpStatus.CREATED)
 }
 
-export function rejectSaveCcjForUser (reason: string = 'HTTP error') {
+export function rejectSaveCcjForExternalId (reason: string = 'HTTP error') {
   mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp('/[0-9]+/county-court-judgment'))
+    .post(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}' +
+      '/county-court-judgment'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 

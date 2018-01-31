@@ -116,7 +116,7 @@ async function linkDefendantWithClaimByLetterHolderId (letterHolderId, user): Pr
     logger.debug(`Linking user ${user.id} to claim ${claim.id}`)
 
     if (!claim.defendantId) {
-      return ClaimStoreClient.linkDefendant(claim.id, user)
+      return ClaimStoreClient.linkDefendant(claim.externalId, user)
     }
   }
 
@@ -150,12 +150,13 @@ export default express.Router()
           cookies.set(stateCookieName, req.query.state, { sameSite: 'lax' })
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
-          Promise.all((user as User).getLetterHolderIdList().map(
+          Promise.all(user.getLetterHolderIdList().map(
             (letterHolderId) => linkDefendantWithClaimByLetterHolderId(letterHolderId, user)
             )
           )
             .then(async () => res.redirect(await retrieveRedirectForLandingPage(res.locals.user)))
             .catch(async () => res.redirect(await retrieveRedirectForLandingPage(res.locals.user)))
+            .catch(next)
         }
       } else {
         res.redirect(OAuthHelper.forLogin(req, res))
