@@ -23,8 +23,8 @@
       </ul>
 
       <p>
-        {{ t('Find out more about how to <a href="{{ cookieInformation }}">manage cookies</a>.',
-        { cookieInformation : 'https://www.aboutcookies.org'}) | safe }}
+        {{ t('Find out more about how to <a href="{{ cookieUri }}">manage cookies</a>.',
+        { cookieUri : 'https://www.aboutcookies.org'}) | safe }}
       </p>
 
       <h2 class="heading-medium">{{ t('How cookies are used in the Civil money claims') }}</h2>
@@ -47,14 +47,14 @@
 
       <p>
         {{ t('We allow Google to use or share our analytics data. You can find out more '
-        + 'about how Google use this information in their <a href="{{ privacyPolicy }}">privacy policy</a>.',
-        { privacyPolicy :  AppPaths.privacyPolicyPage.uri }) | safe }}
+        + 'about how Google use this information in their <a href="{{ privacyPolicyUri }}">privacy policy</a>.',
+        { privacyPolicyUri :  AppPaths.privacyPolicyPage.uri }) | safe }}
       </p>
 
       <p>
-        {{ t('You can opt out of <a href="{{ optOutOfAnalytics }}">opt out of Google Analytics</a> '
+        {{ t('You can opt out of <a href="{{ optOutOfAnalyticsUri }}">opt out of Google Analytics</a> '
         + 'if you do not want Google to have access to your information.',
-        { optOutOfAnalytics : 'https://tools.google.com/dlpage/gaoptout'}) | safe }}
+        { optOutOfAnalyticsUri : 'https://tools.google.com/dlpage/gaoptout'}) | safe }}
       </p>
 
       <p>{{ t('Google Analytics sets the following cookies:') }}</p>
@@ -91,7 +91,6 @@
         </tr>
         </tbody>
       </table>
-
 
       <h2 class="heading-small">{{ t('To turn our introductory message off') }} </h2>
 

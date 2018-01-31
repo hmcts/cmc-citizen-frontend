@@ -16,8 +16,8 @@
       </p>
 
       <p> {{ t('More information about how to use the service is in the '
-        +'<a href="{{  termsAndConditions }}">terms and conditions</a>.',
-        { termsAndConditions: AppPaths.termsAndConditionsPage.uri }) | safe }}
+        +'<a href="{{ termsAndConditionsUri }}">terms and conditions</a>.',
+        { termsAndConditionsUri: AppPaths.termsAndConditionsPage.uri }) | safe }}
       </p>
 
       <h2 class="heading-medium">{{ t('Why we need your personal data') }}</h2>
@@ -35,8 +35,8 @@
         <li>{{ t('your name, address and contact details') }}</li>
         <li>{{ t('information that tells us if you open an email from us, or click on a link in an email') }}</li>
         <li>{{ t('information about how you use this service, like your IP address and the web browser you use. '
-          + 'We do this by using <a href="{{ cookieUrl }}">cookies</a>.',
-          { cookieUrl: AppPaths.cookiesPage.uri}) | safe }}
+          + 'We do this by using <a href="{{ cookieUri }}">cookies</a>.',
+          { cookieUri: AppPaths.cookiesPage.uri}) | safe }}
         </li>
       </uL>
 
@@ -106,8 +106,8 @@
 
       <p>
         {{ t('You can complain to the '
-        + '<a href="{{ informationCommissionerOffice }}">Information Commissioner’s Office </a> if you: ',
-        { informationCommissionerOffice: 'https://ico.org.uk/global/contact-us' }) | safe }}
+        + '<a href="{{ informationCommissionerOfficeUri }}">Information Commissioner’s Office </a> if you: ',
+        { informationCommissionerOfficeUri: 'https://ico.org.uk/global/contact-us' }) | safe }}
       </p>
 
       <ul class="list list-bullet">
@@ -117,8 +117,6 @@
         <li>{{ t('complete') }}</li>
         <li>{{ t('free from bugs or viruses') }}</li>
       </ul>
-
-      {{ supportWidget() }}
 
     </div>
   </div>
