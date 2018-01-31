@@ -8,4 +8,6 @@ export class ValidationGroups {
   static readonly DEFENDANT_ADDRESS: string = 'defendant-address'
   static readonly GOVERNMENT_DEPARTMENT: string = 'government-department'
   static readonly CLAIM_IS_FOR_TENANCY_DEPOSIT: string = 'claim-is-for-tenancy-deposit'
+  static readonly DEFENDANT: string = 'defendant'
+  static readonly CLAIMANT: string = 'claimant'
 }

@@ -25,10 +25,10 @@ export class FormValidator {
       return true
     }
 
-    return (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const model: T = modelTypeMapper(req.body)
 
-      const errors: ValidationError[] = isValidationEnabledFor(req) ? validator.validateSync(model, { groups: validationGroup !== undefined ? [validationGroup] : [] }) : []
+      const errors: ValidationError[] = isValidationEnabledFor(req) ? await validator.validate(model, { groups: validationGroup !== undefined ? [validationGroup] : [] }) : []
       const action: object = req.body.action
 
       req.body = new Form<T>(model, errors)

@@ -10,7 +10,7 @@ import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
-import { Country } from 'app/common/country'
+import { ValidationGroups } from '../helpers/eligibility/validationGroups'
 
 function renderView (form: Form<IndividualDetails>, res: express.Response): void {
   res.render(Paths.defendantIndividualDetailsPage.associatedView, { form: form })
@@ -25,24 +25,19 @@ export default express.Router()
   })
   .post(
     Paths.defendantIndividualDetailsPage.uri,
-    FormValidator.requestHandler(IndividualDetails, IndividualDetails.fromObject),
+    FormValidator.requestHandler(IndividualDetails, IndividualDetails.fromObject, ValidationGroups.DEFENDANT),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       let form: Form<IndividualDetails> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        form = await Country.isValidDefendantAddress(form)
-        if (form.hasErrors()) {
-          renderView(form, res)
-        } else {
-          const draft: Draft<DraftClaim> = res.locals.claimDraft
-          const user: User = res.locals.user;
+        const draft: Draft<DraftClaim> = res.locals.claimDraft
+        const user: User = res.locals.user;
 
-          (draft.document.defendant.partyDetails as IndividualDetails) = form.model
-          await new DraftService().save(draft, user.bearerToken)
+        (draft.document.defendant.partyDetails as IndividualDetails) = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
-          res.redirect(Paths.defendantEmailPage.uri)
-        }
+        res.redirect(Paths.defendantEmailPage.uri)
       }
     }))

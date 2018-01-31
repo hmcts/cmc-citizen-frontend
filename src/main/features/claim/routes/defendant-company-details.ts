@@ -10,6 +10,7 @@ import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
+import { ValidationGroups } from '../helpers/eligibility/validationGroups'
 
 function renderView (form: Form<CompanyDetails>, res: express.Response): void {
   res.render(Paths.defendantCompanyDetailsPage.associatedView, { form: form })
@@ -24,7 +25,7 @@ export default express.Router()
   })
   .post(
     Paths.defendantCompanyDetailsPage.uri,
-    FormValidator.requestHandler(CompanyDetails, CompanyDetails.fromObject, 'defendant'),
+    FormValidator.requestHandler(CompanyDetails, CompanyDetails.fromObject , ValidationGroups.DEFENDANT),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<CompanyDetails> = req.body
       if (form.hasErrors()) {
