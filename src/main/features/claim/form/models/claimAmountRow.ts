@@ -1,10 +1,11 @@
-import * as _ from 'lodash'
 import { IsDefined, Min, ValidateIf } from 'class-validator'
 
 import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 import { Fractions } from 'app/forms/validation/validators/fractions'
 import { MaxLength } from 'app/forms/validation/validators/maxLengthValidator'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
+import * as numeral from 'numeral'
+import { containsAThousandSeparator } from 'common/utils/numericUtils'
 
 export class ValidationErrors {
   static readonly REASON_REQUIRED: string = 'Enter a reason'
@@ -44,7 +45,12 @@ export class ClaimAmountRow {
     }
 
     const reason = value.reason || undefined
-    const amount = value.amount ? _.toNumber(value.amount) : undefined
+    const amount = value.amount
+      ? !value.amount.toString().includes(',') || containsAThousandSeparator(value.amount.toString())
+        ? numeral(value.amount).value()
+        : value.amount
+      : undefined
+
     return new ClaimAmountRow(reason, amount)
   }
 
