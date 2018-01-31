@@ -16,7 +16,7 @@ describe('FeatureToggles', () => {
   })
 
   describe('isEnabled', () => {
-    it('should return toggle value if  testingSupport toggle exists', () => {
+    it('should return toggle value if testingSupport toggle exists', () => {
       const expectedToggleValue: boolean = toBoolean(config.get<boolean>(`featureToggles.testingSupport`))
       expect(FeatureToggles.isEnabled('testingSupport')).to.equal(expectedToggleValue)
     })
