@@ -22,9 +22,8 @@ export class FeesClient {
    * @param {number} claimValue the amount claiming for in pounds
    * @returns {Promise.<number>} promise containing the fee amount in pounds
    */
-  static calculateIssueFee (claimValue: number): Promise<number> {
-    return this.calculateFee(issueFeeCode, claimValue)
-      .then((outcome: CalculationOutcome) => MoneyConverter.convertPenniesToPounds(outcome.amount))
+  static async calculateIssueFee (claimValue: number): Promise<number> {
+    return MoneyConverter.convertPenniesToPounds(((await this.calculateFee(issueFeeCode, claimValue))).amount)
   }
 
   /**
@@ -33,9 +32,8 @@ export class FeesClient {
    * @param {number} claimValue the amount claiming for in pounds
    * @returns {Promise.<number>} promise containing the fee amount in pounds
    */
-  static calculateHearingFee (claimValue: number): Promise<number> {
-    return this.calculateFee(hearingFeeCode, claimValue)
-      .then((outcome: CalculationOutcome) => MoneyConverter.convertPenniesToPounds(outcome.amount))
+  static async calculateHearingFee (claimValue: number): Promise<number> {
+    return MoneyConverter.convertPenniesToPounds(((await this.calculateFee(hearingFeeCode, claimValue))).amount)
   }
 
   /**
@@ -45,21 +43,22 @@ export class FeesClient {
    * @param amount amount in pounds
    * @returns {Promise.<CalculationOutcome>} promise containing the calculation outcome (including fee amount in pennies)
    */
-  static calculateFee (feeCode: string, amount: number): Promise<CalculationOutcome> {
+  static async calculateFee (feeCode: string, amount: number): Promise<CalculationOutcome> {
     ClaimValidator.claimAmount(amount)
     const amountInPennies = MoneyConverter.convertPoundsToPennies(amount)
     if (amountInPennies <= 0) {
       throw new Error(`Amount must be at least 1 penny, amount was: ${amountInPennies}`)
     }
 
-    return request.get(`${feesUrl}/range-groups/${feeCode}/calculations?value=${amountInPennies}`)
-      .then((body: Object) => plainToClass(CalculationOutcome, body))
+    const fee: object = await request.get(`${feesUrl}/range-groups/${feeCode}/calculations?value=${amountInPennies}`)
+    return plainToClass(CalculationOutcome, fee)
   }
+
   /**
    * Get the issue fee range group
    * @returns {Promise.<RangeGroup>} promise containing the range group (including fee amounts in pennies)
    */
-  static getIssueFeeRangeGroup (): Promise<RangeGroup> {
+  static async getIssueFeeRangeGroup (): Promise<RangeGroup> {
     return this.getRangeGroup(issueFeeCode)
   }
 
@@ -67,17 +66,14 @@ export class FeesClient {
    * Get hearing fee range group
    * @returns {Promise.<RangeGroup>} promise containing the range group (including fee amounts in pennies)
    */
-  static getHearingFeeRangeGroup (): Promise<RangeGroup> {
+  static async getHearingFeeRangeGroup (): Promise<RangeGroup> {
     return this.getRangeGroup(hearingFeeCode)
   }
 
-  private static getRangeGroup (code: string): Promise<RangeGroup> {
+  private static async getRangeGroup (code: string): Promise<RangeGroup> {
     if (StringUtils.isBlank(code)) {
       throw new Error('Fee code is required')
     }
-    return request.get(`${feesUrl}/range-groups/${code}`)
-      .then((body: Object) => {
-        return plainToClass(RangeGroup, body)
-      })
+    return plainToClass(RangeGroup, await request.get(`${feesUrl}/range-groups/${code}`) as object)
   }
 }
