@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { toNumberOrUndefined } from 'common/utils/numericUtils'
+import { containsAThousandSeparator, toNumberOrUndefined } from 'common/utils/numericUtils'
 
 describe('toNumberOrUndefined', () => {
 
@@ -70,6 +70,42 @@ describe('toNumberOrUndefined', () => {
 
     it('negative decimal numeric string given', () => {
       expect(toNumberOrUndefined('-10.1098978')).to.be.eq(-10.1098978)
+    })
+  })
+
+  describe('containsAThousandSeparator', () => {
+
+    context('should return true when', () => {
+
+      it('given 1,100', () => {
+        expect(containsAThousandSeparator('1,100')).to.be.eq(true)
+      })
+
+      it('given 110,100', () => {
+        expect(containsAThousandSeparator('110,100')).to.be.eq(true)
+      })
+
+      it('given 1,110,100', () => {
+        expect(containsAThousandSeparator('1,110,100')).to.be.eq(true)
+      })
+
+    })
+    context('should return false when', () => {
+      it('given 1110,100', () => {
+        expect(containsAThousandSeparator('1110,100')).to.be.eq(false)
+      })
+
+      it('given 11,10', () => {
+        expect(containsAThousandSeparator('11,10')).to.be.eq(false)
+      })
+
+      it('given 1,1110,100', () => {
+        expect(containsAThousandSeparator('1,1110,100')).to.be.eq(false)
+      })
+
+      it('given 1,1,10,10,0', () => {
+        expect(containsAThousandSeparator('1,1,10,10,0')).to.be.eq(false)
+      })
     })
   })
 })

@@ -17,5 +17,14 @@ export function toNumberOrUndefined (value: any): number {
 
 export function containsAThousandSeparator (input: string): boolean {
   const output: string[] = input.split(',')
-  return output[output.length - 1].length >= 3
+
+  for (let i: number = 0; i < output.length; i++) {
+    if (i === output.length - 1 && output[i].length < 3) {
+      return false
+    } else if (output[i].length > 3) {
+      return false
+    }
+  }
+
+  return true
 }
