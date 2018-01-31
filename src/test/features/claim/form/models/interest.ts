@@ -32,11 +32,13 @@ describe('Interest', () => {
     })
 
     it('should convert non numeric rate into numeric type', () => {
-      expect(Interest.fromObject({
+      const interest = Interest.fromObject({
         type: InterestType.DIFFERENT,
         rate: '10',
         reason: 'Special case'
-      })).to.deep.equal(new Interest(InterestType.DIFFERENT, 10, 'Special case'))
+      })
+
+      expect(interest).to.deep.equal(new Interest(InterestType.DIFFERENT, 10, 'Special case'))
     })
 
     it('should set standard rate and unset reason when standard type is set', () => {
