@@ -68,8 +68,8 @@ describe('PayBySetDate', () => {
       expect(payBySetDate.requiresExplanation()).to.be.false
     })
 
-    it('should require explanation if payment date month away', () => {
-      payBySetDate.paymentDate.date = localDateFrom(MomentFactory.currentDate().add(1, 'month'))
+    it('should require explanation if payment date more than 28 days away', () => {
+      payBySetDate.paymentDate.date = localDateFrom(MomentFactory.currentDate().add(29, 'days'))
       expect(payBySetDate.requiresExplanation()).to.be.true
     })
   })
