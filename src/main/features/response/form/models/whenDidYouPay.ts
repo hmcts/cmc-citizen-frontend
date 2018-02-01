@@ -11,7 +11,7 @@ import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/va
 const currentDate = MomentFormatter.formatLongDate(MomentFactory.currentDate())
 
 export class ValidationErrors {
-  static readonly HOW_DID_YOU_PAY_AMOUNT_CLAIMED: string = 'Explain how did you paid the amount claimed'
+  static readonly HOW_DID_YOU_PAY_AMOUNT_CLAIMED: string = 'Explain how did you pay the amount claimed'
   static readonly DATE_REQUIRED: string = 'Enter a date'
   static readonly VALID_PAST_DATE: string = `Enter date before ${currentDate}`
   static readonly DATE_INVALID_YEAR: string = 'Enter a 4 digit year'
