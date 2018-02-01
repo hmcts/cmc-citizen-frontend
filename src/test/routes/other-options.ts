@@ -10,7 +10,7 @@ describe('Defendant first contact: start page', () => {
   describe('on GET', () => {
     it('should render page when everything is fine', async () => {
       await request(app)
-        .get(Paths.otherOptionsPage.uri)
+        .get(Paths.resolveBeforeClaimPage.uri)
         .expect(res => expect(res).to.be.successful.withText('Talk to the person who owes you'))
     })
   })
