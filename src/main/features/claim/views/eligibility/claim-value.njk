@@ -8,7 +8,7 @@
   <div class="grid-row">
     <div class="column-two-thirds">
       <h1 class="heading-large">{{ t('Total amount you’re claiming') }}</h1>
-      <p>{{ t('Please include any additional interest in your claim amount.') }}</p>
+      <p>{{ t('If you‘re claiming interest, include that in the amount.') }}</p>
 
       {% set name = 'claimValue' %}
 
@@ -20,7 +20,7 @@
         {{
         radioGroup(
         form = form,
-        label = 'Total amount you’re claiming',
+        label = 'More than £10,000',
         labelForScreenReadersOnly = true,
         name = name,
         options = [
