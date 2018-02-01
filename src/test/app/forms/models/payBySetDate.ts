@@ -81,10 +81,10 @@ describe('PayBySetDate', () => {
         })
 
         it('should reject past date', () => {
-          const yesterday = moment().subtract(1, 'days')
-          const pastDate = new LocalDate(yesterday.year(), yesterday.month() + 1, yesterday.day())
+          const dayBeforeToday = moment().subtract(1, 'days')
 
-          const errors = validator.validateSync(new PayBySetDate(pastDate))
+          const errors = validator.validateSync(
+            new PayBySetDate(new LocalDate(dayBeforeToday.year(), dayBeforeToday.month() + 1, dayBeforeToday.date())))
 
           expect(errors.length).to.equal(1)
           expectValidationError(errors, ValidationErrors.DATE_TODAY_OR_IN_FUTURE)
