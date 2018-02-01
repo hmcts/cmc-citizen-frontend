@@ -1,4 +1,4 @@
-import * as _ from 'lodash'
+import * as numeral from 'numeral'
 
 export function toNumberOrUndefined (value: any): number {
   if ([undefined, NaN, '', null, false].indexOf(value) !== -1) {
@@ -10,12 +10,19 @@ export function toNumberOrUndefined (value: any): number {
   }
 
   const strVal: string = value && value.toString().trim()
-  const numberVal: number = strVal.length > 0 ? _.toNumber(strVal) : undefined
 
-  return isNaN(numberVal) ? undefined : numberVal
+  // checks length, followed by a filter by not containing ',' or valid thousand separators
+  const numberVal: number = strVal.length > 0
+    ? (!strVal.includes(',') || containsAThousandSeparator(strVal))
+      ? numeral(strVal).value()
+      : strVal
+    : undefined
+
+  // checks whether is null or not a number then undefined else  number
+  return !numberVal || isNaN(numberVal) ? undefined : numberVal
 }
 
-export function containsAThousandSeparator (input: string): boolean {
+function containsAThousandSeparator (input: string): boolean {
   const matchedArray = input.match(/^[1-9]\d{0,2}(\,\d{3})+(\.\d*)?$/)
   return matchedArray ? matchedArray.length > 0 : false
 }
