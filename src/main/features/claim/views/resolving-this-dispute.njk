@@ -24,15 +24,6 @@
         <li>{{ t('telling them what you believe they owe and why') }}.</li>
         <li>{{ t('suggesting a timetable for them to pay you back') }}.</li>
         <li>{{ t('explaining you‘ll make a money claim against them if they don‘t pay') }}.</li>
-        <li>
-          {{ t('Telling them that they might have to pay the full amount as well as '
-          + '<a href="{{ feesAndCostsUri }}">fees and other costs</a> if they ‘defend the claim’, and that they could get '
-          + ' a <a href="{{ CCJInformationUri }}">County Court Judgment (CCJ).</a>',
-          {
-            feesAndCostsUri: 'https://www.gov.uk/court-fees-what-they-are',
-            CCJInformationUri: 'https://www.gov.uk/county-court-judgments-ccj-for-debt'
-          }) | safe }}
-        </li>
       </ul>
 
       <h2 class="heading-medium">{{ t('Consider mediation') }}</h2>
