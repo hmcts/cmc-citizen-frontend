@@ -47,19 +47,22 @@ export class Form<Model> {
 
   @ValidateNested()
   model: Model
+  rawData: object
   errors: FormValidationError[]
 
   /**
    * @param model - a object used to fill the form
+   * @param rawData - a raw data used to create model instance
    * @param errors - an array of error objects
    */
-  constructor (model: Model, errors: ValidationError[] = []) {
+  constructor (model: Model, rawData: object = undefined, errors: ValidationError[] = []) {
     this.model = model
+    this.rawData = rawData
     this.errors = this.flatMapDeep(errors)
   }
 
   static empty<Model> (): Form<Model> {
-    return new Form<Model>(null, [])
+    return new Form<Model>(undefined, undefined, [])
   }
 
   hasErrors (): boolean {
@@ -75,6 +78,23 @@ export class Form<Model> {
     return this.errors
       .filter((error: FormValidationError) => error.fieldName === fieldName)
       .map((error: FormValidationError) => error.message)[0]
+  }
+
+  /**
+   * Get raw data for given field name.
+   * @param {string} fieldName
+   * @returns {object}
+   */
+  rawDataFor (fieldName: string): object {
+    if (this.rawData) {
+      let value: any = this.rawData
+      Converter.asProperty(fieldName).split('.').forEach(property => {
+        value = value ? value[property] : value
+      })
+      return value
+    } else {
+      return undefined
+    }
   }
 
   /**

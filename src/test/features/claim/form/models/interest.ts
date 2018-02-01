@@ -113,15 +113,13 @@ describe('Interest', () => {
     })
 
     it('should reject interest with comma', () => {
-      const errors = validator.validateSync(
-        Interest.fromObject(
-          {
-            type: InterestType.DIFFERENT,
-            rate: '1,1',
-            reason: 'Special case'
-          }
-        )
-      )
+      const errors = validator.validateSync(Interest.fromObject(
+        {
+          type: InterestType.DIFFERENT,
+          rate: '1,1',
+          reason: 'Special case'
+        }
+      ))
 
       expect(errors.length).to.equal(1)
       expectValidationError(errors, ValidationErrors.RATE_NOT_VALID)

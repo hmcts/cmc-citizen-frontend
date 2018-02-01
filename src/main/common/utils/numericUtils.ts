@@ -18,8 +18,8 @@ export function toNumberOrUndefined (value: any): number {
       : strVal
     : undefined
 
-  // returns undefined for
-  return !numberVal ? undefined : numberVal
+  // checks whether is null or not a number then undefined else  number
+  return !numberVal || isNaN(numberVal) ? undefined : numberVal
 }
 
 function containsAThousandSeparator (input: string): boolean {
