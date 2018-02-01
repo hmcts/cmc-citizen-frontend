@@ -72,7 +72,7 @@ describe('Form', () => {
           ])
         ])
 
-        const form: Form<any> = new Form(null, [simpleError, nestedError])
+        const form: Form<any> = new Form(null, null,[simpleError, nestedError])
         expect(form.errors.length).to.equal(3)
         expectPropertyValidationError(form.errors, 'amount', 'Total amount is required')
         expectPropertyValidationError(form.errors, 'rows.0.reason', 'Reason is required')
@@ -81,22 +81,22 @@ describe('Form', () => {
     })
 
     it('should be invalid when at least one error is in the errors array', () => {
-      const form: Form<any> = new Form(null, [validationError])
+      const form: Form<any> = new Form(null, null,[validationError])
       expect(form.hasErrors()).to.equal(true)
     })
 
     it('should be valid when there is not errors in the errors array', () => {
-      const form: Form<any> = new Form(null, [])
+      const form: Form<any> = new Form(null, null,[])
       expect(form.hasErrors()).to.equal(false)
     })
 
     it('should return error message if error associated with given field exists', () => {
-      const form: Form<any> = new Form(null, [validationError])
+      const form: Form<any> = new Form(null, null,[validationError])
       expect(form.errorFor('address[city]')).to.equal('City must be empty')
     })
 
     it('should return undefined if error associated with given field does not exist', () => {
-      const form: Form<any> = new Form(null, [])
+      const form: Form<any> = new Form(null, null,[])
       expect(form.errorFor('address[city]')).to.equal(undefined)
     })
 
