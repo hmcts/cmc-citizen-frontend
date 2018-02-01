@@ -52,17 +52,17 @@ export class Form<Model> {
 
   /**
    * @param model - a object used to fill the form
-   * @param rawData - a raw data used to create model instance
    * @param errors - an array of error objects
+   * @param rawData - a raw data used to create model instance
    */
-  constructor (model: Model, rawData: object = undefined, errors: ValidationError[] = []) {
+  constructor (model: Model, errors: ValidationError[] = [], rawData: object = undefined) {
     this.model = model
     this.rawData = rawData
     this.errors = this.flatMapDeep(errors)
   }
 
   static empty<Model> (): Form<Model> {
-    return new Form<Model>(undefined, undefined, [])
+    return new Form<Model>(undefined, [])
   }
 
   hasErrors (): boolean {
