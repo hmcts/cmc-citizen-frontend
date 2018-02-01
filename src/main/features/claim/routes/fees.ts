@@ -4,7 +4,6 @@ import { Paths } from 'claim/paths'
 import { claimAmountWithInterest } from 'app/utils/interestUtils'
 import { FeesClient } from 'fees/feesClient'
 import { Range } from 'fees/models/range'
-import { RangeGroup } from 'app/fees/models/rangeGroup'
 import { FeesTableViewHelper } from 'claim/helpers/feesTableViewHelper'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
@@ -25,10 +24,7 @@ export default express.Router()
         FeesClient.getHearingFeeRangeGroup()
       ]
     )
-      .then((values: any[]) => {
-        const issueFeeRangeGroup: RangeGroup = values[2]
-        const hearingFeeRangeGroup: RangeGroup = values[3]
-
+      .then(([issueFee, hearingFee, issueFeeRangeGroup, hearingFeeRangeGroup]) => {
         const supportedIssueFees: Range[] = issueFeeRangeGroup.ranges
           .filter(range => range.from < supportedFeeLimitInPennies)
           .map(range => range.copy({ to: Math.min(range.to, supportedFeeLimitInPennies) }))
@@ -38,8 +34,8 @@ export default express.Router()
 
         res.render(Paths.feesPage.associatedView,
           {
-            issueFee: values[0],
-            hearingFee: values[1],
+            issueFee: issueFee,
+            hearingFee: hearingFee,
             rows: FeesTableViewHelper.merge(supportedIssueFees, supportedHearingFees)
           }
         )
