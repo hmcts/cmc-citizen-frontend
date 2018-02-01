@@ -32,22 +32,6 @@ describe('toNumberOrUndefined', () => {
     it('string given', () => {
       expect(toNumberOrUndefined('lalala')).to.be.eq(undefined)
     })
-
-    it('given 1110,100', () => {
-      expect(toNumberOrUndefined('1110,100')).to.be.eq(undefined)
-    })
-
-    it('given string 11,10', () => {
-      expect(toNumberOrUndefined('11,10')).to.be.eq(undefined)
-    })
-
-    it('given string 1,1110,100', () => {
-      expect(toNumberOrUndefined('1,1110,100')).to.be.eq(undefined)
-    })
-
-    it('given string 1,1,10,10,0', () => {
-      expect(toNumberOrUndefined('1,1,10,10,0')).to.be.eq(undefined)
-    })
   })
 
   context('should return number when', () => {
@@ -98,6 +82,22 @@ describe('toNumberOrUndefined', () => {
 
     it('given 1,110,100', () => {
       expect(toNumberOrUndefined('1,110,100')).to.be.eq(1110100)
+    })
+
+    it('given 1110,100', () => {
+      expect(toNumberOrUndefined('1110,100')).to.be.eq('1110,100')
+    })
+
+    it('given string 11,10', () => {
+      expect(toNumberOrUndefined('11,10')).to.be.eq('11,10')
+    })
+
+    it('given string 1,1110,100', () => {
+      expect(toNumberOrUndefined('1,1110,100')).to.be.eq('1,1110,100')
+    })
+
+    it('given string 1,1,10,10,0', () => {
+      expect(toNumberOrUndefined('1,1,10,10,0')).to.be.eq('1,1,10,10,0')
     })
   })
 })
