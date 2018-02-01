@@ -26,7 +26,7 @@ export class FormValidator {
       return true
     }
 
-    return (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const model: T = modelTypeMapper(removeIllegalCharacters(req.body))
 
       const errors: ValidationError[] = isValidationEnabledFor(req) ? await validator.validate(model, { groups: validationGroup !== undefined ? [validationGroup] : [] }) : []
