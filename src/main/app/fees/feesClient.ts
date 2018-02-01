@@ -23,7 +23,8 @@ export class FeesClient {
    * @returns {Promise.<number>} promise containing the fee amount in pounds
    */
   static async calculateIssueFee (claimValue: number): Promise<number> {
-    return MoneyConverter.convertPenniesToPounds(((await this.calculateFee(issueFeeCode, claimValue))).amount)
+    const fee: CalculationOutcome = await this.calculateFee(issueFeeCode, claimValue)
+    return MoneyConverter.convertPenniesToPounds(fee.amount)
   }
 
   /**
@@ -33,7 +34,8 @@ export class FeesClient {
    * @returns {Promise.<number>} promise containing the fee amount in pounds
    */
   static async calculateHearingFee (claimValue: number): Promise<number> {
-    return MoneyConverter.convertPenniesToPounds(((await this.calculateFee(hearingFeeCode, claimValue))).amount)
+    const fee: CalculationOutcome = await this.calculateFee(hearingFeeCode, claimValue)
+    return MoneyConverter.convertPenniesToPounds(fee.amount)
   }
 
   /**
@@ -74,6 +76,7 @@ export class FeesClient {
     if (StringUtils.isBlank(code)) {
       throw new Error('Fee code is required')
     }
-    return plainToClass(RangeGroup, await request.get(`${feesUrl}/range-groups/${code}`) as object)
+    const range: object = await request.get(`${feesUrl}/range-groups/${code}`)
+    return plainToClass(RangeGroup, range)
   }
 }
