@@ -9,61 +9,107 @@ import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/val
 export const MAX_NUMBER_OF_ROWS: number = 10
 export const INIT_ROW_COUNT: number = 0
 
+export class ValidationErrors {
+  static readonly AMOUNT_REQUIRED_SALARY: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Salary`
+  static readonly AMOUNT_INVALID_DECIMALS_SALARY: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Salary`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_SALARY: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Salary`
+
+  static readonly AMOUNT_REQUIRED_CREDIT: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Universal Credit`
+  static readonly AMOUNT_INVALID_DECIMALS_CREDIT: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Rent`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_CREDIT: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Rent`
+
+  static readonly AMOUNT_REQUIRED_JOB_SEEK_INCOME: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Jobseeker’s Allowance (income based)`
+  static readonly AMOUNT_INVALID_DECIMALS_JOB_SEEK_INCOME: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Jobseeker’s Allowance (income based)`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_JOB_SEEK_INCOME: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Jobseeker’s Allowance (income based)`
+
+  static readonly AMOUNT_REQUIRED_JOB_SEEK_CONTRIBUTION: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Jobseeker’s Allowance (contribution based)`
+  static readonly AMOUNT_INVALID_DECIMALS_JOB_SEEK_CONTRIBUTION: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Jobseeker’s Allowance (contribution based)`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_JOB_SEEK_CONTRIBUTION: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Jobseeker’s Allowance (contribution based)`
+
+  static readonly AMOUNT_REQUIRED_INCOME: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Income Support`
+  static readonly AMOUNT_INVALID_DECIMALS_INCOME: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Income Support`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_INCOME: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Income Support`
+
+  static readonly AMOUNT_REQUIRED_WORKING_TAX_CREDIT: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Working Tax Credit`
+  static readonly AMOUNT_INVALID_DECIMALS_WORKING_TAX_CREDIT: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Working Tax Credit`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_WORKING_TAX_CREDIT: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Working Tax Credit`
+
+  static readonly AMOUNT_REQUIRED_CHILD_TAX_CREDIT: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Child Tax Credit`
+  static readonly AMOUNT_INVALID_DECIMALS_CHILD_TAX_CREDIT: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Child Tax Credit`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_CHILD_TAX_CREDIT: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Child Tax Credit`
+
+  static readonly AMOUNT_REQUIRED_CHILD_BENEFIT: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Child Benefit`
+  static readonly AMOUNT_INVALID_DECIMALS_CHILD_BENEFIT: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Child Benefit`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_CHILD_BENEFIT: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Child Benefit`
+
+  static readonly AMOUNT_REQUIRED_COUNCIL_TAX_SUPPORT: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Council Tax Support`
+  static readonly AMOUNT_INVALID_DECIMALS_COUNCIL_TAX_SUPPORT: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Council Tax Support`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_COUNCIL_TAX_SUPPORT: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Council Tax Support`
+
+  static readonly AMOUNT_REQUIRED_PENSION: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Pension (paid to you)`
+  static readonly AMOUNT_INVALID_DECIMALS_PENSION: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Pension (paid to you)`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_PENSION: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Pension (paid to you)`
+
+  static readonly AMOUNT_REQUIRED_MAINTENANCE: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Maintenance payments (paid to you)`
+  static readonly AMOUNT_INVALID_DECIMALS_MAINTENANCE: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Maintenance payments (paid to you)`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_MAINTENANCE: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Maintenance payments (paid to you)`
+}
+
 export class MonthlyIncome extends MultiRowForm<AmountDescriptionRow> {
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_SALARY })
+  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_SALARY })
+  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_SALARY })
   salary?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_CREDIT })
+  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_CREDIT })
+  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_CREDIT })
   universalCredit?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_JOB_SEEK_INCOME })
+  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_JOB_SEEK_INCOME })
+  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_JOB_SEEK_INCOME })
   jobSeekerAllowanceIncome?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_JOB_SEEK_CONTRIBUTION })
+  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_JOB_SEEK_CONTRIBUTION })
+  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_JOB_SEEK_CONTRIBUTION })
   jobSeekerAllowanceContribution?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_INCOME })
+  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_INCOME })
+  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_INCOME })
   incomeSupport?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_WORKING_TAX_CREDIT })
+  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_WORKING_TAX_CREDIT })
+  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_WORKING_TAX_CREDIT })
   workingTaxCredit?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_CHILD_TAX_CREDIT })
+  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_CHILD_TAX_CREDIT })
+  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_CHILD_TAX_CREDIT })
   childTaxCredit?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_CHILD_BENEFIT })
+  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_CHILD_BENEFIT })
+  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_CHILD_BENEFIT })
   childBenefit?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_COUNCIL_TAX_SUPPORT })
+  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_COUNCIL_TAX_SUPPORT })
+  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_COUNCIL_TAX_SUPPORT })
   councilTaxSupport?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_PENSION })
+  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_PENSION })
+  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_PENSION })
   pension?: number
 
-  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
-  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
+  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_MAINTENANCE })
+  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_MAINTENANCE })
+  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_MAINTENANCE })
   maintenance?: number
 
   constructor (salary?: number,

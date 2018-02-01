@@ -3,7 +3,6 @@ import { expect } from 'chai'
 import { Validator } from 'class-validator'
 import { AmountDescriptionRow, ValidationErrors } from 'response/form/models/statement-of-means/amountDescriptionRow'
 import { expectValidationError, generateString } from '../../../../../app/forms/models/validationUtils'
-import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 describe('AmountDescriptionRow', () => {
@@ -115,28 +114,28 @@ describe('AmountDescriptionRow', () => {
         const errors = validator.validateSync(new AmountDescriptionRow('abc', 10.111))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.AMOUNT_INVALID_DECIMALS)
+        expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS)
       })
 
       it('when negative amount', () => {
         const errors = validator.validateSync(new AmountDescriptionRow('abc', -10))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
+        expectValidationError(errors, ValidationErrors.POSITIVE_NUMBER_REQUIRED)
       })
 
       it('when amount = 0', () => {
         const errors = validator.validateSync(new AmountDescriptionRow('abc', 0))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
+        expectValidationError(errors, ValidationErrors.POSITIVE_NUMBER_REQUIRED)
       })
 
       it('when empty amount', () => {
         const errors = validator.validateSync(new AmountDescriptionRow('card', undefined))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
+        expectValidationError(errors, ValidationErrors.POSITIVE_NUMBER_REQUIRED)
       })
 
       it('when empty details', () => {
@@ -152,7 +151,7 @@ describe('AmountDescriptionRow', () => {
         )
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.TEXT_TOO_LONG)
+        expectValidationError(errors, ValidationErrors.DESCRIPTION_TOO_LONG)
       })
     })
   })

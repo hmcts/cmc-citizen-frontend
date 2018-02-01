@@ -24,10 +24,10 @@ export class ClaimStoreClient {
     })
   }
 
-  static saveResponseForUser (claimId: number, draft: Draft<ResponseDraft>, user: User): Promise<void> {
+  static saveResponseForUser (externalId: string, draft: Draft<ResponseDraft>, user: User): Promise<void> {
     const response = ResponseModelConverter.convert(draft.document)
 
-    return request.post(`${claimStoreResponsesApiUrl}/${claimId}/defendant/${user.id}`, {
+    return request.post(`${claimStoreResponsesApiUrl}/${externalId}/defendant/${user.id}`, {
       body: response,
       headers: {
         Authorization: `Bearer ${user.bearerToken}`
@@ -108,16 +108,16 @@ export class ClaimStoreClient {
       .then((claims: object[]) => claims.map(claim => new Claim().deserialize(claim)))
   }
 
-  static linkDefendant (claimId: number, user: User): Promise<Claim> {
-    if (!claimId) {
-      return Promise.reject(new Error('Claim ID is required'))
+  static linkDefendant (externalId: string, user: User): Promise<Claim> {
+    if (!externalId) {
+      return Promise.reject(new Error('External ID is required'))
     }
     if (!user.id) {
       return Promise.reject(new Error('User is required'))
     }
 
     return request
-      .put(`${claimStoreApiUrl}/${claimId}/defendant/${user.id}`, {
+      .put(`${claimStoreApiUrl}/${externalId}/defendant/${user.id}`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }
@@ -131,16 +131,16 @@ export class ClaimStoreClient {
       })
   }
 
-  static requestForMoreTime (claimId: number, user: User): Promise<Claim> {
-    if (!claimId) {
-      return Promise.reject(new Error('Claim ID is required'))
+  static requestForMoreTime (externalId: string, user: User): Promise<Claim> {
+    if (!externalId) {
+      return Promise.reject(new Error('External ID is required'))
     }
 
     if (!user || !user.bearerToken) {
       return Promise.reject(new Error('Authorisation token required'))
     }
 
-    return request.post(`${claimStoreApiUrl}/${claimId}/request-more-time`, {
+    return request.post(`${claimStoreApiUrl}/${externalId}/request-more-time`, {
       headers: {
         Authorization: `Bearer ${user.bearerToken}`
       }

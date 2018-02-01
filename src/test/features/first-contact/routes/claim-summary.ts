@@ -24,7 +24,7 @@ describe('Defendant first contact: claim summary page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'letter-holder')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-holder')
       })
 
       it('should redirect to access denied page when claim reference number does not match', async () => {
@@ -62,7 +62,7 @@ describe('Defendant first contact: claim summary page', () => {
     it('should redirect to registration page when everything is fine', async () => {
       const registrationPagePattern = new RegExp(`${config.get('idam.authentication-web.url')}/login/uplift\\?response_type=code&state=1&client_id=cmc_citizen&redirect_uri=http://127.0.0.1:[0-9]{5}/receiver&jwt=ABC`)
 
-      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'letter-holder')
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-holder')
 
       await request(app)
         .post(Paths.claimSummaryPage.uri)
@@ -70,7 +70,7 @@ describe('Defendant first contact: claim summary page', () => {
         .expect(res => expect(res).to.be.redirect.toLocation(registrationPagePattern))
     })
     it('should clear session cookie when everything is fine', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'letter-holder')
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-holder')
 
       await request(app)
         .post(Paths.claimSummaryPage.uri)
@@ -81,7 +81,7 @@ describe('Defendant first contact: claim summary page', () => {
 
   describe('CCJ was requested', () => {
     it('should redirect to ccj error page', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'letter-holder')
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-holder')
       claimStoreServiceMock.resolveRetrieveByLetterHolderId(
         '000MC000', { countyCourtJudgmentRequestedAt: MomentFactory.parse('2010-10-10') }
       )
