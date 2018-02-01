@@ -12,7 +12,7 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
         <p>
-          {{ t('You must pay the claim fee up front. However, we’ll add it to the amount you’re claiming back from the respondent.') }}
+          {{ t('You must pay a fee to make this claim but we‘ll add it to the amount you‘re claiming from the defendant.') }}
         </p>
 
         <table class="form-group">
@@ -32,11 +32,6 @@
           <tr>
             <td>{{ t('Hearing fee (if your claim goes to a hearing)') }}</td>
             <td class="numeric">£{{ hearingFee }}</td>
-          </tr>
-
-          <tr>
-            <td>{{ t('Other fees - for example, to update your claim once submitted') }}</td>
-            <td class="numeric">{{ t('varies by case') }}</td>
           </tr>
 
           </tbody>
@@ -65,13 +60,19 @@
                   <td>{{ row.fees[2] | pennies2pounds | numeral }}</td>
                 </tr>
               {% endfor %}
+              <tr>
+                <td>£10,000.01 to £25,000</td>
+                <td>4.5% of the claim</td>
+                <td>£545.00</td>
+              </tr>
+              <tr>
+                <td>£25,000.01 to £100,000</td>
+                <td>4.5% of the claim</td>
+                <td>£1090.00</td>
+              </tr>
             </table>
           </div>
         </details>
-
-        <p>
-          {{ t('If you’re on a low income or get certain benefits you might be able to get <a target="_blank" href="%s">help with fees</a>. Do this before you make your claim.', { postProcess: 'sprintf', sprintf: ['https://www.gov.uk/get-help-with-court-fees']}) | safe }}
-        </p>
 
         <div class="form-group">
           {{ submitButton('Continue') }}
