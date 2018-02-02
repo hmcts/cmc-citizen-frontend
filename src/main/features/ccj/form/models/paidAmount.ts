@@ -2,6 +2,7 @@ import { IsDefined, IsIn, IsPositive, ValidateIf } from 'class-validator'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { Fractions } from 'forms/validation/validators/fractions'
 import { IsLessThan } from 'forms/validation/validators/isLessThan'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
 
 export class ValidationErrors {
   static readonly OPTION_REQUIRED: string = 'Choose option: yes or no'
@@ -34,8 +35,8 @@ export class PaidAmount {
 
   static fromObject (value?: any): PaidAmount {
     if (value && value.option) {
-      const amount: number = value.amount ? parseFloat(value.amount) : undefined
-      const claimedAmount: number = value.claimedAmount ? parseFloat(value.claimedAmount) : undefined
+      const amount: number = toNumberOrUndefined(value.amount)
+      const claimedAmount: number = toNumberOrUndefined(value.claimedAmount)
       const option: PaidAmountOption = PaidAmountOption.all()
         .filter(option => option.value === value.option)
         .pop()
