@@ -29,6 +29,8 @@ import { BankAccountType } from 'response/form/models/statement-of-means/bankAcc
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { FeatureToggles } from 'utils/featureToggles'
 import { Paths as AppPaths } from 'app/paths'
+import { Paths as ResponsePaths } from 'features/response/paths'
+import { MomentFactory } from 'common/momentFactory'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -104,6 +106,8 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('BankAccountType', BankAccountType)
     nunjucksEnv.addGlobal('ClaimStatus', ClaimStatus)
     nunjucksEnv.addGlobal('AppPaths', AppPaths)
+    nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
+    nunjucksEnv.addGlobal('TodayMoment', MomentFactory.currentDate())
     if (FeatureToggles.isEnabled('finePrint')) {
       nunjucksEnv.addGlobal('cookieText', `GOV.UK uses cookies make the site simpler. <a href="${AppPaths.cookiesPage.uri}">Find out more about cookies</a>`)
     }
