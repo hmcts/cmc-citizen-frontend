@@ -36,9 +36,9 @@
       <div class="clearfix">
         <a class="button button-start" href="{{ startLink }}" role="button">{{ t('Start now') }}</a>
       </div>
-
+      <br>
       <h2 class="heading-medium">{{ t('Check you can use this service') }}</h2>
-      <p>{{ t('To use this service, you must be:') }}</p>
+      <p class=}>{{ t('To use this service, you must be:') }}</p>
 
       <ul class="list list-bullet">
         <li>{{ t('claiming for £10,000 or less, including interest') }}</li>
@@ -60,13 +60,8 @@
         <li>DX: 702634 Salford 5</li>
       </ul>
 
-      <h2 class="heading-medium">{{ t('Help to use this service') }}</h2>
-      <ul class="list">
-      <li>{{ t('Telephone: 0300 123 7050') }}</li>
-      <li>{{ t('Textphone: 0300 144 2122') }}</li>
-      <li>{{ t('<a href="{{ callChargesUri }}">Find out about call charges</a>',
-        { callChargesUri: 'https://www.gov.uk/call-charges' }) | safe }}</li>
-      </ul>
+      {{ supportWidget('Help to use this service')}}
+
     </div>
 
     <div class="column-third">
