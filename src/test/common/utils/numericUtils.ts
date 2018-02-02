@@ -52,36 +52,32 @@ describe('toNumberOrUndefined', () => {
       expect(toNumberOrUndefined(0)).to.be.eq(0)
     })
 
-    it('"0" given', () => {
-      expect(toNumberOrUndefined('0')).to.be.eq(0)
-    })
-
     it('negative number given', () => {
       expect(toNumberOrUndefined(-10)).to.be.eq(-10)
-    })
-
-    it('negative numeric given', () => {
-      expect(toNumberOrUndefined('-10')).to.be.eq(-10)
     })
 
     it('positive number given', () => {
       expect(toNumberOrUndefined(10)).to.be.eq(10)
     })
 
-    it('positive numeric given', () => {
-      expect(toNumberOrUndefined('10')).to.be.eq(10)
-    })
-
     it('decimal number given', () => {
       expect(toNumberOrUndefined(10.10)).to.be.eq(10.10)
     })
 
-    it('decimal numeric given', () => {
-      expect(toNumberOrUndefined('10.10')).to.be.eq(10.10)
+    it('given "0" ', () => {
+      expect(toNumberOrUndefined('0')).to.be.eq(0)
     })
 
-    it('negative decimal numeric given', () => {
+    it('given "-10" ', () => {
+      expect(toNumberOrUndefined('-10')).to.be.eq(-10)
+    })
+
+    it('given "-10.1098978" ', () => {
       expect(toNumberOrUndefined('-10.1098978')).to.be.eq(-10.1098978)
+    })
+
+    it('given "10" ', () => {
+      expect(toNumberOrUndefined('10')).to.be.eq(10)
     })
 
     it('given "1,100" ', () => {
@@ -94,6 +90,10 @@ describe('toNumberOrUndefined', () => {
 
     it('given "1,110,100" ', () => {
       expect(toNumberOrUndefined('1,110,100')).to.be.eq(1110100)
+    })
+
+    it('given 10.10', () => {
+      expect(toNumberOrUndefined('10.10')).to.be.eq(10.10)
     })
 
     it('given "110.111" ', () => {
