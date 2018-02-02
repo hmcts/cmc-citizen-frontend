@@ -36,9 +36,6 @@
       <p>{{ t('<a href="{{ findMediationServiceUri }}">Find a mediation service</a>',
         { findMediationServiceUri: 'http://civilmediation.justice.gov.uk/' }) | safe }}</p>
 
-      <form novalidate method="post">
-        {{ csrfProtection(csrf) }}
-
       </form>
     </div>
   </div>
