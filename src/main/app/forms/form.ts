@@ -87,11 +87,7 @@ export class Form<Model> {
    */
   rawDataFor (fieldName: string): object {
     if (this.rawData) {
-      let value: any = this.rawData
-      Converter.asProperty(fieldName).split('.').forEach(property => {
-        value = value ? value[property] : value
-      })
-      return value
+      return this.getValueFrom(this.rawData, fieldName)
     } else {
       return undefined
     }
@@ -104,14 +100,25 @@ export class Form<Model> {
    */
   valueFor (fieldName: string): string | undefined {
     if (this.model) {
-      let value: any = this.model
-      Converter.asProperty(fieldName).split('.').forEach(property => {
-        value = value ? value[property] : value
-      })
-      return value
+      return this.getValueFrom(this.model, fieldName)
     } else {
       return undefined
     }
+  }
+
+  /**
+   * Iterate though elements of input and find value for field
+   * @param {any} input of type model/rawData
+   * @param {string} fieldName
+   * @returns {object}
+   */
+  private getValueFrom (input: any, fieldName: string): any {
+    let value: any = input
+
+    Converter.asProperty(fieldName).split('.').forEach(property => {
+      value = value ? value[property] : value
+    })
+    return value
   }
 
   /**

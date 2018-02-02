@@ -105,6 +105,19 @@ describe('Form', () => {
       expect(form.valueFor('address[city]')).to.equal('London')
     })
 
+    it('should return raw value if value associated with given field fails validation', () => {
+      const validationError: ValidationError = newValidationError('amount', {
+        'IsNotValid': 'Amount should be valid'
+      })
+
+      validationError.value = undefined
+
+      const form: Form<any> = new Form({ amount: '1,45' },[validationError], { amount: '1,45' })
+
+      expect(form.hasErrors()).to.equal(true)
+      expect(form.rawDataFor('amount')).to.equal('1,45')
+    })
+
     it('should return undefined if value associated with given field does not exist', () => {
       const form: Form<any> = new Form({})
       expect(form.valueFor('address[city]')).to.equal(undefined)
