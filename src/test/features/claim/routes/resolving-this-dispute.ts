@@ -28,7 +28,7 @@ describe('Claim issue: resolving this dispute page', () => {
       await request(app)
         .get(ClaimPaths.resolvingThisDisputerPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Resolving this dispute'))
+        .expect(res => expect(res).to.be.successful.withText('Try to resolve the dispute'))
     })
   })
 
