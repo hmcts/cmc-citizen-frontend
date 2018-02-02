@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
 {% set title = 'Money claim' %}
 {% from "form.njk" import submitButton %}
+{% from "interestSnippet.njk" import interestSnippet %}
 
 {% block content %}
 <div class="grid-row">
@@ -32,28 +33,7 @@
         {% if interestDetails %}
         <tr>
           <th scope="row">
-            <details role="group">
-              <summary role="button" aria-controls="details-content-0" aria-expanded="false">
-                {{ t('Interest to date of judgment') }}
-              </summary>
-              <div class="panel text-small" id="details-content-0" aria-hidden>
-                {{ t('Interest calculated at %s%% for %s days', {
-                  postProcess: 'sprintf', sprintf: [ interestDetails.rate, interestDetails.numberOfDays ]
-                  })
-                }}
-                <br>
-                <span class="font-xsmall">
-                ({{
-                  t('%s to %s', {
-                    postProcess: 'sprintf', sprintf: [
-                      interestDetails.interestDate | date,
-                      defaultJudgmentDate | date
-                    ]
-                  })
-                }})
-              </span>
-              </div>
-            </details>
+            {{ interestSnippet(label = 'Interest to date of judgment', interestDetails.rate, interestDetails.numberOfDays, interestDetails.interestDate, defaultJudgmentDate) }}
           </th>
           <td class="numeric last">
             <span class="font-small">{{ interestDetails.interest | numeral }}</span>

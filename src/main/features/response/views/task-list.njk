@@ -56,7 +56,7 @@
             <div>{{ t('<a href="%s">View claim</a>',
                 {
                   postProcess: 'sprintf',
-                  sprintf: [paths.claimDetailsPage.evaluateUri({ externalId: claim.externalId })]
+                  sprintf: [ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId })]
                 }
               ) | safe }}</div>
           </li>

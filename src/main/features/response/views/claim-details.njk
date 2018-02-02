@@ -4,6 +4,7 @@
 {% set heading = t('Claim details') %}
 
 {% from "form.njk" import csrfProtection %}
+{% from "interestSnippet.njk" import interestSnippet %}
 
 {% block content %}
 
@@ -36,28 +37,7 @@
             {% if claim.claimData.interest.rate %}
               <tr>
                 <td scope="row">
-                  <details role="group">
-                    <summary role="button" aria-controls="details-content-0" aria-expanded="false">
-                      {{ t('Interest') }}
-                    </summary>
-                    <div class="panel text-small" id="details-content-0" aria-hidden>
-                      <div class="">
-                        {{ t('Interest calculated at %s%% for %s days', {
-                            postProcess: 'sprintf', sprintf: [ interestData.rate, interestData.numberOfDays ]
-                          })
-                        }}</div>
-                      <div class="font-xsmall">
-                        ({{
-                          t('%s to %s', {
-                            postProcess: 'sprintf', sprintf: [
-                              interestData.interestDate | date,
-                              today | date
-                            ]
-                          })
-                        }})
-                      </div>
-                    </div>
-                  </details>
+                  {{ interestSnippet(interestData.rate, interestData.numberOfDays, interestData.interestDate, TodayMoment) }}
                 </td>
                 <td class="numeric last">
                   {{ interestData.interest | numeral }}
