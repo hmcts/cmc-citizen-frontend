@@ -67,10 +67,10 @@ export class Address implements CompletableTask {
   city?: string
 
   @ValidateIf(o => o.addressVisible, { groups: ['claimant', 'defendant', 'response'] })
-  @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
-  @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
-  @CheckCountry(Country.all(), { message: ValidationErrors.CLAIMANT_COUNTRY_REQUIRED, groups: ['claimant'] })
-  @CheckCountry(Country.defendantCountries(), { message: ValidationErrors.DEFENDANT_COUNTRY_REQUIRED, groups: ['defendant'] })
+  @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['response'] })
+  @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['response'] })
+  @CheckCountry(Country.all(), { groups: ['claimant'] })
+  @CheckCountry(Country.defendantCountries(), { groups: ['defendant'] })
   @MaxLength(ValidationConstants.POSTCODE_MAX_LENGTH, {
     message: ValidationErrors.POSTCODE_NOT_VALID,
     groups: ['claimant', 'defendant', 'response']
