@@ -2,6 +2,7 @@ import { IsDefined, IsIn, IsPositive, MaxLength, ValidateIf } from 'class-valida
 
 import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 import { CompletableTask } from 'app/models/task'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
 
 export class InterestType {
   static readonly NO_INTEREST: string = 'no interest'
@@ -57,7 +58,7 @@ export class Interest implements CompletableTask {
       return value
     }
 
-    const instance = new Interest(value.type, value.rate ? parseFloat(value.rate) : undefined, value.reason)
+    const instance = new Interest(value.type, toNumberOrUndefined(value.rate), value.reason)
 
     switch (instance.type) {
       case InterestType.STANDARD:

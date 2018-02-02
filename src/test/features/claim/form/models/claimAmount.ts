@@ -46,7 +46,7 @@ describe('ClaimAmountBreakdown', () => {
         rows: [
           {
             reason: 'Something',
-            amount: 100.01
+            amount: '100.01'
           }
         ]
       })).to.deep.equal(new ClaimAmountBreakdown([new ClaimAmountRow('Something', 100.01)]))
