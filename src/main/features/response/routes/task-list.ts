@@ -28,7 +28,8 @@ export default express.Router()
           submitSection: submitSection,
           respondToClaimSection: respondToClaimSection,
           claim: claim,
-          isAfter4pm: isAfter4pm()
+          isAfter4pm: isAfter4pm(),
+          paths: Paths
         })
     } catch (err) {
       next(err)
