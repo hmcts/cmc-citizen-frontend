@@ -7,6 +7,7 @@ import { IsFutureDate } from 'app/forms/validation/validators/dateFutureConstrai
 import { IsLessThanOrEqualToSumOf } from 'forms/validation/validators/isLessThanOrEqualToSumOf'
 import { Fractions } from 'forms/validation/validators/fractions'
 import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
 
 export class ValidationErrors {
   static readonly FIRST_PAYMENT_AMOUNT_INVALID: string = 'Enter a valid payment amount'
@@ -54,9 +55,9 @@ export class RepaymentPlan {
 
   static fromObject (value?: any): RepaymentPlan {
     if (value) {
-      const remainingAmount = value.remainingAmount ? parseFloat(value.remainingAmount) : undefined
-      const firstPayment = value.firstPayment ? parseFloat(value.firstPayment) : undefined
-      const instalmentAmount = value.instalmentAmount ? parseFloat(value.instalmentAmount) : undefined
+      const remainingAmount = toNumberOrUndefined(value.remainingAmount)
+      const firstPayment = toNumberOrUndefined(value.firstPayment)
+      const instalmentAmount = toNumberOrUndefined(value.instalmentAmount)
       const firstPaymentDate = LocalDate.fromObject(value.firstPaymentDate)
 
       const paymentSchedule = PaymentSchedule.all()
