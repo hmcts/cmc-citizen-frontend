@@ -47,19 +47,22 @@ export class Form<Model> {
 
   @ValidateNested()
   model: Model
+  rawData: object
   errors: FormValidationError[]
 
   /**
    * @param model - a object used to fill the form
    * @param errors - an array of error objects
+   * @param rawData - a raw data used to create model instance
    */
-  constructor (model: Model, errors: ValidationError[] = []) {
+  constructor (model: Model, errors: ValidationError[] = [], rawData: object = undefined) {
     this.model = model
+    this.rawData = rawData
     this.errors = this.flatMapDeep(errors)
   }
 
   static empty<Model> (): Form<Model> {
-    return new Form<Model>(null, [])
+    return new Form<Model>(undefined, [])
   }
 
   hasErrors (): boolean {
@@ -78,20 +81,44 @@ export class Form<Model> {
   }
 
   /**
+   * Get raw data for given field name.
+   * @param {string} fieldName
+   * @returns {object}
+   */
+  rawDataFor (fieldName: string): object {
+    if (this.rawData) {
+      return this.getValueFrom(this.rawData, fieldName)
+    } else {
+      return undefined
+    }
+  }
+
+  /**
    * Get model value for given field name.
    *
    * @param fieldName - field name / model property
    */
   valueFor (fieldName: string): string | undefined {
     if (this.model) {
-      let value: any = this.model
-      Converter.asProperty(fieldName).split('.').forEach(property => {
-        value = value ? value[property] : value
-      })
-      return value
+      return this.getValueFrom(this.model, fieldName)
     } else {
       return undefined
     }
+  }
+
+  /**
+   * Iterate though elements of input and find value for field
+   * @param {any} input of type model/rawData
+   * @param {string} fieldName
+   * @returns {object}
+   */
+  private getValueFrom (input: any, fieldName: string): any {
+    let value: any = input
+
+    Converter.asProperty(fieldName).split('.').forEach(property => {
+      value = value ? value[property] : value
+    })
+    return value
   }
 
   /**

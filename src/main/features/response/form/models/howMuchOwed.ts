@@ -3,6 +3,7 @@ import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { Fractions } from 'forms/validation/validators/fractions'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
 
 export class HowMuchOwed {
 
@@ -22,7 +23,7 @@ export class HowMuchOwed {
 
   static fromObject (value?: any): HowMuchOwed {
     if (value) {
-      const amount = value.amount ? parseFloat(value.amount) : undefined
+      const amount = toNumberOrUndefined(value.amount)
       const text = value.text
       return new HowMuchOwed(amount, text)
     } else {
