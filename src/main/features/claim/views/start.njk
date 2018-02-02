@@ -12,12 +12,11 @@
       <h1 class="heading-large">{{ t('Make a money claim') }}</h1>
       <br>
       <p>{{ t('You can make a money claim if a person or organisation owes you money and won’t pay you back.') }}</p>
-      <p
-        class="panel panel-border-wide">{{ t('Before claiming you should contact the person or organisation to try to find a solution. '
+      <p class="panel panel-border-wide">
+        {{ t('Before claiming you should contact the person or organisation to try to find a solution. '
         + 'Find out <a href="{{ uri }}">how you can resolve a claim by discussion or mediation.</a>',
-        { uri: '/resolve-before-claim' } ) | safe }}
+        { uri: AppPaths.resolveBeforeClaimPage.uri } ) | safe }}
       </p>
-
 
       <p>{{ t('Your claim, including your name and address, will be sent to the person you say owes you money. '
         + 'They’ll get a chance to respond to your claim.') }}</p>
