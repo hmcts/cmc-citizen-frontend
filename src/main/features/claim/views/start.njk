@@ -15,7 +15,7 @@
       <p class="panel panel-border-wide">
         {{ t('Before claiming you should contact the person or organisation to try to find a solution. '
         + 'Find out <a href="{{ uri }}">how you can resolve a claim by discussion or mediation.</a>',
-        { uri: AppPaths.resolveBeforeClaimPage.uri } ) | safe }}
+        { uri : AppPaths.resolveBeforeClaimPage.uri } ) | safe }}
       </p>
 
       <p>{{ t('Your claim, including your name and address, will be sent to the person you say owes you money. '
@@ -30,7 +30,7 @@
       <ul class="list list-bullet">
         <li>{{ t('current address and contact details for the person or organisation you’re claiming against (or last known address)') }}</li>
         <li>{{ t('a credit or debit card to pay the <a href="{{ claimFeeUri }}">claim fee</a>',
-          {claimFeeUri: 'https://www.gov.uk/make-court-claim-for-money/court-fees' }) |safe }}
+          { claimFeeUri : 'https://www.gov.uk/make-court-claim-for-money/court-fees' }) |safe }}
         </li>
       </ul>
 
@@ -48,7 +48,7 @@
       </ul>
 
       <h2 class="heading-medium">{{ t('Claim by paper') }}</h2>
-      <p>{{ t('You can also print and complete a <a href="{{  paperFormUri }}">paper claim form</a>.',
+      <p>{{ t('You can also print and complete a <a href="{{ paperFormUri }}">paper claim form</a>.',
         { paperFormUri: 'http://hmctsformfinder.justice.gov.uk/HMCTS/GetForm.do?court_forms_id=338' }) | safe }}</p>
       <p>{{ t('Send the form and a cheque for your <a href="{{ claimFeeUri }}">claim fee</a> to:',
         { claimFeeUri: 'https://www.gov.uk/make-court-claim-for-money/court-fees'}) | safe }}</p>
@@ -63,8 +63,8 @@
 
       <h2 class="heading-medium">{{ t('Help to use this service') }}</h2>
       <ul class="list">
-      <li>{{ t('Telephone: 0300 123 7050 ') }}</li>
-      <li>{{ t('Textphone: 0300 144 2122 ') }}</li>
+      <li>{{ t('Telephone: 0300 123 7050') }}</li>
+      <li>{{ t('Textphone: 0300 144 2122') }}</li>
       <li>{{ t('<a href="{{ callChargesUri }}">Find out about call charges</a>',
         { callChargesUri: 'https://www.gov.uk/call-charges' }) | safe }}</li>
       </ul>
