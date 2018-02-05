@@ -6,7 +6,7 @@ import { CompletableTask } from 'app/models/task'
 import { Address as ClaimAddress } from 'claims/models/address'
 import * as toBoolean from 'to-boolean'
 import { ExtraFormFieldsArePopulated } from 'forms/validation/validators/extraFormFieldsArePopulated'
-import { CheckCountry } from 'forms/validation/validators/checkCountry'
+import { IsCountrySupported } from 'forms/validation/validators/checkCountry'
 import { Country } from 'app/common/country'
 
 export class ValidationErrors {
@@ -22,8 +22,8 @@ export class ValidationErrors {
   static readonly POSTCODE_REQUIRED: string = 'Enter postcode'
   static readonly POSTCODE_NOT_VALID: string = 'The postcode must be no longer than $constraint1 characters'
   static readonly ADDRESS_DROPDOWN_REQUIRED: string = 'Select an address'
-  static readonly CLAIMANT_COUNTRY_REQUIRED = 'The country must be England, Wales, Scotland or Northern Ireland'
-  static readonly DEFENDANT_COUNTRY_REQUIRED = 'The country must be England or Wales'
+  static readonly CLAIMANT_COUNTRY_NOT_SUPPORTED = 'The country must be England, Wales, Scotland or Northern Ireland'
+  static readonly DEFENDANT_COUNTRY_NOT_SUPPORTED = 'The country must be England or Wales'
 
 }
 
@@ -67,10 +67,10 @@ export class Address implements CompletableTask {
   city?: string
 
   @ValidateIf(o => o.addressVisible, { groups: ['claimant', 'defendant', 'response'] })
-  @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['response'] })
-  @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['response'] })
-  @CheckCountry(Country.all(), { groups: ['claimant'] })
-  @CheckCountry(Country.defendantCountries(), { groups: ['defendant'] })
+  @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
+  @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
+  @IsCountrySupported(Country.all(), { groups: ['claimant'] })
+  @IsCountrySupported(Country.defendantCountries(), { groups: ['defendant'] })
   @MaxLength(ValidationConstants.POSTCODE_MAX_LENGTH, {
     message: ValidationErrors.POSTCODE_NOT_VALID,
     groups: ['claimant', 'defendant', 'response']

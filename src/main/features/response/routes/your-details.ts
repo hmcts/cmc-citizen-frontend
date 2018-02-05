@@ -76,7 +76,7 @@ export default express.Router()
     Paths.defendantYourDetailsPage.uri,
     FormValidator.requestHandler(PartyDetails, deserializeFn, 'response'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      let form: Form<PartyDetails> = req.body
+      const form: Form<PartyDetails> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)

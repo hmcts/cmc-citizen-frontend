@@ -11,7 +11,6 @@ import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
-import { ValidationGroups } from '../helpers/eligibility/validationGroups'
 
 function renderView (form: Form<SoleTraderDetails>, res: express.Response): void {
   res.render(Paths.claimantSoleTraderOrSelfEmployedDetailsPage.associatedView, { form: form })
@@ -26,9 +25,9 @@ export default express.Router()
   })
   .post(
     Paths.claimantSoleTraderOrSelfEmployedDetailsPage.uri,
-    FormValidator.requestHandler(SoleTraderDetails, SoleTraderDetails.fromObject, ValidationGroups.CLAIMANT),
+    FormValidator.requestHandler(SoleTraderDetails, SoleTraderDetails.fromObject, 'claimant'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      let form: Form<SoleTraderDetails> = req.body
+      const form: Form<SoleTraderDetails> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)

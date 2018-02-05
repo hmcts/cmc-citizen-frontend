@@ -19,7 +19,7 @@ export class CheckCountryConstraint implements ValidatorConstraintInterface {
 
   async validate (value: any | string, args?: ValidationArguments): Promise<boolean> {
     if (value === undefined || value === null || value === '') {
-      return false
+      return true
     }
     const postcodeInfoResponse: PostcodeInfoResponse = await postcodeClient.lookupPostcode(value)
     if (!postcodeInfoResponse.valid) {
@@ -36,9 +36,9 @@ export class CheckCountryConstraint implements ValidatorConstraintInterface {
     if (args.value === undefined || args.value === null || args.value === '') {
       return AddressValidationErrors.POSTCODE_REQUIRED
     } else if (countries.length === 4) {
-      return AddressValidationErrors.CLAIMANT_COUNTRY_REQUIRED
+      return AddressValidationErrors.CLAIMANT_COUNTRY_NOT_SUPPORTED
     } else if (countries.length === 2) {
-      return AddressValidationErrors.DEFENDANT_COUNTRY_REQUIRED
+      return AddressValidationErrors.DEFENDANT_COUNTRY_NOT_SUPPORTED
     } else {
       return AddressValidationErrors.POSTCODE_REQUIRED
     }
@@ -46,9 +46,9 @@ export class CheckCountryConstraint implements ValidatorConstraintInterface {
 }
 
 /**
- * Verify is a within age limit.
+ * Verify postcode is within accepted list of countries.
  */
-export function CheckCountry (countries: Country[], validationOptions?: ValidationOptions) {
+export function IsCountrySupported (countries: Country[], validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
