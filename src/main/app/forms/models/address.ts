@@ -6,7 +6,7 @@ import { CompletableTask } from 'app/models/task'
 import { Address as ClaimAddress } from 'claims/models/address'
 import * as toBoolean from 'to-boolean'
 import { ExtraFormFieldsArePopulated } from 'forms/validation/validators/extraFormFieldsArePopulated'
-import { IsCountrySupported } from 'forms/validation/validators/checkCountry'
+import { IsCountrySupported } from 'forms/validation/validators/isCountrySupported'
 import { Country } from 'app/common/country'
 
 export class ValidationErrors {
@@ -69,8 +69,8 @@ export class Address implements CompletableTask {
   @ValidateIf(o => o.addressVisible, { groups: ['claimant', 'defendant', 'response'] })
   @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
-  @IsCountrySupported(Country.all(), { groups: ['claimant'] })
-  @IsCountrySupported(Country.defendantCountries(), { groups: ['defendant'] })
+  @IsCountrySupported(Country.all(), { message: ValidationErrors.CLAIMANT_COUNTRY_NOT_SUPPORTED, groups: ['claimant'] })
+  @IsCountrySupported(Country.defendantCountries(), { message: ValidationErrors.DEFENDANT_COUNTRY_NOT_SUPPORTED, groups: ['defendant'] })
   @MaxLength(ValidationConstants.POSTCODE_MAX_LENGTH, {
     message: ValidationErrors.POSTCODE_NOT_VALID,
     groups: ['claimant', 'defendant', 'response']
