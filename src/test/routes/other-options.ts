@@ -11,7 +11,7 @@ describe('Defendant first contact: start page', () => {
     it('should render page when everything is fine', async () => {
       await request(app)
         .get(Paths.resolveBeforeClaimPage.uri)
-        .expect(res => expect(res).to.be.successful.withText('Talk to the person who owes you'))
+        .expect(res => expect(res).to.be.successful.withText('Talk to the person or organisation who owes you'))
     })
   })
 })
