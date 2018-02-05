@@ -31,7 +31,10 @@
         <li>{{ t('a credit or debit card to pay the <a href="{{ claimFeeUri }}">claim fee</a>',
           { claimFeeUri : 'https://www.gov.uk/make-court-claim-for-money/court-fees' }) | safe }}
         </li>
+        <li>{{ t('Around 30 minutes to make your claim.') }}</li>
       </ul>
+
+      <p class="panel panel-border-wide">{{ t('You can save your claim and return to it at any time.') }}</p>
 
       <div class="clearfix">
         <a class="button button-start" href="{{ startLink }}" role="button">{{ t('Start now') }}</a>
@@ -62,7 +65,6 @@
       {{ supportWidget('Help to use this service')}}
 
     </div>
-
   </div>
 
 {% endblock %}
