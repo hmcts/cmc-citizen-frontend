@@ -3,6 +3,7 @@ import { Paths } from 'response/paths'
 import { Claim } from 'claims/models/claim'
 import { getInterestDetails } from 'common/interest'
 import { MoneyConverter } from 'fees/moneyConverter'
+import { MomentFactory } from 'common/momentFactory'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -13,7 +14,8 @@ export default express.Router()
       const interestData = await getInterestDetails(claim)
       res.render(Paths.claimDetailsPage.associatedView, {
         feeAmount: feeAmount,
-        interestData: interestData
+        interestData: interestData,
+        today: MomentFactory.currentDate()
       })
     } catch (err) {
       next(err)
