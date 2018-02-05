@@ -38,3 +38,5 @@ variable "authentication-web-url" {
 variable "service-2-service-auth-url" {
   default = "http://betaDevBccidamS2SLB.reform.hmcts.net"
 }
+
+variable "subscription" {}
