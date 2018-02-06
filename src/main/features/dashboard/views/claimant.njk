@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "responseStatus.njk" import responseStatusForClaimant, claimantRespondToOffer %}
+{% from "main/features/dashboard/views/macros/status.njk" import statusForClaimant, claimantRespondToOffer %}
 
 {% set title = 'Money claim' %}
 
@@ -22,12 +22,12 @@
           {{ claimantRespondToOffer (claim, DashboardUrlHelper.getStatusUrl(claim)) }}
         </p>
 
-        {# {% macro claimantRespondToOffer (claim, url) %}#}
-          {#{% if claim.status === ClaimStatus.OFFER_SUBMITTED %}#}
-            {#{{ t('View <a href="{{ url }}">their offer</a>.',#}
-            {#{ url : url  }) | safe }}#}
-          {#{% endif %}#}
-        {#{% endmacro %}#}
+         {% macro claimantRespondToOffer (claim, url) %}
+          {% if claim.status === ClaimStatus.OFFER_SUBMITTED %}
+            {{ t('View <a href="{{ url }}">their offer</a>.',
+            { url : url  }) | safe }}
+          {% endif %}
+        {% endmacro %}
 
 
 
