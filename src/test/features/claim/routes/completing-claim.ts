@@ -28,7 +28,7 @@ describe('Claim issue: completing claim page', () => {
       await request(app)
         .get(ClaimPaths.completingClaimPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Completing your claim'))
+        .expect(res => expect(res).to.be.successful.withText('Get the details right'))
     })
   })
 

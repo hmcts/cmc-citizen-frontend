@@ -105,6 +105,11 @@ describe('Form', () => {
       expect(form.valueFor('address[city]')).to.equal('London')
     })
 
+    it('should return raw value from request body', () => {
+      const form: Form<any> = new Form({ amount: '1,45' }, [], { amount: '1,45' })
+      expect(form.rawDataFor('amount')).to.equal('1,45')
+    })
+
     it('should return undefined if value associated with given field does not exist', () => {
       const form: Form<any> = new Form({})
       expect(form.valueFor('address[city]')).to.equal(undefined)

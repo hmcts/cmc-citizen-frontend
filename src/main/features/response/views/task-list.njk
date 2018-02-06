@@ -50,6 +50,16 @@
             <strong class="bold">{{ t('Claim number:') }}</strong>
             <span class="block">{{ claim.claimNumber }}</span>
           </li>
+          <li>
+            <strong class="bold">{{ t('Claim details:') }}</strong>
+            <span class="block">{{ claim.totalAmountTillToday | numeral }}</span>
+            <div>{{ t('<a href="%s">View claim</a>',
+                {
+                  postProcess: 'sprintf',
+                  sprintf: [ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId })]
+                }
+              ) | safe }}</div>
+          </li>
         </ul>
       </div>
     </div>
