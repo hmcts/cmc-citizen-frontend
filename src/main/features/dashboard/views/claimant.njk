@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "main/features/dashboard/views/macros/status.njk" import statusForClaimant, claimantRespondToOffer %}
+{% from "./macros/status.njk" import statusForClaimant, claimantRespondToOffer %}
 
 {% set title = 'Money claim' %}
 
@@ -28,8 +28,6 @@
             { url : url  }) | safe }}
           {% endif %}
         {% endmacro %}
-
-
 
         {% if claim.eligibleForCCJ %}
           <p>{{ t('You can only ask for a CCJ at this stage if the defendant has not responded to your claim.') }}</p>
