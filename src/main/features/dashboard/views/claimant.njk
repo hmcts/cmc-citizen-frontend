@@ -16,7 +16,7 @@
     <div class="column-two-thirds">
       <div>
         <h2 class="heading-medium">{{ t('Claim status') }}</h2>
-        {{ responseStatusForClaimant(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+        {{ statusForClaimant(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
 
         <p>
           {{ claimantRespondToOffer (claim, DashboardUrlHelper.getStatusUrl(claim)) }}
