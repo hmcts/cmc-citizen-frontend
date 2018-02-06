@@ -58,6 +58,17 @@ describe('IsCountrySupported', () => {
           .reply(200, mockInvalidPostcodeLookupResponse)
         expect(await constraint.validate('2SW1AN', validationArgs(Country.all()))).to.equal(true)
       })
+
+      it('the postcode lookup client returns an error', async () => {
+        nock(mockPostcode)
+          .get(/\/addresses\/\?postcode=.+/)
+          .reply(500)
+
+        nock(mockPostcode)
+          .get(/\/postcodes\/.+/)
+          .reply(500)
+        expect(await constraint.validate('SW2 1AN', validationArgs(Country.all()))).to.equal(true)
+      })
     })
 
     describe('should return false when ', () => {

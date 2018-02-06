@@ -20,14 +20,18 @@ export class CheckCountryConstraint implements ValidatorConstraintInterface {
     if (value === undefined || value === null || value === '') {
       return true
     }
-    const postcodeInfoResponse: PostcodeInfoResponse = await postcodeClient.lookupPostcode(value)
-    if (!postcodeInfoResponse.valid) {
+    try {
+      const postcodeInfoResponse: PostcodeInfoResponse = await postcodeClient.lookupPostcode(value)
+      if (!postcodeInfoResponse.valid) {
+        return true
+      }
+      const country = postcodeInfoResponse.country.name
+      const countries: Country[] = args.constraints[0]
+
+      return countries.filter(result => result.name.toLowerCase() === country.toLowerCase()).length > 0
+    } catch (err) {
       return true
     }
-    const country = postcodeInfoResponse.country.name
-    const countries: Country[] = args.constraints[0]
-
-    return countries.filter(result => result.name.toLowerCase() === country.toLowerCase()).length > 0
   }
 
   defaultMessage (args: ValidationArguments) {
