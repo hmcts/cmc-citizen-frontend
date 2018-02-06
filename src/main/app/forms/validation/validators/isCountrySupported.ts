@@ -6,7 +6,7 @@ import {
   ValidatorConstraintInterface
 } from 'class-validator'
 import { Country } from 'app/common/country'
-
+import { ErrorLogger } from 'logging/errorLogger'
 import { PostcodeInfoClient, PostcodeInfoResponse } from '@hmcts/postcodeinfo-client'
 import * as config from 'config'
 import { request } from 'client/request'
@@ -30,6 +30,8 @@ export class CheckCountryConstraint implements ValidatorConstraintInterface {
 
       return countries.filter(result => result.name.toLowerCase() === country.toLowerCase()).length > 0
     } catch (err) {
+      const errorLogger = new ErrorLogger()
+      errorLogger.log(err)
       return true
     }
   }
