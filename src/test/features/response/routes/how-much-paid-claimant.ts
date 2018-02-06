@@ -36,7 +36,7 @@ describe('Defendant response: How much have you paid the claimant options', () =
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)
@@ -63,7 +63,7 @@ describe('Defendant response: How much have you paid the claimant options', () =
         })
 
         it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveFind('response', draftOverride)
+          draftStoreServiceMock.resolveFind('response')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -82,7 +82,7 @@ describe('Defendant response: How much have you paid the claimant options', () =
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)
@@ -133,7 +133,7 @@ describe('Defendant response: How much have you paid the claimant options', () =
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to how much paid claimant page when everything is fine', async () => {
+          it('should redirect to how much paid task list page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', draftOverride)
             draftStoreServiceMock.resolveSave()

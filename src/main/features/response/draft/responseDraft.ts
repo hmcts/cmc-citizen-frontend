@@ -125,11 +125,11 @@ export class ResponseDraft extends DraftDocument {
   }
 
   public requireWhenDidYouPay (): boolean {
-    return this.isResponsePopulated() && (this.showWhenDidYouPayWhenAmountClaimed())
+    return this.isResponsePopulated() && (this.isResponseRejectedFullyWithAmountClaimed())
   }
 
-  public requireSubmitSection (): boolean {
-    return this.isResponsePopulated() && this.showTaskListSubmitSection()
+  public requireSubmission (): boolean {
+    return this.isResponsePopulated() && this.isSubmission()
   }
 
   private isResponsePopulated (): boolean {
@@ -148,13 +148,13 @@ export class ResponseDraft extends DraftDocument {
         this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
   }
 
-  private showWhenDidYouPayWhenAmountClaimed (): boolean {
+  private isResponseRejectedFullyWithAmountClaimed (): boolean {
     return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim && this.howMuchPaidClaimant &&
       (this.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID &&
         this.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.AMOUNT_CLAIMED)
   }
 
-  private showTaskListSubmitSection (): boolean {
+  private isSubmission (): boolean {
     return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim
       && this.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE ||
         (this.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID &&

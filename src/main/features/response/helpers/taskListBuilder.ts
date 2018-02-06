@@ -117,7 +117,7 @@ export class TaskListBuilder {
 
   static buildSubmitSection (draft: ResponseDraft, externalId: string): TaskList {
     const tasks: TaskListItem[] = []
-    if (draft.requireSubmitSection()) {
+    if (draft.requireSubmission()) {
       tasks.push(
         new TaskListItem(
           'Check and submit your response',

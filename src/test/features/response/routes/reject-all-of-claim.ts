@@ -146,6 +146,20 @@ describe('Defendant response: full admission options', () => {
                 .toLocation(ResponsePaths.defendantHowMuchPaidClaimant
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
+
+          it('should redirect to send your response by email page when counterclaim option is selected', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('response', draftOverride)
+            draftStoreServiceMock.resolveSave()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ option: 'counterClaim' })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.sendYourResponseByEmail
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          })
         })
       })
     })

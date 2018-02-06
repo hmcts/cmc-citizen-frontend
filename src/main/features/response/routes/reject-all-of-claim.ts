@@ -62,15 +62,15 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params
-
-        if (draft.document.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM) {
-          res.redirect(Paths.sendYourResponseByEmail.evaluateUri({ externalId: externalId }))
-        } else {
-          if (draft.document.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID) {
+        switch (draft.document.rejectAllOfClaim.option) {
+          case RejectAllOfClaimOption.COUNTER_CLAIM:
+            res.redirect(Paths.sendYourResponseByEmail.evaluateUri({ externalId: externalId }))
+            break
+          case RejectAllOfClaimOption.ALREADY_PAID:
             res.redirect(Paths.defendantHowMuchPaidClaimant.evaluateUri({ externalId: externalId }))
-          } else {
+            break
+          case RejectAllOfClaimOption.DISPUTE:
             res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
-          }
         }
       }
     }))

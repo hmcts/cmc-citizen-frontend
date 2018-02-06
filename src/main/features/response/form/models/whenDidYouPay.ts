@@ -11,7 +11,7 @@ import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/va
 const currentDate = MomentFormatter.formatLongDate(MomentFactory.currentDate())
 
 export class ValidationErrors {
-  static readonly HOW_DID_YOU_PAY_AMOUNT_CLAIMED: string = 'Explain how did you pay the amount claimed'
+  static readonly EXPLANATION_REQUIRED: string = 'Explain how did you pay the amount claimed'
   static readonly DATE_REQUIRED: string = 'Enter a date'
   static readonly VALID_PAST_DATE: string = `Enter date before ${currentDate}`
   static readonly DATE_INVALID_YEAR: string = 'Enter a 4 digit year'
@@ -24,8 +24,8 @@ export class WhenDidYouPay {
   @IsValidYearFormat({ message: ValidationErrors.DATE_INVALID_YEAR })
   date?: LocalDate
 
-  @IsDefined({ message: ValidationErrors.HOW_DID_YOU_PAY_AMOUNT_CLAIMED })
-  @IsNotBlank({ message: ValidationErrors.HOW_DID_YOU_PAY_AMOUNT_CLAIMED })
+  @IsDefined({ message: ValidationErrors.EXPLANATION_REQUIRED })
+  @IsNotBlank({ message: ValidationErrors.EXPLANATION_REQUIRED })
   @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
   text?: string
 
@@ -51,8 +51,4 @@ export class WhenDidYouPay {
     }
     return this
   }
-
-  isCompleted (): boolean {
-    return !!this.date.year && this.date.year.toString().length > 0 &&
-      !!this.text && this.text.length > 0
-  }}
+}

@@ -33,12 +33,12 @@ export default express.Router()
       if (form.hasErrors()) {
         await renderView(form, res, next)
       } else {
-        const claim: Claim = res.locals.claim
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
         draft.document.whenDidYouPay = form.model
         await new DraftService().save(draft, user.bearerToken)
+        const claim: Claim = res.locals.claim
 
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
       }

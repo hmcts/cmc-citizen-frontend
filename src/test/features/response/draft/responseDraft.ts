@@ -97,6 +97,16 @@ describe('ResponseDraft', () => {
 
       expect(draft.requireDefence()).to.be.eq(false)
     })
+
+    it('should return true when response is full rejection without counter claim', () => {
+      RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).forEach(option => {
+        const draft: ResponseDraft = new ResponseDraft()
+        draft.response = new Response(ResponseType.DEFENCE)
+        draft.rejectAllOfClaim = new RejectAllOfClaim('dispute')
+
+        expect(draft.requireDefence()).to.be.eq(true)
+      })
+    })
   })
 
   describe('isResponseFullyAdmitted', () => {
@@ -282,13 +292,13 @@ describe('ResponseDraft', () => {
     })
   })
 
-  describe('requireSubmitSection', () => {
+  describe('requireSubmission', () => {
 
     it('should return false when no response type set', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = undefined
 
-      expect(draft.requireSubmitSection()).to.be.eq(false)
+      expect(draft.requireSubmission()).to.be.eq(false)
     })
 
     it('should return true when response is full admission with dispute and already paid and amount claimed', () => {
@@ -298,7 +308,7 @@ describe('ResponseDraft', () => {
       draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.ALREADY_PAID)
       draft.howMuchPaidClaimant = new HowMuchPaidClaimant(HowMuchPaidClaimantOption.AMOUNT_CLAIMED)
 
-      expect(draft.requireSubmitSection()).to.be.eq(true)
+      expect(draft.requireSubmission()).to.be.eq(true)
     })
   })
 

@@ -81,6 +81,72 @@ describe('Defendant response task list builder', () => {
       })
     })
 
+    describe('"When did you pay" task', () => {
+      let requireWhenDidYouPayStub: sinon.SinonStub
+
+      beforeEach(() => {
+        requireWhenDidYouPayStub = sinon.stub(ResponseDraft.prototype, 'requireWhenDidYouPay')
+      })
+
+      afterEach(() => {
+        requireWhenDidYouPayStub.restore()
+      })
+
+      it('should be enabled when claim is fully rejected due to amount being paid and claimed', () => {
+        requireWhenDidYouPayStub.returns(true)
+
+        const input = {
+          whenDidYouPay: {
+            date: new LocalDate(20, 1, 12),
+            text: 'I paid cash'
+          }
+        }
+        const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
+        expect(taskList.tasks.map(task => task.name)).to.contain('When did you pay?')
+      })
+
+      it('should be disabled in remaining cases', () => {
+        requireWhenDidYouPayStub.returns(false)
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
+        expect(taskList.tasks.map(task => task.name)).to.not.contain('When did you pay?')
+      })
+    })
+
+    describe('"Check and submit your response" task', () => {
+      let requireSubmissionStub: sinon.SinonStub
+
+      beforeEach(() => {
+        requireSubmissionStub = sinon.stub(ResponseDraft.prototype, 'requireSubmission')
+      })
+
+      afterEach(() => {
+        requireSubmissionStub.restore()
+      })
+
+      it('should be enabled when claim is fully rejected due to amount being paid and claimed', () => {
+        requireSubmissionStub.returns(true)
+
+        const input = {
+          whenDidYouPay: {
+            date: new LocalDate(20, 1, 12),
+            text: 'I paid cash'
+          }
+        }
+        const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
+        const taskList: TaskList = TaskListBuilder.buildSubmitSection(responseDraft, '400f4c57-9684-49c0-adb4-4cf46579d6dc')
+        expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
+      })
+
+      it('should undefined remaining cases', () => {
+        requireSubmissionStub.returns(false)
+
+        const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), '400f4c57-9684-49c0-adb4-4cf46579d6dc')
+        expect(taskList).to.be.eq(undefined)
+      })
+    })
+
     describe('"When will you pay" task', () => {
       let isResponseFullyAdmittedStub: sinon.SinonStub
       let isResponsePartiallyRejectedDueToStub: sinon.SinonStub
