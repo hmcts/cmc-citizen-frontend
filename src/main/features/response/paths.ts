@@ -34,6 +34,7 @@ export class Paths {
   static readonly defencePaymentOptionsPage = new RoutablePath(`${responsePath}/when-will-you-pay`)
   static readonly defencePaymentPlanPage = new RoutablePath(`${responsePath}/your-payment-plan`)
   static readonly impactOfDisputePage = new RoutablePath(`${responsePath}/impact-of-dispute`)
+  static readonly claimDetailsPage = new RoutablePath(`${responsePath}/claim-details`)
 }
 
 const statementOfMeansPath = `${responsePath}/statement-of-means`
