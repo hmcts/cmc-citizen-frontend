@@ -3,10 +3,10 @@ set -ue
 
 set -x
 
-ADDTIONAL_COMPOSE_FILE=docker-compose.integration-tests.yml
+ADDITIONAL_COMPOSE_FILE=docker-compose.integration-tests.yml
 
 function shutdownDocker() {
-  docker-compose -f ${ADDTIONAL_COMPOSE_FILE} down
+  docker-compose -f ${ADDITIONAL_COMPOSE_FILE} down
 }
 
 trap shutdownDocker INT TERM QUIT EXIT
@@ -14,9 +14,9 @@ trap shutdownDocker INT TERM QUIT EXIT
 bash --version
 docker-compose --version
 
-#docker-compose -f ${ADDTIONAL_COMPOSE_FILE} pull
-docker-compose -f ${ADDTIONAL_COMPOSE_FILE} up --no-color -d remote-webdriver
-docker-compose -f ${ADDTIONAL_COMPOSE_FILE} run integration-tests
-#docker-compose -f ${ADDTIONAL_COMPOSE_FILE} run integration-tests test -- --grep @citizen-smoke-test
-docker-compose -f ${ADDTIONAL_COMPOSE_FILE} down
+#docker-compose -f ${ADDITIONAL_COMPOSE_FILE} pull
+docker-compose -f ${ADDITIONAL_COMPOSE_FILE} up --no-color -d remote-webdriver
+#docker-compose -f ${ADDITIONAL_COMPOSE_FILE} run integration-tests
+docker-compose -f ${ADDITIONAL_COMPOSE_FILE} run integration-tests test -- --grep @citizen-smoke-test
+docker-compose -f ${ADDITIONAL_COMPOSE_FILE} down
 
