@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "./macro/status.njk" import statusForClaimant %}
+{% from "./macro/status.njk" import statusForClaimant, claimantRespondToOffer %}
 
 {% set title = 'Money claim' %}
 
@@ -16,7 +16,10 @@
     <div class="column-two-thirds">
       <div>
         <h2 class="heading-medium">{{ t('Claim status') }}</h2>
-        {{ statusForDefendant(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+        {{ statusForClaimant(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+        <p>
+          {{ claimantRespondToOffer (claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+        </p>
 
         {% if claim.eligibleForCCJ %}
           <p>{{ t('You can only ask for a CCJ at this stage if the defendant has not responded to your claim.') }}</p>

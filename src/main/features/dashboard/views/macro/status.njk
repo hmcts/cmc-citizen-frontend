@@ -58,3 +58,10 @@
   {% endif %}
 
 {% endmacro %}
+
+{% macro claimantRespondToOffer (claim, url) %}
+  {% if claim.status === ClaimStatus.OFFER_SUBMITTED %}
+    {{ t('View <a href="{{ url }}">their offer</a>.',
+    { url : url  }) | safe }}
+  {% endif %}
+{% endmacro %}
