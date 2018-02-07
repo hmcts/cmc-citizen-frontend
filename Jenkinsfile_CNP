@@ -5,6 +5,8 @@
 String product = "cmc"
 String component = "citizen-frontend"
 
+sh "docker-compose ps"
+
 withPipeline("nodejs", product, component) {
   after('build') {
     sh 'yarn setup'

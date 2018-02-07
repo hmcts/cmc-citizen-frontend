@@ -18,7 +18,7 @@
     "test:coverage-unit": "TS_NODE_FAST=true NODE_ENV=mocha LOG_LEVEL=OFF nyc mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*')",
     "test:codacy-upload": "cat ./coverage-report/lcov.info | codacy-coverage",
     "test:codecov-upload": "codecov -f ./coverage-report/lcov.info",
-    "test:smoke": "docker-compose -f docker-compose.integration-tests.yml run --no-deps integration-tests test --grep '@citizen-smoke-test'",
+    "test:smoke": "./bin/run-smoke-tests.sh",
     "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/** -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info",
     "precommit": "yarn lint",
     "prepush": "yarn test && yarn test:routes"

@@ -2,16 +2,12 @@ version: '2.1'
 
 services:
     integration-tests:
-      build:
-        context: .
-        args:
-          - http_proxy
-          - https_proxy
-          - no_proxy
       image: docker.artifactory.reform.hmcts.net/cmc/integration-tests:${INTEGRATION_TESTS_VERSION:-latest}
       environment:
         - WEB_DRIVER_HOST=remote-webdriver
-        - CITIZEN_APP_URL=https://www-test.moneyclaim.reform.hmcts.net
+        - CITIZEN_APP_URL
+          #        - CITIZEN_APP_URL=https://www-test.moneyclaim.reform.hmcts.net
+          # - CITIZEN_APP_URL=https://www.moneyclaim.reform.hmcts.net
         - IDAM_URL=http://betaDevBccidamAppLB.reform.hmcts.net
         - CLAIM_STORE_URL=http://docker.for.mac.localhost:4300
         - SMOKE_TEST_USERNAME=civilmoneyclaims+smoketest@gmail.com
