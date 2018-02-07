@@ -24,9 +24,10 @@ export default express.Router()
   })
   .post(
     Paths.claimantIndividualDetailsPage.uri,
-    FormValidator.requestHandler(IndividualDetails, IndividualDetails.fromObject),
+    FormValidator.requestHandler(IndividualDetails, IndividualDetails.fromObject, 'claimant'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<IndividualDetails> = req.body
+
       if (form.hasErrors()) {
         renderView(form, res)
       } else {

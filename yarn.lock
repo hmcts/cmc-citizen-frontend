@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@hmcts/cmc-common-frontend@^1.36.1":
-  version "1.36.1"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.36.1.tgz#e5219d14c308d2a50b7a09659d6e9ee4f5cf33c3"
+"@hmcts/cmc-common-frontend@^1.37.0":
+  version "1.37.0"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.37.0.tgz#298f87355c5a3614fa399dbb6aef032b3baaf145"
 
 "@hmcts/cmc-draft-store-middleware@^2.0.0":
   version "2.0.0"
@@ -51,9 +51,9 @@
     on-finished "^2.3.0"
     uuid "^3.1.0"
 
-"@hmcts/postcodeinfo-client@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/postcodeinfo-client/-/postcodeinfo-client-1.0.0.tgz#398447fdf3f2c6ba01370bf9fdac86398355841e"
+"@hmcts/postcodeinfo-client@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@hmcts/postcodeinfo-client/-/postcodeinfo-client-1.1.0.tgz#d830d6e23511bc3e76df1e7509762c2a9b85dd65"
   dependencies:
     request "^2.83.0"
     request-promise-native "^1.0.5"

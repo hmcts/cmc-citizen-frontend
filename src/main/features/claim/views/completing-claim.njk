@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 
-{% set title = t('Completing your claim | Money claim') %}
-{% set heading = t('Completing your claim') %}
+{% set title = t('Get the details right | Money claim') %}
+{% set heading = t('Get the details right') %}
 
 {% from "form.njk" import csrfProtection, submitButton %}
 
@@ -12,28 +12,17 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        <p class="bold-medium">{{ t('You should') }}:</p>
 
-        <p>{{ t('Include all the main points of your claim now. You may have to pay an extra fee if you want to make changes later such as') }}:</p>
+        <p>{{ t('You’ll have to pay a fee if you want to:') }}</p>
 
         <ul class="list list-bullet form-group">
-          <li>{{ t('naming someone else as owing you the money - for example, saying a company director owes you money instead of the contractor who carried out the work') }}</li>
-          <li>{{ t('changing the basis of your claim - for example, saying goods were not delivered rather than that they were faulty') }}</li>
-          <li>{{ t('adding important information that significantly changes your claim') }}</li>
+          <li>{{ t('name someone else as owing you the money') }}</li>
+          <li>{{ t('change the basis of your claim - for example, saying goods were undelivered instead of faulty') }}</li>
+          <li>{{ t('add information that significantly changes your claim') }}</li>
         </ul>
 
-        <p class="bold-small">{{ t('Make sure you that you spell the person’s name correctly and get their address right.') }}</p>
+        <p>{{ t('Make sure you that you spell the person or organisation’s name correctly and get the address right.') }}</p>
 
-        <div class="form-group">
-          <div class="notice">
-            <i class="icon icon-important">
-              <span class="visually-hidden">{{ t('Warning') }}</span>
-            </i>
-            <strong class="bold-small">
-              {{ t('It’s against the law to deliberately give untrue or misleading information') }}
-            </strong>
-          </div>
-        </div>
         {{ submitButton('I confirm I’ve read this') }}
       </form>
     </div>

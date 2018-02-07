@@ -1,7 +1,8 @@
 import * as express from 'express'
-import { Validator, ValidationError } from 'class-validator'
+import { ValidationError, Validator } from 'class-validator'
 
 import { Form } from 'forms/form'
+import * as _ from 'lodash'
 
 type Constructor<T> = { new(): T }
 type Mapper<T> = (value: any) => T
@@ -25,13 +26,13 @@ export class FormValidator {
       return true
     }
 
-    return (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const model: T = modelTypeMapper(req.body)
+    return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      const model: T = modelTypeMapper(removeIllegalCharacters(req.body))
 
-      const errors: ValidationError[] = isValidationEnabledFor(req) ? validator.validateSync(model, { groups: validationGroup !== undefined ? [validationGroup] : [] }) : []
+      const errors: ValidationError[] = isValidationEnabledFor(req) ? await validator.validate(model, { groups: validationGroup !== undefined ? [validationGroup] : [] }) : []
       const action: object = req.body.action
 
-      req.body = new Form<T>(model, errors)
+      req.body = new Form<T>(model, errors, req.body)
       if (action) {
         req.body.action = action // Workaround to expose action to request handlers
       }
@@ -40,4 +41,18 @@ export class FormValidator {
     }
   }
 
+}
+
+function removeIllegalCharacters (value) {
+  if (typeof value === 'string') {
+    // Used the same criteria for excluding characters as in pdf service:
+    // https://github.com/hmcts/cmc-pdf-service/commit/0d329cdf316c4170505cea0b1d55fc9e955ef9ed#diff-33006e1cd375862451ac613046341e82R34
+    return value.replace(/[^\u0009\u000A\u000D\u0020-\uD7FF\uE000-\uFFFD]/g, '')
+  }
+
+  if (typeof value === 'object') {
+    return (_.isArray(value) ? _.map : _.mapValues)(value, removeIllegalCharacters)
+  }
+
+  return value
 }

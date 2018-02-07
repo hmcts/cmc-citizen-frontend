@@ -108,7 +108,15 @@ export class ClaimStoreClient {
       .then((claims: object[]) => claims.map(claim => new Claim().deserialize(claim)))
   }
 
-  static linkDefendant (externalId: string, user: User): Promise<Claim> {
+  static linkDefendant (user: User): Promise<void> {
+    return request.put(`${claimStoreApiUrl}/defendant/link`, {
+      headers: {
+        Authorization: `Bearer ${user.bearerToken}`
+      }
+    })
+  }
+
+  static linkDefendantV1 (externalId: string, user: User): Promise<Claim> {
     if (!externalId) {
       return Promise.reject(new Error('External ID is required'))
     }

@@ -9,6 +9,7 @@ import { IsFutureDate } from 'app/forms/validation/validators/dateFutureConstrai
 import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
 import { ValidationConstraints } from 'app/forms/validation/validationConstraints'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
 
 export class ValidationErrors {
   static readonly FIRST_PAYMENT_AMOUNT_INVALID: string = 'Enter a valid payment amount'
@@ -68,9 +69,9 @@ export class DefendantPaymentPlan {
     }
 
     return new DefendantPaymentPlan(
-      value.remainingAmount ? parseFloat(value.remainingAmount) : undefined,
-      value.firstPayment ? parseFloat(value.firstPayment) : undefined,
-      value.instalmentAmount ? parseFloat(value.instalmentAmount) : undefined,
+      toNumberOrUndefined(value.remainingAmount),
+      toNumberOrUndefined(value.firstPayment),
+      toNumberOrUndefined(value.instalmentAmount),
       LocalDate.fromObject(value.firstPaymentDate),
       value.paymentSchedule ? PaymentSchedule.of(value.paymentSchedule) : undefined,
       value.text)
