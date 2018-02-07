@@ -8,9 +8,12 @@ import { Response } from 'claims/models/response'
 import { ResponseType } from 'claims/models/response/responseCommon'
 import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
+import { StatementType } from 'features/offer/form/models/statementType'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { FeatureToggles } from 'utils/featureToggles'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
+import { PartyStatement } from 'claims/models/partyStatement'
+import { MadeBy } from 'offer/form/models/madeBy'
 
 export class Claim {
   id: number
@@ -98,6 +101,13 @@ export class Claim {
       return ClaimStatus.CCJ_REQUESTED
     } else if (this.isSettlementReached()) {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
+
+    } else if (this.isOfferRejectedBy(MadeBy.CLAIMANT)) {
+      return ClaimStatus.OFFER_REJECTED_BY_CLAIMANT
+
+    } else if (this.isOfferRejectedBy(MadeBy.DEFENDANT)) {
+      return ClaimStatus.OFFER_REJECTED_BY_DEFENDANT
+
     } else if (this.isOfferSubmitted()) {
       return ClaimStatus.OFFER_SUBMITTED
     } else if (this.eligibleForCCJ) {
@@ -127,6 +137,25 @@ export class Claim {
 
   private isSettlementReached () {
     return FeatureToggles.isEnabled('offer') && this.settlement && this.settlementReachedAt
+  }
+
+  private isOfferRejectedBy (madeBy: MadeBy): boolean {
+    return FeatureToggles.isEnabled('offer') && this.isLastStatement(StatementType.REJECTION, madeBy)
+  }
+
+  private isOfferAcceptedBy (madeBy: MadeBy): boolean {
+    return FeatureToggles.isEnabled('offer') && this.isLastStatement(StatementType.ACCEPTATION, madeBy)
+  }
+
+  private isLastStatement (statementType: StatementType, madeBy: MadeBy): boolean {
+    if (this.settlement) {
+      const statements: PartyStatement[] = this.settlement.partyStatements
+      const item = statements[statements.length - 1]
+
+      return item && item.type === statementType.value && item.madeBy === madeBy.value
+    }
+
+    return false
   }
 
   private isClaimRejected () {
