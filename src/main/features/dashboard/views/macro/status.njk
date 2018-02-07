@@ -1,6 +1,6 @@
 {% from "timeRemaining.njk" import timeRemaining %}
 
-{% macro responseStatusForDefendant(claim, url, isAfter4pm) %}
+{% macro statusForDefendant(claim, url, isAfter4pm) %}
 
   {% if claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
     {{ t('You have signed the agreement. The claim is now settled.') }}
@@ -30,7 +30,7 @@
 
 {% endmacro %}
 
-{% macro responseStatusForClaimant(claim, url) %}
+{% macro statusForClaimant(claim, url) %}
 
   {% if claim.status === ClaimStatus.CCJ_REQUESTED %}
     {{ t('You requested a County Court Judgment on {{ ccjRequestedAt }}. We will contact you within 5 working days.',

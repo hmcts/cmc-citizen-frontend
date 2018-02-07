@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "./macro/responseStatus.njk" import responseStatusForDefendant %}
+{% from "./macro/status.njk" import statusForDefendant %}
 
 {% set title = t('Money claim') %}
 
@@ -14,7 +14,7 @@
     <div class="column-two-thirds">
       <h2 class="heading-medium">{{ t('Claim status') }}</h2>
 
-      {{ responseStatusForDefendant(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
+      {{ statusForDefendant(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
 
       {% if featureToggles.offer and not claim.settlementReachedAt  %}
         <h2 class="heading-medium">{{ t('More options') }}</h2>
