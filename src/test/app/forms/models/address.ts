@@ -94,8 +94,8 @@ describe('Address/CorrespondenceAddress', () => {
     describe('validation', () => {
       const validator: Validator = new Validator()
 
-      it('should reject address with empty first address line and postcode', () => {
-        const errors = validator.validateSync(new ClassFunction('', '', '', '', ''))
+      it('should reject address with empty first address line and postcode', async () => {
+        const errors = await validator.validate(new ClassFunction('', '', '', '', ''))
 
         expect(errors.length).to.equal(3)
         expectValidationError(errors, ValidationErrors.FIRST_LINE_REQUIRED)
