@@ -19,6 +19,7 @@ import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-che
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.defendantMobilePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const headerText: string = 'Add a phone number (optional)'
 
 describe('Defendant user details: your mobile page', () => {
   attachDefaultHooks(app)
@@ -30,7 +31,7 @@ describe('Defendant user details: your mobile page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)
@@ -47,7 +48,7 @@ describe('Defendant user details: your mobile page', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('What is your mobile number?'))
+            .expect(res => expect(res).to.be.successful.withText(headerText))
         })
       })
     })
@@ -61,7 +62,7 @@ describe('Defendant user details: your mobile page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)
@@ -79,7 +80,7 @@ describe('Defendant user details: your mobile page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('What is your mobile number?', 'div class="error-summary"'))
+              .expect(res => expect(res).to.be.successful.withText(headerText, 'div class="error-summary"'))
           })
         })
 

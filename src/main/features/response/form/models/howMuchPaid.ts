@@ -8,6 +8,7 @@ import { MomentFormatter } from 'app/utils/momentFormatter'
 import { Fractions } from 'forms/validation/validators/fractions'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
 
 const currentDate = MomentFormatter.formatLongDate(MomentFactory.currentDate())
 
@@ -48,7 +49,7 @@ export class HowMuchPaid {
 
   static fromObject (value?: any): HowMuchPaid {
     if (value) {
-      const amount = value.amount ? parseFloat(value.amount) : undefined
+      const amount = toNumberOrUndefined(value.amount)
       const pastDate = LocalDate.fromObject(value.date)
       const text = value.text
       return new HowMuchPaid(amount, pastDate, text)
@@ -70,4 +71,5 @@ export class HowMuchPaid {
     return !!this.date.year && this.date.year.toString().length > 0 &&
       !!this.text && this.text.length > 0 &&
       !!this.amount && this.amount > 0
-  }}
+  }
+}

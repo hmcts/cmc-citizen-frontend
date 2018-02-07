@@ -36,6 +36,7 @@ export const sampleClaimDraftObj = {
   readResolveDispute: true,
   readCompletingClaim: true,
   eligibility: {
+    claimOnBehalf: YesNoOption.NO,
     claimantAddress: YesNoOption.YES,
     defendantAddress: YesNoOption.YES,
     claimValue: ClaimValue.UNDER_10000,
@@ -43,7 +44,8 @@ export const sampleClaimDraftObj = {
     singleClaimant: YesNoOption.YES,
     singleDefendant: YesNoOption.YES,
     governmentDepartment: YesNoOption.NO,
-    helpWithFees: YesNoOption.NO
+    helpWithFees: YesNoOption.NO,
+    claimIsForTenancyDeposit: YesNoOption.NO
   },
   claimant: {
     partyDetails: {
@@ -52,6 +54,7 @@ export const sampleClaimDraftObj = {
       address: {
         line1: 'Apt 99',
         line2: '',
+        line3: '',
         city: 'London',
         postcode: 'E1'
       } as Address,
@@ -81,6 +84,7 @@ export const sampleClaimDraftObj = {
       address: {
         line1: 'Apt 99',
         line2: '',
+        line3: '',
         city: 'London',
         postcode: 'E1'
       },
@@ -191,7 +195,7 @@ const sampleResponseDraftObj = {
     partyDetails: {
       type: 'individual',
       name: 'John Smith',
-      address: { line1: 'Apartment 99', line2: '', city: 'London', postcode: 'SE28 0JE' } as Address,
+      address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
       hasCorrespondenceAddress: false,
       dateOfBirth: {
         known: true,
@@ -214,6 +218,7 @@ const sampleCCJDraftObj = {
       address: {
         line1: 'Apartment 99',
         line2: '',
+        line3: '',
         city: 'London',
         postcode: 'SE28 0JE'
       },

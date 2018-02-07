@@ -71,14 +71,18 @@
     "clusterMode": "FEATURE_CLUSTER_MODE",
     "testingSupport": "FEATURE_TESTING_SUPPORT",
     "countyCourtJudgment": "FEATURE_CCJ",
-    "idamOauth": "FEATURE_IDAM_OAUTH",
     "fullAdmission": "FEATURE_FULL_ADMISSION",
     "partialAdmission": "FEATURE_PARTIAL_ADMISSION",
     "offer": "FEATURE_OFFER",
-    "statementOfMeans": "FEATURE_STATEMENT_OF_MEANS"
+    "statementOfMeans": "FEATURE_STATEMENT_OF_MEANS",
+    "finePrint": "FEATURE_FINE_PRINT",
+    "ccd": "FEATURE_CCD"
   },
   "oauth": {
     "clientId": "OAUTH_CLIENT_ID",
     "clientSecret": "OAUTH_CLIENT_SECRET"
+  },
+  "postcodeLookup": {
+    "apiKey": "POSTCODE_LOOKUP_API_KEY"
   }
 }

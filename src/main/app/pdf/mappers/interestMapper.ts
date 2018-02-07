@@ -9,7 +9,7 @@ import { Moment } from 'moment'
 
 export class InterestMapper {
 
-  public static createInterestData (claim: Claim): object {
+  public static async createInterestData (claim: Claim): Promise<object> {
     const claimData: ClaimData = claim.claimData
     const isNoInterest: boolean = claimData.interest.type === InterestType.NO_INTEREST
 
@@ -23,12 +23,12 @@ export class InterestMapper {
     return {
       rate: claimData.interest.rate,
       dateClaimedFrom: MomentFormatter.formatLongDate(interestDate),
-      claimedAtDateOfSubmission: NumberFormatter.formatMoney(InterestMapper.calculateInterest(claimData, interestDate, claim.createdAt)),
+      claimedAtDateOfSubmission: NumberFormatter.formatMoney(await InterestMapper.calculateInterest(claimData, interestDate, claim.createdAt)),
       accruedInterest: NumberFormatter.formatMoney(InterestMapper.calculateDailyAmount(claimData))
     }
   }
 
-  public static calculateInterest (claimData: ClaimData, interestFromDate: Moment, interestToDate: Moment): number {
+  public static async calculateInterest (claimData: ClaimData, interestFromDate: Moment, interestToDate: Moment): Promise<number> {
     return calculateInterest(claimData.amount.totalAmount(), claimData.interest, interestFromDate, interestToDate)
   }
 

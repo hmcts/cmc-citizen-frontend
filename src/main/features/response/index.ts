@@ -9,16 +9,16 @@ import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { CountyCourtJudgmentRequestedGuard } from 'response/guards/countyCourtJudgmentRequestedGuard'
-import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
 import { IsDefendantInCaseGuard } from 'guards/isDefendantInCaseGuard'
+import { OAuthHelper } from 'idam/oAuthHelper'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    res.redirect(AuthenticationRedirectFactory.get().forLogin(req, res))
+    res.redirect(OAuthHelper.forLogin(req, res))
   }
 
   const requiredRoles = [
-    'cmc-private-beta'
+    'citizen'
   ]
   const unprotectedPaths = []
   return AuthorizationMiddleware.requestHandler(requiredRoles, accessDeniedCallback, unprotectedPaths)

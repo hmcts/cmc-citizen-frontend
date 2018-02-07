@@ -74,10 +74,10 @@ describe('HowMuchPaid', () => {
 
   describe('validation', () => {
     const validator: Validator = new Validator()
+    const aDayBeforeNow = moment().subtract(1, 'days')
+    const pastDate = new LocalDate(aDayBeforeNow.year(), aDayBeforeNow.month() + 1, aDayBeforeNow.date())
 
     it('should reject how much to pay text with undefined', () => {
-      const now = moment()
-      const pastDate = new LocalDate(now.year(), now.month() + 1, now.day() - 1)
       const errors = validator.validateSync(new HowMuchPaid(300, pastDate, undefined))
 
       expectNumberOfValidationErrors(errors, 1)
@@ -85,8 +85,6 @@ describe('HowMuchPaid', () => {
     })
 
     it('should reject how much to pay text with null type', () => {
-      const now = moment()
-      const pastDate = new LocalDate(now.year(), now.month() + 1, now.day() - 1)
       const errors = validator.validateSync(new HowMuchPaid(300, pastDate))
 
       expectNumberOfValidationErrors(errors, 1)
@@ -94,8 +92,6 @@ describe('HowMuchPaid', () => {
     })
 
     it('should reject how much to pay text with empty string', () => {
-      const now = moment()
-      const pastDate = new LocalDate(now.year(), now.month() + 1, now.day() - 1)
       const errors = validator.validateSync(new HowMuchPaid(300, pastDate, ''))
 
       expectNumberOfValidationErrors(errors, 1)
@@ -103,8 +99,6 @@ describe('HowMuchPaid', () => {
     })
 
     it('should reject how much to pay text with white spaces string', () => {
-      const now = moment()
-      const pastDate = new LocalDate(now.year(), now.month() + 1, now.day() - 1)
       const errors = validator.validateSync(new HowMuchPaid(300, pastDate, '    '))
 
       expectNumberOfValidationErrors(errors, 1)
@@ -112,8 +106,6 @@ describe('HowMuchPaid', () => {
     })
 
     it('should reject when amount not specified', () => {
-      const now = moment()
-      const pastDate = new LocalDate(now.year(), now.month() + 1, now.day() - 1)
       const errors = validator.validateSync(new HowMuchPaid(undefined, pastDate, 'i don’t owe the amount of £300'))
 
       expectNumberOfValidationErrors(errors, 1)
@@ -121,8 +113,6 @@ describe('HowMuchPaid', () => {
     })
 
     it('should reject when amount with two decimal places in amount', () => {
-      const now = moment()
-      const pastDate = new LocalDate(now.year(), now.month() + 1, now.day() - 1)
       const errors = validator.validateSync(new HowMuchPaid(10.123, pastDate, 'i don’t owe the amount of £300'))
 
       expectNumberOfValidationErrors(errors, 1)
@@ -134,8 +124,7 @@ describe('HowMuchPaid', () => {
         length: ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1,
         charset: 'alphabetic'
       })
-      const now = moment()
-      const pastDate = new LocalDate(now.year(), now.month() + 1, now.day() - 1)
+
       const errors = validator.validateSync(new HowMuchPaid(300, pastDate, text))
 
       expectNumberOfValidationErrors(errors, 1)
@@ -143,8 +132,6 @@ describe('HowMuchPaid', () => {
     })
 
     it('should accept how much to pay text with max allowed characters', () => {
-      const now = moment()
-      const pastDate = new LocalDate(now.year(), now.month() + 1, now.day() - 1)
       const errors = validator.validateSync(new HowMuchPaid(300, pastDate), randomstring.generate(ValidationConstraints.FREE_TEXT_MAX_LENGTH))
 
       expectNumberOfValidationErrors(errors, 1)
@@ -153,8 +140,6 @@ describe('HowMuchPaid', () => {
 
     context('when pay by set date is known', () => {
       it('should pass with past date, amount and text', () => {
-        const now = moment()
-        const pastDate = new LocalDate(now.year(), now.month() + 1, now.day() - 1)
         const errors = validator.validateSync(new HowMuchPaid(300, pastDate, 'i don’t owe the amount of £300'))
 
         expectNumberOfValidationErrors(errors, 0)

@@ -10,9 +10,9 @@ export const claimStoreApiUrl: string = `${config.get<string>('claim-store.url')
 
 export class OfferClient {
 
-  static makeOffer (claimId: number, user: User, offerForm: OfferForm): Promise<Claim> {
+  static makeOffer (externalId: string, user: User, offerForm: OfferForm): Promise<Claim> {
     const offer: Offer = OfferModelConverter.convert(offerForm)
-    return request.post(`${claimStoreApiUrl}/${claimId}/offers/defendant`, {
+    return request.post(`${claimStoreApiUrl}/${externalId}/offers/defendant`, {
       body: offer,
       headers: {
         Authorization: `Bearer ${user.bearerToken}`
@@ -20,8 +20,8 @@ export class OfferClient {
     })
   }
 
-  static acceptOffer (claimId: number, user: User): Promise<Claim> {
-    return request.post(`${claimStoreApiUrl}/${claimId}/offers/claimant/accept`, {
+  static acceptOffer (externalId: string, user: User): Promise<Claim> {
+    return request.post(`${claimStoreApiUrl}/${externalId}/offers/claimant/accept`, {
       body: '',
       headers: {
         Authorization: `Bearer ${user.bearerToken}`
@@ -29,8 +29,8 @@ export class OfferClient {
     })
   }
 
-  static rejectOffer (claimId: number, user: User): Promise<Claim> {
-    return request.post(`${claimStoreApiUrl}/${claimId}/offers/claimant/reject`, {
+  static rejectOffer (externalId: string, user: User): Promise<Claim> {
+    return request.post(`${claimStoreApiUrl}/${externalId}/offers/claimant/reject`, {
       body: '',
       headers: {
         Authorization: `Bearer ${user.bearerToken}`

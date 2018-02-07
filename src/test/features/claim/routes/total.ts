@@ -13,6 +13,7 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as feesServiceMock from '../../../http-mocks/fees'
+import { mockCalculateInterestRate } from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -24,7 +25,8 @@ describe('Claim issue: total page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+        mockCalculateInterestRate(0)
       })
 
       it('should return 500 and render error page when cannot calculate issue fee', async () => {
@@ -54,7 +56,7 @@ describe('Claim issue: total page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       it('should redirect to task list when amount within limit and everything is fine', async () => {

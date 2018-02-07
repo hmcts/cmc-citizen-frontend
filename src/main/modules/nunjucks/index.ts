@@ -26,6 +26,10 @@ import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { DashboardUrlHelper } from 'dashboard/helpers/dashboardUrlHelper'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
+import { ClaimStatus } from 'claims/models/claimStatus'
+import { FeatureToggles } from 'utils/featureToggles'
+import { Paths as AppPaths } from 'app/paths'
+import { Paths as ResponsePaths } from 'features/response/paths'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -99,6 +103,12 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('DashboardUrlHelper', DashboardUrlHelper)
     nunjucksEnv.addGlobal('UnemploymentType', UnemploymentType)
     nunjucksEnv.addGlobal('BankAccountType', BankAccountType)
+    nunjucksEnv.addGlobal('ClaimStatus', ClaimStatus)
+    nunjucksEnv.addGlobal('AppPaths', AppPaths)
+    nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
+    if (FeatureToggles.isEnabled('finePrint')) {
+      nunjucksEnv.addGlobal('cookieText', `GOV.UK uses cookies make the site simpler. <a href="${AppPaths.cookiesPage.uri}">Find out more about cookies</a>`)
+    }
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

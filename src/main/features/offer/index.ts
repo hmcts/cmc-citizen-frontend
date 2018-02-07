@@ -4,16 +4,16 @@ import * as path from 'path'
 import { RouterFinder } from 'common/router/routerFinder'
 import { ClaimMiddleware } from 'app/claims/claimMiddleware'
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
-import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
 import { Paths } from 'offer/paths'
+import { OAuthHelper } from 'idam/oAuthHelper'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    res.redirect(AuthenticationRedirectFactory.get().forLogin(req, res))
+    res.redirect(OAuthHelper.forLogin(req, res))
   }
 
   const requiredRoles = [
-    'cmc-private-beta'
+    'citizen'
   ]
   const unprotectedPaths = []
   return AuthorizationMiddleware.requestHandler(requiredRoles, accessDeniedCallback, unprotectedPaths)

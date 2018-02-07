@@ -22,13 +22,13 @@ describe('Claim issue: completing claim page', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.completingClaimPage.uri)
 
     it('should render page when everything is fine', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
         .get(ClaimPaths.completingClaimPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Completing your claim'))
+        .expect(res => expect(res).to.be.successful.withText('Get the details right'))
     })
   })
 
@@ -37,7 +37,7 @@ describe('Claim issue: completing claim page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       it('should return 500 and render error page when cannot save draft', async () => {

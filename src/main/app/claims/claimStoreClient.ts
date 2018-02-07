@@ -24,10 +24,10 @@ export class ClaimStoreClient {
     })
   }
 
-  static saveResponseForUser (claimId: number, draft: Draft<ResponseDraft>, user: User): Promise<void> {
+  static saveResponseForUser (externalId: string, draft: Draft<ResponseDraft>, user: User): Promise<void> {
     const response = ResponseModelConverter.convert(draft.document)
 
-    return request.post(`${claimStoreResponsesApiUrl}/${claimId}/defendant/${user.id}`, {
+    return request.post(`${claimStoreResponsesApiUrl}/${externalId}/defendant/${user.id}`, {
       body: response,
       headers: {
         Authorization: `Bearer ${user.bearerToken}`
@@ -35,25 +35,33 @@ export class ClaimStoreClient {
     })
   }
 
-  static retrieveByClaimantId (claimantId: string): Promise<Claim[]> {
-    if (!claimantId) {
-      return Promise.reject(new Error('Claimant ID is required'))
+  static retrieveByClaimantId (user: User): Promise<Claim[]> {
+    if (!user) {
+      return Promise.reject(new Error('User is required'))
     }
 
     return request
-      .get(`${claimStoreApiUrl}/claimant/${claimantId}`)
+      .get(`${claimStoreApiUrl}/claimant/${user.id}`, {
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
       .then((claims: object[]) => {
         return claims.map((claim: object) => new Claim().deserialize(claim))
       })
   }
 
-  static retrieveByLetterHolderId (letterHolderId: string): Promise<Claim> {
+  static retrieveByLetterHolderId (letterHolderId: string, bearerToken: string): Promise<Claim> {
     if (!letterHolderId) {
-      return Promise.reject('Letter holder id must be set')
+      return Promise.reject(new Error('Letter holder id must be set'))
     }
 
     return request
-      .get(`${claimStoreApiUrl}/letter/${letterHolderId}`)
+      .get(`${claimStoreApiUrl}/letter/${letterHolderId}`, {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`
+        }
+      })
       .then(claim => {
         if (claim) {
           return new Claim().deserialize(claim)
@@ -63,15 +71,19 @@ export class ClaimStoreClient {
       })
   }
 
-  static retrieveByExternalId (externalId: string, userId: string): Promise<Claim> {
-    if (!externalId) {
-      return Promise.reject(new Error('External id must be set'))
+  static retrieveByExternalId (externalId: string, user: User): Promise<Claim> {
+    if (!externalId || !user) {
+      return Promise.reject(new Error('External id must be set and user must be set'))
     }
 
     return request
-      .get(`${claimStoreApiUrl}/${externalId}`)
+      .get(`${claimStoreApiUrl}/${externalId}`, {
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
       .then(claim => {
-        if (userId !== claim.submitterId && userId !== claim.defendantId) {
+        if (user.id !== claim.submitterId && user.id !== claim.defendantId) {
           throw new ForbiddenError()
         }
         if (claim) {
@@ -82,26 +94,42 @@ export class ClaimStoreClient {
       })
   }
 
-  static retrieveByDefendantId (defendantId: string): Promise<Claim[]> {
-    if (!defendantId) {
-      return Promise.reject('Defendant ID is required')
+  static retrieveByDefendantId (user: User): Promise<Claim[]> {
+    if (!user) {
+      return Promise.reject('User is required')
     }
 
     return request
-      .get(`${claimStoreApiUrl}/defendant/${defendantId}`)
+      .get(`${claimStoreApiUrl}/defendant/${user.id}`, {
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
       .then((claims: object[]) => claims.map(claim => new Claim().deserialize(claim)))
   }
 
-  static linkDefendant (claimId: number, defendantId: string): Promise<Claim> {
-    if (!claimId) {
-      return Promise.reject('Claim ID is required')
+  static linkDefendant (user: User): Promise<void> {
+    return request.put(`${claimStoreApiUrl}/defendant/link`, {
+      headers: {
+        Authorization: `Bearer ${user.bearerToken}`
+      }
+    })
+  }
+
+  static linkDefendantV1 (externalId: string, user: User): Promise<Claim> {
+    if (!externalId) {
+      return Promise.reject(new Error('External ID is required'))
     }
-    if (!defendantId) {
-      return Promise.reject('Defendant ID is required')
+    if (!user.id) {
+      return Promise.reject(new Error('User is required'))
     }
 
     return request
-      .put(`${claimStoreApiUrl}/${claimId}/defendant/${defendantId}`)
+      .put(`${claimStoreApiUrl}/${externalId}/defendant/${user.id}`, {
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
       .then(claim => {
         if (claim) {
           return new Claim().deserialize(claim)
@@ -111,16 +139,16 @@ export class ClaimStoreClient {
       })
   }
 
-  static requestForMoreTime (claimId: number, user: User): Promise<Claim> {
-    if (!claimId) {
-      return Promise.reject('Claim ID is required')
+  static requestForMoreTime (externalId: string, user: User): Promise<Claim> {
+    if (!externalId) {
+      return Promise.reject(new Error('External ID is required'))
     }
 
     if (!user || !user.bearerToken) {
-      return Promise.reject('Authorisation token required')
+      return Promise.reject(new Error('Authorisation token required'))
     }
 
-    return request.post(`${claimStoreApiUrl}/${claimId}/request-more-time`, {
+    return request.post(`${claimStoreApiUrl}/${externalId}/request-more-time`, {
       headers: {
         Authorization: `Bearer ${user.bearerToken}`
       }

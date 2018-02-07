@@ -21,6 +21,10 @@
           + '<a target="_blank" href="%s">form N1</a> ' + newWindow() + '.',
           { postProcess: 'sprintf', sprintf: [ n1FormUrl ]}) | safe }}
         </p>
+      {% elseif reason === NotEligibleReason.CLAIM_ON_BEHALF %}
+        <p>{{ t('This service is currently for claimants representing themselves.') }}</p>
+        <p>{{ t('If you’re a legal representative <a target="_blank" href="{{ MCOL }}">use the Money Claim Online (MCOL) service.</a>',
+          { MCOL: 'https://www.moneyclaim.gov.uk/web/mcol/welcome' }) | safe }}
       {% elseif reason === NotEligibleReason.MULTIPLE_CLAIMANTS %}
         <p>{{ t('You can’t use this service if more than one person or business is making the claim') }}</p>
         <p>{{ t('Use <a target="_blank" href="%s">form N1 </a>' + newWindow() + ' to make your claim..',
@@ -62,6 +66,11 @@
         <p>{{ t('You might be able to get free legal advice from organisations like '
          + '<a target="_blank" href="%s">Citizens Advice</a> ' + newWindow() + ' about making a claim.',
           { postProcess: 'sprintf', sprintf: [ citizensAdviceUrl ]}) | safe }}</p>
+      {% elseif reason === NotEligibleReason.CLAIM_IS_FOR_TENANCY_DEPOSIT %}
+        <p>{{ t('You can’t make a claim for a tenancy deposit using this service.') }}</p>
+        <p>{{ t('Get <a target="_blank" href="{{ url }}"> help to resolve your dispute</a> ' + newWindow() + ' with a landlord or tenant.</p>',
+          { url: "https://www.gov.uk/tenancy-deposit-protection/disputes-and-problems" }) | safe
+        }}</p>
       {% endif %}
     </div>
 

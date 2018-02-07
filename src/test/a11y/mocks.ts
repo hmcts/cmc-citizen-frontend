@@ -7,7 +7,7 @@ import * as claimStoreMock from '../http-mocks/claim-store'
 import * as feesMock from '../http-mocks/fees'
 import { Claim } from 'claims/models/claim'
 
-idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'letter-holder').persist()
+idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-holder').persist()
 idamServiceMock.resolveRetrieveServiceToken().persist()
 
 draftStoreMock.resolveFindAllDrafts().persist()
@@ -17,7 +17,7 @@ claimStoreMock.resolveRetrieveClaimByExternalId({
   respondedAt: '2017-08-07T15:27:34.654',
   countyCourtJudgmentRequestedAt: '2017-08-09T11:51:28.144'
 }).persist()
-
+claimStoreMock.mockCalculateInterestRate(0).persist()
 feesMock.resolveCalculateIssueFee().persist()
 feesMock.resolveCalculateHearingFee().persist()
 feesMock.resolveGetIssueFeeRangeGroup().persist()

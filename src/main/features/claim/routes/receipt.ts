@@ -15,10 +15,12 @@ export default express.Router()
       async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
         const { externalId } = req.params
-        documentsClient.getClaimIssueReceiptPDF(externalId)
+        documentsClient.getClaimIssueReceiptPDF(externalId, res.locals.user.bearerToken)
           .on('response', (response: http.IncomingMessage) => {
-            if (response.statusCode !== 200) {
-              return next(new Error('Unexpected error during document retrieval'))
+            if (response.statusCode !== HttpStatus.OK) {
+              return next(
+                new Error(response.statusMessage ? response.statusMessage : 'Unexpected error during document retrieval')
+              )
             }
             const buffers: Buffer[] = []
             response.on('data', (chunk: Buffer) => {

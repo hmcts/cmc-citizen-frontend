@@ -4,39 +4,10 @@ import { Paths } from 'ccj/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { Claim } from 'claims/models/claim'
-import { MomentFactory } from 'common/momentFactory'
-import { InterestType } from 'claim/form/models/interest'
-import { InterestDateType } from 'app/common/interestDateType'
-import { Moment } from 'moment'
-import { calculateInterest } from 'app/common/calculateInterest'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Draft } from '@hmcts/draft-store-client'
-
-function getInterestDetails (claim: Claim): object {
-  if (claim.claimData.interest.type === InterestType.NO_INTEREST) {
-    return undefined
-  }
-
-  let interestDate: Moment
-
-  if (claim.claimData.interestDate.type === InterestDateType.CUSTOM) {
-    interestDate = claim.claimData.interestDate.date
-  } else {
-    interestDate = claim.createdAt
-  }
-
-  const todayDate: Moment = MomentFactory.currentDate()
-  const noOfDays: number = todayDate.diff(interestDate, 'days')
-  const rate: number = claim.claimData.interest.rate
-
-  return {
-    numberOfDays: noOfDays,
-    interest: calculateInterest(claim.claimData.amount.totalAmount(), claim.claimData.interest, interestDate),
-    rate: rate,
-    interestDate: interestDate,
-    defaultJudgmentDate: todayDate
-  }
-}
+import { getInterestDetails } from 'common/interest'
+import { MomentFactory } from '../../../common/momentFactory'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -50,8 +21,9 @@ export default express.Router()
         Paths.paidAmountSummaryPage.associatedView, {
           claim: claim,
           alreadyPaid: draft.document.paidAmount.amount || 0,
-          interestDetails: getInterestDetails(claim),
-          nextPageUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
+          interestDetails: await getInterestDetails(claim),
+          nextPageUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId }),
+          defaultJudgmentDate: MomentFactory.currentDate()
         }
       )
     }))

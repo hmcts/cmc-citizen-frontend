@@ -4,11 +4,11 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
 
-import { expectValidationError, generateString, evaluateErrorMsg } from './validationUtils'
+import { evaluateErrorMsg, expectValidationError, generateString } from './validationUtils'
 import {
   Address,
-  ValidationErrors as AddressValidationErrors,
-  ValidationConstants as AddressValidationConstants
+  ValidationConstants as AddressValidationConstants,
+  ValidationErrors as AddressValidationErrors
 } from 'forms/models/address'
 import {
   CorrespondenceAddress,
@@ -40,6 +40,7 @@ describe('Address/CorrespondenceAddress', () => {
         let address = new ClassFunction()
         expect(address.line1).to.be.undefined
         expect(address.line2).to.be.undefined
+        expect(address.line3).to.be.undefined
         expect(address.city).to.be.undefined
         expect(address.postcode).to.be.undefined
       })
@@ -58,11 +59,13 @@ describe('Address/CorrespondenceAddress', () => {
         let result = new ClassFunction().deserialize({
           line1: 'AddressLine1',
           line2: 'AddressLine2',
+          line3: 'AddressLine3',
           city: 'City',
           postcode: 'PostCode'
         })
         expect(result.line1).to.be.equals('AddressLine1')
         expect(result.line2).to.be.equals('AddressLine2')
+        expect(result.line3).to.be.equals('AddressLine3')
         expect(result.city).to.be.equals('City')
         expect(result.postcode).to.be.equals('PostCode')
       })
@@ -73,6 +76,7 @@ describe('Address/CorrespondenceAddress', () => {
         const claimAddress: ClaimAddress = new ClaimAddress().deserialize({
           line1: 'line1',
           line2: 'line2',
+          line3: 'line3',
           city: 'city',
           postcode: 'postcode'
         })
@@ -81,6 +85,7 @@ describe('Address/CorrespondenceAddress', () => {
 
         expect(address.line1).to.equal(claimAddress.line1)
         expect(address.line2).to.equal(claimAddress.line2)
+        expect(address.line3).to.equal(claimAddress.line3)
         expect(address.city).to.equal(claimAddress.city)
         expect(address.postcode).to.equal(claimAddress.postcode)
       })
@@ -89,8 +94,8 @@ describe('Address/CorrespondenceAddress', () => {
     describe('validation', () => {
       const validator: Validator = new Validator()
 
-      it('should reject address with empty first address line and postcode', () => {
-        const errors = validator.validateSync(new ClassFunction('', '', '', ''))
+      it('should reject address with empty first address line and postcode', async () => {
+        const errors = await validator.validate(new ClassFunction('', '', '', '', ''))
 
         expect(errors.length).to.equal(3)
         expectValidationError(errors, ValidationErrors.FIRST_LINE_REQUIRED)
@@ -99,7 +104,7 @@ describe('Address/CorrespondenceAddress', () => {
       })
 
       it('should reject address with blank first address line and postcode', () => {
-        const errors = validator.validateSync(new ClassFunction(' ', '', '', ' '))
+        const errors = validator.validateSync(new ClassFunction(' ', '', '', '', ' '))
 
         expect(errors.length).to.equal(3)
         expectValidationError(errors, ValidationErrors.FIRST_LINE_REQUIRED)
@@ -108,7 +113,7 @@ describe('Address/CorrespondenceAddress', () => {
       })
 
       it('should reject address with first line longer then upper limit', () => {
-        const errors = validator.validateSync(new ClassFunction(generateString(exceededAddressLength), '', 'town', 'SA1'))
+        const errors = validator.validateSync(new ClassFunction(generateString(exceededAddressLength), '', '', 'town', 'SA1'))
 
         expect(errors.length).to.equal(1)
         expectValidationError(
@@ -117,7 +122,7 @@ describe('Address/CorrespondenceAddress', () => {
       })
 
       it('should reject address with second line longer then upper limit', () => {
-        const errors = validator.validateSync(new ClassFunction('Apartment 99', generateString(exceededAddressLength), 'town', 'SA1'))
+        const errors = validator.validateSync(new ClassFunction('Apartment 99', generateString(exceededAddressLength), '', 'town', 'SA1'))
 
         expect(errors.length).to.equal(1)
         expectValidationError(
@@ -125,8 +130,17 @@ describe('Address/CorrespondenceAddress', () => {
         )
       })
 
+      it('should reject address with third line longer then upper limit', () => {
+        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', generateString(exceededAddressLength), 'town', 'SA1'))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(
+          errors, evaluateErrorMsg(ValidationErrors.THIRD_LINE_TOO_LONG, testInput.validationConstants.ADDRESS_MAX_LENGTH)
+        )
+      })
+
       it('should reject address with city longer then upper limit', () => {
-        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', generateString(exceededAddressLength), 'SA1'))
+        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', generateString(exceededAddressLength), 'SA1'))
 
         expect(errors.length).to.equal(1)
         expectValidationError(
@@ -135,7 +149,7 @@ describe('Address/CorrespondenceAddress', () => {
       })
 
       it('should reject address with postcode longer then upper limit', () => {
-        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', 'town', generateString(exceededPostcodeLength)))
+        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', 'town', generateString(exceededPostcodeLength)))
 
         expect(errors.length).to.equal(1)
         expectValidationError(
@@ -144,9 +158,40 @@ describe('Address/CorrespondenceAddress', () => {
       })
 
       it('should accept valid address', () => {
-        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', 'Town', 'SA1'))
+        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', 'Town', 'SA1'))
 
         expect(errors.length).to.equal(0)
+      })
+
+      context('address list is not visible and address inputs are not visible', () => {
+        it('should reject when postcode fields are not populated', () => {
+          const address = new ClassFunction()
+          address.addressVisible = false
+          address.addressSelectorVisible = false
+          const errors = validator.validateSync(address)
+
+          expect(errors.length).to.equal(1)
+        })
+      })
+
+      context('address list is visible but none selected', () => {
+        it('should reject when address is not selected', () => {
+          const address = new ClassFunction()
+          address.addressVisible = false
+          address.addressSelectorVisible = true
+          const errors = validator.validateSync(address)
+          expect(errors.length).to.equal(1)
+        })
+      })
+
+      context('address list is visible and address selected', () => {
+        it('should accept when address is provided', () => {
+          const address = new ClassFunction('line1', '', '', 'city', 'postcode')
+          address.addressVisible = true
+          address.addressSelectorVisible = true
+          const errors = validator.validateSync(address)
+          expect(errors.length).to.equal(0)
+        })
       })
     })
   })
