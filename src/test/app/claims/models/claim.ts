@@ -74,14 +74,7 @@ describe('Claim', () => {
     it('should return valid Offer object when defendant made an offer', () => {
       claim.settlement = new Settlement().deserialize({
         partyStatements: [
-          {
-            type: StatementType.OFFER.value,
-            madeBy: MadeBy.DEFENDANT.value,
-            offer: {
-              content: 'bla',
-              completionDate: '2019-10-10'
-            }
-          }
+          new PartyStatement(StatementType.OFFER.value, MadeBy.DEFENDANT.value, new Offer('aa', moment()))
         ]
       })
       expect(claim.defendantOffer).to.be.instanceof(Offer)
