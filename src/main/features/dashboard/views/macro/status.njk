@@ -8,10 +8,10 @@
     {{ t('The claimant has rejected your offer to settle out of court.' ) }}
   {% elseif claim.status === ClaimStatus.OFFER_REJECTED_BY_DEFENDENT %}
     {{ t('You’ve rejected an offer to settle out of court' ) }}
-  {% elseif claim.status === ClaimStatus.OFFER_ACCEPTED_BY_DEFENDENT %}
-    {{ t('You’ve accepted the offer from the claimant') }}
+  {% elseif claim.status === ClaimStatus.OFFER_ACCEPTED_BY_DEFENDANT %}
+    {{ t('You’ve accepted the offer from the claimant. The claimant must sign it before the offer is agreed') }}
   {% elseif claim.status === ClaimStatus.OFFER_ACCEPTED_BY_CLAIMANT %}
-    {{ t('The claimant has accepted your offer to settle out of court.') }}
+    {{ t('The claimant has accepted your offer to settle out of court. You must sign the agreement before it is legally binding') }}
   {% elseif claim.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
     {{ t('You did not respond by the deadline. {{ claimantName }} can request a County Court Judgment (CCJ) against you. You can still respond until they do.',
     { claimantName: claim.claimData.claimant.name } ) }}
@@ -52,9 +52,9 @@
   {% elseif claim.status === ClaimStatus.OFFER_REJECTED_BY_DEFENDENT %}
     {{ t('The defendant has rejected your offer to settle out of court.') }}
   {% elseif claim.status === ClaimStatus.OFFER_ACCEPTED_BY_DEFENDENT %}
-    {{ t('The defendant has accepted your offer') }}
+    {{ t('The defendant has accepted your offer to settle out of court. You must sign the agreement before it is legally binding') }}
   {% elseif claim.status === ClaimStatus.OFFER_ACCEPTED_BY_CLAIMANT %}
-    {{ t('You’ve accepted the defendants offer to settle out of court.') }}
+    {{ t('You’ve accepted the defendants offer to settle out of court. The defendant must sign it before the offer is agreed') }}
   {% elseif claim.status === ClaimStatus.FREE_MEDIATION %}
     {{ t('{{ defendantName }} has rejected the claim. They’ve suggested free mediation on {{ respondedAt }}. You can accept or reject',
     { defendantName: claim.response.defendant.name, respondedAt: claim.respondedAt | date }) }}
