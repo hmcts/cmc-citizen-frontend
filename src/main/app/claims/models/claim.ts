@@ -101,13 +101,14 @@ export class Claim {
       return ClaimStatus.CCJ_REQUESTED
     } else if (this.isSettlementReached()) {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
-
     } else if (this.isOfferRejectedBy(MadeBy.CLAIMANT)) {
       return ClaimStatus.OFFER_REJECTED_BY_CLAIMANT
-
     } else if (this.isOfferRejectedBy(MadeBy.DEFENDANT)) {
       return ClaimStatus.OFFER_REJECTED_BY_DEFENDANT
-
+    } else if (this.isOfferAcceptedBy(MadeBy.CLAIMANT)) {
+      return ClaimStatus.OFFER_ACCEPTED_BY_CLAIMANT
+    } else if (this.isOfferAcceptedBy(MadeBy.DEFENDANT)) {
+      return ClaimStatus.OFFER_ACCEPTED_BY_DEFENDANT
     } else if (this.isOfferSubmitted()) {
       return ClaimStatus.OFFER_SUBMITTED
     } else if (this.eligibleForCCJ) {

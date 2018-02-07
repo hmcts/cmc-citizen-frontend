@@ -6,7 +6,9 @@
     {{ t('You have signed the agreement. The claim is now settled.') }}
   {% elseif claim.status === ClaimStatus.OFFER_REJECTED_BY_CLAIMANT %}
     {{ t('The claimant has rejected your offer to settle out of court.' ) }}
-      {% elseif claim.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
+  {% elseif claim.status === ClaimStatus.OFFER_REJECTED_BY_DEFENDENT %}
+    {{ t('You’ve rejected an offer to settle out of court' ) }}
+  {% elseif claim.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
     {{ t('You did not respond by the deadline. {{ claimantName }} can request a County Court Judgment (CCJ) against you. You can still respond until they do.',
     { claimantName: claim.claimData.claimant.name } ) }}
   {% elseif claim.status === ClaimStatus.CCJ_REQUESTED %}
@@ -40,7 +42,9 @@
   {% elseif claim.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
     {{ t('The defendant has not responded to your claim. You can request a County Court Judgment (CCJ) to get what’s owed.') }}
   {% elseif claim.status === ClaimStatus.OFFER_REJECTED_BY_CLAIMANT %}
-    {{ t('You’ve rejected an offer to settle out of court' ) }}
+    {{ t('You’ve rejected an offer to settle out of court') }}
+  {% elseif claim.status === ClaimStatus.OFFER_REJECTED_BY_DEFENDENT %}
+    {{ t('The defendant has rejected your offer to settle out of court.') }}
   {% elseif claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
     {{ t('You have signed the agreement. The claim is now settled.') }}
   {% elseif claim.status === ClaimStatus.FREE_MEDIATION %}
