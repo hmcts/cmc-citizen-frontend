@@ -12,6 +12,7 @@ import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { individual } from '../../../data/entity/party'
 import { DefenceType } from 'claims/models/response/fullDefenceResponse'
 import { Individual } from 'claims/models/details/yours/individual'
+import { PartyStatement } from 'claims/models/partyStatement'
 
 describe('Claim', () => {
 
@@ -133,6 +134,14 @@ describe('Claim', () => {
           claim.responseDeadline = moment().add(2, 'days')
         }
         claim.settlement = new Settlement()
+        claim.settlement = {
+          partyStatements: [{
+            type: StatementType.OFFER.value,
+            madeBy: MadeBy.DEFENDANT.value,
+            offer: { content: 'offer text', completionDate: '2017-08-08' }
+          } as PartyStatement
+          ]
+        } as Settlement
         claim.response = {
           responseType: ResponseType.FULL_DEFENCE,
           defenceType: DefenceType.DISPUTE,
