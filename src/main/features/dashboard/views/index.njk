@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import submitButton, errorSummary %}
-{% from "responseStatus.njk" import responseStatusForDefendant, responseStatusForClaimant %}
+{% from "./macro/responseStatus.njk" import responseStatusForDefendant, responseStatusForClaimant %}
 {% from "support.njk" import supportWidget %}
 
 {% set title = 'Money claim' %}
