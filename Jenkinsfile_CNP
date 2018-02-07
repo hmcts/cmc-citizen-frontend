@@ -1,14 +1,19 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@smokey")
 
-def product = "cmc"
-def component = "citizen-frontend"
+String product = "cmc"
+String component = "citizen-frontend"
 
 withPipeline("nodejs", product, component) {
   after('build') {
     sh 'yarn setup'
   }
 
-  enableSlackNotifications('#cmc-tech-cnp')
+  before('smoketest:aat') {
+    env.IDAM_URL = 'http://betaDevBccidamAppLB.reform.hmcts.net'
+    env.CITIZEN_APP_URL = env.TEST_URL
+  }
+
+  enableSlackNotifications('@timj')
 }
