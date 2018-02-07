@@ -13,6 +13,6 @@ trap shutdownDocker INT TERM QUIT EXIT
 
 #docker-compose -f ${ADDTIONAL_COMPOSE_FILE} pull
 docker-compose -f ${ADDTIONAL_COMPOSE_FILE} up --no-color -d remote-webdriver
-docker-compose -f ${ADDTIONAL_COMPOSE_FILE} run integration-tests test --grep "@citizen-smoke-test"
+docker-compose -f ${ADDTIONAL_COMPOSE_FILE} run integration-tests test --grep '"@citizen-smoke-test"'
 docker-compose -f ${ADDTIONAL_COMPOSE_FILE} down
 
