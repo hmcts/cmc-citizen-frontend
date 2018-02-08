@@ -42,7 +42,7 @@ export const sampleClaimDraftObj = {
     claimValue: ClaimValue.UNDER_10000,
     eighteenOrOver: YesNoOption.YES,
     singleClaimant: YesNoOption.YES,
-    singleDefendant: YesNoOption.YES,
+    validDefendant: YesNoOption.YES,
     governmentDepartment: YesNoOption.NO,
     helpWithFees: YesNoOption.NO,
     claimIsForTenancyDeposit: YesNoOption.NO

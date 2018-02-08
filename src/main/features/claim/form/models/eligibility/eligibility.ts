@@ -3,6 +3,7 @@ import { IsIn } from 'class-validator'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
+import { ValidDefendant } from 'claim/form/models/eligibility/validDefendant'
 
 export class Eligibility {
 
@@ -21,11 +22,11 @@ export class Eligibility {
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.OVER_18] })
   eighteenOrOver?: YesNoOption
 
-  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.SINGLE_CLAIMANT] })
+  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.SINGLE_DEFENDANT] })
   singleClaimant?: YesNoOption
 
-  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.SINGLE_DEFENDANT] })
-  singleDefendant?: YesNoOption
+  @IsIn(ValidDefendant.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.VALID_DEFENDANT] })
+  validDefendant?: ValidDefendant
 
   @IsIn(YesNoOption.all(), {
     message: ValidationErrors.YES_NO_REQUIRED,
@@ -47,7 +48,7 @@ export class Eligibility {
                defendantAddress?: YesNoOption,
                claimValue?: ClaimValue,
                singleClaimant?: YesNoOption,
-               singleDefendant?: YesNoOption,
+               validDefendant?: ValidDefendant,
                eighteenOrOver?: YesNoOption,
                governmentDepartment?: YesNoOption,
                helpWithFees?: YesNoOption,
@@ -57,7 +58,7 @@ export class Eligibility {
     this.defendantAddress = defendantAddress
     this.claimValue = claimValue
     this.singleClaimant = singleClaimant
-    this.singleDefendant = singleDefendant
+    this.validDefendant = validDefendant
     this.eighteenOrOver = eighteenOrOver
     this.governmentDepartment = governmentDepartment
     this.helpWithFees = helpWithFees
@@ -71,7 +72,7 @@ export class Eligibility {
       YesNoOption.fromObject(input.defendantAddress),
       ClaimValue.fromObject(input.claimValue),
       YesNoOption.fromObject(input.singleClaimant),
-      YesNoOption.fromObject(input.singleDefendant),
+      ValidDefendant.fromObject(input.validDefendant),
       YesNoOption.fromObject(input.eighteenOrOver),
       YesNoOption.fromObject(input.governmentDepartment),
       YesNoOption.fromObject(input.helpWithFees),
@@ -96,8 +97,8 @@ export class Eligibility {
       if (input.singleClaimant) {
         this.singleClaimant = YesNoOption.fromObject(input.singleClaimant.option)
       }
-      if (input.singleDefendant) {
-        this.singleDefendant = YesNoOption.fromObject(input.singleDefendant.option)
+      if (input.validDefendant) {
+        this.validDefendant = ValidDefendant.fromObject(input.validDefendant.option)
       }
       if (input.eighteenOrOver) {
         this.eighteenOrOver = YesNoOption.fromObject(input.eighteenOrOver.option)
@@ -122,7 +123,7 @@ export class Eligibility {
       this.defendantAddress === YesNoOption.YES &&
       this.claimValue === ClaimValue.UNDER_10000 &&
       this.singleClaimant === YesNoOption.YES &&
-      this.singleDefendant === YesNoOption.YES &&
+      this.validDefendant === ValidDefendant.PERSONAL_CLAIM &&
       this.eighteenOrOver === YesNoOption.YES &&
       this.governmentDepartment === YesNoOption.NO &&
       this.helpWithFees === YesNoOption.NO &&

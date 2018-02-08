@@ -1,0 +1,54 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
+
+{% set title = t('Valid Defendant | Money claim') %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ t('Who are you making the claim for?') }}</h1>
+
+      {% set name = 'validDefendant' %}
+
+      <form novalidate method="post" class="analytics-submit-event-trigger"
+            data-event-action="Eligibility: Valid Defendant"
+            data-event-label-from="{{ name }}">
+        {{ csrfProtection(csrf) }}
+
+        {{
+        radioGroup(
+        form = form,
+        label = 'Who are you making the claim for?',
+        labelForScreenReadersOnly = true,
+        name = name,
+        options = [
+        {
+          bold: false,
+          label: ValidDefendant.PERSONAL_CLAIM.displayValue,
+          value: ValidDefendant.PERSONAL_CLAIM.option,
+          checked: form.valueFor(name) === ValidDefendant.PERSONAL_CLAIM
+        },
+        {
+          bold: false,
+          label: ValidDefendant.MULTIPLE_CLAIM.displayValue,
+          value: ValidDefendant.MULTIPLE_CLAIM.option,
+          checked: form.valueFor(name) === ValidDefendant.MULTIPLE_CLAIM
+        },
+        {
+          bold: false,
+          label: ValidDefendant.REPRESENTATIVE_CLAIM.displayValue,
+          value: ValidDefendant.REPRESENTATIVE_CLAIM.option,
+          checked: form.valueFor(name) === ValidDefendant.REPRESENTATIVE_CLAIM
+        }
+        ]
+        )
+        }}
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

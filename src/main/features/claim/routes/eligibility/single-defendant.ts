@@ -36,13 +36,13 @@ export default express.Router()
         const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
 
-        draft.document.eligibility.singleDefendant = form.model.singleDefendant
+        draft.document.eligibility.singleClaimant = form.model.singleClaimant
         await new DraftService().save(draft, user.bearerToken)
 
-        if (draft.document.eligibility.singleDefendant === YesNoOption.NO) {
-          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_DEFENDANTS}`)
+        if (draft.document.eligibility.singleClaimant === YesNoOption.NO) {
+          res.redirect(Paths.eligibilityGovernmentDepartmentPage.uri)
         } else {
-          res.redirect(Paths.eligibilityOver18Page.uri)
+          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`)
         }
       }
     })

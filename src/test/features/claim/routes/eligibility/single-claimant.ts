@@ -32,7 +32,7 @@ describe('Claim eligibility: single claimant page', () => {
       await request(app)
         .get(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Are you the only person or business making the claim?'))
+        .expect(res => expect(res).to.be.successful.withText('Is this claim against more than one person or organisation?'))
     })
   })
 
