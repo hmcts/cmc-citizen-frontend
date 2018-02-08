@@ -1,0 +1,13 @@
+{% macro expandableSection(label = '', content = '', limit = 400) %}
+  <div class="show-more">
+    <div class="bold-small">{{ t(label) }}</div>
+    {% if content.length > limit %}
+      <input id="more-less" type="checkbox">
+    {% endif %}
+    <p class="form-group-compound">{{ content }}</p>
+    {% if content.length > limit %}
+      <label class="link more" for="more-less">{{ t('Show more') }}</label>
+      <label class="link less" for="more-less">{{ t('Show less') }}</label>
+    {% endif %}
+  </div>
+{% endmacro %}

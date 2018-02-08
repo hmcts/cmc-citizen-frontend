@@ -17,4 +17,3 @@ export default express.Router()
         response: claim.response
       })
     }))
-
