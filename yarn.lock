@@ -46,9 +46,9 @@
     on-finished "^2.3.0"
     uuid "^3.1.0"
 
-"@hmcts/postcodeinfo-client@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/postcodeinfo-client/-/postcodeinfo-client-1.0.0.tgz#398447fdf3f2c6ba01370bf9fdac86398355841e"
+"@hmcts/postcodeinfo-client@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@hmcts/postcodeinfo-client/-/postcodeinfo-client-1.1.0.tgz#d830d6e23511bc3e76df1e7509762c2a9b85dd65"
   dependencies:
     request "^2.83.0"
     request-promise-native "^1.0.5"

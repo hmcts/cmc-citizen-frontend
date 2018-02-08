@@ -22,6 +22,7 @@ import { hasTokenExpired } from 'idam/authorizationMiddleware'
 import { DraftService } from 'services/draftService'
 import { Logger } from '@hmcts/nodejs-logging'
 import { OAuthHelper } from 'idam/oAuthHelper'
+import { FeatureToggles } from 'utils/featureToggles'
 
 const logger = Logger.getLogger('router/receiver')
 const sessionCookie = config.get<string>('session.cookieName')
@@ -110,14 +111,15 @@ function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
   cookies.set(stateCookieName, '', { sameSite: 'lax' })
 }
 
-async function linkDefendantWithClaimByLetterHolderId (letterHolderId, user): Promise<Claim> {
+async function linkDefendantWithClaimByLetterHolderId (letterHolderId, user): Promise<Claim | void> {
   if (user.isInRoles(`letter-${letterHolderId}`)) {
     const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(letterHolderId, user.bearerToken)
     logger.debug(`Linking user ${user.id} to claim ${claim.id}`)
 
     if (!claim.defendantId) {
-      return ClaimStoreClient.linkDefendant(claim.externalId, user)
+      return ClaimStoreClient.linkDefendantV1(claim.externalId, user)
     }
+    return Promise.resolve()
   }
 
   return Promise.reject(new Error('This claim cannot be linked'))
@@ -150,13 +152,19 @@ export default express.Router()
           cookies.set(stateCookieName, req.query.state, { sameSite: 'lax' })
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
-          Promise.all(user.getLetterHolderIdList().map(
+          if (FeatureToggles.isEnabled('ccd')) {
+            await ClaimStoreClient.linkDefendant(user)
+            res.redirect(await retrieveRedirectForLandingPage(user))
+          } else {
+            Promise.all(user.getLetterHolderIdList().map(
             (letterHolderId) => linkDefendantWithClaimByLetterHolderId(letterHolderId, user)
             )
           )
-            .then(async () => res.redirect(await retrieveRedirectForLandingPage(res.locals.user)))
-            .catch(async () => res.redirect(await retrieveRedirectForLandingPage(res.locals.user)))
+            .then(async () => res.redirect(await retrieveRedirectForLandingPage(user)))
+            .catch(async () => res.redirect(await retrieveRedirectForLandingPage(user)))
             .catch(next)
+          }
+
         }
       } else {
         res.redirect(OAuthHelper.forLogin(req, res))

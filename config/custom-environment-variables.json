@@ -75,7 +75,8 @@
     "partialAdmission": "FEATURE_PARTIAL_ADMISSION",
     "offer": "FEATURE_OFFER",
     "statementOfMeans": "FEATURE_STATEMENT_OF_MEANS",
-    "finePrint": "FEATURE_FINE_PRINT"
+    "finePrint": "FEATURE_FINE_PRINT",
+    "ccd": "FEATURE_CCD"
   },
   "oauth": {
     "clientId": "OAUTH_CLIENT_ID",
