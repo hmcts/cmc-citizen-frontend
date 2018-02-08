@@ -6,6 +6,8 @@ import { CompletableTask } from 'app/models/task'
 import { Address as ClaimAddress } from 'claims/models/address'
 import * as toBoolean from 'to-boolean'
 import { ExtraFormFieldsArePopulated } from 'forms/validation/validators/extraFormFieldsArePopulated'
+import { IsCountrySupported } from 'forms/validation/validators/isCountrySupported'
+import { Country } from 'app/common/country'
 
 export class ValidationErrors {
   static readonly FIRST_LINE_REQUIRED: string = 'Enter first address line'
@@ -20,6 +22,9 @@ export class ValidationErrors {
   static readonly POSTCODE_REQUIRED: string = 'Enter postcode'
   static readonly POSTCODE_NOT_VALID: string = 'The postcode must be no longer than $constraint1 characters'
   static readonly ADDRESS_DROPDOWN_REQUIRED: string = 'Select an address'
+  static readonly CLAIMANT_COUNTRY_NOT_SUPPORTED = 'The country must be England, Wales, Scotland or Northern Ireland'
+  static readonly DEFENDANT_COUNTRY_NOT_SUPPORTED = 'The country must be England or Wales'
+
 }
 
 export class ValidationConstants {
@@ -64,6 +69,8 @@ export class Address implements CompletableTask {
   @ValidateIf(o => o.addressVisible, { groups: ['claimant', 'defendant', 'response'] })
   @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
+  @IsCountrySupported(Country.all(), { message: ValidationErrors.CLAIMANT_COUNTRY_NOT_SUPPORTED, groups: ['claimant'] })
+  @IsCountrySupported(Country.defendantCountries(), { message: ValidationErrors.DEFENDANT_COUNTRY_NOT_SUPPORTED, groups: ['defendant'] })
   @MaxLength(ValidationConstants.POSTCODE_MAX_LENGTH, {
     message: ValidationErrors.POSTCODE_NOT_VALID,
     groups: ['claimant', 'defendant', 'response']
