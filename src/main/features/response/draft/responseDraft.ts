@@ -88,7 +88,6 @@ export class ResponseDraft extends DraftDocument {
 
     return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim !== undefined
       && RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).includes(this.rejectAllOfClaim.option)
-      && this.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE
   }
 
   public isResponseFullyAdmitted (): boolean {
@@ -114,22 +113,29 @@ export class ResponseDraft extends DraftDocument {
       && this.rejectPartOfClaim.option === option
   }
 
-  public requirePartialAdmitHandOff (): boolean {
-    if (this.isResponsePopulated() && this.response.type === ResponseType.PART_ADMISSION) {
-      return false
-    }
-  }
-
   public requireMediation (): boolean {
     return this.isResponsePopulated() && (this.isResponseRejectedFully() || this.isResponseRejectedPartially())
   }
 
-  public requireWhenDidYouPay (): boolean {
-    return this.isResponsePopulated() && (this.isResponseRejectedFullyWithAmountClaimed())
+  public isResponseRejectedFullyWithDisputeAmountClaimedPaid (): boolean {
+    if (!this.isResponsePopulated()) {
+      return false
+    }
+
+    return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim
+      && this.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE ||
+      (this.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID &&
+        this.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.AMOUNT_CLAIMED)
   }
 
-  public requireSubmission (): boolean {
-    return this.isResponsePopulated() && this.isSubmission()
+  public isResponseRejectedFullyWithAmountClaimedPaid (): boolean {
+    if (!this.isResponsePopulated()) {
+      return false
+    }
+
+    return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim && this.howMuchPaidClaimant &&
+      (this.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID &&
+        this.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.AMOUNT_CLAIMED)
   }
 
   private isResponsePopulated (): boolean {
@@ -146,18 +152,5 @@ export class ResponseDraft extends DraftDocument {
     return this.response.type === ResponseType.PART_ADMISSION && this.rejectPartOfClaim &&
       (this.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED ||
         this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
-  }
-
-  private isResponseRejectedFullyWithAmountClaimed (): boolean {
-    return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim && this.howMuchPaidClaimant &&
-      (this.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID &&
-        this.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.AMOUNT_CLAIMED)
-  }
-
-  private isSubmission (): boolean {
-    return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim
-      && this.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE ||
-        (this.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID &&
-        this.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.AMOUNT_CLAIMED)
   }
 }

@@ -13,7 +13,7 @@
       <div class="panel-indent">
         <div class="panel panel-border-wide">
           <p>{{ t('You must email your response by ') }}
-            <span class="bold">{{ t('%s', { postProcess: 'sprintf', sprintf: [claim.responseDeadline | date]}) }}</span>
+            <span class="bold">{{ t('{{ responseDeadline }}', { responseDeadline: claim.responseDeadline | date }) }}</span>
           </p>
         </div>
       </div>
@@ -35,14 +35,14 @@
             <table>
               <thead>
               <tr>
-                <th scope="col">Claim amount</th>
-                <th scope="col">Fee</th>
+                <th scope="col">{{ t('Claim amount')}}</th>
+                <th scope="col">{{ t('Fee')}}</th>
               </tr>
               </thead>
-              {% for row in rows %}
+              {% for fee in fees %}
                 <tr>
-                  <td>{{ row.from | pennies2pounds | numeral }} to {{ row.to | pennies2pounds | numeral }}</td>
-                  <td>{{ row.fees[1] | pennies2pounds | numeral }}</td>
+                  <td>{{ fee.from | pennies2pounds | numeral }} to {{ fee.to | pennies2pounds | numeral }}</td>
+                  <td>{{ fee.fees[0] | pennies2pounds | numeral }}</td>
                 </tr>
               {% endfor %}
             </table>
@@ -56,36 +56,39 @@
         <li>
 
           {% if draft.response.type === ResponseType.FULL_ADMISSION %}
-            {{ t('Open <a href="%s" target="_blank">admission form N9A</a> ' + newWindow() + ' and complete using:',
-            { postProcess: 'sprintf', sprintf: [asset_paths["pdf"] + '/OCON9A.pdf']}) | safe }}
+            {{ t('Open <a href="{{ ocon9A }}" target="_blank">admission form N9A</a> ' + newWindow() + ' and complete using:',
+            { ocon9A: [asset_paths["pdf"] + '/OCON9A.pdf']}) | safe }}
           {% endif %}
 
           {% if draft.response.type === ResponseType.PART_ADMISSION %}
-            {{ t('Complete both <a href="%s" target="_blank">admission form N9A</a> and <a href="%s" target="_blank">defence and counterclaim N9B</a> ' + newWindow() + ' using:',
-            { postProcess: 'sprintf', sprintf: [asset_paths["pdf"] + '/OCON9A.pdf', asset_paths["pdf"] + '/OCON9B.pdf']}) | safe }}
+            {{ t('Complete both <a href="{{ ocon9A }}" target="_blank">admission form N9A</a> and <a href="{{ ocon9B }}" target="_blank">defence and counterclaim N9B</a> ' + newWindow() + ' using:',
+            { ocon9A: asset_paths["pdf"] + '/OCON9A.pdf', ocon9B: asset_paths["pdf"] + '/OCON9B.pdf'}) | safe }}
           {% endif %}
 
           {% if draft.response.type === ResponseType.DEFENCE %}
             {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
-              {{ t('Complete both <a href="%s" target="_blank">defence and counterclaim form N9B</a> ' + newWindow() + ' using:',
-              { postProcess: 'sprintf', sprintf: [asset_paths["pdf"] + '/OCON9B.pdf']}) | safe }}
+              {{ t('Complete both <a href="{{ ocon9B }}" target="_blank">defence and counterclaim form N9B</a> ' + newWindow() + ' using:',
+              { ocon9B: [asset_paths["pdf"] + '/OCON9B.pdf']}) | safe }}
 
             {% elseif draft.howMuchPaidClaimant.option === 'lessThanClaimed' %}
-              {{ t('Complete both <a href="%s" target="_blank">admission form N9A</a> and <a href="%s" target="_blank">defence and counterclaim N9B</a> ' + newWindow() + ' using:',
-              { postProcess: 'sprintf', sprintf: [asset_paths["pdf"] + '/OCON9A.pdf', asset_paths["pdf"] + '/OCON9B.pdf']}) | safe }}
+              {{ t('Complete both <a href="{{ ocon9A }}" target="_blank">admission form N9A</a> and <a href="{{ ocon9B }}" target="_blank">defence and counterclaim N9B</a> ' + newWindow() + ' using:',
+              { ocon9A: asset_paths["pdf"] + '/OCON9A.pdf', ocon9B: asset_paths["pdf"] + '/OCON9B.pdf'}) | safe }}
               {% endif %}
           {% endif %}
 
 
           <ul class="list list-bullet">
-            <li>{{ t('Claim No.') }} {{ claim.claimNumber }}</li>
-            <li>{{ t('Claimant') }} {{ claim.claimData.claimant.name }}</li>
-            <li>{{ t('Defendant') }} {{ draft.defendantDetails.partyDetails.name }}</li>
+              <li>{{ t('Claim No.{{ claimNumber }}', { claimNumber: claim.claimNumber }) }}</li>
+              <li>{{ t('Claimant {{ claimantName }}', { claimantName: claim.claimData.claimant.name}) }}</li>
+              <li>{{ t('Defendant {{ defendantName }}', { defendantName: draft.defendantDetails.partyDetails.name}) }}</li>
           </ul>
         </li>
         <li>{{ t('Save the completed form to your device') }}</li>
-        <li>{{ t('Email the forms to') }} <a
-            href="mailto:{{ supportEmailAddress }}?Subject={{ claim.claimNumber }}">{{ supportEmailAddress }}</a></li>
+        <li>
+        {{ t('Email the forms to '
+        +'<a href="mailto:{{ supportEmailAddress }}?Subject={{ claimNumber }}">{{ supportEmailAddress }}</a>"',
+        { supportEmailAddress: supportEmailAddress , claimNumber: claim.claimNumber }) | safe }}
+        </li>
       </ul>
 
       {{ supportWidget() }}
@@ -96,4 +99,3 @@
   </div>
 
 {% endblock %}
-

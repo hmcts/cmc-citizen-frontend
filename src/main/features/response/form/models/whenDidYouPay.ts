@@ -4,11 +4,11 @@ import { LocalDate } from 'forms/models/localDate'
 import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 import { IsValidYearFormat } from 'app/forms/validation/validators/isValidYearFormat'
 import { MomentFactory } from 'common/momentFactory'
-import { MomentFormatter } from 'app/utils/momentFormatter'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
+import { Moment } from 'moment'
 
-const currentDate = MomentFormatter.formatLongDate(MomentFactory.currentDate())
+const currentDate: Moment = MomentFactory.currentDate()
 
 export class ValidationErrors {
   static readonly EXPLANATION_REQUIRED: string = 'Explain how did you pay the amount claimed'

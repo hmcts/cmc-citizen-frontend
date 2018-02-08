@@ -62,7 +62,7 @@ export class TaskListBuilder {
       )
     }
 
-    if (draft.requirePartialAdmitHandOff()) {
+    if (draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)) {
       tasks.push(
         new TaskListItem(
           'How much have you paid the claimant?',
@@ -82,7 +82,7 @@ export class TaskListBuilder {
       )
     }
 
-    if (draft.requireWhenDidYouPay()) {
+    if (draft.isResponseRejectedFullyWithAmountClaimedPaid()) {
       tasks.push(
         new TaskListItem(
           'When did you pay?',
@@ -117,7 +117,7 @@ export class TaskListBuilder {
 
   static buildSubmitSection (draft: ResponseDraft, externalId: string): TaskList {
     const tasks: TaskListItem[] = []
-    if (draft.requireSubmission()) {
+    if (draft.isResponseRejectedFullyWithDisputeAmountClaimedPaid()) {
       tasks.push(
         new TaskListItem(
           'Check and submit your response',

@@ -70,7 +70,7 @@ describe('Defendant response task list builder', () => {
         }
         const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('How much have you paid the claimant?')
+        expect(taskList.tasks.map(task => task.name)).to.contain('How much have you paid the claimant?')
       })
 
       it('should be disabled in remaining cases', () => {
@@ -82,18 +82,18 @@ describe('Defendant response task list builder', () => {
     })
 
     describe('"When did you pay" task', () => {
-      let requireWhenDidYouPayStub: sinon.SinonStub
+      let isResponseRejectedFullyWithAmountClaimedPaidStub: sinon.SinonStub
 
       beforeEach(() => {
-        requireWhenDidYouPayStub = sinon.stub(ResponseDraft.prototype, 'requireWhenDidYouPay')
+        isResponseRejectedFullyWithAmountClaimedPaidStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithAmountClaimedPaid')
       })
 
       afterEach(() => {
-        requireWhenDidYouPayStub.restore()
+        isResponseRejectedFullyWithAmountClaimedPaidStub.restore()
       })
 
       it('should be enabled when claim is fully rejected due to amount being paid and claimed', () => {
-        requireWhenDidYouPayStub.returns(true)
+        isResponseRejectedFullyWithAmountClaimedPaidStub.returns(true)
 
         const input = {
           whenDidYouPay: {
@@ -107,7 +107,7 @@ describe('Defendant response task list builder', () => {
       })
 
       it('should be disabled in remaining cases', () => {
-        requireWhenDidYouPayStub.returns(false)
+        isResponseRejectedFullyWithAmountClaimedPaidStub.returns(false)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('When did you pay?')
@@ -115,18 +115,18 @@ describe('Defendant response task list builder', () => {
     })
 
     describe('"Check and submit your response" task', () => {
-      let requireSubmissionStub: sinon.SinonStub
+      let isResponseRejectedFullyWithDisputeAmountClaimedPaidStub: sinon.SinonStub
 
       beforeEach(() => {
-        requireSubmissionStub = sinon.stub(ResponseDraft.prototype, 'requireSubmission')
+        isResponseRejectedFullyWithDisputeAmountClaimedPaidStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDisputeAmountClaimedPaid')
       })
 
       afterEach(() => {
-        requireSubmissionStub.restore()
+        isResponseRejectedFullyWithDisputeAmountClaimedPaidStub.restore()
       })
 
       it('should be enabled when claim is fully rejected due to amount being paid and claimed', () => {
-        requireSubmissionStub.returns(true)
+        isResponseRejectedFullyWithDisputeAmountClaimedPaidStub.returns(true)
 
         const input = {
           whenDidYouPay: {
@@ -140,7 +140,7 @@ describe('Defendant response task list builder', () => {
       })
 
       it('should undefined remaining cases', () => {
-        requireSubmissionStub.returns(false)
+        isResponseRejectedFullyWithDisputeAmountClaimedPaidStub.returns(false)
 
         const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), '400f4c57-9684-49c0-adb4-4cf46579d6dc')
         expect(taskList).to.be.eq(undefined)

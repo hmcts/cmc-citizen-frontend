@@ -273,13 +273,13 @@ describe('ResponseDraft', () => {
     })
   })
 
-  describe('requireWhenDidYouPay', () => {
+  describe('isResponseRejectedFullyWithAmountClaimedPaid', () => {
 
     it('should return false when no response type set', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = undefined
 
-      expect(draft.requireWhenDidYouPay()).to.be.eq(false)
+      expect(draft.isResponseRejectedFullyWithAmountClaimedPaid()).to.be.eq(false)
     })
 
     it('should return true when response is full admission with already paid and amount claimed', () => {
@@ -288,44 +288,26 @@ describe('ResponseDraft', () => {
       draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.ALREADY_PAID)
       draft.howMuchPaidClaimant = new HowMuchPaidClaimant(HowMuchPaidClaimantOption.AMOUNT_CLAIMED)
 
-      expect(draft.requireWhenDidYouPay()).to.be.eq(true)
+      expect(draft.isResponseRejectedFullyWithAmountClaimedPaid()).to.be.eq(true)
     })
   })
 
-  describe('requireSubmission', () => {
+  describe('isResponseRejectedFullyWithDisputeAmountClaimedPaid', () => {
 
     it('should return false when no response type set', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = undefined
 
-      expect(draft.requireSubmission()).to.be.eq(false)
+      expect(draft.isResponseRejectedFullyWithDisputeAmountClaimedPaid()).to.be.eq(false)
     })
 
-    it('should return true when response is full admission with dispute and already paid and amount claimed', () => {
+    it('should return true when response is rejected with already paid and amount claimed', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.DEFENCE)
-      draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.DISPUTE)
       draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.ALREADY_PAID)
       draft.howMuchPaidClaimant = new HowMuchPaidClaimant(HowMuchPaidClaimantOption.AMOUNT_CLAIMED)
 
-      expect(draft.requireSubmission()).to.be.eq(true)
-    })
-  })
-
-  describe('requirePartialAdmitHandOff', () => {
-
-    it('should return undefined when no response type set', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = undefined
-
-      expect(draft.requirePartialAdmitHandOff()).to.be.eq(undefined)
-    })
-
-    it('should return false when response type set with part admission', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.PART_ADMISSION)
-
-      expect(draft.requirePartialAdmitHandOff()).to.be.eq(false)
+      expect(draft.isResponseRejectedFullyWithDisputeAmountClaimedPaid()).to.be.eq(true)
     })
   })
 
