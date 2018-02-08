@@ -8,6 +8,7 @@ import { ForbiddenError } from '../../errors'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { FeatureToggles } from 'utils/featureToggles'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -83,8 +84,10 @@ export class ClaimStoreClient {
         }
       })
       .then(claim => {
-        if (user.id !== claim.submitterId && user.id !== claim.defendantId) {
-          throw new ForbiddenError()
+        if (!FeatureToggles.isEnabled('ccd')) { // CCD does authorisation checks for us
+          if (user.id !== claim.submitterId && user.id !== claim.defendantId) {
+            throw new ForbiddenError()
+          }
         }
         if (claim) {
           return new Claim().deserialize(claim)
