@@ -60,9 +60,9 @@
               </thead>
               {% for row in rows %}
                 <tr>
-                  <td>{{ row.from | pennies2pounds | numeral }} to {{ row.to | pennies2pounds | numeral }}</td>
-                  <td>{{ row.fees[1] | pennies2pounds | numeral }}</td>
-                  <td>{{ row.fees[2] | pennies2pounds | numeral }}</td>
+                  <td>{{ row.minRange }} to {{ row.maxRange }}</td>
+                  <td>{{ row.fees[1] }}</td>
+                  <td>{{ row.fees[2] }}</td>
                 </tr>
               {% endfor %}
             </table>

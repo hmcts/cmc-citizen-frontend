@@ -2,89 +2,162 @@ import * as config from 'config'
 import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
 
-const serviceBaseURL: string = `${config.get('fees.url')}/range-groups`
+const service: string = (config.get<string>('fees.service'))
+const jurisdiction1 = config.get<string>('fees.jurisdiction1')
+const jurisdiction2 = config.get<string>('fees.jurisdiction2')
+const channel = config.get<string>('fees.channel')
+const issueEvent = config.get<string>('fees.issueFee.event')
+const hearingEvent = config.get<string>('fees.hearingFee.event')
+// const serviceBaseURL: string = `${config.get('fees.url')}/range-groups`
+// const baseFeeRangeUri: string = `${config.get('fees.url')}`
+const baseFeeUri: string = `${config.get('fees.url')}`
 
-const issueFeeCode: string = config.get<string>('fees.issueFee.code')
-const hearingFeeCode: string = config.get<string>('fees.hearingFee.code')
-
-const calculationOutcome = {
-  amount: 2500,
-  fee: {
-    code: 'X0048',
-    description: 'Civil Court fees - Hearing fees - Claim Amount - 0.01 up to 300 GBP',
-    amount: 2500,
-    type: 'fixed'
-  }
+const feeOutcome = {
+  code: 'X0002',
+  description: 'Civil Court fees - Money Claims - Claim Amount - 300.01 up to 500 GBP',
+  version: 1,
+  fee_amount: 50
 }
 
-const rangeGroup = {
-  id: 1,
-  description: 'CMC - Hearing',
-  ranges: [{
-    fee: {
-      code: 'X0048',
-      description: 'Civil Court fees - Hearing fees - Claim Amount - 0.01 up to 300 GBP',
-      amount: 2500,
-      type: 'fixed'
+const feeRange = [
+  {
+    code: 'X0024',
+    fee_type: 'ranged',
+    channel_type: {
+      name: 'online'
     },
-    from: 1,
-    to: 3000
-  }]
-
-}
+    direction_type: {
+      name: 'enhanced'
+    },
+    event_type: {
+      name: 'issue'
+    },
+    jurisdiction1: {
+      name: 'civil'
+    },
+    jurisdiction2: {
+      name: 'county court'
+    },
+    service_type: {
+      name: 'civil money claims'
+    },
+    fee_versions: [
+      {
+        version: 1,
+        description: 'Civil Court fees - Money Claims Online - Claim Amount - 0.01 upto 300 GBP',
+        status: 'approved',
+        flat_amount: {
+          amount: 25
+        },
+        author: 'LOADER',
+        approvedBy: 'LOADER'
+      }
+    ],
+    current_version: {
+      version: 1,
+      description: 'Civil Court fees - Money Claims Online - Claim Amount - 0.01 upto 300 GBP',
+      status: 'approved',
+      flat_amount: {
+        amount: 25
+      },
+      author: 'LOADER',
+      approvedBy: 'LOADER'
+    },
+    min_range: 0,
+    max_range: 300,
+    range_unit: 'GBP',
+    unspecified_claim_amount: false
+  }
+]
 
 export function resolveCalculateIssueFee (): mock.Scope {
-  return resolveCalculateFee(issueFeeCode)
+  return resolveCalculateFee(issueEvent)
 }
 
 export function rejectCalculateIssueFee (reason: string = 'HTTP error'): mock.Scope {
-  return rejectCalculateFee(issueFeeCode, reason)
+  return rejectCalculateFee(issueEvent, reason)
 }
 
 export function resolveCalculateHearingFee (): mock.Scope {
-  return resolveCalculateFee(hearingFeeCode)
+  return resolveCalculateFee(hearingEvent)
 }
 
 export function rejectCalculateHearingFee (reason: string = 'HTTP error'): mock.Scope {
-  return rejectCalculateFee(hearingFeeCode, reason)
+  return rejectCalculateFee(hearingEvent, reason)
 }
 
 export function resolveGetIssueFeeRangeGroup (): mock.Scope {
-  return resolveGetFeeRangeGroup(issueFeeCode)
+  return resolveGetFeeRangeGroup(issueEvent)
 }
 
 export function rejectGetIssueFeeRangeGroup (reason: string = 'HTTP error'): mock.Scope {
-  return rejectGetFeeRangeGroup(issueFeeCode, reason)
+  return rejectGetFeeRangeGroup(issueEvent, reason)
 }
 
 export function resolveGetHearingFeeRangeGroup (): mock.Scope {
-  return resolveGetFeeRangeGroup(hearingFeeCode)
+  return resolveGetFeeRangeGroup(hearingEvent)
 }
 
 export function rejectGetHearingFeeRangeGroup (reason: string = 'HTTP error'): mock.Scope {
-  return rejectGetFeeRangeGroup(hearingFeeCode, reason)
+  return rejectGetFeeRangeGroup(hearingEvent, reason)
 }
 
-export function resolveCalculateFee (code: string): mock.Scope {
-  return mock(serviceBaseURL)
-    .get(new RegExp(`/${code}/calculations\\?value=[0-9]+`))
-    .reply(HttpStatus.OK, calculationOutcome)
+export function resolveCalculateFee (eventType: string): mock.Scope {
+  // const encodedUri: string = encodeURIComponent(`?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&amount_or_volume=${amount}`)
+  return mock(baseFeeUri)
+    .get(`/fees-register/fees/lookup`)
+    .query({
+      service: `${service}`,
+      jurisdiction1: `${jurisdiction1}`,
+      jurisdiction2: `${jurisdiction2}`,
+      channel: `${channel}`,
+      event: `${eventType}`,
+      amount_or_volume: new RegExp(`[\\d]+`)
+    })
+    .reply(HttpStatus.OK, feeOutcome)
 }
 
-export function rejectCalculateFee (code: string, reason: string = 'HTTP error'): mock.Scope {
-  return mock(serviceBaseURL)
-    .get(new RegExp(`/${code}/calculations\\?value=[0-9]+`))
+export function rejectCalculateFee (eventType: string, reason: string = 'HTTP error'): mock.Scope {
+  // const encodedUri: string = encodeURIComponent(`\\?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&amount_or_volume=${amount}`)
+  return mock(baseFeeUri)
+    .get(`/fees-register/fees/lookup`)
+    .query({
+      service: `${service}`,
+      jurisdiction1: `${jurisdiction1}`,
+      jurisdiction2: `${jurisdiction2}`,
+      channel: `${channel}`,
+      event: `${eventType}`,
+      amount_or_volume: new RegExp(`[\\d]+`)
+    })
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-function resolveGetFeeRangeGroup (code: string): mock.Scope {
-  return mock(serviceBaseURL)
-    .get(`/${code}`)
-    .reply(HttpStatus.OK, rangeGroup)
+function resolveGetFeeRangeGroup (eventType: string): mock.Scope {
+  // const encodedUri: string = encodeURIComponent(`?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${issueEvent}&feeVersionStatus=approved`)
+  return mock(baseFeeUri)
+    .get(`/fees-register/fees`)
+    .query({
+      service: `${service}`,
+      jurisdiction1: `${jurisdiction1}`,
+      jurisdiction2: `${jurisdiction2}`,
+      channel: `${channel}`,
+      event: `${eventType}`,
+      feeVersionStatus: `approved`
+    })
+    .reply(HttpStatus.OK, feeRange)
 }
 
-function rejectGetFeeRangeGroup (code: string, reason: string = 'HTTP error'): mock.Scope {
-  return mock(serviceBaseURL)
-    .get(`/${code}`)
+function rejectGetFeeRangeGroup (eventType: string, reason: string = 'HTTP error'): mock.Scope {
+  // const encodeUri: string = encodeURIComponent(`?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${issueEvent}&feeVersionStatus=approved`)
+  return mock(baseFeeUri)
+    .get(`/fees-register/fees`)
+    .query({
+      service: `${service}`,
+      jurisdiction1: `${jurisdiction1}`,
+      jurisdiction2: `${jurisdiction2}`,
+      channel: `${channel}`,
+      event: `${eventType}`,
+      feeVersionStatus: `approved`
+    })
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }

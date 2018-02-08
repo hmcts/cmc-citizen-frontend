@@ -8,7 +8,6 @@ import { PaymentResponse } from 'app/pay/paymentResponse'
 import { Payment } from 'app/pay/payment'
 
 import { FeesClient } from 'app/fees/feesClient'
-import { CalculationOutcome } from 'app/fees/models/calculationOutcome'
 
 import { ClaimStoreClient } from 'app/claims/claimStoreClient'
 import { buildURL } from 'app/utils/callbackBuilder'
@@ -19,6 +18,7 @@ import { ServiceAuthTokenFactoryImpl } from 'common/security/serviceTokenFactory
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Logger } from '@hmcts/nodejs-logging'
+import { FeeOutcome } from 'fees/models/feeOutcome'
 
 const logger = Logger.getLogger('router/pay')
 const issueFeeCode = config.get<string>('fees.issueFee.code')
@@ -93,12 +93,12 @@ export default express.Router()
             return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: draft.document.externalId }))
         }
       }
-      const feeCalculationOutcome: CalculationOutcome = await FeesClient.calculateFee(issueFeeCode, amount)
+      const feeOutcome: FeeOutcome = await FeesClient.calculateFee(issueFeeCode, amount)
       const payClient: PayClient = await getPayClient()
       const payment: PaymentResponse = await payClient.create(
         res.locals.user,
-        feeCalculationOutcome.fee.code,
-        feeCalculationOutcome.amount,
+        feeOutcome.code,
+        feeOutcome.amount,
         getReturnURL(req, draft.document.externalId)
       )
       draft.document.claimant.payment = payment
