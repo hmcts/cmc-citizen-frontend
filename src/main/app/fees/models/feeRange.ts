@@ -20,7 +20,7 @@ export class FeeRange {
     if (overrides === undefined) {
       throw new Error('Overrides object is required')
     }
-    return plainToClass(FeeRange, { min_range: this.minRange, max_range: this.maxRange, current_version: { flat_amount: this.currentVersion.flatAmount, version: this.currentVersion.version, description: this.currentVersion.description, status: this.currentVersion.status }, ...overrides })
+    return plainToClass(FeeRange, { min_range: this.minRange, max_range: this.maxRange, current_version: { flat_amount: { amount : this.currentVersion.flatAmount.amount }, version: this.currentVersion.version, description: this.currentVersion.description, status: this.currentVersion.status }, ...overrides })
   }
 
   getSimplifiedFeeRange (): SimplifiedFeeRange {

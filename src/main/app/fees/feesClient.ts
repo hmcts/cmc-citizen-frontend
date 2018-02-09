@@ -4,6 +4,7 @@ import { plainToClass } from 'class-transformer'
 import { ClaimValidator } from 'app/utils/claimValidator'
 import { FeeOutcome } from 'fees/models/feeOutcome'
 import { FeeRange } from 'fees/models/feeRange'
+import { StringUtils } from 'utils/stringUtils'
 
 const feesUrl = config.get('fees.url')
 const service: string = config.get<string>('fees.service')
@@ -44,6 +45,9 @@ export class FeesClient {
    * @returns {Promise.<FeeOutcome>} promise containing the Fee outcome (including fee amount in GBP)
    */
   static async calculateFee (eventType: string, amount: number): Promise<FeeOutcome> {
+    if (StringUtils.isBlank(eventType)) {
+      throw new Error('Fee eventType is required')
+    }
     ClaimValidator.claimAmount(amount)
     const feeUri: string = `${feesUrl}/fees-register/fees/lookup?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&amount_or_volume=${amount}`
     const fee: object = await request.get(feeUri)
@@ -67,6 +71,9 @@ export class FeesClient {
   }
 
   private static async getRangeGroup (eventType: string): Promise<FeeRange[]> {
+    if (StringUtils.isBlank(eventType)) {
+      throw new Error('Fee eventType is required')
+    }
     const feeUriForRange: string = `${feesUrl}/fees-register/fees?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&feeVersionStatus=approved`
     const range: object[] = await request.get(feeUriForRange)
     return plainToClass(FeeRange, range)
