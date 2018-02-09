@@ -16,7 +16,7 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ClaimPaths.eligibilitySingleClaimantPage.uri
+const pagePath: string = ClaimPaths.eligibilitySingleDefendantPage.uri
 const pageRedirect: string = ClaimPaths.eligibilitySingleDefendantPage.uri
 
 describe('Claim eligibility: single claimant page', () => {

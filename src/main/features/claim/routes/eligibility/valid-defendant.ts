@@ -22,7 +22,7 @@ function renderView (form: Form<Eligibility>, res: express.Response): void {
 export default express.Router()
   .get(Paths.eligibilityValidDefendantPage.uri, (req: express.Request, res: express.Response): void => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
-    console.log(draft.document.eligibility)
+
     renderView(new Form(draft.document.eligibility), res)
   })
   .post(
@@ -48,7 +48,7 @@ export default express.Router()
             res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_DEFENDANTS}`)
             break
           case ValidDefendant.REPRESENTATIVE_CLAIM:
-            res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_VALUE_NOT_KNOWN}`)
+            res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_ON_BEHALF}`)
             break
           default:
             throw new Error(`Unexpected ValidDefendant: ${form.model.validDefendant.option}`)
