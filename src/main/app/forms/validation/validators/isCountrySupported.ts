@@ -25,7 +25,7 @@ export class CheckCountryConstraint implements ValidatorConstraintInterface {
       if (!postcodeInfoResponse.valid) {
         return true
       }
-      const country = postcodeInfoResponse.country
+      const country = postcodeInfoResponse.country.name
       const countries: Country[] = args.constraints[0]
 
       return countries.filter(result => result.name.toLowerCase() === country.toLowerCase()).length > 0
