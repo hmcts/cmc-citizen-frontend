@@ -2,11 +2,10 @@
 import * as chai from 'chai'
 import * as spies from 'sinon-chai'
 import * as path from 'path'
+import { Backend } from 'modules/i18n/backend'
 
 const expect = chai.expect
 chai.use(spies)
-
-import { Backend } from 'modules/i18n/backend'
 
 describe('A gettext backend for i18next', () => {
   let backend
@@ -15,7 +14,7 @@ describe('A gettext backend for i18next', () => {
     backend = new Backend(undefined, undefined)
   })
 
-  it('should read all translations from PO file', function(done) {
+  it('should read all translations from PO file', function (done) {
     this.timeout(6000)
     backend.init(null, {
       loadPath: path.join(__dirname, 'fixtures/translation.po')
