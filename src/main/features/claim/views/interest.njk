@@ -31,7 +31,7 @@
             <div class="multiple-choice" data-target="different-rate">
               <input id="typedifferent" type="radio" name="type"
                      value="different" {% if form.valueFor('type') == 'different' %} checked {% endif %}>
-              <label for="typedifferent">{{ t('a different rate') }}</label>
+              <label for="typedifferent">{{ t('A different rate') }}</label>
             </div>
 
             {% set errorRate = form.errorFor('rate') %}
@@ -43,7 +43,7 @@
               <label class="form-label" for="rate[label]">{{ t('Rate you’re claiming') }}</label>
               {% if errorRate %}<span class="error-message">{{ t(errorRate) }}</span>{% endif %}
               <input class="form-control form-control-1-8 {% if errorRate %} form-control-error{% endif %}" name="rate"
-                     id="rate[label]" value="{{ form.valueFor('rate') | default('') }}"> %
+                     id="rate[label]" value="{{ (form.rawDataFor('rate') if errorRate else form.valueFor('rate')) | default('') }}"> %
 
               <label class="form-label" for="reason[label]">{{ t('Why you’re entitled to this rate') }}</label>
               {% if errorReason %}<span class="error-message">{{ t(errorReason) }}</span>{% endif %}

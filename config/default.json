@@ -78,7 +78,9 @@
     "fullAdmission": false,
     "partialAdmission": false,
     "offer": false,
-    "statementOfMeans": false
+    "statementOfMeans": false,
+    "finePrint": false,
+    "ccd": false
   },
   "oauth": {
     "clientId": "cmc_citizen",

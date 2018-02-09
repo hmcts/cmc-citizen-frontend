@@ -36,6 +36,7 @@ export const sampleClaimDraftObj = {
   readResolveDispute: true,
   readCompletingClaim: true,
   eligibility: {
+    claimOnBehalf: YesNoOption.NO,
     claimantAddress: YesNoOption.YES,
     defendantAddress: YesNoOption.YES,
     claimValue: ClaimValue.UNDER_10000,

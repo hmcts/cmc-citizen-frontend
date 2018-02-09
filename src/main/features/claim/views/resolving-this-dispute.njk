@@ -1,43 +1,48 @@
 {% extends "layout.njk" %}
 
 {% set title = t('Resolving dispute | Money claim') %}
-{% set heading = t('Resolving this dispute') %}
+{% set heading = t('Try to resolve the dispute') %}
 
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
 
 {% block content %}
 
-<div class="grid-row">
-  <div class="column-two-thirds">
-    <p>{{ t('You should try to solve the dispute directly with the party before making a claim by:') }}</p>
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('Before you claim you should:') }}</p>
 
-    <ul class="list-bullet form-group">
-      <li>{{ t('Speaking to them (send an email or letter if you want a record)') }}.</li>
-      <li>{{ t('Telling them what you believe they owe you and why') }}.</li>
-      <li>{{ t('Explaining that if you can’t reach an agreement (such as a timetable for paying the money) you’ll make a legal money claim') }}.</li>
-      <li>{{ t('Telling them that they might have to pay the full amount as well as') }}
-        <a target="_blank" href="http://hmctsformfinder.justice.gov.uk/HMCTS/GetLeaflet.do?court_leaflets_id=264">
-          {{ t('fees and other costs') }}</a>
-        {{ t('if they ‘defend the claim’, and that they could get a <a target="_blank" href="%s"> County Court Judgment (CCJ) </a> registered against them',
-          {
-            postProcess: 'sprintf',
-            sprintf: ['https://www.gov.uk/county-court-judgments-ccj-for-debt']
-          }
-        ) | safe
-        }}</li>
-    </ul>
+      <ul class="list-bullet form-group">
+        <li>{{ t('talk to the person or organisation who owes you') }}</li>
+        <li>{{ t('consider mediation') }}</li>
+      </ul>
 
-    <p class="panel panel-border-wide form-group">
-      {{ t('It might count against you in court if you don’t try to sort out the dispute with the person directly, before you make an official claim') }}.
-    </p>
+      <h2 class="heading-medium">{{ t('Talk to the person or organisation who owes you') }}</h2>
 
-    <form novalidate method="post">
-      {{ csrfProtection(csrf) }}
+      <p>{{ t('Try to resolve the dispute by:') }}</p>
 
-      {{ submitButton('I confirm I’ve read this') }}
-    </form>
+      <ul class="list list-bullet">
+        <li>{{ t('telling them what you believe they owe and why') }}.</li>
+        <li>{{ t('suggesting a timetable for them to pay you back') }}.</li>
+        <li>{{ t('explaining you’ll make a money claim against them if they don’t pay') }}.</li>
+      </ul>
+
+      <h2 class="heading-medium">{{ t('Consider mediation') }}</h2>
+
+      <p>{{ t('Mediation is when an impartial person helps both sides to agree - it can be quicker and cheaper than '
+        + 'making a claim.') }}</p>
+      <p>{{ t('It can often be done on the phone. If you don’t want to speak to the person you’re claiming against, '
+        + 'a mediator can speak to you both separately.') }}</p>
+
+      <p>{{ t('<a href="{{ findMediationServiceUri }}">Find a mediation service</a>',
+        { findMediationServiceUri: 'http://civilmediation.justice.gov.uk/' }) | safe }}</p>
+
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+
+        {{ submitButton('I confirm I’ve read this') }}
+      </form>
+    </div>
   </div>
-</div>
 
 
 {% endblock %}

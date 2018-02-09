@@ -1,0 +1,44 @@
+{% extends "layout.njk" %}
+
+{% set title = t('Resolving dispute | Money claim') %}
+{% set heading = t('Try to resolve the dispute') %}
+
+{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('Before you claim you should:') }}</p>
+
+      <ul class="list-bullet form-group">
+        <li>{{ t('talk to the person or organisation who owes you') }}</li>
+        <li>{{ t('consider mediation') }}</li>
+      </ul>
+
+      <h2 class="heading-medium">{{ t('Talk to the person or organisation who owes you') }}</h2>
+
+      <p>{{ t('Try to resolve the dispute by:') }}</p>
+
+      <ul class="list list-bullet">
+        <li>{{ t('telling them what you believe they owe and why') }}.</li>
+        <li>{{ t('suggesting a timetable for them to pay you back') }}.</li>
+        <li>{{ t('explaining you‘ll make a money claim against them if they don‘t pay') }}.</li>
+      </ul>
+
+      <h2 class="heading-medium">{{ t('Consider mediation') }}</h2>
+
+      <p>{{ t('Mediation is when an impartial person helps both sides to agree - it can be quicker and cheaper than '
+        + 'making a claim.') }}</p>
+      <p>{{ t('It can often be done on the phone. If you don’t want to speak to the person you’re claiming against, '
+        + 'a mediator can speak to you both separately.') }}</p>
+
+      <p>{{ t('<a href="{{ findMediationServiceUri }}">Find a mediation service</a>',
+        { findMediationServiceUri: 'http://civilmediation.justice.gov.uk/' }) | safe }}</p>
+
+      </form>
+    </div>
+  </div>
+
+
+{% endblock %}

@@ -25,9 +25,10 @@ export default express.Router()
   })
   .post(
     Paths.defendantSoleTraderOrSelfEmployedDetailsPage.uri,
-    FormValidator.requestHandler(SoleTraderDetails, SoleTraderDetails.fromObject),
+    FormValidator.requestHandler(SoleTraderDetails, SoleTraderDetails.fromObject, 'defendant'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<SoleTraderDetails> = req.body
+
       if (form.hasErrors()) {
         renderView(form, res)
       } else {

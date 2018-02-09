@@ -16,6 +16,7 @@ export default express.Router()
   .get(Paths.feesPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
     const claimAmount: number = await claimAmountWithInterest(draft.document)
+
     Promise.all(
       [
         FeesClient.calculateIssueFee(claimAmount),
@@ -24,10 +25,7 @@ export default express.Router()
         FeesClient.getHearingFeeRangeGroup()
       ]
     )
-      .then((values: any[]) => {
-        const issueFeeRangeGroup: FeeRange[] = values[2]
-        const hearingFeeRangeGroup: FeeRange[] = values[3]
-
+      .then(([issueFee, hearingFee, issueFeeRangeGroup, hearingFeeRangeGroup]) => {
         const supportedIssueFees: FeeRange[] = issueFeeRangeGroup
           .filter(range => range.minRange < supportedFeeLimitInGBP)
            .map(range => range.copy({ maxRange: Math.min(range.maxRange, supportedFeeLimitInGBP) }))
@@ -37,13 +35,12 @@ export default express.Router()
 
         res.render(Paths.feesPage.associatedView,
           {
-            issueFee: values[0],
-            hearingFee: values[1],
+            issueFee: issueFee,
+            hearingFee: hearingFee,
             rows: FeesTableViewHelper.merge(supportedIssueFees, supportedHearingFees)
           }
         )
-      })
-      .catch(next)
+      }).catch(next)
   })
   .post(Paths.feesPage.uri, (req: express.Request, res: express.Response) => {
     res.redirect(Paths.totalPage.uri)

@@ -209,8 +209,8 @@
       }
 
       var postcodeResponse = JSON.parse(xhr.responseText)
-
       if (!postcodeResponse.valid) {
+
         var ni = isNorthernIrelandPostcode(postcode)
         handlePostcodeError(ni, postcodeLookupWidget)
         return
