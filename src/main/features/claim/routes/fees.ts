@@ -3,7 +3,7 @@ import * as express from 'express'
 import { Paths } from 'claim/paths'
 import { claimAmountWithInterest } from 'app/utils/interestUtils'
 import { FeesClient } from 'fees/feesClient'
-import { FeesTableViewHelper } from 'claim/helpers/feesTableViewHelper'
+import { FeeRange as MergableRange, FeesTableViewHelper } from 'claim/helpers/feesTableViewHelper'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
 import { FeeRange } from 'fees/models/feeRange'
@@ -26,12 +26,12 @@ export default express.Router()
       ]
     )
       .then(([issueFee, hearingFee, issueFeeRangeGroup, hearingFeeRangeGroup]) => {
-        const supportedIssueFees: FeeRange[] = issueFeeRangeGroup
-          .filter(range => range.minRange < supportedFeeLimitInGBP)
-           .map(range => range.copy({ maxRange: Math.min(range.maxRange, supportedFeeLimitInGBP) }))
-        const supportedHearingFees: FeeRange[] = hearingFeeRangeGroup
-          .filter(range => range.minRange < supportedFeeLimitInGBP)
-          .map(range => range.copy({ maxRange: Math.min(range.maxRange, supportedFeeLimitInGBP) }))
+        const supportedIssueFees: MergableRange[] = issueFeeRangeGroup
+          .filter((range: FeeRange) => range.minRange < supportedFeeLimitInGBP)
+           .map((range: FeeRange) => new MergableRange(range.minRange, Math.min(range.maxRange, supportedFeeLimitInGBP), range.currentVersion.flatAmount.amount))
+        const supportedHearingFees: MergableRange[] = hearingFeeRangeGroup
+          .filter((range: FeeRange) => range.minRange < supportedFeeLimitInGBP)
+          .map((range: FeeRange) => new MergableRange(range.minRange, Math.min(range.maxRange, supportedFeeLimitInGBP), range.currentVersion.flatAmount.amount))
 
         res.render(Paths.feesPage.associatedView,
           {
