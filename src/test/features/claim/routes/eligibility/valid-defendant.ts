@@ -13,7 +13,6 @@ import { app } from '../../../../../main/app'
 import * as idamServiceMock from '../../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
-import { YesNoOption } from 'models/yesNoOption'
 import { ValidDefendant } from 'claim/form/models/eligibility/validDefendant'
 
 const cookieName: string = config.get<string>('session.cookieName')
@@ -50,7 +49,7 @@ describe('Claim eligibility: valid defendant page', () => {
         draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
-          .post(ClaimPaths.eligibilityValidDefendantPage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
       })
@@ -60,13 +59,13 @@ describe('Claim eligibility: valid defendant page', () => {
         draftStoreServiceMock.rejectSave()
 
         await request(app)
-          .post(ClaimPaths.eligibilityHelpWithFeesPage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ helpWithFees: YesNoOption.NO.option })
+          .send({ validDefendant: ValidDefendant.PERSONAL_CLAIM.option })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to single claimant page when form is valid and everything is fine', async () => {
+      it('should redirect to single defendant page when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
@@ -81,10 +80,10 @@ describe('Claim eligibility: valid defendant page', () => {
         draftStoreServiceMock.resolveSave()
 
         await request(app)
-          .post(ClaimPaths.eligibilityHelpWithFeesPage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ helpWithFees: YesNoOption.YES.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.HELP_WITH_FEES}`))
+          .send({ validDefendant: ValidDefendant.MULTIPLE_CLAIM.option })
+          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_DEFENDANTS}`))
       })
     })
   })

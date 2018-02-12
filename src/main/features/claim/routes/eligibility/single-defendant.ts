@@ -42,7 +42,7 @@ export default express.Router()
         if (draft.document.eligibility.singleDefendant === YesNoOption.NO) {
           res.redirect(Paths.eligibilityGovernmentDepartmentPage.uri)
         } else {
-          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`)
+          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_DEFENDANTS}`)
         }
       }
     })

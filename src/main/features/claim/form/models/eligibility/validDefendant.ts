@@ -26,7 +26,4 @@ export class ValidDefendant {
       ValidDefendant.REPRESENTATIVE_CLAIM
     ]
   }
-
-
-
 }
