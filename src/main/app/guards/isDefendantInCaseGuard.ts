@@ -1,5 +1,4 @@
 import * as express from 'express'
-
 import { GuardFactory } from 'response/guards/guardFactory'
 import { ForbiddenError } from '../../errors'
 import { User } from 'idam/user'
@@ -17,7 +16,7 @@ export class IsDefendantInCaseGuard {
       const claim: Claim = res.locals.claim
       const user: User = res.locals.user
       if (!FeatureToggles.isEnabled('ccd')) { // CCD does authorisation checks for us
-        return claim.defendantId === user.id
+        return claim.defendantId === user.id || (claim.claimantId === user.id && claim.isClaimRejected() || claim.isOfferSubmitted())
       }
       return true
     }, (req: express.Request, res: express.Response): void => {

@@ -1,0 +1,35 @@
+.show-more-block {
+  background-color: $expandable-background;
+  padding: 20px 20px 10px;
+
+  p {
+    height: 125px;
+    overflow: hidden;
+    white-space: pre-line;
+    word-wrap: break-word;
+  }
+
+  .more {
+    display: block;
+  }
+
+  .less {
+    display: none;
+  }
+
+  input {
+    display: none;
+
+    &:checked + p {
+      height: auto;
+    }
+
+    &:checked ~ .more {
+      display: none;
+    }
+
+    &:checked ~ .less {
+      display: block;
+    }
+  }
+}

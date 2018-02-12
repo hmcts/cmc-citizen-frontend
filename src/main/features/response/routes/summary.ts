@@ -8,12 +8,12 @@ import { ClaimStoreClient } from 'claims/claimStoreClient'
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
-    Paths.viewResponsePage.uri,
+    Paths.summaryPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const { externalId } = req.params
       const user: User = res.locals.user
       const claim: Claim = await ClaimStoreClient.retrieveByExternalId(externalId, user)
-      res.render(Paths.viewResponsePage.associatedView, {
+      res.render(Paths.summaryPage.associatedView, {
         response: claim.response
       })
     }))

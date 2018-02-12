@@ -10,7 +10,7 @@
       <p>{{ t('The defendant {{ name }} has rejected your claim.', name = response.defendant.name) }}</p>
       <p class="bold-medium">{{ t('Their defence') }}</p>
 
-      {{ expandableSection('Why they disagree with the claim', response.defence) }}
+      {{ expandableSection('Why they disagree with the claim', response.defence, id='summaryContent') }}
     </div>
   </div>
 {% endblock %}

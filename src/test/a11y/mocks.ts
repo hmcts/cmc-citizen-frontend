@@ -5,7 +5,7 @@ import * as idamServiceMock from '../http-mocks/idam'
 import * as draftStoreMock from '../http-mocks/draft-store'
 import * as claimStoreMock from '../http-mocks/claim-store'
 import * as feesMock from '../http-mocks/fees'
-import * as postcodeLookup from '../http-mocks/post-code-lookup'
+import * as postcodeLookupMock from '../http-mocks/post-code-lookup'
 import { Claim } from 'claims/models/claim'
 
 idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-holder').persist()
@@ -23,8 +23,8 @@ feesMock.resolveCalculateIssueFee().persist()
 feesMock.resolveCalculateHearingFee().persist()
 feesMock.resolveGetIssueFeeRangeGroup().persist()
 feesMock.resolveGetHearingFeeRangeGroup().persist()
-postcodeLookup.resolvePostcodeLookup().persist()
-postcodeLookup.resolvePostcodeAddressLookup().persist()
+postcodeLookupMock.resolvePostcodeLookup().persist()
+postcodeLookupMock.resolvePostcodeAddressLookup().persist()
 
 const justForwardRequestHandler = {
   requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction): void => {

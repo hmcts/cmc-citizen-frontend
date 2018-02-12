@@ -115,21 +115,21 @@ export class Claim {
     }
   }
 
+  public isClaimRejected () {
+    return this.response && this.response.responseType === ResponseType.FULL_DEFENCE
+  }
+
+  public isOfferSubmitted () {
+    return FeatureToggles.isEnabled('offer')
+      && this.settlement && this.response && this.response.responseType === ResponseType.FULL_DEFENCE
+  }
+
   private isFreeMediationRequested () {
     return this.response && this.response.responseType === ResponseType.FULL_DEFENCE
       && this.response.freeMediation === FreeMediationOption.YES
   }
 
-  private isOfferSubmitted () {
-    return FeatureToggles.isEnabled('offer')
-      && this.settlement && this.response && this.response.responseType === ResponseType.FULL_DEFENCE
-  }
-
   private isSettlementReached () {
     return FeatureToggles.isEnabled('offer') && this.settlement && this.settlementReachedAt
-  }
-
-  private isClaimRejected () {
-    return this.response && this.response.responseType === ResponseType.FULL_DEFENCE
   }
 }

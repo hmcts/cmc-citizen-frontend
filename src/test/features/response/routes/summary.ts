@@ -17,9 +17,9 @@ import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-che
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ResponsePaths.viewResponsePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath: string = ResponsePaths.summaryPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
-describe('Defendant response: confirmation page', () => {
+describe('Defendant response: summary page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -40,7 +40,7 @@ describe('Defendant response: confirmation page', () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
 
         await request(app)
-          .get(ResponsePaths.viewResponsePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
+          .get(ResponsePaths.summaryPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('The defendant’s response'))
       })
@@ -49,7 +49,7 @@ describe('Defendant response: confirmation page', () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('internal service error when retrieving response')
 
         await request(app)
-          .get(ResponsePaths.viewResponsePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
+          .get(ResponsePaths.summaryPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })

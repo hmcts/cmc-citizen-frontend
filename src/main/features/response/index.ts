@@ -32,7 +32,7 @@ export class Feature {
     app.all(/^\/case\/.+\/response\/(?![\d]+\/receiver).*$/, ClaimMiddleware.retrieveByExternalId)
     app.all(allResponseRoutes, IsDefendantInCaseGuard.check())
     app.all(
-      /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|full-admission|partial-admission|counter-claim|receipt|view-response).*$/,
+      /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|full-admission|partial-admission|counter-claim|receipt|summary).*$/,
       AlreadyRespondedGuard.requestHandler
     )
     app.all(allResponseRoutes, CountyCourtJudgmentRequestedGuard.requestHandler)

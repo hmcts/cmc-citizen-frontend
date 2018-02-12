@@ -42,14 +42,14 @@
   {% elseif claim.status === ClaimStatus.FREE_MEDIATION %}
     {{ t('{{ defendantName }} has rejected the claim. They’ve suggested free mediation on {{ respondedAt }}. You can accept or reject',
     { defendantName: claim.response.defendant.name, respondedAt: claim.respondedAt | date }) }}
-    <p><a href="{{ ResponsePaths.viewResponsePage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View full response') }}</a></p>
+    <p><a href="{{ ResponsePaths.summaryPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View full response') }}</a></p>
   {% elseif claim.status === ClaimStatus.CLAIM_REJECTED %}
     {{ t('{{ defendantName }} has rejected the claim. The case will be reviewed by a judge and might go to court.',
     { defendantName:  claim.claimData.defendant.name }) }}
-    <p><a href="{{ ResponsePaths.viewResponsePage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View full response') }}</a></p>
+    <p><a href="{{ ResponsePaths.summaryPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View full response') }}</a></p>
   {% elseif claim.status === ClaimStatus.OFFER_SUBMITTED %}
     {{ t('The defendant has made an offer to settle out of court.') }}
-    <p><a href="{{ ResponsePaths.viewResponsePage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View full response') }}</a></p>
+    <p><a href="{{ ResponsePaths.summaryPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View full response') }}</a></p>
   {% elseif claim.status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ t('{{ defendantName }} has requested an extra 14 days to respond. They need to respond by {{ responseDeadline }}.',
     { defendantName: claim.claimData.defendant.name,
