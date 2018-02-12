@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@feature/archive-smoke-and-functional-yarn-tests")
 
 String product = "cmc"
 String component = "citizen-frontend"
