@@ -11,12 +11,10 @@ function shutdownDocker() {
 
 trap shutdownDocker INT TERM QUIT EXIT
 
-bash --version
 docker-compose --version
 
 docker-compose -f ${ADDITIONAL_COMPOSE_FILE} pull
 docker-compose -f ${ADDITIONAL_COMPOSE_FILE} up --no-color -d remote-webdriver
 docker-compose -f ${ADDITIONAL_COMPOSE_FILE} run integration-tests
-#docker-compose -f ${ADDITIONAL_COMPOSE_FILE} up integration-tests
 docker-compose -f ${ADDITIONAL_COMPOSE_FILE} down
 
