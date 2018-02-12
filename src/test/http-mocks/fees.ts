@@ -70,38 +70,38 @@ const feeRange = [
 ]
 
 export function resolveCalculateIssueFee (): mock.Scope {
-  return resolveCalculateFee(issueEvent)
+  return resolveCalculateFee(issueEvent, onlineChannel)
 }
 
 export function rejectCalculateIssueFee (reason: string = 'HTTP error'): mock.Scope {
-  return rejectCalculateFee(issueEvent, reason)
+  return rejectCalculateFee(issueEvent, reason, onlineChannel)
 }
 
 export function resolveCalculateHearingFee (): mock.Scope {
-  return resolveCalculateFee(hearingEvent)
+  return resolveCalculateFee(hearingEvent, defaultChannel)
 }
 
 export function rejectCalculateHearingFee (reason: string = 'HTTP error'): mock.Scope {
-  return rejectCalculateFee(hearingEvent, reason)
+  return rejectCalculateFee(hearingEvent, reason, defaultChannel)
 }
 
 export function resolveGetIssueFeeRangeGroup (): mock.Scope {
-  return resolveGetFeeRangeGroup(issueEvent)
+  return resolveGetFeeRangeGroup(issueEvent, onlineChannel)
 }
 
 export function rejectGetIssueFeeRangeGroup (reason: string = 'HTTP error'): mock.Scope {
-  return rejectGetFeeRangeGroup(issueEvent, reason)
+  return rejectGetFeeRangeGroup(issueEvent, reason, onlineChannel)
 }
 
 export function resolveGetHearingFeeRangeGroup (): mock.Scope {
-  return resolveGetFeeRangeGroup(hearingEvent)
+  return resolveGetFeeRangeGroup(hearingEvent, defaultChannel)
 }
 
 export function rejectGetHearingFeeRangeGroup (reason: string = 'HTTP error'): mock.Scope {
-  return rejectGetFeeRangeGroup(hearingEvent, reason)
+  return rejectGetFeeRangeGroup(hearingEvent, reason, defaultChannel)
 }
 
-export function resolveCalculateFee (eventType: string): mock.Scope {
+export function resolveCalculateFee (eventType: string, channel: string): mock.Scope {
   // const encodedUri: string = encodeURIComponent(`?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&amount_or_volume=${amount}`)
   return mock(baseFeeUri)
     .get(`/fees-register/fees/lookup`)
@@ -109,14 +109,14 @@ export function resolveCalculateFee (eventType: string): mock.Scope {
       service: `${service}`,
       jurisdiction1: `${jurisdiction1}`,
       jurisdiction2: `${jurisdiction2}`,
-      channel: `${onlineChannel}`,
+      channel: `${channel}`,
       event: `${eventType}`,
       amount_or_volume: new RegExp(`[\\d]+`)
     })
     .reply(HttpStatus.OK, feeOutcome)
 }
 
-export function rejectCalculateFee (eventType: string, reason: string = 'HTTP error'): mock.Scope {
+export function rejectCalculateFee (eventType: string, reason: string = 'HTTP error', channel: string): mock.Scope {
   // const encodedUri: string = encodeURIComponent(`\\?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&amount_or_volume=${amount}`)
   return mock(baseFeeUri)
     .get(`/fees-register/fees/lookup`)
@@ -124,14 +124,14 @@ export function rejectCalculateFee (eventType: string, reason: string = 'HTTP er
       service: `${service}`,
       jurisdiction1: `${jurisdiction1}`,
       jurisdiction2: `${jurisdiction2}`,
-      channel: `${onlineChannel}`,
+      channel: `${channel}`,
       event: `${eventType}`,
       amount_or_volume: new RegExp(`[\\d]+`)
     })
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-function resolveGetFeeRangeGroup (eventType: string): mock.Scope {
+function resolveGetFeeRangeGroup (eventType: string, channel: string): mock.Scope {
   // const encodedUri: string = encodeURIComponent(`?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${issueEvent}&feeVersionStatus=approved`)
   return mock(baseFeeUri)
     .get(`/fees-register/fees`)
@@ -139,14 +139,14 @@ function resolveGetFeeRangeGroup (eventType: string): mock.Scope {
       service: `${service}`,
       jurisdiction1: `${jurisdiction1}`,
       jurisdiction2: `${jurisdiction2}`,
-      channel: `${onlineChannel}`,
+      channel: `${channel}`,
       event: `${eventType}`,
       feeVersionStatus: `approved`
     })
     .reply(HttpStatus.OK, feeRange)
 }
 
-function rejectGetFeeRangeGroup (eventType: string, reason: string = 'HTTP error'): mock.Scope {
+function rejectGetFeeRangeGroup (eventType: string, reason: string = 'HTTP error', channel: string): mock.Scope {
   // const encodeUri: string = encodeURIComponent(`?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${issueEvent}&feeVersionStatus=approved`)
   return mock(baseFeeUri)
     .get(`/fees-register/fees`)
@@ -154,7 +154,7 @@ function rejectGetFeeRangeGroup (eventType: string, reason: string = 'HTTP error
       service: `${service}`,
       jurisdiction1: `${jurisdiction1}`,
       jurisdiction2: `${jurisdiction2}`,
-      channel: `${onlineChannel}`,
+      channel: `${channel}`,
       event: `${eventType}`,
       feeVersionStatus: `approved`
     })

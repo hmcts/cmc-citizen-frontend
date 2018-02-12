@@ -21,7 +21,8 @@ import { Logger } from '@hmcts/nodejs-logging'
 import { FeeOutcome } from 'fees/models/feeOutcome'
 
 const logger = Logger.getLogger('router/pay')
-const issueFeeCode = config.get<string>('fees.issueFee.code')
+const event: string = config.get<string>('fees.issueFee.event')
+const channel: string = config.get<string>('fees.channels.online')
 
 const getPayClient = async (): Promise<PayClient> => {
   const authToken = await new ServiceAuthTokenFactoryImpl().get()
@@ -93,7 +94,7 @@ export default express.Router()
             return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: draft.document.externalId }))
         }
       }
-      const feeOutcome: FeeOutcome = await FeesClient.calculateFee(issueFeeCode, amount)
+      const feeOutcome: FeeOutcome = await FeesClient.calculateFee(event, amount, channel)
       const payClient: PayClient = await getPayClient()
       const payment: PaymentResponse = await payClient.create(
         res.locals.user,

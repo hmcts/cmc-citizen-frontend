@@ -42,11 +42,9 @@
       "paper" : "default"
     },
     "issueFee": {
-      "event": "issue",
-      "code": "cmc-online"
+      "event": "issue"
     },
     "hearingFee": {
-      "code": "cmc-hearing",
       "event": "hearing"
     }
   },
