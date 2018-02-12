@@ -1,11 +1,11 @@
 import * as express from 'express'
 import { GuardFactory } from 'response/guards/guardFactory'
-import { ForbiddenError } from '../../errors'
+import { ForbiddenError } from '../../../errors'
 import { User } from 'idam/user'
 import { Claim } from 'claims/models/claim'
 import { FeatureToggles } from 'utils/featureToggles'
 
-export class IsDefendantInCaseGuard {
+export class DefendantHasSubmittedResposneGuard {
   /**
    * Throws Forbidden error if user is not defendant in the case
    *
@@ -16,7 +16,7 @@ export class IsDefendantInCaseGuard {
       const claim: Claim = res.locals.claim
       const user: User = res.locals.user
       if (!FeatureToggles.isEnabled('ccd')) { // CCD does authorisation checks for us
-        return claim.defendantId === user.id
+        return claim.claimantId === user.id && claim.isClaimRejected() || claim.isOfferSubmitted()
       }
       return true
     }, (req: express.Request, res: express.Response): void => {

@@ -1,4 +1,4 @@
-{% macro expandableSection(label = '', content = '', limit = 400, id='') %}
+{% macro expandableSection(label, content, limit = 400, id) %}
   <div class="show-more-block">
     <div class="bold-small">{{ t(label) }}</div>
     {% if content.length > limit %}
