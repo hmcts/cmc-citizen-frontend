@@ -76,11 +76,10 @@
               {% endif %}
           {% endif %}
 
-
           <ul class="list list-bullet">
               <li>{{ t('Claim No.{{ claimNumber }}', { claimNumber: claim.claimNumber }) }}</li>
               <li>{{ t('Claimant {{ claimantName }}', { claimantName: claim.claimData.claimant.name}) }}</li>
-              <li>{{ t('Defendant {{ defendantName }}', { defendantName: draft.defendantDetails.partyDetails.name}) }}</li>
+              <li>{{ t('Defendant {{ defendantName }}', { defendantName: claim.claimData.defendant.name}) }}</li>
           </ul>
         </li>
         <li>{{ t('Save the completed form to your device') }}</li>
