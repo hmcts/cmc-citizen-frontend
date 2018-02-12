@@ -4,17 +4,28 @@ import * as HttpStatus from 'http-status-codes'
 import { InterestType } from 'features/claim/form/models/interest'
 import { StatementType } from 'features/offer/form/models/statementType'
 import { MadeBy } from 'features/offer/form/models/madeBy'
+import { claimData } from '../data/entity/claimData'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
 export const sampleClaimObj = {
   id: 1,
   submitterId: '1',
+  claimantId: '1',
+  claimData: claimData,
+  claimNumber: '000MC001',
+  moreTimeRequested: false,
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
   defendantId: '123',
   referenceNumber: '000MC000',
   createdAt: '2017-07-25T22:45:51.785',
   issuedOn: '2017-07-25',
+  respondedAt: undefined,
+  claimantEmail: undefined,
+  countyCourtJudgmentRequestedAt: undefined,
+  response: undefined,
+  defendantEmail: undefined,
+  settlementReachedAt: undefined,
   totalAmountTillToday: 200,
   totalAmountTillDateOfIssue: 200,
   claim: {
