@@ -14,12 +14,14 @@ import * as idamServiceMock from '../../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { YesNoOption } from 'models/yesNoOption'
+import { ValidDefendant } from 'claim/form/models/eligibility/validDefendant'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ClaimPaths.eligibilitySingleDefendantPage.uri
+const pagePath: string = ClaimPaths.eligibilityValidDefendantPage.uri
 const pageRedirect: string = ClaimPaths.eligibilitySingleDefendantPage.uri
+const expectedTextOnPage: string = 'Who are you making the claim for?'
 
-describe('Claim eligibility: single claimant page', () => {
+describe('Claim eligibility: valid defendant page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -32,7 +34,7 @@ describe('Claim eligibility: single claimant page', () => {
       await request(app)
         .get(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Is this claim against more than one person or organisation?'))
+        .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage))
     })
   })
 
@@ -48,9 +50,9 @@ describe('Claim eligibility: single claimant page', () => {
         draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
-          .post(pagePath)
+          .post(ClaimPaths.eligibilityValidDefendantPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Please select yes or no', 'div class="error-summary"'))
+          .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
@@ -58,32 +60,31 @@ describe('Claim eligibility: single claimant page', () => {
         draftStoreServiceMock.rejectSave()
 
         await request(app)
-          .post(pagePath)
+          .post(ClaimPaths.eligibilityHelpWithFeesPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ singleClaimant: YesNoOption.YES.option })
+          .send({ helpWithFees: YesNoOption.NO.option })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to single defendant page when form is valid and everything is fine', async () => {
+      it('should redirect to single claimant page when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ singleClaimant: YesNoOption.YES.option })
+          .send({ validDefendant: ValidDefendant.PERSONAL_CLAIM.option })
           .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
       })
-
       it('should redirect to not eligible page when form is valid and not eligible option selected', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)
-          .post(pagePath)
+          .post(ClaimPaths.eligibilityHelpWithFeesPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ singleClaimant: YesNoOption.NO.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`))
+          .send({ helpWithFees: YesNoOption.YES.option })
+          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.HELP_WITH_FEES}`))
       })
     })
   })
