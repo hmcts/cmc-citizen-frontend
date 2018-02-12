@@ -14,7 +14,7 @@ describe('getInterestDetails', () => {
     expect(await getInterestDetails(claim)).to.be.eq(undefined)
   })
 
-  it('should return an object containing the needed values to be displayed', async () => {
+  it('should return expected interestDetails containing the needed values to be displayed', async () => {
     const claim: Claim = new Claim().deserialize(claimStoreServiceMock.sampleClaimObj)
     claimStoreServiceMock.mockCalculateInterestRate(0)
     const createdDate: Moment = claim.createdAt
