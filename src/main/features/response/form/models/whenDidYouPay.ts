@@ -6,21 +6,22 @@ import { IsValidYearFormat } from 'app/forms/validation/validators/isValidYearFo
 import { MomentFactory } from 'common/momentFactory'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
-import { Moment } from 'moment'
-
-const currentDate: Moment = MomentFactory.currentDate()
+import { MomentFormatter } from 'app/utils/momentFormatter'
 
 export class ValidationErrors {
   static readonly EXPLANATION_REQUIRED: string = 'Explain how did you pay the amount claimed'
   static readonly DATE_REQUIRED: string = 'Enter a date'
-  static readonly VALID_PAST_DATE: string = `Enter date before ${currentDate}`
   static readonly DATE_INVALID_YEAR: string = 'Enter a 4 digit year'
+  static validPastDate (): string {
+    const currentDate = MomentFormatter.formatLongDate(MomentFactory.currentDate())
+    return `Enter date before ${currentDate}`
+  }
 }
 
 export class WhenDidYouPay {
 
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
-  @IsPastDate({ message: ValidationErrors.VALID_PAST_DATE })
+  @IsPastDate({ message: ValidationErrors.validPastDate })
   @IsValidYearFormat({ message: ValidationErrors.DATE_INVALID_YEAR })
   date?: LocalDate
 

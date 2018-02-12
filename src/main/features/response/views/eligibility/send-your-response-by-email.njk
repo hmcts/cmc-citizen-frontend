@@ -42,7 +42,7 @@
               {% for fee in fees %}
                 <tr>
                   <td>{{ t('{{ from }} to {{ till }}', { from: fee.from | pennies2pounds | numeral, till: fee.to | pennies2pounds | numeral } )}}</td>
-                  <td>{{ fee.fees[0] | pennies2pounds | numeral }}</td>
+                  <td>{{ fee.fee.amount | pennies2pounds | numeral }}</td>
                 </tr>
               {% endfor %}
             </table>
