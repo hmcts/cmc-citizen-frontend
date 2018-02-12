@@ -37,7 +37,10 @@
     "service": "civil money claims",
     "jurisdiction1": "civil",
     "jurisdiction2": "county court",
-    "channel": "online",
+    "channels": {
+      "online" : "online",
+      "paper" : "default"
+    },
     "issueFee": {
       "event": "issue",
       "code": "cmc-online"

@@ -1,4 +1,7 @@
 import { isUndefined } from 'util'
+import { Logger } from '@hmcts/nodejs-logging'
+
+const logger = Logger.getLogger('feesTableViewHelper.js')
 
 interface RangePartial {
   minRange: number
@@ -63,6 +66,7 @@ export class FeeRangeMerge implements RangePartial {
 
 export class FeesTableViewHelper {
   static merge (firstFeesSet: FeeRange[], secondFeesSet: FeeRange[], increment: number = 1): FeeRangeMerge[] {
+    console.log(firstFeesSet, secondFeesSet)
     if (firstFeesSet === undefined || secondFeesSet === undefined) {
       throw new Error('Both fee sets are required for merge')
     }
@@ -82,6 +86,7 @@ export class FeesTableViewHelper {
       } else {
         overlappedRows.forEach(row => {
           row.addFee(item.targetColumn, item.range.amount)
+          logger.info(`target column: ` + item.targetColumn + `target amount: ` + item.range.amount)
           if (!RangeUtils.areSame(row, item.range)) {
             rows.push(new FeeRangeMerge(row.maxRange + increment, item.range.maxRange, { [item.targetColumn]: item.range.amount }))
           }

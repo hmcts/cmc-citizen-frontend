@@ -3,13 +3,12 @@ import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
 
 const service: string = (config.get<string>('fees.service'))
-const jurisdiction1 = config.get<string>('fees.jurisdiction1')
-const jurisdiction2 = config.get<string>('fees.jurisdiction2')
-const channel = config.get<string>('fees.channel')
-const issueEvent = config.get<string>('fees.issueFee.event')
-const hearingEvent = config.get<string>('fees.hearingFee.event')
-// const serviceBaseURL: string = `${config.get('fees.url')}/range-groups`
-// const baseFeeRangeUri: string = `${config.get('fees.url')}`
+const jurisdiction1: string = config.get<string>('fees.jurisdiction1')
+const jurisdiction2: string = config.get<string>('fees.jurisdiction2')
+const onlineChannel: string = config.get<string>('fees.channels.online')
+const defaultChannel: string = config.get<string>('fees.channels.paper')
+const issueEvent: string = config.get<string>('fees.issueFee.event')
+const hearingEvent: string = config.get<string>('fees.hearingFee.event')
 const baseFeeUri: string = `${config.get('fees.url')}`
 
 const feeOutcome = {
@@ -110,7 +109,7 @@ export function resolveCalculateFee (eventType: string): mock.Scope {
       service: `${service}`,
       jurisdiction1: `${jurisdiction1}`,
       jurisdiction2: `${jurisdiction2}`,
-      channel: `${channel}`,
+      channel: `${onlineChannel}`,
       event: `${eventType}`,
       amount_or_volume: new RegExp(`[\\d]+`)
     })
@@ -125,7 +124,7 @@ export function rejectCalculateFee (eventType: string, reason: string = 'HTTP er
       service: `${service}`,
       jurisdiction1: `${jurisdiction1}`,
       jurisdiction2: `${jurisdiction2}`,
-      channel: `${channel}`,
+      channel: `${onlineChannel}`,
       event: `${eventType}`,
       amount_or_volume: new RegExp(`[\\d]+`)
     })
@@ -140,7 +139,7 @@ function resolveGetFeeRangeGroup (eventType: string): mock.Scope {
       service: `${service}`,
       jurisdiction1: `${jurisdiction1}`,
       jurisdiction2: `${jurisdiction2}`,
-      channel: `${channel}`,
+      channel: `${onlineChannel}`,
       event: `${eventType}`,
       feeVersionStatus: `approved`
     })
@@ -155,7 +154,7 @@ function rejectGetFeeRangeGroup (eventType: string, reason: string = 'HTTP error
       service: `${service}`,
       jurisdiction1: `${jurisdiction1}`,
       jurisdiction2: `${jurisdiction2}`,
-      channel: `${channel}`,
+      channel: `${onlineChannel}`,
       event: `${eventType}`,
       feeVersionStatus: `approved`
     })

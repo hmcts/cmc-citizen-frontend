@@ -10,7 +10,8 @@ const feesUrl = config.get('fees.url')
 const service: string = config.get<string>('fees.service')
 const jurisdiction1: string = config.get<string>('fees.jurisdiction1')
 const jurisdiction2: string = config.get<string>('fees.jurisdiction2')
-const channel: string = config.get<string>('fees.channel')
+const onlineChannel: string = config.get<string>('fees.channels.online')
+const defaultChannel: string = config.get<string>('fees.channels.paper')
 const issueFeeEvent: string = config.get<string>('fees.issueFee.event')
 const hearingFeeEvent: string = config.get('fees.hearingFee.event')
 
@@ -23,7 +24,7 @@ export class FeesClient {
    * @returns {Promise.<number>} promise containing the fee amount in pounds
    */
   static async calculateIssueFee (claimValue: number): Promise<number> {
-    return this.calculateFee(issueFeeEvent, claimValue)
+    return this.calculateFee(issueFeeEvent, claimValue, onlineChannel)
       .then((outcome: FeeOutcome) => outcome.amount)
   }
 
@@ -34,7 +35,7 @@ export class FeesClient {
    * @returns {Promise.<number>} promise containing the fee amount in pounds
    */
   static async calculateHearingFee (claimValue: number): Promise<number> {
-    return this.calculateFee(hearingFeeEvent, claimValue)
+    return this.calculateFee(hearingFeeEvent, claimValue, defaultChannel)
       .then((outcome: FeeOutcome) => (outcome.amount))
   }
   /**
@@ -44,7 +45,7 @@ export class FeesClient {
    * @param amount amount in pounds
    * @returns {Promise.<FeeOutcome>} promise containing the Fee outcome (including fee amount in GBP)
    */
-  static async calculateFee (eventType: string, amount: number): Promise<FeeOutcome> {
+  static async calculateFee (eventType: string, amount: number, channel: string): Promise<FeeOutcome> {
     if (StringUtils.isBlank(eventType)) {
       throw new Error('Fee eventType is required')
     }
@@ -59,7 +60,7 @@ export class FeesClient {
    * @returns {Promise.<FeeRange>} promise containing the range group (including fee amounts in GBP)
    */
   static async getIssueFeeRangeGroup (): Promise<FeeRange[]> {
-    return this.getRangeGroup(issueFeeEvent)
+    return this.getRangeGroup(issueFeeEvent, onlineChannel)
   }
 
   /**
@@ -67,10 +68,10 @@ export class FeesClient {
    * @returns {Promise.<FeeRange>} promise containing the range group (including fee amounts in GBP)
    */
   static async getHearingFeeRangeGroup (): Promise<FeeRange[]> {
-    return this.getRangeGroup(hearingFeeEvent)
+    return this.getRangeGroup(hearingFeeEvent, defaultChannel)
   }
 
-  private static async getRangeGroup (eventType: string): Promise<FeeRange[]> {
+  private static async getRangeGroup (eventType: string, channel: string): Promise<FeeRange[]> {
     if (StringUtils.isBlank(eventType)) {
       throw new Error('Fee eventType is required')
     }
