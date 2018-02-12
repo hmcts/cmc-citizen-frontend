@@ -12,6 +12,7 @@ services:
         - IDAM_URL=http://betaDevBccidamAppLB.reform.hmcts.net
         - CLAIM_STORE_URL=http://docker.for.mac.localhost:4300
         - SMOKE_TEST_USERNAME=civilmoneyclaims+smoketest@gmail.com
+        - MOCHA_JUNIT_FILE_LOCATION='./output/smoke-result.xml'
         - SMOKE_TEST_PASSWORD=Password12
         - HEALTHCHECK_CITIZEN=true
       volumes:
