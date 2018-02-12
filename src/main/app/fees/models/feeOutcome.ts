@@ -6,14 +6,4 @@ export class FeeOutcome {
   @Expose({ name: 'fee_amount' })
   readonly amount: number
   readonly version: number
-
-  // deserialize (input: any): FeeOutcome {
-  //   if (input) {
-  //     this.code = input.code
-  //     this.description = input.description
-  //     this.version = input.version
-  //     this.amount = input.fee_amount
-  //   }
-  //   return this
-  // }
 }
