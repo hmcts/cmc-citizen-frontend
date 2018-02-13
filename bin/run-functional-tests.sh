@@ -9,7 +9,7 @@ function shutdownDocker() {
   docker-compose -f ${ADDITIONAL_COMPOSE_FILE} down
 }
 
-export CLAIM_STORE_URL=$(echo ${TEST_URL} | sed -e "s/citizen-frontend/claim-store/" -e "s/-staging//")
+export CLAIM_STORE_URL=$(echo ${TEST_URL} | sed -e "s/citizen-frontend/claim-store/" -e "s/-staging//" -e "s/https/http/")
 if [[ ${TEST_URL} = *"prod"*  ]]; then
   export IDAM_URL=http://betaPreProdccidamAppLB.reform.hmcts.net:4501
 else
