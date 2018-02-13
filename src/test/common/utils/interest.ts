@@ -7,61 +7,9 @@ import { MomentFactory } from 'common/momentFactory'
 import { Moment } from 'moment'
 
 const sampleClaimObj = {
-  id: 1,
-  submitterId: '1',
-  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
-  defendantId: '123',
-  referenceNumber: '000MC000',
   createdAt: MomentFactory.currentDate(),
   issuedOn: MomentFactory.currentDate(),
-  totalAmountTillToday: 200,
-  totalAmountTillDateOfIssue: 200,
   claim: {
-    claimants: [
-      {
-        type: 'individual',
-        name: 'John Smith',
-        address: {
-          line1: 'line1',
-          line2: 'line2',
-          city: 'city',
-          postcode: 'bb127nq'
-        },
-        dateOfBirth: '1990-02-17'
-      }
-    ],
-    defendants: [
-      {
-        type: 'individual',
-        name: 'John Doe',
-        address: {
-          line1: 'line1',
-          line2: 'line2',
-          city: 'city',
-          postcode: 'bb127nq'
-        }
-      }
-    ],
-    payment: {
-      id: '12',
-      amount: 2500,
-      state: { status: 'failed' }
-    },
-    amount: {
-      type: 'breakdown',
-      rows: [{ reason: 'Reason', amount: 200 }]
-    },
-    interestDate: {
-      date: {
-        year: 2000,
-        month: 2,
-        day: 1
-      }
-    },
-    interest: {
-      type: InterestType.STANDARD
-    },
-    reason: 'Because I can'
   },
   responseDeadline: '2017-08-08'
 }
