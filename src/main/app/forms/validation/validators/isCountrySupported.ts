@@ -19,6 +19,8 @@ export class CheckCountryConstraint implements ValidatorConstraintInterface {
   async validate (value: any | string, args?: ValidationArguments): Promise<boolean> {
     if (value === undefined || value === null || value === '') {
       return true
+    } else if (value.toUpperCase().startsWith('IM')) {
+      return false
     }
     try {
       const postcodeInfoResponse: PostcodeInfoResponse = await postcodeClient.lookupPostcode(value)
