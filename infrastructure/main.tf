@@ -90,9 +90,12 @@ module "citizen-frontend" {
     REPORT_PROBLEM_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPPB/"
 
     // Feature toggles
-    FEATURE_TESTING_SUPPORT = "true"
     FEATURE_CCJ = "true"
-    FEATURE_OFFER = "true"
-    FEATURE_STATEMENT_OF_MEANS = "true"
+    FEATURE_TESTING_SUPPORT = "${var.env == "prod" ? "false" : "true"}"
+    FEATURE_OFFER = "${var.env == "prod" ? "false" : "true"}"
+    FEATURE_STATEMENT_OF_MEANS = "${var.env == "prod" ? "false" : "true"}"
+    FEATURE_FULL_ADMISSION = "${var.env == "prod" ? "false" : "true"}"
+    FEATURE_PARTIAL_ADMISSION = "${var.env == "prod" ? "false" : "true"}"
+    FEATURE_FINE_PRINT = "${var.env == "prod" ? "false" : "true"}"
   }
 }
