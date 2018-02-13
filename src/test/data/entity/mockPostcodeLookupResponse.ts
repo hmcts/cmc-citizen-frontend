@@ -35,19 +35,3 @@ export const mockScottishPostcodeLookupResponse = {
     ]
   }
 }
-
-export const mockInvalidPostcodeLookupResponse = {
-  'valid': 'false',
-  'country': {
-    'gss_code': '',
-    'name': ''
-  },
-  'local_authority': {
-    'gss_code': '',
-    'name': ''
-  },
-  'centre': {
-    'type': '',
-    'coordinates': ''
-  }
-}
