@@ -16,11 +16,11 @@ describe('getInterestDetails', () => {
 
   it('should return expected interestDetails containing the needed values to be displayed', async () => {
     const claim: Claim = new Claim().deserialize(claimStoreServiceMock.sampleClaimObj)
-    claimStoreServiceMock.mockCalculateInterestRate(0)
+    claimStoreServiceMock.mockCalculateInterestRate(5)
     const createdDate: Moment = claim.createdAt
     const interestData = {
       numberOfDays: MomentFactory.currentDate().diff(createdDate, 'days') + 1,
-      interest: 0,
+      interest: 5,
       rate: claim.claimData.interest.rate,
       interestDate: createdDate
     }
