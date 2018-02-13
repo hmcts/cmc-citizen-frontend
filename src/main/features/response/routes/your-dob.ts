@@ -9,6 +9,9 @@ import { ErrorHandling } from 'common/errorHandling'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
+import { Draft } from '@hmcts/draft-store-client'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { Claim } from 'app/claims/models/claim'
 
 function renderView (form: Form<DateOfBirth>, res: express.Response) {
   res.render(Paths.defendantDateOfBirthPage.associatedView, {
@@ -19,13 +22,14 @@ function renderView (form: Form<DateOfBirth>, res: express.Response) {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.defendantDateOfBirthPage.uri, (req: express.Request, res: express.Response) => {
-    const user: User = res.locals.user
-    switch (user.responseDraft.document.defendantDetails.partyDetails.type) {
+    const claim: Claim = res.locals.claim
+    const draft: Draft<ResponseDraft> = res.locals.responseDraft
+    switch (draft.document.defendantDetails.partyDetails.type) {
       case PartyType.INDIVIDUAL.value:
-        renderView(new Form((user.responseDraft.document.defendantDetails.partyDetails as IndividualDetails).dateOfBirth), res)
+        renderView(new Form((draft.document.defendantDetails.partyDetails as IndividualDetails).dateOfBirth), res)
         break
       default:
-        res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: user.claim.externalId }))
+        res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: claim.externalId }))
         break
     }
   })
@@ -38,17 +42,19 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const claim: Claim = res.locals.claim
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
-        switch (user.responseDraft.document.defendantDetails.partyDetails.type) {
+        switch (draft.document.defendantDetails.partyDetails.type) {
           case PartyType.INDIVIDUAL.value:
-            (user.responseDraft.document.defendantDetails.partyDetails as IndividualDetails).dateOfBirth = form.model
+            (draft.document.defendantDetails.partyDetails as IndividualDetails).dateOfBirth = form.model
             break
           default:
             throw Error('Date of birth is only supported for defendant types individual and sole trader')
         }
 
-        await new DraftService().save(res.locals.user.responseDraft, res.locals.user.bearerToken)
+        await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: user.claim.externalId }))
+        res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: claim.externalId }))
       }
     }))

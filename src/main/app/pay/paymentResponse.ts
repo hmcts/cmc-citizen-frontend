@@ -1,7 +1,4 @@
-class PaymentState {
-  status: string
-  finished: boolean
-}
+import { Payment } from 'app/pay/payment'
 
 class PaymentLinks {
   next_url: LinkedUrl // tslint:disable-line variable-name allow snake_case
@@ -13,12 +10,6 @@ class LinkedUrl {
   method: string
 }
 
-export class PaymentResponse {
-  id: string
-  amount: number
-  state: PaymentState
-  description: string
-  reference: string
-  date_created: number // tslint:disable-line variable-name allow snake_case
+export class PaymentResponse extends Payment {
   _links: PaymentLinks
 }

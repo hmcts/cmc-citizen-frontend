@@ -1,5 +1,19 @@
 <ul>
-  {% if toBoolean(featureToggles.testingSupport) %}
+  {% if featureToggles.finePrint %}
+    <li>
+      <a href="{{ AppPaths.cookiesPage.uri }}">{{ t('Cookies') }}</a>
+    </li>
+    <li>
+      <a href="{{ AppPaths.privacyPolicyPage.uri }}">{{ t('Privacy Policy') }}</a>
+    </li>
+    <li>
+      <a href="{{ AppPaths.termsAndConditionsPage.uri }}">{{ t('Terms and conditions') }}</a>
+    </li>
+    <li>
+      <a href="https://www.gov.uk/help">{{ t('Help using GOV.UK') }}</a>
+    </li>
+  {% endif %}
+  {% if featureToggles.testingSupport %}
     <li>
       <a href="/testing-support">Testing support</a>
     </li>

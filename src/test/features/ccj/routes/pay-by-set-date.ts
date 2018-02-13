@@ -6,41 +6,38 @@ import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 
 import { Paths } from 'ccj/paths'
-import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../app/forms/models/validationUtils'
-import { LocalDate } from 'forms/models/localDate'
-
-import * as moment from 'moment'
-import { PayBySetDate, ValidationErrors } from 'ccj/form/models/payBySetDate'
 import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
+import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
-const payBySetDatePage: string = Paths.payBySetDatePage.evaluateUri({ externalId : externalId })
+const pagePath: string = Paths.payBySetDatePage.evaluateUri({ externalId : externalId })
 const checkAndSavePage: string = Paths.checkAndSendPage.evaluateUri({ externalId : externalId })
 
 describe('CCJ - Pay by set date', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', payBySetDatePage)
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       it('should return 500 and render error page when cannot retrieve claims', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .get(payBySetDatePage)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -50,7 +47,7 @@ describe('CCJ - Pay by set date', () => {
         draftStoreServiceMock.rejectFind('Error')
 
         await request(app)
-          .get(payBySetDatePage)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -60,7 +57,7 @@ describe('CCJ - Pay by set date', () => {
         draftStoreServiceMock.resolveFind('ccj')
 
         await request(app)
-          .get(payBySetDatePage)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('When you want them to pay the amount'))
       })
@@ -70,18 +67,20 @@ describe('CCJ - Pay by set date', () => {
   describe('on POST', () => {
     const validFormData = { known: 'true', date: { day: '31', month: '12', year: '2018' } }
 
-    checkAuthorizationGuards(app, 'post', payBySetDatePage)
+    const method = 'post'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .post(payBySetDatePage)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -92,7 +91,7 @@ describe('CCJ - Pay by set date', () => {
         draftStoreServiceMock.rejectFind('Error')
 
         await request(app)
-          .post(payBySetDatePage)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -105,7 +104,7 @@ describe('CCJ - Pay by set date', () => {
           draftStoreServiceMock.rejectSave()
 
           await request(app)
-            .post(payBySetDatePage)
+            .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -117,7 +116,7 @@ describe('CCJ - Pay by set date', () => {
           draftStoreServiceMock.resolveSave()
 
           await request(app)
-            .post(payBySetDatePage)
+            .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(checkAndSavePage))
@@ -130,40 +129,11 @@ describe('CCJ - Pay by set date', () => {
           draftStoreServiceMock.resolveFind('ccj')
 
           await request(app)
-            .post(payBySetDatePage)
+            .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ known: undefined })
             .expect(res => expect(res).to.be.successful.withText('When you want them to pay the amount', 'div class="error-summary"'))
         })
-      })
-    })
-  })
-
-  describe('validation', () => {
-    const validator: Validator = new Validator()
-
-    context('when pay by set date is known', () => {
-      it('should reject non existing date', () => {
-        const errors = validator.validateSync(new PayBySetDate(new LocalDate(2017, 2, 29)))
-
-        expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.DATE_NOT_VALID)
-      })
-
-      it('should reject past date', () => {
-        const today = moment()
-
-        const errors = validator.validateSync(new PayBySetDate(new LocalDate(today.year(), today.month() - 1, today.date())))
-
-        expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.DATE_TODAY_OR_IN_FUTURE)
-      })
-
-      it('should reject date with invalid digits in year', () => {
-        const errors = validator.validateSync(new PayBySetDate(new LocalDate(90, 12, 31)))
-
-        expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.DATE_INVALID_YEAR)
       })
     })
   })

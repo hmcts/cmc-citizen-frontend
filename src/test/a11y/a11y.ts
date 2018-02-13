@@ -9,7 +9,7 @@ import { expect } from 'chai'
 import { RoutablePath } from 'common/router/routablePath'
 import { ErrorPaths as ClaimIssueErrorPaths, Paths as ClaimIssuePaths } from 'claim/paths'
 import { ErrorPaths as DefendantFirstContactErrorPaths, Paths as DefendantFirstContactPaths } from 'first-contact/paths'
-import { Paths as DefendantResponsePaths } from 'response/paths'
+import { Paths as DefendantResponsePaths, StatementOfMeansPaths, PayBySetDatePaths } from 'response/paths'
 import { Paths as CCJPaths } from 'ccj/paths'
 import { Paths as OfferPaths } from 'offer/paths'
 
@@ -55,9 +55,11 @@ function ensurePageCallWillSucceed (url: string): Promise<void> {
       if (res.redirect) {
         throw new Error(`Call to ${url} resulted in a redirect to ${res.get('Location')}`)
       }
-      if (res.serverError) {
-        throw new Error(`Call to ${url} resulted in internal server error`)
+
+      if (!res.ok) {
+        throw new Error(`Call to ${url} resulted in ${res.status}`)
       }
+
     })
 }
 
@@ -65,9 +67,9 @@ const excludedPaths: DefendantResponsePaths[] = [
   ClaimIssuePaths.startPaymentReceiver,
   ClaimIssuePaths.finishPaymentReceiver,
   ClaimIssuePaths.receiptReceiver,
-  ClaimIssuePaths.defendantResponseCopy,
   DefendantResponsePaths.receiptReceiver,
-  DefendantResponsePaths.legacyDashboardRedirect
+  DefendantResponsePaths.legacyDashboardRedirect,
+  OfferPaths.agreementReceiver
 ]
 
 describe('Accessibility', () => {
@@ -91,4 +93,6 @@ describe('Accessibility', () => {
   checkPaths(DefendantResponsePaths)
   checkPaths(CCJPaths)
   checkPaths(OfferPaths)
+  checkPaths(StatementOfMeansPaths)
+  checkPaths(PayBySetDatePaths)
 })

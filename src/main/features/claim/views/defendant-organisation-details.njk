@@ -6,6 +6,10 @@
 {% set title = t('Money claim') %}
 {% set heading = t('Organisation details') %}
 
+{% block additional_scripts %}
+  {% include "postcode-lookup-client-scripts.njk" %}
+{% endblock %}
+
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
@@ -21,7 +25,8 @@
             addressSection = {
               heading: 'Organisation address',
               hint: 'Enter the organisation’s main office or a organisation’s address that has a connection with the claim.',
-              name: 'address'
+              name: 'address',
+              postcodeLookup: true
             },
             showCorrespondenceAddressSection = false
           )

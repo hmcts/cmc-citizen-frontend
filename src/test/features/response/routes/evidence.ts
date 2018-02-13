@@ -12,9 +12,10 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { checkAlreadySubmittedGuard } from './checks/already-submitted-check'
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
-import { ValidationConstants } from 'response/form/models/evidenceRow'
 import { generateString } from '../../../app/forms/models/validationUtils'
 import { EvidenceType } from 'response/form/models/evidenceType'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
+import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.evidencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -25,16 +26,18 @@ describe('Defendant response: evidence', () => {
 
   describe('on GET', () => {
 
-    checkAuthorizationGuards(app, 'get', pagePath)
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
 
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen', 'defendant')
       })
 
-      checkAlreadySubmittedGuard(app, 'get', pagePath)
-      checkCountyCourtJudgmentRequestedGuard(app, 'get', pagePath)
+      checkAlreadySubmittedGuard(app, method, pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       context('when response and CCJ not submitted', () => {
 
@@ -72,18 +75,20 @@ describe('Defendant response: evidence', () => {
 
   describe('on POST', () => {
 
-    checkAuthorizationGuards(app, 'post', pagePath)
+    const method = 'post'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     describe('for authorized user', () => {
 
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta', 'defendant')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen', 'defendant')
       })
 
-      checkAlreadySubmittedGuard(app, 'post', pagePath)
-      checkCountyCourtJudgmentRequestedGuard(app, 'post', pagePath)
+      checkAlreadySubmittedGuard(app, method, pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
-      describe('errors are handled propely', () => {
+      describe('errors are handled properly', () => {
 
         it('should return 500 and render error page when cannot retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
@@ -119,7 +124,7 @@ describe('Defendant response: evidence', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value, description: 'Bla bla' }] })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+                .toLocation(Paths.impactOfDisputePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })
 
@@ -135,7 +140,7 @@ describe('Defendant response: evidence', () => {
               .send({
                 rows: [{
                   type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value,
-                  description: generateString(ValidationConstants.DESCRIPTION_MAX_LENGTH + 1)
+                  description: generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1)
                 }]
               })
               .expect(res => expect(res).to.be.successful.withText('You’ve entered too many characters'))

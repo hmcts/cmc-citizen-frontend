@@ -8,6 +8,9 @@ import { MobilePhone } from 'forms/models/mobilePhone'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { User } from 'idam/user'
+import { Draft } from '@hmcts/draft-store-client'
 
 function renderView (form: Form<MobilePhone>, res: express.Response): void {
   res.render(Paths.claimantMobilePage.associatedView, { form: form })
@@ -16,7 +19,9 @@ function renderView (form: Form<MobilePhone>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.claimantMobilePage.uri, (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    renderView(new Form(res.locals.user.claimDraft.document.claimant.mobilePhone), res)
+    const draft: Draft<DraftClaim> = res.locals.claimDraft
+
+    renderView(new Form(draft.document.claimant.mobilePhone), res)
   })
   .post(
     Paths.claimantMobilePage.uri,
@@ -27,9 +32,11 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        res.locals.user.claimDraft.document.claimant.mobilePhone = form.model
+        const draft: Draft<DraftClaim> = res.locals.claimDraft
+        const user: User = res.locals.user
 
-        await new DraftService().save(res.locals.user.claimDraft, res.locals.user.bearerToken)
+        draft.document.claimant.mobilePhone = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
         res.redirect(Paths.taskListPage.uri)
       }

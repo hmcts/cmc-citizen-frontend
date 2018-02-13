@@ -1,4 +1,3 @@
-import { Serializable } from 'models/serializable'
 import { IsDefined, IsPositive, MaxLength, Min } from 'class-validator'
 import { IsPastDate } from 'forms/validation/validators/datePastConstraint'
 import { LocalDate } from 'forms/models/localDate'
@@ -7,12 +6,14 @@ import { IsValidYearFormat } from 'app/forms/validation/validators/isValidYearFo
 import { MomentFactory } from 'common/momentFactory'
 import { MomentFormatter } from 'app/utils/momentFormatter'
 import { Fractions } from 'forms/validation/validators/fractions'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
+import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
 
 const currentDate = MomentFormatter.formatLongDate(MomentFactory.currentDate())
 
 export class ValidationErrors {
   static readonly NOT_OWE_FULL_AMOUNT_REQUIRED: string = 'Explain why you don’t owe the full amount'
-  static readonly REASON_NOT_OWE_MONEY_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
   static readonly VALID_AMOUNT_REQUIRED: string = 'Enter a valid amount paid'
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount'
   static readonly AMOUNT_NOT_VALID: string = 'Enter valid amount'
@@ -22,7 +23,7 @@ export class ValidationErrors {
   static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter valid amount, maximum two decimal places'
 }
 
-export class HowMuchPaid implements Serializable<HowMuchPaid> {
+export class HowMuchPaid {
 
   @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED })
   @IsPositive({ message: ValidationErrors.VALID_AMOUNT_REQUIRED })
@@ -37,7 +38,7 @@ export class HowMuchPaid implements Serializable<HowMuchPaid> {
 
   @IsDefined({ message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })
-  @MaxLength(99000, { message: ValidationErrors.REASON_NOT_OWE_MONEY_TOO_LONG })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
   text?: string
 
   constructor (amount?: number, date?: LocalDate, text?: string) {
@@ -48,7 +49,7 @@ export class HowMuchPaid implements Serializable<HowMuchPaid> {
 
   static fromObject (value?: any): HowMuchPaid {
     if (value) {
-      const amount = value.amount ? parseFloat(value.amount) : undefined
+      const amount = toNumberOrUndefined(value.amount)
       const pastDate = LocalDate.fromObject(value.date)
       const text = value.text
       return new HowMuchPaid(amount, pastDate, text)
@@ -70,4 +71,5 @@ export class HowMuchPaid implements Serializable<HowMuchPaid> {
     return !!this.date.year && this.date.year.toString().length > 0 &&
       !!this.text && this.text.length > 0 &&
       !!this.amount && this.amount > 0
-  }}
+  }
+}

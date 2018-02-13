@@ -27,3 +27,46 @@
   padding: 5px 4px 4px;
   text-transform: none;
 }
+
+.statement-of-means-container {
+  .triple-column {
+    .column-1 {
+      display: inline-block;
+      margin-right: 10px;
+      width: 49%;
+    }
+
+    .column-2 {
+      display: inline-block;
+      float: none;
+      width: 20%;
+    }
+
+    .column-3 {
+      display: inline-block;
+      margin-right: 10px;
+      text-align: right;
+      width: 20%;
+    }
+
+    .column-4 {
+      display: inline-block;
+      margin-right: 10px;
+      text-align: right;
+      width: 20%;
+    }
+  }
+}
+
+select {
+  .form-control {
+    float: left;
+    margin-left: 0;
+    width: 50%;
+  }
+}
+
+.grey-bottom-border {
+  border-bottom: 1px solid $grey-2;
+}
+

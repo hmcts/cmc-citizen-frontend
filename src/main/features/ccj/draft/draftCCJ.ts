@@ -1,6 +1,6 @@
 import { CCJPaymentOption } from 'ccj/form/models/ccjPaymentOption'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
-import { PayBySetDate } from 'ccj/form/models/payBySetDate'
+import { PayBySetDate } from 'forms/models/payBySetDate'
 import { RepaymentPlan } from 'ccj/form/models/repaymentPlan'
 import { QualifiedDeclaration } from 'ccj/form/models/qualifiedDeclaration'
 import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'

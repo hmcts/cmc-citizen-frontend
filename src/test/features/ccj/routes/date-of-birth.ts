@@ -15,6 +15,7 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { PartyType } from 'app/common/partyType'
+import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
 
 const sampleClaimObj = claimStoreServiceMock.sampleClaimObj
 
@@ -22,7 +23,7 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
 const paidAmountPage = Paths.paidAmountPage.uri.replace(':externalId', externalId)
-const dateOfBirthPage = Paths.dateOfBirthPage.uri.replace(':externalId', externalId)
+const pagePath = Paths.dateOfBirthPage.uri.replace(':externalId', externalId)
 
 function checkAccessGuard (app: any, method: string) {
   PartyType.except(PartyType.INDIVIDUAL).forEach(partyType => {
@@ -38,7 +39,7 @@ function checkAccessGuard (app: any, method: string) {
       })
       draftStoreServiceMock.resolveFind('ccj')
 
-      await request(app)[method](dateOfBirthPage)
+      await request(app)[method](pagePath)
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
     })
@@ -49,20 +50,22 @@ describe('CCJ - defendant date of birth', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', dateOfBirthPage)
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
-      checkAccessGuard(app, 'get')
+      checkAccessGuard(app, method)
 
       it('should return 500 and render error page when cannot retrieve claims', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .get(dateOfBirthPage)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -72,7 +75,7 @@ describe('CCJ - defendant date of birth', () => {
         draftStoreServiceMock.rejectFind('Error')
 
         await request(app)
-          .get(dateOfBirthPage)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -82,7 +85,7 @@ describe('CCJ - defendant date of birth', () => {
         draftStoreServiceMock.resolveFind('ccj')
 
         await request(app)
-          .get(dateOfBirthPage)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Defendant’s date of birth'))
       })
@@ -92,20 +95,22 @@ describe('CCJ - defendant date of birth', () => {
   describe('on POST', () => {
     const validFormData = { known: 'true', date: { day: '31', month: '12', year: '1900' } }
 
-    checkAuthorizationGuards(app, 'post', dateOfBirthPage)
+    const method = 'post'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
-      checkAccessGuard(app, 'post')
+      checkAccessGuard(app, method)
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .post(dateOfBirthPage)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -116,7 +121,7 @@ describe('CCJ - defendant date of birth', () => {
         draftStoreServiceMock.rejectFind('Error')
 
         await request(app)
-          .post(dateOfBirthPage)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -129,7 +134,7 @@ describe('CCJ - defendant date of birth', () => {
           draftStoreServiceMock.rejectSave()
 
           await request(app)
-            .post(dateOfBirthPage)
+            .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -141,7 +146,7 @@ describe('CCJ - defendant date of birth', () => {
           draftStoreServiceMock.resolveSave()
 
           await request(app)
-            .post(dateOfBirthPage)
+            .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(paidAmountPage))
@@ -154,7 +159,7 @@ describe('CCJ - defendant date of birth', () => {
           draftStoreServiceMock.resolveFind('ccj')
 
           await request(app)
-            .post(dateOfBirthPage)
+            .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ known: undefined })
             .expect(res => expect(res).to.be.successful.withText('Defendant’s date of birth', 'div class="error-summary"'))

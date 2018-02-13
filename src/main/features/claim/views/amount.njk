@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, textInput, textInputInline, saveAndContinueButton, linkButton, errorSummary %}
+{% from "form.njk" import csrfProtection, textInputInline, saveAndContinueButton, linkButton, errorSummary %}
 
 {% set title = t('Claim amount') %}
 {% set heading = t('Claim amount') %}
@@ -21,13 +21,13 @@
           <div id="claim-amount">
             <div>
               <div id="claim-amount-heading-1" class="claim-amount-column-1 mobile-hide">
-                <span class="form-label-bold">{{ t('What you’re claiming for') }}</span>
-                <span class="form-hint">
-                  {{ t('Briefly explain why you’re claiming for this - for example, "unpaid debt" or "house deposit not returned"') }}
+                <span id="claim-reason-label" class="form-label-bold">{{ t('What you’re claiming for') }}</span>
+                <span id="claim-reason-hint" class="form-hint">
+                  {{ t('Briefly explain why you’re claiming for this - for example, “unpaid debt” or “house deposit not returned”') }}
                 </span>
               </div>
               <div id="claim-amount-heading-2" class="claim-amount-column-2 mobile-hide">
-                <span class="form-label-bold">{{ t('Amount') }}</span>
+                <span id="claim-amount-label" class="form-label-bold">{{ t('Amount') }}</span>
               </div>
             </div>
             {% set totalError = form.errorFor('rows').length > 0 %}
@@ -60,10 +60,21 @@
                       {{ t('Briefly explain why you’re claiming for this - for example, "unpaid debt" or "house deposit not returned"') }}
                     </span>
                   {% endif %}
+                  {{
+                    textInputInline(
+                      'rows['+loop.index0+'][reason]', form, 'claim-amount-column-1' + (' form-control-error' if displayTotalError else ''),
+                      ariaLabelledBy = "claim-reason-label",
+                      ariaDescribedBy = "claim-reason-hint"
+                    )
+                  }}
 
-                  {{ textInputInline('rows['+loop.index0+'][reason]', form, 'claim-amount-column-1' + (' form-control-error' if displayTotalError else '')) }}
                   <span class="form-label-bold mobile-show">{{ t('Amount') }}</span>
-                  {{ textInputInline('rows['+loop.index0+'][amount]', form, 'claim-amount-column-2' + (' form-control-error' if displayTotalError else ''), ' input-symbol-pound' ) }}
+                  {{
+                    textInputInline(
+                      'rows['+loop.index0+'][amount]', form, 'claim-amount-column-2' + (' form-control-error' if displayTotalError else ''), ' input-symbol-pound',
+                      ariaLabelledBy = "claim-amount-label"
+                    )
+                  }}
                 </div>
               {% endfor %}
             </div>
@@ -86,4 +97,3 @@
     </div>
   </div>
 {% endblock %}
-

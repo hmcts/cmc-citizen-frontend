@@ -25,11 +25,13 @@
             </legend>
 
             <div class="multiple-choice" data-target="claim-date">
-              <input id="typecustom" type="radio" name="type" value="custom" {% if form.valueFor('type') == 'custom' %} checked {% endif %}>
+              <input id="typecustom" type="radio" name="type" value="{{ InterestDateType.CUSTOM }}"
+                {% if form.valueFor('type') == InterestDateType.CUSTOM %} checked
+                {% endif %}>
               <label for="typecustom">
-                <span class="bold-small">{{ t('Claim interest from a particular date') }}</span>
-                <br>
-                {{ t('For example, the date an invoice was overdue or that you told someone they owed you the money.') }}
+                <span class="bold-small">{{ t('From a particular date') }}</span>
+                <span class="form-hint">{{ t('For example, the date an invoice was overdue or that you told someone '
+                  + 'they owed you the money.') }}</span>
               </label>
             </div>
             <div class="panel panel-border-narrow js-hidden" id="claim-date" aria-hidden="false">
@@ -38,14 +40,22 @@
               {{ textInput('Explain why you’re claiming from this date', 'reason', form) }}
 
             </div>
-            {{ radioOption('Claim interest from the date I submit the claim', 'type', form, 'submission', ' ', form.valueFor('type') == 'submission') }}
+            {{ radioOption(
+              label = 'From the date the claim is submitted',
+              name = 'type',
+              form = form,
+              value = InterestDateType.SUBMISSION,
+              hint = ' ',
+              checked = form.valueFor('type') == InterestDateType.SUBMISSION,
+              bold = true
+            ) }}
           </fieldset>
         </div>
 
         <details class='form-group'>
 
           <summary>
-            <span class="summary">{{ t('Help with interest rate') }}</span>
+            <span class="summary">{{ t('Help with this decision') }}</span>
           </summary>
 
           <div class="panel panel-border-narrow">

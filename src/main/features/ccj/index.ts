@@ -8,22 +8,25 @@ import { CCJGuard } from 'ccj/guards/ccjGuard'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
-import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
+import { IsClaimantInCaseGuard } from 'guards/isClaimantInCaseGuard'
+import { OAuthHelper } from 'idam/oAuthHelper'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    res.redirect(AuthenticationRedirectFactory.get().forLogin(req, res))
+    res.redirect(OAuthHelper.forLogin(req, res))
   }
 
-  const requiredRoles = ['cmc-private-beta']
+  const requiredRoles = ['citizen']
   const unprotectedPaths = []
   return AuthorizationMiddleware.requestHandler(requiredRoles, accessDeniedCallback, unprotectedPaths)
 }
 
 export class CCJFeature {
   enableFor (app: express.Express) {
-    app.all(/^\/case\/.+\/ccj\/.*$/, requestHandler())
-    app.all(/^\/case\/.+\/ccj\/.*$/, ClaimMiddleware.retrieveByExternalId)
+    const allCCJ = '/case/*/ccj/*'
+    app.all(allCCJ, requestHandler())
+    app.all(allCCJ, ClaimMiddleware.retrieveByExternalId)
+    app.all(allCCJ, IsClaimantInCaseGuard.check())
     app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/, CCJGuard.requestHandler)
     app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'ccj', 100, (value: any): DraftCCJ => {

@@ -16,21 +16,24 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { SignatureType } from 'app/common/signatureType'
 import { ValidationErrors as BasicValidationErrors } from 'ccj/form/models/declaration'
 import { ValidationErrors as QualifiedValidationErrors } from 'ccj/form/models/qualifiedDeclaration'
+import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
-const cnsPage = CCJPaths.checkAndSendPage.evaluateUri({ externalId: externalId })
+const pagePath = CCJPaths.checkAndSendPage.evaluateUri({ externalId: externalId })
 const confirmationPage = CCJPaths.confirmationPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ: check and send page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', cnsPage)
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath)
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       context('when user authorised', () => {
@@ -38,7 +41,7 @@ describe('CCJ: check and send page', () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
-            .get(cnsPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -48,7 +51,7 @@ describe('CCJ: check and send page', () => {
           draftStoreServiceMock.rejectFind('Error')
 
           await request(app)
-            .get(cnsPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -58,7 +61,7 @@ describe('CCJ: check and send page', () => {
           draftStoreServiceMock.resolveFind('ccj')
 
           await request(app)
-            .get(cnsPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Check your answers'))
         })
@@ -75,18 +78,20 @@ describe('CCJ: check and send page', () => {
       signerRole: 'Director'
     }
 
-    checkAuthorizationGuards(app, 'post', cnsPage)
+    const method = 'post'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .post(cnsPage)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validBasicFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -97,7 +102,7 @@ describe('CCJ: check and send page', () => {
         draftStoreServiceMock.rejectFind('Error')
 
         await request(app)
-          .post(cnsPage)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validBasicFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -107,11 +112,11 @@ describe('CCJ: check and send page', () => {
         it('should redirect to confirmation page when signature is basic', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
-          claimStoreServiceMock.resolveSaveCcjForUser()
+          claimStoreServiceMock.resolveSaveCcjForExternalId()
           draftStoreServiceMock.resolveDelete()
 
           await request(app)
-            .post(cnsPage)
+            .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validBasicFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(confirmationPage))
@@ -120,11 +125,11 @@ describe('CCJ: check and send page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
           draftStoreServiceMock.resolveSave()
-          claimStoreServiceMock.resolveSaveCcjForUser()
+          claimStoreServiceMock.resolveSaveCcjForExternalId()
           draftStoreServiceMock.resolveDelete()
 
           await request(app)
-            .post(cnsPage)
+            .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validQualifiedFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(confirmationPage))
@@ -133,10 +138,10 @@ describe('CCJ: check and send page', () => {
         it('should return 500 when cannot save CCJ', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
-          claimStoreServiceMock.rejectSaveCcjForUser()
+          claimStoreServiceMock.rejectSaveCcjForExternalId()
 
           await request(app)
-            .post(cnsPage)
+            .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validBasicFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -149,7 +154,7 @@ describe('CCJ: check and send page', () => {
           draftStoreServiceMock.resolveFind('ccj')
 
           await request(app)
-            .post(cnsPage)
+            .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ signed: undefined, type: SignatureType.BASIC })
             .expect(res => expect(res).to.be.successful.withText(BasicValidationErrors.DECLARATION_REQUIRED,
@@ -160,7 +165,7 @@ describe('CCJ: check and send page', () => {
           draftStoreServiceMock.resolveFind('ccj')
 
           await request(app)
-            .post(cnsPage)
+            .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ signed: 'true', type: SignatureType.QUALIFIED, signerName: '', signerRole: '' })
             .expect(res => expect(res).to.be.successful.withText(QualifiedValidationErrors.SIGNER_NAME_REQUIRED,

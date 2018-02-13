@@ -1,14 +1,12 @@
 import * as express from 'express'
-import * as toBoolean from 'to-boolean'
-import * as config from 'config'
 import { Claim } from 'app/claims/models/claim'
 import { ClaimStoreClient } from 'app/claims/claimStoreClient'
 import { ErrorPaths } from 'first-contact/paths'
-import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
+import { User } from 'idam/user'
+import { Logger } from '@hmcts/nodejs-logging'
+import { OAuthHelper } from 'idam/oAuthHelper'
 
-const logger = require('@hmcts/nodejs-logging').getLogger('first-contact/guards/claimReferenceMatchesGuard')
-
-const oauthEnabled = toBoolean(config.get('featureToggles.idamOauth'))
+const logger = Logger.getLogger('first-contact/guards/claimReferenceMatchesGuard')
 
 export class ClaimReferenceMatchesGuard {
 
@@ -16,8 +14,9 @@ export class ClaimReferenceMatchesGuard {
     try {
       const reference = ClaimReferenceMatchesGuard.getClaimRef(req)
 
-      const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(res.locals.user.id)
-      res.locals.user.claim = claim
+      const user: User = res.locals.user
+      const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(user.id, user.bearerToken)
+      res.locals.claim = claim
 
       if (claim.claimNumber !== reference) {
         logger.error('Claim reference mismatch - redirecting to access denied page')
@@ -31,9 +30,6 @@ export class ClaimReferenceMatchesGuard {
   }
 
   private static getClaimRef (req: express.Request): string {
-    if (oauthEnabled) {
-      return AuthenticationRedirectFactory.get().getStateCookie(req)
-    }
-    return req.query.ref
+    return OAuthHelper.getStateCookie(req)
   }
 }

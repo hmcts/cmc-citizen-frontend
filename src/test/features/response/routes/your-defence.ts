@@ -16,30 +16,33 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
+import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const defencePage = ResponsePaths.defencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath = ResponsePaths.defencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 describe('Defendant response: defence page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', defencePage)
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
-      checkAlreadySubmittedGuard(app, 'get', defencePage)
-      checkCountyCourtJudgmentRequestedGuard(app, 'get', defencePage)
+      checkAlreadySubmittedGuard(app, method, pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
-            .get(defencePage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -49,7 +52,7 @@ describe('Defendant response: defence page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
-            .get(defencePage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Your defence'))
         })
@@ -58,15 +61,17 @@ describe('Defendant response: defence page', () => {
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', defencePage)
+    const method = 'post'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
-      checkAlreadySubmittedGuard(app, 'post', defencePage)
-      checkCountyCourtJudgmentRequestedGuard(app, 'post', defencePage)
+      checkAlreadySubmittedGuard(app, method, pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       context('when response not submitted', () => {
         context('when form is invalid', () => {
@@ -74,7 +79,7 @@ describe('Defendant response: defence page', () => {
             claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
-              .post(defencePage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -84,7 +89,7 @@ describe('Defendant response: defence page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(defencePage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Your defence', 'div class="error-summary"'))
           })
@@ -97,7 +102,7 @@ describe('Defendant response: defence page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(defencePage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ text: 'Some valid defence' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -109,7 +114,7 @@ describe('Defendant response: defence page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
-              .post(defencePage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ text: 'Some valid defence' })
               .expect(res => expect(res).to.be.redirect

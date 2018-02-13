@@ -30,13 +30,15 @@ $(function () {
       throw new Error('Label element is required')
     }
 
-    for (var content of labelElement.contents()) {
-      const text = $(content).text().trim()
-      if (text && content.class !== 'form-hint') {
-        return text
-      }
-    }
-    return undefined
+    return labelElement.contents()
+      .filter(function() {
+        if ($(this).hasClass('form-hint')) {
+          return false
+        }
+        return !!this.textContent.trim()
+      })
+      .text()
+      .trim()
   }
 
   function findLabel (form, inputName) {

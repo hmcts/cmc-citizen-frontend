@@ -65,14 +65,21 @@
     "timeout": 10000
   },
   "featureToggles": {
+    "clusterMode": false,
     "testingSupport": false,
     "countyCourtJudgment": false,
-    "idamOauth": false,
+    "fullAdmission": false,
     "partialAdmission": false,
-    "offer": false
+    "offer": false,
+    "statementOfMeans": false,
+    "finePrint": false,
+    "ccd": false
   },
   "oauth": {
     "clientId": "cmc_citizen",
     "clientSecret": "123456"
+  },
+  "postcodeLookup": {
+    "apiKey": "AAAAAAA"
   }
 }

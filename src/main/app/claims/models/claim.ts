@@ -1,18 +1,18 @@
-import { Serializable } from 'models/serializable'
-
 import { Moment } from 'moment'
 import { ClaimData } from 'app/claims/models/claimData'
 import { MomentFactory } from 'common/momentFactory'
-import { InterestDateType } from 'app/common/interestDateType'
-import { calculateInterest } from 'app/common/calculateInterest'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
-import { DefendantResponse } from 'claims/models/defendantResponse'
+import { Response } from 'claims/models/response'
+import { ResponseType } from 'claims/models/response/responseCommon'
 import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
+import { ClaimStatus } from 'claims/models/claimStatus'
+import { FeatureToggles } from 'utils/featureToggles'
+import { FreeMediationOption } from 'response/form/models/freeMediation'
 
-export class Claim implements Serializable<Claim> {
+export class Claim {
   id: number
   claimantId: string
   externalId: string
@@ -27,9 +27,12 @@ export class Claim implements Serializable<Claim> {
   claimantEmail: string
   countyCourtJudgment: CountyCourtJudgment
   countyCourtJudgmentRequestedAt: Moment
-  response: DefendantResponse
+  response: Response
   defendantEmail: string
   settlement: Settlement
+  settlementReachedAt: Moment
+  totalAmountTillToday: number
+  totalAmountTillDateOfIssue: number
 
   deserialize (input: any): Claim {
     if (input) {
@@ -50,7 +53,7 @@ export class Claim implements Serializable<Claim> {
         this.defendantEmail = input.defendantEmail
       }
       if (input.response) {
-        this.response = new DefendantResponse().deserialize(input.response)
+        this.response = Response.deserialize(input.response)
       }
       this.claimantEmail = input.submitterEmail
       this.countyCourtJudgment = new CountyCourtJudgment().deserialize(input.countyCourtJudgment)
@@ -60,6 +63,11 @@ export class Claim implements Serializable<Claim> {
       if (input.settlement) {
         this.settlement = new Settlement().deserialize(input.settlement)
       }
+      if (input.settlementReachedAt) {
+        this.settlementReachedAt = MomentFactory.parse(input.settlementReachedAt)
+      }
+      this.totalAmountTillToday = input.totalAmountTillToday
+      this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
     }
     return this
   }
@@ -70,15 +78,6 @@ export class Claim implements Serializable<Claim> {
     }
 
     return this.settlement.getDefendantOffer()
-  }
-
-  get totalAmount (): number {
-    const interestRate = this.claimData.interest
-    const interestDate = this.claimData.interestDate
-    let claimAmount: number = this.claimData.amount.totalAmount()
-    const date = interestDate.type === InterestDateType.SUBMISSION ? this.createdAt : interestDate.date
-
-    return claimAmount + this.claimData.paidFeeAmount + calculateInterest(claimAmount, interestRate, date)
   }
 
   // noinspection JSUnusedGlobalSymbols Called in the view
@@ -92,5 +91,45 @@ export class Claim implements Serializable<Claim> {
     }
 
     return !this.countyCourtJudgmentRequestedAt && this.remainingDays < 0 && !this.respondedAt
+  }
+
+  get status (): ClaimStatus {
+    if (this.countyCourtJudgmentRequestedAt) {
+      return ClaimStatus.CCJ_REQUESTED
+    } else if (this.isSettlementReached()) {
+      return ClaimStatus.OFFER_SETTLEMENT_REACHED
+    } else if (this.isOfferSubmitted()) {
+      return ClaimStatus.OFFER_SUBMITTED
+    } else if (this.eligibleForCCJ) {
+      return ClaimStatus.ELIGIBLE_FOR_CCJ
+    } else if (this.isFreeMediationRequested()) {
+      return ClaimStatus.FREE_MEDIATION
+    } else if (this.isClaimRejected()) {
+      return ClaimStatus.CLAIM_REJECTED
+    } else if (this.moreTimeRequested) {
+      return ClaimStatus.MORE_TIME_REQUESTED
+    } else if (!this.response) {
+      return ClaimStatus.NO_RESPONSE
+    } else {
+      throw new Error('Unknown Status')
+    }
+  }
+
+  private isFreeMediationRequested () {
+    return this.response && this.response.responseType === ResponseType.FULL_DEFENCE
+      && this.response.freeMediation === FreeMediationOption.YES
+  }
+
+  private isOfferSubmitted () {
+    return FeatureToggles.isEnabled('offer')
+      && this.settlement && this.response && this.response.responseType === ResponseType.FULL_DEFENCE
+  }
+
+  private isSettlementReached () {
+    return FeatureToggles.isEnabled('offer') && this.settlement && this.settlementReachedAt
+  }
+
+  private isClaimRejected () {
+    return this.response && this.response.responseType === ResponseType.FULL_DEFENCE
   }
 }

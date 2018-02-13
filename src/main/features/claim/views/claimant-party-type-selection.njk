@@ -1,55 +1,60 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import nameInput, csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 
-{% set title = t("Money claim") %}
+{% set title = t('Money claim') %}
 
 {% block content %}
   <div class="grid-row">
-    <h1 class="heading-large">{{ t("About you and this claim") }}</h1>
-    <p>{{ t('I’m claiming as:') }}</p>
-    <form method="POST" novalidate>
-      {{ csrfProtection(csrf) }}
+      <div class="column-two-thirds">
+        <h1 class="heading-large">{{ t('About you and this claim') }}</h1>
 
-      {{
-        radioGroup(
-          form = form,
-          label = 'About you and this claim',
-          labelForScreenReadersOnly = true,
-          name = 'type',
-          options = [
-            {
-              bold: true,
-              label: 'An individual',
-              hint: 'You are claiming for yourself',
-              value: 'individual',
-              checked: (form.valueFor('type').value === 'individual')
-            },
-            {
-              bold: true,
-              label: 'A sole trader or self-employed person',
-              hint: 'For example, you are claiming as a tradesperson',
-              value: 'soleTrader',
-              checked: (form.valueFor('type').value === 'soleTrader')
-            },
-            {
-              bold: true,
-              label: 'On behalf of a company',
-              hint: 'For example, you sell goods or services as a company',
-              value: 'company',
-              checked: (form.valueFor('type').value === 'company')
-            },
-            {
-              bold: true,
-              label: 'As another type of organisation',
-              hint: 'For example, a partnership, trust, charity, club or association',
-              value: 'organisation',
-              checked: (form.valueFor('type').value === 'organisation')
-            }
-          ]
-        )
-      }}
 
-      {{ saveAndContinueButton() }}
-    </form>
+        <p>We need to know if you’re making this claim as an individual, sole trader or on behalf of a company or an organisation.</p>
+        <p>{{ t('I’m claiming as an:') }}</p>
+        <form method="POST" novalidate>
+          {{ csrfProtection(csrf) }}
+
+          {{
+            radioGroup(
+              form = form,
+              label = 'About you and this claim',
+              labelForScreenReadersOnly = true,
+              name = 'type',
+              options = [
+                {
+                  bold: true,
+                  label: 'Individual',
+                  hint: 'You are claiming for yourself',
+                  value: 'individual',
+                  checked: (form.valueFor('type').value === 'individual')
+                },
+                {
+                  bold: true,
+                  label: 'Sole trader or self-employed person',
+                  hint: 'For example as a tradesperson',
+                  value: 'soleTrader',
+                  checked: (form.valueFor('type').value === 'soleTrader')
+                },
+                {
+                  bold: true,
+                  label: 'Company',
+                  hint: 'For example a company that sells goods and services',
+                  value: 'company',
+                  checked: (form.valueFor('type').value === 'company')
+                },
+                {
+                  bold: true,
+                  label: 'Another type of organisation',
+                  hint: 'For example a partnership, trust, charity, club or association',
+                  value: 'organisation',
+                  checked: (form.valueFor('type').value === 'organisation')
+                }
+              ]
+            )
+          }}
+
+          {{ saveAndContinueButton() }}
+        </form>
+      </div>
   </div>
 {% endblock %}

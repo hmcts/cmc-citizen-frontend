@@ -1,4 +1,3 @@
-import { Serializable } from 'app/models/serializable'
 import { ClaimAmountBreakdown } from 'features/claim/form/models/claimAmountBreakdown'
 import { InterestDate } from 'app/claims/models/interestDate'
 import { Interest } from 'features/claim/form/models/interest'
@@ -16,7 +15,7 @@ import { Organisation as DefendantAsOrganisation } from 'claims/models/details/t
 import { Payment } from 'app/pay/payment'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
-export class ClaimData implements Serializable<ClaimData> {
+export class ClaimData {
   externalId: string
   claimants: Party[]
   defendants: TheirDetails[]

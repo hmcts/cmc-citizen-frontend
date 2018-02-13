@@ -1,8 +1,8 @@
 import { IsDefined, IsIn, IsPositive, MaxLength, ValidateIf } from 'class-validator'
 
-import { Serializable } from 'app/models/serializable'
 import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 import { CompletableTask } from 'app/models/task'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
 
 export class InterestType {
   static readonly NO_INTEREST: string = 'no interest'
@@ -28,7 +28,7 @@ export class ValidationErrors {
   static readonly REASON_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
 }
 
-export class Interest implements Serializable <Interest>, CompletableTask {
+export class Interest implements CompletableTask {
 
   static readonly STANDARD_RATE = 8
 
@@ -58,7 +58,7 @@ export class Interest implements Serializable <Interest>, CompletableTask {
       return value
     }
 
-    const instance = new Interest(value.type, value.rate ? parseFloat(value.rate) : undefined, value.reason)
+    const instance = new Interest(value.type, toNumberOrUndefined(value.rate), value.reason)
 
     switch (instance.type) {
       case InterestType.STANDARD:

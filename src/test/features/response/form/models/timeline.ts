@@ -1,17 +1,17 @@
 import { expect } from 'chai'
 
 import { TimelineRow } from 'response/form/models/timelineRow'
-import { INIT_ROW_COUNT, MAX_NUMBER_OF_EVENTS, Timeline } from 'response/form/models/timeline'
+import { INIT_ROW_COUNT, MAX_NUMBER_OF_ROWS, Timeline } from 'response/form/models/timeline'
 
 describe('Timeline', () => {
 
   describe('on init', () => {
 
-    it('should create array of 4 empty instances of TimelineRow', () => {
+    it(`should create array of ${INIT_ROW_COUNT} empty instances of TimelineRow`, () => {
 
       const actual: TimelineRow[] = (new Timeline()).rows
 
-      expect(actual.length).to.equal(4)
+      expect(actual.length).to.equal(INIT_ROW_COUNT)
       expectAllRowsToBeEmpty(actual)
     })
   })
@@ -113,16 +113,16 @@ describe('Timeline', () => {
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT + 1)
     })
 
-    it('adds only up to 20 elements', () => {
+    it(`adds only up to ${MAX_NUMBER_OF_ROWS} elements`, () => {
       const actual: Timeline = new Timeline()
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
 
-      for (let i = 0; i < MAX_NUMBER_OF_EVENTS + 1; i++) {
+      for (let i = 0; i < MAX_NUMBER_OF_ROWS + 1; i++) {
         actual.appendRow()
       }
 
-      expect(actual.rows.length).to.be.eq(MAX_NUMBER_OF_EVENTS)
+      expect(actual.rows.length).to.be.eq(MAX_NUMBER_OF_ROWS)
     })
   })
 
@@ -133,8 +133,7 @@ describe('Timeline', () => {
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
       actual.removeExcessRows()
-      expect(actual.rows.length).to.be.eq(1)
-      expectAllRowsToBeEmpty(actual.rows)
+      expect(actual.rows.length).to.be.eq(0)
     })
 
     it('should not filter out any element from list when all populated', () => {
@@ -198,7 +197,7 @@ describe('Timeline', () => {
     it('should return true when number of rows is equal max', () => {
       const actual: Timeline = new Timeline()
 
-      for (let i = 0; i < MAX_NUMBER_OF_EVENTS; i++) {
+      for (let i = 0; i < MAX_NUMBER_OF_ROWS; i++) {
         actual.appendRow()
       }
 
@@ -210,14 +209,12 @@ describe('Timeline', () => {
 function expectAllRowsToBeEmpty (rows: TimelineRow[]) {
   rows.forEach(item => {
     expect(item).instanceof(TimelineRow)
-    expect(item.date).to.eq(undefined)
-    expect(item.description).to.eq(undefined)
+    expect(item.isEmpty()).to.eq(true)
   })
 }
 
 function expectAllRowsToBePopulated (rows: TimelineRow[]) {
   rows.forEach(item => {
-    expect(!!item.date).to.eq(true)
-    expect(!!item.description).to.eq(true)
+    expect(item.isEmpty()).to.eq(false)
   })
 }

@@ -12,6 +12,7 @@ import * as toBoolean from 'to-boolean'
 import { NUMBER_FORMAT } from 'app/utils/numberFormatter'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { SignatureType } from 'app/common/signatureType'
 import { ResponseType } from 'response/form/models/responseType'
 import { YesNoOption } from 'models/yesNoOption'
@@ -19,6 +20,17 @@ import { EvidenceType } from 'response/form/models/evidenceType'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { StatementType } from 'offer/form/models/statementType'
+import { InterestDateType } from 'app/common/interestDateType'
+import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
+import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
+import { DashboardUrlHelper } from 'dashboard/helpers/dashboardUrlHelper'
+import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
+import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
+import { ClaimStatus } from 'claims/models/claimStatus'
+import { FeatureToggles } from 'utils/featureToggles'
+import { Paths as AppPaths } from 'app/paths'
+import { Paths as ResponsePaths } from 'features/response/paths'
+
 const packageDotJson = require('../../../../package.json')
 
 const appAssetPaths = {
@@ -73,10 +85,11 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('reportProblemSurveyUrl', config.get('feedback.reportProblemSurvey.url'))
     nunjucksEnv.addGlobal('customerSurveyUrl', config.get('feedback.serviceSurvey.url'))
 
-    nunjucksEnv.addGlobal('toBoolean', toBoolean)
-    nunjucksEnv.addGlobal('featureToggles', config.get('featureToggles'))
+    nunjucksEnv.addGlobal('featureToggles', this.convertPropertiesToBoolean(config.get('featureToggles')))
     nunjucksEnv.addGlobal('RejectAllOfClaimOption', RejectAllOfClaimOption)
     nunjucksEnv.addGlobal('RejectPartOfClaimOption', RejectPartOfClaimOption)
+    nunjucksEnv.addGlobal('DefendantPaymentType', DefendantPaymentType)
+    nunjucksEnv.addGlobal('DefendantPaymentOption', DefendantPaymentOption)
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('ResponseType', ResponseType)
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)
@@ -84,5 +97,27 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('EvidenceType', EvidenceType)
     nunjucksEnv.addGlobal('StatementType', StatementType)
     nunjucksEnv.addGlobal('NotEligibleReason', NotEligibleReason)
+    nunjucksEnv.addGlobal('InterestDateType', InterestDateType)
+    nunjucksEnv.addGlobal('ResidenceType', ResidenceType)
+    nunjucksEnv.addGlobal('PaymentSchedule', PaymentSchedule)
+    nunjucksEnv.addGlobal('DashboardUrlHelper', DashboardUrlHelper)
+    nunjucksEnv.addGlobal('UnemploymentType', UnemploymentType)
+    nunjucksEnv.addGlobal('BankAccountType', BankAccountType)
+    nunjucksEnv.addGlobal('ClaimStatus', ClaimStatus)
+    nunjucksEnv.addGlobal('AppPaths', AppPaths)
+    nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
+    if (FeatureToggles.isEnabled('finePrint')) {
+      nunjucksEnv.addGlobal('cookieText', `GOV.UK uses cookies make the site simpler. <a href="${AppPaths.cookiesPage.uri}">Find out more about cookies</a>`)
+    }
+  }
+
+  private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {
+    if (!featureToggles) {
+      throw new Error('Feature toggles are not defined')
+    }
+    return Object.keys(featureToggles).reduce((result: { [key: string]: boolean }, property: string) => {
+      result[property] = toBoolean(Object.getOwnPropertyDescriptor(featureToggles, property).value)
+      return result
+    }, {})
   }
 }

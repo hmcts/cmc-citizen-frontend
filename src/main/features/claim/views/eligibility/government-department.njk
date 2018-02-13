@@ -9,7 +9,8 @@
     <div class="column-two-thirds">
       <h1 class="heading-large">{{ t('Are you claiming against a government department?') }}</h1>
       <p>
-        {{ t('You can’t use this service to make a claim against a government department such as HM Revenue and Customs.') }}
+        {{ t('<a href="{{ governmentDepartmentUri }}" target="_blank" >See a list of government departments</a>.',
+        { governmentDepartmentUri : 'https://www.gov.uk/government/organisations' }) | safe }}
       </p>
 
       {% set name = 'governmentDepartment' %}
@@ -21,9 +22,9 @@
 
         {{
           radioGroup(
-            'Are you claiming against a government department?',
-            name,
-            [
+            label = 'Are you claiming against a government department?',
+            name = name,
+            options = [
               {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
               {'label': 'No', value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO)}
             ],
@@ -31,19 +32,6 @@
             labelForScreenReadersOnly = true
           )
         }}
-
-        <details class="notice">
-          <summary><span class="summary">{{ t('What if I do claim against a department?') }}</span></summary>
-          <div class="panel panel-border-narrow">
-
-            <p>
-              {{ t('If you name a government department as a respondent, your claim will be referred to a ' +
-              'District Judge who might cancel it (‘strike it out’). You won’t be refunded the claim fee.') }}
-            </p>
-
-          </div>
-
-        </details>
 
         {{ saveAndContinueButton() }}
 

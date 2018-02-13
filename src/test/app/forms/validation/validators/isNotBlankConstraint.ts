@@ -6,12 +6,9 @@ describe('IsNotBlankConstraint', () => {
   const constraint: IsNotBlankConstraint = new IsNotBlankConstraint()
 
   describe('validate', () => {
-    it('should accept undefined value', () => {
-      expect(constraint.validate(null)).to.be.equal(true)
-    })
 
-    it('should accept null value', () => {
-      expect(constraint.validate(null)).to.be.equal(true)
+    it('should accept undefined value', () => {
+      expect(constraint.validate(undefined)).to.be.equal(true)
     })
 
     it('should reject non string value', () => {

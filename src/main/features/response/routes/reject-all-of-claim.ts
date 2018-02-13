@@ -10,14 +10,21 @@ import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { GuardFactory } from 'response/guards/guardFactory'
 import { DraftService } from 'services/draftService'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { Claim } from 'claims/models/claim'
+import { Draft } from '@hmcts/draft-store-client'
 
 function isRequestAllowed (res: express.Response): boolean {
-  return res.locals.user.responseDraft.document.response !== undefined
-    && res.locals.user.responseDraft.document.response.type === ResponseType.OWE_NONE
+  const draft: Draft<ResponseDraft> = res.locals.responseDraft
+
+  return draft.document.response !== undefined
+    && draft.document.response.type === ResponseType.DEFENCE
 }
 
 function accessDeniedCallback (req: express.Request, res: express.Response): void {
-  res.redirect(Paths.responseTypePage.evaluateUri({ externalId: res.locals.user.claim.externalId }))
+  const claim: Claim = res.locals.claim
+
+  res.redirect(Paths.responseTypePage.evaluateUri({ externalId: claim.externalId }))
 }
 
 const guardRequestHandler: express.RequestHandler = GuardFactory.create(isRequestAllowed, accessDeniedCallback)
@@ -34,24 +41,27 @@ export default express.Router()
     Paths.defenceRejectAllOfClaimPage.uri,
     guardRequestHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      renderView(new Form(res.locals.user.responseDraft.document.rejectAllOfClaim), res)
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+
+      renderView(new Form(draft.document.rejectAllOfClaim), res)
     }))
   .post(
     Paths.defenceRejectAllOfClaimPage.uri,
     guardRequestHandler,
     FormValidator.requestHandler(RejectAllOfClaim),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const { externalId } = req.params
       const form: Form<RejectAllOfClaim> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
-        user.responseDraft.document.rejectAllOfClaim = form.model
 
-        await new DraftService().save(user.responseDraft, user.bearerToken)
+        draft.document.rejectAllOfClaim = form.model
+        await new DraftService().save(draft, user.bearerToken)
 
+        const { externalId } = req.params
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
       }
     }))

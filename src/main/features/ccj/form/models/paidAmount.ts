@@ -1,8 +1,8 @@
 import { IsDefined, IsIn, IsPositive, ValidateIf } from 'class-validator'
-import { Serializable } from 'models/serializable'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { Fractions } from 'forms/validation/validators/fractions'
 import { IsLessThan } from 'forms/validation/validators/isLessThan'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
 
 export class ValidationErrors {
   static readonly OPTION_REQUIRED: string = 'Choose option: yes or no'
@@ -12,7 +12,7 @@ export class ValidationErrors {
   static readonly PAID_AMOUNT_GREATER_THAN_TOTAL_AMOUNT: string = 'Paid amount cannot be greater than or equal to total amount'
 }
 
-export class PaidAmount implements Serializable <PaidAmount> {
+export class PaidAmount {
 
   @IsDefined({ message: ValidationErrors.OPTION_REQUIRED })
   @IsIn(PaidAmountOption.all(), { message: ValidationErrors.OPTION_REQUIRED })
@@ -35,8 +35,8 @@ export class PaidAmount implements Serializable <PaidAmount> {
 
   static fromObject (value?: any): PaidAmount {
     if (value && value.option) {
-      const amount: number = value.amount ? parseFloat(value.amount) : undefined
-      const claimedAmount: number = value.claimedAmount ? parseFloat(value.claimedAmount) : undefined
+      const amount: number = toNumberOrUndefined(value.amount)
+      const claimedAmount: number = toNumberOrUndefined(value.claimedAmount)
       const option: PaidAmountOption = PaidAmountOption.all()
         .filter(option => option.value === value.option)
         .pop()

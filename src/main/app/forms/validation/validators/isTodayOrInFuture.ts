@@ -12,7 +12,7 @@ import { LocalDate } from 'forms/models/localDate'
 @ValidatorConstraint()
 export class DateTodayOrInFutureConstraint implements ValidatorConstraintInterface {
   validate (value: any, args?: ValidationArguments) {
-    if (value == null) {
+    if (value === undefined) {
       return true
     }
 
@@ -22,11 +22,8 @@ export class DateTodayOrInFutureConstraint implements ValidatorConstraintInterfa
 
     const date = value.toMoment()
     const now = MomentFactory.currentDate()
-    if (date.isAfter(now) || date.isSame(now)) {
-      return true
-    } else {
-      return false
-    }
+
+    return (date.isAfter(now) || date.isSame(now))
   }
 }
 

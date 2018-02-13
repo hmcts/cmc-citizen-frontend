@@ -9,15 +9,16 @@ import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { CountyCourtJudgmentRequestedGuard } from 'response/guards/countyCourtJudgmentRequestedGuard'
-import { AuthenticationRedirectFactory } from 'utils/AuthenticationRedirectFactory'
+import { IsDefendantInCaseGuard } from 'guards/isDefendantInCaseGuard'
+import { OAuthHelper } from 'idam/oAuthHelper'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    res.redirect(AuthenticationRedirectFactory.get().forLogin(req, res))
+    res.redirect(OAuthHelper.forLogin(req, res))
   }
 
   const requiredRoles = [
-    'cmc-private-beta'
+    'citizen'
   ]
   const unprotectedPaths = []
   return AuthorizationMiddleware.requestHandler(requiredRoles, accessDeniedCallback, unprotectedPaths)
@@ -25,13 +26,16 @@ function defendantResponseRequestHandler (): express.RequestHandler {
 
 export class Feature {
   enableFor (app: express.Express) {
-    app.all('/case/*/response/*', defendantResponseRequestHandler())
+    const allResponseRoutes = '/case/*/response/*'
+
+    app.all(allResponseRoutes, defendantResponseRequestHandler())
     app.all(/^\/case\/.+\/response\/(?![\d]+\/receiver).*$/, ClaimMiddleware.retrieveByExternalId)
+    app.all(allResponseRoutes, IsDefendantInCaseGuard.check())
     app.all(
       /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|full-admission|partial-admission|counter-claim|receipt).*$/,
       AlreadyRespondedGuard.requestHandler
     )
-    app.all(/^\/case\/.+\/response\/.*$/, CountyCourtJudgmentRequestedGuard.requestHandler)
+    app.all(allResponseRoutes, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(
       /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|receipt).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'response', 100, (value: any): ResponseDraft => {

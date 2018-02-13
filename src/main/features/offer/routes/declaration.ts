@@ -6,15 +6,16 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Declaration } from 'ccj/form/models/declaration'
 import { Claim } from 'claims/models/claim'
+import { OfferClient } from 'claims/offerClient'
 
-function renderView (form: Form<Declaration>, claim: Claim, res: express.Response) {
+function renderView (form: Form<Declaration>, res: express.Response) {
+  const claim: Claim = res.locals.claim
   res.render(
     Paths.declarationPage.associatedView,
     {
       claim: claim,
       form: form,
-      offer: claim.defendantOffer,
-      paths: Paths
+      offer: claim.defendantOffer
     }
   )
 }
@@ -25,8 +26,7 @@ export default express.Router()
     Paths.declarationPage.uri,
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        const user: User = res.locals.user
-        renderView(Form.empty(), user.claim, res)
+        renderView(Form.empty(), res)
       }
     )
   )
@@ -35,12 +35,15 @@ export default express.Router()
     FormValidator.requestHandler(Declaration, Declaration.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<Declaration> = req.body
-      const user: User = res.locals.user
 
       if (form.hasErrors()) {
-        renderView(form, user.claim, res)
+        renderView(form, res)
       } else {
-        // TODO: persist and redirect to confirmation page
-        renderView(form, user.claim, res)
+        const claim: Claim = res.locals.claim
+        const user: User = res.locals.user
+
+        await OfferClient.acceptOffer(claim.externalId, user)
+
+        res.redirect(Paths.acceptedPage.evaluateUri({ externalId: claim.externalId }))
       }
     }))

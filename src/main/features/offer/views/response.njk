@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, submitButton, errorSummary, radioGroup %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary, radioGroupWithHintPanel %}
 {% from "date.njk" import dateInput %}
 
 {% set title = t('Money claim | Accept or reject the offer') %}
@@ -9,7 +9,7 @@
     <div class="column-two-thirds">
       <h1 class="heading-large">
         <span class="heading-secondary">{{ t('Defendant’s response') }}</span>
-        {{ t('%s’s offer', { postProcess: 'sprintf', sprintf: [ claim.claimData.defendant.name ] } ) }}
+        {{ t('{{ defendantName }}’s offer', { defendantName: claim.claimData.defendant.name } ) }}
       </h1>
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
@@ -27,7 +27,7 @@
         <h2 class="heading-medium"> {{ t('Do you accept the offer?') }} </h2>
 
         {{
-        radioGroup(
+        radioGroupWithHintPanel(
           label = 'Do you accept the offer?',
           form = form,
           labelForScreenReadersOnly = true,
@@ -36,10 +36,8 @@
             {
               bold: false,
               label: 'Yes',
-              hint: t('You can make a legal agreement between you and %s.',
-                { postProcess: 'sprintf',
-                sprintf:[ claim.claimData.defendant.name ]
-                }),
+              hint: t('Next you can make a legal agreement between you and {{ defendantName }}.',
+                     { defendantName: claim.claimData.defendant.name }),
               value: StatementType.ACCEPTATION.value,
               checked: (form.valueFor('option').value === StatementType.ACCEPTATION)
             },
@@ -58,7 +56,7 @@
           ]
         )
       }}
-      {{ submitButton('Continue') }}
+{{ submitButton('Continue') }}
       </form>
     </div>
   </div>

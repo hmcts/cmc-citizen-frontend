@@ -26,6 +26,8 @@ import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
+import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
+import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
@@ -34,12 +36,16 @@ export const sampleClaimDraftObj = {
   readResolveDispute: true,
   readCompletingClaim: true,
   eligibility: {
+    claimOnBehalf: YesNoOption.NO,
     claimantAddress: YesNoOption.YES,
     defendantAddress: YesNoOption.YES,
     claimValue: ClaimValue.UNDER_10000,
     eighteenOrOver: YesNoOption.YES,
+    singleClaimant: YesNoOption.YES,
+    singleDefendant: YesNoOption.YES,
     governmentDepartment: YesNoOption.NO,
-    helpWithFees: YesNoOption.NO
+    helpWithFees: YesNoOption.NO,
+    claimIsForTenancyDeposit: YesNoOption.NO
   },
   claimant: {
     partyDetails: {
@@ -48,6 +54,7 @@ export const sampleClaimDraftObj = {
       address: {
         line1: 'Apt 99',
         line2: '',
+        line3: '',
         city: 'London',
         postcode: 'E1'
       } as Address,
@@ -77,6 +84,7 @@ export const sampleClaimDraftObj = {
       address: {
         line1: 'Apt 99',
         line2: '',
+        line3: '',
         city: 'London',
         postcode: 'E1'
       },
@@ -103,7 +111,7 @@ export const sampleClaimDraftObj = {
 
 const sampleResponseDraftObj = {
   response: {
-    type: ResponseType.OWE_NONE
+    type: ResponseType.DEFENCE
   },
   rejectAllOfClaim: {
     option: RejectAllOfClaimOption.DISPUTE
@@ -117,13 +125,77 @@ const sampleResponseDraftObj = {
   moreTimeNeeded: {
     option: MoreTimeNeededOption.YES
   },
+  statementOfMeans: {
+    residence: {
+      type: ResidenceType.OWN_HOME
+    },
+    employment: { isCurrentlyEmployed: false },
+    employers: undefined,
+    selfEmployed: undefined,
+    unemployed: { option: { value: UnemploymentType.RETIRED.value } },
+    dependants: { hasAnyChildren: false },
+    supportedByYou: { doYouSupportAnyone: false },
+    maintenance: { option: false },
+    bankAccounts: { rows: [] },
+    debts: { hasAnyDebts: false },
+    monthlyIncome: {
+      salary: 1,
+      universalCredit: 1,
+      jobSeekerAllowanceIncome: 1,
+      jobSeekerAllowanceContribution: 1,
+      incomeSupport: 1,
+      workingTaxCredit: 1,
+      childTaxCredit: 1,
+      childBenefit: 1,
+      councilTaxSupport: 1,
+      pension: 1,
+      maintenance: 1,
+      rows: [{ amount: 10, description: 'bla bla bla' }]
+    },
+    monthlyExpenses: {
+      mortgage: 1,
+      rent: 1,
+      councilTax: 1,
+      gas: 1,
+      electricity: 1,
+      water: 1,
+      travel: 1,
+      schoolCosts: 1,
+      foodAndHousekeeping: 1,
+      tvAndBroadband: 1,
+      mobilePhone: 1,
+      maintenance: 1,
+      rows: [{ amount: 10, description: 'bla bla bla' }]
+    },
+    courtOrders: { hasAnyCourtOrders: false }
+  },
+  defendantPaymentOption: {
+    option: {
+      value: 'INSTALMENTS'
+    }
+  },
+  defendantPaymentPlan: {
+    remainingAmount: 3685,
+    firstPayment: 100,
+    instalmentAmount: 100,
+    firstPaymentDate: {
+      year: 2019,
+      month: 1,
+      day: 1
+    },
+    paymentSchedule: {
+      value: 'EVERY_MONTH',
+      displayValue: 'every month'
+    },
+    text: 'I owe nothing'
+  },
   defendantDetails: {
     email: { address: 'example@example.com' } as Email,
     mobilePhone: { number: '01223344444' } as MobilePhone,
     partyDetails: {
       type: 'individual',
       name: 'John Smith',
-      address: { line1: 'Apartment 99', line2: '', city: 'London', postcode: 'SE28 0JE' } as Address,
+      address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
       hasCorrespondenceAddress: false,
       dateOfBirth: {
         known: true,
@@ -146,6 +218,7 @@ const sampleCCJDraftObj = {
       address: {
         line1: 'Apartment 99',
         line2: '',
+        line3: '',
         city: 'London',
         postcode: 'SE28 0JE'
       },
@@ -169,7 +242,7 @@ const sampleCCJDraftObj = {
   repaymentPlan: {
     remainingAmount: 3685,
     firstPayment: 100,
-    installmentAmount: 100,
+    instalmentAmount: 100,
     firstPaymentDate: {
       year: 2019,
       month: 1,

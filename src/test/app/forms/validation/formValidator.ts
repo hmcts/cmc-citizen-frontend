@@ -31,28 +31,56 @@ describe('FormValidator', () => {
     return void 0
   }
 
-  it('should deserialize request body to class instance using default mapper', () => {
+  it('should deserialize request body to class instance using default mapper', async () => {
     req.body = { name: 'John Smith' }
 
-    FormValidator.requestHandler(Party)(req, res, next)
+    await FormValidator.requestHandler(Party)(req, res, next)
 
     chai.expect(req.body.model).to.be.instanceof(Party)
     chai.expect(req.body.model.name).to.be.equal('John Smith')
   })
 
-  it('should deserialize request body to class instance using custom mapper', () => {
+  it('should deserialize request body to class instance using custom mapper', async () => {
     req.body = { name: 'John Smith' }
 
-    FormValidator.requestHandler(Party, Party.fromObject)(req, res, next)
+    await FormValidator.requestHandler(Party, Party.fromObject)(req, res, next)
 
     chai.expect(req.body.model).to.be.instanceof(Party)
     chai.expect(req.body.model.name).to.be.equal('John Smith')
   })
 
-  it('should validate deserialized object', () => {
+  it('should strip control characters from all string values', async () => {
+    req.body = {
+      someString: 'abc\f\ndef',
+      someArray: [
+        'as\vdf',
+        'ghjk\b'
+      ],
+      someObject: {
+        someProperty: 'z\x1Bxc\x1Av',
+        someOtherProperty: 'tyu\ri'
+      }
+    }
+
+    await FormValidator.requestHandler(Object)(req, res, next)
+
+    chai.expect(req.body.model).to.deep.equal({
+      someString: 'abc\ndef',
+      someArray: [
+        'asdf',
+        'ghjk'
+      ],
+      someObject: {
+        someProperty: 'zxcv',
+        someOtherProperty: 'tyu\ri'
+      }
+    })
+  })
+
+  it('should validate deserialized object', async () => {
     req.body = {}
 
-    FormValidator.requestHandler(Party)(req, res, next)
+    await FormValidator.requestHandler(Party)(req, res, next)
 
     chai.expect(req.body.errors.length).to.be.equal(1)
     chai.expect(req.body.errors[0].property).to.be.equal('name')
@@ -67,10 +95,10 @@ describe('FormValidator', () => {
     chai.expect(req.body.errors.length).to.be.equal(0)
   })
 
-  it('should pass control to the next middleware', () => {
+  it('should pass control to the next middleware', async () => {
     const spy = sinon.spy(next)
 
-    FormValidator.requestHandler(Party)(req, res, spy)
+    await FormValidator.requestHandler(Party)(req, res, spy)
 
     chai.expect(spy).to.have.been.called
   })

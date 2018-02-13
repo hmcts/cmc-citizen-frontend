@@ -3,83 +3,36 @@ import * as moment from 'moment'
 
 import { calculateInterest } from 'app/common/calculateInterest'
 import { Interest, InterestType } from 'claim/form/models/interest'
+import { mockCalculateInterestRate } from '../../http-mocks/claim-store'
 
 describe('calculateInterest', () => {
 
-  function buildInterest (type: InterestType = InterestType.STANDARD, rate: number = 0, reason: string = undefined): Interest {
-    let interest: Interest = new Interest()
-
-    return interest.deserialize({
+  function buildInterest (type: InterestType, rate: number): Interest {
+    return new Interest().deserialize({
       type: type,
       rate: rate,
-      reason: reason
+      reason: 'because'
     })
   }
 
-  describe('should return 0 when', () => {
-    describe('amount 0 and', () => {
-      const AMOUNT: number = 0;
+  describe('should call api for any data gets what API returns', async () => {
 
-      [100, 0].forEach((rate) => {
-        it(`rate ${rate}`, () => {
-          const interest = buildInterest(InterestType.DIFFERENT, rate)
-          const interestDate = moment().subtract(5, 'years')
+    beforeEach(() => {
+      mockCalculateInterestRate(0)
+    })
 
-          expect(calculateInterest(AMOUNT, interest, interestDate)).to.equal(0)
+    Object.keys(InterestType).forEach(async (type) => {
+      [0, 1, 1000].forEach(async (rate) => {
+        it(`when rate is ${rate}, interestType = ${type} gets 0`, async () => {
+
+          const interest = buildInterest(type, rate)
+          const interestFromDate = moment().subtract(5, 'years')
+
+          const expected: number = await calculateInterest(0, interest, interestFromDate)
+
+          expect(expected).to.equal(0)
         })
       })
     })
-
-    describe('interest type is NO_INTEREST and', () => {
-      it('amount is greater than 0', () => {
-        const interest = buildInterest(InterestType.NO_INTEREST)
-        const interestDate = moment().subtract(5, 'years')
-
-        expect(calculateInterest(100, interest, interestDate)).to.equal(0)
-      })
-    })
-
-    describe('date is today', () => {
-      it('amount is greater than 0', () => {
-        const interest = buildInterest()
-        const interestDate = moment()
-
-        expect(calculateInterest(100, interest, interestDate)).to.equal(0)
-      })
-    })
   })
-
-  describe('should return positive number when', () => {
-
-    let amount: number = 100
-    let EXPECTED_RESULT: number = 40.02
-
-    describe('interest type is STANDARD and', () => {
-      it('amount is greater than 0', () => {
-        const interest = buildInterest(InterestType.STANDARD)
-        const interestDate = moment().subtract(5, 'years')
-
-        expect(calculateInterest(amount, interest, interestDate)).to.equal(EXPECTED_RESULT)
-      })
-    })
-
-    describe('interest type is DIFFERENT and', () => {
-      it('amount is greater than 0 (rate = 8)', () => {
-        const interest = buildInterest(InterestType.DIFFERENT, 8)
-        const interestDate = moment().subtract(5, 'years')
-
-        expect(calculateInterest(amount, interest, interestDate)).to.equal(EXPECTED_RESULT)
-      })
-
-      it('amount is greater than 0 (rate = 20)', () => {
-        const interest = buildInterest(InterestType.DIFFERENT, 20)
-        const interestDate = moment().subtract(5, 'years')
-
-        let result: number = calculateInterest(amount, interest, interestDate)
-        expect(result).not.to.equal(EXPECTED_RESULT)
-        expect(result).to.equal(100.05)
-      })
-    })
-  })
-
 })

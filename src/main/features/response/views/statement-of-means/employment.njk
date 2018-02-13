@@ -1,0 +1,57 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioOption, checkboxOption, saveAndContinueButton, errorSummary %}
+{% from "date.njk" import dateInput %}
+
+{% set title = 'Money claim' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ t('Are you currently working?') }}</h1>
+
+      <form method="post" novalidate
+        class="analytics-submit-event-trigger"
+        data-event-action="SoM: Are you currently working"
+        data-event-label-from="isCurrentlyEmployed">
+
+        {{ csrfProtection(csrf) }}
+
+        {% set error = form.errorFor('isCurrentlyEmployed') %}
+        <fieldset id="isCurrentlyEmployed[label]" class="form-group {% if error %} form-group-error {% endif %}">
+          <legend class="visually-hidden">{{ t('Are you currently working?') }}</legend>
+
+          {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+
+          {{
+            radioOption(form = form, label = 'Yes', name = 'isCurrentlyEmployed', value = 'true', checked = form.valueFor('isCurrentlyEmployed') === true)
+          }}
+
+          {% set errorCheckbox = form.errorFor('employed') %}
+
+          <div class="form-group panel panel-border-narrow js-hidden {% if errorCheckbox %} form-group-error {% endif %}" id="isCurrentlyEmployed-true" aria-hidden="false">
+            <p>{{ t('What’s your employment status?') }}</p>
+            <p class="form-hint">{{ t('You can select more than one option.') }}</p>
+
+            {% if errorCheckbox %}<span class="error-message" id="employed[label]">{{ t(errorCheckbox) }}</span>{% endif %}
+            {{
+              checkboxOption(form = form, label = 'Employed', name = 'employed', value = 'true', checked = form.valueFor('employed') === true)
+            }}
+
+            {% if errorCheckbox %}<span class="error-message">{{ t(errorCheckbox) }}</span>{% endif %}
+            {{
+              checkboxOption(form = form, label = 'Self-employed', name = 'selfEmployed', value = 'true', checked = form.valueFor('selfEmployed') === true)
+            }}
+          </div>
+
+          {{
+            radioOption(form = form, label = 'No', name = 'isCurrentlyEmployed', value = 'false', checked = form.valueFor('isCurrentlyEmployed') === false)
+          }}
+
+        </fieldset>
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -5,6 +5,8 @@ import { expect } from 'chai'
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from './validationUtils'
 import { Reason, ValidationErrors } from 'claim/form/models/reason'
+import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 describe('Reason', () => {
 
@@ -85,14 +87,14 @@ describe('Reason', () => {
       expectValidationError(errors, ValidationErrors.REASON_REQUIRED)
     })
 
-    it('should reject claim reason with more than 99000 characters', () => {
-      const errors = validator.validateSync(new Reason(generateString(99001)))
+    it('should reject claim reason with more than max allowed characters', () => {
+      const errors = validator.validateSync(new Reason(generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1)))
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.REASON_TOO_LONG.replace('$constraint1', '99000'))
+      expectValidationError(errors, DefaultValidationErrors.TEXT_TOO_LONG)
     })
 
-    it('should accept claim reason with 99000 characters', () => {
-      const errors = validator.validateSync(new Reason(generateString(9900)))
+    it('should accept claim reason with max allowed characters', () => {
+      const errors = validator.validateSync(new Reason(generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH)))
       expect(errors.length).to.equal(0)
     })
 

@@ -1,16 +1,15 @@
 import * as express from 'express'
 import { Paths } from 'offer/paths'
-import { User } from 'idam/user'
 import { ErrorHandling } from 'common/errorHandling'
+import { Claim } from 'claims/models/claim'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.makeAgreementPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const user: User = res.locals.user
+      const claim: Claim = res.locals.claim
       res.render(Paths.makeAgreementPage.associatedView, {
-        claim: user.claim,
-        paths: Paths
+        claim: claim
       })
     }))

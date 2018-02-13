@@ -13,27 +13,30 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
+import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const paidAmountSummaryPage = Paths.paidAmountSummaryPage.evaluateUri({ externalId: externalId })
+const pagePath = Paths.paidAmountSummaryPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ - paid amount summary page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', paidAmountSummaryPage)
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       it('should return 500 and render error page when cannot retrieve claims', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .get(paidAmountSummaryPage)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -43,7 +46,7 @@ describe('CCJ - paid amount summary page', () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
         await request(app)
-          .get(paidAmountSummaryPage)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -51,9 +54,10 @@ describe('CCJ - paid amount summary page', () => {
       it('should render page when everything is fine', async () => {
         draftStoreServiceMock.resolveFind('ccj')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        claimStoreServiceMock.mockCalculateInterestRate(0)
 
         await request(app)
-          .get(paidAmountSummaryPage)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Amount to be paid by defendant'))
       })

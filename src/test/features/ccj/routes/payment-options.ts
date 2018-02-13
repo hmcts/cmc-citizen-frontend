@@ -14,11 +14,12 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
+import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const paymentOptionsPage = Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
+const pagePath = Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
 
 const validFormData: object = {
   option: PaymentType.IMMEDIATELY.value
@@ -28,11 +29,13 @@ describe('CCJ - payment options', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', paymentOptionsPage)
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       context('when service is unhealthy', () => {
@@ -40,7 +43,7 @@ describe('CCJ - payment options', () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
-            .get(paymentOptionsPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -50,7 +53,7 @@ describe('CCJ - payment options', () => {
           draftStoreServiceMock.rejectFind('Error')
 
           await request(app)
-            .get(paymentOptionsPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -62,7 +65,7 @@ describe('CCJ - payment options', () => {
           draftStoreServiceMock.resolveFind('ccj')
 
           await request(app)
-            .get(paymentOptionsPage)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Payment options'))
         })
@@ -70,11 +73,13 @@ describe('CCJ - payment options', () => {
     })
 
     describe('on POST', () => {
-      checkAuthorizationGuards(app, 'post', paymentOptionsPage)
+      const method = 'post'
+      checkAuthorizationGuards(app, method, pagePath)
+      checkNotClaimantInCaseGuard(app, method, pagePath)
 
       context('when user authorised', () => {
         beforeEach(() => {
-          idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
         })
 
         context('when service is unhealthy', () => {
@@ -82,7 +87,7 @@ describe('CCJ - payment options', () => {
             claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
-              .post(paymentOptionsPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -93,7 +98,7 @@ describe('CCJ - payment options', () => {
             draftStoreServiceMock.rejectFind('Error')
 
             await request(app)
-              .post(paymentOptionsPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -105,7 +110,7 @@ describe('CCJ - payment options', () => {
             draftStoreServiceMock.rejectSave()
 
             await request(app)
-              .post(paymentOptionsPage)
+              .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -125,7 +130,7 @@ describe('CCJ - payment options', () => {
 
             async function checkThatSelectedPaymentOptionRedirectsToPage (data: object, expectedToRedirect: string) {
               await request(app)
-                .post(paymentOptionsPage)
+                .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
                 .send(data)
                 .expect(res => expect(res).to.be.redirect.toLocation(expectedToRedirect))
@@ -147,7 +152,7 @@ describe('CCJ - payment options', () => {
           context('when form is invalid', async () => {
             it('should render page', async () => {
               await request(app)
-                .post(paymentOptionsPage)
+                .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
                 .send({ name: 'John Smith' })
                 .expect(res => expect(res).to.be.successful.withText('Payment options', 'div class="error-summary"'))

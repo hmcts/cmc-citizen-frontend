@@ -20,12 +20,12 @@ describe('Logout receiver', () => {
 
   describe('on GET', () => {
     it('should remove session cookie', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
 
       await request(app)
         .get(AppPaths.logoutReceiver.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.not.have.cookie(cookieName, 'ABC'))
+        .expect(res => expect(res).to.have.cookie(cookieName, ''))
     })
   })
 })

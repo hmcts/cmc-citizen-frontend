@@ -10,7 +10,8 @@
       "es2017.object",
       "dom"
     ],
-    "target": "es5",
+    "target": "es6",
+    "module": "commonjs",
     "baseUrl": "src/main",
     "paths": {
       "app/*": [
@@ -30,6 +31,9 @@
       ],
       "forms/*": [
         "app/forms/*"
+      ],
+      "guards/*": [
+        "app/guards/*"
       ],
       "health/*": [
         "app/health/*"
@@ -66,6 +70,9 @@
       ],
       "offer/*": [
         "features/offer/*"
+      ],
+      "statement-of-means/*": [
+        "features/statement-of-means/*"
       ],
       "dashboard/*": [
         "features/dashboard/*"

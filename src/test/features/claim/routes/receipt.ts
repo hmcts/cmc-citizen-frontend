@@ -12,7 +12,6 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import * as pdfServiceMock from '../../../http-mocks/pdf-service'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -26,7 +25,7 @@ describe('Claim issue: receipt', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       it('should return 500 and render error page when cannot retrieve claim by external id', async () => {
@@ -40,7 +39,7 @@ describe('Claim issue: receipt', () => {
 
       it('should return 500 and render error page when cannot generate PDF', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        pdfServiceMock.rejectGenerate('HTTP error')
+        claimStoreServiceMock.rejectRetrieveDocument('HTTP error')
 
         await request(app)
           .get(ClaimPaths.receiptReceiver.evaluateUri({ externalId: externalId }))
@@ -50,7 +49,7 @@ describe('Claim issue: receipt', () => {
 
       it('should return receipt when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        pdfServiceMock.resolveGenerate()
+        claimStoreServiceMock.resolveRetrieveDocument()
 
         await request(app)
           .get(ClaimPaths.receiptReceiver.evaluateUri({ externalId: externalId }))

@@ -22,13 +22,13 @@ describe('Claim issue: defendant party type selection page', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.defendantPartyTypeSelectionPage.uri)
 
     it('should render page when everything is fine', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
         .get(ClaimPaths.defendantPartyTypeSelectionPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('About them'))
+        .expect(res => expect(res).to.be.successful.withText('Who are you making the claim against?'))
     })
   })
 
@@ -37,7 +37,7 @@ describe('Claim issue: defendant party type selection page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'cmc-private-beta')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       it('should render page with error when form is invalid', async () => {
@@ -47,7 +47,7 @@ describe('Claim issue: defendant party type selection page', () => {
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ type: undefined })
-          .expect(res => expect(res).to.be.successful.withText('About them', 'div class="error-summary"'))
+          .expect(res => expect(res).to.be.successful.withText('Who are you making the claim against?', 'div class="error-summary"'))
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {

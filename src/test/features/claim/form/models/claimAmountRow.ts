@@ -2,7 +2,8 @@ import { expect } from 'chai'
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from '../../../../app/forms/models/validationUtils'
 
-import { ClaimAmountRow, ValidationConstants, ValidationErrors } from 'claim/form/models/claimAmountRow'
+import { ClaimAmountRow, ValidationErrors } from 'claim/form/models/claimAmountRow'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 describe('ClaimAmountRow', () => {
 
@@ -22,7 +23,7 @@ describe('ClaimAmountRow', () => {
     it('should deserialize all fields', () => {
       expect(ClaimAmountRow.fromObject({
         reason: 'Something',
-        amount: 100.01
+        amount: '100.01'
       })).to.deep.equal(new ClaimAmountRow('Something', 100.01))
     })
   })
@@ -75,17 +76,49 @@ describe('ClaimAmountRow', () => {
 
       it('row with valid amount and too long reason', () => {
         const errors = validator.validateSync(
-          new ClaimAmountRow(generateString(ValidationConstants.REASON_MAX_LENGTH + 1), 1.01)
+          new ClaimAmountRow(generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1), 1.01)
         )
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.REASON_TOO_LONG)
       })
+
+      it('row with amount having invalid comma', () => {
+        const errors = validator.validateSync(
+          ClaimAmountRow.fromObject(
+            {
+              reason: 'Something',
+              amount: '11,10'
+            })
+        )
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.AMOUNT_NOT_VALID)
+      })
+
     })
 
     context('should accept', () => {
       it('row with both reason and valid amount', () => {
         const errors = validator.validateSync(new ClaimAmountRow('Something', 0.01))
+
+        expect(errors.length).to.equal(0)
+      })
+
+      it('row with amount containing comma', () => {
+        const errors = validator.validateSync({ reason: 'Something', amount: '1,100' })
+
+        expect(errors.length).to.equal(0)
+      })
+
+      it('row with amount having valid comma', () => {
+        const errors = validator.validateSync(
+          ClaimAmountRow.fromObject(
+            {
+              reason: 'Something',
+              amount: '1,100'
+            })
+        )
 
         expect(errors.length).to.equal(0)
       })

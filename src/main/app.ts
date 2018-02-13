@@ -4,8 +4,8 @@ import * as path from 'path'
 import * as favicon from 'serve-favicon'
 import * as cookieParser from 'cookie-parser'
 import * as bodyParser from 'body-parser'
-import * as logging from '@hmcts/nodejs-logging'
-import { NotFoundError } from './errors'
+import { RequestTracing, Express, Logger } from '@hmcts/nodejs-logging'
+import { ForbiddenError, NotFoundError } from './errors'
 import { ErrorLogger } from 'logging/errorLogger'
 import { RouterFinder } from 'common/router/routerFinder'
 import { Config as HelmetConfig, Helmet } from 'modules/helmet'
@@ -24,7 +24,7 @@ import * as toBoolean from 'to-boolean'
 
 export const app: express.Express = express()
 
-logging.config({
+Logger.config({
   microservice: 'citizen-frontend',
   team: 'cmc',
   environment: process.env.NODE_ENV
@@ -34,6 +34,8 @@ const env = process.env.NODE_ENV || 'development'
 app.locals.ENV = env
 
 const developmentMode = env === 'development'
+
+app.use(RequestTracing.middleware)
 
 const i18next = I18Next.enableFor(app)
 
@@ -51,7 +53,7 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser())
 
 if (!developmentMode) {
-  app.use(logging.express.accessLogger())
+  app.use(Express.accessLogger())
 }
 
 app.use(express.static(path.join(__dirname, 'public')))
@@ -91,6 +93,8 @@ app.use((err, req, res, next) => {
     res.redirect(err.associatedView)
   } else if (err.associatedView) {
     res.render(err.associatedView)
+  } else if (err.statusCode === 403) {
+    res.render(new ForbiddenError().associatedView)
   } else {
     const view = (env === 'mocha' || env === 'development' || env === 'dev' || env === 'dockertests' || env === 'demo') ? 'error_dev' : 'error'
     res.render(view, {

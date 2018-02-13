@@ -3,7 +3,7 @@
 {% from "form.njk" import csrfProtection, submitButton %}
 
 {% set title = t('Money claim') %}
-{% set heading = t("View the claim") %}
+{% set heading = t('View the claim') %}
 
 {% set claimantFullName = claim.claimData.claimant.name %}
 {% set responseDeadline = claim.responseDeadline.format('LL') %}
@@ -34,7 +34,7 @@
       </p>
       {{ subheading( t('Claim details')) }}
       <p><span class="bold">{{ t('Number:') }}</span> {{ referenceNumber }}</p>
-      <p><span class="bold">{{ t('Amount:') }}</span> {{ claim.totalAmount | numeral }}</p>
+      <p><span class="bold">{{ t('Amount:') }}</span> {{ claim.totalAmountTillToday | numeral }}</p>
 
       <p class="bold">{{ t('Reason for claim:') }}</p>
       <p>

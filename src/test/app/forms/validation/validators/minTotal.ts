@@ -100,9 +100,6 @@ describe('MinTotalConstraint', () => {
     })
 
     describe('should return true when 0.01 is the minimum', () => {
-      it('given null input', () => {
-        expect(constraint.validate(null, validationArguments)).to.equal(true)
-      })
 
       it('given undefined input', () => {
         expect(constraint.validate(undefined, validationArguments)).to.equal(true)

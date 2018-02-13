@@ -2,7 +2,10 @@
   "featureToggles": {
     "testingSupport": true,
     "countyCourtJudgment": true,
-    "idamOauth": true,
-    "partialAdmission": true
+    "fullAdmission": true,
+    "partialAdmission": true,
+    "offer": true,
+    "statementOfMeans": true,
+    "finePrint": true
   }
 }

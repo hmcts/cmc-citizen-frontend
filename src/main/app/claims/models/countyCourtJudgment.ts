@@ -1,10 +1,10 @@
 import { RepaymentPlan } from 'claims/models/replaymentPlan'
 import { MomentFactory } from 'common/momentFactory'
-import { Serializable } from 'models/serializable'
 import { Moment } from 'moment'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
 
-export class CountyCourtJudgment implements Serializable<CountyCourtJudgment> {
+export class CountyCourtJudgment {
 
   constructor (public defendantDateOfBirth?: Moment,
                public paymentOption?: string,
@@ -25,7 +25,7 @@ export class CountyCourtJudgment implements Serializable<CountyCourtJudgment> {
         this.defendantDateOfBirth = MomentFactory.parse(input.defendantDateOfBirth)
       }
       this.paymentOption = input.paymentOption
-      this.paidAmount = input.paidAmount ? parseFloat(input.paidAmount) : undefined
+      this.paidAmount = toNumberOrUndefined(input.paidAmount)
       this.repaymentPlan = input.repaymentPlan ? new RepaymentPlan().deserialize(input.repaymentPlan) : undefined
       this.payBySetDate = input.payBySetDate ? MomentFactory.parse(input.payBySetDate) : undefined
       this.statementOfTruth = new StatementOfTruth().deserialize(input.statementOfTruth)

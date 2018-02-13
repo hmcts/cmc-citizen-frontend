@@ -5,8 +5,8 @@
 {% from "statement-of-truth.njk" import statementOfTruth %}
 {% from "party/details.njk" import partyDetailsSummaryFragment %}
 
-{% set title = t("Money claim") %}
-{% set heading = t("Check your answers") %}
+{% set title = t('Money claim') %}
+{% set heading = t('Check your answers') %}
 
 {% block content %}
   <form novalidate method="post">
@@ -28,7 +28,7 @@
     {{ tableEnd() }}
 
     {{ tableStart('payment', 'Payment') }}
-    {{ row("Amount to be paid by defendant", amountToBePaid | numeral, changeLink = paidAmountUrl) }}
+    {{ row('Amount to be paid by defendant', amountToBePaid | numeral, changeLink = paidAmountUrl) }}
 
     {% if draft.paymentOption.option.value == 'IMMEDIATELY' %}
       {% set paymentOptionDisplayValue = [draft.paymentOption.option.displayValue] %}
@@ -44,7 +44,7 @@
       [  t('%s: %s %s',
           { postProcess: 'sprintf', sprintf: [
               t(draft.paymentOption.option.displayValue),
-              draft.repaymentPlan.installmentAmount | numeral,
+              draft.repaymentPlan.instalmentAmount | numeral,
               t(draft.repaymentPlan.paymentSchedule.displayValue)
             ]
           }),
