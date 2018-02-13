@@ -127,6 +127,14 @@ describe('Claim', () => {
           claim.responseDeadline = moment().add(2, 'days')
         }
         claim.settlement = new Settlement()
+        claim.settlement = {
+          partyStatements: [{
+            type: StatementType.OFFER.value,
+            madeBy: MadeBy.DEFENDANT.value,
+            offer: { content: 'offer text', completionDate: '2017-08-08' }
+          } as PartyStatement
+          ]
+        } as Settlement
         claim.response = {
           responseType: ResponseType.FULL_DEFENCE,
           defenceType: DefenceType.DISPUTE,
