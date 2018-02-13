@@ -9,6 +9,12 @@ function shutdownDocker() {
   docker-compose -f ${ADDITIONAL_COMPOSE_FILE} down
 }
 
+if [[ ${TEST_URL} = *"prod"*  ]]; then
+  export IDAM_URL=http://betaPreProdccidamAppLB.reform.hmcts.net:4501
+else
+  export IDAM_URL=http://betaDevBccidamAppLB.reform.hmcts.net
+fi
+
 trap shutdownDocker INT TERM QUIT EXIT
 
 docker-compose --version

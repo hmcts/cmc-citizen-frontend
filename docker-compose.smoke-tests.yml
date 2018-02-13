@@ -7,10 +7,7 @@ services:
       environment:
         - WEB_DRIVER_HOST=remote-webdriver
         - CITIZEN_APP_URL=${TEST_URL}
-          #        - CITIZEN_APP_URL=https://www-test.moneyclaim.reform.hmcts.net
-          # - CITIZEN_APP_URL=https://www.moneyclaim.reform.hmcts.net
-        - IDAM_URL=http://betaDevBccidamAppLB.reform.hmcts.net
-        - CLAIM_STORE_URL=http://docker.for.mac.localhost:4300
+        - IDAM_URL
         - SMOKE_TEST_USERNAME=civilmoneyclaims+smoketest@gmail.com
         - SMOKE_TEST_PASSWORD=Password12
         - HEALTHCHECK_CITIZEN=true
