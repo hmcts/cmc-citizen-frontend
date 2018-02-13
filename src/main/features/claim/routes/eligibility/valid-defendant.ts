@@ -45,7 +45,7 @@ export default express.Router()
             res.redirect(Paths.eligibilitySingleDefendantPage.uri)
             break
           case ValidDefendant.MULTIPLE_CLAIM:
-            res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_DEFENDANTS}`)
+            res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`)
             break
           case ValidDefendant.REPRESENTATIVE_CLAIM:
             res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_ON_BEHALF}`)

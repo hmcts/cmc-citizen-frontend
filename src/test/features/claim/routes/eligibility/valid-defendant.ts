@@ -83,7 +83,7 @@ describe('Claim eligibility: valid defendant page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ validDefendant: ValidDefendant.MULTIPLE_CLAIM.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_DEFENDANTS}`))
+          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`))
       })
     })
   })
