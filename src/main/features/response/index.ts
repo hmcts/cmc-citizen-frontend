@@ -11,7 +11,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { CountyCourtJudgmentRequestedGuard } from 'response/guards/countyCourtJudgmentRequestedGuard'
 import { IsDefendantInCaseGuard } from 'guards/isDefendantInCaseGuard'
 import { OAuthHelper } from 'idam/oAuthHelper'
-import { DefendantHasSubmittedResposneGuard } from 'response/guards/defendantHasSubmittedResposneGuard'
+import { DefendantHasSubmittedResponseGuard } from 'response/guards/defendantHasSubmittedResposneGuard'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -29,17 +29,17 @@ export class Feature {
   enableFor (app: express.Express) {
     const allResponseRoutes = '/case/*/response/*'
 
-    app.all(/^\/case\/.+\/response\/(?![\d]+\/summary).*$/, defendantResponseRequestHandler())
-    app.all(/^\/case\/.+\/response\/(?![\d]+\/receiver).*$/, ClaimMiddleware.retrieveByExternalId)
-    app.all(/^\/case\/.+\/response\/(?![\d]+\/summary).*$/, IsDefendantInCaseGuard.check())
-    app.all('/case/*/response/summary', DefendantHasSubmittedResposneGuard.check())
+    app.all(allResponseRoutes, defendantResponseRequestHandler())
+    app.all(/^\/case\/.+\/response\/(?!receiver).*$/, ClaimMiddleware.retrieveByExternalId)
+    app.all(/^\/case\/.+\/response\/(?!summary).*$/, IsDefendantInCaseGuard.check())
+    app.all('/case/*/response/summary', DefendantHasSubmittedResponseGuard.check())
     app.all(
-      /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|full-admission|partial-admission|counter-claim|receipt|summary).*$/,
+      /^\/case\/.+\/response\/(?!receiver|confirmation|full-admission|partial-admission|counter-claim|receipt|summary).*$/,
       AlreadyRespondedGuard.requestHandler
     )
     app.all(allResponseRoutes, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(
-      /^\/case\/.+\/response\/(?![\d]+\/receiver|confirmation|receipt).*$/,
+      /^\/case\/.+\/response\/(?!receiver|confirmation|receipt).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'response', 100, (value: any): ResponseDraft => {
         return new ResponseDraft().deserialize(value)
       })

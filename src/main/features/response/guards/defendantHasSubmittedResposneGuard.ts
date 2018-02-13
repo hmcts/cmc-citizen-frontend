@@ -5,7 +5,7 @@ import { User } from 'idam/user'
 import { Claim } from 'claims/models/claim'
 import { FeatureToggles } from 'utils/featureToggles'
 
-export class DefendantHasSubmittedResposneGuard {
+export class DefendantHasSubmittedResponseGuard {
   /**
    * Throws Forbidden error if user is not defendant in the case
    *
