@@ -43,7 +43,7 @@ export const sampleClaimDraftObj = {
     defendantAddress: YesNoOption.YES,
     eighteenOrOver: YesNoOption.YES,
     validDefendant: ValidDefendant.PERSONAL_CLAIM,
-    singleDefendant: YesNoOption.YES,
+    singleDefendant: YesNoOption.NO,
     governmentDepartment: YesNoOption.NO,
     claimIsForTenancyDeposit: YesNoOption.NO
   },
