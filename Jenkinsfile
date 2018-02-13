@@ -9,7 +9,9 @@ import uk.gov.hmcts.cmc.smoketests.SmokeTests
 //noinspection GroovyAssignabilityCheck this is how Jenkins does it
 properties(
   [[$class: 'GithubProjectProperty', projectUrlStr: 'https://github.com/cmc-citizen-frontend/'],
-   pipelineTriggers([[$class: 'GitHubPushTrigger']])]
+   pipelineTriggers([[$class: 'GitHubPushTrigger']]),
+  [$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '7', numToKeepStr: '10']]
+  ],
 )
 
 Ansible ansible = new Ansible(this, 'cmc')
