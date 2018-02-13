@@ -9,6 +9,7 @@ import { Defendant } from 'app/drafts/models/defendant'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
+import { ValidDefendant } from 'claim/form/models/eligibility/validDefendant'
 
 describe('DraftClaim deserialization', () => {
   let input
@@ -16,15 +17,14 @@ describe('DraftClaim deserialization', () => {
   beforeEach(() => {
     input = {
       eligibility: {
-        claimOnBehalf: YesNoOption.NO,
+        claimValue: ClaimValue.UNDER_10000,
+        helpWithFees: YesNoOption.NO,
         claimantAddress: YesNoOption.YES,
         defendantAddress: YesNoOption.YES,
-        claimValue: ClaimValue.UNDER_10000,
-        singleClaimant: YesNoOption.YES,
-        singleDefendant: YesNoOption.YES,
         eighteenOrOver: YesNoOption.YES,
+        validDefendant: ValidDefendant.PERSONAL_CLAIM,
+        singleDefendant: YesNoOption.YES,
         governmentDepartment: YesNoOption.NO,
-        helpWithFees: YesNoOption.NO,
         claimIsForTenancyDeposit: YesNoOption.NO
       },
       claimant: {
@@ -83,15 +83,14 @@ describe('DraftClaim deserialization', () => {
     expect(deserialized.defendant.partyDetails.address.postcode).to.equal('SW8 4DA')
     expect(deserialized.defendant.email.address).to.equal('j.clark@mailserver.com')
 
-    expect(deserialized.eligibility.claimOnBehalf).to.equal(YesNoOption.NO)
+    expect(deserialized.eligibility.claimValue).to.equal(ClaimValue.UNDER_10000)
+    expect(deserialized.eligibility.helpWithFees).to.equal(YesNoOption.NO)
     expect(deserialized.eligibility.claimantAddress).to.equal(YesNoOption.YES)
     expect(deserialized.eligibility.defendantAddress).to.equal(YesNoOption.YES)
-    expect(deserialized.eligibility.claimValue).to.equal(ClaimValue.UNDER_10000)
-    expect(deserialized.eligibility.singleClaimant).to.equal(YesNoOption.YES)
-    expect(deserialized.eligibility.singleDefendant).to.equal(YesNoOption.YES)
     expect(deserialized.eligibility.eighteenOrOver).to.equal(YesNoOption.YES)
+    expect(deserialized.eligibility.validDefendant).to.equal(ValidDefendant.PERSONAL_CLAIM)
+    expect(deserialized.eligibility.singleDefendant).to.equal(YesNoOption.YES)
     expect(deserialized.eligibility.governmentDepartment).to.equal(YesNoOption.NO)
-    expect(deserialized.eligibility.helpWithFees).to.equal(YesNoOption.NO)
     expect(deserialized.eligibility.claimIsForTenancyDeposit).to.equal(YesNoOption.NO)
   })
 

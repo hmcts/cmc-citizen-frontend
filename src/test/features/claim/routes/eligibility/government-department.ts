@@ -16,26 +16,29 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const pagePath: string = ClaimPaths.eligibilityGovernmentDepartmentPage.uri
+const pageRedirect: string = ClaimPaths.eligibilityClaimIsForTenancyDepositPage.uri
+const expectedTextOnPage: string = 'Are you claiming against a government department?'
 
 describe('Claim eligibility: government department page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ClaimPaths.eligibilityGovernmentDepartmentPage.uri)
+    checkAuthorizationGuards(app, 'get', pagePath)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
-        .get(ClaimPaths.eligibilityGovernmentDepartmentPage.uri)
+        .get(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Are you claiming against a government department?'))
+        .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage))
     })
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', ClaimPaths.eligibilityGovernmentDepartmentPage.uri)
+    checkAuthorizationGuards(app, 'post', pagePath)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -46,9 +49,9 @@ describe('Claim eligibility: government department page', () => {
         draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
-          .post(ClaimPaths.eligibilityGovernmentDepartmentPage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Are you claiming against a government department?', 'div class="error-summary"'))
+          .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
@@ -56,28 +59,28 @@ describe('Claim eligibility: government department page', () => {
         draftStoreServiceMock.rejectSave()
 
         await request(app)
-          .post(ClaimPaths.eligibilityGovernmentDepartmentPage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ governmentDepartment: YesNoOption.NO.option })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to eligible page when form is valid and everything is fine', async () => {
+      it('should redirect to tenancy deposit  page when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)
-          .post(ClaimPaths.eligibilityGovernmentDepartmentPage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ governmentDepartment: YesNoOption.NO.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.eligibilityEligiblePage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
       })
       it('should redirect to not eligible page when form is valid and not eligible option selected', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)
-          .post(ClaimPaths.eligibilityGovernmentDepartmentPage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ governmentDepartment: YesNoOption.YES.option })
           .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.GOVERNMENT_DEPARTMENT}`))

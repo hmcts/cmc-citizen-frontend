@@ -30,6 +30,7 @@ import { ClaimStatus } from 'claims/models/claimStatus'
 import { FeatureToggles } from 'utils/featureToggles'
 import { Paths as AppPaths } from 'app/paths'
 import { Paths as ResponsePaths } from 'features/response/paths'
+import { ValidDefendant } from 'claim/form/models/eligibility/validDefendant'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -93,6 +94,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('ResponseType', ResponseType)
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)
+    nunjucksEnv.addGlobal('ValidDefendant', ValidDefendant)
     nunjucksEnv.addGlobal('ClaimValue', ClaimValue)
     nunjucksEnv.addGlobal('EvidenceType', EvidenceType)
     nunjucksEnv.addGlobal('StatementType', StatementType)

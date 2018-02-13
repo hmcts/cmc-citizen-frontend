@@ -28,6 +28,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
+import { ValidDefendant } from 'claim/form/models/eligibility/validDefendant'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
@@ -36,15 +37,14 @@ export const sampleClaimDraftObj = {
   readResolveDispute: true,
   readCompletingClaim: true,
   eligibility: {
-    claimOnBehalf: YesNoOption.NO,
+    claimValue: ClaimValue.UNDER_10000,
+    helpWithFees: YesNoOption.NO,
     claimantAddress: YesNoOption.YES,
     defendantAddress: YesNoOption.YES,
-    claimValue: ClaimValue.UNDER_10000,
     eighteenOrOver: YesNoOption.YES,
-    singleClaimant: YesNoOption.YES,
+    validDefendant: ValidDefendant.PERSONAL_CLAIM,
     singleDefendant: YesNoOption.YES,
     governmentDepartment: YesNoOption.NO,
-    helpWithFees: YesNoOption.NO,
     claimIsForTenancyDeposit: YesNoOption.NO
   },
   claimant: {

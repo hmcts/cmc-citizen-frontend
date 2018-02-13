@@ -1,29 +1,28 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 
-{% set title = t('Single Defendant | Money claim') %}
+{% set title = t('Single Claimant | Money claim') %}
 
 {% block content %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Is this claim against only one individual or business?') }}</h1>
-      <p>{{ t('You can’t use this service if this claim is against more than one person or business.') }}</p>
+      <h1 class="heading-large">{{ t('Is this claim against more than one person or organisation?') }}</h1>
 
       {% set name = 'singleDefendant' %}
 
       <form novalidate method="post" class="analytics-submit-event-trigger"
-            data-event-action="Eligibility: Single Defendant"
+            data-event-action="Eligibility: Single claimant"
             data-event-label-from="{{ name }}">
         {{ csrfProtection(csrf) }}
 
         {{
           radioGroup(
-            label = 'Is this claim against only one individual or business?',
+            label = 'Is this claim against more than one person or organisation?',
             name = name,
             options = [
-              {'label': 'Yes', value: YesNoOption.YES.option, checked: form.valueFor(name) === YesNoOption.YES},
-              {'label': 'No', value: YesNoOption.NO.option, checked: form.valueFor(name) === YesNoOption.NO}
+              {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
+              {'label': 'No', value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO)}
             ],
             form = form,
             labelForScreenReadersOnly = true
