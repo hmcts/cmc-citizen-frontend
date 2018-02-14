@@ -19,7 +19,7 @@ import { checkNotDefendantInCaseGuard } from '../checks/not-defendant-in-case-ch
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.sendYourResponseByEmailPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
-describe('Counter Claim: eligibility / send your response', () => {
+describe('Defendant response: send your response by email', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
