@@ -157,7 +157,7 @@ describe('Defendant response: full admission options', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: 'counterClaim' })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.sendYourResponseByEmail
+                .toLocation(ResponsePaths.sendYourResponseByEmailPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })

@@ -41,8 +41,7 @@ export class TaskListBuilder {
     return new TaskList(1, 'Before you start', tasks)
   }
 
-  static buildRespondToClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
-    const externalId: string = claim.externalId
+  static buildRespondToClaimSection (draft: ResponseDraft, externalId: string): TaskList {
     const tasks: TaskListItem[] = []
     tasks.push(
       new TaskListItem(
@@ -134,7 +133,7 @@ export class TaskListBuilder {
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {
     return [].concat(
       TaskListBuilder.buildBeforeYouStartSection(draft, claim).tasks,
-      TaskListBuilder.buildRespondToClaimSection(draft, claim).tasks
+      TaskListBuilder.buildRespondToClaimSection(draft, claim.externalId).tasks
     )
       .filter(item => !item.completed)
   }

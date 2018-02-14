@@ -64,7 +64,7 @@ export default express.Router()
         const { externalId } = req.params
         switch (draft.document.rejectAllOfClaim.option) {
           case RejectAllOfClaimOption.COUNTER_CLAIM:
-            res.redirect(Paths.sendYourResponseByEmail.evaluateUri({ externalId: externalId }))
+            res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
             break
           case RejectAllOfClaimOption.ALREADY_PAID:
             res.redirect(Paths.defendantHowMuchPaidClaimant.evaluateUri({ externalId: externalId }))

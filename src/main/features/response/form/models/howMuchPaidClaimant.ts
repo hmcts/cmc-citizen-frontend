@@ -6,7 +6,7 @@ export class ValidationErrors {
 
 export class HowMuchPaidClaimantOption {
   static readonly AMOUNT_CLAIMED = 'amountClaimed'
-  static readonly LESS_THAN_AMOUNT_CLAIMED = 'lessThanClaimed'
+  static readonly LESS_THAN_AMOUNT_CLAIMED = 'lessThenAmountClaimed'
 
   static all (): string[] {
     return [

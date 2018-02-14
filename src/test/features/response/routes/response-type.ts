@@ -104,7 +104,7 @@ describe('Defendant response: response type page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ type: ResponseType.FULL_ADMISSION })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.sendYourResponseByEmail
+                .toLocation(ResponsePaths.sendYourResponseByEmailPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
@@ -118,7 +118,7 @@ describe('Defendant response: response type page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ type: ResponseType.PART_ADMISSION })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.sendYourResponseByEmail
+                .toLocation(ResponsePaths.sendYourResponseByEmailPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 

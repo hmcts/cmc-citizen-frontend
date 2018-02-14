@@ -4,7 +4,6 @@ import { Paths } from 'response/paths'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 
-import { ResponseType } from 'response/form/models/responseType'
 import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { GuardFactory } from 'response/guards/guardFactory'
@@ -17,8 +16,7 @@ import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/mo
 function isRequestAllowed (res: express.Response): boolean {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-  return draft.document.response !== undefined
-    && draft.document.response.type === ResponseType.DEFENCE
+  return draft.document.isResponseRejectedFullyWithDispute()
 }
 
 function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -63,7 +61,7 @@ export default express.Router()
         const { externalId } = req.params
 
         if (draft.document.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.LESS_THAN_AMOUNT_CLAIMED) {
-          res.redirect(Paths.sendYourResponseByEmail.evaluateUri({ externalId: externalId }))
+          res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
         } else {
           res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
         }

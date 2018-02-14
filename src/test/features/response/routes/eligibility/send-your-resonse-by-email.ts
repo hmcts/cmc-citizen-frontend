@@ -17,7 +17,7 @@ import * as feesServiceMock from '../../../../http-mocks/fees'
 import { checkNotDefendantInCaseGuard } from '../checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = ResponsePaths.sendYourResponseByEmail.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath = ResponsePaths.sendYourResponseByEmailPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Counter Claim: eligibility / send your response', () => {
   attachDefaultHooks(app)

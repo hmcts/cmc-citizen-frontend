@@ -1,4 +1,4 @@
-import { IsDefined, MaxLength } from 'class-validator'
+import { IsDefined, MaxLength, ValidateNested } from 'class-validator'
 import { IsPastDate } from 'forms/validation/validators/datePastConstraint'
 import { LocalDate } from 'forms/models/localDate'
 import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
@@ -12,7 +12,7 @@ export class ValidationErrors {
   static readonly EXPLANATION_REQUIRED: string = 'Explain how did you pay the amount claimed'
   static readonly DATE_REQUIRED: string = 'Enter a date'
   static readonly DATE_INVALID_YEAR: string = 'Enter a 4 digit year'
-  static validPastDate (): string {
+  static readonly DATE_OUTSIDE_RANGE = () => {
     const currentDate = MomentFormatter.formatLongDate(MomentFactory.currentDate())
     return `Enter date before ${currentDate}`
   }
@@ -20,8 +20,9 @@ export class ValidationErrors {
 
 export class WhenDidYouPay {
 
+  @ValidateNested()
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
-  @IsPastDate({ message: ValidationErrors.validPastDate })
+  @IsPastDate({ message: ValidationErrors.DATE_OUTSIDE_RANGE })
   @IsValidYearFormat({ message: ValidationErrors.DATE_INVALID_YEAR })
   date?: LocalDate
 
@@ -36,13 +37,13 @@ export class WhenDidYouPay {
   }
 
   static fromObject (value?: any): WhenDidYouPay {
-    if (value) {
-      const pastDate = LocalDate.fromObject(value.date)
-      const text = value.text
-      return new WhenDidYouPay(pastDate, text)
-    } else {
-      return new WhenDidYouPay()
+    if (!value) {
+      return value
     }
+
+    const date = LocalDate.fromObject(value.date)
+    const text = value.text
+    return new WhenDidYouPay(date, text)
   }
 
   deserialize (input: any): WhenDidYouPay {
