@@ -29,9 +29,9 @@
 }
 
 .task-list-heading {
-  @extend .heading-medium;
-  margin-top: 0;
+  @extend .heading-medium; // sass-lint:disable-line placeholder-in-extend heading-medium is simple, so its ok to extend
   margin-bottom: 0;
+  margin-top: 0;
 }
 
 .task-name {
