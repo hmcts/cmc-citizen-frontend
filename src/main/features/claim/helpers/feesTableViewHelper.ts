@@ -67,7 +67,6 @@ export class FeesTableViewHelper {
     if (firstFeesSet === undefined || secondFeesSet === undefined) {
       throw new Error('Both fee sets are required for merge')
     }
-
     const items: Item[] = [
         ...firstFeesSet.map(range => Item.createForFeeInColumn(range, 1)),
       ...secondFeesSet.map(range => Item.createForFeeInColumn(range, 2))

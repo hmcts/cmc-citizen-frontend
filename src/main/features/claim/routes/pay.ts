@@ -22,7 +22,7 @@ import { FeeOutcome } from 'fees/models/feeOutcome'
 
 const logger = Logger.getLogger('router/pay')
 const event: string = config.get<string>('fees.issueFee.event')
-const channel: string = config.get<string>('fees.channels.online')
+const channel: string = config.get<string>('fees.channel.online')
 
 const getPayClient = async (): Promise<PayClient> => {
   const authToken = await new ServiceAuthTokenFactoryImpl().get()

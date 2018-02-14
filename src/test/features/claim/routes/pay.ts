@@ -33,7 +33,7 @@ const draftType = 'claim'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const event: string = config.get<string>('fees.issueFee.event')
-const channel: string = config.get<string>('fees.channels.online')
+const channel: string = config.get<string>('fees.channel.online')
 const failureMessage: string = 'failure message'
 
 let overrideClaimDraftObj

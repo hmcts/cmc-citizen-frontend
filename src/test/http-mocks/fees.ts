@@ -5,8 +5,8 @@ import * as HttpStatus from 'http-status-codes'
 const service: string = (config.get<string>('fees.service'))
 const jurisdiction1: string = config.get<string>('fees.jurisdiction1')
 const jurisdiction2: string = config.get<string>('fees.jurisdiction2')
-const onlineChannel: string = config.get<string>('fees.channels.online')
-const defaultChannel: string = config.get<string>('fees.channels.paper')
+const onlineChannel: string = config.get<string>('fees.channel.online')
+const defaultChannel: string = config.get<string>('fees.channel.paper')
 const issueEvent: string = config.get<string>('fees.issueFee.event')
 const hearingEvent: string = config.get<string>('fees.hearingFee.event')
 const baseFeeUri: string = `${config.get('fees.url')}`
