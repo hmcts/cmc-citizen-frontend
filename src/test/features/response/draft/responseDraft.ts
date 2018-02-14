@@ -102,7 +102,7 @@ describe('ResponseDraft', () => {
       RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).forEach(option => {
         const draft: ResponseDraft = new ResponseDraft()
         draft.response = new Response(ResponseType.DEFENCE)
-        draft.rejectAllOfClaim = new RejectAllOfClaim('dispute')
+        draft.rejectAllOfClaim = new RejectAllOfClaim(option)
 
         expect(draft.requireDefence()).to.be.eq(true)
       })

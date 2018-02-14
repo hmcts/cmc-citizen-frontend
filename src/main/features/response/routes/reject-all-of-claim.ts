@@ -40,7 +40,7 @@ export default express.Router()
   .get(
     Paths.defenceRejectAllOfClaimPage.uri,
     guardRequestHandler,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
       renderView(new Form(draft.document.rejectAllOfClaim), res)
@@ -49,7 +49,7 @@ export default express.Router()
     Paths.defenceRejectAllOfClaimPage.uri,
     guardRequestHandler,
     FormValidator.requestHandler(RejectAllOfClaim),
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<RejectAllOfClaim> = req.body
 
       if (form.hasErrors()) {
@@ -71,6 +71,9 @@ export default express.Router()
             break
           case RejectAllOfClaimOption.DISPUTE:
             res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
+            break
+          default:
+            throw new Error(`Unknown rejection option: ${draft.document.rejectAllOfClaim.option}`)
         }
       }
     }))

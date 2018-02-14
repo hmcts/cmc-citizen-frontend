@@ -12,7 +12,7 @@ import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 
-async function renderView (form: Form<WhenDidYouPay>, res: express.Response, next: express.NextFunction) {
+function renderView (form: Form<WhenDidYouPay>, res: express.Response) {
   res.render(Paths.whenDidYouPay.associatedView, {
     form: form
   })
@@ -20,18 +20,18 @@ async function renderView (form: Form<WhenDidYouPay>, res: express.Response, nex
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.whenDidYouPay.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  .get(Paths.whenDidYouPay.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
     const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-    await renderView(new Form(draft.document.whenDidYouPay), res, next)
+    renderView(new Form(draft.document.whenDidYouPay), res)
   }))
   .post(
     Paths.whenDidYouPay.uri,
     FormValidator.requestHandler(WhenDidYouPay, WhenDidYouPay.fromObject),
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<WhenDidYouPay> = req.body
       if (form.hasErrors()) {
-        await renderView(form, res, next)
+        renderView(form, res)
       } else {
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user

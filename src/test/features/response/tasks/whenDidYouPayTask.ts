@@ -4,7 +4,7 @@ import { WhenDidYouPayTask } from 'response/tasks/whenDidYouPayTask'
 import { LocalDate } from 'forms/models/localDate'
 
 describe('When did you pay task', () => {
-  it('should be true when date and text is defined', () => {
+  it('should be valid when date and text is defined', () => {
     const input = {
       whenDidYouPay: {
         date: {
@@ -19,7 +19,15 @@ describe('When did you pay task', () => {
     expect(WhenDidYouPayTask.isCompleted(responseDraft)).to.equal(true)
   })
 
-  it('should be false when text is empty', () => {
+  it('should be invalid when task object is undefined', () => {
+    const input = {
+      whenDidYouPay: undefined
+    }
+    const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
+    expect(WhenDidYouPayTask.isCompleted(responseDraft)).to.equal(false)
+  })
+
+  it('should be invalid when text is empty', () => {
     const input = {
       whenDidYouPay: {
         date : new LocalDate(2007, 1, 12),
@@ -30,7 +38,7 @@ describe('When did you pay task', () => {
     expect(WhenDidYouPayTask.isCompleted(responseDraft)).to.equal(false)
   })
 
-  it('should be false when date is undefined', () => {
+  it('should be invalid when date is undefined', () => {
     const input = {
       whenDidYouPay: {
         date: undefined,

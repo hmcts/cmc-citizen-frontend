@@ -12,9 +12,8 @@
     <div class="column-two-thirds">
       <div class="panel-indent">
         <div class="panel panel-border-wide">
-          <p>{{ t('You must email your response by ') }}
-            <span class="bold">{{ t('{{ responseDeadline }}', { responseDeadline: claim.responseDeadline | date }) }}</span>
-          </p>
+          <p>{{ t('You must email your response by <span class="bold">{{ responseDeadline }}</span>',
+            { responseDeadline: claim.responseDeadline | date }) | safe }}</p>
         </div>
       </div>
 
@@ -35,8 +34,8 @@
             <table>
               <thead>
               <tr>
-                <th scope="col">{{ t('Claim amount')}}</th>
-                <th scope="col">{{ t('Fee')}}</th>
+                <th scope="col">{{ t('Claim amount') }}</th>
+                <th scope="col">{{ t('Fee') }}</th>
               </tr>
               </thead>
               {% for fee in fees %}
@@ -69,15 +68,14 @@
             {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
               {{ t('Complete both <a href="{{ ocon9B }}" target="_blank">defence and counterclaim form N9B</a> ' + newWindow() + ' using:',
               { ocon9B: [asset_paths["pdf"] + '/OCON9B.pdf']}) | safe }}
-
-            {% elseif draft.howMuchPaidClaimant.option === 'lessThanClaimed' %}
+            {% elseif draft.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.LESS_THAN_AMOUNT_CLAIMED %}
               {{ t('Complete both <a href="{{ ocon9A }}" target="_blank">admission form N9A</a> and <a href="{{ ocon9B }}" target="_blank">defence and counterclaim N9B</a> ' + newWindow() + ' using:',
               { ocon9A: asset_paths["pdf"] + '/OCON9A.pdf', ocon9B: asset_paths["pdf"] + '/OCON9B.pdf'}) | safe }}
-              {% endif %}
+            {% endif %}
           {% endif %}
 
           <ul class="list list-bullet">
-              <li>{{ t('Claim No.{{ claimNumber }}', { claimNumber: claim.claimNumber }) }}</li>
+              <li>{{ t('Claim No. {{ claimNumber }}', { claimNumber: claim.claimNumber }) }}</li>
               <li>{{ t('Claimant {{ claimantName }}', { claimantName: claim.claimData.claimant.name}) }}</li>
               <li>{{ t('Defendant {{ defendantName }}', { defendantName: claim.claimData.defendant.name}) }}</li>
           </ul>
