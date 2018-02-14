@@ -19,7 +19,7 @@ export async function getInterestDetails (claim: Claim): Promise<object> {
   }
 
   const todayDate: Moment = MomentFactory.currentDate()
-  const noOfDays: number = todayDate.diff(interestDate, 'days') + 1
+  const noOfDays: number = todayDate.diff(interestDate, 'days')
   const rate: number = claim.claimData.interest.rate
 
   return {
