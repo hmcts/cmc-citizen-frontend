@@ -16,7 +16,7 @@ export class ValidDefendant {
     if (!input) {
       return input
     }
-    return this.all().filter(validDefendant => validDefendant.option === input).pop()
+    return ValidDefendant.all().filter(validDefendant => validDefendant.option === input).pop()
   }
 
   static all (): ValidDefendant[] {

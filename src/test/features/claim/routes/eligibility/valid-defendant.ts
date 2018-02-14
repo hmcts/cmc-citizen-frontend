@@ -75,7 +75,7 @@ describe('Claim eligibility: valid defendant page', () => {
           .send({ validDefendant: ValidDefendant.PERSONAL_CLAIM.option })
           .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
       })
-      it('should redirect to not eligible page when form is valid and not eligible option selected', async () => {
+      it('should redirect to not eligible page when form is valid and multiple claimants option selected', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
@@ -84,6 +84,17 @@ describe('Claim eligibility: valid defendant page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .send({ validDefendant: ValidDefendant.MULTIPLE_CLAIM.option })
           .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`))
+      })
+
+      it('should redirect to not eligible page when form is valid and claim on behalf option selected', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveSave()
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ validDefendant: ValidDefendant.REPRESENTATIVE_CLAIM.option })
+          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_ON_BEHALF}`))
       })
     })
   })

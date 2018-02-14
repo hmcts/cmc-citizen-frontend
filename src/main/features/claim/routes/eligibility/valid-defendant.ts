@@ -52,7 +52,6 @@ export default express.Router()
             break
           default:
             throw new Error(`Unexpected ValidDefendant: ${form.model.validDefendant.option}`)
-                // Todo: get a better error message
         }
 
       }

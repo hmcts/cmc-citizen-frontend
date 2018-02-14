@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 
-{% set title = t('Single Claimant | Money claim') %}
+{% set title = t('Single Defendant | Money claim') %}
 
 {% block content %}
 
@@ -12,7 +12,7 @@
       {% set name = 'singleDefendant' %}
 
       <form novalidate method="post" class="analytics-submit-event-trigger"
-            data-event-action="Eligibility: Single claimant"
+            data-event-action="Eligibility: Single defendant"
             data-event-label-from="{{ name }}">
         {{ csrfProtection(csrf) }}
 
