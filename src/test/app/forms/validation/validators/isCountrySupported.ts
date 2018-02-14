@@ -73,13 +73,6 @@ describe('IsCountrySupported', () => {
       })
 
       it('given an Isle of Man postcode', async () => {
-        nock(mockPostcode)
-          .get(/\/postcodes\/.+/)
-          .reply(404)
-        nock(mockPostcode)
-          .get(/\/addresses\/\?postcode=.+/)
-          .reply(404)
-
         expect(await constraint.validate('IM99 1AD', validationArgs(Country.defendantCountries()))).to.equal(false)
       })
     })
