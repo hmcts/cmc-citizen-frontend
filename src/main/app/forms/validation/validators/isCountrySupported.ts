@@ -13,7 +13,7 @@ import { request } from 'client/request'
 
 const postcodeClient = new PostcodeInfoClient(config.get<string>('postcodeLookup.apiKey'), request)
 
-export enum BlockedPostcodes {
+enum BlockedPostcodes {
   ISLE_OF_MAN = 'IM'
 }
 
@@ -25,7 +25,7 @@ export class CheckCountryConstraint implements ValidatorConstraintInterface {
       return true
     }
 
-    if (value.toUpperCase().startsWith(BlockedPostcodes.ISLE_OF_MAN)) {
+    if (value.trim().toUpperCase().startsWith(BlockedPostcodes.ISLE_OF_MAN)) {
       return false
     }
 
