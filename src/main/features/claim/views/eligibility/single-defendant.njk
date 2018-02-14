@@ -21,8 +21,8 @@
             label = 'Is this claim against more than one person or organisation?',
             name = name,
             options = [
-              {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
-              {'label': 'No', value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO)}
+              {'label': 'Yes', value: YesNoOption.YES.option, checked: form.valueFor(name) === YesNoOption.YES},
+              {'label': 'No', value: YesNoOption.NO.option, checked: form.valueFor(name) === YesNoOption.NO}
             ],
             form = form,
             labelForScreenReadersOnly = true
