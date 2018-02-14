@@ -279,7 +279,24 @@ describe('ResponseDraft', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = undefined
 
-      expect(draft.isResponseRejectedFullyWithAmountClaimedPaid()).to.be.eq(false)
+      expect(draft.isResponseRejectedFullyWithAmountClaimedPaid()).to.be.equals(false)
+    })
+
+    it('should return false when full rejection option is undefined', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.DEFENCE)
+      draft.rejectAllOfClaim = undefined
+
+      expect(draft.isResponseRejectedFullyWithAmountClaimedPaid()).to.be.equals(false)
+    })
+
+    it('should return false when payment option undefined', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.DEFENCE)
+      draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.ALREADY_PAID)
+      draft.howMuchPaidClaimant = undefined
+
+      expect(draft.isResponseRejectedFullyWithAmountClaimedPaid()).to.be.equals(false)
     })
 
     it('should return true when response is full admission with already paid and amount claimed', () => {
@@ -288,26 +305,33 @@ describe('ResponseDraft', () => {
       draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.ALREADY_PAID)
       draft.howMuchPaidClaimant = new HowMuchPaidClaimant(HowMuchPaidClaimantOption.AMOUNT_CLAIMED)
 
-      expect(draft.isResponseRejectedFullyWithAmountClaimedPaid()).to.be.eq(true)
+      expect(draft.isResponseRejectedFullyWithAmountClaimedPaid()).to.be.equals(true)
     })
   })
 
-  describe('isResponseRejectedFullyWithDisputeAmountClaimedPaid', () => {
+  describe('isResponseRejectedFullyWithDispute', () => {
 
     it('should return false when no response type set', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = undefined
 
-      expect(draft.isResponseRejectedFullyWithDisputeAmountClaimedPaid()).to.be.eq(false)
+      expect(draft.isResponseRejectedFullyWithDispute()).to.be.equals(false)
     })
 
-    it('should return true when response is rejected with already paid and amount claimed', () => {
+    it('should return false when full rejection option is undefined', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.DEFENCE)
-      draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.ALREADY_PAID)
-      draft.howMuchPaidClaimant = new HowMuchPaidClaimant(HowMuchPaidClaimantOption.AMOUNT_CLAIMED)
+      draft.rejectAllOfClaim = undefined
 
-      expect(draft.isResponseRejectedFullyWithDisputeAmountClaimedPaid()).to.be.eq(true)
+      expect(draft.isResponseRejectedFullyWithDispute()).to.be.equals(false)
+    })
+
+    it('should return true when response is rejected with dispute', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.DEFENCE)
+      draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.DISPUTE)
+
+      expect(draft.isResponseRejectedFullyWithDispute()).to.be.equals(true)
     })
   })
 

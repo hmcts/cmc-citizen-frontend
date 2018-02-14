@@ -115,35 +115,41 @@ describe('Defendant response task list builder', () => {
     })
 
     describe('"Check and submit your response" task', () => {
-      let isResponseRejectedFullyWithDisputeAmountClaimedPaidStub: sinon.SinonStub
+      let isResponseRejectedFullyWithDisputePaidStub: sinon.SinonStub
+      let isResponseRejectedFullyWithAmountClaimedPaidStub: sinon.SinonStub
 
       beforeEach(() => {
-        isResponseRejectedFullyWithDisputeAmountClaimedPaidStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDisputeAmountClaimedPaid')
+        isResponseRejectedFullyWithDisputePaidStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
+        isResponseRejectedFullyWithAmountClaimedPaidStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithAmountClaimedPaid')
       })
 
       afterEach(() => {
-        isResponseRejectedFullyWithDisputeAmountClaimedPaidStub.restore()
+        isResponseRejectedFullyWithDisputePaidStub.restore()
+        isResponseRejectedFullyWithAmountClaimedPaidStub.restore()
       })
 
-      it('should be enabled when claim is fully rejected due to amount being paid and claimed', () => {
-        isResponseRejectedFullyWithDisputeAmountClaimedPaidStub.returns(true)
+      it('should be enabled when claim is fully rejected with dispute', () => {
+        isResponseRejectedFullyWithDisputePaidStub.returns(true)
+        isResponseRejectedFullyWithAmountClaimedPaidStub.returns(false)
 
-        const input = {
-          whenDidYouPay: {
-            date: new LocalDate(20, 1, 12),
-            text: 'I paid cash'
-          }
-        }
-        const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
-        const taskList: TaskList = TaskListBuilder.buildSubmitSection(responseDraft, '400f4c57-9684-49c0-adb4-4cf46579d6dc')
+        const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), '400f4c57-9684-49c0-adb4-4cf46579d6dc')
         expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
       })
 
-      it('should undefined remaining cases', () => {
-        isResponseRejectedFullyWithDisputeAmountClaimedPaidStub.returns(false)
+      it('should be enabled when claim is fully rejected due to claimed amount being paid', () => {
+        isResponseRejectedFullyWithDisputePaidStub.returns(false)
+        isResponseRejectedFullyWithAmountClaimedPaidStub.returns(true)
 
         const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), '400f4c57-9684-49c0-adb4-4cf46579d6dc')
-        expect(taskList).to.be.eq(undefined)
+        expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
+      })
+
+      it('should be disabled in remaining cases', () => {
+        isResponseRejectedFullyWithDisputePaidStub.returns(false)
+        isResponseRejectedFullyWithAmountClaimedPaidStub.returns(false)
+
+        const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), '400f4c57-9684-49c0-adb4-4cf46579d6dc')
+        expect(taskList).to.be.equal(undefined)
       })
     })
 
