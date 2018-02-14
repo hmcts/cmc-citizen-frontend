@@ -28,6 +28,12 @@
   }
 }
 
+.task-list-heading {
+  @extend .heading-medium;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 .task-name {
   @include media (mobile) {
     margin-left: 0;
