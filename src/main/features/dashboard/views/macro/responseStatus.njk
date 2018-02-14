@@ -15,6 +15,8 @@
     { respondedAt: claim.respondedAt | date }) }}
   {% elseif claim.status === ClaimStatus.CLAIM_REJECTED %}
     {{ t('You’ve has rejected the claim. The case will be reviewed by a judge and might go to court.' ) }}
+  {% elseif claim.status === ClaimStatus.OFFER_ACCEPTED %}
+    {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court.') }}
   {% elseif claim.status === ClaimStatus.OFFER_SUBMITTED %}
     {{ t(' You made an offer to settle out of court.') }}
   {% elseif claim.status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -45,8 +47,10 @@
   {% elseif claim.status === ClaimStatus.CLAIM_REJECTED %}
     {{ t('{{ defendantName }} has rejected the claim. The case will be reviewed by a judge and might go to court.',
     { defendantName:  claim.claimData.defendant.name }) }}
+  {% elseif claim.status === ClaimStatus.OFFER_ACCEPTED %}
+    {{ t('You have accepted the defendant’s offer. TODO: Content') }}
   {% elseif claim.status === ClaimStatus.OFFER_SUBMITTED %}
-    {{ t('The defendant has made an offer to settle out of court.') }}
+    {{ t('The defendant has made an offer to settle out of court.') }} <a href="{{ url }}">TODO: Offer here</a>
   {% elseif claim.status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ t('{{ defendantName }} has requested an extra 14 days to respond. They need to respond by {{ responseDeadline }}.',
     { defendantName: claim.claimData.defendant.name,
