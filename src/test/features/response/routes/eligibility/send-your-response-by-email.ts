@@ -53,6 +53,16 @@ describe('Defendant response: send your response by email', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Send your response by email'))
       })
+
+      it('should return error page when unable to retrieve draft', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        draftStoreServiceMock.rejectFind()
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
     })
   })
 })

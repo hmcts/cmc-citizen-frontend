@@ -6,10 +6,11 @@ import * as randomstring from 'randomstring'
 import { Validator } from 'class-validator'
 import { expectNumberOfValidationErrors, expectValidationError } from '../../../../app/forms/models/validationUtils'
 import { WhenDidYouPay, ValidationErrors } from 'response/form/models/whenDidYouPay'
-import { LocalDate } from 'forms/models/localDate'
 import * as moment from 'moment'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
+import { MomentFactory } from 'common/momentFactory'
+import { LocalDate, ValidationErrors as LocalDateValidationErrors } from 'forms/models/localDate'
 
 describe('WhenDidYouPay', () => {
 
@@ -34,15 +35,6 @@ describe('WhenDidYouPay', () => {
       const aDayBeforeNow = moment().subtract(1, 'days')
       const pastDate = new LocalDate(aDayBeforeNow.year(), aDayBeforeNow.month() + 1, aDayBeforeNow.date())
       const errors = validator.validateSync(new WhenDidYouPay(pastDate, undefined))
-
-      expectNumberOfValidationErrors(errors, 1)
-      expectValidationError(errors, ValidationErrors.EXPLANATION_REQUIRED)
-    })
-
-    it('should reject how much to pay text with null type', () => {
-      const aDayBeforeNow = moment().subtract(1, 'days')
-      const pastDate = new LocalDate(aDayBeforeNow.year(), aDayBeforeNow.month() + 1, aDayBeforeNow.date())
-      const errors = validator.validateSync(new WhenDidYouPay(pastDate))
 
       expectNumberOfValidationErrors(errors, 1)
       expectValidationError(errors, ValidationErrors.EXPLANATION_REQUIRED)
@@ -109,6 +101,33 @@ describe('WhenDidYouPay', () => {
 
         expectNumberOfValidationErrors(errors, 1)
         expectValidationError(errors, ValidationErrors.DATE_INVALID_YEAR)
+      })
+
+      it('should reject a future date', () => {
+        const inFuture = MomentFactory.currentDate().add(1, 'years')
+
+        const errors = validator.validateSync(new WhenDidYouPay(new LocalDate(inFuture.year(), 1, 1), 'Paid by cheque'))
+
+        expectNumberOfValidationErrors(errors, 1)
+        expectValidationError(errors, ValidationErrors.DATE_OUTSIDE_RANGE())
+      })
+
+      it('should reject a current date', () => {
+        const today = MomentFactory.currentDate()
+
+        const errors = validator.validateSync(new WhenDidYouPay(new LocalDate(today.year(), today.month() + 1, today.date()), 'Paid by cheque'))
+
+        expectNumberOfValidationErrors(errors, 1)
+        expectValidationError(errors, ValidationErrors.DATE_OUTSIDE_RANGE())
+      })
+
+      it('should reject date with negative values', () => {
+        const errors = validator.validateSync(new WhenDidYouPay(new LocalDate(-1, -1, -1), 'Paid by cheque'))
+
+        expectNumberOfValidationErrors(errors, 1)
+        expectValidationError(errors, LocalDateValidationErrors.YEAR_NOT_VALID)
+        expectValidationError(errors, LocalDateValidationErrors.MONTH_NOT_VALID)
+        expectValidationError(errors, LocalDateValidationErrors.DAY_NOT_VALID)
       })
     })
   })

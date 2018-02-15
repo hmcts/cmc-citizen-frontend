@@ -16,6 +16,7 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
+import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -129,7 +130,7 @@ describe('Defendant response: full admission options', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: 'alreadyPaid' })
+              .send({ option: RejectAllOfClaimOption.ALREADY_PAID })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -141,7 +142,7 @@ describe('Defendant response: full admission options', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: 'alreadyPaid' })
+              .send({ option: RejectAllOfClaimOption.ALREADY_PAID })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.defendantHowMuchPaidClaimant
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
@@ -155,7 +156,7 @@ describe('Defendant response: full admission options', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: 'counterClaim' })
+              .send({ option: RejectAllOfClaimOption.COUNTER_CLAIM })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.sendYourResponseByEmailPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
