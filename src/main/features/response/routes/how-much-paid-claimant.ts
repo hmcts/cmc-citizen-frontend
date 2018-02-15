@@ -12,11 +12,15 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
 import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
+import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
+import { ResponseType } from 'response/form/models/responseType'
 
 function isRequestAllowed (res: express.Response): boolean {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-  return draft.document.isResponseRejectedFullyWithDispute()
+  return draft.document.response !== undefined
+    && draft.document.response.type === ResponseType.DEFENCE
+    && draft.document.rejectAllOfClaim !== undefined && draft.document.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID
 }
 
 function accessDeniedCallback (req: express.Request, res: express.Response): void {

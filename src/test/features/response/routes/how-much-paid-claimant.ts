@@ -25,6 +25,9 @@ const pagePath = ResponsePaths.defendantHowMuchPaidClaimant.evaluateUri({ extern
 const draftOverride = {
   response: {
     type: ResponseType.DEFENCE
+  },
+  rejectAllOfClaim: {
+    option: RejectAllOfClaimOption.ALREADY_PAID
   }
 }
 
@@ -53,6 +56,16 @@ describe('Defendant response: How much have you paid the claimant options', () =
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
+        it('should return 500 and render error page when unable to retrieve draft', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.rejectFind()
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+
         it('should redirect to response type page when response type is full admission', async () => {
           draftStoreServiceMock.resolveFind('response', {
             response: {
@@ -68,18 +81,38 @@ describe('Defendant response: How much have you paid the claimant options', () =
               .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
 
-        it('should return error page when unable to retrieve draft', async () => {
+        it('should redirect to response type page when response type is part admission', async () => {
+          draftStoreServiceMock.resolveFind('response', {
+            response: {
+              type: ResponseType.PART_ADMISSION
+            }
+          })
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.rejectFind()
 
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.serverError.withText('Error'))
+            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.responseTypePage
+              .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+        })
+
+        it('should redirect to response type page when response type is full admission with counter claim option', async () => {
+          draftStoreServiceMock.resolveFind('response', { ...draftOverride,
+            rejectAllOfClaim: {
+              option: RejectAllOfClaimOption.COUNTER_CLAIM
+            }
+          })
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.responseTypePage
+              .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
 
         it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response', draftOverride)
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -119,6 +152,36 @@ describe('Defendant response: How much have you paid the claimant options', () =
               .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
 
+        it('should redirect to response type page when response type is part admission', async () => {
+          draftStoreServiceMock.resolveFind('response', {
+            response: {
+              type: ResponseType.PART_ADMISSION
+            }
+          })
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.responseTypePage
+              .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+        })
+
+        it('should redirect to response type page when response type is full admission with counter claim option', async () => {
+          draftStoreServiceMock.resolveFind('response', { ...draftOverride,
+            rejectAllOfClaim: {
+              option: RejectAllOfClaimOption.COUNTER_CLAIM
+            }
+          })
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.responseTypePage
+              .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+        })
+
         context('when form is invalid', () => {
           it('should return 500 and render error page when cannot retrieve claim', async () => {
             claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
@@ -127,16 +190,6 @@ describe('Defendant response: How much have you paid the claimant options', () =
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
-          })
-
-          it('should render page when everything is fine', async () => {
-            draftStoreServiceMock.resolveFind('response', draftOverride)
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('How much have you paid the claimant?'))
           })
 
           it('should return 500 when cannot retrieve response draft', async () => {
@@ -148,6 +201,16 @@ describe('Defendant response: How much have you paid the claimant options', () =
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: HowMuchPaidClaimantOption.AMOUNT_CLAIMED })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
+          })
+
+          it('should render page when everything is fine', async () => {
+            draftStoreServiceMock.resolveFind('response', draftOverride)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('How much have you paid the claimant?'))
           })
         })
 
