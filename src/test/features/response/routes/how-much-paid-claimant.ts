@@ -53,13 +53,10 @@ describe('Defendant response: How much have you paid the claimant options', () =
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should redirect to response type page when response type is full admission with option already paid', async () => {
+        it('should redirect to response type page when response type is full admission', async () => {
           draftStoreServiceMock.resolveFind('response', {
             response: {
               type: ResponseType.FULL_ADMISSION
-            },
-            rejectPartOfClaim: {
-              option: RejectAllOfClaimOption.ALREADY_PAID
             }
           })
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
@@ -107,13 +104,10 @@ describe('Defendant response: How much have you paid the claimant options', () =
       checkAlreadySubmittedGuard(app, method, pagePath)
 
       context('when response not submitted', () => {
-        it('should redirect to response type page when response type is full admission with option already paid', async () => {
+        it('should redirect to response type page when response type is full admission', async () => {
           draftStoreServiceMock.resolveFind('response', {
             response: {
               type: ResponseType.FULL_ADMISSION
-            },
-            rejectPartOfClaim: {
-              option: RejectAllOfClaimOption.ALREADY_PAID
             }
           })
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
