@@ -56,8 +56,8 @@
               {% for row in rows %}
                 <tr>
                   <td>{{ row.minRange }} to {{ row.maxRange }}</td>
-                  <td>{{ row.fees[1] | default('-') }}</td>
-                  <td>{{ row.fees[2] | default('-') }}</td>
+                  <td>{{ row.fees[1] | default('Not available') }}</td>
+                  <td>{{ row.fees[2] | default('Not available') }}</td>
                 </tr>
               {% endfor %}
             </table>

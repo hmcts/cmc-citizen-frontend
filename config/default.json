@@ -32,7 +32,6 @@
     "gaTrackingId": ""
   },
   "fees": {
-    "supportedFeeLimitInGBP": 10000,
     "url": "http://localhost:4182",
     "service": "civil money claims",
     "jurisdiction1": "civil",

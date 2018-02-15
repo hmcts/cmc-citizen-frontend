@@ -1,5 +1,6 @@
 import { Expose, Type } from 'class-transformer'
 import { CurrentVersion } from 'fees/models/currentVersion'
+
 export class FeeRange {
   @Expose({ name: 'min_range' })
   readonly minRange: number

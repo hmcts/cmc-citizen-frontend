@@ -72,7 +72,7 @@ $(function () {
   })
 
   // Send a google analytics event when a form that has the 'analytics-click-event-trigger' class is submitted.
-  // Example <form method="post" class="analytics-submit-event-trigger" data-event-action="Your GA action" data-event-label-from="Form element to extract GA label minRange"></form>
+  // Example <form method="post" class="analytics-submit-event-trigger" data-event-action="Your GA action" data-event-label-from="Form element to extract GA label from"></form>
   $('.analytics-submit-event-trigger').on('submit', function () {
     var form = $(this)
 

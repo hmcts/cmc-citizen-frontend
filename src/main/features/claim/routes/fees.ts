@@ -7,9 +7,8 @@ import { FeeRange as MergableRange, FeesTableViewHelper } from 'claim/helpers/fe
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
 import { FeeRange } from 'fees/models/feeRange'
-import * as config from 'config'
 
-const supportedFeeLimitInGBP: number = config.get('fees.supportedFeeLimitInGBP')
+const supportedFeeLimitInGBP: number = 10000
 
 /* tslint:disable:no-default-export */
 export default express.Router()

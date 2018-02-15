@@ -63,7 +63,6 @@ export class FeeRangeMerge implements RangePartial {
 
 export class FeesTableViewHelper {
   static merge (firstFeesSet: FeeRange[], secondFeesSet: FeeRange[], increment: number = 1): FeeRangeMerge[] {
-    // console.log(firstFeesSet, secondFeesSet)
     if (firstFeesSet === undefined || secondFeesSet === undefined) {
       throw new Error('Both fee sets are required for merge')
     }
@@ -72,23 +71,23 @@ export class FeesTableViewHelper {
       ...secondFeesSet.map(range => Item.createForFeeInColumn(range, 2))
     ].sort((lhs: Item, rhs: Item) => RangeUtils.compare(lhs.range, rhs.range))
 
-    return items.reduce((rows: FeeRangeMerge[], item: Item) => {
-      const overlappedRows: FeeRangeMerge[] = rows.filter((row: FeeRangeMerge) => RangeUtils.areOverlap(item.range, row))
+    return items.reduce((feeRangeMerge: FeeRangeMerge[], item: Item) => {
+      const overlappedRows: FeeRangeMerge[] = feeRangeMerge.filter((row: FeeRangeMerge) => RangeUtils.areOverlap(item.range, row))
       if (isUndefined(item.range.amount)) {
         throw new Error('Fee amount must be defined')
       }
       if (overlappedRows.length === 0) {
-        rows.push(new FeeRangeMerge(item.range.minRange, item.range.maxRange, { [item.targetColumn]: item.range.amount }))
+        feeRangeMerge.push(new FeeRangeMerge(item.range.minRange, item.range.maxRange, { [item.targetColumn]: item.range.amount }))
       } else {
         overlappedRows.forEach(row => {
           row.addFee(item.targetColumn, item.range.amount)
           if (!RangeUtils.areSame(row, item.range)) {
-            rows.push(new FeeRangeMerge(row.maxRange + increment, item.range.maxRange, { [item.targetColumn]: item.range.amount }))
+            feeRangeMerge.push(new FeeRangeMerge(row.maxRange + increment, item.range.maxRange, { [item.targetColumn]: item.range.amount }))
           }
         })
       }
 
-      return rows
+      return feeRangeMerge
     }, []).sort(RangeUtils.compare)
   }
 }
