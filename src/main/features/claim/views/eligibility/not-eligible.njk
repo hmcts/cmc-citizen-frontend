@@ -66,13 +66,13 @@
         <p>{{ t('You might be able to make a claim using <a target="_blank" href="%s">form N510</a> ' + newWindow() + '.',
           { postProcess: 'sprintf', sprintf: [ n510Url ]}) | safe }}</p>
       {% elseif reason === NotEligibleReason.GOVERNMENT_DEPARTMENT %}
-        <p>{{ t('You can’t use this service to claim against <a href="{{ governmentDepartmentsUrl }}">government departments</a>. ',
+        <p>{{ t('You can’t use this service to claim against <a target="_blank" href="{{ governmentDepartmentsUrl }}">government departments</a>. ',
           { governmentDepartmentsUrl : governmentDepartmentsUrl }) | safe }}</p>
         <p>{{ t('Use <a target="_blank" href="{{ n1FormUrl }}">form N1</a> ' + newWindow() + ' to make your claim.',
           { n1FormUrl : n1FormUrl }) | safe }}</p>
       {% elseif reason === NotEligibleReason.CLAIM_IS_FOR_TENANCY_DEPOSIT %}
         <p>{{ t('You can’t make a claim for a tenancy deposit using this service.') }}</p>
-        <p>{{ t('Get <a href="{{ tenancyServiceUrl }}"> help to resolve your dispute</a> with a landlord or tenant.</p>',
+        <p>{{ t('Get <a target="_blank" href="{{ tenancyServiceUrl }}"> help to resolve your dispute</a> with a landlord or tenant.</p>',
           { tenancyServiceUrl: tenancyServiceUrl  }) | safe }}
         </p>
       {% endif %}
