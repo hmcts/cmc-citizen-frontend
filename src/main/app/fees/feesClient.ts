@@ -51,6 +51,9 @@ export class FeesClient {
     if (StringUtils.isBlank(eventType)) {
       throw new Error('Fee eventType is required')
     }
+    if (StringUtils.isBlank(channel)) {
+      throw new Error('Fee channel is required')
+    }
     ClaimValidator.claimAmount(amount)
     const feeUri: string = `${feesUrl}/fees-register/fees/lookup?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&amount_or_volume=${amount}`
     const fee: object = await request.get(feeUri)
