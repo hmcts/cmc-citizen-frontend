@@ -19,7 +19,8 @@ export class Settlement {
     }
 
     const partyStatement: PartyStatement = this.partyStatements
-      .map(o => this.isOfferMadeByDefendant(o) ? o : undefined).pop()
+    .filter(this.isOfferMadeByDefendant)
+    .pop()
 
     return partyStatement ? partyStatement.offer : undefined
   }

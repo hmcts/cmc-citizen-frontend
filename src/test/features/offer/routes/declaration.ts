@@ -89,7 +89,7 @@ describe('declaration page', () => {
               .post(declarationPage)
               .set('Cookie', `${cookieName}=ABC`)
               .send(formData)
-              .expect(res => expect(res).to.be.successful.withText('Please select I confirm that I believe the details I have provided are correct.', 'div class="error-summary"'))
+              .expect(res => expect(res).to.be.successful.withText('Please select I confirm I’ve read and accept the terms of the agreement.', 'div class="error-summary"'))
           })
         })
       })
