@@ -1,5 +1,6 @@
 import { IsDefined } from 'class-validator'
 import { IsBooleanTrue } from 'forms/validation/validators/isBooleanTrue'
+import * as toBoolean from 'to-boolean'
 
 export class ValidationErrors {
   static readonly DECLARATION_REQUIRED: string = 'Please select I confirm I’ve read and accept the terms of the agreement.'
@@ -18,6 +19,6 @@ export class Declaration {
     if (!value) {
       return value
     }
-    return new Declaration(value.signed === 'true')
+    return new Declaration(toBoolean(value.signed))
   }
 }
