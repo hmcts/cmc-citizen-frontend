@@ -13,8 +13,6 @@
       <form method="post" class="analytics-submit-event-trigger" data-event-action="Response: Select full admission option" data-event-label-from="option" novalidate>
         {{ csrfProtection(csrf) }}
 
-        <legend class="visually-hidden">{{ t('Why do you reject the claim?') }}</legend>
-
         {{
           radioGroup(
           label = 'Why do you reject all the claim?',

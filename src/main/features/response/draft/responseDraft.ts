@@ -132,8 +132,10 @@ export class ResponseDraft extends DraftDocument {
     }
 
     return this.response.type === ResponseType.DEFENCE
-      && this.rejectAllOfClaim !== undefined && this.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID
-      && this.howMuchPaidClaimant !== undefined && this.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.AMOUNT_CLAIMED
+      && this.rejectAllOfClaim !== undefined
+      && this.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID
+      && this.howMuchPaidClaimant !== undefined
+      && this.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.AMOUNT_CLAIMED
   }
 
   private isResponsePopulated (): boolean {

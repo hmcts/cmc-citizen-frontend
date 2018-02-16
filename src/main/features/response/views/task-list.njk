@@ -28,13 +28,13 @@
       </div>
 
       {% if submitSection %}
-      <div class="task-group">
-        {{ taskListHeading(submitSection.position, t(submitSection.name)) }}
+        <div class="task-group">
+          {{ taskListHeading(submitSection.position, t(submitSection.name)) }}
 
-        {% for item in submitSection.tasks %}
-          {{ task(item.startPageUrl, t(item.name), item.completed) }}
-        {% endfor %}
-      </div>
+          {% for item in submitSection.tasks %}
+            {{ task(item.startPageUrl, t(item.name), item.completed) }}
+          {% endfor %}
+        </div>
       {% endif %}
     </div>
 
