@@ -14,6 +14,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 const declarationPage = OfferPaths.declarationPage.evaluateUri({ externalId: externalId })
 const acceptedPage = OfferPaths.acceptedPage.evaluateUri({ externalId: externalId })
+const settledPage = OfferPaths.settledPage.evaluateUri({ externalId: externalId })
 
 describe('declaration page', () => {
   attachDefaultHooks(app)
@@ -64,18 +65,35 @@ describe('declaration page', () => {
           })
         })
 
-        context('when form is valid', async () => {
-          it('should accepted offer and redirect to confirmation page', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            claimStoreServiceMock.resolveAcceptOffer()
-            const formData = {
-              signed: 'true'
-            }
-            await request(app)
-              .post(declarationPage)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(formData)
-              .expect(res => expect(res).to.be.redirect.toLocation(acceptedPage))
+        context('when form is valid', () => {
+          context('when accepting offer as claimant', () => {
+            it('should accepted offer and redirect to confirmation page', async () => {
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+              claimStoreServiceMock.resolveAcceptOffer()
+              const formData = {
+                signed: 'true'
+              }
+              await request(app)
+                .post(declarationPage)
+                .set('Cookie', `${cookieName}=ABC`)
+                .send(formData)
+                .expect(res => expect(res).to.be.redirect.toLocation(acceptedPage))
+            })
+          })
+
+          context('when countersigning offer as defendant', () => {
+            it('should countersign offer and redirect to confirmation page', async () => {
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId({
+                submitterId: '123',
+                defendantId: '1'
+              })
+              claimStoreServiceMock.resolveCountersignOffer()
+              await request(app)
+                .post(declarationPage)
+                .set('Cookie', `${cookieName}=ABC`)
+                .send({ signed: 'true' })
+                .expect(res => expect(res).to.be.redirect.toLocation(settledPage))
+            })
           })
         })
 
