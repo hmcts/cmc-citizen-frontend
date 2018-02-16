@@ -124,7 +124,6 @@ describe('HowMuchPaid', () => {
         length: ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1,
         charset: 'alphabetic'
       })
-
       const errors = validator.validateSync(new HowMuchPaid(300, pastDate, text))
 
       expectNumberOfValidationErrors(errors, 1)
