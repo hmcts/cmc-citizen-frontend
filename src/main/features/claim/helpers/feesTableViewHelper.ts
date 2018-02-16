@@ -62,7 +62,7 @@ export class FeeRangeMerge implements RangePartial {
 }
 
 export class FeesTableViewHelper {
-  static merge (firstFeesSet: FeeRange[], secondFeesSet: FeeRange[], increment: number = 1): FeeRangeMerge[] {
+  static merge (firstFeesSet: FeeRange[], secondFeesSet: FeeRange[], increment: number = 0.01): FeeRangeMerge[] {
     if (firstFeesSet === undefined || secondFeesSet === undefined) {
       throw new Error('Both fee sets are required for merge')
     }

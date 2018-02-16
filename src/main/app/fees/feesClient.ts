@@ -6,14 +6,14 @@ import { FeeOutcome } from 'fees/models/feeOutcome'
 import { FeeRange } from 'fees/models/feeRange'
 import { StringUtils } from 'utils/stringUtils'
 
-const feesUrl = config.get('fees.url')
-const service: string = config.get<string>('fees.service')
-const jurisdiction1: string = config.get<string>('fees.jurisdiction1')
-const jurisdiction2: string = config.get<string>('fees.jurisdiction2')
-const onlineChannel: string = config.get<string>('fees.channel.online')
-const paperChannel: string = config.get<string>('fees.channel.paper')
-const issueFeeEvent: string = config.get<string>('fees.issueFee.event')
-const hearingFeeEvent: string = config.get('fees.hearingFee.event')
+const feesUrl = config.get<string>('fees.url')
+const service = config.get<string>('fees.service')
+const jurisdiction1 = config.get<string>('fees.jurisdiction1')
+const jurisdiction2 = config.get<string>('fees.jurisdiction2')
+const onlineChannel = config.get<string>('fees.channel.online')
+const paperChannel = config.get<string>('fees.channel.paper')
+const issueFeeEvent = config.get<string>('fees.issueFee.event')
+const hearingFeeEvent = config.get<string>('fees.hearingFee.event')
 
 export class FeesClient {
 
