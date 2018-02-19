@@ -6,17 +6,18 @@ import { attachDefaultHooks } from '../../../../routes/hooks'
 import '../../../../routes/expectations'
 import { checkAuthorizationGuards } from '../checks/authorization-check'
 
-import { Paths as ClaimPaths } from 'claim/paths'
-
 import { app } from '../../../../../main/app'
 
 import * as idamServiceMock from '../../../../http-mocks/idam'
+import { Paths as ClaimPaths } from 'claim/paths'
+import * as claimStoreServiceMock from '../../../../http-mocks/claim-store'
+import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ClaimPaths.eligibilityStartPage.uri
-const expectedTextOnPage: string = 'Find out if you can use this service'
+const pagePath: string = ClaimPaths.eligibilityNotEligiblePage.uri
+const expectedTextOnPage: string = 'You can’t use this service'
 
-describe('Claim eligibility: index page', () => {
+describe('Claim eligibility: not eligible page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -24,6 +25,9 @@ describe('Claim eligibility: index page', () => {
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+
+      claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+      draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
         .get(pagePath)
