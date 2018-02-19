@@ -26,7 +26,6 @@ describe('Claim eligibility: not eligible page', () => {
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
 
-      claimStoreServiceMock.resolveRetrieveClaimByExternalId()
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
