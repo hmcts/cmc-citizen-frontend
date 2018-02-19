@@ -3,7 +3,6 @@
 import * as config from 'config'
 import * as supertest from 'supertest'
 import * as pa11y from 'pa11y'
-import * as promisify from 'es6-promisify'
 import { expect } from 'chai'
 
 import { RoutablePath } from 'common/router/routablePath'
@@ -15,35 +14,56 @@ import { Paths as OfferPaths } from 'offer/paths'
 
 import './mocks'
 import { app } from '../../main/app'
+import { Logger } from '@hmcts/nodejs-logging'
 
 app.locals.csrf = 'dummy-token'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const logger = Logger.getLogger('a11y')
 
 const agent = supertest.agent(app)
-const pa11yTest = pa11y({
-  page: {
-    headers: {
-      Cookie: `${cookieName}=ABC`
+
+class Issue {
+  code
+  context
+  message
+  type
+  typeCode
+  selector
+}
+
+async function runPa11y (url): Promise<boolean> {
+  try {
+    const results = await pa11y(agent.get(url).url, {
+      headers: {
+        Cookie: `${cookieName}=ABC`
+      }
+    })
+
+    const errors: Issue[] = results.issues
+
+    if (errors.length === 0) {
+      return true
+    } else {
+      errors.forEach(error => {
+        logger.error(error.message)
+      })
+      return false
     }
+  } catch (error) {
+    throw new Error(error)
   }
-})
-const test = promisify(pa11yTest.run, pa11yTest)
+}
 
 function check (url: string): void {
   describe(`Page ${url}`, () => {
-
-    it('should have no accessibility errors', (done) => {
-      ensurePageCallWillSucceed(url)
-        .then(() =>
-          test(agent.get(url).url)
-        )
-        .then((messages) => {
-          const errors = messages.filter((m) => m.type === 'error')
-          expect(errors, `\n${JSON.stringify(errors, null, 2)}\n`).to.be.empty
-          done()
-        })
-        .catch((err) => done(err))
+    it('should have no accessibility errors', async () => {
+      try {
+        await ensurePageCallWillSucceed(url)
+        expect(await runPa11y(url)).to.be.equal(true)
+      } catch (error) {
+        throw new Error(error)
+      }
     })
   })
 }
@@ -59,7 +79,6 @@ function ensurePageCallWillSucceed (url: string): Promise<void> {
       if (!res.ok) {
         throw new Error(`Call to ${url} resulted in ${res.status}`)
       }
-
     })
 }
 
