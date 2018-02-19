@@ -42,7 +42,7 @@ describe('getInterestDetails', () => {
     claimStoreServiceMock.mockCalculateInterestRate(5)
 
     const today = MomentFactory.currentDate()
-    const claim: Claim = new Claim().deserialize({ ...sampleClaimObj, createdAt: today })
+    const claim: Claim = new Claim().deserialize({ ...sampleClaimObj, issuedOn: today })
 
     const { numberOfDays } = await getInterestDetails(claim) as any
     expect(numberOfDays).to.deep.eq(0)
