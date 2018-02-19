@@ -1,5 +1,4 @@
-FROM node:8.9.0-alpine
-
+FROM node:8-slim
 # See https://crbug.com/795759
 RUN apt-get update && apt-get install -yq libgconf-2-4
 
@@ -34,6 +33,8 @@ USER pptruser
 
 ENTRYPOINT ["dumb-init", "--"]
 CMD ["google-chrome-unstable"]
+
+FROM node:8.9.0-alpine
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
