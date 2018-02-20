@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 
-{% set title = t('Valid Defendant | Money claim') %}
+{% set title = t('Claim Type | Money claim') %}
 
 {% block content %}
 
@@ -9,10 +9,10 @@
     <div class="column-two-thirds">
       <h1 class="heading-large">{{ t('Who are you making the claim for?') }}</h1>
 
-      {% set name = 'validDefendant' %}
+      {% set name = 'claimType' %}
 
       <form novalidate method="post" class="analytics-submit-event-trigger"
-            data-event-action="Eligibility: Valid Defendant"
+            data-event-action="Eligibility: Claim Type"
             data-event-label-from="{{ name }}">
         {{ csrfProtection(csrf) }}
 
@@ -25,21 +25,21 @@
         options = [
         {
           bold: false,
-          label: ValidDefendant.PERSONAL_CLAIM.displayValue,
-          value: ValidDefendant.PERSONAL_CLAIM.option,
-          checked: form.valueFor(name) === ValidDefendant.PERSONAL_CLAIM
+          label: ClaimType.PERSONAL_CLAIM.displayValue,
+          value: ClaimType.PERSONAL_CLAIM.option,
+          checked: form.valueFor(name) === ClaimType.PERSONAL_CLAIM
         },
         {
           bold: false,
-          label: ValidDefendant.MULTIPLE_CLAIM.displayValue,
-          value: ValidDefendant.MULTIPLE_CLAIM.option,
-          checked: form.valueFor(name) === ValidDefendant.MULTIPLE_CLAIM
+          label: ClaimType.MULTIPLE_CLAIM.displayValue,
+          value: ClaimType.MULTIPLE_CLAIM.option,
+          checked: form.valueFor(name) === ClaimType.MULTIPLE_CLAIM
         },
         {
           bold: false,
-          label: ValidDefendant.REPRESENTATIVE_CLAIM.displayValue,
-          value: ValidDefendant.REPRESENTATIVE_CLAIM.option,
-          checked: form.valueFor(name) === ValidDefendant.REPRESENTATIVE_CLAIM
+          label: ClaimType.REPRESENTATIVE_CLAIM.displayValue,
+          value: ClaimType.REPRESENTATIVE_CLAIM.option,
+          checked: form.valueFor(name) === ClaimType.REPRESENTATIVE_CLAIM
         }
         ]
         )

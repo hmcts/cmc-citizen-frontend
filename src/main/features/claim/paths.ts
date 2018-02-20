@@ -34,7 +34,7 @@ export class Paths {
   static readonly eligibilityStartPage = new RoutablePath('/claim/eligibility/index')
   static readonly eligibilityClaimValuePage = new RoutablePath('/claim/eligibility/claim-value')
   static readonly eligibilitySingleDefendantPage = new RoutablePath('/claim/eligibility/single-defendant')
-  static readonly eligibilityValidDefendantPage = new RoutablePath('/claim/eligibility/valid-defendant')
+  static readonly eligibilityClaimTypePage = new RoutablePath('/claim/eligibility/claim-type')
   static readonly eligibilityHelpWithFeesPage = new RoutablePath('/claim/eligibility/help-with-fees')
   static readonly eligibilityClaimantAddressPage = new RoutablePath('/claim/eligibility/claimant-address')
   static readonly eligibilityDefendantAddressPage = new RoutablePath('/claim/eligibility/defendant-address')

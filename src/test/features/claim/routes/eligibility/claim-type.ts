@@ -13,14 +13,14 @@ import { app } from '../../../../../main/app'
 import * as idamServiceMock from '../../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
-import { ValidDefendant } from 'claim/form/models/eligibility/validDefendant'
+import { ClaimType } from 'claim/form/models/eligibility/claimType'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ClaimPaths.eligibilityValidDefendantPage.uri
+const pagePath: string = ClaimPaths.eligibilityClaimTypePage.uri
 const pageRedirect: string = ClaimPaths.eligibilitySingleDefendantPage.uri
 const expectedTextOnPage: string = 'Who are you making the claim for?'
 
-describe('Claim eligibility: valid defendant page', () => {
+describe('Claim eligibility: claim type page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -61,7 +61,7 @@ describe('Claim eligibility: valid defendant page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ validDefendant: ValidDefendant.PERSONAL_CLAIM.option })
+          .send({ claimType: ClaimType.PERSONAL_CLAIM.option })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -72,7 +72,7 @@ describe('Claim eligibility: valid defendant page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ validDefendant: ValidDefendant.PERSONAL_CLAIM.option })
+          .send({ claimType: ClaimType.PERSONAL_CLAIM.option })
           .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
       })
       it('should redirect to not eligible page when form is valid and multiple claimants option selected', async () => {
@@ -82,7 +82,7 @@ describe('Claim eligibility: valid defendant page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ validDefendant: ValidDefendant.MULTIPLE_CLAIM.option })
+          .send({ claimType: ClaimType.MULTIPLE_CLAIM.option })
           .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`))
       })
 
@@ -93,7 +93,7 @@ describe('Claim eligibility: valid defendant page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ validDefendant: ValidDefendant.REPRESENTATIVE_CLAIM.option })
+          .send({ claimType: ClaimType.REPRESENTATIVE_CLAIM.option })
           .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_ON_BEHALF}`))
       })
     })

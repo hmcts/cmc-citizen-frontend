@@ -9,7 +9,7 @@ import { Defendant } from 'app/drafts/models/defendant'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
-import { ValidDefendant } from 'claim/form/models/eligibility/validDefendant'
+import { ClaimType } from 'claim/form/models/eligibility/claimType'
 
 describe('DraftClaim deserialization', () => {
   let input
@@ -22,7 +22,7 @@ describe('DraftClaim deserialization', () => {
         claimantAddress: YesNoOption.YES,
         defendantAddress: YesNoOption.YES,
         eighteenOrOver: YesNoOption.YES,
-        validDefendant: ValidDefendant.PERSONAL_CLAIM,
+        claimType: ClaimType.PERSONAL_CLAIM,
         singleDefendant: YesNoOption.YES,
         governmentDepartment: YesNoOption.NO,
         claimIsForTenancyDeposit: YesNoOption.NO
@@ -88,7 +88,7 @@ describe('DraftClaim deserialization', () => {
     expect(deserialized.eligibility.claimantAddress).to.equal(YesNoOption.YES)
     expect(deserialized.eligibility.defendantAddress).to.equal(YesNoOption.YES)
     expect(deserialized.eligibility.eighteenOrOver).to.equal(YesNoOption.YES)
-    expect(deserialized.eligibility.validDefendant).to.equal(ValidDefendant.PERSONAL_CLAIM)
+    expect(deserialized.eligibility.claimType).to.equal(ClaimType.PERSONAL_CLAIM)
     expect(deserialized.eligibility.singleDefendant).to.equal(YesNoOption.YES)
     expect(deserialized.eligibility.governmentDepartment).to.equal(YesNoOption.NO)
     expect(deserialized.eligibility.claimIsForTenancyDeposit).to.equal(YesNoOption.NO)

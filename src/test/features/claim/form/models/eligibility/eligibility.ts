@@ -5,7 +5,7 @@ import { Eligibility } from 'claim/form/models/eligibility/eligibility'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
-import { ValidDefendant } from 'claim/form/models/eligibility/validDefendant'
+import { ClaimType } from 'claim/form/models/eligibility/claimType'
 
 describe('Eligibility', () => {
 
@@ -21,7 +21,7 @@ describe('Eligibility', () => {
           YesNoOption.YES,
           YesNoOption.YES,
           YesNoOption.YES,
-          ValidDefendant.PERSONAL_CLAIM,
+          ClaimType.PERSONAL_CLAIM,
           YesNoOption.YES,
           undefined,
           YesNoOption.NO
@@ -39,7 +39,7 @@ describe('Eligibility', () => {
           YesNoOption.YES,
           YesNoOption.YES,
           YesNoOption.YES,
-          ValidDefendant.PERSONAL_CLAIM,
+          ClaimType.PERSONAL_CLAIM,
           YesNoOption.NO,
           YesNoOption.NO,
           YesNoOption.NO

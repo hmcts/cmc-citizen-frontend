@@ -3,7 +3,7 @@ import { IsIn } from 'class-validator'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
-import { ValidDefendant } from 'claim/form/models/eligibility/validDefendant'
+import { ClaimType } from 'claim/form/models/eligibility/claimType'
 
 export class Eligibility {
 
@@ -22,8 +22,8 @@ export class Eligibility {
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.OVER_18] })
   eighteenOrOver?: YesNoOption
 
-  @IsIn(ValidDefendant.all(), { message: ValidationErrors.SELECT_AN_OPTION, groups: [ValidationGroups.VALID_DEFENDANT] })
-  validDefendant?: ValidDefendant
+  @IsIn(ClaimType.all(), { message: ValidationErrors.SELECT_AN_OPTION, groups: [ValidationGroups.CLAIM_TYPE] })
+  claimType?: ClaimType
 
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.SINGLE_DEFENDANT] })
   singleDefendant?: YesNoOption
@@ -45,7 +45,7 @@ export class Eligibility {
                claimantAddress?: YesNoOption,
                defendantAddress?: YesNoOption,
                eighteenOrOver?: YesNoOption,
-               validDefendant?: ValidDefendant,
+               claimType?: ClaimType,
                singleClaimant?: YesNoOption,
                governmentDepartment?: YesNoOption,
                claimIsForTenancyDeposit?: YesNoOption) {
@@ -54,7 +54,7 @@ export class Eligibility {
     this.claimantAddress = claimantAddress
     this.defendantAddress = defendantAddress
     this.eighteenOrOver = eighteenOrOver
-    this.validDefendant = validDefendant
+    this.claimType = claimType
     this.singleDefendant = singleClaimant
     this.governmentDepartment = governmentDepartment
     this.claimIsForTenancyDeposit = claimIsForTenancyDeposit
@@ -67,7 +67,7 @@ export class Eligibility {
       YesNoOption.fromObject(input.claimantAddress),
       YesNoOption.fromObject(input.defendantAddress),
       YesNoOption.fromObject(input.eighteenOrOver),
-      ValidDefendant.fromObject(input.validDefendant),
+      ClaimType.fromObject(input.claimType),
       YesNoOption.fromObject(input.singleDefendant),
       YesNoOption.fromObject(input.governmentDepartment),
       YesNoOption.fromObject(input.claimIsForTenancyDeposit)
@@ -91,8 +91,8 @@ export class Eligibility {
       if (input.eighteenOrOver) {
         this.eighteenOrOver = YesNoOption.fromObject(input.eighteenOrOver.option)
       }
-      if (input.validDefendant) {
-        this.validDefendant = ValidDefendant.fromObject(input.validDefendant.option)
+      if (input.claimType) {
+        this.claimType = ClaimType.fromObject(input.claimType.option)
       }
       if (input.singleDefendant) {
         this.singleDefendant = YesNoOption.fromObject(input.singleDefendant.option)
@@ -114,7 +114,7 @@ export class Eligibility {
       this.claimantAddress === YesNoOption.YES &&
       this.defendantAddress === YesNoOption.YES &&
       this.eighteenOrOver === YesNoOption.YES &&
-      this.validDefendant === ValidDefendant.PERSONAL_CLAIM &&
+      this.claimType === ClaimType.PERSONAL_CLAIM &&
       this.singleDefendant === YesNoOption.NO &&
       this.governmentDepartment === YesNoOption.NO &&
       this.claimIsForTenancyDeposit === YesNoOption.NO
