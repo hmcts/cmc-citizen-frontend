@@ -1,5 +1,9 @@
 {% from "timeRemaining.njk" import timeRemaining %}
 
+{% macro _viewResponseLink (externalId) %}
+  <a href="{{ ResponsePaths.summaryPage.evaluateUri({ externalId: externalId }) }}">{{ t('View full response') }}</a>
+{% endmacro %}
+
 {% macro responseStatusForDefendant(claim, url, isAfter4pm) %}
 
   {% if claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
@@ -41,16 +45,20 @@
     {{ t('The defendant has not responded to your claim. You can request a County Court Judgment (CCJ) to get what’s owed.') }}
   {% elseif claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
     {{ t('You have signed the agreement. The claim is now settled.') }}
+    <p>{{ _viewResponseLink(claim.externalId) }}</p>
   {% elseif claim.status === ClaimStatus.FREE_MEDIATION %}
     {{ t('{{ defendantName }} has rejected the claim. They’ve suggested free mediation on {{ respondedAt }}. You can accept or reject',
     { defendantName: claim.response.defendant.name, respondedAt: claim.respondedAt | date }) }}
+    <p>{{ _viewResponseLink(claim.externalId) }}</p>
   {% elseif claim.status === ClaimStatus.CLAIM_REJECTED %}
     {{ t('{{ defendantName }} has rejected the claim. The case will be reviewed by a judge and might go to court.',
     { defendantName:  claim.claimData.defendant.name }) }}
+    <p>{{ _viewResponseLink(claim.externalId) }}</p>
   {% elseif claim.status === ClaimStatus.OFFER_ACCEPTED %}
     {{ t('You have accepted the defendant’s offer. TODO: Content') }}
   {% elseif claim.status === ClaimStatus.OFFER_SUBMITTED %}
-    {{ t('The defendant has made an offer to settle out of court.') }} <a href="{{ url }}">TODO: Offer here</a>
+    {{ t('The defendant has made an offer to settle out of court.') }}
+    <p>{{ _viewResponseLink(claim.externalId) }}</p>
   {% elseif claim.status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ t('{{ defendantName }} has requested an extra 14 days to respond. They need to respond by {{ responseDeadline }}.',
     { defendantName: claim.claimData.defendant.name,
