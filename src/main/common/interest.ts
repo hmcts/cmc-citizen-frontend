@@ -15,10 +15,10 @@ export async function getInterestDetails (claim: Claim): Promise<object> {
   if (claim.claimData.interestDate.type === InterestDateType.CUSTOM) {
     interestDate = claim.claimData.interestDate.date
   } else {
-    interestDate = claim.issuedOn
+    interestDate = claim.createdAt.startOf('day')
   }
 
-  const todayDate: Moment = MomentFactory.currentDate()
+  const todayDate: Moment = MomentFactory.currentDate().startOf('day')
   const noOfDays: number = todayDate.diff(interestDate, 'days')
   const rate: number = claim.claimData.interest.rate
 
