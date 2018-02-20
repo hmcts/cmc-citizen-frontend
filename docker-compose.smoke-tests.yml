@@ -8,8 +8,8 @@ services:
         - WEB_DRIVER_HOST=remote-webdriver
         - CITIZEN_APP_URL=${TEST_URL}
         - IDAM_URL
-        - SMOKE_TEST_USERNAME=civilmoneyclaims+smoketest@gmail.com
-        - SMOKE_TEST_PASSWORD=Password12
+        - AAT_TEST_CITIZEN_USER_USERNAME=civilmoneyclaims+smoketest@gmail.com
+        - AAT_TEST_USER_PASSWORD=Password12
         - HEALTHCHECK_CITIZEN=true
       volumes:
         - ./smoke-output:/usr/src/app/output
