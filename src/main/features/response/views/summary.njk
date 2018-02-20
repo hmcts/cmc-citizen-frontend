@@ -1,0 +1,16 @@
+{% extends "layout.njk" %}
+{% from "./macro/expandableSection.njk" import expandableSection %}
+
+{% set title = t('The defendant’s response | Money claim') %}
+{% set heading = t('The defendant’s response') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('The defendant {{ name }} has rejected your claim.', name = response.defendant.name) }}</p>
+      <p class="bold-medium">{{ t('Their defence') }}</p>
+
+      {{ expandableSection(label = 'Why they disagree with the claim', content = response.defence, id = 'summaryContent') }}
+    </div>
+  </div>
+{% endblock %}
