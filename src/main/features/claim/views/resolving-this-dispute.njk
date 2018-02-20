@@ -16,14 +16,14 @@
         <li>{{ t('consider mediation') }}</li>
       </ul>
 
-      <h2 class="heading-medium">{{ t('Talk to the person or organisation who owes you') }}</h2>
+      <h2 class="heading-medium">{{ t('Talk to the person or organisation') }}</h2>
 
       <p>{{ t('Try to resolve the dispute by:') }}</p>
 
       <ul class="list list-bullet">
-        <li>{{ t('telling them what you believe they owe and why') }}.</li>
-        <li>{{ t('suggesting a timetable for them to pay you back') }}.</li>
-        <li>{{ t('explaining you’ll make a money claim against them if they don’t pay') }}.</li>
+        <li>{{ t('telling them what you believe they owe and why') }}</li>
+        <li>{{ t('suggesting a timetable for them to pay you back') }}</li>
+        <li>{{ t('explaining you‘ll make a money claim against them if they don‘t pay') }}</li>
       </ul>
 
       <h2 class="heading-medium">{{ t('Consider mediation') }}</h2>
@@ -33,8 +33,17 @@
       <p>{{ t('It can often be done on the phone. If you don’t want to speak to the person you’re claiming against, '
         + 'a mediator can speak to you both separately.') }}</p>
 
-      <p>{{ t('<a href="{{ findMediationServiceUri }}">Find a mediation service</a>',
+      <h2 class="heading-small">{{ t('Before making a claim') }}</h2>
+      <p>{{ t('If you intend to claim against an organisation, it may have a mediation service or complaints process '
+        + 'you can use.') }}</p>
+
+      <p>{{ t('You can also <a href="{{ findMediationServiceUri }}">use a paid mediation service</a>',
         { findMediationServiceUri: 'http://civilmediation.justice.gov.uk/' }) | safe }}</p>
+
+      <h2 class="heading-small">{{ t('After making a claim') }}</h2>
+
+      <p>{{ t('If the person or organisation disputes your claim you may be able to use the free small claims '
+        + 'mediation service.') }}</p>
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
