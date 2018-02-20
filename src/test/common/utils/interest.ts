@@ -2,7 +2,7 @@ import { InterestDateType } from 'app/common/interestDateType'
 import { expect } from 'chai'
 import { InterestType } from 'claim/form/models/interest'
 import { Claim } from 'claims/models/claim'
-import { getInterestDetails } from 'common/interest'
+import { getInterestDetails } from 'common/interestUtils'
 import { MomentFactory } from 'common/momentFactory'
 import * as claimStoreServiceMock from '../../http-mocks/claim-store'
 
