@@ -3,12 +3,13 @@ import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
-import { ResponseGuard } from 'response/guards/alreadyRespondedGuard'
+import { ResponseGuard } from 'response/guards/responseGuard'
 import { ClaimMiddleware } from 'app/claims/claimMiddleware'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { CountyCourtJudgmentRequestedGuard } from 'response/guards/countyCourtJudgmentRequestedGuard'
+import { IsClaimantInCaseGuard } from 'guards/isClaimantInCaseGuard'
 import { IsDefendantInCaseGuard } from 'guards/isDefendantInCaseGuard'
 import { OAuthHelper } from 'idam/oAuthHelper'
 
@@ -35,7 +36,7 @@ export class Feature {
       /^\/case\/.+\/response\/(?!confirmation|full-admission|partial-admission|counter-claim|receipt|summary).*$/,
       ResponseGuard.checkResponseDoesNotExist()
     )
-    app.all('/case/*/response/summary', ResponseGuard.checkResponseExists())
+    app.all('/case/*/response/summary', ResponseGuard.checkResponseExists(), IsClaimantInCaseGuard.check())
     app.all(allResponseRoutes, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(
       /^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
