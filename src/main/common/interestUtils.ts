@@ -4,7 +4,7 @@ import { Moment } from 'moment'
 import { InterestType } from 'claim/form/models/interest'
 import { calculateInterest } from 'app/common/calculateInterest'
 import { Claim } from 'claims/models/claim'
-import { InterestData } from 'app/common/InterestData'
+import { InterestData } from 'app/common/interestData'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { DraftClaim } from 'drafts/models/draftClaim'
 

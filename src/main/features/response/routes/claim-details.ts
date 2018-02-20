@@ -3,7 +3,7 @@ import { Paths } from 'response/paths'
 import { Claim } from 'claims/models/claim'
 import { getInterestDetails } from 'common/interestUtils'
 import { MoneyConverter } from 'fees/moneyConverter'
-import { InterestData } from 'app/common/InterestData'
+import { InterestData } from 'app/common/interestData'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
