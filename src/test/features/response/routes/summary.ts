@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from '../../../routes/hooks'
 import { checkAuthorizationGuards } from './checks/authorization-check'
+import { checkOnlyClaimantHasAccess } from '../../../routes/checks/claimant-in-case-check'
 
 import { Paths as ResponsePaths } from 'response/paths'
 
@@ -24,6 +25,7 @@ describe('Defendant response: summary page', () => {
     const method = 'get'
     checkAuthorizationGuards(app, method, pagePath)
     checkNotDefendantInCaseGuard(app, method, pagePath)
+    checkOnlyClaimantHasAccess(app, method, pagePath)
 
     describe('for authorized user', () => {
       beforeEach(() => {

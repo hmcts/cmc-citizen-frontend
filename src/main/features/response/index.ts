@@ -36,7 +36,7 @@ export class Feature {
       /^\/case\/.+\/response\/(?!confirmation|full-admission|partial-admission|counter-claim|receipt|summary).*$/,
       ResponseGuard.checkResponseDoesNotExist()
     )
-    app.all('/case/*/response/summary', ResponseGuard.checkResponseExists(), IsClaimantInCaseGuard.check())
+    app.all('/case/*/response/summary', IsClaimantInCaseGuard.check(), ResponseGuard.checkResponseExists())
     app.all(allResponseRoutes, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(
       /^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
