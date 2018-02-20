@@ -36,7 +36,7 @@ export class FeesClient {
    */
   static calculateHearingFee (claimValue: number): Promise<number> {
     return this.calculateFee(hearingFeeEvent, claimValue, paperChannel)
-      .then((outcome: FeeOutcome) => (outcome.amount))
+      .then((outcome: FeeOutcome) => outcome.amount)
   }
 
   /**
@@ -80,7 +80,7 @@ export class FeesClient {
     if (StringUtils.isBlank(eventType)) {
       throw new Error('Fee eventType is required')
     }
-    if (StringUtils.isBlank(eventType)) {
+    if (StringUtils.isBlank(channel)) {
       throw new Error('Fee channel is required')
     }
     const uri: string = `${feesUrl}/fees-register/fees?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&feeVersionStatus=approved`

@@ -19,6 +19,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Logger } from '@hmcts/nodejs-logging'
 import { FeeOutcome } from 'fees/models/feeOutcome'
+import { MoneyConverter } from 'fees/moneyConverter'
 
 const logger = Logger.getLogger('router/pay')
 const event: string = config.get<string>('fees.issueFee.event')
@@ -96,10 +97,11 @@ export default express.Router()
       }
       const feeOutcome: FeeOutcome = await FeesClient.calculateFee(event, amount, channel)
       const payClient: PayClient = await getPayClient()
+      const amountInPennies: number = MoneyConverter.convertPoundsToPennies(feeOutcome.amount)
       const payment: PaymentResponse = await payClient.create(
         res.locals.user,
         feeOutcome.code,
-        feeOutcome.amount,
+        amountInPennies,
         getReturnURL(req, draft.document.externalId)
       )
       draft.document.claimant.payment = payment
