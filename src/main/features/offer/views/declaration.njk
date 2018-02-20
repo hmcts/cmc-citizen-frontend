@@ -78,13 +78,16 @@
         {{ csrfProtection(csrf) }}
 
         <div class="form-group">
+          {% set checkboxLabel = 'I confirm I’ve read and accept the terms of the agreement.' %}
+
           {{
             checkboxSingle(
               name = 'signed',
               option = {
-                label: 'I confirm I’ve read and accept the terms of the agreement.',
+                label: checkboxLabel,
                 value: true
               },
+              label = checkboxLabel,
               form = form,
               legendHidden = true
             )
