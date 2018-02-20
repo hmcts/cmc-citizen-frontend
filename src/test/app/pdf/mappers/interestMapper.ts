@@ -13,7 +13,7 @@ const creationDate = MomentFactory.currentDateTime()
 const customInterestDate = creationDate.subtract(10, 'days')
 
 const submissionInterestDateClaim = {
-  createdAt: creationDate,
+  issuedOn: creationDate,
   claimData: {
     amount: new ClaimAmountBreakdown(),
     interest: {
@@ -46,7 +46,7 @@ describe('InterestMapper', () => {
       mockCalculateInterestRate(1)
     })
 
-    it('should use Claim createdAt date if submission interest date is used', async () => {
+    it('should use Claim issuedOn date if submission interest date is used', async () => {
       let mapped: any = await InterestMapper.createInterestData(submissionInterestDateClaim)
       expect(mapped.dateClaimedFrom).to.equal(MomentFormatter.formatLongDate(creationDate))
     })

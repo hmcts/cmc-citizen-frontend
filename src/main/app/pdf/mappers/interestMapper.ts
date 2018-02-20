@@ -18,12 +18,12 @@ export class InterestMapper {
     }
 
     const interestDate = claimData.interestDate.type === InterestDateType.SUBMISSION
-      ? claim.createdAt : claimData.interestDate.date
+      ? claim.issuedOn : claimData.interestDate.date
 
     return {
       rate: claimData.interest.rate,
       dateClaimedFrom: MomentFormatter.formatLongDate(interestDate),
-      claimedAtDateOfSubmission: NumberFormatter.formatMoney(await InterestMapper.calculateInterest(claimData, interestDate, claim.createdAt)),
+      claimedAtDateOfIssue: NumberFormatter.formatMoney(await InterestMapper.calculateInterest(claimData, interestDate, claim.issuedOn)),
       accruedInterest: NumberFormatter.formatMoney(InterestMapper.calculateDailyAmount(claimData))
     }
   }
