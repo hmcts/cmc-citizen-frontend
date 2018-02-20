@@ -15,58 +15,56 @@ variable "env" { }
 
 variable "ilbIp" { }
 
-variable "test-draft-store-api-url" {
+variable "draft_store_api_url" {
   default = "https://testdraftstorelb.moneyclaim.reform.hmcts.net:4302"
 }
 
-variable "prod-draft-store-api-url" {
-  default = "https://preproddraftstorelb.moneyclaim.reform.hmcts.net:4301"
-//  default = "https://testdraftstorelb.moneyclaim.reform.hmcts.net:4301"
-}
-
-variable "test-payments-api-url" {
+variable "payments_api_url" {
   default = "https://test.payments.reform.hmcts.net:4421"
 }
 
-variable "prod-payments-api-url" {
-  default = "https://preprod.payments.reform.hmcts.net:4401"
-//  default = "https://payments.reform.hmcts.net:4401"
-}
-
-variable "test-fees-api-url" {
+variable "fees_api_url" {
   default = "https://test.fees-register.reform.hmcts.net:4431"
 }
 
-variable "prod-fees-api-url" {
-  default = "https://preprod.fees-register.reform.hmcts.net:4411"
-//  default = "https://fees-register.reform.hmcts.net:4411"
-}
-
-variable "test-idam-api-url" {
+variable "idam_api_url" {
   default = "http://betaDevBccidamAppLB.reform.hmcts.net"
 }
 
-variable "prod-idam-api-url" {
-  default = "http://betaPreProdccidamAppLB.reform.hmcts.net:4501"
-  //  default = "http://betaProdccidamAppLB.reform.hmcts.net:4501"
-}
-
-variable "test-s2s-url" {
+variable "s2s_url" {
   default = "http://betaDevBccidamS2SLB.reform.hmcts.net"
 }
 
-variable "prod-s2s-url" {
-  default = "http://betaPreProdccidamAppLB.reform.hmcts.net:4502"
-  //  default = "http://betaProdccidamAppLB.reform.hmcts.net:4502"
-}
-
-variable "test-authentication-web-url" {
+variable "authentication_web_url" {
   default = "https://idam-test.dev.ccidam.reform.hmcts.net"
 }
 
-variable "prod-authentication-web-url" {
-  default = "https://idam.preprod.ccidam.reform.hmcts.net"
-//  default = "https://www.idam.reform.hmcts.net"
+variable "subscription" {}
+
+variable "vault_section" {
+  default = "test"
+}
+// feature toggles
+variable "feature_ccj" {
+  default = "true"
 }
 
-variable "subscription" {}
+variable "feature_offer" {
+  default = "false"
+}
+
+variable "feature_statement_of_means" {
+  default = "false"
+}
+
+variable "feature_full_admission" {
+  default = "false"
+}
+
+variable "feature_partial_admission" {
+  default = "false"
+}
+
+variable "feature_fine_print" {
+  default = "false"
+}
