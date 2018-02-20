@@ -32,10 +32,6 @@ const justForwardRequestHandler = {
   }
 }
 
-mock('response/guards/alreadyRespondedGuard', {
-  AlreadyRespondedGuard: justForwardRequestHandler
-})
-
 mock('first-contact/guards/claimReferenceMatchesGuard', {
   ClaimReferenceMatchesGuard: {
     requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction): void => {

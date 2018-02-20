@@ -3,7 +3,7 @@ import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
-import { AlreadyRespondedGuard } from 'response/guards/alreadyRespondedGuard'
+import { ResponseGuard } from 'response/guards/alreadyRespondedGuard'
 import { ClaimMiddleware } from 'app/claims/claimMiddleware'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
@@ -11,7 +11,6 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { CountyCourtJudgmentRequestedGuard } from 'response/guards/countyCourtJudgmentRequestedGuard'
 import { IsDefendantInCaseGuard } from 'guards/isDefendantInCaseGuard'
 import { OAuthHelper } from 'idam/oAuthHelper'
-import { DefendantHasSubmittedResponseGuard } from 'response/guards/defendantHasSubmittedResposneGuard'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -30,16 +29,16 @@ export class Feature {
     const allResponseRoutes = '/case/*/response/*'
 
     app.all(allResponseRoutes, defendantResponseRequestHandler())
-    app.all(/^\/case\/.+\/response\/(?!receiver).*$/, ClaimMiddleware.retrieveByExternalId)
+    app.all(allResponseRoutes, ClaimMiddleware.retrieveByExternalId)
     app.all(/^\/case\/.+\/response\/(?!summary).*$/, IsDefendantInCaseGuard.check())
-    app.all('/case/*/response/summary', DefendantHasSubmittedResponseGuard.check())
     app.all(
-      /^\/case\/.+\/response\/(?!receiver|confirmation|full-admission|partial-admission|counter-claim|receipt|summary).*$/,
-      AlreadyRespondedGuard.requestHandler
+      /^\/case\/.+\/response\/(?!confirmation|full-admission|partial-admission|counter-claim|receipt|summary).*$/,
+      ResponseGuard.checkResponseDoesNotExist()
     )
+    app.all('/case/*/response/summary', ResponseGuard.checkResponseExists())
     app.all(allResponseRoutes, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(
-      /^\/case\/.+\/response\/(?!receiver|confirmation|receipt).*$/,
+      /^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'response', 100, (value: any): ResponseDraft => {
         return new ResponseDraft().deserialize(value)
       })

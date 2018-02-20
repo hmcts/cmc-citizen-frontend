@@ -13,7 +13,6 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 
 import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
-import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ResponsePaths.summaryPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -31,23 +30,31 @@ describe('Defendant response: summary page', () => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
       })
 
+      it('should return 500 and render error page when cannot retrieve claim', async () => {
+        claimStoreServiceMock.rejectRetrieveClaimByExternalId('Internal service error when retrieving response')
+
+        await request(app)
+          .get(ResponsePaths.summaryPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should render not found page when claim does not have response', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+        await request(app)
+          .get(ResponsePaths.summaryPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.notFound.withText('Page not found'))
+      })
+
       it('should render page when everything is fine', async () => {
-        draftStoreServiceMock.resolveFind('response')
         claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
 
         await request(app)
           .get(ResponsePaths.summaryPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('The defendant’s response'))
-      })
-
-      it('should return 500 and render error page when cannot retrieve claim', async () => {
-        claimStoreServiceMock.rejectRetrieveClaimByExternalId('internal service error when retrieving response')
-
-        await request(app)
-          .get(ResponsePaths.summaryPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
     })
   })
