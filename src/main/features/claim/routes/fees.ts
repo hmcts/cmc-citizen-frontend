@@ -3,12 +3,12 @@ import * as express from 'express'
 import { Paths } from 'claim/paths'
 import { claimAmountWithInterest } from 'app/utils/interestUtils'
 import { FeesClient } from 'fees/feesClient'
-import { Range } from 'fees/models/range'
-import { FeesTableViewHelper } from 'claim/helpers/feesTableViewHelper'
+import { FeeRange as MergableRange, FeesTableViewHelper } from 'claim/helpers/feesTableViewHelper'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
+import { FeeRange } from 'fees/models/feeRange'
 
-const supportedFeeLimitInPennies: number = 1000000
+const supportedFeeLimitInGBP: number = 10000
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -25,12 +25,12 @@ export default express.Router()
       ]
     )
       .then(([issueFee, hearingFee, issueFeeRangeGroup, hearingFeeRangeGroup]) => {
-        const supportedIssueFees: Range[] = issueFeeRangeGroup.ranges
-          .filter(range => range.from < supportedFeeLimitInPennies)
-          .map(range => range.copy({ to: Math.min(range.to, supportedFeeLimitInPennies) }))
-        const supportedHearingFees: Range[] = hearingFeeRangeGroup.ranges
-          .filter(range => range.from < supportedFeeLimitInPennies)
-          .map(range => range.copy({ to: Math.min(range.to, supportedFeeLimitInPennies) }))
+        const supportedIssueFees: MergableRange[] = issueFeeRangeGroup
+          .filter((range: FeeRange) => range.minRange < supportedFeeLimitInGBP)
+           .map((range: FeeRange) => new MergableRange(range.minRange, Math.min(range.maxRange, supportedFeeLimitInGBP), range.currentVersion.flatAmount.amount))
+        const supportedHearingFees: MergableRange[] = hearingFeeRangeGroup
+          .filter((range: FeeRange) => range.minRange < supportedFeeLimitInGBP)
+          .map((range: FeeRange) => new MergableRange(range.minRange, Math.min(range.maxRange, supportedFeeLimitInGBP), range.currentVersion.flatAmount.amount))
 
         res.render(Paths.feesPage.associatedView,
           {
