@@ -55,7 +55,7 @@
     { defendantName:  claim.claimData.defendant.name }) }}
     <p>{{ _viewResponseLink(claim.externalId) }}</p>
   {% elseif claim.status === ClaimStatus.OFFER_ACCEPTED %}
-    {{ t('You have accepted the defendant’s offer. TODO: Content') }}
+    {{ t('Offer accepted') }}
   {% elseif claim.status === ClaimStatus.OFFER_SUBMITTED %}
     {{ t('The defendant has made an offer to settle out of court.') }}
     <p>{{ _viewResponseLink(claim.externalId) }}</p>
