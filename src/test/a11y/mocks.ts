@@ -13,7 +13,7 @@ idamServiceMock.resolveRetrieveServiceToken().persist()
 draftStoreMock.resolveFindAllDrafts().persist()
 
 claimStoreMock.resolveRetrieveByLetterHolderId('000MC000').persist()
-claimStoreMock.resolveRetrieveClaimByExternalId({
+claimStoreMock.resolveRetrieveClaimByExternalIdWithResponse({
   respondedAt: '2017-08-07T15:27:34.654',
   countyCourtJudgmentRequestedAt: '2017-08-09T11:51:28.144'
 }).persist()
@@ -28,10 +28,6 @@ const justForwardRequestHandler = {
     next()
   }
 }
-
-mock('response/guards/alreadyRespondedGuard', {
-  AlreadyRespondedGuard: justForwardRequestHandler
-})
 
 mock('first-contact/guards/claimReferenceMatchesGuard', {
   ClaimReferenceMatchesGuard: {

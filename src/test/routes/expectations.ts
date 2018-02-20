@@ -59,6 +59,13 @@ Assertion.addProperty('forbidden', statusCodeInRangeAssertion([
 ]))
 
 /**
+ * Checks whether response status code is not found
+ */
+Assertion.addProperty('notFound', statusCodeInRangeAssertion([
+  HttpStatus.NOT_FOUND
+]))
+
+/**
  * Checks whether response status code is within supported server error (5xx) range
  */
 Assertion.addProperty('serverError', statusCodeInRangeAssertion([
