@@ -32,11 +32,11 @@ describe('Logout receiver', () => {
     })
 
     it('should remove session cookie even when session invalidation is failed ', async () => {
-      idamServiceMock.rejectInvalidateSession(idamServiceMock.defaultServiceAuthToken)
+      idamServiceMock.rejectInvalidateSession(idamServiceMock.defaultAuthToken)
 
       await request(app)
         .get(AppPaths.logoutReceiver.uri)
-        .set('Cookie', `${cookieName}=${idamServiceMock.defaultServiceAuthToken}`)
+        .set('Cookie', `${cookieName}=${idamServiceMock.defaultAuthToken}`)
         .expect(res => expect(res).to.have.cookie(cookieName, ''))
     })
 
