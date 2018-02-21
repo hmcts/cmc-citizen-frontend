@@ -5,13 +5,11 @@ import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 import { IsValidYearFormat } from 'app/forms/validation/validators/isValidYearFormat'
 import { MomentFactory } from 'common/momentFactory'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
-import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
+import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { MomentFormatter } from 'app/utils/momentFormatter'
 
 export class ValidationErrors {
   static readonly EXPLANATION_REQUIRED: string = 'Explain how did you pay the amount claimed'
-  static readonly DATE_REQUIRED: string = 'Enter a date'
-  static readonly DATE_INVALID_YEAR: string = 'Enter a 4 digit year'
   static readonly DATE_OUTSIDE_RANGE = () => {
     const currentDate = MomentFormatter.formatLongDate(MomentFactory.currentDate())
     return `Enter date before ${currentDate}`
@@ -21,14 +19,14 @@ export class ValidationErrors {
 export class WhenDidYouPay {
 
   @ValidateNested()
-  @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
+  @IsDefined({ message: CommonValidationErrors.DATE_REQUIRED })
   @IsPastDate({ message: ValidationErrors.DATE_OUTSIDE_RANGE })
-  @IsValidYearFormat({ message: ValidationErrors.DATE_INVALID_YEAR })
+  @IsValidYearFormat({ message: CommonValidationErrors.DATE_INVALID_YEAR })
   date?: LocalDate
 
   @IsDefined({ message: ValidationErrors.EXPLANATION_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.EXPLANATION_REQUIRED })
-  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: CommonValidationErrors.TEXT_TOO_LONG })
   text?: string
 
   constructor (date?: LocalDate, text?: string) {

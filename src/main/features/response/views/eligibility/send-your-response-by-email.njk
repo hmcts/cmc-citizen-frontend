@@ -5,7 +5,10 @@
 {% set title = t('Money claim') %}
 {% set heading = t('Send your response by email') %}
 
-{% macro newWindow() %}<span class="font-xsmall">{{ t('(opens in a new window)') }}</span>{% endmacro %}
+{% macro externalLink(text, href) %}
+  <a href="{{ href }}" target="_blank">{{ text }}</a>
+  <span class="font-xsmall">{{ t('(opens in a new window)') }}</span>
+{% endmacro %}
 
 {% block content %}
   <div class="grid-row">
@@ -55,22 +58,21 @@
         <li>
 
           {% if draft.response.type === ResponseType.FULL_ADMISSION %}
-            {{ t('Open <a href="{{ ocon9A }}" target="_blank">admission form N9A</a> ' + newWindow() + ' and complete using:',
-            { ocon9A: [asset_paths["pdf"] + '/OCON9A.pdf']}) | safe }}
+            {{ t('Open ' + externalLink('admission form N9A', asset_paths["pdf"] + '/OCON9A.pdf') + ' and complete using:') | safe }}
           {% endif %}
 
           {% if draft.response.type === ResponseType.PART_ADMISSION %}
-            {{ t('Complete both <a href="{{ ocon9A }}" target="_blank">admission form N9A</a> and <a href="{{ ocon9B }}" target="_blank">defence and counterclaim N9B</a> ' + newWindow() + ' using:',
-            { ocon9A: asset_paths["pdf"] + '/OCON9A.pdf', ocon9B: asset_paths["pdf"] + '/OCON9B.pdf'}) | safe }}
+            {{ t('Complete both ' + externalLink('admission form N9A', asset_paths["pdf"] + '/OCON9A.pdf')+ ' and '
+               + externalLink('defence and counterclaim N9B', asset_paths["pdf"] + '/OCON9B.pdf') + ' using:') | safe }}
           {% endif %}
 
           {% if draft.response.type === ResponseType.DEFENCE %}
             {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
-              {{ t('Complete both <a href="{{ ocon9B }}" target="_blank">defence and counterclaim form N9B</a> ' + newWindow() + ' using:',
+              {{ t('Complete both ' + externalLink('defence and counterclaim form N9B', asset_paths["pdf"] + '/OCON9B.pdf') + ' using:',
               { ocon9B: [asset_paths["pdf"] + '/OCON9B.pdf']}) | safe }}
             {% elseif draft.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.LESS_THAN_AMOUNT_CLAIMED %}
-              {{ t('Complete both <a href="{{ ocon9A }}" target="_blank">admission form N9A</a> and <a href="{{ ocon9B }}" target="_blank">defence and counterclaim N9B</a> ' + newWindow() + ' using:',
-              { ocon9A: asset_paths["pdf"] + '/OCON9A.pdf', ocon9B: asset_paths["pdf"] + '/OCON9B.pdf'}) | safe }}
+              {{ t('Complete both ' + externalLink('admission form N9A', asset_paths["pdf"] + '/OCON9A.pdf')+ ' and '
+              + externalLink('defence and counterclaim N9B', asset_paths["pdf"] + '/OCON9B.pdf') + ' using:') | safe }}
             {% endif %}
           {% endif %}
 

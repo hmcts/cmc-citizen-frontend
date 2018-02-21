@@ -8,7 +8,7 @@ import { expectNumberOfValidationErrors, expectValidationError } from '../../../
 import { WhenDidYouPay, ValidationErrors } from 'response/form/models/whenDidYouPay'
 import * as moment from 'moment'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
-import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
+import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { MomentFactory } from 'common/momentFactory'
 import { LocalDate, ValidationErrors as LocalDateValidationErrors } from 'forms/models/localDate'
 
@@ -68,7 +68,7 @@ describe('WhenDidYouPay', () => {
       const errors = validator.validateSync(new WhenDidYouPay(pastDate, text))
 
       expectNumberOfValidationErrors(errors, 1)
-      expectValidationError(errors, DefaultValidationErrors.TEXT_TOO_LONG)
+      expectValidationError(errors, CommonValidationErrors.TEXT_TOO_LONG)
     })
 
     it('should accept how much to pay text with max allowed characters', () => {
@@ -77,7 +77,7 @@ describe('WhenDidYouPay', () => {
       const errors = validator.validateSync(new WhenDidYouPay(pastDate), randomstring.generate(ValidationConstraints.FREE_TEXT_MAX_LENGTH))
 
       expectNumberOfValidationErrors(errors, 1)
-      expectValidationError(errors, DefaultValidationErrors.TEXT_TOO_LONG)
+      expectValidationError(errors, CommonValidationErrors.TEXT_TOO_LONG)
     })
 
     context('when pay by set date is known', () => {
@@ -93,14 +93,14 @@ describe('WhenDidYouPay', () => {
         const errors = validator.validateSync(new WhenDidYouPay(undefined, 'Paid by cheque'))
 
         expectNumberOfValidationErrors(errors, 1)
-        expectValidationError(errors, ValidationErrors.DATE_REQUIRED)
+        expectValidationError(errors, CommonValidationErrors.DATE_REQUIRED)
       })
 
       it('should reject date with invalid digits in year', () => {
         const errors = validator.validateSync(new WhenDidYouPay(new LocalDate(20, 2, 29), 'Paid by cheque'))
 
         expectNumberOfValidationErrors(errors, 1)
-        expectValidationError(errors, ValidationErrors.DATE_INVALID_YEAR)
+        expectValidationError(errors, CommonValidationErrors.DATE_INVALID_YEAR)
       })
 
       it('should reject a future date', () => {
