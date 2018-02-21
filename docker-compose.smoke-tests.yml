@@ -3,7 +3,7 @@ version: '2.1'
 services:
     integration-tests:
       image: docker.artifactory.reform.hmcts.net/cmc/integration-tests:${INTEGRATION_TESTS_VERSION:-latest}
-      command: test --grep @citizen-smoke-test
+      command: test --steps --verbose --grep @citizen-smoke-test
       environment:
         - WEB_DRIVER_HOST=remote-webdriver
         - CITIZEN_APP_URL=${TEST_URL}
