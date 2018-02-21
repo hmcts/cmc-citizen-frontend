@@ -10,17 +10,19 @@ import { Paths as AppPaths } from 'app/paths'
 import { app } from '../../main/app'
 
 import * as idamServiceMock from '../http-mocks/idam'
+import { attachDefaultHooks } from './hooks'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Logout receiver', () => {
+  attachDefaultHooks(app)
+
   beforeEach(() => {
     mock.cleanAll()
   })
 
   describe('on GET', () => {
     it('should remove session cookie', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       idamServiceMock.resolveInvalidateSession('ABC')
 
       await request(app)
@@ -30,7 +32,6 @@ describe('Logout receiver', () => {
     })
 
     it('should remove session cookie even when session invalidation is failed ', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       idamServiceMock.rejectInvalidateSession(idamServiceMock.defaultServiceAuthToken)
 
       await request(app)
@@ -40,7 +41,6 @@ describe('Logout receiver', () => {
     })
 
     it('should not remove session cookie or invalidate auth token when session cookie is missing ', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
 
       await request(app)
         .get(AppPaths.logoutReceiver.uri)
