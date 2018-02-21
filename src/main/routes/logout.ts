@@ -18,7 +18,6 @@ export default express.Router()
   .get(Paths.logoutReceiver.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const jwt: string = JwtExtractor.extract(req)
-      const cookies = new Cookies(req, res)
 
       if (jwt) {
         try {
@@ -28,6 +27,7 @@ export default express.Router()
           logger.error(`Failed invalidating JWT for userId  ${id}`)
         }
 
+        const cookies = new Cookies(req, res)
         cookies.set(sessionCookie, '', { sameSite: 'lax' })
       }
 
