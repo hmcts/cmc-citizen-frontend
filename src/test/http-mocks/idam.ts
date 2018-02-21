@@ -25,7 +25,7 @@ export function resolveExchangeCode (token: string) {
 
 export function resolveInvalidateCode (token: string) {
   mock(apiServiceBaseURL)
-    .post(`/session/${token}`)
+    .delete(`/session/${token}`)
     .reply(HttpStatus.OK)
 }
 

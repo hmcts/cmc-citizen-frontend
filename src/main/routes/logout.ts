@@ -14,7 +14,7 @@ const logger = Logger.getLogger('routes/logout')
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.logoutReceiver.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  .get(Paths.logoutReceiver.uri, async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
     const jwt: string = JwtExtractor.extract(req)
 
     if (jwt) {
