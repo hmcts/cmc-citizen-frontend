@@ -19,6 +19,6 @@ export class Declaration {
     if (!value) {
       return value
     }
-    return new Declaration(toBoolean(value.signed))
+    return new Declaration(value.signed && toBoolean(value.signed))
   }
 }
