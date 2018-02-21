@@ -1,6 +1,7 @@
+import * as moment from 'moment'
+
 import { InterestDateType } from 'app/common/interestDateType'
 import { MomentFactory } from 'common/momentFactory'
-import { Moment } from 'moment'
 import { InterestType } from 'claim/form/models/interest'
 import { calculateInterest } from 'app/common/calculateInterest'
 import { Claim } from 'claims/models/claim'
@@ -13,21 +14,22 @@ export async function getInterestDetails (claim: Claim): Promise<InterestData> {
     return undefined
   }
 
-  let interestFromDate: Moment
+  const interestFromDate: moment.Moment = getInterestDateOrIssueDate(claim)
+  const interestToDate: moment.Moment = moment.max(interestFromDate, MomentFactory.currentDate())
+  const numberOfDays: number = interestToDate.diff(interestFromDate, 'days')
 
+  const interest: number = await calculateInterest(claim.claimData.amount.totalAmount(), claim.claimData.interest, interestFromDate, interestToDate)
+  const rate = claim.claimData.interest.rate
+
+  return { interestFromDate, interestToDate, numberOfDays, interest, rate }
+}
+
+function getInterestDateOrIssueDate (claim: Claim): moment.Moment {
   if (claim.claimData.interestDate.type === InterestDateType.CUSTOM) {
-    interestFromDate = claim.claimData.interestDate.date
+    return claim.claimData.interestDate.date
   } else {
-    interestFromDate = claim.issuedOn
+    return claim.issuedOn
   }
-
-  const todayDate: Moment = MomentFactory.currentDate()
-  const numberOfDays: number = todayDate.diff(interestFromDate, 'days') < 0 ? 0 : todayDate.diff(interestFromDate, 'days')
-  const interest: number = numberOfDays > 0 ? await calculateInterest(claim.claimData.amount.totalAmount(), claim.claimData.interest, interestFromDate) : 0
-  const rate: number = claim.claimData.interest.rate
-  const interestToDate: Moment = MomentFactory.currentDate().diff(interestFromDate, 'days') < 0 ? interestFromDate : MomentFactory.currentDate()
-
-  return { numberOfDays, interest, rate, interestFromDate, interestToDate }
 }
 
 export async function draftInterestAmount (claimDraft: DraftClaim): Promise<number> {
