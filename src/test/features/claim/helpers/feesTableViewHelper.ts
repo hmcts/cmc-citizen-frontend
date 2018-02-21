@@ -1,9 +1,6 @@
 import { expect } from 'chai'
 
-import { FeesTableViewHelper, Row } from 'claim/helpers/feesTableViewHelper'
-
-import { Range } from 'fees/models/range'
-import { Fee } from 'fees/models/fee'
+import { FeeRange, FeesTableViewHelper, FeeRangeMerge } from 'claim/helpers/feesTableViewHelper'
 
 describe('FeesTableViewHelper', () => {
   it('should throw an error when issue fees array is undefined', () => {
@@ -16,143 +13,146 @@ describe('FeesTableViewHelper', () => {
 
   describe('should merge two arrays', () => {
     it('of the same size', () => {
-      const firstFeesSet: Range[] = [
-        new Range(0.01, 300, new Fee('IF1', 'Issue fee - band 1', 25, 'fixed')),
-        new Range(300.01, 500, new Fee('IF2', 'Issue fee - band 2', 35, 'fixed'))
+      const firstFeesSet: FeeRange[] = [
+        new FeeRange(0.01, 300, 25),
+        new FeeRange(300.01, 500, 35)
       ]
-      const secondFeesSet: Range[] = [
-        new Range(0.01, 300, new Fee('HF1', 'Hearing fee - band 1', 25, 'fixed')),
-        new Range(300.01, 500, new Fee('HF2', 'Hearing fee - band 2', 55, 'fixed'))
+      const secondFeesSet: FeeRange[] = [
+        new FeeRange(0.01, 300, 25),
+        new FeeRange(300.01, 500, 55)
       ]
-
-      const result: Row[] = FeesTableViewHelper.merge(firstFeesSet, secondFeesSet, 0.01)
+      const result: FeeRangeMerge[] = FeesTableViewHelper.merge(firstFeesSet, secondFeesSet, 0.01)
       expect(result).to.have.lengthOf(2)
       expect(result).to.have.deep.members([
-        new Row(0.01, 300, { 1: 25, 2: 25 }),
-        new Row(300.01, 500, { 1: 35, 2: 55 })
+        new FeeRangeMerge(0.01, 300, { 1: 25, 2: 25 }),
+        new FeeRangeMerge(300.01, 500, { 1: 35, 2: 55 })
       ])
     })
 
     describe('of different sizes', () => {
       it('when first band is missing from first array', () => {
-        const firstFeesSet: Range[] = [
-          new Range(300.01, 500, new Fee('IF2', 'Issue fee - band 2', 35, 'fixed'))
+
+        const firstFeesSet: FeeRange[] = [
+          new FeeRange(300.01, 500, 35)
         ]
-        const secondFeesSet: Range[] = [
-          new Range(0.01, 300, new Fee('HF1', 'Hearing fee - band 1', 25, 'fixed')),
-          new Range(300.01, 500, new Fee('HF2', 'Hearing fee - band 2', 55, 'fixed'))
+        const secondFeesSet: FeeRange[] = [
+          new FeeRange(0.01, 300, 25),
+          new FeeRange(300.01, 500, 55)
         ]
 
-        const result: Row[] = FeesTableViewHelper.merge(firstFeesSet, secondFeesSet, 0.01)
+        const result: FeeRangeMerge[] = FeesTableViewHelper.merge(firstFeesSet, secondFeesSet, 0.01)
         expect(result).to.have.lengthOf(2)
         expect(result).to.have.deep.members([
-          new Row(0.01, 300, { 2: 25 }),
-          new Row(300.01, 500, { 1: 35, 2: 55 })
+          new FeeRangeMerge(0.01, 300, { 2: 25 }),
+          new FeeRangeMerge(300.01, 500, { 1: 35, 2: 55 })
         ])
       })
 
       it('when second band is missing from first array', () => {
-        const firstFeesSet: Range[] = [
-          new Range(0.01, 300, new Fee('IF1', 'Issue fee - band 1', 25, 'fixed'))
+
+        const firstFeesSet: FeeRange[] = [
+          new FeeRange(0.01, 300, 25)
         ]
-        const secondFeesSet: Range[] = [
-          new Range(0.01, 300, new Fee('HF1', 'Hearing fee - band 1', 25, 'fixed')),
-          new Range(300.01, 500, new Fee('HF2', 'Hearing fee - band 2', 55, 'fixed'))
+        const secondFeesSet: FeeRange[] = [
+          new FeeRange(0.01, 300, 25),
+          new FeeRange(300.01, 500, 55)
         ]
 
-        const result: Row[] = FeesTableViewHelper.merge(firstFeesSet, secondFeesSet, 0.01)
+        const result: FeeRangeMerge[] = FeesTableViewHelper.merge(firstFeesSet, secondFeesSet, 0.01)
         expect(result).to.have.lengthOf(2)
         expect(result).to.have.deep.members([
-          new Row(0.01, 300, { 1: 25, 2: 25 }),
-          new Row(300.01, 500, { 2: 55 })
+          new FeeRangeMerge(0.01, 300, { 1: 25, 2: 25 }),
+          new FeeRangeMerge(300.01, 500, { 2: 55 })
         ])
       })
 
       it('when first band is missing from second array', () => {
-        const firstFeesSet: Range[] = [
-          new Range(0.01, 300, new Fee('IF1', 'Issue fee - band 1', 25, 'fixed')),
-          new Range(300.01, 500, new Fee('IF2', 'Issue fee - band 2', 35, 'fixed'))
+
+        const firstFeesSet: FeeRange[] = [
+          new FeeRange(0.01, 300, 25),
+          new FeeRange(300.01, 500, 35)
         ]
-        const secondFeesSet: Range[] = [
-          new Range(300.01, 500, new Fee('HF2', 'Hearing fee - band 2', 55, 'fixed'))
+        const secondFeesSet: FeeRange[] = [
+          new FeeRange(300.01, 500, 55)
         ]
 
-        const result: Row[] = FeesTableViewHelper.merge(firstFeesSet, secondFeesSet, 0.01)
+        const result: FeeRangeMerge[] = FeesTableViewHelper.merge(firstFeesSet, secondFeesSet, 0.01)
         expect(result).to.have.lengthOf(2)
         expect(result).to.have.deep.members([
-          new Row(0.01, 300, { 1: 25 }),
-          new Row(300.01, 500, { 1: 35, 2: 55 })
+          new FeeRangeMerge(0.01, 300, { 1: 25 }),
+          new FeeRangeMerge(300.01, 500, { 1: 35, 2: 55 })
         ])
       })
 
       it('when second band is missing from second array', () => {
-        const firstFeesSet: Range[] = [
-          new Range(0.01, 300, new Fee('IF1', 'Issue fee - band 1', 25, 'fixed')),
-          new Range(300.01, 500, new Fee('IF2', 'Issue fee - band 2', 35, 'fixed'))
+
+        const firstFeesSet: FeeRange[] = [
+          new FeeRange(0.01, 300, 25),
+          new FeeRange(300.01, 500, 35)
         ]
-        const secondFeesSet: Range[] = [
-          new Range(0.01, 300, new Fee('HF1', 'Hearing fee - band 1', 25, 'fixed'))
+        const secondFeesSet: FeeRange[] = [
+          new FeeRange(0.01, 300, 25)
         ]
 
-        const result: Row[] = FeesTableViewHelper.merge(firstFeesSet, secondFeesSet, 0.01)
+        const result: FeeRangeMerge[] = FeesTableViewHelper.merge(firstFeesSet, secondFeesSet, 0.01)
         expect(result).to.have.lengthOf(2)
         expect(result).to.have.deep.members([
-          new Row(0.01, 300, { 1: 25, 2: 25 }),
-          new Row(300.01, 500, { 1: 35 })
+          new FeeRangeMerge(0.01, 300, { 1: 25, 2: 25 }),
+          new FeeRangeMerge(300.01, 500, { 1: 35 })
         ])
       })
     })
   })
 
   it('should merge two arrays when ranges are misaligned', () => {
-    const firstFeesSet: Range[] = [
-      new Range(0.01, 300, new Fee('IF1', 'Issue fee - band 1', 25, 'fixed')),
-      new Range(300.01, 500, new Fee('IF2', 'Issue fee - band 2', 35, 'fixed'))
+    const firstFeesSet: FeeRange[] = [
+      new FeeRange(0.01, 300, 25),
+      new FeeRange(300.01, 500, 35)
     ]
-    const secondFeesSet: Range[] = [
-      new Range(0.01, 100, new Fee('HF1', 'Hearing fee - band 1', 15, 'fixed')),
-      new Range(100.01, 300, new Fee('HF2', 'Hearing fee - band 2', 35, 'fixed')),
-      new Range(300.01, 500, new Fee('HF3', 'Hearing fee - band 3', 55, 'fixed'))
+    const secondFeesSet: FeeRange[] = [
+      new FeeRange(0.01, 100, 15),
+      new FeeRange(100.01, 300, 35),
+      new FeeRange(300.01, 500, 55)
     ]
-
-    const result: Row[] = FeesTableViewHelper.merge(firstFeesSet, secondFeesSet, 0.01)
+    const result: FeeRangeMerge[] = FeesTableViewHelper.merge(firstFeesSet, secondFeesSet, 0.01)
     expect(result).to.have.lengthOf(3)
     expect(result).to.have.deep.members([
-      new Row(0.01, 100, { 1: 25, 2: 15 }),
-      new Row(100.01, 300, { 1: 25, 2: 35 }),
-      new Row(300.01, 500, { 1: 35, 2: 55 })
+      new FeeRangeMerge(0.01, 100, { 1: 25, 2: 15 }),
+      new FeeRangeMerge(100.01, 300, { 1: 25, 2: 35 }),
+      new FeeRangeMerge(300.01, 500, { 1: 35, 2: 55 })
     ])
   })
 
   it('should merge two fee arrays used in real life', () => {
-    const firstFeesSet: Range[] = [
-      new Range(0.01, 300, new Fee('IF1', 'Issue fee - band 1', 25, 'fixed')),
-      new Range(300.01, 500, new Fee('IF2', 'Issue fee - band 2', 35, 'fixed')),
-      new Range(500.01, 1000, new Fee('IF3', 'Issue fee - band 3', 60, 'fixed')),
-      new Range(1000.01, 1500, new Fee('IF4', 'Issue fee - band 4', 70, 'fixed')),
-      new Range(1500.01, 3000, new Fee('IF5', 'Issue fee - band 5', 105, 'fixed')),
-      new Range(3000.01, 5000, new Fee('IF6', 'Issue fee - band 6', 185, 'fixed')),
-      new Range(5000.01, 10000, new Fee('IF7', 'Issue fee - band 7', 410, 'fixed'))
+
+    const firstFeesSet: FeeRange[] = [
+      new FeeRange(0.01, 300, 25),
+      new FeeRange(300.01, 500, 35),
+      new FeeRange(500.01, 1000, 60),
+      new FeeRange(1000.01, 1500, 70),
+      new FeeRange(1500.01, 3000, 105),
+      new FeeRange(3000.01, 5000, 185),
+      new FeeRange(5000.01, 10000, 410)
     ]
-    const secondFeesSet: Range[] = [
-      new Range(0.01, 300, new Fee('HF1', 'Hearing fee - band 1', 25, 'fixed')),
-      new Range(300.01, 500, new Fee('HF2', 'Hearing fee - band 2', 55, 'fixed')),
-      new Range(500.01, 1000, new Fee('HF3', 'Hearing fee - band 3', 80, 'fixed')),
-      new Range(1000.01, 1500, new Fee('HF4', 'Hearing fee - band 4', 115, 'fixed')),
-      new Range(1500.01, 3000, new Fee('HF5', 'Hearing fee - band 5', 170, 'fixed')),
-      new Range(3000.01, 10000, new Fee('HF6', 'Hearing fee - band 5', 335, 'fixed'))
+    const secondFeesSet: FeeRange[] = [
+      new FeeRange(0.01, 300, 25),
+      new FeeRange(300.01, 500, 55),
+      new FeeRange(500.01, 1000, 80),
+      new FeeRange(1000.01, 1500, 115),
+      new FeeRange(1500.01, 3000, 170),
+      new FeeRange(3000.01, 10000, 335)
     ]
 
-    const result: Row[] = FeesTableViewHelper.merge(firstFeesSet, secondFeesSet, 0.01)
+    const result: FeeRangeMerge[] = FeesTableViewHelper.merge(firstFeesSet, secondFeesSet, 0.01)
     expect(result).to.have.lengthOf(7)
     expect(result).to.have.deep.members([
-      new Row(0.01, 300, { 1: 25, 2: 25 }),
-      new Row(300.01, 500, { 1: 35, 2: 55 }),
-      new Row(500.01, 1000, { 1: 60, 2: 80 }),
-      new Row(1000.01, 1500, { 1: 70, 2: 115 }),
-      new Row(1500.01, 3000, { 1: 105, 2: 170 }),
-      new Row(3000.01, 5000, { 1: 185, 2: 335 }),
-      new Row(5000.01, 10000, { 1: 410, 2: 335 })
+      new FeeRangeMerge(0.01, 300, { 1: 25, 2: 25 }),
+      new FeeRangeMerge(300.01, 500, { 1: 35, 2: 55 }),
+      new FeeRangeMerge(500.01, 1000, { 1: 60, 2: 80 }),
+      new FeeRangeMerge(1000.01, 1500, { 1: 70, 2: 115 }),
+      new FeeRangeMerge(1500.01, 3000, { 1: 105, 2: 170 }),
+      new FeeRangeMerge(3000.01, 5000, { 1: 185, 2: 335 }),
+      new FeeRangeMerge(5000.01, 10000, { 1: 410, 2: 335 })
     ])
   })
 })
