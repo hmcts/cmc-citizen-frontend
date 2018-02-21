@@ -72,4 +72,9 @@ export class IdamClient {
         )
       })
   }
+
+  static invalidateCode (code: string): Promise<void> {
+    const url = `${config.get('idam.api.url')}/session/${code}`
+    return request.delete(url)
+  }
 }

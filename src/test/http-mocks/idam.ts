@@ -23,6 +23,12 @@ export function resolveExchangeCode (token: string) {
     })
 }
 
+export function resolveInvalidateCode (token: string) {
+  mock(apiServiceBaseURL)
+    .post(`/session/${token}`)
+    .reply(HttpStatus.OK)
+}
+
 export function rejectRetrieveUserFor (reason: string) {
   return mock(apiServiceBaseURL)
     .get('/details')
