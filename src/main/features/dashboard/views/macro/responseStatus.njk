@@ -58,7 +58,9 @@
     {{ t('Offer accepted') }}
   {% elseif claim.status === ClaimStatus.OFFER_SUBMITTED %}
     {{ t('The defendant has made an offer to settle out of court.') }}
-    <p>{{ _viewResponseLink(claim.externalId) }}</p>
+    <p>
+      <a href="{{ url }}">{{ t('View their offer') }}</a>
+    </p>
   {% elseif claim.status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ t('{{ defendantName }} has requested an extra 14 days to respond. They need to respond by {{ responseDeadline }}.',
     { defendantName: claim.claimData.defendant.name,
