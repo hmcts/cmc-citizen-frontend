@@ -25,7 +25,7 @@ String channel = '#cmc-tech-notification'
 timestamps {
   milestone()
   lock(resource: "citizen-frontend-${env.BRANCH_NAME}", inversePrecedence: true) {
-    node('slave') {
+    node('moj_centos_large2') {
       try {
         def version
         def citizenFrontendRPMVersion
