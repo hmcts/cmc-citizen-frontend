@@ -1,8 +1,8 @@
-import { Range } from 'fees/models/range'
+import { isUndefined } from 'util'
 
 interface RangePartial {
-  from: number
-  to: number
+  minRange: number
+  maxRange: number
 }
 
 class RangeUtils {
@@ -14,7 +14,7 @@ class RangeUtils {
    * @returns {number} 0 if equal, other value it not
    */
   static compare (lhs: RangePartial, rhs: RangePartial): number {
-    return lhs.to - rhs.to || lhs.from - rhs.from
+    return lhs.maxRange - rhs.maxRange || lhs.minRange - rhs.minRange
   }
 
   /**
@@ -25,7 +25,7 @@ class RangeUtils {
    * @returns {boolean} true if ranges overlap, otherwise false
    */
   static areSame (lhs: RangePartial, rhs: RangePartial): boolean {
-    return lhs.from === rhs.from && lhs.to === rhs.to
+    return lhs.minRange === rhs.minRange && lhs.maxRange === rhs.maxRange
   }
 
   /**
@@ -36,52 +36,58 @@ class RangeUtils {
    * @returns {boolean} true if ranges overlap, otherwise false
    */
   static areOverlap (lhs: RangePartial, rhs: RangePartial): boolean {
-    return (lhs.from <= rhs.from && lhs.to >= rhs.from) || (lhs.from <= rhs.to && lhs.to >= rhs.to) || (lhs.from <= rhs.from && lhs.to >= rhs.to)
+    return (lhs.minRange <= rhs.minRange && lhs.maxRange >= rhs.minRange) || (lhs.minRange <= rhs.maxRange && lhs.maxRange >= rhs.maxRange) || (lhs.minRange <= rhs.minRange && lhs.maxRange >= rhs.maxRange)
   }
+
 }
 
 class Item {
-  constructor (public readonly range: Range, public readonly targetColumn: number) {}
+  constructor (public readonly range: FeeRange, public readonly targetColumn: number) {}
 
-  static createForFeeInColumn (range: Range, targetColumn: number): Item {
+  static createForFeeInColumn (range: FeeRange, targetColumn: number): Item {
     return new Item(range, targetColumn)
   }
 }
 
-export class Row {
-  constructor (public readonly from: number, public readonly to: number, private readonly fees: { [key: number]: number } = {}) {}
+export class FeeRange implements RangePartial {
+  constructor (public readonly minRange: number, public readonly maxRange: number, public readonly amount: number | string) {}
+}
 
-  addFee (key: number, value: number): void {
+export class FeeRangeMerge implements RangePartial {
+  constructor (public readonly minRange: number, public readonly maxRange: number, private readonly fees: { [key: string]: number | string } = {}) {}
+
+  addFee (key: number, value: number | string): void {
     this.fees[key] = value
   }
 }
 
 export class FeesTableViewHelper {
-  static merge (firstFeesSet: Range[], secondFeesSet: Range[], increment: number = 1): Row[] {
+  static merge (firstFeesSet: FeeRange[], secondFeesSet: FeeRange[], increment: number = 0.01): FeeRangeMerge[] {
     if (firstFeesSet === undefined || secondFeesSet === undefined) {
       throw new Error('Both fee sets are required for merge')
     }
-
     const items: Item[] = [
         ...firstFeesSet.map(range => Item.createForFeeInColumn(range, 1)),
       ...secondFeesSet.map(range => Item.createForFeeInColumn(range, 2))
     ].sort((lhs: Item, rhs: Item) => RangeUtils.compare(lhs.range, rhs.range))
 
-    return items.reduce((rows: Row[], item: Item) => {
-      const overlappedRows: Row[] = rows.filter((row: Row) => RangeUtils.areOverlap(item.range, row))
-
+    return items.reduce((feeRangeMerge: FeeRangeMerge[], item: Item) => {
+      const overlappedRows: FeeRangeMerge[] = feeRangeMerge.filter((row: FeeRangeMerge) => RangeUtils.areOverlap(item.range, row))
+      if (isUndefined(item.range.amount)) {
+        throw new Error('Fee amount must be defined')
+      }
       if (overlappedRows.length === 0) {
-        rows.push(new Row(item.range.from, item.range.to, { [item.targetColumn]: item.range.fee.amount }))
+        feeRangeMerge.push(new FeeRangeMerge(item.range.minRange, item.range.maxRange, { [item.targetColumn]: item.range.amount }))
       } else {
         overlappedRows.forEach(row => {
-          row.addFee(item.targetColumn, item.range.fee.amount)
+          row.addFee(item.targetColumn, item.range.amount)
           if (!RangeUtils.areSame(row, item.range)) {
-            rows.push(new Row(row.to + increment, item.range.to, { [item.targetColumn]: item.range.fee.amount }))
+            feeRangeMerge.push(new FeeRangeMerge(row.maxRange + increment, item.range.maxRange, { [item.targetColumn]: item.range.amount }))
           }
         })
       }
 
-      return rows
+      return feeRangeMerge
     }, []).sort(RangeUtils.compare)
   }
 }

@@ -11,7 +11,6 @@ export class Paths {
   static readonly moreTimeConfirmationPage = new RoutablePath(`${responsePath}/more-time-confirmation`)
   static readonly responseTypePage = new RoutablePath(`${responsePath}/response-type`)
   static readonly defencePage = new RoutablePath(`${responsePath}/your-defence`)
-
   static readonly freeMediationPage = new RoutablePath(`${responsePath}/free-mediation`)
   static readonly checkAndSendPage = new RoutablePath(`${responsePath}/check-and-send`)
   static readonly confirmationPage = new RoutablePath(`${responsePath}/confirmation`)
@@ -35,6 +34,7 @@ export class Paths {
   static readonly defencePaymentPlanPage = new RoutablePath(`${responsePath}/your-payment-plan`)
   static readonly impactOfDisputePage = new RoutablePath(`${responsePath}/impact-of-dispute`)
   static readonly claimDetailsPage = new RoutablePath(`${responsePath}/claim-details`)
+  static readonly summaryPage = new RoutablePath(`${responsePath}/summary`)
 }
 
 const statementOfMeansPath = `${responsePath}/statement-of-means`
