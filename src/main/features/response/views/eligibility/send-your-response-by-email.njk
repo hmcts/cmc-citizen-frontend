@@ -43,8 +43,8 @@
               </thead>
               {% for fee in fees %}
                 <tr>
-                  <td>{{ t('{{ from }} to {{ till }}', { from: fee.from | pennies2pounds | numeral, till: fee.to | pennies2pounds | numeral } )}}</td>
-                  <td>{{ fee.fee.amount | pennies2pounds | numeral }}</td>
+                  <td>{{ t('{{ from }} to {{ till }}', { from: fee.minRange | numeral, till: fee.maxRange | numeral } )}}</td>
+                  <td>{{ fee.amount | numeral }}</td>
                 </tr>
               {% endfor %}
             </table>
