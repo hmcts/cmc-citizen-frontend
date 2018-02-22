@@ -10,7 +10,7 @@ function shutdownDocker() {
 }
 
 if [[ ${TEST_URL} = *"prod"*  ]]; then
-  export IDAM_URL=http://betaPreProdccidamAppLB.reform.hmcts.net:4501
+  echo "No creating users in prod via testing support"
 else
   export IDAM_URL=http://betaDevBccidamAppLB.reform.hmcts.net
 fi
