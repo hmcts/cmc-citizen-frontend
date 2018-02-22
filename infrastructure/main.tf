@@ -29,7 +29,7 @@ locals {
 }
 
 module "citizen-frontend" {
-  source = "git@github.com:contino/moj-module-webapp.git"
+  source = "git@github.com:contino/moj-module-webapp.git?ref=feature/add-custom-hostname-support"
   product = "${var.product}-${var.microservice}"
   location = "${var.location}"
   env = "${var.env}"
