@@ -7,19 +7,18 @@
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Is this claim against only one individual or business?') }}</h1>
-      <p>{{ t('You can’t use this service if this claim is against more than one person or business.') }}</p>
+      <h1 class="heading-large">{{ t('Is this claim against more than one person or organisation?') }}</h1>
 
       {% set name = 'singleDefendant' %}
 
       <form novalidate method="post" class="analytics-submit-event-trigger"
-            data-event-action="Eligibility: Single Defendant"
+            data-event-action="Eligibility: Single defendant"
             data-event-label-from="{{ name }}">
         {{ csrfProtection(csrf) }}
 
         {{
           radioGroup(
-            label = 'Is this claim against only one individual or business?',
+            label = 'Is this claim against more than one person or organisation?',
             name = name,
             options = [
               {'label': 'Yes', value: YesNoOption.YES.option, checked: form.valueFor(name) === YesNoOption.YES},
