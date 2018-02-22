@@ -5,6 +5,7 @@ import { Eligibility } from 'claim/form/models/eligibility/eligibility'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
+import { ClaimType } from 'claim/form/models/eligibility/claimType'
 
 describe('Eligibility', () => {
 
@@ -15,14 +16,13 @@ describe('Eligibility', () => {
     it('should reject eligibility if not complete', () => {
       const errors = validator.validateSync(
         new Eligibility(
-          YesNoOption.NO,
-          YesNoOption.YES,
-          YesNoOption.YES,
           ClaimValue.UNDER_10000,
-          YesNoOption.YES,
-          YesNoOption.YES,
-          YesNoOption.YES,
           YesNoOption.NO,
+          YesNoOption.YES,
+          YesNoOption.YES,
+          YesNoOption.YES,
+          ClaimType.PERSONAL_CLAIM,
+          YesNoOption.YES,
           undefined,
           YesNoOption.NO
         )
@@ -34,13 +34,12 @@ describe('Eligibility', () => {
     it('should be valid if all eligibility provided', () => {
       const errors = validator.validateSync(
         new Eligibility(
+          ClaimValue.UNDER_10000,
           YesNoOption.NO,
           YesNoOption.YES,
           YesNoOption.YES,
-          ClaimValue.UNDER_10000,
           YesNoOption.YES,
-          YesNoOption.YES,
-          YesNoOption.YES,
+          ClaimType.PERSONAL_CLAIM,
           YesNoOption.NO,
           YesNoOption.NO,
           YesNoOption.NO

@@ -10,23 +10,24 @@ import { Eligibility } from 'claim/form/models/eligibility/eligibility'
 import { FormValidator } from 'forms/validation/formValidator'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
-import { YesNoOption } from 'app/models/yesNoOption'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
+import { ClaimType } from 'claim/form/models/eligibility/claimType'
 
 function renderView (form: Form<Eligibility>, res: express.Response): void {
-  res.render(Paths.eligibilitySingleClaimantPage.associatedView, { form: form })
+  res.render(Paths.eligibilityClaimTypePage.associatedView, { form: form })
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.eligibilitySingleClaimantPage.uri, (req: express.Request, res: express.Response): void => {
+  .get(Paths.eligibilityClaimTypePage.uri, (req: express.Request, res: express.Response): void => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
+
     renderView(new Form(draft.document.eligibility), res)
   })
   .post(
-    Paths.eligibilitySingleClaimantPage.uri,
-    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.SINGLE_CLAIMANT),
+    Paths.eligibilityClaimTypePage.uri,
+    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.CLAIM_TYPE),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Eligibility> = req.body
 
@@ -36,14 +37,23 @@ export default express.Router()
         const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
 
-        draft.document.eligibility.singleClaimant = form.model.singleClaimant
+        draft.document.eligibility.claimType = form.model.claimType
         await new DraftService().save(draft, user.bearerToken)
 
-        if (draft.document.eligibility.singleClaimant === YesNoOption.NO) {
-          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`)
-        } else {
-          res.redirect(Paths.eligibilitySingleDefendantPage.uri)
+        switch (form.model.claimType) {
+          case ClaimType.PERSONAL_CLAIM:
+            res.redirect(Paths.eligibilitySingleDefendantPage.uri)
+            break
+          case ClaimType.MULTIPLE_CLAIM:
+            res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`)
+            break
+          case ClaimType.REPRESENTATIVE_CLAIM:
+            res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_ON_BEHALF}`)
+            break
+          default:
+            throw new Error(`Unexpected ClaimType: ${form.model.claimType.option}`)
         }
+
       }
     })
   )
