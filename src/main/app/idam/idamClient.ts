@@ -72,4 +72,13 @@ export class IdamClient {
         )
       })
   }
+
+  static invalidateSession (jwt: string): Promise<void> {
+    if (!jwt) {
+      return Promise.reject(new Error('JWT is required'))
+    }
+
+    const url = `${config.get('idam.api.url')}/session/${jwt}`
+    return request.delete(url)
+  }
 }
