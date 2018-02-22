@@ -13,13 +13,14 @@ import { app } from '../../../../../main/app'
 import * as idamServiceMock from '../../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
-import { YesNoOption } from 'models/yesNoOption'
+import { ClaimType } from 'claim/form/models/eligibility/claimType'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ClaimPaths.eligibilitySingleClaimantPage.uri
+const pagePath: string = ClaimPaths.eligibilityClaimTypePage.uri
 const pageRedirect: string = ClaimPaths.eligibilitySingleDefendantPage.uri
+const expectedTextOnPage: string = 'Who are you making the claim for?'
 
-describe('Claim eligibility: single claimant page', () => {
+describe('Claim eligibility: claim type page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -32,7 +33,7 @@ describe('Claim eligibility: single claimant page', () => {
       await request(app)
         .get(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Are you the only person or business making the claim?'))
+        .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage))
     })
   })
 
@@ -50,7 +51,7 @@ describe('Claim eligibility: single claimant page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Please select yes or no', 'div class="error-summary"'))
+          .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
@@ -60,7 +61,7 @@ describe('Claim eligibility: single claimant page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ singleClaimant: YesNoOption.YES.option })
+          .send({ claimType: ClaimType.PERSONAL_CLAIM.option })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -71,19 +72,29 @@ describe('Claim eligibility: single claimant page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ singleClaimant: YesNoOption.YES.option })
+          .send({ claimType: ClaimType.PERSONAL_CLAIM.option })
           .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
       })
-
-      it('should redirect to not eligible page when form is valid and not eligible option selected', async () => {
+      it('should redirect to not eligible page when form is valid and multiple claimants option selected', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ singleClaimant: YesNoOption.NO.option })
+          .send({ claimType: ClaimType.MULTIPLE_CLAIM.option })
           .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`))
+      })
+
+      it('should redirect to not eligible page when form is valid and claim on behalf option selected', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveSave()
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ claimType: ClaimType.REPRESENTATIVE_CLAIM.option })
+          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_ON_BEHALF}`))
       })
     })
   })
