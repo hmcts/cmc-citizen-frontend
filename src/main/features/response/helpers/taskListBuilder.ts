@@ -16,7 +16,8 @@ import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { Claim } from 'claims/models/claim'
 
 export class TaskListBuilder {
-  static buildBeforeYouStartSection (draft: ResponseDraft, externalId: string): TaskList {
+  static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim): TaskList {
+    const externalId: string = claim.externalId
     const tasks: TaskListItem[] = []
     tasks.push(
       new TaskListItem(
@@ -26,26 +27,27 @@ export class TaskListBuilder {
       )
     )
 
-    return new TaskList(1, 'Before you start', tasks)
-  }
-
-  static buildRespondToClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
-    const externalId: string = claim.externalId
-    const tasks: TaskListItem[] = []
     const now: Moment = MomentFactory.currentDateTime()
     if (claim.responseDeadline.isAfter(now)) {
       tasks.push(
         new TaskListItem(
-          'More time needed to respond',
+          'Do you want more time to respond?',
           Paths.moreTimeRequestPage.evaluateUri({ externalId: externalId }),
           MoreTimeNeededTask.isCompleted(draft)
         )
       )
     }
 
+    return new TaskList(1, 'Before you start', tasks)
+  }
+
+  static buildRespondToClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
+    const externalId: string = claim.externalId
+    const tasks: TaskListItem[] = []
+
     tasks.push(
       new TaskListItem(
-        'Do you owe the money claimed',
+        'Choose a response',
         Paths.responseTypePage.evaluateUri({ externalId: externalId }),
         OweMoneyTask.isCompleted(draft)
       )
@@ -119,7 +121,7 @@ export class TaskListBuilder {
 
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {
     return [].concat(
-      TaskListBuilder.buildBeforeYouStartSection(draft, claim.externalId).tasks,
+      TaskListBuilder.buildBeforeYouStartSection(draft, claim).tasks,
       TaskListBuilder.buildRespondToClaimSection(draft, claim).tasks
     )
       .filter(item => !item.completed)
