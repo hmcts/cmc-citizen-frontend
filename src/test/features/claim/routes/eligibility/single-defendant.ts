@@ -17,7 +17,8 @@ import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ClaimPaths.eligibilitySingleDefendantPage.uri
-const pageRedirect: string = ClaimPaths.eligibilityOver18Page.uri
+const pageRedirect: string = ClaimPaths.eligibilityGovernmentDepartmentPage.uri
+const expectedTextOnPage: string = 'Is this claim against more than one person or organisation?'
 
 describe('Claim eligibility: single defendant page', () => {
   attachDefaultHooks(app)
@@ -32,7 +33,7 @@ describe('Claim eligibility: single defendant page', () => {
       await request(app)
         .get(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Is this claim against only one individual or business?'))
+        .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage))
     })
   })
 
@@ -50,7 +51,7 @@ describe('Claim eligibility: single defendant page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Please select yes or no', 'div class="error-summary"'))
+          .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
@@ -64,14 +65,14 @@ describe('Claim eligibility: single defendant page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to over 18 page when form is valid and everything is fine', async () => {
+      it('should redirect to government department page when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ singleDefendant: YesNoOption.YES.option })
+          .send({ singleDefendant: YesNoOption.NO.option })
           .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
       })
 
@@ -82,7 +83,7 @@ describe('Claim eligibility: single defendant page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ singleDefendant: YesNoOption.NO.option })
+          .send({ singleDefendant: YesNoOption.YES.option })
           .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_DEFENDANTS}`))
       })
     })
