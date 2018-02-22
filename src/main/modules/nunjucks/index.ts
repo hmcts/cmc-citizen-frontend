@@ -54,6 +54,7 @@ export class Nunjucks {
     const nunjucksEnv = nunjucks.configure([
       path.join(__dirname, '..', '..', 'views'),
       path.join(__dirname, '..', '..', 'features'),
+      path.join(__dirname, '..', '..', 'views', 'macro'),
       path.join(__dirname, '..', '..', '..', '..', 'node_modules', '@hmcts', 'cmc-common-frontend', 'macros')
     ], {
       autoescape: true,
