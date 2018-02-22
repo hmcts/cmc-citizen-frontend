@@ -3,17 +3,18 @@
 {% from "date.njk" import dateInput %}
 
 {% set title = t('Money claim') %}
-{% set heading = t('What is your date of birth?') %}
+{% set heading = t('Add your date of birth') %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
+      <p>{{ t('We use your date of birth to make sure you’re over 18 and that legal proceedings involving a claim are taken against the right person.') }}</p>
       <form method="post">
         <input type="hidden" name="known" value="true" />
 
         {{ csrfProtection(csrf) }}
 
-        {{ dateInput(form = form, name = 'date', hint = 'You must be over 18 to use this service') }}
+        {{ dateInput(form = form, name = 'date', hint = 'For example, 31 3 1980') }}
 
         {{ saveAndContinueButton() }}
       </form>
