@@ -8,5 +8,4 @@ export class Eligibility {
     const eligible = claim.eligibility.eligible
     return isCompleted && eligible
   }
-
 }

@@ -16,26 +16,29 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const pagePath: string = ClaimPaths.eligibilityClaimantAddressPage.uri
+const pageRedirect: string = ClaimPaths.eligibilityDefendantAddressPage.uri
+const expectedTextOnPage: string = 'Do you live in the UK?'
 
 describe('Claim eligibility: claimant address page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ClaimPaths.eligibilityClaimantAddressPage.uri)
+    checkAuthorizationGuards(app, 'get', pagePath)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
-        .get(ClaimPaths.eligibilityClaimantAddressPage.uri)
+        .get(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Do you live in the UK?'))
+        .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage))
     })
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', ClaimPaths.eligibilityClaimantAddressPage.uri)
+    checkAuthorizationGuards(app, 'post', pagePath)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -46,9 +49,9 @@ describe('Claim eligibility: claimant address page', () => {
         draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
-          .post(ClaimPaths.eligibilityClaimantAddressPage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Do you live in the UK?', 'div class="error-summary"'))
+          .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
@@ -56,7 +59,7 @@ describe('Claim eligibility: claimant address page', () => {
         draftStoreServiceMock.rejectSave()
 
         await request(app)
-          .post(ClaimPaths.eligibilityClaimantAddressPage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ claimantAddress: YesNoOption.YES.option })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -67,17 +70,17 @@ describe('Claim eligibility: claimant address page', () => {
         draftStoreServiceMock.resolveSave()
 
         await request(app)
-          .post(ClaimPaths.eligibilityClaimantAddressPage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ claimantAddress: YesNoOption.YES.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.eligibilityDefendantAddressPage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
       })
       it('should redirect to not eligible page when form is valid and not eligible option selected', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)
-          .post(ClaimPaths.eligibilityClaimantAddressPage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ claimantAddress: YesNoOption.NO.option })
           .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIMANT_ADDRESS}`))

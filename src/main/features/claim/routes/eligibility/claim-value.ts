@@ -48,7 +48,7 @@ export default express.Router()
             res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_VALUE_OVER_10000}`)
             break
           case ClaimValue.UNDER_10000:
-            res.redirect(Paths.eligibilitySingleClaimantPage.uri)
+            res.redirect(Paths.eligibilityHelpWithFeesPage.uri)
             break
           default:
             throw new Error(`Unexpected claimValue: ${claimValue.option}`)
