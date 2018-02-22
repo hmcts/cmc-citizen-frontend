@@ -1,4 +1,5 @@
 {% extends "layout.njk" %}
+{% from "../macro/paperFormAddress.njk" import paperFormAddress %}
 
 {% set title = t('Not eligible | Money claim') %}
 
@@ -62,9 +63,12 @@
           ' or <a target="_blank" href="%s">form N1</a> ' + newWindow() + '.',
           { postProcess: 'sprintf', sprintf: [ n510Url, n1FormUrl ]}) | safe }}</p>
       {% elseif reason === NotEligibleReason.DEFENDANT_ADDRESS %}
-        <p>{{ t('You can only claim against a person or organisation in England or Wales.') }}</p>
-        <p>{{ t('You might be able to make a claim using <a target="_blank" href="%s">form N510</a> ' + newWindow() + '.',
+        <p>{{ t('You can only claim against a person or organisation with an address in England or Wales.') }}</p>
+        <p>{{ t('Depending on where you’ll be sending the claim, you might be able to use<a target="_blank" href="%s">form N510</a> '
+          + newWindow() + '.',
           { postProcess: 'sprintf', sprintf: [ n510Url ]}) | safe }}</p>
+        <h2 class="heading-medium">{{ t('Where to send paper forms') }}</h2>
+        {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.GOVERNMENT_DEPARTMENT %}
         <p>{{ t('You can’t use this service to claim against <a target="_blank" href="{{ governmentDepartmentsUrl }}">government departments</a>. ',
           { governmentDepartmentsUrl : governmentDepartmentsUrl }) | safe }}</p>
