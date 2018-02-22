@@ -7,17 +7,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { TaskList } from 'drafts/tasks/taskList'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { LocalDate } from 'forms/models/localDate'
-import { MomentFactory } from 'common/momentFactory'
-import { Claim } from 'claims/models/claim'
-import { Individual } from 'app/claims/models/details/theirs/individual'
-
-const claim = {
-  responseDeadline: MomentFactory.currentDateTime(),
-  externalId: undefined,
-  claimData: {
-    defendant: new Individual()
-  }
-} as Claim
+import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 
 describe('Defendant response task list builder', () => {
   describe('"Respond to claim" section', () => {
@@ -35,14 +25,14 @@ describe('Defendant response task list builder', () => {
       it('should be enabled when mediation is available', () => {
         stub.returns(true)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claimStoreServiceMock.sampleClaimObj.externalId)
         expect(taskList.tasks.map(task => task.name)).to.contain('Free mediation')
       })
 
       it('should be disabled when mediation is not available', () => {
         stub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claimStoreServiceMock.sampleClaimObj.externalId)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('Free mediation')
       })
     })
@@ -69,15 +59,87 @@ describe('Defendant response task list builder', () => {
           }
         }
         const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claimStoreServiceMock.sampleClaimObj.externalId)
         expect(taskList.tasks.map(task => task.name)).to.contain('How much have you paid the claimant?')
       })
 
       it('should be disabled in remaining cases', () => {
         stub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claimStoreServiceMock.sampleClaimObj.externalId)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('How much have you paid the claimant?')
+      })
+    })
+
+    describe('"When did you pay" task', () => {
+      let isResponseRejectedFullyWithAmountClaimedPaidStub: sinon.SinonStub
+
+      beforeEach(() => {
+        isResponseRejectedFullyWithAmountClaimedPaidStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithAmountClaimedPaid')
+      })
+
+      afterEach(() => {
+        isResponseRejectedFullyWithAmountClaimedPaidStub.restore()
+      })
+
+      it('should be enabled when claim is fully rejected due to amount being paid and claimed', () => {
+        isResponseRejectedFullyWithAmountClaimedPaidStub.returns(true)
+
+        const input = {
+          whenDidYouPay: {
+            date: new LocalDate(20, 1, 12),
+            text: 'I paid cash'
+          }
+        }
+        const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claimStoreServiceMock.sampleClaimObj.externalId)
+        expect(taskList.tasks.map(task => task.name)).to.contain('When did you pay?')
+      })
+
+      it('should be disabled in remaining cases', () => {
+        isResponseRejectedFullyWithAmountClaimedPaidStub.returns(false)
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claimStoreServiceMock.sampleClaimObj.externalId)
+        expect(taskList.tasks.map(task => task.name)).to.not.contain('When did you pay?')
+      })
+    })
+
+    describe('"Check and submit your response" task', () => {
+      let isResponseRejectedFullyWithDisputePaidStub: sinon.SinonStub
+      let isResponseRejectedFullyWithAmountClaimedPaidStub: sinon.SinonStub
+
+      beforeEach(() => {
+        isResponseRejectedFullyWithDisputePaidStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
+        isResponseRejectedFullyWithAmountClaimedPaidStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithAmountClaimedPaid')
+      })
+
+      afterEach(() => {
+        isResponseRejectedFullyWithDisputePaidStub.restore()
+        isResponseRejectedFullyWithAmountClaimedPaidStub.restore()
+      })
+
+      it('should be enabled when claim is fully rejected with dispute', () => {
+        isResponseRejectedFullyWithDisputePaidStub.returns(true)
+        isResponseRejectedFullyWithAmountClaimedPaidStub.returns(false)
+
+        const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), claimStoreServiceMock.sampleClaimObj.externalId)
+        expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
+      })
+
+      it('should be enabled when claim is fully rejected due to claimed amount being paid', () => {
+        isResponseRejectedFullyWithDisputePaidStub.returns(false)
+        isResponseRejectedFullyWithAmountClaimedPaidStub.returns(true)
+
+        const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), claimStoreServiceMock.sampleClaimObj.externalId)
+        expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
+      })
+
+      it('should be disabled in remaining cases', () => {
+        isResponseRejectedFullyWithDisputePaidStub.returns(false)
+        isResponseRejectedFullyWithAmountClaimedPaidStub.returns(false)
+
+        const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), claimStoreServiceMock.sampleClaimObj.externalId)
+        expect(taskList).to.be.equal(undefined)
       })
     })
 
@@ -99,7 +161,7 @@ describe('Defendant response task list builder', () => {
         isResponseFullyAdmittedStub.returns(true)
         isResponsePartiallyRejectedDueToStub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claimStoreServiceMock.sampleClaimObj.externalId)
         expect(taskList.tasks.map(task => task.name)).to.contain('When will you pay?')
       })
 
@@ -114,7 +176,7 @@ describe('Defendant response task list builder', () => {
             text: 'I owe nothing'
           }
         }
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft().deserialize(input), claim)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft().deserialize(input), claimStoreServiceMock.sampleClaimObj.externalId)
         expect(taskList.tasks.map(task => task.name)).to.contain('When will you pay?')
       })
 
@@ -122,7 +184,7 @@ describe('Defendant response task list builder', () => {
         isResponseFullyAdmittedStub.returns(false)
         isResponsePartiallyRejectedDueToStub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claimStoreServiceMock.sampleClaimObj.externalId)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('When will you pay?')
       })
     })
