@@ -21,6 +21,9 @@ export class Paths {
   static readonly timelinePage = new RoutablePath(`${responsePath}/timeline`)
   static readonly evidencePage = new RoutablePath(`${responsePath}/evidence`)
   static readonly receiptReceiver = new RoutablePath(`${responsePath}/receipt`)
+  static readonly sendYourResponseByEmailPage = new RoutablePath(`${responsePath}/eligibility/send-your-response-by-email`)
+  static readonly whenDidYouPay = new RoutablePath(`${responsePath}/when-did-you-pay`)
+  static readonly defendantHowMuchPaidClaimant = new RoutablePath(`${responsePath}/eligibility/how-much-paid-claimant`)
   // Added in case anyone has a printed copy of a PDF with the old URL
   static readonly legacyDashboardRedirect = new RoutablePath('/response/dashboard')
   static readonly defendantHowMuchPaid = new RoutablePath(`${responsePath}/how-much-paid`)

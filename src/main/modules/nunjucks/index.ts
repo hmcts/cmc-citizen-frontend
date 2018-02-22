@@ -30,6 +30,8 @@ import { ClaimStatus } from 'claims/models/claimStatus'
 import { FeatureToggles } from 'utils/featureToggles'
 import { Paths as AppPaths } from 'app/paths'
 import { Paths as ResponsePaths } from 'features/response/paths'
+import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
+import { ClaimType } from 'claim/form/models/eligibility/claimType'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -93,6 +95,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('ResponseType', ResponseType)
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)
+    nunjucksEnv.addGlobal('ClaimType', ClaimType)
     nunjucksEnv.addGlobal('ClaimValue', ClaimValue)
     nunjucksEnv.addGlobal('EvidenceType', EvidenceType)
     nunjucksEnv.addGlobal('StatementType', StatementType)
@@ -106,6 +109,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('ClaimStatus', ClaimStatus)
     nunjucksEnv.addGlobal('AppPaths', AppPaths)
     nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
+    nunjucksEnv.addGlobal('HowMuchPaidClaimantOption', HowMuchPaidClaimantOption)
     if (FeatureToggles.isEnabled('finePrint')) {
       nunjucksEnv.addGlobal('cookieText', `GOV.UK uses cookies make the site simpler. <a href="${AppPaths.cookiesPage.uri}">Find out more about cookies</a>`)
     }

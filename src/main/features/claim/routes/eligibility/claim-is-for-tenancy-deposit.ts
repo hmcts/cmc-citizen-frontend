@@ -43,7 +43,7 @@ export default express.Router()
 
       const option: YesNoOption = draft.document.eligibility.claimIsForTenancyDeposit
       if (option === YesNoOption.NO) {
-        res.redirect(Paths.eligibilityClaimValuePage.uri)
+        res.redirect(Paths.eligibilityEligiblePage.uri)
       } else {
         res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_IS_FOR_TENANCY_DEPOSIT}`)
       }
