@@ -62,7 +62,6 @@ describe('Claim issue: fees page', () => {
         feesServiceMock.resolveCalculateIssueFee()
         feesServiceMock.resolveCalculateHearingFee()
         feesServiceMock.rejectGetIssueFeeRangeGroup()
-        feesServiceMock.resolveGetHearingFeeRangeGroup()
 
         await request(app)
           .get(ClaimPaths.feesPage.uri)
