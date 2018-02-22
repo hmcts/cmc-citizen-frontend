@@ -34,6 +34,7 @@ module "citizen-frontend" {
   location = "${var.location}"
   env = "${var.env}"
   ilbIp = "${var.ilbIp}"
+  additional_host_name = "${var.external_hostname}"
 
   app_settings = {
     WEBSITE_NODE_DEFAULT_VERSION = "8.9.0"
