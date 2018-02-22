@@ -4,21 +4,21 @@ import { DraftClaim } from 'app/drafts/models/draftClaim'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { Eligibility } from 'drafts/tasks/eligibility'
+import { ClaimType } from 'claim/form/models/eligibility/claimType'
 
 describe('Check eligibility', () => {
   describe('isCompleted', () => {
     it('should return true when the task is completed', () => {
       const input = {
         eligibility: {
-          claimOnBehalf: YesNoOption.NO,
+          claimValue: ClaimValue.UNDER_10000,
+          helpWithFees: YesNoOption.NO,
           claimantAddress: YesNoOption.YES,
           defendantAddress: YesNoOption.YES,
-          claimValue: ClaimValue.UNDER_10000,
           eighteenOrOver: YesNoOption.YES,
-          singleClaimant: YesNoOption.YES,
-          singleDefendant: YesNoOption.YES,
+          claimType: ClaimType.PERSONAL_CLAIM,
+          singleDefendant: YesNoOption.NO,
           governmentDepartment: YesNoOption.NO,
-          helpWithFees: YesNoOption.NO,
           claimIsForTenancyDeposit: YesNoOption.NO
         }
       }
@@ -33,16 +33,15 @@ describe('Check eligibility', () => {
     it('should return false when the task is completed but user is not eligible', () => {
       const input = {
         eligibility: {
-          claimOnBehalf: YesNoOption.YES,
+          claimValue: ClaimValue.UNDER_10000,
+          helpWithFees: YesNoOption.NO,
           claimantAddress: YesNoOption.YES,
           defendantAddress: YesNoOption.YES,
-          claimValue: ClaimValue.NOT_KNOWN,
           eighteenOrOver: YesNoOption.YES,
-          singleClaimant: YesNoOption.YES,
+          claimType: ClaimType.MULTIPLE_CLAIM,
           singleDefendant: YesNoOption.YES,
           governmentDepartment: YesNoOption.NO,
-          helpWithFees: YesNoOption.NO,
-          claimIsForTenancyDeposit: YesNoOption.YES
+          claimIsForTenancyDeposit: YesNoOption.NO
         }
       }
       const claim: DraftClaim = new DraftClaim().deserialize(input)
