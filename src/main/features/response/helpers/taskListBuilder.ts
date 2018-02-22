@@ -14,10 +14,13 @@ import { WhenWillYouPayTask } from 'response/tasks/whenWillYouPayTask'
 import { FreeMediationTask } from 'response/tasks/freeMediationTask'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { Claim } from 'claims/models/claim'
+import { WhenDidYouPayTask } from 'response/tasks/whenDidYouPayTask'
 
 export class TaskListBuilder {
-  static buildBeforeYouStartSection (draft: ResponseDraft, externalId: string): TaskList {
+  static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim): TaskList {
     const tasks: TaskListItem[] = []
+    const now: Moment = MomentFactory.currentDateTime()
+    const externalId: string = claim.externalId
     tasks.push(
       new TaskListItem(
         'Confirm your details',
@@ -25,14 +28,6 @@ export class TaskListBuilder {
         YourDetails.isCompleted(draft)
       )
     )
-
-    return new TaskList(1, 'Before you start', tasks)
-  }
-
-  static buildRespondToClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
-    const externalId: string = claim.externalId
-    const tasks: TaskListItem[] = []
-    const now: Moment = MomentFactory.currentDateTime()
     if (claim.responseDeadline.isAfter(now)) {
       tasks.push(
         new TaskListItem(
@@ -43,6 +38,11 @@ export class TaskListBuilder {
       )
     }
 
+    return new TaskList(1, 'Before you start', tasks)
+  }
+
+  static buildRespondToClaimSection (draft: ResponseDraft, externalId: string): TaskList {
+    const tasks: TaskListItem[] = []
     tasks.push(
       new TaskListItem(
         'Do you owe the money claimed',
@@ -81,6 +81,16 @@ export class TaskListBuilder {
       )
     }
 
+    if (draft.isResponseRejectedFullyWithAmountClaimedPaid()) {
+      tasks.push(
+        new TaskListItem(
+          'When did you pay?',
+          Paths.whenDidYouPay.evaluateUri({ externalId: externalId }),
+          WhenDidYouPayTask.isCompleted(draft)
+        )
+      )
+    }
+
     if (draft.requireDefence()) {
       tasks.push(
         new TaskListItem(
@@ -104,23 +114,26 @@ export class TaskListBuilder {
     return new TaskList(2, 'Respond to claim', tasks)
   }
 
-  static buildSubmitSection (externalId: string): TaskList {
+  static buildSubmitSection (draft: ResponseDraft, externalId: string): TaskList {
     const tasks: TaskListItem[] = []
-    tasks.push(
-      new TaskListItem(
-        'Check and submit your response',
-        Paths.checkAndSendPage.evaluateUri({ externalId: externalId }),
-        false
+    if (draft.isResponseRejectedFullyWithDispute() || draft.isResponseRejectedFullyWithAmountClaimedPaid()) {
+      tasks.push(
+        new TaskListItem(
+          'Check and submit your response',
+          Paths.checkAndSendPage.evaluateUri({ externalId: externalId }),
+          false
+        )
       )
-    )
-
-    return new TaskList(3, 'Submit', tasks)
+      return new TaskList(3, 'Submit', tasks)
+    } else {
+      return undefined
+    }
   }
 
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {
     return [].concat(
-      TaskListBuilder.buildBeforeYouStartSection(draft, claim.externalId).tasks,
-      TaskListBuilder.buildRespondToClaimSection(draft, claim).tasks
+      TaskListBuilder.buildBeforeYouStartSection(draft, claim).tasks,
+      TaskListBuilder.buildRespondToClaimSection(draft, claim.externalId).tasks
     )
       .filter(item => !item.completed)
   }
