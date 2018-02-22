@@ -1,6 +1,8 @@
 #!groovy
+//noinspection GroovyUnusedAssignment
 @Library("Infrastructure") _
 
+//noinspection GroovyAssignabilityCheck
 properties([
 		parameters([
 			string(name: 'PRODUCT_NAME', defaultValue: 'cmc', description: ''),
@@ -11,12 +13,26 @@ properties([
 		])
 ])
 
+List<LinkedHashMap<String, Object>> secrets = [
+  secret('AatTestUserUsername', 'SMOKE_TEST_CITIZEN_USERNAME'),
+  secret('AatTestUserPassword', 'SMOKE_TEST_USER_PASSWORD')
+]
+
+static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
+  [ $class: 'AzureKeyVaultSecret',
+    secretType: 'Secret',
+    name: secretName,
+    version: '',
+    envVariable: envVar
+  ]
+}
+
+
 withParameterizedPipeline(params.TYPE, params.PRODUCT_NAME, params.APP, params.ENVIRONMENT, params.SUBSCRIPTION) {
   after('build') {
-  // Erm... after was being called before build...
-    sh 'yarn install'
     sh 'yarn setup'
   }
 
+  loadVaultSecrets(secrets)
   enableSlackNotifications('#cmc-tech-cnp')
 }
