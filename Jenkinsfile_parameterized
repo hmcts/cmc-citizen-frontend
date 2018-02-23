@@ -34,5 +34,5 @@ withParameterizedPipeline(params.TYPE, params.PRODUCT_NAME, params.APP, params.E
   }
 
   loadVaultSecrets(secrets)
-  enableSlackNotifications('#cmc-tech-cnp')
+  enableSlackNotifications('#cmc-tech-notification')
 }
