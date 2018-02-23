@@ -12,21 +12,16 @@
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
       <p>
-        {{ t('%s will also be asked to sign. Once signed this agreement replaces the court claim.', {
-              postProcess: 'sprintf', sprintf: [ claim.claimData.defendant.name ]}) }}
-      </p>
-      <p>
         {{
-          t('View your claim status on <a href="{{ dashboardUri }}">your money claims account</a>.', {
-            dashboardUri: '/dashboard'
-          }) | safe
+          t('{{ name }} will also be asked to sign. Once signed this agreement replaces the court claim.', {
+            name: claim.claimData.defendant.name
+          })
         }}
       </p>
 
       {{ supportWidget() }}
 
-      <br>
-      <a href="#" role="button" class="button">Finished</a>
+      {% include "includes/service_survey_link.njk" %}
     </div>
   </div>
 {% endblock %}

@@ -10,7 +10,7 @@
 
       <p>
         {{ t('You can make a legal agreement to settle out of court.') }}
-        {{ t('It’s based on the information you and {{name}} have provided. It has not been reviewed by the court.', {
+        {{ t('It’s based on the information you and {{ name }} have provided. It has not been reviewed by the court.', {
                name: claim.claimData.defendant.name
              })
         }}
@@ -22,9 +22,10 @@
       </p>
 
       <p>
-        {{ t('The agreement is a legal contract between you and {{name}}.', {
-               name: claim.claimData.defendant.name
-             })
+        {{
+          t('The agreement is a legal contract between you and {{ name }}.', {
+            name: claim.claimData.defendant.name
+          })
         }}
       <p>
 
