@@ -19,9 +19,22 @@ export class Settlement {
     }
 
     const partyStatement: PartyStatement = this.partyStatements
-      .map(o => this.isOfferMadeByDefendant(o) ? o : undefined).pop()
+    .filter(this.isOfferMadeByDefendant)
+    .pop()
 
     return partyStatement ? partyStatement.offer : undefined
+  }
+
+  isOfferAccepted (): boolean {
+    if (!this.partyStatements) {
+      return false
+    }
+
+    const statement: PartyStatement = this.partyStatements
+    .filter(o => o.type === StatementType.ACCEPTATION.value)
+    .pop()
+
+    return !!statement
   }
 
   private isOfferMadeByDefendant (partyStatement: PartyStatement): boolean {

@@ -252,6 +252,12 @@ export function resolveRejectOffer (by: string = 'claimant') {
     .reply(HttpStatus.CREATED)
 }
 
+export function resolveCountersignOffer (by: string = 'defendant') {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp(`/.+/offers/${by}/countersign`))
+    .reply(HttpStatus.CREATED)
+}
+
 export function rejectSaveCcjForExternalId (reason: string = 'HTTP error') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}' +
