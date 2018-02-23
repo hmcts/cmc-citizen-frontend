@@ -51,7 +51,7 @@ describe('Defendant response: send your response by email', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('How to complete and send your response'))
+          .expect(res => expect(res).to.be.successful.withText('Post your response'))
       })
 
       it('should return error page when unable to retrieve draft', async () => {
