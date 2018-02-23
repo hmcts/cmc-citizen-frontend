@@ -18,7 +18,7 @@ import { YesNoOption } from 'models/yesNoOption'
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ClaimPaths.eligibilityClaimantAddressPage.uri
 const pageRedirect: string = ClaimPaths.eligibilityDefendantAddressPage.uri
-const expectedTextOnPage: string = 'Do you live in the UK?'
+const expectedTextOnPage: string = 'Do you have a postal address in the UK?'
 
 describe('Claim eligibility: claimant address page', () => {
   attachDefaultHooks(app)

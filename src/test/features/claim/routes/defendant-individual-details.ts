@@ -29,6 +29,7 @@ const input = {
     } as LocalDate
   } as DateOfBirth
 } as IndividualDetails
+const theirName: string = 'Full name (include title)'
 
 describe('defendant as individual details page', () => {
   attachDefaultHooks(app)
@@ -43,7 +44,7 @@ describe('defendant as individual details page', () => {
       await request(app)
         .get(ClaimPaths.defendantIndividualDetailsPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Their details'))
+        .expect(res => expect(res).to.be.successful.withText(theirName))
     })
   })
 
@@ -62,7 +63,7 @@ describe('defendant as individual details page', () => {
           .post(ClaimPaths.defendantIndividualDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send(nameMissingInput)
-          .expect(res => expect(res).to.be.successful.withText('Their details', 'div class="error-summary"', 'Enter name'))
+          .expect(res => expect(res).to.be.successful.withText(theirName, 'div class="error-summary"', 'Enter name'))
       })
       describe('should render page with error when address is invalid', () => {
         beforeEach(() => {
@@ -74,7 +75,7 @@ describe('defendant as individual details page', () => {
             .post(ClaimPaths.defendantIndividualDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Their details', 'div class="error-summary"', 'Enter first address line'))
+            .expect(res => expect(res).to.be.successful.withText(theirName, 'div class="error-summary"', 'Enter first address line'))
         })
         it('postcode is missing', async () => {
           const invalidAddressInput = { ...input, ...{ address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: '' } } }
@@ -82,7 +83,7 @@ describe('defendant as individual details page', () => {
             .post(ClaimPaths.defendantIndividualDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Their details', 'div class="error-summary"', 'Enter postcode'))
+            .expect(res => expect(res).to.be.successful.withText(theirName, 'div class="error-summary"', 'Enter postcode'))
         })
       })
 
@@ -96,7 +97,7 @@ describe('defendant as individual details page', () => {
             .post(ClaimPaths.defendantIndividualDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidCorrespondenceAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Their details', 'div class="error-summary"', 'Enter first correspondence address line'))
+            .expect(res => expect(res).to.be.successful.withText(theirName, 'div class="error-summary"', 'Enter first correspondence address line'))
         })
         it('postcode is missing', async () => {
           const invalidCorrespondenceAddressInput = { ...input, ...{ hasCorrespondenceAddress: 'true', correspondenceAddress: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: '' } } }
@@ -104,11 +105,11 @@ describe('defendant as individual details page', () => {
             .post(ClaimPaths.defendantIndividualDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidCorrespondenceAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Their details', 'div class="error-summary"', 'Enter correspondence address postcode'))
+            .expect(res => expect(res).to.be.successful.withText(theirName, 'div class="error-summary"', 'Enter correspondence address postcode'))
         })
       })
 
-      it('should redirect to data of birth page when everything is fine ', async () => {
+      it('should redirect to defendant email page when everything is fine ', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
         await request(app)
