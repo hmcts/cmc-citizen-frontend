@@ -15,26 +15,69 @@ variable "env" { }
 
 variable "ilbIp" { }
 
-variable "draft-store-api-url" {
+variable "draft_store_api_url" {
   default = "https://testdraftstorelb.moneyclaim.reform.hmcts.net:4302"
 }
 
-variable "payments-api-url" {
+variable "payments_api_url" {
   default = "https://test.payments.reform.hmcts.net:4421"
 }
 
-variable "fees-api-url" {
+variable "fees_api_url" {
   default = "https://test.fees-register.reform.hmcts.net:4431"
 }
 
-variable "idam-api-url" {
-  default = "http://betaDevBccidamAppLB.reform.hmcts.net:4551"
+variable "idam_api_url" {
+  default = "http://betaDevBccidamAppLB.reform.hmcts.net"
 }
 
-variable "authentication-web-url" {
+variable "s2s_url" {
+  default = "http://betaDevBccidamS2SLB.reform.hmcts.net"
+}
+
+variable "authentication_web_url" {
   default = "https://idam-test.dev.ccidam.reform.hmcts.net"
 }
 
-variable "service-2-service-auth-url" {
-  default = "http://betaDevBccidamAppLB.reform.hmcts.net:4552"
+variable "subscription" {}
+
+variable "vault_section" {
+  default = "test"
+}
+// feature toggles
+variable "feature_ccj" {
+  default = "true"
+}
+
+variable "feature_offer" {
+  default = "false"
+}
+
+variable "feature_statement_of_means" {
+  default = "false"
+}
+
+variable "feature_full_admission" {
+  default = "false"
+}
+
+variable "feature_partial_admission" {
+  default = "false"
+}
+
+variable "feature_fine_print" {
+  default = "false"
+}
+
+variable "jenkins_AAD_objectId" {
+  type                        = "string"
+  description                 = "(Required) The Azure AD object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault. The object ID must be unique for the list of access policies."
+}
+
+variable "tenant_id" {
+  description = "(Required) The Azure Active Directory tenant ID that should be used for authenticating requests to the key vault. This is usually sourced from environemnt variables and not normally required to be specified."
+}
+
+variable "client_id" {
+  description = "(Required) The object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault. The object ID must be unique for the list of access policies. This is usually sourced from environment variables and not normally required to be specified."
 }
