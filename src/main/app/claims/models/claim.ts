@@ -98,6 +98,8 @@ export class Claim {
       return ClaimStatus.CCJ_REQUESTED
     } else if (this.isSettlementReached()) {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
+    } else if (this.isOfferAccepted()) {
+      return ClaimStatus.OFFER_ACCEPTED
     } else if (this.isOfferSubmitted()) {
       return ClaimStatus.OFFER_SUBMITTED
     } else if (this.eligibleForCCJ) {
@@ -123,6 +125,10 @@ export class Claim {
   private isOfferSubmitted () {
     return FeatureToggles.isEnabled('offer')
       && this.settlement && this.response && this.response.responseType === ResponseType.FULL_DEFENCE
+  }
+
+  private isOfferAccepted () {
+    return FeatureToggles.isEnabled('offer') && this.settlement && this.settlement.isOfferAccepted()
   }
 
   private isSettlementReached () {

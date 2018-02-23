@@ -7,27 +7,21 @@
   <div class="grid-row">
     <div class="column-two-thirds">
       <div class="govuk-box-highlight">
-        <h1 class="bold-large">{{ t('You’ve signed the agreement') }}</h1>
-
-        <p class="issue-receipt-download">
-          <a href="{{ agreementLink }}">{{ t('Download agreement as a PDF') }}</a>
-        </p>
+        <h1 class="heading-large">{{ t('You’ve signed the agreement') }}</h1>
       </div>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
       <p>
-        {{ t('%s will also be asked to sign. Once signed this agreement replaces the court claim.', {
-              postProcess: 'sprintf', sprintf: [ claim.claimData.defendant.name ]}) }}
-      </p>
-      <p>
-        {{ t('View your claim status on <a href="%s">your money claims account</a>.', {
-              postProcess: 'sprintf', sprintf: [ '/dashboard' ]}) | safe }}
+        {{
+          t('{{ name }} will also be asked to sign. Once signed this agreement replaces the court claim.', {
+            name: claim.claimData.defendant.name
+          })
+        }}
       </p>
 
       {{ supportWidget() }}
 
-      <br>
-      <a href="#" class="button">Finished</a>
+      {% include "includes/service_survey_link.njk" %}
     </div>
   </div>
 {% endblock %}
