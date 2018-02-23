@@ -97,7 +97,7 @@ export class TaskListBuilder {
     if (draft.requireDefence()) {
       tasks.push(
         new TaskListItem(
-          'Your defence',
+          'Why do you disagree with the claim?',
           Paths.defencePage.evaluateUri({ externalId: externalId }),
           YourDefenceTask.isCompleted(draft)
         )
