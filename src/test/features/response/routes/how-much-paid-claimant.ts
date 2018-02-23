@@ -16,18 +16,22 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
+import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = ResponsePaths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath = ResponsePaths.defendantHowMuchPaidClaimant.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 const draftOverride = {
   response: {
     type: ResponseType.DEFENCE
+  },
+  rejectAllOfClaim: {
+    option: RejectAllOfClaimOption.ALREADY_PAID
   }
 }
 
-describe('Defendant response: full admission options', () => {
+describe('Defendant response: How much have you paid the claimant options', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -52,8 +56,52 @@ describe('Defendant response: full admission options', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should redirect to response type page when response type is not full admission', async () => {
-          draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.PART_ADMISSION } })
+        it('should return 500 and render error page when unable to retrieve draft', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.rejectFind()
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+
+        it('should redirect to response type page when response type is full admission', async () => {
+          draftStoreServiceMock.resolveFind('response', {
+            response: {
+              type: ResponseType.FULL_ADMISSION
+            }
+          })
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.responseTypePage
+              .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+        })
+
+        it('should redirect to response type page when response type is part admission', async () => {
+          draftStoreServiceMock.resolveFind('response', {
+            response: {
+              type: ResponseType.PART_ADMISSION
+            }
+          })
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.responseTypePage
+              .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+        })
+
+        it('should redirect to response type page when response type is full admission with counter claim option', async () => {
+          draftStoreServiceMock.resolveFind('response', { ...draftOverride,
+            rejectAllOfClaim: {
+              option: RejectAllOfClaimOption.COUNTER_CLAIM
+            }
+          })
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -70,7 +118,7 @@ describe('Defendant response: full admission options', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Why do you reject the claim?'))
+            .expect(res => expect(res).to.be.successful.withText('How much have you paid the claimant?'))
         })
       })
     })
@@ -89,8 +137,42 @@ describe('Defendant response: full admission options', () => {
       checkAlreadySubmittedGuard(app, method, pagePath)
 
       context('when response not submitted', () => {
-        it('should redirect to response type page when response type is not full admission', async () => {
-          draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.PART_ADMISSION } })
+        it('should redirect to response type page when response type is full admission', async () => {
+          draftStoreServiceMock.resolveFind('response', {
+            response: {
+              type: ResponseType.FULL_ADMISSION
+            }
+          })
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.responseTypePage
+              .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+        })
+
+        it('should redirect to response type page when response type is part admission', async () => {
+          draftStoreServiceMock.resolveFind('response', {
+            response: {
+              type: ResponseType.PART_ADMISSION
+            }
+          })
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.responseTypePage
+              .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+        })
+
+        it('should redirect to response type page when response type is full admission with counter claim option', async () => {
+          draftStoreServiceMock.resolveFind('response', { ...draftOverride,
+            rejectAllOfClaim: {
+              option: RejectAllOfClaimOption.COUNTER_CLAIM
+            }
+          })
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -110,6 +192,17 @@ describe('Defendant response: full admission options', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
+          it('should return 500 when cannot retrieve response draft', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.rejectFind('Error')
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ option: HowMuchPaidClaimantOption.AMOUNT_CLAIMED })
+              .expect(res => expect(res).to.be.serverError.withText('Error'))
+          })
+
           it('should render page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response', draftOverride)
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
@@ -117,7 +210,7 @@ describe('Defendant response: full admission options', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Why do you reject the claim?', 'div class="error-summary"'))
+              .expect(res => expect(res).to.be.successful.withText('How much have you paid the claimant?'))
           })
         })
 
@@ -130,11 +223,11 @@ describe('Defendant response: full admission options', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: RejectAllOfClaimOption.ALREADY_PAID })
+              .send({ option: HowMuchPaidClaimantOption.AMOUNT_CLAIMED })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to how much paid claimant page when everything is fine', async () => {
+          it('should redirect to how much paid task list page when everything is fine and AMOUNT_CLAIMED is selected', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', draftOverride)
             draftStoreServiceMock.resolveSave()
@@ -142,13 +235,13 @@ describe('Defendant response: full admission options', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: RejectAllOfClaimOption.ALREADY_PAID })
+              .send({ option: HowMuchPaidClaimantOption.AMOUNT_CLAIMED })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.defendantHowMuchPaidClaimant
+                .toLocation(ResponsePaths.taskListPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
-          it('should redirect to send your response by email page when counterclaim option is selected', async () => {
+          it('should redirect to send your response by email page when everything is fine and LESS_THAN_AMOUNT_CLAIMED is selected', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', draftOverride)
             draftStoreServiceMock.resolveSave()
@@ -156,7 +249,7 @@ describe('Defendant response: full admission options', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: RejectAllOfClaimOption.COUNTER_CLAIM })
+              .send({ option: HowMuchPaidClaimantOption.LESS_THAN_AMOUNT_CLAIMED })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.sendYourResponseByEmailPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
