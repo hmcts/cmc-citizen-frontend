@@ -40,9 +40,9 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         if (draft.document.eligibility.singleDefendant === YesNoOption.NO) {
-          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_DEFENDANTS}`)
+          res.redirect(Paths.eligibilityGovernmentDepartmentPage.uri)
         } else {
-          res.redirect(Paths.eligibilityOver18Page.uri)
+          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_DEFENDANTS}`)
         }
       }
     })

@@ -6,16 +6,14 @@
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Check eligibility') }}</h1>
+      <h1 class="heading-large">{{ t('Find out if you can use this service') }}</h1>
 
-      <p class="lede">{{ t('Find out if you’re eligible to use this service') }}</p>
-
-      <p class="panel panel-border-wide">
-        {{ t('We can tell you if you can use this service but can’t say if your claim is valid. ' +
-        'For example, there are time limits for some types of claim.') }}
+      <p>
+        {{ t('We’ll ask you some questions to check you can use this service. '
+        + 'We can’t say if your claim will be successful or not.') }}
       </p>
 
-      <a href="{{ nextPage }}" class="button">{{ t('Continue to questions') }}</a>
+      <a href="{{ nextPage }}" class="button">{{ t('Continue') }}</a>
     </div>
   </div>
 
