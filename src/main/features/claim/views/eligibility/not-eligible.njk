@@ -64,9 +64,9 @@
           { postProcess: 'sprintf', sprintf: [ n510Url, n1FormUrl ]}) | safe }}</p>
       {% elseif reason === NotEligibleReason.DEFENDANT_ADDRESS %}
         <p>{{ t('You can only claim against a person or organisation with an address in England or Wales.') }}</p>
-        <p>{{ t('Depending on where you’ll be sending the claim, you might be able to use<a target="_blank" href="%s">form N510</a> '
-          + newWindow() + '.',
-          { postProcess: 'sprintf', sprintf: [ n510Url ]}) | safe }}</p>
+        <p>{{ t('Depending on where you’ll be sending the claim, you might be able to use <a target="_blank" href="{{ n1FormUrl }}">form N1</a>'
+          + newWindow() + ' and <a target="_blank" href="{{ n510Url }}">form N510</a> ' + newWindow() + '.',
+          { n1FormUrl : n1FormUrl , n510Url : n510Url }) | safe }}</p>
         <h2 class="heading-medium">{{ t('Where to send paper forms') }}</h2>
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.GOVERNMENT_DEPARTMENT %}
