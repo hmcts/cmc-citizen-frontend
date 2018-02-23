@@ -4,7 +4,7 @@ import { User } from 'idam/user'
 import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import { Declaration } from 'ccj/form/models/declaration'
+import { Declaration } from 'offer/form/models/declaration'
 import { Claim } from 'claims/models/claim'
 import { OfferClient } from 'claims/offerClient'
 
@@ -42,8 +42,14 @@ export default express.Router()
         const claim: Claim = res.locals.claim
         const user: User = res.locals.user
 
-        await OfferClient.acceptOffer(claim.externalId, user)
+        if (user.id === claim.defendantId) {
+          await OfferClient.countersignOffer(claim.externalId, user)
 
-        res.redirect(Paths.acceptedPage.evaluateUri({ externalId: claim.externalId }))
+          res.redirect(Paths.settledPage.evaluateUri({ externalId: claim.externalId }))
+        } else {
+          await OfferClient.acceptOffer(claim.externalId, user)
+
+          res.redirect(Paths.acceptedPage.evaluateUri({ externalId: claim.externalId }))
+        }
       }
     }))
