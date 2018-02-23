@@ -21,6 +21,7 @@ const input = {
   hasCorrespondenceAddress: false,
   businessName: 'businessName'
 } as SoleTraderDetails
+const theirName: string = 'Full name (include title)'
 
 describe('defendant as soleTrader details page', () => {
   attachDefaultHooks(app)
@@ -35,7 +36,7 @@ describe('defendant as soleTrader details page', () => {
       await request(app)
         .get(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Their details'))
+        .expect(res => expect(res).to.be.successful.withText(theirName))
     })
   })
 
@@ -54,7 +55,7 @@ describe('defendant as soleTrader details page', () => {
           .post(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send(nameMissingInput)
-          .expect(res => expect(res).to.be.successful.withText('Their details', 'div class="error-summary"', 'Enter name'))
+          .expect(res => expect(res).to.be.successful.withText(theirName, 'div class="error-summary"', 'Enter name'))
       })
       describe('should render page with error when address is invalid', () => {
         beforeEach(() => {
@@ -66,7 +67,7 @@ describe('defendant as soleTrader details page', () => {
             .post(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Their details', 'div class="error-summary"', 'Enter first address line'))
+            .expect(res => expect(res).to.be.successful.withText(theirName, 'div class="error-summary"', 'Enter first address line'))
         })
         it('postcode is missing', async () => {
           const invalidAddressInput = { ...input, ...{ address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: '' } } }
@@ -74,7 +75,7 @@ describe('defendant as soleTrader details page', () => {
             .post(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Their details', 'div class="error-summary"', 'Enter postcode'))
+            .expect(res => expect(res).to.be.successful.withText(theirName, 'div class="error-summary"', 'Enter postcode'))
         })
       })
 
@@ -88,7 +89,7 @@ describe('defendant as soleTrader details page', () => {
             .post(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidCorrespondenceAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Their details', 'div class="error-summary"', 'Enter first correspondence address line'))
+            .expect(res => expect(res).to.be.successful.withText(theirName, 'div class="error-summary"', 'Enter first correspondence address line'))
         })
         it('postcode is missing', async () => {
           const invalidCorrespondenceAddressInput = { ...input, ...{ hasCorrespondenceAddress: 'true', correspondenceAddress: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: '' } } }
@@ -96,7 +97,7 @@ describe('defendant as soleTrader details page', () => {
             .post(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidCorrespondenceAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Their details', 'div class="error-summary"', 'Enter correspondence address postcode'))
+            .expect(res => expect(res).to.be.successful.withText(theirName, 'div class="error-summary"', 'Enter correspondence address postcode'))
         })
       })
 
