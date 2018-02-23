@@ -1,7 +1,6 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+{% from "form.njk" import csrfProtection, checkboxSingle, submitButton, errorSummary %}
 {% from "table.njk" import row %}
-{% from "statement-of-truth.njk" import statementOfTruth %}
 
 {% set title = t('Money claim | Declaration') %}
 
@@ -12,31 +11,85 @@
       <h1 class="heading-large">{{ t('Your agreement') }}</h1>
 
       <p>
-        {{
-          t('You and %s need to sign the agreement.', {
-             postProcess: 'sprintf', sprintf: [ claim.claimData.defendant.name ]
-           }
-          )
-        }}
+        {% if user.id == claim.defendantId %}
+          {{
+            t('You need to sign the agreement.')
+          }}
+        {% else %}
+          {{
+            t('You and {{ defendantName }} need to sign the agreement.', {
+              defendantName: claim.claimData.defendant.name
+            })
+          }}
+        {% endif %}
       </p>
 
       {{
-         row( 'The offer',
-              t('%s: %s', { postProcess: 'sprintf', sprintf: [ claim.claimData.defendant.name, offer.content ] })
-         )
+        row('The offer',
+          t('{{ defendantName }}: {{ offerContent }}', {
+            defendantName: claim.claimData.defendant.name,
+            offerContent: offer.content
+          })
+        )
       }}
       {{ row('Completion date', offer.completionDate | date) }}
+
+      <h3 class="heading-medium">Terms of the agreement</h3>
+
+      <p>
+        {{
+          t('This agreement settles the claim made by {{ claimantName }} against {{ defendantName }}. This includes all money owed in the case, for example counterclaims, court fees, expenses or interest.', {
+            claimantName: claim.claimData.claimant.name,
+            defendantName: claim.claimData.defendant.name
+          })
+        }}
+      </p>
+
+      <p>{{ t('If you both keep to this agreement:') }}</p>
+      <ul class="list list-bullet">
+        <li>{{ t('the original claim and any counterclaims will be closed') }}</li>
+        <li>{{ t('neither of you can make any further claims relating to this case') }}</li>
+      </ul>
+
+      <p>{{ t('This agreement is confidential until you’ve both signed it. After that it can be used in court, for example if the agreement is broken.') }}</p>
+
+      <h3 class="heading-medium">{{ t('If the agreement is broken') }}</h3>
+
+      <p>{{ t('Either of you can apply to:') }}</p>
+      <ul class="list list-bullet">
+        <li>{{ t('request a judgment for any money still owed from this agreement') }}</li>
+        <li>{{ t('restart the original claim or counterclaim') }}</li>
+      </ul>
+
+      <p>
+        {{
+          t('<a href="{{ n244formUri }}">Complete form N244</a> and send it to the <a href="{{ countyCourtBusinessCentreUri }}">County Court Business Centre</a>. You need to say on the form which of the 2 options you’re applying for.', {
+            n244formUri: 'http://formfinder.hmctsformfinder.justice.gov.uk/n244-eng.pdf',
+            countyCourtBusinessCentreUri: 'https://courttribunalfinder.service.gov.uk/courts/county-court-business-centre-ccbc'
+          }) | safe
+        }}
+      </p>
+
+      <p>{{ t('The original claim and any counterclaims will be kept on hold in case this agreement is broken. They will be closed three months after the last payment date (if applicable) if we don’t hear from either of you.') }}</p>
+
+      <h2 class="heading-medium">{{ t('Sign the agreement') }}</h2>
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
         <div class="form-group">
+          {% set checkboxLabel = 'I confirm I’ve read and accept the terms of the agreement.' %}
+
           {{
-            statementOfTruth(
-              form,
-              title = 'Declaration',
-              label = 'By signing this you confirm that you accept the terms of the agreement.',
-              typeOfStatement = 'declaration'
+            checkboxSingle(
+              name = 'signed',
+              option = {
+                label: checkboxLabel,
+                value: true
+              },
+              label = checkboxLabel,
+              form = form,
+              legendHidden = true
             )
           }}
 

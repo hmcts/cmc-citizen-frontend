@@ -37,4 +37,13 @@ export class OfferClient {
       }
     })
   }
+
+  static countersignOffer (externalId: string, user: User): Promise<Claim> {
+    return request.post(`${claimStoreApiUrl}/${externalId}/offers/defendant/countersign`, {
+      body: '',
+      headers: {
+        Authorization: `Bearer ${user.bearerToken}`
+      }
+    })
+  }
 }
