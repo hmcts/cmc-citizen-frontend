@@ -20,28 +20,27 @@
       </div>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
-      <p>{{ t('%s has until 4pm on %s to respond to your claim. They can ask for an extra 14 days if they need it.
+      <p>{{ t('{{ defendantName }} has until 4pm on {{ responseDeadline }} to respond to your claim. They can ask for an extra 14 days if they need it.
               We’ll email you when they respond.',
-        {
-          postProcess: 'sprintf',
-          sprintf: [ defendantName, responseDeadline | date ]
-        }
+          {
+            defendantName : defendantName,
+            responseDeadline: responseDeadline | date
+          }
         ) | safe }}
       </p>
       <p>{{ t('You can request a default County Court Judgment (CCJ) against them if they don’t respond.') }}</p>
 
       <h2 class="heading-medium">{{ t('If the defendant pays you') }}</h2>
       <p>
-        {{ t('You need to email moneyclaims@hmcts.gsi.gov.uk to let us know. Include the date you were paid.',
-        {
-          postProcess: 'sprintf',
-          sprintf: [defendantName]
-        }) }}
-      </p>
-      <p>{{ t('You can view the claim at any time on <a href="%s"> your money claims account</a>.',
+        {{ t('You need to email {{ supportEmailAddress }} to let us know. Include the date you were paid.',
           {
-            postProcess: 'sprintf',
-            sprintf: ['/dashboard']
+            supportEmailAddress: supportEmailAddress
+          }
+        ) | safe }}
+      </p>
+      <p>{{ t('You can view the claim at any time on <a href="{{ dashboard }}"> your money claims account</a>.',
+          {
+            dashboard: '/dashboard'
           }) | safe }}</p>
 
       {% include "includes/service_survey_link.njk" %}
