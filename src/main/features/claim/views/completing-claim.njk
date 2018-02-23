@@ -12,16 +12,13 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-
-        <p>{{ t('You’ll have to pay a fee if you want to:') }}</p>
+        <p>{{ t('You’ll have to pay an additional fee if you want to:') }}</p>
 
         <ul class="list list-bullet form-group">
-          <li>{{ t('name someone else as owing you the money') }}</li>
+          <li>{{ t('change the name of anyone involved with the claim') }}</li>
           <li>{{ t('change the basis of your claim - for example, saying goods were undelivered instead of faulty') }}</li>
           <li>{{ t('add information that significantly changes your claim') }}</li>
         </ul>
-
-        <p>{{ t('Make sure you that you spell the person or organisation’s name correctly and get the address right.') }}</p>
 
         {{ submitButton('I confirm I’ve read this') }}
       </form>
