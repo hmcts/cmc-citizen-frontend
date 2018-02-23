@@ -25,5 +25,5 @@ withPipeline("nodejs", product, component) {
   }
 
   loadVaultSecrets(secrets)
-  enableSlackNotifications('#cmc-tech-cnp')
+  enableSlackNotifications('#cmc-tech-notification')
 }

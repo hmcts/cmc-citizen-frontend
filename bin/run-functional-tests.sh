@@ -10,11 +10,7 @@ function shutdownDocker() {
 }
 
 export CLAIM_STORE_URL=$(echo ${TEST_URL} | sed -e "s/citizen-frontend/claim-store/" -e "s/-staging//" -e "s/https/http/")
-if [[ ${TEST_URL} = *"prod"*  ]]; then
-  export IDAM_URL=http://betaPreProdccidamAppLB.reform.hmcts.net:4501
-else
-  export IDAM_URL=http://betaDevBccidamAppLB.reform.hmcts.net
-fi
+export IDAM_URL=http://betaDevBccidamAppLB.reform.hmcts.net
 
 trap shutdownDocker INT TERM QUIT EXIT
 
