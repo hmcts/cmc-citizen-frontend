@@ -1,0 +1,38 @@
+#!groovy
+//noinspection GroovyUnusedAssignment
+@Library("Infrastructure") _
+
+//noinspection GroovyAssignabilityCheck
+properties([
+		parameters([
+			string(name: 'PRODUCT_NAME', defaultValue: 'cmc', description: ''),
+			string(name: 'APP', defaultValue: 'citizen-frontend', description: ''),
+			string(name: 'TYPE', defaultValue: 'nodejs', description: ''),
+			string(name: 'ENVIRONMENT', defaultValue: 'sandbox', description: 'Environment where code should be build and deployed'),
+			choice(name: 'SUBSCRIPTION', choices: 'sandbox\nnonprod\nprod', description: 'Azure subscriptions available to build in')
+		])
+])
+
+List<LinkedHashMap<String, Object>> secrets = [
+  secret('AatTestUserUsername', 'SMOKE_TEST_CITIZEN_USERNAME'),
+  secret('AatTestUserPassword', 'SMOKE_TEST_USER_PASSWORD')
+]
+
+static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
+  [ $class: 'AzureKeyVaultSecret',
+    secretType: 'Secret',
+    name: secretName,
+    version: '',
+    envVariable: envVar
+  ]
+}
+
+
+withParameterizedPipeline(params.TYPE, params.PRODUCT_NAME, params.APP, params.ENVIRONMENT, params.SUBSCRIPTION) {
+  after('build') {
+    sh 'yarn setup'
+  }
+
+  loadVaultSecrets(secrets)
+  enableSlackNotifications('#cmc-tech-notification')
+}
