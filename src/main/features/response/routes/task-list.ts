@@ -21,7 +21,7 @@ export default express.Router()
       const respondToClaimSection = TaskListBuilder
         .buildRespondToClaimSection(draft.document, claim)
 
-      const submitSection = TaskListBuilder.buildSubmitSection(claim.externalId)
+      const submitSection = TaskListBuilder.buildSubmitSection(draft.document, claim.externalId)
 
       res.render(Paths.taskListPage.associatedView,
         {

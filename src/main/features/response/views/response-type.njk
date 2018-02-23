@@ -47,6 +47,68 @@
         </div>
       </details>
 
+      <p>
+        {{ t('You could get a County Court Judgment (CCJ) in all cases.') }}
+      </p>
+
+      <details class="notice">
+        <summary><span class="summary">{{ t('Find out when you could get a CCJ') }}</span></summary>
+        <div class="panel panel-border-narrow">
+          <h2 class="heading-small">{{ t('Admit all of the claim') }}</h2>
+          <p>
+            {{ t('If you admit all of the claim is fair you can contact the claimant yourself ' +
+          'and pay the money. Ask them to let the court know when they have your ' +
+          'payment.' )}}
+          </p>
+
+          <p>
+            {{ t('The claimant can ask for a County Court Judgment (CCJ) to be made ' +
+            'against you if you admit the claim. If they ask for a CCJ to be made you ' +
+            'against you then you can apply for a:' )}}
+          </p>
+
+          <ul class="list list-bullet">
+            <li>{{ t('certificate of cancellation if you pay the debt within 28 days') }}</li>
+            <li>{{ t('certificate of satisfaction if you pay the debt after 28 days') }}</li>
+          </ul>
+
+
+          <h2 class="heading-small">{{ t('Admit part of the claim') }}</h2>
+          <p>
+            {{ t('If you think the claim is too high you can offer the amount you think you ' +
+              'owe as part of your defence. You’ll get the chance to explain why your offer ' +
+              'is the amount you believe you owe.' )}}
+          </p>
+
+          <p>
+            {{ t('The claimant can ask for a County Court Judgment (CCJ) to be made ' +
+            'against you if you part admit the claim. If they ask for a CCJ to be made you ' +
+            'against you then you can apply for a:' )}}
+          </p>
+
+            <ul class="list list-bullet">
+            <li>{{ t('certificate of cancellation if you pay the debt within 28 days') }}</li>
+            <li>{{ t('certificate of satisfaction if you pay the debt after 28 days') }}</li>
+            </ul>
+
+          <h2 class="heading-small">{{ t('Reject the claim') }}</h2>
+          <p>
+          {{ t('If you don`t accept you owe the amount of money claimed you can prepare ' +
+            'and submit your defence online. You might have to go to a hearing - it can ' +
+            'take up to 7 months to get a hearing date.' )}}
+          </p>
+
+          <p>
+            {{ t('If you reject the claim and lose your case, you’ll get a County Court ' +
+            'Judgment (CCJ) ordering you to pay the full claim amount and any costs. ' +
+            'Details of the CCJ will be entered on the Register of Judgments, Orders ' +
+            'and Fines for 6 years.') }}
+          </p>
+
+        </div>
+
+      </details>
+
         <form method="POST" class="analytics-submit-event-trigger" data-event-action="Response: Select defendant response option" data-event-label-from="type[value]" novalidate>
 
         {{ csrfProtection(csrf) }}

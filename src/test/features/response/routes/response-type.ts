@@ -94,7 +94,7 @@ describe('Defendant response: response type page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to task list page when everything is fine', async () => {
+          it('should redirect to send your response by email page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveSave()
@@ -104,11 +104,11 @@ describe('Defendant response: response type page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ type: ResponseType.FULL_ADMISSION })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.taskListPage
+                .toLocation(ResponsePaths.sendYourResponseByEmailPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
-          it('should redirect to reject part of claim page when everything is fine and PART_ADMISSION is selected', async () => {
+          it('should redirect to send your response by email page when everything is fine and PART_ADMISSION is selected', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveSave()
@@ -118,7 +118,7 @@ describe('Defendant response: response type page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ type: ResponseType.PART_ADMISSION })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.defenceRejectPartOfClaimPage
+                .toLocation(ResponsePaths.sendYourResponseByEmailPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
