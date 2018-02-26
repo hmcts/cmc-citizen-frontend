@@ -8,9 +8,8 @@
   <div class="grid-row">
     <div class="column-two-thirds">
       <h1 class="heading-large">
-        {{ t('Is the person or organisation you’re claiming against based in England or Wales?') }}
+        {{ t('Does the person or organisation you’re claiming against have a postal address in England or Wales?') }}
       </h1>
-      <p>{{ t('You can only make a claim against an address in England or Wales.') }}</p>
 
       {% set name = 'defendantAddress' %}
 
@@ -21,7 +20,7 @@
 
         {{
           radioGroup(
-            label = 'Is the person or organisation you’re claiming against based in England or Wales?',
+            label = 'Does the person or organisation you’re claiming against have a postal address in England or Wales?',
             name = name,
             options = [
               {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},

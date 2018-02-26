@@ -1,0 +1,37 @@
+{% extends "layout.njk" %}
+
+{% set title = t('Money claim | Make a legal agreement') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <h1 class="heading-large">{{ t('Make a legal agreement') }}</h1>
+
+      <p>
+        {{ t('You can make a legal agreement to settle out of court.') }}
+        {{ t('It’s based on the information you and {{ name }} have provided. It has not been reviewed by the court.', {
+               name: claim.claimData.defendant.name
+             })
+        }}
+      </p>
+
+      <p>
+        {{ t('You can avoid getting a County Court Judgment (CCJ) if you settle out of court. ') }}
+        {{ t('There will be no public record of the claim.') }}
+      </p>
+
+      <p>
+        {{
+          t('The agreement is a legal contract between you and {{ name }}.', {
+            name: claim.claimData.defendant.name
+          })
+        }}
+      <p>
+
+      <a href="{{ OfferPaths.declarationPage.evaluateUri({ externalId: claim.externalId }) }}" role="button" class="button">
+        {{ t('View the agreement') }}
+      </a>
+    </div>
+  </div>
+{% endblock %}

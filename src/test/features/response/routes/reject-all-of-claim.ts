@@ -16,6 +16,7 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
+import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -69,7 +70,7 @@ describe('Defendant response: full admission options', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('I reject all of the claim'))
+            .expect(res => expect(res).to.be.successful.withText('Why do you reject the claim?'))
         })
       })
     })
@@ -116,7 +117,7 @@ describe('Defendant response: full admission options', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('I reject all of the claim', 'div class="error-summary"'))
+              .expect(res => expect(res).to.be.successful.withText('Why do you reject the claim?', 'div class="error-summary"'))
           })
         })
 
@@ -129,11 +130,11 @@ describe('Defendant response: full admission options', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: 'alreadyPaid' })
+              .send({ option: RejectAllOfClaimOption.ALREADY_PAID })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to mediation page when everything is fine', async () => {
+          it('should redirect to how much paid claimant page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', draftOverride)
             draftStoreServiceMock.resolveSave()
@@ -141,9 +142,23 @@ describe('Defendant response: full admission options', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: 'alreadyPaid' })
+              .send({ option: RejectAllOfClaimOption.ALREADY_PAID })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.taskListPage
+                .toLocation(ResponsePaths.defendantHowMuchPaidClaimant
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          })
+
+          it('should redirect to send your response by email page when counterclaim option is selected', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('response', draftOverride)
+            draftStoreServiceMock.resolveSave()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ option: RejectAllOfClaimOption.COUNTER_CLAIM })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.sendYourResponseByEmailPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })

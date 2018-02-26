@@ -1,0 +1,34 @@
+{% extends "layout.njk" %}
+{% from "support.njk" import supportWidget %}
+
+{% set title = t('Money claim | Claim settled - confirmation page') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <div class="govuk-box-highlight">
+        <h1 class="heading-large">{{ t('You’ve settled out of court') }}</h1>
+
+        <p class="issue-receipt-download">
+          <a href="{{ agreementLink }}">{{ t('Download agreement as a PDF') }}</a>
+        </p>
+      </div>
+
+      <h2 class="heading-medium">{{ t('What happens next') }}</h2>
+      <p>
+        {{ t('You’ve both signed a legal agreement which replaces the claim.') }}
+      </p>
+      <p>
+        {{
+          t('View your claim status on <a href="{{ dashboardUri }}">your money claims account</a>.', {
+            dashboardUri: '/dashboard'
+          }) | safe
+        }}
+      </p>
+
+      {{ supportWidget() }}
+
+      {% include "includes/service_survey_link.njk" %}
+    </div>
+  </div>
+{% endblock %}

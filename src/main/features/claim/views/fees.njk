@@ -12,7 +12,8 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
         <p>
-          {{ t('You must pay a fee to make this claim but we’ll add it to the amount you’re claiming from the defendant.') }}
+          {{ t('You must pay a fee to make this claim but we’ll add it to the amount you’re claiming
+          from the defendant.') }}
         </p>
 
         <table class="form-group">
@@ -55,9 +56,9 @@
               </thead>
               {% for row in rows %}
                 <tr>
-                  <td>{{ row.from | pennies2pounds | numeral }} to {{ row.to | pennies2pounds | numeral }}</td>
-                  <td>{{ row.fees[1] | pennies2pounds | numeral }}</td>
-                  <td>{{ row.fees[2] | pennies2pounds | numeral }}</td>
+                  <td>{{ row.minRange | numeral }} to {{ row.maxRange | numeral }}</td>
+                  <td>{{ row.fees[1] | numeral | default('Not available') }}</td>
+                  <td>{{ row.fees[2] | numeral | default('Not available') }}</td>
                 </tr>
               {% endfor %}
             </table>
