@@ -18,7 +18,7 @@ const feeOutcome = {
   fee_amount: 50
 }
 
-const feeRange = [
+export const feeRange = [
   {
     code: 'X0024',
     fee_type: 'ranged',

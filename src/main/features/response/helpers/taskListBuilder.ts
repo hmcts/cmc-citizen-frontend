@@ -19,7 +19,6 @@ import { WhenDidYouPayTask } from 'response/tasks/whenDidYouPayTask'
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim): TaskList {
     const tasks: TaskListItem[] = []
-    const now: Moment = MomentFactory.currentDateTime()
     const externalId: string = claim.externalId
     tasks.push(
       new TaskListItem(
@@ -28,10 +27,12 @@ export class TaskListBuilder {
         YourDetails.isCompleted(draft)
       )
     )
+
+    const now: Moment = MomentFactory.currentDateTime()
     if (claim.responseDeadline.isAfter(now)) {
       tasks.push(
         new TaskListItem(
-          'More time needed to respond',
+          'Do you want more time to respond?',
           Paths.moreTimeRequestPage.evaluateUri({ externalId: externalId }),
           MoreTimeNeededTask.isCompleted(draft)
         )
@@ -41,11 +42,13 @@ export class TaskListBuilder {
     return new TaskList(1, 'Before you start', tasks)
   }
 
-  static buildRespondToClaimSection (draft: ResponseDraft, externalId: string): TaskList {
+  static buildRespondToClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
+    const externalId: string = claim.externalId
     const tasks: TaskListItem[] = []
+
     tasks.push(
       new TaskListItem(
-        'Do you owe the money claimed',
+        'Choose a response',
         Paths.responseTypePage.evaluateUri({ externalId: externalId }),
         OweMoneyTask.isCompleted(draft)
       )
@@ -94,7 +97,7 @@ export class TaskListBuilder {
     if (draft.requireDefence()) {
       tasks.push(
         new TaskListItem(
-          'Your defence',
+          'Why do you disagree with the claim?',
           Paths.defencePage.evaluateUri({ externalId: externalId }),
           YourDefenceTask.isCompleted(draft)
         )
@@ -133,7 +136,7 @@ export class TaskListBuilder {
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {
     return [].concat(
       TaskListBuilder.buildBeforeYouStartSection(draft, claim).tasks,
-      TaskListBuilder.buildRespondToClaimSection(draft, claim.externalId).tasks
+      TaskListBuilder.buildRespondToClaimSection(draft, claim).tasks
     )
       .filter(item => !item.completed)
   }

@@ -47,7 +47,7 @@ describe('Defendant user details: your date of birth page', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('What is your date of birth?'))
+            .expect(res => expect(res).to.be.successful.withText('Add your date of birth'))
         })
       })
     })
@@ -78,7 +78,7 @@ describe('Defendant user details: your date of birth page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('What is your date of birth?', 'div class="error-summary"'))
+              .expect(res => expect(res).to.be.successful.withText('Add your date of birth', 'div class="error-summary"'))
           })
         })
 

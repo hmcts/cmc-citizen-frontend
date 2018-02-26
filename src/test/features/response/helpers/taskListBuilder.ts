@@ -8,6 +8,9 @@ import { TaskList } from 'drafts/tasks/taskList'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { LocalDate } from 'forms/models/localDate'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import { Claim } from 'claims/models/claim'
+
+const claim: Claim = new Claim().deserialize(claimStoreServiceMock.sampleClaimObj)
 
 describe('Defendant response task list builder', () => {
   describe('"Respond to claim" section', () => {
@@ -25,14 +28,14 @@ describe('Defendant response task list builder', () => {
       it('should be enabled when mediation is available', () => {
         stub.returns(true)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claimStoreServiceMock.sampleClaimObj.externalId)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('Free mediation')
       })
 
       it('should be disabled when mediation is not available', () => {
         stub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claimStoreServiceMock.sampleClaimObj.externalId)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('Free mediation')
       })
     })
@@ -59,14 +62,14 @@ describe('Defendant response task list builder', () => {
           }
         }
         const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claimStoreServiceMock.sampleClaimObj.externalId)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('How much have you paid the claimant?')
       })
 
       it('should be disabled in remaining cases', () => {
         stub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claimStoreServiceMock.sampleClaimObj.externalId)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('How much have you paid the claimant?')
       })
     })
@@ -92,14 +95,14 @@ describe('Defendant response task list builder', () => {
           }
         }
         const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claimStoreServiceMock.sampleClaimObj.externalId)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('When did you pay?')
       })
 
       it('should be disabled in remaining cases', () => {
         isResponseRejectedFullyWithAmountClaimedPaidStub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claimStoreServiceMock.sampleClaimObj.externalId)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('When did you pay?')
       })
     })
@@ -161,7 +164,7 @@ describe('Defendant response task list builder', () => {
         isResponseFullyAdmittedStub.returns(true)
         isResponsePartiallyRejectedDueToStub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claimStoreServiceMock.sampleClaimObj.externalId)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('When will you pay?')
       })
 
@@ -176,7 +179,7 @@ describe('Defendant response task list builder', () => {
             text: 'I owe nothing'
           }
         }
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft().deserialize(input), claimStoreServiceMock.sampleClaimObj.externalId)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft().deserialize(input), claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('When will you pay?')
       })
 
@@ -184,7 +187,7 @@ describe('Defendant response task list builder', () => {
         isResponseFullyAdmittedStub.returns(false)
         isResponsePartiallyRejectedDueToStub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claimStoreServiceMock.sampleClaimObj.externalId)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('When will you pay?')
       })
     })

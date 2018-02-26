@@ -1,46 +1,39 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import radioGroup, saveAndContinueButton, errorSummary %}
 {% from "support.njk" import supportWidget %}
+{% from "feesTable.njk" import feesTable %}
 
 {% set title = t('Money claim') %}
 
-{% set heading = t('Next steps') %}
+{% set heading = t('How to complete and send your response') %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
       <div class="panel-indent">
         <div class="panel panel-border-wide">
-          <p>{{ t('Complete and email the defence and counterclaim form by %s',
-            { postProcess: 'sprintf', sprintf: [claim.responseDeadline | date]}) }}</p>
-          <p>{{ t('To make a counter claim you will have to pay a fee. Court staff can tell you how much you have to pay.') }}</p>
+          <p>{{ t('Complete and email the defence and counterclaim form by <span class="bold-small">{{ responseDeadline }}', { responseDeadline: claim.responseDeadline | date  }) | safe }} </span></p>
         </div>
       </div>
 
+      <p>{{ t('You’ll need to pay a court fee if you make a counterclaim.') }}</p>
+
+      {{ feesTable('View claim fees', rows ) }}
+
       <ul class="list list-number">
         <li>
-          {{ t('Complete <a href="%s" target="_blank">defence and counterclaim form N9B</a> <span class="font-xsmall">(opens in a new window)</span> entering these details:',
-          { postProcess: 'sprintf', sprintf: [asset_paths["pdf"] + '/OCON9B.pdf']}) | safe }}
+          {{ t('Complete <a href="{{ link }}" download="download" target="_blank">defence and counterclaim form N9B</a> entering these details:',
+          { link : [asset_paths["pdf"] + '/OCON9B.pdf']}) | safe }}
           <ul class="list list-bullet">
             <li>{{ t('Claim No.') }} {{ claim.claimNumber }}</li>
             <li>{{ t('Claimant') }} {{ claim.claimData.claimant.name }}</li>
             <li>{{ t('Defendant') }} {{ response.defendantDetails.partyDetails.name }}</li>
           </ul>
         </li>
-        <li>{{ t('Download and attach the completed form to an email') }}</li>
-        <li>{{ t('Send the email with the attached form to') }} <a href="mailto:{{ supportEmailAddress }}?Subject={{ claim.claimNumber }}">{{ supportEmailAddress }}</a></li>
+        <li>{{ t('Save the completed form to your device.') }}</li>
+        <li>{{ t('Email the form to <a href="mailto:{{ supportEmailAddress }}?Subject={{ claimNumber }}">{{ supportEmailAddress }}</a>',
+                  { supportEmailAddress: supportEmailAddress, claimNumber: claim.claimNumber }) | safe }} </li>
       </ul>
-
-      <p>
-        {{ t('You need to pay a claim fee as part of your counterclaim. Find out more about
-        <a href="%s" target="_blank">claim fees</a>.',
-        { postProcess: 'sprintf', sprintf: ['https://www.gov.uk/make-court-claim-for-money/court-fees']}) | safe }}
-      </p>
-
-      <p>
-        {{ t('You need <a target="_blank" href="%s">Acrobat Reader</a> to complete these forms.',
-        { postProcess: 'sprintf', sprintf: ['https://get.adobe.com/uk/reader/']}) | safe }}
-      </p>
 
       {{ supportWidget() }}
 

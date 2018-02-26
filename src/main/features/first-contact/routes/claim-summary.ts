@@ -7,6 +7,8 @@ import { ClaimReferenceMatchesGuard } from 'first-contact/guards/claimReferenceM
 import { JwtExtractor } from 'idam/jwtExtractor'
 import { ClaimantRequestedCCJGuard } from 'first-contact/guards/claimantRequestedCCJGuard'
 import { OAuthHelper } from 'idam/oAuthHelper'
+import { getInterestDetails } from 'common/interest'
+import { MomentFactory } from '../../../common/momentFactory'
 
 const sessionCookie = config.get<string>('session.cookieName')
 
@@ -21,7 +23,11 @@ export default express.Router()
     ClaimantRequestedCCJGuard.requestHandler,
     async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const claim: Claim = res.locals.claim
-      res.render(Paths.claimSummaryPage.associatedView, { claim: claim })
+      const interestData = await getInterestDetails(claim)
+      res.render(Paths.claimSummaryPage.associatedView, {
+        interestData: interestData,
+        toDate: MomentFactory.currentDate()
+      })
     })
   .post(Paths.claimSummaryPage.uri, (req: express.Request, res: express.Response): void => {
     new Cookies(req, res).set(sessionCookie, '', { sameSite: 'lax' })
