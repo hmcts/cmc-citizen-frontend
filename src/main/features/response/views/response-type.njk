@@ -7,67 +7,54 @@
   <div class="grid-row">
     <div class="column-two-thirds">
 
-      <h1 class="heading-large">{{ t('Do you owe the money claimed?') }}</h1>
+      <h1 class="heading-large">{{ t('How do you respond to the claim?') }}</h1>
 
-      <p>
-        {{ t('You could get a County Court Judgment (CCJ) in all cases.') }}
-      </p>
+      <details class="form-group">
+        <summary>{{ t('Find out what each response means') }}</summary>
 
-      <details class="notice">
-        <summary><span class="summary">{{ t('Find out when you could get a CCJ') }}</span></summary>
-        <div class="panel panel-border-narrow">
-          <h2 class="heading-small">{{ t('Admit all of the claim') }}</h2>
-          <p>
-            {{ t('If you admit all of the claim is fair you can contact the claimant yourself ' +
-          'and pay the money. Ask them to let the court know when they have your ' +
-          'payment.' )}}
-          </p>
+        <div class="panel">
+          <h2 class="heading-medium">{{ t('Admit all of the claim') }}</h2>
 
-          <p>
-            {{ t('The claimant can ask for a County Court Judgment (CCJ) to be made ' +
-            'against you if you admit the claim. If they ask for a CCJ to be made you ' +
-            'against you then you can apply for a:' )}}
-          </p>
+          <p>{{ t('You have 19 days from the date of issue to admit the claim. The date of issue is on the claim form.') }}</p>
 
-          <ul class="list list-bullet">
-            <li>{{ t('certificate of cancellation if you pay the debt within 28 days') }}</li>
-            <li>{{ t('certificate of satisfaction if you pay the debt after 28 days') }}</li>
-          </ul>
+          <h3 class="heading-small form-group-related">{{ t('Pay immediately') }}</h3>
+          <p>{{ t('If you admit all the claim and want to pay it in full, including interest and claim fee, contact the claimant to arrange payment.') }}</p>
+          <p>{{ t('If you pay at the same time as admitting the claim, you won’t get a County Court Judgment (CCJ).') }}</p>
+          <p>{{ t('You should ask the claimant to give you a receipt.') }}</p>
 
+          <h3 class="heading-small form-group-related">{{ t('If you can’t pay immediately') }}</h3>
+          <p>{{ t('If you admit all the claim but can’t pay immediately, you can offer to pay the claimant in instalments.') }}</p>
+          <p>{{ t('If the claimant accepts your offer, they can ask the court to enter a CCJ against you and you’ll be sent an order to pay.') }}</p>
+          <p>{{ t('If the claimant rejects your offer, they can ask the court to enter a CCJ against you. The court will then decide the instalment plan.') }}</p>
 
-          <h2 class="heading-small">{{ t('Admit part of the claim') }}</h2>
-          <p>
-            {{ t('If you think the claim is too high you can offer the amount you think you ' +
-              'owe as part of your defence. You’ll get the chance to explain why your offer ' +
-              'is the amount you believe you owe.' )}}
-          </p>
+          <h2 class="heading-medium">{{ t('Admit part of the claim') }}</h2>
+          <p>{{ t('You have 19 days from the date of issue to partly admit the claim. The date of issue is on the claim form.') }}</p>
+          <h3 class="heading-small form-group-related">{{ t('Pay immediately') }}</h3>
+          <p>{{ t('To admit part of the claim, contact the claimant and pay the amount you believe you owe then send the court your part admission.') }}</p>
+          <p>{{ t('They can accept the amount you’ve paid and settle the claim, or ask the court to transfer the claim to a County Court hearing centre.') }}</p>
 
-          <p>
-            {{ t('The claimant can ask for a County Court Judgment (CCJ) to be made ' +
-            'against you if you part admit the claim. If they ask for a CCJ to be made you ' +
-            'against you then you can apply for a:' )}}
-          </p>
+          <h3 class="heading-small form-group-related">{{ t('If you can’t pay immediately') }}</h3>
+          <p>{{ t('If the claimant accepts your part-admission and you can’t pay immediately, you can offer to pay in instalments.') }}</p>
+          <p>{{ t('If the claimant agrees, they can ask the court to enter a CCJ against you and you’ll be sent an order to pay.') }}</p>
+          <p>{{ t('If they reject your offer, the court will decide an instalment plan.') }}</p>
 
-            <ul class="list list-bullet">
-            <li>{{ t('certificate of cancellation if you pay the debt within 28 days') }}</li>
-            <li>{{ t('certificate of satisfaction if you pay the debt after 28 days') }}</li>
-            </ul>
+          <h2 class="heading-medium">{{ t('Reject all of the claim') }}</h2>
+          <p>{{ t('You can partly admit the claim and offer to pay what you believe you owe in instalments.') }}</p>
+          <p>{{ t('If the claimant agrees, they can ask court to enter a CCJ against you and you’ll be sent an order to pay.') }}</p>
+          <p>{{ t('If they reject your offer, the court will decide an instalment plan.') }}</p>
 
-          <h2 class="heading-small">{{ t('Reject the claim') }}</h2>
-          <p>
-          {{ t('If you don`t accept you owe the amount of money claimed you can prepare ' +
-            'and submit your defence online. You might have to go to a hearing - it can ' +
-            'take up to 7 months to get a hearing date.' )}}
-          </p>
+          <h2 class="heading-medium">{{ t('Reject all of the claim') }}</h2>
+          <p>{{ t('If you reject all of the claim, the claim may be transferred to a County Court hearing centre.') }}</p>
+          <p>{{ t('If you reject because you believe you’ve paid the money, the claimant has 28 days to tell you and the court whether they’re ' +
+                  'proceeding with the claim. If they proceed, the claim may be transferred to a County Court hearing centre.') }}</p>
 
-          <p>
-            {{ t('If you reject the claim and lose your case, you’ll get a County Court ' +
-            'Judgment (CCJ) ordering you to pay the full claim amount and any costs. ' +
-            'Details of the CCJ will be entered on the Register of Judgments, Orders ' +
-            'and Fines for 6 years.') }}
-          </p>
-
+          <h2 class="heading-medium">{{ t('Hearing centre location') }}</h2>
+          <p>{{ t('If the claim is against you as an individual, the hearing centre will be the nearest one to your home or business.') }}</p>
+          <p>{{ t('If the claimant is an individual and the claim is against you as an organisation, the hearing centre will be the nearest one to their home or business.') }}</p>
         </div>
+      </details>
+
+      </div>
 
       </details>
 
@@ -88,12 +75,12 @@
 
             {{ radioOption(form = form, name = 'type[value]', value = ResponseType.PART_ADMISSION.value,
               label = 'I admit part of the claim', bold = true,
-              hint = 'You agree you owe some money but not the amount claimed.'
+              hint = 'You agree you owe some money but not the amount claimed'
             )}}
 
             {{ radioOption(form = form, name = 'type[value]', value = ResponseType.DEFENCE.value,
               label = 'I reject all of the claim', bold = true,
-              hint = 'You have either paid the claim in full or you reject the claim'
+              hint = 'You have either paid what you believe you owe or you reject the claim'
             )}}
 
           </fieldset>

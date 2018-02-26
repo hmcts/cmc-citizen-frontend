@@ -13,6 +13,7 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
+      <p>{{ t('The claimant provided these details. You can correct your address.') }}</p>
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
         <input type="hidden" name="type" value="{{ form.model.type }}">
@@ -20,7 +21,7 @@
         {% if form.model.type == 'individual' %}
           {%
             set fields = [
-              { readOnly: true, label: 'Your full name', value: claim.claimData.defendant.name }
+              { readOnly: true, label: 'Full name', value: claim.claimData.defendant.name }
             ]
           %}
           {% set addressSectionHeading = 'Your address' %}

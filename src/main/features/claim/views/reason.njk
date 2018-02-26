@@ -14,16 +14,19 @@
         {% set error = form.errorFor(name) %}
         <div class="form-group {% if error %} form-group-error {% endif %}">
           <label for="{{ name }}" id="{{ name }}[label]">
-            <span class="form-label">
-              {{ t('Briefly explain why you believe the defendant owes you money.') }}
-            </span>
+            <p class="form-label">
+              {{ t('Explain why you believe the defendant owes you money.') }}
+            </p>
+            <p class="form-label">
+              {{ t('List any evidence or documents which support your claim - you might be asked to provide them later.') }}
+            </p>
 
             {% if error %}
               <span class="error-message">{{ t(error) }}</span>
             {% endif %}
           </label>
 
-          <textarea id="{{ name }}" name="{{ name }}" rows="10" class="form-control form-control-3-4 {% if error %}form-control-error{% endif %}">{{ form.valueFor(name) | default('') }}</textarea>
+          <textarea id="{{ name }}" name="{{ name }}" rows="10" class="form-control full-width {% if error %}form-control-error{% endif %}">{{ form.valueFor(name) | default('') }}</textarea>
         </div>
 
         {{ saveAndContinueButton() }}

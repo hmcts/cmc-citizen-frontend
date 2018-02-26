@@ -8,9 +8,7 @@
       <div class="column-two-thirds">
         <h1 class="heading-large">{{ t('About you and this claim') }}</h1>
 
-
-        <p>We need to know if you’re making this claim as an individual, sole trader or on behalf of a company or an organisation.</p>
-        <p>{{ t('I’m claiming as an:') }}</p>
+        <p>{{ t('I’m claiming as:') }}</p>
         <form method="POST" novalidate>
           {{ csrfProtection(csrf) }}
 
@@ -23,21 +21,21 @@
               options = [
                 {
                   bold: true,
-                  label: 'Individual',
+                  label: 'An individual',
                   hint: 'You are claiming for yourself',
                   value: 'individual',
                   checked: (form.valueFor('type').value === 'individual')
                 },
                 {
                   bold: true,
-                  label: 'Sole trader or self-employed person',
+                  label: 'A sole trader or self-employed person',
                   hint: 'For example as a tradesperson',
                   value: 'soleTrader',
                   checked: (form.valueFor('type').value === 'soleTrader')
                 },
                 {
                   bold: true,
-                  label: 'Company',
+                  label: 'A company',
                   hint: 'For example a company that sells goods and services',
                   value: 'company',
                   checked: (form.valueFor('type').value === 'company')

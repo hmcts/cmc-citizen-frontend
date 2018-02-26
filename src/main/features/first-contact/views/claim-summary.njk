@@ -1,51 +1,42 @@
 {% extends "layout.njk" %}
 {% from "subheading.njk" import subheading %}
 {% from "form.njk" import csrfProtection, submitButton %}
+{% from "amountBreakdown.njk" import amountBreakdownTable %}
 
 {% set title = t('Money claim') %}
-{% set heading = t('View the claim') %}
+{% set heading = t('Claim details') %}
 
-{% set claimantFullName = claim.claimData.claimant.name %}
 {% set responseDeadline = claim.responseDeadline.format('LL') %}
 {% set referenceNumber = claim.claimNumber %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
+      <p><span class="bold-small">{{ t('Claim number:') }}</span> {{ referenceNumber }}</p>
+      <p><span class="bold-small">{{ t('Claim amount:') }}</span> {{ claim.totalAmountTillToday | numeral }}</p>
 
-      <p>
-      {{ t('%s has made a money claim against you.',
-                {
-                  postProcess: 'sprintf',
-                  sprintf: [claimantFullName]
-                }
-        )
-      }}
-      </p>
-      <p class="panel panel-border-wide">
-        {{ t('You have until <strong class="bold">%s</strong> to respond to this claim. You might have to pay more and the claimant can apply for a <a href="https://www.gov.uk/county-court-judgments-ccj-for-debt">County Court Judgment (CCJ)</a> against you if you don’t respond in time.',
-        {
-          postProcess: 'sprintf',
-          sprintf: [responseDeadline]
-        }
-        ) | safe
-        }}
+      {{ amountBreakdownTable('View amount breakdown', claim, interestData, toDate) }}
 
-      </p>
-      {{ subheading( t('Claim details')) }}
-      <p><span class="bold">{{ t('Number:') }}</span> {{ referenceNumber }}</p>
-      <p><span class="bold">{{ t('Amount:') }}</span> {{ claim.totalAmountTillToday | numeral }}</p>
+      <p class="bold form-group-related">{{ t('Reason for claim:') }}</p>
+      <p>{{ claim.claimData.reason }}</p>
 
-      <p class="bold">{{ t('Reason for claim:') }}</p>
-      <p>
-        {{ claim.claimData.reason }}
-      </p>
+      <div class="panel panel-border-wide">
+        <p>{{ t('Your response will be sent to the claimant {{ claimantFullName }}.', { claimantFullName: claim.claimData.claimant.name }) }}</p>
+      </div>
 
       <form method="POST">
         {{ csrfProtection(csrf) }}
 
         {{ submitButton('Respond to claim') }}
       </form>
+
+      <details>
+        <summary>{{ t('How we use and store your personal information') }}</summary>
+        <div class="panel panel-border">
+          <p>{{ t('This claim contains personal information about you that Jan Clark has provided, for example your name and address.') }}</p>
+          <p>{{ t('Find out about how we use and store your <a href="{{ link }}" target="_self">personal information</a>.', { link: AppPaths.privacyPolicyPage.uri }) | safe }}</p>
+        </div>
+      </details>
     </div>
   </div>
 {% endblock %}

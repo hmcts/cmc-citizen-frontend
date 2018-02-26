@@ -11,7 +11,7 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        <p>{{ t('Your claim could be for a single amount or might be made up of multiple items') }}</p>
+        <p>{{ t('Your claim could be for a single amount or might be made up of multiple items.') }}</p>
         <div class="panel panel-border-wide">
           <p>{{ t('Don’t include interest - we’ll ask you about this next.') }}</p>
 
@@ -23,7 +23,7 @@
               <div id="claim-amount-heading-1" class="claim-amount-column-1 mobile-hide">
                 <span id="claim-reason-label" class="form-label-bold">{{ t('What you’re claiming for') }}</span>
                 <span id="claim-reason-hint" class="form-hint">
-                  {{ t('Briefly explain why you’re claiming for this - for example, “unpaid debt” or “house deposit not returned”') }}
+                  {{ t('Briefly explain each item - for example, "broken tiles", "roof damage"') }}
                 </span>
               </div>
               <div id="claim-amount-heading-2" class="claim-amount-column-2 mobile-hide">
