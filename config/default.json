@@ -88,8 +88,5 @@
   },
   "postcodeLookup": {
     "apiKey": "AAAAAAA"
-  },
-  "appInsights": {
-    "instrumentationKey": "app-insights-instrumentation-key"
   }
 }
