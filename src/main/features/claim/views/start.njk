@@ -10,7 +10,7 @@
   <div class="grid-row">
     <div class="column-two-thirds">
       <h1 class="heading-large">{{ t('Make a money claim') }}</h1>
-      <p>{{ t('You can make a money claim if a person or organisation owes you money and won’t pay you back.') }}</p>
+      <p>{{ t('You can make a money claim if you believe a person or organisation owes you money and won’t pay you back.') }}</p>
       <p class="panel panel-border-wide">
         {{ t('Before claiming you should contact the person or organisation to try to find a solution. '
         + 'Find out <a href="{{ uri }}">how you can resolve a claim by discussion or mediation.</a>',
@@ -33,6 +33,8 @@
         </li>
       </ul>
 
+      <p>{{ t('You can’t claim against a person who has already hired a legal representative to represent them for the dispute.') }}</p>
+
       <div class="clearfix">
         <a class="button button-start" href="{{ startLink }}" role="button">{{ t('Start now') }}</a>
       </div>
@@ -46,7 +48,7 @@
       </ul>
 
       <h2 class="heading-medium">{{ t('Claim by paper') }}</h2>
-      <p>{{ t('You can also print and complete a <a href="{{ paperFormUri }}">paper claim form</a>.',
+      <p>{{ t('You can print and complete a <a href="{{ paperFormUri }}">paper claim form</a> instead of using this service.',
         { paperFormUri: 'http://hmctsformfinder.justice.gov.uk/HMCTS/GetForm.do?court_forms_id=338' }) | safe }}</p>
       <p>{{ t('Send the form and a cheque for your <a href="{{ claimFeeUri }}">claim fee</a> to:',
         { claimFeeUri: 'https://www.gov.uk/make-court-claim-for-money/court-fees'}) | safe }}</p>
