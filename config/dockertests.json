@@ -7,5 +7,8 @@
     "offer": true,
     "statementOfMeans": true,
     "finePrint": true
+  },
+  "appInsights": {
+    "instrumentationKey": "dummy-app-insights-instrumentation-key"
   }
 }
