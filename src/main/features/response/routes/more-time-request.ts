@@ -16,8 +16,12 @@ import { Claim } from 'claims/models/claim'
 
 function renderView (form: Form<MoreTimeNeeded>, res: express.Response, next: express.NextFunction) {
   try {
+    const claim: Claim = res.locals.claim
+    const moreTimeDeadline: string = 'You’ll have until 4pm on ' + claim.responseDeadline.format('LL') + ' to respond'
+
     res.render(Paths.moreTimeRequestPage.associatedView, {
-      form: form
+      form: form,
+      moreTimeDeadline: moreTimeDeadline
     })
   } catch (err) {
     next(err)

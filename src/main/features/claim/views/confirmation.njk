@@ -14,7 +14,7 @@
           <h1 class="bold-large">{{ claimNumber }}</h1>
         </div>
         <p class="issue-receipt-download">
-          <a href="/claim/{{ externalId }}/receipt">{{ t('Download claim as pdf') }}</a>
+          <a href="/claim/{{ externalId }}/receipt">{{ t('Download your claim as a PDF') }}</a>
         </p>
 
       </div>
@@ -38,12 +38,10 @@
           }
         ) | safe }}
       </p>
-      <p>{{ t('You can view the claim at any time on <a href="{{ dashboard }}"> your money claims account</a>.',
-          {
-            dashboard: '/dashboard'
-          }) | safe }}</p>
 
       {% include "includes/service_survey_link.njk" %}
+
+      <a class="button" href="/dashboard" >{{ t('Go to your account') }}</a>
 
       {{ supportWidget() }}
 
