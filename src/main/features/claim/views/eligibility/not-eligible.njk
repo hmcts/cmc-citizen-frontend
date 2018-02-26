@@ -52,8 +52,8 @@
           {{ t('Use <a target="_blank" href="{{ legacyServiceUrl }}">Money Claim Online (MCOL)</a> ' + newWindow()
           + ' for claims between £10,001 and £100,000.',
           { legacyServiceUrl: legacyServiceUrl }) | safe }}</p>
-        <p>{{ t('Use <a target="_blank" href="{{  n1FormUrl }}">form N1</a> ' + newWindow() + ' for claims over £100,000.',
-          { n1FormUrl: n1FormUrl }) | safe }}</p>
+        <p>{{ t('Use <a target="_blank" href="{{ n1FormUrl }}">form N1</a> ' + newWindow() + ' for claims over £100,000.',
+          { n1FormUrl: [ n1FormUrl ]}) | safe }}</p>
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.UNDER_18 %}
         <p>{{ t('You need to be 18 or over to use this service.') }}</p>

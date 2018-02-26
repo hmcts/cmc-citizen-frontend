@@ -33,7 +33,7 @@
           {% endif %}
           <tr>
             <td scope="col">{{ t('Claim fee') }}</td>
-            <td class="numeric last">{{ feeAmount | numeral }}</td>
+            <td class="numeric last">{{ claim.claimData.feeAmountInPennies | pennies2pounds | numeral }}</td>
           </tr>
           <tr>
             <td class="bold-small" scope="row">{{ t('Claim Total') }}</td>
