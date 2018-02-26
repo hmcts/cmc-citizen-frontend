@@ -1,3 +1,7 @@
+import { AppInsights } from 'modules/app-insights'
+// App Insights needs to be enabled as early as possible as it monitors other libraries as well
+AppInsights.enable()
+
 import * as express from 'express'
 import * as config from 'config'
 import * as path from 'path'
