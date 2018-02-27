@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { Paths } from 'response/paths'
 import { Claim } from 'claims/models/claim'
-import { getInterestDetails } from 'common/interest'
+import { getInterestDetails } from 'common/interestUtils'
 import { MomentFactory } from 'common/momentFactory'
 
 /* tslint:disable:no-default-export */
