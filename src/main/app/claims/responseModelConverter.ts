@@ -17,6 +17,8 @@ import { Defendant } from 'drafts/models/defendant'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { ResponseType as FormResponseType } from 'response/form/models/responseType'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
+import { WhenDidYouPay } from 'claims/models/whenDidYouPay'
+import { WhenDidYouPay as DraftWhenDidYouPay } from 'response/form/models/whenDidYouPay'
 
 export class ResponseModelConverter {
 
@@ -36,6 +38,7 @@ export class ResponseModelConverter {
       freeMediation: responseDraft.freeMediation && responseDraft.freeMediation.option,
       moreTimeNeeded: responseDraft.moreTimeNeeded && responseDraft.moreTimeNeeded.option,
       defendant: this.convertPartyDetails(responseDraft.defendantDetails),
+      whenDidYouPay: this.convertWhenDidYouPay(responseDraft.whenDidYouPay),
       statementOfTruth
     }
   }
@@ -92,4 +95,7 @@ export class ResponseModelConverter {
     return party
   }
 
+  private static convertWhenDidYouPay (whenDidYouPay: DraftWhenDidYouPay): WhenDidYouPay {
+    return new WhenDidYouPay(whenDidYouPay.date.toMoment(), whenDidYouPay.text)
+  }
 }
