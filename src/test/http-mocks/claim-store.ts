@@ -62,7 +62,8 @@ export const sampleClaimObj = {
     interest: {
       type: InterestType.STANDARD
     },
-    reason: 'Because I can'
+    reason: 'Because I can',
+    feeAmountInPennies: 2500
   },
   responseDeadline: '2017-08-08',
   countyCourtJudgment: {
