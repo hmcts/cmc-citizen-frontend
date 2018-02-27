@@ -11,6 +11,10 @@
           .addEventListener('click', function (event) {
             event.preventDefault()
 
+            if (postcodeLookupWidget.querySelector('.form-control-error')) {
+              enterManuallyLink(postcodeLookupWidget).classList.remove('hidden')
+              hideManualErrorMessages()
+            }
             hide(postcodeAddressPicker(postcodeLookupWidget))
             clearAddressFields(postcodeLookupWidget)
             hide(addressSection(postcodeLookupWidget))
@@ -73,6 +77,33 @@
           })
       })
   })
+
+  function hideManualErrorMessages () {
+    allFormControlErrors()
+      .forEach(function (element) {
+        element.classList.remove('form-control-error')
+      })
+    allFormGroupErrors()
+      .forEach(function (element) {
+        element.classList.remove('form-group-error')
+      })
+    allErrorMessages()
+      .forEach(function (element) {
+        element.classList.add('visually-hidden')
+      })
+  }
+
+  function allFormControlErrors () {
+    return document.querySelectorAll('.form-control-error')
+  }
+
+  function allFormGroupErrors () {
+    return document.querySelectorAll('.form-group-error')
+  }
+
+  function allErrorMessages () {
+    return document.querySelectorAll('.error-message')
+  }
 
   function show (element) {
     // IE doesn't support multiple arguments to classList
