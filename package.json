@@ -77,6 +77,7 @@
     "reflect-metadata": "^0.1.10",
     "request": "^2.81.0",
     "request-promise-native": "^1.0.3",
+    "requestretry": "^1.13.0",
     "require-directory": "^2.1.1",
     "serve-favicon": "^2.3.0",
     "string.prototype.startswith": "^0.2.0",
