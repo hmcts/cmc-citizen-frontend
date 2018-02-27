@@ -5,11 +5,7 @@
 //noinspection GroovyAssignabilityCheck
 properties([
 		parameters([
-			string(name: 'PRODUCT_NAME', defaultValue: 'cmc', description: ''),
-			string(name: 'APP', defaultValue: 'citizen-frontend', description: ''),
-			string(name: 'TYPE', defaultValue: 'nodejs', description: ''),
-			string(name: 'ENVIRONMENT', defaultValue: 'sandbox', description: 'Environment where code should be build and deployed'),
-			choice(name: 'SUBSCRIPTION', choices: 'sandbox\nnonprod\nprod', description: 'Azure subscriptions available to build in')
+			choice(name: 'ENVIRONMENT', choices: 'saat\nsprod', description: 'Environment where code should be build and deployed')
 		])
 ])
 
@@ -28,7 +24,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 }
 
 
-withParameterizedPipeline(params.TYPE, params.PRODUCT_NAME, params.APP, params.ENVIRONMENT, params.SUBSCRIPTION) {
+withParameterizedPipeline('nodejs', 'cmc', 'citizen-frontend', params.ENVIRONMENT, 'sandbox') {
   after('build') {
     sh 'yarn setup'
   }
