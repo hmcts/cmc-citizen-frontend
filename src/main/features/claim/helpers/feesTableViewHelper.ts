@@ -1,4 +1,9 @@
 import { isUndefined } from 'util'
+import { FeesClient } from 'fees/feesClient'
+import { FeeRange as MergeableRange } from 'claim/helpers/feesTableViewHelper'
+import { FeeRange as ViewFeeRange } from 'fees/models/feeRange'
+
+const supportedFeeLimitInGBP: number = 10000
 
 interface RangePartial {
   minRange: number
@@ -89,5 +94,23 @@ export class FeesTableViewHelper {
 
       return feeRangeMerge
     }, []).sort(RangeUtils.compare)
+  }
+
+  static async feesTableContent (): Promise<FeeRangeMerge[]> {
+    const issueFeeRangeGroup: ViewFeeRange[] = await FeesClient.getIssueFeeRangeGroup()
+    const hearingFeeRangeGroup: ViewFeeRange[] = await FeesClient.getHearingFeeRangeGroup()
+
+    const supportedIssueFees: MergeableRange[] = issueFeeRangeGroup
+      .filter((range: ViewFeeRange) => range.minRange < supportedFeeLimitInGBP)
+      .map((range: ViewFeeRange) => new MergeableRange(
+        range.minRange, Math.min(range.maxRange, supportedFeeLimitInGBP), range.currentVersion.flatAmount.amount)
+      )
+    const supportedHearingFees: MergeableRange[] = hearingFeeRangeGroup
+      .filter((range: ViewFeeRange) => range.minRange < supportedFeeLimitInGBP)
+      .map((range: ViewFeeRange) => new MergeableRange(
+        range.minRange, Math.min(range.maxRange, supportedFeeLimitInGBP), range.currentVersion.flatAmount.amount)
+      )
+
+    return this.merge(supportedIssueFees, supportedHearingFees)
   }
 }

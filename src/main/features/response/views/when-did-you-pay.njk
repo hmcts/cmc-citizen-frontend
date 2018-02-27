@@ -11,7 +11,6 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        <h4 class="heading-small">{{ t('When did you pay the amount?') }}</h4>
         {{ dateInput(name = 'date', form = form) }}
 
         {{ textArea(label = t('How did you pay the amount claimed?'), name = 'text', form = form) }}
