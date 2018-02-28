@@ -8,11 +8,11 @@ import { Eligibility } from 'claim/form/models/eligibility/eligibility'
 import { FormValidator } from 'forms/validation/formValidator'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
-import { YesNoOption } from 'app/models/yesNoOption'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
+import { Over18Defendant } from 'claim/form/models/eligibility/over18Defendant'
 
 function renderView (form: Form<Eligibility>, res: express.Response): void {
   res.render(Paths.eligibilityOver18DefendantPage.associatedView, { form: form })
@@ -35,12 +35,12 @@ export default express.Router()
       } else {
         const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
-        draft.document.eligibility.eighteenOrOver = form.model.eighteenOrOver
+        draft.document.eligibility.eighteenOrOverDefendant = form.model.eighteenOrOverDefendant
 
         await new DraftService().save(draft, user.bearerToken)
 
-        if (draft.document.eligibility.eighteenOrOver === YesNoOption.NO) {
-          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.UNDER_18}`)
+        if (draft.document.eligibility.eighteenOrOverDefendant === Over18Defendant.NO) {
+          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.UNDER_18_DEFENDANT}`)
         } else {
           res.redirect(Paths.eligibilityClaimTypePage.uri)
         }

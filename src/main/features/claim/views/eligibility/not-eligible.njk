@@ -60,6 +60,11 @@
         <p>{{ t('You might be able to get advice from organisations like ' +
           '<a target="_blank" href="{{ citizensAdviceUrl }}">Citizens Advice</a> ' + newWindow() + ' about making a claim.',
           { citizensAdviceUrl: citizensAdviceUrl }) | safe }}</p>
+      {% elseif reason === NotEligibleReason.UNDER_18_DEFENDANT %}
+        <p>{{ t('You can only use this service to claim against a defendant who’s 18 or over.') }}</p>
+        <p>{{ t('You might be able to get advice from organisations like ' +
+            '<a target="_blank" href="{{ citizensAdviceUrl }}">Citizens Advice</a> ' + newWindow() + ' about making a claim.',
+            { citizensAdviceUrl: citizensAdviceUrl }) | safe }}</p>
       {% elseif reason === NotEligibleReason.HELP_WITH_FEES %}
         <p>{{ t('You need to use the paper service if you want <a target="_blank" href="{{ feesHelpUri }}">help paying your court fees</a>.'
           + newWindow() + '.',
