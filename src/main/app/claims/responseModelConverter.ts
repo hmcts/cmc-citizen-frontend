@@ -96,6 +96,6 @@ export class ResponseModelConverter {
   }
 
   private static convertWhenDidYouPay (whenDidYouPay: DraftWhenDidYouPay): WhenDidYouPay {
-    return new WhenDidYouPay(whenDidYouPay.date.toMoment(), whenDidYouPay.text)
+    return new WhenDidYouPay(whenDidYouPay.date.asString(), whenDidYouPay.text)
   }
 }

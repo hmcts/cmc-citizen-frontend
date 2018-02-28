@@ -1,4 +1,5 @@
 import { individual } from './party'
+import { whenDidYouPay } from './whenDidYouPay'
 
 export const responseData = {
   defendant: individual,
@@ -6,5 +7,6 @@ export const responseData = {
   responseType: 'FULL_DEFENCE',
   defenceType: 'DISPUTE',
   defence: 'My defence',
-  freeMediation: 'no'
+  freeMediation: 'no',
+  whenDidYouPay: whenDidYouPay
 }
