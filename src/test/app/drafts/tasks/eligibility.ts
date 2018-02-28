@@ -5,6 +5,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { Eligibility } from 'drafts/tasks/eligibility'
 import { ClaimType } from 'claim/form/models/eligibility/claimType'
+import { Over18Defendant } from '../../../../main/features/claim/form/models/eligibility/over18Defendant'
 
 describe('Check eligibility', () => {
   describe('isCompleted', () => {
@@ -16,6 +17,7 @@ describe('Check eligibility', () => {
           claimantAddress: YesNoOption.YES,
           defendantAddress: YesNoOption.YES,
           eighteenOrOver: YesNoOption.YES,
+          eighteenOrOverDefendant: Over18Defendant.YES,
           claimType: ClaimType.PERSONAL_CLAIM,
           singleDefendant: YesNoOption.NO,
           governmentDepartment: YesNoOption.NO,
@@ -38,6 +40,7 @@ describe('Check eligibility', () => {
           claimantAddress: YesNoOption.YES,
           defendantAddress: YesNoOption.YES,
           eighteenOrOver: YesNoOption.YES,
+          eighteenOrOverDefendant: Over18Defendant.YES,
           claimType: ClaimType.MULTIPLE_CLAIM,
           singleDefendant: YesNoOption.YES,
           governmentDepartment: YesNoOption.NO,

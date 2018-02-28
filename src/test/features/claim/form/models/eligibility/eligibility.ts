@@ -6,6 +6,7 @@ import { ValidationErrors } from 'forms/validation/validationErrors'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { ClaimType } from 'claim/form/models/eligibility/claimType'
+import { Over18Defendant } from '../../../../../../main/features/claim/form/models/eligibility/over18Defendant'
 
 describe('Eligibility', () => {
 
@@ -21,6 +22,7 @@ describe('Eligibility', () => {
           YesNoOption.YES,
           YesNoOption.YES,
           YesNoOption.YES,
+          Over18Defendant.YES,
           ClaimType.PERSONAL_CLAIM,
           YesNoOption.YES,
           undefined,
@@ -39,6 +41,7 @@ describe('Eligibility', () => {
           YesNoOption.YES,
           YesNoOption.YES,
           YesNoOption.YES,
+          Over18Defendant.YES,
           ClaimType.PERSONAL_CLAIM,
           YesNoOption.NO,
           YesNoOption.NO,

@@ -1,0 +1,39 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
+
+{% set title = t('Over 18 | Money claim') %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ t('Do you believe the person you’re claiming against is 18 or over?') }}</h1>
+
+      {% set name = 'eighteenOrOverDefendant' %}
+
+      <form novalidate method="post" class="analytics-submit-event-trigger"
+            data-event-action="Eligibility: Select 18 or over option for defendant"
+            data-event-label-from="{{ name }}">
+        {{ csrfProtection(csrf) }}
+
+        {{
+          radioGroup(
+            label = 'Do you believe the person you’re claiming against is 18 or over?',
+            name = name,
+            options = [
+              {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
+              {'label': 'No', value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO)}
+              {'label': 'I’m claiming against a company or organisation', value: PartyType.ORGANISATION.value, checked: (form.valueFor(name) === PartyType.ORGANISATION)}
+            ],
+            form = form,
+            labelForScreenReadersOnly = true
+          )
+        }}
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
