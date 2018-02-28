@@ -42,7 +42,7 @@ export default express.Router()
         if (draft.document.eligibility.eighteenOrOver === YesNoOption.NO) {
           res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.UNDER_18}`)
         } else {
-          res.redirect(Paths.eligibilityClaimTypePage.uri)
+          res.redirect(Paths.eligibilityOver18DefendantPage.uri)
         }
       }
     })

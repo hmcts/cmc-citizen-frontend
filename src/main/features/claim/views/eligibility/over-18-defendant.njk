@@ -21,9 +21,10 @@
             label = 'Do you believe the person you’re claiming against is 18 or over?',
             name = name,
             options = [
-              {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
-              {'label': 'No', value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO)}
-              {'label': 'I’m claiming against a company or organisation', value: PartyType.ORGANISATION.value, checked: (form.valueFor(name) === PartyType.ORGANISATION)}
+              {'label': 'Yes', value: Over18Defendant.YES.option, checked: (form.valueFor(name) === Over18Defendant.YES)},
+              {'label': 'No', value: Over18Defendant.NO.option, checked: (form.valueFor(name) === Over18Defendant.NO)},
+              {'label': 'I’m claiming against a company or organisation', value: Over18Defendant.COMPANY_OR_ORGANISATION.option,
+                          checked: (form.valueFor(name) === Over18Defendant.COMPANY_OR_ORGANISATION)}
             ],
             form = form,
             labelForScreenReadersOnly = true

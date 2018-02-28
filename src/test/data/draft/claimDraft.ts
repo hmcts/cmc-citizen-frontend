@@ -3,6 +3,7 @@ import { InterestType } from 'claim/form/models/interest'
 import { InterestDateType } from 'app/common/interestDateType'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
+import { Over18Defendant } from '../../../main/features/claim/form/models/eligibility/over18Defendant'
 
 export const claimDraft = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
@@ -13,6 +14,7 @@ export const claimDraft = {
     defendantAddress: YesNoOption.YES,
     claimValue: ClaimValue.UNDER_10000,
     eighteenOrOver: YesNoOption.YES,
+    eighteenOrOverDefendant: Over18Defendant.YES,
     governmentDepartment: YesNoOption.NO,
     helpWithFees: YesNoOption.NO,
     claimIsForTenancyDeposit: YesNoOption.NO
