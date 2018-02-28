@@ -17,7 +17,7 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ClaimPaths.eligibilityOver18Page.uri
-const pageRedirect: string = ClaimPaths.eligibilityOver18DefendantPage.uri
+const pageRedirect: string = ClaimPaths.eligibilityDefendantAgeOptionPage.uri
 const expectedTextOnPage: string = 'Are you 18 or over?'
 
 describe('Claim eligibility: over 18 page', () => {

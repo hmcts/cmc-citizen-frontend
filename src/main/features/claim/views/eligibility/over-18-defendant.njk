@@ -9,7 +9,7 @@
     <div class="column-two-thirds">
       <h1 class="heading-large">{{ t('Do you believe the person you’re claiming against is 18 or over?') }}</h1>
 
-      {% set name = 'eighteenOrOverDefendant' %}
+      {% set name = 'defendantAge' %}
 
       <form novalidate method="post" class="analytics-submit-event-trigger"
             data-event-action="Eligibility: Select 18 or over option for defendant"
@@ -21,10 +21,10 @@
             label = 'Do you believe the person you’re claiming against is 18 or over?',
             name = name,
             options = [
-              {'label': 'Yes', value: Over18Defendant.YES.option, checked: (form.valueFor(name) === Over18Defendant.YES)},
-              {'label': 'No', value: Over18Defendant.NO.option, checked: (form.valueFor(name) === Over18Defendant.NO)},
-              {'label': 'I’m claiming against a company or organisation', value: Over18Defendant.COMPANY_OR_ORGANISATION.option,
-                          checked: (form.valueFor(name) === Over18Defendant.COMPANY_OR_ORGANISATION)}
+              {'label': 'Yes', value: DefendantAgeOption.YES.option, checked: (form.valueFor(name) === DefendantAgeOption.YES)},
+              {'label': 'No', value: DefendantAgeOption.NO.option, checked: (form.valueFor(name) === DefendantAgeOption.NO)},
+              {'label': 'I’m claiming against a company or organisation', value: DefendantAgeOption.COMPANY_OR_ORGANISATION.option,
+                          checked: (form.valueFor(name) === DefendantAgeOption.COMPANY_OR_ORGANISATION)}
             ],
             form = form,
             labelForScreenReadersOnly = true

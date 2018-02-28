@@ -13,10 +13,10 @@ import { app } from '../../../../../main/app'
 import * as idamServiceMock from '../../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
-import { Over18Defendant } from 'claim/form/models/eligibility/over18Defendant'
+import { DefendantAgeOption } from 'claim/form/models/eligibility/DefendantAgeOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ClaimPaths.eligibilityOver18DefendantPage.uri
+const pagePath: string = ClaimPaths.eligibilityDefendantAgeOptionPage.uri
 const pageRedirect: string = ClaimPaths.eligibilityClaimTypePage.uri
 const expectedTextOnPage: string = 'Do you believe the person you’re claiming against is 18 or over?'
 
@@ -61,7 +61,7 @@ describe('Claim eligibility: over 18 defendant page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ eighteenOrOverDefendant: Over18Defendant.YES.option })
+          .send({ eighteenOrOverDefendant: DefendantAgeOption.YES.option })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -72,7 +72,7 @@ describe('Claim eligibility: over 18 defendant page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ eighteenOrOverDefendant: Over18Defendant.YES.option })
+          .send({ eighteenOrOverDefendant: DefendantAgeOption.YES.option })
           .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
       })
 
@@ -83,7 +83,7 @@ describe('Claim eligibility: over 18 defendant page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ eighteenOrOverDefendant: Over18Defendant.NO.option })
+          .send({ eighteenOrOverDefendant: DefendantAgeOption.NO.option })
           .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.UNDER_18_DEFENDANT}`))
       })
     })

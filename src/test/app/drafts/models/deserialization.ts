@@ -10,7 +10,7 @@ import { IndividualDetails } from 'forms/models/individualDetails'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { ClaimType } from 'claim/form/models/eligibility/claimType'
-import { Over18Defendant } from '../../../../main/features/claim/form/models/eligibility/over18Defendant'
+import { DefendantAgeOption } from 'claim/form/models/eligibility/DefendantAgeOption'
 
 describe('DraftClaim deserialization', () => {
   let input
@@ -23,7 +23,7 @@ describe('DraftClaim deserialization', () => {
         claimantAddress: YesNoOption.YES,
         defendantAddress: YesNoOption.YES,
         eighteenOrOver: YesNoOption.YES,
-        eighteenOrOverDefendant: Over18Defendant.YES,
+        eighteenOrOverDefendant: DefendantAgeOption.YES,
         claimType: ClaimType.PERSONAL_CLAIM,
         singleDefendant: YesNoOption.YES,
         governmentDepartment: YesNoOption.NO,
@@ -90,7 +90,7 @@ describe('DraftClaim deserialization', () => {
     expect(deserialized.eligibility.claimantAddress).to.equal(YesNoOption.YES)
     expect(deserialized.eligibility.defendantAddress).to.equal(YesNoOption.YES)
     expect(deserialized.eligibility.eighteenOrOver).to.equal(YesNoOption.YES)
-    expect(deserialized.eligibility.eighteenOrOverDefendant).to.equal(Over18Defendant.YES)
+    expect(deserialized.eligibility.defendantAge).to.equal(DefendantAgeOption.YES)
     expect(deserialized.eligibility.claimType).to.equal(ClaimType.PERSONAL_CLAIM)
     expect(deserialized.eligibility.singleDefendant).to.equal(YesNoOption.YES)
     expect(deserialized.eligibility.governmentDepartment).to.equal(YesNoOption.NO)
