@@ -96,6 +96,8 @@ export class ResponseModelConverter {
   }
 
   private static convertWhenDidYouPay (paymentDeclaration: DraftPaymentDeclaration): PaymentDeclaration {
-    return new PaymentDeclaration(paymentDeclaration.date.asString(), paymentDeclaration.text)
+    if (paymentDeclaration !== undefined) {
+      return new PaymentDeclaration(paymentDeclaration.date.asString(), paymentDeclaration.text)
+    }
   }
 }

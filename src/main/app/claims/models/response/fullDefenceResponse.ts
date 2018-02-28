@@ -19,7 +19,7 @@ export namespace FullDefenceResponse {
       ...ResponseCommon.deserialize(input),
       defenceType: input.defenceType,
       defence: input.defence,
-      whenDidYouPay: input.whenDidYouPay
+      whenDidYouPay: input.whenDidYouPay ? new PaymentDeclaration().deserialize(input.whenDidYouPay) : undefined
     }
   }
 }
