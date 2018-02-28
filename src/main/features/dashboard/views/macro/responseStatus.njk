@@ -20,7 +20,8 @@
   {% elseif claim.status === ClaimStatus.CLAIM_REJECTED %}
     {{ t('You’ve rejected the claim. The case will be reviewed by a judge and might go to court.' ) }}
   {% elseif claim.status === ClaimStatus.OFFER_ACCEPTED %}
-    {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court.') }}
+    {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court. {{ claimantName }} has signed the agreement.',
+    { claimantName: claim.claimData.claimant.name } ) }}
   {% elseif claim.status === ClaimStatus.OFFER_SUBMITTED %}
     {{ t('You made an offer to settle out of court.') }}
   {% elseif claim.status === ClaimStatus.MORE_TIME_REQUESTED %}

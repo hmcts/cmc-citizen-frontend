@@ -14,6 +14,9 @@
     <div class="column-two-thirds">
       <h2 class="heading-medium">{{ t('Claim status') }}</h2>
 
+      {{ claim.respondedAt | date }}
+      <h3 class="heading-small">{{ t('Settle claim') }} </h3>
+
       {{ responseStatusForDefendant(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
 
       {% if featureToggles.offer and claim.status === ClaimStatus.OFFER_ACCEPTED %}
@@ -21,6 +24,10 @@
           <a href="{{ OfferPaths.countersignAgreementPage.evaluateUri({ externalId: claim.externalId }) }}">
             {{ t('Sign the agreement') }}
           </a>
+        </p>
+      {% elif featureToggles.offer and claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED  %}
+        <p>
+          <a href="{{ claimSettlementUri }}">{{ t('Download the agreement') }}</a>
         </p>
       {% elif featureToggles.offer and not claim.settlementReachedAt  %}
         <h2 class="heading-medium">{{ t('More options') }}</h2>
