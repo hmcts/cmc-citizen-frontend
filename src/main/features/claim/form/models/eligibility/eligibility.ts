@@ -49,7 +49,7 @@ export class Eligibility {
                claimantAddress?: YesNoOption,
                defendantAddress?: YesNoOption,
                eighteenOrOver?: YesNoOption,
-               eighteenOrOverDefendant?: DefendantAgeOption,
+               defendantAge?: DefendantAgeOption,
                claimType?: ClaimType,
                singleClaimant?: YesNoOption,
                governmentDepartment?: YesNoOption,
@@ -59,7 +59,7 @@ export class Eligibility {
     this.claimantAddress = claimantAddress
     this.defendantAddress = defendantAddress
     this.eighteenOrOver = eighteenOrOver
-    this.defendantAge = eighteenOrOverDefendant
+    this.defendantAge = defendantAge
     this.claimType = claimType
     this.singleDefendant = singleClaimant
     this.governmentDepartment = governmentDepartment

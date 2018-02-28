@@ -14,7 +14,7 @@ export const claimDraft = {
     defendantAddress: YesNoOption.YES,
     claimValue: ClaimValue.UNDER_10000,
     eighteenOrOver: YesNoOption.YES,
-    eighteenOrOverDefendant: DefendantAgeOption.YES,
+    defendantAge: DefendantAgeOption.YES,
     governmentDepartment: YesNoOption.NO,
     helpWithFees: YesNoOption.NO,
     claimIsForTenancyDeposit: YesNoOption.NO

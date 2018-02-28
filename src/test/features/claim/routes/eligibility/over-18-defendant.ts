@@ -61,7 +61,7 @@ describe('Claim eligibility: over 18 defendant page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ eighteenOrOverDefendant: DefendantAgeOption.YES.option })
+          .send({ defendantAge: DefendantAgeOption.YES.option })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -72,7 +72,7 @@ describe('Claim eligibility: over 18 defendant page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ eighteenOrOverDefendant: DefendantAgeOption.YES.option })
+          .send({ defendantAge: DefendantAgeOption.YES.option })
           .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
       })
 
@@ -83,7 +83,7 @@ describe('Claim eligibility: over 18 defendant page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ eighteenOrOverDefendant: DefendantAgeOption.NO.option })
+          .send({ defendantAge: DefendantAgeOption.NO.option })
           .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.UNDER_18_DEFENDANT}`))
       })
     })

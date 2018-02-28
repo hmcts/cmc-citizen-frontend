@@ -23,7 +23,7 @@ describe('DraftClaim deserialization', () => {
         claimantAddress: YesNoOption.YES,
         defendantAddress: YesNoOption.YES,
         eighteenOrOver: YesNoOption.YES,
-        eighteenOrOverDefendant: DefendantAgeOption.YES,
+        defendantAge: DefendantAgeOption.YES,
         claimType: ClaimType.PERSONAL_CLAIM,
         singleDefendant: YesNoOption.YES,
         governmentDepartment: YesNoOption.NO,
