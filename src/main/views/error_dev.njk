@@ -3,9 +3,19 @@
 {% set heading = 'Error' %}
 
 {% block content %}
-  {#<h1 class="heading-large">{{ error.message }}</h1>#}
-  {% if error.status %}
-    {#<h3 class="heading-medium">{{ error.status }}</h3>#}
+  {% if error.message %}
+    <h1 class="heading-large">{{ error.message }}</h1>
   {% endif %}
-  {#<pre class="code">{{ error.stack }}</pre>#}
+  {% if error.body %}
+    <h1 class="heading-large">{{ error.body }}</h1>
+  {% endif %}
+  {% if error.status %}
+    <h3 class="heading-medium">{{ error.status }}</h3>
+  {% endif %}
+  {% if error.statusCode %}
+    <h3 class="heading-medium">{{ error.statusCode }}</h3>
+  {% endif %}
+  {% if error.stack %}
+    <pre class="code">{{ error.stack }}</pre>
+  {% endif %}
 {% endblock %}
