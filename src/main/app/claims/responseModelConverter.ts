@@ -17,8 +17,8 @@ import { Defendant } from 'drafts/models/defendant'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { ResponseType as FormResponseType } from 'response/form/models/responseType'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
-import { WhenDidYouPay } from 'claims/models/whenDidYouPay'
-import { WhenDidYouPay as DraftWhenDidYouPay } from 'response/form/models/whenDidYouPay'
+import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
+import { PaymentDeclaration as DraftPaymentDeclaration } from 'response/form/models/paymentDeclaration'
 
 export class ResponseModelConverter {
 
@@ -95,7 +95,7 @@ export class ResponseModelConverter {
     return party
   }
 
-  private static convertWhenDidYouPay (whenDidYouPay: DraftWhenDidYouPay): WhenDidYouPay {
-    return new WhenDidYouPay(whenDidYouPay.date.asString(), whenDidYouPay.text)
+  private static convertWhenDidYouPay (paymentDeclaration: DraftPaymentDeclaration): PaymentDeclaration {
+    return new PaymentDeclaration(paymentDeclaration.date.asString(), paymentDeclaration.text)
   }
 }

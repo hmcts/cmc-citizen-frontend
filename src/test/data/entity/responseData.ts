@@ -1,5 +1,4 @@
 import { individual } from './party'
-import { whenDidYouPay } from './whenDidYouPay'
 
 export const responseData = {
   defendant: individual,
@@ -8,5 +7,5 @@ export const responseData = {
   defenceType: 'DISPUTE',
   defence: 'My defence',
   freeMediation: 'no',
-  whenDidYouPay: whenDidYouPay
+  whenDidYouPay: { paidDate: '2017-01-01', explanation: 'I paid cash' }
 }

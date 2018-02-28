@@ -1,13 +1,11 @@
-export class WhenDidYouPay {
-  paidDate: string
-  explanation: string
+export class PaymentDeclaration {
 
-  constructor (paidDate: string, explanation: string) {
+  constructor (public paidDate: string, public explanation: string) {
     this.paidDate = paidDate
     this.explanation = explanation
   }
 
-  deserialize (input: any): WhenDidYouPay {
+  deserialize (input: any): PaymentDeclaration {
     if (input) {
       this.paidDate = input.paidDate
       this.explanation = input.explanation

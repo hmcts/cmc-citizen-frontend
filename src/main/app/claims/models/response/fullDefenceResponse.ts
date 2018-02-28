@@ -1,5 +1,5 @@
 import { ResponseCommon, ResponseType } from './responseCommon'
-import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
+import { PaymentDeclaration } from 'response/form/models/paymentDeclaration'
 
 export enum DefenceType {
   DISPUTE = 'DISPUTE',
@@ -10,7 +10,7 @@ export interface FullDefenceResponse extends ResponseCommon {
   responseType: ResponseType.FULL_DEFENCE
   defenceType: DefenceType
   defence: string
-  whenDidYouPay: WhenDidYouPay
+  whenDidYouPay: PaymentDeclaration
 }
 
 export namespace FullDefenceResponse {
