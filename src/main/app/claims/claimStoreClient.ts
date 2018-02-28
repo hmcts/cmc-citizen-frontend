@@ -91,13 +91,8 @@ export class ClaimStoreClient {
             throw new ForbiddenError()
           }
         }
-        return new Claim().deserialize(claim.body)
+        return new Claim().deserialize(claim)
       })
-      .catch(err => {
-        console.log(err)
-        return new Claim()
-      })
-
   }
 
   static retrieveByDefendantId (user: User): Promise<Claim[]> {
