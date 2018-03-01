@@ -2,11 +2,8 @@ import * as express from 'express'
 
 import { Paths as AppPaths } from 'app/paths'
 import { Paths as DashboardPaths } from 'dashboard/paths'
-import { Paths as ClaimPaths } from 'claim/paths'
-import { Paths as ResponsePaths } from 'response/paths'
 import { Paths as FirstContactPaths } from 'first-contact/paths'
 import { ClaimStoreClient } from 'app/claims/claimStoreClient'
-import { User } from 'app/idam/user'
 import { ErrorHandling } from 'common/errorHandling'
 import { Claim } from 'claims/models/claim'
 import * as Cookies from 'cookies'
@@ -14,16 +11,12 @@ import { AuthToken } from 'idam/authToken'
 import * as config from 'config'
 import { IdamClient } from 'app/idam/idamClient'
 import { buildURL } from 'utils/callbackBuilder'
-import { DraftClaim } from 'drafts/models/draftClaim'
 import { JwtExtractor } from 'idam/jwtExtractor'
 import { RoutablePath } from 'common/router/routablePath'
-import { Draft } from '@hmcts/draft-store-client'
 import { hasTokenExpired } from 'idam/authorizationMiddleware'
-import { DraftService } from 'services/draftService'
 import { Logger } from '@hmcts/nodejs-logging'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { FeatureToggles } from 'utils/featureToggles'
-import { ResponseDraft } from 'response/draft/responseDraft'
 
 const logger = Logger.getLogger('router/receiver')
 const sessionCookie = config.get<string>('session.cookieName')
@@ -69,52 +62,6 @@ function loginErrorHandler (req: express.Request,
   }
   cookies.set(stateCookieName, '', { sameSite: 'lax' })
   return next(err)
-}
-
-async function retrieveRedirectForLandingPage (user: User): Promise<string> {
-  const atLeastOneClaimIssued: boolean = (await ClaimStoreClient.retrieveByClaimantId(user)).length > 0
-  const claimAgainstDefendant = await ClaimStoreClient.retrieveByDefendantId(user)
-  const atLeastOneResponse: boolean = claimAgainstDefendant.length > 0 &&
-    claimAgainstDefendant.some((claim: Claim) => !!claim.respondedAt)
-  const atLeastOneCCJ: boolean = claimAgainstDefendant.length > 0 &&
-    claimAgainstDefendant.some((claim: Claim) => !!claim.countyCourtJudgmentRequestedAt)
-
-  if (atLeastOneClaimIssued || atLeastOneResponse || atLeastOneCCJ) {
-    return DashboardPaths.dashboardPage.uri
-  }
-
-  const draftClaims: Draft<DraftClaim>[] = await new DraftService().find('claim', '100', user.bearerToken, (value: any): DraftClaim => {
-    return new DraftClaim().deserialize(value)
-  })
-
-  const draftClaimSaved: boolean = draftClaims.length > 0
-  const claimIssuedButNoResponse: boolean = (claimAgainstDefendant).length > 0
-    && !atLeastOneResponse
-
-  const draftResponse: Draft<ResponseDraft>[] = await new DraftService().find('response', '100', user.bearerToken, (value: any): ResponseDraft => {
-    return new ResponseDraft().deserialize(value)
-  })
-
-  const draftResponseSaved: boolean = draftResponse.length > 0
-
-  if (claimIssuedButNoResponse && draftClaimSaved) {
-    return DashboardPaths.dashboardPage.uri
-  }
-
-  if (draftClaimSaved) {
-    return ClaimPaths.taskListPage.uri
-  }
-
-  if (claimIssuedButNoResponse && !draftResponseSaved) {
-    return ResponsePaths.taskListPage
-      .evaluateUri({ externalId: claimAgainstDefendant.pop().externalId })
-  }
-
-  if (claimIssuedButNoResponse && draftResponseSaved) {
-    return DashboardPaths.dashboardPage.uri
-  }
-
-  return ClaimPaths.startPage.uri
 }
 
 function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
@@ -165,14 +112,13 @@ export default express.Router()
         } else {
           if (FeatureToggles.isEnabled('ccd')) {
             await ClaimStoreClient.linkDefendant(user)
-            res.redirect(await retrieveRedirectForLandingPage(user))
+            res.redirect(DashboardPaths.dashboardPage.uri)
           } else {
             Promise.all(user.getLetterHolderIdList().map(
             (letterHolderId) => linkDefendantWithClaimByLetterHolderId(letterHolderId, user)
             )
           )
-            .then(async () => res.redirect(await retrieveRedirectForLandingPage(user)))
-            .catch(async () => res.redirect(await retrieveRedirectForLandingPage(user)))
+            .then(async () => res.redirect(DashboardPaths.dashboardPage.uri))
             .catch(next)
           }
 
