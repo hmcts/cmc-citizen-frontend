@@ -1,4 +1,4 @@
-import { request } from 'client/request'
+import { retryingRequest } from 'client/request'
 import * as config from 'config'
 import { Claim } from 'app/claims/models/claim'
 import { User } from 'app/idam/user'
@@ -17,23 +17,25 @@ const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
 export class ClaimStoreClient {
   static saveClaimForUser (draft: Draft<DraftClaim>, user: User): Promise<Claim> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
-    return request.post(`${claimStoreApiUrl}/${user.id}`, {
-      body: convertedDraftClaim,
-      headers: {
-        Authorization: `Bearer ${user.bearerToken}`
-      }
-    })
+    return retryingRequest
+      .post(`${claimStoreApiUrl}/${user.id}`, {
+        body: convertedDraftClaim,
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
   }
 
   static saveResponseForUser (externalId: string, draft: Draft<ResponseDraft>, user: User): Promise<void> {
     const response = ResponseModelConverter.convert(draft.document)
 
-    return request.post(`${claimStoreResponsesApiUrl}/${externalId}/defendant/${user.id}`, {
-      body: response,
-      headers: {
-        Authorization: `Bearer ${user.bearerToken}`
-      }
-    })
+    return retryingRequest
+      .post(`${claimStoreResponsesApiUrl}/${externalId}/defendant/${user.id}`, {
+        body: response,
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
   }
 
   static retrieveByClaimantId (user: User): Promise<Claim[]> {
@@ -41,7 +43,7 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('User is required'))
     }
 
-    return request
+    return retryingRequest
       .get(`${claimStoreApiUrl}/claimant/${user.id}`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
@@ -57,7 +59,7 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('Letter holder id must be set'))
     }
 
-    return request
+    return retryingRequest
       .get(`${claimStoreApiUrl}/letter/${letterHolderId}`, {
         headers: {
           Authorization: `Bearer ${bearerToken}`
@@ -77,7 +79,7 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('External id must be set and user must be set'))
     }
 
-    return request
+    return retryingRequest
       .get(`${claimStoreApiUrl}/${externalId}`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
@@ -89,11 +91,7 @@ export class ClaimStoreClient {
             throw new ForbiddenError()
           }
         }
-        if (claim) {
-          return new Claim().deserialize(claim)
-        } else {
-          throw new Error('Call was successful, but received an empty claim instance')
-        }
+        return new Claim().deserialize(claim)
       })
   }
 
@@ -102,7 +100,7 @@ export class ClaimStoreClient {
       return Promise.reject('User is required')
     }
 
-    return request
+    return retryingRequest
       .get(`${claimStoreApiUrl}/defendant/${user.id}`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
@@ -112,11 +110,12 @@ export class ClaimStoreClient {
   }
 
   static linkDefendant (user: User): Promise<void> {
-    return request.put(`${claimStoreApiUrl}/defendant/link`, {
-      headers: {
-        Authorization: `Bearer ${user.bearerToken}`
-      }
-    })
+    return retryingRequest
+      .put(`${claimStoreApiUrl}/defendant/link`, {
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
   }
 
   static linkDefendantV1 (externalId: string, user: User): Promise<Claim> {
@@ -127,7 +126,7 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('User is required'))
     }
 
-    return request
+    return retryingRequest
       .put(`${claimStoreApiUrl}/${externalId}/defendant/${user.id}`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
@@ -151,11 +150,12 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('Authorisation token required'))
     }
 
-    return request.post(`${claimStoreApiUrl}/${externalId}/request-more-time`, {
-      headers: {
-        Authorization: `Bearer ${user.bearerToken}`
-      }
-    })
+    return retryingRequest
+      .post(`${claimStoreApiUrl}/${externalId}/request-more-time`, {
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
   }
 
   static isClaimLinked (reference: string): Promise<boolean> {
@@ -163,7 +163,8 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('Claim reference is required'))
     }
 
-    return request.get(`${claimStoreApiUrl}/${reference}/defendant-link-status`)
+    return retryingRequest
+      .get(`${claimStoreApiUrl}/${reference}/defendant-link-status`)
       .then(linkStatus => linkStatus.linked)
   }
 }
