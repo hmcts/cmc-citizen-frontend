@@ -60,6 +60,7 @@ describe('Login receiver', async () => {
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
           draftStoreServiceMock.resolveFindNoDraftFound()
+          draftStoreServiceMock.resolveFindNoDraftFound()
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -74,6 +75,7 @@ describe('Login receiver', async () => {
           draftStoreServiceMock.resolveFind('claim')
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+          draftStoreServiceMock.resolveFindNoDraftFound()
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -88,12 +90,29 @@ describe('Login receiver', async () => {
           draftStoreServiceMock.resolveFindNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantId('A')
+          draftStoreServiceMock.resolveFindNoDraftFound()
 
           await request(app)
             .get(AppPaths.receiver.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+        })
+      })
+
+      context('when defendant has one or more draft responses', async () => {
+
+        it('should redirect to response task-list', async () => {
+          draftStoreServiceMock.resolveFindNoDraftFound()
+          claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveByDefendantId('A')
+          draftStoreServiceMock.resolveFind('response')
+
+          await request(app)
+            .get(AppPaths.receiver.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(DashboardPaths.dashboardPage.uri))
         })
       })
 
