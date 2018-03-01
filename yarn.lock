@@ -58,6 +58,15 @@
     request "^2.83.0"
     request-promise-native "^1.0.5"
 
+"@hmcts/requestretry@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@hmcts/requestretry/-/requestretry-1.0.1.tgz#801b4ade0a085851eefe3d5865360b1fe9945270"
+  dependencies:
+    extend "^3.0.0"
+    lodash "^4.15.0"
+    request "^2.74.0"
+    when "^3.7.7"
+
 "@types/body-parser@*":
   version "1.16.8"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.16.8.tgz#687ec34140624a3bec2b1a8ea9268478ae8f3be3"
@@ -5528,15 +5537,6 @@ request@~2.79.0:
     tough-cookie "~2.3.0"
     tunnel-agent "~0.4.1"
     uuid "^3.0.0"
-
-requestretry@^1.13.0:
-  version "1.13.0"
-  resolved "https://registry.yarnpkg.com/requestretry/-/requestretry-1.13.0.tgz#213ec1006eeb750e8b8ce54176283d15a8d55d94"
-  dependencies:
-    extend "^3.0.0"
-    lodash "^4.15.0"
-    request "^2.74.0"
-    when "^3.7.7"
 
 requestretry@^1.2.2:
   version "1.12.2"

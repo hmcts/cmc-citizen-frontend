@@ -3,7 +3,7 @@ import { RequestTracingHandler } from 'logging/requestTracingHandler'
 import * as config from 'config'
 import * as requestBase from 'request'
 import * as requestPromise from 'request-promise-native'
-import * as requestRetry from 'requestretry'
+import * as requestRetry from '@hmcts/requestretry'
 
 const timeout: number = config.get<number>('http.timeout')
 const maxAttempts: number = config.get<number>('requestRetry.maxAttempts')
