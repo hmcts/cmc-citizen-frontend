@@ -1,3 +1,8 @@
+sudo: required
+addons:
+  chrome: stable
+before_install:
+  - google-chrome-stable --no-sandbox --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 language: node_js
 cache: yarn
 script:
