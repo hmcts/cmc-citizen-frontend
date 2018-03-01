@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 
-{% set title = t('Over 18 | Money claim') %}
+{% set title = t('Defendant Age Eligibility | Money claim') %}
 
 {% block content %}
 
@@ -12,7 +12,7 @@
       {% set name = 'defendantAge' %}
 
       <form novalidate method="post" class="analytics-submit-event-trigger"
-            data-event-action="Eligibility: Select 18 or over option for defendant"
+            data-event-action="Eligibility: defendant age"
             data-event-label-from="{{ name }}">
         {{ csrfProtection(csrf) }}
 

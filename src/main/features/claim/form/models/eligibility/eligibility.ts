@@ -4,7 +4,7 @@ import { ValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { ClaimType } from 'claim/form/models/eligibility/claimType'
-import { DefendantAgeOption } from 'claim/form/models/eligibility/DefendantAgeOption'
+import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
 
 export class Eligibility {
 
@@ -23,7 +23,7 @@ export class Eligibility {
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.OVER_18] })
   eighteenOrOver?: YesNoOption
 
-  @IsIn(DefendantAgeOption.all(), { message: ValidationErrors.OVER_18_DEFENDANT_REQUIRED, groups: [ValidationGroups.OVER_18_DEFENDANT] })
+  @IsIn(DefendantAgeOption.all(), { message: ValidationErrors.DEFENDANT_AGE_REQUIRED, groups: [ValidationGroups.OVER_18_DEFENDANT] })
   defendantAge?: DefendantAgeOption
 
   @IsIn(ClaimType.all(), { message: ValidationErrors.SELECT_AN_OPTION, groups: [ValidationGroups.CLAIM_TYPE] })

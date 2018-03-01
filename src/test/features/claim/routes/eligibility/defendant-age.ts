@@ -13,10 +13,10 @@ import { app } from '../../../../../main/app'
 import * as idamServiceMock from '../../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
-import { DefendantAgeOption } from 'claim/form/models/eligibility/DefendantAgeOption'
+import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ClaimPaths.eligibilityDefendantAgeOptionPage.uri
+const pagePath: string = ClaimPaths.eligibilityDefendantAgePage.uri
 const pageRedirect: string = ClaimPaths.eligibilityClaimTypePage.uri
 const expectedTextOnPage: string = 'Do you believe the person you’re claiming against is 18 or over?'
 

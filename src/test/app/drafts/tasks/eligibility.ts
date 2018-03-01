@@ -5,7 +5,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { Eligibility } from 'drafts/tasks/eligibility'
 import { ClaimType } from 'claim/form/models/eligibility/claimType'
-import { DefendantAgeOption } from 'claim/form/models/eligibility/DefendantAgeOption'
+import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
 
 describe('Check eligibility', () => {
   describe('isCompleted', () => {

@@ -32,7 +32,7 @@ import { Paths as AppPaths } from 'app/paths'
 import { Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { ClaimType } from 'claim/form/models/eligibility/claimType'
-import { DefendantAgeOption } from 'claim/form/models/eligibility/DefendantAgeOption'
+import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
 
 const packageDotJson = require('../../../../package.json')
 
