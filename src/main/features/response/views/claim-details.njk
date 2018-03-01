@@ -14,7 +14,7 @@
       <p><span class="bold-small">{{ t('Claim reference') }}:</span> {{ claim.claimNumber }}</p>
       <p><span class="bold-small">{{ t('Claim amount') }}:</span> {{ claim.totalAmountTillToday | numeral }}</p>
 
-      {{ amountBreakdownTable('View amount breakdown', claim, interestData, today) }}
+      {{ amountBreakdownTable('View amount breakdown', claim, interestData) }}
       <p><span class="bold-small">{{ t('Reason for claim') }}:</span></p>
       <p>{{ claim.claimData.reason }}</p>
 
