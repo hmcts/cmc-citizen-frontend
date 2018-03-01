@@ -14,10 +14,14 @@ export type RequestAPI = RequestPromiseAPI | DefaultRequestAPI
 
 const defaultOptions = {
   json: true,
-  timeout: timeout,
+  timeout: timeout
+}
+
+const defaultRequestRetryOptions = {
   fullResponse: false,
   maxAttempts: maxAttempts
 }
+
 const request: RequestPromiseAPI = RequestTracingHandler.proxy(
   RequestLoggingHandler.proxy(requestPromise.defaults(defaultOptions))
 )
@@ -26,7 +30,10 @@ const requestNonPromise: DefaultRequestAPI = RequestTracingHandler.proxy(
 )
 
 const retryingRequest: RequestPromiseAPI = RequestTracingHandler.proxy(
-  RequestLoggingHandler.proxy(requestRetry.defaults(defaultOptions))
+  RequestLoggingHandler.proxy(requestRetry.defaults({
+    ...defaultOptions,
+    ...defaultRequestRetryOptions
+  }))
 )
 
 export {
