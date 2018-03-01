@@ -22,9 +22,6 @@ const defaultRequestRetryOptions = {
   maxAttempts: maxAttempts
 }
 
-const request: RequestPromiseAPI = RequestTracingHandler.proxy(
-  RequestLoggingHandler.proxy(requestPromise.defaults(defaultOptions))
-)
 const requestNonPromise: DefaultRequestAPI = RequestTracingHandler.proxy(
   RequestLoggingHandler.proxy(requestBase)
 )
@@ -37,7 +34,7 @@ const retryingRequest: RequestPromiseAPI = RequestTracingHandler.proxy(
 )
 
 export {
-  request,
+  retryingRequest as request,
   requestNonPromise,
   retryingRequest
 }
