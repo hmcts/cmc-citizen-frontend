@@ -58,13 +58,14 @@
     request "^2.83.0"
     request-promise-native "^1.0.5"
 
-"@hmcts/requestretry@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@hmcts/requestretry/-/requestretry-1.0.1.tgz#801b4ade0a085851eefe3d5865360b1fe9945270"
+"@hmcts/requestretry@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@hmcts/requestretry/-/requestretry-1.1.0.tgz#5d9a1734571e435ed025ee21ec432beee5f0c41e"
   dependencies:
     extend "^3.0.0"
     lodash "^4.15.0"
     request "^2.74.0"
+    request-promise-core "^1.1.1"
     when "^3.7.7"
 
 "@types/body-parser@*":
@@ -5410,7 +5411,7 @@ request-progress@^2.0.1:
   dependencies:
     throttleit "^1.0.0"
 
-request-promise-core@1.1.1:
+request-promise-core@1.1.1, request-promise-core@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/request-promise-core/-/request-promise-core-1.1.1.tgz#3eee00b2c5aa83239cfb04c5700da36f81cd08b6"
   dependencies:
