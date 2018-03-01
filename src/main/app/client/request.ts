@@ -35,6 +35,5 @@ const retryingRequest: RequestPromiseAPI = RequestTracingHandler.proxy(
 
 export {
   retryingRequest as request,
-  requestNonPromise,
-  retryingRequest
+  requestNonPromise
 }

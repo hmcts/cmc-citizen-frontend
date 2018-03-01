@@ -3,7 +3,7 @@ import * as config from 'config'
 import { PaymentRequest } from 'app/pay/paymentRequest'
 import { PaymentResponse } from 'app/pay/paymentResponse'
 import { Payment } from 'app/pay/payment'
-import { retryingRequest as request } from 'client/request'
+import { request } from 'client/request'
 import { User } from 'app/idam/user'
 import { ServiceAuthToken } from 'app/idam/serviceAuthToken'
 
