@@ -1,4 +1,4 @@
-import { retryingRequest } from 'client/request'
+import { request } from 'client/request'
 import * as config from 'config'
 import { Claim } from 'app/claims/models/claim'
 import { User } from 'app/idam/user'
@@ -17,7 +17,7 @@ const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
 export class ClaimStoreClient {
   static saveClaimForUser (draft: Draft<DraftClaim>, user: User): Promise<Claim> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
-    return retryingRequest
+    return request
       .post(`${claimStoreApiUrl}/${user.id}`, {
         body: convertedDraftClaim,
         headers: {
@@ -29,7 +29,7 @@ export class ClaimStoreClient {
   static saveResponseForUser (externalId: string, draft: Draft<ResponseDraft>, user: User): Promise<void> {
     const response = ResponseModelConverter.convert(draft.document)
 
-    return retryingRequest
+    return request
       .post(`${claimStoreResponsesApiUrl}/${externalId}/defendant/${user.id}`, {
         body: response,
         headers: {
@@ -43,7 +43,7 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('User is required'))
     }
 
-    return retryingRequest
+    return request
       .get(`${claimStoreApiUrl}/claimant/${user.id}`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
@@ -59,7 +59,7 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('Letter holder id must be set'))
     }
 
-    return retryingRequest
+    return request
       .get(`${claimStoreApiUrl}/letter/${letterHolderId}`, {
         headers: {
           Authorization: `Bearer ${bearerToken}`
@@ -79,7 +79,7 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('External id must be set and user must be set'))
     }
 
-    return retryingRequest
+    return request
       .get(`${claimStoreApiUrl}/${externalId}`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
@@ -100,7 +100,7 @@ export class ClaimStoreClient {
       return Promise.reject('User is required')
     }
 
-    return retryingRequest
+    return request
       .get(`${claimStoreApiUrl}/defendant/${user.id}`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
@@ -110,7 +110,7 @@ export class ClaimStoreClient {
   }
 
   static linkDefendant (user: User): Promise<void> {
-    return retryingRequest
+    return request
       .put(`${claimStoreApiUrl}/defendant/link`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
@@ -126,7 +126,7 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('User is required'))
     }
 
-    return retryingRequest
+    return request
       .put(`${claimStoreApiUrl}/${externalId}/defendant/${user.id}`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
@@ -150,7 +150,7 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('Authorisation token required'))
     }
 
-    return retryingRequest
+    return request
       .post(`${claimStoreApiUrl}/${externalId}/request-more-time`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
@@ -163,7 +163,7 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('Claim reference is required'))
     }
 
-    return retryingRequest
+    return request
       .get(`${claimStoreApiUrl}/${reference}/defendant-link-status`)
       .then(linkStatus => linkStatus.linked)
   }
