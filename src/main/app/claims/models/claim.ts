@@ -12,11 +12,6 @@ import { ClaimStatus } from 'claims/models/claimStatus'
 import { FeatureToggles } from 'utils/featureToggles'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 
-interface State {
-  date: Moment
-  status: ClaimStatus
-}
-
 export class Claim {
   id: number
   claimantId: string
@@ -119,23 +114,6 @@ export class Claim {
       return ClaimStatus.NO_RESPONSE
     } else {
       throw new Error('Unknown Status')
-    }
-  }
-
-  get stateHistory (): State[] {
-    if (this.status === ClaimStatus.OFFER_ACCEPTED) {
-      return [{
-        date: undefined,
-        status: ClaimStatus.OFFER_ACCEPTED
-      }, {
-        date: this.respondedAt,
-        status: ClaimStatus.CLAIM_REJECTED
-      }]
-    } else {
-      return [{
-        date: undefined,
-        status: this.status
-      }]
     }
   }
 
