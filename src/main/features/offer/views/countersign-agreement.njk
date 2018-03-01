@@ -21,11 +21,7 @@
       </p>
 
       <p>
-        {{
-          t('You both need to sign the agreement for it to become a legal contract.', {
-            name: claim.claimData.defendant.name
-          })
-        }}
+        {{ t('You both need to sign the agreement for it to become a legal contract.') }}
       <p>
 
       <a href="{{ OfferPaths.declarationPage.evaluateUri({ externalId: claim.externalId }) }}" role="button" class="button">
