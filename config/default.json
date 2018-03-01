@@ -71,6 +71,9 @@
   "http": {
     "timeout": 10000
   },
+  "requestRetry": {
+    "maxAttempts": 3
+  },
   "featureToggles": {
     "clusterMode": false,
     "testingSupport": false,
