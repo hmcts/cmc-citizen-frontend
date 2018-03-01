@@ -23,10 +23,5 @@ export const responseDraft = {
   },
   freeMediation: {
     option: 'no'
-  },
-  whenDidYouPay: {
-    date: {
-      year: 2017, month: 1, day: 1
-    },
-    text: 'I paid cash' }
+  }
 }

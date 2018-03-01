@@ -1,5 +1,5 @@
 import { ResponseCommon, ResponseType } from './responseCommon'
-import { PaymentDeclaration } from 'response/form/models/paymentDeclaration'
+import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
 
 export enum DefenceType {
   DISPUTE = 'DISPUTE',
@@ -10,7 +10,7 @@ export interface FullDefenceResponse extends ResponseCommon {
   responseType: ResponseType.FULL_DEFENCE
   defenceType: DefenceType
   defence: string
-  whenDidYouPay: PaymentDeclaration
+  paymentDeclaration: PaymentDeclaration
 }
 
 export namespace FullDefenceResponse {
@@ -19,7 +19,7 @@ export namespace FullDefenceResponse {
       ...ResponseCommon.deserialize(input),
       defenceType: input.defenceType,
       defence: input.defence,
-      whenDidYouPay: input.whenDidYouPay ? new PaymentDeclaration().deserialize(input.whenDidYouPay) : undefined
+      paymentDeclaration: input.paymentDeclaration ? new PaymentDeclaration().deserialize(input.paymentDeclaration) : undefined
     }
   }
 }

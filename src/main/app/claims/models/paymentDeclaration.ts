@@ -1,6 +1,6 @@
 export class PaymentDeclaration {
 
-  constructor (public paidDate: string, public explanation: string) {
+  constructor (public paidDate?: string, public explanation?: string) {
     this.paidDate = paidDate
     this.explanation = explanation
   }

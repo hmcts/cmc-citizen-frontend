@@ -31,6 +31,11 @@ export class ResponseModelConverter {
       )
     }
 
+    let paymentDeclaration: PaymentDeclaration = undefined
+    if (responseDraft.isResponseRejectedFullyWithAmountClaimedPaid()) {
+      paymentDeclaration = this.convertWhenDidYouPay(responseDraft.whenDidYouPay)
+    }
+
     return {
       responseType: ResponseType.FULL_DEFENCE,
       defenceType: this.inferDefenceType(responseDraft),
@@ -38,7 +43,7 @@ export class ResponseModelConverter {
       freeMediation: responseDraft.freeMediation && responseDraft.freeMediation.option,
       moreTimeNeeded: responseDraft.moreTimeNeeded && responseDraft.moreTimeNeeded.option,
       defendant: this.convertPartyDetails(responseDraft.defendantDetails),
-      whenDidYouPay: this.convertWhenDidYouPay(responseDraft.whenDidYouPay),
+      paymentDeclaration,
       statementOfTruth
     }
   }
@@ -96,8 +101,9 @@ export class ResponseModelConverter {
   }
 
   private static convertWhenDidYouPay (paymentDeclaration: DraftPaymentDeclaration): PaymentDeclaration {
-    if (paymentDeclaration !== undefined) {
-      return new PaymentDeclaration(paymentDeclaration.date.asString(), paymentDeclaration.text)
+    if (!paymentDeclaration) {
+      return undefined
     }
+    return new PaymentDeclaration(paymentDeclaration.date.asString(), paymentDeclaration.text)
   }
 }
