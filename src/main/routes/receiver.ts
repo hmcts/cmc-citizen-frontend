@@ -23,6 +23,7 @@ import { DraftService } from 'services/draftService'
 import { Logger } from '@hmcts/nodejs-logging'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { FeatureToggles } from 'utils/featureToggles'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 const logger = Logger.getLogger('router/receiver')
 const sessionCookie = config.get<string>('session.cookieName')
@@ -90,6 +91,12 @@ async function retrieveRedirectForLandingPage (user: User): Promise<string> {
   const claimIssuedButNoResponse: boolean = (claimAgainstDefendant).length > 0
     && !atLeastOneResponse
 
+  const draftResponse: Draft<ResponseDraft>[] = await new DraftService().find('response', '100', user.bearerToken, (value: any): ResponseDraft => {
+    return new ResponseDraft().deserialize(value)
+  })
+
+  const draftResponseSaved: boolean = draftResponse.length > 0
+
   if (claimIssuedButNoResponse && draftClaimSaved) {
     return DashboardPaths.dashboardPage.uri
   }
@@ -98,9 +105,13 @@ async function retrieveRedirectForLandingPage (user: User): Promise<string> {
     return ClaimPaths.taskListPage.uri
   }
 
-  if (claimIssuedButNoResponse) {
+  if (claimIssuedButNoResponse && !draftResponseSaved) {
     return ResponsePaths.taskListPage
       .evaluateUri({ externalId: claimAgainstDefendant.pop().externalId })
+  }
+
+  if (claimIssuedButNoResponse && draftResponseSaved) {
+    return DashboardPaths.dashboardPage.uri
   }
 
   return ClaimPaths.startPage.uri
