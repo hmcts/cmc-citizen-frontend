@@ -118,7 +118,7 @@ export default express.Router()
             (letterHolderId) => linkDefendantWithClaimByLetterHolderId(letterHolderId, user)
             )
           )
-            .then(async () => res.redirect(DashboardPaths.dashboardPage.uri))
+            .then(() => res.redirect(DashboardPaths.dashboardPage.uri))
             .catch(next)
           }
 
