@@ -67,6 +67,9 @@
   "http": {
     "timeout": "HTTP_TIMEOUT"
   },
+  "requestRetry": {
+    "maxAttempts": "REQUEST_RETRY_MAX_ATTEMPTS"
+  },
   "featureToggles": {
     "clusterMode": "FEATURE_CLUSTER_MODE",
     "testingSupport": "FEATURE_TESTING_SUPPORT",
