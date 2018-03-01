@@ -15,7 +15,7 @@ export class ValidationErrors {
 }
 
 export class ValidationConstraints {
-  static readonly DATE_MAX_LENGTH: number = 25
+  static readonly DATE_MAX_LENGTH: number = 20
 }
 
 export class TimelineRow extends MultiRowFormItem {

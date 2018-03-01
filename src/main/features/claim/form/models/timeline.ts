@@ -33,4 +33,8 @@ export class Timeline extends MultiRowForm<TimelineRow> {
   getMaxNumberOfRows (): number {
     return MAX_NUMBER_OF_ROWS
   }
+
+  isCompleted (): boolean {
+    return this.rows.length > 0
+  }
 }

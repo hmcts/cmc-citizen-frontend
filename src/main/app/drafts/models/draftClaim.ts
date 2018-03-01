@@ -40,7 +40,7 @@ export class DraftClaim extends DraftDocument {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }
       this.eligibility = new Eligibility().deserialize(input.eligibility)
-      this.timeline = new Timeline().deserialize(input.timeline)
+      this.timeline = new Timeline().deserialize(input.timeline) as Timeline
     }
     return this
   }

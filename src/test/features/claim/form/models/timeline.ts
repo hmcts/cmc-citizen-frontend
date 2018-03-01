@@ -65,7 +65,7 @@ describe('Timeline', () => {
   describe('deserialize', () => {
 
     it('should return valid Timeline object with list of empty TimelineRow', () => {
-      const actual: Timeline = new Timeline().deserialize({})
+      const actual: Timeline = new Timeline().deserialize({}) as Timeline
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
       expectAllRowsToBeEmpty(actual.rows)
@@ -74,7 +74,7 @@ describe('Timeline', () => {
     it('should return valid Timeline object with populated first TimelineRow', () => {
       const actual: Timeline = new Timeline().deserialize(
         { rows: [{ date: 'May', description: 'OK' }] }
-      )
+      ) as Timeline
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
 
@@ -97,7 +97,7 @@ describe('Timeline', () => {
             { date: 'May', description: 'OK' }
           ]
         }
-      )
+      ) as Timeline
 
       expectAllRowsToBePopulated(actual.rows)
     })
@@ -147,7 +147,7 @@ describe('Timeline', () => {
           { date: 'Apr', description: 'OK' },
           { date: 'May', description: 'OK' }
         ]
-      })
+      }) as Timeline
 
       expect(actual.rows.length).to.be.eq(5)
       actual.removeExcessRows()
@@ -163,7 +163,7 @@ describe('Timeline', () => {
           {},
           {}
         ]
-      })
+      }) as Timeline
 
       expect(actual.rows.length).to.be.eq(4)
       actual.removeExcessRows()
@@ -179,7 +179,7 @@ describe('Timeline', () => {
           { date: 'Feb', description: 'OK' },
           {}
         ]
-      })
+      }) as Timeline
 
       expect(actual.rows.length).to.be.eq(4)
       actual.removeExcessRows()

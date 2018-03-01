@@ -52,5 +52,8 @@ export const claimDraft = {
   },
   reason: {
     reason: 'Because he did...'
+  },
+  timeline: {
+    rows: []
   }
 }
