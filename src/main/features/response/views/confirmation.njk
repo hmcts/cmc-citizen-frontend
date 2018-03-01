@@ -32,7 +32,7 @@
         <p>{{ t('You can still <a href="{{ link }}">settle the claim out of court</a>. For example you could offer to fix faulty goods you sold the claimant or suggest a payment.',
             { link: OfferPaths.settleOutOfCourtPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}</p>
         <p>{{ t('You can avoid getting a County Court Judgment if the claimant accepts your offer.') }}</p>
-      {% end if %}
+      {% endif %}
 
       <h2 class="heading-medium">{{ t('Mediation') }}</h2>
       <p>{{ t('You have chosen to use the free mediation service to resolve the dispute with {{ claimant }}. We’ll ask them if they want to mediate.', { claimant: claim.claimData.claimant.name  }) | safe }}</p>
