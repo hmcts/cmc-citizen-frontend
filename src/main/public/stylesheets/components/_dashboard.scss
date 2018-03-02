@@ -24,3 +24,12 @@
   padding: 16px 0 0;
   text-align: right;
 }
+
+.status-block {
+  border-bottom: 1px solid $grey-2;
+}
+
+.status-block.single {
+  border: none;
+}
+
