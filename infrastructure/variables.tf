@@ -15,6 +15,11 @@ variable "env" { }
 
 variable "ilbIp" { }
 
+variable "ga_tracking_id" {
+  description = "Google Analytics tracking ID"
+  default = "UA-97111056-1"
+}
+
 variable "draft_store_api_url" {
   default = "https://testdraftstorelb.moneyclaim.reform.hmcts.net:4302"
 }
