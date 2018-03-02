@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 
-import { TimelineRow } from 'response/form/models/timelineRow'
 import { INIT_ROW_COUNT, MAX_NUMBER_OF_ROWS, Timeline } from 'response/form/models/timeline'
+import { TimelineRow } from 'forms/models/timelineRow'
 
 describe('Timeline', () => {
 

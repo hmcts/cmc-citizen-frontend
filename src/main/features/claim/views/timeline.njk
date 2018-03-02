@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
-{% from "timelineForm.njk" import timelineForm%}
+{% from "timelineForm.njk" import timelineForm %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Timeline of events') %}
@@ -11,7 +11,7 @@
 
     <form method="post" novalidate>
       {{ csrfProtection(csrf) }}
-      <h3 class="heading-small">{{ t('Example timeline') }}</h3>
+      <h2 class="heading-small">{{ t('Example timeline') }}</h2>
       <ul class="list list-bullet">
         <li>{{ t('12 January 2017 - John Smith gave me a quote to replace the roof.') }}</li>
         <li>{{ t('14 January 2017 - We agreed and signed a contract for the work.') }}</li>
