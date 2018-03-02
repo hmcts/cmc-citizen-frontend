@@ -1,9 +1,10 @@
 import { expect } from 'chai'
 
-import { TimelineRow, ValidationErrors, ValidationConstraints } from 'response/form/models/timelineRow'
+import { TimelineRow, ValidationErrors, ValidationConstraints } from 'claim/form/models/timelineRow'
 import { ValidationConstraints as DefaultValidationConstraints } from 'forms/validation/validationConstraints'
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from '../../../../app/forms/models/validationUtils'
+import { ValidationErrors as GlobalValidationErrors } from 'app/forms/validation/validationErrors'
 
 describe('TimelineRow', () => {
 
@@ -49,14 +50,14 @@ describe('TimelineRow', () => {
         const errors = validator.validateSync(new TimelineRow('', 'Let me tell you what happened'))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.DATE_REQUIRED)
+        expectValidationError(errors, GlobalValidationErrors.DATE_REQUIRED)
       })
 
       it('when both args are empty strings', () => {
         const errors = validator.validateSync(new TimelineRow('', ''))
 
         expect(errors.length).to.equal(2)
-        expectValidationError(errors, ValidationErrors.DATE_REQUIRED)
+        expectValidationError(errors, GlobalValidationErrors.DATE_REQUIRED)
         expectValidationError(errors, ValidationErrors.DESCRIPTION_REQUIRED)
       })
 
@@ -77,7 +78,7 @@ describe('TimelineRow', () => {
         )
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.DESCRIPTION_TOO_LONG)
+        expectValidationError(errors, GlobalValidationErrors.TEXT_TOO_LONG)
       })
     })
   })
