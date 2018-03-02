@@ -21,13 +21,13 @@
       <p>
         {{
           t('View your claim status on <a href="{{ dashboardUri }}">your money claims account</a>.', {
-            dashboardUri: '/dashboard'
+            dashboardUri: dashboardLink
           }) | safe
         }}
       </p>
 
       <br>
-      <a href="/dashboard" class="button">Finished</a>
+      <a href="{{ dashboardLink }}" class="button">Finished</a>
 
       {{ supportWidget() }}
 
