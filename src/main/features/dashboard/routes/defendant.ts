@@ -19,7 +19,6 @@ export default express.Router()
       isAfter4pm: isAfter4pm(),
       claim: claim,
       claimReceiptUri: Paths.claimReceiptReceiver.evaluateUri({ externalId: externalId }),
-      responseReceiptUri: Paths.responseReceiptReceiver.evaluateUri({ externalId: externalId }),
       claimSettlementUri: Paths.agreementReceiver.evaluateUri({ externalId: externalId })
     })
   }))
