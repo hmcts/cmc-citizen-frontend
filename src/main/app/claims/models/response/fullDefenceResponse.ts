@@ -9,8 +9,8 @@ export enum DefenceType {
 export interface FullDefenceResponse extends ResponseCommon {
   responseType: ResponseType.FULL_DEFENCE
   defenceType: DefenceType
+  paymentDeclaration?: PaymentDeclaration
   defence: string
-  paymentDeclaration: PaymentDeclaration
 }
 
 export namespace FullDefenceResponse {
@@ -18,8 +18,8 @@ export namespace FullDefenceResponse {
     return {
       ...ResponseCommon.deserialize(input),
       defenceType: input.defenceType,
-      defence: input.defence,
-      paymentDeclaration: input.paymentDeclaration ? new PaymentDeclaration().deserialize(input.paymentDeclaration) : undefined
+      paymentDeclaration: input.paymentDeclaration ? new PaymentDeclaration().deserialize(input.paymentDeclaration) : undefined,
+      defence: input.defence
     }
   }
 }

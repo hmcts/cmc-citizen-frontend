@@ -1,9 +1,6 @@
 export class PaymentDeclaration {
 
-  constructor (public paidDate?: string, public explanation?: string) {
-    this.paidDate = paidDate
-    this.explanation = explanation
-  }
+  constructor (public paidDate?: string, public explanation?: string) {}
 
   deserialize (input: any): PaymentDeclaration {
     if (input) {

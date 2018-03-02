@@ -16,7 +16,7 @@ export class ValidationErrors {
   }
 }
 
-export class PaymentDeclaration {
+export class WhenDidYouPay {
 
   @ValidateNested()
   @IsDefined({ message: CommonValidationErrors.DATE_REQUIRED })
@@ -34,17 +34,17 @@ export class PaymentDeclaration {
     this.text = text
   }
 
-  static fromObject (value?: any): PaymentDeclaration {
+  static fromObject (value?: any): WhenDidYouPay {
     if (!value) {
       return value
     }
 
     const date = LocalDate.fromObject(value.date)
     const text = value.text
-    return new PaymentDeclaration(date, text)
+    return new WhenDidYouPay(date, text)
   }
 
-  deserialize (input: any): PaymentDeclaration {
+  deserialize (input: any): WhenDidYouPay {
     if (input) {
       this.date = new LocalDate().deserialize(input.date)
       this.text = input.text

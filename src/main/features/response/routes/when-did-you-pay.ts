@@ -4,7 +4,7 @@ import { Paths } from 'features/response/paths'
 
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import { PaymentDeclaration } from 'features/response/form/models/paymentDeclaration'
+import { WhenDidYouPay } from 'features/response/form/models/whenDidYouPay'
 import { User } from 'idam/user'
 import { ErrorHandling } from 'common/errorHandling'
 import { Claim } from 'claims/models/claim'
@@ -12,7 +12,7 @@ import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 
-function renderView (form: Form<PaymentDeclaration>, res: express.Response) {
+function renderView (form: Form<WhenDidYouPay>, res: express.Response) {
   res.render(Paths.whenDidYouPay.associatedView, {
     form: form
   })
@@ -27,9 +27,9 @@ export default express.Router()
   }))
   .post(
     Paths.whenDidYouPay.uri,
-    FormValidator.requestHandler(PaymentDeclaration, PaymentDeclaration.fromObject),
+    FormValidator.requestHandler(WhenDidYouPay, WhenDidYouPay.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const form: Form<PaymentDeclaration> = req.body
+      const form: Form<WhenDidYouPay> = req.body
       if (form.hasErrors()) {
         renderView(form, res)
       } else {

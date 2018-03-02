@@ -18,22 +18,22 @@ import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { ResponseType as FormResponseType } from 'response/form/models/responseType'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
-import { PaymentDeclaration as DraftPaymentDeclaration } from 'response/form/models/paymentDeclaration'
+import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
 
 export class ResponseModelConverter {
 
   static convert (responseDraft: ResponseDraft): Response {
+    let paymentDeclaration: PaymentDeclaration = undefined
+    if (responseDraft.isResponseRejectedFullyWithAmountClaimedPaid()) {
+      paymentDeclaration = this.convertWhenDidYouPay(responseDraft.whenDidYouPay)
+    }
+
     let statementOfTruth: StatementOfTruth = undefined
     if (responseDraft.qualifiedStatementOfTruth) {
       statementOfTruth = new StatementOfTruth(
         responseDraft.qualifiedStatementOfTruth.signerName,
         responseDraft.qualifiedStatementOfTruth.signerRole
       )
-    }
-
-    let paymentDeclaration: PaymentDeclaration = undefined
-    if (responseDraft.isResponseRejectedFullyWithAmountClaimedPaid()) {
-      paymentDeclaration = this.convertWhenDidYouPay(responseDraft.whenDidYouPay)
     }
 
     return {
@@ -100,10 +100,10 @@ export class ResponseModelConverter {
     return party
   }
 
-  private static convertWhenDidYouPay (paymentDeclaration: DraftPaymentDeclaration): PaymentDeclaration {
-    if (!paymentDeclaration) {
+  private static convertWhenDidYouPay (whenDidYouPay: WhenDidYouPay): PaymentDeclaration {
+    if (whenDidYouPay === undefined) {
       return undefined
     }
-    return new PaymentDeclaration(paymentDeclaration.date.asString(), paymentDeclaration.text)
+    return new PaymentDeclaration(whenDidYouPay.date.asString(), whenDidYouPay.text)
   }
 }

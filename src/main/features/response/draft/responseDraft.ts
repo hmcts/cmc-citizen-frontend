@@ -21,7 +21,7 @@ import * as toBoolean from 'to-boolean'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
 import { PayBySetDate } from 'response/draft/payBySetDate'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
-import { PaymentDeclaration } from 'response/form/models/paymentDeclaration'
+import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
 import { HowMuchPaidClaimantOption, HowMuchPaidClaimant } from 'response/form/models/howMuchPaidClaimant'
 
 export class ResponseDraft extends DraftDocument {
@@ -44,7 +44,7 @@ export class ResponseDraft extends DraftDocument {
   payBySetDate?: PayBySetDate
   impactOfDispute?: ImpactOfDispute
   statementOfMeans?: StatementOfMeans
-  whenDidYouPay?: PaymentDeclaration
+  whenDidYouPay?: WhenDidYouPay
   howMuchPaidClaimant?: HowMuchPaidClaimant
 
   deserialize (input: any): ResponseDraft {
@@ -71,7 +71,7 @@ export class ResponseDraft extends DraftDocument {
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
       this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
       this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
-      this.whenDidYouPay = new PaymentDeclaration().deserialize(input.whenDidYouPay)
+      this.whenDidYouPay = new WhenDidYouPay().deserialize(input.whenDidYouPay)
       this.howMuchPaidClaimant = new HowMuchPaidClaimant(input.howMuchPaidClaimant && input.howMuchPaidClaimant.option)
     }
     return this
