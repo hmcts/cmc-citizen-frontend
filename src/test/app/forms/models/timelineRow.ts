@@ -1,9 +1,9 @@
 import { expect } from 'chai'
 
-import { TimelineRow, ValidationErrors, ValidationConstraints } from 'claim/form/models/timelineRow'
-import { ValidationConstraints as DefaultValidationConstraints } from 'forms/validation/validationConstraints'
+import { TimelineRow, ValidationErrors, ValidationConstraints } from 'app/forms/models/timelineRow'
+import { ValidationConstraints as DefaultValidationConstraints } from 'app/forms/validation/validationConstraints'
 import { Validator } from 'class-validator'
-import { expectValidationError, generateString } from '../../../../app/forms/models/validationUtils'
+import { expectValidationError, generateString } from './validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'app/forms/validation/validationErrors'
 
 describe('TimelineRow', () => {

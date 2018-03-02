@@ -29,7 +29,7 @@ import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 import { ClaimType } from 'claim/form/models/eligibility/claimType'
-import { Timeline } from 'claim/form/models/timeline'
+import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
@@ -110,7 +110,7 @@ export const sampleClaimDraftObj = {
   } as Reason,
   timeline: {
     rows: [{ date: 'aaa', description: 'bb' }]
-  } as Timeline
+  } as ClaimantTimeline
 } as DraftClaim
 
 const sampleResponseDraftObj = {

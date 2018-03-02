@@ -1,17 +1,17 @@
 import { expect } from 'chai'
 
-import { TimelineRow } from 'claim/form/models/timelineRow'
-import { Timeline, INIT_ROW_COUNT, MAX_NUMBER_OF_ROWS, ValidationErrors } from 'claim/form/models/timeline'
+import { TimelineRow } from 'app/forms/models/timelineRow'
+import { ClaimantTimeline, INIT_ROW_COUNT, MAX_NUMBER_OF_ROWS, ValidationErrors } from 'claim/form/models/claimantTimeline'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
 
-describe('Timeline', () => {
+describe('ClaimantTimeline', () => {
 
   describe('on init', () => {
 
     it(`should create array of ${INIT_ROW_COUNT} empty instances of TimelineRow`, () => {
 
-      const actual: TimelineRow[] = (new Timeline()).rows
+      const actual: TimelineRow[] = (new ClaimantTimeline()).rows
 
       expect(actual.length).to.equal(INIT_ROW_COUNT)
       expectAllRowsToBeEmpty(actual)
@@ -21,19 +21,19 @@ describe('Timeline', () => {
   describe('fromObject', () => {
 
     it('should return undefined value when undefined provided', () => {
-      const actual: any = Timeline.fromObject(undefined)
+      const actual: any = ClaimantTimeline.fromObject(undefined)
 
       expect(actual).to.eql(undefined)
     })
 
-    it('should return Timeline with list of empty TimelineRow[] when empty input given', () => {
-      const actual: Timeline = Timeline.fromObject([])
+    it('should return ClaimantTimeline with list of empty TimelineRow[] when empty input given', () => {
+      const actual: ClaimantTimeline = ClaimantTimeline.fromObject([])
 
       expectAllRowsToBeEmpty(actual.rows)
     })
 
-    it('should return Timeline with first element on list populated', () => {
-      const actual: Timeline = Timeline.fromObject({ rows: [{ date: 'May', description: 'OK' }] })
+    it('should return ClaimantTimeline with first element on list populated', () => {
+      const actual: ClaimantTimeline = ClaimantTimeline.fromObject({ rows: [{ date: 'May', description: 'OK' }] })
 
       const populatedItem: TimelineRow = actual.rows.pop()
 
@@ -44,7 +44,7 @@ describe('Timeline', () => {
     })
 
     it('should return object with list of TimelineRow longer than default', () => {
-      const actual: Timeline = Timeline.fromObject(
+      const actual: ClaimantTimeline = ClaimantTimeline.fromObject(
         {
           rows: [
             { date: 'Jan', description: 'OK' },
@@ -64,17 +64,17 @@ describe('Timeline', () => {
 
   describe('deserialize', () => {
 
-    it('should return valid Timeline object with list of empty TimelineRow', () => {
-      const actual: Timeline = new Timeline().deserialize({}) as Timeline
+    it('should return valid ClaimantTimeline object with list of empty TimelineRow', () => {
+      const actual: ClaimantTimeline = new ClaimantTimeline().deserialize({}) as ClaimantTimeline
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
       expectAllRowsToBeEmpty(actual.rows)
     })
 
-    it('should return valid Timeline object with populated first TimelineRow', () => {
-      const actual: Timeline = new Timeline().deserialize(
+    it('should return valid ClaimantTimeline object with populated first TimelineRow', () => {
+      const actual: ClaimantTimeline = new ClaimantTimeline().deserialize(
         { rows: [{ date: 'May', description: 'OK' }] }
-      ) as Timeline
+      ) as ClaimantTimeline
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
 
@@ -86,8 +86,8 @@ describe('Timeline', () => {
       expectAllRowsToBeEmpty(actual.rows.slice(1))
     })
 
-    it('should return valid Timeline object with list of row longer than default length', () => {
-      const actual: Timeline = new Timeline().deserialize(
+    it('should return valid ClaimantTimeline object with list of row longer than default length', () => {
+      const actual: ClaimantTimeline = new ClaimantTimeline().deserialize(
         {
           rows: [
             { date: 'Jan', description: 'OK' },
@@ -97,7 +97,7 @@ describe('Timeline', () => {
             { date: 'May', description: 'OK' }
           ]
         }
-      ) as Timeline
+      ) as ClaimantTimeline
 
       expectAllRowsToBePopulated(actual.rows)
     })
@@ -106,7 +106,7 @@ describe('Timeline', () => {
   describe('appendRow', () => {
 
     it('adds empty element to list of rows', () => {
-      const actual: Timeline = new Timeline()
+      const actual: ClaimantTimeline = new ClaimantTimeline()
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
 
@@ -116,7 +116,7 @@ describe('Timeline', () => {
     })
 
     it(`adds only up to ${MAX_NUMBER_OF_ROWS} elements`, () => {
-      const actual: Timeline = new Timeline()
+      const actual: ClaimantTimeline = new ClaimantTimeline()
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
 
@@ -131,7 +131,7 @@ describe('Timeline', () => {
   describe('removeExcessRows', () => {
 
     it('should filter out all elements from list when empty', () => {
-      const actual: Timeline = new Timeline()
+      const actual: ClaimantTimeline = new ClaimantTimeline()
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
       actual.removeExcessRows()
@@ -139,7 +139,7 @@ describe('Timeline', () => {
     })
 
     it('should not filter out any element from list when all populated', () => {
-      const actual: Timeline = new Timeline().deserialize({
+      const actual: ClaimantTimeline = new ClaimantTimeline().deserialize({
         rows: [
           { date: 'Jan', description: 'OK' },
           { date: 'Feb', description: 'OK' },
@@ -147,7 +147,7 @@ describe('Timeline', () => {
           { date: 'Apr', description: 'OK' },
           { date: 'May', description: 'OK' }
         ]
-      }) as Timeline
+      }) as ClaimantTimeline
 
       expect(actual.rows.length).to.be.eq(5)
       actual.removeExcessRows()
@@ -156,14 +156,14 @@ describe('Timeline', () => {
     })
 
     it('should filter out some elements from list when some of them are populated', () => {
-      const actual: Timeline = new Timeline().deserialize({
+      const actual: ClaimantTimeline = new ClaimantTimeline().deserialize({
         rows: [
           { date: 'Jan', description: 'OK' },
           { date: 'Feb', description: 'OK' },
           {},
           {}
         ]
-      }) as Timeline
+      }) as ClaimantTimeline
 
       expect(actual.rows.length).to.be.eq(4)
       actual.removeExcessRows()
@@ -172,14 +172,14 @@ describe('Timeline', () => {
     })
 
     it('should filter out some elements from list when mixed', () => {
-      const actual: Timeline = new Timeline().deserialize({
+      const actual: ClaimantTimeline = new ClaimantTimeline().deserialize({
         rows: [
           { date: 'Jan', description: 'OK' },
           {},
           { date: 'Feb', description: 'OK' },
           {}
         ]
-      }) as Timeline
+      }) as ClaimantTimeline
 
       expect(actual.rows.length).to.be.eq(4)
       actual.removeExcessRows()
@@ -191,13 +191,13 @@ describe('Timeline', () => {
   describe('canAddMoreRows', () => {
 
     it('should return true when number of elements is lower than max number', () => {
-      const actual: Timeline = new Timeline()
+      const actual: ClaimantTimeline = new ClaimantTimeline()
 
       expect(actual.canAddMoreRows()).to.be.eq(true)
     })
 
     it('should return true when number of rows is equal max', () => {
-      const actual: Timeline = new Timeline()
+      const actual: ClaimantTimeline = new ClaimantTimeline()
 
       for (let i = 0; i < MAX_NUMBER_OF_ROWS; i++) {
         actual.appendRow()
@@ -212,14 +212,14 @@ describe('Timeline', () => {
     const validator: Validator = new Validator()
 
     it('should reject when no rows given', () => {
-      const errors = validator.validateSync(new Timeline([]))
+      const errors = validator.validateSync(new ClaimantTimeline([]))
 
       expect(errors.length).to.equal(1)
       expectValidationError(errors, ValidationErrors.ENTER_AT_LEAST_ONE_ROW)
     })
 
     it('should accept when at least one row given', () => {
-      const errors = validator.validateSync(new Timeline([new TimelineRow('may', 'ok')]))
+      const errors = validator.validateSync(new ClaimantTimeline([new TimelineRow('may', 'ok')]))
 
       expect(errors.length).to.equal(0)
     })

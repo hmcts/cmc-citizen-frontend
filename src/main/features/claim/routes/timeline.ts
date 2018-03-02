@@ -7,13 +7,13 @@ import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { RoutablePath } from 'common/router/routablePath'
-import { Timeline } from 'claim/form/models/timeline'
+import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
 
 const page: RoutablePath = Paths.timelinePage
 
-function renderView (form: Form<Timeline>, res: express.Response): void {
+function renderView (form: Form<ClaimantTimeline>, res: express.Response): void {
   res.render(page.associatedView, {
     form: form
   })
@@ -21,7 +21,7 @@ function renderView (form: Form<Timeline>, res: express.Response): void {
 
 function actionHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
   if (req.body.action) {
-    const form: Form<Timeline> = req.body
+    const form: Form<ClaimantTimeline> = req.body
     if (req.body.action.addRow) {
       form.model.appendRow()
     }
@@ -40,10 +40,10 @@ export default express.Router()
     })
   .post(
     page.uri,
-    FormValidator.requestHandler(Timeline, Timeline.fromObject, undefined, ['addRow']),
+    FormValidator.requestHandler(ClaimantTimeline, ClaimantTimeline.fromObject, undefined, ['addRow']),
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<Timeline> = req.body
+      const form: Form<ClaimantTimeline> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)

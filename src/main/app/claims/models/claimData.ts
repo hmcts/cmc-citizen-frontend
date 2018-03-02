@@ -14,7 +14,7 @@ import { SoleTrader as DefendantAsSoleTrader } from 'claims/models/details/their
 import { Organisation as DefendantAsOrganisation } from 'claims/models/details/theirs/organisation'
 import { Payment } from 'app/pay/payment'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
-import { Timeline } from 'claim/form/models/timeline'
+import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 
 export class ClaimData {
   externalId: string
@@ -23,7 +23,7 @@ export class ClaimData {
   amount: ClaimAmountBreakdown = new ClaimAmountBreakdown()
   feeAmountInPennies: number
   reason: string
-  timeline: Timeline
+  timeline: ClaimantTimeline
   interest: Interest
   interestDate: InterestDate
   payment: Payment = new Payment()
@@ -66,7 +66,7 @@ export class ClaimData {
       this.reason = input.reason
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
       this.reason = input.reason
-      this.timeline = Timeline.fromObject(input.timeline)
+      this.timeline = ClaimantTimeline.fromObject(input.timeline)
       this.externalId = input.externalId
       if (input.interest) {
         this.interest = new Interest().deserialize(input.interest)
