@@ -88,11 +88,15 @@
       ],
       "services/*": [
         "services/*"
+      ],
+      "integration-tests/*": [
+        "../../integration-tests/src/*"
       ]
     },
     "typeRoots": [
       "./node_modules/@types",
-      "./types"
+      "./types",
+      "./integration-tests/types"
     ]
   }
 }

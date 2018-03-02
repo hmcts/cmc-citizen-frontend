@@ -1,0 +1,111 @@
+import { PartyType } from 'integration-tests/data/party-type'
+import { claimAmount, claimFee, claimReason, createClaimant, createDefendant } from 'integration-tests/data/test-data'
+import I = CodeceptJS.I
+
+const I: I = actor()
+
+const fields = {
+  checkboxFactsTrue: 'input#signedtrue',
+  signerName: 'input[id=signerName]',
+  signerRole: 'input[id=signerRole]'
+}
+
+const buttons = {
+  submit: 'input[type=submit]'
+}
+
+export class ClaimantCheckAndSendPage {
+
+  open (type: string): void {
+    I.amOnCitizenAppPage('/claim/check-and-send')
+  }
+
+  signStatementOfTruthAndSubmit (signerName: string, signerRole: string): void {
+    I.fillField(fields.signerName, signerName)
+    I.fillField(fields.signerRole, signerRole)
+    this.checkFactsTrueAndSubmit()
+  }
+
+  checkFactsTrueAndSubmit (): void {
+    I.checkOption(fields.checkboxFactsTrue)
+    I.click(buttons.submit)
+  }
+
+  verifyClaimantCheckAndSendAnswers (claimant: Party, claimantType: PartyType): void {
+    I.see(claimant.address.line1)
+    I.see(claimant.address.line2)
+    I.see(claimant.address.city)
+    I.see(claimant.address.postcode)
+    I.see(claimant.correspondenceAddress.line1)
+    I.see(claimant.correspondenceAddress.line2)
+    I.see(claimant.correspondenceAddress.city)
+    I.see(claimant.correspondenceAddress.postcode)
+    switch (claimantType) {
+
+      case PartyType.INDIVIDUAL:
+        I.see(claimant.name)
+        // todo have to convert numeric month to full text month I.see(claimant.dateOfBirth)
+        break
+      case PartyType.SOLE_TRADER:
+        I.see(claimant.name)
+        break
+      case PartyType.COMPANY:
+        I.see(claimant.name)
+        I.see(claimant.contactPerson)
+        break
+      case PartyType.ORGANISATION:
+        I.see(claimant.name)
+        I.see(claimant.contactPerson)
+        break
+      default:
+        throw new Error('non-matching claimant type for claim')
+    }
+    I.see(claimant.mobilePhone)
+    I.see(claimReason)
+  }
+
+  verifyDefendantCheckAndSendAnswers (defendantType: PartyType, enterDefendantEmail: boolean = true): void {
+    const defendant: Party = createDefendant(defendantType, enterDefendantEmail)
+
+    I.see(defendant.address.line1)
+    I.see(defendant.address.line2)
+    I.see(defendant.address.city)
+    I.see(defendant.address.postcode)
+    switch (defendantType) {
+
+      case PartyType.INDIVIDUAL:
+        I.see(defendant.name)
+        break
+      case PartyType.SOLE_TRADER:
+        I.see(defendant.name)
+        break
+      case PartyType.COMPANY:
+        I.see(defendant.name)
+        break
+      case PartyType.ORGANISATION:
+        I.see(defendant.name)
+        break
+      default:
+        throw new Error('non-matching defendant Type type for claim')
+    }
+    if (enterDefendantEmail) {
+      I.see(defendant.email)
+    }
+  }
+
+  verifyClaimAmount (): void {
+    I.see('£' + claimAmount.getClaimTotal().toFixed(2))
+    I.see('£' + claimFee.toFixed(2))
+    I.see('£' + claimAmount.getTotal().toFixed(2))
+  }
+
+  verifyCheckAndSendAnswers (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): void {
+    const claimant: Party = createClaimant(claimantType)
+
+    I.waitForText('Check your answers before submitting your claim')
+    this.verifyClaimantCheckAndSendAnswers(claimant, claimantType)
+    this.verifyDefendantCheckAndSendAnswers(defendantType, enterDefendantEmail)
+    this.verifyClaimAmount()
+  }
+
+}
