@@ -14,14 +14,12 @@
     <div class="column-two-thirds">
       <h2 class="heading-medium">{{ t('Claim status') }}</h2>
 
-
-
       {% if featureToggles.offer and claim.status === ClaimStatus.OFFER_ACCEPTED %}
-        {% for state in claim.stateHistory %}
+        {% for defendantClaimState in claim.stateHistory %}
           <div class="status-block">
-            <p>{{ (state.date | date) if state.date}}</p>
+            <p>{{ (defendantClaimState.date | date) if defendantClaimState.date}}</p>
             <p>
-              {{ responseStatusForDefendantBasedOnState(state.status, claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
+              {{ responseStatusForDefendantBasedOnState(defendantClaimState, claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
             </p>
           </div>
         {% endfor %}
