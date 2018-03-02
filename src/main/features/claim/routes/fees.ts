@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { Paths } from 'claim/paths'
-import { claimAmountWithInterest } from 'app/utils/interestUtils'
+import { draftClaimAmountWithInterest } from 'common/interestUtils'
 import { FeesClient } from 'fees/feesClient'
 import { FeesTableViewHelper } from 'claim/helpers/feesTableViewHelper'
 import { DraftClaim } from 'drafts/models/draftClaim'
@@ -11,7 +11,7 @@ import { Draft } from '@hmcts/draft-store-client'
 export default express.Router()
   .get(Paths.feesPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
-    const claimAmount: number = await claimAmountWithInterest(draft.document)
+    const claimAmount: number = await draftClaimAmountWithInterest(draft.document)
 
     Promise.all(
       [

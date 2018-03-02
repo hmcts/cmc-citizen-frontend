@@ -15,7 +15,7 @@
             data-event-label-from="option" novalidate>
         {{ csrfProtection(csrf) }}
 
-        <p>{{ t('The amount claimed is {{ totalAmountTillToday }}', { totalAmountTillToday: claim.totalAmountTillToday | numeral }) }}</p>
+        <p>{{ t('The total amount claimed is {{ totalAmountTillToday }}. This includes the claim fee and any interest.', { totalAmountTillToday: claim.totalAmountTillToday | numeral }) }}</p>
 
         {{
         radioGroup(

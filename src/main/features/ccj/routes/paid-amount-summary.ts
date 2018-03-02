@@ -6,7 +6,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { Claim } from 'claims/models/claim'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Draft } from '@hmcts/draft-store-client'
-import { getInterestDetails } from 'common/interest'
+import { getInterestDetails } from 'common/interestUtils'
 import { MomentFactory } from '../../../common/momentFactory'
 
 /* tslint:disable:no-default-export */

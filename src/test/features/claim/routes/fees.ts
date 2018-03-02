@@ -7,6 +7,9 @@ import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 
 import { ErrorPaths, Paths as ClaimPaths } from 'claim/paths'
+import { InterestType } from 'claim/form/models/interest'
+import { LocalDate } from 'forms/models/localDate'
+import { InterestDateType } from 'app/common/interestDateType'
 
 import { app } from '../../../../main/app'
 
@@ -29,7 +32,6 @@ describe('Claim issue: fees page', () => {
       })
 
       it('should return 500 and render error page when cannot calculate issue fee', async () => {
-        mockCalculateInterestRate(0)
         draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.rejectCalculateIssueFee()
         feesServiceMock.resolveCalculateHearingFee()
@@ -43,7 +45,6 @@ describe('Claim issue: fees page', () => {
       })
 
       it('should return 500 and render error page when cannot calculate hearing fee', async () => {
-        mockCalculateInterestRate(0)
         draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.resolveCalculateIssueFee()
         feesServiceMock.rejectCalculateHearingFee()
@@ -57,7 +58,6 @@ describe('Claim issue: fees page', () => {
       })
 
       it('should return 500 and render error page when retrieving issue fee range group failed', async () => {
-        mockCalculateInterestRate(0)
         draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.resolveCalculateIssueFee()
         feesServiceMock.resolveCalculateHearingFee()
@@ -70,7 +70,6 @@ describe('Claim issue: fees page', () => {
       })
 
       it('should return 500 and render error page when retrieving hearing fee range group failed', async () => {
-        mockCalculateInterestRate(0)
         draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.resolveCalculateIssueFee()
         feesServiceMock.resolveCalculateHearingFee()
@@ -94,6 +93,13 @@ describe('Claim issue: fees page', () => {
                   amount: 10000
                 }
               ]
+            },
+            interest: {
+              type: InterestType.STANDARD
+            },
+            interestDate: {
+              type: InterestDateType.CUSTOM,
+              date: new LocalDate(2018, 1, 1)
             }
           }
         )
@@ -105,7 +111,6 @@ describe('Claim issue: fees page', () => {
       })
 
       it('should render page when everything is fine (total amount < £10k, no interest)', async () => {
-        mockCalculateInterestRate(1)
         draftStoreServiceMock.resolveFind('claim', {
           amount: {
             rows: [
@@ -139,6 +144,13 @@ describe('Claim issue: fees page', () => {
                 amount: max - interest
               }
             ]
+          },
+          interest: {
+            type: InterestType.STANDARD
+          },
+          interestDate: {
+            type: InterestDateType.CUSTOM,
+            date: new LocalDate(2018, 1, 1)
           }
         })
         feesServiceMock.resolveCalculateIssueFee()

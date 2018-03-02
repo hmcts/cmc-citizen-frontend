@@ -119,7 +119,6 @@ describe('Claim issue: initiate payment receiver', () => {
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
       feesServiceMock.rejectCalculateFee(event, channel, failureMessage)
-      claimStoreServiceMock.mockCalculateInterestRate(0)
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
@@ -131,7 +130,6 @@ describe('Claim issue: initiate payment receiver', () => {
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
       feesServiceMock.resolveCalculateFee(event, channel)
-      claimStoreServiceMock.mockCalculateInterestRate(0)
       idamServiceMock.rejectRetrieveServiceToken()
 
       await request(app)
@@ -143,7 +141,6 @@ describe('Claim issue: initiate payment receiver', () => {
     it('should return 500 and error page when cannot create payment', async () => {
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
-      claimStoreServiceMock.mockCalculateInterestRate(0)
       feesServiceMock.resolveCalculateFee(event, channel)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.rejectCreate()
@@ -161,7 +158,6 @@ describe('Claim issue: initiate payment receiver', () => {
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.resolveCreate()
       draftStoreServiceMock.rejectSave()
-      claimStoreServiceMock.mockCalculateInterestRate(0)
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
@@ -176,7 +172,6 @@ describe('Claim issue: initiate payment receiver', () => {
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.resolveCreate()
       draftStoreServiceMock.resolveSave()
-      claimStoreServiceMock.mockCalculateInterestRate(0)
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
@@ -188,7 +183,6 @@ describe('Claim issue: initiate payment receiver', () => {
       draftStoreServiceMock.resolveFind(draftType)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.resolveRetrieve('success')
-      claimStoreServiceMock.mockCalculateInterestRate(0)
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)

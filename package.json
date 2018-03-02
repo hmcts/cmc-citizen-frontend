@@ -24,13 +24,14 @@
     "prepush": "yarn test && yarn test:routes"
   },
   "dependencies": {
-    "@hmcts/cmc-common-frontend": "^1.38.0",
+    "@hmcts/cmc-common-frontend": "^1.39.0",
     "@hmcts/cmc-draft-store-middleware": "^2.0.0",
     "@hmcts/draft-store-client": "^1.1.1",
     "@hmcts/info-provider": "^1.0.0",
     "@hmcts/nodejs-healthcheck": "^1.4.5",
     "@hmcts/nodejs-logging": "^2.2.0",
     "@hmcts/postcodeinfo-client": "^1.1.0",
+    "@hmcts/requestretry": "^1.1.0",
     "@types/config": "^0.0.34",
     "@types/cookies": "^0.7.1",
     "@types/csurf": "^1.9.33",
@@ -45,6 +46,7 @@
     "@types/nunjucks": "^3.0.0",
     "@types/request-promise-native": "^1.0.2",
     "@types/shortid": "^0.0.29",
+    "applicationinsights": "^1.0.2",
     "body-parser": "^1.13.3",
     "build-url": "^1.0.9",
     "class-transformer": "^0.1.7",

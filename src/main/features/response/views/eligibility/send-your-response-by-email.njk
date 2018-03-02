@@ -78,7 +78,7 @@
           {% endif %}
 
           <ul class="list list-bullet">
-            <li>{{ t('Claim No. {{ claimNumber }}', { claimNumber: claim.claimNumber }) }}</li>
+            <li>{{ t('Claim number {{ claimNumber }}', { claimNumber: claim.claimNumber }) }}</li>
             <li>{{ t('Claimant {{ claimantName }}', { claimantName: claim.claimData.claimant.name}) }}</li>
             <li>{{ t('Defendant {{ defendantName }}', { defendantName: claim.claimData.defendant.name}) }}</li>
           </ul>
@@ -102,10 +102,10 @@
 
         <li>{{ t('Post the forms to:') }}</li>
 
-        <div class="keep-formatting">
-          {{ t('Civil Money Claims') }}
+        <div class="keep-formatting panel">{{ t('Civil Money Claims') }}
           {{ t('St. Katharine`s House') }}
           {{ t('21-27 St. Katharine`s Street') }}
+          {{ t('Northampton') }}
           {{ t('NN1 2LH') }}
         </div>
 

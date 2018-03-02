@@ -7,8 +7,7 @@ import { ClaimReferenceMatchesGuard } from 'first-contact/guards/claimReferenceM
 import { JwtExtractor } from 'idam/jwtExtractor'
 import { ClaimantRequestedCCJGuard } from 'first-contact/guards/claimantRequestedCCJGuard'
 import { OAuthHelper } from 'idam/oAuthHelper'
-import { getInterestDetails } from 'common/interest'
-import { MomentFactory } from '../../../common/momentFactory'
+import { getInterestDetails } from 'common/interestUtils'
 
 const sessionCookie = config.get<string>('session.cookieName')
 
@@ -25,8 +24,7 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const interestData = await getInterestDetails(claim)
       res.render(Paths.claimSummaryPage.associatedView, {
-        interestData: interestData,
-        toDate: MomentFactory.currentDate()
+        interestData: interestData
       })
     })
   .post(Paths.claimSummaryPage.uri, (req: express.Request, res: express.Response): void => {

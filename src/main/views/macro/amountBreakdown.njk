@@ -1,6 +1,6 @@
 {% from "interestSnippet.njk" import interestSnippet %}
 
-{% macro amountBreakdownTable(label, claim, interestData, toDate) %}
+{% macro amountBreakdownTable(label, claim, interestData) %}
   <details>
     <summary>{{ t(label) }}</summary>
       <div class="panel panel-border-narrow">
@@ -24,7 +24,7 @@
           {% if claim.claimData.interest.rate %}
             <tr>
               <td scope="row">
-                {{ interestSnippet(interestData.rate, interestData.numberOfDays, interestData.interestDate, toDate) }}
+                {{ interestSnippet(interestData.rate, interestData.numberOfDays, interestData.interestFromDate, interestData.interestToDate) }}
               </td>
               <td class="numeric last">
                 {{ interestData.interest | numeral }}
@@ -33,7 +33,7 @@
           {% endif %}
           <tr>
             <td scope="col">{{ t('Claim fee') }}</td>
-            <td class="numeric last">{{ feeAmount | numeral }}</td>
+            <td class="numeric last">{{ claim.claimData.feeAmountInPennies | pennies2pounds | numeral }}</td>
           </tr>
           <tr>
             <td class="bold-small" scope="row">{{ t('Claim Total') }}</td>

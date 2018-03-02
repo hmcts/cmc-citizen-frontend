@@ -7,7 +7,7 @@ import { StatementOfTruth } from 'forms/models/statementOfTruth'
 import { FeesClient } from 'fees/feesClient'
 import { TotalAmount } from 'forms/models/totalAmount'
 import { InterestDateType } from 'app/common/interestDateType'
-import { interestAmount } from 'utils/interestUtils'
+import { draftInterestAmount } from 'common/interestUtils'
 import { InterestType } from 'claim/form/models/interest'
 import { PartyType } from 'app/common/partyType'
 import { AllClaimTasksCompletedGuard } from 'claim/guards/allClaimTasksCompletedGuard'
@@ -25,7 +25,7 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
 
 async function getClaimAmountTotal (draft: DraftClaim): Promise<TotalAmount> {
-  const interest: number = await interestAmount(draft)
+  const interest: number = await draftInterestAmount(draft)
   const totalAmount: number = draft.amount.totalAmount()
 
   return FeesClient.calculateIssueFee(totalAmount + interest)
