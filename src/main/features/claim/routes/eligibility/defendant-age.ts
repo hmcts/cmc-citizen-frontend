@@ -26,7 +26,7 @@ export default express.Router()
   })
   .post(
     Paths.eligibilityDefendantAgePage.uri,
-    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.OVER_18_DEFENDANT),
+    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.DEFENDANT_AGE),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Eligibility> = req.body
 

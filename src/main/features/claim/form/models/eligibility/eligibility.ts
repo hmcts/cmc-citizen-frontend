@@ -23,7 +23,7 @@ export class Eligibility {
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.OVER_18] })
   eighteenOrOver?: YesNoOption
 
-  @IsIn(DefendantAgeOption.all(), { message: ValidationErrors.DEFENDANT_AGE_REQUIRED, groups: [ValidationGroups.OVER_18_DEFENDANT] })
+  @IsIn(DefendantAgeOption.all(), { message: ValidationErrors.DEFENDANT_AGE_REQUIRED, groups: [ValidationGroups.DEFENDANT_AGE] })
   defendantAge?: DefendantAgeOption
 
   @IsIn(ClaimType.all(), { message: ValidationErrors.SELECT_AN_OPTION, groups: [ValidationGroups.CLAIM_TYPE] })
