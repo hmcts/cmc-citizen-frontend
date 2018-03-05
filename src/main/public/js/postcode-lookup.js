@@ -13,7 +13,7 @@
 
             if (postcodeLookupWidget.querySelector('.form-control-error')) {
               enterManuallyLink(postcodeLookupWidget).classList.remove('hidden')
-              hideManualErrorMessages()
+              hideManualErrorMessages(postcodeLookupWidget)
             }
             hide(postcodeAddressPicker(postcodeLookupWidget))
             clearAddressFields(postcodeLookupWidget)
@@ -78,7 +78,7 @@
       })
   })
 
-  function hideManualErrorMessages () {
+  function hideManualErrorMessages (postcodeLookupWidget) {
     allFormControlErrors()
       .forEach(function (element) {
         element.classList.remove('form-control-error')
@@ -87,7 +87,7 @@
       .forEach(function (element) {
         element.classList.remove('form-group-error')
       })
-    allErrorMessages()
+    allAddressErrorMessages(postcodeLookupWidget)
       .forEach(function (element) {
         element.classList.add('visually-hidden')
       })
@@ -101,8 +101,8 @@
     return document.querySelectorAll('.form-group-error')
   }
 
-  function allErrorMessages () {
-    return document.querySelectorAll('.error-message')
+  function allAddressErrorMessages (postcodeLookupWidget) {
+    return addressSection(postcodeLookupWidget).querySelectorAll('.error-message')
   }
 
   function show (element) {
