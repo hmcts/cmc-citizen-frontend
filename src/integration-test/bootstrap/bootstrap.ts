@@ -1,9 +1,9 @@
 /* tslint:disable:no-console */
 
 import * as fs from 'fs'
-import { request } from 'integration-tests/helpers/clients/base/request'
+import { request } from 'integration-test/helpers/clients/base/request'
 import { RequestResponse } from 'request'
-import { IdamClient } from 'integration-tests/helpers/clients/idamClient'
+import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 
 const citizenAppURL = process.env.CITIZEN_APP_URL
 

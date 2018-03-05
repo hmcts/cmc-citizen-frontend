@@ -1,9 +1,9 @@
-import { PartyType } from 'integration-tests/data/party-type'
-import { createClaimData } from 'integration-tests/data/test-data'
-import { Helper } from 'integration-tests/tests/citizen/endToEnd/steps/helper'
+import { PartyType } from 'integration-test/data/party-type'
+import { createClaimData } from 'integration-test/data/test-data'
+import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import I = CodeceptJS.I
-import { DefenceType } from 'integration-tests/data/defence-type'
-import { DefendantClaimDetails } from 'integration-tests/tests/citizen/defence/pages/defendant-claim-details'
+import { DefenceType } from 'integration-test/data/defence-type'
+import { DefendantClaimDetails } from 'integration-test/tests/citizen/defence/pages/defendant-claim-details'
 
 const helperSteps: Helper = new Helper()
 const defendantDetails: DefendantClaimDetails = new DefendantClaimDetails()

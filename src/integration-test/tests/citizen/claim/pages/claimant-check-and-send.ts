@@ -1,5 +1,5 @@
-import { PartyType } from 'integration-tests/data/party-type'
-import { claimAmount, claimFee, claimReason, createClaimant, createDefendant } from 'integration-tests/data/test-data'
+import { PartyType } from 'integration-test/data/party-type'
+import { claimAmount, claimFee, claimReason, createClaimant, createDefendant } from 'integration-test/data/test-data'
 import I = CodeceptJS.I
 
 const I: I = actor()

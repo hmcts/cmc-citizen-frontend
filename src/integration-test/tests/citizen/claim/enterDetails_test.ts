@@ -1,9 +1,9 @@
 import I = CodeceptJS.I
-import { ClaimantClaimAmountPage } from 'integration-tests/tests/citizen/claim/pages/claimant-claim-amount'
-import { ClaimSteps } from 'integration-tests/tests/citizen/claim/steps/claim'
-import { InterestSteps } from 'integration-tests/tests/citizen/claim/steps/interest'
-import { UserSteps } from 'integration-tests/tests/citizen/home/steps/user'
-import { PartyType } from 'integration-tests/data/party-type'
+import { ClaimantClaimAmountPage } from 'integration-test/tests/citizen/claim/pages/claimant-claim-amount'
+import { ClaimSteps } from 'integration-test/tests/citizen/claim/steps/claim'
+import { InterestSteps } from 'integration-test/tests/citizen/claim/steps/interest'
+import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
+import { PartyType } from 'integration-test/data/party-type'
 
 const userSteps: UserSteps = new UserSteps()
 const claimSteps: ClaimSteps = new ClaimSteps()

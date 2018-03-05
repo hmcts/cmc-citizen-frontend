@@ -1,4 +1,4 @@
-import { IdamClient } from 'integration-tests/helpers/clients/idamClient'
+import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 
 class IdamHelper extends codecept_helper {
 

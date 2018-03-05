@@ -1,7 +1,7 @@
-import { DEFAULT_PASSWORD } from 'integration-tests/data/test-data'
-import { ClaimantStartClaimPage } from 'integration-tests/tests/citizen/claim/pages/claimant-start-claim'
-import { ClaimantTaskListPage } from 'integration-tests/tests/citizen/claim/pages/claimant-task-list'
-import { LoginPage } from 'integration-tests/tests/citizen/home/pages/login'
+import { DEFAULT_PASSWORD } from 'integration-test/data/test-data'
+import { ClaimantStartClaimPage } from 'integration-test/tests/citizen/claim/pages/claimant-start-claim'
+import { ClaimantTaskListPage } from 'integration-test/tests/citizen/claim/pages/claimant-task-list'
+import { LoginPage } from 'integration-test/tests/citizen/home/pages/login'
 
 const loginPage: LoginPage = new LoginPage()
 const startClaimPage: ClaimantStartClaimPage = new ClaimantStartClaimPage()

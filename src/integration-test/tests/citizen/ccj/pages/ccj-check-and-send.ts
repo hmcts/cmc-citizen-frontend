@@ -1,6 +1,6 @@
 import I = CodeceptJS.I
-import { PartyType } from 'integration-tests/data/party-type'
-import { claimAmount } from 'integration-tests/data/test-data'
+import { PartyType } from 'integration-test/data/party-type'
+import { claimAmount } from 'integration-test/data/test-data'
 
 const I: I = actor()
 

@@ -1,4 +1,4 @@
-import { claimAmount } from 'integration-tests/data/test-data'
+import { claimAmount } from 'integration-test/data/test-data'
 import I = CodeceptJS.I
 
 const I: I = actor()

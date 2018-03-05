@@ -1,4 +1,4 @@
-import { request } from 'integration-tests/helpers/clients/base/request'
+import { request } from 'integration-test/helpers/clients/base/request'
 
 const baseURL: string = process.env.CLAIM_STORE_URL
 

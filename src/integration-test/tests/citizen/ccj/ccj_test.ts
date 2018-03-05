@@ -1,9 +1,9 @@
 import I = CodeceptJS.I
-import { PartyType } from 'integration-tests/data/party-type'
-import { createClaimData } from 'integration-tests/data/test-data'
-import { CountyCourtJudgementSteps } from 'integration-tests/tests/citizen/ccj/steps/ccj'
+import { PartyType } from 'integration-test/data/party-type'
+import { createClaimData } from 'integration-test/data/test-data'
+import { CountyCourtJudgementSteps } from 'integration-test/tests/citizen/ccj/steps/ccj'
 
-import { UserSteps } from 'integration-tests/tests/citizen/home/steps/user'
+import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 
 const userSteps: UserSteps = new UserSteps()
 const ccjSteps: CountyCourtJudgementSteps = new CountyCourtJudgementSteps()

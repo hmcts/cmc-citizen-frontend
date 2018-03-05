@@ -1,5 +1,5 @@
-import { offer } from 'integration-tests/data/test-data'
-import { DefendantOfferPage } from 'integration-tests/tests/citizen/offers/pages/defendant-offer'
+import { offer } from 'integration-test/data/test-data'
+import { DefendantOfferPage } from 'integration-test/tests/citizen/offers/pages/defendant-offer'
 import I = CodeceptJS.I
 
 const I: I = actor()

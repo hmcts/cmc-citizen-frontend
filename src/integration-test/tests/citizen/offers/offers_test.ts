@@ -1,7 +1,7 @@
-import { PartyType } from 'integration-tests/data/party-type'
-import { createClaimant, createClaimData, createResponseData } from 'integration-tests/data/test-data'
-import { UserSteps } from 'integration-tests/tests/citizen/home/steps/user'
-import { OfferSteps } from 'integration-tests/tests/citizen/offers/steps/offer'
+import { PartyType } from 'integration-test/data/party-type'
+import { createClaimant, createClaimData, createResponseData } from 'integration-test/data/test-data'
+import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
+import { OfferSteps } from 'integration-test/tests/citizen/offers/steps/offer'
 import I = CodeceptJS.I
 
 const userSteps: UserSteps = new UserSteps()

@@ -1,6 +1,6 @@
-import { ClaimantInterestPage } from 'integration-tests/tests/citizen/claim/pages/claimant-interest'
-import { ClaimantInterestDatePage } from 'integration-tests/tests/citizen/claim/pages/claimant-interest-date'
-import { ClaimantInterestTotalPage } from 'integration-tests/tests/citizen/claim/pages/claimant-interest-total'
+import { ClaimantInterestPage } from 'integration-test/tests/citizen/claim/pages/claimant-interest'
+import { ClaimantInterestDatePage } from 'integration-test/tests/citizen/claim/pages/claimant-interest-date'
+import { ClaimantInterestTotalPage } from 'integration-test/tests/citizen/claim/pages/claimant-interest-total'
 
 const claimantInterestPage: ClaimantInterestPage = new ClaimantInterestPage()
 const claimantInterestDatePage: ClaimantInterestDatePage = new ClaimantInterestDatePage()

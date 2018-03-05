@@ -1,7 +1,7 @@
 import I = CodeceptJS.I
-import { PartyType } from 'integration-tests/data/party-type'
-import { DefenceSteps } from 'integration-tests/tests/citizen/defence/steps/defence'
-import { DefenceType } from 'integration-tests/data/defence-type'
+import { PartyType } from 'integration-test/data/party-type'
+import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defence'
+import { DefenceType } from 'integration-test/data/defence-type'
 
 const I: I = actor()
 const defenceSteps: DefenceSteps = new DefenceSteps()

@@ -1,5 +1,5 @@
-import { PaymentConfirmationPage } from 'integration-tests/tests/citizen/claim/pages/govpay/payment-confirmation'
-import { PaymentDetailsPage } from 'integration-tests/tests/citizen/claim/pages/govpay/payment-details'
+import { PaymentConfirmationPage } from 'integration-test/tests/citizen/claim/pages/govpay/payment-confirmation'
+import { PaymentDetailsPage } from 'integration-test/tests/citizen/claim/pages/govpay/payment-details'
 
 class CardDetailsFactory {
   static createForCard (cardNumber: number): CardDetails {

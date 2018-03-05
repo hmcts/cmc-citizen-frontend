@@ -1,6 +1,6 @@
-import { PartyType } from 'integration-tests/data/party-type'
-import { createClaimData } from 'integration-tests/data/test-data'
-import { Helper } from 'integration-tests/tests/citizen/endToEnd/steps/helper'
+import { PartyType } from 'integration-test/data/party-type'
+import { createClaimData } from 'integration-test/data/test-data'
+import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import I = CodeceptJS.I
 
 const helperSteps: Helper = new Helper()

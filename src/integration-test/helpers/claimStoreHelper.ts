@@ -1,5 +1,5 @@
-import { ClaimStoreClient } from 'integration-tests/helpers/clients/claimStoreClient'
-import { IdamClient } from 'integration-tests/helpers/clients/idamClient'
+import { ClaimStoreClient } from 'integration-test/helpers/clients/claimStoreClient'
+import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 
 class ClaimStoreHelper extends codecept_helper {
 

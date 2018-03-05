@@ -1,6 +1,6 @@
 import I = CodeceptJS.I
-import { ClaimantDashboardPage } from 'integration-tests/tests/citizen/dashboard/pages/claimant'
-import { DashboardPage } from 'integration-tests/tests/citizen/dashboard/pages/dashboard'
+import { ClaimantDashboardPage } from 'integration-test/tests/citizen/dashboard/pages/claimant'
+import { DashboardPage } from 'integration-test/tests/citizen/dashboard/pages/dashboard'
 
 const I: I = actor()
 const dashboardPage: DashboardPage = new DashboardPage()

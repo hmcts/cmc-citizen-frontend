@@ -1,4 +1,4 @@
-import { PartyType } from 'integration-tests/data/party-type'
+import { PartyType } from 'integration-test/data/party-type'
 
 export const DEFAULT_PASSWORD = 'Password12'
 

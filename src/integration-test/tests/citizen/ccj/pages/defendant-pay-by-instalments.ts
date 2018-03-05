@@ -1,5 +1,5 @@
-import { claimAmount } from 'integration-tests/data/test-data'
-import { DateParser } from 'integration-tests/utils/date-parser'
+import { claimAmount } from 'integration-test/data/test-data'
+import { DateParser } from 'integration-test/utils/date-parser'
 import I = CodeceptJS.I
 
 const I: I = actor()

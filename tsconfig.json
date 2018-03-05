@@ -89,7 +89,7 @@
       "services/*": [
         "services/*"
       ],
-      "integration-tests/*": [
+      "integration-test/*": [
         "../integration-test/*"
       ]
     },

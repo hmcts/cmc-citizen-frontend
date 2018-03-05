@@ -1,4 +1,4 @@
-import { DefendantTaskListPage } from 'integration-tests/tests/citizen/defence/pages/defendant-task-list'
+import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
 
 const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
 
