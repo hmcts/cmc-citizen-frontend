@@ -37,7 +37,7 @@
   </div>
 {% endmacro %}
 
-{% macro timelineForm(form) %}
+{% macro timelineFragment(form) %}
 
   {% set noRowsError = form.errorFor('rows') %}
   <div class="multiline {% if noRowsError %} form-group-error {% endif %}">
