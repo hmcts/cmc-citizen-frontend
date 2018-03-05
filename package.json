@@ -19,6 +19,7 @@
     "test:codacy-upload": "cat ./coverage-report/lcov.info | codacy-coverage",
     "test:codecov-upload": "codecov -f ./coverage-report/lcov.info",
     "test:smoke": "./bin/run-smoke-tests.sh",
+    "test:codecept": "ls -l && ts-node --require tsconfig-paths/register ./node_modules/.bin/codeceptjs run --config default.conf.js --reporter mocha-multi",
     "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/** -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info",
     "precommit": "yarn lint",
     "prepush": "yarn test && yarn test:routes"
@@ -112,6 +113,7 @@
     "husky": "^0.14.3",
     "jsonwebtoken": "^8.0.1",
     "mocha": "^5.0.0",
+    "mocha-multi": "^1.0.1",
     "mochawesome": "^3.0.0",
     "mock-require": "^2.0.1",
     "nock": "^9.0.22",
@@ -126,7 +128,8 @@
     "sonarqube-scanner": "^2.0.1",
     "supertest": "^3.0.0",
     "tslint": "^5.5.0",
-    "tslint-config-standard": "^7.0.0"
+    "tslint-config-standard": "^7.0.0",
+    "webdriverio": "^4.11.0"
   },
   "nyc": {
     "extension": [
