@@ -15,11 +15,11 @@
       <h2 class="heading-medium">{{ t('Claim status') }}</h2>
 
       {% if featureToggles.offer and claim.status === ClaimStatus.OFFER_ACCEPTED %}
-        {% for defendantClaimState in claim.stateHistory %}
+        {% for state in claim.stateHistory %}
           <div class="status-block">
-            <p>{{ (defendantClaimState.date | date) if defendantClaimState.date}}</p>
+            <p>{{ (state.date | date) if state.date}}</p>
             <p>
-              {{ responseStatusForDefendantBasedOnState(defendantClaimState, claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
+              {{ responseStatusForDefendantBasedOnState(state, claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
             </p>
           </div>
         {% endfor %}
@@ -40,6 +40,8 @@
               makeOfferUri : makeAnOfferUri }) | safe
             }}
           </p>
+
+
       {% endif %}
     </div>
 
