@@ -9,4 +9,4 @@ RUN yarn install && yarn cache clean
 COPY ./src/integration-test /usr/src/app/src/integration-test
 
 ENTRYPOINT [ "yarn" ]
-CMD [ "test:codecept" ]
+CMD [ "test:integration" ]

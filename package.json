@@ -19,7 +19,7 @@
     "test:codacy-upload": "cat ./coverage-report/lcov.info | codacy-coverage",
     "test:codecov-upload": "codecov -f ./coverage-report/lcov.info",
     "test:smoke": "./bin/run-smoke-tests.sh",
-    "test:codecept": "ts-node --require tsconfig-paths/register ./node_modules/.bin/codeceptjs run --config default.conf.js --reporter mocha-multi",
+    "test:integration": "ts-node --require tsconfig-paths/register ./node_modules/.bin/codeceptjs run --config default.conf.js --reporter mocha-multi",
     "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/** -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info",
     "precommit": "yarn lint",
     "prepush": "yarn test && yarn test:routes"
