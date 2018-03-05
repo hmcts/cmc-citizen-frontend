@@ -1,6 +1,7 @@
 import * as express from 'express'
 
 import { Paths as AppPaths } from 'app/paths'
+import { Paths as ClaimPaths } from 'claim/paths'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 import { Paths as FirstContactPaths } from 'first-contact/paths'
 import { ClaimStoreClient } from 'app/claims/claimStoreClient'
@@ -17,6 +18,11 @@ import { hasTokenExpired } from 'idam/authorizationMiddleware'
 import { Logger } from '@hmcts/nodejs-logging'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { FeatureToggles } from 'utils/featureToggles'
+import { User } from 'app/idam/user'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { Draft } from '@hmcts/draft-store-client'
+import { DraftService } from 'services/draftService'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 const logger = Logger.getLogger('router/receiver')
 const sessionCookie = config.get<string>('session.cookieName')
@@ -62,6 +68,36 @@ function loginErrorHandler (req: express.Request,
   }
   cookies.set(stateCookieName, '', { sameSite: 'lax' })
   return next(err)
+}
+
+async function retrieveRedirectForLandingPage (user: User): Promise<string> {
+
+  const atLeastOneClaimIssued: boolean = (await ClaimStoreClient.retrieveByClaimantId(user)).length > 0
+
+  const claimAgainstDefendant = await ClaimStoreClient.retrieveByDefendantId(user)
+
+  const atLeastOneResponse: boolean = claimAgainstDefendant.length > 0
+
+  const atLeastOneCCJ: boolean = claimAgainstDefendant.length > 0 &&
+    claimAgainstDefendant.some((claim: Claim) => !!claim.countyCourtJudgmentRequestedAt)
+
+  const draftClaims: Draft<DraftClaim>[] = await new DraftService().find('claim', '100', user.bearerToken, (value: any): DraftClaim => {
+    return new DraftClaim().deserialize(value)
+  })
+
+  const draftClaimSaved: boolean = draftClaims.length > 0
+
+  const draftResponse: Draft<ResponseDraft>[] = await new DraftService().find('response', '100', user.bearerToken, (value: any): ResponseDraft => {
+    return new ResponseDraft().deserialize(value)
+  })
+
+  const draftResponseSaved: boolean = draftResponse.length > 0
+
+  if (atLeastOneClaimIssued || atLeastOneResponse || atLeastOneCCJ || draftClaimSaved || draftResponseSaved) {
+    return DashboardPaths.dashboardPage.uri
+  } else {
+    return ClaimPaths.startPage.uri
+  }
 }
 
 function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
@@ -112,13 +148,14 @@ export default express.Router()
         } else {
           if (FeatureToggles.isEnabled('ccd')) {
             await ClaimStoreClient.linkDefendant(user)
-            res.redirect(DashboardPaths.dashboardPage.uri)
+            res.redirect(await retrieveRedirectForLandingPage(user))
           } else {
             Promise.all(user.getLetterHolderIdList().map(
             (letterHolderId) => linkDefendantWithClaimByLetterHolderId(letterHolderId, user)
             )
           )
-            .then(() => res.redirect(DashboardPaths.dashboardPage.uri))
+            .then(async () => res.redirect(await retrieveRedirectForLandingPage(user)))
+            .catch(async () => res.redirect(await retrieveRedirectForLandingPage(user)))
             .catch(next)
           }
 
