@@ -18,7 +18,7 @@ describe('CallbackBuilder', () => {
 
     it('for non SSL request ', () => {
       const path = 'my/service/path'
-      const expected = `http://localhost/${path}`
+      const expected = `https://localhost/${path}`
       req.secure = false
       req.headers = { host: 'localhost' }
 
