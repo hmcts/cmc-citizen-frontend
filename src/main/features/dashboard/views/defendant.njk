@@ -35,10 +35,10 @@
           <p>{{ t('We will email you to explain what to do next.') }}</p>
           <h2 class="heading-medium">{{ t('More options') }}</h2>
           <h3 class="heading-small">{{ t('Settle out of court') }}</h3>
-          <p>{{ t('You can still <a href="%s">make an offer</a> to settle the claim out of court. You will avoid a hearing and a County Court Judgment against you.',
-              { postProcess: 'sprintf',
-                sprintf: [ OfferPaths.offerPage.evaluateUri({ externalId: claim.externalId }) ]
-              }) | safe }}
+          <p>{{
+              t('You can still <a href="{{ makeOfferUri }}">make an offer</a> to settle the claim out of court. You will avoid a hearing and a County Court Judgment against you.', {
+              makeOfferUri : makeAnOfferUri }) | safe
+            }}
           </p>
       {% endif %}
     </div>
