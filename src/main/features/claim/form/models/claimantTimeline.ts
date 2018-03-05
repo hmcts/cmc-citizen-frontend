@@ -1,4 +1,3 @@
-
 import { TimelineRow } from 'forms/models/timelineRow'
 import { Timeline } from 'forms/models/timeline'
 import { AtLeastOnePopulatedRow } from 'forms/validation/validators/atLeastOnePopulatedRow'
