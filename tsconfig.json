@@ -90,13 +90,12 @@
         "services/*"
       ],
       "integration-tests/*": [
-        "../../integration-tests/src/*"
+        "../integration-test/*"
       ]
     },
     "typeRoots": [
       "./node_modules/@types",
-      "./types",
-      "./integration-tests/types"
+      "./types"
     ]
   }
 }

@@ -1,9 +1,9 @@
-const ProxySettings = require('./src/config/proxy-settings').ProxySettings
+const ProxySettings = require('./src/integration-test/config/proxy-settings').ProxySettings
 
 exports.config = {
-  name: 'integration-tests',
-  bootstrap: './src/bootstrap/bootstrap.ts',
-  tests: './src/tests/**/*_test.*',
+  name: 'citizen-integration-tests',
+  bootstrap: './src/integration-test/bootstrap/bootstrap.ts',
+  tests: './src/integration-test/tests/**/*_test.*',
   output: './output',
   timeout: 10000,
   helpers: {
@@ -18,16 +18,13 @@ exports.config = {
       }
     },
     IdamHelper: {
-      require: './src/helpers/idamHelper'
+      require: './src/integration-test/helpers/idamHelper'
     },
     ClaimStoreHelper: {
-      require: './src/helpers/claimStoreHelper'
+      require: './src/integration-test/helpers/claimStoreHelper'
     },
     PageHelper: {
-      require: './src/helpers/pageHelper'
-    },
-    DownloadPdfHelper: {
-      require: './src/helpers/downloadPdfHelper'
+      require: './src/integration-test/helpers/pageHelper'
     }
   },
   mocha: {

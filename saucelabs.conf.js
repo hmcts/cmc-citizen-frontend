@@ -1,4 +1,4 @@
-const supportedBrowsers = require('./src/config/saucelabs/supported-browsers').supportedBrowsers
+const supportedBrowsers = require('./src/integration-test/config/saucelabs/supported-browsers').supportedBrowsers
 
 const browser = requiredValue(process.env.SAUCELABS_BROWSER, 'SAUCELABS_BROWSER')
 const saucelabsTunnelIdentifier = requiredValue(process.env.SAUCELABS_TUNNEL_IDENTIFIER, 'SAUCELABS_TUNNEL_IDENTIFIER')
@@ -52,9 +52,6 @@ exports.config = {
     },
     PageHelper: {
       require: './src/helpers/pageHelper'
-    },
-    DownloadPdfHelper: {
-      require: './src/helpers/downloadPdfHelper'
     },
     SaucelabsReporter: {
       require: './src/helpers/saucelabsReporter'
