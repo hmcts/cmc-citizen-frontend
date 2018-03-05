@@ -8,7 +8,7 @@ export function buildURL (req: express.Request, path: string): string {
   if (req === undefined) {
     throw new Error('Request is undefined')
   }
-  const protocol = (req.secure) ? 'https://' : 'http://'
+  const protocol = 'https://'
   const host = req.headers.host
 
   const baseURL: string = `${protocol}${host}`
