@@ -1,5 +1,4 @@
 const ProxySettings = require('./src/config/proxy-settings').ProxySettings
-const legalPageDefinitions = require('./src/tests/legal/page-definitions')
 
 exports.config = {
   name: 'integration-tests',
@@ -31,7 +30,6 @@ exports.config = {
       require: './src/helpers/downloadPdfHelper'
     }
   },
-  include: Object.assign({ }, legalPageDefinitions),
   mocha: {
     reporterOptions: {
       'codeceptjs-cli-reporter': {

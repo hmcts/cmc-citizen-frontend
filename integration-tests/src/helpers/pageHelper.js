@@ -10,7 +10,6 @@ function normalizeURL (url) {
 }
 
 const citizenAppBaseURL = normalizeURL(process.env.CITIZEN_APP_URL || 'https://localhost:3000')
-const legalAppBaseURL = normalizeURL(process.env.LEGAL_APP_URL || 'https://localhost:4000/legal')
 
 // eslint-disable-next-line camelcase
 let Helper = codecept_helper
@@ -20,10 +19,6 @@ class PageHelper extends Helper {
 
   amOnCitizenAppPage (path) {
     return this.helpers['WebDriverIO'].amOnPage(`${citizenAppBaseURL}${path}`)
-  }
-
-  amOnLegalAppPage (path) {
-    return this.helpers['WebDriverIO'].amOnPage(`${legalAppBaseURL}${path}`)
   }
 
 }

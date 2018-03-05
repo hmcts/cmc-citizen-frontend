@@ -6,7 +6,6 @@ import { RequestResponse } from 'request'
 import { IdamClient } from '../helpers/clients/idamClient'
 
 const citizenAppURL = process.env.CITIZEN_APP_URL
-const legalAppURL = process.env.LEGAL_APP_URL
 
 class Client {
   static checkHealth (appURL: string): Promise<RequestResponse> {
@@ -86,21 +85,10 @@ async function createSmokeTestsUserIfDoesntExist (username: string, userGroup: s
 
 module.exports = async function (done: () => void) {
   try {
-    const healthChecks = []
-    if (process.env.HEALTHCHECK_CITIZEN === 'true') {
-      healthChecks.push(waitTillHealthy(citizenAppURL))
-    }
-    if (process.env.HEALTHCHECK_LEGAL === 'true') {
-      healthChecks.push(waitTillHealthy(legalAppURL))
-    }
-
-    await Promise.all(healthChecks)
+    await waitTillHealthy(citizenAppURL)
     if (process.env.IDAM_URL) {
       if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
         await createSmokeTestsUserIfDoesntExist(process.env.SMOKE_TEST_CITIZEN_USERNAME, 'cmc-private-beta', process.env.SMOKE_TEST_USER_PASSWORD)
-      }
-      if (process.env.SMOKE_TEST_SOLICITOR_USERNAME) {
-        await createSmokeTestsUserIfDoesntExist(process.env.SMOKE_TEST_SOLICITOR_USERNAME, 'cmc-solicitor', process.env.SMOKE_TEST_USER_PASSWORD)
       }
     }
   } catch (error) {

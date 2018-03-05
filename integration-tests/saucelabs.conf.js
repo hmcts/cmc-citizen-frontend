@@ -1,4 +1,3 @@
-const legalPageDefinitions = require('./src/tests/legal/page-definitions')
 const supportedBrowsers = require('./src/config/saucelabs/supported-browsers').supportedBrowsers
 
 const browser = requiredValue(process.env.SAUCELABS_BROWSER, 'SAUCELABS_BROWSER')
@@ -61,7 +60,6 @@ exports.config = {
       require: './src/helpers/saucelabsReporter'
     }
   },
-  include: Object.assign({ }, legalPageDefinitions),
   mocha: {
     reporterOptions: {
       'codeceptjs-cli-reporter': {
