@@ -100,7 +100,7 @@
     "chai": "^4.1.1",
     "chai-as-promised": "^7.1.1",
     "codacy-coverage": "^2.0.3",
-    "codeceptjs": "^1.1.6",
+    "codeceptjs": "1.0.3",
     "codecov": "^3.0.0",
     "debug": "^3.0.0",
     "gulp": "^3.9.0",
