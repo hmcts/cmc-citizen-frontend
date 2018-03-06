@@ -32,6 +32,7 @@ import { Paths as AppPaths } from 'app/paths'
 import { Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { ClaimType } from 'claim/form/models/eligibility/claimType'
+import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -96,6 +97,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('ResponseType', ResponseType)
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)
+    nunjucksEnv.addGlobal('DefendantAgeOption', DefendantAgeOption)
     nunjucksEnv.addGlobal('ClaimType', ClaimType)
     nunjucksEnv.addGlobal('ClaimValue', ClaimValue)
     nunjucksEnv.addGlobal('EvidenceType', EvidenceType)

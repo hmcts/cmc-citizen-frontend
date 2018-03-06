@@ -8,25 +8,25 @@ import { Eligibility } from 'claim/form/models/eligibility/eligibility'
 import { FormValidator } from 'forms/validation/formValidator'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
-import { YesNoOption } from 'app/models/yesNoOption'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
+import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
 
 function renderView (form: Form<Eligibility>, res: express.Response): void {
-  res.render(Paths.eligibilityOver18Page.associatedView, { form: form })
+  res.render(Paths.eligibilityDefendantAgePage.associatedView, { form: form })
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.eligibilityOver18Page.uri, (req: express.Request, res: express.Response): void => {
+  .get(Paths.eligibilityDefendantAgePage.uri, (req: express.Request, res: express.Response): void => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
     renderView(new Form(draft.document.eligibility), res)
   })
   .post(
-    Paths.eligibilityOver18Page.uri,
-    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.OVER_18),
+    Paths.eligibilityDefendantAgePage.uri,
+    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.DEFENDANT_AGE),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Eligibility> = req.body
 
@@ -35,14 +35,14 @@ export default express.Router()
       } else {
         const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
-        draft.document.eligibility.eighteenOrOver = form.model.eighteenOrOver
+        draft.document.eligibility.defendantAge = form.model.defendantAge
 
         await new DraftService().save(draft, user.bearerToken)
 
-        if (draft.document.eligibility.eighteenOrOver === YesNoOption.NO) {
-          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.UNDER_18}`)
+        if (draft.document.eligibility.defendantAge === DefendantAgeOption.NO) {
+          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.UNDER_18_DEFENDANT}`)
         } else {
-          res.redirect(Paths.eligibilityDefendantAgePage.uri)
+          res.redirect(Paths.eligibilityClaimTypePage.uri)
         }
       }
     })

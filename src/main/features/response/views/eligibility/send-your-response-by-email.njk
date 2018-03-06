@@ -1,13 +1,10 @@
 {% extends "layout.njk" %}
 {% from "support.njk" import supportWidget %}
 {% from "form.njk" import csrfProtection, submitButton %}
+{% from "externalLink.njk" import externalLink %}
 
 {% set title = t('Money claim') %}
 {% set heading = t('Post your response') %}
-
-{% macro externalLink(text, href) %}
-  <a href="{{ href }}" target="_blank">{{ text }}</a>
-{% endmacro %}
 
 {% block content %}
   <div class="grid-row">
