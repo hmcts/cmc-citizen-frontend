@@ -1,0 +1,89 @@
+{% from "form.njk" import linkButton %}
+
+{% macro evidenceRow(index, form) %}
+
+  {% set typeKey = 'rows[' + index + '][type]' %}
+
+  {% set typeValue = form.valueFor(typeKey).value %}
+  {% set typeErrorExist = form.errorFor('rows[' + index + '][type]').length > 0 %}
+
+  <div class="multiline-row {% if typeErrorExist %} form-group-error {% endif %}">
+    <label class="visually-hidden" for="rows[{{ index }}][type]">{{ index + 1 }}{{ t('. Evidence') }}</label>
+    {% if typeErrorExist %}
+      <span class="error-message" id="{{ typeKey }}[label]">
+        {{ t(form.errorFor(typeKey)) }}
+      </span>
+    {% endif %}
+    <select name="rows[{{ index }}][type]" id="rows[{{ index }}][type]"
+      class="form-control-select {% if typeErrorExist %}form-control-error{% endif %}" >
+
+      <option value="">{{ t('-- Please make a selection --') }}</option>
+      {% for row in EvidenceType.all() %}
+        <option value="{{ row.value }}" {% if typeValue == row.value %}selected{% endif %}>{{ row.displayValue }}</option>
+      {% endfor %}
+    </select>
+    <div class="panel panel-border-narrow {% if not typeValue %} js-hidden {% endif %}">
+      {% set descriptionKey = 'rows[' + index + '][description]' %}
+      {% set valueDescription = form.valueFor(descriptionKey) %}
+      {% set errorDescription = form.errorFor(descriptionKey) %}
+      <div class="form-group {% if errorDescription %} form-group-error {% endif %}">
+        <label for="{{ descriptionKey }}" id="{{ descriptionKey }}[label]" class="form-label">
+          {{ t('Describe this evidence in more detail (optional).') }}
+
+          <span class="evidence-message evidence-message-CONTRACTS_AND_AGREEMENTS {% if typeValue !== EvidenceType.CONTRACTS_AND_AGREEMENTS.value %}hidden{% endif %}">
+            {{ t('For example, a signed contract by the claimant.') }}
+          </span>
+          <span class="evidence-message evidence-message-EXPERT_WITNESS {% if typeValue !== EvidenceType.EXPERT_WITNESS.value %}hidden{% endif %}">
+            {{ t('For example, a surveyor’s report.') }}
+          </span>
+          <span class="evidence-message evidence-message-CORRESPONDENCE {% if typeValue !== EvidenceType.CORRESPONDENCE.value %}hidden{% endif %}">
+            {{ t('For example, a letter from the claimant stating what work they expected you to do.') }}
+          </span>
+          <span class="evidence-message evidence-message-PHOTO {% if typeValue !== EvidenceType.PHOTO.value %}hidden{% endif %}">
+            {{ t('For example, a photo of the work you carried out.') }}
+          </span>
+          <span class="evidence-message evidence-message-RECEIPTS {% if typeValue !== EvidenceType.RECEIPTS.value %}hidden{% endif %}">
+            {{ t('For example, a receipt showing you’ve paid the claimant.') }}
+          </span>
+          <span class="evidence-message evidence-message-STATEMENT_OF_ACCOUNT {% if typeValue !== EvidenceType.STATEMENT_OF_ACCOUNT.value %}hidden{% endif %}">
+            {{ t('For example, a bank statement showing you’ve paid the claimant.') }}
+          </span>
+        </label>
+        {% if errorDescription %}
+          <span class="error-message">{{ t(errorDescription) }}</span>
+        {% endif %}
+        <textarea
+          id="{{ descriptionKey }}" name="{{ descriptionKey }}"
+          class="form-control multiline-column-text {% if errorDescription %}form-control-error{% endif %}"
+          rows="3">{{ valueDescription | default('') }}</textarea>
+      </div>
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro evidenceFragment(form) %}
+
+  <div class="multiline">
+    <div class="multiline-rows">
+    {% for row in form.model.rows %}
+      {{ evidenceRow(loop.index0, form) }}
+    {% endfor %}
+    </div>
+  </div>
+
+  {% if form.model and form.model.canAddMoreRows() %}
+    <div id="add-event-container" class="form-group">
+      {{ linkButton('Add more evidence', 'action[addRow]', 'button button-secondary') }}
+    </div>
+  {% endif %}
+
+  <div class="panel panel-border-wide">
+    <p>
+        {{
+          t('Your evidence list will only be sent to the claimant %s.',
+            { postProcess: 'sprintf', sprintf: [ claimantName ] })
+        }}
+    </p>
+  </div>
+
+{% endmacro %}
