@@ -7,13 +7,13 @@ import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { RoutablePath } from 'common/router/routablePath'
-import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
+import { Evidence } from 'forms/models/evidence'
 
-const page: RoutablePath = Paths.timelinePage
+const page: RoutablePath = Paths.evidencePage
 
-function renderView (form: Form<ClaimantTimeline>, res: express.Response): void {
+function renderView (form: Form<Evidence>, res: express.Response): void {
   res.render(page.associatedView, {
     form: form
   })
@@ -21,7 +21,7 @@ function renderView (form: Form<ClaimantTimeline>, res: express.Response): void 
 
 function actionHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
   if (req.body.action) {
-    const form: Form<ClaimantTimeline> = req.body
+    const form: Form<Evidence> = req.body
     if (req.body.action.addRow) {
       form.model.appendRow()
     }
@@ -36,14 +36,14 @@ export default express.Router()
     page.uri,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<DraftClaim> = res.locals.claimDraft
-      renderView(new Form(draft.document.timeline), res)
+      renderView(new Form(draft.document.evidence), res)
     })
   .post(
     page.uri,
-    FormValidator.requestHandler(ClaimantTimeline, ClaimantTimeline.fromObject, undefined, ['addRow']),
+    FormValidator.requestHandler(Evidence, Evidence.fromObject, undefined, ['addRow']),
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<ClaimantTimeline> = req.body
+      const form: Form<Evidence> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)
@@ -52,7 +52,7 @@ export default express.Router()
         const user: User = res.locals.user
 
         form.model.removeExcessRows()
-        draft.document.timeline = form.model
+        draft.document.evidence = form.model
         await new DraftService().save(draft, user.bearerToken)
 
         res.redirect(Paths.taskListPage.uri)

@@ -20,4 +20,8 @@ export class Evidence extends MultiRowForm<EvidenceRow> {
   getInitialNumberOfRows (): number {
     return INIT_ROW_COUNT
   }
+
+  isCompleted (): boolean {
+    return !!this.rows
+  }
 }

@@ -62,14 +62,14 @@ describe('Evidence', () => {
   describe('deserialize', () => {
 
     it('should return valid Evidence object with list of empty EvidenceRow', () => {
-      const actual: Evidence = new Evidence().deserialize({})
+      const actual: Evidence = new Evidence().deserialize({}) as Evidence
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
       expectAllRowsToBeEmpty(actual.rows)
     })
 
     it('should return valid Evidence object with populated first EvidenceRow', () => {
-      const actual: Evidence = new Evidence().deserialize({ rows: [item()] })
+      const actual: Evidence = new Evidence().deserialize({ rows: [item()] }) as Evidence
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
 
@@ -82,7 +82,7 @@ describe('Evidence', () => {
     })
 
     it('should return valid Evidence object with list of row longer than default length', () => {
-      const actual: Evidence = new Evidence().deserialize({ rows: [item(), item(), item(), item(), item()] })
+      const actual: Evidence = new Evidence().deserialize({ rows: [item(), item(), item(), item(), item()] }) as Evidence
 
       expectAllRowsToBePopulated(actual.rows)
     })
@@ -126,7 +126,7 @@ describe('Evidence', () => {
     it('should not filter out any element from list when all populated', () => {
       const actual: Evidence = new Evidence().deserialize({
         rows: [item(), item(), item(), item(), item()]
-      })
+      }) as Evidence
 
       expect(actual.rows.length).to.be.eq(5)
       actual.removeExcessRows()
@@ -137,7 +137,7 @@ describe('Evidence', () => {
     it('should filter out some elements from list when some of them are populated', () => {
       const actual: Evidence = new Evidence().deserialize({
         rows: [item(), item(), {}, {}]
-      })
+      }) as Evidence
 
       expect(actual.rows.length).to.be.eq(4)
       actual.removeExcessRows()
@@ -148,7 +148,7 @@ describe('Evidence', () => {
     it('should filter out some elements from list when mixed', () => {
       const actual: Evidence = new Evidence().deserialize({
         rows: [item(), {}, item(), {}]
-      })
+      }) as Evidence
 
       expect(actual.rows.length).to.be.eq(4)
       actual.removeExcessRows()
@@ -173,6 +173,32 @@ describe('Evidence', () => {
       }
 
       expect(actual.canAddMoreRows()).to.be.eq(false)
+    })
+  })
+
+  describe('isCompleted', () => {
+
+    context('should return true when ', () => {
+
+      it('rows is an empty array', () => {
+        const actual: Evidence = new Evidence([])
+
+        expect(actual.isCompleted()).to.be.eq(true)
+      })
+
+      it('rows is populated array', () => {
+        const actual: Evidence = new Evidence().deserialize({ rows: [item()] }) as Evidence
+
+        expect(actual.isCompleted()).to.be.eq(true)
+      })
+    })
+
+    it('should return false when rows is undefined', () => {
+      const actual: Evidence = new Evidence()
+
+      delete actual.rows
+
+      expect(actual.isCompleted()).to.be.eq(false)
     })
   })
 })
