@@ -2,8 +2,8 @@ import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from '../../../../app/forms/models/validationUtils'
-import { EvidenceRow } from 'response/form/models/evidenceRow'
-import { EvidenceType } from 'response/form/models/evidenceType'
+import { EvidenceRow } from 'forms/models/evidenceRow'
+import { EvidenceType } from 'forms/models/evidenceType'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 

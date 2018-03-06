@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 
-import { EvidenceRow } from 'response/form/models/evidenceRow'
-import { Evidence, INIT_ROW_COUNT } from 'response/form/models/evidence'
-import { EvidenceType } from 'response/form/models/evidenceType'
+import { EvidenceRow } from 'forms/models/evidenceRow'
+import { Evidence, INIT_ROW_COUNT } from 'forms/models/evidence'
+import { EvidenceType } from 'forms/models/evidenceType'
 import { MAX_NUMBER_OF_ROWS } from 'forms/models/multiRowForm'
 
 describe('Evidence', () => {
@@ -44,13 +44,15 @@ describe('Evidence', () => {
     })
 
     it('should return object with list of EvidenceRow longer than default', () => {
-      const actual: Evidence = Evidence.fromObject({ rows: [
-        { type: EvidenceType.OTHER.value, description: 'OK' },
-        { type: EvidenceType.OTHER.value, description: 'OK' },
-        { type: EvidenceType.OTHER.value, description: 'OK' },
-        { type: EvidenceType.OTHER.value, description: 'OK' },
-        { type: EvidenceType.OTHER.value, description: 'OK' }
-      ] })
+      const actual: Evidence = Evidence.fromObject({
+        rows: [
+          { type: EvidenceType.OTHER.value, description: 'OK' },
+          { type: EvidenceType.OTHER.value, description: 'OK' },
+          { type: EvidenceType.OTHER.value, description: 'OK' },
+          { type: EvidenceType.OTHER.value, description: 'OK' },
+          { type: EvidenceType.OTHER.value, description: 'OK' }
+        ]
+      })
 
       expect(actual.rows.length).to.be.greaterThan(INIT_ROW_COUNT)
       expectAllRowsToBePopulated(actual.rows)

@@ -1,4 +1,4 @@
-import { EvidenceRow } from 'response/form/models/evidenceRow'
+import { EvidenceRow } from 'app/forms/models/evidenceRow'
 import { MultiRowForm } from 'forms/models/multiRowForm'
 
 export const INIT_ROW_COUNT: number = 4
