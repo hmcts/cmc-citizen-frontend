@@ -72,31 +72,28 @@ function loginErrorHandler (req: express.Request,
 
 async function retrieveRedirectForLandingPage (user: User): Promise<string> {
 
-  const atLeastOneClaimIssued: boolean = (await ClaimStoreClient.retrieveByClaimantId(user)).length > 0
+  const noClaimIssued: boolean = (await ClaimStoreClient.retrieveByClaimantId(user)).length === 0
 
   const claimAgainstDefendant = await ClaimStoreClient.retrieveByDefendantId(user)
 
-  const atLeastOneResponse: boolean = claimAgainstDefendant.length > 0
-
-  const atLeastOneCCJ: boolean = claimAgainstDefendant.length > 0 &&
-    claimAgainstDefendant.some((claim: Claim) => !!claim.countyCourtJudgmentRequestedAt)
+  const notADefendant: boolean = claimAgainstDefendant.length === 0
 
   const draftClaims: Draft<DraftClaim>[] = await new DraftService().find('claim', '100', user.bearerToken, (value: any): DraftClaim => {
     return new DraftClaim().deserialize(value)
   })
 
-  const draftClaimSaved: boolean = draftClaims.length > 0
+  const noDraftClaims: boolean = draftClaims.length === 0
 
   const draftResponse: Draft<ResponseDraft>[] = await new DraftService().find('response', '100', user.bearerToken, (value: any): ResponseDraft => {
     return new ResponseDraft().deserialize(value)
   })
 
-  const draftResponseSaved: boolean = draftResponse.length > 0
+  const noDraftResponse: boolean = draftResponse.length === 0
 
-  if (atLeastOneClaimIssued || atLeastOneResponse || atLeastOneCCJ || draftClaimSaved || draftResponseSaved) {
-    return DashboardPaths.dashboardPage.uri
-  } else {
+  if (noClaimIssued && notADefendant && noDraftClaims && noDraftResponse) {
     return ClaimPaths.startPage.uri
+  } else {
+    return DashboardPaths.dashboardPage.uri
   }
 }
 
