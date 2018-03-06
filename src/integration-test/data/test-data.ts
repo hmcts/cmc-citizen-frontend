@@ -3,7 +3,6 @@ import { PartyType } from 'integration-test/data/party-type'
 export const DEFAULT_PASSWORD = 'Password12'
 
 export const SMOKE_TEST_CITIZEN_USERNAME = process.env.SMOKE_TEST_CITIZEN_USERNAME
-export const SMOKE_TEST_SOLICITOR_USERNAME = process.env.SMOKE_TEST_SOLICITOR_USERNAME
 export const SMOKE_TEST_USER_PASSWORD = process.env.SMOKE_TEST_USER_PASSWORD
 
 export const claimFee = 25.00
