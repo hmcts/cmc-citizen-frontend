@@ -52,7 +52,7 @@ timestamps {
 
         onPR {
           stage('Integration Tests') {
-            integrationTests.execute([
+            integrationTests.executeCitizenTests([
               'CITIZEN_FRONTEND_VERSION': citizenFrontendVersion,
               'CITIZEN_INTEGRATION_TESTS_VERSION': citizenIntegrationTestsVersion,
               'INTEGRATION_TESTS_BRANCH': 'feature/ROC-3269-Move-integration-tests-to-frontend-repos',
