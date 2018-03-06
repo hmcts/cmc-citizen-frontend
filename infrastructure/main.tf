@@ -90,6 +90,7 @@ module "citizen-frontend" {
     FEATURE_FULL_ADMISSION = "${var.feature_full_admission}"
     FEATURE_PARTIAL_ADMISSION = "${var.feature_partial_admission}"
     FEATURE_FINE_PRINT = "${var.feature_fine_print}"
+    FEATURE_CCD = "${var.feature_ccd}"
   }
 }
 
