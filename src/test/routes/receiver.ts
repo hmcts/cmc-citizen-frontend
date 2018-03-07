@@ -33,6 +33,7 @@ describe('Login receiver', async () => {
         claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
         claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
         draftStoreServiceMock.resolveFindNoDraftFound()
+        draftStoreServiceMock.resolveFindNoDraftFound()
 
         await request(app)
           .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
@@ -46,6 +47,7 @@ describe('Login receiver', async () => {
         claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
         claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
         draftStoreServiceMock.resolveFindNoDraftFound()
+        draftStoreServiceMock.resolveFindNoDraftFound()
 
         await request(app)
           .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
@@ -53,8 +55,7 @@ describe('Login receiver', async () => {
           .expect(res => expect(res).to.have.cookie('state', ''))
       })
 
-      context('when no claim or response or draft', async () => {
-
+      context('when no claim issued or received and no drafts (new claimant)', async () => {
         it('should redirect to claim start', async () => {
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
@@ -68,13 +69,12 @@ describe('Login receiver', async () => {
         })
       })
 
-      context('when draft claim exists', async () => {
-
+      context('when only draft claim exists (claimant making first claim)', async () => {
         it('should redirect to dashboard', async () => {
-          draftStoreServiceMock.resolveFind('claim')
-          draftStoreServiceMock.resolveFindNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+          draftStoreServiceMock.resolveFind('claim')
+          draftStoreServiceMock.resolveFindNoDraftFound()
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -83,13 +83,54 @@ describe('Login receiver', async () => {
         })
       })
 
-      context('when a defendant but no draft response', async () => {
-
+      context('when only claim issued (claimant made first claim)', async () => {
         it('should redirect to dashboard', async () => {
+          claimStoreServiceMock.resolveRetrieveByClaimantId()
+          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
           draftStoreServiceMock.resolveFindNoDraftFound()
           draftStoreServiceMock.resolveFindNoDraftFound()
+
+          await request(app)
+            .get(AppPaths.receiver.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
+        })
+      })
+
+      context('when claim issued and draft claim exists (claimant making another claim)', async () => {
+        it('should redirect to dashboard', async () => {
+          claimStoreServiceMock.resolveRetrieveByClaimantId()
+          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+          draftStoreServiceMock.resolveFind('claim')
+          draftStoreServiceMock.resolveFindNoDraftFound()
+
+          await request(app)
+            .get(AppPaths.receiver.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
+        })
+      })
+
+      context('when only claim received (defendant served with first claim)', async () => {
+        it('should redirect to dashboard', async () => {
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveByDefendantId('A')
+          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+          draftStoreServiceMock.resolveFindNoDraftFound()
+          draftStoreServiceMock.resolveFindNoDraftFound()
+
+          await request(app)
+            .get(AppPaths.receiver.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
+        })
+      })
+
+      context('when claim received and draft response exists (defendant responding to claim)', async () => {
+        it('should redirect to dashboard', async () => {
+          claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+          draftStoreServiceMock.resolveFindNoDraftFound()
+          draftStoreServiceMock.resolveFind('response')
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -99,11 +140,10 @@ describe('Login receiver', async () => {
         })
       })
 
-      context('when draft claim and defendant has a claim against them', async () => {
-
+      context('when claim received and draft claim exists (defendant making first claim)', async () => {
         it('should redirect to dashboard', async () => {
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
+          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
           draftStoreServiceMock.resolveFind('claim')
           draftStoreServiceMock.resolveFindNoDraftFound()
 
@@ -114,43 +154,12 @@ describe('Login receiver', async () => {
         })
       })
 
-      context('when claim exists', async () => {
-
+      context('when claim received and another claim issued (defendant made first claim)', async () => {
         it('should redirect to dashboard', async () => {
-          draftStoreServiceMock.resolveFindNoDraftFound()
-          draftStoreServiceMock.resolveFindNoDraftFound()
           claimStoreServiceMock.resolveRetrieveByClaimantId()
           claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
-
-          await request(app)
-            .get(AppPaths.receiver.uri)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
-        })
-      })
-
-      context('when response exists', async () => {
-
-        it('should redirect to dashboard', async () => {
           draftStoreServiceMock.resolveFindNoDraftFound()
           draftStoreServiceMock.resolveFindNoDraftFound()
-          claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
-
-          await request(app)
-            .get(AppPaths.receiver.uri)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
-        })
-      })
-
-      context('when claim and response exists', async () => {
-
-        it('should redirect to dashboard', async () => {
-          draftStoreServiceMock.resolveFindNoDraftFound()
-          draftStoreServiceMock.resolveFindNoDraftFound()
-          claimStoreServiceMock.resolveRetrieveByClaimantId()
-          claimStoreServiceMock.resolveRetrieveByDefendantIdWithResponse()
 
           await request(app)
             .get(AppPaths.receiver.uri)
