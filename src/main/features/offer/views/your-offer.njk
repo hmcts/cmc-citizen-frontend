@@ -13,7 +13,7 @@
 
         <p>{{ t('Make it clear what you will do and by when. For example: "I will pay you £240 on 29 April 2018 by bank transfer".') }}</p>
 
-        <p>{{ t('If you’re also asking Jan Clark to do something, say clearly what it is and by when it should be done. For example: "You will fix the roof by 28 April 2018."') }}</p>
+        <p>{{ t('If you’re also asking {{ claimantName }} to do something, say clearly what it is and by when it should be done. For example: "You will fix the roof by 28 April 2018."', { claimantName: claim.claimData.claimant.name }) }}</p>
 
         <div class="description-block">
           <h2 class="bold-medium"> {{ t('Your offer') }}</h2>
