@@ -33,6 +33,7 @@ import { Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { ClaimType } from 'claim/form/models/eligibility/claimType'
 import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
+import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -94,6 +95,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('RejectPartOfClaimOption', RejectPartOfClaimOption)
     nunjucksEnv.addGlobal('DefendantPaymentType', DefendantPaymentType)
     nunjucksEnv.addGlobal('DefendantPaymentOption', DefendantPaymentOption)
+    nunjucksEnv.addGlobal('PaymentType', PaymentType)
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('ResponseType', ResponseType)
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)
