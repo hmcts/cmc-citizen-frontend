@@ -45,9 +45,9 @@ exports.config = {
         stdout: `./output/citizen-mochawesome-stdout.log`,
         options: {
           reportDir: 'output',
-          reportFilename: `citizen-e2e-result`,
+          reportFilename: 'citizen-e2e-result',
           inlineAssets: true,
-          reportTitle: `E2E tests result`
+          reportTitle: `Citizen E2E tests result`
         }
       }
     }
