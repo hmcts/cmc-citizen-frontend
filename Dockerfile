@@ -1,9 +1,12 @@
-FROM node:8.9.0-alpine
+FROM node:8.9.4-alpine
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 COPY package.json yarn.lock /usr/src/app/
+
+RUN yarn config set proxy $http_proxy && yarn config set https-proxy $https_proxy
+
 RUN yarn install
 
 COPY config /usr/src/app/config
