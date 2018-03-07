@@ -8,13 +8,16 @@ import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'
 import { OfferClient } from 'claims/offerClient'
 import { Claim } from 'claims/models/claim'
+import { MomentFactory } from 'common/momentFactory'
 
 async function renderView (form: Form<Offer>, res: express.Response, next: express.NextFunction) {
   const claim: Claim = res.locals.claim
+  const futureDate: string = 'For example, ' + MomentFactory.currentDate().add(30, 'days').format('DD MM YYYY')
 
   res.render(Paths.offerPage.associatedView, {
     form: form,
-    claim: claim
+    claim: claim,
+    futureDate: futureDate
   })
 }
 

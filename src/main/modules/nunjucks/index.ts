@@ -76,7 +76,7 @@ export class Nunjucks {
     numeral.defaultFormat(NUMBER_FORMAT)
 
     nunjucksEnv.addGlobal('asset_paths', appAssetPaths)
-    nunjucksEnv.addGlobal('serviceName', 'Money Claim')
+    nunjucksEnv.addGlobal('serviceName', 'Money Claims')
     nunjucksEnv.addGlobal('supportEmailAddress', config.get('support.contact-email'))
     nunjucksEnv.addGlobal('development', this.developmentMode)
     nunjucksEnv.addGlobal('govuk_template_version', packageDotJson.dependencies.govuk_template_jinja)
