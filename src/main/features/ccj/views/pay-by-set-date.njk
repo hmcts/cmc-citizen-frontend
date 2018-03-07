@@ -15,7 +15,7 @@
           {{ t('When do you want them to pay?') }}
         </h1>
 
-        {{ dateInput(name = 'date', form = form, hint = futureDate) }}
+        {{ dateInput(name = 'date', form = form, hint = 'For example, ' + futureDate) }}
 
         {{ saveAndContinueButton() }}
       </form>
