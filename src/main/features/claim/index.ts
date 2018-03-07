@@ -31,5 +31,6 @@ export class Feature {
       }))
     app.all('/claim/*/receipt', ClaimMiddleware.retrieveByExternalId)
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
+    app.use('/', RouterFinder.findAll(path.join(__dirname, '../eligibility')))
   }
 }

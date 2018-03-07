@@ -6,14 +6,14 @@ import { attachDefaultHooks } from '../../../../routes/hooks'
 import '../../../../routes/expectations'
 import { checkAuthorizationGuards } from '../checks/authorization-check'
 
-import { Paths as ClaimPaths } from 'claim/paths'
+import { Paths } from 'eligibility/paths'
 
 import { app } from '../../../../../main/app'
 
 import * as idamServiceMock from '../../../../http-mocks/idam'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ClaimPaths.eligibilityEligiblePage.uri
+const pagePath: string = Paths.eligibilityEligiblePage.uri
 const expectedTextOnPage: string = 'You can use this service'
 
 describe('Claim eligibility: eligible page', () => {

@@ -6,7 +6,7 @@ import { attachDefaultHooks } from '../../../../routes/hooks'
 import '../../../../routes/expectations'
 import { checkAuthorizationGuards } from '../checks/authorization-check'
 
-import { Paths as ClaimPaths } from 'claim/paths'
+import { Paths } from 'eligibility/paths'
 
 import { app } from '../../../../../main/app'
 
@@ -16,8 +16,8 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ClaimType } from 'claim/form/models/eligibility/claimType'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ClaimPaths.eligibilityClaimTypePage.uri
-const pageRedirect: string = ClaimPaths.eligibilitySingleDefendantPage.uri
+const pagePath: string = Paths.eligibilityClaimTypePage.uri
+const pageRedirect: string = Paths.eligibilitySingleDefendantPage.uri
 const expectedTextOnPage: string = 'Who are you making the claim for?'
 
 describe('Claim eligibility: claim type page', () => {
@@ -83,7 +83,7 @@ describe('Claim eligibility: claim type page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ claimType: ClaimType.MULTIPLE_CLAIM.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`))
+          .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`))
       })
 
       it('should redirect to not eligible page when form is valid and claim on behalf option selected', async () => {
@@ -94,7 +94,7 @@ describe('Claim eligibility: claim type page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ claimType: ClaimType.REPRESENTATIVE_CLAIM.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_ON_BEHALF}`))
+          .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_ON_BEHALF}`))
       })
     })
   })

@@ -6,7 +6,7 @@ import { attachDefaultHooks } from '../../../../routes/hooks'
 import '../../../../routes/expectations'
 import { checkAuthorizationGuards } from '../checks/authorization-check'
 
-import { Paths as ClaimPaths } from 'claim/paths'
+import { Paths } from 'eligibility/paths'
 
 import { app } from '../../../../../main/app'
 
@@ -16,8 +16,8 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ClaimPaths.eligibilityGovernmentDepartmentPage.uri
-const pageRedirect: string = ClaimPaths.eligibilityClaimIsForTenancyDepositPage.uri
+const pagePath: string = Paths.eligibilityGovernmentDepartmentPage.uri
+const pageRedirect: string = Paths.eligibilityClaimIsForTenancyDepositPage.uri
 const expectedTextOnPage: string = 'Are you claiming against a government department?'
 
 describe('Claim eligibility: government department page', () => {
@@ -83,7 +83,7 @@ describe('Claim eligibility: government department page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ governmentDepartment: YesNoOption.YES.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.GOVERNMENT_DEPARTMENT}`))
+          .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.GOVERNMENT_DEPARTMENT}`))
       })
     })
   })

@@ -6,7 +6,7 @@ import { attachDefaultHooks } from '../../../../routes/hooks'
 import '../../../../routes/expectations'
 import { checkAuthorizationGuards } from '../checks/authorization-check'
 
-import { Paths as ClaimPaths } from 'claim/paths'
+import { Paths } from 'eligibility/paths'
 
 import { app } from '../../../../../main/app'
 
@@ -16,8 +16,8 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ClaimPaths.eligibilityDefendantAddressPage.uri
-const pageRedirect: string = ClaimPaths.eligibilityOver18Page.uri
+const pagePath: string = Paths.eligibilityDefendantAddressPage.uri
+const pageRedirect: string = Paths.eligibilityOver18Page.uri
 const expectedTextOnPage: string = 'Does the person or organisation you’re claiming against have an address in England or Wales?'
 
 describe('Claim eligibility: defendant address page', () => {
@@ -83,7 +83,7 @@ describe('Claim eligibility: defendant address page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ defendantAddress: YesNoOption.NO.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.DEFENDANT_ADDRESS}`))
+          .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.DEFENDANT_ADDRESS}`))
       })
     })
   })

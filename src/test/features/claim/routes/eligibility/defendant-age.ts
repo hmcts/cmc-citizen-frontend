@@ -6,7 +6,7 @@ import { attachDefaultHooks } from '../../../../routes/hooks'
 import '../../../../routes/expectations'
 import { checkAuthorizationGuards } from '../checks/authorization-check'
 
-import { Paths as ClaimPaths } from 'claim/paths'
+import { Paths } from 'eligibility/paths'
 
 import { app } from '../../../../../main/app'
 
@@ -16,8 +16,8 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ClaimPaths.eligibilityDefendantAgePage.uri
-const pageRedirect: string = ClaimPaths.eligibilityClaimTypePage.uri
+const pagePath: string = Paths.eligibilityDefendantAgePage.uri
+const pageRedirect: string = Paths.eligibilityClaimTypePage.uri
 const expectedTextOnPage: string = 'Do you believe the person you’re claiming against is 18 or over?'
 
 describe('Claim eligibility: over 18 defendant page', () => {
@@ -84,7 +84,7 @@ describe('Claim eligibility: over 18 defendant page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ defendantAge: DefendantAgeOption.NO.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.UNDER_18_DEFENDANT}`))
+          .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.UNDER_18_DEFENDANT}`))
       })
     })
   })

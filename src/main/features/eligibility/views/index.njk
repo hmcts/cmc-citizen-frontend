@@ -6,6 +6,8 @@
 
 {% block content %}
 
+  {{ registeredUser | default('no') }}
+
   <div class="grid-row">
       <div class="column-two-thirds">
         <h1 class="heading-large">{{ t('Try the new beta service') }}</h1>
@@ -14,9 +16,11 @@
           {{ t('We’re building a new service to make it simpler, clearer and faster to make and respond to claims online.') }}
         </p>
 
-        <p>{{ t('It’s in the beta phase which means we’re continuously improving it based on feedback from users.' +
-          'You can still ' + externalLink('use Money Claim Online (MCOL) ', legacyServiceUrl)
-          + 'if you prefer while the new service is in beta.') | safe }}</p>
+        <p>
+          {{ t('It’s in the beta phase which means we’re continuously improving it based on feedback from users.'
+          + 'You can still ' + externalLink('use Money Claim Online (MCOL)', legacyServiceUrl)
+          + 'if you prefer while the new service is in beta.') | safe }}
+        </p>
 
         <p>{{ t('We’ll ask you some questions to check you can use the new service.') }}</p>
 

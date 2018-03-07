@@ -7,7 +7,7 @@ import { attachDefaultHooks } from '../../../../routes/hooks'
 import '../../../../routes/expectations'
 import { checkAuthorizationGuards } from '../checks/authorization-check'
 
-import { Paths as ClaimPaths } from 'claim/paths'
+import { Paths } from 'eligibility/paths'
 
 import { app } from '../../../../../main/app'
 
@@ -16,8 +16,8 @@ import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ClaimPaths.eligibilityOver18Page.uri
-const pageRedirect: string = ClaimPaths.eligibilityDefendantAgePage.uri
+const pagePath: string = Paths.eligibilityOver18Page.uri
+const pageRedirect: string = Paths.eligibilityDefendantAgePage.uri
 const expectedTextOnPage: string = 'Are you 18 or over?'
 
 describe('Claim eligibility: over 18 page', () => {
@@ -84,7 +84,7 @@ describe('Claim eligibility: over 18 page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ eighteenOrOver: YesNoOption.NO.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.UNDER_18}`))
+          .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.UNDER_18}`))
       })
     })
   })

@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths } from 'claim/paths'
+import { Paths } from 'eligibility/paths'
 
 /* tslint:disable:no-default-export */
 export default express.Router()

@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths } from 'claim/paths'
+import { Paths } from 'eligibility/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'forms/form'

@@ -1,33 +1,33 @@
 import * as express from 'express'
 
-import { Paths } from 'claim/paths'
+import { Paths } from 'eligibility/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'forms/form'
-import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
-import { FormValidator } from 'forms/validation/formValidator'
+import { User } from 'idam/user'
 import { Eligibility } from 'claim/form/models/eligibility/eligibility'
+import { FormValidator } from 'forms/validation/formValidator'
 import { YesNoOption } from 'models/yesNoOption'
-import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
+import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
 
 function renderView (form: Form<Eligibility>, res: express.Response): void {
-  res.render(Paths.eligibilityClaimantAddressPage.associatedView, { form: form })
+  res.render(Paths.eligibilityHelpWithFeesPage.associatedView, { form: form })
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.eligibilityClaimantAddressPage.uri, (req: express.Request, res: express.Response): void => {
+  .get(Paths.eligibilityHelpWithFeesPage.uri, (req: express.Request, res: express.Response): void => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
     renderView(new Form(draft.document.eligibility), res)
   })
   .post(
-    Paths.eligibilityClaimantAddressPage.uri,
-    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.CLAIMANT_ADDRESS),
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+    Paths.eligibilityHelpWithFeesPage.uri,
+    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.HELP_WITH_FEES),
+    ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<Eligibility> = req.body
 
       if (form.hasErrors()) {
@@ -36,14 +36,16 @@ export default express.Router()
         const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
 
-        draft.document.eligibility.claimantAddress = form.model.claimantAddress
+        draft.document.eligibility.helpWithFees = form.model.helpWithFees
         await new DraftService().save(draft, user.bearerToken)
 
-        if (draft.document.eligibility.claimantAddress === YesNoOption.NO) {
-          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIMANT_ADDRESS}`)
+        const option: YesNoOption = draft.document.eligibility.helpWithFees
+        if (option === YesNoOption.NO) {
+          res.redirect(Paths.eligibilityClaimantAddressPage.uri)
         } else {
-          res.redirect(Paths.eligibilityDefendantAddressPage.uri)
+          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.HELP_WITH_FEES}`)
         }
+
       }
     })
   )

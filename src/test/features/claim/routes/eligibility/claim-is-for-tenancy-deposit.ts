@@ -6,7 +6,7 @@ import { attachDefaultHooks } from '../../../../routes/hooks'
 import '../../../../routes/expectations'
 import { checkAuthorizationGuards } from '../checks/authorization-check'
 
-import { Paths as ClaimPaths } from 'claim/paths'
+import { Paths } from 'eligibility/paths'
 
 import { app } from '../../../../../main/app'
 
@@ -16,8 +16,8 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ClaimPaths.eligibilityClaimIsForTenancyDepositPage.uri
-const pageRedirect: string = ClaimPaths.eligibilityEligiblePage.uri
+const pagePath: string = Paths.eligibilityClaimIsForTenancyDepositPage.uri
+const pageRedirect: string = Paths.eligibilityEligiblePage.uri
 const expectedTextOnPage: string = 'Is your claim for a tenancy deposit?'
 
 describe('Claim eligibility: is claim for tenancy deposit page', () => {
@@ -84,7 +84,7 @@ describe('Claim eligibility: is claim for tenancy deposit page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ claimIsForTenancyDeposit: YesNoOption.YES.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_IS_FOR_TENANCY_DEPOSIT}`))
+          .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_IS_FOR_TENANCY_DEPOSIT}`))
       })
     })
   })

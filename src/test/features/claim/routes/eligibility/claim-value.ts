@@ -6,7 +6,7 @@ import { attachDefaultHooks } from '../../../../routes/hooks'
 import '../../../../routes/expectations'
 import { checkAuthorizationGuards } from '../checks/authorization-check'
 
-import { Paths as ClaimPaths } from 'claim/paths'
+import { Paths } from 'eligibility/paths'
 
 import { app } from '../../../../../main/app'
 
@@ -16,8 +16,8 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ClaimPaths.eligibilityClaimValuePage.uri
-const pageRedirect: string = ClaimPaths.eligibilityHelpWithFeesPage.uri
+const pagePath: string = Paths.eligibilityClaimValuePage.uri
+const pageRedirect: string = Paths.eligibilityHelpWithFeesPage.uri
 const expectedTextOnPage: string = 'Total amount you’re claiming'
 
 describe('Claim eligibility: claim value page', () => {
@@ -84,7 +84,7 @@ describe('Claim eligibility: claim value page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ claimValue: ClaimValue.NOT_KNOWN.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_VALUE_NOT_KNOWN}`))
+          .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_VALUE_NOT_KNOWN}`))
       })
     })
   })

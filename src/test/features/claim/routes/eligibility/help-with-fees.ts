@@ -6,7 +6,7 @@ import { attachDefaultHooks } from '../../../../routes/hooks'
 import '../../../../routes/expectations'
 import { checkAuthorizationGuards } from '../checks/authorization-check'
 
-import { Paths as ClaimPaths } from 'claim/paths'
+import { Paths } from 'eligibility/paths'
 
 import { app } from '../../../../../main/app'
 
@@ -16,8 +16,8 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = ClaimPaths.eligibilityHelpWithFeesPage.uri
-const pageRedirect: string = ClaimPaths.eligibilityClaimantAddressPage.uri
+const pagePath: string = Paths.eligibilityHelpWithFeesPage.uri
+const pageRedirect: string = Paths.eligibilityClaimantAddressPage.uri
 const expectedTextOnPage: string = 'Do you need help with fees?'
 
 describe('Claim eligibility: help with fees page', () => {
@@ -83,7 +83,7 @@ describe('Claim eligibility: help with fees page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ helpWithFees: YesNoOption.YES.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${ClaimPaths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.HELP_WITH_FEES}`))
+          .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.HELP_WITH_FEES}`))
       })
     })
   })

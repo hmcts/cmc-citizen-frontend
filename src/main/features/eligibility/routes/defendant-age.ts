@@ -1,8 +1,6 @@
-import { Draft } from '@hmcts/draft-store-client'
-import { DraftClaim } from 'drafts/models/draftClaim'
 import * as express from 'express'
 
-import { Paths } from 'claim/paths'
+import { Paths } from 'eligibility/paths'
 
 import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'forms/form'
@@ -12,22 +10,23 @@ import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
-import { ClaimType } from 'claim/form/models/eligibility/claimType'
+import { Draft } from '@hmcts/draft-store-client'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
 
 function renderView (form: Form<Eligibility>, res: express.Response): void {
-  res.render(Paths.eligibilityClaimTypePage.associatedView, { form: form })
+  res.render(Paths.eligibilityDefendantAgePage.associatedView, { form: form })
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.eligibilityClaimTypePage.uri, (req: express.Request, res: express.Response): void => {
+  .get(Paths.eligibilityDefendantAgePage.uri, (req: express.Request, res: express.Response): void => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
-
     renderView(new Form(draft.document.eligibility), res)
   })
   .post(
-    Paths.eligibilityClaimTypePage.uri,
-    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.CLAIM_TYPE),
+    Paths.eligibilityDefendantAgePage.uri,
+    FormValidator.requestHandler(undefined, Eligibility.fromObject, ValidationGroups.DEFENDANT_AGE),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Eligibility> = req.body
 
@@ -36,24 +35,15 @@ export default express.Router()
       } else {
         const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
+        draft.document.eligibility.defendantAge = form.model.defendantAge
 
-        draft.document.eligibility.claimType = form.model.claimType
         await new DraftService().save(draft, user.bearerToken)
 
-        switch (form.model.claimType) {
-          case ClaimType.PERSONAL_CLAIM:
-            res.redirect(Paths.eligibilitySingleDefendantPage.uri)
-            break
-          case ClaimType.MULTIPLE_CLAIM:
-            res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`)
-            break
-          case ClaimType.REPRESENTATIVE_CLAIM:
-            res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_ON_BEHALF}`)
-            break
-          default:
-            throw new Error(`Unexpected ClaimType: ${form.model.claimType.option}`)
+        if (draft.document.eligibility.defendantAge === DefendantAgeOption.NO) {
+          res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.UNDER_18_DEFENDANT}`)
+        } else {
+          res.redirect(Paths.eligibilityClaimTypePage.uri)
         }
-
       }
     })
   )
