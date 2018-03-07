@@ -36,16 +36,16 @@ exports.config = {
         }
       },
       'mocha-junit-reporter': {
-        stdout: './output/mocha-stdout.log',
+        stdout: './output/citizen-mocha-stdout.log',
         options: {
-          mochaFile: process.env.MOCHA_JUNIT_FILE_LOCATION || './output/integration-result.xml'
+          mochaFile: process.env.MOCHA_JUNIT_FILE_LOCATION || './output/citizen-integration-result.xml'
         }
       },
       'mochawesome': {
-        stdout: `./output/mochawesome-stdout.log`,
+        stdout: `./output/citizen-mochawesome-stdout.log`,
         options: {
           reportDir: 'output',
-          reportFilename: `e2e-result`,
+          reportFilename: `citizen-e2e-result`,
           inlineAssets: true,
           reportTitle: `E2E tests result`
         }

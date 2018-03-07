@@ -66,20 +66,20 @@ exports.config = {
         }
       },
       'mocha-junit-reporter': {
-        stdout: `./output/${browser}-mocha-junit-reporter-stdout.log`,
+        stdout: `./output/${browser}-citizen-mocha-junit-reporter-stdout.log`,
         options: {
-          mochaFile: `./output/${browser}-e2e-result.xml`,
-          reportTitle: `Cross browser E2E results for: ${browser}`,
+          mochaFile: `./output/${browser}-citizen-e2e-result.xml`,
+          reportTitle: `Citizen cross browser E2E results for: ${browser}`,
           inlineAssets: true
         }
       },
       'mochawesome': {
-        stdout: `./output/${browser}-mochawesome-stdout.log`,
+        stdout: `./output/${browser}-citizen-mochawesome-stdout.log`,
         options: {
           reportDir: 'output',
-          reportFilename: `${browser}-e2e-result`,
+          reportFilename: `${browser}-citizen-e2e-result`,
           inlineAssets: true,
-          reportTitle: `${browser} E2E tests result`
+          reportTitle: `${browser} citizen E2E tests result`
         }
       }
     }
