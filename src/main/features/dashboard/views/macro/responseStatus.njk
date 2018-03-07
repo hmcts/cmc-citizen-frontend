@@ -18,11 +18,12 @@
     {{ t('You’ve rejected the claim and suggested mediation on {{ respondedAt }}.',
     { respondedAt: claim.respondedAt | date }) }}
   {% elseif claim.status === ClaimStatus.CLAIM_REJECTED %}
-    {{ t('You’ve rejected the claim. The case will be reviewed by a judge and might go to court.' ) }}
+    {{ t('Your defence is being processed.') }}
+    {{ t('We will email you to explain what to do next.' ) }}
   {% elseif claim.status === ClaimStatus.OFFER_ACCEPTED %}
     {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court.') }}
   {% elseif claim.status === ClaimStatus.OFFER_SUBMITTED %}
-    {{ t('You made an offer to settle out of court.') }}
+    {{ t('Your offer has been sent to the claimant.') }}
   {% elseif claim.status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ t('You need to respond by {{ responseDeadline }}. You asked for an extra 14 days to respond.',
     { responseDeadline: claim.responseDeadline | date }) }}

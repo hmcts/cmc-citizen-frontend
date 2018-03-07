@@ -6,33 +6,15 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-        <p>{{ t('You can avoid going to a hearing if you settle out of court.') }}</p>
-        <p>
-        {{ t('If %s accepts your offer you’ll both sign a legal agreement. This agreement will replace the claim.',
-        {
-          postProcess: 'sprintf',
-          sprintf: [claim.claimData.claimant.name]
-        }
-        ) }}
-      </p>
-      <p>
-        {{ t('You can ask the court to make a Judgment if %s breaks the agreement.',
-        {
-          postProcess: 'sprintf',
-          sprintf: [claim.claimData.claimant.name]
-        }
-        ) }}
-      </p>
-      <p>
-        {{ t('Out of court offers can’t be mentioned in court if you don’t reach an agreement.') }}
-      </p>
+      <p>{{ t('You can avoid getting a County Court Judgment (CCJ) if you settle out of court.') }}
+         {{ t('There will be no public record of the claim.') }}</p>
 
-      {{ t('<a href="%s" class="button">Continue</a>',
-        {
-            postProcess: 'sprintf',
-            sprintf: [OfferPaths.offerPage.evaluateUri({ externalId: claim.externalId })]
-        }
-      ) | safe }}
+      <p>{{ t('If {{ claimant }} accepts your offer you’ll both sign a legal agreement. This agreement will replace the claim.', { claimant: claim.claimData.claimant.name  }) | safe}}</p>
+
+      <p>{{ t('If {{ claimant }} rejects your offer it can’t be mentioned in court.', { claimant: claim.claimData.claimant.name  }) | safe}}</p>
+
+      <p>{{ t('<a href="{{ link }}" class="button">Continue</a>',
+      { link: OfferPaths.offerPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}</p>
     </div>
   </div>
 {% endblock %}

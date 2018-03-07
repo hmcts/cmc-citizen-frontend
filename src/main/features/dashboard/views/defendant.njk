@@ -14,7 +14,9 @@
     <div class="column-two-thirds">
       <h2 class="heading-medium">{{ t('Claim status') }}</h2>
 
-      {{ responseStatusForDefendant(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
+      {% if featureToggles.offer and claim.status === ClaimStatus.CLAIM_REJECTED %}
+        {{ responseStatusForDefendant(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
+      {% endif %}
 
       {% if featureToggles.offer and claim.status === ClaimStatus.OFFER_ACCEPTED %}
         <p>
@@ -22,15 +24,20 @@
             {{ t('Sign the agreement') }}
           </a>
         </p>
-      {% elif featureToggles.offer and not claim.settlementReachedAt  %}
+        {% elif featureToggles.offer and claim.status === ClaimStatus.CLAIM_REJECTED  %}
         <h2 class="heading-medium">{{ t('More options') }}</h2>
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
-        <p>{{ t('You can still <a href="%s">make an offer</a> to settle the claim out of court. You will avoid a hearing and a County Court Judgment against you.',
-                { postProcess: 'sprintf',
-                  sprintf: [ OfferPaths.offerPage.evaluateUri({ externalId: claim.externalId }) ]
-                }) | safe
-            }}
-        </p>
+        <p>{{ t('You can still <a href="{{ link }}">make an offer</a> to settle the claim out of court. If your offer is accepted you won’t have to a court hearing.',
+          { link: OfferPaths.settleOutOfCourtPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}</p>
+      {% endif %}
+
+      {% if featureToggles.offer and claim.status === ClaimStatus.OFFER_SUBMITTED %}
+        <h2 class="heading-small">{{ t('Settle out of court') }}</h2>
+        <p>{{ t('You made an offer to settle the claim out of court. {{ claimant }} can accept or reject your offer.', { claimant: claim.claimData.claimant.name  }) | safe}}</p>
+        {{ t('We’ll email you when they respond') }}
+
+        <h2 class="heading-small">{{ t('Your response to the claim') }}</h2>
+        {{ t('You’ve has rejected the claim. The case will be reviewed by a judge and might go to court.') }}
       {% endif %}
     </div>
 
