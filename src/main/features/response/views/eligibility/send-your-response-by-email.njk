@@ -1,0 +1,117 @@
+{% extends "layout.njk" %}
+{% from "support.njk" import supportWidget %}
+{% from "form.njk" import csrfProtection, submitButton %}
+{% from "externalLink.njk" import externalLink %}
+
+{% set title = t('Money claim') %}
+{% set heading = t('Post your response') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <div class="panel-indent">
+        <div class="panel panel-border-wide">
+          <p>{{ t('We need to receive your response before <span class="bold">4pm on {{ responseDeadline }}</span>',
+            { responseDeadline: claim.responseDeadline | date }) | safe }}</p>
+        </div>
+      </div>
+
+
+      <h2 class="heading-medium">{{ t('Follow these steps') }}</h2>
+
+      {% if draft.response.type === ResponseType.DEFENCE %}
+        {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
+
+          <h2 class="heading-medium">{{ t('Counterclaim fee') }}</h2>
+          <p>
+            {{ t('You`ll need to pay a court fee if you make a counterclaim.')}}
+          </p>
+          <details class="notice">
+            <summary>{{ t('View claim fees') }}</summary>
+
+            <div class="panel">
+              <p>
+                {{ t('The fee is based on the amount you`re claiming, including interest.') }}
+              </p>
+              <table>
+                <thead>
+                <tr>
+                  <th scope="col">{{ t('Claim amount') }}</th>
+                  <th scope="col">{{ t('Fee') }}</th>
+                </tr>
+                </thead>
+                {% for fee in fees %}
+                  <tr>
+                    <td>{{ t('{{ from }} to {{ till }}', { from: fee.minRange | numeral, till: fee.maxRange | numeral } )}}</td>
+                    <td>{{ fee.amount | numeral | default('Not available') }}</td>
+                  </tr>
+                {% endfor %}
+              </table>
+            </div>
+          </details>
+        {% endif %}
+      {% endif %}
+
+      <ul class="list list-number">
+        <li>
+
+          {% if draft.response.type === ResponseType.FULL_ADMISSION %}
+            {{ t(externalLink('Download the admission form', asset_paths["pdf"] + '/OCON9A.pdf') + ' using these details:') | safe }}
+          {% endif %}
+
+          {% if draft.response.type === ResponseType.PART_ADMISSION %}
+            {{ t(externalLink('Download the admission form', asset_paths["pdf"] + '/OCON9A.pdf')+ ' and '
+            + externalLink('defence form', asset_paths["pdf"] + '/OCON9B.pdf') + ' using these details:') | safe }}
+          {% endif %}
+
+          {% if draft.response.type === ResponseType.DEFENCE %}
+            {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
+              {{ t('Download and print the ' + externalLink('defence and counterclaim', asset_paths["pdf"] + '/OCON9B.pdf') + ' form using:',
+              { ocon9B: [asset_paths["pdf"] + '/OCON9B.pdf']}) | safe }}
+            {% elseif draft.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.LESS_THAN_AMOUNT_CLAIMED %}
+              {{ t('Download the ' + externalLink('admission form', asset_paths["pdf"] + '/OCON9A.pdf')+ ' and the '
+              + externalLink('defence form', asset_paths["pdf"] + '/OCON9B.pdf') + ' using these details:') | safe }}
+            {% endif %}
+          {% endif %}
+
+          <ul class="list list-bullet">
+            <li>{{ t('Claim number {{ claimNumber }}', { claimNumber: claim.claimNumber }) }}</li>
+            <li>{{ t('Claimant {{ claimantName }}', { claimantName: claim.claimData.claimant.name}) }}</li>
+            <li>{{ t('Defendant {{ defendantName }}', { defendantName: claim.claimData.defendant.name}) }}</li>
+          </ul>
+        </li>
+
+        {% if draft.response.type === ResponseType.DEFENCE %}
+          {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
+          <li>{{ t('Print and complete the forms (ignore section 4 of the defence form unless '
+            + ' you`re making a counterclaim).') }}</li>
+          {% endif %}
+        {% endif %}
+
+        {% if draft.response.type === ResponseType.PART_ADMISSION %}
+            <li>{{ t('Print and complete the forms (ignore section 4 of the defence form unless '
+              + ' you`re making a counterclaim).') }}</li>
+        {% endif %}
+
+        {% if draft.response.type === ResponseType.FULL_ADMISSION %}
+          <li>{{ t('Print and complete the form') }}</li>
+        {% endif %}
+
+        <li>{{ t('Post the forms to:') }}</li>
+
+        <div class="keep-formatting panel">{{ t('Civil Money Claims') }}
+          {{ t('St. Katharine`s House') }}
+          {{ t('21-27 St. Katharine`s Street') }}
+          {{ t('Northampton') }}
+          {{ t('NN1 2LH') }}
+        </div>
+
+      </ul>
+
+      {{ supportWidget() }}
+
+    </div>
+
+  </div>
+
+{% endblock %}

@@ -25,3 +25,5 @@ npm-debug.log.*
 
 coverage-report
 .scannerwork
+smoke-output/
+functional-output/

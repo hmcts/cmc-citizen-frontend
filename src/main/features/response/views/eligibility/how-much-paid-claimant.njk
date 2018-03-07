@@ -1,0 +1,44 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
+{% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
+
+{% set title = t('Money claim') %}
+
+{% set heading = t('How much have you paid the claimant?') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <form method="post" class="analytics-submit-event-trigger"
+            data-event-action="Response: How much have you paid the claimant?"
+            data-event-label-from="option" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        <p>{{ t('The total amount claimed is {{ totalAmountTillToday }}. This includes the claim fee and any interest.', { totalAmountTillToday: claim.totalAmountTillToday | numeral }) }}</p>
+
+        {{
+        radioGroup(
+        label = 'How much have you paid the claimant?',
+        legendHidden = true,
+        name = 'option',
+        options = [
+        {
+          label: 'The amount claimed',
+          value: 'amountClaimed'
+        },
+        {
+          label: 'Less than the amount claimed',
+          value: 'lessThenAmountClaimed'
+        }
+        ],
+        form = form
+        )
+        }}
+
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}
+

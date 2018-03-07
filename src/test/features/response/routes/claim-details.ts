@@ -39,7 +39,7 @@ describe('Defendant response: claim details page', () => {
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Defence submitted'))
+          .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response'))
       })
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {

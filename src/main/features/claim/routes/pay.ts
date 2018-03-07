@@ -10,7 +10,7 @@ import { FeesClient } from 'app/fees/feesClient'
 
 import { ClaimStoreClient } from 'app/claims/claimStoreClient'
 import { buildURL } from 'app/utils/callbackBuilder'
-import { claimAmountWithInterest } from 'app/utils/interestUtils'
+import { draftClaimAmountWithInterest } from 'common/interestUtils'
 import { User } from 'app/idam/user'
 import { DraftService } from 'services/draftService'
 import { ServiceAuthTokenFactoryImpl } from 'common/security/serviceTokenFactoryImpl'
@@ -80,7 +80,7 @@ export default express.Router()
       if (!draft.document.externalId) {
         throw new Error(`externalId is missing from the draft claim. User Id : ${user.id}`)
       }
-      const amount: number = await claimAmountWithInterest(draft.document)
+      const amount: number = await draftClaimAmountWithInterest(draft.document)
       if (!amount) {
         throw new Error('No amount entered, you cannot pay yet')
       }

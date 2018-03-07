@@ -1,0 +1,17 @@
+version: '2.1'
+
+services:
+    integration-tests:
+      image: docker.artifactory.reform.hmcts.net/cmc/integration-tests:${INTEGRATION_TESTS_VERSION:-latest}
+      command: test --grep '@citizen($$| )'
+      environment:
+        - WEB_DRIVER_HOST=remote-webdriver
+        - CITIZEN_APP_URL=${TEST_URL}
+        - IDAM_URL
+        - CLAIM_STORE_URL
+        - HEALTHCHECK_CITIZEN=true
+      volumes:
+        - ./functional-output:/usr/src/app/output
+    remote-webdriver:
+      image: docker.artifactory.reform.hmcts.net/selenium/standalone-chrome:3.8.1
+

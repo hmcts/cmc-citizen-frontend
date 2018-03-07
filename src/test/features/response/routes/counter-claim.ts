@@ -16,6 +16,7 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
+import * as feesServiceMock from '../../../http-mocks/fees'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ResponsePaths.counterClaimPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -47,6 +48,8 @@ describe('Defendant response: counter claim page', () => {
       it('should render page when everything is fine', async () => {
         draftStoreServiceMock.resolveFind('response')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        feesServiceMock.resolveGetIssueFeeRangeGroup()
+        feesServiceMock.resolveGetHearingFeeRangeGroup()
 
         await request(app)
           .get(pagePath)

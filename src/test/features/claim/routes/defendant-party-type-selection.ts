@@ -14,6 +14,7 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const expectedTextOnPage: string = 'Who are you making the claim against?'
 
 describe('Claim issue: defendant party type selection page', () => {
   attachDefaultHooks(app)
@@ -28,7 +29,7 @@ describe('Claim issue: defendant party type selection page', () => {
       await request(app)
         .get(ClaimPaths.defendantPartyTypeSelectionPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Who are you making the claim against?'))
+        .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage))
     })
   })
 
@@ -47,7 +48,7 @@ describe('Claim issue: defendant party type selection page', () => {
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ type: undefined })
-          .expect(res => expect(res).to.be.successful.withText('Who are you making the claim against?', 'div class="error-summary"'))
+          .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {

@@ -62,7 +62,8 @@ export const sampleClaimObj = {
     interest: {
       type: InterestType.STANDARD
     },
-    reason: 'Because I can'
+    reason: 'Because I can',
+    feeAmountInPennies: 2500
   },
   responseDeadline: '2017-08-08',
   countyCourtJudgment: {
@@ -249,6 +250,12 @@ export function resolveAcceptOffer (by: string = 'claimant') {
 export function resolveRejectOffer (by: string = 'claimant') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp(`/.+/offers/${by}/reject`))
+    .reply(HttpStatus.CREATED)
+}
+
+export function resolveCountersignOffer (by: string = 'defendant') {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp(`/.+/offers/${by}/countersign`))
     .reply(HttpStatus.CREATED)
 }
 

@@ -2,11 +2,15 @@
   background-color: $expandable-background;
   padding: 20px 20px 10px;
 
-  p {
-    height: 125px;
-    overflow: hidden;
+  .content {
+    margin-bottom: 10px;
     white-space: pre-line;
     word-wrap: break-word;
+
+    &.expandable {
+      height: 125px;
+      overflow: hidden;
+    }
   }
 
   .more {
@@ -20,7 +24,7 @@
   input {
     display: none;
 
-    &:checked + p {
+    &:checked + .expandable {
       height: auto;
     }
 

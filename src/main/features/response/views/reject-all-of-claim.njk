@@ -4,7 +4,7 @@
 
 {% set title = t('Money claim') %}
 
-{% set heading = t('I reject all of the claim') %}
+{% set heading = t('Why do you reject the claim?') %}
 
 {% block content %}
   <div class="grid-row">
@@ -13,15 +13,14 @@
       <form method="post" class="analytics-submit-event-trigger" data-event-action="Response: Select full admission option" data-event-label-from="option" novalidate>
         {{ csrfProtection(csrf) }}
 
-        <legend class="visually-hidden">{{ t('I reject all of the claim') }}</legend>
-
         {{
           radioGroup(
           label = 'Why do you reject all the claim?',
+          legendHidden = true,
           name = 'option',
           options = [
             {
-              label: 'I’ve already paid the claim in full',
+              label: 'I’ve paid what I believe I owe',
               value: 'alreadyPaid'
             },
             {
@@ -29,9 +28,8 @@
               value: 'dispute'
             },
             {
-              label: 'Defend now and also make a counterclaim',
-              value: 'counterClaim',
-              hint: 'You’ll need to complete the defence and counterclaim form.'
+              label: 'I dispute the claim and want to make a counterclaim',
+              value: 'counterClaim'
             }
           ],
           form = form

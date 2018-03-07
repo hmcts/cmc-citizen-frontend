@@ -29,6 +29,7 @@ import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 import { ClaimType } from 'claim/form/models/eligibility/claimType'
+import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
@@ -42,6 +43,7 @@ export const sampleClaimDraftObj = {
     claimantAddress: YesNoOption.YES,
     defendantAddress: YesNoOption.YES,
     eighteenOrOver: YesNoOption.YES,
+    defendantAge: DefendantAgeOption.YES,
     claimType: ClaimType.PERSONAL_CLAIM,
     singleDefendant: YesNoOption.NO,
     governmentDepartment: YesNoOption.NO,

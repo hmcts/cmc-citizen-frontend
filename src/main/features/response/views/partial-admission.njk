@@ -22,7 +22,7 @@
           {{ t('Complete both the <a href="%s" target="_blank">admission N9A</a> and <a href="%s" target="_blank">defence and counterclaim N9B</a> forms <span class="font-xsmall">(forms open in new window)</span>',
           { postProcess: 'sprintf', sprintf: [asset_paths["pdf"] + '/OCON9A.pdf', asset_paths["pdf"] + '/OCON9B.pdf']}) | safe }}
           <ul class="list list-bullet">
-            <li>{{ t('Claim No.') }} {{ claim.claimNumber }}</li>
+            <li>{{ t('Claim number') }} {{ claim.claimNumber }}</li>
             <li>{{ t('Claimant') }} {{ claim.claimData.claimant.name }}</li>
             <li>{{ t('Defendant') }} {{ response.defendantDetails.partyDetails.name }}</li>
           </ul>

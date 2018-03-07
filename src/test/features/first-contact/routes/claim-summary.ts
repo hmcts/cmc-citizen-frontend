@@ -47,11 +47,11 @@ describe('Defendant first contact: claim summary page', () => {
 
       it('should return 200 and render view when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001')
-
+        claimStoreServiceMock.mockCalculateInterestRate(0)
         await request(app)
           .get(Paths.claimSummaryPage.uri)
           .set('Cookie', `${cookieName}=ABC;state=000MC001`)
-          .expect(res => expect(res).to.be.successful.withText('View the claim'))
+          .expect(res => expect(res).to.be.successful.withText('Claim details'))
       })
     })
   })
@@ -60,7 +60,7 @@ describe('Defendant first contact: claim summary page', () => {
     checkAuthorizationGuards(app, 'post', Paths.claimSummaryPage.uri)
 
     it('should redirect to registration page when everything is fine', async () => {
-      const registrationPagePattern = new RegExp(`${config.get('idam.authentication-web.url')}/login/uplift\\?response_type=code&state=1&client_id=cmc_citizen&redirect_uri=http://127.0.0.1:[0-9]{5}/receiver&jwt=ABC`)
+      const registrationPagePattern = new RegExp(`${config.get('idam.authentication-web.url')}/login/uplift\\?response_type=code&state=1&client_id=cmc_citizen&redirect_uri=https://127.0.0.1:[0-9]{5}/receiver&jwt=ABC`)
 
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-holder')
 

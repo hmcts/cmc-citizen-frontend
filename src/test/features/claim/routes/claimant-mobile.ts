@@ -14,7 +14,7 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const headerText: string = 'Add a phone number (optional)'
+const headerText: string = 'Enter a contact number (optional)'
 
 describe('Claim issue: claimant mobile page', () => {
   attachDefaultHooks(app)
