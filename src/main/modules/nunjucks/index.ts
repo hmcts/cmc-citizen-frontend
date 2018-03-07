@@ -3,7 +3,7 @@ import * as path from 'path'
 import * as express from 'express'
 import * as config from 'config'
 import * as nunjucks from 'nunjucks'
-import { dateFilter } from 'modules/nunjucks/filters/dateFilter'
+import { dateFilter, dateInputFilter } from 'modules/nunjucks/filters/dateFilter'
 import { convertToPoundsFilter } from 'modules/nunjucks/filters/convertToPounds'
 import * as numeralFilter from 'nunjucks-numeral-filter'
 import * as numeral from 'numeral'
@@ -84,6 +84,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('gaTrackingId', config.get<string>('analytics.gaTrackingId'))
     nunjucksEnv.addGlobal('t', (key: string, options?: TranslationOptions): string => this.i18next.t(key, options))
     nunjucksEnv.addFilter('date', dateFilter)
+    nunjucksEnv.addFilter('inputDate', dateInputFilter)
     nunjucksEnv.addFilter('pennies2pounds', convertToPoundsFilter)
     nunjucksEnv.addFilter('numeral', numeralFilter)
     nunjucksEnv.addGlobal('betaFeedbackSurveyUrl', config.get('feedback.feedbackSurvey.url'))

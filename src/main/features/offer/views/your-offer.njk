@@ -24,7 +24,7 @@
           <h4 class="heading-small"> {{ t('When will all parts of this offer be done?') }}</h4>
         </div>
 
-        {{ dateInput(form = form, name = 'completionDate',label = '', hint = t('For example, {{ futureDate }}', { futureDate: futureDate.format('DD MM YYYY') })) }}
+        {{ dateInput(form = form, name = 'completionDate',label = '', hint = t('For example, {{ futureDate }}', { futureDate: futureDate | inputDate })) }}
 
         <div class="panel panel-border-wide">
           <p>
