@@ -74,6 +74,13 @@
     {{ row(timelineRow.date, timelineRow.description, '', loop.index0 === lastItemIndex) }}
     {% endfor %}
 
+    {{ row('Your evidence (optional):', '', paths.evidencePage.uri, false ) }}
+    {% set allEvidenceRows = draftClaim.evidence.getPopulatedRowsOnly() %}
+    {% set lastItemIndex = allEvidenceRows.length - 1 %}
+    {% for evidenceRow in allEvidenceRows %}
+    {{ row(evidenceRow.type.displayValue, evidenceRow.description | default(''), '', loop.index0 === lastItemIndex) }}
+    {% endfor %}
+
     {{ tableEnd() }}
 
     <div class="column-two-thirds">
