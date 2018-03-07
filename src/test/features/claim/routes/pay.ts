@@ -74,9 +74,11 @@ describe('Claim issue: initiate payment receiver', () => {
             number: '07000000000'
           } as MobilePhone,
           payment: {
-            id: '12',
+            reference: 'XXXX123',
+            dateCreated: 12345,
             amount: 2500,
-            state: { status: 'success' }
+            status: 'Success',
+            links: { nextUrl: { href: 'any href', method: 'POST' } }
           } as Payment
         } as Claimant,
         defendant: {
@@ -234,9 +236,11 @@ describe('Claim issue: post payment callback receiver', () => {
             number: '07000000000'
           } as MobilePhone,
           payment: {
-            id: '12',
+            reference: 'XXXX123',
+            dateCreated: 12345,
             amount: 2500,
-            state: { status: 'success' }
+            status: 'success',
+            links: { nextUrl: { href: 'any href', method: 'POST' } }
           } as Payment
         } as Claimant,
         defendant: {

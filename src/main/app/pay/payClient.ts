@@ -1,19 +1,19 @@
 import * as config from 'config'
-
-import { PaymentRequest } from 'app/pay/paymentRequest'
 import { PaymentResponse } from 'app/pay/paymentResponse'
 import { Payment } from 'app/pay/payment'
 import { request } from 'client/request'
 import { User } from 'app/idam/user'
 import { ServiceAuthToken } from 'app/idam/serviceAuthToken'
-
 import * as uuid from 'uuid/v4'
 import { Fees } from 'app/pay/fees'
-import { NewPaymentRequest } from 'app/pay/newPaymentRequest'
-import { NewPaymentResponse } from 'app/pay/newPaymentResponse'
+import { plainToClass } from 'class-transformer'
 
 const payUrl = config.get<string>('pay.url')
 const payPath = config.get<string>('pay.path')
+const serviceName = config.get<string>('pay.service-name')
+const currency = config.get<string>('pay.currency')
+const siteId = config.get<string>('pay.site-id')
+const description = config.get<string>('pay.description')
 
 export class PayClient {
   constructor (public serviceAuthToken: ServiceAuthToken) {
@@ -21,69 +21,60 @@ export class PayClient {
   }
 
   /**
-   * Creates a payment request for CC-Pay
    *
-   * @param user a user
-   * @param feeCode the fee code
-   * @param amount the amount in pounds
+   * @param User a user
+   * @param {Fees[]} array of fees
+   * @param amount fee amount
    * @param returnURL the url the user should be redirected to
-   * @returns {Promise.URL}
+   * @returns Promise.Payment
    */
-  create (user: User, feeCode: string, amount: number, returnURL: string): Promise<PaymentResponse> {
-    const paymentReference = `CMC1$$$${uuid()}$$$AA00$$$${feeCode}`
-    return request.post({
-      uri: `${payUrl}/users/${user.id}/payments`,
-      body: new PaymentRequest(amount, paymentReference, 'Money Claim issue fee', returnURL),
-      headers: {
-        Authorization: `Bearer ${user.bearerToken}`,
-        ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`
-      }
-    })
-  }
-
-  createNewPayment (user: User, fees: Fees[], amount: number, returnURL: string): Promise<NewPaymentResponse> {
-    const caseReference: string = uuid()
-    const serviceName = config.get<string>('pay.service-name')
-    const currency = config.get<string>('pay.currency')
-    const siteId = config.get<string>('pay.site-id')
-    const description = config.get<string>('pay.description')
-    let paymentReq: NewPaymentRequest = new NewPaymentRequest(amount, caseReference, description, serviceName, currency, siteId, fees, returnURL)
-
-    return request.post({
+  async create (user: User, fees: Fees[], amount: number, returnURL: string): Promise<Payment> {
+    const paymentReq: object = this.preparePaymentRequest(amount, fees)
+    console.log('bearer token:' + user.bearerToken, '\nauthtoken:' + this.serviceAuthToken.bearerToken, '\nreturnUrl:' + returnURL)
+    const payment: object = await request.post({
       uri: `${payUrl}/${payPath}`,
       body: paymentReq,
       headers: {
         Authorization: `Bearer ${user.bearerToken}`,
-        ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`
+        ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`,
+        'return-url': `${returnURL}`
       }
     })
+    return plainToClass(Payment, payment)
   }
 
-  retrieve (user: User, paymentId: string): Promise<Payment> {
+  /**
+   *
+   * @param user a user
+   * @param paymentId Id when payment initiated
+   * @returns Promise<Payment>
+   */
+  async retrieve (user: User, paymentId: string): Promise<PaymentResponse> {
     if (!paymentId) {
       return Promise.reject(new Error('Payment id must be set'))
     }
-
-    return request.get({
-      uri: `${payUrl}/users/${user.id}/payments/${paymentId}`,
-      headers: {
-        Authorization: `Bearer ${user.bearerToken}`,
-        ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`
-      }
-    })
-  }
-
-  retrieveNew (user: User, paymentId: string): Promise<Payment> {
-    if (!paymentId) {
-      return Promise.reject(new Error('Payment id must be set'))
-    }
-
-    return request.get({
+    const paymentResponse: object = await request.get({
       uri: `${payUrl}/${payPath}/${paymentId}`,
       headers: {
         Authorization: `Bearer ${user.bearerToken}`,
         ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`
       }
     })
+    console.log("responseXXX: " + JSON.stringify(paymentResponse))
+    return plainToClass(PaymentResponse, paymentResponse)
+  }
+
+  private preparePaymentRequest (amount: number, fees: Fees[]): object {
+    const caseReference: string = uuid()
+    return {
+      amount: amount,
+      case_reference: caseReference,
+      description: description,
+      service: serviceName,
+      currency: currency,
+      site_id: siteId,
+      fee: fees,
+      ccd_case_number: 'UNKNOWN'
+    }
   }
 }

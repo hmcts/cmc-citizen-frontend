@@ -1,36 +1,47 @@
-export class PaymentState {
-  status: string
-  finished: boolean
+import 'reflect-metadata'
+import { Expose, Type} from 'class-transformer'
+import { MoneyConverter } from 'fees/moneyConverter'
 
-  deserialize (input?: any): PaymentState {
-    if (input) {
-      this.status = input.status
-      this.finished = input.finished
-    }
-    return this
-  }
+class NextURL {
+  readonly href: string
+  readonly method: string
+}
+
+class Links {
+  @Expose({ name: 'next_url' })
+  @Type(() => NextURL)
+  readonly nextUrl: NextURL
+
+  @Type(() => NextURL)
+  readonly self: NextURL
+
 }
 
 export class Payment {
-  id: string
-  amount: number
-  reference: string
-  description: string
-  date_created: number // tslint:disable-line variable-name allow snake_case
-  state: PaymentState
 
-  static fromObject (input?: any): Payment {
-    return new Payment().deserialize(input)
-  }
+  reference: string
+
+  @Expose({ name: 'date_created' })
+  dateCreated: number
+
+  status: string
+
+  amount: number
+
+  @Expose({ name: '_links' })
+  @Type(() => Links)
+  links: Links
+
+  // static fromObject (input?: any): Payment {
+  //   return new Payment().deserialize(input)
+  // }
 
   deserialize (input?: any): Payment {
     if (input) {
-      this.id = input.id
-      this.amount = input.amount
       this.reference = input.reference
-      this.description = input.description
-      this.date_created = input.date_created
-      this.state = new PaymentState().deserialize(input.state)
+      this.dateCreated = input.dateCreated
+      this.status = input.status
+      this.amount = MoneyConverter.convertPoundsToPennies(input.amount)
     }
     return this
   }

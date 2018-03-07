@@ -4,7 +4,6 @@ import * as config from 'config'
 import { Paths } from 'claim/paths'
 
 import { PayClient } from 'app/pay/payClient'
-import { PaymentResponse } from 'app/pay/paymentResponse'
 import { Payment } from 'app/pay/payment'
 
 import { FeesClient } from 'app/fees/feesClient'
@@ -19,9 +18,8 @@ import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Logger } from '@hmcts/nodejs-logging'
 import { FeeOutcome } from 'fees/models/feeOutcome'
-import { MoneyConverter } from 'fees/moneyConverter'
-// import { NewPaymentResponse } from 'app/pay/newPaymentResponse'
-// import { Fees } from 'app/pay/fees'
+import { Fees } from 'app/pay/fees'
+import { PaymentResponse } from 'app/pay/paymentResponse'
 
 const logger = Logger.getLogger('router/pay')
 const event: string = config.get<string>('fees.issueFee.event')
@@ -87,40 +85,31 @@ export default express.Router()
         throw new Error('No amount entered, you cannot pay yet')
       }
 
-      const paymentId = draft.document.claimant.payment.id
+      const paymentRef = draft.document.claimant.payment.reference
 
-      if (paymentId) {
+      if (paymentRef) {
         const payClient: PayClient = await getPayClient()
-        const payment: Payment = await payClient.retrieve(user, paymentId)
-        switch (payment.state.status) {
+        const paymentResponse: PaymentResponse = await payClient.retrieve(user, paymentRef)
+        switch (paymentResponse.status) {
           case 'success':
             return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: draft.document.externalId }))
         }
       }
       const feeOutcome: FeeOutcome = await FeesClient.calculateFee(event, amount, channel)
       const payClient: PayClient = await getPayClient()
-      const amountInPennies: number = MoneyConverter.convertPoundsToPennies(feeOutcome.amount)
-      // const fees: Fees = new Fees(feeOutcome.amount, feeOutcome.code, feeOutcome.version)
-      // const feesArray: Fees[] = [fees]
-      // const paymentNew: NewPaymentResponse = await payClient.createNewPayment(
-      //   res.locals.user,
-      //   feesArray,
-      //   feeOutcome.amount,
-      //   getReturnURL(req, draft.document.externalId)
-      //
-      // )
-      // draft.document.claimant.payment = paymentNew
-      const payment: PaymentResponse = await payClient.create(
+      const fees: Fees = new Fees(feeOutcome.amount, feeOutcome.code, feeOutcome.version)
+      const feesArray: Fees[] = [fees]
+      const payment: Payment = await payClient.create(
         res.locals.user,
-        feeOutcome.code,
-        amountInPennies,
+        feesArray,
+        feeOutcome.amount,
         getReturnURL(req, draft.document.externalId)
       )
+      console.log('payment is: ' + JSON.stringify(payment))
       draft.document.claimant.payment = payment
-
       await new DraftService().save(draft, user.bearerToken)
 
-      res.redirect(payment._links.next_url.href)
+      res.redirect(payment.links.nextUrl.href)
     } catch (err) {
       logPaymentError(user.id, draft.document.claimant.payment)
       next(err)
@@ -132,7 +121,7 @@ export default express.Router()
     try {
       const { externalId } = req.params
 
-      const paymentId = draft.document.claimant.payment.id
+      const paymentId = draft.document.claimant.payment.reference
       if (!paymentId) {
         return res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
       }
@@ -143,16 +132,16 @@ export default express.Router()
 
       await new DraftService().save(draft, user.bearerToken)
 
-      const status: string = payment.state.status
-
+      const status: string = payment.status
+      console.log('status: ' + status)
       // https://gds-payments.gelato.io/docs/versions/1.0.0/api-reference
       switch (status) {
-        case 'cancelled':
-        case 'failed':
+        case 'Cancelled':
+        case 'Failed':
           logPaymentError(user.id, payment)
           res.redirect(Paths.checkAndSendPage.uri)
           break
-        case 'success':
+        case 'Success':
           await successHandler(res, next)
           break
         default:

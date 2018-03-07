@@ -1,9 +1,14 @@
+import { Fees } from 'app/pay/fees'
+
 export class PaymentRequest {
   // tslint:disable-next-line variable-name allow snake_case
-  constructor (public amount: number, public reference: string, public description: string, public return_url: string) {
+  constructor (public amount: number, public case_reference: string, public description: string, public service_name: string, public currency: string, public site_id: string, public fees: Fees[]) {
     this.amount = amount
-    this.reference = reference
+    this.case_reference = case_reference
     this.description = description
-    this.return_url = return_url
+    this.service_name = service_name
+    this.currency = currency
+    this.site_id = site_id
+    this.fees = fees
   }
 }

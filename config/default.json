@@ -49,8 +49,8 @@
   },
   "pay": {
     "url": "http://localhost:4421",
-    "path": "card-payment",
-    "service-name": "civil money claims",
+    "path": "card-payments",
+    "service-name": "CMC",
     "currency": "GBP",
     "site-id": "AA00",
     "description": "Money Claim issue fee"

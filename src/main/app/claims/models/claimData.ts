@@ -44,7 +44,7 @@ export class ClaimData {
   }
 
   get paidFeeAmount (): number {
-    return this.payment.amount / 100
+    return this.feeAmountInPennies
   }
 
   deserialize (input: any): ClaimData {
@@ -56,7 +56,6 @@ export class ClaimData {
       }
       this.feeAmountInPennies = input.feeAmountInPennies
 
-      this.payment = new Payment().deserialize(input.payment)
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
       this.interest = new Interest().deserialize(input.interest)
       this.interestDate = new InterestDate().deserialize(input.interestDate)
