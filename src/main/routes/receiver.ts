@@ -19,14 +19,13 @@ import { Logger } from '@hmcts/nodejs-logging'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { FeatureToggles } from 'utils/featureToggles'
 import { User } from 'app/idam/user'
-import { DraftClaim } from 'drafts/models/draftClaim'
-import { Draft } from '@hmcts/draft-store-client'
 import { DraftService } from 'services/draftService'
-import { ResponseDraft } from 'response/draft/responseDraft'
 
 const logger = Logger.getLogger('router/receiver')
 const sessionCookie = config.get<string>('session.cookieName')
 const stateCookieName = 'state'
+
+const draftService: DraftService = new DraftService()
 
 async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath): Promise<string> {
   if (req.query.state !== OAuthHelper.getStateCookie(req)) {
@@ -71,26 +70,12 @@ function loginErrorHandler (req: express.Request,
 }
 
 async function retrieveRedirectForLandingPage (user: User): Promise<string> {
-
   const noClaimIssued: boolean = (await ClaimStoreClient.retrieveByClaimantId(user)).length === 0
+  const noClaimReceived: boolean = (await ClaimStoreClient.retrieveByDefendantId(user)).length === 0
+  const noDraftClaims: boolean = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
+  const noDraftResponses: boolean = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
 
-  const claimAgainstDefendant = await ClaimStoreClient.retrieveByDefendantId(user)
-
-  const notADefendant: boolean = claimAgainstDefendant.length === 0
-
-  const draftClaims: Draft<DraftClaim>[] = await new DraftService().find('claim', '100', user.bearerToken, (value: any): DraftClaim => {
-    return new DraftClaim().deserialize(value)
-  })
-
-  const noDraftClaims: boolean = draftClaims.length === 0
-
-  const draftResponse: Draft<ResponseDraft>[] = await new DraftService().find('response', '100', user.bearerToken, (value: any): ResponseDraft => {
-    return new ResponseDraft().deserialize(value)
-  })
-
-  const noDraftResponse: boolean = draftResponse.length === 0
-
-  if (noClaimIssued && notADefendant && noDraftClaims && noDraftResponse) {
+  if (noClaimIssued && noClaimReceived && noDraftClaims && noDraftResponses) {
     return ClaimPaths.startPage.uri
   } else {
     return DashboardPaths.dashboardPage.uri
