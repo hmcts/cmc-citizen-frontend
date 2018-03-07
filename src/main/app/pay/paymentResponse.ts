@@ -5,8 +5,6 @@ import { Expose, Type } from 'class-transformer'
 
 export class PaymentResponse extends Payment {
 
-  //readonly amount: number
-
   readonly description: string
 
   readonly currency: string

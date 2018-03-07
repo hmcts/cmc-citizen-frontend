@@ -72,10 +72,10 @@ export const sampleClaimDraftObj = {
       number: '07000000000'
     } as MobilePhone,
     payment: {
-      reference: 'XXXX123',
+      reference: '123',
       dateCreated: 12345,
       amount: 2500,
-      status: 'success',
+      status: 'Success',
       links: { nextUrl: { href: 'any href', method: 'POST' } }
     } as Payment
   } as Claimant,

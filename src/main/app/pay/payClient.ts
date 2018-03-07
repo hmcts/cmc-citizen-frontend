@@ -30,7 +30,6 @@ export class PayClient {
    */
   async create (user: User, fees: Fees[], amount: number, returnURL: string): Promise<Payment> {
     const paymentReq: object = this.preparePaymentRequest(amount, fees)
-    console.log('bearer token:' + user.bearerToken, '\nauthtoken:' + this.serviceAuthToken.bearerToken, '\nreturnUrl:' + returnURL)
     const payment: object = await request.post({
       uri: `${payUrl}/${payPath}`,
       body: paymentReq,
@@ -46,21 +45,20 @@ export class PayClient {
   /**
    *
    * @param user a user
-   * @param paymentId Id when payment initiated
+   * @param paymentRef Ref when payment initiated
    * @returns Promise<Payment>
    */
-  async retrieve (user: User, paymentId: string): Promise<PaymentResponse> {
-    if (!paymentId) {
-      return Promise.reject(new Error('Payment id must be set'))
+  async retrieve (user: User, paymentRef: string): Promise<PaymentResponse> {
+    if (!paymentRef) {
+      return Promise.reject(new Error('Payment reference must be set'))
     }
     const paymentResponse: object = await request.get({
-      uri: `${payUrl}/${payPath}/${paymentId}`,
+      uri: `${payUrl}/${payPath}/${paymentRef}`,
       headers: {
         Authorization: `Bearer ${user.bearerToken}`,
         ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`
       }
     })
-    console.log("responseXXX: " + JSON.stringify(paymentResponse))
     return plainToClass(PaymentResponse, paymentResponse)
   }
 

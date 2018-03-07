@@ -3,65 +3,65 @@ import * as HttpStatus from 'http-status-codes'
 import * as config from 'config'
 
 const payUrl = config.get<string>('pay.url')
-const payPath = config.get<string>('pay.path')
+const payPath = '/' + config.get<string>('pay.path')
 
-// const payment = {
-//   id: '12',
-//   amount: 100,
-//   state: {
-//     status: 'failed'
-//   },
-//   _links: {
-//     next_url: {
-//       method: 'get',
-//       href: '/claim-confirmed'
-//     }
-//   }
-// }
-const payment: object =
-  {
-    reference: 'RC-1520-2670-0178-8285',
-    amount: 35,
-    links: {
-      self: {
-        href: 'http://localhost:4421/card-payments/RC-1520-2670-0178-8285',
-        method: 'GET'
-      }
+export const paymentInitiateResponse: object = {
+  reference: 'RC-1520-4225-4161-2265',
+  date_created: '2018-03-07T11:35:42.095+0000',
+  status: 'Initiated',
+  _links: {
+    next_url: {
+      href: 'https://www.payments.service.gov.uk/secure/8b647ade-02cc-4c85-938d-4db560404df8',
+      method: 'GET'
     }
   }
-
-const requestBody: object = {
-  amount: 50,
-  case_reference: new RegExp(/^[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}$/i),
-  description: 'Money Claim issue fee',
-  service: 'CMC',
-  currency: 'GBP',
-  site_id: 'AA00',
-  fee: [{ 'calculated_amount': 50, 'code': 'X0002', 'version': 1 }],
-  ccd_case_number: 'UNKNOWN'
 }
 
+const paymentRetrieveResponse: object = {
+  amount: 60,
+  description: 'Money Claim issue fee',
+  reference: 'RC-1520-4276-0065-8715',
+  currency: 'GBP',
+  ccd_case_number: 'UNKNOWN',
+  case_reference: 'dfd75bac-6d54-4c7e-98f7-50e047d7c7f5',
+  channel: 'online',
+  method: 'card',
+  external_provider: 'gov pay',
+  status: 'Success',
+  external_reference: 'h8mtngl42o4i8ajrq64mdqufhl',
+  site_id: 'AA00',
+  service_name: 'Civil Money Claims',
+  fees: [
+    {
+      code: 'X0026',
+      version: '1',
+      calculated_amount: 60
+    }],
+  _links: {
+    self: { href: 'http://localhost:4421/card-payments/RC-1520-4276-0065-8715', method: 'GET' }
+  }
+}
 
 export function resolveCreate () {
   mock(payUrl)
-    .post(payPath, requestBody)
-    .reply(HttpStatus.CREATED, { ...payment, state: 'Initiated' })
+    .post(payPath)
+    .reply(HttpStatus.CREATED, { ...paymentInitiateResponse })
 }
 
 export function rejectCreate () {
   mock(payUrl)
-    .post(payPath, requestBody)
+    .post(payPath)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR)
 }
 
 export function resolveRetrieve (status: string) {
-  mock(payUrl)
-    .get(`${payPath}/` + new RegExp(`[\\d]+`))
-    .reply(HttpStatus.OK, { ...payment, state: `${status}` })
+  mock(payUrl + payPath)
+    .get(new RegExp(`\/[\\d]+`))
+    .reply(HttpStatus.OK, { ...paymentRetrieveResponse, status: `${status}` })
 }
 
 export function rejectRetrieve () {
-  mock(payUrl)
-    .get(`${payPath}/` + new RegExp(`[\\d]+`))
+  mock(payUrl + payPath)
+    .get(new RegExp(`\/[\\d]+`))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR)
 }

@@ -91,7 +91,7 @@ export default express.Router()
         const payClient: PayClient = await getPayClient()
         const paymentResponse: PaymentResponse = await payClient.retrieve(user, paymentRef)
         switch (paymentResponse.status) {
-          case 'success':
+          case 'Success':
             return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: draft.document.externalId }))
         }
       }
@@ -105,7 +105,6 @@ export default express.Router()
         feeOutcome.amount,
         getReturnURL(req, draft.document.externalId)
       )
-      console.log('payment is: ' + JSON.stringify(payment))
       draft.document.claimant.payment = payment
       await new DraftService().save(draft, user.bearerToken)
 
@@ -121,19 +120,18 @@ export default express.Router()
     try {
       const { externalId } = req.params
 
-      const paymentId = draft.document.claimant.payment.reference
-      if (!paymentId) {
+      const paymentReference = draft.document.claimant.payment.reference
+      if (!paymentReference) {
         return res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
       }
       const payClient = await getPayClient()
 
-      const payment: Payment = await payClient.retrieve(user, paymentId)
+      const payment: Payment = await payClient.retrieve(user, paymentReference)
       draft.document.claimant.payment = new Payment().deserialize(payment)
 
       await new DraftService().save(draft, user.bearerToken)
 
       const status: string = payment.status
-      console.log('status: ' + status)
       // https://gds-payments.gelato.io/docs/versions/1.0.0/api-reference
       switch (status) {
         case 'Cancelled':

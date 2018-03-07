@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { Expose, Type} from 'class-transformer'
+import { Expose, Type } from 'class-transformer'
 import { MoneyConverter } from 'fees/moneyConverter'
 
 class NextURL {
@@ -31,10 +31,6 @@ export class Payment {
   @Expose({ name: '_links' })
   @Type(() => Links)
   links: Links
-
-  // static fromObject (input?: any): Payment {
-  //   return new Payment().deserialize(input)
-  // }
 
   deserialize (input?: any): Payment {
     if (input) {
