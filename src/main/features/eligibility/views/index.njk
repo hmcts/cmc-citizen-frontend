@@ -24,6 +24,14 @@
 
         <p>{{ t('We’ll ask you some questions to check you can use the new service.') }}</p>
 
+
+        {#Message for existing customers#}
+        {#<p>#}
+          {#{{ t('We’ll ask you some questions to check you can use this service. '#}
+          {#+ 'We can’t say if your claim will be successful or not.') }}#}
+        {#</p>#}
+       {##}
+
         <a href="{{ nextPage }}" class="button">{{ t('Continue to new service') }}</a>
       </div>
     </div>
