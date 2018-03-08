@@ -10,7 +10,7 @@ const claimDetailsHeading: string = 'Claim details'
 
 export class Helper {
 
-  async enterPinNumber (claimRef: string, claimantEmail : string): Promise<void> {
+  async enterPinNumber (claimRef: string, claimantEmail: string): Promise<void> {
     defenceSteps.enterClaimReference(claimRef)
     I.waitForText('Please enter your security code to continue')
     const authorisation = await IdamClient.authenticateUser(claimantEmail)
