@@ -7,6 +7,9 @@ services:
       environment:
         - WEB_DRIVER_HOST=remote-webdriver
         - CITIZEN_APP_URL=${TEST_URL}
+        - http_proxy
+        - https_proxy
+        - no_proxy=remote-webdriver
         - IDAM_URL
         - CLAIM_STORE_URL
         - HEALTHCHECK_CITIZEN=true
