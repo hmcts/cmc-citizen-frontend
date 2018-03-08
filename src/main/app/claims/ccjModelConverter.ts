@@ -11,7 +11,7 @@ function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan 
 
   if (repaymentPlan && repaymentPlan.remainingAmount) {
     return new RepaymentPlan(
-      repaymentPlan.firstPayment,
+      repaymentPlan.remainingAmount,
       repaymentPlan.instalmentAmount,
       repaymentPlan.firstPaymentDate.toMoment(),
       repaymentPlan.paymentSchedule.value
