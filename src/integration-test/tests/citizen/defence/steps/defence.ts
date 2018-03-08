@@ -1,5 +1,4 @@
-import { DEFAULT_PASSWORD, createDefendant, defence } from 'integration-test/data/test-data'
-import { request } from 'integration-test/helpers/clients/base/request'
+import { createDefendant, DEFAULT_PASSWORD, defence } from 'integration-test/data/test-data'
 import { DefendantCheckAndSendPage } from 'integration-test/tests/citizen/defence/pages/defendant-check-and-send'
 import { DefendantDefenceTypePage } from 'integration-test/tests/citizen/defence/pages/defendant-defence-type'
 import { DefendantDobPage } from 'integration-test/tests/citizen/defence/pages/defendant-dob'
@@ -25,11 +24,13 @@ import { DefendantYourDefencePage } from 'integration-test/tests/citizen/defence
 import { StatementOfMeansSteps } from 'integration-test/tests/citizen/defence/steps/statementOfMeans'
 import { LoginPage } from 'integration-test/tests/citizen/home/pages/login'
 import { DefendantSteps } from 'integration-test/tests/citizen/home/steps/defendant'
-import I = CodeceptJS.I
 import { PartyType } from 'integration-test/data/party-type'
 import { DefenceType } from 'integration-test/data/defence-type'
 import { DefendantHowMuchHaveYouPaidClaimantPage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-have-you-paid-claimant'
 import { DefendantWhenDidYouPayPage } from 'integration-test/tests/citizen/defence/pages/defendant-when-did-you-pay'
+import { ClaimStoreClient } from 'integration-test/helpers/clients/claimStoreClient'
+import { IdamClient } from 'integration-test/helpers/clients/idamClient'
+import I = CodeceptJS.I
 
 const I: I = actor()
 const defendantStartPage: DefendantStartPage = new DefendantStartPage()
@@ -60,29 +61,6 @@ const statementOfMeansSteps: StatementOfMeansSteps = new StatementOfMeansSteps()
 const defendantHowMuchHaveYouPaidClaimantPage: DefendantHowMuchHaveYouPaidClaimantPage = new DefendantHowMuchHaveYouPaidClaimantPage()
 const defendantWhenDidYouPayPage: DefendantWhenDidYouPayPage = new DefendantWhenDidYouPayPage()
 
-const claimStoreBaseUrl: string = process.env.CLAIM_STORE_URL
-const idamBaseUrl: string = process.env.IDAM_URL
-
-class Helper {
-  static getLetterHolderId (claimRef: string) {
-    return request.get({
-      uri: `${claimStoreBaseUrl}/testing-support/claims/${claimRef}`,
-      resolveWithFullResponse: true,
-      rejectUnauthorized: false,
-      json: false
-    })
-  }
-
-  static getPin (letterHolderId: string) {
-    return request.get({
-      uri: `${idamBaseUrl}/testing-support/accounts/pin/${letterHolderId}`,
-      resolveWithFullResponse: true,
-      rejectUnauthorized: false,
-      json: false
-    })
-  }
-}
-
 const updatedAddress = { line1: 'ABC Street', line2: 'A cool place', city: 'Bristol', postcode: 'AAA BCC' }
 
 const defendantRepaymentPlan: PaymentPlan = {
@@ -96,11 +74,10 @@ const text = 'I owe nothing'
 
 export class DefenceSteps {
 
-  async getClaimPin (claimRef: string): Promise<string> {
-    const claimObj = await Helper.getLetterHolderId(claimRef)
+  async getClaimPin (claimRef: string, authorisation: string): Promise<string> {
+    const claim: Claim = await ClaimStoreClient.retrieveByReferenceNumber(claimRef, { bearerToken: authorisation })
 
-    const letterHolderId = JSON.parse(claimObj.body).letterHolderId
-    const pinResponse = await Helper.getPin(letterHolderId)
+    const pinResponse = await IdamClient.getPin(claim.letterHolderId)
 
     return pinResponse.body
   }
@@ -111,8 +88,8 @@ export class DefenceSteps {
     defendantEnterClaimRefPage.enterClaimReference(claimRef)
   }
 
-  async enterClaimPin (claimRef: string): Promise<void> {
-    const claimPinNumber = await this.getClaimPin(claimRef)
+  async enterClaimPin (claimRef: string, authorisation: string): Promise<void> {
+    const claimPinNumber = await this.getClaimPin(claimRef, authorisation)
     defendantEnterPinPage.enterPinNumber(claimPinNumber)
   }
 
@@ -274,6 +251,7 @@ export class DefenceSteps {
   }
 
   async makeDefenceAndSubmit (defendantEmail: string, defendantType: PartyType, defenceType: DefenceType): Promise<void> {
+    I.click('Respond to claim')
     I.see('Confirm your details')
     I.see('Do you want more time to respond?')
     I.see('Choose a response')
@@ -314,6 +292,7 @@ export class DefenceSteps {
   }
 
   makeDefenceResponse (claimRef: string, defendant: Party, claimant: Party, defenceType: DefenceType = DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID): void {
+    I.click('Respond to claim')
     I.see('Confirm your details')
     I.see('Do you want more time to respond?')
     I.see('Choose a response')
@@ -335,6 +314,7 @@ export class DefenceSteps {
   }
 
   sendDefenceResponseHandOff (claimRef: string, defendant: Party, claimant: Party, defenceType: DefenceType): void {
+    I.click('Respond to claim')
     I.see('Confirm your details')
     I.see('Do you want more time to respond?')
     I.see('Choose a response')

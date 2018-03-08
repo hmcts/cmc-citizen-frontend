@@ -14,6 +14,7 @@ Scenario('I can as a defendant make an offer to the claimant @citizen', function
   const defendantEmail: string = yield I.createCitizenUser()
 
   const claimRef: string = yield I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL), claimantEmail)
+
   I.linkDefendantToClaim(claimRef, claimantEmail, defendantEmail)
   I.respondToClaim(claimRef, claimantEmail, createResponseData(PartyType.INDIVIDUAL), defendantEmail)
 

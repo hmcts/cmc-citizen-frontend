@@ -1,5 +1,5 @@
 declare type User = {
-  id: string
+  id?: string
   bearerToken: string
 }
 
@@ -18,6 +18,7 @@ declare type Claim = {
   id: number
   referenceNumber: string
   externalId: string
+  letterHolderId: string
 }
 
 declare type Party = {
