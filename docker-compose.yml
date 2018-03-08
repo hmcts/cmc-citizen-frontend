@@ -9,3 +9,12 @@ services:
         - https_proxy
         - no_proxy
     image: docker.artifactory.reform.hmcts.net/cmc/citizen-frontend
+  citizen-integration-tests:
+    build:
+      context: .
+      dockerfile: integration-tests.Dockerfile
+      args:
+        - http_proxy
+        - https_proxy
+        - no_proxy
+    image: docker.artifactory.reform.hmcts.net/cmc/citizen-integration-tests

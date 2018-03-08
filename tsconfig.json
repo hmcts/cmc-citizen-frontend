@@ -88,6 +88,9 @@
       ],
       "services/*": [
         "services/*"
+      ],
+      "integration-test/*": [
+        "../integration-test/*"
       ]
     },
     "typeRoots": [
