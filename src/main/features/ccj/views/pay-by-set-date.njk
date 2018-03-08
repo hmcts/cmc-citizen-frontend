@@ -12,18 +12,10 @@
         {{ csrfProtection(csrf) }}
 
         <h1 class="heading-large">
-          <span class="heading-secondary">{{ t('County Court Judgment') }}</span>
-          {{ t('Order them to pay full amount by a set date') }}
+          {{ t('When do you want them to pay?') }}
         </h1>
 
-        <fieldset class="form-group {% if error %} form-group-error {% endif %}">
-          <legend>
-              <span class="form-label-bold">
-                {{ t('When you want them to pay the amount') }}
-              </span>
-          </legend>
-        </fieldset>
-        {{ dateInput('date', form) }}
+        {{ dateInput(name = 'date', form = form, hint = t('For example, {{ futureDate }}', { futureDate: futureDate | inputDate })) }}
 
         {{ saveAndContinueButton() }}
       </form>
