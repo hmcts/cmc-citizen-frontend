@@ -59,7 +59,7 @@ describe('CCJ - paid amount summary page', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Amount to be paid by defendant'))
+          .expect(res => expect(res).to.be.successful.withText('Judgment amount'))
       })
     })
   })

@@ -41,5 +41,8 @@ export const claimData = {
     amount: 10000,
     status: 'Success',
     links: { nextUrl: { href: 'any href', method: 'POST' } }
+  },
+  timeline: {
+    rows: []
   }
 }
