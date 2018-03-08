@@ -251,6 +251,7 @@ export class DefenceSteps {
   }
 
   async makeDefenceAndSubmit (defendantEmail: string, defendantType: PartyType, defenceType: DefenceType): Promise<void> {
+    I.click('Respond to claim')
     I.see('Confirm your details')
     I.see('Do you want more time to respond?')
     I.see('Choose a response')
@@ -291,6 +292,7 @@ export class DefenceSteps {
   }
 
   makeDefenceResponse (claimRef: string, defendant: Party, claimant: Party, defenceType: DefenceType = DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID): void {
+    I.click('Respond to claim')
     I.see('Confirm your details')
     I.see('Do you want more time to respond?')
     I.see('Choose a response')
@@ -312,6 +314,7 @@ export class DefenceSteps {
   }
 
   sendDefenceResponseHandOff (claimRef: string, defendant: Party, claimant: Party, defenceType: DefenceType): void {
+    I.click('Respond to claim')
     I.see('Confirm your details')
     I.see('Do you want more time to respond?')
     I.see('Choose a response')
