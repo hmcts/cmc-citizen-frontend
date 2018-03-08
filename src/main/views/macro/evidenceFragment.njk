@@ -19,7 +19,7 @@
 
       <option value="">{{ t('-- Please make a selection --') }}</option>
       {% for row in EvidenceType.all() %}
-        <option value="{{ row.value }}" {% if typeValue == row.value %}selected{% endif %}>{{ row.displayValue }}</option>
+        <option value="{{ row.value }}" {% if typeValue === row.value %}selected{% endif %}>{{ row.displayValue }}</option>
       {% endfor %}
     </select>
     <div class="panel panel-border-narrow {% if not typeValue %} js-hidden {% endif %}">
