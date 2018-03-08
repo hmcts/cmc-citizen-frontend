@@ -61,7 +61,7 @@ describe('RepaymentPlan', () => {
       it('undefined option', () => {
         const errors = validator.validateSync(new RepaymentPlan(undefined))
 
-        expect(errors.length).to.equal(4)
+        expect(errors.length).to.equal(3)
         expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
         expectValidationError(errors, ValidationErrors.SELECT_PAYMENT_SCHEDULE)
         expectValidationError(errors, ValidationErrors.INVALID_DATE)
@@ -74,7 +74,7 @@ describe('RepaymentPlan', () => {
       repaymentPlan.instalmentAmount = 101
       const errors = validator.validateSync(repaymentPlan)
 
-      expect(errors.length).to.equal(2)
+      expect(errors.length).to.equal(1)
       expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
     })
 
