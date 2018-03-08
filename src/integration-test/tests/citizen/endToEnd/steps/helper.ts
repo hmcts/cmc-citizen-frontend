@@ -9,10 +9,10 @@ const claimDetailsHeading: string = 'Claim details'
 
 export class Helper {
 
-  async enterPinNumber (claimRef: string): Promise<void> {
+  async enterPinNumber (claimRef: string, authorisation : string): Promise<void> {
     defenceSteps.enterClaimReference(claimRef)
     I.waitForText('Please enter your security code to continue')
-    defenceSteps.enterClaimPin(claimRef)
+    defenceSteps.enterClaimPin(claimRef, authorisation)
   }
 
   finishResponse (defendantEmail: string, defendantType: PartyType, defenceType: DefenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE): void {
