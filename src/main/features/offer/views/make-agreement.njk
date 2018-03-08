@@ -6,41 +6,13 @@
   <div class="grid-row">
     <div class="column-two-thirds">
 
-      <h1 class="heading-large">{{ t('Make a legal agreement') }}</h1>
+      <h1 class="heading-large">{{ t('You can now make a legal agreement') }}</h1>
 
-      <h3 class="heading-medium">{{ t('What’s in it') }}</h3>
-      <p>
-        {{ t('You can make a legal agreement to settle out of court.') }}
-        {{ t('It’s based on the information you and %s have provided. It has not been reviewed by the court.', {
-               postProcess: 'sprintf',
-               sprintf: [ claim.claimData.defendant.name ]
-             }
-           )
-        }}
-      </p>
-      <h2 class="heading-medium">{{ t('What happens when you sign') }}</h2>
-      <p>
-        {{ t('If you and %s sign this agreement it replaces the court claim.', {
-               postProcess: 'sprintf',
-               sprintf: [ claim.claimData.defendant.name ]
-             }
-           )
-        }}
-      </p>
-
-      <p>{{ t('Once signed the agreement is confidential. You must not tell anyone about what’s in it.') }}</p>
-
-      <h2 class="heading-medium">{{ t('If the agreement is broken') }}</h2>
-
-        <p>{{ t('You can ask the court to either:') }}</p>
-
-        <ul class="list list-bullet">
-          <li>{{ t('request a judgment for any money still owed under this agreement') }}</li>
-          <li>{{ t('restart the original claim for the full amount and arrange a hearing') }}</li>
-        </ul>
+      <p>{{ t('The agreement will be based on the offer from {{ defendantName }} you’ve just accepted. It has not been reviewed by court staff or a judge.', { defendantName: claim.claimData.defendant.name}) }}</p>
+      <p>{{ t('You both need to sign the agreement for it to become a legal contract.') }}</p>
 
       <a href="{{ OfferPaths.declarationPage.evaluateUri({ externalId: claim.externalId }) }}" class="button">
-        {{ t('View and sign the agreement') }}
+        {{ t('Make an agreement') }}
       </a>
     </div>
   </div>

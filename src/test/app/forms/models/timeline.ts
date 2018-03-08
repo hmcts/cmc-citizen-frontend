@@ -1,7 +1,11 @@
 import { expect } from 'chai'
 
-import { TimelineRow } from 'response/form/models/timelineRow'
-import { INIT_ROW_COUNT, MAX_NUMBER_OF_ROWS, Timeline } from 'response/form/models/timeline'
+import { INIT_ROW_COUNT, Timeline } from 'forms/models/timeline'
+import { TimelineRow } from 'forms/models/timelineRow'
+import { expectValidationError } from './validationUtils'
+import { Validator } from 'class-validator'
+import { ValidationErrors } from 'forms/validation/validationErrors'
+import { MAX_NUMBER_OF_ROWS } from 'forms/models/multiRowForm'
 
 describe('Timeline', () => {
 
@@ -204,7 +208,38 @@ describe('Timeline', () => {
       expect(actual.canAddMoreRows()).to.be.eq(false)
     })
   })
+
+  describe('validation', () => {
+
+    const validator: Validator = new Validator()
+
+    it('should reject only when an invalid row given', () => {
+      const errors = validator.validateSync(new Timeline([row('', 'ok')]))
+
+      expect(errors.length).to.equal(1)
+      expectValidationError(errors, ValidationErrors.DATE_REQUIRED)
+    })
+
+    context('should accept when', () => {
+      it('no rows given', () => {
+        const errors = validator.validateSync(new Timeline([]))
+
+        expect(errors.length).to.equal(0)
+      })
+
+      it('valid rows rows given', () => {
+        const errors = validator.validateSync(new Timeline([row('may', 'ok'), row('june', 'ok')]))
+
+        expect(errors.length).to.equal(0)
+      })
+    })
+
+  })
 })
+
+function row (date: string, description: string): TimelineRow {
+  return new TimelineRow(date, description)
+}
 
 function expectAllRowsToBeEmpty (rows: TimelineRow[]) {
   rows.forEach(item => {

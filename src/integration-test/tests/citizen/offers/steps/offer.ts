@@ -22,7 +22,7 @@ export class OfferSteps {
   acceptOffer (): void {
     I.checkOption('Yes')
     I.click('Continue')
-    I.click('View and sign the agreement')
+    I.click('Make an agreement')
     this.signAgreement()
     I.see('You’ve signed the agreement')
   }

@@ -1,32 +1,27 @@
 import * as express from 'express'
 
-import { Paths } from 'response/paths'
+import { Paths } from 'claim/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'app/forms/validation/formValidator'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
-
 import { User } from 'idam/user'
 import { RoutablePath } from 'common/router/routablePath'
-import { Timeline } from 'forms/models/timeline'
+import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 import { Draft } from '@hmcts/draft-store-client'
-import { ResponseDraft } from 'response/draft/responseDraft'
-import { Claim } from 'claims/models/claim'
+import { DraftClaim } from 'drafts/models/draftClaim'
 
 const page: RoutablePath = Paths.timelinePage
 
-function renderView (form: Form<Timeline>, res: express.Response): void {
-  const claim: Claim = res.locals.claim
-
+function renderView (form: Form<ClaimantTimeline>, res: express.Response): void {
   res.render(page.associatedView, {
-    form: form,
-    claimantName: claim.claimData.claimant.name
+    form: form
   })
 }
 
 function actionHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
   if (req.body.action) {
-    const form: Form<Timeline> = req.body
+    const form: Form<ClaimantTimeline> = req.body
     if (req.body.action.addRow) {
       form.model.appendRow()
     }
@@ -40,28 +35,27 @@ export default express.Router()
   .get(
     page.uri,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      const draft: Draft<DraftClaim> = res.locals.claimDraft
       renderView(new Form(draft.document.timeline), res)
     })
   .post(
     page.uri,
-    FormValidator.requestHandler(Timeline, Timeline.fromObject, undefined, ['addRow']),
+    FormValidator.requestHandler(ClaimantTimeline, ClaimantTimeline.fromObject, undefined, ['addRow']),
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<Timeline> = req.body
+      const form: Form<ClaimantTimeline> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        const claim: Claim = res.locals.claim
-        const draft: Draft<ResponseDraft> = res.locals.responseDraft
+        const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
 
         form.model.removeExcessRows()
         draft.document.timeline = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.evidencePage.evaluateUri({ externalId: claim.externalId }))
+        res.redirect(Paths.taskListPage.uri)
       }
     })
   )

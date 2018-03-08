@@ -50,7 +50,8 @@ export function createClaimData (claimantType: PartyType, defendantType: PartyTy
     interest: {
       type: 'no interest'
     },
-    reason: claimReason
+    reason: claimReason,
+    timeline: { rows: [{ date: 'may', description: 'ok' }] }
   } as ClaimData
 
   if (claimInterest) {
