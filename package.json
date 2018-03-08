@@ -21,7 +21,7 @@
     "test:smoke": "./bin/run-smoke-tests.sh",
     "test:integration": "ts-node --require tsconfig-paths/register ./node_modules/.bin/codeceptjs run --verbose --config default.conf.js --reporter mocha-multi",
     "test:cross-browser": "ts-node --require tsconfig-paths/register ./node_modules/.bin/codeceptjs run --verbose --config saucelabs.conf.js --reporter mocha-multi",
-    "list-supported-browsers": "ts-node -e 'Object.keys(require(\"./src/integration-test/config/saucelabs/supported-browsers\").supportedBrowsers).forEach(key => console.log(key))'",
+    "list-supported-browsers": "node -e 'Object.keys(require(\"@hmcts/cmc-supported-browsers\").supportedBrowsers).forEach(key => console.log(key))'",
     "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/** -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info",
     "precommit": "yarn lint",
     "prepush": "yarn test && yarn test:routes"
@@ -91,6 +91,7 @@
     "uuid": "^3.0.1"
   },
   "devDependencies": {
+    "@hmcts/cmc-supported-browsers": "^1.0.1",
     "@types/chai": "^4.0.3",
     "@types/chai-as-promised": "^7.1.0",
     "@types/chai-spies": "^0.0.0",
