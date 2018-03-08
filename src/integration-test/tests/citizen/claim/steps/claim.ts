@@ -1,5 +1,13 @@
 import { PartyType } from 'integration-test/data/party-type'
-import { claimAmount, createClaimant, claimReason, createDefendant, postCodeLookup, SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD } from 'integration-test/data/test-data'
+import {
+  claimAmount,
+  createClaimant,
+  claimReason,
+  createDefendant,
+  postCodeLookup,
+  SMOKE_TEST_CITIZEN_USERNAME,
+  SMOKE_TEST_USER_PASSWORD
+} from 'integration-test/data/test-data'
 import { CitizenCompletingClaimInfoPage } from 'integration-test/tests/citizen/claim/pages/citizen-completing-claim-info'
 import { CitizenDobPage } from 'integration-test/tests/citizen/claim/pages/citizen-dob'
 import { CitizenEmailPage } from 'integration-test/tests/citizen/claim/pages/citizen-email'
@@ -19,6 +27,7 @@ import { InterestSteps } from 'integration-test/tests/citizen/claim/steps/intere
 import { PaymentSteps } from 'integration-test/tests/citizen/claim/steps/payment'
 import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 import I = CodeceptJS.I
+import { ClaimantTimelinePage } from 'integration-test/tests/citizen/claim/pages/claimant-timeline'
 
 const I: I = actor()
 const citizenResolveDisputePage: CitizenResolveDisputePage = new CitizenResolveDisputePage()
@@ -33,6 +42,7 @@ const citizenEmailPage: CitizenEmailPage = new CitizenEmailPage()
 const claimantClaimAmountPage: ClaimantClaimAmountPage = new ClaimantClaimAmountPage()
 const claimantFeesToPayPage: ClaimantFeesToPayPage = new ClaimantFeesToPayPage()
 const claimantReasonPage: ClaimantReasonPage = new ClaimantReasonPage()
+const claimantTimelinePage: ClaimantTimelinePage = new ClaimantTimelinePage()
 const claimantCheckAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const claimantClaimConfirmedPage: ClaimantClaimConfirmedPage = new ClaimantClaimConfirmedPage()
 const userSteps: UserSteps = new UserSteps()
@@ -152,6 +162,10 @@ export class ClaimSteps {
     claimantReasonPage.enterReason(claimReason)
   }
 
+  enterClaimTimeline (): void {
+    claimantTimelinePage.enterTimelineRow('may', 'ok')
+  }
+
   checkClaimFactsAreTrueAndSubmit (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): void {
     claimantCheckAndSendPage.verifyCheckAndSendAnswers(claimantType, defendantType, enterDefendantEmail)
 
@@ -185,6 +199,7 @@ export class ClaimSteps {
     interestSteps.skipClaimantInterestTotalPage()
     userSteps.selectClaimDetails()
     this.enterClaimReason()
+    this.enterClaimTimeline()
     userSteps.selectCheckAndSubmitYourClaim()
     this.checkClaimFactsAreTrueAndSubmit(claimantType, defendantType, enterDefendantEmail)
   }
@@ -243,6 +258,7 @@ export class ClaimSteps {
     interestSteps.skipClaimantInterestTotalPage()
     userSteps.selectClaimDetails()
     this.enterClaimReason()
+    this.enterClaimTimeline()
     userSteps.selectCheckAndSubmitYourClaim()
     I.see('John Smith')
     I.see('University of Manchester')
