@@ -5,6 +5,10 @@ class IdamHelper extends codecept_helper {
     return this.createRandomUser('cmc-private-beta')
   }
 
+  retrievePin (letterHolderId: string): Promise<string> {
+    return IdamClient.getPin(letterHolderId)
+  }
+
   private async createRandomUser (userGroupCode: string): Promise<string> {
     const email: string = this.generateRandomEmailAddress()
     await IdamClient.createUser(email, userGroupCode)
