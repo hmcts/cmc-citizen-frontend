@@ -36,8 +36,6 @@
             {
               bold: false,
               label: 'Yes',
-              hint: t('Next you can make a legal agreement between you and {{ defendantName }}.',
-                     { defendantName: claim.claimData.defendant.name }),
               value: StatementType.ACCEPTATION.value,
               checked: (form.valueFor('option').value === StatementType.ACCEPTATION)
             },
@@ -56,7 +54,7 @@
           ]
         )
       }}
-{{ submitButton('Continue') }}
+      {{ submitButton('Continue') }}
       </form>
     </div>
   </div>

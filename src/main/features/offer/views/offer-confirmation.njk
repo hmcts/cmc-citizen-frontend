@@ -6,29 +6,11 @@
   <div class="grid-row">
     <div class="column-two-thirds">
         <div class="govuk-box-highlight">
-          <h1 class="bold-large">{{ t('Your offer has been sent to %s',
-          {
-          postProcess: 'sprintf',
-          sprintf: [ claim.claimData.claimant.name ]
-          }
-          ) }}</h1>
+          <h1 class="bold-large">{{ t('Your offer has been sent to {{ claimantName }}', { claimantName: claim.claimData.claimant.name }) }}</h1>
         </div>
         <h2 class="heading-medium">{{ t('What happens next') }}</h2>
         <p>
-        {{ t('%s can accept, reject or make a counter offer. We’ll let you know when they respond.',
-        {
-          postProcess: 'sprintf',
-          sprintf: [ claim.claimData.claimant.name ]
-        }
-        ) }}
-      </p>
-      <p>
-        {{ t('View your claim status on your <a href="%s">money claims account</a>.',
-          {
-            postProcess: 'sprintf',
-            sprintf: ['/dashboard']
-          }
-        ) | safe }}
+        {{ t('{{ claimantName }} can accept or reject. We’ll email you when they respond.', { claimantName: claim.claimData.claimant.name }) }}
       </p>
 
       {{ supportWidget() }}

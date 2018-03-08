@@ -42,7 +42,7 @@
     {{ t('You requested a County Court Judgment on {{ ccjRequestedAt }}. We will contact you within 5 working days.',
     { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
   {% elseif claim.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
-    {{ t('The defendant has not responded to your claim. You can request a County Court Judgment (CCJ) to get what’s owed.') }}
+    <p>{{ t('You can request a County Court Judgment') }}</p>
   {% elseif claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
     {{ t('You have signed the agreement. The claim is now settled.') }}
     <p>{{ _viewResponseLink(claim.externalId) }}</p>
