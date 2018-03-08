@@ -31,13 +31,64 @@ export class IdamClient {
     })
   }
 
+  static getPin (letterHolderId: string) {
+    return request.get({
+      uri: `${baseURL}/testing-support/accounts/pin/${letterHolderId}`,
+      resolveWithFullResponse: true,
+      rejectUnauthorized: false,
+      json: false
+    })
+  }
+
   /**
-   * Authorizes user with default password
+   * Uplift's a users account
    *
    * @param {string} email
+   * @param upliftToken the pin user's authorization header
    * @returns {Promise<string>}
    */
-  static async authorizeUser (email: string, password: string = undefined): Promise<string> {
+  static async upliftUser (email: string, upliftToken: string): Promise<string> {
+    const base64EncodedCredentials = new Buffer(`${email}:${defaultPassword}`)
+      .toString('base64')
+
+    const { 'access-token': token } = await request.post({
+      uri: `${baseURL}/oauth2/authorize?upliftToken=${upliftToken}`,
+      headers: {
+        Authorization: `Basic ${base64EncodedCredentials}`
+      }
+    })
+
+    return token
+  }
+
+  /**
+   * Authorizes pin user
+   *
+   * @param {string} pin
+   * @returns {Promise<string>} bearer token
+   */
+  static async authenticatePinUser (pin: string): Promise<string> {
+    const base64EncodedCredentials = new Buffer(pin)
+      .toString('base64')
+
+    const { 'access-token': token } = await request.post({
+      uri: `${baseURL}/oauth2/authorize`,
+      headers: {
+        Authorization: `Pin ${base64EncodedCredentials}`
+      }
+    })
+
+    return token
+  }
+
+  /**
+   * Authenticate user
+   *
+   * @param {string} email
+   * @param password the users password (optional, default will be used if none provided)
+   * @returns {Promise<string>}
+   */
+  static async authenticateUser (email: string, password: string = undefined): Promise<string> {
     const base64EncodedCredentials = new Buffer(`${email}:${password ? password : defaultPassword}`)
       .toString('base64')
 
