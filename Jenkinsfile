@@ -28,6 +28,7 @@ timestamps {
         def version
         def citizenFrontendRPMVersion
         def citizenFrontendVersion
+        def citizenIntegrationTestsVersion
 
         stage('Checkout') {
           deleteDir()
@@ -45,13 +46,16 @@ timestamps {
 
         stage('Package application (Docker)') {
           citizenFrontendVersion = dockerImage imageName: 'cmc/citizen-frontend'
+          citizenIntegrationTestsVersion = dockerImage imageName: 'cmc/citizen-integration-tests',
+            dockerArgs: '--file integration-tests.Dockerfile'
         }
 
         onPR {
           stage('Integration Tests') {
-            integrationTests.execute([
+            integrationTests.executeCitizenTests([
               'CITIZEN_FRONTEND_VERSION': citizenFrontendVersion,
-              'TESTS_TAG'               : '@citizen'
+              'CITIZEN_INTEGRATION_TESTS_VERSION': citizenIntegrationTestsVersion,
+              'TESTS_TAG': '@citizen'
             ])
           }
         }
