@@ -16,6 +16,8 @@ export class OfferSteps {
     I.see('Your money claims account')
     I.click(claimRef)
     I.click('make an offer')
+    I.see('Make an offer to settle out of court')
+    I.click('Continue')
     this.makeOffer()
   }
 
