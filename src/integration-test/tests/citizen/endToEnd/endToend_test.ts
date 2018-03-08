@@ -2,7 +2,6 @@ import { PartyType } from 'integration-test/data/party-type'
 import { createClaimData } from 'integration-test/data/test-data'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import I = CodeceptJS.I
-import { SESSION_COOKIE_NAME } from 'integration-test/utils/cookie'
 
 const helperSteps: Helper = new Helper()
 
@@ -15,8 +14,7 @@ Scenario('I can as an Individual make a claim against an Individual Without a de
 
   const claimRef: string = yield I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, false), claimantEmail)
 
-  const sessionCookie = yield I.grabCookie(SESSION_COOKIE_NAME)
-  yield helperSteps.enterPinNumber(claimRef, sessionCookie)
+  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.finishResponse(defendantEmail, PartyType.INDIVIDUAL)
 })
 
@@ -26,8 +24,7 @@ Scenario('I can as Sole Trader make a claim against an Individual and are able t
 
   const claimRef = yield I.createClaim(createClaimData(PartyType.SOLE_TRADER, PartyType.INDIVIDUAL), claimantEmail)
 
-  const sessionCookie = yield I.grabCookie(SESSION_COOKIE_NAME)
-  yield helperSteps.enterPinNumber(claimRef, sessionCookie)
+  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.finishResponse(defendantEmail, PartyType.INDIVIDUAL)
 })
 
@@ -37,8 +34,7 @@ Scenario('I can as a Company make a claim against an Individual and are able to 
 
   const claimRef: string = yield I.createClaim(createClaimData(PartyType.COMPANY, PartyType.INDIVIDUAL), claimantEmail)
 
-  const sessionCookie = yield I.grabCookie(SESSION_COOKIE_NAME)
-  yield helperSteps.enterPinNumber(claimRef, sessionCookie)
+  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.finishResponse(defendantEmail, PartyType.INDIVIDUAL)
 })
 
@@ -48,8 +44,7 @@ Scenario('I can as a Individual make a claim against a Company and are able to p
 
   const claimRef: string = yield I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.COMPANY), claimantEmail)
 
-  const sessionCookie = yield I.grabCookie(SESSION_COOKIE_NAME)
-  yield helperSteps.enterPinNumber(claimRef, sessionCookie)
+  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.finishResponse(defendantEmail, PartyType.COMPANY)
 })
 
@@ -59,8 +54,7 @@ Scenario('I can as a Company make a claim against a company and are able to pay 
 
   const claimRef: string = yield I.createClaim(createClaimData(PartyType.COMPANY, PartyType.COMPANY), claimantEmail)
 
-  const sessionCookie = yield I.grabCookie(SESSION_COOKIE_NAME)
-  yield helperSteps.enterPinNumber(claimRef, sessionCookie)
+  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.finishResponse(defendantEmail, PartyType.COMPANY)
 })
 
@@ -70,7 +64,6 @@ Scenario('I can as a Organisation make a claim against an Individual and are abl
 
   const claimRef: string = yield I.createClaim(createClaimData(PartyType.ORGANISATION, PartyType.INDIVIDUAL), claimantEmail)
 
-  const sessionCookie = yield I.grabCookie(SESSION_COOKIE_NAME)
-  yield helperSteps.enterPinNumber(claimRef, sessionCookie)
+  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.finishResponse(defendantEmail, PartyType.INDIVIDUAL)
 })

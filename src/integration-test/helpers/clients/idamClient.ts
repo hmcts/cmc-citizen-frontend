@@ -41,7 +41,7 @@ export class IdamClient {
   }
 
   /**
-   * Authorizes user
+   * Uplift's a users account
    *
    * @param {string} email
    * @param upliftToken the pin user's authorization header
