@@ -3,7 +3,7 @@ import * as path from 'path'
 import * as express from 'express'
 import * as config from 'config'
 import * as nunjucks from 'nunjucks'
-import { dateFilter } from 'modules/nunjucks/filters/dateFilter'
+import { dateFilter, dateInputFilter } from 'modules/nunjucks/filters/dateFilter'
 import { convertToPoundsFilter } from 'modules/nunjucks/filters/convertToPounds'
 import * as numeralFilter from 'nunjucks-numeral-filter'
 import * as numeral from 'numeral'
@@ -33,6 +33,7 @@ import { Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { ClaimType } from 'claim/form/models/eligibility/claimType'
 import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
+import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -76,13 +77,14 @@ export class Nunjucks {
     numeral.defaultFormat(NUMBER_FORMAT)
 
     nunjucksEnv.addGlobal('asset_paths', appAssetPaths)
-    nunjucksEnv.addGlobal('serviceName', 'Money Claim')
+    nunjucksEnv.addGlobal('serviceName', 'Money Claims')
     nunjucksEnv.addGlobal('supportEmailAddress', config.get('support.contact-email'))
     nunjucksEnv.addGlobal('development', this.developmentMode)
     nunjucksEnv.addGlobal('govuk_template_version', packageDotJson.dependencies.govuk_template_jinja)
     nunjucksEnv.addGlobal('gaTrackingId', config.get<string>('analytics.gaTrackingId'))
     nunjucksEnv.addGlobal('t', (key: string, options?: TranslationOptions): string => this.i18next.t(key, options))
     nunjucksEnv.addFilter('date', dateFilter)
+    nunjucksEnv.addFilter('inputDate', dateInputFilter)
     nunjucksEnv.addFilter('pennies2pounds', convertToPoundsFilter)
     nunjucksEnv.addFilter('numeral', numeralFilter)
     nunjucksEnv.addGlobal('betaFeedbackSurveyUrl', config.get('feedback.feedbackSurvey.url'))
@@ -94,6 +96,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('RejectPartOfClaimOption', RejectPartOfClaimOption)
     nunjucksEnv.addGlobal('DefendantPaymentType', DefendantPaymentType)
     nunjucksEnv.addGlobal('DefendantPaymentOption', DefendantPaymentOption)
+    nunjucksEnv.addGlobal('PaymentType', PaymentType)
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('ResponseType', ResponseType)
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)
