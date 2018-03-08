@@ -9,9 +9,14 @@ import { DraftService } from 'services/draftService'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Draft } from '@hmcts/draft-store-client'
+import { MomentFactory } from 'common/momentFactory'
+import { Moment } from 'moment'
 
 function renderView (form: Form<PayBySetDate>, res: express.Response): void {
-  res.render(Paths.payBySetDatePage.associatedView, { form: form })
+  const futureDate: Moment = MomentFactory.currentDate().add(30, 'days')
+  res.render(Paths.payBySetDatePage.associatedView, {
+    form: form,
+    futureDate: futureDate })
 }
 
 /* tslint:disable:no-default-export */
