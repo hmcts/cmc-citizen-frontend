@@ -18,17 +18,11 @@
         {{ csrfProtection(csrf) }}
 
         <input type="hidden" name="remainingAmount" value="{{ remainingAmount }}"/>
-        <div class="form-group">
-          <fieldset>
-            <legend class="visually-hidden">{{ t('How much they pay following this instalment') }}</legend>
-            {{ poundInput('The first payment of', 'firstPayment', form, 'For example, £243.20', bold = true) }}
-          </fieldset>
-        </div>
 
         <div class="form-group">
           <fieldset>
-            <legend class="visually-hidden">{{ t('Followed by equal instalments of') }}</legend>
-            {{ poundInput('Followed by equal instalments of', 'instalmentAmount', form, 'For example, £200', bold = true) }}
+            <legend class="visually-hidden">{{ t('Amount for each instalment') }}</legend>
+            {{ poundInput('Amount for each instalment', 'instalmentAmount', form, 'For example, £200', bold = true) }}
           </fieldset>
         </div>
 

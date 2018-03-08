@@ -40,21 +40,12 @@
     {% endif %}
 
     {% if draft.paymentOption.option.value == 'INSTALMENTS' %}
-      {% set paymentOptionDisplayValue =
-      [  t('%s: %s %s',
-          { postProcess: 'sprintf', sprintf: [
-              t(draft.paymentOption.option.displayValue),
-              draft.repaymentPlan.instalmentAmount | numeral,
-              t(draft.repaymentPlan.paymentSchedule.displayValue)
-            ]
-          }),
-          t('First payment on %s',
-            { postProcess: 'sprintf', sprintf: [draft.repaymentPlan.firstPaymentDate.toMoment() | date]})
-      ]
-      %}
+      {{ row( 'How do you want the defendant to pay', draft.paymentOption.option.displayValue, changeLink = paymentOptionUrl, bottomBorder = false) }}
+      {{ row( 'Instalments of', draft.repaymentPlan.instalmentAmount | numeral, bottomBorder = false) }}
+      {{ row( 'When you want them to make the first payment', draft.repaymentPlan.firstPaymentDate.toMoment() | date, bottomBorder = false) }}
+      {{ row( 'How often you want them to make this payment', draft.repaymentPlan.paymentSchedule.displayValue, bottomBorder = true) }}
     {% endif %}
 
-    {{ rowWithMultipleValue('When you want the defendant to pay', paymentOptionDisplayValue, changeLink = paymentOptionUrl) }}
     {{ tableEnd() }}
 
     <div class="form-group">
