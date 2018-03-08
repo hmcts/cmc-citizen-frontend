@@ -1,4 +1,4 @@
-import { supportedBrowsers } from '@hmcts/cmc-supported-browsers'
+const supportedBrowsers = require('@hmcts/cmc-supported-browsers').supportedBrowsers
 
 const browser = requiredValue(process.env.SAUCELABS_BROWSER, 'SAUCELABS_BROWSER')
 const saucelabsTunnelIdentifier = requiredValue(process.env.SAUCELABS_TUNNEL_IDENTIFIER, 'SAUCELABS_TUNNEL_IDENTIFIER')
