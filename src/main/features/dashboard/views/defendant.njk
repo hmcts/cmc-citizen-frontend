@@ -14,9 +14,10 @@
     <div class="column-two-thirds">
       <h2 class="heading-medium">{{ t('Claim status') }}</h2>
 
-      {% if featureToggles.offer and claim.status === ClaimStatus.CLAIM_REJECTED %}
-        {{ responseStatusForDefendant(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
-      {% endif %}
+        {% if featureToggles.offer and claim.status === ClaimStatus.CLAIM_REJECTED %}
+          {{ responseStatusForDefendant(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
+        {% endif %}
+
 
       {% if featureToggles.offer and claim.status === ClaimStatus.OFFER_ACCEPTED %}
         <p>
@@ -32,12 +33,21 @@
       {% endif %}
 
       {% if featureToggles.offer and claim.status === ClaimStatus.OFFER_SUBMITTED %}
-        <h2 class="heading-small">{{ t('Settle out of court') }}</h2>
-        <p>{{ t('You made an offer to settle the claim out of court. {{ claimant }} can accept or reject your offer.', { claimant: claim.claimData.claimant.name  }) | safe}}</p>
-        {{ t('We’ll email you when they respond') }}
+        <div class="grey-bottom-border">
+          <h3 class="bold-small">{{ t('Settle out of court') }}</h3>
+          <p>{{ t('You made an offer to settle the claim out of court. {{ claimant }} can accept or reject your offer.', { claimant: claim.claimData.claimant.name  }) | safe}}</p>
+          <p>{{ t('We’ll email you when they respond') }}</p>
+        </div>
 
         <h2 class="heading-small">{{ t('Your response to the claim') }}</h2>
+
         {{ t('You’ve has rejected the claim. The case will be reviewed by a judge and might go to court.') }}
+      {% endif %}
+
+      {% if claim.respondedAt and claim.status !== ClaimStatus.CLAIM_REJECTED %}
+            <p>
+              <span class="block"><a href="{{ responseReceiptUri }}">{{ t('Download your response') }}</a></span>
+            </p>
       {% endif %}
     </div>
 
@@ -56,12 +66,6 @@
             <strong class="bold">{{ t('Claim details:') }}</strong>
             <span class="block"><a href="{{ claimReceiptUri }}">{{ t('Download claim details') }}</a></span>
           </li>
-          {% if claim.respondedAt %}
-            <li>
-              <strong class="bold">{{ t('Your response:') }}</strong>
-              <span class="block"><a href="{{ responseReceiptUri }}">{{ t('Download your response') }}</a></span>
-            </li>
-          {% endif %}
         </ul>
       </div>
     </div>
