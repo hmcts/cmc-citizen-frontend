@@ -48,7 +48,6 @@ export default express.Router()
           await new DraftService().save(draft, user.bearerToken)
 
           const { externalId } = req.params
-          // console.log(Paths.checkAndSendPage)
           res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
         }
       }))
