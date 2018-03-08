@@ -14,8 +14,8 @@ const buttons = {
 export class ClaimantEvidencePage {
 
   enterEvidenceRow (type: string, description: string): void {
-    I.fillField(fields.description, description)
     I.selectOption(fields.type, type)
+    I.fillField(fields.description, description)
 
     I.click(buttons.submit)
   }

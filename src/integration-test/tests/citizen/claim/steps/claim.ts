@@ -169,7 +169,7 @@ export class ClaimSteps {
   }
 
   enterClaimEvidence (): void {
-    claimantEvidencePage.enterEvidenceRow('Contracts and agreements', 'ok')
+    claimantEvidencePage.enterEvidenceRow('CONTRACTS_AND_AGREEMENTS', 'ok')
   }
 
   checkClaimFactsAreTrueAndSubmit (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): void {
