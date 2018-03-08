@@ -8,7 +8,7 @@
   <div class="grid-row">
     <div class="column-two-thirds">
 
-      <h1 class="heading-large">{{ t('Your agreement') }}</h1>
+      <h1 class="heading-large">{{ t('Terms of the agreement') }}</h1>
 
       <p>
         {% if user.id == claim.defendantId %}
@@ -33,8 +33,6 @@
         )
       }}
       {{ row('Completion date', offer.completionDate | date) }}
-
-      <h3 class="heading-medium">Terms of the agreement</h3>
 
       <p>
         {{
@@ -73,6 +71,20 @@
       <p>{{ t('The original claim and any counterclaims will be kept on hold in case this agreement is broken. They will be closed three months after the last payment date (if applicable) if we don’t hear from either of you.') }}</p>
 
       <h2 class="heading-medium">{{ t('Sign the agreement') }}</h2>
+
+      <p>{% set signAgreementText = 'Make sure this contract includes everything you have agreed with {{ name }} before signing.' %}</p>
+
+        {% if user.id === claim.defendantId  %}
+          {{ t(signAgreementText, {
+              name: claim.claimData.claimant.name
+            })
+          }}
+        {% else %}
+          {{ t(signAgreementText, {
+              name: claim.claimData.defendant.name
+            })
+          }}
+        {% endif %}
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
