@@ -96,7 +96,6 @@ Scenario('I can view the claim details from a link on the dashboard @citizen', f
 
   yield helperSteps.enterPinNumber(claimRef)
   helperSteps.defendantViewCaseTaskList(defendantEmail)
-  I.click('Respond to claim')
   defendantDetails.clickViewClaim()
   defendantDetails.checkClaimData(claimRef)
 })
