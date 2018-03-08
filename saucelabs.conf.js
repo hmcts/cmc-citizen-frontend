@@ -22,8 +22,8 @@ function setupDesiredCapabilitiesFor (browser, saucelabsTunnelName) {
 
 exports.config = {
   name: 'integration-tests',
-  bootstrap: './src/bootstrap/bootstrap.ts',
-  tests: './src/tests/**/*_test.*',
+  bootstrap: './src/integration-test/bootstrap/bootstrap.ts',
+  tests: './src/integration-test/tests/**/*_test.*',
   output: './output',
   timeout: 10000,
   helpers: {
@@ -45,16 +45,16 @@ exports.config = {
       desiredCapabilities: setupDesiredCapabilitiesFor(browser, saucelabsTunnelIdentifier)
     },
     IdamHelper: {
-      require: './src/helpers/idamHelper'
+      require: './src/integration-test/helpers/idamHelper'
     },
     ClaimStoreHelper: {
-      require: './src/helpers/claimStoreHelper'
+      require: './src/integration-test/helpers/claimStoreHelper'
     },
     PageHelper: {
-      require: './src/helpers/pageHelper'
+      require: './src/integration-test/helpers/pageHelper'
     },
     SaucelabsReporter: {
-      require: './src/helpers/saucelabsReporter'
+      require: './src/integration-test/helpers/saucelabsReporter'
     }
   },
   mocha: {
