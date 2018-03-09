@@ -27,6 +27,7 @@ import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { StringUtils } from 'utils/stringUtils'
 import { InterestType } from 'claim/form/models/interest'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
+import { Payment } from 'app/pay/Payment'
 
 export class ClaimModelConverter {
 
@@ -40,7 +41,7 @@ export class ClaimModelConverter {
     claimData.amount = new ClaimAmountBreakdown().deserialize(draftClaim.amount)
     claimData.claimants = [this.convertClaimantDetails(draftClaim)]
     claimData.defendants = [this.convertDefendantDetails(draftClaim)]
-    claimData.payment = draftClaim.claimant.payment
+    claimData.payment = this.convertPaymentDetails(draftClaim.claimant.payment)
     claimData.reason = draftClaim.reason.reason
     claimData.timeline = { rows : draftClaim.timeline.getPopulatedRowsOnly() } as ClaimantTimeline
     claimData.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(draftClaim.claimant.payment.amount)
@@ -175,5 +176,14 @@ export class ClaimModelConverter {
       interestDate.reason = draftInterestDate.reason
     }
     return interestDate
+  }
+
+  private static convertPaymentDetails (payment: Payment): Payment {
+    return {
+      reference: payment.reference,
+      amount: payment.amount,
+      status: payment.status,
+      date_created: payment.date_created
+    }
   }
 }

@@ -21,7 +21,7 @@ export class Payment {
   status: string // only in V2
   date_created: number | string // V1 uses number, V2 uses ISO string
   @Type(() => Links)
-  _links: Links
+  _links?: Links
 
   static deserialize (input?: any): Payment {
     return plainToClass(Payment, input as object)

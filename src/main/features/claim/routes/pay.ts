@@ -124,7 +124,7 @@ export default express.Router()
       }
       const payClient = await getPayClient()
 
-      const payment: Payment = await payClient.retrieve(user, paymentReference)
+      const payment: PaymentRetrieveResponse = await payClient.retrieve(user, paymentReference)
       draft.document.claimant.payment = payment
 
       await new DraftService().save(draft, user.bearerToken)
