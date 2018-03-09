@@ -6,6 +6,7 @@ const I: I = actor()
 
 const fields = {
   repayment: {
+    firstPayment: 'input[id=firstPayment]',
     equalInstalments: 'input[id=instalmentAmount]',
     firstPaymentDate: {
       day: 'input[id=\'firstPaymentDate[day]\']',
@@ -33,6 +34,8 @@ export class DefendantPayByInstalmentsPage {
 
   enterRepaymentPlan (plan: PaymentPlan): void {
     const [ year, month, day ] = DateParser.parse(plan.firstPaymentDate)
+
+    I.fillField(fields.repayment.firstPayment, plan.firstPayment.toFixed(2))
     I.fillField(fields.repayment.equalInstalments, plan.equalInstalment.toFixed(2))
     I.fillField(fields.repayment.firstPaymentDate.day, day)
     I.fillField(fields.repayment.firstPaymentDate.month, month)
