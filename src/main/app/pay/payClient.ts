@@ -8,8 +8,8 @@ import * as uuid from 'uuid/v4'
 import { Fee } from 'app/pay/fees'
 import { plainToClass } from 'class-transformer'
 
-const payUrl = config.get<string>('pay.url')
-const payPath = config.get<string>('pay.path')
+const baseURL = `${config.get('pay.url')}/card-payments`
+
 const serviceName = config.get<string>('pay.service-name')
 const currency = config.get<string>('pay.currency')
 const siteId = config.get<string>('pay.site-id')
@@ -31,7 +31,7 @@ export class PayClient {
   async create (user: User, fees: Fee[], amount: number, returnURL: string): Promise<Payment> {
     const paymentReq: object = this.preparePaymentRequest(amount, fees)
     const payment: object = await request.post({
-      uri: `${payUrl}/${payPath}`,
+      uri: baseURL,
       body: paymentReq,
       headers: {
         Authorization: `Bearer ${user.bearerToken}`,
@@ -53,7 +53,7 @@ export class PayClient {
       return Promise.reject(new Error('Payment reference must be set'))
     }
     const paymentResponse: object = await request.get({
-      uri: `${payUrl}/${payPath}/${paymentRef}`,
+      uri: `${baseURL}/${paymentRef}`,
       headers: {
         Authorization: `Bearer ${user.bearerToken}`,
         ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`

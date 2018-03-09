@@ -49,7 +49,6 @@
   },
   "pay": {
     "url": "http://localhost:4421",
-    "path": "card-payments",
     "service-name": "CMC",
     "currency": "GBP",
     "site-id": "AA00",

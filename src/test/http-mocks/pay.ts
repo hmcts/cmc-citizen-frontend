@@ -2,8 +2,8 @@ import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
 import * as config from 'config'
 
-const payUrl = config.get<string>('pay.url')
-const payPath = '/' + config.get<string>('pay.path')
+const baseURL = config.get<string>('pay.url')
+const endpointPath = '/card-payments'
 
 export const paymentInitiateResponse: object = {
   reference: 'RC-1520-4225-4161-2265',
@@ -46,25 +46,25 @@ const paymentRetrieveResponse: object = {
 }
 
 export function resolveCreate () {
-  mock(payUrl)
-    .post(payPath)
+  mock(baseURL)
+    .post(endpointPath)
     .reply(HttpStatus.CREATED, { ...paymentInitiateResponse })
 }
 
 export function rejectCreate () {
-  mock(payUrl)
-    .post(payPath)
+  mock(baseURL)
+    .post(endpointPath)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR)
 }
 
 export function resolveRetrieve (status: string) {
-  mock(payUrl + payPath)
+  mock(baseURL + endpointPath)
     .get(new RegExp(`\/[\\d]+`))
     .reply(HttpStatus.OK, { ...paymentRetrieveResponse, status: `${status}` })
 }
 
 export function rejectRetrieve () {
-  mock(payUrl + payPath)
+  mock(baseURL + endpointPath)
     .get(new RegExp(`\/[\\d]+`))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR)
 }
