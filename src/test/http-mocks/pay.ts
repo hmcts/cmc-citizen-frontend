@@ -38,7 +38,10 @@ const paymentRetrieveResponse: object = {
       calculated_amount: 60
     }],
   _links: {
-    self: { href: 'http://localhost:4421/card-payments/RC-1520-4276-0065-8715', method: 'GET' }
+    self: {
+      href: 'http://localhost:4421/card-payments/RC-1520-4276-0065-8715',
+      method: 'GET'
+    }
   }
 }
 

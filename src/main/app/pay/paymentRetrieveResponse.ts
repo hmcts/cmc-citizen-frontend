@@ -1,9 +1,9 @@
 import 'reflect-metadata'
 import { Payment } from 'app/pay/payment'
-import { Fees } from 'app/pay/fees'
+import { Fee } from 'app/pay/fees'
 import { Expose, Type } from 'class-transformer'
 
-export class PaymentResponse extends Payment {
+export class PaymentRetrieveResponse extends Payment {
 
   readonly description: string
 
@@ -31,6 +31,6 @@ export class PaymentResponse extends Payment {
   @Expose({ name: 'service_name' })
   readonly serviceName: string
 
-  @Type(() => Fees)
-  readonly fees: Fees
+  @Type(() => Fee)
+  readonly fees: Fee
 }

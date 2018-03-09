@@ -18,8 +18,8 @@ import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Logger } from '@hmcts/nodejs-logging'
 import { FeeOutcome } from 'fees/models/feeOutcome'
-import { Fees } from 'app/pay/fees'
-import { PaymentResponse } from 'app/pay/paymentResponse'
+import { Fee } from 'app/pay/fees'
+import { PaymentRetrieveResponse } from 'app/pay/paymentRetrieveResponse'
 
 const logger = Logger.getLogger('router/pay')
 const event: string = config.get<string>('fees.issueFee.event')
@@ -89,7 +89,7 @@ export default express.Router()
 
       if (paymentRef) {
         const payClient: PayClient = await getPayClient()
-        const paymentResponse: PaymentResponse = await payClient.retrieve(user, paymentRef)
+        const paymentResponse: PaymentRetrieveResponse = await payClient.retrieve(user, paymentRef)
         switch (paymentResponse.status) {
           case 'Success':
             return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: draft.document.externalId }))
@@ -97,11 +97,10 @@ export default express.Router()
       }
       const feeOutcome: FeeOutcome = await FeesClient.calculateFee(event, amount, channel)
       const payClient: PayClient = await getPayClient()
-      const fees: Fees = new Fees(feeOutcome.amount, feeOutcome.code, feeOutcome.version)
-      const feesArray: Fees[] = [fees]
+      const feeArray: Fee[] = [new Fee(feeOutcome.amount, feeOutcome.code, feeOutcome.version)]
       const payment: Payment = await payClient.create(
         res.locals.user,
-        feesArray,
+        feeArray,
         feeOutcome.amount,
         getReturnURL(req, draft.document.externalId)
       )

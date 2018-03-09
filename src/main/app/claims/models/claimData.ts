@@ -45,10 +45,6 @@ export class ClaimData {
     }
   }
 
-  get paidFeeAmount (): number {
-    return this.feeAmountInPennies
-  }
-
   deserialize (input: any): ClaimData {
     if (input) {
       this.claimants = this.deserializeClaimants(input.claimants)

@@ -1,11 +1,11 @@
 import * as config from 'config'
-import { PaymentResponse } from 'app/pay/paymentResponse'
+import { PaymentRetrieveResponse } from 'app/pay/paymentRetrieveResponse'
 import { Payment } from 'app/pay/payment'
 import { request } from 'client/request'
 import { User } from 'app/idam/user'
 import { ServiceAuthToken } from 'app/idam/serviceAuthToken'
 import * as uuid from 'uuid/v4'
-import { Fees } from 'app/pay/fees'
+import { Fee } from 'app/pay/fees'
 import { plainToClass } from 'class-transformer'
 
 const payUrl = config.get<string>('pay.url')
@@ -22,13 +22,13 @@ export class PayClient {
 
   /**
    *
-   * @param User a user
-   * @param {Fees[]} array of fees
+   * @param user a user
+   * @param {Fee[]} array of fees
    * @param amount fee amount
    * @param returnURL the url the user should be redirected to
    * @returns Promise.Payment
    */
-  async create (user: User, fees: Fees[], amount: number, returnURL: string): Promise<Payment> {
+  async create (user: User, fees: Fee[], amount: number, returnURL: string): Promise<Payment> {
     const paymentReq: object = this.preparePaymentRequest(amount, fees)
     const payment: object = await request.post({
       uri: `${payUrl}/${payPath}`,
@@ -48,7 +48,7 @@ export class PayClient {
    * @param paymentRef Ref when payment initiated
    * @returns Promise<Payment>
    */
-  async retrieve (user: User, paymentRef: string): Promise<PaymentResponse> {
+  async retrieve (user: User, paymentRef: string): Promise<PaymentRetrieveResponse> {
     if (!paymentRef) {
       return Promise.reject(new Error('Payment reference must be set'))
     }
@@ -59,10 +59,10 @@ export class PayClient {
         ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`
       }
     })
-    return plainToClass(PaymentResponse, paymentResponse)
+    return plainToClass(PaymentRetrieveResponse, paymentResponse)
   }
 
-  private preparePaymentRequest (amount: number, fees: Fees[]): object {
+  private preparePaymentRequest (amount: number, fees: Fee[]): object {
     const caseReference: string = uuid()
     return {
       amount: amount,
