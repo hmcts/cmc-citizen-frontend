@@ -42,7 +42,7 @@
         <tr>
           <th scope="row">{{ t('Claim fee') }}</th>
           <td class="numeric last">
-            <span class="font-small">{{ claim.claimData.feeAmountInPennies | numeral }}</span>
+            <span class="font-small">{{ claim.claimData.feeAmountInPennies | pennies2pounds | numeral }}</span>
           </td>
         </tr>
 
