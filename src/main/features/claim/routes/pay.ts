@@ -95,6 +95,8 @@ export default express.Router()
             case 'Success':
               return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: draft.document.externalId }))
           }
+        } else if (draft.document.claimant.payment['state'] && draft.document.claimant.payment['state']['status'] === 'success') {
+          logError(user.id, draft.document.claimant.payment, 'Successful payment from V1 version of the API cannot be handled')
         }
       }
       const feeOutcome: FeeOutcome = await FeesClient.calculateFee(event, amount, channel)

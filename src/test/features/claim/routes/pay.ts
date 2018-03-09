@@ -173,6 +173,10 @@ describe('Claim issue: initiate payment receiver', () => {
     })
 
     it('should initiate new payment and redirect to next page when payment does not exist for given reference', async () => {
+      overrideClaimDraftObj.claimant.payment.state = {
+        status: 'success'
+      }
+
       idamServiceMock.resolveRetrieveServiceToken()
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
       payServiceMock.resolveRetrieveToNotFound()
