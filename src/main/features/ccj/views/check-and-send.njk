@@ -40,10 +40,14 @@
     {% endif %}
 
     {% if draft.paymentOption.option.value == 'INSTALMENTS' %}
-      {{ row( 'How do you want the defendant to pay', draft.paymentOption.option.displayValue, changeLink = paymentOptionUrl, bottomBorder = false) }}
-      {{ row( 'Instalments of', draft.repaymentPlan.instalmentAmount | numeral, bottomBorder = false) }}
-      {{ row( 'When you want them to make the first payment', draft.repaymentPlan.firstPaymentDate.toMoment() | date, bottomBorder = false) }}
-      {{ row( 'How often you want them to make this payment', draft.repaymentPlan.paymentSchedule.displayValue, bottomBorder = true) }}
+      {{ row( 'How do you want the defendant to pay',
+        draft.paymentOption.option.displayValue, changeLink = paymentOptionUrl, bottomBorder = false) }}
+      {{ row( 'Instalments of',
+        draft.repaymentPlan.instalmentAmount | numeral, bottomBorder = false) }}
+      {{ row( 'When do you want them to make the first payment',
+        draft.repaymentPlan.firstPaymentDate.toMoment() | date, bottomBorder = false) }}
+      {{ row( 'How often you want them to make this payment',
+        draft.repaymentPlan.paymentSchedule.displayValue, bottomBorder = true) }}
     {% endif %}
 
     {{ tableEnd() }}
