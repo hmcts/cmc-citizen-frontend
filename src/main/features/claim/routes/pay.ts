@@ -97,10 +97,9 @@ export default express.Router()
       }
       const feeOutcome: FeeOutcome = await FeesClient.calculateFee(event, amount, channel)
       const payClient: PayClient = await getPayClient()
-      const feeArray: Fee[] = [new Fee(feeOutcome.amount, feeOutcome.code, feeOutcome.version)]
       const payment: Payment = await payClient.create(
         res.locals.user,
-        feeArray,
+        [new Fee(feeOutcome.amount, feeOutcome.code, feeOutcome.version)],
         feeOutcome.amount,
         getReturnURL(req, draft.document.externalId)
       )

@@ -2,18 +2,18 @@ import 'reflect-metadata'
 import { Expose, Type } from 'class-transformer'
 import { MoneyConverter } from 'fees/moneyConverter'
 
-class NextURL {
+class Link {
   readonly href: string
   readonly method: string
 }
 
 class Links {
   @Expose({ name: 'next_url' })
-  @Type(() => NextURL)
-  readonly nextUrl: NextURL
+  @Type(() => Link)
+  readonly nextUrl: Link
 
-  @Type(() => NextURL)
-  readonly self: NextURL
+  @Type(() => Link)
+  readonly self: Link
 
 }
 
