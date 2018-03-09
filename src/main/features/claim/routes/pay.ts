@@ -85,7 +85,7 @@ export default express.Router()
         throw new Error('No amount entered, you cannot pay yet')
       }
 
-      const paymentRef = draft.document.claimant.payment.reference
+      const paymentRef = draft.document.claimant.payment ? draft.document.claimant.payment.reference : undefined
 
       if (paymentRef) {
         const payClient: PayClient = await getPayClient()
@@ -106,7 +106,7 @@ export default express.Router()
       draft.document.claimant.payment = payment
       await new DraftService().save(draft, user.bearerToken)
 
-      res.redirect(payment.links.nextUrl.href)
+      res.redirect(payment._links.next_url.href)
     } catch (err) {
       logPaymentError(user.id, draft.document.claimant.payment)
       next(err)
@@ -125,7 +125,7 @@ export default express.Router()
       const payClient = await getPayClient()
 
       const payment: Payment = await payClient.retrieve(user, paymentReference)
-      draft.document.claimant.payment = new Payment().deserialize(payment)
+      draft.document.claimant.payment = payment
 
       await new DraftService().save(draft, user.bearerToken)
 

@@ -1,6 +1,7 @@
+/* tslint:disable variable-name allow snake_case */
+
 import 'reflect-metadata'
-import { Expose, Type } from 'class-transformer'
-import { MoneyConverter } from 'fees/moneyConverter'
+import { plainToClass, Type } from 'class-transformer'
 
 class Link {
   readonly href: string
@@ -8,37 +9,21 @@ class Link {
 }
 
 class Links {
-  @Expose({ name: 'next_url' })
-  @Type(() => Link)
-  readonly nextUrl: Link
-
   @Type(() => Link)
   readonly self: Link
-
+  @Type(() => Link)
+  readonly next_url: Link
 }
 
 export class Payment {
-
   reference: string
-
-  @Expose({ name: 'date_created' })
-  dateCreated: number
-
-  status: string
-
   amount: number
-
-  @Expose({ name: '_links' })
+  status: string // only in V2
+  date_created: number | string // V1 uses number, V2 uses ISO string
   @Type(() => Links)
-  links: Links
+  _links: Links
 
-  deserialize (input?: any): Payment {
-    if (input) {
-      this.reference = input.reference
-      this.dateCreated = input.dateCreated
-      this.status = input.status
-      this.amount = MoneyConverter.convertPoundsToPennies(input.amount)
-    }
-    return this
+  static deserialize (input?: any): Payment {
+    return plainToClass(Payment, input as object)
   }
 }

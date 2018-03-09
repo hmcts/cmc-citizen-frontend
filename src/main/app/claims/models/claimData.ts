@@ -50,7 +50,7 @@ export class ClaimData {
       this.claimants = this.deserializeClaimants(input.claimants)
       this.defendants = this.deserializeDefendants(input.defendants)
       if (input.payment) {
-        this.payment = new Payment().deserialize(input.payment)
+        this.payment = Payment.deserialize(input.payment)
       }
       this.feeAmountInPennies = input.feeAmountInPennies
 

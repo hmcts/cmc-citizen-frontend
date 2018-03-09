@@ -52,7 +52,7 @@ export class PayClient {
         'return-url': `${returnURL}`
       }
     })
-    return plainToClass(Payment, payment)
+    return Payment.deserialize(payment)
   }
 
   /**
