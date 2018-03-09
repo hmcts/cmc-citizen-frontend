@@ -39,13 +39,7 @@ export const claimData = {
     reference: '123',
     date_created: 12345,
     amount: 10000,
-    status: 'Success',
-    _links: {
-      next_url: {
-        href: 'any href',
-        method: 'POST'
-      }
-    }
+    status: 'Success'
   },
   timeline: {
     rows: []
