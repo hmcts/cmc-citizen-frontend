@@ -21,18 +21,31 @@ export class PayClient {
   }
 
   /**
+   * Creates a payment within Reform Payment Hub
    *
-   * @param user a user
-   * @param {Fee[]} array of fees
-   * @param amount fee amount
-   * @param returnURL the url the user should be redirected to
-   * @returns Promise.Payment
+   * @param user - user who make a call
+   * @param fees - fees array used to calculate total fee amount
+   * @param amount - total fee amount
+   * @param returnURL - the url the user should be redirected to
+   * @returns response with payment status and link to card payment page
    */
   async create (user: User, fees: Fee[], amount: number, returnURL: string): Promise<Payment> {
-    const paymentReq: object = this.preparePaymentRequest(amount, fees)
+    if (!user) {
+      throw new Error('User is required')
+    }
+    if (!fees) {
+      throw new Error('Fees array is required')
+    }
+    if (!amount) {
+      throw new Error('Total fee amount is required')
+    }
+    if (!returnURL) {
+      throw new Error('Post payment redirect URL is required')
+    }
+
     const payment: object = await request.post({
       uri: baseURL,
-      body: paymentReq,
+      body: this.preparePaymentRequest(amount, fees),
       headers: {
         Authorization: `Bearer ${user.bearerToken}`,
         ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`,
@@ -43,14 +56,18 @@ export class PayClient {
   }
 
   /**
+   * Retrieves a payment from Reform Payment Hub
    *
-   * @param user a user
-   * @param paymentRef Ref when payment initiated
-   * @returns Promise<Payment>
+   * @param user - user who makes a call
+   * @param paymentRef - payment reference number within Reform Payment Hub, generated when payment was created
+   * @returns response all payment details including most recent payment status
    */
   async retrieve (user: User, paymentRef: string): Promise<PaymentRetrieveResponse> {
+    if (!user) {
+      throw new Error('User is required')
+    }
     if (!paymentRef) {
-      return Promise.reject(new Error('Payment reference must be set'))
+      throw new Error('Payment reference is required')
     }
     const paymentResponse: object = await request.get({
       uri: `${baseURL}/${paymentRef}`,
