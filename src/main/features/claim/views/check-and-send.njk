@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 
-{% from "table.njk" import tableStart,tableEnd, row, rowWithMultipleValue %}
+{% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
 {% from "form.njk" import csrfProtection, submitButton, errorSummary, textInput %}
 {% from "statement-of-truth.njk" import statementOfTruth %}
 {% from "party/details.njk" import partyDetailsSummaryFragment %}
@@ -66,7 +66,16 @@
 
     {{ tableStart('claimDetails', 'Claim details') }}
     {{ row('Why you’re owed the money:', draftClaim.reason.reason, paths.reasonPage.uri ) }}
+
+    {{ row('Timeline of what happened:', '', paths.timelinePage.uri, false ) }}
+    {% set allTimelineRows = draftClaim.timeline.getPopulatedRowsOnly() %}
+    {% set lastItemIndex = allTimelineRows.length - 1 %}
+    {% for timelineRow in allTimelineRows %}
+    {{ row(timelineRow.date, timelineRow.description, '', loop.index0 === lastItemIndex) }}
+    {% endfor %}
+
     {{ tableEnd() }}
+
     <div class="column-two-thirds">
       <div class="form-group">
         {{ statementOfTruth(

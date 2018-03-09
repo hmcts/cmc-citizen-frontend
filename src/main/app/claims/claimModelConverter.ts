@@ -25,6 +25,7 @@ import { InterestDateType } from 'app/common/interestDateType'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { StringUtils } from 'utils/stringUtils'
 import { InterestType } from 'claim/form/models/interest'
+import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 
 export class ClaimModelConverter {
 
@@ -41,6 +42,7 @@ export class ClaimModelConverter {
     claimData.defendants = [this.convertDefendantDetails(draftClaim)]
     claimData.payment = draftClaim.claimant.payment
     claimData.reason = draftClaim.reason.reason
+    claimData.timeline = { rows : draftClaim.timeline.getPopulatedRowsOnly() } as ClaimantTimeline
     claimData.feeAmountInPennies = draftClaim.claimant.payment.amount
     if (draftClaim.qualifiedStatementOfTruth && draftClaim.qualifiedStatementOfTruth.signerName) {
       claimData.statementOfTruth = new StatementOfTruth(
