@@ -74,7 +74,6 @@
     "mime": "^2.0.3",
     "moment": "^2.18.1",
     "nodelist-foreach-polyfill": "^1.2.0",
-    "npm": "^5.7.1",
     "nunjucks": "^3.0.0",
     "nunjucks-numeral-filter": "0.0.2",
     "otp": "^0.1.3",
