@@ -172,6 +172,20 @@ describe('Claim issue: initiate payment receiver', () => {
         .expect(res => expect(res).to.be.serverError.withText('Error'))
     })
 
+    it('should initiate new payment and redirect to next page when payment does not exist for given reference', async () => {
+      idamServiceMock.resolveRetrieveServiceToken()
+      draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
+      payServiceMock.resolveRetrieveToNotFound()
+      feesServiceMock.resolveCalculateFee(event, channel)
+      payServiceMock.resolveCreate()
+      draftStoreServiceMock.resolveSave()
+
+      await request(app)
+        .get(Paths.startPaymentReceiver.uri)
+        .set('Cookie', `${cookieName}=ABC`)
+        .expect(res => expect(res).to.be.redirect.toLocation('https://www.payments.service.gov.uk/secure/8b647ade-02cc-4c85-938d-4db560404df8'))
+    })
+
     it('should redirect to next page when everything is fine', async () => {
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)

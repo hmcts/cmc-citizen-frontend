@@ -4,6 +4,7 @@ import { Payment } from 'app/pay/payment'
 import { request } from 'client/request'
 import { User } from 'app/idam/user'
 import { ServiceAuthToken } from 'app/idam/serviceAuthToken'
+import * as HttpStatus from 'http-status-codes'
 import * as uuid from 'uuid/v4'
 import { Fee } from 'app/pay/fees'
 import { plainToClass } from 'class-transformer'
@@ -60,23 +61,30 @@ export class PayClient {
    *
    * @param user - user who makes a call
    * @param paymentRef - payment reference number within Reform Payment Hub, generated when payment was created
-   * @returns response all payment details including most recent payment status
+   * @returns response all payment details including most recent payment status or undefined when reference does not exist
    */
-  async retrieve (user: User, paymentRef: string): Promise<PaymentRetrieveResponse> {
+  async retrieve (user: User, paymentRef: string): Promise<PaymentRetrieveResponse | undefined> {
     if (!user) {
       throw new Error('User is required')
     }
     if (!paymentRef) {
       throw new Error('Payment reference is required')
     }
-    const paymentResponse: object = await request.get({
-      uri: `${baseURL}/${paymentRef}`,
-      headers: {
-        Authorization: `Bearer ${user.bearerToken}`,
-        ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`
+    try {
+      const paymentResponse: object = await request.get({
+        uri: `${baseURL}/${paymentRef}`,
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`,
+          ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`
+        }
+      })
+      return plainToClass(PaymentRetrieveResponse, paymentResponse)
+    } catch (err) {
+      if (err.statusCode === HttpStatus.NOT_FOUND) {
+        return undefined
       }
-    })
-    return plainToClass(PaymentRetrieveResponse, paymentResponse)
+      throw err
+    }
   }
 
   private preparePaymentRequest (amount: number, fees: Fee[]): object {

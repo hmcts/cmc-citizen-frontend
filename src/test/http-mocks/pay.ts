@@ -63,6 +63,12 @@ export function resolveRetrieve (status: string) {
     .reply(HttpStatus.OK, { ...paymentRetrieveResponse, status: `${status}` })
 }
 
+export function resolveRetrieveToNotFound () {
+  mock(baseURL + endpointPath)
+    .get(new RegExp(`\/[\\d]+`))
+    .reply(HttpStatus.NOT_FOUND)
+}
+
 export function rejectRetrieve () {
   mock(baseURL + endpointPath)
     .get(new RegExp(`\/[\\d]+`))

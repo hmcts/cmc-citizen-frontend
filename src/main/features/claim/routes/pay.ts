@@ -90,9 +90,11 @@ export default express.Router()
       if (paymentRef) {
         const payClient: PayClient = await getPayClient()
         const paymentResponse: PaymentRetrieveResponse = await payClient.retrieve(user, paymentRef)
-        switch (paymentResponse.status) {
-          case 'Success':
-            return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: draft.document.externalId }))
+        if (paymentResponse !== undefined) {
+          switch (paymentResponse.status) {
+            case 'Success':
+              return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: draft.document.externalId }))
+          }
         }
       }
       const feeOutcome: FeeOutcome = await FeesClient.calculateFee(event, amount, channel)
