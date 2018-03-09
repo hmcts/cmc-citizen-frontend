@@ -14,14 +14,14 @@ export class Helper {
     defenceSteps.enterClaimReference(claimRef)
     I.waitForText('Please enter your security code to continue')
     const authorisation = await IdamClient.authenticateUser(claimantEmail)
-    defenceSteps.enterClaimPin(claimRef, authorisation)
+    return defenceSteps.enterClaimPin(claimRef, authorisation)
   }
 
-  finishResponse (defendantEmail: string, defendantType: PartyType, defenceType: DefenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE): void {
+  finishResponse (defendantEmail: string, defendantType: PartyType, defenceType: DefenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE): Promise<void> {
     I.waitForText(claimDetailsHeading)
     defenceSteps.respondToClaim()
     defenceSteps.loginAsDefendant(defendantEmail)
-    defenceSteps.makeDefenceAndSubmit(defendantEmail, defendantType, defenceType)
+    return defenceSteps.makeDefenceAndSubmit(defendantEmail, defendantType, defenceType)
   }
 
   finishResponseWithHandOff (claimRef: string, defendant: Party, claimant: Party, defendantEmail: string, defenceType: DefenceType): void {
