@@ -19,6 +19,7 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.payBySetDatePage.evaluateUri({ externalId : externalId })
 const checkAndSavePage: string = Paths.checkAndSendPage.evaluateUri({ externalId : externalId })
+const checkContent: string = 'When do you want them to pay?'
 
 describe('CCJ - Pay by set date', () => {
   attachDefaultHooks(app)
@@ -59,7 +60,7 @@ describe('CCJ - Pay by set date', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('When you want them to pay the amount'))
+          .expect(res => expect(res).to.be.successful.withText(checkContent))
       })
     })
   })
@@ -132,7 +133,7 @@ describe('CCJ - Pay by set date', () => {
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ known: undefined })
-            .expect(res => expect(res).to.be.successful.withText('When you want them to pay the amount', 'div class="error-summary"'))
+            .expect(res => expect(res).to.be.successful.withText(checkContent, 'div class="error-summary"'))
         })
       })
     })

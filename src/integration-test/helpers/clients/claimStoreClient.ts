@@ -52,19 +52,15 @@ export class ClaimStoreClient {
   /**
    * Links defendant to claim in the claim store
    *
-   * @param {number} externalId - claim external ID
    * @param {string} defendant - defendant ID
    * @returns {Promise<Claim>}
    */
-  static linkDefendant (externalId: string, defendant: User): Promise<Claim> {
-    if (!externalId) {
-      return Promise.reject('Claim ID is required')
-    }
+  static linkDefendant (defendant: User): Promise<Claim> {
     if (!defendant) {
       return Promise.reject('Defendant is required')
     }
 
-    return request.put(`${baseURL}/claims/${externalId}/defendant/${defendant.id}`, {
+    return request.put(`${baseURL}/claims/defendant/link`, {
       headers: {
         Authorization: `Bearer ${defendant.bearerToken}`
       }
