@@ -10,7 +10,7 @@
         <h1 class="heading-large">{{ t('You’ve settled out of court') }}</h1>
 
         <p class="issue-receipt-download">
-          <a href="{{ agreementLink }}">{{ t('Download agreement as a PDF') }}</a>
+          <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download agreement as a PDF') }}</a>
         </p>
       </div>
 
@@ -21,13 +21,13 @@
       <p>
         {{
           t('View your claim status on <a href="{{ dashboardUri }}">your money claims account</a>.', {
-            dashboardUri: dashboardLink
+            dashboardUri: DashboardPaths.defendantPage.evaluateUri({ externalId: claim.externalId })
           }) | safe
         }}
       </p>
 
       <br>
-      <a href="{{ dashboardLink }}" class="button">Finished</a>
+      <a href="{{ DashboardPaths.defendantPage.evaluateUri({ externalId: claim.externalId }) }}" class="button">Finished</a>
 
       {{ supportWidget() }}
 

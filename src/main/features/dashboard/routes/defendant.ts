@@ -1,7 +1,6 @@
 import * as express from 'express'
 
 import { Paths } from 'dashboard/paths'
-import { Paths as OfferPaths } from 'offer/paths'
 import { ErrorHandling } from 'common/errorHandling'
 
 import { ClaimStoreClient } from 'claims/claimStoreClient'
@@ -19,8 +18,6 @@ export default express.Router()
     res.render(Paths.defendantPage.associatedView, {
       isAfter4pm: isAfter4pm(),
       claim: claim,
-      claimReceiptUri: Paths.claimReceiptReceiver.evaluateUri({ externalId: externalId }),
-      claimSettlementUri: Paths.agreementReceiver.evaluateUri({ externalId: externalId }),
-      makeAnOfferUri: OfferPaths.offerPage.evaluateUri({ externalId: externalId })
+      claimReceiptUri: Paths.claimReceiptReceiver.evaluateUri({ externalId: externalId })
     })
   }))

@@ -28,7 +28,7 @@
         <p>{{ claim.respondedAt | date }}</p>
         <h3 class="heading-small">{{ t('Settle Claim') }} </h3>
         {{ responseStatusForDefendant(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
-        <a href="{{ claimSettlementUri }}">{{ t('Download the agreement') }}</a>
+        <a href="{{ DashboardPaths.agreementReceiver.evaluateUri({ externalId: externalId }) }}">{{ t('Download the agreement') }}</a>
 
         {% elif featureToggles.offer and not claim.settlementReachedAt %}
           <h3 class="heading-small">{{ t('Your defence is being processed.') }}</h3>
@@ -37,7 +37,7 @@
           <h3 class="heading-small">{{ t('Settle out of court') }}</h3>
           <p>{{
               t('You can still <a href="{{ makeOfferUri }}">make an offer</a> to settle the claim out of court. You will avoid a hearing and a County Court Judgment against you.', {
-              makeOfferUri : makeAnOfferUri }) | safe
+              makeOfferUri : OfferPaths.offerPage.evaluateUri({ externalId: externalId }) }) | safe
             }}
           </p>
 
