@@ -12,12 +12,10 @@
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
       <p>
-        {{ t('You have rejected the defendant %s’s offer of settle out of court.', {
-              postProcess: 'sprintf', sprintf: [ claim.claimData.defendant.name ]}) }}
+        {{ t('You’ve rejected the defendant’s offer to settle out of court.') }}
       </p>
       <p>
-        {{ t('View your claim status on <a href="%s">your money claims account</a>.', {
-              postProcess: 'sprintf', sprintf: [ '/dashboard' ]}) | safe }}
+        {{ t('View your claim status on <a href="{{ dashboard }}">your money claims account</a>.', { dashboard: '/dashboard' }) | safe }}
       </p>
 
       {{ supportWidget() }}

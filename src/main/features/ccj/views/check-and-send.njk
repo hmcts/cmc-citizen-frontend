@@ -12,7 +12,7 @@
   <form novalidate method="post">
     {{ csrfProtection(csrf) }}
 
-    {{ tableStart('theirDetails', 'Their details') }}
+    {{ tableStart('theirDetails', 'Their details (defendant)') }}
     {{
       partyDetailsSummaryFragment(
         partyDetails = defendant,

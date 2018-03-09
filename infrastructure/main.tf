@@ -52,7 +52,7 @@ module "citizen-frontend" {
     REFORM_ENVIRONMENT = "${var.env}"
 
     // Application vars
-    GA_TRACKING_ID = "UA-97111056-1"
+    GA_TRACKING_ID = "${var.ga_tracking_id}"
     POSTCODE_LOOKUP_API_KEY = "${data.vault_generic_secret.postcode-lookup-api-key.data["value"]}"
 
     // IDAM
@@ -90,6 +90,7 @@ module "citizen-frontend" {
     FEATURE_FULL_ADMISSION = "${var.feature_full_admission}"
     FEATURE_PARTIAL_ADMISSION = "${var.feature_partial_admission}"
     FEATURE_FINE_PRINT = "${var.feature_fine_print}"
+    FEATURE_CCD = "${var.feature_ccd}"
   }
 }
 

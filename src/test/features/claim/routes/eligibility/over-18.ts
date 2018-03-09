@@ -17,7 +17,7 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ClaimPaths.eligibilityOver18Page.uri
-const pageRedirect: string = ClaimPaths.eligibilityClaimTypePage.uri
+const pageRedirect: string = ClaimPaths.eligibilityDefendantAgePage.uri
 const expectedTextOnPage: string = 'Are you 18 or over?'
 
 describe('Claim eligibility: over 18 page', () => {
@@ -65,7 +65,7 @@ describe('Claim eligibility: over 18 page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to claim type page when form is valid and everything is fine', async () => {
+      it('should redirect to over 18 defendant page when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 

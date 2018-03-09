@@ -8,24 +8,25 @@
   <div class="column-two-thirds">
 
     <h1 class="heading-large">
-      <span class="heading-secondary">{{ t('County Court Judgment') }} </span>
-
       {{ t('Payment options') }}
     </h1>
+
+    <h2 class="bold-small form-group">{{ t('I would like the defendant to pay:') }}</h2>
 
     <form method="post" class="analytics-submit-event-trigger" data-event-action="CCJ: Select payment option" data-event-label-from="option" novalidate>
       {{ csrfProtection(csrf) }}
 
       {{
       radioGroup(
-        'I would like the defendant to be ordered to pay:',
+        'I would like the defendant to pay:',
         'option',
         [
-          {'label': 'Immediately', value: 'IMMEDIATELY', checked: (form.valueFor('option').value === 'IMMEDIATELY')},
-          {'label': 'By instalments', value: 'INSTALMENTS', checked: (form.valueFor('option').value === 'INSTALMENTS')},
-          {'label': 'The full amount by a set date', value: 'FULL_BY_SPECIFIED_DATE', checked: (form.valueFor('option').value === 'FULL_BY_SPECIFIED_DATE')}
+          {'label': 'Immediately', value: PaymentType.IMMEDIATELY.value, checked: (form.valueFor('option').value === PaymentType.IMMEDIATELY)},
+          {'label': 'By a set date', value: PaymentType.FULL_BY_SPECIFIED_DATE.value, checked: (form.valueFor('option').value === PaymentType.FULL_BY_SPECIFIED_DATE)},
+          {'label': 'By instalments', value: PaymentType.INSTALMENTS.value, checked: (form.valueFor('option').value === PaymentType.INSTALMENTS)}
         ],
-        form = form
+        form = form,
+        legendHidden = true
       )
       }}
 
