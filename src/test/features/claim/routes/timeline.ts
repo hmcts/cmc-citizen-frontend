@@ -14,36 +14,27 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const pagePath: string = ClaimPaths.timelinePage.uri
 
-describe('Claim issue: reason page', () => {
+describe('Claim issue: timeline page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ClaimPaths.reasonPage.uri)
+    checkAuthorizationGuards(app, 'get', pagePath)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
-        .get(ClaimPaths.reasonPage.uri)
+        .get(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Why you’re owed the money'))
-    })
-
-    it('should render page when everything is fine without a name field', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      draftStoreServiceMock.resolveFind('claim', { defendant: undefined })
-
-      await request(app)
-        .get(ClaimPaths.reasonPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Why you’re owed the money'))
+        .expect(res => expect(res).to.be.successful.withText('Timeline of events'))
     })
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', ClaimPaths.reasonPage.uri)
+    checkAuthorizationGuards(app, 'post', pagePath)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -54,9 +45,9 @@ describe('Claim issue: reason page', () => {
         draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
-          .post(ClaimPaths.reasonPage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Why you’re owed the money', 'div class="error-summary"'))
+          .expect(res => expect(res).to.be.successful.withText('Timeline of events', 'div class="error-summary"'))
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
@@ -64,9 +55,9 @@ describe('Claim issue: reason page', () => {
         draftStoreServiceMock.rejectSave()
 
         await request(app)
-          .post(ClaimPaths.reasonPage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ reason: 'Roof started leaking soon after...' })
+          .send({ rows: [{ 'date': 'may', 'description': 'ok' }] })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -75,10 +66,10 @@ describe('Claim issue: reason page', () => {
         draftStoreServiceMock.resolveSave()
 
         await request(app)
-          .post(ClaimPaths.reasonPage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ reason: 'Roof started leaking soon after...' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.timelinePage.uri))
+          .send({ rows: [{ 'date': 'may', 'description': 'ok' }] })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
       })
     })
   })

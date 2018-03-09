@@ -1,0 +1,69 @@
+{% from "form.njk" import linkButton %}
+
+{% macro timelineRow(index, form) %}
+
+  {% set dateKey = 'rows[' + index + '][date]' %}
+  {% set dateValue = form.valueFor(dateKey) %}
+  {% set dateError = form.errorFor(dateKey) %}
+
+  {% set descriptionKey = 'rows[' + index + '][description]' %}
+  {% set descriptionError = form.errorFor(descriptionKey) %}
+  {% set descriptionValue = form.valueFor(descriptionKey) %}
+
+  <div class="multiline-row {% if dateError or descriptionError %} form-group-error {% endif %}">
+    {% if dateError %}
+    <span class="error-message" id="{{ dateKey }}[label]">
+      {{ t(dateError) }}
+    </span>
+    {% endif %}
+    {% if descriptionError %}
+    <span class="error-message" id="{{ descriptionKey }}[label]">
+      {{ t(descriptionError) }}
+    </span>
+    {% endif %}
+
+    <label class="form-label-bold mobile-show" for="{{ dateKey }}">{{ index + 1 }}{{ t('. Date') }}</label>
+    <span class="form-hint mobile-show">{{ t('For example, 1 May 2017') }}</span>
+    <input id="{{ dateKey }}" name="{{ dateKey }}" value="{{ dateValue if dateValue }}"
+           class="form-control multiline-column-1 {% if dateError %}form-control-error{% endif %}" type="text">
+
+    <label for="{{ descriptionKey }}" class="form-label-bold mobile-show">
+      {{ t('What happened') }}
+    </label>
+    <span class="form-hint mobile-show">{{ t('For example, you might have signed a contract') }}</span>
+    <textarea id="{{ descriptionKey }}" name="{{ descriptionKey }}"
+              class="form-control multiline-column-text {% if descriptionError %}form-control-error{% endif %}"
+              rows="2">{{ descriptionValue if descriptionValue }}</textarea>
+  </div>
+{% endmacro %}
+
+{% macro timelineFragment(form) %}
+
+  {% set noRowsError = form.errorFor('rows') %}
+  <div class="multiline {% if noRowsError %} form-group-error {% endif %}">
+    {% if noRowsError %}<span class="error-message" id="rows[label]">{{ t(noRowsError) }}</span>{% endif %}
+    <div class="multiline-headings">
+      <div class="multiline-column-1">
+        <label class="form-label-bold">{{ t('Date') }}</label>
+        <span class="form-hint">{{ t('For example, 1 May 2017') }}</span>
+      </div>
+      <div class="multiline-column-2">
+        <label class="form-label-bold">{{ t('What happened') }}</label>
+        <span class="form-hint">{{ t('For example, you might have signed a contract') }}</span>
+      </div>
+    </div>
+
+    <div class="multiline-rows">
+    {% for row in form.model.rows %}
+      {{ timelineRow(loop.index0, form) }}
+    {% endfor %}
+    </div>
+
+  </div>
+
+  {% if form.model and form.model.canAddMoreRows() %}
+    <div id="add-event-container" class="form-group">
+      {{ linkButton('Add another event', 'action[addRow]', 'button button-secondary') }}
+    </div>
+  {% endif %}
+{% endmacro %}
