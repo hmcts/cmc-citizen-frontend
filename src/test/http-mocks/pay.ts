@@ -48,7 +48,7 @@ const paymentRetrieveResponse: object = {
 export function resolveCreate () {
   mock(baseURL)
     .post(endpointPath)
-    .reply(HttpStatus.CREATED, { ...paymentInitiateResponse })
+    .reply(HttpStatus.CREATED, paymentInitiateResponse)
 }
 
 export function rejectCreate () {
