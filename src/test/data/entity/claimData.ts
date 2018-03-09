@@ -37,10 +37,15 @@ export const claimData = {
   feeAmountInPennies: 1000000,
   payment: {
     reference: '123',
-    dateCreated: 12345,
+    date_created: 12345,
     amount: 10000,
     status: 'Success',
-    links: { nextUrl: { href: 'any href', method: 'POST' } }
+    _links: {
+      next_url: {
+        href: 'any href',
+        method: 'POST'
+      }
+    }
   },
   timeline: {
     rows: []
