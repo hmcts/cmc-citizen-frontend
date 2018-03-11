@@ -27,7 +27,7 @@ import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { StringUtils } from 'utils/stringUtils'
 import { InterestType } from 'claim/form/models/interest'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
-import { Payment } from 'app/pay/Payment'
+import { Payment } from 'payment-hub-client/payment'
 
 export class ClaimModelConverter {
 

@@ -5,7 +5,7 @@ import { IndividualDetails } from 'forms/models/individualDetails'
 import { PartyType } from 'app/common/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { MobilePhone } from 'app/forms/models/mobilePhone'
-import { Payment } from 'app/pay/payment'
+import { Payment } from 'payment-hub-client/payment'
 import { CompletableTask } from 'app/models/task'
 
 export class Claimant implements CompletableTask {

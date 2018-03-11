@@ -1,12 +1,12 @@
 import * as config from 'config'
-import { PaymentRetrieveResponse } from 'app/pay/paymentRetrieveResponse'
-import { Payment } from 'app/pay/payment'
+import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveResponse'
+import { Payment } from 'payment-hub-client/payment'
 import { request } from 'client/request'
 import { User } from 'app/idam/user'
 import { ServiceAuthToken } from 'app/idam/serviceAuthToken'
 import * as HttpStatus from 'http-status-codes'
 import * as uuid from 'uuid/v4'
-import { Fee } from 'app/pay/fee'
+import { Fee } from 'payment-hub-client/fee'
 import { plainToClass } from 'class-transformer'
 
 const baseURL = `${config.get('pay.url')}/card-payments`

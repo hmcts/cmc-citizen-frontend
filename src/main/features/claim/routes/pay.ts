@@ -3,8 +3,8 @@ import * as config from 'config'
 
 import { Paths } from 'claim/paths'
 
-import { PayClient } from 'app/pay/payClient'
-import { Payment } from 'app/pay/payment'
+import { PayClient } from 'payment-hub-client/payClient'
+import { Payment } from 'payment-hub-client/payment'
 
 import { FeesClient } from 'app/fees/feesClient'
 
@@ -18,8 +18,8 @@ import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Logger } from '@hmcts/nodejs-logging'
 import { FeeOutcome } from 'fees/models/feeOutcome'
-import { Fee } from 'app/pay/fee'
-import { PaymentRetrieveResponse } from 'app/pay/paymentRetrieveResponse'
+import { Fee } from 'payment-hub-client/fee'
+import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveResponse'
 
 const logger = Logger.getLogger('router/pay')
 const event: string = config.get<string>('fees.issueFee.event')

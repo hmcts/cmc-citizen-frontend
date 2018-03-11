@@ -1,4 +1,4 @@
-import { Payment } from 'app/pay/payment'
+import { Payment } from 'payment-hub-client/payment'
 
 export function paymentOf (amountInPounds: number): Payment {
   const payment = new Payment()
