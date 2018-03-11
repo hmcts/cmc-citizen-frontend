@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { Payment } from 'app/pay/payment'
-import { Fee } from 'app/pay/fees'
+import { Fee } from 'app/pay/fee'
 import { Expose, Type } from 'class-transformer'
 
 export class PaymentRetrieveResponse extends Payment {

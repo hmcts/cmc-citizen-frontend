@@ -6,7 +6,7 @@ import { User } from 'app/idam/user'
 import { ServiceAuthToken } from 'app/idam/serviceAuthToken'
 import * as HttpStatus from 'http-status-codes'
 import * as uuid from 'uuid/v4'
-import { Fee } from 'app/pay/fees'
+import { Fee } from 'app/pay/fee'
 import { plainToClass } from 'class-transformer'
 
 const baseURL = `${config.get('pay.url')}/card-payments`

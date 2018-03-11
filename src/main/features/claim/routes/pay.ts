@@ -18,7 +18,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Logger } from '@hmcts/nodejs-logging'
 import { FeeOutcome } from 'fees/models/feeOutcome'
-import { Fee } from 'app/pay/fees'
+import { Fee } from 'app/pay/fee'
 import { PaymentRetrieveResponse } from 'app/pay/paymentRetrieveResponse'
 
 const logger = Logger.getLogger('router/pay')
