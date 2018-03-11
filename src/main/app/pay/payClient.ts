@@ -2,6 +2,7 @@ import { ServiceAuthToken } from 'app/idam/serviceAuthToken'
 import { User } from 'app/idam/user'
 import { plainToClass } from 'class-transformer'
 import { request } from 'client/request'
+import { checkDefined, checkNotEmpty } from 'common/preconditions'
 import * as config from 'config'
 import * as HttpStatus from 'http-status-codes'
 import { Fee } from 'payment-hub-client/fee'
@@ -30,15 +31,9 @@ export class PayClient {
    * @returns response with payment status and link to card payment page
    */
   async create (user: User, fees: Fee[], returnURL: string): Promise<Payment> {
-    if (!user) {
-      throw new Error('User is required')
-    }
-    if (!fees) {
-      throw new Error('Fees array is required')
-    }
-    if (!returnURL) {
-      throw new Error('Post payment redirect URL is required')
-    }
+    checkDefined(user, 'User is required')
+    checkNotEmpty(fees, 'Fees array is required')
+    checkNotEmpty(returnURL, 'Post payment redirect URL is required')
 
     const payment: object = await request.post({
       uri: baseURL,
@@ -60,12 +55,9 @@ export class PayClient {
    * @returns response all payment details including most recent payment status or undefined when reference does not exist
    */
   async retrieve (user: User, paymentRef: string): Promise<PaymentRetrieveResponse | undefined> {
-    if (!user) {
-      throw new Error('User is required')
-    }
-    if (!paymentRef) {
-      throw new Error('Payment reference is required')
-    }
+    checkDefined(user, 'User is required')
+    checkNotEmpty(paymentRef, 'Payment reference is required')
+
     try {
       const paymentResponse: object = await request.get({
         uri: `${baseURL}/${paymentRef}`,
