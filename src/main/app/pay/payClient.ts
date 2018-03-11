@@ -1,13 +1,13 @@
-import * as config from 'config'
-import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveResponse'
-import { Payment } from 'payment-hub-client/payment'
-import { request } from 'client/request'
-import { User } from 'app/idam/user'
 import { ServiceAuthToken } from 'app/idam/serviceAuthToken'
-import * as HttpStatus from 'http-status-codes'
-import * as uuid from 'uuid/v4'
-import { Fee } from 'payment-hub-client/fee'
+import { User } from 'app/idam/user'
 import { plainToClass } from 'class-transformer'
+import { request } from 'client/request'
+import * as config from 'config'
+import * as HttpStatus from 'http-status-codes'
+import { Fee } from 'payment-hub-client/fee'
+import { Payment } from 'payment-hub-client/payment'
+import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveResponse'
+import * as uuid from 'uuid/v4'
 
 const baseURL = `${config.get('pay.url')}/card-payments`
 
@@ -26,19 +26,15 @@ export class PayClient {
    *
    * @param user - user who make a call
    * @param fees - fees array used to calculate total fee amount
-   * @param amount - total fee amount
    * @param returnURL - the url the user should be redirected to
    * @returns response with payment status and link to card payment page
    */
-  async create (user: User, fees: Fee[], amount: number, returnURL: string): Promise<Payment> {
+  async create (user: User, fees: Fee[], returnURL: string): Promise<Payment> {
     if (!user) {
       throw new Error('User is required')
     }
     if (!fees) {
       throw new Error('Fees array is required')
-    }
-    if (!amount) {
-      throw new Error('Total fee amount is required')
     }
     if (!returnURL) {
       throw new Error('Post payment redirect URL is required')
@@ -46,7 +42,7 @@ export class PayClient {
 
     const payment: object = await request.post({
       uri: baseURL,
-      body: this.preparePaymentRequest(amount, fees),
+      body: this.preparePaymentRequest(fees),
       headers: {
         Authorization: `Bearer ${user.bearerToken}`,
         ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`,
@@ -87,17 +83,18 @@ export class PayClient {
     }
   }
 
-  private preparePaymentRequest (amount: number, fees: Fee[]): object {
-    const caseReference: string = uuid()
+  private preparePaymentRequest (fees: Fee[]): object {
     return {
-      amount: amount,
-      case_reference: caseReference,
+      case_reference: uuid(),
+      ccd_case_number: 'UNKNOWN',
       description: description,
       service: serviceName,
       currency: currency,
       site_id: siteId,
       fee: fees,
-      ccd_case_number: 'UNKNOWN'
+      amount: fees.reduce((amount: number, fee: Fee) => {
+        return amount + fee.calculated_amount
+      }, 0)
     }
   }
 }
