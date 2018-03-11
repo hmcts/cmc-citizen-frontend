@@ -41,7 +41,7 @@ export class ClaimModelConverter {
     claimData.amount = new ClaimAmountBreakdown().deserialize(draftClaim.amount)
     claimData.claimants = [this.convertClaimantDetails(draftClaim)]
     claimData.defendants = [this.convertDefendantDetails(draftClaim)]
-    claimData.payment = this.convertPaymentDetails(draftClaim.claimant.payment)
+    claimData.payment = this.makeShallowCopy(draftClaim.claimant.payment)
     claimData.reason = draftClaim.reason.reason
     claimData.timeline = { rows : draftClaim.timeline.getPopulatedRowsOnly() } as ClaimantTimeline
     claimData.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(draftClaim.claimant.payment.amount)
@@ -178,7 +178,16 @@ export class ClaimModelConverter {
     return interestDate
   }
 
-  private static convertPaymentDetails (payment: Payment): Payment {
+  /**
+   * Makes shallow copy to payment object to format that is supported by the backend API.
+   *
+   * Note: It is workaround to remove all unnecessary properties from {@link PaymentRetrieveResponse}. In
+   * long term the intention is to send only payment reference and creation date to backend API.
+   *
+   * @param {Payment} payment - payment object retrieved from Payment HUB using {@link PayClient#retrieve}
+   * @returns {Payment} - simplified payment object required by the backend API
+   */
+  private static makeShallowCopy (payment: Payment): Payment {
     return {
       reference: payment.reference,
       amount: payment.amount,
