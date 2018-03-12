@@ -87,7 +87,8 @@
     "offer": false,
     "statementOfMeans": false,
     "finePrint": false,
-    "ccd": false
+    "ccd": false,
+    "returnErrorToUser": false
   },
   "oauth": {
     "clientId": "cmc_citizen",
