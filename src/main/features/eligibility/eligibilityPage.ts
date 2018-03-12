@@ -2,30 +2,9 @@ import { Form } from 'app/forms/form'
 import { Eligibility } from 'claim/form/models/eligibility/eligibility'
 import { ErrorHandling } from 'common/errorHandling'
 import { RoutablePath } from 'common/router/routablePath'
-import * as Cookies from 'cookies'
+import { CookieEligibilityStore, EligibilityStore } from 'eligibility/store'
 import * as express from 'express'
 import { FormValidator } from 'forms/validation/formValidator'
-
-const cookieTimeToLiveInMinutes = 10
-
-interface EligibilityStore {
-  read (req: express.Request, res: express.Response): Eligibility
-
-  write (eligibility: Eligibility, req: express.Request, res: express.Response): void
-}
-
-class CookieEligibilityStore implements EligibilityStore {
-  read (req: express.Request, res: express.Response): Eligibility {
-    const cookie: string = new Cookies(req, res).get(cookieName)
-    return new Eligibility().deserialize(cookie !== undefined ? JSON.parse(cookie) : undefined)
-  }
-
-  write (eligibility: Eligibility, req: express.Request, res: express.Response): void {
-    new Cookies(req, res).set(cookieName, JSON.stringify(eligibility), { sameSite: 'lax', maxAge: cookieTimeToLiveInMinutes  * 60 * 1000 })
-  }
-}
-
-const cookieName = 'eligibility-check'
 
 const eligibilityStore: EligibilityStore = new CookieEligibilityStore()
 
