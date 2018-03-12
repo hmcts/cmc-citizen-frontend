@@ -1,7 +1,7 @@
 import { RoutablePath } from 'common/router/routablePath'
 
 export class Paths {
-  static readonly eligibilityStartPage = new RoutablePath('/eligibility/index')
+  static readonly startPage = new RoutablePath('/eligibility/index')
   static readonly claimValuePage = new RoutablePath('/eligibility/claim-value')
   static readonly helpWithFeesPage = new RoutablePath('/eligibility/help-with-fees')
   static readonly eligibilitySingleDefendantPage = new RoutablePath('/eligibility/single-defendant')
