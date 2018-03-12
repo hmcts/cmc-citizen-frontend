@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 
 COPY package.json yarn.lock tsconfig.json types default.conf.js saucelabs.conf.js /usr/src/app/
 
-RUN yarn config set proxy $http_proxy && yarn config set https-proxy $https_proxy
+RUN yarn config set proxy "$http_proxy" && yarn config set https-proxy "$https_proxy"
 
 RUN yarn install && yarn cache clean
 
