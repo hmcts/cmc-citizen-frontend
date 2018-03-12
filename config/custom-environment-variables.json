@@ -79,7 +79,8 @@
     "offer": "FEATURE_OFFER",
     "statementOfMeans": "FEATURE_STATEMENT_OF_MEANS",
     "finePrint": "FEATURE_FINE_PRINT",
-    "ccd": "FEATURE_CCD"
+    "ccd": "FEATURE_CCD",
+    "returnErrorToUser": "FEATURE_RETURN_ERROR_TO_USER"
   },
   "oauth": {
     "clientId": "OAUTH_CLIENT_ID",

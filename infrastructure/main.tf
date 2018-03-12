@@ -93,6 +93,8 @@ module "citizen-frontend" {
     FEATURE_PARTIAL_ADMISSION = "${var.feature_partial_admission}"
     FEATURE_FINE_PRINT = "${var.feature_fine_print}"
     FEATURE_CCD = "${var.feature_ccd}"
+    FEATURE_RETURN_ERROR_TO_USER = "${var.feature_return_error_to_user}"
+
     CONTACT_EMAIL = "${data.vault_generic_secret.staff_email.data["value"]}"
 
   }
