@@ -9,7 +9,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 const eligibilityStore: EligibilityStore = new CookieEligibilityStore()
 
 export abstract class EligibilityPage<T> {
-  constructor (private path: RoutablePath, private property: string, private validationGroup: string) {}
+  constructor (private path: RoutablePath, private property: string) {}
 
   buildRouter (): express.Router {
     return express.Router()
@@ -17,7 +17,7 @@ export abstract class EligibilityPage<T> {
         this.renderView(new Form(eligibilityStore.read(req, res)), res)
       })
       .post(this.path.uri,
-        FormValidator.requestHandler(undefined, Eligibility.fromObject, this.validationGroup),
+        FormValidator.requestHandler(undefined, Eligibility.fromObject, this.property),
         ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
           const form: Form<Eligibility> = req.body
 

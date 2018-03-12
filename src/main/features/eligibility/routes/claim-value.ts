@@ -4,12 +4,11 @@ import { Paths } from 'eligibility/paths'
 
 import { EligibilityPage } from 'eligibility/eligibilityPage'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
-import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 
 class ClaimValueEligibilityPage extends EligibilityPage<ClaimValue> {
   constructor () {
-    super(Paths.eligibilityClaimValuePage, 'claimValue', ValidationGroups.CLAIM_VALUE)
+    super(Paths.eligibilityClaimValuePage, 'claimValue')
   }
 
   checkValue (value: ClaimValue, res: express.Response): void {
@@ -24,7 +23,7 @@ class ClaimValueEligibilityPage extends EligibilityPage<ClaimValue> {
         res.redirect(Paths.eligibilityHelpWithFeesPage.uri)
         break
       default:
-        throw new Error(`Unexpected claimValue: ${value.option}`)
+        throw new Error(`Unexpected claim value: ${value.option}`)
     }
   }
 }
