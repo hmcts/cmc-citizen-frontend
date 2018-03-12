@@ -6,11 +6,11 @@ import { Paths } from 'app/paths'
 export default express.Router()
   .get(Paths.enterClaimNumberPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
-      res.render('not-implemented-yet')
+      res.render('enter-claim-number')
     })
   )
   .post(Paths.enterClaimNumberPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
-      res.render('not-implemented-yet')
+      res.render('enter-claim-number')
     })
   )
