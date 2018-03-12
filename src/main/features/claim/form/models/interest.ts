@@ -23,9 +23,13 @@ export class Interest {
     this.interest = interest
   }
 
+  static fromObject (input?: any): Interest {
+    return new Interest(input.interest)
+  }
+
   deserialize (input?: any): Interest {
     if (input) {
-      this.interest = input
+      this.interest = input.interest
     }
 
     return this

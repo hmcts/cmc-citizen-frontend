@@ -20,13 +20,15 @@ function renderView (form: Form<Interest>, res: express.Response): void {
 export default express.Router()
   .get(Paths.interestPage.uri, (req: express.Request, res: express.Response): void => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
+    console.log(draft.document.interest)
     renderView(new Form(draft.document.interest), res)
   })
   .post(
     Paths.interestPage.uri,
-    FormValidator.requestHandler(Interest),
+    FormValidator.requestHandler(Interest, Interest.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Interest> = req.body
+      console.log(form)
 
       if (form.hasErrors()) {
         renderView(form, res)
