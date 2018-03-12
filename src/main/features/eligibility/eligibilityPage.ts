@@ -6,6 +6,8 @@ import * as Cookies from 'cookies'
 import * as express from 'express'
 import { FormValidator } from 'forms/validation/formValidator'
 
+const cookieTimeToLiveInMinutes = 10
+
 interface EligibilityStore {
   read (req: express.Request, res: express.Response): Eligibility
 
@@ -14,12 +16,12 @@ interface EligibilityStore {
 
 class CookieEligibilityStore implements EligibilityStore {
   read (req: express.Request, res: express.Response): Eligibility {
-    const cookie = new Cookies(req, res).get(cookieName)
+    const cookie: string = new Cookies(req, res).get(cookieName)
     return new Eligibility().deserialize(cookie !== undefined ? JSON.parse(cookie) : undefined)
   }
 
   write (eligibility: Eligibility, req: express.Request, res: express.Response): void {
-    new Cookies(req, res).set(cookieName, JSON.stringify(eligibility), { sameSite: 'lax' })
+    new Cookies(req, res).set(cookieName, JSON.stringify(eligibility), { sameSite: 'lax', maxAge: cookieTimeToLiveInMinutes  * 60 * 1000 })
   }
 }
 
