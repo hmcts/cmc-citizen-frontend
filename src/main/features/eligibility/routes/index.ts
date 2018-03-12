@@ -8,6 +8,6 @@ export default express.Router()
   .get(Paths.eligibilityStartPage.uri, (req: express.Request, res: express.Response): void => {
     res.render(Paths.eligibilityStartPage.associatedView, {
       registeredUser: JwtExtractor.extract(req) !== undefined,
-      nextPage: Paths.eligibilityClaimValuePage.uri
+      nextPage: Paths.claimValuePage.uri
     })
   })

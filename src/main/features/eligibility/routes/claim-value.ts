@@ -8,7 +8,7 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 
 class ClaimValueEligibilityPage extends EligibilityPage<ClaimValue> {
   constructor () {
-    super(Paths.eligibilityClaimValuePage, 'claimValue')
+    super(Paths.claimValuePage, 'claimValue')
   }
 
   checkValue (value: ClaimValue, res: express.Response): void {
@@ -20,7 +20,7 @@ class ClaimValueEligibilityPage extends EligibilityPage<ClaimValue> {
         res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_VALUE_OVER_10000}`)
         break
       case ClaimValue.UNDER_10000:
-        res.redirect(Paths.eligibilityHelpWithFeesPage.uri)
+        res.redirect(Paths.helpWithFeesPage.uri)
         break
       default:
         throw new Error(`Unexpected claim value: ${value.option}`)

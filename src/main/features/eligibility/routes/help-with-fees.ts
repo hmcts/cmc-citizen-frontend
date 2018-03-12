@@ -8,7 +8,7 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 
 class HelpWithFeesEligibilityPage extends EligibilityPage<YesNoOption> {
   constructor () {
-    super(Paths.eligibilityHelpWithFeesPage, 'helpWithFees')
+    super(Paths.helpWithFeesPage, 'helpWithFees')
   }
 
   checkValue (value: YesNoOption, res: express.Response): void {
