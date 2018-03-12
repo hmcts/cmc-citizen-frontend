@@ -92,5 +92,6 @@ variable "client_id" {
 }
 
 variable "node_env" {
+  // https://www.dynatrace.com/news/blog/the-drastic-effects-of-omitting-node_env-in-your-express-js-applications/
   default = "production"
 }
