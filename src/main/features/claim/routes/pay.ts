@@ -102,6 +102,7 @@ export default express.Router()
       const payClient: PayClient = await getPayClient()
       const payment: Payment = await payClient.create(
         res.locals.user,
+        draft.document.externalId,
         [new Fee(feeOutcome.amount, feeOutcome.code, feeOutcome.version)],
         getReturnURL(req, draft.document.externalId)
       )

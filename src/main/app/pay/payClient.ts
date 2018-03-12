@@ -8,7 +8,6 @@ import * as HttpStatus from 'http-status-codes'
 import { Fee } from 'payment-hub-client/fee'
 import { Payment } from 'payment-hub-client/payment'
 import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveResponse'
-import * as uuid from 'uuid/v4'
 
 const baseURL = `${config.get('pay.url')}/card-payments`
 
@@ -26,18 +25,20 @@ export class PayClient {
    * Creates a payment within Reform Payment Hub
    *
    * @param user - user who make a call
+   * @param caseReference - reference number of the case associated with the payment
    * @param fees - fees array used to calculate total fee amount
    * @param returnURL - the url the user should be redirected to
    * @returns response with payment status and link to card payment page
    */
-  async create (user: User, fees: Fee[], returnURL: string): Promise<Payment> {
+  async create (user: User, caseReference: string, fees: Fee[], returnURL: string): Promise<Payment> {
     checkDefined(user, 'User is required')
+    checkNotEmpty(caseReference, 'Case reference is required')
     checkNotEmpty(fees, 'Fees array is required')
     checkNotEmpty(returnURL, 'Post payment redirect URL is required')
 
     const payment: object = await request.post({
       uri: baseURL,
-      body: this.preparePaymentRequest(fees),
+      body: this.preparePaymentRequest(caseReference, fees),
       headers: {
         Authorization: `Bearer ${user.bearerToken}`,
         ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`,
@@ -51,16 +52,16 @@ export class PayClient {
    * Retrieves a payment from Reform Payment Hub
    *
    * @param user - user who makes a call
-   * @param paymentRef - payment reference number within Reform Payment Hub, generated when payment was created
+   * @param paymentReference - payment reference number within Reform Payment Hub, generated when payment was created
    * @returns response all payment details including most recent payment status or undefined when reference does not exist
    */
-  async retrieve (user: User, paymentRef: string): Promise<PaymentRetrieveResponse | undefined> {
+  async retrieve (user: User, paymentReference: string): Promise<PaymentRetrieveResponse | undefined> {
     checkDefined(user, 'User is required')
-    checkNotEmpty(paymentRef, 'Payment reference is required')
+    checkNotEmpty(paymentReference, 'Payment reference is required')
 
     try {
       const paymentResponse: object = await request.get({
-        uri: `${baseURL}/${paymentRef}`,
+        uri: `${baseURL}/${paymentReference}`,
         headers: {
           Authorization: `Bearer ${user.bearerToken}`,
           ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`
@@ -75,9 +76,9 @@ export class PayClient {
     }
   }
 
-  private preparePaymentRequest (fees: Fee[]): object {
+  private preparePaymentRequest (caseReference: string, fees: Fee[]): object {
     return {
-      case_reference: uuid(),
+      case_reference: caseReference,
       ccd_case_number: 'UNKNOWN',
       description: description,
       service: serviceName,
