@@ -37,7 +37,7 @@
           <h3 class="heading-small">{{ t('Settle out of court') }}</h3>
           <p>{{
               t('You can still <a href="{{ makeOfferUri }}">make an offer</a> to settle the claim out of court. You will avoid a hearing and a County Court Judgment against you.', {
-              makeOfferUri : OfferPaths.offerPage.evaluateUri({ externalId: externalId }) }) | safe
+              makeOfferUri : OfferPaths.offerPage.evaluateUri({ externalId: claim.externalId }) }) | safe
             }}
           </p>
 
