@@ -7,7 +7,7 @@ const saucelabsAccessKey = requiredValue(process.env.SAUCELABS_ACCESS_KEY, 'SAUC
 
 function requiredValue (envVariableValue, variableName) {
   if (envVariableValue && envVariableValue.trim().length > 0) {
-    return envVariableValue
+    return envVariableValue.trim()
   } else {
     throw new Error(`${variableName} is a required environment variable, but wasn't set`)
   }
