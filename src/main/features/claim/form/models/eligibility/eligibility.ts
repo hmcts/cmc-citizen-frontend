@@ -67,6 +67,9 @@ export class Eligibility {
   }
 
   static fromObject (input: any): Eligibility {
+    if (input == null) {
+      return input
+    }
     return new Eligibility(
       ClaimValue.fromObject(input.claimValue),
       YesNoOption.fromObject(input.helpWithFees),
