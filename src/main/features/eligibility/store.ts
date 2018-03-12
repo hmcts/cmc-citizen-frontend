@@ -13,13 +13,12 @@ export interface EligibilityStore {
 
 export class CookieEligibilityStore implements EligibilityStore {
 
-
   read (req: express.Request, res: express.Response): Eligibility {
     const cookie: string = new Cookies(req, res).get(cookieName)
     return new Eligibility().deserialize(cookie !== undefined ? JSON.parse(cookie) : undefined)
   }
 
   write (eligibility: Eligibility, req: express.Request, res: express.Response): void {
-    new Cookies(req, res).set(cookieName, JSON.stringify(eligibility), { sameSite: 'lax', maxAge: cookieTimeToLiveInMinutes  * 60 * 1000 })
+    new Cookies(req, res).set(cookieName, JSON.stringify(eligibility), { sameSite: 'lax', maxAge: cookieTimeToLiveInMinutes * 60 * 1000 })
   }
 }
