@@ -14,7 +14,7 @@ import * as payServiceMock from '../../../http-mocks/pay'
 
 import { attachDefaultHooks } from '../../../routes/hooks'
 import { checkAuthorizationGuards } from './checks/authorization-check'
-import { Interest, InterestType } from 'claim/form/models/interest'
+import { Interest, InterestRateOption } from 'claim/form/models/interestRate'
 import { Defendant } from 'app/drafts/models/defendant'
 import { Claimant } from 'app/drafts/models/claimant'
 import { DraftClaim } from 'app/drafts/models/draftClaim'
@@ -96,7 +96,7 @@ describe('Claim issue: initiate payment receiver', () => {
           rows: [{ reason: 'Valid reason', amount: 1 } as ClaimAmountRow]
         } as ClaimAmountBreakdown,
         interest: {
-          type: InterestType.NO_INTEREST
+          type: InterestRateOption.NO_INTEREST
         } as Interest,
         interestDate: {} as InterestDate,
         reason: {
@@ -250,7 +250,7 @@ describe('Claim issue: post payment callback receiver', () => {
           rows: [{ reason: 'Valid reason', amount: 1 } as ClaimAmountRow]
         } as ClaimAmountBreakdown,
         interest: {
-          type: InterestType.NO_INTEREST
+          type: InterestRateOption.NO_INTEREST
         } as Interest,
         interestDate: {} as InterestDate,
         reason: {

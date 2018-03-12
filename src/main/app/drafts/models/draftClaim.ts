@@ -1,6 +1,6 @@
 import { Claimant } from 'drafts/models/claimant'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
-import { Interest } from 'claim/form/models/interest'
+import { InterestRate } from 'claim/form/models/interestRate'
 import { InterestDate } from 'claim/form/models/interestDate'
 import { Reason } from 'claim/form/models/reason'
 import * as uuid from 'uuid'
@@ -9,6 +9,8 @@ import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
 import { Eligibility } from 'claim/form/models/eligibility/eligibility'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
+import { Interest } from 'claim/form/models/interest'
+import { InterestType } from 'claim/form/models/interestType'
 
 export class DraftClaim extends DraftDocument {
 
@@ -17,6 +19,8 @@ export class DraftClaim extends DraftDocument {
   defendant: Defendant = new Defendant()
   amount: ClaimAmountBreakdown = new ClaimAmountBreakdown()
   interest: Interest = new Interest()
+  interestType: InterestType = new InterestType()
+  interestRate: InterestRate = new InterestRate()
   interestDate: InterestDate = new InterestDate()
   reason: Reason = new Reason()
   readResolveDispute: boolean = false
@@ -31,6 +35,8 @@ export class DraftClaim extends DraftDocument {
       this.claimant = new Claimant().deserialize(input.claimant)
       this.defendant = new Defendant().deserialize(input.defendant)
       this.interest = new Interest().deserialize(input.interest)
+      this.interestType = new InterestType().deserialize(input.interestType)
+      this.interestRate = new InterestRate().deserialize(input.interestRate)
       this.interestDate = new InterestDate().deserialize(input.interestDate)
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
       this.reason = new Reason().deserialize(input.reason)

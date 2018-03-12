@@ -1,6 +1,6 @@
 import { InterestDateType } from 'app/common/interestDateType'
 import { expect } from 'chai'
-import { InterestType } from 'claim/form/models/interest'
+import { InterestRateOption } from 'claim/form/models/interestRate'
 import { Claim } from 'claims/models/claim'
 import { getInterestDetails } from 'common/interestUtils'
 import { MomentFactory } from 'common/momentFactory'
@@ -9,7 +9,7 @@ import * as claimStoreServiceMock from '../http-mocks/claim-store'
 const sampleClaimObj = {
   claim: {
     interest: {
-      type: InterestType.STANDARD
+      type: InterestRateOption.STANDARD
     },
     interestDate: {
       type: InterestDateType.SUBMISSION
@@ -28,7 +28,7 @@ describe('getInterestDetails', () => {
       ...{
         claim: {
           interest: {
-            type: InterestType.NO_INTEREST
+            type: InterestRateOption.NO_INTEREST
           },
           interestDate: undefined
         }

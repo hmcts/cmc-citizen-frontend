@@ -5,7 +5,7 @@ import * as HttpStatus from 'http-status-codes'
 import { ResponseType } from 'response/form/models/responseType'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
-import { InterestType } from 'app/../../main/features/claim/form/models/interest'
+import { InterestRateOption } from 'features/claim/form/models/interestRate'
 import { Defendant } from 'app/drafts/models/defendant'
 import { Claimant } from 'app/drafts/models/claimant'
 import { DraftClaim } from 'app/drafts/models/draftClaim'
@@ -17,7 +17,7 @@ import { DateOfBirth } from 'app/forms/models/dateOfBirth'
 import { LocalDate } from 'forms/models/localDate'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { ClaimAmountRow } from 'claim/form/models/claimAmountRow'
-import { Interest } from 'claim/form/models/interest'
+import { InterestRate } from 'claim/form/models/interestRate'
 import { InterestDate } from 'claim/form/models/interestDate'
 import { Reason } from 'claim/form/models/reason'
 import { ResponseDraft } from 'response/draft/responseDraft'
@@ -103,9 +103,9 @@ export const sampleClaimDraftObj = {
       } as ClaimAmountRow
     ]
   } as ClaimAmountBreakdown,
-  interest: {
-    type: InterestType.NO_INTEREST
-  } as Interest,
+  interestRate: {
+    type: InterestRateOption.NO_INTEREST
+  } as InterestRate,
   interestDate: {} as InterestDate,
   reason: {
     reason: 'Valid reason'

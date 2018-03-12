@@ -12,7 +12,7 @@ export class ClaimAmount {
 
   private static amountAndInterestCompleted (claim: DraftClaim) {
     return claim.amount.totalAmount() > 0 &&
-      claim.interest.isCompleted()
+      claim.interestRate.isCompleted()
   }
 
 }

@@ -10,23 +10,24 @@ import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
-import { Interest, InterestOption } from 'claim/form/models/interest'
+import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
 
-function renderView (form: Form<Interest>, res: express.Response): void {
-  res.render(Paths.interestPage.associatedView, { form: form })
+function renderView (form: Form<InterestType>, res: express.Response): void {
+  res.render(Paths.interestTypePage.associatedView, { form: form })
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.interestPage.uri, (req: express.Request, res: express.Response): void => {
+  .get(Paths.interestTypePage.uri, (req: express.Request, res: express.Response): void => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
-    renderView(new Form(draft.document.interest), res)
+
+    renderView(new Form(draft.document.interestType), res)
   })
   .post(
-    Paths.interestPage.uri,
-    FormValidator.requestHandler(Interest),
+    Paths.interestTypePage.uri,
+    FormValidator.requestHandler(InterestType),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<Interest> = req.body
+      const form: Form<InterestType> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)
@@ -37,10 +38,10 @@ export default express.Router()
         draft.document.interest = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        if (form.model.interest === InterestOption.NO) {
-          res.redirect(Paths.feesPage.uri)
+        if (form.model.interestType === InterestTypeOption.SAME_RATE) {
+          res.redirect(Paths.interestRatePage.uri)
         } else {
-          res.redirect(Paths.interestTypePage.uri)
+          res.redirect(Paths.interestRatePage.uri)
         }
       }
     }))

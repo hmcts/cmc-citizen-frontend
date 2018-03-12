@@ -2,7 +2,7 @@ import { expect } from 'chai'
 
 import { DraftClaim } from 'app/drafts/models/draftClaim'
 import { ClaimAmount } from 'app/drafts/tasks/claimAmount'
-import { InterestType } from 'claim/form/models/interest'
+import { InterestRateOption } from 'claim/form/models/interestRate'
 
 describe('Claim amount', () => {
 
@@ -17,7 +17,7 @@ describe('Claim amount', () => {
           }]
         },
         interest: {
-          type: InterestType.NO_INTEREST
+          type: InterestRateOption.NO_INTEREST
         }
       }
       const claim: DraftClaim = new DraftClaim().deserialize(input)
@@ -33,7 +33,7 @@ describe('Claim amount', () => {
           }]
         },
         interest: {
-          type: InterestType.STANDARD,
+          type: InterestRateOption.STANDARD,
           rate: '',
           reason: ''
         }
@@ -52,7 +52,7 @@ describe('Claim amount', () => {
           }]
         },
         interest: {
-          type: InterestType.NO_INTEREST,
+          type: InterestRateOption.NO_INTEREST,
           rate: '',
           reason: ''
         }

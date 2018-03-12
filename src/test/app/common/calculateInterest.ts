@@ -2,13 +2,13 @@ import { expect } from 'chai'
 import * as moment from 'moment'
 
 import { calculateInterest } from 'app/common/calculateInterest'
-import { Interest, InterestType } from 'claim/form/models/interest'
+import { InterestRate, InterestRateOption } from 'claim/form/models/interestRate'
 import { mockCalculateInterestRate } from '../../http-mocks/claim-store'
 
 describe('calculateInterest', () => {
 
-  function buildInterest (type: InterestType, rate: number): Interest {
-    return new Interest().deserialize({
+  function buildInterest (type: InterestRateOption, rate: number): InterestRate {
+    return new InterestRate().deserialize({
       type: type,
       rate: rate,
       reason: 'because'
@@ -21,9 +21,9 @@ describe('calculateInterest', () => {
       mockCalculateInterestRate(0)
     })
 
-    Object.keys(InterestType).forEach(async (type) => {
+    Object.keys(InterestRateOption).forEach(async (type) => {
       [0, 1, 1000].forEach(async (rate) => {
-        it(`when rate is ${rate}, interestType = ${type} gets 0`, async () => {
+        it(`when rate is ${rate}, InterestRateOption = ${type} gets 0`, async () => {
 
           const interest = buildInterest(type, rate)
           const interestFromDate = moment().subtract(5, 'years')

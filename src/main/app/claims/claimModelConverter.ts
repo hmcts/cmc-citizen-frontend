@@ -24,16 +24,16 @@ import { InterestDate as DraftInterestDate } from 'claim/form/models/interestDat
 import { InterestDateType } from 'app/common/interestDateType'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { StringUtils } from 'utils/stringUtils'
-import { InterestType } from 'claim/form/models/interest'
+import { InterestRateOption } from 'claim/form/models/interestRate'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 
 export class ClaimModelConverter {
 
   static convert (draftClaim: DraftClaim): ClaimData {
     const claimData: ClaimData = new ClaimData()
-    claimData.interest = draftClaim.interest
+    claimData.interestRate = draftClaim.interestRate
     claimData.externalId = draftClaim.externalId
-    if (claimData.interest.type !== InterestType.NO_INTEREST) {
+    if (claimData.interestRate.type !== InterestRateOption.NO_INTEREST) {
       claimData.interestDate = this.convertInterestDate(draftClaim.interestDate)
     }
     claimData.amount = new ClaimAmountBreakdown().deserialize(draftClaim.amount)

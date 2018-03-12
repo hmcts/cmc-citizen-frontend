@@ -1,7 +1,7 @@
 import * as config from 'config'
 import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
-import { InterestType } from 'features/claim/form/models/interest'
+import { InterestRateOption } from 'features/claim/form/models/interestRate'
 import { StatementType } from 'features/offer/form/models/statementType'
 import { MadeBy } from 'features/offer/form/models/madeBy'
 
@@ -60,7 +60,7 @@ export const sampleClaimObj = {
       }
     },
     interest: {
-      type: InterestType.STANDARD
+      type: InterestRateOption.STANDARD
     },
     reason: 'Because I can',
     feeAmountInPennies: 2500

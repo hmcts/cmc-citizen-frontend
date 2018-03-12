@@ -8,18 +8,18 @@ describe('Interest', () => {
   describe('isCompleted', () => {
 
     it('should return true when interest type is submission', () => {
-      const interest: InterestDate = new InterestDate(InterestDateType.SUBMISSION)
-      expect(interest.isCompleted()).to.equal(true)
+      const interestDate: InterestDate = new InterestDate(InterestDateType.SUBMISSION)
+      expect(interestDate.isCompleted()).to.equal(true)
     })
 
     it('should return true when interest type is custom', () => {
-      const interest: InterestDate = new InterestDate(InterestDateType.CUSTOM)
-      expect(interest.isCompleted()).to.equal(true)
+      const interestDate: InterestDate = new InterestDate(InterestDateType.CUSTOM)
+      expect(interestDate.isCompleted()).to.equal(true)
     })
 
     it('should return false when there is no date', () => {
-      const interest: InterestDate = new InterestDate()
-      expect(interest.isCompleted()).to.equal(false)
+      const interestDate: InterestDate = new InterestDate()
+      expect(interestDate.isCompleted()).to.equal(false)
     })
   })
 })

@@ -7,7 +7,7 @@ import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 
 import { ErrorPaths, Paths as ClaimPaths } from 'claim/paths'
-import { InterestType } from 'claim/form/models/interest'
+import { InterestRateOption } from 'claim/form/models/interestRate'
 import { LocalDate } from 'forms/models/localDate'
 import { InterestDateType } from 'app/common/interestDateType'
 
@@ -95,7 +95,7 @@ describe('Claim issue: fees page', () => {
               ]
             },
             interest: {
-              type: InterestType.STANDARD
+              type: InterestRateOption.STANDARD
             },
             interestDate: {
               type: InterestDateType.CUSTOM,
@@ -146,7 +146,7 @@ describe('Claim issue: fees page', () => {
             ]
           },
           interest: {
-            type: InterestType.STANDARD
+            type: InterestRateOption.STANDARD
           },
           interestDate: {
             type: InterestDateType.CUSTOM,

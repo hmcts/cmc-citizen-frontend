@@ -1,29 +1,29 @@
 import { expect } from 'chai'
 
-import { Interest, InterestType } from 'claim/form/models/interest'
+import { InterestRate, InterestRateOption } from 'claim/form/models/interestRate'
 
 describe('Interest', () => {
 
   describe('isCompleted', () => {
 
     it('should return true when interest type is no interest', () => {
-      const interest: Interest = new Interest(InterestType.NO_INTEREST)
-      expect(interest.isCompleted()).to.equal(true)
+      const interestRate: InterestRate = new InterestRate(InterestRateOption.NO_INTEREST)
+      expect(interestRate.isCompleted()).to.equal(true)
     })
 
     it('should return true when interest type is standard', () => {
-      const interest: Interest = new Interest(InterestType.STANDARD)
-      expect(interest.isCompleted()).to.equal(true)
+      const interestRate: InterestRate = new InterestRate(InterestRateOption.STANDARD)
+      expect(interestRate.isCompleted()).to.equal(true)
     })
 
     it('should return true when interest type is different', () => {
-      const interest: Interest = new Interest(InterestType.DIFFERENT)
-      expect(interest.isCompleted()).to.equal(true)
+      const interestRate: InterestRate = new InterestRate(InterestRateOption.DIFFERENT)
+      expect(interestRate.isCompleted()).to.equal(true)
     })
 
     it('should return false when there is no date', () => {
-      const interest: Interest = new Interest()
-      expect(interest.isCompleted()).to.equal(false)
+      const interestRate: InterestRate = new InterestRate()
+      expect(interestRate.isCompleted()).to.equal(false)
     })
   })
 })

@@ -1,5 +1,5 @@
 import { individualDetails } from './partyDetails'
-import { InterestType } from 'claim/form/models/interest'
+import { InterestRateOption } from 'claim/form/models/interestRate'
 import { InterestDateType } from 'app/common/interestDateType'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
@@ -45,7 +45,7 @@ export const claimDraft = {
     ]
   },
   interest: {
-    type: InterestType.DIFFERENT,
+    type: InterestRateOption.DIFFERENT,
     rate: 16,
     reason: 'High profile case'
   },

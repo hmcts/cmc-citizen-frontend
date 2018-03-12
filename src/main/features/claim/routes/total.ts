@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { Paths } from 'claim/paths'
-import { InterestType } from 'features/claim/form/models/interest'
+import { InterestRateOption } from 'features/claim/form/models/interestRate'
 import { TotalAmount } from 'forms/models/totalAmount'
 import { draftInterestAmount } from 'common/interestUtils'
 import { FeesClient } from 'fees/feesClient'
@@ -21,7 +21,7 @@ export default express.Router()
       res.render(Paths.totalPage.associatedView,
         {
           interestTotal: new TotalAmount(totalAmount, interest, feeAmount),
-          interestClaimed: (draft.interest.type !== InterestType.NO_INTEREST)
+          interestClaimed: (draft.interest.type !== InterestRateOption.NO_INTEREST)
         })
     }))
   .post(Paths.totalPage.uri, (req: express.Request, res: express.Response) => {

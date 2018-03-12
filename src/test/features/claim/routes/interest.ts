@@ -12,7 +12,7 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import { InterestType } from 'claim/form/models/interest'
+import { InterestRateOption } from 'claim/form/models/interestRate'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -20,21 +20,21 @@ describe('Claim issue: interest page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ClaimPaths.interestPage.uri)
+    checkAuthorizationGuards(app, 'get', ClaimPaths.interestRatePage.uri)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
-        .get(ClaimPaths.interestPage.uri)
+        .get(ClaimPaths.interestRatePage.uri)
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.successful.withText('Interest'))
     })
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', ClaimPaths.interestPage.uri)
+    checkAuthorizationGuards(app, 'post', ClaimPaths.interestRatePage.uri)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -45,7 +45,7 @@ describe('Claim issue: interest page', () => {
         draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
-          .post(ClaimPaths.interestPage.uri)
+          .post(ClaimPaths.interestRatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Interest', 'div class="error-summary"'))
       })
@@ -55,9 +55,9 @@ describe('Claim issue: interest page', () => {
         draftStoreServiceMock.rejectSave()
 
         await request(app)
-          .post(ClaimPaths.interestPage.uri)
+          .post(ClaimPaths.interestRatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ type: InterestType.STANDARD })
+          .send({ type: InterestRateOption.STANDARD })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -66,9 +66,9 @@ describe('Claim issue: interest page', () => {
         draftStoreServiceMock.resolveSave()
 
         await request(app)
-          .post(ClaimPaths.interestPage.uri)
+          .post(ClaimPaths.interestRatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ type: InterestType.STANDARD })
+          .send({ type: InterestRateOption.STANDARD })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestDatePage.uri))
       })
 
@@ -77,9 +77,9 @@ describe('Claim issue: interest page', () => {
         draftStoreServiceMock.resolveSave()
 
         await request(app)
-          .post(ClaimPaths.interestPage.uri)
+          .post(ClaimPaths.interestRatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ type: InterestType.DIFFERENT, rate: '9', reason: 'Special case' })
+          .send({ type: InterestRateOption.DIFFERENT, rate: '9', reason: 'Special case' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestDatePage.uri))
       })
 
@@ -88,9 +88,9 @@ describe('Claim issue: interest page', () => {
         draftStoreServiceMock.resolveSave()
 
         await request(app)
-          .post(ClaimPaths.interestPage.uri)
+          .post(ClaimPaths.interestRatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ type: InterestType.NO_INTEREST })
+          .send({ type: InterestRateOption.NO_INTEREST })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.feesPage.uri))
       })
     })

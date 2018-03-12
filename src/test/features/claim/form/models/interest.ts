@@ -5,7 +5,7 @@ import * as _ from 'lodash'
 import { Validator } from 'class-validator'
 
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
-import { Interest, InterestType, ValidationErrors } from 'claim/form/models/interest'
+import { Interest, InterestRateOption, ValidationErrors } from 'claim/form/models/interestRate'
 
 describe('Interest', () => {
 
@@ -25,36 +25,36 @@ describe('Interest', () => {
 
     it('should deserialize all fields', () => {
       expect(Interest.fromObject({
-        type: InterestType.DIFFERENT,
+        type: InterestRateOption.DIFFERENT,
         rate: 10,
         reason: 'Special case'
-      })).to.deep.equal(new Interest(InterestType.DIFFERENT, 10, 'Special case'))
+      })).to.deep.equal(new Interest(InterestRateOption.DIFFERENT, 10, 'Special case'))
     })
 
     it('should convert non numeric rate into numeric type', () => {
       const interest = Interest.fromObject({
-        type: InterestType.DIFFERENT,
+        type: InterestRateOption.DIFFERENT,
         rate: '10',
         reason: 'Special case'
       })
 
-      expect(interest).to.deep.equal(new Interest(InterestType.DIFFERENT, 10, 'Special case'))
+      expect(interest).to.deep.equal(new Interest(InterestRateOption.DIFFERENT, 10, 'Special case'))
     })
 
     it('should set standard rate and unset reason when standard type is set', () => {
       expect(Interest.fromObject({
-        type: InterestType.STANDARD,
+        type: InterestRateOption.STANDARD,
         rate: 100,
         reason: 'Special case'
-      })).to.deep.equal(new Interest(InterestType.STANDARD, Interest.STANDARD_RATE, undefined))
+      })).to.deep.equal(new Interest(InterestRateOption.STANDARD, Interest.STANDARD_RATE, undefined))
     })
 
     it('should unset both rate and reason when no interest is set', () => {
       expect(Interest.fromObject({
-        type: InterestType.NO_INTEREST,
+        type: InterestRateOption.NO_INTEREST,
         rate: 100,
         reason: 'Special case'
-      })).to.deep.equal(new Interest(InterestType.NO_INTEREST, undefined, undefined))
+      })).to.deep.equal(new Interest(InterestRateOption.NO_INTEREST, undefined, undefined))
     })
   })
 
@@ -115,7 +115,7 @@ describe('Interest', () => {
     it('should reject interest with comma', () => {
       const errors = validator.validateSync(Interest.fromObject(
         {
-          type: InterestType.DIFFERENT,
+          type: InterestRateOption.DIFFERENT,
           rate: '1,1',
           reason: 'Special case'
         }
@@ -126,7 +126,7 @@ describe('Interest', () => {
     })
 
     it('should accept interest with recognised type', () => {
-      InterestType.all().forEach(type => {
+      InterestRateOption.all().forEach(type => {
         const errors = validator.validateSync(new Interest(type, 10, 'Privileged'))
 
         expect(errors.length).to.equal(0)
@@ -134,7 +134,7 @@ describe('Interest', () => {
     })
 
     it('should reject custom interest without rate and reason', () => {
-      const errors = validator.validateSync(new Interest(InterestType.DIFFERENT, undefined, undefined))
+      const errors = validator.validateSync(new Interest(InterestRateOption.DIFFERENT, undefined, undefined))
 
       expect(errors.length).to.equal(2)
       expectValidationError(errors, ValidationErrors.RATE_REQUIRED)
@@ -142,40 +142,40 @@ describe('Interest', () => {
     })
 
     it('should reject custom interest with zero rate', () => {
-      const errors = validator.validateSync(new Interest(InterestType.DIFFERENT, 0, 'Privileged'))
+      const errors = validator.validateSync(new Interest(InterestRateOption.DIFFERENT, 0, 'Privileged'))
 
       expect(errors.length).to.equal(1)
       expectValidationError(errors, ValidationErrors.RATE_NOT_VALID)
     })
 
     it('should reject custom interest with negative rate', () => {
-      const errors = validator.validateSync(new Interest(InterestType.DIFFERENT, -1, 'Privileged'))
+      const errors = validator.validateSync(new Interest(InterestRateOption.DIFFERENT, -1, 'Privileged'))
 
       expect(errors.length).to.equal(1)
       expectValidationError(errors, ValidationErrors.RATE_NOT_VALID)
     })
 
     it('should reject custom interest with reason longer then upper limit', () => {
-      const errors = validator.validateSync(new Interest(InterestType.DIFFERENT, 10, _.repeat('*', 251)))
+      const errors = validator.validateSync(new Interest(InterestRateOption.DIFFERENT, 10, _.repeat('*', 251)))
 
       expect(errors.length).to.equal(1)
       expectValidationError(errors, ValidationErrors.REASON_TOO_LONG.replace('$constraint1', '250'))
     })
 
     it('should accept valid standard interest', () => {
-      const errors = validator.validateSync(new Interest(InterestType.STANDARD))
+      const errors = validator.validateSync(new Interest(InterestRateOption.STANDARD))
 
       expect(errors.length).to.equal(0)
     })
 
     it('should accept valid custom interest', () => {
-      const errors = validator.validateSync(new Interest(InterestType.DIFFERENT, 10, 'Privileged'))
+      const errors = validator.validateSync(new Interest(InterestRateOption.DIFFERENT, 10, 'Privileged'))
 
       expect(errors.length).to.equal(0)
     })
 
     it('should accept valid no interest', () => {
-      const errors = validator.validateSync(new Interest(InterestType.NO_INTEREST))
+      const errors = validator.validateSync(new Interest(InterestRateOption.NO_INTEREST))
 
       expect(errors.length).to.equal(0)
     })
