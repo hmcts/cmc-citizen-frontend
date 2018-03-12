@@ -1,28 +1,28 @@
 /* tslint:disable:no-unused-expression */
 import { expect } from 'chai'
-import { isCCBCCasePrefix } from 'common/utils/ccbcCasePrefix'
+import { isCCBCCaseReference } from 'common/utils/isCCBCCaseReference'
 
 describe('isCCBCCasePrefix', () => {
   it('should return true if it is a prefix', () => {
     const referenceNumber = 'AA131231'
-    expect(isCCBCCasePrefix(referenceNumber)).to.be.true
+    expect(isCCBCCaseReference(referenceNumber)).to.be.true
   })
 
-  it('should return false when prefix is contained but not at the start', () => {
+  it('should return true when prefix is contained but not at the start', () => {
     const referenceNumber = '111AA1'
-    expect(isCCBCCasePrefix(referenceNumber)).to.be.false
+    expect(isCCBCCaseReference(referenceNumber)).to.be.true
   })
 
   it('should return false when prefix doesn’t match', () => {
     const referenceNumber = '000MC001'
-    expect(isCCBCCasePrefix(referenceNumber)).to.be.false
+    expect(isCCBCCaseReference(referenceNumber)).to.be.false
   })
   it('should return false for empty reference', () => {
     const referenceNumber = ''
-    expect(isCCBCCasePrefix(referenceNumber)).to.be.false
+    expect(isCCBCCaseReference(referenceNumber)).to.be.false
   })
   it('should return false for undefined reference', () => {
     const referenceNumber = undefined
-    expect(isCCBCCasePrefix(referenceNumber)).to.be.false
+    expect(isCCBCCaseReference(referenceNumber)).to.be.false
   })
 })

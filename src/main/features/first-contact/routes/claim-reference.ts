@@ -11,7 +11,7 @@ import { ClaimReference } from 'app/forms/models/claimReference'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'
 import { OAuthHelper } from 'idam/oAuthHelper'
-import { isCCBCCasePrefix } from 'common/utils/ccbcCasePrefix'
+import { isCCBCCaseReference } from 'common/utils/isCCBCCaseReference'
 
 function renderView (form: Form<ClaimReference>, res: express.Response): void {
   res.render(Paths.claimReferencePage.associatedView, { form: form })
@@ -29,7 +29,7 @@ export default express.Router()
       const form: Form<ClaimReference> = req.body
 
       if (form.hasErrors()) {
-        if (isCCBCCasePrefix(form.model.reference)) {
+        if (isCCBCCaseReference(form.model.reference)) {
           return res.redirect(mcolUrl)
         }
 
