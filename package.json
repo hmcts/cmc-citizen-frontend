@@ -3,7 +3,7 @@
   "version": "1.1.1",
   "private": true,
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=8.9.4"
   },
   "scripts": {
     "setup": "gulp sass copy-files",
@@ -19,12 +19,16 @@
     "test:codacy-upload": "cat ./coverage-report/lcov.info | codacy-coverage",
     "test:codecov-upload": "codecov -f ./coverage-report/lcov.info",
     "test:smoke": "./bin/run-smoke-tests.sh",
+    "test:integration": "ts-node --require tsconfig-paths/register ./node_modules/.bin/codeceptjs run --verbose --config default.conf.js --reporter mocha-multi",
+    "test:integration-debug": "ts-node --require tsconfig-paths/register ./node_modules/.bin/codeceptjs run --verbose --config default.conf.js",
+    "test:cross-browser": "ts-node --require tsconfig-paths/register ./node_modules/.bin/codeceptjs run --verbose --config saucelabs.conf.js --reporter mocha-multi",
+    "list-supported-browsers": "node -e 'Object.keys(require(\"@hmcts/cmc-supported-browsers\").supportedBrowsers).forEach(key => console.log(key))'",
     "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/** -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info",
     "precommit": "yarn lint",
     "prepush": "yarn test && yarn test:routes"
   },
   "dependencies": {
-    "@hmcts/cmc-common-frontend": "^1.39.0",
+    "@hmcts/cmc-common-frontend": "^1.40.0",
     "@hmcts/cmc-draft-store-middleware": "^2.0.0",
     "@hmcts/draft-store-client": "^1.1.1",
     "@hmcts/info-provider": "^1.0.0",
@@ -88,6 +92,7 @@
     "uuid": "^3.0.1"
   },
   "devDependencies": {
+    "@hmcts/cmc-supported-browsers": "^1.0.1",
     "@types/chai": "^4.0.3",
     "@types/chai-as-promised": "^7.1.0",
     "@types/chai-spies": "^0.0.0",
@@ -99,6 +104,7 @@
     "chai": "^4.1.1",
     "chai-as-promised": "^7.1.1",
     "codacy-coverage": "^2.0.3",
+    "codeceptjs": "^1.1.6",
     "codecov": "^3.0.0",
     "debug": "^3.0.0",
     "gulp": "^3.9.0",
@@ -110,8 +116,10 @@
     "gulp-sass": "^3.1.0",
     "husky": "^0.14.3",
     "jsonwebtoken": "^8.0.1",
-    "mocha": "^5.0.0",
-    "mochawesome": "^3.0.0",
+    "mocha": "^5.0.3",
+    "mocha-junit-reporter": "^1.17.0",
+    "mocha-multi": "^1.0.1",
+    "mochawesome": "^3.0.2",
     "mock-require": "^2.0.1",
     "nock": "^9.0.22",
     "nsp": "^3.0.0",
@@ -125,7 +133,8 @@
     "sonarqube-scanner": "^2.0.1",
     "supertest": "^3.0.0",
     "tslint": "^5.5.0",
-    "tslint-config-standard": "^7.0.0"
+    "tslint-config-standard": "^7.0.0",
+    "webdriverio": "^4.11.0"
   },
   "nyc": {
     "extension": [

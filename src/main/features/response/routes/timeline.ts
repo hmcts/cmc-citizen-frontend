@@ -8,7 +8,7 @@ import { DraftService } from 'services/draftService'
 
 import { User } from 'idam/user'
 import { RoutablePath } from 'common/router/routablePath'
-import { Timeline } from 'response/form/models/timeline'
+import { Timeline } from 'forms/models/timeline'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'

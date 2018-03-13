@@ -41,5 +41,8 @@ export const claimData = {
     state: {
       status: 'success'
     }
+  },
+  timeline: {
+    rows: []
   }
 }
