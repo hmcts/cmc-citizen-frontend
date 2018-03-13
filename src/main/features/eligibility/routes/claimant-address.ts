@@ -1,23 +1,17 @@
-import * as express from 'express'
-
 import { Paths } from 'eligibility/paths'
 
-import { YesNoOption } from 'models/yesNoOption'
-import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
-import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
 import { EligibilityPage } from 'eligibility/eligibilityPage'
+import { YesNoOption } from 'models/yesNoOption'
+import { EligibilityCheck, eligible, notEligible } from 'eligibility/model/eligibilityCheck'
+import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 
 class ClaimantAddressEligibilityPage extends EligibilityPage<YesNoOption> {
   constructor () {
-    super(Paths.eligibilityClaimantAddressPage, 'claimantAddress', ValidationGroups.CLAIMANT_ADDRESS)
+    super(Paths.claimantAddressPage, Paths.defendantAddressPage, 'claimantAddress')
   }
 
-  checkValue (value: YesNoOption, res: express.Response): void {
-    if (value === YesNoOption.NO) {
-      res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIMANT_ADDRESS}`)
-    } else {
-      res.redirect(Paths.eligibilityDefendantAddressPage.uri)
-    }
+  checkEligibility (value: YesNoOption): EligibilityCheck {
+    return value === YesNoOption.NO ? eligible() : notEligible(NotEligibleReason.CLAIMANT_ADDRESS)
   }
 }
 

@@ -4,8 +4,8 @@ import { Paths } from 'eligibility/paths'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.eligibilityNotEligiblePage.uri, (req: express.Request, res: express.Response): void => {
-    res.render(Paths.eligibilityNotEligiblePage.associatedView, {
+  .get(Paths.notEligiblePage.uri, (req: express.Request, res: express.Response): void => {
+    res.render(Paths.notEligiblePage.associatedView, {
       reason: req.query.reason
     })
   })

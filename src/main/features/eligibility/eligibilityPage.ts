@@ -15,7 +15,8 @@ import { CookieEligibilityStore, EligibilityStore } from 'eligibility/store'
 const eligibilityStore: EligibilityStore = new CookieEligibilityStore()
 
 export abstract class EligibilityPage<T> {
-  constructor (private path: RoutablePath, private nextPagePath: RoutablePath, private property: string) {}
+  constructor (private path: RoutablePath, private nextPagePath: RoutablePath, private property: string) {
+  }
 
   buildRouter (): express.Router {
     return express.Router()
@@ -56,7 +57,7 @@ export abstract class EligibilityPage<T> {
     if (result.eligible) {
       res.redirect(this.nextPagePath.uri)
     } else {
-      res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${result.notEligibleReason}`)
+      res.redirect(`${Paths.notEligiblePage.uri}?reason=${result.notEligibleReason}`)
     }
   }
 

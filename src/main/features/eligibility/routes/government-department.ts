@@ -1,22 +1,17 @@
-import * as express from 'express'
-
 import { Paths } from 'eligibility/paths'
-import { YesNoOption } from 'models/yesNoOption'
-import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
-import { ValidationGroups } from 'claim/helpers/eligibility/validationGroups'
+
 import { EligibilityPage } from 'eligibility/eligibilityPage'
+import { YesNoOption } from 'models/yesNoOption'
+import { EligibilityCheck, eligible, notEligible } from 'eligibility/model/eligibilityCheck'
+import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 
 class GovernmentDepartmentEligiblityPage extends EligibilityPage<YesNoOption> {
   constructor () {
-    super(Paths.eligibilityGovernmentDepartmentPage, 'governmentDepartment', ValidationGroups.GOVERNMENT_DEPARTMENT)
+    super(Paths.governmentDepartmentPage, Paths.helpWithFeesPage, 'governmentDepartment')
   }
 
-  checkValue (value: YesNoOption, res: express.Response): void {
-    if (value === YesNoOption.YES) {
-      res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.GOVERNMENT_DEPARTMENT}`)
-    } else {
-      res.redirect(Paths.eligibilityClaimIsForTenancyDepositPage.uri)
-    }
+  checkEligibility (value: YesNoOption): EligibilityCheck {
+    return value === YesNoOption.NO ? eligible() : notEligible(NotEligibleReason.GOVERNMENT_DEPARTMENT)
   }
 }
 
