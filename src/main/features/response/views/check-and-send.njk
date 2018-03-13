@@ -137,7 +137,7 @@
       {% set allTimelineRows = draft.timeline.getPopulatedRowsOnly() %}
       {% set lastItemIndex = allTimelineRows.length - 1 %}
       {% for timelineRow in allTimelineRows %}
-      {{ row(timelineRow.date, timelineRow.description, '', loop.index0 === lastItemIndex) }}
+        {{ row(timelineRow.date, timelineRow.description, '', loop.index0 === lastItemIndex) }}
       {% endfor %}
       {{ row('Comments about their timeline (optional):	', draft.timeline.comment | default(''), paths.timelinePage.evaluateUri({ externalId: claim.externalId }), true ) }}
 

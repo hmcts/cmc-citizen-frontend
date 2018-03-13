@@ -20,8 +20,7 @@ function renderView (form: Form<DefendantTimeline>, res: express.Response): void
 
   res.render(page.associatedView, {
     form: form,
-    timeline: claim.claimData.timeline,
-    claimantName: claim.claimData.claimant.name
+    timeline: claim.claimData.timeline
   })
 }
 
