@@ -30,7 +30,7 @@ const eligibilityStore: EligibilityStore = new CookieEligibilityStore()
 export abstract class EligibilityPage<T> {
   constructor (private path: RoutablePath, private property: string, private validationGroup: string) {}
 
-  buildRouter(): express.Router {
+  buildRouter (): express.Router {
     return express.Router()
       .get(this.path.uri, (req: express.Request, res: express.Response): void => {
         this.renderView(new Form(eligibilityStore.read(req, res)), res)
