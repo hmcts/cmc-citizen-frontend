@@ -1,34 +1,21 @@
-import { Form } from 'app/forms/form'
-import { Eligibility } from 'claim/form/models/eligibility/eligibility'
-import { ErrorHandling } from 'common/errorHandling'
-import { RoutablePath } from 'common/router/routablePath'
-import * as Cookies from 'cookies'
 import * as express from 'express'
+
+import { Paths } from 'eligibility/paths'
+import { RoutablePath } from 'common/router/routablePath'
+import { ErrorHandling } from 'common/errorHandling'
+
 import { FormValidator } from 'forms/validation/formValidator'
+import { Form } from 'app/forms/form'
 
-interface EligibilityStore {
-  read (req: express.Request, res: express.Response): Eligibility
+import { Eligibility } from 'claim/form/models/eligibility/eligibility'
+import { EligibilityCheck } from 'eligibility/model/eligibilityCheck'
 
-  write (eligibility: Eligibility, req: express.Request, res: express.Response): void
-}
-
-class CookieEligibilityStore implements EligibilityStore {
-  read (req: express.Request, res: express.Response): Eligibility {
-    const cookie = new Cookies(req, res).get(cookieName)
-    return new Eligibility().deserialize(cookie !== undefined ? JSON.parse(cookie) : undefined)
-  }
-
-  write (eligibility: Eligibility, req: express.Request, res: express.Response): void {
-    new Cookies(req, res).set(cookieName, JSON.stringify(eligibility), { sameSite: 'lax' })
-  }
-}
-
-const cookieName = 'eligibility-check'
+import { CookieEligibilityStore, EligibilityStore } from 'eligibility/store'
 
 const eligibilityStore: EligibilityStore = new CookieEligibilityStore()
 
 export abstract class EligibilityPage<T> {
-  constructor (private path: RoutablePath, private property: string, private validationGroup: string) {}
+  constructor (private path: RoutablePath, private nextPagePath: RoutablePath, private property: string) {}
 
   buildRouter (): express.Router {
     return express.Router()
@@ -36,7 +23,7 @@ export abstract class EligibilityPage<T> {
         this.renderView(new Form(eligibilityStore.read(req, res)), res)
       })
       .post(this.path.uri,
-        FormValidator.requestHandler(undefined, Eligibility.fromObject, this.validationGroup),
+        FormValidator.requestHandler(undefined, Eligibility.fromObject, this.property),
         ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
           const form: Form<Eligibility> = req.body
 
@@ -51,7 +38,7 @@ export abstract class EligibilityPage<T> {
             eligibility[this.property] = form.model[this.property]
             eligibilityStore.write(eligibility, req, res)
 
-            this.checkValue(eligibility[this.property], res)
+            this.handleAnswer(eligibility[this.property], res)
           }
         })
       )
@@ -63,5 +50,15 @@ export abstract class EligibilityPage<T> {
     })
   }
 
-  abstract checkValue (value: T, res: express.Response): void
+  protected handleAnswer (value: T, res: express.Response): void {
+    const result: EligibilityCheck = this.checkEligibility(value)
+
+    if (result.eligible) {
+      res.redirect(this.nextPagePath.uri)
+    } else {
+      res.redirect(`${Paths.eligibilityNotEligiblePage.uri}?reason=${result.notEligibleReason}`)
+    }
+  }
+
+  protected abstract checkEligibility (value: T): EligibilityCheck
 }

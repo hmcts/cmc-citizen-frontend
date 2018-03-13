@@ -13,8 +13,8 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = Paths.eligibilityClaimValuePage.uri
-const pageRedirect: string = Paths.eligibilityHelpWithFeesPage.uri
+const pagePath: string = Paths.claimValuePage.uri
+const pageRedirect: string = Paths.helpWithFeesPage.uri
 const expectedTextOnPage: string = 'Total amount you’re claiming'
 
 describe('Claim eligibility: claim value page', () => {

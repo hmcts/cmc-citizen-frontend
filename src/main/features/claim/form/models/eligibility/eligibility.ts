@@ -8,10 +8,10 @@ import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOp
 
 export class Eligibility {
 
-  @IsIn(ClaimValue.all(), { message: ValidationErrors.SELECT_AN_OPTION, groups: [ValidationGroups.CLAIM_VALUE] })
+  @IsIn(ClaimValue.all(), { message: ValidationErrors.SELECT_AN_OPTION, groups: ['claimValue'] })
   claimValue?: ClaimValue
 
-  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.HELP_WITH_FEES] })
+  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['helpWithFees'] })
   helpWithFees?: YesNoOption
 
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: [ValidationGroups.CLAIMANT_ADDRESS] })

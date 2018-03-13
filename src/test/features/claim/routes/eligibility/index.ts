@@ -13,7 +13,7 @@ import { app } from '../../../../../main/app'
 import * as idamServiceMock from '../../../../http-mocks/idam'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = Paths.eligibilityStartPage.uri
+const pagePath: string = Paths.startPage.uri
 const expectedTextOnPage: string = 'Find out if you can use this service'
 
 describe('Claim eligibility: index page', () => {

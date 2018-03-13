@@ -13,7 +13,7 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = Paths.eligibilityHelpWithFeesPage.uri
+const pagePath: string = Paths.helpWithFeesPage.uri
 const pageRedirect: string = Paths.eligibilityClaimantAddressPage.uri
 const expectedTextOnPage: string = 'Do you need help with fees?'
 
