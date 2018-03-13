@@ -33,9 +33,10 @@ const claimant = {
 describe('ClaimStoreClient', () => {
   context('timeouts and retries handling', () => {
     const requestDelay = 1000
+    const retryAttempts = 3
 
     const retryingRequest = request.defaults({
-      maxAttempts: 3,
+      maxAttempts: retryAttempts,
       retryDelay: requestDelay
     } as RequestPromiseOptions)
 
@@ -64,6 +65,22 @@ describe('ClaimStoreClient', () => {
 
         const claim: Claim = await claimStoreClient.saveClaim(claimDraft, claimant)
         expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(claimData))
+      }).timeout(5000)
+
+      it('should propagate error responses other than 409', async () => {
+        mock(`${claimStoreApiUrl}`)
+          .post(`/${claimant.id}`)
+          .times(retryAttempts)
+          .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
+
+        try {
+          await claimStoreClient.saveClaim(claimDraft, claimant)
+        } catch (err) {
+          expect(err.statusCode).to.equal(HttpStatus.INTERNAL_SERVER_ERROR)
+          expect(err.error).to.equal('An unexpected error occurred')
+          return
+        }
+        expect.fail()
       }).timeout(5000)
     })
   })
