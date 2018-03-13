@@ -28,7 +28,9 @@
     {{ tableEnd() }}
 
     {{ tableStart('payment', 'Payment') }}
-    {{ row('Amount to be paid by defendant', amountToBePaid | numeral, changeLink = paidAmountUrl) }}
+
+    {{ row('Has the defendant paid some of the amount owed?', draft.paidAmount.option.value, changeLink = paidAmountUrl, bottomBorder = false) }}
+    {{ row('Amount to be paid by defendant', amountToBePaid | numeral) }}
 
     {% if draft.paymentOption.option.value == 'IMMEDIATELY' %}
       {% set paymentOptionDisplayValue = [draft.paymentOption.option.displayValue] %}
