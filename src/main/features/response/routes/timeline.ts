@@ -8,25 +8,26 @@ import { DraftService } from 'services/draftService'
 
 import { User } from 'idam/user'
 import { RoutablePath } from 'common/router/routablePath'
-import { Timeline } from 'forms/models/timeline'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
+import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 
 const page: RoutablePath = Paths.timelinePage
 
-function renderView (form: Form<Timeline>, res: express.Response): void {
+function renderView (form: Form<DefendantTimeline>, res: express.Response): void {
   const claim: Claim = res.locals.claim
 
   res.render(page.associatedView, {
     form: form,
+    timeline: claim.claimData.timeline,
     claimantName: claim.claimData.claimant.name
   })
 }
 
 function actionHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
   if (req.body.action) {
-    const form: Form<Timeline> = req.body
+    const form: Form<DefendantTimeline> = req.body
     if (req.body.action.addRow) {
       form.model.appendRow()
     }
@@ -45,10 +46,10 @@ export default express.Router()
     })
   .post(
     page.uri,
-    FormValidator.requestHandler(Timeline, Timeline.fromObject, undefined, ['addRow']),
+    FormValidator.requestHandler(DefendantTimeline, DefendantTimeline.fromObject, undefined, ['addRow']),
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<Timeline> = req.body
+      const form: Form<DefendantTimeline> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)
@@ -61,7 +62,7 @@ export default express.Router()
         draft.document.timeline = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.evidencePage.evaluateUri({ externalId: claim.externalId }))
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )

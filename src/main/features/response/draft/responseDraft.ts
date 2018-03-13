@@ -11,7 +11,6 @@ import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
 import { HowMuchPaid } from 'response/form/models/howMuchPaid'
 import { HowMuchOwed } from 'response/form/models/howMuchOwed'
-import { Timeline } from 'forms/models/timeline'
 import { DefendantPaymentOption } from 'response/form/models/defendantPaymentOption'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
@@ -23,6 +22,7 @@ import { PayBySetDate } from 'response/draft/payBySetDate'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
 import { HowMuchPaidClaimantOption, HowMuchPaidClaimant } from 'response/form/models/howMuchPaidClaimant'
+import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 
 export class ResponseDraft extends DraftDocument {
 
@@ -32,7 +32,7 @@ export class ResponseDraft extends DraftDocument {
   moreTimeNeeded?: MoreTimeNeeded
   defendantDetails?: Defendant = new Defendant()
   howMuchIsPaid?: HowMuchPaid
-  timeline: Timeline
+  timeline: DefendantTimeline
   evidence: Evidence
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
   howMuchOwed?: HowMuchOwed
@@ -57,7 +57,7 @@ export class ResponseDraft extends DraftDocument {
       this.defendantDetails = new Defendant().deserialize(input.defendantDetails)
       this.howMuchIsPaid = new HowMuchPaid().deserialize(input.howMuchIsPaid)
       this.howMuchOwed = new HowMuchOwed().deserialize(input.howMuchOwed)
-      this.timeline = new Timeline().deserialize(input.timeline)
+      this.timeline = DefendantTimeline.fromObject(input.timeline)
       this.evidence = new Evidence().deserialize(input.evidence)
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)

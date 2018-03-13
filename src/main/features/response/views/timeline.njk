@@ -9,6 +9,28 @@
 <div class="grid-row">
   <div class="column-two-thirds">
 
+    <div class="description-block">
+      <h3 class="heading-small">Their timeline</h3>
+      <div class="form-fields">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">{{ t('Date') }}</th>
+              <th scope="col">{{ t('What happened') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for event in timeline.rows %}
+            <tr>
+              <td>{{ event.date }}</td>
+              <td>{{ event.description }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <form method="post" novalidate>
       {{ csrfProtection(csrf) }}
       <h2 class="heading-small">{{ t('Add your timeline of events (optional)') }}</h2>
@@ -16,12 +38,13 @@
 
       {{ timelineFragment(form) }}
 
-      <div class="panel panel-border-wide">
-        <p>{{
-              t('Your response will be sent to the claimant {{ claimantName }}. A judge will not consider your response unless your case goes to a hearing.',
-               { claimantName: claimantName })
-           }}
-        </p>
+      <div class="form-group">
+        <label class="form-label-bold" for="comment">
+          <h3 class="heading-small">Add any comments about their timeline (optional)</h3>
+        </label>
+        <textarea id="comment" name="comment"
+          class="form-control form-control-3-4 form-control-medium"
+          rows="4" cols="20">{{ form.valueFor('comment') | default('') }}</textarea>
       </div>
 
       {{ saveAndContinueButton() }}

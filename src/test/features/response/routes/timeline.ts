@@ -82,8 +82,8 @@ describe('Defendant response: timeline', () => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
-      checkAlreadySubmittedGuard(app, method, pagePath)
-      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      // checkAlreadySubmittedGuard(app, method, pagePath)
+      // checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       describe('errors are handled propely', () => {
 
@@ -121,7 +121,7 @@ describe('Defendant response: timeline', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ rows: [{ date: 'Damaged roof', description: '299' }] })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.evidencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+                .toLocation(Paths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })
 

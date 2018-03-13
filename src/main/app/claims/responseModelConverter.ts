@@ -19,6 +19,7 @@ import { ResponseType as FormResponseType } from 'response/form/models/responseT
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
 import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
+import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 
 export class ResponseModelConverter {
 
@@ -43,6 +44,10 @@ export class ResponseModelConverter {
       freeMediation: responseDraft.freeMediation && responseDraft.freeMediation.option,
       moreTimeNeeded: responseDraft.moreTimeNeeded && responseDraft.moreTimeNeeded.option,
       defendant: this.convertPartyDetails(responseDraft.defendantDetails),
+      timeline: {
+        rows: responseDraft.timeline.getPopulatedRowsOnly(),
+        comment: responseDraft.timeline.comment
+      } as DefendantTimeline,
       paymentDeclaration,
       statementOfTruth
     }
