@@ -57,7 +57,9 @@ export class ResponseDraft extends DraftDocument {
       this.defendantDetails = new Defendant().deserialize(input.defendantDetails)
       this.howMuchIsPaid = new HowMuchPaid().deserialize(input.howMuchIsPaid)
       this.howMuchOwed = new HowMuchOwed().deserialize(input.howMuchOwed)
-      this.timeline = DefendantTimeline.fromObject(input.timeline)
+      if (input.timeline) {
+        this.timeline = new DefendantTimeline().deserialize(input.timeline)
+      }
       this.evidence = new Evidence().deserialize(input.evidence)
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)

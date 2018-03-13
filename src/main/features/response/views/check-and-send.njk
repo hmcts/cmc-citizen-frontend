@@ -139,7 +139,7 @@
       {% for timelineRow in allTimelineRows %}
       {{ row(timelineRow.date, timelineRow.description, '', loop.index0 === lastItemIndex) }}
       {% endfor %}
-      {{ row('Comments about their timeline (optional):	', draft.timeline.comment, paths.timelinePage.evaluateUri({ externalId: claim.externalId }), true ) }}
+      {{ row('Comments about their timeline (optional):	', draft.timeline.comment | default(''), paths.timelinePage.evaluateUri({ externalId: claim.externalId }), true ) }}
 
       {{ tableEnd() }}
     {% endif %}
