@@ -7,6 +7,7 @@ import { Logger } from '@hmcts/nodejs-logging'
 import { OAuthHelper } from 'idam/oAuthHelper'
 
 const logger = Logger.getLogger('first-contact/guards/claimReferenceMatchesGuard')
+const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
 export class ClaimReferenceMatchesGuard {
 
@@ -15,7 +16,7 @@ export class ClaimReferenceMatchesGuard {
       const reference = ClaimReferenceMatchesGuard.getClaimRef(req)
 
       const user: User = res.locals.user
-      const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(user.id, user.bearerToken)
+      const claim: Claim = await claimStoreClient.retrieveByLetterHolderId(user.id, user.bearerToken)
       res.locals.claim = claim
 
       if (claim.claimNumber !== reference) {
