@@ -55,6 +55,48 @@ describe('Login receiver', async () => {
           .expect(res => expect(res).to.have.cookie('state', ''))
       })
 
+      it('should return 500 and render error page when cannot retrieve claimant claims', async () => {
+        claimStoreServiceMock.rejectRetrieveByClaimantId('HTTP error')
+
+        await request(app)
+          .get(AppPaths.receiver.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should return 500 and render error page when cannot retrieve defendant claims', async () => {
+        claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+        claimStoreServiceMock.rejectRetrieveByDefendantId('HTTP error')
+
+        await request(app)
+          .get(AppPaths.receiver.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should return 500 and render error page when cannot retrieve claim drafts', async () => {
+        claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+        claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+        draftStoreServiceMock.rejectFind('HTTP error')
+
+        await request(app)
+          .get(AppPaths.receiver.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should return 500 and render error page when cannot retrieve response drafts', async () => {
+        claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+        claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+        draftStoreServiceMock.resolveFindNoDraftFound()
+        draftStoreServiceMock.rejectFind('HTTP error')
+
+        await request(app)
+          .get(AppPaths.receiver.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
       context('when no claim issued or received and no drafts (new claimant)', async () => {
         it('should redirect to claim start', async () => {
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
