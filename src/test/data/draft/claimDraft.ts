@@ -21,9 +21,16 @@ export const claimDraft = {
   },
   claimant: {
     payment: {
-      id: 12,
+      reference: '123',
+      date_created: 12345,
       amount: 10000,
-      state: { status: 'success' }
+      status: 'Success',
+      _links: {
+        next_url: {
+          href: 'any href',
+          method: 'POST'
+        }
+      }
     },
     partyDetails: individualDetails,
     mobilePhone: {

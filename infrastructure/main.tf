@@ -24,6 +24,10 @@ data "vault_generic_secret" "oauth-client-secret" {
   path = "secret/${var.vault_section}/ccidam/idam-api/oauth2/client-secrets/cmc-citizen"
 }
 
+data "vault_generic_secret" "staff_email" {
+  path = "secret/${var.vault_section}/cmc/claim-store/staff_email"
+}
+
 locals {
   aseName = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
 }
@@ -38,10 +42,8 @@ module "citizen-frontend" {
   subscription = "${var.subscription}"
 
   app_settings = {
-    WEBSITE_NODE_DEFAULT_VERSION = "8.9.0"
-
     // Node specific vars
-    NODE_ENV = "${var.env == "prod" ? "prod" : "dev"}"
+    NODE_ENV = "${var.node_env}"
     UV_THREADPOOL_SIZE = "64"
     NODE_CONFIG_DIR = "D:\\home\\site\\wwwroot\\config"
     TS_BASE_URL = "./src/main"
@@ -91,6 +93,10 @@ module "citizen-frontend" {
     FEATURE_PARTIAL_ADMISSION = "${var.feature_partial_admission}"
     FEATURE_FINE_PRINT = "${var.feature_fine_print}"
     FEATURE_CCD = "${var.feature_ccd}"
+    FEATURE_RETURN_ERROR_TO_USER = "${var.feature_return_error_to_user}"
+
+    CONTACT_EMAIL = "${data.vault_generic_secret.staff_email.data["value"]}"
+
   }
 }
 
