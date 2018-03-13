@@ -124,7 +124,7 @@ export class Eligibility {
       this.claimantAddress === YesNoOption.YES &&
       this.defendantAddress === YesNoOption.YES &&
       this.eighteenOrOver === YesNoOption.YES &&
-      this.defendantAge === DefendantAgeOption.YES &&
+      (this.defendantAge === DefendantAgeOption.YES || this.defendantAge === DefendantAgeOption.COMPANY_OR_ORGANISATION) &&
       this.claimType === ClaimType.PERSONAL_CLAIM &&
       this.singleDefendant === YesNoOption.NO &&
       this.governmentDepartment === YesNoOption.NO &&
