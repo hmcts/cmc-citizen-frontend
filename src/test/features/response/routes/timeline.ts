@@ -82,8 +82,8 @@ describe('Defendant response: timeline', () => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
-      // checkAlreadySubmittedGuard(app, method, pagePath)
-      // checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      checkAlreadySubmittedGuard(app, method, pagePath)
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       describe('errors are handled propely', () => {
 
