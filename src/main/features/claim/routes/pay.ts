@@ -65,7 +65,7 @@ async function successHandler (res, next) {
     await new DraftService().delete(draft.id, user.bearerToken)
     res.redirect(Paths.confirmationPage.evaluateUri({ externalId: draft.document.externalId }))
   } else {
-    const claim = await ClaimStoreClient.saveClaimForUser(draft, user)
+    const claim = await ClaimStoreClient.saveClaim(draft, user)
     await new DraftService().delete(draft.id, user.bearerToken)
     res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
   }

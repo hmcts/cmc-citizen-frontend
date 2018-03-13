@@ -15,13 +15,13 @@ export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
 const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
 
 export class ClaimStoreClient {
-  static saveClaimForUser (draft: Draft<DraftClaim>, user: User): Promise<Claim> {
+  static saveClaim (draft: Draft<DraftClaim>, claimant: User): Promise<Claim> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
     return request
-      .post(`${claimStoreApiUrl}/${user.id}`, {
+      .post(`${claimStoreApiUrl}/${claimant.id}`, {
         body: convertedDraftClaim,
         headers: {
-          Authorization: `Bearer ${user.bearerToken}`
+          Authorization: `Bearer ${claimant.bearerToken}`
         }
       })
   }
