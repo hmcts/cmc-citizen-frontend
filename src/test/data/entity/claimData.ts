@@ -2,7 +2,7 @@ import { individual } from './party'
 
 export const claimData = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
-  claimant: { ...individual, email: undefined },
+  claimants: [{ ...individual, email: undefined }],
   defendants: [{ ...individual, mobilePhone: undefined }],
   amount: {
     rows: [

@@ -37,7 +37,9 @@ export class Party {
         this.address = new Address().deserialize(input.address)
       }
       if (input.correspondenceAddress) {
+        console.log(JSON.stringify(input.correspondenceAddress))
         this.correspondenceAddress = new Address().deserialize(input.correspondenceAddress)
+        console.log(JSON.stringify(this.correspondenceAddress))
       }
     }
     return this

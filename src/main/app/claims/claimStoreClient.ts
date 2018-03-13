@@ -1,4 +1,5 @@
 import { request as requestPromiseApi, RequestPromiseAPI } from 'client/request'
+import * as HttpStatus from 'http-status-codes'
 import * as config from 'config'
 import { Claim } from 'app/claims/models/claim'
 import { User } from 'app/idam/user'
@@ -26,6 +27,16 @@ export class ClaimStoreClient {
         body: convertedDraftClaim,
         headers: {
           Authorization: `Bearer ${claimant.bearerToken}`
+        }
+      })
+      .then(claim => {
+        return new Claim().deserialize(claim)
+      })
+      .catch((err) => {
+        if (err.statusCode === HttpStatus.CONFLICT) {
+          return this.retrieveByExternalId(draft.document.externalId, claimant)
+        } else {
+          throw err
         }
       })
   }
