@@ -132,13 +132,16 @@ export default express.Router()
             await ClaimStoreClient.linkDefendant(user)
             res.redirect(await retrieveRedirectForLandingPage(user))
           } else {
-            Promise.all(user.getLetterHolderIdList().map(
-            (letterHolderId) => linkDefendantWithClaimByLetterHolderId(letterHolderId, user)
-            )
-          )
-            .then(async () => res.redirect(await retrieveRedirectForLandingPage(user)))
-            .catch(async () => res.redirect(await retrieveRedirectForLandingPage(user)))
-            .catch(next)
+            try {
+              await Promise.all(user.getLetterHolderIdList().map(
+              (letterHolderId) => linkDefendantWithClaimByLetterHolderId(letterHolderId, user)
+                )
+              )
+            } catch (err) {
+              // ignore linking errors
+              logger.error(err)
+            }
+            res.redirect(await retrieveRedirectForLandingPage(user))
           }
 
         }

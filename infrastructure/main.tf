@@ -43,7 +43,7 @@ module "citizen-frontend" {
 
   app_settings = {
     // Node specific vars
-    NODE_ENV = "${var.env == "prod" ? "prod" : "dev"}"
+    NODE_ENV = "${var.node_env}"
     UV_THREADPOOL_SIZE = "64"
     NODE_CONFIG_DIR = "D:\\home\\site\\wwwroot\\config"
     TS_BASE_URL = "./src/main"
@@ -93,6 +93,8 @@ module "citizen-frontend" {
     FEATURE_PARTIAL_ADMISSION = "${var.feature_partial_admission}"
     FEATURE_FINE_PRINT = "${var.feature_fine_print}"
     FEATURE_CCD = "${var.feature_ccd}"
+    FEATURE_RETURN_ERROR_TO_USER = "${var.feature_return_error_to_user}"
+
     CONTACT_EMAIL = "${data.vault_generic_secret.staff_email.data["value"]}"
 
   }
