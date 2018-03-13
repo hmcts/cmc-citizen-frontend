@@ -17,8 +17,10 @@ import { ClaimData } from 'claims/models/claimData'
 
 const claimDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftData), moment(), moment())
 
+const claimantId = 123456
+
 const returnedClaim = {
-  submitterId: 123456,
+  submitterId: claimantId,
   createdAt: moment().toISOString(),
   responseDeadline: moment().toISOString(),
   issuedOn: moment().toISOString(),
@@ -26,52 +28,66 @@ const returnedClaim = {
 }
 
 const claimant = {
-  id: 123456,
+  id: claimantId,
   bearerToken: 'SuperSecretToken'
 } as any as User
 
 describe('ClaimStoreClient', () => {
   context('timeouts and retries handling', () => {
-    const requestDelay = 1000
+    const requestDelayInMillis = 500
     const retryAttempts = 3
 
     const retryingRequest = request.defaults({
-      maxAttempts: retryAttempts,
-      retryDelay: requestDelay
+      retryDelay: requestDelayInMillis,
+      maxAttempts: retryAttempts
     } as RequestPromiseOptions)
 
     const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(retryingRequest)
 
     describe('saveClaim', () => {
-      it('should retrieve a claim that was successfully saved on first attempt', async () => {
+      function mockSuccessOnFirstSaveAttempt () {
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}`)
           .reply(HttpStatus.OK, returnedClaim)
+      }
+
+      it('should retrieve a claim that was successfully saved on first attempt', async () => {
+        mockSuccessOnFirstSaveAttempt()
 
         const claim: Claim = await claimStoreClient.saveClaim(claimDraft, claimant)
+
         expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(claimData))
       })
 
-      it('should retrieve claim saved on first timed out attempt', async () => {
+      function mockTimeoutOnFirstSaveAttemptAndConflictOnSecondOne () {
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}`)
-          .socketDelay(requestDelay + 10)
+          .socketDelay(requestDelayInMillis + 10)
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}`)
           .reply(HttpStatus.CONFLICT, `Duplicate claim for external id ${claimDraftData.externalId}`)
         mock(`${claimStoreApiUrl}`)
           .get(`/${claimDraftData.externalId}`)
           .reply(HttpStatus.OK, returnedClaim)
+      }
+
+      it('should retrieve claim saved on first attempt that timed out and caused a 409 on retry', async () => {
+        mockTimeoutOnFirstSaveAttemptAndConflictOnSecondOne()
 
         const claim: Claim = await claimStoreClient.saveClaim(claimDraft, claimant)
-        expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(claimData))
-      }).timeout(5000)
 
-      it('should propagate error responses other than 409', async () => {
+        expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(claimData))
+      })
+
+      function mockInternalServerErrorOnAllAttempts () {
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}`)
           .times(retryAttempts)
           .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
+      }
+
+      it('should propagate error responses other than 409', async () => {
+        mockInternalServerErrorOnAllAttempts()
 
         try {
           await claimStoreClient.saveClaim(claimDraft, claimant)
@@ -80,8 +96,9 @@ describe('ClaimStoreClient', () => {
           expect(err.error).to.equal('An unexpected error occurred')
           return
         }
-        expect.fail()
-      }).timeout(5000)
+
+        expect.fail() // Exception should have been thrown due to 500 response code
+      })
     })
   })
 })
