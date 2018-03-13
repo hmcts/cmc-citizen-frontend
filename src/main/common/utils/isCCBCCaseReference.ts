@@ -7,5 +7,5 @@ export function isCCBCCaseReference (referenceNumber: string): boolean {
     return false
   }
 
-  return ccbcCaseIdentifier.filter((id) => referenceNumber.includes(id)).length > 0
+  return ccbcCaseIdentifier.filter((id) => referenceNumber.toUpperCase().includes(id)).length > 0
 }
