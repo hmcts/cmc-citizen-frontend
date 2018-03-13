@@ -17,6 +17,9 @@
       "app/*": [
         "app/*"
       ],
+      "payment-hub-client/*": [
+        "app/pay/*"
+      ],
       "client/*": [
         "app/client/*"
       ],
