@@ -84,7 +84,7 @@ export class PayClient {
       service: serviceName,
       currency: currency,
       site_id: siteId,
-      fee: fees,
+      fees: fees,
       amount: fees.reduce((amount: number, fee: Fee) => {
         return amount + fee.calculated_amount
       }, 0)
