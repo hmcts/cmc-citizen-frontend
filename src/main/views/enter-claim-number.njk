@@ -13,9 +13,12 @@
 
         {{ textInput('Claim number', 'reference', form) }}
         {{ submitButton('Continue') }}
+
+        <p>
+          <a href="{{ AppPaths.noClaimNumberPage.uri }}">{{ t('Don’t have a claim number?') }}</a>
+        </p>
       </form>
     </div>
   </div>
 
 {% endblock %}
-

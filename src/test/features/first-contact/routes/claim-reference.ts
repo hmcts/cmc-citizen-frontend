@@ -17,7 +17,7 @@ describe('Defendant first contact: claim reference page', () => {
     it('should render page when everything is fine', async () => {
       await request(app)
         .get(DefendantFirstContactPaths.claimReferencePage.uri)
-        .expect(res => expect(res).to.be.successful.withText('Enter the claim number from the email or letter we sent you.'))
+        .expect(res => expect(res).to.be.successful.withText('Enter your claim number'))
     })
   })
 
@@ -25,7 +25,7 @@ describe('Defendant first contact: claim reference page', () => {
     it('should render page when form is invalid and everything is fine', async () => {
       await request(app)
         .post(DefendantFirstContactPaths.claimReferencePage.uri)
-        .expect(res => expect(res).to.be.successful.withText('Enter the claim number from the email or letter we sent you.', 'div class="error-summary"'))
+        .expect(res => expect(res).to.be.successful.withText('Enter your claim number', 'div class="error-summary"'))
     })
 
     it('should redirect to pin validation page when form is valid and everything is fine', async () => {
