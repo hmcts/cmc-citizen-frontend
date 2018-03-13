@@ -17,7 +17,6 @@ export default express.Router()
 
     res.render(Paths.defendantPage.associatedView, {
       isAfter4pm: isAfter4pm(),
-      claim: claim,
-      claimReceiptUri: Paths.claimReceiptReceiver.evaluateUri({ externalId: externalId })
+      claim: claim
     })
   }))

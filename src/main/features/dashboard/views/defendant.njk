@@ -59,7 +59,7 @@
           </li>
           <li>
             <strong class="bold">{{ t('Claim details:') }}</strong>
-            <span class="block"><a href="{{ claimReceiptUri }}">{{ t('Download claim details') }}</a></span>
+            <span class="block"><a href="{{ DashboardPaths.claimReceiptReceiver.evaluateUri({ externalId: externalId }) }}">{{ t('Download claim details') }}</a></span>
           </li>
         </ul>
       </div>
