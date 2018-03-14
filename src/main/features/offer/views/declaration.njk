@@ -68,8 +68,9 @@
 
       <h2 class="heading-medium">{{ t('Sign the agreement') }}</h2>
 
-      <p>{{t('Make sure this agreement includes everything you've agreed with Mary Richards before signing. You won't be able to change this later.
-')}}</p>
+      <p>{{t('Make sure this agreement includes everything you've agreed with {{ defendantName }} before signing. You won't be able to change this later.
+
+')}}
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
