@@ -17,19 +17,19 @@ export class Interest {
 
   @IsDefined({ message: ValidationErrors.YES_NO_REQUIRED })
   @IsIn(InterestOption.all(), { message: ValidationErrors.YES_NO_REQUIRED })
-  interest?: string
+  option?: string
 
-  constructor (interest?: string) {
-    this.interest = interest
+  constructor (option?: string) {
+    this.option = option
   }
 
   static fromObject (input?: any): Interest {
-    return new Interest(input.interest)
+    return new Interest(input.option)
   }
 
   deserialize (input?: any): Interest {
     if (input) {
-      this.interest = input.interest
+      this.option = input.option
     }
 
     return this

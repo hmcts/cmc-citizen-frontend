@@ -3,11 +3,11 @@
 {% from "date.njk" import dateInput %}
 
 {% set title = t('Money claim') %}
-{% set heading = t('When are you claiming interest from?') %}
+{% set heading = t('When do you want to stop claiming interest?') %}
 
 {% block content %}
 
-<div class="grid-row">
+  <div class="grid-row">
     <div class="column-two-thirds">
 
       <form novalidate method="post">
@@ -15,26 +15,25 @@
 
         <div class="form-group {% if error %} form-group-error {% endif %}">
 
-          {% set name = 'type' %}
+          {% set name = 'option' %}
 
           {{
           radioGroup(
-            'When are you claiming interest from?',
+            'When do you want to stop claiming interest?',
             name,
             [
               {
-                label: 'The date you submit the claim',
-                value: InterestDateType.SUBMISSION,
-                checked: (form.valueFor(name) === InterestDateType.SUBMISSION),
+                label: 'When you submit the claim',
+                value: InterestEndDateOption.SUBMISSION,
+                checked: (form.valueFor(name) === InterestEndDateOption.SUBMISSION),
                 bold: true,
                 hint: 'If you submit after 4pm it will be the next working day.'
               },
               {
-                label: 'A particular date',
-                value: InterestDateType.CUSTOM,
-                checked: (form.valueFor(name) === InterestDateType.CUSTOM),
-                bold: true,
-                hint: 'For example the date an invoice was overdue or that you told someone they owed you the money.'
+                label: 'Continue until the claim is settled or judgment made',
+                value: InterestEndDateOption.SETTLED_OR_JUDGMENT,
+                checked: (form.valueFor(name) === InterestEndDateOption.SETTLED_OR_JUDGMENT),
+                bold: true
               }
             ],
             form = form,

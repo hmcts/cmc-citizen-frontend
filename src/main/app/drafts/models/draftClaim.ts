@@ -11,6 +11,8 @@ import { Eligibility } from 'claim/form/models/eligibility/eligibility'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 import { Interest } from 'claim/form/models/interest'
 import { InterestType } from 'claim/form/models/interestType'
+import { InterestStartDate } from 'claim/form/models/interestStartDate'
+import { InterestEndDate } from 'claim/form/models/interestEndDate'
 
 export class DraftClaim extends DraftDocument {
 
@@ -22,6 +24,8 @@ export class DraftClaim extends DraftDocument {
   interestType: InterestType = new InterestType()
   interestRate: InterestRate = new InterestRate()
   interestDate: InterestDate = new InterestDate()
+  interestStartDate: InterestStartDate = new InterestStartDate()
+  interestEndDate: InterestEndDate = new InterestEndDate()
   reason: Reason = new Reason()
   readResolveDispute: boolean = false
   readCompletingClaim: boolean = false
@@ -38,6 +42,8 @@ export class DraftClaim extends DraftDocument {
       this.interestType = new InterestType().deserialize(input.interestType)
       this.interestRate = new InterestRate().deserialize(input.interestRate)
       this.interestDate = new InterestDate().deserialize(input.interestDate)
+      this.interestStartDate = new InterestStartDate().deserialize(input.interestStartDate)
+      this.interestEndDate = new InterestEndDate().deserialize(input.interestEndDate)
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
       this.reason = new Reason().deserialize(input.reason)
       this.readResolveDispute = input.readResolveDispute

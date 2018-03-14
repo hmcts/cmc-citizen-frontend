@@ -1,8 +1,9 @@
 import { IsDefined, IsIn, IsPositive, MaxLength, ValidateIf } from 'class-validator'
-
 import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 import { CompletableTask } from 'app/models/task'
 import { toNumberOrUndefined } from 'common/utils/numericUtils'
+import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
+import { getStandardInterestRate } from 'common/interestUtils'
 
 export class InterestRateOption {
   static readonly STANDARD: string = 'standard'
@@ -21,14 +22,9 @@ export class ValidationErrors {
 
   static readonly RATE_REQUIRED: string = 'You haven’t entered a rate'
   static readonly RATE_NOT_VALID: string = 'Correct the rate you’ve entered'
-
-  static readonly REASON_REQUIRED: string = 'You haven’t explained why you’re claiming this rate'
-  static readonly REASON_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
 }
 
 export class InterestRate implements CompletableTask {
-
-  static readonly STANDARD_RATE = 8
 
   @IsDefined({ message: ValidationErrors.TYPE_REQUIRED })
   @IsIn(InterestRateOption.all(), { message: ValidationErrors.TYPE_REQUIRED })
@@ -40,9 +36,9 @@ export class InterestRate implements CompletableTask {
   rate?: number
 
   @ValidateIf(o => o.type === InterestRateOption.DIFFERENT)
-  @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
-  @IsNotBlank({ message: ValidationErrors.REASON_REQUIRED })
-  @MaxLength(250, { message: ValidationErrors.REASON_TOO_LONG })
+  @IsDefined({ message: CommonValidationErrors.REASON_REQUIRED })
+  @IsNotBlank({ message: CommonValidationErrors.REASON_REQUIRED })
+  @MaxLength(250, { message: CommonValidationErrors.REASON_TOO_LONG })
   reason?: string
 
   constructor (type?: string, rate?: number, reason?: string) {
@@ -60,7 +56,7 @@ export class InterestRate implements CompletableTask {
 
     switch (instance.type) {
       case InterestRateOption.STANDARD:
-        instance.rate = InterestRate.STANDARD_RATE
+        instance.rate = getStandardInterestRate()
         instance.reason = undefined
         break
     }
@@ -79,6 +75,6 @@ export class InterestRate implements CompletableTask {
   }
 
   isCompleted (): boolean {
-    return !!this.type && this.type.length > 0
+    return !!this.type && (this.type === InterestRateOption.STANDARD || this.type === InterestRateOption.DIFFERENT)
   }
 }

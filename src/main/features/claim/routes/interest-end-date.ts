@@ -1,34 +1,32 @@
 import * as express from 'express'
-
 import { Paths } from 'claim/paths'
-
+import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-
-import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
-import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
-import { ForbiddenError } from '../../../errors'
+import { InterestEndDate } from 'claim/form/models/interestEndDate'
 
-function renderView (form: Form<InterestType>, res: express.Response): void {
-  res.render(Paths.interestTypePage.associatedView, { form: form })
+function renderView (form: Form<InterestEndDate>, res: express.Response): void {
+  res.render(Paths.interestEndDatePage.associatedView, {
+    form: form
+  })
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.interestTypePage.uri, (req: express.Request, res: express.Response): void => {
+  .get(Paths.interestEndDatePage.uri, (req: express.Request, res: express.Response) => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
 
-    renderView(new Form(draft.document.interestType), res)
+    renderView(new Form(draft.document.interestEndDate), res)
   })
   .post(
-    Paths.interestTypePage.uri,
-    FormValidator.requestHandler(InterestType, InterestType.fromObject),
+    Paths.interestEndDatePage.uri,
+    FormValidator.requestHandler(InterestEndDate, InterestEndDate.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const form: Form<InterestType> = req.body
+      const form: Form<InterestEndDate> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)
@@ -36,13 +34,9 @@ export default express.Router()
         const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
 
-        draft.document.interestType = form.model
+        draft.document.interestEndDate = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        if (form.model.option === InterestTypeOption.SAME_RATE) {
-          res.redirect(Paths.interestRatePage.uri)
-        } else {
-          throw new ForbiddenError()
-        }
+        res.redirect(Paths.totalPage.uri)
       }
     }))

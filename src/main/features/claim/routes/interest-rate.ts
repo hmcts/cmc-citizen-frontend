@@ -1,11 +1,8 @@
 import * as express from 'express'
-
 import { Paths } from 'claim/paths'
-
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import { InterestRate, InterestRateOption } from 'claim/form/models/interestRate'
-
+import { InterestRate } from 'claim/form/models/interestRate'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
@@ -38,10 +35,6 @@ export default express.Router()
         draft.document.interestRate = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        if (form.model.type === InterestRateOption.NO_INTEREST) {
-          res.redirect(Paths.feesPage.uri)
-        } else {
-          res.redirect(Paths.interestDatePage.uri)
-        }
+        res.redirect(Paths.interestDatePage.uri)
       }
     }))

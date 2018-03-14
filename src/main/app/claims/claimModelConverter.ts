@@ -16,26 +16,24 @@ import { Individual as DefendantAsIndividual } from 'claims/models/details/their
 import { Company as DefendantAsCompany } from 'claims/models/details/theirs/company'
 import { SoleTrader as DefendantAsSoleTrader } from 'claims/models/details/theirs/soleTrader'
 import { Organisation as DefendantAsOrganisation } from 'claims/models/details/theirs/organisation'
-import { InterestDate } from 'app/claims/models/interestDate'
 import { Address } from 'claims/models/address'
 import { Address as AddressForm } from 'forms/models/address'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
-import { InterestDate as DraftInterestDate } from 'claim/form/models/interestDate'
-import { InterestDateType } from 'app/common/interestDateType'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { StringUtils } from 'utils/stringUtils'
-import { InterestRateOption } from 'claim/form/models/interestRate'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 
 export class ClaimModelConverter {
 
   static convert (draftClaim: DraftClaim): ClaimData {
     const claimData: ClaimData = new ClaimData()
-    claimData.interestRate = draftClaim.interestRate
     claimData.externalId = draftClaim.externalId
-    if (claimData.interestRate.type !== InterestRateOption.NO_INTEREST) {
-      claimData.interestDate = this.convertInterestDate(draftClaim.interestDate)
-    }
+    claimData.interest = draftClaim.interest
+    claimData.interestType = draftClaim.interestType
+    claimData.interestRate = draftClaim.interestRate
+    claimData.interestDate = draftClaim.interestDate
+    claimData.interestStartDate = draftClaim.interestStartDate
+    claimData.interestEndDate = draftClaim.interestEndDate
     claimData.amount = new ClaimAmountBreakdown().deserialize(draftClaim.amount)
     claimData.feeAmountInPennies = draftClaim.claimant.payment.amount
     claimData.claimants = [this.convertClaimantDetails(draftClaim)]
@@ -165,15 +163,5 @@ export class ClaimModelConverter {
     address.city = addressForm.city
     address.postcode = addressForm.postcode
     return address
-  }
-
-  private static convertInterestDate (draftInterestDate: DraftInterestDate): InterestDate {
-    const interestDate: InterestDate = new InterestDate()
-    interestDate.type = draftInterestDate.type
-    if (draftInterestDate.type === InterestDateType.CUSTOM) {
-      interestDate.date = draftInterestDate.date.toMoment()
-      interestDate.reason = draftInterestDate.reason
-    }
-    return interestDate
   }
 }

@@ -16,6 +16,9 @@ import { Payment } from 'app/pay/payment'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 import { Interest } from 'claim/form/models/interest'
+import { InterestType } from 'claim/form/models/interestType'
+import { InterestEndDate } from 'claim/form/models/interestEndDate'
+import { InterestStartDate } from 'claim/form/models/interestStartDate'
 
 export class ClaimData {
   externalId: string
@@ -26,8 +29,11 @@ export class ClaimData {
   reason: string
   timeline: ClaimantTimeline
   interest: Interest
+  interestType: InterestType
   interestRate: InterestRate
   interestDate: InterestDate
+  interestStartDate: InterestStartDate = new InterestStartDate()
+  interestEndDate: InterestEndDate = new InterestEndDate()
   payment: Payment = new Payment()
   statementOfTruth?: StatementOfTruth
 
@@ -62,16 +68,15 @@ export class ClaimData {
 
       this.payment = new Payment().deserialize(input.payment)
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
-      this.interestRate = new InterestRate().deserialize(input.interest)
-      this.interestDate = new InterestDate().deserialize(input.interestDate)
 
       this.reason = input.reason
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
       this.reason = input.reason
       this.timeline = ClaimantTimeline.fromObject(input.timeline)
       this.externalId = input.externalId
-      if (input.interest) {
-        this.interest = new Interest().deserialize(input.interest)
+      this.interest = new Interest().deserialize(input.interest)
+      if (input.interestType) {
+        this.interestDate = new InterestType().deserialize(input.interestType)
       }
       if (input.interestRate) {
         this.interestRate = new InterestRate().deserialize(input.interestRate)
@@ -79,6 +84,13 @@ export class ClaimData {
       if (input.interestDate) {
         this.interestDate = new InterestDate().deserialize(input.interestDate)
       }
+      if (input.interestStartDate) {
+        this.interestStartDate = new InterestStartDate().deserialize(input.interestStartDate)
+      }
+      if (input.interestEndDate) {
+        this.interestEndDate = new InterestEndDate().deserialize(input.interestEndDate)
+      }
+
       if (input.statementOfTruth) {
         this.statementOfTruth = new StatementOfTruth().deserialize(input.statementOfTruth)
       }

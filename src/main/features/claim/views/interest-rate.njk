@@ -2,16 +2,14 @@
 {% from "form.njk" import csrfProtection, textInput, radioOption, saveAndContinueButton, errorSummary %}
 
 {% set title = t('Money claim') %}
-{% set heading = t('Interest') %}
+{% set heading = t('What annual rate of interest do you want to claim?') %}
 
 {% block content %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
 
-      <p>{{ t('You can also claim interest on the money you’re owed. The court will decide if you’re entitled to it.') }} </p>
-
-      <p>{{ t('Unless you know that a different rate applies, you can claim up to 8% per annum.') }} </p>
+      <p>{{ t('You can claim 8% per year unless you know that a different rate applies.') }} </p>
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
@@ -23,8 +21,8 @@
           <fieldset id="type[label]">
 
             <legend>
-              <span class="form-label-bold">
-                {{ t('What annual rate of interest are you claiming?') }}
+              <span class="visually-hidden">
+                {{ t('What annual rate of interest do you want to claim?') }}
               </span>
               {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
             </legend>
@@ -38,40 +36,35 @@
 
             {% set errorRate = form.errorFor('rate') %}
             {% set errorReason = form.errorFor('reason') %}
-            <div
-              class="panel panel-border-narrow js-hidden {% if errorRate or errorReason %} form-group-error {% endif %} "
-              id="different-rate">
+            <div class="panel panel-border-narrow js-hidden {% if errorRate or errorReason %} form-group-error {% endif %}" id="different-rate">
 
-              <label class="form-label" for="rate[label]">{{ t('Rate you’re claiming') }}</label>
-              {% if errorRate %}<span class="error-message">{{ t(errorRate) }}</span>{% endif %}
-              <input class="form-control form-control-1-8 {% if errorRate %} form-control-error{% endif %}" name="rate"
-                     id="rate[label]" value="{{ (form.rawDataFor('rate') if errorRate else form.valueFor('rate')) | default('') }}"> %
+              <div class="form-group-compound">
+                <label class="form-label" for="rate[label]">{{ t('Rate you’re claiming') }}</label>
+                {% if errorRate %}<span class="error-message">{{ t(errorRate) }}</span>{% endif %}
+                <input class="form-control form-control-1-8 {% if errorRate %} form-control-error{% endif %}" name="rate"
+                       id="rate[label]" value="{{ (form.rawDataFor('rate') if errorRate else form.valueFor('rate')) | default('') }}"> %
+              </div>
 
-              <label class="form-label" for="reason[label]">{{ t('Why you’re entitled to this rate') }}</label>
-              {% if errorReason %}<span class="error-message">{{ t(errorReason) }}</span>{% endif %}
-              <input class="form-control {% if errorReason %} form-control-error{% endif %}" name="reason" type="text"
-                     id="reason[label]" value="{{ form.valueFor('reason') | default('') }}">
+              <div class="form-group-compound">
+                <label class="form-label" for="reason[label]">{{ t('Why you’re entitled to this rate') }}</label>
+                {% if errorReason %}<span class="error-message">{{ t(errorReason) }}</span>{% endif %}
+                <input class="form-control {% if errorReason %} form-control-error{% endif %}" name="reason" type="text"
+                       id="reason[label]" value="{{ form.valueFor('reason') | default('') }}">
+              </div>
             </div>
           </fieldset>
         </div>
 
         <details class='form-group'>
-
           <summary>
-            <span class="summary">{{ t('Help with interest rate') }}</span>
+            <span class="summary">{{ t('Help with interest rates') }}</span>
           </summary>
 
           <div class="panel panel-border-narrow">
-            <p>
-             {{ t('As standard you can claim up to 8% interest on money owed to you. You might be able to claim
-             a different rate. For example, if a loan has not been repaid, or if you had a contract which entitles
-             you to a particular rate.') }}</p>
-            <p>
-             {{ t('The court will decide if you’re entitled to some or all of the interest claimed. '+
-             'You might be asked to give reasons for why you should get interest.')}}</p>
-
+            <p>{{ t('As standard you can claim up to 8% interest on money owed to you. You might be able to claim a different rate. For example,' +
+              ' if a loan has not been repaid, or if you had a contract which entitles you to a particular rate.') }}</p>
+            <p>{{ t('The court will decide if you’re entitled to some or all of the interest claimed.') }}</p>
           </div>
-
         </details>
 
         <div class="form-group">

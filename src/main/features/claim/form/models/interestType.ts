@@ -1,4 +1,5 @@
 import { IsDefined, IsIn } from 'class-validator'
+import { CompletableTask } from 'models/task'
 
 export class InterestTypeOption {
   static readonly SAME_RATE = 'same'
@@ -16,21 +17,33 @@ export class ValidationErrors {
   static readonly INTEREST_TYPE_REQUIRED: string = 'Choose same rate or breakdown'
 }
 
-export class InterestType {
+export class InterestType implements CompletableTask {
 
   @IsDefined({ message: ValidationErrors.INTEREST_TYPE_REQUIRED })
   @IsIn(InterestTypeOption.all(), { message: ValidationErrors.INTEREST_TYPE_REQUIRED })
-  interestType?: string
+  option?: string
 
-  constructor (interestType?: string) {
-    this.interestType = interestType
+  constructor (option?: string) {
+    this.option = option
+  }
+
+  static fromObject (value?: any): InterestType {
+    if (value == null) {
+      return value
+    }
+
+    return new InterestType(value.option)
   }
 
   deserialize (input?: any): InterestType {
     if (input) {
-      this.interestType = input
+      this.option = input.option
     }
 
     return this
+  }
+
+  isCompleted (): boolean {
+    return !!this.option && (this.option === InterestTypeOption.SAME_RATE || this.option === InterestTypeOption.BREAKDOWN)
   }
 }

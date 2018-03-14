@@ -8,6 +8,8 @@ import { Claim } from 'claims/models/claim'
 import { InterestData } from 'app/common/interestData'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { DraftClaim } from 'drafts/models/draftClaim'
+import { Moment } from 'moment'
+import { InterestOption } from 'claim/form/models/interest'
 
 export async function getInterestDetails (claim: Claim): Promise<InterestData> {
   if (claim.claimData.interestRate.type === InterestRateOption.NO_INTEREST) {
@@ -33,15 +35,16 @@ function getInterestDateOrIssueDate (claim: Claim): moment.Moment {
 }
 
 export async function draftInterestAmount (claimDraft: DraftClaim): Promise<number> {
-  const interest = claimDraft.interestRate
+  const interest: number = getInterestRate(claimDraft)
   const breakdown: ClaimAmountBreakdown = claimDraft.amount
-  const interestDate = claimDraft.interestDate
+  const interestStartDate: Moment = claimDraft.interestDate.type === InterestDateType.SUBMISSION ? MomentFactory.currentDate() :
+                                    claimDraft.interestStartDate.date.toMoment()
   const claimAmount: number = breakdown.totalAmount()
 
   return calculateInterest(
     claimAmount,
     interest,
-    interestDate.type === InterestDateType.CUSTOM ? interestDate.date.toMoment() : MomentFactory.currentDate()
+    interestStartDate
   )
 }
 
@@ -50,4 +53,20 @@ export async function draftClaimAmountWithInterest (claimDraft: DraftClaim): Pro
   const claimAmount: number = claimDraft.amount.totalAmount()
 
   return claimAmount + interest
+}
+
+function getInterestRate (claimDraft: DraftClaim): number {
+  if (claimDraft.interest.option === InterestOption.NO) {
+    return 0.00
+  }
+
+  if (claimDraft.interestRate.type === InterestRateOption.STANDARD) {
+    return getStandardInterestRate()
+  } else {
+    return claimDraft.interestRate.rate
+  }
+}
+
+export function getStandardInterestRate(): number {
+  return 8.0
 }

@@ -36,6 +36,7 @@ import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOp
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 import { InterestOption } from 'claim/form/models/interest'
 import { InterestTypeOption } from 'claim/form/models/interestType'
+import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -111,6 +112,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('InterestOption', InterestOption)
     nunjucksEnv.addGlobal('InterestTypeOption', InterestTypeOption)
     nunjucksEnv.addGlobal('InterestDateType', InterestDateType)
+    nunjucksEnv.addGlobal('InterestEndDateOption', InterestEndDateOption)
     nunjucksEnv.addGlobal('ResidenceType', ResidenceType)
     nunjucksEnv.addGlobal('PaymentSchedule', PaymentSchedule)
     nunjucksEnv.addGlobal('DashboardUrlHelper', DashboardUrlHelper)
