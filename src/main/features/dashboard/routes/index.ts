@@ -10,17 +10,19 @@ import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { ResponseDraft } from 'response/draft/responseDraft'
 
+const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.dashboardPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+  .get(Paths.dashboardPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
     const claimDraft: Draft<DraftClaim> = res.locals.claimDraft
     const responseDraft: Draft<ResponseDraft> = res.locals.responseDraft
     const user: User = res.locals.user
-    const claimsAsClaimant: Claim[] = await ClaimStoreClient.retrieveByClaimantId(user)
+    const claimsAsClaimant: Claim[] = await claimStoreClient.retrieveByClaimantId(user)
     const claimDraftSaved: boolean = claimDraft.document && claimDraft.id !== 0
     const responseDraftSaved = responseDraft && responseDraft.document && responseDraft.id !== 0
 
-    const claimsAsDefendant: Claim[] = await ClaimStoreClient.retrieveByDefendantId(user)
+    const claimsAsDefendant: Claim[] = await claimStoreClient.retrieveByDefendantId(user)
 
     res.render(Paths.dashboardPage.associatedView, {
       paths: Paths,

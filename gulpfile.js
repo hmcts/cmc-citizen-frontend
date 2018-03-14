@@ -15,24 +15,26 @@ const govUkElementRoot = path.join(repoRoot, 'node_modules/govuk-elements-sass/p
 const assetsDirectory = './src/main/public'
 const stylesheetsDirectory = `${assetsDirectory}/stylesheets`
 
-gulp.task('sass', () => {
+gulp.task('sass', (done) => {
   gulp.src(stylesheetsDirectory + '/*.scss')
+    .pipe(plumber())
     .pipe(sass({
       includePaths: [
         govUkFrontendToolkitRoot,
         govUkElementRoot
       ]
     }))
-    .pipe(plumber())
     .pipe(sass())
     .pipe(gulp.dest(stylesheetsDirectory))
     .pipe(livereload())
+  done()
 })
 
-gulp.task('copy-files', () => {
+gulp.task('copy-files', (done) => {
   copyGovUkTemplate()
   copyClientPolyfills()
   copyA11ySniffer()
+  done()
 })
 
 function copyGovUkTemplate () {
@@ -92,11 +94,12 @@ function copyA11ySniffer () {
     .pipe(gulp.dest(`${assetsDirectory}/stylesheets/lib/`))
 }
 
-gulp.task('watch', () => {
-  gulp.watch(stylesheetsDirectory + '/**/*.scss', [ 'sass' ])
+gulp.task('watch', (done) => {
+  gulp.watch(stylesheetsDirectory + '/**/*.scss', gulp.series('sass'))
+  done()
 })
 
-gulp.task('develop', () => {
+gulp.task('develop', (done) => {
   setTimeout(() => {
     livereload.listen({
       key: fs.readFileSync(path.join(__dirname, 'src', 'main', 'resources', 'localhost-ssl', 'localhost.key'), 'utf-8'),
@@ -104,7 +107,8 @@ gulp.task('develop', () => {
     })
     nodemon({
       ext: 'ts js po',
-      stdout: true
+      stdout: true,
+      ignore: ['./src/integration-test/', 'src/main/public/js/lib', 'src/test']
     }).on('readable', () => {
       this.stdout.on('data', function (chunk) {
         if (/^Application started on port/.test(chunk)) {
@@ -115,11 +119,18 @@ gulp.task('develop', () => {
       this.stderr.pipe(process.stderr)
     })
   }, 500)
+  done()
 })
 
-gulp.task('default', [
-  'sass',
-  'copy-files',
-  'develop',
-  'watch'
-])
+gulp.task('default',
+  gulp.series(
+    gulp.parallel(
+      'sass',
+      'copy-files',
+    ),
+    gulp.parallel(
+      'develop',
+      'watch'
+    )
+  )
+)

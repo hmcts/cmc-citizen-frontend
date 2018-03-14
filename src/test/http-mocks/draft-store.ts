@@ -11,7 +11,7 @@ import { Claimant } from 'app/drafts/models/claimant'
 import { DraftClaim } from 'app/drafts/models/draftClaim'
 import { IndividualDetails } from 'app/forms/models/individualDetails'
 import { MobilePhone } from 'app/forms/models/mobilePhone'
-import { Payment } from 'app/pay/payment'
+import { Payment } from 'payment-hub-client/payment'
 import { Address } from 'forms/models/address'
 import { DateOfBirth } from 'app/forms/models/dateOfBirth'
 import { LocalDate } from 'forms/models/localDate'
@@ -75,9 +75,16 @@ export const sampleClaimDraftObj = {
       number: '07000000000'
     } as MobilePhone,
     payment: {
-      id: '12',
+      reference: '123',
+      date_created: 12345,
       amount: 2500,
-      state: { status: 'success' }
+      status: 'Success',
+      _links: {
+        next_url: {
+          href: 'any href',
+          method: 'POST'
+        }
+      }
     } as Payment
   } as Claimant,
   defendant: {

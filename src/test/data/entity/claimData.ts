@@ -2,7 +2,7 @@ import { individual } from './party'
 
 export const claimData = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
-  claimant: { ...individual, email: undefined },
+  claimants: [{ ...individual, email: undefined }],
   defendants: [{ ...individual, mobilePhone: undefined }],
   amount: {
     rows: [
@@ -34,13 +34,12 @@ export const claimData = {
     type: 'submission'
   },
   reason: 'Because he did...',
-  feeAmountInPennies: 10000,
+  feeAmountInPennies: 1000000,
   payment: {
+    reference: '123',
+    date_created: 12345,
     amount: 10000,
-    id: 12,
-    state: {
-      status: 'success'
-    }
+    status: 'Success'
   },
   timeline: {
     rows: []

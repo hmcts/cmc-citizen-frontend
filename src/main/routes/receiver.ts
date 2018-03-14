@@ -22,10 +22,12 @@ import { User } from 'app/idam/user'
 import { DraftService } from 'services/draftService'
 
 const logger = Logger.getLogger('router/receiver')
+
 const sessionCookie = config.get<string>('session.cookieName')
 const stateCookieName = 'state'
 
 const draftService: DraftService = new DraftService()
+const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
 async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath): Promise<string> {
   if (req.query.state !== OAuthHelper.getStateCookie(req)) {
@@ -70,8 +72,8 @@ function loginErrorHandler (req: express.Request,
 }
 
 async function retrieveRedirectForLandingPage (user: User): Promise<string> {
-  const noClaimIssued: boolean = (await ClaimStoreClient.retrieveByClaimantId(user)).length === 0
-  const noClaimReceived: boolean = (await ClaimStoreClient.retrieveByDefendantId(user)).length === 0
+  const noClaimIssued: boolean = (await claimStoreClient.retrieveByClaimantId(user)).length === 0
+  const noClaimReceived: boolean = (await claimStoreClient.retrieveByDefendantId(user)).length === 0
   const noDraftClaims: boolean = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
   const noDraftResponses: boolean = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
 
@@ -89,11 +91,11 @@ function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
 
 async function linkDefendantWithClaimByLetterHolderId (letterHolderId, user): Promise<Claim | void> {
   if (user.isInRoles(`letter-${letterHolderId}`)) {
-    const claim: Claim = await ClaimStoreClient.retrieveByLetterHolderId(letterHolderId, user.bearerToken)
+    const claim: Claim = await claimStoreClient.retrieveByLetterHolderId(letterHolderId, user.bearerToken)
     logger.debug(`Linking user ${user.id} to claim ${claim.id}`)
 
     if (!claim.defendantId) {
-      return ClaimStoreClient.linkDefendantV1(claim.externalId, user)
+      return claimStoreClient.linkDefendantV1(claim.externalId, user)
     }
     return Promise.resolve()
   }
@@ -129,16 +131,19 @@ export default express.Router()
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
           if (FeatureToggles.isEnabled('ccd')) {
-            await ClaimStoreClient.linkDefendant(user)
+            await claimStoreClient.linkDefendant(user)
             res.redirect(await retrieveRedirectForLandingPage(user))
           } else {
-            Promise.all(user.getLetterHolderIdList().map(
-            (letterHolderId) => linkDefendantWithClaimByLetterHolderId(letterHolderId, user)
-            )
-          )
-            .then(async () => res.redirect(await retrieveRedirectForLandingPage(user)))
-            .catch(async () => res.redirect(await retrieveRedirectForLandingPage(user)))
-            .catch(next)
+            try {
+              await Promise.all(user.getLetterHolderIdList().map(
+              (letterHolderId) => linkDefendantWithClaimByLetterHolderId(letterHolderId, user)
+                )
+              )
+            } catch (err) {
+              // ignore linking errors
+              logger.error(err)
+            }
+            res.redirect(await retrieveRedirectForLandingPage(user))
           }
 
         }

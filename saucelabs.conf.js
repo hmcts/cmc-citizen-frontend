@@ -1,4 +1,4 @@
-const supportedBrowsers = require('./src/integration-test/config/saucelabs/supported-browsers').supportedBrowsers
+const supportedBrowsers = require('@hmcts/cmc-supported-browsers').supportedBrowsers
 
 const browser = requiredValue(process.env.SAUCELABS_BROWSER, 'SAUCELABS_BROWSER')
 const saucelabsTunnelIdentifier = requiredValue(process.env.SAUCELABS_TUNNEL_IDENTIFIER, 'SAUCELABS_TUNNEL_IDENTIFIER')
@@ -7,7 +7,7 @@ const saucelabsAccessKey = requiredValue(process.env.SAUCELABS_ACCESS_KEY, 'SAUC
 
 function requiredValue (envVariableValue, variableName) {
   if (envVariableValue && envVariableValue.trim().length > 0) {
-    return envVariableValue
+    return envVariableValue.trim()
   } else {
     throw new Error(`${variableName} is a required environment variable, but wasn't set`)
   }
@@ -22,8 +22,8 @@ function setupDesiredCapabilitiesFor (browser, saucelabsTunnelName) {
 
 exports.config = {
   name: 'integration-tests',
-  bootstrap: './src/bootstrap/bootstrap.ts',
-  tests: './src/tests/**/*_test.*',
+  bootstrap: './src/integration-test/bootstrap/bootstrap.ts',
+  tests: './src/integration-test/tests/**/*_test.*',
   output: './output',
   timeout: 10000,
   helpers: {
@@ -45,16 +45,16 @@ exports.config = {
       desiredCapabilities: setupDesiredCapabilitiesFor(browser, saucelabsTunnelIdentifier)
     },
     IdamHelper: {
-      require: './src/helpers/idamHelper'
+      require: './src/integration-test/helpers/idamHelper'
     },
     ClaimStoreHelper: {
-      require: './src/helpers/claimStoreHelper'
+      require: './src/integration-test/helpers/claimStoreHelper'
     },
     PageHelper: {
-      require: './src/helpers/pageHelper'
+      require: './src/integration-test/helpers/pageHelper'
     },
     SaucelabsReporter: {
-      require: './src/helpers/saucelabsReporter'
+      require: './src/integration-test/helpers/saucelabsReporter'
     }
   },
   mocha: {
