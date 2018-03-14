@@ -45,9 +45,8 @@ export class ClaimModelConverter {
     claimData.payment = this.makeShallowCopy(draftClaim.claimant.payment)
     claimData.reason = draftClaim.reason.reason
     claimData.timeline = { rows: draftClaim.timeline.getPopulatedRowsOnly() } as ClaimantTimeline
-    claimData.evidence = { rows: draftClaim.evidence.getPopulatedRowsOnly() } as Evidence
+    claimData.evidence = { rows: ClaimModelConverter.convertEvidence(draftClaim.evidence) as any } as Evidence
     claimData.feeAmountInPennies = draftClaim.claimant.payment.amount
-    claimData.timeline = { rows : draftClaim.timeline.getPopulatedRowsOnly() } as ClaimantTimeline
     claimData.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(draftClaim.claimant.payment.amount)
     if (draftClaim.qualifiedStatementOfTruth && draftClaim.qualifiedStatementOfTruth.signerName) {
       claimData.statementOfTruth = new StatementOfTruth(
@@ -56,6 +55,15 @@ export class ClaimModelConverter {
       )
     }
     return claimData
+  }
+
+  private static convertEvidence (evidence: Evidence) {
+    return evidence.getPopulatedRowsOnly().map(item => {
+      return {
+        type: item.type.value,
+        description: item.description
+      }
+    })
   }
 
   private static convertClaimantDetails (draftClaim: DraftClaim): Party {
