@@ -7,7 +7,7 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 
 class DefendantAddressEligibilityPage extends EligibilityPage<YesNoOption> {
   constructor () {
-    super(Paths.defendantAddressPage, Paths.governmentDepartmentPage, 'defendantAddress')
+    super(Paths.defendantAddressPage, Paths.over18Page, 'defendantAddress')
   }
 
   checkEligibility (value: YesNoOption): EligibilityCheck {

@@ -7,7 +7,7 @@ import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 
 class GovernmentDepartmentEligiblityPage extends EligibilityPage<YesNoOption> {
   constructor () {
-    super(Paths.governmentDepartmentPage, Paths.helpWithFeesPage, 'governmentDepartment')
+    super(Paths.governmentDepartmentPage, Paths.claimIsForTenancyDepositPage, 'governmentDepartment')
   }
 
   checkEligibility (value: YesNoOption): EligibilityCheck {

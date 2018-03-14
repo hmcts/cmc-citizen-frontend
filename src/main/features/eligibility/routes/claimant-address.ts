@@ -11,7 +11,7 @@ class ClaimantAddressEligibilityPage extends EligibilityPage<YesNoOption> {
   }
 
   checkEligibility (value: YesNoOption): EligibilityCheck {
-    return value === YesNoOption.NO ? eligible() : notEligible(NotEligibleReason.CLAIMANT_ADDRESS)
+    return value === YesNoOption.YES ? eligible() : notEligible(NotEligibleReason.CLAIMANT_ADDRESS)
   }
 }
 

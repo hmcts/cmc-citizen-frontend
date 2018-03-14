@@ -22,6 +22,11 @@ export class DraftClaim extends DraftDocument {
   readCompletingClaim: boolean = false
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
   eligibility: Eligibility = new Eligibility()
+  // Remove and have a true false flag in relation to cookie
+
+  /*
+  Or only create Draft when eligibility cookie exists
+   */
 
   deserialize (input: any): DraftClaim {
     if (input) {
