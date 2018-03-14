@@ -1,37 +1,29 @@
-export class PaymentState {
-  status: string
-  finished: boolean
+/* tslint:disable variable-name allow snake_case */
 
-  deserialize (input?: any): PaymentState {
-    if (input) {
-      this.status = input.status
-      this.finished = input.finished
-    }
-    return this
-  }
+import 'reflect-metadata'
+import { plainToClass, Type } from 'class-transformer'
+
+class Link {
+  readonly href: string
+  readonly method: string
+}
+
+class Links {
+  @Type(() => Link)
+  readonly self: Link
+  @Type(() => Link)
+  readonly next_url: Link
 }
 
 export class Payment {
-  id: string
-  amount: number
   reference: string
-  description: string
-  date_created: number // tslint:disable-line variable-name allow snake_case
-  state: PaymentState
+  amount: number
+  status: string // only in V2
+  date_created: number | string // V1 uses number, V2 uses ISO string
+  @Type(() => Links)
+  _links?: Links
 
-  static fromObject (input?: any): Payment {
-    return new Payment().deserialize(input)
-  }
-
-  deserialize (input?: any): Payment {
-    if (input) {
-      this.id = input.id
-      this.amount = input.amount
-      this.reference = input.reference
-      this.description = input.description
-      this.date_created = input.date_created
-      this.state = new PaymentState().deserialize(input.state)
-    }
-    return this
+  static deserialize (input?: any): Payment {
+    return plainToClass(Payment, input as object)
   }
 }
