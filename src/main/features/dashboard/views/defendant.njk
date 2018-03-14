@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "./macro/responseStatus.njk" import responseStatusForDefendant, responseStatusForDefendantBasedOnState %}
+{% from "./macro/caseStatus.njk" import caseStatusForDefendant, responseStatusForDefendantBasedOnState %}
 
 {% set title = t('Money claim') %}
 
@@ -27,7 +27,7 @@
         {% elif featureToggles.offer and claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         <p>{{ claim.respondedAt | date }}</p>
         <h3 class="heading-small">{{ t('Settle Claim') }} </h3>
-        {{ responseStatusForDefendant(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
+        {{ caseStatusForDefendant(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
         <a href="{{ DashboardPaths.agreementReceiver.evaluateUri({ externalId: externalId }) }}">{{ t('Download the agreement') }}</a>
 
         {% elif featureToggles.offer and not claim.settlementReachedAt %}

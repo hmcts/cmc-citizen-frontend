@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "./macro/responseStatus.njk" import responseStatusForClaimant %}
+{% from "./macro/caseHistory.njk" import caseHistoryForClaimant %}
 
 {% set title = 'Money claim' %}
 
@@ -28,7 +28,7 @@
             {{ submitButton('Request a County Court Judgment') }}
           </form>
         {% else %}
-            {{ responseStatusForClaimant(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+            {{ caseHistoryForClaimant(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
         {% endif %}
 
         {% if claim.countyCourtJudgmentRequestedAt %}

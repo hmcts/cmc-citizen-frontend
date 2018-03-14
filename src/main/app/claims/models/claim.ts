@@ -13,7 +13,6 @@ import { FeatureToggles } from 'utils/featureToggles'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 
 interface State {
-  date: Moment
   status: ClaimStatus
 }
 
@@ -125,15 +124,12 @@ export class Claim {
   get stateHistory (): State[] {
     if (this.status === ClaimStatus.OFFER_ACCEPTED) {
       return [{
-        date: undefined,
         status: ClaimStatus.OFFER_ACCEPTED
       }, {
-        date: this.respondedAt,
         status: ClaimStatus.CLAIM_REJECTED
       }]
     } else {
       return [{
-        date: undefined,
         status: this.status
       }]
     }

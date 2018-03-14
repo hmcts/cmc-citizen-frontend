@@ -1,0 +1,39 @@
+{% from "./caseStatus.njk" import caseStatusForClaimant %}
+{% from "timeRemaining.njk" import timeRemaining %}
+
+{% macro _viewResponseLink (externalId) %}
+  <a href="{{ ResponsePaths.summaryPage.evaluateUri({ externalId: externalId }) }}">{{ t('View full response') }}</a>
+{% endmacro %}
+
+{% macro caseHistoryForClaimant(claim, url) %}
+  {% for state in claim.stateHistory %}
+    {% if state.status === ClaimStatus.OFFER_ACCEPTED %}
+      <div class="status-block">
+        <h3 class="heading-small">{{ t('Settle out of court') }}</h3>
+        <p>
+          {{ t('You’ve agreed to the offer made by {{ defendantName }} and signed an agreement to settle your claim.',
+            { defendantName: claim.claimData.defendant.name }) }}
+        </p>
+        <p>
+          {{ t('We’ve asked {{ defendantName }} to sign the agreement.',
+            { defendantName: claim.claimData.defendant.name }) }}
+        </p>
+      </div>
+    {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
+      <div class="status-block">
+        <h3 class="heading-small">{{ t('The defendant’s response') }}</h3>
+        {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – this is a form which you must complete to tell us more about the claim.',
+          { defendantName: claim.claimData.defendant.name }) }}
+        <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">
+          <p>{{ t('Download their response') }}</p>
+        </a>
+      </div>
+    {% else %}
+      <div class="status-block">
+        {{ caseStatusForClaimant(state.status, claim, url) }}
+      </div>
+    {% endif %}
+  {% endfor %}
+
+
+{% endmacro %}
