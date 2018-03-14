@@ -10,10 +10,13 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { FeatureToggles } from 'utils/featureToggles'
+import { Logger } from '@hmcts/nodejs-logging'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
 const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
+
+const logger = Logger.getLogger('claims/claimStoreClient')
 
 export class ClaimStoreClient {
   constructor (private request: RequestPromiseAPI = requestPromiseApi) {
@@ -34,6 +37,7 @@ export class ClaimStoreClient {
       })
       .catch((err) => {
         if (err.statusCode === HttpStatus.CONFLICT) {
+          logger.warn(`Claim ${draft.document.externalId} appears to have been saved successfully on initial timed out attempt, retrieving the saved instance`)
           return this.retrieveByExternalId(draft.document.externalId, claimant)
         } else {
           throw err
