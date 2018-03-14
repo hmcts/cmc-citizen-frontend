@@ -42,8 +42,7 @@
       {% if state.status === ClaimStatus.OFFER_ACCEPTED %}
         <h3 class="heading-small">{{ t('Settle out of court') }}</h3>
         <p>
-          {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court. {{ claimantName }} has signed the agreement.',
-            { claimantName: claim.claimData.claimant.name }) }}
+          {{ t('The claimant has accepted your offer and signed a legal agreement. You need to sign the agreement to settle out of court.') }}
         </p>
         <p>
           {{ t('When you’ve both signed the agreement, the claim won’t proceed.') }}
