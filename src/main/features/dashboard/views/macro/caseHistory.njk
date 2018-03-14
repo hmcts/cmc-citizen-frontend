@@ -58,8 +58,6 @@
         <p>
           <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>
         </p>
-        {#<h3 class="heading-small">{{ t('Your defence is being processed.') }}</h3>#}
-        {#<p>{{ t('We will email you to explain what to do next.') }}</p>#}
       {% else %}
         {% if claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
           <h3 class="heading-small">{{ t('Agreement signed') }}</h3>

@@ -8,13 +8,12 @@
     <div class="column-two-thirds">
       <div class="govuk-box-highlight">
         <h1 class="bold-large">{{ t('You’ve settled out of court') }}</h1>
-        <br />
-        <p>
+        <div class="action-date-container">
           <strong class="bold">{{ claim.settlementReachedAt | date }}</strong>
-        </p>
-        <p class="issue-receipt-download">
+        </div>
+        <div class="receipt-download-container">
           <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download agreement as a PDF') }}</a>
-        </p>
+        </div>
       </div>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
@@ -24,7 +23,9 @@
 
       {% include "includes/service_survey_link.njk" %}
 
-      <a href="{{ DashboardPaths.dashboardPage.uri }}" class="button">Finished</a>
+      <p>
+        <a href="{{ DashboardPaths.dashboardPage.uri }}" class="button">{{ t('Finished') }}</a>
+      </p>
 
       {{ supportWidget() }}
 

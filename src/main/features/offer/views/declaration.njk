@@ -25,15 +25,15 @@
       </p>
 
       <div class="form-group">
-      {{
-        row('The offer',
-          t('{{ defendantName }}: {{ offerContent }}', {
-            defendantName: claim.claimData.defendant.name,
-            offerContent: offer.content
-          })
-        )
-      }}
-      {{ row('Completion date', offer.completionDate | date) }}
+        {{
+          row('The offer',
+            t('{{ defendantName }}: {{ offerContent }}', {
+              defendantName: claim.claimData.defendant.name,
+              offerContent: offer.content
+            })
+          )
+        }}
+        {{ row('Completion date', offer.completionDate | date) }}
       </div>
 
       <p>
@@ -72,19 +72,9 @@
 
       <h2 class="heading-medium">{{ t('Sign the agreement') }}</h2>
 
-      <p>{% set signAgreementText = 'Make sure this contract includes everything you have agreed with {{ name }} before signing.' %}</p>
-
-        {% if user.id === claim.defendantId  %}
-          {{ t(signAgreementText, {
-              name: claim.claimData.claimant.name
-            })
-          }}
-        {% else %}
-          {{ t(signAgreementText, {
-              name: claim.claimData.defendant.name
-            })
-          }}
-        {% endif %}
+      {{ t('Make sure this contract includes everything you have agreed with {{ name }} before signing.',
+        { name: claim.claimData.claimant.name if user.id === claim.defendantId else claim.claimData.defendant.name })
+      }}
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
