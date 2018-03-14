@@ -7,8 +7,11 @@
   <div class="grid-row">
     <div class="column-two-thirds">
       <div class="govuk-box-highlight">
-        <h1 class="heading-large">{{ t('You’ve settled out of court') }}</h1>
-
+        <h1 class="bold-large">{{ t('You’ve settled out of court') }}</h1>
+        <br />
+        <p>
+          <strong class="bold">{{ claim.settlementReachedAt | date }}</strong>
+        </p>
         <p class="issue-receipt-download">
           <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download agreement as a PDF') }}</a>
         </p>
@@ -18,19 +21,13 @@
       <p>
         {{ t('You’ve both signed a legal agreement which replaces the claim.') }}
       </p>
-      <p>
-        {{
-          t('View your claim status on <a href="{{ dashboardUri }}">your money claims account</a>.', {
-            dashboardUri: DashboardPaths.defendantPage.evaluateUri({ externalId: claim.externalId })
-          }) | safe
-        }}
-      </p>
-      
+
+      {% include "includes/service_survey_link.njk" %}
+
       <a href="{{ DashboardPaths.defendantPage.evaluateUri({ externalId: claim.externalId }) }}" class="button">Finished</a>
 
       {{ supportWidget() }}
 
-      {% include "includes/service_survey_link.njk" %}
     </div>
   </div>
 {% endblock %}
