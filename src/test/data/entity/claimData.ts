@@ -34,13 +34,12 @@ export const claimData = {
     type: 'submission'
   },
   reason: 'Because he did...',
-  feeAmountInPennies: 10000,
+  feeAmountInPennies: 1000000,
   payment: {
+    reference: '123',
+    date_created: 12345,
     amount: 10000,
-    id: 12,
-    state: {
-      status: 'success'
-    }
+    status: 'Success'
   },
   timeline: {
     rows: []
