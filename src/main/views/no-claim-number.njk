@@ -15,9 +15,9 @@
           </legend>
 
           {{ csrfProtection(csrf) }}
-          <div class="multiple-choice">
-            <input id="radio-2" type="radio" name="radio_group2" value="{{ Service.MONEYCLAIMS.option }}">
-            <label for="radio-2">{{ t('Money claims - new beta service') }}</label>
+          <div class="multiple-choice" id="service[label]">
+            <input id="service-moneyclaims" type="radio" name="service" value="{{ Service.MONEYCLAIMS.option }}">
+            <label for="service-moneyclaims">{{ t('Money claims - new beta service') }}</label>
             <details>
               <summary>{{ t('What does the new service look like?') }}</summary>
               <div class="panel">
@@ -36,8 +36,8 @@
             </details>
           </div>
           <div class="multiple-choice">
-            <input id="radio-1" type="radio" name="radio_group2" value="{{ Service.MCOL.option }}">
-            <label for="radio-1">{{ t('Money Claim Online (MCOL)') }}
+            <input id="service-mcol" type="radio" name="service" value="{{ Service.MCOL.option }}">
+            <label for="service-mcol">{{ t('Money Claim Online (MCOL)') }}
               <span class="form-hint">{{ t('You’ll have used an 8-digit Government Gateway user ID.') }}</span>
             </label>
             <details>
