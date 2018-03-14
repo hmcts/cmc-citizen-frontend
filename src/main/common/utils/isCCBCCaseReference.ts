@@ -1,11 +1,17 @@
 import { join } from 'path'
 
-const ccbcCaseIdentifier: string[] = require(join(__dirname, '..', '..', 'resources', 'ccbc_case_identifiers.json'))
+const ccbcCaseIdentifiers: string[] = require(join(__dirname, '..', '..', 'resources', 'ccbc_case_identifiers.json'))
 
-export function isCCBCCaseReference (referenceNumber: string): boolean {
-  if (!referenceNumber || referenceNumber.length < 2) {
+/**
+ * Checks against a list of CCBC case IDs and if they contained in the string provided
+ * returns true
+ * @param {string} referenceNumber the reference number, returns false if not provided
+ * @returns {boolean} if the reference is likely a CCBC reference
+ */
+export function isCCBCCaseReference (referenceNumber?: string): boolean {
+  if (!referenceNumber) {
     return false
   }
 
-  return ccbcCaseIdentifier.filter((id) => referenceNumber.toUpperCase().includes(id)).length > 0
+  return ccbcCaseIdentifiers.filter((id) => referenceNumber.toUpperCase().includes(id)).length > 0
 }
