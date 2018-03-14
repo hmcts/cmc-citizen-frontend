@@ -4,46 +4,29 @@
   <a href="{{ ResponsePaths.summaryPage.evaluateUri({ externalId: externalId }) }}">{{ t('View full response') }}</a>
 {% endmacro %}
 
-{% macro responseStatusForDefendantBasedOnState(state, claim, url, isAfter4pm) %}
-  {% if state.status === ClaimStatus.OFFER_ACCEPTED %}
-    <h3 class="heading-small">{{ t('Settle claim') }} </h3>
-      {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court. {{ claimantName }} has signed the agreement.',
-      { claimantName: claim.claimData.claimant.name } ) }}
-      <a href="{{ OfferPaths.countersignAgreementPage.evaluateUri({ externalId: claim.externalId }) }}">
-        <p>{{ t('Sign the agreement') }}</p>
-      </a>
-  {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
-      <h3 class="heading-small">{{ t('Your response to the claim') }} </h3>
-      {{ t('You’ve rejected the claim. The case will be reviewed by a judge and might go to court.' ) }}
-      <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">
-        <p>{{ t('Download your response') }}</p>
-      </a>
-  {% endif %}
-{% endmacro %}
-
-{% macro caseStatusForDefendant(claim, url, isAfter4pm) %}
-  {% if claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
+{% macro caseStatusForDefendant(status, claim, url, isAfter4pm) %}
+  {% if status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
     {{ t('You have signed the agreement. The claim is now settled.') }}
-  {% elseif claim.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
+  {% elseif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
     {{ t('You did not respond by the deadline. {{ claimantName }} can request a County Court Judgment (CCJ) against you. You can still respond until they do.',
     { claimantName: claim.claimData.claimant.name } ) }}
-  {% elseif claim.status === ClaimStatus.CCJ_REQUESTED %}
+  {% elseif status === ClaimStatus.CCJ_REQUESTED %}
     {{ t('{{ claimantName }} requested a County Court Judgment against you on {{ ccjRequestedAt }}. We will contact you both within 5 working days.',
     { claimantName: claim.claimData.claimant.name, ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
-  {% elseif claim.status === ClaimStatus.FREE_MEDIATION %}
+  {% elseif status === ClaimStatus.FREE_MEDIATION %}
     {{ t('You’ve rejected the claim and suggested mediation on {{ respondedAt }}.',
     { respondedAt: claim.respondedAt | date }) }}
-  {% elseif claim.status === ClaimStatus.CLAIM_REJECTED %}
+  {% elseif status === ClaimStatus.CLAIM_REJECTED %}
     {{ t('You’ve rejected the claim. The case will be reviewed by a judge and might go to court.' ) }}
-  {% elseif claim.status === ClaimStatus.OFFER_ACCEPTED %}
-    {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court. {{ claimantName }} has signed the agreement.',
+  {% elseif status === ClaimStatus.OFFER_ACCEPTED %}
+    {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court.',
     { claimantName: claim.claimData.claimant.name } ) }}
-  {% elseif claim.status === ClaimStatus.OFFER_SUBMITTED %}
+  {% elseif status === ClaimStatus.OFFER_SUBMITTED %}
     {{ t('You made an offer to settle out of court.') }}
-  {% elseif claim.status === ClaimStatus.MORE_TIME_REQUESTED %}
+  {% elseif status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ t('You need to respond by {{ responseDeadline }}. You asked for an extra 14 days to respond.',
     { responseDeadline: claim.responseDeadline | date }) }}
-  {% elseif claim.status === ClaimStatus.NO_RESPONSE %}
+  {% elseif status === ClaimStatus.NO_RESPONSE %}
     <a href="{{ url }}">{{ t('Respond to claim') }}</a>
     <span class="block mobile-inline">
       {{ timeRemaining(claim.remainingDays, isAfter4pm) }}

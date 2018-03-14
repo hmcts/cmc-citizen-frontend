@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "./macro/caseStatus.njk" import caseStatusForDefendant, responseStatusForDefendantBasedOnState %}
+{% from "./macro/caseHistory.njk" import caseHistoryForDefendant %}
 
 {% set title = t('Money claim') %}
 
@@ -13,35 +13,15 @@
     </div>
     <div class="column-two-thirds">
       <h2 class="heading-medium">{{ t('Claim status') }}</h2>
+      {{ caseHistoryForDefendant(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
 
-      {% if featureToggles.offer and claim.status === ClaimStatus.OFFER_ACCEPTED %}
-        {% for state in claim.stateHistory %}
-          <div class="status-block">
-            <p>{{ (state.date | date) if state.date}}</p>
-            <p>
-              {{ responseStatusForDefendantBasedOnState(state, claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
-            </p>
-          </div>
-        {% endfor %}
-
-        {% elif featureToggles.offer and claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
-        <p>{{ claim.respondedAt | date }}</p>
-        <h3 class="heading-small">{{ t('Settle Claim') }} </h3>
-        {{ caseStatusForDefendant(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
-        <a href="{{ DashboardPaths.agreementReceiver.evaluateUri({ externalId: externalId }) }}">{{ t('Download the agreement') }}</a>
-
-        {% elif featureToggles.offer and not claim.settlementReachedAt %}
-          <h3 class="heading-small">{{ t('Your defence is being processed.') }}</h3>
-          <p>{{ t('We will email you to explain what to do next.') }}</p>
-          <h2 class="heading-medium">{{ t('More options') }}</h2>
-          <h3 class="heading-small">{{ t('Settle out of court') }}</h3>
-          <p>{{
-              t('You can still <a href="{{ makeOfferUri }}">make an offer</a> to settle the claim out of court. You will avoid a hearing and a County Court Judgment against you.', {
-              makeOfferUri : OfferPaths.offerPage.evaluateUri({ externalId: claim.externalId }) }) | safe
-            }}
-          </p>
-
-
+      {% if featureToggles.offer and state.status === ClaimStatus.CLAIM_REJECTED %}
+        <h2 class="heading-medium">{{ t('More options') }}</h2>
+        <h3 class="heading-small">{{ t('Settle out of court') }}</h3>
+        <p>
+          {{ t('You can still <a href="{{ makeOfferUri }}">make an offer</a> to settle the claim out of court. You will avoid a hearing and a County Court Judgment against you.',
+            { makeOfferUri : OfferPaths.offerPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}
+        </p>
       {% endif %}
     </div>
 
