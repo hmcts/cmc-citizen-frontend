@@ -8,7 +8,7 @@
 {% macro caseHistoryForClaimant(claim, url) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
-      {% if featureToggles.offer and state.status === ClaimStatus.OFFER_ACCEPTED %}
+      {% if state.status === ClaimStatus.OFFER_ACCEPTED %}
         <h3 class="heading-small">{{ t('Settle out of court') }}</h3>
         <p>
           {{ t('You’ve agreed to the offer made by {{ defendantName }} and signed an agreement to settle your claim.',
@@ -37,7 +37,7 @@
 {% macro caseHistoryForDefendant(claim, url, isAfter4pm) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
-      {% if featureToggles.offer and state.status === ClaimStatus.OFFER_ACCEPTED %}
+      {% if state.status === ClaimStatus.OFFER_ACCEPTED %}
         <h3 class="heading-small">{{ t('Settle out of court') }}</h3>
         <p>
           {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court. {{ claimantName }} has signed the agreement.',
