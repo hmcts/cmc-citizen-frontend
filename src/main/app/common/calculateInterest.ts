@@ -21,5 +21,8 @@ export async function calculateInterest (amount: number,
                                          interest: Interest,
                                          interestFromDate: Moment,
                                          interestToDate: Moment = MomentFactory.currentDateTime()): Promise<number> {
-  return InterestRateClient.calculateInterestRate(amount, getRate(interest), interestFromDate, interestToDate)
+  if (interestToDate.diff(interestFromDate, 'days') > 0) {
+    return InterestRateClient.calculateInterestRate(amount, getRate(interest), interestFromDate, interestToDate)
+  }
+  return 0
 }

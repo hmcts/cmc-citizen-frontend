@@ -11,6 +11,8 @@
 
       <p>{{ t('You can also claim interest on the money you’re owed. The court will decide if you’re entitled to it.') }} </p>
 
+      <p>{{ t('Unless you know that a different rate applies, you can claim up to 8% per annum.') }} </p>
+
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
@@ -22,7 +24,7 @@
 
             <legend>
               <span class="form-label-bold">
-                {{ t('What rate of interest are you claiming?') }}
+                {{ t('What annual rate of interest are you claiming?') }}
               </span>
               {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
             </legend>
@@ -62,10 +64,9 @@
 
           <div class="panel panel-border-narrow">
             <p>
-             {{ t('You can claim up to 8% interest on money owed to you. '+
-             'You might be able to claim a different rate. '+
-             'For example, if a loan has not been repaid, '+
-             'or if you had a contract which entitles you to a particular rate.') }}</p>
+             {{ t('As standard you can claim up to 8% interest on money owed to you. You might be able to claim
+             a different rate. For example, if a loan has not been repaid, or if you had a contract which entitles
+             you to a particular rate.') }}</p>
             <p>
              {{ t('The court will decide if you’re entitled to some or all of the interest claimed. '+
              'You might be asked to give reasons for why you should get interest.')}}</p>

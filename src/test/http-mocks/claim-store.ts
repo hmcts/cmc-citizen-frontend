@@ -62,7 +62,8 @@ export const sampleClaimObj = {
     interest: {
       type: InterestType.STANDARD
     },
-    reason: 'Because I can'
+    reason: 'Because I can',
+    feeAmountInPennies: 2500
   },
   responseDeadline: '2017-08-08',
   countyCourtJudgment: {
@@ -113,8 +114,8 @@ export function resolveRetrieveClaimByExternalId (claimOverride?: object): mock.
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...claimOverride })
 }
 
-export function resolveRetrieveClaimByExternalIdWithResponse (override?: object) {
-  mock(`${serviceBaseURL}/claims`)
+export function resolveRetrieveClaimByExternalIdWithResponse (override?: object): mock.Scope {
+  return mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...sampleDefendantResponseObj, ...override })
 }
@@ -185,6 +186,12 @@ export function resolveRetrieveByDefendantIdWithResponse (override?: object) {
     .reply(HttpStatus.OK, [{ ...sampleClaimObj, ...sampleDefendantResponseObj, ...override }])
 }
 
+export function rejectRetrieveByDefendantId (reason: string) {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/defendant/[0-9]+'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
 export function resolveSaveResponse () {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/.+/defendant/[0-9]+'))
@@ -249,6 +256,12 @@ export function resolveAcceptOffer (by: string = 'claimant') {
 export function resolveRejectOffer (by: string = 'claimant') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp(`/.+/offers/${by}/reject`))
+    .reply(HttpStatus.CREATED)
+}
+
+export function resolveCountersignOffer (by: string = 'defendant') {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp(`/.+/offers/${by}/countersign`))
     .reply(HttpStatus.CREATED)
 }
 

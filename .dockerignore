@@ -13,5 +13,9 @@
 
 !src/main/**
 !config/**
+!types/**
+!src/integration-test/**
+!default.conf.js
+!saucelabs.conf.js
 
 !server.js

@@ -3,25 +3,29 @@ import * as config from 'config'
 
 import { Paths } from 'claim/paths'
 
-import { PayClient } from 'app/pay/payClient'
-import { PaymentResponse } from 'app/pay/paymentResponse'
-import { Payment } from 'app/pay/payment'
+import { PayClient } from 'payment-hub-client/payClient'
+import { Payment } from 'payment-hub-client/payment'
 
 import { FeesClient } from 'app/fees/feesClient'
-import { CalculationOutcome } from 'app/fees/models/calculationOutcome'
 
 import { ClaimStoreClient } from 'app/claims/claimStoreClient'
 import { buildURL } from 'app/utils/callbackBuilder'
-import { claimAmountWithInterest } from 'app/utils/interestUtils'
+import { draftClaimAmountWithInterest } from 'common/interestUtils'
 import { User } from 'app/idam/user'
 import { DraftService } from 'services/draftService'
 import { ServiceAuthTokenFactoryImpl } from 'common/security/serviceTokenFactoryImpl'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Logger } from '@hmcts/nodejs-logging'
+import { FeeOutcome } from 'fees/models/feeOutcome'
+import { Fee } from 'payment-hub-client/fee'
+import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveResponse'
+
+const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
 const logger = Logger.getLogger('router/pay')
-const issueFeeCode = config.get<string>('fees.issueFee.code')
+const event: string = config.get<string>('fees.issueFee.event')
+const channel: string = config.get<string>('fees.channel.online')
 
 const getPayClient = async (): Promise<PayClient> => {
   const authToken = await new ServiceAuthTokenFactoryImpl().get()
@@ -47,7 +51,7 @@ async function successHandler (res, next) {
 
   let claimStatus: boolean
   try {
-    claimStatus = await ClaimStoreClient.retrieveByExternalId(draft.document.externalId, user)
+    claimStatus = await claimStoreClient.retrieveByExternalId(draft.document.externalId, user)
       .then(() => true)
   } catch (err) {
     if (err.toString().includes('Claim not found by external id')) {
@@ -63,7 +67,7 @@ async function successHandler (res, next) {
     await new DraftService().delete(draft.id, user.bearerToken)
     res.redirect(Paths.confirmationPage.evaluateUri({ externalId: draft.document.externalId }))
   } else {
-    const claim = await ClaimStoreClient.saveClaimForUser(draft, user)
+    const claim = await claimStoreClient.saveClaim(draft, user)
     await new DraftService().delete(draft.id, user.bearerToken)
     res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
   }
@@ -78,31 +82,33 @@ export default express.Router()
       if (!draft.document.externalId) {
         throw new Error(`externalId is missing from the draft claim. User Id : ${user.id}`)
       }
-      const amount: number = await claimAmountWithInterest(draft.document)
+      const amount: number = await draftClaimAmountWithInterest(draft.document)
       if (!amount) {
         throw new Error('No amount entered, you cannot pay yet')
       }
 
-      const paymentId = draft.document.claimant.payment.id
+      const paymentRef = draft.document.claimant.payment ? draft.document.claimant.payment.reference : undefined
 
-      if (paymentId) {
+      if (paymentRef) {
         const payClient: PayClient = await getPayClient()
-        const payment: Payment = await payClient.retrieve(user, paymentId)
-        switch (payment.state.status) {
-          case 'success':
+        const paymentResponse: PaymentRetrieveResponse = await payClient.retrieve(user, paymentRef)
+        if (paymentResponse !== undefined) {
+          if (paymentResponse.status === 'Success') {
             return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: draft.document.externalId }))
+          }
+        } else if (draft.document.claimant.payment['state'] && draft.document.claimant.payment['state']['status'] === 'success') {
+          logError(user.id, draft.document.claimant.payment, 'Successful payment from V1 version of the API cannot be handled')
         }
       }
-      const feeCalculationOutcome: CalculationOutcome = await FeesClient.calculateFee(issueFeeCode, amount)
+      const feeOutcome: FeeOutcome = await FeesClient.calculateFee(event, amount, channel)
       const payClient: PayClient = await getPayClient()
-      const payment: PaymentResponse = await payClient.create(
+      const payment: Payment = await payClient.create(
         res.locals.user,
-        feeCalculationOutcome.fee.code,
-        feeCalculationOutcome.amount,
+        draft.document.externalId,
+        [new Fee(feeOutcome.amount, feeOutcome.code, feeOutcome.version)],
         getReturnURL(req, draft.document.externalId)
       )
       draft.document.claimant.payment = payment
-
       await new DraftService().save(draft, user.bearerToken)
 
       res.redirect(payment._links.next_url.href)
@@ -117,27 +123,26 @@ export default express.Router()
     try {
       const { externalId } = req.params
 
-      const paymentId = draft.document.claimant.payment.id
-      if (!paymentId) {
+      const paymentReference = draft.document.claimant.payment.reference
+      if (!paymentReference) {
         return res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
       }
       const payClient = await getPayClient()
 
-      const payment: Payment = await payClient.retrieve(user, paymentId)
-      draft.document.claimant.payment = new Payment().deserialize(payment)
+      const payment: PaymentRetrieveResponse = await payClient.retrieve(user, paymentReference)
+      draft.document.claimant.payment = payment
 
       await new DraftService().save(draft, user.bearerToken)
 
-      const status: string = payment.state.status
-
+      const status: string = payment.status
       // https://gds-payments.gelato.io/docs/versions/1.0.0/api-reference
       switch (status) {
-        case 'cancelled':
-        case 'failed':
+        case 'Cancelled':
+        case 'Failed':
           logPaymentError(user.id, payment)
           res.redirect(Paths.checkAndSendPage.uri)
           break
-        case 'success':
+        case 'Success':
           await successHandler(res, next)
           break
         default:

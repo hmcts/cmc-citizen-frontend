@@ -4,7 +4,7 @@ import * as path from 'path'
 import * as favicon from 'serve-favicon'
 import * as cookieParser from 'cookie-parser'
 import * as bodyParser from 'body-parser'
-import { RequestTracing, Express, Logger } from '@hmcts/nodejs-logging'
+import { RequestTracing, Logger } from '@hmcts/nodejs-logging'
 import { ForbiddenError, NotFoundError } from './errors'
 import { ErrorLogger } from 'logging/errorLogger'
 import { RouterFinder } from 'common/router/routerFinder'
@@ -21,6 +21,7 @@ import { CCJFeature } from 'ccj/index'
 import { Feature as OfferFeature } from 'offer/index'
 import { TestingSupportFeature } from 'testing-support/index'
 import * as toBoolean from 'to-boolean'
+import { FeatureToggles } from 'utils/featureToggles'
 
 export const app: express.Express = express()
 
@@ -51,10 +52,6 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 app.use(cookieParser())
-
-if (!developmentMode) {
-  app.use(Express.accessLogger())
-}
 
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -96,7 +93,7 @@ app.use((err, req, res, next) => {
   } else if (err.statusCode === 403) {
     res.render(new ForbiddenError().associatedView)
   } else {
-    const view = (env === 'mocha' || env === 'development' || env === 'dev' || env === 'dockertests' || env === 'demo') ? 'error_dev' : 'error'
+    const view = FeatureToggles.isEnabled('returnErrorToUser') ? 'error_dev' : 'error'
     res.render(view, {
       error: err,
       title: 'error'

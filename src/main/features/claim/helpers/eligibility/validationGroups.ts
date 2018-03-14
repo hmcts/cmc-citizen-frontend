@@ -1,9 +1,9 @@
 export class ValidationGroups {
-  static readonly CLAIM_ON_BEHALF: string = 'claim-on-behalf'
   static readonly CLAIM_VALUE: string = 'claim-value'
-  static readonly SINGLE_CLAIMANT: string = 'single-claimant'
   static readonly SINGLE_DEFENDANT: string = 'single-defendant'
+  static readonly CLAIM_TYPE: string = 'claim-type'
   static readonly OVER_18: string = 'over-18'
+  static readonly DEFENDANT_AGE: string = 'over-18-defendant'
   static readonly HELP_WITH_FEES: string = 'help-with-fees'
   static readonly CLAIMANT_ADDRESS: string = 'claimant-address'
   static readonly DEFENDANT_ADDRESS: string = 'defendant-address'

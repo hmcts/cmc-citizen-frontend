@@ -7,11 +7,14 @@ import {
 } from 'class-validator'
 import { Country } from 'app/common/country'
 import { ErrorLogger } from 'logging/errorLogger'
-import { PostcodeInfoClient, PostcodeInfoResponse } from '@hmcts/postcodeinfo-client'
-import * as config from 'config'
-import { request } from 'client/request'
+import { PostcodeInfoResponse } from '@hmcts/postcodeinfo-client'
+import { ClientFactory } from 'postcode-lookup/clientFactory'
 
-const postcodeClient = new PostcodeInfoClient(config.get<string>('postcodeLookup.apiKey'), request)
+const postcodeClient = ClientFactory.createInstance()
+
+enum BlockedPostcodes {
+  ISLE_OF_MAN = 'IM'
+}
 
 @ValidatorConstraint()
 export class CheckCountryConstraint implements ValidatorConstraintInterface {
@@ -20,6 +23,11 @@ export class CheckCountryConstraint implements ValidatorConstraintInterface {
     if (value === undefined || value === null || value === '') {
       return true
     }
+
+    if (value.trim().toUpperCase().startsWith(BlockedPostcodes.ISLE_OF_MAN)) {
+      return false
+    }
+
     try {
       const postcodeInfoResponse: PostcodeInfoResponse = await postcodeClient.lookupPostcode(value)
       if (!postcodeInfoResponse.valid) {

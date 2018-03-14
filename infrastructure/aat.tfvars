@@ -1,0 +1,7 @@
+feature_fine_print = "true"
+feature_full_admission = "true"
+feature_offer = "true"
+feature_partial_admission = "true"
+feature_statement_of_means = "true"
+feature_ccd = "true"
+feature_return_error_to_user = "true"

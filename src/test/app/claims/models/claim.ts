@@ -12,6 +12,7 @@ import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { individual } from '../../../data/entity/party'
 import { DefenceType } from 'claims/models/response/fullDefenceResponse'
 import { Individual } from 'claims/models/details/yours/individual'
+import { PartyStatement } from 'claims/models/partyStatement'
 
 describe('Claim', () => {
 
@@ -73,14 +74,7 @@ describe('Claim', () => {
     it('should return valid Offer object when defendant made an offer', () => {
       claim.settlement = new Settlement().deserialize({
         partyStatements: [
-          {
-            type: StatementType.OFFER.value,
-            madeBy: MadeBy.DEFENDANT.value,
-            offer: {
-              content: 'bla',
-              completionDate: '2019-10-10'
-            }
-          }
+          new PartyStatement(StatementType.OFFER.value, MadeBy.DEFENDANT.value, new Offer('aa', moment()))
         ]
       })
       expect(claim.defendantOffer).to.be.instanceof(Offer)

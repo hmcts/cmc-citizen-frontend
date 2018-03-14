@@ -44,6 +44,6 @@ export default express.Router()
         draft.document.reason = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.taskListPage.uri)
+        res.redirect(Paths.timelinePage.uri)
       }
     }))

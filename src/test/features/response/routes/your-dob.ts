@@ -19,6 +19,7 @@ import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-che
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.defendantDateOfBirthPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const expectedText: string = 'Enter your date of birth'
 
 describe('Defendant user details: your date of birth page', () => {
   attachDefaultHooks(app)
@@ -47,7 +48,7 @@ describe('Defendant user details: your date of birth page', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('What is your date of birth?'))
+            .expect(res => expect(res).to.be.successful.withText(expectedText))
         })
       })
     })
@@ -78,7 +79,7 @@ describe('Defendant user details: your date of birth page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('What is your date of birth?', 'div class="error-summary"'))
+              .expect(res => expect(res).to.be.successful.withText(expectedText, 'div class="error-summary"'))
           })
         })
 

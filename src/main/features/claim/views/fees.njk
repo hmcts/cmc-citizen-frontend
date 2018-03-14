@@ -1,5 +1,6 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, submitButton %}
+{% from "feesTable.njk" import feesTable %}
 
 {% set title = t('Fees | Money claim') %}
 {% set heading = t('Fees you’ll pay') %}
@@ -12,7 +13,8 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
         <p>
-          {{ t('You must pay a fee to make this claim but we’ll add it to the amount you’re claiming from the defendant.') }}
+          {{ t('You must pay a fee to make this claim but we’ll add it to the amount you’re claiming
+          from the defendant.') }}
         </p>
 
         <table class="form-group">
@@ -37,32 +39,7 @@
           </tbody>
         </table>
 
-
-        <details class="notice">
-          <summary>{{ t('How these fees are calculated') }}</summary>
-
-          <div class="panel">
-            <p>
-              {{ t('The fee is based on the amount you’re claiming, including any interest.')}}
-            </p>
-            <table>
-              <thead>
-              <tr>
-                <th scope="col">Claim amount</th>
-                <th scope="col">Claim fee</th>
-                <th scope="col">Hearing fee</th>
-              </tr>
-              </thead>
-              {% for row in rows %}
-                <tr>
-                  <td>{{ row.from | pennies2pounds | numeral }} to {{ row.to | pennies2pounds | numeral }}</td>
-                  <td>{{ row.fees[1] | pennies2pounds | numeral }}</td>
-                  <td>{{ row.fees[2] | pennies2pounds | numeral }}</td>
-                </tr>
-              {% endfor %}
-            </table>
-          </div>
-        </details>
+        {{ feesTable('How these fees are calculated', rows , showHearingFee = true) }}
 
         <div class="form-group">
           {{ submitButton('Continue') }}

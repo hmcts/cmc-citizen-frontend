@@ -6,25 +6,12 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-        <p>{{ t('You can avoid going to a hearing if you settle out of court.') }}</p>
+        <p>{{ t('You can avoid getting a County Court Judgment (CCJ) if you settle out of court. There will be no public record of the claim.') }}</p>
         <p>
-        {{ t('If %s accepts your offer you’ll both sign a legal agreement. This agreement will replace the claim.',
-        {
-          postProcess: 'sprintf',
-          sprintf: [claim.claimData.claimant.name]
-        }
-        ) }}
+        {{ t('If {{ claimantName }} accepts your offer you’ll both sign a legal agreement.', { claimantName: claim.claimData.claimant.name }) }}
       </p>
       <p>
-        {{ t('You can ask the court to make a Judgment if %s breaks the agreement.',
-        {
-          postProcess: 'sprintf',
-          sprintf: [claim.claimData.claimant.name]
-        }
-        ) }}
-      </p>
-      <p>
-        {{ t('Out of court offers can’t be mentioned in court if you don’t reach an agreement.') }}
+        {{ t('If they reject your offer the details can’t be mentioned in court.') }}
       </p>
 
       {{ t('<a href="%s" class="button">Continue</a>',

@@ -10,11 +10,11 @@
     <div class="column-two-thirds">
 
       <p>
-        {{ t('Your claim response deadline is now %s.', { postProcess: 'sprintf', sprintf: [newDeadline | date] }) }}
+        {{ t('You must respond before 4pm on {{ deadline }}.', { deadline: newDeadline | date }) }}
       </p>
 
       <p>
-        {{ t('We’ve emailed both you and %s confirming the additional response time.', { postProcess: 'sprintf', sprintf: [claimantFullName]}) }}
+        {{ t('We’ll email both you and {{ claimant }} confirming the additional response time.', { claimant: claimantFullName}) }}
       </p>
 
       <form method="post" novalidate>

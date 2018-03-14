@@ -17,8 +17,14 @@
       "app/*": [
         "app/*"
       ],
+      "payment-hub-client/*": [
+        "app/pay/*"
+      ],
       "client/*": [
         "app/client/*"
+      ],
+      "postcode-lookup/*": [
+        "app/postcode-lookup/*"
       ],
       "drafts/*": [
         "app/drafts/*"
@@ -85,6 +91,9 @@
       ],
       "services/*": [
         "services/*"
+      ],
+      "integration-test/*": [
+        "../integration-test/*"
       ]
     },
     "typeRoots": [

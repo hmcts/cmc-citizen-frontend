@@ -70,7 +70,7 @@ describe('Claim issue: reason page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to task list when form is valid and everything is fine', async () => {
+      it('should redirect to timeline when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
@@ -78,7 +78,7 @@ describe('Claim issue: reason page', () => {
           .post(ClaimPaths.reasonPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ reason: 'Roof started leaking soon after...' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.timelinePage.uri))
       })
     })
   })

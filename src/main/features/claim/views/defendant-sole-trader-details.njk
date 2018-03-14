@@ -20,12 +20,12 @@
           partyDetailsFragment(
             form,
             fields = [
-              { label: 'Full name', name: 'name' },
-              { label: 'Business name (optional)', name: 'businessName' }
+              { label: 'Full name (include title)', name: 'name' },
+              { label: 'Trading as (if you know it)', name: 'businessName' }
             ],
             addressSection = {
-              heading: 'Their address',
-              hint: 'You must enter the defendant’s residentials or trade address to make a claim against them.',
+              heading: 'Their postal address',
+              hint: 'You can enter their residential or trade address.',
               name: 'address',
               postcodeLookup: true
             },

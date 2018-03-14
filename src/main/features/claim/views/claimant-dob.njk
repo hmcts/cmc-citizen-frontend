@@ -12,7 +12,7 @@
         <input type="hidden" name="known" value="true" />
         {{ csrfProtection(csrf) }}
 
-        {{ dateInput(form = form, name = 'date', hint = 'You must be over 18 to use this service') }}
+        {{ dateInput(form = form, name = 'date') }}
 
         {{ saveAndContinueButton() }}
       </form>

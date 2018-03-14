@@ -2,7 +2,7 @@ import * as express from 'express'
 import { Paths } from 'claim/paths'
 import { InterestType } from 'features/claim/form/models/interest'
 import { TotalAmount } from 'forms/models/totalAmount'
-import { interestAmount } from 'app/utils/interestUtils'
+import { draftInterestAmount } from 'common/interestUtils'
 import { FeesClient } from 'fees/feesClient'
 
 import { DraftClaim } from 'drafts/models/draftClaim'
@@ -14,7 +14,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: DraftClaim = res.locals.claimDraft.document
 
-      const interest: number = await interestAmount(draft)
+      const interest: number = await draftInterestAmount(draft)
       const totalAmount: number = draft.amount.totalAmount()
 
       const feeAmount: number = await FeesClient.calculateIssueFee(totalAmount + interest)

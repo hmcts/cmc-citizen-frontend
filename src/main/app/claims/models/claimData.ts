@@ -12,8 +12,9 @@ import { Individual as DefendantAsIndividual } from 'claims/models/details/their
 import { Company as DefendantAsCompany } from 'claims/models/details/theirs/company'
 import { SoleTrader as DefendantAsSoleTrader } from 'claims/models/details/theirs/soleTrader'
 import { Organisation as DefendantAsOrganisation } from 'claims/models/details/theirs/organisation'
-import { Payment } from 'app/pay/payment'
+import { Payment } from 'payment-hub-client/payment'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
+import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 
 export class ClaimData {
   externalId: string
@@ -22,6 +23,7 @@ export class ClaimData {
   amount: ClaimAmountBreakdown = new ClaimAmountBreakdown()
   feeAmountInPennies: number
   reason: string
+  timeline: ClaimantTimeline
   interest: Interest
   interestDate: InterestDate
   payment: Payment = new Payment()
@@ -43,20 +45,15 @@ export class ClaimData {
     }
   }
 
-  get paidFeeAmount (): number {
-    return this.payment.amount / 100
-  }
-
   deserialize (input: any): ClaimData {
     if (input) {
       this.claimants = this.deserializeClaimants(input.claimants)
       this.defendants = this.deserializeDefendants(input.defendants)
       if (input.payment) {
-        this.payment = new Payment().deserialize(input.payment)
+        this.payment = Payment.deserialize(input.payment)
       }
       this.feeAmountInPennies = input.feeAmountInPennies
 
-      this.payment = new Payment().deserialize(input.payment)
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
       this.interest = new Interest().deserialize(input.interest)
       this.interestDate = new InterestDate().deserialize(input.interestDate)
@@ -64,6 +61,7 @@ export class ClaimData {
       this.reason = input.reason
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
       this.reason = input.reason
+      this.timeline = ClaimantTimeline.fromObject(input.timeline)
       this.externalId = input.externalId
       if (input.interest) {
         this.interest = new Interest().deserialize(input.interest)

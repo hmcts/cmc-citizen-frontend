@@ -1,7 +1,8 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary, textArea %}
+{% from "./macro/expandableSection.njk" import expandableSection %}
 
-{% set heading = t('Your defence') %}
+{% set heading = t('Why do you disagree with the claim?') %}
 {% set title = t('Money claim') %}
 
 {% set claimantFullName = claim.claimData.claimant.name %}
@@ -10,19 +11,22 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <div class="description-block">
-        <h4 class="heading-small"> {{ t('Their reasons for making the claim') }}</h4>
-        <p>{{ theirReason }}</p>
+      <div class="form-group">
+        {{ expandableSection(label = 'Their reasons for making the claim', content = theirReason, id = 'summaryContent') }}
       </div>
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        {{ textArea(label = t('Briefly explain why you disagree with the claim. If you disagree with only some of the claim, say what you believe is wrong and what you believe is correct.'), name = 'text', form = form, rows = 10) }}
+        <p class="bold-small">{{ t('Explain why you disagree with the claim') }}</p>
+
+        <p>{{ t('You can also list any evidence or documents which support your defence - you might be asked to provide them later.') }}</p>
+
+        {{ textArea(name = 'text', form = form, rows = 10) }}
 
         <div class="panel panel-border-wide">
           <p>
-            {{ t('Your response will be sent to the claimant %s. A judge will not consider see your explanation unless the claim is defended.',
+            {{ t('Your response will be sent to the claimant %s.',
             {
               postProcess: 'sprintf',
               sprintf: [claimantFullName]

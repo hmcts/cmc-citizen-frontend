@@ -1,0 +1,29 @@
+{% macro feesTable(label, rows, showHearingFee=false) %}
+  <details class="notice">
+    <summary>{{ t(label) }}</summary>
+
+    <div class="panel">
+      <p>
+        {{ t('The fee is based on the amount you’re claiming, including any interest.')}}
+      </p>
+      <table>
+        <thead>
+        <tr>
+          <th scope="col">{{ t('Claim amount') }}</th>
+          <th scope="col">{{ t('Claim fee') }}</th>
+          {% if showHearingFee %}<th scope="col">{{ t('Hearing fee') }}</th>{% endif %}
+        </tr>
+        </thead>
+        {% for row in rows %}
+          <tr>
+            <td>{{ row.minRange | numeral }} to {{ row.maxRange | numeral }}</td>
+            <td>{{ row.fees[1] | numeral | default('Not available') }}</td>
+            {% if showHearingFee %}<td>{{ row.fees[2] | numeral | default('Not available') }}</td>{% endif %}
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </details>
+{% endmacro %}
+
+

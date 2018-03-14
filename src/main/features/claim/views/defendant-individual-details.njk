@@ -20,11 +20,10 @@
           partyDetailsFragment(
             form,
             fields = [
-              { label: 'Full name', name: 'name' }
+              { label: 'Full name (include title)', name: 'name' }
             ],
             addressSection = {
-              heading: 'Their residential address',
-              hint: 'You must enter the defendant’s residential address to make a claim against them.',
+              heading: 'Their postal address',
               name: 'address',
               postcodeLookup: true
             },

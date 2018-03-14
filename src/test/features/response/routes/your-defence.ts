@@ -19,6 +19,7 @@ import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-c
 import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const expectedText: string = 'Why do you disagree with the claim'
 
 const pagePath = ResponsePaths.defencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 describe('Defendant response: defence page', () => {
@@ -54,7 +55,7 @@ describe('Defendant response: defence page', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Your defence'))
+            .expect(res => expect(res).to.be.successful.withText(expectedText))
         })
       })
     })
@@ -91,7 +92,7 @@ describe('Defendant response: defence page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Your defence', 'div class="error-summary"'))
+              .expect(res => expect(res).to.be.successful.withText(expectedText, 'div class="error-summary"'))
           })
         })
 
