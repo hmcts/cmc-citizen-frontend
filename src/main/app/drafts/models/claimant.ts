@@ -5,7 +5,7 @@ import { IndividualDetails } from 'forms/models/individualDetails'
 import { PartyType } from 'app/common/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { MobilePhone } from 'app/forms/models/mobilePhone'
-import { Payment } from 'app/pay/payment'
+import { Payment } from 'payment-hub-client/payment'
 import { CompletableTask } from 'app/models/task'
 
 export class Claimant implements CompletableTask {
@@ -15,7 +15,7 @@ export class Claimant implements CompletableTask {
 
   deserialize (input?: any): Claimant {
     if (input) {
-      this.payment = new Payment().deserialize(input.payment)
+      this.payment = Payment.deserialize(input.payment)
       if (input.mobilePhone) {
         this.mobilePhone = new MobilePhone().deserialize(input.mobilePhone)
       }
