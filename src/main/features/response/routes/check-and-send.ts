@@ -20,6 +20,8 @@ import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 
+const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
   const claim: Claim = res.locals.claim
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -122,7 +124,7 @@ export default express.Router()
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
           await new DraftService().save(draft, user.bearerToken)
         }
-        await ClaimStoreClient.saveResponseForUser(claim.externalId, draft, user)
+        await claimStoreClient.saveResponseForUser(claim.externalId, draft, user)
         await new DraftService().delete(draft.id, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
       }

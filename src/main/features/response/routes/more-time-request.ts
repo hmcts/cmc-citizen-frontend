@@ -14,6 +14,8 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
 
+const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+
 function renderView (form: Form<MoreTimeNeeded>, res: express.Response, next: express.NextFunction) {
   try {
     const claim: Claim = res.locals.claim
@@ -56,7 +58,7 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         if (form.model.option === MoreTimeNeededOption.YES) {
-          await ClaimStoreClient.requestForMoreTime(claim.externalId, user)
+          await claimStoreClient.requestForMoreTime(claim.externalId, user)
 
           res.redirect(Paths.moreTimeConfirmationPage.evaluateUri({ externalId: claim.externalId }))
         } else {
