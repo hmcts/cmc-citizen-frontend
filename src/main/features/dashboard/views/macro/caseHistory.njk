@@ -28,7 +28,9 @@
             <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
           </p>
       {% else %}
-        {{ caseStatusForClaimant(state.status, claim, url) }}
+        <p>
+          {{ caseStatusForClaimant(state.status, claim, url) }}
+        </p>
       {% endif %}
     </div>
   {% endfor %}
@@ -44,6 +46,9 @@
             { claimantName: claim.claimData.claimant.name }) }}
         </p>
         <p>
+          {{ t('When you’ve both signed the agreement, the claim won’t proceed.') }}
+        </p>
+        <p>
           <a href="{{ OfferPaths.countersignAgreementPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Sign the agreement') }}</a>
         </p>
       {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
@@ -57,7 +62,20 @@
         {#<h3 class="heading-small">{{ t('Your defence is being processed.') }}</h3>#}
         {#<p>{{ t('We will email you to explain what to do next.') }}</p>#}
       {% else %}
-        {{ caseStatusForDefendant(claim.status, claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
+        {% if claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
+          <h3 class="heading-small">{{ t('Agreement signed') }}</h3>
+        {% endif %}
+        <p>
+          {{ caseStatusForDefendant(claim.status, claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
+        </p>
+        {% if claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
+          <p>
+            {{ t('The agreement explains what can happen if either party breaks the terms.') }}
+          </p>
+          <p>
+            <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
+          </p>
+        {% endif %}
       {% endif %}
     </div>
   {% endfor %}

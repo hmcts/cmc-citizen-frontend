@@ -6,10 +6,7 @@
 
 {% macro caseStatusForDefendant(status, claim, url, isAfter4pm) %}
   {% if status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
-    {{ t('You have both signed a legal agreement which replaces the claim. The claim is now settled.') }}
-    <p>
-      <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
-    </p>
+    {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
   {% elseif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
     {{ t('You did not respond by the deadline. {{ claimantName }} can request a County Court Judgment (CCJ) against you. You can still respond until they do.',
     { claimantName: claim.claimData.claimant.name } ) }}
