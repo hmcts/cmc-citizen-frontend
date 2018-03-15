@@ -53,6 +53,12 @@
             <strong class="bold">{{ t('Claim details:') }}</strong>
             <span class="block"><a href="{{ receiptUri }}">{{ t('Download claim') }}</a></span>
           </li>
+          {% if claim.response %}
+            <li>
+              <strong class="bold">{{ t('Defendant’s response:') }}</strong>
+              <span class="block"><a href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a></span>
+            </li>
+          {% endif %}
         </ul>
       </div>
     </div>
