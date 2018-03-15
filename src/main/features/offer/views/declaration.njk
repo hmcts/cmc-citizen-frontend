@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, checkboxSingle, submitButton, errorSummary %}
-{% from "table.njk" import row %}
+{% from "./macro/offerTable.njk" import offerTable %}
 
 {% set title = t('Money claim | Declaration') %}
 
@@ -24,10 +24,7 @@
         {% endif %}
       </p>
 
-      <div class="form-group">
-        {{ row('The offer', claim.claimData.defendant.name + ': ' + offer.content) }}
-        {{ row('Completion date', offer.completionDate | date) }}
-      </div>
+      {{ offerTable(claim.claimData.defendant.name + ': ' + offer.content, offer.completionDate) }}
 
       <p>
         {{
