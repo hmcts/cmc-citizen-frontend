@@ -9,7 +9,7 @@
       <div class="govuk-box-highlight">
         <h1 class="bold-large">{{ t('You’ve settled out of court') }}</h1>
         <div class="action-date-container">
-          <strong class="bold">{{ claim.settlementReachedAt | date }}</strong>
+          <span class="bold">{{ claim.settlementReachedAt | date }}</span>
         </div>
         <div class="receipt-download-container">
           <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download agreement as a PDF') }}</a>

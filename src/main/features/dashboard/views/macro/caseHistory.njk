@@ -39,7 +39,7 @@
       {% if state.status === ClaimStatus.CLAIM_REJECTED %}
         <h3 class="heading-small">{{ t('Your response to the claim') }}</h3>
         <p>
-          {{ t('You have rejected the claim. The case will be reviewed by a judge and might go to court.') }}
+          {{ t('You’ve rejected the claim. The case will be reviewed by a judge and might go to court.') }}
         </p>
         <p>
           <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>
