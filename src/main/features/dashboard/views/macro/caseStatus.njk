@@ -14,7 +14,7 @@
     {{ t('{{ claimantName }} requested a County Court Judgment against you on {{ ccjRequestedAt }}. We will contact you both within 5 working days.',
     { claimantName: claim.claimData.claimant.name, ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
   {% elseif status === ClaimStatus.FREE_MEDIATION %}
-    {{ t('You’ve rejected the claim and suggested mediation on {{ respondedAt }}.',
+    {{ t('You’ve rejected the claim and suggested mediation on {{ caseStatusForDefendant }}.',
     { respondedAt: claim.respondedAt | date }) }}
   {% elseif status === ClaimStatus.CLAIM_REJECTED %}
     {{ t('You’ve rejected the claim. The case will be reviewed by a judge and might go to court.' ) }}
