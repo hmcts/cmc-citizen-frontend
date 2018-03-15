@@ -12,7 +12,6 @@ import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import { IsLessThan } from 'forms/validation/validators/isLessThan'
 
 export class ValidationErrors {
-  static readonly FIRST_PAYMENT_AMOUNT_INVALID: string = 'Enter a valid payment amount'
   static readonly INSTALMENTS_AMOUNT_INVALID: string = 'Enter a valid amount for equal instalments'
   static readonly INVALID_DATE: string = 'Enter a valid first payment date'
   static readonly FUTURE_DATE: string = 'Enter a first payment date in the future'
