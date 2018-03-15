@@ -25,14 +25,7 @@
       </p>
 
       <div class="form-group">
-        {{
-          row('The offer',
-            t('{{ defendantName }}: {{ offerContent }}', {
-              defendantName: claim.claimData.defendant.name,
-              offerContent: offer.content
-            })
-          )
-        }}
+        {{ row('The offer', claim.claimData.defendant.name + ': ' + offer.content) }}
         {{ row('Completion date', offer.completionDate | date) }}
       </div>
 
