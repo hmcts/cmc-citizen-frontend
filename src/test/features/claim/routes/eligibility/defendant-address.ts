@@ -22,7 +22,6 @@ describe('Claim eligibility: defendant address page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-
     it('should render page when everything is fine', async () => {
 
       await request(app)
@@ -33,10 +32,7 @@ describe('Claim eligibility: defendant address page', () => {
   })
 
   describe('on POST', () => {
-    /**
-     * Our generic class for Eligibility does not support invalid form in terms of eligibility. (YET)
-     */
-    xit('should render page when form is invalid and everything is fine', async () => {
+    it('should render page when form is invalid and everything is fine', async () => {
 
       await request(app)
         .post(pagePath)
@@ -52,6 +48,7 @@ describe('Claim eligibility: defendant address page', () => {
         .send({ defendantAddress: YesNoOption.YES.option })
         .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
     })
+
     it('should redirect to not eligible page when form is valid and not eligible option selected', async () => {
 
       await request(app)

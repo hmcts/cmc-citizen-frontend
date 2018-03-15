@@ -5,7 +5,6 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from '../../../../routes/hooks'
 import '../../../../routes/expectations'
-import { checkAuthorizationGuards } from '../checks/authorization-check'
 
 import { Paths } from 'eligibility/paths'
 
@@ -33,13 +32,8 @@ describe('Claim eligibility: over 18 page', () => {
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', pagePath)
-
     describe('for authorized user', () => {
-      /**
-       * Our generic class for Eligibility does not support invalid form in terms of eligibility. (YET)
-       */
-      xit('should render page when form is invalid and everything is fine', async () => {
+      it('should render page when form is invalid and everything is fine', async () => {
 
         await request(app)
           .post(pagePath)

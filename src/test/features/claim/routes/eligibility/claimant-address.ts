@@ -31,10 +31,7 @@ describe('Claim eligibility: claimant address page', () => {
   })
 
   describe('on POST', () => {
-    /**
-     * Our generic class for Eligibility does not support invalid form in terms of eligibility. (YET)
-     */
-    xit('should render page when form is invalid and everything is fine', async () => {
+    it('should render page when form is invalid and everything is fine', async () => {
       await request(app)
         .post(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
