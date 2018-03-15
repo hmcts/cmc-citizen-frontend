@@ -16,6 +16,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.claimValuePage.uri
 const pageRedirect: string = Paths.helpWithFeesPage.uri
 const expectedTextOnPage: string = 'Total amount you’re claiming'
+const notEligibleReason: string = NotEligibleReason.CLAIM_VALUE_NOT_KNOWN
 
 describe('Claim eligibility: claim value page', () => {
   attachDefaultHooks(app)
@@ -54,7 +55,7 @@ describe('Claim eligibility: claim value page', () => {
         .post(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
         .send({ claimValue: ClaimValue.NOT_KNOWN.option })
-        .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_VALUE_NOT_KNOWN}`))
+        .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${notEligibleReason}`))
     })
   })
 })

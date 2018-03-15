@@ -14,8 +14,9 @@ import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.helpWithFeesPage.uri
-const pageRedirect: string = Paths.eligibilityClaimantAddressPage.uri
+const pageRedirect: string = Paths.claimantAddressPage.uri
 const expectedTextOnPage: string = 'Do you need help with fees?'
+const notEligibleReason: string = NotEligibleReason.HELP_WITH_FEES
 
 describe('Claim eligibility: help with fees page', () => {
   attachDefaultHooks(app)
@@ -36,7 +37,7 @@ describe('Claim eligibility: help with fees page', () => {
       await request(app)
         .post(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Do you need help with fees?', 'div class="error-summary"'))
+        .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
     })
 
     it('should redirect to claimant address page when form is valid and everything is fine', async () => {
@@ -54,7 +55,7 @@ describe('Claim eligibility: help with fees page', () => {
         .post(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
         .send({ helpWithFees: YesNoOption.YES.option })
-        .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.eligibilityNotEligiblePage.uri}?reason=${NotEligibleReason.HELP_WITH_FEES}`))
+        .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${notEligibleReason}`))
     })
   })
 })
