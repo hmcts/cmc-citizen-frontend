@@ -41,12 +41,21 @@ describe('Claim eligibility: over 18 defendant page', () => {
           .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
       })
 
-      it('should redirect to claim type page when form is valid and everything is fine', async () => {
+      it('should redirect to claim type page when everything is valid, the defendant is said to be over 18 and everything is fine', async () => {
 
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ defendantAge: DefendantAgeOption.YES.option })
+          .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
+      })
+
+      it('should redirect to claim type page when form is valid, the defendant is said to a company or organisation and everything is fine', async () => {
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ defendantAge: DefendantAgeOption.COMPANY_OR_ORGANISATION.option })
           .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
       })
 
