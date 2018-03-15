@@ -15,11 +15,11 @@
         {{ csrfProtection(csrf) }}
         <table>
           <tr>
-            <td>{{ t('The offer') }}</td>
+            <td class="label">{{ t('The offer') }}</td>
             <td>{{ offer.content }}</td>
           </tr>
           <tr>
-            <td>{{ t('By when') }}</td>
+            <td class="label">{{ t('By when') }}</td>
             <td>{{ offer.completionDate | date }}</td>
           </tr>
         </table>
