@@ -22,15 +22,11 @@
             {{ t('Sign the agreement') }}
           </a>
         </p>
-      {% elif featureToggles.offer and not claim.settlementReachedAt  %}
+        {% elif featureToggles.offer and claim.status === ClaimStatus.CLAIM_REJECTED  %}
         <h2 class="heading-medium">{{ t('More options') }}</h2>
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
-        <p>{{ t('You can still <a href="%s">make an offer</a> to settle the claim out of court. You will avoid a hearing and a County Court Judgment against you.',
-                { postProcess: 'sprintf',
-                  sprintf: [ OfferPaths.offerPage.evaluateUri({ externalId: claim.externalId }) ]
-                }) | safe
-            }}
-        </p>
+        <p>{{ t('You can still <a href="{{ link }}">make an offer</a> to settle the claim out of court. You will avoid a hearing and a County Court Judgment against you.',
+          { link: OfferPaths.offerPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}</p>
       {% endif %}
     </div>
 
