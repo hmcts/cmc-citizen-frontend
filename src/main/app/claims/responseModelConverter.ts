@@ -17,10 +17,17 @@ import { Defendant } from 'drafts/models/defendant'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { ResponseType as FormResponseType } from 'response/form/models/responseType'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
+import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
+import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
 
 export class ResponseModelConverter {
 
   static convert (responseDraft: ResponseDraft): Response {
+    let paymentDeclaration: PaymentDeclaration = undefined
+    if (responseDraft.isResponseRejectedFullyWithAmountClaimedPaid()) {
+      paymentDeclaration = this.convertWhenDidYouPay(responseDraft.whenDidYouPay)
+    }
+
     let statementOfTruth: StatementOfTruth = undefined
     if (responseDraft.qualifiedStatementOfTruth) {
       statementOfTruth = new StatementOfTruth(
@@ -36,6 +43,7 @@ export class ResponseModelConverter {
       freeMediation: responseDraft.freeMediation && responseDraft.freeMediation.option,
       moreTimeNeeded: responseDraft.moreTimeNeeded && responseDraft.moreTimeNeeded.option,
       defendant: this.convertPartyDetails(responseDraft.defendantDetails),
+      paymentDeclaration,
       statementOfTruth
     }
   }
@@ -92,4 +100,10 @@ export class ResponseModelConverter {
     return party
   }
 
+  private static convertWhenDidYouPay (whenDidYouPay: WhenDidYouPay): PaymentDeclaration {
+    if (whenDidYouPay === undefined) {
+      return undefined
+    }
+    return new PaymentDeclaration(whenDidYouPay.date.asString(), whenDidYouPay.text)
+  }
 }

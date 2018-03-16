@@ -22,6 +22,7 @@ export class Paths {
   static readonly feesPage = new RoutablePath('/claim/fees')
   static readonly totalPage = new RoutablePath('/claim/total')
   static readonly reasonPage = new RoutablePath('/claim/reason')
+  static readonly timelinePage = new RoutablePath('/claim/timeline')
   static readonly checkAndSendPage = new RoutablePath('/claim/check-and-send')
   static readonly startPaymentReceiver = new RoutablePath('/claim/pay')
   static readonly finishPaymentReceiver = new RoutablePath('/claim/pay/:externalId/receiver')

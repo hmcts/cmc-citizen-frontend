@@ -6,6 +6,8 @@ import { User } from 'idam/user'
 
 import { UUIDUtils } from 'common/utils/uuidUtils'
 
+const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+
 export class ClaimMiddleware {
 
   static retrieveByExternalId (req: express.Request, res: express.Response, next: express.NextFunction): void {
@@ -13,7 +15,7 @@ export class ClaimMiddleware {
     const externalId: string = UUIDUtils.extractFrom(req.path)
 
     const user: User = res.locals.user
-    ClaimStoreClient.retrieveByExternalId(externalId, user)
+    claimStoreClient.retrieveByExternalId(externalId, user)
       .then((claim: Claim) => {
         res.locals.claim = claim
         next()

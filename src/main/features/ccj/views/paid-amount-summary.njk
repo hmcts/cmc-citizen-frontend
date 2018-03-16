@@ -7,13 +7,12 @@
 <div class="grid-row">
   <div class="column-two-thirds">
     <h1 class="heading-large">
-      <span class="heading-secondary">{{ t('County Court Judgment') }}</span>
-      {{ t('Amount to be paid by defendant') }}
+      {{ t('Judgment amount') }}
     </h1>
 
     <div class="form-group">
       <p>
-        {{ t('Amount payable by the defendant is calculated on the amount you’re claiming and any other costs minus any amount paid by the defendant.') }}
+        {{ t('Judgment will be entered against the defendant for this amount. It includes the claim fee you’ve paid.') }}
       </p>
       <table class="table-form">
         <caption class="visuallyhidden">{{ t('Amount payable by the defendant') }}</caption>
@@ -33,7 +32,7 @@
         {% if interestDetails %}
         <tr>
           <th scope="row">
-            {{ interestSnippet(label = 'Interest to date of judgment', interestDetails.rate, interestDetails.numberOfDays, interestDetails.interestFromDate, defaultJudgmentDate) }}
+            {{ interestSnippet(label = 'Interest to date', interestDetails.rate, interestDetails.numberOfDays, interestDetails.interestFromDate, defaultJudgmentDate) }}
           </th>
           <td class="numeric last">
             <span class="font-small">{{ interestDetails.interest | numeral }}</span>
@@ -43,7 +42,7 @@
         <tr>
           <th scope="row">{{ t('Claim fee') }}</th>
           <td class="numeric last">
-            <span class="font-small">{{ claim.claimData.paidFeeAmount | numeral }}</span>
+            <span class="font-small">{{ claim.claimData.feeAmountInPennies | pennies2pounds | numeral }}</span>
           </td>
         </tr>
 

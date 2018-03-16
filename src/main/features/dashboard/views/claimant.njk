@@ -16,23 +16,24 @@
     <div class="column-two-thirds">
       <div>
         <h2 class="heading-medium">{{ t('Claim status') }}</h2>
-        {{ responseStatusForClaimant(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
 
         {% if claim.eligibleForCCJ %}
-          <p>{{ t('You can only ask for a CCJ at this stage if the defendant has not responded to your claim.') }}</p>
-          <p>{{ t('A CCJ means the court orders the defendant to pay the claim.') }}</p>
-
+          <h3 class="bold-small">{{ t('You can request a County Court Judgment') }}</h3>
+          <p>{{ t('{{ defendantName }} has not responded to your claim by the deadline. You can request a County Court Judgment (CCJ) against them.', { defendantName : claim.claimData.defendant.name }) }}</p>
+          <p>{{ t('The court will make an order asking them to pay the money. It does not guarantee that they pay it.') }}</p>
+          <p>{{ t('{{ defendantName }} can still respond to the claim until you request a CCJ.', { defendantName : claim.claimData.defendant.name }) }}</p>
           <form novalidate method="post">
             {{ csrfProtection(csrf) }}
 
             {{ submitButton('Request a County Court Judgment') }}
           </form>
-
+        {% else %}
+            {{ responseStatusForClaimant(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
         {% endif %}
 
         {% if claim.countyCourtJudgmentRequestedAt %}
-          <p>{{ t('%s can no longer respond to your claim.',
-                  { postProcess: 'sprintf', sprintf: [ claim.claimData.defendant.name ] }) }}</p>
+
+          <p>{{ t('{{ defendantName }} can no longer respond to your claim.', { defendantName: claim.claimData.defendant.name }) }}</p>
         {% endif %}
       </div>
     </div>
@@ -45,7 +46,7 @@
             <span class="block">{{ claim.claimData.defendant.name }}</span>
           </li>
           <li>
-            <strong class="bold">{{ t('Claim amount:') }}</strong>
+            <strong class="bold">{{ t('Total claim amount:') }}</strong>
             <span class="block">{{ claim.totalAmountTillToday | numeral }}</span>
           </li>
           <li>

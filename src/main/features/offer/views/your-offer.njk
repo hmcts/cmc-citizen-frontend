@@ -10,28 +10,25 @@
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
-        <div class="description-block">
-          <h4 class="heading-small"> {{ t('Your offer') }}</h4>
-        </div>
 
-        <span class="form-hint">{{ t('For example a payment, fix a problem or return goods.') }}</span>
+        <p>{{ t('Make it clear what you will do and by when. For example: "I will pay you £240 on 29 April 2018 by bank transfer".') }}</p>
+
+        <p>{{ t('If you’re also asking {{ claimantName }} to do something, say clearly what it is and by when it should be done. For example: "You will fix the roof by 28 April 2018."', { claimantName: claim.claimData.claimant.name }) }}</p>
+
+        <div class="description-block">
+          <h2 class="bold-medium"> {{ t('Your offer') }}</h2>
+        </div>
         {{ textArea(id='offerText', label= '', name='offerText', form = form, rows = 10) }}
 
         <div class="description-block">
-          <h4 class="heading-small"> {{ t('When will you pay in full or complete your offer?') }}</h4>
+          <h4 class="heading-small"> {{ t('When will all parts of this offer be done?') }}</h4>
         </div>
 
-        {{ dateInput(form = form, name = 'completionDate',label = '', hint = t('For example, 23 04 2017')) }}
+        {{ dateInput(form = form, name = 'completionDate',label = '', hint = t('For example, {{ futureDate }}', { futureDate: futureDate | inputDate })) }}
 
         <div class="panel panel-border-wide">
           <p>
-            {{ t('%s can accept, reject or make a counter offer.',
-            {
-              postProcess: 'sprintf',
-              sprintf: [claim.claimData.claimant.name]
-            }
-            )
-            }}
+            {{ t('{{ claimantName }} can accept or reject your offer.', { claimantName: claim.claimData.claimant.name }) }}
           </p>
         </div>
         {{ submitButton('Submit offer') }}

@@ -17,6 +17,9 @@
       "app/*": [
         "app/*"
       ],
+      "payment-hub-client/*": [
+        "app/pay/*"
+      ],
       "client/*": [
         "app/client/*"
       ],
@@ -91,6 +94,9 @@
       ],
       "services/*": [
         "services/*"
+      ],
+      "integration-test/*": [
+        "../integration-test/*"
       ]
     },
     "typeRoots": [
