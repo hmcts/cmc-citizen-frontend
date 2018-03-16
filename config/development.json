@@ -7,7 +7,7 @@
     "offer": true,
     "statementOfMeans": true,
     "finePrint": true,
-    "ccd": true,
+    "ccd": false,
     "returnErrorToUser": true
   },
   "appInsights": {
