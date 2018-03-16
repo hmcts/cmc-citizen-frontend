@@ -11,6 +11,8 @@ import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'
 import { OAuthHelper } from 'idam/oAuthHelper'
 
+const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+
 function renderView (form: Form<ClaimReference>, res: express.Response): void {
   res.render(Paths.claimReferencePage.associatedView, { form: form })
 }
@@ -27,7 +29,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        const linked: boolean = await ClaimStoreClient.isClaimLinked(form.model.reference)
+        const linked: boolean = await claimStoreClient.isClaimLinked(form.model.reference)
 
         if (linked) {
           return res.redirect(AppPaths.homePage.uri)

@@ -1,4 +1,5 @@
 import { DraftClaim } from 'drafts/models/draftClaim'
+import { MoneyConverter } from 'fees/moneyConverter'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { PartyType } from 'app/common/partyType'
 import { IndividualDetails } from 'forms/models/individualDetails'
@@ -22,6 +23,7 @@ import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { StringUtils } from 'utils/stringUtils'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
+import { Payment } from 'payment-hub-client/payment'
 import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
 import { InterestRateOption } from 'claim/form/models/interestRate'
@@ -39,13 +41,12 @@ export class ClaimModelConverter {
     claimData.interest = this.convertInterest(draftClaim)
     claimData.interestDate = this.convertInterestDate(draftClaim)
     claimData.amount = new ClaimAmountBreakdown().deserialize(draftClaim.amount)
-    claimData.feeAmountInPennies = draftClaim.claimant.payment.amount
     claimData.claimants = [this.convertClaimantDetails(draftClaim)]
     claimData.defendants = [this.convertDefendantDetails(draftClaim)]
-    claimData.payment = draftClaim.claimant.payment
+    claimData.payment = this.makeShallowCopy(draftClaim.claimant.payment)
     claimData.reason = draftClaim.reason.reason
     claimData.timeline = { rows : draftClaim.timeline.getPopulatedRowsOnly() } as ClaimantTimeline
-    claimData.feeAmountInPennies = draftClaim.claimant.payment.amount
+    claimData.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(draftClaim.claimant.payment.amount)
     if (draftClaim.qualifiedStatementOfTruth && draftClaim.qualifiedStatementOfTruth.signerName) {
       claimData.statementOfTruth = new StatementOfTruth(
         draftClaim.qualifiedStatementOfTruth.signerName,
@@ -192,5 +193,23 @@ export class ClaimModelConverter {
       interestDate.date = new LocalDate(submissionDate.year(), submissionDate.month() + 1, submissionDate.date())
     }
     return interestDate
+  }
+
+  /**
+   * Makes shallow copy to payment object to format that is supported by the backend API.
+   *
+   * Note: It is workaround to remove all unnecessary properties from {@link PaymentRetrieveResponse}. In
+   * long term the intention is to send only payment reference and creation date to backend API.
+   *
+   * @param {Payment} payment - payment object retrieved from Payment HUB using {@link PayClient#retrieve}
+   * @returns {Payment} - simplified payment object required by the backend API
+   */
+  private static makeShallowCopy (payment: Payment): Payment {
+    return {
+      reference: payment.reference,
+      amount: payment.amount,
+      status: payment.status,
+      date_created: payment.date_created
+    }
   }
 }

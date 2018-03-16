@@ -6,7 +6,9 @@
     "partialAdmission": true,
     "offer": true,
     "statementOfMeans": true,
-    "finePrint": true
+    "finePrint": true,
+    "ccd": true,
+    "returnErrorToUser": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

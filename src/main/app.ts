@@ -21,6 +21,7 @@ import { CCJFeature } from 'ccj/index'
 import { Feature as OfferFeature } from 'offer/index'
 import { TestingSupportFeature } from 'testing-support/index'
 import * as toBoolean from 'to-boolean'
+import { FeatureToggles } from 'utils/featureToggles'
 
 export const app: express.Express = express()
 
@@ -92,7 +93,7 @@ app.use((err, req, res, next) => {
   } else if (err.statusCode === 403) {
     res.render(new ForbiddenError().associatedView)
   } else {
-    const view = (env === 'mocha' || env === 'development' || env === 'dev' || env === 'dockertests' || env === 'demo') ? 'error_dev' : 'error'
+    const view = FeatureToggles.isEnabled('returnErrorToUser') ? 'error_dev' : 'error'
     res.render(view, {
       error: err,
       title: 'error'

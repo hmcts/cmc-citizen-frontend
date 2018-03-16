@@ -16,7 +16,7 @@ Scenario('I can complete the journey when I fully reject the claim as I dispute 
 
   const claimRef: string = yield I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL), claimantEmail)
 
-  yield helperSteps.enterPinNumber(claimRef)
+  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.finishResponse(defendantEmail, PartyType.INDIVIDUAL, DefenceType.FULL_REJECTION_WITH_DISPUTE)
 })
 
@@ -26,7 +26,7 @@ Scenario('I can complete the journey when I fully reject the claim as I have alr
 
   const claimRef: string = yield I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL), claimantEmail)
 
-  yield helperSteps.enterPinNumber(claimRef)
+  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.finishResponse(defendantEmail, PartyType.INDIVIDUAL, DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID)
 })
 
@@ -40,7 +40,7 @@ Scenario('I can see send your response by email page when I admit all of the cla
 
   const claimRef: string = yield I.createClaim(claimData, claimantEmail)
 
-  yield helperSteps.enterPinNumber(claimRef)
+  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.finishResponseWithHandOff(claimRef, defendant, claimant, defendantEmail, DefenceType.FULL_ADMISSION)
 })
 
@@ -54,7 +54,7 @@ Scenario('I can see send your response by email page when I admit part of the cl
 
   const claimRef: string = yield I.createClaim(claimData, claimantEmail)
 
-  yield helperSteps.enterPinNumber(claimRef)
+  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.finishResponseWithHandOff(claimRef, defendant, claimant, defendantEmail, DefenceType.PART_ADMISSION)
 })
 
@@ -68,7 +68,7 @@ Scenario('I can see send your response by email page when I reject all of the cl
 
   const claimRef: string = yield I.createClaim(claimData, claimantEmail)
 
-  yield helperSteps.enterPinNumber(claimRef)
+  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.finishResponseWithHandOff(claimRef, defendant, claimant, defendantEmail, DefenceType.FULL_REJECTION_WITH_COUNTER_CLAIM)
 })
 
@@ -82,7 +82,7 @@ Scenario('I can see send your response by email page when I reject all of the cl
 
   const claimRef: string = yield I.createClaim(claimData, claimantEmail)
 
-  yield helperSteps.enterPinNumber(claimRef)
+  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.finishResponseWithHandOff(claimRef, defendant, claimant,
     defendantEmail, DefenceType.FULL_REJECTION_BECAUSE_ALREADY_PAID_LESS_THAN_CLAIMED_AMOUNT
   )
@@ -94,8 +94,9 @@ Scenario('I can view the claim details from a link on the dashboard @citizen', f
 
   const claimRef: string = yield I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL), claimantEmail)
 
-  yield helperSteps.enterPinNumber(claimRef)
+  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.defendantViewCaseTaskList(defendantEmail)
+  I.click('Respond to claim')
   defendantDetails.clickViewClaim()
   defendantDetails.checkClaimData(claimRef)
 })
