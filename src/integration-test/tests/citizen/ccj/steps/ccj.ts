@@ -23,7 +23,6 @@ const ccjDefendantPayBySetDatePage: DefendantPayBySetDatePage = new DefendantPay
 const ccjCheckAndSendPage: CountyCourtJudgementCheckAndSendPage = new CountyCourtJudgementCheckAndSendPage()
 
 const ccjRepaymentPlan: PaymentPlan = {
-  firstPayment: 50.00,
   equalInstalment: 20.00,
   firstPaymentDate: '2025-01-01',
   frequency: 'everyWeek'
