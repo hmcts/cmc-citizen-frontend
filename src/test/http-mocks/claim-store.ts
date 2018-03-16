@@ -186,6 +186,12 @@ export function resolveRetrieveByDefendantIdWithResponse (override?: object) {
     .reply(HttpStatus.OK, [{ ...sampleClaimObj, ...sampleDefendantResponseObj, ...override }])
 }
 
+export function rejectRetrieveByDefendantId (reason: string) {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/defendant/[0-9]+'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
 export function resolveSaveResponse () {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/.+/defendant/[0-9]+'))

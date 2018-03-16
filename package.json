@@ -21,6 +21,8 @@
     "test:smoke": "./bin/run-smoke-tests.sh",
     "test:integration": "ts-node --require tsconfig-paths/register ./node_modules/.bin/codeceptjs run --verbose --config default.conf.js --reporter mocha-multi",
     "test:integration-debug": "ts-node --require tsconfig-paths/register ./node_modules/.bin/codeceptjs run --verbose --config default.conf.js",
+    "test:cross-browser": "ts-node --require tsconfig-paths/register ./node_modules/.bin/codeceptjs run --verbose --config saucelabs.conf.js --reporter mocha-multi",
+    "list-supported-browsers": "node -e 'Object.keys(require(\"@hmcts/cmc-supported-browsers\").supportedBrowsers).forEach(key => console.log(key))'",
     "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/** -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info",
     "precommit": "yarn lint",
     "prepush": "yarn test && yarn test:routes"
@@ -63,6 +65,7 @@
     "express": "^4.13.3",
     "govuk-elements-sass": "^3.0.2",
     "govuk_template_jinja": "0.23.0",
+    "gulp": "^4.0.0",
     "helmet": "^3.1.0",
     "http-status-codes": "^1.1.6",
     "i18next": "^10.0.7",
@@ -90,6 +93,7 @@
     "uuid": "^3.0.1"
   },
   "devDependencies": {
+    "@hmcts/cmc-supported-browsers": "^1.0.1",
     "@types/chai": "^4.0.3",
     "@types/chai-as-promised": "^7.1.0",
     "@types/chai-spies": "^0.0.0",
@@ -104,7 +108,6 @@
     "codeceptjs": "^1.1.6",
     "codecov": "^3.0.0",
     "debug": "^3.0.0",
-    "gulp": "^3.9.0",
     "gulp-livereload": "^3.8.0",
     "gulp-nodemon": "^2.0.2",
     "gulp-plumber": "^1.0.0",
@@ -125,7 +128,7 @@
     "randomstring": "^1.1.5",
     "sass-lint": "^1.10.2",
     "sinon": "^4.0.2",
-    "sinon-chai": "^2.13.0",
+    "sinon-chai": "^3.0.0",
     "sinon-express-mock": "^2.0.0",
     "sonarqube-scanner": "^2.0.1",
     "supertest": "^3.0.0",

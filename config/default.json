@@ -48,7 +48,11 @@
     }
   },
   "pay": {
-    "url": "http://localhost:4421"
+    "url": "http://localhost:4421",
+    "service-name": "CMC",
+    "currency": "GBP",
+    "site-id": "AA00",
+    "description": "Money Claim issue fee"
   },
   "pdf-service": {
     "url": "http://localhost:5500",
@@ -83,7 +87,8 @@
     "offer": false,
     "statementOfMeans": false,
     "finePrint": false,
-    "ccd": false
+    "ccd": false,
+    "returnErrorToUser": false
   },
   "oauth": {
     "clientId": "cmc_citizen",
