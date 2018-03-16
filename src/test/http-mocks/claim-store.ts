@@ -4,6 +4,13 @@ import * as HttpStatus from 'http-status-codes'
 import { InterestRateOption } from 'features/claim/form/models/interestRate'
 import { StatementType } from 'features/offer/form/models/statementType'
 import { MadeBy } from 'features/offer/form/models/madeBy'
+import { Interest, InterestOption } from 'claim/form/models/interest'
+import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
+import { InterestRate } from 'claim/form/models/interestRate'
+import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/interestEndDate'
+import { InterestDateType } from 'app/common/interestDateType'
+import { InterestDate } from 'claim/form/models/interestDate'
+import { InterestStartDate } from 'claim/form/models/interestStartDate'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
@@ -52,16 +59,31 @@ export const sampleClaimObj = {
       type: 'breakdown',
       rows: [{ reason: 'Reason', amount: 200 }]
     },
-    interestDate: {
-      date: {
-        year: 2000,
-        month: 2,
-        day: 1
-      }
-    },
     interest: {
-      type: InterestRateOption.STANDARD
-    },
+      option: InterestOption.YES
+    } as Interest,
+    interestType: {
+      option: InterestTypeOption.SAME_RATE
+    } as InterestType,
+    interestRate: {
+      type: InterestRateOption.DIFFERENT,
+      rate: 10,
+      reason: 'Special case'
+    } as InterestRate,
+    interestDate: {
+      type: InterestDateType.SUBMISSION
+    } as InterestDate,
+    interestStartDate: {
+      date: {
+        day: 10,
+        month: 12,
+        year: 2016
+      },
+      reason: 'reason'
+    } as InterestStartDate,
+    interestEndDate: {
+      option: InterestEndDateOption.SETTLED_OR_JUDGMENT
+    } as InterestEndDate,
     reason: 'Because I can',
     feeAmountInPennies: 2500
   },

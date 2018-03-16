@@ -24,6 +24,9 @@ export class Interest {
   }
 
   static fromObject (input?: any): Interest {
+    if (input == null) {
+      return input
+    }
     return new Interest(input.option)
   }
 

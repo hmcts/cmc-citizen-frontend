@@ -15,12 +15,14 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as feesServiceMock from '../../../http-mocks/fees'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const pageContent: string = 'Total amount you’re claiming'
+const pagePath: string = ClaimPaths.totalPage.uri
 
 describe('Claim issue: total page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ClaimPaths.totalPage.uri)
+    checkAuthorizationGuards(app, 'get', pagePath)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -29,10 +31,46 @@ describe('Claim issue: total page', () => {
 
       it('should return 500 and render error page when cannot calculate issue fee', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        feesServiceMock.rejectCalculateIssueFee('HTTP error')
+        feesServiceMock.rejectCalculateIssueFee()
 
         await request(app)
-          .get(ClaimPaths.totalPage.uri)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should return 500 and render error page when cannot calculate hearing fee', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+        feesServiceMock.resolveCalculateIssueFee()
+        feesServiceMock.rejectCalculateHearingFee()
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should return 500 and render error page when retrieving issue fee range group failed', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+        feesServiceMock.resolveCalculateIssueFee()
+        feesServiceMock.resolveCalculateHearingFee()
+        feesServiceMock.rejectGetIssueFeeRangeGroup()
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should return 500 and render error page when retrieving hearing fee range group failed', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+        feesServiceMock.resolveCalculateIssueFee()
+        feesServiceMock.resolveCalculateHearingFee()
+        feesServiceMock.resolveGetIssueFeeRangeGroup()
+        feesServiceMock.rejectGetHearingFeeRangeGroup()
+
+        await request(app)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -40,30 +78,32 @@ describe('Claim issue: total page', () => {
       it('should render page when everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.resolveCalculateIssueFee()
+        feesServiceMock.resolveCalculateHearingFee()
+        feesServiceMock.resolveGetIssueFeeRangeGroup()
+        feesServiceMock.resolveGetHearingFeeRangeGroup()
 
         await request(app)
-          .get(ClaimPaths.totalPage.uri)
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Total amount you’re claiming'))
+          .expect(res => expect(res).to.be.successful.withText(pageContent))
       })
     })
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', ClaimPaths.totalPage.uri)
+    checkAuthorizationGuards(app, 'post', pagePath)
 
     describe('for authorized user', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
-      it('should redirect to task list when amount within limit and everything is fine', async () => {
+      it('should redirect to task list everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
-          .post(ClaimPaths.totalPage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ totalAmount: '299' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
       })
     })

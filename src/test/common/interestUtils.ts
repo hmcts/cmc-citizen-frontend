@@ -1,19 +1,43 @@
 import { InterestDateType } from 'app/common/interestDateType'
 import { expect } from 'chai'
-import { InterestRateOption } from 'claim/form/models/interestRate'
+import { InterestRate, InterestRateOption } from 'claim/form/models/interestRate'
 import { Claim } from 'claims/models/claim'
 import { getInterestDetails } from 'common/interestUtils'
 import { MomentFactory } from 'common/momentFactory'
 import * as claimStoreServiceMock from '../http-mocks/claim-store'
+import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
+import { InterestOption } from 'claim/form/models/interest'
+import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/interestEndDate'
+import { InterestDate } from 'claim/form/models/interestDate'
+import { InterestStartDate } from 'claim/form/models/interestStartDate'
 
 const sampleClaimObj = {
   claim: {
     interest: {
-      type: InterestRateOption.STANDARD
+      option: InterestOption.YES
     },
+    interestType: {
+      option: InterestTypeOption.SAME_RATE
+    } as InterestType,
+    interestRate: {
+      type: InterestRateOption.DIFFERENT,
+      rate: 10,
+      reason: 'Special case'
+    } as InterestRate,
     interestDate: {
       type: InterestDateType.SUBMISSION
-    }
+    } as InterestDate,
+    interestStartDate: {
+      date: {
+        day: 10,
+        month: 12,
+        year: 2016
+      },
+      reason: 'reason'
+    } as InterestStartDate,
+    interestEndDate: {
+      option: InterestEndDateOption.SETTLED_OR_JUDGMENT
+    } as InterestEndDate
   },
   createdAt: MomentFactory.currentDate(),
   issuedOn: MomentFactory.currentDate(),
@@ -28,7 +52,7 @@ describe('getInterestDetails', () => {
       ...{
         claim: {
           interest: {
-            type: InterestRateOption.NO_INTEREST
+            option: InterestOption.NO
           },
           interestDate: undefined
         }

@@ -12,16 +12,18 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import { InterestOption } from 'claim/form/models/interest'
+import { InterestRateOption } from 'claim/form/models/interestRate'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pageContent: string = 'Do you want to claim interest?'
-const pagePath: string = ClaimPaths.interestPage.uri
+const pageContent: string = 'What annual rate of interest do you want to claim?'
+const pagePath: string = ClaimPaths.interestRatePage.uri
 
-describe('Claim issue: interest page', () => {
+describe('Claim issue: interest rate page', () => {
+
   attachDefaultHooks(app)
 
   describe('on GET', () => {
+
     checkAuthorizationGuards(app, 'get', pagePath)
 
     it('should render page when everything is fine', async () => {
@@ -36,9 +38,11 @@ describe('Claim issue: interest page', () => {
   })
 
   describe('on POST', () => {
+
     checkAuthorizationGuards(app, 'post', pagePath)
 
     describe('for authorized user', () => {
+
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
@@ -59,30 +63,34 @@ describe('Claim issue: interest page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ option: InterestOption.YES })
+          .send({ type: InterestRateOption.STANDARD })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to interest type page when form is valid, yes is selected and everything is fine', async () => {
+      it('should redirect to interest date page when form is valid, 8% is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ option: InterestOption.YES })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestTypePage.uri))
+          .send({ type: InterestRateOption.STANDARD })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestDatePage.uri))
       })
 
-      it('should redirect to total page when form is valid, no is selected and everything is fine', async () => {
+      it('should redirect to interest date page when form is valid, a different rate is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ option: InterestOption.NO })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.totalPage.uri))
+          .send({
+            type: InterestRateOption.DIFFERENT,
+            rate: '10',
+            reason: 'Special case'
+          })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestDatePage.uri))
       })
     })
   })

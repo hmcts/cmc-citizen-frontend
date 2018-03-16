@@ -14,7 +14,6 @@ import * as payServiceMock from '../../../http-mocks/pay'
 
 import { attachDefaultHooks } from '../../../routes/hooks'
 import { checkAuthorizationGuards } from './checks/authorization-check'
-import { Interest, InterestRateOption } from 'claim/form/models/interestRate'
 import { Defendant } from 'app/drafts/models/defendant'
 import { Claimant } from 'app/drafts/models/claimant'
 import { DraftClaim } from 'app/drafts/models/draftClaim'
@@ -28,6 +27,12 @@ import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { ClaimAmountRow } from 'claim/form/models/claimAmountRow'
 import { InterestDate } from 'claim/form/models/interestDate'
 import { Reason } from 'claim/form/models/reason'
+import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
+import { Interest, InterestOption } from 'claim/form/models/interest'
+import { InterestRate, InterestRateOption } from 'claim/form/models/interestRate'
+import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/interestEndDate'
+import { InterestDateType } from 'app/common/interestDateType'
+import { InterestStartDate } from 'claim/form/models/interestStartDate'
 
 const draftType = 'claim'
 
@@ -96,9 +101,30 @@ describe('Claim issue: initiate payment receiver', () => {
           rows: [{ reason: 'Valid reason', amount: 1 } as ClaimAmountRow]
         } as ClaimAmountBreakdown,
         interest: {
-          type: InterestRateOption.NO_INTEREST
+          option: InterestOption.YES
         } as Interest,
-        interestDate: {} as InterestDate,
+        interestType: {
+          option: InterestTypeOption.SAME_RATE
+        } as InterestType,
+        interestRate: {
+          type: InterestRateOption.DIFFERENT,
+          rate: 10,
+          reason: 'Special case'
+        } as InterestRate,
+        interestDate: {
+          type: InterestDateType.SUBMISSION
+        } as InterestDate,
+        interestStartDate: {
+          date: {
+            day: 10,
+            month: 12,
+            year: 2016
+          },
+          reason: 'reason'
+        } as InterestStartDate,
+        interestEndDate: {
+          option: InterestEndDateOption.SETTLED_OR_JUDGMENT
+        } as InterestEndDate,
         reason: {
           reason: 'Valid reason'
         } as Reason
@@ -250,9 +276,30 @@ describe('Claim issue: post payment callback receiver', () => {
           rows: [{ reason: 'Valid reason', amount: 1 } as ClaimAmountRow]
         } as ClaimAmountBreakdown,
         interest: {
-          type: InterestRateOption.NO_INTEREST
+          option: InterestOption.YES
         } as Interest,
-        interestDate: {} as InterestDate,
+        interestType: {
+          option: InterestTypeOption.SAME_RATE
+        } as InterestType,
+        interestRate: {
+          type: InterestRateOption.DIFFERENT,
+          rate: 10,
+          reason: 'Special case'
+        } as InterestRate,
+        interestDate: {
+          type: InterestDateType.SUBMISSION
+        } as InterestDate,
+        interestStartDate: {
+          date: {
+            day: 10,
+            month: 12,
+            year: 2016
+          },
+          reason: 'reason'
+        } as InterestStartDate,
+        interestEndDate: {
+          option: InterestEndDateOption.SETTLED_OR_JUDGMENT
+        } as InterestEndDate,
         reason: {
           reason: 'Valid reason'
         } as Reason

@@ -31,25 +31,16 @@ import { UnemploymentType } from 'response/form/models/statement-of-means/unempl
 import { ClaimType } from 'claim/form/models/eligibility/claimType'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
+import { Interest, InterestOption } from 'claim/form/models/interest'
+import { InterestDateType } from 'app/common/interestDateType'
+import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
+import { InterestStartDate } from 'claim/form/models/interestStartDate'
+import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/interestEndDate'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
 export const sampleClaimDraftObj = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
-  readResolveDispute: true,
-  readCompletingClaim: true,
-  eligibility: {
-    claimValue: ClaimValue.UNDER_10000,
-    helpWithFees: YesNoOption.NO,
-    claimantAddress: YesNoOption.YES,
-    defendantAddress: YesNoOption.YES,
-    eighteenOrOver: YesNoOption.YES,
-    defendantAge: DefendantAgeOption.YES,
-    claimType: ClaimType.PERSONAL_CLAIM,
-    singleDefendant: YesNoOption.NO,
-    governmentDepartment: YesNoOption.NO,
-    claimIsForTenancyDeposit: YesNoOption.NO
-  },
   claimant: {
     partyDetails: {
       type: 'individual',
@@ -103,13 +94,48 @@ export const sampleClaimDraftObj = {
       } as ClaimAmountRow
     ]
   } as ClaimAmountBreakdown,
+  interest: {
+    option: InterestOption.YES
+  } as Interest,
+  interestType: {
+    option: InterestTypeOption.SAME_RATE
+  } as InterestType,
   interestRate: {
-    type: InterestRateOption.NO_INTEREST
+    type: InterestRateOption.DIFFERENT,
+    rate: 10,
+    reason: 'Special case'
   } as InterestRate,
-  interestDate: {} as InterestDate,
+  interestDate: {
+    type: InterestDateType.SUBMISSION
+  } as InterestDate,
+  interestStartDate: {
+    date: {
+      day: 10,
+      month: 12,
+      year: 2016
+    },
+    reason: 'reason'
+  } as InterestStartDate,
+  interestEndDate: {
+    option: InterestEndDateOption.SETTLED_OR_JUDGMENT
+  } as InterestEndDate,
   reason: {
     reason: 'Valid reason'
   } as Reason,
+  readResolveDispute: true,
+  readCompletingClaim: true,
+  eligibility: {
+    claimValue: ClaimValue.UNDER_10000,
+    helpWithFees: YesNoOption.NO,
+    claimantAddress: YesNoOption.YES,
+    defendantAddress: YesNoOption.YES,
+    eighteenOrOver: YesNoOption.YES,
+    defendantAge: DefendantAgeOption.YES,
+    claimType: ClaimType.PERSONAL_CLAIM,
+    singleDefendant: YesNoOption.NO,
+    governmentDepartment: YesNoOption.NO,
+    claimIsForTenancyDeposit: YesNoOption.NO
+  },
   timeline: {
     rows: [{ date: 'aaa', description: 'bb' }]
   } as ClaimantTimeline

@@ -15,6 +15,8 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { InterestDateType } from 'app/common/interestDateType'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const pageContent: string = 'When are you claiming interest from?'
+const pagePath: string = ClaimPaths.interestDatePage.uri
 
 describe('Claim issue: interest date page', () => {
 
@@ -22,22 +24,22 @@ describe('Claim issue: interest date page', () => {
 
   describe('on GET', () => {
 
-    checkAuthorizationGuards(app, 'get', ClaimPaths.interestDatePage.uri)
+    checkAuthorizationGuards(app, 'get', pagePath)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
-        .get(ClaimPaths.interestDatePage.uri)
+        .get(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('When are you claiming interest from?'))
+        .expect(res => expect(res).to.be.successful.withText(pageContent))
     })
   })
 
   describe('on POST', () => {
 
-    checkAuthorizationGuards(app, 'post', ClaimPaths.interestDatePage.uri)
+    checkAuthorizationGuards(app, 'post', pagePath)
 
     describe('for authorized user', () => {
 
@@ -49,9 +51,9 @@ describe('Claim issue: interest date page', () => {
         draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
-          .post(ClaimPaths.interestDatePage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('When are you claiming interest from?', 'div class="error-summary"'))
+          .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
@@ -59,7 +61,7 @@ describe('Claim issue: interest date page', () => {
         draftStoreServiceMock.rejectSave()
 
         await request(app)
-          .post(ClaimPaths.interestDatePage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ type: InterestDateType.SUBMISSION })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -70,25 +72,23 @@ describe('Claim issue: interest date page', () => {
         draftStoreServiceMock.resolveSave()
 
         await request(app)
-          .post(ClaimPaths.interestDatePage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ type: InterestDateType.SUBMISSION })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.feesPage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.totalPage.uri))
       })
 
-      it('should redirect to total page when form is valid, custom date selected and everything is fine', async () => {
+      it('should redirect to interest start date page when form is valid, custom date selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)
-          .post(ClaimPaths.interestDatePage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({
-            type: InterestDateType.CUSTOM,
-            date: { day: '31', month: '12', year: '2016' },
-            reason: 'Special case'
+            type: InterestDateType.CUSTOM
           })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.feesPage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestStartDatePage.uri))
       })
     })
   })

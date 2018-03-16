@@ -12,13 +12,13 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import { InterestOption } from 'claim/form/models/interest'
+import { InterestTypeOption } from 'claim/form/models/interestType'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pageContent: string = 'Do you want to claim interest?'
-const pagePath: string = ClaimPaths.interestPage.uri
+const pageContent: string = 'How do you want to claim interest?'
+const pagePath: string = ClaimPaths.interestTypePage.uri
 
-describe('Claim issue: interest page', () => {
+describe('Claim issue: interest type page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -59,30 +59,30 @@ describe('Claim issue: interest page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ option: InterestOption.YES })
+          .send({ option: InterestTypeOption.SAME_RATE })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to interest type page when form is valid, yes is selected and everything is fine', async () => {
+      it('should redirect to interest rate page when form is valid, same rate is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ option: InterestOption.YES })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestTypePage.uri))
+          .send({ option: InterestTypeOption.SAME_RATE })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestRatePage.uri))
       })
 
-      it('should redirect to total page when form is valid, no is selected and everything is fine', async () => {
+      it('should throw forbidden error when form is valid, breakdown is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ option: InterestOption.NO })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.totalPage.uri))
+          .send({ option: InterestTypeOption.BREAKDOWN })
+          .expect(res => expect(res).to.be.forbidden.withText('Forbidden'))
       })
     })
   })

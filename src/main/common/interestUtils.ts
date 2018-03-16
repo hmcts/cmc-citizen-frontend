@@ -8,11 +8,10 @@ import { Claim } from 'claims/models/claim'
 import { InterestData } from 'app/common/interestData'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { DraftClaim } from 'drafts/models/draftClaim'
-import { Moment } from 'moment'
 import { InterestOption } from 'claim/form/models/interest'
 
 export async function getInterestDetails (claim: Claim): Promise<InterestData> {
-  if (claim.claimData.interestRate.type === InterestRateOption.NO_INTEREST) {
+  if (claim.claimData.interest.option === InterestOption.NO) {
     return undefined
   }
 
@@ -20,7 +19,7 @@ export async function getInterestDetails (claim: Claim): Promise<InterestData> {
   const interestToDate: moment.Moment = moment.max(interestFromDate, MomentFactory.currentDate())
   const numberOfDays: number = interestToDate.diff(interestFromDate, 'days')
 
-  const interest: number = await calculateInterest(claim.claimData.amount.totalAmount(), claim.claimData.interestRate, interestFromDate, interestToDate)
+  const interest: number = await calculateInterest(claim.claimData.amount.totalAmount(), claim.claimData.interestRate.rate, interestFromDate, interestToDate)
   const rate = claim.claimData.interestRate.rate
 
   return { interestFromDate, interestToDate, numberOfDays, interest, rate }
@@ -37,7 +36,7 @@ function getInterestDateOrIssueDate (claim: Claim): moment.Moment {
 export async function draftInterestAmount (claimDraft: DraftClaim): Promise<number> {
   const interest: number = getInterestRate(claimDraft)
   const breakdown: ClaimAmountBreakdown = claimDraft.amount
-  const interestStartDate: Moment = claimDraft.interestDate.type === InterestDateType.SUBMISSION ? MomentFactory.currentDate() :
+  const interestStartDate: moment.Moment = claimDraft.interestDate.type === InterestDateType.SUBMISSION ? MomentFactory.currentDate() :
                                     claimDraft.interestStartDate.date.toMoment()
   const claimAmount: number = breakdown.totalAmount()
 
@@ -67,6 +66,6 @@ function getInterestRate (claimDraft: DraftClaim): number {
   }
 }
 
-export function getStandardInterestRate(): number {
+export function getStandardInterestRate (): number {
   return 8.0
 }

@@ -22,6 +22,7 @@ import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { StringUtils } from 'utils/stringUtils'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
+import { InterestStartDate } from 'claim/form/models/interestStartDate'
 
 export class ClaimModelConverter {
 
@@ -32,7 +33,7 @@ export class ClaimModelConverter {
     claimData.interestType = draftClaim.interestType
     claimData.interestRate = draftClaim.interestRate
     claimData.interestDate = draftClaim.interestDate
-    claimData.interestStartDate = draftClaim.interestStartDate
+    claimData.interestStartDate = new InterestStartDate(draftClaim.interestStartDate.date, draftClaim.interestStartDate.reason)
     claimData.interestEndDate = draftClaim.interestEndDate
     claimData.amount = new ClaimAmountBreakdown().deserialize(draftClaim.amount)
     claimData.feeAmountInPennies = draftClaim.claimant.payment.amount

@@ -56,7 +56,7 @@
         {{ row('Why you’re claiming this rate', draftClaim.interestRate.reason, bold = true) }}
       {% endif %}
       {% if draftClaim.interestDate.type === InterestDateType.SUBMISSION %}
-        {{ row('When are you claiming interest from?', t('The date you submit the claim') | date, paths.interestDatePage.uri, bottomBorder = false, bold = true) }}
+        {{ row('When are you claiming interest from?', t('The date you submit the claim'), paths.interestDatePage.uri, bottomBorder = false, bold = true) }}
       {% else %}
         {{ row('When are you claiming interest from?', t('A particular date'), paths.interestDatePage.uri, bottomBorder = false, bold = true) }}
         {{ row('Date interest applied from', draftClaim.interestStartDate.date.asString() | date, paths.interestStartDatePage.uri, bottomBorder = false, bold = true) }}

@@ -133,7 +133,7 @@ describe('Claim issue: amount page', () => {
             .post(ClaimPaths.amountPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ rows: [{ reason: 'Damaged roof', amount: '299' }] })
-            .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestRatePage.uri))
+            .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestPage.uri))
         })
 
         it('should redirect to amount exceeded page when form is valid, amount above limit and everything is fine', async () => {
