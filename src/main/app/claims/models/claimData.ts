@@ -1,6 +1,4 @@
 import { ClaimAmountBreakdown } from 'features/claim/form/models/claimAmountBreakdown'
-import { InterestDate } from 'app/claims/models/interestDate'
-import { InterestRate } from 'features/claim/form/models/interestRate'
 import { Party } from 'claims/models/details/yours/party'
 import { Individual as ClaimantAsIndividual } from 'claims/models/details/yours/individual'
 import { Company as ClaimantAsCompany } from 'claims/models/details/yours/company'
@@ -15,10 +13,8 @@ import { Organisation as DefendantAsOrganisation } from 'claims/models/details/t
 import { Payment } from 'app/pay/payment'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
-import { Interest } from 'claim/form/models/interest'
-import { InterestType } from 'claim/form/models/interestType'
-import { InterestEndDate } from 'claim/form/models/interestEndDate'
-import { InterestStartDate } from 'claim/form/models/interestStartDate'
+import { InterestDate } from 'claims/models/interestDate'
+import { Interest } from 'claims/models/interest'
 
 export class ClaimData {
   externalId: string
@@ -29,11 +25,7 @@ export class ClaimData {
   reason: string
   timeline: ClaimantTimeline
   interest: Interest
-  interestType: InterestType
-  interestRate: InterestRate
   interestDate: InterestDate
-  interestStartDate: InterestStartDate = new InterestStartDate()
-  interestEndDate: InterestEndDate = new InterestEndDate()
   payment: Payment = new Payment()
   statementOfTruth?: StatementOfTruth
 
@@ -75,20 +67,8 @@ export class ClaimData {
       this.timeline = ClaimantTimeline.fromObject(input.timeline)
       this.externalId = input.externalId
       this.interest = new Interest().deserialize(input.interest)
-      if (input.interestType) {
-        this.interestDate = new InterestType().deserialize(input.interestType)
-      }
-      if (input.interestRate) {
-        this.interestRate = new InterestRate().deserialize(input.interestRate)
-      }
       if (input.interestDate) {
         this.interestDate = new InterestDate().deserialize(input.interestDate)
-      }
-      if (input.interestStartDate) {
-        this.interestStartDate = new InterestStartDate().deserialize(input.interestStartDate)
-      }
-      if (input.interestEndDate) {
-        this.interestEndDate = new InterestEndDate().deserialize(input.interestEndDate)
       }
 
       if (input.statementOfTruth) {

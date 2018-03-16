@@ -22,19 +22,22 @@ import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { StringUtils } from 'utils/stringUtils'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
-import { InterestStartDate } from 'claim/form/models/interestStartDate'
+import { InterestDate } from 'claims/models/interestDate'
+import { Interest } from 'claims/models/interest'
+import { InterestRateOption } from 'claim/form/models/interestRate'
+import { InterestDateType } from 'app/common/interestDateType'
+import { isAfter4pm } from 'common/dateUtils'
+import { MomentFactory } from 'common/momentFactory'
+import { LocalDate } from 'forms/models/localDate'
+import { Moment } from 'moment'
 
 export class ClaimModelConverter {
 
   static convert (draftClaim: DraftClaim): ClaimData {
     const claimData: ClaimData = new ClaimData()
     claimData.externalId = draftClaim.externalId
-    claimData.interest = draftClaim.interest
-    claimData.interestType = draftClaim.interestType
-    claimData.interestRate = draftClaim.interestRate
-    claimData.interestDate = draftClaim.interestDate
-    claimData.interestStartDate = new InterestStartDate(draftClaim.interestStartDate.date, draftClaim.interestStartDate.reason)
-    claimData.interestEndDate = draftClaim.interestEndDate
+    claimData.interest = this.convertInterest(draftClaim)
+    claimData.interestDate = this.convertInterestDate(draftClaim)
     claimData.amount = new ClaimAmountBreakdown().deserialize(draftClaim.amount)
     claimData.feeAmountInPennies = draftClaim.claimant.payment.amount
     claimData.claimants = [this.convertClaimantDetails(draftClaim)]
@@ -164,5 +167,30 @@ export class ClaimModelConverter {
     address.city = addressForm.city
     address.postcode = addressForm.postcode
     return address
+  }
+
+  private static convertInterest (draftClaim: DraftClaim): InterestDate {
+    const interest: Interest = new Interest()
+    interest.type = draftClaim.interestRate.type
+    interest.rate = draftClaim.interestRate.rate
+    if (draftClaim.interestRate.type === InterestRateOption.DIFFERENT) {
+      interest.reason = draftClaim.interestRate.reason
+    }
+    interest.option = draftClaim.interestType.option
+    return interest
+  }
+
+  private static convertInterestDate (draftClaim: DraftClaim): InterestDate {
+    const interestDate: InterestDate = new InterestDate()
+    interestDate.type = draftClaim.interestDate.type
+    if (draftClaim.interestDate.type === InterestDateType.CUSTOM) {
+      interestDate.date = draftClaim.interestStartDate.date
+      interestDate.reason = draftClaim.interestStartDate.reason
+      interestDate.endDate = draftClaim.interestEndDate.option
+    } else {
+      const submissionDate: Moment = isAfter4pm() ? MomentFactory.currentDate().add(1, 'day') : MomentFactory.currentDate()
+      interestDate.date = new LocalDate(submissionDate.year(), submissionDate.month() + 1, submissionDate.date())
+    }
+    return interestDate
   }
 }

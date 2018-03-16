@@ -9,6 +9,7 @@ import { InterestType, InterestTypeOption } from 'claim/form/models/interestType
 import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDate } from 'claim/form/models/interestDate'
 import { InterestStartDate } from 'claim/form/models/interestStartDate'
+import { LocalDate } from 'forms/models/localDate'
 
 export const claimDraft = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
@@ -61,14 +62,14 @@ export const claimDraft = {
     reason: 'Special case'
   } as InterestRate,
   interestDate: {
-    type: InterestDateType.SUBMISSION
+    type: InterestDateType.CUSTOM
   } as InterestDate,
   interestStartDate: {
     date: {
       day: 10,
       month: 12,
       year: 2016
-    },
+    } as LocalDate,
     reason: 'reason'
   } as InterestStartDate,
   interestEndDate: {

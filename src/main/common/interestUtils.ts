@@ -9,6 +9,7 @@ import { InterestData } from 'app/common/interestData'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { InterestOption } from 'claim/form/models/interest'
+import { isAfter4pm } from 'common/dateUtils'
 
 export async function getInterestDetails (claim: Claim): Promise<InterestData> {
   if (claim.claimData.interest.option === InterestOption.NO) {
@@ -19,15 +20,15 @@ export async function getInterestDetails (claim: Claim): Promise<InterestData> {
   const interestToDate: moment.Moment = moment.max(interestFromDate, MomentFactory.currentDate())
   const numberOfDays: number = interestToDate.diff(interestFromDate, 'days')
 
-  const interest: number = await calculateInterest(claim.claimData.amount.totalAmount(), claim.claimData.interestRate.rate, interestFromDate, interestToDate)
-  const rate = claim.claimData.interestRate.rate
+  const interest: number = await calculateInterest(claim.claimData.amount.totalAmount(), claim.claimData.interest.rate, interestFromDate, interestToDate)
+  const rate = claim.claimData.interest.rate
 
   return { interestFromDate, interestToDate, numberOfDays, interest, rate }
 }
 
 function getInterestDateOrIssueDate (claim: Claim): moment.Moment {
   if (claim.claimData.interestDate.type === InterestDateType.CUSTOM) {
-    return claim.claimData.interestDate.date
+    return claim.claimData.interestDate.date.toMoment()
   } else {
     return claim.issuedOn
   }
@@ -36,7 +37,8 @@ function getInterestDateOrIssueDate (claim: Claim): moment.Moment {
 export async function draftInterestAmount (claimDraft: DraftClaim): Promise<number> {
   const interest: number = getInterestRate(claimDraft)
   const breakdown: ClaimAmountBreakdown = claimDraft.amount
-  const interestStartDate: moment.Moment = claimDraft.interestDate.type === InterestDateType.SUBMISSION ? MomentFactory.currentDate() :
+  const issuedDate: moment.Moment = isAfter4pm() ? MomentFactory.currentDate().add(1, 'day') : MomentFactory.currentDate()
+  const interestStartDate: moment.Moment = claimDraft.interestDate.type === InterestDateType.SUBMISSION ? issuedDate :
                                     claimDraft.interestStartDate.date.toMoment()
   const claimAmount: number = breakdown.totalAmount()
 

@@ -2,8 +2,8 @@ import { IsDefined, IsIn } from 'class-validator'
 import { CompletableTask } from 'models/task'
 
 export class InterestEndDateOption {
-  static readonly SUBMISSION = 'same'
-  static readonly SETTLED_OR_JUDGMENT = 'breakdown'
+  static readonly SUBMISSION = 'submission'
+  static readonly SETTLED_OR_JUDGMENT = 'settled_or_judgement'
 
   static all (): string[] {
     return [
