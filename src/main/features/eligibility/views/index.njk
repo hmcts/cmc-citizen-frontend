@@ -6,19 +6,19 @@
 
 {% block content %}
 
-  {% if registeredUser %}
-    <div class="grid-row">
-      <div class="column-two-thirds">
-        <h1 class="heading-large">{{ t('Find out if you can use this service') }}</h1>
+{% if registeredUser %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ t('Find out if you can use this service') }}</h1>
 
-        <p>
-          {{ t('We’ll ask you some questions to check you can use this service. '
-          + 'We can’t say if your claim will be successful or not.') }}
-        </p>
+      <p>
+        {{ t('We’ll ask you some questions to check you can use this service. '
+        + 'We can’t say if your claim will be successful or not.') }}
+      </p>
 
-        <a href="{{ EligibilityPaths.claimValuePage.uri }}" class="button">{{ t('Continue') }}</a>
-      </div>
+      <a href="{{ EligibilityPaths.claimValuePage.uri }}" class="button">{{ t('Continue') }}</a>
     </div>
+  </div>
 {% else %}
   <div class="grid-row">
     <div class="column-two-thirds">
@@ -40,5 +40,4 @@
     </div>
   </div>
 {% endif %}
-
 {% endblock %}

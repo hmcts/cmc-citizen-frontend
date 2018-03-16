@@ -3,7 +3,8 @@ import * as Cookies from 'cookies'
 import * as express from 'express'
 
 const cookieName = 'eligibility-check'
-const cookieTimeToLiveInMinutes = 10
+const millisecondsToSeconds = 60 * 10000
+const cookieTimeToLiveInMinutes = 10 * millisecondsToSeconds
 
 export interface EligibilityStore {
   read (req: express.Request, res: express.Response): Eligibility
@@ -19,6 +20,6 @@ export class CookieEligibilityStore implements EligibilityStore {
   }
 
   write (eligibility: Eligibility, req: express.Request, res: express.Response): void {
-    new Cookies(req, res).set(cookieName, JSON.stringify(eligibility), { sameSite: 'lax', maxAge: cookieTimeToLiveInMinutes * 60 * 1000 })
+    new Cookies(req, res).set(cookieName, JSON.stringify(eligibility), { sameSite: 'lax', maxAge: cookieTimeToLiveInMinutes })
   }
 }
