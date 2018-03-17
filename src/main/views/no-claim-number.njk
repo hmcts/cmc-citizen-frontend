@@ -1,0 +1,60 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+
+{% set title = 'Which service did you use to view or make the claim?' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post">
+        <fieldset class="notice">
+          <legend>
+            <h1 class="heading-large">
+              {{ t('Which service did you use to view or make the claim?') }}
+            </h1>
+          </legend>
+
+          {{ csrfProtection(csrf) }}
+          <div class="multiple-choice" id="service[label]">
+            <input id="service-moneyclaims" type="radio" name="service" value="{{ Service.MONEYCLAIMS.option }}">
+            <label for="service-moneyclaims">{{ t('Money claims - new beta service') }}</label>
+            <details>
+              <summary>{{ t('What does the new service look like?') }}</summary>
+              <div class="panel">
+
+                <p class="form-hint">{{ t('Example of Money claims BETA') }}</p>
+                <img alt="{{ t('Money claims sign in page') }}"
+                     src="{{ asset_paths.images }}/screenshots/sign-in.png"
+                     width="70%">
+                <img alt="{{ t('Money claims task list page') }}"
+                     src="{{ asset_paths.images }}/screenshots/task-list.png"
+                     width="70%">
+                <img alt="{{ t('Money claims respond to claim page') }}"
+                     src="{{ asset_paths.images }}/screenshots/respond.png"
+                     width="70%">
+              </div>
+            </details>
+          </div>
+          <div class="multiple-choice">
+            <input id="service-mcol" type="radio" name="service" value="{{ Service.MCOL.option }}">
+            <label for="service-mcol">{{ t('Money Claim Online (MCOL)') }}
+              <span class="form-hint">{{ t('You’ll have used an 8-digit Government Gateway user ID.') }}</span>
+            </label>
+            <details>
+              <summary>{{ t('What does MCOL look like?') }}</summary>
+              <div class="panel">
+                <p class="form-hint">{{ t('Example of MCOL') }}</p>
+                <img alt="{{ t('MCOL homepage') }}"
+                     src="{{ asset_paths.images }}/screenshots/mcol.png"
+                     width="70%">
+              </div>
+            </details>
+          </div>
+        </fieldset>
+
+        {{ submitButton('Continue') }}
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

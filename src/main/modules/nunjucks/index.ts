@@ -34,6 +34,7 @@ import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaim
 import { ClaimType } from 'claim/form/models/eligibility/claimType'
 import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
+import { Service } from 'models/service'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -42,6 +43,7 @@ const appAssetPaths = {
   js_vendor: '/js/lib',
   style: '/stylesheets',
   style_vendor: '/stylesheets/lib',
+  images: '/img',
   images_vendor: '/img/lib',
   pdf: '/pdf'
 }
@@ -116,6 +118,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('AppPaths', AppPaths)
     nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
     nunjucksEnv.addGlobal('HowMuchPaidClaimantOption', HowMuchPaidClaimantOption)
+    nunjucksEnv.addGlobal('Service', Service)
     if (FeatureToggles.isEnabled('finePrint')) {
       nunjucksEnv.addGlobal('cookieText', `GOV.UK uses cookies make the site simpler. <a href="${AppPaths.cookiesPage.uri}">Find out more about cookies</a>`)
     }

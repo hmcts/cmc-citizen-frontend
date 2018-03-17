@@ -47,6 +47,7 @@ async function waitTillHealthy (appURL: string) {
   const maxTries = 36
   const sleepInterval = 10
 
+  console.log('I am definitely running Tims changes ')
   console.log(`Verifying health for ${appURL}`)
 
   let response: RequestResponse
