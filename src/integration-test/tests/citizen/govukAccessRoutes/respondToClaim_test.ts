@@ -13,7 +13,7 @@ Scenario('I can enter a CCBC reference and get sent to MCOL', function* (I: I) {
 
 Scenario('I can enter a moneyclaims reference and get sent to enter a pin', function* (I: I) {
   const claimantEmail: string = yield I.createCitizenUser()
-  const claimRef: string = yield I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, false), claimantEmail)
+  const claimRef: string = yield I.createClaim(createClaimData(PartyType.SOLE_TRADER, PartyType.INDIVIDUAL), claimantEmail)
 
   accessRoutesSteps.respondToClaimMoneyClaims(claimRef)
 })

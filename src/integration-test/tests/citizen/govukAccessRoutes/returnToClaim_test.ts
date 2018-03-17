@@ -26,5 +26,3 @@ Scenario('I can select don’t have a claim number and choose to go to moneyclai
 Scenario('I can select don’t have a claim number and choose to go to MCOL', function* (I: I) {
   accessRoutesSteps.dontHaveAReferenceMcol()
 })
-
-
