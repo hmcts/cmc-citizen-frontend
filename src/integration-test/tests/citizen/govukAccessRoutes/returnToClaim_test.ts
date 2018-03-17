@@ -19,6 +19,7 @@ Scenario('I can enter a moneyclaims reference and login to see the dashboard', f
 
 Scenario('I can select don’t have a claim number and choose to go to moneyclaims, login and see the dashboard', function* (I: I) {
   const claimantEmail: string = yield I.createCitizenUser()
+  yield I.createClaim(createClaimData(PartyType.SOLE_TRADER, PartyType.INDIVIDUAL), claimantEmail)
   accessRoutesSteps.dontHaveAReferenceMoneyClaims(claimantEmail)
 })
 
