@@ -7,11 +7,11 @@ const accessRoutesSteps: AccessRoutesSteps = new AccessRoutesSteps()
 
 Feature('GovUK access routes - respond to claim')
 
-Scenario('I can enter a CCBC reference and get sent to MCOL', function* (I: I) {
+Scenario('I can enter a CCBC reference and get sent to MCOL @citizen', function* (I: I) {
   accessRoutesSteps.respondToClaimMcol()
 })
 
-Scenario('I can enter a moneyclaims reference and get sent to enter a pin', function* (I: I) {
+Scenario('I can enter a moneyclaims reference and get sent to enter a pin @citizen', function* (I: I) {
   const claimantEmail: string = yield I.createCitizenUser()
   const claimRef: string = yield I.createClaim(createClaimData(PartyType.SOLE_TRADER, PartyType.INDIVIDUAL), claimantEmail)
 
