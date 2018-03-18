@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, submitButton, errorSummary, radioGroupWithHintPanel %}
 {% from "date.njk" import dateInput %}
+{% from "./macro/offerTable.njk" import offerTable %}
 
 {% set title = t('Money claim | Accept or reject the offer') %}
 
@@ -13,16 +14,8 @@
       </h1>
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
-        <table>
-          <tr>
-            <td>{{ t('The offer') }}</td>
-            <td>{{ offer.content }}</td>
-          </tr>
-          <tr>
-            <td>{{ t('By when') }}</td>
-            <td>{{ offer.completionDate | date }}</td>
-          </tr>
-        </table>
+
+        {{ offerTable(offer.content, offer.completionDate) }}
 
         <h2 class="heading-medium"> {{ t('Do you accept the offer?') }} </h2>
 

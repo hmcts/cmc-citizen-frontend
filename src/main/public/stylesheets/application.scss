@@ -7,6 +7,7 @@ $path: '/img/lib/';
 //noinspection CssUnknownTarget comes from govuk_frontend_toolkit
 @import 'conditionals';
 
+@import 'components/layout';
 @import 'components/colours';
 @import 'components/form';
 @import 'components/table-form';
@@ -14,7 +15,7 @@ $path: '/img/lib/';
 @import 'components/multiline';
 @import 'components/task-list';
 @import 'components/check-answers';
-@import 'components/claim-confirmed';
+@import 'components/confirmation-page';
 @import 'components/govuk-highlight-box-extension';
 @import 'components/related-items';
 @import 'components/report-problem';
@@ -22,6 +23,7 @@ $path: '/img/lib/';
 @import 'components/survey-links';
 @import 'components/mobile';
 @import 'components/expandable-content';
+@import 'components/offer-table';
 
 .notice {
   margin-bottom: 1.5rem;

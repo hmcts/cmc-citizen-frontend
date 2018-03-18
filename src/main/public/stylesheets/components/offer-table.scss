@@ -1,0 +1,10 @@
+.offer-table {
+  @extend .form-group; // sass-lint:disable-line placeholder-in-extend
+
+  .label {
+    @include media(mobile) {
+      font-weight: bold;
+      padding-bottom: 5px;
+    }
+  }
+}
