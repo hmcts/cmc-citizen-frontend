@@ -11,7 +11,6 @@ import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation
 const FUTURE_YEAR = MomentFactory.currentDate().add(10, 'years').year()
 const DEFAULT_REPAYMENT_PLAN = {
   remainingAmount: 100,
-  firstPayment: 50,
   instalmentAmount: 50,
   firstPaymentDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   paymentSchedule: PaymentSchedule.EVERY_MONTH.value
@@ -19,7 +18,6 @@ const DEFAULT_REPAYMENT_PLAN = {
 
 const REPAYMENT_PLAN_FOR_DESERIALISATION = {
   remainingAmount: 100,
-  firstPayment: 50,
   instalmentAmount: 50,
   firstPaymentDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   paymentSchedule: { value: PaymentSchedule.EVERY_MONTH.value, displayValue: PaymentSchedule.EVERY_MONTH.displayValue }
