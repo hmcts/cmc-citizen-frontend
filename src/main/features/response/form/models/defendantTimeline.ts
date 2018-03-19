@@ -24,10 +24,11 @@ export class DefendantTimeline extends Timeline {
   }
 
   deserialize (input?: any): DefendantTimeline {
-    if (input) {
-      this.rows = this.deserializeRows(input.rows)
+    if (!input) {
+      return new DefendantTimeline()
     }
 
+    this.rows = this.deserializeRows(input.rows)
     this.comment = input.comment || undefined
 
     return this
