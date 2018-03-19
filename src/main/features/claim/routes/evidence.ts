@@ -1,25 +1,21 @@
 import * as express from 'express'
 
-import { Paths } from 'response/paths'
+import { Paths } from 'claim/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'app/forms/validation/formValidator'
-import { Evidence } from 'forms/models/evidence'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
-import { RoutablePath } from 'common/router/routablePath'
 import { User } from 'idam/user'
+import { RoutablePath } from 'common/router/routablePath'
 import { Draft } from '@hmcts/draft-store-client'
-import { ResponseDraft } from 'response/draft/responseDraft'
-import { Claim } from 'app/claims/models/claim'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { Evidence } from 'forms/models/evidence'
 
 const page: RoutablePath = Paths.evidencePage
 
 function renderView (form: Form<Evidence>, res: express.Response): void {
-  const claim: Claim = res.locals.claim
-
   res.render(page.associatedView, {
-    form: form,
-    claimantName: claim.claimData.claimant.name
+    form: form
   })
 }
 
@@ -39,7 +35,7 @@ export default express.Router()
   .get(
     page.uri,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      const draft: Draft<DraftClaim> = res.locals.claimDraft
       renderView(new Form(draft.document.evidence), res)
     })
   .post(
@@ -52,15 +48,14 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        const claim: Claim = res.locals.claim
-        const draft: Draft<ResponseDraft> = res.locals.responseDraft
+        const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
 
         form.model.removeExcessRows()
         draft.document.evidence = form.model
-
         await new DraftService().save(draft, user.bearerToken)
-        res.redirect(Paths.impactOfDisputePage.evaluateUri({ externalId: claim.externalId }))
+
+        res.redirect(Paths.taskListPage.uri)
       }
     })
   )

@@ -16,7 +16,7 @@ import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/mode
 import { SignatureType } from 'app/common/signatureType'
 import { ResponseType } from 'response/form/models/responseType'
 import { YesNoOption } from 'models/yesNoOption'
-import { EvidenceType } from 'response/form/models/evidenceType'
+import { EvidenceType } from 'forms/models/evidenceType'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { StatementType } from 'offer/form/models/statementType'
