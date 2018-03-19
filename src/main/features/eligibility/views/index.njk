@@ -5,10 +5,9 @@
 {% set legacyServiceUrl = 'https://www.moneyclaim.gov.uk/web/mcol/welcome' %}
 
 {% block content %}
-
-{% if registeredUser %}
   <div class="grid-row">
     <div class="column-two-thirds">
+      {% if registeredUser %}
       <h1 class="heading-large">{{ t('Find out if you can use this service') }}</h1>
 
       <p>
@@ -17,11 +16,7 @@
       </p>
 
       <a href="{{ EligibilityPaths.claimValuePage.uri }}" class="button">{{ t('Continue') }}</a>
-    </div>
-  </div>
-{% else %}
-  <div class="grid-row">
-    <div class="column-two-thirds">
+      {% else %}
       <h1 class="heading-large">{{ t('Try the new beta service') }}</h1>
 
       <p>
@@ -30,14 +25,14 @@
 
       <p>
         {{ t('It’s in the beta phase which means we’re continuously improving it based on feedback from users.'
-        + 'You can still ' + externalLink('use Money Claim Online (MCOL)', legacyServiceUrl)
+        + 'You can still use ' + externalLink('Money Claim Online (MCOL)', legacyServiceUrl)
         + 'if you prefer while the new service is in beta.') | safe }}
       </p>
 
       <p>{{ t('We’ll ask you some questions to check you can use the new service.') }}</p>
 
       <a href="{{ EligibilityPaths.claimValuePage.uri }}" class="button">{{ t('Continue to new service') }}</a>
+      {% endif %}
     </div>
   </div>
-{% endif %}
 {% endblock %}
