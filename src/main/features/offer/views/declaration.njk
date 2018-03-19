@@ -28,7 +28,7 @@
 
       <p>
         {{
-          t('This agreement settles the claim made by {{ claimantName }} against {{ defendantName }}. This includes all money owed in the case, for example counterclaims, court fees, expenses or interest.', {
+          t('This agreement settles the claim made by {{ claimantName }} against {{ defendantName }}. This includes all money owed in the claim, for example court fees, expenses or interest.', {
             claimantName: claim.claimData.claimant.name,
             defendantName: claim.claimData.defendant.name
           })
@@ -37,18 +37,15 @@
 
       <p>{{t('This agreement puts the claim on hold. Neither party can make any further claims relating to this case, other than to enforce it.')}}</p>
 
-      <p>{{t('Either party can view and download this agreement from their money claims account. Both parties should keep a copy of this agreement.')}}</p>
+      <p>{{t('Either party can view and download this agreement from their Money Claims account. Both parties should keep a copy of this agreement.')}}</p>
 
-      <p>{{ t('The original claim and any counterclaims will be kept on hold in case this agreement is broken.') }}</p>
-
-      <p>{{ t('You can view and download this agreement at any time from your money claims account.') }}</p>
 
       <h3 class="heading-medium">{{ t('If the agreement is broken') }}</h3>
 
       <p>{{ t('Either party can apply to:') }}</p>
       <ul class="list list-bullet">
         <li>{{ t('request a judgment for any money still owed from this agreement') }}</li>
-        <li>{{ t('restart the original claim or counterclaim for the full amount of the claim') }}</li>
+        <li>{{ t('resume the original claim or counterclaim for the full amount of the claim') }}</li>
         <li>{{ t('ask the court to enforce any of the steps to be taken')}}
       </ul>
 
