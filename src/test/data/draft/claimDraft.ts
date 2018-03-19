@@ -87,5 +87,8 @@ export const claimDraft = {
   },
   timeline: {
     rows: []
+  },
+  evidence: {
+    rows: []
   }
 }

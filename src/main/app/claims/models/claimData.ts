@@ -13,6 +13,7 @@ import { Organisation as DefendantAsOrganisation } from 'claims/models/details/t
 import { Payment } from 'payment-hub-client/payment'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
+import { Evidence } from 'forms/models/evidence'
 import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
 
@@ -24,6 +25,7 @@ export class ClaimData {
   feeAmountInPennies: number
   reason: string
   timeline: ClaimantTimeline
+  evidence: Evidence
   interest: Interest
   interestDate: InterestDate
   payment: Payment = new Payment()
@@ -60,6 +62,7 @@ export class ClaimData {
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
       this.reason = input.reason
       this.timeline = ClaimantTimeline.fromObject(input.timeline)
+      this.evidence = Evidence.fromObject(input.evidence)
       this.externalId = input.externalId
       this.interest = new Interest().deserialize(input.interest)
       if (input.interestDate) {

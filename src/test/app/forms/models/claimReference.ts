@@ -70,5 +70,11 @@ describe('ClaimReference', () => {
 
       expect(errors.length).to.equal(0)
     })
+
+    it('should accept valid claim reference ignoring case', () => {
+      const errors = validator.validateSync(new ClaimReference('000mc001'))
+
+      expect(errors.length).to.equal(0)
+    })
   })
 })

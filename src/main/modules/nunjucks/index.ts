@@ -16,7 +16,7 @@ import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/mode
 import { SignatureType } from 'app/common/signatureType'
 import { ResponseType } from 'response/form/models/responseType'
 import { YesNoOption } from 'models/yesNoOption'
-import { EvidenceType } from 'response/form/models/evidenceType'
+import { EvidenceType } from 'forms/models/evidenceType'
 import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { StatementType } from 'offer/form/models/statementType'
@@ -38,6 +38,7 @@ import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 import { InterestOption } from 'claim/form/models/interest'
 import { InterestTypeOption } from 'claim/form/models/interestType'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
+import { Service } from 'models/service'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -46,6 +47,7 @@ const appAssetPaths = {
   js_vendor: '/js/lib',
   style: '/stylesheets',
   style_vendor: '/stylesheets/lib',
+  images: '/img',
   images_vendor: '/img/lib',
   pdf: '/pdf'
 }
@@ -124,6 +126,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('DashboardPaths', DashboardPaths)
     nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
     nunjucksEnv.addGlobal('HowMuchPaidClaimantOption', HowMuchPaidClaimantOption)
+    nunjucksEnv.addGlobal('Service', Service)
     if (FeatureToggles.isEnabled('finePrint')) {
       nunjucksEnv.addGlobal('cookieText', `GOV.UK uses cookies make the site simpler. <a href="${AppPaths.cookiesPage.uri}">Find out more about cookies</a>`)
     }
