@@ -10,9 +10,9 @@
         <h1 class="bold-large">{{ t('You’ve submitted your response') }}</h1>
 
         <p>
-          <strong class="bold">{{ submittedOn | date }}</strong>
+          <span class="bold">{{ submittedOn | date }}</span>
         </p>
-        <p class="issue-receipt-download ">
+        <p class="receipt-download-container ">
           <a href="{{ paths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response as a PDF') }}</a>
         </p>
       </div>
