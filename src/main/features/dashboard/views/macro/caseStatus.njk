@@ -4,71 +4,69 @@
   <a href="{{ ResponsePaths.summaryPage.evaluateUri({ externalId: externalId }) }}">{{ t('View full response') }}</a>
 {% endmacro %}
 
-{% macro responseStatusForDefendant(claim, url, isAfter4pm) %}
-
-  {% if claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
-    {{ t('You have signed the agreement. The claim is now settled.') }}
-  {% elseif claim.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
+{% macro caseStatusForDefendant(status, claim, url, isAfter4pm) %}
+  {% if status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
+    {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
+  {% elseif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
     {{ t('You did not respond by the deadline. {{ claimantName }} can request a County Court Judgment (CCJ) against you. You can still respond until they do.',
     { claimantName: claim.claimData.claimant.name } ) }}
-  {% elseif claim.status === ClaimStatus.CCJ_REQUESTED %}
+  {% elseif status === ClaimStatus.CCJ_REQUESTED %}
     {{ t('{{ claimantName }} requested a County Court Judgment against you on {{ ccjRequestedAt }}. We will contact you both within 5 working days.',
     { claimantName: claim.claimData.claimant.name, ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
-  {% elseif claim.status === ClaimStatus.FREE_MEDIATION %}
-    {{ t('You’ve rejected the claim and suggested mediation on {{ respondedAt }}.',
+  {% elseif status === ClaimStatus.FREE_MEDIATION %}
+    {{ t('You’ve rejected the claim and suggested mediation on {{ caseStatusForDefendant }}.',
     { respondedAt: claim.respondedAt | date }) }}
-  {% elseif claim.status === ClaimStatus.CLAIM_REJECTED %}
+  {% elseif status === ClaimStatus.CLAIM_REJECTED %}
     {{ t('You’ve rejected the claim. The case will be reviewed by a judge and might go to court.' ) }}
-  {% elseif claim.status === ClaimStatus.OFFER_ACCEPTED %}
-    {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court.') }}
-  {% elseif claim.status === ClaimStatus.OFFER_SUBMITTED %}
+  {% elseif status === ClaimStatus.OFFER_ACCEPTED %}
+    {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court.',
+    { claimantName: claim.claimData.claimant.name } ) }}
+  {% elseif status === ClaimStatus.OFFER_SUBMITTED %}
     {{ t('You made an offer to settle out of court.') }}
-  {% elseif claim.status === ClaimStatus.MORE_TIME_REQUESTED %}
+  {% elseif status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ t('You need to respond by {{ responseDeadline }}. You asked for an extra 14 days to respond.',
     { responseDeadline: claim.responseDeadline | date }) }}
-  {% elseif claim.status === ClaimStatus.NO_RESPONSE %}
+  {% elseif status === ClaimStatus.NO_RESPONSE %}
     <a href="{{ url }}">{{ t('Respond to claim') }}</a>
     <span class="block mobile-inline">
       {{ timeRemaining(claim.remainingDays, isAfter4pm) }}
     </span>
-
   {% endif %}
-
 {% endmacro %}
 
-{% macro responseStatusForClaimant(claim, url) %}
-
-  {% if claim.status === ClaimStatus.CCJ_REQUESTED %}
+{% macro caseStatusForClaimant(status, claim, url) %}
+  {% if status === ClaimStatus.CCJ_REQUESTED %}
     {{ t('You requested a County Court Judgment on {{ ccjRequestedAt }}. We will contact you within 5 working days.',
     { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
-  {% elseif claim.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
+  {% elseif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
     <p>{{ t('You can request a County Court Judgment') }}</p>
-  {% elseif claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
-    {{ t('You have signed the agreement. The claim is now settled.') }}
-    <p>{{ _viewResponseLink(claim.externalId) }}</p>
-  {% elseif claim.status === ClaimStatus.FREE_MEDIATION %}
+  {% elseif status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
+    {{ t('You both signed an agreement to settle out of court.') }}
+    <p>
+      <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
+    </p>
+  {% elseif status === ClaimStatus.FREE_MEDIATION %}
     {{ t('{{ defendantName }} has rejected the claim. They’ve suggested free mediation on {{ respondedAt }}. You can accept or reject',
     { defendantName: claim.response.defendant.name, respondedAt: claim.respondedAt | date }) }}
     <p>{{ _viewResponseLink(claim.externalId) }}</p>
-  {% elseif claim.status === ClaimStatus.CLAIM_REJECTED %}
+  {% elseif status === ClaimStatus.CLAIM_REJECTED %}
     {{ t('{{ defendantName }} has rejected the claim. The case will be reviewed by a judge and might go to court.',
     { defendantName:  claim.claimData.defendant.name }) }}
     <p>{{ _viewResponseLink(claim.externalId) }}</p>
-  {% elseif claim.status === ClaimStatus.OFFER_ACCEPTED %}
-    {{ t('Offer accepted') }}
-  {% elseif claim.status === ClaimStatus.OFFER_SUBMITTED %}
+  {% elseif status === ClaimStatus.OFFER_ACCEPTED %}
+    {{ t('You’ve signed the agreement. We’ve asked {{ defendantName }} to sign the agreement.', { defendantName: claim.claimData.defendant.name }) }}
+  {% elseif status === ClaimStatus.OFFER_SUBMITTED %}
     {{ t('The defendant has made an offer to settle out of court.') }}
     <p>
       <a href="{{ url }}">{{ t('View their offer') }}</a>
     </p>
-  {% elseif claim.status === ClaimStatus.MORE_TIME_REQUESTED %}
+  {% elseif status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ t('{{ defendantName }} has requested an extra 14 days to respond. They need to respond by {{ responseDeadline }}.',
     { defendantName: claim.claimData.defendant.name,
       responseDeadline: claim.responseDeadline | date }) }}
-  {% elseif claim.status === ClaimStatus.NO_RESPONSE %}
+  {% elseif status === ClaimStatus.NO_RESPONSE %}
     {{ t('Your claim has been sent. {{ defendantName }} has until {{ responseDeadline }} to respond. They can request an extra 14 days if they need it.',
     { defendantName: claim.claimData.defendant.name,
       responseDeadline: claim.responseDeadline | date }) }}
   {% endif %}
-
 {% endmacro %}

@@ -41,7 +41,7 @@ describe('declaration page', () => {
         await request(app)
           .get(declarationPage)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Your agreement'))
+          .expect(res => expect(res).to.be.successful.withText('Terms of the agreement'))
       })
     })
 
