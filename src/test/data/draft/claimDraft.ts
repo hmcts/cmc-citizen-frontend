@@ -2,8 +2,8 @@ import { individualDetails } from './partyDetails'
 import { InterestType } from 'claim/form/models/interest'
 import { InterestDateType } from 'app/common/interestDateType'
 import { YesNoOption } from 'models/yesNoOption'
-import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
-import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
+import { ClaimValue } from 'eligibility/model/claimValue'
+import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 
 export const claimDraft = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',

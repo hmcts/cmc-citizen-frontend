@@ -1,9 +1,9 @@
-import { YesNoOption } from 'models/yesNoOption'
+import { YesNoOption } from 'app/models/yesNoOption'
 import { IsIn } from 'class-validator'
-import { ValidationErrors } from 'forms/validation/validationErrors'
-import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
-import { ClaimType } from 'claim/form/models/eligibility/claimType'
-import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
+import { ValidationErrors } from 'app/forms/validation/validationErrors'
+import { ClaimValue } from 'eligibility/model/claimValue'
+import { ClaimType } from 'eligibility/model/claimType'
+import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 
 export class Eligibility {
 

@@ -2,22 +2,22 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from '../../../../routes/hooks'
-import '../../../../routes/expectations'
+import { attachDefaultHooks } from '../../../routes/hooks'
+import '../../../routes/expectations'
 
 import { Paths } from 'eligibility/paths'
 
-import { app } from '../../../../../main/app'
+import { app } from '../../../../main/app'
 
-import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
+import { NotEligibleReason } from 'eligibility/notEligibleReason'
 import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = Paths.singleDefendantPage.uri
-const pageRedirect: string = Paths.governmentDepartmentPage.uri
-const expectedTextOnPage: string = 'Is this claim against more than one person or organisation?'
+const pagePath: string = Paths.claimIsForTenancyDepositPage.uri
+const pageRedirect: string = Paths.eligiblePage.uri
+const expectedTextOnPage: string = 'Is your claim for a tenancy deposit?'
 
-describe('Claim eligibility: single defendant page', () => {
+describe('Claim eligibility: is claim for tenancy deposit page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -40,12 +40,12 @@ describe('Claim eligibility: single defendant page', () => {
           .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
       })
 
-      it('should redirect to government department page when form is valid and everything is fine', async () => {
+      it('should redirect to eligible page when form is valid and everything is fine', async () => {
 
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ singleDefendant: YesNoOption.NO.option })
+          .send({ claimIsForTenancyDeposit: YesNoOption.NO.option })
           .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
       })
 
@@ -54,8 +54,8 @@ describe('Claim eligibility: single defendant page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ singleDefendant: YesNoOption.YES.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_DEFENDANTS}`))
+          .send({ claimIsForTenancyDeposit: YesNoOption.YES.option })
+          .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_IS_FOR_TENANCY_DEPOSIT}`))
       })
     })
   })

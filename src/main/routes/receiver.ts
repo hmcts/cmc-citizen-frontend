@@ -1,6 +1,7 @@
-import { Eligibility } from 'claim/form/models/eligibility/eligibility'
-import { CookieEligibilityStore } from 'eligibility/store'
 import * as express from 'express'
+
+import { Eligibility } from 'eligibility/model/eligibility'
+import { CookieEligibilityStore } from 'eligibility/store'
 
 import { Paths as AppPaths } from 'app/paths'
 import { Paths as ClaimPaths } from 'claim/paths'

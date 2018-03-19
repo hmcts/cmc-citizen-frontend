@@ -2,15 +2,15 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from '../../../../routes/hooks'
-import '../../../../routes/expectations'
+import { attachDefaultHooks } from '../../../routes/hooks'
+import '../../../routes/expectations'
 
 import { Paths } from 'eligibility/paths'
 
-import { app } from '../../../../../main/app'
+import { app } from '../../../../main/app'
 
-import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
-import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
+import { NotEligibleReason } from 'eligibility/notEligibleReason'
+import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.defendantAgePage.uri

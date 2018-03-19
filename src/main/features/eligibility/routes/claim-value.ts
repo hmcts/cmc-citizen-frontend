@@ -1,9 +1,9 @@
 import { Paths } from 'eligibility/paths'
 
 import { EligibilityPage } from 'eligibility/eligibilityPage'
-import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
+import { ClaimValue } from 'eligibility/model/claimValue'
 import { EligibilityCheck, eligible, notEligible } from 'eligibility/model/eligibilityCheck'
-import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
+import { NotEligibleReason } from 'eligibility/notEligibleReason'
 
 class ClaimValueEligibilityPage extends EligibilityPage<ClaimValue> {
   constructor () {

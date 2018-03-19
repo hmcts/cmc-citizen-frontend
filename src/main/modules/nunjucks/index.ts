@@ -17,8 +17,7 @@ import { SignatureType } from 'app/common/signatureType'
 import { ResponseType } from 'response/form/models/responseType'
 import { YesNoOption } from 'models/yesNoOption'
 import { EvidenceType } from 'response/form/models/evidenceType'
-import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
-import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
+import { NotEligibleReason } from 'claim/../../features/eligibility/notEligibleReason'
 import { StatementType } from 'offer/form/models/statementType'
 import { InterestDateType } from 'app/common/interestDateType'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
@@ -32,8 +31,6 @@ import { Paths as AppPaths } from 'app/paths'
 import { Paths as DashboardPaths } from 'features/dashboard/paths'
 import { Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
-import { ClaimType } from 'claim/form/models/eligibility/claimType'
-import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 
 const packageDotJson = require('../../../../package.json')
@@ -101,9 +98,6 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('ResponseType', ResponseType)
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)
-    nunjucksEnv.addGlobal('DefendantAgeOption', DefendantAgeOption)
-    nunjucksEnv.addGlobal('ClaimType', ClaimType)
-    nunjucksEnv.addGlobal('ClaimValue', ClaimValue)
     nunjucksEnv.addGlobal('EvidenceType', EvidenceType)
     nunjucksEnv.addGlobal('StatementType', StatementType)
     nunjucksEnv.addGlobal('NotEligibleReason', NotEligibleReason)

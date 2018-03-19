@@ -1,4 +1,4 @@
-import { YesNoOption } from 'models/yesNoOption'
+import { YesNoOption } from 'app/models/yesNoOption'
 import { PartyType } from 'app/common/partyType'
 
 export class DefendantAgeOption {

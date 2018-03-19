@@ -1,4 +1,4 @@
-import { Eligibility } from 'claim/form/models/eligibility/eligibility'
+import { Eligibility } from 'eligibility/model/eligibility'
 import * as Cookies from 'cookies'
 import * as express from 'express'
 

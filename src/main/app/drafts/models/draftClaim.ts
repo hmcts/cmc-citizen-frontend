@@ -9,7 +9,7 @@ import * as uuid from 'uuid'
 import { Defendant } from 'app/drafts/models/defendant'
 import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
-import { Eligibility } from 'claim/form/models/eligibility/eligibility'
+import { Eligibility } from 'eligibility/model/eligibility'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 
 export class DraftClaim extends DraftDocument {

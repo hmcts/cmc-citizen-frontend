@@ -1,8 +1,8 @@
 import { Defendant } from 'app/drafts/models/defendant'
 import { expect } from 'chai'
-import { ClaimType } from 'claim/form/models/eligibility/claimType'
-import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
-import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
+import { ClaimType } from 'eligibility/model/claimType'
+import { ClaimValue } from 'eligibility/model/claimValue'
+import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 
 import { Claimant } from 'drafts/models/claimant'
 import { DraftClaim } from 'drafts/models/draftClaim'
