@@ -1,3 +1,5 @@
+import * as toBoolean from 'to-boolean'
+
 import { Claimant } from 'drafts/models/claimant'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { Interest } from 'claim/form/models/interest'
@@ -22,7 +24,7 @@ export class DraftClaim extends DraftDocument {
   readResolveDispute: boolean = false
   readCompletingClaim: boolean = false
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
-  eligibility: Eligibility = new Eligibility()
+  eligibility: boolean | Eligibility
   timeline: ClaimantTimeline = new ClaimantTimeline()
 
   deserialize (input: any): DraftClaim {
@@ -39,7 +41,14 @@ export class DraftClaim extends DraftDocument {
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }
-      this.eligibility = new Eligibility().deserialize(input.eligibility)
+      switch (typeof input.eligibility) {
+        case 'boolean':
+          this.eligibility = toBoolean(input.eligibility)
+          break
+        case 'object':
+          this.eligibility = new Eligibility().deserialize(input.eligibility)
+          break
+      }
       this.timeline = new ClaimantTimeline().deserialize(input.timeline) as ClaimantTimeline
     }
     return this
