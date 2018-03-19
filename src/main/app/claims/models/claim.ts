@@ -11,6 +11,7 @@ import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { FeatureToggles } from 'utils/featureToggles'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
+import { DefenceType } from 'claims/models/response/fullDefenceResponse'
 
 interface State {
   status: ClaimStatus
@@ -110,8 +111,10 @@ export class Claim {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
     } else if (this.isFreeMediationRequested()) {
       return ClaimStatus.FREE_MEDIATION
-    } else if (this.isClaimRejected()) {
+    } else if (this.isClaimRejectedAsDisputed()) {
       return ClaimStatus.CLAIM_REJECTED
+    } else if (this.isClaimRejectedAsStatesPaid()) {
+      return ClaimStatus.CLAIM_REJECTED_STATES_PAID
     } else if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
     } else if (!this.response) {
@@ -126,7 +129,7 @@ export class Claim {
       return [{
         status: ClaimStatus.OFFER_ACCEPTED
       }, {
-        status: ClaimStatus.CLAIM_REJECTED
+        status: this.responseStatus()
       }]
     } else {
       return [{
@@ -153,7 +156,27 @@ export class Claim {
     return FeatureToggles.isEnabled('offer') && this.settlement && this.settlementReachedAt
   }
 
-  private isClaimRejected () {
-    return this.response && this.response.responseType === ResponseType.FULL_DEFENCE
+  private isClaimRejectedAsStatesPaid () {
+    return this.response && this.response.defenceType === DefenceType.ALREADY_PAID
+  }
+
+  private isClaimRejectedAsDisputed () {
+    return this.response && this.response.defenceType === DefenceType.DISPUTE
+  }
+
+  private responseStatus (): ClaimStatus {
+    if (!this.response) {
+      throw new Error('There is no response')
+    }
+
+    if (this.isClaimRejectedAsStatesPaid()) {
+      return ClaimStatus.CLAIM_REJECTED_STATES_PAID
+    }
+    if (this.isClaimRejectedAsDisputed()) {
+      return ClaimStatus.CLAIM_REJECTED
+    }
+
+    throw new Error(`Unknown defence type: ${this.response.defenceType}`)
+
   }
 }

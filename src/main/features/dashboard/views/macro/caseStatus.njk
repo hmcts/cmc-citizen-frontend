@@ -5,6 +5,7 @@
 {% endmacro %}
 
 {% macro caseStatusForDefendant(status, claim, url, isAfter4pm) %}
+  {% set claimantName = claim.claimData.claimant.name %}
   {% if status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
     {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
   {% elseif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
@@ -12,12 +13,14 @@
     { claimantName: claim.claimData.claimant.name } ) }}
   {% elseif status === ClaimStatus.CCJ_REQUESTED %}
     {{ t('{{ claimantName }} requested a County Court Judgment against you on {{ ccjRequestedAt }}. We will contact you both within 5 working days.',
-    { claimantName: claim.claimData.claimant.name, ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
+    { claimantName: claimantName, ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
   {% elseif status === ClaimStatus.FREE_MEDIATION %}
     {{ t('You’ve rejected the claim and suggested mediation on {{ caseStatusForDefendant }}.',
     { respondedAt: claim.respondedAt | date }) }}
   {% elseif status === ClaimStatus.CLAIM_REJECTED %}
     {{ t('You’ve rejected the claim. The case will be reviewed by a judge and might go to court.' ) }}
+  {% elseif status === ClaimStatus.CLAIM_REJECTED_STATES_PAID %}
+    {{ t('We’ve emailed {{ claimantName }} telling them when and how you paid the claim.', { claimantName: claimantName }) }}
   {% elseif status === ClaimStatus.OFFER_ACCEPTED %}
     {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court.',
     { claimantName: claim.claimData.claimant.name } ) }}
@@ -49,6 +52,8 @@
     {{ t('{{ defendantName }} has rejected the claim. They’ve suggested free mediation on {{ respondedAt }}. You can accept or reject',
     { defendantName: claim.response.defendant.name, respondedAt: claim.respondedAt | date }) }}
     <p>{{ _viewResponseLink(claim.externalId) }}</p>
+  {% elseif status === ClaimStatus.CLAIM_REJECTED_STATES_PAID %}
+    {{ t('The defendant believes that they’ve paid the claim in full.') }}
   {% elseif status === ClaimStatus.CLAIM_REJECTED %}
     {{ t('{{ defendantName }} has rejected the claim. The case will be reviewed by a judge and might go to court.',
     { defendantName:  claim.claimData.defendant.name }) }}

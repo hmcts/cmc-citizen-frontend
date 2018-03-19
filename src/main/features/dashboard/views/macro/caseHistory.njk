@@ -13,7 +13,7 @@
           <p>
             <a href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
           </p>
-      {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
+      {% elseif state.status === ClaimStatus.OFFER_ACCEPTED %}
         <h3 class="heading-small">{{ t('Settle out of court') }}</h3>
         <p>
           {{ t('You’ve agreed to the offer made by {{ defendantName }} and signed an agreement to settle your claim.',
@@ -23,6 +23,15 @@
           {{ t('We’ve asked {{ defendantName }} to sign the agreement.',
             { defendantName: claim.claimData.defendant.name }) }}
         </p>
+      {% elseif state.status === ClaimStatus.CLAIM_REJECTED_STATES_PAID %}
+        <h3 class="heading-small">{{ t('The defendant’s response') }}</h3>
+        <p>
+          {{ t('{{ defendantName }} believes that they’ve paid the claim in full. ' +
+          'Email moneyclaims@hmcts.gsi.gov.uk if you want to proceed with the claim - ' +
+          'you must do this before 4pm on 21 April 2018.',
+            { defendantName: claim.claimData.defendant.name }) }}
+        </p>
+        <p>{{ t('Down') }}</p>
       {% else %}
         <p>
           {{ caseStatusForClaimant(state.status, claim, url) }}
@@ -43,7 +52,7 @@
         <p>
           <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>
         </p>
-      {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
+      {% elseif state.status === ClaimStatus.OFFER_ACCEPTED %}
         <h3 class="heading-small">{{ t('Settle out of court') }}</h3>
         <p>
           {{ t('The claimant has accepted your offer and signed a legal agreement. You need to sign the agreement to settle out of court.') }}
@@ -54,7 +63,7 @@
         <p>
           <a href="{{ OfferPaths.countersignAgreementPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Sign the agreement') }}</a>
         </p>
-      {% elif claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
+      {% elseif claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
           <h3 class="heading-small">{{ t('Agreement signed') }}</h3>
           <p>
             {{ caseStatusForDefendant(claim.status, claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
