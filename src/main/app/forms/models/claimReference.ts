@@ -10,7 +10,7 @@ export class ClaimReference {
 
   @IsDefined({ message: ValidationErrors.CLAIM_REFERENCE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.CLAIM_REFERENCE_REQUIRED })
-  @Matches(new RegExp('\\b\\d{3}MC\\d{3}\\b'), { message: ValidationErrors.CLAIM_REFERENCE_INVALID })
+  @Matches(new RegExp('\\b\\d{3}MC\\d{3}\\b', 'i'), { message: ValidationErrors.CLAIM_REFERENCE_INVALID })
   reference?: string
 
   constructor (reference?: string) {

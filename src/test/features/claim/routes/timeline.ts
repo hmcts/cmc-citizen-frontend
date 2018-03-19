@@ -69,7 +69,7 @@ describe('Claim issue: timeline page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ rows: [{ 'date': 'may', 'description': 'ok' }] })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.evidencePage.uri))
       })
     })
   })

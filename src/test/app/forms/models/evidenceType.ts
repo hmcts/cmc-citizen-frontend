@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { EvidenceType } from 'response/form/models/evidenceType'
+import { EvidenceType } from 'forms/models/evidenceType'
 
 describe('EvidenceType', () => {
 
