@@ -15,40 +15,45 @@
           </legend>
 
           {{ csrfProtection(csrf) }}
-          <div class="multiple-choice" id="service[label]">
-            <input id="service-moneyclaims" type="radio" name="service" value="{{ Service.MONEYCLAIMS.option }}">
-            <label for="service-moneyclaims">{{ t('Money claims - new beta service') }}</label>
-            <details>
-              <summary>{{ t('What does the new service look like?') }}</summary>
-              <div class="panel">
+          {% set error = form.errorFor('service') %}
+          <div id="service[label]" class="form-group{% if error %} form-group-error{% endif %}">
+          {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+            <div class="multiple-choice">
+              <input id="service-moneyclaims"
+                     type="radio" name="service" value="{{ Service.MONEYCLAIMS.option }}">
+              <label for="service-moneyclaims">{{ t('Money claims - new beta service') }}</label>
+              <details>
+                <summary>{{ t('What does the new service look like?') }}</summary>
+                <div class="panel">
 
-                <p class="form-hint">{{ t('Example of Money claims BETA') }}</p>
-                <img alt="{{ t('Money claims sign in page') }}"
-                     src="{{ asset_paths.images }}/screenshots/sign-in.png"
-                     width="70%">
-                <img alt="{{ t('Money claims task list page') }}"
-                     src="{{ asset_paths.images }}/screenshots/task-list.png"
-                     width="70%">
-                <img alt="{{ t('Money claims respond to claim page') }}"
-                     src="{{ asset_paths.images }}/screenshots/respond.png"
-                     width="70%">
-              </div>
-            </details>
-          </div>
-          <div class="multiple-choice">
-            <input id="service-mcol" type="radio" name="service" value="{{ Service.MCOL.option }}">
-            <label for="service-mcol">{{ t('Money Claim Online (MCOL)') }}
-              <span class="form-hint">{{ t('You’ll have used an 8-digit Government Gateway user ID.') }}</span>
-            </label>
-            <details>
-              <summary>{{ t('What does MCOL look like?') }}</summary>
-              <div class="panel">
-                <p class="form-hint">{{ t('Example of MCOL') }}</p>
-                <img alt="{{ t('MCOL homepage') }}"
-                     src="{{ asset_paths.images }}/screenshots/mcol.png"
-                     width="70%">
-              </div>
-            </details>
+                  <p class="form-hint">{{ t('Example of Money claims BETA') }}</p>
+                  <img alt="{{ t('Money claims sign in page') }}"
+                       src="{{ asset_paths.images }}/screenshots/sign-in.png"
+                       width="70%">
+                  <img alt="{{ t('Money claims task list page') }}"
+                       src="{{ asset_paths.images }}/screenshots/task-list.png"
+                       width="70%">
+                  <img alt="{{ t('Money claims respond to claim page') }}"
+                       src="{{ asset_paths.images }}/screenshots/respond.png"
+                       width="70%">
+                </div>
+              </details>
+            </div>
+            <div class="multiple-choice">
+              <input id="service-mcol" type="radio" name="service" value="{{ Service.MCOL.option }}">
+              <label for="service-mcol">{{ t('Money Claim Online (MCOL)') }}
+                <span class="form-hint">{{ t('You’ll have used an 8-digit Government Gateway user ID.') }}</span>
+              </label>
+              <details>
+                <summary>{{ t('What does MCOL look like?') }}</summary>
+                <div class="panel">
+                  <p class="form-hint">{{ t('Example of MCOL') }}</p>
+                  <img alt="{{ t('MCOL homepage') }}"
+                       src="{{ asset_paths.images }}/screenshots/mcol.png"
+                       width="70%">
+                </div>
+              </details>
+            </div>
           </div>
         </fieldset>
 
