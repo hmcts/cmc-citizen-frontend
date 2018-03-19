@@ -9,7 +9,7 @@ const offerSteps: OfferSteps = new OfferSteps()
 
 Feature('Offers')
 
-Scenario('I can as a defendant make an offer to the claimant @citizen', function* (I: I) {
+Scenario('I can as a defendant make an offer, accept offer and counter sign the agreement @citizen', function* (I: I) {
   const claimantEmail: string = yield I.createCitizenUser()
   const defendantEmail: string = yield I.createCitizenUser()
 
@@ -30,5 +30,5 @@ Scenario('I can as a defendant make an offer to the claimant @citizen', function
   userSteps.login(defendantEmail)
   offerSteps.countersignOfferFromDashboard(claimRef)
   offerSteps.viewClaimFromDashboard(claimRef)
-  I.see('You have signed the agreement. The claim is now settled.')
+  I.see('You’ve both signed a legal agreement. The claim is now settled.')
 })

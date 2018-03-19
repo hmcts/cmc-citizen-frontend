@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import submitButton, errorSummary %}
-{% from "./macro/responseStatus.njk" import responseStatusForDefendant, responseStatusForClaimant %}
+{% from "./macro/caseStatus.njk" import caseStatusForDefendant, caseStatusForClaimant %}
 {% from "support.njk" import supportWidget %}
 
 {% set title = 'Money claim' %}
@@ -51,13 +51,13 @@
             <td>{{ claim.claimData.defendant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
             <td class="mobile-hide">
-              {{ responseStatusForClaimant(claim, statusUrl) }}
+              {{ caseStatusForClaimant(claim.status, claim, statusUrl) }}
             </td>
           </tr>
           <tr>
             <td colspan="3" class="mobile-table-status">
               {{ t('Status: ') }}
-              {{ responseStatusForClaimant(claim, statusUrl) }}
+              {{ caseStatusForClaimant(claim.status, claim, statusUrl) }}
             </td>
           </tr>
         {% endfor %}
@@ -99,12 +99,12 @@
             <td>{{ claim.claimData.claimant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
             <td class="mobile-hide">
-              {{ responseStatusForDefendant(claim, statusUrl, isAfter4pm) }}
+              {{ caseStatusForDefendant(claim.status, claim, statusUrl, isAfter4pm) }}
             </td>
           </tr>
           <tr>
             <td colspan="3" class="mobile-table-status">
-              {{ t('Status: ') }} {{ responseStatusForDefendant(claim, statusUrl, isAfter4pm) }}
+              {{ t('Status: ') }} {{ caseStatusForDefendant(claim.status, claim, statusUrl, isAfter4pm) }}
             </td>
           </tr>
         {% endfor %}
