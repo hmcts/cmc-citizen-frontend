@@ -33,7 +33,7 @@
       <details>
         <summary>{{ t('How we use and store your personal information') }}</summary>
         <div class="panel panel-border">
-          <p>{{ t('This claim contains personal information about you that Jan Clark has provided, for example your name and address.') }}</p>
+          <p>{{ t('This claim contains personal information about you that {{ claimant }} has provided, for example your name and address.', { claimant: claim.claimData.claimant.name  }) }}</p>
           <p>{{ t('Find out about how we use and store your <a href="{{ link }}" target="_self">personal information</a>.', { link: AppPaths.privacyPolicyPage.uri }) | safe }}</p>
         </div>
       </details>
