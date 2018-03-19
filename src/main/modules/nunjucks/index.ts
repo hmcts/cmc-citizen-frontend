@@ -29,11 +29,13 @@ import { BankAccountType } from 'response/form/models/statement-of-means/bankAcc
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { FeatureToggles } from 'utils/featureToggles'
 import { Paths as AppPaths } from 'app/paths'
+import { Paths as DashboardPaths } from 'features/dashboard/paths'
 import { Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { ClaimType } from 'claim/form/models/eligibility/claimType'
 import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
+import { Service } from 'models/service'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -42,6 +44,7 @@ const appAssetPaths = {
   js_vendor: '/js/lib',
   style: '/stylesheets',
   style_vendor: '/stylesheets/lib',
+  images: '/img',
   images_vendor: '/img/lib',
   pdf: '/pdf'
 }
@@ -114,8 +117,10 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('BankAccountType', BankAccountType)
     nunjucksEnv.addGlobal('ClaimStatus', ClaimStatus)
     nunjucksEnv.addGlobal('AppPaths', AppPaths)
+    nunjucksEnv.addGlobal('DashboardPaths', DashboardPaths)
     nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
     nunjucksEnv.addGlobal('HowMuchPaidClaimantOption', HowMuchPaidClaimantOption)
+    nunjucksEnv.addGlobal('Service', Service)
     if (FeatureToggles.isEnabled('finePrint')) {
       nunjucksEnv.addGlobal('cookieText', `GOV.UK uses cookies make the site simpler. <a href="${AppPaths.cookiesPage.uri}">Find out more about cookies</a>`)
     }
