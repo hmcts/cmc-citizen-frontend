@@ -9,8 +9,8 @@ export class ActionForm<Model> extends Form<Model> {
       throw new Error('Action is expected to be an object instance')
     }
     const keys: string[] = Object.keys(action)
-    if (keys.length > 1) {
-      throw new Error('A single action was expected, but found multiple')
+    if (keys.length !== 1) {
+      throw new Error('A single action key is expected')
     }
     return `action[${keys.pop()}]`
   }

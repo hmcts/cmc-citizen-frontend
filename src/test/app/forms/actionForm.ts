@@ -20,6 +20,10 @@ describe('ActionForm', () => {
       expect(() => ActionForm.buildPostbackFocusTarget(action)).to.throw(Error)
     })
 
+    it('should throw an error if action object has no keys', () => {
+      expect(() => ActionForm.buildPostbackFocusTarget({ })).to.throw(Error)
+    })
+
     it('should set postbackFocusTarget to expected string value if correct action object is available', () => {
       const action = {
         addRow: 'Add new row'
