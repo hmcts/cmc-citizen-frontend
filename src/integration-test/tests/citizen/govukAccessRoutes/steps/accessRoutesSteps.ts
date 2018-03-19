@@ -14,7 +14,7 @@ const selectors = {
   moneyclaimsRadio: 'input[id="service-moneyclaims"]'
 }
 
-const ccbcReference = 'AA12321321'
+const ccbcReference = 'AA123213'
 const mcolText = 'Money Claim Online'
 const dashboardHeading = 'Your money claims account'
 
