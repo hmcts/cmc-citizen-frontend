@@ -1,6 +1,7 @@
 import { ResponseCommon, ResponseType } from './responseCommon'
 import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
+import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 
 export enum DefenceType {
   DISPUTE = 'DISPUTE',
@@ -13,6 +14,7 @@ export interface FullDefenceResponse extends ResponseCommon {
   paymentDeclaration?: PaymentDeclaration
   defence: string,
   timeline: DefendantTimeline
+  evidence: DefendantEvidence
 }
 
 export namespace FullDefenceResponse {
@@ -25,7 +27,11 @@ export namespace FullDefenceResponse {
       timeline: {
         rows: input.timeline && input.timeline.rows || [],
         comment: input.timeline && input.timeline.comment || undefined
-      } as DefendantTimeline
+      } as DefendantTimeline,
+      evidence: {
+        rows: input.evidence && input.evidence.rows || [],
+        comment: input.evidence && input.evidence.comment || undefined
+      } as DefendantEvidence
     }
   }
 }
