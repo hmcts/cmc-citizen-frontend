@@ -20,7 +20,7 @@ function renderView (form: Form<DefendantEvidence>, res: express.Response): void
 
   res.render(page.associatedView, {
     form: form,
-    claimantName: claim.claimData.claimant.name
+    evidence: claim.claimData.evidence
   })
 }
 
