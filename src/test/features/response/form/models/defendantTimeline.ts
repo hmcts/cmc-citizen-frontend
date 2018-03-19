@@ -71,28 +71,41 @@ describe('DefendantTimeline', () => {
 
   describe('deserialize', () => {
 
-    it('should return valid DefendantTimeline object with list of empty TimelineRow', () => {
-      const actual: DefendantTimeline = new DefendantTimeline().deserialize({})
+    context('should return valid DefendantTimeline object with list of', () => {
 
-      expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
-      expectAllRowsToBeEmpty(actual.rows)
-      expect(actual.comment).to.be.eq(undefined)
-    })
+      [{}, undefined].forEach(input => {
+        it(`empty TimelineRow when ${input} given`, () => {
+          const actual: DefendantTimeline = new DefendantTimeline().deserialize(input)
 
-    it('should return valid DefendantTimeline object with populated first TimelineRow', () => {
-      const actual: DefendantTimeline = new DefendantTimeline().deserialize(
-        { rows: [{ date: 'May', description: 'OK' }], comment: 'fine' }
-      )
+          expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
+          expectAllRowsToBeEmpty(actual.rows)
+          expect(actual.comment).to.be.eq(undefined)
+        })
+      })
 
-      expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
+      it('should return valid DefendantTimeline object with list of empty TimelineRow', () => {
+        const actual: DefendantTimeline = new DefendantTimeline().deserialize({})
 
-      const populatedItem: TimelineRow = actual.rows[0]
+        expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
+        expectAllRowsToBeEmpty(actual.rows)
+        expect(actual.comment).to.be.eq(undefined)
+      })
 
-      expect(populatedItem.date).to.eq('May')
-      expect(populatedItem.description).to.eq('OK')
+      it('should return valid DefendantTimeline object with populated first TimelineRow', () => {
+        const actual: DefendantTimeline = new DefendantTimeline().deserialize(
+          { rows: [{ date: 'May', description: 'OK' }], comment: 'fine' }
+        )
 
-      expectAllRowsToBeEmpty(actual.rows.slice(1))
-      expect(actual.comment).to.be.eq('fine')
+        expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
+
+        const populatedItem: TimelineRow = actual.rows[0]
+
+        expect(populatedItem.date).to.eq('May')
+        expect(populatedItem.description).to.eq('OK')
+
+        expectAllRowsToBeEmpty(actual.rows.slice(1))
+        expect(actual.comment).to.be.eq('fine')
+      })
     })
   })
 
