@@ -61,7 +61,7 @@ export default express.Router()
         draft.document.timeline = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+        res.redirect(Paths.evidencePage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )

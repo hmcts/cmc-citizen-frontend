@@ -14,15 +14,15 @@ import { HowMuchOwed } from 'response/form/models/howMuchOwed'
 import { DefendantPaymentOption } from 'response/form/models/defendantPaymentOption'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
-import { Evidence } from 'forms/models/evidence'
-import * as config from 'config'
-import * as toBoolean from 'to-boolean'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
 import { PayBySetDate } from 'response/draft/payBySetDate'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
 import { HowMuchPaidClaimantOption, HowMuchPaidClaimant } from 'response/form/models/howMuchPaidClaimant'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
+import { DefendantEvidence } from 'response/form/models/defendantEvidence'
+import * as config from 'config'
+import * as toBoolean from 'to-boolean'
 
 export class ResponseDraft extends DraftDocument {
 
@@ -33,7 +33,7 @@ export class ResponseDraft extends DraftDocument {
   defendantDetails?: Defendant = new Defendant()
   howMuchIsPaid?: HowMuchPaid
   timeline: DefendantTimeline
-  evidence: Evidence
+  evidence: DefendantEvidence
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
   howMuchOwed?: HowMuchOwed
   rejectPartOfClaim?: RejectPartOfClaim
@@ -57,7 +57,7 @@ export class ResponseDraft extends DraftDocument {
       this.defendantDetails = new Defendant().deserialize(input.defendantDetails)
       this.howMuchIsPaid = new HowMuchPaid().deserialize(input.howMuchIsPaid)
       this.howMuchOwed = new HowMuchOwed().deserialize(input.howMuchOwed)
-      this.evidence = new Evidence().deserialize(input.evidence) as Evidence
+      this.evidence = new DefendantEvidence().deserialize(input.evidence)
       this.timeline = new DefendantTimeline().deserialize(input.timeline)
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)

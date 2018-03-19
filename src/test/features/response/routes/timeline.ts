@@ -111,7 +111,7 @@ describe('Defendant response: timeline', () => {
 
         context('valid form', () => {
 
-          it('should render page when form is valid, amount within limit and everything is fine', async () => {
+          it('should redirect to evidence page when and everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveSave(100)
@@ -121,7 +121,7 @@ describe('Defendant response: timeline', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ rows: [{ date: 'Damaged roof', description: '299' }] })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+                .toLocation(Paths.evidencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })
 
