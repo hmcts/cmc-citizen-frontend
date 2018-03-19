@@ -1,0 +1,12 @@
+{% macro offerTable(offer, completionDate) %}
+  <div class="offer-table">
+    <div class="bottom-border">
+      <div class="column-one-quarter label">{{ t('The offer') }}</div>
+      <div class="column-three-quarters">{{ offer }}</div>
+    </div>
+    <div class="bottom-border">
+      <div class="column-one-quarter label">{{ t('Completion date') }}</div>
+      <div class="column-three-quarters">{{ completionDate | date }}</div>
+    </div>
+  </div>
+{% endmacro %}

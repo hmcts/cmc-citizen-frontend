@@ -99,3 +99,7 @@ variable "node_env" {
   // https://www.dynatrace.com/news/blog/the-drastic-effects-of-omitting-node_env-in-your-express-js-applications/
   default = "production"
 }
+
+variable "external_host_name" {
+  default = "moneyclaims.sandbox.platform.hmcts.net"
+}
