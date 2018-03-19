@@ -12,7 +12,6 @@ import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
-import { ActionForm } from 'forms/actionForm'
 
 function renderView (form: Form<ClaimAmountBreakdown>, res: express.Response): void {
   res.render(Paths.amountPage.associatedView, {
@@ -24,11 +23,10 @@ function renderView (form: Form<ClaimAmountBreakdown>, res: express.Response): v
 
 function actionHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
   if (req.body.action) {
-    const form: ActionForm<ClaimAmountBreakdown> = req.body
-    if (form.action.addRow) {
+    const form: Form<ClaimAmountBreakdown> = req.body
+    if (req.body.action.addRow) {
       form.model.appendRow()
     }
-    form.postbackFocusTarget = ActionForm.buildPostbackFocusTarget(form.action)
     return renderView(form, res)
   }
   next()
