@@ -11,7 +11,7 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        <input type="hidden" id="focus-target" value="{{ form.model.focusTarget | default('') }}" />
+        <input type="hidden" id="focus-target" value="{{ form.postbackFocusTarget | default('') }}" />
 
         <p>{{ t('Your claim could be for a single amount or might be made up of multiple items.') }}</p>
         <div class="panel panel-border-wide">
