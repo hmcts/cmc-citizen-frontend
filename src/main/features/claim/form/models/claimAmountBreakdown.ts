@@ -2,6 +2,7 @@ import { ValidateNested } from 'class-validator'
 
 import { ClaimAmountRow } from 'features/claim/form/models/claimAmountRow'
 import { MinTotal } from 'app/forms/validation/validators/minTotal'
+import { PostbackFocusTargetHolder } from 'forms/models/postbackFocusNameHolder'
 
 export const INIT_ROW_COUNT: number = 4
 export const MAX_NUMBER_OF_ROWS: number = 20
@@ -10,8 +11,10 @@ export class ValidationErrors {
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount of money'
 }
 
-export class ClaimAmountBreakdown {
+export class ClaimAmountBreakdown implements PostbackFocusTargetHolder {
   readonly type: string = 'breakdown'
+
+  focusTarget: string
 
   @ValidateNested({ each: true })
   @MinTotal(0.01, { message: ValidationErrors.AMOUNT_REQUIRED })

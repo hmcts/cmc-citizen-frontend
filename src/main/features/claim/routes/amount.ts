@@ -27,9 +27,14 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
     if (req.body.action.addRow) {
       form.model.appendRow()
     }
+    form.model.focusTarget = deferFocusTarget(req)
     return renderView(form, res)
   }
   next()
+}
+
+function deferFocusTarget (req: express.Request): string {
+  return `action[${Object.keys(req.body.action).pop()}]`
 }
 
 /* tslint:disable:no-default-export */
