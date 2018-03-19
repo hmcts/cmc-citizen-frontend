@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@hmcts/cmc-common-frontend@^1.40.0":
-  version "1.40.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.40.0.tgz#8de3ca0ba0e4cec401c959c2700faba8035ebddd"
+"@hmcts/cmc-common-frontend@^1.42.0":
+  version "1.42.0"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.42.0.tgz#c33187b8e03c4624b00f1760287d4c7cee987ef1"
 
 "@hmcts/cmc-draft-store-middleware@^2.0.0":
   version "2.0.0"
@@ -3221,7 +3221,7 @@ got@^6.7.1:
     unzip-response "^2.0.1"
     url-parse-lax "^1.0.0"
 
-govuk-elements-sass@^3.0.2:
+govuk-elements-sass@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/govuk-elements-sass/-/govuk-elements-sass-3.1.2.tgz#4c79a6893c500e5c817ade8d5008e709f718a3c3"
   dependencies:

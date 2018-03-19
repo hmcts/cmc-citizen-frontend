@@ -73,9 +73,9 @@ export const claimDraft = {
   } as InterestDate,
   interestStartDate: {
     date: {
-      day: 10,
-      month: 12,
-      year: 2016
+      day: 1,
+      month: 1,
+      year: 2018
     } as LocalDate,
     reason: 'reason'
   } as InterestStartDate,

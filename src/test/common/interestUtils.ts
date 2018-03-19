@@ -1,43 +1,25 @@
 import { InterestDateType } from 'app/common/interestDateType'
 import { expect } from 'chai'
-import { InterestRate, InterestRateOption } from 'claim/form/models/interestRate'
 import { Claim } from 'claims/models/claim'
 import { getInterestDetails } from 'common/interestUtils'
 import { MomentFactory } from 'common/momentFactory'
 import * as claimStoreServiceMock from '../http-mocks/claim-store'
-import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
-import { InterestOption } from 'claim/form/models/interest'
-import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/interestEndDate'
-import { InterestDate } from 'claim/form/models/interestDate'
-import { InterestStartDate } from 'claim/form/models/interestStartDate'
+import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
+import { Interest } from 'claims/models/interest'
+import { InterestDate } from 'claims/models/interestDate'
+import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 const sampleClaimObj = {
   claim: {
     interest: {
-      option: InterestOption.YES
-    },
-    interestType: {
-      option: InterestTypeOption.SAME_RATE
-    } as InterestType,
-    interestRate: {
-      type: InterestRateOption.DIFFERENT,
+      type: ClaimInterestType.STANDARD,
       rate: 10,
       reason: 'Special case'
-    } as InterestRate,
+    } as Interest,
     interestDate: {
-      type: InterestDateType.SUBMISSION
-    } as InterestDate,
-    interestStartDate: {
-      date: {
-        day: 10,
-        month: 12,
-        year: 2016
-      },
-      reason: 'reason'
-    } as InterestStartDate,
-    interestEndDate: {
-      option: InterestEndDateOption.SETTLED_OR_JUDGMENT
-    } as InterestEndDate
+      type: InterestDateType.SUBMISSION,
+      endDate: InterestEndDateOption.SETTLED_OR_JUDGMENT
+    } as InterestDate
   },
   createdAt: MomentFactory.currentDate(),
   issuedOn: MomentFactory.currentDate(),
@@ -51,9 +33,7 @@ describe('getInterestDetails', () => {
       ...sampleClaimObj,
       ...{
         claim: {
-          interest: {
-            option: InterestOption.NO
-          },
+          interest: undefined,
           interestDate: undefined
         }
       }

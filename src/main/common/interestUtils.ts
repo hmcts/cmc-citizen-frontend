@@ -10,9 +10,10 @@ import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { InterestOption } from 'claim/form/models/interest'
 import { isAfter4pm } from 'common/dateUtils'
+import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 export async function getInterestDetails (claim: Claim): Promise<InterestData> {
-  if (claim.claimData.interest.option === InterestOption.NO) {
+  if (claim.claimData.interest.type === ClaimInterestType.NO_INTEREST || claim.claimData.interest.type === undefined) {
     return undefined
   }
 
@@ -28,7 +29,7 @@ export async function getInterestDetails (claim: Claim): Promise<InterestData> {
 
 function getInterestDateOrIssueDate (claim: Claim): moment.Moment {
   if (claim.claimData.interestDate.type === InterestDateType.CUSTOM) {
-    return claim.claimData.interestDate.date.toMoment()
+    return claim.claimData.interestDate.date
   } else {
     return claim.issuedOn
   }

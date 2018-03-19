@@ -3,7 +3,7 @@ import { CompletableTask } from 'models/task'
 
 export class InterestEndDateOption {
   static readonly SUBMISSION = 'submission'
-  static readonly SETTLED_OR_JUDGMENT = 'settled_or_judgement'
+  static readonly SETTLED_OR_JUDGMENT = 'settled_or_judgment'
 
   static all (): string[] {
     return [

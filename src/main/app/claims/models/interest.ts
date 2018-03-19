@@ -1,6 +1,6 @@
 export class Interest {
 
-  constructor (public type?: string, public rate?: number, public reason?: string, public option?: string) {}
+  constructor (public type?: string, public rate?: number, public reason?: string) {}
 
   deserialize (input?: any): Interest {
     if (input) {
@@ -10,9 +10,6 @@ export class Interest {
       }
       if (input.reason) {
         this.reason = input.reason
-      }
-      if (input.option) {
-        this.option = input.option
       }
     }
     return this

@@ -28,10 +28,8 @@ import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
 import { InterestRateOption } from 'claim/form/models/interestRate'
 import { InterestDateType } from 'app/common/interestDateType'
-import { isAfter4pm } from 'common/dateUtils'
-import { MomentFactory } from 'common/momentFactory'
-import { LocalDate } from 'forms/models/localDate'
-import { Moment } from 'moment'
+import { InterestOption } from 'claim/form/models/interest'
+import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 export class ClaimModelConverter {
 
@@ -170,14 +168,17 @@ export class ClaimModelConverter {
     return address
   }
 
-  private static convertInterest (draftClaim: DraftClaim): InterestDate {
+  private static convertInterest (draftClaim: DraftClaim): Interest {
     const interest: Interest = new Interest()
-    interest.type = draftClaim.interestRate.type
-    interest.rate = draftClaim.interestRate.rate
+    if (draftClaim.interest.option === InterestOption.NO) {
+      interest.type = ClaimInterestType.NO_INTEREST
+    } else {
+      interest.type = draftClaim.interestRate.type
+      interest.rate = draftClaim.interestRate.rate
+    }
     if (draftClaim.interestRate.type === InterestRateOption.DIFFERENT) {
       interest.reason = draftClaim.interestRate.reason
     }
-    interest.option = draftClaim.interestType.option
     return interest
   }
 
@@ -185,12 +186,9 @@ export class ClaimModelConverter {
     const interestDate: InterestDate = new InterestDate()
     interestDate.type = draftClaim.interestDate.type
     if (draftClaim.interestDate.type === InterestDateType.CUSTOM) {
-      interestDate.date = draftClaim.interestStartDate.date
+      interestDate.date = draftClaim.interestStartDate.date.toMoment()
       interestDate.reason = draftClaim.interestStartDate.reason
       interestDate.endDate = draftClaim.interestEndDate.option
-    } else {
-      const submissionDate: Moment = isAfter4pm() ? MomentFactory.currentDate().add(1, 'day') : MomentFactory.currentDate()
-      interestDate.date = new LocalDate(submissionDate.year(), submissionDate.month() + 1, submissionDate.date())
     }
     return interestDate
   }
