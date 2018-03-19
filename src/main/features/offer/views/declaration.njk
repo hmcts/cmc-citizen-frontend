@@ -11,17 +11,9 @@
       <h1 class="heading-large">{{ t('Terms of the agreement') }}</h1>
 
       <p>
-        {% if user.id == claim.defendantId %}
           {{
             t('You need to sign the agreement.')
           }}
-        {% else %}
-          {{
-            t('Both you and {{ defendantName }} need to sign this agreement for it to become a legal contract.', {
-              defendantName: claim.claimData.defendant.name
-            })
-          }}
-        {% endif %}
       </p>
 
       {{ offerTable(claim.claimData.defendant.name + ': ' + offer.content, offer.completionDate) }}
