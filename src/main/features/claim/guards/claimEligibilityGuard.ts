@@ -19,7 +19,7 @@ export class ClaimEligibilityGuard {
    */
   static check (): express.RequestHandler {
     return GuardFactory.create((res: express.Response, req: express.Request) => {
-      const draft: Draft<DraftClaim> =  res.locals.claimDraft
+      const draft: Draft<DraftClaim> = res.locals.claimDraft
       if (draft.document.eligibility) {
         return true
       }

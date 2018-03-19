@@ -15,6 +15,7 @@ import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 export class DraftClaim extends DraftDocument {
 
   externalId = uuid()
+  eligibility: boolean
   claimant: Claimant = new Claimant()
   defendant: Defendant = new Defendant()
   amount: ClaimAmountBreakdown = new ClaimAmountBreakdown()
@@ -24,7 +25,6 @@ export class DraftClaim extends DraftDocument {
   readResolveDispute: boolean = false
   readCompletingClaim: boolean = false
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
-  eligibility: boolean | Eligibility
   timeline: ClaimantTimeline = new ClaimantTimeline()
 
   deserialize (input: any): DraftClaim {
@@ -46,7 +46,7 @@ export class DraftClaim extends DraftDocument {
           this.eligibility = toBoolean(input.eligibility)
           break
         case 'object':
-          this.eligibility = new Eligibility().deserialize(input.eligibility)
+          this.eligibility = new Eligibility().deserialize(input.eligibility).eligible
           break
       }
       this.timeline = new ClaimantTimeline().deserialize(input.timeline) as ClaimantTimeline
