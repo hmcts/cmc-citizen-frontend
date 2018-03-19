@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as config from 'config'
 
 import { Paths } from 'first-contact/paths'
 import { Paths as AppPaths } from 'app/paths'
@@ -10,12 +11,15 @@ import { ClaimReference } from 'app/forms/models/claimReference'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'
 import { OAuthHelper } from 'idam/oAuthHelper'
+import { isCCBCCaseReference } from 'common/utils/isCCBCCaseReference'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
 function renderView (form: Form<ClaimReference>, res: express.Response): void {
   res.render(Paths.claimReferencePage.associatedView, { form: form })
 }
+
+const mcolUrl = config.get<string>('mcol.url')
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -27,6 +31,10 @@ export default express.Router()
       const form: Form<ClaimReference> = req.body
 
       if (form.hasErrors()) {
+        if (isCCBCCaseReference(form.model.reference)) {
+          return res.redirect(mcolUrl)
+        }
+
         renderView(form, res)
       } else {
         const linked: boolean = await claimStoreClient.isClaimLinked(form.model.reference)
@@ -34,6 +42,6 @@ export default express.Router()
         if (linked) {
           return res.redirect(AppPaths.homePage.uri)
         }
-        res.redirect(OAuthHelper.forPin(req, res, form.model.reference))
+        res.redirect(OAuthHelper.forPin(req, res, form.model.reference.toUpperCase()))
       }
     }))
