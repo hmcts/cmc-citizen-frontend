@@ -6,14 +6,11 @@
   <div class="grid-row">
     <div class="column-two-thirds">
 
-      <h1 class="heading-large">{{ t('Make a legal agreement') }}</h1>
+      <h1 class="heading-large">{{ t('You can now make a legal agreement') }}</h1>
 
       <p>
-        {{ t('You can make a legal agreement to settle out of court.') }}
-        {{ t('It’s based on the information you and {{ name }} have provided. It has not been reviewed by the court.', {
-               name: claim.claimData.defendant.name
-             })
-        }}
+        {{ t('The agreement will be based on the offer from {{ defendantName }} you’ve just accepted. It has not been reviewed by court staff or a judge.', {
+          defendantName: claim.claimData.defendant.name }) }}
       </p>
 
       <p>
@@ -22,15 +19,11 @@
       </p>
 
       <p>
-        {{
-          t('The agreement is a legal contract between you and {{ name }}.', {
-            name: claim.claimData.defendant.name
-          })
-        }}
+        {{ t('You both need to sign the agreement for it to become a legal contract.') }}
       <p>
 
       <a href="{{ OfferPaths.declarationPage.evaluateUri({ externalId: claim.externalId }) }}" role="button" class="button">
-        {{ t('View the agreement') }}
+        {{ t('Make an agreement') }}
       </a>
     </div>
   </div>

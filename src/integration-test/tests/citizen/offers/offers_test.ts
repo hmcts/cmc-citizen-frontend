@@ -30,5 +30,5 @@ Scenario('I can as a defendant make an offer to the claimant @citizen', function
   userSteps.login(defendantEmail)
   offerSteps.countersignOfferFromDashboard(claimRef)
   offerSteps.viewClaimFromDashboard(claimRef)
-  I.see('You have signed the agreement. The claim is now settled.')
+  I.see('You’ve both signed a legal agreement. The claim is now settled.')
 })
