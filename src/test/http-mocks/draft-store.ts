@@ -24,13 +24,9 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Email } from 'app/forms/models/email'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
-import { YesNoOption } from 'models/yesNoOption'
-import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
-import { ClaimType } from 'claim/form/models/eligibility/claimType'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
-import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
@@ -38,18 +34,7 @@ export const sampleClaimDraftObj = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
   readResolveDispute: true,
   readCompletingClaim: true,
-  eligibility: {
-    claimValue: ClaimValue.UNDER_10000,
-    helpWithFees: YesNoOption.NO,
-    claimantAddress: YesNoOption.YES,
-    defendantAddress: YesNoOption.YES,
-    eighteenOrOver: YesNoOption.YES,
-    defendantAge: DefendantAgeOption.YES,
-    claimType: ClaimType.PERSONAL_CLAIM,
-    singleDefendant: YesNoOption.NO,
-    governmentDepartment: YesNoOption.NO,
-    claimIsForTenancyDeposit: YesNoOption.NO
-  },
+  eligibility: true,
   claimant: {
     partyDetails: {
       type: 'individual',

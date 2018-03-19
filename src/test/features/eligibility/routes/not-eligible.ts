@@ -2,10 +2,10 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from '../../../../routes/hooks'
-import '../../../../routes/expectations'
+import { attachDefaultHooks } from '../../../routes/hooks'
+import '../../../routes/expectations'
 
-import { app } from '../../../../../main/app'
+import { app } from '../../../../main/app'
 
 import { Paths } from 'eligibility/paths'
 

@@ -2,18 +2,18 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from '../../../../routes/hooks'
-import '../../../../routes/expectations'
+import { attachDefaultHooks } from '../../../routes/hooks'
+import '../../../routes/expectations'
 
 import { Paths } from 'eligibility/paths'
 
-import { app } from '../../../../../main/app'
+import { app } from '../../../../main/app'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = Paths.eligiblePage.uri
-const expectedTextOnPage: string = 'You can use this service'
+const pagePath: string = Paths.startPage.uri
+const expectedTextOnPage: string = 'Find out if you can use this service'
 
-describe('Claim eligibility: eligible page', () => {
+describe('Claim eligibility: index page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {

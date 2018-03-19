@@ -7,7 +7,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'app/forms/form'
 
-import { Eligibility } from 'claim/form/models/eligibility/eligibility'
+import { Eligibility } from 'eligibility/model/eligibility'
 import { EligibilityCheck } from 'eligibility/model/eligibilityCheck'
 
 import { CookieEligibilityStore, EligibilityStore } from 'eligibility/store'

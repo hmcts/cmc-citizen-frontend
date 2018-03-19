@@ -1,12 +1,12 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../../../app/forms/models/validationUtils'
-import { Eligibility } from 'claim/form/models/eligibility/eligibility'
-import { ValidationErrors } from 'forms/validation/validationErrors'
-import { YesNoOption } from 'models/yesNoOption'
-import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
-import { ClaimType } from 'claim/form/models/eligibility/claimType'
-import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
+import { expectValidationError } from '../../../app/forms/models/validationUtils'
+import { Eligibility } from 'eligibility/model/eligibility'
+import { ValidationErrors } from 'app/forms/validation/validationErrors'
+import { YesNoOption } from 'app/models/yesNoOption'
+import { ClaimValue } from 'features/eligibility/model/claimValue'
+import { ClaimType } from 'features/eligibility/model/claimType'
+import { DefendantAgeOption } from 'features/eligibility/model/defendantAgeOption'
 
 describe('Eligibility', () => {
 

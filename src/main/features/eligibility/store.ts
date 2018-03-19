@@ -1,10 +1,11 @@
-import { Eligibility } from 'claim/form/models/eligibility/eligibility'
+import { Eligibility } from 'eligibility/model/eligibility'
 import * as Cookies from 'cookies'
 import * as express from 'express'
 
-const cookieName = 'eligibility-check'
-const millisecondsToSeconds = 60 * 10000
-const cookieTimeToLiveInMinutes = 10 * millisecondsToSeconds
+const minuteInMilliseconds = 60 * 1000
+const cookieTimeToLiveInMinutes = 10 * minuteInMilliseconds
+
+export const cookieName = 'eligibility-check'
 
 export interface EligibilityStore {
   read (req: express.Request, res: express.Response): Eligibility

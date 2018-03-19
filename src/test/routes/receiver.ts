@@ -1,19 +1,24 @@
-import { expect } from 'chai'
-import * as request from 'supertest'
-import * as config from 'config'
-
-import { attachDefaultHooks } from './hooks'
-import './expectations'
-
 import { Paths as AppPaths } from 'app/paths'
+import { expect } from 'chai'
+import { ClaimType } from 'eligibility/model/claimType'
+import { ClaimValue } from 'eligibility/model/claimValue'
+import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 import { Paths as ClaimPaths } from 'claim/paths'
+import * as config from 'config'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 
-import { app } from '../../main/app'
+import { cookieName as eligibilityCookieName } from 'eligibility/store'
+import { YesNoOption } from 'models/yesNoOption'
+import * as request from 'supertest'
 
-import * as idamServiceMock from '../http-mocks/idam'
+import { app } from '../../main/app'
 import * as claimStoreServiceMock from '../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../http-mocks/draft-store'
+
+import * as idamServiceMock from '../http-mocks/idam'
+import './expectations'
+
+import { attachDefaultHooks } from './hooks'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -95,6 +100,49 @@ describe('Login receiver', async () => {
           .get(AppPaths.receiver.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      context('when valid eligibility cookie exists (user with intention to create a claim)', async () => {
+        it('should redirect to task list', async () => {
+
+          const eligibleCookie = {
+            claimValue: {
+              option: ClaimValue.UNDER_10000.option
+            },
+            helpWithFees: {
+              option: YesNoOption.NO.option
+            },
+            claimantAddress: {
+              option: YesNoOption.YES.option
+            },
+            defendantAddress: {
+              option: YesNoOption.YES.option
+            },
+            eighteenOrOver: {
+              option: YesNoOption.YES.option
+            },
+            defendantAge: {
+              option: DefendantAgeOption.YES.option
+            },
+            claimType: {
+              option: ClaimType.PERSONAL_CLAIM.option
+            },
+            singleDefendant: {
+              option: YesNoOption.NO.option
+            },
+            governmentDepartment: {
+              option: YesNoOption.NO.option
+            },
+            claimIsForTenancyDeposit: {
+              option: YesNoOption.NO.option
+            }
+          }
+
+          await request(app)
+            .get(AppPaths.receiver.uri)
+            .set('Cookie', `${cookieName}=ABC;${eligibilityCookieName}=${JSON.stringify(eligibleCookie)}`)
+            .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
+        })
       })
 
       context('when no claim issued or received and no drafts (new claimant)', async () => {

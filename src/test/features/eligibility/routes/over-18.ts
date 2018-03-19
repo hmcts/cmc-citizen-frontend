@@ -1,23 +1,24 @@
 import { expect } from 'chai'
+import { YesNoOption } from 'app/models/yesNoOption'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from '../../../../routes/hooks'
-import '../../../../routes/expectations'
+import { attachDefaultHooks } from '../../../routes/hooks'
+import '../../../routes/expectations'
 
 import { Paths } from 'eligibility/paths'
 
-import { app } from '../../../../../main/app'
+import { app } from '../../../../main/app'
 
-import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
-import { YesNoOption } from 'models/yesNoOption'
+import { NotEligibleReason } from 'eligibility/notEligibleReason'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = Paths.governmentDepartmentPage.uri
-const pageRedirect: string = Paths.claimIsForTenancyDepositPage.uri
-const expectedTextOnPage: string = 'Are you claiming against a government department?'
+const pagePath: string = Paths.over18Page.uri
+const pageRedirect: string = Paths.defendantAgePage.uri
+const expectedTextOnPage: string = 'Are you 18 or over?'
+const notEligibleReason: string = NotEligibleReason.UNDER_18
 
-describe('Claim eligibility: government department page', () => {
+describe('Claim eligibility: over 18 page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -40,12 +41,12 @@ describe('Claim eligibility: government department page', () => {
           .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
       })
 
-      it('should redirect to tenancy deposit  page when form is valid and everything is fine', async () => {
+      it('should redirect to over 18 defendant page when form is valid and everything is fine', async () => {
 
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ governmentDepartment: YesNoOption.NO.option })
+          .send({ eighteenOrOver: YesNoOption.YES.option })
           .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
       })
 
@@ -54,8 +55,8 @@ describe('Claim eligibility: government department page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ governmentDepartment: YesNoOption.YES.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${NotEligibleReason.GOVERNMENT_DEPARTMENT}`))
+          .send({ eighteenOrOver: YesNoOption.NO.option })
+          .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${notEligibleReason}`))
       })
     })
   })

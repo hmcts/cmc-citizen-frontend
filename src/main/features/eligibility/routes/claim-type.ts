@@ -1,8 +1,8 @@
 import { Paths } from 'eligibility/paths'
 
-import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
+import { NotEligibleReason } from 'eligibility/notEligibleReason'
 import { EligibilityPage } from 'eligibility/eligibilityPage'
-import { ClaimType } from 'claim/form/models/eligibility/claimType'
+import { ClaimType } from 'eligibility/model/claimType'
 import { EligibilityCheck, eligible, notEligible } from 'eligibility/model/eligibilityCheck'
 
 class ClaimTypeEligibilityPage extends EligibilityPage<ClaimType> {
