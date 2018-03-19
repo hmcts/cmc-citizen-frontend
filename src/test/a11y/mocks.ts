@@ -15,7 +15,8 @@ draftStoreMock.resolveFindAllDrafts().persist()
 claimStoreMock.resolveRetrieveByLetterHolderId('000MC000').persist()
 claimStoreMock.resolveRetrieveClaimByExternalIdWithResponse({
   respondedAt: '2017-08-07T15:27:34.654',
-  countyCourtJudgmentRequestedAt: '2017-08-09T11:51:28.144'
+  countyCourtJudgmentRequestedAt: '2017-08-09T11:51:28.144',
+  settlementReachedAt: '2017-08-10T15:27:32.917'
 }).persist()
 claimStoreMock.mockCalculateInterestRate(0).persist()
 feesMock.resolveCalculateIssueFee().persist()
