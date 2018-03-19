@@ -28,14 +28,10 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
     if (form.action.addRow) {
       form.model.appendRow()
     }
-    form.postbackFocusTarget = deferFocusTarget(req)
+    form.postbackFocusTarget = ActionForm.buildPostbackFocusTarget(form.action)
     return renderView(form, res)
   }
   next()
-}
-
-function deferFocusTarget (req: express.Request): string {
-  return `action[${Object.keys(req.body.action).pop()}]`
 }
 
 /* tslint:disable:no-default-export */
