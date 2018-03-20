@@ -1,4 +1,4 @@
-import { EvidenceRow } from 'response/form/models/evidenceRow'
+import { EvidenceRow } from 'forms/models/evidenceRow'
 import { MultiRowForm } from 'forms/models/multiRowForm'
 
 export const INIT_ROW_COUNT: number = 4
@@ -19,5 +19,9 @@ export class Evidence extends MultiRowForm<EvidenceRow> {
 
   getInitialNumberOfRows (): number {
     return INIT_ROW_COUNT
+  }
+
+  isCompleted (): boolean {
+    return !!this.rows
   }
 }

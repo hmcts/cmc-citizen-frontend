@@ -43,5 +43,8 @@ export const claimData = {
   },
   timeline: {
     rows: []
+  },
+  evidence: {
+    rows: []
   }
 }

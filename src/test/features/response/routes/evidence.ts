@@ -13,7 +13,7 @@ import { checkAuthorizationGuards } from './checks/authorization-check'
 import { checkAlreadySubmittedGuard } from './checks/already-submitted-check'
 import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
 import { generateString } from '../../../app/forms/models/validationUtils'
-import { EvidenceType } from 'response/form/models/evidenceType'
+import { EvidenceType } from 'forms/models/evidenceType'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
 

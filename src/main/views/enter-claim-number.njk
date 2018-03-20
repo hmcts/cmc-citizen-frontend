@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, textInput, submitButton, errorSummary %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
 
 {% set title = 'Enter your claim number' %}
 {% set heading = 'Enter your claim number' %}
@@ -7,8 +7,6 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-
-      <p>{{ t('Enter the claim number from the email or letter we sent you.') }}</p>
 
       <form method="post">
         {{ csrfProtection(csrf) }}
@@ -28,11 +26,15 @@
                  class="form-control {% if error %}form-control-error{% endif %}"
                  value="{{ (form.rawDataFor(name) if error else form.valueFor(name)) | default('') }}">
         </div>
-        
+
+
         {{ submitButton('Continue') }}
+
+        <p>
+          <a href="{{ AppPaths.noClaimNumberPage.uri }}">{{ t('Don’t have a claim number?') }}</a>
+        </p>
       </form>
     </div>
   </div>
 
 {% endblock %}
-

@@ -15,7 +15,7 @@ import { Timeline } from 'forms/models/timeline'
 import { DefendantPaymentOption } from 'response/form/models/defendantPaymentOption'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
-import { Evidence } from 'response/form/models/evidence'
+import { Evidence } from 'forms/models/evidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
@@ -58,7 +58,7 @@ export class ResponseDraft extends DraftDocument {
       this.howMuchIsPaid = new HowMuchPaid().deserialize(input.howMuchIsPaid)
       this.howMuchOwed = new HowMuchOwed().deserialize(input.howMuchOwed)
       this.timeline = new Timeline().deserialize(input.timeline)
-      this.evidence = new Evidence().deserialize(input.evidence)
+      this.evidence = new Evidence().deserialize(input.evidence) as Evidence
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }
