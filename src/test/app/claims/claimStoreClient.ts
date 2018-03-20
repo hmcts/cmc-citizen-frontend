@@ -56,8 +56,7 @@ describe('ClaimStoreClient', () => {
 
         const claim: Claim = await claimStoreClient.saveClaim(claimDraft, claimant)
 
-        const deserialised = new ClaimData().deserialize(claimData)
-        expect(claim.claimData).to.deep.equal(deserialised)
+        expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(claimData))
       })
 
       function mockTimeoutOnFirstSaveAttemptAndConflictOnSecondOne () {
