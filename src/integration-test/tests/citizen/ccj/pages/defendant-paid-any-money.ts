@@ -32,7 +32,7 @@ export class DefendantPaidAnyMoneyPage {
 
   defendantPaid (amount: number): void {
     this.paidSome()
-    I.see('Total amount payable by the defendant is £' + claimAmount.getTotal().toFixed(2))
+    I.see('Total claim amount is £' + claimAmount.getTotal().toFixed(2))
     I.fillField(fields.paidAmount, amount.toFixed(2))
     I.click(buttons.submit)
   }
