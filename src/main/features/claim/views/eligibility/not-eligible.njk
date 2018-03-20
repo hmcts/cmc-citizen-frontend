@@ -53,8 +53,7 @@
         <p>{{ t('You might be able to get advice from organisations like ' + externalLink('Citizens Advice', citizensAdviceUrl)
             + ' about making a claim.') | safe }}</p>
       {% elseif reason === NotEligibleReason.HELP_WITH_FEES %}
-        <p>{{ t('You need to use the paper service if you want ' + externalLink('help paying your court fee', feesHelpUri ) + '.'
-            + '.') | safe }}</p>
+        <p>{{ t('You need to use the paper service if you want ' + externalLink('help paying your court fees', feesHelpUri ) + '.') | safe }}</p>
         <p>{{ t('Make your claim by post using ' + externalLink('form N1', n1FormUrl) + '.') | safe }}</p>
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.CLAIMANT_ADDRESS %}
