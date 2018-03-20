@@ -3,9 +3,8 @@ import * as express from 'express'
 import { Paths } from 'response/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'app/forms/validation/formValidator'
-import { Evidence } from 'response/form/models/evidence'
+import { Evidence } from 'forms/models/evidence'
 import { ErrorHandling } from 'common/errorHandling'
-import { EvidenceType } from 'response/form/models/evidenceType'
 import { DraftService } from 'services/draftService'
 import { RoutablePath } from 'common/router/routablePath'
 import { User } from 'idam/user'
@@ -20,8 +19,7 @@ function renderView (form: Form<Evidence>, res: express.Response): void {
 
   res.render(page.associatedView, {
     form: form,
-    claimantName: claim.claimData.claimant.name,
-    allEvidenceTypes: EvidenceType.all()
+    claimantName: claim.claimData.claimant.name
   })
 }
 

@@ -12,6 +12,10 @@ table {
     td {
       font-weight: 400;
       vertical-align: top;
+
+      &.label { // sass-lint:disable-line nesting-depth
+        white-space: nowrap;
+      }
     }
   }
 
