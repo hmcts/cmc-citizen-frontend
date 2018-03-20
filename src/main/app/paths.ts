@@ -17,5 +17,6 @@ export class Paths {
   static readonly returnToClaimReceiver = new RoutablePath('/return-to-claim', false)
 
   static readonly enterClaimNumberPage = new RoutablePath('/enter-claim-number', false)
+  static readonly noClaimNumberPage = new RoutablePath('/no-claim-number', false)
 
 }

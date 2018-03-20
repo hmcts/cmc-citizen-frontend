@@ -28,6 +28,7 @@ import { PaymentSteps } from 'integration-test/tests/citizen/claim/steps/payment
 import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 import I = CodeceptJS.I
 import { ClaimantTimelinePage } from 'integration-test/tests/citizen/claim/pages/claimant-timeline'
+import { ClaimantEvidencePage } from 'integration-test/tests/citizen/claim/pages/claimant-evidence'
 
 const I: I = actor()
 const citizenResolveDisputePage: CitizenResolveDisputePage = new CitizenResolveDisputePage()
@@ -43,6 +44,7 @@ const claimantClaimAmountPage: ClaimantClaimAmountPage = new ClaimantClaimAmount
 const claimantFeesToPayPage: ClaimantFeesToPayPage = new ClaimantFeesToPayPage()
 const claimantReasonPage: ClaimantReasonPage = new ClaimantReasonPage()
 const claimantTimelinePage: ClaimantTimelinePage = new ClaimantTimelinePage()
+const claimantEvidencePage: ClaimantEvidencePage = new ClaimantEvidencePage()
 const claimantCheckAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const claimantClaimConfirmedPage: ClaimantClaimConfirmedPage = new ClaimantClaimConfirmedPage()
 const userSteps: UserSteps = new UserSteps()
@@ -166,6 +168,10 @@ export class ClaimSteps {
     claimantTimelinePage.enterTimelineRow('may', 'ok')
   }
 
+  enterClaimEvidence (): void {
+    claimantEvidencePage.enterEvidenceRow('CONTRACTS_AND_AGREEMENTS', 'ok')
+  }
+
   checkClaimFactsAreTrueAndSubmit (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): void {
     claimantCheckAndSendPage.verifyCheckAndSendAnswers(claimantType, defendantType, enterDefendantEmail)
 
@@ -200,6 +206,7 @@ export class ClaimSteps {
     userSteps.selectClaimDetails()
     this.enterClaimReason()
     this.enterClaimTimeline()
+    this.enterClaimEvidence()
     userSteps.selectCheckAndSubmitYourClaim()
     this.checkClaimFactsAreTrueAndSubmit(claimantType, defendantType, enterDefendantEmail)
   }
@@ -259,6 +266,7 @@ export class ClaimSteps {
     userSteps.selectClaimDetails()
     this.enterClaimReason()
     this.enterClaimTimeline()
+    this.enterClaimEvidence()
     userSteps.selectCheckAndSubmitYourClaim()
     I.see('John Smith')
     I.see('University of Manchester')
