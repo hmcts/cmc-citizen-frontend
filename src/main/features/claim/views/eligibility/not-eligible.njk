@@ -35,7 +35,7 @@
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.MULTIPLE_DEFENDANTS %}
         <p>{{ t('You can’t use this service if this claim is against more than one person or business.') }}</p>
-        <p>{{ t('Use ' + externalLink('Money Claim Online', legacyServiceUrl)
+        <p>{{ t('Use ' + externalLink('Money Claim Online (MCOL)', legacyServiceUrl)
           + ' for claims against 2 people or organisations.') | safe }}</p>
         <p>{{ t('Use ' + externalLink('form N1', n1FormUrl) + ' for claims against 3 or more people or organisations.') | safe }}</p>
         {{ paperFormAddress() }}
