@@ -1,8 +1,14 @@
 {% extends "layout.njk" %}
 {% from "support.njk" import supportWidget %}
+{% from "internalLink.njk" import internalLink %}
+{% from "externalLink.njk" import externalLink %}
 {% set heading = 'Cookies' %}
 
 {% set title = 'Money claim' %}
+{% set termsAndConditionsUri = AppPaths.termsAndConditionsPage.uri %}
+{% set cookieUri = 'https://www.aboutcookies.org' %}
+{% set googlePrivacyPolicyUri = 'https://www.google.com/policies/privacy/partners/' %}
+{% set optOutOfAnalyticsUri = 'https://tools.google.com/dlpage/gaoptout' %}
 
 {% block content %}
   <div class="grid-row">
@@ -23,8 +29,7 @@
       </ul>
 
       <p>
-        {{ t('Find out more about <a href="{{ cookieUri }}"> how to manage cookies</a>.',
-        { cookieUri : 'https://www.aboutcookies.org'}) | safe }}
+        {{ t('Find out more about ' + externalLink( 'how to manage cookies', cookieUri )) | safe }}
       </p>
 
       <h2 class="heading-medium">{{ t('Cookies used to measure website usage') }}</h2>
@@ -45,14 +50,12 @@
 
       <p>
         {{ t('We allow Google to use or share our analytics data. You can find out more '
-        + 'about how Google use this information in their <a href="{{ googlePrivacyPolicyUri }}">Privacy Policy</a>.',
-        { googlePrivacyPolicyUri : 'https://www.google.com/policies/privacy/partners/' }) | safe }}
+        + 'about how Google use this information in their ' + internalLink('Privacy Policy.', googlePrivacyPolicyUri)) | safe }}
       </p>
 
       <p>
-        {{ t('You can opt out of <a href="{{ optOutOfAnalyticsUri }}">opt out of Google Analytics</a> '
-        + 'if you do not want Google to have access to your information.',
-        { optOutOfAnalyticsUri : 'https://tools.google.com/dlpage/gaoptout'}) | safe }}
+        {{ t('You can ' + internalLink('opt out of Google Analytics', optOutOfAnalyticsUri)
+        + 'if you do not want Google to have access to your information.') | safe }}
       </p>
 
       <p>{{ t('Google Analytics sets the following cookies:') }}</p>
