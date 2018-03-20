@@ -28,7 +28,7 @@ export class DefendantPayByInstalmentsPage {
 
   checkOutstandingAmount (defendantPaidAmount: number): void {
     const amountOutstanding: number = claimAmount.getTotal() - defendantPaidAmount
-    I.see('Total amount payable by the defendant is £' + amountOutstanding.toFixed(2))
+    I.see('Total claim amount is £' + amountOutstanding.toFixed(2))
   }
 
   enterRepaymentPlan (plan: PaymentPlan): void {
