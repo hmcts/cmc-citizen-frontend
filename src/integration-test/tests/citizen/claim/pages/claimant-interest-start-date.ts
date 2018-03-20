@@ -8,7 +8,7 @@ const fields = {
   month: 'input[id="date[month]"]',
   year: 'input[id="date[year]"]',
 
-  reason: 'input[id="reason"]'
+  reason: 'input[id=reason]'
 }
 
 const buttons = {
