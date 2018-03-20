@@ -104,6 +104,8 @@ export class Claim {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
     } else if (this.isOfferAccepted()) {
       return ClaimStatus.OFFER_ACCEPTED
+    } else if (this.isOfferRejected()) {
+      return ClaimStatus.CLAIMANT_REJECTED_OFFER
     } else if (this.isOfferSubmitted()) {
       return ClaimStatus.OFFER_SUBMITTED
     } else if (this.eligibleForCCJ) {
@@ -147,6 +149,10 @@ export class Claim {
 
   private isOfferAccepted () {
     return FeatureToggles.isEnabled('offer') && this.settlement && this.settlement.isOfferAccepted()
+  }
+
+  private isOfferRejected () {
+    return FeatureToggles.isEnabled('offer') && this.settlement && this.settlement.isOfferRejected()
   }
 
   private isSettlementReached () {

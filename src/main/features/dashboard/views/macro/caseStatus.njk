@@ -21,6 +21,8 @@
   {% elseif status === ClaimStatus.OFFER_ACCEPTED %}
     {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court.',
     { claimantName: claim.claimData.claimant.name } ) }}
+  {% elseif status === ClaimStatus.CLAIMANT_REJECTED_OFFER %}
+    {{ t('{{ claimantName }} has rejected your offer.',{claimantName: claim.claimData.claimant.name}) | safe }}
   {% elseif status === ClaimStatus.OFFER_SUBMITTED %}
     {{ t('You made an offer to settle out of court.') }}
   {% elseif status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -55,6 +57,8 @@
     <p>{{ _viewResponseLink(claim.externalId) }}</p>
   {% elseif status === ClaimStatus.OFFER_ACCEPTED %}
     {{ t('You’ve signed the agreement. We’ve asked {{ defendantName }} to sign the agreement.', { defendantName: claim.claimData.defendant.name }) }}
+  {% elseif status === ClaimStatus.CLAIMANT_REJECTED_OFFER %}
+    {{ t('You’ve rejected an offer to settle out of court.') }}
   {% elseif status === ClaimStatus.OFFER_SUBMITTED %}
     {{ t('The defendant has made an offer to settle out of court.') }}
     <p>
