@@ -6,7 +6,6 @@
 
 {% set title = t('Money claim') %}
 {% set privacyPolicyUri = AppPaths.privacyPolicyPage.uri %}
-{% set termsAndConditionsUri = AppPaths.termsAndConditionsPage.uri %}
 {% set cookieUri = AppPaths.cookiesPage.uri %}
 
 {% set title = t('Money claim') %}
@@ -44,11 +43,11 @@
 
       <h2 class="heading-medium">{{ t('Sharing and storing data') }}</h2>
       <p>
-        {{ t('Our ' + internalLink('privacy policy' , privacyPolicyUri) + ' explains where your data is stored, and who it is shared with.') | safe }}
+        {{ t('Our ' + internalLink('privacy policy', privacyPolicyUri) + ' explains where your data is stored, and who it is shared with.') | safe }}
       </p>
 
       <p>
-        {{ t('Our ' + internalLink('cookie policy' , cookieUri) + ' explains how this service uses and stores cookies.') | safe }}
+        {{ t('Our ' + internalLink('cookie policy', cookieUri) + ' explains how this service uses and stores cookies.') | safe }}
       </p>
 
       <h2 class="heading-medium">{{ t('Laws applying to this service') }}</h2>

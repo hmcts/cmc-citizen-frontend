@@ -5,8 +5,7 @@
 {% set heading = 'Cookies' %}
 
 {% set title = 'Money claim' %}
-{% set termsAndConditionsUri = AppPaths.termsAndConditionsPage.uri %}
-{% set cookieUri = 'https://www.aboutcookies.org' %}
+{% set cookieResourseUri = 'https://www.aboutcookies.org' %}
 {% set googlePrivacyPolicyUri = 'https://www.google.com/policies/privacy/partners/' %}
 {% set optOutOfAnalyticsUri = 'https://tools.google.com/dlpage/gaoptout' %}
 
@@ -29,7 +28,7 @@
       </ul>
 
       <p>
-        {{ t('Find out more about ' + externalLink( 'how to manage cookies', cookieUri )) | safe }}
+        {{ t('Find out more about ' + externalLink( 'how to manage cookies', cookieResourseUri )) | safe }}
       </p>
 
       <h2 class="heading-medium">{{ t('Cookies used to measure website usage') }}</h2>
