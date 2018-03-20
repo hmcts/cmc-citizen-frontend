@@ -16,26 +16,31 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <p>{{ t('This privacy policy explains why we collect your personal data and what we do with it. '
+      <p>
+        {{ t('This privacy policy explains why we collect your personal data and what we do with it. '
         + 'It also explains your rights and how to enforce them.') }}
       </p>
 
       <h2 class="heading-medium">{{ t('Who manages this service') }}</h2>
+
       <p>
         {{ t('This service is managed by Her Majesty’s Courts and Tribunals Service (HMCTS), '
         + 'which is an executive agency of the Ministry of Justice (MoJ).') }}
       </p>
+
       <p>
         {{ t('The MoJ is known as the data controller for data protection purposes. The '
         + internalLink('MoJ personal information charter', MOJInfoCharterUri )
         + 'explains how the MoJ processes personal data.') | safe }}
       </p>
+
       <p>
         {{ t('As part of the MoJ, HMCTS is responsible for deciding how '
         + 'your personal data is used and for protecting the personal data you provide.') }}
       </p>
 
-      <p> {{ t('More information about how to use the service is in the '
+      <p>
+        {{ t('More information about how to use the service is in the '
         + internalLink('terms and conditions', termsAndConditionsUri)) | safe }}
       </p>
 
@@ -44,6 +49,7 @@
       <p>
         {{ t('We collect your personal data to:') }}
       </p>
+
       <ul class="list list-bullet">
         <li>{{ t('process your claim or application') }}</li>
         <li>{{ t('meet legal requirements') }}</li>
@@ -51,15 +57,17 @@
         </li>
       </ul>
 
-      <p>{{ t('Our staff use your personal data to process your claim or application. '
-        + 'They work in the UK and your data is stored in the UK.') }}</p>
-
+      <p>
+        {{ t('Our staff use your personal data to process your claim or application. '
+        + 'They work in the UK and your data is stored in the UK.') }}
+      </p>
 
       <h2 class="heading-medium">{{ t('Types of personal data we collect') }}</h2>
 
       <p>
         {{ t('The personal data we collect includes:') }}
       </p>
+
       <ul class="list list-bullet">
         <li>{{ t('your name, address and contact details') }}</li>
         <li>{{ t('your email and password (if you create an account)') }}</li>
@@ -67,10 +75,10 @@
         </li>
       </ul>
 
-
       <h2 class="heading-medium">{{ t('Using your data') }}</h2>
 
-      <p> {{ t('As part of your claim you’ll be asked to use your email address to set up an account. '
+      <p>
+        {{ t('As part of your claim you’ll be asked to use your email address to set up an account. '
         + 'You will be able to use this email and password to sign into other HMCTS services.') }}
       </p>
 
@@ -79,8 +87,10 @@
         + 'handed over to the email provider you use.') }}
       </p>
 
-      <p>{{ t('We '+ internalLink('use cookies', cookieUri)
-        +'use cookies to collect data that tells us about how you’re using this service, including:') | safe }}</p>
+      <p>
+        {{ t('We '+ internalLink('use cookies', cookieUri)
+        +'use cookies to collect data that tells us about how you’re using this service, including:') | safe }}
+      </p>
 
       <ul class="list list-bullet">
         <li>{{ t('if you open an email from us or click on a link in an email') }}</li>
@@ -91,24 +101,24 @@
 
       <h2 class="heading-medium">{{ t('Sharing your data') }}</h2>
 
-      <p>{{ t('If another government department is involved in processing your claim or application, '
+      <p>
+        {{ t('If another government department is involved in processing your claim or application, '
         + 'we’ll share your data with them.') }}
       </p>
+
       <p>{{ t('If you contact us and ask for help with a service you are using, '
         + 'your personal data may be shared with the Good Things Foundation. '
         + 'This is a company who we have partnered with to offer face to face support.') }}
       </p>
+
       <p>
         {{ t('We use Google Analytics to collect our website statistics. This anonymous website usage data is shared with Google.'
         + 'Find out about this in our ' + internalLink('terms and conditions.', termsAndConditionsUri)) | safe }}
       </p>
 
-
       <h2 class="heading-medium">{{ t('Your rights') }}</h2>
 
-      <p>
-        {{ t('You can ask:') }}
-      </p>
+      <p>{{ t('You can ask:') }}</p>
 
       <ul class="list list-bullet">
         <li>{{ t('to see the personal data that we hold on you') }}</li>
@@ -117,14 +127,20 @@
         <li>{{ t('that access to the personal data is restricted (for example, you can ask to have your data stored for longer and not automatically deleted)') }}</li>
       </ul>
 
-      <p> {{ t('If you want to see the personal data that we hold on you, '
-        + internalLink('you can make a subject access request.', dataRequestUri) +' This request goes to the MoJ as data controller.') | safe }}</p>
+      <p>
+        {{ t('If you want to see the personal data that we hold on you, '
+        + internalLink('you can make a subject access request.', dataRequestUri) +' This request goes to the MoJ as data controller.') | safe }}
+      </p>
 
       <h2 class="heading-medium">{{ t('How to complain') }}</h2>
 
-      <p> {{ t('See our '+ internalLink('complaints procedure,', complaintsProcedureUri)
-        + ' if you want to complain about how we’ve handled your personal data.') | safe }}</p>
-      <p> {{ t('You can also complain to the ' + internalLink('Information Commissioner’s Office' , informationCommissionerOfficeUri)
+      <p>
+        {{ t('See our '+ internalLink('complaints procedure,', complaintsProcedureUri)
+        + ' if you want to complain about how we’ve handled your personal data.') | safe }}
+      </p>
+
+      <p>
+        {{ t('You can also complain to the ' + internalLink('Information Commissioner’s Office' , informationCommissionerOfficeUri)
         + 'if you’re not satisfied with our response or believe we are not processing your personal data lawfully.') | safe }}
       </p>
 
@@ -151,6 +167,7 @@
         {{ t('If you are responding to a money claim we ask you to check the personal information about you that was '
         + 'provided by the claimant which includes your name, your address and contact details.') }}
       </p>
+
       <p> {{ t('We may ask you to provide:') }}</p>
       <li>{{ t('your date of birth') }}</li>
       <li>{{ t('your business or organisation if you are acting on their behalf') }}</li>
@@ -196,11 +213,6 @@
       <p>
         {{ t('If a judgment is made on a case some information is shared with Registry Trust Limited who provide financial information about court judgments to banks and credit agencies.') }}
       </p>
-
-
-
-
-
 
     </div>
   </div>
