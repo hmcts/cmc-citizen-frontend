@@ -7,8 +7,7 @@ const fields = {
   day: 'input[id="date[day]"]',
   month: 'input[id="date[month]"]',
   year: 'input[id="date[year]"]',
-
-  reason: 'input[id=reason]'
+  reason: 'textarea[id=reason]'
 }
 
 const buttons = {
