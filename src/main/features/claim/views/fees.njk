@@ -17,25 +17,17 @@
           from the defendant.') }}
         </p>
 
-        <table class="form-group">
-          <thead>
-          <tr>
-            <th scope="col"></th>
-            <th class="numeric" scope="col"></th>
-          </tr>
-          </thead>
+        <table class="no-header form-group">
           <tbody>
+            <tr>
+              <td>{{ t('Claim fee') }}</td>
+              <td class="numeric">£{{ issueFee }}</td>
+            </tr>
 
-          <tr>
-            <td>{{ t('Claim fee') }}</td>
-            <td class="numeric">£{{ issueFee }}</td>
-          </tr>
-
-          <tr>
-            <td>{{ t('Hearing fee (if your claim goes to a hearing)') }}</td>
-            <td class="numeric">£{{ hearingFee }}</td>
-          </tr>
-
+            <tr>
+              <td>{{ t('Hearing fee (if your claim goes to a hearing)') }}</td>
+              <td class="numeric">£{{ hearingFee }}</td>
+            </tr>
           </tbody>
         </table>
 
