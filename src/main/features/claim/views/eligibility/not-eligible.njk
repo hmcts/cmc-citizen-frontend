@@ -58,6 +58,8 @@
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.CLAIMANT_ADDRESS %}
         <p>{{ t('You need to have an address in the UK to use this service.') }}</p>
+        <p>{{ t('You might be able to make a claim ' + externalLink('using form N510', n510Url) + ' or ' + externalLink('form N1', n1FormUrl) + '.') | safe }}</p>
+        {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.DEFENDANT_ADDRESS %}
         <p>{{ t('You can only use this service to claim against a person or organisation with an address in England or Wales.') }}</p>
         <p>{{ t('Depending on where you’ll be sending the claim, you might be able to use ' + externalLink('form N1', n1FormUrl)
