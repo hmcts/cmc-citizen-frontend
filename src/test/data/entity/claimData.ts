@@ -38,7 +38,7 @@ export const claimData = {
   } as Interest,
   interestDate: {
     type: InterestDateType.CUSTOM,
-    date: moment('2018-01-01T00:00:00.000Z'),
+    date: moment({ year: 2018, month: 0, day: 1 }),
     reason: 'reason',
     endDate: InterestEndDateOption.SETTLED_OR_JUDGMENT
   } as InterestDate,
