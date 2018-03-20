@@ -4,7 +4,7 @@ import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDateType } from 'app/common/interestDateType'
 import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
-import moment = require('moment')
+import { MomentFactory } from 'common/momentFactory'
 
 export const claimData = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
@@ -38,7 +38,7 @@ export const claimData = {
   } as Interest,
   interestDate: {
     type: InterestDateType.CUSTOM,
-    date: moment({ year: 2018, month: 0, day: 1 }),
+    date: MomentFactory.parse('2018-01-01T00:00:00.000Z'),
     reason: 'reason',
     endDate: InterestEndDateOption.SETTLED_OR_JUDGMENT
   } as InterestDate,
