@@ -23,7 +23,7 @@
           }
         )
     }}
-    {{ row('Contact number (optional):', draftClaim.claimant.mobilePhone.number, paths.claimantMobilePage.uri, bold = true) }}
+    {{ row('Contact number (optional)', draftClaim.claimant.mobilePhone.number, paths.claimantMobilePage.uri, bold = true) }}
     {{ tableEnd() }}
 
     {{ tableStart('theirDetails', 'Their details (defendant)') }}
@@ -38,57 +38,80 @@
         )
     }}
 
-    {{ row('Email:', draftClaim.defendant.email.address, paths.defendantEmailPage.uri, bold = true) }}
+    {{ row('Email', draftClaim.defendant.email.address, paths.defendantEmailPage.uri, bold = true) }}
     {{ tableEnd() }}
 
     {{ tableStart('claimAmount', 'Claim amount') }}
-    {{ row('Claim amount:', claimAmountTotal.claimAmount | numeral, paths.amountPage.uri, bold = true) }}
+
+    {{ row('Claim amount breakdown', '', paths.amountPage.uri, bottomBorder = false, bold = true) }}
+
+    {% for each in draftClaim.amount.rows %}
+      {% if each.reason %}
+        {{ row(each.reason, each.amount, bottomBorder = false, bold = true) }}
+      {% endif %}
+    {% endfor %}
+
+    <div class="full-width bottom-border"></div>
 
     {% if (draftClaim.interest.option === InterestOption.YES) %}
       {{ row('Claim Interest', 'Yes' , paths.interestPage.uri, bold = true) }}
       {% if (draftClaim.interestType.option === InterestTypeOption.SAME_RATE) %}
         {{ row('How do you want to claim interest?', 'Same rate for the whole period' , paths.interestRatePage.uri, bottomBorder = false, bold = true) }}
-      {% endif %}
-      {% if (draftClaim.interestRate.type) %}
-        {{ row('What rate of interest do you want to claim?', draftClaim.interestRate.rate | numeral('0,0.00') + '\%', bottomBorder = false, bold = true) }}
-      {% endif %}
-      {% if (draftClaim.interestRate.reason) %}
-        {{ row('Why you’re claiming this rate', draftClaim.interestRate.reason, bold = true) }}
-      {% endif %}
-      {% if draftClaim.interestDate.type === InterestDateType.SUBMISSION %}
-        {{ row('When are you claiming interest from?', t('The date you submit the claim'), paths.interestDatePage.uri, bottomBorder = false, bold = true) }}
-      {% else %}
-        {{ row('When are you claiming interest from?', t('A particular date'), paths.interestDatePage.uri, bottomBorder = false, bold = true) }}
-        {{ row('Date interest applied from', draftClaim.interestStartDate.date.asString() | date, paths.interestStartDatePage.uri, bottomBorder = false, bold = true) }}
-        {{ row('Explain why you’re claiming from this date', draftClaim.interestStartDate.reason, bold = true) }}
-        {% if (draftClaim.interestEndDate.option === InterestEndDateOption.SUBMISSION) %}
-          {{ row('When do you want to stop claiming interest?', t('When you submit the claim '), paths.interestEndDatePage.uri, bold = true) }}
+
+        {% if (draftClaim.interestRate.type) %}
+          {{ row('What rate of interest do you want to claim?', draftClaim.interestRate.rate | numeral('0,0.00') + '\%', bottomBorder = false, bold = true) }}
+        {% endif %}
+        {% if (draftClaim.interestRate.reason) %}
+          {{ row('Why you’re claiming this rate', draftClaim.interestRate.reason, bold = true) }}
+        {% endif %}
+        {% if draftClaim.interestDate.type === InterestDateType.SUBMISSION %}
+          {{ row('When are you claiming interest from?', t('The date you submit the claim'), paths.interestDatePage.uri, bottomBorder = false, bold = true) }}
         {% else %}
-          {{ row('When do you want to stop claiming interest?', t('Continue until the claim is settled or judgment made'), paths.interestEndDatePage.uri, bold = true) }}
+          {{ row('When are you claiming interest from?', t('A particular date'), paths.interestDatePage.uri, bottomBorder = false, bold = true) }}
+          {{ row('Date interest applied from', draftClaim.interestStartDate.date.asString() | date, paths.interestStartDatePage.uri, bottomBorder = false, bold = true) }}
+          {{ row('Explain why you’re claiming from this date', draftClaim.interestStartDate.reason, bold = true) }}
+          {% if (draftClaim.interestEndDate.option === InterestEndDateOption.SUBMISSION) %}
+            {{ row('When do you want to stop claiming interest?', t('When you submit the claim '), paths.interestEndDatePage.uri, bold = true) }}
+          {% else %}
+            {{ row('When do you want to stop claiming interest?', t('Continue until the claim is settled or judgment made'), paths.interestEndDatePage.uri, bold = true) }}
+          {% endif %}
+        {% endif %}
+      {% else %}
+        {{ row('How do you want to claim interest?', 'Break down interest for different time periods or items', paths.interestTypePage.uri, bottomBorder = false, bold = true) }}
+        {{ row('Total interest amount', draftClaim.interestTotal.amount | numeral, paths.interestTotalPage.uri, bottomBorder = false, bold = true) }}
+        {{ row('Show how you calculated the amount', draftClaim.interestTotal.reason, bold = true) }}
+        {% if (draftClaim.interestContinueClaiming.option === YesNoOption.YES) %}
+          {{ row('Continue to claim interest after you submit your claim?', 'Yes', paths.interestContinueClaimingPage.uri, bottomBorder = false, bold = true) }}
+          {{ row('What rate of interest do you want to claim?', draftClaim.interestHowMuch.dailyAmount | numeral + ', daily interest amount', paths.interestHowMuchPage.uri, bold = true) }}
+        {% else %}
+          {{ row('Continue to claim interest after you submit your claim?', 'No', paths.interestContinueClaimingPage.uri, bold = true) }}
         {% endif %}
       {% endif %}
-      {% if (claimAmountTotal.interestAmount) %}
-        {{ row('Interest:', claimAmountTotal.interestAmount | numeral, paths.interestRatePage.uri, bold = true) }}
-      {% endif %}
     {% else %}
-      {{ row('Interest rate:', t('I don’t want to claim interest'), paths.interestRatePage.uri, bold = true) }}
+      {{ row('Interest rate', t('I don’t want to claim interest'), paths.interestRatePage.uri, bold = true) }}
     {% endif %}
+    {{ tableEnd() }}
 
-    {{ row('Claim fee:', claimAmountTotal.feeAmount | numeral, bold = true) }}
-    {{ row('Total amount you’re claiming:',  claimAmountTotal.totalAmountTillToday | numeral, bold = true) }}
+    {{ tableStart('totalAmount', 'Total amount') }}
+    {{ row('Claim amount', claimAmountTotal.claimAmount | numeral, bold = true) }}
+    {% if (claimAmountTotal.interestAmount) %}
+      {{ row('Interest to date', claimAmountTotal.interestAmount | numeral, bold = true) }}
+    {% endif %}
+    {{ row('Claim fee', claimAmountTotal.feeAmount | numeral, bold = true) }}
+    {{ row('Total',  claimAmountTotal.totalAmountTillToday | numeral, bold = true) }}
     {{ tableEnd() }}
 
     {{ tableStart('claimDetails', 'Claim details') }}
-    {{ row('Why you’re owed the money:', draftClaim.reason.reason, paths.reasonPage.uri, bold = true) }}
+    {{ row('Why you’re owed the money', draftClaim.reason.reason, paths.reasonPage.uri, bold = true) }}
 
-    {{ row('Timeline of what happened:', '', paths.timelinePage.uri, false, bold = true) }}
+    {{ row('Timeline of what happened', '', paths.timelinePage.uri, false, bold = true) }}
     {% set allTimelineRows = draftClaim.timeline.getPopulatedRowsOnly() %}
     {% set lastItemIndex = allTimelineRows.length - 1 %}
     {% for timelineRow in allTimelineRows %}
       {{ row(timelineRow.date, timelineRow.description, '', loop.index0 === lastItemIndex) }}
     {% endfor %}
 
-    {{ row('Your evidence (optional):', '', paths.evidencePage.uri, false ) }}
+    {{ row('Your evidence (optional)', '', paths.evidencePage.uri, false ) }}
     {% set allEvidenceRows = draftClaim.evidence.getPopulatedRowsOnly() %}
     {% set lastItemIndex = allEvidenceRows.length - 1 %}
     {% for evidenceRow in allEvidenceRows %}

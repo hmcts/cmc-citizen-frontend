@@ -22,7 +22,7 @@ export class InterestContinueClaiming implements CompletableTask {
   }
 
   deserialize (input?: any): InterestContinueClaiming {
-    if (input) {
+    if (input && input.option) {
       this.option = YesNoOption.fromObject(input.option.option)
     }
 
