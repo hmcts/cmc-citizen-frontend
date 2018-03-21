@@ -23,11 +23,11 @@
         }
       )
     }}
-    {{ row('Phone:', draft.defendantDetails.mobilePhone.number, paths.defendantMobilePage.evaluateUri({ externalId: claim.externalId })) }}
+    {{ row('Contact number (optional)', draft.defendantDetails.mobilePhone.number, paths.defendantMobilePage.evaluateUri({ externalId: claim.externalId })) }}
 
     {{ tableEnd() }}
 
-    {{ tableStart('moneyOwed', 'Do you owe the money claimed?') }}
+    {{ tableStart('moneyOwed', 'Your response to the claim') }}
 
     {{ row('Do you owe the money claimed?', t(draft.response.type.displayValue) | capitalize, paths.responseTypePage.evaluateUri({ externalId: claim.externalId })) }}
 

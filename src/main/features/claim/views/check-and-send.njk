@@ -2,7 +2,7 @@
 
 {% from "table.njk" import tableStart, tableEnd, row %}
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
-{% from "statement-of-truth.njk" import statementOfTruth %}
+{% from "../../../views/macro/statementOfTruth.njk" import statementOfTruth %}
 {% from "party/details.njk" import partyDetailsSummaryFragment %}
 
 {% set title = t('Money claim') %}
@@ -23,7 +23,7 @@
           }
         )
     }}
-    {{ row('Phone:', draftClaim.claimant.mobilePhone.number, paths.claimantMobilePage.uri) }}
+    {{ row('Contact number (optional):', draftClaim.claimant.mobilePhone.number, paths.claimantMobilePage.uri) }}
     {{ tableEnd() }}
 
     {{ tableStart('theirDetails', 'Their details (defendant)') }}

@@ -21,11 +21,11 @@ export class ClaimantClaimAmountPage {
 
   enterAmount (amount1: number, amount2: number, amount3: number): void {
     I.fillField(fields.reason1, 'Claim value')
-    I.fillField(fields.amount1, amount1.toFixed(2))
+    I.fillField(fields.amount1, amount1.toString())
     I.fillField(fields.reason2, 'Cost of legal help')
-    I.fillField(fields.amount2, amount2.toFixed(2))
+    I.fillField(fields.amount2, amount2.toString())
     I.fillField(fields.reason3, 'Extra admin fees')
-    I.fillField(fields.amount3, amount3.toFixed(2))
+    I.fillField(fields.amount3, amount3.toString())
   }
 
   calculateTotal (): void {

@@ -18,7 +18,7 @@ export class DefendantPayBySetDatePage {
   paymentBySetDate (paymentDate: string): void {
     const [ year, month, day ] = DateParser.parse(paymentDate)
 
-    I.see('When do you want them to pay?')
+    I.see('When do you want the defendant to pay?')
     I.fillField(fields.day, day)
     I.fillField(fields.month, month)
     I.fillField(fields.year, year)

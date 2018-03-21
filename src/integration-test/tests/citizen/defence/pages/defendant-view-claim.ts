@@ -15,7 +15,7 @@ export class DefendantViewClaimPage {
   clickRespondToClaim (): void {
     I.waitForText('View amount breakdown')
     I.click('summary')
-    I.see('Claim fee £25.00')
+    I.see('Claim fee £25')
     I.click(buttons.submit)
   }
 

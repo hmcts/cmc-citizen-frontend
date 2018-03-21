@@ -1,6 +1,7 @@
 import { PartyType } from 'integration-test/data/party-type'
 import { claimAmount, claimFee, claimReason, createClaimant, createDefendant } from 'integration-test/data/test-data'
 import I = CodeceptJS.I
+import { AmountHelper } from 'integration-test/helpers/amountHelper'
 
 const I: I = actor()
 
@@ -94,9 +95,9 @@ export class ClaimantCheckAndSendPage {
   }
 
   verifyClaimAmount (): void {
-    I.see('£' + claimAmount.getClaimTotal().toFixed(2))
-    I.see('£' + claimFee.toFixed(2))
-    I.see('£' + claimAmount.getTotal().toFixed(2))
+    I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()))
+    I.see(AmountHelper.formatMoney(claimFee))
+    I.see(AmountHelper.formatMoney(claimAmount.getTotal()))
   }
 
   verifyCheckAndSendAnswers (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): void {
