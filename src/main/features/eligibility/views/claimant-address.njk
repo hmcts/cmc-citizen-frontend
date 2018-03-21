@@ -2,13 +2,15 @@
 {% from "form.njk" import csrfProtection, radioGroup, errorSummary, saveAndContinueButton %}
 
 {% set title = t('Claimant address | Money claim') %}
+{% set question = t('Do you have an address in the UK?') %}
+{% set additionalInformation = t('The UK is made up of England, Scotland, Wales and Northern Ireland.') %}
 
 {% block content %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Do you have an address in the UK?') }}</h1>
-      <p>{{ t('The UK is made up of England, Scotland, Wales and Northern Ireland.') }}</p>
+      <h1 class="heading-large">{{ question }}</h1>
+      <p>{{ additionalInformation }}</p>
 
       {% set name = 'claimantAddress' %}
 
@@ -19,7 +21,7 @@
 
         {{
         radioGroup(
-          label = 'Do you have a postal address in the UK?',
+          label = question,
           name = name,
           options = [
             {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},

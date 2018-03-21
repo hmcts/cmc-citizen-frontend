@@ -2,16 +2,16 @@
 {% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 
 {% set title = t('Govornment department | Money claim') %}
+{% set question = t('Are you claiming against a government department?') %}
+{% set additionalInformation = t('<a href="{{ governmentDepartmentUri }}" target="_blank" >See a list of government departments</a>.',
+{ governmentDepartmentUri : 'https://www.gov.uk/government/publications/serve-the-treasury-solicitor-with-legal-proceedings' }) %}
 
 {% block content %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Are you claiming against a government department?') }}</h1>
-      <p>
-        {{ t('<a href="{{ governmentDepartmentUri }}" target="_blank" >See a list of government departments</a>.',
-        { governmentDepartmentUri : 'https://www.gov.uk/government/publications/serve-the-treasury-solicitor-with-legal-proceedings' }) | safe }}
-      </p>
+      <h1 class="heading-large">{{ question }}</h1>
+      <p>{{ additionalInformation | safe }}</p>
 
       {% set name = 'governmentDepartment' %}
 
@@ -22,7 +22,7 @@
 
         {{
           radioGroup(
-            label = 'Are you claiming against a government department?',
+            label = question,
             name = name,
             options = [
               {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},

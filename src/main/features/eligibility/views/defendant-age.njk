@@ -2,12 +2,13 @@
 {% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 
 {% set title = t('Defendant Age Eligibility | Money claim') %}
+{% set question = t('Do you believe the person you’re claiming against is 18 or over?') %}
 
 {% block content %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Do you believe the person you’re claiming against is 18 or over?') }}</h1>
+      <h1 class="heading-large">{{ question }}</h1>
 
       {% set name = 'defendantAge' %}
 
@@ -18,7 +19,7 @@
 
         {{
           radioGroup(
-            label = 'Do you believe the person you’re claiming against is 18 or over?',
+            label = question,
             name = name,
             options = [
               {'label': 'Yes', value: DefendantAgeOption.YES.option, checked: (form.valueFor(name) === DefendantAgeOption.YES)},

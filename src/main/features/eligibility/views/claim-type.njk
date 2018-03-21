@@ -2,12 +2,13 @@
 {% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 
 {% set title = t('Claim Type | Money claim') %}
+{% set question = t('Who are you making the claim for?') %}
 
 {% block content %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Who are you making the claim for?') }}</h1>
+      <h1 class="heading-large">{{ question }}</h1>
 
       {% set name = 'claimType' %}
 
@@ -19,7 +20,7 @@
         {{
         radioGroup(
         form = form,
-        label = 'Who are you making the claim for?',
+        label = question,
         labelForScreenReadersOnly = true,
         name = name,
         options = [
