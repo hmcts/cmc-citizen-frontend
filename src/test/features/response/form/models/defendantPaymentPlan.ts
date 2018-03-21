@@ -12,7 +12,6 @@ import { ValidationConstraints } from 'forms/validation/validationConstraints'
 const FUTURE_YEAR = MomentFactory.currentDate().add(10, 'years').year()
 const DEFAULT_PAYMENT_PLAN = {
   remainingAmount: 100,
-  firstPayment: 50,
   instalmentAmount: 50,
   firstPaymentDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   paymentSchedule: PaymentSchedule.EVERY_MONTH.value,
@@ -21,7 +20,6 @@ const DEFAULT_PAYMENT_PLAN = {
 
 const DEFENDANT_PAYMENT_PLAN_FOR_DESERIALISATION = {
   remainingAmount: 100,
-  firstPayment: 50,
   instalmentAmount: 50,
   firstPaymentDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   paymentSchedule: { value: PaymentSchedule.EVERY_MONTH.value, displayValue: PaymentSchedule.EVERY_MONTH.displayValue },
@@ -29,7 +27,7 @@ const DEFENDANT_PAYMENT_PLAN_FOR_DESERIALISATION = {
 }
 
 function validPaymentPlan (): DefendantPaymentPlan {
-  return new DefendantPaymentPlan(100, 50, 50, new LocalDate(FUTURE_YEAR, 10, 10), PaymentSchedule.EVERY_MONTH, 'I owe nothing')
+  return new DefendantPaymentPlan(100, 50, new LocalDate(FUTURE_YEAR, 10, 10), PaymentSchedule.EVERY_MONTH, 'I owe nothing')
 }
 
 describe('DefendantPaymentPlan', () => {
@@ -63,42 +61,19 @@ describe('DefendantPaymentPlan', () => {
     describe('should reject when', () => {
       it('undefined option', () => {
         const errors = validator.validateSync(new DefendantPaymentPlan(undefined))
-        expect(errors.length).to.equal(5)
-        expectValidationError(errors, ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
+        expect(errors.length).to.equal(4)
         expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
         expectValidationError(errors, ValidationErrors.SELECT_PAYMENT_SCHEDULE)
         expectValidationError(errors, ValidationErrors.INVALID_DATE)
         expectValidationError(errors, ValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED)
       })
 
-      it('first amount > remainingAmount', () => {
-        const paymentPlan = validPaymentPlan()
-        paymentPlan.firstPayment = 101
-        const errors = validator.validateSync(paymentPlan)
-        expect(errors.length).to.equal(2)
-        expectValidationError(errors, ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
-        expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
-      })
-
       it('instalment amount > remainingAmount', () => {
         const paymentPlan = validPaymentPlan()
         paymentPlan.instalmentAmount = 101
         const errors = validator.validateSync(paymentPlan)
-        expect(errors.length).to.equal(2)
-        expectValidationError(errors, ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
+        expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
-      })
-
-      it('first amount <= 0', () => {
-        const paymentPlan = validPaymentPlan()
-        const valuesToTest = [0, -1]
-
-        valuesToTest.forEach(amount => {
-          paymentPlan.firstPayment = amount
-          const errors = validator.validateSync(paymentPlan)
-          expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
-        })
       })
 
       it('instalment amount <= 0', () => {
@@ -116,15 +91,6 @@ describe('DefendantPaymentPlan', () => {
       it('instalment amount invalid decimal places', () => {
         const paymentPlan = validPaymentPlan()
         paymentPlan.instalmentAmount = 1.022
-        const errors = validator.validateSync(paymentPlan)
-
-        expect(errors.length).to.equal(1)
-        expectValidationError(errors, CommonValidationErrors.AMOUNT_INVALID_DECIMALS)
-      })
-
-      it('first payment invalid decimal places', () => {
-        const paymentPlan = validPaymentPlan()
-        paymentPlan.firstPayment = 1.022
         const errors = validator.validateSync(paymentPlan)
 
         expect(errors.length).to.equal(1)

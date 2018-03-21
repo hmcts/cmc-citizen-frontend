@@ -23,11 +23,11 @@
         }
       )
     }}
-    {{ row('Phone:', draft.defendantDetails.mobilePhone.number, paths.defendantMobilePage.evaluateUri({ externalId: claim.externalId })) }}
+    {{ row('Contact number (optional)', draft.defendantDetails.mobilePhone.number, paths.defendantMobilePage.evaluateUri({ externalId: claim.externalId })) }}
 
     {{ tableEnd() }}
 
-    {{ tableStart('moneyOwed', 'Do you owe the money claimed?') }}
+    {{ tableStart('moneyOwed', 'Your response to the claim') }}
 
     {{ row('Do you owe the money claimed?', t(draft.response.type.displayValue) | capitalize, paths.responseTypePage.evaluateUri({ externalId: claim.externalId })) }}
 
@@ -139,7 +139,6 @@
       {% if draft.defendantPaymentOption.isOfType(DefendantPaymentType.INSTALMENTS) %}
         {{ tableStart('whenWillYouPay', 'When will you pay?') }}
         {{ row('When will you pay', t(draft.defendantPaymentOption.option.displayValueFor(draft.responseType)) | capitalize, paths.defencePaymentOptionsPage.evaluateUri({ externalId: claim.externalId })) }}
-        {{ row('The first payment of', draft.defendantPaymentPlan.firstPayment | numeral , paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
         {{ row('Followed by equal instalments of', draft.defendantPaymentPlan.instalmentAmount | numeral, paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
         {{ row('Make the first payment on', draft.defendantPaymentPlan.firstPaymentDate.toMoment() | date, paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
         {{ row('Frequency of payments', t(draft.defendantPaymentPlan.paymentSchedule.displayValue), paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
