@@ -1,6 +1,6 @@
 import * as numeral from 'numeral'
 
-export const NUMBER_FORMAT = '$0,0.00'
+export const NUMBER_FORMAT = '$0,0[.]00'
 
 export class NumberFormatter {
 

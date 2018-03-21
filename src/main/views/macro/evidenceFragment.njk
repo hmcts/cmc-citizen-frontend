@@ -31,7 +31,7 @@
           {{ t('Describe this evidence in more detail (optional).') }}
 
           <span class="evidence-message evidence-message-CONTRACTS_AND_AGREEMENTS {% if typeValue !== EvidenceType.CONTRACTS_AND_AGREEMENTS.value %}hidden{% endif %}">
-            {{ t('For example, a signed contract by the claimant.') }}
+            {{ t('For example, a signed contract.') }}
           </span>
           <span class="evidence-message evidence-message-EXPERT_WITNESS {% if typeValue !== EvidenceType.EXPERT_WITNESS.value %}hidden{% endif %}">
             {{ t('For example, a surveyor’s report.') }}
@@ -43,10 +43,10 @@
             {{ t('For example, a photo of the work you carried out.') }}
           </span>
           <span class="evidence-message evidence-message-RECEIPTS {% if typeValue !== EvidenceType.RECEIPTS.value %}hidden{% endif %}">
-            {{ t('For example, a receipt showing you’ve paid the claimant.') }}
+            {{ t('For example, a receipt showing the amount you’ve paid.') }}
           </span>
           <span class="evidence-message evidence-message-STATEMENT_OF_ACCOUNT {% if typeValue !== EvidenceType.STATEMENT_OF_ACCOUNT.value %}hidden{% endif %}">
-            {{ t('For example, a bank statement showing you’ve paid the claimant.') }}
+            {{ t('For example, a bank statement showing the amount you’ve paid.') }}
           </span>
         </label>
         {% if errorDescription %}
