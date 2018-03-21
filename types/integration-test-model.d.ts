@@ -111,7 +111,6 @@ declare type TimelineEvent = {
 }
 
 declare type PaymentPlan = {
-  firstPayment: number,
   equalInstalment: number,
   firstPaymentDate: string,
   frequency: 'everyWeek'
