@@ -14,6 +14,7 @@ import moment = require('moment')
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Claim } from 'claims/models/claim'
 import { ClaimData } from 'claims/models/claimData'
+import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 const claimDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftData), moment(), moment())
 
@@ -26,6 +27,9 @@ const returnedClaim = {
   issuedOn: moment().toISOString(),
   claim: claimData
 }
+
+returnedClaim.claim.interest.type = ClaimInterestType.NO_INTEREST
+delete returnedClaim.claim.interestDate
 
 const claimant = {
   id: claimantId,
