@@ -28,7 +28,7 @@ export class PaymentDetailsPage {
 
   enterPaymentDetails (cardDetails: CardDetails, billingDetails: Address, email: string): void {
     I.waitForText('Enter card details')
-    I.fillField(fields.card.number, cardDetails.number.toString())
+    I.fillField(fields.card.number, cardDetails.number)
     I.fillField(fields.card.expiryDate.month, cardDetails.expiryMonth)
     I.fillField(fields.card.expiryDate.year, cardDetails.expiryYear)
     I.fillField(fields.card.name, cardDetails.name)

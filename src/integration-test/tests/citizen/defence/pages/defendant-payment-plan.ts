@@ -1,6 +1,7 @@
 import I = CodeceptJS.I
 import { claimAmount } from 'integration-test/data/test-data'
 import { DateParser } from 'integration-test/utils/date-parser'
+import { AmountHelper } from 'integration-test/helpers/amountHelper'
 
 const I: I = actor()
 
@@ -30,14 +31,14 @@ export class DefendantPaymentPlanPage {
 
   checkOutstandingAmount (defendantPaidAmount: number): void {
     const amountOutstanding: number = claimAmount.getTotal() - defendantPaidAmount
-    I.see('You believe you owe £' + amountOutstanding.toFixed(2))
+    I.see('You believe you owe ' + AmountHelper.formatMoney(amountOutstanding))
   }
 
   enterRepaymentPlan (plan: PaymentPlan, text: string): void {
     const [ year, month, day ] = DateParser.parse(plan.firstPaymentDate)
 
-    I.fillField(fields.repayment.firstPayment, plan.firstPayment.toFixed(2))
-    I.fillField(fields.repayment.equalInstalments, plan.equalInstalment.toFixed(2))
+    I.fillField(fields.repayment.firstPayment, plan.firstPayment)
+    I.fillField(fields.repayment.equalInstalments, plan.equalInstalment)
     I.fillField(fields.repayment.firstPaymentDate.day, day)
     I.fillField(fields.repayment.firstPaymentDate.month, month)
     I.fillField(fields.repayment.firstPaymentDate.year, year)

@@ -8,7 +8,7 @@ declare namespace CodeceptJS {
     retrievePin (letterHolderId: string): () => string
     amOnCitizenAppPage: (path: string) => void
 
-    fillField: (locator: string, value: string) => any
+    fillField: (locator: string, value: string | number) => any
     selectOption: (select: string, option: string) => any
   }
 }
