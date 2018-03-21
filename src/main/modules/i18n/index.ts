@@ -27,7 +27,7 @@ export class I18Next {
           caches: ['cookie']
         },
         interpolation: {
-          escapeValue: false
+          escapeValue: false // Escaping is already handed by Nunjucks
         },
         whitelist: ['en', 'cy'],
         fallbackLng: 'en',
