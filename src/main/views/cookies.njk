@@ -49,11 +49,11 @@
 
       <p>
         {{ t('We allow Google to use or share our analytics data. You can find out more '
-        + 'about how Google use this information in their ' + internalLink('Privacy Policy.', googlePrivacyPolicyUri)) | safe }}
+        + 'about how Google use this information in their ' + externalLink('Privacy Policy.', googlePrivacyPolicyUri)) | safe }}
       </p>
 
       <p>
-        {{ t('You can ' + internalLink('opt out of Google Analytics', optOutOfAnalyticsUri)
+        {{ t('You can ' + externalLink('opt out of Google Analytics', optOutOfAnalyticsUri)
         + 'if you do not want Google to have access to your information.') | safe }}
       </p>
 
