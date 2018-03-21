@@ -1,5 +1,4 @@
-import { IsDefined, MaxLength } from 'class-validator'
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
+import { MaxLength } from 'class-validator'
 import { PartyDetails } from './partyDetails'
 import { PartyType } from 'app/common/partyType'
 
@@ -10,8 +9,6 @@ export class ValidationErrors {
 
 export class OrganisationDetails extends PartyDetails {
 
-  @IsDefined({ message: ValidationErrors.CONTACT_PERSON_REQUIRED, groups: ['claimant'] })
-  @IsNotBlank({ message: ValidationErrors.CONTACT_PERSON_REQUIRED, groups: ['claimant'] })
   @MaxLength(35, { message: ValidationErrors.CONTACT_PERSON_NAME_TOO_LONG, groups: ['claimant', 'response'] })
   contactPerson?: string
 
