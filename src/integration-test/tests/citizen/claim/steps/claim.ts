@@ -259,7 +259,7 @@ export class ClaimSteps {
     interestSteps.enterDefaultInterest()
     this.readFeesPage()
     I.see('Total amount you’re claiming')
-    I.see('£25.00')
+    I.see('£25')
     I.see(claimAmount.getClaimTotal().toFixed(2), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
     I.see(claimAmount.getTotal().toFixed(2), 'table.table-form > tfoot > tr > td.numeric.last > span')
     interestSteps.skipClaimantInterestTotalPage()
