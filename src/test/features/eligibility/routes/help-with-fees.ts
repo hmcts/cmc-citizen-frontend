@@ -15,7 +15,7 @@ import { YesNoOption } from 'models/yesNoOption'
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.helpWithFeesPage.uri
 const pageRedirect: string = Paths.claimantAddressPage.uri
-const expectedTextOnPage: string = 'Do you need help with fees?'
+const expectedTextOnPage: string = 'Do you need help paying your court fees?'
 const notEligibleReason: string = NotEligibleReason.HELP_WITH_FEES
 
 describe('Claim eligibility: help with fees page', () => {
