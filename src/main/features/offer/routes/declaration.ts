@@ -8,6 +8,8 @@ import { Declaration } from 'offer/form/models/declaration'
 import { Claim } from 'claims/models/claim'
 import { OfferClient } from 'claims/offerClient'
 
+const offerClient: OfferClient = new OfferClient()
+
 function renderView (form: Form<Declaration>, res: express.Response) {
   const claim: Claim = res.locals.claim
   res.render(
@@ -43,11 +45,11 @@ export default express.Router()
         const user: User = res.locals.user
 
         if (user.id === claim.defendantId) {
-          await OfferClient.countersignOffer(claim.externalId, user)
+          await offerClient.countersignOffer(claim.externalId, user)
 
           res.redirect(Paths.settledPage.evaluateUri({ externalId: claim.externalId }))
         } else {
-          await OfferClient.acceptOffer(claim.externalId, user)
+          await offerClient.acceptOffer(claim.externalId, user)
 
           res.redirect(Paths.acceptedPage.evaluateUri({ externalId: claim.externalId }))
         }

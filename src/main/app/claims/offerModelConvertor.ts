@@ -6,7 +6,7 @@ export class OfferModelConverter {
   static convert (offerForm: OfferForm): Offer {
     return new Offer(
               offerForm.offerText,
-              offerForm.completionDate.toMoment()
+              offerForm.completionDate.asString()
           )
   }
 }

@@ -51,7 +51,7 @@ describe('Settlement', () => {
       const offer: Offer = myInput.partyStatements[0].offer
       const actual: Settlement = new Settlement().deserialize(myInput)
 
-      expect(actual.getDefendantOffer().completionDate.format('YYYY-DD-MM')).to.be.eq(offer.completionDate)
+      expect(actual.getDefendantOffer().completionDate).to.be.eq(offer.completionDate)
       expect(actual.getDefendantOffer().content).to.be.eq(offer.content)
     })
   })

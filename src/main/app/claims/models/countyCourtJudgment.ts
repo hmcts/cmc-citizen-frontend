@@ -10,7 +10,7 @@ export class CountyCourtJudgment {
                public paymentOption?: string,
                public paidAmount?: number,
                public repaymentPlan?: RepaymentPlan,
-               public payBySetDate?: Moment,
+               public payBySetDate?: string,
                public statementOfTruth?: StatementOfTruth) {
     this.defendantDateOfBirth = defendantDateOfBirth
     this.paymentOption = paymentOption
@@ -27,7 +27,7 @@ export class CountyCourtJudgment {
       this.paymentOption = input.paymentOption
       this.paidAmount = toNumberOrUndefined(input.paidAmount)
       this.repaymentPlan = input.repaymentPlan ? new RepaymentPlan().deserialize(input.repaymentPlan) : undefined
-      this.payBySetDate = input.payBySetDate ? MomentFactory.parse(input.payBySetDate) : undefined
+      this.payBySetDate = input.payBySetDate
       this.statementOfTruth = new StatementOfTruth().deserialize(input.statementOfTruth)
     }
     return this
