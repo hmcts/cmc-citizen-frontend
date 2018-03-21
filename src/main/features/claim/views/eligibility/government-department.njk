@@ -12,7 +12,7 @@
     <div class="column-two-thirds">
       <h1 class="heading-large">{{ t('Are you claiming against a government department?') }}</h1>
       <p>
-        {{ t(externalLink('See a list of government departments', governmentDepartmentUri) + '.') | safe }}
+        {{ externalLink(t('See a list of government departments'), governmentDepartmentUri) + '.') | safe }}
       </p>
 
       {% set name = 'governmentDepartment' %}
