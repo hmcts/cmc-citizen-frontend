@@ -26,6 +26,9 @@ export class I18Next {
           lookupCookie: 'lang',
           caches: ['cookie']
         },
+        interpolation: {
+          escapeValue: false
+        },
         whitelist: ['en', 'cy'],
         fallbackLng: 'en',
         nsSeparator: false,
