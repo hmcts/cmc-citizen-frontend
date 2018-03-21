@@ -14,6 +14,9 @@ import { Interest } from 'claim/form/models/interest'
 import { InterestType } from 'claim/form/models/interestType'
 import { InterestStartDate } from 'claim/form/models/interestStartDate'
 import { InterestEndDate } from 'claim/form/models/interestEndDate'
+import { InterestTotal } from 'claim/form/models/interestTotal'
+import { InterestContinueClaiming } from 'claim/form/models/interestContinueClaiming'
+import { InterestHowMuch } from 'claim/form/models/interestHowMuch'
 
 export class DraftClaim extends DraftDocument {
 
@@ -27,6 +30,9 @@ export class DraftClaim extends DraftDocument {
   interestDate: InterestDate = new InterestDate()
   interestStartDate: InterestStartDate = new InterestStartDate()
   interestEndDate: InterestEndDate = new InterestEndDate()
+  interestTotal: InterestTotal = new InterestTotal()
+  interestContinueClaiming: InterestContinueClaiming = new InterestContinueClaiming()
+  interestHowMuch: InterestHowMuch = new InterestHowMuch()
   reason: Reason = new Reason()
   readResolveDispute: boolean = false
   readCompletingClaim: boolean = false
@@ -46,6 +52,9 @@ export class DraftClaim extends DraftDocument {
       this.interestDate = new InterestDate().deserialize(input.interestDate)
       this.interestStartDate = new InterestStartDate().deserialize(input.interestStartDate)
       this.interestEndDate = new InterestEndDate().deserialize(input.interestEndDate)
+      this.interestTotal = new InterestTotal().deserialize(input.interestTotal)
+      this.interestContinueClaiming = new InterestContinueClaiming().deserialize(input.interestContinueClaiming)
+      this.interestHowMuch = new InterestHowMuch().deserialize(input.interestHowMuch)
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
       this.reason = new Reason().deserialize(input.reason)
       this.readResolveDispute = input.readResolveDispute

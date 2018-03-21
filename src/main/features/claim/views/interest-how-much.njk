@@ -1,0 +1,47 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, poundInput, radioOption, saveAndContinueButton, errorSummary %}
+
+{% set title = t('Money claim') %}
+{% set heading = t('How much do you want to continue claiming?') %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+
+        {% set error = form.errorFor('type') %}
+
+        <div class="form-group {% if error %} form-group-error {% endif %}">
+
+          <fieldset id="type[label]">
+
+            <legend>
+              <span class="visually-hidden">
+                {{ t('How much do you want to continue claiming?') }}
+              </span>
+              {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+            </legend>
+
+            {{ radioOption('8% per year', 'type', form, 'standard', checked = form.valueFor('type') == 'standard') }}
+            <div class="multiple-choice" data-target="different">
+              <input id="typedifferent" type="radio" name="type"
+                     value="different" {% if form.valueFor('type') == 'different' %} checked {% endif %}>
+              <label for="typedifferent">{{ t('Specific daily interest amount') }}</label>
+            </div>
+
+            <div class="panel panel-border-narrow js-hidden {% if errorDailyAmount %} form-group-error {% endif %}" id="different">
+              {{ poundInput('Daily interest amount', 'dailyAmount', form) }}
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="form-group">
+          {{ saveAndContinueButton() }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

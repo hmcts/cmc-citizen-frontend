@@ -1,5 +1,6 @@
 import { individualDetails } from './partyDetails'
-import { InterestRate, InterestRateOption } from 'claim/form/models/interestRate'
+import { InterestRate } from 'claim/form/models/interestRate'
+import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestDateType } from 'app/common/interestDateType'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'

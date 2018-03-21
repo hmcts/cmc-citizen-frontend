@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import * as moment from 'moment'
 
 import { calculateInterest } from 'app/common/calculateInterest'
-import { InterestRateOption } from 'claim/form/models/interestRate'
+import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { mockCalculateInterestRate } from '../../http-mocks/claim-store'
 
 describe('calculateInterest', () => {

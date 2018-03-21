@@ -1,0 +1,37 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
+
+{% set title = t('Money claim') %}
+{% set heading = t('Continue to claim interest after you submit your claim?') %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      {% set name = 'option' %}
+
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+
+        {{
+        radioGroup(
+          label = 'Continue to claim interest after you submit your claim?',
+          name = name,
+          options = [
+          {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
+          {'label': 'No', value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO)}
+        ],
+          form = form,
+          labelForScreenReadersOnly = true,
+          isInline = true
+        )
+        }}
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

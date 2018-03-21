@@ -5,7 +5,9 @@ import * as _ from 'lodash'
 import { Validator } from 'class-validator'
 
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
-import { InterestRate, InterestRateOption, ValidationErrors } from 'claim/form/models/interestRate'
+import { InterestRate, ValidationErrors } from 'claim/form/models/interestRate'
+import { InterestRateOption } from 'claim/form/models/interestRateOption'
+
 import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
 
 import { getStandardInterestRate } from 'common/interestUtils'

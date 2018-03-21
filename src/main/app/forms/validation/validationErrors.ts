@@ -20,4 +20,5 @@ export class ValidationErrors {
 
   static readonly REASON_REQUIRED: string = 'You need to explain why you\'re claiming from a particular date'
   static readonly REASON_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
+  static readonly AMOUNT_NOT_VALID: string = 'Enter a valid amount'
 }
