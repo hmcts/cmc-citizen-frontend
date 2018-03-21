@@ -4,11 +4,9 @@ import { MomentFactory } from 'common/momentFactory'
 
 export class RepaymentPlan {
 
-  constructor (public firstPayment?: number,
-               public instalmentAmount?: number,
+  constructor (public instalmentAmount?: number,
                public firstPaymentDate?: Moment,
                public paymentSchedule?: string | PaymentSchedule) {
-    this.firstPayment = firstPayment
     this.instalmentAmount = instalmentAmount
     this.firstPaymentDate = firstPaymentDate
     this.paymentSchedule = paymentSchedule
@@ -16,7 +14,6 @@ export class RepaymentPlan {
 
   deserialize (input?: any): RepaymentPlan {
     if (input) {
-      this.firstPayment = input.firstPayment
       this.instalmentAmount = input.instalmentAmount
       this.firstPaymentDate = MomentFactory.parse(input.firstPaymentDate)
       this.paymentSchedule = PaymentSchedule.of(input.paymentSchedule)

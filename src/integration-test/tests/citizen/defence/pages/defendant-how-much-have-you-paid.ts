@@ -17,7 +17,7 @@ const buttons = {
 export class DefendantHowMuchHaveYouPaidPage {
 
   enterAmountPaidWithDateAndExplaination (amount: number, date, explaination: string): void {
-    I.fillField(fields.amount, amount.toFixed(2))
+    I.fillField(fields.amount, amount.toString())
     I.fillField(fields.day, date.day)
     I.fillField(fields.month, date.month)
     I.fillField(fields.year, date.year)

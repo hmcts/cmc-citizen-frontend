@@ -1,15 +1,25 @@
 {% extends "layout.njk" %}
 
+{% from "externalLink.njk" import externalLink %}
+
 {% set title = t('Eligibility | Money claim') %}
 
 {% block content %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Find out if you can use this service') }}</h1>
+      <h1 class="heading-large">{{ t('Try the new online service') }}</h1>
 
       <p>
-        {{ t('We’ll ask you some questions to check you can use this service.') }}
+        {{ t('We’re building a new service to make it simpler, clearer and faster to make and respond to claims online.') }}
+      </p>
+
+      <p>
+        {{ t('It’s in the beta phase which means we’re making continuous improvements based on feedback from users. You can still ' + externalLink('use Money Claim Online (MCOL)', legacyServiceUrl) + ' if you prefer while the new service is in beta.') | safe }}
+      </p>
+
+      <p>
+        {{ t('We’ll ask you some questions to check you can use the new service.') }}
       </p>
 
       <a href="{{ nextPage }}" class="button">{{ t('Continue') }}</a>
