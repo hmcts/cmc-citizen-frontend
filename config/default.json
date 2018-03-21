@@ -96,5 +96,8 @@
   },
   "postcodeLookup": {
     "apiKey": "AAAAAAA"
+  },
+  "mcol": {
+    "url": "https://www.moneyclaim.gov.uk/web/mcol/welcome"
   }
 }

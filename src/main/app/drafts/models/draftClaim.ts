@@ -11,6 +11,7 @@ import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
 import { Eligibility } from 'eligibility/model/eligibility'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
+import { Evidence } from 'forms/models/evidence'
 
 export class DraftClaim extends DraftDocument {
 
@@ -26,6 +27,7 @@ export class DraftClaim extends DraftDocument {
   readCompletingClaim: boolean = false
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
   timeline: ClaimantTimeline = new ClaimantTimeline()
+  evidence: Evidence = new Evidence()
 
   deserialize (input: any): DraftClaim {
     if (input) {
@@ -50,6 +52,7 @@ export class DraftClaim extends DraftDocument {
           break
       }
       this.timeline = new ClaimantTimeline().deserialize(input.timeline) as ClaimantTimeline
+      this.evidence = new Evidence().deserialize(input.evidence) as Evidence
     }
     return this
   }
