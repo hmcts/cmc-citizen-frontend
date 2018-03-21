@@ -14,7 +14,7 @@ const buttons = {
 export class DefendantHowMuchYouOwePage {
 
   enterAmountOwedAndExplaination (amount: number, explaination: string): void {
-    I.fillField(fields.amount, amount)
+    I.fillField(fields.amount, amount.toString())
     I.fillField(fields.text, explaination)
     I.click(buttons.submit)
   }

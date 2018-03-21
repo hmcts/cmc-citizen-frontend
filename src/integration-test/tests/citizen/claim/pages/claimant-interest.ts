@@ -24,7 +24,7 @@ export class ClaimantInterestPage {
 
   selectDifferentRate (rate: number): void {
     I.checkOption(fields.typeDifferent)
-    I.fillField(fields.rate, rate)
+    I.fillField(fields.rate, rate.toString())
     I.fillField(fields.reason, 'Because I want to')
     I.click(buttons.submit)
   }

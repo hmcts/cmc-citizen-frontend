@@ -36,8 +36,8 @@ export class DefendantPayByInstalmentsPage {
   enterRepaymentPlan (plan: PaymentPlan): void {
     const [ year, month, day ] = DateParser.parse(plan.firstPaymentDate)
 
-    I.fillField(fields.repayment.firstPayment, plan.firstPayment)
-    I.fillField(fields.repayment.equalInstalments, plan.equalInstalment)
+    I.fillField(fields.repayment.firstPayment, plan.firstPayment.toString())
+    I.fillField(fields.repayment.equalInstalments, plan.equalInstalment.toString())
     I.fillField(fields.repayment.firstPaymentDate.day, day)
     I.fillField(fields.repayment.firstPaymentDate.month, month)
     I.fillField(fields.repayment.firstPaymentDate.year, year)

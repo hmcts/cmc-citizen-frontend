@@ -28,13 +28,13 @@ export class DefendantPaidAnyMoneyPage {
   }
 
   amountPaid (amountPaid: number): void {
-    I.fillField(fields.paidAmount, amountPaid)
+    I.fillField(fields.paidAmount, amountPaid.toString())
   }
 
   defendantPaid (amount: number): void {
     this.paidSome()
     I.see('Total claim amount: ' + AmountHelper.formatMoney(claimAmount.getTotal()))
-    I.fillField(fields.paidAmount, amount)
+    I.fillField(fields.paidAmount, amount.toString())
     I.click(buttons.submit)
   }
 }
