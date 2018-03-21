@@ -60,7 +60,7 @@ describe('CCJ: repayment page', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Order them to pay by instalments'))
+            .expect(res => expect(res).to.be.successful.withText('Suggest instalments for the defendant'))
         })
       })
     })
@@ -69,7 +69,6 @@ describe('CCJ: repayment page', () => {
   describe('on POST', () => {
     const validFormData = {
       remainingAmount: 160,
-      firstPayment: 77.32,
       instalmentAmount: 76,
       paymentSchedule: 'EVERY_MONTH',
       firstPaymentDate: {
