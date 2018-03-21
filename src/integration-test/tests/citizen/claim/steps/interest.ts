@@ -4,6 +4,7 @@ import { ClaimantInterestPage } from 'integration-test/tests/citizen/claim/pages
 import { ClaimantInterestTypePage } from 'integration-test/tests/citizen/claim/pages/claimant-interest-type'
 import { ClaimantInterestRatePage } from 'integration-test/tests/citizen/claim/pages/claimant-interest-rate'
 import { ClaimantInterestStartDatePage } from 'integration-test/tests/citizen/claim/pages/claimant-interest-start-date'
+import { ClaimantInterestEndDatePage } from 'integration-test/tests/citizen/claim/pages/claimant-interest-end-date'
 
 const claimantInterestPage: ClaimantInterestPage = new ClaimantInterestPage()
 const claimantInterestTypePage: ClaimantInterestTypePage = new ClaimantInterestTypePage()
@@ -11,6 +12,7 @@ const claimantInterestRatePage: ClaimantInterestRatePage = new ClaimantInterestR
 const claimantInterestDatePage: ClaimantInterestDatePage = new ClaimantInterestDatePage()
 const claimantInterestTotalPage: ClaimantInterestTotalPage = new ClaimantInterestTotalPage()
 const claimantInterestStartDatePage: ClaimantInterestStartDatePage = new ClaimantInterestStartDatePage()
+const claimantInterestEndDatePage: ClaimantInterestEndDatePage = new ClaimantInterestEndDatePage()
 
 export class InterestSteps {
 
@@ -31,6 +33,7 @@ export class InterestSteps {
     claimantInterestRatePage.selectDifferent('10', 'Contract')
     claimantInterestDatePage.selectCustom()
     claimantInterestStartDatePage.selectParticularDate('2018-01-01', 'Contract')
+    claimantInterestEndDatePage.selectSettledOrJudgment()
   }
 
   skipClaimantInterestTotalPage (): void {

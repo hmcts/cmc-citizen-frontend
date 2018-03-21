@@ -11,7 +11,7 @@ const buttons = {
   submit: 'input[type=submit]'
 }
 
-export class ClaimantInterestDatePage {
+export class ClaimantInterestEndDatePage {
 
   selectSubmission (): void {
     I.checkOption(fields.optionSubmission)
