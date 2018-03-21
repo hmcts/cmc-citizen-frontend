@@ -16,8 +16,83 @@
         </div>
       </div>
 
-
       <h2 class="heading-medium">{{ t('Follow these steps') }}</h2>
+
+      <ul class="list list-number">
+        <li>
+          {% if draft.response.type === ResponseType.FULL_ADMISSION %}
+            {{ t('Download the <span class="bold-small">admission form.</span>') | safe }}
+          {% endif %}
+
+          {% if draft.response.type === ResponseType.PART_ADMISSION %}
+            {{ t('Download the <span class="bold-small">admission form</span> and the <span class="bold-small">defence form</span>') | safe }}
+          {% endif %}
+
+          {% if draft.response.type === ResponseType.DEFENCE %}
+            {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
+              {{ t('Download the <span class="bold-small">defence and counterclaim form.</span>') | safe }}
+            {% elseif draft.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.LESS_THAN_AMOUNT_CLAIMED %}
+              {{ t('Download the <span class="bold-small">admission form</span> and the <span class="bold-small">defence form</span>') | safe }}
+            {% endif %}
+          {% endif %}
+        </li>
+
+        {% if draft.response.type === ResponseType.FULL_ADMISSION %}
+          <li>{{ t('Print and complete the form') }}</li>
+        {% endif %}
+
+        {% if draft.response.type === ResponseType.PART_ADMISSION %}
+          <li>{{ t('Print and complete the forms (ignore section 4 of the defence form unless you’re making a counterclaim).') }}</li>
+        {% endif %}
+
+        {% if draft.response.type === ResponseType.DEFENCE %}
+          {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
+            <li>{{ t('Print and complete the form') }}</li>
+          {% elseif draft.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.LESS_THAN_AMOUNT_CLAIMED %}
+            <li>{{ t('Print and complete the forms (ignore section 4 of the defence form unless you’re making a counterclaim).') }}</li>
+          {% endif %}
+        {% endif %}
+
+        <li>{{ t('Post the forms to:') }}</li>
+      </ul>
+
+      <div class="keep-formatting panel">{{ t('Civil Money Claims') }}
+        {{ t('St. Katharine`s House') }}
+        {{ t('21-27 St. Katharine`s Street') }}
+        {{ t('Northampton') }}
+        {{ t('NN1 2LH') }}
+      </div>
+
+      <p>{{ t('You can also email completed forms to {{ supportEmailAddress }}', { supportEmailAddress: supportEmailAddress }) }}</p>
+
+      <h2 class="heading-medium">{{ t('Download and complete the form') }}</h2>
+
+      {% if draft.response.type === ResponseType.FULL_ADMISSION %}
+       <p>{{ t(externalLink('Download the admission form', asset_paths["pdf"] + '/OCON9A.pdf') + ' (PDF, 102 KB).') | safe }}</p>
+      {% endif %}
+
+      {% if draft.response.type === ResponseType.PART_ADMISSION %}
+        <p>{{ t(externalLink('Download admission form', asset_paths["pdf"] + '/OCON9A.pdf') + ' (PDF, 102 KB).') | safe }}</p>
+        <p>{{ t(externalLink('Download defence form', asset_paths["pdf"] + '/OCON9B.pdf') + ' (PDF, 76 KB).') | safe }}</p>
+      {% endif %}
+
+      {% if draft.response.type === ResponseType.DEFENCE %}
+        {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
+          <p>{{ t(externalLink('Download defence and counterclaim form ', asset_paths["pdf"] + '/OCON9B.pdf') + ' (PDF, 76 KB).') | safe }}</p>
+        {% elseif draft.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.LESS_THAN_AMOUNT_CLAIMED %}
+          <p>{{ t(externalLink('Download admission form', asset_paths["pdf"] + '/OCON9A.pdf') + ' (PDF, 102 KB).') | safe }}</p>
+          <p>{{ t(externalLink('Download defence form', asset_paths["pdf"] + '/OCON9B.pdf') + ' (PDF, 76 KB).') | safe }}</p>
+        {% endif %}
+      {% endif %}
+
+
+      <p>{{ t('Use these details when completing the form:') }}</p>
+
+      <ul class="list list-bullet">
+        <li>{{ t('Claim number {{ claimNumber }}', { claimNumber: claim.claimNumber }) }}</li>
+        <li>{{ t('Claimant {{ claimantName }}', { claimantName: claim.claimData.claimant.name}) }}</li>
+        <li>{{ t('Defendant {{ defendantName }}', { defendantName: claim.claimData.defendant.name}) }}</li>
+      </ul>
 
       {% if draft.response.type === ResponseType.DEFENCE %}
         {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
@@ -51,62 +126,6 @@
           </details>
         {% endif %}
       {% endif %}
-
-      <ul class="list list-number">
-        <li>
-
-          {% if draft.response.type === ResponseType.FULL_ADMISSION %}
-            {{ t(externalLink('Download the admission form', asset_paths["pdf"] + '/OCON9A.pdf') + ' using these details:') | safe }}
-          {% endif %}
-
-          {% if draft.response.type === ResponseType.PART_ADMISSION %}
-            {{ t(externalLink('Download the admission form', asset_paths["pdf"] + '/OCON9A.pdf')+ ' and '
-            + externalLink('defence form', asset_paths["pdf"] + '/OCON9B.pdf') + ' using these details:') | safe }}
-          {% endif %}
-
-          {% if draft.response.type === ResponseType.DEFENCE %}
-            {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
-              {{ t('Download and print the ' + externalLink('defence and counterclaim', asset_paths["pdf"] + '/OCON9B.pdf') + ' form using:',
-              { ocon9B: [asset_paths["pdf"] + '/OCON9B.pdf']}) | safe }}
-            {% elseif draft.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.LESS_THAN_AMOUNT_CLAIMED %}
-              {{ t('Download the ' + externalLink('admission form', asset_paths["pdf"] + '/OCON9A.pdf')+ ' and the '
-              + externalLink('defence form', asset_paths["pdf"] + '/OCON9B.pdf') + ' using these details:') | safe }}
-            {% endif %}
-          {% endif %}
-
-          <ul class="list list-bullet">
-            <li>{{ t('Claim number {{ claimNumber }}', { claimNumber: claim.claimNumber }) }}</li>
-            <li>{{ t('Claimant {{ claimantName }}', { claimantName: claim.claimData.claimant.name}) }}</li>
-            <li>{{ t('Defendant {{ defendantName }}', { defendantName: claim.claimData.defendant.name}) }}</li>
-          </ul>
-        </li>
-
-        {% if draft.response.type === ResponseType.DEFENCE %}
-          {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
-          <li>{{ t('Print and complete the forms (ignore section 4 of the defence form unless '
-            + ' you`re making a counterclaim).') }}</li>
-          {% endif %}
-        {% endif %}
-
-        {% if draft.response.type === ResponseType.PART_ADMISSION %}
-            <li>{{ t('Print and complete the forms (ignore section 4 of the defence form unless '
-              + ' you`re making a counterclaim).') }}</li>
-        {% endif %}
-
-        {% if draft.response.type === ResponseType.FULL_ADMISSION %}
-          <li>{{ t('Print and complete the form') }}</li>
-        {% endif %}
-
-        <li>{{ t('Post the forms to:') }}</li>
-
-        <div class="keep-formatting panel">{{ t('Civil Money Claims') }}
-          {{ t('St. Katharine`s House') }}
-          {{ t('21-27 St. Katharine`s Street') }}
-          {{ t('Northampton') }}
-          {{ t('NN1 2LH') }}
-        </div>
-
-      </ul>
 
       {{ supportWidget() }}
 
