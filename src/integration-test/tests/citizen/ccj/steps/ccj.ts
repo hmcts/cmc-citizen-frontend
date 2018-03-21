@@ -23,7 +23,6 @@ const ccjDefendantPayBySetDatePage: DefendantPayBySetDatePage = new DefendantPay
 const ccjCheckAndSendPage: CountyCourtJudgementCheckAndSendPage = new CountyCourtJudgementCheckAndSendPage()
 
 const ccjRepaymentPlan: PaymentPlan = {
-  firstPayment: 50.00,
   equalInstalment: 20.00,
   firstPaymentDate: '2025-01-01',
   frequency: 'everyWeek'
@@ -39,7 +38,7 @@ export class CountyCourtJudgementSteps {
     testingSupport.makeClaimAvailableForCCJ(claimRef)
     dashboardSteps.startCCJ(claimRef)
     if (defendantType === PartyType.INDIVIDUAL) {
-      I.see('Defendant’s date of birth')
+      I.see('Do you know the defendant’s date of birth?')
       I.click('input[id=knowntrue]')
       ccjDateOfBirthPage.enterDOB(defendant.dateOfBirth)
     }

@@ -23,38 +23,36 @@
       )
     }}
     {% if claim.claimData.defendant.email %}
-      {{ row('Email:', claim.claimData.defendant.email) }}
+      {{ row('Email', claim.claimData.defendant.email) }}
     {% endif %}
     {{ tableEnd() }}
 
     {{ tableStart('payment', 'Payment') }}
-    {{ row('Amount to be paid by defendant', amountToBePaid | numeral, changeLink = paidAmountUrl) }}
+
+    {{ row('Has the defendant paid some of the amount owed?',
+      draft.paidAmount.option.value | capitalize, changeLink = paidAmountUrl, bottomBorder = false) }}
+    {{ row('Amount to be paid by defendant', amountToBePaid | numeral) }}
 
     {% if draft.paymentOption.option.value == 'IMMEDIATELY' %}
-      {% set paymentOptionDisplayValue = [draft.paymentOption.option.displayValue] %}
+      {{ row('When you want the defendant to pay',
+        draft.paymentOption.option.displayValue, changeLink = paymentOptionUrl, bottomBorder = true) }}
+    {% else %}
+      {{ row('How you want the defendant to pay',
+        draft.paymentOption.option.displayValue, changeLink = paymentOptionUrl, bottomBorder = false) }}
+      {% if draft.paymentOption.option.value == 'FULL_BY_SPECIFIED_DATE' %}
+        {{ row('When you want the defendant to pay',
+          draft.payBySetDate.date.toMoment() | date, bottomBorder = true) }}
+      {% endif %}
+      {% if draft.paymentOption.option.value == 'INSTALMENTS' %}
+        {{ row('Instalments of',
+          draft.repaymentPlan.instalmentAmount | numeral, bottomBorder = false) }}
+        {{ row('When you want them to make the first payment',
+          draft.repaymentPlan.firstPaymentDate.toMoment() | date, bottomBorder = false) }}
+        {{ row('How often you want them to make this payment',
+          draft.repaymentPlan.paymentSchedule.displayValue, bottomBorder = true) }}
+      {% endif %}
     {% endif %}
 
-    {% if draft.paymentOption.option.value == 'FULL_BY_SPECIFIED_DATE' %}
-      {% set paymentOptionDisplayValue = [draft.paymentOption.option.displayValue
-        + ' ' + draft.payBySetDate.date.toMoment() | date] %}
-    {% endif %}
-
-    {% if draft.paymentOption.option.value == 'INSTALMENTS' %}
-      {% set paymentOptionDisplayValue =
-      [  t('%s: %s %s',
-          { postProcess: 'sprintf', sprintf: [
-              t(draft.paymentOption.option.displayValue),
-              draft.repaymentPlan.instalmentAmount | numeral,
-              t(draft.repaymentPlan.paymentSchedule.displayValue)
-            ]
-          }),
-          t('First payment on %s',
-            { postProcess: 'sprintf', sprintf: [draft.repaymentPlan.firstPaymentDate.toMoment() | date]})
-      ]
-      %}
-    {% endif %}
-
-    {{ rowWithMultipleValue('When you want the defendant to pay', paymentOptionDisplayValue, changeLink = paymentOptionUrl) }}
     {{ tableEnd() }}
 
     <div class="form-group">
