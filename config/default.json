@@ -86,7 +86,6 @@
     "partialAdmission": false,
     "offer": false,
     "statementOfMeans": false,
-    "finePrint": false,
     "ccd": false,
     "returnErrorToUser": false
   },
