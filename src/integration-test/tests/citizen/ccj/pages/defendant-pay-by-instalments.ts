@@ -29,7 +29,7 @@ export class DefendantPayByInstalmentsPage {
 
   checkOutstandingAmount (defendantPaidAmount: number): void {
     const amountOutstanding: number = claimAmount.getTotal() - defendantPaidAmount
-    I.see('Total amount payable by the defendant is ' + AmountHelper.formatMoney(amountOutstanding))
+    I.see('Total claim amount is ' + AmountHelper.formatMoney(amountOutstanding))
   }
 
   enterRepaymentPlan (plan: PaymentPlan): void {
