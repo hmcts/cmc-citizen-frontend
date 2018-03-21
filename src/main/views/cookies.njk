@@ -104,7 +104,7 @@
         <tr>
           <th scope="col">{{ t('Cookie name') }}</th>
           <th scope="col">{{ t('What this cookie is for') }}</th>
-          <th scope="col">{{ t('Expires') }}</th>
+          <th scope="col">{{ t('Expires after') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -138,13 +138,6 @@
         </thead>
         <tbody>
         <tr>
-          <td>connect.sid</td>
-          <td>
-            {{ t('Carries details of your current session') }}
-          </td>
-          <td class="text-area">{{ t('When you close your browser') }}</td>
-        </tr>
-        <tr>
           <td>sessionKey</td>
           <td>
             {{ t('Protects your session using encryption') }}
@@ -152,7 +145,7 @@
           <td class="text-area">{{ t('When you close your browser') }}</td>
         </tr>
         <tr>
-          <td>session_ID</td>
+          <td>SESSION_ID</td>
           <td>
             {{ t('Keeps track of your answers') }}
           </td>
@@ -206,30 +199,23 @@
         </thead>
         <tbody>
         <tr>
-          <td>TS01a0d005</td>
+          <td>_csrf</td>
+          <td>
+            {{ t('Helps protect against forgery') }}
+          </td>
+          <td class="text-area">{{ t('When you close your browser') }}</td>
+        </tr>
+        <tr>
+          <td>ARRAfinnity</td>
           <td>
             {{ t('Protects your session from tampering') }}
           </td>
           <td class="text-area">{{ t('When you close your browser') }}</td>
         </tr>
         <tr>
-          <td>__state</td>
+          <td>state</td>
           <td>
             {{ t('Identifies you to the service and secures your authentication') }}
-          </td>
-          <td class="text-area">{{ t('When you close your browser') }}</td>
-        </tr>
-        <tr>
-          <td>X_CMC</td>
-          <td>
-            {{ t('Helps us keep track of your session') }}
-          </td>
-          <td class="text-area">{{ t('When you close your browser') }}</td>
-        </tr>
-        <tr>
-          <td>_csrf</td>
-          <td>
-            {{ t('Helps protect against forgery') }}
           </td>
           <td class="text-area">{{ t('When you close your browser') }}</td>
         </tr>
