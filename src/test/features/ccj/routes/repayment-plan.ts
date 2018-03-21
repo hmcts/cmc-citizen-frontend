@@ -60,7 +60,7 @@ describe('CCJ: repayment page', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Order them to pay by instalments'))
+            .expect(res => expect(res).to.be.successful.withText('Suggest instalments for the defendant'))
         })
       })
     })
