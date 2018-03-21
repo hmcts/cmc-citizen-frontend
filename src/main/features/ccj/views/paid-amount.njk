@@ -9,8 +9,6 @@
   <div class="column-two-thirds">
 
     <h1 class="heading-large">
-      <span class="heading-secondary">{{ t('County Court Judgment') }} </span>
-
       {{ t('Has the defendant paid some of the amount owed?') }}
     </h1>
 
@@ -30,7 +28,7 @@
 
             <p>
               {{
-                t('Total amount payable by the defendant is %s', {
+                t('Total claim amount: %s', {
                     postProcess: 'sprintf', sprintf: [ totalAmount | numeral ]
                   }
                 )

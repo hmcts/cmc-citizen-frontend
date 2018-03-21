@@ -12,7 +12,7 @@
         {{ csrfProtection(csrf) }}
 
         <h1 class="heading-large">
-          {{ t('When do you want them to pay?') }}
+          {{ t('When do you want the defendant to pay?') }}
         </h1>
 
         {{ dateInput(name = 'date', form = form, hint = t('For example, {{ futureDate }}', { futureDate: futureDate | inputDate })) }}
