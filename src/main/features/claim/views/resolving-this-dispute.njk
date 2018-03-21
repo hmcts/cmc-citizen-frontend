@@ -4,6 +4,7 @@
 {% set heading = t('Try to resolve the dispute') %}
 
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+{% from "externalLink.njk" import externalLink %}
 
 {% block content %}
 
@@ -37,8 +38,7 @@
       <p>{{ t('If you intend to claim against an organisation, it may have a mediation service or complaints process '
         + 'you can use.') }}</p>
 
-      <p>{{ t('You can also <a href="{{ findMediationServiceUri }}">use a paid mediation service</a>',
-        { findMediationServiceUri: 'http://civilmediation.justice.gov.uk/' }) | safe }}</p>
+      <p>{{ t('You can also ' + externalLink('use a paid mediation service', 'http://civilmediation.justice.gov.uk/') + '.') | safe }}</p>
 
       <h2 class="heading-small">{{ t('After making a claim') }}</h2>
 

@@ -11,34 +11,28 @@
         {{ csrfProtection(csrf) }}
 
         <h1 class="heading-large">
-          <span class="heading-secondary">{{ t('County Court Judgment') }}</span>
-          {{ t('Defendant’s date of birth') }}
+          {{ t('Do you know the defendant’s date of birth?') }}
         </h1>
 
-        <p>{{ t('We use this to ensure legal proceedings are made against the right person. ' +
-        'For example, if there are 2 people living at the same address with the same ' +
-        'name.') }}</p>
-
         {% set error = form.errorFor('known') %}
-
         <fieldset id="known[label]" class="form-group {% if error %} form-group-error {% endif %}">
           <legend>
-              <span class="form-label-bold">
-                {{ t('Do you know the defendant’s date of birth?') }}
-              </span>
+            <span class="visuallyhidden">
+              {{ t('Do you know the defendant’s date of birth?') }}
+            </span>
           </legend>
 
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
           {{
-            radioOption(form = form, label = 'Yes', name = 'known', value = 'true', checked = form.valueFor('known') === true, bold = true, hint = ' ')
+            radioOption(form = form, label = 'Yes', name = 'known', value = 'true', checked = form.valueFor('known') === true, bold = true)
           }}
 
           <div class="form-group panel panel-border-narrow js-hidden " id="known-true" aria-hidden="false">
-            {{ dateInput(form = form, name = 'date', hint = 'You can only request a CCJ against someone who is over 18') }}
+            {{ dateInput(form = form, name = 'date', hint = 'For example, 29 05 1985') }}
           </div>
 
           {{
-            radioOption(form = form, label = 'No', name = 'known', value = 'false', checked = form.valueFor('known') === false, bold = true, hint = 'The court will still enter the judgment for you.')
+            radioOption(form = form, label = 'No', name = 'known', value = 'false', checked = form.valueFor('known') === false, bold = true)
           }}
 
         </fieldset>

@@ -38,7 +38,7 @@ export class CountyCourtJudgementSteps {
     testingSupport.makeClaimAvailableForCCJ(claimRef)
     dashboardSteps.startCCJ(claimRef)
     if (defendantType === PartyType.INDIVIDUAL) {
-      I.see('Defendant’s date of birth')
+      I.see('Do you know the defendant’s date of birth?')
       I.click('input[id=knowntrue]')
       ccjDateOfBirthPage.enterDOB(defendant.dateOfBirth)
     }
