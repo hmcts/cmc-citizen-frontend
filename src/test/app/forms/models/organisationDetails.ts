@@ -84,7 +84,7 @@ describe('OrganisationDetails', () => {
       let errors: ValidationError[] = validator.validateSync(organisationDetails)
       expectValidationError(errors, PartydDetailsValidationErrors.NAME_TOO_LONG.replace('$constraint1','255'))
     })
-    
+
     it('should return error when contact person got more than 255 character', () => {
       organisationDetails.contactPerson = aVeryLongString()
       organisationDetails.name = 'claimantPerson'
