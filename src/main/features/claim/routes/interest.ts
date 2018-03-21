@@ -35,6 +35,16 @@ export default express.Router()
         const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
 
+        if (form.model.option === InterestOption.NO) {
+          draft.document.interestTotal = undefined
+          draft.document.interestContinueClaiming = undefined
+          draft.document.interestHowMuch = undefined
+          draft.document.interestRate = undefined
+          draft.document.interestDate = undefined
+          draft.document.interestStartDate = undefined
+          draft.document.interestEndDate = undefined
+        }
+
         draft.document.interest = form.model
         await new DraftService().save(draft, user.bearerToken)
 
