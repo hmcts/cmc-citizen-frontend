@@ -11,6 +11,8 @@ import { OfferClient } from 'claims/offerClient'
 import { Claim } from 'claims/models/claim'
 import { Offer } from 'app/claims/models/offer'
 
+const offerClient: OfferClient = new OfferClient()
+
 function renderView (form: Form<DefendantResponse>, res: express.Response, next: express.NextFunction) {
   const claim: Claim = res.locals.claim
   const offer: Offer = claim.defendantOffer
@@ -48,7 +50,7 @@ export default express.Router()
             res.redirect(Paths.makeAgreementPage.evaluateUri({ externalId: claim.externalId }))
             break
           case StatementType.REJECTION:
-            await OfferClient.rejectOffer(claim.externalId, user)
+            await offerClient.rejectOffer(claim.externalId, user)
             res.redirect(Paths.rejectedPage.evaluateUri({ externalId: claim.externalId }))
             break
           default:

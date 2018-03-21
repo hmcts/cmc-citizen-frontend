@@ -11,6 +11,8 @@ import { Claim } from 'claims/models/claim'
 import { MomentFactory } from 'common/momentFactory'
 import { Moment } from 'moment'
 
+const offerClient: OfferClient = new OfferClient()
+
 async function renderView (form: Form<Offer>, res: express.Response, next: express.NextFunction) {
   const claim: Claim = res.locals.claim
   const futureDate: Moment = MomentFactory.currentDate().add(30, 'days')
@@ -40,7 +42,7 @@ export default express.Router()
         const claim: Claim = res.locals.claim
         const user: User = res.locals.user
         const offer: Offer = form.model
-        await OfferClient.makeOffer(claim.externalId, user, offer)
+        await offerClient.makeOffer(claim.externalId, user, offer)
         res.redirect(Paths.offerConfirmationPage.evaluateUri({ externalId: claim.externalId }))
       }
     }))

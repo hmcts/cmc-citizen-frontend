@@ -4,7 +4,6 @@ import { RepaymentPlan as RepaymentPlanForm } from 'ccj/form/models/repaymentPla
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 import { RepaymentPlan } from 'claims/models/replaymentPlan'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
-import { Moment } from 'moment'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {
@@ -28,9 +27,9 @@ function convertPaidAmount (draftCcj: DraftCCJ): number {
   return undefined
 }
 
-function convertPayBySetDate (draftCcj: DraftCCJ): Moment {
+function convertPayBySetDate (draftCcj: DraftCCJ): string {
   return (draftCcj.paymentOption.option === PaymentType.FULL_BY_SPECIFIED_DATE)
-    ? draftCcj.payBySetDate.date.toMoment() : undefined
+    ? draftCcj.payBySetDate.date.asString() : undefined
 }
 
 export class CCJModelConverter {

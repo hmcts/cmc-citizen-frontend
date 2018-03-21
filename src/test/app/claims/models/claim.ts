@@ -5,7 +5,6 @@ import { Settlement } from 'claims/models/settlement'
 import { StatementType } from 'offer/form/models/statementType'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { Offer } from 'claims/models/offer'
-import moment = require('moment')
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { ResponseType } from 'claims/models/response/responseCommon'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
@@ -13,6 +12,8 @@ import { individual } from '../../../data/entity/party'
 import { DefenceType } from 'claims/models/response/fullDefenceResponse'
 import { Individual } from 'claims/models/details/yours/individual'
 import { PartyStatement } from 'claims/models/partyStatement'
+import { DATE_FORMAT } from 'app/utils/momentFormatter'
+import moment = require('moment')
 
 describe('Claim', () => {
 
@@ -74,7 +75,8 @@ describe('Claim', () => {
     it('should return valid Offer object when defendant made an offer', () => {
       claim.settlement = new Settlement().deserialize({
         partyStatements: [
-          new PartyStatement(StatementType.OFFER.value, MadeBy.DEFENDANT.value, new Offer('aa', moment()))
+          new PartyStatement(StatementType.OFFER.value, MadeBy.DEFENDANT.value,
+            new Offer('aa', moment().format(DATE_FORMAT)))
         ]
       })
       expect(claim.defendantOffer).to.be.instanceof(Offer)
