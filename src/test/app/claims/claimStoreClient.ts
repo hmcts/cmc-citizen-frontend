@@ -8,13 +8,13 @@ import { User } from 'idam/user'
 import { claimDraft as claimDraftData } from '../../data/draft/claimDraft'
 import { claimData } from '../../data/entity/claimData'
 import { RequestPromiseOptions } from 'request-promise-native'
-import { ClaimStoreClient, claimStoreApiUrl } from 'claims/claimStoreClient'
+import { claimStoreApiUrl, ClaimStoreClient } from 'claims/claimStoreClient'
 import { Draft } from '@hmcts/draft-store-client'
-import moment = require('moment')
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Claim } from 'claims/models/claim'
 import { ClaimData } from 'claims/models/claimData'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
+import moment = require('moment')
 
 const claimDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftData), moment(), moment())
 
@@ -25,11 +25,14 @@ const returnedClaim = {
   createdAt: moment().toISOString(),
   responseDeadline: moment().toISOString(),
   issuedOn: moment().toISOString(),
-  claim: claimData
+  claim: { ...claimData, interest: { type: ClaimInterestType.NO_INTEREST }, interestDate: undefined }
 }
 
-returnedClaim.claim.interest.type = ClaimInterestType.NO_INTEREST
-delete returnedClaim.claim.interestDate
+const expectedClaimData = {
+  ...claimData,
+  interest: { type: ClaimInterestType.NO_INTEREST },
+  interestDate: undefined
+}
 
 const claimant = {
   id: claimantId,
@@ -60,7 +63,7 @@ describe('ClaimStoreClient', () => {
 
         const claim: Claim = await claimStoreClient.saveClaim(claimDraft, claimant)
 
-        expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(claimData))
+        expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimData))
       })
 
       function mockTimeoutOnFirstSaveAttemptAndConflictOnSecondOne () {
@@ -80,7 +83,7 @@ describe('ClaimStoreClient', () => {
 
         const claim: Claim = await claimStoreClient.saveClaim(claimDraft, claimant)
 
-        expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(claimData))
+        expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimData))
       })
 
       function mockInternalServerErrorOnAllAttempts () {
