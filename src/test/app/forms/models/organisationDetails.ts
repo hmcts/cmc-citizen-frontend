@@ -85,20 +85,6 @@ describe('OrganisationDetails', () => {
       expectValidationError(errors, PartydDetailsValidationErrors.NAME_TOO_LONG.replace('$constraint1','255'))
     })
 
-    it('should return error when contact person is undefined', () => {
-      organisationDetails.name = 'companyName'
-      organisationDetails.contactPerson = undefined
-      let errors: ValidationError[] = validator.validateSync(organisationDetails)
-      expectValidationError(errors, OrganisationDetailsValidationErrors.CONTACT_PERSON_REQUIRED)
-    })
-
-    it('should return error when contact person is blank', () => {
-      organisationDetails.name = 'companyName'
-      organisationDetails.contactPerson = '  '
-      let errors: ValidationError[] = validator.validateSync(organisationDetails)
-      expectValidationError(errors, OrganisationDetailsValidationErrors.CONTACT_PERSON_REQUIRED)
-    })
-
     it('should return error when contact person got more than 255 character', () => {
       organisationDetails.contactPerson = aVeryLongString()
       organisationDetails.name = 'claimantPerson'
