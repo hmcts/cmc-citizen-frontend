@@ -29,6 +29,7 @@ import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 import I = CodeceptJS.I
 import { ClaimantTimelinePage } from 'integration-test/tests/citizen/claim/pages/claimant-timeline'
 import { ClaimantEvidencePage } from 'integration-test/tests/citizen/claim/pages/claimant-evidence'
+import { AmountHelper } from 'integration-test/helpers/amountHelper'
 
 const I: I = actor()
 const citizenResolveDisputePage: CitizenResolveDisputePage = new CitizenResolveDisputePage()
@@ -200,8 +201,8 @@ export class ClaimSteps {
     interestSteps.enterDefaultInterest()
     this.readFeesPage()
     I.see('Total amount you’re claiming')
-    I.see(claimAmount.getClaimTotal().toFixed(2), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
-    I.see(claimAmount.getTotal().toFixed(2), 'table.table-form > tfoot > tr > td.numeric.last > span')
+    I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
+    I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
     interestSteps.skipClaimantInterestTotalPage()
     userSteps.selectClaimDetails()
     this.enterClaimReason()
@@ -259,9 +260,9 @@ export class ClaimSteps {
     interestSteps.enterDefaultInterest()
     this.readFeesPage()
     I.see('Total amount you’re claiming')
-    I.see('£25.00')
-    I.see(claimAmount.getClaimTotal().toFixed(2), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
-    I.see(claimAmount.getTotal().toFixed(2), 'table.table-form > tfoot > tr > td.numeric.last > span')
+    I.see('£25')
+    I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
+    I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
     interestSteps.skipClaimantInterestTotalPage()
     userSteps.selectClaimDetails()
     this.enterClaimReason()

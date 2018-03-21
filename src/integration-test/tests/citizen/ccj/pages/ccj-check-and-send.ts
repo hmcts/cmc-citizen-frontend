@@ -1,6 +1,7 @@
 import I = CodeceptJS.I
 import { PartyType } from 'integration-test/data/party-type'
 import { claimAmount } from 'integration-test/data/test-data'
+import { AmountHelper } from 'integration-test/helpers/amountHelper'
 
 const I: I = actor()
 
@@ -55,6 +56,6 @@ export class CountyCourtJudgementCheckAndSendPage {
     I.see(address.postcode)
     I.see('Amount to be paid by defendant')
     const amountOutstanding: number = claimAmount.getTotal() - defendantPaidAmount
-    I.see('£' + amountOutstanding.toFixed(2))
+    I.see(AmountHelper.formatMoney(amountOutstanding))
   }
 }

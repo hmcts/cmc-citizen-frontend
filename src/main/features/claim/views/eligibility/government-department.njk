@@ -1,7 +1,10 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
+{% from "externalLink.njk" import externalLink %}
 
 {% set title = t('Govornment department | Money claim') %}
+
+{% set governmentDepartmentUri = 'https://www.gov.uk/government/publications/serve-the-treasury-solicitor-with-legal-proceedings' %}
 
 {% block content %}
 
@@ -9,8 +12,7 @@
     <div class="column-two-thirds">
       <h1 class="heading-large">{{ t('Are you claiming against a government department?') }}</h1>
       <p>
-        {{ t('<a href="{{ governmentDepartmentUri }}" target="_blank" >See a list of government departments</a>.',
-        { governmentDepartmentUri : 'https://www.gov.uk/government/publications/serve-the-treasury-solicitor-with-legal-proceedings' }) | safe }}
+        {{ (externalLink(t('See a list of government departments'), governmentDepartmentUri) + '.') | safe }}
       </p>
 
       {% set name = 'governmentDepartment' %}
