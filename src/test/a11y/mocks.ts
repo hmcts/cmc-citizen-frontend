@@ -75,6 +75,9 @@ mock('response/guards/guardFactory', {
   GuardFactory: {
     create: () => {
       return justForwardRequestHandler.requestHandler
+    },
+    createAsync: () => {
+      return justForwardRequestHandler.requestHandler
     }
   }
 })

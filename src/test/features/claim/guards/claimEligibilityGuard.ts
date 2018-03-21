@@ -12,8 +12,12 @@ import { ClaimEligibilityGuard } from 'claim/guards/claimEligibilityGuard'
 import { cookieName as eligibilityCookieName } from 'eligibility/store'
 import { eligibleCookie } from '../../../data/cookie/eligibility'
 
+import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
+
+import * as idamServiceMock from '../../../http-mocks/idam'
+import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 
 chai.use(spies)
 
@@ -25,10 +29,11 @@ describe('Claim eligibility guard', () => {
   }
 
   beforeEach(() => {
-    claimDraft = new Draft(1, 'claim', new DraftClaim(), moment(), moment())
+    claimDraft = new Draft(100, 'claim', new DraftClaim(), moment(), moment())
 
     res.locals = {
-      claimDraft: claimDraft
+      claimDraft: claimDraft,
+      user: new User('1', 'user@example.com', 'John', 'Smith', [], 'citizen', '')
     }
     res.redirect = sinon.spy((location: string): void => {
       return void 0
@@ -41,9 +46,9 @@ describe('Claim eligibility guard', () => {
       req.headers = {}
     })
 
-    it('should pass request through', () => {
+    it('should pass request through', async () => {
       const spy = sinon.spy(next)
-      ClaimEligibilityGuard.check()(req, res, spy)
+      await ClaimEligibilityGuard.check()(req, res, spy)
 
       chai.expect(spy).to.have.been.called
     })
@@ -52,20 +57,25 @@ describe('Claim eligibility guard', () => {
   context('when draft is not marked as eligible but eligibility cookie exists', () => {
     beforeEach(() => {
       claimDraft.document.eligibility = false
+      req.protocol = 'https'
       req.headers = {
         cookie: `${eligibilityCookieName}=${JSON.stringify(eligibleCookie)}`
       }
+      res.getHeader = () => { return void 0 }
+      res.setHeader = () => { return void 0 }
+      idamServiceMock.resolveRetrieveServiceToken()
+      draftStoreServiceMock.resolveSave()
     })
 
-    it('should mark draft as eligible', () => {
-      ClaimEligibilityGuard.check()(req, res, next)
+    it('should mark draft as eligible', async () => {
+      await ClaimEligibilityGuard.check()(req, res, next)
 
       chai.expect(claimDraft.document.eligibility).to.be.equal(true)
     })
 
-    it('should pass request through', () => {
+    it('should pass request through', async () => {
       const spy = sinon.spy(next)
-      ClaimEligibilityGuard.check()(req, res, spy)
+      await ClaimEligibilityGuard.check()(req, res, spy)
 
       chai.expect(spy).to.have.been.called
     })
@@ -77,8 +87,8 @@ describe('Claim eligibility guard', () => {
       req.headers = {}
     })
 
-    it('should redirect to eligibility page', () => {
-      ClaimEligibilityGuard.check()(req, res, next)
+    it('should redirect to eligibility page', async () => {
+      await ClaimEligibilityGuard.check()(req, res, next)
 
       chai.expect(res.redirect).to.have.been.calledWith(Paths.startPage.uri)
     })
