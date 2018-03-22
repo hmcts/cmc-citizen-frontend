@@ -64,6 +64,24 @@ Scenario('I can prepare a claim with different interest rate and date @citizen',
   I.see('Prepare your claim')
 })
 
+Scenario('I can prepare a claim with a manually entered interest amount and a daily amount added @citizen', function* (I: I) {
+  const email: string = yield I.createCitizenUser()
+  userSteps.login(email)
+
+  userSteps.startClaim()
+  claimSteps.completeEligibility()
+  userSteps.selectClaimAmount()
+  claimSteps.enterClaimAmount(10, 20.50, 50)
+  I.see('£80.50')
+  claimSteps.claimantTotalAmountPageRead()
+  I.see('Do you want to claim interest?')
+  interestSteps.enterBreakdownInterestAmountAndDailyAmount()
+  interestSteps.enterSpecificInterestRateAndDate(2, '1990-01-01')
+  I.see('Total amount you’re claiming')
+  interestSteps.skipClaimantInterestTotalPage()
+  I.see('Prepare your claim')
+})
+
 Scenario('I can see the Claim amount page calculates properly and shows the correct fees table @citizen', function* (I: I) {
   const email: string = yield I.createCitizenUser()
   userSteps.login(email)

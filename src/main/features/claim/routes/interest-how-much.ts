@@ -8,6 +8,7 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
 import { InterestHowMuch } from 'claim/form/models/interestHowMuch'
+import { InterestRateOption } from 'claim/form/models/interestRateOption'
 
 function renderView (form: Form<InterestHowMuch>, res: express.Response): void {
   res.render(Paths.interestHowMuchPage.associatedView, { form: form })
@@ -31,6 +32,10 @@ export default express.Router()
       } else {
         const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
+
+        if (form.model.type === InterestRateOption.STANDARD) {
+          draft.document.interestHowMuch.dailyAmount = undefined
+        }
 
         draft.document.interestHowMuch = form.model
         await new DraftService().save(draft, user.bearerToken)
