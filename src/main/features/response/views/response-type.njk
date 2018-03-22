@@ -15,7 +15,7 @@
         <div class="panel">
           <h2 class="heading-medium">{{ t('Admit all of the claim') }}</h2>
 
-          <p>{{ t('You have 19 days from the date of issue to admit the claim. The date of issue is on the claim form.') }}</p>
+          <p>{{ t('You have until 4pm on {{ deadline }} to admit the claim.', deadline = responseDeadline | date) }}</p>
 
           <h3 class="heading-small form-group-related">{{ t('Pay immediately') }}</h3>
           <p>{{ t('If you admit all the claim and want to pay it in full, including interest and claim fee, contact the claimant to arrange payment.') }}</p>
@@ -28,7 +28,7 @@
           <p>{{ t('If the claimant rejects your offer, they can ask the court to enter a CCJ against you. The court will then decide the instalment plan.') }}</p>
 
           <h2 class="heading-medium">{{ t('Admit part of the claim') }}</h2>
-          <p>{{ t('You have 19 days from the date of issue to partly admit the claim. The date of issue is on the claim form.') }}</p>
+          <p>{{ t('You have until 4pm on {{ deadline }} to admit part of the claim.', deadline = responseDeadline | date) }}</p>
           <h3 class="heading-small form-group-related">{{ t('Pay immediately') }}</h3>
           <p>{{ t('To admit part of the claim, contact the claimant and pay the amount you believe you owe then send the court your part admission.') }}</p>
           <p>{{ t('They can accept the amount you’ve paid and settle the claim, or ask the court to transfer the claim to a County Court hearing centre.') }}</p>
@@ -39,11 +39,8 @@
           <p>{{ t('If they reject your offer, the court will decide an instalment plan.') }}</p>
 
           <h2 class="heading-medium">{{ t('Reject all of the claim') }}</h2>
-          <p>{{ t('You can partly admit the claim and offer to pay what you believe you owe in instalments.') }}</p>
-          <p>{{ t('If the claimant agrees, they can ask court to enter a CCJ against you and you’ll be sent an order to pay.') }}</p>
-          <p>{{ t('If they reject your offer, the court will decide an instalment plan.') }}</p>
+          <p>{{ t('You have until 4pm on {{ deadline }} to reject the claim.', deadline = responseDeadline | date) }}</p>
 
-          <h2 class="heading-medium">{{ t('Reject all of the claim') }}</h2>
           <p>{{ t('If you reject all of the claim, the claim may be transferred to a County Court hearing centre.') }}</p>
           <p>{{ t('If you reject because you believe you’ve paid the money, the claimant has 28 days to tell you and the court whether they’re ' +
                   'proceeding with the claim. If they proceed, the claim may be transferred to a County Court hearing centre.') }}</p>

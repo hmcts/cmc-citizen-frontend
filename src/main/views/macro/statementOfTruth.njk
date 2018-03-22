@@ -1,0 +1,58 @@
+{% from "form.njk" import textInput, checkboxSingle, submitButton %}
+
+{%
+macro statementOfTruth(
+  form,
+  title = 'Statement of truth',
+  label = 'I confirm that I believe the details I have provided are correct.',
+  isQualified = false,
+  typeOfStatement = 'statement of truth'
+) %}
+  <p class="bold-medium">{{ t(title) }}</p>
+
+  <p>{{ t('The information on this page forms your claim. You can see it on the claim form after you submit.') }}</p>
+  <p>{{ t('When you’re satisfied that your answers are accurate, you should tick to “sign” this statement of truth on the form.') }}</p>
+
+  {% if isQualified %}
+    <p>{{ t('You must hold a senior position in your organisation to sign the %s.',
+    {
+      postProcess: 'sprintf',
+      sprintf: [typeOfStatement]
+    }) }}</p>
+
+    <details class='form-group'>
+      <summary>
+        <span class="summary">{{ t('Types of senior position') }}</span>
+      </summary>
+
+      <div class="panel">
+        <p>{{ t('A senior position could be a:') }}</p>
+        <ul class="list-bullet list">
+          <li>{{ t('director') }}</li>
+          <li>{{ t('treasurer') }} </li>
+          <li>{{ t('chief executive') }} </li>
+          <li>{{ t('manager or other officer of the company or corporation') }}</li>
+        </ul>
+        <p>{{ t("If your company isn't registered, a senior position could also be the:") }}</p>
+        <ul class="list-bullet list">
+          <li>{{ t('chairman') }}</li>
+          <li>{{ t('president') }}</li>
+          <li>{{ t('town clerk or other similar officer of the corporation.') }}</li>
+        </ul>
+      </div>
+    </details>
+
+    {{ textInput(t('Full name'), 'signerName', form, inputClass = 'form-control-1-2') }}
+    {{ textInput(t('Role'), 'signerRole', form, inputClass = 'form-control-1-2') }}
+  {% endif %}
+
+  {{
+  checkboxSingle(
+  label = label,
+  name = 'signed',
+  option = { label: label, value: true },
+  form = form,
+  legendHidden = true
+  )
+  }}
+{% endmacro %}

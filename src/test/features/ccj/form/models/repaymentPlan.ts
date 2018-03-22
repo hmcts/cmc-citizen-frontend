@@ -11,7 +11,6 @@ import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation
 const FUTURE_YEAR = MomentFactory.currentDate().add(10, 'years').year()
 const DEFAULT_REPAYMENT_PLAN = {
   remainingAmount: 100,
-  firstPayment: 50,
   instalmentAmount: 50,
   firstPaymentDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   paymentSchedule: PaymentSchedule.EVERY_MONTH.value
@@ -19,14 +18,13 @@ const DEFAULT_REPAYMENT_PLAN = {
 
 const REPAYMENT_PLAN_FOR_DESERIALISATION = {
   remainingAmount: 100,
-  firstPayment: 50,
   instalmentAmount: 50,
   firstPaymentDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   paymentSchedule: { value: PaymentSchedule.EVERY_MONTH.value, displayValue: PaymentSchedule.EVERY_MONTH.displayValue }
 }
 
 function validRepaymentPlan (): RepaymentPlan {
-  return new RepaymentPlan(100, 50, 50, new LocalDate(FUTURE_YEAR, 10, 10), PaymentSchedule.EVERY_MONTH)
+  return new RepaymentPlan(100, 50, new LocalDate(FUTURE_YEAR, 10, 10), PaymentSchedule.EVERY_MONTH)
 }
 
 describe('RepaymentPlan', () => {
@@ -61,8 +59,7 @@ describe('RepaymentPlan', () => {
       it('undefined option', () => {
         const errors = validator.validateSync(new RepaymentPlan(undefined))
 
-        expect(errors.length).to.equal(4)
-        expectValidationError(errors, ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
+        expect(errors.length).to.equal(3)
         expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
         expectValidationError(errors, ValidationErrors.SELECT_PAYMENT_SCHEDULE)
         expectValidationError(errors, ValidationErrors.INVALID_DATE)
@@ -70,35 +67,13 @@ describe('RepaymentPlan', () => {
 
     })
 
-    it('first amount > remainingAmount', () => {
-      const repaymentPlan = validRepaymentPlan()
-      repaymentPlan.firstPayment = 101
-      const errors = validator.validateSync(repaymentPlan)
-
-      expect(errors.length).to.equal(2)
-      expectValidationError(errors, ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
-    })
-
     it('instalment amount > remainingAmount', () => {
       const repaymentPlan = validRepaymentPlan()
       repaymentPlan.instalmentAmount = 101
       const errors = validator.validateSync(repaymentPlan)
 
-      expect(errors.length).to.equal(2)
+      expect(errors.length).to.equal(1)
       expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
-    })
-
-    it('first amount <= 0', () => {
-      const repaymentPlan = validRepaymentPlan()
-      const valuesToTest = [0, -1]
-
-      valuesToTest.forEach(amount => {
-        repaymentPlan.firstPayment = amount
-        const errors = validator.validateSync(repaymentPlan)
-
-        expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.FIRST_PAYMENT_AMOUNT_INVALID)
-      })
     })
 
     it('instalment amount <= 0', () => {
@@ -117,15 +92,6 @@ describe('RepaymentPlan', () => {
     it('instalment amount invalid decimal places', () => {
       const repaymentPlan = validRepaymentPlan()
       repaymentPlan.instalmentAmount = 1.022
-      const errors = validator.validateSync(repaymentPlan)
-
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, CommonValidationErrors.AMOUNT_INVALID_DECIMALS)
-    })
-
-    it('first payment invalid decimal places', () => {
-      const repaymentPlan = validRepaymentPlan()
-      repaymentPlan.firstPayment = 1.022
       const errors = validator.validateSync(repaymentPlan)
 
       expect(errors.length).to.equal(1)
