@@ -37,6 +37,10 @@ function getInterestDateOrIssueDate (claim: Claim): moment.Moment {
 }
 
 export async function draftInterestAmount (claimDraft: DraftClaim): Promise<number> {
+  if (claimDraft.interest.option === YesNoOption.NO) {
+    return 0.00
+  }
+
   if (claimDraft.interestType.option === InterestTypeOption.BREAKDOWN) {
     return claimDraft.interestTotal.amount
   }
