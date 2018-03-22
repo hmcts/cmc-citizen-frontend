@@ -74,7 +74,14 @@ mock('offer/guards/offerGuard', {
 mock('response/guards/guardFactory', {
   GuardFactory: {
     create: () => {
-      return justForwardRequestHandler.requestHandler
+      return (req: express.Request, res: express.Response, next: express.NextFunction): void => {
+        next()
+      }
+    },
+    createAsync: () => {
+      return async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+        next()
+      }
     }
   }
 })

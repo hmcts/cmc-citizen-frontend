@@ -5,6 +5,7 @@ import * as config from 'config'
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
+import { checkEligibilityGuards } from './checks/eligibility-check'
 
 import { Paths as ClaimPaths } from 'claim/paths'
 
@@ -21,6 +22,7 @@ describe('Claim issue: interest page', () => {
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.interestPage.uri)
+    checkEligibilityGuards(app, 'get', ClaimPaths.interestPage.uri)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
@@ -35,6 +37,7 @@ describe('Claim issue: interest page', () => {
 
   describe('on POST', () => {
     checkAuthorizationGuards(app, 'post', ClaimPaths.interestPage.uri)
+    checkEligibilityGuards(app, 'post', ClaimPaths.interestPage.uri)
 
     describe('for authorized user', () => {
       beforeEach(() => {
