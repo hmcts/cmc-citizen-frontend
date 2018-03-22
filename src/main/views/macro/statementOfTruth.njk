@@ -3,6 +3,7 @@
 {%
 macro statementOfTruth(
   form,
+  statementOfTruthType,
   title = 'Statement of truth',
   label = 'I confirm that I believe the details I have provided are correct.',
   isQualified = false,
@@ -10,8 +11,10 @@ macro statementOfTruth(
 ) %}
   <p class="bold-medium">{{ t(title) }}</p>
 
-  <p>{{ t('The information on this page forms your claim. You can see it on the claim form after you submit.') }}</p>
-  <p>{{ t('When you’re satisfied that your answers are accurate, you should tick to “sign” this statement of truth on the form.') }}</p>
+  {% if statementOfTruthType == 'claim' or statementOfTruthType == 'response' %}
+    <p>{{ t('The information on this page forms your {{ type }}. You can see it on the {{ type }} form after you submit.', { type: statementOfTruthType }) }}</p>
+    <p>{{ t('When you’re satisfied that your answers are accurate, you should tick to “sign” this statement of truth on the form.') }}</p>
+  {% endif %}
 
   {% if isQualified %}
     <p>{{ t('You must hold a senior position in your organisation to sign the %s.',

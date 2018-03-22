@@ -3,7 +3,7 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const links = {
-  iAlreadyHaveAnAccount: 'Sign in to your account.'
+  iAlreadyHaveAnAccount: 'Already have an account? Click here to login instead.'
 }
 
 export class DefendantRegisterPage {
