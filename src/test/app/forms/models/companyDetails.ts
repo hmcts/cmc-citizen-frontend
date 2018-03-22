@@ -84,20 +84,6 @@ describe('CompanyDetails', () => {
       expectValidationError(errors, PartydDetailsValidationErrors.NAME_TOO_LONG.replace('$constraint1','255'))
     })
 
-    it('should return error when contact person is undefined', () => {
-      companyDetails.name = 'companyName'
-      companyDetails.contactPerson = undefined
-      let errors: ValidationError[] = validator.validateSync(companyDetails)
-      expectValidationError(errors, CompanyDetailsValidationErrors.CONTACT_PERSON_REQUIRED.replace('$constraint1','35'))
-    })
-
-    it('should return error when contact person is blank', () => {
-      companyDetails.name = 'companyName'
-      companyDetails.contactPerson = ''
-      let errors: ValidationError[] = validator.validateSync(companyDetails)
-      expectValidationError(errors, CompanyDetailsValidationErrors.CONTACT_PERSON_REQUIRED)
-    })
-
     it('should return error when contact person got more than 255 character', () => {
       companyDetails.contactPerson = aVeryLongString()
       companyDetails.name = 'companyName'
@@ -206,7 +192,7 @@ describe('CompanyDetails', () => {
       companyDetails.address = validAddress
       companyDetails.hasCorrespondenceAddress = true
       companyDetails.correspondenceAddress = validAddress
-      companyDetails.contactPerson = 'Me'
+      companyDetails.contactPerson = ''
     })
 
     it('should return false when has name is undefined', () => {
@@ -233,11 +219,6 @@ describe('CompanyDetails', () => {
     it('should return false when has correspondence address and correspondence address is not completed', () => {
       companyDetails.hasCorrespondenceAddress = true
       companyDetails.correspondenceAddress = new Address()
-      expect(companyDetails.isCompleted()).to.equal(false)
-    })
-
-    it('should return false when contact person is undefined', () => {
-      companyDetails.contactPerson = undefined
       expect(companyDetails.isCompleted()).to.equal(false)
     })
 
