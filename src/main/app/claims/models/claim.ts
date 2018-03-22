@@ -85,6 +85,13 @@ export class Claim {
     return this.settlement.getDefendantOffer()
   }
 
+  get respondToResponseDeadline (): Moment | undefined {
+    if (!this.respondedAt) {
+      return undefined
+    }
+    return this.respondedAt.clone().add('33', 'days')
+  }
+
   // noinspection JSUnusedGlobalSymbols Called in the view
   get remainingDays (): number {
     return this.responseDeadline.diff(MomentFactory.currentDate(), 'days')
