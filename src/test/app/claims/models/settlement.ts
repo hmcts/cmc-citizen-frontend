@@ -77,6 +77,28 @@ describe('Settlement', () => {
       expect(actual.isOfferAccepted()).to.be.eq(true)
     })
   })
+
+  describe('isOfferRejected', () => {
+    it('should return false when no offer', () => {
+      const actual: Settlement = new Settlement().deserialize(undefined)
+      expect(actual.isOfferRejected()).to.be.eq(false)
+    })
+
+    it('should return false when there is offer but no rejection', () => {
+      const actual: Settlement = new Settlement().deserialize(input(StatementType.OFFER))
+      expect(actual.isOfferRejected()).to.be.eq(false)
+    })
+
+    it('should return false when offer is accepted', () => {
+      const actual: Settlement = new Settlement().deserialize(input(StatementType.ACCEPTATION, MadeBy.CLAIMANT))
+      expect(actual.isOfferRejected()).to.be.eq(false)
+    })
+
+    it('should return true when offer is rejected', () => {
+      const actual: Settlement = new Settlement().deserialize(input(StatementType.REJECTION, MadeBy.CLAIMANT))
+      expect(actual.isOfferRejected()).to.be.eq(true)
+    })
+  })
 })
 
 function input (type: StatementType = StatementType.OFFER, madeBy: MadeBy = MadeBy.DEFENDANT): any {
