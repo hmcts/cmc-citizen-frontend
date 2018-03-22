@@ -8,12 +8,10 @@ import { ClaimAmount } from 'drafts/tasks/claimAmount'
 import { ClaimDetails } from 'drafts/tasks/claimDetails'
 import { YourDetails } from 'app/drafts/tasks/yourDetails'
 import { TheirDetails } from 'app/drafts/tasks/theirDetails'
-import { Eligibility } from 'app/drafts/tasks/eligibility'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: DraftClaim): TaskList {
     return new TaskList(1, 'Before you start', [
-      new TaskListItem('Check eligibility', Paths.eligibilityStartPage.uri, Eligibility.isCompleted(draft)),
       new TaskListItem('Resolving this dispute', Paths.resolvingThisDisputerPage.uri, ResolveDispute.isCompleted(draft))
     ])
   }

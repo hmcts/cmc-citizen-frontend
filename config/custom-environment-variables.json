@@ -50,6 +50,11 @@
   "pdf-service": {
     "url": "PDF_SERVICE_URL"
   },
+  "eligibility": {
+    "cookie": {
+      "timeToLiveInMinutes": "ELIGIBILITY_COOKIE_TIME_TO_LIVE_IN_MINUTES"
+    }
+  },
   "support": {
     "contact-email": "CONTACT_EMAIL"
   },

@@ -5,6 +5,12 @@ const validator = new Validator()
 
 export class YourDefenceTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
-    return !!(responseDraft.defence && validator.validateSync(responseDraft.defence).length === 0)
+    return !!responseDraft.defence
+      && YourDefenceTask.isSectionValid(responseDraft.defence)
+      && YourDefenceTask.isSectionValid(responseDraft.timeline)
+  }
+
+  private static isSectionValid (section): boolean {
+    return !!section && validator.validateSync(section).length === 0
   }
 }

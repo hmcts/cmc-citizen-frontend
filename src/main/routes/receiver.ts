@@ -1,5 +1,8 @@
 import * as express from 'express'
 
+import { Eligibility } from 'eligibility/model/eligibility'
+import { CookieEligibilityStore } from 'eligibility/store'
+
 import { Paths as AppPaths } from 'app/paths'
 import { Paths as ClaimPaths } from 'claim/paths'
 import { Paths as DashboardPaths } from 'dashboard/paths'
@@ -28,6 +31,8 @@ const stateCookieName = 'state'
 
 const draftService: DraftService = new DraftService()
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+
+const eligibilityStore = new CookieEligibilityStore()
 
 async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath): Promise<string> {
   if (req.query.state !== OAuthHelper.getStateCookie(req)) {
@@ -71,7 +76,13 @@ function loginErrorHandler (req: express.Request,
   return next(err)
 }
 
-async function retrieveRedirectForLandingPage (user: User): Promise<string> {
+async function retrieveRedirectForLandingPage (req: express.Request, res: express.Response): Promise<string> {
+  const eligibility: Eligibility = eligibilityStore.read(req, res)
+  if (eligibility.eligible) {
+    return ClaimPaths.taskListPage.uri
+  }
+
+  const user: User = res.locals.user
   const noClaimIssued: boolean = (await claimStoreClient.retrieveByClaimantId(user)).length === 0
   const noClaimReceived: boolean = (await claimStoreClient.retrieveByDefendantId(user)).length === 0
   const noDraftClaims: boolean = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
@@ -132,7 +143,7 @@ export default express.Router()
         } else {
           if (FeatureToggles.isEnabled('ccd')) {
             await claimStoreClient.linkDefendant(user)
-            res.redirect(await retrieveRedirectForLandingPage(user))
+            res.redirect(await retrieveRedirectForLandingPage(req, res))
           } else {
             try {
               await Promise.all(user.getLetterHolderIdList().map(
@@ -143,7 +154,7 @@ export default express.Router()
               // ignore linking errors
               logger.error(err)
             }
-            res.redirect(await retrieveRedirectForLandingPage(user))
+            res.redirect(await retrieveRedirectForLandingPage(req, res))
           }
 
         }

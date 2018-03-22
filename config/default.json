@@ -58,6 +58,11 @@
     "url": "http://localhost:5500",
     "apiVersion": "v1"
   },
+  "eligibility": {
+    "cookie": {
+      "timeToLiveInMinutes": 10
+    }
+  },
   "support": {
     "contact-email": "i-am-configurable@example.com"
   },
