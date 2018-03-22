@@ -31,7 +31,7 @@ export default express.Router()
               const pdf = Buffer.concat(buffers)
               res.writeHead(HttpStatus.OK, {
                 'Content-Type': 'application/pdf',
-                'Content-Disposition': `attachment; filename=${claim.claimNumber}-claim-receipt.pdf`,
+                'Content-Disposition': `attachment; filename=${claim.claimNumber}-claim-form-claimant-copy.pdf`,
                 'Content-Length': pdf.length
               })
 

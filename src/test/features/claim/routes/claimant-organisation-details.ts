@@ -5,6 +5,7 @@ import * as config from 'config'
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
+import { checkEligibilityGuards } from './checks/eligibility-check'
 import { OrganisationDetails } from 'app/forms/models/organisationDetails'
 import { Paths as ClaimPaths } from 'claim/paths'
 import { Address } from 'forms/models/address'
@@ -17,7 +18,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const input = {
   name: 'Anirudha Inc.',
   type: 'organisation',
-  contactPerson: 'John Snow',
+  contactPerson: '',
   address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
   hasCorrespondenceAddress: false
 } as OrganisationDetails
@@ -27,6 +28,7 @@ describe('claimant as organisation details page', () => {
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.claimantOrganisationDetailsPage.uri)
+    checkEligibilityGuards(app, 'get', ClaimPaths.claimantOrganisationDetailsPage.uri)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
@@ -41,6 +43,7 @@ describe('claimant as organisation details page', () => {
 
   describe('on POST', () => {
     checkAuthorizationGuards(app, 'post', ClaimPaths.claimantOrganisationDetailsPage.uri)
+    checkEligibilityGuards(app, 'post', ClaimPaths.claimantOrganisationDetailsPage.uri)
 
     describe('for authorized user', () => {
       beforeEach(() => {

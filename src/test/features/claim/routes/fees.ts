@@ -5,6 +5,7 @@ import * as config from 'config'
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
+import { checkEligibilityGuards } from './checks/eligibility-check'
 
 import { ErrorPaths, Paths as ClaimPaths } from 'claim/paths'
 import { InterestType } from 'claim/form/models/interest'
@@ -25,6 +26,7 @@ describe('Claim issue: fees page', () => {
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.feesPage.uri)
+    checkEligibilityGuards(app, 'get', ClaimPaths.feesPage.uri)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -168,6 +170,7 @@ describe('Claim issue: fees page', () => {
 
   describe('on POST', () => {
     checkAuthorizationGuards(app, 'post', ClaimPaths.feesPage.uri)
+    checkEligibilityGuards(app, 'post', ClaimPaths.feesPage.uri)
 
     it('should redirect to total page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
