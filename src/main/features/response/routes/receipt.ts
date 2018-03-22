@@ -31,7 +31,7 @@ export default express.Router()
               const claim: Claim = res.locals.claim
               res.writeHead(HttpStatus.OK, {
                 'Content-Type': 'application/pdf',
-                'Content-Disposition': `attachment; filename=${claim.claimNumber}-response-receipt.pdf`,
+                'Content-Disposition': `attachment; filename=${claim.claimNumber}-claim-response.pdf`,
                 'Content-Length': pdf.length
               })
 

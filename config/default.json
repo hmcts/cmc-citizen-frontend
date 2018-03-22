@@ -60,7 +60,7 @@
   },
   "eligibility": {
     "cookie": {
-      "timeToLiveInMinutes": 10
+      "timeToLiveInMinutes": 2880
     }
   },
   "support": {
@@ -91,7 +91,6 @@
     "partialAdmission": false,
     "offer": false,
     "statementOfMeans": false,
-    "finePrint": false,
     "ccd": false,
     "returnErrorToUser": false
   },

@@ -27,7 +27,6 @@ import { DashboardUrlHelper } from 'dashboard/helpers/dashboardUrlHelper'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
 import { ClaimStatus } from 'claims/models/claimStatus'
-import { FeatureToggles } from 'utils/featureToggles'
 import { Paths as AppPaths } from 'app/paths'
 import { Paths as DashboardPaths } from 'features/dashboard/paths'
 import { Paths as ResponsePaths } from 'features/response/paths'
@@ -124,9 +123,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
     nunjucksEnv.addGlobal('HowMuchPaidClaimantOption', HowMuchPaidClaimantOption)
     nunjucksEnv.addGlobal('Service', Service)
-    if (FeatureToggles.isEnabled('finePrint')) {
-      nunjucksEnv.addGlobal('cookieText', `GOV.UK uses cookies make the site simpler. <a href="${AppPaths.cookiesPage.uri}">Find out more about cookies</a>`)
-    }
+    nunjucksEnv.addGlobal('cookieText', `GOV.UK uses cookies make the site simpler. <a href="${AppPaths.cookiesPage.uri}">Find out more about cookies</a>`)
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {
