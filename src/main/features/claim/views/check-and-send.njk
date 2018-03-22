@@ -53,7 +53,7 @@
 
     {{ row('Total', claimAmountTotal.claimAmount | numeral, bold = true )}}
 
-    {% if (draftClaim.interest.option === InterestOption.YES) %}
+    {% if (draftClaim.interest.option === YesNoOption.YES) %}
       {{ row('Claim Interest', 'Yes' , paths.interestPage.uri, bold = true) }}
       {% if (draftClaim.interestType.option === InterestTypeOption.SAME_RATE) %}
         {{ row('How do you want to claim interest?', 'Same rate for the whole period' , paths.interestRatePage.uri, bottomBorder = false, bold = true) }}

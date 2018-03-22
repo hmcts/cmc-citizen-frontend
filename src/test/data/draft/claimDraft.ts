@@ -5,7 +5,7 @@ import { InterestDateType } from 'app/common/interestDateType'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
-import { Interest, InterestOption } from 'claim/form/models/interest'
+import { Interest } from 'claim/form/models/interest'
 import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
 import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDate } from 'claim/form/models/interestDate'
@@ -59,7 +59,7 @@ export const claimDraft = {
     ]
   },
   interest: {
-    option: InterestOption.YES
+    option: YesNoOption.YES
   } as Interest,
   interestType: {
     option: InterestTypeOption.SAME_RATE

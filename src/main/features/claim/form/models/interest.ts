@@ -1,25 +1,14 @@
 import { IsDefined, IsIn } from 'class-validator'
 import { ValidationErrors } from 'forms/validation/validationErrors'
-
-export class InterestOption {
-  static readonly YES = 'yes'
-  static readonly NO = 'no'
-
-  static all (): string[] {
-    return [
-      InterestOption.YES,
-      InterestOption.NO
-    ]
-  }
-}
+import { YesNoOption } from 'models/yesNoOption'
 
 export class Interest {
 
   @IsDefined({ message: ValidationErrors.YES_NO_REQUIRED })
-  @IsIn(InterestOption.all(), { message: ValidationErrors.YES_NO_REQUIRED })
-  option?: string
+  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED })
+  option?: YesNoOption
 
-  constructor (option?: string) {
+  constructor (option?: YesNoOption) {
     this.option = option
   }
 
@@ -27,12 +16,12 @@ export class Interest {
     if (input == null) {
       return input
     }
-    return new Interest(input.option)
+    return new Interest(YesNoOption.fromObject(input.option))
   }
 
   deserialize (input?: any): Interest {
-    if (input) {
-      this.option = input.option
+    if (input && input.option) {
+      this.option = YesNoOption.fromObject(input.option.option)
     }
 
     return this

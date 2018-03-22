@@ -31,7 +31,7 @@ import { UnemploymentType } from 'response/form/models/statement-of-means/unempl
 import { ClaimType } from 'claim/form/models/eligibility/claimType'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
-import { Interest, InterestOption } from 'claim/form/models/interest'
+import { Interest } from 'claim/form/models/interest'
 import { InterestDateType } from 'app/common/interestDateType'
 import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
 import { InterestStartDate } from 'claim/form/models/interestStartDate'
@@ -102,7 +102,7 @@ export const sampleClaimDraftObj = {
     ]
   } as ClaimAmountBreakdown,
   interest: {
-    option: InterestOption.YES
+    option: YesNoOption.YES
   } as Interest,
   interestType: {
     option: InterestTypeOption.SAME_RATE

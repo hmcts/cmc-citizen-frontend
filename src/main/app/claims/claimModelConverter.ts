@@ -29,8 +29,8 @@ import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestDateType } from 'app/common/interestDateType'
-import { InterestOption } from 'claim/form/models/interest'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
+import { YesNoOption } from 'models/yesNoOption'
 
 export class ClaimModelConverter {
 
@@ -182,7 +182,7 @@ export class ClaimModelConverter {
 
   private static convertInterest (draftClaim: DraftClaim): Interest {
     const interest: Interest = new Interest()
-    if (draftClaim.interest.option === InterestOption.NO) {
+    if (draftClaim.interest.option === YesNoOption.NO) {
       interest.type = ClaimInterestType.NO_INTEREST
     } else {
       interest.type = draftClaim.interestRate.type

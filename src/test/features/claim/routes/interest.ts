@@ -12,7 +12,7 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import { InterestOption } from 'claim/form/models/interest'
+import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pageContent: string = 'Do you want to claim interest?'
@@ -59,7 +59,7 @@ describe('Claim issue: interest page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ option: InterestOption.YES })
+          .send({ option: YesNoOption.YES.option })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -70,7 +70,7 @@ describe('Claim issue: interest page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ option: InterestOption.YES })
+          .send({ option: YesNoOption.YES.option })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestTypePage.uri))
       })
 
@@ -81,7 +81,7 @@ describe('Claim issue: interest page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ option: InterestOption.NO })
+          .send({ option: YesNoOption.NO.option })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.totalPage.uri))
       })
     })
