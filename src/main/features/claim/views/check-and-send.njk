@@ -7,6 +7,8 @@
 
 {% set title = t('Money claim') %}
 {% set heading = t('Check your answers before submitting your claim') %}
+{% set claimantPartyDetails = draftClaim.claimant.partyDetails %}
+{% set claimantPartyDetailsPageUri = paths.claimantOrganisationDetailsPage.uri if (claimantPartyDetails.type === 'company' or claimantPartyDetails.type === 'organisation') else  paths.claimantIndividualDetailsPage.uri %}
 
 {% block content %}
   <form novalidate method="post">
@@ -15,10 +17,10 @@
     {{ tableStart('yourDetails', 'Your details (claimant)') }}
     {{
         partyDetailsSummaryFragment(
-          partyDetails = draftClaim.claimant.partyDetails,
+          partyDetails = claimantPartyDetails,
           changeLinks = {
-            name: paths.claimantIndividualDetailsPage.uri,
-            address: paths.claimantIndividualDetailsPage.uri,
+            name: claimantPartyDetailsPageUri,
+            address: claimantPartyDetailsPageUri,
             dateOfBirth: paths.claimantDateOfBirthPage.uri,
             contactPerson: paths.claimantOrganisationDetailsPage.uri
           }
