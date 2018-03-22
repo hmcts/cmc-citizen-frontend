@@ -3,8 +3,8 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  amount: 'input[id="amount[label]"]',
-  reason: 'textarea[id="reason[label]"]'
+  amount: 'input[id=amount]',
+  reason: 'textarea[id=reason]'
 }
 
 const buttons = {

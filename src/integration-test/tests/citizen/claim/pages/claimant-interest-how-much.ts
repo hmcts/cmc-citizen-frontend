@@ -5,7 +5,7 @@ const I: I = actor()
 const fields = {
   optionStandard: 'input[id=typestandard]',
   optionDifferent: 'input[id=typedifferent]',
-  dailyAmount: 'input[id="dailyAmount[label]"]'
+  dailyAmount: 'input[id="dailyAmount"]'
 }
 
 const buttons = {
