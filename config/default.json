@@ -58,6 +58,11 @@
     "url": "http://localhost:5500",
     "apiVersion": "v1"
   },
+  "eligibility": {
+    "cookie": {
+      "timeToLiveInMinutes": 2880
+    }
+  },
   "support": {
     "contact-email": "i-am-configurable@example.com"
   },
@@ -86,7 +91,6 @@
     "partialAdmission": false,
     "offer": false,
     "statementOfMeans": false,
-    "finePrint": false,
     "ccd": false,
     "returnErrorToUser": false
   },

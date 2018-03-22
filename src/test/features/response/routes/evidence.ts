@@ -16,6 +16,7 @@ import { generateString } from '../../../app/forms/models/validationUtils'
 import { EvidenceType } from 'forms/models/evidenceType'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
+import { ResponseType } from 'response/form/models/responseType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.evidencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -112,11 +113,11 @@ describe('Defendant response: evidence', () => {
 
       describe('update row action', () => {
 
-        context('valid form', () => {
+        context('valid form should redirect to', () => {
 
-          it('should render page when form is valid, amount within limit and everything is fine', async () => {
+          it('impactOfDisputePage when it is not FULL DEFENCE', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.PART_ADMISSION } })
             draftStoreServiceMock.resolveSave(100)
 
             await request(app)
@@ -126,11 +127,24 @@ describe('Defendant response: evidence', () => {
               .expect(res => expect(res).to.be.redirect
                 .toLocation(Paths.impactOfDisputePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
+
+          it('taskListPage when it is FULL DEFENCE', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave(100)
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value, description: 'Bla bla' }] })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(Paths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          })
         })
 
         context('invalid form', () => {
 
-          it('should render page when description undefined', async () => {
+          it('should render page when description too long', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
 
