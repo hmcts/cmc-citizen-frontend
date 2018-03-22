@@ -1,3 +1,8 @@
 import * as _request from 'request-promise-native'
+import { RequestAPI } from 'client/request'
 
-export const request = _request.defaults({ json: true })
+const request: RequestAPI = _request.defaults({ json: true })
+
+export {
+  request
+}

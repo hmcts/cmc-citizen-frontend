@@ -18,6 +18,7 @@
     "test:coverage-unit": "TS_NODE_FAST=true NODE_ENV=mocha LOG_LEVEL=OFF nyc mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*')",
     "test:codacy-upload": "cat ./coverage-report/lcov.info | codacy-coverage",
     "test:codecov-upload": "codecov -f ./coverage-report/lcov.info",
+    "postinstall": "if [ \"${NODE_ENV}\" == 'production' ]; then yarn snyk-protect; fi",
     "test:smoke": "./bin/run-smoke-tests.sh",
     "test:integration": "TS_NODE_FAST=true ts-node --require tsconfig-paths/register ./node_modules/.bin/codeceptjs run --verbose --config default.conf.js --reporter mocha-multi",
     "test:integration-debug": "TS_NODE_FAST=true ts-node --require tsconfig-paths/register ./node_modules/.bin/codeceptjs run --verbose --config default.conf.js",
@@ -25,7 +26,8 @@
     "list-supported-browsers": "node -e 'Object.keys(require(\"@hmcts/cmc-supported-browsers\").supportedBrowsers).forEach(key => console.log(key))'",
     "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/** -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info",
     "precommit": "yarn lint",
-    "prepush": "yarn test && yarn test:routes"
+    "prepush": "yarn test && yarn test:routes",
+    "snyk-protect": "snyk protect --org=hmcts --debug"
   },
   "dependencies": {
     "@hmcts/cmc-common-frontend": "^1.43.0",
@@ -85,6 +87,7 @@
     "request-promise-native": "^1.0.3",
     "require-directory": "^2.1.1",
     "serve-favicon": "^2.3.0",
+    "snyk": "^1.66.0",
     "string.prototype.startswith": "^0.2.0",
     "to-boolean": "^1.0.0",
     "ts-node": "^3.3.0",
@@ -153,5 +156,6 @@
     ],
     "report-dir": "coverage-report",
     "all": true
-  }
+  },
+  "snyk": true
 }

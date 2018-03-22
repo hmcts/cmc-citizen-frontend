@@ -1,4 +1,4 @@
-import { request } from 'integration-test/helpers/clients/base/request'
+import { request } from 'client/request'
 
 const baseURL: string = process.env.IDAM_URL
 
@@ -13,7 +13,7 @@ export class IdamClient {
    * @param {string} userGroupCode
    * @returns {Promise<void>}
    */
-  static createUser (email: string, userGroupCode: string, password: string = undefined): Promise<void> {
+  static async createUser (email: string, userGroupCode: string, password: string = undefined): Promise<void> {
     return request.post({
       uri: `${baseURL}/testing-support/accounts`,
       body: {
@@ -31,7 +31,7 @@ export class IdamClient {
     })
   }
 
-  static getPin (letterHolderId: string) {
+  static async getPin (letterHolderId: string) {
     return request.get({
       uri: `${baseURL}/testing-support/accounts/pin/${letterHolderId}`,
       resolveWithFullResponse: true,
@@ -108,7 +108,7 @@ export class IdamClient {
    * @param {string} jwt
    * @returns {Promise<User>}
    */
-  static retrieveUser (jwt: string): Promise<User> {
+  static async retrieveUser (jwt: string): Promise<User> {
     return request.get({
       uri: `${baseURL}/details`,
       headers: {

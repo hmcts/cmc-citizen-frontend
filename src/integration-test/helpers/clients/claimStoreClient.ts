@@ -1,4 +1,4 @@
-import { request } from 'integration-test/helpers/clients/base/request'
+import { request } from 'client/request'
 
 const baseURL: string = process.env.CLAIM_STORE_URL
 
@@ -11,7 +11,7 @@ export class ClaimStoreClient {
    * @param {User} owner - claim owner
    * @returns {Promise<Claim>}
    */
-  static retrieveByReferenceNumber (referenceNumber: string, owner: User): Promise<Claim> {
+  static async retrieveByReferenceNumber (referenceNumber: string, owner: User): Promise<Claim> {
     if (!referenceNumber) {
       return Promise.reject('Claim reference number is required')
     }
@@ -33,7 +33,7 @@ export class ClaimStoreClient {
    * @param {User} submitter - user that submits claim
    * @returns {Promise<Claim>}
    */
-  static create (claimData: ClaimData, submitter: User): Promise<Claim> {
+  static async create (claimData: ClaimData, submitter: User): Promise<Claim> {
     if (!claimData) {
       return Promise.reject('Claim data is required')
     }
@@ -56,7 +56,7 @@ export class ClaimStoreClient {
    * @param externalId the claims external id
    * @returns {Promise<Claim>}
    */
-  static linkDefendant (defendant: User, externalId: string): Promise<Claim> {
+  static async linkDefendant (defendant: User, externalId: string): Promise<Claim> {
     if (!externalId) {
       return Promise.reject('External ID is required')
     }
@@ -79,7 +79,7 @@ export class ClaimStoreClient {
    * @param {User} defendant - user that makes response
    * @returns {Promise<Claim>}
    */
-  static respond (externalId: string, responseData: ResponseData, defendant: User): Promise<Claim> {
+  static async respond (externalId: string, responseData: ResponseData, defendant: User): Promise<Claim> {
     if (!externalId) {
       return Promise.reject('Claim ID is required')
     }

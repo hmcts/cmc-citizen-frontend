@@ -6,6 +6,7 @@
 
 !package.json
 !yarn.lock
+!.snyk
 
 !gulpfile.js
 !tsconfig.json

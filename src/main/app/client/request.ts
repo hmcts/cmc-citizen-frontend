@@ -8,7 +8,7 @@ import * as requestRetry from '@hmcts/requestretry'
 const timeout: number = config.get<number>('http.timeout')
 const maxAttempts: number = config.get<number>('requestRetry.maxAttempts')
 
-export type RequestPromiseAPI = requestBase.RequestAPI<requestPromise.RequestPromise, requestPromise.RequestPromiseOptions, requestBase.RequiredUriUrl>
+export type RequestPromiseAPI = requestBase.RequestAPI<requestPromise.RequestPromise & Promise<any>, requestPromise.RequestPromiseOptions, requestBase.RequiredUriUrl>
 export type DefaultRequestAPI = requestBase.RequestAPI<requestBase.Request, requestBase.CoreOptions, requestBase.RequiredUriUrl>
 export type RequestAPI = RequestPromiseAPI | DefaultRequestAPI
 
