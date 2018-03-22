@@ -7,7 +7,6 @@ const I: I = actor()
 
 const fields = {
   repayment: {
-    firstPayment: 'input[id=firstPayment]',
     equalInstalments: 'input[id=instalmentAmount]',
     firstPaymentDate: {
       day: 'input[id=\'firstPaymentDate[day]\']',
@@ -30,13 +29,12 @@ export class DefendantPayByInstalmentsPage {
 
   checkOutstandingAmount (defendantPaidAmount: number): void {
     const amountOutstanding: number = claimAmount.getTotal() - defendantPaidAmount
-    I.see('Total amount payable by the defendant is ' + AmountHelper.formatMoney(amountOutstanding))
+    I.see('Total claim amount is ' + AmountHelper.formatMoney(amountOutstanding))
   }
 
   enterRepaymentPlan (plan: PaymentPlan): void {
     const [ year, month, day ] = DateParser.parse(plan.firstPaymentDate)
 
-    I.fillField(fields.repayment.firstPayment, plan.firstPayment.toString())
     I.fillField(fields.repayment.equalInstalments, plan.equalInstalment.toString())
     I.fillField(fields.repayment.firstPaymentDate.day, day)
     I.fillField(fields.repayment.firstPaymentDate.month, month)

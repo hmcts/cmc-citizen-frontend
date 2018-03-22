@@ -26,6 +26,9 @@ export class I18Next {
           lookupCookie: 'lang',
           caches: ['cookie']
         },
+        interpolation: {
+          escapeValue: false // Escaping is already handled by Nunjucks
+        },
         whitelist: ['en', 'cy'],
         fallbackLng: 'en',
         nsSeparator: false,

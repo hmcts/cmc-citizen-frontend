@@ -2,7 +2,7 @@
 
 {% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
-{% from "statement-of-truth.njk" import statementOfTruth %}
+{% from "../../../views/macro/statementOfTruth.njk" import statementOfTruth %}
 {% from "party/details.njk" import partyDetailsSummaryFragment %}
 
 {% set title = t('Money claim') %}
@@ -154,7 +154,6 @@
       {% if draft.defendantPaymentOption.isOfType(DefendantPaymentType.INSTALMENTS) %}
         {{ tableStart('whenWillYouPay', 'When will you pay?') }}
         {{ row('When will you pay', t(draft.defendantPaymentOption.option.displayValueFor(draft.responseType)) | capitalize, paths.defencePaymentOptionsPage.evaluateUri({ externalId: claim.externalId })) }}
-        {{ row('The first payment of', draft.defendantPaymentPlan.firstPayment | numeral , paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
         {{ row('Followed by equal instalments of', draft.defendantPaymentPlan.instalmentAmount | numeral, paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
         {{ row('Make the first payment on', draft.defendantPaymentPlan.firstPaymentDate.toMoment() | date, paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
         {{ row('Frequency of payments', t(draft.defendantPaymentPlan.paymentSchedule.displayValue), paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId })) }}
@@ -178,16 +177,21 @@
       {{ tableEnd() }}
     {% endif %}
 
-    {{
-      statementOfTruth(
-        form,
-        label = 'I believe that the facts stated in this defence are true.',
-        isQualified = (signatureType === SignatureType.QUALIFIED)
-      )
-    }}
+    <div class="column-two-thirds">
+      <div class="form-group">
+        {{
+          statementOfTruth(
+            form,
+            statementOfTruthType = 'response',
+            label = 'I believe that the facts stated in this response are true.',
+            isQualified = (signatureType === SignatureType.QUALIFIED)
+          )
+        }}
 
-    {{ submitButton('Submit response') }}
+        {{ submitButton('Submit response') }}
 
-    <input type="hidden" name="type" value="{{ form.model.type }}">
+        <input type="hidden" name="type" value="{{ form.model.type }}">
+      </div>
+    </div>
   </form>
 {% endblock %}

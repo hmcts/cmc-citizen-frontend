@@ -66,7 +66,6 @@ const defendantWhenDidYouPayPage: DefendantWhenDidYouPayPage = new DefendantWhen
 const updatedAddress = { line1: 'ABC Street', line2: 'A cool place', city: 'Bristol', postcode: 'AAA BCC' }
 
 const defendantRepaymentPlan: PaymentPlan = {
-  firstPayment: 50.00,
   equalInstalment: 20.00,
   firstPaymentDate: '2025-01-01',
   frequency: 'everyWeek'
