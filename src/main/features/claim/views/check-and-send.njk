@@ -47,11 +47,11 @@
 
     {% for each in draftClaim.amount.rows %}
       {% if each.reason %}
-        {{ row(each.reason, each.amount, bottomBorder = false, bold = true) }}
+        {{ row(each.reason, each.amount, bottomBorder = false) }}
       {% endif %}
     {% endfor %}
 
-    <div class="full-width bottom-border"></div>
+    {{ row('Total', claimAmountTotal.claimAmount | numeral, bold = true )}}
 
     {% if (draftClaim.interest.option === InterestOption.YES) %}
       {{ row('Claim Interest', 'Yes' , paths.interestPage.uri, bold = true) }}
