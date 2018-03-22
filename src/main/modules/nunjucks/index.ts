@@ -7,6 +7,7 @@ import { dateFilter, dateInputFilter } from 'modules/nunjucks/filters/dateFilter
 import { convertToPoundsFilter } from 'modules/nunjucks/filters/convertToPounds'
 import * as numeralFilter from 'nunjucks-numeral-filter'
 import * as numeral from 'numeral'
+import * as moment from 'moment'
 import * as toBoolean from 'to-boolean'
 
 import { NUMBER_FORMAT } from 'app/utils/numberFormatter'
@@ -78,6 +79,8 @@ export class Nunjucks {
     require('numeral/locales/en-gb')
     numeral.locale('en-gb')
     numeral.defaultFormat(NUMBER_FORMAT)
+
+    moment.locale('en-gb')
 
     nunjucksEnv.addGlobal('asset_paths', appAssetPaths)
     nunjucksEnv.addGlobal('serviceName', 'Money Claims')

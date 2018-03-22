@@ -18,9 +18,11 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        <p class="bold-small">{{ t('Explain why you disagree with the claim') }}</p>
+        <p class="bold-small">{{ t('Briefly explain why you disagree with the claim') }}</p>
 
-        <p>{{ t('You can also list any evidence or documents which support your defence - you might be asked to provide them later.') }}</p>
+        <p>{{ t('If you fail to dispute any part of the claim the court may assume you admit it.') }}</p>
+
+        <p>{{ t('You should also say if you accept any parts of the claim.') }}</p>
 
         {{ textArea(name = 'text', form = form, rows = 10) }}
 
