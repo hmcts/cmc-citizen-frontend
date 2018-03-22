@@ -11,18 +11,28 @@ import { app } from '../../../../main/app'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.startPage.uri
-const expectedTextOnPage: string = 'Try the new online service'
 
 describe('Claim eligibility: index page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    it('should render page when everything is fine', async () => {
+    context('when user is logged in', () => {
+      it('should render page when everything is fine', async () => {
 
-      await request(app)
-        .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage))
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC;`)
+          .expect(res => expect(res).to.be.successful.withText('Find out if you can use this service'))
+      })
+    })
+
+    context('when user is logged out', () => {
+      it('should render page when everything is fine', async () => {
+
+        await request(app)
+          .get(pagePath)
+          .expect(res => expect(res).to.be.successful.withText('Try the new online service'))
+      })
     })
   })
 })
