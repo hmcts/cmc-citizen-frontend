@@ -50,6 +50,11 @@
   "pdf-service": {
     "url": "PDF_SERVICE_URL"
   },
+  "startPage": {
+    "makeClaim": {
+      "uri": "MAKE_CLAIM_START_PAGE_URI"
+    }
+  },
   "eligibility": {
     "cookie": {
       "timeToLiveInMinutes": "ELIGIBILITY_COOKIE_TIME_TO_LIVE_IN_MINUTES"

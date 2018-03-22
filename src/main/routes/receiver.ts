@@ -29,6 +29,8 @@ const logger = Logger.getLogger('router/receiver')
 const sessionCookie = config.get<string>('session.cookieName')
 const stateCookieName = 'state'
 
+const makeClaimStartPageUri = config.get<string>('startPage.makeClaim.uri')
+
 const draftService: DraftService = new DraftService()
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -89,7 +91,7 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
   const noDraftResponses: boolean = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
 
   if (noClaimIssued && noClaimReceived && noDraftClaims && noDraftResponses) {
-    return ClaimPaths.startPage.uri
+    return makeClaimStartPageUri
   } else {
     return DashboardPaths.dashboardPage.uri
   }
