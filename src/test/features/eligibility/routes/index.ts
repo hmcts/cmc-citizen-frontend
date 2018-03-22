@@ -9,6 +9,8 @@ import { Paths } from 'eligibility/paths'
 
 import { app } from '../../../../main/app'
 
+import * as idamServiceMock from '../../../http-mocks/idam'
+
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.startPage.uri
 
@@ -18,6 +20,7 @@ describe('Claim eligibility: index page', () => {
   describe('on GET', () => {
     context('when user is logged in', () => {
       it('should render page when everything is fine', async () => {
+        idamServiceMock.resolveRetrieveUserFor('1')
 
         await request(app)
           .get(pagePath)

@@ -1,7 +1,6 @@
 import { expect } from 'chai'
 import { YesNoOption } from 'models/yesNoOption'
 import * as request from 'supertest'
-import * as config from 'config'
 
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
@@ -12,7 +11,6 @@ import { app } from '../../../../main/app'
 
 import { NotEligibleReason } from 'eligibility/notEligibleReason'
 
-const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.over18Page.uri
 const pageRedirect: string = Paths.defendantAgePage.uri
 const expectedTextOnPage: string = 'Are you 18 or over?'
@@ -26,7 +24,6 @@ describe('Claim eligibility: over 18 page', () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage))
     })
   })
@@ -37,7 +34,6 @@ describe('Claim eligibility: over 18 page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
       })
 
@@ -45,7 +41,6 @@ describe('Claim eligibility: over 18 page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
           .send({ eighteenOrOver: YesNoOption.YES.option })
           .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
       })
@@ -54,7 +49,6 @@ describe('Claim eligibility: over 18 page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
           .send({ eighteenOrOver: YesNoOption.NO.option })
           .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${notEligibleReason}`))
       })

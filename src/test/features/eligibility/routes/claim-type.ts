@@ -1,6 +1,5 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
-import * as config from 'config'
 
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
@@ -12,7 +11,6 @@ import { app } from '../../../../main/app'
 import { NotEligibleReason } from 'eligibility/notEligibleReason'
 import { ClaimType } from 'eligibility/model/claimType'
 
-const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.claimTypePage.uri
 const pageRedirect: string = Paths.singleDefendantPage.uri
 const expectedTextOnPage: string = 'Who are you making the claim for?'
@@ -25,7 +23,6 @@ describe('Claim eligibility: claim type page', () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage))
     })
   })
@@ -36,7 +33,6 @@ describe('Claim eligibility: claim type page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
       })
 
@@ -44,7 +40,6 @@ describe('Claim eligibility: claim type page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
           .send({ claimType: ClaimType.PERSONAL_CLAIM.option })
           .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
       })
@@ -53,7 +48,6 @@ describe('Claim eligibility: claim type page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
           .send({ claimType: ClaimType.MULTIPLE_CLAIM.option })
           .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`))
       })
@@ -62,7 +56,6 @@ describe('Claim eligibility: claim type page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
           .send({ claimType: ClaimType.REPRESENTATIVE_CLAIM.option })
           .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_ON_BEHALF}`))
       })
