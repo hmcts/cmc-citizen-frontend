@@ -19,7 +19,7 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.payBySetDatePage.evaluateUri({ externalId : externalId })
 const checkAndSavePage: string = Paths.checkAndSendPage.evaluateUri({ externalId : externalId })
-const checkContent: string = 'When do you want them to pay?'
+const checkContent: string = 'When do you want the defendant to pay?'
 
 describe('CCJ - Pay by set date', () => {
   attachDefaultHooks(app)

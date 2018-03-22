@@ -1,5 +1,6 @@
 import * as config from 'config'
 import { expect } from 'chai'
+import { Request } from 'express'
 
 import { JwtExtractor } from 'app/idam/jwtExtractor'
 
@@ -13,7 +14,7 @@ describe('Extracting JWT', () => {
       cookies: {
         [sessionCookieName]: jwtValue
       }
-    }
+    } as Request
 
     expect(JwtExtractor.extract(req)).to.equal(jwtValue)
   })

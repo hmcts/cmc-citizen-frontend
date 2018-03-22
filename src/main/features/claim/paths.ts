@@ -33,19 +33,8 @@ export class Paths {
   static readonly defendantPartyTypeSelectionPage = new RoutablePath('/claim/defendant-party-type-selection')
   static readonly incompleteSubmissionPage = new RoutablePath('/claim/incomplete-submission')
 
-  static readonly eligibilityStartPage = new RoutablePath('/claim/eligibility/index')
-  static readonly eligibilityClaimValuePage = new RoutablePath('/claim/eligibility/claim-value')
-  static readonly eligibilitySingleDefendantPage = new RoutablePath('/claim/eligibility/single-defendant')
-  static readonly eligibilityClaimTypePage = new RoutablePath('/claim/eligibility/claim-type')
-  static readonly eligibilityHelpWithFeesPage = new RoutablePath('/claim/eligibility/help-with-fees')
-  static readonly eligibilityClaimantAddressPage = new RoutablePath('/claim/eligibility/claimant-address')
-  static readonly eligibilityDefendantAddressPage = new RoutablePath('/claim/eligibility/defendant-address')
-  static readonly eligibilityOver18Page = new RoutablePath('/claim/eligibility/over-18')
-  static readonly eligibilityDefendantAgePage = new RoutablePath('/claim/eligibility/defendant-age')
-  static readonly eligibilityGovernmentDepartmentPage = new RoutablePath('/claim/eligibility/government-department')
-  static readonly eligibilityClaimIsForTenancyDepositPage = new RoutablePath('/claim/eligibility/claim-is-for-tenancy-deposit')
-  static readonly eligibilityEligiblePage = new RoutablePath('/claim/eligibility/eligible')
-  static readonly eligibilityNotEligiblePage = new RoutablePath('/claim/eligibility/not-eligible')
+  static readonly eligibilityStartPage = new RoutablePath('/eligibility/index')
+  static readonly eligibilityNotEligiblePage = new RoutablePath('/eligibility/not-eligible')
 }
 
 export class ErrorPaths {

@@ -7,7 +7,7 @@ export class ValidationErrors {
 export class PaymentType {
   static readonly IMMEDIATELY = new PaymentType('IMMEDIATELY', 'Immediately')
   static readonly INSTALMENTS = new PaymentType('INSTALMENTS', 'By instalments')
-  static readonly FULL_BY_SPECIFIED_DATE = new PaymentType('FULL_BY_SPECIFIED_DATE', 'The full amount by')
+  static readonly FULL_BY_SPECIFIED_DATE = new PaymentType('FULL_BY_SPECIFIED_DATE', 'By a set date')
 
   readonly value: string
   readonly displayValue: string
