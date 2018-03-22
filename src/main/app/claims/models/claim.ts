@@ -105,7 +105,7 @@ export class Claim {
     } else if (this.isOfferAccepted()) {
       return ClaimStatus.OFFER_ACCEPTED
     } else if (this.isOfferRejected()) {
-      return ClaimStatus.CLAIMANT_REJECTED_OFFER
+      return ClaimStatus.OFFER_REJECTED
     } else if (this.isOfferSubmitted()) {
       return ClaimStatus.OFFER_SUBMITTED
     } else if (this.eligibleForCCJ) {
