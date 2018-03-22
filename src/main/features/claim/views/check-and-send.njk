@@ -53,7 +53,7 @@
 
     {{ row('Total', claimAmountTotal.claimAmount | numeral, bold = true )}}
 
-    {% if (draftClaim.interest.option === YesNoOption.YES) %}
+    {% if (draftClaim.interest.option === Ye.YES) %}
       {{ row('Claim Interest', 'Yes' , paths.interestPage.uri, bold = true) }}
       {% if (draftClaim.interestType.option === InterestTypeOption.SAME_RATE) %}
         {{ row('How do you want to claim interest?', 'Same rate for the whole period' , paths.interestRatePage.uri, bottomBorder = false, bold = true) }}
@@ -104,14 +104,14 @@
     {{ tableStart('claimDetails', 'Claim details') }}
     {{ row('Why you’re owed the money', draftClaim.reason.reason, paths.reasonPage.uri, bold = true) }}
 
-    {{ row('Timeline of what happened', '', paths.timelinePage.uri, false, bold = true) }}
+    {{ row('Timeline of what happened', '', paths.timelinePage.uri, bottomBorder = false, bold = true) }}
     {% set allTimelineRows = draftClaim.timeline.getPopulatedRowsOnly() %}
     {% set lastItemIndex = allTimelineRows.length - 1 %}
     {% for timelineRow in allTimelineRows %}
       {{ row(timelineRow.date, timelineRow.description, '', loop.index0 === lastItemIndex) }}
     {% endfor %}
 
-    {{ row('Your evidence (optional)', '', paths.evidencePage.uri, false ) }}
+    {{ row('Your evidence (optional)', '', paths.evidencePage.uri, bottomBorder = false, bold = true ) }}
     {% set allEvidenceRows = draftClaim.evidence.getPopulatedRowsOnly() %}
     {% set lastItemIndex = allEvidenceRows.length - 1 %}
     {% for evidenceRow in allEvidenceRows %}
