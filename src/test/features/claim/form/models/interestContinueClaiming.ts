@@ -15,10 +15,6 @@ describe('InterestContinueClaiming', () => {
       expect(InterestContinueClaiming.fromObject(undefined)).to.be.equal(undefined)
     })
 
-    it('should return null when value is null', () => {
-      expect(InterestContinueClaiming.fromObject(null)).to.be.equal(null)
-    })
-
     it('should leave missing fields undefined', () => {
       expect(InterestContinueClaiming.fromObject({})).to.deep.equal(new InterestContinueClaiming())
     })
@@ -39,11 +35,6 @@ describe('InterestContinueClaiming', () => {
 
     it('should return a InterestContinueClaiming instance with fields set to default values when given "undefined"', () => {
       const deserialized = new InterestContinueClaiming().deserialize(undefined)
-      expect(deserialized.option).to.be.undefined
-    })
-
-    it('should return a InterestTotal instance with fields set to default values when given "null"', () => {
-      const deserialized = new InterestContinueClaiming().deserialize(null)
       expect(deserialized.option).to.be.undefined
     })
 

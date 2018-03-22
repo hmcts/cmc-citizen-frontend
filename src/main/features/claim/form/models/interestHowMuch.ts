@@ -7,9 +7,6 @@ import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation
 
 export class ValidationErrors {
   static readonly TYPE_REQUIRED: string = 'Choose a type of interest'
-
-  static readonly RATE_REQUIRED: string = 'You haven’t entered a daily amount'
-  static readonly RATE_NOT_VALID: string = 'Correct the amount you’ve entered'
 }
 
 export class InterestHowMuch implements CompletableTask {

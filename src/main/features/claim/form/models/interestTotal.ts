@@ -11,9 +11,9 @@ export class ValidationErrors {
 
 export class InterestTotal implements CompletableTask {
 
+  @IsDefined({ message: CommonValidationErrors.AMOUNT_REQUIRED })
   @Min(0.01, { message: CommonValidationErrors.AMOUNT_NOT_VALID })
   @Fractions(0, 2, { message: CommonValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @IsDefined({ message: CommonValidationErrors.AMOUNT_REQUIRED })
   amount?: number
 
   @IsDefined({ message: ValidationErrors.REASON_REQUIRED })

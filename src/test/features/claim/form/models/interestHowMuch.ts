@@ -6,6 +6,7 @@ import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestHowMuch, ValidationErrors } from 'claim/form/models/interestHowMuch'
+import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
 
 describe('InterestHowMuch', () => {
 
@@ -15,10 +16,6 @@ describe('InterestHowMuch', () => {
       expect(InterestHowMuch.fromObject(undefined)).to.be.equal(undefined)
     })
 
-    it('should return null when value is null', () => {
-      expect(InterestHowMuch.fromObject(null)).to.be.equal(null)
-    })
-
     it('should leave missing fields undefined', () => {
       expect(InterestHowMuch.fromObject({})).to.deep.equal(new InterestHowMuch())
     })
@@ -26,17 +23,17 @@ describe('InterestHowMuch', () => {
     it('should deserialize all fields', () => {
       expect(InterestHowMuch.fromObject({
         type: InterestRateOption.DIFFERENT,
-        dailyAmount: 10
-      })).to.deep.equal(new InterestHowMuch(InterestRateOption.DIFFERENT, 10))
+        dailyAmount: 10.50
+      })).to.deep.equal(new InterestHowMuch(InterestRateOption.DIFFERENT, 10.5))
     })
 
     it('should convert non numeric rate into numeric type', () => {
       const interest = InterestHowMuch.fromObject({
         type: InterestRateOption.DIFFERENT,
-        dailyAmount: '10'
+        dailyAmount: '10.50'
       })
 
-      expect(interest).to.deep.equal(new InterestHowMuch(InterestRateOption.DIFFERENT, 10))
+      expect(interest).to.deep.equal(new InterestHowMuch(InterestRateOption.DIFFERENT, 10.5))
     })
   })
 
@@ -102,21 +99,28 @@ describe('InterestHowMuch', () => {
       const errors = validator.validateSync(new InterestHowMuch(InterestRateOption.DIFFERENT, undefined))
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.RATE_REQUIRED)
+      expectValidationError(errors, CommonValidationErrors.AMOUNT_REQUIRED)
     })
 
     it('should reject custom InterestHowMuch with zero dailyAmount', () => {
       const errors = validator.validateSync(new InterestHowMuch(InterestRateOption.DIFFERENT, 0))
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.RATE_NOT_VALID)
+      expectValidationError(errors, CommonValidationErrors.AMOUNT_NOT_VALID)
     })
 
     it('should reject custom InterestHowMuch with negative dailyAmount', () => {
       const errors = validator.validateSync(new InterestHowMuch(InterestRateOption.DIFFERENT, -1))
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.RATE_NOT_VALID)
+      expectValidationError(errors, CommonValidationErrors.AMOUNT_NOT_VALID)
+    })
+
+    it('should reject dailyAmount with more than two decimal places in amount', () => {
+      const errors = validator.validateSync(new InterestHowMuch(InterestRateOption.DIFFERENT, 10.123))
+
+      expect(errors.length).to.equal(1)
+      expectValidationError(errors, CommonValidationErrors.AMOUNT_INVALID_DECIMALS)
     })
 
     it('should accept valid standard interest', () => {

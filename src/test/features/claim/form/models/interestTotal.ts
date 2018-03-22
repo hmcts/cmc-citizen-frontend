@@ -15,10 +15,6 @@ describe('InterestTotal', () => {
       expect(InterestTotal.fromObject(undefined)).to.be.equal(undefined)
     })
 
-    it('should return null when value is null', () => {
-      expect(InterestTotal.fromObject(null)).to.be.equal(null)
-    })
-
     it('should leave missing fields undefined', () => {
       expect(InterestTotal.fromObject({})).to.deep.equal(new InterestTotal())
     })
@@ -49,12 +45,6 @@ describe('InterestTotal', () => {
 
     it('should return a InterestTotal instance with fields set to default values when given "undefined"', () => {
       const deserialized = new InterestTotal().deserialize(undefined)
-      expect(deserialized.amount).to.be.undefined
-      expect(deserialized.reason).to.be.undefined
-    })
-
-    it('should return a InterestTotal instance with fields set to default values when given "null"', () => {
-      const deserialized = new InterestTotal().deserialize(null)
       expect(deserialized.amount).to.be.undefined
       expect(deserialized.reason).to.be.undefined
     })
