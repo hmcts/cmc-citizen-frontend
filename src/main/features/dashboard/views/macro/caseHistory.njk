@@ -83,8 +83,18 @@
             <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
           </p>
       {% elseif state.status === ClaimStatus.CLAIM_REJECTED_STATES_PAID %}
-        
-      {% endif %}
+        <h3 class="heading-small">{{ t('Your response to the claim') }}</h3>
+        <p>
+          {{ t('We’ve emailed {{ claimantName }} telling them when and how you said you paid the claim.',
+            { claimantName: claim.claimData.defendant.name }) }}
+        </p>
+        <p>
+          {{ t('We’ll contact you to let you know how they respond. They can confirm you’ve paid and the claim is ' +
+             'settled, or they can proceed with it.') }}
+        </p>
+        <p>
+          <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>
+        </p>
       {% else %}
         <p>
           {{ caseStatusForDefendant(claim.status, claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}

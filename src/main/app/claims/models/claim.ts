@@ -85,7 +85,8 @@ export class Claim {
     return this.settlement.getDefendantOffer()
   }
 
-  get respondToResponseDeadline (): Moment | undefined {
+  // noinspection JSUnusedGlobalSymbols Called in the view
+  get respondToResponseDeadline (): Moment {
     if (!this.respondedAt) {
       return undefined
     }
@@ -131,18 +132,14 @@ export class Claim {
     }
   }
 
+  // noinspection JSUnusedGlobalSymbols Called in the view
   get stateHistory (): State[] {
-    if (this.status === ClaimStatus.OFFER_ACCEPTED) {
-      return [{
-        status: ClaimStatus.OFFER_ACCEPTED
-      }, {
-        status: this.responseStatus()
-      }]
-    } else {
-      return [{
-        status: this.status
-      }]
-    }
+    return [{
+      status: this.status
+    }, {
+      status: this.responseStatus()
+    }]
+      .filter(state => !!state.status)
   }
 
   private isFreeMediationRequested () {
@@ -173,7 +170,7 @@ export class Claim {
 
   private responseStatus (): ClaimStatus {
     if (!this.response) {
-      throw new Error('There is no response')
+      return undefined
     }
 
     if (this.isClaimRejectedAsStatesPaid()) {
