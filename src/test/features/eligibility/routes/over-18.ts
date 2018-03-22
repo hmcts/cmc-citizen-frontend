@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { YesNoOption } from 'app/models/yesNoOption'
+import { YesNoOption } from 'models/yesNoOption'
 import * as request from 'supertest'
 import * as config from 'config'
 
