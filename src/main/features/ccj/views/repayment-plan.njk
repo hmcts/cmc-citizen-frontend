@@ -7,42 +7,36 @@
   <div class="grid-row">
     <div class="column-two-thirds">
       <h1 class="heading-large">
-        <span class="heading-secondary">{{ t('County Court Judgment') }}</span>
-        {{ t('Order them to pay by instalments') }}
+        {{ t('Suggest instalments for the defendant') }}
       </h1>
-      <p>{{ t('Total amount payable by the defendant is %s',
-        { postProcess: 'sprintf', sprintf: [ remainingAmount | numeral ]}) }}
+      <p>{{ t('Total claim amount is {{ remainingAmount }}',
+          { remainingAmount : remainingAmount | numeral })
+        }}
       </p>
 
       <form method="post" novalidate>
         {{ csrfProtection(csrf) }}
 
         <input type="hidden" name="remainingAmount" value="{{ remainingAmount }}"/>
+
         <div class="form-group">
           <fieldset>
-            <legend class="visually-hidden">{{ t('How much they pay following this instalment') }}</legend>
-            {{ poundInput('The first payment of', 'firstPayment', form, 'For example, £243.20', bold = true) }}
+            <legend class="visually-hidden">{{ t('Amount for each instalment') }}</legend>
+            {{ poundInput('Amount for each instalment', 'instalmentAmount', form, 'For example, £10', bold = true) }}
           </fieldset>
         </div>
 
         <div class="form-group">
           <fieldset>
-            <legend class="visually-hidden">{{ t('Followed by equal instalments of') }}</legend>
-            {{ poundInput('Followed by equal instalments of', 'instalmentAmount', form, 'For example, £200', bold = true) }}
-          </fieldset>
-        </div>
-
-        <div class="form-group">
-          <fieldset>
-            <legend class="visually-hidden">{{ t('When you want them to make the first payment') }}</legend>
+            <legend class="visually-hidden">{{ t('Date for first payment') }}</legend>
             {{ dateInput('firstPaymentDate', form, hint = 'For example, 12 03 2017',
-            label = 'When you want them to make the first payment') }}
+            label = 'Date for first payment') }}
           </fieldset>
         </div>
 
         <div class="form-group">
           {{ radioGroup(
-          'How often you want them to make this payment',
+          'How often do you want them to pay instalments?',
           'paymentSchedule',
           [
           {

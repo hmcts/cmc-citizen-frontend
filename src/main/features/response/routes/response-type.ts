@@ -13,8 +13,10 @@ import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
 
 function renderView (form: Form<Response>, res: express.Response) {
+  const claim: Claim = res.locals.claim
   res.render(Paths.responseTypePage.associatedView, {
-    form: form
+    form: form,
+    responseDeadline: claim.responseDeadline
   })
 }
 
