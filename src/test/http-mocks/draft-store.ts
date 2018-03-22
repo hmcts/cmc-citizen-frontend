@@ -24,18 +24,21 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Email } from 'app/forms/models/email'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
-import { YesNoOption } from 'models/yesNoOption'
-import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
-import { ClaimType } from 'claim/form/models/eligibility/claimType'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
-import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
 import { Interest } from 'claim/form/models/interest'
 import { InterestDateType } from 'app/common/interestDateType'
 import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
 import { InterestStartDate } from 'claim/form/models/interestStartDate'
 import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/interestEndDate'
+import { ClaimValue } from 'eligibility/model/claimValue'
+import { YesNoOption } from 'models/yesNoOption'
+import { Evidence } from 'forms/models/evidence'
+import { EvidenceType } from 'forms/models/evidenceType'
+import { Eligibility } from 'eligibility/model/eligibility'
+import { ClaimType } from 'eligibility/model/claimType'
+import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
@@ -142,10 +145,13 @@ export const sampleClaimDraftObj = {
     singleDefendant: YesNoOption.NO,
     governmentDepartment: YesNoOption.NO,
     claimIsForTenancyDeposit: YesNoOption.NO
-  },
+  } as Eligibility,
   timeline: {
     rows: [{ date: 'aaa', description: 'bb' }]
-  } as ClaimantTimeline
+  } as ClaimantTimeline,
+  evidence: {
+    rows: [{ type: EvidenceType.OTHER, description: 'bb' }]
+  } as Evidence
 } as DraftClaim
 
 const sampleResponseDraftObj = {
@@ -157,6 +163,10 @@ const sampleResponseDraftObj = {
   },
   defence: {
     text: 'Some valid defence'
+  },
+  timeline: {
+    rows: [],
+    comment: ''
   },
   freeMediation: {
     option: FreeMediationOption.NO

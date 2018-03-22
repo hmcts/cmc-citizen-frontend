@@ -3,14 +3,14 @@ import { InterestRate } from 'claim/form/models/interestRate'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestDateType } from 'app/common/interestDateType'
 import { YesNoOption } from 'models/yesNoOption'
-import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
-import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
 import { Interest } from 'claim/form/models/interest'
 import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
 import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDate } from 'claim/form/models/interestDate'
 import { InterestStartDate } from 'claim/form/models/interestStartDate'
 import { LocalDate } from 'forms/models/localDate'
+import { ClaimValue } from 'eligibility/model/claimValue'
+import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 
 export const claimDraft = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',

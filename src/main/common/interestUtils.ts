@@ -10,8 +10,8 @@ import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { isAfter4pm } from 'common/dateUtils'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
-import { InterestTypeOption } from 'claim/form/models/interestType'
 import { YesNoOption } from 'models/yesNoOption'
+import { InterestTypeOption } from 'claim/form/models/interestType'
 
 export async function getInterestDetails (claim: Claim): Promise<InterestData> {
   if (claim.claimData.interest.type === ClaimInterestType.NO_INTEREST || claim.claimData.interest.type === undefined) {

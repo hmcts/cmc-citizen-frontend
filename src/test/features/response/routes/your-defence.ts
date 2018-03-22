@@ -119,7 +119,7 @@ describe('Defendant response: defence page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ text: 'Some valid defence' })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.taskListPage
+                .toLocation(ResponsePaths.timelinePage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })
