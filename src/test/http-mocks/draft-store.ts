@@ -117,6 +117,10 @@ const sampleResponseDraftObj = {
   defence: {
     text: 'Some valid defence'
   },
+  timeline : {
+    rows: [],
+    comment: ''
+  },
   freeMediation: {
     option: FreeMediationOption.NO
   },

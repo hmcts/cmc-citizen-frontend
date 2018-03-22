@@ -111,7 +111,7 @@ describe('Defendant response: timeline', () => {
 
         context('valid form', () => {
 
-          it('should render page when form is valid, amount within limit and everything is fine', async () => {
+          it('should redirect to evidence page when and everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveSave(100)
