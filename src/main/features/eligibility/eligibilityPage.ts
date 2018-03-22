@@ -10,9 +10,9 @@ import { Form } from 'app/forms/form'
 import { Eligibility } from 'eligibility/model/eligibility'
 import { EligibilityCheck } from 'eligibility/model/eligibilityCheck'
 
-import { CookieEligibilityStore, EligibilityStore } from 'eligibility/store'
+import { CookieEligibilityStore } from 'eligibility/store'
 
-const eligibilityStore: EligibilityStore = new CookieEligibilityStore()
+const eligibilityStore: CookieEligibilityStore = new CookieEligibilityStore()
 
 export abstract class EligibilityPage<T> {
   constructor (private path: RoutablePath, private nextPagePath: RoutablePath, private property: string) {
