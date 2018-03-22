@@ -10,7 +10,7 @@
     <div class="column-full">
       <h1 class="heading-large">{{ t('Your money claims account') }}</h1>
       {% if not claimDraftSaved %}
-        <a id="start-now" class="newclaim" href="{{ paths.claimStartPage.uri }}">{{ t('Make a new money claim') }}</a>
+        <a id="start-now" class="newclaim" href="{{ DashboardPaths.claimStartPage.uri }}">{{ t('Make a new money claim') }}</a>
       {% endif %}
 
       {% if claimsAsClaimant | length or claimDraftSaved %}
@@ -29,17 +29,17 @@
         <tbody>
         {% if claimDraftSaved %}
           <tr class="draft mobile-table">
-            <td><a href="{{ paths.claimTaskListPage.uri }}">{{ t('Draft claim') }}</a></td>
+            <td><a href="{{ DashboardPaths.claimTaskListPage.uri }}">{{ t('Draft claim') }}</a></td>
             <td>-</td>
 
             <td>-</td>
             <td class="mobile-hide">
-              <a href="{{ paths.claimTaskListPage.uri }}">{{ t('Continue with claim') }}</a>
+              <a href="{{ DashboardPaths.claimTaskListPage.uri }}">{{ t('Continue with claim') }}</a>
             </td>
           </tr>
           <tr>
             <td colspan="3" class="mobile-table-status">
-              {{ t('Status: ') }}<a href="{{ paths.claimTaskListPage.uri }}">{{ t('Continue with claim') }}</a>
+              {{ t('Status: ') }}<a href="{{ DashboardPaths.claimTaskListPage.uri }}">{{ t('Continue with claim') }}</a>
             </td>
           </tr>
         {% endif %}
@@ -83,7 +83,7 @@
         <tbody>
         {% if responseDraftSaved %}
           <tr class="draft mobile-table">
-            <td><a href="{{ paths.responseTaskListPage.uri }}">Draft response</a></td>
+            <td><a href="{{ DashboardPaths.responseTaskListPage.uri }}">Draft response</a></td>
             <td>-</td>
 
             <td>-</td>
