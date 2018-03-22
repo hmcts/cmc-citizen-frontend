@@ -1,3 +1,4 @@
+import * as config from 'config'
 import * as express from 'express'
 import * as Cookies from 'cookies'
 import * as _ from 'lodash'
@@ -5,7 +6,7 @@ import * as _ from 'lodash'
 import { Eligibility } from 'eligibility/model/eligibility'
 
 const minuteInMilliseconds = 60 * 1000
-const cookieTimeToLiveInMinutes = 10 * minuteInMilliseconds
+const cookieTimeToLiveInMinutes = config.get<number>('eligibility.cookie.timeToLiveInMinutes') * minuteInMilliseconds
 
 export const cookieName = 'eligibility-check'
 
