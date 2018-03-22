@@ -1,5 +1,6 @@
 import * as express from 'express'
 import { Paths } from 'app/paths'
+import { Paths as EligibilityPaths } from 'eligibility/paths'
 import { Paths as FirstContactPaths } from 'first-contact/paths'
 import { ErrorHandling } from 'common/errorHandling'
 
@@ -8,7 +9,7 @@ import { ErrorHandling } from 'common/errorHandling'
 export default express.Router()
   .get(Paths.makeClaimReceiver.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
-      res.redirect('/not-implemented-yet')
+      res.redirect(EligibilityPaths.startPage.uri)
     })
   )
   .get(Paths.respondToClaimReceiver.uri,

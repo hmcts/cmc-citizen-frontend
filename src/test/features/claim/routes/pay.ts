@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { Paths } from 'claim/paths'
+import { Paths as ClaimPaths, Paths } from 'claim/paths'
 
 import { app } from '../../../../main/app'
 
@@ -14,6 +14,7 @@ import * as payServiceMock from '../../../http-mocks/pay'
 
 import { attachDefaultHooks } from '../../../routes/hooks'
 import { checkAuthorizationGuards } from './checks/authorization-check'
+import { checkEligibilityGuards } from './checks/eligibility-check'
 import { Interest, InterestType } from 'claim/form/models/interest'
 import { Defendant } from 'app/drafts/models/defendant'
 import { Claimant } from 'app/drafts/models/claimant'
@@ -39,10 +40,10 @@ const failureMessage: string = 'failure message'
 let overrideClaimDraftObj
 
 describe('Claim issue: initiate payment receiver', () => {
-
   attachDefaultHooks(app)
 
   checkAuthorizationGuards(app, 'get', Paths.startPaymentReceiver.uri)
+  checkEligibilityGuards(app, 'get', ClaimPaths.startPaymentReceiver.uri)
 
   describe('for authorized user', () => {
 
@@ -218,10 +219,10 @@ describe('Claim issue: initiate payment receiver', () => {
 })
 
 describe('Claim issue: post payment callback receiver', () => {
-
   attachDefaultHooks(app)
 
   checkAuthorizationGuards(app, 'get', Paths.finishPaymentReceiver.uri)
+  checkEligibilityGuards(app, 'get', ClaimPaths.finishPaymentReceiver.uri)
 
   describe('for authorized user', () => {
 
