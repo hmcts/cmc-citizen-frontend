@@ -12,6 +12,7 @@ import { Config as HelmetConfig, Helmet } from 'modules/helmet'
 import { I18Next } from 'modules/i18n'
 import { Nunjucks } from 'modules/nunjucks'
 
+import { Feature as EligibilityFeature } from 'eligibility/index'
 import { Feature as ClaimIssueFeature } from 'claim/index'
 import { Feature as DefendantFirstContactFeature } from 'first-contact/index'
 import { Feature as DefendantResponseFeature } from 'response/index'
@@ -59,6 +60,7 @@ if (env !== 'mocha') {
   new CsrfProtection().enableFor(app)
 }
 
+new EligibilityFeature().enableFor(app)
 new DashboardFeature().enableFor(app)
 new ClaimIssueFeature().enableFor(app)
 new DefendantFirstContactFeature().enableFor(app)

@@ -89,6 +89,9 @@
       "testing-support/*": [
         "features/testing-support/*"
       ],
+      "eligibility/*": [
+        "features/eligibility/*"
+      ],
       "services/*": [
         "services/*"
       ],

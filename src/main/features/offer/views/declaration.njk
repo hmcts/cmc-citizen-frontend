@@ -11,49 +11,39 @@
       <h1 class="heading-large">{{ t('Terms of the agreement') }}</h1>
 
       <p>
-        {% if user.id == claim.defendantId %}
           {{
             t('You need to sign the agreement.')
           }}
-        {% else %}
-          {{
-            t('Both you and {{ defendantName }} need to sign this agreement for it to become a legal contract.', {
-              defendantName: claim.claimData.defendant.name
-            })
-          }}
-        {% endif %}
       </p>
 
       {{ offerTable(claim.claimData.defendant.name + ': ' + offer.content, offer.completionDate) }}
 
       <p>
         {{
-          t('This agreement settles the claim made by {{ claimantName }} against {{ defendantName }}. This includes all money owed in the case, for example counterclaims, court fees, expenses or interest.', {
+          t('This agreement settles the claim made by {{ claimantName }} against {{ defendantName }}. This includes all money owed in the claim, for example court fees, expenses or interest.', {
             claimantName: claim.claimData.claimant.name,
             defendantName: claim.claimData.defendant.name
           })
         }}
       </p>
 
-      <p>{{ t('This agreement replaces the claim. Neither of you can make any further claims relating to this case.') }}</p>
+      <p>{{t('This agreement puts the claim on hold. Neither party can make any further claims relating to this case, other than to enforce it.')}}</p>
 
-      <p>{{ t('This agreement is confidential until you’ve both signed it. After that it can be used in court, for example if the agreement is broken.') }}</p>
+      <p>{{t('Either party can view and download this agreement from their Money Claims account. Both parties should keep a copy of this agreement.')}}</p>
 
-      <p>{{ t('The original claim and any counterclaims will be kept on hold in case this agreement is broken.') }}</p>
-
-      <p>{{ t('You can view and download this agreement at any time from your money claims account.') }}</p>
 
       <h3 class="heading-medium">{{ t('If the agreement is broken') }}</h3>
 
-      <p>{{ t('Either of you can apply to:') }}</p>
+      <p>{{ t('Either party can apply to:') }}</p>
       <ul class="list list-bullet">
         <li>{{ t('request a judgment for any money still owed from this agreement') }}</li>
-        <li>{{ t('restart the original claim or counterclaim for the full amount of the claim') }}</li>
+        <li>{{ t('resume the original claim or counterclaim for the full amount of the claim') }}</li>
+        <li>{{ t('ask the court to enforce any of the steps to be taken')}}
       </ul>
 
       <p>
         {{
-          t('You should complete <a href="{{ n244formUri }}">form N244</a> and send it to the <a href="{{ countyCourtBusinessCentreUri }}">County Court Business Centre</a>. You need to say on the form which of the 2 options you’re applying for.', {
+          t('To apply, download and complete form N244 and send it to the County Court Business Centre. You need to say on the form which of the 3 options you’re applying for.', {
             n244formUri: 'http://formfinder.hmctsformfinder.justice.gov.uk/n244-eng.pdf',
             countyCourtBusinessCentreUri: 'https://courttribunalfinder.service.gov.uk/courts/county-court-business-centre-ccbc'
           }) | safe
@@ -62,9 +52,7 @@
 
       <h2 class="heading-medium">{{ t('Sign the agreement') }}</h2>
 
-      {{ t('Make sure this contract includes everything you have agreed with {{ name }} before signing.',
-        { name: claim.claimData.claimant.name if user.id === claim.defendantId else claim.claimData.defendant.name })
-      }}
+      <p>{{ t('Make sure this agreement includes everything you’ve agreed with {{ defendantName }} before signing. You won’t be able to change this later.') }}
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}

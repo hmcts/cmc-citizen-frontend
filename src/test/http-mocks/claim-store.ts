@@ -66,7 +66,8 @@ export const sampleClaimObj = {
       endDate: InterestEndDateOption.SETTLED_OR_JUDGMENT
     } as InterestDate,
     reason: 'Because I can',
-    feeAmountInPennies: 2500
+    feeAmountInPennies: 2500,
+    timeline: { rows: [{ date: 'a', description: 'b' }] }
   },
   responseDeadline: '2017-08-08',
   countyCourtJudgment: {

@@ -1,3 +1,5 @@
+import * as toBoolean from 'to-boolean'
+
 import { Claimant } from 'drafts/models/claimant'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { InterestRate } from 'claim/form/models/interestRate'
@@ -7,7 +9,7 @@ import * as uuid from 'uuid'
 import { Defendant } from 'app/drafts/models/defendant'
 import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { QualifiedStatementOfTruth } from 'app/forms/models/qualifiedStatementOfTruth'
-import { Eligibility } from 'claim/form/models/eligibility/eligibility'
+import { Eligibility } from 'eligibility/model/eligibility'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 import { Evidence } from 'forms/models/evidence'
 import { Interest } from 'claim/form/models/interest'
@@ -18,6 +20,7 @@ import { InterestEndDate } from 'claim/form/models/interestEndDate'
 export class DraftClaim extends DraftDocument {
 
   externalId = uuid()
+  eligibility: boolean | Eligibility
   claimant: Claimant = new Claimant()
   defendant: Defendant = new Defendant()
   amount: ClaimAmountBreakdown = new ClaimAmountBreakdown()
@@ -31,7 +34,6 @@ export class DraftClaim extends DraftDocument {
   readResolveDispute: boolean = false
   readCompletingClaim: boolean = false
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
-  eligibility: Eligibility = new Eligibility()
   timeline: ClaimantTimeline = new ClaimantTimeline()
   evidence: Evidence = new Evidence()
 
@@ -53,7 +55,14 @@ export class DraftClaim extends DraftDocument {
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }
-      this.eligibility = new Eligibility().deserialize(input.eligibility)
+      switch (typeof input.eligibility) {
+        case 'boolean':
+          this.eligibility = toBoolean(input.eligibility)
+          break
+        case 'object':
+          this.eligibility = new Eligibility().deserialize(input.eligibility).eligible
+          break
+      }
       this.timeline = new ClaimantTimeline().deserialize(input.timeline) as ClaimantTimeline
       this.evidence = new Evidence().deserialize(input.evidence) as Evidence
     }
