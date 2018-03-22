@@ -2,7 +2,7 @@
 
 {% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
-{% from "statement-of-truth.njk" import statementOfTruth %}
+{% from "../../../views/macro/statementOfTruth.njk" import statementOfTruth %}
 {% from "party/details.njk" import partyDetailsSummaryFragment %}
 
 {% set title = t('Money claim') %}
@@ -55,17 +55,19 @@
 
     {{ tableEnd() }}
 
-    <div class="form-group">
-      {{ statementOfTruth(
-        form,
-        title = 'Declaration',
-        label = 'I declare that the details I have given are true to the best of my knowledge.',
-        isQualified = claim.claimData.claimant.isBusiness(),
-        typeOfStatement = 'declaration')
-      }}
+    <div class="column-two-thirds">
+      <div class="form-group">
+        {{ statementOfTruth(
+          form,
+          title = 'Declaration',
+          label = 'I declare that the details I have given are true to the best of my knowledge.',
+          isQualified = claim.claimData.claimant.isBusiness(),
+          typeOfStatement = 'declaration')
+        }}
 
-      {{ submitButton('Sign and submit') }}
-      <input type="hidden" name="type" value="{{ form.model.type }}">
+        {{ submitButton('Sign and submit') }}
+        <input type="hidden" name="type" value="{{ form.model.type }}">
+      </div>
     </div>
   </form>
 {% endblock %}
