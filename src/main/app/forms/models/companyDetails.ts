@@ -1,17 +1,13 @@
-import { IsDefined, MaxLength } from 'class-validator'
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
+import { MaxLength } from 'class-validator'
 import { PartyDetails } from './partyDetails'
 import { PartyType } from 'app/common/partyType'
 
 export class ValidationErrors {
   static readonly CONTACT_PERSON_NAME_TOO_LONG: string = 'Contact Person name must be no longer than $constraint1 characters'
-  static readonly CONTACT_PERSON_REQUIRED: string = 'Enter contact person name(s)'
 }
 
 export class CompanyDetails extends PartyDetails {
 
-  @IsDefined({ message: ValidationErrors.CONTACT_PERSON_REQUIRED, groups: ['claimant'] })
-  @IsNotBlank({ message: ValidationErrors.CONTACT_PERSON_REQUIRED, groups: ['claimant'] })
   @MaxLength(35, { message: ValidationErrors.CONTACT_PERSON_NAME_TOO_LONG, groups: ['claimant', 'response'] })
   contactPerson?: string
 

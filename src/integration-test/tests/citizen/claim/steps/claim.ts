@@ -28,6 +28,8 @@ import { PaymentSteps } from 'integration-test/tests/citizen/claim/steps/payment
 import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 import I = CodeceptJS.I
 import { ClaimantTimelinePage } from 'integration-test/tests/citizen/claim/pages/claimant-timeline'
+import { ClaimantEvidencePage } from 'integration-test/tests/citizen/claim/pages/claimant-evidence'
+import { AmountHelper } from 'integration-test/helpers/amountHelper'
 
 const I: I = actor()
 const citizenResolveDisputePage: CitizenResolveDisputePage = new CitizenResolveDisputePage()
@@ -43,6 +45,7 @@ const claimantClaimAmountPage: ClaimantClaimAmountPage = new ClaimantClaimAmount
 const claimantFeesToPayPage: ClaimantFeesToPayPage = new ClaimantFeesToPayPage()
 const claimantReasonPage: ClaimantReasonPage = new ClaimantReasonPage()
 const claimantTimelinePage: ClaimantTimelinePage = new ClaimantTimelinePage()
+const claimantEvidencePage: ClaimantEvidencePage = new ClaimantEvidencePage()
 const claimantCheckAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const claimantClaimConfirmedPage: ClaimantClaimConfirmedPage = new ClaimantClaimConfirmedPage()
 const userSteps: UserSteps = new UserSteps()
@@ -166,6 +169,10 @@ export class ClaimSteps {
     claimantTimelinePage.enterTimelineRow('may', 'ok')
   }
 
+  enterClaimEvidence (): void {
+    claimantEvidencePage.enterEvidenceRow('CONTRACTS_AND_AGREEMENTS', 'ok')
+  }
+
   checkClaimFactsAreTrueAndSubmit (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): void {
     claimantCheckAndSendPage.verifyCheckAndSendAnswers(claimantType, defendantType, enterDefendantEmail)
 
@@ -194,12 +201,13 @@ export class ClaimSteps {
     interestSteps.enterDefaultInterest()
     this.readFeesPage()
     I.see('Total amount you’re claiming')
-    I.see(claimAmount.getClaimTotal().toFixed(2), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
-    I.see(claimAmount.getTotal().toFixed(2), 'table.table-form > tfoot > tr > td.numeric.last > span')
+    I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
+    I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
     interestSteps.skipClaimantInterestTotalPage()
     userSteps.selectClaimDetails()
     this.enterClaimReason()
     this.enterClaimTimeline()
+    this.enterClaimEvidence()
     userSteps.selectCheckAndSubmitYourClaim()
     this.checkClaimFactsAreTrueAndSubmit(claimantType, defendantType, enterDefendantEmail)
   }
@@ -252,13 +260,14 @@ export class ClaimSteps {
     interestSteps.enterDefaultInterest()
     this.readFeesPage()
     I.see('Total amount you’re claiming')
-    I.see('£25.00')
-    I.see(claimAmount.getClaimTotal().toFixed(2), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
-    I.see(claimAmount.getTotal().toFixed(2), 'table.table-form > tfoot > tr > td.numeric.last > span')
+    I.see('£25')
+    I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
+    I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
     interestSteps.skipClaimantInterestTotalPage()
     userSteps.selectClaimDetails()
     this.enterClaimReason()
     this.enterClaimTimeline()
+    this.enterClaimEvidence()
     userSteps.selectCheckAndSubmitYourClaim()
     I.see('John Smith')
     I.see('University of Manchester')

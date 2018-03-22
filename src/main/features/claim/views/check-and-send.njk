@@ -1,8 +1,8 @@
 {% extends "layout.njk" %}
 
-{% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
-{% from "form.njk" import csrfProtection, submitButton, errorSummary, textInput %}
-{% from "statement-of-truth.njk" import statementOfTruth %}
+{% from "table.njk" import tableStart, tableEnd, row %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+{% from "../../../views/macro/statementOfTruth.njk" import statementOfTruth %}
 {% from "party/details.njk" import partyDetailsSummaryFragment %}
 
 {% set title = t('Money claim') %}
@@ -23,7 +23,7 @@
           }
         )
     }}
-    {{ row('Phone:', draftClaim.claimant.mobilePhone.number, paths.claimantMobilePage.uri) }}
+    {{ row('Contact number (optional):', draftClaim.claimant.mobilePhone.number, paths.claimantMobilePage.uri) }}
     {{ tableEnd() }}
 
     {{ tableStart('theirDetails', 'Their details (defendant)') }}
@@ -71,7 +71,14 @@
     {% set allTimelineRows = draftClaim.timeline.getPopulatedRowsOnly() %}
     {% set lastItemIndex = allTimelineRows.length - 1 %}
     {% for timelineRow in allTimelineRows %}
-    {{ row(timelineRow.date, timelineRow.description, '', loop.index0 === lastItemIndex) }}
+      {{ row(timelineRow.date, timelineRow.description, '', loop.index0 === lastItemIndex) }}
+    {% endfor %}
+
+    {{ row('Your evidence (optional):', '', paths.evidencePage.uri, false ) }}
+    {% set allEvidenceRows = draftClaim.evidence.getPopulatedRowsOnly() %}
+    {% set lastItemIndex = allEvidenceRows.length - 1 %}
+    {% for evidenceRow in allEvidenceRows %}
+      {{ row(evidenceRow.type.displayValue, evidenceRow.description | default(''), '', loop.index0 === lastItemIndex) }}
     {% endfor %}
 
     {{ tableEnd() }}
@@ -80,6 +87,7 @@
       <div class="form-group">
         {{ statementOfTruth(
             form,
+            statementOfTruthType = 'claim',
             label = 'I believe that the facts stated in this claim are true.',
             isQualified = partyAsCompanyOrOrganisation
           )

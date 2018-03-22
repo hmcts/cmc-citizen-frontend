@@ -14,12 +14,6 @@
       {{ csrfProtection(csrf) }}
 
       <input type="hidden" name="remainingAmount" value="{{ remainingAmount }}"/>
-      <div class="form-group">
-        <fieldset>
-          <legend class="visually-hidden">{{ t('How much they pay following this instalment') }}</legend>
-          {{ poundInput('The first payment will be:', 'firstPayment', form, 'For example, £100', bold = true) }}
-        </fieldset>
-      </div>
 
       <div class="form-group">
         <fieldset>

@@ -34,6 +34,7 @@ gulp.task('copy-files', (done) => {
   copyGovUkTemplate()
   copyClientPolyfills()
   copyA11ySniffer()
+  copyClientModules()
   done()
 })
 
@@ -92,6 +93,17 @@ function copyA11ySniffer () {
     './node_modules/HTML_CodeSniffer/Auditor/**/*.{css,gif,png}'
   ])
     .pipe(gulp.dest(`${assetsDirectory}/stylesheets/lib/`))
+}
+
+function copyClientModules () {
+  gulp.src([
+    './node_modules/numeral/min/numeral.min.js'
+  ])
+    .pipe(gulp.dest(`${assetsDirectory}/js/lib/numeral`))
+  gulp.src([
+    './node_modules/numeral/min/locales.min.js'
+  ])
+    .pipe(gulp.dest(`${assetsDirectory}/js/lib/numeral`))
 }
 
 gulp.task('watch', (done) => {

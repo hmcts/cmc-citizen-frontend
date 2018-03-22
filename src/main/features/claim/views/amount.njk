@@ -84,7 +84,7 @@
               {% endif %}
               {{ linkButton('Calculate total', 'action[calculate]', 'link-button calculate') }}
             </div>
-            <div class="claim-amount-row  bold-medium total">
+            <div class="bold-medium total">
               <span class="claim-amount-column-1"></span>
               <span>
                   <span class="claim-amount-column-2" id="totalSum">{{ totalAmount | numeral }}</span>
@@ -96,4 +96,11 @@
       </form>
     </div>
   </div>
+{% endblock %}
+
+{% block additional_scripts %}
+  <script src="{{ asset_paths['js_vendor'] }}/numeral/numeral.min.js"></script>
+  <script src="{{ asset_paths['js_vendor'] }}/numeral/locales.min.js"></script>
+  <script src="{{ asset_paths['js'] }}/calculate-amount-total.js"></script>
+  <script src="{{ asset_paths['js'] }}/append-row.js"></script>
 {% endblock %}

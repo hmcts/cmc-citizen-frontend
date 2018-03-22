@@ -1,10 +1,11 @@
 import { IsDefined, IsIn, ValidateIf } from 'class-validator'
 
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
-import { EvidenceType } from 'response/form/models/evidenceType'
+
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
+import { EvidenceType } from 'forms/models/evidenceType'
 
 export class ValidationErrors {
   static readonly TYPE_REQUIRED: string = 'Choose type of evidence'

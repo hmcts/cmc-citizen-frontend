@@ -50,7 +50,6 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
     responseDraft.defendantPaymentPlan = new DefendantPaymentPlan(
       1000,
       100,
-      100,
       localDateFrom(MomentFactory.currentDate().add(1, 'day')),
       PaymentSchedule.EACH_WEEK,
       'I am not able to pay immediately'
@@ -140,11 +139,6 @@ describe('WhenWillYouPayTask', () => {
 
     it('should not be completed when payment plan is undefined', () => {
       responseDraft.defendantPaymentPlan = undefined
-      expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
-    })
-
-    it('should not be completed when payment plan is not valid', () => {
-      responseDraft.defendantPaymentPlan.firstPayment = undefined
       expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
     })
 

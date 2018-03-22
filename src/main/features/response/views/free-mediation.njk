@@ -39,18 +39,6 @@
                 value = 'yes'
               )
             }}
-            <div class="panel panel-border-narrow js-hidden" id="option-yes">
-              <p>
-              {{
-                t('If both you and %s say yes, we’ll contact you to set up an appointment and answer any questions you have.',
-                  {
-                   postProcess: 'sprintf',
-                   sprintf: [ claimantFullName ]
-                  }
-                )
-              }}
-              </p>
-            </div>
             {{
               radioOption(
                 label = t('No'),
@@ -59,21 +47,6 @@
                 value = 'no'
               )
             }}
-
-            <div class="panel panel-border-narrow js-hidden" id="option-no">
-              <p>
-                {{
-                  t('If you can reach an agreement with %s you don’t need to go to a hearing. You’ll need to explain your side and if the court decides you owe the money, you might have to pay more or get a <a target="_blank" href="%s">County Court Judgment (CCJ)</a> made against you.',
-                  {
-                    postProcess: 'sprintf',
-                    sprintf: [
-                      claimantFullName,
-                      'https://www.gov.uk/county-court-judgments-ccj-for-debt'
-                    ]
-                  }) | safe
-                }}
-              </p>
-            </div>
           </fieldset>
         </div>
         <div class="form-group">

@@ -28,6 +28,7 @@ import { StringUtils } from 'utils/stringUtils'
 import { InterestType } from 'claim/form/models/interest'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 import { Payment } from 'payment-hub-client/payment'
+import { Evidence } from 'forms/models/evidence'
 
 export class ClaimModelConverter {
 
@@ -43,7 +44,9 @@ export class ClaimModelConverter {
     claimData.defendants = [this.convertDefendantDetails(draftClaim)]
     claimData.payment = this.makeShallowCopy(draftClaim.claimant.payment)
     claimData.reason = draftClaim.reason.reason
-    claimData.timeline = { rows : draftClaim.timeline.getPopulatedRowsOnly() } as ClaimantTimeline
+    claimData.timeline = { rows: draftClaim.timeline.getPopulatedRowsOnly() } as ClaimantTimeline
+    claimData.evidence = { rows: ClaimModelConverter.convertEvidence(draftClaim.evidence) as any } as Evidence
+    claimData.feeAmountInPennies = draftClaim.claimant.payment.amount
     claimData.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(draftClaim.claimant.payment.amount)
     if (draftClaim.qualifiedStatementOfTruth && draftClaim.qualifiedStatementOfTruth.signerName) {
       claimData.statementOfTruth = new StatementOfTruth(
@@ -52,6 +55,15 @@ export class ClaimModelConverter {
       )
     }
     return claimData
+  }
+
+  private static convertEvidence (evidence: Evidence) {
+    return evidence.getPopulatedRowsOnly().map(item => {
+      return {
+        type: item.type.value,
+        description: item.description
+      }
+    })
   }
 
   private static convertClaimantDetails (draftClaim: DraftClaim): Party {

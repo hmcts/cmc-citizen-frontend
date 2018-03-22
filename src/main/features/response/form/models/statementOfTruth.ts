@@ -4,7 +4,7 @@ import { SignatureType } from 'app/common/signatureType'
 
 export class ValidationErrors {
   static readonly STATEMENT_OF_TRUTH_REQUIRED_MESSAGE: string =
-    'Please select I believe that the facts stated in this defence are true'
+    'Please select I believe that the facts stated in this response are true'
 }
 
 export class StatementOfTruth {
