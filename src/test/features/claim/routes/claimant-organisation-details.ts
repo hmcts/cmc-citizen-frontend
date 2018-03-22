@@ -18,7 +18,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const input = {
   name: 'Anirudha Inc.',
   type: 'organisation',
-  contactPerson: 'John Snow',
+  contactPerson: '',
   address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
   hasCorrespondenceAddress: false
 } as OrganisationDetails
