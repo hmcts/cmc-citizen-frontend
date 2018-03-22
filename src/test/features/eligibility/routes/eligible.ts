@@ -3,6 +3,7 @@ import * as request from 'supertest'
 
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
+import { checkAuthorizationMiddleware } from './checks/authorization-check'
 
 import { Paths } from 'eligibility/paths'
 
@@ -15,6 +16,8 @@ describe('Claim eligibility: eligible page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
+    checkAuthorizationMiddleware(app, 'get', pagePath)
+
     it('should render page when everything is fine', async () => {
 
       await request(app)

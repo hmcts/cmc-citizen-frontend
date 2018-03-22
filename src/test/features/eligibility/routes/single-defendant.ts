@@ -3,6 +3,7 @@ import * as request from 'supertest'
 
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
+import { checkAuthorizationMiddleware } from './checks/authorization-check'
 
 import { Paths } from 'eligibility/paths'
 
@@ -19,6 +20,8 @@ describe('Claim eligibility: single defendant page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
+    checkAuthorizationMiddleware(app, 'get', pagePath)
+
     it('should render page when everything is fine', async () => {
 
       await request(app)
@@ -28,6 +31,8 @@ describe('Claim eligibility: single defendant page', () => {
   })
 
   describe('on POST', () => {
+    checkAuthorizationMiddleware(app, 'post', pagePath)
+
     describe('for authorized user', () => {
       it('should render page when form is invalid and everything is fine', async () => {
 

@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
+import { checkAuthorizationMiddleware } from './checks/authorization-check'
 
 import { Paths } from 'eligibility/paths'
 
@@ -18,6 +19,8 @@ describe('Claim eligibility: index page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
+    checkAuthorizationMiddleware(app, 'get', pagePath)
+
     context('when user is logged in', () => {
       it('should render page when everything is fine', async () => {
         idamServiceMock.resolveRetrieveUserFor('1')
