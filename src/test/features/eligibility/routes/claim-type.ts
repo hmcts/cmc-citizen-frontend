@@ -33,37 +33,35 @@ describe('Claim eligibility: claim type page', () => {
   describe('on POST', () => {
     checkAuthorizationMiddleware(app, 'post', pagePath)
 
-    describe('for authorized user', () => {
-      it('should render page when form is invalid and everything is fine', async () => {
+    it('should render page when form is invalid and everything is fine', async () => {
 
-        await request(app)
-          .post(pagePath)
-          .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
-      })
+      await request(app)
+        .post(pagePath)
+        .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
+    })
 
-      it('should redirect to single defendant page when form is valid and everything is fine', async () => {
+    it('should redirect to single defendant page when form is valid and everything is fine', async () => {
 
-        await request(app)
-          .post(pagePath)
-          .send({ claimType: ClaimType.PERSONAL_CLAIM.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
-      })
+      await request(app)
+        .post(pagePath)
+        .send({ claimType: ClaimType.PERSONAL_CLAIM.option })
+        .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
+    })
 
-      it('should redirect to not eligible page when form is valid and multiple claimants option selected', async () => {
+    it('should redirect to not eligible page when form is valid and multiple claimants option selected', async () => {
 
-        await request(app)
-          .post(pagePath)
-          .send({ claimType: ClaimType.MULTIPLE_CLAIM.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`))
-      })
+      await request(app)
+        .post(pagePath)
+        .send({ claimType: ClaimType.MULTIPLE_CLAIM.option })
+        .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_CLAIMANTS}`))
+    })
 
-      it('should redirect to not eligible page when form is valid and claim on behalf option selecteds', async () => {
+    it('should redirect to not eligible page when form is valid and claim on behalf option selecteds', async () => {
 
-        await request(app)
-          .post(pagePath)
-          .send({ claimType: ClaimType.REPRESENTATIVE_CLAIM.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_ON_BEHALF}`))
-      })
+      await request(app)
+        .post(pagePath)
+        .send({ claimType: ClaimType.REPRESENTATIVE_CLAIM.option })
+        .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${NotEligibleReason.CLAIM_ON_BEHALF}`))
     })
   })
 })

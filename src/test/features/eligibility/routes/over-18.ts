@@ -34,29 +34,27 @@ describe('Claim eligibility: over 18 page', () => {
   describe('on POST', () => {
     checkAuthorizationMiddleware(app, 'post', pagePath)
 
-    describe('for authorized user', () => {
-      it('should render page when form is invalid and everything is fine', async () => {
+    it('should render page when form is invalid and everything is fine', async () => {
 
-        await request(app)
-          .post(pagePath)
-          .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
-      })
+      await request(app)
+        .post(pagePath)
+        .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
+    })
 
-      it('should redirect to over 18 defendant page when form is valid and everything is fine', async () => {
+    it('should redirect to over 18 defendant page when form is valid and everything is fine', async () => {
 
-        await request(app)
-          .post(pagePath)
-          .send({ eighteenOrOver: YesNoOption.YES.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
-      })
+      await request(app)
+        .post(pagePath)
+        .send({ eighteenOrOver: YesNoOption.YES.option })
+        .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
+    })
 
-      it('should redirect to not eligible page when form is valid and not eligible option selected', async () => {
+    it('should redirect to not eligible page when form is valid and not eligible option selected', async () => {
 
-        await request(app)
-          .post(pagePath)
-          .send({ eighteenOrOver: YesNoOption.NO.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${notEligibleReason}`))
-      })
+      await request(app)
+        .post(pagePath)
+        .send({ eighteenOrOver: YesNoOption.NO.option })
+        .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${notEligibleReason}`))
     })
   })
 })

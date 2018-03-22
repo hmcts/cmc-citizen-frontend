@@ -33,29 +33,27 @@ describe('Claim eligibility: single defendant page', () => {
   describe('on POST', () => {
     checkAuthorizationMiddleware(app, 'post', pagePath)
 
-    describe('for authorized user', () => {
-      it('should render page when form is invalid and everything is fine', async () => {
+    it('should render page when form is invalid and everything is fine', async () => {
 
-        await request(app)
-          .post(pagePath)
-          .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
-      })
+      await request(app)
+        .post(pagePath)
+        .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
+    })
 
-      it('should redirect to government department page when form is valid and everything is fine', async () => {
+    it('should redirect to government department page when form is valid and everything is fine', async () => {
 
-        await request(app)
-          .post(pagePath)
-          .send({ singleDefendant: YesNoOption.NO.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
-      })
+      await request(app)
+        .post(pagePath)
+        .send({ singleDefendant: YesNoOption.NO.option })
+        .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
+    })
 
-      it('should redirect to not eligible page when form is valid and not eligible option selected', async () => {
+    it('should redirect to not eligible page when form is valid and not eligible option selected', async () => {
 
-        await request(app)
-          .post(pagePath)
-          .send({ singleDefendant: YesNoOption.YES.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_DEFENDANTS}`))
-      })
+      await request(app)
+        .post(pagePath)
+        .send({ singleDefendant: YesNoOption.YES.option })
+        .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${NotEligibleReason.MULTIPLE_DEFENDANTS}`))
     })
   })
 })
