@@ -60,7 +60,7 @@
   },
   "eligibility": {
     "cookie": {
-      "timeToLiveInMinutes": 10
+      "timeToLiveInMinutes": 2880
     }
   },
   "support": {
