@@ -2,30 +2,31 @@ import * as express from 'express'
 
 import { Paths } from 'response/paths'
 import { Form } from 'forms/form'
-import { FormValidator } from 'app/forms/validation/formValidator'
-import { Evidence } from 'forms/models/evidence'
+import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { RoutablePath } from 'common/router/routablePath'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Claim } from 'app/claims/models/claim'
+import { Claim } from 'claims/models/claim'
+import { DefendantEvidence } from 'response/form/models/defendantEvidence'
+import { ResponseType } from 'response/form/models/responseType'
 
 const page: RoutablePath = Paths.evidencePage
 
-function renderView (form: Form<Evidence>, res: express.Response): void {
+function renderView (form: Form<DefendantEvidence>, res: express.Response): void {
   const claim: Claim = res.locals.claim
 
   res.render(page.associatedView, {
     form: form,
-    claimantName: claim.claimData.claimant.name
+    evidence: claim.claimData.evidence
   })
 }
 
 function actionHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
   if (req.body.action) {
-    const form: Form<Evidence> = req.body
+    const form: Form<DefendantEvidence> = req.body
     if (req.body.action.addRow) {
       form.model.appendRow()
     }
@@ -44,10 +45,10 @@ export default express.Router()
     })
   .post(
     page.uri,
-    FormValidator.requestHandler(Evidence, Evidence.fromObject, undefined, ['addRow']),
+    FormValidator.requestHandler(DefendantEvidence, DefendantEvidence.fromObject, undefined, ['addRow']),
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<Evidence> = req.body
+      const form: Form<DefendantEvidence> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)
@@ -60,7 +61,12 @@ export default express.Router()
         draft.document.evidence = form.model
 
         await new DraftService().save(draft, user.bearerToken)
-        res.redirect(Paths.impactOfDisputePage.evaluateUri({ externalId: claim.externalId }))
+
+        if (draft.document.response.type === ResponseType.DEFENCE) {
+          res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+        } else {
+          res.redirect(Paths.impactOfDisputePage.evaluateUri({ externalId: claim.externalId }))
+        }
       }
     })
   )
