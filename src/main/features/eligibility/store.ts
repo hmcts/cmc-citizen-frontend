@@ -1,6 +1,8 @@
-import { Eligibility } from 'eligibility/model/eligibility'
-import * as Cookies from 'cookies'
 import * as express from 'express'
+import * as Cookies from 'cookies'
+import * as _ from 'lodash'
+
+import { Eligibility } from 'eligibility/model/eligibility'
 
 const minuteInMilliseconds = 60 * 1000
 const cookieTimeToLiveInMinutes = 10 * minuteInMilliseconds
@@ -22,7 +24,16 @@ export class CookieEligibilityStore implements EligibilityStore {
   }
 
   write (eligibility: Eligibility, req: express.Request, res: express.Response): void {
-    new Cookies(req, res).set(cookieName, JSON.stringify(eligibility), { sameSite: 'lax', maxAge: cookieTimeToLiveInMinutes })
+    const excludeDisplayValue = (value: any): any | undefined => {
+      const property = 'displayValue'
+
+      if (value && typeof value === 'object' && Object.getOwnPropertyDescriptor(value, property)) {
+        return _.omit(value, property)
+      }
+      return undefined
+    }
+
+    new Cookies(req, res).set(cookieName, JSON.stringify(_.cloneDeepWith(eligibility, excludeDisplayValue)), { sameSite: 'lax', maxAge: cookieTimeToLiveInMinutes })
   }
 
   clear (req: express.Request, res: express.Response): void {
