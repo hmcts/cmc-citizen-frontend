@@ -1,8 +1,13 @@
 {% extends "layout.njk" %}
 {% from "support.njk" import supportWidget %}
+{% from "internalLink.njk" import internalLink %}
+{% from "externalLink.njk" import externalLink %}
 {% set heading = 'Cookies' %}
 
 {% set title = 'Money claim' %}
+{% set cookieResourseUri = 'https://www.aboutcookies.org' %}
+{% set googlePrivacyPolicyUri = 'https://www.google.com/policies/privacy/partners/' %}
+{% set optOutOfAnalyticsUri = 'https://tools.google.com/dlpage/gaoptout' %}
 
 {% block content %}
   <div class="grid-row">
@@ -14,24 +19,21 @@
         + 'Most websites need cookies to work properly.') }}
       </p>
 
-      <p> {{ t('This service uses them to:') }}</p>
+      <p> {{ t('How cookies are used in this service:') }}</p>
 
       <ul class="list list-bullet">
-        <li>{{ t('measure how you use the service so it can be updated and improved based on your needs') }}</li>
+        <li>{{ t('measure how you use the service so it can be improved') }}</li>
         <li>{{ t('remember the notifications you’ve seen so that you’re not shown them again') }}</li>
         <li>{{ t('temporarily store the answers you give') }}</li>
       </ul>
 
       <p>
-        {{ t('Find out more about how to <a href="{{ cookieUri }}">manage cookies</a>.',
-        { cookieUri : 'https://www.aboutcookies.org'}) | safe }}
+        {{ t('Find out more about ' + externalLink( 'how to manage cookies', cookieResourseUri )) | safe }}
       </p>
 
-      <h2 class="heading-medium">{{ t('How cookies are used in the Civil money claims') }}</h2>
-      <h2 class="heading-small">{{ t('To measure website usage') }}</h2>
-
+      <h2 class="heading-medium">{{ t('Cookies used to measure website usage') }}</h2>
       <p>
-        {{ t('We use Google Analytics software to collect information about how you use this service.'
+        {{ t('We use Google Analytics software to collect information about how you use this service. '
         + 'We do this to help make sure the service is meeting the needs of its users '
         + 'and to help us make improvements, for example improving site search.') }}
       </p>
@@ -47,14 +49,12 @@
 
       <p>
         {{ t('We allow Google to use or share our analytics data. You can find out more '
-        + 'about how Google use this information in their <a href="{{ privacyPolicyUri }}">privacy policy</a>.',
-        { privacyPolicyUri :  AppPaths.privacyPolicyPage.uri }) | safe }}
+        + 'about how Google use this information in their ' + externalLink('Privacy Policy.', googlePrivacyPolicyUri)) | safe }}
       </p>
 
       <p>
-        {{ t('You can opt out of <a href="{{ optOutOfAnalyticsUri }}">opt out of Google Analytics</a> '
-        + 'if you do not want Google to have access to your information.',
-        { optOutOfAnalyticsUri : 'https://tools.google.com/dlpage/gaoptout'}) | safe }}
+        {{ t('You can ' + externalLink('opt out of Google Analytics', optOutOfAnalyticsUri)
+        + 'if you do not want Google to have access to your information.') | safe }}
       </p>
 
       <p>{{ t('Google Analytics sets the following cookies:') }}</p>
@@ -62,9 +62,9 @@
       <table class="form-group">
         <thead>
         <tr>
-          <th scope="col">{{ t('Name') }}</th>
-          <th scope="col">{{ t('Purpose') }}</th>
-          <th scope="col">{{ t('Expires') }}</th>
+          <th scope="col">{{ t('Cookie name') }}</th>
+          <th scope="col">{{ t('What this cookie is for') }}</th>
+          <th scope="col">{{ t('Expires after') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -92,19 +92,19 @@
         </tbody>
       </table>
 
-      <h2 class="heading-small">{{ t('To turn our introductory message off') }} </h2>
+      <h2 class="heading-medium">{{ t('Cookies used to turn our introductory message off') }} </h2>
 
       <p>
-        {{ t('You may see a pop-up welcome message when you first visit the service. '
-        + 'We’ll store a cookie so that your computer knows you’ve seen it and knows not to show it again.' ) }}
+        {{ t('You may see a welcome message when you first visit the service. '
+        +'We’ll store a cookie so that your computer knows not to show this message again.') }}
       </p>
 
       <table class="form-group">
         <thead>
         <tr>
-          <th scope="col">{{ t('Name') }}</th>
-          <th scope="col">{{ t('Purpose') }}</th>
-          <th scope="col">{{ t('Expires') }}</th>
+          <th scope="col">{{ t('Cookie name') }}</th>
+          <th scope="col">{{ t('What this cookie is for') }}</th>
+          <th scope="col">{{ t('Expires after') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -119,7 +119,7 @@
       </table>
 
       <h2
-        class="heading-small">{{ t('To store the answers you’ve given during your visit (known as a ‘session’)') }}
+        class="heading-medium">{{ t('Cookies used to store the answers you’ve given during your visit (known as a ‘session’)') }}
       </h2>
 
       <p>
@@ -131,52 +131,52 @@
       <table class="form-group">
         <thead>
         <tr>
-          <th scope="col">{{ t('Name') }}</th>
-          <th scope="col">{{ t('Purpose') }}</th>
+          <th scope="col">{{ t('Cookie name') }}</th>
+          <th scope="col">{{ t('What this cookie is for') }}</th>
           <th scope="col">{{ t('Expires') }}</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-          <td>connect.sid</td>
+          <td>SESSION_ID</td>
           <td>
-            {{ t('Carries details of your current session') }}
+            {{ t('Keeps track of your answers') }}
           </td>
           <td class="text-area">{{ t('When you close your browser') }}</td>
         </tr>
         <tr>
-          <td>sessionKey</td>
+          <td>eligibility-check</td>
           <td>
-            {{ t('Protects your session using encryption') }}
+            {{ t('Stores answers to eligibility questions') }}
           </td>
-          <td class="text-area">{{ t('When you close your browser') }}</td>
+          <td class="text-area">{{ t('Ten minutes') }}</td>
         </tr>
         </tbody>
       </table>
 
-      <h2 class="heading-small">{{ t('To identify you when you come back to the service') }}</h2>
+      <h2 class="heading-medium">{{ t('Cookies used to identify you when you come back to the service') }}</h2>
       <p>{{ t('We use authentication cookies to identify you when you return to the service.') }}</p>
 
       <table class="form-group">
         <thead>
         <tr>
-          <th scope="col">{{ t('Name') }}</th>
-          <th scope="col">{{ t('Purpose') }}</th>
+          <th scope="col">{{ t('Cookie name') }}</th>
+          <th scope="col">{{ t('What this cookie is for') }}</th>
           <th scope="col">{{ t('Expires') }}</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-          <td>__auth-token</td>
+          <td>lang</td>
           <td>
-            {{ t('Identifies you to the service') }}
+            {{ t('Identifies your prefered language') }}
           </td>
           <td class="text-area">{{ t('When you close your browser') }}</td>
         </tr>
         </tbody>
       </table>
 
-      <h2 class="heading-small">{{ t('To make the service more secure') }}</h2>
+      <h2 class="heading-medium">{{ t('Cookies used to make the service more secure') }}</h2>
       <p>
         {{ t('We set cookies which prevent attackers from modifying the contents of the other cookies we set. '
         + 'This makes the service more secure and protects your personal information. ') }}
@@ -185,21 +185,28 @@
       <table class="form-group">
         <thead>
         <tr>
-          <th scope="col">{{ t('Name') }}</th>
-          <th scope="col">{{ t('Purpose') }}</th>
+          <th scope="col">{{ t('Cookie name') }}</th>
+          <th scope="col">{{ t('What this cookie is for') }}</th>
           <th scope="col">{{ t('Expires') }}</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-          <td>TSxxxxxxxx</td>
+          <td>_csrf</td>
+          <td>
+            {{ t('Helps protect against forgery') }}
+          </td>
+          <td class="text-area">{{ t('When you close your browser') }}</td>
+        </tr>
+        <tr>
+          <td>ARRAfinnity</td>
           <td>
             {{ t('Protects your session from tampering') }}
           </td>
           <td class="text-area">{{ t('When you close your browser') }}</td>
         </tr>
         <tr>
-          <td>__state</td>
+          <td>state</td>
           <td>
             {{ t('Identifies you to the service and secures your authentication') }}
           </td>
