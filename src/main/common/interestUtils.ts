@@ -22,8 +22,12 @@ export async function getInterestDetails (claim: Claim): Promise<InterestData> {
   const interestToDate: moment.Moment = moment.max(interestFromDate, MomentFactory.currentDate())
   const numberOfDays: number = interestToDate.diff(interestFromDate, 'days')
 
-  const interest: number = await calculateInterest(claim.claimData.amount.totalAmount(), claim.claimData.interest.rate, interestFromDate, interestToDate)
   const rate = claim.claimData.interest.rate
+  let interest: number = await calculateInterest(claim.claimData.amount.totalAmount(), rate, interestFromDate, interestToDate)
+
+  if (claim.claimData.interest.type === ClaimInterestType.BREAKDOWN) {
+    interest += claim.claimData.interest.interestBreakdown.totalAmount
+  }
 
   return { interestFromDate, interestToDate, numberOfDays, interest, rate }
 }
@@ -48,7 +52,7 @@ export async function draftInterestAmount (claimDraft: DraftClaim): Promise<numb
   const breakdown: ClaimAmountBreakdown = claimDraft.amount
   const issuedDate: moment.Moment = isAfter4pm() ? MomentFactory.currentDate().add(1, 'day') : MomentFactory.currentDate()
   const interestStartDate: moment.Moment = claimDraft.interestDate.type === InterestDateType.SUBMISSION ? issuedDate :
-                                    claimDraft.interestStartDate.date.toMoment()
+    claimDraft.interestStartDate.date.toMoment()
   const claimAmount: number = breakdown.totalAmount()
 
   return calculateInterest(

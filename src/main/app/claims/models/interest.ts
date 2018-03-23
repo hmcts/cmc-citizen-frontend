@@ -18,7 +18,7 @@ export class Interest {
         this.specificDailyAmount = input.specificDailyAmount
       }
       if (input.interestBreakdown) {
-        this.interestBreakdown = new InterestBreakdown().deserialize(input.reason)
+        this.interestBreakdown = new InterestBreakdown().deserialize(input.interestBreakdown)
       }
     }
     return this
