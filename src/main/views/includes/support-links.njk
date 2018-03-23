@@ -1,5 +1,4 @@
 <ul>
-  {% if featureToggles.finePrint %}
     <li>
       <a href="{{ AppPaths.cookiesPage.uri }}">{{ t('Cookies') }}</a>
     </li>
@@ -12,7 +11,6 @@
     <li>
       <a href="https://www.gov.uk/help">{{ t('Help using GOV.UK') }}</a>
     </li>
-  {% endif %}
   {% if featureToggles.testingSupport %}
     <li>
       <a href="/testing-support">Testing support</a>

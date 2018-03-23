@@ -53,4 +53,45 @@ describe('Eligibility', () => {
     })
   })
 
+  describe('eligible', () => {
+
+    it('should be valid if all eligibility answers are eligible', () => {
+
+      const eligibility = new Eligibility(
+        ClaimValue.UNDER_10000,
+        YesNoOption.NO,
+        YesNoOption.YES,
+        YesNoOption.YES,
+        YesNoOption.YES,
+        DefendantAgeOption.COMPANY_OR_ORGANISATION,
+        ClaimType.PERSONAL_CLAIM,
+        YesNoOption.NO,
+        YesNoOption.NO,
+        YesNoOption.NO
+      )
+
+      expect(eligibility.eligible).to.equal(true)
+
+    })
+
+    it('should be invalid if any eligibility answer is not eligible', () => {
+
+      const eligibility = new Eligibility(
+        ClaimValue.UNDER_10000,
+        YesNoOption.NO,
+        YesNoOption.YES,
+        YesNoOption.YES,
+        YesNoOption.YES,
+        DefendantAgeOption.NO,
+        ClaimType.PERSONAL_CLAIM,
+        YesNoOption.NO,
+        YesNoOption.NO,
+        YesNoOption.NO
+      )
+
+      expect(eligibility.eligible).to.equal(false)
+
+    })
+  })
+
 })
