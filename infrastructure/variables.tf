@@ -55,7 +55,7 @@ variable "feature_ccj" {
 }
 
 variable "feature_offer" {
-  default = "false"
+  default = "true"
 }
 
 variable "feature_statement_of_means" {
