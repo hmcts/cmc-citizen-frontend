@@ -192,6 +192,7 @@ export class ClaimModelConverter {
         interestBreakdown.totalAmount = draftClaim.interestTotal.amount
         interestBreakdown.explanation = draftClaim.interestTotal.reason
         interest.interestBreakdown = interestBreakdown
+        interest.type = ClaimInterestType.BREAKDOWN
         if (draftClaim.interestHowMuch.type === InterestRateOption.STANDARD) {
           interest.rate = getStandardInterestRate()
         } else {
@@ -204,11 +205,13 @@ export class ClaimModelConverter {
 
   private static convertInterestDate (draftClaim: DraftClaim): InterestDate {
     const interestDate: InterestDate = new InterestDate()
-    interestDate.type = draftClaim.interestDate.type
-    if (draftClaim.interestDate.type === InterestDateType.CUSTOM) {
-      interestDate.date = draftClaim.interestStartDate.date.toMoment()
-      interestDate.reason = draftClaim.interestStartDate.reason
-      interestDate.endDateType = draftClaim.interestEndDate.option
+    if (draftClaim.interestType.option === InterestTypeOption.SAME_RATE) {
+      interestDate.type = draftClaim.interestDate.type
+      if (draftClaim.interestDate.type === InterestDateType.CUSTOM) {
+        interestDate.date = draftClaim.interestStartDate.date.toMoment()
+        interestDate.reason = draftClaim.interestStartDate.reason
+        interestDate.endDateType = draftClaim.interestEndDate.option
+      }
     }
     return interestDate
   }
