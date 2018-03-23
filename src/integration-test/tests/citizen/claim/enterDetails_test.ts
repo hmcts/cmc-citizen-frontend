@@ -76,7 +76,6 @@ Scenario('I can prepare a claim with a manually entered interest amount and a da
   claimSteps.claimantTotalAmountPageRead()
   I.see('Do you want to claim interest?')
   interestSteps.enterBreakdownInterestAmountAndDailyAmount()
-  interestSteps.enterSpecificInterestRateAndDate(2, '1990-01-01')
   I.see('Total amount you’re claiming')
   interestSteps.skipClaimantInterestTotalPage()
   I.see('Prepare your claim')

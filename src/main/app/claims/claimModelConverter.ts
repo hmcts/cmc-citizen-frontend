@@ -30,8 +30,10 @@ import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestDateType } from 'app/common/interestDateType'
-import { InterestType as ClaimInterestType } from 'claims/models/interestType'
+import { InterestType, InterestType as ClaimInterestType } from 'claims/models/interestType'
 import { YesNoOption } from 'models/yesNoOption'
+import { getStandardInterestRate } from 'common/interestUtils'
+import { InterestBreakdown } from 'claims/models/InterestBreakdown'
 
 export class ClaimModelConverter {
 
@@ -177,8 +179,20 @@ export class ClaimModelConverter {
     if (draftClaim.interest.option === YesNoOption.NO) {
       interest.type = ClaimInterestType.NO_INTEREST
     } else {
-      interest.type = draftClaim.interestRate.type
-      interest.rate = draftClaim.interestRate.rate
+      if (draftClaim.interestType.option === InterestType.STANDARD) {
+        interest.type = draftClaim.interestRate.type
+        interest.rate = draftClaim.interestRate.rate
+      } else {
+        const interestBreakdown = new InterestBreakdown()
+        interestBreakdown.totalAmount = draftClaim.interestTotal.amount
+        interestBreakdown.explanation = draftClaim.interestTotal.reason
+        interest.interestBreakdown = interestBreakdown
+        if (draftClaim.interestHowMuch.type === InterestRateOption.STANDARD) {
+          interest.rate = getStandardInterestRate()
+        } else {
+          interest.specificDailyAmount = draftClaim.interestHowMuch.dailyAmount
+        }
+      }
     }
     if (draftClaim.interestRate.type === InterestRateOption.DIFFERENT) {
       interest.reason = draftClaim.interestRate.reason
@@ -190,7 +204,7 @@ export class ClaimModelConverter {
     const interestDate: InterestDate = new InterestDate()
     interestDate.type = draftClaim.interestDate.type
     if (draftClaim.interestDate.type === InterestDateType.CUSTOM) {
-      interestDate.date = draftClaim.interestStartDate.date.toMoment()
+      interestDate.date = draftClaim.interestStartDate.date.asString()
       interestDate.reason = draftClaim.interestStartDate.reason
       interestDate.endDate = draftClaim.interestEndDate.option
     }
