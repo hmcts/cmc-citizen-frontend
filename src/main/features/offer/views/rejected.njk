@@ -18,10 +18,14 @@
         {{ t('View your claim status on <a href="{{ dashboard }}">your money claims account</a>.', { dashboard: '/dashboard' }) | safe }}
       </p>
 
+      {% include "includes/service_survey_link.njk" %}
+
+      <p>
+        <a href="{{ DashboardPaths.dashboardPage.uri }}" class="button">{{ t('Finished') }}</a>
+      </p>
+
       {{ supportWidget() }}
 
-      <br>
-      <a href="#" class="button">Finished</a>
     </div>
   </div>
 {% endblock %}
