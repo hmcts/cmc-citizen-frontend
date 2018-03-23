@@ -93,14 +93,14 @@
         timelineCheckAndSend(
           header = 'Timeline of what happened (optional)',
           timeline = draft.timeline.getPopulatedRowsOnly(),
-          url = paths.timelinePage.uri
+          url = paths.timelinePage.evaluateUri({ externalId: claim.externalId })
         )
       }}
       {{
         evidenceCheckAndSend(
           header = 'Your evidence (optional)',
           evidence = draft.evidence.getPopulatedRowsOnly(),
-          url = paths.evidencePage.uri
+          url = paths.evidencePage.evaluateUri({ externalId: claim.externalId })
         )
       }}
 
