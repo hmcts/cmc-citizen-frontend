@@ -12,7 +12,7 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import { InterestRateOption } from 'claim/form/models/interestRate'
+import { InterestRateOption } from 'claim/form/models/interestRateOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pageContent: string = 'What annual rate of interest do you want to claim?'

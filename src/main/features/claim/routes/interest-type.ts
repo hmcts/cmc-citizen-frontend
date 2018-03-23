@@ -11,7 +11,6 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
 import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
-import { ForbiddenError } from '../../../errors'
 
 function renderView (form: Form<InterestType>, res: express.Response): void {
   res.render(Paths.interestTypePage.associatedView, { form: form })
@@ -36,13 +35,24 @@ export default express.Router()
         const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
 
+        if (form.model.option === InterestTypeOption.SAME_RATE) {
+          draft.document.interestTotal = undefined
+          draft.document.interestContinueClaiming = undefined
+          draft.document.interestHowMuch = undefined
+        } else {
+          draft.document.interestRate = undefined
+          draft.document.interestDate = undefined
+          draft.document.interestStartDate = undefined
+          draft.document.interestEndDate = undefined
+        }
+
         draft.document.interestType = form.model
         await new DraftService().save(draft, user.bearerToken)
 
         if (form.model.option === InterestTypeOption.SAME_RATE) {
           res.redirect(Paths.interestRatePage.uri)
         } else {
-          throw new ForbiddenError()
+          res.redirect(Paths.interestTotalPage.uri)
         }
       }
     }))

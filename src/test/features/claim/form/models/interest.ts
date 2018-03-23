@@ -6,7 +6,8 @@ import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
 import { ValidationErrors } from 'app/forms/validation/validationErrors'
 
-import { Interest, InterestOption } from 'claim/form/models/interest'
+import { Interest } from 'claim/form/models/interest'
+import { YesNoOption } from 'models/yesNoOption'
 
 describe('Interest', () => {
 
@@ -16,18 +17,14 @@ describe('Interest', () => {
       expect(Interest.fromObject(undefined)).to.be.equal(undefined)
     })
 
-    it('should return null when value is null', () => {
-      expect(Interest.fromObject(null)).to.be.equal(null)
-    })
-
     it('should leave missing fields undefined', () => {
       expect(Interest.fromObject({})).to.deep.equal(new Interest())
     })
 
     it('should deserialize all fields', () => {
       expect(Interest.fromObject({
-        option: InterestOption.YES
-      })).to.deep.equal(new Interest(InterestOption.YES))
+        option: YesNoOption.YES.option
+      })).to.deep.equal(new Interest(YesNoOption.YES))
     })
   })
 
@@ -49,8 +46,8 @@ describe('Interest', () => {
     })
 
     it('should return a Interest instance with fields set when given an object with value', () => {
-      const deserialized = new Interest().deserialize({ option: InterestOption.YES })
-      expect(deserialized.option).to.be.eq(InterestOption.YES)
+      const deserialized = new Interest().deserialize({ option: YesNoOption.YES })
+      expect(deserialized.option).to.be.eq(YesNoOption.YES)
     })
   })
 
@@ -65,15 +62,8 @@ describe('Interest', () => {
       expectValidationError(errors, ValidationErrors.YES_NO_REQUIRED)
     })
 
-    it('should reject interest with unrecognised type', () => {
-      const errors = validator.validateSync(new Interest('unrecognised-type'))
-
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.YES_NO_REQUIRED)
-    })
-
     it('should accept interest with recognised type', () => {
-      InterestOption.all().forEach(option => {
+      YesNoOption.all().forEach(option => {
         const errors = validator.validateSync(new Interest(option))
 
         expect(errors.length).to.equal(0)

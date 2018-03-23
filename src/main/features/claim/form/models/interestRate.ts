@@ -4,18 +4,7 @@ import { CompletableTask } from 'app/models/task'
 import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
 import { getStandardInterestRate } from 'common/interestUtils'
-
-export class InterestRateOption {
-  static readonly STANDARD: string = 'standard'
-  static readonly DIFFERENT: string = 'different'
-
-  static all (): string[] {
-    return [
-      InterestRateOption.STANDARD,
-      InterestRateOption.DIFFERENT
-    ]
-  }
-}
+import { InterestRateOption } from 'claim/form/models/interestRateOption'
 
 export class ValidationErrors {
   static readonly TYPE_REQUIRED: string = 'Choose a rate of interest'

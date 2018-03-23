@@ -2,7 +2,7 @@ import * as moment from 'moment'
 
 import { InterestDateType } from 'app/common/interestDateType'
 import { MomentFactory } from 'common/momentFactory'
-import { InterestRateOption } from 'claim/form/models/interestRate'
+import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { calculateInterest } from 'app/common/calculateInterest'
 import { Claim } from 'claims/models/claim'
 import { InterestData } from 'app/common/interestData'
@@ -11,6 +11,7 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { isAfter4pm } from 'common/dateUtils'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 import { YesNoOption } from 'models/yesNoOption'
+import { InterestTypeOption } from 'claim/form/models/interestType'
 
 export async function getInterestDetails (claim: Claim): Promise<InterestData> {
   if (claim.claimData.interest.type === ClaimInterestType.NO_INTEREST || claim.claimData.interest.type === undefined) {
@@ -36,6 +37,13 @@ function getInterestDateOrIssueDate (claim: Claim): moment.Moment {
 }
 
 export async function draftInterestAmount (claimDraft: DraftClaim): Promise<number> {
+  if (claimDraft.interest.option === YesNoOption.NO) {
+    return 0.00
+  }
+
+  if (claimDraft.interestType.option === InterestTypeOption.BREAKDOWN) {
+    return claimDraft.interestTotal.amount
+  }
   const interest: number = getInterestRate(claimDraft)
   const breakdown: ClaimAmountBreakdown = claimDraft.amount
   const issuedDate: moment.Moment = isAfter4pm() ? MomentFactory.currentDate().add(1, 'day') : MomentFactory.currentDate()

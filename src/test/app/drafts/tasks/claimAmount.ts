@@ -2,13 +2,14 @@ import { expect } from 'chai'
 
 import { DraftClaim } from 'app/drafts/models/draftClaim'
 import { ClaimAmount } from 'app/drafts/tasks/claimAmount'
-import { InterestRate, InterestRateOption } from 'claim/form/models/interestRate'
-import { InterestOption } from 'claim/form/models/interest'
+import { InterestRate } from 'claim/form/models/interestRate'
+import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
 import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDateType } from 'app/common/interestDateType'
 import { InterestDate } from 'claim/form/models/interestDate'
 import { InterestStartDate } from 'claim/form/models/interestStartDate'
+import { YesNoOption } from 'models/yesNoOption'
 
 describe('Claim amount', () => {
 
@@ -23,7 +24,7 @@ describe('Claim amount', () => {
           }]
         },
         interest: {
-          option: InterestOption.NO
+          option: YesNoOption.NO
         }
       }
       const claim: DraftClaim = new DraftClaim().deserialize(input)
@@ -39,7 +40,7 @@ describe('Claim amount', () => {
           }]
         },
         interest: {
-          option: InterestOption.YES
+          option: YesNoOption.YES
         },
         interestType: {
           option: InterestTypeOption.SAME_RATE
@@ -78,7 +79,7 @@ describe('Claim amount', () => {
           }]
         },
         interest: {
-          option: InterestOption.NO
+          option: YesNoOption.NO
         }
       }
       const claim: DraftClaim = new DraftClaim().deserialize(input)

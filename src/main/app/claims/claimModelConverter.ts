@@ -28,10 +28,13 @@ import { Evidence } from 'forms/models/evidence'
 import { convertEvidence } from 'claims/converters/evidenceConverter'
 import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
-import { InterestRateOption } from 'claim/form/models/interestRate'
+import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestDateType } from 'app/common/interestDateType'
-import { InterestOption } from 'claim/form/models/interest'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
+import { YesNoOption } from 'models/yesNoOption'
+import { getStandardInterestRate } from 'common/interestUtils'
+import { InterestBreakdown } from 'claims/models/InterestBreakdown'
+import { InterestTypeOption } from 'claim/form/models/interestType'
 
 export class ClaimModelConverter {
 
@@ -174,25 +177,41 @@ export class ClaimModelConverter {
 
   private static convertInterest (draftClaim: DraftClaim): Interest {
     const interest: Interest = new Interest()
-    if (draftClaim.interest.option === InterestOption.NO) {
+
+    if (draftClaim.interest.option === YesNoOption.NO) {
       interest.type = ClaimInterestType.NO_INTEREST
     } else {
-      interest.type = draftClaim.interestRate.type
-      interest.rate = draftClaim.interestRate.rate
-    }
-    if (draftClaim.interestRate.type === InterestRateOption.DIFFERENT) {
-      interest.reason = draftClaim.interestRate.reason
+      if (draftClaim.interestType.option === InterestTypeOption.SAME_RATE) {
+        interest.type = draftClaim.interestRate.type
+        interest.rate = draftClaim.interestRate.rate
+        if (draftClaim.interestRate.type === InterestRateOption.DIFFERENT) {
+          interest.reason = draftClaim.interestRate.reason
+        }
+      } else {
+        const interestBreakdown = new InterestBreakdown()
+        interestBreakdown.totalAmount = draftClaim.interestTotal.amount
+        interestBreakdown.explanation = draftClaim.interestTotal.reason
+        interest.interestBreakdown = interestBreakdown
+        interest.type = ClaimInterestType.BREAKDOWN
+        if (draftClaim.interestHowMuch.type === InterestRateOption.STANDARD) {
+          interest.rate = getStandardInterestRate()
+        } else {
+          interest.specificDailyAmount = draftClaim.interestHowMuch.dailyAmount
+        }
+      }
     }
     return interest
   }
 
   private static convertInterestDate (draftClaim: DraftClaim): InterestDate {
     const interestDate: InterestDate = new InterestDate()
-    interestDate.type = draftClaim.interestDate.type
-    if (draftClaim.interestDate.type === InterestDateType.CUSTOM) {
-      interestDate.date = draftClaim.interestStartDate.date.toMoment()
-      interestDate.reason = draftClaim.interestStartDate.reason
-      interestDate.endDateType = draftClaim.interestEndDate.option
+    if (draftClaim.interestType.option === InterestTypeOption.SAME_RATE) {
+      interestDate.type = draftClaim.interestDate.type
+      if (draftClaim.interestDate.type === InterestDateType.CUSTOM) {
+        interestDate.date = draftClaim.interestStartDate.date.toMoment()
+        interestDate.reason = draftClaim.interestStartDate.reason
+        interestDate.endDateType = draftClaim.interestEndDate.option
+      }
     }
     return interestDate
   }

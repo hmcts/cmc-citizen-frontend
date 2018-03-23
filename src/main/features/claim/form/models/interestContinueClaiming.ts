@@ -1,8 +1,9 @@
 import { IsDefined, IsIn } from 'class-validator'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { YesNoOption } from 'models/yesNoOption'
+import { CompletableTask } from 'models/task'
 
-export class Interest {
+export class InterestContinueClaiming implements CompletableTask {
 
   @IsDefined({ message: ValidationErrors.YES_NO_REQUIRED })
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED })
@@ -12,18 +13,23 @@ export class Interest {
     this.option = option
   }
 
-  static fromObject (input?: any): Interest {
+  static fromObject (input?: any): InterestContinueClaiming {
     if (input == null) {
       return input
     }
-    return new Interest(YesNoOption.fromObject(input.option))
+
+    return new InterestContinueClaiming(YesNoOption.fromObject(input.option))
   }
 
-  deserialize (input?: any): Interest {
+  deserialize (input?: any): InterestContinueClaiming {
     if (input && input.option) {
       this.option = YesNoOption.fromObject(input.option.option)
     }
 
     return this
+  }
+
+  isCompleted (): boolean {
+    return !!this.option
   }
 }

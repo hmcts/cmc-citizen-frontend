@@ -32,7 +32,6 @@ import { Paths as DashboardPaths } from 'features/dashboard/paths'
 import { Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
-import { InterestOption } from 'claim/form/models/interest'
 import { InterestTypeOption } from 'claim/form/models/interestType'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { Service } from 'models/service'
@@ -108,7 +107,6 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('EvidenceType', EvidenceType)
     nunjucksEnv.addGlobal('StatementType', StatementType)
     nunjucksEnv.addGlobal('NotEligibleReason', NotEligibleReason)
-    nunjucksEnv.addGlobal('InterestOption', InterestOption)
     nunjucksEnv.addGlobal('InterestTypeOption', InterestTypeOption)
     nunjucksEnv.addGlobal('InterestDateType', InterestDateType)
     nunjucksEnv.addGlobal('InterestEndDateOption', InterestEndDateOption)

@@ -74,7 +74,7 @@ describe('Claim issue: interest type page', () => {
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestRatePage.uri))
       })
 
-      it('should throw forbidden error when form is valid, breakdown is selected and everything is fine', async () => {
+      it('should redirect to interest total page when form is valid, breakdown is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
@@ -82,7 +82,7 @@ describe('Claim issue: interest type page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ option: InterestTypeOption.BREAKDOWN })
-          .expect(res => expect(res).to.be.forbidden.withText('Forbidden'))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestTotalPage.uri))
       })
     })
   })

@@ -32,8 +32,8 @@
           isInline = true,
           name = name,
           options = [
-          {'label': 'Yes', value: InterestOption.YES, checked: (form.valueFor(name) === InterestOption.YES)},
-          {'label': 'No', value: InterestOption.NO, checked: (form.valueFor(name) === InterestOption.NO)}
+          {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
+          {'label': 'No', value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO)}
         ],
           form = form,
           labelForScreenReadersOnly = true

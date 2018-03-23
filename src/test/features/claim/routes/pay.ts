@@ -29,11 +29,13 @@ import { ClaimAmountRow } from 'claim/form/models/claimAmountRow'
 import { InterestDate } from 'claim/form/models/interestDate'
 import { Reason } from 'claim/form/models/reason'
 import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
-import { Interest, InterestOption } from 'claim/form/models/interest'
-import { InterestRate, InterestRateOption } from 'claim/form/models/interestRate'
+import { Interest } from 'claim/form/models/interest'
+import { InterestRate } from 'claim/form/models/interestRate'
+import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDateType } from 'app/common/interestDateType'
 import { InterestStartDate } from 'claim/form/models/interestStartDate'
+import { YesNoOption } from 'models/yesNoOption'
 
 const draftType = 'claim'
 
@@ -109,7 +111,7 @@ describe('Claim issue: initiate payment receiver', () => {
           rows: [{ reason: 'Valid reason', amount: 1 } as ClaimAmountRow]
         } as ClaimAmountBreakdown,
         interest: {
-          option: InterestOption.YES
+          option: YesNoOption.YES
         } as Interest,
         interestType: {
           option: InterestTypeOption.SAME_RATE
@@ -304,7 +306,7 @@ describe('Claim issue: post payment callback receiver', () => {
           rows: [{ reason: 'Valid reason', amount: 1 } as ClaimAmountRow]
         } as ClaimAmountBreakdown,
         interest: {
-          option: InterestOption.YES
+          option: YesNoOption.YES
         } as Interest,
         interestType: {
           option: InterestTypeOption.SAME_RATE

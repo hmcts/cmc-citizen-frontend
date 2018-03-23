@@ -8,7 +8,7 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { ErrorHandling } from 'common/errorHandling'
 import { Draft } from '@hmcts/draft-store-client'
 import { FeeRangeMerge, FeesTableViewHelper } from 'claim/helpers/feesTableViewHelper'
-import { InterestOption } from 'claim/form/models/interest'
+import { YesNoOption } from 'models/yesNoOption'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -27,7 +27,7 @@ export default express.Router()
       res.render(Paths.totalPage.associatedView,
         {
           interestTotal: new TotalAmount(totalAmount, interest, issueFee),
-          interestClaimed: (draft.document.interest.option !== InterestOption.NO),
+          interestClaimed: (draft.document.interest.option !== YesNoOption.NO),
           issueFee: issueFee,
           hearingFee: hearingFee,
           feeTableContent: feeTableContent

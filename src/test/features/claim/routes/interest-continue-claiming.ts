@@ -5,7 +5,6 @@ import * as config from 'config'
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
-import { checkEligibilityGuards } from './checks/eligibility-check'
 
 import { Paths as ClaimPaths } from 'claim/paths'
 
@@ -16,15 +15,14 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pageContent: string = 'Do you want to claim interest?'
-const pagePath: string = ClaimPaths.interestPage.uri
+const pageContent: string = 'Continue to claim interest after you submit your claim?'
+const pagePath: string = ClaimPaths.interestContinueClaimingPage.uri
 
-describe('Claim issue: interest page', () => {
+describe('Claim issue: interest continue claiming page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', pagePath)
-    checkEligibilityGuards(app, 'get', pagePath)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
@@ -39,7 +37,6 @@ describe('Claim issue: interest page', () => {
 
   describe('on POST', () => {
     checkAuthorizationGuards(app, 'post', pagePath)
-    checkEligibilityGuards(app, 'post', pagePath)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -66,7 +63,7 @@ describe('Claim issue: interest page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to interest type page when form is valid, yes is selected and everything is fine', async () => {
+      it('should redirect to interest how much page when form is valid, yes is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
@@ -74,7 +71,7 @@ describe('Claim issue: interest page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ option: YesNoOption.YES.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestTypePage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestHowMuchPage.uri))
       })
 
       it('should redirect to total page when form is valid, no is selected and everything is fine', async () => {
