@@ -19,8 +19,8 @@ export class Settlement {
     }
 
     const partyStatement: PartyStatement = this.partyStatements
-    .filter(this.isOfferMadeByDefendant)
-    .pop()
+      .filter(this.isOfferMadeByDefendant)
+      .pop()
 
     return partyStatement ? partyStatement.offer : undefined
   }
@@ -31,8 +31,20 @@ export class Settlement {
     }
 
     const statement: PartyStatement = this.partyStatements
-    .filter(o => o.type === StatementType.ACCEPTATION.value)
-    .pop()
+      .filter(o => o.type === StatementType.ACCEPTATION.value)
+      .pop()
+
+    return !!statement
+  }
+
+  isOfferRejected (): boolean {
+    if (!this.partyStatements) {
+      return false
+    }
+
+    const statement: PartyStatement = this.partyStatements
+      .filter(o => o.type === StatementType.REJECTION.value)
+      .pop()
 
     return !!statement
   }
