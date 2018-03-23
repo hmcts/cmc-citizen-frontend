@@ -15,14 +15,10 @@
 
         <p>{{ t('If you’re also asking {{ claimantName }} to do something, say clearly what it is and by when it should be done. For example: "You will fix the roof by 28 April 2018."', { claimantName: claim.claimData.claimant.name }) }}</p>
 
-        <div class="description-block">
-          <h2 class="bold-medium"> {{ t('Your offer') }}</h2>
-        </div>
+        <h2 class="bold-medium notice"> {{ t('Your offer') }}</h2>
         {{ textArea(id='offerText', label= '', name='offerText', form = form, rows = 10) }}
 
-        <div class="description-block">
-          <h4 class="heading-small"> {{ t('When will all parts of this offer be done?') }}</h4>
-        </div>
+        <h4 class="heading-small"> {{ t('When will all parts of this offer be done?') }}</h4>
 
         {{ dateInput(form = form, name = 'completionDate',label = '', hint = t('For example, {{ futureDate }}', { futureDate: futureDate | inputDate })) }}
 
