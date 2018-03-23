@@ -63,7 +63,7 @@ export const sampleClaimObj = {
     } as Interest,
     interestDate: {
       type: InterestDateType.SUBMISSION,
-      endDate: InterestEndDateOption.SETTLED_OR_JUDGMENT
+      endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
     } as InterestDate,
     reason: 'Because I can',
     feeAmountInPennies: 2500,

@@ -206,7 +206,7 @@ export class ClaimModelConverter {
     if (draftClaim.interestDate.type === InterestDateType.CUSTOM) {
       interestDate.date = draftClaim.interestStartDate.date.asString()
       interestDate.reason = draftClaim.interestStartDate.reason
-      interestDate.endDate = draftClaim.interestEndDate.option
+      interestDate.endDateType = draftClaim.interestEndDate.option
     }
     return interestDate
   }

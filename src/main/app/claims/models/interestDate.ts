@@ -1,6 +1,6 @@
 export class InterestDate {
 
-  constructor (public type?: string, public date?: string, public reason?: string, public endDate?: string) {}
+  constructor (public type?: string, public date?: string, public reason?: string, public endDateType?: string) {}
 
   deserialize (input?: any): InterestDate {
     if (input) {
@@ -11,8 +11,8 @@ export class InterestDate {
       if (input.reason) {
         this.reason = input.reason
       }
-      if (input.endDate !== undefined) {
-        this.endDate = input.endDate
+      if (input.endDateType !== undefined) {
+        this.endDateType = input.endDateType
       }
     }
     return this

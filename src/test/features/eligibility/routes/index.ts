@@ -4,10 +4,13 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
+import { checkAuthorizationMiddleware } from './checks/authorization-check'
 
 import { Paths } from 'eligibility/paths'
 
 import { app } from '../../../../main/app'
+
+import * as idamServiceMock from '../../../http-mocks/idam'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.startPage.uri
@@ -16,8 +19,11 @@ describe('Claim eligibility: index page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
+    checkAuthorizationMiddleware(app, 'get', pagePath)
+
     context('when user is logged in', () => {
       it('should render page when everything is fine', async () => {
+        idamServiceMock.resolveRetrieveUserFor('1')
 
         await request(app)
           .get(pagePath)

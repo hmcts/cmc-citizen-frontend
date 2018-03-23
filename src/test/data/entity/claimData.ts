@@ -45,7 +45,7 @@ export const claimData = {
     type: InterestDateType.CUSTOM,
     date: new LocalDate(2018, 1, 1).asString(),
     reason: 'reason',
-    endDate: InterestEndDateOption.SETTLED_OR_JUDGMENT
+    endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
   } as InterestDate,
   reason: 'Because he did...',
   feeAmountInPennies: 1000000,
