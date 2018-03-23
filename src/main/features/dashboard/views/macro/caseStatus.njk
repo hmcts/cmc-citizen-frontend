@@ -8,10 +8,12 @@
   {% if status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
     {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
   {% elseif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
-    {{ t('You did not respond by the deadline. {{ claimantName }} can request a County Court Judgment (CCJ) against you. You can still respond until they do.',
+    {{ t('You did not respond by the deadline. {{ claimantName }} can request a County Court Judgment (CCJ) against you. '
+    + 'You can still respond until they do.',
     { claimantName: claim.claimData.claimant.name } ) }}
   {% elseif status === ClaimStatus.CCJ_REQUESTED %}
-    {{ t('{{ claimantName }} requested a County Court Judgment against you on {{ ccjRequestedAt }}. We will contact you both within 5 working days.',
+    {{ t('{{ claimantName }} requested a County Court Judgment against you on {{ ccjRequestedAt }}. '
+    + 'We will contact you both within 5 working days.',
     { claimantName: claim.claimData.claimant.name, ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
   {% elseif status === ClaimStatus.FREE_MEDIATION %}
     {{ t('You’ve rejected the claim and suggested mediation on {{ caseStatusForDefendant }}.',
@@ -21,6 +23,8 @@
   {% elseif status === ClaimStatus.OFFER_ACCEPTED %}
     {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court.',
     { claimantName: claim.claimData.claimant.name } ) }}
+  {% elseif status === ClaimStatus.OFFER_REJECTED %}
+    {{ t('{{ claimantName }} has rejected your offer.', { claimantName: claim.claimData.claimant.name }) | safe }}
   {% elseif status === ClaimStatus.OFFER_SUBMITTED %}
     {{ t('You made an offer to settle out of court.') }}
   {% elseif status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -46,7 +50,8 @@
       <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
     </p>
   {% elseif status === ClaimStatus.FREE_MEDIATION %}
-    {{ t('{{ defendantName }} has rejected the claim. They’ve suggested free mediation on {{ respondedAt }}. You can accept or reject',
+    {{ t('{{ defendantName }} has rejected the claim. '
+    + 'They’ve suggested free mediation on {{ respondedAt }}. You can accept or reject',
     { defendantName: claim.response.defendant.name, respondedAt: claim.respondedAt | date }) }}
     <p>{{ _viewResponseLink(claim.externalId) }}</p>
   {% elseif status === ClaimStatus.CLAIM_REJECTED %}
@@ -54,7 +59,10 @@
     { defendantName:  claim.claimData.defendant.name }) }}
     <p>{{ _viewResponseLink(claim.externalId) }}</p>
   {% elseif status === ClaimStatus.OFFER_ACCEPTED %}
-    {{ t('You’ve signed the agreement. We’ve asked {{ defendantName }} to sign the agreement.', { defendantName: claim.claimData.defendant.name }) }}
+    {{ t('You’ve signed the agreement. We’ve asked {{ defendantName }} to sign the agreement.',
+    { defendantName: claim.claimData.defendant.name }) }}
+  {% elseif status === ClaimStatus.OFFER_REJECTED %}
+    {{ t('You’ve rejected an offer to settle out of court.') }}
   {% elseif status === ClaimStatus.OFFER_SUBMITTED %}
     {{ t('The defendant has made an offer to settle out of court.') }}
     <p>
@@ -65,7 +73,8 @@
     { defendantName: claim.claimData.defendant.name,
       responseDeadline: claim.responseDeadline | date }) }}
   {% elseif status === ClaimStatus.NO_RESPONSE %}
-    {{ t('Your claim has been sent. {{ defendantName }} has until {{ responseDeadline }} to respond. They can request an extra 14 days if they need it.',
+    {{ t('Your claim has been sent. {{ defendantName }} has until {{ responseDeadline }} to respond. '
+    + 'They can request an extra 14 days if they need it.',
     { defendantName: claim.claimData.defendant.name,
       responseDeadline: claim.responseDeadline | date }) }}
   {% endif %}
