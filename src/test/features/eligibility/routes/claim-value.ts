@@ -1,9 +1,9 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
-import * as config from 'config'
 
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
+import { checkAuthorizationMiddleware } from './checks/authorization-check'
 
 import { Paths } from 'eligibility/paths'
 
@@ -12,7 +12,6 @@ import { app } from '../../../../main/app'
 import { NotEligibleReason } from 'eligibility/notEligibleReason'
 import { ClaimValue } from 'eligibility/model/claimValue'
 
-const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.claimValuePage.uri
 const pageRedirect: string = Paths.helpWithFeesPage.uri
 const expectedTextOnPage: string = 'Total amount you’re claiming'
@@ -22,21 +21,23 @@ describe('Claim eligibility: claim value page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
+    checkAuthorizationMiddleware(app, 'get', pagePath)
+
     it('should render page when everything is fine', async () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage))
     })
   })
 
   describe('on POST', () => {
+    checkAuthorizationMiddleware(app, 'post', pagePath)
+
     it('should render page when form is invalid and everything is fine', async () => {
 
       await request(app)
         .post(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
     })
 
@@ -44,7 +45,6 @@ describe('Claim eligibility: claim value page', () => {
 
       await request(app)
         .post(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
         .send({ claimValue: ClaimValue.UNDER_10000.option })
         .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
     })
@@ -53,7 +53,6 @@ describe('Claim eligibility: claim value page', () => {
 
       await request(app)
         .post(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
         .send({ claimValue: ClaimValue.NOT_KNOWN.option })
         .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${notEligibleReason}`))
     })

@@ -9,8 +9,10 @@ import moment = require('moment')
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { ResponseType } from 'claims/models/response/responseCommon'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
+import { defenceWithDisputeData } from '../../../data/entity/responseData'
+import { offer, offerRejection } from '../../../data/entity/offer'
 import { individual } from '../../../data/entity/party'
-import { DefenceType } from 'claims/models/response/fullDefenceResponse'
+import { DefenceType, FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { Individual } from 'claims/models/details/yours/individual'
 import { PartyStatement } from 'claims/models/partyStatement'
 
@@ -188,6 +190,17 @@ describe('Claim', () => {
       claim.response = undefined
 
       expect(claim.status).to.be.equal(ClaimStatus.NO_RESPONSE)
+    })
+
+    describe('offer rejected status', () => {
+      it('should return OFFER_REJECTED when offer is rejected', () => {
+        claim.response = FullDefenceResponse.deserialize(defenceWithDisputeData)
+        claim.settlement = new Settlement().deserialize({
+          partyStatements: [offer, offerRejection]
+        })
+
+        expect(claim.status).to.be.equal(ClaimStatus.OFFER_REJECTED)
+      })
     })
   })
 })
