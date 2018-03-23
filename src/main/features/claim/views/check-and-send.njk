@@ -2,7 +2,9 @@
 
 {% from "table.njk" import tableStart, tableEnd, row %}
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
-{% from "../../../views/macro/statementOfTruth.njk" import statementOfTruth %}
+{% from "statementOfTruth.njk" import statementOfTruth %}
+{% from "timelineCheckAndSend.njk" import timelineCheckAndSend %}
+{% from "evidenceCheckAndSend.njk" import evidenceCheckAndSend %}
 {% from "party/details.njk" import partyDetailsSummaryFragment %}
 
 {% set title = t('Money claim') %}
@@ -42,7 +44,15 @@
     {{ tableEnd() }}
 
     {{ tableStart('claimAmount', 'Claim amount') }}
-    {{ row('Claim amount:', claimAmountTotal.claimAmount | numeral, paths.amountPage.uri )}}
+    {{ row('Claim amount breakdown', '', paths.amountPage.uri, bottomBorder = false, bold = true) }}
+
+    {% for each in draftClaim.amount.rows %}
+      {% if each.reason %}
+        {{ row(each.reason, each.amount, bottomBorder = false) }}
+      {% endif %}
+    {% endfor %}
+
+    {{ row('Total', claimAmountTotal.claimAmount | numeral, bold = true )}}
 
     {% if (interestClaimed === true) %}
       {% if (draftClaim.interest.rate) %}
@@ -66,21 +76,20 @@
 
     {{ tableStart('claimDetails', 'Claim details') }}
     {{ row('Why you’re owed the money:', draftClaim.reason.reason, paths.reasonPage.uri ) }}
-
-    {{ row('Timeline of what happened:', '', paths.timelinePage.uri, false ) }}
-    {% set allTimelineRows = draftClaim.timeline.getPopulatedRowsOnly() %}
-    {% set lastItemIndex = allTimelineRows.length - 1 %}
-    {% for timelineRow in allTimelineRows %}
-      {{ row(timelineRow.date, timelineRow.description, '', loop.index0 === lastItemIndex) }}
-    {% endfor %}
-
-    {{ row('Your evidence (optional):', '', paths.evidencePage.uri, false ) }}
-    {% set allEvidenceRows = draftClaim.evidence.getPopulatedRowsOnly() %}
-    {% set lastItemIndex = allEvidenceRows.length - 1 %}
-    {% for evidenceRow in allEvidenceRows %}
-      {{ row(evidenceRow.type.displayValue, evidenceRow.description | default(''), '', loop.index0 === lastItemIndex) }}
-    {% endfor %}
-
+    {{
+      timelineCheckAndSend(
+        header = 'Timeline of what happened',
+        timeline = draftClaim.timeline.getPopulatedRowsOnly(),
+        url = paths.timelinePage.uri
+      )
+    }}
+    {{
+      evidenceCheckAndSend(
+        header = 'Your evidence (optional)',
+        evidence = draftClaim.evidence.getPopulatedRowsOnly(),
+        url = paths.evidencePage.uri
+      )
+    }}
     {{ tableEnd() }}
 
     <div class="column-two-thirds">
