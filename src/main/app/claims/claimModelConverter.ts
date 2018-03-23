@@ -33,7 +33,7 @@ import { InterestDateType } from 'app/common/interestDateType'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 import { YesNoOption } from 'models/yesNoOption'
 import { getStandardInterestRate } from 'common/interestUtils'
-import { InterestBreakdown } from 'claims/models/InterestBreakdown'
+import { InterestBreakdown } from 'claims/models/interestBreakdown'
 import { InterestTypeOption } from 'claim/form/models/interestType'
 
 export class ClaimModelConverter {
