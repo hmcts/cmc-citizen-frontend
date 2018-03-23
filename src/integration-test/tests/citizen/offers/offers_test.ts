@@ -32,3 +32,26 @@ Scenario('I can as a defendant make an offer, accept offer and counter sign the 
   offerSteps.viewClaimFromDashboard(claimRef)
   I.see('You’ve both signed a legal agreement. The claim is now settled.')
 })
+
+Scenario('as a defendant I can make an offer to claimant and have the claimant reject it @citizen', function* (I: I) {
+  const claimantEmail: string = yield I.createCitizenUser()
+  const defendantEmail: string = yield I.createCitizenUser()
+
+  const claimRef: string = yield I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL), claimantEmail)
+
+  I.linkDefendantToClaim(claimRef, claimantEmail, defendantEmail)
+  I.respondToClaim(claimRef, claimantEmail, createResponseData(PartyType.INDIVIDUAL), defendantEmail)
+
+  userSteps.login(defendantEmail)
+  offerSteps.makeOfferFromDashboard(claimRef)
+  I.see('Your offer has been sent to ' + createClaimant(PartyType.INDIVIDUAL).name)
+  I.click('Sign out')
+
+  userSteps.login(claimantEmail)
+  offerSteps.rejectOfferFromDashboard(claimRef)
+  I.click('Sign out')
+
+  userSteps.login(defendantEmail)
+  offerSteps.viewClaimFromDashboard(claimRef)
+  I.see(createClaimant(PartyType.INDIVIDUAL).name + ' has rejected your offer.')
+})
