@@ -33,7 +33,7 @@ Scenario('I can as a defendant make an offer, accept offer and counter sign the 
   I.see('You’ve both signed a legal agreement. The claim is now settled.')
 })
 
-Scenario('as a defendant I can make an offer to claimant and have the claimant reject it @citizen', function* (I: I) {
+Scenario('I can make an offer as a defendant to a claimant and have the claimant reject it @citizen', function* (I: I) {
   const claimantEmail: string = yield I.createCitizenUser()
   const defendantEmail: string = yield I.createCitizenUser()
 
