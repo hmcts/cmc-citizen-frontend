@@ -3,7 +3,7 @@ import { MomentFactory } from 'common/momentFactory'
 
 export class InterestDate {
 
-  constructor (public type?: string, public date?: Moment, public reason?: string, public endDate?: string) {}
+  constructor (public type?: string, public date?: Moment, public reason?: string, public endDateType?: string) {}
 
   deserialize (input?: any): InterestDate {
     if (input) {
@@ -15,7 +15,7 @@ export class InterestDate {
         this.reason = input.reason
       }
       if (input.endDate !== undefined) {
-        this.endDate = input.endDate
+        this.endDateType = input.endDateType
       }
     }
     return this

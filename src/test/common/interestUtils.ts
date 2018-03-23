@@ -18,7 +18,7 @@ const sampleClaimObj = {
     } as Interest,
     interestDate: {
       type: InterestDateType.SUBMISSION,
-      endDate: InterestEndDateOption.SETTLED_OR_JUDGMENT
+      endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
     } as InterestDate
   },
   createdAt: MomentFactory.currentDate(),
