@@ -147,29 +147,21 @@ describe('Defendant response task list builder', () => {
     })
 
     describe('"When will you pay" task', () => {
-      let isResponseFullyAdmittedStub: sinon.SinonStub
+      let isResponseRejectedFullyWithDisputeStub: sinon.SinonStub
       let isResponsePartiallyRejectedDueToStub: sinon.SinonStub
 
       beforeEach(() => {
-        isResponseFullyAdmittedStub = sinon.stub(ResponseDraft.prototype, 'isResponseFullyAdmitted')
+        isResponseRejectedFullyWithDisputeStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
         isResponsePartiallyRejectedDueToStub = sinon.stub(ResponseDraft.prototype, 'isResponsePartiallyRejectedDueTo')
       })
 
       afterEach(() => {
-        isResponseFullyAdmittedStub.restore()
+        isResponseRejectedFullyWithDisputeStub.restore()
         isResponsePartiallyRejectedDueToStub.restore()
       })
 
-      it('should be enabled when claim is fully admitted', () => {
-        isResponseFullyAdmittedStub.returns(true)
-        isResponsePartiallyRejectedDueToStub.returns(false)
-
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
-        expect(taskList.tasks.map(task => task.name)).to.contain('When will you pay?')
-      })
-
       it('should be enabled when claim is partially rejected due to amount being too high', () => {
-        isResponseFullyAdmittedStub.returns(false)
+        isResponseRejectedFullyWithDisputeStub.returns(false)
         isResponsePartiallyRejectedDueToStub.withArgs(RejectPartOfClaimOption.AMOUNT_TOO_HIGH).returns(true)
 
         const input = {
@@ -184,7 +176,7 @@ describe('Defendant response task list builder', () => {
       })
 
       it('should be disabled in remaining cases', () => {
-        isResponseFullyAdmittedStub.returns(false)
+        isResponseRejectedFullyWithDisputeStub.returns(false)
         isResponsePartiallyRejectedDueToStub.returns(false)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)

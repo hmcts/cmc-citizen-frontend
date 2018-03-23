@@ -263,14 +263,6 @@ describe('ResponseDraft', () => {
 
       expect(draft.requireMediation()).to.be.eq(true)
     })
-
-    it('should return true when response is rejected and counter claim is made', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.DEFENCE)
-      draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.COUNTER_CLAIM)
-
-      expect(draft.requireMediation()).to.be.eq(true)
-    })
   })
 
   describe('isResponseRejectedFullyWithAmountClaimedPaid', () => {

@@ -114,7 +114,7 @@ export class ResponseDraft extends DraftDocument {
   }
 
   public requireMediation (): boolean {
-    return this.isResponsePopulated() && (this.isResponseRejectedFully() || this.isResponseRejectedPartially())
+    return this.isResponsePopulated() && (this.isResponseRejectedFullyWithDispute() || this.isResponseRejectedPartially())
   }
 
   public isResponseRejectedFullyWithDispute (): boolean {
@@ -140,12 +140,6 @@ export class ResponseDraft extends DraftDocument {
 
   private isResponsePopulated (): boolean {
     return !!this.response && !!this.response.type
-  }
-
-  private isResponseRejectedFully (): boolean {
-    return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim &&
-      (this.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE ||
-        this.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM)
   }
 
   private isResponseRejectedPartially (): boolean {
