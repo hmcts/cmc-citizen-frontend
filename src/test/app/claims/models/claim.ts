@@ -159,20 +159,6 @@ describe('Claim', () => {
     });
 
     [true, false].forEach(isMoreTimeRequested => {
-      it(`should return FREE_MEDIATION when defendant has rejected the claim and asked for free mediation and more time requested = ${isMoreTimeRequested}`, () => {
-        claim.moreTimeRequested = isMoreTimeRequested
-        claim.response = {
-          responseType: ResponseType.FULL_DEFENCE,
-          defenceType: DefenceType.DISPUTE,
-          defence: 'defence reasoning',
-          freeMediation: FreeMediationOption.YES,
-          defendant: new Individual().deserialize(individual)
-        }
-        expect(claim.status).to.be.equal(ClaimStatus.FREE_MEDIATION)
-      })
-    });
-
-    [true, false].forEach(isMoreTimeRequested => {
       it(`should return CLAIM_REJECTED when the defendant has rejected the claim with no free mediation and more time requested = ${isMoreTimeRequested}`, () => {
         claim.moreTimeRequested = isMoreTimeRequested
         claim.response = {
