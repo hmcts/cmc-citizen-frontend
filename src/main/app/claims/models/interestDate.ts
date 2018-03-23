@@ -14,7 +14,7 @@ export class InterestDate {
       if (input.reason) {
         this.reason = input.reason
       }
-      if (input.endDate !== undefined) {
+      if (input.endDateType !== undefined) {
         this.endDateType = input.endDateType
       }
     }
