@@ -10,7 +10,6 @@ import { YourDefenceTask } from 'response/tasks/yourDefenceTask'
 import { YourDetails } from 'response/tasks/yourDetails'
 import { HowMuchPaidTask } from 'response/tasks/howMuchPaidTask'
 import { HowMuchOwedTask } from 'response/tasks/howMuchOwedTask'
-import { WhenWillYouPayTask } from 'response/tasks/whenWillYouPayTask'
 import { FreeMediationTask } from 'response/tasks/freeMediationTask'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { Claim } from 'claims/models/claim'
@@ -70,16 +69,6 @@ export class TaskListBuilder {
           'How much have you paid the claimant?',
           Paths.defendantHowMuchPaid.evaluateUri({ externalId: externalId }),
           HowMuchPaidTask.isCompleted(draft)
-        )
-      )
-    }
-
-    if (draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)) {
-      tasks.push(
-        new TaskListItem(
-          'When will you pay?',
-          Paths.defencePaymentOptionsPage.evaluateUri({ externalId: externalId }),
-          WhenWillYouPayTask.isCompleted(draft)
         )
       )
     }

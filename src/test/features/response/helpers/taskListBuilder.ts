@@ -145,43 +145,5 @@ describe('Defendant response task list builder', () => {
         expect(taskList).to.be.equal(undefined)
       })
     })
-
-    describe('"When will you pay" task', () => {
-      let isResponseRejectedFullyWithDisputeStub: sinon.SinonStub
-      let isResponsePartiallyRejectedDueToStub: sinon.SinonStub
-
-      beforeEach(() => {
-        isResponseRejectedFullyWithDisputeStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
-        isResponsePartiallyRejectedDueToStub = sinon.stub(ResponseDraft.prototype, 'isResponsePartiallyRejectedDueTo')
-      })
-
-      afterEach(() => {
-        isResponseRejectedFullyWithDisputeStub.restore()
-        isResponsePartiallyRejectedDueToStub.restore()
-      })
-
-      it('should be enabled when claim is partially rejected due to amount being too high', () => {
-        isResponseRejectedFullyWithDisputeStub.returns(false)
-        isResponsePartiallyRejectedDueToStub.withArgs(RejectPartOfClaimOption.AMOUNT_TOO_HIGH).returns(true)
-
-        const input = {
-          howMuchIsPaid: {
-            amount: 300,
-            date: new LocalDate(20, 1, 12),
-            text: 'I owe nothing'
-          }
-        }
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft().deserialize(input), claim)
-        expect(taskList.tasks.map(task => task.name)).to.contain('When will you pay?')
-      })
-
-      it('should be disabled in remaining cases', () => {
-        isResponseRejectedFullyWithDisputeStub.returns(false)
-        isResponsePartiallyRejectedDueToStub.returns(false)
-
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('When will you pay?')
-      })
-    })
   })
 })

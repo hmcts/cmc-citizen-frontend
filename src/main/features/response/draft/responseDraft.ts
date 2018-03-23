@@ -18,7 +18,7 @@ import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
 import { PayBySetDate } from 'response/draft/payBySetDate'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
-import { HowMuchPaidClaimantOption, HowMuchPaidClaimant } from 'response/form/models/howMuchPaidClaimant'
+import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import * as config from 'config'
@@ -85,9 +85,7 @@ export class ResponseDraft extends DraftDocument {
     if (!this.isResponsePopulated()) {
       return false
     }
-
-    return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim !== undefined
-      && RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).includes(this.rejectAllOfClaim.option)
+    return this.isResponseRejectedFullyWithDispute()
   }
 
   public isResponseFullyAdmitted (): boolean {

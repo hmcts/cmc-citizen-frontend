@@ -31,8 +31,7 @@ describe('OweMoneyTask', () => {
   describe('when part admission', () => {
     it('should be not completed when type of part admission is not selected', () => {
       const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.PART_ADMISSION)
-      draft.rejectPartOfClaim = new RejectPartOfClaim(undefined)
+      draft.response = undefined
 
       expect(OweMoneyTask.isCompleted(draft)).to.equal(false)
     })
