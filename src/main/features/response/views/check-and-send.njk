@@ -130,8 +130,23 @@
     {% endif %}
 
     {% if draft.requireDefence() %}
-      {{ tableStart('yourDefence', 'Your defence') }}
-      {{ row('Your defence', draft.defence.text, paths.defencePage.evaluateUri({ externalId: claim.externalId })) }}
+      {{ tableStart('yourDefence', 'Response details') }}
+      {{ row('Why you disagree with the claim', draft.defence.text, paths.defencePage.evaluateUri({ externalId: claim.externalId })) }}
+
+      {{ row('Timeline of what happened (optional):', '', paths.timelinePage.evaluateUri({ externalId: claim.externalId }), false ) }}
+      {% set allTimelineRows = draft.timeline.getPopulatedRowsOnly() %}
+      {% for timelineRow in allTimelineRows %}
+        {{ row(timelineRow.date, timelineRow.description, '', false) }}
+      {% endfor %}
+      {{ row('Comments about their timeline (optional):	', draft.timeline.comment | default(''), '', true ) }}
+
+      {{ row('Your evidence (optional):', '', paths.evidencePage.evaluateUri({ externalId: claim.externalId }), false ) }}
+      {% set allEvidenceRows = draft.evidence.getPopulatedRowsOnly() %}
+      {% for evidenceRow in allEvidenceRows %}
+        {{ row(evidenceRow.type.displayValue, evidenceRow.description | default(''), '', false) }}
+      {% endfor %}
+      {{ row('Comments about their evidence (optional):	', draft.evidence.comment | default(''), '', true ) }}
+
       {{ tableEnd() }}
     {% endif %}
 
