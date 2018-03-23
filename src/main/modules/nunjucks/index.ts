@@ -35,6 +35,7 @@ import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 import { InterestTypeOption } from 'claim/form/models/interestType'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { Service } from 'models/service'
+import { InterestRateOption } from 'claim/form/models/interestRateOption'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -101,6 +102,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('DefendantPaymentType', DefendantPaymentType)
     nunjucksEnv.addGlobal('DefendantPaymentOption', DefendantPaymentOption)
     nunjucksEnv.addGlobal('PaymentType', PaymentType)
+    nunjucksEnv.addGlobal('InterestRateOption', InterestRateOption)
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('ResponseType', ResponseType)
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)

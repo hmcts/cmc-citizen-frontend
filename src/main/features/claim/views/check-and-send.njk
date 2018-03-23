@@ -84,7 +84,11 @@
         {{ row('Show how you calculated the amount', draftClaim.interestTotal.reason, bold = true) }}
         {% if (draftClaim.interestContinueClaiming.option === YesNoOption.YES) %}
           {{ row('Continue to claim interest after you submit your claim?', 'Yes', paths.interestContinueClaimingPage.uri, bottomBorder = false, bold = true) }}
-          {{ row('What rate of interest do you want to claim?', draftClaim.interestHowMuch.dailyAmount | numeral + ', daily interest amount', paths.interestHowMuchPage.uri, bold = true) }}
+          {% if (draftClaim.interestHowMuch.type === InterestRateOption.STANDARD) %}
+            {{ row('What rate of interest do you want to claim?', '8% daily interest amount', paths.interestHowMuchPage.uri, bold = true) }}
+          {% else %}
+            {{ row('What rate of interest do you want to claim?', draftClaim.interestHowMuch.dailyAmount | numeral + ', daily interest amount', paths.interestHowMuchPage.uri, bold = true) }}
+          {% endif %}
         {% else %}
           {{ row('Continue to claim interest after you submit your claim?', 'No', paths.interestContinueClaimingPage.uri, bold = true) }}
         {% endif %}
