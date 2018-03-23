@@ -184,6 +184,9 @@ export class ClaimModelConverter {
       if (draftClaim.interestType.option === InterestTypeOption.SAME_RATE) {
         interest.type = draftClaim.interestRate.type
         interest.rate = draftClaim.interestRate.rate
+        if (draftClaim.interestRate.type === InterestRateOption.DIFFERENT) {
+          interest.reason = draftClaim.interestRate.reason
+        }
       } else {
         const interestBreakdown = new InterestBreakdown()
         interestBreakdown.totalAmount = draftClaim.interestTotal.amount
@@ -195,9 +198,6 @@ export class ClaimModelConverter {
           interest.specificDailyAmount = draftClaim.interestHowMuch.dailyAmount
         }
       }
-    }
-    if (draftClaim.interestRate.type === InterestRateOption.DIFFERENT) {
-      interest.reason = draftClaim.interestRate.reason
     }
     return interest
   }

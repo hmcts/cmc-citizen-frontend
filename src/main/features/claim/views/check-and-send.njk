@@ -47,7 +47,7 @@
 
     {% for each in draftClaim.amount.rows %}
       {% if each.reason %}
-        {{ row(each.reason, each.amount, bottomBorder = false) }}
+        {{ row(each.reason, each.amount | numeral, bottomBorder = false) }}
       {% endif %}
     {% endfor %}
 
