@@ -14,18 +14,21 @@ import {
 import { Response } from 'claims/models/response'
 import { defenceWithDisputeData, defenceWithAmountClaimedAlreadyPaidData } from '../../data/entity/responseData'
 import { company, individual, organisation, soleTrader } from '../../data/entity/party'
+import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 
 function prepareResponseDraft (draftTemplate: any, partyDetails: object) {
   return new ResponseDraft().deserialize({
     ...draftTemplate,
-    defendantDetails: { ...draftTemplate.defendantDetails, partyDetails: partyDetails }
+    defendantDetails: { ...draftTemplate.defendantDetails, partyDetails: partyDetails },
+    timeline: DefendantTimeline.fromObject({ rows: [], comment: 'I do not agree' })
   })
 }
 
 function prepareResponseData (template, party: object) {
   return Response.deserialize({
     ...template,
-    defendant: { ...party, email: 'user@example.com', mobilePhone: '0700000000' }
+    defendant: { ...party, email: 'user@example.com', mobilePhone: '0700000000' },
+    timeline: { rows: [], comment: 'I do not agree' }
   })
 }
 

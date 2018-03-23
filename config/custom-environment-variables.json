@@ -50,6 +50,11 @@
   "pdf-service": {
     "url": "PDF_SERVICE_URL"
   },
+  "eligibility": {
+    "cookie": {
+      "timeToLiveInMinutes": "ELIGIBILITY_COOKIE_TIME_TO_LIVE_IN_MINUTES"
+    }
+  },
   "support": {
     "contact-email": "CONTACT_EMAIL"
   },
@@ -78,7 +83,6 @@
     "partialAdmission": "FEATURE_PARTIAL_ADMISSION",
     "offer": "FEATURE_OFFER",
     "statementOfMeans": "FEATURE_STATEMENT_OF_MEANS",
-    "finePrint": "FEATURE_FINE_PRINT",
     "ccd": "FEATURE_CCD",
     "returnErrorToUser": "FEATURE_RETURN_ERROR_TO_USER"
   },

@@ -19,8 +19,8 @@
         partyDetailsSummaryFragment(
           partyDetails = draftClaim.claimant.partyDetails,
           changeLinks = {
-            name: paths.claimantIndividualDetailsPage.uri,
-            address: paths.claimantIndividualDetailsPage.uri,
+            name: claimantPartyDetailsPageUri,
+            address: claimantPartyDetailsPageUri,
             dateOfBirth: paths.claimantDateOfBirthPage.uri
           }
         )
@@ -34,8 +34,8 @@
             partyDetails = draftClaim.defendant.partyDetails,
             showCorrespondenceAddressSection = false,
               changeLinks = {
-              name: paths.defendantIndividualDetailsPage.uri,
-              address: paths.defendantIndividualDetailsPage.uri
+              name: defendantPartyDetailsPageUri,
+              address: defendantPartyDetailsPageUri
            }
         )
     }}
@@ -44,7 +44,15 @@
     {{ tableEnd() }}
 
     {{ tableStart('claimAmount', 'Claim amount') }}
-    {{ row('Claim amount:', claimAmountTotal.claimAmount | numeral, paths.amountPage.uri )}}
+    {{ row('Claim amount breakdown', '', paths.amountPage.uri, bottomBorder = false, bold = true) }}
+
+    {% for each in draftClaim.amount.rows %}
+      {% if each.reason %}
+        {{ row(each.reason, each.amount, bottomBorder = false) }}
+      {% endif %}
+    {% endfor %}
+
+    {{ row('Total', claimAmountTotal.claimAmount | numeral, bold = true )}}
 
     {% if (interestClaimed === true) %}
       {% if (draftClaim.interest.rate) %}

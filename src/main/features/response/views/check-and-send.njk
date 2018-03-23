@@ -117,8 +117,26 @@
     {% endif %}
 
     {% if draft.requireDefence() %}
-      {{ tableStart('yourDefence', 'Your defence') }}
-      {{ row(label = 'Your defence', value = draft.defence.text, changeLink = paths.defencePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+      {{ tableStart('yourDefence', 'Response details') }}
+      {{ row(label = 'Why you disagree with the claim', value = draft.defence.text, changeLink = paths.defencePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+
+      {{
+        timelineCheckAndSend(
+          header = 'Timeline of what happened (optional)',
+          timeline = draft.timeline.getPopulatedRowsOnly(),
+          url = paths.timelinePage.evaluateUri({ externalId: claim.externalId })
+        )
+      }}
+      {{ row(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), bold = true) }}
+
+      {{
+        evidenceCheckAndSend(
+          header = 'Your evidence (optional)',
+          evidence = draft.evidence.getPopulatedRowsOnly(),
+          url = paths.evidencePage.evaluateUri({ externalId: claim.externalId })
+        )
+      }}
+      {{ row(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
       {{ tableEnd() }}
     {% endif %}
 

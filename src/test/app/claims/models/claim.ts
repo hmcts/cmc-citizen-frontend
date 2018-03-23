@@ -9,8 +9,10 @@ import moment = require('moment')
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { ResponseType } from 'claims/models/response/responseCommon'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
+import { defenceWithDisputeData } from '../../../data/entity/responseData'
+import { offer, offerRejection } from '../../../data/entity/offer'
 import { individual } from '../../../data/entity/party'
-import { DefenceType } from 'claims/models/response/fullDefenceResponse'
+import { DefenceType, FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { Individual } from 'claims/models/details/yours/individual'
 import { PartyStatement } from 'claims/models/partyStatement'
 
@@ -157,20 +159,6 @@ describe('Claim', () => {
     });
 
     [true, false].forEach(isMoreTimeRequested => {
-      it(`should return FREE_MEDIATION when defendant has rejected the claim and asked for free mediation and more time requested = ${isMoreTimeRequested}`, () => {
-        claim.moreTimeRequested = isMoreTimeRequested
-        claim.response = {
-          responseType: ResponseType.FULL_DEFENCE,
-          defenceType: DefenceType.DISPUTE,
-          defence: 'defence reasoning',
-          freeMediation: FreeMediationOption.YES,
-          defendant: new Individual().deserialize(individual)
-        }
-        expect(claim.status).to.be.equal(ClaimStatus.FREE_MEDIATION)
-      })
-    });
-
-    [true, false].forEach(isMoreTimeRequested => {
       it(`should return CLAIM_REJECTED when the defendant has rejected the claim with no free mediation and more time requested = ${isMoreTimeRequested}`, () => {
         claim.moreTimeRequested = isMoreTimeRequested
         claim.response = {
@@ -188,6 +176,17 @@ describe('Claim', () => {
       claim.response = undefined
 
       expect(claim.status).to.be.equal(ClaimStatus.NO_RESPONSE)
+    })
+
+    describe('offer rejected status', () => {
+      it('should return OFFER_REJECTED when offer is rejected', () => {
+        claim.response = FullDefenceResponse.deserialize(defenceWithDisputeData)
+        claim.settlement = new Settlement().deserialize({
+          partyStatements: [offer, offerRejection]
+        })
+
+        expect(claim.status).to.be.equal(ClaimStatus.OFFER_REJECTED)
+      })
     })
   })
 })

@@ -31,6 +31,7 @@ import { DefendantWhenDidYouPayPage } from 'integration-test/tests/citizen/defen
 import { ClaimStoreClient } from 'integration-test/helpers/clients/claimStoreClient'
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 import I = CodeceptJS.I
+import { DefendantEvidencePage } from 'integration-test/tests/citizen/defence/pages/defendant-evidence'
 
 const I: I = actor()
 const defendantStartPage: DefendantStartPage = new DefendantStartPage()
@@ -52,6 +53,7 @@ const defendantHowMuchYouBelieveYouOwePage: DefendantHowMuchYouOwePage = new Def
 const defendantHowMuchHaveYouPaidTheClaimant: DefendantHowMuchHaveYouPaidPage = new DefendantHowMuchHaveYouPaidPage()
 const defendantRejectPartOfClaimPage: DefendantRejectPartOfClaimPage = new DefendantRejectPartOfClaimPage()
 const defendantTimelineOfEventsPage: DefendantTimelineEventsPage = new DefendantTimelineEventsPage()
+const defendantEvidencePage: DefendantEvidencePage = new DefendantEvidencePage()
 const defendantImpactOfDisputePage: DefendantImpactOfDisputePage = new DefendantImpactOfDisputePage()
 const loginPage: LoginPage = new LoginPage()
 const defendantPaymentPlanPage: DefendantPaymentPlanPage = new DefendantPaymentPlanPage()
@@ -140,6 +142,11 @@ export class DefenceSteps {
     defendantTimelineOfEventsPage.submitForm()
   }
 
+  enterEvidence (description: string, comment: string): void {
+    I.see('Add your timeline of events')
+    defendantEvidencePage.enterEvidenceRow('CONTRACTS_AND_AGREEMENTS', description, comment)
+  }
+
   explainImpactOfDispute (impactOfDispute: string): void {
     I.see('How this dispute has affected you?')
     defendantImpactOfDisputePage.enterImpactOfDispute(impactOfDispute)
@@ -190,8 +197,7 @@ export class DefenceSteps {
       defence.paidWhatIBelieveIOwe.paidDate,
       defence.paidWhatIBelieveIOwe.explanation)
     this.addTimeLineOfEvents(defence.timeline)
-    I.see('List your evidence')
-    I.click('Save and continue')
+    this.enterEvidence('description', 'They do not have evidence')
     this.explainImpactOfDispute(defence.impactOfDispute)
     defendantSteps.selectTaskFreeMediation()
     defendantFreeMediationPage.chooseYes()
@@ -207,8 +213,7 @@ export class DefenceSteps {
       defence.claimAmountIsTooMuch.howMuchIBelieveIOwe,
       defence.claimAmountIsTooMuch.explanation)
     this.addTimeLineOfEvents(defence.timeline)
-    I.see('List your evidence')
-    I.click('Save and continue')
+    this.enterEvidence('description', 'They do not have evidence')
     this.explainImpactOfDispute(defence.impactOfDispute)
     defendantSteps.selectTaskWhenWillYouPay()
     defendantWhenWillYouPage.chooseInstalments()
@@ -266,6 +271,8 @@ export class DefenceSteps {
         this.rejectAllOfClaimAsDisputeClaim()
         I.see('Why do you disagree with the claim?')
         this.submitDefenceText('I fully dispute this claim')
+        this.addTimeLineOfEvents({ events: [{ date: 'may', description: 'ok' } as TimelineEvent] } as Timeline)
+        this.enterEvidence('description', 'comment')
         this.askforMediation()
         defendantSteps.selectCheckAndSubmitYourDefence()
         break
@@ -273,6 +280,8 @@ export class DefenceSteps {
       case DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID:
         this.enterWhenDidYouPay(defence)
         this.submitDefenceText('I have already paid')
+        this.addTimeLineOfEvents({ events: [{ date: 'may', description: 'ok' } as TimelineEvent] } as Timeline)
+        this.enterEvidence('description', 'comment')
         defendantSteps.selectCheckAndSubmitYourDefence()
         I.see('When did you pay this amount?')
         I.see('How did you pay the amount claimed?')
@@ -306,6 +315,8 @@ export class DefenceSteps {
     if (defenceType === DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID) {
       this.enterWhenDidYouPay(defence)
       this.submitDefenceText('I have already paid')
+      this.addTimeLineOfEvents({ events: [{ date: 'may', description: 'ok' } as TimelineEvent] } as Timeline)
+      this.enterEvidence('description', 'comment')
       defendantSteps.selectCheckAndSubmitYourDefence()
       I.see('When did you pay this amount?')
       I.see('How did you pay the amount claimed?')

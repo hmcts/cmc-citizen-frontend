@@ -5,6 +5,7 @@ import * as config from 'config'
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
+import { checkEligibilityGuards } from './checks/eligibility-check'
 import { IndividualDetails } from 'app/forms/models/individualDetails'
 import { DateOfBirth } from 'app/forms/models/dateOfBirth'
 import { LocalDate } from 'forms/models/localDate'
@@ -36,6 +37,7 @@ describe('defendant as individual details page', () => {
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.defendantIndividualDetailsPage.uri)
+    checkEligibilityGuards(app, 'get', ClaimPaths.defendantIndividualDetailsPage.uri)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
@@ -50,6 +52,7 @@ describe('defendant as individual details page', () => {
 
   describe('on POST', () => {
     checkAuthorizationGuards(app, 'post', ClaimPaths.defendantIndividualDetailsPage.uri)
+    checkEligibilityGuards(app, 'post', ClaimPaths.defendantIndividualDetailsPage.uri)
 
     describe('for authorized user', () => {
       beforeEach(() => {
