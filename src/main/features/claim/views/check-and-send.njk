@@ -2,7 +2,9 @@
 
 {% from "table.njk" import tableStart, tableEnd, row %}
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
-{% from "../../../views/macro/statementOfTruth.njk" import statementOfTruth %}
+{% from "statementOfTruth.njk" import statementOfTruth %}
+{% from "timelineCheckAndSend.njk" import timelineCheckAndSend %}
+{% from "evidenceCheckAndSend.njk" import evidenceCheckAndSend %}
 {% from "party/details.njk" import partyDetailsSummaryFragment %}
 
 {% set title = t('Money claim') %}
@@ -102,22 +104,21 @@
     {{ tableEnd() }}
 
     {{ tableStart('claimDetails', 'Claim details') }}
-    {{ row('Why you’re owed the money', draftClaim.reason.reason, paths.reasonPage.uri, bold = true) }}
-
-    {{ row('Timeline of what happened', '', paths.timelinePage.uri, bottomBorder = false, bold = true) }}
-    {% set allTimelineRows = draftClaim.timeline.getPopulatedRowsOnly() %}
-    {% set lastItemIndex = allTimelineRows.length - 1 %}
-    {% for timelineRow in allTimelineRows %}
-      {{ row(timelineRow.date, timelineRow.description, '', loop.index0 === lastItemIndex) }}
-    {% endfor %}
-
-    {{ row('Your evidence (optional)', '', paths.evidencePage.uri, bottomBorder = false, bold = true ) }}
-    {% set allEvidenceRows = draftClaim.evidence.getPopulatedRowsOnly() %}
-    {% set lastItemIndex = allEvidenceRows.length - 1 %}
-    {% for evidenceRow in allEvidenceRows %}
-      {{ row(evidenceRow.type.displayValue, evidenceRow.description | default(''), '', loop.index0 === lastItemIndex) }}
-    {% endfor %}
-
+    {{ row('Why you’re owed the money:', draftClaim.reason.reason, paths.reasonPage.uri ) }}
+    {{
+      timelineCheckAndSend(
+        header = 'Timeline of what happened',
+        timeline = draftClaim.timeline.getPopulatedRowsOnly(),
+        url = paths.timelinePage.uri
+      )
+    }}
+    {{
+      evidenceCheckAndSend(
+        header = 'Your evidence (optional)',
+        evidence = draftClaim.evidence.getPopulatedRowsOnly(),
+        url = paths.evidencePage.uri
+      )
+    }}
     {{ tableEnd() }}
 
     <div class="column-two-thirds">
