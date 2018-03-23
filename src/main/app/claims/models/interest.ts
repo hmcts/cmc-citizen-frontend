@@ -1,4 +1,4 @@
-import { InterestBreakdown } from 'claims/models/InterestBreakdown'
+import { InterestBreakdown } from 'claims/models/interestBreakdown'
 
 export class Interest {
 

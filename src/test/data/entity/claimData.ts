@@ -4,8 +4,7 @@ import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDateType } from 'app/common/interestDateType'
 import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
-import { LocalDate } from 'forms/models/localDate'
-import { InterestBreakdown } from 'claims/models/InterestBreakdown'
+import moment = require('moment')
 
 export const claimData = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
@@ -33,17 +32,14 @@ export const claimData = {
     type: 'breakdown'
   },
   interest: {
-    interestBreakdown: {
-      explanation: undefined,
-      totalAmount: undefined
-    } as InterestBreakdown,
+    interestBreakdown: undefined,
     type: InterestRateOption.DIFFERENT,
     rate: 10,
     reason: 'Special case'
   } as Interest,
   interestDate: {
     type: InterestDateType.CUSTOM,
-    date: new LocalDate(2018, 1, 1).asString(),
+    date: moment.utc({ year: 2018, month: 0, day: 1 }),
     reason: 'reason',
     endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
   } as InterestDate,

@@ -30,7 +30,7 @@ export async function getInterestDetails (claim: Claim): Promise<InterestData> {
 
 function getInterestDateOrIssueDate (claim: Claim): moment.Moment {
   if (claim.claimData.interestDate.type === InterestDateType.CUSTOM) {
-    return MomentFactory.parse(claim.claimData.interestDate.date)
+    return claim.claimData.interestDate.date
   } else {
     return claim.issuedOn
   }
