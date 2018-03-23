@@ -39,7 +39,7 @@ describe('Offer rejected page', () => {
         await request(app)
           .get(page)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('You’ve rejected their offer'))
+          .expect(res => expect(res).to.be.successful.withText('You’ve rejected an offer to settle out of court'))
       })
     })
   })

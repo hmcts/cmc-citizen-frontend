@@ -10,7 +10,6 @@ import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { FeatureToggles } from 'utils/featureToggles'
-import { FreeMediationOption } from 'response/form/models/freeMediation'
 
 interface State {
   status: ClaimStatus
@@ -110,8 +109,6 @@ export class Claim {
       return ClaimStatus.OFFER_SUBMITTED
     } else if (this.eligibleForCCJ) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
-    } else if (this.isFreeMediationRequested()) {
-      return ClaimStatus.FREE_MEDIATION
     } else if (this.isClaimRejected()) {
       return ClaimStatus.CLAIM_REJECTED
     } else if (this.moreTimeRequested) {
@@ -135,11 +132,6 @@ export class Claim {
         status: this.status
       }]
     }
-  }
-
-  private isFreeMediationRequested (): boolean {
-    return this.response && this.response.responseType === ResponseType.FULL_DEFENCE
-      && this.response.freeMediation === FreeMediationOption.YES
   }
 
   private isOfferSubmitted (): boolean {
