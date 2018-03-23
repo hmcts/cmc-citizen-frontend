@@ -7,21 +7,22 @@
   <div class="grid-row">
     <div class="column-two-thirds">
       <div class="govuk-box-highlight">
-        <h1 class="bold-large">{{ t('You’ve rejected their offer') }}</h1>
+        <h1 class="bold-large">{{ t('You’ve rejected an offer to settle out of court') }}</h1>
       </div>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
       <p>
         {{ t('You’ve rejected the defendant’s offer to settle out of court.') }}
       </p>
+
+      {% include "includes/service_survey_link.njk" %}
+
       <p>
-        {{ t('View your claim status on <a href="{{ dashboard }}">your money claims account</a>.', { dashboard: '/dashboard' }) | safe }}
+        <a href="{{ DashboardPaths.dashboardPage.uri }}" class="button">{{ t('Finished') }}</a>
       </p>
 
       {{ supportWidget() }}
 
-      <br>
-      <a href="#" class="button">Finished</a>
     </div>
   </div>
 {% endblock %}
