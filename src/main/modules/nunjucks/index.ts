@@ -36,6 +36,7 @@ import { InterestTypeOption } from 'claim/form/models/interestType'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { Service } from 'models/service'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
+import { InterestType } from 'claims/models/interestType'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -109,6 +110,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('EvidenceType', EvidenceType)
     nunjucksEnv.addGlobal('StatementType', StatementType)
     nunjucksEnv.addGlobal('NotEligibleReason', NotEligibleReason)
+    nunjucksEnv.addGlobal('InterestType', InterestType)
     nunjucksEnv.addGlobal('InterestTypeOption', InterestTypeOption)
     nunjucksEnv.addGlobal('InterestDateType', InterestDateType)
     nunjucksEnv.addGlobal('InterestEndDateOption', InterestEndDateOption)
