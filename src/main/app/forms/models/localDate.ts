@@ -52,7 +52,8 @@ export class LocalDate {
   }
 
   toMoment (): moment.Moment {
-    return moment.utc({ year: this.year, month: this.month - 1, day: this.day }) // Moment months are zero indexed
+    return moment.utc({ year: this.year, month: this.month - 1, day: this.day })
+      .hours(0).minutes(0).seconds(0).milliseconds(0)// Moment months are zero indexed
   }
 
   asString (): string {
