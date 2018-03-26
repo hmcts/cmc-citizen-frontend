@@ -6,7 +6,7 @@ export class MomentFactory {
   }
 
   static currentDate (): moment.Moment {
-    return moment.utc().hours(0).minutes(0).seconds(0).milliseconds(0)
+    return moment().hours(0).minutes(0).seconds(0).milliseconds(0)
   }
 
   static parse (value: string): moment.Moment {
