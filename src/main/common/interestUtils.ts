@@ -29,7 +29,8 @@ export async function getInterestDetails (claim: Claim): Promise<InterestData> {
     interest += claim.claimData.interest.interestBreakdown.totalAmount
   }
 
-  return { interestFromDate, interestToDate, numberOfDays, interest, rate }
+  const specificDailyAmount = claim.claimData.interest.specificDailyAmount
+  return { interestFromDate, interestToDate, numberOfDays, interest, rate, specificDailyAmount }
 }
 
 function getInterestDateOrIssueDate (claim: Claim): moment.Moment {

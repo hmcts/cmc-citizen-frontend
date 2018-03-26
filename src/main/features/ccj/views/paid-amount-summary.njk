@@ -32,7 +32,8 @@
         {% if interestDetails %}
         <tr>
           <th scope="row">
-            {{ interestSnippet(label = 'Interest to date', interestDetails.rate, interestDetails.numberOfDays, interestDetails.interestFromDate, defaultJudgmentDate) }}
+            {{ interestSnippet(label = 'Interest to date', interestDetails.rate, interestDetails.numberOfDays,
+              interestDetails.interestFromDate, defaultJudgmentDate, interestDetails.specificDailyAmount) }}
           </th>
           <td class="numeric last">
             <span class="font-small">{{ interestDetails.interest | numeral }}</span>
