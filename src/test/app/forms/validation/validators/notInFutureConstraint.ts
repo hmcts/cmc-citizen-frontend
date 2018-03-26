@@ -25,7 +25,7 @@ describe('DateNotInFutureConstraint', () => {
         expect(constraint.validate(new LocalDate(undefined, undefined, undefined))).to.equal(true)
       })
 
-      it.skip('given today date', () => {
+      it('given today date', () => {
         let now = moment()
         expect(constraint.validate(new LocalDate(now.year(), now.month() + 1, now.date()))).to.equal(true)
       })

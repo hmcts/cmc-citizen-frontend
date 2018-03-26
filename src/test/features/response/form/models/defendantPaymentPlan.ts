@@ -97,7 +97,7 @@ describe('DefendantPaymentPlan', () => {
         expectValidationError(errors, CommonValidationErrors.AMOUNT_INVALID_DECIMALS)
       })
 
-      it.skip('date is not future', () => {
+      it('date is not future', () => {
         const paymentPlan = validPaymentPlan()
         const moment = MomentFactory.currentDate()
         paymentPlan.firstPaymentDate = new LocalDate(moment.year(), moment.month() + 1, moment.date())
