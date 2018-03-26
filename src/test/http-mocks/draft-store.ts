@@ -5,7 +5,7 @@ import * as HttpStatus from 'http-status-codes'
 import { ResponseType } from 'response/form/models/responseType'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
-import { InterestType } from 'app/../../main/features/claim/form/models/interest'
+import { InterestRateOption } from 'features/claim/form/models/interestRateOption'
 import { Defendant } from 'app/drafts/models/defendant'
 import { Claimant } from 'app/drafts/models/claimant'
 import { DraftClaim } from 'app/drafts/models/draftClaim'
@@ -17,7 +17,7 @@ import { DateOfBirth } from 'app/forms/models/dateOfBirth'
 import { LocalDate } from 'forms/models/localDate'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { ClaimAmountRow } from 'claim/form/models/claimAmountRow'
-import { Interest } from 'claim/form/models/interest'
+import { InterestRate } from 'claim/form/models/interestRate'
 import { InterestDate } from 'claim/form/models/interestDate'
 import { Reason } from 'claim/form/models/reason'
 import { ResponseDraft } from 'response/draft/responseDraft'
@@ -27,14 +27,23 @@ import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
+import { Interest } from 'claim/form/models/interest'
+import { InterestDateType } from 'app/common/interestDateType'
+import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
+import { InterestStartDate } from 'claim/form/models/interestStartDate'
+import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/interestEndDate'
+import { ClaimValue } from 'eligibility/model/claimValue'
+import { YesNoOption } from 'models/yesNoOption'
+import { Evidence } from 'forms/models/evidence'
+import { EvidenceType } from 'forms/models/evidenceType'
+import { Eligibility } from 'eligibility/model/eligibility'
+import { ClaimType } from 'eligibility/model/claimType'
+import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
 export const sampleClaimDraftObj = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
-  readResolveDispute: true,
-  readCompletingClaim: true,
-  eligibility: true,
   claimant: {
     partyDetails: {
       type: 'individual',
@@ -96,15 +105,53 @@ export const sampleClaimDraftObj = {
     ]
   } as ClaimAmountBreakdown,
   interest: {
-    type: InterestType.NO_INTEREST
+    option: YesNoOption.YES
   } as Interest,
-  interestDate: {} as InterestDate,
+  interestType: {
+    option: InterestTypeOption.SAME_RATE
+  } as InterestType,
+  interestRate: {
+    type: InterestRateOption.DIFFERENT,
+    rate: 10,
+    reason: 'Special case'
+  } as InterestRate,
+  interestDate: {
+    type: InterestDateType.SUBMISSION
+  } as InterestDate,
+  interestStartDate: {
+    date: {
+      day: 10,
+      month: 12,
+      year: 2016
+    },
+    reason: 'reason'
+  } as InterestStartDate,
+  interestEndDate: {
+    option: InterestEndDateOption.SETTLED_OR_JUDGMENT
+  } as InterestEndDate,
   reason: {
     reason: 'Valid reason'
   } as Reason,
+  readResolveDispute: true,
+  readCompletingClaim: true,
+  eligibility: {
+    claimValue: ClaimValue.UNDER_10000,
+    helpWithFees: YesNoOption.NO,
+    claimantAddress: YesNoOption.YES,
+    defendantAddress: YesNoOption.YES,
+    eighteenOrOver: YesNoOption.YES,
+    defendantAge: DefendantAgeOption.YES,
+    claimType: ClaimType.PERSONAL_CLAIM,
+    singleDefendant: YesNoOption.NO,
+    governmentDepartment: YesNoOption.NO,
+    claimIsForTenancyDeposit: YesNoOption.NO
+  } as Eligibility,
   timeline: {
     rows: [{ date: 'aaa', description: 'bb' }]
-  } as ClaimantTimeline
+  } as ClaimantTimeline,
+  evidence: {
+    rows: [{ type: EvidenceType.OTHER, description: 'bb' }]
+  } as Evidence
 } as DraftClaim
 
 const sampleResponseDraftObj = {
@@ -117,7 +164,7 @@ const sampleResponseDraftObj = {
   defence: {
     text: 'Some valid defence'
   },
-  timeline : {
+  timeline: {
     rows: [],
     comment: ''
   },

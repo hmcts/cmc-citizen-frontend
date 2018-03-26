@@ -1,0 +1,11 @@
+{% from "table.njk" import row %}
+
+{% macro evidenceCheckAndSend(header, evidence, url) %}
+
+  {{ row(label = header, value = '', changeLink = url, bottomBorder = false, bold = true) }}
+  {% set lastItemIndex = evidence.length - 1 %}
+  {% for evidenceRow in evidence %}
+    {{ row(evidenceRow.type.displayValue, evidenceRow.description | default(''), '', loop.index0 === lastItemIndex) }}
+  {% endfor %}
+
+{% endmacro %}

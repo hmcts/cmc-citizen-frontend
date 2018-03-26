@@ -1,0 +1,48 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, poundInput, textArea, saveAndContinueButton, errorSummary %}
+
+{% set title = t('Money claim') %}
+{% set heading = t('What is the total interest for your claim?') %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <p>{{ t('You need to calculate interest for the different time periods or items and let us know the total. We’ll add it to your claim amount.') }}</p>
+
+      <details class="form-group">
+        <summary>{{ t('Help calculating interest') }}</summary>
+        <div class="panel panel-border-narrow">
+          <p>{{ t('For most types of debt the rate is usually 8%.') }}</p>
+          <p>{{ t('To calculate this, use the steps below.') }}</p>
+          <ol class="list-number">
+            <li class="form-group-compound">{{ t('Work out the yearly interest: take the amount you’re claiming and multiply it by 0.08 (which is 8%).') }}</li>
+            <li class="form-group-compound">{{ t('Work out the daily interest: divide your yearly interest from step 1 by 365 (the number of days in a year).') }}</li>
+            <li class="form-group-compound">{{ t('Work out the total amount of interest: multiply the daily interest from step 2 by the number of days the debt has been overdue.') }}</li>
+          </ol>
+          <div class="example">
+            <p>{{ t('Example') }}</p>
+            <p>{{ t('If you were owed £1,000:') }}</p>
+            <p>{{ t('the annual interest would be £80 (1000 x 0.08 = 80) you’d divide £80 by 365 to get the daily interest: about 22p a day (80 / 365 = 0.22) after 50 days this would be £11 (50 x 0.22 = 11)') }}</p>
+          </div>
+        </div>
+      </details>
+
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+
+        <div class="form-group">
+          <div class="form-group">
+            {{ poundInput('Total interest amount', 'amount', form) }}
+          </div>
+          {{ textArea('Show how you calculated the amount', 'reason', form, inputClass = 'full-width') }}
+        </div>
+
+        <div class="form-group">
+          {{ saveAndContinueButton() }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
