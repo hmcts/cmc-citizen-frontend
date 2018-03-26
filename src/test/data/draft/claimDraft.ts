@@ -1,7 +1,14 @@
 import { individualDetails } from './partyDetails'
-import { InterestType } from 'claim/form/models/interest'
+import { InterestRate } from 'claim/form/models/interestRate'
+import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestDateType } from 'app/common/interestDateType'
 import { YesNoOption } from 'models/yesNoOption'
+import { Interest } from 'claim/form/models/interest'
+import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
+import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/interestEndDate'
+import { InterestDate } from 'claim/form/models/interestDate'
+import { InterestStartDate } from 'claim/form/models/interestStartDate'
+import { LocalDate } from 'forms/models/localDate'
 import { ClaimValue } from 'eligibility/model/claimValue'
 import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 
@@ -52,13 +59,30 @@ export const claimDraft = {
     ]
   },
   interest: {
-    type: InterestType.DIFFERENT,
-    rate: 16,
-    reason: 'High profile case'
-  },
+    option: YesNoOption.YES
+  } as Interest,
+  interestType: {
+    option: InterestTypeOption.SAME_RATE
+  } as InterestType,
+  interestRate: {
+    type: InterestRateOption.DIFFERENT,
+    rate: 10,
+    reason: 'Special case'
+  } as InterestRate,
   interestDate: {
-    type: InterestDateType.SUBMISSION
-  },
+    type: InterestDateType.CUSTOM
+  } as InterestDate,
+  interestStartDate: {
+    date: {
+      day: 1,
+      month: 1,
+      year: 2018
+    } as LocalDate,
+    reason: 'reason'
+  } as InterestStartDate,
+  interestEndDate: {
+    option: InterestEndDateOption.SETTLED_OR_JUDGMENT
+  } as InterestEndDate,
   reason: {
     reason: 'Because he did...'
   },

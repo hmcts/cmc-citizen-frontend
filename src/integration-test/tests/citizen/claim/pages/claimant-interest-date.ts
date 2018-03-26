@@ -1,17 +1,10 @@
 import I = CodeceptJS.I
-import { DateParser } from 'integration-test/utils/date-parser'
 
 const I: I = actor()
 
 const fields = {
   typeSubmission: 'input[id=typesubmission]',
-  typeCustom: 'input[id=typecustom]',
-
-  day: 'input[id="date[day]"]',
-  month: 'input[id="date[month]"]',
-  year: 'input[id="date[year]"]',
-
-  reason: 'input[id="reason"]'
+  typeCustom: 'input[id=typecustom]'
 }
 
 const buttons = {
@@ -20,19 +13,13 @@ const buttons = {
 
 export class ClaimantInterestDatePage {
 
-  selectDefaultDate (): void {
+  selectSubmission (): void {
     I.checkOption(fields.typeSubmission)
     I.click(buttons.submit)
   }
 
-  selectParticularDate (date: string): void {
-    const [ year, month, day ] = DateParser.parse(date)
-
+  selectCustom (): void {
     I.checkOption(fields.typeCustom)
-    I.fillField(fields.day, day)
-    I.fillField(fields.month, month)
-    I.fillField(fields.year, year)
-    I.fillField(fields.reason, 'Because I want to')
     I.click(buttons.submit)
   }
 }
