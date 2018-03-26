@@ -35,6 +35,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import { getStandardInterestRate } from 'common/interestUtils'
 import { InterestBreakdown } from 'claims/models/interestBreakdown'
 import { InterestTypeOption } from 'claim/form/models/interestType'
+import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 
 export class ClaimModelConverter {
 
@@ -212,6 +213,12 @@ export class ClaimModelConverter {
         interestDate.reason = draftClaim.interestStartDate.reason
         interestDate.endDateType = draftClaim.interestEndDate.option
       }
+    }
+    if (
+      draftClaim.interestType.option === InterestTypeOption.BREAKDOWN &&
+      draftClaim.interestContinueClaiming.option === YesNoOption.NO
+    ) {
+      interestDate.endDateType = InterestEndDateOption.SUBMISSION
     }
     return interestDate
   }
