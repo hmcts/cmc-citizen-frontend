@@ -77,6 +77,8 @@ if (toBoolean(config.get<boolean>('featureToggles.testingSupport'))) {
   new TestingSupportFeature().enableFor(app)
 }
 
+// Below method overrides the moment's toISOString method, which is used by RequestPromise
+// to convert moment object to String
 moment.prototype.toISOString = function () {
   return this.format('YYYY-MM-DD[T]HH:mm:ss.SSS')
 }
