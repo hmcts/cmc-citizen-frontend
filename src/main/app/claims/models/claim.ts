@@ -113,12 +113,12 @@ export class Claim {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
     } else if (this.isOfferAccepted()) {
       return ClaimStatus.OFFER_ACCEPTED
+    } else if (this.isOfferRejected()) {
+      return ClaimStatus.OFFER_REJECTED
     } else if (this.isOfferSubmitted()) {
       return ClaimStatus.OFFER_SUBMITTED
     } else if (this.eligibleForCCJ) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
-    } else if (this.isFreeMediationRequested()) {
-      return ClaimStatus.FREE_MEDIATION
     } else if (this.isClaimRejectedAsDisputed()) {
       return ClaimStatus.CLAIM_REJECTED
     } else if (this.isClaimRejectedAsStatesPaid()) {
@@ -142,22 +142,21 @@ export class Claim {
       .filter(state => !!state.status)
   }
 
-  private isFreeMediationRequested () {
-    return this.response && this.response.responseType === ResponseType.FULL_DEFENCE
-      && this.response.freeMediation === FreeMediationOption.YES
-  }
-
-  private isOfferSubmitted () {
+  private isOfferSubmitted (): boolean {
     return FeatureToggles.isEnabled('offer')
       && this.settlement && this.response && this.response.responseType === ResponseType.FULL_DEFENCE
   }
 
-  private isOfferAccepted () {
+  private isOfferAccepted (): boolean {
     return FeatureToggles.isEnabled('offer') && this.settlement && this.settlement.isOfferAccepted()
   }
 
-  private isSettlementReached () {
-    return FeatureToggles.isEnabled('offer') && this.settlement && this.settlementReachedAt
+  private isOfferRejected (): boolean {
+    return FeatureToggles.isEnabled('offer') && this.settlement && this.settlement.isOfferRejected()
+  }
+
+  private isSettlementReached (): boolean {
+    return FeatureToggles.isEnabled('offer') && this.settlement && !!this.settlementReachedAt
   }
 
   private isClaimRejectedAsStatesPaid () {
@@ -181,6 +180,5 @@ export class Claim {
     }
 
     throw new Error(`Unknown defence type: ${this.response.defenceType}`)
-
   }
 }
