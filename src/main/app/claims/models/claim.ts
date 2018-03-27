@@ -10,7 +10,6 @@ import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { FeatureToggles } from 'utils/featureToggles'
-import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { DefenceType } from 'claims/models/response/fullDefenceResponse'
 
 interface State {
@@ -134,12 +133,12 @@ export class Claim {
 
   // noinspection JSUnusedGlobalSymbols Called in the view
   get stateHistory (): State[] {
-    return [{
-      status: this.status
-    }, {
-      status: this.responseStatus()
-    }]
-      .filter(state => !!state.status)
+    const statuses = [{ status: this.status }]
+    if (this.responseStatus() && statuses[0].status !== this.responseStatus()) {
+      statuses.push({ status: this.responseStatus() })
+    }
+
+    return statuses
   }
 
   private isOfferSubmitted (): boolean {
