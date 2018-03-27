@@ -38,13 +38,14 @@ Scenario('I can make an offer as a defendant to a claimant and have the claimant
   const defendantEmail: string = yield I.createCitizenUser()
 
   const claimRef: string = yield I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL), claimantEmail)
+  const claimantName: string = yield createClaimant(PartyType.INDIVIDUAL).name
 
   I.linkDefendantToClaim(claimRef, claimantEmail, defendantEmail)
   I.respondToClaim(claimRef, claimantEmail, createResponseData(PartyType.INDIVIDUAL), defendantEmail)
 
   userSteps.login(defendantEmail)
   offerSteps.makeOfferFromDashboard(claimRef)
-  I.see('Your offer has been sent to ' + createClaimant(PartyType.INDIVIDUAL).name)
+  I.see('Your offer has been sent to ' + claimantName)
   I.click('Sign out')
 
   userSteps.login(claimantEmail)
