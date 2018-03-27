@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, textInput, radioOption, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, textInput, radioGroup, saveAndContinueButton, errorSummary %}
 {% from "date.njk" import dateInput %}
 
 {% set title = t('Money claim') %}
@@ -13,43 +13,34 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-      {% set error = form.errorFor('type') %}
-
         <div class="form-group {% if error %} form-group-error {% endif %}">
 
-          <fieldset id="type[label]">
+          {% set name = 'type' %}
 
-            <legend>
-              <span class="visually-hidden">{{ t('When are you claiming interest from?') }}</span>
-              {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
-            </legend>
-
-            <div class="multiple-choice" data-target="claim-date">
-              <input id="typecustom" type="radio" name="type" value="{{ InterestDateType.CUSTOM }}"
-                {% if form.valueFor('type') == InterestDateType.CUSTOM %} checked
-                {% endif %}>
-              <label for="typecustom">
-                <span class="bold-small">{{ t('From a particular date') }}</span>
-                <span class="form-hint">{{ t('For example, the date an invoice was overdue or that you told someone '
-                  + 'they owed you the money.') }}</span>
-              </label>
-            </div>
-            <div class="panel panel-border-narrow js-hidden" id="claim-date" aria-hidden="false">
-
-              {{ dateInput('date', form) }}
-              {{ textInput('Explain why you’re claiming from this date', 'reason', form) }}
-
-            </div>
-            {{ radioOption(
-              label = 'From the date the claim is submitted',
-              name = 'type',
-              form = form,
-              value = InterestDateType.SUBMISSION,
-              hint = ' ',
-              checked = form.valueFor('type') == InterestDateType.SUBMISSION,
-              bold = true
-            ) }}
-          </fieldset>
+          {{
+          radioGroup(
+            'When are you claiming interest from?',
+            name,
+            [
+              {
+                label: 'The date you submit the claim',
+                value: InterestDateType.SUBMISSION,
+                checked: (form.valueFor(name) === InterestDateType.SUBMISSION),
+                bold: true,
+                hint: 'If you submit after 4pm it will be the next working day.'
+              },
+              {
+                label: 'A particular date',
+                value: InterestDateType.CUSTOM,
+                checked: (form.valueFor(name) === InterestDateType.CUSTOM),
+                bold: true,
+                hint: 'For example the date an invoice was overdue or that you told someone they owed you the money.'
+              }
+            ],
+            form = form,
+            labelForScreenReadersOnly = true
+          )
+          }}
         </div>
 
         <div class="form-group">

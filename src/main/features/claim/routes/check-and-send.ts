@@ -6,9 +6,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { StatementOfTruth } from 'forms/models/statementOfTruth'
 import { FeesClient } from 'fees/feesClient'
 import { TotalAmount } from 'forms/models/totalAmount'
-import { InterestDateType } from 'app/common/interestDateType'
 import { draftInterestAmount } from 'common/interestUtils'
-import { InterestType } from 'claim/form/models/interest'
 import { PartyType } from 'app/common/partyType'
 import { AllClaimTasksCompletedGuard } from 'claim/guards/allClaimTasksCompletedGuard'
 import { IndividualDetails } from 'forms/models/individualDetails'
@@ -115,8 +113,6 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
       res.render(Paths.checkAndSendPage.associatedView, {
         draftClaim: draft.document,
         claimAmountTotal: interestTotal,
-        payAtSubmission: draft.document.interestDate.type === InterestDateType.SUBMISSION,
-        interestClaimed: draft.document.interest.type !== InterestType.NO_INTEREST,
         contactPerson: getContactPerson(draft.document.claimant.partyDetails),
         businessName: getBusinessName(draft.document.claimant.partyDetails),
         dateOfBirth: getDateOfBirth(draft.document.claimant.partyDetails),

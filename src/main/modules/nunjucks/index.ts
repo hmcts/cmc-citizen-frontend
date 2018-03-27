@@ -32,7 +32,11 @@ import { Paths as DashboardPaths } from 'features/dashboard/paths'
 import { Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
+import { InterestTypeOption } from 'claim/form/models/interestType'
+import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { Service } from 'models/service'
+import { InterestRateOption } from 'claim/form/models/interestRateOption'
+import { InterestType } from 'claims/models/interestType'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -99,13 +103,17 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('DefendantPaymentType', DefendantPaymentType)
     nunjucksEnv.addGlobal('DefendantPaymentOption', DefendantPaymentOption)
     nunjucksEnv.addGlobal('PaymentType', PaymentType)
+    nunjucksEnv.addGlobal('InterestRateOption', InterestRateOption)
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('ResponseType', ResponseType)
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)
     nunjucksEnv.addGlobal('EvidenceType', EvidenceType)
     nunjucksEnv.addGlobal('StatementType', StatementType)
     nunjucksEnv.addGlobal('NotEligibleReason', NotEligibleReason)
+    nunjucksEnv.addGlobal('InterestType', InterestType)
+    nunjucksEnv.addGlobal('InterestTypeOption', InterestTypeOption)
     nunjucksEnv.addGlobal('InterestDateType', InterestDateType)
+    nunjucksEnv.addGlobal('InterestEndDateOption', InterestEndDateOption)
     nunjucksEnv.addGlobal('ResidenceType', ResidenceType)
     nunjucksEnv.addGlobal('PaymentSchedule', PaymentSchedule)
     nunjucksEnv.addGlobal('DashboardUrlHelper', DashboardUrlHelper)
