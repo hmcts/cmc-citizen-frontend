@@ -28,13 +28,13 @@ export default express.Router()
       const form: Form<ClaimReference> = req.body
 
       if (form.hasErrors()) {
-        if (isNonCMCReference(form.model.reference)) {
-          return res.redirect(mcolUrl)
-        }
-
         renderView(form, res)
       } else {
-        res.redirect(Paths.homePage.uri)
+        if (isNonCMCReference(form.model.reference)) {
+          res.redirect(mcolUrl)
+        } else {
+          res.redirect(Paths.homePage.uri)
+        }
       }
     })
   )
