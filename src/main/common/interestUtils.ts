@@ -11,11 +11,9 @@ import { isAfter4pm } from 'common/dateUtils'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 import { YesNoOption } from 'models/yesNoOption'
 import { InterestTypeOption } from 'claim/form/models/interestType'
-import { User } from 'idam/user'
-import { InterestRateClient } from 'claims/interestRateClient'
 import { calculateInterest } from 'app/common/calculateInterest'
 
-export async function getInterestDetails (claim: Claim, user: User): Promise<InterestData> {
+export async function getInterestDetails (claim: Claim): Promise<InterestData> {
   if (claim.claimData.interest.type === ClaimInterestType.NO_INTEREST || claim.claimData.interest.type === undefined) {
     return undefined
   }
@@ -25,7 +23,7 @@ export async function getInterestDetails (claim: Claim, user: User): Promise<Int
   const numberOfDays: number = interestToDate.diff(interestFromDate, 'days')
 
   const rate = claim.claimData.interest.rate
-  let interest: number = await InterestRateClient.calculateInterestRateForClaim(claim.externalId, user)
+  let interest: number = claim.totalInterest
 
   const specificDailyAmount = claim.claimData.interest.specificDailyAmount
   return { interestFromDate, interestToDate, numberOfDays, interest, rate, specificDailyAmount }

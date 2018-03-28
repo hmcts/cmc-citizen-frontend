@@ -22,7 +22,7 @@ export default express.Router()
     ClaimantRequestedCCJGuard.requestHandler,
     async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const claim: Claim = res.locals.claim
-      const interestData = await getInterestDetails(claim, res.locals.user)
+      const interestData = await getInterestDetails(claim)
       res.render(Paths.claimSummaryPage.associatedView, {
         interestData: interestData
       })

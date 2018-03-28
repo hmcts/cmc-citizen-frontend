@@ -21,7 +21,7 @@ export default express.Router()
         Paths.paidAmountSummaryPage.associatedView, {
           claim: claim,
           alreadyPaid: draft.document.paidAmount.amount || 0,
-          interestDetails: await getInterestDetails(claim, res.locals.user),
+          interestDetails: await getInterestDetails(claim),
           nextPageUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId }),
           defaultJudgmentDate: MomentFactory.currentDate()
         }

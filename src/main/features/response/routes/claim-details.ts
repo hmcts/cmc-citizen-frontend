@@ -8,7 +8,7 @@ export default express.Router()
   .get(Paths.claimDetailsPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       const claim: Claim = res.locals.claim
-      const interestData = await getInterestDetails(claim, res.locals.user)
+      const interestData = await getInterestDetails(claim)
       res.render(Paths.claimDetailsPage.associatedView, {
         interestData: interestData
       })
