@@ -19,7 +19,7 @@ export async function getInterestDetails (claim: Claim): Promise<InterestData> {
   }
 
   const interestFromDate: moment.Moment = getInterestDateOrIssueDate(claim)
-  const interestToDate: moment.Moment = moment.max(interestFromDate, MomentFactory.currentDate())
+  const interestToDate: moment.Moment = moment.max(MomentFactory.currentDate(), claim.issuedOn)
   const numberOfDays: number = interestToDate.diff(interestFromDate, 'days')
 
   const rate = claim.claimData.interest.rate
