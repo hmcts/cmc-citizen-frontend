@@ -8,6 +8,7 @@ import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { Interest } from 'claims/models/interest'
 import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
+import { User } from 'idam/user'
 
 const sampleClaimObj = {
   claim: {
@@ -23,8 +24,17 @@ const sampleClaimObj = {
   },
   createdAt: MomentFactory.currentDate(),
   issuedOn: MomentFactory.currentDate(),
-  responseDeadline: '2017-08-08'
+  responseDeadline: '2017-08-08',
+  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 }
+
+const user: User = new User('1',
+  'my@mail.com',
+  'test',
+  'test',
+  [],
+  'citizen',
+  'token')
 
 describe('getInterestDetails', () => {
 
@@ -39,7 +49,7 @@ describe('getInterestDetails', () => {
       }
     })
 
-    expect(await getInterestDetails(claim)).to.be.eq(undefined)
+    expect(await getInterestDetails(claim, user)).to.be.eq(undefined)
   })
 
   it('should return 0 for number of days when interest date starts from today', async () => {
@@ -48,7 +58,7 @@ describe('getInterestDetails', () => {
     const today = MomentFactory.currentDate()
     const claim: Claim = new Claim().deserialize({ ...sampleClaimObj, issuedOn: today })
 
-    const { numberOfDays } = await getInterestDetails(claim) as any
+    const { numberOfDays } = await getInterestDetails(claim, user) as any
     expect(numberOfDays).to.deep.eq(0)
   })
 
@@ -58,7 +68,7 @@ describe('getInterestDetails', () => {
     const yesterday = MomentFactory.currentDate().subtract(1, 'days')
     const claim: Claim = new Claim().deserialize({ ...sampleClaimObj, issuedOn: yesterday })
 
-    const { numberOfDays } = await getInterestDetails(claim) as any
+    const { numberOfDays } = await getInterestDetails(claim, user) as any
     expect(numberOfDays).to.deep.eq(1)
   })
 
@@ -68,7 +78,7 @@ describe('getInterestDetails', () => {
     const tomorrow = MomentFactory.currentDate().add(1, 'days')
     const claim: Claim = new Claim().deserialize({ ...sampleClaimObj, issuedOn: tomorrow })
 
-    const { numberOfDays } = await getInterestDetails(claim) as any
+    const { numberOfDays } = await getInterestDetails(claim, user) as any
     expect(numberOfDays).to.deep.eq(0)
   })
 })
