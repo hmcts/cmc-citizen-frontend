@@ -3,8 +3,13 @@ import { expect } from 'chai'
 import { isNonCMCReference } from 'common/utils/isNonCMCReference'
 
 describe('isNonCMCReference', () => {
-  it('should return false when the reference number is in CMC format', () => {
+  it('should return false when the reference number is in CMC format with upper case MC', () => {
     const referenceNumber = '000MC001'
+    expect(isNonCMCReference(referenceNumber)).to.be.false
+  })
+
+  it('should return false when the reference number is in CMC format with lower case mc', () => {
+    const referenceNumber = '000mc001'
     expect(isNonCMCReference(referenceNumber)).to.be.false
   })
 

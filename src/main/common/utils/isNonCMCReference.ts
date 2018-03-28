@@ -9,5 +9,5 @@ export function isNonCMCReference (referenceNumber?: string): boolean {
     return true
   }
 
-  return !referenceNumber.match(/^\d\d\dMC\d\d\d$/)
+  return !referenceNumber.match(/^\d\d\dMC\d\d\d$/i)
 }
