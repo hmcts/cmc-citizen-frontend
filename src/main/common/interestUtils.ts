@@ -13,19 +13,13 @@ import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 import { YesNoOption } from 'models/yesNoOption'
 import { InterestTypeOption } from 'claim/form/models/interestType'
 
-function getInterestEndDate (issuedOn: moment.Moment, interestFromDate: moment.Moment): moment.Moment {
-  const currentDate = MomentFactory.currentDate()
-  const endDate = issuedOn > currentDate ? issuedOn : currentDate
-  return moment.max(interestFromDate, endDate)
-}
-
 export async function getInterestDetails (claim: Claim): Promise<InterestData> {
   if (claim.claimData.interest.type === ClaimInterestType.NO_INTEREST || claim.claimData.interest.type === undefined) {
     return undefined
   }
 
   const interestFromDate: moment.Moment = getInterestDateOrIssueDate(claim)
-  const interestToDate: moment.Moment = getInterestEndDate(claim.issuedOn, interestFromDate)
+  const interestToDate: moment.Moment = moment.max(MomentFactory.currentDate(), claim.issuedOn)
   const numberOfDays: number = interestToDate.diff(interestFromDate, 'days')
 
   const rate = claim.claimData.interest.rate
