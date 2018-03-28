@@ -11,7 +11,7 @@ import { ClaimReference } from 'app/forms/models/claimReference'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'
 import { OAuthHelper } from 'idam/oAuthHelper'
-import { isCCBCCaseReference } from 'common/utils/isCCBCCaseReference'
+import { isNonCMCReference } from 'common/utils/isNonCMCReference'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -31,7 +31,7 @@ export default express.Router()
       const form: Form<ClaimReference> = req.body
 
       if (form.hasErrors()) {
-        if (isCCBCCaseReference(form.model.reference)) {
+        if (isNonCMCReference(form.model.reference)) {
           return res.redirect(mcolUrl)
         }
 
