@@ -31,12 +31,12 @@ export default express.Router()
       const form: Form<ClaimReference> = req.body
 
       if (form.hasErrors()) {
+        renderView(form, res)
+      } else {
         if (isNonCMCReference(form.model.reference)) {
           return res.redirect(mcolUrl)
         }
 
-        renderView(form, res)
-      } else {
         const linked: boolean = await claimStoreClient.isClaimLinked(form.model.reference)
 
         if (linked) {
