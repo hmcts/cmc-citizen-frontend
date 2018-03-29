@@ -27,9 +27,20 @@ export class OfferSteps {
     I.see('You’ve signed the agreement')
   }
 
+  rejectOffer (): void {
+    I.checkOption('No')
+    I.click('Continue')
+    I.see('You’ve rejected their offer')
+  }
+
   acceptOfferFromDashboard (claimRef: string): void {
     this.viewOfferFromDashboard(claimRef)
     this.acceptOffer()
+  }
+
+  rejectOfferFromDashboard (claimRef: string): void {
+    this.viewOfferFromDashboard(claimRef)
+    this.rejectOffer()
   }
 
   countersignAgreement (): void {

@@ -29,7 +29,9 @@
             {% for item in evidence.rows %}
               <tr>
                 <td>{{ item.type.displayValue }}</td>
-                <td>{{ item.description }}</td>
+                  {% if item.description %}
+                    <td>{{ item.description }}</td>
+                  {% endif %}
               </tr>
             {% endfor %}
             </tbody>
