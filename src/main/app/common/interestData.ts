@@ -6,4 +6,5 @@ export interface InterestData {
   rate: number
   interestFromDate: Moment
   interestToDate: Moment
+  specificDailyAmount: number
 }
