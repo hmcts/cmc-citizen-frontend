@@ -19,17 +19,17 @@
 
       <h2 class="bold-large form-group">{{ t('Your response') }}</h2>
 
-      <p>{{ t('We’ve emailed {{ claimant }} your defence, explaining why you reject the claim.', { claimant: claim.claimData.claimant.name  }) | safe}}</p>
+      <p>{{ t('We’ve emailed {{ claimant }} your defence, explaining why you reject the claim.', { claimant: claim.claimData.claimant.name }) | safe}}</p>
 
-      <p>{{ t('View the <a href="{{ link }}">defence against you and your response.</a>', { link: '/dashboard' }) | safe }}</p>
+      <p>{{ t('View the <a href="{{ link }}">claim against you and your response.</a>', { link: '/dashboard' }) | safe }}</p>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
-      <p>{{ t('If {{ defendant }} accepts your defence the claim will be cancelled.', { defendant: claim.claimData.defendant.name }) | safe }}</p>
+      <p>{{ t('If {{ claimant }} accepts your defence the claim will be cancelled.', { claimant: claim.claimData.claimant.name }) | safe }}</p>
       <p>{{ t('If they reject your defence the case will be reviewed and might go to a hearing.') }}</p>
 
       {% if featureToggles.offer %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
-        <p>{{ t('You can still <a href="{{ link }}">settle the claim out of court</a>. For example you could offer to fix faulty goods you sold the claimant or suggest a payment.',
+        <p>{{ t('You may still <a href="{{ link }}">settle the claim out of court</a>. For example you could offer to fix goods you sold the claimant or suggest a payment.',
             { link: OfferPaths.settleOutOfCourtPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}</p>
         <p>{{ t('You can avoid getting a County Court Judgment if the claimant accepts your offer.') }}</p>
       {% endif %}

@@ -1,10 +1,11 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
+{% from "externalLink.njk" import externalLink %}
 
 {% set title = t('Govornment department | Money claim') %}
 {% set question = t('Are you claiming against a government department?') %}
-{% set additionalInformation = t('<a href="{{ governmentDepartmentUri }}" target="_blank" >See a list of government departments</a>.',
-{ governmentDepartmentUri : 'https://www.gov.uk/government/publications/serve-the-treasury-solicitor-with-legal-proceedings' }) %}
+{% set additionalInformation = t(externalLink('See a list of government departments',
+  'https://www.gov.uk/government/publications/serve-the-treasury-solicitor-with-legal-proceedings') + '.') %}
 
 {% block content %}
 

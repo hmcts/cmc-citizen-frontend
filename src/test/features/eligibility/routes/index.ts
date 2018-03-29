@@ -11,7 +11,7 @@ import { app } from '../../../../main/app'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.startPage.uri
-const expectedTextOnPage: string = 'Find out if you can use this service'
+const expectedTextOnPage: string = 'Try the new online service'
 
 describe('Claim eligibility: index page', () => {
   attachDefaultHooks(app)

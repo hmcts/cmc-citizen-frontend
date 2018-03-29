@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as config from 'config'
 
 import { Paths } from 'eligibility/paths'
 
@@ -6,6 +7,7 @@ import { Paths } from 'eligibility/paths'
 export default express.Router()
   .get(Paths.notEligiblePage.uri, (req: express.Request, res: express.Response): void => {
     res.render(Paths.notEligiblePage.associatedView, {
-      reason: req.query.reason
+      reason: req.query.reason,
+      legacyServiceUrl: config.get<string>('mcol.url')
     })
   })
