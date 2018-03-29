@@ -74,30 +74,44 @@ export const claimDraft = {
     option: InterestEndDateOption.SETTLED_OR_JUDGMENT
   } as InterestEndDate,
   reason: {
-    reason: 'Because he did...'
+    reason: 'A strong sense of entitlement. Evidence'
   },
   timeline: {
     rows: [
-      { date: 'Jan', description: 'OK' },
-      { date: 'Feb', description: 'OK' },
-      { date: 'Mar', description: 'OK' },
-      { date: 'Apr', description: 'OK' },
-      { date: 'May', description: 'OK' },
-      { date: 'Jun', description: 'OK' }
+      { date: '27 May 1997', description: 'Best day ever' },
+      { date: '23 March 2018', description: 'A historic day in the history of the world' }
     ]
   },
   evidence: {
     rows: [
-      { type: EvidenceType.PHOTO.value, description: 'OK' },
-      { type: EvidenceType.PHOTO.value, description: 'OK' },
-      { type: EvidenceType.PHOTO.value, description: 'OK' },
-      { type: EvidenceType.PHOTO.value, description: 'OK' },
-      { type: EvidenceType.PHOTO.value, description: 'OK' },
-      { type: EvidenceType.PHOTO.value, description: 'OK' }
-    ], comment: 'I do not agree'
+      {
+        type: EvidenceType.STATEMENT_OF_ACCOUNT,
+        description: 'Statement of account'
+      },
+      {
+        type: EvidenceType.RECEIPTS,
+        description: 'receipt'
+      },
+      {
+        type: EvidenceType.PHOTO,
+        description: 'photo'
+      },
+      {
+        type: EvidenceType.EXPERT_WITNESS,
+        description: 'expert witness'
+      },
+      {
+        type: EvidenceType.CORRESPONDENCE,
+        description: 'Correspondence'
+      },
+      {
+        type: EvidenceType.CONTRACTS_AND_AGREEMENTS,
+        description: 'Contact and Agreements'
+      },
+      {
+        type: EvidenceType.OTHER,
+        description: 'Other'
+      }
+    ]
   }
 }
-
-/*
-"timeline":{"rows":[{"date":"27 May 1997","description":"I signed a contract with GDM to say i would maintain the system for 18 years"},{"date":"27 May 2015","description":"The contact should have ended but i still pay for its maintainance"},{"date":"23 March 2018","description":"A milestone achievement, we should all be proud"},{}]},"evidence":{"rows":[{"type":{"value":"CONTRACTS_AND_AGREEMENTS","displayValue":"Contracts and agreements"},"description":"Contract stated that i must not damage the product for the 18 year period. However i have spent a considerable amount of money ensuring its maintenance. "},{"type":{"value":"PHOTO","displayValue":"Photo evidence"},"description":"At least 1 photo was taken ever year, on the anniversary of the contract."},{"type":{"value":"EXPERT_WITNESS","displayValue":"Expert witness"},"description":"The Co-Founder of the business was present in all the photos that i have submitted to evidence"},{"type":{"value":"STATEMENT_OF_ACCOUNT","displayValue":"Statements of account"},"description":"18 Years of Bank statements can support my claims"}]}
- */
