@@ -23,8 +23,7 @@ const sampleClaimObj = {
   },
   createdAt: MomentFactory.currentDate(),
   issuedOn: MomentFactory.currentDate(),
-  responseDeadline: '2017-08-08',
-  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc'
+  responseDeadline: '2017-08-08'
 }
 
 describe('getInterestDetails', () => {
