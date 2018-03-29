@@ -16,7 +16,6 @@ import { CitizenResolveDisputePage } from 'integration-test/tests/citizen/claim/
 import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claim/pages/claimant-check-and-send'
 import { ClaimantClaimAmountPage } from 'integration-test/tests/citizen/claim/pages/claimant-claim-amount'
 import { ClaimantClaimConfirmedPage } from 'integration-test/tests/citizen/claim/pages/claimant-claim-confirmed'
-import { ClaimantFeesToPayPage } from 'integration-test/tests/citizen/claim/pages/claimant-fees-to-pay'
 import { ClaimantReasonPage } from 'integration-test/tests/citizen/claim/pages/claimant-reason'
 import { CompanyDetailsPage } from 'integration-test/tests/citizen/claim/pages/company-details'
 import { IndividualDetailsPage } from 'integration-test/tests/citizen/claim/pages/individual-details'
@@ -42,7 +41,6 @@ const citizenDOBPage: CitizenDobPage = new CitizenDobPage()
 const citizenMobilePage: CitizenMobilePage = new CitizenMobilePage()
 const citizenEmailPage: CitizenEmailPage = new CitizenEmailPage()
 const claimantClaimAmountPage: ClaimantClaimAmountPage = new ClaimantClaimAmountPage()
-const claimantFeesToPayPage: ClaimantFeesToPayPage = new ClaimantFeesToPayPage()
 const claimantReasonPage: ClaimantReasonPage = new ClaimantReasonPage()
 const claimantTimelinePage: ClaimantTimelinePage = new ClaimantTimelinePage()
 const claimantEvidencePage: ClaimantEvidencePage = new ClaimantEvidencePage()
@@ -157,10 +155,6 @@ export class ClaimSteps {
     claimantClaimAmountPage.continue()
   }
 
-  readFeesPage (): void {
-    claimantFeesToPayPage.continue()
-  }
-
   enterClaimReason (): void {
     claimantReasonPage.enterReason(claimReason)
   }
@@ -199,7 +193,6 @@ export class ClaimSteps {
     this.enterTestDataClaimAmount()
     this.claimantTotalAmountPageRead()
     interestSteps.enterDefaultInterest()
-    this.readFeesPage()
     I.see('Total amount you’re claiming')
     I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
     I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
@@ -258,7 +251,6 @@ export class ClaimSteps {
     I.see('£80.50')
     this.claimantTotalAmountPageRead()
     interestSteps.enterDefaultInterest()
-    this.readFeesPage()
     I.see('Total amount you’re claiming')
     I.see('£25')
     I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
