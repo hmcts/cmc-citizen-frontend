@@ -7,6 +7,10 @@ import { IsValidYearFormat } from 'app/forms/validation/validators/isValidYearFo
 import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
 import { CompletableTask } from 'models/task'
 
+export class ValidationErrors {
+  static readonly REASON_REQUIRED: string = 'You need to explain why you\'re claiming from a particular date'
+}
+
 export class InterestStartDate implements CompletableTask {
 
   @ValidateNested()
@@ -16,8 +20,8 @@ export class InterestStartDate implements CompletableTask {
   @IsNotInFuture({ message: CommonValidationErrors.DATE_IN_FUTURE })
   date?: LocalDate
 
-  @IsDefined({ message: CommonValidationErrors.REASON_REQUIRED })
-  @IsNotBlank({ message: CommonValidationErrors.REASON_REQUIRED })
+  @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
+  @IsNotBlank({ message: ValidationErrors.REASON_REQUIRED })
   @MaxLength(250, { message: CommonValidationErrors.REASON_TOO_LONG })
   reason?: string
 
