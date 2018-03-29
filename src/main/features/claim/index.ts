@@ -29,7 +29,7 @@ export class Feature {
       DraftMiddleware.requestHandler(new DraftService(), 'claim', 100, (value: any): DraftClaim => {
         return new DraftClaim().deserialize(value)
       }),
-      ClaimEligibilityGuard.check()
+      ClaimEligibilityGuard.requestHandler()
     )
     app.all('/claim/*/receipt', ClaimMiddleware.retrieveByExternalId)
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))

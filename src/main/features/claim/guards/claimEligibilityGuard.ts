@@ -20,7 +20,7 @@ export class ClaimEligibilityGuard {
    *
    * @returns {express.RequestHandler} - request handler middleware
    */
-  static check (): express.RequestHandler {
+  static requestHandler (): express.RequestHandler {
     return GuardFactory.createAsync(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DraftClaim> = res.locals.claimDraft
       if (draft.document.eligibility) {

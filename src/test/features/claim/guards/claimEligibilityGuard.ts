@@ -48,7 +48,7 @@ describe('Claim eligibility guard', () => {
 
     it('should pass request through', async () => {
       const spy = sinon.spy(next)
-      await ClaimEligibilityGuard.check()(req, res, spy)
+      await ClaimEligibilityGuard.requestHandler()(req, res, spy)
 
       chai.expect(spy).to.have.been.called
     })
@@ -68,14 +68,14 @@ describe('Claim eligibility guard', () => {
     })
 
     it('should mark draft as eligible', async () => {
-      await ClaimEligibilityGuard.check()(req, res, next)
+      await ClaimEligibilityGuard.requestHandler()(req, res, next)
 
       chai.expect(claimDraft.document.eligibility).to.be.equal(true)
     })
 
     it('should pass request through', async () => {
       const spy = sinon.spy(next)
-      await ClaimEligibilityGuard.check()(req, res, spy)
+      await ClaimEligibilityGuard.requestHandler()(req, res, spy)
 
       chai.expect(spy).to.have.been.called
     })
@@ -88,7 +88,7 @@ describe('Claim eligibility guard', () => {
     })
 
     it('should redirect to eligibility page', async () => {
-      await ClaimEligibilityGuard.check()(req, res, next)
+      await ClaimEligibilityGuard.requestHandler()(req, res, next)
 
       chai.expect(res.redirect).to.have.been.calledWith(Paths.startPage.uri)
     })
