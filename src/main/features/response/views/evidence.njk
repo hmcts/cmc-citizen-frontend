@@ -27,12 +27,12 @@
             </thead>
             <tbody>
             {% for item in evidence.rows %}
-              <tr>
-                <td>{{ item.type.displayValue }}</td>
-                  {% if item.description %}
-                    <td>{{ item.description }}</td>
-                  {% endif %}
-              </tr>
+              {% if item.description %}
+                <tr>
+                  <td>{{ item.type.displayValue }}</td>
+                  <td>{{ item.description }}</td>
+                </tr>
+              {% endif %}
             {% endfor %}
             </tbody>
           </table>
