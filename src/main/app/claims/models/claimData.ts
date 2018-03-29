@@ -1,6 +1,4 @@
 import { ClaimAmountBreakdown } from 'features/claim/form/models/claimAmountBreakdown'
-import { InterestDate } from 'app/claims/models/interestDate'
-import { Interest } from 'features/claim/form/models/interest'
 import { Party } from 'claims/models/details/yours/party'
 import { Individual as ClaimantAsIndividual } from 'claims/models/details/yours/individual'
 import { Company as ClaimantAsCompany } from 'claims/models/details/yours/company'
@@ -16,6 +14,8 @@ import { Payment } from 'payment-hub-client/payment'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 import { Evidence } from 'forms/models/evidence'
+import { InterestDate } from 'claims/models/interestDate'
+import { Interest } from 'claims/models/interest'
 
 export class ClaimData {
   externalId: string
@@ -57,8 +57,6 @@ export class ClaimData {
       this.feeAmountInPennies = input.feeAmountInPennies
 
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
-      this.interest = new Interest().deserialize(input.interest)
-      this.interestDate = new InterestDate().deserialize(input.interestDate)
 
       this.reason = input.reason
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
@@ -66,12 +64,11 @@ export class ClaimData {
       this.timeline = ClaimantTimeline.fromObject(input.timeline)
       this.evidence = Evidence.fromObject(input.evidence)
       this.externalId = input.externalId
-      if (input.interest) {
-        this.interest = new Interest().deserialize(input.interest)
-      }
+      this.interest = new Interest().deserialize(input.interest)
       if (input.interestDate) {
         this.interestDate = new InterestDate().deserialize(input.interestDate)
       }
+
       if (input.statementOfTruth) {
         this.statementOfTruth = new StatementOfTruth().deserialize(input.statementOfTruth)
       }

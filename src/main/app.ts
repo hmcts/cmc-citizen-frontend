@@ -4,14 +4,16 @@ import * as path from 'path'
 import * as favicon from 'serve-favicon'
 import * as cookieParser from 'cookie-parser'
 import * as bodyParser from 'body-parser'
-import { RequestTracing, Logger } from '@hmcts/nodejs-logging'
+import { Logger, RequestTracing } from '@hmcts/nodejs-logging'
 import { ForbiddenError, NotFoundError } from './errors'
 import { ErrorLogger } from 'logging/errorLogger'
 import { RouterFinder } from 'common/router/routerFinder'
 import { Config as HelmetConfig, Helmet } from 'modules/helmet'
 import { I18Next } from 'modules/i18n'
 import { Nunjucks } from 'modules/nunjucks'
+import * as moment from 'moment'
 
+import { Feature as EligibilityFeature } from 'eligibility/index'
 import { Feature as ClaimIssueFeature } from 'claim/index'
 import { Feature as DefendantFirstContactFeature } from 'first-contact/index'
 import { Feature as DefendantResponseFeature } from 'response/index'
@@ -59,6 +61,7 @@ if (env !== 'mocha') {
   new CsrfProtection().enableFor(app)
 }
 
+new EligibilityFeature().enableFor(app)
 new DashboardFeature().enableFor(app)
 new ClaimIssueFeature().enableFor(app)
 new DefendantFirstContactFeature().enableFor(app)
@@ -72,6 +75,12 @@ if (toBoolean(config.get<boolean>('featureToggles.offer'))) {
 
 if (toBoolean(config.get<boolean>('featureToggles.testingSupport'))) {
   new TestingSupportFeature().enableFor(app)
+}
+
+// Below method overrides the moment's toISOString method, which is used by RequestPromise
+// to convert moment object to String
+moment.prototype.toISOString = function () {
+  return this.format('YYYY-MM-DD[T]HH:mm:ss.SSS')
 }
 
 app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))

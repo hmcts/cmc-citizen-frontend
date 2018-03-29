@@ -1,4 +1,10 @@
 import { individual } from './party'
+import { InterestRateOption } from 'claim/form/models/interestRateOption'
+import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
+import { InterestDateType } from 'app/common/interestDateType'
+import { InterestDate } from 'claims/models/interestDate'
+import { Interest } from 'claims/models/interest'
+import moment = require('moment')
 
 export const claimData = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
@@ -26,13 +32,17 @@ export const claimData = {
     type: 'breakdown'
   },
   interest: {
-    type: 'different',
-    rate: 16,
-    reason: 'High profile case'
-  },
+    interestBreakdown: undefined,
+    type: InterestRateOption.DIFFERENT,
+    rate: 10,
+    reason: 'Special case'
+  } as Interest,
   interestDate: {
-    type: 'submission'
-  },
+    type: InterestDateType.CUSTOM,
+    date: moment.utc({ year: 2018, month: 0, day: 1 }),
+    reason: 'reason',
+    endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
+  } as InterestDate,
   reason: 'Because he did...',
   feeAmountInPennies: 1000000,
   payment: {

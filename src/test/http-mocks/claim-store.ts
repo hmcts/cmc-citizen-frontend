@@ -1,9 +1,13 @@
 import * as config from 'config'
 import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
-import { InterestType } from 'features/claim/form/models/interest'
 import { StatementType } from 'features/offer/form/models/statementType'
 import { MadeBy } from 'features/offer/form/models/madeBy'
+import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
+import { InterestDateType } from 'app/common/interestDateType'
+import { Interest } from 'claims/models/interest'
+import { InterestDate } from 'claims/models/interestDate'
+import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
@@ -52,18 +56,18 @@ export const sampleClaimObj = {
       type: 'breakdown',
       rows: [{ reason: 'Reason', amount: 200 }]
     },
-    interestDate: {
-      date: {
-        year: 2000,
-        month: 2,
-        day: 1
-      }
-    },
     interest: {
-      type: InterestType.STANDARD
-    },
+      type: ClaimInterestType.STANDARD,
+      rate: 10,
+      reason: 'Special case'
+    } as Interest,
+    interestDate: {
+      type: InterestDateType.SUBMISSION,
+      endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
+    } as InterestDate,
     reason: 'Because I can',
-    feeAmountInPennies: 2500
+    feeAmountInPennies: 2500,
+    timeline: { rows: [{ date: 'a', description: 'b' }] }
   },
   responseDeadline: '2017-08-08',
   countyCourtJudgment: {

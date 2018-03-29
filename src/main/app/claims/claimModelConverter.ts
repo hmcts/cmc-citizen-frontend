@@ -17,35 +17,40 @@ import { Individual as DefendantAsIndividual } from 'claims/models/details/their
 import { Company as DefendantAsCompany } from 'claims/models/details/theirs/company'
 import { SoleTrader as DefendantAsSoleTrader } from 'claims/models/details/theirs/soleTrader'
 import { Organisation as DefendantAsOrganisation } from 'claims/models/details/theirs/organisation'
-import { InterestDate } from 'app/claims/models/interestDate'
 import { Address } from 'claims/models/address'
 import { Address as AddressForm } from 'forms/models/address'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
-import { InterestDate as DraftInterestDate } from 'claim/form/models/interestDate'
-import { InterestDateType } from 'app/common/interestDateType'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { StringUtils } from 'utils/stringUtils'
-import { InterestType } from 'claim/form/models/interest'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 import { Payment } from 'payment-hub-client/payment'
 import { Evidence } from 'forms/models/evidence'
+import { convertEvidence } from 'claims/converters/evidenceConverter'
+import { InterestDate } from 'claims/models/interestDate'
+import { Interest } from 'claims/models/interest'
+import { InterestRateOption } from 'claim/form/models/interestRateOption'
+import { InterestDateType } from 'app/common/interestDateType'
+import { InterestType as ClaimInterestType } from 'claims/models/interestType'
+import { YesNoOption } from 'models/yesNoOption'
+import { getStandardInterestRate } from 'common/interestUtils'
+import { InterestBreakdown } from 'claims/models/interestBreakdown'
+import { InterestTypeOption } from 'claim/form/models/interestType'
+import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 
 export class ClaimModelConverter {
 
   static convert (draftClaim: DraftClaim): ClaimData {
     const claimData: ClaimData = new ClaimData()
-    claimData.interest = draftClaim.interest
     claimData.externalId = draftClaim.externalId
-    if (claimData.interest.type !== InterestType.NO_INTEREST) {
-      claimData.interestDate = this.convertInterestDate(draftClaim.interestDate)
-    }
+    claimData.interest = this.convertInterest(draftClaim)
+    claimData.interestDate = this.convertInterestDate(draftClaim)
     claimData.amount = new ClaimAmountBreakdown().deserialize(draftClaim.amount)
     claimData.claimants = [this.convertClaimantDetails(draftClaim)]
     claimData.defendants = [this.convertDefendantDetails(draftClaim)]
     claimData.payment = this.makeShallowCopy(draftClaim.claimant.payment)
     claimData.reason = draftClaim.reason.reason
     claimData.timeline = { rows: draftClaim.timeline.getPopulatedRowsOnly() } as ClaimantTimeline
-    claimData.evidence = { rows: ClaimModelConverter.convertEvidence(draftClaim.evidence) as any } as Evidence
+    claimData.evidence = { rows: convertEvidence(draftClaim.evidence) as any } as Evidence
     claimData.feeAmountInPennies = draftClaim.claimant.payment.amount
     claimData.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(draftClaim.claimant.payment.amount)
     if (draftClaim.qualifiedStatementOfTruth && draftClaim.qualifiedStatementOfTruth.signerName) {
@@ -55,15 +60,6 @@ export class ClaimModelConverter {
       )
     }
     return claimData
-  }
-
-  private static convertEvidence (evidence: Evidence) {
-    return evidence.getPopulatedRowsOnly().map(item => {
-      return {
-        type: item.type.value,
-        description: item.description
-      }
-    })
   }
 
   private static convertClaimantDetails (draftClaim: DraftClaim): Party {
@@ -180,12 +176,49 @@ export class ClaimModelConverter {
     return address
   }
 
-  private static convertInterestDate (draftInterestDate: DraftInterestDate): InterestDate {
+  private static convertInterest (draftClaim: DraftClaim): Interest {
+    const interest: Interest = new Interest()
+
+    if (draftClaim.interest.option === YesNoOption.NO) {
+      interest.type = ClaimInterestType.NO_INTEREST
+    } else {
+      if (draftClaim.interestType.option === InterestTypeOption.SAME_RATE) {
+        interest.type = draftClaim.interestRate.type
+        interest.rate = draftClaim.interestRate.rate
+        if (draftClaim.interestRate.type === InterestRateOption.DIFFERENT) {
+          interest.reason = draftClaim.interestRate.reason
+        }
+      } else {
+        const interestBreakdown = new InterestBreakdown()
+        interestBreakdown.totalAmount = draftClaim.interestTotal.amount
+        interestBreakdown.explanation = draftClaim.interestTotal.reason
+        interest.interestBreakdown = interestBreakdown
+        interest.type = ClaimInterestType.BREAKDOWN
+        if (draftClaim.interestHowMuch.type === InterestRateOption.STANDARD) {
+          interest.rate = getStandardInterestRate()
+        } else {
+          interest.specificDailyAmount = draftClaim.interestHowMuch.dailyAmount
+        }
+      }
+    }
+    return interest
+  }
+
+  private static convertInterestDate (draftClaim: DraftClaim): InterestDate {
     const interestDate: InterestDate = new InterestDate()
-    interestDate.type = draftInterestDate.type
-    if (draftInterestDate.type === InterestDateType.CUSTOM) {
-      interestDate.date = draftInterestDate.date.toMoment()
-      interestDate.reason = draftInterestDate.reason
+    if (draftClaim.interestType.option === InterestTypeOption.SAME_RATE) {
+      interestDate.type = draftClaim.interestDate.type
+      if (draftClaim.interestDate.type === InterestDateType.CUSTOM) {
+        interestDate.date = draftClaim.interestStartDate.date.toMoment()
+        interestDate.reason = draftClaim.interestStartDate.reason
+        interestDate.endDateType = draftClaim.interestEndDate.option
+      }
+    }
+    if (
+      draftClaim.interestType.option === InterestTypeOption.BREAKDOWN &&
+      draftClaim.interestContinueClaiming.option === YesNoOption.NO
+    ) {
+      interestDate.endDateType = InterestEndDateOption.SUBMISSION
     }
     return interestDate
   }

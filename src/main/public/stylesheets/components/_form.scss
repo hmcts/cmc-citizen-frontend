@@ -73,3 +73,39 @@ select {
 .keep-formatting {
   white-space: pre-line;
 }
+
+.example {
+  border: 1px solid $grey-2;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  overflow: hidden;
+  padding: 30px 15px 15px;
+  position: relative;
+
+  &::before {
+    background: $grey-2;
+    color: $white;
+    content: 'EXAMPLE';
+    font-family: 'nta', Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    left: 0;
+    line-height: 1.25;
+    padding: .2em .78947em .2em .8em;
+    position: absolute;
+    text-transform: none;
+    top: 0;
+  }
+}
+
+@media (min-width: 641px) {
+  .example {
+    padding: 45px 30px 30px;
+
+    &::before {
+      font-size: 14px;
+      line-height: 1.42857;
+    }
+  }
+}
+

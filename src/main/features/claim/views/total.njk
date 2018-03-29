@@ -1,5 +1,6 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
+{% from "feesTable.njk" import feesTable %}
 
 {% set title = t('Total amount you’re claiming') %}
 {% set heading = t('Total amount you’re claiming') %}
@@ -15,7 +16,7 @@
             {{ t('Total amount you’re claiming') }}
           </legend>
 
-          <table class="table-form">
+          <table class="table-form form-group">
             <caption class="visuallyhidden"></caption>
             <thead>
             <tr>
@@ -39,7 +40,7 @@
             </tr>
             {% if (interestClaimed) %}
               <tr>
-                <th scope="row">{{ t('Interest') }}</th>
+                <th scope="row">{{ t('Interest to date') }}</th>
                 <td class="numeric last">
                   <label class="visuallyhidden" for="amount">{{ t('Interest') }}</label>
                   <span class="font-small">{{ interestTotal.interestAmount | numeral }}</span>
@@ -56,7 +57,7 @@
             </tbody>
           </table>
 
-          <br>
+          {{ feesTable('How these fees are calculated', feeTableContent , showHearingFee = true) }}
 
         </fieldset>
 

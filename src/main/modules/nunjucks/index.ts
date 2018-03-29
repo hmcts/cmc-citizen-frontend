@@ -17,9 +17,8 @@ import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/mode
 import { SignatureType } from 'app/common/signatureType'
 import { ResponseType } from 'response/form/models/responseType'
 import { YesNoOption } from 'models/yesNoOption'
+import { NotEligibleReason } from 'claim/../../features/eligibility/notEligibleReason'
 import { EvidenceType } from 'forms/models/evidenceType'
-import { NotEligibleReason } from 'claim/helpers/eligibility/notEligibleReason'
-import { ClaimValue } from 'claim/form/models/eligibility/claimValue'
 import { StatementType } from 'offer/form/models/statementType'
 import { InterestDateType } from 'app/common/interestDateType'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
@@ -28,15 +27,16 @@ import { DashboardUrlHelper } from 'dashboard/helpers/dashboardUrlHelper'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
 import { ClaimStatus } from 'claims/models/claimStatus'
-import { FeatureToggles } from 'utils/featureToggles'
 import { Paths as AppPaths } from 'app/paths'
 import { Paths as DashboardPaths } from 'features/dashboard/paths'
 import { Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
-import { ClaimType } from 'claim/form/models/eligibility/claimType'
-import { DefendantAgeOption } from 'claim/form/models/eligibility/defendantAgeOption'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
+import { InterestTypeOption } from 'claim/form/models/interestType'
+import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { Service } from 'models/service'
+import { InterestRateOption } from 'claim/form/models/interestRateOption'
+import { InterestType } from 'claims/models/interestType'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -103,16 +103,17 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('DefendantPaymentType', DefendantPaymentType)
     nunjucksEnv.addGlobal('DefendantPaymentOption', DefendantPaymentOption)
     nunjucksEnv.addGlobal('PaymentType', PaymentType)
+    nunjucksEnv.addGlobal('InterestRateOption', InterestRateOption)
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('ResponseType', ResponseType)
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)
-    nunjucksEnv.addGlobal('DefendantAgeOption', DefendantAgeOption)
-    nunjucksEnv.addGlobal('ClaimType', ClaimType)
-    nunjucksEnv.addGlobal('ClaimValue', ClaimValue)
     nunjucksEnv.addGlobal('EvidenceType', EvidenceType)
     nunjucksEnv.addGlobal('StatementType', StatementType)
     nunjucksEnv.addGlobal('NotEligibleReason', NotEligibleReason)
+    nunjucksEnv.addGlobal('InterestType', InterestType)
+    nunjucksEnv.addGlobal('InterestTypeOption', InterestTypeOption)
     nunjucksEnv.addGlobal('InterestDateType', InterestDateType)
+    nunjucksEnv.addGlobal('InterestEndDateOption', InterestEndDateOption)
     nunjucksEnv.addGlobal('ResidenceType', ResidenceType)
     nunjucksEnv.addGlobal('PaymentSchedule', PaymentSchedule)
     nunjucksEnv.addGlobal('DashboardUrlHelper', DashboardUrlHelper)
@@ -124,9 +125,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
     nunjucksEnv.addGlobal('HowMuchPaidClaimantOption', HowMuchPaidClaimantOption)
     nunjucksEnv.addGlobal('Service', Service)
-    if (FeatureToggles.isEnabled('finePrint')) {
-      nunjucksEnv.addGlobal('cookieText', `GOV.UK uses cookies make the site simpler. <a href="${AppPaths.cookiesPage.uri}">Find out more about cookies</a>`)
-    }
+    nunjucksEnv.addGlobal('cookieText', `GOV.UK uses cookies make the site simpler. <a href="${AppPaths.cookiesPage.uri}">Find out more about cookies</a>`)
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

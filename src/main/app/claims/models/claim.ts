@@ -10,7 +10,6 @@ import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { FeatureToggles } from 'utils/featureToggles'
-import { FreeMediationOption } from 'response/form/models/freeMediation'
 
 interface State {
   status: ClaimStatus
@@ -37,6 +36,7 @@ export class Claim {
   settlementReachedAt: Moment
   totalAmountTillToday: number
   totalAmountTillDateOfIssue: number
+  totalInterest: number
 
   deserialize (input: any): Claim {
     if (input) {
@@ -72,6 +72,7 @@ export class Claim {
       }
       this.totalAmountTillToday = input.totalAmountTillToday
       this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
+      this.totalInterest = input.totalInterest
     }
     return this
   }
@@ -104,12 +105,12 @@ export class Claim {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
     } else if (this.isOfferAccepted()) {
       return ClaimStatus.OFFER_ACCEPTED
+    } else if (this.isOfferRejected()) {
+      return ClaimStatus.OFFER_REJECTED
     } else if (this.isOfferSubmitted()) {
       return ClaimStatus.OFFER_SUBMITTED
     } else if (this.eligibleForCCJ) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
-    } else if (this.isFreeMediationRequested()) {
-      return ClaimStatus.FREE_MEDIATION
     } else if (this.isClaimRejected()) {
       return ClaimStatus.CLAIM_REJECTED
     } else if (this.moreTimeRequested) {
@@ -135,25 +136,24 @@ export class Claim {
     }
   }
 
-  private isFreeMediationRequested () {
-    return this.response && this.response.responseType === ResponseType.FULL_DEFENCE
-      && this.response.freeMediation === FreeMediationOption.YES
-  }
-
-  private isOfferSubmitted () {
+  private isOfferSubmitted (): boolean {
     return FeatureToggles.isEnabled('offer')
       && this.settlement && this.response && this.response.responseType === ResponseType.FULL_DEFENCE
   }
 
-  private isOfferAccepted () {
+  private isOfferAccepted (): boolean {
     return FeatureToggles.isEnabled('offer') && this.settlement && this.settlement.isOfferAccepted()
   }
 
-  private isSettlementReached () {
-    return FeatureToggles.isEnabled('offer') && this.settlement && this.settlementReachedAt
+  private isOfferRejected (): boolean {
+    return FeatureToggles.isEnabled('offer') && this.settlement && this.settlement.isOfferRejected()
   }
 
-  private isClaimRejected () {
+  private isSettlementReached (): boolean {
+    return FeatureToggles.isEnabled('offer') && this.settlement && !!this.settlementReachedAt
+  }
+
+  private isClaimRejected (): boolean {
     return this.response && this.response.responseType === ResponseType.FULL_DEFENCE
   }
 }

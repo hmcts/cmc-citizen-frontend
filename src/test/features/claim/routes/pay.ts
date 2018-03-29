@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { Paths } from 'claim/paths'
+import { Paths as ClaimPaths, Paths } from 'claim/paths'
 
 import { app } from '../../../../main/app'
 
@@ -14,7 +14,7 @@ import * as payServiceMock from '../../../http-mocks/pay'
 
 import { attachDefaultHooks } from '../../../routes/hooks'
 import { checkAuthorizationGuards } from './checks/authorization-check'
-import { Interest, InterestType } from 'claim/form/models/interest'
+import { checkEligibilityGuards } from './checks/eligibility-check'
 import { Defendant } from 'app/drafts/models/defendant'
 import { Claimant } from 'app/drafts/models/claimant'
 import { DraftClaim } from 'app/drafts/models/draftClaim'
@@ -28,6 +28,14 @@ import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { ClaimAmountRow } from 'claim/form/models/claimAmountRow'
 import { InterestDate } from 'claim/form/models/interestDate'
 import { Reason } from 'claim/form/models/reason'
+import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
+import { Interest } from 'claim/form/models/interest'
+import { InterestRate } from 'claim/form/models/interestRate'
+import { InterestRateOption } from 'claim/form/models/interestRateOption'
+import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/interestEndDate'
+import { InterestDateType } from 'app/common/interestDateType'
+import { InterestStartDate } from 'claim/form/models/interestStartDate'
+import { YesNoOption } from 'models/yesNoOption'
 
 const draftType = 'claim'
 
@@ -39,10 +47,10 @@ const failureMessage: string = 'failure message'
 let overrideClaimDraftObj
 
 describe('Claim issue: initiate payment receiver', () => {
-
   attachDefaultHooks(app)
 
   checkAuthorizationGuards(app, 'get', Paths.startPaymentReceiver.uri)
+  checkEligibilityGuards(app, 'get', ClaimPaths.startPaymentReceiver.uri)
 
   describe('for authorized user', () => {
 
@@ -103,9 +111,30 @@ describe('Claim issue: initiate payment receiver', () => {
           rows: [{ reason: 'Valid reason', amount: 1 } as ClaimAmountRow]
         } as ClaimAmountBreakdown,
         interest: {
-          type: InterestType.NO_INTEREST
+          option: YesNoOption.YES
         } as Interest,
-        interestDate: {} as InterestDate,
+        interestType: {
+          option: InterestTypeOption.SAME_RATE
+        } as InterestType,
+        interestRate: {
+          type: InterestRateOption.DIFFERENT,
+          rate: 10,
+          reason: 'Special case'
+        } as InterestRate,
+        interestDate: {
+          type: InterestDateType.SUBMISSION
+        } as InterestDate,
+        interestStartDate: {
+          date: {
+            day: 10,
+            month: 12,
+            year: 2016
+          },
+          reason: 'reason'
+        } as InterestStartDate,
+        interestEndDate: {
+          option: InterestEndDateOption.SETTLED_OR_JUDGMENT
+        } as InterestEndDate,
         reason: {
           reason: 'Valid reason'
         } as Reason
@@ -218,10 +247,10 @@ describe('Claim issue: initiate payment receiver', () => {
 })
 
 describe('Claim issue: post payment callback receiver', () => {
-
   attachDefaultHooks(app)
 
   checkAuthorizationGuards(app, 'get', Paths.finishPaymentReceiver.uri)
+  checkEligibilityGuards(app, 'get', ClaimPaths.finishPaymentReceiver.uri)
 
   describe('for authorized user', () => {
 
@@ -277,9 +306,30 @@ describe('Claim issue: post payment callback receiver', () => {
           rows: [{ reason: 'Valid reason', amount: 1 } as ClaimAmountRow]
         } as ClaimAmountBreakdown,
         interest: {
-          type: InterestType.NO_INTEREST
+          option: YesNoOption.YES
         } as Interest,
-        interestDate: {} as InterestDate,
+        interestType: {
+          option: InterestTypeOption.SAME_RATE
+        } as InterestType,
+        interestRate: {
+          type: InterestRateOption.DIFFERENT,
+          rate: 10,
+          reason: 'Special case'
+        } as InterestRate,
+        interestDate: {
+          type: InterestDateType.SUBMISSION
+        } as InterestDate,
+        interestStartDate: {
+          date: {
+            day: 10,
+            month: 12,
+            year: 2016
+          },
+          reason: 'reason'
+        } as InterestStartDate,
+        interestEndDate: {
+          option: InterestEndDateOption.SETTLED_OR_JUDGMENT
+        } as InterestEndDate,
         reason: {
           reason: 'Valid reason'
         } as Reason

@@ -23,12 +23,4 @@ table {
     border-top: 2px solid $black;
   }
 
-  &.no-header {
-    tbody {
-      tr:first-child { // sass-lint:disable-line force-pseudo-nesting
-        border-top: 1px solid $border-colour;
-      }
-    }
-  }
-
 }

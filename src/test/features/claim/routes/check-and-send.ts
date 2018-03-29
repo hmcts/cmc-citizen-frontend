@@ -5,6 +5,7 @@ import * as config from 'config'
 import { attachDefaultHooks } from '../../../routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
+import { checkEligibilityGuards } from './checks/eligibility-check'
 
 import { Paths as ClaimPaths } from 'claim/paths'
 
@@ -22,6 +23,7 @@ describe('Claim issue: check and send page', () => {
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.checkAndSendPage.uri)
+    checkEligibilityGuards(app, 'get', ClaimPaths.checkAndSendPage.uri)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -61,6 +63,7 @@ describe('Claim issue: check and send page', () => {
 
   describe('on POST', () => {
     checkAuthorizationGuards(app, 'post', ClaimPaths.checkAndSendPage.uri)
+    checkEligibilityGuards(app, 'post', ClaimPaths.checkAndSendPage.uri)
 
     describe('for authorized user', () => {
       beforeEach(() => {

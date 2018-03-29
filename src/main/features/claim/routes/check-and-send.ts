@@ -6,9 +6,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { StatementOfTruth } from 'forms/models/statementOfTruth'
 import { FeesClient } from 'fees/feesClient'
 import { TotalAmount } from 'forms/models/totalAmount'
-import { InterestDateType } from 'app/common/interestDateType'
 import { draftInterestAmount } from 'common/interestUtils'
-import { InterestType } from 'claim/form/models/interest'
 import { PartyType } from 'app/common/partyType'
 import { AllClaimTasksCompletedGuard } from 'claim/guards/allClaimTasksCompletedGuard'
 import { IndividualDetails } from 'forms/models/individualDetails'
@@ -77,6 +75,36 @@ function getStatementOfTruthClassFor (draft: Draft<DraftClaim>): { new(): Statem
   }
 }
 
+function getClaimantPartyDetailsPageUri (partyDetails: PartyDetails): string {
+  switch (partyDetails.type) {
+    case PartyType.COMPANY.value:
+      return Paths.claimantCompanyDetailsPage.uri
+    case PartyType.ORGANISATION.value:
+      return Paths.claimantOrganisationDetailsPage.uri
+    case PartyType.INDIVIDUAL.value:
+      return Paths.claimantIndividualDetailsPage.uri
+    case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+      return Paths.claimantSoleTraderOrSelfEmployedDetailsPage.uri
+    default:
+      throw new Error(`Unknown party type: ${partyDetails.type}`)
+  }
+}
+
+function getDefendantPartyDetailsPageUri (partyDetails: PartyDetails): string {
+  switch (partyDetails.type) {
+    case PartyType.COMPANY.value:
+      return Paths.defendantCompanyDetailsPage.uri
+    case PartyType.ORGANISATION.value:
+      return Paths.defendantOrganisationDetailsPage.uri
+    case PartyType.INDIVIDUAL.value:
+      return Paths.defendantIndividualDetailsPage.uri
+    case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+      return Paths.defendantSoleTraderOrSelfEmployedDetailsPage.uri
+    default:
+      throw new Error(`Unknown party type: ${partyDetails.type}`)
+  }
+}
+
 function renderView (form: Form<StatementOfTruth>, res: express.Response, next: express.NextFunction) {
   const draft: Draft<DraftClaim> = res.locals.claimDraft
 
@@ -85,13 +113,13 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
       res.render(Paths.checkAndSendPage.associatedView, {
         draftClaim: draft.document,
         claimAmountTotal: interestTotal,
-        payAtSubmission: draft.document.interestDate.type === InterestDateType.SUBMISSION,
-        interestClaimed: draft.document.interest.type !== InterestType.NO_INTEREST,
         contactPerson: getContactPerson(draft.document.claimant.partyDetails),
         businessName: getBusinessName(draft.document.claimant.partyDetails),
         dateOfBirth: getDateOfBirth(draft.document.claimant.partyDetails),
         defendantBusinessName: getBusinessName(draft.document.defendant.partyDetails),
         partyAsCompanyOrOrganisation: draft.document.claimant.partyDetails.isBusiness(),
+        claimantPartyDetailsPageUri: getClaimantPartyDetailsPageUri(draft.document.claimant.partyDetails),
+        defendantPartyDetailsPageUri: getDefendantPartyDetailsPageUri(draft.document.defendant.partyDetails),
         paths: Paths,
         form: form
       })

@@ -1,0 +1,55 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
+
+{% set title = t('Claim Type | Money claim') %}
+{% set question = t('Who are you making the claim for?') %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ question }}</h1>
+
+      {% set name = 'claimType' %}
+
+      <form novalidate method="post" class="analytics-submit-event-trigger"
+            data-event-action="Eligibility: Claim Type"
+            data-event-label-from="{{ name }}">
+        {{ csrfProtection(csrf) }}
+
+        {{
+        radioGroup(
+        form = form,
+        label = question,
+        labelForScreenReadersOnly = true,
+        name = name,
+        options = [
+        {
+          bold: false,
+          label: ClaimType.PERSONAL_CLAIM.displayValue,
+          value: ClaimType.PERSONAL_CLAIM.option,
+          checked: form.valueFor(name) === ClaimType.PERSONAL_CLAIM
+        },
+        {
+          bold: false,
+          label: ClaimType.MULTIPLE_CLAIM.displayValue,
+          value: ClaimType.MULTIPLE_CLAIM.option,
+          checked: form.valueFor(name) === ClaimType.MULTIPLE_CLAIM
+        },
+        {
+          bold: false,
+          label: ClaimType.REPRESENTATIVE_CLAIM.displayValue,
+          value: ClaimType.REPRESENTATIVE_CLAIM.option,
+          checked: form.valueFor(name) === ClaimType.REPRESENTATIVE_CLAIM
+        }
+        ]
+        )
+        }}
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

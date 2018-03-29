@@ -32,7 +32,6 @@
     "partialAdmission": true,
     "offer": true,
     "statementOfMeans": true,
-    "finePrint": true,
     "returnErrorToUser": true
   },
   "appInsights": {

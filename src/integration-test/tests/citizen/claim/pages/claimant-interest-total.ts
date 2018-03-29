@@ -3,7 +3,8 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  amount: 'todo, for future use'
+  amount: 'input[id=amount]',
+  reason: 'textarea[id=reason]'
 }
 
 const buttons = {
@@ -12,16 +13,9 @@ const buttons = {
 
 export class ClaimantInterestTotalPage {
 
-  open (): void {
-    I.amOnCitizenAppPage('/claim/total')
-  }
-
-  // to be used in the future.
-  getTotalAmount (): number {
-    return I.grabTextFrom(fields.amount)
-  }
-
-  continue (): void {
+  selectInterestTotal (amount: string, reason: string): void {
+    I.fillField(fields.amount, amount)
+    I.fillField(fields.reason, reason)
     I.click(buttons.submit)
   }
 }
