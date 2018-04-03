@@ -58,6 +58,11 @@
     "url": "http://localhost:5500",
     "apiVersion": "v1"
   },
+  "startPage": {
+    "makeClaim": {
+      "uri": "/claim/start"
+    }
+  },
   "eligibility": {
     "cookie": {
       "timeToLiveInMinutes": 2880

@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as config from 'config'
 
 import { Paths } from 'dashboard/paths'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
@@ -11,6 +12,8 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { ResponseDraft } from 'response/draft/responseDraft'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+
+const makeClaimStartPageUri = config.get<string>('startPage.makeClaim.uri')
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -25,11 +28,11 @@ export default express.Router()
     const claimsAsDefendant: Claim[] = await claimStoreClient.retrieveByDefendantId(user)
 
     res.render(Paths.dashboardPage.associatedView, {
-      paths: Paths,
       claimsAsClaimant: claimsAsClaimant,
       claimDraftSaved: claimDraftSaved,
       claimsAsDefendant: claimsAsDefendant,
       responseDraftSaved: responseDraftSaved,
-      isAfter4pm: isAfter4pm()
+      isAfter4pm: isAfter4pm(),
+      makeClaimStartPageUri: makeClaimStartPageUri
     })
   }))
