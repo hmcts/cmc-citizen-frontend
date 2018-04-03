@@ -8,7 +8,7 @@ import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation
 import { CompletableTask } from 'models/task'
 
 export class ValidationErrors {
-  static readonly REASON_REQUIRED: string = 'You need to explain why you\'re claiming from a particular date'
+  static readonly REASON_REQUIRED: string = 'You need to explain why you’re claiming from a particular date'
 }
 
 export class InterestStartDate implements CompletableTask {
