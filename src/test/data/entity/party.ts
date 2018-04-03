@@ -8,16 +8,16 @@ export const individual = {
     line2: 'Street 1',
     line3: 'Cool house name',
     city: 'London',
-    postcode: 'E1A'
+    postcode: 'SW1A 2AA'
   },
   correspondenceAddress: {
     line1: 'Flat 10',
     line2: 'Street 10',
     line3: 'Cooler house name',
-    city: 'Belfast',
-    postcode: 'B10A'
+    city: 'London',
+    postcode: 'SW1A 1AA'
   },
-  dateOfBirth: '1999-01-01',
+  dateOfBirth: '1997-05-27',
   mobilePhone: '0700000001',
   email: 'individual@example.com'
 }
@@ -31,14 +31,14 @@ export const soleTrader = {
     line2: 'Street 2',
     line3: 'Cool house name',
     city: 'London',
-    postcode: 'E2A'
+    postcode: 'SW1A 2AA'
   },
   correspondenceAddress: {
     line1: 'Flat 20',
     line2: 'Street 20',
     line3: 'Cooler house name',
-    city: 'Belfast',
-    postcode: 'B20A'
+    city: 'London',
+    postcode: 'SW1A 1AA'
   },
   mobilePhone: '0700000002',
   email: 'sole-trader@example.com'
@@ -53,14 +53,14 @@ export const company = {
     line2: 'Street 3',
     line3: 'Cool house name',
     city: 'London',
-    postcode: 'E3A'
+    postcode: 'SW1A 2AA'
   },
   correspondenceAddress: {
     line1: 'Flat 30',
     line2: 'Street 30',
     line3: 'Cooler house name',
     city: 'Belfast',
-    postcode: 'B30A'
+    postcode: 'SW1A 1AA'
   },
   mobilePhone: '0700000003',
   email: 'company@example.com'
@@ -75,14 +75,14 @@ export const organisation = {
     line2: 'Street 4',
     line3: 'Cool house name',
     city: 'London',
-    postcode: 'E4A'
+    postcode: 'SW1A 2AA'
   },
   correspondenceAddress: {
     line1: 'Flat 40',
     line2: 'Street 40',
     line3: 'Cooler house name',
     city: 'Belfast',
-    postcode: 'B40A'
+    postcode: 'SW1A 1AA'
   },
   mobilePhone: '0700000004',
   email: 'organisation@example.com'

@@ -15,7 +15,7 @@ export const individualDetails = {
     line1: 'Flat 10',
     line2: 'Street 10',
     line3: 'Cooler house name',
-    city: 'Belfast',
+    city: 'London',
     postcode: 'SW1A 1AA'
   },
   dateOfBirth: {
@@ -37,15 +37,15 @@ export const soleTraderDetails = {
     line2: 'Street 2',
     line3: 'Cool house name',
     city: 'London',
-    postcode: 'E2A'
+    postcode: 'SW1A 2AA'
   },
   hasCorrespondenceAddress: true,
   correspondenceAddress: {
     line1: 'Flat 20',
     line2: 'Street 20',
     line3: 'Cooler house name',
-    city: 'Belfast',
-    postcode: 'B20A'
+    city: 'London',
+    postcode: 'SW1A 1AA'
   }
 }
 
@@ -58,7 +58,7 @@ export const companyDetails = {
     line2: 'Street 3',
     line3: 'Cool house name',
     city: 'London',
-    postcode: 'E3A'
+    postcode: 'SW1A 2AA'
   },
   hasCorrespondenceAddress: true,
   correspondenceAddress: {
@@ -66,7 +66,7 @@ export const companyDetails = {
     line2: 'Street 30',
     line3: 'Cooler house name',
     city: 'Belfast',
-    postcode: 'B30A'
+    postcode: 'SW1A 1AA'
   }
 }
 
@@ -79,7 +79,7 @@ export const organisationDetails = {
     line2: 'Street 4',
     line3: 'Cool house name',
     city: 'London',
-    postcode: 'E4A'
+    postcode: 'SW1A 2AA'
   },
   hasCorrespondenceAddress: true,
   correspondenceAddress: {
@@ -87,7 +87,7 @@ export const organisationDetails = {
     line2: 'Street 40',
     line3: 'Cooler house name',
     city: 'Belfast',
-    postcode: 'B40A'
+    postcode: 'SW1A 1AA'
   }
 }
 
