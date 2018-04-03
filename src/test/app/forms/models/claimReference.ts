@@ -44,35 +44,20 @@ describe('ClaimReference', () => {
       expectValidationError(errors, ValidationErrors.CLAIM_REFERENCE_REQUIRED)
     })
 
-    it('should reject less than allowed characters reference', () => {
-      const errors = validator.validateSync(new ClaimReference('000MC12'))
-
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.CLAIM_REFERENCE_INVALID)
-    })
-
-    it('should reject more than allowed numbers claim reference', () => {
-      const errors = validator.validateSync(new ClaimReference('000MC0011'))
-
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.CLAIM_REFERENCE_INVALID)
-    })
-
-    it('should reject claim reference with wrong alphabets in middle', () => {
-      const errors = validator.validateSync(new ClaimReference('000CM001'))
-
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.CLAIM_REFERENCE_INVALID)
-    })
-
-    it('should accepts valid claim reference', () => {
+    it('should accepts valid CMC claim reference', () => {
       const errors = validator.validateSync(new ClaimReference('000MC001'))
 
       expect(errors.length).to.equal(0)
     })
 
-    it('should accept valid claim reference ignoring case', () => {
+    it('should accept valid CMC claim reference ignoring case', () => {
       const errors = validator.validateSync(new ClaimReference('000mc001'))
+
+      expect(errors.length).to.equal(0)
+    })
+
+    it('should accept non-CMC claim reference', () => {
+      const errors = validator.validateSync(new ClaimReference('123LL33CC5'))
 
       expect(errors.length).to.equal(0)
     })
