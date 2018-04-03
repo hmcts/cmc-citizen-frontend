@@ -5,7 +5,6 @@ import { Paths as DraftSubmittion } from 'claim/paths'
 import { ErrorHandling } from 'common/errorHandling'
 
 import { DraftService } from 'services/draftService'
-import { Paths as DashboardPaths } from 'dashboard/paths'
 import { User } from 'idam/user'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { claimDraft as claimDraftData } from '../../../../test/data/draft/createDraft'
