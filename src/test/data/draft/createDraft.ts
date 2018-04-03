@@ -10,9 +10,10 @@ import { InterestDate } from 'claim/form/models/interestDate'
 import { InterestStartDate } from 'claim/form/models/interestStartDate'
 import { LocalDate } from 'forms/models/localDate'
 import { EvidenceType } from 'forms/models/evidenceType'
+import * as uuid from 'uuid'
 
 export const claimDraft = {
-  externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
+  externalId: uuid(),
   readResolveDispute: true,
   readCompletingClaim: true,
   eligibility: true,
@@ -31,20 +32,20 @@ export const claimDraft = {
     },
     partyDetails: individualDetails,
     mobilePhone: {
-      number: '07000000000'
+      number: '07112358132'
     }
   },
   defendant: {
     partyDetails: individualDetails,
     email: {
-      address: 'defendant@example.com'
+      address: 'civilmoneyclaims+Generic-Claim@gmail.com'
     }
   },
   amount: {
     rows: [
       {
-        reason: 'Valid reason',
-        amount: 1
+        reason: 'Bakery Cost',
+        amount: 3141.59
       }
     ]
   },
@@ -68,18 +69,18 @@ export const claimDraft = {
       month: 1,
       year: 2018
     } as LocalDate,
-    reason: 'reason'
+    reason: 'Im interest-ed in getting more money'
   } as InterestStartDate,
   interestEndDate: {
     option: InterestEndDateOption.SETTLED_OR_JUDGMENT
   } as InterestEndDate,
   reason: {
-    reason: 'A strong sense of entitlement. Evidence'
+    reason: 'A strong sense of entitlement.'
   },
   timeline: {
     rows: [
-      { date: '27 May 1997', description: 'Best day ever' },
-      { date: '23 March 2018', description: 'A historic day in the history of the world' }
+      { date: '27 May 1997', description: 'The day the first bill was issued' },
+      { date: '23 March 2018', description: 'A historic day with enormous importance' }
     ]
   },
   evidence: {
@@ -90,27 +91,27 @@ export const claimDraft = {
       },
       {
         type: EvidenceType.RECEIPTS,
-        description: 'receipt'
+        description: 'Description of receipt'
       },
       {
         type: EvidenceType.PHOTO,
-        description: 'photo'
+        description: 'Description of Photo'
       },
       {
         type: EvidenceType.EXPERT_WITNESS,
-        description: 'expert witness'
+        description: 'Description from expert witness'
       },
       {
         type: EvidenceType.CORRESPONDENCE,
-        description: 'Correspondence'
+        description: 'Description of Correspondence'
       },
       {
         type: EvidenceType.CONTRACTS_AND_AGREEMENTS,
-        description: 'Contact and Agreements'
+        description: 'Description of Contact and Agreements'
       },
       {
         type: EvidenceType.OTHER,
-        description: 'Other'
+        description: 'Description of Other'
       }
     ]
   }
