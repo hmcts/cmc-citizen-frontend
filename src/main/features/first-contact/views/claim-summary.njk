@@ -20,10 +20,6 @@
       <p class="bold form-group-related">{{ t('Reason for claim:') }}</p>
       <p>{{ claim.claimData.reason }}</p>
 
-      <div class="panel panel-border-wide">
-        <p>{{ t('Your response will be sent to the claimant {{ claimantFullName }}.', { claimantFullName: claim.claimData.claimant.name }) }}</p>
-      </div>
-
       <form method="POST">
         {{ csrfProtection(csrf) }}
 
@@ -38,8 +34,8 @@
         </div>
       </details>
 
-      <p class="bold-medium form-group-related">{{ t('Download the claim') }}</p>
-      <p><span class="block"><a href="{{ DashboardPaths.claimReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download claim') }}</a>{{ t('(PDF)') }}</span></p>
+      <p class="bold-small form-group-related">{{ t('Download the claim') }}</p>
+      <p><span class="block"><a href="{{ DashboardPaths.claimReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download claim') }}</a>{{ t(' (PDF)') }}</span></p>
     </div>
   </div>
 {% endblock %}
