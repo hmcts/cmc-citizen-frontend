@@ -7,17 +7,17 @@
     {% if rate %}
       <div class="panel text-small" id="details-content-0" aria-hidden>
         <div>
-          {{ t('Interest calculated at %s%% for %s days', {
-            postProcess: 'sprintf', sprintf: [ rate, numberOfDays ] }) }}
-          ({{ t('%s to %s', { postProcess: 'sprintf', sprintf: [ interestDate | date, interestToDate | date ]}) }})
+          {{ t('Interest calculated at {{ rate }}% for {{ numberOfDays }} days', { rate: rate, numberOfDays: numberOfDays}) }}
+          {{ t('({{ interestDate }} to {{ interestToDate }})', { interestDate: interestDate | date, interestToDate: interestToDate | date }) }}
+          )
         </div>
       </div>
     {% elseif specificDailyAmount > 0 %}
       <div class="panel text-small" id="details-content-0" aria-hidden>
         <div>
-          {{ t('Interest calculated with daily interest amount of %s for %s days', {
-            postProcess: 'sprintf', sprintf: [ specificDailyAmount | numeral, numberOfDays ] }) }}
-          ({{ t('%s to %s', { postProcess: 'sprintf', sprintf: [ interestDate | date, interestToDate | date ]}) }})
+          {{ t('Interest calculated with daily interest amount of {{ specificDailyAmount }} for {{ numberOfDays}} days', {
+            specificDailyAmount: specificDailyAmount | numeral, numberOfDays: numberOfDays }) }}
+          {{ t('({{ interestDate }} to {{ interestToDate }})', { interestDate: interestDate | date, interestToDate: interestToDate | date }) }}
         </div>
       </div>
     {% endif %}
