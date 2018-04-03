@@ -8,7 +8,7 @@ export const individualDetails = {
     line2: 'Street 1',
     line3: 'Cool house name',
     city: 'London',
-    postcode: 'E1A'
+    postcode: 'SW1A 2AA'
   },
   hasCorrespondenceAddress: true,
   correspondenceAddress: {
@@ -16,14 +16,14 @@ export const individualDetails = {
     line2: 'Street 10',
     line3: 'Cooler house name',
     city: 'Belfast',
-    postcode: 'B10A'
+    postcode: 'SW1A 1AA'
   },
   dateOfBirth: {
     known: true,
     date: {
-      year: 1999,
-      month: 1,
-      day: 1
+      year: 1997,
+      month: 5,
+      day: 27
     }
   }
 }
