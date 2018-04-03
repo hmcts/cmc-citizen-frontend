@@ -1,7 +1,6 @@
 import { RoutablePath } from 'common/router/routablePath'
 
 export class Paths {
-  static readonly startPage = new RoutablePath('/claim/start')
   static readonly taskListPage = new RoutablePath('/claim/task-list')
   static readonly resolvingThisDisputerPage = new RoutablePath('/claim/resolving-this-dispute')
   static readonly completingClaimPage = new RoutablePath('/claim/completing-claim')
