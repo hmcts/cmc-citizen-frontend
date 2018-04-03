@@ -16,7 +16,8 @@
       {{ amountBreakdownTable('View amount breakdown', claim, interestData) }}
       <p><span class="bold-small">{{ t('Reason for claim') }}:</span></p>
       <p>{{ claim.claimData.reason }}</p>
-
+      <p><span class="bold-medium">{{ t('Download the claim') }}</span></p>
+      <p><span class="block"><a href="{{ DashboardPaths.claimReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download claim') }}</a>{{ t(' (PDF)') }}</span></p>
     </div>
   </div>
 {% endblock %}

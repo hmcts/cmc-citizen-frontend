@@ -39,7 +39,7 @@
           </li>
           <li>
             <strong class="bold">{{ t('Claim details:') }}</strong>
-            <span class="block"><a href="{{ DashboardPaths.claimReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download claim') }}</a></span>
+            <span class="block"><a href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View claim') }}</a></span>
           </li>
           {% if claim.response %}
           <li>

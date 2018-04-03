@@ -37,6 +37,9 @@
           <p>{{ t('Find out about how we use and store your <a href="{{ link }}" target="_self">personal information</a>.', { link: AppPaths.privacyPolicyPage.uri }) | safe }}</p>
         </div>
       </details>
+
+      <p class="bold-medium form-group-related">{{ t('Download the claim') }}</p>
+      <p><span class="block"><a href="{{ DashboardPaths.claimReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download claim') }}</a>{{ t('(PDF)') }}</span></p>
     </div>
   </div>
 {% endblock %}
