@@ -1,6 +1,7 @@
 import * as express from 'express'
 
 import { Paths } from 'testing-support/paths'
+import { Paths as DraftSubmittion } from 'claim/paths'
 import { ErrorHandling } from 'common/errorHandling'
 
 import { DraftService } from 'services/draftService'
@@ -36,6 +37,6 @@ export default express.Router()
       const claimDraft = new Draft<DraftClaim>(null, 'claim', new DraftClaim().deserialize(claimDraftData), moment(), moment())
       await new DraftService().save(claimDraft, user.bearerToken)
 
-      res.redirect(DashboardPaths.dashboardPage.uri)
+      res.redirect(DraftSubmittion.checkAndSendPage.uri)
     })
   )
