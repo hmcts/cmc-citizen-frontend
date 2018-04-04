@@ -9,14 +9,23 @@ import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/intere
 import { InterestDate } from 'claim/form/models/interestDate'
 import { InterestStartDate } from 'claim/form/models/interestStartDate'
 import { LocalDate } from 'forms/models/localDate'
-import { EvidenceType } from 'forms/models/evidenceType'
-import * as uuid from 'uuid'
+import { ClaimValue } from 'eligibility/model/claimValue'
+import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 
 export const claimDraft = {
-  externalId: uuid(),
+  externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
   readResolveDispute: true,
   readCompletingClaim: true,
-  eligibility: true,
+  eligibility: {
+    claimantAddress: YesNoOption.YES,
+    defendantAddress: YesNoOption.YES,
+    claimValue: ClaimValue.UNDER_10000,
+    eighteenOrOver: YesNoOption.YES,
+    defendantAge: DefendantAgeOption.YES,
+    governmentDepartment: YesNoOption.NO,
+    helpWithFees: YesNoOption.NO,
+    claimIsForTenancyDeposit: YesNoOption.NO
+  },
   claimant: {
     payment: {
       reference: '123',
@@ -32,20 +41,20 @@ export const claimDraft = {
     },
     partyDetails: individualDetails,
     mobilePhone: {
-      number: '07112358132'
+      number: '07000000000'
     }
   },
   defendant: {
     partyDetails: individualDetails,
     email: {
-      address: 'civilmoneyclaims+Generic-Claim@gmail.com'
+      address: 'defendant@example.com'
     }
   },
   amount: {
     rows: [
       {
-        reason: 'Bakery Cost',
-        amount: 3141.59
+        reason: 'Valid reason',
+        amount: 1
       }
     ]
   },
@@ -69,50 +78,18 @@ export const claimDraft = {
       month: 1,
       year: 2018
     } as LocalDate,
-    reason: 'Im interest-ed in getting more money'
+    reason: 'reason'
   } as InterestStartDate,
   interestEndDate: {
     option: InterestEndDateOption.SETTLED_OR_JUDGMENT
   } as InterestEndDate,
   reason: {
-    reason: 'A strong sense of entitlement.'
+    reason: 'Because he did...'
   },
   timeline: {
-    rows: [
-      { date: '27 May 1997', description: 'The day the first bill was issued' },
-      { date: '23 March 2018', description: 'A historic day with enormous importance' }
-    ]
+    rows: []
   },
   evidence: {
-    rows: [
-      {
-        type: EvidenceType.STATEMENT_OF_ACCOUNT,
-        description: 'Statement of account'
-      },
-      {
-        type: EvidenceType.RECEIPTS,
-        description: 'Description of receipt'
-      },
-      {
-        type: EvidenceType.PHOTO,
-        description: 'Description of Photo'
-      },
-      {
-        type: EvidenceType.EXPERT_WITNESS,
-        description: 'Description from expert witness'
-      },
-      {
-        type: EvidenceType.CORRESPONDENCE,
-        description: 'Description of Correspondence'
-      },
-      {
-        type: EvidenceType.CONTRACTS_AND_AGREEMENTS,
-        description: 'Description of Contact and Agreements'
-      },
-      {
-        type: EvidenceType.OTHER,
-        description: 'Description of Other'
-      }
-    ]
+    rows: []
   }
 }
