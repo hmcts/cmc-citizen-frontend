@@ -20,18 +20,20 @@
         <div class="form-fields">
           <table>
             <thead>
-              <tr>
+            <tr>
                 <th scope="col">{{ t('Type') }}</th>
                 <th scope="col">{{ t('Description') }}</th>
               </tr>
             </thead>
             <tbody>
             {% for item in evidence.rows %}
-              {% if item.description %}
-                <tr>
-                  <td>{{ item.type.displayValue }}</td>
-                  <td>{{ item.description }}</td>
-                </tr>
+              <tr>
+                <td>{{ item.type.displayValue }}</td>
+                  {% if item.description %}
+                    <td>{{ item.description }}</td>
+                  {% else %}
+                    <td></td>
+              </tr>
               {% endif %}
             {% endfor %}
             </tbody>
