@@ -36,6 +36,7 @@ export class Claim {
   settlementReachedAt: Moment
   totalAmountTillToday: number
   totalAmountTillDateOfIssue: number
+  totalInterest: number
 
   deserialize (input: any): Claim {
     if (input) {
@@ -71,6 +72,7 @@ export class Claim {
       }
       this.totalAmountTillToday = input.totalAmountTillToday
       this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
+      this.totalInterest = input.totalInterest
     }
     return this
   }

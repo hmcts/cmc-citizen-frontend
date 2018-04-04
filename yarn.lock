@@ -162,9 +162,9 @@
   dependencies:
     http-status-codes "*"
 
-"@types/i18next-express-middleware@^0.0.32":
-  version "0.0.32"
-  resolved "https://registry.yarnpkg.com/@types/i18next-express-middleware/-/i18next-express-middleware-0.0.32.tgz#b0b0d1df1104c86bba9168c44291db1d91cdfc88"
+"@types/i18next-express-middleware@^0.0.33":
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/@types/i18next-express-middleware/-/i18next-express-middleware-0.0.33.tgz#1c5625f123eaae126de3b43626ef9a04bc6ad482"
   dependencies:
     "@types/express" "*"
     "@types/i18next" "*"
