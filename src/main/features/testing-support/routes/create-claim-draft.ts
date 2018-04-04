@@ -7,11 +7,9 @@ import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { DraftClaim } from 'drafts/models/draftClaim'
-import { claimDraft as claimDraftData } from '../../../../test/data/draft/createDraft'
+import { claimDraft as claimDraftData } from 'drafts/draft-data/claimDraft'
 import { Draft } from '@hmcts/draft-store-client'
-import moment = require('moment')
-
-const draftService = new DraftService()
+import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -21,16 +19,15 @@ export default express.Router()
     })
   )
   .post(Paths.createClaimDraftPage.uri,
+    DraftMiddleware.requestHandler(new DraftService(), 'claim', 100, (value: any): DraftClaim => {
+      return new DraftClaim().deserialize(value)
+    }),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
+      const draft: Draft<DraftClaim> = res.locals.claimDraft
       const user: User = res.locals.user
-      const drafts = await draftService.find('claim', '100', user.bearerToken, (value) => value)
 
-      drafts.forEach(async draft => {
-        await new DraftService().delete(draft.id, user.bearerToken)
-      })
-
-      const claimDraft = new Draft<DraftClaim>(null, 'claim', new DraftClaim().deserialize(claimDraftData), moment(), moment())
-      await new DraftService().save(claimDraft, user.bearerToken)
+      draft.document = new DraftClaim().deserialize(claimDraftData)
+      await new DraftService().save(draft, user.bearerToken)
 
       res.redirect(ClaimPaths.checkAndSendPage.uri)
     })

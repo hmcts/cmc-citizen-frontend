@@ -5,7 +5,7 @@ import { request } from 'client/request'
 import * as HttpStatus from 'http-status-codes'
 
 import { User } from 'idam/user'
-import { claimDraft as claimDraftData } from '../../data/draft/claimDraft'
+import { claimDraft as claimDraftData } from 'drafts/draft-data/      '
 import { claimData } from '../../data/entity/claimData'
 import { RequestPromiseOptions } from 'request-promise-native'
 import { claimStoreApiUrl, ClaimStoreClient } from 'claims/claimStoreClient'
