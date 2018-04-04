@@ -13,10 +13,6 @@ import moment = require('moment')
 
 const draftService = new DraftService()
 
-function getDraftType (req: express.Request): string {
-  return Object.keys(req.body.action)[0]
-}
-
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.createClaimDraftPage.uri,
@@ -27,7 +23,7 @@ export default express.Router()
   .post(Paths.createClaimDraftPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
-      const drafts = await draftService.find(getDraftType(req), '100', user.bearerToken, (value) => value)
+      const drafts = await draftService.find('claim', '100', user.bearerToken, (value) => value)
 
       drafts.forEach(async draft => {
         await new DraftService().delete(draft.id, user.bearerToken)
