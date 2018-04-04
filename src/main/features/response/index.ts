@@ -36,9 +36,9 @@ export class Feature {
 
     app.all(allResponseRoutes, defendantResponseRequestHandler())
     app.all(allResponseRoutes, ClaimMiddleware.retrieveByExternalId)
-    app.all(/^\/case\/.+\/response\/(?!receipt|summary).*$/, IsDefendantInCaseGuard.check())
+    app.all(/^\/case\/.+\/response\/(?!receipt|summary|claim-details).*$/, IsDefendantInCaseGuard.check())
     app.all(
-      /^\/case\/.+\/response\/(?!confirmation|full-admission|partial-admission|counter-claim|receipt|summary).*$/,
+      /^\/case\/.+\/response\/(?!confirmation|full-admission|partial-admission|counter-claim|receipt|summary|claim-details).*$/,
       ResponseGuard.checkResponseDoesNotExist()
     )
     app.all('/case/*/response/summary', IsClaimantInCaseGuard.check(), ResponseGuard.checkResponseExists())
