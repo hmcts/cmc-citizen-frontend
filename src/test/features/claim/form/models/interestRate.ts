@@ -135,7 +135,7 @@ describe('InterestRate', () => {
 
       expect(errors.length).to.equal(2)
       expectValidationError(errors, ValidationErrors.RATE_REQUIRED)
-      expectValidationError(errors, CommonValidationErrors.REASON_REQUIRED)
+      expectValidationError(errors, ValidationErrors.REASON_REQUIRED)
     })
 
     it('should reject custom InterestRate with zero rate', () => {
