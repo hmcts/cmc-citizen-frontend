@@ -33,12 +33,13 @@ locals {
 }
 
 module "citizen-frontend" {
-  source = "git@github.com:contino/moj-module-webapp.git"
+  source = "git@github.com:contino/moj-module-webapp.git?ref=feature/ROC-3460-One-app-insights-per-product"
   product = "${var.product}-${var.microservice}"
   location = "${var.location}"
   env = "${var.env}"
   ilbIp = "${var.ilbIp}"
   is_frontend  = true
+  appinsights_instrumentation_key = "${var.appinsights_instrumentation_key}"
   subscription = "${var.subscription}"
   additional_host_name = "${var.external_host_name}"
   https_only = "true"
