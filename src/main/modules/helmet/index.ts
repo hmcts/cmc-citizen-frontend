@@ -19,7 +19,7 @@ export class Helmet {
 
   enableFor (app: express.Express) {
     app.use(helmet())
-    app.use(helmet.noCache())
+    app.all(/^.+(?!\/public\/.*)$/, helmet.noCache())
 
     new ContentSecurityPolicy(this.developmentMode).enableFor(app)
 
