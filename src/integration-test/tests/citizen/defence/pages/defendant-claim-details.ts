@@ -1,5 +1,6 @@
 import I = CodeceptJS.I
 import { claimAmount, claimReason } from 'integration-test/data/test-data'
+import { InterestType } from 'integration-test/data/interest-type'
 
 const I: I = actor()
 
@@ -13,15 +14,11 @@ export class DefendantClaimDetails {
     I.click('View claim')
   }
 
-  checkClaimData (claimReference: string, getTotal: boolean = true, getTotalWithInterest: boolean = false): void {
+  checkClaimData (claimReference: string, interestType: InterestType): void {
     I.see(claimReference)
-    if (getTotal) {
-      I.see(claimAmount.getTotal())
-    }
-    if (getTotalWithInterest) {
-      I.see(claimAmount.getTotalWithInterest())
-    }
+    I.see(claimAmount.getInterestTotal(interestType))
     I.see(claimReason)
     I.click(fields.amountBreakdown)
   }
+
 }

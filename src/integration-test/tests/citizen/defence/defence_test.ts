@@ -1,4 +1,5 @@
 import { PartyType } from 'integration-test/data/party-type'
+import { InterestType } from 'integration-test/data/interest-type'
 import { createClaimData, dailyInterestAmount } from 'integration-test/data/test-data'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import I = CodeceptJS.I
@@ -98,19 +99,19 @@ Scenario('I can view the claim details from a link on the dashboard @citizen', f
   helperSteps.defendantViewCaseTaskList(defendantEmail)
   I.click('Respond to claim')
   defendantDetails.clickViewClaim()
-  defendantDetails.checkClaimData(claimRef,true,false)
+  defendantDetails.checkClaimData(claimRef, InterestType.STANDARD)
 })
 
 Scenario('I can view the claim details from a link on the dashboard for interest breakdown @citizen', function* (I: I) {
   const claimantEmail: string = yield I.createCitizenUser()
   const defendantEmail: string = yield I.createCitizenUser()
 
-  const claimRef: string = yield I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL,true,false, true), claimantEmail)
+  const claimRef: string = yield I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL,true, InterestType.BREAKDOWN), claimantEmail)
 
   yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.defendantViewCaseTaskList(defendantEmail)
   I.click('Respond to claim')
   defendantDetails.clickViewClaim()
-  defendantDetails.checkClaimData(claimRef,false,true)
+  defendantDetails.checkClaimData(claimRef, InterestType.BREAKDOWN)
   I.see('Interest calculated with daily interest amount of £' + dailyInterestAmount + ' for 0 days')
 })

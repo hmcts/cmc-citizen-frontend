@@ -44,7 +44,7 @@ declare type Amount = {
   rows: AmountBreakdown[],
   getClaimTotal: () => number
   getTotal: () => number
-  getTotalWithInterest?: () => number
+  getInterestTotal?: (interestType) => number
 }
 
 declare type AmountBreakdown = {

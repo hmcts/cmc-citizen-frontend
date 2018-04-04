@@ -1,4 +1,5 @@
 import { PartyType } from 'integration-test/data/party-type'
+import { InterestType } from 'integration-test/data/interest-type'
 
 export const DEFAULT_PASSWORD = 'Password12'
 
@@ -22,8 +23,13 @@ export const claimAmount: Amount = {
   getTotal (): number {
     return this.getClaimTotal() + claimFee
   },
-  getTotalWithInterest (): number {
-    return this.getClaimTotal() + fixedInterestAmount + claimFee
+  getInterestTotal (interestType: InterestType = InterestType.STANDARD): number {
+    switch (interestType) {
+      case InterestType.STANDARD:
+        return this.getClaimTotal() + claimFee
+      case InterestType.BREAKDOWN:
+        return this.getClaimTotal() + fixedInterestAmount + claimFee
+    }
   }
 }
 
@@ -35,7 +41,7 @@ export const postCodeLookup = {
 export const claimReason = 'My reasons for the claim are that I am owed this money for a variety of reason, these being...'
 
 export function createClaimData (claimantType: PartyType, defendantType: PartyType, hasEmailAddress: boolean = true,
-                                 claimInterest: boolean = true, claimInterestBreakdown: boolean = false): ClaimData {
+                                 interestType: InterestType = InterestType.STANDARD): ClaimData {
   let claimData = {
     claimants: [createClaimant(claimantType)],
     defendants: [createDefendant(defendantType, hasEmailAddress)],
@@ -59,29 +65,30 @@ export function createClaimData (claimantType: PartyType, defendantType: PartyTy
     timeline: { rows: [{ date: 'may', description: 'ok' }] }
   } as ClaimData
 
-  if (claimInterest) {
-    claimData.interest = {
-      type: 'standard',
-      rate: 8
-    }
+  switch (interestType) {
+    case InterestType.BREAKDOWN:
+      claimData.interest = {
+        type: 'breakdown',
+        interestBreakdown: {
+          totalAmount: fixedInterestAmount,
+          explanation: 'up to today'
+        },
+        specificDailyAmount: dailyInterestAmount
+      }
+      claimData.interestDate = {
+        endDateType: 'settled_or_judgment'
+      }
+      break
 
-    claimData.interestDate = {
-      type: 'submission'
-    }
-  }
+    case InterestType.STANDARD:
+      claimData.interest = {
+        type: 'standard',
+        rate: 8
+      }
 
-  if (claimInterestBreakdown) {
-    claimData.interest = {
-      type: 'breakdown',
-      interestBreakdown: {
-        totalAmount: fixedInterestAmount,
-        explanation: 'up to today'
-      },
-      specificDailyAmount: dailyInterestAmount
-    }
-    claimData.interestDate = {
-      endDateType: 'settled_or_judgment'
-    }
+      claimData.interestDate = {
+        type: 'submission'
+      }
   }
 
   return claimData

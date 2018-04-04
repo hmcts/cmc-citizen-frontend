@@ -16,7 +16,7 @@ Scenario('Request judgment as an individual with no defendant email and pay by i
   const defendantType: PartyType = PartyType.INDIVIDUAL
   const hasDefendantEmail = false
 
-  const claimRef: string = yield I.createClaim(createClaimData(claimantType, defendantType, hasDefendantEmail, false), email)
+  const claimRef: string = yield I.createClaim(createClaimData(claimantType, defendantType, hasDefendantEmail), email)
 
   userSteps.login(email)
   ccjSteps.requestCCJ(claimRef, defendantType)
@@ -30,7 +30,7 @@ Scenario('Request judgment as a Company, pay by set date @citizen', function* (I
   const claimantType: PartyType = PartyType.COMPANY
   const defendantType: PartyType = PartyType.COMPANY
 
-  const claimRef: string = yield I.createClaim(createClaimData(claimantType, defendantType, true, false), email)
+  const claimRef: string = yield I.createClaim(createClaimData(claimantType, defendantType, true), email)
 
   userSteps.login(email)
   ccjSteps.requestCCJ(claimRef, defendantType)
@@ -44,7 +44,7 @@ Scenario('Request judgment as a sole trader, pay immediately @citizen', function
   const claimantType: PartyType = PartyType.SOLE_TRADER
   const defendantType: PartyType = PartyType.ORGANISATION
 
-  const claimRef: string = yield I.createClaim(createClaimData(claimantType, defendantType, true, false), email)
+  const claimRef: string = yield I.createClaim(createClaimData(claimantType, defendantType, true), email)
 
   userSteps.login(email)
   ccjSteps.requestCCJ(claimRef, defendantType)
