@@ -24,6 +24,7 @@ import { Feature as OfferFeature } from 'offer/index'
 import { TestingSupportFeature } from 'testing-support/index'
 import * as toBoolean from 'to-boolean'
 import { FeatureToggles } from 'utils/featureToggles'
+import * as noCache from 'nocache'
 
 export const app: express.Express = express()
 
@@ -38,6 +39,7 @@ app.locals.ENV = env
 
 const developmentMode = env === 'development'
 
+app.use(noCache())
 app.use(RequestTracing.middleware)
 
 const i18next = I18Next.enableFor(app)
