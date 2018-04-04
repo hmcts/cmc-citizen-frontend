@@ -6,6 +6,8 @@ export const SMOKE_TEST_CITIZEN_USERNAME = process.env.SMOKE_TEST_CITIZEN_USERNA
 export const SMOKE_TEST_USER_PASSWORD = process.env.SMOKE_TEST_USER_PASSWORD
 
 export const claimFee = 25.00
+export const fixedInterestAmount = 100
+export const dailyInterestAmount = 5
 
 export const claimAmount: Amount = {
   type: 'breakdown',
@@ -19,6 +21,9 @@ export const claimAmount: Amount = {
   },
   getTotal (): number {
     return this.getClaimTotal() + claimFee
+  },
+  getTotalWithInterest (): number {
+    return this.getClaimTotal() + fixedInterestAmount + claimFee
   }
 }
 
@@ -30,7 +35,7 @@ export const postCodeLookup = {
 export const claimReason = 'My reasons for the claim are that I am owed this money for a variety of reason, these being...'
 
 export function createClaimData (claimantType: PartyType, defendantType: PartyType, hasEmailAddress: boolean = true,
-                                 claimInterest: boolean = true): ClaimData {
+                                 claimInterest: boolean = true, claimInterestBreakdown: boolean = false): ClaimData {
   let claimData = {
     claimants: [createClaimant(claimantType)],
     defendants: [createDefendant(defendantType, hasEmailAddress)],
@@ -64,6 +69,21 @@ export function createClaimData (claimantType: PartyType, defendantType: PartyTy
       type: 'submission'
     }
   }
+
+  if (claimInterestBreakdown) {
+    claimData.interest = {
+      type: 'breakdown',
+      interestBreakdown: {
+        totalAmount: fixedInterestAmount,
+        explanation: 'up to today'
+      },
+      specificDailyAmount: dailyInterestAmount
+    }
+    claimData.interestDate = {
+      endDateType: 'settled_or_judgment'
+    }
+  }
+
   return claimData
 }
 

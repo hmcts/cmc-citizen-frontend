@@ -13,9 +13,14 @@ export class DefendantClaimDetails {
     I.click('View claim')
   }
 
-  checkClaimData (claimReference: string): void {
+  checkClaimData (claimReference: string, getTotal: boolean = true, getTotalWithInterest: boolean = false): void {
     I.see(claimReference)
-    I.see(claimAmount.getTotal())
+    if (getTotal) {
+      I.see(claimAmount.getTotal())
+    }
+    if (getTotalWithInterest) {
+      I.see(claimAmount.getTotalWithInterest())
+    }
     I.see(claimReason)
     I.click(fields.amountBreakdown)
   }
