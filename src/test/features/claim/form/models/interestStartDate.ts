@@ -5,7 +5,7 @@ import * as _ from 'lodash'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
 
-import { InterestStartDate } from 'claim/form/models/interestStartDate'
+import { InterestStartDate, ValidationErrors } from 'claim/form/models/interestStartDate'
 import { LocalDate } from 'forms/models/localDate'
 import { InterestDateType } from 'app/common/interestDateType'
 import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
@@ -82,7 +82,7 @@ describe('InterestStartDate', () => {
 
       expect(errors.length).to.equal(2)
       expectValidationError(errors, CommonValidationErrors.DATE_REQUIRED)
-      expectValidationError(errors, CommonValidationErrors.REASON_REQUIRED)
+      expectValidationError(errors, ValidationErrors.REASON_REQUIRED)
     })
 
     it('should reject custom InterestStartDate date with invalid date', () => {
