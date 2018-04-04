@@ -93,25 +93,27 @@ Scenario('I can view the claim details from a link on the dashboard @citizen', f
   const claimantEmail: string = yield I.createCitizenUser()
   const defendantEmail: string = yield I.createCitizenUser()
 
-  const claimRef: string = yield I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL), claimantEmail)
+  const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+  const claimRef: string = yield I.createClaim(claimData, claimantEmail)
 
   yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.defendantViewCaseTaskList(defendantEmail)
   I.click('Respond to claim')
   defendantDetails.clickViewClaim()
-  defendantDetails.checkClaimData(claimRef, InterestType.STANDARD)
+  defendantDetails.checkClaimData(claimRef, claimData)
 })
 
 Scenario('I can view the claim details from a link on the dashboard for interest breakdown @citizen', function* (I: I) {
   const claimantEmail: string = yield I.createCitizenUser()
   const defendantEmail: string = yield I.createCitizenUser()
 
-  const claimRef: string = yield I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL,true, InterestType.BREAKDOWN), claimantEmail)
+  const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL,true, InterestType.BREAKDOWN)
+  const claimRef: string = yield I.createClaim(claimData, claimantEmail)
 
   yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.defendantViewCaseTaskList(defendantEmail)
   I.click('Respond to claim')
   defendantDetails.clickViewClaim()
-  defendantDetails.checkClaimData(claimRef, InterestType.BREAKDOWN)
+  defendantDetails.checkClaimData(claimRef, claimData)
   I.see('Interest calculated with daily interest amount of £' + dailyInterestAmount + ' for 0 days')
 })

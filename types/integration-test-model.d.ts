@@ -11,7 +11,8 @@ declare type ClaimData = {
   interest: Interest
   interestDate?: InterestDate
   reason: string
-  payment: Payment
+  payment: Payment,
+  total: number
 }
 
 declare type Claim = {
@@ -44,7 +45,6 @@ declare type Amount = {
   rows: AmountBreakdown[],
   getClaimTotal: () => number
   getTotal: () => number
-  getInterestTotal?: (interestType) => number
 }
 
 declare type AmountBreakdown = {

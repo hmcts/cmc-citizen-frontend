@@ -22,14 +22,6 @@ export const claimAmount: Amount = {
   },
   getTotal (): number {
     return this.getClaimTotal() + claimFee
-  },
-  getInterestTotal (interestType: InterestType = InterestType.STANDARD): number {
-    switch (interestType) {
-      case InterestType.STANDARD:
-        return this.getClaimTotal() + claimFee
-      case InterestType.BREAKDOWN:
-        return this.getClaimTotal() + fixedInterestAmount + claimFee
-    }
   }
 }
 
@@ -62,7 +54,15 @@ export function createClaimData (claimantType: PartyType, defendantType: PartyTy
       type: 'no interest'
     },
     reason: claimReason,
-    timeline: { rows: [{ date: 'may', description: 'ok' }] }
+    timeline: { rows: [{ date: 'may', description: 'ok' }] },
+    get total (): number {
+      switch (interestType) {
+        case InterestType.STANDARD:
+          return this.amount.getClaimTotal() + claimFee
+        case InterestType.BREAKDOWN:
+          return this.amount.getClaimTotal() + fixedInterestAmount + claimFee
+      }
+    }
   } as ClaimData
 
   switch (interestType) {
@@ -79,7 +79,6 @@ export function createClaimData (claimantType: PartyType, defendantType: PartyTy
         endDateType: 'settled_or_judgment'
       }
       break
-
     case InterestType.STANDARD:
       claimData.interest = {
         type: 'standard',
