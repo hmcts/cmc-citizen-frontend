@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { Paths } from 'testing-support/paths'
-import { Paths as DraftSubmittion } from 'claim/paths'
+import { Paths as ClaimPaths } from 'claim/paths'
 import { ErrorHandling } from 'common/errorHandling'
 
 import { DraftService } from 'services/draftService'
@@ -19,12 +19,12 @@ function getDraftType (req: express.Request): string {
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.createDraftPage.uri,
+  .get(Paths.createClaimDraftPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      res.render(Paths.createDraftPage.associatedView)
+      res.render(Paths.createClaimDraftPage.associatedView)
     })
   )
-  .post(Paths.createDraftPage.uri,
+  .post(Paths.createClaimDraftPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
       const drafts = await draftService.find(getDraftType(req), '100', user.bearerToken, (value) => value)
@@ -36,6 +36,6 @@ export default express.Router()
       const claimDraft = new Draft<DraftClaim>(null, 'claim', new DraftClaim().deserialize(claimDraftData), moment(), moment())
       await new DraftService().save(claimDraft, user.bearerToken)
 
-      res.redirect(DraftSubmittion.checkAndSendPage.uri)
+      res.redirect(ClaimPaths.checkAndSendPage.uri)
     })
   )
