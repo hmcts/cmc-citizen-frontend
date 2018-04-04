@@ -30,7 +30,7 @@ export class OfferSteps {
   rejectOffer (): void {
     I.checkOption('No')
     I.click('Continue')
-    I.see('You’ve rejected their offer')
+    I.see('You’ve rejected an offer to settle out of court')
   }
 
   acceptOfferFromDashboard (claimRef: string): void {
