@@ -85,10 +85,10 @@ export function createClaimData (claimantType: PartyType, defendantType: PartyTy
         type: 'standard',
         rate: 8
       }
-
       claimData.interestDate = {
         type: 'submission'
       }
+      break
   }
 
   return claimData

@@ -1,4 +1,5 @@
 export enum InterestType {
   STANDARD,
-  BREAKDOWN
+  BREAKDOWN,
+  NO_INTEREST
 }
