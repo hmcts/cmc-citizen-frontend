@@ -76,7 +76,6 @@
     "js-base64": "^2.3.2",
     "mime": "^2.0.3",
     "moment": "^2.18.1",
-    "nocache": "^2.0.0",
     "nodelist-foreach-polyfill": "^1.2.0",
     "nunjucks": "^3.0.0",
     "nunjucks-numeral-filter": "0.0.2",
