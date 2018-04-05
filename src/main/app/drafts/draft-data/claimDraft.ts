@@ -1,14 +1,4 @@
-import { InterestRate } from 'claim/form/models/interestRate'
-import { InterestRateOption } from 'claim/form/models/interestRateOption'
-import { InterestDateType } from 'app/common/interestDateType'
 import { YesNoOption } from 'models/yesNoOption'
-import { Interest } from 'claim/form/models/interest'
-import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
-import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/interestEndDate'
-import { InterestDate } from 'claim/form/models/interestDate'
-import { InterestStartDate } from 'claim/form/models/interestStartDate'
-import { LocalDate } from 'forms/models/localDate'
-import { EvidenceType } from 'forms/models/evidenceType'
 import * as uuid from 'uuid'
 import { PartyType } from 'app/common/partyType'
 
@@ -21,7 +11,7 @@ export const claimDraft = {
     payment: {
       reference: '123',
       date_created: 12345,
-      amount: 10000,
+      amount: 8500,
       status: 'Success',
       _links: {
         next_url: {
@@ -39,14 +29,6 @@ export const claimDraft = {
         line3: 'Cool house name',
         city: 'London',
         postcode: 'SW1A 2AA'
-      },
-      hasCorrespondenceAddress: true,
-      correspondenceAddress: {
-        line1: 'Flat 10',
-        line2: 'Street 10',
-        line3: 'Cooler house name',
-        city: 'London',
-        postcode: 'SW1A 1AA'
       },
       dateOfBirth: {
         known: true,
@@ -72,14 +54,7 @@ export const claimDraft = {
         city: 'London',
         postcode: 'SW1A 2AA'
       },
-      hasCorrespondenceAddress: true,
-      correspondenceAddress: {
-        line1: 'Flat 13',
-        line2: 'Street 10',
-        line3: 'Coolest house name',
-        city: 'London',
-        postcode: 'SW1A 1AA'
-      },
+      hasCorrespondenceAddress: false,
       dateOfBirth: {
         known: true,
         date: {
@@ -90,7 +65,7 @@ export const claimDraft = {
       }
     },
     email: {
-      address: 'civilmoneyclaims+Generic-Claim@gmail.com'
+      address: ''
     }
   },
   amount: {
@@ -102,30 +77,8 @@ export const claimDraft = {
     ]
   },
   interest: {
-    option: YesNoOption.YES
-  } as Interest,
-  interestType: {
-    option: InterestTypeOption.SAME_RATE
-  } as InterestType,
-  interestRate: {
-    type: InterestRateOption.DIFFERENT,
-    rate: 10,
-    reason: 'Special case'
-  } as InterestRate,
-  interestDate: {
-    type: InterestDateType.CUSTOM
-  } as InterestDate,
-  interestStartDate: {
-    date: {
-      day: 1,
-      month: 1,
-      year: 2018
-    } as LocalDate,
-    reason: 'Im interest-ed in getting more money'
-  } as InterestStartDate,
-  interestEndDate: {
-    option: InterestEndDateOption.SETTLED_OR_JUDGMENT
-  } as InterestEndDate,
+    option: YesNoOption.NO
+  },
   reason: {
     reason: 'A strong sense of entitlement.'
   },
@@ -136,19 +89,6 @@ export const claimDraft = {
     ]
   },
   evidence: {
-    rows: [
-      {
-        type: EvidenceType.STATEMENT_OF_ACCOUNT,
-        description: 'Statement of account'
-      },
-      {
-        type: EvidenceType.RECEIPTS,
-        description: 'Description of receipt'
-      },
-      {
-        type: EvidenceType.OTHER,
-        description: 'Description of Other'
-      }
-    ]
+    rows: []
   }
 }
