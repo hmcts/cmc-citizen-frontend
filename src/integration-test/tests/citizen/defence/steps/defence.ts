@@ -279,9 +279,6 @@ export class DefenceSteps {
 
       case DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID:
         this.enterWhenDidYouPay(defence)
-        this.submitDefenceText('I have already paid')
-        this.addTimeLineOfEvents({ events: [{ date: 'may', description: 'ok' } as TimelineEvent] } as Timeline)
-        this.enterEvidence('description', 'comment')
         defendantSteps.selectCheckAndSubmitYourDefence()
         I.see('When did you pay this amount?')
         I.see('How did you pay the amount claimed?')
