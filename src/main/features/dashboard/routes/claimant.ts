@@ -19,8 +19,7 @@ export default express.Router()
     const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
 
     res.render(Paths.claimantPage.associatedView, {
-      claim: claim,
-      receiptUri: Paths.claimReceiptReceiver.evaluateUri({ externalId: externalId })
+      claim: claim
     })
   }))
   .post(Paths.claimantPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {

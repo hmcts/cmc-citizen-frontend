@@ -39,7 +39,7 @@ export const claimData = {
   } as Interest,
   interestDate: {
     type: InterestDateType.CUSTOM,
-    date: moment.utc({ year: 2018, month: 0, day: 1 }),
+    date: moment({ year: 2018, month: 0, day: 1 }),
     reason: 'reason',
     endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
   } as InterestDate,

@@ -1,6 +1,7 @@
 import { Paths as AppPaths } from 'app/paths'
 import { expect } from 'chai'
 import { Paths as ClaimPaths } from 'claim/paths'
+import { Paths as EligibilityPaths } from 'eligibility/paths'
 import * as config from 'config'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 
@@ -110,7 +111,7 @@ describe('Login receiver', async () => {
       })
 
       context('when no claim issued or received and no drafts (new claimant)', async () => {
-        it('should redirect to claim start', async () => {
+        it('should redirect to eligibility start page', async () => {
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
           draftStoreServiceMock.resolveFindNoDraftFound()
@@ -119,7 +120,7 @@ describe('Login receiver', async () => {
           await request(app)
             .get(AppPaths.receiver.uri)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPage.uri))
+            .expect(res => expect(res).to.be.redirect.toLocation(EligibilityPaths.startPage.uri))
         })
       })
 
