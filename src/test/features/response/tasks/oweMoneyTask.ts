@@ -25,15 +25,15 @@ describe('OweMoneyTask', () => {
 
       expect(OweMoneyTask.isCompleted(draft)).to.equal(true)
     })
-
   })
 
   describe('when part admission', () => {
-    it('should be not completed when type of part admission is not selected', () => {
+    it('should be completed when type of part admission is not selected', () => {
       const draft: ResponseDraft = new ResponseDraft()
-      draft.response = undefined
+      draft.response = new Response(ResponseType.PART_ADMISSION)
+      draft.rejectPartOfClaim = new RejectPartOfClaim(undefined)
 
-      expect(OweMoneyTask.isCompleted(draft)).to.equal(false)
+      expect(OweMoneyTask.isCompleted(draft)).to.equal(true)
     })
 
     it('should be completed when type of part admission is selected', () => {
@@ -47,7 +47,7 @@ describe('OweMoneyTask', () => {
     })
   })
 
-  describe('when full admission', () => {
+  describe('when full rejection', () => {
     it('should be not completed when type of full admission is not selected', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.DEFENCE)

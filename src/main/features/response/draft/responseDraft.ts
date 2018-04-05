@@ -1,6 +1,6 @@
 import { Response } from 'response/form/models/response'
 import { FreeMediation } from 'response/form/models/freeMediation'
-import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { RejectPartOfClaim } from 'response/form/models/rejectPartOfClaim'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { Defence } from 'response/form/models/defence'
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
@@ -81,13 +81,6 @@ export class ResponseDraft extends DraftDocument {
     return !isNullOrUndefined(this.moreTimeNeeded) && this.moreTimeNeeded.option === MoreTimeNeededOption.YES
   }
 
-  public requireDefence (): boolean {
-    if (!this.isResponsePopulated()) {
-      return false
-    }
-    return this.isResponseRejectedFullyWithDispute()
-  }
-
   public isResponseFullyAdmitted (): boolean {
     if (!toBoolean(config.get<boolean>('featureToggles.fullAdmission'))) {
       return false
@@ -109,10 +102,6 @@ export class ResponseDraft extends DraftDocument {
       && this.response.type === ResponseType.PART_ADMISSION
       && this.rejectPartOfClaim !== undefined
       && this.rejectPartOfClaim.option === option
-  }
-
-  public requireMediation (): boolean {
-    return this.isResponsePopulated() && (this.isResponseRejectedFullyWithDispute() || this.isResponseRejectedPartially())
   }
 
   public isResponseRejectedFullyWithDispute (): boolean {
@@ -138,11 +127,5 @@ export class ResponseDraft extends DraftDocument {
 
   private isResponsePopulated (): boolean {
     return !!this.response && !!this.response.type
-  }
-
-  private isResponseRejectedPartially (): boolean {
-    return this.response.type === ResponseType.PART_ADMISSION && this.rejectPartOfClaim &&
-      (this.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED ||
-        this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
   }
 }
