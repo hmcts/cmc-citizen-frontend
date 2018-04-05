@@ -56,7 +56,7 @@
           {% if claim.response %}
             <li>
               <strong class="bold">{{ t('Defendant’s response:') }}</strong>
-              <span class="block"><a href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a></span>
+              <span class="block"><a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a></span>
             </li>
           {% endif %}
         </ul>

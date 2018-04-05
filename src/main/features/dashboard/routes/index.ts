@@ -25,7 +25,6 @@ export default express.Router()
     const claimsAsDefendant: Claim[] = await claimStoreClient.retrieveByDefendantId(user)
 
     res.render(Paths.dashboardPage.associatedView, {
-      paths: Paths,
       claimsAsClaimant: claimsAsClaimant,
       claimDraftSaved: claimDraftSaved,
       claimsAsDefendant: claimsAsDefendant,
