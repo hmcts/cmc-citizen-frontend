@@ -179,7 +179,6 @@ export class ClaimSteps {
 
   makeAClaimAndSubmitStatementOfTruth (email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
     userSteps.login(email)
-    userSteps.startClaim()
     this.completeEligibility()
     userSteps.selectResolvingThisDispute()
     this.resolveDispute()
@@ -236,7 +235,6 @@ export class ClaimSteps {
 
   makeAClaimAndNavigateUpToPayment (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
     userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
-    userSteps.startClaim()
     this.completeEligibility()
     userSteps.selectResolvingThisDispute()
     this.resolveDispute()

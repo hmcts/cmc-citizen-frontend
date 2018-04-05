@@ -29,12 +29,8 @@
             {% for item in evidence.rows %}
               <tr>
                 <td>{{ item.type.displayValue }}</td>
-                  {% if item.description %}
-                    <td>{{ item.description }}</td>
-                  {% else %}
-                    <td></td>
+                <td>{{ item.description | default('')}}</td>
               </tr>
-              {% endif %}
             {% endfor %}
             </tbody>
           </table>

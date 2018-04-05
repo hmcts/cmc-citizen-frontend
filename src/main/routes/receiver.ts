@@ -6,6 +6,7 @@ import { CookieEligibilityStore } from 'eligibility/store'
 import { Paths as AppPaths } from 'app/paths'
 import { Paths as ClaimPaths } from 'claim/paths'
 import { Paths as DashboardPaths } from 'dashboard/paths'
+import { Paths as EligibilityPaths } from 'eligibility/paths'
 import { Paths as FirstContactPaths } from 'first-contact/paths'
 import { ClaimStoreClient } from 'app/claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'
@@ -89,7 +90,7 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
   const noDraftResponses: boolean = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
 
   if (noClaimIssued && noClaimReceived && noDraftClaims && noDraftResponses) {
-    return ClaimPaths.startPage.uri
+    return EligibilityPaths.startPage.uri
   } else {
     return DashboardPaths.dashboardPage.uri
   }
