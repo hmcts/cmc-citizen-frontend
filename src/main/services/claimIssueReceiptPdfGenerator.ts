@@ -7,7 +7,7 @@ import * as HttpStatus from 'http-status-codes'
 
 const documentsClient: DocumentsClient = new DocumentsClient()
 
-export class PdfGenerator {
+export class ClaimIssueReceiptPDFGenerator {
   static async requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
     {
       const { externalId } = req.params
