@@ -1,6 +1,8 @@
 import * as express from 'express'
 import * as path from 'path'
 
+import { Paths } from 'claim/paths'
+
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { ClaimEligibilityGuard } from 'claim/guards/claimEligibilityGuard'
 import { RouterFinder } from 'common/router/routerFinder'
@@ -24,6 +26,10 @@ function claimIssueRequestHandler (): express.RequestHandler {
 
 export class Feature {
   enableFor (app: express.Express) {
+    if (app.settings.nunjucksEnv && app.settings.nunjucksEnv.globals) {
+      app.settings.nunjucksEnv.globals.ClaimPaths = Paths
+    }
+
     app.all('/claim/*', claimIssueRequestHandler())
     app.all(/^\/claim\/(?!start|amount-exceeded|.+\/confirmation|.+\/receipt).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'claim', 100, (value: any): DraftClaim => {

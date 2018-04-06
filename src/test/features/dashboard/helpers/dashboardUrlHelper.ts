@@ -3,6 +3,8 @@ import { sampleClaimObj, sampleDefendantResponseObj } from '../../../http-mocks/
 import { DashboardUrlHelper } from 'dashboard/helpers/dashboardUrlHelper'
 import { Claim } from 'claims/models/claim'
 import { Paths } from 'dashboard/paths'
+import { Paths as ResponsePaths } from 'response/paths'
+import { Paths as OfferPaths } from 'offer/paths'
 
 describe('DashboardUrlHelper', () => {
   describe('getStatusUrl', () => {
@@ -14,20 +16,20 @@ describe('DashboardUrlHelper', () => {
         })
 
       expect(DashboardUrlHelper.getStatusUrl(claim))
-        .to.equal(Paths.agreementReceiver.evaluateUri({ externalId: claim.externalId }))
+        .to.equal(OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }))
 
     })
     it('should return response task-list page when there is no response', () => {
       const claim = new Claim().deserialize(sampleClaimObj)
 
       expect(DashboardUrlHelper.getStatusUrl(claim))
-        .to.equal(Paths.responseTaskListPage.evaluateUri({ externalId: claim.externalId }))
+        .to.equal(ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
     })
     it('should return offer response page when there is a response and no settlement', () => {
       const claim = new Claim().deserialize({ ...sampleClaimObj, ...sampleDefendantResponseObj })
 
       expect(DashboardUrlHelper.getStatusUrl(claim))
-        .to.equal(Paths.offerResponsePage.evaluateUri({ externalId: claim.externalId }))
+        .to.equal(OfferPaths.responsePage.evaluateUri({ externalId: claim.externalId }))
     })
   })
   describe('getNextResponseUrl', () => {
@@ -43,7 +45,7 @@ describe('DashboardUrlHelper', () => {
       const claim = new Claim().deserialize(sampleClaimObj)
 
       expect(DashboardUrlHelper.getNextResponseUrl(claim))
-        .to.equal(Paths.responseTaskListPage.evaluateUri({ externalId: claim.externalId }))
+        .to.equal(ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
 
     })
 

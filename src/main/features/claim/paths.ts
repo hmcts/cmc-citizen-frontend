@@ -1,7 +1,6 @@
 import { RoutablePath } from 'common/router/routablePath'
 
 export class Paths {
-  static readonly startPage = new RoutablePath('/claim/start')
   static readonly taskListPage = new RoutablePath('/claim/task-list')
   static readonly resolvingThisDisputerPage = new RoutablePath('/claim/resolving-this-dispute')
   static readonly completingClaimPage = new RoutablePath('/claim/completing-claim')
@@ -38,9 +37,6 @@ export class Paths {
   static readonly claimantPartyTypeSelectionPage = new RoutablePath('/claim/claimant-party-type-selection')
   static readonly defendantPartyTypeSelectionPage = new RoutablePath('/claim/defendant-party-type-selection')
   static readonly incompleteSubmissionPage = new RoutablePath('/claim/incomplete-submission')
-
-  static readonly eligibilityStartPage = new RoutablePath('/eligibility/index')
-  static readonly eligibilityNotEligiblePage = new RoutablePath('/eligibility/not-eligible')
 }
 
 export class ErrorPaths {
