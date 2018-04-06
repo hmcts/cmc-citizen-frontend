@@ -2,7 +2,7 @@ import { StringUtils } from 'utils/stringUtils'
 
 const pathParameterRegex = /\/:[^\/]+/g
 
-export function isValidParameterValue (parameterValue: string): boolean {
+function isValidParameterValue (parameterValue: string): boolean {
   return !(StringUtils.isBlank(parameterValue) || parameterValue === 'undefined' || parameterValue === 'null')
 }
 

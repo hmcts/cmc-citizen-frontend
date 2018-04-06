@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { isValidParameterValue, RoutablePath } from 'common/router/routablePath'
+import { RoutablePath } from 'common/router/routablePath'
 
 describe('RoutablePath', () => {
   describe('providing uri', () => {
@@ -70,33 +70,6 @@ describe('RoutablePath', () => {
         expect(new RoutablePath('/claim/:externalId/confirmation', false).associatedView).to.be.equal('claim/confirmation')
         expect(new RoutablePath('/claim/:type/:subtype/list', false).associatedView).to.be.equal('claim/list')
       })
-    })
-  })
-
-  describe('isInValidParameterValue', () => {
-
-    it('should return false if value is undefined', () => {
-      expect(isValidParameterValue(undefined)).to.be.equals(false)
-    })
-
-    it('should return false if value is null', () => {
-      expect(isValidParameterValue(null)).to.be.equals(false)
-    })
-
-    it('should return false if value is string `undefined`', () => {
-      expect(isValidParameterValue('undefined')).to.be.equals(false)
-    })
-
-    it('should return false if value is string `null`', () => {
-      expect(isValidParameterValue('null')).to.be.equals(false)
-    })
-
-    it('should return false if value is empty string', () => {
-      expect(isValidParameterValue('null')).to.be.equals(false)
-    })
-
-    it('should return true if value is valid', () => {
-      expect(isValidParameterValue('123')).to.be.equals(true)
     })
   })
 
