@@ -29,6 +29,7 @@ import I = CodeceptJS.I
 import { ClaimantTimelinePage } from 'integration-test/tests/citizen/claim/pages/claimant-timeline'
 import { ClaimantEvidencePage } from 'integration-test/tests/citizen/claim/pages/claimant-evidence'
 import { AmountHelper } from 'integration-test/helpers/amountHelper'
+import { TestingSupportSteps } from 'integration-test/tests/citizen/testingSupport/steps/testingSupport'
 
 const I: I = actor()
 const citizenResolveDisputePage: CitizenResolveDisputePage = new CitizenResolveDisputePage()
@@ -50,6 +51,7 @@ const userSteps: UserSteps = new UserSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 const eligibilitySteps: EligibilitySteps = new EligibilitySteps()
 const paymentSteps: PaymentSteps = new PaymentSteps()
+const testingSupport: TestingSupportSteps = new TestingSupportSteps()
 
 export class ClaimSteps {
 
@@ -205,6 +207,16 @@ export class ClaimSteps {
   }
 
   makeAClaimAndSubmit (email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): string {
+    this.makeAClaimAndSubmitStatementOfTruth(email, claimantType, defendantType, enterDefendantEmail)
+    paymentSteps.payWithWorkingCard()
+    this.reloadPage() // reload gets over the ESOCKETTIMEDOUT Error
+    this.reloadPage() // reload gets over the 409 Duplicate Key value violates unique constraint Error
+    I.waitForText('Claim submitted')
+    return claimantClaimConfirmedPage.getClaimReference()
+  }
+
+  makeATestingSupportClaimAndSubmit (): void {
+    testingSupport.createClaimDraft()
     this.makeAClaimAndSubmitStatementOfTruth(email, claimantType, defendantType, enterDefendantEmail)
     paymentSteps.payWithWorkingCard()
     this.reloadPage() // reload gets over the ESOCKETTIMEDOUT Error
