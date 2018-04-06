@@ -4,13 +4,15 @@
 
 {% macro downloadResponse(claim, url) %}
   <p>
-    <a href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
+    <a
+      href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
   </p>
 {% endmacro %}
 
 {% macro downloadTheAgreement(claim, url) %}
   <p>
-    <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
+    <a
+      href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
   </p>
 {% endmacro %}
 
@@ -18,6 +20,12 @@
   <p>
     <a href="{{ url }}">{{ t('View and respond to offer') }}</a>
   </p>
+{% endmacro %}
+
+{% macro emailLinkForFreeMediation(claim, url) %}
+  <a
+    href="mailto:moneyclaims@hmcts.gsi.gov.uk?Subject=Free%20Mediation%20Decision%20-%20Claim%20Number:%20{{ claim.claimNumber }}"
+    target="_top">moneyclaims@hmcts.gsi.gov.uk</a>
 {% endmacro %}
 
 
@@ -74,9 +82,8 @@
           {{ t('You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.') }}
         </p>
 
-        <p>
-          <a href="{{ url }}">{{ t('View and respond to offer') }}</a>
-        </p>
+        {{ responseToOffer(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+
         {#Todo Why do we want them to respond AFTER theyve responded#}
 
         <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
@@ -85,9 +92,8 @@
           + 'this is a form which you must complete to tell us more about the claim.',
           { defendantName: claim.claimData.defendant.name }) }}
         </p>
-        <p>
-          <a href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
-        </p>
+
+        {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
 
         {#Todo Why have a view and respond to offer when youve already rejected the offer#}
         {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
@@ -113,9 +119,12 @@
             { defendantName: claim.claimData.defendant.name }) }}
           </p>
           <p>
-            {{ t('Tell us whether you agree to mediation or not by emailing moneyclaims@hmcts.gsi.gov.uk before XXXXX{{ deadline }}.',
-            {deadline : deadline }) }}
+            {{ t('Tell us whether you agree to mediation or not by emailing ') }}
+            {{ emailLinkForFreeMediation(claim, url) }}
+            {{ t(' before {{ offerResponseDeadline? }}XXXXX',
+            {offerResponseDeadline: offerResponseDeadline }) }}
           </p>
+
           {#Todo find out what this deadline is?#}
         {% else %}
           <p>
@@ -124,9 +133,8 @@
             { defendantName: claim.claimData.defendant.name }) }}
           </p>
         {% endif %}
-          <p>
-            <a href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
-          </p>
+
+        {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
 
         {% elif state.status === ClaimStatus.NO_RESPONSE %}
         <h2 class="heading-medium">{{ t('Your claim has been sent') }}</h2>
@@ -227,7 +235,8 @@
           {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
         </p>
         <p>
-          <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
+          <a
+            href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
         </p>
         {% elif state.status === ClaimStatus.CLAIM_REJECTED and claim.response.freeMediation === FreeMediationOption.NO %}
         <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
