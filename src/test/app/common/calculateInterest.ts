@@ -4,11 +4,10 @@ import { MomentFactory } from 'common/momentFactory'
 import { calculateInterest } from 'app/common/calculateInterest'
 import { mockCalculateInterestRate } from '../../http-mocks/claim-store'
 
-describe('calculateInterest', () => {
+import { attachDefaultHooks } from '../../../test/hooks'
 
-  beforeEach(() => {
-    mockCalculateInterestRate(0.08)
-  })
+describe('calculateInterest', () => {
+  attachDefaultHooks()
 
   it(`should return 0 without calling an API when interest period is 0 days`, async () => {
     const interestFromDate = MomentFactory.currentDateTime()
@@ -19,6 +18,8 @@ describe('calculateInterest', () => {
   })
 
   it(`should return interest value calculated by API when interest period is greater then 0 days`, async () => {
+    mockCalculateInterestRate(0.08)
+
     const interestFromDate = MomentFactory.currentDateTime().subtract(1, 'year')
     const interestToDate = MomentFactory.currentDateTime()
     const amount = await calculateInterest(100, 8, interestFromDate, interestToDate)
