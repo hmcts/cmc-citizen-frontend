@@ -1,9 +1,8 @@
-import { Logger, LoggingConfig, RequestTracingHeaders as Headers } from '@hmcts/nodejs-logging'
+import { Logger, RequestTracingHeaders as Headers } from '@hmcts/nodejs-logging'
 
 export class ApiLogger {
-  constructor (public logger = Logger.getLogger('apiLogger.js'), public loggingConfig = LoggingConfig.logging) {
+  constructor (public logger = Logger.getLogger('apiLogger.js')) {
     this.logger = logger
-    this.loggingConfig = loggingConfig
   }
 
   logRequest (requestData) {

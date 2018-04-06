@@ -4,7 +4,7 @@ import * as path from 'path'
 import * as favicon from 'serve-favicon'
 import * as cookieParser from 'cookie-parser'
 import * as bodyParser from 'body-parser'
-import { Logger, RequestTracing } from '@hmcts/nodejs-logging'
+import { RequestTracing } from '@hmcts/nodejs-logging'
 import { ForbiddenError, NotFoundError } from './errors'
 import { ErrorLogger } from 'logging/errorLogger'
 import { RouterFinder } from 'common/router/routerFinder'
@@ -26,12 +26,6 @@ import * as toBoolean from 'to-boolean'
 import { FeatureToggles } from 'utils/featureToggles'
 
 export const app: express.Express = express()
-
-Logger.config({
-  microservice: 'citizen-frontend',
-  team: 'cmc',
-  environment: process.env.NODE_ENV
-})
 
 const env = process.env.NODE_ENV || 'development'
 app.locals.ENV = env
