@@ -13,6 +13,8 @@ describe('calculateInterest', () => {
       mockCalculateInterestRate(0)
     })
 
+    // when rate is 0, InterestRateOption = STANDARD gets 0:
+    // when rate is 1, InterestRateOption = STANDARD gets 0:
     Object.keys(InterestRateOption).forEach(async (type) => {
       [0, 1, 1000].forEach(async (rate) => {
         it(`when rate is ${rate}, InterestRateOption = ${type} gets 0`, async () => {
