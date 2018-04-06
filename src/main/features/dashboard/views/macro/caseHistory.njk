@@ -23,21 +23,20 @@
 
       <p>
         {{ t('{{ defendantName }} can no longer respond to your claim using this service - they may have responded by post.',
-        { defendantName: claim.claimData.defendant.name }) }}) }}
+        { defendantName: claim.claimData.defendant.name }) }}
       </p>
 
       {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
       <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
       <p>
-        {{ t('{{ defendantName }} has made an offer to settle out of court. You must accept or reject by 4pm on {{ offerDeadline??? }}.',
-        { defendantName: claim.claimData.defendant.name }) }}) }}
+        {{ t('{{ defendantName }} has made an offer to settle out of court. You must accept or reject by 4pm on zXXXXX{{ offerDeadline??? }}.',
+        { defendantName: claim.claimData.defendant.name }) }}
       </p>
       {#todo Clarify with Marc James. Do we have an offer deadline now?#}
 
-      <p>
-        {{ t('View and respond to offer.') }}
-      </p>
-      {#todo link#}
+        <p>
+          <a href="{{ url }}">{{ t('View their offer') }}</a>
+        </p>
 
       <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
       <p>
