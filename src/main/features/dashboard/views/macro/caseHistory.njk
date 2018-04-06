@@ -67,44 +67,6 @@
         <p>
           {{ t('View and respond to offer.') }}
         </p>
-
-        {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
-        <h3 class="heading-small">{{ t('The defendant’s response') }}</h3>
-        <p>
-          {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
-          + 'this is a form which you must complete to tell us more about the claim.',
-          { defendantName: claim.claimData.defendant.name }) }}
-        </p>
-        <p>
-          <a
-            href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
-        </p>
-
-        {% elif state.status === ClaimStatus.CLAIM_REJECTED and claim.response.freeMediation === FreeMediationOption.NO %}
-        h2: The defendant's response
-        Mary Richards has rejected the claim. They’ve suggested mediation to help resolve this dispute.
-
-        Tell us whether you agree to mediation or not by emailing moneyclaims@hmcts.gsi.gov.uk before 4pm on 3 April 2018.
-        <link> Download their response
-
-
-
-        <h3 class="heading-small">{{ t('The defendant’s response') }}</h3>
-        <p>
-          {{ t('{{ defendantName }} has rejected the claim. They’ve suggested mediation to help resolve this dispute.') }}
-          { defendantName: claim.claimData.defendant.name }) }}
-        </p>
-
-        <p>
-          {{ t(' Tell us whether you agree to mediation or not by emailing moneyclaims@hmcts.gsi.gov.uk before {{ deadline }}.',
-          {deadline : deadline }) }}
-        </p>
-        {#Todo find out what this deadline is?#}
-
-        <p>
-          <a
-            href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
-        </p>
         {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
         <p>
@@ -123,11 +85,13 @@
         <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
         <p>
           {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
-          + 'this is a form which you must complete to tell us more about the claim.') }}
+          + 'this is a form which you must complete to tell us more about the claim.',
+          { defendantName: claim.claimData.defendant.name}) }}
         </p>
         <p>
-          {{ t('Download their response') }}
+          <a href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a>
         </p>
+        {#Todo link download#}
         {% elif state.status === ClaimStatus.NO_RESPONSE %}
         <h2 class="heading-medium">{{ t('Your claim has been sent') }}</h2>
         <p>
