@@ -17,19 +17,8 @@
       <div>
         <h2 class="heading-medium">{{ t('Claim status') }}</h2>
 
-        {% if claim.eligibleForCCJ %}
-          <h3 class="bold-small">{{ t('You can request a County Court Judgment') }}</h3>
-          <p>{{ t('{{ defendantName }} has not responded to your claim by the deadline. You can request a County Court Judgment (CCJ) against them.', { defendantName : claim.claimData.defendant.name }) }}</p>
-          <p>{{ t('The court will make an order asking them to pay the money. It does not guarantee that they pay it.') }}</p>
-          <p>{{ t('{{ defendantName }} can still respond to the claim until you request a CCJ.', { defendantName : claim.claimData.defendant.name }) }}</p>
-          <form novalidate method="post">
-            {{ csrfProtection(csrf) }}
-
-            {{ submitButton('Request a County Court Judgment') }}
-          </form>
-        {% else %}
             {{ caseHistoryForClaimant(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
-        {% endif %}
+
 
         {% if claim.countyCourtJudgmentRequestedAt %}
 
