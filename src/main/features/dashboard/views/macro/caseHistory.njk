@@ -13,13 +13,15 @@
       </p>
 
       <p>
-        {{ t('{{ defendantName }} can no longer respond to your claim using this service - they may have responded by post.') }}
+        {{ t('{{ defendantName }} can no longer respond to your claim using this service - they may have responded by post.',
+        { defendantName: claim.claimData.defendant.name }) }}) }}
       </p>
 
       {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
       <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
       <p>
-        {{ t('{{ defendantName }} has made an offer to settle out of court. You must accept or reject by 4pm on {{ offerDeadline??? }}.') }}
+        {{ t('{{ defendantName }} has made an offer to settle out of court. You must accept or reject by 4pm on {{ offerDeadline??? }}.',
+        { defendantName: claim.claimData.defendant.name }) }}) }}
       </p>
       {#todo Clarify with Marc James. Do we have an offer deadline now?#}
 
@@ -104,7 +106,9 @@
       {% elif state.status === ClaimStatus.NO_RESPONSE %}
       <h2 class="heading-medium">{{ t('Your claim has been sent') }}</h2>
       <p>
-        {{ t('{{ claimantName }} has until {{ responseDeadline }} to respond. They can request an extra 14 days if they need it.') }}
+        {{ t('{{ claimantName }} has until {{ responseDeadline }} to respond. They can request an extra 14 days if they need it.',
+        { claimantName: claim.claimData.claimant.name ,
+          responseDeadline: claim.responseDeadline | date }) | safe }}
       </p>
       {% else %}
         <p>
