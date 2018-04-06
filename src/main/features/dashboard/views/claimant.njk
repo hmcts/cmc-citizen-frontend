@@ -19,11 +19,6 @@
 
             {{ caseHistoryForClaimant(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
 
-
-        {% if claim.countyCourtJudgmentRequestedAt %}
-
-          <p>{{ t('{{ defendantName }} can no longer respond to your claim.', { defendantName: claim.claimData.defendant.name }) }}</p>
-        {% endif %}
       </div>
     </div>
 
