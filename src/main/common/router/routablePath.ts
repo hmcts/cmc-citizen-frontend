@@ -1,3 +1,5 @@
+import { StringUtils } from 'utils/stringUtils'
+
 const pathParameterRegex = /\/:[^\/]+/g
 
 export class RoutablePath {
@@ -33,6 +35,10 @@ export class RoutablePath {
     return `${featureName}/views/${viewPath}`
   }
 
+  static isValidParameterValue (parameterValue: string): boolean {
+    return !(StringUtils.isBlank(parameterValue) || parameterValue === 'undefined' || parameterValue === 'null')
+  }
+
   evaluateUri (substitutions: { [key: string]: string }): string {
     if (substitutions === undefined || Object.keys(substitutions).length === 0) {
       throw new Error('Path parameter substitutions are required')
@@ -40,6 +46,10 @@ export class RoutablePath {
 
     const path = Object.entries(substitutions).reduce((uri: string, substitution: [string, string]) => {
       const [parameterName, parameterValue] = substitution
+
+      if (!RoutablePath.isValidParameterValue(parameterValue)) {
+        throw new Error(`Path parameter :${parameterName} is not provided`)
+      }
 
       const updatedUri: string = uri.replace(`:${parameterName}`, parameterValue)
       if (updatedUri === uri) {
