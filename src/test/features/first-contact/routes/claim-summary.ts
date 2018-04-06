@@ -47,7 +47,6 @@ describe('Defendant first contact: claim summary page', () => {
 
       it('should return 200 and render view when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001')
-        claimStoreServiceMock.mockCalculateInterestRate(0)
         await request(app)
           .get(Paths.claimSummaryPage.uri)
           .set('Cookie', `${cookieName}=ABC;state=000MC001`)

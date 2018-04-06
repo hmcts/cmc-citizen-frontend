@@ -11,6 +11,8 @@ export class ValidationErrors {
 
   static readonly RATE_REQUIRED: string = 'You haven’t entered a rate'
   static readonly RATE_NOT_VALID: string = 'Correct the rate you’ve entered'
+
+  static readonly REASON_REQUIRED: string = 'You haven’t explained why you’re claiming this rate'
 }
 
 export class InterestRate implements CompletableTask {
@@ -25,8 +27,8 @@ export class InterestRate implements CompletableTask {
   rate?: number
 
   @ValidateIf(o => o.type === InterestRateOption.DIFFERENT)
-  @IsDefined({ message: CommonValidationErrors.REASON_REQUIRED })
-  @IsNotBlank({ message: CommonValidationErrors.REASON_REQUIRED })
+  @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
+  @IsNotBlank({ message: ValidationErrors.REASON_REQUIRED })
   @MaxLength(250, { message: CommonValidationErrors.REASON_TOO_LONG })
   reason?: string
 
