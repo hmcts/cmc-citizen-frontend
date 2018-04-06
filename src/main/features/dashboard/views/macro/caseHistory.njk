@@ -2,6 +2,25 @@
 {% from "timeRemaining.njk" import timeRemaining %}
 {% from "form.njk" import submitButton %}
 
+{% macro downloadResponse(claim, url) %}
+  <p>
+    <a href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
+  </p>
+{% endmacro %}
+
+{% macro downloadTheAgreement(claim, url) %}
+  <p>
+    <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
+  </p>
+{% endmacro %}
+
+{% macro responseToOffer(claim, url) %}
+  <p>
+    <a href="{{ url }}">{{ t('View and respond to offer') }}</a>
+  </p>
+{% endmacro %}
+
+
 {% macro caseHistoryForClaimant(claim, url) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
@@ -76,9 +95,9 @@
         <p>
           {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
         </p>
-        <p>
-          <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
-        </p>
+
+        {{ downloadTheAgreement(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+
         {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
         <h2 class="heading-medium">{{ t('The defendant has requested more time to respond') }}</h2>
         <p>
