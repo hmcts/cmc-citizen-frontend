@@ -20,7 +20,7 @@
         <div class="form-fields">
           <table>
             <thead>
-              <tr>
+            <tr>
                 <th scope="col">{{ t('Type') }}</th>
                 <th scope="col">{{ t('Description') }}</th>
               </tr>
@@ -29,9 +29,7 @@
             {% for item in evidence.rows %}
               <tr>
                 <td>{{ item.type.displayValue }}</td>
-                  {% if item.description %}
-                    <td>{{ item.description }}</td>
-                  {% endif %}
+                <td>{{ item.description | default('')}}</td>
               </tr>
             {% endfor %}
             </tbody>
