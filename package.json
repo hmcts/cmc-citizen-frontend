@@ -18,7 +18,7 @@
     "test:coverage-unit": "TS_NODE_FAST=true NODE_ENV=mocha LOG_LEVEL=OFF nyc mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*')",
     "test:codacy-upload": "cat ./coverage-report/lcov.info | codacy-coverage",
     "test:codecov-upload": "codecov -f ./coverage-report/lcov.info",
-    "test:smoke": "echo disabled due to testing breaking change to journey",
+    "test:smoke": "./bin/run-smoke-tests.sh",
     "test:integration": "TS_NODE_FAST=true ts-node --require tsconfig-paths/register ./node_modules/.bin/codeceptjs run --verbose --config default.conf.js --reporter mocha-multi",
     "test:integration-debug": "TS_NODE_FAST=true ts-node --require tsconfig-paths/register ./node_modules/.bin/codeceptjs run --verbose --config default.conf.js",
     "test:cross-browser": "TS_NODE_FAST=true ts-node --require tsconfig-paths/register ./node_modules/.bin/codeceptjs run --verbose --config saucelabs.conf.js --reporter mocha-multi",
