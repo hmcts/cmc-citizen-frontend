@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { RoutablePath } from 'common/router/routablePath'
+import { isValidParameterValue, RoutablePath } from 'common/router/routablePath'
 
 describe('RoutablePath', () => {
   describe('providing uri', () => {
@@ -38,7 +38,7 @@ describe('RoutablePath', () => {
     it('should fail when path parameter placeholder has invalid value', () => {
       [{ id: undefined }, { id: null }, { id: 'null' }, { id: 'undefined' }, { id: '' }].forEach(invalidValue => {
         expect(() => new RoutablePath('/case/:id/payment').evaluateUri(invalidValue))
-          .to.throw(Error, 'Path parameter :id is not provided')
+          .to.throw(Error, 'Path parameter :id is invalid')
       })
     })
   })
@@ -76,27 +76,27 @@ describe('RoutablePath', () => {
   describe('isInValidParameterValue', () => {
 
     it('should return false if value is undefined', () => {
-      expect(RoutablePath.isValidParameterValue(undefined)).to.be.equals(false)
+      expect(isValidParameterValue(undefined)).to.be.equals(false)
     })
 
     it('should return false if value is null', () => {
-      expect(RoutablePath.isValidParameterValue(null)).to.be.equals(false)
+      expect(isValidParameterValue(null)).to.be.equals(false)
     })
 
     it('should return false if value is string `undefined`', () => {
-      expect(RoutablePath.isValidParameterValue('undefined')).to.be.equals(false)
+      expect(isValidParameterValue('undefined')).to.be.equals(false)
     })
 
     it('should return false if value is string `null`', () => {
-      expect(RoutablePath.isValidParameterValue('null')).to.be.equals(false)
+      expect(isValidParameterValue('null')).to.be.equals(false)
     })
 
     it('should return false if value is empty string', () => {
-      expect(RoutablePath.isValidParameterValue('null')).to.be.equals(false)
+      expect(isValidParameterValue('null')).to.be.equals(false)
     })
 
     it('should return true if value is valid', () => {
-      expect(RoutablePath.isValidParameterValue('123')).to.be.equals(true)
+      expect(isValidParameterValue('123')).to.be.equals(true)
     })
   })
 
