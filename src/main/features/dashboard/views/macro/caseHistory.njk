@@ -81,17 +81,30 @@
           {{ t('{{ defendantName }} has requested an extra 14 days to respond. They need to respond by {{ responseDeadline }}.',
           { defendantName: claim.claimData.defendant.name ,  responseDeadline: claim.responseDeadline | date }) | safe }}
         </p>
+
         {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
-        <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
-        <p>
-          {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
-          + 'this is a form which you must complete to tell us more about the claim.',
-          { defendantName: claim.claimData.defendant.name}) }}
-        </p>
-        <p>
-          <a href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a>
-        </p>
-        {#Todo link download#}
+        <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
+        {% if claim.response.freeMediation === FreeMediationOption.YES %}
+          <p>
+            {{ t('{{ defendantName }} has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
+            { defendantName: claim.claimData.defendant.name }) }}
+          </p>
+          <p>
+            {{ t('Tell us whether you agree to mediation or not by emailing moneyclaims@hmcts.gsi.gov.uk before XXXXX{{ deadline }}.',
+            {deadline : deadline }) }}
+          </p>
+          {#Todo find out what this deadline is?#}
+        {% else %}
+          <p>
+            {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
+            + 'this is a form which you must complete to tell us more about the claim.',
+            { defendantName: claim.claimData.defendant.name }) }}
+          </p>
+        {% endif %}
+          <p>
+            <a href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
+          </p>
+
         {% elif state.status === ClaimStatus.NO_RESPONSE %}
         <h2 class="heading-medium">{{ t('Your claim has been sent') }}</h2>
         <p>
