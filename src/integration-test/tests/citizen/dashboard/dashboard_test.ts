@@ -15,12 +15,3 @@ Scenario('Check newly created claim is in my account dashboard with correct clai
   I.see('Your money claims account')
   I.see(claimRef + ' ' + createDefendant(PartyType.INDIVIDUAL).name + ' ' + AmountHelper.formatMoney(claimAmount.getTotal()))
 })
-
-Scenario('I generate a claim draft using testing support and submit it @citizen', function* (I: I) {
-  const claimRef: string = yield claimSteps.makeATestingSupportClaimAndSubmit()
-
-  I.click('My account')
-  I.see('Your money claims account')
-  I.see(claimRef + ' ' + createDefendant(PartyType.INDIVIDUAL).name + ' ' + AmountHelper.formatMoney(claimAmount.getTotal()))
-  // Needs clarified with Damian and reworked
-})
