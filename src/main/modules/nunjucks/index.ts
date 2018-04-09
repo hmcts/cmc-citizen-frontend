@@ -29,8 +29,6 @@ import { BankAccountType } from 'response/form/models/statement-of-means/bankAcc
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { Paths as AppPaths } from 'app/paths'
 import { Paths as DashboardPaths } from 'features/dashboard/paths'
-import { Paths as FirstContactPaths } from 'features/first-contact/paths'
-import { Paths as ClaimPaths } from 'features/claim/paths'
 import { Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
@@ -124,8 +122,6 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('ClaimStatus', ClaimStatus)
     nunjucksEnv.addGlobal('AppPaths', AppPaths)
     nunjucksEnv.addGlobal('DashboardPaths', DashboardPaths)
-    nunjucksEnv.addGlobal('ClaimPaths', ClaimPaths)
-    nunjucksEnv.addGlobal('FirstContactPaths', FirstContactPaths)
     nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
     nunjucksEnv.addGlobal('HowMuchPaidClaimantOption', HowMuchPaidClaimantOption)
     nunjucksEnv.addGlobal('Service', Service)
