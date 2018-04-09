@@ -2,6 +2,11 @@ import { StringUtils } from 'utils/stringUtils'
 
 const pathParameterRegex = /\/:[^\/]+/g
 
+/**
+ *  This method validates the path parameter value used in URI paths.
+ *  And empty, null, undefined, string literal 'null' and 'undefined' are invalid values.
+ *  This prevents undefined being passed to urls like: `/case/undefined/claim/receipt`
+ */
 function isValidParameterValue (parameterValue: string): boolean {
   return !(StringUtils.isBlank(parameterValue) || parameterValue === 'undefined' || parameterValue === 'null')
 }
