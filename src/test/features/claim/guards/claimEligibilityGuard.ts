@@ -19,9 +19,13 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 
+import { attachDefaultHooks } from '../../../../test/hooks'
+
 chai.use(spies)
 
 describe('Claim eligibility guard', () => {
+  attachDefaultHooks()
+
   let claimDraft: Draft<DraftClaim>
 
   const next = (e?: any): void => {
