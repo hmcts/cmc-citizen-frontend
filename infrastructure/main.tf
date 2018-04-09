@@ -38,6 +38,9 @@ locals {
   nonPreviewVaultUri = "${module.citizen-frontend-vault.key_vault_uri}"
   previewVaultUri = "https://cmc-citizen-fe-aat.vault.azure.net/"
   vaultUri = "${var.env == "preview"? local.previewVaultUri : local.nonPreviewVaultUri}"
+
+  localClaimStoreUrl = "http://cmc-claim-store-${var.env}.service.${local.aseName}.internal"
+  claimStoreUrl = "${var.env == "preview" ? "http://cmc-claim-store-aat.service.core-compute-aat.internal" : local.localClaimStoreUrl}"
 }
 
 module "citizen-frontend" {
@@ -87,7 +90,6 @@ module "citizen-frontend" {
 
     // Our service dependencies
     CLAIM_STORE_URL = "http://cmc-claim-store-${var.env}.service.${local.aseName}.internal"
-    PDF_SERVICE_URL = "http://cmc-pdf-service-${var.env}.service.${local.aseName}.internal"
 
     // Surveys
     SERVICE_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPT1/"
