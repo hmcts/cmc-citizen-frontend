@@ -20,7 +20,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 
 const pagePath = ResponsePaths.defendantHowMuchPaid.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 describe('Defendant response: how much have you paid', () => {
-  attachDefaultHooks()
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     const method = 'get'
