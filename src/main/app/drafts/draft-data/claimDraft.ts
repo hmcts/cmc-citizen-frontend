@@ -4,22 +4,10 @@ import { PartyType } from 'app/common/partyType'
 
 export const claimDraft = {
   externalId: uuid(),
+  eligibility: true,
   readResolveDispute: true,
   readCompletingClaim: true,
-  eligibility: true,
   claimant: {
-    payment: {
-      reference: '123',
-      date_created: 12345,
-      amount: 8500,
-      status: 'Success',
-      _links: {
-        next_url: {
-          href: 'any href',
-          method: 'POST'
-        }
-      }
-    },
     partyDetails: {
       type: PartyType.INDIVIDUAL.value,
       name: 'Jack Davids',
@@ -53,15 +41,6 @@ export const claimDraft = {
         line3: 'Cooler house name',
         city: 'London',
         postcode: 'SW1A 2AA'
-      },
-      hasCorrespondenceAddress: false,
-      dateOfBirth: {
-        known: true,
-        date: {
-          year: 1997,
-          month: 5,
-          day: 27
-        }
       }
     },
     email: {
@@ -87,8 +66,5 @@ export const claimDraft = {
       { date: '27 May 1997', description: 'The day the first bill was issued' },
       { date: '23 March 2018', description: 'A historic day with enormous importance' }
     ]
-  },
-  evidence: {
-    rows: []
   }
 }
