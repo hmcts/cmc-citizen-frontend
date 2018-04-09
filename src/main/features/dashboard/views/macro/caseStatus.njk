@@ -15,18 +15,17 @@
     {{ t('The claimant has requested a County Court Judgement (CCJ) against you on {{ ccjRequestedAt }}.',
     { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
   {% elseif status === ClaimStatus.CLAIM_REJECTED %}
-    {% if claim.response.freeMediation === FreeMediationOption.YES %}
-      {{ t('You’ve rejected the claim and suggested mediation on {{ respondedAt }}.',
-      { respondedAt: claim.respondedAt | date }) }}
-    {% else %}
+    {% if claim.response.freeMediation === FreeMediationOption.NO %}
       {{ t('You’ve rejected the claim.' ) }}
+    {% else %}
+      {{ t('You’ve rejected the claim and suggested mediation. '
+      + 'We’ll ask the claimant if they agree to take part in mediation.') }}
     {% endif %}
   {% elseif status === ClaimStatus.OFFER_ACCEPTED %}
-    {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court.',
-    { claimantName: claim.claimData.claimant.name } ) }}
+    {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court.') }}
     <p>{{ t('You have rejected the claim.') }}</p>
   {% elseif status === ClaimStatus.OFFER_REJECTED %}
-    {{ t('The claimant has rejected your offer.') }}
+       {{ t('The claimant has rejected your offer.') }}
     <p>{{ t('You have rejected the claim.') }}</p>
   {% elseif status === ClaimStatus.OFFER_SUBMITTED %}
     {{ t('Your offer has been sent to the claimant.') }}
@@ -51,24 +50,20 @@
   {% elseif status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
     {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
   {% elseif status === ClaimStatus.CLAIM_REJECTED %}
-    {% if claim.response.freeMediation === FreeMediationOption.YES %}
-
-      "Mary Richards has rejected the claim. But they’ve suggested a mediation session to help resolve this dispute."
-
+    {% if claim.response.freeMediation === FreeMediationOption.NO %}
+      {{ t('{{ defendantName }} has rejected your claim.',
+      { defendantName:  claim.claimData.defendant.name }) }}
+    {% else %}
       {#todo Ask for content check. You shouldn't start a sentence with "But".#}
       {{ t('{{ defendantName }} has rejected the claim. '
       + 'They’ve suggested free mediation on {{ respondedAt }}. You can accept or reject',
       { defendantName: claim.response.defendant.name, respondedAt: claim.respondedAt | date }) }}
-    {% else %}
-      {{ t('{{ defendantName }} has rejected your claim.',
-      { defendantName:  claim.claimData.defendant.name }) }}
     {% endif %}
   {% elseif status === ClaimStatus.OFFER_ACCEPTED %}
     {{ t('You’ve signed the agreement. We’ve asked {{ defendantName }} to sign the agreement.',
     { defendantName: claim.claimData.defendant.name }) }}
   {% elseif status === ClaimStatus.OFFER_REJECTED %}
     {{ t('You’ve rejected an offer to settle out of court.') }}
-
     <p>
       {{ t('{{ defendantName }} has rejected your claim.',
       { defendantName:  claim.claimData.defendant.name }) }}
