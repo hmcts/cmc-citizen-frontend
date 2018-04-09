@@ -3,6 +3,7 @@
 {% from "form.njk" import submitButton %}
 
 {% macro downloadResponse(claim, url) %}
+  {#todo Check this is getting the right response#}
   <p>
     <a
       href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
@@ -174,9 +175,10 @@
         </p>
 
         <p>
-          <a target="blank" href="https://www.gov.uk/county-court-judgments-ccj-for-debt">{{ t('Find out more about County Court Judgments') }}</a>
+          <a target="blank"
+             href="https://www.gov.uk/county-court-judgments-ccj-for-debt">{{ t('Find out more about County Court Judgments') }}</a>
         </p>
-        {#Todo add link ^#}
+
         {% elif claim.status === ClaimStatus.OFFER_SUBMITTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
         <p>
@@ -241,15 +243,35 @@
           <a
             href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
         </p>
-        {% elif state.status === ClaimStatus.CLAIM_REJECTED and claim.response.freeMediation === FreeMediationOption.NO %}
-        <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
-        <p>
-          {{ t('You’ve rejected the claim. The case will be reviewed by a judge and might go to court.') }}
-        </p>
+        {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
+        {% if claim.response.freeMediation === FreeMediationOption.NO %}
+          <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
+          <p>
+            {{ t('You’ve rejected the claim. We’ll send you a directions questionnaire – '
+            + 'this is a form which you must complete to tell us more about the claim.') }}
+          </p>
+
+          {% elif claim.response.freeMediation === FreeMediationOption.YES %}
+          <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
+          <p>
+            {{ t('You have rejected the claim. You’ve suggested mediation.') }}
+          </p>
+
+          <p>
+            {{ t('We’ll ask Mary Richards if they agree to take part in mediation.') }}
+          </p>
+
+          <p>
+            {{ t('If they say yes, we’ll arrange a date for mediation. '
+            + 'If they say no we’ll send you a directions questionnaire - '
+            + 'this is a form you complete to tell us more about the claim.') }}
+          </p>
+        {% endif %}
         <p>
           <a
-            href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>
+            href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
         </p>
+
         {% elif claim.status === ClaimStatus.MORE_TIME_REQUESTED %}
 
         <h2 class="heading-medium">{{ t('You haven’t responded to this claim') }}</h2>

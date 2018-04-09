@@ -19,7 +19,7 @@
       {{ t('You’ve rejected the claim and suggested mediation on {{ respondedAt }}.',
       { respondedAt: claim.respondedAt | date }) }}
     {% else %}
-      {{ t('You’ve rejected the claim. The case will be reviewed by a judge and might go to court.' ) }}
+      {{ t('You’ve rejected the claim.' ) }}
     {% endif %}
   {% elseif status === ClaimStatus.OFFER_ACCEPTED %}
     {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court.',
