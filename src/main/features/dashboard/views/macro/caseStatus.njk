@@ -24,10 +24,13 @@
   {% elseif status === ClaimStatus.OFFER_ACCEPTED %}
     {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court.',
     { claimantName: claim.claimData.claimant.name } ) }}
+    <p>{{ t('You have rejected the claim.') }}</p>
   {% elseif status === ClaimStatus.OFFER_REJECTED %}
-    {{ t('{{ claimantName }} has rejected your offer.', { claimantName: claim.claimData.claimant.name }) | safe }}
+    {{ t('The claimant has rejected your offer.') }}
+    <p>{{ t('You have rejected the claim.') }}</p>
   {% elseif status === ClaimStatus.OFFER_SUBMITTED %}
-    {{ t('You made an offer to settle out of court.') }}
+    {{ t('Your offer has been sent to the claimant.') }}
+    <p>{{ t('You have rejected the claim.') }}</p>
   {% elseif status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ t('You need to respond by {{ responseDeadline }}.',
     { responseDeadline: claim.responseDeadline | date }) }}

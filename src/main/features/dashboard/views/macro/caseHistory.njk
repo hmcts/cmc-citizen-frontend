@@ -170,9 +170,7 @@
           { claimantName : claim.claimData.claimant.name, ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
         </p>
 
-        <p>
-          {{ t('You can no longer respond to the claim.') }}
-        </p>
+        <p>{{ t('You can no longer respond to the claim.') }}</p>
 
         <p>
           <a target="blank"
@@ -182,21 +180,18 @@
         {% elif claim.status === ClaimStatus.OFFER_SUBMITTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
         <p>
-          {{ t('You made an offer to settle the claim out of court. Jan Clark can accept or reject your offer.') }}
+          {{ t('The claimant has rejected your offer to settle the claim. Complete the directions questionnaire.') }}
         </p>
-        <link>
-        We’ll email you when they respond.
-        <link>
-        {#Todo link#}
         <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
         <p>
           {{ t('You have rejected the claim. We’ll send you a directions questionnaire – this is a form which you must
           complete to tell us more about the claim.') }}
         </p>
-        <link>
-        Download your response
-        <link>
-        {#Todo link#}
+
+        <p>
+          <a href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>
+        </p>
+
         {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
         <p>
@@ -233,15 +228,14 @@
         <a
           href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>
         </p>
-        {#Todo link#}
+
         {% elif claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         <h2 class="heading-medium">{{ t('Agreement signed') }}</h2>
         <p>
           {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
         </p>
         <p>
-          <a
-            href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
+          <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
         </p>
         {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
         {% if claim.response.freeMediation === FreeMediationOption.NO %}
