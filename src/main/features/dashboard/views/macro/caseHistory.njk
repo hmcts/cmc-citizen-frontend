@@ -158,20 +158,23 @@
 
 
       {% if claim.status === ClaimStatus.CCJ_REQUESTED %}
-        <h2 class="heading-medium">{{ t('') }}</h2>
-        {#Todo CCJ header this header#}
+        <h2 class="heading-medium">{{ t('The claimant has requested a CCJ against you') }}</h2>
         <p>
-          {{ t('The claimant has requested a CCJ against you') }}
+          {{ t('You didn’t respond to this claim by the deadline of{{ responseDeadline }}.',
+          { responseDeadline: claim.responseDeadline | date }) }}
         </p>
         <p>
-          {{ t('You didn’t respond to this claim by the deadline of ADDRESPONSEDEADLINE.') }}
+          {{ t('{{ claimantName }} requested a default County Court Judgment (CCJ) against you on {{ ccjRequestedAt }}. '
+          + 'We’ll contact you within 5 days to tell you whether the claimant’s request for judgment has been successful.',
+          { claimantName : claim.claimData.claimant.name, ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
         </p>
+
         <p>
-          {{ t('{{ claimantName }} requested a default County Court Judgment (CCJ) against you on {{ CCJRequestedOn }}. '
-          + ' We’ll contact you within 5 days to tell you whether the claimant’s request for judgment has been successful.') }}
+          {{ t('You can no longer respond to the claim.') }}
         </p>
+
         <p>
-          {{ t('Find out more about County Court Judgments.') }}
+          <a target="blank" href="https://www.gov.uk/county-court-judgments-ccj-for-debt">{{ t('Find out more about County Court Judgments') }}</a>
         </p>
         {#Todo add link ^#}
         {% elif claim.status === ClaimStatus.OFFER_SUBMITTED %}
@@ -251,7 +254,8 @@
 
         <h2 class="heading-medium">{{ t('You haven’t responded to this claim') }}</h2>
         <p>
-          {{ t('You need to respond before 4pm on 3 April 2018 (19 days remaining).') }}
+          {{ t('You need to respond by {{ responseDeadline }}.',
+          { responseDeadline: claim.responseDeadline | date }) }}
         </p>
 
         <p>
@@ -263,19 +267,20 @@
         {% elif claim.status === ClaimStatus.CLAIM_REJECTED %}
         <h2 class="heading-medium">{{ t('More time requested') }}</h2>
         <p>
-          {{ t('You need to respond before {{ responseDeadline }}.') }}
+          {{ t('You need to respond by {{ responseDeadline }}.',
+          { responseDeadline: claim.responseDeadline | date }) }}
         </p>
         <p>
           {{ t('Respond to claim') }}
         </p>
-        {#todo add links to responseDeadline and respond to claim#}
+        {#todo add links to respond to claim#}
 
         {% elif claim.status === ClaimStatus.NO_RESPONSE %}
         <h2 class="heading-medium">{{ t('You haven’t responded to this claim') }}</h2>
         <p>
-          {{ t('You need to respond before {{ responseDeadline }}.') }}
+          {{ t('You need to respond before 4pm on {{ responseDeadline }}.',
+          { responseDeadline: claim.responseDeadline | date }) }}
         </p>
-        {#todo add response deadline#}
 
 
       {% else %}

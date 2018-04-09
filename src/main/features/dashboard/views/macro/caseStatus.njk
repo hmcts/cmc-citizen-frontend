@@ -12,9 +12,8 @@
     + 'You can still respond until they do.',
     { claimantName: claim.claimData.claimant.name } ) }}
   {% elseif status === ClaimStatus.CCJ_REQUESTED %}
-    {{ t('{{ claimantName }} requested a County Court Judgment against you on {{ ccjRequestedAt }}. '
-    + 'We will contact you both within 5 working days.',
-    { claimantName: claim.claimData.claimant.name, ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
+    {{ t('The claimant has requested a County Court Judgement (CCJ) against you on {{ ccjRequestedAt }}.',
+    { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
   {% elseif status === ClaimStatus.CLAIM_REJECTED %}
     {% if claim.response.freeMediation === FreeMediationOption.YES %}
       {{ t('You’ve rejected the claim and suggested mediation on {{ respondedAt }}.',
@@ -30,7 +29,7 @@
   {% elseif status === ClaimStatus.OFFER_SUBMITTED %}
     {{ t('You made an offer to settle out of court.') }}
   {% elseif status === ClaimStatus.MORE_TIME_REQUESTED %}
-    {{ t('You need to respond by {{ responseDeadline }}. You asked for an extra 14 days to respond.',
+    {{ t('You need to respond by {{ responseDeadline }}.',
     { responseDeadline: claim.responseDeadline | date }) }}
   {% elseif status === ClaimStatus.NO_RESPONSE %}
     <a href="{{ url }}">{{ t('Respond to claim') }}</a>
