@@ -12,7 +12,6 @@ export default express.Router()
   .get('/info', infoRequestHandler({
     info: {
       'claimstore': basicInfoContributor('claim-store'),
-      'pdf-service': basicInfoContributor('pdf-service'),
       'draft-store': basicInfoContributor('draft-store'),
       'fees': basicInfoContributor('fees'),
       'pay': basicInfoContributor('pay'),

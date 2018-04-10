@@ -22,9 +22,6 @@
   "pay": {
     "url": "http://localhost:14421"
   },
-  "pdf-service": {
-    "url": "http://localhost:15500"
-  },
   "featureToggles": {
     "testingSupport": true,
     "countyCourtJudgment": true,

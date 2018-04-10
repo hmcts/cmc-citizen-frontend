@@ -1,6 +1,6 @@
 import { Response } from 'response/form/models/response'
 import { FreeMediation } from 'response/form/models/freeMediation'
-import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { RejectPartOfClaim } from 'response/form/models/rejectPartOfClaim'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { Defence } from 'response/form/models/defence'
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
@@ -18,7 +18,7 @@ import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
 import { PayBySetDate } from 'response/draft/payBySetDate'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
-import { HowMuchPaidClaimantOption, HowMuchPaidClaimant } from 'response/form/models/howMuchPaidClaimant'
+import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import * as config from 'config'
@@ -81,15 +81,6 @@ export class ResponseDraft extends DraftDocument {
     return !isNullOrUndefined(this.moreTimeNeeded) && this.moreTimeNeeded.option === MoreTimeNeededOption.YES
   }
 
-  public requireDefence (): boolean {
-    if (!this.isResponsePopulated()) {
-      return false
-    }
-
-    return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim !== undefined
-      && RejectAllOfClaimOption.except(RejectAllOfClaimOption.COUNTER_CLAIM).includes(this.rejectAllOfClaim.option)
-  }
-
   public isResponseFullyAdmitted (): boolean {
     if (!toBoolean(config.get<boolean>('featureToggles.fullAdmission'))) {
       return false
@@ -111,10 +102,6 @@ export class ResponseDraft extends DraftDocument {
       && this.response.type === ResponseType.PART_ADMISSION
       && this.rejectPartOfClaim !== undefined
       && this.rejectPartOfClaim.option === option
-  }
-
-  public requireMediation (): boolean {
-    return this.isResponsePopulated() && (this.isResponseRejectedFully() || this.isResponseRejectedPartially())
   }
 
   public isResponseRejectedFullyWithDispute (): boolean {
@@ -140,17 +127,5 @@ export class ResponseDraft extends DraftDocument {
 
   private isResponsePopulated (): boolean {
     return !!this.response && !!this.response.type
-  }
-
-  private isResponseRejectedFully (): boolean {
-    return this.response.type === ResponseType.DEFENCE && this.rejectAllOfClaim &&
-      (this.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE ||
-        this.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM)
-  }
-
-  private isResponseRejectedPartially (): boolean {
-    return this.response.type === ResponseType.PART_ADMISSION && this.rejectPartOfClaim &&
-      (this.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED ||
-        this.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
   }
 }
