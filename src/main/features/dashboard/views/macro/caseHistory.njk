@@ -2,11 +2,10 @@
 {% from "timeRemaining.njk" import timeRemaining %}
 {% from "form.njk" import submitButton %}
 
-{% macro downloadResponse(claim, url) %}
-  {#todo Check this is getting the right response#}
+{% macro downloadResponse(claim, url, text) %}
   <p>
     <a
-      href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
+      href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t(text) }}</a>
   </p>
 {% endmacro %}
 
@@ -46,14 +45,17 @@
         <h2 class="heading-medium">{{ t('The defendant has requested more time to respond') }}</h2>
         <p>
           {{ t('{{ defendantName }} has requested an extra 14 days to respond. They need to respond by {{ responseDeadline }}.',
-          { defendantName: claim.claimData.defendant.name ,  responseDeadline: claim.responseDeadline | date }) | safe }}
+          { defendantName: claim.claimData.defendant.name ,
+            responseDeadline: claim.responseDeadline | date }) | safe }}
         </p>
 
         {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
         <h2 class="bold-small">{{ t('You can request a County Court Judgment') }}</h2>
-        <p>{{ t('{{ defendantName }} has not responded to your claim by the deadline. '
+        <p>
+          {{ t('{{ defendantName }} has not responded to your claim by the deadline. '
           + 'You can request a County Court Judgment (CCJ) against them.',
-          { defendantName : claim.claimData.defendant.name }) }}</p>
+          { defendantName : claim.claimData.defendant.name }) }}
+        </p>
         <p>
           {{ t('The court will make an order asking them to pay the money. It does not guarantee that they pay it.') }}
         </p>
@@ -72,7 +74,8 @@
         </p>
 
         <p>
-          {{ t('{{ defendantName }} can no longer respond to your claim using this service - they may have responded by post.',
+          {{ t('{{ defendantName }} can no longer respond to your claim using this service - '
+          + 'they may have responded by post.',
           { defendantName: claim.claimData.defendant.name }) }}
         </p>
 
@@ -84,7 +87,6 @@
             + 'this is a form which you must complete to tell us more about the claim.',
             { defendantName: claim.claimData.defendant.name }) }}
           </p>
-          {#Todo find out what this deadline is?#}
         {% else %}
           <p>
             {{ t('{{ defendantName }} has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
@@ -96,17 +98,19 @@
             {{ t(' before {{ offerResponseDeadline? }}XXXXX',
             {offerResponseDeadline: offerResponseDeadline }) }}
           </p>
+          {#Todo Ask Marc if we have a free mediation deadline#}
         {% endif %}
 
-        {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+        {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
 
         {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
         <p>
-          {{ t('{{ defendantName }} has made an offer to settle out of court. You must accept or reject by 4pm on zXXXXX{{ offerDeadline??? }}.',
+          {{ t('{{ defendantName }} has made an offer to settle out of court. '
+          + 'You must accept or reject by 4pm on XXXXX{{ offerDeadline??? }}.',
           { defendantName: claim.claimData.defendant.name }) }}
         </p>
-        {#todo Clarify with Marc James. Do we have an offer deadline now?#}
+        {#todo Clarify with Marc as we dont currently have an offer deadline#}
 
         <p>
           <a href="{{ url }}">{{ t('View and respond to offer') }}</a>
@@ -129,10 +133,6 @@
           {{ t('You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.') }}
         </p>
 
-        {{ responseToOffer(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
-
-        {#Todo Why do we want them to respond AFTER theyve responded#}
-
         <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
         <p>
           {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
@@ -140,9 +140,7 @@
           { defendantName: claim.claimData.defendant.name }) }}
         </p>
 
-        {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
-
-        {#Todo Why have a view and respond to offer when youve already rejected the offer#}
+        {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
 
         {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
@@ -150,7 +148,6 @@
           {{ t('You’ve agreed to the offer made by {{ defendantName }} and signed an agreement to settle your claim.',
           { defendantName: claim.claimData.defendant.name }) }}
         </p>
-
 
         {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
@@ -234,8 +231,7 @@
           </p>
         {% endif %}
         <p>
-          <a
-            href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
+          <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
           {#todo check this text and link#}
         </p>
 
@@ -283,8 +279,7 @@
           {{ t('When you’ve both signed the agreement, the claim won’t proceed.') }}
         </p>
         <p>
-          <a
-            href="{{ OfferPaths.countersignAgreementPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Sign the agreement') }}</a>
+          <a href="{{ OfferPaths.countersignAgreementPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Sign the agreement') }}</a>
         </p>
 
         <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
