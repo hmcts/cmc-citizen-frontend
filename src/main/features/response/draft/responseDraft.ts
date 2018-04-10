@@ -125,6 +125,13 @@ export class ResponseDraft extends DraftDocument {
       && this.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.AMOUNT_CLAIMED
   }
 
+  public isDigitalResponseSelected (): boolean {
+    if (this.isResponsePopulated() && this.response.type !== ResponseType.DEFENCE) {
+      return false
+    }
+    return true
+  }
+
   private isResponsePopulated (): boolean {
     return !!this.response && !!this.response.type
   }
