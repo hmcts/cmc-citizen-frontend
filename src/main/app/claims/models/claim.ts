@@ -86,7 +86,6 @@ export class Claim {
     return this.settlement.getDefendantOffer()
   }
 
-  // noinspection JSUnusedGlobalSymbols Called in the view
   get respondToResponseDeadline (): Moment {
     if (!this.respondedAt) {
       return undefined
@@ -94,7 +93,6 @@ export class Claim {
     return this.respondedAt.clone().add('33', 'days')
   }
 
-  // noinspection JSUnusedGlobalSymbols Called in the view
   get remainingDays (): number {
     return this.responseDeadline.diff(MomentFactory.currentDate(), 'days')
   }
@@ -133,7 +131,6 @@ export class Claim {
     }
   }
 
-  // noinspection JSUnusedGlobalSymbols Called in the view
   get stateHistory (): State[] {
     const statuses = [{ status: this.status }]
     if (this.responseStatus() && statuses[0].status !== this.responseStatus()) {
