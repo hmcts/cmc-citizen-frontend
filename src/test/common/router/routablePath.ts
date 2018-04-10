@@ -34,6 +34,13 @@ describe('RoutablePath', () => {
       expect(new RoutablePath('/case/:id/payment/:payment-type').evaluateUri({ id: '999', 'payment-type': 'card' }))
         .to.be.equal('/case/999/payment/card')
     })
+
+    it('should fail when path parameter placeholder has invalid value', () => {
+      [{ id: undefined }, { id: null }, { id: 'null' }, { id: 'undefined' }, { id: '' }].forEach(invalidValue => {
+        expect(() => new RoutablePath('/case/:id/payment').evaluateUri(invalidValue))
+          .to.throw(Error, 'Path parameter :id is invalid')
+      })
+    })
   })
 
   describe('finding associated view', () => {
@@ -65,4 +72,5 @@ describe('RoutablePath', () => {
       })
     })
   })
+
 })
