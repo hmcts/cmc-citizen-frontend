@@ -5,7 +5,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { Paths } from 'app/paths'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ClaimReference } from 'forms/models/claimReference'
-import { isCCBCCaseReference } from 'common/utils/isCCBCCaseReference'
+import { isNonCMCReference } from 'common/utils/isNonCMCReference'
 import { Form } from 'forms/form'
 
 function renderView (form: Form<ClaimReference>, res: express.Response): void {
@@ -28,13 +28,13 @@ export default express.Router()
       const form: Form<ClaimReference> = req.body
 
       if (form.hasErrors()) {
-        if (isCCBCCaseReference(form.model.reference)) {
-          return res.redirect(mcolUrl)
-        }
-
         renderView(form, res)
       } else {
-        res.redirect(Paths.homePage.uri)
+        if (isNonCMCReference(form.model.reference)) {
+          res.redirect(mcolUrl)
+        } else {
+          res.redirect(Paths.homePage.uri)
+        }
       }
     })
   )

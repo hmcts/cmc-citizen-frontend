@@ -11,7 +11,7 @@
               { defendantName: claim.claimData.defendant.name }) }}
           </p>
           <p>
-            <a href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
+            <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
           </p>
       {% elseif state.status === ClaimStatus.OFFER_ACCEPTED %}
         <h3 class="heading-small">{{ t('Settle out of court') }}</h3>

@@ -44,6 +44,7 @@ export default express.Router()
           draft.document.interestDate = undefined
           draft.document.interestStartDate = undefined
           draft.document.interestEndDate = undefined
+          draft.document.interestType = undefined
         }
 
         draft.document.interest = form.model

@@ -30,6 +30,17 @@ data "vault_generic_secret" "staff_email" {
 
 locals {
   aseName = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
+
+  previewVaultName = "${var.product}-citizen-fe"
+  nonPreviewVaultName = "${var.product}-citizen-fe-${var.env}"
+  vaultName = "${var.env == "preview" ? local.previewVaultName : local.nonPreviewVaultName}"
+
+  nonPreviewVaultUri = "${module.citizen-frontend-vault.key_vault_uri}"
+  previewVaultUri = "https://cmc-citizen-fe-aat.vault.azure.net/"
+  vaultUri = "${var.env == "preview"? local.previewVaultUri : local.nonPreviewVaultUri}"
+
+  localClaimStoreUrl = "http://cmc-claim-store-${var.env}.service.${local.aseName}.internal"
+  claimStoreUrl = "${var.env == "preview" ? "http://cmc-claim-store-aat.service.core-compute-aat.internal" : local.localClaimStoreUrl}"
 }
 
 module "citizen-frontend" {
@@ -38,9 +49,9 @@ module "citizen-frontend" {
   location = "${var.location}"
   env = "${var.env}"
   ilbIp = "${var.ilbIp}"
-  is_frontend  = true
+  is_frontend = "${var.env != "preview" ? 1: 0}"
   subscription = "${var.subscription}"
-  additional_host_name = "${var.external_host_name}"
+  additional_host_name = "${var.env != "preview" ? var.external_host_name : "null"}"
   https_only = "true"
 
   app_settings = {
@@ -78,8 +89,7 @@ module "citizen-frontend" {
     DRAFT_STORE_SECRET_SECONDARY = "${data.vault_generic_secret.draft_store_secret.data["secondary"]}"
 
     // Our service dependencies
-    CLAIM_STORE_URL = "http://cmc-claim-store-${var.env}.service.${local.aseName}.internal"
-    PDF_SERVICE_URL = "http://cmc-pdf-service-${var.env}.service.${local.aseName}.internal"
+    CLAIM_STORE_URL = "${local.claimStoreUrl}"
 
     // Surveys
     SERVICE_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPT1/"
@@ -87,7 +97,8 @@ module "citizen-frontend" {
     REPORT_PROBLEM_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPPB/"
 
     // Feature toggles
-    FEATURE_TESTING_SUPPORT = "${var.env == "prod" ? "false" : "true"}" // Enabled everywhere except prod
+    FEATURE_TESTING_SUPPORT = "${var.env == "prod" ? "false" : "true"}"
+    // Enabled everywhere except prod
     FEATURE_CCJ = "${var.feature_ccj}"
     FEATURE_OFFER = "${var.feature_offer}"
     FEATURE_STATEMENT_OF_MEANS = "${var.feature_statement_of_means}"
@@ -103,12 +114,12 @@ module "citizen-frontend" {
 }
 
 module "citizen-frontend-vault" {
-  source              = "git@github.com:contino/moj-module-key-vault?ref=master"
-  name                = "cmc-citizen-fe-${var.env}"
-  product             = "${var.product}"
-  env                 = "${var.env}"
-  tenant_id           = "${var.tenant_id}"
-  object_id           = "${var.jenkins_AAD_objectId}"
+  source = "git@github.com:contino/moj-module-key-vault?ref=master"
+  name = "${local.vaultName}"
+  product = "${var.product}"
+  env = "${var.env}"
+  tenant_id = "${var.tenant_id}"
+  object_id = "${var.jenkins_AAD_objectId}"
   resource_group_name = "${module.citizen-frontend.resource_group_name}"
   product_group_object_id = "68839600-92da-4862-bb24-1259814d1384"
 }
