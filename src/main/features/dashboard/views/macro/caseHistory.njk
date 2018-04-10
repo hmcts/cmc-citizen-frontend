@@ -2,6 +2,7 @@
 {% from "timeRemaining.njk" import timeRemaining %}
 
 {% macro caseHistoryForClaimant(claim, url) %}
+  {% set defendantName = claim.claimData.defendant.name %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
       {% if state.status === ClaimStatus.CLAIM_REJECTED %}
@@ -12,7 +13,7 @@
               'Email {{ supportEmailAddress }} if you want to proceed with the claim - ' +
               'you must do this before 4pm on {{ respondToResponseDeadline }}.',
               {
-                defendantName: claim.claimData.defendant.name,
+                defendantName: defendantName,
                 supportEmailAddress: supportEmailAddress,
                 respondToResponseDeadline: claim.respondToResponseDeadline | date
               }) }}
@@ -20,7 +21,7 @@
         {% elseif claim.response.freeMediation === FreeMediationOption.NO %}
           <p>
             {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – this is a form which you must complete to tell us more about the claim.',
-              { defendantName: claim.claimData.defendant.name }) }}
+              { defendantName: defendantName }) }}
           </p>
         {% else %}
           {{ caseStatusForClaimant(state.status, claim, url) }}
@@ -32,11 +33,11 @@
         <h3 class="heading-small">{{ t('Settle out of court') }}</h3>
         <p>
           {{ t('You’ve agreed to the offer made by {{ defendantName }} and signed an agreement to settle your claim.',
-            { defendantName: claim.claimData.defendant.name }) }}
+            { defendantName: defendantName }) }}
         </p>
         <p>
           {{ t('We’ve asked {{ defendantName }} to sign the agreement.',
-            { defendantName: claim.claimData.defendant.name }) }}
+            { defendantName: defendantName }) }}
         </p>
       {% else %}
         <p>
@@ -48,6 +49,7 @@
 {% endmacro %}
 
 {% macro caseHistoryForDefendant(claim, url, isAfter4pm) %}
+  {% set claimantName = claim.claimData.claimant.name %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
       {% if state.status === ClaimStatus.CLAIM_REJECTED %}
@@ -55,7 +57,7 @@
         {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
           <p>
             {{ t('We’ve emailed {{ claimantName }} telling them when and how you said you paid the claim.',
-              { claimantName: claim.claimData.defendant.name }) }}
+              { claimantName: claimantName }) }}
           </p>
           <p>
             {{ t('We’ll contact you to let you know how they respond. They can confirm you’ve paid and the claim is ' +

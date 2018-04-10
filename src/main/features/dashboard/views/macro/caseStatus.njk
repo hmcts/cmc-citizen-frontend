@@ -11,11 +11,11 @@
   {% elseif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
     {{ t('You did not respond by the deadline. {{ claimantName }} can request a County Court Judgment (CCJ) against you. '
     + 'You can still respond until they do.',
-    { claimantName: claim.claimData.claimant.name } ) }}
+    { claimantName: claimantName } ) }}
   {% elseif status === ClaimStatus.CCJ_REQUESTED %}
     {{ t('{{ claimantName }} requested a County Court Judgment against you on {{ ccjRequestedAt }}. '
       + 'We will contact you both within 5 working days.',
-      { claimantName: claim.claimData.claimant.name, ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
+      { claimantName: claimantName, ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
   {% elseif status === ClaimStatus.CLAIM_REJECTED %}
     {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
       {{ t('We’ve emailed {{ claimantName }} telling them when and how you paid the claim.', { claimantName: claimantName }) }}
@@ -28,10 +28,9 @@
       {% endif %}
     {% endif %}
   {% elseif status === ClaimStatus.OFFER_ACCEPTED %}
-    {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court.',
-    { claimantName: claim.claimData.claimant.name } ) }}
+    {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court.') }}
   {% elseif status === ClaimStatus.OFFER_REJECTED %}
-    {{ t('{{ claimantName }} has rejected your offer.', { claimantName: claim.claimData.claimant.name }) | safe }}
+    {{ t('{{ claimantName }} has rejected your offer.', { claimantName: claimantName }) | safe }}
   {% elseif status === ClaimStatus.OFFER_SUBMITTED %}
     {{ t('You made an offer to settle out of court.') }}
   {% elseif status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -46,6 +45,7 @@
 {% endmacro %}
 
 {% macro caseStatusForClaimant(status, claim, url) %}
+  {% set defendantName = claim.claimData.defendant.name %}
   {% if status === ClaimStatus.CCJ_REQUESTED %}
     {{ t('You requested a County Court Judgment on {{ ccjRequestedAt }}. We will contact you within 5 working days.',
     { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
@@ -63,16 +63,16 @@
       {% if claim.response.freeMediation === FreeMediationOption.YES %}
         {{ t('{{ defendantName }} has rejected the claim. '
           + 'They’ve suggested free mediation on {{ respondedAt }}. You can accept or reject',
-          { defendantName: claim.response.defendant.name, respondedAt: claim.respondedAt | date }) }}
+          { defendantName: defendantName, respondedAt: claim.respondedAt | date }) }}
       {% else %}
         {{ t('{{ defendantName }} has rejected the claim. The case will be reviewed by a judge and might go to court.',
-        { defendantName:  claim.claimData.defendant.name }) }}
+        { defendantName:  defendantName }) }}
       {% endif %}
     {% endif %}
     <p>{{ _viewResponseLink(claim.externalId) }}</p>
   {% elseif status === ClaimStatus.OFFER_ACCEPTED %}
     {{ t('You’ve signed the agreement. We’ve asked {{ defendantName }} to sign the agreement.',
-    { defendantName: claim.claimData.defendant.name }) }}
+    { defendantName: defendantName }) }}
   {% elseif status === ClaimStatus.OFFER_REJECTED %}
     {{ t('You’ve rejected an offer to settle out of court.') }}
   {% elseif status === ClaimStatus.OFFER_SUBMITTED %}
@@ -82,12 +82,10 @@
     </p>
   {% elseif status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ t('{{ defendantName }} has requested an extra 14 days to respond. They need to respond by {{ responseDeadline }}.',
-    { defendantName: claim.claimData.defendant.name,
-      responseDeadline: claim.responseDeadline | date }) }}
+    { defendantName: defendantName, responseDeadline: claim.responseDeadline | date }) }}
   {% elseif status === ClaimStatus.NO_RESPONSE %}
     {{ t('Your claim has been sent. {{ defendantName }} has until {{ responseDeadline }} to respond. '
     + 'They can request an extra 14 days if they need it.',
-    { defendantName: claim.claimData.defendant.name,
-      responseDeadline: claim.responseDeadline | date }) }}
+    { defendantName: defendantName, responseDeadline: claim.responseDeadline | date }) }}
   {% endif %}
 {% endmacro %}
