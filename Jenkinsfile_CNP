@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure@pr-preview-deployment")
+@Library("Infrastructure")
 
 String product = "cmc"
 String component = "citizen-frontend"
