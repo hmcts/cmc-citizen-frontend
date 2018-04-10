@@ -59,12 +59,12 @@ export const sampleClaimObj = {
     interest: {
       type: ClaimInterestType.STANDARD,
       rate: 10,
-      reason: 'Special case'
+      reason: 'Special case',
+      interestDate: {
+        type: InterestDateType.SUBMISSION,
+        endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
+      } as InterestDate
     } as Interest,
-    interestDate: {
-      type: InterestDateType.SUBMISSION,
-      endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
-    } as InterestDate,
     reason: 'Because I can',
     feeAmountInPennies: 2500,
     timeline: { rows: [{ date: 'a', description: 'b' }] }
