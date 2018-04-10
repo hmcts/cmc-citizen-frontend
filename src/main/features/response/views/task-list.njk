@@ -58,7 +58,7 @@
           </li>
           <li>
             <strong class="bold">{{ t('Claim details:') }}</strong>
-            <span class="block"><a href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View claim') }}</a></span>
+            <a class="block" href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View claim') }}</a>
           </li>
         </ul>
       </div>
