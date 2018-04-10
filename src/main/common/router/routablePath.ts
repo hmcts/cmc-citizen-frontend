@@ -1,4 +1,15 @@
+import { StringUtils } from 'utils/stringUtils'
+
 const pathParameterRegex = /\/:[^\/]+/g
+
+/**
+ *  Validates the path parameter value used in URI paths.
+ *  And empty, null, undefined, string literal 'null' and 'undefined' are invalid values.
+ *  This prevents undefined being passed to urls like: `/case/undefined/claim/receipt`
+ */
+function isValidParameterValue (parameterValue: string): boolean {
+  return !(StringUtils.isBlank(parameterValue) || parameterValue === 'undefined' || parameterValue === 'null')
+}
 
 export class RoutablePath {
   private _uri: string
@@ -40,6 +51,10 @@ export class RoutablePath {
 
     const path = Object.entries(substitutions).reduce((uri: string, substitution: [string, string]) => {
       const [parameterName, parameterValue] = substitution
+
+      if (!isValidParameterValue(parameterValue)) {
+        throw new Error(`Path parameter :${parameterName} is invalid`)
+      }
 
       const updatedUri: string = uri.replace(`:${parameterName}`, parameterValue)
       if (updatedUri === uri) {

@@ -34,6 +34,10 @@ function prepareClaimData (claimantParty: object, defendantParty: object): Claim
   })
 }
 
+function convertObjectLiteralToJSON (value: object): object {
+  return JSON.parse(JSON.stringify(value))
+}
+
 describe('ClaimModelConverter', () => {
   [
     [[individualDetails, individual], [soleTraderDetails, soleTrader]],
@@ -47,7 +51,8 @@ describe('ClaimModelConverter', () => {
       const claimDraft = prepareClaimDraft(claimantPartyDetails, defendantPartyDetails)
       const claimData = prepareClaimData(claimantParty, defendantParty)
 
-      expect(ClaimModelConverter.convert(claimDraft)).to.deep.equal(claimData)
+      expect(convertObjectLiteralToJSON(ClaimModelConverter.convert(claimDraft)))
+        .to.deep.equal(convertObjectLiteralToJSON(claimData))
     })
   })
 })

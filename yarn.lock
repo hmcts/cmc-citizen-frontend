@@ -62,9 +62,9 @@
     request "^2.83.0"
     request-promise-native "^1.0.5"
 
-"@hmcts/requestretry@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/requestretry/-/requestretry-1.1.0.tgz#5d9a1734571e435ed025ee21ec432beee5f0c41e"
+"@hmcts/requestretry@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@hmcts/requestretry/-/requestretry-1.1.2.tgz#e0bca727abce98702a48b17a83984febd8ae3198"
   dependencies:
     extend "^3.0.0"
     lodash "^4.15.0"
