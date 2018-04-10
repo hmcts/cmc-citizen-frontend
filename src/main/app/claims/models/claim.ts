@@ -10,7 +10,6 @@ import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { FeatureToggles } from 'utils/featureToggles'
-import { DefenceType } from 'claims/models/response/fullDefenceResponse'
 
 interface State {
   status: ClaimStatus
@@ -118,10 +117,8 @@ export class Claim {
       return ClaimStatus.OFFER_SUBMITTED
     } else if (this.eligibleForCCJ) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
-    } else if (this.isClaimRejectedAsDisputed()) {
+    } else if (this.isClaimRejected()) {
       return ClaimStatus.CLAIM_REJECTED
-    } else if (this.isClaimRejectedAsStatesPaid()) {
-      return ClaimStatus.CLAIM_REJECTED_STATES_PAID
     } else if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
     } else if (!this.response) {
@@ -133,8 +130,8 @@ export class Claim {
 
   get stateHistory (): State[] {
     const statuses = [{ status: this.status }]
-    if (this.responseStatus() && statuses[0].status !== this.responseStatus()) {
-      statuses.push({ status: this.responseStatus() })
+    if (this.isClaimRejected() && statuses[0].status !== ClaimStatus.CLAIM_REJECTED) {
+      statuses.push({ status: ClaimStatus.CLAIM_REJECTED })
     }
 
     return statuses
@@ -157,26 +154,7 @@ export class Claim {
     return FeatureToggles.isEnabled('offer') && this.settlement && !!this.settlementReachedAt
   }
 
-  private isClaimRejectedAsStatesPaid () {
-    return this.response && this.response.defenceType === DefenceType.ALREADY_PAID
-  }
-
-  private isClaimRejectedAsDisputed () {
-    return this.response && this.response.defenceType === DefenceType.DISPUTE
-  }
-
-  private responseStatus (): ClaimStatus {
-    if (!this.response) {
-      return undefined
-    }
-
-    if (this.isClaimRejectedAsStatesPaid()) {
-      return ClaimStatus.CLAIM_REJECTED_STATES_PAID
-    }
-    if (this.isClaimRejectedAsDisputed()) {
-      return ClaimStatus.CLAIM_REJECTED
-    }
-
-    throw new Error(`Unknown defence type: ${this.response.defenceType}`)
+  private isClaimRejected (): boolean {
+    return this.response && this.response.responseType === ResponseType.FULL_DEFENCE
   }
 }

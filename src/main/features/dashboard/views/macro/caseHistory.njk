@@ -4,15 +4,30 @@
 {% macro caseHistoryForClaimant(claim, url) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
-      {% if state.status === ClaimStatus.CLAIM_REJECTED and claim.response.freeMediation === FreeMediationOption.NO %}
+      {% if state.status === ClaimStatus.CLAIM_REJECTED %}
         <h3 class="heading-small">{{ t('The defendant’s response') }}</h3>
+        {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+          <p>
+            {{ t('{{ defendantName }} believes that they’ve paid the claim in full. ' +
+              'Email {{ supportEmailAddress }} if you want to proceed with the claim - ' +
+              'you must do this before 4pm on {{ respondToResponseDeadline }}.',
+              {
+                defendantName: claim.claimData.defendant.name,
+                supportEmailAddress: supportEmailAddress,
+                respondToResponseDeadline: claim.respondToResponseDeadline | date
+              }) }}
+          </p>
+        {% elseif claim.response.freeMediation === FreeMediationOption.NO %}
           <p>
             {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – this is a form which you must complete to tell us more about the claim.',
               { defendantName: claim.claimData.defendant.name }) }}
           </p>
-          <p>
-            <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
-          </p>
+        {% else %}
+          {{ caseStatusForClaimant(state.status, claim, url) }}
+        {% endif %}
+        <p>
+          <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
+        </p>
       {% elseif state.status === ClaimStatus.OFFER_ACCEPTED %}
         <h3 class="heading-small">{{ t('Settle out of court') }}</h3>
         <p>
@@ -22,23 +37,6 @@
         <p>
           {{ t('We’ve asked {{ defendantName }} to sign the agreement.',
             { defendantName: claim.claimData.defendant.name }) }}
-        </p>
-      {% elseif state.status === ClaimStatus.CLAIM_REJECTED_STATES_PAID %}
-        <h3 class="heading-small">{{ t('The defendant’s response') }}</h3>
-        <p>
-          {{ t('{{ defendantName }} believes that they’ve paid the claim in full. ' +
-          'Email {{ supportEmailAddress }} if you want to proceed with the claim - ' +
-          'you must do this before 4pm on {{ respondToResponseDeadline }}.',
-            {
-              defendantName: claim.claimData.defendant.name,
-              supportEmailAddress: supportEmailAddress,
-              respondToResponseDeadline: claim.respondToResponseDeadline | date
-            }) }}
-        </p>
-        <p>
-          <a href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">
-            {{ t('Download their response') }}
-          </a>
         </p>
       {% else %}
         <p>
@@ -52,11 +50,24 @@
 {% macro caseHistoryForDefendant(claim, url, isAfter4pm) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
-      {% if state.status === ClaimStatus.CLAIM_REJECTED and claim.response.freeMediation === FreeMediationOption.NO %}
+      {% if state.status === ClaimStatus.CLAIM_REJECTED %}
         <h3 class="heading-small">{{ t('Your response to the claim') }}</h3>
-        <p>
-          {{ t('You’ve rejected the claim. The case will be reviewed by a judge and might go to court.') }}
-        </p>
+        {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+          <p>
+            {{ t('We’ve emailed {{ claimantName }} telling them when and how you said you paid the claim.',
+              { claimantName: claim.claimData.defendant.name }) }}
+          </p>
+          <p>
+            {{ t('We’ll contact you to let you know how they respond. They can confirm you’ve paid and the claim is ' +
+              'settled, or they can proceed with it.') }}
+          </p>
+        {% elseif claim.response.freeMediation === FreeMediationOption.NO %}
+          <p>
+            {{ t('You’ve rejected the claim. The case will be reviewed by a judge and might go to court.') }}
+          </p>
+        {% else %}
+          {{ caseStatusForDefendant(state.status, claim, url) }}
+        {% endif %}
         <p>
           <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>
         </p>
@@ -82,19 +93,6 @@
           <p>
             <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
           </p>
-      {% elseif state.status === ClaimStatus.CLAIM_REJECTED_STATES_PAID %}
-        <h3 class="heading-small">{{ t('Your response to the claim') }}</h3>
-        <p>
-          {{ t('We’ve emailed {{ claimantName }} telling them when and how you said you paid the claim.',
-            { claimantName: claim.claimData.defendant.name }) }}
-        </p>
-        <p>
-          {{ t('We’ll contact you to let you know how they respond. They can confirm you’ve paid and the claim is ' +
-             'settled, or they can proceed with it.') }}
-        </p>
-        <p>
-          <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>
-        </p>
       {% else %}
         <p>
           {{ caseStatusForDefendant(claim.status, claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}

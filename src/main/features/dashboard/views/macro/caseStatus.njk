@@ -17,14 +17,16 @@
       + 'We will contact you both within 5 working days.',
       { claimantName: claim.claimData.claimant.name, ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
   {% elseif status === ClaimStatus.CLAIM_REJECTED %}
-    {% if claim.response.freeMediation === FreeMediationOption.YES %}
-      {{ t('You’ve rejected the claim and suggested mediation on {{ respondedAt }}.',
-        { respondedAt: claim.respondedAt | date }) }}
+    {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+      {{ t('We’ve emailed {{ claimantName }} telling them when and how you paid the claim.', { claimantName: claimantName }) }}
     {% else %}
-      {{ t('You’ve rejected the claim. The case will be reviewed by a judge and might go to court.' ) }}
+      {% if claim.response.freeMediation === FreeMediationOption.YES %}
+        {{ t('You’ve rejected the claim and suggested mediation on {{ respondedAt }}.',
+          { respondedAt: claim.respondedAt | date }) }}
+      {% else %}
+        {{ t('You’ve rejected the claim. The case will be reviewed by a judge and might go to court.' ) }}
+      {% endif %}
     {% endif %}
-  {% elseif status === ClaimStatus.CLAIM_REJECTED_STATES_PAID %}
-    {{ t('We’ve emailed {{ claimantName }} telling them when and how you paid the claim.', { claimantName: claimantName }) }}
   {% elseif status === ClaimStatus.OFFER_ACCEPTED %}
     {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court.',
     { claimantName: claim.claimData.claimant.name } ) }}
@@ -54,16 +56,18 @@
     <p>
       <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
     </p>
-  {% elseif status === ClaimStatus.CLAIM_REJECTED_STATES_PAID %}
-    {{ t('The defendant believes that they’ve paid the claim in full.') }}
   {% elseif status === ClaimStatus.CLAIM_REJECTED %}
-    {% if claim.response.freeMediation === FreeMediationOption.YES %}
-      {{ t('{{ defendantName }} has rejected the claim. '
-        + 'They’ve suggested free mediation on {{ respondedAt }}. You can accept or reject',
-        { defendantName: claim.response.defendant.name, respondedAt: claim.respondedAt | date }) }}
+    {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+      {{ t('The defendant believes that they’ve paid the claim in full.') }}
     {% else %}
-      {{ t('{{ defendantName }} has rejected the claim. The case will be reviewed by a judge and might go to court.',
-      { defendantName:  claim.claimData.defendant.name }) }}
+      {% if claim.response.freeMediation === FreeMediationOption.YES %}
+        {{ t('{{ defendantName }} has rejected the claim. '
+          + 'They’ve suggested free mediation on {{ respondedAt }}. You can accept or reject',
+          { defendantName: claim.response.defendant.name, respondedAt: claim.respondedAt | date }) }}
+      {% else %}
+        {{ t('{{ defendantName }} has rejected the claim. The case will be reviewed by a judge and might go to court.',
+        { defendantName:  claim.claimData.defendant.name }) }}
+      {% endif %}
     {% endif %}
     <p>{{ _viewResponseLink(claim.externalId) }}</p>
   {% elseif status === ClaimStatus.OFFER_ACCEPTED %}

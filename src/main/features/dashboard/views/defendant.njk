@@ -13,7 +13,7 @@
       <h2 class="heading-medium">{{ t('Claim status') }}</h2>
       {{ caseHistoryForDefendant(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
 
-      {% if featureToggles.offer and claim.status === ClaimStatus.CLAIM_REJECTED %}
+      {% if featureToggles.offer and claim.status === ClaimStatus.CLAIM_REJECTED and claim.response.defenceType !== DefenceType.ALREADY_PAID %}
         <h2 class="heading-medium">{{ t('More options') }}</h2>
         <h3 class="heading-small">{{ t('Settle out of court') }}</h3>
         <p>

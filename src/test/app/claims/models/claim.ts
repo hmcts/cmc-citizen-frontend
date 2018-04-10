@@ -190,17 +190,17 @@ describe('Claim', () => {
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.NO_RESPONSE)
     })
 
-    it('should contain only 1 response status', () => {
+    it('should contain the claim status only if response rejected but no offer made', () => {
       claim.respondedAt = moment()
-      claim.response = { defenceType: DefenceType.ALREADY_PAID }
+      claim.response = { responseType: ResponseType.FULL_DEFENCE }
 
       expect(claim.stateHistory).to.have.lengthOf(1)
-      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIM_REJECTED_STATES_PAID)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIM_REJECTED)
     })
 
-    it('should contain multiple statuses when multiple apply', () => {
+    it('should contain multiple statuses when response rejected and offers exchanged', () => {
       claim.respondedAt = moment()
-      claim.response = { defenceType: DefenceType.DISPUTE }
+      claim.response = { responseType: ResponseType.FULL_DEFENCE }
       claim.settlement = new Settlement()
       claim.settlementReachedAt = moment()
 
