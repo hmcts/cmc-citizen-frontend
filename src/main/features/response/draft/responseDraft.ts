@@ -126,10 +126,7 @@ export class ResponseDraft extends DraftDocument {
   }
 
   public isDigitalResponseSelected (): boolean {
-    if (this.isResponsePopulated() && this.response.type !== ResponseType.DEFENCE) {
-      return false
-    }
-    return true
+    return !(this.isResponsePopulated() && this.response.type !== ResponseType.DEFENCE)
   }
 
   private isResponsePopulated (): boolean {
