@@ -51,7 +51,7 @@ module "citizen-frontend" {
   ilbIp = "${var.ilbIp}"
   is_frontend = "${var.env != "preview" ? 1: 0}"
   subscription = "${var.subscription}"
-  additional_host_name = "${var.external_host_name}"
+  additional_host_name = "${var.env != "preview" ? var.external_host_name : "null"}"
   https_only = "true"
 
   app_settings = {
