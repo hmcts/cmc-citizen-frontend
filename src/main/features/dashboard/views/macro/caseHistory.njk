@@ -34,11 +34,33 @@
   {% for state in claim.stateHistory %}
     <div class="status-block">
 
-      {% if state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
+      {% if state.status === ClaimStatus.NO_RESPONSE %}
+        <h2 class="heading-medium">{{ t('Your claim has been sent') }}</h2>
+        <p>
+          {{ t('{{ claimantName }} has until {{ responseDeadline }} to respond. They can request an extra 14 days if they need it.',
+          { claimantName: claim.claimData.claimant.name,
+            responseDeadline: claim.responseDeadline | date }) | safe }}
+        </p>
+
+        {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
+        <h2 class="heading-medium">{{ t('The defendant has requested more time to respond') }}</h2>
+        <p>
+          {{ t('{{ defendantName }} has requested an extra 14 days to respond. They need to respond by {{ responseDeadline }}.',
+          { defendantName: claim.claimData.defendant.name ,  responseDeadline: claim.responseDeadline | date }) | safe }}
+        </p>
+
+        {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
         <h2 class="bold-small">{{ t('You can request a County Court Judgment') }}</h2>
-        <p>{{ t('{{ defendantName }} has not responded to your claim by the deadline. You can request a County Court Judgment (CCJ) against them.', { defendantName : claim.claimData.defendant.name }) }}</p>
-        <p>{{ t('The court will make an order asking them to pay the money. It does not guarantee that they pay it.') }}</p>
-        <p>{{ t('{{ defendantName }} can still respond to the claim until you request a CCJ.', { defendantName : claim.claimData.defendant.name }) }}</p>
+        <p>{{ t('{{ defendantName }} has not responded to your claim by the deadline. '
+          + 'You can request a County Court Judgment (CCJ) against them.',
+          { defendantName : claim.claimData.defendant.name }) }}</p>
+        <p>
+          {{ t('The court will make an order asking them to pay the money. It does not guarantee that they pay it.') }}
+        </p>
+        <p>
+          {{ t('{{ defendantName }} can still respond to the claim until you request a CCJ.',
+          { defendantName : claim.claimData.defendant.name }) }}
+        </p>
         <form novalidate method="post">
           {{ submitButton('Request a County Court Judgment') }}
         </form>
@@ -54,6 +76,30 @@
           { defendantName: claim.claimData.defendant.name }) }}
         </p>
 
+        {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
+        <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
+        {% if claim.response.freeMediation === FreeMediationOption.NO %}
+          <p>
+            {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
+            + 'this is a form which you must complete to tell us more about the claim.',
+            { defendantName: claim.claimData.defendant.name }) }}
+          </p>
+          {#Todo find out what this deadline is?#}
+        {% else %}
+          <p>
+            {{ t('{{ defendantName }} has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
+            { defendantName: claim.claimData.defendant.name }) }}
+          </p>
+          <p>
+            {{ t('Tell us whether you agree to mediation or not by emailing ') }}
+            {{ emailLinkForFreeMediation(claim, url) }}
+            {{ t(' before {{ offerResponseDeadline? }}XXXXX',
+            {offerResponseDeadline: offerResponseDeadline }) }}
+          </p>
+        {% endif %}
+
+        {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+
         {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
         <p>
@@ -63,20 +109,20 @@
         {#todo Clarify with Marc James. Do we have an offer deadline now?#}
 
         <p>
-          <a href="{{ url }}">{{ t('View their offer') }}</a>
+          <a href="{{ url }}">{{ t('View and respond to offer') }}</a>
         </p>
 
         <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
         <p>
-          {{ t(' Mary Richards has rejected your claim. We’ll send you a directions questionnaire – '
-          + 'this is a form which you must complete to tell us more about the claim.') }}
-        </p>
-        {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
-        <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
-        <p>
-          {{ t('You’ve agreed to the offer made by {{ defendantName }} and signed an agreement to settle your claim.',
+          {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
+          + 'this is a form which you must complete to tell us more about the claim.',
           { defendantName: claim.claimData.defendant.name }) }}
         </p>
+
+        <p>
+         <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
+        </p>
+
         {% elif state.status === ClaimStatus.OFFER_REJECTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
         <p>
@@ -97,6 +143,15 @@
         {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
 
         {#Todo Why have a view and respond to offer when youve already rejected the offer#}
+
+        {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
+        <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
+        <p>
+          {{ t('You’ve agreed to the offer made by {{ defendantName }} and signed an agreement to settle your claim.',
+          { defendantName: claim.claimData.defendant.name }) }}
+        </p>
+
+
         {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
         <p>
@@ -105,45 +160,6 @@
 
         {{ downloadTheAgreement(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
 
-        {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
-        <h2 class="heading-medium">{{ t('The defendant has requested more time to respond') }}</h2>
-        <p>
-          {{ t('{{ defendantName }} has requested an extra 14 days to respond. They need to respond by {{ responseDeadline }}.',
-          { defendantName: claim.claimData.defendant.name ,  responseDeadline: claim.responseDeadline | date }) | safe }}
-        </p>
-
-        {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
-        <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
-        {% if claim.response.freeMediation === FreeMediationOption.YES %}
-          <p>
-            {{ t('{{ defendantName }} has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
-            { defendantName: claim.claimData.defendant.name }) }}
-          </p>
-          <p>
-            {{ t('Tell us whether you agree to mediation or not by emailing ') }}
-            {{ emailLinkForFreeMediation(claim, url) }}
-            {{ t(' before {{ offerResponseDeadline? }}XXXXX',
-            {offerResponseDeadline: offerResponseDeadline }) }}
-          </p>
-
-          {#Todo find out what this deadline is?#}
-        {% else %}
-          <p>
-            {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
-            + 'this is a form which you must complete to tell us more about the claim.',
-            { defendantName: claim.claimData.defendant.name }) }}
-          </p>
-        {% endif %}
-
-        {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
-
-        {% elif state.status === ClaimStatus.NO_RESPONSE %}
-        <h2 class="heading-medium">{{ t('Your claim has been sent') }}</h2>
-        <p>
-          {{ t('{{ claimantName }} has until {{ responseDeadline }} to respond. They can request an extra 14 days if they need it.',
-          { claimantName: claim.claimData.claimant.name ,
-            responseDeadline: claim.responseDeadline | date }) | safe }}
-        </p>
       {% else %}
         <p>
           {{ caseStatusForClaimant(state.status, claim, url) }}
@@ -284,7 +300,8 @@
           {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
         </p>
         <p>
-          <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
+          <a
+            href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
         </p>
 
         {% elif claim.status === ClaimStatus.NO_RESPONSE %}
