@@ -189,15 +189,7 @@
   {% for state in claim.stateHistory %}
     <div class="status-block">
 
-      {% if claim.status === ClaimStatus.NO_RESPONSE %}
-        <h2 class="heading-medium">{{ t('You haven’t responded to this claim') }}</h2>
-        <p>
-          {{ t('You need to respond before 4pm on {{ responseDeadline }}.',
-          { responseDeadline: claim.responseDeadline | date }) }}
-        </p>
-        <a href="{{ url }}">{{ t('Respond to claim') }}</a>
-
-        {% elif claim.status === ClaimStatus.MORE_TIME_REQUESTED %}
+        {% if claim.status === ClaimStatus.MORE_TIME_REQUESTED %}
         <h2 class="heading-medium">{{ t('More time requested') }}</h2>
         <p>
           {{ t('You need to respond before 4pm, {{ responseDeadline }}.',
