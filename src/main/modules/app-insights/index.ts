@@ -1,7 +1,7 @@
 import * as config from 'config'
 import * as appInsights from 'applicationinsights'
 
-export declare class AppInsightsConfiguration {
+declare class AppInsightsConfiguration {
   instrumentationKey: string
   roleName: string
 }
