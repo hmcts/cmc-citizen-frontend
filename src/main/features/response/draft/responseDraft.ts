@@ -125,16 +125,7 @@ export class ResponseDraft extends DraftDocument {
       && this.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.AMOUNT_CLAIMED
   }
 
-  public isResponseAdmitPartOrAll (): boolean {
-    if (!this.isResponsePopulated()) {
-      return false
-    }
-
-    return this.response.type === ResponseType.PART_ADMISSION
-      || this.response.type === ResponseType.FULL_ADMISSION
-  }
-
-  private isResponsePopulated (): boolean {
+  public isResponsePopulated (): boolean {
     return !!this.response && !!this.response.type
   }
 }

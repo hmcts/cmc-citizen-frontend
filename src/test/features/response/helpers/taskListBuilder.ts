@@ -99,20 +99,20 @@ describe('Defendant response task list builder', () => {
     })
 
     describe('"Check and submit your response" task', () => {
+      let stub: sinon.SinonStub
       let isResponseRejectedFullyWithDisputePaidStub: sinon.SinonStub
       let isResponseRejectedFullyWithAmountClaimedPaidStub: sinon.SinonStub
-      let isResponseAdmitPartOrAllStub: sinon.SinonStub
 
       beforeEach(() => {
+        stub = sinon.stub(ResponseDraft.prototype, 'isResponsePopulated')
         isResponseRejectedFullyWithDisputePaidStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
         isResponseRejectedFullyWithAmountClaimedPaidStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithAmountClaimedPaid')
-        isResponseAdmitPartOrAllStub = sinon.stub(ResponseDraft.prototype, 'isResponseAdmitPartOrAll')
       })
 
       afterEach(() => {
+        stub.restore()
         isResponseRejectedFullyWithDisputePaidStub.restore()
         isResponseRejectedFullyWithAmountClaimedPaidStub.restore()
-        isResponseAdmitPartOrAllStub.restore()
       })
 
       it('should be enabled when claim is fully rejected with dispute', () => {
@@ -131,10 +131,10 @@ describe('Defendant response task list builder', () => {
         expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
       })
 
-      it('should be disabled if admit part or all of claim', () => {
+      it('should be disabled in remaining cases', () => {
+        stub.returns(true)
         isResponseRejectedFullyWithDisputePaidStub.returns(false)
         isResponseRejectedFullyWithAmountClaimedPaidStub.returns(false)
-        isResponseAdmitPartOrAllStub.returns(true)
 
         const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), claimStoreServiceMock.sampleClaimObj.externalId)
         expect(taskList).to.be.equal(undefined)

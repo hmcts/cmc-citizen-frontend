@@ -80,7 +80,9 @@ export class TaskListBuilder {
 
   static buildSubmitSection (draft: ResponseDraft, externalId: string): TaskList {
     const tasks: TaskListItem[] = []
-    if (! draft.isResponseAdmitPartOrAll()) {
+    if (! draft.isResponsePopulated()
+      || draft.isResponseRejectedFullyWithDispute()
+      || draft.isResponseRejectedFullyWithAmountClaimedPaid()) {
       tasks.push(
         new TaskListItem(
           'Check and submit your response',
