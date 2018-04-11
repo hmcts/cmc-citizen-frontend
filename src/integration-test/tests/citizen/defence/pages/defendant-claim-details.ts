@@ -17,7 +17,6 @@ export class DashbaordClaimDetails {
     I.see(claimData.total)
     I.see(claimData.reason)
     I.click(fields.amountBreakdown)
-    I.wait(60)
     I.click('Download claim')
     I.see('Claim amount')
     I.see(claimData.total)
