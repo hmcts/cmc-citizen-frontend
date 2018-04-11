@@ -7,7 +7,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { DraftClaim } from 'drafts/models/draftClaim'
-import { claimDraft as claimDraftData } from 'drafts/draft-data/claimDraft'
+import { createClaimDraft } from 'drafts/draft-data/claimDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 
@@ -26,7 +26,7 @@ export default express.Router()
       const draft: Draft<DraftClaim> = res.locals.claimDraft
       const user: User = res.locals.user
 
-      draft.document = new DraftClaim().deserialize(claimDraftData)
+      draft.document = new DraftClaim().deserialize(createClaimDraft())
       await new DraftService().save(draft, user.bearerToken)
 
       res.redirect(ClaimPaths.checkAndSendPage.uri)
