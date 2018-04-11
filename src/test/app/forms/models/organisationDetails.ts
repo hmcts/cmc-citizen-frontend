@@ -6,7 +6,7 @@ import { Address, ValidationErrors as AddressValidationErrors } from 'forms/mode
 import { ValidationErrors as CorrespondenceAddressValidationErrors } from 'forms/models/correspondenceAddress'
 import { ValidationError, Validator } from 'class-validator'
 import { expectValidationError } from './validationUtils'
-const validAddress = new Address('line1', 'line2', 'line3', 'city', 'postcode')
+const validAddress = new Address('line1', 'line2', 'line3', 'city', 'bb127nq')
 
 const aVeryLongString = (): string => {
   return 'aVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongString' +

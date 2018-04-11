@@ -113,7 +113,7 @@ describe('Address/CorrespondenceAddress', () => {
       })
 
       it('should reject address with first line longer then upper limit', () => {
-        const errors = validator.validateSync(new ClassFunction(generateString(exceededAddressLength), '', '', 'town', 'SA1'))
+        const errors = validator.validateSync(new ClassFunction(generateString(exceededAddressLength), '', '', 'town', 'bb127nq'))
 
         expect(errors.length).to.equal(1)
         expectValidationError(
@@ -122,7 +122,7 @@ describe('Address/CorrespondenceAddress', () => {
       })
 
       it('should reject address with second line longer then upper limit', () => {
-        const errors = validator.validateSync(new ClassFunction('Apartment 99', generateString(exceededAddressLength), '', 'town', 'SA1'))
+        const errors = validator.validateSync(new ClassFunction('Apartment 99', generateString(exceededAddressLength), '', 'town', 'bb127nq'))
 
         expect(errors.length).to.equal(1)
         expectValidationError(
@@ -131,7 +131,7 @@ describe('Address/CorrespondenceAddress', () => {
       })
 
       it('should reject address with third line longer then upper limit', () => {
-        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', generateString(exceededAddressLength), 'town', 'SA1'))
+        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', generateString(exceededAddressLength), 'town', 'bb127nq'))
 
         expect(errors.length).to.equal(1)
         expectValidationError(
@@ -140,7 +140,7 @@ describe('Address/CorrespondenceAddress', () => {
       })
 
       it('should reject address with city longer then upper limit', () => {
-        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', generateString(exceededAddressLength), 'SA1'))
+        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', generateString(exceededAddressLength), 'bb127nq'))
 
         expect(errors.length).to.equal(1)
         expectValidationError(
@@ -157,8 +157,14 @@ describe('Address/CorrespondenceAddress', () => {
         )
       })
 
+      it('should reject address with invalid postcode', () => {
+        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', 'Town', 'bb1012345'))
+
+        expect(errors.length).to.equal(1)
+      })
+
       it('should accept valid address', () => {
-        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', 'Town', 'SA1'))
+        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', 'Town', 'bb127nq'))
 
         expect(errors.length).to.equal(0)
       })
@@ -186,7 +192,7 @@ describe('Address/CorrespondenceAddress', () => {
 
       context('address list is visible and address selected', () => {
         it('should accept when address is provided', () => {
-          const address = new ClassFunction('line1', '', '', 'city', 'postcode')
+          const address = new ClassFunction('line1', '', '', 'city', 'bb127nq')
           address.addressVisible = true
           address.addressSelectorVisible = true
           const errors = validator.validateSync(address)
