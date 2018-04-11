@@ -2,7 +2,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import * as uuid from 'uuid'
 import { PartyType } from 'app/common/partyType'
 
-export function createClaimDraft () {
+export function prepareClaimDraft () {
   return {
     externalId: uuid(),
     eligibility: true,
