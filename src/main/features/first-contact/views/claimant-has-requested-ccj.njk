@@ -6,10 +6,9 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-        <p>
-        {{ t('You can’t use this service. Find out <a target="_blank" href="%s">how to pay or challenge the CCJ</a>.', { postProcess: 'sprintf', sprintf: ['https://www.gov.uk/county-court-judgments-ccj-for-debt']}) | safe }}
-        </p>
-
+      <p>
+      {{ t('You can’t use this service. Find out <a target="_blank" href="{{ url }}">how to pay or challenge the CCJ</a>.',
+        { url: 'https://www.gov.uk/county-court-judgments-ccj-for-debt' }) | safe }}
       </p>
     </div>
   </div>
