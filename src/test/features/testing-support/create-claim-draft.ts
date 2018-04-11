@@ -28,7 +28,7 @@ describe('Testing Support: Create Claim Draft', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(1, 'citizen')
+        idamServiceMock.resolveRetrieveUserFor('100', 'citizen')
       })
 
       it('should render page when everything is fine', async () => {
@@ -45,7 +45,7 @@ describe('Testing Support: Create Claim Draft', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(1, 'citizen')
+        idamServiceMock.resolveRetrieveUserFor('100', 'citizen')
       })
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
