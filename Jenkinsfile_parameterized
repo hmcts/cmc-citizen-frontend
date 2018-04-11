@@ -1,6 +1,6 @@
 #!groovy
 //noinspection GroovyUnusedAssignment
-@Library("Infrastructure@feature/ROC-3460-One-app-insights-per-product") _
+@Library("Infrastructure") _
 
 //noinspection GroovyAssignabilityCheck
 properties([
