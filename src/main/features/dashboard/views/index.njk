@@ -3,12 +3,12 @@
 {% from "./macro/caseStatus.njk" import caseStatusForDefendant, caseStatusForClaimant %}
 {% from "support.njk" import supportWidget %}
 
-{% set title = 'Money claim' %}
+{% set title = t('Your money claims account') %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-full">
-      <h1 class="heading-large">{{ t('Your money claims account') }}</h1>
+      <h1 class="heading-large">{{ title }}</h1>
       {% if not claimDraftSaved %}
         <a id="start-now" class="newclaim" href="{{ EligibilityPaths.startPage.uri }}">{{ t('Make a new money claim') }}</a>
       {% endif %}

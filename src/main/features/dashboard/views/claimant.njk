@@ -1,19 +1,17 @@
 {% extends "layout.njk" %}
 {% from "./macro/caseHistory.njk" import caseHistoryForClaimant %}
 
-{% set title = 'Money claim' %}
+{% set title = 'Your money claims account' %}
 
 {% from "form.njk" import submitButton, csrfProtection %}
 
 {% block content %}
   <div class="grid-row">
-    <div class="column-full">
+    <div class="column-two-thirds">
       <h1 class="heading-large">
         <span class="heading-secondary">{{ t('Claim number:') }}</span>
         {{ claim.claimNumber }}
       </h1>
-    </div>
-    <div class="column-two-thirds">
       <div>
         <h2 class="heading-medium">{{ t('Claim status') }}</h2>
 
@@ -39,7 +37,8 @@
     </div>
 
     <div class="column-one-third">
-      <div class="meta-data">
+      <div class="about-claim-widget">
+        <p class="heading-small">{{ t('About claim') }}</p>
         <ul class="font-xsmall list">
           <li>
             <strong class="bold">{{ t('Defendant name:') }}</strong>

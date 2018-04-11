@@ -13,17 +13,12 @@
       </div>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
-      <p>{{ t('You requested a County Court Judgment on %s. We’ll contact you within 5 days to tell you whether the judgment has been entered.',
-        { postProcess: 'sprintf', sprintf: [ ccjRequestedAt | date ]}) }}
+      <p>{{ t('You requested a County Court Judgment on {{ ccjRequestedAt }}. We’ll contact you within 5 days to tell you whether the judgment has been entered.',
+        { ccjRequestedAt: ccjRequestedAt | date }) }}
       </p>
-      <p>{{ t('%s can no longer respond to the claim using this service - they may have responded by post.',
-        { postProcess: 'sprintf', sprintf: [ defendantName ]}) }}</p>
+      <p>{{ t('{{ defendantName }} can no longer respond to the claim using this service - they may have responded by post.', { defendantName: defendantName }) }}</p>
 
-      <p>{{ t('View your claim status on <a href="%s">your money claims account</a>.',
-        {
-          postProcess: 'sprintf',
-          sprintf: ['/dashboard']
-        }) | safe }}</p>
+      <p>{{ t('View your claim status on <a href="{{ url }}">your money claims account</a>.', { url: '/dashboard' }) | safe }}</p>
 
       {{ supportWidget() }}
 
