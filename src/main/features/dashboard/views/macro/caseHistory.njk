@@ -4,8 +4,8 @@
 
 {% macro downloadResponse(claim, url, text) %}
   <p>
-    <a
-      href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t(text) }}</a>
+    <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t(text) }}</a>
+
   </p>
 {% endmacro %}
 
@@ -123,9 +123,7 @@
           { defendantName: claim.claimData.defendant.name }) }}
         </p>
 
-        <p>
-         <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
-        </p>
+        {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
 
         {% elif state.status === ClaimStatus.OFFER_REJECTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
@@ -155,7 +153,7 @@
           {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
         </p>
 
-        {{ downloadTheAgreement(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+        {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
 
       {% else %}
         <p>
@@ -231,8 +229,7 @@
           </p>
         {% endif %}
         <p>
-          <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download their response') }}</a>
-          {#todo check this text and link#}
+          {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download your Response') }}
         </p>
 
         {% elif claim.status === ClaimStatus.OFFER_SUBMITTED %}
@@ -251,8 +248,7 @@
         </p>
 
         <p>
-          <a
-            href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>
+          {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download your Response') }}
         </p>
 
         {% elif claim.status === ClaimStatus.OFFER_REJECTED %}
@@ -294,9 +290,9 @@
         <p>
           {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
         </p>
+
         <p>
-          <a
-            href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
+          {{ downloadTheAgreement(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
         </p>
 
         {% elif claim.status === ClaimStatus.NO_RESPONSE %}
