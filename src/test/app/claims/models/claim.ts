@@ -14,7 +14,7 @@ import { individual } from '../../../data/entity/party'
 import { DefenceType, FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { Individual } from 'claims/models/details/yours/individual'
 import { PartyStatement } from 'claims/models/partyStatement'
-import moment = require('moment')
+import * as moment from 'moment'
 
 describe('Claim', () => {
 
