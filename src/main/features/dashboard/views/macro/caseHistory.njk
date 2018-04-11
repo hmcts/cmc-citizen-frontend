@@ -2,6 +2,41 @@
 {% from "timeRemaining.njk" import timeRemaining %}
 {% from "form.njk" import submitButton %}
 
+{% macro claimRejected(claim,url,party) %}
+
+  {% if party === 'claimant' %}
+    <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
+    <p>
+      {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
+      + 'this is a form which you must complete to tell us more about the claim.',
+      { defendantName: claim.claimData.defendant.name }) }}
+    </p>
+
+    <p>
+      {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
+    </p>
+
+    {% elif party == 'defendant' %}
+    <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
+
+    <p>
+      {{ t('You have rejected the claim. We’ll send you a directions questionnaire – this is a form which you must '
+      + 'complete to tell us more about the claim.') }}
+    </p>
+
+    <p>
+      {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download your Response') }}
+    </p>
+
+  {% else %}
+    <p>
+      {{ t('The claim was rejected by the claimant') }}
+    </p>
+    todo This is never meant to show. IS there a better way of doing this.
+
+  {% endif %}
+{% endmacro %}
+
 {% macro downloadResponse(claim, url, text) %}
   <p>
     <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t(text) }}</a>
@@ -80,15 +115,13 @@
         </p>
 
         {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
-        <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
         {% if claim.response.freeMediation === FreeMediationOption.NO %}
-          <p>
-            {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
-            + 'this is a form which you must complete to tell us more about the claim.',
-            { defendantName: claim.claimData.defendant.name }) }}
-          </p>
+
+          {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'claimant') }}
+
         {% else %}
           <p>
+          <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
             {{ t('{{ defendantName }} has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
             { defendantName: claim.claimData.defendant.name }) }}
           </p>
@@ -99,9 +132,9 @@
             {offerResponseDeadline: offerResponseDeadline }) }}
           </p>
           {#Todo Ask Marc if we have a free mediation deadline#}
+          {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
         {% endif %}
 
-        {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
 
         {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
@@ -112,33 +145,17 @@
         </p>
         {#todo Clarify with Marc as we dont currently have an offer deadline#}
 
-        <p>
-          <a href="{{ url }}">{{ t('View and respond to offer') }}</a>
-        </p>
-
-        <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
-        <p>
-          {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
-          + 'this is a form which you must complete to tell us more about the claim.',
-          { defendantName: claim.claimData.defendant.name }) }}
-        </p>
-
-        {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
+        {{ responseToOffer(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+        {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'claimant') }}
 
         {% elif state.status === ClaimStatus.OFFER_REJECTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
         <p>
-          {{ t('You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.') }}
+          {{ t('You’ve rejected the defendant’s offer to settle out of court. '
+          + 'You won’t receive any more offers from the defendant.') }}
         </p>
 
-        <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
-        <p>
-          {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
-          + 'this is a form which you must complete to tell us more about the claim.',
-          { defendantName: claim.claimData.defendant.name }) }}
-        </p>
-
-        {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
+        {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'claimant') }}
 
         {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
@@ -146,6 +163,10 @@
           {{ t('You’ve agreed to the offer made by {{ defendantName }} and signed an agreement to settle your claim.',
           { defendantName: claim.claimData.defendant.name }) }}
         </p>
+
+        {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'claimant') }}
+
+        {#Todo BUG: There is a previous state being displayed ONLY on Offer Accepted#}
 
         {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
@@ -275,7 +296,8 @@
           {{ t('When you’ve both signed the agreement, the claim won’t proceed.') }}
         </p>
         <p>
-          <a href="{{ OfferPaths.countersignAgreementPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Sign the agreement') }}</a>
+          <a
+            href="{{ OfferPaths.countersignAgreementPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Sign the agreement') }}</a>
         </p>
 
         <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
