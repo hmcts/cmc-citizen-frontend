@@ -23,7 +23,7 @@ describe('ApiLogger', () => {
 
     it('should format the message of method and uri', () => {
       let logEntry = apiLogger._buildRequestEntry(requestData)
-      expect(logEntry.message)
+      expect(logEntry)
         .to.contain('GET')
         .and.to.contain('http://localhost/resource')
     })
@@ -31,30 +31,30 @@ describe('ApiLogger', () => {
     it('should include request body if provided', () => {
       requestData.requestBody = { formField: 'formValue' }
       let logEntry = apiLogger._buildRequestEntry(requestData)
-      expect(logEntry.message).to.contain('{"formField":"formValue"}')
+      expect(logEntry).to.contain('{"formField":"formValue"}')
     })
 
     it('should not include request body if not provided', () => {
       let logEntry = apiLogger._buildRequestEntry(requestData)
-      expect(logEntry.message).not.to.contain('Body')
+      expect(logEntry).not.to.contain('Body')
     })
 
     it('should include query string if provided', () => {
       requestData.query = { key: 'value' }
       let logEntry = apiLogger._buildRequestEntry(requestData)
-      expect(logEntry.message).to.contain('{"key":"value"}')
+      expect(logEntry).to.contain('{"key":"value"}')
     })
 
     it('should not include query string if not provided', () => {
       let logEntry = apiLogger._buildRequestEntry(requestData)
-      expect(logEntry.message).not.to.contain('Query')
+      expect(logEntry).not.to.contain('Query')
     })
 
     it('should include both request body and query string if provided', () => {
       requestData.requestBody = { formField: 'formValue' }
       requestData.query = { key: 'value' }
       let logEntry = apiLogger._buildRequestEntry(requestData)
-      expect(logEntry.message)
+      expect(logEntry)
         .to.contain('{"formField":"formValue"}')
         .and.to.contain('{"key":"value"}')
     })
@@ -79,41 +79,36 @@ describe('ApiLogger', () => {
 
     it('should format the message of uri', () => {
       let logEntry = apiLogger._buildResponseEntry(responseData)
-      expect(logEntry.message).to.contain('http://localhost/resource')
-    })
-
-    it('should set the responseCode', () => {
-      let logEntry = apiLogger._buildResponseEntry(responseData)
-      expect(logEntry.responseCode).to.equal(200)
+      expect(logEntry).to.contain('http://localhost/resource')
     })
 
     it('should include response body if provided', () => {
       responseData.responseBody = { field: 'value' }
       let logEntry = apiLogger._buildResponseEntry(responseData)
-      expect(logEntry.message).to.contain('{"field":"value"}')
+      expect(logEntry).to.contain('{"field":"value"}')
     })
 
     it('should not include response body if not provided', () => {
       let logEntry = apiLogger._buildResponseEntry(responseData)
-      expect(logEntry.message).not.to.contain('Body')
+      expect(logEntry).not.to.contain('Body')
     })
 
     it('should include error if provided', () => {
       responseData.error = { message: 'Something bad happened' }
       let logEntry = apiLogger._buildResponseEntry(responseData)
-      expect(logEntry.message).to.contain('{"message":"Something bad happened"}')
+      expect(logEntry).to.contain('{"message":"Something bad happened"}')
     })
 
     it('should not include error if not provided', () => {
       let logEntry = apiLogger._buildResponseEntry(responseData)
-      expect(logEntry.message).not.to.contain('Error')
+      expect(logEntry).not.to.contain('Error')
     })
 
     it('should include both response body and error if provided', () => {
       responseData.responseBody = { field: 'value' }
       responseData.error = { message: 'Something bad happened' }
       let logEntry = apiLogger._buildResponseEntry(responseData)
-      expect(logEntry.message)
+      expect(logEntry)
         .to.contain('{"field":"value"}')
         .and.to.contain('{"message":"Something bad happened"}')
     })

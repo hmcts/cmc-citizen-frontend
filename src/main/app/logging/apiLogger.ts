@@ -5,32 +5,27 @@ export class ApiLogger {
     this.logger = logger
   }
 
-  logRequest (requestData) {
-    return this.logger.info(this._buildRequestEntry(requestData))
+  logRequest (requestData): void {
+    this.logger.info(this._buildRequestEntry(requestData))
   }
 
-  _buildRequestEntry (requestData) {
-    return {
-      message: `API: ${requestData.method} ${requestData.uri} ` +
+  _buildRequestEntry (requestData): string {
+    return `API: ${requestData.method} ${requestData.uri} ` +
       ((requestData.query) ? `| Query: ${this._stringifyObject(requestData.query)} ` : '') +
       ((requestData.requestBody) ? `| Body: ${this._stringifyObject(requestData.requestBody)} ` : '')
-    }
   }
 
-  logResponse (responseData) {
+  logResponse (responseData): void {
     this._logLevelFor(responseData.responseCode).call(this.logger, this._buildResponseEntry(responseData))
   }
 
-  _buildResponseEntry (responseData) {
-    return {
-      message: `API: Response ${responseData.responseCode} from ${responseData.uri} ` +
+  _buildResponseEntry (responseData): string {
+    return `API: Response ${responseData.responseCode} from ${responseData.uri} ` +
       ((responseData.responseBody && this.isDebugLevel()) ? `| Body: ${this._stringifyObject(responseData.responseBody)} ` : '') +
-      ((responseData.error) ? `| Error: ${this._stringifyObject(responseData.error)} ` : ''),
-      responseCode: responseData.responseCode
-    }
+      ((responseData.error) ? `| Error: ${this._stringifyObject(responseData.error)} ` : '')
   }
 
-  _stringifyObject (object) {
+  _stringifyObject (object): string {
     if (object !== null && typeof object === 'object') {
       return JSON.stringify(object)
     }
@@ -42,7 +37,7 @@ export class ApiLogger {
     return object
   }
 
-  _logLevelFor (statusCode) {
+  _logLevelFor (statusCode): Function {
     if (statusCode < 400 || statusCode === 404) {
       return this.logger.info
     } else if (statusCode >= 400 && statusCode < 500) {
@@ -56,7 +51,7 @@ export class ApiLogger {
     return this.resolveLoggingLevel() === 'DEBUG' || this.resolveLoggingLevel() === 'TRACE' || this.resolveLoggingLevel() === 'ALL'
   }
 
-  private resolveLoggingLevel () {
+  private resolveLoggingLevel (): string {
     const currentLevel = process.env.LOG_LEVEL || 'INFO'
     return currentLevel.toUpperCase()
   }
