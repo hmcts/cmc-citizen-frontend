@@ -17,6 +17,6 @@ export class DefendantClaimDetails {
     I.see(claimData.total)
     I.see(claimData.reason)
     I.click(fields.amountBreakdown)
+    I.click('Download claim')
   }
-
 }
