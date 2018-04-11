@@ -4,7 +4,6 @@ import * as path from 'path'
 import * as favicon from 'serve-favicon'
 import * as cookieParser from 'cookie-parser'
 import * as bodyParser from 'body-parser'
-import { RequestTracing } from '@hmcts/nodejs-logging'
 import { ForbiddenError, NotFoundError } from './errors'
 import { ErrorLogger } from 'logging/errorLogger'
 import { RouterFinder } from 'common/router/routerFinder'
@@ -31,8 +30,6 @@ const env = process.env.NODE_ENV || 'development'
 app.locals.ENV = env
 
 const developmentMode = env === 'development'
-
-app.use(RequestTracing.middleware)
 
 const i18next = I18Next.enableFor(app)
 
