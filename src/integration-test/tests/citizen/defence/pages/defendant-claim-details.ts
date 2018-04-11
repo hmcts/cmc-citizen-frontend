@@ -3,10 +3,10 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  amountBreakdown: 'details'
+  amountBreakdown: 'Details'
 }
 
-export class DefendantClaimDetails {
+export class DashbaordClaimDetails {
 
   clickViewClaim (): void {
     I.click('View claim')
@@ -17,6 +17,9 @@ export class DefendantClaimDetails {
     I.see(claimData.total)
     I.see(claimData.reason)
     I.click(fields.amountBreakdown)
+    I.wait(60)
     I.click('Download claim')
+    I.see('Claim amount')
+    I.see(claimData.total)
   }
 }

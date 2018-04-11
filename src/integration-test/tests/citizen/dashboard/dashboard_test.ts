@@ -3,10 +3,10 @@ import { claimAmount, createClaimData, createDefendant } from 'integration-test/
 import { ClaimSteps } from 'integration-test/tests/citizen/claim/steps/claim'
 import I = CodeceptJS.I
 import { AmountHelper } from 'integration-test/helpers/amountHelper'
-import { DefendantClaimDetails } from 'integration-test/tests/citizen/defence/pages/defendant-claim-details'
+import { DashbaordClaimDetails } from 'integration-test/tests/citizen/defence/pages/defendant-claim-details'
 
 const claimSteps: ClaimSteps = new ClaimSteps()
-const defendantDetails: DefendantClaimDetails = new DefendantClaimDetails()
+const dashbaordClaimDetails: DashbaordClaimDetails = new DashbaordClaimDetails()
 
 Scenario('Check newly created claim is in my account dashboard with correct claim amount @citizen', function* (I: I) {
   const email: string = yield I.createCitizenUser()
@@ -21,6 +21,6 @@ Scenario('Check newly created claim is in my account dashboard with correct clai
   I.see('Claim number:')
   I.see(claimRef)
   I.see('Claim status')
-  defendantDetails.clickViewClaim()
-  defendantDetails.checkClaimData(claimRef, claimData)
+  dashbaordClaimDetails.clickViewClaim()
+  dashbaordClaimDetails.checkClaimData(claimRef, claimData)
 })
