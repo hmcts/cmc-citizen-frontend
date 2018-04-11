@@ -80,7 +80,7 @@ export class TaskListBuilder {
 
   static buildSubmitSection (draft: ResponseDraft, externalId: string): TaskList {
     const tasks: TaskListItem[] = []
-    if (draft.isDigitalResponseSelected()) {
+    if (! draft.isResponseAdmitPartOrAll()) {
       tasks.push(
         new TaskListItem(
           'Check and submit your response',
