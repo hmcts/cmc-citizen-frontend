@@ -184,13 +184,6 @@ describe('ResponseDraft', () => {
 
       expect(draft.isResponseRejectedFullyWithAmountClaimedPaid()).to.be.equals(true)
     })
-
-    it('should return true when response is populated', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.DEFENCE)
-
-      expect(draft.isResponsePopulated()).to.be.equals(true)
-    })
   })
 
   describe('isResponseRejectedFullyWithDispute', () => {
@@ -216,6 +209,22 @@ describe('ResponseDraft', () => {
       draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.DISPUTE)
 
       expect(draft.isResponseRejectedFullyWithDispute()).to.be.equals(true)
+    })
+  })
+
+  describe('isResponsePopulated', () => {
+    it('should return true when response is populated', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.DEFENCE)
+
+      expect(draft.isResponsePopulated()).to.be.equals(true)
+    })
+
+    it('should return false when response is not populated', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = undefined
+
+      expect(draft.isResponsePopulated()).to.be.equals(false)
     })
   })
 
