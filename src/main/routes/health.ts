@@ -11,7 +11,6 @@ export default express.Router()
       'claimstore': basicHealthCheck('claim-store'),
       'draft-store': basicHealthCheck('draft-store'),
       'fees': basicHealthCheck('fees'),
-      'pdf-service': basicHealthCheck('pdf-service'),
       'pay': basicHealthCheck('pay'),
       'idam-service-2-service-auth': basicHealthCheck('idam.service-2-service-auth'),
       'idam-api': basicHealthCheck('idam.api'),

@@ -116,7 +116,7 @@
 
     {% endif %}
 
-    {% if draft.requireDefence() %}
+    {% if draft.isResponseRejectedFullyWithDispute() %}
       {{ tableStart('yourDefence', 'Response details') }}
       {{ row(label = 'Why you disagree with the claim', value = draft.defence.text, changeLink = paths.defencePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
 
@@ -161,7 +161,7 @@
       {% endif %}
     {% endif %}
 
-    {% if draft.requireMediation() %}
+    {% if draft.isResponseRejectedFullyWithDispute() %}
       {{ tableStart('freeMediation', 'Free mediation') }}
       {{ row(label = 'Free mediation', value = t(draft.freeMediation.option) | capitalize, changeLink = paths.freeMediationPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
       {{ tableEnd() }}
