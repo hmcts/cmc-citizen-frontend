@@ -33,6 +33,10 @@
       draft.paidAmount.option.value | capitalize, changeLink = paidAmountUrl, bottomBorder = false) }}
     {{ row('Amount to be paid by defendant', amountToBePaid | numeral) }}
 
+    {% if draft.paidAmount.amount %}
+      {{ row('Amount already paid', draft.paidAmount.amount | numeral) }}
+    {% endif %}
+
     {% if draft.paymentOption.option.value == 'IMMEDIATELY' %}
       {{ row('When you want the defendant to pay',
         draft.paymentOption.option.displayValue, changeLink = paymentOptionUrl, bottomBorder = true) }}
