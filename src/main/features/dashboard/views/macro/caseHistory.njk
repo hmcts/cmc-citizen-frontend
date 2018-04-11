@@ -122,8 +122,8 @@
         {% else %}
           <p>
           <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
-            {{ t('{{ defendantName }} has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
-            { defendantName: claim.claimData.defendant.name }) }}
+          {{ t('{{ defendantName }} has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
+          { defendantName: claim.claimData.defendant.name }) }}
           </p>
           <p>
             {{ t('Tell us whether you agree to mediation or not by emailing ') }}
@@ -189,15 +189,7 @@
   {% for state in claim.stateHistory %}
     <div class="status-block">
 
-        {% if claim.status === ClaimStatus.MORE_TIME_REQUESTED %}
-        <h2 class="heading-medium">{{ t('More time requested') }}</h2>
-        <p>
-          {{ t('You need to respond before 4pm, {{ responseDeadline }}.',
-          { responseDeadline: claim.responseDeadline | date }) }}
-          <span class="block mobile-inline">{{ timeRemaining(claim.remainingDays, isAfter4pm) }}</span>
-        </p>
-
-        {% elif claim.status === ClaimStatus.CCJ_REQUESTED %}
+      {% if claim.status === ClaimStatus.CCJ_REQUESTED %}
         <h2 class="heading-medium">{{ t('The claimant has requested a CCJ against you') }}</h2>
         <p>
           {{ t('You didn’t respond to this claim by the deadline of {{ responseDeadline }}.',
@@ -215,14 +207,12 @@
           <a target="blank"
              href="https://www.gov.uk/county-court-judgments-ccj-for-debt">{{ t('Find out more about County Court Judgments') }}</a>
         </p>
+        {#todo No link URL was provided. I got this from .gov#}
 
         {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
         {% if claim.response.freeMediation === FreeMediationOption.NO %}
-          <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
-          <p>
-            {{ t('You have rejected the claim. We’ll send you a directions questionnaire – '
-            + 'this is a form which you must complete to tell us more about the claim.') }}
-          </p>
+
+          {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'defendant') }}
 
         {% else %}
           <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
@@ -240,10 +230,11 @@
             + 'If they say no we’ll send you a directions questionnaire - '
             + 'this is a form you complete to tell us more about the claim.') }}
           </p>
+
+          <p>
+            {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download your Response') }}
+          </p>
         {% endif %}
-        <p>
-          {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download your Response') }}
-        </p>
 
         {% elif claim.status === ClaimStatus.OFFER_SUBMITTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
@@ -254,15 +245,7 @@
 
         <p>{{ t('We’ll email you when they respond.') }}</p>
 
-        <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
-        <p>
-          {{ t('You have rejected the claim. We’ll send you a directions questionnaire – this is a form which you must '
-          + 'complete to tell us more about the claim.') }}
-        </p>
-
-        <p>
-          {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download your Response') }}
-        </p>
+        {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'defendant') }}
 
         {% elif claim.status === ClaimStatus.OFFER_REJECTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
@@ -270,13 +253,7 @@
           {{ t('The claimant has rejected your offer to settle the claim. Complete the directions questionnaire.') }}
         </p>
 
-        {#todo Your response to claim link#}
-
-        <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
-        <p>
-          {{ t('You have rejected the claim. We’ll send you a directions questionnaire – this is a form which you must '
-          + 'complete to tell us more about the claim.') }}
-        </p>
+        {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'defendant') }}
 
         {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
@@ -292,12 +269,7 @@
             href="{{ OfferPaths.countersignAgreementPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Sign the agreement') }}</a>
         </p>
 
-        <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
-        <p>
-          {{ t('You have rejected the claim. We’ll send you a directions questionnaire – this is a form which you must '
-          + 'complete to tell us more about the claim.') }}
-        </p>
-        {#todo Your response to claim link#}
+        {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'defendant') }}
 
         {% elif claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         <h2 class="heading-medium">{{ t('Agreement signed') }}</h2>
