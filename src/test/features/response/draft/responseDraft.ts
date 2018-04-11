@@ -184,13 +184,6 @@ describe('ResponseDraft', () => {
 
       expect(draft.isResponseRejectedFullyWithAmountClaimedPaid()).to.be.equals(true)
     })
-
-    it('should return true when response is populated', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.DEFENCE)
-
-      expect(draft.isResponsePopulated()).to.be.equals(true)
-    })
   })
 
   describe('isResponseRejectedFullyWithDispute', () => {
