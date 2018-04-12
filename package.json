@@ -73,6 +73,7 @@
     "i18next-sprintf-postprocessor": "^0.2.2",
     "jquery": "3.3.1",
     "js-base64": "^2.3.2",
+    "lodash": "^4.17.5",
     "mime": "^2.0.3",
     "moment": "^2.18.1",
     "nodelist-foreach-polyfill": "^1.2.0",
