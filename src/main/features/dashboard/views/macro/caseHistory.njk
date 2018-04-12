@@ -122,8 +122,8 @@
         {% else %}
           <p>
           <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
-          {{ t('{{ defendantName }} has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
-          { defendantName: claim.claimData.defendant.name }) }}
+            {{ t('{{ defendantName }} has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
+            { defendantName: claim.claimData.defendant.name }) }}
           </p>
           <p>
             {{ t('Tell us whether you agree to mediation or not by emailing ') }}
@@ -189,7 +189,7 @@
   {% for state in claim.stateHistory %}
     <div class="status-block">
 
-      {% if claim.status === ClaimStatus.CCJ_REQUESTED %}
+        {% if state.status === ClaimStatus.CCJ_REQUESTED %}
         <h2 class="heading-medium">{{ t('The claimant has requested a CCJ against you') }}</h2>
         <p>
           {{ t('You didn’t respond to this claim by the deadline of {{ responseDeadline }}.',
@@ -207,7 +207,7 @@
           <a target="blank"
              href="https://www.gov.uk/county-court-judgments-ccj-for-debt">{{ t('Find out more about County Court Judgments') }}</a>
         </p>
-        {#todo No link URL was provided. I got this from .gov#}
+          {#todo No link URL was provided. I got this from .gov#}
 
         {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
         {% if claim.response.freeMediation === FreeMediationOption.NO %}
@@ -236,7 +236,7 @@
           </p>
         {% endif %}
 
-        {% elif claim.status === ClaimStatus.OFFER_SUBMITTED %}
+        {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
         <p>
           {{ t('You made an offer to settle the claim out of court. {{ claimantName }} can accept or reject your offer.',
@@ -245,15 +245,15 @@
 
         <p>{{ t('We’ll email you when they respond.') }}</p>
 
-        {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'defendant') }}
+          {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'defendant') }}
 
-        {% elif claim.status === ClaimStatus.OFFER_REJECTED %}
+        {% elif state.status === ClaimStatus.OFFER_REJECTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
         <p>
           {{ t('The claimant has rejected your offer to settle the claim. Complete the directions questionnaire.') }}
         </p>
 
-        {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'defendant') }}
+          {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'defendant') }}
 
         {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
@@ -265,13 +265,12 @@
           {{ t('When you’ve both signed the agreement, the claim won’t proceed.') }}
         </p>
         <p>
-          <a
-            href="{{ OfferPaths.countersignAgreementPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Sign the agreement') }}</a>
+          <a href="{{ OfferPaths.countersignAgreementPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Sign the agreement') }}</a>
         </p>
 
-        {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'defendant') }}
+          {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'defendant') }}
 
-        {% elif claim.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
+        {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         <h2 class="heading-medium">{{ t('Agreement signed') }}</h2>
         <p>
           {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
