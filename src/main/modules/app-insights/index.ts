@@ -1,10 +1,18 @@
 import * as config from 'config'
 import * as appInsights from 'applicationinsights'
 
+declare class AppInsightsConfiguration {
+  instrumentationKey: string
+  roleName: string
+}
+
 export class AppInsights {
   static enable () {
-    appInsights.setup(config.get<string>('appInsights.instrumentationKey'))
+    const appInsightsConfig = config.get<AppInsightsConfiguration>('appInsights')
+
+    appInsights.setup(appInsightsConfig.instrumentationKey)
       .setAutoCollectConsole(true, true)
-      .start()
+    appInsights.defaultClient.context.tags[appInsights.defaultClient.context.keys.cloudRole] = appInsightsConfig.roleName
+    appInsights.start()
   }
 }

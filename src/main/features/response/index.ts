@@ -3,6 +3,7 @@ import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
+import { DefenceType } from 'claims/models/response/fullDefenceResponse'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { ResponseGuard } from 'response/guards/responseGuard'
 import { ClaimMiddleware } from 'app/claims/claimMiddleware'
@@ -29,6 +30,7 @@ function defendantResponseRequestHandler (): express.RequestHandler {
 export class Feature {
   enableFor (app: express.Express) {
     if (app.settings.nunjucksEnv && app.settings.nunjucksEnv.globals) {
+      app.settings.nunjucksEnv.globals.DefenceType = DefenceType
       app.settings.nunjucksEnv.globals.FreeMediationOption = FreeMediationOption
     }
 
