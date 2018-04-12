@@ -48,7 +48,7 @@ export class ApiLogger {
   }
 
   private isDebugLevel (): boolean {
-    return this.resolveLoggingLevel() === 'DEBUG' || this.resolveLoggingLevel() === 'TRACE' || this.resolveLoggingLevel() === 'ALL'
+    return this.resolveLoggingLevel() === 'DEBUG' || this.resolveLoggingLevel() === 'SILLY'
   }
 
   private resolveLoggingLevel (): string {
