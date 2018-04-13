@@ -20,10 +20,6 @@
       <p class="bold form-group-related">{{ t('Reason for claim:') }}</p>
       <p>{{ claim.claimData.reason }}</p>
 
-      <div class="panel panel-border-wide">
-        <p>{{ t('Your response will be sent to the claimant {{ claimantFullName }}.', { claimantFullName: claim.claimData.claimant.name }) }}</p>
-      </div>
-
       <form method="POST">
         {{ csrfProtection(csrf) }}
 
@@ -37,6 +33,9 @@
           <p>{{ t('Find out about how we use and store your <a href="{{ link }}" target="_self">personal information</a>.', { link: AppPaths.privacyPolicyPage.uri }) | safe }}</p>
         </div>
       </details>
+
+      <p class="bold-small">{{ t('Download the claim') }}</p>
+      <p><a href="{{ FirstContactPaths.receiptReceiver.uri }}">{{ t('Download claim') }}</a> ({{ t('PDF') }})</p>
     </div>
   </div>
 {% endblock %}
