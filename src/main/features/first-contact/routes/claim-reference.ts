@@ -33,7 +33,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        if (isCMCReference(form.model.reference)) {
+        if (!isCMCReference(form.model.reference)) {
           return res.redirect(mcolUrl)
         }
 
