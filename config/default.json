@@ -99,5 +99,8 @@
   },
   "mcol": {
     "url": "https://www.moneyclaim.gov.uk/web/mcol/welcome"
+  },
+  "appInsights": {
+    "roleName": "citizen-frontend"
   }
 }
