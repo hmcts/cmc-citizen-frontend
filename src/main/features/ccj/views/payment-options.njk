@@ -21,9 +21,9 @@
         'I would like the defendant to pay:',
         'option',
         [
-          {'label': 'Immediately', value: PaymentType.IMMEDIATELY.value, checked: (form.valueFor('option').value === PaymentType.IMMEDIATELY.value)},
-          {'label': 'By a set date', value: PaymentType.FULL_BY_SPECIFIED_DATE.value, checked: (form.valueFor('option').value === PaymentType.FULL_BY_SPECIFIED_DATE.value)},
-          {'label': 'By instalments', value: PaymentType.INSTALMENTS.value, checked: (form.valueFor('option').value === PaymentType.INSTALMENTS.value)}
+          {'label': 'Immediately', value: PaymentType.IMMEDIATELY.value, checked: (form.valueFor('option').value === PaymentType.IMMEDIATELY)},
+          {'label': 'By a set date', value: PaymentType.FULL_BY_SPECIFIED_DATE.value, checked: (form.valueFor('option').value === PaymentType.FULL_BY_SPECIFIED_DATE)},
+          {'label': 'By instalments', value: PaymentType.INSTALMENTS.value, checked: (form.valueFor('option').value === PaymentType.INSTALMENTS)}
         ],
         form = form,
         legendHidden = true
