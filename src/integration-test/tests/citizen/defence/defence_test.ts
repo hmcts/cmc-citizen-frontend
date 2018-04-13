@@ -24,11 +24,16 @@ Scenario('I can complete the journey when I fully reject the claim as I dispute 
 Scenario('I can complete the journey when I fully reject the claim as I have already paid @citizen', function* (I: I) {
   const claimantEmail: string = yield I.createCitizenUser()
   const defendantEmail: string = yield I.createCitizenUser()
+  const claimModel: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
 
-  const claimRef: string = yield I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL), claimantEmail)
+  const claimRef: string = yield I.createClaim(claimModel, claimantEmail)
 
   yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.finishResponse(defendantEmail, PartyType.INDIVIDUAL, DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID)
+
+  I.click('My account')
+  I.see(claimRef)
+  I.see(`We’ve emailed ${claimModel.claimants[0].name} telling them when and how you paid the claim`)
 })
 
 Scenario('I can see send your response by email page when I admit all of the claim @citizen', function* (I: I) {
@@ -107,7 +112,7 @@ Scenario('I can view the claim details from a link on the dashboard for interest
   const claimantEmail: string = yield I.createCitizenUser()
   const defendantEmail: string = yield I.createCitizenUser()
 
-  const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL,true, InterestType.BREAKDOWN)
+  const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true, InterestType.BREAKDOWN)
   const claimRef: string = yield I.createClaim(claimData, claimantEmail)
 
   yield helperSteps.enterPinNumber(claimRef, claimantEmail)
