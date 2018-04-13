@@ -2,40 +2,33 @@
 {% from "timeRemaining.njk" import timeRemaining %}
 {% from "form.njk" import submitButton %}
 
-{% macro claimRejected(claim,url,party) %}
+{% macro _claimRejectedForClaimant(claim) %}
+  <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
+  <p>
+    {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
+    + 'this is a form which you must complete to tell us more about the claim.',
+    { defendantName: claim.claimData.defendant.name }) }}
+  </p>
 
-  {% if party === 'claimant' %}
-    <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
-    <p>
-      {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
-      + 'this is a form which you must complete to tell us more about the claim.',
-      { defendantName: claim.claimData.defendant.name }) }}
-    </p>
-
-    <p>
-      {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
-    </p>
-
-    {% elif party == 'defendant' %}
-    <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
-
-    <p>
-      {{ t('You have rejected the claim. We’ll send you a directions questionnaire – this is a form which you must '
-      + 'complete to tell us more about the claim.') }}
-    </p>
-
-    <p>
-      {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download your Response') }}
-    </p>
-
-  {% else %}
-    <p>
-      {{ t('The claim was rejected by the claimant') }}
-    </p>
-    todo This is never meant to show. IS there a better way of doing this.
-
-  {% endif %}
+  <p>
+    {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
+  </p>
 {% endmacro %}
+
+{% macro _claimRejectedForDefendant(claim,url) %}
+  <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
+
+  <p>
+    {{ t('You have rejected the claim. We’ll send you a directions questionnaire – this is a form which you must '
+    + 'complete to tell us more about the claim.') }}
+  </p>
+
+  <p>
+    {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download your Response') }}
+  </p>
+{% endmacro %}
+
+
 
 {% macro downloadResponse(claim, url, text) %}
   <p>
@@ -63,8 +56,8 @@
     target="_top">moneyclaims@hmcts.gsi.gov.uk</a>
 {% endmacro %}
 
-
 {% macro caseHistoryForClaimant(claim, url) %}
+  {% set defendantName = claim.claimData.defendant.name %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
 
@@ -115,6 +108,18 @@
         </p>
 
         {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
+      {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+        <p>
+          {{ t('{{ defendantName }} believes that they’ve paid the claim in full. ' +
+          'Email {{ supportEmailAddress }} if you want to proceed with the claim - ' +
+          'you must do this before 4pm on {{ respondToResponseDeadline }}.',
+          {
+            defendantName: defendantName,
+            supportEmailAddress: supportEmailAddress,
+            respondToResponseDeadline: claim.respondToResponseDeadline | date
+          }) }}
+        </p>
+        {% endif %}
         {% if claim.response.freeMediation === FreeMediationOption.NO %}
 
           {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'claimant') }}
@@ -133,6 +138,8 @@
           </p>
           {#Todo Ask Marc if we have a free mediation deadline#}
           {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
+
+          {#TODO Do they want a link for email?#}
         {% endif %}
 
 
@@ -146,7 +153,6 @@
         {#todo Clarify with Marc as we dont currently have an offer deadline#}
 
         {{ responseToOffer(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
-        {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'claimant') }}
 
         {% elif state.status === ClaimStatus.OFFER_REJECTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
@@ -155,18 +161,12 @@
           + 'You won’t receive any more offers from the defendant.') }}
         </p>
 
-        {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'claimant') }}
-
         {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
         <p>
           {{ t('You’ve agreed to the offer made by {{ defendantName }} and signed an agreement to settle your claim.',
           { defendantName: claim.claimData.defendant.name }) }}
         </p>
-
-        {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'claimant') }}
-
-        {#Todo BUG: There is a previous state being displayed ONLY on Offer Accepted#}
 
         {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
@@ -186,6 +186,7 @@
 {% endmacro %}
 
 {% macro caseHistoryForDefendant(claim, url, isAfter4pm) %}
+  {% set claimantName = claim.claimData.claimant.name %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
 
@@ -210,6 +211,16 @@
           {#todo No link URL was provided. I got this from .gov#}
 
         {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
+      {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+        <p>
+          {{ t('We’ve emailed {{ claimantName }} telling them when and how you said you paid the claim.',
+          { claimantName: claimantName }) }}
+        </p>
+        <p>
+          {{ t('We’ll contact you to let you know how they respond. They can confirm you’ve paid and the claim is ' +
+          'settled, or they can proceed with it.') }}
+        </p>
+        {% endif %}
         {% if claim.response.freeMediation === FreeMediationOption.NO %}
 
           {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'defendant') }}
@@ -245,15 +256,11 @@
 
         <p>{{ t('We’ll email you when they respond.') }}</p>
 
-          {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'defendant') }}
-
         {% elif state.status === ClaimStatus.OFFER_REJECTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
         <p>
           {{ t('The claimant has rejected your offer to settle the claim. Complete the directions questionnaire.') }}
         </p>
-
-          {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'defendant') }}
 
         {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
@@ -268,8 +275,6 @@
           <a href="{{ OfferPaths.countersignAgreementPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Sign the agreement') }}</a>
         </p>
 
-          {{ claimRejected(claim, DashboardUrlHelper.getStatusUrl(claim), 'defendant') }}
-
         {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         <h2 class="heading-medium">{{ t('Agreement signed') }}</h2>
         <p>
@@ -280,7 +285,7 @@
           {{ downloadTheAgreement(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
         </p>
 
-        {% elif claim.status === ClaimStatus.NO_RESPONSE %}
+        {% elif state.status === ClaimStatus.NO_RESPONSE %}
         <h2 class="heading-medium">{{ t('You haven’t responded to this claim') }}</h2>
         <p>
           {{ t('You need to respond before 4pm on {{ responseDeadline }}.',

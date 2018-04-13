@@ -5,17 +5,21 @@
 {% endmacro %}
 
 {% macro caseStatusForDefendant(status, claim, url, isAfter4pm) %}
+  {% set claimantName = claim.claimData.claimant.name %}
   {% if status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
     {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
   {% elseif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
     {{ t('You did not respond by the deadline. {{ claimantName }} can request a County Court Judgment (CCJ) against you. '
     + 'You can still respond until they do.',
-    { claimantName: claim.claimData.claimant.name } ) }}
+    { claimantName: claimantName } ) }}
   {% elseif status === ClaimStatus.CCJ_REQUESTED %}
     {{ t('The claimant has requested a County Court Judgement (CCJ) against you on {{ ccjRequestedAt }}.',
     { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
   {% elseif status === ClaimStatus.CLAIM_REJECTED %}
-    {% if claim.response.freeMediation === FreeMediationOption.NO %}
+    {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+      {{ t('We’ve emailed {{ claimantName }} telling them when and how you paid the claim.',
+      { claimantName: claimantName }) }}
+    {% elif claim.response.freeMediation === FreeMediationOption.NO %}
       {{ t('You’ve rejected the claim.' ) }}
     {% else %}
       {{ t('You’ve rejected the claim and suggested mediation. '
@@ -42,6 +46,7 @@
 {% endmacro %}
 
 {% macro caseStatusForClaimant(status, claim, url) %}
+  {% set defendantName = claim.claimData.defendant.name %}
   {% if status === ClaimStatus.CCJ_REQUESTED %}
     {{ t('You requested a County Court Judgment on {{ ccjRequestedAt }}.',
     { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
@@ -50,18 +55,22 @@
   {% elseif status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
     {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
   {% elseif status === ClaimStatus.CLAIM_REJECTED %}
-    {% if claim.response.freeMediation === FreeMediationOption.NO %}
-      {{ t('{{ defendantName }} has rejected your claim.',
-      { defendantName:  claim.claimData.defendant.name }) }}
+    {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+        {{ t('{{ defendantName }} believes that they’ve paid the claim in full. ',
+        { defendantName: defendantName }) }}
     {% else %}
-      {#todo Ask for content check. You shouldn't start a sentence with "But".#}
-      {{ t('{{ defendantName }} has rejected the claim. '
-      + 'They’ve suggested free mediation on {{ respondedAt }}. You can accept or reject',
-      { defendantName: claim.response.defendant.name, respondedAt: claim.respondedAt | date }) }}
+      {% if claim.response.freeMediation === FreeMediationOption.YES %}
+        {{ t('{{ defendantName }} has rejected the claim. '
+          + 'They’ve suggested free mediation on {{ respondedAt }}. You can accept or reject',
+          { defendantName: defendantName, respondedAt: claim.respondedAt | date }) }}
+      {% else %}
+        {{ t('{{ defendantName }} has rejected your claim.',
+        { defendantName:  defendantName }) }}
+      {% endif %}
     {% endif %}
   {% elseif status === ClaimStatus.OFFER_ACCEPTED %}
     {{ t('You’ve signed the agreement. We’ve asked {{ defendantName }} to sign the agreement.',
-    { defendantName: claim.claimData.defendant.name }) }}
+    { defendantName: defendantName }) }}
   {% elseif status === ClaimStatus.OFFER_REJECTED %}
     {{ t('You’ve rejected an offer to settle out of court.') }}
     <p>
