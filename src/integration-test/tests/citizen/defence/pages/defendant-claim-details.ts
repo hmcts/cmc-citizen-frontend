@@ -6,7 +6,7 @@ const fields = {
   amountBreakdown: 'Details'
 }
 
-export class DashbaordClaimDetails {
+export class DashboardClaimDetails {
 
   clickViewClaim (): void {
     I.click('View claim')
