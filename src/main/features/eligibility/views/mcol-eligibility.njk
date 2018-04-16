@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 {% from "./macro/mcolSupport.njk" import mcolSupportWidget %}
 
-{% set title = t('Eligibility | Money claim') %}
+{% set title = t('Check you can use Money Claim Online | Money claims') %}
 
 {% block content %}
 
@@ -9,28 +9,22 @@
     <div class="column-two-thirds">
       <h1 class="heading-large">{{ t('Check you can use Money Claim Online (MCOL)') }}</h1>
 
-      <p>
-        {{ t('You can use the existing MCOL service to claim:') }}
-      </p>
+      <p>{{ t('You can use the existing MCOL service to claim:') }}</p>
 
       <ul class="list list-bullet">
-        <li> {{ t('for a fixed sum under £100,000') }} </li>
-        <li> {{ t('against no more than 2 people or organisations') }} </li>
+        <li>{{ t('for a fixed sum under £100,000') }}</li>
+        <li>{{ t('against no more than 2 people or organisations') }}</li>
       </ul>
 
       <p>
         {{ t('You can use the service from anywhere in the UK, but only against someone with an address in England or Wales.') }}
       </p>
 
-      <p>
-        {{ t('You must be 18 or over to make a claim.') }}
-      </p>
+      <p>{{ t('You must be 18 or over to make a claim.') }}</p>
 
       <h1 class="heading-medium">{{ t('What you can’t claim for on MCOL') }}</h1>
 
-      <p>
-        {{ t('You can’t use this service to:') }}
-      </p>
+      <p>{{ t('You can’t use this service to:') }}</p>
 
       <ul class="list list-bullet">
         <li> {{ t('make a claim against a government department or agency, for example HMRC or DVLA') }} </li>
