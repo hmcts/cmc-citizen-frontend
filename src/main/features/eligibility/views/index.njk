@@ -17,20 +17,14 @@
       {% else %}
         <h1 class="heading-large">{{ t('Try the new online service') }}</h1>
 
-        <p>
-          {{ t('We’re building a new service which is currently in beta. This means we’re testing different designs '
-          + 'and making changes based on feedback from users.') }}
-        </p>
+        <p>{{ t('We’re building a new service which is currently in beta. This means we’re testing different designs '
+          + 'and making changes based on feedback from users.') }}</p>
 
-        <p>
-          {{ t('We’ll ask you some questions to check you can use the new service.') }}
-        </p>
+        <p>{{ t('We’ll ask you some questions to check you can use the new service.') }}</p>
 
-        <p>
-          {{ t('You can still <a href="{{ uri }}">use Money Claim Online (MCOL)</a> '
+        <p>{{ t('You can still <a href="{{ uri }}">use Money Claim Online (MCOL)</a> '
           + 'if you prefer while we’re testing the new service.',
-            { uri: EligibilityPaths.mcolEligibilityPage.uri }) | safe }}
-        </p>
+            { uri: EligibilityPaths.mcolEligibilityPage.uri }) | safe }}</p>
 
         <a href="{{ EligibilityPaths.claimValuePage.uri }}" class="button">{{ t('Continue') }}</a>
       {% endif %}
