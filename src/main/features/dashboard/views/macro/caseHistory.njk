@@ -2,14 +2,108 @@
 {% from "timeRemaining.njk" import timeRemaining %}
 {% from "form.njk" import submitButton %}
 
+{% set defendantName = claim.claimData.defendant.name %}
+{% set claimantName = claim.claimData.claimant.name %}
+
+{#----------------------------------- CASE HISTORY MACROS-----------------------------------------------#}
+{% macro caseHistoryForClaimant(claim, url) %}
+  {% for state in claim.stateHistory %}
+    <div class="status-block">
+
+      {% if state.status === ClaimStatus.NO_RESPONSE %}
+        {{ _noResponseForClaimant(claim) }}
+
+        {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
+        {{ _moreTimeRequestedForClaimant(claim) }}
+
+        {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
+        {{ _eligibileForCJJForClaimant(claim) }}
+
+        {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
+        {{ _CCJRequestedForClaimant(claim) }}
+
+        {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
+        {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+          {{ _claimRejectedAlreadyPaidForClaimant(claim) }}
+
+          {% elif claim.response.freeMediation === FreeMediationOption.NO %}
+          {{ _claimRejectedFreeMediationNOForClaimant(claim) }}
+
+        {% else %}
+          {{ _claimRejectedFreeMediationYESForClaimant(claim) }}
+        {% endif %}
+
+        {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
+        {{ _offerSubmittedForClaimant(claim) }}
+
+        {% elif state.status === ClaimStatus.OFFER_REJECTED %}
+        {{ _offerRejectedForClaimant(claim) }}
+
+        {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
+        {{ _offerAcceptedForClaimant(claim) }}
+
+        {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
+        {{ _offerSettlementReachedForClaimant(claim) }}
+
+      {% else %}
+        <p>
+          {{ caseStatusForClaimant(state.status, claim, url) }}
+        </p>
+      {% endif %}
+    </div>
+  {% endfor %}
+{% endmacro %}
+
+{% macro caseHistoryForDefendant(claim, url, isAfter4pm) %}
+  {% for state in claim.stateHistory %}
+    <div class="status-block">
+
+      {% if state.status === ClaimStatus.CCJ_REQUESTED %}
+        {{ _CCJRequesterForDefendant(claim) }}
+
+        {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
+        {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+          {{ _claimRejectedAlreadyPaidForDefendant(claim) }}
+        {% endif %}
+        {% if claim.response.freeMediation === FreeMediationOption.NO %}
+          {{ _claimRejectedFreeMediationNOForDefendant(claim) }}
+        {% else %}
+          {{ _claimRejectedFreeMediationYESForDefendant(claim) }}
+        {% endif %}
+
+        {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
+        {{ _offerSubmittedForDefendant(claim) }}
+
+        {% elif state.status === ClaimStatus.OFFER_REJECTED %}
+        {{ _offerRejectedForDefendant(claim) }}
+
+        {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
+        {{ _offerAcceptedForDefendant(claim) }}
+
+        {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
+        {{ _offerSettlementReachedForDefendant(claim) }}
+
+        {% elif state.status === ClaimStatus.NO_RESPONSE %}
+        {{ _noResponseForDefendant() }}
+      {% else %}
+        <p>
+          {{ caseStatusForDefendant(claim.status, claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
+        </p>
+      {% endif %}
+    </div>
+  {% endfor %}
+{% endmacro %}
+
+
 {#----------------------------------- Supporting Macros ----------------------------------------------#}
 
 {% macro _claimRejectedForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
   <p>
     {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
     + 'this is a form which you must complete to tell us more about the claim.',
-    { defendantName: claim.claimData.defendant.name }) }}
+    { defendantName: defendantName }) }}
   </p>
 
   <p>
@@ -37,25 +131,21 @@
   </p>
 {% endmacro %}
 
-{% macro emailLinkForFreeMediation(claim, url) %}
-  <a
-    href="mailto:moneyclaims@hmcts.gsi.gov.uk?Subject=Free%20Mediation%20Decision%20-%20Claim%20Number:%20{{ claim.claimNumber }}"
-    target="_top">moneyclaims@hmcts.gsi.gov.uk</a>
-{% endmacro %}
-
 {#------------------------------------ Claimant Macros -----------------------------------------------#}
 
 {% macro _noResponseForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('Your claim has been sent') }}</h2>
   <p>
-    {{ t('{{ claimantName }} has until {{ responseDeadline }} to respond. They can request an extra 14 days if they need it.',
-    { claimantName: claim.claimData.claimant.name,
+    {{ t('{{ defendantName }} has until {{ responseDeadline }} to respond. They can request an extra 14 days if they need it.',
+    { defendantName: defendantName,
       responseDeadline: claim.responseDeadline | date }) | safe }}
   </p>
 
 {% endmacro %}
 
 {% macro _CCJRequestedForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('You’ve requested a County Court Judgment (CCJ).') }}</h2>
   <p>
     {{ t('We will contact you within 5 days to tell you whether the judgment has been entered.') }}
@@ -64,24 +154,25 @@
   <p>
     {{ t('{{ defendantName }} can no longer respond to your claim using this service - '
     + 'they may have responded by post.',
-    { defendantName: claim.claimData.defendant.name }) }}
+    { defendantName: defendantName }) }}
   </p>
 
 {% endmacro %}
 
 {% macro _eligibileForCJJForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="bold-small">{{ t('You can request a County Court Judgment') }}</h2>
   <p>
     {{ t('{{ defendantName }} has not responded to your claim by the deadline. '
     + 'You can request a County Court Judgment (CCJ) against them.',
-    { defendantName : claim.claimData.defendant.name }) }}
+    { defendantName : defendantName }) }}
   </p>
   <p>
     {{ t('The court will make an order asking them to pay the money. It does not guarantee that they pay it.') }}
   </p>
   <p>
     {{ t('{{ defendantName }} can still respond to the claim until you request a CCJ.',
-    { defendantName : claim.claimData.defendant.name }) }}
+    { defendantName : defendantName }) }}
   </p>
   <form novalidate method="post">
     {{ submitButton('Request a County Court Judgment') }}
@@ -90,22 +181,26 @@
 {% endmacro %}
 
 {% macro _moreTimeRequestedForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('The defendant has requested more time to respond') }}</h2>
   <p>
-    {{ t('{{ defendantName }} has requested an extra 14 days to respond. They need to respond by {{ responseDeadline }}.',
-    { defendantName: claim.claimData.defendant.name ,
+    {{ t('{{ defendantName }} has requested an extra 14 days to respond. They need to respond by {{ responseDeadline }}',
+    { defendantName: defendantName ,
       responseDeadline: claim.responseDeadline | date }) | safe }}
+    {{ timeRemaining(claim.remainingDays, isAfter4pm) + '.'}}
   </p>
+
 
 {% endmacro %}
 
 {% macro _claimRejectedAlreadyPaidForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
   <p>
 
     {{ t('{{ defendantName }} believes that they’ve paid the claim in full. '
     + 'Email moneyclaims@hmcts.gsi.gov.uk if you want to proceed with the claim - '
-    + 'you must do this before {{ respondToResponseDeadline }}.',
+    + 'you must do this before 4pm on {{ respondToResponseDeadline }}.',
     {
       defendantName: defendantName,
       respondToResponseDeadline: claim.respondToResponseDeadline | date
@@ -117,11 +212,12 @@
 {% endmacro %}
 
 {% macro _claimRejectedFreeMediationNOForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
   <p>
     {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
     + 'this is a form which you must complete to tell us more about the claim.',
-    { defendantName: claim.claimData.defendant.name }) }}
+    { defendantName: defendantName }) }}
   </p>
 
   <p>
@@ -131,46 +227,44 @@
 {% endmacro %}
 
 {% macro _claimRejectedFreeMediationYESForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
   <p>
   <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
   {{ t('{{ defendantName }} has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
-  { defendantName: claim.claimData.defendant.name }) }}
+  { defendantName: defendantName }) }}
   </p>
   <p>
-    {{ t('Tell us whether you agree to mediation or not by emailing ') }}
-    {{ emailLinkForFreeMediation(claim, url) }}
-    {{ t(' before {{ offerResponseDeadline? }}XXXXX',
+    {{ t('Tell us whether you agree to mediation or not by emailing moneyclaims@hmcts.gsi.gov.uk before
+    {{ offerResponseDeadline? }} within 5 days.',
     {offerResponseDeadline: offerResponseDeadline }) }}
   </p>
-  {#Todo Ask Marc if we have a free mediation deadline#}
   {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
-
-  {#TODO Do they want a link for email?#}
 
 {% endmacro %}
 
 {% macro _offerSubmittedForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
   <p>
-    {{ t('{{ defendantName }} has made an offer to settle out of court. '
-    + 'You must accept or reject by 4pm on XXXXX{{ offerDeadline??? }}.',
-    { defendantName: claim.claimData.defendant.name }) }}
+    {{ t('{{ defendantName }} has made an offer to settle out of court.',
+    { defendantName: defendantName }) }}
   </p>
-  {#todo Clarify with Marc as we dont currently have an offer deadline#}
 
   {{ responseToOffer(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
 {% endmacro %}
 
 {% macro _offerAcceptedForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
   <p>
     {{ t('You’ve agreed to the offer made by {{ defendantName }} and signed an agreement to settle your claim.',
-    { defendantName: claim.claimData.defendant.name }) }}
+    { defendantName: defendantName }) }}
   </p>
 
 {% endmacro %}
 
 {% macro _offerRejectedForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
   <p>
     {{ t('You’ve rejected the defendant’s offer to settle out of court. '
@@ -179,6 +273,7 @@
 {% endmacro %}
 
 {% macro _offerSettlementReachedForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
   <p>
     {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
@@ -200,6 +295,7 @@
 {% endmacro %}
 
 {% macro _CCJRequesterForDefendant(claim) %}
+  {% set claimantName = claim.claimData.claimant.name %}
   <h2 class="heading-medium">{{ t('The claimant has requested a CCJ against you') }}</h2>
   <p>
     {{ t('You didn’t respond to this claim by the deadline of {{ responseDeadline }}.',
@@ -208,7 +304,8 @@
   <p>
     {{ t('{{ claimantName }} requested a default County Court Judgment (CCJ) against you on {{ ccjRequestedAt }}. '
     + 'We’ll contact you within 5 days to tell you whether the claimant’s request for judgment has been successful.',
-    { claimantName : claim.claimData.claimant.name, ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
+    { claimantName : claimantName,
+      ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
   </p>
 
   <p>{{ t('You can no longer respond to the claim.') }}</p>
@@ -222,6 +319,7 @@
 {% endmacro %}
 
 {% macro _claimRejectedAlreadyPaidForDefendant(claim) %}
+  {% set claimantName = claim.claimData.claimant.name %}
   <p>
     {{ t('We’ve emailed {{ claimantName }} telling them when and how you said you paid the claim.',
     { claimantName: claimantName }) }}
@@ -246,6 +344,7 @@
 {% endmacro %}
 
 {% macro _claimRejectedFreeMediationYESForDefendant(claim) %}
+  {% set claimantName = claim.claimData.claimant.name %}
   <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
   <p>
     {{ t('You have rejected the claim. You’ve suggested mediation.') }}
@@ -253,7 +352,7 @@
 
   <p>
     {{ t('We’ll ask {{ claimantName }} if they agree to take part in mediation.',
-    {claimantName: claim.claimData.claimant.name}) }}
+    {claimantName: claimantName}) }}
   </p>
 
   <p>
@@ -268,10 +367,11 @@
 {% endmacro %}
 
 {% macro _offerSubmittedForDefendant(claim) %}
+  {% set claimantName = claim.claimData.claimant.name %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
   <p>
     {{ t('You made an offer to settle the claim out of court. {{ claimantName }} can accept or reject your offer.',
-    {claimantName: claim.claimData.claimant.name}) }}
+    {claimantName: claimantName}) }}
   </p>
 
   <p>{{ t('We’ll email you when they respond.') }}</p>
@@ -310,95 +410,4 @@
   <p>
     {{ downloadTheAgreement(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
   </p>
-{% endmacro %}
-
-{#----------------------------------- CASE HISTORY MACROS-----------------------------------------------#}
-{% macro caseHistoryForClaimant(claim, url) %}
-  {% set defendantName = claim.claimData.defendant.name %}
-  {% for state in claim.stateHistory %}
-    <div class="status-block">
-
-      {% if state.status === ClaimStatus.NO_RESPONSE %}
-        {{ _noResponseForClaimant(claim) }}
-
-        {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
-        {{ _moreTimeRequestedForClaimant(claim) }}
-
-        {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
-        {{ _eligibileForCJJForClaimant(claim) }}
-
-        {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
-        {{ _CCJRequestedForClaimant(claim) }}
-
-        {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
-        {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
-          {{ _claimRejectedAlreadyPaidForClaimant }}
-
-          {% elif claim.response.freeMediation === FreeMediationOption.NO %}
-          {{ _claimRejectedFreeMediationNOForClaimant(claim) }}
-
-        {% else %}
-          {{ _claimRejectedFreeMediationYESForClaimant(claim) }}
-        {% endif %}
-
-        {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
-        {{ _offerSubmittedForClaimant(claim) }}
-
-        {% elif state.status === ClaimStatus.OFFER_REJECTED %}
-        {{ _offerRejectedForClaimant(claim) }}
-
-        {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
-        {{ _offerAcceptedForClaimant(claim) }}
-
-        {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
-        {{ _offerSettlementReachedForClaimant(claim) }}
-
-      {% else %}
-        <p>
-          {{ caseStatusForClaimant(state.status, claim, url) }}
-        </p>
-      {% endif %}
-    </div>
-  {% endfor %}
-{% endmacro %}
-
-{% macro caseHistoryForDefendant(claim, url, isAfter4pm) %}
-  {% set claimantName = claim.claimData.claimant.name %}
-  {% for state in claim.stateHistory %}
-    <div class="status-block">
-
-      {% if state.status === ClaimStatus.CCJ_REQUESTED %}
-        {{ _CCJRequesterForDefendant(claim) }}
-
-        {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
-          {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
-            {{ _claimRejectedAlreadyPaidForDefendant(claim) }}
-          {% endif %}
-          {% if claim.response.freeMediation === FreeMediationOption.NO %}
-            {{ _claimRejectedFreeMediationNOForDefendant(claim) }}
-            {% else %}
-            {{ _claimRejectedFreeMediationYESForDefendant(claim) }}
-          {% endif %}
-
-        {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
-        {{ _offerSubmittedForDefendant(claim) }}
-
-        {% elif state.status === ClaimStatus.OFFER_REJECTED %}
-        {{ _offerRejectedForDefendant(claim) }}
-
-        {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
-        {{ _offerAcceptedForDefendant(claim) }}
-
-        {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
-        {{ _offerSettlementReachedForDefendant(claim) }}
-
-        {% elif state.status === ClaimStatus.NO_RESPONSE %}
-        {{ _noResponseForDefendant() }}
-      {% else %}
-        <p>
-          {{ caseStatusForDefendant(claim.status, claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
-        </p>
-      {% endif %}
-    </div>
-  {% endfor %}
 {% endmacro %}
