@@ -7,24 +7,13 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { ClaimReference } from 'forms/models/claimReference'
 import { isCMCReference } from 'common/utils/isCMCReference'
 import { isCCBCCaseReference } from 'common/utils/isCCBCCaseReference'
-import { Form, FormValidationError } from 'forms/form'
-import { ValidationError } from 'class-validator'
+import { Form } from 'forms/form'
 
 function renderView (form: Form<ClaimReference>, res: express.Response): void {
   res.render(Paths.enterClaimNumberPage.associatedView, { form: form })
 }
 
 const mcolUrl = config.get<string>('mcol.url')
-const ERROR_MESSAGE: string = "Reference number is invalid. Please click on 'don't have claim reference number'"
-
-let addErrorMessage = function (form: Form<ClaimReference>) {
-  const validationError = new ValidationError()
-  validationError.property = 'reference'
-  validationError.target = { 'reference': form.model.reference }
-  validationError.value = form.model.reference
-  validationError.constraints = { ['isInvalidReference']: ERROR_MESSAGE }
-  form.errors.push(new FormValidationError(validationError, ''))
-}
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -36,6 +25,7 @@ export default express.Router()
   .post(
     Paths.enterClaimNumberPage.uri,
     FormValidator.requestHandler(ClaimReference),
+
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<ClaimReference> = req.body
 
@@ -44,11 +34,10 @@ export default express.Router()
       } else {
         if (isCMCReference(form.model.reference)) {
           res.redirect(Paths.homePage.uri)
-        } else if (isCCBCCaseReference(form.model.reference)) {
-          return res.redirect(mcolUrl)
-        } else {
-          addErrorMessage(form)
-          renderView(form, res)
+        }
+
+        if (isCCBCCaseReference(form.model.reference)) {
+          res.redirect(mcolUrl)
         }
       }
     })
