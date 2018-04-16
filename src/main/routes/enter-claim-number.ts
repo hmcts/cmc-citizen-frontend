@@ -34,9 +34,7 @@ export default express.Router()
       } else {
         if (isCMCReference(form.model.reference)) {
           res.redirect(Paths.homePage.uri)
-        }
-
-        if (isCCBCCaseReference(form.model.reference)) {
+        } else if (isCCBCCaseReference(form.model.reference)) {
           res.redirect(mcolUrl)
         }
       }
