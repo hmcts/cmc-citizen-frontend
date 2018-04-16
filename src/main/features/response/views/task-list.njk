@@ -55,10 +55,10 @@
           <li>
             <strong class="bold">{{ t('Total claim amount:') }}</strong>
             <div>{{ claim.totalAmountTillToday | numeral }}</div>
-            <div>
-              {{ t('<a href="{{ url }}">View claim</a>',
-                { url: ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}
-            </div>
+          </li>
+          <li>
+            <strong class="bold">{{ t('Claim details:') }}</strong>
+            <a class="block" href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View claim') }}</a>
           </li>
         </ul>
       </div>

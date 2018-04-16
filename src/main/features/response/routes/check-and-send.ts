@@ -110,12 +110,6 @@ export default express.Router()
               return
             }
             break
-          case ResponseType.PART_ADMISSION:
-            res.redirect(Paths.partialAdmissionPage.evaluateUri({ externalId: claim.externalId }))
-            return
-          case ResponseType.FULL_ADMISSION:
-            res.redirect(Paths.fullAdmissionPage.evaluateUri({ externalId: claim.externalId }))
-            return
           default:
             next(new Error('Unknown response type: ' + responseType))
         }
