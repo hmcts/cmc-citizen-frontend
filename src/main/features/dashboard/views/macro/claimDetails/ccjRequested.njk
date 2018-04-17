@@ -1,0 +1,38 @@
+{% macro ccjRequestedForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  <h2 class="heading-medium">{{ t('You’ve requested a County Court Judgment (CCJ).') }}</h2>
+  <p>
+    {{ t('We will contact you within 5 days to tell you whether the judgment has been entered.') }}
+  </p>
+
+  <p>
+    {{ t('{{ defendantName }} can no longer respond to your claim using this service - '
+    + 'they may have responded by post.',
+    { defendantName: defendantName }) }}
+  </p>
+
+{% endmacro %}
+
+{% macro ccjRequesterForDefendant(claim) %}
+  {% set claimantName = claim.claimData.claimant.name %}
+  <h2 class="heading-medium">{{ t('The claimant has requested a CCJ against you') }}</h2>
+  <p>
+    {{ t('You didn’t respond to this claim by the deadline of {{ responseDeadline }}.',
+    { responseDeadline: claim.responseDeadline | date }) }}
+  </p>
+  <p>
+    {{ t('{{ claimantName }} requested a default County Court Judgment (CCJ) against you on {{ ccjRequestedAt }}. '
+    + 'We’ll contact you within 5 days to tell you whether the claimant’s request for judgment has been successful.',
+    { claimantName : claimantName,
+      ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
+  </p>
+
+  <p>{{ t('You can no longer respond to the claim.') }}</p>
+
+  <p>
+    <a target="blank"
+       href="https://www.gov.uk/county-court-judgments-ccj-for-debt">{{ t('Find out more about County Court Judgments') }}</a>
+  </p>
+  {#todo No link URL was provided. I got this from .gov#}
+
+{% endmacro %}

@@ -1,17 +1,19 @@
 {% from "./caseStatus.njk" import caseStatusForClaimant, caseStatusForDefendant %}
 {% from "timeRemaining.njk" import timeRemaining %}
 {% from "form.njk" import submitButton %}
+{% from "./claimDetails/noReponse.njk" import noResponseForClaimant %}
+{% from "./claimDetails/ccjRequested.njk" import ccjRequestedForClaimant, ccjRequesterForDefendant %}
 
-{% set defendantName = claim.claimData.defendant.name %}
-{% set claimantName = claim.claimData.claimant.name %}
 
-{#----------------------------------- CASE HISTORY MACROS-----------------------------------------------#}
+
+
+{#----------------------------------- PUBLIC CASE HISTORY MACROS-----------------------------------------------#}
 {% macro caseHistoryForClaimant(claim, url) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
 
       {% if state.status === ClaimStatus.NO_RESPONSE %}
-        {{ _noResponseForClaimant(claim) }}
+        {{ noResponseForClaimant(claim) }}
 
         {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
         {{ _moreTimeRequestedForClaimant(claim) }}
@@ -20,7 +22,7 @@
         {{ _eligibileForCJJForClaimant(claim) }}
 
         {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
-        {{ _CCJRequestedForClaimant(claim) }}
+        {{ ccjRequestedForClaimant(claim) }}
 
         {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
         {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
@@ -59,7 +61,7 @@
     <div class="status-block">
 
       {% if state.status === ClaimStatus.CCJ_REQUESTED %}
-        {{ _CCJRequesterForDefendant(claim) }}
+        {{ ccjRequesterForDefendant(claim) }}
 
         {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
         {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
@@ -83,8 +85,6 @@
         {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         {{ _offerSettlementReachedForDefendant(claim) }}
 
-        {% elif state.status === ClaimStatus.NO_RESPONSE %}
-        {{ _noResponseForDefendant() }}
       {% else %}
         <p>
           {{ caseStatusForDefendant(claim.status, claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
@@ -94,70 +94,7 @@
   {% endfor %}
 {% endmacro %}
 
-
-{#----------------------------------- Supporting Macros ----------------------------------------------#}
-
-{% macro _claimRejectedForClaimant(claim) %}
-  {% set defendantName = claim.claimData.defendant.name %}
-  <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
-  <p>
-    {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
-    + 'this is a form which you must complete to tell us more about the claim.',
-    { defendantName: defendantName }) }}
-  </p>
-
-  <p>
-    {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
-  </p>
-{% endmacro %}
-
-{% macro downloadResponse(claim, url, text) %}
-  <p>
-    <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t(text) }}</a>
-
-  </p>
-{% endmacro %}
-
-{% macro downloadTheAgreement(claim, url) %}
-  <p>
-    <a
-      href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
-  </p>
-{% endmacro %}
-
-{% macro responseToOffer(claim, url) %}
-  <p>
-    <a href="{{ url }}">{{ t('View and respond to offer') }}</a>
-  </p>
-{% endmacro %}
-
 {#------------------------------------ Claimant Macros -----------------------------------------------#}
-
-{% macro _noResponseForClaimant(claim) %}
-  {% set defendantName = claim.claimData.defendant.name %}
-  <h2 class="heading-medium">{{ t('Your claim has been sent') }}</h2>
-  <p>
-    {{ t('{{ defendantName }} has until {{ responseDeadline }} to respond. They can request an extra 14 days if they need it.',
-    { defendantName: defendantName,
-      responseDeadline: claim.responseDeadline | date }) | safe }}
-  </p>
-
-{% endmacro %}
-
-{% macro _CCJRequestedForClaimant(claim) %}
-  {% set defendantName = claim.claimData.defendant.name %}
-  <h2 class="heading-medium">{{ t('You’ve requested a County Court Judgment (CCJ).') }}</h2>
-  <p>
-    {{ t('We will contact you within 5 days to tell you whether the judgment has been entered.') }}
-  </p>
-
-  <p>
-    {{ t('{{ defendantName }} can no longer respond to your claim using this service - '
-    + 'they may have responded by post.',
-    { defendantName: defendantName }) }}
-  </p>
-
-{% endmacro %}
 
 {% macro _eligibileForCJJForClaimant(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
@@ -284,40 +221,6 @@
 
 {#----------------------------------- Defendant Macros ----------------------------------------------#}
 
-{% macro _noResponseForDefendant(claim) %}
-  <h2 class="heading-medium">{{ t('You haven’t responded to this claim') }}</h2>
-  <p>
-    {{ t('You need to respond before 4pm on {{ responseDeadline }}.',
-    { responseDeadline: claim.responseDeadline | date }) }}
-  </p>
-
-  <a href="{{ url }}">{{ t('Respond to claim') }}</a>
-{% endmacro %}
-
-{% macro _CCJRequesterForDefendant(claim) %}
-  {% set claimantName = claim.claimData.claimant.name %}
-  <h2 class="heading-medium">{{ t('The claimant has requested a CCJ against you') }}</h2>
-  <p>
-    {{ t('You didn’t respond to this claim by the deadline of {{ responseDeadline }}.',
-    { responseDeadline: claim.responseDeadline | date }) }}
-  </p>
-  <p>
-    {{ t('{{ claimantName }} requested a default County Court Judgment (CCJ) against you on {{ ccjRequestedAt }}. '
-    + 'We’ll contact you within 5 days to tell you whether the claimant’s request for judgment has been successful.',
-    { claimantName : claimantName,
-      ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
-  </p>
-
-  <p>{{ t('You can no longer respond to the claim.') }}</p>
-
-  <p>
-    <a target="blank"
-       href="https://www.gov.uk/county-court-judgments-ccj-for-debt">{{ t('Find out more about County Court Judgments') }}</a>
-  </p>
-  {#todo No link URL was provided. I got this from .gov#}
-
-{% endmacro %}
-
 {% macro _claimRejectedAlreadyPaidForDefendant(claim) %}
   {% set claimantName = claim.claimData.claimant.name %}
   <p>
@@ -409,5 +312,41 @@
 
   <p>
     {{ downloadTheAgreement(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+  </p>
+{% endmacro %}
+
+{#----------------------------------- Supporting Macros ----------------------------------------------#}
+
+{% macro _claimRejectedForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
+  <p>
+    {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
+    + 'this is a form which you must complete to tell us more about the claim.',
+    { defendantName: defendantName }) }}
+  </p>
+
+  <p>
+    {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
+  </p>
+{% endmacro %}
+
+{% macro downloadResponse(claim, url, text) %}
+  <p>
+    <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t(text) }}</a>
+
+  </p>
+{% endmacro %}
+
+{% macro downloadTheAgreement(claim, url) %}
+  <p>
+    <a
+      href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
+  </p>
+{% endmacro %}
+
+{% macro responseToOffer(claim, url) %}
+  <p>
+    <a href="{{ url }}">{{ t('View and respond to offer') }}</a>
   </p>
 {% endmacro %}

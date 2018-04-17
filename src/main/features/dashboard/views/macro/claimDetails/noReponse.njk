@@ -1,0 +1,11 @@
+{% macro noResponseForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  <h2 class="heading-medium">{{ t('Your claim has been sent') }}</h2>
+  <p>
+    {{ t('{{ defendantName }} has until {{ responseDeadline }} to respond. They can request an extra 14 days if they need it.',
+    { defendantName: defendantName,
+      responseDeadline: claim.responseDeadline | date }) | safe }}
+  </p>
+
+{% endmacro %}
+
