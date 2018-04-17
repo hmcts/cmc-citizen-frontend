@@ -7,12 +7,12 @@
 {% from "./claimDetails/ccjRequested.njk" import ccjRequestedForClaimant, ccjRequesterForDefendant %}
 
 {% from "./claimDetails/claimRejected.njk" import
-claimRejectedAlreadyPaidForClaimant,
-claimRejectedAlreadyPaidForDefendant,
-claimRejectedFreeMediationNOForClaimant,
-claimRejectedFreeMediationNOForDefendant,
-claimRejectedFreeMediationYESForClaimant,
-claimRejectedFreeMediationYESForDefendant %}
+  claimRejectedAlreadyPaidForClaimant,
+  claimRejectedAlreadyPaidForDefendant,
+  claimRejectedFreeMediationNOForClaimant,
+  claimRejectedFreeMediationNOForDefendant,
+  claimRejectedFreeMediationYESForClaimant,
+  claimRejectedFreeMediationYESForDefendant %}
 
 {% from "./claimDetails/offerSubmitted.njk" import offerSubmittedForClaimant, offerSubmittedForDefendant %}
 {% from "./claimDetails/offerAccepted.njk" import offerAcceptedForClaimant, offerAcceptedForDefendant %}
@@ -22,41 +22,30 @@ claimRejectedFreeMediationYESForDefendant %}
 {% macro caseHistoryForClaimant(claim, url) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
-
       {% if state.status === ClaimStatus.NO_RESPONSE %}
         {{ noResponseForClaimant(claim) }}
-
-        {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
+      {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
         {{ moreTimeRequestedForClaimant(claim) }}
-
-        {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
+      {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
         {{ ccjEligibleForClaimant(claim) }}
-
-        {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
+      {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
         {{ ccjRequestedForClaimant(claim) }}
-
-        {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
+      {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
         {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
-
           {{ claimRejectedAlreadyPaidForClaimant(claim) }}
-          {% elif claim.response.freeMediation === FreeMediationOption.NO %}
+        {% elif claim.response.freeMediation === FreeMediationOption.NO %}
           {{ claimRejectedFreeMediationNOForClaimant(claim) }}
         {% else %}
           {{ claimRejectedFreeMediationYESForClaimant(claim) }}
         {% endif %}
-
-        {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
+      {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
         {{ offerSubmittedForClaimant(claim) }}
-
-        {% elif state.status === ClaimStatus.OFFER_REJECTED %}
+      {% elif state.status === ClaimStatus.OFFER_REJECTED %}
         {{ offerRejectedForClaimant(claim) }}
-
-        {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
+      {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         {{ offerAcceptedForClaimant(claim) }}
-
-        {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
+      {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         {{ offerSettlementReached(claim) }}
-
       {% else %}
         <p>
           {{ caseStatusForClaimant(state.status, claim, url) }}
@@ -69,35 +58,26 @@ claimRejectedFreeMediationYESForDefendant %}
 {% macro caseHistoryForDefendant(claim, url, isAfter4pm) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
-
       {% if state.status === ClaimStatus.CCJ_REQUESTED %}
         {{ ccjRequesterForDefendant(claim) }}
-
-        {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
+      {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
         {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
-
           {{ claimRejectedAlreadyPaidForDefendant(claim) }}
         {% endif %}
         {% if claim.response.freeMediation === FreeMediationOption.NO %}
-           {{ claimRejectedFreeMediationNOForDefendant(claim) }}
-
-          {% else %}
-           {{ claimRejectedFreeMediationYESForDefendant(claim) }}
-          {% endif %}
-
-        {{ offer (claim) }}
-        {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
+          {{ claimRejectedFreeMediationNOForDefendant(claim) }}
+        {% else %}
+          {{ claimRejectedFreeMediationYESForDefendant(claim) }}
+        {% endif %}
+        {{ settleOutOfCourtOption (claim) }}
+      {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
         {{ offerSubmittedForDefendant(claim) }}
-
-        {% elif state.status === ClaimStatus.OFFER_REJECTED %}
+      {% elif state.status === ClaimStatus.OFFER_REJECTED %}
         {{ offerRejectedForDefendant(claim) }}
-
-        {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
+      {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         {{ offerAcceptedForDefendant(claim) }}
-
-        {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
+      {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         {{ offerSettlementReached(claim) }}
-
       {% else %}
         <p>
           {{ caseStatusForDefendant(claim.status, claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
@@ -107,9 +87,9 @@ claimRejectedFreeMediationYESForDefendant %}
   {% endfor %}
 {% endmacro %}
 
-{% macro offer (claim) %}
+{% macro settleOutOfCourtOption (claim) %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
   <p>{{ t('You may still <a href="{{ link }}">settle the claim out of court</a>. For example you could offer to fix goods you sold the claimant or suggest a payment.',
-    { link: OfferPaths.settleOutOfCourtPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}</p>
+      { link: OfferPaths.settleOutOfCourtPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}</p>
   <p>{{ t('You can avoid getting a County Court Judgment if the claimant accepts your offer.') }}</p>
 {% endmacro %}
