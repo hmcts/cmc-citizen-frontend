@@ -4,15 +4,8 @@ import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 class ClaimStoreHelper extends codecept_helper {
 
   async createClaim (claimData: ClaimData, submitterEmail: string): Promise<string> {
-
-    console.log('auth user', submitterEmail)
     const submitter: User = await this.prepareAuthenticatedUser(submitterEmail)
-
-    console.log('I create claim')
-
     const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter)
-
-    console.log('I have just created claim', referenceNumber)
 
     return referenceNumber
   }
@@ -37,12 +30,7 @@ class ClaimStoreHelper extends codecept_helper {
 
   private async prepareAuthenticatedUser (userEmail: string): Promise<User> {
     const jwt: string = await IdamClient.authenticateUser(userEmail)
-
-    console.log('auth token', jwt)
-
     const user: User = await IdamClient.retrieveUser(jwt)
-
-    console.log('This is my user:', user)
 
     return { ...user, bearerToken: jwt }
   }

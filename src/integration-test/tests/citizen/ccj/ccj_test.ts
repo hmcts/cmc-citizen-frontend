@@ -27,18 +27,11 @@ Scenario('Request judgment as an individual with no defendant email and pay by i
 })
 
 Scenario('Request judgment as a Company, pay by set date @citizen', function* (I: I) {
-
-  console.log('Start TESTING`')
-
   const email: string = yield I.createCitizenUser()
   const claimantType: PartyType = PartyType.COMPANY
   const defendantType: PartyType = PartyType.COMPANY
 
-  console.log('user created, Im a about to create claim')
-
   const claimRef: string = yield I.createClaim(createClaimData(claimantType, defendantType, true, InterestType.NO_INTEREST), email)
-
-  console.log('claim created')
 
   userSteps.login(email)
   ccjSteps.requestCCJ(claimRef, defendantType)
