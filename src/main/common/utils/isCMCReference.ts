@@ -9,5 +9,5 @@ export function isCMCReference (referenceNumber?: string): boolean {
     return false
   }
 
-  return new RegExp(/^\d\d\dMC\d\d\d$/i).test(referenceNumber)
+  return /^\d\d\dMC\d\d\d$/i.test(referenceNumber)
 }
