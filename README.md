@@ -37,7 +37,7 @@ It will be available at https://localhost:3000
 
 ### Running the application on docker (integrated environment)
 
-See the README.md in cmc/integration-tests (not yet open sourced)
+See the README.md in hmcts/cmc-integration-tests
 
 ## Developing
 

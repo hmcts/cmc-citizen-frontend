@@ -25,6 +25,10 @@ function defendantFirstContactRequestHandler (): express.RequestHandler {
 
 export class Feature {
   enableFor (app: express.Express): void {
+    if (app.settings.nunjucksEnv && app.settings.nunjucksEnv.globals) {
+      app.settings.nunjucksEnv.globals.FirstContactPaths = Paths
+    }
+
     app.all('/first-contact/*', defendantFirstContactRequestHandler())
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
