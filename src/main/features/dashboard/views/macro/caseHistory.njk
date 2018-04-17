@@ -75,6 +75,7 @@ claimRejectedFreeMediationYESForDefendant %}
 
         {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
         {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+
           {{ claimRejectedAlreadyPaidForDefendant(claim) }}
         {% endif %}
         {% if claim.response.freeMediation === FreeMediationOption.NO %}
@@ -84,6 +85,7 @@ claimRejectedFreeMediationYESForDefendant %}
            {{ claimRejectedFreeMediationYESForDefendant(claim) }}
           {% endif %}
 
+        {{ offer (claim) }}
         {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
         {{ offerSubmittedForDefendant(claim) }}
 
@@ -103,4 +105,11 @@ claimRejectedFreeMediationYESForDefendant %}
       {% endif %}
     </div>
   {% endfor %}
+{% endmacro %}
+
+{% macro offer (claim) %}
+  <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
+  <p>{{ t('You may still <a href="{{ link }}">settle the claim out of court</a>. For example you could offer to fix goods you sold the claimant or suggest a payment.',
+    { link: OfferPaths.settleOutOfCourtPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}</p>
+  <p>{{ t('You can avoid getting a County Court Judgment if the claimant accepts your offer.') }}</p>
 {% endmacro %}
