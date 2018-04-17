@@ -9,7 +9,6 @@ import { RouterFinder } from 'common/router/routerFinder'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
-import { ClaimMiddleware } from 'claims/claimMiddleware'
 import { OAuthHelper } from 'idam/oAuthHelper'
 
 function claimIssueRequestHandler (): express.RequestHandler {
@@ -37,7 +36,6 @@ export class Feature {
       }),
       ClaimEligibilityGuard.requestHandler()
     )
-    app.all('/claim/*/receipt', ClaimMiddleware.retrieveByExternalId)
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }
 }

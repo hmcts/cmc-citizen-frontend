@@ -4,10 +4,10 @@ import { createClaimData, dailyInterestAmount } from 'integration-test/data/test
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import I = CodeceptJS.I
 import { DefenceType } from 'integration-test/data/defence-type'
-import { DefendantClaimDetails } from 'integration-test/tests/citizen/defence/pages/defendant-claim-details'
+import { DashboardClaimDetails } from 'integration-test/tests/citizen/defence/pages/defendant-claim-details'
 
 const helperSteps: Helper = new Helper()
-const defendantDetails: DefendantClaimDetails = new DefendantClaimDetails()
+const defendantDetails: DashboardClaimDetails = new DashboardClaimDetails()
 
 Feature('Respond to claim')
 
