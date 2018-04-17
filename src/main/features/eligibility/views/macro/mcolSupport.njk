@@ -1,9 +1,10 @@
+{% from "callCharges.njk" import callCharges %}
+
 {% macro mcolSupportWidget(label = 'Help and advice') %}
   <h2 class="heading-medium">{{ t(label) }}</h2>
   <pre>{{ t('Money Claim Online helpdesk') }}</pre>
   <pre>{{ t('Email: ccbc@hmcts.gsi.gov.uk') }}</pre>
   <pre>{{ t('Telephone: 0300 123 1057') }}</pre>
   <pre>{{ t('Monday to Friday, 8:30am to 5pm') }}</pre>
-  <p><a target="_blank" href="https://www.gov.uk/call-charges">{{ t('Find out about call charges') }}
-      <span class="font-xsmall">{{ t('(opens in a new window)') }}</span></a></p>
+  {{ callCharges() }}
 {% endmacro %}
