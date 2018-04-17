@@ -12,15 +12,11 @@ import { isCCBCCaseReference } from 'common/utils/isCCBCCaseReference'
 export class CheckClaimReferenceNumberConstraint implements ValidatorConstraintInterface {
 
   validate (value: any | string, args?: ValidationArguments): boolean {
-    if (value === undefined || value === null || value === '') {
+    if (value === undefined || value === '') {
       return true
     }
 
     return isCMCReference(value) || isCCBCCaseReference(value)
-  }
-
-  defaultMessage (args: ValidationArguments) {
-    return 'Enter a valid reference number'
   }
 }
 
