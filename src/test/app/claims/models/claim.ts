@@ -177,6 +177,21 @@ describe('Claim', () => {
     })
   })
 
+  describe('respondToDefendantPaidInFullDeadline', () => {
+
+    it('should add 28 days to the response deadline', () => {
+      const claim = new Claim()
+      claim.respondedAt = moment()
+
+      expect(claim.respondToDefendantPaidInFullDeadline.toISOString()).to.equal(claim.respondedAt.add(28, 'days').toISOString())
+    })
+
+    it('should return undefined if claim is not responded to', () => {
+      const claim = new Claim()
+      expect(claim.respondToDefendantPaidInFullDeadline).to.equal(undefined)
+    })
+  })
+
   describe('stateHistory', () => {
     let claim
 

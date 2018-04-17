@@ -92,6 +92,13 @@ export class Claim {
     return this.respondedAt.clone().add('33', 'days')
   }
 
+  get respondToDefendantPaidInFullDeadline (): Moment {
+    if (!this.respondedAt) {
+      return undefined
+    }
+    return this.respondedAt.clone().add('28', 'days')
+  }
+
   get remainingDays (): number {
     return this.responseDeadline.diff(MomentFactory.currentDate(), 'days')
   }

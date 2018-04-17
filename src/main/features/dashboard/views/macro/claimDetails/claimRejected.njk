@@ -11,10 +11,10 @@
 
     {{ t('{{ defendantName }} believes that they’ve paid the claim in full. '
     + 'Email moneyclaims@hmcts.gsi.gov.uk if you want to proceed with the claim - '
-    + 'you must do this before 4pm on {{ respondToResponseDeadline }}.',
+    + 'you must do this before 4pm on {{ respondToDefendantPaidInFullDeadline }}.',
     {
       defendantName: defendantName,
-      respondToResponseDeadline: claim.respondToResponseDeadline | date
+      respondToDefendantPaidInFullDeadline: claim.respondToDefendantPaidInFullDeadline | date
     }) }}
   </p>
   <p>
@@ -77,7 +77,7 @@
   </p>
 
   <p>
-    {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download your Response') }}
+    {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download your response') }}
   </p>
 {% endmacro %}
 
@@ -100,7 +100,7 @@
   </p>
 
   <p>
-    {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download your Response') }}
+    {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download your response') }}
   </p>
 {% endmacro %}
 
