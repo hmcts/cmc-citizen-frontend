@@ -2,7 +2,8 @@
   {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
   <p>
-    {{ t('You’ve agreed to the offer made by {{ defendantName }} and signed an agreement to settle your claim.',
+    {{ t('You’ve agreed to the offer made by {{ defendantName }} and signed an agreement to settle your claim. ' +
+    'We’ve asked them to sign the agreement.',
     { defendantName: defendantName }) }}
   </p>
 

@@ -61,16 +61,21 @@
     {% else %}
       {% if claim.response.freeMediation === FreeMediationOption.YES %}
         {{ t('{{ defendantName }} has rejected the claim. '
-          + 'They’ve suggested free mediation on {{ respondedAt }}. You can accept or reject',
-          { defendantName: defendantName, respondedAt: claim.respondedAt | date }) }}
+          + 'But they’ve suggested a mediation session to help resolve this dispute.',
+          { defendantName: defendantName }) }}
       {% else %}
         {{ t('{{ defendantName }} has rejected your claim.',
         { defendantName:  defendantName }) }}
       {% endif %}
     {% endif %}
   {% elseif status === ClaimStatus.OFFER_ACCEPTED %}
-    {{ t('You’ve signed the agreement. We’ve asked {{ defendantName }} to sign the agreement.',
+    {{ t('You’ve signed the agreement. {{ defendantName }} will also be asked to sign. '
+    + 'The agreement replaces the claim once you’ve both signed.',
     { defendantName: defendantName }) }}
+    <p>
+      {{ t('{{ defendantName }} has rejected your claim.',
+      { defendantName:  claim.claimData.defendant.name }) }}
+    </p>
   {% elseif status === ClaimStatus.OFFER_REJECTED %}
     {{ t('You’ve rejected an offer to settle out of court.') }}
     <p>
