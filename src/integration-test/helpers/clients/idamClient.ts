@@ -4,6 +4,12 @@ const baseURL: string = process.env.IDAM_URL
 
 const defaultPassword = 'Password12'
 
+const oauth2 = {
+  client_id: 'cmc_citizen',
+  redirect_uri: 'https://localhost:3000/receiver',
+  client_secret: '123456'
+}
+
 export class IdamClient {
 
   /**
@@ -43,12 +49,6 @@ export class IdamClient {
     password = password || defaultPassword
 
     const base64Authorisation: string = IdamClient.toBase64(`${username}:${password}`)
-
-    const oauth2 = {
-      client_id: 'cmc_citizen',
-      redirect_uri: 'https://localhost:3000/receiver'
-    }
-
     const oauth2Params: string = IdamClient.toUrlParams(oauth2)
 
     const authResponse = await request.post({
@@ -61,7 +61,7 @@ export class IdamClient {
       grant_type: 'authorization_code',
       client_id: oauth2.client_id,
       redirect_uri: oauth2.redirect_uri,
-      client_secret: '123456'
+      client_secret: oauth2.client_secret
     })
 
     const tokenExchangeResponse = await request.post({
@@ -94,7 +94,7 @@ export class IdamClient {
     const base64EncodedCredentials = IdamClient.toBase64(`${email}:${defaultPassword}`)
 
     const { 'access-token': token } = await request.post({
-      uri: `${baseURL}/oauth2/authorize?upliftToken=${upliftToken}&redirect_uri=https://localhost:3000/receiver`,
+      uri: `${baseURL}/oauth2/authorize?upliftToken=${upliftToken}&redirect_uri=${oauth2.redirect_uri}`,
       headers: {
         Authorization: `Basic ${base64EncodedCredentials}`
       }
