@@ -1,0 +1,28 @@
+{% macro offerSubmittedForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
+  <p>
+    {{ t('{{ defendantName }} has made an offer to settle out of court.',
+    { defendantName: defendantName }) }}
+  </p>
+
+  {{ responseToOffer(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+{% endmacro %}
+
+{% macro offerSubmittedForDefendant(claim) %}
+  {% set claimantName = claim.claimData.claimant.name %}
+  <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
+  <p>
+    {{ t('You made an offer to settle the claim out of court. {{ claimantName }} can accept or reject your offer.',
+    {claimantName: claimantName}) }}
+  </p>
+
+  <p>{{ t('We’ll email you when they respond.') }}</p>
+
+{% endmacro %}
+
+{% macro responseToOffer(claim, url) %}
+  <p>
+    <a href="{{ url }}">{{ t('View and respond to offer') }}</a>
+  </p>
+{% endmacro %}

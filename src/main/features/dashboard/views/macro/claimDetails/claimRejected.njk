@@ -1,0 +1,106 @@
+{% macro downloadResponse(claim, url, text) %}
+  <p>
+    <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t(text) }}</a>
+  </p>
+{% endmacro %}
+
+{% macro claimRejectedAlreadyPaidForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
+  <p>
+
+    {{ t('{{ defendantName }} believes that they’ve paid the claim in full. '
+    + 'Email moneyclaims@hmcts.gsi.gov.uk if you want to proceed with the claim - '
+    + 'you must do this before 4pm on {{ respondToResponseDeadline }}.',
+    {
+      defendantName: defendantName,
+      respondToResponseDeadline: claim.respondToResponseDeadline | date
+    }) }}
+  </p>
+  <p>
+    {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
+  </p>
+{% endmacro %}
+
+{% macro claimRejectedFreeMediationNOForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
+  <p>
+    {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
+    + 'this is a form which you must complete to tell us more about the claim.',
+    { defendantName: defendantName }) }}
+  </p>
+
+  <p>
+    {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
+  </p>
+
+{% endmacro %}
+
+{% macro claimRejectedFreeMediationYESForClaimant(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  <p>
+  <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
+  {{ t('{{ defendantName }} has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
+  { defendantName: defendantName }) }}
+  </p>
+  <p>
+    {{ t('Tell us whether you agree to mediation or not by emailing moneyclaims@hmcts.gsi.gov.uk before
+    {{ offerResponseDeadline? }} within 5 days.',
+    {offerResponseDeadline: offerResponseDeadline }) }}
+  </p>
+  {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
+
+{% endmacro %}
+
+
+{#----------------------------------- Defendant Macros ----------------------------------------------#}
+
+{% macro claimRejectedAlreadyPaidForDefendant(claim) %}
+  {% set claimantName = claim.claimData.claimant.name %}
+  <p>
+    {{ t('We’ve emailed {{ claimantName }} telling them when and how you said you paid the claim.',
+    { claimantName: claimantName }) }}
+  </p>
+  <p>
+    {{ t('We’ll contact you to let you know how they respond. They can confirm you’ve paid and the claim is ' +
+    'settled, or they can proceed with it.') }}
+  </p>
+{% endmacro %}
+
+{% macro claimRejectedFreeMediationNOForDefendant(claim) %}
+  <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
+
+  <p>
+    {{ t('You have rejected the claim. We’ll send you a directions questionnaire – this is a form which you must '
+    + 'complete to tell us more about the claim.') }}
+  </p>
+
+  <p>
+    {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download your Response') }}
+  </p>
+{% endmacro %}
+
+{% macro claimRejectedFreeMediationYESForDefendant(claim) %}
+  {% set claimantName = claim.claimData.claimant.name %}
+  <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
+  <p>
+    {{ t('You have rejected the claim. You’ve suggested mediation.') }}
+  </p>
+
+  <p>
+    {{ t('We’ll ask {{ claimantName }} if they agree to take part in mediation.',
+    {claimantName: claimantName}) }}
+  </p>
+
+  <p>
+    {{ t('If they say yes, we’ll arrange a date for mediation. '
+    + 'If they say no we’ll send you a directions questionnaire - '
+    + 'this is a form you complete to tell us more about the claim.') }}
+  </p>
+
+  <p>
+    {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download your Response') }}
+  </p>
+{% endmacro %}
+
