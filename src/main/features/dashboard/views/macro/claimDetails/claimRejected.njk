@@ -18,7 +18,7 @@
     }) }}
   </p>
   <p>
-    {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
+    {{ downloadResponse(claim, DashboardUrlHelper.xgetStatusUrl(claim), 'Download their response') }}
   </p>
 {% endmacro %}
 
@@ -32,7 +32,7 @@
   </p>
 
   <p>
-    {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
+    {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their response') }}
   </p>
 
 {% endmacro %}
@@ -49,7 +49,7 @@
     {{ offerResponseDeadline? }} within 5 days.',
     {offerResponseDeadline: offerResponseDeadline }) }}
   </p>
-  {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their Response') }}
+  {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their response') }}
 
 {% endmacro %}
 
