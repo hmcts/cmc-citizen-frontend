@@ -6,7 +6,6 @@ import { Paths } from 'app/paths'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ClaimReference } from 'forms/models/claimReference'
 import { isCMCReference } from 'common/utils/isCMCReference'
-import { isCCBCCaseReference } from 'common/utils/isCCBCCaseReference'
 import { Form } from 'forms/form'
 
 function renderView (form: Form<ClaimReference>, res: express.Response): void {
@@ -25,7 +24,6 @@ export default express.Router()
   .post(
     Paths.enterClaimNumberPage.uri,
     FormValidator.requestHandler(ClaimReference),
-
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<ClaimReference> = req.body
 
@@ -34,7 +32,7 @@ export default express.Router()
       } else {
         if (isCMCReference(form.model.reference)) {
           res.redirect(Paths.homePage.uri)
-        } else if (isCCBCCaseReference(form.model.reference)) {
+        } else {
           res.redirect(mcolUrl)
         }
       }
