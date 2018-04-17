@@ -99,6 +99,13 @@ export class Claim {
     return this.respondedAt.clone().add('28', 'days')
   }
 
+  get respondToMediationDeadline (): Moment {
+    if (!this.respondedAt) {
+      return undefined
+    }
+    return this.respondedAt.clone().add('5', 'days')
+  }
+
   get remainingDays (): number {
     return this.responseDeadline.diff(MomentFactory.currentDate(), 'days')
   }

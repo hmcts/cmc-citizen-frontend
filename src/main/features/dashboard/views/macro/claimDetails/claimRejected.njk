@@ -45,16 +45,16 @@
   { defendantName: defendantName }) }}
   </p>
   <p>
-    {{ t('Tell us whether you agree to mediation or not by emailing moneyclaims@hmcts.gsi.gov.uk before
-    {{ offerResponseDeadline? }} within 5 days.',
-    {offerResponseDeadline: offerResponseDeadline }) }}
+    {{ t('Tell us whether you agree to mediation or not by emailing moneyclaims@hmcts.gsi.gov.uk before '
+    + '{{ respondToMediationDeadline }}.',
+    {respondToMediationDeadline: claim.respondToMediationDeadline | date }) }}
+    {#todo This needs a content review#}
+    {#What if theyre reading this after the date? #}
   </p>
+
   {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their response') }}
 
 {% endmacro %}
-
-
-{#----------------------------------- Defendant Macros ----------------------------------------------#}
 
 {% macro claimRejectedAlreadyPaidForDefendant(claim) %}
   {% set claimantName = claim.claimData.claimant.name %}
