@@ -7,17 +7,18 @@ import '../../../routes/expectations'
 import { Paths } from 'eligibility/paths'
 import { app } from '../../../../main/app'
 
-const mcolEligibilityPage: string = Paths.mcolEligibilityPage.uri
+const pagePath: string = Paths.mcolEligibilityPage.uri
+const expectedTextOnPage: string = 'You can use the existing MCOL service to claim'
 
-describe('Mcol eligibility', () => {
+describe('Claim eligibility: Mcol eligibility', () => {
   attachDefaultHooks(app)
 
-  describe('on Get', () => {
+  describe('on GET', () => {
     it('should render page when everything is fine', async () => {
 
       await request(app)
-        .get(mcolEligibilityPage)
-        .expect(res => expect(res).to.be.successful.withText('You can use the existing MCOL service to claim'))
+        .get(pagePath)
+        .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage))
     })
   })
 })
