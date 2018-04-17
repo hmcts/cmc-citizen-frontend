@@ -1,0 +1,12 @@
+{% extends "layout.njk" %}
+{% from "support.njk" import supportWidget %}
+
+{% set heading = 'Contact us' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      {{ supportWidget('Money Claims') }}
+    </div>
+  </div>
+{% endblock %}
