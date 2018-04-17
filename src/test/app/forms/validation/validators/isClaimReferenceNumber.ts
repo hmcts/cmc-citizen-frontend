@@ -16,10 +16,6 @@ describe('CheckClaimReferenceNumberConstraint', () => {
         expect(constraint.validate('')).to.equal(true)
       })
 
-      it('given reference is null', () => {
-        expect(constraint.validate(null)).to.equal(true)
-      })
-
       it('given reference is valid CMC claim reference', () => {
         expect(constraint.validate('000MC001')).to.equal(true)
       })
