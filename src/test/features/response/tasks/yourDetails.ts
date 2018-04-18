@@ -17,143 +17,180 @@ import { CompanyDetails } from 'forms/models/companyDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { generateString } from '../../../app/forms/models/validationUtils'
 
-describe('Your details task', () => {
+const validAddress = new Address('line1', 'line2', 'line3', 'city', 'postcode')
 
+describe('Your details task', () => {
+  let draft: ResponseDraft
+  let individualDetails: IndividualDetails
+  let soleTraderDetails: SoleTraderDetails
+  let companyDetails: CompanyDetails
+  let organisationDetails: OrganisationDetails
+
+  beforeEach(() => {
+    draft = new ResponseDraft()
+    individualDetails = new IndividualDetails()
+    soleTraderDetails = new SoleTraderDetails()
+    companyDetails = new CompanyDetails()
+    organisationDetails = new OrganisationDetails()
+  })
   context('should not be completed when', () => {
     it('response is undefined', () => {
-      const draft = new ResponseDraft()
-
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
     it('defendant details is undefined', () => {
-      const draft = new ResponseDraft()
       draft.defendantDetails = undefined
-
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
     it('defendant party details is undefined', () => {
-      const draft = new ResponseDraft()
       draft.defendantDetails.partyDetails = undefined
-
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
     it('defendant party address is undefined', () => {
-      const draft = new ResponseDraft()
       draft.defendantDetails.partyDetails = new PartyDetails()
       draft.defendantDetails.partyDetails.address = undefined
+      draft.defendantDetails.email = new Email('test@test.com')
+      draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
+
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
     it('defendant party address is invalid', () => {
-      const draft = new ResponseDraft()
       const inValidAddress = new Address('', '', '', '', '')
 
       draft.defendantDetails.partyDetails = new PartyDetails()
       draft.defendantDetails.partyDetails.address = inValidAddress
       draft.defendantDetails.email = new Email('test@test.com')
       draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
+
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
     it('defendant party correspondence address is invalid', () => {
-      const draft = new ResponseDraft()
-      const inValidAddress = new CorrespondenceAddress('', '', '', '', '')
+      const invalidCorrespondenceAddress = new CorrespondenceAddress('', '', '', '', '')
 
       draft.defendantDetails.partyDetails = new PartyDetails()
-      draft.defendantDetails.partyDetails.correspondenceAddress = inValidAddress
+      draft.defendantDetails.partyDetails.correspondenceAddress = invalidCorrespondenceAddress
       draft.defendantDetails.email = new Email('test@test.com')
       draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
+
+      expect(YourDetails.isCompleted(draft)).to.be.false
+    })
+
+    it('defendant individual mobile phone is undefined', () => {
+      const dateOfBirth: DateOfBirth = new DateOfBirth(true, new LocalDate(1981, 11, 11))
+      individualDetails.dateOfBirth = dateOfBirth
+
+      draft.defendantDetails = new Defendant(individualDetails)
+      draft.defendantDetails.mobilePhone = undefined
+      draft.defendantDetails.partyDetails.address = validAddress
+
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
     it('defendant individual date of birth is undefined', () => {
-      const draft = new ResponseDraft()
-      let individualDetails: IndividualDetails = new IndividualDetails()
       let dateOfBirth = new DateOfBirth()
-
       individualDetails.dateOfBirth = dateOfBirth
+
       draft.defendantDetails = new Defendant(individualDetails)
+      draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
+      draft.defendantDetails.partyDetails.address = validAddress
+
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
     it('defendant individual date of birth is invalid', () => {
-      const draft = new ResponseDraft()
-      let individualDetails: IndividualDetails = new IndividualDetails()
-      const dob: DateOfBirth = new DateOfBirth(true, new LocalDate(90, 11, 25))
-      individualDetails.dateOfBirth = dob
+      const dateOfBirth: DateOfBirth = new DateOfBirth(true, new LocalDate(90, 11, 25))
+      individualDetails.dateOfBirth = dateOfBirth
+
       draft.defendantDetails = new Defendant(individualDetails)
+      draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
+      draft.defendantDetails.partyDetails.address = validAddress
 
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
     it('defendant sole trader mobile phone is undefined', () => {
-      const draft = new ResponseDraft()
-      draft.defendantDetails = new Defendant(new SoleTraderDetails())
+      draft.defendantDetails = new Defendant(soleTraderDetails)
       draft.defendantDetails.mobilePhone = undefined
+      draft.defendantDetails.partyDetails.address = validAddress
+
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
     it('defendant sole trader mobile phone is invalid', () => {
-      const draft = new ResponseDraft()
-      draft.defendantDetails = new Defendant(new SoleTraderDetails())
+      draft.defendantDetails = new Defendant(soleTraderDetails)
+
       draft.defendantDetails.mobilePhone = new MobilePhone(generateString(31))
+      draft.defendantDetails.partyDetails.address = validAddress
 
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
     it('defendant company mobile phone is undefined', () => {
-      const draft = new ResponseDraft()
-      draft.defendantDetails = new Defendant(new CompanyDetails())
+      draft.defendantDetails = new Defendant(companyDetails)
       draft.defendantDetails.mobilePhone = undefined
+      draft.defendantDetails.partyDetails.address = validAddress
 
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
     it('defendant company mobile phone is invalid', () => {
-      const draft = new ResponseDraft()
-      draft.defendantDetails = new Defendant(new CompanyDetails())
+      draft.defendantDetails = new Defendant(companyDetails)
+      const validAddress = new Address('line1', 'line2', 'line3', 'city', 'postcode')
+
       draft.defendantDetails.mobilePhone = new MobilePhone(generateString(31))
+      draft.defendantDetails.partyDetails.address = validAddress
+
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
     it('defendant organisation mobile phone is undefined', () => {
-      const draft = new ResponseDraft()
-      draft.defendantDetails = new Defendant(new OrganisationDetails())
+      draft.defendantDetails = new Defendant(organisationDetails)
       draft.defendantDetails.mobilePhone = undefined
+      draft.defendantDetails.partyDetails.address = validAddress
+
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
     it('defendant organisation mobile phone is invalid', () => {
-      const draft = new ResponseDraft()
-      draft.defendantDetails = new Defendant(new OrganisationDetails())
+      draft.defendantDetails = new Defendant(organisationDetails)
+
       draft.defendantDetails.mobilePhone = new MobilePhone(generateString(31))
+      draft.defendantDetails.partyDetails.address = validAddress
+
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
   })
 
   context('should be completed when', () => {
-    it('both individual address and date of birth are valid', () => {
-      const draft = new ResponseDraft()
 
-      let individualDetails: IndividualDetails = new IndividualDetails()
-      const validAddress = new Address('line1', 'line2', 'line3', 'city', 'postcode')
-      const dob: DateOfBirth = new DateOfBirth(true, new LocalDate(1981, 11, 11))
-      individualDetails.dateOfBirth = dob
+    it('defendant individual mobile phone is defined', () => {
+      const dateOfBirth: DateOfBirth = new DateOfBirth(true, new LocalDate(1981, 11, 11))
+      individualDetails.dateOfBirth = dateOfBirth
+
       draft.defendantDetails = new Defendant(individualDetails)
+      draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
+      draft.defendantDetails.partyDetails.address = validAddress
+
+      expect(YourDetails.isCompleted(draft)).to.be.true
+    })
+
+    it('both individual address and date of birth are valid', () => {
+      const dateOfBirth: DateOfBirth = new DateOfBirth(true, new LocalDate(1981, 11, 11))
+      individualDetails.dateOfBirth = dateOfBirth
+
+      draft.defendantDetails = new Defendant(individualDetails)
+      draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
       draft.defendantDetails.partyDetails.address = validAddress
 
       expect(YourDetails.isCompleted(draft)).to.be.true
     })
 
     it('both sole trader address and mobile phone are valid', () => {
-      const draft = new ResponseDraft()
-      let soleTraderDetails: SoleTraderDetails = new SoleTraderDetails()
-
       draft.defendantDetails = new Defendant(soleTraderDetails)
-      const validAddress = new Address('line1', 'line2', 'line3', 'city', 'postcode')
       draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
       draft.defendantDetails.partyDetails.address = validAddress
 
@@ -161,11 +198,7 @@ describe('Your details task', () => {
     })
 
     it('both company address and mobile phone are valid', () => {
-      const draft = new ResponseDraft()
-      let companyDetails: CompanyDetails = new CompanyDetails()
-
       draft.defendantDetails = new Defendant(companyDetails)
-      const validAddress = new Address('line1', 'line2', 'line3', 'city', 'postcode')
       draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
       draft.defendantDetails.partyDetails.address = validAddress
 
@@ -173,11 +206,7 @@ describe('Your details task', () => {
     })
 
     it('both organisation address and mobile phone are valid', () => {
-      const draft = new ResponseDraft()
-      let organisationDetails: OrganisationDetails = new OrganisationDetails()
-
       draft.defendantDetails = new Defendant(organisationDetails)
-      const validAddress = new Address('line1', 'line2', 'line3', 'city', 'postcode')
       draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
       draft.defendantDetails.partyDetails.address = validAddress
 

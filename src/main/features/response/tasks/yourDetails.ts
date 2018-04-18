@@ -28,11 +28,7 @@ export class YourDetails {
   }
 
   private static isMobilePhoneCompleted (defendant: Defendant): boolean {
-    if (defendant.partyDetails.type !== PartyType.INDIVIDUAL.value) {
-      return this.isDefinedAndValid(defendant.mobilePhone)
-    } else {
-      return true
-    }
+    return this.isDefinedAndValid(defendant.mobilePhone)
   }
 
   private static isDefinedAndValid (value: any, validationGroups: string[] = []): boolean {
