@@ -1,6 +1,6 @@
 {% from "timeRemaining.njk" import timeRemaining %}
 
-{% macro moreTimeRequestedForClaimant(claim) %}
+{% macro moreTimeRequestedForClaimantDashboard(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('The defendant has requested more time to respond') }}</h2>
   <p>

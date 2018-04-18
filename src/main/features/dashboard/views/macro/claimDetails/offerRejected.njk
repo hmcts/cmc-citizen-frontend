@@ -1,4 +1,4 @@
-{% macro offerRejectedForClaimant(claim) %}
+{% macro offerRejectedForClaimantDashboard(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
   <p>
@@ -7,7 +7,7 @@
   </p>
 {% endmacro %}
 
-{% macro offerRejectedForDefendant(claim) %}
+{% macro offerRejectedForDefendantDashboard(claim) %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
   <p>
     {{ t('The claimant has rejected your offer to settle the claim. Complete the directions questionnaire.') }}

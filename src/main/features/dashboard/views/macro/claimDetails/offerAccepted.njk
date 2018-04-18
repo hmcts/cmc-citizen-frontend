@@ -1,4 +1,4 @@
-{% macro offerAcceptedForClaimant(claim) %}
+{% macro offerAcceptedForClaimantDashboard(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
   <p>
@@ -9,7 +9,7 @@
 
 {% endmacro %}
 
-{% macro offerAcceptedForDefendant(claim) %}
+{% macro offerAcceptedForDefendantDashboard(claim) %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
   <p>
     {{ t('The claimant has accepted your offer and signed a legal agreement. '

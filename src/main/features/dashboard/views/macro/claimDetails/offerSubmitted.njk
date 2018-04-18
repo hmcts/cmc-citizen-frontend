@@ -1,4 +1,4 @@
-{% macro offerSubmittedForClaimant(claim) %}
+{% macro offerSubmittedForClaimantDashboard(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
   <p>
@@ -9,7 +9,7 @@
   {{ responseToOffer(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
 {% endmacro %}
 
-{% macro offerSubmittedForDefendant(claim) %}
+{% macro offerSubmittedForDefendantDashboard(claim) %}
   {% set claimantName = claim.claimData.claimant.name %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
   <p>

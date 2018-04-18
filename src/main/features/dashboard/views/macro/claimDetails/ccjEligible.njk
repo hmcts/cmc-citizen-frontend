@@ -1,6 +1,6 @@
 {% from "form.njk" import submitButton %}
 
-{% macro ccjEligibleForClaimant(claim) %}
+{% macro ccjEligibleForClaimantDashboard(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="bold-small">{{ t('You can request a County Court Judgment') }}</h2>
   <p>
