@@ -6,7 +6,7 @@ const defaultPassword = 'Password12'
 
 const oauth2 = {
   client_id: 'cmc_citizen',
-  redirect_uri: process.env.FRONTEND_BASE_URL,
+  redirect_uri: `${process.env.CITIZEN_APP_URL}/receiver`,
   client_secret: '123456'
 }
 
