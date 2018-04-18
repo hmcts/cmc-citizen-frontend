@@ -6,7 +6,7 @@ const defaultPassword = 'Password12'
 
 const oauth2 = {
   client_id: 'cmc_citizen',
-  redirect_uri: 'https://localhost:3000/receiver',
+  redirect_uri: process.env.FRONTEND_BASE_URL,
   client_secret: '123456'
 }
 
@@ -92,15 +92,21 @@ export class IdamClient {
    */
   static async upliftUser (email: string, upliftToken: string): Promise<string> {
     const base64EncodedCredentials = IdamClient.toBase64(`${email}:${defaultPassword}`)
+    const upliftParams = IdamClient.toUrlParams({
+      response_type: 'code',
+      client_id: oauth2.client_id,
+      redirect_uri: oauth2.redirect_uri,
+      upliftToken: upliftToken
+    })
 
-    const { 'access-token': token } = await request.post({
-      uri: `${baseURL}/oauth2/authorize?upliftToken=${upliftToken}&redirect_uri=${oauth2.redirect_uri}`,
+    const obj = await request.post({
+      uri: `${baseURL}/oauth2/authorize?${upliftParams}`,
       headers: {
         Authorization: `Basic ${base64EncodedCredentials}`
       }
     })
 
-    return token
+    return obj.code
   }
 
   /**
@@ -111,15 +117,31 @@ export class IdamClient {
    */
   static async authenticatePinUser (pin: string): Promise<string> {
     const base64EncodedCredentials = IdamClient.toBase64(pin)
+    const oauth2Params: string = IdamClient.toUrlParams(oauth2)
 
-    const { 'access_token': token } = await request.post({
-      uri: `${baseURL}/oauth2/authorize`,
+    const { code } = await request.post({
+      uri: `${baseURL}/oauth2/authorize?${oauth2Params}&response_type=code`,
       headers: {
         Authorization: `Pin ${base64EncodedCredentials}`
       }
     })
 
-    return token
+    return IdamClient.exchangeCode(code)
+  }
+
+  static exchangeCode (code: string): Promise<string> {
+
+    return request.post({
+      uri: `${baseURL}/oauth2/token`,
+      auth: {
+        username: oauth2.client_id,
+        password: oauth2.client_secret
+      },
+      form: { grant_type: 'authorization_code', code: code, redirect_uri: oauth2.redirect_uri }
+    })
+      .then((response: any) => {
+        return response['access_token']
+      })
   }
 
   /**
