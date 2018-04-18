@@ -107,7 +107,7 @@ export function createClaimant (type: PartyType): Party {
       line1: '234 Acacia Road',
       line2: 'a really cool place',
       city: 'Edinburgh',
-      postcode: 'EDE 1AC'
+      postcode: 'G72 7ZY'
     },
     mobilePhone: '07700000001'
   }
