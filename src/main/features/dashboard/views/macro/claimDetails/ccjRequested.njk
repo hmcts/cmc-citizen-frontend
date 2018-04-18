@@ -1,4 +1,4 @@
-{% macro ccjRequestedForClaimantDashboard(claim) %}
+{% macro ccjRequestedForClaimantClaimDetails(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('You’ve requested a County Court Judgment (CCJ).') }}</h2>
   <p>
@@ -13,7 +13,7 @@
 
 {% endmacro %}
 
-{% macro ccjRequesterForDefendantDashboard(claim) %}
+{% macro ccjRequesterForDefendantClaimDetails(claim) %}
   {% set claimantName = claim.claimData.claimant.name %}
   <h2 class="heading-medium">{{ t('The claimant has requested a CCJ against you') }}</h2>
   <p>
@@ -34,4 +34,14 @@
        href="https://www.gov.uk/county-court-judgments-ccj-for-debt">{{ t('Find out more about County Court Judgments') }}</a>
   </p>
 
+{% endmacro %}
+
+{% macro ccjRequestedForClaimantDashboard(claim) %}
+  {{ t('You requested a County Court Judgment on {{ ccjRequestedAt }}.',
+  { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
+{% endmacro %}
+
+{% macro ccjRequestedForDefendantDashboard(claim) %}
+  {{ t('The claimant has requested a County Court Judgement (CCJ) against you on {{ ccjRequestedAt }}.',
+  { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
 {% endmacro %}

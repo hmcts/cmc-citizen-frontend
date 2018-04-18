@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "./macro/caseHistory.njk" import caseHistoryForDefendantDashboard %}
+{% from "./macro/caseHistory.njk" import caseHistoryForDefendantClaimDetails %}
 
 {% set title = t('Your money claims account') %}
 
@@ -11,7 +11,7 @@
         {{ claim.claimNumber }}
       </h1>
       <h2 class="heading-medium">{{ t('Claim status') }}</h2>
-      {{ caseHistoryForDefendantDashboard(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
+      {{ caseHistoryForDefendantClaimDetails(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
     </div>
 
     <div class="column-one-third">

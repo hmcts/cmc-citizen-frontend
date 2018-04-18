@@ -1,51 +1,56 @@
 {% from "./caseStatus.njk" import caseStatusForClaimant, caseStatusForDefendant %}
 
-{% from "./claimDetails/noReponse.njk" import noResponseForClaimantDashboard %}
-{% from "./claimDetails/moreTimeRequested.njk" import moreTimeRequestedForClaimantDashboard %}
+{% from "./claimDetails/noReponse.njk" import noResponseForClaimantClaimDetails %}
+{% from "./claimDetails/moreTimeRequested.njk" import moreTimeRequestedForClaimantClaimDetails %}
 
-{% from "./claimDetails/ccjEligible.njk" import ccjEligibleForClaimantDashboard %}
-{% from "./claimDetails/ccjRequested.njk" import ccjRequestedForClaimantDashboard, ccjRequesterForDefendantDashboard %}
+{% from "./claimDetails/ccjEligible.njk" import ccjEligibleForClaimantClaimDetails %}
+{% from "./claimDetails/ccjRequested.njk" import
+ccjRequestedForClaimantClaimDetails,
+ccjRequesterForDefendantClaimDetails,
+ccjRequestedForClaimantDashboard,
+ccjRequestedForDefendantDashboard
+%}
 
 {% from "./claimDetails/claimRejected.njk" import
-  claimRejectedAlreadyPaidForClaimantDashboard,
-  claimRejectedAlreadyPaidForDefendantDashboard,
-  claimRejectedFreeMediationNOForClaimantDashboard,
-  claimRejectedFreeMediationNOForDefendantDashboard,
-  claimRejectedFreeMediationYESForClaimantDashboard,
-  claimRejectedFreeMediationYESForDefendantDashboard %}
+  claimRejectedAlreadyPaidForClaimantClaimDetails,
+  claimRejectedAlreadyPaidForDefendantClaimDetails,
+  claimRejectedFreeMediationNOForClaimantClaimDetails,
+  claimRejectedFreeMediationNOForDefendantClaimDetails,
+  claimRejectedFreeMediationYESForClaimantClaimDetails,
+  claimRejectedFreeMediationYESForDefendantClaimDetails %}
 
-{% from "./claimDetails/offerSubmitted.njk" import offerSubmittedForClaimantDashboard, offerSubmittedForDefendantDashboard %}
-{% from "./claimDetails/offerAccepted.njk" import offerAcceptedForClaimantDashboard, offerAcceptedForDefendantDashboard %}
-{% from "./claimDetails/offerRejected.njk" import offerRejectedForClaimantDashboard, offerRejectedForDefendantDashboard %}
-{% from "./claimDetails/offerSettlement.njk" import offerSettlementReachedDashboard %}
+{% from "./claimDetails/offerSubmitted.njk" import offerSubmittedForClaimantClaimDetails, offerSubmittedForDefendantClaimDetails %}
+{% from "./claimDetails/offerAccepted.njk" import offerAcceptedForClaimantClaimDetails, offerAcceptedForDefendantClaimDetails %}
+{% from "./claimDetails/offerRejected.njk" import offerRejectedForClaimantClaimDetails, offerRejectedForDefendantClaimDetails %}
+{% from "./claimDetails/offerSettlement.njk" import offerSettlementReachedClaimDetails %}
 
-{% macro caseHistoryForClaimantDashboard(claim, url) %}
+{% macro caseHistoryForClaimantClaimDetails(claim, url) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
       {% if state.status === ClaimStatus.NO_RESPONSE %}
-        {{ noResponseForClaimantDashboard(claim) }}
+        {{ noResponseForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
-        {{ moreTimeRequestedForClaimantDashboard(claim) }}
+        {{ moreTimeRequestedForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
-        {{ ccjEligibleForClaimantDashboard(claim) }}
+        {{ ccjEligibleForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
-        {{ ccjRequestedForClaimantDashboard(claim) }}
+        {{ ccjRequestedForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
         {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
-          {{ claimRejectedAlreadyPaidForClaimantDashboard(claim) }}
+          {{ claimRejectedAlreadyPaidForClaimantClaimDetails(claim) }}
         {% elif claim.response.freeMediation === FreeMediationOption.NO %}
-          {{ claimRejectedFreeMediationNOForClaimantDashboard(claim) }}
+          {{ claimRejectedFreeMediationNOForClaimantClaimDetails(claim) }}
         {% else %}
-          {{ claimRejectedFreeMediationYESForClaimantDashboard(claim) }}
+          {{ claimRejectedFreeMediationYESForClaimantClaimDetails(claim) }}
         {% endif %}
       {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
-        {{ offerSubmittedForClaimantDashboard(claim) }}
+        {{ offerSubmittedForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_REJECTED %}
-        {{ offerRejectedForClaimantDashboard(claim) }}
+        {{ offerRejectedForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
-        {{ offerAcceptedForClaimantDashboard(claim) }}
+        {{ offerAcceptedForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
-        {{ offerSettlementReachedDashboard(claim) }}
+        {{ offerSettlementReachedClaimDetails(claim) }}
       {% else %}
         <p>
           {{ caseStatusForClaimant(state.status, claim, url) }}
@@ -55,37 +60,42 @@
   {% endfor %}
 {% endmacro %}
 
-{% macro caseHistoryForDefendantDashboard(claim, url, isAfter4pm) %}
+{% macro caseHistoryForDefendantClaimDetails(claim, url, isAfter4pm) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
-      {% if state.status === ClaimStatus.CCJ_REQUESTED %}
-        {{ ccjRequesterForDefendantDashboard(claim) }}
-      {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
+      {% if state.status === ClaimStatus.NO_RESPONSE %}
+        {{ noResponseForDefendantClaimDetails(claim) }}
+        {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
+        {{ moreTimeRequestedForDefendantClaimDetails(claim) }}
+        {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
+        {{ ccjEligibleForDefendantClaimDetails(claim) }}
+        {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
+        {{ ccjRequesterForDefendantClaimDetails(claim) }}
+        {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
         {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
-          {{ claimRejectedAlreadyPaidForDefendantDashboard(claim) }}
-        {% endif %}
-        {% if claim.response.freeMediation === FreeMediationOption.NO %}
-          {{ claimRejectedFreeMediationNOForDefendantDashboard(claim) }}
+          {{ claimRejectedAlreadyPaidForDefendantClaimDetails(claim) }}
+          {% elif claim.response.freeMediation === FreeMediationOption.NO %}
+          {{ claimRejectedFreeMediationNOForDefendantClaimDetails(claim) }}
         {% else %}
-          {{ claimRejectedFreeMediationYESForDefendantDashboard(claim) }}
+          {{ claimRejectedFreeMediationYESForDefendantClaimDetails(claim) }}
         {% endif %}
-        {{ settleOutOfCourtOption (claim) }}
-      {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
-        {{ offerSubmittedForDefendantDashboard(claim) }}
-      {% elif state.status === ClaimStatus.OFFER_REJECTED %}
-        {{ offerRejectedForDefendantDashboard(claim) }}
-      {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
-        {{ offerAcceptedForDefendantDashboard(claim) }}
-      {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
-        {{ offerSettlementReachedDashboard(claim) }}
+        {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
+        {{ offerSubmittedForDefendantClaimDetails(claim) }}
+        {% elif state.status === ClaimStatus.OFFER_REJECTED %}
+        {{ offerRejectedForDefendantClaimDetails(claim) }}
+        {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
+        {{ offerAcceptedForDefendantClaimDetails(claim) }}
+        {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
+        {{ offerSettlementReachedClaimDetails(claim) }}
       {% else %}
         <p>
-          {{ caseStatusForDefendant(claim.status, claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
+          {{ caseStatusForDefendant(claim.status, claim, ClaimDetailsUrlHelper.getStatusUrl(claim), isAfter4pm) }}
         </p>
       {% endif %}
     </div>
   {% endfor %}
 {% endmacro %}
+
 
 {% macro settleOutOfCourtOption (claim) %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>

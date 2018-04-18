@@ -1,4 +1,4 @@
-{% macro offerSettlementReachedDashboard(claim) %}
+{% macro offerSettlementReachedClaimDetails(claim) %}
   <h2 class="heading-medium">{{ t('Agreement signed') }}</h2>
   <p>
     {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
@@ -8,6 +8,13 @@
     {{ downloadTheAgreement(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
   </p>
 {% endmacro %}
+
+{% macro offerSettlementReachedDashboard(claim) %}
+
+  {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
+
+{% endmacro %}
+
 
 {% macro downloadTheAgreement(claim, url) %}
   <p>
