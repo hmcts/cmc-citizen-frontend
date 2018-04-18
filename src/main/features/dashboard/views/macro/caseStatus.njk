@@ -46,7 +46,7 @@
 {% endmacro %}
 
 {% macro caseStatusForClaimant(status, claim, url) %}
-  {% set defendantName = claim.claimData.defendant.name %}
+  {% set defendantName = defendantName %}
   {% if status === ClaimStatus.CCJ_REQUESTED %}
     {{ t('You requested a County Court Judgment on {{ ccjRequestedAt }}.',
     { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
@@ -74,23 +74,23 @@
     { defendantName: defendantName }) }}
     <p>
       {{ t('{{ defendantName }} has rejected your claim.',
-      { defendantName:  claim.claimData.defendant.name }) }}
+      { defendantName:  defendantName }) }}
     </p>
   {% elseif status === ClaimStatus.OFFER_REJECTED %}
     {{ t('You’ve rejected an offer to settle out of court.') }}
     <p>
       {{ t('{{ defendantName }} has rejected your claim.',
-      { defendantName:  claim.claimData.defendant.name }) }}
+      { defendantName:  defendantName }) }}
     </p>
   {% elseif status === ClaimStatus.OFFER_SUBMITTED %}
     <p>
       {{ t('The defendant has made an offer to settle out of court.') }}
     </p>
     {{ t('{{ defendantName }} has rejected your claim.',
-    { defendantName:  claim.claimData.defendant.name }) }}
+    { defendantName:  defendantName }) }}
   {% elseif status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ t('{{ defendantName }} has requested more time to respond.',
-    { defendantName: claim.claimData.defendant.name }) }}
+    { defendantName: defendantName }) }}
   {% elseif status === ClaimStatus.NO_RESPONSE %}
     {{ t('Your claim has been sent.') }}
   {% endif %}
