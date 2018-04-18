@@ -15,8 +15,8 @@ export class IsValidPostcodeConstraint implements ValidatorConstraintInterface {
       return true
     }
     const UK_POSTCODE_REGEX = /^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))[0-9][A-Za-z]{2})$/
-    const trimmedValue = value.toString().replace(/\s/g,'')
-    return validator.matches(trimmedValue, new RegExp(UK_POSTCODE_REGEX))
+    const normalised = value.toString().replace(/\s/g,'')
+    return validator.matches(normalised, new RegExp(UK_POSTCODE_REGEX))
   }
 
   defaultMessage (args: ValidationArguments) {
