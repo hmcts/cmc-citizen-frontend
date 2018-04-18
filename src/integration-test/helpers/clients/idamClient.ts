@@ -46,9 +46,7 @@ export class IdamClient {
    */
   static async authenticateUser (username: string, password: string = undefined): Promise<string> {
 
-    password = password || defaultPassword
-
-    const base64Authorisation: string = IdamClient.toBase64(`${username}:${password}`)
+    const base64Authorisation: string = IdamClient.toBase64(`${username}:${password || defaultPassword}`)
     const oauth2Params: string = IdamClient.toUrlParams(oauth2)
 
     const authResponse = await request.post({
@@ -56,22 +54,7 @@ export class IdamClient {
       headers: { Authorization: `Basic ${base64Authorisation}` }
     })
 
-    const tokenParams = IdamClient.toUrlParams({
-      code: authResponse['code'],
-      grant_type: 'authorization_code',
-      client_id: oauth2.client_id,
-      redirect_uri: oauth2.redirect_uri,
-      client_secret: oauth2.client_secret
-    })
-
-    const tokenExchangeResponse = await request.post({
-      url: `${baseURL}/oauth2/token?${tokenParams}`,
-      headers: {
-        'Content-type': 'application/x-www-form-urlencoded'
-      }
-    })
-
-    return tokenExchangeResponse['access_token']
+    return IdamClient.exchangeCode(authResponse['code'])
   }
 
   static getPin (letterHolderId: string) {
