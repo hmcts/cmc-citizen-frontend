@@ -8,8 +8,7 @@
 ccjRequestedForClaimantClaimDetails,
 ccjRequesterForDefendantClaimDetails,
 ccjRequestedForClaimantDashboard,
-ccjRequestedForDefendantDashboard
-%}
+ccjRequestedForDefendantDashboard %}
 
 {% from "./claimDetails/claimRejected.njk" import
   claimRejectedAlreadyPaidForClaimantClaimDetails,
@@ -67,8 +66,6 @@ ccjRequestedForDefendantDashboard
         {{ noResponseForDefendantClaimDetails(claim) }}
         {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
         {{ moreTimeRequestedForDefendantClaimDetails(claim) }}
-        {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
-        {{ ccjEligibleForDefendantClaimDetails(claim) }}
         {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
         {{ ccjRequesterForDefendantClaimDetails(claim) }}
         {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
@@ -89,7 +86,7 @@ ccjRequestedForDefendantDashboard
         {{ offerSettlementReachedClaimDetails(claim) }}
       {% else %}
         <p>
-          {{ caseStatusForDefendant(claim.status, claim, ClaimDetailsUrlHelper.getStatusUrl(claim), isAfter4pm) }}
+          {{ caseStatusForDefendant(claim.status, claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
         </p>
       {% endif %}
     </div>
