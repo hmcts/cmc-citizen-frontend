@@ -6,14 +6,16 @@
 
 {% macro claimRejectedAlreadyPaidForClaimantClaimDetails(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
+  {% set emailAddress = 'moneyclaims@hmcts.gsi.gov.uk' %}
   <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
   <p>
 
     {{ t('{{ defendantName }} believes that they’ve paid the claim in full. '
-    + 'Email moneyclaims@hmcts.gsi.gov.uk if you want to proceed with the claim - '
+    + 'Email {{ emailAddress }} if you want to proceed with the claim - '
     + 'you must do this before 4pm on {{ respondToDefendantPaidInFullDeadline }}.',
     {
       defendantName: defendantName,
+      emailAddress: emailAddress,
       respondToDefendantPaidInFullDeadline: claim.respondToDefendantPaidInFullDeadline | date
     }) }}
   </p>
@@ -39,18 +41,20 @@
 
 {% macro claimRejectedFreeMediationYESForClaimantClaimDetails(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
+  {% set emailAddress = 'moneyclaims@hmcts.gsi.gov.uk' %}
   <p>
   <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
   {{ t('{{ defendantName }} has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
   { defendantName: defendantName }) }}
   </p>
   <p>
-    {{ t('Tell us whether you agree to mediation or not by emailing moneyclaims@hmcts.gsi.gov.uk before '
+    {{ t('Tell us whether you agree to mediation or not by emailing {{ emailAddress }} before '
     + '{{ respondToMediationDeadline }}.',
-    {respondToMediationDeadline: claim.respondToMediationDeadline | date }) }}
-    {#todo This needs a content review#}
-    {#What if theyre reading this after the date? #}
+    { emailAddress: emailAddress,
+      respondToMediationDeadline: claim.respondToMediationDeadline | date }) }}
   </p>
+  {# Todo This needs a content review#}
+  {# Todo what if theyre reading this after the date? #}
 
   {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their response') }}
 
@@ -118,7 +122,6 @@
   {{ t('We’ve emailed {{ claimantName }} telling them when and how you paid the claim.',
   { claimantName: claimantName }) }}
 {% endmacro %}
--------------
 
 {% macro claimRejectedFreeMediationNOForClaimantDashboard(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
