@@ -32,8 +32,7 @@ offerAcceptedForDefendantDashboard %}
 offerRejectedForClaimantDashboard,
 offerRejectedForDefendantDashboard %}
 
-{% from "./claimStatus/offerSettlement.njk" import
-offerSettlementReachedDashboard %}
+{% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedDashboard %}
 
 {% macro caseStatusForClaimant(status, claim, url) %}
   {% if status === ClaimStatus.NO_RESPONSE %}

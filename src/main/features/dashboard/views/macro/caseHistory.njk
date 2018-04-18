@@ -16,9 +16,15 @@ ccjRequesterForDefendantClaimDetails %}
   claimRejectedFreeMediationYESForClaimantClaimDetails,
   claimRejectedFreeMediationYESForDefendantClaimDetails %}
 
-{% from "./claimStatus/offerSubmitted.njk" import offerSubmittedForClaimantClaimDetails, offerSubmittedForDefendantClaimDetails %}
-{% from "./claimStatus/offerAccepted.njk" import offerAcceptedForClaimantClaimDetails, offerAcceptedForDefendantClaimDetails %}
-{% from "./claimStatus/offerRejected.njk" import offerRejectedForClaimantClaimDetails, offerRejectedForDefendantClaimDetails %}
+{% from "./claimStatus/offerSubmitted.njk" import
+offerSubmittedForClaimantClaimDetails,
+offerSubmittedForDefendantClaimDetails %}
+{% from "./claimStatus/offerAccepted.njk" import
+offerAcceptedForClaimantClaimDetails,
+offerAcceptedForDefendantClaimDetails %}
+{% from "./claimStatus/offerRejected.njk" import
+offerRejectedForClaimantClaimDetails,
+offerRejectedForDefendantClaimDetails %}
 {% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedClaimDetails %}
 
 {% macro caseHistoryForClaimantClaimDetails(claim, url) %}
