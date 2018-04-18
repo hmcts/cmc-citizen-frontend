@@ -7,6 +7,7 @@
   </p>
 
   {{ responseToOffer(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+
 {% endmacro %}
 
 {% macro offerSubmittedForDefendantClaimDetails(claim) %}
@@ -28,11 +29,13 @@
   </p>
   {{ t('{{ defendantName }} has rejected your claim.',
   { defendantName:  defendantName }) }}
+
 {% endmacro %}
 
 {% macro offerSubmittedForDefendantDashboard(claim) %}
   {{ t('Your offer has been sent to the claimant.') }}
   <p>{{ t('You have rejected the claim.') }}</p>
+
 {% endmacro %}
 
 
@@ -40,4 +43,5 @@
   <p>
     <a href="{{ url }}">{{ t('View and respond to offer') }}</a>
   </p>
+
 {% endmacro %}

@@ -7,6 +7,7 @@
   <p>
     {{ downloadTheAgreement(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
   </p>
+
 {% endmacro %}
 
 {% macro offerSettlementReachedDashboard(claim) %}
@@ -15,10 +16,10 @@
 
 {% endmacro %}
 
-
 {% macro downloadTheAgreement(claim, url) %}
   <p>
     <a
       href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
   </p>
+
 {% endmacro %}

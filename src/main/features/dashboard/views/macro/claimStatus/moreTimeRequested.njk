@@ -9,16 +9,19 @@
       responseDeadline: claim.responseDeadline | date }) | safe }}
     {{ timeRemaining(claim.remainingDays, isAfter4pm) + '.'}}
   </p>
+
 {% endmacro %}
 
 {% macro moreTimeRequestedForClaimantDashboard(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
   {{ t('{{ defendantName }} has requested more time to respond.',
   { defendantName: defendantName }) }}
+
 {% endmacro %}
 
 {% macro moreTimeRequestedForDefendantDashboard(claim) %}
   {{ t('You need to respond by {{ responseDeadline }}.',
   { responseDeadline: claim.responseDeadline | date }) }}
+
 {% endmacro %}
 

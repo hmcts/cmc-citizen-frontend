@@ -25,6 +25,7 @@
   <p>
     {{ t('The defendant has not responded to your claim. You can request a County Court Judgment against them.') }}
   </p>
+
 {% endmacro %}
 
 {% macro ccjEligibleForDefendantDashboard(claim) %}
@@ -32,4 +33,5 @@
   {{ t('You did not respond by the deadline. {{ claimantName }} can request a County Court Judgment (CCJ) against you. '
   + 'You can still respond until they do.',
   { claimantName: claimantName } ) }}
+
 {% endmacro %}

@@ -22,6 +22,7 @@
     <a
       href="{{ OfferPaths.countersignAgreementPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Sign the agreement') }}</a>
   </p>
+
 {% endmacro %}
 
 {% macro offerAcceptedForClaimantDashboard(claim) %}
@@ -39,4 +40,5 @@
 {% macro offerAcceptedForDefendantDashboard(claim) %}
   {{ t('The claimant has accepted your offer. You need to sign a legal agreement to settle out of court.') }}
   <p>{{ t('You have rejected the claim.') }}</p>
+
 {% endmacro %}

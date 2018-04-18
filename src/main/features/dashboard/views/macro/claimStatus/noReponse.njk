@@ -13,6 +13,7 @@
 
 {% macro noResponseForClaimantDashboard(claim) %}
   {{ t('Your claim has been sent.') }}
+
 {% endmacro %}
 
 {% macro noResponseForDefendantDashboard(claim, url) %}
@@ -20,4 +21,5 @@
   <span class="block mobile-inline">
       {{ timeRemaining(claim.remainingDays, isAfter4pm) }}
     </span>
+
 {% endmacro %}

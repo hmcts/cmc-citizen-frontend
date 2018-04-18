@@ -39,9 +39,11 @@
 {% macro ccjRequestedForClaimantDashboard(claim) %}
   {{ t('You requested a County Court Judgment on {{ ccjRequestedAt }}.',
   { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
+
 {% endmacro %}
 
 {% macro ccjRequestedForDefendantDashboard(claim) %}
   {{ t('The claimant has requested a County Court Judgement (CCJ) against you on {{ ccjRequestedAt }}.',
   { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
+
 {% endmacro %}
