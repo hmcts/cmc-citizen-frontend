@@ -4,7 +4,7 @@
   </p>
 {% endmacro %}
 
-{% macro claimRejectedAlreadyPaidForClaimant(claim) %}
+{% macro claimRejectedAlreadyPaidForClaimantDashboard(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
   <p>
@@ -22,7 +22,7 @@
   </p>
 {% endmacro %}
 
-{% macro claimRejectedFreeMediationNOForClaimant(claim) %}
+{% macro claimRejectedFreeMediationNOForClaimantDashboard(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
   <p>
@@ -37,7 +37,7 @@
 
 {% endmacro %}
 
-{% macro claimRejectedFreeMediationYESForClaimant(claim) %}
+{% macro claimRejectedFreeMediationYESForClaimantDashboard(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
   <p>
   <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
@@ -56,7 +56,7 @@
 
 {% endmacro %}
 
-{% macro claimRejectedAlreadyPaidForDefendant(claim) %}
+{% macro claimRejectedAlreadyPaidForDefendantDashboard(claim) %}
   {% set claimantName = claim.claimData.claimant.name %}
   <p>
     {{ t('We’ve emailed {{ claimantName }} telling them when and how you said you paid the claim.',
@@ -68,7 +68,7 @@
   </p>
 {% endmacro %}
 
-{% macro claimRejectedFreeMediationNOForDefendant(claim) %}
+{% macro claimRejectedFreeMediationNOForDefendantDashboard(claim) %}
   <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
 
   <p>
@@ -81,7 +81,7 @@
   </p>
 {% endmacro %}
 
-{% macro claimRejectedFreeMediationYESForDefendant(claim) %}
+{% macro claimRejectedFreeMediationYESForDefendantDashboard(claim) %}
   {% set claimantName = claim.claimData.claimant.name %}
   <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
   <p>

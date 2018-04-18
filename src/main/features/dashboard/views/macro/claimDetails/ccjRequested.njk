@@ -1,4 +1,4 @@
-{% macro ccjRequestedForClaimant(claim) %}
+{% macro ccjRequestedForClaimantDashboard(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('You’ve requested a County Court Judgment (CCJ).') }}</h2>
   <p>
@@ -13,7 +13,7 @@
 
 {% endmacro %}
 
-{% macro ccjRequesterForDefendant(claim) %}
+{% macro ccjRequesterForDefendantDashboard(claim) %}
   {% set claimantName = claim.claimData.claimant.name %}
   <h2 class="heading-medium">{{ t('The claimant has requested a CCJ against you') }}</h2>
   <p>
