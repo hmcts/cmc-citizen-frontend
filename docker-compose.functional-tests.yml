@@ -11,6 +11,7 @@ services:
         - https_proxy
         - no_proxy=remote-webdriver
         - IDAM_URL
+        - OAUTH2_CLIENT_SECRET
         - CLAIM_STORE_URL
         - HEALTHCHECK_CITIZEN=true
       volumes:
