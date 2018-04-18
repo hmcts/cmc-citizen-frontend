@@ -1,18 +1,18 @@
 {% from "timeRemaining.njk" import timeRemaining %}
 
-{% from "./claimDetails/noReponse.njk" import noResponseForClaimantDashboard, noResponseForDefendantDashboard %}
-{% from "./claimDetails/moreTimeRequested.njk" import
+{% from "./claimStatus/noReponse.njk" import noResponseForClaimantDashboard, noResponseForDefendantDashboard %}
+{% from "./claimStatus/moreTimeRequested.njk" import
 moreTimeRequestedForClaimantDashboard,
 moreTimeRequestedForDefendantDashboard %}
 
-{% from "./claimDetails/ccjEligible.njk" import
+{% from "./claimStatus/ccjEligible.njk" import
 ccjEligibleForClaimantDashboard,
 ccjEligibleForDefendantDashboard %}
-{% from "./claimDetails/ccjRequested.njk" import
+{% from "./claimStatus/ccjRequested.njk" import
 ccjRequestedForClaimantDashboard,
 ccjRequestedForDefendantDashboard %}
 
-{% from "./claimDetails/claimRejected.njk" import
+{% from "./claimStatus/claimRejected.njk" import
 claimRejectedAlreadyPaidForClaimantDashboard,
 claimRejectedAlreadyPaidForDefendantDashboard,
 claimRejectedFreeMediationNOForClaimantDashboard,
@@ -20,10 +20,10 @@ claimRejectedFreeMediationNOForDefendantDashboard,
 claimRejectedFreeMediationYESForClaimantDashboard,
 claimRejectedFreeMediationYESForDefendantDashboard %}
 
-{% from "./claimDetails/offerSubmitted.njk" import offerSubmittedForClaimantDashboard, offerSubmittedForDefendantDashboard %}
-{% from "./claimDetails/offerAccepted.njk" import offerAcceptedForClaimantDashboard, offerAcceptedForDefendantDashboard %}
-{% from "./claimDetails/offerRejected.njk" import offerRejectedForClaimantDashboard, offerRejectedForDefendantDashboard %}
-{% from "./claimDetails/offerSettlement.njk" import offerSettlementReachedDashboard %}
+{% from "./claimStatus/offerSubmitted.njk" import offerSubmittedForClaimantDashboard, offerSubmittedForDefendantDashboard %}
+{% from "./claimStatus/offerAccepted.njk" import offerAcceptedForClaimantDashboard, offerAcceptedForDefendantDashboard %}
+{% from "./claimStatus/offerRejected.njk" import offerRejectedForClaimantDashboard, offerRejectedForDefendantDashboard %}
+{% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedDashboard %}
 
 {% macro _viewResponseLink (externalId) %}
   <a href="{{ ResponsePaths.summaryPage.evaluateUri({ externalId: externalId }) }}">{{ t('View full response') }}</a>
