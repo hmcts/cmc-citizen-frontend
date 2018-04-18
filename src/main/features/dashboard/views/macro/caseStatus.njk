@@ -46,7 +46,7 @@
 {% endmacro %}
 
 {% macro caseStatusForClaimant(status, claim, url) %}
-  {% set defendantName = defendantName %}
+  {% set defendantName = claim.claimData.defendant.name %}
   {% if status === ClaimStatus.CCJ_REQUESTED %}
     {{ t('You requested a County Court Judgment on {{ ccjRequestedAt }}.',
     { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
