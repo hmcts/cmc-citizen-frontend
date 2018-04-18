@@ -2,7 +2,7 @@ version: '2.1'
 
 services:
     citizen-integration-tests:
-      image: docker.artifactory.reform.hmcts.net/cmc/citizen-integration-tests:${CITIZEN_INTEGRATION_TESTS_VERSION:-latest}
+      image: hmcts/cmc-citizen-integration-tests:${CITIZEN_INTEGRATION_TESTS_VERSION:-latest}
       command: test:integration --grep @citizen-smoke-test
       environment:
         - WEB_DRIVER_HOST=remote-webdriver
@@ -17,5 +17,5 @@ services:
       volumes:
         - ./smoke-output:/usr/src/app/output
     remote-webdriver:
-      image: docker.artifactory.reform.hmcts.net/selenium/standalone-chrome:3.8.1
+      image: selenium/standalone-chrome:3.8.1
 
