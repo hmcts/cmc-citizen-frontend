@@ -7,12 +7,10 @@ moreTimeRequestedForDefendantDashboard %}
 
 {% from "./claimDetails/ccjEligible.njk" import
 ccjEligibleForClaimantDashboard,
-ccjEligibleForDefendantDashboard,
-ccjEligibleForClaimantClaimDetails %}
+ccjEligibleForDefendantDashboard %}
 {% from "./claimDetails/ccjRequested.njk" import
 ccjRequestedForClaimantDashboard,
-ccjRequestedForDefendantDashboard,
-ccjRequestedForClaimantClaimDetails %}
+ccjRequestedForDefendantDashboard %}
 
 {% from "./claimDetails/claimRejected.njk" import
 claimRejectedAlreadyPaidForClaimantDashboard,
@@ -42,20 +40,20 @@ claimRejectedFreeMediationYESForDefendantDashboard %}
       {{ ccjRequestedForClaimantDashboard(claim) }}
     {% elif status === ClaimStatus.CLAIM_REJECTED %}
       {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
-          {{ claimRejectedAlreadyPaidForClaimantDashboard(claim) }}
+         {{ claimRejectedAlreadyPaidForClaimantDashboard(claim) }}
         {% elif claim.response.freeMediation === FreeMediationOption.NO %}
-          {{ claimRejectedFreeMediationNOForClaimantDashboard(claim) }}
+         {{ claimRejectedFreeMediationNOForClaimantDashboard(claim) }}
       {% else %}
         {{ claimRejectedFreeMediationYESForClaimantDashboard(claim) }}
-    {% endif %}
+      {% endif %}
     {% elif status === ClaimStatus.OFFER_SUBMITTED %}
-    {{ offerSubmittedForClaimantDashboard(claim) }}
+      {{ offerSubmittedForClaimantDashboard(claim) }}
     {% elif status === ClaimStatus.OFFER_REJECTED %}
-    {{ offerRejectedForClaimantDashboard(claim) }}
+      {{ offerRejectedForClaimantDashboard(claim) }}
     {% elif status === ClaimStatus.OFFER_ACCEPTED %}
-    {{ offerAcceptedForClaimantDashboard(claim) }}
+      {{ offerAcceptedForClaimantDashboard(claim) }}
     {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
-    {{ offerSettlementReachedDashboard(claim) }}
+      {{ offerSettlementReachedDashboard(claim) }}
   {% endif %}
 {% endmacro %}
 
@@ -70,13 +68,13 @@ claimRejectedFreeMediationYESForDefendantDashboard %}
     {% elif status === ClaimStatus.CCJ_REQUESTED %}
       {{ ccjRequestedForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.CLAIM_REJECTED %}
-      {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+    {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
         {{ claimRejectedAlreadyPaidForDefendantDashboard(claim) }}
       {% elif claim.response.freeMediation === FreeMediationOption.NO %}
         {{ claimRejectedFreeMediationNOForDefendantDashboard(claim) }}
-      {% else %}
-        {{ claimRejectedFreeMediationYESForDefendantDashboard(claim) }}
-      {% endif %}
+    {% else %}
+      {{ claimRejectedFreeMediationYESForDefendantDashboard(claim) }}
+    {% endif %}
     {% elif status === ClaimStatus.OFFER_SUBMITTED %}
       {{ offerSubmittedForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.OFFER_REJECTED %}
