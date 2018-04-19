@@ -57,5 +57,7 @@ export class CountyCourtJudgementCheckAndSendPage {
     I.see('Amount to be paid by defendant')
     const amountOutstanding: number = claimAmount.getTotal() - defendantPaidAmount
     I.see(AmountHelper.formatMoney(amountOutstanding))
+    I.see('Amount already paid')
+    I.see(AmountHelper.formatMoney(defendantPaidAmount))
   }
 }
