@@ -10,7 +10,7 @@ function shutdownDocker() {
 if [[ ${TEST_URL} = *"prod"*  ]]; then
   echo "No creating users in prod via testing support"
 else
-  export IDAM_URL=http://betaDevBccidamAppLB.reform.hmcts.net
+  export IDAM_URL=https://preprod-idamapi.reform.hmcts.net:3511
 fi
 
 trap shutdownDocker INT TERM QUIT EXIT
