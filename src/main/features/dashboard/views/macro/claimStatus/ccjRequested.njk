@@ -1,3 +1,8 @@
+{% macro ccjRequestedForClaimantDashboard(claim) %}
+  {{ t('You requested a County Court Judgment on {{ ccjRequestedAt }}.',
+    { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
+{% endmacro %}
+
 {% macro ccjRequestedForClaimantClaimDetails(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-medium">{{ t('You’ve requested a County Court Judgment (CCJ).') }}</h2>
@@ -8,9 +13,13 @@
   <p>
     {{ t('{{ defendantName }} can no longer respond to your claim using this service - '
     + 'they may have responded by post.',
-    { defendantName: defendantName }) }}
+      { defendantName: defendantName }) }}
   </p>
+{% endmacro %}
 
+{% macro ccjRequestedForDefendantDashboard(claim) %}
+  {{ t('The claimant has requested a County Court Judgement (CCJ) against you on {{ ccjRequestedAt }}.',
+    { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
 {% endmacro %}
 
 {% macro ccjRequesterForDefendantClaimDetails(claim) %}
@@ -33,17 +42,4 @@
     <a target="blank"
        href="https://www.gov.uk/county-court-judgments-ccj-for-debt">{{ t('Find out more about County Court Judgments') }}</a>
   </p>
-
-{% endmacro %}
-
-{% macro ccjRequestedForClaimantDashboard(claim) %}
-  {{ t('You requested a County Court Judgment on {{ ccjRequestedAt }}.',
-  { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
-
-{% endmacro %}
-
-{% macro ccjRequestedForDefendantDashboard(claim) %}
-  {{ t('The claimant has requested a County Court Judgement (CCJ) against you on {{ ccjRequestedAt }}.',
-  { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
-
 {% endmacro %}

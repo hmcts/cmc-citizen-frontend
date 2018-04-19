@@ -4,6 +4,12 @@
   </p>
 {% endmacro %}
 
+{% macro claimRejectedAlreadyPaidForClaimantDashboard(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  {{ t('{{ defendantName }} believes that they’ve paid the claim in full. ',
+    { defendantName: defendantName }) }}
+{% endmacro %}
+
 {% macro claimRejectedAlreadyPaidForClaimantClaimDetails(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
   {% set emailAddress = 'moneyclaims@hmcts.gsi.gov.uk' %}
@@ -13,14 +19,37 @@
     + 'Email {{ emailAddress }} if you want to proceed with the claim - '
     + 'you must do this before 4pm on {{ respondToDefendantPaidInFullDeadline }}.',
     {
-      defendantName: defendantName,
-      emailAddress: emailAddress,
+      defendantName: defendantName, emailAddress: emailAddress,
       respondToDefendantPaidInFullDeadline: claim.respondToDefendantPaidInFullDeadline | date
     }) }}
   </p>
   <p>
     {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their response') }}
   </p>
+{% endmacro %}
+
+{% macro claimRejectedAlreadyPaidForDefendantDashboard(claim) %}
+  {% set claimantName = claim.claimData.claimant.name %}
+  {{ t('We’ve emailed {{ claimantName }} telling them when and how you paid the claim.',
+    { claimantName: claimantName }) }}
+{% endmacro %}
+
+{% macro claimRejectedAlreadyPaidForDefendantClaimDetails(claim) %}
+  {% set claimantName = claim.claimData.claimant.name %}
+  <p>
+    {{ t('We’ve emailed {{ claimantName }} telling them when and how you said you paid the claim.',
+      { claimantName: claimantName }) }}
+  </p>
+  <p>
+    {{ t('We’ll contact you to let you know how they respond. They can confirm you’ve paid and the claim is ' +
+      'settled, or they can proceed with it.') }}
+  </p>
+{% endmacro %}
+
+{% macro claimRejectedFreeMediationNOForClaimantDashboard(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  {{ t('{{ defendantName }} has rejected your claim.',
+    { defendantName:  defendantName }) }}
 {% endmacro %}
 
 {% macro claimRejectedFreeMediationNOForClaimantClaimDetails(claim) %}
@@ -35,7 +64,30 @@
   <p>
     {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their response') }}
   </p>
+{% endmacro %}
 
+{% macro claimRejectedFreeMediationNOForDefendantDashboard(claim) %}
+  {{ t('You’ve rejected the claim.' ) }}
+{% endmacro %}
+
+{% macro claimRejectedFreeMediationNOForDefendantClaimDetails(claim) %}
+  <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
+
+  <p>
+    {{ t('You have rejected the claim. We’ll send you a directions questionnaire – this is a form which you must '
+      + 'complete to tell us more about the claim.') }}
+  </p>
+
+  <p>
+    {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download your response') }}
+  </p>
+{% endmacro %}
+
+{% macro claimRejectedFreeMediationYESForClaimantDashboard(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  {{ t('{{ defendantName }} has rejected the claim. '
+    + 'But they’ve suggested a mediation session to help resolve this dispute.',
+    { defendantName: defendantName }) }}
 {% endmacro %}
 
 {% macro claimRejectedFreeMediationYESForClaimantClaimDetails(claim) %}
@@ -56,32 +108,11 @@
   {# Todo what if theyre reading this after the date? #}
 
   {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their response') }}
-
 {% endmacro %}
 
-{% macro claimRejectedAlreadyPaidForDefendantClaimDetails(claim) %}
-  {% set claimantName = claim.claimData.claimant.name %}
-  <p>
-    {{ t('We’ve emailed {{ claimantName }} telling them when and how you said you paid the claim.',
-    { claimantName: claimantName }) }}
-  </p>
-  <p>
-    {{ t('We’ll contact you to let you know how they respond. They can confirm you’ve paid and the claim is ' +
-    'settled, or they can proceed with it.') }}
-  </p>
-{% endmacro %}
-
-{% macro claimRejectedFreeMediationNOForDefendantClaimDetails(claim) %}
-  <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
-
-  <p>
-    {{ t('You have rejected the claim. We’ll send you a directions questionnaire – this is a form which you must '
-    + 'complete to tell us more about the claim.') }}
-  </p>
-
-  <p>
-    {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download your response') }}
-  </p>
+{% macro claimRejectedFreeMediationYESForDefendantDashboard(claim) %}
+  {{ t('You’ve rejected the claim and suggested mediation. '
+    + 'We’ll ask the claimant if they agree to take part in mediation.') }}
 {% endmacro %}
 
 {% macro claimRejectedFreeMediationYESForDefendantClaimDetails(claim) %}
@@ -106,39 +137,3 @@
     {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download your response') }}
   </p>
 {% endmacro %}
-
-{% macro claimRejectedFreeMediationNOForDefendantDashboard(claim) %}
-  {{ t('You’ve rejected the claim.' ) }}
-{% endmacro %}
-
-{% macro claimRejectedFreeMediationYESForDefendantDashboard(claim) %}
-  {{ t('You’ve rejected the claim and suggested mediation. '
-  + 'We’ll ask the claimant if they agree to take part in mediation.') }}
-{% endmacro %}
-
-{% macro claimRejectedAlreadyPaidForDefendantDashboard(claim) %}
-  {% set claimantName = claim.claimData.claimant.name %}
-  {{ t('We’ve emailed {{ claimantName }} telling them when and how you paid the claim.',
-  { claimantName: claimantName }) }}
-{% endmacro %}
-
-{% macro claimRejectedFreeMediationNOForClaimantDashboard(claim) %}
-  {% set defendantName = claim.claimData.defendant.name %}
-  {{ t('{{ defendantName }} has rejected your claim.',
-  { defendantName:  defendantName }) }}
-{% endmacro %}
-
-{% macro claimRejectedFreeMediationYESForClaimantDashboard(claim) %}
-  {% set defendantName = claim.claimData.defendant.name %}
-  {{ t('{{ defendantName }} has rejected the claim. '
-  + 'But they’ve suggested a mediation session to help resolve this dispute.',
-  { defendantName: defendantName }) }}
-{% endmacro %}
-
-{% macro claimRejectedAlreadyPaidForClaimantDashboard(claim) %}
-  {% set defendantName = claim.claimData.defendant.name %}
-  {{ t('{{ defendantName }} believes that they’ve paid the claim in full. ',
-  { defendantName: defendantName }) }}
-{% endmacro %}
-
-
