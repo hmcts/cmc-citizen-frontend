@@ -47,6 +47,7 @@ export class IdamClient {
   static async authenticateUser (username: string, password: string = undefined): Promise<string> {
 
     const base64Authorisation: string = IdamClient.toBase64(`${username}:${password || defaultPassword}`)
+    /* tslint:disable:no-console */
     console.log('>>>>>>>>>>>')
     console.log(oauth2)
     const oauth2Params: string = IdamClient.toUrlParams(oauth2)
