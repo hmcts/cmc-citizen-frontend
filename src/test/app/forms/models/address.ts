@@ -152,9 +152,7 @@ describe('Address/CorrespondenceAddress', () => {
         const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', 'town', generateString(exceededPostcodeLength)))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(
-          errors, evaluateErrorMsg(ValidationErrors.POSTCODE_NOT_VALID, testInput.validationConstants.POSTCODE_MAX_LENGTH)
-        )
+        expectValidationError(errors, ValidationErrors.POSTCODE_NOT_VALID)
       })
 
       it('should reject address with invalid postcode', () => {
