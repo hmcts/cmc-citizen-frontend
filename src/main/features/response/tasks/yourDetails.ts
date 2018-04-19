@@ -15,8 +15,8 @@ export class YourDetails {
     }
 
     return this.isDefinedAndValid(response.defendantDetails.partyDetails, ['response'])
-      && this.isDateOfBirthCompleted(response.defendantDetails.partyDetails) // for individuals
-      && this.isMobilePhoneCompleted(response.defendantDetails) // for others
+      && this.isDateOfBirthCompleted(response.defendantDetails.partyDetails)
+      && this.isMobilePhoneCompleted(response.defendantDetails)
   }
 
   private static isDateOfBirthCompleted (partyDetails: PartyDetails): boolean {
