@@ -13,7 +13,7 @@ export class YesNoOption {
     } else if (input === 'no') {
       return YesNoOption.NO
     } else {
-      throw new Error(`Invalid YesNoOption value: ${JSON.stringify(input)}`)
+      return undefined
     }
   }
 
