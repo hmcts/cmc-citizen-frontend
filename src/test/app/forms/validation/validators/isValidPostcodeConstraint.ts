@@ -34,23 +34,27 @@ describe('IsValidPostcodeConstraint', () => {
 
       describe('should return true for valid formats ', () => {
 
-        it('given a valid postcode of M1 1AA', () => {
+        it('given a valid postcode of format AN NAA', () => {
           expect(constraint.validate('M1 1AA')).to.equal(true)
         })
 
-        it('given a valid postcode of M60 1NW', () => {
+        it('given a valid postcode of format ANN NAA', () => {
           expect(constraint.validate('M60 1NW')).to.equal(true)
         })
 
-        it('given a valid postcode of DN55 1PT', () => {
+        it('given a valid postcode of format AAN NAA', () => {
+          expect(constraint.validate('CR2 6HX')).to.equal(true)
+        })
+
+        it('given a valid postcode of format AANN NAA', () => {
           expect(constraint.validate('DN55 1PT')).to.equal(true)
         })
 
-        it('given a valid postcode of W1A 0AX', () => {
+        it('given a valid postcode of format ANA NAA', () => {
           expect(constraint.validate('W1A 0AX')).to.equal(true)
         })
 
-        it('given a valid postcode of EC1A 1BB', () => {
+        it('given a valid postcode of format AANA NAA', () => {
           expect(constraint.validate('EC1A 1BB')).to.equal(true)
         })
       })
