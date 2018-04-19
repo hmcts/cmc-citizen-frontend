@@ -10,7 +10,7 @@
         {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
           <p>
             {{ t('{{ defendantName }} believes that they’ve paid the claim in full. ' +
-              'Email {{ supportEmailAddress }} if you want to proceed with the claim - ' +
+              'Email {{ supportEmailAddress }} if you want to proceed with the claim ' +
               'you must do this before 4pm on {{ respondToResponseDeadline }}.',
               {
                 defendantName: defendantName,
