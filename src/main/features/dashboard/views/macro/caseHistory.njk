@@ -17,14 +17,14 @@ ccjRequesterForDefendantClaimDetails %}
   claimRejectedFreeMediationYESForDefendantClaimDetails %}
 
 {% from "./claimStatus/offerSubmitted.njk" import
-offerSubmittedForClaimantClaimDetails,
-offerSubmittedForDefendantClaimDetails %}
+  offerSubmittedForClaimantClaimDetails,
+  offerSubmittedForDefendantClaimDetails %}
 {% from "./claimStatus/offerAccepted.njk" import
-offerAcceptedForClaimantClaimDetails,
-offerAcceptedForDefendantClaimDetails %}
+  offerAcceptedForClaimantClaimDetails,
+  offerAcceptedForDefendantClaimDetails %}
 {% from "./claimStatus/offerRejected.njk" import
-offerRejectedForClaimantClaimDetails,
-offerRejectedForDefendantClaimDetails %}
+  offerRejectedForClaimantClaimDetails,
+  offerRejectedForDefendantClaimDetails %}
 {% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedClaimDetails %}
 
 {% macro caseHistoryForClaimantClaimDetails(claim, url) %}
@@ -72,7 +72,6 @@ offerRejectedForDefendantClaimDetails %}
         {{ moreTimeRequestedForDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
         {{ ccjRequesterForDefendantClaimDetails(claim) }}
-
       {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
         {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
           {{ claimRejectedAlreadyPaidForDefendantClaimDetails(claim) }}
