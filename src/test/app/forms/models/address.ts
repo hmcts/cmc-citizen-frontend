@@ -33,7 +33,6 @@ describe('Address/CorrespondenceAddress', () => {
     const ClassFunction = testInput.classFunction
     const ValidationErrors = testInput.validationErrors
     const exceededAddressLength: number = testInput.validationConstants.ADDRESS_MAX_LENGTH + 1
-    const exceededPostcodeLength: number = testInput.validationConstants.POSTCODE_MAX_LENGTH + 1
 
     describe('constructor', () => {
       it('should set primitive type fields to undefined', () => {
@@ -149,7 +148,7 @@ describe('Address/CorrespondenceAddress', () => {
       })
 
       it('should reject address with postcode longer then upper limit', () => {
-        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', 'town', generateString(exceededPostcodeLength)))
+        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', 'town', generateString(8)))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.POSTCODE_NOT_VALID)
