@@ -148,7 +148,7 @@ describe('Address/CorrespondenceAddress', () => {
       })
 
       it('should reject address with postcode longer then upper limit', () => {
-        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', 'town', generateString(8)))
+        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', 'town', generateString(9)))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.POSTCODE_NOT_VALID)
