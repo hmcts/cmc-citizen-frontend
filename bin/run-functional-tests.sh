@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-ADDITIONAL_COMPOSE_FILE=docker-compose.functional-tests.yml
+ADDITIONAL_COMPOSE_FILE="docker-compose.functional-tests.yml -f docker-compose.yml"
 
 function shutdownDocker() {
   docker-compose -f ${ADDITIONAL_COMPOSE_FILE} down
