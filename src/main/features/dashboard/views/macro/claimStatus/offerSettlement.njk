@@ -1,4 +1,4 @@
-{% macro offerSettlementReachedDashboard(claim) %}
+{% macro offerSettlementReachedDashboard() %}
   {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
 {% endmacro %}
 
@@ -15,7 +15,6 @@
 
 {% macro downloadTheAgreement(claim, url) %}
   <p>
-    <a
-      href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
+    <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
   </p>
 {% endmacro %}

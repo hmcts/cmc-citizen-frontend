@@ -66,7 +66,7 @@
   </p>
 {% endmacro %}
 
-{% macro claimRejectedFreeMediationNOForDefendantDashboard(claim) %}
+{% macro claimRejectedFreeMediationNOForDefendantDashboard() %}
   {{ t('You’ve rejected the claim.' ) }}
 {% endmacro %}
 
@@ -110,7 +110,7 @@
   {{ downloadResponse(claim, DashboardUrlHelper.getStatusUrl(claim), 'Download their response') }}
 {% endmacro %}
 
-{% macro claimRejectedFreeMediationYESForDefendantDashboard(claim) %}
+{% macro claimRejectedFreeMediationYESForDefendantDashboard() %}
   {{ t('You’ve rejected the claim and suggested mediation. '
     + 'We’ll ask the claimant if they agree to take part in mediation.') }}
 {% endmacro %}

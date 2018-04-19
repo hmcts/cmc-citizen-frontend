@@ -88,7 +88,7 @@ ccjRequesterForDefendantClaimDetails %}
       {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
         {{ offerSubmittedForDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_REJECTED %}
-        {{ offerRejectedForDefendantClaimDetails(claim) }}
+        {{ offerRejectedForDefendantClaimDetails() }}
       {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         {{ offerAcceptedForDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
@@ -101,7 +101,6 @@ ccjRequesterForDefendantClaimDetails %}
     </div>
   {% endfor %}
 {% endmacro %}
-
 
 {% macro settleOutOfCourtOption (claim) %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>

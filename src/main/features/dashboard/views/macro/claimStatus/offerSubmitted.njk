@@ -15,10 +15,10 @@
     { defendantName: defendantName }) }}
   </p>
 
-  {{ responseToOffer(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+  {{ responseToOffer(DashboardUrlHelper.getStatusUrl(claim)) }}
 {% endmacro %}
 
-{% macro offerSubmittedForDefendantDashboard(claim) %}
+{% macro offerSubmittedForDefendantDashboard() %}
   {{ t('Your offer has been sent to the claimant.') }}
   <p>{{ t('You have rejected the claim.') }}</p>
 {% endmacro %}
@@ -34,7 +34,7 @@
   <p>{{ t('We’ll email you when they respond.') }}</p>
 {% endmacro %}
 
-{% macro responseToOffer(claim, url) %}
+{% macro responseToOffer(url) %}
   <p>
     <a href="{{ url }}">{{ t('View and respond to offer') }}</a>
   </p>

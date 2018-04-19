@@ -36,11 +36,11 @@
 
 {% macro caseStatusForClaimant(status, claim, url) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
-    {{ noResponseForClaimantDashboard(claim) }}
+    {{ noResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ moreTimeRequestedForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
-    {{ ccjEligibleForClaimantDashboard(claim) }}
+    {{ ccjEligibleForClaimantDashboard() }}
   {% elif status === ClaimStatus.CCJ_REQUESTED %}
     {{ ccjRequestedForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIM_REJECTED %}
@@ -58,7 +58,7 @@
   {% elif status === ClaimStatus.OFFER_ACCEPTED %}
     {{ offerAcceptedForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
-    {{ offerSettlementReachedDashboard(claim) }}
+    {{ offerSettlementReachedDashboard() }}
   {% endif %}
 {% endmacro %}
 
@@ -75,18 +75,18 @@
     {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
       {{ claimRejectedAlreadyPaidForDefendantDashboard(claim) }}
     {% elif claim.response.freeMediation === FreeMediationOption.NO %}
-      {{ claimRejectedFreeMediationNOForDefendantDashboard(claim) }}
+      {{ claimRejectedFreeMediationNOForDefendantDashboard() }}
     {% else %}
-      {{ claimRejectedFreeMediationYESForDefendantDashboard(claim) }}
+      {{ claimRejectedFreeMediationYESForDefendantDashboard() }}
     {% endif %}
   {% elif status === ClaimStatus.OFFER_SUBMITTED %}
-    {{ offerSubmittedForDefendantDashboard(claim) }}
+    {{ offerSubmittedForDefendantDashboard() }}
   {% elif status === ClaimStatus.OFFER_REJECTED %}
-    {{ offerRejectedForDefendantDashboard(claim) }}
+    {{ offerRejectedForDefendantDashboard() }}
   {% elif status === ClaimStatus.OFFER_ACCEPTED %}
-    {{ offerAcceptedForDefendantDashboard(claim) }}
+    {{ offerAcceptedForDefendantDashboard() }}
   {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
-    {{ offerSettlementReachedDashboard(claim) }}
+    {{ offerSettlementReachedDashboard() }}
   {% endif %}
 {% endmacro %}
 
