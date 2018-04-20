@@ -36,7 +36,7 @@ describe('Returning user: Enter claim number', () => {
     it('should redirect to mcol when ccbc prefix is used', async () => {
       await request(app)
         .post(Paths.enterClaimNumberPage.uri)
-        .send({ reference: 'AA1' })
+        .send({ reference: 'A1BA1123' })
         .expect(res => expect(res).to.be.redirect.toLocation(config.get<string>('mcol.url')))
     })
 
