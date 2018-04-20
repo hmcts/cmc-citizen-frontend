@@ -5,9 +5,7 @@
   moreTimeRequestedForClaimantDashboard,
   moreTimeRequestedForDefendantDashboard %}
 
-{% from "./claimStatus/ccjEligible.njk" import
-  ccjEligibleForClaimantDashboard,
-  ccjEligibleForDefendantDashboard %}
+{% from "./claimStatus/ccjEligible.njk" import ccjEligibleForClaimantDashboard %}
 {% from "./claimStatus/ccjRequested.njk" import
   ccjRequestedForClaimantDashboard,
   ccjRequestedForDefendantDashboard %}
@@ -65,8 +63,6 @@
     {{ noResponseForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ moreTimeRequestedForDefendantDashboard(claim) }}
-  {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
-    {{ ccjEligibleForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.CCJ_REQUESTED %}
     {{ ccjRequestedForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIM_REJECTED %}

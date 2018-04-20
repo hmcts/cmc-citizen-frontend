@@ -1,14 +1,12 @@
 {% from "form.njk" import submitButton %}
 
 {% macro ccjEligibleForClaimantDashboard() %}
-  <p>
-    {{ t('The defendant has not responded to your claim. You can request a County Court Judgment against them.') }}
-  </p>
+  {{ t('The defendant has not responded to your claim. You can request a County Court Judgment against them.') }}
 {% endmacro %}
 
 {% macro ccjEligibleForClaimantClaimDetails(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
-  <h2 class="bold-small">{{ t('You can request a County Court Judgment') }}</h2>
+  <h2 class="heading-small">{{ t('You can request a County Court Judgment') }}</h2>
   <p>
     {{ t('{{ defendantName }} has not responded to your claim by the deadline. '
     + 'You can request a County Court Judgment (CCJ) against them.',
@@ -24,11 +22,4 @@
   <form novalidate method="post">
     {{ submitButton('Request a County Court Judgment') }}
   </form>
-{% endmacro %}
-
-{% macro ccjEligibleForDefendantDashboard(claim) %}
-  {% set claimantName = claim.claimData.claimant.name %}
-  {{ t('You did not respond by the deadline. {{ claimantName }} can request a County Court Judgment (CCJ) against you. '
-  + 'You can still respond until they do.',
-    { claimantName: claimantName } ) }}
 {% endmacro %}
