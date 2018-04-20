@@ -1,5 +1,3 @@
-{% from "timeRemaining.njk" import timeRemaining %}
-
 {% from "./claimStatus/noReponse.njk" import
   noResponseForClaimantDashboard,
   noResponseForDefendantDashboard %}
@@ -64,7 +62,7 @@
 
 {% macro caseStatusForDefendant(status, claim, url, isAfter4pm) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
-    {{ noResponseForDefendantDashboard(claim, url) }}
+    {{ noResponseForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ moreTimeRequestedForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}

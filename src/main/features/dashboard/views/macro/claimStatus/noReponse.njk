@@ -5,17 +5,25 @@
 {% endmacro %}
 
 {% macro noResponseForClaimantClaimDetails(claim) %}
-  {% set defendantName = claim.claimData.defendant.name %}
-  <h2 class="heading-medium">{{ t('Your claim has been sent') }}</h2>
+  <h2 class="heading-small">{{ t('Your claim has been sent') }}</h2>
   <p>
     {{ t('{{ defendantName }} has until {{ responseDeadline }} to respond. They can request an extra 14 days if they need it.',
-      { defendantName: defendantName, responseDeadline: claim.responseDeadline | date }) | safe }}
+      { defendantName: claim.claimData.defendant.name, responseDeadline: claim.responseDeadline | date }) }}
   </p>
 {% endmacro %}
 
-{% macro noResponseForDefendantDashboard(claim, url) %}
-  <a href="{{ url }}">{{ t('Respond to claim') }}</a>
-  <span class="block mobile-inline">
+{% macro noResponseForDefendantDashboard(claim) %}
+  {{ t('Respond to claim.') }}
+  <span class="block mobile-inline font-xsmall">
     {{ timeRemaining(claim.remainingDays, isAfter4pm) }}
   </span>
+{% endmacro %}
+
+{% macro noResponseForDefendantClaimDetails(claim) %}
+  <h2 class="heading-small">{{ t('You haven’t responded to this claim') }}</h2>
+  <p>
+    {{ t('You need to respond before 4pm on {{ deadline }} {{ remainingTime }}.',
+      { deadline: claim.responseDeadline | date, remainingTime: timeRemaining(claim.remainingDays, isAfter4pm) }) }}
+  </p>
+  <a href="{{ ResponsePaths.taskListPage.uri }}">{{ t('Respond to claim') }}</a>
 {% endmacro %}
