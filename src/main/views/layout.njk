@@ -1,3 +1,7 @@
+{#{% block title %}#}
+  {#{{ t(title) }}#}
+{#{% endblock %}#}
+
 {% block content %}{% endblock %}
 {% extends "govukTemplate.njk" %}
 
@@ -25,3 +29,5 @@
   {% include "includes/scripts.njk" %}
   {% block additional_scripts %}{% endblock %}
 {% endblock %}
+
+
