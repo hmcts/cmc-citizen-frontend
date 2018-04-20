@@ -1,4 +1,4 @@
-import { IsDefined, MaxLength, ValidateIf } from 'class-validator'
+import { IsDefined, MaxLength, ValidateIf, Validator } from 'class-validator'
 
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 
@@ -143,7 +143,7 @@ export class Address implements CompletableTask {
     return this
   }
 
-  isCompleted (): boolean {
-    return !!this.postcode && this.postcode.length > 0
+  isCompleted (...groups: string[]): boolean {
+    return new Validator().validateSync(this, { groups: groups }).length === 0
   }
 }
