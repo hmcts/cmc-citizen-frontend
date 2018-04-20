@@ -3,7 +3,7 @@
 {% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
 {% from "party/details.njk" import partyDetailsFragment %}
 
-{% set heading = t('Company details') %}
+{% set heading = ('Company details') %}
 
 {% block additional_scripts %}
   {% include "postcode-lookup-client-scripts.njk" %}

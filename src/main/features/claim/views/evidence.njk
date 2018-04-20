@@ -2,7 +2,7 @@
 {% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
 {% from "evidenceFragment.njk" import evidenceFragment %}
 
-{% set heading = t('List any evidence (optional)') %}
+{% set heading = ('List any evidence (optional)') %}
 
 {% block additional_scripts %}
   <script src="{{ asset_paths['js'] }}/evidence-select-handler.js"></script>
