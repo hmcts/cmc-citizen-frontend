@@ -10,38 +10,45 @@
     <div class="column-two-thirds">
       <h1 class="heading-large">
         <span class="heading-secondary">{{ t('Claim number:') }}</span>
-        {{ claim.claimNumber }}
+        {{ claim.claimNumber if claim else 'Draft' }}
       </h1>
       <div>
         <h2 class="heading-medium">{{ t('Claim status') }}</h2>
-        {{ caseHistoryForClaimantClaimDetails(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+        {% if claim %}
+          {{ caseHistoryForClaimantClaimDetails(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+        {% else %}
+          <h2 class="bold-small">{{ t('This claim has not been submitted') }}</h2>
+          {{ t('Your claim is saved as a draft.') }} <a href="{{ ClaimPaths.taskListPage.uri }}">{{ t('Continue with claim.') }}</a>
+        {% endif %}
       </div>
     </div>
 
-    <div class="column-one-third">
-      <div class="about-claim-widget">
-        <p class="heading-small">{{ t('About claim') }}</p>
-        <ul class="font-xsmall list">
-          <li>
-            <strong class="bold">{{ t('Defendant name:') }}</strong>
-            <span class="block">{{ claim.claimData.defendant.name }}</span>
-          </li>
-          <li>
-            <strong class="bold">{{ t('Total claim amount:') }}</strong>
-            <span class="block">{{ claim.totalAmountTillToday | numeral }}</span>
-          </li>
-          <li>
-            <strong class="bold">{{ t('Claim details:') }}</strong>
-            <span class="block"><a href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View claim') }}</a></span>
-          </li>
-          {% if claim.response %}
+    {% if claim %}
+      <div class="column-one-third">
+        <div class="about-claim-widget">
+          <p class="heading-small">{{ t('About claim') }}</p>
+          <ul class="font-xsmall list">
             <li>
-              <strong class="bold">{{ t('Defendant’s response:') }}</strong>
-              <span class="block"><a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a></span>
+              <strong class="bold">{{ t('Defendant name:') }}</strong>
+              <span class="block">{{ claim.claimData.defendant.name }}</span>
             </li>
-          {% endif %}
-        </ul>
+            <li>
+              <strong class="bold">{{ t('Total claim amount:') }}</strong>
+              <span class="block">{{ claim.totalAmountTillToday | numeral }}</span>
+            </li>
+            <li>
+              <strong class="bold">{{ t('Claim details:') }}</strong>
+              <span class="block"><a href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View claim') }}</a></span>
+            </li>
+            {% if claim.response %}
+              <li>
+                <strong class="bold">{{ t('Defendant’s response:') }}</strong>
+                <span class="block"><a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a></span>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
       </div>
-    </div>
+    {% endif %}
   </div>
 {% endblock %}
