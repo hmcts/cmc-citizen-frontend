@@ -1,24 +1,28 @@
 {% from "timeRemaining.njk" import timeRemaining %}
 
 {% macro moreTimeRequestedForClaimantDashboard(claim) %}
-  {% set defendantName = claim.claimData.defendant.name %}
   {{ t('{{ defendantName }} has requested more time to respond.',
-    { defendantName: defendantName }) }}
+    { defendantName: claim.claimData.defendant.name }) }}
 {% endmacro %}
 
 {% macro moreTimeRequestedForClaimantClaimDetails(claim) %}
-  {% set defendantName = claim.claimData.defendant.name %}
-  <h2 class="heading-medium">{{ t('The defendant has requested more time to respond') }}</h2>
+  <h2 class="heading-small">{{ t('The defendant has requested more time to respond') }}</h2>
   <p>
-    {{ t('{{ defendantName }} has requested an extra 14 days to respond. They need to respond by {{ responseDeadline }}',
-      { defendantName: defendantName, responseDeadline: claim.responseDeadline | date }) | safe }}
-
-    {{ timeRemaining(claim.remainingDays, isAfter4pm()) + '.'}}
+    {{ t('{{ defendantName }} has requested an extra 14 days to respond. They need to respond by {{ responseDeadline }}.',
+      { defendantName: claim.claimData.defendant.name, responseDeadline: claim.responseDeadline | date }) | safe }}
   </p>
 {% endmacro %}
 
 {% macro moreTimeRequestedForDefendantDashboard(claim) %}
-  {{ t('You need to respond by {{ responseDeadline }}.',
+  {{ t('You need to respond before 4pm on {{ responseDeadline }}.',
     { responseDeadline: claim.responseDeadline | date }) }}
 {% endmacro %}
 
+{% macro moreTimeRequestedForDefendantClaimDetails(claim) %}
+  <h2 class="heading-small">{{ t('More time requested') }}</h2>
+  <p>
+    {{ t('You need to respond before 4pm on {{ responseDeadline }} {{ remainingTime }}.',
+      { responseDeadline: claim.responseDeadline | date, remainingTime: timeRemaining(claim.remainingDays, isAfter4pm()) }) | safe }}
+  </p>
+  <a href="{{ ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Respond to claim') }}</a>
+{% endmacro %}
