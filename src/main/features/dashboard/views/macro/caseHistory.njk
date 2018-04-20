@@ -27,7 +27,7 @@ ccjRequesterForDefendantClaimDetails %}
   offerRejectedForDefendantClaimDetails %}
 {% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedClaimDetails %}
 
-{% macro caseHistoryForClaimantClaimDetails(claim, url) %}
+{% macro caseHistoryForClaimantClaimDetails(claim, url, csrf) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
       {% if state.status === ClaimStatus.NO_RESPONSE %}
@@ -35,7 +35,7 @@ ccjRequesterForDefendantClaimDetails %}
       {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
         {{ moreTimeRequestedForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
-        {{ ccjEligibleForClaimantClaimDetails(claim) }}
+        {{ ccjEligibleForClaimantClaimDetails(claim, csrf) }}
       {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
         {{ ccjRequestedForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.CLAIM_REJECTED %}

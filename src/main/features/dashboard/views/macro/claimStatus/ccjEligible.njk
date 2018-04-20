@@ -1,10 +1,10 @@
-{% from "form.njk" import submitButton %}
+{% from "form.njk" import csrfProtection, submitButton %}
 
 {% macro ccjEligibleForClaimantDashboard() %}
   {{ t('The defendant has not responded to your claim. You can request a County Court Judgment against them.') }}
 {% endmacro %}
 
-{% macro ccjEligibleForClaimantClaimDetails(claim) %}
+{% macro ccjEligibleForClaimantClaimDetails(claim, csrf) %}
   {% set defendantName = claim.claimData.defendant.name %}
   <h2 class="heading-small">{{ t('You can request a County Court Judgment') }}</h2>
   <p>
@@ -20,6 +20,7 @@
       { defendantName : defendantName }) }}
   </p>
   <form novalidate method="post">
+    {{ csrfProtection(csrf) }}
     {{ submitButton('Request a County Court Judgment') }}
   </form>
 {% endmacro %}

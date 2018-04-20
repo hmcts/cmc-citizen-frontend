@@ -3,8 +3,6 @@
 
 {% set title = 'Your money claims account' %}
 
-{% from "form.njk" import submitButton, csrfProtection %}
-
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
@@ -15,7 +13,7 @@
       <div>
         <h2 class="heading-medium">{{ t('Claim status') }}</h2>
         {% if claim %}
-          {{ caseHistoryForClaimantClaimDetails(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+          {{ caseHistoryForClaimantClaimDetails(claim, DashboardUrlHelper.getStatusUrl(claim), csrf) }}
         {% else %}
           <h2 class="bold-small">{{ t('This claim has not been submitted') }}</h2>
           {{ t('Your claim is saved as a draft.') }} <a href="{{ ClaimPaths.taskListPage.uri }}">{{ t('Continue with claim.') }}</a>
