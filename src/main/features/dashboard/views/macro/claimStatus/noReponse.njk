@@ -15,7 +15,7 @@
 {% macro noResponseForDefendantDashboard(claim) %}
   {{ t('Respond to claim.') }}
   <span class="block mobile-inline font-xsmall">
-    {{ timeRemaining(claim.remainingDays, isAfter4pm) }}
+    {{ timeRemaining(claim.remainingDays, isAfter4pm()) }}
   </span>
 {% endmacro %}
 
@@ -23,7 +23,7 @@
   <h2 class="heading-small">{{ t('You haven’t responded to this claim') }}</h2>
   <p>
     {{ t('You need to respond before 4pm on {{ deadline }} {{ remainingTime }}.',
-      { deadline: claim.responseDeadline | date, remainingTime: timeRemaining(claim.remainingDays, isAfter4pm) }) }}
+      { deadline: claim.responseDeadline | date, remainingTime: timeRemaining(claim.remainingDays, isAfter4pm()) }) | safe }}
   </p>
-  <a href="{{ ResponsePaths.taskListPage.uri }}">{{ t('Respond to claim') }}</a>
+  <a href="{{ ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Respond to claim') }}</a>
 {% endmacro %}

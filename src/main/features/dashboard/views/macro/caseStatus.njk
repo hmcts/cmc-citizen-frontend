@@ -60,7 +60,7 @@
   {% endif %}
 {% endmacro %}
 
-{% macro caseStatusForDefendant(status, claim, url, isAfter4pm) %}
+{% macro caseStatusForDefendant(status, claim, url) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}

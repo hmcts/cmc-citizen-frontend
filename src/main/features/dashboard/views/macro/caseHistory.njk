@@ -63,7 +63,7 @@ ccjRequesterForDefendantClaimDetails %}
   {% endfor %}
 {% endmacro %}
 
-{% macro caseHistoryForDefendantClaimDetails(claim, url, isAfter4pm) %}
+{% macro caseHistoryForDefendantClaimDetails(claim, url) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
       {% if state.status === ClaimStatus.NO_RESPONSE %}
@@ -95,7 +95,7 @@ ccjRequesterForDefendantClaimDetails %}
           {{ offerSettlementReachedClaimDetails(claim) }}
       {% else %}
         <p>
-          {{ caseStatusForDefendant(claim.status, claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
+          {{ caseStatusForDefendant(claim.status, claim, DashboardUrlHelper.getStatusUrl(claim)) }}
         </p>
       {% endif %}
     </div>

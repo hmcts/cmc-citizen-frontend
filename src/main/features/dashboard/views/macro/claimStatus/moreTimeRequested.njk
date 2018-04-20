@@ -13,7 +13,7 @@
     {{ t('{{ defendantName }} has requested an extra 14 days to respond. They need to respond by {{ responseDeadline }}',
       { defendantName: defendantName, responseDeadline: claim.responseDeadline | date }) | safe }}
 
-    {{ timeRemaining(claim.remainingDays, isAfter4pm) + '.'}}
+    {{ timeRemaining(claim.remainingDays, isAfter4pm()) + '.'}}
   </p>
 {% endmacro %}
 

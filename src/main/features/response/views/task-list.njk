@@ -46,7 +46,7 @@
             <div>
               {{ t('{{ responseDeadline }} at 4pm', { responseDeadline: claim.responseDeadline | date }) }}
             </div>
-            <div>{{ timeRemaining(claim.remainingDays) }}</div>
+            <div>{{ timeRemaining(claim.remainingDays, isAfter4pm()) }}</div>
           </li>
           <li>
             <strong class="bold">{{ t('Claim number:') }}</strong>

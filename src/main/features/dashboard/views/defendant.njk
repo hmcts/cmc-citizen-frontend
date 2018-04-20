@@ -11,7 +11,7 @@
         {{ claim.claimNumber }}
       </h1>
       <h2 class="heading-medium">{{ t('Claim status') }}</h2>
-      {{ caseHistoryForDefendantClaimDetails(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
+      {{ caseHistoryForDefendantClaimDetails(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
     </div>
 
     <div class="column-one-third">
