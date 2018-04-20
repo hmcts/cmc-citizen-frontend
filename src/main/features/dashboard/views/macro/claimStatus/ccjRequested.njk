@@ -25,14 +25,18 @@
   <h2 class="heading-small">{{ t('The claimant has requested a CCJ against you') }}</h2>
   <p>
     {{ t('You didn’t respond to this claim by the deadline of {{ responseDeadline }}.',
-    { responseDeadline: claim.responseDeadline | date }) }}
+      { responseDeadline: claim.responseDeadline | date }) }}
   </p>
   <p>
     {{ t('{{ claimantName }} requested a default County Court Judgment (CCJ) against you on {{ ccjRequestedAt }}. '
-    + 'We’ll contact you within 5 days to tell you whether the claimant’s request for judgment has been successful.',
-    { claimantName : claim.claimData.claimant.name,
+      + 'We’ll contact you within 5 days to tell you whether the claimant’s request for judgment has been successful.',
+      { claimantName : claim.claimData.claimant.name,
       ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
   </p>
-  <p>{{ t('You can no longer respond to the claim.') }}</p>
-  {{ externalLink(t('Find out more about County Court Judgments'), 'https://www.gov.uk/county-court-judgments-ccj-for-debt') }}
+  <p>
+    {{ t('You can no longer respond to the claim.') }}
+  </p>
+  <p>
+    {{ externalLink(t('Find out more about County Court Judgments'), 'https://www.gov.uk/county-court-judgments-ccj-for-debt') }}
+  </p>
 {% endmacro %}

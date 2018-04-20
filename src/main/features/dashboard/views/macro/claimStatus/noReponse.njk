@@ -25,5 +25,11 @@
     {{ t('You need to respond before 4pm on {{ responseDeadline }} {{ remainingTime }}.',
       { responseDeadline: claim.responseDeadline | date, remainingTime: timeRemaining(claim.remainingDays, isAfter4pm()) }) | safe }}
   </p>
+  <p>
+    {{ _respondToClaimLink(claim) }}
+  </p>
+{% endmacro %}
+
+{% macro _respondToClaimLink(claim) %}
   <a href="{{ ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Respond to claim') }}</a>
 {% endmacro %}
