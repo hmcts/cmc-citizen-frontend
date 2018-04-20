@@ -13,7 +13,7 @@
       <div>
         <h2 class="heading-medium">{{ t('Claim status') }}</h2>
         {% if claim %}
-          {{ caseHistoryForClaimantClaimDetails(claim, DashboardUrlHelper.getStatusUrl(claim), csrf) }}
+          {{ caseHistoryForClaimantClaimDetails(claim, csrf) }}
         {% else %}
           <h2 class="bold-small">{{ t('This claim has not been submitted') }}</h2>
           {{ t('Your claim is saved as a draft.') }} <a href="{{ ClaimPaths.taskListPage.uri }}">{{ t('Continue with claim.') }}</a>

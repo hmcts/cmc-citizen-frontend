@@ -44,20 +44,18 @@
           </tr>
         {% endif %}
         {% for claim in claimsAsClaimant %}
-          {% set statusUrl = DashboardUrlHelper.getStatusUrl(claim) %}
-
           <tr class="claims default mobile-table">
             <td><a href="/dashboard/{{ claim.externalId }}/claimant">{{ claim.claimNumber }}</a></td>
             <td>{{ claim.claimData.defendant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
             <td class="mobile-hide">
-              {{ caseStatusForClaimant(claim.status, claim, statusUrl) }}
+              {{ caseStatusForClaimant(claim.status, claim) }}
             </td>
           </tr>
           <tr>
             <td colspan="3" class="mobile-table-status">
               {{ t('Status: ') }}
-              {{ caseStatusForClaimant(claim.status, claim, statusUrl) }}
+              {{ caseStatusForClaimant(claim.status, claim) }}
             </td>
           </tr>
         {% endfor %}
@@ -91,19 +89,17 @@
           </tr>
         {% endif %}
         {% for claim in claimsAsDefendant %}
-          {% set statusUrl = DashboardUrlHelper.getStatusUrl(claim) %}
-
           <tr class="mobile-table">
             <td><a href="{{ DashboardPaths.defendantPage.evaluateUri({ externalId: claim.externalId }) }}">{{ claim.claimNumber }}</a></td>
             <td>{{ claim.claimData.claimant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
             <td class="mobile-hide">
-              {{ caseStatusForDefendant(claim.status, claim, statusUrl) }}
+              {{ caseStatusForDefendant(claim.status, claim) }}
             </td>
           </tr>
           <tr>
             <td colspan="3" class="mobile-table-status">
-              {{ t('Status: ') }} {{ caseStatusForDefendant(claim.status, claim, statusUrl) }}
+              {{ t('Status: ') }} {{ caseStatusForDefendant(claim.status, claim) }}
             </td>
           </tr>
         {% endfor %}

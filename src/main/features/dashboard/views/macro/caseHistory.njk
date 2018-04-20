@@ -27,7 +27,7 @@ ccjRequesterForDefendantClaimDetails %}
   offerRejectedForDefendantClaimDetails %}
 {% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedClaimDetails %}
 
-{% macro caseHistoryForClaimantClaimDetails(claim, url, csrf) %}
+{% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
       {% if state.status === ClaimStatus.NO_RESPONSE %}
@@ -56,14 +56,14 @@ ccjRequesterForDefendantClaimDetails %}
         {{ offerSettlementReachedClaimDetails(claim) }}
       {% else %}
         <p>
-          {{ caseStatusForClaimant(state.status, claim, url) }}
+          {{ caseStatusForClaimant(state.status, claim) }}
         </p>
       {% endif %}
     </div>
   {% endfor %}
 {% endmacro %}
 
-{% macro caseHistoryForDefendantClaimDetails(claim, url) %}
+{% macro caseHistoryForDefendantClaimDetails(claim) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
       {% if state.status === ClaimStatus.NO_RESPONSE %}
@@ -84,7 +84,6 @@ ccjRequesterForDefendantClaimDetails %}
         {% if not claim.settlement %}
           {{ _settleOutOfCourtOption (claim) }}
         {% endif %}
-
       {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
         {{ offerSubmittedForDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_REJECTED %}
@@ -95,7 +94,7 @@ ccjRequesterForDefendantClaimDetails %}
           {{ offerSettlementReachedClaimDetails(claim) }}
       {% else %}
         <p>
-          {{ caseStatusForDefendant(claim.status, claim, DashboardUrlHelper.getStatusUrl(claim)) }}
+          {{ caseStatusForDefendant(claim.status, claim) }}
         </p>
       {% endif %}
     </div>

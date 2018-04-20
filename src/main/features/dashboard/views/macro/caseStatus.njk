@@ -30,7 +30,7 @@
 
 {% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedDashboard %}
 
-{% macro caseStatusForClaimant(status, claim, url) %}
+{% macro caseStatusForClaimant(status, claim) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -58,7 +58,7 @@
   {% endif %}
 {% endmacro %}
 
-{% macro caseStatusForDefendant(status, claim, url) %}
+{% macro caseStatusForDefendant(status, claim) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -82,8 +82,4 @@
   {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
     {{ offerSettlementReachedDashboard() }}
   {% endif %}
-{% endmacro %}
-
-{% macro _viewResponseLink (externalId) %}
-  <a href="{{ ResponsePaths.summaryPage.evaluateUri({ externalId: externalId }) }}">{{ t('View full response') }}</a>
 {% endmacro %}
