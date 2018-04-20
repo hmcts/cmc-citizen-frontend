@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, textInput, saveAndContinueButton, errorSummary, textArea, poundInput %}
 
-{% set heading = t('How much money do you believe you owe?') %}
+{% set heading = 'How much money do you believe you owe?' %}
 
 {% set claimantFullName = claim.claimData.claimant.name %}
 
