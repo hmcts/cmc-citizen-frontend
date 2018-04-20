@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure@feature/no-yarn-verbose")
+@Library("Infrastructure")
 
 String product = "cmc"
 String component = "citizen-frontend"
