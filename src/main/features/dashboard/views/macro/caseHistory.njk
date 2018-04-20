@@ -82,7 +82,7 @@ ccjRequesterForDefendantClaimDetails %}
         {% endif %}
 
         {% if not claim.settlement %}
-          {{ settleOutOfCourtOption (claim) }}
+          {{ _settleOutOfCourtOption (claim) }}
         {% endif %}
 
       {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
@@ -102,7 +102,7 @@ ccjRequesterForDefendantClaimDetails %}
   {% endfor %}
 {% endmacro %}
 
-{% macro settleOutOfCourtOption (claim) %}
+{% macro _settleOutOfCourtOption (claim) %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
   <p>{{ t('You may still <a href="{{ link }}">settle the claim out of court</a>. For example you could offer to fix goods you sold the claimant or suggest a payment.',
       { link: OfferPaths.settleOutOfCourtPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}</p>
