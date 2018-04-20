@@ -1,14 +1,18 @@
 #!/bin/bash
 set -ex
 
-ADDITIONAL_COMPOSE_FILE=docker-compose.functional-tests.yml
+ADDITIONAL_COMPOSE_FILE="docker-compose.functional-tests.yml -f docker-compose.yml"
 
 function shutdownDocker() {
   docker-compose -f ${ADDITIONAL_COMPOSE_FILE} down
 }
 
-export CLAIM_STORE_URL=$(echo ${TEST_URL} | sed -e "s/citizen-frontend/claim-store/" -e "s/-staging//" -e "s/https/http/")
-export IDAM_URL=http://betaDevBccidamAppLB.reform.hmcts.net
+if [[ ${TEST_URL} = *"preview"*  ]]; then
+  export CLAIM_STORE_URL="http://cmc-claim-store-aat.service.core-compute-aat.internal"
+else
+  export CLAIM_STORE_URL=$(echo ${TEST_URL} | sed -e "s/citizen-frontend/claim-store/" -e "s/-staging//" -e "s/https/http/")
+fi
+export IDAM_URL=https://preprod-idamapi.reform.hmcts.net:3511
 
 trap shutdownDocker INT TERM QUIT EXIT
 
