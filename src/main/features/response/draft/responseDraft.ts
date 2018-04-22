@@ -125,7 +125,7 @@ export class ResponseDraft extends DraftDocument {
       && this.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.AMOUNT_CLAIMED
   }
 
-  private isResponsePopulated (): boolean {
+  public isResponsePopulated (): boolean {
     return !!this.response && !!this.response.type
   }
 }
