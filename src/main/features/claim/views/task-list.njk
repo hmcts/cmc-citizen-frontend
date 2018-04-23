@@ -1,10 +1,10 @@
 {% extends "layout.njk" %}
 {% from "task-list.njk" import task, taskListHeading, disabledTask %}
+{% set heading = 'Make a money claim' %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Make a money claim') }}</h1>
       <div class="task-group">
         {{ taskListHeading(beforeYouStart.position, t(beforeYouStart.name)) }}
 

@@ -4,7 +4,11 @@
 <!--[if gt IE 8]><!--><html lang="{{ html_lang|default('en') }}"><!--<![endif]-->
 <head>
   <meta charset="utf-8" />
-  <title>{{ t(heading) }} - {{ t(moneyClaims) }}</title>
+  {% if heading %}
+    <title>{{ t(heading) }} - {{ t(moneyClaims) }}</title>
+  {% else %}
+    <title>{{ t(moneyClaims) }}</title>
+  {% endif %}
 
   <!--[if gt IE 8]><!--><link rel="stylesheet" media="screen" href="{{ asset_paths['style_vendor'] }}/govuk-template.css?{{ govuk_template_version }}"/><!--<![endif]-->
   <!--[if IE 6]><link rel="stylesheet" media="screen" href="{{ asset_paths['style_vendor'] }}/govuk-template-ie6.css?{{ govuk_template_version }}"/><![endif]-->
