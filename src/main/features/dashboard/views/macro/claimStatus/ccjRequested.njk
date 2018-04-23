@@ -6,7 +6,7 @@
 {% endmacro %}
 
 {% macro ccjRequestedForClaimantClaimDetails(claim) %}
-  <h2 class="heading-small">{{ t('You’ve requested a County Court Judgment (CCJ).') }}</h2>
+  <h2 class="heading-small">{{ t('You’ve requested a County Court Judgment (CCJ)') }}</h2>
   <p>
     {{ t('We’ll contact you within 5 days to tell you whether the judgment has been entered.') }}
   </p>
@@ -21,7 +21,7 @@
     { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
 {% endmacro %}
 
-{% macro ccjRequesterForDefendantClaimDetails(claim) %}
+{% macro ccjRequestedForDefendantClaimDetails(claim) %}
   <h2 class="heading-small">{{ t('The claimant has requested a CCJ against you') }}</h2>
   <p>
     {{ t('You didn’t respond to this claim by the deadline of {{ responseDeadline }}.',

@@ -8,9 +8,9 @@
   <p>
     {{ t('{{ defendantName }} believes that they’ve paid the claim in full. '
       + 'Email {{ emailAddress }} if you want to proceed with the claim '
-      + 'you must do this before 4pm on {{ respondToDefendantPaidInFullDeadline }}.',
+      + 'you must do this before 4pm on {{ respondToResponseDeadline }}.',
       { defendantName: claim.claimData.defendant.name, emailAddress: 'moneyclaims@hmcts.gsi.gov.uk',
-      respondToDefendantPaidInFullDeadline: claim.respondToDefendantPaidInFullDeadline | date }) }}
+        respondToResponseDeadline: claim.respondToResponseDeadline | date }) }}
   </p>
   <p>
     {{ _downloadResponseLink(claim, 'Download their response') }}

@@ -89,14 +89,9 @@ export class Claim {
     if (!this.respondedAt) {
       return undefined
     }
-    return this.respondedAt.clone().add('33', 'days')
-  }
-
-  get respondToDefendantPaidInFullDeadline (): Moment {
-    if (!this.respondedAt) {
-      return undefined
-    }
-    return this.respondedAt.clone().add('28', 'days')
+    const daysForService = 5
+    const daysForResponse = 28
+    return this.respondedAt.clone().add(daysForService + daysForResponse, 'days')
   }
 
   get respondToMediationDeadline (): Moment {
