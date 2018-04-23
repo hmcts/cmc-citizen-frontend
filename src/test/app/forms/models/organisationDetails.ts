@@ -1,16 +1,21 @@
 import { expect } from 'chai'
-import { OrganisationDetails, ValidationErrors as OrganisationDetailsValidationErrors } from 'forms/models/organisationDetails'
+import {
+  OrganisationDetails,
+  ValidationConstraints as OrganisationDetailsValidationConstraints,
+  ValidationErrors as OrganisationDetailsValidationErrors
+} from 'forms/models/organisationDetails'
 import { ValidationErrors as PartydDetailsValidationErrors } from 'forms/models/partyDetails'
 import { PartyType } from 'app/common/partyType'
 import { Address, ValidationErrors as AddressValidationErrors } from 'forms/models/address'
 import { ValidationErrors as CorrespondenceAddressValidationErrors } from 'forms/models/correspondenceAddress'
 import { ValidationError, Validator } from 'class-validator'
-import { expectValidationError } from './validationUtils'
+import { expectValidationError, generateString } from './validationUtils'
+
 const validAddress = new Address('line1', 'line2', 'line3', 'city', 'postcode')
 
 const aVeryLongString = (): string => {
   return 'aVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongString' +
-         'aVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringa'
+    'aVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringa'
 }
 describe('OrganisationDetails', () => {
   let input
@@ -82,15 +87,15 @@ describe('OrganisationDetails', () => {
       organisationDetails.contactPerson = 'contactPerson'
       organisationDetails.address = validAddress
       let errors: ValidationError[] = validator.validateSync(organisationDetails)
-      expectValidationError(errors, PartydDetailsValidationErrors.NAME_TOO_LONG.replace('$constraint1','255'))
+      expectValidationError(errors, PartydDetailsValidationErrors.NAME_TOO_LONG.replace('$constraint1', '255'))
     })
 
-    it('should return error when contact person got more than 255 character', () => {
-      organisationDetails.contactPerson = aVeryLongString()
+    it('should return error when contact person got more than max length', () => {
+      organisationDetails.contactPerson = generateString(OrganisationDetailsValidationConstraints.CONTACT_PERSON_MAX_LENGTH + 1)
       organisationDetails.name = 'claimantPerson'
       organisationDetails.address = validAddress
       let errors: ValidationError[] = validator.validateSync(organisationDetails)
-      expectValidationError(errors, OrganisationDetailsValidationErrors.CONTACT_PERSON_NAME_TOO_LONG.replace('$constraint1','35'))
+      expectValidationError(errors, OrganisationDetailsValidationErrors.CONTACT_PERSON_NAME_TOO_LONG.replace('$constraint1', '35'))
     })
 
     describe('when "has correspondence address" flag is set to true', () => {

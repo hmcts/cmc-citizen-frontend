@@ -99,15 +99,18 @@ describe('Defendant response task list builder', () => {
     })
 
     describe('"Check and submit your response" task', () => {
+      let isResponsePopulatedStub: sinon.SinonStub
       let isResponseRejectedFullyWithDisputePaidStub: sinon.SinonStub
       let isResponseRejectedFullyWithAmountClaimedPaidStub: sinon.SinonStub
 
       beforeEach(() => {
+        isResponsePopulatedStub = sinon.stub(ResponseDraft.prototype, 'isResponsePopulated')
         isResponseRejectedFullyWithDisputePaidStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
         isResponseRejectedFullyWithAmountClaimedPaidStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithAmountClaimedPaid')
       })
 
       afterEach(() => {
+        isResponsePopulatedStub.restore()
         isResponseRejectedFullyWithDisputePaidStub.restore()
         isResponseRejectedFullyWithAmountClaimedPaidStub.restore()
       })
@@ -129,6 +132,7 @@ describe('Defendant response task list builder', () => {
       })
 
       it('should be disabled in remaining cases', () => {
+        isResponsePopulatedStub.returns(true)
         isResponseRejectedFullyWithDisputePaidStub.returns(false)
         isResponseRejectedFullyWithAmountClaimedPaidStub.returns(false)
 
