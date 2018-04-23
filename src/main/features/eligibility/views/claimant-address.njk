@@ -1,15 +1,13 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, radioGroup, errorSummary, saveAndContinueButton %}
 
-{% set title = t('Claimant address | Money claim') %}
-{% set question = t('Do you have an address in the UK?') %}
+{% set heading = 'Do you have an address in the UK?' %}
 {% set additionalInformation = t('The UK is made up of England, Scotland, Wales and Northern Ireland.') %}
 
 {% block content %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ question }}</h1>
       <p>{{ additionalInformation }}</p>
 
       {% set name = 'claimantAddress' %}

@@ -1,8 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 
-{% set title = t('Claim value | Money claim') %}
-{% set question = t('Total amount you’re claiming') %}
+{% set heading = 'Total amount you’re claiming' %}
 {% set additionalInformation = t('If you’re claiming interest, include that in the amount.') %}
 
 {% block content %}
@@ -10,7 +9,6 @@
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ question }}</h1>
       <p>{{ additionalInformation }}</p>
 
       {% set name = 'claimValue' %}

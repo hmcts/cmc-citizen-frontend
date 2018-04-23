@@ -1,15 +1,12 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 
-{% set title = t('Defendant Age Eligibility | Money claim') %}
-{% set question = t('Do you believe the person you’re claiming against is 18 or over?') %}
+{% set heading = 'Do you believe the person you’re claiming against is 18 or over?' %}
 
 {% block content %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ question }}</h1>
-
       {% set name = 'defendantAge' %}
 
       <form novalidate method="post" class="analytics-submit-event-trigger"

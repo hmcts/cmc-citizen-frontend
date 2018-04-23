@@ -2,8 +2,7 @@
 {% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 {% from "externalLink.njk" import externalLink %}
 
-{% set title = t('Govornment department | Money claim') %}
-{% set question = t('Are you claiming against a government department?') %}
+{% set heading = 'Are you claiming against a government department?' %}
 {% set additionalInformation = t(externalLink('See a list of government departments',
   'https://www.gov.uk/government/publications/serve-the-treasury-solicitor-with-legal-proceedings') + '.') %}
 
@@ -11,7 +10,6 @@
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ question }}</h1>
       <p>{{ additionalInformation | safe }}</p>
 
       {% set name = 'governmentDepartment' %}
