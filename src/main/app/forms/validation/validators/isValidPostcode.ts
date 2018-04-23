@@ -18,10 +18,6 @@ export class IsValidPostcodeConstraint implements ValidatorConstraintInterface {
     const normalised = value.toString().replace(/\s/g,'')
     return validator.matches(normalised, new RegExp(UK_POSTCODE_REGEX))
   }
-
-  defaultMessage (args: ValidationArguments) {
-    return 'Enter a valid postcode'
-  }
 }
 
 /**
