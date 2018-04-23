@@ -34,14 +34,19 @@ describe('isCCBCCaseReference', () => {
       const referenceNumber = 'A1QZ12AA'
       expect(isCCBCCaseReference(referenceNumber)).to.be.true
     })
-  })
 
-  describe('should return false when ', () => {
+    it('ccbc identifier is A1A11231', () => {
+      const referenceNumber = 'A1A11231'
+      expect(isCCBCCaseReference(referenceNumber)).to.be.true
+    })
 
     it('ccbc identifier is contained but not at the start', () => {
       const referenceNumber = '111AA167'
-      expect(isCCBCCaseReference(referenceNumber)).to.be.false
+      expect(isCCBCCaseReference(referenceNumber)).to.be.true
     })
+  })
+
+  describe('should return false when ', () => {
 
     it('ccbc identifier is AA131231', () => {
       const referenceNumber = 'AA131231'
@@ -50,11 +55,6 @@ describe('isCCBCCaseReference', () => {
 
     it('ccbc identifier is A1AAA231', () => {
       const referenceNumber = 'A1AAA231'
-      expect(isCCBCCaseReference(referenceNumber)).to.be.false
-    })
-
-    it('ccbc identifier is A1A11231', () => {
-      const referenceNumber = 'A1A11231'
       expect(isCCBCCaseReference(referenceNumber)).to.be.false
     })
 
