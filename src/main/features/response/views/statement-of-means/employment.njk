@@ -2,13 +2,11 @@
 {% from "form.njk" import csrfProtection, radioOption, checkboxOption, saveAndContinueButton, errorSummary %}
 {% from "date.njk" import dateInput %}
 
-{% set title = 'Money claim' %}
+{% set heading = 'Are you currently working?' %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Are you currently working?') }}</h1>
-
       <form method="post" novalidate
         class="analytics-submit-event-trigger"
         data-event-action="SoM: Are you currently working"

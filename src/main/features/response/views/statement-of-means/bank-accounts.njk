@@ -1,7 +1,6 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, poundInputInline, linkButton, saveAndContinueButton, errorSummary %}
 
-{% set title = t('Money claim') %}
 {% set heading = t('List your bank and savings accounts') %}
 
 {% macro bankAccountRow(index, form) %}

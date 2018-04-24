@@ -1,7 +1,6 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, poundInput, textArea, radioOption, linkButton, saveAndContinueButton, errorSummary %}
 
-{% set title = t('Money claim') %}
 {% set heading = t('Are you paying any other court orders?') %}
 
 {% macro courtOrdersRow(index, form) %}

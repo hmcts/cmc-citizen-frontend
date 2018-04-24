@@ -6,8 +6,6 @@
   <meta charset="utf-8" />
   {% if heading %}
     <title>{{ t(heading) }} - {{ t(moneyClaims) }}</title>
-  {% else %}
-    <title>{{ t(confirmation_heading) }} - {{ t(moneyClaims) }}</title>
   {% endif %}
 
   <!--[if gt IE 8]><!--><link rel="stylesheet" media="screen" href="{{ asset_paths['style_vendor'] }}/govuk-template.css?{{ govuk_template_version }}"/><!--<![endif]-->
@@ -81,7 +79,7 @@
     {{ errorSummary(form) }}
   {% endif %}
 
-  {% if heading %}
+  {% if heading and headingVisible %}
     <div class="grid-row">
       <div class="column-two-thirds">
         <h1 class="heading-{{ headingSize | default('large') }}">
