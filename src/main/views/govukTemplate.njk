@@ -7,7 +7,7 @@
   {% if heading %}
     <title>{{ t(heading) }} - {{ t(moneyClaims) }}</title>
   {% else %}
-    <title>{{ t(moneyClaims) }}</title>
+    <title>{{ t(confirmation_heading) }} - {{ t(moneyClaims) }}</title>
   {% endif %}
 
   <!--[if gt IE 8]><!--><link rel="stylesheet" media="screen" href="{{ asset_paths['style_vendor'] }}/govuk-template.css?{{ govuk_template_version }}"/><!--<![endif]-->
@@ -82,12 +82,17 @@
   {% endif %}
 
   {% if heading %}
-    <h1 class="heading-{{ headingSize | default('large') }}">
-      {{ t(heading) }}
-    {% if headingSecondary %}
-      <span class="heading-secondary">{{ t(headingSecondary) }}</span>
-    {% endif %}
-    </h1>
+    <div class="grid-row">
+      <div class="column-two-thirds">
+        <h1 class="heading-{{ headingSize | default('large') }}">
+          {{ t(heading) }}
+          {% if headingSecondary %}
+            <span class="heading-secondary">{{ t(headingSecondary) }}</span>
+          {% endif %}
+        </h1>
+      </div>
+    </div>
+
   {% endif %}
 
   {% block content %}{% endblock %}
