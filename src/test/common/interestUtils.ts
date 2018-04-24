@@ -3,7 +3,6 @@ import { expect } from 'chai'
 import { Claim } from 'claims/models/claim'
 import { getInterestDetails } from 'common/interestUtils'
 import { MomentFactory } from 'common/momentFactory'
-import * as claimStoreServiceMock from '../http-mocks/claim-store'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { Interest } from 'claims/models/interest'
 import { InterestDate } from 'claims/models/interestDate'
@@ -43,8 +42,6 @@ describe('getInterestDetails', () => {
   })
 
   it('should return 0 for number of days when interest date starts from today', async () => {
-    claimStoreServiceMock.mockCalculateInterestRate(5)
-
     const today = MomentFactory.currentDate()
     const claim: Claim = new Claim().deserialize({ ...sampleClaimObj, issuedOn: today })
 
@@ -53,8 +50,6 @@ describe('getInterestDetails', () => {
   })
 
   it('should return 1 for number of days when interest date starts from yesterday', async () => {
-    claimStoreServiceMock.mockCalculateInterestRate(5)
-
     const yesterday = MomentFactory.currentDate().subtract(1, 'days')
     const claim: Claim = new Claim().deserialize({ ...sampleClaimObj, issuedOn: yesterday })
 
@@ -63,8 +58,6 @@ describe('getInterestDetails', () => {
   })
 
   it('should return 0 for number of days when interest date starts from tomorrow (issue date in the future)', async () => {
-    claimStoreServiceMock.mockCalculateInterestRate(5)
-
     const tomorrow = MomentFactory.currentDate().add(1, 'days')
     const claim: Claim = new Claim().deserialize({ ...sampleClaimObj, issuedOn: tomorrow })
 

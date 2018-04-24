@@ -9,9 +9,8 @@ export class OweMoneyTask {
 
     switch (responseDraft.response.type) {
       case ResponseType.FULL_ADMISSION:
-        return true
       case ResponseType.PART_ADMISSION:
-        return responseDraft.rejectPartOfClaim && responseDraft.rejectPartOfClaim.option !== undefined
+        return true
       case ResponseType.DEFENCE:
         return responseDraft.rejectAllOfClaim && responseDraft.rejectAllOfClaim.option !== undefined
       default:

@@ -17,11 +17,7 @@ macro statementOfTruth(
   {% endif %}
 
   {% if isQualified %}
-    <p>{{ t('You must hold a senior position in your organisation to sign the %s.',
-    {
-      postProcess: 'sprintf',
-      sprintf: [typeOfStatement]
-    }) }}</p>
+    <p>{{ t('You must hold a senior position in your organisation to sign the {{ typeOfStatement }}.', { typeOfStatement: typeOfStatement }) }}</p>
 
     <details class='form-group'>
       <summary>

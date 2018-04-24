@@ -3,6 +3,7 @@ import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
+import { DefenceType } from 'claims/models/response/fullDefenceResponse'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { ResponseGuard } from 'response/guards/responseGuard'
 import { ClaimMiddleware } from 'app/claims/claimMiddleware'
@@ -29,6 +30,7 @@ function defendantResponseRequestHandler (): express.RequestHandler {
 export class Feature {
   enableFor (app: express.Express) {
     if (app.settings.nunjucksEnv && app.settings.nunjucksEnv.globals) {
+      app.settings.nunjucksEnv.globals.DefenceType = DefenceType
       app.settings.nunjucksEnv.globals.FreeMediationOption = FreeMediationOption
     }
 
@@ -36,9 +38,9 @@ export class Feature {
 
     app.all(allResponseRoutes, defendantResponseRequestHandler())
     app.all(allResponseRoutes, ClaimMiddleware.retrieveByExternalId)
-    app.all(/^\/case\/.+\/response\/(?!receipt|summary).*$/, IsDefendantInCaseGuard.check())
+    app.all(/^\/case\/.+\/response\/(?!receipt|summary|claim-details).*$/, IsDefendantInCaseGuard.check())
     app.all(
-      /^\/case\/.+\/response\/(?!confirmation|full-admission|partial-admission|counter-claim|receipt|summary).*$/,
+      /^\/case\/.+\/response\/(?!confirmation|counter-claim|receipt|summary|claim-details).*$/,
       ResponseGuard.checkResponseDoesNotExist()
     )
     app.all('/case/*/response/summary', IsClaimantInCaseGuard.check(), ResponseGuard.checkResponseExists())

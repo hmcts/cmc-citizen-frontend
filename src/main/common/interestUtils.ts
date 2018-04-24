@@ -3,7 +3,6 @@ import * as moment from 'moment'
 import { InterestDateType } from 'app/common/interestDateType'
 import { MomentFactory } from 'common/momentFactory'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
-import { calculateInterest } from 'app/common/calculateInterest'
 import { Claim } from 'claims/models/claim'
 import { InterestData } from 'app/common/interestData'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
@@ -12,6 +11,7 @@ import { isAfter4pm } from 'common/dateUtils'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 import { YesNoOption } from 'models/yesNoOption'
 import { InterestTypeOption } from 'claim/form/models/interestType'
+import { calculateInterest } from 'app/common/calculateInterest'
 
 export async function getInterestDetails (claim: Claim): Promise<InterestData> {
   if (claim.claimData.interest.type === ClaimInterestType.NO_INTEREST || claim.claimData.interest.type === undefined) {
@@ -23,11 +23,7 @@ export async function getInterestDetails (claim: Claim): Promise<InterestData> {
   const numberOfDays: number = interestToDate.diff(interestFromDate, 'days')
 
   const rate = claim.claimData.interest.rate
-  let interest: number = await calculateInterest(claim.claimData.amount.totalAmount(), rate, interestFromDate, interestToDate)
-
-  if (claim.claimData.interest.type === ClaimInterestType.BREAKDOWN) {
-    interest += claim.claimData.interest.interestBreakdown.totalAmount
-  }
+  let interest: number = claim.totalInterest
 
   const specificDailyAmount = claim.claimData.interest.specificDailyAmount
   return { interestFromDate, interestToDate, numberOfDays, interest, rate, specificDailyAmount }

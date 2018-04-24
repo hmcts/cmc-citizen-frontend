@@ -107,8 +107,9 @@ export const sampleDefendantResponseObj = {
 }
 
 export function mockCalculateInterestRate (expected: number): mock.Scope {
-  return mock(`${serviceBaseURL}/interest/calculate`)
-    .get(new RegExp('.+'))
+  return mock(serviceBaseURL)
+    .get('/interest/calculate')
+    .query(true)
     .reply(HttpStatus.OK, { amount: expected })
 }
 

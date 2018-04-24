@@ -19,6 +19,7 @@ class Client {
     })
   }
 }
+
 // TS:no-
 function logStartupProblem (response) {
   if (response.body) {
@@ -75,11 +76,8 @@ async function createSmokeTestsUserIfDoesntExist (username: string, userGroup: s
     if (!(username || password)) {
       return undefined
     }
-    return IdamClient.createUser(
-      username,
-      userGroup,
-      password
-    )
+
+    return IdamClient.createUser(username, userGroup, password)
   }
 }
 

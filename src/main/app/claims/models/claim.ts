@@ -36,6 +36,7 @@ export class Claim {
   settlementReachedAt: Moment
   totalAmountTillToday: number
   totalAmountTillDateOfIssue: number
+  totalInterest: number
 
   deserialize (input: any): Claim {
     if (input) {
@@ -71,6 +72,7 @@ export class Claim {
       }
       this.totalAmountTillToday = input.totalAmountTillToday
       this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
+      this.totalInterest = input.totalInterest
     }
     return this
   }
@@ -83,7 +85,13 @@ export class Claim {
     return this.settlement.getDefendantOffer()
   }
 
-  // noinspection JSUnusedGlobalSymbols Called in the view
+  get respondToResponseDeadline (): Moment {
+    if (!this.respondedAt) {
+      return undefined
+    }
+    return this.respondedAt.clone().add('33', 'days')
+  }
+
   get remainingDays (): number {
     return this.responseDeadline.diff(MomentFactory.currentDate(), 'days')
   }
@@ -121,17 +129,12 @@ export class Claim {
   }
 
   get stateHistory (): State[] {
-    if (this.status === ClaimStatus.OFFER_ACCEPTED) {
-      return [{
-        status: ClaimStatus.OFFER_ACCEPTED
-      }, {
-        status: ClaimStatus.CLAIM_REJECTED
-      }]
-    } else {
-      return [{
-        status: this.status
-      }]
+    const statuses = [{ status: this.status }]
+    if (this.isClaimRejected() && statuses[0].status !== ClaimStatus.CLAIM_REJECTED) {
+      statuses.push({ status: ClaimStatus.CLAIM_REJECTED })
     }
+
+    return statuses
   }
 
   private isOfferSubmitted (): boolean {

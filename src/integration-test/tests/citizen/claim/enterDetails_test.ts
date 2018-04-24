@@ -15,7 +15,6 @@ Feature('Claimant Enter details of claim')
 Scenario('I can prepare a claim with default interest @citizen', function* (I: I) {
   const email: string = yield I.createCitizenUser()
   userSteps.login(email)
-  userSteps.startClaim()
   claimSteps.completeEligibility()
   userSteps.selectClaimAmount()
   I.see('Claim amount')
@@ -33,7 +32,6 @@ Scenario('I can prepare a claim with no interest @citizen', function* (I: I) {
   const email: string = yield I.createCitizenUser()
   userSteps.login(email)
 
-  userSteps.startClaim()
   claimSteps.completeEligibility()
   userSteps.selectClaimAmount()
   I.see('Claim amount')
@@ -51,7 +49,6 @@ Scenario('I can prepare a claim with different interest rate and date @citizen',
   const email: string = yield I.createCitizenUser()
   userSteps.login(email)
 
-  userSteps.startClaim()
   claimSteps.completeEligibility()
   userSteps.selectClaimAmount()
   claimSteps.enterClaimAmount(10, 20.50, 50)
@@ -68,7 +65,6 @@ Scenario('I can prepare a claim with a manually entered interest amount and a da
   const email: string = yield I.createCitizenUser()
   userSteps.login(email)
 
-  userSteps.startClaim()
   claimSteps.completeEligibility()
   userSteps.selectClaimAmount()
   claimSteps.enterClaimAmount(10, 20.50, 50)
@@ -85,7 +81,6 @@ Scenario('I can see the Claim amount page calculates properly and shows the corr
   const email: string = yield I.createCitizenUser()
   userSteps.login(email)
 
-  userSteps.startClaim()
   claimSteps.completeEligibility()
   userSteps.selectClaimAmount()
   I.see('Claim amount')

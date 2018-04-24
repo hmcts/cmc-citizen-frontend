@@ -1,21 +1,19 @@
 {% extends "layout.njk" %}
 {% from "./macro/caseHistory.njk" import caseHistoryForDefendant %}
 
-{% set title = t('Money claim') %}
+{% set title = t('Your money claims account') %}
 
 {% block content %}
   <div class="grid-row">
-    <div class="column-full">
+    <div class="column-two-thirds">
       <h1 class="heading-large">
         <span class="heading-secondary">{{ t('Claim number:') }}</span>
         {{ claim.claimNumber }}
       </h1>
-    </div>
-    <div class="column-two-thirds">
       <h2 class="heading-medium">{{ t('Claim status') }}</h2>
       {{ caseHistoryForDefendant(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
 
-      {% if featureToggles.offer and claim.status === ClaimStatus.CLAIM_REJECTED %}
+      {% if featureToggles.offer and claim.status === ClaimStatus.CLAIM_REJECTED and claim.response.defenceType !== DefenceType.ALREADY_PAID %}
         <h2 class="heading-medium">{{ t('More options') }}</h2>
         <h3 class="heading-small">{{ t('Settle out of court') }}</h3>
         <p>
@@ -26,7 +24,7 @@
     </div>
 
     <div class="column-one-third">
-      <div class="meta-data">
+      <div class="about-claim-widget">
         <p class="heading-small">{{ t('About claim') }}</p>
         <ul class="font-xsmall list">
           <li>
@@ -39,12 +37,12 @@
           </li>
           <li>
             <strong class="bold">{{ t('Claim details:') }}</strong>
-            <span class="block"><a href="{{ DashboardPaths.claimReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download claim') }}</a></span>
+            <span class="block"><a href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View claim') }}</a></span>
           </li>
           {% if claim.response %}
           <li>
             <strong class="bold">{{ t('Your response:') }}</strong>
-            <span class="block"><a href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a></span>
+            <span class="block"><a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a></span>
           </li>
           {% endif %}
         </ul>

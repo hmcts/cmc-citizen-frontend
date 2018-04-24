@@ -29,7 +29,7 @@
             {% for item in evidence.rows %}
               <tr>
                 <td>{{ item.type.displayValue }}</td>
-                <td>{{ item.description }}</td>
+                <td>{{ item.description | default('')}}</td>
               </tr>
             {% endfor %}
             </tbody>

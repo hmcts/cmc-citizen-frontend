@@ -5,7 +5,6 @@ class ClaimStoreHelper extends codecept_helper {
 
   async createClaim (claimData: ClaimData, submitterEmail: string): Promise<string> {
     const submitter: User = await this.prepareAuthenticatedUser(submitterEmail)
-
     const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter)
 
     return referenceNumber
@@ -16,8 +15,9 @@ class ClaimStoreHelper extends codecept_helper {
     const claim: Claim = await ClaimStoreClient.retrieveByReferenceNumber(claimRef, { bearerToken: claimantBearerToken })
     const pinResponse = await IdamClient.getPin(claim.letterHolderId)
     const upliftToken = await IdamClient.authenticatePinUser(pinResponse.body)
-    const defendantBearerToken = await IdamClient.upliftUser(defendantEmail, upliftToken)
-    await ClaimStoreClient.linkDefendant({ bearerToken: defendantBearerToken }, claim.externalId)
+    await IdamClient.upliftUser(defendantEmail, upliftToken)
+    const defendant: User = await this.prepareAuthenticatedUser(defendantEmail)
+    await ClaimStoreClient.linkDefendant(defendant, claim.externalId)
   }
 
   async respondToClaim (referenceNumber: string, ownerEmail: string, responseData: ResponseData, defendantEmail: string): Promise<void> {
@@ -31,6 +31,7 @@ class ClaimStoreHelper extends codecept_helper {
   private async prepareAuthenticatedUser (userEmail: string): Promise<User> {
     const jwt: string = await IdamClient.authenticateUser(userEmail)
     const user: User = await IdamClient.retrieveUser(jwt)
+
     return { ...user, bearerToken: jwt }
   }
 }
