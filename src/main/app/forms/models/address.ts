@@ -10,6 +10,8 @@ import { IsCountrySupported } from 'forms/validation/validators/isCountrySupport
 import { Country } from 'app/common/country'
 import { IsValidPostcode } from 'forms/validation/validators/isValidPostcode'
 
+const validator = new Validator()
+
 export class ValidationErrors {
   static readonly FIRST_LINE_REQUIRED: string = 'Enter first address line'
   static readonly FIRST_LINE_TOO_LONG: string = 'The address line must be no longer than $constraint1 characters'
@@ -144,6 +146,6 @@ export class Address implements CompletableTask {
   }
 
   isCompleted (...groups: string[]): boolean {
-    return new Validator().validateSync(this, { groups: groups }).length === 0
+    return validator.validateSync(this, { groups: groups }).length === 0
   }
 }
