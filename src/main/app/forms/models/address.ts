@@ -10,7 +10,7 @@ import { IsCountrySupported } from 'forms/validation/validators/isCountrySupport
 import { Country } from 'app/common/country'
 import { IsValidPostcode } from 'forms/validation/validators/isValidPostcode'
 
-const validator = new Validator()
+const validator: Validator = new Validator()
 
 export class ValidationErrors {
   static readonly FIRST_LINE_REQUIRED: string = 'Enter first address line'
