@@ -2,11 +2,11 @@
 
 {% from "form.njk" import saveAndContinueButton, csrfProtection, radioGroup, radioGroupWithHintPanel, errorSummary %}
 
+{% set heading = formLabel %}
+
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t(formLabel) }}</h1>
-
       <form method="post"
             class="analytics-submit-event-trigger"
             data-event-action="Defendant: Select payment option"
