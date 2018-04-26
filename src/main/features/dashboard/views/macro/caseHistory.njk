@@ -3,7 +3,9 @@
 {% from "./claimStatus/noReponse.njk" import noResponseForClaimantClaimDetails, noResponseForDefendantClaimDetails %}
 {% from "./claimStatus/moreTimeRequested.njk" import moreTimeRequestedForClaimantClaimDetails, moreTimeRequestedForDefendantClaimDetails %}
 
-{% from "./claimStatus/ccjEligible.njk" import ccjEligibleForClaimantClaimDetails %}
+{% from "./claimStatus/ccjEligible.njk" import
+  ccjEligibleForClaimantClaimDetails,
+  ccjEligibleForDefendantClaimDetails %}
 {% from "./claimStatus/ccjRequested.njk" import
 ccjRequestedForClaimantClaimDetails,
 ccjRequestedForDefendantClaimDetails %}
@@ -70,6 +72,8 @@ ccjRequestedForDefendantClaimDetails %}
         {{ noResponseForDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
         {{ moreTimeRequestedForDefendantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
+        {{ ccjEligibleForDefendantClaimDetails(claim, csrf) }}
       {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
         {{ ccjRequestedForDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
