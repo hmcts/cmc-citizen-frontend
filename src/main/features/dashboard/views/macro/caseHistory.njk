@@ -81,7 +81,7 @@ ccjRequestedForDefendantClaimDetails %}
           {{ claimRejectedFreeMediationYESForDefendantClaimDetails(claim) }}
         {% endif %}
 
-        {% if not claim.settlement %}
+        {% if claim.response.defenceType !== DefenceType.ALREADY_PAID %}
           {{ _settleOutOfCourtOption (claim) }}
         {% endif %}
       {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
