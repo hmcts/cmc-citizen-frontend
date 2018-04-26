@@ -1,5 +1,4 @@
 import { RequestLoggingHandler } from 'logging/requestPromiseLoggingHandler'
-import { RequestTracingHandler } from 'logging/requestTracingHandler'
 import * as config from 'config'
 import * as requestBase from 'request'
 import * as requestPromise from 'request-promise-native'
@@ -22,16 +21,12 @@ const defaultRequestRetryOptions = {
   maxAttempts: maxAttempts
 }
 
-const requestNonPromise: DefaultRequestAPI = RequestTracingHandler.proxy(
-  RequestLoggingHandler.proxy(requestBase)
-)
+const requestNonPromise: DefaultRequestAPI = RequestLoggingHandler.proxy(requestBase)
 
-const retryingRequest: RequestPromiseAPI = RequestTracingHandler.proxy(
-  RequestLoggingHandler.proxy(requestRetry.defaults({
-    ...defaultOptions,
-    ...defaultRequestRetryOptions
-  }))
-)
+const retryingRequest: RequestPromiseAPI = RequestLoggingHandler.proxy(requestRetry.defaults({
+  ...defaultOptions,
+  ...defaultRequestRetryOptions
+}))
 
 export {
   retryingRequest as request,

@@ -36,10 +36,6 @@ variable "idam_api_url" {
   default = "http://betaDevBccidamAppLB.reform.hmcts.net"
 }
 
-variable "s2s_url" {
-  default = "http://betaDevBccidamS2SLB.reform.hmcts.net"
-}
-
 variable "authentication_web_url" {
   default = "https://idam-test.dev.ccidam.reform.hmcts.net"
 }
@@ -102,4 +98,9 @@ variable "node_env" {
 
 variable "external_host_name" {
   default = "moneyclaims.sandbox.platform.hmcts.net"
+}
+
+variable "appinsights_instrumentation_key" {
+  description = "Instrumentation key of the App Insights instance this webapp should use. Module will create own App Insights resource if this is not provided"
+  default = ""
 }

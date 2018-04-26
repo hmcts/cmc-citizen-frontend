@@ -26,7 +26,7 @@ export default express.Router()
       res.render(Paths.taskListPage.associatedView,
         {
           beforeYouStartSection: beforeYouStartSection,
-          submitSection: beforeYouStartSection.isCompleted() && respondToClaimSection.isCompleted() ? submitSection : undefined,
+          submitSection: submitSection,
           respondToClaimSection: respondToClaimSection,
           claim: claim,
           isAfter4pm: isAfter4pm()
