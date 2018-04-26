@@ -23,22 +23,22 @@
           <th scope="col">{{ t('Defendant name') }}</th>
           <th scope="col">{{ t('Claim amount') }}</th>
 
-          <th scope="col" class="mobile-hide">{{ t('Status') }}</th>
+          <th scope="col" class="phone-hide">{{ t('Status') }}</th>
         </tr>
         </thead>
         <tbody>
         {% if claimDraftSaved %}
-          <tr class="draft mobile-table">
+          <tr class="draft phone-table">
             <td><a href="{{ ClaimPaths.taskListPage.uri }}">{{ t('Draft claim') }}</a></td>
             <td>-</td>
 
             <td>-</td>
-            <td class="mobile-hide">
+            <td class="phone-hide">
               <a href="{{ ClaimPaths.taskListPage.uri }}">{{ t('Continue with claim') }}</a>
             </td>
           </tr>
           <tr>
-            <td colspan="3" class="mobile-table-status">
+            <td colspan="3" class="phone-table-status">
               {{ t('Status: ') }}<a href="{{ ClaimPaths.taskListPage.uri }}">{{ t('Continue with claim') }}</a>
             </td>
           </tr>
@@ -46,16 +46,16 @@
         {% for claim in claimsAsClaimant %}
           {% set statusUrl = DashboardUrlHelper.getStatusUrl(claim) %}
 
-          <tr class="claims default mobile-table">
+          <tr class="claims default phone-table">
             <td><a href="/dashboard/{{ claim.externalId }}/claimant">{{ claim.claimNumber }}</a></td>
             <td>{{ claim.claimData.defendant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
-            <td class="mobile-hide">
+            <td class="phone-hide">
               {{ caseStatusForClaimant(claim.status, claim, statusUrl) }}
             </td>
           </tr>
           <tr>
-            <td colspan="3" class="mobile-table-status">
+            <td colspan="3" class="phone-table-status">
               {{ t('Status: ') }}
               {{ caseStatusForClaimant(claim.status, claim, statusUrl) }}
             </td>
@@ -72,17 +72,17 @@
 
       <table class="claim-dashboard">
         <thead>
-        <tr class="mobile-table">
+        <tr class="phone-table">
           <th scope="col">{{ t('Claim number') }}</th>
           <th scope="col">{{ t('Claimant name') }}</th>
           <th scope="col">{{ t('Claim amount') }}</th>
 
-          <th scope="col" class="mobile-hide">{{ t('Status') }}</th>
+          <th scope="col" class="phone-hide">{{ t('Status') }}</th>
         </tr>
         </thead>
         <tbody>
         {% if responseDraftSaved %}
-          <tr class="draft mobile-table">
+          <tr class="draft phone-table">
             <td><a href="{{ ResponsePaths.taskListPage.uri }}">Draft response</a></td>
             <td>-</td>
 
@@ -94,16 +94,16 @@
           {% set statusUrl = DashboardUrlHelper.getStatusUrl(claim) %}
           {% set nextPageUrl = DashboardUrlHelper.getNextResponseUrl(claim) %}
 
-          <tr class="mobile-table">
+          <tr class="phone-table">
             <td><a href="{{ nextPageUrl }}">{{ claim.claimNumber }}</a></td>
             <td>{{ claim.claimData.claimant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
-            <td class="mobile-hide">
+            <td class="phone-hide">
               {{ caseStatusForDefendant(claim.status, claim, statusUrl, isAfter4pm) }}
             </td>
           </tr>
           <tr>
-            <td colspan="3" class="mobile-table-status">
+            <td colspan="3" class="phone-table-status">
               {{ t('Status: ') }} {{ caseStatusForDefendant(claim.status, claim, statusUrl, isAfter4pm) }}
             </td>
           </tr>

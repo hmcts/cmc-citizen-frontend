@@ -11,7 +11,7 @@ import {
 import { CitizenCompletingClaimInfoPage } from 'integration-test/tests/citizen/claim/pages/citizen-completing-claim-info'
 import { CitizenDobPage } from 'integration-test/tests/citizen/claim/pages/citizen-dob'
 import { CitizenEmailPage } from 'integration-test/tests/citizen/claim/pages/citizen-email'
-import { CitizenMobilePage } from 'integration-test/tests/citizen/claim/pages/citizen-mobile'
+import { CitizenPhonePage } from 'integration-test/tests/citizen/claim/pages/citizen-phone'
 import { CitizenResolveDisputePage } from 'integration-test/tests/citizen/claim/pages/citizen-resolve-dispute'
 import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claim/pages/claimant-check-and-send'
 import { ClaimantClaimAmountPage } from 'integration-test/tests/citizen/claim/pages/claimant-claim-amount'
@@ -38,7 +38,7 @@ const companyDetailsPage: CompanyDetailsPage = new CompanyDetailsPage()
 const individualDetailsPage: IndividualDetailsPage = new IndividualDetailsPage()
 const organisationDetailsPage: OrganisationDetailsPage = new OrganisationDetailsPage()
 const citizenDOBPage: CitizenDobPage = new CitizenDobPage()
-const citizenMobilePage: CitizenMobilePage = new CitizenMobilePage()
+const citizenPhonePage: CitizenPhonePage = new CitizenPhonePage()
 const citizenEmailPage: CitizenEmailPage = new CitizenEmailPage()
 const claimantClaimAmountPage: ClaimantClaimAmountPage = new ClaimantClaimAmountPage()
 const claimantReasonPage: ClaimantReasonPage = new ClaimantReasonPage()
@@ -105,7 +105,7 @@ export class ClaimSteps {
       default:
         throw new Error('non-matching claimant type for claim')
     }
-    citizenMobilePage.enterMobile(claimant.mobilePhone)
+    citizenPhonePage.enterPhone(claimant.phone)
   }
 
   enterTheirDetails (defendantType: PartyType, enterDefendantEmail: boolean = true): void {
@@ -230,7 +230,7 @@ export class ClaimSteps {
       default:
         throw new Error('non-matching claimant type for claim')
     }
-    citizenMobilePage.enterMobile(claimant.mobilePhone)
+    citizenPhonePage.enterPhone(claimant.phone)
   }
 
   makeAClaimAndNavigateUpToPayment (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {

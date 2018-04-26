@@ -95,7 +95,7 @@ describe('Defendant user details: your date of birth page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to your mobile page when everything is fine', async () => {
+          it('should redirect to your phone page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveSave()
 
@@ -104,7 +104,7 @@ describe('Defendant user details: your date of birth page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ known: 'true', date: { year: '1978', month: '1', day: '11' } })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.defendantMobilePage
+                .toLocation(ResponsePaths.defendantPhonePage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })

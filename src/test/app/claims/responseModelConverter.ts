@@ -27,7 +27,7 @@ function prepareResponseDraft (draftTemplate: any, partyDetails: object) {
 function prepareResponseData (template, party: object) {
   return Response.deserialize({
     ...template,
-    defendant: { ...party, email: 'user@example.com', mobilePhone: '0700000000' },
+    defendant: { ...party, email: 'user@example.com', phone: '0700000000' },
     timeline: { rows: [], comment: 'I do not agree' }
   })
 }

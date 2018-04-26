@@ -9,7 +9,7 @@ import moment = require('moment')
 export const claimData = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
   claimants: [{ ...individual, email: undefined }],
-  defendants: [{ ...individual, mobilePhone: undefined }],
+  defendants: [{ ...individual, phone: undefined }],
   amount: {
     rows: [
       {

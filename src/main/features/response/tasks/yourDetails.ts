@@ -16,7 +16,7 @@ export class YourDetails {
 
     return this.isDefinedAndValid(response.defendantDetails.partyDetails, ['response'])
       && this.isDateOfBirthCompleted(response.defendantDetails.partyDetails)
-      && this.isMobilePhoneCompleted(response.defendantDetails)
+      && this.isPhoneCompleted(response.defendantDetails)
   }
 
   private static isDateOfBirthCompleted (partyDetails: PartyDetails): boolean {
@@ -27,8 +27,8 @@ export class YourDetails {
     }
   }
 
-  private static isMobilePhoneCompleted (defendant: Defendant): boolean {
-    return this.isDefinedAndValid(defendant.mobilePhone)
+  private static isPhoneCompleted (defendant: Defendant): boolean {
+    return this.isDefinedAndValid(defendant.phone)
   }
 
   private static isDefinedAndValid (value: any, validationGroups: string[] = []): boolean {

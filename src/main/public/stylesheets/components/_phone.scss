@@ -1,28 +1,28 @@
-.mobile-show,
-.mobile-table-status {
+.phone-show,
+.phone-table-status {
   display: none;
 }
 
 @include media (mobile) {
-  .mobile-hide {
+  .phone-hide {
     display: none;
   }
 
-  .mobile-show {
+  .phone-show {
     display: block;
   }
 
-  .mobile-table-status {
+  .phone-table-status {
     display: table-cell;
   }
 
-  .mobile-table {
+  .phone-table {
     td {
       border-bottom: 0;
     }
   }
 
-  .mobile-inline {
+  .phone-inline {
     display: inline;
   }
 }

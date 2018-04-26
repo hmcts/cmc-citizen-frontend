@@ -18,10 +18,10 @@ import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-c
 import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = ResponsePaths.defendantMobilePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath = ResponsePaths.defendantPhonePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const headerText: string = 'Add a phone number (optional)'
 
-describe('Defendant user details: your mobile page', () => {
+describe('Defendant user details: your phone page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {

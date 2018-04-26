@@ -25,7 +25,7 @@
           }
         )
     }}
-    {{ row('Contact number (optional)', draftClaim.claimant.mobilePhone.number, paths.claimantMobilePage.uri, bold = true) }}
+    {{ row('Contact number (optional)', draftClaim.claimant.phone.number, paths.claimantPhonePage.uri, bold = true) }}
     {{ tableEnd() }}
 
     {{ tableStart('theirDetails', 'Their details (defendant)') }}

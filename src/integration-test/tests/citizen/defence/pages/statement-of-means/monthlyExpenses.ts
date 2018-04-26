@@ -13,7 +13,7 @@ const fields = {
   schoolCosts: 'input[id="schoolCosts"]',
   foodAndHousekeeping: 'input[id="foodAndHousekeeping"]',
   tvAndBroadband: 'input[id="tvAndBroadband"]',
-  mobilePhone: 'input[id="mobilePhone"]',
+  phone: 'input[id="phone"]',
   maintenance: 'input[id="maintenance"]'
 }
 
@@ -34,7 +34,7 @@ export class MonthlyExpensesPage {
     I.fillField(fields.schoolCosts, '10')
     I.fillField(fields.foodAndHousekeeping, '10')
     I.fillField(fields.tvAndBroadband, '10')
-    I.fillField(fields.mobilePhone, '10')
+    I.fillField(fields.phone, '10')
     I.fillField(fields.maintenance, '10')
 
     I.click(buttons.submit)

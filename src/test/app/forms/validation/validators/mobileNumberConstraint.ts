@@ -1,11 +1,11 @@
 import { expect } from 'chai'
-import { IsMobilePhoneConstraint } from 'forms/validation/validators/mobilePhone'
+import { IsPhoneConstraint } from 'forms/validation/validators/phone'
 
 /**
  * The tests below are aligned to what GOV.UK Notify is accepting and not how we would like to validate phone numbers.
  */
-describe('IsMobilePhoneConstraint', () => {
-  const constraint: IsMobilePhoneConstraint = new IsMobilePhoneConstraint()
+describe('IsPhoneConstraint', () => {
+  const constraint: IsPhoneConstraint = new IsPhoneConstraint()
 
   describe('validate', () => {
     describe('for land line numbers', () => {
@@ -18,7 +18,7 @@ describe('IsMobilePhoneConstraint', () => {
       })
     })
 
-    describe('for mobile numbers starting with 0', () => {
+    describe('for phone numbers starting with 0', () => {
       it('valid number should return true', () => {
         expect(constraint.validate('07873738547')).to.equal(true)
       })

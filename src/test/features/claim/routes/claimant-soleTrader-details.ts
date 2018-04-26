@@ -103,14 +103,14 @@ describe('claimant as soleTrader details page', () => {
         })
       })
 
-      it('should redirect to mobile number page when everything is fine ', async () => {
+      it('should redirect to phone number page when everything is fine ', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
         await request(app)
           .post(ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send(input)
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.claimantMobilePage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.claimantPhonePage.uri))
       })
     })
   })
