@@ -28,20 +28,20 @@
           <ul class="font-xsmall list">
             <li>
               <strong class="bold">{{ t('Defendant name:') }}</strong>
-              <span class="block">{{ claim.claimData.defendant.name }}</span>
+              <div>{{ claim.claimData.defendant.name }}</div>
             </li>
             <li>
               <strong class="bold">{{ t('Total claim amount:') }}</strong>
-              <span class="block">{{ claim.totalAmountTillToday | numeral }}</span>
+              <div>{{ claim.totalAmountTillToday | numeral }}</div>
             </li>
             <li>
               <strong class="bold">{{ t('Claim details:') }}</strong>
-              <span class="block"><a href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View claim') }}</a></span>
+              <a class="block" href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View claim') }}</a>
             </li>
             {% if claim.response %}
               <li>
                 <strong class="bold">{{ t('Defendant’s response:') }}</strong>
-                <span class="block"><a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a></span>
+                <a class="block" href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a>
               </li>
             {% endif %}
           </ul>

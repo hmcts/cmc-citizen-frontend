@@ -14,9 +14,9 @@
 
 {% macro noResponseForDefendantDashboard(claim) %}
   {{ t('Respond to claim.') }}
-  <span class="block mobile-inline font-xsmall">
+  <div class="mobile-inline font-xsmall">
     {{ timeRemaining(claim.remainingDays, isAfter4pm()) }}
-  </span>
+  </div>
 {% endmacro %}
 
 {% macro noResponseForDefendantClaimDetails(claim) %}
