@@ -9,7 +9,7 @@
     {{ t('{{ defendantName }} believes that they’ve paid the claim in full. '
       + 'Email {{ emailAddress }} if you want to proceed with the claim '
       + 'you must do this before 4pm on {{ respondToResponseDeadline }}.',
-      { defendantName: claim.claimData.defendant.name, emailAddress: 'moneyclaims@hmcts.gsi.gov.uk',
+      { defendantName: claim.claimData.defendant.name, emailAddress: supportEmailAddress,
         respondToResponseDeadline: claim.respondToResponseDeadline | date }) }}
   </p>
   <p>
@@ -82,7 +82,7 @@
   </p>
   <p>
     {{ t('Tell us whether you agree to mediation or not by emailing {{ emailAddress }} before {{ respondToMediationDeadline }}.',
-      { emailAddress: 'moneyclaims@hmcts.gsi.gov.uk', respondToMediationDeadline: claim.respondToMediationDeadline | date }) }}
+      { emailAddress: supportEmailAddress, respondToMediationDeadline: claim.respondToMediationDeadline | date }) }}
   </p>
   <p>
     {{ _downloadResponseLink(claim, 'Download their response') }}
