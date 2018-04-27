@@ -16,7 +16,12 @@
           {{ caseHistoryForClaimantClaimDetails(claim, csrf) }}
         {% else %}
           <h2 class="bold-small">{{ t('This claim has not been submitted') }}</h2>
-          {{ t('Your claim is saved as a draft.') }} <a href="{{ ClaimPaths.taskListPage.uri }}">{{ t('Continue with claim.') }}</a>
+          <p>
+            {{ t('Your claim is saved as a draft.') }}
+          </p>
+          <p>
+            <a href="{{ ClaimPaths.taskListPage.uri }}">{{ t('Continue with claim') }}</a>
+          </p>
         {% endif %}
       </div>
     </div>
