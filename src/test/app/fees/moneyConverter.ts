@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { MoneyConverter } from 'app/fees/moneyConverter'
+import { MoneyConverter } from 'fees/moneyConverter'
 
 describe('MoneyConvertor', () => {
   it('should convert fee from pennies to pounds', async () => {

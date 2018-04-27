@@ -4,7 +4,7 @@ import { Paths } from 'claim/paths'
 
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import { ClaimValidator } from 'app/utils/claimValidator'
+import { ClaimValidator } from 'utils/claimValidator'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 
 import { ErrorHandling } from 'common/errorHandling'

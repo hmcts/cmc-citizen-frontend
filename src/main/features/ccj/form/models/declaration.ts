@@ -1,6 +1,6 @@
 import { IsDefined } from 'class-validator'
 import { IsBooleanTrue } from 'forms/validation/validators/isBooleanTrue'
-import { SignatureType } from 'app/common/signatureType'
+import { SignatureType } from 'app-common/signatureType'
 
 /**
  * We cannot reuse StatementOfTruth class as for legal reason error message must be different.

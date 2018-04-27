@@ -1,5 +1,5 @@
-import { ServiceAuthToken } from 'app/idam/serviceAuthToken'
-import { User } from 'app/idam/user'
+import { ServiceAuthToken } from 'idam/serviceAuthToken'
+import { User } from 'idam/user'
 import { plainToClass } from 'class-transformer'
 import { request } from 'client/request'
 import { checkDefined, checkNotEmpty } from 'common/preconditions'

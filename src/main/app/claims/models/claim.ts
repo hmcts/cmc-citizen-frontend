@@ -1,5 +1,5 @@
 import { Moment } from 'moment'
-import { ClaimData } from 'app/claims/models/claimData'
+import { ClaimData } from 'claims/models/claimData'
 import { MomentFactory } from 'common/momentFactory'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'

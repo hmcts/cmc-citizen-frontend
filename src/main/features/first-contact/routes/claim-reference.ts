@@ -2,11 +2,11 @@ import * as express from 'express'
 import * as config from 'config'
 
 import { Paths } from 'first-contact/paths'
-import { Paths as AppPaths } from 'app/paths'
+import { Paths as AppPaths } from 'main/app/paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
-import { ClaimReference } from 'app/forms/models/claimReference'
+import { ClaimReference } from 'forms/models/claimReference'
 
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { ErrorHandling } from 'common/errorHandling'

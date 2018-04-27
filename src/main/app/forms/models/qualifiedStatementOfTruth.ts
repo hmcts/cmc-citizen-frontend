@@ -3,7 +3,7 @@ import { IsBooleanTrue } from 'forms/validation/validators/isBooleanTrue'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import * as toBoolean from 'to-boolean'
 import { StatementOfTruth } from 'forms/models/statementOfTruth'
-import { SignatureType } from 'app/common/signatureType'
+import { SignatureType } from 'app-common/signatureType'
 
 export class ValidationErrors {
   static readonly STATEMENT_OF_TRUTH_REQUIRED_MESSAGE: string = 'Please select I believe that the facts stated in this claim are true.'

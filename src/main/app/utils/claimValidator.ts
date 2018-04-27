@@ -1,4 +1,4 @@
-import { ClaimAmountExceedsLimitError } from 'errors'
+import { ClaimAmountExceedsLimitError } from 'main/errors'
 
 export class ClaimValidator {
   static readonly AMOUNT_LIMIT = 10000

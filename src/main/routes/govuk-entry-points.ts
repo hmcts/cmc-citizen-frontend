@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { Paths } from 'app/paths'
+import { Paths } from 'main/app/paths'
 import { Paths as EligibilityPaths } from 'eligibility/paths'
 import { Paths as FirstContactPaths } from 'first-contact/paths'
 import { ErrorHandling } from 'common/errorHandling'

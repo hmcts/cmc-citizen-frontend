@@ -5,7 +5,7 @@ import { RoutablePath } from 'common/router/routablePath'
 import { ErrorHandling } from 'common/errorHandling'
 
 import { FormValidator } from 'forms/validation/formValidator'
-import { Form } from 'app/forms/form'
+import { Form } from 'forms/form'
 
 import { Eligibility } from 'eligibility/model/eligibility'
 import { EligibilityCheck } from 'eligibility/model/eligibilityCheck'

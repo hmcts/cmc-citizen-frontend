@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths } from 'app/paths'
+import { Paths } from 'main/app/paths'
 
 /* tslint:disable:no-default-export */
 export default express.Router()

@@ -1,5 +1,5 @@
-import { DraftClaim } from 'app/drafts/models/draftClaim'
-import { InterestDateType } from 'app/common/interestDateType'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { InterestDateType } from 'app-common/interestDateType'
 import { InterestTypeOption } from 'claim/form/models/interestType'
 import { YesNoOption } from 'models/yesNoOption'
 

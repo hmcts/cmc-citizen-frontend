@@ -1,5 +1,5 @@
 import { IsDefined, IsIn } from 'class-validator'
-import { InterestDateType } from 'app/common/interestDateType'
+import { InterestDateType } from 'app-common/interestDateType'
 
 export class ValidationErrors {
   static readonly TYPE_REQUIRED: string = 'Choose when to claim interest from'

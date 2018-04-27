@@ -4,7 +4,7 @@ import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { IsTodayOrInFuture } from 'forms/validation/validators/isTodayOrInFuture'
 
 import { LocalDate } from 'forms/models/localDate'
-import { IsValidYearFormat } from 'app/forms/validation/validators/isValidYearFormat'
+import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
 
 export class ValidationErrors {
   static readonly DATE_REQUIRED: string = 'Enter a date'

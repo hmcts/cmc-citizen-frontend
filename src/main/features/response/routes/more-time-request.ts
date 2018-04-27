@@ -5,7 +5,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
-import { ClaimStoreClient } from 'app/claims/claimStoreClient'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { MoreTimeAlreadyRequestedGuard } from 'response/guards/moreTimeAlreadyRequestedGuard'
 import { ErrorHandling } from 'common/errorHandling'
 import { User } from 'idam/user'

@@ -1,4 +1,4 @@
-import { InterestDateType } from 'app/common/interestDateType'
+import { InterestDateType } from 'app-common/interestDateType'
 import { expect } from 'chai'
 import { Claim } from 'claims/models/claim'
 import { getInterestDetails } from 'common/interestUtils'

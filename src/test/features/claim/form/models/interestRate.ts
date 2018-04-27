@@ -8,7 +8,7 @@ import { expectValidationError } from '../../../../app/forms/models/validationUt
 import { InterestRate, ValidationErrors } from 'claim/form/models/interestRate'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 
-import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
+import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 
 import { getStandardInterestRate } from 'common/interestUtils'
 

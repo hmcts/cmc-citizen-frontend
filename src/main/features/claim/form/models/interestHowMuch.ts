@@ -1,9 +1,9 @@
 import { IsDefined, IsIn, IsPositive, ValidateIf } from 'class-validator'
-import { CompletableTask } from 'app/models/task'
+import { CompletableTask } from 'models/task'
 import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { Fractions } from 'forms/validation/validators/fractions'
-import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
+import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 
 export class ValidationErrors {
   static readonly TYPE_REQUIRED: string = 'Choose a type of interest'

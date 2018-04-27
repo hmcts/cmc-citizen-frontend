@@ -3,7 +3,7 @@ import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'common/router/routerFinder'
-import { ClaimMiddleware } from 'app/claims/claimMiddleware'
+import { ClaimMiddleware } from 'claims/claimMiddleware'
 import { CCJGuard } from 'ccj/guards/ccjGuard'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'

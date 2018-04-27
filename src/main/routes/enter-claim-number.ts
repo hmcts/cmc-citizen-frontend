@@ -2,7 +2,7 @@ import * as express from 'express'
 import * as config from 'config'
 
 import { ErrorHandling } from 'common/errorHandling'
-import { Paths } from 'app/paths'
+import { Paths } from 'main/app/paths'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ClaimReference } from 'forms/models/claimReference'
 import { isNonCMCReference } from 'common/utils/isNonCMCReference'

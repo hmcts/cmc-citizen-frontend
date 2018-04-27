@@ -5,7 +5,7 @@ import * as spies from 'sinon-chai'
 import { mockReq as req, mockRes as res } from 'sinon-express-mock'
 import { IsDefined } from 'class-validator'
 
-import { FormValidator } from 'app/forms/validation/formValidator'
+import { FormValidator } from 'forms/validation/formValidator'
 
 chai.use(spies)
 

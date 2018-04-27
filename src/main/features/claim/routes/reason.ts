@@ -6,7 +6,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { Reason } from 'claim/form/models/reason'
 
 import { ErrorHandling } from 'common/errorHandling'
-import { User } from 'app/idam/user'
+import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'

@@ -17,7 +17,7 @@ import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 
 import { ResponseType } from 'response/form/models/responseType'
-import { SignatureType } from 'app/common/signatureType'
+import { SignatureType } from 'app-common/signatureType'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
 

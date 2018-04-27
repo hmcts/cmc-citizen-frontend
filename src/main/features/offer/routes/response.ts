@@ -9,7 +9,7 @@ import { User } from 'idam/user'
 import { StatementType } from 'offer/form/models/statementType'
 import { OfferClient } from 'claims/offerClient'
 import { Claim } from 'claims/models/claim'
-import { Offer } from 'app/claims/models/offer'
+import { Offer } from 'claims/models/offer'
 
 function renderView (form: Form<DefendantResponse>, res: express.Response, next: express.NextFunction) {
   const claim: Claim = res.locals.claim

@@ -13,7 +13,7 @@ import { app } from '../../../../main/app'
 
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import { InterestDateType } from 'app/common/interestDateType'
+import { InterestDateType } from 'app-common/interestDateType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pageContent: string = 'When are you claiming interest from?'

@@ -2,7 +2,7 @@ import * as express from 'express'
 import * as path from 'path'
 
 import { RouterFinder } from 'common/router/routerFinder'
-import { ClaimMiddleware } from 'app/claims/claimMiddleware'
+import { ClaimMiddleware } from 'claims/claimMiddleware'
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { Paths } from 'offer/paths'
 import { OAuthHelper } from 'idam/oAuthHelper'

@@ -6,7 +6,7 @@ import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
-import { DraftClaim } from 'app/drafts/models/draftClaim'
+import { DraftClaim } from 'drafts/models/draftClaim'
 
 /* tslint:disable:no-default-export */
 export default express.Router()

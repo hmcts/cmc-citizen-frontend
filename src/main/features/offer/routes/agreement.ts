@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { Paths } from 'offer/paths'
 import { ErrorHandling } from 'common/errorHandling'
-import { DocumentsClient } from 'app/documents/documentsClient'
+import { DocumentsClient } from 'documents/documentsClient'
 import * as http from 'http'
 import * as HttpStatus from 'http-status-codes'
 import { Claim } from 'claims/models/claim'

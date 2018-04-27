@@ -6,7 +6,7 @@ import { attachDefaultHooks } from './hooks'
 import './expectations'
 
 import { app } from '../../main/app'
-import { Paths } from 'app/paths'
+import { Paths } from 'main/app/paths'
 import { Service } from 'models/service'
 
 describe('Returning user: No claim number', () => {

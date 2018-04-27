@@ -4,7 +4,7 @@ import * as request from 'supertest'
 import '../routes/expectations'
 
 import { app } from '../../main/app'
-import { Paths } from 'app/paths'
+import { Paths } from 'main/app/paths'
 
 describe('Privacy Policy page', () => {
   describe('on GET', () => {

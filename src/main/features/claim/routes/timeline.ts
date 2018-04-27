@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { Paths } from 'claim/paths'
 import { Form } from 'forms/form'
-import { FormValidator } from 'app/forms/validation/formValidator'
+import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'

@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { SoleTraderDetails, ValidationErrors as SoleTraderDetailsValidationErrors } from 'forms/models/soleTraderDetails'
 import { ValidationErrors as PartydDetailsValidationErrors } from 'forms/models/partyDetails'
-import { PartyType } from 'app/common/partyType'
+import { PartyType } from 'app-common/partyType'
 import { Address, ValidationErrors as AddressValidationErrors } from 'forms/models/address'
 import { ValidationErrors as CorrespondenceAddressValidationErrors } from 'forms/models/correspondenceAddress'
 import { ValidationError, Validator } from 'class-validator'

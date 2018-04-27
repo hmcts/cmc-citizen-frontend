@@ -4,7 +4,7 @@ import { Paths } from 'dashboard/paths'
 import { ErrorHandling } from 'common/errorHandling'
 
 import { ClaimStoreClient } from 'claims/claimStoreClient'
-import { Claim } from 'app/claims/models/claim'
+import { Claim } from 'claims/models/claim'
 import { isAfter4pm } from 'common/dateUtils'
 import { User } from 'idam/user'
 

@@ -1,8 +1,8 @@
 import { IsDefined, Min, ValidateIf } from 'class-validator'
 
-import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
-import { Fractions } from 'app/forms/validation/validators/fractions'
-import { MaxLength } from 'app/forms/validation/validators/maxLengthValidator'
+import { IsNotBlank } from 'forms/validation/validators/isBlank'
+import { Fractions } from 'forms/validation/validators/fractions'
+import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { toNumberOrUndefined } from 'common/utils/numericUtils'
 

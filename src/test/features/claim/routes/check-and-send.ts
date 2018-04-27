@@ -14,7 +14,7 @@ import { app } from '../../../../main/app'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import * as feesServiceMock from '../../../http-mocks/fees'
-import { SignatureType } from 'app/common/signatureType'
+import { SignatureType } from 'app-common/signatureType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 

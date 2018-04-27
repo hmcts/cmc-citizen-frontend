@@ -2,10 +2,10 @@ import * as express from 'express'
 import * as config from 'config'
 import * as Cookies from 'cookies'
 
-import { IdamClient } from 'app/idam/idamClient'
+import { IdamClient } from 'idam/idamClient'
 import { Logger } from '@hmcts/nodejs-logging'
 
-import { Paths } from 'app/paths'
+import { Paths } from 'main/app/paths'
 import { JwtExtractor } from 'idam/jwtExtractor'
 import { JwtUtils } from 'common/utils/jwtUtils'
 import { ErrorHandling } from 'common/errorHandling'

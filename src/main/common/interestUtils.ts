@@ -1,17 +1,17 @@
 import * as moment from 'moment'
 
-import { InterestDateType } from 'app/common/interestDateType'
+import { InterestDateType } from 'app-common/interestDateType'
 import { MomentFactory } from 'common/momentFactory'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { Claim } from 'claims/models/claim'
-import { InterestData } from 'app/common/interestData'
+import { InterestData } from 'app-common/interestData'
 import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { isAfter4pm } from 'common/dateUtils'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 import { YesNoOption } from 'models/yesNoOption'
 import { InterestTypeOption } from 'claim/form/models/interestType'
-import { calculateInterest } from 'app/common/calculateInterest'
+import { calculateInterest } from 'app-common/calculateInterest'
 
 export async function getInterestDetails (claim: Claim): Promise<InterestData> {
   if (claim.claimData.interest.type === ClaimInterestType.NO_INTEREST || claim.claimData.interest.type === undefined) {

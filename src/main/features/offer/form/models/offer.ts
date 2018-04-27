@@ -1,5 +1,5 @@
 import { MaxLength, IsDefined, ValidateNested } from 'class-validator'
-import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
+import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
 import { LocalDate } from 'forms/models/localDate'
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
