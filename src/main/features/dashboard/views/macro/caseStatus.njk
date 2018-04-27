@@ -38,7 +38,7 @@
     { responseDeadline: claim.responseDeadline | date }) }}
   {% elseif status === ClaimStatus.NO_RESPONSE %}
     <a href="{{ url }}">{{ t('Respond to claim') }}</a>
-    <span class="block phone-inline">
+    <span class="block mobile-inline">
       {{ timeRemaining(claim.remainingDays, isAfter4pm) }}
     </span>
   {% endif %}
