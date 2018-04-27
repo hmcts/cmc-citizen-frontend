@@ -22,15 +22,15 @@
     </span>
     {% endif %}
 
-    <label class="form-label-bold phone-show" for="{{ dateKey }}">{{ index + 1 }}{{ t('. Date') }}</label>
-    <span class="form-hint phone-show">{{ t('For example, 1 May 2017') }}</span>
+    <label class="form-label-bold mobile-show" for="{{ dateKey }}">{{ index + 1 }}{{ t('. Date') }}</label>
+    <span class="form-hint mobile-show">{{ t('For example, 1 May 2017') }}</span>
     <input id="{{ dateKey }}" name="{{ dateKey }}" value="{{ dateValue if dateValue }}"
            class="form-control multiline-column-1 {% if dateError %}form-control-error{% endif %}" type="text">
 
-    <label for="{{ descriptionKey }}" class="form-label-bold phone-show">
+    <label for="{{ descriptionKey }}" class="form-label-bold mobile-show">
       {{ t('What happened') }}
     </label>
-    <span class="form-hint phone-show">{{ t('For example, you might have signed a contract') }}</span>
+    <span class="form-hint mobile-show">{{ t('For example, you might have signed a contract') }}</span>
     <textarea id="{{ descriptionKey }}" name="{{ descriptionKey }}"
               class="form-control multiline-column-text {% if descriptionError %}form-control-error{% endif %}"
               rows="2">{{ descriptionValue if descriptionValue }}</textarea>

@@ -23,7 +23,7 @@
           <th scope="col">{{ t('Defendant name') }}</th>
           <th scope="col">{{ t('Claim amount') }}</th>
 
-          <th scope="col" class="phone-hide">{{ t('Status') }}</th>
+          <th scope="col" class="mobile-hide">{{ t('Status') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -33,7 +33,7 @@
             <td>-</td>
 
             <td>-</td>
-            <td class="phone-hide">
+            <td class="mobile-hide">
               <a href="{{ ClaimPaths.taskListPage.uri }}">{{ t('Continue with claim') }}</a>
             </td>
           </tr>
@@ -50,7 +50,7 @@
             <td><a href="/dashboard/{{ claim.externalId }}/claimant">{{ claim.claimNumber }}</a></td>
             <td>{{ claim.claimData.defendant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
-            <td class="phone-hide">
+            <td class="mobile-hide">
               {{ caseStatusForClaimant(claim.status, claim, statusUrl) }}
             </td>
           </tr>
@@ -77,7 +77,7 @@
           <th scope="col">{{ t('Claimant name') }}</th>
           <th scope="col">{{ t('Claim amount') }}</th>
 
-          <th scope="col" class="phone-hide">{{ t('Status') }}</th>
+          <th scope="col" class="mobile-hide">{{ t('Status') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -98,7 +98,7 @@
             <td><a href="{{ nextPageUrl }}">{{ claim.claimNumber }}</a></td>
             <td>{{ claim.claimData.claimant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
-            <td class="phone-hide">
+            <td class="mobile-hide">
               {{ caseStatusForDefendant(claim.status, claim, statusUrl, isAfter4pm) }}
             </td>
           </tr>
