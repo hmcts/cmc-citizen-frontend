@@ -4,7 +4,7 @@ import { GuardFactory } from 'response/guards/guardFactory'
 import { Logger } from '@hmcts/nodejs-logging'
 
 import { Claim } from 'claims/models/claim'
-import { NotFoundError } from 'main/errors'
+import { NotFoundError } from 'errors'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 
 const logger = Logger.getLogger('response/guards/responseGuard')

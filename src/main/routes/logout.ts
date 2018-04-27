@@ -5,7 +5,7 @@ import * as Cookies from 'cookies'
 import { IdamClient } from 'idam/idamClient'
 import { Logger } from '@hmcts/nodejs-logging'
 
-import { Paths } from 'main/app/paths'
+import { Paths } from 'paths'
 import { JwtExtractor } from 'idam/jwtExtractor'
 import { JwtUtils } from 'shared/utils/jwtUtils'
 import { ErrorHandling } from 'shared/errorHandling'

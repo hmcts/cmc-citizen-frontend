@@ -63,6 +63,12 @@
       "utils/*": [
         "main/app/utils/*"
       ],
+      "paths": [
+        "main/app/paths"
+      ],
+      "errors" :[
+        "main/errors"
+      ],
       "modules/*": [
         "main/modules/*"
       ],

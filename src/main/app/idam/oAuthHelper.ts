@@ -3,7 +3,7 @@ import * as uuid from 'uuid'
 import * as Cookies from 'cookies'
 import * as express from 'express'
 import { buildURL } from 'utils/callbackBuilder'
-import { Paths } from 'main/app/paths'
+import { Paths } from 'paths'
 import { RoutablePath } from 'shared/router/routablePath'
 import { User } from 'idam/user'
 

@@ -2,7 +2,7 @@ import * as express from 'express'
 import * as config from 'config'
 
 import { Paths } from 'first-contact/paths'
-import { Paths as AppPaths } from 'main/app/paths'
+import { Paths as AppPaths } from 'paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'

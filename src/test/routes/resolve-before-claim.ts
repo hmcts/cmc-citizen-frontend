@@ -4,7 +4,7 @@ import * as request from 'supertest'
 import '../routes/expectations'
 
 import { app } from '../../main/app'
-import { Paths } from 'main/app/paths'
+import { Paths } from 'paths'
 
 describe('Resolving Dispute page', () => {
   describe('on GET', () => {

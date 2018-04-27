@@ -3,7 +3,7 @@ import * as express from 'express'
 import { Eligibility } from 'eligibility/model/eligibility'
 import { CookieEligibilityStore } from 'eligibility/store'
 
-import { Paths as AppPaths } from 'main/app/paths'
+import { Paths as AppPaths } from 'paths'
 import { Paths as ClaimPaths } from 'claim/paths'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 import { Paths as EligibilityPaths } from 'eligibility/paths'
