@@ -1,5 +1,5 @@
 import { IsInt, Min, ValidateIf } from 'class-validator'
-import { toNumberOrUndefined } from 'common/utils/numericUtils'
+import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 export class NumberOfChildren {

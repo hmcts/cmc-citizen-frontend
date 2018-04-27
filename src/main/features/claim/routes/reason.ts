@@ -5,7 +5,7 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Reason } from 'claim/form/models/reason'
 
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'

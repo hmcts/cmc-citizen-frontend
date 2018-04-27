@@ -8,7 +8,7 @@ import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
-import { toNumberOrUndefined } from 'common/utils/numericUtils'
+import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { IsLessThan } from 'forms/validation/validators/isLessThan'
 
 export class ValidationErrors {

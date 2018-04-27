@@ -7,7 +7,7 @@ import { expectValidationError } from '../../../../app/forms/models/validationUt
 
 import { InterestStartDate, ValidationErrors } from 'claim/form/models/interestStartDate'
 import { LocalDate } from 'forms/models/localDate'
-import { InterestDateType } from 'app-common/interestDateType'
+import { InterestDateType } from 'common/interestDateType'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 
 describe('InterestStartDate', () => {

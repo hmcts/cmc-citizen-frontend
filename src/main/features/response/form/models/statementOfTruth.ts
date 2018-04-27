@@ -1,6 +1,6 @@
 import { IsDefined } from 'class-validator'
 import { IsBooleanTrue } from 'forms/validation/validators/isBooleanTrue'
-import { SignatureType } from 'app-common/signatureType'
+import { SignatureType } from 'common/signatureType'
 
 export class ValidationErrors {
   static readonly STATEMENT_OF_TRUTH_REQUIRED_MESSAGE: string =

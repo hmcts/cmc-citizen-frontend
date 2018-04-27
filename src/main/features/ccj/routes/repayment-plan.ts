@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { Paths } from 'ccj/paths'
 
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 import { Form } from 'forms/form'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'

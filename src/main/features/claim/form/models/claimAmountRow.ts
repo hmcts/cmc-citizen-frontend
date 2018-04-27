@@ -4,7 +4,7 @@ import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { Fractions } from 'forms/validation/validators/fractions'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
-import { toNumberOrUndefined } from 'common/utils/numericUtils'
+import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 
 export class ValidationErrors {
   static readonly REASON_REQUIRED: string = 'Enter a reason'

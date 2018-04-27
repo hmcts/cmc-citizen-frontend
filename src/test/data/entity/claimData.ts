@@ -1,7 +1,7 @@
 import { individual } from './party'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
-import { InterestDateType } from 'app-common/interestDateType'
+import { InterestDateType } from 'common/interestDateType'
 import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
 import moment = require('moment')

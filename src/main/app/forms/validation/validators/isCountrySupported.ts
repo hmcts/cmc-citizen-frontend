@@ -5,7 +5,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface
 } from 'class-validator'
-import { Country } from 'app-common/country'
+import { Country } from 'common/country'
 import { ErrorLogger } from 'logging/errorLogger'
 import { PostcodeInfoResponse } from '@hmcts/postcodeinfo-client'
 import { ClientFactory } from 'postcode-lookup/clientFactory'

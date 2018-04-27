@@ -3,9 +3,9 @@ import { Individual } from 'claims/models/details/theirs/individual'
 import { SoleTrader } from 'claims/models/details/theirs/soleTrader'
 import { Company } from 'claims/models/details/theirs/company'
 import { Organisation } from 'claims/models/details/theirs/organisation'
-import { PartyType } from 'app-common/partyType'
+import { PartyType } from 'common/partyType'
 import { MomentFormatter } from 'utils/momentFormatter'
-import { MomentFactory } from 'common/momentFactory'
+import { MomentFactory } from 'shared/momentFactory'
 
 export class TheirDetailsMapper {
   static createTheirDetails (party: TheirDetails, email: string): object {

@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { Paths } from 'response/paths'
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 import { DocumentsClient } from 'documents/documentsClient'
 import * as http from 'http'
 import * as HttpStatus from 'http-status-codes'

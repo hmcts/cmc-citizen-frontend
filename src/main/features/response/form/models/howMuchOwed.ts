@@ -3,7 +3,7 @@ import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { Fractions } from 'forms/validation/validators/fractions'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
-import { toNumberOrUndefined } from 'common/utils/numericUtils'
+import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 
 export class HowMuchOwed {
 

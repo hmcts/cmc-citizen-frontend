@@ -6,7 +6,7 @@ import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
 import { Fractions } from 'forms/validation/validators/fractions'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
-import { toNumberOrUndefined } from 'common/utils/numericUtils'
+import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { IsLessThan } from 'forms/validation/validators/isLessThan'
 
 export class ValidationErrors {

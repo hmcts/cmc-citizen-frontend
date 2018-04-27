@@ -6,7 +6,7 @@ import { DefendantPaymentPlan, ValidationErrors } from 'response/form/models/def
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { LocalDate } from 'forms/models/localDate'
-import { MomentFactory } from 'common/momentFactory'
+import { MomentFactory } from 'shared/momentFactory'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 const FUTURE_YEAR = MomentFactory.currentDate().add(10, 'years').year()

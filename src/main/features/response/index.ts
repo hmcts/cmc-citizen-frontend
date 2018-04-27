@@ -2,7 +2,7 @@ import * as express from 'express'
 import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
-import { RouterFinder } from 'common/router/routerFinder'
+import { RouterFinder } from 'shared/router/routerFinder'
 import { DefenceType } from 'claims/models/response/fullDefenceResponse'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { ResponseGuard } from 'response/guards/responseGuard'

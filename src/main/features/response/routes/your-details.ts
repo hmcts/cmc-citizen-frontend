@@ -2,11 +2,11 @@ import * as express from 'express'
 import { plainToClass } from 'class-transformer'
 
 import { Paths } from 'response/paths'
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import { PartyType } from 'app-common/partyType'
+import { PartyType } from 'common/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'

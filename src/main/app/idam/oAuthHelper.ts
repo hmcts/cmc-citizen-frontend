@@ -4,7 +4,7 @@ import * as Cookies from 'cookies'
 import * as express from 'express'
 import { buildURL } from 'utils/callbackBuilder'
 import { Paths } from 'main/app/paths'
-import { RoutablePath } from 'common/router/routablePath'
+import { RoutablePath } from 'shared/router/routablePath'
 import { User } from 'idam/user'
 
 const clientId = config.get<string>('oauth.clientId')

@@ -8,7 +8,7 @@ import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/mode
 import { PayBySetDate } from 'response/draft/payBySetDate'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { Explanation } from 'response/form/models/pay-by-set-date/explanation'
-import { MomentFactory } from 'common/momentFactory'
+import { MomentFactory } from 'shared/momentFactory'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { localDateFrom } from '../../../localDateUtils'

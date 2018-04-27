@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { checkDefined, checkNotEmpty } from 'common/preconditions'
+import { checkDefined, checkNotEmpty } from 'shared/preconditions'
 
 describe('Preconditions', () => {
   describe('checkDefined', () => {

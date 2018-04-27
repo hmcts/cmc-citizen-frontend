@@ -2,7 +2,7 @@ import * as express from 'express'
 import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
-import { RouterFinder } from 'common/router/routerFinder'
+import { RouterFinder } from 'shared/router/routerFinder'
 import { ClaimMiddleware } from 'claims/claimMiddleware'
 import { CCJGuard } from 'ccj/guards/ccjGuard'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'

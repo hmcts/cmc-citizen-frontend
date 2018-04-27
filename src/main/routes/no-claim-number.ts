@@ -1,7 +1,7 @@
 import * as express from 'express'
 import * as config from 'config'
 
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 import { Paths } from 'main/app/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'

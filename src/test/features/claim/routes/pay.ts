@@ -33,7 +33,7 @@ import { Interest } from 'claim/form/models/interest'
 import { InterestRate } from 'claim/form/models/interestRate'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/interestEndDate'
-import { InterestDateType } from 'app-common/interestDateType'
+import { InterestDateType } from 'common/interestDateType'
 import { InterestStartDate } from 'claim/form/models/interestStartDate'
 import { YesNoOption } from 'models/yesNoOption'
 

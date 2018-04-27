@@ -9,9 +9,9 @@ import { Form } from 'forms/form'
 import { ClaimReference } from 'forms/models/claimReference'
 
 import { ClaimStoreClient } from 'claims/claimStoreClient'
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 import { OAuthHelper } from 'idam/oAuthHelper'
-import { isNonCMCReference } from 'common/utils/isNonCMCReference'
+import { isNonCMCReference } from 'shared/utils/isNonCMCReference'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 

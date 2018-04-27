@@ -10,7 +10,7 @@ import { InterestRateOption } from 'claim/form/models/interestRateOption'
 
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 
-import { getStandardInterestRate } from 'common/interestUtils'
+import { getStandardInterestRate } from 'shared/interestUtils'
 
 describe('InterestRate', () => {
 

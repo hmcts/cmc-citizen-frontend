@@ -28,7 +28,7 @@ import { ResidenceType } from 'response/form/models/statement-of-means/residence
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 import { Interest } from 'claim/form/models/interest'
-import { InterestDateType } from 'app-common/interestDateType'
+import { InterestDateType } from 'common/interestDateType'
 import { InterestType, InterestTypeOption } from 'claim/form/models/interestType'
 import { InterestStartDate } from 'claim/form/models/interestStartDate'
 import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/interestEndDate'

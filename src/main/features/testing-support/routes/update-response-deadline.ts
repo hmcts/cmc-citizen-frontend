@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { Paths } from 'testing-support/paths'
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 import { Form } from 'forms/form'
 import { UpdateResponseDeadlineRequest } from 'testing-support/models/updateResponseDeadlineRequest'
 import { FormValidator } from 'forms/validation/formValidator'

@@ -7,8 +7,8 @@ import { Logger } from '@hmcts/nodejs-logging'
 
 import { Paths } from 'main/app/paths'
 import { JwtExtractor } from 'idam/jwtExtractor'
-import { JwtUtils } from 'common/utils/jwtUtils'
-import { ErrorHandling } from 'common/errorHandling'
+import { JwtUtils } from 'shared/utils/jwtUtils'
+import { ErrorHandling } from 'shared/errorHandling'
 
 const sessionCookie = config.get<string>('session.cookieName')
 const logger = Logger.getLogger('routes/logout')

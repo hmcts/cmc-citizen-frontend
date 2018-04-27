@@ -1,6 +1,6 @@
 import { AmountDescriptionRow } from 'features/response/form/models/statement-of-means/amountDescriptionRow'
 import { MultiRowForm } from 'forms/models/multiRowForm'
-import { toNumberOrUndefined } from 'common/utils/numericUtils'
+import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { IsDefined } from 'class-validator'
 import { Fractions } from 'forms/validation/validators/fractions'
 import { Min } from 'forms/validation/validators/min'

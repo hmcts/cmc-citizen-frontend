@@ -1,4 +1,4 @@
-import { PartyType } from 'app-common/partyType'
+import { PartyType } from 'common/partyType'
 import { Party } from 'claims/models/details/yours/party'
 import { Individual } from 'claims/models/details/yours/individual'
 import { Company } from 'claims/models/details/yours/company'

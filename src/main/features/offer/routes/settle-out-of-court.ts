@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { Paths } from 'offer/paths'
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 import { Claim } from 'claims/models/claim'
 
 /* tslint:disable:no-default-export */

@@ -1,6 +1,6 @@
 import { IsDefined, MaxLength } from 'class-validator'
 import { IsBooleanTrue } from 'forms/validation/validators/isBooleanTrue'
-import { SignatureType } from 'app-common/signatureType'
+import { SignatureType } from 'common/signatureType'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import * as toBoolean from 'to-boolean'
 import { Declaration } from 'ccj/form/models/declaration'

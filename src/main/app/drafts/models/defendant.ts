@@ -1,6 +1,6 @@
 import { Email } from 'forms/models/email'
 import { CompletableTask } from 'models/task'
-import { PartyType } from 'app-common/partyType'
+import { PartyType } from 'common/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
