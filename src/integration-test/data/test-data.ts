@@ -40,7 +40,7 @@ export function createClaimData (claimantType: PartyType, defendantType: PartyTy
     payment: {
       amount: claimFee * 100,
       reference: 'RC-1524-6488-1670-7520',
-      status: 'success',
+      status: 'success'
     },
     feeAmountInPennies: claimFee * 100,
     amount: claimAmount,
