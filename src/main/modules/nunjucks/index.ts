@@ -1,4 +1,4 @@
-import { isAfter4pm } from 'common/dateUtils'
+import { isAfter4pm } from 'shared/dateUtils'
 import { TranslationOptions } from 'i18next'
 import * as path from 'path'
 import * as express from 'express'
