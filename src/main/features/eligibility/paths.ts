@@ -14,4 +14,5 @@ export class Paths {
   static readonly claimIsForTenancyDepositPage = new RoutablePath('/eligibility/claim-is-for-tenancy-deposit')
   static readonly eligiblePage = new RoutablePath('/eligibility/eligible')
   static readonly notEligiblePage = new RoutablePath('/eligibility/not-eligible')
+  static readonly mcolEligibilityPage = new RoutablePath('/eligibility/mcol-eligibility')
 }
