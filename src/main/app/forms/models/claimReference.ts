@@ -1,5 +1,5 @@
 import { IsDefined } from 'class-validator'
-import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
+import { IsNotBlank } from 'forms/validation/validators/isBlank'
 
 export class ValidationErrors {
   static readonly CLAIM_REFERENCE_REQUIRED: string = 'You need to enter the claim number'

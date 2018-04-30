@@ -1,8 +1,8 @@
 import * as express from 'express'
 import { Paths } from 'ccj/paths'
 
-import { ErrorHandling } from 'common/errorHandling'
-import { Form } from 'app/forms/form'
+import { ErrorHandling } from 'shared/errorHandling'
+import { Form } from 'forms/form'
 import { User } from 'idam/user'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { FormValidator } from 'forms/validation/formValidator'

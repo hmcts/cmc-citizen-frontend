@@ -6,8 +6,8 @@ import { ResolveDispute } from 'drafts/tasks/resolveDispute'
 import { CompletingYourClaim } from 'drafts/tasks/completingYourClaim'
 import { ClaimAmount } from 'drafts/tasks/claimAmount'
 import { ClaimDetails } from 'drafts/tasks/claimDetails'
-import { YourDetails } from 'app/drafts/tasks/yourDetails'
-import { TheirDetails } from 'app/drafts/tasks/theirDetails'
+import { YourDetails } from 'drafts/tasks/yourDetails'
+import { TheirDetails } from 'drafts/tasks/theirDetails'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: DraftClaim): TaskList {

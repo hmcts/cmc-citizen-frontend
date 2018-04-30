@@ -5,7 +5,7 @@ import {
   ValidationErrors as OrganisationDetailsValidationErrors
 } from 'forms/models/organisationDetails'
 import { ValidationErrors as PartydDetailsValidationErrors } from 'forms/models/partyDetails'
-import { PartyType } from 'app/common/partyType'
+import { PartyType } from 'common/partyType'
 import { Address, ValidationErrors as AddressValidationErrors } from 'forms/models/address'
 import { ValidationErrors as CorrespondenceAddressValidationErrors } from 'forms/models/correspondenceAddress'
 import { ValidationError, Validator } from 'class-validator'

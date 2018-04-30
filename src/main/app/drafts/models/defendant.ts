@@ -1,12 +1,12 @@
-import { Email } from 'app/forms/models/email'
-import { CompletableTask } from 'app/models/task'
-import { PartyType } from 'app/common/partyType'
+import { Email } from 'forms/models/email'
+import { CompletableTask } from 'models/task'
+import { PartyType } from 'common/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { IndividualDetails } from 'forms/models/individualDetails'
-import { MobilePhone } from 'app/forms/models/mobilePhone'
+import { MobilePhone } from 'forms/models/mobilePhone'
 
 export class Defendant implements CompletableTask {
   partyDetails?: PartyDetails

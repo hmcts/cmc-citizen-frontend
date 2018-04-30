@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { ResponseModelConverter } from 'app/claims/responseModelConverter'
+import { ResponseModelConverter } from 'claims/responseModelConverter'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { defenceWithDisputeDraft, defenceWithAmountClaimedAlreadyPaidDraft } from '../../data/draft/responseDraft'

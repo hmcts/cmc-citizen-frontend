@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { Paths } from 'claim/paths'
 
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 import { ClaimMiddleware } from 'claims/claimMiddleware'
 
 import { ClaimIssueReceiptPDFGenerator } from 'services/claimIssueReceiptPdfGenerator'

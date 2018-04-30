@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-expression */
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 import * as express from 'express'
 
 import * as chai from 'chai'

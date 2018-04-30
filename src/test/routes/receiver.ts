@@ -1,4 +1,4 @@
-import { Paths as AppPaths } from 'app/paths'
+import { Paths as AppPaths } from 'paths'
 import { expect } from 'chai'
 import { Paths as ClaimPaths } from 'claim/paths'
 import { Paths as EligibilityPaths } from 'eligibility/paths'
