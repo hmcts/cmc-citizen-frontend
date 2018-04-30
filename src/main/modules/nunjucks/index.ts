@@ -1,3 +1,4 @@
+import { isAfter4pm } from 'common/dateUtils'
 import { TranslationOptions } from 'i18next'
 import * as path from 'path'
 import * as express from 'express'
@@ -23,7 +24,6 @@ import { StatementType } from 'offer/form/models/statementType'
 import { InterestDateType } from 'common/interestDateType'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
-import { DashboardUrlHelper } from 'dashboard/helpers/dashboardUrlHelper'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
 import { ClaimStatus } from 'claims/models/claimStatus'
@@ -93,6 +93,7 @@ export class Nunjucks {
     nunjucksEnv.addFilter('inputDate', dateInputFilter)
     nunjucksEnv.addFilter('pennies2pounds', convertToPoundsFilter)
     nunjucksEnv.addFilter('numeral', numeralFilter)
+    nunjucksEnv.addGlobal('isAfter4pm', isAfter4pm)
     nunjucksEnv.addGlobal('betaFeedbackSurveyUrl', config.get('feedback.feedbackSurvey.url'))
     nunjucksEnv.addGlobal('reportProblemSurveyUrl', config.get('feedback.reportProblemSurvey.url'))
     nunjucksEnv.addGlobal('customerSurveyUrl', config.get('feedback.serviceSurvey.url'))
@@ -116,7 +117,6 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('InterestEndDateOption', InterestEndDateOption)
     nunjucksEnv.addGlobal('ResidenceType', ResidenceType)
     nunjucksEnv.addGlobal('PaymentSchedule', PaymentSchedule)
-    nunjucksEnv.addGlobal('DashboardUrlHelper', DashboardUrlHelper)
     nunjucksEnv.addGlobal('UnemploymentType', UnemploymentType)
     nunjucksEnv.addGlobal('BankAccountType', BankAccountType)
     nunjucksEnv.addGlobal('ClaimStatus', ClaimStatus)

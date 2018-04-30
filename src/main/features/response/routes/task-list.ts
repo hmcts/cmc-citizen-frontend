@@ -4,7 +4,6 @@ import { Paths } from 'response/paths'
 
 import { Claim } from 'claims/models/claim'
 
-import { isAfter4pm } from 'shared/dateUtils'
 import { TaskListBuilder } from 'response/helpers/taskListBuilder'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
@@ -28,8 +27,7 @@ export default express.Router()
           beforeYouStartSection: beforeYouStartSection,
           submitSection: submitSection,
           respondToClaimSection: respondToClaimSection,
-          claim: claim,
-          isAfter4pm: isAfter4pm()
+          claim: claim
         })
     } catch (err) {
       next(err)

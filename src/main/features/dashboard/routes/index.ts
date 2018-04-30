@@ -5,7 +5,6 @@ import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { Claim } from 'claims/models/claim'
 import { User } from 'idam/user'
 import { ErrorHandling } from 'shared/errorHandling'
-import { isAfter4pm } from 'shared/dateUtils'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { ResponseDraft } from 'response/draft/responseDraft'
@@ -28,7 +27,6 @@ export default express.Router()
       claimsAsClaimant: claimsAsClaimant,
       claimDraftSaved: claimDraftSaved,
       claimsAsDefendant: claimsAsDefendant,
-      responseDraftSaved: responseDraftSaved,
-      isAfter4pm: isAfter4pm()
+      responseDraftSaved: responseDraftSaved
     })
   }))
