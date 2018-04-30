@@ -5,7 +5,7 @@ import * as Cookies from 'cookies'
 
 import { JwtExtractor } from 'idam/jwtExtractor'
 import { IdamClient } from 'idam/idamClient'
-import { User } from 'idam/user'
+import { User } from 'app/idam/user'
 import { Logger } from '@hmcts/nodejs-logging'
 
 const sessionCookieName = config.get<string>('session.cookieName')

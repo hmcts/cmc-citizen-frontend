@@ -1,5 +1,5 @@
 import { expect, assert } from 'chai'
-import { MomentFactory } from 'shared/momentFactory'
+import { MomentFactory } from 'common/momentFactory'
 
 describe('MomentFactory', () => {
   describe('static method test cases', () => {

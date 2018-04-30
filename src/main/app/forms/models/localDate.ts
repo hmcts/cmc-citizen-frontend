@@ -2,7 +2,7 @@ import { Max, Min } from 'class-validator'
 import * as _ from 'lodash'
 import * as moment from 'moment'
 
-import { DATE_FORMAT } from 'utils/momentFormatter'
+import { DATE_FORMAT } from 'app/utils/momentFormatter'
 
 export class ValidationErrors {
   static readonly YEAR_NOT_VALID: string = 'Enter a valid year'

@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { Address } from 'forms/models/address'
+import { Address } from 'app/forms/models/address'
 
 describe('Address', () => {
   describe('isCompleted', () => {

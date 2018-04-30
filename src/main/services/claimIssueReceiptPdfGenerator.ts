@@ -1,7 +1,7 @@
 import * as express from 'express'
 
-import { Claim } from 'claims/models/claim'
-import { DocumentsClient } from 'documents/documentsClient'
+import { Claim } from 'app/claims/models/claim'
+import { DocumentsClient } from 'app/documents/documentsClient'
 import * as http from 'http'
 import * as HttpStatus from 'http-status-codes'
 

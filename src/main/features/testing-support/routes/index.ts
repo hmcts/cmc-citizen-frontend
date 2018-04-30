@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { Paths } from 'testing-support/paths'
-import { ErrorHandling } from 'shared/errorHandling'
+import { ErrorHandling } from 'common/errorHandling'
 
 /* tslint:disable:no-default-export */
 export default express.Router()

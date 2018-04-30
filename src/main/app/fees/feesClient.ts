@@ -1,7 +1,7 @@
 import * as config from 'config'
 import { request } from 'client/request'
 import { plainToClass } from 'class-transformer'
-import { ClaimValidator } from 'utils/claimValidator'
+import { ClaimValidator } from 'app/utils/claimValidator'
 import { FeeOutcome } from 'fees/models/feeOutcome'
 import { FeeRange } from 'fees/models/feeRange'
 import { StringUtils } from 'utils/stringUtils'

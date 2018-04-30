@@ -7,7 +7,7 @@ import { ClaimReferenceMatchesGuard } from 'first-contact/guards/claimReferenceM
 import { JwtExtractor } from 'idam/jwtExtractor'
 import { ClaimantRequestedCCJGuard } from 'first-contact/guards/claimantRequestedCCJGuard'
 import { OAuthHelper } from 'idam/oAuthHelper'
-import { getInterestDetails } from 'shared/interestUtils'
+import { getInterestDetails } from 'common/interestUtils'
 
 const sessionCookie = config.get<string>('session.cookieName')
 

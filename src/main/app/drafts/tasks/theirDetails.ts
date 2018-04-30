@@ -1,4 +1,4 @@
-import { DraftClaim } from 'drafts/models/draftClaim'
+import { DraftClaim } from 'app/drafts/models/draftClaim'
 
 export class TheirDetails {
 

@@ -1,4 +1,4 @@
-import { RoutablePath } from 'shared/router/routablePath'
+import { RoutablePath } from 'common/router/routablePath'
 
 const ccjPath = '/case/:externalId/ccj'
 

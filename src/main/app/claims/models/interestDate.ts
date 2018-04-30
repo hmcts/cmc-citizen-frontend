@@ -1,5 +1,5 @@
 import { Moment } from 'moment'
-import { MomentFactory } from 'shared/momentFactory'
+import { MomentFactory } from 'common/momentFactory'
 
 export class InterestDate {
 

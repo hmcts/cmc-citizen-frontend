@@ -5,7 +5,7 @@ import { expect } from 'chai'
 import * as moment from 'moment'
 
 import { PaymentDateChecker } from 'response/helpers/paymentDateChecker'
-import { MomentFactory } from 'shared/momentFactory'
+import { MomentFactory } from 'common/momentFactory'
 
 describe('PaymentDateChecker', () => {
   describe('isLaterThan28DaysFromNow', () => {

@@ -1,4 +1,4 @@
-import { RoutablePath } from 'shared/router/routablePath'
+import { RoutablePath } from 'common/router/routablePath'
 
 export class Paths {
   static readonly indexPage = new RoutablePath('/testing-support/index')

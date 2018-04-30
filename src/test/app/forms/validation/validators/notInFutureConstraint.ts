@@ -3,7 +3,7 @@ import * as moment from 'moment'
 
 import { DateNotInFutureConstraint } from 'forms/validation/validators/notInFuture'
 
-import { LocalDate } from 'forms/models/localDate'
+import { LocalDate } from 'app/forms/models/localDate'
 
 describe('DateNotInFutureConstraint', () => {
   const constraint: DateNotInFutureConstraint = new DateNotInFutureConstraint()

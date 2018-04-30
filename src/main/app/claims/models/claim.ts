@@ -1,6 +1,6 @@
 import { Moment } from 'moment'
-import { ClaimData } from 'claims/models/claimData'
-import { MomentFactory } from 'shared/momentFactory'
+import { ClaimData } from 'app/claims/models/claimData'
+import { MomentFactory } from 'common/momentFactory'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'

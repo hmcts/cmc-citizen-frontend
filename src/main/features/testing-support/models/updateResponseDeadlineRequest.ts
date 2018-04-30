@@ -2,7 +2,7 @@ import { LocalDate } from 'forms/models/localDate'
 import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { IsDefined, ValidateNested } from 'class-validator'
-import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
+import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 
 class ValidationErrors {

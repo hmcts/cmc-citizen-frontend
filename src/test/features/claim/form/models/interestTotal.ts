@@ -4,7 +4,7 @@ import { expect } from 'chai'
 import * as _ from 'lodash'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
-import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
+import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
 import { InterestTotal, ValidationErrors } from 'claim/form/models/interestTotal'
 
 describe('InterestTotal', () => {

@@ -6,7 +6,7 @@ import * as pa11y from 'pa11y'
 import * as promisify from 'es6-promisify'
 import { expect } from 'chai'
 
-import { RoutablePath } from 'shared/router/routablePath'
+import { RoutablePath } from 'common/router/routablePath'
 import { ErrorPaths as ClaimIssueErrorPaths, Paths as ClaimIssuePaths } from 'claim/paths'
 import { ErrorPaths as DefendantFirstContactErrorPaths, Paths as DefendantFirstContactPaths } from 'first-contact/paths'
 import { Paths as DefendantResponsePaths, StatementOfMeansPaths, PayBySetDatePaths } from 'response/paths'

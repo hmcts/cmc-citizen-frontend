@@ -3,7 +3,7 @@ import * as moment from 'moment'
 
 import { DatePastConstraint } from 'forms/validation/validators/datePastConstraint'
 
-import { LocalDate } from 'forms/models/localDate'
+import { LocalDate } from 'app/forms/models/localDate'
 
 describe('DatePastConstraint', () => {
   const constraint: DatePastConstraint = new DatePastConstraint()

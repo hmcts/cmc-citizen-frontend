@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { Paths } from 'ccj/paths'
-import { ErrorHandling } from 'shared/errorHandling'
+import { ErrorHandling } from 'common/errorHandling'
 import { Claim } from 'claims/models/claim'
 
 /* tslint:disable:no-default-export */

@@ -3,7 +3,7 @@ import * as moment from 'moment'
 
 import { DateTodayOrInFutureConstraint } from 'forms/validation/validators/isTodayOrInFuture'
 
-import { LocalDate } from 'forms/models/localDate'
+import { LocalDate } from 'app/forms/models/localDate'
 
 describe('DateTodayOrInFutureConstraint', () => {
   const constraint: DateTodayOrInFutureConstraint = new DateTodayOrInFutureConstraint()

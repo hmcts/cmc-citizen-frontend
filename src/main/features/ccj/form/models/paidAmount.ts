@@ -2,7 +2,7 @@ import { IsDefined, IsIn, IsPositive, ValidateIf } from 'class-validator'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { Fractions } from 'forms/validation/validators/fractions'
 import { IsLessThan } from 'forms/validation/validators/isLessThan'
-import { toNumberOrUndefined } from 'shared/utils/numericUtils'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
 
 export class ValidationErrors {
   static readonly OPTION_REQUIRED: string = 'Choose option: yes or no'

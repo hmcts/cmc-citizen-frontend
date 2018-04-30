@@ -1,10 +1,10 @@
 import { IsDefined, MaxLength, ValidateNested } from 'class-validator'
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
-import { IsNotInFuture } from 'forms/validation/validators/notInFuture'
-import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
-import { LocalDate } from 'forms/models/localDate'
-import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
-import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
+import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
+import { IsNotInFuture } from 'app/forms/validation/validators/notInFuture'
+import { IsValidLocalDate } from 'app/forms/validation/validators/isValidLocalDate'
+import { LocalDate } from 'app/forms/models/localDate'
+import { IsValidYearFormat } from 'app/forms/validation/validators/isValidYearFormat'
+import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
 import { CompletableTask } from 'models/task'
 
 export class ValidationErrors {

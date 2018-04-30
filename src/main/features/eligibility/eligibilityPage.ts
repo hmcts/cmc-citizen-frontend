@@ -1,11 +1,11 @@
 import * as express from 'express'
 
 import { Paths } from 'eligibility/paths'
-import { RoutablePath } from 'shared/router/routablePath'
-import { ErrorHandling } from 'shared/errorHandling'
+import { RoutablePath } from 'common/router/routablePath'
+import { ErrorHandling } from 'common/errorHandling'
 
 import { FormValidator } from 'forms/validation/formValidator'
-import { Form } from 'forms/form'
+import { Form } from 'app/forms/form'
 
 import { Eligibility } from 'eligibility/model/eligibility'
 import { EligibilityCheck } from 'eligibility/model/eligibilityCheck'

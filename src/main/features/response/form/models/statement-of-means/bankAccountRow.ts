@@ -4,7 +4,7 @@ import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/val
 import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
 import { Fractions } from 'forms/validation/validators/fractions'
 import * as toBoolean from 'to-boolean'
-import { toNumberOrUndefined } from 'shared/utils/numericUtils'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
 
 export class ValidationErrors {

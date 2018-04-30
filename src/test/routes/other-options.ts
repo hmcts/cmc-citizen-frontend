@@ -4,7 +4,7 @@ import * as request from 'supertest'
 import '../routes/expectations'
 
 import { app } from '../../main/app'
-import { Paths } from 'paths'
+import { Paths } from 'app/paths'
 
 const expectedTextOnPage: string = 'talk to the person or organisation you say owes you'
 

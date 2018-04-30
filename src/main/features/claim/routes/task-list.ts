@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { Paths } from 'claim/paths'
 
-import { TaskList } from 'drafts/tasks/taskList'
+import { TaskList } from 'app/drafts/tasks/taskList'
 
 import { TaskListBuilder } from 'claim/helpers/taskListBuilder'
 import { Draft } from '@hmcts/draft-store-client'

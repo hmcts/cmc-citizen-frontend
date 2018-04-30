@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Claim } from 'claims/models/claim'
+import { Claim } from 'app/claims/models/claim'
 import { Paths } from 'response/paths'
 import { TaskListBuilder } from 'response/helpers/taskListBuilder'
 import { Draft } from '@hmcts/draft-store-client'

@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { Defendant } from 'drafts/models/defendant'
+import { Defendant } from 'app/drafts/models/defendant'
 
 /* Allow chai assertions which don't end in a function call, e.g. expect(thing).to.be.undefined */
 /* tslint:disable:no-unused-expression */

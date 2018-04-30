@@ -1,5 +1,5 @@
 import { Party } from './party'
-import { PartyType } from 'common/partyType'
+import { PartyType } from 'app/common/partyType'
 import { Address } from 'claims/models/address'
 
 export class Organisation extends Party {

@@ -1,5 +1,5 @@
 import { IsEmail } from 'forms/validation/validators/isEmail'
-import { CompletableTask } from 'models/task'
+import { CompletableTask } from 'app/models/task'
 import { Validator } from 'class-validator'
 
 export class ValidationErrors {

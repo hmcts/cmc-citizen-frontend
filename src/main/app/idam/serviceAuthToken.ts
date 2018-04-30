@@ -1,5 +1,5 @@
 import * as moment from 'moment'
-import { JwtUtils } from 'shared/utils/jwtUtils'
+import { JwtUtils } from 'common/utils/jwtUtils'
 
 export class ServiceAuthToken {
   constructor (public bearerToken: string) {

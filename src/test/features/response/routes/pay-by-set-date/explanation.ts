@@ -17,7 +17,7 @@ import * as claimStoreServiceMock from '../../../../http-mocks/claim-store'
 import { checkCountyCourtJudgmentRequestedGuard } from '../checks/ccj-requested-check'
 import { ValidationErrors } from 'response/form/models/pay-by-set-date/explanation'
 import { checkNotDefendantInCaseGuard } from '../checks/not-defendant-in-case-check'
-import { PartyType } from 'common/partyType'
+import { PartyType } from 'app/common/partyType'
 import { ResponseType } from 'response/form/models/responseType'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
