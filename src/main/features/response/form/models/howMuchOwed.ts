@@ -1,5 +1,5 @@
 import { IsDefined, IsPositive, MaxLength } from 'class-validator'
-import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
+import { IsNotBlank } from '@hmcts/cmc-validators/dist/isNotBlank'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { Fractions } from 'forms/validation/validators/fractions'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'

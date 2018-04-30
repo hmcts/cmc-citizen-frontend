@@ -1,7 +1,7 @@
 import { IsDefined, MaxLength, ValidateNested } from 'class-validator'
 import { IsPastDate } from 'forms/validation/validators/datePastConstraint'
 import { LocalDate } from 'forms/models/localDate'
-import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
+import { IsNotBlank } from '@hmcts/cmc-validators/dist/isNotBlank'
 import { IsValidYearFormat } from 'app/forms/validation/validators/isValidYearFormat'
 import { MomentFactory } from 'common/momentFactory'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'

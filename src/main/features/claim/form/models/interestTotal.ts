@@ -2,7 +2,7 @@ import { IsDefined, MaxLength, Min } from 'class-validator'
 import { CompletableTask } from 'models/task'
 import { Fractions } from 'forms/validation/validators/fractions'
 import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
+import { IsNotBlank } from '@hmcts/cmc-validators/dist/isNotBlank'
 import { toNumberOrUndefined } from 'common/utils/numericUtils'
 
 export class ValidationErrors {

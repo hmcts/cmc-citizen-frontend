@@ -1,14 +1,12 @@
 import { IsDefined, MaxLength, ValidateIf, Validator } from 'class-validator'
-
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
-
 import { CompletableTask } from 'app/models/task'
 import { Address as ClaimAddress } from 'claims/models/address'
 import * as toBoolean from 'to-boolean'
 import { ExtraFormFieldsArePopulated } from 'forms/validation/validators/extraFormFieldsArePopulated'
 import { IsCountrySupported } from 'forms/validation/validators/isCountrySupported'
 import { Country } from 'app/common/country'
-import { IsValidPostcode } from 'forms/validation/validators/isValidPostcode'
+import { IsNotBlank } from '@hmcts/cmc-validators/dist/isNotBlank'
+import { IsValidPostcode } from '@hmcts/cmc-validators/dist/isValidPostcode'
 
 const validator: Validator = new Validator()
 
@@ -72,7 +70,10 @@ export class Address implements CompletableTask {
   @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsCountrySupported(Country.all(), { message: ValidationErrors.CLAIMANT_COUNTRY_NOT_SUPPORTED, groups: ['claimant'] })
-  @IsCountrySupported(Country.defendantCountries(), { message: ValidationErrors.DEFENDANT_COUNTRY_NOT_SUPPORTED, groups: ['defendant'] })
+  @IsCountrySupported(Country.defendantCountries(), {
+    message: ValidationErrors.DEFENDANT_COUNTRY_NOT_SUPPORTED,
+    groups: ['defendant']
+  })
   @IsValidPostcode({
     message: ValidationErrors.POSTCODE_NOT_VALID,
     groups: ['claimant', 'defendant', 'response']

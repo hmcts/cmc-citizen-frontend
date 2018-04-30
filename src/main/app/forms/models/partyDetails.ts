@@ -1,5 +1,5 @@
 import { IsDefined, MaxLength, ValidateIf, ValidateNested, Validator } from 'class-validator'
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
+import { IsNotBlank } from '@hmcts/cmc-validators/dist/isNotBlank'
 import { Address } from 'forms/models/address'
 import { CorrespondenceAddress } from 'forms/models/correspondenceAddress'
 import { PartyType } from 'app/common/partyType'

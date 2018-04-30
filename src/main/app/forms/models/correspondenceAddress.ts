@@ -1,9 +1,8 @@
 import { IsDefined, MaxLength } from 'class-validator'
 
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
-
 import { Address } from 'forms/models/address'
-import { IsValidPostcode } from 'forms/validation/validators/isValidPostcode'
+import { IsNotBlank } from '@hmcts/cmc-validators/dist/isNotBlank'
+import { IsValidPostcode } from '@hmcts/cmc-validators/dist/isValidPostcode'
 
 export class ValidationErrors {
   static readonly FIRST_LINE_REQUIRED: string = 'Enter first correspondence address line'

@@ -1,6 +1,6 @@
 import { IsDefined, ValidateIf } from 'class-validator'
 
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
+import { IsNotBlank } from '@hmcts/cmc-validators/dist/isNotBlank'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'

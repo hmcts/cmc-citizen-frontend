@@ -1,5 +1,5 @@
 import { IsDefined, MaxLength, ValidateNested } from 'class-validator'
-import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
+import { IsNotBlank } from '@hmcts/cmc-validators/dist/isNotBlank'
 import { IsNotInFuture } from 'app/forms/validation/validators/notInFuture'
 import { IsValidLocalDate } from 'app/forms/validation/validators/isValidLocalDate'
 import { LocalDate } from 'app/forms/models/localDate'
