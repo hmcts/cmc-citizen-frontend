@@ -1,5 +1,5 @@
 import { Moment } from 'moment'
-import { MomentFactory } from 'shared/momentFactory'
+import { MomentFactory } from 'common/momentFactory'
 import { InterestRateClient } from 'claims/interestRateClient'
 
 export async function calculateInterest (amount: number,

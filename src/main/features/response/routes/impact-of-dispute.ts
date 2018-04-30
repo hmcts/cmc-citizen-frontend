@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { Paths } from 'features/response/paths'
-import { ErrorHandling } from 'shared/errorHandling'
+import { ErrorHandling } from 'common/errorHandling'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'

@@ -3,10 +3,10 @@ import { expect } from 'chai'
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from '../../../../app/forms/models/validationUtils'
 import { DefendantPaymentPlan, ValidationErrors } from 'response/form/models/defendantPaymentPlan'
-import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
+import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { LocalDate } from 'forms/models/localDate'
-import { MomentFactory } from 'shared/momentFactory'
+import { MomentFactory } from 'common/momentFactory'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 const FUTURE_YEAR = MomentFactory.currentDate().add(10, 'years').year()

@@ -6,7 +6,7 @@ import { Validator } from 'class-validator'
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestHowMuch, ValidationErrors } from 'claim/form/models/interestHowMuch'
-import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
+import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
 
 describe('InterestHowMuch', () => {
 

@@ -2,11 +2,11 @@ import { CompanyDetails } from 'forms/models/companyDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { IndividualDetails } from 'forms/models/individualDetails'
-import { PartyType } from 'common/partyType'
+import { PartyType } from 'app/common/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
-import { MobilePhone } from 'forms/models/mobilePhone'
+import { MobilePhone } from 'app/forms/models/mobilePhone'
 import { Payment } from 'payment-hub-client/payment'
-import { CompletableTask } from 'models/task'
+import { CompletableTask } from 'app/models/task'
 
 export class Claimant implements CompletableTask {
   partyDetails?: PartyDetails

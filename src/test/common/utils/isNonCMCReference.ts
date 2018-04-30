@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-expression */
 import { expect } from 'chai'
-import { isNonCMCReference } from 'shared/utils/isNonCMCReference'
+import { isNonCMCReference } from 'common/utils/isNonCMCReference'
 
 describe('isNonCMCReference', () => {
   it('should return false when the reference number is in CMC format with upper case MC', () => {

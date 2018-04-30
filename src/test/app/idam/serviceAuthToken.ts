@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import * as jwt from 'jsonwebtoken'
 import * as moment from 'moment'
 
-import { ServiceAuthToken } from 'idam/serviceAuthToken'
+import { ServiceAuthToken } from 'app/idam/serviceAuthToken'
 
 describe('ServiceAuthToken', () => {
   describe('hasExpired', () => {

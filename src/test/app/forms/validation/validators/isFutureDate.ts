@@ -2,8 +2,8 @@ import { expect } from 'chai'
 
 import { DateFutureConstraint } from 'forms/validation/validators/dateFutureConstraint'
 
-import { LocalDate } from 'forms/models/localDate'
-import { MomentFactory } from 'shared/momentFactory'
+import { LocalDate } from 'app/forms/models/localDate'
+import { MomentFactory } from 'common/momentFactory'
 
 describe('DateFutureConstraint', () => {
   const constraint: DateFutureConstraint = new DateFutureConstraint()

@@ -1,6 +1,6 @@
 import { IsDefined, IsInt, Min } from 'class-validator'
 
-import { toNumberOrUndefined } from 'shared/utils/numericUtils'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { IsLessThanOrEqualTo } from 'forms/validation/validators/isLessThanOrEqualTo'
 

@@ -4,7 +4,7 @@ import { expect } from 'chai'
 import { Validator } from 'class-validator'
 
 import { expectValidationError } from '../../../../app/forms/models/validationUtils'
-import { ValidationErrors } from 'forms/validation/validationErrors'
+import { ValidationErrors } from 'app/forms/validation/validationErrors'
 
 import { Interest } from 'claim/form/models/interest'
 import { YesNoOption } from 'models/yesNoOption'

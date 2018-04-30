@@ -1,5 +1,5 @@
 import { IsDefined, IsInt, Max, Min } from 'class-validator'
-import { toNumberOrUndefined } from 'shared/utils/numericUtils'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 export class ValidationErrors {

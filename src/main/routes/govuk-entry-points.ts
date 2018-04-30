@@ -1,8 +1,8 @@
 import * as express from 'express'
-import { Paths } from 'paths'
+import { Paths } from 'app/paths'
 import { Paths as EligibilityPaths } from 'eligibility/paths'
 import { Paths as FirstContactPaths } from 'first-contact/paths'
-import { ErrorHandling } from 'shared/errorHandling'
+import { ErrorHandling } from 'common/errorHandling'
 
 /* tslint:disable:no-default-export */
 // These routes are linked to from gov.uk and cannot be changed without a matching content change on their side

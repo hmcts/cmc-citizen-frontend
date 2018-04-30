@@ -2,12 +2,12 @@ import { IsDefined, MaxLength, ValidateIf } from 'class-validator'
 
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 
-import { CompletableTask } from 'models/task'
+import { CompletableTask } from 'app/models/task'
 import { Address as ClaimAddress } from 'claims/models/address'
 import * as toBoolean from 'to-boolean'
 import { ExtraFormFieldsArePopulated } from 'forms/validation/validators/extraFormFieldsArePopulated'
 import { IsCountrySupported } from 'forms/validation/validators/isCountrySupported'
-import { Country } from 'common/country'
+import { Country } from 'app/common/country'
 
 export class ValidationErrors {
   static readonly FIRST_LINE_REQUIRED: string = 'Enter first address line'

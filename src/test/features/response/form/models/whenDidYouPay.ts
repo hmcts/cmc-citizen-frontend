@@ -9,7 +9,7 @@ import { WhenDidYouPay, ValidationErrors } from 'response/form/models/whenDidYou
 import * as moment from 'moment'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
-import { MomentFactory } from 'shared/momentFactory'
+import { MomentFactory } from 'common/momentFactory'
 import { LocalDate, ValidationErrors as LocalDateValidationErrors } from 'forms/models/localDate'
 
 describe('WhenDidYouPay', () => {

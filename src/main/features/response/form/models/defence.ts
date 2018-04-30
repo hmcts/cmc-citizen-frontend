@@ -1,5 +1,5 @@
 import { MaxLength, IsDefined } from 'class-validator'
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
+import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 

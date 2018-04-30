@@ -6,7 +6,7 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 
-import { ErrorHandling } from 'shared/errorHandling'
+import { ErrorHandling } from 'common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { User } from 'idam/user'

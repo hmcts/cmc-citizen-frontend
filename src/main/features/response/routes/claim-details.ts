@@ -1,8 +1,8 @@
 import * as express from 'express'
 import { Paths } from 'response/paths'
 import { Claim } from 'claims/models/claim'
-import { getInterestDetails } from 'shared/interestUtils'
-import { ErrorHandling } from 'shared/errorHandling'
+import { getInterestDetails } from 'common/interestUtils'
+import { ErrorHandling } from 'common/errorHandling'
 
 /* tslint:disable:no-default-export */
 export default express.Router()

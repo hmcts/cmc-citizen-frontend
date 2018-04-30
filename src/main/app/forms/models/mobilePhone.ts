@@ -1,5 +1,5 @@
 import { IsDefined, MaxLength } from 'class-validator'
-import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
+import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
 
 export class ValidationErrors {
   static readonly NUMBER_REQUIRED: string = 'Enter UK phone number'

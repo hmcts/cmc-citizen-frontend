@@ -4,7 +4,7 @@ import * as path from 'path'
 import { ErrorPaths, Paths } from 'first-contact/paths'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
-import { RouterFinder } from 'shared/router/routerFinder'
+import { RouterFinder } from 'common/router/routerFinder'
 
 function defendantFirstContactRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {

@@ -12,107 +12,91 @@
     ],
     "target": "es6",
     "module": "commonjs",
-    "baseUrl": "src" ,
+    "baseUrl": "src/main",
     "paths": {
-
+      "app/*": [
+        "app/*"
+      ],
       "payment-hub-client/*": [
-        "main/app/pay/*"
+        "app/pay/*"
       ],
       "client/*": [
-        "main/app/client/*"
+        "app/client/*"
       ],
       "postcode-lookup/*": [
-        "main/app/postcode-lookup/*"
+        "app/postcode-lookup/*"
       ],
       "drafts/*": [
-        "main/app/drafts/*"
+        "app/drafts/*"
       ],
       "claims/*": [
-        "main/app/claims/*"
-      ],
-      "common/*": [
-        "main/app/common/*"
-      ],
-      "documents/*": [
-        "main/app/documents/*"
+        "app/claims/*"
       ],
       "fees/*": [
-        "main/app/fees/*"
+        "app/fees/*"
       ],
       "forms/*": [
-        "main/app/forms/*"
+        "app/forms/*"
       ],
       "guards/*": [
-        "main/app/guards/*"
+        "app/guards/*"
       ],
       "health/*": [
-        "main/app/health/*"
+        "app/health/*"
       ],
       "idam/*": [
-        "main/app/idam/*"
+        "app/idam/*"
       ],
       "logging/*": [
-        "main/app/logging/*"
+        "app/logging/*"
       ],
       "models/*": [
-        "main/app/models/*"
-      ],
-      "pdf/*": [
-        "main/app/pdf/*"
+        "app/models/*"
       ],
       "utils/*": [
-        "main/app/utils/*"
-      ],
-      "paths": [
-        "main/app/paths"
-      ],
-      "errors" :[
-        "main/errors"
+        "app/utils/*"
       ],
       "modules/*": [
-        "main/modules/*"
+        "modules/*"
       ],
       "routes/*": [
-        "main/routes/*"
+        "routes/*"
       ],
-      "shared/*": [
-        "main/common/*"
-      ],
-      "features/*": [
-        "main/features/*"
+      "common/*": [
+        "common/*"
       ],
       "claim/*": [
-        "main/features/claim/*"
+        "features/claim/*"
       ],
       "first-contact/*": [
-        "main/features/first-contact/*"
+        "features/first-contact/*"
       ],
       "response/*": [
-        "main/features/response/*"
+        "features/response/*"
       ],
       "offer/*": [
-        "main/features/offer/*"
+        "features/offer/*"
       ],
       "statement-of-means/*": [
-        "main/features/statement-of-means/*"
+        "features/statement-of-means/*"
       ],
       "dashboard/*": [
-        "main/features/dashboard/*"
+        "features/dashboard/*"
       ],
       "ccj/*": [
-        "main/features/ccj/*"
+        "features/ccj/*"
       ],
       "testing-support/*": [
-        "main/features/testing-support/*"
+        "features/testing-support/*"
       ],
       "eligibility/*": [
-        "main/features/eligibility/*"
+        "features/eligibility/*"
       ],
       "services/*": [
-        "main/services/*"
+        "services/*"
       ],
       "integration-test/*": [
-        "integration-test/*"
+        "../integration-test/*"
       ]
     },
     "typeRoots": [

@@ -3,10 +3,10 @@ import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { IsDefined, IsIn, IsPositive, ValidateNested } from 'class-validator'
 import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
-import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
+import { IsFutureDate } from 'app/forms/validation/validators/dateFutureConstraint'
 import { Fractions } from 'forms/validation/validators/fractions'
-import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
-import { toNumberOrUndefined } from 'shared/utils/numericUtils'
+import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import { IsLessThan } from 'forms/validation/validators/isLessThan'
 
 export class ValidationErrors {

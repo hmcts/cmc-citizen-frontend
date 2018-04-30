@@ -3,7 +3,7 @@ import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 import { Fractions } from 'forms/validation/validators/fractions'
 import * as toBoolean from 'to-boolean'
-import { toNumberOrUndefined } from 'shared/utils/numericUtils'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints as GlobalValidationConstants } from 'forms/validation/validationConstraints'
 

@@ -2,11 +2,11 @@ import * as express from 'express'
 
 import { Paths } from 'ccj/paths'
 
-import { ErrorHandling } from 'shared/errorHandling'
+import { ErrorHandling } from 'common/errorHandling'
 import { Claim } from 'claims/models/claim'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Draft } from '@hmcts/draft-store-client'
-import { getInterestDetails } from 'shared/interestUtils'
+import { getInterestDetails } from 'common/interestUtils'
 import { MomentFactory } from '../../../common/momentFactory'
 
 /* tslint:disable:no-default-export */

@@ -2,11 +2,11 @@ import * as express from 'express'
 
 import { Paths } from 'dashboard/paths'
 import { Paths as CCJPaths } from 'ccj/paths'
-import { ErrorHandling } from 'shared/errorHandling'
+import { ErrorHandling } from 'common/errorHandling'
 
 import { ClaimStoreClient } from 'claims/claimStoreClient'
-import { Claim } from 'claims/models/claim'
-import { PartyType } from 'common/partyType'
+import { Claim } from 'app/claims/models/claim'
+import { PartyType } from 'app/common/partyType'
 import { User } from 'idam/user'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()

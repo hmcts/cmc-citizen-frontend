@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { RoutablePath } from 'shared/router/routablePath'
+import { RoutablePath } from 'common/router/routablePath'
 
 describe('RoutablePath', () => {
   describe('providing uri', () => {

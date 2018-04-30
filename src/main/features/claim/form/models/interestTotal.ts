@@ -1,9 +1,9 @@
 import { IsDefined, MaxLength, Min } from 'class-validator'
 import { CompletableTask } from 'models/task'
 import { Fractions } from 'forms/validation/validators/fractions'
-import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
+import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
-import { toNumberOrUndefined } from 'shared/utils/numericUtils'
+import { toNumberOrUndefined } from 'common/utils/numericUtils'
 
 export class ValidationErrors {
   static readonly REASON_REQUIRED: string = 'You must tell us how you calculated the amount'

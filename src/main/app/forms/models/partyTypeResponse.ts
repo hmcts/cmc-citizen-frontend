@@ -1,5 +1,5 @@
 import { IsDefined, IsIn } from 'class-validator'
-import { PartyType } from 'common/partyType'
+import { PartyType } from 'app/common/partyType'
 
 export class ValidationErrors {
   static readonly TYPE_REQUIRED: string = 'Choose your response'

@@ -1,6 +1,6 @@
 import * as express from 'express'
-import { Claim } from 'claims/models/claim'
-import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { Claim } from 'app/claims/models/claim'
+import { ClaimStoreClient } from 'app/claims/claimStoreClient'
 import { ErrorPaths } from 'first-contact/paths'
 import { User } from 'idam/user'
 import { Logger } from '@hmcts/nodejs-logging'

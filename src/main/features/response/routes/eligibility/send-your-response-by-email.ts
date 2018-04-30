@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { Paths } from 'response/paths'
 
-import { ErrorHandling } from 'shared/errorHandling'
+import { ErrorHandling } from 'common/errorHandling'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { FeesClient } from 'fees/feesClient'

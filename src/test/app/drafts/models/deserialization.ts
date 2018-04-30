@@ -1,4 +1,4 @@
-import { Defendant } from 'drafts/models/defendant'
+import { Defendant } from 'app/drafts/models/defendant'
 import { expect } from 'chai'
 import { ClaimType } from 'eligibility/model/claimType'
 import { ClaimValue } from 'eligibility/model/claimValue'

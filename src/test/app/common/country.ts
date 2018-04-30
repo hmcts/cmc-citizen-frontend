@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 
-import { Country } from 'common/country'
+import { Country } from 'app/common/country'
 
 describe('Country', () => {
   describe('valueOf', () => {

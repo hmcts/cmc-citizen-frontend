@@ -1,4 +1,4 @@
-import { TaskListItem } from 'drafts/tasks/taskListItem'
+import { TaskListItem } from 'app/drafts/tasks/taskListItem'
 
 export class TaskList {
   constructor (public position: number, public name: string, public tasks: TaskListItem[]) {

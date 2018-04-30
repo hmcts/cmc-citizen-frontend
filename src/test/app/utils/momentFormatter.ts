@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import * as moment from 'moment'
 
-import { MomentFormatter } from 'utils/momentFormatter'
+import { MomentFormatter } from 'app/utils/momentFormatter'
 
 describe('MomentFormatter', () => {
 

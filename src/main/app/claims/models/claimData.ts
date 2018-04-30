@@ -5,7 +5,7 @@ import { Company as ClaimantAsCompany } from 'claims/models/details/yours/compan
 import { SoleTrader as ClaimantAsSoleTrader } from 'claims/models/details/yours/soleTrader'
 import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
 import { Organisation as ClaimantAsOrganisation } from 'claims/models/details/yours/organisation'
-import { PartyType } from 'common/partyType'
+import { PartyType } from 'app/common/partyType'
 import { Individual as DefendantAsIndividual } from 'claims/models/details/theirs/individual'
 import { Company as DefendantAsCompany } from 'claims/models/details/theirs/company'
 import { SoleTrader as DefendantAsSoleTrader } from 'claims/models/details/theirs/soleTrader'

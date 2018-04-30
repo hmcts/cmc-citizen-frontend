@@ -9,8 +9,8 @@ import { Paths } from 'ccj/paths'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 import * as config from 'config'
 import { expect } from 'chai'
-import { MomentFactory } from 'shared/momentFactory'
-import { RoutablePath } from 'shared/router/routablePath'
+import { MomentFactory } from 'common/momentFactory'
+import { RoutablePath } from 'common/router/routablePath'
 
 const cookieName: string = config.get<string>('session.cookieName')
 

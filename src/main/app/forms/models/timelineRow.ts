@@ -6,7 +6,7 @@ import {
   ValidationConstraints as DefaultValidationConstraints
 } from 'forms/validation/validationConstraints'
 import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
-import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
+import { ValidationErrors as GlobalValidationErrors } from 'app/forms/validation/validationErrors'
 
 export class ValidationErrors {
   static readonly DATE_TOO_LONG: string = 'Enter a date no longer than $constraint1 characters'

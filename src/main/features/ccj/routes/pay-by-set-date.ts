@@ -6,10 +6,10 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { PayBySetDate } from 'forms/models/payBySetDate'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
-import { ErrorHandling } from 'shared/errorHandling'
+import { ErrorHandling } from 'common/errorHandling'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Draft } from '@hmcts/draft-store-client'
-import { MomentFactory } from 'shared/momentFactory'
+import { MomentFactory } from 'common/momentFactory'
 import { Moment } from 'moment'
 
 function renderView (form: Form<PayBySetDate>, res: express.Response): void {

@@ -1,9 +1,9 @@
-import { PartyType } from 'common/partyType'
-import { Party } from 'claims/models/details/yours/party'
-import { Individual } from 'claims/models/details/yours/individual'
-import { Company } from 'claims/models/details/yours/company'
-import { SoleTrader } from 'claims/models/details/yours/soleTrader'
-import { Organisation } from 'claims/models/details/yours/organisation'
+import { PartyType } from 'app/common/partyType'
+import { Party } from 'app/claims/models/details/yours/party'
+import { Individual } from 'app/claims/models/details/yours/individual'
+import { Company } from 'app/claims/models/details/yours/company'
+import { SoleTrader } from 'app/claims/models/details/yours/soleTrader'
+import { Organisation } from 'app/claims/models/details/yours/organisation'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
 export enum ResponseType {
