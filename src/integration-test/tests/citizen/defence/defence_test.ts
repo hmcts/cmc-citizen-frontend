@@ -18,7 +18,7 @@ Scenario('I can complete the journey when I fully reject the claim as I dispute 
   const claimRef: string = yield I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL), claimantEmail)
 
   yield helperSteps.enterPinNumber(claimRef, claimantEmail)
-  helperSteps.finishResponse(defendantEmail, PartyType.INDIVIDUAL, DefenceType.FULL_REJECTION_WITH_DISPUTE)
+  helperSteps.finishResponse(claimRef, defendantEmail, PartyType.INDIVIDUAL, DefenceType.FULL_REJECTION_WITH_DISPUTE)
 })
 
 Scenario('I can complete the journey when I fully reject the claim as I have already paid @citizen', function* (I: I) {
@@ -29,7 +29,7 @@ Scenario('I can complete the journey when I fully reject the claim as I have alr
   const claimRef: string = yield I.createClaim(claimModel, claimantEmail)
 
   yield helperSteps.enterPinNumber(claimRef, claimantEmail)
-  helperSteps.finishResponse(defendantEmail, PartyType.INDIVIDUAL, DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID)
+  helperSteps.finishResponse(claimRef, defendantEmail, PartyType.INDIVIDUAL, DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID)
 
   I.click('My account')
   I.see(claimRef)
@@ -103,6 +103,7 @@ Scenario('I can view the claim details from a link on the dashboard @citizen', f
 
   yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.defendantViewCaseTaskList(defendantEmail)
+  I.click(claimRef)
   I.click('Respond to claim')
   defendantDetails.clickViewClaim()
   defendantDetails.checkClaimData(claimRef, claimData)
@@ -117,6 +118,7 @@ Scenario('I can view the claim details from a link on the dashboard for interest
 
   yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.defendantViewCaseTaskList(defendantEmail)
+  I.click(claimRef)
   I.click('Respond to claim')
   defendantDetails.clickViewClaim()
   defendantDetails.checkClaimData(claimRef, claimData)
