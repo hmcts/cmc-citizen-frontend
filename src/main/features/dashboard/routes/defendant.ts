@@ -5,7 +5,6 @@ import { ErrorHandling } from 'common/errorHandling'
 
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { Claim } from 'app/claims/models/claim'
-import { isAfter4pm } from 'common/dateUtils'
 import { User } from 'idam/user'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
@@ -18,7 +17,6 @@ export default express.Router()
     const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
 
     res.render(Paths.defendantPage.associatedView, {
-      isAfter4pm: isAfter4pm(),
       claim: claim
     })
   }))

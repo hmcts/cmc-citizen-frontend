@@ -8,6 +8,8 @@ const defendantOfferPage: DefendantOfferPage = new DefendantOfferPage()
 export class OfferSteps {
 
   makeOffer (): void {
+    I.see('Make an offer to settle out of court')
+    I.click('Continue')
     defendantOfferPage.enterOffer(offer.offerText, offer.completionDate)
   }
 
@@ -15,7 +17,7 @@ export class OfferSteps {
     I.click('My account')
     I.see('Your money claims account')
     I.click(claimRef)
-    I.click('make an offer')
+    I.click('settle the claim out of court')
     this.makeOffer()
   }
 
@@ -57,7 +59,7 @@ export class OfferSteps {
 
   viewOfferFromDashboard (claimRef: string): void {
     this.viewClaimFromDashboard(claimRef)
-    I.click('View their offer')
+    I.click('View and respond to offer')
   }
 
   viewClaimFromDashboard (claimRef: string): void {
