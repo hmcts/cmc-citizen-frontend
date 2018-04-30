@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@hmcts/cmc-common-frontend@^1.46.0":
-  version "1.46.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.46.0.tgz#444527f1ed57122f959820fee5de0bbb884ccc4d"
+"@hmcts/cmc-common-frontend@^1.45.0":
+  version "1.45.0"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.45.0.tgz#a1cad47ec106cb37ae3ee16774168202048f4456"
 
 "@hmcts/cmc-draft-store-middleware@^2.0.0":
   version "2.0.0"
