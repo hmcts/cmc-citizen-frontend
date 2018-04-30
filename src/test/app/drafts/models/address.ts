@@ -15,12 +15,12 @@ describe('Address', () => {
       expect(add.isCompleted()).to.equal(true)
     })
 
-    it('should return false when the there is no postcode', () => {
+    it('should return false when there is no postcode', () => {
       const add: Address = new Address()
       expect(add.isCompleted()).to.equal(false)
     })
 
-    it('should return false when the there is invalid postcode', () => {
+    it('should return false when there is invalid postcode', () => {
       const input = {
         line1: 'House no',
         line2: 'Another lane',
