@@ -10,6 +10,7 @@ export class Paths {
   static readonly privacyPolicyPage = new RoutablePath('/privacy-policy', false)
   static readonly cookiesPage = new RoutablePath('/cookies', false)
   static readonly termsAndConditionsPage = new RoutablePath('/terms-and-conditions', false)
+  static readonly contactUsPage = new RoutablePath('/contact-us', false)
 
   // gov.uk entrypoints - these can't change without updating gov.uk content as well
   static readonly makeClaimReceiver = new RoutablePath('/make-claim', false)

@@ -4,7 +4,6 @@ import { Paths } from 'response/paths'
 
 import { Claim } from 'claims/models/claim'
 
-import { isAfter4pm } from 'common/dateUtils'
 import { TaskListBuilder } from 'response/helpers/taskListBuilder'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
@@ -26,10 +25,9 @@ export default express.Router()
       res.render(Paths.taskListPage.associatedView,
         {
           beforeYouStartSection: beforeYouStartSection,
-          submitSection: beforeYouStartSection.isCompleted() && respondToClaimSection.isCompleted() ? submitSection : undefined,
+          submitSection: submitSection,
           respondToClaimSection: respondToClaimSection,
-          claim: claim,
-          isAfter4pm: isAfter4pm()
+          claim: claim
         })
     } catch (err) {
       next(err)

@@ -5,7 +5,6 @@ import { Settlement } from 'claims/models/settlement'
 import { StatementType } from 'offer/form/models/statementType'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { Offer } from 'claims/models/offer'
-import moment = require('moment')
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { ResponseType } from 'claims/models/response/responseCommon'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
@@ -15,6 +14,7 @@ import { individual } from '../../../data/entity/party'
 import { DefenceType, FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { Individual } from 'claims/models/details/yours/individual'
 import { PartyStatement } from 'claims/models/partyStatement'
+import * as moment from 'moment'
 
 describe('Claim', () => {
 
@@ -97,15 +97,6 @@ describe('Claim', () => {
     });
 
     [true, false].forEach(isMoreTimeRequested => {
-      it(`should return ELIGIBLE_FOR_CCJ if defendant has not responded before the deadline, more time requested = ${isMoreTimeRequested}`, () => {
-        claim.moreTimeRequested = isMoreTimeRequested
-        claim.responseDeadline = moment().subtract(10, 'days')
-
-        expect(claim.status).to.be.equal(ClaimStatus.ELIGIBLE_FOR_CCJ)
-      })
-    });
-
-    [true, false].forEach(isMoreTimeRequested => {
       it(`should return CCJ_REQUESTED when a claimant requests a CCJ and more time requested = ${isMoreTimeRequested}.`, () => {
         claim.moreTimeRequested = isMoreTimeRequested
         claim.responseDeadline = moment().subtract(10, 'days')
@@ -113,43 +104,26 @@ describe('Claim', () => {
         claim.countyCourtJudgmentRequestedAt = moment()
         expect(claim.status).to.be.equal(ClaimStatus.CCJ_REQUESTED)
       })
-    });
+    })
 
-    [
-      { isMoreTimeRequested: false, isEligibleForCCJ: false },
-      { isMoreTimeRequested: false, isEligibleForCCJ: true },
-      { isMoreTimeRequested: true, isEligibleForCCJ: false },
-      { isMoreTimeRequested: true, isEligibleForCCJ: true }
-    ].forEach(obj => {
-      it(`should return OFFER_SUBMITTED if an offer has been submitted. More time requested = ${obj.isMoreTimeRequested} and eligibility for a CCJ is ${obj.isEligibleForCCJ}`, () => {
-        claim.moreTimeRequested = obj.isMoreTimeRequested
-        if (obj.isEligibleForCCJ) {
-          claim.responseDeadline = moment().subtract(2, 'days')
-        } else {
-          claim.responseDeadline = moment().add(2, 'days')
-        }
-        claim.settlement = new Settlement()
-        claim.response = {
-          responseType: ResponseType.FULL_DEFENCE,
-          defenceType: DefenceType.DISPUTE,
-          defence: 'defence reasoning',
-          freeMediation: FreeMediationOption.YES,
-          defendant: new Individual().deserialize(individual)
-        }
+    it('should return OFFER_SUBMITTED if an offer has been submitted.', () => {
+      claim.settlement = new Settlement()
+      claim.response = {
+        responseType: ResponseType.FULL_DEFENCE,
+        defenceType: DefenceType.DISPUTE,
+        defence: 'defence reasoning',
+        freeMediation: FreeMediationOption.YES,
+        defendant: new Individual().deserialize(individual)
+      }
 
-        expect(claim.status).to.be.equal(ClaimStatus.OFFER_SUBMITTED)
-      })
-    });
+      expect(claim.status).to.be.equal(ClaimStatus.OFFER_SUBMITTED)
+    })
 
-    [true, false].forEach(isMoreTimeRequested => {
-      it(`should return OFFER_SETTLEMENT_REACHED if an offer has been accepted and more time requested = ${isMoreTimeRequested}`, () => {
-        claim.moreTimeRequested = isMoreTimeRequested
+    it('should return OFFER_SETTLEMENT_REACHED if an offer has been accepted', () => {
+      claim.settlement = new Settlement()
+      claim.settlementReachedAt = moment()
 
-        claim.settlement = new Settlement()
-        claim.settlementReachedAt = moment()
-
-        expect(claim.status).to.be.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
-      })
+      expect(claim.status).to.be.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
     })
 
     it('should return MORE_TIME_REQUESTED when more time is requested', () => {
@@ -178,15 +152,76 @@ describe('Claim', () => {
       expect(claim.status).to.be.equal(ClaimStatus.NO_RESPONSE)
     })
 
-    describe('offer rejected status', () => {
-      it('should return OFFER_REJECTED when offer is rejected', () => {
-        claim.response = FullDefenceResponse.deserialize(defenceWithDisputeData)
-        claim.settlement = new Settlement().deserialize({
-          partyStatements: [offer, offerRejection]
-        })
-
-        expect(claim.status).to.be.equal(ClaimStatus.OFFER_REJECTED)
+    it('should return OFFER_REJECTED when offer is rejected', () => {
+      claim.response = FullDefenceResponse.deserialize(defenceWithDisputeData)
+      claim.settlement = new Settlement().deserialize({
+        partyStatements: [offer, offerRejection]
       })
+
+      expect(claim.status).to.be.equal(ClaimStatus.OFFER_REJECTED)
+    })
+  })
+
+  describe('respondToResponseDeadline', () => {
+
+    it('should add 33 days to the response deadline', () => {
+      const claim = new Claim()
+      claim.respondedAt = moment()
+
+      expect(claim.respondToResponseDeadline.toISOString()).to.equal(claim.respondedAt.add(33, 'days').toISOString())
+    })
+
+    it('should return undefined if claim is not responded to', () => {
+      const claim = new Claim()
+      expect(claim.respondToResponseDeadline).to.equal(undefined)
+    })
+  })
+
+  describe('respondToMediationDeadline', () => {
+
+    it('should add 5 days to the response deadline', () => {
+      const claim = new Claim()
+      claim.respondedAt = moment()
+
+      expect(claim.respondToMediationDeadline.toISOString()).to.equal(claim.respondedAt.add(5, 'days').toISOString())
+    })
+
+    it('should return undefined if claim is not responded to', () => {
+      const claim = new Claim()
+      expect(claim.respondToMediationDeadline).to.equal(undefined)
+    })
+  })
+
+  describe('stateHistory', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim()
+      claim.responseDeadline = moment()
+    })
+
+    it('should contain the claim status only if not responded to', () => {
+      expect(claim.stateHistory).to.have.lengthOf(1)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.NO_RESPONSE)
+    })
+
+    it('should contain the claim status only if response rejected but no offer made', () => {
+      claim.respondedAt = moment()
+      claim.response = { responseType: ResponseType.FULL_DEFENCE }
+
+      expect(claim.stateHistory).to.have.lengthOf(1)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIM_REJECTED)
+    })
+
+    it('should contain multiple statuses when response rejected and offers exchanged', () => {
+      claim.respondedAt = moment()
+      claim.response = { responseType: ResponseType.FULL_DEFENCE }
+      claim.settlement = new Settlement()
+      claim.settlementReachedAt = moment()
+
+      expect(claim.stateHistory).to.have.lengthOf(2)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.CLAIM_REJECTED)
     })
   })
 })

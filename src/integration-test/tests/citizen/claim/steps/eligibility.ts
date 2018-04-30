@@ -10,6 +10,8 @@ function completeEligibilityPage (optionSelector: string) {
 export class EligibilitySteps {
 
   complete (): void {
+    I.amOnCitizenAppPage('/eligibility')
+
     I.see('Find out if you can use this service')
     I.click('Continue')
 

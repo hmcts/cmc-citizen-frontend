@@ -14,12 +14,7 @@
         {{ t('If they reject your offer the details can’t be mentioned in court.') }}
       </p>
 
-      {{ t('<a href="%s" class="button">Continue</a>',
-        {
-            postProcess: 'sprintf',
-            sprintf: [OfferPaths.offerPage.evaluateUri({ externalId: claim.externalId })]
-        }
-      ) | safe }}
+      {{ t('<a href="{{ url }}" class="button">Continue</a>', { url: OfferPaths.offerPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}
     </div>
   </div>
 {% endblock %}

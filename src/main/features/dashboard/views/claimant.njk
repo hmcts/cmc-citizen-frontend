@@ -1,66 +1,57 @@
 {% extends "layout.njk" %}
-{% from "./macro/caseHistory.njk" import caseHistoryForClaimant %}
+{% from "./macro/caseHistory.njk" import caseHistoryForClaimantClaimDetails %}
 
-{% set title = 'Money claim' %}
-
-{% from "form.njk" import submitButton, csrfProtection %}
+{% set title = 'Your money claims account' %}
 
 {% block content %}
   <div class="grid-row">
-    <div class="column-full">
+    <div class="column-two-thirds">
       <h1 class="heading-large">
         <span class="heading-secondary">{{ t('Claim number:') }}</span>
-        {{ claim.claimNumber }}
+        {{ claim.claimNumber if claim else 'Draft' }}
       </h1>
-    </div>
-    <div class="column-two-thirds">
       <div>
         <h2 class="heading-medium">{{ t('Claim status') }}</h2>
-
-        {% if claim.eligibleForCCJ %}
-          <h3 class="bold-small">{{ t('You can request a County Court Judgment') }}</h3>
-          <p>{{ t('{{ defendantName }} has not responded to your claim by the deadline. You can request a County Court Judgment (CCJ) against them.', { defendantName : claim.claimData.defendant.name }) }}</p>
-          <p>{{ t('The court will make an order asking them to pay the money. It does not guarantee that they pay it.') }}</p>
-          <p>{{ t('{{ defendantName }} can still respond to the claim until you request a CCJ.', { defendantName : claim.claimData.defendant.name }) }}</p>
-          <form novalidate method="post">
-            {{ csrfProtection(csrf) }}
-
-            {{ submitButton('Request a County Court Judgment') }}
-          </form>
+        {% if claim %}
+          {{ caseHistoryForClaimantClaimDetails(claim, csrf) }}
         {% else %}
-            {{ caseHistoryForClaimant(claim, DashboardUrlHelper.getStatusUrl(claim)) }}
-        {% endif %}
-
-        {% if claim.countyCourtJudgmentRequestedAt %}
-
-          <p>{{ t('{{ defendantName }} can no longer respond to your claim.', { defendantName: claim.claimData.defendant.name }) }}</p>
+          <h2 class="bold-small">{{ t('This claim has not been submitted') }}</h2>
+          <p>
+            {{ t('Your claim is saved as a draft.') }}
+          </p>
+          <p>
+            <a href="{{ ClaimPaths.taskListPage.uri }}">{{ t('Continue with claim') }}</a>
+          </p>
         {% endif %}
       </div>
     </div>
 
-    <div class="column-one-third">
-      <div class="meta-data">
-        <ul class="font-xsmall list">
-          <li>
-            <strong class="bold">{{ t('Defendant name:') }}</strong>
-            <span class="block">{{ claim.claimData.defendant.name }}</span>
-          </li>
-          <li>
-            <strong class="bold">{{ t('Total claim amount:') }}</strong>
-            <span class="block">{{ claim.totalAmountTillToday | numeral }}</span>
-          </li>
-          <li>
-            <strong class="bold">{{ t('Claim details:') }}</strong>
-            <span class="block"><a href="{{ receiptUri }}">{{ t('Download claim') }}</a></span>
-          </li>
-          {% if claim.response %}
+    {% if claim %}
+      <div class="column-one-third">
+        <div class="about-claim-widget">
+          <p class="heading-small">{{ t('About claim') }}</p>
+          <ul class="font-xsmall list">
             <li>
-              <strong class="bold">{{ t('Defendant’s response:') }}</strong>
-              <span class="block"><a href="{{ DashboardPaths.responseReceiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a></span>
+              <strong class="bold">{{ t('Defendant name:') }}</strong>
+              <div>{{ claim.claimData.defendant.name }}</div>
             </li>
-          {% endif %}
-        </ul>
+            <li>
+              <strong class="bold">{{ t('Total claim amount:') }}</strong>
+              <div>{{ claim.totalAmountTillToday | numeral }}</div>
+            </li>
+            <li>
+              <strong class="bold">{{ t('Claim details:') }}</strong>
+              <a class="block" href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View claim') }}</a>
+            </li>
+            {% if claim.response %}
+              <li>
+                <strong class="bold">{{ t('Defendant’s response:') }}</strong>
+                <a class="block" href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
       </div>
-    </div>
+    {% endif %}
   </div>
 {% endblock %}

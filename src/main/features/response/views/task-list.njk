@@ -43,10 +43,10 @@
         <ul class="font-xsmall list">
           <li>
             <strong class="bold">{{ t('Response deadline:') }}</strong>
-            <span class="block">
-            {{ t('%s at 4pm', { postProcess: 'sprintf', sprintf: [ claim.responseDeadline | date ] }) }} <br/>
-              {{ timeRemaining(claim.remainingDays) }}
-          </span>
+            <div>
+              {{ t('{{ responseDeadline }} at 4pm', { responseDeadline: claim.responseDeadline | date }) }}
+            </div>
+            <div>{{ timeRemaining(claim.remainingDays, isAfter4pm()) }}</div>
           </li>
           <li>
             <strong class="bold">{{ t('Claim number:') }}</strong>
@@ -54,13 +54,11 @@
           </li>
           <li>
             <strong class="bold">{{ t('Total claim amount:') }}</strong>
-            <span class="block">{{ claim.totalAmountTillToday | numeral }}</span>
-            <div>{{ t('<a href="%s">View claim</a>',
-                {
-                  postProcess: 'sprintf',
-                  sprintf: [ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId })]
-                }
-              ) | safe }}</div>
+            <div>{{ claim.totalAmountTillToday | numeral }}</div>
+          </li>
+          <li>
+            <strong class="bold">{{ t('Claim details:') }}</strong>
+            <a class="block" href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View claim') }}</a>
           </li>
         </ul>
       </div>

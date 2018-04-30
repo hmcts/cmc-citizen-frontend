@@ -1,4 +1,5 @@
 import { PartyType } from 'integration-test/data/party-type'
+import { InterestType } from 'integration-test/data/interest-type'
 
 export const DEFAULT_PASSWORD = 'Password12'
 
@@ -6,6 +7,8 @@ export const SMOKE_TEST_CITIZEN_USERNAME = process.env.SMOKE_TEST_CITIZEN_USERNA
 export const SMOKE_TEST_USER_PASSWORD = process.env.SMOKE_TEST_USER_PASSWORD
 
 export const claimFee = 25.00
+export const fixedInterestAmount = 100
+export const dailyInterestAmount = 5
 
 export const claimAmount: Amount = {
   type: 'breakdown',
@@ -30,20 +33,14 @@ export const postCodeLookup = {
 export const claimReason = 'My reasons for the claim are that I am owed this money for a variety of reason, these being...'
 
 export function createClaimData (claimantType: PartyType, defendantType: PartyType, hasEmailAddress: boolean = true,
-                                 claimInterest: boolean = true): ClaimData {
+                                 interestType: InterestType = InterestType.STANDARD): ClaimData {
   let claimData = {
     claimants: [createClaimant(claimantType)],
     defendants: [createDefendant(defendantType, hasEmailAddress)],
     payment: {
-      id: '1',
-      state: {
-        status: 'success',
-        finished: true
-      },
       amount: claimFee * 100,
-      reference: 'CMC1$$$4d308250-d89e-485b-aafb-33a641fd00b3$$$AA00$$$X0024',
-      description: 'Money Claim issue fee',
-      date_created: '1511175701404'
+      reference: 'RC-1524-6488-1670-7520',
+      status: 'success'
     },
     feeAmountInPennies: claimFee * 100,
     amount: claimAmount,
@@ -51,19 +48,42 @@ export function createClaimData (claimantType: PartyType, defendantType: PartyTy
       type: 'no interest'
     },
     reason: claimReason,
-    timeline: { rows: [{ date: 'may', description: 'ok' }] }
+    timeline: { rows: [{ date: 'may', description: 'ok' }] },
+    get total (): number {
+      switch (interestType) {
+        case InterestType.STANDARD:
+          return this.amount.getClaimTotal() + claimFee
+        case InterestType.BREAKDOWN:
+          return this.amount.getClaimTotal() + fixedInterestAmount + claimFee
+      }
+    }
   } as ClaimData
 
-  if (claimInterest) {
-    claimData.interest = {
-      type: 'standard',
-      rate: 8
-    }
-
-    claimData.interestDate = {
-      type: 'submission'
-    }
+  switch (interestType) {
+    case InterestType.BREAKDOWN:
+      claimData.interest = {
+        type: 'breakdown',
+        interestBreakdown: {
+          totalAmount: fixedInterestAmount,
+          explanation: 'up to today'
+        },
+        specificDailyAmount: dailyInterestAmount
+      }
+      claimData.interestDate = {
+        endDateType: 'settled_or_judgment'
+      }
+      break
+    case InterestType.STANDARD:
+      claimData.interest = {
+        type: 'standard',
+        rate: 8
+      }
+      claimData.interestDate = {
+        type: 'submission'
+      }
+      break
   }
+
   return claimData
 }
 

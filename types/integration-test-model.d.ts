@@ -11,7 +11,8 @@ declare type ClaimData = {
   interest: Interest
   interestDate?: InterestDate
   reason: string
-  payment: Payment
+  payment: Payment,
+  total: number
 }
 
 declare type Claim = {
@@ -54,24 +55,24 @@ declare type AmountBreakdown = {
 declare type Interest = {
   type: string
   rate?: number
+  interestBreakdown?: InterestBreakdown
+  specificDailyAmount?: number
+}
+
+declare type InterestBreakdown = {
+  totalAmount?: number
+  explanation?: string
 }
 
 declare type InterestDate = {
-  type: string
+  type?: string
+  endDateType?: string
 }
 
 declare type Payment = {
-  id: string
   amount: number
   reference: string
-  description: string
-  date_created: string
-  state: PaymentState
-}
-
-declare type PaymentState = {
   status: string
-  finished: boolean
 }
 
 declare type ResponseData = {

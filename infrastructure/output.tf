@@ -1,7 +1,7 @@
 output "vaultUri" {
-  value = "${module.citizen-frontend-vault.key_vault_uri}"
+  value = "${local.vaultUri}"
 }
 
 output "vaultName" {
-  value = "${module.citizen-frontend-vault.key_vault_name}"
+  value = "${local.vaultName}"
 }

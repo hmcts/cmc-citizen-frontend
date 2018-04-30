@@ -1,29 +1,29 @@
 import { expect } from 'chai'
-import * as moment from 'moment'
+import { MomentFactory } from 'common/momentFactory'
 
 import { calculateInterest } from 'app/common/calculateInterest'
-import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { mockCalculateInterestRate } from '../../http-mocks/claim-store'
 
+import { attachDefaultHooks } from '../../../test/hooks'
+
 describe('calculateInterest', () => {
+  attachDefaultHooks()
 
-  describe('should call api for any data gets what API returns', async () => {
+  it(`should return 0 without calling an API when interest period is 0 days`, async () => {
+    const interestFromDate = MomentFactory.currentDateTime()
+    const interestToDate = MomentFactory.currentDateTime()
+    const amount = await calculateInterest(100, 8, interestFromDate, interestToDate)
 
-    beforeEach(() => {
-      mockCalculateInterestRate(0)
-    })
+    expect(amount).to.equal(0)
+  })
 
-    Object.keys(InterestRateOption).forEach(async (type) => {
-      [0, 1, 1000].forEach(async (rate) => {
-        it(`when rate is ${rate}, InterestRateOption = ${type} gets 0`, async () => {
+  it(`should return interest value calculated by API when interest period is greater then 0 days`, async () => {
+    mockCalculateInterestRate(0.08)
 
-          const interestFromDate = moment().subtract(5, 'years')
+    const interestFromDate = MomentFactory.currentDateTime().subtract(1, 'year')
+    const interestToDate = MomentFactory.currentDateTime()
+    const amount = await calculateInterest(100, 8, interestFromDate, interestToDate)
 
-          const expected: number = await calculateInterest(0, rate, interestFromDate)
-
-          expect(expected).to.equal(0)
-        })
-      })
-    })
+    expect(amount).to.equal(0.08)
   })
 })
