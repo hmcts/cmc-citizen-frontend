@@ -3,7 +3,7 @@ import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { IsDefined, ValidateNested } from 'class-validator'
 import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
-import { IsNotBlank } from '@hmcts/cmc-validators/dist/isNotBlank'
+import { IsNotBlank } from '@hmcts/cmc-validators'
 
 class ValidationErrors {
   static readonly CLAIM_NUMBER_REQUIRED: string = 'Enter a claim number'

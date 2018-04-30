@@ -2,7 +2,7 @@ import { IsDefined, IsInt, Min } from 'class-validator'
 import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
-import { IsNotBlank } from '@hmcts/cmc-validators/dist/isNotBlank'
+import { IsNotBlank } from '@hmcts/cmc-validators'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {

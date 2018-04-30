@@ -1,5 +1,5 @@
 import { IsDefined } from 'class-validator'
-import { IsNotBlank } from '@hmcts/cmc-validators/dist/isNotBlank'
+import { IsNotBlank } from '@hmcts/cmc-validators'
 
 export class ValidationErrors {
   static readonly CLAIM_REFERENCE_REQUIRED: string = 'You need to enter the claim number'

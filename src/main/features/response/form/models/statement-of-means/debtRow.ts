@@ -4,7 +4,7 @@ import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/val
 import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
 import { Fractions } from 'forms/validation/validators/fractions'
 import { toNumberOrUndefined } from 'common/utils/numericUtils'
-import { IsNotBlank } from '@hmcts/cmc-validators/dist/isNotBlank'
+import { IsNotBlank } from '@hmcts/cmc-validators'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 

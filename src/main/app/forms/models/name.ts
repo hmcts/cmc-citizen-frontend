@@ -1,5 +1,5 @@
 import { IsDefined, MaxLength } from 'class-validator'
-import { IsNotBlank } from '@hmcts/cmc-validators/dist/isNotBlank'
+import { IsNotBlank } from '@hmcts/cmc-validators'
 import { CompletableTask } from 'app/models/task'
 
 export class ValidationErrors {
