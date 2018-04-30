@@ -70,17 +70,9 @@ declare type InterestDate = {
 }
 
 declare type Payment = {
-  id: string
   amount: number
   reference: string
-  description: string
-  date_created: string
-  state: PaymentState
-}
-
-declare type PaymentState = {
   status: string
-  finished: boolean
 }
 
 declare type ResponseData = {
