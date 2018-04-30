@@ -1,10 +1,10 @@
 import * as express from 'express'
 
 import { Paths } from 'dashboard/paths'
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 
 import { ClaimStoreClient } from 'claims/claimStoreClient'
-import { Claim } from 'app/claims/models/claim'
+import { Claim } from 'claims/models/claim'
 import { User } from 'idam/user'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()

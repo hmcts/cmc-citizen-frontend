@@ -2,7 +2,7 @@ import { Party } from 'claims/models/details/yours/party'
 import { Company } from 'claims/models/details/yours/company'
 import { SoleTrader } from 'claims/models/details/yours/soleTrader'
 import { Organisation } from 'claims/models/details/yours/organisation'
-import { PartyType } from 'app/common/partyType'
+import { PartyType } from 'common/partyType'
 
 export class PartyDetailsMapper {
   static createPartyDetails (party: Party, email: string): object {

@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { Paths } from 'offer/paths'
 import { User } from 'idam/user'
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Declaration } from 'offer/form/models/declaration'

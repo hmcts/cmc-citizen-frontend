@@ -1,10 +1,10 @@
 import * as express from 'express'
 
 import { ClaimStoreClient } from 'claims/claimStoreClient'
-import { Claim } from 'app/claims/models/claim'
+import { Claim } from 'claims/models/claim'
 import { User } from 'idam/user'
 
-import { UUIDUtils } from 'common/utils/uuidUtils'
+import { UUIDUtils } from 'shared/utils/uuidUtils'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
