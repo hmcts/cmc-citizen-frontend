@@ -26,15 +26,19 @@ describe('CheckClaimReferenceNumberConstraint', () => {
     })
 
     describe('should return false when ', () => {
-      it('given an invalid reference 1234567', () => {
+      it('given all numeric reference 1234567', () => {
         expect(constraint.validate('1234567')).to.equal(false)
       })
 
-      it('given an invalid reference RSAD', () => {
+      it('given an shorter length reference RSAD', () => {
         expect(constraint.validate('RSAD')).to.equal(false)
       })
 
-      it('given an invalid reference 12RS234', () => {
+      it('given an longer length reference 123RD4567', () => {
+        expect(constraint.validate('123RD4567')).to.equal(false)
+      })
+
+      it('given an reference having invalid format 12RS234', () => {
         expect(constraint.validate('12RS234')).to.equal(false)
       })
     })

@@ -20,11 +20,6 @@ describe('isCCBCCaseReference', () => {
       expect(isCCBCCaseReference(referenceNumber)).to.be.true
     })
 
-    it('ccbc identifier is A1QZ1A23', () => {
-      const referenceNumber = 'A1QZ1A23'
-      expect(isCCBCCaseReference(referenceNumber)).to.be.true
-    })
-
     it('ccbc identifier is A1QZ1A2A', () => {
       const referenceNumber = 'A1QZ1A2A'
       expect(isCCBCCaseReference(referenceNumber)).to.be.true
