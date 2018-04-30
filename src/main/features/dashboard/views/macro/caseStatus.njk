@@ -68,8 +68,8 @@
         {{ t('{{ defendantName }} has rejected the claim. The case will be reviewed by a judge and might go to court.',
         { defendantName:  defendantName }) }}
       {% endif %}
+      <p>{{ _viewResponseLink(claim.externalId) }}</p>
     {% endif %}
-    <p>{{ _viewResponseLink(claim.externalId) }}</p>
   {% elseif status === ClaimStatus.OFFER_ACCEPTED %}
     {{ t('You’ve signed the agreement. We’ve asked {{ defendantName }} to sign the agreement.',
     { defendantName: defendantName }) }}
