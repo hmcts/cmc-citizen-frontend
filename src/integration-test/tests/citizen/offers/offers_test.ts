@@ -53,5 +53,5 @@ Scenario('I can make an offer as a defendant to a claimant and have the claimant
 
   userSteps.login(defendantEmail)
   offerSteps.viewClaimFromDashboard(claimRef)
-  I.see(createClaimant(PartyType.INDIVIDUAL).name + ' has rejected your offer.')
+  I.see('The claimant has rejected your offer to settle the claim.')
 })
