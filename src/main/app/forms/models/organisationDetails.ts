@@ -1,14 +1,21 @@
-import { MaxLength } from 'class-validator'
 import { PartyDetails } from './partyDetails'
 import { PartyType } from 'app/common/partyType'
+import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 
 export class ValidationErrors {
   static readonly CONTACT_PERSON_NAME_TOO_LONG: string = 'Contact Person name must be no longer than $constraint1 characters'
 }
 
+export class ValidationConstraints {
+  static readonly CONTACT_PERSON_MAX_LENGTH: number = 35
+}
+
 export class OrganisationDetails extends PartyDetails {
 
-  @MaxLength(35, { message: ValidationErrors.CONTACT_PERSON_NAME_TOO_LONG, groups: ['claimant', 'response'] })
+  @MaxLength(
+    ValidationConstraints.CONTACT_PERSON_MAX_LENGTH,
+    { message: ValidationErrors.CONTACT_PERSON_NAME_TOO_LONG, groups: ['claimant', 'response'] }
+  )
   contactPerson?: string
 
   constructor () {

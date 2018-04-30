@@ -1,5 +1,4 @@
 import * as express from 'express'
-import * as config from 'config'
 
 import { Paths } from 'eligibility/paths'
 import { JwtExtractor } from 'idam/jwtExtractor'
@@ -8,7 +7,6 @@ import { JwtExtractor } from 'idam/jwtExtractor'
 export default express.Router()
   .get(Paths.startPage.uri, (req: express.Request, res: express.Response): void => {
     res.render(Paths.startPage.associatedView, {
-      registeredUser: JwtExtractor.extract(req) !== undefined,
-      legacyServiceUrl: config.get<string>('mcol.url')
+      registeredUser: JwtExtractor.extract(req) !== undefined
     })
   })

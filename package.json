@@ -28,7 +28,7 @@
     "prepush": "yarn test && yarn test:routes"
   },
   "dependencies": {
-    "@hmcts/cmc-common-frontend": "^1.44.0",
+    "@hmcts/cmc-common-frontend": "^1.45.0",
     "@hmcts/cmc-draft-store-middleware": "^2.0.0",
     "@hmcts/draft-store-client": "^1.1.1",
     "@hmcts/info-provider": "^1.0.0",
@@ -104,7 +104,7 @@
     "HTML_CodeSniffer": "https://github.com/squizlabs/HTML_CodeSniffer/archive/2.0.7.tar.gz",
     "chai": "^4.1.1",
     "chai-as-promised": "^7.1.1",
-    "codacy-coverage": "^2.0.3",
+    "codacy-coverage": "^3.0.0",
     "codeceptjs": "^1.1.6",
     "codecov": "^3.0.0",
     "debug": "^3.0.0",

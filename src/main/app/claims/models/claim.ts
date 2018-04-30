@@ -89,7 +89,16 @@ export class Claim {
     if (!this.respondedAt) {
       return undefined
     }
-    return this.respondedAt.clone().add('33', 'days')
+    const daysForService = 5
+    const daysForResponse = 28
+    return this.respondedAt.clone().add(daysForService + daysForResponse, 'days')
+  }
+
+  get respondToMediationDeadline (): Moment {
+    if (!this.respondedAt) {
+      return undefined
+    }
+    return this.respondedAt.clone().add('5', 'days')
   }
 
   get remainingDays (): number {

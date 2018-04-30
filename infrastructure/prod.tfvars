@@ -1,6 +1,5 @@
 vault_section = "prod"
 idam_api_url = "https://prod-idamapi.reform.hmcts.net:3511"
-s2s_url = "https://prod-s2s-api.reform.hmcts.net:3511"
 authentication_web_url = "https://hmcts-access.service.gov.uk"
 fees_api_url = "https://fees-register.reform.hmcts.net:4411"
 payments_api_url = "https://payments.reform.hmcts.net:4401"
