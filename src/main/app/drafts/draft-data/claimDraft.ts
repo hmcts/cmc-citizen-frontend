@@ -28,7 +28,7 @@ export function prepareClaimDraft () {
           }
         }
       },
-      mobilePhone: {
+      phone: {
         number: '07112358132'
       }
     },

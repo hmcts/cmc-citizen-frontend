@@ -9,10 +9,10 @@ export class SoleTrader extends Party {
               name?: string,
               address?: Address,
               correspondenceAddress?: Address,
-              mobilePhone?: string,
+              phone?: string,
               email?: string,
               businessName?: string) {
-    super(PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value, name, address, correspondenceAddress, mobilePhone, email)
+    super(PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value, name, address, correspondenceAddress, phone, email)
     this.businessName = businessName
   }
 

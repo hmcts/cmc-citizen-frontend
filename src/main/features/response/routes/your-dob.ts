@@ -29,7 +29,7 @@ export default express.Router()
         renderView(new Form((draft.document.defendantDetails.partyDetails as IndividualDetails).dateOfBirth), res)
         break
       default:
-        res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: claim.externalId }))
+        res.redirect(Paths.defendantPhonePage.evaluateUri({ externalId: claim.externalId }))
         break
     }
   })
@@ -55,6 +55,6 @@ export default express.Router()
 
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: claim.externalId }))
+        res.redirect(Paths.defendantPhonePage.evaluateUri({ externalId: claim.externalId }))
       }
     }))

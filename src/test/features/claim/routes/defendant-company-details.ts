@@ -103,7 +103,7 @@ describe('defendant as company details page', () => {
         })
       })
 
-      it('should redirect to mobile phone page when everything is fine ', async () => {
+      it('should redirect to phone page when everything is fine ', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
         await request(app)

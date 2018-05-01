@@ -103,7 +103,7 @@ export function createClaimant (type: PartyType): Party {
       city: 'Edinburgh',
       postcode: 'G72 7ZY'
     },
-    mobilePhone: '07700000001'
+    phone: '07700000001'
   }
 
   switch (type) {
@@ -137,7 +137,7 @@ export function createDefendant (type: PartyType, hasEmailAddress: boolean = fal
       city: 'Manchester',
       postcode: 'M13 9PL'
     },
-    mobilePhone: '07700000002',
+    phone: '07700000002',
     email: hasEmailAddress ? 'civilmoneyclaims+adefendant@gmail.com' : undefined
   }
 

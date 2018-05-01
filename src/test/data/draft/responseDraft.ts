@@ -6,7 +6,7 @@ import { individualDetails } from './partyDetails'
 const baseResponseDraft = {
   defendantDetails: {
     partyDetails: individualDetails,
-    mobilePhone: {
+    phone: {
       number: '0700000000'
     },
     email: {

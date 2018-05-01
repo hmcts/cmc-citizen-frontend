@@ -19,7 +19,7 @@ import { Defendant } from 'app/drafts/models/defendant'
 import { Claimant } from 'app/drafts/models/claimant'
 import { DraftClaim } from 'app/drafts/models/draftClaim'
 import { IndividualDetails } from 'app/forms/models/individualDetails'
-import { MobilePhone } from 'app/forms/models/mobilePhone'
+import { Phone } from 'app/forms/models/phone'
 import { Payment } from 'payment-hub-client/payment'
 import { Address } from 'forms/models/address'
 import { DateOfBirth } from 'app/forms/models/dateOfBirth'
@@ -78,9 +78,9 @@ describe('Claim issue: initiate payment receiver', () => {
               } as LocalDate
             } as DateOfBirth
           } as IndividualDetails,
-          mobilePhone: {
+          phone: {
             number: '07000000000'
-          } as MobilePhone,
+          } as Phone,
           payment: {
             reference: '123',
             date_created: 12345,
@@ -278,9 +278,9 @@ describe('Claim issue: post payment callback receiver', () => {
               } as LocalDate
             } as DateOfBirth
           } as IndividualDetails,
-          mobilePhone: {
+          phone: {
             number: '07000000000'
-          } as MobilePhone,
+          } as Phone,
           payment: {
             reference: '123',
             date_created: 12345,

@@ -50,9 +50,9 @@ export class ValidationErrors {
   static readonly AMOUNT_INVALID_DECIMALS_TV: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for TV and Broadband`
   static readonly NON_NEGATIVE_NUMBER_REQUIRED_TV: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for TV and Broadband`
 
-  static readonly AMOUNT_REQUIRED_MOBILE: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Mobile Phone`
-  static readonly AMOUNT_INVALID_DECIMALS_MOBILE: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Mobile Phone`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_MOBILE: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Mobile Phone`
+  static readonly AMOUNT_REQUIRED_PHONE: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Phone`
+  static readonly AMOUNT_INVALID_DECIMALS_PHONE: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Phone`
+  static readonly NON_NEGATIVE_NUMBER_REQUIRED_PHONE: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Phone`
 
   static readonly AMOUNT_REQUIRED_MAINTENANCE: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Maintenance payments`
   static readonly AMOUNT_INVALID_DECIMALS_MAINTENANCE: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Maintenance payments`
@@ -111,10 +111,10 @@ export class MonthlyExpenses extends MultiRowForm<AmountDescriptionRow> {
   @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_TV })
   tvAndBroadband?: number
 
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_MOBILE })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_MOBILE })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_MOBILE })
-  mobilePhone?: number
+  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_PHONE })
+  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_PHONE })
+  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_PHONE })
+  phone?: number
 
   @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_MAINTENANCE })
   @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_MAINTENANCE })
@@ -131,7 +131,7 @@ export class MonthlyExpenses extends MultiRowForm<AmountDescriptionRow> {
                schoolCosts?: number,
                foodAndHousekeeping?: number,
                tvAndBroadband?: number,
-               mobilePhone?: number,
+               phone?: number,
                maintenance?: number,
                rows?: AmountDescriptionRow[]) {
     super(rows)
@@ -145,7 +145,7 @@ export class MonthlyExpenses extends MultiRowForm<AmountDescriptionRow> {
     this.schoolCosts = schoolCosts
     this.foodAndHousekeeping = foodAndHousekeeping
     this.tvAndBroadband = tvAndBroadband
-    this.mobilePhone = mobilePhone
+    this.phone = phone
     this.maintenance = maintenance
   }
 
@@ -165,7 +165,7 @@ export class MonthlyExpenses extends MultiRowForm<AmountDescriptionRow> {
       toNumberOrUndefined(value.schoolCosts),
       toNumberOrUndefined(value.foodAndHousekeeping),
       toNumberOrUndefined(value.tvAndBroadband),
-      toNumberOrUndefined(value.mobilePhone),
+      toNumberOrUndefined(value.phone),
       toNumberOrUndefined(value.maintenance),
       value.rows ? value.rows.map(AmountDescriptionRow.fromObject) : []
     )
@@ -187,7 +187,7 @@ export class MonthlyExpenses extends MultiRowForm<AmountDescriptionRow> {
       this.schoolCosts = input.schoolCosts
       this.foodAndHousekeeping = input.foodAndHousekeeping
       this.tvAndBroadband = input.tvAndBroadband
-      this.mobilePhone = input.mobilePhone
+      this.phone = input.phone
       this.maintenance = input.maintenance
 
       this.rows = this.deserializeRows(input.rows)

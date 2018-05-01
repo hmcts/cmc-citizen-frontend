@@ -18,7 +18,7 @@ export const individual = {
     postcode: 'B10A'
   },
   dateOfBirth: '1999-01-01',
-  mobilePhone: '0700000001',
+  phone: '0700000001',
   email: 'individual@example.com'
 }
 
@@ -40,7 +40,7 @@ export const soleTrader = {
     city: 'Belfast',
     postcode: 'B20A'
   },
-  mobilePhone: '0700000002',
+  phone: '0700000002',
   email: 'sole-trader@example.com'
 }
 
@@ -62,7 +62,7 @@ export const company = {
     city: 'Belfast',
     postcode: 'B30A'
   },
-  mobilePhone: '0700000003',
+  phone: '0700000003',
   email: 'company@example.com'
 }
 
@@ -84,6 +84,6 @@ export const organisation = {
     city: 'Belfast',
     postcode: 'B40A'
   },
-  mobilePhone: '0700000004',
+  phone: '0700000004',
   email: 'organisation@example.com'
 }

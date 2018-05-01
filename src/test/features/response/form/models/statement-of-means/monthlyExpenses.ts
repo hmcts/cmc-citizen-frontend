@@ -49,7 +49,7 @@ describe('MonthlyExpenses', () => {
       expect(actual.schoolCosts).to.be.eq(8)
       expect(actual.foodAndHousekeeping).to.be.eq(9)
       expect(actual.tvAndBroadband).to.be.eq(10)
-      expect(actual.mobilePhone).to.be.eq(11)
+      expect(actual.phone).to.be.eq(11)
       expect(actual.maintenance).to.be.eq(12)
 
       const populatedItem: AmountDescriptionRow = actual.rows.pop()
@@ -91,7 +91,7 @@ describe('MonthlyExpenses', () => {
         schoolCosts: 8,
         foodAndHousekeeping: 9,
         tvAndBroadband: 10,
-        mobilePhone: 11,
+        phone: 11,
         maintenance: 12,
         rows: [{ amount: 13, description: 'bla bla' }]
       })
@@ -106,7 +106,7 @@ describe('MonthlyExpenses', () => {
       expect(actual.schoolCosts).to.be.eq(8)
       expect(actual.foodAndHousekeeping).to.be.eq(9)
       expect(actual.tvAndBroadband).to.be.eq(10)
-      expect(actual.mobilePhone).to.be.eq(11)
+      expect(actual.phone).to.be.eq(11)
       expect(actual.maintenance).to.be.eq(12)
 
       const populatedItem: AmountDescriptionRow = actual.rows.pop()
@@ -145,7 +145,7 @@ describe('MonthlyExpenses', () => {
         expect(errors.length).to.equal(12)
         expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_COUNCIL)
         expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_MAINTENANCE)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_MOBILE)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_PHONE)
         expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_MORTGAGE)
         expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_SCHOOL)
         expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_TRAVEL)
@@ -163,7 +163,7 @@ describe('MonthlyExpenses', () => {
         expect(errors.length).to.equal(12)
         expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_COUNCIL)
         expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_MAINTENANCE)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_MOBILE)
+        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_PHONE)
         expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_MORTGAGE)
         expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_SCHOOL)
         expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_TRAVEL)
@@ -252,7 +252,7 @@ function prepareInput (customData?: object): object {
     schoolCosts: '8',
     foodAndHousekeeping: '9',
     tvAndBroadband: '10',
-    mobilePhone: '11',
+    phone: '11',
     maintenance: '12',
     rows: [{ amount: '13', description: 'bla' }],
     ...customData
@@ -277,6 +277,6 @@ function expectAllFieldsToBeEmpty (actual: MonthlyExpenses): void {
   expect(actual.schoolCosts).to.be.eq(undefined)
   expect(actual.foodAndHousekeeping).to.be.eq(undefined)
   expect(actual.tvAndBroadband).to.be.eq(undefined)
-  expect(actual.mobilePhone).to.be.eq(undefined)
+  expect(actual.phone).to.be.eq(undefined)
   expect(actual.maintenance).to.be.eq(undefined)
 }

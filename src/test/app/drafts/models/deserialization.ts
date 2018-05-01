@@ -9,7 +9,7 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { Address } from 'forms/models/address'
 import { DateOfBirth } from 'forms/models/dateOfBirth'
 import { IndividualDetails } from 'forms/models/individualDetails'
-import { MobilePhone } from 'forms/models/mobilePhone'
+import { Phone } from 'forms/models/phone'
 import { YesNoOption } from 'models/yesNoOption'
 
 describe('DraftClaim deserialization', () => {
@@ -19,7 +19,7 @@ describe('DraftClaim deserialization', () => {
     input = {
       eligibility: true,
       claimant: {
-        mobilePhone: {
+        phone: {
           number: '7123123123'
         },
         partyDetails: {
@@ -65,7 +65,7 @@ describe('DraftClaim deserialization', () => {
     expect((deserialized.claimant.partyDetails as IndividualDetails).dateOfBirth.date.day).to.equal(10)
     expect((deserialized.claimant.partyDetails as IndividualDetails).dateOfBirth.date.month).to.equal(11)
     expect((deserialized.claimant.partyDetails as IndividualDetails).dateOfBirth.date.year).to.equal(1990)
-    expect(deserialized.claimant.mobilePhone.number).to.equal('7123123123')
+    expect(deserialized.claimant.phone.number).to.equal('7123123123')
 
     expect(deserialized.defendant.partyDetails.name).to.equal('Janice Henrietta Clark')
     expect(deserialized.defendant.partyDetails.address.line1).to.equal('Another lane')
@@ -84,7 +84,7 @@ describe('DraftClaim deserialization', () => {
     expect(deserialized.claimant.partyDetails).to.be.instanceof(IndividualDetails)
     expect(deserialized.claimant.partyDetails.address).to.be.instanceof(Address)
     expect((deserialized.claimant.partyDetails as IndividualDetails).dateOfBirth).to.be.instanceof(DateOfBirth)
-    expect(deserialized.claimant.mobilePhone).to.be.instanceof(MobilePhone)
+    expect(deserialized.claimant.phone).to.be.instanceof(Phone)
     expect(deserialized.defendant).to.be.instanceof(Defendant)
   })
 

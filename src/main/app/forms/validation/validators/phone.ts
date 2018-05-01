@@ -7,7 +7,7 @@ import {
 } from 'class-validator'
 
 @ValidatorConstraint()
-export class IsMobilePhoneConstraint implements ValidatorConstraintInterface {
+export class IsPhoneConstraint implements ValidatorConstraintInterface {
 
   validate (value?: any, args?: ValidationArguments): boolean {
     if (value === undefined) {
@@ -26,18 +26,18 @@ export class IsMobilePhoneConstraint implements ValidatorConstraintInterface {
 }
 
 /**
- * Verify a valid UK mobile number.
+ * Verify a valid UK phone number.
  *
  * The validation is aligned to match what GOV.UK Notify is accepting.
  */
-export function IsMobilePhone (validationOptions?: ValidationOptions) {
+export function IsPhone (validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
       constraints: [],
-      validator: IsMobilePhoneConstraint
+      validator: IsPhoneConstraint
     })
   }
 }
