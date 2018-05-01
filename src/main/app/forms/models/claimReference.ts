@@ -4,7 +4,7 @@ import { IsClaimReferenceNumber } from 'forms/validation/validators/isClaimRefer
 
 export class ValidationErrors {
   static readonly CLAIM_REFERENCE_REQUIRED: string = 'You need to enter the claim number'
-  static readonly INVALID_CLAIM_NUMBER: string = 'Enter a valid reference number'
+  static readonly INVALID_CLAIM_NUMBER: string = 'Enter a valid claim number'
 }
 
 export class ClaimReference {
