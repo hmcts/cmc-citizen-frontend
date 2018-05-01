@@ -1,13 +1,11 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, textInput, poundInput, radioOption, textArea, saveAndContinueButton, errorSummary %}
 
-{% set title = 'Money claim' %}
+{% set heading = 'What are you self-employed as?' %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('What are you self-employed as?') }}</h1>
-
       <form method="post" novalidate
         class="analytics-submit-event-trigger"
         data-event-action="SoM: What are you self-employed as"

@@ -3,8 +3,7 @@
 {% from "form.njk" import csrfProtection, textInput, radioGroup, saveAndContinueButton, errorSummary %}
 {% from "party/details.njk" import partyDetailsFragment %}
 
-{% set title = t('Money claim') %}
-{% set heading = t('Confirm your details') %}
+{% set heading = 'Confirm your details' %}
 
 {% block additional_scripts %}
   {% include "postcode-lookup-client-scripts.njk" %}

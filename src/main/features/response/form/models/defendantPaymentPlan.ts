@@ -7,7 +7,7 @@ import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { IsFutureDate } from 'app/forms/validation/validators/dateFutureConstraint'
 import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
 import { ValidationConstraints } from 'app/forms/validation/validationConstraints'
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
+import { IsNotBlank } from '@hmcts/cmc-validators'
 import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import { IsLessThan } from 'forms/validation/validators/isLessThan'
 

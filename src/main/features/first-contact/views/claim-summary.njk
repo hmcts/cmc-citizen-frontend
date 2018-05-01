@@ -3,8 +3,7 @@
 {% from "form.njk" import csrfProtection, submitButton %}
 {% from "amountBreakdown.njk" import amountBreakdownTable %}
 
-{% set title = t('Money claim') %}
-{% set heading = t('Claim details') %}
+{% set heading = 'Claim details' %}
 
 {% set responseDeadline = claim.responseDeadline.format('LL') %}
 {% set referenceNumber = claim.claimNumber %}
