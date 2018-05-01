@@ -1,14 +1,11 @@
 {% extends "layout.njk" %}
-{% set title = 'Money claim' %}
+{% set heading = 'Judgment amount' %}
 {% from "form.njk" import submitButton %}
 {% from "interestSnippet.njk" import interestSnippet %}
 
 {% block content %}
 <div class="grid-row">
   <div class="column-two-thirds">
-    <h1 class="heading-large">
-      {{ t('Judgment amount') }}
-    </h1>
 
     <div class="form-group">
       <p>
