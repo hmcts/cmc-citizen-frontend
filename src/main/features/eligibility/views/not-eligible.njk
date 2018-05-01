@@ -23,7 +23,8 @@
         </p>
       {% elseif reason === NotEligibleReason.CLAIM_ON_BEHALF %}
         <p>{{ t('This service is currently for claimants representing themselves.') }}</p>
-        <p>{{ t('Use ' + externalLink('form N1', n1FormUrl) + ' to make your claim.') | safe }}
+        <p>{{ t('If you’re a legal representative ' + externalLink('use the Money Claim Online (MCOL) service', legacyServiceUrl) +
+            ' or use ' + externalLink('form N1', n1FormUrl) + ' to make your claim.') | safe }}
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.MULTIPLE_CLAIMANTS %}
         <p>{{ t('You can’t use this service if more than one person or business is making the claim.') }}</p>
@@ -53,12 +54,11 @@
         <p>{{ t('Make your claim by post using ' + externalLink('form N1', n1FormUrl) + '.') | safe }}</p>
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.CLAIMANT_ADDRESS %}
-        <p>{{ t('You need to have an address in the UK to use this service.') }}</p>
-        <p>{{ t('You might be able to make a claim ' + externalLink('using form N510', n510Url) + ' or ' + externalLink('form N1', n1FormUrl) + '.') | safe }}</p>
-        {{ paperFormAddress() }}
+        <p>{{ t('You need to have an address in the UK to make a money claim.') }}</p>
       {% elseif reason === NotEligibleReason.DEFENDANT_ADDRESS %}
         <p>{{ t('You can only use this service to claim against a person or organisation with an address in England or Wales.') }}</p>
-        <p>{{ t('You might be able to make a claim using '+ externalLink('form N510', n510Url) + '.') | safe }}</p>
+        <p>{{ t('Depending on where you’ll be sending the claim, you might be able to use ' + externalLink('form N1', n1FormUrl)
+            + ' and ' + externalLink('form N510', n510Url) + '.') | safe }}</p>
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.GOVERNMENT_DEPARTMENT %}
         <p>{{ t('You can’t use this service to claim against ' + externalLink('government departments', governmentDepartmentsUrl) + '. ') | safe }}</p>
