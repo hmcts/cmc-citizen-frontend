@@ -1,7 +1,6 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, textInputInline, poundInputInline, radioOption, linkButton, saveAndContinueButton, errorSummary %}
 
-{% set title = t('Money claim') %}
 {% set heading = t('Do you have any debts?') %}
 
 {% macro debtRow(index, form) %}

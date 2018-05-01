@@ -2,7 +2,7 @@ import { IsDefined } from 'class-validator'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
+import { IsNotBlank } from '@hmcts/cmc-validators'
 
 export class ValidationErrors {
   static readonly DETAILS_REQUIRED: string = 'Enter details'

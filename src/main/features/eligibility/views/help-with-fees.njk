@@ -1,15 +1,13 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, radioGroup, errorSummary, saveAndContinueButton %}
 
-{% set title = t('Claimant address | Money claim') %}
-{% set question = t('Do you need help paying your court fees?') %}
+{% set heading = 'Do you need help paying your court fees?' %}
 {% set additionalInformation = t('If you’re on a low income or get certain benefits you could get financial help with court fees.') %}
 
 {% block content %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ question }}</h1>
       <p>{{ additionalInformation }}</p>
 
       {% set name = 'helpWithFees' %}
@@ -21,7 +19,7 @@
 
         {{
         radioGroup(
-          label = question,
+          label = heading,
           name = name,
           options = [
             {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},

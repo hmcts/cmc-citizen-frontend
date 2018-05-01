@@ -53,7 +53,7 @@ export const sampleClaimDraftObj = {
         line2: '',
         line3: '',
         city: 'London',
-        postcode: 'E1'
+        postcode: 'bb127nq'
       } as Address,
       hasCorrespondenceAddress: false,
       dateOfBirth: {
@@ -90,7 +90,7 @@ export const sampleClaimDraftObj = {
         line2: '',
         line3: '',
         city: 'London',
-        postcode: 'E1'
+        postcode: 'bb127nq'
       },
       hasCorrespondenceAddress: false
     } as IndividualDetails,

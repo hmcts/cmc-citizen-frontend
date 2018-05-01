@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@hmcts/cmc-common-frontend@^1.45.0":
-  version "1.45.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.45.0.tgz#a1cad47ec106cb37ae3ee16774168202048f4456"
+"@hmcts/cmc-common-frontend@^1.46.0":
+  version "1.46.0"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.46.0.tgz#444527f1ed57122f959820fee5de0bbb884ccc4d"
 
 "@hmcts/cmc-draft-store-middleware@^2.0.0":
   version "2.0.0"
@@ -16,6 +16,14 @@
 "@hmcts/cmc-supported-browsers@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@hmcts/cmc-supported-browsers/-/cmc-supported-browsers-1.0.1.tgz#201d415b7efdf858c77ddccb66bbe9af258c03bc"
+
+"@hmcts/cmc-validators@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-validators/-/cmc-validators-0.1.2.tgz#67679d0ec3b1f19fc139e2b50734d4e81e4819c6"
+  dependencies:
+    class-validator "^0.8.1"
+    ts-node "^3.3.0"
+    typescript "^2.4.2"
 
 "@hmcts/draft-store-client@^1.1.1", "@hmcts/draft-store-client@^1.2.1":
   version "1.2.1"
@@ -3116,9 +3124,9 @@ govuk_frontend_toolkit@^7.1.0:
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/govuk_frontend_toolkit/-/govuk_frontend_toolkit-7.2.0.tgz#5c006d83c3de33c7da49f720cadae83f58783158"
 
-govuk_template_jinja@0.23.0:
-  version "0.23.0"
-  resolved "https://registry.yarnpkg.com/govuk_template_jinja/-/govuk_template_jinja-0.23.0.tgz#9315ac403d1d85b01a62b7044cb95d8ec3e303a4"
+govuk_template_jinja@0.24.0:
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/govuk_template_jinja/-/govuk_template_jinja-0.24.0.tgz#bcf8a6745178d4565612fda50f9965e2a7fd04c8"
 
 graceful-fs@^3.0.0:
   version "3.0.11"

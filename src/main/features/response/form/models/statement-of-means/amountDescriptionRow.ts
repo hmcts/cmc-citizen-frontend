@@ -4,7 +4,7 @@ import { Fractions } from 'forms/validation/validators/fractions'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
+import { IsNotBlank } from '@hmcts/cmc-validators'
 
 export class ValidationErrors {
   static readonly DESCRIPTION_REQUIRED: string = 'Enter name for item you added'

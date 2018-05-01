@@ -1,8 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, textInputInline, poundInputInline, poundInput, linkButton, saveAndContinueButton, errorSummary %}
 
-{% set title = t('Money claim') %}
-{% set heading = t('Monthly income') %}
+{% set heading = 'Monthly income' %}
 
 {% macro incomeRow(index, form) %}
 

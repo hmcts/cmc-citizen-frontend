@@ -2,7 +2,7 @@
 {% from "form.njk" import csrfProtection, textInput, saveAndContinueButton, errorSummary %}
 {% from "date.njk" import dateInput %}
 
-{% set title = t('Money claim') %}
+{% set heading = 'When do you want the defendant to pay?' %}
 
 {% block content %}
   <div class="grid-row">
@@ -10,10 +10,6 @@
       <form method="post" novalidate>
         <input type="hidden" name="known" value="true" />
         {{ csrfProtection(csrf) }}
-
-        <h1 class="heading-large">
-          {{ t('When do you want the defendant to pay?') }}
-        </h1>
 
         {{ dateInput(name = 'date', form = form, hint = t('For example, {{ futureDate }}', { futureDate: futureDate | inputDate })) }}
 
