@@ -1,10 +1,11 @@
 import { IsDefined, MaxLength, ValidateIf, Validator } from 'class-validator'
-import { CompletableTask } from 'app/models/task'
+import { CompletableTask } from 'models/task'
+
 import { Address as ClaimAddress } from 'claims/models/address'
 import * as toBoolean from 'to-boolean'
 import { ExtraFormFieldsArePopulated } from 'forms/validation/validators/extraFormFieldsArePopulated'
 import { IsCountrySupported } from 'forms/validation/validators/isCountrySupported'
-import { Country } from 'app/common/country'
+import { Country } from 'common/country'
 import { IsNotBlank, IsValidPostcode } from '@hmcts/cmc-validators'
 
 const validator: Validator = new Validator()

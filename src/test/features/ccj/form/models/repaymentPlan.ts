@@ -5,8 +5,8 @@ import { expectValidationError } from '../../../../app/forms/models/validationUt
 import { RepaymentPlan, ValidationErrors } from 'ccj/form/models/repaymentPlan'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { LocalDate } from 'forms/models/localDate'
-import { MomentFactory } from 'common/momentFactory'
-import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
+import { MomentFactory } from 'shared/momentFactory'
+import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 
 const FUTURE_YEAR = MomentFactory.currentDate().add(10, 'years').year()
 const DEFAULT_REPAYMENT_PLAN = {

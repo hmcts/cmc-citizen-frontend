@@ -1,10 +1,10 @@
 import { IsDefined, Min, ValidateIf } from 'class-validator'
 
 import { IsNotBlank } from '@hmcts/cmc-validators'
-import { Fractions } from 'app/forms/validation/validators/fractions'
-import { MaxLength } from 'app/forms/validation/validators/maxLengthValidator'
+import { Fractions } from 'forms/validation/validators/fractions'
+import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
-import { toNumberOrUndefined } from 'common/utils/numericUtils'
+import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 
 export class ValidationErrors {
   static readonly REASON_REQUIRED: string = 'Enter a reason'

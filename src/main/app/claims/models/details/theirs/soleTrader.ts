@@ -1,5 +1,5 @@
 import { TheirDetails } from './theirDetails'
-import { PartyType } from 'app/common/partyType'
+import { PartyType } from 'common/partyType'
 import { Address } from 'claims/models/address'
 
 export class SoleTrader extends TheirDetails {

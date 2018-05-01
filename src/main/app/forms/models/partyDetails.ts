@@ -2,7 +2,7 @@ import { IsDefined, MaxLength, ValidateIf, ValidateNested, Validator } from 'cla
 import { IsNotBlank } from '@hmcts/cmc-validators'
 import { Address } from 'forms/models/address'
 import { CorrespondenceAddress } from 'forms/models/correspondenceAddress'
-import { PartyType } from 'app/common/partyType'
+import { PartyType } from 'common/partyType'
 
 export class ValidationErrors {
   static readonly ADDRESS_REQUIRED = 'Enter an address'

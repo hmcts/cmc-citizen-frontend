@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { CheckCountryConstraint } from 'forms/validation/validators/isCountrySupported'
-import { Country } from 'app/common/country'
+import { Country } from 'common/country'
 import { ValidationArguments } from 'class-validator'
 import * as nock from 'nock'
 import { mockAddressResponse } from '../../../../data/entity/mockAddressResponse'

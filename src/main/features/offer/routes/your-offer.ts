@@ -4,11 +4,11 @@ import { Paths } from 'offer/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Offer } from 'offer/form/models/offer'
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 import { User } from 'idam/user'
 import { OfferClient } from 'claims/offerClient'
 import { Claim } from 'claims/models/claim'
-import { MomentFactory } from 'common/momentFactory'
+import { MomentFactory } from 'shared/momentFactory'
 import { Moment } from 'moment'
 
 async function renderView (form: Form<Offer>, res: express.Response, next: express.NextFunction) {
