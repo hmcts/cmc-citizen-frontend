@@ -13,6 +13,7 @@ import { ErrorPaths as DefendantFirstContactErrorPaths, Paths as DefendantFirstC
 import { Paths as DefendantResponsePaths, StatementOfMeansPaths, PayBySetDatePaths } from 'response/paths'
 import { Paths as CCJPaths } from 'ccj/paths'
 import { Paths as OfferPaths } from 'offer/paths'
+import { Logger } from '@hmcts/nodejs-logging'
 
 import './mocks'
 import { app } from '../../main/app'
@@ -20,6 +21,7 @@ import { app } from '../../main/app'
 app.locals.csrf = 'dummy-token'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const logger = Logger.getLogger('a11y.ts')
 
 const agent = supertest.agent(app)
 const pa11yTest = pa11y({
@@ -58,7 +60,7 @@ async function extractPageText (url: string): Promise<string> {
   return res.text
 }
 
-function ensureHeadingIsIncludedInPageTitle(text: string): void {
+function ensureHeadingIsIncludedInPageTitle (text: string): void {
   const title: string = text.match(/<title>(.*)<\/title>/)[1]
   const heading: RegExpMatchArray = text.match(/<h1 class="heading-large">\s*(.*)\s*<\/h1>/)
 
@@ -66,7 +68,7 @@ function ensureHeadingIsIncludedInPageTitle(text: string): void {
     expect(title).to.be.equal(`${heading[1]} - Money Claims`)
   } else {
     expect(title).to.be.not.equal(' - Money Claims')
-    console.log(`No heading found on page titled '${title}' exists`)
+    logger.warn(`No heading found on page titled '${title}' exists`)
   }
 }
 
