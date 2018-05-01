@@ -1,5 +1,5 @@
 import { IsDefined, IsIn, IsPositive, MaxLength, ValidateIf } from 'class-validator'
-import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
+import { IsNotBlank } from '@hmcts/cmc-validators'
 import { CompletableTask } from 'app/models/task'
 import { toNumberOrUndefined } from 'common/utils/numericUtils'
 import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'

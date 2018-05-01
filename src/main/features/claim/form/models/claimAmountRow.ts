@@ -1,6 +1,6 @@
 import { IsDefined, Min, ValidateIf } from 'class-validator'
 
-import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
+import { IsNotBlank } from '@hmcts/cmc-validators'
 import { Fractions } from 'app/forms/validation/validators/fractions'
 import { MaxLength } from 'app/forms/validation/validators/maxLengthValidator'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'

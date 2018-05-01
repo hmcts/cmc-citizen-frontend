@@ -1,13 +1,13 @@
-import { IsDefined, MaxLength, ValidateIf } from 'class-validator'
-
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
-
+import { IsDefined, MaxLength, ValidateIf, Validator } from 'class-validator'
 import { CompletableTask } from 'app/models/task'
 import { Address as ClaimAddress } from 'claims/models/address'
 import * as toBoolean from 'to-boolean'
 import { ExtraFormFieldsArePopulated } from 'forms/validation/validators/extraFormFieldsArePopulated'
 import { IsCountrySupported } from 'forms/validation/validators/isCountrySupported'
 import { Country } from 'app/common/country'
+import { IsNotBlank, IsValidPostcode } from '@hmcts/cmc-validators'
+
+const validator: Validator = new Validator()
 
 export class ValidationErrors {
   static readonly FIRST_LINE_REQUIRED: string = 'Enter first address line'
@@ -20,7 +20,7 @@ export class ValidationErrors {
   static readonly CITY_NOT_VALID: string = 'The city must be no longer than $constraint1 characters'
 
   static readonly POSTCODE_REQUIRED: string = 'Enter postcode'
-  static readonly POSTCODE_NOT_VALID: string = 'The postcode must be no longer than $constraint1 characters'
+  static readonly POSTCODE_NOT_VALID: string = 'Enter a valid postcode'
   static readonly ADDRESS_DROPDOWN_REQUIRED: string = 'Select an address'
   static readonly CLAIMANT_COUNTRY_NOT_SUPPORTED = 'The country must be England, Wales, Scotland or Northern Ireland'
   static readonly DEFENDANT_COUNTRY_NOT_SUPPORTED = 'The country must be England or Wales'
@@ -29,7 +29,6 @@ export class ValidationErrors {
 
 export class ValidationConstants {
   static readonly ADDRESS_MAX_LENGTH: number = 100
-  static readonly POSTCODE_MAX_LENGTH: number = 8
 }
 
 export class Address implements CompletableTask {
@@ -70,8 +69,11 @@ export class Address implements CompletableTask {
   @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsCountrySupported(Country.all(), { message: ValidationErrors.CLAIMANT_COUNTRY_NOT_SUPPORTED, groups: ['claimant'] })
-  @IsCountrySupported(Country.defendantCountries(), { message: ValidationErrors.DEFENDANT_COUNTRY_NOT_SUPPORTED, groups: ['defendant'] })
-  @MaxLength(ValidationConstants.POSTCODE_MAX_LENGTH, {
+  @IsCountrySupported(Country.defendantCountries(), {
+    message: ValidationErrors.DEFENDANT_COUNTRY_NOT_SUPPORTED,
+    groups: ['defendant']
+  })
+  @IsValidPostcode({
     message: ValidationErrors.POSTCODE_NOT_VALID,
     groups: ['claimant', 'defendant', 'response']
   })
@@ -143,7 +145,7 @@ export class Address implements CompletableTask {
     return this
   }
 
-  isCompleted (): boolean {
-    return !!this.postcode && this.postcode.length > 0
+  isCompleted (...groups: string[]): boolean {
+    return validator.validateSync(this, { groups: groups }).length === 0
   }
 }

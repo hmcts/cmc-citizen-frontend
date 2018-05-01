@@ -1,19 +1,13 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
 
-{% set title = 'Which service did you use to view or make the claim?' %}
+{% set heading = 'Which service did you use to view or make the claim?' %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
       <form method="post">
         <fieldset class="notice">
-          <legend>
-            <h1 class="heading-large">
-              {{ t('Which service did you use to view or make the claim?') }}
-            </h1>
-          </legend>
-
           {{ csrfProtection(csrf) }}
           {% set error = form.errorFor('service') %}
           <div id="service[label]" class="form-group{% if error %} form-group-error{% endif %}">

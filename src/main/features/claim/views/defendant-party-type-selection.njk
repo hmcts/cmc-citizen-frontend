@@ -1,12 +1,10 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import nameInput, csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
-
-{% set title = t('Money claim') %}
+{% set heading = 'Who are you making the claim against?' %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Who are you making the claim against?') }}</h1>
      <p class="bold-medium"></p>
 
       <form method="POST" novalidate>

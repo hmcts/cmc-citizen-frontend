@@ -2,13 +2,11 @@
 {% from "form.njk" import csrfProtection, radioOption, numericInput, saveAndContinueButton, errorSummary %}
 {% from "date.njk" import dateInput %}
 
-{% set title = 'Money claim' %}
+{% set heading = 'Do any children live with you?' %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Do any children live with you?') }}</h1>
-
       <form method="post" novalidate
         class="analytics-submit-event-trigger"
         data-event-action="SoM: Do any children live with you?"

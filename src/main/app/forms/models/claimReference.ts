@@ -1,5 +1,5 @@
 import { IsDefined } from 'class-validator'
-import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
+import { IsNotBlank } from '@hmcts/cmc-validators'
 import { IsClaimReferenceNumber } from 'forms/validation/validators/isClaimReferenceNumber'
 
 export class ValidationErrors {
