@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-expression */
 import { expect } from 'chai'
 
-import { UUIDUtils } from 'common/utils/uuidUtils'
+import { UUIDUtils } from 'shared/utils/uuidUtils'
 
 describe('UUIDUtils', () => {
   const uuid = 'cde28f9f-3574-423b-8026-2092cad1f3cd'

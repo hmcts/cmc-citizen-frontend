@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { JwtUtils } from 'common/utils/jwtUtils'
+import { JwtUtils } from 'shared/utils/jwtUtils'
 
 describe('JwtUtils', () => {
   describe('decodePayload', () => {

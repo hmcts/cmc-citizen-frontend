@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { PostcodeInfoResponse } from '@hmcts/postcodeinfo-client'
 
-import { Paths as AppPaths } from 'app/paths'
+import { Paths as AppPaths } from 'paths'
 import { Logger } from '@hmcts/nodejs-logging'
 import { ClientFactory } from 'postcode-lookup/clientFactory'
 

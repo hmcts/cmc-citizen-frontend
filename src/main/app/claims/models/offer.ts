@@ -1,6 +1,6 @@
 
 import { Moment } from 'moment'
-import { MomentFactory } from 'common/momentFactory'
+import { MomentFactory } from 'shared/momentFactory'
 
 export class Offer {
   content: string

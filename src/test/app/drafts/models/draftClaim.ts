@@ -4,7 +4,7 @@
 import { expect } from 'chai'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Claimant } from 'drafts/models/claimant'
-import { Defendant } from 'app/drafts/models/defendant'
+import { Defendant } from 'drafts/models/defendant'
 
 function verifyDefaultValues (initialValue: any) {
   const actualDraft: DraftClaim = new DraftClaim().deserialize(initialValue)

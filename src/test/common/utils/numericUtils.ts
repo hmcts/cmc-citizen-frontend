@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { toNumberOrUndefined } from 'common/utils/numericUtils'
+import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 
 describe('toNumberOrUndefined', () => {
 

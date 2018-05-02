@@ -2,13 +2,13 @@ import { IsDefined, IsPositive, MaxLength, Min } from 'class-validator'
 import { IsPastDate } from 'forms/validation/validators/datePastConstraint'
 import { LocalDate } from 'forms/models/localDate'
 import { IsNotBlank } from '@hmcts/cmc-validators'
-import { IsValidYearFormat } from 'app/forms/validation/validators/isValidYearFormat'
-import { MomentFactory } from 'common/momentFactory'
-import { MomentFormatter } from 'app/utils/momentFormatter'
+import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
+import { MomentFactory } from 'shared/momentFactory'
+import { MomentFormatter } from 'utils/momentFormatter'
 import { Fractions } from 'forms/validation/validators/fractions'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
-import { toNumberOrUndefined } from 'common/utils/numericUtils'
+import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 
 const currentDate = MomentFormatter.formatLongDate(MomentFactory.currentDate())
 

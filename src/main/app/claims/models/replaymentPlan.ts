@@ -1,6 +1,6 @@
 import { Moment } from 'moment'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
-import { MomentFactory } from 'common/momentFactory'
+import { MomentFactory } from 'shared/momentFactory'
 
 export class RepaymentPlan {
 
