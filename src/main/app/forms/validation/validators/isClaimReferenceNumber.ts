@@ -5,8 +5,8 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface
 } from 'class-validator'
-import { isCMCReference } from 'common/utils/isCMCReference'
-import { isCCBCCaseReference } from 'common/utils/isCCBCCaseReference'
+import { isCMCReference } from 'shared/utils/isCMCReference'
+import { isCCBCCaseReference } from 'shared/utils/isCCBCCaseReference'
 
 @ValidatorConstraint()
 export class CheckClaimReferenceNumberConstraint implements ValidatorConstraintInterface {

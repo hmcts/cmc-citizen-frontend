@@ -1,11 +1,11 @@
 import * as express from 'express'
 import * as config from 'config'
 
-import { ErrorHandling } from 'common/errorHandling'
-import { Paths } from 'app/paths'
+import { ErrorHandling } from 'shared/errorHandling'
+import { Paths } from 'paths'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ClaimReference } from 'forms/models/claimReference'
-import { isCMCReference } from 'common/utils/isCMCReference'
+import { isCMCReference } from 'shared/utils/isCMCReference'
 import { Form } from 'forms/form'
 
 function renderView (form: Form<ClaimReference>, res: express.Response): void {

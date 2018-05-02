@@ -1,5 +1,5 @@
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { PartyType } from 'app/common/partyType'
+import { PartyType } from 'common/partyType'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { Validator } from 'class-validator'

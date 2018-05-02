@@ -2,16 +2,16 @@ import * as express from 'express'
 import * as config from 'config'
 
 import { Paths } from 'first-contact/paths'
-import { Paths as AppPaths } from 'app/paths'
+import { Paths as AppPaths } from 'paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
-import { ClaimReference } from 'app/forms/models/claimReference'
+import { ClaimReference } from 'forms/models/claimReference'
 
 import { ClaimStoreClient } from 'claims/claimStoreClient'
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 import { OAuthHelper } from 'idam/oAuthHelper'
-import { isCCBCCaseReference } from 'common/utils/isCCBCCaseReference'
+import { isCCBCCaseReference } from 'shared/utils/isCCBCCaseReference'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 

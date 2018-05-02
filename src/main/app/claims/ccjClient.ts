@@ -1,4 +1,4 @@
-import { User } from 'app/idam/user'
+import { User } from 'idam/user'
 import { request } from 'client/request'
 import { CCJModelConverter } from 'claims/ccjModelConverter'
 import { claimStoreApiUrl } from 'claims/claimStoreClient'

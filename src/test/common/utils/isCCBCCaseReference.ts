@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-expression */
 import { expect } from 'chai'
-import { isCCBCCaseReference } from 'common/utils/isCCBCCaseReference'
+import { isCCBCCaseReference } from 'shared/utils/isCCBCCaseReference'
 
 describe('isCCBCCaseReference', () => {
   describe('should return true when ', () => {

@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { ClaimModelConverter } from 'app/claims/claimModelConverter'
+import { ClaimModelConverter } from 'claims/claimModelConverter'
 
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { claimDraft as draftTemplate } from '../../data/draft/claimDraft'
@@ -11,7 +11,7 @@ import {
   soleTraderDetails
 } from '../../data/draft/partyDetails'
 
-import { ClaimData } from 'app/claims/models/claimData'
+import { ClaimData } from 'claims/models/claimData'
 import { claimData as entityTemplate } from '../../data/entity/claimData'
 import { company, individual, organisation, soleTrader } from '../../data/entity/party'
 

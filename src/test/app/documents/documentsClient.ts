@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { DocumentsClient } from 'app/documents/documentsClient'
+import { DocumentsClient } from 'documents/documentsClient'
 
 describe('DocumentsClient', () => {
   const client: DocumentsClient = new DocumentsClient()
