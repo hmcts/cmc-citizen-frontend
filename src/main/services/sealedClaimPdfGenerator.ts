@@ -6,10 +6,10 @@ import { pdfEndpointResponseHandler } from 'services/pdfEndpointsResponseHandler
 
 const documentsClient: DocumentsClient = new DocumentsClient()
 
-export class ClaimIssueReceiptPDFGenerator {
+export class SealedClaimPdfGenerator {
 
   /**
-   * Handles claim issue receipt downloads
+   * Handles sealed claim downloads
    *
    * Note: Middleware expects to have {@link Claim} available in {@link express.Response.locals}
    *
@@ -21,8 +21,8 @@ export class ClaimIssueReceiptPDFGenerator {
   static async requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
     const claim: Claim = res.locals.claim
 
-    documentsClient.getClaimIssueReceiptPDF(claim.externalId, res.locals.user.bearerToken)
-      .on('response', pdfEndpointResponseHandler(`${claim.claimNumber}-claim-form-claimant-copy`, res, next))
+    documentsClient.getSealedClaimPDF(claim.externalId, res.locals.user.bearerToken)
+      .on('response', pdfEndpointResponseHandler(`sealed-claim-${claim.claimNumber}`, res, next))
       .on('error', (err: Error) => {
         next(err)
       })
