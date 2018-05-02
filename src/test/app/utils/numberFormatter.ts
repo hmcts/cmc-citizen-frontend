@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import * as numeral from 'numeral'
 import 'numeral/locales/en-gb'
 
-import { NumberFormatter } from 'app/utils/numberFormatter'
+import { NumberFormatter } from 'utils/numberFormatter'
 
 describe('NumberFormatter', () => {
   numeral.locale('en-gb')

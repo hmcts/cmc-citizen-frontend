@@ -1,8 +1,8 @@
 import { RepaymentPlan } from 'claims/models/replaymentPlan'
-import { MomentFactory } from 'common/momentFactory'
+import { MomentFactory } from 'shared/momentFactory'
 import { Moment } from 'moment'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
-import { toNumberOrUndefined } from 'common/utils/numericUtils'
+import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 
 export class CountyCourtJudgment {
 

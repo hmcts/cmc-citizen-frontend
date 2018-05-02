@@ -1,6 +1,6 @@
 import { IsDefined, IsInt, IsPositive, ValidateIf } from 'class-validator'
 
-import { toNumberOrUndefined } from 'common/utils/numericUtils'
+import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import * as toBoolean from 'to-boolean'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 

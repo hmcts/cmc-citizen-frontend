@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 
-import { PartyType } from 'app/common/partyType'
+import { PartyType } from 'common/partyType'
 
 describe('PartyType', () => {
   describe('valueOf', () => {

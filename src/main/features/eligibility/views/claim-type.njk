@@ -1,15 +1,12 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 
-{% set title = t('Claim Type | Money claim') %}
-{% set question = t('Who are you making the claim for?') %}
+{% set heading = 'Who are you making the claim for?' %}
 
 {% block content %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ question }}</h1>
-
       {% set name = 'claimType' %}
 
       <form novalidate method="post" class="analytics-submit-event-trigger"
@@ -20,7 +17,7 @@
         {{
         radioGroup(
         form = form,
-        label = question,
+        label = heading,
         labelForScreenReadersOnly = true,
         name = name,
         options = [

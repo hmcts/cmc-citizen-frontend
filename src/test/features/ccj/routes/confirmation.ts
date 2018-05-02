@@ -49,7 +49,7 @@ describe('CCJ: confirmation page', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('CCJ'))
+            .expect(res => expect(res).to.be.successful.withText('County Court Judgment requested'))
         })
       })
     })

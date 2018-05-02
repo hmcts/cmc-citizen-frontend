@@ -1,14 +1,14 @@
 {% extends "layout.njk" %}
-
-{% set title = t('Money claim') %}
 {% from "support.njk" import supportWidget %}
+
+{% set headingVisible = false %}
+{% set heading = 'Confirmation' %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
       <div class="govuk-box-highlight">
         <h1 class="bold-large">{{ t('You’ve submitted your response') }}</h1>
-
         <p>
           <span class="bold">{{ submittedOn | date }}</span>
         </p>

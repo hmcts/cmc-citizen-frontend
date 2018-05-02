@@ -17,10 +17,11 @@ export class Helper {
     return defenceSteps.enterClaimPin(claimRef, authorisation)
   }
 
-  finishResponse (defendantEmail: string, defendantType: PartyType, defenceType: DefenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE): Promise<void> {
+  finishResponse (claimRef: string, defendantEmail: string, defendantType: PartyType, defenceType: DefenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE): Promise<void> {
     I.waitForText(claimDetailsHeading)
     defenceSteps.respondToClaim()
     defenceSteps.loginAsDefendant(defendantEmail)
+    I.click(claimRef)
     return defenceSteps.makeDefenceAndSubmit(defendantEmail, defendantType, defenceType)
   }
 
@@ -28,6 +29,7 @@ export class Helper {
     I.waitForText(claimDetailsHeading)
     defenceSteps.respondToClaim()
     defenceSteps.loginAsDefendant(defendantEmail)
+    I.click(claimRef)
     defenceSteps.sendDefenceResponseHandOff(claimRef, defendant, claimant, defenceType)
   }
 

@@ -9,7 +9,7 @@ import { IdamClient } from 'idam/idamClient'
 import { RequireUtils } from '../../requireUtils'
 
 RequireUtils.removeModuleFromCache('common/security/serviceTokenFactoryImpl')
-import { ServiceAuthTokenFactoryImpl } from 'common/security/serviceTokenFactoryImpl'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
 chai.use(spies)
 

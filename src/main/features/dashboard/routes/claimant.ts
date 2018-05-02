@@ -2,28 +2,32 @@ import * as express from 'express'
 
 import { Paths } from 'dashboard/paths'
 import { Paths as CCJPaths } from 'ccj/paths'
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 
 import { ClaimStoreClient } from 'claims/claimStoreClient'
-import { Claim } from 'app/claims/models/claim'
-import { PartyType } from 'app/common/partyType'
+import { Claim } from 'claims/models/claim'
+import { PartyType } from 'common/partyType'
 import { User } from 'idam/user'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+const draftExternalId = 'draft'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.claimantPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
     const { externalId } = req.params
-    const user: User = res.locals.user
-    const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
 
     res.render(Paths.claimantPage.associatedView, {
-      claim: claim
+      claim: externalId !== draftExternalId ? await claimStoreClient.retrieveByExternalId(externalId, res.locals.user as User) : undefined
     })
   }))
   .post(Paths.claimantPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
     const { externalId } = req.params
+
+    if (externalId === draftExternalId) {
+      throw new Error('Draft external ID is not supported')
+    }
+
     const user: User = res.locals.user
     const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
 

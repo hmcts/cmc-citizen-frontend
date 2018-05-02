@@ -6,12 +6,12 @@ import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { MaximumAgeValidator } from 'forms/validation/validators/maximumAgeValidator'
 import { MinimumAgeValidator } from 'forms/validation/validators/minimumAgeValidator'
 
-import { MomentFactory } from 'common/momentFactory'
+import { MomentFactory } from 'shared/momentFactory'
 import { MomentFormatter } from 'utils/momentFormatter'
 
 import { LocalDate } from 'forms/models/localDate'
-import { CompletableTask } from 'app/models/task'
-import { IsValidYearFormat } from 'app/forms/validation/validators/isValidYearFormat'
+import { CompletableTask } from 'models/task'
+import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
 import * as toBoolean from 'to-boolean'
 
 export class ValidationErrors {

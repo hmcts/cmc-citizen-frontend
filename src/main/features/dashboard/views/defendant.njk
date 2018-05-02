@@ -1,7 +1,8 @@
 {% extends "layout.njk" %}
-{% from "./macro/caseHistory.njk" import caseHistoryForDefendant %}
+{% from "./macro/caseHistory.njk" import caseHistoryForDefendantClaimDetails %}
 
-{% set title = t('Your money claims account') %}
+{% set headingVisible = false %}
+{% set heading = 'Claim status' %}
 
 {% block content %}
   <div class="grid-row">
@@ -11,16 +12,7 @@
         {{ claim.claimNumber }}
       </h1>
       <h2 class="heading-medium">{{ t('Claim status') }}</h2>
-      {{ caseHistoryForDefendant(claim, DashboardUrlHelper.getStatusUrl(claim), isAfter4pm) }}
-
-      {% if featureToggles.offer and claim.status === ClaimStatus.CLAIM_REJECTED and claim.response.defenceType !== DefenceType.ALREADY_PAID %}
-        <h2 class="heading-medium">{{ t('More options') }}</h2>
-        <h3 class="heading-small">{{ t('Settle out of court') }}</h3>
-        <p>
-          {{ t('You can still <a href="{{ makeOfferUri }}">make an offer</a> to settle the claim out of court. You will avoid a hearing and a County Court Judgment against you.',
-            { makeOfferUri : OfferPaths.offerPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}
-        </p>
-      {% endif %}
+      {{ caseHistoryForDefendantClaimDetails(claim) }}
     </div>
 
     <div class="column-one-third">
@@ -29,20 +21,20 @@
         <ul class="font-xsmall list">
           <li>
             <strong class="bold">{{ t('Claimant name:') }}</strong>
-            <span class="block">{{ claim.claimData.claimant.name }}</span>
+            <div>{{ claim.claimData.claimant.name }}</div>
           </li>
           <li>
             <strong class="bold">{{ t('Claim amount:') }}</strong>
-            <span class="block">{{ claim.totalAmountTillToday | numeral }}</span>
+            <div>{{ claim.totalAmountTillToday | numeral }}</div>
           </li>
           <li>
             <strong class="bold">{{ t('Claim details:') }}</strong>
-            <span class="block"><a href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View claim') }}</a></span>
+            <a class="block" href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View claim') }}</a>
           </li>
           {% if claim.response %}
           <li>
             <strong class="bold">{{ t('Your response:') }}</strong>
-            <span class="block"><a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a></span>
+            <a class="block" href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a>
           </li>
           {% endif %}
         </ul>

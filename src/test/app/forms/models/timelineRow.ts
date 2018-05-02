@@ -1,10 +1,10 @@
 import { expect } from 'chai'
 
-import { TimelineRow, ValidationErrors, ValidationConstraints } from 'app/forms/models/timelineRow'
-import { ValidationConstraints as DefaultValidationConstraints } from 'app/forms/validation/validationConstraints'
+import { TimelineRow, ValidationErrors, ValidationConstraints } from 'forms/models/timelineRow'
+import { ValidationConstraints as DefaultValidationConstraints } from 'forms/validation/validationConstraints'
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from './validationUtils'
-import { ValidationErrors as GlobalValidationErrors } from 'app/forms/validation/validationErrors'
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 describe('TimelineRow', () => {
 
