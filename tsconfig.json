@@ -72,6 +72,9 @@
       "modules/*": [
         "main/modules/*"
       ],
+      "main/*": [
+        "main/*"
+      ],
       "routes/*": [
         "main/routes/*"
       ],

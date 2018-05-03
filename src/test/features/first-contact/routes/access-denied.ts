@@ -2,11 +2,11 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
-import '../../../routes/expectations'
+import 'test/routes/expectations'
 
 import { ErrorPaths as DefendantFirstContactErrorPaths } from 'first-contact/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
 describe('Defendant first contact: access denied page', () => {
   attachDefaultHooks(app)

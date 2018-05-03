@@ -2,14 +2,14 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import '../../routes/expectations'
+import 'test/routes/expectations'
 
 import { Paths } from 'testing-support/paths'
 import { Paths as ClaimPaths } from 'claim/paths'
-import { app } from '../../../main/app'
+import { app } from 'main/app'
 
-import * as idamServiceMock from '../../http-mocks/idam'
-import * as draftStoreServiceMock from '../../http-mocks/draft-store'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/routes/authorization-check'

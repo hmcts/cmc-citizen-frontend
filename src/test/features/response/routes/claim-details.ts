@@ -7,10 +7,10 @@ import { checkAuthorizationGuards } from './checks/authorization-check'
 
 import { Paths as ResponsePaths } from 'response/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
-import * as idamServiceMock from '../../../http-mocks/idam'
-import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
 

@@ -3,14 +3,14 @@ import * as request from 'supertest'
 import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
-import '../../../routes/expectations'
+import 'test/routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 
 import { ErrorPaths as ClaimErrorPaths } from 'claim/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
-import * as idamServiceMock from '../../../http-mocks/idam'
+import * as idamServiceMock from 'test/http-mocks/idam'
 
 const cookieName: string = config.get<string>('session.cookieName')
 

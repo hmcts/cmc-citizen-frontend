@@ -6,14 +6,14 @@ import * as config from 'config'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 
 import { cookieName as eligibilityCookieName } from 'eligibility/store'
-import { eligibleCookie } from '../data/cookie/eligibility'
+import { eligibleCookie } from 'test/data/cookie/eligibility'
 import * as request from 'supertest'
 
-import { app } from '../../main/app'
-import * as claimStoreServiceMock from '../http-mocks/claim-store'
-import * as draftStoreServiceMock from '../http-mocks/draft-store'
+import { app } from 'main/app'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-import * as idamServiceMock from '../http-mocks/idam'
+import * as idamServiceMock from 'test/http-mocks/idam'
 import './expectations'
 
 import { attachDefaultHooks } from './hooks'

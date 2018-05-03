@@ -3,16 +3,16 @@ import * as request from 'supertest'
 import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
-import '../../../routes/expectations'
+import 'test/routes/expectations'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 
 import { Paths as CCJPaths } from 'ccj/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
-import * as idamServiceMock from '../../../http-mocks/idam'
-import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId

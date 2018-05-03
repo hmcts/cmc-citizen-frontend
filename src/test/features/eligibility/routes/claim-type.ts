@@ -2,12 +2,12 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
-import '../../../routes/expectations'
+import 'test/routes/expectations'
 import { checkAuthorizationMiddleware } from './checks/authorization-check'
 
 import { Paths } from 'eligibility/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
 import { NotEligibleReason } from 'eligibility/notEligibleReason'
 import { ClaimType } from 'eligibility/model/claimType'

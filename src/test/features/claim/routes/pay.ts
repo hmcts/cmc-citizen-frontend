@@ -4,13 +4,13 @@ import * as config from 'config'
 
 import { Paths as ClaimPaths, Paths } from 'claim/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
-import * as idamServiceMock from '../../../http-mocks/idam'
-import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import * as feesServiceMock from '../../../http-mocks/fees'
-import * as payServiceMock from '../../../http-mocks/pay'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import * as feesServiceMock from 'test/http-mocks/fees'
+import * as payServiceMock from 'test/http-mocks/pay'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from './checks/authorization-check'

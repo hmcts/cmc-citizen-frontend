@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import { ClaimModelConverter } from 'claims/claimModelConverter'
 
 import { DraftClaim } from 'drafts/models/draftClaim'
-import { claimDraft as draftTemplate } from '../../data/draft/claimDraft'
+import { claimDraft as draftTemplate } from 'test/data/draft/claimDraft'
 import {
   companyDetails,
   individualDetails,
@@ -12,7 +12,7 @@ import {
 } from 'test/data/draft/partyDetails'
 
 import { ClaimData } from 'claims/models/claimData'
-import { claimData as entityTemplate } from '../../data/entity/claimData'
+import { claimData as entityTemplate } from 'test/data/entity/claimData'
 import { company, individual, organisation, soleTrader } from 'test/data/entity/party'
 
 function prepareClaimDraft (claimantPartyDetails: object, defendantPartyDetails: object): DraftClaim {

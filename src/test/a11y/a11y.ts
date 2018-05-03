@@ -16,7 +16,7 @@ import { Paths as CCJPaths } from 'ccj/paths'
 import { Paths as OfferPaths } from 'offer/paths'
 
 import './mocks'
-import { app } from '../../main/app'
+import { app } from 'main/app'
 
 app.locals.csrf = 'dummy-token'
 

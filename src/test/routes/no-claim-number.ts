@@ -5,7 +5,7 @@ import * as config from 'config'
 import { attachDefaultHooks } from './hooks'
 import './expectations'
 
-import { app } from '../../main/app'
+import { app } from 'main/app'
 import { Paths } from 'paths'
 import { Service } from 'models/service'
 

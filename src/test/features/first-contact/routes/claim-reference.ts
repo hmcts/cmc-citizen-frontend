@@ -3,12 +3,12 @@ import * as request from 'supertest'
 import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
-import '../../../routes/expectations'
+import 'test/routes/expectations'
 
 import { Paths as DefendantFirstContactPaths } from 'first-contact/paths'
-import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
 describe('Defendant first contact: claim reference page', () => {
   attachDefaultHooks(app)
