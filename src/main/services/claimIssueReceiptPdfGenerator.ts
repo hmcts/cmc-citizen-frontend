@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as http from 'http'
 
 import { Claim } from 'claims/models/claim'
 import { DocumentsClient } from 'documents/documentsClient'
@@ -21,22 +22,16 @@ export class ClaimIssueReceiptPDFGenerator {
   static async requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
     const claim: Claim = res.locals.claim
 
-    try {
-      documentsClient.getClaimIssueReceiptPDF(claim.externalId, res.locals.user.bearerToken)
-        .on('response', () => {
-          try {
-            pdfEndpointResponseHandler(`${claim.claimNumber}-claim-form-claimant-copy`, res)
-          } catch (e) {
-            // return Promise.reject(e)
-            next(e)
-          }
-          return Promise.resolve()
-        })
-        .on('error', (err: Error) => {
+    documentsClient.getClaimIssueReceiptPDF(claim.externalId, res.locals.user.bearerToken)
+      .on('response', (response: http.IncomingMessage) => {
+        try {
+          pdfEndpointResponseHandler(`${claim.claimNumber}-claim-form-claimant-copy`, res)(response)
+        } catch (err) {
           next(err)
-        })
-    } catch (error) {
-      next(error)
-    }
+        }
+      })
+      .on('error', (err: Error) => {
+        next(err)
+      })
   }
 }

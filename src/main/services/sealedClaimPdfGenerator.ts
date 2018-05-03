@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as http from 'http'
 
 import { Claim } from 'claims/models/claim'
 import { DocumentsClient } from 'documents/documentsClient'
@@ -23,7 +24,13 @@ export class SealedClaimPdfGenerator {
 
     try {
       documentsClient.getSealedClaimPDF(claim.externalId, res.locals.user.bearerToken)
-        .on('response', pdfEndpointResponseHandler(`sealed-claim-${claim.claimNumber}`, res))
+        .on('response', (response: http.IncomingMessage) => {
+          try {
+            pdfEndpointResponseHandler(`sealed-claim-${claim.claimNumber}`, res)(response)
+          } catch (err) {
+            next(err)
+          }
+        })
         .on('error', (err: Error) => {
           next(err)
         })
