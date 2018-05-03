@@ -1,10 +1,9 @@
 import * as express from 'express'
 
 import { GuardFactory } from 'response/guards/guardFactory'
-import { Paths } from 'response/paths'
 
 import { Claim } from 'claims/models/claim'
-import { UUIDUtils } from 'shared/utils/uuidUtils'
+import { ForbiddenError } from 'errors'
 
 export class OnlyDefendantCanDoItGuard {
   /**
@@ -23,9 +22,8 @@ export class OnlyDefendantCanDoItGuard {
       }
 
       return claim.defendantId === user.id
-    }, (req: express.Request, res: express.Response): void => {
-      const externalId: string = UUIDUtils.extractFrom(req.path)
-      res.redirect(Paths.claimDetailsPage.evaluateUri({ externalId: externalId }))
+    }, (): void => {
+      throw new ForbiddenError()
     })
   }
 }

@@ -22,7 +22,7 @@ import { RoutablePath } from 'shared/router/routablePath'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
-const path: RoutablePath = ClaimPaths.sealedClaimPdf
+const path: RoutablePath = ClaimPaths.sealedClaimPdfReceiver
 
 describe('Sealed Claim: pdf', () => {
   attachDefaultHooks(app)

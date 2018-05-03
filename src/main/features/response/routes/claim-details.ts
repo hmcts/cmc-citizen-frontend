@@ -4,6 +4,11 @@ import { Paths as ClaimPaths } from 'claim/paths'
 import { Claim } from 'claims/models/claim'
 import { getInterestDetails } from 'shared/interestUtils'
 import { ErrorHandling } from 'shared/errorHandling'
+import { User } from 'idam/user'
+
+function isCurrentUserLinkedToClaim (user: User, claim: Claim): boolean {
+  return claim.defendantId === user.id
+}
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -13,7 +18,7 @@ export default express.Router()
       const interestData = await getInterestDetails(claim)
       res.render(Paths.claimDetailsPage.associatedView, {
         interestData: interestData,
-        pdfUrl: (res.locals.claim.defendantId === res.locals.user.id) ? ClaimPaths.sealedClaimPdf : ClaimPaths.receiptReceiver
+        pdfUrl: isCurrentUserLinkedToClaim(res.locals.user, res.locals.claim) ? ClaimPaths.sealedClaimPdfReceiver : ClaimPaths.receiptReceiver
       })
     })
   )

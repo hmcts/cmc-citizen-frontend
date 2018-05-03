@@ -10,7 +10,7 @@ import { OnlyDefendantCanDoItGuard } from 'claim/guards/onlyDefendantCanDoItGuar
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
-    Paths.sealedClaimPdf.uri,
+    Paths.sealedClaimPdfReceiver.uri,
     ClaimMiddleware.retrieveByExternalId,
     OnlyDefendantCanDoItGuard.requestHandler(),
     ErrorHandling.apply(SealedClaimPdfGenerator.requestHandler))
