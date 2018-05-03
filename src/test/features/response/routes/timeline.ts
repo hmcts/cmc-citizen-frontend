@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
-import { attachDefaultHooks } from '../../../routes/hooks'
+import { attachDefaultHooks } from 'test/routes/hooks'
 import '../../../routes/expectations'
 import { Paths } from 'response/paths'
 import { app } from '../../../../main/app'

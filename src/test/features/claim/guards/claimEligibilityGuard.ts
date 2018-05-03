@@ -10,7 +10,7 @@ import { Paths } from 'eligibility/paths'
 
 import { ClaimEligibilityGuard } from 'claim/guards/claimEligibilityGuard'
 import { cookieName as eligibilityCookieName } from 'eligibility/store'
-import { eligibleCookie } from '../../../data/cookie/eligibility'
+import { eligibleCookie } from 'test/data/cookie/eligibility'
 
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
@@ -19,7 +19,7 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 
-import { attachDefaultHooks } from '../../../../test/hooks'
+import { attachDefaultHooks } from 'test/hooks'
 
 chai.use(spies)
 

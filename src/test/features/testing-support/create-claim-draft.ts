@@ -11,8 +11,8 @@ import { app } from '../../../main/app'
 import * as idamServiceMock from '../../http-mocks/idam'
 import * as draftStoreServiceMock from '../../http-mocks/draft-store'
 
-import { attachDefaultHooks } from '../../routes/hooks'
-import { checkAuthorizationGuards } from '../../routes/authorization-check'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import { checkAuthorizationGuards } from 'test/routes/authorization-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.createClaimDraftPage.uri

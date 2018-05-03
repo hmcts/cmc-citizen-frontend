@@ -8,7 +8,7 @@ import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { LocalDate } from 'forms/models/localDate'
 import { Explanation } from 'response/form/models/pay-by-set-date/explanation'
 import { MomentFactory } from 'shared/momentFactory'
-import { localDateFrom } from '../../../localDateUtils'
+import { localDateFrom } from 'test/localDateUtils'
 
 describe('PayBySetDate', () => {
   let payBySetDate: PayBySetDate

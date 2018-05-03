@@ -2,9 +2,9 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
+import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from './checks/authorization-check'
-import { checkOnlyClaimantHasAccess } from '../../../routes/checks/claimant-in-case-check'
+import { checkOnlyClaimantHasAccess } from 'test/routes/checks/claimant-in-case-check'
 
 import { Paths as ResponsePaths } from 'response/paths'
 

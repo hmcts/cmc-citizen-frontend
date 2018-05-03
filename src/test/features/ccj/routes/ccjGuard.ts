@@ -1,4 +1,4 @@
-import { attachDefaultHooks } from '../../../routes/hooks'
+import { attachDefaultHooks } from 'test/routes/hooks'
 import * as idamServiceMock from '../../../http-mocks/idam'
 import '../../../routes/expectations'
 

@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { YesNoOption } from 'models/yesNoOption'
 import * as request from 'supertest'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
+import { attachDefaultHooks } from 'test/routes/hooks'
 import '../../../routes/expectations'
 import { checkAuthorizationMiddleware } from './checks/authorization-check'
 

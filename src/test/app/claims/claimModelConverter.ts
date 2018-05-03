@@ -9,11 +9,11 @@ import {
   individualDetails,
   organisationDetails,
   soleTraderDetails
-} from '../../data/draft/partyDetails'
+} from 'test/data/draft/partyDetails'
 
 import { ClaimData } from 'claims/models/claimData'
 import { claimData as entityTemplate } from '../../data/entity/claimData'
-import { company, individual, organisation, soleTrader } from '../../data/entity/party'
+import { company, individual, organisation, soleTrader } from 'test/data/entity/party'
 
 function prepareClaimDraft (claimantPartyDetails: object, defendantPartyDetails: object): DraftClaim {
   return new DraftClaim().deserialize({

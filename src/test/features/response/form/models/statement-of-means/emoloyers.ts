@@ -4,7 +4,7 @@ import {
   EmployerRow,
   ValidationErrors as RowValidationErrors
 } from 'response/form/models/statement-of-means/employerRow'
-import { expectValidationError } from '../../../../../app/forms/models/validationUtils'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { Validator } from 'class-validator'
 
 describe('Employers', () => {

@@ -3,7 +3,7 @@ import * as request from 'supertest'
 import * as HttpStatus from 'http-status-codes'
 import * as config from 'config'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
+import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { checkAlreadySubmittedGuard } from './checks/already-submitted-check'
 

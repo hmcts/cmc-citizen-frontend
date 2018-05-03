@@ -12,7 +12,7 @@ import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as feesServiceMock from '../../../http-mocks/fees'
 import * as payServiceMock from '../../../http-mocks/pay'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
+import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from './checks/authorization-check'
 import { checkEligibilityGuards } from './checks/eligibility-check'
 import { Defendant } from 'drafts/models/defendant'
