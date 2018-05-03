@@ -21,10 +21,15 @@ export class SealedClaimPdfGenerator {
   static async requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
     const claim: Claim = res.locals.claim
 
-    documentsClient.getSealedClaimPDF(claim.externalId, res.locals.user.bearerToken)
-      .on('response', pdfEndpointResponseHandler(`sealed-claim-${claim.claimNumber}`, res, next))
-      .on('error', (err: Error) => {
-        next(err)
-      })
+    try {
+      documentsClient.getSealedClaimPDF(claim.externalId, res.locals.user.bearerToken)
+        .on('response', pdfEndpointResponseHandler(`sealed-claim-${claim.claimNumber}`, res))
+        .on('error', (err: Error) => {
+          next(err)
+        })
+    } catch (error) {
+      next(error)
+    }
+
   }
 }

@@ -2,15 +2,11 @@ import * as express from 'express'
 import * as HttpStatus from 'http-status-codes'
 import * as http from 'http'
 
-export function pdfEndpointResponseHandler (
-  filename: string, res: express.Response, next: express.NextFunction
-): (response: http.IncomingMessage) => void {
+export function pdfEndpointResponseHandler (filename: string, res: express.Response): (response: http.IncomingMessage) => void {
 
   return function (response: http.IncomingMessage): void {
     if (response.statusCode !== HttpStatus.OK) {
-      next(
-        new Error(response.statusMessage ? response.statusMessage : 'Unexpected error during document retrieval')
-      )
+      throw new Error(response.statusMessage || 'Unexpected error during document retrieval')
     } else {
       const buffers: Buffer[] = []
       response.on('data', (chunk: Buffer) => {

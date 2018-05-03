@@ -37,7 +37,7 @@ describe('Claim issue: receipt', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should return 500 and render error page when cannot generate PDF', async () => {
+      it('should return 500 and render error page when cannot generate PDF', async (done) => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         claimStoreServiceMock.rejectRetrieveDocument('HTTP error')
 
@@ -45,6 +45,8 @@ describe('Claim issue: receipt', () => {
           .get(ClaimPaths.receiptReceiver.evaluateUri({ externalId: externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
+
+        done()
       })
 
       it('should return receipt when everything is fine', async () => {

@@ -21,10 +21,22 @@ export class ClaimIssueReceiptPDFGenerator {
   static async requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
     const claim: Claim = res.locals.claim
 
-    documentsClient.getClaimIssueReceiptPDF(claim.externalId, res.locals.user.bearerToken)
-      .on('response', pdfEndpointResponseHandler(`${claim.claimNumber}-claim-form-claimant-copy`, res, next))
-      .on('error', (err: Error) => {
-        next(err)
-      })
+    try {
+      documentsClient.getClaimIssueReceiptPDF(claim.externalId, res.locals.user.bearerToken)
+        .on('response', () => {
+          try {
+            pdfEndpointResponseHandler(`${claim.claimNumber}-claim-form-claimant-copy`, res)
+          } catch (e) {
+            // return Promise.reject(e)
+            next(e)
+          }
+          return Promise.resolve()
+        })
+        .on('error', (err: Error) => {
+          next(err)
+        })
+    } catch (error) {
+      next(error)
+    }
   }
 }
