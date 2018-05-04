@@ -15,7 +15,7 @@
       <p><span class="bold-small">{{ t('Reason for claim') }}:</span></p>
       <p>{{ claim.claimData.reason }}</p>
       <p><span class="bold-small">{{ t('Download the claim') }}</span></p>
-      <p><a href="{{ ClaimPaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download claim') }}</a> ({{ t('PDF') }})</p>
+      <p><a href="{{ pdfUrl.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download claim') }}</a> ({{ t('PDF') }})</p>
     </div>
   </div>
 {% endblock %}
