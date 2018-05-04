@@ -11,7 +11,7 @@ import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { CountyCourtJudgmentRequestedGuard } from 'response/guards/countyCourtJudgmentRequestedGuard'
-import { IsClaimantInCaseGuard } from 'guards/isClaimantInCaseGuard'
+import { OnlyClaimantLinkedToClaimCanDoIt } from 'guards/onlyClaimantLinkedToClaimCanDoIt'
 import { OnlyDefendantLinkedToClaimCanDoIt } from 'guards/onlyDefendantLinkedToClaimCanDoIt'
 import { OAuthHelper } from 'idam/oAuthHelper'
 
@@ -43,7 +43,7 @@ export class Feature {
       /^\/case\/.+\/response\/(?!confirmation|counter-claim|receipt|summary|claim-details).*$/,
       ResponseGuard.checkResponseDoesNotExist()
     )
-    app.all('/case/*/response/summary', IsClaimantInCaseGuard.check(), ResponseGuard.checkResponseExists())
+    app.all('/case/*/response/summary', OnlyClaimantLinkedToClaimCanDoIt.check(), ResponseGuard.checkResponseExists())
     app.all(/^\/case\/.*\/response\/(?!claim-details).*$/, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(
       /^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
