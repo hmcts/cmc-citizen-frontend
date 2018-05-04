@@ -6,7 +6,7 @@ import { User } from 'idam/user'
 import { Claim } from 'claims/models/claim'
 import { FeatureToggles } from 'utils/featureToggles'
 
-export class IsDefendantInCaseGuard {
+export class OnlyDefendantLinkedToClaimCanDoIt {
   /**
    * Throws Forbidden error if user is not defendant in the case
    *

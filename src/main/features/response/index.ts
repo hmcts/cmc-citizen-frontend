@@ -12,7 +12,7 @@ import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { CountyCourtJudgmentRequestedGuard } from 'response/guards/countyCourtJudgmentRequestedGuard'
 import { IsClaimantInCaseGuard } from 'guards/isClaimantInCaseGuard'
-import { IsDefendantInCaseGuard } from 'guards/isDefendantInCaseGuard'
+import { OnlyDefendantLinkedToClaimCanDoIt } from 'guards/onlyDefendantLinkedToClaimCanDoIt'
 import { OAuthHelper } from 'idam/oAuthHelper'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
@@ -38,7 +38,7 @@ export class Feature {
 
     app.all(allResponseRoutes, defendantResponseRequestHandler())
     app.all(allResponseRoutes, ClaimMiddleware.retrieveByExternalId)
-    app.all(/^\/case\/.+\/response\/(?!receipt|summary|claim-details).*$/, IsDefendantInCaseGuard.check())
+    app.all(/^\/case\/.+\/response\/(?!receipt|summary|claim-details).*$/, OnlyDefendantLinkedToClaimCanDoIt.check())
     app.all(
       /^\/case\/.+\/response\/(?!confirmation|counter-claim|receipt|summary|claim-details).*$/,
       ResponseGuard.checkResponseDoesNotExist()
