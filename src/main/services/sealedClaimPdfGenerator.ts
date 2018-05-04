@@ -22,6 +22,6 @@ export class SealedClaimPdfGenerator {
     const claim: Claim = res.locals.claim
 
     const pdf: Buffer = await documentsClient.getSealedClaimPDF(claim.externalId, res.locals.user.bearerToken)
-    DownloadUtils.downloadAsPDF(res, pdf, `sealed-claim-${claim.claimNumber}`)
+    DownloadUtils.downloadPDF(res, pdf, `sealed-claim-${claim.claimNumber}`)
   }
 }

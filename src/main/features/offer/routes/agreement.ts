@@ -15,5 +15,5 @@ export default express.Router()
       const pdf: Buffer = await documentsClient.getSettlementAgreementPDF(externalId, res.locals.user.bearerToken)
 
       const claim: Claim = res.locals.claim
-      DownloadUtils.downloadAsPDF(res, pdf, `${claim.claimNumber}-settlement-agreement`)
+      DownloadUtils.downloadPDF(res, pdf, `${claim.claimNumber}-settlement-agreement`)
     }))

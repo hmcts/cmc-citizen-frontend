@@ -19,5 +19,5 @@ export default express.Router()
       const claim: Claim = res.locals.claim
 
       const pdf: Buffer = await documentsClient.getClaimIssueReceiptPDF(claim.externalId, res.locals.user.bearerToken)
-      DownloadUtils.downloadAsPDF(res, pdf, `${claim.claimNumber}-claim-form-claimant-copy`)
+      DownloadUtils.downloadPDF(res, pdf, `${claim.claimNumber}-claim-form-claimant-copy`)
     }))
