@@ -3,8 +3,8 @@
 
 
 "@hmcts/cmc-common-frontend@^1.45.0":
-  version "1.45.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.45.0.tgz#a1cad47ec106cb37ae3ee16774168202048f4456"
+  version "1.46.0"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.46.0.tgz#444527f1ed57122f959820fee5de0bbb884ccc4d"
 
 "@hmcts/cmc-draft-store-middleware@^2.0.0":
   version "2.0.0"
@@ -16,6 +16,12 @@
 "@hmcts/cmc-supported-browsers@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@hmcts/cmc-supported-browsers/-/cmc-supported-browsers-1.0.1.tgz#201d415b7efdf858c77ddccb66bbe9af258c03bc"
+
+"@hmcts/cmc-validators@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-validators/-/cmc-validators-0.1.6.tgz#b664b5bb8ee00ca5633aab57d75f2924f736e4a2"
+  dependencies:
+    class-validator "^0.8.1"
 
 "@hmcts/draft-store-client@^1.1.1", "@hmcts/draft-store-client@^1.2.1":
   version "1.2.1"

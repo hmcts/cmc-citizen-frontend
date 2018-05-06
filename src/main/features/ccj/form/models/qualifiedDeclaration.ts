@@ -1,5 +1,5 @@
 import { IsDefined, MaxLength } from 'class-validator'
-import { IsBooleanTrue } from 'forms/validation/validators/isBooleanTrue'
+import { IsBooleanTrue } from '@hmcts/cmc-validators'
 import { SignatureType } from 'app/common/signatureType'
 import { IsNotBlank } from 'forms/validation/validators/isBlank'
 import * as toBoolean from 'to-boolean'

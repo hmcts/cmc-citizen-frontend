@@ -30,6 +30,7 @@
   "dependencies": {
     "@hmcts/cmc-common-frontend": "^1.45.0",
     "@hmcts/cmc-draft-store-middleware": "^2.0.0",
+    "@hmcts/cmc-validators": "^0.1.6",
     "@hmcts/draft-store-client": "^1.1.1",
     "@hmcts/info-provider": "^1.0.0",
     "@hmcts/nodejs-healthcheck": "^1.4.5",
