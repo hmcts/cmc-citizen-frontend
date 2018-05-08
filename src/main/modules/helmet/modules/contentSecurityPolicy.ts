@@ -9,7 +9,9 @@ export class ContentSecurityPolicy {
   constructor (public developmentMode: boolean) {}
 
   enableFor (app: express.Express) {
-    const scriptSrc = ['\'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU=\'', '\'sha256-G29/qSW/JHHANtFhlrZVDZW1HOkCDRc78ggbqwwIJ2g=\'', self, '*.google-analytics.com']
+    const inlineJsEnabledBodyClassName = '\'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU=\''
+    const inlineJsWindowGOVUKClassName = '\'sha256-G29/qSW/JHHANtFhlrZVDZW1HOkCDRc78ggbqwwIJ2g=\''
+    const scriptSrc = [inlineJsEnabledBodyClassName, inlineJsWindowGOVUKClassName, self, '*.google-analytics.com']
     const connectSrc = [self]
 
     if (this.developmentMode) {
