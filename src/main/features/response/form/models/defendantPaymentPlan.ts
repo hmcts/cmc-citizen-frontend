@@ -1,14 +1,13 @@
 import { LocalDate } from 'forms/models/localDate'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { IsDefined, IsIn, IsPositive, MaxLength, ValidateNested } from 'class-validator'
-import { Fractions, IsNotBlank } from '@hmcts/cmc-validators'
+import { Fractions, IsNotBlank, IsLessThan } from '@hmcts/cmc-validators'
 import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
-import { IsLessThan } from 'forms/validation/validators/isLessThan'
 
 export class ValidationErrors {
   static readonly INSTALMENTS_AMOUNT_INVALID: string = 'Enter a valid amount for equal instalments'
