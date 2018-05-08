@@ -41,7 +41,7 @@ describe('Defendant first contact: claim reference page', () => {
     it('should redirect to mcol when CCBC prefix is used', async () => {
       await request(app)
         .post(DefendantFirstContactPaths.claimReferencePage.uri)
-        .send({ reference: 'AA1' })
+        .send({ reference: 'A1ED1123' })
         .expect(res => expect(res).to.be.redirect.toLocation(config.get<string>('mcol.url')))
     })
 

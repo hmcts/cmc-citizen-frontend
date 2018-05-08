@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { Paths } from 'claim/paths'
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { DraftService } from 'services/draftService'

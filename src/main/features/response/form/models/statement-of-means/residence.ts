@@ -2,7 +2,7 @@ import { ResidenceType } from 'response/form/models/statement-of-means/residence
 import { IsDefined, IsIn, MaxLength, ValidateIf } from 'class-validator'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
+import { IsNotBlank } from '@hmcts/cmc-validators'
 
 export class ValidationErrors {
   static readonly DESCRIBE_YOUR_HOUSING: string = 'Describe your housing'

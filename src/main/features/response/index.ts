@@ -2,11 +2,11 @@ import * as express from 'express'
 import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
-import { RouterFinder } from 'common/router/routerFinder'
+import { RouterFinder } from 'shared/router/routerFinder'
 import { DefenceType } from 'claims/models/response/fullDefenceResponse'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { ResponseGuard } from 'response/guards/responseGuard'
-import { ClaimMiddleware } from 'app/claims/claimMiddleware'
+import { ClaimMiddleware } from 'claims/claimMiddleware'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
@@ -44,7 +44,7 @@ export class Feature {
       ResponseGuard.checkResponseDoesNotExist()
     )
     app.all('/case/*/response/summary', IsClaimantInCaseGuard.check(), ResponseGuard.checkResponseExists())
-    app.all(allResponseRoutes, CountyCourtJudgmentRequestedGuard.requestHandler)
+    app.all(/^\/case\/.*\/response\/(?!claim-details).*$/, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(
       /^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'response', 100, (value: any): ResponseDraft => {

@@ -1,11 +1,11 @@
 import * as express from 'express'
 import * as config from 'config'
 
-import { ErrorHandling } from 'common/errorHandling'
-import { Paths } from 'app/paths'
+import { ErrorHandling } from 'shared/errorHandling'
+import { Paths } from 'paths'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ClaimReference } from 'forms/models/claimReference'
-import { isNonCMCReference } from 'common/utils/isNonCMCReference'
+import { isCMCReference } from 'shared/utils/isCMCReference'
 import { Form } from 'forms/form'
 
 function renderView (form: Form<ClaimReference>, res: express.Response): void {
@@ -30,10 +30,10 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        if (isNonCMCReference(form.model.reference)) {
-          res.redirect(mcolUrl)
-        } else {
+        if (isCMCReference(form.model.reference)) {
           res.redirect(Paths.homePage.uri)
+        } else {
+          res.redirect(mcolUrl)
         }
       }
     })

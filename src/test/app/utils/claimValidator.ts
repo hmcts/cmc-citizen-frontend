@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import 'numeral/locales/en-gb'
-import { ClaimValidator } from 'app/utils/claimValidator'
+import { ClaimValidator } from 'utils/claimValidator'
 
 describe('ClaimValidator.validateClaimAmount', () => {
   describe('should throws error for amount', () => {

@@ -1,4 +1,4 @@
-import { RoutablePath } from 'common/router/routablePath'
+import { RoutablePath } from 'shared/router/routablePath'
 
 export class Paths {
   static readonly startPage = new RoutablePath('/eligibility/index')
@@ -14,4 +14,5 @@ export class Paths {
   static readonly claimIsForTenancyDepositPage = new RoutablePath('/eligibility/claim-is-for-tenancy-deposit')
   static readonly eligiblePage = new RoutablePath('/eligibility/eligible')
   static readonly notEligiblePage = new RoutablePath('/eligibility/not-eligible')
+  static readonly mcolEligibilityPage = new RoutablePath('/eligibility/mcol-eligibility')
 }

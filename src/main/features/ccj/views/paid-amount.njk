@@ -1,16 +1,12 @@
 {% extends "layout.njk" %}
 
-{% set title = 'Money claim' %}
+{% set heading = 'Has the defendant paid some of the amount owed?' %}
 
 {% from "form.njk" import saveAndContinueButton, csrfProtection, poundInput, radioOption, errorSummary %}
 
 {% block content %}
 <div class="grid-row">
   <div class="column-two-thirds">
-
-    <h1 class="heading-large">
-      {{ t('Has the defendant paid some of the amount owed?') }}
-    </h1>
 
     <form method="post" class="analytics-submit-event-trigger" data-event-action="CCJ: Select whether defendant paid some of the amount owed" data-event-label-from="option" novalidate>
 

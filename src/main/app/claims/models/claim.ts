@@ -1,6 +1,6 @@
 import { Moment } from 'moment'
-import { ClaimData } from 'app/claims/models/claimData'
-import { MomentFactory } from 'common/momentFactory'
+import { ClaimData } from 'claims/models/claimData'
+import { MomentFactory } from 'shared/momentFactory'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
@@ -89,7 +89,16 @@ export class Claim {
     if (!this.respondedAt) {
       return undefined
     }
-    return this.respondedAt.clone().add('33', 'days')
+    const daysForService = 5
+    const daysForResponse = 28
+    return this.respondedAt.clone().add(daysForService + daysForResponse, 'days')
+  }
+
+  get respondToMediationDeadline (): Moment {
+    if (!this.respondedAt) {
+      return undefined
+    }
+    return this.respondedAt.clone().add('5', 'days')
   }
 
   get remainingDays (): number {

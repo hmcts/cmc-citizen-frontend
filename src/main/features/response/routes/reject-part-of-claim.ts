@@ -7,7 +7,7 @@ import { Form } from 'forms/form'
 
 import { ResponseType } from 'response/form/models/responseType'
 import { RejectPartOfClaim } from 'response/form/models/rejectPartOfClaim'
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 import { User } from 'idam/user'
 import { GuardFactory } from 'response/guards/guardFactory'
 import { DraftService } from 'services/draftService'

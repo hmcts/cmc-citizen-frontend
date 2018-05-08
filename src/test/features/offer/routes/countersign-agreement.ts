@@ -39,7 +39,7 @@ describe('Countersign agreement page', () => {
         await request(app)
           .get(countersignAgreementPage)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Make a legal agreement'))
+          .expect(res => expect(res).to.be.successful.withText('You can now make a legal agreement'))
       })
     })
   })

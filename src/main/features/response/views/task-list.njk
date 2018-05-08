@@ -2,14 +2,11 @@
 {% from "task-list.njk" import task, taskListHeading, disabledTask %}
 {% from "timeRemaining.njk" import timeRemaining %}
 
-{% set title = t('Task list | Money claim') %}
+{% set heading = 'Respond to a money claim' %}
 
 {% block content %}
 
   <div class="grid-row">
-    <div class="column-full">
-      <h1 class="heading-large">{{ t('Respond to a money claim') }}</h1>
-    </div>
     <div class="column-two-thirds">
       <div class="task-group">
         {{ taskListHeading(beforeYouStartSection.position, t(beforeYouStartSection.name)) }}
@@ -46,7 +43,7 @@
             <div>
               {{ t('{{ responseDeadline }} at 4pm', { responseDeadline: claim.responseDeadline | date }) }}
             </div>
-            <div>{{ timeRemaining(claim.remainingDays) }}</div>
+            <div>{{ timeRemaining(claim.remainingDays, isAfter4pm()) }}</div>
           </li>
           <li>
             <strong class="bold">{{ t('Claim number:') }}</strong>

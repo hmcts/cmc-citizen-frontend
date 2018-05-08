@@ -31,20 +31,23 @@ data "vault_generic_secret" "staff_email" {
 locals {
   aseName = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
 
+  local_env = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "aat" : "saat" : var.env}"
+  local_ase = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "core-compute-aat" : "core-compute-saat" : local.aseName}"
+
   previewVaultName = "${var.product}-citizen-fe"
   nonPreviewVaultName = "${var.product}-citizen-fe-${var.env}"
-  vaultName = "${var.env == "preview" ? local.previewVaultName : local.nonPreviewVaultName}"
+  vaultName = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
 
   nonPreviewVaultUri = "${module.citizen-frontend-vault.key_vault_uri}"
   previewVaultUri = "https://cmc-citizen-fe-aat.vault.azure.net/"
-  vaultUri = "${var.env == "preview"? local.previewVaultUri : local.nonPreviewVaultUri}"
+  vaultUri = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultUri : local.nonPreviewVaultUri}"
 
-  localClaimStoreUrl = "http://cmc-claim-store-${var.env}.service.${local.aseName}.internal"
-  claimStoreUrl = "${var.env == "preview" ? "http://cmc-claim-store-aat.service.core-compute-aat.internal" : local.localClaimStoreUrl}"
+  s2sUrl = "http://rpe-service-auth-provider-${local.local_env}.service.${local.local_ase}.internal"
+  claimStoreUrl = "http://cmc-claim-store-${local.local_env}.service.${local.local_ase}.internal"
 }
 
 module "citizen-frontend" {
-  source = "git@github.com:contino/moj-module-webapp.git"
+  source = "git@github.com:hmcts/moj-module-webapp.git?ref=RPE-389/local-cache"
   product = "${var.product}-${var.microservice}"
   location = "${var.location}"
   env = "${var.env}"
@@ -60,7 +63,7 @@ module "citizen-frontend" {
     NODE_ENV = "${var.node_env}"
     UV_THREADPOOL_SIZE = "64"
     NODE_CONFIG_DIR = "D:\\home\\site\\wwwroot\\config"
-    TS_BASE_URL = "./src/main"
+    TS_BASE_URL = "./src"
 
     // Logging vars
     REFORM_TEAM = "${var.product}"
@@ -74,7 +77,7 @@ module "citizen-frontend" {
     // IDAM
     IDAM_API_URL = "${var.idam_api_url}"
     IDAM_AUTHENTICATION_WEB_URL = "${var.authentication_web_url}"
-    IDAM_S2S_AUTH = "${var.s2s_url}"
+    IDAM_S2S_AUTH = "${local.s2sUrl}"
     IDAM_S2S_TOTP_SECRET = "${data.vault_generic_secret.s2s_secret.data["value"]}"
     OAUTH_CLIENT_SECRET = "${data.vault_generic_secret.oauth-client-secret.data["value"]}"
 
@@ -115,7 +118,7 @@ module "citizen-frontend" {
 }
 
 module "citizen-frontend-vault" {
-  source = "git@github.com:contino/moj-module-key-vault?ref=master"
+  source = "git@github.com:hmcts/moj-module-key-vault?ref=master"
   name = "${local.vaultName}"
   product = "${var.product}"
   env = "${var.env}"

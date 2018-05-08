@@ -5,7 +5,7 @@ import { Paths } from 'claim/paths'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { ClaimEligibilityGuard } from 'claim/guards/claimEligibilityGuard'
-import { RouterFinder } from 'common/router/routerFinder'
+import { RouterFinder } from 'shared/router/routerFinder'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
@@ -30,7 +30,7 @@ export class Feature {
     }
 
     app.all('/claim/*', claimIssueRequestHandler())
-    app.all(/^\/claim\/(?!start|amount-exceeded|.+\/confirmation|.+\/receipt).*$/,
+    app.all(/^\/claim\/(?!start|amount-exceeded|.+\/confirmation|.+\/receipt|.+\/sealed-claim).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'claim', 100, (value: any): DraftClaim => {
         return new DraftClaim().deserialize(value)
       }),

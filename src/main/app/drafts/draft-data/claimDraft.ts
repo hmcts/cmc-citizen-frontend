@@ -1,6 +1,6 @@
 import { YesNoOption } from 'models/yesNoOption'
 import * as uuid from 'uuid'
-import { PartyType } from 'app/common/partyType'
+import { PartyType } from 'common/partyType'
 
 export function prepareClaimDraft () {
   return {

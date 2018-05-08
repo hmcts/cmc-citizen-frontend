@@ -14,7 +14,7 @@ import { CompanyDetails } from 'forms/models/companyDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { generateString } from '../../../app/forms/models/validationUtils'
 
-const validAddress = new Address('line1', 'line2', 'line3', 'city', 'postcode')
+const validAddress = new Address('line1', 'line2', 'line3', 'city', 'SW1A 1AA')
 const invalidAddress = new Address('', '', '', '', '')
 
 describe('Your details task', () => {

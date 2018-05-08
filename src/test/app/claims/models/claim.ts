@@ -1,5 +1,5 @@
 import { Claim } from 'claims/models/claim'
-import { MomentFactory } from 'common/momentFactory'
+import { MomentFactory } from 'shared/momentFactory'
 import { expect } from 'chai'
 import { Settlement } from 'claims/models/settlement'
 import { StatementType } from 'offer/form/models/statementType'
@@ -174,6 +174,21 @@ describe('Claim', () => {
     it('should return undefined if claim is not responded to', () => {
       const claim = new Claim()
       expect(claim.respondToResponseDeadline).to.equal(undefined)
+    })
+  })
+
+  describe('respondToMediationDeadline', () => {
+
+    it('should add 5 days to the response deadline', () => {
+      const claim = new Claim()
+      claim.respondedAt = moment()
+
+      expect(claim.respondToMediationDeadline.toISOString()).to.equal(claim.respondedAt.add(5, 'days').toISOString())
+    })
+
+    it('should return undefined if claim is not responded to', () => {
+      const claim = new Claim()
+      expect(claim.respondToMediationDeadline).to.equal(undefined)
     })
   })
 

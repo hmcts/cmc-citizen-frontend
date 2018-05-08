@@ -1,8 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, textInput, linkButton, saveAndContinueButton, errorSummary %}
 
-{% set title = t('Money claim') %}
-{% set heading = t('Who employs you?') %}
+{% set heading = 'Who employs you?'%}
 
 {% macro employerRow(index, form) %}
 

@@ -2,7 +2,7 @@ import * as config from 'config'
 import * as otp from 'otp'
 
 import { request } from 'client/request'
-import { User } from 'app/idam/user'
+import { User } from 'idam/user'
 import { ServiceAuthToken } from 'idam/serviceAuthToken'
 import { AuthToken } from 'idam/authToken'
 
@@ -25,8 +25,7 @@ export class IdamClient {
 
     return request.post({
       uri: `${s2sUrl}/lease`,
-      form: new ServiceAuthRequest(microserviceName, oneTimePassword),
-      json: false
+      body: new ServiceAuthRequest(microserviceName, oneTimePassword)
     }).then(token => {
       return new ServiceAuthToken(token)
     })

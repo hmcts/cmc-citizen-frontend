@@ -1,7 +1,6 @@
 {% extends "layout.njk" %}
 
-{% set title = t('Completing your claim | Money claim') %}
-{% set heading = t('Claim details') %}
+{% set heading = 'Claim details' %}
 
 {% from "form.njk" import csrfProtection %}
 {% from "amountBreakdown.njk" import amountBreakdownTable %}
@@ -16,7 +15,7 @@
       <p><span class="bold-small">{{ t('Reason for claim') }}:</span></p>
       <p>{{ claim.claimData.reason }}</p>
       <p><span class="bold-small">{{ t('Download the claim') }}</span></p>
-      <p><a href="{{ ClaimPaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download claim') }}</a> ({{ t('PDF') }})</p>
+      <p><a href="{{ pdfUrl.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download claim') }}</a> ({{ t('PDF') }})</p>
     </div>
   </div>
 {% endblock %}
