@@ -56,8 +56,8 @@ describe('ClaimReference', () => {
       expect(errors.length).to.equal(0)
     })
 
-    it('should accept non-CMC claim reference', () => {
-      const errors = validator.validateSync(new ClaimReference('123LL33CC5'))
+    it('should accept CCBC claim reference', () => {
+      const errors = validator.validateSync(new ClaimReference('A1LL3CC5'))
 
       expect(errors.length).to.equal(0)
     })

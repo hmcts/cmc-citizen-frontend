@@ -10,6 +10,10 @@ export class DocumentsClient {
   constructor (public documentsUrl: string = `${claimStoreBaseUrl}/documents`) {
   }
 
+  getSealedClaimPDF (claimExternalId: string, bearerToken: string): Request {
+    return this.getPDF(claimExternalId, 'sealedClaim', bearerToken)
+  }
+
   getClaimIssueReceiptPDF (claimExternalId: string, bearerToken: string): Request {
     return this.getPDF(claimExternalId, 'claimIssueReceipt', bearerToken)
   }
