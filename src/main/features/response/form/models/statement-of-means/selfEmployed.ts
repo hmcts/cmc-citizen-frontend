@@ -1,7 +1,6 @@
 import { IsDefined, Max, Min, ValidateIf } from 'class-validator'
-import { IsNotBlank } from '@hmcts/cmc-validators'
+import { IsNotBlank, Fractions } from '@hmcts/cmc-validators'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
-import { Fractions } from 'forms/validation/validators/fractions'
 import * as toBoolean from 'to-boolean'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
