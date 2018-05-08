@@ -1,5 +1,5 @@
 import { PartyDetails } from './partyDetails'
-import { PartyType } from 'app/common/partyType'
+import { PartyType } from 'common/partyType'
 import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
 
 export class ValidationErrors {

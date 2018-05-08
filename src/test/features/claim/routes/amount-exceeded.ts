@@ -26,7 +26,7 @@ describe('Claim issue: amount exceeded page', () => {
       await request(app)
         .get(ClaimErrorPaths.amountExceededPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Make a money claim'))
+        .expect(res => expect(res).to.be.successful.withText('Excess Money claim'))
     })
   })
 })

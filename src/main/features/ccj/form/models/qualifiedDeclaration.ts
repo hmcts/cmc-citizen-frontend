@@ -1,7 +1,6 @@
 import { IsDefined, MaxLength } from 'class-validator'
-import { IsBooleanTrue } from '@hmcts/cmc-validators'
-import { SignatureType } from 'app/common/signatureType'
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
+import { IsBooleanTrue, IsNotBlank } from '@hmcts/cmc-validators'
+import { SignatureType } from 'common/signatureType'
 import * as toBoolean from 'to-boolean'
 import { Declaration } from 'ccj/form/models/declaration'
 

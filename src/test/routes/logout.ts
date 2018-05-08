@@ -5,7 +5,7 @@ import * as mock from 'nock'
 
 import './expectations'
 
-import { Paths as AppPaths } from 'app/paths'
+import { Paths as AppPaths } from 'paths'
 
 import { app } from '../../main/app'
 

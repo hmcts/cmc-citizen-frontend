@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 
-{% set title = t('Money claim') %}
+{% set heading = 'Respond to a money claim' %}
 
 {% from "form.njk" import csrfProtection, linkButton %}
 {% from "support.njk" import supportWidget %}
@@ -9,8 +9,6 @@
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Respond to a money claim') }}</h1>
-
       <p>{{ t('You have 19 days to respond to the claim from the date the court issued it.') }}</p>
       <p>{{ t('Find the exact deadline date in the letter or email you received explaining the claim.') }}</p>
       <p>{{ t('We’ll send your response to the claimant (the person or organisation who says you owe them money).') }}</p>

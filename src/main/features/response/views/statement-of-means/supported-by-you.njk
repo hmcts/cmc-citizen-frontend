@@ -1,13 +1,11 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, radioOption, numericInput, textArea, saveAndContinueButton, errorSummary %}
 
-{% set title = 'Money claim' %}
+{% set heading = 'Do you support anyone else financially?' %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Do you support anyone else financially?') }}</h1>
-
       <form method="post" novalidate
         class="analytics-submit-event-trigger"
         data-event-action="SoM: Do you support anyone else financially?"

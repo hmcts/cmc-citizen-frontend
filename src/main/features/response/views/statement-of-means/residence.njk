@@ -1,13 +1,11 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, errorSummary, radioOption, saveAndContinueButton, textInput %}
 
-{% set title = 'Money claim' %}
+{% set heading = 'Where are you living?' %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Where are you living?') }}</h1>
-
       <form
         method="POST"
         class="analytics-submit-event-trigger"

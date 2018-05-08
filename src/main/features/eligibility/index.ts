@@ -11,7 +11,7 @@ import { ClaimType } from 'eligibility/model/claimType'
 import { ClaimValue } from 'eligibility/model/claimValue'
 import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 
-import { RouterFinder } from 'common/router/routerFinder'
+import { RouterFinder } from 'shared/router/routerFinder'
 
 async function authorizationRequestHandler (req: express.Request, res: express.Response, next: express.NextFunction) {
   const jwt: string = JwtExtractor.extract(req)

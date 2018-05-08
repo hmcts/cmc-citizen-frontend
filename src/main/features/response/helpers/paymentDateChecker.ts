@@ -1,5 +1,5 @@
 import * as moment from 'moment'
-import { MomentFactory } from 'common/momentFactory'
+import { MomentFactory } from 'shared/momentFactory'
 
 function toDate (dateTime: moment.Moment): moment.Moment {
   const date: moment.Moment = dateTime.clone()

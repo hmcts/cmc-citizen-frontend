@@ -1,4 +1,4 @@
-import { RoutablePath } from 'common/router/routablePath'
+import { RoutablePath } from 'shared/router/routablePath'
 
 export class Paths {
   static readonly taskListPage = new RoutablePath('/claim/task-list')
@@ -37,6 +37,7 @@ export class Paths {
   static readonly claimantPartyTypeSelectionPage = new RoutablePath('/claim/claimant-party-type-selection')
   static readonly defendantPartyTypeSelectionPage = new RoutablePath('/claim/defendant-party-type-selection')
   static readonly incompleteSubmissionPage = new RoutablePath('/claim/incomplete-submission')
+  static readonly sealedClaimPdfReceiver = new RoutablePath('/claim/:externalId/sealed-claim')
 }
 
 export class ErrorPaths {

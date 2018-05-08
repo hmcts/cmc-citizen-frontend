@@ -1,9 +1,9 @@
 import { IsDefined, IsIn, IsPositive, MaxLength, ValidateIf } from 'class-validator'
-import { IsNotBlank } from 'app/forms/validation/validators/isBlank'
-import { CompletableTask } from 'app/models/task'
-import { toNumberOrUndefined } from 'common/utils/numericUtils'
-import { ValidationErrors as CommonValidationErrors } from 'app/forms/validation/validationErrors'
-import { getStandardInterestRate } from 'common/interestUtils'
+import { IsNotBlank } from '@hmcts/cmc-validators'
+import { CompletableTask } from 'models/task'
+import { toNumberOrUndefined } from 'shared/utils/numericUtils'
+import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
+import { getStandardInterestRate } from 'shared/interestUtils'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 
 export class ValidationErrors {

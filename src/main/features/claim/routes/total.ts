@@ -1,11 +1,11 @@
 import * as express from 'express'
 import { Paths } from 'claim/paths'
 import { TotalAmount } from 'forms/models/totalAmount'
-import { draftClaimAmountWithInterest, draftInterestAmount } from 'common/interestUtils'
+import { draftClaimAmountWithInterest, draftInterestAmount } from 'shared/interestUtils'
 import { FeesClient } from 'fees/feesClient'
 
 import { DraftClaim } from 'drafts/models/draftClaim'
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 import { Draft } from '@hmcts/draft-store-client'
 import { FeeRangeMerge, FeesTableViewHelper } from 'claim/helpers/feesTableViewHelper'
 import { YesNoOption } from 'models/yesNoOption'

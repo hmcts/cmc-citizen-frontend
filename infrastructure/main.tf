@@ -33,7 +33,7 @@ locals {
 
   local_env = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "aat" : "saat" : var.env}"
   local_ase = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "core-compute-aat" : "core-compute-saat" : local.aseName}"
-  
+
   previewVaultName = "${var.product}-citizen-fe"
   nonPreviewVaultName = "${var.product}-citizen-fe-${var.env}"
   vaultName = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
@@ -47,7 +47,7 @@ locals {
 }
 
 module "citizen-frontend" {
-  source = "git@github.com:contino/moj-module-webapp.git"
+  source = "git@github.com:hmcts/moj-module-webapp.git?ref=RPE-389/local-cache"
   product = "${var.product}-${var.microservice}"
   location = "${var.location}"
   env = "${var.env}"
@@ -63,7 +63,7 @@ module "citizen-frontend" {
     NODE_ENV = "${var.node_env}"
     UV_THREADPOOL_SIZE = "64"
     NODE_CONFIG_DIR = "D:\\home\\site\\wwwroot\\config"
-    TS_BASE_URL = "./src/main"
+    TS_BASE_URL = "./src"
 
     // Logging vars
     REFORM_TEAM = "${var.product}"
@@ -118,7 +118,7 @@ module "citizen-frontend" {
 }
 
 module "citizen-frontend-vault" {
-  source = "git@github.com:contino/moj-module-key-vault?ref=master"
+  source = "git@github.com:hmcts/moj-module-key-vault?ref=master"
   name = "${local.vaultName}"
   product = "${var.product}"
   env = "${var.env}"

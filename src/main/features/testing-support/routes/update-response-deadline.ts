@@ -1,10 +1,10 @@
 import * as express from 'express'
 import { Paths } from 'testing-support/paths'
-import { ErrorHandling } from 'common/errorHandling'
+import { ErrorHandling } from 'shared/errorHandling'
 import { Form } from 'forms/form'
 import { UpdateResponseDeadlineRequest } from 'testing-support/models/updateResponseDeadlineRequest'
-import { FormValidator } from 'app/forms/validation/formValidator'
-import { User } from 'app/idam/user'
+import { FormValidator } from 'forms/validation/formValidator'
+import { User } from 'idam/user'
 import { TestingSupportClient } from 'testing-support/testingSupportClient'
 
 function renderView (form: Form<UpdateResponseDeadlineRequest>, res: express.Response): void {

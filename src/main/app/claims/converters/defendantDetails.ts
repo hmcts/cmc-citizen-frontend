@@ -1,4 +1,4 @@
-import { PartyType } from 'app/common/partyType'
+import { PartyType } from 'common/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { TheirDetails } from 'claims/models/details/theirs/theirDetails'

@@ -1,9 +1,8 @@
 import { IsDefined, MaxLength } from 'class-validator'
-import { IsBooleanTrue } from '@hmcts/cmc-validators'
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
+import { IsNotBlank, IsBooleanTrue } from '@hmcts/cmc-validators'
 import * as toBoolean from 'to-boolean'
 import { StatementOfTruth } from 'forms/models/statementOfTruth'
-import { SignatureType } from 'app/common/signatureType'
+import { SignatureType } from 'common/signatureType'
 
 export class ValidationErrors {
   static readonly STATEMENT_OF_TRUTH_REQUIRED_MESSAGE: string = 'Please select I believe that the facts stated in this claim are true.'

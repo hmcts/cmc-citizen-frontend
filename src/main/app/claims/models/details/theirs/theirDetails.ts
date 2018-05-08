@@ -1,5 +1,5 @@
 import { Address } from 'claims/models/address'
-import { PartyType } from 'app/common/partyType'
+import { PartyType } from 'common/partyType'
 
 export class TheirDetails {
   type: string

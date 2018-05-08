@@ -2,13 +2,11 @@
 {% from "form.njk" import csrfProtection, radioOption, numericInput, textInput, saveAndContinueButton, errorSummary %}
 {% from "date.njk" import dateInput %}
 
-{% set title = 'Money claim' %}
+{% set heading = 'Are you unemployed or retired?' %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">{{ t('Are you unemployed or retired?') }}</h1>
-
       <form method="post" novalidate
         class="analytics-submit-event-trigger"
         data-event-action="SoM: Are you unemployed or retired?"

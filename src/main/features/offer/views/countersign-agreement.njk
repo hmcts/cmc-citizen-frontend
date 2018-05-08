@@ -1,13 +1,10 @@
 {% extends "layout.njk" %}
 
-{% set title = t('Money claim | Make a legal agreement') %}
+{% set heading = 'You can now make a legal agreement' %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-
-      <h1 class="heading-large">{{ t('You can now make a legal agreement') }}</h1>
-
       <p>
         {{ t('The agreement will be based on the offer from {{ defendantName }} you’ve just accepted. It has not been reviewed by court staff or a judge.', {
           defendantName: claim.claimData.defendant.name }) }}
