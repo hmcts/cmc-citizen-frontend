@@ -13,7 +13,7 @@ import { YesNoOption } from 'models/yesNoOption'
 
 const pagePath: string = Paths.claimantAddressPage.uri
 const pageRedirect: string = Paths.defendantAddressPage.uri
-const expectedTextOnPage: string = 'Do you have an address in the UK?'
+const expectedTextOnPage: string = 'Do you have a postal address in the UK?'
 const notEligibleReason: string = NotEligibleReason.CLAIMANT_ADDRESS
 
 describe('Claim eligibility: claimant address page', () => {

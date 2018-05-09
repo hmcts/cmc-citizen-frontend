@@ -36,8 +36,16 @@ describe('Returning user: Enter claim number', () => {
     it('should redirect to mcol when ccbc prefix is used', async () => {
       await request(app)
         .post(Paths.enterClaimNumberPage.uri)
-        .send({ reference: 'AA1' })
+        .send({ reference: 'A1BA1123' })
         .expect(res => expect(res).to.be.redirect.toLocation(config.get<string>('mcol.url')))
     })
+
+    it('should render the page when invalid reference is used', async () => {
+      await request(app)
+        .post(Paths.enterClaimNumberPage.uri)
+        .send({ reference: '1234567' })
+        .expect(res => expect(res).to.be.successful.withText('Enter your claim number', 'div class="error-summary"'))
+    })
+
   })
 })
