@@ -25,16 +25,6 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 
 
 withParameterizedPipeline('nodejs', 'cmc', 'citizen-frontend', params.ENVIRONMENT, 'sandbox') {
-  afterCheckout {
-    if (env.BRANCH_NAME == "master") {
-      sh 'echo "This is master"'
-    } else {
-      sh "echo 'On branch ${env.BRANCH_NAME}'"
-      sh "git fetch origin feature/ROC-3550-Test-push-to-branch:feature/ROC-3550-Test-push-to-branch"
-      sh "git push --verbose --force origin HEAD:feature/ROC-3550-Test-push-to-branch"
-    }
-  }
-
   after('build') {
     sh 'yarn setup'
   }
