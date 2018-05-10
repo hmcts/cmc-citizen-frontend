@@ -21,6 +21,19 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 }
 
 withPipeline("nodejs", product, component) {
+  afterCheckout {
+    if (env.BRANCH_NAME == "master") {
+      try {
+        sh """
+          git fetch origin demo:demo
+          git push --force origin HEAD:demo
+        """
+      } catch (err) {
+        // Send a notification to Slack channel?
+      }
+    }
+  }
+
   after('build') {
     sh 'yarn setup'
   }
