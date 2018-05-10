@@ -29,7 +29,7 @@ withPipeline("nodejs", product, component) {
           git push --force origin HEAD:demo
         """
       } catch (err) {
-        // Send a notification to Slack channel?
+        notifyBuildEvent channel: '#cmc-tech-notification', color: 'warning', message: 'Failed to update demo branch'
       }
     }
   }
