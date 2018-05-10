@@ -4,7 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
-import { checkAuthorizationGuards } from './checks/authorization-check'
+import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/authorization-check'
 
 import { Paths as CCJPaths } from 'ccj/paths'
 
@@ -16,7 +16,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { SignatureType } from 'common/signatureType'
 import { ValidationErrors as BasicValidationErrors } from 'ccj/form/models/declaration'
 import { ValidationErrors as QualifiedValidationErrors } from 'ccj/form/models/qualifiedDeclaration'
-import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
+import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')

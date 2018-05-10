@@ -4,8 +4,8 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
-import { checkAuthorizationGuards } from './checks/authorization-check'
-import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
+import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
+import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
 import { Paths, StatementOfMeansPaths } from 'response/paths'
 

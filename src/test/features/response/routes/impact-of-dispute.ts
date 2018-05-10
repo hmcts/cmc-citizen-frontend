@@ -10,12 +10,12 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as randomstring from 'randomstring'
 
-import { checkAuthorizationGuards } from './checks/authorization-check'
-import { checkAlreadySubmittedGuard } from './checks/already-submitted-check'
-import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
+import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
+import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks/already-submitted-check'
+import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors } from 'forms/validation/validationErrors'
-import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
+import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.impactOfDisputePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })

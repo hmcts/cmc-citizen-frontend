@@ -3,7 +3,7 @@ import * as request from 'supertest'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
-import { checkAuthorizationMiddleware } from './checks/authorization-check'
+import { checkAuthorizationMiddleware } from 'test/features/eligibility/routes/checks/authorization-check'
 
 import { app } from 'main/app'
 

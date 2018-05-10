@@ -12,7 +12,7 @@ import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
-import { checkAuthorizationGuards } from './checks/authorization-check'
+import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/authorization-check'
 
 import { sampleClaimDraftObj } from 'test/http-mocks/draft-store'
 import { company, individual, organisation, soleTrader } from 'test/data/entity/party'

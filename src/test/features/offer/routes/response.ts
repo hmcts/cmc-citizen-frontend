@@ -9,7 +9,7 @@ import { Paths as OfferPaths } from 'offer/paths'
 import { StatementType } from 'offer/form/models/statementType'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
-import { checkAuthorizationGuards } from './checks/authorization-check'
+import { checkAuthorizationGuards } from 'test/features/offer/routes/checks/authorization-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'

@@ -4,7 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
-import { checkAuthorizationGuards } from './checks/authorization-check'
+import { checkAuthorizationGuards } from 'test/features/first-contact/routes/checks/authorization-check'
 
 import { ErrorPaths, Paths } from 'first-contact/paths'
 

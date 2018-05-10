@@ -5,8 +5,8 @@ import * as config from 'config'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 
-import { checkAuthorizationGuards } from './checks/authorization-check'
-import { checkEligibilityGuards } from './checks/eligibility-check'
+import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
+import { checkEligibilityGuards } from 'test/features/claim/routes/checks/eligibility-check'
 
 import { Paths as ClaimPaths } from 'claim/paths'
 

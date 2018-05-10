@@ -9,7 +9,7 @@ import { app } from 'main/app'
 import { Paths as OfferPaths } from 'offer/paths'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
-import { checkAuthorizationGuards } from './checks/authorization-check'
+import { checkAuthorizationGuards } from 'test/features/offer/routes/checks/authorization-check'
 
 import { LocalDate } from 'forms/models/localDate'
 

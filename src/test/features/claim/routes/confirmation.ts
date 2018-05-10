@@ -3,7 +3,7 @@ import * as request from 'supertest'
 import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
-import { checkAuthorizationGuards } from './checks/authorization-check'
+import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
 import { Paths as ClaimPaths } from 'claim/paths'
 

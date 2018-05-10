@@ -11,8 +11,8 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
-import { checkAuthorizationGuards } from './checks/authorization-check'
-import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
+import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/authorization-check'
+import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
