@@ -26,14 +26,11 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 
 withParameterizedPipeline('nodejs', 'cmc', 'citizen-frontend', params.ENVIRONMENT, 'sandbox') {
   afterCheckout {
-    sh '''
-      if [ "$(git rev-parse --abbrev-ref HEAD)" == "master" ]
-      then
-          echo "On master"
-      else
-          echo "On $(git rev-parse --abbrev-ref HEAD) branch"
-      fi
-    '''
+    if (env.BRANCH_NAME == "master") {
+      sh 'echo "This is master"'
+    } else {
+      sh "echo 'On branch ${env.BRANCH_NAME}'"
+    }
   }
 
   after('build') {
