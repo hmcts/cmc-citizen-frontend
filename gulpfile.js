@@ -47,6 +47,11 @@ function copyGovUkTemplate () {
     .pipe(gulp.dest(`${assetsDirectory}/js/lib/`))
 
   gulp.src([
+    './node_modules/govuk_template_jinja/assets/images/apple-touch-icon.png'
+  ])
+    .pipe(gulp.dest(`${assetsDirectory}/`))
+
+  gulp.src([
     './node_modules/govuk_frontend_toolkit/images/**/*',
     './node_modules/govuk_template_jinja/assets/images/*.*'
   ])
