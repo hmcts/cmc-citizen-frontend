@@ -15,7 +15,7 @@ import { Paths as DefendantResponsePaths, StatementOfMeansPaths, PayBySetDatePat
 import { Paths as CCJPaths } from 'ccj/paths'
 import { Paths as OfferPaths } from 'offer/paths'
 
-import './mocks'
+import 'test/a11y/mocks'
 import { app } from 'main/app'
 
 app.locals.csrf = 'dummy-token'

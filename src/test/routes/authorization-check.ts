@@ -3,7 +3,7 @@ import * as request from 'supertest'
 import * as config from 'config'
 import * as mock from 'nock'
 
-import './expectations'
+import 'test/routes/expectations'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 
