@@ -259,14 +259,27 @@
       postcodeResponse.addresses.forEach(function (address) {
         var formattedAddress = address.formattedAddress.replace(/\r?\n|\r/g, ', ')
         var lines = formattedAddress.split(',')
+        var valueFormattedAddress = []
+        var townOrCity = lines[lines.length - 2].trim()
+        var postCode = lines[lines.length - 1].trim()
 
-        var valueFormattedAddress = [
-          lines[0].trim(),
-          lines.length > 3 ? lines[1].trim() : '',
-          lines.length > 4 ? lines[2].trim() : '',
-          lines[lines.length-2].trim(),
-          lines[lines.length-1].trim()
-        ].join(', ')
+        if (address.organisationName === "") {
+          valueFormattedAddress = [
+            lines[0].trim(),
+            lines.length > 3 ? lines[1].trim() : '',
+            lines.length > 4 ? lines[2].trim() : '',
+            townOrCity,
+            postCode
+          ].join(', ')
+        } else {
+          valueFormattedAddress = [
+            lines.length > 3 ? lines[1].trim() : '',
+            lines.length > 4 ? lines[2].trim() : '',
+            lines.length > 5 ? lines[3].trim() : '',
+            townOrCity,
+            postCode
+          ].join(', ')
+        }
         var option = document.createElement('option')
         option.value = valueFormattedAddress
         option.text = formattedAddress
