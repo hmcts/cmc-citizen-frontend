@@ -3,7 +3,7 @@ import * as request from 'supertest'
 import * as config from 'config'
 import * as mock from 'nock'
 
-import 'test/routes//expectations'
+import 'test/routes/expectations'
 
 import { Paths as AppPaths } from 'paths'
 

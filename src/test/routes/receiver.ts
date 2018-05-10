@@ -14,7 +14,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
-import 'test/routes//expectations'
+import 'test/routes/expectations'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 

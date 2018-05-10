@@ -3,7 +3,7 @@ import * as request from 'supertest'
 import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
-import 'test/routes//expectations'
+import 'test/routes/expectations'
 
 import { app } from 'main/app'
 import { Paths } from 'paths'
