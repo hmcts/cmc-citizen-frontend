@@ -30,6 +30,9 @@ withParameterizedPipeline('nodejs', 'cmc', 'citizen-frontend', params.ENVIRONMEN
       sh 'echo "This is master"'
     } else {
       sh "echo 'On branch ${env.BRANCH_NAME}'"
+
+      notifyBuildEvent channel: '#cmc-tech-notification', color: 'warning', message: 'Just testing this out'
+
       sh "git fetch origin feature/ROC-3550-Test-push-to-branch:feature/ROC-3550-Test-push-to-branch"
       sh "git push --verbose --force origin HEAD:feature/ROC-3550-Test-push-to-branch"
     }
