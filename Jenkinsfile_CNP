@@ -22,7 +22,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 
 withPipeline("nodejs", product, component) {
   afterCheckout {
-    if (env.BRANCH_NAME == "master") {
+    onMaster {
       try {
         sh """
           git fetch origin demo:demo
