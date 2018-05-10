@@ -4,7 +4,7 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
 
-import { expectValidationError, generateString } from './validationUtils'
+import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 
 import { MobilePhone, ValidationErrors } from 'forms/models/mobilePhone'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
