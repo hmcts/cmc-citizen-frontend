@@ -43,10 +43,6 @@ describe('Login receiver', async () => {
       it('should clear state cookie when auth token is retrieved from idam', async () => {
         const token = 'I am dummy access token'
         idamServiceMock.resolveExchangeCode(token)
-        claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-        claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
-        draftStoreServiceMock.resolveFindNoDraftFound()
-        draftStoreServiceMock.resolveFindNoDraftFound()
 
         await request(app)
           .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
@@ -58,12 +54,13 @@ describe('Login receiver', async () => {
         claimStoreServiceMock.rejectRetrieveByClaimantId('HTTP error')
 
         await request(app)
-          .get(AppPaths.receiver.uri)
+          .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
       it('should return 500 and render error page when cannot retrieve defendant claims', async () => {
+        claimStoreServiceMock.resolveLinkDefendant()
         claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
         claimStoreServiceMock.rejectRetrieveByDefendantId('HTTP error')
 
@@ -74,6 +71,7 @@ describe('Login receiver', async () => {
       })
 
       it('should return 500 and render error page when cannot retrieve claim drafts', async () => {
+        claimStoreServiceMock.resolveLinkDefendant()
         claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
         claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
         draftStoreServiceMock.rejectFind('HTTP error')
@@ -85,6 +83,7 @@ describe('Login receiver', async () => {
       })
 
       it('should return 500 and render error page when cannot retrieve response drafts', async () => {
+        claimStoreServiceMock.resolveLinkDefendant()
         claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
         claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
         draftStoreServiceMock.resolveFindNoDraftFound()
@@ -98,6 +97,7 @@ describe('Login receiver', async () => {
 
       context('when valid eligibility cookie exists (user with intention to create a claim)', async () => {
         it('should redirect to task list', async () => {
+          claimStoreServiceMock.resolveLinkDefendant()
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -108,6 +108,7 @@ describe('Login receiver', async () => {
 
       context('when no claim issued or received and no drafts (new claimant)', async () => {
         it('should redirect to eligibility start page', async () => {
+          claimStoreServiceMock.resolveLinkDefendant()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
           draftStoreServiceMock.resolveFindNoDraftFound()
@@ -122,6 +123,7 @@ describe('Login receiver', async () => {
 
       context('when only draft claim exists (claimant making first claim)', async () => {
         it('should redirect to dashboard', async () => {
+          claimStoreServiceMock.resolveLinkDefendant()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
           draftStoreServiceMock.resolveFind('claim')
@@ -136,6 +138,7 @@ describe('Login receiver', async () => {
 
       context('when only claim issued (claimant made first claim)', async () => {
         it('should redirect to dashboard', async () => {
+          claimStoreServiceMock.resolveLinkDefendant()
           claimStoreServiceMock.resolveRetrieveByClaimantId()
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
           draftStoreServiceMock.resolveFindNoDraftFound()
@@ -150,6 +153,7 @@ describe('Login receiver', async () => {
 
       context('when claim issued and draft claim exists (claimant making another claim)', async () => {
         it('should redirect to dashboard', async () => {
+          claimStoreServiceMock.resolveLinkDefendant()
           claimStoreServiceMock.resolveRetrieveByClaimantId()
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
           draftStoreServiceMock.resolveFind('claim')
@@ -164,6 +168,7 @@ describe('Login receiver', async () => {
 
       context('when only claim received (defendant served with first claim)', async () => {
         it('should redirect to dashboard', async () => {
+          claimStoreServiceMock.resolveLinkDefendant()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
           draftStoreServiceMock.resolveFindNoDraftFound()
@@ -178,6 +183,7 @@ describe('Login receiver', async () => {
 
       context('when claim received and draft response exists (defendant responding to claim)', async () => {
         it('should redirect to dashboard', async () => {
+          claimStoreServiceMock.resolveLinkDefendant()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
           draftStoreServiceMock.resolveFindNoDraftFound()
@@ -193,6 +199,7 @@ describe('Login receiver', async () => {
 
       context('when claim received and draft claim exists (defendant making first claim)', async () => {
         it('should redirect to dashboard', async () => {
+          claimStoreServiceMock.resolveLinkDefendant()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
           draftStoreServiceMock.resolveFind('claim')
@@ -207,6 +214,7 @@ describe('Login receiver', async () => {
 
       context('when claim received and another claim issued (defendant made first claim)', async () => {
         it('should redirect to dashboard', async () => {
+          claimStoreServiceMock.resolveLinkDefendant()
           claimStoreServiceMock.resolveRetrieveByClaimantId()
           claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
           draftStoreServiceMock.resolveFindNoDraftFound()
