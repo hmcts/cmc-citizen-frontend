@@ -4,7 +4,7 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
 
-import { evaluateErrorMsg, expectValidationError, generateString } from './validationUtils'
+import { evaluateErrorMsg, expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 import {
   Address,
   ValidationConstants as AddressValidationConstants,

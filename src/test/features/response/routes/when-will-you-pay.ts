@@ -2,21 +2,21 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
-import '../../../routes/expectations'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import 'test/routes/expectations'
 
 import { Paths, PayBySetDatePaths } from 'response/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
-import * as idamServiceMock from '../../../http-mocks/idam'
-import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import { checkAuthorizationGuards } from './checks/authorization-check'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
 import { ResponseType } from 'response/form/models/responseType'
 import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
-import { checkNotDefendantInCaseGuard } from './checks/not-defendant-in-case-check'
+import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId

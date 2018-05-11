@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
-import { expectValidationError, generateString } from '../../../../app/forms/models/validationUtils'
+import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 import { DefendantPaymentPlan, ValidationErrors } from 'response/form/models/defendantPaymentPlan'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
