@@ -270,7 +270,7 @@
             lines.length > 4 ? lines[2].trim() : '',
             townOrCity,
             postCode
-          ].join(', ')
+          ]
         } else {
           valueFormattedAddress = [
             lines.length > 3 ? lines[1].trim() : '',
@@ -278,10 +278,10 @@
             lines.length > 5 ? lines[3].trim() : '',
             townOrCity,
             postCode
-          ].join(', ')
+          ]
         }
         var option = document.createElement('option')
-        option.value = valueFormattedAddress
+        option.value = valueFormattedAddress.join(', ')
         option.text = formattedAddress
         postcodeSelectDropdown.appendChild(option)
       })
