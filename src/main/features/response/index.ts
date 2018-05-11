@@ -11,8 +11,8 @@ import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { CountyCourtJudgmentRequestedGuard } from 'response/guards/countyCourtJudgmentRequestedGuard'
-import { IsClaimantInCaseGuard } from 'guards/isClaimantInCaseGuard'
-import { IsDefendantInCaseGuard } from 'guards/isDefendantInCaseGuard'
+import { OnlyClaimantLinkedToClaimCanDoIt } from 'guards/onlyClaimantLinkedToClaimCanDoIt'
+import { OnlyDefendantLinkedToClaimCanDoIt } from 'guards/onlyDefendantLinkedToClaimCanDoIt'
 import { OAuthHelper } from 'idam/oAuthHelper'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
@@ -38,12 +38,12 @@ export class Feature {
 
     app.all(allResponseRoutes, defendantResponseRequestHandler())
     app.all(allResponseRoutes, ClaimMiddleware.retrieveByExternalId)
-    app.all(/^\/case\/.+\/response\/(?!receipt|summary|claim-details).*$/, IsDefendantInCaseGuard.check())
+    app.all(/^\/case\/.+\/response\/(?!receipt|summary|claim-details).*$/, OnlyDefendantLinkedToClaimCanDoIt.check())
     app.all(
       /^\/case\/.+\/response\/(?!confirmation|counter-claim|receipt|summary|claim-details).*$/,
       ResponseGuard.checkResponseDoesNotExist()
     )
-    app.all('/case/*/response/summary', IsClaimantInCaseGuard.check(), ResponseGuard.checkResponseExists())
+    app.all('/case/*/response/summary', OnlyClaimantLinkedToClaimCanDoIt.check(), ResponseGuard.checkResponseExists())
     app.all(/^\/case\/.*\/response\/(?!claim-details).*$/, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(
       /^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
