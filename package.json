@@ -3,7 +3,7 @@
   "version": "1.1.1",
   "private": true,
   "engines": {
-    "node": ">=8.9.4"
+    "node": ">=8.9.4 <10.0.0"
   },
   "scripts": {
     "setup": "gulp sass copy-files",
@@ -98,7 +98,7 @@
     "@hmcts/cmc-supported-browsers": "^1.0.1",
     "@types/chai": "^4.0.3",
     "@types/chai-as-promised": "^7.1.0",
-    "@types/chai-spies": "^0.0.0",
+    "@types/chai-spies": "^0.0.1",
     "@types/jsonwebtoken": "^7.2.3",
     "@types/mocha": "*",
     "@types/sinon-chai": "^2.7.28",

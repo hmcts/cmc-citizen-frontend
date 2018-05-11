@@ -14,7 +14,7 @@ import { YesNoOption } from 'models/yesNoOption'
 
 const pagePath: string = Paths.defendantAddressPage.uri
 const pageRedirect: string = Paths.over18Page.uri
-const expectedTextOnPage: string = 'Does the person or organisation you’re claiming against have an address in England or Wales?'
+const expectedTextOnPage: string = 'Does the person or organisation you’re claiming against have a postal address in England or Wales?'
 const notEligibleReason: string = NotEligibleReason.DEFENDANT_ADDRESS
 
 describe('Claim eligibility: defendant address page', () => {
