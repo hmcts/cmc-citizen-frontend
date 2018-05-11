@@ -105,10 +105,8 @@ export class ClaimStoreClient {
         }
       })
       .then(claim => {
-        if (!FeatureToggles.isEnabled('ccd')) { // CCD does authorisation checks for us
-          if (user.id !== claim.submitterId && user.id !== claim.defendantId) {
-            throw new ForbiddenError()
-          }
+        if (user.id !== claim.submitterId && user.id !== claim.defendantId) {
+          throw new ForbiddenError()
         }
         return new Claim().deserialize(claim)
       })
@@ -133,29 +131,6 @@ export class ClaimStoreClient {
       .put(`${claimStoreApiUrl}/defendant/link`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
-        }
-      })
-  }
-
-  linkDefendantV1 (externalId: string, user: User): Promise<Claim> {
-    if (!externalId) {
-      return Promise.reject(new Error('External ID is required'))
-    }
-    if (!user.id) {
-      return Promise.reject(new Error('User is required'))
-    }
-
-    return this.request
-      .put(`${claimStoreApiUrl}/${externalId}/defendant/${user.id}`, {
-        headers: {
-          Authorization: `Bearer ${user.bearerToken}`
-        }
-      })
-      .then(claim => {
-        if (claim) {
-          return new Claim().deserialize(claim)
-        } else {
-          throw new Error('Call was successful, but received an empty claim instance')
         }
       })
   }

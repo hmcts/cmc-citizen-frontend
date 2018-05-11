@@ -33,7 +33,7 @@ locals {
 
   local_env = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "aat" : "saat" : var.env}"
   local_ase = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "core-compute-aat" : "core-compute-saat" : local.aseName}"
-  
+
   previewVaultName = "${var.product}-citizen-fe"
   nonPreviewVaultName = "${var.product}-citizen-fe-${var.env}"
   vaultName = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
@@ -109,7 +109,6 @@ module "citizen-frontend" {
     FEATURE_FULL_ADMISSION = "${var.feature_full_admission}"
     FEATURE_PARTIAL_ADMISSION = "${var.feature_partial_admission}"
     FEATURE_FINE_PRINT = "${var.feature_fine_print}"
-    FEATURE_CCD = "${var.feature_ccd}"
     FEATURE_RETURN_ERROR_TO_USER = "${var.feature_return_error_to_user}"
 
     CONTACT_EMAIL = "${data.vault_generic_secret.staff_email.data["value"]}"
