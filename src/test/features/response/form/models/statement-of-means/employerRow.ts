@@ -2,7 +2,7 @@ import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
 import { EmployerRow, ValidationErrors } from 'response/form/models/statement-of-means/employerRow'
-import { expectValidationError, generateString } from '../../../../../app/forms/models/validationUtils'
+import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 import { ValidationConstraints as GlobalValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 

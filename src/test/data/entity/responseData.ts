@@ -1,4 +1,4 @@
-import { individual } from './party'
+import { individual } from 'test/data/entity/party'
 
 const baseResponseData = {
   defendant: individual,

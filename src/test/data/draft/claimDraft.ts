@@ -1,4 +1,4 @@
-import { individualDetails } from './partyDetails'
+import { individualDetails } from 'test/data/draft/partyDetails'
 import { InterestRate } from 'claim/form/models/interestRate'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestDateType } from 'common/interestDateType'
