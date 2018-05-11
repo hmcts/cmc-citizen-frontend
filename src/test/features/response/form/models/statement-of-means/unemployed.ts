@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
-import { expectValidationError, generateString } from '../../../../../app/forms/models/validationUtils'
+import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 import { Unemployed } from 'response/form/models/statement-of-means/unemployed'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'

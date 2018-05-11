@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { GuardFactory } from 'response/guards/guardFactory'
-import { ForbiddenError } from '../../errors'
+import { ForbiddenError } from 'errors'
 import { User } from 'idam/user'
 import { Claim } from 'claims/models/claim'
 

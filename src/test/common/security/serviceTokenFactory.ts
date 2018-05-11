@@ -6,7 +6,7 @@ import * as sinon from 'sinon'
 import { ServiceAuthToken } from 'idam/serviceAuthToken'
 import { IdamClient } from 'idam/idamClient'
 
-import { RequireUtils } from '../../requireUtils'
+import { RequireUtils } from 'test/requireUtils'
 
 RequireUtils.removeModuleFromCache('common/security/serviceTokenFactoryImpl')
 import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
