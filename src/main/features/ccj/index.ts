@@ -8,7 +8,7 @@ import { CCJGuard } from 'ccj/guards/ccjGuard'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
-import { IsClaimantInCaseGuard } from 'guards/isClaimantInCaseGuard'
+import { OnlyClaimantLinkedToClaimCanDoIt } from 'guards/onlyClaimantLinkedToClaimCanDoIt'
 import { OAuthHelper } from 'idam/oAuthHelper'
 
 function requestHandler (): express.RequestHandler {
@@ -26,7 +26,7 @@ export class CCJFeature {
     const allCCJ = '/case/*/ccj/*'
     app.all(allCCJ, requestHandler())
     app.all(allCCJ, ClaimMiddleware.retrieveByExternalId)
-    app.all(allCCJ, IsClaimantInCaseGuard.check())
+    app.all(allCCJ, OnlyClaimantLinkedToClaimCanDoIt.check())
     app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/, CCJGuard.requestHandler)
     app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'ccj', 100, (value: any): DraftCCJ => {
