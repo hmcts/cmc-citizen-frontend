@@ -103,11 +103,12 @@ export class ClaimStoreClient {
           Authorization: `Bearer ${user.bearerToken}`
         }
       })
-      .then((claim: Claim) => {
+      .then((json: object) => {
+        const claim = new Claim().deserialize(json)
         if (user.id !== claim.claimantId && user.id !== claim.defendantId) {
           throw new ForbiddenError()
         }
-        return new Claim().deserialize(claim)
+        return claim
       })
   }
 
