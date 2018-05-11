@@ -89,7 +89,7 @@
     "to-boolean": "^1.0.0",
     "ts-node": "^6.0.0",
     "tsconfig-paths": "^3.1.1",
-    "typescript": "^2.4.2",
+    "typescript": "2.6.2",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
@@ -133,7 +133,7 @@
     "sinon-express-mock": "^2.0.0",
     "sonarqube-scanner": "^2.0.1",
     "supertest": "^3.0.0",
-    "tslint": "^5.5.0",
+    "tslint": "5.9.1",
     "tslint-config-standard": "^7.0.0",
     "webdriverio": "^4.11.0"
   },
