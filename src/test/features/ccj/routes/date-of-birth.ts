@@ -14,7 +14,7 @@ import * as idamServiceMock from '../../../http-mocks/idam'
 import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 import { checkAuthorizationGuards } from './checks/authorization-check'
-import { PartyType } from 'app/common/partyType'
+import { PartyType } from 'common/partyType'
 import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
 
 const sampleClaimObj = claimStoreServiceMock.sampleClaimObj

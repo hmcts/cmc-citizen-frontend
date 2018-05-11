@@ -1,3 +1,4 @@
+import { isAfter4pm } from 'shared/dateUtils'
 import { TranslationOptions } from 'i18next'
 import * as path from 'path'
 import * as express from 'express'
@@ -10,24 +11,23 @@ import * as numeral from 'numeral'
 import * as moment from 'moment'
 import * as toBoolean from 'to-boolean'
 
-import { NUMBER_FORMAT } from 'app/utils/numberFormatter'
+import { NUMBER_FORMAT } from 'utils/numberFormatter'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
-import { SignatureType } from 'app/common/signatureType'
+import { SignatureType } from 'common/signatureType'
 import { ResponseType } from 'response/form/models/responseType'
 import { YesNoOption } from 'models/yesNoOption'
 import { NotEligibleReason } from 'claim/../../features/eligibility/notEligibleReason'
 import { EvidenceType } from 'forms/models/evidenceType'
 import { StatementType } from 'offer/form/models/statementType'
-import { InterestDateType } from 'app/common/interestDateType'
+import { InterestDateType } from 'common/interestDateType'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
-import { DashboardUrlHelper } from 'dashboard/helpers/dashboardUrlHelper'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
 import { ClaimStatus } from 'claims/models/claimStatus'
-import { Paths as AppPaths } from 'app/paths'
+import { Paths as AppPaths } from 'paths'
 import { Paths as DashboardPaths } from 'features/dashboard/paths'
 import { Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
@@ -93,6 +93,7 @@ export class Nunjucks {
     nunjucksEnv.addFilter('inputDate', dateInputFilter)
     nunjucksEnv.addFilter('pennies2pounds', convertToPoundsFilter)
     nunjucksEnv.addFilter('numeral', numeralFilter)
+    nunjucksEnv.addGlobal('isAfter4pm', isAfter4pm)
     nunjucksEnv.addGlobal('betaFeedbackSurveyUrl', config.get('feedback.feedbackSurvey.url'))
     nunjucksEnv.addGlobal('reportProblemSurveyUrl', config.get('feedback.reportProblemSurvey.url'))
     nunjucksEnv.addGlobal('customerSurveyUrl', config.get('feedback.serviceSurvey.url'))
@@ -116,7 +117,6 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('InterestEndDateOption', InterestEndDateOption)
     nunjucksEnv.addGlobal('ResidenceType', ResidenceType)
     nunjucksEnv.addGlobal('PaymentSchedule', PaymentSchedule)
-    nunjucksEnv.addGlobal('DashboardUrlHelper', DashboardUrlHelper)
     nunjucksEnv.addGlobal('UnemploymentType', UnemploymentType)
     nunjucksEnv.addGlobal('BankAccountType', BankAccountType)
     nunjucksEnv.addGlobal('ClaimStatus', ClaimStatus)
@@ -126,6 +126,8 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('HowMuchPaidClaimantOption', HowMuchPaidClaimantOption)
     nunjucksEnv.addGlobal('Service', Service)
     nunjucksEnv.addGlobal('cookieText', `GOV.UK uses cookies make the site simpler. <a href="${AppPaths.cookiesPage.uri}">Find out more about cookies</a>`)
+    nunjucksEnv.addGlobal('serviceName', `Money Claims`)
+    nunjucksEnv.addGlobal('headingVisible', true)
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

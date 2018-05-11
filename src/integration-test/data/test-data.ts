@@ -38,15 +38,9 @@ export function createClaimData (claimantType: PartyType, defendantType: PartyTy
     claimants: [createClaimant(claimantType)],
     defendants: [createDefendant(defendantType, hasEmailAddress)],
     payment: {
-      id: '1',
-      state: {
-        status: 'success',
-        finished: true
-      },
       amount: claimFee * 100,
-      reference: 'CMC1$$$4d308250-d89e-485b-aafb-33a641fd00b3$$$AA00$$$X0024',
-      description: 'Money Claim issue fee',
-      date_created: '1511175701404'
+      reference: 'RC-1524-6488-1670-7520',
+      status: 'success'
     },
     feeAmountInPennies: claimFee * 100,
     amount: claimAmount,
@@ -107,7 +101,7 @@ export function createClaimant (type: PartyType): Party {
       line1: '234 Acacia Road',
       line2: 'a really cool place',
       city: 'Edinburgh',
-      postcode: 'EDE 1AC'
+      postcode: 'G72 7ZY'
     },
     mobilePhone: '07700000001'
   }

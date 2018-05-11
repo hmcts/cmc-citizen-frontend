@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { FractionsConstraint } from 'app/forms/validation/validators/fractions'
+import { FractionsConstraint } from 'forms/validation/validators/fractions'
 import { ValidationArguments } from 'class-validator'
 
 describe('FractionsConstraint', () => {

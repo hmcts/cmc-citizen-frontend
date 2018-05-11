@@ -1,4 +1,4 @@
-import { RoutablePath } from 'common/router/routablePath'
+import { RoutablePath } from 'shared/router/routablePath'
 
 const responsePath = '/case/:externalId/response'
 

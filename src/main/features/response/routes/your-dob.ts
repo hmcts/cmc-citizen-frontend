@@ -4,14 +4,14 @@ import { Paths } from 'response/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { DateOfBirth } from 'forms/models/dateOfBirth'
-import { PartyType } from 'app/common/partyType'
-import { ErrorHandling } from 'common/errorHandling'
+import { PartyType } from 'common/partyType'
+import { ErrorHandling } from 'shared/errorHandling'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Claim } from 'app/claims/models/claim'
+import { Claim } from 'claims/models/claim'
 
 function renderView (form: Form<DateOfBirth>, res: express.Response) {
   res.render(Paths.defendantDateOfBirthPage.associatedView, {

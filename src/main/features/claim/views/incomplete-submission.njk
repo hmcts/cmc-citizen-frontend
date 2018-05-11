@@ -1,13 +1,12 @@
 {% extends "layout.njk" %}
 {% from "remainingTasksFragment.njk" import remainingTasksFragment  %}
 
-{% set title = t('Incomplete submission') %}
+{% set heading = 'You need to complete all sections before you submit your claim' %}
 
 {% block content %}
 
   {{
     remainingTasksFragment(
-      heading = 'You need to complete all sections before you submit your claim',
       tasks = tasks,
       backLink = taskListUri
     )

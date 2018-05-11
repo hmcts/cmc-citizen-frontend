@@ -1,6 +1,6 @@
 import { IsDefined, MaxLength } from 'class-validator'
-import { IsNotBlank } from 'forms/validation/validators/isBlank'
-import { CompletableTask } from 'app/models/task'
+import { IsNotBlank } from '@hmcts/cmc-validators'
+import { CompletableTask } from 'models/task'
 
 export class ValidationErrors {
   static readonly NAME_REQUIRED: string = 'Enter name'

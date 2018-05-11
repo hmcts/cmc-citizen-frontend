@@ -1,0 +1,41 @@
+{% extends "layout.njk" %}
+{% from "support.njk" import mcolSupportWidget %}
+
+{% set heading = t('Check you can use Money Claim Online (MCOL)') %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h2 class="heading-large">{{ t('Check you can use Money Claim Online (MCOL)') }}</h2>
+
+      <p>{{ t('You can use the existing MCOL service to claim:') }}</p>
+
+      <ul class="list list-bullet">
+        <li>{{ t('for a fixed sum under £100,000') }}</li>
+        <li>{{ t('against no more than 2 people or organisations') }}</li>
+      </ul>
+
+      <p>
+        {{ t('You can use the service from anywhere in the UK, but only against someone with an address in England or Wales.') }}
+      </p>
+
+      <p>{{ t('You must be 18 or over to make a claim.') }}</p>
+
+      <h2 class="heading-medium">{{ t('What you can’t claim for on MCOL') }}</h2>
+
+      <p>{{ t('You can’t use this service to:') }}</p>
+
+      <ul class="list list-bullet">
+        <li> {{ t('make a claim against a government department or agency, for example HMRC or DVLA') }} </li>
+        <li> {{ t('get compensation for an accident or injury') }} </li>
+        <li> {{ t('get your tenancy deposit back from your landlord') }} </li>
+      </ul>
+
+      {{ mcolSupportWidget() }}
+
+      <a href="{{ mcolUrl }}" class="button">{{ t('Continue to MCOL') }}</a>
+    </div>
+  </div>
+
+{% endblock %}
