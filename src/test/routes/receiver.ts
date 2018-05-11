@@ -33,10 +33,6 @@ describe('Login receiver', async () => {
       it('should save bearer token in cookie when auth token is retrieved from idam', async () => {
         const token = 'I am dummy access token'
         idamServiceMock.resolveExchangeCode(token)
-        claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-        claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
-        draftStoreServiceMock.resolveFindNoDraftFound()
-        draftStoreServiceMock.resolveFindNoDraftFound()
 
         await request(app)
           .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
