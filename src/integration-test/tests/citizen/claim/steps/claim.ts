@@ -127,13 +127,13 @@ export class ClaimSteps {
       case PartyType.COMPANY:
         partyTypePage.selectCompany()
         companyDetailsPage.enterCompanyName(defendant.name)
-        companyDetailsPage.enterAddress(defendant.address)
+        companyDetailsPage.enterAddressOnPostCodeLookUp(defendant.address)
         companyDetailsPage.submit()
         break
       case PartyType.ORGANISATION:
         partyTypePage.selectOrganisationl()
         organisationDetailsPage.enterOrganisationName(defendant.name)
-        organisationDetailsPage.enterAddress(defendant.address)
+        organisationDetailsPage.enterAddressOnPostCodeLookUp(defendant.address)
         organisationDetailsPage.submit()
         break
       default:
@@ -260,7 +260,6 @@ export class ClaimSteps {
     this.enterClaimEvidence()
     userSteps.selectCheckAndSubmitYourClaim()
     I.see('John Smith')
-    I.see('University of Manchester')
     I.see('Oxford Road')
     I.see('Manchester')
     I.see('M13 9PL')
