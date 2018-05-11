@@ -9,7 +9,6 @@ import { ForbiddenError } from '../../errors'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { FeatureToggles } from 'utils/featureToggles'
 import { Logger } from '@hmcts/nodejs-logging'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
