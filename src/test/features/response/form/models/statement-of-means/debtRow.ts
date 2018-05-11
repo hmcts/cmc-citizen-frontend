@@ -2,7 +2,7 @@ import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
 import { DebtRow, ValidationErrors } from 'response/form/models/statement-of-means/debtRow'
-import { expectValidationError, generateString } from '../../../../../app/forms/models/validationUtils'
+import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 

@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 import * as _ from 'lodash'
 import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../../app/forms/models/validationUtils'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 
 import { InterestStartDate, ValidationErrors } from 'claim/form/models/interestStartDate'
 import { LocalDate } from 'forms/models/localDate'

@@ -292,5 +292,5 @@ export function rejectRetrieveDocument (reason: string) {
 export function resolveRetrieveDocument () {
   mock(`${serviceBaseURL}/documents`)
     .get(new RegExp('/.+/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
-    .reply(HttpStatus.OK, [])
+    .reply(HttpStatus.OK)
 }
