@@ -1,4 +1,4 @@
-import { individual } from './party'
+import { individual } from 'test/data/entity/party'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDateType } from 'common/interestDateType'

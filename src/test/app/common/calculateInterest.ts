@@ -2,9 +2,9 @@ import { expect } from 'chai'
 import { MomentFactory } from 'shared/momentFactory'
 
 import { calculateInterest } from 'common/calculateInterest'
-import { mockCalculateInterestRate } from '../../http-mocks/claim-store'
+import { mockCalculateInterestRate } from 'test/http-mocks/claim-store'
 
-import { attachDefaultHooks } from '../../../test/hooks'
+import { attachDefaultHooks } from 'test/hooks'
 
 describe('calculateInterest', () => {
   attachDefaultHooks()
