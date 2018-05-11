@@ -108,6 +108,7 @@
     "codeceptjs": "^1.1.6",
     "codecov": "^3.0.0",
     "debug": "^3.0.0",
+    "gulp": "^4.0.0",
     "gulp-livereload": "^3.8.0",
     "gulp-nodemon": "^2.0.2",
     "gulp-plumber": "^1.0.0",
