@@ -5,7 +5,7 @@ import { ForbiddenError } from '../../errors'
 import { User } from 'idam/user'
 import { Claim } from 'claims/models/claim'
 
-export class IsClaimantInCaseGuard {
+export class OnlyClaimantLinkedToClaimCanDoIt {
   /**
    * Throws Forbidden error if user is not the claimant in the case
    *
