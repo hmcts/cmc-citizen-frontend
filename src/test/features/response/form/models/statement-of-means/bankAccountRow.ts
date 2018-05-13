@@ -2,7 +2,7 @@ import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
 import { BankAccountRow } from 'response/form/models/statement-of-means/bankAccountRow'
-import { expectValidationError } from '../../../../../app/forms/models/validationUtils'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
 

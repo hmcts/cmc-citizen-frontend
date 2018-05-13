@@ -1,7 +1,7 @@
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { ResponseType } from 'response/form/models/responseType'
-import { individualDetails } from './partyDetails'
+import { individualDetails } from 'test/data/draft/partyDetails'
 
 const baseResponseDraft = {
   defendantDetails: {

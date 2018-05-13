@@ -9,7 +9,7 @@ import { expect } from 'chai'
 import * as moment from 'moment'
 import { Validator } from 'class-validator'
 
-import { expectValidationError } from './validationUtils'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 
 import { DateOfBirth, ValidationErrors } from 'forms/models/dateOfBirth'
 import { LocalDate } from 'forms/models/localDate'

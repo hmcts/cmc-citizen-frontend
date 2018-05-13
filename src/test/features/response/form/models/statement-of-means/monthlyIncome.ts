@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { MonthlyIncome, INIT_ROW_COUNT, ValidationErrors as MonthlyIncomeValidationErrors } from 'response/form/models/statement-of-means/monthlyIncome'
 import { AmountDescriptionRow, ValidationErrors } from 'response/form/models/statement-of-means/amountDescriptionRow'
 import { Validator } from 'class-validator'
-import { expectValidationError, generateString } from '../../../../../app/forms/models/validationUtils'
+import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 describe('MonthlyIncome', () => {
