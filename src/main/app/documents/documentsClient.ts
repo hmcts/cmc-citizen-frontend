@@ -1,6 +1,5 @@
 import * as config from 'config'
-import { requestNonPromise } from 'client/request'
-import { Request } from 'request'
+import { request } from 'client/request'
 import { StringUtils } from 'utils/stringUtils'
 
 const claimStoreBaseUrl = config.get<string>('claim-store.url')
@@ -10,23 +9,23 @@ export class DocumentsClient {
   constructor (public documentsUrl: string = `${claimStoreBaseUrl}/documents`) {
   }
 
-  getSealedClaimPDF (claimExternalId: string, bearerToken: string): Request {
+  getSealedClaimPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
     return this.getPDF(claimExternalId, 'sealedClaim', bearerToken)
   }
 
-  getClaimIssueReceiptPDF (claimExternalId: string, bearerToken: string): Request {
+  getClaimIssueReceiptPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
     return this.getPDF(claimExternalId, 'claimIssueReceipt', bearerToken)
   }
 
-  getDefendantResponseReceiptPDF (claimExternalId: string, bearerToken: string): Request {
+  getDefendantResponseReceiptPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
     return this.getPDF(claimExternalId, 'defendantResponseReceipt', bearerToken)
   }
 
-  getSettlementAgreementPDF (claimExternalId: string, bearerToken: string): Request {
+  getSettlementAgreementPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
     return this.getPDF(claimExternalId, 'settlementAgreement', bearerToken)
   }
 
-  private getPDF (claimExternalId: string, documentTemplate: string, bearerToken: string): Request {
+  private getPDF (claimExternalId: string, documentTemplate: string, bearerToken: string): Promise<Buffer> {
     if (StringUtils.isBlank(claimExternalId)) {
       throw new Error('Claim external ID cannot be blank')
     }
@@ -36,12 +35,14 @@ export class DocumentsClient {
     if (StringUtils.isBlank(bearerToken)) {
       throw new Error('User authorisation cannot be blank')
     }
-    return requestNonPromise.get(
+    return request.get(
       `${this.documentsUrl}/${documentTemplate}/${claimExternalId}`,
       {
         headers: {
-          Authorization: `Bearer ${bearerToken}`
-        }
+          Authorization: `Bearer ${bearerToken}`,
+          Accept: 'application/pdf'
+        },
+        encoding: null
       }
     )
   }

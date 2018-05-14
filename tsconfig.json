@@ -14,7 +14,6 @@
     "module": "commonjs",
     "baseUrl": "src" ,
     "paths": {
-
       "payment-hub-client/*": [
         "main/app/pay/*"
       ],
@@ -110,9 +109,6 @@
       ],
       "services/*": [
         "main/services/*"
-      ],
-      "integration-test/*": [
-        "integration-test/*"
       ]
     },
     "typeRoots": [

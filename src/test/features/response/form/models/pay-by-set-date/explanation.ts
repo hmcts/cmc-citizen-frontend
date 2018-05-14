@@ -1,6 +1,6 @@
 import { ValidationErrors, Explanation } from 'response/form/models/pay-by-set-date/explanation'
 import { ValidationError, Validator } from 'class-validator'
-import { expectValidationError, generateString } from '../../../../../app/forms/models/validationUtils'
+import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 

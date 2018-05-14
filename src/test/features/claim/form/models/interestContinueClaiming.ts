@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../../app/forms/models/validationUtils'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { InterestContinueClaiming } from 'claim/form/models/interestContinueClaiming'
 import { YesNoOption } from 'models/yesNoOption'
