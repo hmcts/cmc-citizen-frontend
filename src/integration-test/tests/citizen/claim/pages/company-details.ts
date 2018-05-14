@@ -43,7 +43,7 @@ export class CompanyDetailsPage {
     I.fillField(fields.name, name)
   }
 
-  lookupAddress (postcodeLookUp): void {
+  lookupAddress (postcodeLookUp: PostCodeLookup): void {
     I.fillField(fields.address.postcodeLookUp, postcodeLookUp.postCode)
     I.click(buttons.lookupAddress)
     I.waitForVisible(fields.address.addressList)

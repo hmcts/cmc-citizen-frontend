@@ -25,7 +25,7 @@ export const claimAmount: Amount = {
   }
 }
 
-export const postCodeLookup = {
+export const postCodeLookup: PostCodeLookup = {
   postCode: 'M13 9PL',
   selectedOption: 'University of Manchester, Oxford Road, Manchester, M13 9PL'
 }

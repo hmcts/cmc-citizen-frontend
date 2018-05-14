@@ -43,8 +43,8 @@ export class OrganisationDetailsPage {
     I.fillField(fields.name, name)
   }
 
-  lookupAddress (postcodeLookUp): void {
-    I.fillField(fields.address.postcodeLookUp, postcodeLookUp.postcode)
+  lookupAddress (postcodeLookUp: PostCodeLookup): void {
+    I.fillField(fields.address.postcodeLookUp, postcodeLookUp.postCode)
     I.click(buttons.lookupAddress)
     I.waitForVisible(fields.address.addressList)
     I.selectOption(fields.address.addressList, postcodeLookUp.selectedOption)
