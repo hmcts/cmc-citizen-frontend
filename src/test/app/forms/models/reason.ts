@@ -3,7 +3,7 @@
 
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
-import { expectValidationError, generateString } from './validationUtils'
+import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 import { Reason, ValidationErrors } from 'claim/form/models/reason'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'

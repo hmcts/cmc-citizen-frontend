@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { GuardFactory } from 'features/response/guards/guardFactory'
-import { NotFoundError } from '../../errors'
+import { NotFoundError } from 'errors'
 import { FeatureToggles } from 'utils/featureToggles'
 
 export class FeatureToggleGuard {

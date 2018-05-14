@@ -6,7 +6,7 @@ import { TaskListBuilder } from 'response/helpers/taskListBuilder'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { TaskList } from 'drafts/tasks/taskList'
 import { LocalDate } from 'forms/models/localDate'
-import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Claim } from 'claims/models/claim'
 
 const claim: Claim = new Claim().deserialize(claimStoreServiceMock.sampleClaimObj)

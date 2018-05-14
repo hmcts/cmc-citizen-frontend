@@ -3,17 +3,17 @@ import { expect } from 'chai'
 import { ResponseModelConverter } from 'claims/responseModelConverter'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { defenceWithDisputeDraft, defenceWithAmountClaimedAlreadyPaidDraft } from '../../data/draft/responseDraft'
+import { defenceWithDisputeDraft, defenceWithAmountClaimedAlreadyPaidDraft } from 'test/data/draft/responseDraft'
 import {
   companyDetails,
   individualDetails,
   organisationDetails,
   soleTraderDetails
-} from '../../data/draft/partyDetails'
+} from 'test/data/draft/partyDetails'
 
 import { Response } from 'claims/models/response'
-import { defenceWithDisputeData, defenceWithAmountClaimedAlreadyPaidData } from '../../data/entity/responseData'
-import { company, individual, organisation, soleTrader } from '../../data/entity/party'
+import { defenceWithDisputeData, defenceWithAmountClaimedAlreadyPaidData } from 'test/data/entity/responseData'
+import { company, individual, organisation, soleTrader } from 'test/data/entity/party'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 
 function prepareResponseDraft (draftTemplate: any, partyDetails: object) {

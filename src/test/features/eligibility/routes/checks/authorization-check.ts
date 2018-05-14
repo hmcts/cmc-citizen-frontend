@@ -3,9 +3,9 @@ import * as request from 'supertest'
 import * as config from 'config'
 import * as mock from 'nock'
 
-import '../../../../routes/expectations'
+import 'test/routes/expectations'
 
-import * as idamServiceMock from '../../../../http-mocks/idam'
+import * as idamServiceMock from 'test/http-mocks/idam'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
