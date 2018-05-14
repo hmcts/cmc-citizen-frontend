@@ -27,7 +27,7 @@ export class ClaimData {
   timeline: ClaimantTimeline
   evidence: Evidence
   interest: Interest
-  interestDate: InterestDate
+  _interestDate: InterestDate
   payment: Payment = new Payment()
   statementOfTruth?: StatementOfTruth
 
@@ -45,6 +45,24 @@ export class ClaimData {
     } else {
       throw new Error('This claim has multiple defendants')
     }
+  }
+
+  // 
+  // NOTE: 
+  // Added explicit getter and setter temporarily to ensure backward compatibility
+  // during migration of the claim data structure in the backend which will have its 
+  // field `interestField` move from the root under the `interest` field.
+  //
+  set interestDate (interestDate: InterestDate) {
+    this._interestDate = interestDate
+  }
+
+  get interestDate (): InterestDate {
+    if (this._interestDate) {
+      return this._interestDate
+    }
+
+    return this.interest ? this.interest.interestDate : undefined
   }
 
   deserialize (input: any): ClaimData {
