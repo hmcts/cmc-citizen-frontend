@@ -4,7 +4,7 @@ import {
   createClaimant,
   claimReason,
   createDefendant,
-  postCodeLookup,
+  postcodeLookupQuery,
   SMOKE_TEST_CITIZEN_USERNAME,
   SMOKE_TEST_USER_PASSWORD
 } from 'integration-test/data/test-data'
@@ -115,7 +115,7 @@ export class ClaimSteps {
       case PartyType.INDIVIDUAL:
         partyTypePage.selectIndividual()
         individualDetailsPage.enterName(defendant.name)
-        individualDetailsPage.enterAddressOnPostCodeLookUp(postCodeLookup)
+        individualDetailsPage.enterAddressOnPostCodeLookUp(postcodeLookupQuery)
         individualDetailsPage.submit()
         break
       case PartyType.SOLE_TRADER:
@@ -127,13 +127,13 @@ export class ClaimSteps {
       case PartyType.COMPANY:
         partyTypePage.selectCompany()
         companyDetailsPage.enterCompanyName(defendant.name)
-        companyDetailsPage.lookupAddress(postCodeLookup)
+        companyDetailsPage.lookupAddress(postcodeLookupQuery)
         companyDetailsPage.submit()
         break
       case PartyType.ORGANISATION:
         partyTypePage.selectOrganisationl()
         organisationDetailsPage.enterOrganisationName(defendant.name)
-        organisationDetailsPage.lookupAddress(postCodeLookup)
+        organisationDetailsPage.lookupAddress(postcodeLookupQuery)
         organisationDetailsPage.submit()
         break
       default:
@@ -223,7 +223,7 @@ export class ClaimSteps {
       case PartyType.INDIVIDUAL:
         partyTypePage.selectIndividual()
         individualDetailsPage.enterName(claimant.name)
-        individualDetailsPage.enterAddressOnPostCodeLookUp(postCodeLookup)
+        individualDetailsPage.enterAddressOnPostCodeLookUp(postcodeLookupQuery)
         individualDetailsPage.submit()
         citizenDOBPage.enterDOB(claimant.dateOfBirth)
         break
