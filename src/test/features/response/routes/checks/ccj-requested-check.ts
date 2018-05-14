@@ -2,9 +2,9 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import '../../../../routes/expectations'
+import 'test/routes/expectations'
 
-import * as claimStoreServiceMock from '../../../../http-mocks/claim-store'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Paths } from 'dashboard/paths'
 
 const cookieName: string = config.get<string>('session.cookieName')

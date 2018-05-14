@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { attachDefaultHooks as attachBaseDefaultHooks } from '../hooks'
+import { attachDefaultHooks as attachBaseDefaultHooks } from 'test/hooks'
 
 export function attachDefaultHooks (app: express.Express) {
   attachBaseDefaultHooks()

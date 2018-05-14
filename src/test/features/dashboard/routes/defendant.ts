@@ -2,16 +2,16 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
-import '../../../routes/expectations'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import 'test/routes/expectations'
 
 import { Paths } from 'dashboard/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
-import * as idamServiceMock from '../../../http-mocks/idam'
-import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import { checkAuthorizationGuards } from './checks/authorization-check'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/authorization-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
