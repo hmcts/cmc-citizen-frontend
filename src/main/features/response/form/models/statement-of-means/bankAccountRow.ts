@@ -2,7 +2,7 @@ import { IsDefined, IsIn, ValidateIf } from 'class-validator'
 
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
-import { Fractions } from 'forms/validation/validators/fractions'
+import { Fractions } from '@hmcts/cmc-validators'
 import * as toBoolean from 'to-boolean'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
