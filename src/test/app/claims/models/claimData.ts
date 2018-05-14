@@ -18,14 +18,14 @@ describe('ClaimData', () => {
     })
 
     it('should return the interestDate from the interest object', () => {
-      claimData.interest = { ...INTEREST, ...{ interestDate: INTEREST_DATE } } as Interest
+      claimData.interest = { ...INTEREST, interestDate: INTEREST_DATE } as Interest
       claimData.interestDate = undefined
       expect(claimData.interestDate).to.be.equal(INTEREST_DATE)
     })
 
     it('should return the interestDate from the claimData object when both provided', () => {
       const OTHER_INTEREST_DATE = { ...INTEREST_DATE } as InterestDate
-      claimData.interest = { ...INTEREST, ...{ interestDate: INTEREST_DATE } } as Interest
+      claimData.interest = { ...INTEREST, interestDate: INTEREST_DATE } as Interest
       claimData.interestDate = OTHER_INTEREST_DATE
       expect(claimData.interestDate).to.be.equal(OTHER_INTEREST_DATE)
     })
