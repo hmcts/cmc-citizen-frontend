@@ -51,7 +51,9 @@ export class ClaimData {
   // NOTE:
   // Added explicit getter and setter temporarily to ensure backward compatibility
   // during migration of the claim data structure in the backend which will have its
-  // field `interestField` move from the root under the `interest` field.
+  // `interest` field moved.
+  // 
+  // This must be removed once migration has been completed.
   //
   set interestDate (interestDate: InterestDate) {
     this._interestDate = interestDate
