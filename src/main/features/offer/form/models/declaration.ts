@@ -1,5 +1,5 @@
 import { IsDefined } from 'class-validator'
-import { IsBooleanTrue } from 'forms/validation/validators/isBooleanTrue'
+import { IsBooleanTrue } from '@hmcts/cmc-validators'
 import * as toBoolean from 'to-boolean'
 
 export class ValidationErrors {

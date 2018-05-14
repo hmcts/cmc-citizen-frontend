@@ -4,10 +4,9 @@ import { IsDefined, IsIn, IsPositive, ValidateNested } from 'class-validator'
 import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
 import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
-import { Fractions } from 'forms/validation/validators/fractions'
+import { Fractions, IsLessThan } from '@hmcts/cmc-validators'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
-import { IsLessThan } from 'forms/validation/validators/isLessThan'
 
 export class ValidationErrors {
   static readonly INSTALMENTS_AMOUNT_INVALID: string = 'Enter a valid payment amount'
