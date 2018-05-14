@@ -115,7 +115,7 @@ export class ClaimSteps {
       case PartyType.INDIVIDUAL:
         partyTypePage.selectIndividual()
         individualDetailsPage.enterName(defendant.name)
-        individualDetailsPage.enterAddressOnPostCodeLookUp(postcodeLookupQuery)
+        individualDetailsPage.enterAddress(defendant.address)
         individualDetailsPage.submit()
         break
       case PartyType.SOLE_TRADER:
