@@ -7,7 +7,7 @@ const fields = {
   contactPerson: 'input[id=contactPerson]',
   address: {
     postcodeLookUp: 'input[id="address[postcodeLookup]"]',
-    selectAddressList: 'select[id="address[addressList]"]',
+    addressList: 'select[id="address[addressList]"]',
     line1: 'input[id="address[line1]"]',
     line2: 'input[id="address[line2]"]',
     city: 'input[id="address[city]"]',
@@ -26,7 +26,7 @@ const fields = {
 
 const buttons = {
   submit: 'input[type=submit]',
-  postCodeLookUp: 'a[id="address[find-button]"]'
+  lookupAddress: 'a[id="address[find-button]"]'
 }
 
 export class CompanyDetailsPage {
@@ -43,12 +43,11 @@ export class CompanyDetailsPage {
     I.fillField(fields.name, name)
   }
 
-  enterAddressOnPostCodeLookUp (postCodeLookup): void {
-    I.fillField(fields.address.postcodeLookUp, postCodeLookup.postCode)
-    I.click(buttons.postCodeLookUp)
-    I.waitForVisible(fields.address.selectAddressList)
-    I.click(fields.address.selectAddressList)
-    I.selectOption(fields.address.selectAddressList, postCodeLookup.selectedOption)
+  enterAddressOnPostCodeLookUp (lookupAddress): void {
+    I.fillField(fields.address.postcodeLookUp, lookupAddress.postCode)
+    I.click(buttons.lookupAddress)
+    I.waitForVisible(fields.address.addressList)
+    I.selectOption(fields.address.addressList, lookupAddress.selectedOption)
   }
 
   enterAddresses (address: Address, correspondenceAddress: Address): void {
