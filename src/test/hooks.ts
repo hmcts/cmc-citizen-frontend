@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import * as mock from 'nock'
 
-import * as idamServiceMock from './http-mocks/idam'
+import * as idamServiceMock from 'test/http-mocks/idam'
 
 export function attachDefaultHooks () {
   let retrieveServiceTokenMock: any

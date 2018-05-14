@@ -3,7 +3,7 @@
 
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
-import { expectValidationError, generateString } from './validationUtils'
+import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 import { Name, ValidationErrors } from 'forms/models/name'
 
 describe('Name', () => {

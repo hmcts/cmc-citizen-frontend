@@ -5,7 +5,7 @@ import { PartyType } from 'common/partyType'
 import { Address, ValidationErrors as AddressValidationErrors } from 'forms/models/address'
 import { ValidationErrors as CorrespondenceAddressValidationErrors } from 'forms/models/correspondenceAddress'
 import { ValidationError, Validator } from 'class-validator'
-import { expectValidationError } from './validationUtils'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 const validAddress = new Address('line1', 'line2', 'line3', 'city', 'bb127nq')
 
 const aVeryLongString = (): string => {

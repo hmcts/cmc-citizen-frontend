@@ -4,7 +4,7 @@ import { ClaimantTimeline, ValidationErrors } from 'claim/form/models/claimantTi
 import { Validator } from 'class-validator'
 import { TimelineRow } from 'forms/models/timelineRow'
 import { INIT_ROW_COUNT } from 'forms/models/timeline'
-import { expectValidationError } from '../../../../app/forms/models/validationUtils'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 
 describe('ClaimantTimeline', () => {
 

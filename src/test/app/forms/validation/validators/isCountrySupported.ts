@@ -3,8 +3,8 @@ import { CheckCountryConstraint } from 'forms/validation/validators/isCountrySup
 import { Country } from 'common/country'
 import { ValidationArguments } from 'class-validator'
 import * as nock from 'nock'
-import { mockAddressResponse } from '../../../../data/entity/mockAddressResponse'
-import { mockPostcodeLookupResponse, mockScottishPostcodeLookupResponse } from '../../../../data/entity/mockPostcodeLookupResponse'
+import { mockAddressResponse } from 'test/data/entity/mockAddressResponse'
+import { mockPostcodeLookupResponse, mockScottishPostcodeLookupResponse } from 'test/data/entity/mockPostcodeLookupResponse'
 
 const mockPostcode = 'https://postcodeinfo.service.justice.gov.uk'
 

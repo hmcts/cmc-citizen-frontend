@@ -2,13 +2,13 @@ import { expect } from 'chai'
 import { YesNoOption } from 'models/yesNoOption'
 import * as request from 'supertest'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
-import '../../../routes/expectations'
-import { checkAuthorizationMiddleware } from './checks/authorization-check'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import 'test/routes/expectations'
+import { checkAuthorizationMiddleware } from 'test/features/eligibility/routes/checks/authorization-check'
 
 import { Paths } from 'eligibility/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
 import { NotEligibleReason } from 'eligibility/notEligibleReason'
 
