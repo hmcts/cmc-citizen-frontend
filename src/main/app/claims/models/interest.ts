@@ -4,7 +4,7 @@ import { InterestDate } from 'claims/models/interestDate'
 export class Interest {
 
   constructor (public type?: string, public rate?: number, public reason?: string, public specificDailyAmount?: number,
-               public interestBreakdown?: InterestBreakdown, public interestDate?:InterestDate) {}
+               public interestBreakdown?: InterestBreakdown, public interestDate?: InterestDate) {}
 
   deserialize (input?: any): Interest {
     if (input) {

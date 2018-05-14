@@ -47,10 +47,10 @@ export class ClaimData {
     }
   }
 
-  // 
-  // NOTE: 
+  //
+  // NOTE:
   // Added explicit getter and setter temporarily to ensure backward compatibility
-  // during migration of the claim data structure in the backend which will have its 
+  // during migration of the claim data structure in the backend which will have its
   // field `interestField` move from the root under the `interest` field.
   //
   set interestDate (interestDate: InterestDate) {
