@@ -133,7 +133,7 @@ export function createDefendant (type: PartyType, hasEmailAddress: boolean = fal
     name: undefined,
     address: {
       line1: 'Oxford Road',
-      line2:'',
+      line2: '',
       city: 'Manchester',
       postcode: 'M13 9PL'
     },
