@@ -2,10 +2,8 @@ import { IsDefined, Min, ValidateIf } from 'class-validator'
 
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
-import { Fractions } from 'forms/validation/validators/fractions'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
-import { IsNotBlank } from '@hmcts/cmc-validators'
-import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
+import { IsNotBlank, Fractions, MaxLength } from '@hmcts/cmc-validators'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {

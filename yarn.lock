@@ -17,13 +17,11 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@hmcts/cmc-supported-browsers/-/cmc-supported-browsers-1.0.1.tgz#201d415b7efdf858c77ddccb66bbe9af258c03bc"
 
-"@hmcts/cmc-validators@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-validators/-/cmc-validators-0.1.2.tgz#67679d0ec3b1f19fc139e2b50734d4e81e4819c6"
+"@hmcts/cmc-validators@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-validators/-/cmc-validators-0.1.6.tgz#b664b5bb8ee00ca5633aab57d75f2924f736e4a2"
   dependencies:
     class-validator "^0.8.1"
-    ts-node "^3.3.0"
-    typescript "^2.4.2"
 
 "@hmcts/draft-store-client@^1.1.1", "@hmcts/draft-store-client@^1.2.1":
   version "1.2.1"
