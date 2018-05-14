@@ -43,11 +43,11 @@ export class OrganisationDetailsPage {
     I.fillField(fields.name, name)
   }
 
-  enterAddressOnPostCodeLookUp (lookupAddress): void {
-    I.fillField(fields.address.postcodeLookUp, lookupAddress.postCode)
+  lookupAddress (postcodeLookUp): void {
+    I.fillField(fields.address.postcodeLookUp, postcodeLookUp.postcode)
     I.click(buttons.lookupAddress)
     I.waitForVisible(fields.address.addressList)
-    I.selectOption(fields.address.addressList, lookupAddress.selectedOption)
+    I.selectOption(fields.address.addressList, postcodeLookUp.selectedOption)
   }
 
   enterAddresses (address: Address, correspondenceAddress: Address): void {

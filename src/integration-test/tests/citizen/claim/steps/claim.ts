@@ -127,13 +127,13 @@ export class ClaimSteps {
       case PartyType.COMPANY:
         partyTypePage.selectCompany()
         companyDetailsPage.enterCompanyName(defendant.name)
-        companyDetailsPage.enterAddressOnPostCodeLookUp(defendant.address)
+        companyDetailsPage.lookupAddress(defendant.address)
         companyDetailsPage.submit()
         break
       case PartyType.ORGANISATION:
         partyTypePage.selectOrganisationl()
         organisationDetailsPage.enterOrganisationName(defendant.name)
-        organisationDetailsPage.enterAddressOnPostCodeLookUp(defendant.address)
+        organisationDetailsPage.lookupAddress(defendant.address)
         organisationDetailsPage.submit()
         break
       default:
