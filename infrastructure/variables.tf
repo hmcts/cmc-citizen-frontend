@@ -70,10 +70,6 @@ variable "feature_fine_print" {
   default = "false"
 }
 
-variable "feature_ccd" {
-  default = "false"
-}
-
 variable "feature_return_error_to_user" {
   default = "false"
 }

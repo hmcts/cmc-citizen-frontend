@@ -10,7 +10,6 @@ import { Paths as EligibilityPaths } from 'eligibility/paths'
 import { Paths as FirstContactPaths } from 'first-contact/paths'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { ErrorHandling } from 'shared/errorHandling'
-import { Claim } from 'claims/models/claim'
 import * as Cookies from 'cookies'
 import { AuthToken } from 'idam/authToken'
 import * as config from 'config'
@@ -21,7 +20,6 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { hasTokenExpired } from 'idam/authorizationMiddleware'
 import { Logger } from '@hmcts/nodejs-logging'
 import { OAuthHelper } from 'idam/oAuthHelper'
-import { FeatureToggles } from 'utils/featureToggles'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 
@@ -101,20 +99,6 @@ function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
   cookies.set(stateCookieName, '', { sameSite: 'lax' })
 }
 
-async function linkDefendantWithClaimByLetterHolderId (letterHolderId, user): Promise<Claim | void> {
-  if (user.isInRoles(`letter-${letterHolderId}`)) {
-    const claim: Claim = await claimStoreClient.retrieveByLetterHolderId(letterHolderId, user.bearerToken)
-    logger.debug(`Linking user ${user.id} to claim ${claim.id}`)
-
-    if (!claim.defendantId) {
-      return claimStoreClient.linkDefendantV1(claim.externalId, user)
-    }
-    return Promise.resolve()
-  }
-
-  return Promise.reject(new Error('This claim cannot be linked'))
-}
-
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(AppPaths.receiver.uri,
@@ -142,22 +126,8 @@ export default express.Router()
           cookies.set(stateCookieName, req.query.state, { sameSite: 'lax' })
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
-          if (FeatureToggles.isEnabled('ccd')) {
-            await claimStoreClient.linkDefendant(user)
-            res.redirect(await retrieveRedirectForLandingPage(req, res))
-          } else {
-            try {
-              await Promise.all(user.getLetterHolderIdList().map(
-              (letterHolderId) => linkDefendantWithClaimByLetterHolderId(letterHolderId, user)
-                )
-              )
-            } catch (err) {
-              // ignore linking errors
-              logger.error(err)
-            }
-            res.redirect(await retrieveRedirectForLandingPage(req, res))
-          }
-
+          await claimStoreClient.linkDefendant(user)
+          res.redirect(await retrieveRedirectForLandingPage(req, res))
         }
       } else {
         res.redirect(OAuthHelper.forLogin(req, res))
