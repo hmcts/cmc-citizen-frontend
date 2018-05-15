@@ -25,7 +25,7 @@ export class TaskListBuilder {
     )
 
     const now: Moment = MomentFactory.currentDateTime()
-    if (claim.responseDeadline.isAfter(now)) {
+    if (claim.responseDeadline.endOf('day').isAfter(now)) {
       tasks.push(
         new TaskListItem(
           'Do you want more time to respond?',
