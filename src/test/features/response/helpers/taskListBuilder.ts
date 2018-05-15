@@ -9,9 +9,13 @@ import { LocalDate } from 'forms/models/localDate'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Claim } from 'claims/models/claim'
 
-const claim: Claim = new Claim().deserialize(claimStoreServiceMock.sampleClaimObj)
-
 describe('Defendant response task list builder', () => {
+  let claim: Claim
+
+  before(() => {
+    claim = new Claim().deserialize(claimStoreServiceMock.sampleClaimObj)
+  })
+
   describe('"Respond to claim" section', () => {
     describe('"Why do you disagree with the claim?" task', () => {
       let stub: sinon.SinonStub
