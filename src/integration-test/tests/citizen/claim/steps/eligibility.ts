@@ -12,7 +12,7 @@ export class EligibilitySteps {
   complete (): void {
     I.amOnCitizenAppPage('/eligibility')
 
-    I.see('Find out if you can use this service')
+    I.see('Find out if you can make a claim using this service')
     I.click('Continue')
 
     completeEligibilityPage('input[id=claimValueUNDER_10000]')

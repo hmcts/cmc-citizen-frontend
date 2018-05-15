@@ -28,7 +28,7 @@ describe('Claim eligibility: index page', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC;`)
-          .expect(res => expect(res).to.be.successful.withText('Try the new online service'))
+          .expect(res => expect(res).to.be.successful.withText('Find out if you can make a claim using this service'))
       })
     })
 
