@@ -30,7 +30,7 @@ describe('Defendant response task list builder', () => {
       const responseDraft: ResponseDraft = new ResponseDraft().deserialize(defenceWithDisputeDraft)
 
       it('should be available when defendant tries to respond before due day', () => {
-        claim.responseDeadline = getTodayAsReturnedByClaimStore().add(7, 'days')
+        claim.responseDeadline = getTodayAsReturnedByClaimStore().add(1, 'days')
         const taskList: TaskList = TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim)
         expect(taskList.tasks.find(task => task.name === 'Do you want more time to respond?')).not.to.be.undefined
       })
