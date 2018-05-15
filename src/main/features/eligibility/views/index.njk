@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 {% from "externalLink.njk" import externalLink %}
 
-{% set heading = 'Find out if you can use this service' %}
+{% set heading = 'Try the new online service' %}
 
 {% block content %}
   <div class="grid-row">
@@ -13,7 +13,6 @@
 
         <a href="{{ EligibilityPaths.claimValuePage.uri }}" class="button">{{ t('Continue') }}</a>
       {% else %}
-        <h1 class="heading-large">{{ t('Try the new online service') }}</h1>
 
         <p>{{ t('We’re building a new service which is currently in beta. This means we’re testing different designs '
           + 'and making changes based on feedback from users.') }}</p>
