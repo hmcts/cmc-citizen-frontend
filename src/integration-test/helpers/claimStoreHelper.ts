@@ -17,7 +17,7 @@ class ClaimStoreHelper extends codecept_helper {
     const upliftToken = await IdamClient.authenticatePinUser(pinResponse.body)
     await IdamClient.upliftUser(defendantEmail, upliftToken)
     const defendant: User = await this.prepareAuthenticatedUser(defendantEmail)
-    await ClaimStoreClient.linkDefendant(defendant, claim.externalId)
+    await ClaimStoreClient.linkDefendant(defendant)
   }
 
   async respondToClaim (referenceNumber: string, ownerEmail: string, responseData: ResponseData, defendantEmail: string): Promise<void> {
