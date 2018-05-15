@@ -2,22 +2,22 @@ import { individual } from 'test/data/entity/party'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDateType } from 'common/interestDateType'
-import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
 import moment = require('moment')
-
-export const interestData = {
-  interestBreakdown: undefined,
-  type: InterestRateOption.DIFFERENT,
-  rate: 10,
-  reason: 'Special case'
-}
 
 export const interestDateData = {
   type: InterestDateType.CUSTOM,
   date: moment({ year: 2018, month: 0, day: 1 }),
   reason: 'reason',
   endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
+}
+
+export const interestData = {
+  interestBreakdown: undefined,
+  type: InterestRateOption.DIFFERENT,
+  rate: 10,
+  reason: 'Special case',
+  interestDate: interestDateData
 }
 
 export const claimData = {
@@ -46,7 +46,6 @@ export const claimData = {
     type: 'breakdown'
   },
   interest: interestData as Interest,
-  interestDate: interestDateData as InterestDate,
   reason: 'Because he did...',
   feeAmountInPennies: 1000000,
   payment: {

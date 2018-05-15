@@ -27,7 +27,6 @@ export class ClaimData {
   timeline: ClaimantTimeline
   evidence: Evidence
   interest: Interest
-  _interestDate: InterestDate
   payment: Payment = new Payment()
   statementOfTruth?: StatementOfTruth
 
@@ -45,26 +44,6 @@ export class ClaimData {
     } else {
       throw new Error('This claim has multiple defendants')
     }
-  }
-
-  //
-  // NOTE:
-  // Added explicit getter and setter temporarily to ensure backward compatibility
-  // during migration of the claim data structure in the backend which will have its
-  // `interest` field moved.
-  //
-  // This must be removed once migration has been completed.
-  //
-  set interestDate (interestDate: InterestDate) {
-    this._interestDate = interestDate
-  }
-
-  get interestDate (): InterestDate {
-    if (this._interestDate) {
-      return this._interestDate
-    }
-
-    return this.interest ? this.interest.interestDate : undefined
   }
 
   deserialize (input: any): ClaimData {
@@ -85,8 +64,15 @@ export class ClaimData {
       this.evidence = Evidence.fromObject(input.evidence)
       this.externalId = input.externalId
       this.interest = new Interest().deserialize(input.interest)
+
+      //
+      // NOTE: To be removed once data model migration is completed.
+      //
+      // `interestDate` prior migration completion can be provided in `claimData`
+      // in which case we still handle it for backward compatibility reasons.
+      //
       if (input.interestDate) {
-        this.interestDate = new InterestDate().deserialize(input.interestDate)
+        this.interest.interestDate = new InterestDate().deserialize(input.interestDate)
       }
 
       if (input.statementOfTruth) {
