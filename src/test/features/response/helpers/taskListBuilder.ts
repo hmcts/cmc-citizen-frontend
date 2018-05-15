@@ -15,7 +15,7 @@ import { defenceWithDisputeDraft } from 'test/data/draft/responseDraft'
 
 function getTodayAsReturnedByClaimStore (): moment.Moment {
   const now: moment.Moment = moment()
-  return moment(`${now.year()}-${now.month()}-${now.date()}`)
+  return moment(`${now.year()}-${now.month() + 1}-${now.date()}`)
 }
 
 describe('Defendant response task list builder', () => {
@@ -25,17 +25,31 @@ describe('Defendant response task list builder', () => {
     claim = new Claim().deserialize(claimStoreServiceMock.sampleClaimObj)
   })
 
-  describe('"Respond to claim" section', () => {
-    describe('"Do you need more time to respond?" section', () => {
+  describe('"Before you start" section', () => {
+    describe('"Do you need more time to respond?" task', () => {
       const responseDraft: ResponseDraft = new ResponseDraft().deserialize(defenceWithDisputeDraft)
+
+      it('should be available when defendant tries to respond before due day', () => {
+        claim.responseDeadline = getTodayAsReturnedByClaimStore().add(7, 'days')
+        const taskList: TaskList = TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim)
+        expect(taskList.tasks.find(task => task.name === 'Do you want more time to respond?')).not.to.be.undefined
+      })
 
       it('should be available when defendant tries to respond on due day', () => {
         claim.responseDeadline = getTodayAsReturnedByClaimStore()
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
+        const taskList: TaskList = TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim)
         expect(taskList.tasks.find(task => task.name === 'Do you want more time to respond?')).not.to.be.undefined
       })
-    })
 
+      it('should not be available when defendant tries to respond after due day', () => {
+        claim.responseDeadline = getTodayAsReturnedByClaimStore().subtract(1, 'days')
+        const taskList: TaskList = TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim)
+        expect(taskList.tasks.find(task => task.name === 'Do you want more time to respond?')).to.be.undefined
+      })
+    })
+  })
+
+  describe('"Respond to claim" section', () => {
     describe('"Why do you disagree with the claim?" task', () => {
       let stub: sinon.SinonStub
 
