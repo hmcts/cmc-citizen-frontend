@@ -1,6 +1,9 @@
+/* tslint:disable:no-unused-expression */
+
 import { expect } from 'chai'
 
 import * as sinon from 'sinon'
+import * as moment from 'moment'
 
 import { TaskListBuilder } from 'response/helpers/taskListBuilder'
 import { ResponseDraft } from 'response/draft/responseDraft'
@@ -8,6 +11,12 @@ import { TaskList } from 'drafts/tasks/taskList'
 import { LocalDate } from 'forms/models/localDate'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Claim } from 'claims/models/claim'
+import { defenceWithDisputeDraft } from 'test/data/draft/responseDraft'
+
+function getTodayAsReturnedByClaimStore (): moment.Moment {
+  const now: moment.Moment = moment()
+  return moment(`${now.year()}-${now.month()}-${now.date()}`)
+}
 
 describe('Defendant response task list builder', () => {
   let claim: Claim
@@ -17,6 +26,16 @@ describe('Defendant response task list builder', () => {
   })
 
   describe('"Respond to claim" section', () => {
+    describe('"Do you need more time to respond?" section', () => {
+      const responseDraft: ResponseDraft = new ResponseDraft().deserialize(defenceWithDisputeDraft)
+
+      it('should be available when defendant tries to respond on due day', () => {
+        claim.responseDeadline = getTodayAsReturnedByClaimStore()
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
+        expect(taskList.tasks.find(task => task.name === 'Do you want more time to respond?')).not.to.be.undefined
+      })
+    })
+
     describe('"Why do you disagree with the claim?" task', () => {
       let stub: sinon.SinonStub
 
