@@ -56,10 +56,7 @@ export class ClaimStoreClient {
    * @param externalId the claims external id
    * @returns {Promise<Claim>}
    */
-  static linkDefendant (defendant: User, externalId: string): Promise<Claim> {
-    if (!externalId) {
-      return Promise.reject('External ID is required')
-    }
+  static linkDefendant (defendant: User): Promise<Claim> {
     if (!defendant) {
       return Promise.reject('Defendant is required')
     }
