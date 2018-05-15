@@ -64,7 +64,7 @@ export class ClaimStoreClient {
       return Promise.reject('Defendant is required')
     }
 
-    return request.put(`${baseURL}/claims/${externalId}/defendant/${defendant.id}`, {
+    return request.put(`${baseURL}/claims/defendant/link`, {
       headers: {
         Authorization: `Bearer ${defendant.bearerToken}`
       }
