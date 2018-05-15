@@ -2,8 +2,7 @@ import { AmountDescriptionRow } from 'features/response/form/models/statement-of
 import { MultiRowForm } from 'forms/models/multiRowForm'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { IsDefined } from 'class-validator'
-import { Fractions } from 'forms/validation/validators/fractions'
-import { Min } from 'forms/validation/validators/min'
+import { Fractions, Min } from '@hmcts/cmc-validators'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 export const MAX_NUMBER_OF_ROWS: number = 10

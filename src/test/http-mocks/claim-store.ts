@@ -209,6 +209,12 @@ export function rejectSaveResponse (reason: string) {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
+export function resolveLinkDefendant () {
+  mock(`${serviceBaseURL}/claims`)
+    .put('/defendant/link')
+    .reply(HttpStatus.OK)
+}
+
 export function resolveRequestForMoreTime () {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/.+/request-more-time'))
