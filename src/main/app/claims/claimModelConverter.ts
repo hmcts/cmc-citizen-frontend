@@ -43,7 +43,6 @@ export class ClaimModelConverter {
     const claimData: ClaimData = new ClaimData()
     claimData.externalId = draftClaim.externalId
     claimData.interest = this.convertInterest(draftClaim)
-    claimData.interestDate = this.convertInterestDate(draftClaim)
     claimData.amount = new ClaimAmountBreakdown().deserialize(draftClaim.amount)
     claimData.claimants = [this.convertClaimantDetails(draftClaim)]
     claimData.defendants = [this.convertDefendantDetails(draftClaim)]
@@ -201,6 +200,9 @@ export class ClaimModelConverter {
         }
       }
     }
+
+    interest.interestDate = this.convertInterestDate(draftClaim)
+
     return interest
   }
 
