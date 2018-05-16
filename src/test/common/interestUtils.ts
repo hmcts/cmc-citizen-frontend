@@ -13,12 +13,13 @@ const sampleClaimObj = {
     interest: {
       type: ClaimInterestType.STANDARD,
       rate: 10,
-      reason: 'Special case'
-    } as Interest,
-    interestDate: {
-      type: InterestDateType.SUBMISSION,
-      endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
-    } as InterestDate
+      reason: 'Special case',
+      interestDate: {
+        type: InterestDateType.SUBMISSION,
+        endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
+      } as InterestDate
+    } as Interest
+
   },
   createdAt: MomentFactory.currentDate(),
   issuedOn: MomentFactory.currentDate(),
@@ -32,8 +33,7 @@ describe('getInterestDetails', () => {
       ...sampleClaimObj,
       ...{
         claim: {
-          interest: undefined,
-          interestDate: undefined
+          interest: undefined
         }
       }
     })

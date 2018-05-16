@@ -14,7 +14,6 @@ import { Payment } from 'payment-hub-client/payment'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 import { Evidence } from 'forms/models/evidence'
-import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
 
 export class ClaimData {
@@ -27,7 +26,6 @@ export class ClaimData {
   timeline: ClaimantTimeline
   evidence: Evidence
   interest: Interest
-  interestDate: InterestDate
   payment: Payment = new Payment()
   statementOfTruth?: StatementOfTruth
 
@@ -65,9 +63,6 @@ export class ClaimData {
       this.evidence = Evidence.fromObject(input.evidence)
       this.externalId = input.externalId
       this.interest = new Interest().deserialize(input.interest)
-      if (input.interestDate) {
-        this.interestDate = new InterestDate().deserialize(input.interestDate)
-      }
 
       if (input.statementOfTruth) {
         this.statementOfTruth = new StatementOfTruth().deserialize(input.statementOfTruth)

@@ -35,14 +35,14 @@ export const claimData = {
     interestBreakdown: undefined,
     type: InterestRateOption.DIFFERENT,
     rate: 10,
-    reason: 'Special case'
+    reason: 'Special case',
+    interestDate: {
+      type: InterestDateType.CUSTOM,
+      date: moment.utc({ year: 2018, month: 0, day: 1 }),
+      reason: 'reason',
+      endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
+    } as InterestDate
   } as Interest,
-  interestDate: {
-    type: InterestDateType.CUSTOM,
-    date: moment({ year: 2018, month: 0, day: 1 }),
-    reason: 'reason',
-    endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
-  } as InterestDate,
   reason: 'Because he did...',
   feeAmountInPennies: 1000000,
   payment: {
