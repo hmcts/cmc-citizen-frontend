@@ -1,9 +1,10 @@
 import { InterestBreakdown } from 'claims/models/interestBreakdown'
+import { InterestDate } from 'claims/models/interestDate'
 
 export class Interest {
 
   constructor (public type?: string, public rate?: number, public reason?: string, public specificDailyAmount?: number,
-               public interestBreakdown?: InterestBreakdown) {}
+               public interestBreakdown?: InterestBreakdown, public interestDate?: InterestDate) {}
 
   deserialize (input?: any): Interest {
     if (input) {
@@ -19,6 +20,9 @@ export class Interest {
       }
       if (input.interestBreakdown) {
         this.interestBreakdown = new InterestBreakdown().deserialize(input.interestBreakdown)
+      }
+      if (input.interestDate) {
+        this.interestDate = new InterestDate().deserialize(input.interestDate)
       }
     }
     return this

@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
 
-import { expectValidationError } from './validationUtils'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 
 import { LocalDate, ValidationErrors } from 'forms/models/localDate'
 

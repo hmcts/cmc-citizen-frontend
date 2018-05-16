@@ -5,8 +5,8 @@ import { request } from 'client/request'
 import * as HttpStatus from 'http-status-codes'
 
 import { User } from 'idam/user'
-import { claimDraft as claimDraftData } from '../../data/draft/claimDraft'
-import { claimData } from '../../data/entity/claimData'
+import { claimDraft as claimDraftData } from 'test/data/draft/claimDraft'
+import { claimData } from 'test/data/entity/claimData'
 import { RequestPromiseOptions } from 'request-promise-native'
 import { claimStoreApiUrl, ClaimStoreClient } from 'claims/claimStoreClient'
 import { Draft } from '@hmcts/draft-store-client'
@@ -25,7 +25,7 @@ const returnedClaim = {
   createdAt: moment().toISOString(),
   responseDeadline: moment().toISOString(),
   issuedOn: moment().toISOString(),
-  claim: { ...claimData, interest: { type: ClaimInterestType.NO_INTEREST }, interestDate: undefined }
+  claim: { ...claimData, interest: { type: ClaimInterestType.NO_INTEREST, interestDate: undefined } }
 }
 
 const expectedClaimData = {
@@ -79,12 +79,19 @@ describe('ClaimStoreClient', () => {
       }
 
       it('should retrieve claim saved on first attempt that timed out and caused a 409 on retry', async () => {
+        resolveLinkDefendant()
         mockTimeoutOnFirstSaveAttemptAndConflictOnSecondOne()
 
         const claim: Claim = await claimStoreClient.saveClaim(claimDraft, claimant)
 
         expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimData))
       })
+
+      function resolveLinkDefendant () {
+        mock(`${claimStoreApiUrl}`)
+          .put('/defendant/link')
+          .reply(HttpStatus.OK)
+      }
 
       function mockInternalServerErrorOnAllAttempts () {
         mock(`${claimStoreApiUrl}`)
