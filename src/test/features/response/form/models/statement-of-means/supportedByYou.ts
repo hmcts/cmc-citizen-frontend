@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../../../app/forms/models/validationUtils'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { SupportedByYou } from 'response/form/models/statement-of-means/supportedByYou'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { NumberOfPeople, ValidationErrors } from 'response/form/models/statement-of-means/numberOfPeople'

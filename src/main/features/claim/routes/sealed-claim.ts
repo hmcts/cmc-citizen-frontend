@@ -5,12 +5,12 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { ClaimMiddleware } from 'claims/claimMiddleware'
 
 import { SealedClaimPdfGenerator } from 'services/sealedClaimPdfGenerator'
-import { IsDefendantInCaseGuard } from 'guards/isDefendantInCaseGuard'
+import { OnlyDefendantLinkedToClaimCanDoIt } from 'guards/onlyDefendantLinkedToClaimCanDoIt'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.sealedClaimPdfReceiver.uri,
     ClaimMiddleware.retrieveByExternalId,
-    IsDefendantInCaseGuard.check(),
+    OnlyDefendantLinkedToClaimCanDoIt.check(),
     ErrorHandling.apply(SealedClaimPdfGenerator.requestHandler))

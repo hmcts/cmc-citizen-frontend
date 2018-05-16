@@ -7,7 +7,7 @@ import { Claim } from 'claims/models/claim'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Draft } from '@hmcts/draft-store-client'
 import { getInterestDetails } from 'shared/interestUtils'
-import { MomentFactory } from '../../../common/momentFactory'
+import { MomentFactory } from 'shared/momentFactory'
 
 /* tslint:disable:no-default-export */
 export default express.Router()

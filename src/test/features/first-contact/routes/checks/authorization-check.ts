@@ -1,4 +1,4 @@
-import { checkAuthorizationGuards as check } from '../../../../routes/authorization-check'
+import { checkAuthorizationGuards as check } from 'test/routes/authorization-check'
 
 import { Paths } from 'first-contact/paths'
 

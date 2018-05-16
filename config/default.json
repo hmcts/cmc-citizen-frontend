@@ -87,7 +87,6 @@
     "partialAdmission": false,
     "offer": false,
     "statementOfMeans": false,
-    "ccd": false,
     "returnErrorToUser": false
   },
   "oauth": {

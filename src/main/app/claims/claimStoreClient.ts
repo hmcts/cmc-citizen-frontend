@@ -5,11 +5,10 @@ import { Claim } from 'claims/models/claim'
 import { User } from 'idam/user'
 import { ClaimModelConverter } from 'claims/claimModelConverter'
 import { ResponseModelConverter } from 'claims/responseModelConverter'
-import { ForbiddenError } from '../../errors'
+import { ForbiddenError } from 'errors'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { FeatureToggles } from 'utils/featureToggles'
 import { Logger } from '@hmcts/nodejs-logging'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
@@ -104,13 +103,12 @@ export class ClaimStoreClient {
           Authorization: `Bearer ${user.bearerToken}`
         }
       })
-      .then(claim => {
-        if (!FeatureToggles.isEnabled('ccd')) { // CCD does authorisation checks for us
-          if (user.id !== claim.submitterId && user.id !== claim.defendantId) {
-            throw new ForbiddenError()
-          }
+      .then((json: object) => {
+        const claim = new Claim().deserialize(json)
+        if (user.id !== claim.claimantId && user.id !== claim.defendantId) {
+          throw new ForbiddenError()
         }
-        return new Claim().deserialize(claim)
+        return claim
       })
   }
 
@@ -133,29 +131,6 @@ export class ClaimStoreClient {
       .put(`${claimStoreApiUrl}/defendant/link`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
-        }
-      })
-  }
-
-  linkDefendantV1 (externalId: string, user: User): Promise<Claim> {
-    if (!externalId) {
-      return Promise.reject(new Error('External ID is required'))
-    }
-    if (!user.id) {
-      return Promise.reject(new Error('User is required'))
-    }
-
-    return this.request
-      .put(`${claimStoreApiUrl}/${externalId}/defendant/${user.id}`, {
-        headers: {
-          Authorization: `Bearer ${user.bearerToken}`
-        }
-      })
-      .then(claim => {
-        if (claim) {
-          return new Claim().deserialize(claim)
-        } else {
-          throw new Error('Call was successful, but received an empty claim instance')
         }
       })
   }

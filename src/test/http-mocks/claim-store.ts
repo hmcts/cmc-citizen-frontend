@@ -59,12 +59,12 @@ export const sampleClaimObj = {
     interest: {
       type: ClaimInterestType.STANDARD,
       rate: 10,
-      reason: 'Special case'
+      reason: 'Special case',
+      interestDate: {
+        type: InterestDateType.SUBMISSION,
+        endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
+      } as InterestDate
     } as Interest,
-    interestDate: {
-      type: InterestDateType.SUBMISSION,
-      endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
-    } as InterestDate,
     reason: 'Because I can',
     feeAmountInPennies: 2500,
     timeline: { rows: [{ date: 'a', description: 'b' }] }
@@ -209,6 +209,12 @@ export function rejectSaveResponse (reason: string) {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
+export function resolveLinkDefendant () {
+  mock(`${serviceBaseURL}/claims`)
+    .put('/defendant/link')
+    .reply(HttpStatus.OK)
+}
+
 export function resolveRequestForMoreTime () {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/.+/request-more-time'))
@@ -286,5 +292,5 @@ export function rejectRetrieveDocument (reason: string) {
 export function resolveRetrieveDocument () {
   mock(`${serviceBaseURL}/documents`)
     .get(new RegExp('/.+/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
-    .reply(HttpStatus.OK, [])
+    .reply(HttpStatus.OK)
 }
