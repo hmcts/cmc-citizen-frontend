@@ -11,6 +11,8 @@ import { YourDetails } from 'response/tasks/yourDetails'
 import { FreeMediationTask } from 'response/tasks/freeMediationTask'
 import { Claim } from 'claims/models/claim'
 import { WhenDidYouPayTask } from 'response/tasks/whenDidYouPayTask'
+import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { WhenWillYouPayTask } from 'response/tasks/whenWillYouPayTask'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim): TaskList {
@@ -71,6 +73,16 @@ export class TaskListBuilder {
           'Free mediation',
           Paths.freeMediationPage.evaluateUri({ externalId: externalId }),
           FreeMediationTask.isCompleted(draft)
+        )
+      )
+    }
+
+    if (draft.isResponseFullyAdmitted() || draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)) {
+      tasks.push(
+        new TaskListItem(
+          'When will you pay?',
+          Paths.defencePaymentOptionsPage.evaluateUri({ externalId: externalId }),
+          WhenWillYouPayTask.isCompleted(draft)
         )
       )
     }
