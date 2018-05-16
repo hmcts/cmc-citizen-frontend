@@ -96,7 +96,7 @@ describe('InterestStartDate', () => {
       const errors = validator.validateSync(new InterestStartDate(new LocalDate(80, 12, 30), 'Privileged'))
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, CommonValidationErrors.DATE_INVALID_YEAR)
+      expectValidationError(errors, CommonValidationErrors.DATE_NOT_VALID)
     })
 
     it('should reject custom InterestStartDate date with reason longer then upper limit', () => {

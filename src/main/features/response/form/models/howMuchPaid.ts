@@ -1,8 +1,7 @@
 import { IsDefined, IsPositive, MaxLength, Min } from 'class-validator'
 import { IsPastDate } from 'forms/validation/validators/datePastConstraint'
 import { LocalDate } from 'forms/models/localDate'
-import { IsNotBlank, Fractions } from '@hmcts/cmc-validators'
-import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
+import { IsNotBlank, Fractions, IsValidLocalDate } from '@hmcts/cmc-validators'
 import { MomentFactory } from 'shared/momentFactory'
 import { MomentFormatter } from 'utils/momentFormatter'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
@@ -32,7 +31,7 @@ export class HowMuchPaid {
 
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
   @IsPastDate({ message: ValidationErrors.VALID_PAST_DATE })
-  @IsValidYearFormat({ message: ValidationErrors.DATE_INVALID_YEAR })
+  @IsValidLocalDate({ message: ValidationErrors.DATE_REQUIRED })
   date?: LocalDate
 
   @IsDefined({ message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })

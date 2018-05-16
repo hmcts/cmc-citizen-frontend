@@ -101,7 +101,7 @@ describe('DateOfBirth', () => {
         const errors = validator.validateSync(dateOfBirth(90, 12, 31))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.DATE_INVALID_YEAR)
+        expectValidationError(errors, ValidationErrors.DATE_NOT_VALID)
       })
     })
 

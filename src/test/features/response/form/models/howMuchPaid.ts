@@ -156,7 +156,7 @@ describe('HowMuchPaid', () => {
         const errors = validator.validateSync(new HowMuchPaid(300, new LocalDate(20, 2, 29), 'i don’t owe the amount of £300'))
 
         expectNumberOfValidationErrors(errors, 1)
-        expectValidationError(errors, ValidationErrors.DATE_INVALID_YEAR)
+        expectValidationError(errors, ValidationErrors.DATE_REQUIRED)
       })
     })
   })
