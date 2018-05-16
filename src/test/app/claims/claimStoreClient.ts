@@ -25,7 +25,7 @@ const returnedClaim = {
   createdAt: moment().toISOString(),
   responseDeadline: moment().toISOString(),
   issuedOn: moment().toISOString(),
-  claim: { ...claimData, interest: { type: ClaimInterestType.NO_INTEREST }, interestDate: undefined }
+  claim: { ...claimData, interest: { type: ClaimInterestType.NO_INTEREST, interestDate: undefined } }
 }
 
 const expectedClaimData = {
