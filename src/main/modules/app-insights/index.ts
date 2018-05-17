@@ -6,6 +6,17 @@ declare class AppInsightsConfiguration {
   roleName: string
 }
 
+function hideUuidInUrlIfNotStaticFile (url: string): string {
+  let fileRegexp = new RegExp('(\\..{2,5}$)')
+  let uuidRegexp = new RegExp('[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}')
+
+  if (url.match(fileRegexp) == null) {
+    return url.replace(uuidRegexp, '{uuid}')
+  } else {
+    return url
+  }
+}
+
 export class AppInsights {
   static enable () {
     const appInsightsConfig = config.get<AppInsightsConfiguration>('appInsights')
@@ -14,27 +25,14 @@ export class AppInsights {
       .setAutoCollectConsole(true, true)
     appInsights.defaultClient.context.tags[appInsights.defaultClient.context.keys.cloudRole] = appInsightsConfig.roleName
 
-    let fileRegexp = new RegExp('(\\..{2,5}$)')
-    let removeUuidRegexp = new RegExp('[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}', 'g')
-
     appInsights.defaultClient.addTelemetryProcessor(function (envelope, contextObjects) {
-      if (contextObjects) {
-        if (contextObjects.correlationContext) {
-          // if there's operation, rename request having claim UUID to {uuid} mask to aggregate them correctly
-          if (contextObjects.correlationContext.operation) {
-            let operationName = contextObjects.correlationContext.operation.name
-
-            // if operation's name is not static file
-            if (operationName.match(fileRegexp) == null) {
-              let newOperationName = operationName.replace(removeUuidRegexp, '{uuid}')
-              // console.log(contextObjects.correlationContext.operation.name)
-              // console.log(newOperationName)
-
-              contextObjects.correlationContext.operation.name = newOperationName
-            }
-          }
+      // hide UUID's in operationName URL's that are not static files, so they can be aggregated properly
+      if (envelope.tags) {
+        if (envelope.tags['ai.operation.name']) {
+          envelope.tags['ai.operation.name'] = hideUuidInUrlIfNotStaticFile(envelope.tags['ai.operation.name'])
         }
       }
+
       // always send
       return true
     })
