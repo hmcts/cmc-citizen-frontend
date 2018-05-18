@@ -6,11 +6,11 @@ declare class AppInsightsConfiguration {
   roleName: string
 }
 
-function hideUuidInUrlIfNotStaticFile (url: string): string {
-  let fileRegexp = new RegExp('(\\..{2,5}$)')
-  let uuidRegexp = new RegExp('[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}')
+const fileRegexp = new RegExp('(\\..{2,5}$)')
+const uuidRegexp = new RegExp('[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}')
 
-  if (url.match(fileRegexp) == null) {
+function hideUuidInUrlIfNotStaticFile (url: string): string {
+  if (!fileRegexp.test(url)) {
     return url.replace(uuidRegexp, '{uuid}')
   } else {
     return url
