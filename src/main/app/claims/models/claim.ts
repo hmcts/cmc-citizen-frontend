@@ -10,6 +10,7 @@ import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { FeatureToggles } from 'utils/featureToggles'
+import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
 
 interface State {
   status: ClaimStatus
@@ -110,7 +111,9 @@ export class Claim {
       return false
     }
 
-    return !this.countyCourtJudgmentRequestedAt && this.remainingDays < 0 && !this.respondedAt
+    return !this.countyCourtJudgmentRequestedAt
+      && !this.respondedAt
+      && isPastResponseDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
   }
 
   get status (): ClaimStatus {

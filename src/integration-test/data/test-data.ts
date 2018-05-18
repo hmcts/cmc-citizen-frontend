@@ -69,7 +69,7 @@ export function createClaimData (claimantType: PartyType, defendantType: PartyTy
         },
         specificDailyAmount: dailyInterestAmount
       }
-      claimData.interestDate = {
+      claimData.interest.interestDate = {
         endDateType: 'settled_or_judgment'
       }
       break
@@ -78,7 +78,7 @@ export function createClaimData (claimantType: PartyType, defendantType: PartyTy
         type: 'standard',
         rate: 8
       }
-      claimData.interestDate = {
+      claimData.interest.interestDate = {
         type: 'submission'
       }
       break

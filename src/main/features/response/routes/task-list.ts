@@ -7,6 +7,7 @@ import { Claim } from 'claims/models/claim'
 import { TaskListBuilder } from 'response/helpers/taskListBuilder'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
+import { MomentFactory } from 'shared/momentFactory'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -16,7 +17,7 @@ export default express.Router()
       const claim: Claim = res.locals.claim
 
       const beforeYouStartSection = TaskListBuilder
-        .buildBeforeYouStartSection(draft.document, claim)
+        .buildBeforeYouStartSection(draft.document, claim, MomentFactory.currentDateTime())
       const respondToClaimSection = TaskListBuilder
         .buildRespondToClaimSection(draft.document, claim)
 
