@@ -15,10 +15,6 @@ export default express.Router()
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       const claim: Claim = res.locals.claim
 
-      if (draft.document.moreTimeNeeded) {
-
-      }
-
       const beforeYouStartSection = TaskListBuilder
         .buildBeforeYouStartSection(draft.document, claim)
       const respondToClaimSection = TaskListBuilder

@@ -103,6 +103,18 @@ describe('Defendant response: more time needed page', () => {
                 .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
 
+        it('should redirect to confirmation page when more time already requested on claim', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({ moreTimeRequested: true })
+          draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.redirect
+              .toLocation(ResponsePaths.moreTimeConfirmationPage
+                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+        })
+
         context('when form is invalid', () => {
           it('should render page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()

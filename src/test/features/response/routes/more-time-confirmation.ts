@@ -74,6 +74,16 @@ describe('Defendant response: more time needed - confirmation page', () => {
             .expect(res => expect(res).to.be.successful.withText('You have an extra 14 days to respond'))
         })
 
+        it('should render confirmation page when more time already requested on claim', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({ moreTimeRequested: true })
+          draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('You have an extra 14 days to respond'))
+        })
+
         it('should return 500 and render error page when answer is "yes" and cannot retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('Internal server error')
 
