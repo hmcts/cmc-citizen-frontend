@@ -2,7 +2,7 @@ import { IsDefined, IsIn, IsPositive, ValidateIf } from 'class-validator'
 import { CompletableTask } from 'models/task'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
-import { Fractions } from 'forms/validation/validators/fractions'
+import { Fractions } from '@hmcts/cmc-validators'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 
 export class ValidationErrors {

@@ -30,6 +30,7 @@
   "dependencies": {
     "@hmcts/cmc-common-frontend": "^1.46.0",
     "@hmcts/cmc-draft-store-middleware": "^2.0.0",
+    "@hmcts/cmc-validators": "^0.1.6",
     "@hmcts/draft-store-client": "^1.1.1",
     "@hmcts/info-provider": "^1.0.0",
     "@hmcts/nodejs-healthcheck": "^1.4.5",
@@ -113,7 +114,7 @@
     "gulp-nodemon": "^2.0.2",
     "gulp-plumber": "^1.0.0",
     "gulp-rename": "^1.2.2",
-    "gulp-replace": "^0.6.1",
+    "gulp-replace": "^1.0.0",
     "gulp-sass": "^4.0.0",
     "husky": "^0.14.3",
     "jsonwebtoken": "^8.0.1",

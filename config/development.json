@@ -6,7 +6,6 @@
     "partialAdmission": true,
     "offer": true,
     "statementOfMeans": true,
-    "ccd": false,
     "returnErrorToUser": true
   },
   "appInsights": {

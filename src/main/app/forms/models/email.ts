@@ -1,4 +1,4 @@
-import { IsEmail } from 'forms/validation/validators/isEmail'
+import { IsEmail } from '@hmcts/cmc-validators'
 import { CompletableTask } from 'models/task'
 import { Validator } from 'class-validator'
 

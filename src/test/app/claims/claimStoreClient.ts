@@ -25,7 +25,7 @@ const returnedClaim = {
   createdAt: moment().toISOString(),
   responseDeadline: moment().toISOString(),
   issuedOn: moment().toISOString(),
-  claim: { ...claimData, interest: { type: ClaimInterestType.NO_INTEREST }, interestDate: undefined }
+  claim: { ...claimData, interest: { type: ClaimInterestType.NO_INTEREST, interestDate: undefined } }
 }
 
 const expectedClaimData = {
@@ -79,12 +79,19 @@ describe('ClaimStoreClient', () => {
       }
 
       it('should retrieve claim saved on first attempt that timed out and caused a 409 on retry', async () => {
+        resolveLinkDefendant()
         mockTimeoutOnFirstSaveAttemptAndConflictOnSecondOne()
 
         const claim: Claim = await claimStoreClient.saveClaim(claimDraft, claimant)
 
         expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimData))
       })
+
+      function resolveLinkDefendant () {
+        mock(`${claimStoreApiUrl}`)
+          .put('/defendant/link')
+          .reply(HttpStatus.OK)
+      }
 
       function mockInternalServerErrorOnAllAttempts () {
         mock(`${claimStoreApiUrl}`)
