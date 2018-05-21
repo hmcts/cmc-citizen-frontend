@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths, PayBySetDatePaths } from 'response/paths'
+import {Paths, PayBySetDatePaths } from 'response/paths'
 
 import { ErrorHandling } from 'shared/errorHandling'
 import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
@@ -25,7 +25,7 @@ function formLabelFor (responseDraft: ResponseDraft): string {
   if (isAmountTooHighPartialResponse(responseDraft)) {
     return 'When will you pay the amount you admit you owe?'
   } else {
-    return 'When will you pay?'
+    return 'How do you want to pay?'
   }
 }
 
@@ -69,7 +69,7 @@ export default express.Router()
           const { externalId } = req.params
           switch (form.model.option) {
             case DefendantPaymentType.BY_SET_DATE:
-              res.redirect(PayBySetDatePaths.paymentDatePage.evaluateUri({ externalId: externalId }))
+              res.redirect(PayBySetDatePaths.payByDatestatementPage.evaluateUri({ externalId: externalId }))
               break
             case DefendantPaymentType.INSTALMENTS:
               res.redirect(Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))

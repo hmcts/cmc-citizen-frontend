@@ -61,4 +61,5 @@ const payBySetDatePath = `${responsePath}/pay-by-set-date`
 export class PayBySetDatePaths {
   static readonly paymentDatePage: RoutablePath = new RoutablePath(`${payBySetDatePath}/payment-date`)
   static readonly explanationPage = new RoutablePath(`${payBySetDatePath}/explanation`)
+  static readonly payByDatestatementPage = new RoutablePath(`${payBySetDatePath}/pay-by-date-statement`)
 }

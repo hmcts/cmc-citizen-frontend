@@ -1,0 +1,26 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary, textArea %}
+
+{% set heading = 'You need to explain why you can’t pay immediately' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post">
+        {{ csrfProtection(csrf) }}
+
+        <p>{{ t('You need to provide {{ claimant }} with details of:',
+            { claimant: claim.claimData.claimant.name | safe }) }}</p>
+
+        <ul class="list list-bullet">
+          <li>{{ t('monthly bills and expenses') }}</li>
+          <li>{{ t('monthly income and benifits') }}</li>
+          <li>{{ t('bank balances and savings') }}</li>
+          <li>{{ t('debts or court orders') }}</li>
+        </ul>
+
+        {{ submitButton('Continue') }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

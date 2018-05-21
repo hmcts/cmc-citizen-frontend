@@ -17,6 +17,12 @@
         {% if statementOfMeansIsApplicable %}
           {% set hintText = t('You will need to give details of your finances to {{ claimantFullName }} to explain why.', { claimantFullName: claim.claimData.claimant.name }) %}
         {% endif %}
+
+        <div class="notice">
+          <i class="icon icon-important"><span class="visually-hidden">Warning</span> </i>
+          <strong class="bold-small">You may receive a County Court Judgment (CCJ) if you don't pay immediately.</strong>
+        </div>
+
         {{
         radioGroupWithHintPanel(
           form = form,
@@ -24,6 +30,11 @@
           labelForScreenReadersOnly = true,
           name = 'option',
           options = [
+            {
+              label: DefendantPaymentType.IMMEDIATELY.displayValueFor(responseType),
+              value: DefendantPaymentType.IMMEDIATELY.value,
+              checked: (form.valueFor('option') === DefendantPaymentType.IMMEDIATELY)
+            },
             {
               label: DefendantPaymentType.BY_SET_DATE.displayValueFor(responseType),
               value: DefendantPaymentType.BY_SET_DATE.value,

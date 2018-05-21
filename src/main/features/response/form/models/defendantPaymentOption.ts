@@ -2,12 +2,14 @@ import { IsDefined, IsIn } from 'class-validator'
 import { ResponseType } from 'response/form/models/responseType'
 
 export class DefendantPaymentTypeLabels {
-  static readonly INSTALMENTS: string = 'By instalments'
+  static readonly IMMEDIATELY: string = 'Immediately'
+  static readonly INSTALMENTS: string = 'I`ll suggest a repayment plan'
   static readonly FULL_ADMIT_BY_SPECIFIED_DATE: string = 'Full amount by a set date'
   static readonly BY_SET_DATE: string = 'By a set date'
 }
 
 export class DefendantPaymentType {
+  static readonly IMMEDIATELY = new DefendantPaymentType('IMMEDIATELY')
   static readonly INSTALMENTS = new DefendantPaymentType('INSTALMENTS')
   static readonly BY_SET_DATE = new DefendantPaymentType('BY_SET_DATE')
 
@@ -19,6 +21,7 @@ export class DefendantPaymentType {
 
   static all (): DefendantPaymentType[] {
     return [
+      DefendantPaymentType.IMMEDIATELY,
       DefendantPaymentType.BY_SET_DATE,
       DefendantPaymentType.INSTALMENTS
     ]
@@ -32,6 +35,8 @@ export class DefendantPaymentType {
 
   displayValueFor (responseType: ResponseType): string {
     switch (this.value) {
+      case DefendantPaymentType.IMMEDIATELY.value:
+        return DefendantPaymentTypeLabels.IMMEDIATELY
       case DefendantPaymentType.INSTALMENTS.value:
         return DefendantPaymentTypeLabels.INSTALMENTS
       case DefendantPaymentType.BY_SET_DATE.value:
@@ -43,9 +48,9 @@ export class DefendantPaymentType {
 
   private bySetDateLabelFor (responseType: ResponseType): string {
     if (responseType.value === ResponseType.FULL_ADMISSION.value) {
-      return DefendantPaymentTypeLabels.FULL_ADMIT_BY_SPECIFIED_DATE
-    } else {
       return DefendantPaymentTypeLabels.BY_SET_DATE
+    } else {
+      return DefendantPaymentTypeLabels.FULL_ADMIT_BY_SPECIFIED_DATE
     }
   }
 }
