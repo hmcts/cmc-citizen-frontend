@@ -2,7 +2,7 @@ import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
 import { Paths } from 'response/paths'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Moment } from 'moment'
+import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
 import { MoreTimeNeededTask } from 'response/tasks/moreTimeNeededTask'
 import { OweMoneyTask } from 'response/tasks/oweMoneyTask'
@@ -12,9 +12,10 @@ import { FreeMediationTask } from 'response/tasks/freeMediationTask'
 import { Claim } from 'claims/models/claim'
 import { WhenDidYouPayTask } from 'response/tasks/whenDidYouPayTask'
 import { WhenWillYouPayTask } from 'response/tasks/whenWillYouPayTask'
+import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
 
 export class TaskListBuilder {
-  static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim): TaskList {
+  static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
     const tasks: TaskListItem[] = []
     const externalId: string = claim.externalId
     tasks.push(
@@ -25,8 +26,7 @@ export class TaskListBuilder {
       )
     )
 
-    const now: Moment = MomentFactory.currentDateTime()
-    if (claim.responseDeadline.isAfter(now)) {
+    if (!isPastResponseDeadline(now, claim.responseDeadline)) {
       tasks.push(
         new TaskListItem(
           'Do you want more time to respond?',
@@ -110,7 +110,7 @@ export class TaskListBuilder {
 
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {
     return [].concat(
-      TaskListBuilder.buildBeforeYouStartSection(draft, claim).tasks,
+      TaskListBuilder.buildBeforeYouStartSection(draft, claim, MomentFactory.currentDateTime()).tasks,
       TaskListBuilder.buildRespondToClaimSection(draft, claim).tasks
     )
       .filter(item => !item.completed)

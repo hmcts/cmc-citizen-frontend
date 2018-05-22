@@ -199,9 +199,8 @@ export class ClaimModelConverter {
           interest.specificDailyAmount = draftClaim.interestHowMuch.dailyAmount
         }
       }
+      interest.interestDate = this.convertInterestDate(draftClaim)
     }
-
-    interest.interestDate = this.convertInterestDate(draftClaim)
 
     return interest
   }

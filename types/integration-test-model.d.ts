@@ -129,3 +129,8 @@ declare type CardDetails = {
   name: string,
   verificationCode: string
 }
+
+declare type PostcodeLookupQuery = {
+  postcode: string,
+  address: string
+}

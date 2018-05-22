@@ -1,3 +1,4 @@
+/* tslint:disable:no-unused-expression */
 import { expect } from 'chai'
 
 import { ClaimModelConverter } from 'claims/claimModelConverter'
@@ -14,6 +15,8 @@ import {
 import { ClaimData } from 'claims/models/claimData'
 import { claimData as entityTemplate } from 'test/data/entity/claimData'
 import { company, individual, organisation, soleTrader } from 'test/data/entity/party'
+import { YesNoOption } from 'models/yesNoOption'
+import { Interest } from 'claim/form/models/interest'
 
 function prepareClaimDraft (claimantPartyDetails: object, defendantPartyDetails: object): DraftClaim {
   return new DraftClaim().deserialize({
@@ -54,5 +57,12 @@ describe('ClaimModelConverter', () => {
       expect(convertObjectLiteralToJSON(ClaimModelConverter.convert(claimDraft)))
         .to.deep.equal(convertObjectLiteralToJSON(claimData))
     })
+  })
+
+  it('should not create interestDate if no interest is selected in the draft', () => {
+    const claimDraft = prepareClaimDraft(individualDetails, individual)
+    claimDraft.interest = new Interest(YesNoOption.NO)
+    const converted: ClaimData = ClaimModelConverter.convert(claimDraft)
+    expect(converted.interest.interestDate).to.be.undefined
   })
 })
