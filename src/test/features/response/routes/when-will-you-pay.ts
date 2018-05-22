@@ -61,7 +61,7 @@ describe('Defendant - when will you pay options', () => {
       })
 
       context('when service is healthy', () => {
-        const fullAdmissionQuestion: string = 'When will you pay?'
+        const fullAdmissionQuestion: string = 'How do you want to pay?'
         it(`should render page asking '${fullAdmissionQuestion}' when full admission was selected`, async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response', {
@@ -173,6 +173,12 @@ describe('Defendant - when will you pay options', () => {
                 { option: DefendantPaymentType.BY_SET_DATE.value },
                 PayBySetDatePaths.paymentDatePage.evaluateUri({ externalId: externalId }))
             })
+
+            it('should redirect to task list page for "IMMEDIATELY" option selected', async () => {
+              await checkThatSelectedPaymentOptionRedirectsToPage(
+                { option: DefendantPaymentType.IMMEDIATELY.value },
+                Paths.taskListPage.evaluateUri({ externalId: externalId }))
+            })
           })
 
           context('when form is invalid', async () => {
@@ -181,7 +187,7 @@ describe('Defendant - when will you pay options', () => {
                 .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
                 .send({ name: 'John Smith' })
-                .expect(res => expect(res).to.be.successful.withText('When will you pay?'))
+                .expect(res => expect(res).to.be.successful.withText('How do you want to pay?'))
             })
           })
         })

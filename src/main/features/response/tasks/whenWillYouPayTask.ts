@@ -25,6 +25,8 @@ export class WhenWillYouPayTask {
         && this.explanationIsValidIfRequired(responseDraft.payBySetDate)
     } else if (responseDraft.defendantPaymentOption.option === DefendantPaymentType.INSTALMENTS) {
       return isValid(responseDraft.defendantPaymentPlan)
+    } else if (responseDraft.defendantPaymentOption.option === DefendantPaymentType.IMMEDIATELY) {
+      return isValid(responseDraft.defendantPaymentOption)
     } else {
       throw new Error(`Unknown payment option: ${responseDraft.defendantPaymentOption.option}`)
     }

@@ -2,14 +2,16 @@ import { IsDefined, IsIn } from 'class-validator'
 import { ResponseType } from 'response/form/models/responseType'
 
 export class DefendantPaymentTypeLabels {
-  static readonly INSTALMENTS: string = 'By instalments'
+  static readonly INSTALMENTS: string = 'I`ll suggest a repayment plan'
   static readonly FULL_ADMIT_BY_SPECIFIED_DATE: string = 'Full amount by a set date'
   static readonly BY_SET_DATE: string = 'By a set date'
+  static readonly IMMEDIATELY: string = 'Immediately'
 }
 
 export class DefendantPaymentType {
   static readonly INSTALMENTS = new DefendantPaymentType('INSTALMENTS')
   static readonly BY_SET_DATE = new DefendantPaymentType('BY_SET_DATE')
+  static readonly IMMEDIATELY = new DefendantPaymentType('IMMEDIATELY')
 
   readonly value: string
 
@@ -19,6 +21,7 @@ export class DefendantPaymentType {
 
   static all (): DefendantPaymentType[] {
     return [
+      DefendantPaymentType.IMMEDIATELY,
       DefendantPaymentType.BY_SET_DATE,
       DefendantPaymentType.INSTALMENTS
     ]
@@ -36,6 +39,8 @@ export class DefendantPaymentType {
         return DefendantPaymentTypeLabels.INSTALMENTS
       case DefendantPaymentType.BY_SET_DATE.value:
         return this.bySetDateLabelFor(responseType)
+      case DefendantPaymentType.IMMEDIATELY.value:
+        return DefendantPaymentTypeLabels.IMMEDIATELY
       default:
         throw new Error('Unknown defendant payment option!')
     }

@@ -54,6 +54,8 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
       PaymentSchedule.EACH_WEEK,
       'I am not able to pay immediately'
     )
+  } else if (paymentType === DefendantPaymentType.IMMEDIATELY) {
+    responseDraft.defendantPaymentOption = new DefendantPaymentOption(DefendantPaymentType.IMMEDIATELY)
   }
   responseDraft.response = new Response(ResponseType.FULL_ADMISSION)
   responseDraft.defendantDetails = new Defendant(new IndividualDetails())
@@ -143,6 +145,23 @@ describe('WhenWillYouPayTask', () => {
     })
 
     it('should be completed when payment plan is valid', () => {
+      expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
+    })
+  })
+
+  context('when pay by immediately is selected', () => {
+    let responseDraft: ResponseDraft
+
+    beforeEach(() => {
+      responseDraft = validResponseDraftWith(DefendantPaymentType.IMMEDIATELY)
+    })
+
+    it('should not be completed when defendantPaymentOption is undefined', () => {
+      responseDraft.defendantPaymentOption = new DefendantPaymentOption(undefined)
+      expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+    })
+
+    it('should be completed when defendantPaymentOption immediately is valid', () => {
       expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
     })
   })

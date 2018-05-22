@@ -25,7 +25,7 @@ function formLabelFor (responseDraft: ResponseDraft): string {
   if (isAmountTooHighPartialResponse(responseDraft)) {
     return 'When will you pay the amount you admit you owe?'
   } else {
-    return 'When will you pay?'
+    return 'How do you want to pay?'
   }
 }
 
@@ -68,6 +68,9 @@ export default express.Router()
 
           const { externalId } = req.params
           switch (form.model.option) {
+            case DefendantPaymentType.IMMEDIATELY:
+              res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
+              break
             case DefendantPaymentType.BY_SET_DATE:
               res.redirect(PayBySetDatePaths.paymentDatePage.evaluateUri({ externalId: externalId }))
               break
