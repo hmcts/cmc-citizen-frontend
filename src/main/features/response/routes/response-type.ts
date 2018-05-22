@@ -11,6 +11,8 @@ import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
+import * as config from 'config'
+import * as toBoolean from 'to-boolean'
 
 function renderView (form: Form<Response>, res: express.Response) {
   const claim: Claim = res.locals.claim
@@ -55,7 +57,11 @@ export default express.Router()
             res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: claim.externalId }))
             break
           case ResponseType.FULL_ADMISSION:
-            res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+            if (toBoolean(config.get<boolean>('featureToggles.fullAdmission'))) {
+              res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+            } else {
+              res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: claim.externalId }))
+            }
             break
           default:
             next(new Error(`Unknown response type: ${responseType}`))
