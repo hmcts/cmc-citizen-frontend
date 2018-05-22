@@ -215,7 +215,7 @@ export class DefenceSteps {
     this.addTimeLineOfEvents(defence.timeline)
     this.enterEvidence('description', 'They do not have evidence')
     this.explainImpactOfDispute(defence.impactOfDispute)
-    defendantSteps.selectTaskWhenWillYouPay()
+    defendantSteps.selectTaskDecideHowWillYouPay()
     defendantWhenWillYouPage.chooseInstalments()
     defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan, text)
     statementOfMeansSteps.fillStatementOfMeansData()
@@ -284,39 +284,21 @@ export class DefenceSteps {
         I.see('How did you pay the amount claimed?')
         break
 
+      case DefenceType.FULL_ADMISSION:
+        defendantSteps.selectTaskChooseAResponse()
+        defendantDefenceTypePage.admitAllOfMoneyClaim()
+        defendantSteps.selectTaskDecideHowWillYouPay()
+        defendantWhenWillYouPage.chooseImmediately()
+        break
+
       default:
         throw new Error('Unknown DefenceType')
     }
 
-    this.checkAndSendAndSubmit(defendantType)
-    if (defenceType === DefenceType.FULL_REJECTION_WITH_DISPUTE || defenceType === DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID) {
+    if (defenceType === DefenceType.FULL_REJECTION_WITH_DISPUTE
+      || defenceType === DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID) {
+      this.checkAndSendAndSubmit(defendantType)
       I.see('You’ve submitted your response')
-    } else {
-      I.see('Next steps')
-    }
-  }
-
-  makeDefenceResponse (claimRef: string, defendant: Party, claimant: Party, defenceType: DefenceType = DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID): void {
-    I.click('Respond to claim')
-    I.see('Confirm your details')
-    I.see('Do you want more time to respond?')
-    I.see('Choose a response')
-    I.dontSee('Your defence')
-    I.dontSee('COMPLETE')
-
-    this.confirmYourDetails(defendant)
-    I.see('COMPLETE')
-
-    this.requestMoreTimeToRespond()
-
-    if (defenceType === DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID) {
-      this.enterWhenDidYouPay(defence)
-      this.submitDefenceText('I have already paid')
-      this.addTimeLineOfEvents({ events: [{ date: 'may', description: 'ok' } as TimelineEvent] } as Timeline)
-      this.enterEvidence('description', 'comment')
-      defendantSteps.selectCheckAndSubmitYourDefence()
-      I.see('When did you pay this amount?')
-      I.see('How did you pay the amount claimed?')
     }
   }
 
