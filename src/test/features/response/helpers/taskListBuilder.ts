@@ -208,14 +208,14 @@ describe('Defendant response task list builder', () => {
         isResponseFullyAdmittedStub.returns(true)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
-        expect(taskList.tasks.map(task => task.name)).to.contain('Decide how you`ll pay?')
+        expect(taskList.tasks.map(task => task.name)).to.contain('Decide how you`ll pay')
       })
 
       it('should be disabled in remaining cases', () => {
         isResponseFullyAdmittedStub.returns(false)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('Decide how you`ll pay?')
+        expect(taskList.tasks.map(task => task.name)).to.not.contain('Decide how you`ll pay')
       })
     })
   })
