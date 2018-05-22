@@ -11,7 +11,7 @@ function isValid (input): boolean {
   return input !== undefined && validator.validateSync(input).length === 0
 }
 
-export class WhenWillYouPayTask {
+export class DecideHowYouWillPayTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
     return isValid(responseDraft.defendantPaymentOption)
       && this.paymentDetailsAreProvidedFor(responseDraft)
@@ -46,8 +46,8 @@ export class WhenWillYouPayTask {
 
       return statementOfMeans !== undefined
         && isValid(statementOfMeans.residence)
-        && WhenWillYouPayTask.isDependantsCompleted(statementOfMeans)
-        && WhenWillYouPayTask.isEmploymentCompleted(statementOfMeans)
+        && DecideHowYouWillPayTask.isDependantsCompleted(statementOfMeans)
+        && DecideHowYouWillPayTask.isEmploymentCompleted(statementOfMeans)
         && isValid(statementOfMeans.bankAccounts)
         && isValid(statementOfMeans.debts)
         && isValid(statementOfMeans.monthlyIncome)

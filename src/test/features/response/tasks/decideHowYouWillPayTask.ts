@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-expression */
 import { expect } from 'chai'
 
-import { WhenWillYouPayTask } from 'response/tasks/whenWillYouPayTask'
+import { DecideHowYouWillPayTask } from 'response/tasks/decideHowYouWillPayTask'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
@@ -80,7 +80,7 @@ function dateMoreThan28DaysFromNow () {
   return localDateFrom(MomentFactory.currentDate().add(29, 'days'))
 }
 
-describe('WhenWillYouPayTask', () => {
+describe('DecideHowYouWillPayTask', () => {
 
   context('should not be completed when', () => {
 
@@ -88,14 +88,14 @@ describe('WhenWillYouPayTask', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.defendantPaymentOption = undefined
 
-      expect(WhenWillYouPayTask.isCompleted(draft)).to.be.false
+      expect(DecideHowYouWillPayTask.isCompleted(draft)).to.be.false
     })
 
     it('payment option is undefined', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.defendantPaymentOption = new DefendantPaymentOption(undefined)
 
-      expect(WhenWillYouPayTask.isCompleted(draft)).to.be.false
+      expect(DecideHowYouWillPayTask.isCompleted(draft)).to.be.false
     })
   })
 
@@ -108,27 +108,27 @@ describe('WhenWillYouPayTask', () => {
 
     it('should not be completed when pay by set is undefined', () => {
       responseDraft.payBySetDate = undefined
-      expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+      expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
     })
 
     it('should not be completed when payment date is not valid', () => {
       responseDraft.payBySetDate.paymentDate.date = undefined
-      expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+      expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
     })
 
     it('should not be completed when payment date is more than 28 days from today and explanation is not valid', () => {
       responseDraft.payBySetDate.paymentDate.date = dateMoreThan28DaysFromNow()
       responseDraft.payBySetDate.explanation.text = undefined
-      expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+      expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
     })
 
     it('should be completed when payment date is more than 28 days from today and explanation is valid', () => {
       responseDraft.payBySetDate.paymentDate.date = dateMoreThan28DaysFromNow()
-      expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
+      expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
     })
 
     it('should be completed when payment date is today', () => {
-      expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
+      expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
     })
   })
 
@@ -141,11 +141,11 @@ describe('WhenWillYouPayTask', () => {
 
     it('should not be completed when payment plan is undefined', () => {
       responseDraft.defendantPaymentPlan = undefined
-      expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+      expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
     })
 
     it('should be completed when payment plan is valid', () => {
-      expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
+      expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
     })
   })
 
@@ -158,11 +158,11 @@ describe('WhenWillYouPayTask', () => {
 
     it('should not be completed when defendantPaymentOption is undefined', () => {
       responseDraft.defendantPaymentOption = new DefendantPaymentOption(undefined)
-      expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+      expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
     })
 
     it('should be completed when defendantPaymentOption immediately is valid', () => {
-      expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
+      expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
     })
   })
 
@@ -177,21 +177,21 @@ describe('WhenWillYouPayTask', () => {
 
       it('should not be completed when statement of means is undefined', () => {
         responseDraft.statementOfMeans = undefined
-        expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+        expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
       })
 
       it('should not be completed when residence is undefined', () => {
         responseDraft.statementOfMeans.residence = undefined
-        expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+        expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
       })
 
       it('should not be completed when residence is invalid', () => {
         responseDraft.statementOfMeans.residence.type = undefined
-        expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+        expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
       })
 
       it('should be completed when all SOM items are valid', () => {
-        expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
+        expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
       })
     })
 
@@ -203,12 +203,12 @@ describe('WhenWillYouPayTask', () => {
 
       it('should be complete when statement of means is undefined', () => {
         responseDraft.statementOfMeans = undefined
-        expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
+        expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
       })
 
       it('should be complete when statement of means item is invalid', () => {
         responseDraft.statementOfMeans.residence.type = undefined
-        expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
+        expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
       })
     })
 
@@ -223,14 +223,14 @@ describe('WhenWillYouPayTask', () => {
             responseDraft.statementOfMeans.maintenance.option = false
             responseDraft.statementOfMeans.supportedByYou.doYouSupportAnyone = false
 
-            expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
+            expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
           })
 
           it('no children, but maintenance', () => {
             responseDraft.statementOfMeans.dependants.hasAnyChildren = false
             responseDraft.statementOfMeans.maintenance = new Maintenance(true, 1)
 
-            expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
+            expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
           })
 
           it('no children and maintenance, but supported', () => {
@@ -238,13 +238,13 @@ describe('WhenWillYouPayTask', () => {
             responseDraft.statementOfMeans.maintenance.option = false
             responseDraft.statementOfMeans.supportedByYou = new SupportedByYou(true, new NumberOfPeople(3, 'story'))
 
-            expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
+            expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
           })
 
           it('has young children', () => {
             responseDraft.statementOfMeans.dependants = new Dependants(true, new NumberOfChildren(2, 1, 0))
 
-            expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
+            expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
           })
 
           it('has children between 16 and 19 and they do not educate', () => {
@@ -254,7 +254,7 @@ describe('WhenWillYouPayTask', () => {
             )
             responseDraft.statementOfMeans.education = new Education(0, noOfChildrenBetween16and19)
 
-            expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
+            expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
           })
 
           it('has children between 16 and 19 and they educate', () => {
@@ -264,7 +264,7 @@ describe('WhenWillYouPayTask', () => {
             )
             responseDraft.statementOfMeans.education = new Education(1, noOfChildrenBetween16and19)
 
-            expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
+            expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
           })
         })
 
@@ -273,26 +273,26 @@ describe('WhenWillYouPayTask', () => {
           it('dependants section not submitted', () => {
             responseDraft.statementOfMeans.dependants = undefined
 
-            expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+            expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
           })
 
           it('dependants submitted with children between 16 and 19 and education section not submitted', () => {
             responseDraft.statementOfMeans.dependants = new Dependants(true, new NumberOfChildren(0, 0, 1))
             responseDraft.statementOfMeans.education = undefined
 
-            expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+            expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
           })
 
           it('maintenance not submitted', () => {
             responseDraft.statementOfMeans.maintenance = undefined
 
-            expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+            expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
           })
 
           it('supported by you not submitted', () => {
             responseDraft.statementOfMeans.supportedByYou = undefined
 
-            expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+            expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
           })
         })
       })
@@ -300,7 +300,7 @@ describe('WhenWillYouPayTask', () => {
       context('employment group is completed when', () => {
 
         it('unemployed (default setup for mock)', () => {
-          expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
+          expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
         })
 
         it('employed with list of employers', () => {
@@ -308,7 +308,7 @@ describe('WhenWillYouPayTask', () => {
           responseDraft.statementOfMeans.employment = new Employment(true, true, false)
           responseDraft.statementOfMeans.employers = new Employers([new EmployerRow('Company', 'job')])
 
-          expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
+          expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
         })
 
         it('self-Employed and not employed', () => {
@@ -317,7 +317,7 @@ describe('WhenWillYouPayTask', () => {
           responseDraft.statementOfMeans.employers = undefined
           responseDraft.statementOfMeans.selfEmployed = new SelfEmployed('job', 1000, false, 10, 'my story')
 
-          expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
+          expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
         })
 
         it('self-Employed and employed', () => {
@@ -326,7 +326,7 @@ describe('WhenWillYouPayTask', () => {
           responseDraft.statementOfMeans.employers = new Employers([new EmployerRow('Company', 'job')])
           responseDraft.statementOfMeans.selfEmployed = new SelfEmployed('job', 1000, false)
 
-          expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.true
+          expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
         })
       })
 
@@ -335,28 +335,28 @@ describe('WhenWillYouPayTask', () => {
         it('employment not submitted', () => {
           responseDraft.statementOfMeans.employment = undefined
 
-          expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+          expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
         })
 
         it('selected "no" for employment and not submitted unemployed', () => {
           responseDraft.statementOfMeans.employment = new Employment(false)
           responseDraft.statementOfMeans.unemployed = undefined
 
-          expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+          expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
         })
 
         it('employed and not submitted employers', () => {
           responseDraft.statementOfMeans.employment = new Employment(true, true, false)
           responseDraft.statementOfMeans.employers = undefined
 
-          expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+          expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
         })
 
         it('self-employed and not submitted selfEmployed', () => {
           responseDraft.statementOfMeans.employment = new Employment(true, false, true)
           responseDraft.statementOfMeans.selfEmployed = undefined
 
-          expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+          expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
         })
 
         it('employed and self-employed and not submitted selfEmployed nor employers', () => {
@@ -364,7 +364,7 @@ describe('WhenWillYouPayTask', () => {
           responseDraft.statementOfMeans.selfEmployed = undefined
           responseDraft.statementOfMeans.employers = undefined
 
-          expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+          expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
         })
       })
 
@@ -373,37 +373,37 @@ describe('WhenWillYouPayTask', () => {
         it('residence not submitted', () => {
           responseDraft.statementOfMeans.residence = undefined
 
-          expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+          expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
         })
 
         it('bankAccounts not submitted', () => {
           responseDraft.statementOfMeans.bankAccounts = undefined
 
-          expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+          expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
         })
 
         it('debts not submitted', () => {
           responseDraft.statementOfMeans.debts = undefined
 
-          expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+          expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
         })
 
         it('monthlyIncome not submitted', () => {
           responseDraft.statementOfMeans.monthlyIncome = undefined
 
-          expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+          expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
         })
 
         it('monthlyExpenses not submitted', () => {
           responseDraft.statementOfMeans.monthlyExpenses = undefined
 
-          expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+          expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
         })
 
         it('courtOrders not submitted', () => {
           responseDraft.statementOfMeans.courtOrders = undefined
 
-          expect(WhenWillYouPayTask.isCompleted(responseDraft)).to.be.false
+          expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
         })
       })
     })

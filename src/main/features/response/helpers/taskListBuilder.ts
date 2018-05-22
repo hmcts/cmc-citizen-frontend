@@ -11,7 +11,7 @@ import { YourDetails } from 'response/tasks/yourDetails'
 import { FreeMediationTask } from 'response/tasks/freeMediationTask'
 import { Claim } from 'claims/models/claim'
 import { WhenDidYouPayTask } from 'response/tasks/whenDidYouPayTask'
-import { WhenWillYouPayTask } from 'response/tasks/whenWillYouPayTask'
+import { DecideHowYouWillPayTask } from 'response/tasks/decideHowYouWillPayTask'
 import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
 
 export class TaskListBuilder {
@@ -79,9 +79,9 @@ export class TaskListBuilder {
     if (draft.isResponseFullyAdmitted()) {
       tasks.push(
         new TaskListItem(
-          'Decide how you`ll pay?',
+          'Decide how you`ll pay',
           Paths.defencePaymentOptionsPage.evaluateUri({ externalId: externalId }),
-          WhenWillYouPayTask.isCompleted(draft)
+          DecideHowYouWillPayTask.isCompleted(draft)
         )
       )
     }
