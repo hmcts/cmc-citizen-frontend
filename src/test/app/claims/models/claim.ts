@@ -17,11 +17,10 @@ import { PartyStatement } from 'claims/models/partyStatement'
 import * as moment from 'moment'
 
 describe('Claim', () => {
-
   describe('eligibleForCCJ', () => {
     const claim = new Claim()
 
-    context('remainingDays < 0', () => {
+    context('response deadline has passed', () => {
       before('setup', () => {
         claim.countyCourtJudgmentRequestedAt = undefined
         claim.responseDeadline = MomentFactory.currentDate().subtract(1, 'day')
@@ -37,18 +36,7 @@ describe('Claim', () => {
       })
     })
 
-    context('remainingDays = 0', () => {
-      before('setup', () => {
-        claim.countyCourtJudgmentRequestedAt = undefined
-        claim.responseDeadline = MomentFactory.currentDate()
-      })
-
-      it('should return false', () => {
-        expect(claim.eligibleForCCJ).to.be.equal(false)
-      })
-    })
-
-    context('remainingDays > 0', () => {
+    context('defendant still has time to respond', () => {
       before('setup', () => {
         claim.countyCourtJudgmentRequestedAt = undefined
         claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
@@ -93,7 +81,7 @@ describe('Claim', () => {
 
     beforeEach(() => {
       claim = new Claim()
-      claim.responseDeadline = moment()
+      claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
     });
 
     [true, false].forEach(isMoreTimeRequested => {
@@ -197,7 +185,7 @@ describe('Claim', () => {
 
     beforeEach(() => {
       claim = new Claim()
-      claim.responseDeadline = moment()
+      claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
     })
 
     it('should contain the claim status only if not responded to', () => {
