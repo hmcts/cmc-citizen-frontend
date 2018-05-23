@@ -25,9 +25,9 @@ export const claimAmount: Amount = {
   }
 }
 
-export const postCodeLookup = {
-  postCode: 'M13 9PL',
-  selectedOption: 'University of Manchester, Oxford Road, Manchester, M13 9PL'
+export const postcodeLookupQuery: PostcodeLookupQuery = {
+  postcode: 'M13 9PL',
+  address: 'University of Manchester, Oxford Road, Manchester, M13 9PL'
 }
 
 export const claimReason = 'My reasons for the claim are that I am owed this money for a variety of reason, these being...'
@@ -132,8 +132,8 @@ export function createDefendant (type: PartyType, hasEmailAddress: boolean = fal
     type: type,
     name: undefined,
     address: {
-      line1: 'University of Manchester',
-      line2: 'Oxford Road',
+      line1: 'Oxford Road',
+      line2: '',
       city: 'Manchester',
       postcode: 'M13 9PL'
     },
