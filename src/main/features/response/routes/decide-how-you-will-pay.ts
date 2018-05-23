@@ -69,14 +69,11 @@ export default express.Router()
           const { externalId } = req.params
           switch (form.model.option) {
             case DefendantPaymentType.IMMEDIATELY:
-              res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
-              break
+              return res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
             case DefendantPaymentType.BY_SET_DATE:
-              res.redirect(PayBySetDatePaths.paymentDatePage.evaluateUri({ externalId: externalId }))
-              break
+              return res.redirect(PayBySetDatePaths.paymentDatePage.evaluateUri({ externalId: externalId }))
             case DefendantPaymentType.INSTALMENTS:
-              res.redirect(Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))
-              break
+              return res.redirect(Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))
           }
         }
       }))
