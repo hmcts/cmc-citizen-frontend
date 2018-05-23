@@ -10,7 +10,7 @@ export class MoreTimeAlreadyRequestedGuard {
     const claim: Claim = res.locals.claim
     const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-    if (draft.document.isMoreTimeRequested() || claim.moreTimeRequested) {
+    if (claim.moreTimeRequested) {
       res.redirect(Paths.moreTimeConfirmationPage.evaluateUri({ externalId: claim.externalId }))
     } else {
       next()
