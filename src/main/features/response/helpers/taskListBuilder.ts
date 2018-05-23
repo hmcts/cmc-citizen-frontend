@@ -30,7 +30,7 @@ export class TaskListBuilder {
         new TaskListItem(
           'Do you want more time to respond?',
           Paths.moreTimeRequestPage.evaluateUri({ externalId: externalId }),
-          MoreTimeNeededTask.isCompleted(draft)
+          MoreTimeNeededTask.isCompleted(draft, claim.moreTimeRequested)
         )
       )
     }
