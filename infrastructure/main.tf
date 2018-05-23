@@ -44,6 +44,7 @@ locals {
 
   s2sUrl = "http://rpe-service-auth-provider-${local.local_env}.service.${local.local_ase}.internal"
   claimStoreUrl = "http://cmc-claim-store-${local.local_env}.service.${local.local_ase}.internal"
+  draftStoreUrl = "http://draft-store-service-${local.local_env}.service.${local.local_ase}.internal"
 }
 
 module "citizen-frontend" {
@@ -88,7 +89,7 @@ module "citizen-frontend" {
     FEES_URL = "${var.fees_api_url}"
 
     // Draft Store API
-    DRAFT_STORE_URL = "${var.draft_store_api_url}"
+    DRAFT_STORE_URL = "${local.draftStoreUrl}"
     DRAFT_STORE_SECRET_PRIMARY = "${data.vault_generic_secret.draft_store_secret.data["primary"]}"
     DRAFT_STORE_SECRET_SECONDARY = "${data.vault_generic_secret.draft_store_secret.data["secondary"]}"
 

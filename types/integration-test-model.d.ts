@@ -8,8 +8,7 @@ declare type ClaimData = {
   defendants: Party[]
   feeAmountInPennies: number
   amount: Amount
-  interest: Interest
-  interestDate?: InterestDate
+  interest: Interest,
   reason: string
   payment: Payment,
   total: number
@@ -56,7 +55,8 @@ declare type Interest = {
   type: string
   rate?: number
   interestBreakdown?: InterestBreakdown
-  specificDailyAmount?: number
+  specificDailyAmount?: number,
+  interestDate?: InterestDate
 }
 
 declare type InterestBreakdown = {
@@ -128,4 +128,9 @@ declare type CardDetails = {
   expiryYear: string
   name: string,
   verificationCode: string
+}
+
+declare type PostcodeLookupQuery = {
+  postcode: string,
+  address: string
 }
