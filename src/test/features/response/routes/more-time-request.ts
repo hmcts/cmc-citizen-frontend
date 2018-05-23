@@ -39,13 +39,10 @@ describe('Defendant response: more time needed page', () => {
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       context('when response not submitted', () => {
-        beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        })
-
         describe('should render editable page', async () => {
           it('when no option selected', async () => {
             draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
               .get(pagePath)
@@ -55,6 +52,7 @@ describe('Defendant response: more time needed page', () => {
 
           it('when answer is "no"', async () => {
             draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: MoreTimeNeededOption.NO } })
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
               .get(pagePath)
@@ -64,6 +62,7 @@ describe('Defendant response: more time needed page', () => {
         })
 
         it('should redirect to confirmation page when answer is "yes"', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({ moreTimeRequested: true })
           draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: MoreTimeNeededOption.YES } })
 
           await request(app)
@@ -91,19 +90,7 @@ describe('Defendant response: more time needed page', () => {
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       context('when response not submitted', () => {
-        it('should redirect to confirmation page when already submitted answer is "yes"', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: MoreTimeNeededOption.YES } })
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.redirect
-              .toLocation(ResponsePaths.moreTimeConfirmationPage
-                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-        })
-
-        it('should redirect to confirmation page when more time already requested on claim', async () => {
+        it('should redirect to confirmation page when more time already requested', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId({ moreTimeRequested: true })
           draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
 

@@ -21,6 +21,7 @@ export const sampleClaimObj = {
   issuedOn: '2017-07-25',
   totalAmountTillToday: 200,
   totalAmountTillDateOfIssue: 200,
+  moreTimeRequested: false,
   claim: {
     claimants: [
       {
