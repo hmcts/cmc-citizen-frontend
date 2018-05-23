@@ -1,7 +1,5 @@
 import * as express from 'express'
-
 import { Paths, StatementOfMeansPaths } from 'response/paths'
-
 import { ErrorHandling } from 'shared/errorHandling'
 import { Form } from 'forms/form'
 import { DraftService } from 'services/draftService'
@@ -31,6 +29,8 @@ function renderView (form: Form<PaidAmount>, res: express.Response): void {
 
   res.render(Paths.defencePaymentPlanPage.associatedView, {
     form: form,
+    monthlyIncome: draft.document.statementOfMeans.monthlyIncome,
+    monthlyExpenses: draft.document.statementOfMeans.monthlyExpenses,
     remainingAmount: claim.totalAmountTillToday - alreadyPaid
   })
 }
@@ -41,7 +41,6 @@ export default express.Router()
     FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-
       renderView(new Form(draft.document.defendantPaymentPlan), res)
     }))
 
