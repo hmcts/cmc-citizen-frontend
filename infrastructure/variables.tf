@@ -20,10 +20,6 @@ variable "ga_tracking_id" {
   default = "UA-97111056-1"
 }
 
-variable "draft_store_api_url" {
-  default = "https://testdraftstorelb.moneyclaim.reform.hmcts.net:4302"
-}
-
 variable "payments_api_url" {
   default = "https://test.payments.reform.hmcts.net:4421"
 }
