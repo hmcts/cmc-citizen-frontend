@@ -57,10 +57,9 @@ async function successHandler (res, next) {
     claimIsAlreadyFullyPersisted = await claimStoreClient.retrieveByExternalId(externalId, user).then(() => true)
   } catch (err) {
     /**
-     * CONFLICT -> onhold case (CCD-env only) -> submit full claim
      * NOT_FOUND -> claim was not submitted yet -> migrate draft
      */
-    if (err.statusCode === HttpStatus.CONFLICT || err.statusCode === HttpStatus.NOT_FOUND) {
+    if (err.statusCode === HttpStatus.NOT_FOUND) {
       claimIsAlreadyFullyPersisted = false
     } else {
       logError(
