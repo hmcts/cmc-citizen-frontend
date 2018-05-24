@@ -1,35 +1,43 @@
+
 $(document).ready(function () {
 
   $('input[name="paymentSchedule"]').click(function () {
 
-    //need total amount claimed to calculate length of payment
-    //how do i get total amount claimed to use here?
+    var remainingAmount = $('input[name="remainingAmount"]').val()
     var instalmentAmount = $('#instalmentAmount').val()
 
-    function calculateLengthOfPayment(paymentScheduleVal) {
-      //wrong calculation - to be corrected
-      return Math.ceil(instalmentAmount/paymentScheduleVal)
+    function calculateHowManyInstalments() {
+      return Math.ceil(remainingAmount/instalmentAmount)
     }
 
-    //exact calculation still to be worked on
-    /*
-    total claim amount = 1000
-    regular payments = 50
-    if each week --> 1000/50 = 20 instalments = 20 weeks
-    if every two weeks --> 1000/50 = 20 instalments = 40 weeks
-    if every month --> 1000/50 = 20 instalments = 20 months
+    function cal(days) {
+      var numberOfDaysToPay = calculateHowManyInstalments() * days
+      var finalPaidDay = moment().add(numberOfDaysToPay,'days')
+      console.log(finalPaidDay)
+      console.log(finalPaidDay.diff( moment(), 'years'))
+      console.log(finalPaidDay.diff( moment(), 'months'))
+      console.log(finalPaidDay.diff( moment(), 'weeks'))
+    }
 
-     */
     switch ($(this).attr('id')) {
       case 'paymentScheduleEACH_WEEK':
-        $('#lengthOfRepayment').text(calculateLengthOfPayment(7))
+        $('#lengthOfRepayment').text(cal(7))
         break;
       case 'paymentScheduleEVERY_TWO_WEEKS':
-        $('#lengthOfRepayment').text(calculateLengthOfPayment(14))
+        $('#lengthOfRepayment').text(cal(14))
         break;
       case 'paymentScheduleEVERY_MONTH':
-        $('#lengthOfRepayment').text(calculateLengthOfPayment(30))
+        $('#lengthOfRepayment').text(cal(30))
         break;
     }
   })
 })
+
+
+/*
+total claim amount = 1000
+regular payments = 50
+if each week --> 1000/50 = 20 instalments = 20 * 7 = 140 days
+if every two weeks --> 1000/50 = 20 instalments = 20 * 14 = 280 days
+if every month --> 1000/50 = 20 instalments = 20 * 30 = 600 days
+*/

@@ -53,6 +53,7 @@
       </div>
 
       <h2 class="heading-small">Length of repayment plan</h2>
+      <input type="hidden" name="remainingAmount" value="{{ remainingAmount }}">
       <p id="lengthOfRepayment"> - </p>
 
       <div class="form-group">
@@ -69,4 +70,5 @@
 
 {% block additional_scripts %}
   <script src="{{ asset_paths['js'] }}/defendant-repayment-plan.js"></script>
+  <script src="{{ asset_paths['js_vendor'] }}/vendor/moment/moment.js"></script>
 {% endblock %}
