@@ -12,11 +12,12 @@ $(document).ready(function () {
 
     function cal(days) {
       var numberOfDaysToPay = calculateHowManyInstalments() * days
-      var finalPaidDay = moment().add(numberOfDaysToPay,'days')
-      console.log(finalPaidDay)
-      console.log(finalPaidDay.diff( moment(), 'years'))
-      console.log(finalPaidDay.diff( moment(), 'months'))
-      console.log(finalPaidDay.diff( moment(), 'weeks'))
+      var finalInstalmentDate = moment(new Date()).add(numberOfDaysToPay,'days')
+
+      console.log(moment.duration(finalInstalmentDate.diff(new Date()),'years').humanize())
+      // console.log(finalPaidDay.diff( moment(), 'years'))
+      // console.log(finalPaidDay.diff( moment(), 'months'))
+      // console.log(finalPaidDay.diff( moment(), 'weeks'))
     }
 
     switch ($(this).attr('id')) {
