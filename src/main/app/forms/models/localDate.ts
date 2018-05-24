@@ -3,7 +3,6 @@ import * as _ from 'lodash'
 import * as moment from 'moment'
 
 import { DATE_FORMAT } from 'utils/momentFormatter'
-import { LocalDate as ValidatorDate } from '@hmcts/cmc-validators'
 
 export class ValidationErrors {
   static readonly YEAR_NOT_VALID: string = 'Enter a valid year'
@@ -11,7 +10,7 @@ export class ValidationErrors {
   static readonly DAY_NOT_VALID: string = 'Enter a valid day'
 }
 
-export class LocalDate implements ValidatorDate {
+export class LocalDate {
 
   @Min(1, { message: ValidationErrors.YEAR_NOT_VALID })
   @Max(9999, { message: ValidationErrors.YEAR_NOT_VALID })
