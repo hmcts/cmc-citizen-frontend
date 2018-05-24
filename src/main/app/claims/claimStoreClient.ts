@@ -22,6 +22,18 @@ export class ClaimStoreClient {
     // Nothing to do
   }
 
+  savePrePayment (externalId: string, submitter: User): Promise<string> {
+    return this.request.post(`${claimStoreApiUrl}/${externalId}/pre-payment`, {
+      headers: {
+        Authorization: `Bearer ${submitter.bearerToken}`
+      }
+    }).then(caseReference => {
+      return caseReference.case_reference
+    }).catch((err) => {
+      throw err
+    })
+  }
+
   saveClaim (draft: Draft<DraftClaim>, claimant: User): Promise<Claim> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
     return this.request
