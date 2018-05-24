@@ -52,6 +52,7 @@ export class StatementOfMeansPaths {
   static readonly monthlyIncomePage = new RoutablePath(`${statementOfMeansPath}/monthly-income`)
   static readonly monthlyExpensesPage = new RoutablePath(`${statementOfMeansPath}/monthly-expenses`)
   static readonly courtOrdersPage = new RoutablePath(`${statementOfMeansPath}/court-orders`)
+  static readonly cannotPayImmediatelyPage = new RoutablePath(`${statementOfMeansPath}/explain-why-cannot-pay-immediately`)
 }
 
 const fullAdmissionPath = `${responsePath}/full-admission`

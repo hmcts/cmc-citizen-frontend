@@ -1,24 +1,21 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, poundInput, textArea, radioOption, linkButton, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, poundInput, textArea, radioOption, linkButton, saveAndContinueButton, errorSummary, textInput %}
 
-{% set heading = 'Are you paying any other court orders?' %}
+{% set heading = 'Are you paying money as a result of any court orders?' %}
 
 {% macro courtOrdersRow(index, form) %}
 
   {% set prefix = 'rows[' + index + ']' %}
-  {% set detailsKey = prefix + '[details]' %}
   {% set amountKey = prefix + '[amount]' %}
+  {% set instalmentAmountKey = prefix + '[instalmentAmount]' %}
+  {% set claimNumberKey = prefix + '[claimNumber]' %}
 
-  <div class="form-group {% if form.errorFor(detailsKey) or form.errorFor(amountKey) %} form-group-error {% endif %}">
+  <div class="form-group {% if form.errorFor(amountKey) or form.errorFor(instalmentAmountKey) or form.errorFor(claimNumberKey) %} form-group-error {% endif %}">
 
-    {{
-      textArea(
-        label = 'Give details - for example how you’re paying and the claim number',
-        name = detailsKey,
-        form = form
-      )
-    }}
+    {{ textInput('Claim number', name = claimNumberKey, form = form) }}
     {{ poundInput(label = 'Amount you owe', name = amountKey, form = form) }}
+    {{ poundInput(label = 'Montly instalment amount', name = instalmentAmountKey, form = form) }}
+
 
   </div>
 

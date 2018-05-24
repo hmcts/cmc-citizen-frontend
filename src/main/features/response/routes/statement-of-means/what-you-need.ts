@@ -12,6 +12,6 @@ export default express.Router()
     (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.claim
       res.render(Paths.whatYouNeedPage.associatedView, {
-        nextPageLink: Paths.residencePage.evaluateUri({ externalId: claim.externalId })
+        nextPageLink: Paths.bankAccountsPage.evaluateUri({ externalId: claim.externalId })
       })
     })

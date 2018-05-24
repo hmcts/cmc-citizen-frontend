@@ -42,7 +42,7 @@ export default express.Router()
         draft.document.statementOfMeans.unemployed = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: externalId }))
+        res.redirect(StatementOfMeansPaths.debtsPage.evaluateUri({ externalId: externalId }))
       }
     })
   )

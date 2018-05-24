@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths, StatementOfMeansPaths } from 'response/paths'
+import { StatementOfMeansPaths } from 'response/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
@@ -60,7 +60,7 @@ export default express.Router()
         draft.document.statementOfMeans.courtOrders = form.model
 
         await new DraftService().save(draft, user.bearerToken)
-        res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+        res.redirect(StatementOfMeansPaths.cannotPayImmediatelyPage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )
