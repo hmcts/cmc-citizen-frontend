@@ -16,7 +16,7 @@ export class DecideHowYouWillPayTask {
     return responseDraft.fullAdmission
       && isValid(responseDraft.fullAdmission.defendantPaymentOption)
       && this.paymentDetailsAreProvidedFor(responseDraft)
-      && this.statementOfMeansIsCompletedIfApplicable(responseDraft)
+      || this.statementOfMeansIsCompletedIfApplicable(responseDraft)
   }
 
   private static paymentDetailsAreProvidedFor (responseDraft: ResponseDraft): boolean {

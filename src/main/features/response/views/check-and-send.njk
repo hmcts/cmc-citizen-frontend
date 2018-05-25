@@ -158,6 +158,11 @@
         {% endif %}
         {{ tableEnd() }}
       {% endif %}
+      {% if draft.fullAdmission.defendantPaymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+        {{ tableStart('whenWillYouPay', 'When will you pay?') }}
+        {{ row(label = 'When will you pay', value = t(draft.fullAdmission.defendantPaymentOption.option.displayValueFor(draft.responseType)) | capitalize, changeLink = paths.defencePaymentOptionsPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+        {{ tableEnd() }}
+      {% endif %}
     {% endif %}
 
     {% if draft.isResponseRejectedFullyWithDispute() %}
