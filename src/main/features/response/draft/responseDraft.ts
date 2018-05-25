@@ -24,6 +24,21 @@ import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 
+export class FullAdmission {
+  defendantPaymentOption: DefendantPaymentOption
+  payBySetDate?: PayBySetDate
+  defendantPaymentPlan?: DefendantPaymentPlan
+
+  deserialize (input: any): FullAdmission {
+    if (input) {
+      this.defendantPaymentOption = new DefendantPaymentOption().deserialize(input.defendantPaymentOption)
+      this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
+      this.defendantPaymentPlan = new DefendantPaymentPlan().deserialize(input.defendantPaymentPlan)
+      return this
+    }
+  }
+}
+
 export class ResponseDraft extends DraftDocument {
 
   response?: Response
@@ -38,14 +53,13 @@ export class ResponseDraft extends DraftDocument {
   howMuchOwed?: HowMuchOwed
   rejectPartOfClaim?: RejectPartOfClaim
   rejectAllOfClaim?: RejectAllOfClaim
-  defendantPaymentOption: DefendantPaymentOption
-  defendantPaymentPlan?: DefendantPaymentPlan
   paidAmount?: PaidAmount
-  payBySetDate?: PayBySetDate
   impactOfDispute?: ImpactOfDispute
   statementOfMeans?: StatementOfMeans
   whenDidYouPay?: WhenDidYouPay
   howMuchPaidClaimant?: HowMuchPaidClaimant
+
+  fullAdmission?: FullAdmission
 
   deserialize (input: any): ResponseDraft {
     if (input) {
@@ -64,15 +78,15 @@ export class ResponseDraft extends DraftDocument {
       }
       this.rejectPartOfClaim = new RejectPartOfClaim(input.rejectPartOfClaim && input.rejectPartOfClaim.option)
       this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
-      this.defendantPaymentOption = new DefendantPaymentOption().deserialize(input.defendantPaymentOption)
-      this.defendantPaymentPlan = new DefendantPaymentPlan().deserialize(input.defendantPaymentPlan)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
-      this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
-      this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
       this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
       this.whenDidYouPay = new WhenDidYouPay().deserialize(input.whenDidYouPay)
       this.howMuchPaidClaimant = new HowMuchPaidClaimant(input.howMuchPaidClaimant && input.howMuchPaidClaimant.option)
+
+      if (input.fullAdmission) {
+        this.fullAdmission = new FullAdmission().deserialize(input.fullAdmission)
+      }
     }
     return this
   }
