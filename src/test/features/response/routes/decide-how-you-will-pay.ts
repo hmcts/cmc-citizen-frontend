@@ -15,7 +15,6 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
 import { ResponseType } from 'response/form/models/responseType'
 import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
-import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
@@ -73,23 +72,6 @@ describe('Defendant - when will you pay options', () => {
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText(fullAdmissionQuestion))
-        })
-
-        const partAdmissionQuestion: string = 'When will you pay the amount you admit you owe?'
-        it(`should render page asking '${partAdmissionQuestion}' when partial admission was selected`, async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response', {
-            response: {
-              type: ResponseType.PART_ADMISSION
-            },
-            rejectPartOfClaim: {
-              option: RejectPartOfClaimOption.AMOUNT_TOO_HIGH
-            }
-          })
-          await request(app)
-            .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText(partAdmissionQuestion))
         })
       })
     })

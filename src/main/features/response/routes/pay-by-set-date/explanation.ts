@@ -36,7 +36,7 @@ export default express.Router()
     FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      renderView(new Form(draft.document.payBySetDate.explanation), res)
+      renderView(new Form(draft.document.fullAdmission.payBySetDate.explanation), res)
     })
   .post(
     PayBySetDatePaths.explanationPage.uri,
@@ -50,7 +50,7 @@ export default express.Router()
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        draft.document.payBySetDate.explanation = form.model
+        draft.document.fullAdmission.payBySetDate.explanation = form.model
         await new DraftService().save(draft, user.bearerToken)
 
         res.redirect(nextPageFor(draft.document).evaluateUri({ externalId: req.params.externalId }))

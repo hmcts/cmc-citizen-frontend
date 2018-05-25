@@ -13,22 +13,23 @@ function isValid (input): boolean {
 
 export class DecideHowYouWillPayTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
-    return isValid(responseDraft.defendantPaymentOption)
+    return responseDraft.fullAdmission
+      && isValid(responseDraft.fullAdmission.defendantPaymentOption)
       && this.paymentDetailsAreProvidedFor(responseDraft)
       && this.statementOfMeansIsCompletedIfApplicable(responseDraft)
   }
 
   private static paymentDetailsAreProvidedFor (responseDraft: ResponseDraft): boolean {
-    if (responseDraft.defendantPaymentOption.option === DefendantPaymentType.BY_SET_DATE) {
-      return responseDraft.payBySetDate !== undefined
-        && isValid(responseDraft.payBySetDate.paymentDate)
-        && this.explanationIsValidIfRequired(responseDraft.payBySetDate)
-    } else if (responseDraft.defendantPaymentOption.option === DefendantPaymentType.INSTALMENTS) {
-      return isValid(responseDraft.defendantPaymentPlan)
-    } else if (responseDraft.defendantPaymentOption.option === DefendantPaymentType.IMMEDIATELY) {
-      return isValid(responseDraft.defendantPaymentOption)
+    if (responseDraft.fullAdmission.defendantPaymentOption.option === DefendantPaymentType.BY_SET_DATE) {
+      return responseDraft.fullAdmission.payBySetDate !== undefined
+        && isValid(responseDraft.fullAdmission.payBySetDate.paymentDate)
+        && this.explanationIsValidIfRequired(responseDraft.fullAdmission.payBySetDate)
+    } else if (responseDraft.fullAdmission.defendantPaymentOption.option === DefendantPaymentType.INSTALMENTS) {
+      return isValid(responseDraft.fullAdmission.defendantPaymentPlan)
+    } else if (responseDraft.fullAdmission.defendantPaymentOption.option === DefendantPaymentType.IMMEDIATELY) {
+      return isValid(responseDraft.fullAdmission.defendantPaymentOption)
     } else {
-      throw new Error(`Unknown payment option: ${responseDraft.defendantPaymentOption.option}`)
+      throw new Error(`Unknown payment option: ${responseDraft.fullAdmission.defendantPaymentOption.option}`)
     }
   }
 
