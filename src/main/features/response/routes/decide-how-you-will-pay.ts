@@ -10,24 +10,9 @@ import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { ResponseType } from 'response/form/models/responseType'
-import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
-
-function isAmountTooHighPartialResponse (responseDraft: ResponseDraft): boolean {
-  return responseDraft.response.type.value === ResponseType.PART_ADMISSION.value
-    && responseDraft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
-}
-
-function formLabelFor (responseDraft: ResponseDraft): string {
-  if (isAmountTooHighPartialResponse(responseDraft)) {
-    return 'When will you pay the amount you admit you owe?'
-  } else {
-    return 'How do you want to pay?'
-  }
-}
 
 function renderView (form: Form<DefendantPaymentOption>, res: express.Response) {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -35,8 +20,7 @@ function renderView (form: Form<DefendantPaymentOption>, res: express.Response) 
   res.render(Paths.defencePaymentOptionsPage.associatedView, {
     form: form,
     claim: claim,
-    responseType: draft.document.response.type,
-    formLabel: formLabelFor(draft.document),
+    draft: draft.document,
     statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(draft.document)
   })
 }
