@@ -54,7 +54,8 @@ async function successHandler (res, next) {
   let claimIsAlreadyFullyPersisted: boolean
 
   try {
-    claimIsAlreadyFullyPersisted = await claimStoreClient.retrieveByExternalId(externalId, user).then(() => true)
+    claimIsAlreadyFullyPersisted = await claimStoreClient.retrieveByExternalId(externalId, user)
+      .then(() => true)
   } catch (err) {
     /**
      * NOT_FOUND -> claim was not submitted yet -> migrate draft

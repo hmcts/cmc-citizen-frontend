@@ -132,6 +132,12 @@ export function rejectRetrieveClaimByExternalId (reason: string = 'Error') {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
+export function resolveRetrieveClaimByExternalIdTo404HttpCode (reason: string = 'Claim not found') {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
+    .reply(HttpStatus.NOT_FOUND, reason)
+}
+
 export function resolveRetrieveByClaimantId (claimOverride?: object) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/claimant/[0-9]+'))
@@ -186,16 +192,16 @@ export function resolveRetrieveByDefendantId (referenceNumber: string, defendant
     .reply(HttpStatus.OK, [{ ...sampleClaimObj, referenceNumber: referenceNumber, defendantId: defendantId }])
 }
 
-export function resolveRetrieveByDefendantIdWithResponse (override?: object) {
-  mock(`${serviceBaseURL}/claims`)
-    .get(new RegExp('/defendant/[0-9]+'))
-    .reply(HttpStatus.OK, [{ ...sampleClaimObj, ...sampleDefendantResponseObj, ...override }])
-}
-
 export function rejectRetrieveByDefendantId (reason: string) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/defendant/[0-9]+'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
+export function resolvePrePaymentSave () {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}/pre-payment'))
+    .reply(HttpStatus.OK, { case_reference: 1527177480274990 })
 }
 
 export function resolveSaveResponse () {
