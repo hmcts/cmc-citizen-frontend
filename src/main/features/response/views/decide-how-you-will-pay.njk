@@ -2,7 +2,7 @@
 
 {% from "form.njk" import saveAndContinueButton, csrfProtection, radioGroup, radioGroupWithHintPanel, errorSummary %}
 
-{% set heading = formLabel %}
+{% set heading = 'How do you want to pay?' %}
 
 {% block content %}
   <div class="grid-row">
@@ -22,27 +22,28 @@
         {% if statementOfMeansIsApplicable %}
           {% set hintText = t('You will need to give details of your finances to {{ claimantFullName }} to explain why you can`t pay immediately.', { claimantFullName: claim.claimData.claimant.name }) %}
         {% endif %}
+
         {{
         radioGroupWithHintPanel(
           form = form,
-          label = formLabel,
+          label = heading,
           labelForScreenReadersOnly = true,
           name = 'option',
           options = [
             {
-              label: DefendantPaymentType.IMMEDIATELY.displayValueFor(responseType),
+              label: DefendantPaymentType.IMMEDIATELY.displayValueFor(draft.response.type),
               value: DefendantPaymentType.IMMEDIATELY.value,
               checked: (form.valueFor('option') === DefendantPaymentType.IMMEDIATELY),
               hint: 'You must make sure they receive the money within 5 days. Any cheques or transfers must be clear in their account.'
             },
             {
-              label: DefendantPaymentType.BY_SET_DATE.displayValueFor(responseType),
+              label: DefendantPaymentType.BY_SET_DATE.displayValueFor(draft.response.type),
               value: DefendantPaymentType.BY_SET_DATE.value,
               checked: (form.valueFor('option') === DefendantPaymentType.BY_SET_DATE),
               hint: hintText
             },
             {
-              label: DefendantPaymentType.INSTALMENTS.displayValueFor(responseType),
+              label: DefendantPaymentType.INSTALMENTS.displayValueFor(draft.response.type),
               value: DefendantPaymentType.INSTALMENTS.value,
               checked: (form.valueFor('option') === DefendantPaymentType.INSTALMENTS),
               hint: hintText
