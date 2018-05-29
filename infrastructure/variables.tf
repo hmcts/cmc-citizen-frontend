@@ -29,11 +29,11 @@ variable "fees_api_url" {
 }
 
 variable "idam_api_url" {
-  default = "http://betaDevBccidamAppLB.reform.hmcts.net"
+  default = "http://idam-api-idam-saat.service.core-compute-idam-saat.internal"
 }
 
 variable "authentication_web_url" {
-  default = "https://idam-test.dev.ccidam.reform.hmcts.net"
+  default = "https://idam-web-public-idam-saat.service.core-compute-idam-saat.internal"
 }
 
 variable "subscription" {}
