@@ -11,8 +11,7 @@ import { DraftService } from 'services/draftService'
 import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
-import * as config from 'config'
-import * as toBoolean from 'to-boolean'
+import { FeatureToggles } from 'utils/featureToggles'
 
 function renderView (form: Form<Response>, res: express.Response) {
   const claim: Claim = res.locals.claim
@@ -64,7 +63,7 @@ export default express.Router()
             res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: claim.externalId }))
             break
           case ResponseType.FULL_ADMISSION:
-            if (toBoolean(config.get<boolean>('featureToggles.fullAdmission'))) {
+            if (FeatureToggles.isEnabled('fullAdmission')) {
               res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
             } else {
               res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: claim.externalId }))
