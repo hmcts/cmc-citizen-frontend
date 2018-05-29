@@ -11,7 +11,8 @@ declare type ClaimData = {
   interest: Interest,
   reason: string
   payment: Payment,
-  total: number
+  total: number,
+  externalId: string
 }
 
 declare type Claim = {

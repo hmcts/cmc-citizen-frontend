@@ -43,6 +43,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const event: string = config.get<string>('fees.issueFee.event')
 const channel: string = config.get<string>('fees.channel.online')
 const failureMessage: string = 'failure message'
+const externalId: string = draftStoreServiceMock.sampleClaimDraftObj.externalId
 
 let overrideClaimDraftObj
 
@@ -56,7 +57,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
     beforeEach(() => {
       overrideClaimDraftObj = {
-        externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
+        externalId: externalId,
         readResolveDispute: true,
         readCompletingClaim: true,
         claimant: {
@@ -154,6 +155,7 @@ describe('Claim issue: initiate payment receiver', () => {
     it('should return 500 and error page when cannot calculate issue fee', async () => {
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
+      claimStoreServiceMock.resolvePrePaymentSave()
       feesServiceMock.rejectCalculateFee(event, channel, failureMessage)
 
       await request(app)
@@ -165,6 +167,7 @@ describe('Claim issue: initiate payment receiver', () => {
     it('should return 500 and error page when cannot retrieve service token needed for payment service', async () => {
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
+      claimStoreServiceMock.resolvePrePaymentSave()
       feesServiceMock.resolveCalculateFee(event, channel)
       idamServiceMock.rejectRetrieveServiceToken()
 
@@ -177,6 +180,7 @@ describe('Claim issue: initiate payment receiver', () => {
     it('should return 500 and error page when cannot create payment', async () => {
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
+      claimStoreServiceMock.resolvePrePaymentSave()
       feesServiceMock.resolveCalculateFee(event, channel)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.rejectCreate()
@@ -190,6 +194,7 @@ describe('Claim issue: initiate payment receiver', () => {
     it('should return 500 and error page when cannot save draft', async () => {
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
+      claimStoreServiceMock.resolvePrePaymentSave()
       feesServiceMock.resolveCalculateFee(event, channel)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.resolveCreate()
@@ -209,6 +214,7 @@ describe('Claim issue: initiate payment receiver', () => {
       idamServiceMock.resolveRetrieveServiceToken()
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
       payServiceMock.resolveRetrieveToNotFound()
+      claimStoreServiceMock.resolvePrePaymentSave()
       feesServiceMock.resolveCalculateFee(event, channel)
       payServiceMock.resolveCreate()
       draftStoreServiceMock.resolveSave()
@@ -222,6 +228,7 @@ describe('Claim issue: initiate payment receiver', () => {
     it('should redirect to next page when everything is fine', async () => {
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
+      claimStoreServiceMock.resolvePrePaymentSave()
       feesServiceMock.resolveCalculateFee(event, channel)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.resolveCreate()
@@ -241,7 +248,7 @@ describe('Claim issue: initiate payment receiver', () => {
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.redirect.toLocation(Paths.finishPaymentReceiver.evaluateUri({ externalId: draftStoreServiceMock.sampleClaimDraftObj.externalId })))
+        .expect(res => expect(res).to.be.redirect.toLocation(Paths.finishPaymentReceiver.evaluateUri({ externalId: externalId })))
     })
   })
 })
@@ -256,7 +263,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
     beforeEach(() => {
       overrideClaimDraftObj = {
-        externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
+        externalId: externalId,
         readResolveDispute: true,
         readCompletingClaim: true,
         claimant: {
@@ -335,16 +342,6 @@ describe('Claim issue: post payment callback receiver', () => {
         } as Reason
       } as DraftClaim
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-    })
-
-    it('should return 500 and error page when cannot retrieve service token needed for payment service', async () => {
-      draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
-      idamServiceMock.rejectRetrieveServiceToken()
-
-      await request(app)
-        .get(Paths.finishPaymentReceiver.uri)
-        .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.serverError.withText('Error'))
     })
 
     it('should return 500 and error page when cannot retrieve payment', async () => {
@@ -444,16 +441,16 @@ describe('Claim issue: post payment callback receiver', () => {
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${draftStoreServiceMock.sampleClaimDraftObj.externalId}/confirmation`))
+              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
           })
 
           it('should redirect to confirmation page when payment is missing', async () => {
             draftStoreServiceMock.resolveFind(draftType, { claimant: undefined })
 
             await request(app)
-              .get(Paths.finishPaymentReceiver.evaluateUri({ externalId: draftStoreServiceMock.sampleClaimDraftObj.externalId }))
+              .get(Paths.finishPaymentReceiver.evaluateUri({ externalId: externalId }))
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${draftStoreServiceMock.sampleClaimDraftObj.externalId}/confirmation`))
+              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
           })
         })
 
@@ -464,7 +461,7 @@ describe('Claim issue: post payment callback receiver', () => {
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.rejectRetrieveClaimByExternalId('Claim not found by external id')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
             claimStoreServiceMock.rejectSaveClaimForUser()
 
             await request(app)
@@ -478,7 +475,7 @@ describe('Claim issue: post payment callback receiver', () => {
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.rejectRetrieveClaimByExternalId('Claim not found by external id')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
             claimStoreServiceMock.resolveSaveClaimForUser()
             draftStoreServiceMock.rejectDelete()
 
@@ -493,14 +490,14 @@ describe('Claim issue: post payment callback receiver', () => {
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.rejectRetrieveClaimByExternalId('Claim not found by external id')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
             claimStoreServiceMock.resolveSaveClaimForUser()
             draftStoreServiceMock.resolveDelete()
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/400f4c57-9684-49c0-adb4-4cf46579d6dc/confirmation`))
+              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
           })
         })
       })
