@@ -29,8 +29,6 @@ export class ClaimStoreClient {
       }
     }).then(caseReference => {
       return caseReference.case_reference
-    }).catch((err) => {
-      throw err
     })
   }
 

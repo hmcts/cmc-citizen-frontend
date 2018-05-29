@@ -80,7 +80,7 @@ export class PayClient {
 
   private preparePaymentRequest (caseReference: string, externalId: string, fees: Fee[]): object {
     return {
-      case_reference: caseReference,
+      case_reference: externalId,
       ccd_case_number: caseReference === externalId ? 'UNKNOWN' : caseReference,
       description: description,
       service: serviceName,
