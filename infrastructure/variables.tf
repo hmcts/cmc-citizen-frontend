@@ -21,7 +21,7 @@ variable "ga_tracking_id" {
 }
 
 variable "payments_api_url" {
-  default = "https://test.payments.reform.hmcts.net:4421"
+  default = "http://payment-api-saat-staging.service.core-compute-saat.internal"
 }
 
 variable "fees_api_url" {
