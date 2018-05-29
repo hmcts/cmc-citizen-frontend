@@ -1,4 +1,9 @@
 import * as express from 'express'
+import { plainToClass } from 'class-transformer'
+import { Claim } from 'claims/models/claim'
+import { Draft } from '@hmcts/draft-store-client'
+import { Address } from 'forms/models/address'
+import { PartyDetails } from 'forms/models/partyDetails'
 import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
@@ -27,6 +32,19 @@ function defendantResponseRequestHandler (): express.RequestHandler {
   return AuthorizationMiddleware.requestHandler(requiredRoles, accessDeniedCallback, unprotectedPaths)
 }
 
+function initiatePartyFromClaimHandler (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const draft: Draft<ResponseDraft> = res.locals.responseDraft
+  if (!draft.document.defendantDetails.partyDetails) {
+    const claim: Claim = res.locals.claim
+
+    const partyDetails: PartyDetails = plainToClass(PartyDetails, claim.claimData.defendant)
+    partyDetails.address = new Address()
+
+    draft.document.defendantDetails.partyDetails = partyDetails
+  }
+  next()
+}
+
 export class Feature {
   enableFor (app: express.Express) {
     if (app.settings.nunjucksEnv && app.settings.nunjucksEnv.globals) {
@@ -45,11 +63,11 @@ export class Feature {
     )
     app.all('/case/*/response/summary', OnlyClaimantLinkedToClaimCanDoIt.check(), ResponseGuard.checkResponseExists())
     app.all(/^\/case\/.*\/response\/(?!claim-details).*$/, CountyCourtJudgmentRequestedGuard.requestHandler)
-    app.all(
-      /^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
+    app.all(/^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'response', 100, (value: any): ResponseDraft => {
         return new ResponseDraft().deserialize(value)
-      })
+      }),
+      initiatePartyFromClaimHandler
     )
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }

@@ -139,30 +139,22 @@
       {{ tableEnd() }}
     {% endif %}
 
-    {% if draft.isResponseFullyAdmitted() or draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH) %}
-      {% if draft.fullAdmission.defendantPaymentOption.isOfType(DefendantPaymentType.INSTALMENTS) %}
-        {{ tableStart('whenWillYouPay', 'When will you pay?') }}
-        {{ row(label = 'When will you pay', value = t(draft.fullAdmission.defendantPaymentOption.option.displayValueFor(draft.responseType)) | capitalize, changeLink = paths.defencePaymentOptionsPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-        {{ row(label = 'Followed by equal instalments of', value = draft.fullAdmission.defendantPaymentPlan.instalmentAmount | numeral, changeLink = paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-        {{ row(label = 'Make the first payment on', value = draft.fullAdmission.defendantPaymentPlan.firstPaymentDate.toMoment() | date, changeLink = paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-        {{ row(label = 'Frequency of payments', value = t(draft.fullAdmission.defendantPaymentPlan.paymentSchedule.displayValue), changeLink = paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-        {{ row(label = 'Explain why you can’t pay the full amount now', value = draft.fullAdmission.defendantPaymentPlan.text, changeLink = paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-        {{ tableEnd() }}
-      {% endif %}
-      {% if draft.fullAdmission.defendantPaymentOption.isOfType(DefendantPaymentType.BY_SET_DATE) %}
-        {{ tableStart('whenWillYouPay', 'When will you pay?') }}
+    {% if draft.isResponseFullyAdmitted() %}
+      {{ tableStart('whenWillYouPay', 'When will you pay') }}
         {{ row(label = 'When will you pay', value = t(draft.fullAdmission.defendantPaymentOption.option.displayValueFor(draft.response.type)) | capitalize, changeLink = paths.defencePaymentOptionsPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-        {{ row(label = 'When you’ll pay the amount', value = draft.fullAdmission.payBySetDate.paymentDate.date.toMoment() | date, changeLink = payBySetDatePaths.paymentDatePage.evaluateUri({ externalId: claim.externalId }), bottomBorder = (not draft.payBySetDate.hasExplanation()), bold = true) }}
-        {% if draft.fullAdmission.payBySetDate.hasExplanation() %}
-          {{ row(label = 'Explain why you can’t pay immediately', changeLink = draft.fullAdmission.payBySetDate.explanation.text, changeLink = payBySetDatePaths.explanationPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+        {% if draft.fullAdmission.defendantPaymentOption.isOfType(DefendantPaymentType.BY_SET_DATE) %}
+          {{ row(label = 'When you’ll pay the amount', value = draft.fullAdmission.payBySetDate.paymentDate.date.toMoment() | date, changeLink = payBySetDatePaths.paymentDatePage.evaluateUri({ externalId: claim.externalId }), bottomBorder = (not draft.fullAdmission.payBySetDate.hasExplanation()), bold = true) }}
+          {% if draft.fullAdmission.payBySetDate.hasExplanation() %}
+            {{ row(label = 'Explain why you can’t pay the full amount now', value = draft.fullAdmission.payBySetDate.explanation.text, changeLink = payBySetDatePaths.explanationPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+          {% endif %}
         {% endif %}
-        {{ tableEnd() }}
-      {% endif %}
-      {% if draft.fullAdmission.defendantPaymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
-        {{ tableStart('whenWillYouPay', 'When will you pay?') }}
-        {{ row(label = 'When will you pay', value = t(draft.fullAdmission.defendantPaymentOption.option.displayValueFor(draft.responseType)) | capitalize, changeLink = paths.defencePaymentOptionsPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-        {{ tableEnd() }}
-      {% endif %}
+        {% if draft.fullAdmission.defendantPaymentOption.isOfType(DefendantPaymentType.INSTALMENTS) %}
+          {{ row(label = 'Regular payments of', value = draft.fullAdmission.defendantPaymentPlan.instalmentAmount | numeral, changeLink = paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bold = true, bottomBorder = false) }}
+          {{ row(label = 'Frequency of payments', value = t(draft.fullAdmission.defendantPaymentPlan.paymentSchedule.displayValue), changeLink = paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bold = true, bottomBorder = false) }}
+          {{ row(label = 'Make the first payment on', value = draft.fullAdmission.defendantPaymentPlan.firstPaymentDate.toMoment() | date, changeLink = paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bold = true, bottomBorder = false) }}
+          {{ row(label = 'Explain why you can’t pay the full amount now', value = draft.fullAdmission.defendantPaymentPlan.text, changeLink = paths.defencePaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+        {% endif %}
+      {{ tableEnd() }}
     {% endif %}
 
     {% if draft.isResponseRejectedFullyWithDispute() %}
