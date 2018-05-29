@@ -20,16 +20,17 @@ export class DecideHowYouWillPayTask {
   }
 
   private static paymentDetailsAreProvidedFor (responseDraft: ResponseDraft): boolean {
-    if (responseDraft.fullAdmission.defendantPaymentOption.option === DefendantPaymentType.BY_SET_DATE) {
-      return responseDraft.fullAdmission.payBySetDate !== undefined
-        && isValid(responseDraft.fullAdmission.payBySetDate.paymentDate)
-        && this.explanationIsValidIfRequired(responseDraft.fullAdmission.payBySetDate)
-    } else if (responseDraft.fullAdmission.defendantPaymentOption.option === DefendantPaymentType.INSTALMENTS) {
-      return isValid(responseDraft.fullAdmission.defendantPaymentPlan)
-    } else if (responseDraft.fullAdmission.defendantPaymentOption.option === DefendantPaymentType.IMMEDIATELY) {
-      return isValid(responseDraft.fullAdmission.defendantPaymentOption)
-    } else {
-      throw new Error(`Unknown payment option: ${responseDraft.fullAdmission.defendantPaymentOption.option}`)
+    switch (responseDraft.fullAdmission.defendantPaymentOption.option) {
+      case DefendantPaymentType.IMMEDIATELY:
+        return true
+      case DefendantPaymentType.BY_SET_DATE:
+        return responseDraft.fullAdmission.payBySetDate !== undefined
+          && isValid(responseDraft.fullAdmission.payBySetDate.paymentDate)
+          && this.explanationIsValidIfRequired(responseDraft.fullAdmission.payBySetDate)
+      case DefendantPaymentType.INSTALMENTS:
+        return isValid(responseDraft.fullAdmission.defendantPaymentPlan)
+      default:
+        throw new Error(`Unknown payment option: ${responseDraft.fullAdmission.defendantPaymentOption.option}`)
     }
   }
 
