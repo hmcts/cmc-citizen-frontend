@@ -1,5 +1,6 @@
 import { PartyType } from 'integration-test/data/party-type'
 import { InterestType } from 'integration-test/data/interest-type'
+import * as uuid from 'uuid'
 
 export const DEFAULT_PASSWORD = 'Password12'
 
@@ -49,6 +50,7 @@ export function createClaimData (claimantType: PartyType, defendantType: PartyTy
     },
     reason: claimReason,
     timeline: { rows: [{ date: 'may', description: 'ok' }] },
+    externalId: uuid(),
     get total (): number {
       switch (interestType) {
         case InterestType.STANDARD:

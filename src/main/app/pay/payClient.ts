@@ -26,19 +26,21 @@ export class PayClient {
    *
    * @param user - user who make a call
    * @param caseReference - reference number of the case associated with the payment
+   * @param externalId - externalId of claim
    * @param fees - fees array used to calculate total fee amount
    * @param returnURL - the url the user should be redirected to
    * @returns response with payment status and link to card payment page
    */
-  async create (user: User, caseReference: string, fees: Fee[], returnURL: string): Promise<Payment> {
+  async create (user: User, caseReference: string, externalId: string, fees: Fee[], returnURL: string): Promise<Payment> {
     checkDefined(user, 'User is required')
     checkNotEmpty(caseReference, 'Case reference is required')
+    checkNotEmpty(externalId, 'ExternalId is required')
     checkNotEmpty(fees, 'Fees array is required')
     checkNotEmpty(returnURL, 'Post payment redirect URL is required')
 
     const payment: object = await request.post({
       uri: baseURL,
-      body: this.preparePaymentRequest(caseReference, fees),
+      body: this.preparePaymentRequest(caseReference, externalId, fees),
       headers: {
         Authorization: `Bearer ${user.bearerToken}`,
         ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`,
@@ -76,10 +78,10 @@ export class PayClient {
     }
   }
 
-  private preparePaymentRequest (caseReference: string, fees: Fee[]): object {
+  private preparePaymentRequest (caseReference: string, externalId: string, fees: Fee[]): object {
     return {
-      case_reference: caseReference,
-      ccd_case_number: 'UNKNOWN',
+      case_reference: externalId,
+      ccd_case_number: caseReference === externalId ? 'UNKNOWN' : caseReference,
       description: description,
       service: serviceName,
       currency: currency,
