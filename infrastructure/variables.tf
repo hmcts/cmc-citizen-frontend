@@ -33,7 +33,7 @@ variable "idam_api_url" {
 }
 
 variable "authentication_web_url" {
-  default = "https://idam-web-public-idam-saat.service.core-compute-idam-saat.internal"
+  default = "http://idam-web-public-idam-saat.service.core-compute-idam-saat.internal"
 }
 
 variable "subscription" {}
