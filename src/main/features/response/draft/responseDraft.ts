@@ -1,3 +1,4 @@
+import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { Response } from 'response/form/models/response'
 import { FreeMediation } from 'response/form/models/freeMediation'
 import { RejectPartOfClaim } from 'response/form/models/rejectPartOfClaim'
@@ -15,7 +16,6 @@ import { DefendantPaymentOption } from 'response/form/models/defendantPaymentOpt
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
-import { PayBySetDate } from 'response/draft/payBySetDate'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
 import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
@@ -26,13 +26,13 @@ import * as toBoolean from 'to-boolean'
 
 export class FullAdmission {
   defendantPaymentOption: DefendantPaymentOption
-  payBySetDate?: PayBySetDate
+  paymentDate?: PaymentDate
   defendantPaymentPlan?: DefendantPaymentPlan
 
   deserialize (input: any): FullAdmission {
     if (input) {
       this.defendantPaymentOption = new DefendantPaymentOption().deserialize(input.defendantPaymentOption)
-      this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
+      this.paymentDate = new PaymentDate().deserialize(input.paymentDate)
       this.defendantPaymentPlan = new DefendantPaymentPlan().deserialize(input.defendantPaymentPlan)
       return this
     }

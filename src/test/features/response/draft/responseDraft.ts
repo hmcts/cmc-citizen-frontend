@@ -57,7 +57,6 @@ describe('ResponseDraft', () => {
         month: 2,
         day: 10
       }
-      const paymentDateExplanation = 'I can not pay now'
 
       const draft: ResponseDraft = new ResponseDraft().deserialize({
         response: {
@@ -70,13 +69,8 @@ describe('ResponseDraft', () => {
           option: MoreTimeNeededOption.YES
         },
         fullAdmission: {
-          payBySetDate: {
-            paymentDate: {
-              date: paymentDate
-            },
-            explanation: {
-              text: paymentDateExplanation
-            }
+          paymentDate: {
+            date: paymentDate
           }
         },
         statementOfMeans: {
@@ -96,8 +90,7 @@ describe('ResponseDraft', () => {
       expect(draft.response.type).to.eql(responseType)
       expect(draft.moreTimeNeeded.option).to.eql(MoreTimeNeededOption.YES)
       expect(draft.freeMediation.option).to.eql(FreeMediationOption.YES)
-      assertLocalDateEquals(draft.fullAdmission.payBySetDate.paymentDate.date, paymentDate)
-      expect(draft.fullAdmission.payBySetDate.explanation.text).to.equal(paymentDateExplanation)
+      assertLocalDateEquals(draft.fullAdmission.paymentDate.date, paymentDate)
       expect(draft.statementOfMeans.residence.type).to.eql(ResidenceType.OTHER)
     })
   })

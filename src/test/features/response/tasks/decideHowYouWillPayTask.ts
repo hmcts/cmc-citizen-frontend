@@ -5,9 +5,7 @@ import { DecideHowYouWillPayTask } from 'response/tasks/decideHowYouWillPayTask'
 
 import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
 import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
-import { PayBySetDate } from 'response/draft/payBySetDate'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
-import { Explanation } from 'response/form/models/pay-by-set-date/explanation'
 import { MomentFactory } from 'shared/momentFactory'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
@@ -42,10 +40,7 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
   responseDraft.fullAdmission = new FullAdmission()
   if (paymentType === DefendantPaymentType.BY_SET_DATE) {
     responseDraft.fullAdmission.defendantPaymentOption = new DefendantPaymentOption(DefendantPaymentType.BY_SET_DATE)
-    responseDraft.fullAdmission.payBySetDate = new PayBySetDate(
-      new PaymentDate(localDateFrom(MomentFactory.currentDate())),
-      new Explanation('I an not able to pay now')
-    )
+    responseDraft.fullAdmission.paymentDate = new PaymentDate(localDateFrom(MomentFactory.currentDate()))
   } else if (paymentType === DefendantPaymentType.INSTALMENTS) {
     responseDraft.fullAdmission.defendantPaymentOption = new DefendantPaymentOption(DefendantPaymentType.INSTALMENTS)
     responseDraft.fullAdmission.defendantPaymentPlan = new DefendantPaymentPlan(
@@ -77,10 +72,6 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
   return responseDraft
 }
 
-function dateMoreThan28DaysFromNow () {
-  return localDateFrom(MomentFactory.currentDate().add(29, 'days'))
-}
-
 describe('DecideHowYouWillPayTask', () => {
 
   context('should not be completed when', () => {
@@ -109,25 +100,9 @@ describe('DecideHowYouWillPayTask', () => {
       responseDraft = validResponseDraftWith(DefendantPaymentType.BY_SET_DATE)
     })
 
-    it('should not be completed when pay by set is undefined', () => {
-      responseDraft.fullAdmission.payBySetDate = undefined
-      expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
-    })
-
     it('should not be completed when payment date is not valid', () => {
-      responseDraft.fullAdmission.payBySetDate.paymentDate.date = undefined
+      responseDraft.fullAdmission.paymentDate.date = undefined
       expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
-    })
-
-    it('should not be completed when payment date is more than 28 days from today and explanation is not valid', () => {
-      responseDraft.fullAdmission.payBySetDate.paymentDate.date = dateMoreThan28DaysFromNow()
-      responseDraft.fullAdmission.payBySetDate.explanation.text = undefined
-      expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
-    })
-
-    it('should be completed when payment date is more than 28 days from today and explanation is valid', () => {
-      responseDraft.fullAdmission.payBySetDate.paymentDate.date = dateMoreThan28DaysFromNow()
-      expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
     })
 
     it('should be completed when payment date is today', () => {

@@ -2,7 +2,6 @@ import { Validator } from 'class-validator'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
-import { PayBySetDate } from 'response/draft/payBySetDate'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 
 const validator = new Validator()
@@ -24,21 +23,11 @@ export class DecideHowYouWillPayTask {
       case DefendantPaymentType.IMMEDIATELY:
         return true
       case DefendantPaymentType.BY_SET_DATE:
-        return responseDraft.fullAdmission.payBySetDate !== undefined
-          && isValid(responseDraft.fullAdmission.payBySetDate.paymentDate)
-          && this.explanationIsValidIfRequired(responseDraft.fullAdmission.payBySetDate)
+        return isValid(responseDraft.fullAdmission.paymentDate)
       case DefendantPaymentType.INSTALMENTS:
         return isValid(responseDraft.fullAdmission.defendantPaymentPlan)
       default:
         throw new Error(`Unknown payment option: ${responseDraft.fullAdmission.defendantPaymentOption.option}`)
-    }
-  }
-
-  private static explanationIsValidIfRequired (payBySetDate: PayBySetDate): boolean {
-    if (payBySetDate.requiresExplanation()) {
-      return isValid(payBySetDate.explanation)
-    } else {
-      return true
     }
   }
 
