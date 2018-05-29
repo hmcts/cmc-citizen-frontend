@@ -67,7 +67,7 @@ variable "feature_fine_print" {
 }
 
 variable "feature_return_error_to_user" {
-  default = "false"
+  default = "true"
 }
 
 variable "jenkins_AAD_objectId" {
