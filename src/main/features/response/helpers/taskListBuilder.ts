@@ -93,8 +93,8 @@ export class TaskListBuilder {
     const tasks: TaskListItem[] = []
     if (! draft.isResponsePopulated()
       || draft.isResponseRejectedFullyWithDispute()
-      || draft.isResponseFullyAdmitted()
-      || draft.isResponseRejectedFullyWithAmountClaimedPaid()) {
+      || draft.isResponseRejectedFullyWithAmountClaimedPaid()
+      || draft.isResponseFullyAdmitted()) {
       tasks.push(
         new TaskListItem(
           'Check and submit your response',

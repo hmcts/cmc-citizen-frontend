@@ -31,19 +31,19 @@
           name = 'option',
           options = [
             {
-              label: DefendantPaymentType.IMMEDIATELY.displayValueFor(draft.response.type),
+              label: DefendantPaymentType.IMMEDIATELY.displayValue,
               value: DefendantPaymentType.IMMEDIATELY.value,
               checked: (form.valueFor('option') === DefendantPaymentType.IMMEDIATELY),
               hint: 'You must make sure they receive the money within 5 days. Any cheques or transfers must be clear in their account.'
             },
             {
-              label: DefendantPaymentType.BY_SET_DATE.displayValueFor(draft.response.type),
+              label: DefendantPaymentType.BY_SET_DATE.displayValue,
               value: DefendantPaymentType.BY_SET_DATE.value,
               checked: (form.valueFor('option') === DefendantPaymentType.BY_SET_DATE),
               hint: hintText
             },
             {
-              label: DefendantPaymentType.INSTALMENTS.displayValueFor(draft.response.type),
+              label: DefendantPaymentType.INSTALMENTS.displayValue,
               value: DefendantPaymentType.INSTALMENTS.value,
               checked: (form.valueFor('option') === DefendantPaymentType.INSTALMENTS),
               hint: hintText

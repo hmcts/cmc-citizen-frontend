@@ -39,7 +39,7 @@ describe('Defendant - when will you pay options', () => {
       })
 
       context('when service is unhealthy', () => {
-        it('should return 500 and render error page when cannot retrieve claims', async () => {
+        it('should return 500 and render error page when cannot retrieve claim by external id', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
@@ -87,7 +87,7 @@ describe('Defendant - when will you pay options', () => {
         })
 
         context('when service is unhealthy', () => {
-          it('should return 500 when cannot retrieve claim by external id', async () => {
+          it('should return 500 and render error page when cannot retrieve claim by external id', async () => {
             claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
@@ -97,7 +97,7 @@ describe('Defendant - when will you pay options', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should return 500 when cannot retrieve response draft', async () => {
+          it('should return 500 and render error page when cannot retrieve response draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.rejectFind('Error')
 
@@ -108,7 +108,7 @@ describe('Defendant - when will you pay options', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should return 500 when cannot save response draft', async () => {
+          it('should return 500 and render error page when cannot save response draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.rejectSave()
@@ -169,7 +169,7 @@ describe('Defendant - when will you pay options', () => {
                 .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
                 .send({ name: 'John Smith' })
-                .expect(res => expect(res).to.be.successful.withText('How do you want to pay?'))
+                .expect(res => expect(res).to.be.successful.withText('How do you want to pay?', 'div class="error-summary"'))
             })
           })
         })

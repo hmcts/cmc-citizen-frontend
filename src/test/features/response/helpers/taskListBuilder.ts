@@ -6,7 +6,7 @@ import * as sinon from 'sinon'
 import * as moment from 'moment'
 
 import { TaskListBuilder } from 'response/helpers/taskListBuilder'
-import { ResponseDraft } from 'response/draft/responseDraft'
+import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
 import { TaskList } from 'drafts/tasks/taskList'
 import { LocalDate } from 'forms/models/localDate'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
@@ -207,14 +207,20 @@ describe('Defendant response task list builder', () => {
       it('should be enabled when claim is fully admitted', () => {
         isResponseFullyAdmittedStub.returns(true)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
+        const draft = new ResponseDraft()
+        draft.fullAdmission = new FullAdmission()
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('Decide how you`ll pay')
       })
 
       it('should be disabled in remaining cases', () => {
         isResponseFullyAdmittedStub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
+        const draft = new ResponseDraft()
+        draft.fullAdmission = new FullAdmission()
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('Decide how you`ll pay')
       })
     })

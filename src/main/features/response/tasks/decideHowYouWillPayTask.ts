@@ -11,8 +11,7 @@ function isValid (input): boolean {
 
 export class DecideHowYouWillPayTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
-    return responseDraft.fullAdmission
-      && isValid(responseDraft.fullAdmission.paymentOption)
+    return isValid(responseDraft.fullAdmission.paymentOption)
       && this.paymentDetailsAreProvidedFor(responseDraft)
   }
 

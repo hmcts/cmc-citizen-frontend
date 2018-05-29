@@ -40,7 +40,8 @@ export class StatementOfMeans {
     if (!responseDraft) {
       throw new Error('Response draft has to be provided as input')
     }
-    return this.isResponseApplicable(responseDraft) && !responseDraft.defendantDetails.partyDetails.isBusiness()
+    return !responseDraft.defendantDetails.partyDetails.isBusiness()
+      && this.isResponseApplicable(responseDraft)
   }
 
   private static isResponseApplicable (responseDraft: ResponseDraft) {

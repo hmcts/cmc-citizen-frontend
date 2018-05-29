@@ -62,7 +62,7 @@
 
     {{ tableEnd() }}
 
-    {% if statementOfMeansIsApplicable %}
+    {% if statementOfMeansIsApplicable and draft.statementOfMeans %}
       {% include "./statement-of-means/check-and-send.njk" %}
     {% endif %}
 
@@ -141,7 +141,7 @@
 
     {% if draft.isResponseFullyAdmitted() %}
       {{ tableStart('whenWillYouPay', 'When will you pay') }}
-        {{ row(label = 'When will you pay', value = t(draft.fullAdmission.paymentOption.option.displayValueFor(draft.response.type)) | capitalize, changeLink = paths.defencePaymentOptionsPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+        {{ row(label = 'When will you pay', value = t(draft.fullAdmission.paymentOption.option.displayValue) | capitalize, changeLink = paths.defencePaymentOptionsPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
         {% if draft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.BY_SET_DATE) %}
           {{ row(label = 'When you’ll pay the amount', value = draft.fullAdmission.paymentDate.date.toMoment() | date, changeLink = payBySetDatePaths.paymentDatePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
         {% endif %}
