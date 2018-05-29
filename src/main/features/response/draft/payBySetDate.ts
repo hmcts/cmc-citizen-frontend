@@ -1,6 +1,5 @@
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { Explanation } from 'response/form/models/pay-by-set-date/explanation'
-import { PaymentDateChecker } from 'response/helpers/paymentDateChecker'
 
 export class PayBySetDate {
   paymentDate: PaymentDate
@@ -31,7 +30,6 @@ export class PayBySetDate {
     try {
       return this.paymentDate !== undefined
         && this.paymentDate.date !== undefined
-        && PaymentDateChecker.isLaterThan28DaysFromNow(this.paymentDate.date.toMoment())
     } catch (error) {
       return false
     }

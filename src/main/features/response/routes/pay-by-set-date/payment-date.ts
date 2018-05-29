@@ -6,8 +6,6 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
 import { DraftService } from 'services/draftService'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
-import { PaymentDateChecker } from 'response/helpers/paymentDateChecker'
-import { RoutablePath } from 'shared/router/routablePath'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
@@ -42,15 +40,7 @@ export default express.Router()
         const paymentDate: PaymentDate = form.model
         draft.document.fullAdmission.payBySetDate.paymentDate = paymentDate
 
-        let nextPage: RoutablePath
-        if (PaymentDateChecker.isLaterThan28DaysFromNow(paymentDate.date.toMoment())) {
-          nextPage = PayBySetDatePaths.explanationPage
-        } else {
-          draft.document.fullAdmission.payBySetDate.clearExplanation()
-          nextPage = Paths.taskListPage
-        }
-
         await new DraftService().save(draft, user.bearerToken)
-        res.redirect(nextPage.evaluateUri({ externalId: req.params.externalId }))
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: req.params.externalId }))
       }
     }))
