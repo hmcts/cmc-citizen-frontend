@@ -12,20 +12,20 @@ function isValid (input): boolean {
 export class DecideHowYouWillPayTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
     return responseDraft.fullAdmission
-      && isValid(responseDraft.fullAdmission.defendantPaymentOption)
+      && isValid(responseDraft.fullAdmission.paymentOption)
       && this.paymentDetailsAreProvidedFor(responseDraft)
   }
 
   private static paymentDetailsAreProvidedFor (responseDraft: ResponseDraft): boolean {
-    switch (responseDraft.fullAdmission.defendantPaymentOption.option) {
+    switch (responseDraft.fullAdmission.paymentOption.option) {
       case DefendantPaymentType.IMMEDIATELY:
         return true
       case DefendantPaymentType.BY_SET_DATE:
         return isValid(responseDraft.fullAdmission.paymentDate)
       case DefendantPaymentType.INSTALMENTS:
-        return isValid(responseDraft.fullAdmission.defendantPaymentPlan)
+        return isValid(responseDraft.fullAdmission.paymentPlan)
       default:
-        throw new Error(`Unknown payment option: ${responseDraft.fullAdmission.defendantPaymentOption.option}`)
+        throw new Error(`Unknown payment option: ${responseDraft.fullAdmission.paymentOption.option}`)
     }
   }
 }

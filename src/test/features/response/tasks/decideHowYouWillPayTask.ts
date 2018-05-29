@@ -39,11 +39,11 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
   const responseDraft: ResponseDraft = new ResponseDraft()
   responseDraft.fullAdmission = new FullAdmission()
   if (paymentType === DefendantPaymentType.BY_SET_DATE) {
-    responseDraft.fullAdmission.defendantPaymentOption = new DefendantPaymentOption(DefendantPaymentType.BY_SET_DATE)
+    responseDraft.fullAdmission.paymentOption = new DefendantPaymentOption(DefendantPaymentType.BY_SET_DATE)
     responseDraft.fullAdmission.paymentDate = new PaymentDate(localDateFrom(MomentFactory.currentDate()))
   } else if (paymentType === DefendantPaymentType.INSTALMENTS) {
-    responseDraft.fullAdmission.defendantPaymentOption = new DefendantPaymentOption(DefendantPaymentType.INSTALMENTS)
-    responseDraft.fullAdmission.defendantPaymentPlan = new DefendantPaymentPlan(
+    responseDraft.fullAdmission.paymentOption = new DefendantPaymentOption(DefendantPaymentType.INSTALMENTS)
+    responseDraft.fullAdmission.paymentPlan = new DefendantPaymentPlan(
       1000,
       100,
       localDateFrom(MomentFactory.currentDate().add(1, 'day')),
@@ -51,7 +51,7 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
       'I am not able to pay immediately'
     )
   } else if (paymentType === DefendantPaymentType.IMMEDIATELY) {
-    responseDraft.fullAdmission.defendantPaymentOption = new DefendantPaymentOption(DefendantPaymentType.IMMEDIATELY)
+    responseDraft.fullAdmission.paymentOption = new DefendantPaymentOption(DefendantPaymentType.IMMEDIATELY)
   }
   responseDraft.response = new Response(ResponseType.FULL_ADMISSION)
   responseDraft.defendantDetails = new Defendant(new IndividualDetails())
@@ -79,7 +79,7 @@ describe('DecideHowYouWillPayTask', () => {
     it(' object is undefined', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.fullAdmission = new FullAdmission()
-      draft.fullAdmission.defendantPaymentOption = undefined
+      draft.fullAdmission.paymentOption = undefined
 
       expect(DecideHowYouWillPayTask.isCompleted(draft)).to.be.false
     })
@@ -87,7 +87,7 @@ describe('DecideHowYouWillPayTask', () => {
     it('payment option is undefined', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.fullAdmission = new FullAdmission()
-      draft.fullAdmission.defendantPaymentOption = new DefendantPaymentOption(undefined)
+      draft.fullAdmission.paymentOption = new DefendantPaymentOption(undefined)
 
       expect(DecideHowYouWillPayTask.isCompleted(draft)).to.be.false
     })
@@ -118,7 +118,7 @@ describe('DecideHowYouWillPayTask', () => {
     })
 
     it('should not be completed when payment plan is undefined', () => {
-      responseDraft.fullAdmission.defendantPaymentPlan = undefined
+      responseDraft.fullAdmission.paymentPlan = undefined
       expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
     })
 
@@ -134,12 +134,12 @@ describe('DecideHowYouWillPayTask', () => {
       responseDraft = validResponseDraftWith(DefendantPaymentType.IMMEDIATELY)
     })
 
-    it('should not be completed when defendantPaymentOption is undefined', () => {
-      responseDraft.fullAdmission.defendantPaymentOption = new DefendantPaymentOption(undefined)
+    it('should not be completed when payment option is undefined', () => {
+      responseDraft.fullAdmission.paymentOption = new DefendantPaymentOption(undefined)
       expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
     })
 
-    it('should be completed when defendantPaymentOption immediately is valid', () => {
+    it('should be completed when payment option immediately is valid', () => {
       expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
     })
   })

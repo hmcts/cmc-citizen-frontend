@@ -113,7 +113,7 @@ describe('StatementOfMeans', () => {
           type: ResponseType.FULL_ADMISSION
         },
         fullAdmission: {
-          defendantPaymentOption: {
+          paymentOption: {
             option: DefendantPaymentType.INSTALMENTS
           }
         }

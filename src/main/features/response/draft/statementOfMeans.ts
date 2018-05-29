@@ -45,7 +45,7 @@ export class StatementOfMeans {
 
   private static isResponseApplicable (responseDraft: ResponseDraft) {
     return (responseDraft.response.type === ResponseType.FULL_ADMISSION
-      && !responseDraft.fullAdmission.defendantPaymentOption.isOfType(DefendantPaymentType.IMMEDIATELY))
+      && !responseDraft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY))
   }
 
   deserialize (input: any): StatementOfMeans {

@@ -32,7 +32,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-      renderView(new Form(draft.document.fullAdmission.defendantPaymentOption), res)
+      renderView(new Form(draft.document.fullAdmission.paymentOption), res)
     }))
   .post(Paths.defencePaymentOptionsPage.uri,
     FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
@@ -47,7 +47,7 @@ export default express.Router()
           const draft: Draft<ResponseDraft> = res.locals.responseDraft
           const user: User = res.locals.user
 
-          draft.document.fullAdmission.defendantPaymentOption = form.model
+          draft.document.fullAdmission.paymentOption = form.model
           await new DraftService().save(draft, user.bearerToken)
 
           const { externalId } = req.params

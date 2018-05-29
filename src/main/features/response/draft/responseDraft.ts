@@ -12,8 +12,8 @@ import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
 import { HowMuchPaid } from 'response/form/models/howMuchPaid'
 import { HowMuchOwed } from 'response/form/models/howMuchOwed'
-import { DefendantPaymentOption } from 'response/form/models/defendantPaymentOption'
-import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
+import { DefendantPaymentOption as PaymentOption } from 'response/form/models/defendantPaymentOption'
+import { DefendantPaymentPlan as PaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
@@ -25,15 +25,15 @@ import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 
 export class FullAdmission {
-  defendantPaymentOption: DefendantPaymentOption
+  paymentOption: PaymentOption
   paymentDate?: PaymentDate
-  defendantPaymentPlan?: DefendantPaymentPlan
+  paymentPlan?: PaymentPlan
 
   deserialize (input: any): FullAdmission {
     if (input) {
-      this.defendantPaymentOption = new DefendantPaymentOption().deserialize(input.defendantPaymentOption)
+      this.paymentOption = new PaymentOption().deserialize(input.paymentOption)
       this.paymentDate = new PaymentDate().deserialize(input.paymentDate)
-      this.defendantPaymentPlan = new DefendantPaymentPlan().deserialize(input.defendantPaymentPlan)
+      this.paymentPlan = new PaymentPlan().deserialize(input.paymentPlan)
       return this
     }
   }

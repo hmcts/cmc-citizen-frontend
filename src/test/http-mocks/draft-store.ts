@@ -219,12 +219,12 @@ const sampleResponseDraftObj = {
     courtOrders: { hasAnyCourtOrders: false }
   },
   fullAdmission: {
-    defendantPaymentOption: {
+    paymentOption: {
       option: {
         value: 'INSTALMENTS'
       }
     },
-    defendantPaymentPlan: {
+    paymentPlan: {
       remainingAmount: 3685,
       instalmentAmount: 100,
       firstPaymentDate: {
