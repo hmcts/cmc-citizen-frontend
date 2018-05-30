@@ -33,18 +33,7 @@ function nextDay () {
   }
 }
 
-function date29DaysFromToday () {
-  const dateLaterThan28DaysFromToday: moment.Moment = moment().add(29, 'days')
-  return {
-    date: {
-      year: dateLaterThan28DaysFromToday.year().toString(),
-      month: (dateLaterThan28DaysFromToday.month() + 1).toString(),
-      day: dateLaterThan28DaysFromToday.date().toString()
-    }
-  }
-}
-
-describe('Pay by set date : payment date', () => {
+describe('Pay by set date: payment date', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -145,21 +134,6 @@ describe('Pay by set date : payment date', () => {
             .expect(res => expect(res).to.be.redirect
               .toLocation(
                 Paths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
-              )
-            )
-        })
-
-        it('should redirect to explanation page when data is valid and user provides a date later than 28 days from today', async () => {
-          draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send(date29DaysFromToday())
-            .expect(res => expect(res).to.be.redirect
-              .toLocation(
-                PayBySetDatePaths.explanationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )
         })
