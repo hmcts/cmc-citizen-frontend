@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 import 'test/routes/expectations'
-import { Paths, StatementOfMeansPaths } from 'response/paths'
+import { StatementOfMeansPaths } from 'response/paths'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
@@ -65,7 +65,7 @@ describe('Defendant response: Statement of means: debts', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Are you paying any other court orders?'))
+            .expect(res => expect(res).to.be.successful.withText('Are you paying money as a result of any court orders?'))
         })
       })
     })
@@ -119,10 +119,10 @@ describe('Defendant response: Statement of means: debts', () => {
 
             await request(app)
               .post(pagePath)
-              .send({ hasAnyCourtOrders: 'true', rows: [{ details: 'my debt', amount: '100' }] })
+              .send({ hasAnyCourtOrders: 'true', rows: [{ instalmentAmount: '100', amount: '100', claimNumber: '12345' }] })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.taskListPage.evaluateUri(
+                .toLocation(StatementOfMeansPaths.cannotPayImmediatelyPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
                 )
               )
@@ -138,7 +138,7 @@ describe('Defendant response: Statement of means: debts', () => {
               .send({ hasAnyCourtOrders: 'false' })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.taskListPage.evaluateUri(
+                .toLocation(StatementOfMeansPaths.cannotPayImmediatelyPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
                 )
               )
@@ -156,7 +156,7 @@ describe('Defendant response: Statement of means: debts', () => {
             .post(pagePath)
             .send({ action: { addRow: 'Add row' } })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Are you paying any other court orders?'))
+            .expect(res => expect(res).to.be.successful.withText('Are you paying money as a result of any court orders?'))
         })
       })
     })

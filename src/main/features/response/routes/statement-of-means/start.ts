@@ -13,6 +13,6 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       res.render(Paths.startPage.associatedView, {
         claimantName: claim.claimData.claimant.name,
-        nextPageLink: Paths.whatYouNeedPage.evaluateUri({ externalId: claim.externalId })
+        nextPageLink: Paths.bankAccountsPage.evaluateUri({ externalId: claim.externalId })
       })
     })

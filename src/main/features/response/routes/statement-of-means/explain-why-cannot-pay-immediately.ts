@@ -24,13 +24,13 @@ async function renderView (form: Form<Explanation>, res: express.Response, next:
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.defencePage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  .get(StatementOfMeansPaths.cannotPayImmediatelyPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
     await renderView(new Form(draft.document.payBySetDate.explanation), res, next)
   })
   .post(
-    Paths.defencePage.uri,
+    StatementOfMeansPaths.cannotPayImmediatelyPage.uri,
     FormValidator.requestHandler(Explanation),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Explanation> = req.body

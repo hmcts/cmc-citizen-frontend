@@ -135,7 +135,7 @@ describe('CourtOrders', () => {
       })
 
       it('when hasAnyCourtOrders = true and invalid row given', () => {
-        const errors = validator.validateSync(new CourtOrders(true, [new CourtOrderRow(100, 100, '')]))
+        const errors = validator.validateSync(new CourtOrders(true, [new CourtOrderRow(100, -100, '')]))
 
         expect(errors.length).to.equal(1)
       })

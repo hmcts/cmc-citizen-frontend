@@ -105,28 +105,28 @@ describe('CourtOrderRow', () => {
       it('when invalid amount and instalmentAmount', () => {
         const errors = validator.validateSync(new CourtOrderRow(10.111, 10.111, 'abc'))
 
-        expect(errors.length).to.equal(1)
+        expect(errors.length).to.equal(2)
         expectValidationError(errors, GlobalValidationErrors.AMOUNT_INVALID_DECIMALS)
       })
 
       it('when negative amount and instalmentAmount', () => {
         const errors = validator.validateSync(new CourtOrderRow(-10, -10, 'abc'))
 
-        expect(errors.length).to.equal(1)
+        expect(errors.length).to.equal(2)
         expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
       })
 
       it('when amount and instalment = 0', () => {
         const errors = validator.validateSync(new CourtOrderRow(0, 0, 'abc'))
 
-        expect(errors.length).to.equal(1)
+        expect(errors.length).to.equal(2)
         expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
       })
 
       it('when empty amount and instalmentAmount', () => {
         const errors = validator.validateSync(new CourtOrderRow(undefined, undefined, 'abc'))
 
-        expect(errors.length).to.equal(1)
+        expect(errors.length).to.equal(2)
         expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
       })
     })
