@@ -7,7 +7,7 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
-import { Paths, StatementOfMeansPaths } from 'response/paths'
+import { Paths, FullAdmissionPaths, StatementOfMeansPaths } from 'response/paths'
 
 import { app } from 'main/app'
 
@@ -19,7 +19,7 @@ import { ResponseType } from 'response/form/models/responseType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const pagePath = Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId })
+const pagePath = FullAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId })
 const statementOfMeansStartPage = StatementOfMeansPaths.startPage.evaluateUri({ externalId: externalId })
 const taskListPage = Paths.taskListPage.evaluateUri({ externalId: externalId })
 

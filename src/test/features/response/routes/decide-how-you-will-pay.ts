@@ -19,7 +19,7 @@ import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/chec
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const pagePath = Paths.defencePaymentOptionsPage.evaluateUri({ externalId: externalId })
+const pagePath = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: externalId })
 
 const validFormData: object = {
   option: DefendantPaymentType.INSTALMENTS.value
@@ -147,7 +147,7 @@ describe('Defendant - when will you pay options', () => {
             it('should redirect to repayment plan page for "INSTALMENTS" option selected', async () => {
               await checkThatSelectedPaymentOptionRedirectsToPage(
                 { option: DefendantPaymentType.INSTALMENTS.value },
-                Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))
+                FullAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId }))
             })
 
             it('should redirect to payment date page for "BY_SET_DATE" option selected', async () => {

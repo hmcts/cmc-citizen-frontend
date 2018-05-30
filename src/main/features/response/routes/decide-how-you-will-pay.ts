@@ -17,7 +17,7 @@ import { Claim } from 'claims/models/claim'
 function renderView (form: Form<DefendantPaymentOption>, res: express.Response) {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const claim: Claim = res.locals.claim
-  res.render(Paths.defencePaymentOptionsPage.associatedView, {
+  res.render(FullAdmissionPaths.paymentOptionPage.associatedView, {
     form: form,
     claim: claim,
     draft: draft.document,
@@ -27,14 +27,14 @@ function renderView (form: Form<DefendantPaymentOption>, res: express.Response) 
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.defencePaymentOptionsPage.uri,
+  .get(FullAdmissionPaths.paymentOptionPage.uri,
     FeatureToggleGuard.featureEnabledGuard('fullAdmission'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
       renderView(new Form(draft.document.fullAdmission.paymentOption), res)
     }))
-  .post(Paths.defencePaymentOptionsPage.uri,
+  .post(FullAdmissionPaths.paymentOptionPage.uri,
     FeatureToggleGuard.featureEnabledGuard('fullAdmission'),
     FormValidator.requestHandler(DefendantPaymentOption, DefendantPaymentOption.fromObject),
     ErrorHandling.apply(
@@ -57,7 +57,7 @@ export default express.Router()
             case DefendantPaymentType.BY_SET_DATE:
               return res.redirect(FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: externalId }))
             case DefendantPaymentType.INSTALMENTS:
-              return res.redirect(Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))
+              return res.redirect(FullAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId }))
           }
         }
       }))

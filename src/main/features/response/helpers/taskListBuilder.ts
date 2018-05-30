@@ -1,6 +1,6 @@
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
-import { Paths } from 'response/paths'
+import { Paths, FullAdmissionPaths } from 'response/paths'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
@@ -80,7 +80,7 @@ export class TaskListBuilder {
       tasks.push(
         new TaskListItem(
           'Decide how you`ll pay',
-          Paths.defencePaymentOptionsPage.evaluateUri({ externalId: externalId }),
+          FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: externalId }),
           DecideHowYouWillPayTask.isCompleted(draft)
         )
       )

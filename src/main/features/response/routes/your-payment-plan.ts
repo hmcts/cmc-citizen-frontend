@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths, StatementOfMeansPaths } from 'response/paths'
+import { Paths, FullAdmissionPaths, StatementOfMeansPaths } from 'response/paths'
 
 import { ErrorHandling } from 'shared/errorHandling'
 import { Form } from 'forms/form'
@@ -29,7 +29,7 @@ function renderView (form: Form<PaidAmount>, res: express.Response): void {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const alreadyPaid: number = draft.document.paidAmount.amount || 0
 
-  res.render(Paths.defencePaymentPlanPage.associatedView, {
+  res.render(FullAdmissionPaths.paymentPlanPage.associatedView, {
     form: form,
     remainingAmount: claim.totalAmountTillToday - alreadyPaid
   })
@@ -37,7 +37,7 @@ function renderView (form: Form<PaidAmount>, res: express.Response): void {
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.defencePaymentPlanPage.uri,
+  .get(FullAdmissionPaths.paymentPlanPage.uri,
     FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -45,7 +45,7 @@ export default express.Router()
       renderView(new Form(draft.document.fullAdmission.paymentPlan), res)
     }))
 
-  .post(Paths.defencePaymentPlanPage.uri,
+  .post(FullAdmissionPaths.paymentPlanPage.uri,
     FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     FormValidator.requestHandler(DefendantPaymentPlan, DefendantPaymentPlan.fromObject),
     ErrorHandling.apply(
