@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths, PayBySetDatePaths, StatementOfMeansPaths } from 'response/paths'
+import { Paths, FullAdmissionPaths, StatementOfMeansPaths } from 'response/paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
@@ -29,7 +29,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   res.render(Paths.checkAndSendPage.associatedView, {
     paths: Paths,
     statementOfMeansPaths: StatementOfMeansPaths,
-    payBySetDatePaths: PayBySetDatePaths,
+    payBySetDatePaths: FullAdmissionPaths,
     claim: claim,
     form: form,
     draft: draft.document,

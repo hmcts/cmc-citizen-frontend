@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { PayBySetDatePaths, Paths } from 'response/paths'
+import { FullAdmissionPaths, Paths } from 'response/paths'
 import { Form } from 'forms/form'
 import { User } from 'idam/user'
 import { FormValidator } from 'forms/validation/formValidator'
@@ -11,7 +11,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 
 function renderView (form: Form<PaymentDate>, res: express.Response) {
-  res.render(PayBySetDatePaths.paymentDatePage.associatedView, {
+  res.render(FullAdmissionPaths.paymentDatePage.associatedView, {
     form: form
   })
 }
@@ -19,14 +19,14 @@ function renderView (form: Form<PaymentDate>, res: express.Response) {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
-    PayBySetDatePaths.paymentDatePage.uri,
+    FullAdmissionPaths.paymentDatePage.uri,
     FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.fullAdmission.paymentDate), res)
     })
   .post(
-    PayBySetDatePaths.paymentDatePage.uri,
+    FullAdmissionPaths.paymentDatePage.uri,
     FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
     FormValidator.requestHandler(PaymentDate, PaymentDate.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {

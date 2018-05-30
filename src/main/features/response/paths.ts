@@ -56,9 +56,6 @@ export class StatementOfMeansPaths {
   static readonly courtOrdersPage = new RoutablePath(`${statementOfMeansPath}/court-orders`)
 }
 
-const payBySetDatePath = `${responsePath}/pay-by-set-date`
-
-export class PayBySetDatePaths {
-  static readonly paymentDatePage: RoutablePath = new RoutablePath(`${payBySetDatePath}/payment-date`)
-  static readonly explanationPage = new RoutablePath(`${payBySetDatePath}/explanation`)
+export class FullAdmissionPaths {
+  static readonly paymentDatePage: RoutablePath = new RoutablePath(`${responsePath}/full-admission/payment-date`)
 }

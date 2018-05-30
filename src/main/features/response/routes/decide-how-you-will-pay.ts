@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths, PayBySetDatePaths } from 'response/paths'
+import { Paths, FullAdmissionPaths } from 'response/paths'
 
 import { ErrorHandling } from 'shared/errorHandling'
 import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
@@ -55,7 +55,7 @@ export default express.Router()
             case DefendantPaymentType.IMMEDIATELY:
               return res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
             case DefendantPaymentType.BY_SET_DATE:
-              return res.redirect(PayBySetDatePaths.paymentDatePage.evaluateUri({ externalId: externalId }))
+              return res.redirect(FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: externalId }))
             case DefendantPaymentType.INSTALMENTS:
               return res.redirect(Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))
           }

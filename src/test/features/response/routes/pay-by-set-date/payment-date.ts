@@ -6,7 +6,7 @@ import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
 import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks/already-submitted-check'
 
-import { Paths, PayBySetDatePaths } from 'response/paths'
+import { Paths, FullAdmissionPaths } from 'response/paths'
 
 import { app } from 'main/app'
 
@@ -20,7 +20,7 @@ import { ValidationErrors } from 'forms/models/payBySetDate'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = PayBySetDatePaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath = FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 function nextDay () {
   const nextDay: moment.Moment = moment().add(1, 'days')
