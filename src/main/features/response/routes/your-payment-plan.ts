@@ -38,7 +38,7 @@ function renderView (form: Form<PaidAmount>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(FullAdmissionPaths.paymentPlanPage.uri,
-    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
@@ -46,7 +46,7 @@ export default express.Router()
     }))
 
   .post(FullAdmissionPaths.paymentPlanPage.uri,
-    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission'),
     FormValidator.requestHandler(DefendantPaymentPlan, DefendantPaymentPlan.fromObject),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response): Promise<void> => {

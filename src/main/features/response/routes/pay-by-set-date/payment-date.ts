@@ -20,14 +20,14 @@ function renderView (form: Form<PaymentDate>, res: express.Response) {
 export default express.Router()
   .get(
     FullAdmissionPaths.paymentDatePage.uri,
-    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission'),
     (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.fullAdmission.paymentDate), res)
     })
   .post(
     FullAdmissionPaths.paymentDatePage.uri,
-    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission'),
     FormValidator.requestHandler(PaymentDate, PaymentDate.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<PaymentDate> = req.body
