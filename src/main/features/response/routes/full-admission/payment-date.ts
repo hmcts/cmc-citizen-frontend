@@ -38,8 +38,8 @@ export default express.Router()
         const user: User = res.locals.user
 
         draft.document.fullAdmission.paymentDate = form.model
-
         await new DraftService().save(draft, user.bearerToken)
+
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: req.params.externalId }))
       }
     }))

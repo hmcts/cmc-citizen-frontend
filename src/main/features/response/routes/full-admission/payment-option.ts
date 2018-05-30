@@ -2,17 +2,17 @@ import * as express from 'express'
 
 import { Paths, FullAdmissionPaths } from 'response/paths'
 
-import { ErrorHandling } from 'shared/errorHandling'
+import { ErrorHandling } from 'main/common/errorHandling'
 import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
-import { Form } from 'forms/form'
-import { FormValidator } from 'forms/validation/formValidator'
-import { User } from 'idam/user'
+import { Form } from 'main/app/forms/form'
+import { FormValidator } from 'main/app/forms/validation/formValidator'
+import { User } from 'main/app/idam/user'
 import { DraftService } from 'services/draftService'
-import { FeatureToggleGuard } from 'guards/featureToggleGuard'
+import { FeatureToggleGuard } from 'main/app/guards/featureToggleGuard'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { Draft } from '@hmcts/draft-store-client'
-import { Claim } from 'claims/models/claim'
+import { Claim } from 'main/app/claims/models/claim'
 
 function renderView (form: Form<DefendantPaymentOption>, res: express.Response) {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
