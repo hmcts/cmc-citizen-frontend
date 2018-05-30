@@ -50,9 +50,9 @@
 {% endmacro %}
 
 {{ tableStart('statementOfMeans', 'Your financial details') }}
-{{ row('Where are you living?	', draft.statementOfMeans.residence.residenceType, statementOfMeansPaths.residencePage.evaluateUri({ externalId: claim.externalId })) }}
+{{ row('Where are you living?	', draft.statementOfMeans.residence.residenceType, StatementOfMeansPaths.residencePage.evaluateUri({ externalId: claim.externalId })) }}
 
-{{ row('Children', '', statementOfMeansPaths.dependantsPage.evaluateUri({ externalId: claim.externalId }), false) }}
+{{ row('Children', '', StatementOfMeansPaths.dependantsPage.evaluateUri({ externalId: claim.externalId }), false) }}
 {{ row('Do any children live with you?', 'Yes' if draft.statementOfMeans.dependants.hasAnyChildren else 'No', '', not draft.statementOfMeans.dependants.hasAnyChildren) }}
 
 {% if draft.statementOfMeans.dependants.hasAnyChildren %}
@@ -62,24 +62,24 @@
   {{ row('16 to 19', noOfKids.between16and19, '') }}
 
   {% if draft.statementOfMeans.education %}
-    {{ row('Number of children aged 16 to 19 full-time education or training', draft.statementOfMeans.education.value, statementOfMeansPaths.educationPage.evaluateUri({ externalId: claim.externalId })) }}
+    {{ row('Number of children aged 16 to 19 full-time education or training', draft.statementOfMeans.education.value, StatementOfMeansPaths.educationPage.evaluateUri({ externalId: claim.externalId })) }}
   {% endif %}
 {% endif %}
 
-{{ row('Maintenance', '', statementOfMeansPaths.maintenancePage.evaluateUri({ externalId: claim.externalId }), false) }}
+{{ row('Maintenance', '', StatementOfMeansPaths.maintenancePage.evaluateUri({ externalId: claim.externalId }), false) }}
 {{ row('Do you or your partner pay maintenance for any children?', 'Yes' if draft.statementOfMeans.maintenance.option else 'No', '', not draft.statementOfMeans.maintenance.option) }}
 
 {% if draft.statementOfMeans.maintenance.option %}
   {{ row('Number of children', draft.statementOfMeans.maintenance.value, '') }}
 {% endif %}
 
-{{ row('Employment', '', statementOfMeansPaths.employmentPage.evaluateUri({ externalId: claim.externalId }), false) }}
+{{ row('Employment', '', StatementOfMeansPaths.employmentPage.evaluateUri({ externalId: claim.externalId }), false) }}
 {{ row('Are you currently working?', 'Yes' if draft.statementOfMeans.employment.isCurrentlyEmployed else 'No', '', false) }}
 
 {{ employmentStatus(draft.statementOfMeans) }}
 
 {% if draft.statementOfMeans.employment.employed %}
-  {{ row('Who employs you?', '', statementOfMeansPaths.employersPage.evaluateUri({ externalId: claim.externalId }), false) }}
+  {{ row('Who employs you?', '', StatementOfMeansPaths.employersPage.evaluateUri({ externalId: claim.externalId }), false) }}
   {% set indexOfLastRow = draft.statementOfMeans.employers.rows.length - 1 %}
   {% for employer in draft.statementOfMeans.employers.rows %}
     {{ row('Employer name', employer.employerName, '', false ) }}
@@ -88,7 +88,7 @@
 {% endif %}
 
 {% if draft.statementOfMeans.employment.selfEmployed %}
-  {{ row('What are you self-employed as?', '', statementOfMeansPaths.selfEmployedPage.evaluateUri({ externalId: claim.externalId }), false) }}
+  {{ row('What are you self-employed as?', '', StatementOfMeansPaths.selfEmployedPage.evaluateUri({ externalId: claim.externalId }), false) }}
   {{ row('Job title', draft.statementOfMeans.selfEmployed.jobTitle, '', false ) }}
   {{ row('Annual turnover', draft.statementOfMeans.selfEmployed.annualTurnover | numeral, '', not draft.statementOfMeans.selfEmployed.areYouBehindOnTax ) }}
   {% if draft.statementOfMeans.selfEmployed.areYouBehindOnTax %}
@@ -99,7 +99,7 @@
 {% endif %}
 
 {% set numberOfBankAccounts = draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly().length %}
-{{ row('Bank accounts and savings', '', statementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: claim.externalId }), not numberOfBankAccounts) }}
+{{ row('Bank accounts and savings', '', StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: claim.externalId }), not numberOfBankAccounts) }}
 {% set indexOfLastRow = numberOfBankAccounts - 1 %}
 
 {% for account in draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly() %}
@@ -110,7 +110,7 @@
 
 {% set income = draft.statementOfMeans.monthlyIncome %}
 {% set otherIncome = income.getPopulatedRowsOnly() %}
-{{ row('Monthly income', '', statementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), false) }}
+{{ row('Monthly income', '', StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), false) }}
 {{ row('Take home pay', income.salary | numeral, '', false) }}
 {{ row('Universal Credit', income.universalCredit | numeral, '', false) }}
 {{ row('Jobseeker’s Allowance (income based)', income.jobSeekerAllowanceIncome | numeral, '', false) }}
@@ -130,7 +130,7 @@
 
 {% set expenses = draft.statementOfMeans.monthlyExpenses %}
 {% set otherExpenses = expenses.getPopulatedRowsOnly() %}
-{{ row('Monthly expenses', '', statementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), false) }}
+{{ row('Monthly expenses', '', StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), false) }}
 {{ row('Mortgage', expenses.mortgage | numeral, '', false) }}
 {{ row('Rent', expenses.rent | numeral, '', false) }}
 {{ row('Council Tax', expenses.councilTax | numeral, '', false) }}
@@ -149,18 +149,18 @@
   {{ row(expenseRow.description, expenseRow.amount | numeral, '', loop.index0 === indexOfLastRow ) }}
 {% endfor %}
 
-{{ row('Debts', '', statementOfMeansPaths.debtsPage.evaluateUri({ externalId: claim.externalId }), false) }}
+{{ row('Debts', '', StatementOfMeansPaths.debtsPage.evaluateUri({ externalId: claim.externalId }), false) }}
 {{ row('Do you have any debts?', 'Yes' if draft.statementOfMeans.debts.hasAnyDebts else 'No', '', not draft.statementOfMeans.debts.hasAnyDebts) }}
 {% set debtRows = draft.statementOfMeans.debts.getPopulatedRowsOnly() %}
 {% set indexOfLastRow = debtRows.length - 1 %}
 
 {% for debtRow in debtRows %}
   {{ row('Debt', debtRow.debt, '', false ) }}
-  {{ row('Total owed', debtRow.totalOwed | numeral, '', false) }}
+  {{ row('Total owed', debtRow.totalOwed | numeral, '', false) }}StatementOfMeansPaths
   {{ row('Monthly Payments', debtRow.monthlyPayments | numeral, '', loop.index0 === indexOfLastRow ) }}
 {% endfor %}
 
-{{ row('Court orders', '', statementOfMeansPaths.courtOrdersPage.evaluateUri({ externalId: claim.externalId }), false) }}
+{{ row('Court orders', '', StatementOfMeansPaths.courtOrdersPage.evaluateUri({ externalId: claim.externalId }), false) }}
 {{ row('Are you paying any other court orders?', 'Yes' if draft.statementOfMeans.courtOrders.hasAnyCourtOrders else 'No', '', not draft.statementOfMeans.courtOrders.hasAnyCourtOrders) }}
 {% set courtOrdersRows = draft.statementOfMeans.courtOrders.getPopulatedRowsOnly() %}
 {% set indexOfLastRow = courtOrdersRows.length - 1 %}
