@@ -25,7 +25,7 @@ export class DefendantTaskListPage {
   }
 
   selectTaskDecideHowWillYouPay (): void {
-    I.click('Decide how you`ll pay?')
+    I.click('Decide how you`ll pay')
   }
 
   selectTaskWhenDidYouPay (): void {
