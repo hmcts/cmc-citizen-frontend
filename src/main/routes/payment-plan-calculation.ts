@@ -3,7 +3,7 @@ import * as HttpStatus from 'http-status-codes'
 import * as _ from 'lodash'
 
 import { Paths as AppPaths } from 'paths'
-import { createPaymentPlan } from 'common/paymentPlan'
+import PaymentPlan from 'common/PaymentPlan'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -24,12 +24,12 @@ export default express.Router()
       })
     }
 
-    const paymentPlan = createPaymentPlan(totalAmount, instalmentAmount, frequencyInWeeks)
+    const paymentPlan = new PaymentPlan(totalAmount, instalmentAmount, frequencyInWeeks)
 
     return res.status(HttpStatus.OK).json({
       paymentPlan: {
         paymentLength: paymentPlan.getPaymentLength(),
-        lastPaymentDate: paymentPlan.getLastPaymentDate().toJSON()
+        lastPaymentDate: paymentPlan.getLastPaymentDate()
       }
     })
   })

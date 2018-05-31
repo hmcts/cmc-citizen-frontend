@@ -1,15 +1,13 @@
-import * as moment from 'moment'
-import * as sinon from 'sinon'
-
 import * as request from 'supertest'
 import * as HttpStatus from 'http-status-codes'
 
-import * as paymentPlan from 'common/paymentPlan'
+import 'test/routes/expectations'
 
 import { app } from 'main/app'
 import { Paths } from 'paths'
+import PaymentPlan from 'common/paymentPlan'
 
-describe('Payment plan calculation when not all query parameters are passed - negative test', () => {
+describe.only('Payment plan calculation', () => {
   describe('on GET', () => {
     it('should return a [422] validation error when `total-amount` parameter is not provided', async () => {
       const instalmentAmount = 10
@@ -70,28 +68,16 @@ describe('Payment plan calculation when not all query parameters are passed - ne
           }
         })
     })
-  })
 
-  describe.only('Payment plan calcuation when all query parameters are passed - positive test', () => {
-
-    before(() => {
-      const mockedPaymentPlan = {
-        getPaymentLength: () => '3 days',
-        getLastPaymentDate: () => moment('2018-01-01')
-      }
-
-      const createPaymentPlanStub = sinon.stub(paymentPlan, 'createPaymentPlan')
-      createPaymentPlanStub.returns(mockedPaymentPlan)
-    })
-
-    it('should return payment plan calculations for given data', async () => {
+    it('should return a ', async () => {
       const totalAmount = 1000
       const instalmentAmount = 10
       const frequencyInWeeks = 2
+      const paymentPlan = new PaymentPlan(totalAmount, instalmentAmount, frequencyInWeeks)
 
       const queryParams = {
         'total-amount': totalAmount,
-        'instalment-amount': instalmentAmount,
+        'instalment-amount': instalmentAmount
         'frequency-in-weeks': frequencyInWeeks
       }
 
@@ -100,10 +86,16 @@ describe('Payment plan calculation when not all query parameters are passed - ne
         .query(queryParams)
         .expect(HttpStatus.OK, {
           paymentPlan: {
-            paymentLength: '3 days',
-            lastPaymentDate: moment('2018-01-01').toJSON()
+            paymentLength: ,
+            lastPaymentDate: '`frequency-in-weeks` not provided'
           }
         })
     })
+
+    // it('should return the payment plan', async () => {
+    //   await request(app)
+    //     .get(Paths.paymentPlanCalculation.uri)
+    //     .expect(res => console.log(res.body))
+    // })
   })
 })
