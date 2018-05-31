@@ -12,38 +12,33 @@ import { Claim } from 'claims/models/claim'
 import { Explanation } from 'response/form/models/pay-by-set-date/explanation'
 import { StatementOfMeansPaths, Paths as Paths } from 'response/paths'
 
-async function renderView (form: Form<Explanation>, res: express.Response, next: express.NextFunction) {
-  try {
-    res.render(StatementOfMeansPaths.cannotPayImmediatelyPage.associatedView, {
-      form: form
-    })
-  } catch (err) {
-    next(err)
-  }
+function renderView (form: Form<Explanation>, res: express.Response) {
+  res.render(StatementOfMeansPaths.cannotPayImmediatelyPage.associatedView, {
+    form: form
+  })
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(StatementOfMeansPaths.cannotPayImmediatelyPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  .get(StatementOfMeansPaths.cannotPayImmediatelyPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
     const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-    await renderView(new Form(draft.document.payBySetDate.explanation), res, next)
-  })
+    renderView(new Form(draft.document.payBySetDate.explanation), res)
+  }))
   .post(
     StatementOfMeansPaths.cannotPayImmediatelyPage.uri,
     FormValidator.requestHandler(Explanation),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Explanation> = req.body
-
       if (form.hasErrors()) {
-        await renderView(form, res, next)
+        renderView(form, res)
       } else {
-        const claim: Claim = res.locals.claim
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        draft.document.defence = form.model
+        draft.document.payBySetDate.explanation = form.model
         await new DraftService().save(draft, user.bearerToken)
+        const claim: Claim = res.locals.claim
 
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
       }
