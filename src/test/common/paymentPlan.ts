@@ -1,11 +1,11 @@
 /* tslint:disable:no-unused-expression */
-import { PaymentPlan } from 'common/paymentPlan'
+import PaymentPlan from 'common/paymentPlan'
 import { expect } from 'chai'
 import * as moment from 'moment'
 
 const TOTAL_AMOUNT = 1000
 
-describe.only('PaymentPlan',() => {
+describe('PaymentPlan',() => {
   describe('getLastPaymentDate', () => {
     it('should return the last payment date from given fromDate', () => {
       const instalmentAmount = 10
