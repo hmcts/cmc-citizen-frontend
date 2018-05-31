@@ -60,7 +60,7 @@ describe('Defendant - when will you pay options', () => {
       })
 
       context('when service is healthy', () => {
-        const fullAdmissionQuestion: string = 'How do you want to pay?'
+        const fullAdmissionQuestion: string = 'When do you want to pay?'
         it(`should render page asking '${fullAdmissionQuestion}' when full admission was selected`, async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response', {
@@ -169,7 +169,7 @@ describe('Defendant - when will you pay options', () => {
                 .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
                 .send({ name: 'John Smith' })
-                .expect(res => expect(res).to.be.successful.withText('How do you want to pay?', 'div class="error-summary"'))
+                .expect(res => expect(res).to.be.successful.withText('When do you want to pay?', 'div class="error-summary"'))
             })
           })
         })
