@@ -1,8 +1,14 @@
 import * as moment from 'moment'
 import 'moment-precise-range-plugin'
 
-/* tslint:disable:no-default-export */
-export default class PaymentPlan {
+export function createPaymentPlan (
+  totalAmount: number,
+  instalmentAmount: number,
+  frequencyInWeeks: number): PaymentPlan {
+  return new PaymentPlan(totalAmount, instalmentAmount, frequencyInWeeks)
+}
+
+class PaymentPlan {
   private numberOfInstalments: number
 
   constructor (
