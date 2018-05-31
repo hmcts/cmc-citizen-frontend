@@ -11,6 +11,7 @@ import { DebtsPage } from 'integration-test/tests/citizen/defence/pages/statemen
 import { CourtOrdersPage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/courtOrders'
 import { MonthlyIncomePage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/monthlyIncome'
 import { MonthlyExpensesPage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/monthlyExpenses'
+import { CannotPayImmediatelyPage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/explain-why-cannot-pay-immediately'
 
 const somStartPage: StartPage = new StartPage()
 const somWhatYouNeedPage: WhatYouNeedPage = new WhatYouNeedPage()
@@ -25,11 +26,14 @@ const somDebtsPage: DebtsPage = new DebtsPage()
 const somMonthlyIncomePage: MonthlyIncomePage = new MonthlyIncomePage()
 const somMonthlyExpensesPage: MonthlyExpensesPage = new MonthlyExpensesPage()
 const somCourtOrdersPage: CourtOrdersPage = new CourtOrdersPage()
+const somCannotPayImmediatelyPage: CannotPayImmediatelyPage = new CannotPayImmediatelyPage()
 
 export class StatementOfMeansSteps {
 
   fillStatementOfMeansData (): void {
     somStartPage.clickContinue()
+    somBankAccountsPage.clickContinue()
+    somBankAccountsPage.clickContinue()
     somWhatYouNeedPage.clickContinue()
     somResidencePage.selectOwnHome()
     somDependantsPage.selectDontHaveChildren()
@@ -37,10 +41,10 @@ export class StatementOfMeansSteps {
     somSupportedByYouPage.selectDontSupportAnyone()
     somEmploymentPage.selectNotWorkingCurrently()
     somUnemployedPage.selectRetired()
-    somBankAccountsPage.clickContinue()
     somDebtsPage.selectDontHaveDebts()
     somMonthlyIncomePage.fillOutAllFieldsAndContinue()
     somMonthlyExpensesPage.fillOutAllFieldsAndContinue()
     somCourtOrdersPage.selectDontHaveCourtOrders()
+    somCannotPayImmediatelyPage.enterExplaination()
   }
 }
