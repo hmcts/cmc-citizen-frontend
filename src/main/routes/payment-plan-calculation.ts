@@ -3,7 +3,9 @@ import * as HttpStatus from 'http-status-codes'
 import * as _ from 'lodash'
 
 import { Paths as AppPaths } from 'paths'
-import PaymentPlan from 'common/PaymentPlan'
+import { createPaymentPlan } from 'common/paymentPlan'
+
+console.log('createPaymentPlan>', createPaymentPlan)
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -24,7 +26,7 @@ export default express.Router()
       })
     }
 
-    const paymentPlan = new PaymentPlan(totalAmount, instalmentAmount, frequencyInWeeks)
+    const paymentPlan = createPaymentPlan(totalAmount, instalmentAmount, frequencyInWeeks)
 
     return res.status(HttpStatus.OK).json({
       paymentPlan: {
