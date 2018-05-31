@@ -289,6 +289,7 @@ export class DefenceSteps {
         defendantDefenceTypePage.admitAllOfMoneyClaim()
         defendantSteps.selectTaskDecideHowWillYouPay()
         defendantWhenWillYouPage.chooseImmediately()
+        defendantSteps.selectCheckAndSubmitYourDefence()
         break
 
       default:
