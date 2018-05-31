@@ -276,14 +276,12 @@ export class DefenceSteps {
         this.askforMediation()
         defendantSteps.selectCheckAndSubmitYourDefence()
         break
-
       case DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID:
         this.enterWhenDidYouPay(defence)
         defendantSteps.selectCheckAndSubmitYourDefence()
         I.see('When did you pay this amount?')
         I.see('How did you pay the amount claimed?')
         break
-
       case DefenceType.FULL_ADMISSION:
         defendantSteps.selectTaskChooseAResponse()
         defendantDefenceTypePage.admitAllOfMoneyClaim()
@@ -291,16 +289,17 @@ export class DefenceSteps {
         defendantWhenWillYouPage.chooseImmediately()
         defendantSteps.selectCheckAndSubmitYourDefence()
         break
-
       default:
         throw new Error('Unknown DefenceType')
     }
 
-    this.checkAndSendAndSubmit(defendantType)
-    if (defenceType === DefenceType.FULL_REJECTION_WITH_DISPUTE || defenceType === DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID) {
-      I.see('You’ve submitted your response')
-    } else {
-      I.see('Next steps')
+    if (defenceType !== DefenceType.FULL_ADMISSION) {
+      this.checkAndSendAndSubmit(defendantType)
+      if (defenceType === DefenceType.FULL_REJECTION_WITH_DISPUTE || defenceType === DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID) {
+        I.see('You’ve submitted your response')
+      } else {
+        I.see('Next steps')
+      }
     }
   }
 
