@@ -72,7 +72,7 @@ describe('Payment plan calculation when not all query parameters are passed - ne
     })
   })
 
-  describe.only('Payment plan calcuation when all query parameters are passed - positive test', () => {
+  describe('Payment plan calcuation when all query parameters are passed - positive test', () => {
 
     before(() => {
       const mockedPaymentPlan = {
