@@ -35,8 +35,9 @@ const eligibilityStore = new CookieEligibilityStore()
 
 async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath): Promise<string> {
   if (req.query.state !== OAuthHelper.getStateCookie(req)) {
-    throw new Error('Invalid state')
+    logger.warn('State cookie mismatch! Request: "' + req.query.state + '", Cookie: "' + OAuthHelper.getStateCookie(req) + '"')
   }
+
   const authToken: AuthToken = await IdamClient.exchangeCode(
     req.query.code,
     buildURL(req, receiver.uri)
