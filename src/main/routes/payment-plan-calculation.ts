@@ -5,8 +5,6 @@ import * as _ from 'lodash'
 import { Paths as AppPaths } from 'paths'
 import { createPaymentPlan } from 'common/paymentPlan'
 
-console.log('createPaymentPlan>', createPaymentPlan)
-
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(AppPaths.paymentPlanCalculation.uri, (req, res) => {
@@ -31,7 +29,7 @@ export default express.Router()
     return res.status(HttpStatus.OK).json({
       paymentPlan: {
         paymentLength: paymentPlan.getPaymentLength(),
-        lastPaymentDate: paymentPlan.getLastPaymentDate()
+        lastPaymentDate: paymentPlan.getLastPaymentDate().toJSON()
       }
     })
   })
