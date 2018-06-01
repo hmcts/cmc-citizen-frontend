@@ -1,0 +1,109 @@
+$(document).ready(function () {
+  var feature = (function () {
+    var config = {
+      paymentLengthCalculationApi: '/payment-plan-calculation',
+      noPaymentLengthPlaceholder: '-',
+
+      // Default selectors
+      containerSelector: '.payment-plan-calculation',
+      totalAmountSelector: 'input[name=remainingAmount]',
+      instalmentAmountSelector: 'input[name=instalmentAmount]',
+      paymentSchedultSelector: 'input[name=paymentSchedule]',
+      paymentLengthSelector: '.lengthOfRepayment'
+    }
+
+    var containerElement = null;
+
+    var totalAmountElement = null;
+    var instalmentAmountElement = null;
+    var paymentScheduleElement = null;
+    var paymentLengthElement = null;
+
+    var getTotalAmount = function () {
+      return totalAmountElement.val();
+    }
+
+    var getInstalmentAmount = function () {
+      return instalmentAmountElement.val();
+    }
+
+    var getPaymentSchedule = function () {
+      return containerElement.find(config.paymentSchedultSelector + ':checked').val();
+    }
+
+    var setPaymentLength = function (paymentLength) {
+      paymentLengthElement.text(paymentLength);
+    }
+
+    var init = function (settings) {
+      // Allow overriding the default config
+      $.extend(config, settings);
+
+      containerElement = $(config.containerSelector);
+
+      totalAmountElement = containerElement.find(config.totalAmountSelector);
+      instalmentAmountElement = containerElement.find(config.instalmentAmountSelector);
+      paymentScheduleElement = containerElement.find(config.paymentSchedultSelector);
+      paymentLengthElement = containerElement.find(config.paymentLengthSelector);
+
+      setup();
+    };
+
+    var setup = function () {
+      instalmentAmountElement.keyup(updatePaymentLength);
+      paymentScheduleElement.change(updatePaymentLength);
+    }
+
+    var updatePaymentLength = function() {
+      var totalAmount = getTotalAmount();
+      var instalmentAmount = getInstalmentAmount();
+      var frequencyInWeeks = mapFrequencyInWeeks(getPaymentSchedule());
+
+      if (!totalAmount || !instalmentAmount || !frequencyInWeeks) {
+        setPaymentLength(config.noPaymentLengthPlaceholder);
+        return
+      }
+      callPaymentPlanCalculationEndpoint(getTotalAmount, getInstalmentAmount, frequencyInWeeks);
+    }
+
+    var callPaymentPlanCalculationEndpoint = function (totalAmount, instalmentAmount, frequencyInWeeks) {
+      var parameters = {
+        'total-amount': totalAmount,
+        'instalment-amount': instalmentAmount,
+        'frequency-in-weeks': frequencyInWeeks
+      }
+      $.getJSON({
+        url: buildApiPath(parameters),
+        success: paymentPlanCalculationHandler
+      })
+    }
+
+    var paymentPlanCalculationHandler = function (data) {
+      var paymentPlan = data.paymentPlan || {};
+      setPaymentLength(paymentPlan.paymentLength || config.noPaymentLengthPlaceholder);
+    }
+
+    var buildApiPath = function (parameters) {
+      return config.paymentLengthCalculationApi + '?' + $.param(parameters)
+    }
+
+    var mapFrequencyInWeeks = function(frequency) {
+      switch (frequency) {
+        case 'EACH_WEEK': 
+          return 1;
+        case 'EVERY_TWO_WEEKS': 
+          return 2;
+        case 'EVERY_MONTH': 
+          return 4;
+        default:
+          return undefined;
+      }
+    }
+
+    return {
+      init: init
+    };
+  })();
+
+  feature.init();
+});

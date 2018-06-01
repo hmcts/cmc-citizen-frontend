@@ -4,12 +4,16 @@
 
 {% set heading = 'Your repayment plan' %}
 
+{% block additional_scripts %}
+  {% include "payment-plan-calculation-scripts.njk" %}
+{% endblock %}
+
 {% block content %}
   <div class="column-two-thirds">
 
     <p>{{ t('The total amount claimed is {{ remainingAmount }}. This includes the claim fee and any interest.', { remainingAmount: remainingAmount | numeral }) }} </p>
 
-    <form method="post" novalidate>
+    <form method="post" novalidate class="payment-plan-calculation">
       {{ csrfProtection(csrf) }}
 
       <h2 class="heading-small">Your finances</h2>
@@ -54,7 +58,7 @@
 
       <h2 class="heading-small">Length of repayment plan</h2>
       <input type="hidden" name="remainingAmount" value="{{ remainingAmount }}">
-      <p id="lengthOfRepayment"> - </p>
+      <p id="lengthOfRepayment" class="lengthOfRepayment"> - </p>
 
       <div class="form-group">
         <fieldset>
@@ -66,9 +70,4 @@
       {{ saveAndContinueButton() }}
     </form>
   </div>
-{% endblock %}
-
-{% block additional_scripts %}
-  <script src="{{ asset_paths['js'] }}/defendant-repayment-plan.js"></script>
-  <script src="{{ asset_paths['js_vendor'] }}/vendor/moment/moment.js"></script>
 {% endblock %}
