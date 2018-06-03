@@ -1,0 +1,4 @@
+{% from "form.njk" import input %}
+{% macro claimReferenceInput(label, name, form, hint, inputClass='', compound=false, autocomplete='on') %}
+  {{ input(label, name, form, hint, 'text', inputClass, compound, autocomplete, maxLength='8') }}
+{% endmacro %}

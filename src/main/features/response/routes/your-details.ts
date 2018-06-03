@@ -47,35 +47,21 @@ function deserializeFn (value: any): PartyDetails {
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.defendantYourDetailsPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  .get(Paths.defendantYourDetailsPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
     const draft: Draft<ResponseDraft> = res.locals.responseDraft
     const claim: Claim = res.locals.claim
 
-    const partyDetails: PartyDetails = plainToClass(PartyDetails, claim.claimData.defendant)
-    if (draft.document.defendantDetails.partyDetails) {
-      switch (draft.document.defendantDetails.partyDetails.type) {
-        case PartyType.COMPANY.value:
-          (partyDetails as CompanyDetails).contactPerson =
-            (draft.document.defendantDetails.partyDetails as CompanyDetails).contactPerson
-          break
-        case PartyType.ORGANISATION.value:
-          (partyDetails as OrganisationDetails).contactPerson =
-            (draft.document.defendantDetails.partyDetails as OrganisationDetails).contactPerson
-          break
-        default:
-          break
-      }
-      partyDetails.address = draft.document.defendantDetails.partyDetails.address
-      partyDetails.hasCorrespondenceAddress = draft.document.defendantDetails.partyDetails.hasCorrespondenceAddress
-      partyDetails.correspondenceAddress = draft.document.defendantDetails.partyDetails.correspondenceAddress
+    if (!draft.document.defendantDetails.partyDetails.address.postcode) {
+      const partyDetails: PartyDetails = plainToClass(PartyDetails, claim.claimData.defendant)
+      draft.document.defendantDetails.partyDetails.address = partyDetails.address
     }
 
-    renderView(new Form(partyDetails), res)
+    renderView(new Form(draft.document.defendantDetails.partyDetails), res)
   }))
   .post(
     Paths.defendantYourDetailsPage.uri,
     FormValidator.requestHandler(PartyDetails, deserializeFn, 'response'),
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<PartyDetails> = req.body
 
       if (form.hasErrors()) {
