@@ -11,11 +11,11 @@ import { BankAccounts } from 'response/form/models/statement-of-means/bankAccoun
 import { FeatureToggles } from 'utils/featureToggles'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { ResponseType } from 'response/form/models/responseType'
-import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { Debts } from 'response/form/models/statement-of-means/debts'
 import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders'
 import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
 import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
+import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 
 export class StatementOfMeans {
   residence?: Residence
@@ -40,15 +40,13 @@ export class StatementOfMeans {
     if (!responseDraft) {
       throw new Error('Response draft has to be provided as input')
     }
-    return this.isResponseApplicable(responseDraft) && !responseDraft.defendantDetails.partyDetails.isBusiness()
+    return !responseDraft.defendantDetails.partyDetails.isBusiness()
+      && this.isResponseApplicable(responseDraft)
   }
 
   private static isResponseApplicable (responseDraft: ResponseDraft) {
-    return responseDraft.response.type === ResponseType.FULL_ADMISSION
-      || (responseDraft.response.type === ResponseType.PART_ADMISSION
-        && responseDraft.rejectPartOfClaim
-        && responseDraft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH
-      )
+    return (responseDraft.response.type === ResponseType.FULL_ADMISSION
+      && !responseDraft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY))
   }
 
   deserialize (input: any): StatementOfMeans {

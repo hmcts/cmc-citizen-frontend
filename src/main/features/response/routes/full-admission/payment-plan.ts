@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths, StatementOfMeansPaths } from 'response/paths'
+import { Paths, FullAdmissionPaths } from 'response/paths'
 
 import { ErrorHandling } from 'shared/errorHandling'
 import { Form } from 'forms/form'
@@ -10,26 +10,16 @@ import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { FormValidator } from 'forms/validation/formValidator'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
-import { RoutablePath } from 'shared/router/routablePath'
-import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
-
-function nextPageFor (responseDraft: ResponseDraft): RoutablePath {
-  if (StatementOfMeans.isApplicableFor(responseDraft)) {
-    return StatementOfMeansPaths.startPage
-  } else {
-    return Paths.taskListPage
-  }
-}
 
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
   const claim: Claim = res.locals.claim
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const alreadyPaid: number = draft.document.paidAmount.amount || 0
 
-  res.render(Paths.defencePaymentPlanPage.associatedView, {
+  res.render(FullAdmissionPaths.paymentPlanPage.associatedView, {
     form: form,
     remainingAmount: claim.totalAmountTillToday - alreadyPaid
   })
@@ -37,16 +27,16 @@ function renderView (form: Form<PaidAmount>, res: express.Response): void {
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.defencePaymentPlanPage.uri,
-    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
+  .get(FullAdmissionPaths.paymentPlanPage.uri,
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-      renderView(new Form(draft.document.defendantPaymentPlan), res)
+      renderView(new Form(draft.document.fullAdmission.paymentPlan), res)
     }))
 
-  .post(Paths.defencePaymentPlanPage.uri,
-    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
+  .post(FullAdmissionPaths.paymentPlanPage.uri,
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission'),
     FormValidator.requestHandler(DefendantPaymentPlan, DefendantPaymentPlan.fromObject),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response): Promise<void> => {
@@ -58,10 +48,10 @@ export default express.Router()
           const draft: Draft<ResponseDraft> = res.locals.responseDraft
           const user: User = res.locals.user
 
-          draft.document.defendantPaymentPlan = form.model
+          draft.document.fullAdmission.paymentPlan = form.model
           await new DraftService().save(draft, user.bearerToken)
 
           const { externalId } = req.params
-          res.redirect(nextPageFor(draft.document).evaluateUri({ externalId: externalId }))
+          res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
         }
       }))
