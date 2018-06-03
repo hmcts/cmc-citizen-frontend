@@ -1,6 +1,6 @@
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
-import { Paths } from 'response/paths'
+import { Paths, FullAdmissionPaths } from 'response/paths'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
@@ -11,6 +11,7 @@ import { YourDetails } from 'response/tasks/yourDetails'
 import { FreeMediationTask } from 'response/tasks/freeMediationTask'
 import { Claim } from 'claims/models/claim'
 import { WhenDidYouPayTask } from 'response/tasks/whenDidYouPayTask'
+import { DecideHowYouWillPayTask } from 'response/tasks/decideHowYouWillPayTask'
 import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
 
 export class TaskListBuilder {
@@ -75,6 +76,16 @@ export class TaskListBuilder {
       )
     }
 
+    if (draft.isResponseFullyAdmitted()) {
+      tasks.push(
+        new TaskListItem(
+          'Decide how you`ll pay',
+          FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: externalId }),
+          DecideHowYouWillPayTask.isCompleted(draft)
+        )
+      )
+    }
+
     return new TaskList(2, 'Respond to claim', tasks)
   }
 
@@ -82,7 +93,8 @@ export class TaskListBuilder {
     const tasks: TaskListItem[] = []
     if (! draft.isResponsePopulated()
       || draft.isResponseRejectedFullyWithDispute()
-      || draft.isResponseRejectedFullyWithAmountClaimedPaid()) {
+      || draft.isResponseRejectedFullyWithAmountClaimedPaid()
+      || draft.isResponseFullyAdmitted()) {
       tasks.push(
         new TaskListItem(
           'Check and submit your response',

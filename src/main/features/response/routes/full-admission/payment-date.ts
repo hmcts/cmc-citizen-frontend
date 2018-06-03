@@ -1,19 +1,17 @@
 import * as express from 'express'
-import { PayBySetDatePaths, Paths } from 'response/paths'
+import { FullAdmissionPaths, Paths } from 'response/paths'
 import { Form } from 'forms/form'
 import { User } from 'idam/user'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
 import { DraftService } from 'services/draftService'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
-import { PaymentDateChecker } from 'response/helpers/paymentDateChecker'
-import { RoutablePath } from 'shared/router/routablePath'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 
 function renderView (form: Form<PaymentDate>, res: express.Response) {
-  res.render(PayBySetDatePaths.paymentDatePage.associatedView, {
+  res.render(FullAdmissionPaths.paymentDatePage.associatedView, {
     form: form
   })
 }
@@ -21,15 +19,15 @@ function renderView (form: Form<PaymentDate>, res: express.Response) {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
-    PayBySetDatePaths.paymentDatePage.uri,
-    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
+    FullAdmissionPaths.paymentDatePage.uri,
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission'),
     (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      renderView(new Form(draft.document.payBySetDate.paymentDate), res)
+      renderView(new Form(draft.document.fullAdmission.paymentDate), res)
     })
   .post(
-    PayBySetDatePaths.paymentDatePage.uri,
-    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
+    FullAdmissionPaths.paymentDatePage.uri,
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission'),
     FormValidator.requestHandler(PaymentDate, PaymentDate.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<PaymentDate> = req.body
@@ -39,18 +37,9 @@ export default express.Router()
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        const paymentDate: PaymentDate = form.model
-        draft.document.payBySetDate.paymentDate = paymentDate
-
-        let nextPage: RoutablePath
-        if (PaymentDateChecker.isLaterThan28DaysFromNow(paymentDate.date.toMoment())) {
-          nextPage = PayBySetDatePaths.explanationPage
-        } else {
-          draft.document.payBySetDate.clearExplanation()
-          nextPage = Paths.taskListPage
-        }
-
+        draft.document.fullAdmission.paymentDate = form.model
         await new DraftService().save(draft, user.bearerToken)
-        res.redirect(nextPage.evaluateUri({ externalId: req.params.externalId }))
+
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: req.params.externalId }))
       }
     }))

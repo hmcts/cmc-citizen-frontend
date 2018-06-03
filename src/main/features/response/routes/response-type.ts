@@ -8,9 +8,10 @@ import { ResponseType } from 'response/form/models/responseType'
 import { ErrorHandling } from 'shared/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
-import { ResponseDraft } from 'response/draft/responseDraft'
+import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
+import { FeatureToggles } from 'utils/featureToggles'
 
 function renderView (form: Form<Response>, res: express.Response) {
   const claim: Claim = res.locals.claim
@@ -43,11 +44,18 @@ export default express.Router()
         const user: User = res.locals.user
 
         draft.document.response = form.model
+
+        if (draft.document.response.type === ResponseType.FULL_ADMISSION) {
+          if (!draft.document.fullAdmission) {
+            draft.document.fullAdmission = new FullAdmission()
+          }
+        } else {
+          delete draft.document.fullAdmission
+        }
+
         await new DraftService().save(draft, user.bearerToken)
 
-        const responseType = draft.document.response.type
-
-        switch (responseType) {
+        switch (draft.document.response.type) {
           case ResponseType.DEFENCE:
             res.redirect(Paths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: externalId }))
             break
@@ -55,10 +63,14 @@ export default express.Router()
             res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: claim.externalId }))
             break
           case ResponseType.FULL_ADMISSION:
-            res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: claim.externalId }))
+            if (FeatureToggles.isEnabled('fullAdmission')) {
+              res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+            } else {
+              res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: claim.externalId }))
+            }
             break
           default:
-            next(new Error(`Unknown response type: ${responseType}`))
+            next(new Error(`Unknown response type: ${draft.document.response.type}`))
         }
       }
     }))
