@@ -97,7 +97,7 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@hmcts/cmc-supported-browsers/-/cmc-supported-browsers-1.0.1.tgz#201d415b7efdf858c77ddccb66bbe9af258c03bc"
 
-"@hmcts/cmc-validators@^0.1.6":
+"@hmcts/cmc-validators@^0.1.9":
   version "0.1.9"
   resolved "https://registry.yarnpkg.com/@hmcts/cmc-validators/-/cmc-validators-0.1.9.tgz#b265205d91c5ba4157f5dbd00e2c6250fb579c07"
   dependencies:
