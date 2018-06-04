@@ -1,6 +1,6 @@
 import * as express from 'express'
 import * as _ from 'lodash'
-import { Paths, StatementOfMeansPaths } from 'response/paths'
+import { Paths } from 'response/paths'
 import { ErrorHandling } from 'shared/errorHandling'
 import { Form } from 'forms/form'
 import { DraftService } from 'services/draftService'
@@ -8,21 +8,11 @@ import { User } from 'idam/user'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { FormValidator } from 'forms/validation/formValidator'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
-import { RoutablePath } from 'shared/router/routablePath'
-import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
 import { createPaymentPlan } from 'common/paymentPlan'
 import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
-
-function nextPageFor (responseDraft: ResponseDraft): RoutablePath {
-  if (StatementOfMeans.isApplicableFor(responseDraft)) {
-    return StatementOfMeansPaths.startPage
-  } else {
-    return Paths.taskListPage
-  }
-}
 
 function mapFrequencyInWeeks (frequency: PaymentSchedule): number {
   switch (frequency) {
@@ -42,7 +32,11 @@ function renderView (form: Form<DefendantPaymentPlan>, res: express.Response): v
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const alreadyPaid: number = draft.document.paidAmount.amount || 0
   const { remainingAmount, instalmentAmount, paymentSchedule } = form.model
-  const paymentLength = createPaymentPlan(remainingAmount, instalmentAmount, mapFrequencyInWeeks(paymentSchedule)).getPaymentLength()
+
+  let paymentLength
+  if (remainingAmount && instalmentAmount && paymentSchedule) {
+    paymentLength = createPaymentPlan(remainingAmount, instalmentAmount, mapFrequencyInWeeks(paymentSchedule)).getPaymentLength()
+  }
 
   res.render(Paths.defencePaymentPlanPage.associatedView, {
     form: form,
@@ -78,6 +72,6 @@ export default express.Router()
           await new DraftService().save(draft, user.bearerToken)
 
           const { externalId } = req.params
-          res.redirect(nextPageFor(draft.document).evaluateUri({ externalId: externalId }))
+          res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
         }
       }))
