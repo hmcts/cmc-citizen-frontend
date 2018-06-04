@@ -63,6 +63,16 @@ describe('Defendant: payment page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Your repayment plan'))
         })
+
+        it.only('should calculate length of payment with given payment plan', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response')
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('2 years 9 months 4 weeks'))
+        })
       })
     })
   })
@@ -70,14 +80,13 @@ describe('Defendant: payment page', () => {
   describe('on POST', () => {
     const validFormData = {
       remainingAmount: 160,
-      instalmentAmount: 30.00,
+      instalmentAmount: 30,
       firstPaymentDate: {
         day: 12,
         month: 3,
         year: 2050
       },
-      paymentSchedule: 'EVERY_MONTH',
-      text: 'I owe nothing'
+      paymentSchedule: 'EVERY_MONTH'
     }
 
     const method = 'post'

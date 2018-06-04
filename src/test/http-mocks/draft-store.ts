@@ -235,8 +235,7 @@ const sampleResponseDraftObj = {
       paymentSchedule: {
         value: 'EVERY_MONTH',
         displayValue: 'every month'
-      },
-      text: 'I owe nothing'
+      }
     }
   },
   defendantDetails: {
