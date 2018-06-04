@@ -1,6 +1,6 @@
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
-import { Paths, FullAdmissionPaths } from 'response/paths'
+import { Paths, FullAdmissionPaths, StatementOfMeansPaths } from 'response/paths'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
@@ -81,6 +81,31 @@ export class TaskListBuilder {
         new TaskListItem(
           'Decide how you`ll pay',
           FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: externalId }),
+          DecideHowYouWillPayTask.isCompleted(draft)
+        )
+      )
+    }
+
+    if (draft.isResponseFullyAdmittedWithPayBySetDate()) {
+      tasks.push(
+        new TaskListItem(
+          'Share your financial details',
+          StatementOfMeansPaths.startPage.evaluateUri({ externalId: externalId }),
+          false
+        )
+      )
+    }
+
+    if (draft.isResponseFullyAdmittedWithInstalments()) {
+      tasks.push(
+        new TaskListItem(
+          'Share your financial details',
+          StatementOfMeansPaths.startPage.evaluateUri({ externalId: externalId }),
+          false
+        ),
+        new TaskListItem(
+          'Your repayment plan',
+          FullAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId }),
           DecideHowYouWillPayTask.isCompleted(draft)
         )
       )

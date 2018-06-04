@@ -50,7 +50,7 @@ export default express.Router()
     FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      renderView(new Form(draft.document.defendantPaymentPlan), res)
+      renderView(new Form(draft.document.fullAdmission.paymentPlan), res)
     }))
 
   .post(FullAdmissionPaths.paymentPlanPage.uri,

@@ -12,8 +12,8 @@ import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
 import { HowMuchPaid } from 'response/form/models/howMuchPaid'
 import { HowMuchOwed } from 'response/form/models/howMuchOwed'
-import { DefendantPaymentOption as PaymentOption } from 'response/form/models/defendantPaymentOption'
-import { DefendantPaymentPlan as PaymentPlan } from 'response/form/models/defendantPaymentPlan'
+import { DefendantPaymentOption as PaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { DefendantPaymentPlan as PaymentPlan} from 'response/form/models/defendantPaymentPlan'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
@@ -103,6 +103,18 @@ export class ResponseDraft extends DraftDocument {
     }
 
     return this.isResponsePopulated() && this.response.type === ResponseType.FULL_ADMISSION
+  }
+
+  public isResponseFullyAdmittedWithPayBySetDate (): boolean {
+    return this.isResponseFullyAdmitted
+    && !isNullOrUndefined(this.fullAdmission)
+    && this.fullAdmission.paymentOption.option === DefendantPaymentType.BY_SET_DATE
+  }
+
+  public isResponseFullyAdmittedWithInstalments (): boolean {
+    return this.isResponseFullyAdmitted
+    && !isNullOrUndefined(this.fullAdmission)
+    && this.fullAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS
   }
 
   public isResponsePartiallyRejectedDueTo (option: String): boolean {
