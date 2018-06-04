@@ -64,7 +64,7 @@ describe('Defendant: payment page', () => {
             .expect(res => expect(res).to.be.successful.withText('Your repayment plan'))
         })
 
-        it.only('should calculate length of payment with given payment plan', async () => {
+        it('should calculate length of payment with given payment plan', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
 
