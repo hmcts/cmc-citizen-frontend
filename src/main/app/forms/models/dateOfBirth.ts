@@ -15,7 +15,6 @@ import * as toBoolean from 'to-boolean'
 
 export class ValidationErrors {
   static readonly DATE_NOT_VALID: string = 'Please enter a valid date'
-  static readonly DATE_INVALID_YEAR: string = 'Enter a 4 digit year'
   static readonly DATE_UNDER_18: string = 'Please enter a date of birth before %s'
 }
 

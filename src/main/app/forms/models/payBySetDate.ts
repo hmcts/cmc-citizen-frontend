@@ -9,7 +9,6 @@ export class ValidationErrors {
   static readonly DATE_REQUIRED: string = 'Enter a date'
   static readonly DATE_NOT_VALID: string = 'Enter a valid date'
   static readonly DATE_TODAY_OR_IN_FUTURE: string = 'Enter a date that is today or in the future'
-  static readonly DATE_INVALID_YEAR: string = 'Enter a 4 digit year'
 }
 
 export class PayBySetDate {

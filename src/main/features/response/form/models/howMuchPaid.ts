@@ -17,7 +17,6 @@ export class ValidationErrors {
   static readonly AMOUNT_NOT_VALID: string = 'Enter valid amount'
   static readonly DATE_REQUIRED: string = 'Enter a date'
   static readonly VALID_PAST_DATE: string = `Enter date before ${currentDate}`
-  static readonly DATE_INVALID_YEAR: string = 'Enter a 4 digit year'
   static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter valid amount, maximum two decimal places'
 }
 
@@ -30,8 +29,8 @@ export class HowMuchPaid {
   amount?: number
 
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
-  @IsPastDate({ message: ValidationErrors.VALID_PAST_DATE })
   @IsValidLocalDate({ message: ValidationErrors.DATE_REQUIRED })
+  @IsPastDate({ message: ValidationErrors.VALID_PAST_DATE })
   date?: LocalDate
 
   @IsDefined({ message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })
