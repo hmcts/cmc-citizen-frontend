@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import saveAndContinueButton, errorSummary, csrfProtection, radioGroup, poundInput, textArea %}
+{% from "form.njk" import linkButton, saveAndContinueButton, errorSummary, csrfProtection, radioGroup, poundInput, textArea %}
 {% from "date.njk" import dateInput %}
 
 {% set heading = 'Your repayment plan' %}
@@ -56,9 +56,10 @@
         ) }}
       </div>
 
+      {{ linkButton('Calculate length of repayment plan', 'action[calculatePaymentPlan]', 'button button-secondary') }}
+
       <h2 class="heading-small">Length of repayment plan</h2>
-      <input type="hidden" name="remainingAmount" value="{{ remainingAmount }}">
-      <p id="lengthOfRepayment" class="lengthOfRepayment"> - </p>
+      <p id="lengthOfRepayment" class="lengthOfRepayment"> {{ paymentLength | default("-") }} </p>
 
       <div class="form-group">
         <fieldset>

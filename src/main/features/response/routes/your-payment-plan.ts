@@ -1,10 +1,10 @@
 import * as express from 'express'
+import * as _ from 'lodash'
 import { Paths, StatementOfMeansPaths } from 'response/paths'
 import { ErrorHandling } from 'shared/errorHandling'
 import { Form } from 'forms/form'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
-import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { FormValidator } from 'forms/validation/formValidator'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
@@ -13,6 +13,8 @@ import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
+import { createPaymentPlan } from 'common/paymentPlan'
+import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
 
 function nextPageFor (responseDraft: ResponseDraft): RoutablePath {
   if (StatementOfMeans.isApplicableFor(responseDraft)) {
@@ -22,13 +24,29 @@ function nextPageFor (responseDraft: ResponseDraft): RoutablePath {
   }
 }
 
-function renderView (form: Form<PaidAmount>, res: express.Response): void {
+function mapFrequencyInWeeks (frequency: PaymentSchedule): number {
+  switch (frequency) {
+    case PaymentSchedule.EACH_WEEK:
+      return 1
+    case PaymentSchedule.EVERY_TWO_WEEKS:
+      return 2
+    case PaymentSchedule.EVERY_MONTH:
+      return 4
+    default:
+      return undefined
+  }
+}
+
+function renderView (form: Form<DefendantPaymentPlan>, res: express.Response): void {
   const claim: Claim = res.locals.claim
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const alreadyPaid: number = draft.document.paidAmount.amount || 0
+  const { remainingAmount, instalmentAmount, paymentSchedule } = form.model
+  const paymentLength = createPaymentPlan(remainingAmount, instalmentAmount, mapFrequencyInWeeks(paymentSchedule)).getPaymentLength()
 
   res.render(Paths.defencePaymentPlanPage.associatedView, {
     form: form,
+    paymentLength,
     monthlyIncome: draft.document.statementOfMeans.monthlyIncome,
     monthlyExpenses: draft.document.statementOfMeans.monthlyExpenses,
     remainingAmount: claim.totalAmountTillToday - alreadyPaid
@@ -46,12 +64,11 @@ export default express.Router()
 
   .post(Paths.defencePaymentPlanPage.uri,
     FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
-    FormValidator.requestHandler(DefendantPaymentPlan, DefendantPaymentPlan.fromObject),
+    FormValidator.requestHandler(DefendantPaymentPlan, DefendantPaymentPlan.fromObject, undefined, ['calculatePaymentPlan']),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response): Promise<void> => {
         const form: Form<DefendantPaymentPlan> = req.body
-
-        if (form.hasErrors()) {
+        if (form.hasErrors() || _.get(req, 'body.action.calculatePaymentPlan')) {
           renderView(form, res)
         } else {
           const draft: Draft<ResponseDraft> = res.locals.responseDraft
