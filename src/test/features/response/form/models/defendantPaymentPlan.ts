@@ -61,11 +61,10 @@ describe('DefendantPaymentPlan', () => {
     describe('should reject when', () => {
       it('undefined option', () => {
         const errors = validator.validateSync(new DefendantPaymentPlan(undefined))
-        expect(errors.length).to.equal(4)
+        expect(errors.length).to.equal(3)
         expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
         expectValidationError(errors, ValidationErrors.SELECT_PAYMENT_SCHEDULE)
         expectValidationError(errors, ValidationErrors.INVALID_DATE)
-        expectValidationError(errors, ValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED)
       })
 
       it('instalment amount > remainingAmount', () => {
@@ -114,33 +113,6 @@ describe('DefendantPaymentPlan', () => {
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.SELECT_PAYMENT_SCHEDULE)
-      })
-
-      it('explanation text is undefined', () => {
-        const paymentPlan = validPaymentPlan()
-        paymentPlan.text = undefined
-        const errors = validator.validateSync(paymentPlan)
-
-        expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED)
-      })
-
-      it('explanation text is a blank string', () => {
-        const paymentPlan = validPaymentPlan()
-        paymentPlan.text = ''
-        const errors = validator.validateSync(paymentPlan)
-
-        expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.WHY_NOT_OWE_FULL_AMOUNT_REQUIRED)
-      })
-
-      it('explanation text is too long', () => {
-        const paymentPlan = validPaymentPlan()
-        paymentPlan.text = generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1)
-        const errors = validator.validateSync(paymentPlan)
-
-        expect(errors.length).to.equal(1)
-        expectValidationError(errors, CommonValidationErrors.TEXT_TOO_LONG)
       })
     })
 
