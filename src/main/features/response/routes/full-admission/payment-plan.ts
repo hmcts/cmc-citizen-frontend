@@ -1,6 +1,7 @@
 import * as express from 'express'
-import * as _ from 'lodash'
-import { Paths } from 'response/paths'
+
+import { Paths, FullAdmissionPaths } from 'response/paths'
+
 import { ErrorHandling } from 'shared/errorHandling'
 import { Form } from 'forms/form'
 import { DraftService } from 'services/draftService'
@@ -38,7 +39,7 @@ function renderView (form: Form<DefendantPaymentPlan>, res: express.Response): v
     paymentLength = createPaymentPlan(remainingAmount, instalmentAmount, mapFrequencyInWeeks(paymentSchedule)).getPaymentLength()
   }
 
-  res.render(Paths.defencePaymentPlanPage.associatedView, {
+  res.render(FullAdmissionPaths.paymentPlanPage.associatedView, {
     form: form,
     paymentLength,
     monthlyIncome: draft.document.statementOfMeans.monthlyIncome,
@@ -49,15 +50,15 @@ function renderView (form: Form<DefendantPaymentPlan>, res: express.Response): v
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.defencePaymentPlanPage.uri,
-    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
+  .get(FullAdmissionPaths.paymentPlanPage.uri,
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.defendantPaymentPlan), res)
     }))
 
-  .post(Paths.defencePaymentPlanPage.uri,
-    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission', 'partialAdmission'),
+  .post(FullAdmissionPaths.paymentPlanPage.uri,
+    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission'),
     FormValidator.requestHandler(DefendantPaymentPlan, DefendantPaymentPlan.fromObject, undefined, ['calculatePaymentPlan']),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response): Promise<void> => {
@@ -68,7 +69,7 @@ export default express.Router()
           const draft: Draft<ResponseDraft> = res.locals.responseDraft
           const user: User = res.locals.user
 
-          draft.document.defendantPaymentPlan = form.model
+          draft.document.fullAdmission.paymentPlan = form.model
           await new DraftService().save(draft, user.bearerToken)
 
           const { externalId } = req.params

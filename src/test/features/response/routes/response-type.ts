@@ -94,7 +94,7 @@ describe('Defendant response: response type page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to send your response by email page when everything is fine', async () => {
+          it('should redirect to task list page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveSave()
@@ -104,7 +104,7 @@ describe('Defendant response: response type page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ type: ResponseType.FULL_ADMISSION })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.sendYourResponseByEmailPage
+                .toLocation(ResponsePaths.taskListPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 

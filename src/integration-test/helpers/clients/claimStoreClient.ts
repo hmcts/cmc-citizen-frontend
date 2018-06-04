@@ -41,19 +41,21 @@ export class ClaimStoreClient {
       return Promise.reject('Submitter is required')
     }
 
-    return request.post(`${baseURL}/claims/${submitter.id}`, {
+    const headers = {
+      Authorization: `Bearer ${submitter.bearerToken}`
+    }
+    return request.post(`${baseURL}/claims/${claimData.externalId}/pre-payment`, {
+      headers
+    }).then(() => request.post(`${baseURL}/claims/${submitter.id}`, {
       body: claimData,
-      headers: {
-        Authorization: `Bearer ${submitter.bearerToken}`
-      }
-    })
+      headers
+    }))
   }
 
   /**
    * Links defendant to claim in the claim store
    *
    * @param {string} defendant - defendant ID
-   * @param externalId the claims external id
    * @returns {Promise<Claim>}
    */
   static linkDefendant (defendant: User): Promise<Claim> {

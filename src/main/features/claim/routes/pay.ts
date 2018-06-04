@@ -20,6 +20,7 @@ import { Logger } from '@hmcts/nodejs-logging'
 import { FeeOutcome } from 'fees/models/feeOutcome'
 import { Fee } from 'payment-hub-client/fee'
 import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveResponse'
+import * as HttpStatus from 'http-status-codes'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -48,29 +49,37 @@ function logError (id: string, payment: Payment, message: string) {
 async function successHandler (res, next) {
   const draft: Draft<DraftClaim> = res.locals.claimDraft
   const user: User = res.locals.user
+  const externalId: string = draft.document.externalId
 
-  let claimStatus: boolean
+  let claimIsAlreadyFullyPersisted: boolean
+
   try {
-    claimStatus = await claimStoreClient.retrieveByExternalId(draft.document.externalId, user)
+    claimIsAlreadyFullyPersisted = await claimStoreClient.retrieveByExternalId(externalId, user)
       .then(() => true)
   } catch (err) {
-    if (err.toString().includes('Claim not found by external id')) {
-      claimStatus = false
+    /**
+     * NOT_FOUND -> claim was not submitted yet -> migrate draft
+     */
+    if (err.statusCode === HttpStatus.NOT_FOUND) {
+      claimIsAlreadyFullyPersisted = false
     } else {
-      logError(user.id, draft.document.claimant.payment, `Payment processed successfully but there is problem retrieving claim from claim store externalId: ${draft.document.externalId},`)
+      logError(
+        user.id,
+        draft.document.claimant.payment,
+        `Payment processed successfully but there is problem retrieving claim from claim store externalId: ${externalId}.`
+      )
+
       next(err)
       return
     }
   }
 
-  if (claimStatus) {
-    await new DraftService().delete(draft.id, user.bearerToken)
-    res.redirect(Paths.confirmationPage.evaluateUri({ externalId: draft.document.externalId }))
-  } else {
-    const claim = await claimStoreClient.saveClaim(draft, user)
-    await new DraftService().delete(draft.id, user.bearerToken)
-    res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
+  if (!claimIsAlreadyFullyPersisted) {
+    await claimStoreClient.saveClaim(draft, user)
   }
+
+  await new DraftService().delete(draft.id, user.bearerToken)
+  res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
 }
 
 /* tslint:disable:no-default-export */
@@ -78,8 +87,10 @@ export default express.Router()
   .get(Paths.startPaymentReceiver.uri, async (req, res, next) => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
     const user: User = res.locals.user
+    const externalId: string = draft.document.externalId
+
     try {
-      if (!draft.document.externalId) {
+      if (!externalId) {
         throw new Error(`externalId is missing from the draft claim. User Id : ${user.id}`)
       }
       const amount: number = await draftClaimAmountWithInterest(draft.document)
@@ -94,17 +105,20 @@ export default express.Router()
         const paymentResponse: PaymentRetrieveResponse = await payClient.retrieve(user, paymentRef)
         if (paymentResponse !== undefined) {
           if (paymentResponse.status === 'Success') {
-            return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: draft.document.externalId }))
+            return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: externalId }))
           }
         } else if (draft.document.claimant.payment['state'] && draft.document.claimant.payment['state']['status'] === 'success') {
           logError(user.id, draft.document.claimant.payment, 'Successful payment from V1 version of the API cannot be handled')
         }
       }
+
+      const caseReference: string = await claimStoreClient.savePrePayment(externalId, user)
       const feeOutcome: FeeOutcome = await FeesClient.calculateFee(event, amount, channel)
       const payClient: PayClient = await getPayClient()
       const payment: Payment = await payClient.create(
-        res.locals.user,
-        draft.document.externalId,
+        user,
+        caseReference,
+        externalId,
         [new Fee(feeOutcome.amount, feeOutcome.code, feeOutcome.version)],
         getReturnURL(req, draft.document.externalId)
       )
@@ -120,6 +134,7 @@ export default express.Router()
   .get(Paths.finishPaymentReceiver.uri, async (req, res, next) => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
     const user: User = res.locals.user
+
     try {
       const { externalId } = req.params
 
