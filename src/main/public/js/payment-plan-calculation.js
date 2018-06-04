@@ -9,6 +9,7 @@ $(document).ready(function () {
       totalAmountSelector: 'input[name=remainingAmount]',
       instalmentAmountSelector: 'input[name=instalmentAmount]',
       paymentSchedultSelector: 'input[name=paymentSchedule]',
+      calculatePaymentLengthButton: '.calculateLengthOfRepayment',
       paymentLengthSelector: '.lengthOfRepayment'
     }
 
@@ -17,6 +18,7 @@ $(document).ready(function () {
     var totalAmountElement = null;
     var instalmentAmountElement = null;
     var paymentScheduleElement = null;
+    var calculatePaymentLengthButtonElement = null;
     var paymentLengthElement = null;
 
     var getTotalAmount = function () {
@@ -44,14 +46,20 @@ $(document).ready(function () {
       totalAmountElement = containerElement.find(config.totalAmountSelector);
       instalmentAmountElement = containerElement.find(config.instalmentAmountSelector);
       paymentScheduleElement = containerElement.find(config.paymentSchedultSelector);
+      calculatePaymentLengthButtonElement = containerElement.find(config.calculatePaymentLengthButton);
       paymentLengthElement = containerElement.find(config.paymentLengthSelector);
 
       setup();
     };
 
     var setup = function () {
+      enableProgressiveEnhancement();
       instalmentAmountElement.keyup(updatePaymentLength);
       paymentScheduleElement.change(updatePaymentLength);
+    }
+
+    var enableProgressiveEnhancement = function() {
+      calculatePaymentLengthButtonElement.remove();
     }
 
     var updatePaymentLength = function() {
