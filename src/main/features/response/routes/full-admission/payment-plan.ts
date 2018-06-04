@@ -1,5 +1,7 @@
 import * as express from 'express'
 
+import * as _ from 'lodash'
+
 import { Paths, FullAdmissionPaths } from 'response/paths'
 
 import { ErrorHandling } from 'shared/errorHandling'
@@ -32,18 +34,12 @@ function renderView (form: Form<DefendantPaymentPlan>, res: express.Response): v
   const claim: Claim = res.locals.claim
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const alreadyPaid: number = draft.document.paidAmount.amount || 0
-  const { remainingAmount, instalmentAmount, paymentSchedule } = form.model
-
-  let paymentLength
-  if (remainingAmount && instalmentAmount && paymentSchedule) {
-    paymentLength = createPaymentPlan(remainingAmount, instalmentAmount, mapFrequencyInWeeks(paymentSchedule)).getPaymentLength()
-  }
 
   res.render(FullAdmissionPaths.paymentPlanPage.associatedView, {
     form: form,
-    paymentLength,
-    monthlyIncome: draft.document.statementOfMeans.monthlyIncome,
-    monthlyExpenses: draft.document.statementOfMeans.monthlyExpenses,
+    paymentLength: calculatePaymentPlanLength(form.model),
+    monthlyIncome: _.get(draft.document, 'statementOfMeans.monthlyIncome', ''),
+    monthlyExpenses: _.get(draft.document, 'statementOfMeans.monthlyExpenses', ''),
     remainingAmount: claim.totalAmountTillToday - alreadyPaid
   })
 }
@@ -76,3 +72,16 @@ export default express.Router()
           res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
         }
       }))
+
+function calculatePaymentPlanLength (model: DefendantPaymentPlan): string {
+  if (!model) {
+    return
+  }
+
+  const { remainingAmount, instalmentAmount, paymentSchedule } = model
+  if (remainingAmount && instalmentAmount && paymentSchedule) {
+    return createPaymentPlan(remainingAmount, instalmentAmount, mapFrequencyInWeeks(paymentSchedule)).getPaymentLength()
+  }
+
+  return
+}
