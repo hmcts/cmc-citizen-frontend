@@ -1,4 +1,4 @@
-import { IsDefined, IsPositive, MaxLength, Min } from 'class-validator'
+import { IsDefined, IsPositive, MaxLength, Min, ValidateNested } from 'class-validator'
 import { IsPastDate } from 'forms/validation/validators/datePastConstraint'
 import { LocalDate } from 'forms/models/localDate'
 import { IsNotBlank, Fractions, IsValidLocalDate } from '@hmcts/cmc-validators'
@@ -28,6 +28,7 @@ export class HowMuchPaid {
   @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS })
   amount?: number
 
+  @ValidateNested()
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
   @IsValidLocalDate({ message: ValidationErrors.DATE_REQUIRED })
   @IsPastDate({ message: ValidationErrors.VALID_PAST_DATE })
