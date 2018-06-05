@@ -86,7 +86,7 @@ export class TaskListBuilder {
         )
       )
     }
-    if (draft.isResponseFullyAdmitted() && draft.isResponseFullAdmissionWithPayBySetDate()) {
+    if (draft.isResponseFullyAdmitted() && draft.isResponseFullyAdmittedWithPayBySetDate()) {
       tasks.push(
         new TaskListItem(
           'Share your financial details',
