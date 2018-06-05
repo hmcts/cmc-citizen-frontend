@@ -38,8 +38,15 @@ function renderView (form: Form<DefendantPaymentPlan>, res: express.Response): v
   res.render(FullAdmissionPaths.paymentPlanPage.associatedView, {
     form: form,
     paymentLength: calculatePaymentPlanLength(form.model),
-    monthlyIncome: _.get(draft.document, 'statementOfMeans.monthlyIncome', ''),
-    monthlyExpenses: _.get(draft.document, 'statementOfMeans.monthlyExpenses', ''),
+    // TODO: Provisionally defaulting `monthly income` and `monthly expenses`
+    //       to zero as statement of means may not have been completed yet
+    //       at this stage.
+    //       ROC-3846: will enforce statement of means to be completed before
+    //       `Your repayment plan` and hence this can safely be removed after story
+    //       has been implemented.
+    monthlyIncome: _.get(draft.document, 'statementOfMeans.monthlyIncome', 0),
+    monthlyExpenses: _.get(draft.document, 'statementOfMeans.monthlyExpenses', 0),
+
     remainingAmount: claim.totalAmountTillToday - alreadyPaid
   })
 }
