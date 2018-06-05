@@ -1,13 +1,5 @@
 import * as moment from 'moment'
 import 'moment-precise-range-plugin'
-
-export function createPaymentPlan (
-  totalAmount: number,
-  instalmentAmount: number,
-  frequencyInWeeks: number): PaymentPlan {
-  return new PaymentPlan(totalAmount, instalmentAmount, frequencyInWeeks)
-}
-
 class PaymentPlan {
   private numberOfInstalments: number
 
@@ -55,4 +47,11 @@ class PaymentPlan {
     const plural = num < 2 ? '' : 's'
     return `${num} ${word}${plural}`
   }
+}
+
+export function createPaymentPlan (
+  totalAmount: number,
+  instalmentAmount: number,
+  frequencyInWeeks: number): PaymentPlan {
+  return new PaymentPlan(totalAmount, instalmentAmount, frequencyInWeeks)
 }

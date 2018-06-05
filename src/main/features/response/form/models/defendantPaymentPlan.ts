@@ -51,7 +51,7 @@ export class DefendantPaymentPlan {
       toNumberOrUndefined(value.remainingAmount),
       toNumberOrUndefined(value.instalmentAmount),
       LocalDate.fromObject(value.firstPaymentDate),
-      value.paymentSchedule ? PaymentSchedule.of(value.paymentSchedule) : undefined )
+      value.paymentSchedule ? PaymentSchedule.of(value.paymentSchedule) : undefined)
   }
 
   deserialize (input?: any): DefendantPaymentPlan {

@@ -75,7 +75,7 @@ export default express.Router()
 
 function calculatePaymentPlanLength (model: DefendantPaymentPlan): string {
   if (!model) {
-    return
+    return undefined
   }
 
   const { remainingAmount, instalmentAmount, paymentSchedule } = model
@@ -83,5 +83,5 @@ function calculatePaymentPlanLength (model: DefendantPaymentPlan): string {
     return createPaymentPlan(remainingAmount, instalmentAmount, mapFrequencyInWeeks(paymentSchedule)).getPaymentLength()
   }
 
-  return
+  return undefined
 }

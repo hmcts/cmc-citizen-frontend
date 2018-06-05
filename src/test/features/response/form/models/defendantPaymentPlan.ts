@@ -1,13 +1,12 @@
 import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
-import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { DefendantPaymentPlan, ValidationErrors } from 'response/form/models/defendantPaymentPlan'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { LocalDate } from 'forms/models/localDate'
 import { MomentFactory } from 'shared/momentFactory'
-import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 const FUTURE_YEAR = MomentFactory.currentDate().add(10, 'years').year()
 const DEFAULT_PAYMENT_PLAN = {
@@ -27,7 +26,7 @@ const DEFENDANT_PAYMENT_PLAN_FOR_DESERIALISATION = {
 }
 
 function validPaymentPlan (): DefendantPaymentPlan {
-  return new DefendantPaymentPlan(100, 50, new LocalDate(FUTURE_YEAR, 10, 10), PaymentSchedule.EVERY_MONTH, 'I owe nothing')
+  return new DefendantPaymentPlan(100, 50, new LocalDate(FUTURE_YEAR, 10, 10), PaymentSchedule.EVERY_MONTH)
 }
 
 describe('DefendantPaymentPlan', () => {

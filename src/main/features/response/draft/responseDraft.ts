@@ -13,7 +13,7 @@ import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTrut
 import { HowMuchPaid } from 'response/form/models/howMuchPaid'
 import { HowMuchOwed } from 'response/form/models/howMuchOwed'
 import { DefendantPaymentOption as PaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
-import { DefendantPaymentPlan as PaymentPlan} from 'response/form/models/defendantPaymentPlan'
+import { DefendantPaymentPlan as PaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
