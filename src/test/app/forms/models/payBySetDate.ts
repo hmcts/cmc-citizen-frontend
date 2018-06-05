@@ -4,7 +4,7 @@ import { Validator } from 'class-validator'
 import * as moment from 'moment'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { PayBySetDate, ValidationErrors } from 'forms/models/payBySetDate'
-import { LocalDate } from 'forms/models/localDate'
+import { LocalDate, ValidationErrors as LocalDateValidationErrors } from 'forms/models/localDate'
 
 describe('PayBySetDate', () => {
 
@@ -68,7 +68,7 @@ describe('PayBySetDate', () => {
           })))
 
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.DATE_INVALID_YEAR)
+          expectValidationError(errors, LocalDateValidationErrors.YEAR_FORMAT_NOT_VALID)
         })
       })
 
@@ -94,7 +94,7 @@ describe('PayBySetDate', () => {
           const errors = validator.validateSync(new PayBySetDate(new LocalDate(90, 12, 31)))
 
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.DATE_INVALID_YEAR)
+          expectValidationError(errors, LocalDateValidationErrors.YEAR_FORMAT_NOT_VALID)
         })
       })
     })
