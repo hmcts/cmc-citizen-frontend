@@ -153,4 +153,14 @@ export class ResponseDraft extends DraftDocument {
   public isResponsePopulated (): boolean {
     return !!this.response && !!this.response.type
   }
+
+  public isResponseFullAdmissionWithPayBySetDate (): boolean {
+    if (!this.isResponsePopulated()) {
+      return false
+    }
+
+    return this.response.type === ResponseType.FULL_ADMISSION
+      && this.fullAdmission !== undefined
+      && this.fullAdmission.paymentOption.option === DefendantPaymentType.BY_SET_DATE
+  }
 }

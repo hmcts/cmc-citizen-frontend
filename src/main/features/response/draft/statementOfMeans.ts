@@ -16,6 +16,7 @@ import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders
 import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
 import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
 import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { Explanation } from 'response/form/models/statement-of-means/explanation'
 
 export class StatementOfMeans {
   residence?: Residence
@@ -32,6 +33,7 @@ export class StatementOfMeans {
   monthlyIncome?: MonthlyIncome
   monthlyExpenses?: MonthlyExpenses
   courtOrders?: CourtOrders
+  explanation?: Explanation
 
   static isApplicableFor (responseDraft?: ResponseDraft): boolean {
     if (!FeatureToggles.isEnabled('statementOfMeans')) {
@@ -65,6 +67,7 @@ export class StatementOfMeans {
       this.monthlyIncome = new MonthlyIncome().deserialize(input.monthlyIncome)
       this.monthlyExpenses = new MonthlyExpenses().deserialize(input.monthlyExpenses)
       this.courtOrders = new CourtOrders().deserialize(input.courtOrders)
+      this.explanation = new Explanation().deserialize(input.explanation)
     }
     return this
   }
