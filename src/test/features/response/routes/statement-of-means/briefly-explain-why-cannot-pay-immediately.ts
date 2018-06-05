@@ -22,7 +22,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const expectedText: string = 'Briefly explain why you can`t pay immediately'
 
 const pagePath = StatementOfMeansPaths.brieflyExplainWhyCannotPayImmediatelyPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
-describe('Statement of means: Explain why cannot page immediately page', () => {
+describe('Statement of means: Briefly explain why cannot page immediately page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {

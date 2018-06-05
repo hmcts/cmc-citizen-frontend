@@ -14,6 +14,7 @@ import { WhenDidYouPayTask } from 'response/tasks/whenDidYouPayTask'
 import { DecideHowYouWillPayTask } from 'response/tasks/decideHowYouWillPayTask'
 import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
 import { YourRepaymentPlanTask } from 'features/response/tasks/yourRepaymentPlanTask'
+import { StatementOfMeansTask } from 'response/tasks/statementOfMeansTask'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -91,7 +92,7 @@ export class TaskListBuilder {
         new TaskListItem(
           'Share your financial details',
           StatementOfMeansPaths.explainWhyCannotPayImmediatelyPage.evaluateUri({ externalId: externalId }),
-          DecideHowYouWillPayTask.isCompleted(draft)
+          StatementOfMeansTask.isCompleted(draft)
         )
       )
     }

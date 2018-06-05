@@ -80,9 +80,7 @@ export class ResponseDraft extends DraftDocument {
       this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
-      if (input.statementOfMeans) {
-        this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
-      }
+      this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
       this.whenDidYouPay = new WhenDidYouPay().deserialize(input.whenDidYouPay)
       this.howMuchPaidClaimant = new HowMuchPaidClaimant(input.howMuchPaidClaimant && input.howMuchPaidClaimant.option)
 

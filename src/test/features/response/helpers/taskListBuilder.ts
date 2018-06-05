@@ -195,18 +195,21 @@ describe('Defendant response task list builder', () => {
 
     describe('"Decide how you`ll pay" task', () => {
       let isResponseFullyAdmittedStub: sinon.SinonStub
+      let isResponseFullyAdmittedWithPayBySetDateStub: sinon.SinonStub
 
       beforeEach(() => {
         isResponseFullyAdmittedStub = sinon.stub(ResponseDraft.prototype, 'isResponseFullyAdmitted')
+        isResponseFullyAdmittedWithPayBySetDateStub = sinon.stub(ResponseDraft.prototype, 'isResponseFullyAdmittedWithPayBySetDate')
       })
 
       afterEach(() => {
         isResponseFullyAdmittedStub.restore()
+        isResponseFullyAdmittedWithPayBySetDateStub.restore()
       })
 
       it('should be enabled when claim is fully admitted', () => {
         isResponseFullyAdmittedStub.returns(true)
-
+        isResponseFullyAdmittedWithPayBySetDateStub.returns(false)
         const draft = new ResponseDraft()
         draft.fullAdmission = new FullAdmission()
 
