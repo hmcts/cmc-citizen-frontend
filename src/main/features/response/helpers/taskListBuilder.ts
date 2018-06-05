@@ -1,6 +1,6 @@
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
-import { Paths, FullAdmissionPaths, StatementOfMeansPaths } from 'response/paths'
+import { Paths, FullAdmissionPaths } from 'response/paths'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
@@ -13,6 +13,7 @@ import { Claim } from 'claims/models/claim'
 import { WhenDidYouPayTask } from 'response/tasks/whenDidYouPayTask'
 import { DecideHowYouWillPayTask } from 'response/tasks/decideHowYouWillPayTask'
 import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
+import { YourRepaymentPlanTask } from 'features/response/tasks/yourRepaymentPlanTask'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -86,27 +87,12 @@ export class TaskListBuilder {
       )
     }
 
-    if (draft.isResponseFullyAdmittedWithPayBySetDate()) {
-      tasks.push(
-        new TaskListItem(
-          'Share your financial details',
-          StatementOfMeansPaths.startPage.evaluateUri({ externalId: externalId }),
-          false
-        )
-      )
-    }
-
     if (draft.isResponseFullyAdmittedWithInstalments()) {
       tasks.push(
         new TaskListItem(
-          'Share your financial details',
-          StatementOfMeansPaths.startPage.evaluateUri({ externalId: externalId }),
-          false
-        ),
-        new TaskListItem(
           'Your repayment plan',
           FullAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId }),
-          DecideHowYouWillPayTask.isCompleted(draft)
+          YourRepaymentPlanTask.isCompleted(draft)
         )
       )
     }

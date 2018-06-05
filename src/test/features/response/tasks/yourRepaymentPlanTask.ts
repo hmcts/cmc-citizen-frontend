@@ -61,7 +61,7 @@ describe('YourRepaymentPlanTask', () => {
     })
   })
 
-  context.only('when payment plan object is invalid', () => {
+  context('when payment plan object is invalid', () => {
 
     it('should not be completed', () => {
       const draft: ResponseDraft = new ResponseDraft()

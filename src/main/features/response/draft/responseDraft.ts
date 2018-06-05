@@ -23,6 +23,7 @@ import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
+import * as _ from 'lodash'
 
 export class FullAdmission {
   paymentOption: PaymentOption
@@ -105,16 +106,11 @@ export class ResponseDraft extends DraftDocument {
     return this.isResponsePopulated() && this.response.type === ResponseType.FULL_ADMISSION
   }
 
-  public isResponseFullyAdmittedWithPayBySetDate (): boolean {
-    return this.isResponseFullyAdmitted
-    && !isNullOrUndefined(this.fullAdmission)
-    && this.fullAdmission.paymentOption.option === DefendantPaymentType.BY_SET_DATE
-  }
-
+  // TODO: Because of an overlap between two stories (ROC-3657, ROC-3658), the logic of this function
+  // is incomplete. ROC-3658 should revisit once 'statement of means' flow is complete.
   public isResponseFullyAdmittedWithInstalments (): boolean {
-    return this.isResponseFullyAdmitted
-    && !isNullOrUndefined(this.fullAdmission)
-    && this.fullAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS
+    return this.isResponseFullyAdmitted()
+      && (_.get(this, 'fullAdmission.paymentOption.option') === DefendantPaymentType.INSTALMENTS)
   }
 
   public isResponsePartiallyRejectedDueTo (option: String): boolean {
