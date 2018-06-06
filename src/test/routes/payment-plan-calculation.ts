@@ -7,9 +7,13 @@ import * as HttpStatus from 'http-status-codes'
 import * as paymentPlan from 'common/paymentPlan'
 
 import { app } from 'main/app'
+
 import { Paths } from 'paths'
+import { attachDefaultHooks } from 'test/routes/hooks'
 
 describe('Payment plan calculation', () => {
+  attachDefaultHooks(app)
+
   describe('on GET', () => {
     describe('when not all query parameters are provided', () => {
       it('should return a [422] validation error when `total-amount` parameter is not provided', async () => {
