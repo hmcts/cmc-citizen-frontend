@@ -1,9 +1,7 @@
 import { LocalDate } from 'forms/models/localDate'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { IsDefined, IsIn, IsPositive, MaxLength, ValidateNested } from 'class-validator'
-import { Fractions, IsNotBlank, IsLessThan } from '@hmcts/cmc-validators'
-import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
-import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
+import { Fractions, IsNotBlank, IsLessThan, IsValidLocalDate } from '@hmcts/cmc-validators'
 import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
@@ -29,7 +27,6 @@ export class DefendantPaymentPlan {
   @ValidateNested()
   @IsDefined({ message: ValidationErrors.INVALID_DATE })
   @IsValidLocalDate({ message: ValidationErrors.INVALID_DATE })
-  @IsValidYearFormat({ message: ValidationErrors.INVALID_DATE })
   @IsFutureDate({ message: ValidationErrors.FUTURE_DATE })
   firstPaymentDate?: LocalDate
 

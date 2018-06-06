@@ -60,7 +60,7 @@ describe('LocalDate', () => {
     })
 
     it('should accept date withing the range limit', () => {
-      expect(validator.validateSync(new LocalDate(1, 1, 1)).length).to.equal(0)
+      expect(validator.validateSync(new LocalDate(1000, 1, 1)).length).to.equal(0)
       expect(validator.validateSync(new LocalDate(9999, 12, 31)).length).to.equal(0)
     })
 
