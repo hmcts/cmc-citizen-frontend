@@ -46,7 +46,7 @@ function validateThatIsPositiveNumber (value: string, name: string) {
   }
   const convertedValue = Number(value)
   if (isNaN(convertedValue)) {
-    return `'${name}' must be a positive number`
+    return `'${name}' must be a number`
   }
   if (convertedValue < 1) {
     return `'${name}' must be a positive number`

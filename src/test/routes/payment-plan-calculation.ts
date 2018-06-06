@@ -52,7 +52,7 @@ describe('Payment plan calculation', () => {
           'frequency-in-weeks': 2
         }
 
-        await paymentPlanCalculationShouldReturnValidationError(queryParams, '\'total-amount\' must be a positive number')
+        await paymentPlanCalculationShouldReturnValidationError(queryParams, '\'total-amount\' must be a number')
       })
 
       it('should return a [422] validation error when `instalment-amount` parameter is not a number', async () => {
@@ -63,7 +63,7 @@ describe('Payment plan calculation', () => {
           'frequency-in-weeks': 2
         }
 
-        await paymentPlanCalculationShouldReturnValidationError(queryParams, '\'instalment-amount\' must be a positive number')
+        await paymentPlanCalculationShouldReturnValidationError(queryParams, '\'instalment-amount\' must be a number')
       })
 
       it('should return a [422] validation error when `frequency-in-weeks` parameter is not a number', async () => {
@@ -73,7 +73,7 @@ describe('Payment plan calculation', () => {
           'frequency-in-weeks': 'NaN'
         }
 
-        await paymentPlanCalculationShouldReturnValidationError(queryParams, '\'frequency-in-weeks\' must be a positive number')
+        await paymentPlanCalculationShouldReturnValidationError(queryParams, '\'frequency-in-weeks\' must be a number')
       })
     })
 
