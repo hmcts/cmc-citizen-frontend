@@ -116,6 +116,7 @@ describe('Payment plan calculation', () => {
 })
 
 describe('when all query parameters are provided', () => {
+  let createPaymentPlanStub: sinon.SinonStub
 
   before(() => {
     const mockedPaymentPlan = {
@@ -123,8 +124,12 @@ describe('when all query parameters are provided', () => {
       getLastPaymentDate: () => moment('2018-01-01')
     }
 
-    const createPaymentPlanStub = sinon.stub(paymentPlan, 'createPaymentPlan')
+    createPaymentPlanStub = sinon.stub(paymentPlan, 'createPaymentPlan')
     createPaymentPlanStub.returns(mockedPaymentPlan)
+  })
+
+  after(() => {
+    createPaymentPlanStub.restore()
   })
 
   it('should return payment plan calculations for given data', async () => {
