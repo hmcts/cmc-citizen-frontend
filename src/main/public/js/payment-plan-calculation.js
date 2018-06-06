@@ -6,7 +6,7 @@ $(document).ready(function () {
 
       // Default selectors
       containerSelector: '.payment-plan-calculation',
-      totalAmountSelector: 'input[name=originalClaimAmount]',
+      totalAmountSelector: 'input[name=totalAmount]',
       instalmentAmountSelector: 'input[name=instalmentAmount]',
       paymentSchedultSelector: 'input[name=paymentSchedule]',
       calculatePaymentLengthButton: '.calculateLengthOfRepayment',
@@ -97,11 +97,11 @@ $(document).ready(function () {
 
     var mapFrequencyInWeeks = function(frequency) {
       switch (frequency) {
-        case 'EACH_WEEK': 
+        case 'EACH_WEEK':
           return 1;
-        case 'EVERY_TWO_WEEKS': 
+        case 'EVERY_TWO_WEEKS':
           return 2;
-        case 'EVERY_MONTH': 
+        case 'EVERY_MONTH':
           return 4;
         default:
           return undefined;

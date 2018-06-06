@@ -11,7 +11,7 @@
 {% block content %}
   <div class="column-two-thirds">
 
-    <p>{{ t('The total amount claimed is {{ originalClaimAmount }}. This includes the claim fee and any interest.', { originalClaimAmount: originalClaimAmount | numeral }) }} </p>
+    <p>{{ t('The total amount claimed is {{ totalAmount }}. This includes the claim fee and any interest.', { totalAmount: totalAmount | numeral }) }} </p>
 
     <form method="post" novalidate class="payment-plan-calculation">
       {{ csrfProtection(csrf) }}
@@ -22,7 +22,7 @@
       <p>{{ t('Your total monthly expenses is {{ monthlyExpenses }}',
           { monthlyExpenses: monthlyExpenses | numeral }) }}</p>
 
-      <input type="hidden" name="originalClaimAmount" value="{{ originalClaimAmount }}"/>
+      <input type="hidden" name="totalAmount" value="{{ totalAmount }}"/>
 
       <div class="form-group">
         <fieldset>

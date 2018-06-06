@@ -10,7 +10,7 @@ import { MomentFactory } from 'shared/momentFactory'
 
 const FUTURE_YEAR = MomentFactory.currentDate().add(10, 'years').year()
 const DEFAULT_PAYMENT_PLAN = {
-  remainingAmount: 100,
+  totalAmount: 100,
   instalmentAmount: 50,
   firstPaymentDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   paymentSchedule: PaymentSchedule.EVERY_MONTH.value,
@@ -18,7 +18,7 @@ const DEFAULT_PAYMENT_PLAN = {
 }
 
 const DEFENDANT_PAYMENT_PLAN_FOR_DESERIALISATION = {
-  remainingAmount: 100,
+  totalAmount: 100,
   instalmentAmount: 50,
   firstPaymentDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   paymentSchedule: { value: PaymentSchedule.EVERY_MONTH.value, displayValue: PaymentSchedule.EVERY_MONTH.displayValue },

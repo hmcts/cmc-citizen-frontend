@@ -225,7 +225,7 @@ const sampleResponseDraftObj = {
       }
     },
     paymentPlan: {
-      remainingAmount: 3685,
+      totalAmount: 3685,
       instalmentAmount: 100,
       firstPaymentDate: {
         year: 2019,

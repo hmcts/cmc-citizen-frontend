@@ -23,6 +23,7 @@ import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
+
 export class FullAdmission {
   paymentOption: PaymentOption
   paymentDate?: PaymentDate

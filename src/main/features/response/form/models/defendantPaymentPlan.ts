@@ -15,10 +15,10 @@ export class ValidationErrors {
 
 export class DefendantPaymentPlan {
 
-  remainingAmount?: number
+  totalAmount?: number
 
   @IsPositive({ message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
-  @IsLessThan('remainingAmount', { message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
+  @IsLessThan('totalAmount', { message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
   @Fractions(0, 2, { message: CommonValidationErrors.AMOUNT_INVALID_DECIMALS })
   instalmentAmount?: number
 
@@ -31,12 +31,12 @@ export class DefendantPaymentPlan {
   @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SELECT_PAYMENT_SCHEDULE })
   paymentSchedule?: PaymentSchedule
 
-  constructor (remainingAmount?: number,
+  constructor (totalAmount?: number,
                instalmentAmount?: number,
                firstPaymentDate?: LocalDate,
                paymentSchedule?: PaymentSchedule
               ) {
-    this.remainingAmount = remainingAmount
+    this.totalAmount = totalAmount
     this.instalmentAmount = instalmentAmount
     this.firstPaymentDate = firstPaymentDate
     this.paymentSchedule = paymentSchedule
@@ -48,7 +48,7 @@ export class DefendantPaymentPlan {
     }
 
     return new DefendantPaymentPlan(
-      toNumberOrUndefined(value.remainingAmount),
+      toNumberOrUndefined(value.totalAmount),
       toNumberOrUndefined(value.instalmentAmount),
       LocalDate.fromObject(value.firstPaymentDate),
       value.paymentSchedule ? PaymentSchedule.of(value.paymentSchedule) : undefined)
@@ -56,7 +56,7 @@ export class DefendantPaymentPlan {
 
   deserialize (input?: any): DefendantPaymentPlan {
     if (input) {
-      this.remainingAmount = input.remainingAmount
+      this.totalAmount = input.totalAmount
       this.instalmentAmount = input.instalmentAmount
       this.firstPaymentDate = new LocalDate().deserialize(input.firstPaymentDate)
       this.paymentSchedule = input.paymentSchedule ? PaymentSchedule.of(input.paymentSchedule.value) : undefined

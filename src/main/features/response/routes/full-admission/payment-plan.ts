@@ -39,7 +39,7 @@ function renderView (form: Form<DefendantPaymentPlan>, res: express.Response): v
     paymentLength: calculatePaymentPlanLength(form.model),
     monthlyIncome: _.get(draft, 'document.statementOfMeans.monthlyIncome', 0),
     monthlyExpenses: _.get(draft, 'document.statementOfMeans.monthlyExpenses', 0),
-    originalClaimAmount: claim.claimData.amount.totalAmount()
+    totalAmount: claim.claimData.amount.totalAmount()
   })
 }
 
@@ -77,9 +77,9 @@ function calculatePaymentPlanLength (model: DefendantPaymentPlan): string {
     return undefined
   }
 
-  const { remainingAmount, instalmentAmount, paymentSchedule } = model
-  if (remainingAmount && instalmentAmount && paymentSchedule) {
-    return createPaymentPlan(remainingAmount, instalmentAmount, mapFrequencyInWeeks(paymentSchedule)).getPaymentLength()
+  const { totalAmount, instalmentAmount, paymentSchedule } = model
+  if (totalAmount && instalmentAmount && paymentSchedule) {
+    return createPaymentPlan(totalAmount, instalmentAmount, mapFrequencyInWeeks(paymentSchedule)).getPaymentLength()
   }
 
   return undefined
