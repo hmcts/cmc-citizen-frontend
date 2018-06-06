@@ -175,7 +175,7 @@ describe('ResponseDraft', () => {
       })
     })
 
-    it('should return true when response is full admission but payment option is instalments', () => {
+    it('should return true when response is full admission and payment option is instalments', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.FULL_ADMISSION)
       draft.fullAdmission = new FullAdmission()
