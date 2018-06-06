@@ -146,7 +146,7 @@ describe('when all query parameters are provided', () => {
   })
 })
 
-async function paymentPlanCalculationShouldReturnValidationError(queryParams: object, expectedErrorMessage: string) {
+async function paymentPlanCalculationShouldReturnValidationError (queryParams: object, expectedErrorMessage: string) {
   await request(app)
     .get(Paths.paymentPlanCalculation.uri)
     .query(queryParams)
