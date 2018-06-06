@@ -34,17 +34,17 @@ export default express.Router()
     })
   })
 
-function validate (totalAmount: string, instalmentAmount: string, frequencyInWeeks: string) {  
+function validate (totalAmount: string, instalmentAmount: string, frequencyInWeeks: string) {
   return validateThatIsPositiveNumber(totalAmount, 'total-amount')
   || validateThatIsPositiveNumber(instalmentAmount, 'instalment-amount')
   || validateThatIsPositiveNumber(frequencyInWeeks, 'frequency-in-weeks')
 }
 
-function validateThatIsPositiveNumber(value: string, name: string) {
+function validateThatIsPositiveNumber (value: string, name: string) {
   if (_.isEmpty(value)) {
     return `'${name}' not provided`
   }
-  const convertedValue = Number(value);
+  const convertedValue = Number(value)
   if (isNaN(convertedValue)) {
     return `'${name}' must be a positive number`
   }

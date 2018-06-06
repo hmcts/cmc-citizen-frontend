@@ -62,7 +62,7 @@ describe('Payment plan calculation', () => {
           'instalment-amount': 'NaN',
           'frequency-in-weeks': 2
         }
-        
+
         await paymentPlanCalculationShouldReturnValidationError(queryParams, '\'instalment-amount\' must be a positive number')
       })
 
@@ -72,7 +72,7 @@ describe('Payment plan calculation', () => {
           'instalment-amount': 10,
           'frequency-in-weeks': 'NaN'
         }
-        
+
         await paymentPlanCalculationShouldReturnValidationError(queryParams, '\'frequency-in-weeks\' must be a positive number')
       })
     })
@@ -84,7 +84,7 @@ describe('Payment plan calculation', () => {
           'instalment-amount': 10,
           'frequency-in-weeks': 2
         }
-        
+
         await paymentPlanCalculationShouldReturnValidationError(queryParams, '\'total-amount\' must be a positive number')
       })
 
@@ -94,7 +94,7 @@ describe('Payment plan calculation', () => {
           'instalment-amount': 0,
           'frequency-in-weeks': 2
         }
-        
+
         await paymentPlanCalculationShouldReturnValidationError(queryParams, '\'instalment-amount\' must be a positive number')
       })
 
@@ -104,46 +104,46 @@ describe('Payment plan calculation', () => {
           'instalment-amount': 10,
           'frequency-in-weeks': 0
         }
-        
+
         await paymentPlanCalculationShouldReturnValidationError(queryParams, '\'frequency-in-weeks\' must be a positive number')
-      })
       })
     })
   })
+})
 
-  describe('when all query parameters are provided', () => {
+describe('when all query parameters are provided', () => {
 
-    before(() => {
-      const mockedPaymentPlan = {
-        getPaymentLength: () => '3 days',
-        getLastPaymentDate: () => moment('2018-01-01')
-      }
+  before(() => {
+    const mockedPaymentPlan = {
+      getPaymentLength: () => '3 days',
+      getLastPaymentDate: () => moment('2018-01-01')
+    }
 
-      const createPaymentPlanStub = sinon.stub(paymentPlan, 'createPaymentPlan')
-      createPaymentPlanStub.returns(mockedPaymentPlan)
-    })
+    const createPaymentPlanStub = sinon.stub(paymentPlan, 'createPaymentPlan')
+    createPaymentPlanStub.returns(mockedPaymentPlan)
+  })
 
-    it('should return payment plan calculations for given data', async () => {
-      const totalAmount = 1000
-      const instalmentAmount = 10
-      const frequencyInWeeks = 2
+  it('should return payment plan calculations for given data', async () => {
+    const totalAmount = 1000
+    const instalmentAmount = 10
+    const frequencyInWeeks = 2
 
-      const queryParams = {
-        'total-amount': totalAmount,
-        'instalment-amount': instalmentAmount,
-        'frequency-in-weeks': frequencyInWeeks
-      }
+    const queryParams = {
+      'total-amount': totalAmount,
+      'instalment-amount': instalmentAmount,
+      'frequency-in-weeks': frequencyInWeeks
+    }
 
-      await request(app)
-        .get(Paths.paymentPlanCalculation.uri)
-        .query(queryParams)
-        .expect(HttpStatus.OK, {
-          paymentPlan: {
-            paymentLength: '3 days',
-            lastPaymentDate: moment('2018-01-01').toJSON()
-          }
-        })
-    })
+    await request(app)
+      .get(Paths.paymentPlanCalculation.uri)
+      .query(queryParams)
+      .expect(HttpStatus.OK, {
+        paymentPlan: {
+          paymentLength: '3 days',
+          lastPaymentDate: moment('2018-01-01').toJSON()
+        }
+      })
+  })
 })
 
 async function paymentPlanCalculationShouldReturnValidationError(queryParams: object, expectedErrorMessage: string) {
