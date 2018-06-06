@@ -23,8 +23,6 @@ import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
-import * as _ from 'lodash'
-
 export class FullAdmission {
   paymentOption: PaymentOption
   paymentDate?: PaymentDate
@@ -110,7 +108,9 @@ export class ResponseDraft extends DraftDocument {
   // is incomplete. ROC-3658 should revisit once 'statement of means' flow is complete.
   public isResponseFullyAdmittedWithInstalments (): boolean {
     return this.isResponseFullyAdmitted()
-      && (_.get(this, 'fullAdmission.paymentOption.option') === DefendantPaymentType.INSTALMENTS)
+        && this.fullAdmission 
+        && this.fullAdmission.paymentOption 
+        && (this.fullAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS)
   }
 
   public isResponsePartiallyRejectedDueTo (option: String): boolean {
