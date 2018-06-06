@@ -1,5 +1,7 @@
 import * as moment from 'moment'
 import 'moment-precise-range-plugin'
+import { MomentFactory } from 'shared/momentFactory'
+
 class PaymentPlan {
   private numberOfInstalments: number
 
@@ -11,11 +13,10 @@ class PaymentPlan {
   }
 
   getPaymentLength (): string {
-    const now = moment()
-    const lastPaymentDate = this.getLastPaymentDate(now)
+    const now: moment.Moment = MomentFactory.currentDate()
+    const lastPaymentDate: moment.Moment = this.getLastPaymentDate(now)
 
-    const paymentDuration = (moment as any).preciseDiff(now, lastPaymentDate, true)
-    const { years, months, days } = paymentDuration
+    const { years, months, days } = (moment as any).preciseDiff(now, lastPaymentDate, true)
     const paymentLength: Array<string> = []
 
     if (years) {
@@ -37,15 +38,14 @@ class PaymentPlan {
     return paymentLength.join(' ')
   }
 
-  getLastPaymentDate (fromDate: moment.Moment = moment()): moment.Moment {
-    const timeToCompletePaymentsInWeeks = this.numberOfInstalments * this.frequencyInWeeks
-    const lastPaymentDate = fromDate.clone().add(timeToCompletePaymentsInWeeks, 'weeks')
-    return lastPaymentDate
+  private pluralize (num: number, word: string) {
+    const plural: string = num < 2 ? '' : 's'
+    return `${num} ${word}${plural}`
   }
 
-  private pluralize (num: number, word: string) {
-    const plural = num < 2 ? '' : 's'
-    return `${num} ${word}${plural}`
+  getLastPaymentDate (fromDate: moment.Moment = MomentFactory.currentDate()): moment.Moment {
+    const timeToCompletePaymentsInWeeks: number = this.numberOfInstalments * this.frequencyInWeeks
+    return fromDate.clone().add(timeToCompletePaymentsInWeeks, 'weeks')
   }
 }
 
