@@ -154,7 +154,7 @@ export const sampleClaimDraftObj = {
   } as Evidence
 } as DraftClaim
 
-const sampleResponseDraftObj = {
+export const sampleResponseDraftObj = {
   response: {
     type: ResponseType.DEFENCE
   },

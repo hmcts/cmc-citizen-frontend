@@ -4,10 +4,12 @@ import * as _ from 'lodash'
 
 import { Paths, FullAdmissionPaths } from 'response/paths'
 
+import { GuardFactory } from 'response/guards/guardFactory'
 import { ErrorHandling } from 'shared/errorHandling'
 import { Form } from 'forms/form'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
+import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { FormValidator } from 'forms/validation/formValidator'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
@@ -17,18 +19,17 @@ import { Claim } from 'claims/models/claim'
 import { createPaymentPlan } from 'common/paymentPlan'
 import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
 
-function mapFrequencyInWeeks (frequency: PaymentSchedule): number {
-  switch (frequency) {
-    case PaymentSchedule.EACH_WEEK:
-      return 1
-    case PaymentSchedule.EVERY_TWO_WEEKS:
-      return 2
-    case PaymentSchedule.EVERY_MONTH:
-      return 4
-    default:
-      throw new Error('Unknown payment schedule')
-  }
-}
+const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
+  const draft: Draft<ResponseDraft> = res.locals.responseDraft
+
+  return draft.document.fullAdmission
+    && draft.document.fullAdmission.paymentOption
+    && draft.document.fullAdmission.paymentOption.isOfType(DefendantPaymentType.INSTALMENTS)
+}, (req: express.Request, res: express.Response): void => {
+  const claim: Claim = res.locals.claim
+
+  res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+})
 
 function renderView (form: Form<DefendantPaymentPlan>, res: express.Response): void {
   const claim: Claim = res.locals.claim
@@ -46,14 +47,16 @@ function renderView (form: Form<DefendantPaymentPlan>, res: express.Response): v
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(FullAdmissionPaths.paymentPlanPage.uri,
-    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission'),
+    FeatureToggleGuard.featureEnabledGuard('fullAdmission'),
+    stateGuardRequestHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.fullAdmission.paymentPlan), res)
     }))
 
   .post(FullAdmissionPaths.paymentPlanPage.uri,
-    FeatureToggleGuard.anyFeatureEnabledGuard('fullAdmission'),
+    FeatureToggleGuard.featureEnabledGuard('fullAdmission'),
+    stateGuardRequestHandler,
     FormValidator.requestHandler(DefendantPaymentPlan, DefendantPaymentPlan.fromObject, undefined, ['calculatePaymentPlan']),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response): Promise<void> => {
@@ -83,4 +86,17 @@ function calculatePaymentPlanLength (model: DefendantPaymentPlan): string {
   }
 
   return undefined
+}
+
+function mapFrequencyInWeeks (frequency: PaymentSchedule): number {
+  switch (frequency) {
+    case PaymentSchedule.EACH_WEEK:
+      return 1
+    case PaymentSchedule.EVERY_TWO_WEEKS:
+      return 2
+    case PaymentSchedule.EVERY_MONTH:
+      return 4
+    default:
+      throw new Error('Unknown payment schedule')
+  }
 }
