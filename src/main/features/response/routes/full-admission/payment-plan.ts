@@ -26,21 +26,20 @@ function mapFrequencyInWeeks (frequency: PaymentSchedule): number {
     case PaymentSchedule.EVERY_MONTH:
       return 4
     default:
-      return undefined
+      throw new Error('Unknown payment schedule')
   }
 }
 
 function renderView (form: Form<DefendantPaymentPlan>, res: express.Response): void {
   const claim: Claim = res.locals.claim
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
-  const alreadyPaid: number = draft.document.paidAmount.amount || 0
 
   res.render(FullAdmissionPaths.paymentPlanPage.associatedView, {
     form: form,
     paymentLength: calculatePaymentPlanLength(form.model),
     monthlyIncome: _.get(draft, 'document.statementOfMeans.monthlyIncome', 0),
     monthlyExpenses: _.get(draft, 'document.statementOfMeans.monthlyExpenses', 0),
-    remainingAmount: claim.totalAmountTillToday - alreadyPaid
+    remainingAmount: claim.totalAmountTillToday
   })
 }
 
