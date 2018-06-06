@@ -22,7 +22,7 @@
       <p>{{ t('Your total monthly expenses is {{ monthlyExpenses }}',
           { monthlyExpenses: monthlyExpenses | numeral }) }}</p>
 
-      <input type="hidden" name="remainingAmount" value="{{ originalClaimAmount }}"/>
+      <input type="hidden" name="originalClaimAmount" value="{{ originalClaimAmount }}"/>
 
       <div class="form-group">
         <fieldset>
