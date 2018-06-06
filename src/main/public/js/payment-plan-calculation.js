@@ -6,7 +6,7 @@ $(document).ready(function () {
 
       // Default selectors
       containerSelector: '.payment-plan-calculation',
-      totalAmountSelector: 'input[name=remainingAmount]',
+      totalAmountSelector: 'input[name=originalClaimAmount]',
       instalmentAmountSelector: 'input[name=instalmentAmount]',
       paymentSchedultSelector: 'input[name=paymentSchedule]',
       calculatePaymentLengthButton: '.calculateLengthOfRepayment',

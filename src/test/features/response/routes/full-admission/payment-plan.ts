@@ -79,7 +79,7 @@ describe('Defendant: payment page', () => {
 
   describe('on POST', () => {
     const validFormData = {
-      remainingAmount: 160,
+      originalClaimAmount: 160,
       instalmentAmount: 30,
       firstPaymentDate: {
         day: 12,
