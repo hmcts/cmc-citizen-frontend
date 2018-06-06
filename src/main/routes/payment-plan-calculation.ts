@@ -9,11 +9,11 @@ import { createPaymentPlan } from 'common/paymentPlan'
 export default express.Router()
   .get(AppPaths.paymentPlanCalculation.uri, (req, res) => {
 
-    const totalAmount = req.query['total-amount']
-    const instalmentAmount = req.query['instalment-amount']
-    const frequencyInWeeks = req.query['frequency-in-weeks']
+    const totalAmount: string = req.query['total-amount']
+    const instalmentAmount: string = req.query['instalment-amount']
+    const frequencyInWeeks: string = req.query['frequency-in-weeks']
 
-    const error = validate(totalAmount, instalmentAmount, frequencyInWeeks)
+    const error: string = validate(totalAmount, instalmentAmount, frequencyInWeeks)
 
     if (error) {
       return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
@@ -24,7 +24,7 @@ export default express.Router()
       })
     }
 
-    const paymentPlan = createPaymentPlan(totalAmount, instalmentAmount, frequencyInWeeks)
+    const paymentPlan = createPaymentPlan(Number(totalAmount), Number(instalmentAmount), Number(frequencyInWeeks))
 
     return res.status(HttpStatus.OK).json({
       paymentPlan: {
@@ -34,14 +34,21 @@ export default express.Router()
     })
   })
 
-function validate (totalAmount, instalmentAmount, frequencyInWeeks) {
-  if (_.isEmpty(totalAmount)) {
-    return '`total-amount` not provided'
+function validate (totalAmount: string, instalmentAmount: string, frequencyInWeeks: string) {  
+  return validateThatIsPositiveNumber(totalAmount, 'total-amount')
+  || validateThatIsPositiveNumber(instalmentAmount, 'instalment-amount')
+  || validateThatIsPositiveNumber(frequencyInWeeks, 'frequency-in-weeks')
+}
+
+function validateThatIsPositiveNumber(value: string, name: string) {
+  if (_.isEmpty(value)) {
+    return `'${name}' not provided`
   }
-  if (_.isEmpty(instalmentAmount)) {
-    return '`instalment-amount` not provided'
+  const convertedValue = Number(value);
+  if (isNaN(convertedValue)) {
+    return `'${name}' must be a positive number`
   }
-  if (_.isEmpty(frequencyInWeeks)) {
-    return '`frequency-in-weeks` not provided'
+  if (convertedValue < 1) {
+    return `'${name}' must be a positive number`
   }
 }

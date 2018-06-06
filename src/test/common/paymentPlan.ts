@@ -5,7 +5,7 @@ import * as moment from 'moment'
 
 const TOTAL_AMOUNT = 1000
 
-describe('PaymentPlan',() => {
+describe('PaymentPlan', () => {
   describe('getLastPaymentDate', () => {
     it('should return the last payment date from given fromDate', () => {
       const instalmentAmount = 10

@@ -3,7 +3,6 @@ import { expect } from 'chai'
 
 import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
 import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
-import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { MomentFactory } from 'shared/momentFactory'
 import { DefendantPaymentPlan as PaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
@@ -20,20 +19,12 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
   responseDraft.response = new Response(ResponseType.FULL_ADMISSION)
   responseDraft.fullAdmission = new FullAdmission()
   responseDraft.fullAdmission.paymentOption = new DefendantPaymentOption(paymentType)
-  switch (paymentType) {
-    case DefendantPaymentType.BY_SET_DATE:
-      responseDraft.fullAdmission.paymentDate = new PaymentDate(localDateFrom(MomentFactory.currentDate()))
-      break
-    case DefendantPaymentType.INSTALMENTS:
-      responseDraft.fullAdmission.paymentPlan = new PaymentPlan(
-        1000,
-        100,
-        localDateFrom(MomentFactory.currentDate().add(1, 'day')),
-        PaymentSchedule.EACH_WEEK
-      )
-      break
-  }
-  responseDraft.defendantDetails = new Defendant(new IndividualDetails())
+  responseDraft.fullAdmission.paymentPlan = new PaymentPlan(
+    1000,
+    100,
+    localDateFrom(MomentFactory.currentDate().add(1, 'day')),
+    PaymentSchedule.EACH_WEEK
+  )
   return responseDraft
 }
 
