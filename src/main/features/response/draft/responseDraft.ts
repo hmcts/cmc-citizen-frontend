@@ -108,8 +108,8 @@ export class ResponseDraft extends DraftDocument {
   // is incomplete. ROC-3658 should revisit once 'statement of means' flow is complete.
   public isResponseFullyAdmittedWithInstalments (): boolean {
     return this.isResponseFullyAdmitted()
-        && this.fullAdmission 
-        && this.fullAdmission.paymentOption 
+        && this.fullAdmission
+        && this.fullAdmission.paymentOption
         && (this.fullAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS)
   }
 
