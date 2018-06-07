@@ -15,7 +15,7 @@ import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/chec
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const pagePath = Paths.explainWhyCannotPayImmediatelyPage.evaluateUri({
+const pagePath = Paths.introPage.evaluateUri({
   externalId: claimStoreServiceMock.sampleClaimObj.externalId
 })
 

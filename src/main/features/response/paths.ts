@@ -36,7 +36,7 @@ export class Paths {
 const statementOfMeansPath = `${responsePath}/statement-of-means`
 
 export class StatementOfMeansPaths {
-  static readonly startPage = new RoutablePath(`${statementOfMeansPath}/start`)
+  static readonly introPage = new RoutablePath(`${statementOfMeansPath}/explain-why-cannot-pay-immediately`)
   static readonly whatYouNeedPage = new RoutablePath(`${statementOfMeansPath}/what-you-need`)
   static readonly residencePage = new RoutablePath(`${statementOfMeansPath}/residence`)
   static readonly dependantsPage = new RoutablePath(`${statementOfMeansPath}/dependants`)
@@ -52,7 +52,6 @@ export class StatementOfMeansPaths {
   static readonly monthlyIncomePage = new RoutablePath(`${statementOfMeansPath}/monthly-income`)
   static readonly monthlyExpensesPage = new RoutablePath(`${statementOfMeansPath}/monthly-expenses`)
   static readonly courtOrdersPage = new RoutablePath(`${statementOfMeansPath}/court-orders`)
-  static readonly explainWhyCannotPayImmediatelyPage = new RoutablePath(`${statementOfMeansPath}/explain-why-cannot-pay-immediately`)
   static readonly brieflyExplainWhyCannotPayImmediatelyPage = new RoutablePath(`${statementOfMeansPath}/briefly-explain-why-cannot-pay-immediately`)
 }
 

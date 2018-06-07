@@ -11,6 +11,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
 import { Explanation } from 'response/form/models/statement-of-means/explanation'
 import { StatementOfMeansPaths, Paths as Paths } from 'response/paths'
+import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 
 function renderView (form: Form<Explanation>, res: express.Response) {
   res.render(StatementOfMeansPaths.brieflyExplainWhyCannotPayImmediatelyPage.associatedView, {
@@ -20,11 +21,12 @@ function renderView (form: Form<Explanation>, res: express.Response) {
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(StatementOfMeansPaths.brieflyExplainWhyCannotPayImmediatelyPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-    const draft: Draft<ResponseDraft> = res.locals.responseDraft
-
-    renderView(new Form(draft.document.statementOfMeans.explanation), res)
-  }))
+  .get(StatementOfMeansPaths.brieflyExplainWhyCannotPayImmediatelyPage.uri,
+    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      renderView(new Form(draft.document.statementOfMeans.explanation), res)
+    }))
   .post(
     StatementOfMeansPaths.brieflyExplainWhyCannotPayImmediatelyPage.uri,
     FormValidator.requestHandler(Explanation),

@@ -91,7 +91,7 @@ export class TaskListBuilder {
       tasks.push(
         new TaskListItem(
           'Share your financial details',
-          StatementOfMeansPaths.explainWhyCannotPayImmediatelyPage.evaluateUri({ externalId: externalId }),
+          StatementOfMeansPaths.introPage.evaluateUri({ externalId: externalId }),
           StatementOfMeansTask.isCompleted(draft)
         )
       )

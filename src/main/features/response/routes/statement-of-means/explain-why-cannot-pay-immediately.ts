@@ -7,11 +7,11 @@ import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
-    Paths.explainWhyCannotPayImmediatelyPage.uri,
+    Paths.introPage.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.claim
-      res.render(Paths.explainWhyCannotPayImmediatelyPage.associatedView, {
+      res.render(Paths.introPage.associatedView, {
         claimantName: claim.claimData.claimant.name,
         nextPageLink: Paths.bankAccountsPage.evaluateUri({ externalId: claim.externalId })
       })

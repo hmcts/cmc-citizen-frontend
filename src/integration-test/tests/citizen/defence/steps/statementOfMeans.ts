@@ -33,7 +33,6 @@ export class StatementOfMeansSteps {
   fillStatementOfMeansData (): void {
     somStartPage.clickContinue()
     somBankAccountsPage.clickContinue()
-    somBankAccountsPage.clickContinue()
     somWhatYouNeedPage.clickContinue()
     somResidencePage.selectOwnHome()
     somDependantsPage.selectDontHaveChildren()

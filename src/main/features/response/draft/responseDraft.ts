@@ -23,6 +23,7 @@ import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
+import { PartyType } from 'common/partyType'
 
 export class FullAdmission {
   paymentOption: PaymentOption
@@ -80,7 +81,9 @@ export class ResponseDraft extends DraftDocument {
       this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
-      this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
+      if (input.statementOfMeans) {
+        this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
+      }
       this.whenDidYouPay = new WhenDidYouPay().deserialize(input.whenDidYouPay)
       this.howMuchPaidClaimant = new HowMuchPaidClaimant(input.howMuchPaidClaimant && input.howMuchPaidClaimant.option)
 
@@ -100,7 +103,12 @@ export class ResponseDraft extends DraftDocument {
       return false
     }
 
-    return this.isResponsePopulated() && this.response.type === ResponseType.FULL_ADMISSION
+    return this.isResponsePopulated()
+      && this.response.type === ResponseType.FULL_ADMISSION
+      && this.defendantDetails !== undefined
+      && this.defendantDetails.partyDetails !== undefined
+      && (this.defendantDetails.partyDetails.type === PartyType.INDIVIDUAL.value
+      || this.defendantDetails.partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value)
   }
 
   // TODO: Because of an overlap between two stories (ROC-3657, ROC-3658), the logic of this function

@@ -12,6 +12,8 @@ import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/r
 import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
+import { PartyType } from 'common/partyType'
+import { PartyDetails } from 'forms/models/partyDetails'
 
 describe('ResponseDraft', () => {
 
@@ -123,9 +125,10 @@ describe('ResponseDraft', () => {
   })
 
   describe('isResponseFullyAdmitted', () => {
-    it('should return false when no response type set', () => {
+    it('should return false when no response type or defendantDetails is set', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = undefined
+      draft.defendantDetails.partyDetails = undefined
 
       expect(draft.isResponseFullyAdmitted()).to.be.eq(false)
     })
@@ -142,6 +145,8 @@ describe('ResponseDraft', () => {
     it('should return true when response is a full admission', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.FULL_ADMISSION)
+      draft.defendantDetails.partyDetails = new PartyDetails()
+      draft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
 
       expect(draft.isResponseFullyAdmitted()).to.be.eq(true)
     })
