@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import * as request from 'supertest'
 import * as config from 'config'
+import * as _ from 'lodash'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
@@ -23,7 +24,7 @@ import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/chec
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
-const draft = { ...draftStoreServiceMock.sampleResponseDraftObj }
+const draft = _.cloneDeep(draftStoreServiceMock.sampleResponseDraftObj)
 draft.fullAdmission.paymentOption.option = DefendantPaymentType.BY_SET_DATE
 
 function nextDay () {
