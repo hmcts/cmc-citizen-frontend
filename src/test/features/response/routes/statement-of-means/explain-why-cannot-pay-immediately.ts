@@ -12,6 +12,8 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { StatementOfMeansPaths as Paths } from 'response/paths'
 import { app } from 'main/app'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import { checkCountyCourtJudgmentRequestedGuard } from '../checks/ccj-requested-check'
+import { checkAlreadySubmittedGuard } from '../checks/already-submitted-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -63,6 +65,45 @@ describe('Statement of means', () => {
             .expect(res => expect(res).to.be.successful.withText(
               'Explain why you can`t pay immediately'
             ))
+        })
+      })
+    })
+
+    describe('on POST', () => {
+      const method = 'post'
+      checkAuthorizationGuards(app, method, pagePath)
+      checkNotDefendantInCaseGuard(app, method, pagePath)
+
+      describe('for authorized user', () => {
+        beforeEach(() => {
+          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen', 'defendant')
+        })
+
+        checkAlreadySubmittedGuard(app, method, pagePath)
+        checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+
+        it('should return 500 and render error page when cannot save draft', async () => {
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.rejectSave()
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+
+        it('should redirect to task list when everything is fine', async () => {
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveSave()
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(Paths.bankAccountsPage
+                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
       })
     })

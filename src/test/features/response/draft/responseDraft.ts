@@ -152,12 +152,12 @@ describe('ResponseDraft', () => {
     })
   })
 
-  describe('isResponseFullyAdmittedWithInstalments', () => {
+  describe('isResponseFullAdmissionBySetDateOrInstalments', () => {
     it('should return false when no response type set', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = undefined
 
-      expect(draft.isResponseFullyAdmittedWithInstalments()).to.be.eq(false)
+      expect(draft.isResponseFullAdmissionBySetDateOrInstalments()).to.be.eq(false)
     })
 
     it('should return false when response is not full admission', () => {
@@ -165,26 +165,35 @@ describe('ResponseDraft', () => {
         const draft: ResponseDraft = new ResponseDraft()
         draft.response = new Response(responseType)
 
-        expect(draft.isResponseFullyAdmittedWithInstalments()).to.be.eq(false)
+        expect(draft.isResponseFullAdmissionBySetDateOrInstalments()).to.be.eq(false)
       })
     })
 
     it('should return false when response is full admission but payment option is not instalments', () => {
-      DefendantPaymentType.except(DefendantPaymentType.INSTALMENTS).forEach(paymentType => {
-        const draft: ResponseDraft = new ResponseDraft()
-        draft.response = new Response(ResponseType.FULL_ADMISSION)
-        draft.fullAdmission = new FullAdmission()
-        draft.fullAdmission.paymentOption = new DefendantPaymentOption(paymentType)
-
-        expect(draft.isResponseFullyAdmittedWithInstalments()).to.be.eq(false)
-      })
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.FULL_ADMISSION)
+      draft.fullAdmission = new FullAdmission()
+      draft.fullAdmission.paymentOption = new DefendantPaymentOption(DefendantPaymentType.IMMEDIATELY)
     })
 
     it('should return true when response is full admission and payment option is instalments', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.FULL_ADMISSION)
       draft.fullAdmission = new FullAdmission()
+      draft.defendantDetails.partyDetails = new PartyDetails()
+      draft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
       draft.fullAdmission.paymentOption = new DefendantPaymentOption(DefendantPaymentType.INSTALMENTS)
+
+      expect(draft.isResponseFullyAdmitted()).to.be.eq(true)
+    })
+
+    it('should return true when response is full admission and payment option is by set date', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.FULL_ADMISSION)
+      draft.fullAdmission = new FullAdmission()
+      draft.defendantDetails.partyDetails = new PartyDetails()
+      draft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
+      draft.fullAdmission.paymentOption = new DefendantPaymentOption(DefendantPaymentType.BY_SET_DATE)
 
       expect(draft.isResponseFullyAdmitted()).to.be.eq(true)
     })

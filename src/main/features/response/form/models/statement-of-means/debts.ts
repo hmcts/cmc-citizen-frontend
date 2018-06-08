@@ -5,6 +5,8 @@ import * as toBoolean from 'to-boolean'
 import { DebtRow } from 'response/form/models/statement-of-means/debtRow'
 import { AtLeastOnePopulatedRow } from 'forms/validation/validators/atLeastOnePopulatedRow'
 
+export const INIT_ROW_COUNT: number = 2
+
 export class ValidationErrors {
   static readonly ENTER_AT_LEAST_ONE_ROW: string = 'Enter at least one debt'
 }
@@ -31,6 +33,10 @@ export class Debts extends MultiRowForm<DebtRow> {
     const hasAnyDebts: boolean = value.hasAnyDebts !== undefined ? toBoolean(value.hasAnyDebts) : undefined
 
     return new Debts(hasAnyDebts, (hasAnyDebts === true && value.rows) ? value.rows.map(DebtRow.fromObject) : [])
+  }
+
+  getInitialNumberOfRows (): number {
+    return INIT_ROW_COUNT
   }
 
   createEmptyRow (): DebtRow {
