@@ -1,5 +1,7 @@
 /* tslint:disable:no-unused-expression */
 import { expect } from 'chai'
+import { BankAccountRow } from 'response/form/models/statement-of-means/bankAccountRow'
+import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
 
 import { StatementOfMeansTask } from 'response/tasks/statementOfMeansTask'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
@@ -63,7 +65,7 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
   responseDraft.statementOfMeans.supportedByYou = new SupportedByYou(false)
   responseDraft.statementOfMeans.employment = new Employment(false)
   responseDraft.statementOfMeans.unemployed = new Unemployed(UnemploymentType.RETIRED)
-  responseDraft.statementOfMeans.bankAccounts = new BankAccounts()
+  responseDraft.statementOfMeans.bankAccounts = new BankAccounts([new BankAccountRow(BankAccountType.CURRENT_ACCOUNT, false, 100)])
   responseDraft.statementOfMeans.debts = new Debts(false)
   responseDraft.statementOfMeans.monthlyIncome = new MonthlyIncome(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, [])
   responseDraft.statementOfMeans.monthlyExpenses = new MonthlyExpenses(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, [])

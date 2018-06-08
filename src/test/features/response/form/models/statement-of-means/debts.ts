@@ -43,13 +43,11 @@ describe('Debts', () => {
         ]
       })
 
-      const populatedItem: DebtRow = actual.rows.pop()
+      const populatedItem: DebtRow = actual.rows[0]
 
       expect(populatedItem.debt).to.eq('credit card')
       expect(populatedItem.totalOwed).to.eq(100)
       expect(populatedItem.monthlyPayments).to.eq(10)
-
-      expectAllRowsToBeEmpty(actual.rows)
     })
   })
 

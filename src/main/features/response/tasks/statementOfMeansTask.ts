@@ -11,11 +11,6 @@ function isValid (input): boolean {
 
 export class StatementOfMeansTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
-    return isValid(responseDraft.fullAdmission.paymentOption)
-      && this.statementOfMeansIsCompletedIfApplicable(responseDraft)
-  }
-
-  private static statementOfMeansIsCompletedIfApplicable (responseDraft: ResponseDraft): boolean {
     if (StatementOfMeans.isApplicableFor(responseDraft)) {
       const statementOfMeans: StatementOfMeans = responseDraft.statementOfMeans
 
