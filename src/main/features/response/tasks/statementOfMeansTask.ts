@@ -28,7 +28,6 @@ export class StatementOfMeansTask {
         && isValid(statementOfMeans.monthlyIncome)
         && isValid(statementOfMeans.monthlyExpenses)
         && isValid(statementOfMeans.courtOrders)
-        && isValid(statementOfMeans.explanation)
     }
 
     return true

@@ -33,7 +33,6 @@ import { Debts } from 'response/form/models/statement-of-means/debts'
 import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders'
 import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
 import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
-import { Explanation } from 'response/form/models/statement-of-means/explanation'
 
 function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDraft {
   const responseDraft: ResponseDraft = new ResponseDraft()
@@ -49,8 +48,7 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
         1000,
         100,
         localDateFrom(MomentFactory.currentDate().add(1, 'day')),
-        PaymentSchedule.EACH_WEEK,
-        'I am not able to pay immediately'
+        PaymentSchedule.EACH_WEEK
       )
       break
   }
@@ -69,7 +67,6 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
   responseDraft.statementOfMeans.monthlyIncome = new MonthlyIncome(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, [])
   responseDraft.statementOfMeans.monthlyExpenses = new MonthlyExpenses(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, [])
   responseDraft.statementOfMeans.courtOrders = new CourtOrders(false)
-  responseDraft.statementOfMeans.explanation = new Explanation('My explanation')
 
   return responseDraft
 }
@@ -312,12 +309,6 @@ describe('StatementOfMeansTask', () => {
 
         it('courtOrders not submitted', () => {
           responseDraft.statementOfMeans.courtOrders = undefined
-
-          expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.false
-        })
-
-        it('explanation not submitted', () => {
-          responseDraft.statementOfMeans.explanation = undefined
 
           expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.false
         })

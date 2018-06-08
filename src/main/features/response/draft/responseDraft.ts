@@ -23,7 +23,6 @@ import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
-import { PartyType } from 'common/partyType'
 
 export class FullAdmission {
   paymentOption: PaymentOption
@@ -103,12 +102,7 @@ export class ResponseDraft extends DraftDocument {
       return false
     }
 
-    return this.isResponsePopulated()
-      && this.response.type === ResponseType.FULL_ADMISSION
-      && this.defendantDetails !== undefined
-      && this.defendantDetails.partyDetails !== undefined
-      && (this.defendantDetails.partyDetails.type === PartyType.INDIVIDUAL.value
-      || this.defendantDetails.partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value)
+    return this.isResponsePopulated() && this.response.type === ResponseType.FULL_ADMISSION
   }
 
   // TODO: Because of an overlap between two stories (ROC-3657, ROC-3658), the logic of this function
