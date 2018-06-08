@@ -29,7 +29,7 @@
     "cookieName": "SESSION_ID"
   },
   "analytics": {
-    "gaTrackingId": "UA-97111056-1"
+    "gaTrackingId": ""
   },
   "fees": {
     "url": "http://localhost:4182",
