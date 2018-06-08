@@ -118,7 +118,7 @@ describe('Defendant response: Statement of means: account-banks', () => {
 
           await request(app)
             .post(pagePath)
-            .send({ rows: [{ typeOfAccount: BankAccountType.ISA.value, isJoint: false, balance: 10 }] })
+            .send({ rows: [{ typeOfAccount: BankAccountType.ISA.value, joint: false, balance: 10 }] })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.residencePage.evaluateUri(

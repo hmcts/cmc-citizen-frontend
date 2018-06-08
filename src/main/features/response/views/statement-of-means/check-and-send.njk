@@ -105,7 +105,7 @@
 {% for account in draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly() %}
   {{ row('Type of account', account.typeOfAccount.displayValue, '', false ) }}
   {{ row('Balance', account.balance | numeral, '', false) }}
-  {{ row('Joint account', 'Yes' if account.isJoint else 'No', '', loop.index0 === indexOfLastRow ) }}
+  {{ row('Joint account', 'Yes' if account.joint else 'No', '', loop.index0 === indexOfLastRow ) }}
 {% endfor %}
 
 {% set income = draft.statementOfMeans.monthlyIncome %}

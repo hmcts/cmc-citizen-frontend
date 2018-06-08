@@ -6,12 +6,12 @@ export const MAX_NUMBER_OF_ROWS: number = 10
 export const INIT_ROW_COUNT: number = 2
 
 export class ValidationErrors {
-  static readonly ENTER_AT_LEAST_ONE_ROW: string = 'Enter at least one account'
+  static readonly AT_LEAST_ONE_ROW_REQUIRED: string = 'Enter at least one account'
 }
 
 export class BankAccounts extends MultiRowForm<BankAccountRow> {
 
-  @AtLeastOnePopulatedRow({ message: ValidationErrors.ENTER_AT_LEAST_ONE_ROW })
+  @AtLeastOnePopulatedRow({ message: ValidationErrors.AT_LEAST_ONE_ROW_REQUIRED })
   rows: BankAccountRow[]
 
   static fromObject (value?: any): BankAccounts {
