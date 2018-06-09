@@ -10,7 +10,7 @@ const buttons = {
   submit: 'input[id="saveAndContinue"]'
 }
 
-export class SupportedByYouPage {
+export class OtherDependantsPage {
 
   selectDontSupportAnyone (): void {
     I.checkOption(fields.dontSupportAnyone)

@@ -8,7 +8,7 @@ export class ValidationErrors {
   static readonly SELECT_AN_OPTION: string = 'Select an option'
 }
 
-export class Unemployed {
+export class Unemployment {
 
   @IsDefined({ message: ValidationErrors.SELECT_AN_OPTION })
   @IsIn(UnemploymentType.all(), { message: ValidationErrors.SELECT_AN_OPTION })
@@ -28,19 +28,19 @@ export class Unemployed {
     this.otherDetails = otherDetails
   }
 
-  static fromObject (value?: any): Unemployed {
+  static fromObject (value?: any): Unemployment {
     if (!value) {
       return value
     }
 
-    return new Unemployed(
+    return new Unemployment(
       UnemploymentType.valueOf(value.option),
       UnemploymentDetails.fromObject(value.unemploymentDetails),
       OtherDetails.fromObject(value.otherDetails)
     )
   }
 
-  deserialize (input?: any): Unemployed {
+  deserialize (input?: any): Unemployment {
     if (input) {
       this.option = UnemploymentType.valueOf(input.option && input.option.value)
       this.unemploymentDetails = input.unemploymentDetails && new UnemploymentDetails().deserialize(input.unemploymentDetails)

@@ -60,7 +60,7 @@ export default express.Router()
         draft.document.statementOfMeans.courtOrders = form.model
 
         await new DraftService().save(draft, user.bearerToken)
-        res.redirect(StatementOfMeansPaths.brieflyExplainWhyCannotPayImmediatelyPage.evaluateUri({ externalId: claim.externalId }))
+        res.redirect(StatementOfMeansPaths.explanationPage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )

@@ -14,7 +14,7 @@ import { app } from 'main/app'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = StatementOfMeansPaths.supportedByYouPage.evaluateUri(
+const pagePath: string = StatementOfMeansPaths.otherDependantsPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
 

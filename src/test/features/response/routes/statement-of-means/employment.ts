@@ -152,7 +152,7 @@ describe('Defendant response: Statement of means: employment', () => {
             .send({ currentlyEmployed: true, selfEmployed: true, employed: false })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.selfEmployedPage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.selfEmploymentPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )

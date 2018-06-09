@@ -6,7 +6,7 @@ import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { Residence } from 'response/form/models/statement-of-means/residence'
 import { Employment } from 'response/form/models/statement-of-means/employment'
 import { Employers } from 'response/form/models/statement-of-means/employers'
-import { SelfEmployed } from 'response/form/models/statement-of-means/selfEmployed'
+import { SelfEmployment } from 'response/form/models/statement-of-means/selfEmployment'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { ResponseType } from 'response/form/models/responseType'
@@ -28,7 +28,7 @@ describe('StatementOfMeans', () => {
       expect(actual.residence).to.be.eq(undefined)
       expect(actual.employment).to.be.eq(undefined)
       expect(actual.employers).to.be.eq(undefined)
-      expect(actual.selfEmployed).to.be.eq(undefined)
+      expect(actual.selfEmployment).to.be.eq(undefined)
     })
 
     it('should return populated StatementOfMeans for valid input', () => {
@@ -67,7 +67,7 @@ describe('StatementOfMeans', () => {
       expect(actual.residence.type.value).to.equal(ResidenceType.OTHER.value)
       expect(actual.employment).to.be.instanceof(Employment)
       expect(actual.employers).to.be.instanceof(Employers)
-      expect(actual.selfEmployed).to.be.instanceof(SelfEmployed)
+      expect(actual.selfEmployment).to.be.instanceof(SelfEmployment)
     })
   })
 

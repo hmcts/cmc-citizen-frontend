@@ -39,10 +39,10 @@ export class StatementOfMeansTask {
     if (statementOfMeans.dependants.hasAnyChildren && statementOfMeans.dependants.numberOfChildren.between16and19 > 0) {
       return isValid(statementOfMeans.education)
         && isValid(statementOfMeans.maintenance)
-        && isValid(statementOfMeans.supportedByYou)
+        && isValid(statementOfMeans.otherDependants)
     }
 
-    return isValid(statementOfMeans.maintenance) && isValid(statementOfMeans.supportedByYou)
+    return isValid(statementOfMeans.maintenance) && isValid(statementOfMeans.otherDependants)
   }
 
   private static isEmploymentCompleted (som: StatementOfMeans): boolean {
@@ -53,13 +53,13 @@ export class StatementOfMeansTask {
     }
 
     if (!som.employment.currentlyEmployed) {
-      return isValid(som.unemployed)
+      return isValid(som.unemployment)
     }
 
     let result: boolean = true
 
     if (som.employment.selfEmployed) {
-      result = result && isValid(som.selfEmployed)
+      result = result && isValid(som.selfEmployment)
     }
 
     if (som.employment.employed) {

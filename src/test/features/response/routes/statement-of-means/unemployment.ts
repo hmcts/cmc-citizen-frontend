@@ -12,13 +12,14 @@ import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
 import { app } from 'main/app'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 
+const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = StatementOfMeansPaths.selfEmployedPage.evaluateUri(
-  { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
-)
+const pagePath: string = StatementOfMeansPaths.unemployedPage.evaluateUri({ externalId: externalId })
+const nextPagePath: string = StatementOfMeansPaths.debtsPage.evaluateUri({ externalId: externalId })
 
-describe('Defendant response: Statement of means: self-employment', () => {
+describe('Defendant response: Statement of means: unemployment page', () => {
 
   attachDefaultHooks(app)
 
@@ -31,7 +32,7 @@ describe('Defendant response: Statement of means: self-employment', () => {
     context('when user authorised', () => {
 
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen', 'defendant')
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)
@@ -65,7 +66,7 @@ describe('Defendant response: Statement of means: self-employment', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('What are you self-employed as?'))
+            .expect(res => expect(res).to.be.successful.withText('Are you unemployed or retired?'))
         })
       })
     })
@@ -80,7 +81,7 @@ describe('Defendant response: Statement of means: self-employment', () => {
     describe('for authorized user', () => {
 
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen', 'defendant')
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)
@@ -106,24 +107,44 @@ describe('Defendant response: Statement of means: self-employment', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
-      })
 
-      describe('update', () => {
+        context('should redirect to Task list page when', () => {
 
-        it('should update draft store and redirect', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
+          it('UNEMPLOYED selected', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
 
-          await request(app)
-            .post(pagePath)
-            .send({ jobTitle: 'my role', annualTurnover: 10, areYouBehindOnTax: false })
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.onTaxPaymentsPage.evaluateUri(
-                { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
-              )
-            )
+            await request(app)
+              .post(pagePath)
+              .send({ option: UnemploymentType.UNEMPLOYED.value, unemploymentDetails: { years: 0, months: 1 } })
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.redirect.toLocation(nextPagePath))
+          })
+
+          it('RETIRED selected', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
+
+            await request(app)
+              .post(pagePath)
+              .send({ option: UnemploymentType.RETIRED.value })
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.redirect.toLocation(nextPagePath))
+          })
+
+          it('OTHER selected', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
+
+            await request(app)
+              .post(pagePath)
+              .send({ option: UnemploymentType.OTHER.value, otherDetails: { details: 'story' } })
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.redirect.toLocation(nextPagePath))
+          })
         })
       })
     })

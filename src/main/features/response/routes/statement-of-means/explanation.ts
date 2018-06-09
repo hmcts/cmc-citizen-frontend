@@ -14,21 +14,21 @@ import { StatementOfMeansPaths, Paths as Paths } from 'response/paths'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 
 function renderView (form: Form<Explanation>, res: express.Response) {
-  res.render(StatementOfMeansPaths.brieflyExplainWhyCannotPayImmediatelyPage.associatedView, {
+  res.render(StatementOfMeansPaths.explanationPage.associatedView, {
     form: form
   })
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(StatementOfMeansPaths.brieflyExplainWhyCannotPayImmediatelyPage.uri,
+  .get(StatementOfMeansPaths.explanationPage.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.statementOfMeans.explanation), res)
     }))
   .post(
-    StatementOfMeansPaths.brieflyExplainWhyCannotPayImmediatelyPage.uri,
+    StatementOfMeansPaths.explanationPage.uri,
     FormValidator.requestHandler(Explanation),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Explanation> = req.body

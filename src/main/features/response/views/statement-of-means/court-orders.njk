@@ -36,6 +36,7 @@
       <div class="statement-of-means-container">
         <fieldset id="hasAnyCourtOrders[label]" class="form-group {% if errorHasAnyCourtOrders %} form-group-error {% endif %}">
           <legend class="visually-hidden">{{ t('Are you paying any other court orders?') }}</legend>
+          {% if errorHasAnyCourtOrders %}<span class="error-message">{{ t(errorHasAnyCourtOrders) }}</span>{% endif %}
 
           {{
             radioOption(form = form, label = 'Yes', name = 'hasAnyCourtOrders', value = 'true', checked = form.valueFor('hasAnyCourtOrders') === true)

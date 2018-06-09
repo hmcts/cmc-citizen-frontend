@@ -1,24 +1,24 @@
 import { expect } from 'chai'
-import { SelfEmployed, ValidationErrors } from 'response/form/models/statement-of-means/selfEmployed'
+import { SelfEmployment, ValidationErrors } from 'response/form/models/statement-of-means/selfEmployment'
 import { Validator } from 'class-validator'
 import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 import { ValidationConstraints as GlobalValidationConstants } from 'forms/validation/validationConstraints'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
-describe('SelfEmployed', () => {
+describe('SelfEmployment', () => {
 
   describe('deserialize', () => {
 
     it('should return empty SelfEmployed for undefined given as input', () => {
-      const actual = new SelfEmployed().deserialize(undefined)
+      const actual = new SelfEmployment().deserialize(undefined)
 
-      expect(actual).to.be.instanceof(SelfEmployed)
+      expect(actual).to.be.instanceof(SelfEmployment)
       expect(actual.jobTitle).to.be.eq(undefined)
       expect(actual.annualTurnover).to.be.eq(undefined)
     })
 
     it('should return fully populated SelfEmployed', () => {
-      const actual = new SelfEmployed().deserialize({
+      const actual = new SelfEmployment().deserialize({
         jobTitle: 'my role', annualTurnover: 10
       })
 
@@ -30,13 +30,13 @@ describe('SelfEmployed', () => {
   describe('fromObject', () => {
 
     it('should return undefined when undefined given', () => {
-      const actual = SelfEmployed.fromObject(undefined)
+      const actual = SelfEmployment.fromObject(undefined)
 
       expect(actual).to.be.eq(undefined)
     })
 
     it('should return fully populated SelfEmployed', () => {
-      const actual = SelfEmployed.fromObject({
+      const actual = SelfEmployment.fromObject({
         jobTitle: 'my role', annualTurnover: 10
       })
 
@@ -51,7 +51,7 @@ describe('SelfEmployed', () => {
     context('should accept', () => {
 
       it('all fields given with valid values', () => {
-        const errors = validator.validateSync(new SelfEmployed('My role', 1000))
+        const errors = validator.validateSync(new SelfEmployment('My role', 1000))
 
         expect(errors.length).to.equal(0)
       })
@@ -60,7 +60,7 @@ describe('SelfEmployed', () => {
     context('should reject when', () => {
 
       it('in input', () => {
-        const errors = validator.validateSync(new SelfEmployed())
+        const errors = validator.validateSync(new SelfEmployment())
 
         expect(errors.length).to.equal(2)
         expectValidationError(errors, ValidationErrors.JOB_TITLE_REQUIRED)
@@ -69,7 +69,7 @@ describe('SelfEmployed', () => {
 
       it('too long role name', () => {
         const errors = validator.validateSync(
-          new SelfEmployed(
+          new SelfEmployment(
             generateString(GlobalValidationConstants.STANDARD_TEXT_INPUT_MAX_LENGTH + 1), 1000
           )
         )
@@ -79,7 +79,7 @@ describe('SelfEmployed', () => {
       })
 
       it('too many decimal digits for annualTurnover', () => {
-        const errors = validator.validateSync(new SelfEmployed('my role', 10.111))
+        const errors = validator.validateSync(new SelfEmployment('my role', 10.111))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, GlobalValidationErrors.AMOUNT_INVALID_DECIMALS)
@@ -87,7 +87,7 @@ describe('SelfEmployed', () => {
 
       it('too much annualTurnover', () => {
         const errors = validator.validateSync(
-          new SelfEmployed('my role', GlobalValidationConstants.MAX_VALUE + 1)
+          new SelfEmployment('my role', GlobalValidationConstants.MAX_VALUE + 1)
         )
 
         expect(errors.length).to.equal(1)

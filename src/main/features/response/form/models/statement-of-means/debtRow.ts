@@ -61,7 +61,6 @@ export class DebtRow extends MultiRowFormItem {
       this.totalOwed = input.totalOwed
       this.monthlyPayments = input.monthlyPayments
     }
-
     return this
   }
 }

@@ -10,7 +10,7 @@ export class ValidationErrors {
   static readonly TOO_MUCH: string = 'Are you sure this is a valid value?'
 }
 
-export class SelfEmployed {
+export class SelfEmployment {
 
   @IsDefined({ message: ValidationErrors.JOB_TITLE_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.JOB_TITLE_REQUIRED })
@@ -28,18 +28,18 @@ export class SelfEmployed {
     this.annualTurnover = annualTurnover
   }
 
-  static fromObject (value?: any): SelfEmployed {
+  static fromObject (value?: any): SelfEmployment {
     if (!value) {
       return value
     }
 
-    return new SelfEmployed(
+    return new SelfEmployment(
       value.jobTitle || undefined,
-      toNumberOrUndefined(value.annualTurnover),
+      toNumberOrUndefined(value.annualTurnover)
     )
   }
 
-  deserialize (input?: any): SelfEmployed {
+  deserialize (input?: any): SelfEmployment {
     if (input) {
       this.jobTitle = input.jobTitle
       this.annualTurnover = input.annualTurnover

@@ -8,11 +8,11 @@ import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { RoutablePath } from 'shared/router/routablePath'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
-import { SupportedByYou } from 'response/form/models/statement-of-means/supportedByYou'
+import { OtherDependants } from 'response/form/models/statement-of-means/otherDependants'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 
-const page: RoutablePath = Paths.supportedByYouPage
+const page: RoutablePath = Paths.otherDependantsPage
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -22,15 +22,15 @@ export default express.Router()
     (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       res.render(page.associatedView, {
-        form: new Form(draft.document.statementOfMeans.supportedByYou)
+        form: new Form(draft.document.statementOfMeans.otherDependants)
       })
     })
   .post(
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
-    FormValidator.requestHandler(SupportedByYou, SupportedByYou.fromObject),
+    FormValidator.requestHandler(OtherDependants, OtherDependants.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const form: Form<SupportedByYou> = req.body
+      const form: Form<OtherDependants> = req.body
       const { externalId } = req.params
 
       if (form.hasErrors()) {
@@ -39,7 +39,7 @@ export default express.Router()
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        draft.document.statementOfMeans.supportedByYou = form.model
+        draft.document.statementOfMeans.otherDependants = form.model
         await new DraftService().save(draft, user.bearerToken)
 
         res.redirect(Paths.employmentPage.evaluateUri({ externalId: externalId }))

@@ -23,11 +23,11 @@
     {% endif %}
     {{ row('Employment status', employmentStatus, '') }}
   {% else %}
-    {% if statementOfMeans.unemployed.option === UnemploymentType.UNEMPLOYED %}
-      {% set years = statementOfMeans.unemployed.unemploymentDetails.years %}
-      {% set months = statementOfMeans.unemployed.unemploymentDetails.months %}
+    {% if statementOfMeans.unemployment.option === UnemploymentType.UNEMPLOYED %}
+      {% set years = statementOfMeans.unemployment.unemploymentDetails.years %}
+      {% set months = statementOfMeans.unemployment.unemploymentDetails.months %}
 
-      {% set status = statementOfMeans.unemployed.option.displayValue %}
+      {% set status = statementOfMeans.unemployment.option.displayValue %}
       {% if years or months %}
         {% set status = status + ' for ' %}
         {% if years %}
@@ -39,10 +39,10 @@
       {% endif %}
 
       {{ row('Employment status', status, '') }}
-    {% elseif statementOfMeans.unemployed.option === UnemploymentType.OTHER %}
-      {{ row('Employment status', statementOfMeans.unemployed.otherDetails.details, '') }}
+    {% elseif statementOfMeans.unemployment.option === UnemploymentType.OTHER %}
+      {{ row('Employment status', statementOfMeans.unemployment.otherDetails.details, '') }}
     {% else %}
-      {{ row('Employment status', statementOfMeans.unemployed.option.displayValue, '') }}
+      {{ row('Employment status', statementOfMeans.unemployment.option.displayValue, '') }}
     {% endif %}
 
   {% endif %}
@@ -88,9 +88,9 @@
 {% endif %}
 
 {% if draft.statementOfMeans.employment.selfEmployed %}
-  {{ row('What are you self-employed as?', '', StatementOfMeansPaths.selfEmployedPage.evaluateUri({ externalId: claim.externalId }), false) }}
-  {{ row('Job title', draft.statementOfMeans.selfEmployed.jobTitle, '', false ) }}
-  {{ row('Annual turnover', draft.statementOfMeans.selfEmployed.annualTurnover | numeral, '', not draft.statementOfMeans.onTaxPayments ) }}
+  {{ row('What are you self-employed as?', '', StatementOfMeansPaths.selfEmploymentPage.evaluateUri({ externalId: claim.externalId }), false) }}
+  {{ row('Job title', draft.statementOfMeans.selfEmployment.jobTitle, '', false ) }}
+  {{ row('Annual turnover', draft.statementOfMeans.selfEmployment.annualTurnover | numeral, '', not draft.statementOfMeans.onTaxPayments ) }}
   {% if draft.statementOfMeans.onTaxPayments %}
     {{ row('Are you behind on tax', 'Yes' if draft.statementOfMeans.onTaxPayments.behindOnTaxPayments else 'No', '', false ) }}
     {{ row('Amount you owe?', draft.statementOfMeans.onTaxPayments.amountYouOwe | numeral, '', false ) }}
@@ -166,7 +166,7 @@
 {% set indexOfLastRow = courtOrdersRows.length - 1 %}
 
 {% for courtOrderRow in courtOrdersRows %}
-  {{ row('Details about court orders', courtOrderRow.details, '', false ) }}
+  {{ row('Details about court orders', courtOrderRow.claimNumber, '', false ) }}
   {{ row('Amount you owe', courtOrderRow.amount | numeral, '', loop.index0 === indexOfLastRow) }}
 {% endfor %}
 

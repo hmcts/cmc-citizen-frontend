@@ -4,7 +4,7 @@ import * as toBoolean from 'to-boolean'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { NumberOfPeople } from 'response/form/models/statement-of-means/numberOfPeople'
 
-export class SupportedByYou {
+export class OtherDependants {
 
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
   doYouSupportAnyone: boolean
@@ -18,7 +18,7 @@ export class SupportedByYou {
     this.numberOfPeople = numberOfPeople
   }
 
-  static fromObject (value?: any): SupportedByYou {
+  static fromObject (value?: any): OtherDependants {
     if (!value) {
       return value
     }
@@ -26,13 +26,13 @@ export class SupportedByYou {
     const doYouSupportAnyone: boolean = value.doYouSupportAnyone !== undefined ?
       toBoolean(value.doYouSupportAnyone) : undefined
 
-    return new SupportedByYou(
+    return new OtherDependants(
       doYouSupportAnyone,
       doYouSupportAnyone ? NumberOfPeople.fromObject(value.numberOfPeople) : undefined
     )
   }
 
-  deserialize (input?: any): SupportedByYou {
+  deserialize (input?: any): OtherDependants {
     if (input) {
       this.doYouSupportAnyone = input.doYouSupportAnyone
       if (this.doYouSupportAnyone) {

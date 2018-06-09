@@ -24,12 +24,12 @@ import { BankAccounts } from 'response/form/models/statement-of-means/bankAccoun
 import { Dependants } from 'response/form/models/statement-of-means/dependants'
 import { NumberOfChildren } from 'response/form/models/statement-of-means/numberOfChildren'
 import { Education } from 'response/form/models/statement-of-means/education'
-import { Unemployed } from 'response/form/models/statement-of-means/unemployed'
+import { Unemployment } from 'response/form/models/statement-of-means/unemployment'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 import { Employers } from 'response/form/models/statement-of-means/employers'
 import { EmployerRow } from 'response/form/models/statement-of-means/employerRow'
-import { SelfEmployed } from 'response/form/models/statement-of-means/selfEmployed'
-import { SupportedByYou } from 'response/form/models/statement-of-means/supportedByYou'
+import { SelfEmployment } from 'response/form/models/statement-of-means/selfEmployment'
+import { OtherDependants } from 'response/form/models/statement-of-means/otherDependants'
 import { NumberOfPeople } from 'response/form/models/statement-of-means/numberOfPeople'
 import { Debts } from 'response/form/models/statement-of-means/debts'
 import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders'
@@ -62,9 +62,9 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
   responseDraft.statementOfMeans.residence = new Residence(ResidenceType.OWN_HOME)
   responseDraft.statementOfMeans.dependants = new Dependants(false)
   responseDraft.statementOfMeans.maintenance = new Maintenance(false)
-  responseDraft.statementOfMeans.supportedByYou = new SupportedByYou(false)
+  responseDraft.statementOfMeans.otherDependants = new OtherDependants(false)
   responseDraft.statementOfMeans.employment = new Employment(false)
-  responseDraft.statementOfMeans.unemployed = new Unemployed(UnemploymentType.RETIRED)
+  responseDraft.statementOfMeans.unemployment = new Unemployment(UnemploymentType.RETIRED)
   responseDraft.statementOfMeans.bankAccounts = new BankAccounts([new BankAccountRow(BankAccountType.CURRENT_ACCOUNT, false, 100)])
   responseDraft.statementOfMeans.debts = new Debts(false)
   responseDraft.statementOfMeans.monthlyIncome = new MonthlyIncome(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, [])
@@ -132,7 +132,7 @@ describe('StatementOfMeansTask', () => {
           it('no children, no maintenance, no one supported', () => {
             responseDraft.statementOfMeans.dependants.hasAnyChildren = false
             responseDraft.statementOfMeans.maintenance.option = false
-            responseDraft.statementOfMeans.supportedByYou.doYouSupportAnyone = false
+            responseDraft.statementOfMeans.otherDependants.doYouSupportAnyone = false
 
             expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
           })
@@ -147,7 +147,7 @@ describe('StatementOfMeansTask', () => {
           it('no children and maintenance, but supported', () => {
             responseDraft.statementOfMeans.dependants.hasAnyChildren = false
             responseDraft.statementOfMeans.maintenance.option = false
-            responseDraft.statementOfMeans.supportedByYou = new SupportedByYou(true, new NumberOfPeople(3, 'story'))
+            responseDraft.statementOfMeans.otherDependants = new OtherDependants(true, new NumberOfPeople(3, 'story'))
 
             expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
           })
@@ -200,8 +200,8 @@ describe('StatementOfMeansTask', () => {
             expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.false
           })
 
-          it('supported by you not submitted', () => {
-            responseDraft.statementOfMeans.supportedByYou = undefined
+          it('other dependants not submitted', () => {
+            responseDraft.statementOfMeans.otherDependants = undefined
 
             expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.false
           })
@@ -215,27 +215,27 @@ describe('StatementOfMeansTask', () => {
         })
 
         it('employed with list of employers', () => {
-          responseDraft.statementOfMeans.unemployed = undefined
+          responseDraft.statementOfMeans.unemployment = undefined
           responseDraft.statementOfMeans.employment = new Employment(true, true, false)
           responseDraft.statementOfMeans.employers = new Employers([new EmployerRow('Company', 'job')])
 
           expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
         })
 
-        it('self-Employed and not employed', () => {
-          responseDraft.statementOfMeans.unemployed = undefined
+        it('self-employed and not employed', () => {
+          responseDraft.statementOfMeans.unemployment = undefined
           responseDraft.statementOfMeans.employment = new Employment(true, false, true)
           responseDraft.statementOfMeans.employers = undefined
-          responseDraft.statementOfMeans.selfEmployed = new SelfEmployed('job', 1000, false, 10, 'my story')
+          responseDraft.statementOfMeans.selfEmployment = new SelfEmployment('job', 1000)
 
           expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
         })
 
-        it('self-Employed and employed', () => {
-          responseDraft.statementOfMeans.unemployed = undefined
+        it('self-employed and employed', () => {
+          responseDraft.statementOfMeans.unemployment = undefined
           responseDraft.statementOfMeans.employment = new Employment(true, true, true)
           responseDraft.statementOfMeans.employers = new Employers([new EmployerRow('Company', 'job')])
-          responseDraft.statementOfMeans.selfEmployed = new SelfEmployed('job', 1000, false)
+          responseDraft.statementOfMeans.selfEmployment = new SelfEmployment('job', 1000)
 
           expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
         })
@@ -251,7 +251,7 @@ describe('StatementOfMeansTask', () => {
 
         it('selected "no" for employment and not submitted unemployed', () => {
           responseDraft.statementOfMeans.employment = new Employment(false)
-          responseDraft.statementOfMeans.unemployed = undefined
+          responseDraft.statementOfMeans.unemployment = undefined
 
           expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.false
         })
@@ -265,14 +265,14 @@ describe('StatementOfMeansTask', () => {
 
         it('self-employed and not submitted selfEmployed', () => {
           responseDraft.statementOfMeans.employment = new Employment(true, false, true)
-          responseDraft.statementOfMeans.selfEmployed = undefined
+          responseDraft.statementOfMeans.selfEmployment = undefined
 
           expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.false
         })
 
         it('employed and self-employed and not submitted selfEmployed nor employers', () => {
           responseDraft.statementOfMeans.employment = new Employment(true, true, true)
-          responseDraft.statementOfMeans.selfEmployed = undefined
+          responseDraft.statementOfMeans.selfEmployment = undefined
           responseDraft.statementOfMeans.employers = undefined
 
           expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.false

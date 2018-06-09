@@ -2,12 +2,12 @@ import { OnTaxPayments } from 'response/form/models/statement-of-means/onTaxPaym
 import { Residence } from 'response/form/models/statement-of-means/residence'
 import { Employment } from 'response/form/models/statement-of-means/employment'
 import { Employers } from 'response/form/models/statement-of-means/employers'
-import { SelfEmployed } from 'response/form/models/statement-of-means/selfEmployed'
+import { SelfEmployment } from 'response/form/models/statement-of-means/selfEmployment'
 import { Dependants } from 'response/form/models/statement-of-means/dependants'
 import { Education } from 'response/form/models/statement-of-means/education'
 import { Maintenance } from 'response/form/models/statement-of-means/maintenance'
-import { SupportedByYou } from 'response/form/models/statement-of-means/supportedByYou'
-import { Unemployed } from 'response/form/models/statement-of-means/unemployed'
+import { OtherDependants } from 'response/form/models/statement-of-means/otherDependants'
+import { Unemployment } from 'response/form/models/statement-of-means/unemployment'
 import { BankAccounts } from 'response/form/models/statement-of-means/bankAccounts'
 import { FeatureToggles } from 'utils/featureToggles'
 import { ResponseDraft } from 'response/draft/responseDraft'
@@ -23,13 +23,13 @@ export class StatementOfMeans {
   residence?: Residence
   dependants?: Dependants
   maintenance?: Maintenance
-  supportedByYou?: SupportedByYou
+  otherDependants?: OtherDependants
   education?: Education
   employment?: Employment
   employers?: Employers
-  selfEmployed?: SelfEmployed
+  selfEmployment?: SelfEmployment
   onTaxPayments?: OnTaxPayments
-  unemployed?: Unemployed
+  unemployment?: Unemployment
   bankAccounts?: BankAccounts
   debts?: Debts
   monthlyIncome?: MonthlyIncome
@@ -59,12 +59,12 @@ export class StatementOfMeans {
       this.dependants = new Dependants().deserialize(input.dependants)
       this.education = new Education().deserialize(input.education)
       this.maintenance = new Maintenance().deserialize(input.maintenance)
-      this.supportedByYou = new SupportedByYou().deserialize(input.supportedByYou)
+      this.otherDependants = new OtherDependants().deserialize(input.otherDependants)
       this.employment = new Employment().deserialize(input.employment)
       this.employers = new Employers().deserialize(input.employers)
-      this.selfEmployed = new SelfEmployed().deserialize(input.selfEmployed)
+      this.selfEmployment = new SelfEmployment().deserialize(input.selfEmployment)
       this.onTaxPayments = new OnTaxPayments().deserialize(input.onTaxPayments)
-      this.unemployed = new Unemployed().deserialize(input.unemployed)
+      this.unemployment = new Unemployment().deserialize(input.unemployment)
       this.bankAccounts = new BankAccounts().deserialize(input.bankAccounts)
       this.debts = new Debts().deserialize(input.debts)
       this.monthlyIncome = new MonthlyIncome().deserialize(input.monthlyIncome)

@@ -10,7 +10,7 @@ const buttons = {
   submit: 'input[id="saveAndContinue"]'
 }
 
-export class UnemployedPage {
+export class UnemploymentPage {
 
   selectRetired (): void {
     I.checkOption(fields.retired)
