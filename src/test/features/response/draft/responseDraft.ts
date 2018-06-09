@@ -1,7 +1,8 @@
 import { expect } from 'chai'
 import { LocalDate } from 'forms/models/localDate'
 
-import { ResponseDraft } from 'response/draft/responseDraft'
+import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
+import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 
 import { Response } from 'response/form/models/response'
 import { ResponseType } from 'response/form/models/responseType'
@@ -146,6 +147,44 @@ describe('ResponseDraft', () => {
       draft.response = new Response(ResponseType.FULL_ADMISSION)
       draft.defendantDetails.partyDetails = new PartyDetails()
       draft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
+
+      expect(draft.isResponseFullyAdmitted()).to.be.eq(true)
+    })
+  })
+
+  describe('isResponseFullyAdmittedWithInstalments', () => {
+    it('should return false when no response type set', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = undefined
+
+      expect(draft.isResponseFullyAdmittedWithInstalments()).to.be.eq(false)
+    })
+
+    it('should return false when response is not full admission', () => {
+      ResponseType.except(ResponseType.FULL_ADMISSION).forEach(responseType => {
+        const draft: ResponseDraft = new ResponseDraft()
+        draft.response = new Response(responseType)
+
+        expect(draft.isResponseFullyAdmittedWithInstalments()).to.be.eq(false)
+      })
+    })
+
+    it('should return false when response is full admission but payment option is not instalments', () => {
+      DefendantPaymentType.except(DefendantPaymentType.INSTALMENTS).forEach(paymentType => {
+        const draft: ResponseDraft = new ResponseDraft()
+        draft.response = new Response(ResponseType.FULL_ADMISSION)
+        draft.fullAdmission = new FullAdmission()
+        draft.fullAdmission.paymentOption = new DefendantPaymentOption(paymentType)
+
+        expect(draft.isResponseFullyAdmittedWithInstalments()).to.be.eq(false)
+      })
+    })
+
+    it('should return true when response is full admission and payment option is instalments', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.FULL_ADMISSION)
+      draft.fullAdmission = new FullAdmission()
+      draft.fullAdmission.paymentOption = new DefendantPaymentOption(DefendantPaymentType.INSTALMENTS)
 
       expect(draft.isResponseFullyAdmitted()).to.be.eq(true)
     })
