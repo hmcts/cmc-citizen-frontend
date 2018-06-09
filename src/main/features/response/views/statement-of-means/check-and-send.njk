@@ -13,7 +13,7 @@
 
 {% macro employmentStatus(statementOfMeans) %}
 
-  {% if statementOfMeans.employment.isCurrentlyEmployed %}
+  {% if statementOfMeans.employment.currentlyEmployed %}
     {% set employmentStatus = 'Employed' if statementOfMeans.employment.employed %}
     {% if statementOfMeans.employment.selfEmployed %}
       {% if employmentStatus %}
@@ -57,9 +57,9 @@
 
 {% if draft.statementOfMeans.dependants.hasAnyChildren %}
   {% set noOfKids = draft.statementOfMeans.dependants.numberOfChildren %}
-  {{ row('Under 11', noOfKids.under11, '', not (noOfKids.between11and15 or noOfKids.between16and19)) }}
-  {{ row('11 to 15', noOfKids.between11and15, '', not noOfKids.between16and19) }}
-  {{ row('16 to 19', noOfKids.between16and19, '') }}
+  {{ row('Under 11', noOfKids.under11 | default('0'), '', not (noOfKids.between11and15 or noOfKids.between16and19)) }}
+  {{ row('11 to 15', noOfKids.between11and15 | default('0'), '', not noOfKids.between16and19) }}
+  {{ row('16 to 19', noOfKids.between16and19 | default('0'), '') }}
 
   {% if draft.statementOfMeans.education %}
     {{ row('Number of children aged 16 to 19 full-time education or training', draft.statementOfMeans.education.value, StatementOfMeansPaths.educationPage.evaluateUri({ externalId: claim.externalId })) }}
@@ -74,7 +74,7 @@
 {% endif %}
 
 {{ row('Employment', '', StatementOfMeansPaths.employmentPage.evaluateUri({ externalId: claim.externalId }), false) }}
-{{ row('Are you currently working?', 'Yes' if draft.statementOfMeans.employment.isCurrentlyEmployed else 'No', '', false) }}
+{{ row('Are you currently working?', 'Yes' if draft.statementOfMeans.employment.currentlyEmployed else 'No', '', false) }}
 
 {{ employmentStatus(draft.statementOfMeans) }}
 
@@ -90,11 +90,11 @@
 {% if draft.statementOfMeans.employment.selfEmployed %}
   {{ row('What are you self-employed as?', '', StatementOfMeansPaths.selfEmployedPage.evaluateUri({ externalId: claim.externalId }), false) }}
   {{ row('Job title', draft.statementOfMeans.selfEmployed.jobTitle, '', false ) }}
-  {{ row('Annual turnover', draft.statementOfMeans.selfEmployed.annualTurnover | numeral, '', not draft.statementOfMeans.selfEmployed.areYouBehindOnTax ) }}
-  {% if draft.statementOfMeans.selfEmployed.areYouBehindOnTax %}
-    {{ row('Are you behind on tax', 'Yes' if draft.statementOfMeans.selfEmployed.areYouBehindOnTax else 'No', '', false ) }}
-    {{ row('Amount you owe?', draft.statementOfMeans.selfEmployed.amountYouOwe | numeral, '', false ) }}
-    {{ row('Reason', draft.statementOfMeans.selfEmployed.reason) }}
+  {{ row('Annual turnover', draft.statementOfMeans.selfEmployed.annualTurnover | numeral, '', not draft.statementOfMeans.onTaxPayments ) }}
+  {% if draft.statementOfMeans.onTaxPayments %}
+    {{ row('Are you behind on tax', 'Yes' if draft.statementOfMeans.onTaxPayments.behindOnTaxPayments else 'No', '', false ) }}
+    {{ row('Amount you owe?', draft.statementOfMeans.onTaxPayments.amountYouOwe | numeral, '', false ) }}
+    {{ row('Reason', draft.statementOfMeans.onTaxPayments.reason) }}
   {% endif %}
 {% endif %}
 
