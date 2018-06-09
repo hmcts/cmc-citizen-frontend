@@ -27,7 +27,7 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     FormValidator.requestHandler(SelfEmployed, SelfEmployed.fromObject),
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<SelfEmployed> = req.body
 
       if (form.hasErrors()) {
@@ -40,7 +40,7 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params
-        res.redirect(StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: externalId }))
+        res.redirect(StatementOfMeansPaths.onTaxPaymentsPage.evaluateUri({ externalId: externalId }))
       }
     })
   )

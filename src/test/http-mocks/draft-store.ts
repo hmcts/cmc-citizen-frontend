@@ -178,7 +178,7 @@ export const sampleResponseDraftObj = {
     residence: {
       type: ResidenceType.OWN_HOME
     },
-    employment: { isCurrentlyEmployed: false },
+    employment: { currentlyEmployed: false },
     employers: undefined,
     selfEmployed: undefined,
     unemployed: { option: { value: UnemploymentType.RETIRED.value } },

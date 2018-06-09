@@ -11,14 +11,14 @@
 
         {{ csrfProtection(csrf) }}
 
-        <p>{{ t('How many are both of the following:') }}</p>
+        <p>{{ t('How many are both:') }}</p>
 
         <ul class="list list-bullet">
           <li>{{ t('in full-time education or training') }}</li>
-          <li>{{ t('not married or in a civil partnership') }}</li>
+          <li>{{ t('single (unmarried and not in a civil partnership)') }}</li>
         </ul>
 
-        <input type="hidden" name="maxValue" value="{{ between16and19 | default(0) }}">
+        <input type="hidden" name="maxValue" value="{{ numberOfChildrenBetween16and19 | default(0) }}">
         {{ numericInput('Enter number', 'value', form) }}
 
         {{ saveAndContinueButton() }}

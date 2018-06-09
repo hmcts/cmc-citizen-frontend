@@ -52,7 +52,7 @@ export class StatementOfMeansTask {
       return false
     }
 
-    if (!som.employment.isCurrentlyEmployed) {
+    if (!som.employment.currentlyEmployed) {
       return isValid(som.unemployed)
     }
 

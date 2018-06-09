@@ -9,7 +9,6 @@ import { DraftService } from 'services/draftService'
 import { RoutablePath } from 'shared/router/routablePath'
 import { Dependants } from 'response/form/models/statement-of-means/dependants'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
-import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 
@@ -28,7 +27,7 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     FormValidator.requestHandler(Dependants, Dependants.fromObject),
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<Dependants> = req.body
 
       if (form.hasErrors()) {
@@ -36,14 +35,11 @@ export default express.Router()
       } else {
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
-        const statementOfMeans: StatementOfMeans = draft.document.statementOfMeans
-        statementOfMeans.dependants = form.model
-
-        if (statementOfMeans.dependants.hasAnyChildren === false) {
-          statementOfMeans.education = undefined
-        }
 
         draft.document.statementOfMeans.dependants = form.model
+        if (!form.model.numberOfChildren || !form.model.numberOfChildren.between16and19) {
+          draft.document.statementOfMeans.education = undefined
+        }
         await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params

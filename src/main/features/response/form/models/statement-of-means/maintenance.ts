@@ -25,16 +25,12 @@ export class Maintenance {
       return value
     }
 
-    const maintenance = new Maintenance(
-      value.option !== undefined ? toBoolean(value.option) === true : undefined,
-      toNumberOrUndefined(value.value)
+    const option: boolean = value.option !== undefined ? toBoolean(value.option) : undefined
+
+    return new Maintenance(
+      option,
+      option ? toNumberOrUndefined(value.value) : undefined
     )
-
-    if (!maintenance.option) {
-      maintenance.value = undefined
-    }
-
-    return maintenance
   }
 
   deserialize (input?: any): Maintenance {

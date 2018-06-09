@@ -37,7 +37,7 @@ export default express.Router()
   .get(
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
-    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.statementOfMeans.employers), res)
     })
@@ -46,7 +46,7 @@ export default express.Router()
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     FormValidator.requestHandler(Employers, Employers.fromObject, undefined, ['addRow']),
     actionHandler,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<Employers> = req.body
 
       if (form.hasErrors()) {
@@ -63,7 +63,7 @@ export default express.Router()
         if (draft.document.statementOfMeans.employment.selfEmployed) {
           res.redirect(StatementOfMeansPaths.selfEmployedPage.evaluateUri({ externalId: externalId }))
         } else {
-          res.redirect(StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: externalId }))
+          res.redirect(StatementOfMeansPaths.debtsPage.evaluateUri({ externalId: externalId }))
         }
       }
     })

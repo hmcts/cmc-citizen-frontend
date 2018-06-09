@@ -27,7 +27,7 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     FormValidator.requestHandler(Maintenance, Maintenance.fromObject),
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<Maintenance> = req.body
 
       if (form.hasErrors()) {

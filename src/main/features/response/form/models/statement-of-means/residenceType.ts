@@ -1,6 +1,6 @@
 export class ResidenceType {
-  static readonly OWN_HOME = new ResidenceType('OWN_HOME', 'Home you own yourself (including if you have a mortgage)')
-  static readonly JOINT_OWN_HOME = new ResidenceType('JOINT_OWN_HOME', 'Jointly-owned home (including if you have a mortgage)')
+  static readonly OWN_HOME = new ResidenceType('OWN_HOME', 'Home you own yourself (or pay a mortgage on)')
+  static readonly JOINT_OWN_HOME = new ResidenceType('JOINT_OWN_HOME', 'Jointly-owned home (or jointly mortgaged home)')
   static readonly PRIVATE_RENTAL = new ResidenceType('PRIVATE_RENTAL', 'Private rental')
   static readonly COUNCIL_OR_HOUSING_ASSN_HOME = new ResidenceType('COUNCIL_OR_HOUSING_ASSN_HOME', 'Council or housing association home')
   static readonly OTHER = new ResidenceType('OTHER', 'Other')

@@ -18,11 +18,9 @@ const page: RoutablePath = Paths.educationPage
 function renderView (form: Form<Education>, res: express.Response): void {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const numberOfChildren: NumberOfChildren = draft.document.statementOfMeans.dependants.numberOfChildren
-  const between16and19: number = (numberOfChildren && numberOfChildren.between16and19) || 0
-
   res.render(page.associatedView, {
     form: form,
-    between16and19: between16and19
+    numberOfChildrenBetween16and19: (numberOfChildren && numberOfChildren.between16and19) || 0
   })
 }
 

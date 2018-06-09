@@ -20,7 +20,7 @@ export class BankAccountRow extends MultiRowFormItem {
 
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: GlobalValidationErrors.SELECT_AN_OPTION })
-  joint?: boolean = undefined
+  joint?: boolean
 
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: GlobalValidationErrors.NUMBER_REQUIRED })

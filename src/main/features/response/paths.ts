@@ -46,6 +46,7 @@ export class StatementOfMeansPaths {
   static readonly employmentPage = new RoutablePath(`${statementOfMeansPath}/employment`)
   static readonly employersPage = new RoutablePath(`${statementOfMeansPath}/employers`)
   static readonly selfEmployedPage = new RoutablePath(`${statementOfMeansPath}/self-employed`)
+  static readonly onTaxPaymentsPage = new RoutablePath(`${statementOfMeansPath}/on-tax-payments`)
   static readonly unemployedPage = new RoutablePath(`${statementOfMeansPath}/unemployed`)
   static readonly bankAccountsPage = new RoutablePath(`${statementOfMeansPath}/bank-accounts`)
   static readonly debtsPage = new RoutablePath(`${statementOfMeansPath}/debts`)

@@ -1,3 +1,4 @@
+import { OnTaxPayments } from 'response/form/models/statement-of-means/onTaxPayments'
 import { Residence } from 'response/form/models/statement-of-means/residence'
 import { Employment } from 'response/form/models/statement-of-means/employment'
 import { Employers } from 'response/form/models/statement-of-means/employers'
@@ -27,6 +28,7 @@ export class StatementOfMeans {
   employment?: Employment
   employers?: Employers
   selfEmployed?: SelfEmployed
+  onTaxPayments?: OnTaxPayments
   unemployed?: Unemployed
   bankAccounts?: BankAccounts
   debts?: Debts
@@ -61,6 +63,7 @@ export class StatementOfMeans {
       this.employment = new Employment().deserialize(input.employment)
       this.employers = new Employers().deserialize(input.employers)
       this.selfEmployed = new SelfEmployed().deserialize(input.selfEmployed)
+      this.onTaxPayments = new OnTaxPayments().deserialize(input.onTaxPayments)
       this.unemployed = new Unemployed().deserialize(input.unemployed)
       this.bankAccounts = new BankAccounts().deserialize(input.bankAccounts)
       this.debts = new Debts().deserialize(input.debts)

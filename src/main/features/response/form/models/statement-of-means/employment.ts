@@ -10,17 +10,17 @@ export class ValidationErrors {
 
 export class Employment {
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
-  isCurrentlyEmployed: boolean
+  currentlyEmployed: boolean
 
-  @ValidateIf(o => o.isCurrentlyEmployed === true && !o.selfEmployed && !o.employed)
+  @ValidateIf(o => o.currentlyEmployed === true && !o.selfEmployed && !o.employed)
   @IsBooleanTrue({ message: ValidationErrors.SELECT_AT_LEAST_ONE_OPTION })
   employed: boolean
 
   selfEmployed: boolean
 
-  constructor (isCurrentlyEmployed?: boolean, employed?: boolean, selfEmployed?: boolean) {
-    this.isCurrentlyEmployed = isCurrentlyEmployed
-    if (this.isCurrentlyEmployed) {
+  constructor (currentlyEmployed?: boolean, employed?: boolean, selfEmployed?: boolean) {
+    this.currentlyEmployed = currentlyEmployed
+    if (this.currentlyEmployed) {
       this.employed = employed
       this.selfEmployed = selfEmployed
     }
@@ -31,23 +31,19 @@ export class Employment {
       return value
     }
 
-    const employment = new Employment(
-      value.isCurrentlyEmployed !== undefined ? toBoolean(value.isCurrentlyEmployed) === true : undefined,
-      value.employed !== undefined ? toBoolean(value.employed) === true : undefined,
-      value.selfEmployed !== undefined ? toBoolean(value.selfEmployed) === true : undefined
+    const currentlyEmployed: boolean = value.currentlyEmployed !== undefined ? toBoolean(value.currentlyEmployed) : undefined
+
+    return new Employment(
+      currentlyEmployed,
+      currentlyEmployed ? value.employed !== undefined ? toBoolean(value.employed) : undefined : undefined,
+      currentlyEmployed ? value.selfEmployed !== undefined ? toBoolean(value.selfEmployed) : undefined : undefined
     )
-
-    if (!employment.isCurrentlyEmployed) {
-      employment.employed = employment.selfEmployed = undefined
-    }
-
-    return employment
   }
 
   deserialize (input?: any): Employment {
     if (input) {
-      this.isCurrentlyEmployed = input.isCurrentlyEmployed
-      if (this.isCurrentlyEmployed) {
+      this.currentlyEmployed = input.currentlyEmployed
+      if (this.currentlyEmployed) {
         this.employed = input.employed
         this.selfEmployed = input.selfEmployed
       }

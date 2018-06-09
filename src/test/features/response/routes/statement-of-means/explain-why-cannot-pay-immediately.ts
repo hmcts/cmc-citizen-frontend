@@ -83,7 +83,7 @@ describe('Statement of means', () => {
         checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
         it('should return 500 and render error page when cannot save draft', async () => {
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response', { statementOfMeans: undefined })
           draftStoreServiceMock.rejectSave()
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
@@ -94,7 +94,7 @@ describe('Statement of means', () => {
         })
 
         it('should redirect to task list when everything is fine', async () => {
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response', { statementOfMeans: undefined })
           draftStoreServiceMock.resolveSave()
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 

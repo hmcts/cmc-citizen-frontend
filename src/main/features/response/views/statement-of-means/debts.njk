@@ -38,7 +38,7 @@
 <div class="grid-row">
   <div class="column-two-thirds">
 
-    <p>{{ t('For example credit cards, loans and any rent or other bills you owe.') }}</p>
+    <p>{{ t('For example due to credit cards, loans, rent or any other bills.') }}</p>
 
     <form method="post" novalidate
           class="analytics-submit-event-trigger"
@@ -51,6 +51,7 @@
       <div class="statement-of-means-container">
         <fieldset id="hasAnyDebts[label]" class="form-group {% if errorHasAnyDebts %} form-group-error {% endif %}">
           <legend class="visually-hidden">{{ t('Do you have any debts?') }}</legend>
+          {% if errorHasAnyDebts %}<span class="error-message">{{ t(errorHasAnyDebts) }}</span>{% endif %}
 
           {{
             radioOption(form = form, label = 'Yes', name = 'hasAnyDebts', value = 'true', checked = form.valueFor('hasAnyDebts') === true)

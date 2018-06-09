@@ -35,7 +35,7 @@ export default express.Router()
   .get(
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
-    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.statementOfMeans.bankAccounts), res)
     })
@@ -44,7 +44,7 @@ export default express.Router()
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     FormValidator.requestHandler(BankAccounts, BankAccounts.fromObject, undefined, ['addRow']),
     actionHandler,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<BankAccounts> = req.body
 
       if (form.hasErrors()) {

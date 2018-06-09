@@ -9,7 +9,6 @@ import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { RoutablePath } from 'shared/router/routablePath'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
-import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 
@@ -30,7 +29,7 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     FormValidator.requestHandler(Employment, Employment.fromObject),
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<Employment> = req.body
 
       if (form.hasErrors()) {
@@ -38,20 +37,17 @@ export default express.Router()
       } else {
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
-        const statementOfMeans: StatementOfMeans = draft.document.statementOfMeans
-        statementOfMeans.employment = form.model
-
-        if (statementOfMeans.employment.isCurrentlyEmployed === true) {
-          statementOfMeans.unemployed = undefined
-        } else if (statementOfMeans.employment.isCurrentlyEmployed === false) {
-          statementOfMeans.selfEmployed = statementOfMeans.employers = undefined
-        }
 
         draft.document.statementOfMeans.employment = form.model
+        if (form.model.currentlyEmployed) {
+          draft.document.statementOfMeans.unemployed = undefined
+        } else {
+          draft.document.statementOfMeans.employers = draft.document.statementOfMeans.selfEmployed = undefined
+        }
         await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params
-        if (form.model.isCurrentlyEmployed === false) {
+        if (form.model.currentlyEmployed === false) {
           res.redirect(StatementOfMeansPaths.unemployedPage.evaluateUri({ externalId: externalId }))
         } else {
           if (form.model.employed) {

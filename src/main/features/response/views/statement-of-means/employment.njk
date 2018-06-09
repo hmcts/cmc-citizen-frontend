@@ -10,25 +10,25 @@
       <form method="post" novalidate
         class="analytics-submit-event-trigger"
         data-event-action="SoM: Are you currently working"
-        data-event-label-from="isCurrentlyEmployed">
+        data-event-label-from="currentlyEmployed">
 
         {{ csrfProtection(csrf) }}
 
-        {% set error = form.errorFor('isCurrentlyEmployed') %}
-        <fieldset id="isCurrentlyEmployed[label]" class="form-group {% if error %} form-group-error {% endif %}">
+        {% set error = form.errorFor('currentlyEmployed') %}
+        <fieldset id="currentlyEmployed[label]" class="form-group {% if error %} form-group-error {% endif %}">
           <legend class="visually-hidden">{{ t('Are you currently working?') }}</legend>
 
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
 
           {{
-            radioOption(form = form, label = 'Yes', name = 'isCurrentlyEmployed', value = 'true', checked = form.valueFor('isCurrentlyEmployed') === true)
+            radioOption(form = form, label = 'Yes', name = 'currentlyEmployed', value = 'true', checked = form.valueFor('currentlyEmployed') === true)
           }}
 
           {% set errorCheckbox = form.errorFor('employed') %}
 
-          <div class="form-group panel panel-border-narrow js-hidden {% if errorCheckbox %} form-group-error {% endif %}" id="isCurrentlyEmployed-true" aria-hidden="false">
+          <div class="form-group panel panel-border-narrow js-hidden {% if errorCheckbox %} form-group-error {% endif %}" id="currentlyEmployed-true" aria-hidden="false">
             <p>{{ t('What’s your employment status?') }}</p>
-            <p class="form-hint">{{ t('You can select more than one option.') }}</p>
+            <p class="form-hint">{{ t('You can select both') }}</p>
 
             {% if errorCheckbox %}<span class="error-message" id="employed[label]">{{ t(errorCheckbox) }}</span>{% endif %}
             {{
@@ -42,7 +42,7 @@
           </div>
 
           {{
-            radioOption(form = form, label = 'No', name = 'isCurrentlyEmployed', value = 'false', checked = form.valueFor('isCurrentlyEmployed') === false)
+            radioOption(form = form, label = 'No', name = 'currentlyEmployed', value = 'false', checked = form.valueFor('currentlyEmployed') === false)
           }}
 
         </fieldset>

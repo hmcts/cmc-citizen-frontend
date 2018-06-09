@@ -18,7 +18,7 @@
         <fieldset id="option[label]" class="form-group {% if errorOption %} form-group-error {% endif %}">
           <legend class="visually-hidden">{{ t('Do you or your partner pay maintenance for any children?') }}</legend>
 
-          {% if error %}<span class="error-message">{{ t(errorOption) }}</span>{% endif %}
+          {% if errorOption %}<span class="error-message">{{ t(errorOption) }}</span>{% endif %}
 
           {{
             radioOption(form = form, label = 'Yes', name = 'option', value = 'true', checked = form.valueFor('option') === true)
@@ -28,7 +28,7 @@
             id="option-true"
             aria-hidden="false">
 
-            {{ numericInput('Number of children', 'value', form) }}
+            {{ numericInput('How many?', 'value', form) }}
 
           </div>
 
