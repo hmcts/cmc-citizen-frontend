@@ -108,16 +108,6 @@ export class TaskListBuilder {
       )
     }
 
-    if (draft.isResponseFullyAdmittedWithInstalments()) {
-      tasks.push(
-        new TaskListItem(
-          'Your repayment plan',
-          FullAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId }),
-          YourRepaymentPlanTask.isCompleted(draft)
-        )
-      )
-    }
-
     return new TaskList(2, 'Respond to claim', tasks)
   }
 
