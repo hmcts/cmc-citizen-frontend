@@ -15,13 +15,15 @@ export class StatementOfMeansTask {
       const statementOfMeans: StatementOfMeans = responseDraft.statementOfMeans
 
       return statementOfMeans !== undefined
+        && isValid(statementOfMeans.bankAccounts)
         && isValid(statementOfMeans.residence)
         && StatementOfMeansTask.isDependantsCompleted(statementOfMeans)
+        && isValid(statementOfMeans.maintenance)
+        && isValid(statementOfMeans.otherDependants)
         && StatementOfMeansTask.isEmploymentCompleted(statementOfMeans)
-        && isValid(statementOfMeans.bankAccounts)
-        && isValid(statementOfMeans.debts)
         && isValid(statementOfMeans.monthlyIncome)
         && isValid(statementOfMeans.monthlyExpenses)
+        && isValid(statementOfMeans.debts)
         && isValid(statementOfMeans.courtOrders)
         && isValid(statementOfMeans.explanation)
     }
@@ -30,42 +32,34 @@ export class StatementOfMeansTask {
   }
 
   private static isDependantsCompleted (statementOfMeans: StatementOfMeans): boolean {
-    const dependantValid = isValid(statementOfMeans.dependants)
+    const valid = isValid(statementOfMeans.dependants)
 
-    if (!dependantValid) {
-      return false
-    }
-
-    if (statementOfMeans.dependants.declared && statementOfMeans.dependants.numberOfChildren.between16and19 > 0) {
+    if (valid && statementOfMeans.dependants.declared && statementOfMeans.dependants.numberOfChildren.between16and19 > 0) {
       return isValid(statementOfMeans.education)
-        && isValid(statementOfMeans.maintenance)
-        && isValid(statementOfMeans.otherDependants)
     }
 
-    return isValid(statementOfMeans.maintenance) && isValid(statementOfMeans.otherDependants)
+    return valid
   }
 
-  private static isEmploymentCompleted (som: StatementOfMeans): boolean {
-    const employmentValid = isValid(som.employment)
-
-    if (!employmentValid) {
+  private static isEmploymentCompleted (statementOfMeans: StatementOfMeans): boolean {
+    if (!isValid(statementOfMeans.employment)) {
       return false
     }
 
-    if (!som.employment.declared) {
-      return isValid(som.unemployment)
+    if (!statementOfMeans.employment.declared) {
+      return isValid(statementOfMeans.unemployment)
     }
 
-    let result: boolean = true
+    let valid: boolean = true
 
-    if (som.employment.selfEmployed) {
-      result = result && isValid(som.selfEmployment)
+    if (statementOfMeans.employment.employed) {
+      valid = valid && isValid(statementOfMeans.employers)
     }
 
-    if (som.employment.employed) {
-      result = result && isValid(som.employers)
+    if (statementOfMeans.employment.selfEmployed) {
+      valid = valid && isValid(statementOfMeans.selfEmployment) && isValid(statementOfMeans.onTaxPayments)
     }
 
-    return result
+    return valid
   }
 }

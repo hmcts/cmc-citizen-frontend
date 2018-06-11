@@ -2,6 +2,7 @@
 import { expect } from 'chai'
 import { BankAccountRow } from 'response/form/models/statement-of-means/bankAccountRow'
 import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
+import { OnTaxPayments } from 'response/form/models/statement-of-means/onTaxPayments'
 
 import { StatementOfMeansTask } from 'response/tasks/statementOfMeansTask'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
@@ -227,6 +228,7 @@ describe('StatementOfMeansTask', () => {
           responseDraft.statementOfMeans.employment = new Employment(true, false, true)
           responseDraft.statementOfMeans.employers = undefined
           responseDraft.statementOfMeans.selfEmployment = new SelfEmployment('job', 1000)
+          responseDraft.statementOfMeans.onTaxPayments = new OnTaxPayments(false)
 
           expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
         })
@@ -236,9 +238,20 @@ describe('StatementOfMeansTask', () => {
           responseDraft.statementOfMeans.employment = new Employment(true, true, true)
           responseDraft.statementOfMeans.employers = new Employers([new EmployerRow('Company', 'job')])
           responseDraft.statementOfMeans.selfEmployment = new SelfEmployment('job', 1000)
+          responseDraft.statementOfMeans.onTaxPayments = new OnTaxPayments(false)
 
           expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
         })
+
+        it('self-employed with on tax payments', () => {
+          responseDraft.statementOfMeans.unemployment = undefined
+          responseDraft.statementOfMeans.employment = new Employment(true, false, true)
+          responseDraft.statementOfMeans.selfEmployment = new SelfEmployment('job', 1000)
+          responseDraft.statementOfMeans.onTaxPayments = new OnTaxPayments(true, 100, 'Taxes')
+
+          expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
+        })
+
       })
 
       context('is not completed when', () => {
