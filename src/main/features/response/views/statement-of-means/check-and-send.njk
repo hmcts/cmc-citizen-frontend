@@ -93,8 +93,10 @@
   {{ row('Annual turnover', draft.statementOfMeans.selfEmployment.annualTurnover | numeral, '', not draft.statementOfMeans.onTaxPayments ) }}
   {% if draft.statementOfMeans.onTaxPayments %}
     {{ row('Are you behind on tax', 'Yes' if draft.statementOfMeans.onTaxPayments.declared else 'No', '', false ) }}
-    {{ row('Amount you owe?', draft.statementOfMeans.onTaxPayments.amountYouOwe | numeral, '', false ) }}
-    {{ row('Reason', draft.statementOfMeans.onTaxPayments.reason) }}
+    {% if draft.statementOfMeans.onTaxPayments.declared %}
+      {{ row('Amount you owe?', draft.statementOfMeans.onTaxPayments.amountYouOwe | numeral, '', false ) }}
+      {{ row('Reason', draft.statementOfMeans.onTaxPayments.reason) }}
+    {% endif %}
   {% endif %}
 {% endif %}
 
