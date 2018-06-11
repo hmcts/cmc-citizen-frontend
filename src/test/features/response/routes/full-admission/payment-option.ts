@@ -147,7 +147,7 @@ describe('Defendant - when will you pay options', () => {
             it('should redirect to repayment plan page for "INSTALMENTS" option selected', async () => {
               await checkThatSelectedPaymentOptionRedirectsToPage(
                 { option: DefendantPaymentType.INSTALMENTS.value },
-                FullAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId }))
+                Paths.taskListPage.evaluateUri({ externalId: externalId }))
             })
 
             it('should redirect to payment date page for "BY_SET_DATE" option selected', async () => {

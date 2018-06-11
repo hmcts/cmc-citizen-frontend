@@ -12,7 +12,7 @@ import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
 import { HowMuchPaid } from 'response/form/models/howMuchPaid'
 import { HowMuchOwed } from 'response/form/models/howMuchOwed'
-import { DefendantPaymentOption as PaymentOption } from 'response/form/models/defendantPaymentOption'
+import { DefendantPaymentOption as PaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { DefendantPaymentPlan as PaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
@@ -103,6 +103,15 @@ export class ResponseDraft extends DraftDocument {
     }
 
     return this.isResponsePopulated() && this.response.type === ResponseType.FULL_ADMISSION
+  }
+
+  // TODO: Because of an overlap between two stories (ROC-3657, ROC-3658), the logic of this function
+  // is incomplete. ROC-3658 should revisit once 'statement of means' flow is complete.
+  public isResponseFullyAdmittedWithInstalments (): boolean {
+    return this.isResponseFullyAdmitted()
+        && this.fullAdmission
+        && this.fullAdmission.paymentOption
+        && (this.fullAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS)
   }
 
   public isResponsePartiallyRejectedDueTo (option: String): boolean {
