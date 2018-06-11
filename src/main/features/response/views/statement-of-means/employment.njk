@@ -10,23 +10,23 @@
       <form method="post" novalidate
         class="analytics-submit-event-trigger"
         data-event-action="SoM: Are you currently working"
-        data-event-label-from="currentlyEmployed">
+        data-event-label-from="declared">
 
         {{ csrfProtection(csrf) }}
 
-        {% set error = form.errorFor('currentlyEmployed') %}
-        <fieldset id="currentlyEmployed[label]" class="form-group {% if error %} form-group-error {% endif %}">
+        {% set error = form.errorFor('declared') %}
+        <fieldset id="declared[label]" class="form-group {% if error %} form-group-error {% endif %}">
           <legend class="visually-hidden">{{ t('Are you currently working?') }}</legend>
 
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
 
           {{
-            radioOption(form = form, label = 'Yes', name = 'currentlyEmployed', value = 'true', checked = form.valueFor('currentlyEmployed') === true)
+            radioOption(form = form, label = 'Yes', name = 'declared', value = 'true', checked = form.valueFor('declared') === true)
           }}
 
           {% set errorCheckbox = form.errorFor('employed') %}
 
-          <div class="form-group panel panel-border-narrow js-hidden {% if errorCheckbox %} form-group-error {% endif %}" id="currentlyEmployed-true" aria-hidden="false">
+          <div class="form-group panel panel-border-narrow js-hidden {% if errorCheckbox %} form-group-error {% endif %}" id="declared-true" aria-hidden="false">
             <p>{{ t('What’s your employment status?') }}</p>
             <p class="form-hint">{{ t('You can select both') }}</p>
 
@@ -42,7 +42,7 @@
           </div>
 
           {{
-            radioOption(form = form, label = 'No', name = 'currentlyEmployed', value = 'false', checked = form.valueFor('currentlyEmployed') === false)
+            radioOption(form = form, label = 'No', name = 'declared', value = 'false', checked = form.valueFor('declared') === false)
           }}
 
         </fieldset>

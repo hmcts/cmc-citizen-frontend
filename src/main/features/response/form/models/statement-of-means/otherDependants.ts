@@ -7,14 +7,14 @@ import { NumberOfPeople } from 'response/form/models/statement-of-means/numberOf
 export class OtherDependants {
 
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
-  doYouSupportAnyone: boolean
+  declared: boolean
 
-  @ValidateIf(o => o.doYouSupportAnyone === true)
+  @ValidateIf(o => o.declared === true)
   @ValidateNested()
   numberOfPeople: NumberOfPeople
 
-  constructor (doYouSupportAnyone?: boolean, numberOfPeople?: NumberOfPeople) {
-    this.doYouSupportAnyone = doYouSupportAnyone
+  constructor (declared?: boolean, numberOfPeople?: NumberOfPeople) {
+    this.declared = declared
     this.numberOfPeople = numberOfPeople
   }
 
@@ -23,19 +23,19 @@ export class OtherDependants {
       return value
     }
 
-    const doYouSupportAnyone: boolean = value.doYouSupportAnyone !== undefined ?
-      toBoolean(value.doYouSupportAnyone) : undefined
+    const declared: boolean = value.declared !== undefined ?
+      toBoolean(value.declared) : undefined
 
     return new OtherDependants(
-      doYouSupportAnyone,
-      doYouSupportAnyone ? NumberOfPeople.fromObject(value.numberOfPeople) : undefined
+      declared,
+      declared ? NumberOfPeople.fromObject(value.numberOfPeople) : undefined
     )
   }
 
   deserialize (input?: any): OtherDependants {
     if (input) {
-      this.doYouSupportAnyone = input.doYouSupportAnyone
-      if (this.doYouSupportAnyone) {
+      this.declared = input.declared
+      if (this.declared) {
         this.numberOfPeople = new NumberOfPeople().deserialize(input.numberOfPeople)
       }
     }

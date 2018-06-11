@@ -12,32 +12,32 @@ describe('Maintenance', () => {
       const actual = new Maintenance().deserialize(undefined)
 
       expect(actual).to.be.instanceof(Maintenance)
-      expect(actual.option).to.be.eq(undefined)
+      expect(actual.declared).to.be.eq(undefined)
       expect(actual.value).to.be.eq(undefined)
     })
 
-    it('should return Maintenance with populated only hasAnyChildren', () => {
-      const actual = new Maintenance().deserialize({ option: false })
+    it('should return Maintenance with populated only declared', () => {
+      const actual = new Maintenance().deserialize({ declared: false })
 
-      expect(actual.option).to.be.eq(false)
+      expect(actual.declared).to.be.eq(false)
       expect(actual.value).to.be.eq(undefined)
     })
 
     it('should return fully populated Maintenance', () => {
       const actual = new Maintenance().deserialize(
-        { option: true, value: 3 }
+        { declared: true, value: 3 }
       )
 
-      expect(actual.option).to.be.eq(true)
+      expect(actual.declared).to.be.eq(true)
       expect(actual.value).to.be.eq(3)
     })
 
-    it('should NOT populate other fields when option = false', () => {
+    it('should NOT populate other fields when declared = false', () => {
       const actual = new Maintenance().deserialize(
-        { option: false, value: 3 }
+        { declared: false, value: 3 }
       )
 
-      expect(actual.option).to.be.eq(false)
+      expect(actual.declared).to.be.eq(false)
       expect(actual.value).to.be.eq(undefined)
     })
   })
@@ -50,28 +50,28 @@ describe('Maintenance', () => {
       expect(actual).to.be.eq(undefined)
     })
 
-    it('should return Maintenance with populated only hasAnyChildren', () => {
-      const actual = Maintenance.fromObject({ option: false })
+    it('should return Maintenance with populated only declared', () => {
+      const actual = Maintenance.fromObject({ declared: false })
 
-      expect(actual.option).to.be.eq(false)
+      expect(actual.declared).to.be.eq(false)
       expect(actual.value).to.be.eq(undefined)
     })
 
     it('should return fully populated Maintenance', () => {
       const actual = Maintenance.fromObject(
-        { option: true, value: 2 }
+        { declared: true, value: 2 }
       )
 
-      expect(actual.option).to.be.eq(true)
+      expect(actual.declared).to.be.eq(true)
       expect(actual.value).to.be.eq(2)
     })
 
-    it('should NOT populate other fields when option = false', () => {
+    it('should NOT populate other fields when declared = false', () => {
       const actual = Maintenance.fromObject(
-        { option: false, value: 3 }
+        { declared: false, value: 3 }
       )
 
-      expect(actual.option).to.be.eq(false)
+      expect(actual.declared).to.be.eq(false)
       expect(actual.value).to.be.eq(undefined)
     })
   })
@@ -79,7 +79,7 @@ describe('Maintenance', () => {
   describe('validation', () => {
     const validator: Validator = new Validator()
 
-    describe('when option is', () => {
+    describe('when declared is', () => {
 
       context('undefined', () => {
 
@@ -134,7 +134,7 @@ describe('Maintenance', () => {
         })
       })
 
-      context('option = false', () => {
+      context('declared = false', () => {
 
         it('should not validate other fields', () => {
           const errors = validator.validateSync(new Maintenance(false, -10.1))

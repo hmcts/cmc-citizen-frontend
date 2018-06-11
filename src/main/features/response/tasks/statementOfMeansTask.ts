@@ -36,7 +36,7 @@ export class StatementOfMeansTask {
       return false
     }
 
-    if (statementOfMeans.dependants.hasAnyChildren && statementOfMeans.dependants.numberOfChildren.between16and19 > 0) {
+    if (statementOfMeans.dependants.declared && statementOfMeans.dependants.numberOfChildren.between16and19 > 0) {
       return isValid(statementOfMeans.education)
         && isValid(statementOfMeans.maintenance)
         && isValid(statementOfMeans.otherDependants)
@@ -52,7 +52,7 @@ export class StatementOfMeansTask {
       return false
     }
 
-    if (!som.employment.currentlyEmployed) {
+    if (!som.employment.declared) {
       return isValid(som.unemployment)
     }
 

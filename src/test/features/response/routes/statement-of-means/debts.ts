@@ -119,7 +119,7 @@ describe('Defendant response: Statement of means: debts', () => {
 
             await request(app)
               .post(pagePath)
-              .send({ hasAnyDebts: 'true', rows: [{ debt: 'my debt', totalOwed: '100', monthlyPayments: '10' }] })
+              .send({ declared: 'true', rows: [{ debt: 'my debt', totalOwed: '100', monthlyPayments: '10' }] })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
                 .toLocation(StatementOfMeansPaths.monthlyIncomePage.evaluateUri(
@@ -135,7 +135,7 @@ describe('Defendant response: Statement of means: debts', () => {
 
             await request(app)
               .post(pagePath)
-              .send({ hasAnyDebts: 'false' })
+              .send({ declared: 'false' })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
                 .toLocation(StatementOfMeansPaths.monthlyIncomePage.evaluateUri(

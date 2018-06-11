@@ -13,7 +13,7 @@
 
 {% macro employmentStatus(statementOfMeans) %}
 
-  {% if statementOfMeans.employment.currentlyEmployed %}
+  {% if statementOfMeans.employment.declared %}
     {% set employmentStatus = 'Employed' if statementOfMeans.employment.employed %}
     {% if statementOfMeans.employment.selfEmployed %}
       {% if employmentStatus %}
@@ -53,9 +53,9 @@
 {{ row('Where are you living?	', draft.statementOfMeans.residence.residenceType, StatementOfMeansPaths.residencePage.evaluateUri({ externalId: claim.externalId })) }}
 
 {{ row('Children', '', StatementOfMeansPaths.dependantsPage.evaluateUri({ externalId: claim.externalId }), false) }}
-{{ row('Do any children live with you?', 'Yes' if draft.statementOfMeans.dependants.hasAnyChildren else 'No', '', not draft.statementOfMeans.dependants.hasAnyChildren) }}
+{{ row('Do any children live with you?', 'Yes' if draft.statementOfMeans.dependants.declared else 'No', '', not draft.statementOfMeans.dependants.declared) }}
 
-{% if draft.statementOfMeans.dependants.hasAnyChildren %}
+{% if draft.statementOfMeans.dependants.declared %}
   {% set noOfKids = draft.statementOfMeans.dependants.numberOfChildren %}
   {{ row('Under 11', noOfKids.under11 | default('0'), '', not (noOfKids.between11and15 or noOfKids.between16and19)) }}
   {{ row('11 to 15', noOfKids.between11and15 | default('0'), '', not noOfKids.between16and19) }}
@@ -67,9 +67,9 @@
 {% endif %}
 
 {{ row('Maintenance', '', StatementOfMeansPaths.maintenancePage.evaluateUri({ externalId: claim.externalId }), false) }}
-{{ row('Do you or your partner pay maintenance for any children?', 'Yes' if draft.statementOfMeans.maintenance.option else 'No', '', not draft.statementOfMeans.maintenance.option) }}
+{{ row('Do you or your partner pay maintenance for any children?', 'Yes' if draft.statementOfMeans.maintenance.declared else 'No', '', not draft.statementOfMeans.maintenance.declared) }}
 
-{% if draft.statementOfMeans.maintenance.option %}
+{% if draft.statementOfMeans.maintenance.declared %}
   {{ row('Number of children', draft.statementOfMeans.maintenance.value, '') }}
 {% endif %}
 
@@ -92,7 +92,7 @@
   {{ row('Job title', draft.statementOfMeans.selfEmployment.jobTitle, '', false ) }}
   {{ row('Annual turnover', draft.statementOfMeans.selfEmployment.annualTurnover | numeral, '', not draft.statementOfMeans.onTaxPayments ) }}
   {% if draft.statementOfMeans.onTaxPayments %}
-    {{ row('Are you behind on tax', 'Yes' if draft.statementOfMeans.onTaxPayments.behindOnTaxPayments else 'No', '', false ) }}
+    {{ row('Are you behind on tax', 'Yes' if draft.statementOfMeans.onTaxPayments.declared else 'No', '', false ) }}
     {{ row('Amount you owe?', draft.statementOfMeans.onTaxPayments.amountYouOwe | numeral, '', false ) }}
     {{ row('Reason', draft.statementOfMeans.onTaxPayments.reason) }}
   {% endif %}
@@ -150,7 +150,7 @@
 {% endfor %}
 
 {{ row('Debts', '', StatementOfMeansPaths.debtsPage.evaluateUri({ externalId: claim.externalId }), false) }}
-{{ row('Do you have any debts?', 'Yes' if draft.statementOfMeans.debts.hasAnyDebts else 'No', '', not draft.statementOfMeans.debts.hasAnyDebts) }}
+{{ row('Do you have any debts?', 'Yes' if draft.statementOfMeans.debts.declared else 'No', '', not draft.statementOfMeans.debts.declared) }}
 {% set debtRows = draft.statementOfMeans.debts.getPopulatedRowsOnly() %}
 {% set indexOfLastRow = debtRows.length - 1 %}
 
@@ -161,7 +161,7 @@
 {% endfor %}
 
 {{ row('Court orders', '', StatementOfMeansPaths.courtOrdersPage.evaluateUri({ externalId: claim.externalId }), false) }}
-{{ row('Are you paying any other court orders?', 'Yes' if draft.statementOfMeans.courtOrders.hasAnyCourtOrders else 'No', '', not draft.statementOfMeans.courtOrders.hasAnyCourtOrders) }}
+{{ row('Are you paying any other court orders?', 'Yes' if draft.statementOfMeans.courtOrders.declared else 'No', '', not draft.statementOfMeans.courtOrders.declared) }}
 {% set courtOrdersRows = draft.statementOfMeans.courtOrders.getPopulatedRowsOnly() %}
 {% set indexOfLastRow = courtOrdersRows.length - 1 %}
 

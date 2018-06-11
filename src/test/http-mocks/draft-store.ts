@@ -178,15 +178,15 @@ export const sampleResponseDraftObj = {
     residence: {
       type: ResidenceType.OWN_HOME
     },
-    employment: { currentlyEmployed: false },
+    employment: { declared: false },
     employers: undefined,
     selfEmployment: undefined,
     unemployment: { option: { value: UnemploymentType.RETIRED.value } },
-    dependants: { hasAnyChildren: false },
-    otherDependants: { doYouSupportAnyone: false },
-    maintenance: { option: false },
+    dependants: { declared: false },
+    otherDependants: { declared: false },
+    maintenance: { declared: false },
     bankAccounts: { rows: [] },
-    debts: { hasAnyDebts: false },
+    debts: { declared: false },
     monthlyIncome: {
       salary: 1,
       universalCredit: 1,
@@ -216,7 +216,7 @@ export const sampleResponseDraftObj = {
       maintenance: 1,
       rows: [{ amount: 10, description: 'bla bla bla' }]
     },
-    courtOrders: { hasAnyCourtOrders: false }
+    courtOrders: { declared: false }
   },
   fullAdmission: {
     paymentOption: {

@@ -39,7 +39,7 @@ export default express.Router()
         const user: User = res.locals.user
 
         draft.document.statementOfMeans.employment = form.model
-        if (form.model.currentlyEmployed) {
+        if (form.model.declared) {
           draft.document.statementOfMeans.unemployment = undefined
         } else {
           draft.document.statementOfMeans.employers = draft.document.statementOfMeans.selfEmployment = undefined
@@ -47,7 +47,7 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params
-        if (form.model.currentlyEmployed === false) {
+        if (form.model.declared === false) {
           res.redirect(StatementOfMeansPaths.unemployedPage.evaluateUri({ externalId: externalId }))
         } else {
           if (form.model.employed) {

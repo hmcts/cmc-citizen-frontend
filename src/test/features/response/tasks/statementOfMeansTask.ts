@@ -130,23 +130,23 @@ describe('StatementOfMeansTask', () => {
         context('is completed when', () => {
 
           it('no children, no maintenance, no one supported', () => {
-            responseDraft.statementOfMeans.dependants.hasAnyChildren = false
-            responseDraft.statementOfMeans.maintenance.option = false
-            responseDraft.statementOfMeans.otherDependants.doYouSupportAnyone = false
+            responseDraft.statementOfMeans.dependants.declared = false
+            responseDraft.statementOfMeans.maintenance.declared = false
+            responseDraft.statementOfMeans.otherDependants.declared = false
 
             expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
           })
 
           it('no children, but maintenance', () => {
-            responseDraft.statementOfMeans.dependants.hasAnyChildren = false
+            responseDraft.statementOfMeans.dependants.declared = false
             responseDraft.statementOfMeans.maintenance = new Maintenance(true, 1)
 
             expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
           })
 
           it('no children and maintenance, but supported', () => {
-            responseDraft.statementOfMeans.dependants.hasAnyChildren = false
-            responseDraft.statementOfMeans.maintenance.option = false
+            responseDraft.statementOfMeans.dependants.declared = false
+            responseDraft.statementOfMeans.maintenance.declared = false
             responseDraft.statementOfMeans.otherDependants = new OtherDependants(true, new NumberOfPeople(3, 'story'))
 
             expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true

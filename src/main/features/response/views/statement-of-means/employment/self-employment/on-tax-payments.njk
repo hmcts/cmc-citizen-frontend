@@ -9,30 +9,30 @@
       <form method="post" novalidate
         class="analytics-submit-event-trigger"
         data-event-action="SoM: What are you self-employed as"
-        data-event-label-from="behindOnTaxPayments">
+        data-event-label-from="declared">
 
         {{ csrfProtection(csrf) }}
 
         <p>{{ t('For example National Insurance contributions, Income Tax or VAT.') }}</p>
 
-        {% set errorBehindOnTaxPayments = form.errorFor('behindOnTaxPayments') %}
-        <fieldset id="behindOnTaxPayments[label]" class="form-group {% if errorBehindOnTaxPayments %} form-group-error {% endif %}">
+        {% set errorBehindOnTaxPayments = form.errorFor('declared') %}
+        <fieldset id="declared[label]" class="form-group {% if errorBehindOnTaxPayments %} form-group-error {% endif %}">
           <legend class="visually-hidden">{{ t('Are you behind on tax payments?') }}</legend>
 
           {% if errorBehindOnTaxPayments %}<span class="error-message">{{ t(errorBehindOnTaxPayments) }}</span>{% endif %}
 
-          {{ radioOption(form = form, label = 'Yes', name = 'behindOnTaxPayments', value = 'true', checked = form.valueFor('behindOnTaxPayments') === true) }}
+          {{ radioOption(form = form, label = 'Yes', name = 'declared', value = 'true', checked = form.valueFor('declared') === true) }}
 
           {% set error = form.errorFor('amountYouOwe') or form.errorFor('amountYouOwe') %}
 
-          <div class="form-group panel panel-border-narrow js-hidden {% if errorCheckbox %} form-group-error {% endif %}" id="behindOnTaxPayments-true" aria-hidden="false">
+          <div class="form-group panel panel-border-narrow js-hidden {% if errorCheckbox %} form-group-error {% endif %}" id="declared-true" aria-hidden="false">
 
             {{ poundInput('Amount you owe', 'amountYouOwe', form) }}
 
             {{ textArea('Reason', 'reason', form) }}
           </div>
 
-          {{ radioOption(form = form, label = 'No', name = 'behindOnTaxPayments', value = 'false', checked = form.valueFor('behindOnTaxPayments') === false) }}
+          {{ radioOption(form = form, label = 'No', name = 'declared', value = 'false', checked = form.valueFor('declared') === false) }}
 
         </fieldset>
 

@@ -117,7 +117,7 @@ describe('Defendant response: Statement of means: employment', () => {
 
           await request(app)
             .post(pagePath)
-            .send({ currentlyEmployed: false })
+            .send({ declared: false })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.unemployedPage.evaluateUri(
@@ -133,7 +133,7 @@ describe('Defendant response: Statement of means: employment', () => {
 
           await request(app)
             .post(pagePath)
-            .send({ currentlyEmployed: true, selfEmployed: true, employed: true })
+            .send({ declared: true, selfEmployed: true, employed: true })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.employersPage.evaluateUri(
@@ -149,7 +149,7 @@ describe('Defendant response: Statement of means: employment', () => {
 
           await request(app)
             .post(pagePath)
-            .send({ currentlyEmployed: true, selfEmployed: true, employed: false })
+            .send({ declared: true, selfEmployed: true, employed: false })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.selfEmploymentPage.evaluateUri(

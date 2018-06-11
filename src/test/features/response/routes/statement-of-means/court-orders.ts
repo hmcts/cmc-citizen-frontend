@@ -18,7 +18,7 @@ const pagePath: string = StatementOfMeansPaths.courtOrdersPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
 
-describe('Defendant response: Statement of means: debts', () => {
+describe('Defendant response: Statement of means: court orders', () => {
 
   attachDefaultHooks(app)
 
@@ -119,7 +119,7 @@ describe('Defendant response: Statement of means: debts', () => {
 
             await request(app)
               .post(pagePath)
-              .send({ hasAnyCourtOrders: 'true', rows: [{ instalmentAmount: '100', amount: '100', claimNumber: '12345' }] })
+              .send({ declared: 'true', rows: [{ instalmentAmount: '100', amount: '100', claimNumber: '12345' }] })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
                 .toLocation(StatementOfMeansPaths.explanationPage.evaluateUri(
@@ -135,7 +135,7 @@ describe('Defendant response: Statement of means: debts', () => {
 
             await request(app)
               .post(pagePath)
-              .send({ hasAnyCourtOrders: 'false' })
+              .send({ declared: 'false' })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
                 .toLocation(StatementOfMeansPaths.explanationPage.evaluateUri(

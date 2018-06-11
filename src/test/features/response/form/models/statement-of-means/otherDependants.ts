@@ -13,33 +13,33 @@ describe('OtherDependants', () => {
       const actual = new OtherDependants().deserialize(undefined)
 
       expect(actual).to.be.instanceof(OtherDependants)
-      expect(actual.doYouSupportAnyone).to.be.eq(undefined)
+      expect(actual.declared).to.be.eq(undefined)
       expect(actual.numberOfPeople).to.be.eq(undefined)
     })
 
-    it('should return OtherDependants with populated only doYouSupportAnyone', () => {
-      const actual = new OtherDependants().deserialize({ doYouSupportAnyone: false })
+    it('should return OtherDependants with populated only declared', () => {
+      const actual = new OtherDependants().deserialize({ declared: false })
 
-      expect(actual.doYouSupportAnyone).to.be.eq(false)
+      expect(actual.declared).to.be.eq(false)
       expect(actual.numberOfPeople).to.be.eq(undefined)
     })
 
     it('should return fully populated OtherDependants', () => {
       const actual = new OtherDependants().deserialize(
-        { doYouSupportAnyone: true, numberOfPeople: { value: 1, details: 'my story' } }
+        { declared: true, numberOfPeople: { value: 1, details: 'my story' } }
       )
 
-      expect(actual.doYouSupportAnyone).to.be.eq(true)
+      expect(actual.declared).to.be.eq(true)
       expect(actual.numberOfPeople.value).to.be.eq(1)
       expect(actual.numberOfPeople.details).to.be.eq('my story')
     })
 
-    it('should NOT populate other fields when doYouSupportAnyone = false', () => {
+    it('should NOT populate other fields when declared = false', () => {
       const actual = new OtherDependants().deserialize(
-        { doYouSupportAnyone: false, numberOfPeople: { value: 1, details: 'my story' } }
+        { declared: false, numberOfPeople: { value: 1, details: 'my story' } }
       )
 
-      expect(actual.doYouSupportAnyone).to.be.eq(false)
+      expect(actual.declared).to.be.eq(false)
       expect(actual.numberOfPeople).to.be.eq(undefined)
     })
   })
@@ -52,29 +52,29 @@ describe('OtherDependants', () => {
       expect(actual).to.be.eq(undefined)
     })
 
-    it('should return OtherDependants with populated only doYouSupportAnyone', () => {
-      const actual = OtherDependants.fromObject({ doYouSupportAnyone: false })
+    it('should return OtherDependants with populated only declared', () => {
+      const actual = OtherDependants.fromObject({ declared: false })
 
-      expect(actual.doYouSupportAnyone).to.be.eq(false)
+      expect(actual.declared).to.be.eq(false)
       expect(actual.numberOfPeople).to.be.eq(undefined)
     })
 
     it('should return fully populated OtherDependants', () => {
       const actual = OtherDependants.fromObject(
-        { doYouSupportAnyone: true, numberOfPeople: { value: '1', details: 'my story' } }
+        { declared: true, numberOfPeople: { value: '1', details: 'my story' } }
       )
 
-      expect(actual.doYouSupportAnyone).to.be.eq(true)
+      expect(actual.declared).to.be.eq(true)
       expect(actual.numberOfPeople.value).to.be.eq(1)
       expect(actual.numberOfPeople.details).to.be.eq('my story')
     })
 
-    it('should NOT populate other fields when doYouSupportAnyone = false', () => {
+    it('should NOT populate other fields when declared = false', () => {
       const actual = OtherDependants.fromObject(
-        { doYouSupportAnyone: false, numberOfPeople: { value: '1', details: 'my story' } }
+        { declared: false, numberOfPeople: { value: '1', details: 'my story' } }
       )
 
-      expect(actual.doYouSupportAnyone).to.be.eq(false)
+      expect(actual.declared).to.be.eq(false)
       expect(actual.numberOfPeople).to.be.eq(undefined)
     })
   })
@@ -82,7 +82,7 @@ describe('OtherDependants', () => {
   describe('validation', () => {
     const validator: Validator = new Validator()
 
-    context('when doYouSupportAnyone is', () => {
+    context('when declared is', () => {
 
       context('undefined', () => {
 
@@ -141,7 +141,7 @@ describe('OtherDependants', () => {
         })
       })
 
-      context('doYouSupportAnyone = false', () => {
+      context('declared = false', () => {
 
         it('should accept when other fields empty', () => {
           const errors = validator.validateSync(new OtherDependants(false, undefined))

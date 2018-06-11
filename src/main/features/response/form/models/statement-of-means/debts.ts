@@ -14,15 +14,15 @@ export class ValidationErrors {
 export class Debts extends MultiRowForm<DebtRow> {
 
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
-  hasAnyDebts: boolean
+  declared: boolean
 
-  @ValidateIf(o => o.hasAnyDebts === true)
+  @ValidateIf(o => o.declared === true)
   @AtLeastOnePopulatedRow({ message: ValidationErrors.ENTER_AT_LEAST_ONE_ROW })
   rows: DebtRow[]
 
-  constructor (hasAnyDebts?: boolean, rows?: DebtRow[]) {
+  constructor (declared?: boolean, rows?: DebtRow[]) {
     super(rows)
-    this.hasAnyDebts = hasAnyDebts
+    this.declared = declared
   }
 
   static fromObject (value?: any): Debts {
@@ -30,9 +30,11 @@ export class Debts extends MultiRowForm<DebtRow> {
       return value
     }
 
-    const hasAnyDebts: boolean = value.hasAnyDebts !== undefined ? toBoolean(value.hasAnyDebts) : undefined
+    const declared: boolean = value.declared !== undefined ? toBoolean(value.declared) : undefined
 
-    return new Debts(hasAnyDebts, (hasAnyDebts === true && value.rows) ? value.rows.map(DebtRow.fromObject) : [])
+    return new Debts(
+      declared,
+      (declared === true && value.rows) ? value.rows.map(DebtRow.fromObject) : [])
   }
 
   getInitialNumberOfRows (): number {
@@ -45,7 +47,7 @@ export class Debts extends MultiRowForm<DebtRow> {
 
   deserialize (input?: any): Debts {
     if (input) {
-      this.hasAnyDebts = input.hasAnyDebts
+      this.declared = input.declared
       this.rows = this.deserializeRows(input.rows)
     }
 

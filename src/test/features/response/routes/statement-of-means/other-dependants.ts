@@ -18,7 +18,7 @@ const pagePath: string = StatementOfMeansPaths.otherDependantsPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
 
-describe('Defendant response: Statement of means: do you support anyone', () => {
+describe('Defendant response: Statement of means: other dependants', () => {
 
   attachDefaultHooks(app)
 
@@ -117,7 +117,7 @@ describe('Defendant response: Statement of means: do you support anyone', () => 
 
           await request(app)
             .post(pagePath)
-            .send({ doYouSupportAnyone: 'false' })
+            .send({ declared: 'false' })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.employmentPage.evaluateUri(
@@ -134,7 +134,7 @@ describe('Defendant response: Statement of means: do you support anyone', () => 
           await request(app)
             .post(pagePath)
             .send({
-              doYouSupportAnyone: 'false',
+              declared: 'false',
               numberOfPeople: { value: 1, details: 'It is my story' }
             })
             .set('Cookie', `${cookieName}=ABC`)

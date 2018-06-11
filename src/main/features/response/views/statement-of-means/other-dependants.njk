@@ -9,24 +9,24 @@
       <form method="post" novalidate
         class="analytics-submit-event-trigger"
         data-event-action="SoM: Do you support anyone else financially?"
-        data-event-label-from="doYouSupportAnyone">
+        data-event-label-from="declared">
 
         {{ csrfProtection(csrf) }}
 
-        {% set error = form.errorFor('doYouSupportAnyone') %}
-        <fieldset id="doYouSupportAnyone[label]" class="form-group {% if error %} form-group-error {% endif %}">
+        {% set error = form.errorFor('declared') %}
+        <fieldset id="declared[label]" class="form-group {% if error %} form-group-error {% endif %}">
           <legend>{{ t('This can include adults and people you don’t live with.') }}</legend>
 
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
 
           {{
-            radioOption(form = form, label = 'Yes', name = 'doYouSupportAnyone', value = 'true', checked = form.valueFor('doYouSupportAnyone') === true)
+            radioOption(form = form, label = 'Yes', name = 'declared', value = 'true', checked = form.valueFor('declared') === true)
           }}
 
           {% set atLeastOfNumberShouldBeEnteredError = form.errorFor('numberOfPeople') %}
 
           <div class="form-group panel panel-border-narrow js-hidden {% if atLeastOfNumberShouldBeEnteredError %} form-group-error {% endif %}"
-               id="doYouSupportAnyone-true" aria-hidden="false">
+               id="declared-true" aria-hidden="false">
 
           {% if atLeastOfNumberShouldBeEnteredError %}
             <p id="numberOfPeople[label]" class="error-message">
@@ -42,7 +42,7 @@
           </div>
 
           {{
-            radioOption(form = form, label = 'No', name = 'doYouSupportAnyone', value = 'false', checked = form.valueFor('doYouSupportAnyone') === false)
+            radioOption(form = form, label = 'No', name = 'declared', value = 'false', checked = form.valueFor('declared') === false)
           }}
 
         </fieldset>
