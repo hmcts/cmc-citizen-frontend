@@ -154,7 +154,32 @@ export const sampleClaimDraftObj = {
   } as Evidence
 } as DraftClaim
 
+const commonResponsePartial = {
+  defendantDetails: {
+    email: { address: 'example@example.com' } as Email,
+    mobilePhone: { number: '01223344444' } as MobilePhone,
+    partyDetails: {
+      type: 'individual',
+      name: 'John Smith',
+      address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
+      hasCorrespondenceAddress: false,
+      dateOfBirth: {
+        known: true,
+        date: {
+          day: 31,
+          month: 12,
+          year: 1980
+        } as LocalDate
+      } as DateOfBirth
+    } as IndividualDetails
+  } as Defendant,
+  moreTimeNeeded: {
+    option: MoreTimeNeededOption.YES
+  }
+}
+
 export const sampleResponseDraftObj = {
+  ...commonResponsePartial,
   response: {
     type: ResponseType.DEFENCE
   },
@@ -170,9 +195,33 @@ export const sampleResponseDraftObj = {
   },
   freeMediation: {
     option: FreeMediationOption.NO
+  }
+} as ResponseDraft
+
+export const sampleFullAdmissionResponseDraftObj = {
+  ...commonResponsePartial,
+  response: {
+    type: ResponseType.FULL_ADMISSION
   },
-  moreTimeNeeded: {
-    option: MoreTimeNeededOption.YES
+  fullAdmission: {
+    paymentOption: {
+      option: {
+        value: 'INSTALMENTS'
+      }
+    },
+    paymentPlan: {
+      totalAmount: 3685,
+      instalmentAmount: 100,
+      firstPaymentDate: {
+        year: 2019,
+        month: 1,
+        day: 1
+      },
+      paymentSchedule: {
+        value: 'EVERY_MONTH',
+        displayValue: 'every month'
+      }
+    }
   },
   statementOfMeans: {
     residence: {
@@ -217,46 +266,8 @@ export const sampleResponseDraftObj = {
       rows: [{ amount: 10, description: 'bla bla bla' }]
     },
     courtOrders: { declared: false }
-  },
-  fullAdmission: {
-    paymentOption: {
-      option: {
-        value: 'INSTALMENTS'
-      }
-    },
-    paymentPlan: {
-      totalAmount: 3685,
-      instalmentAmount: 100,
-      firstPaymentDate: {
-        year: 2019,
-        month: 1,
-        day: 1
-      },
-      paymentSchedule: {
-        value: 'EVERY_MONTH',
-        displayValue: 'every month'
-      }
-    }
-  },
-  defendantDetails: {
-    email: { address: 'example@example.com' } as Email,
-    mobilePhone: { number: '01223344444' } as MobilePhone,
-    partyDetails: {
-      type: 'individual',
-      name: 'John Smith',
-      address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
-      hasCorrespondenceAddress: false,
-      dateOfBirth: {
-        known: true,
-        date: {
-          day: 31,
-          month: 12,
-          year: 1980
-        } as LocalDate
-      } as DateOfBirth
-    } as IndividualDetails
-  } as Defendant
-} as ResponseDraft
+  }
+}
 
 const sampleCCJDraftObj = {
   defendant: {
@@ -313,6 +324,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
     case 'response':
       documentDocument = { ...sampleResponseDraftObj, ...draftOverride }
       break
+    case 'response:full-admission':
+      documentDocument = { ...sampleFullAdmissionResponseDraftObj, ...draftOverride }
+      break
     case 'ccj':
       documentDocument = { ...sampleCCJDraftObj, ...draftOverride }
       break
@@ -325,7 +339,7 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
     .reply(HttpStatus.OK, {
       data: [{
         id: 100,
-        type: draftType,
+        type: draftType.split(':')[0],
         document: documentDocument,
         created: '2017-10-01T12:00:00.000',
         updated: '2017-10-01T12:01:00.000'

@@ -1,6 +1,10 @@
 import * as express from 'express'
 
 import { StatementOfMeansPaths } from 'response/paths'
+
+import { FeatureToggleGuard } from 'guards/featureToggleGuard'
+import { StatementOfMeansStateGuard } from 'response/guards/statementOfMeansStateGuard'
+
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
@@ -8,7 +12,6 @@ import { DraftService } from 'services/draftService'
 import { Employers } from 'response/form/models/statement-of-means/employers'
 import { User } from 'idam/user'
 import { RoutablePath } from 'shared/router/routablePath'
-import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 
@@ -37,6 +40,7 @@ export default express.Router()
   .get(
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
+    StatementOfMeansStateGuard.requestHandler(),
     async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.statementOfMeans.employers), res)
@@ -44,6 +48,7 @@ export default express.Router()
   .post(
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
+    StatementOfMeansStateGuard.requestHandler(),
     FormValidator.requestHandler(Employers, Employers.fromObject, undefined, ['addRow']),
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {

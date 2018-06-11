@@ -63,7 +63,7 @@ describe('Defendant - when will you pay options', () => {
         const fullAdmissionQuestion: string = 'When do you want to pay?'
         it(`should render page asking '${fullAdmissionQuestion}' when full admission was selected`, async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response', {
+          draftStoreServiceMock.resolveFind('response:full-admission', {
             response: {
               type: ResponseType.FULL_ADMISSION
             }
@@ -110,7 +110,7 @@ describe('Defendant - when will you pay options', () => {
 
           it('should return 500 and render error page when cannot save response draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('response:full-admission')
             draftStoreServiceMock.rejectSave()
 
             await request(app)
@@ -124,7 +124,7 @@ describe('Defendant - when will you pay options', () => {
         context('when service is healthy', () => {
           beforeEach(() => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response', {
+            draftStoreServiceMock.resolveFind('response:full-admission', {
               response: {
                 type: ResponseType.FULL_ADMISSION
               }
