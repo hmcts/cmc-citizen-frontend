@@ -179,6 +179,7 @@ const commonResponsePartial = {
 }
 
 export const sampleResponseDraftObj = {
+  ...commonResponsePartial,
   response: {
     type: ResponseType.DEFENCE
   },
@@ -194,92 +195,7 @@ export const sampleResponseDraftObj = {
   },
   freeMediation: {
     option: FreeMediationOption.NO
-  },
-  moreTimeNeeded: {
-    option: MoreTimeNeededOption.YES
-  },
-  statementOfMeans: {
-    residence: {
-      type: ResidenceType.OWN_HOME
-    },
-    employment: { declared: false },
-    employers: undefined,
-    selfEmployment: undefined,
-    unemployment: { option: { value: UnemploymentType.RETIRED.value } },
-    dependants: { declared: false },
-    otherDependants: { declared: false },
-    maintenance: { declared: false },
-    bankAccounts: { rows: [] },
-    debts: { declared: false },
-    monthlyIncome: {
-      salary: 1,
-      universalCredit: 1,
-      jobSeekerAllowanceIncome: 1,
-      jobSeekerAllowanceContribution: 1,
-      incomeSupport: 1,
-      workingTaxCredit: 1,
-      childTaxCredit: 1,
-      childBenefit: 1,
-      councilTaxSupport: 1,
-      pension: 1,
-      maintenance: 1,
-      rows: [{ amount: 10, description: 'bla bla bla' }]
-    },
-    monthlyExpenses: {
-      mortgage: 1,
-      rent: 1,
-      councilTax: 1,
-      gas: 1,
-      electricity: 1,
-      water: 1,
-      travel: 1,
-      schoolCosts: 1,
-      foodAndHousekeeping: 1,
-      tvAndBroadband: 1,
-      mobilePhone: 1,
-      maintenance: 1,
-      rows: [{ amount: 10, description: 'bla bla bla' }]
-    },
-    courtOrders: { declared: false }
-  },
-  fullAdmission: {
-    paymentOption: {
-      option: {
-        value: 'INSTALMENTS'
-      }
-    },
-    paymentPlan: {
-      totalAmount: 3685,
-      instalmentAmount: 100,
-      firstPaymentDate: {
-        year: 2019,
-        month: 1,
-        day: 1
-      },
-      paymentSchedule: {
-        value: 'EVERY_MONTH',
-        displayValue: 'every month'
-      }
-    }
-  },
-  defendantDetails: {
-    email: { address: 'example@example.com' } as Email,
-    mobilePhone: { number: '01223344444' } as MobilePhone,
-    partyDetails: {
-      type: 'individual',
-      name: 'John Smith',
-      address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
-      hasCorrespondenceAddress: false,
-      dateOfBirth: {
-        known: true,
-        date: {
-          day: 31,
-          month: 12,
-          year: 1980
-        } as LocalDate
-      } as DateOfBirth
-    } as IndividualDetails
-  } as Defendant
+  }
 } as ResponseDraft
 
 export const sampleFullAdmissionResponseDraftObj = {
