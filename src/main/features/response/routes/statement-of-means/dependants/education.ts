@@ -23,7 +23,8 @@ const page: RoutablePath = Paths.educationPage
 const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-  return draft.document.statementOfMeans.dependants.declared === true
+  return draft.document.statementOfMeans.dependants !== undefined
+    && draft.document.statementOfMeans.dependants.declared === true
     && draft.document.statementOfMeans.dependants.numberOfChildren.between16and19 > 0
 }, (req: express.Request, res: express.Response): void => {
   res.redirect(Paths.dependantsPage.evaluateUri({ externalId: UUIDUtils.extractFrom(req.path) }))

@@ -22,7 +22,8 @@ const page: RoutablePath = StatementOfMeansPaths.employersPage
 const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-  return draft.document.statementOfMeans.employment.declared === true
+  return draft.document.statementOfMeans.employment !== undefined
+    && draft.document.statementOfMeans.employment.declared === true
     && draft.document.statementOfMeans.employment.employed === true
 }, (req: express.Request, res: express.Response): void => {
   res.redirect(Paths.employmentPage.evaluateUri({ externalId: UUIDUtils.extractFrom(req.path) }))
