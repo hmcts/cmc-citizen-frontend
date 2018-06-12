@@ -14,11 +14,12 @@ export class StatementOfMeansStateGuard {
    *
    * @returns {e.RequestHandler}
    */
-  static requestHandler (): express.RequestHandler {
+  static requestHandler (requireInitiatedModel: boolean = true): express.RequestHandler {
     return GuardFactory.create((res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-      return draft.document.isResponseFullyAdmitted()
+      return (requireInitiatedModel ? draft.document.statementOfMeans !== undefined : true)
+        && draft.document.isResponseFullyAdmitted()
         && (draft.document.isResponseFullyAdmittedWithPayBySetDate() || draft.document.isResponseFullyAdmittedWithInstalments())
     }, (req: express.Request, res: express.Response): void => {
       res.redirect(Paths.taskListPage.evaluateUri({ externalId: UUIDUtils.extractFrom(req.path) }))

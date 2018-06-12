@@ -17,7 +17,7 @@ export default express.Router()
   .get(
     Paths.introPage.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
-    StatementOfMeansStateGuard.requestHandler(),
+    StatementOfMeansStateGuard.requestHandler(false),
     (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.claim
       res.render(Paths.introPage.associatedView, {
@@ -27,7 +27,7 @@ export default express.Router()
   .post(
     Paths.introPage.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
-    StatementOfMeansStateGuard.requestHandler(),
+    StatementOfMeansStateGuard.requestHandler(false),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.claim
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
