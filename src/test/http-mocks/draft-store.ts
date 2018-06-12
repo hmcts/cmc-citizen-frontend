@@ -360,7 +360,10 @@ export function resolveFindAllDrafts (): mock.Scope {
       }, {
         id: 201,
         type: 'response',
-        document: sampleResponseDraftObj,
+        document: {
+          ...sampleResponseDraftObj,
+          ...sampleFullAdmissionResponseDraftObj
+        },
         created: '2017-10-02T12:00:00.000',
         updated: '2017-10-02T12:01:00.000'
       }, {
