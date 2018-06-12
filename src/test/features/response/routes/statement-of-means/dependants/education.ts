@@ -18,6 +18,18 @@ const pagePath: string = StatementOfMeansPaths.educationPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
 
+const draftOverride = {
+  statementOfMeans: {
+    ...draftStoreServiceMock.sampleFullAdmissionResponseDraftObj.statementOfMeans,
+    dependants: {
+      declared: true,
+      numberOfChildren: {
+        between16and19: 1
+      }
+    }
+  }
+}
+
 describe('Defendant response: Statement of means: education', () => {
 
   attachDefaultHooks(app)
@@ -60,7 +72,7 @@ describe('Defendant response: Statement of means: education', () => {
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('response:full-admission', draftOverride)
 
           await request(app)
             .get(pagePath)
@@ -112,7 +124,7 @@ describe('Defendant response: Statement of means: education', () => {
 
         it('should update draft store and redirect', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('response:full-admission', draftOverride)
           draftStoreServiceMock.resolveSave()
 
           await request(app)

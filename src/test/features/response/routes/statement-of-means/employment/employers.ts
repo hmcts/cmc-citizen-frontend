@@ -18,6 +18,16 @@ const pagePath: string = StatementOfMeansPaths.employersPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
 
+const draftOverride = {
+  statementOfMeans: {
+    ...draftStoreServiceMock.sampleFullAdmissionResponseDraftObj.statementOfMeans,
+    employment: {
+      declared: true,
+      employed: true
+    }
+  }
+}
+
 describe('Defendant response: Statement of means: employers', () => {
 
   attachDefaultHooks(app)
@@ -60,7 +70,7 @@ describe('Defendant response: Statement of means: employers', () => {
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('response:full-admission', draftOverride)
 
           await request(app)
             .get(pagePath)
@@ -112,7 +122,7 @@ describe('Defendant response: Statement of means: employers', () => {
 
         it('should update draft store and redirect', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('response:full-admission', draftOverride)
           draftStoreServiceMock.resolveSave()
 
           await request(app)
@@ -131,7 +141,7 @@ describe('Defendant response: Statement of means: employers', () => {
 
         it('should update draft store and redirect', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('response:full-admission', draftOverride)
 
           await request(app)
             .post(pagePath)

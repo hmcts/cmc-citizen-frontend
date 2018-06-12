@@ -1,6 +1,7 @@
 import * as express from 'express'
+import { GuardFactory } from 'response/guards/guardFactory'
 
-import { StatementOfMeansPaths } from 'response/paths'
+import { StatementOfMeansPaths as Paths, StatementOfMeansPaths } from 'response/paths'
 
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { StatementOfMeansStateGuard } from 'response/guards/statementOfMeansStateGuard'
@@ -14,8 +15,18 @@ import { User } from 'idam/user'
 import { RoutablePath } from 'shared/router/routablePath'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { UUIDUtils } from 'shared/utils/uuidUtils'
 
 const page: RoutablePath = StatementOfMeansPaths.employersPage
+
+const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
+  const draft: Draft<ResponseDraft> = res.locals.responseDraft
+
+  return draft.document.statementOfMeans.employment.declared === true
+    && draft.document.statementOfMeans.employment.employed === true
+}, (req: express.Request, res: express.Response): void => {
+  res.redirect(Paths.employmentPage.evaluateUri({ externalId: UUIDUtils.extractFrom(req.path) }))
+})
 
 function renderView (form: Form<Employers>, res: express.Response): void {
   res.render(page.associatedView, {
@@ -41,6 +52,7 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     StatementOfMeansStateGuard.requestHandler(),
+    stateGuardRequestHandler,
     async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.statementOfMeans.employers), res)
@@ -49,6 +61,7 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     StatementOfMeansStateGuard.requestHandler(),
+    stateGuardRequestHandler,
     FormValidator.requestHandler(Employers, Employers.fromObject, undefined, ['addRow']),
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {

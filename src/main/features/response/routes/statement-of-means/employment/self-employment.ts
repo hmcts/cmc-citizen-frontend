@@ -1,6 +1,7 @@
 import * as express from 'express'
+import { GuardFactory } from 'response/guards/guardFactory'
 
-import { StatementOfMeansPaths } from 'response/paths'
+import { StatementOfMeansPaths as Paths, StatementOfMeansPaths } from 'response/paths'
 
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { StatementOfMeansStateGuard } from 'response/guards/statementOfMeansStateGuard'
@@ -14,8 +15,18 @@ import { User } from 'idam/user'
 import { RoutablePath } from 'shared/router/routablePath'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
+import { UUIDUtils } from 'shared/utils/uuidUtils'
 
 const page: RoutablePath = StatementOfMeansPaths.selfEmploymentPage
+
+const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
+  const draft: Draft<ResponseDraft> = res.locals.responseDraft
+
+  return draft.document.statementOfMeans.employment.declared === true
+    && draft.document.statementOfMeans.employment.selfEmployed === true
+}, (req: express.Request, res: express.Response): void => {
+  res.redirect(Paths.employmentPage.evaluateUri({ externalId: UUIDUtils.extractFrom(req.path) }))
+})
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -23,6 +34,7 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     StatementOfMeansStateGuard.requestHandler(),
+    stateGuardRequestHandler,
     (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       res.render(page.associatedView, { form: new Form(draft.document.statementOfMeans.selfEmployment) })
@@ -31,6 +43,7 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     StatementOfMeansStateGuard.requestHandler(),
+    stateGuardRequestHandler,
     FormValidator.requestHandler(SelfEmployment, SelfEmployment.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<SelfEmployment> = req.body
