@@ -87,8 +87,11 @@ export class TaskListBuilder {
         )
       )
     }
+
     if (draft.isResponseFullyAdmitted()
-      && (draft.isResponseFullyAdmittedWithPayBySetDate() || draft.isResponseFullyAdmittedWithInstalments())) {
+      && (draft.isResponseFullyAdmittedWithPayBySetDate() || draft.isResponseFullyAdmittedWithInstalments())
+      && !draft.defendantDetails.partyDetails.isBusiness()
+    ) {
       tasks.push(
         new TaskListItem(
           'Share your financial details',

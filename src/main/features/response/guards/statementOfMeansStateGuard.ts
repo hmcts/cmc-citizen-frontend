@@ -21,6 +21,7 @@ export class StatementOfMeansStateGuard {
       return (requireInitiatedModel ? draft.document.statementOfMeans !== undefined : true)
         && draft.document.isResponseFullyAdmitted()
         && (draft.document.isResponseFullyAdmittedWithPayBySetDate() || draft.document.isResponseFullyAdmittedWithInstalments())
+        && !draft.document.defendantDetails.partyDetails.isBusiness()
     }, (req: express.Request, res: express.Response): void => {
       res.redirect(Paths.taskListPage.evaluateUri({ externalId: UUIDUtils.extractFrom(req.path) }))
     })
