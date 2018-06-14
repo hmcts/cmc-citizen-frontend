@@ -33,7 +33,7 @@ Scenario('I can complete the journey when I fully reject the claim as I have alr
 
   I.click('My account')
   I.see(claimRef)
-  I.see(`We’ve emailed ${claimModel.claimants[0].name} telling them when and how you paid the claim`)
+  I.see(`We’ve emailed ${claimModel.claimants[0].name} telling them when and how you said you paid the claim`)
 })
 
 Scenario('I can complete the journey when I fully admit all of the claim @citizen', function* (I: I) {
