@@ -1,3 +1,4 @@
+import { FullAdmissionResponse, PaymentOption, PaymentSchedule } from 'claims/models/response/fullDefenceAdmission'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Response } from 'claims/models/response'
 import { ResponseType, YesNoOption } from 'claims/models/response/responseCommon'
@@ -25,12 +26,14 @@ import { convertEvidence } from 'claims/converters/evidenceConverter'
 
 export class ResponseModelConverter {
 
-  static convert (responseDraft: ResponseDraft): Response {
-    switch (responseDraft.response.type) { // TODO: consider using single type interface / class
+  static convert (draft: ResponseDraft): Response {
+    switch (draft.response.type) { // TODO: consider using single type interface / class
       case FormResponseType.DEFENCE:
-        return this.convertFullDefence(responseDraft)
+        return this.convertFullDefence(draft)
+      case FormResponseType.FULL_ADMISSION:
+        return this.convertFullAdmission(draft)
       default:
-        throw new Error(`Unsupported response type: ${responseDraft.response.type.value}`)
+        throw new Error(`Unsupported response type: ${draft.response.type.value}`)
     }
   }
 
@@ -40,19 +43,11 @@ export class ResponseModelConverter {
       paymentDeclaration = this.convertWhenDidYouPay(draft.whenDidYouPay)
     }
 
-    let statementOfTruth: StatementOfTruth = undefined
-    if (draft.qualifiedStatementOfTruth) {
-      statementOfTruth = new StatementOfTruth(
-        draft.qualifiedStatementOfTruth.signerName,
-        draft.qualifiedStatementOfTruth.signerRole
-      )
-    }
-
     return {
       responseType: ResponseType.FULL_DEFENCE,
-      defenceType: this.inferDefenceType(draft),
       defendant: this.convertPartyDetails(draft.defendantDetails),
       moreTimeNeeded: draft.moreTimeNeeded && draft.moreTimeNeeded.option as YesNoOption,
+      defenceType: this.inferDefenceType(draft),
       defence: draft.defence.text,
       timeline: {
         rows: draft.timeline.getPopulatedRowsOnly(),
@@ -64,8 +59,36 @@ export class ResponseModelConverter {
       } as DefendantEvidence,
       freeMediation: draft.freeMediation && draft.freeMediation.option as YesNoOption,
       paymentDeclaration,
-      statementOfTruth
+      statementOfTruth: this.convertStatementOfTruth(draft)
     }
+  }
+
+  private static convertFullAdmission (draft: ResponseDraft): FullAdmissionResponse {
+    return {
+      responseType: ResponseType.FULL_ADMISSION,
+      defendant: this.convertPartyDetails(draft.defendantDetails),
+      moreTimeNeeded: draft.moreTimeNeeded && draft.moreTimeNeeded.option as YesNoOption,
+      paymentOption: draft.fullAdmission.paymentOption.option.value as PaymentOption,
+      paymentDate: draft.fullAdmission.paymentDate && draft.fullAdmission.paymentDate.date.toMoment(),
+      repaymentPlan: draft.fullAdmission.paymentPlan && {
+        instalmentAmount: draft.fullAdmission.paymentPlan.instalmentAmount,
+        firstPaymentDate: draft.fullAdmission.paymentPlan.firstPaymentDate.toMoment(),
+        paymentSchedule: draft.fullAdmission.paymentPlan.paymentSchedule.value as PaymentSchedule
+      },
+      freeMediation: undefined,
+      statementOfTruth: this.convertStatementOfTruth(draft)
+    }
+  }
+
+  private static convertStatementOfTruth (draft: ResponseDraft): StatementOfTruth {
+    if (draft.qualifiedStatementOfTruth) {
+      return new StatementOfTruth(
+        draft.qualifiedStatementOfTruth.signerName,
+        draft.qualifiedStatementOfTruth.signerRole
+      )
+    }
+
+    return undefined
   }
 
   // TODO A workaround for Claim Store staff notifications logic to work.
