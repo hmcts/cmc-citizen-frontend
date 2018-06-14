@@ -100,7 +100,7 @@ describe('WhenDidYouPay', () => {
         const errors = validator.validateSync(new WhenDidYouPay(new LocalDate(20, 2, 29), 'Paid by cheque'))
 
         expectNumberOfValidationErrors(errors, 1)
-        expectValidationError(errors, CommonValidationErrors.DATE_INVALID_YEAR)
+        expectValidationError(errors, LocalDateValidationErrors.YEAR_FORMAT_NOT_VALID)
       })
 
       it('should reject a future date', () => {

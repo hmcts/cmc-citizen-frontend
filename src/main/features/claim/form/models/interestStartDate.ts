@@ -1,9 +1,7 @@
 import { IsDefined, MaxLength, ValidateNested } from 'class-validator'
-import { IsNotBlank } from '@hmcts/cmc-validators'
+import { IsNotBlank, IsValidLocalDate } from '@hmcts/cmc-validators'
 import { IsNotInFuture } from 'forms/validation/validators/notInFuture'
-import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { LocalDate } from 'forms/models/localDate'
-import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { CompletableTask } from 'models/task'
 
@@ -16,7 +14,6 @@ export class InterestStartDate implements CompletableTask {
   @ValidateNested()
   @IsDefined({ message: CommonValidationErrors.DATE_REQUIRED })
   @IsValidLocalDate({ message: CommonValidationErrors.DATE_NOT_VALID })
-  @IsValidYearFormat({ message: CommonValidationErrors.DATE_INVALID_YEAR })
   @IsNotInFuture({ message: CommonValidationErrors.DATE_IN_FUTURE })
   date?: LocalDate
 

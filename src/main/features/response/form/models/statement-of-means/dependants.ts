@@ -3,7 +3,7 @@ import { IsDefined, ValidateIf, ValidateNested } from 'class-validator'
 import * as toBoolean from 'to-boolean'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { NumberOfChildren } from 'response/form/models/statement-of-means/numberOfChildren'
-import { AtLeastOneFieldIsPopulated } from 'forms/validation/validators/atLeastOneFieldIsPopulated'
+import { AtLeastOneFieldIsPopulated } from '@hmcts/cmc-validators'
 
 export class ValidationErrors {
   static readonly ENTER_AT_LEAST_ONE: string = 'Enter a number for at least one field'
