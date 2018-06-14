@@ -21,9 +21,10 @@ export namespace FullDefenceResponse {
   export function deserialize (input: any): FullDefenceResponse {
     return {
       ...ResponseCommon.deserialize(input),
-      defenceType: input.defenceType,
+      responseType: ResponseType.FULL_DEFENCE,
+      defenceType: input.defenceType as DefenceType,
       paymentDeclaration: input.paymentDeclaration ? new PaymentDeclaration().deserialize(input.paymentDeclaration) : undefined,
-      defence: input.defence,
+      defence: input.defence as string,
       timeline: {
         rows: input.timeline && input.timeline.rows || [],
         comment: input.timeline && input.timeline.comment || undefined

@@ -1,7 +1,7 @@
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Response } from 'claims/models/response'
-import { ResponseType } from 'claims/models/response/responseCommon'
-import { DefenceType } from 'claims/models/response/fullDefenceResponse'
+import { ResponseType, YesNoOption } from 'claims/models/response/responseCommon'
+import { DefenceType, FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { PartyType } from 'common/partyType'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { Party } from 'claims/models/details/yours/party'
@@ -26,34 +26,43 @@ import { convertEvidence } from 'claims/converters/evidenceConverter'
 export class ResponseModelConverter {
 
   static convert (responseDraft: ResponseDraft): Response {
+    switch (responseDraft.response.type) { // TODO: consider using single type interface / class
+      case FormResponseType.DEFENCE:
+        return this.convertFullDefence(responseDraft)
+      default:
+        throw new Error(`Unsupported response type: ${responseDraft.response.type.value}`)
+    }
+  }
+
+  private static convertFullDefence (draft: ResponseDraft): FullDefenceResponse {
     let paymentDeclaration: PaymentDeclaration = undefined
-    if (responseDraft.isResponseRejectedFullyWithAmountClaimedPaid()) {
-      paymentDeclaration = this.convertWhenDidYouPay(responseDraft.whenDidYouPay)
+    if (draft.isResponseRejectedFullyWithAmountClaimedPaid()) {
+      paymentDeclaration = this.convertWhenDidYouPay(draft.whenDidYouPay)
     }
 
     let statementOfTruth: StatementOfTruth = undefined
-    if (responseDraft.qualifiedStatementOfTruth) {
+    if (draft.qualifiedStatementOfTruth) {
       statementOfTruth = new StatementOfTruth(
-        responseDraft.qualifiedStatementOfTruth.signerName,
-        responseDraft.qualifiedStatementOfTruth.signerRole
+        draft.qualifiedStatementOfTruth.signerName,
+        draft.qualifiedStatementOfTruth.signerRole
       )
     }
 
     return {
       responseType: ResponseType.FULL_DEFENCE,
-      defenceType: this.inferDefenceType(responseDraft),
-      defence: responseDraft.defence.text,
-      freeMediation: responseDraft.freeMediation && responseDraft.freeMediation.option,
-      moreTimeNeeded: responseDraft.moreTimeNeeded && responseDraft.moreTimeNeeded.option,
-      defendant: this.convertPartyDetails(responseDraft.defendantDetails),
+      defenceType: this.inferDefenceType(draft),
+      defendant: this.convertPartyDetails(draft.defendantDetails),
+      moreTimeNeeded: draft.moreTimeNeeded && draft.moreTimeNeeded.option as YesNoOption,
+      defence: draft.defence.text,
       timeline: {
-        rows: responseDraft.timeline.getPopulatedRowsOnly(),
-        comment: responseDraft.timeline.comment
+        rows: draft.timeline.getPopulatedRowsOnly(),
+        comment: draft.timeline.comment
       } as DefendantTimeline,
       evidence: {
-        rows: convertEvidence(responseDraft.evidence) as any,
-        comment: responseDraft.evidence.comment
+        rows: convertEvidence(draft.evidence) as any,
+        comment: draft.evidence.comment
       } as DefendantEvidence,
+      freeMediation: draft.freeMediation && draft.freeMediation.option as YesNoOption,
       paymentDeclaration,
       statementOfTruth
     }
@@ -62,11 +71,9 @@ export class ResponseModelConverter {
   // TODO A workaround for Claim Store staff notifications logic to work.
   // Should be removed once partial admission feature is fully done and frontend and backend models are aligned properly.
   private static inferDefenceType (draft: ResponseDraft): DefenceType {
-    if (draft.response.type === FormResponseType.DEFENCE) {
-      return draft.rejectAllOfClaim && draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID
-        ? DefenceType.ALREADY_PAID
-        : DefenceType.DISPUTE
-    }
+    return draft.rejectAllOfClaim && draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID
+      ? DefenceType.ALREADY_PAID
+      : DefenceType.DISPUTE
   }
 
   private static convertPartyDetails (defendant: Defendant): Party {

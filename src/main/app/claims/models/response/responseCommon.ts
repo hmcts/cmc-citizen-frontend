@@ -7,14 +7,20 @@ import { Organisation } from 'claims/models/details/yours/organisation'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
 export enum ResponseType {
-  FULL_DEFENCE = 'FULL_DEFENCE'
+  FULL_DEFENCE = 'FULL_DEFENCE',
+  FULL_ADMISSION = 'FULL_ADMISSION'
+}
+
+export enum YesNoOption {
+  YES = 'YES',
+  NO = 'NO'
 }
 
 export interface ResponseCommon {
   responseType: ResponseType
-  freeMediation: string
-  moreTimeNeeded?: string
+  moreTimeNeeded?: YesNoOption
   defendant: Party
+  freeMediation: YesNoOption
   statementOfTruth?: StatementOfTruth
 }
 
