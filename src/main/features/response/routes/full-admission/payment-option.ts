@@ -57,7 +57,7 @@ export default express.Router()
             case DefendantPaymentType.BY_SET_DATE:
               return res.redirect(FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: externalId }))
             case DefendantPaymentType.INSTALMENTS:
-              return res.redirect(FullAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId }))
+              return res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
           }
         }
       }))

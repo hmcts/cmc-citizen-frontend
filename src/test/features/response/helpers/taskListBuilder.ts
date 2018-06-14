@@ -224,5 +224,37 @@ describe('Defendant response task list builder', () => {
         expect(taskList.tasks.map(task => task.name)).to.not.contain('Decide how you`ll pay')
       })
     })
+
+    describe('"Your repayment plan" task', () => {
+      let isResponseFullyAdmittedWithInstalmentsStub: sinon.SinonStub
+
+      beforeEach(() => {
+        isResponseFullyAdmittedWithInstalmentsStub = sinon.stub(ResponseDraft.prototype, 'isResponseFullyAdmittedWithInstalments')
+      })
+
+      afterEach(() => {
+        isResponseFullyAdmittedWithInstalmentsStub.restore()
+      })
+
+      it('should be enabled when claim is fully admitted with payment option as instalments', () => {
+        isResponseFullyAdmittedWithInstalmentsStub.returns(true)
+
+        const draft = new ResponseDraft()
+        draft.fullAdmission = new FullAdmission()
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
+        expect(taskList.tasks.map(task => task.name)).to.contain('Your repayment plan')
+      })
+
+      it('should be disabled in remaining cases', () => {
+        isResponseFullyAdmittedWithInstalmentsStub.returns(false)
+
+        const draft = new ResponseDraft()
+        draft.fullAdmission = new FullAdmission()
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
+        expect(taskList.tasks.map(task => task.name)).to.not.contain('Your repayment plan')
+      })
+    })
   })
 })

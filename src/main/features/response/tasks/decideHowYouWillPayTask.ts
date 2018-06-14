@@ -18,11 +18,10 @@ export class DecideHowYouWillPayTask {
   private static paymentDetailsAreProvidedFor (responseDraft: ResponseDraft): boolean {
     switch (responseDraft.fullAdmission.paymentOption.option) {
       case DefendantPaymentType.IMMEDIATELY:
+      case DefendantPaymentType.INSTALMENTS:
         return true
       case DefendantPaymentType.BY_SET_DATE:
         return isValid(responseDraft.fullAdmission.paymentDate)
-      case DefendantPaymentType.INSTALMENTS:
-        return isValid(responseDraft.fullAdmission.paymentPlan)
       default:
         throw new Error(`Unknown payment option: ${responseDraft.fullAdmission.paymentOption.option}`)
     }

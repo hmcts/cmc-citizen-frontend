@@ -6,7 +6,7 @@ import * as randomstring from 'randomstring'
 import { Validator } from 'class-validator'
 import { expectNumberOfValidationErrors, expectValidationError } from 'test/app/forms/models/validationUtils'
 import { HowMuchPaid, ValidationErrors } from 'response/form/models/howMuchPaid'
-import { LocalDate } from 'forms/models/localDate'
+import { LocalDate, ValidationErrors as LocalDateValidationErrors } from 'forms/models/localDate'
 import * as moment from 'moment'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
@@ -156,7 +156,7 @@ describe('HowMuchPaid', () => {
         const errors = validator.validateSync(new HowMuchPaid(300, new LocalDate(20, 2, 29), 'i don’t owe the amount of £300'))
 
         expectNumberOfValidationErrors(errors, 1)
-        expectValidationError(errors, ValidationErrors.DATE_INVALID_YEAR)
+        expectValidationError(errors, LocalDateValidationErrors.YEAR_FORMAT_NOT_VALID)
       })
     })
   })
