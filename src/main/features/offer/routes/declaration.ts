@@ -24,7 +24,7 @@ function renderView (form: Form<Declaration>, res: express.Response) {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
-    Paths.declarationPage.uri, OfferAcceptedGuard.requestHandler,
+    Paths.declarationPage.uri, OfferAcceptedGuard.check(),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         renderView(Form.empty(), res)
@@ -32,7 +32,7 @@ export default express.Router()
     )
   )
   .post(
-    Paths.declarationPage.uri, OfferAcceptedGuard.requestHandler,
+    Paths.declarationPage.uri, OfferAcceptedGuard.check(),
     FormValidator.requestHandler(Declaration, Declaration.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<Declaration> = req.body
