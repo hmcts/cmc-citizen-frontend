@@ -39,7 +39,7 @@ describe('Offer confirmation page', () => {
         await request(app)
           .get(confirmationPage)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Your offer has been sent'))
+          .expect(res => expect(res).to.be.successful.withText('We’ve sent your offer'))
       })
     })
   })
