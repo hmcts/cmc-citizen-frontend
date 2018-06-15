@@ -11,6 +11,7 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
+import { StatementOfMeans } from 'response/draft/statementOfMeans'
 
 const page: RoutablePath = StatementOfMeansPaths.monthlyIncomePage
 
@@ -38,7 +39,8 @@ export default express.Router()
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      renderView(new Form(draft.document.statementOfMeans.monthlyIncome), res)
+      const statementOfMeans: StatementOfMeans = draft.document.statementOfMeans || new StatementOfMeans()
+      renderView(new Form(statementOfMeans.monthlyIncome), res)
     })
   .post(
     page.uri,
