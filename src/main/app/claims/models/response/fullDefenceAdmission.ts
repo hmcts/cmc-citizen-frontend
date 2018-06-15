@@ -1,6 +1,7 @@
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
-import { ResponseCommon, ResponseType } from './responseCommon'
+import { ResponseCommon, ResponseType } from 'claims/models/response/responseCommon'
+import { StatementOfMeans } from 'claims/models/response/statement-of-means/statementOfMeans'
 
 export enum PaymentOption {
   IMMEDIATELY = 'IMMEDIATELY',
@@ -25,6 +26,7 @@ export interface FullAdmissionResponse extends ResponseCommon {
   paymentOption: PaymentOption
   paymentDate?: Moment
   repaymentPlan?: RepaymentPlan
+  statementOfMeans?: StatementOfMeans
 }
 
 export namespace FullAdmissionResponse {
@@ -38,7 +40,8 @@ export namespace FullAdmissionResponse {
         instalmentAmount: input.repaymentPlan.instalmentAmount,
         firstPaymentDate: MomentFactory.parse(input.repaymentPlan.firstPaymentDate),
         paymentSchedule: input.repaymentPlan.paymentSchedule
-      }
+      },
+      statementOfMeans: input.statementOfMeans
     }
   }
 }

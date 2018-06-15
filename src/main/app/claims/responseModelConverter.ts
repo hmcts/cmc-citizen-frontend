@@ -1,4 +1,10 @@
 import { FullAdmissionResponse, PaymentOption, PaymentSchedule } from 'claims/models/response/fullDefenceAdmission'
+import {
+  AgeGroupType,
+  BankAccountType,
+  Child,
+  ResidenceType
+} from 'claims/models/response/statement-of-means/statementOfMeans'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Response } from 'claims/models/response'
 import { ResponseType, YesNoOption } from 'claims/models/response/responseCommon'
@@ -19,6 +25,11 @@ import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { ResponseType as FormResponseType } from 'response/form/models/responseType'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
+import { BankAccountRow } from 'response/form/models/statement-of-means/bankAccountRow'
+import { CourtOrderRow } from 'response/form/models/statement-of-means/courtOrderRow'
+import { DebtRow } from 'response/form/models/statement-of-means/debtRow'
+import { EmployerRow } from 'response/form/models/statement-of-means/employerRow'
+import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
@@ -76,6 +87,63 @@ export class ResponseModelConverter {
         paymentSchedule: draft.fullAdmission.paymentPlan.paymentSchedule.value as PaymentSchedule
       },
       freeMediation: undefined,
+      statementOfMeans: draft.statementOfMeans && {
+        bankAccounts: draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly().map((bankAccount: BankAccountRow) => {
+          return {
+            type: bankAccount.typeOfAccount.value as BankAccountType,
+            joint: bankAccount.joint,
+            balance: bankAccount.balance
+          }
+        }),
+        residence: {
+          type: draft.statementOfMeans.residence.type.value as ResidenceType,
+          otherDetail: draft.statementOfMeans.residence.housingDetails
+        },
+        dependant: draft.statementOfMeans.dependants.declared || draft.statementOfMeans.maintenance.declared || draft.statementOfMeans.otherDependants.declared ? {
+          children: draft.statementOfMeans.dependants.declared ? this.convertStatementOfMeansChildreen(draft) : undefined,
+          numberOfMaintainedChildren: draft.statementOfMeans.maintenance.declared ? draft.statementOfMeans.maintenance.value : undefined,
+          otherDependants: draft.statementOfMeans.otherDependants.declared ? undefined : undefined
+        } : undefined,
+        employment: {
+          employers: draft.statementOfMeans.employment.employed ? draft.statementOfMeans.employers.getPopulatedRowsOnly().map((employer: EmployerRow) => {
+            return {
+              jobTitle: employer.jobTitle,
+              name: employer.employerName
+            }
+          }) : undefined,
+          selfEmployment: draft.statementOfMeans.employment.selfEmployed ? {
+            jobTitle: draft.statementOfMeans.selfEmployment.jobTitle,
+            annualTurnover: draft.statementOfMeans.selfEmployment.annualTurnover,
+            onTaxPayments: draft.statementOfMeans.onTaxPayments.declared ? {
+              amountYouOwe: draft.statementOfMeans.onTaxPayments.amountYouOwe,
+              reason: draft.statementOfMeans.onTaxPayments.reason
+            } : undefined
+          } : undefined,
+          unemployment: !draft.statementOfMeans.employment.employed && !draft.statementOfMeans.employment.selfEmployed ? {
+            unemployed: draft.statementOfMeans.unemployment.option === UnemploymentType.UNEMPLOYED ? {
+              numberOfMonths: draft.statementOfMeans.unemployment.unemploymentDetails.months,
+              numberOfYears: draft.statementOfMeans.unemployment.unemploymentDetails.years
+            } : undefined,
+            retired: draft.statementOfMeans.unemployment.option === UnemploymentType.RETIRED,
+            other: draft.statementOfMeans.unemployment.option === UnemploymentType.OTHER ? draft.statementOfMeans.unemployment.otherDetails.details : undefined
+          } : undefined
+        },
+        debts: draft.statementOfMeans.debts.declared ? draft.statementOfMeans.debts.getPopulatedRowsOnly().map((debt: DebtRow) => {
+          return {
+            description: debt.debt,
+            totalOwed: debt.totalOwed,
+            monthlyPayments: debt.monthlyPayments
+          }
+        }) : undefined,
+        courtOrders: draft.statementOfMeans.courtOrders.declared ? draft.statementOfMeans.courtOrders.getPopulatedRowsOnly().map((courtOrder: CourtOrderRow) => {
+          return {
+            claimNumber: courtOrder.claimNumber,
+            amountOwed: courtOrder.amount,
+            monthlyInstalmentAmount: courtOrder.instalmentAmount
+          }
+        }) : undefined,
+        reason: draft.statementOfMeans.explanation.text
+      },
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
   }
@@ -146,5 +214,33 @@ export class ResponseModelConverter {
       return undefined
     }
     return new PaymentDeclaration(whenDidYouPay.date.asString(), whenDidYouPay.text)
+  }
+
+  private static convertStatementOfMeansChildreen (draft: ResponseDraft): Child[] {
+    if (!draft.statementOfMeans.dependants.declared) {
+      return undefined
+    }
+
+    const children: Child[] = []
+    if (draft.statementOfMeans.dependants.numberOfChildren.under11) {
+      children.push({
+        ageGroupType: AgeGroupType.UNDER_11,
+        numberOfChildren: draft.statementOfMeans.dependants.numberOfChildren.under11
+      })
+    }
+    if (draft.statementOfMeans.dependants.numberOfChildren.between11and15) {
+      children.push({
+        ageGroupType: AgeGroupType.BETWEEN_11_AND_15,
+        numberOfChildren: draft.statementOfMeans.dependants.numberOfChildren.between11and15
+      })
+    }
+    if (draft.statementOfMeans.dependants.numberOfChildren.between16and19) {
+      children.push({
+        ageGroupType: AgeGroupType.BETWEEN_16_AND_19,
+        numberOfChildren: draft.statementOfMeans.dependants.numberOfChildren.between16and19,
+        numberOfChildrenLivingWithYou: draft.statementOfMeans.education ? draft.statementOfMeans.education.value : undefined
+      })
+    }
+    return children
   }
 }

@@ -3,6 +3,9 @@ import { DefendantPaymentType } from 'response/form/models/defendantPaymentOptio
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { ResponseType } from 'response/form/models/responseType'
+import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
+import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
+import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 import { individualDetails } from 'test/data/draft/partyDetails'
 
 const baseResponseDraft = {
@@ -114,5 +117,103 @@ export const fullAdmissionWithPaymentByInstalmentsDraft = {
         value: PaymentSchedule.EACH_WEEK
       }
     }
+  }
+}
+
+export const statementOfMeansWithMandatoryFieldsDraft = {
+  bankAccounts: {
+    rows: [{
+      typeOfAccount: BankAccountType.CURRENT_ACCOUNT,
+      joint: false,
+      balance: 1000
+    }]
+  },
+  residence: {
+    type: ResidenceType.OWN_HOME
+  },
+  dependants: {
+    declared: false
+  },
+  maintenance: {
+    declared: false
+  },
+  otherDependants: {
+    declared: false
+  },
+  employment: {
+    declared: false
+  },
+  unemployment: {
+    option: UnemploymentType.RETIRED
+  },
+  debts: {
+    declared: false
+  },
+  courtOrders: {
+    declared: false
+  },
+  explanation: 'Some reason'
+}
+
+export const statementOfMeansWithAllFieldsDraft = {
+  ...statementOfMeansWithMandatoryFieldsDraft,
+  dependants: {
+    declared: true,
+    numberOfChildren: {
+      under11: 1,
+      between11and15: 2,
+      between16and19: 3
+    }
+  },
+  education: {
+    value: 3
+  },
+  maintenance: {
+    declared: true,
+    value: 4
+  },
+  otherDependants: {
+    declared: true,
+    numberOfPeople: {
+      value: 5,
+      details: 'Colleagues'
+    }
+  },
+  employment: {
+    declared: true,
+    employed: true,
+    selfEmployed: true
+  },
+  employers: {
+    rows: [{
+      employerName: 'HMCTS',
+      jobTitle: 'Service manager'
+    }]
+  },
+  selfEmployment: {
+    jobTitle: 'Director',
+    annualTurnover: 10000
+  },
+  onTaxPayments: {
+    declared: true,
+    amountYouOwe: 100,
+    reason: 'Various taxes'
+  },
+  unemployment: undefined,
+  debts: {
+    declared: true,
+    rows: [{
+      debt: 'Hard to tell',
+      totalOwed: 1000,
+      monthlyPayments: 100
+    }]
+  },
+  courtOrders: {
+    declared: true,
+    rows: [{
+      claimNumber: '000MC001',
+      amount: 100,
+      instalmentAmount: 10
+    }]
   }
 }

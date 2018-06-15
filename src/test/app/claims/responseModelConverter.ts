@@ -8,7 +8,9 @@ import {
   defenceWithAmountClaimedAlreadyPaidDraft,
   fullAdmissionWithImmediatePaymentDraft,
   fullAdmissionWithPaymentBySetDateDraft,
-  fullAdmissionWithPaymentByInstalmentsDraft
+  fullAdmissionWithPaymentByInstalmentsDraft,
+  statementOfMeansWithMandatoryFieldsDraft,
+  statementOfMeansWithAllFieldsDraft
 } from 'test/data/draft/responseDraft'
 import {
   companyDetails,
@@ -23,7 +25,9 @@ import {
   defenceWithAmountClaimedAlreadyPaidData,
   fullAdmissionWithImmediatePaymentData,
   fullAdmissionWithPaymentBySetDateData,
-  fullAdmissionWithPaymentByInstalmentsData
+  fullAdmissionWithPaymentByInstalmentsData,
+  statementOfMeansWithMandatoryFieldsOnlyData,
+  statementOfMeansWithAllFieldsData
 } from 'test/data/entity/responseData'
 import { company, individual, organisation, soleTrader } from 'test/data/entity/party'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
@@ -106,9 +110,25 @@ describe('ResponseModelConverter', () => {
         .to.deep.equal(convertObjectLiteralToJSON(responseData))
     })
 
+    it('should convert full admission paid by set date with mandatory SoM only', () => {
+      const responseDraft = prepareResponseDraft({ ...fullAdmissionWithPaymentBySetDateDraft, statementOfMeans: { ...statementOfMeansWithMandatoryFieldsDraft } }, individualDetails)
+      const responseData = prepareResponseData({ ...fullAdmissionWithPaymentBySetDateData, statementOfMeans: { ...statementOfMeansWithMandatoryFieldsOnlyData } }, individual)
+
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+        .to.deep.equal(convertObjectLiteralToJSON(responseData))
+    })
+
     it('should convert full admission paid by instalments', () => {
       const responseDraft = prepareResponseDraft(fullAdmissionWithPaymentByInstalmentsDraft, individualDetails)
       const responseData = prepareResponseData(fullAdmissionWithPaymentByInstalmentsData, individual)
+
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+        .to.deep.equal(convertObjectLiteralToJSON(responseData))
+    })
+
+    it('should convert full admission paid by instalments with complete SoM', () => {
+      const responseDraft = prepareResponseDraft({ ...fullAdmissionWithPaymentByInstalmentsDraft, statementOfMeans: { ...statementOfMeansWithAllFieldsDraft } }, individualDetails)
+      const responseData = prepareResponseData({ ...fullAdmissionWithPaymentByInstalmentsData, statementOfMeans: { ...statementOfMeansWithAllFieldsData } }, individual)
 
       expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
         .to.deep.equal(convertObjectLiteralToJSON(responseData))

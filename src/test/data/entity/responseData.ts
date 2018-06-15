@@ -1,4 +1,9 @@
 import { PaymentOption, PaymentSchedule } from 'claims/models/response/fullDefenceAdmission'
+import {
+  AgeGroupType,
+  BankAccountType,
+  ResidenceType
+} from 'claims/models/response/statement-of-means/statementOfMeans'
 import { individual } from 'test/data/entity/party'
 
 const baseResponseData = {
@@ -55,4 +60,64 @@ export const fullAdmissionWithPaymentByInstalmentsData = {
     firstPaymentDate: '2050-12-31',
     paymentSchedule: PaymentSchedule.EACH_WEEK
   }
+}
+
+export const statementOfMeansWithMandatoryFieldsOnlyData = {
+  bankAccounts: [
+    {
+      balance: 1000,
+      joint: false,
+      type: BankAccountType.CURRENT_ACCOUNT
+    }
+  ],
+  residence: {
+    type: ResidenceType.OWN_HOME
+  },
+  employment: {
+    unemployment: {
+      retired: true
+    }
+  }
+}
+
+export const statementOfMeansWithAllFieldsData = {
+  ...statementOfMeansWithMandatoryFieldsOnlyData,
+  dependant: {
+    children: [{
+      ageGroupType: AgeGroupType.UNDER_11,
+      numberOfChildren: 1
+    }, {
+      ageGroupType: AgeGroupType.BETWEEN_11_AND_15,
+      numberOfChildren: 2
+    }, {
+      ageGroupType: AgeGroupType.BETWEEN_16_AND_19,
+      numberOfChildren: 3,
+      numberOfChildrenLivingWithYou: 3
+    }],
+    numberOfMaintainedChildren: 4
+  },
+  employment: {
+    employers: [{
+      jobTitle: 'Service manager',
+      name: 'HMCTS'
+    }],
+    selfEmployment: {
+      jobTitle: 'Director',
+      annualTurnover: 10000,
+      onTaxPayments: {
+        amountYouOwe: 100,
+        reason: 'Various taxes'
+      }
+    }
+  },
+  debts: [{
+    description: 'Hard to tell',
+    totalOwed: 1000,
+    monthlyPayments: 100
+  }],
+  courtOrders: [{
+    claimNumber: '000MC001',
+    amountOwed: 100,
+    monthlyInstalmentAmount: 10
+  }]
 }
