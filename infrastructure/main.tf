@@ -34,12 +34,12 @@ data "azurerm_key_vault_secret" "s2s_secret" {
 }
 
 data "azurerm_key_vault_secret" "draft_store_primary" {
-  name = "draft-store-primary"
+  name = "citizen-draft-store-primary"
   vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
 data "azurerm_key_vault_secret" "draft_store_secondary" {
-  name = "draft-store-secondary"
+  name = "citizen-draft-store-secondary"
   vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
