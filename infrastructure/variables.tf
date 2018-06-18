@@ -1,6 +1,8 @@
 // Infrastructural variables
-variable "product" {
-  default = "cmc"
+variable "product" {}
+
+variable "raw_product" {
+  default = "cmc" // jenkins-library overrides product for PRs and adds e.g. pr-118-cmc
 }
 
 variable "microservice" {
