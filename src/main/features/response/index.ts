@@ -1,3 +1,5 @@
+import { PaymentOption } from 'claims/models/response/fullDefenceAdmission'
+import { ResponseType } from 'claims/models/response/responseCommon'
 import * as express from 'express'
 import { plainToClass } from 'class-transformer'
 import { Claim } from 'claims/models/claim'
@@ -53,6 +55,10 @@ export class Feature {
       app.settings.nunjucksEnv.globals.StatementOfMeansPaths = StatementOfMeansPaths
       app.settings.nunjucksEnv.globals.DefenceType = DefenceType
       app.settings.nunjucksEnv.globals.FreeMediationOption = FreeMediationOption
+      app.settings.nunjucksEnv.globals.domain = {
+        ResponseType: ResponseType,
+        PaymentOption: PaymentOption
+      }
     }
 
     const allResponseRoutes = '/case/*/response/*'
