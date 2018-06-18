@@ -35,16 +35,16 @@
 
       {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
         {% include "./confirmation/full-admission-steps.njk" %}
-        <p>{{ externalLink('What did you think of this service?', '') }}</p>
-        <p><a class="button" href="{{ DashboardPaths.dashboardPage.uri }}">{{ t('Go to your account') }}</a></p>
       {% endif %}
       {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
         {% include "./confirmation/full-defence-steps.njk" %}
       {% endif %}
 
-      {{ supportWidget() }}
-
       {% include "includes/service_survey_link.njk" %}
+
+      <p><a class="button" href="{{ DashboardPaths.dashboardPage.uri }}">{{ t('Go to your account') }}</a></p>
+
+      {{ supportWidget() }}
     </div>
   </div>
 {% endblock %}
