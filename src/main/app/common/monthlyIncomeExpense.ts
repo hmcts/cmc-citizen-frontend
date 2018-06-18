@@ -1,28 +1,15 @@
-import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
+import * as _ from 'lodash'
+import { IncomeExpenseSchedule } from 'common/incomeExpenseSchedule'
 
-export class MonthlyIncomeExpense {
-  amount: number
-  frequency: IncomeExpenseSchedule
-  totalAmount: number = 0
+export interface IncomeExpenseSource {
+  amount: number,
+  incomeExpenseSchedule: IncomeExpenseSchedule
+}
 
-  getTotalAmount (amount: number): number {
-    return this.amount += amount
-  }
-
-  convertIncomeExpenseSchedule (incomeExpenseSchedule: IncomeExpenseSchedule): number {
-    switch (incomeExpenseSchedule) {
-      case IncomeExpenseSchedule.WEEK:
-        return 52 / 12
-      case IncomeExpenseSchedule.TWO_WEEKS:
-        return 52 / 12 / 2
-      case IncomeExpenseSchedule.FOUR_WEEKS:
-        return 52 / 12 / 4
-      case IncomeExpenseSchedule.MONTH:
-        return 1
-      default:
-        throw new Error('Unknown income schedule')
-    }
-  }
-
-  getTotalAmountPerMonth ()
+export function calculateTotalAmount (sources: IncomeExpenseSource[]): number {
+  let totalMonthlyAmount = _.reduce(sources, function (total: number, source: IncomeExpenseSource) {
+    const monthlyAmount = source.amount * source.incomeExpenseSchedule.valueInMonths
+    return total + monthlyAmount
+  }, 0)
+  return _.round(totalMonthlyAmount,2)
 }
