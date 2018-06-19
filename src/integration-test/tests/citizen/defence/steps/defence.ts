@@ -1,4 +1,4 @@
-import { createDefendant, DEFAULT_PASSWORD, defence } from 'integration-test/data/test-data'
+import { createClaimant, createDefendant, DEFAULT_PASSWORD, defence } from 'integration-test/data/test-data'
 import { DefendantCheckAndSendPage } from 'integration-test/tests/citizen/defence/pages/defendant-check-and-send'
 import { DefendantDefenceTypePage } from 'integration-test/tests/citizen/defence/pages/defendant-defence-type'
 import { DefendantDobPage } from 'integration-test/tests/citizen/defence/pages/defendant-dob'
@@ -282,25 +282,34 @@ export class DefenceSteps {
         I.see('When did you pay this amount?')
         I.see('How did you pay the amount claimed?')
         break
-      case DefenceType.FULL_ADMISSION:
-        defendantSteps.selectTaskChooseAResponse()
-        defendantDefenceTypePage.admitAllOfMoneyClaim()
-        defendantSteps.selectTaskDecideHowWillYouPay()
-        defendantWhenWillYouPage.chooseImmediately()
-        defendantSteps.selectCheckAndSubmitYourDefence()
-        break
       default:
         throw new Error('Unknown DefenceType')
     }
 
-    if (defenceType !== DefenceType.FULL_ADMISSION) {
-      this.checkAndSendAndSubmit(defendantType)
-      if (defenceType === DefenceType.FULL_REJECTION_WITH_DISPUTE || defenceType === DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID) {
-        I.see('You’ve submitted your response')
-      } else {
-        I.see('Next steps')
-      }
+    this.checkAndSendAndSubmit(defendantType)
+    if (defenceType === DefenceType.FULL_REJECTION_WITH_DISPUTE || defenceType === DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID) {
+      I.see('You’ve submitted your response')
+    } else {
+      I.see('Next steps')
     }
+  }
+
+  makeFullAdmission (defendantType: PartyType): void {
+    I.dontSee('COMPLETE')
+
+    this.confirmYourDetails(createDefendant(defendantType))
+
+    this.requestMoreTimeToRespond()
+
+    defendantSteps.selectTaskChooseAResponse()
+    defendantDefenceTypePage.admitAllOfMoneyClaim()
+    defendantSteps.selectTaskDecideHowWillYouPay()
+    defendantWhenWillYouPage.chooseImmediately()
+    defendantSteps.selectCheckAndSubmitYourDefence()
+    this.checkAndSendAndSubmit(defendantType)
+
+    I.see('You’ve submitted your response')
+    I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} to tell them you’ll pay immediately.`)
   }
 
   sendDefenceResponseHandOff (claimRef: string, defendant: Party, claimant: Party, defenceType: DefenceType): void {
@@ -317,15 +326,6 @@ export class DefenceSteps {
     this.requestMoreTimeToRespond()
 
     switch (defenceType) {
-
-      case DefenceType.FULL_ADMISSION:
-        this.admitAllOfClaim()
-        I.see('Download the admission form')
-        I.see(claimRef)
-        I.see(claimant.name)
-        I.see(defendant.name)
-        break
-
       case DefenceType.PART_ADMISSION:
         this.admitPartOfClaim()
         I.see('Download the admission form')

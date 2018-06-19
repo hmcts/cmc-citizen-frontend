@@ -1,12 +1,14 @@
 import { PartyType } from 'integration-test/data/party-type'
 import { InterestType } from 'integration-test/data/interest-type'
 import { createClaimData, dailyInterestAmount } from 'integration-test/data/test-data'
+import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defence'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import I = CodeceptJS.I
 import { DefenceType } from 'integration-test/data/defence-type'
 import { DashboardClaimDetails } from 'integration-test/tests/citizen/defence/pages/defendant-claim-details'
 
 const helperSteps: Helper = new Helper()
+const defenceSteps: DefenceSteps = new DefenceSteps()
 const defendantDetails: DashboardClaimDetails = new DashboardClaimDetails()
 
 Feature('Respond to claim')
@@ -44,7 +46,10 @@ Scenario('I can complete the journey when I fully admit all of the claim @citize
   const claimRef: string = yield I.createClaim(claimData, claimantEmail)
 
   yield helperSteps.enterPinNumber(claimRef, claimantEmail)
-  helperSteps.finishResponse(claimRef, defendantEmail, PartyType.INDIVIDUAL, DefenceType.FULL_ADMISSION)
+  helperSteps.linkClaimToDefendant(defendantEmail)
+  helperSteps.startResponseFromDashboard(claimRef)
+
+  defenceSteps.makeFullAdmission(PartyType.INDIVIDUAL)
 })
 
 Scenario('I can see send your response by email page when I admit part of the claim @citizen', function* (I: I) {
