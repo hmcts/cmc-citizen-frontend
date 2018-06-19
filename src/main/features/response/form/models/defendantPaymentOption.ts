@@ -38,6 +38,13 @@ export class DefendantPaymentType {
     ]
   }
 
+  static except (dependantPaymentType: DefendantPaymentType): DefendantPaymentType[] {
+    if (dependantPaymentType === undefined) {
+      throw new Error('DependantPaymentType type is required')
+    }
+    return DefendantPaymentType.all().filter(item => item !== dependantPaymentType)
+  }
+
   static valueOf (value: string): DefendantPaymentType {
     return DefendantPaymentType.all()
       .filter(type => type.value === value)

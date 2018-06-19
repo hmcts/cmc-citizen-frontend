@@ -13,6 +13,7 @@ import { Claim } from 'claims/models/claim'
 import { WhenDidYouPayTask } from 'response/tasks/whenDidYouPayTask'
 import { DecideHowYouWillPayTask } from 'response/tasks/decideHowYouWillPayTask'
 import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
+import { YourRepaymentPlanTask } from 'features/response/tasks/yourRepaymentPlanTask'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -82,6 +83,16 @@ export class TaskListBuilder {
           'Decide how you`ll pay',
           FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: externalId }),
           DecideHowYouWillPayTask.isCompleted(draft)
+        )
+      )
+    }
+
+    if (draft.isResponseFullyAdmittedWithInstalments()) {
+      tasks.push(
+        new TaskListItem(
+          'Your repayment plan',
+          FullAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId }),
+          YourRepaymentPlanTask.isCompleted(draft)
         )
       )
     }

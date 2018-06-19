@@ -148,8 +148,7 @@
         {% if draft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.INSTALMENTS) %}
           {{ row(label = 'Regular payments of', value = draft.fullAdmission.paymentPlan.instalmentAmount | numeral, changeLink = FullAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: claim.externalId }), bold = true, bottomBorder = false) }}
           {{ row(label = 'Frequency of payments', value = t(draft.fullAdmission.paymentPlan.paymentSchedule.displayValue), bold = true, bottomBorder = false) }}
-          {{ row(label = 'Make the first payment on', value = draft.fullAdmission.paymentPlan.firstPaymentDate.toMoment() | date, bold = true, bottomBorder = false) }}
-          {{ row(label = 'Explain why you can’t pay the full amount now', value = draft.fullAdmission.paymentPlan.text, bold = true) }}
+          {{ row(label = 'Make the first payment on', value = draft.fullAdmission.paymentPlan.firstPaymentDate.toMoment() | date, bold = true) }}
         {% endif %}
       {{ tableEnd() }}
     {% endif %}

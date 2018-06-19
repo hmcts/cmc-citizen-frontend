@@ -174,9 +174,9 @@
   dependencies:
     "@types/chai" "*"
 
-"@types/chai-spies@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@types/chai-spies/-/chai-spies-0.0.1.tgz#f95c741f0d9b88216b328ec6fb45f54701fbdef0"
+"@types/chai-spies@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/chai-spies/-/chai-spies-1.0.0.tgz#1442daa924d2a8c3f20253db5e5e8fdd1fd4f229"
   dependencies:
     "@types/chai" "*"
 
@@ -334,9 +334,9 @@
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/shortid/-/shortid-0.0.29.tgz#8093ee0416a6e2bf2aa6338109114b3fbffa0e9b"
 
-"@types/sinon-chai@^2.7.28":
-  version "2.7.29"
-  resolved "https://registry.yarnpkg.com/@types/sinon-chai/-/sinon-chai-2.7.29.tgz#4db01497e2dd1908b2bd30d1782f456353f5f723"
+"@types/sinon-chai@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@types/sinon-chai/-/sinon-chai-3.2.0.tgz#58abf70d8d002d2292ce656425431d873f2c77bc"
   dependencies:
     "@types/chai" "*"
     "@types/sinon" "*"
@@ -1943,7 +1943,7 @@ diff@3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/diff/-/diff-3.3.1.tgz#aa8567a6eed03c531fc89d3f711cd0e5259dec75"
 
-diff@3.5.0, diff@^3.1.0, diff@^3.2.0, diff@^3.4.0:
+diff@3.5.0, diff@^3.1.0, diff@^3.2.0, diff@^3.4.0, diff@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/diff/-/diff-3.5.0.tgz#800c0dd1e0a8bfbc95835c202ad220fe317e5a12"
 
@@ -2699,12 +2699,6 @@ form-data@~2.1.1:
     asynckit "^0.4.0"
     combined-stream "^1.0.5"
     mime-types "^2.1.12"
-
-formatio@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/formatio/-/formatio-1.2.0.tgz#f3b2167d9068c4698a8d51f4f760a39a54d818eb"
-  dependencies:
-    samsam "1.x"
 
 formidable@^1.1.1:
   version "1.2.0"
@@ -4681,9 +4675,13 @@ log-driver@^1.x:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/log-driver/-/log-driver-1.2.7.tgz#63b95021f0702fedfa2c9bb0a24e7797d71871d8"
 
-lolex@^2.2.0, lolex@^2.3.2:
+lolex@^2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/lolex/-/lolex-2.3.2.tgz#85f9450425103bf9e7a60668ea25dc43274ca807"
+
+lolex@^2.4.2:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/lolex/-/lolex-2.7.0.tgz#9c087a69ec440e39d3f796767cf1b2cdc43d5ea5"
 
 longest@^1.0.0, longest@^1.0.1:
   version "1.0.1"
@@ -5082,6 +5080,10 @@ mock-require@^2.0.1:
   dependencies:
     caller-id "^0.1.0"
 
+moment-precise-range-plugin@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/moment-precise-range-plugin/-/moment-precise-range-plugin-1.3.0.tgz#60ac075fdfd14689f6d102af751d171a80b4ab60"
+
 moment@^2.18.1:
   version "2.21.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.21.0.tgz#2a114b51d2a6ec9e6d83cf803f838a878d8a023a"
@@ -5159,9 +5161,9 @@ nested-error-stacks@~2.0.0:
   dependencies:
     inherits "~2.0.1"
 
-nise@^1.2.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/nise/-/nise-1.3.0.tgz#7d6d506e64a0e37959495157f30a799c0436df72"
+nise@^1.3.3:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/nise/-/nise-1.4.1.tgz#78bc2b343d5ff1031ea9d1bb2c87a94c26db7250"
   dependencies:
     "@sinonjs/formatio" "^2.0.0"
     just-extend "^1.1.27"
@@ -6536,7 +6538,7 @@ safe-regex@^1.1.0:
   dependencies:
     ret "~0.1.10"
 
-samsam@1.3.0, samsam@1.x:
+samsam@1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/samsam/-/samsam-1.3.0.tgz#8d1d9350e25622da30de3e44ba692b5221ab7c50"
 
@@ -6722,17 +6724,17 @@ sinon-express-mock@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/sinon-express-mock/-/sinon-express-mock-2.0.0.tgz#eef617283e03e063c008e753f470e1a7858dc663"
 
-sinon@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/sinon/-/sinon-5.0.0.tgz#e6de3b3f7fed338b470f8779dc4bab9fca058894"
+sinon@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/sinon/-/sinon-6.0.0.tgz#f26627e4830dc34279661474da2c9e784f166215"
   dependencies:
-    diff "^3.1.0"
-    formatio "1.2.0"
+    "@sinonjs/formatio" "^2.0.0"
+    diff "^3.5.0"
     lodash.get "^4.4.2"
-    lolex "^2.2.0"
-    nise "^1.2.0"
-    supports-color "^4.4.0"
-    type-detect "^4.0.5"
+    lolex "^2.4.2"
+    nise "^1.3.3"
+    supports-color "^5.4.0"
+    type-detect "^4.0.8"
 
 slice-ansi@0.0.4:
   version "0.0.4"
@@ -7144,7 +7146,7 @@ supports-color@^3.1.2:
   dependencies:
     has-flag "^1.0.0"
 
-supports-color@^4.0.0, supports-color@^4.4.0:
+supports-color@^4.0.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-4.5.0.tgz#be7a0de484dec5c5cddf8b3d59125044912f635b"
   dependencies:
@@ -7153,6 +7155,12 @@ supports-color@^4.0.0, supports-color@^4.4.0:
 supports-color@^5.3.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-5.3.0.tgz#5b24ac15db80fa927cf5227a4a33fd3c4c7676c0"
+  dependencies:
+    has-flag "^3.0.0"
+
+supports-color@^5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-5.4.0.tgz#1c6b337402c2137605efe19f10fec390f6faab54"
   dependencies:
     has-flag "^3.0.0"
 
@@ -7506,7 +7514,7 @@ type-detect@^4.0.0:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/type-detect/-/type-detect-4.0.5.tgz#d70e5bc81db6de2a381bcaca0c6e0cbdc7635de2"
 
-type-detect@^4.0.5:
+type-detect@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/type-detect/-/type-detect-4.0.8.tgz#7646fb5f18871cfbb7749e69bd39a6388eb7450c"
 

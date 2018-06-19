@@ -154,7 +154,7 @@ export const sampleClaimDraftObj = {
   } as Evidence
 } as DraftClaim
 
-const sampleResponseDraftObj = {
+export const sampleResponseDraftObj = {
   response: {
     type: ResponseType.DEFENCE
   },
@@ -225,7 +225,7 @@ const sampleResponseDraftObj = {
       }
     },
     paymentPlan: {
-      remainingAmount: 3685,
+      totalAmount: 3685,
       instalmentAmount: 100,
       firstPaymentDate: {
         year: 2019,
@@ -235,8 +235,7 @@ const sampleResponseDraftObj = {
       paymentSchedule: {
         value: 'EVERY_MONTH',
         displayValue: 'every month'
-      },
-      text: 'I owe nothing'
+      }
     }
   },
   defendantDetails: {

@@ -30,8 +30,7 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
         1000,
         100,
         localDateFrom(MomentFactory.currentDate().add(1, 'day')),
-        PaymentSchedule.EACH_WEEK,
-        'I am not able to pay immediately'
+        PaymentSchedule.EACH_WEEK
       )
       break
   }
@@ -94,17 +93,7 @@ describe('DecideHowYouWillPayTask', () => {
       responseDraft = validResponseDraftWith(DefendantPaymentType.INSTALMENTS)
     })
 
-    it('should not be completed when payment plan is undefined', () => {
-      responseDraft.fullAdmission.paymentPlan = undefined
-      expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
-    })
-
-    it('should not be completed when payment plan is not valid', () => {
-      responseDraft.fullAdmission.paymentPlan = new PaymentPlan()
-      expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
-    })
-
-    it('should be completed when payment plan is valid', () => {
+    it('should be completed', () => {
       expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
     })
   })

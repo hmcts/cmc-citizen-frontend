@@ -1,6 +1,8 @@
 import { expect } from 'chai'
+import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import * as request from 'supertest'
 import * as config from 'config'
+import * as _ from 'lodash'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
@@ -21,6 +23,9 @@ import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/chec
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+
+const draft = _.cloneDeep(draftStoreServiceMock.sampleResponseDraftObj)
+draft.fullAdmission.paymentOption.option = DefendantPaymentType.BY_SET_DATE
 
 function nextDay () {
   const nextDay: moment.Moment = moment().add(1, 'days')
@@ -64,7 +69,7 @@ describe('Pay by set date: payment date', () => {
         })
 
         it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response', draft)
 
           await request(app)
             .get(pagePath)
@@ -103,7 +108,7 @@ describe('Pay by set date: payment date', () => {
         })
 
         it('should render error page when unable to save draft', async () => {
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response', draft)
           draftStoreServiceMock.rejectSave()
 
           await request(app)
@@ -114,7 +119,7 @@ describe('Pay by set date: payment date', () => {
         })
 
         it('should trigger validation when invalid data is given', async () => {
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response', draft)
 
           await request(app)
             .post(pagePath)
@@ -124,7 +129,7 @@ describe('Pay by set date: payment date', () => {
         })
 
         it('should redirect to task list when data is valid and user provides a date within 28 days from today', async () => {
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response', draft)
           draftStoreServiceMock.resolveSave()
 
           await request(app)
