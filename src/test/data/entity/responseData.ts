@@ -4,6 +4,7 @@ import {
   BankAccountType,
   ResidenceType
 } from 'claims/models/response/statement-of-means/statementOfMeans'
+import { MomentFactory } from 'shared/momentFactory'
 import { individual } from 'test/data/entity/party'
 
 const baseResponseData = {
@@ -41,7 +42,8 @@ const baseFullAdmissionData = {
 export const fullAdmissionWithImmediatePaymentData = {
   ...baseResponseData,
   ...baseFullAdmissionData,
-  paymentOption: PaymentOption.IMMEDIATELY
+  paymentOption: PaymentOption.IMMEDIATELY,
+  paymentDate: MomentFactory.currentDate().add(5, 'days')
 }
 
 export const fullAdmissionWithPaymentBySetDateData = {

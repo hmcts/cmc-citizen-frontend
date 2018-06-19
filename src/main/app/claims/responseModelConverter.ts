@@ -5,7 +5,8 @@ import {
   Child,
   ResidenceType
 } from 'claims/models/response/statement-of-means/statementOfMeans'
-import { ResponseDraft } from 'response/draft/responseDraft'
+import { Moment } from 'moment'
+import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
 import { Response } from 'claims/models/response'
 import { ResponseType, YesNoOption } from 'claims/models/response/responseCommon'
 import { DefenceType, FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
@@ -22,6 +23,7 @@ import { CompanyDetails } from 'forms/models/companyDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { Defendant } from 'drafts/models/defendant'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
+import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { ResponseType as FormResponseType } from 'response/form/models/responseType'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
@@ -34,6 +36,7 @@ import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { convertEvidence } from 'claims/converters/evidenceConverter'
+import { MomentFactory } from 'shared/momentFactory'
 
 export class ResponseModelConverter {
 
@@ -80,7 +83,7 @@ export class ResponseModelConverter {
       defendant: this.convertPartyDetails(draft.defendantDetails),
       moreTimeNeeded: draft.moreTimeNeeded && draft.moreTimeNeeded.option as YesNoOption,
       paymentOption: draft.fullAdmission.paymentOption.option.value as PaymentOption,
-      paymentDate: draft.fullAdmission.paymentDate && draft.fullAdmission.paymentDate.date.toMoment(),
+      paymentDate: this.convertPaymentDate(draft.fullAdmission),
       repaymentPlan: draft.fullAdmission.paymentPlan && {
         instalmentAmount: draft.fullAdmission.paymentPlan.instalmentAmount,
         firstPaymentDate: draft.fullAdmission.paymentPlan.firstPaymentDate.toMoment(),
@@ -207,6 +210,17 @@ export class ResponseModelConverter {
       party.mobilePhone = defendant.mobilePhone.number
     }
     return party
+  }
+
+  private static convertPaymentDate (fullAdmission: FullAdmission): Moment {
+    switch (fullAdmission.paymentOption.option) {
+      case DefendantPaymentType.IMMEDIATELY:
+        return MomentFactory.currentDate().add(5, 'days')
+      case DefendantPaymentType.BY_SET_DATE:
+        return fullAdmission.paymentDate.date.toMoment()
+      default:
+        return undefined
+    }
   }
 
   private static convertWhenDidYouPay (whenDidYouPay: WhenDidYouPay): PaymentDeclaration {

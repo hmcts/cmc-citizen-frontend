@@ -15,10 +15,10 @@
           <span class="block bold-large">{{ claim.claimNumber }}</span>
         </p>
         <p>
-          <span class="bold">{{ submittedOn | date }}</span>
+          <span class="bold">{{ claim.respondedAt | date }}</span>
         </p>
         <p class="receipt-download-container">
-          <a href="{{ paths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a> (PDF)
+          <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a> (PDF)
         </p>
       </div>
 
