@@ -1,28 +1,36 @@
 import * as express from 'express'
 import * as HttpStatus from 'http-status-codes'
 
-import { StatementOfMeansPaths } from 'response/paths'
+import { Paths } from 'paths'
+import { calculateTotalAmount, IncomeExpenseSource } from 'common/calculateMonthlyIncomeExpense'
 
 export default express.Router()
-  .get(StatementOfMeansPaths.totalIncomeOrExpensesCalculation.uri, (req, res) => {
+  .post(Paths.totalIncomeOrExpensesCalculation.uri, (req: express.Request, res: express.Response) => {
 
-    const amount: string = req.query['amount']
-    const frequencyToMonths: string = req.query['frequency-to-months']
+    const incomeExpenseSource: IncomeExpenseSource[] = req.body.incomeExpenseSource
 
-    const error: string = validate(amount, frequencyToMonths)
+    console.log(incomeExpenseSource)
 
-    if (error) {
-      return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
-        error: {
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          message: error
-        }
-      })
-    }
+    // const error: string = isIncomeExpenseSource(incomeExpenseSource)
+    //
+    // if (error) {
+    //   return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
+    //     error: {
+    //       status: HttpStatus.UNPROCESSABLE_ENTITY,
+    //       message: error
+    //     }
+    //   })
+    // }
 
-    return res.status(HttpStatus.OK).json({
+    const totalAmount: number = calculateTotalAmount(incomeExpenseSource)
 
-    })
+    console.log('totalAmount-->',calculateTotalAmount(incomeExpenseSource))
+
+    return res.status(HttpStatus.OK).type(totalAmount.toString())
   })
 
-
+function isIncomeExpenseSource (object: any): string {
+  if (object as IncomeExpenseSource[]) {
+    return `'${object}' is not of type IncomeExpenseSource`
+  }
+}

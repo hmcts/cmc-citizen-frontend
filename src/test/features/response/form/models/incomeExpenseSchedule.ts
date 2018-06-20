@@ -8,7 +8,7 @@ describe('IncomeExpenseSchedule', () => {
     IncomeExpenseSchedule.all().forEach(expectedIncomeExpenseSchedule => {
       it(`should return a valid object for '${expectedIncomeExpenseSchedule.value}'`, () => {
         const actualIncomeExpenseSchedule: IncomeExpenseSchedule = IncomeExpenseSchedule.of(expectedIncomeExpenseSchedule.value)
-  
+
         expect(actualIncomeExpenseSchedule).to.be.instanceof(IncomeExpenseSchedule)
         expect(actualIncomeExpenseSchedule.value).to.equal(expectedIncomeExpenseSchedule.value)
         expect(actualIncomeExpenseSchedule.displayValue).to.equal(expectedIncomeExpenseSchedule.displayValue)

@@ -11,9 +11,9 @@ const SAMPLE_MONTHLY_INCOME_SOURCE_FROM_OBJECT = {
 }
 const SAMPLE_MONTHLY_INCOME_SOURCE_DESERIALIZE = {
   amount: 100,
-  schedule: { 
-    value: IncomeExpenseSchedule.MONTH.value, 
-    displayValue: IncomeExpenseSchedule.MONTH.displayValue 
+  schedule: {
+    value: IncomeExpenseSchedule.MONTH.value,
+    displayValue: IncomeExpenseSchedule.MONTH.displayValue
   }
 }
 
