@@ -76,8 +76,6 @@ const defendantRepaymentPlan: PaymentPlan = {
   frequency: 'everyWeek'
 }
 
-const text = 'I owe nothing'
-
 export class DefenceSteps {
 
   async getClaimPin (claimRef: string, authorisation: string): Promise<string> {
@@ -222,7 +220,7 @@ export class DefenceSteps {
     this.explainImpactOfDispute(defence.impactOfDispute)
     defendantSteps.selectTaskDecideHowWillYouPay()
     defendantWhenWillYouPage.chooseInstalments()
-    defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan, text)
+    defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan)
     statementOfMeansSteps.fillStatementOfMeans()
     I.see('Respond to a money claim')
     defendantSteps.selectTaskFreeMediation()
@@ -318,9 +316,20 @@ export class DefenceSteps {
         defendantWhenWillYouPage.chooseFullBySetDate()
         defendantPaymentDatePage.enterDate('2020-12-31')
         defendantPaymentDatePage.saveAndContinue()
-        defendantTaskListPage.selectShareYourFinancialDetailsTask()
-        statementOfMeansSteps.fillStatementOfMeans()
         break
+      case PaymentOption.INSTALMENTS:
+        defendantWhenWillYouPage.chooseInstalments()
+        defendantTaskListPage.selectYourRepaymentPlanTask()
+        defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan)
+        defendantPaymentPlanPage.saveAndContinue()
+        break
+      default:
+        throw new Error(`Unknown payment option: ${paymentOption}`)
+    }
+
+    if (paymentOption === PaymentOption.BY_SET_DATE || paymentOption === PaymentOption.INSTALMENTS) {
+      defendantTaskListPage.selectShareYourFinancialDetailsTask()
+      statementOfMeansSteps.fillStatementOfMeans()
     }
 
     defendantSteps.selectCheckAndSubmitYourDefence()
@@ -335,6 +344,11 @@ export class DefenceSteps {
       case PaymentOption.BY_SET_DATE:
         I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} your offer to pay by 31 December 2020 and your explanation of why you can’t pay before then.`)
         break
+      case PaymentOption.INSTALMENTS:
+        I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} to tell them you’ve suggested paying by instalments.`)
+        break
+      default:
+        throw new Error(`Unknown payment option: ${paymentOption}`)
     }
   }
 

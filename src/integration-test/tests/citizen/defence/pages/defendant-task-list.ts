@@ -36,6 +36,10 @@ export class DefendantTaskListPage {
     I.click('Why do you disagree with the claim?')
   }
 
+  selectYourRepaymentPlanTask (): void {
+    I.click('Your repayment plan')
+  }
+
   selectShareYourFinancialDetailsTask (): void {
     I.click('Share your financial details')
   }

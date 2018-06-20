@@ -67,6 +67,20 @@ Scenario('I can complete the journey when I fully admit all of the claim with fu
   defenceSteps.makeFullAdmission(PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
 })
 
+Scenario('I can complete the journey when I fully admit all of the claim with full payment by instalments @citizen', function* (I: I) {
+  const claimantEmail: string = yield I.createCitizenUser()
+  const defendantEmail: string = yield I.createCitizenUser()
+
+  const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+  const claimRef: string = yield I.createClaim(claimData, claimantEmail)
+
+  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
+  helperSteps.linkClaimToDefendant(defendantEmail)
+  helperSteps.startResponseFromDashboard(claimRef)
+
+  defenceSteps.makeFullAdmission(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
+})
+
 Scenario('I can see send your response by email page when I admit part of the claim @citizen', function* (I: I) {
   const claimantEmail: string = yield I.createCitizenUser()
   const defendantEmail: string = yield I.createCitizenUser()
