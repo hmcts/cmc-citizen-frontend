@@ -27,7 +27,7 @@
 
     <form method="post" novalidate
           class="analytics-submit-event-trigger"
-          data-event-action="SoM: Are you paying any other court orders?"
+          data-event-action="SoM: Are you paying money as a result of any court orders?"
           data-event-label-from="declared">
 
       {{ csrfProtection(csrf) }}
@@ -35,7 +35,7 @@
       {% set errorHasAnyCourtOrders = form.errorFor('declared') %}
       <div class="statement-of-means-container">
         <fieldset id="declared[label]" class="form-group {% if errorHasAnyCourtOrders %} form-group-error {% endif %}">
-          <legend class="visually-hidden">{{ t('Are you paying any other court orders?') }}</legend>
+          <legend class="visually-hidden">{{ t('Are you paying money as a result of any court orders?') }}</legend>
           {% if errorHasAnyCourtOrders %}<span class="error-message">{{ t(errorHasAnyCourtOrders) }}</span>{% endif %}
 
           {{

@@ -8,14 +8,14 @@
     <div class="column-two-thirds">
       <form method="post" novalidate
         class="analytics-submit-event-trigger"
-        data-event-action="SoM: Are you currently working"
+        data-event-action="SoM: Do you have a job?"
         data-event-label-from="declared">
 
         {{ csrfProtection(csrf) }}
 
         {% set error = form.errorFor('declared') %}
         <fieldset id="declared[label]" class="form-group {% if error %} form-group-error {% endif %}">
-          <legend class="visually-hidden">{{ t('Are you currently working?') }}</legend>
+          <legend class="visually-hidden">{{ t('Do you have a job?') }}</legend>
 
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
 
