@@ -1,0 +1,51 @@
+{% extends "layout.njk" %}
+{% from "task-list.njk" import task, taskListHeading, disabledTask %}
+
+{% set headingVisible = false %}
+{% set heading = 'Claimant contact details' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">
+        <span class="heading-secondary">{{ t('Claimant') }}</span>
+        {{ claim.claimData.claimant.name }}
+      </h1>
+      <p>
+        {{ claim.claimData.claimant.address.line1 }}<br />
+        {% if claim.claimData.claimant.address.line2 %}
+          {{ claim.claimData.claimant.address.line2 }}<br />
+        {% endif %}
+        {% if claim.claimData.claimant.address.line3 %}
+          {{ claim.claimData.claimant.address.line3 }}<br />
+        {% endif %}
+        {{ claim.claimData.claimant.address.city }}<br />
+        {{ claim.claimData.claimant.address.postcode }}
+      </p>
+      {% if claim.claimData.claimant.mobilePhone %}
+        <p>{{ t('Phone: {{ phoneNumber }}', { phoneNumber: claim.claimData.claimant.mobilePhone }) }}</p>
+      {% endif %}
+      <p>{{ t('Email: <a href="mailto:{{ claimantEmail }}">{{ claimantEmail }}</a>', { claimantEmail: claim.claimantEmail }) | safe }} </p>
+    </div>
+
+    <div class="column-one-third">
+      <div class="about-claim-widget">
+        <p class="heading-small">{{ t('About claim') }}</p>
+        <ul class="font-xsmall list">
+          <li>
+            <strong class="bold">{{ t('Claimant name:') }}</strong>
+            <span class="block">{{ claim.claimData.claimant.name }}</span>
+          </li>
+          <li>
+            <strong class="bold">{{ t('Claim amount:') }}</strong>
+            <div>{{ claim.totalAmountTillToday | numeral }}</div>
+          </li>
+          <li>
+            <strong class="bold">{{ t('Claim details:') }}</strong>
+            <a class="block" href="{{ ClaimPaths.sealedClaimPdfReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download claim') }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}
