@@ -3,23 +3,29 @@ import { IsDefined, Min, ValidateIf } from 'class-validator'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
-import { Fractions } from '@hmcts/cmc-validators'
+import { Fractions, IsNotBlank } from '@hmcts/cmc-validators'
+
+export class ValidationErrors {
+  static readonly CLAIM_NUMBER_REQUIRED: string = 'Enter a claim number'
+}
 
 export class CourtOrderRow extends MultiRowFormItem {
 
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(1, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
+  @Min(0, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
   instalmentAmount?: number
 
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(1, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
+  @Min(0.01, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
   amount?: number
 
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
+  @IsDefined({ message: ValidationErrors.CLAIM_NUMBER_REQUIRED })
+  @IsNotBlank({ message: ValidationErrors.CLAIM_NUMBER_REQUIRED })
   claimNumber?: string
 
   constructor (amount?: number, instalmentAmount?: number, claimNumber?: string) {

@@ -10,7 +10,7 @@ export class ValidationErrors {
 }
 
 export class ValidationConstraints {
-  static readonly AMOUNT_YOU_OWE_MIN_VALUE: number = 1
+  static readonly AMOUNT_YOU_OWE_MIN_VALUE: number = 0.01
 }
 
 export class OnTaxPayments {

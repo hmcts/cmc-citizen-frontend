@@ -98,6 +98,12 @@ describe('CourtOrderRow', () => {
 
         expect(errors.length).to.equal(0)
       })
+
+      it('when amount has minimal value of 1 penny', () => {
+        const errors = validator.validateSync(new CourtOrderRow(0.01, 0, 'abc'))
+
+        expect(errors.length).to.equal(0)
+      })
     })
 
     context('should reject', () => {
@@ -116,10 +122,10 @@ describe('CourtOrderRow', () => {
         expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
       })
 
-      it('when amount and instalment = 0', () => {
+      it('when amount equal 0', () => {
         const errors = validator.validateSync(new CourtOrderRow(0, 0, 'abc'))
 
-        expect(errors.length).to.equal(2)
+        expect(errors.length).to.equal(1)
         expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
       })
 
