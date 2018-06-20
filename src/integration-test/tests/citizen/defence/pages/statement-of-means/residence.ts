@@ -14,6 +14,9 @@ export class ResidencePage {
 
   selectOwnHome (): void {
     I.checkOption(fields.ownHome)
+  }
+
+  clickContinue (): void {
     I.click(buttons.submit)
   }
 }

@@ -3,17 +3,17 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  declared: 'input[id="declaredfalse"]'
+  text: 'textarea[id=text]'
 }
 
 const buttons = {
   submit: 'input[id="saveAndContinue"]'
 }
 
-export class MaintenancePage {
+export class ExplanationPage {
 
-  selectNotDeclared (): void {
-    I.checkOption(fields.declared)
+  enterExplanation (): void {
+    I.fillField(fields.text, 'I cannot pay immediately')
   }
 
   clickContinue (): void {

@@ -36,6 +36,10 @@ export class DefendantTaskListPage {
     I.click('Why do you disagree with the claim?')
   }
 
+  selectShareYourFinancialDetailsTask (): void {
+    I.click('Share your financial details')
+  }
+
   selectTaskCheckAndSendYourResponse (): void {
     I.click('Check and submit your response')
   }

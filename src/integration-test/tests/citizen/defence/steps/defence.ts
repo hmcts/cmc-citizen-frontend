@@ -1,3 +1,4 @@
+import { PaymentOption } from 'integration-test/data/payment-option'
 import { createClaimant, createDefendant, DEFAULT_PASSWORD, defence } from 'integration-test/data/test-data'
 import { DefendantCheckAndSendPage } from 'integration-test/tests/citizen/defence/pages/defendant-check-and-send'
 import { DefendantDefenceTypePage } from 'integration-test/tests/citizen/defence/pages/defendant-defence-type'
@@ -12,11 +13,13 @@ import { DefendantMobilePage } from 'integration-test/tests/citizen/defence/page
 import { DefendantMoreTimeConfirmationPage } from 'integration-test/tests/citizen/defence/pages/defendant-more-time-confirmation'
 import { DefendantMoreTimeRequestPage } from 'integration-test/tests/citizen/defence/pages/defendant-more-time-request'
 import { DefendantNameAndAddressPage } from 'integration-test/tests/citizen/defence/pages/defendant-name-and-address'
+import { DefendantPaymentDatePage } from 'integration-test/tests/citizen/defence/pages/defendant-payment-date'
 import { DefendantPaymentPlanPage } from 'integration-test/tests/citizen/defence/pages/defendant-payment-plan'
 import { DefendantRegisterPage } from 'integration-test/tests/citizen/defence/pages/defendant-register'
 import { DefendantRejectAllOfClaimPage } from 'integration-test/tests/citizen/defence/pages/defendant-reject-all-of-claim'
 import { DefendantRejectPartOfClaimPage } from 'integration-test/tests/citizen/defence/pages/defendant-reject-part-of-claim'
 import { DefendantStartPage } from 'integration-test/tests/citizen/defence/pages/defendant-start'
+import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
 import { DefendantTimelineEventsPage } from 'integration-test/tests/citizen/defence/pages/defendant-timeline-events'
 import { DefendantViewClaimPage } from 'integration-test/tests/citizen/defence/pages/defendant-view-claim'
 import { DefendantWhenWillYouPayPage } from 'integration-test/tests/citizen/defence/pages/defendant-when-will-you-pay'
@@ -56,6 +59,8 @@ const defendantTimelineOfEventsPage: DefendantTimelineEventsPage = new Defendant
 const defendantEvidencePage: DefendantEvidencePage = new DefendantEvidencePage()
 const defendantImpactOfDisputePage: DefendantImpactOfDisputePage = new DefendantImpactOfDisputePage()
 const loginPage: LoginPage = new LoginPage()
+const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
+const defendantPaymentDatePage: DefendantPaymentDatePage = new DefendantPaymentDatePage()
 const defendantPaymentPlanPage: DefendantPaymentPlanPage = new DefendantPaymentPlanPage()
 const defendantWhenWillYouPage: DefendantWhenWillYouPayPage = new DefendantWhenWillYouPayPage()
 const defendantSteps: DefendantSteps = new DefendantSteps()
@@ -218,7 +223,7 @@ export class DefenceSteps {
     defendantSteps.selectTaskDecideHowWillYouPay()
     defendantWhenWillYouPage.chooseInstalments()
     defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan, text)
-    statementOfMeansSteps.fillStatementOfMeansData()
+    statementOfMeansSteps.fillStatementOfMeans()
     I.see('Respond to a money claim')
     defendantSteps.selectTaskFreeMediation()
     defendantFreeMediationPage.chooseYes()
@@ -294,7 +299,7 @@ export class DefenceSteps {
     }
   }
 
-  makeFullAdmission (defendantType: PartyType): void {
+  makeFullAdmission (defendantType: PartyType, paymentOption: PaymentOption): void {
     I.dontSee('COMPLETE')
 
     this.confirmYourDetails(createDefendant(defendantType))
@@ -304,12 +309,33 @@ export class DefenceSteps {
     defendantSteps.selectTaskChooseAResponse()
     defendantDefenceTypePage.admitAllOfMoneyClaim()
     defendantSteps.selectTaskDecideHowWillYouPay()
-    defendantWhenWillYouPage.chooseImmediately()
+
+    switch (paymentOption) {
+      case PaymentOption.IMMEDIATELY:
+        defendantWhenWillYouPage.chooseImmediately()
+        break
+      case PaymentOption.BY_SET_DATE:
+        defendantWhenWillYouPage.chooseFullBySetDate()
+        defendantPaymentDatePage.enterDate('2020-12-31')
+        defendantPaymentDatePage.saveAndContinue()
+        defendantTaskListPage.selectShareYourFinancialDetailsTask()
+        statementOfMeansSteps.fillStatementOfMeans()
+        break
+    }
+
     defendantSteps.selectCheckAndSubmitYourDefence()
     this.checkAndSendAndSubmit(defendantType)
 
     I.see('You’ve submitted your response')
-    I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} to tell them you’ll pay immediately.`)
+
+    switch (paymentOption) {
+      case PaymentOption.IMMEDIATELY:
+        I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} to tell them you’ll pay immediately.`)
+        break
+      case PaymentOption.BY_SET_DATE:
+        I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} your offer to pay by 31 December 2020 and your explanation of why you can’t pay before then.`)
+        break
+    }
   }
 
   sendDefenceResponseHandOff (claimRef: string, defendant: Party, claimant: Party, defenceType: DefenceType): void {

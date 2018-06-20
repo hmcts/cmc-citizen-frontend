@@ -3,7 +3,7 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  dontHaveDebts: 'input[id="hasAnyDebtsfalse"]'
+  declared: 'input[id="declaredfalse"]'
 }
 
 const buttons = {
@@ -12,8 +12,11 @@ const buttons = {
 
 export class DebtsPage {
 
-  selectDontHaveDebts (): void {
-    I.checkOption(fields.dontHaveDebts)
+  selectNotDeclared (): void {
+    I.checkOption(fields.declared)
+  }
+
+  clickContinue (): void {
     I.click(buttons.submit)
   }
 }

@@ -3,7 +3,7 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  notWorkingCurrently: 'input[id="isCurrentlyEmployedfalse"]'
+  declared: 'input[id="declaredfalse"]'
 }
 
 const buttons = {
@@ -12,8 +12,11 @@ const buttons = {
 
 export class EmploymentPage {
 
-  selectNotWorkingCurrently (): void {
-    I.checkOption(fields.notWorkingCurrently)
+  selectNotDeclared (): void {
+    I.checkOption(fields.declared)
+  }
+
+  clickContinue (): void {
     I.click(buttons.submit)
   }
 }

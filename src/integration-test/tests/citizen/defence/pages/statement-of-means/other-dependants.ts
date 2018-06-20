@@ -3,7 +3,7 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  dontSupportAnyone: 'input[id="doYouSupportAnyonefalse"]'
+  declared: 'input[id="declaredfalse"]'
 }
 
 const buttons = {
@@ -12,8 +12,11 @@ const buttons = {
 
 export class OtherDependantsPage {
 
-  selectDontSupportAnyone (): void {
-    I.checkOption(fields.dontSupportAnyone)
+  selectNotDeclared (): void {
+    I.checkOption(fields.declared)
+  }
+
+  clickContinue (): void {
     I.click(buttons.submit)
   }
 }
