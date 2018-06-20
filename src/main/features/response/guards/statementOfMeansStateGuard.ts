@@ -3,6 +3,7 @@ import * as express from 'express'
 import { ResponseDraft } from 'response/draft/responseDraft'
 
 import { GuardFactory } from 'response/guards/guardFactory'
+import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
 
 import { Paths } from 'response/paths'
 import { UUIDUtils } from 'shared/utils/uuidUtils'
@@ -18,10 +19,8 @@ export class StatementOfMeansStateGuard {
     return GuardFactory.create((res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-      return (requireInitiatedModel ? draft.document.statementOfMeans !== undefined : true)
-        && draft.document.isResponseFullyAdmitted()
-        && (draft.document.isResponseFullyAdmittedWithPayBySetDate() || draft.document.isResponseFullyAdmittedWithInstalments())
-        && !draft.document.defendantDetails.partyDetails.isBusiness()
+      return StatementOfMeansFeature.isApplicableFor(draft.document)
+        && (requireInitiatedModel ? draft.document.statementOfMeans !== undefined : true)
     }, (req: express.Request, res: express.Response): void => {
       res.redirect(Paths.taskListPage.evaluateUri({ externalId: UUIDUtils.extractFrom(req.path) }))
     })

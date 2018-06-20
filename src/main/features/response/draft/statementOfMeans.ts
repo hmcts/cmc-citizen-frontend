@@ -9,14 +9,10 @@ import { Maintenance } from 'response/form/models/statement-of-means/maintenance
 import { OtherDependants } from 'response/form/models/statement-of-means/otherDependants'
 import { Unemployment } from 'response/form/models/statement-of-means/unemployment'
 import { BankAccounts } from 'response/form/models/statement-of-means/bankAccounts'
-import { FeatureToggles } from 'utils/featureToggles'
-import { ResponseDraft } from 'response/draft/responseDraft'
-import { ResponseType } from 'response/form/models/responseType'
 import { Debts } from 'response/form/models/statement-of-means/debts'
 import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders'
 import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
 import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
-import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { Explanation } from 'response/form/models/statement-of-means/explanation'
 
 export class StatementOfMeans {
@@ -36,22 +32,6 @@ export class StatementOfMeans {
   monthlyExpenses?: MonthlyExpenses
   courtOrders?: CourtOrders
   explanation?: Explanation
-
-  static isApplicableFor (responseDraft?: ResponseDraft): boolean {
-    if (!FeatureToggles.isEnabled('statementOfMeans')) {
-      return false
-    }
-    if (!responseDraft) {
-      throw new Error('Response draft has to be provided as input')
-    }
-    return !responseDraft.defendantDetails.partyDetails.isBusiness()
-      && this.isResponseApplicable(responseDraft)
-  }
-
-  private static isResponseApplicable (responseDraft: ResponseDraft) {
-    return (responseDraft.response.type === ResponseType.FULL_ADMISSION
-      && !responseDraft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY))
-  }
 
   deserialize (input: any): StatementOfMeans {
     if (input) {

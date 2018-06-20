@@ -15,6 +15,7 @@ import { DecideHowYouWillPayTask } from 'response/tasks/decideHowYouWillPayTask'
 import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
 import { YourRepaymentPlanTask } from 'features/response/tasks/yourRepaymentPlanTask'
 import { StatementOfMeansTask } from 'response/tasks/statementOfMeansTask'
+import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -88,10 +89,7 @@ export class TaskListBuilder {
       )
     }
 
-    if (draft.isResponseFullyAdmitted()
-      && (draft.isResponseFullyAdmittedWithPayBySetDate() || draft.isResponseFullyAdmittedWithInstalments())
-      && !draft.defendantDetails.partyDetails.isBusiness()
-    ) {
+    if (StatementOfMeansFeature.isApplicableFor(draft)) {
       tasks.push(
         new TaskListItem(
           'Share your financial details',

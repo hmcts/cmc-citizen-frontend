@@ -15,10 +15,10 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { SignatureType } from 'common/signatureType'
 import { QualifiedStatementOfTruth } from 'response/form/models/qualifiedStatementOfTruth'
 import { DraftService } from 'services/draftService'
-import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
+import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -31,7 +31,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     form: form,
     draft: draft.document,
     signatureType: signatureTypeFor(claim, draft),
-    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(draft.document)
+    statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(draft.document)
   })
 }
 

@@ -2,6 +2,7 @@ import { Validator } from 'class-validator'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
+import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
 
 const validator = new Validator()
 
@@ -11,7 +12,7 @@ function isValid (input): boolean {
 
 export class StatementOfMeansTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
-    if (StatementOfMeans.isApplicableFor(responseDraft)) {
+    if (StatementOfMeansFeature.isApplicableFor(responseDraft)) {
       const statementOfMeans: StatementOfMeans = responseDraft.statementOfMeans
 
       return statementOfMeans !== undefined
