@@ -3,7 +3,14 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  declared: 'input[id="declaredfalse"]'
+  options: {
+    declared: 'input[id="declaredtrue"]',
+    notDeclared: 'input[id="declaredfalse"]'
+  },
+  numberOfPeople: {
+    value: 'input[id="numberOfPeople[value]"]',
+    details: 'textarea[id="numberOfPeople[details]"]'
+  }
 }
 
 const buttons = {
@@ -12,8 +19,17 @@ const buttons = {
 
 export class OtherDependantsPage {
 
+  selectDeclared (): void {
+    I.checkOption(fields.options.declared)
+  }
+
   selectNotDeclared (): void {
-    I.checkOption(fields.declared)
+    I.checkOption(fields.options.notDeclared)
+  }
+
+  enterNumberOfPeople (value: number, details: string): void {
+    I.fillField(fields.numberOfPeople.value, value.toFixed())
+    I.fillField(fields.numberOfPeople.details, details)
   }
 
   clickContinue (): void {

@@ -221,7 +221,7 @@ export class DefenceSteps {
     defendantSteps.selectTaskDecideHowWillYouPay()
     defendantWhenWillYouPage.chooseInstalments()
     defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan)
-    statementOfMeansSteps.fillStatementOfMeans()
+    statementOfMeansSteps.fillMandatoryStatementOfMeans()
     I.see('Respond to a money claim')
     defendantSteps.selectTaskFreeMediation()
     defendantFreeMediationPage.chooseYes()
@@ -316,20 +316,19 @@ export class DefenceSteps {
         defendantWhenWillYouPage.chooseFullBySetDate()
         defendantPaymentDatePage.enterDate('2020-12-31')
         defendantPaymentDatePage.saveAndContinue()
+        defendantTaskListPage.selectShareYourFinancialDetailsTask()
+        statementOfMeansSteps.fillMandatoryStatementOfMeans()
         break
       case PaymentOption.INSTALMENTS:
         defendantWhenWillYouPage.chooseInstalments()
         defendantTaskListPage.selectYourRepaymentPlanTask()
         defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan)
         defendantPaymentPlanPage.saveAndContinue()
+        defendantTaskListPage.selectShareYourFinancialDetailsTask()
+        statementOfMeansSteps.fillOptionalStatementOfMeans()
         break
       default:
         throw new Error(`Unknown payment option: ${paymentOption}`)
-    }
-
-    if (paymentOption === PaymentOption.BY_SET_DATE || paymentOption === PaymentOption.INSTALMENTS) {
-      defendantTaskListPage.selectShareYourFinancialDetailsTask()
-      statementOfMeansSteps.fillStatementOfMeans()
     }
 
     defendantSteps.selectCheckAndSubmitYourDefence()
