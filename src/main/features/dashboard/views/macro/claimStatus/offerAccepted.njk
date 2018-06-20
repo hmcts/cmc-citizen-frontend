@@ -1,8 +1,7 @@
 {% macro offerAcceptedForClaimantDashboard(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
   <p>
-    {{ t('You’ve signed the agreement. {{ defendantName }} will also be asked to sign. '
-      + 'The agreement replaces the claim once you’ve both signed.',
+    {{ t('You’ve signed the agreement. We’ve asked {{ defendantName }} to sign the agreement.',
       { defendantName: defendantName }) }}
   </p>
   {{ t('{{ defendantName }} has rejected your claim.',

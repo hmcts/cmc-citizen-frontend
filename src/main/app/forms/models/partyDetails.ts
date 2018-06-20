@@ -21,7 +21,7 @@ export class PartyDetails {
 
   @IsDefined({ message: ValidationErrors.ADDRESS_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @ValidateNested({ groups: ['claimant', 'defendant', 'response'] })
-  address?: Address = new Address()
+  address?: Address
 
   hasCorrespondenceAddress?: boolean
 

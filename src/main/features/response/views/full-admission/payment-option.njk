@@ -1,0 +1,60 @@
+{% extends "layout.njk" %}
+
+{% from "form.njk" import saveAndContinueButton, csrfProtection, radioGroup, radioGroupWithHintPanel, errorSummary %}
+
+{% set heading = 'When do you want to pay?' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post"
+            class="analytics-submit-event-trigger"
+            data-event-action="Defendant: Select payment option"
+            data-event-label-from="option"
+            novalidate>
+        {{ csrfProtection(csrf) }}
+
+        <div class="notice">
+          <i class="icon icon-important"><span class="visually-hidden">{{ t('Warning') }}</span></i>
+          <strong class="bold-small">{{ t('You may receive a County Court Judgment (CCJ) if you don`t pay immediately.') }}</strong>
+        </div>
+
+        {% if statementOfMeansIsApplicable %}
+          {% set hintText = t('You will need to give details of your finances to {{ claimantFullName }} to explain why you can`t pay immediately.', { claimantFullName: claim.claimData.claimant.name }) %}
+        {% endif %}
+
+        {{
+        radioGroupWithHintPanel(
+          form = form,
+          label = heading,
+          labelForScreenReadersOnly = true,
+          name = 'option',
+          options = [
+            {
+              label: DefendantPaymentType.IMMEDIATELY.displayValue,
+              value: DefendantPaymentType.IMMEDIATELY.value,
+              checked: (form.valueFor('option') === DefendantPaymentType.IMMEDIATELY),
+              hint: 'You must make sure they receive the money within 5 days. Any cheques or transfers must be clear in their account.'
+            },
+            {
+              label: DefendantPaymentType.BY_SET_DATE.displayValue,
+              value: DefendantPaymentType.BY_SET_DATE.value,
+              checked: (form.valueFor('option') === DefendantPaymentType.BY_SET_DATE),
+              hint: hintText
+            },
+            {
+              label: DefendantPaymentType.INSTALMENTS.displayValue,
+              value: DefendantPaymentType.INSTALMENTS.value,
+              checked: (form.valueFor('option') === DefendantPaymentType.INSTALMENTS),
+              hint: hintText
+            }
+          ]
+        )
+        }}
+
+        {{ saveAndContinueButton() }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

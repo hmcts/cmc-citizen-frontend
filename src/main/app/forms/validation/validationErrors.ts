@@ -14,7 +14,6 @@ export class ValidationErrors {
   static readonly DEFENDANT_AGE_REQUIRED: string = 'Select yes, no, or company/organisation'
 
   static readonly DATE_REQUIRED: string = 'Enter a date'
-  static readonly DATE_INVALID_YEAR: string = 'Enter a 4 digit year'
   static readonly DATE_NOT_VALID: string = 'Enter a valid date'
   static readonly DATE_IN_FUTURE: string = 'Correct the date. You can\'t use a future date'
 

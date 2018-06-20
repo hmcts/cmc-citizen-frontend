@@ -20,8 +20,8 @@ export class DefendantSteps {
     defendantTaskListPage.selectTaskHowMuchMoneyBelieveYouOwe()
   }
 
-  selectTaskWhenWillYouPay (): void {
-    defendantTaskListPage.selectTaskWhenWillYouPay()
+  selectTaskDecideHowWillYouPay (): void {
+    defendantTaskListPage.selectTaskDecideHowWillYouPay()
   }
 
   selectTaskWhenDidYouPay (): void {

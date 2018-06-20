@@ -1,3 +1,4 @@
+import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { Response } from 'response/form/models/response'
 import { FreeMediation } from 'response/form/models/freeMediation'
 import { RejectPartOfClaim } from 'response/form/models/rejectPartOfClaim'
@@ -11,11 +12,10 @@ import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
 import { HowMuchPaid } from 'response/form/models/howMuchPaid'
 import { HowMuchOwed } from 'response/form/models/howMuchOwed'
-import { DefendantPaymentOption } from 'response/form/models/defendantPaymentOption'
-import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
+import { DefendantPaymentOption as PaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { DefendantPaymentPlan as PaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
-import { PayBySetDate } from 'response/draft/payBySetDate'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
 import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
@@ -23,6 +23,21 @@ import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
+
+export class FullAdmission {
+  paymentOption: PaymentOption
+  paymentDate?: PaymentDate
+  paymentPlan?: PaymentPlan
+
+  deserialize (input: any): FullAdmission {
+    if (input) {
+      this.paymentOption = new PaymentOption().deserialize(input.paymentOption)
+      this.paymentDate = new PaymentDate().deserialize(input.paymentDate)
+      this.paymentPlan = new PaymentPlan().deserialize(input.paymentPlan)
+      return this
+    }
+  }
+}
 
 export class ResponseDraft extends DraftDocument {
 
@@ -38,14 +53,13 @@ export class ResponseDraft extends DraftDocument {
   howMuchOwed?: HowMuchOwed
   rejectPartOfClaim?: RejectPartOfClaim
   rejectAllOfClaim?: RejectAllOfClaim
-  defendantPaymentOption: DefendantPaymentOption
-  defendantPaymentPlan?: DefendantPaymentPlan
   paidAmount?: PaidAmount
-  payBySetDate?: PayBySetDate
   impactOfDispute?: ImpactOfDispute
   statementOfMeans?: StatementOfMeans
   whenDidYouPay?: WhenDidYouPay
   howMuchPaidClaimant?: HowMuchPaidClaimant
+
+  fullAdmission?: FullAdmission
 
   deserialize (input: any): ResponseDraft {
     if (input) {
@@ -64,15 +78,17 @@ export class ResponseDraft extends DraftDocument {
       }
       this.rejectPartOfClaim = new RejectPartOfClaim(input.rejectPartOfClaim && input.rejectPartOfClaim.option)
       this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
-      this.defendantPaymentOption = new DefendantPaymentOption().deserialize(input.defendantPaymentOption)
-      this.defendantPaymentPlan = new DefendantPaymentPlan().deserialize(input.defendantPaymentPlan)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
-      this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
-      this.payBySetDate = new PayBySetDate().deserialize(input.payBySetDate)
-      this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
+      if (input.statementOfMeans) {
+        this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
+      }
       this.whenDidYouPay = new WhenDidYouPay().deserialize(input.whenDidYouPay)
       this.howMuchPaidClaimant = new HowMuchPaidClaimant(input.howMuchPaidClaimant && input.howMuchPaidClaimant.option)
+
+      if (input.fullAdmission) {
+        this.fullAdmission = new FullAdmission().deserialize(input.fullAdmission)
+      }
     }
     return this
   }
@@ -87,6 +103,15 @@ export class ResponseDraft extends DraftDocument {
     }
 
     return this.isResponsePopulated() && this.response.type === ResponseType.FULL_ADMISSION
+  }
+
+  // TODO: Because of an overlap between two stories (ROC-3657, ROC-3658), the logic of this function
+  // is incomplete. ROC-3658 should revisit once 'statement of means' flow is complete.
+  public isResponseFullyAdmittedWithInstalments (): boolean {
+    return this.isResponseFullyAdmitted()
+        && this.fullAdmission
+        && this.fullAdmission.paymentOption
+        && (this.fullAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS)
   }
 
   public isResponsePartiallyRejectedDueTo (option: String): boolean {

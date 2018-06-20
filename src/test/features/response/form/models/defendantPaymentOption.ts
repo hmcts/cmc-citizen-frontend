@@ -9,7 +9,6 @@ import {
   DefendantPaymentOption, DefendantPaymentType, DefendantPaymentTypeLabels,
   ValidationErrors
 } from 'response/form/models/defendantPaymentOption'
-import { ResponseType } from 'response/form/models/responseType'
 
 describe('DefendantPaymentOption', () => {
   describe('form object deserialization', () => {
@@ -99,34 +98,17 @@ describe('DefendantPaymentOption', () => {
 })
 
 describe('DefendantPaymentType', () => {
-  describe('displayValueFor', () => {
-    it('should throw error on unknown payment type', () => {
-      const unknown: DefendantPaymentType = new DefendantPaymentType('unknown')
-      expect(() => unknown.displayValueFor({ } as ResponseType)).to.throw(Error)
+  describe('displayValue', () => {
+    it(`should return '${DefendantPaymentTypeLabels.IMMEDIATELY}' for IMMEDIATELY`, () => {
+      expect(DefendantPaymentType.IMMEDIATELY.displayValue).to.equal(DefendantPaymentTypeLabels.IMMEDIATELY)
     })
 
-    context('on full admission', () => {
-      it(`should return '${DefendantPaymentTypeLabels.INSTALMENTS}' for BY_INSTALMENTS`, () => {
-        expect(DefendantPaymentType.INSTALMENTS.displayValueFor(ResponseType.FULL_ADMISSION))
-          .to.equal(DefendantPaymentTypeLabels.INSTALMENTS)
-      })
-
-      it(`should return '${DefendantPaymentTypeLabels.FULL_ADMIT_BY_SPECIFIED_DATE}' for BY_SET_DATE`, () => {
-        expect(DefendantPaymentType.BY_SET_DATE.displayValueFor(ResponseType.FULL_ADMISSION))
-          .to.equal(DefendantPaymentTypeLabels.FULL_ADMIT_BY_SPECIFIED_DATE)
-      })
+    it(`should return '${DefendantPaymentTypeLabels.BY_SET_DATE}' for BY_SET_DATE`, () => {
+      expect(DefendantPaymentType.BY_SET_DATE.displayValue).to.equal(DefendantPaymentTypeLabels.BY_SET_DATE)
     })
 
-    context('on partial admission', () => {
-      it(`should return '${DefendantPaymentTypeLabels.INSTALMENTS}' for BY_INSTALMENTS`, () => {
-        expect(DefendantPaymentType.INSTALMENTS.displayValueFor(ResponseType.PART_ADMISSION))
-          .to.equal(DefendantPaymentTypeLabels.INSTALMENTS)
-      })
-
-      it(`should return '${DefendantPaymentTypeLabels.BY_SET_DATE}' for BY_SET_DATE`, () => {
-        expect(DefendantPaymentType.BY_SET_DATE.displayValueFor(ResponseType.PART_ADMISSION))
-          .to.equal(DefendantPaymentTypeLabels.BY_SET_DATE)
-      })
+    it(`should return '${DefendantPaymentTypeLabels.INSTALMENTS}' for INSTALMENTS`, () => {
+      expect(DefendantPaymentType.INSTALMENTS.displayValue).to.equal(DefendantPaymentTypeLabels.INSTALMENTS)
     })
   })
 })

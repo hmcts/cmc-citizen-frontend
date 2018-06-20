@@ -17,6 +17,7 @@ import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 
 describe('StatementOfMeans', () => {
   describe('deserialize', () => {
@@ -110,21 +111,15 @@ describe('StatementOfMeans', () => {
       const responseDraft: ResponseDraft = {
         response: {
           type: ResponseType.FULL_ADMISSION
+        },
+        fullAdmission: {
+          paymentOption: {
+            option: DefendantPaymentType.INSTALMENTS
+          }
         }
       } as ResponseDraft
 
-      itShouldBeEnabledForNonBusinessAndDisabledForBusinessDefendants(responseDraft)
-    })
-
-    context('when response is part admission - claim amount too much', () => {
-      const responseDraft: ResponseDraft = {
-        response: {
-          type: ResponseType.PART_ADMISSION
-        },
-        rejectPartOfClaim: new RejectPartOfClaim(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
-      } as ResponseDraft
-
-      itShouldBeEnabledForNonBusinessAndDisabledForBusinessDefendants(responseDraft)
+      itShouldBeEnabledForNonBusinessAndDisabledForBusinessDefendants(new ResponseDraft().deserialize(responseDraft))
     })
 
     context('when response is part admission - I paid what I believe I owe', () => {

@@ -49,6 +49,10 @@ export class Settlement {
     return !!statement
   }
 
+  isOfferResponded (): boolean {
+    return this.isOfferAccepted() || this.isOfferRejected()
+  }
+
   private isOfferMadeByDefendant (partyStatement: PartyStatement): boolean {
     return partyStatement.type === StatementType.OFFER.value && partyStatement.madeBy === MadeBy.DEFENDANT.value
   }

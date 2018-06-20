@@ -5,7 +5,7 @@ import * as config from 'config'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 
-import { Paths, PayBySetDatePaths } from 'response/paths'
+import { Paths, FullAdmissionPaths } from 'response/paths'
 
 import { app } from 'main/app'
 
@@ -15,12 +15,11 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
 import { ResponseType } from 'response/form/models/responseType'
 import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
-import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const pagePath = Paths.defencePaymentOptionsPage.evaluateUri({ externalId: externalId })
+const pagePath = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: externalId })
 
 const validFormData: object = {
   option: DefendantPaymentType.INSTALMENTS.value
@@ -40,7 +39,7 @@ describe('Defendant - when will you pay options', () => {
       })
 
       context('when service is unhealthy', () => {
-        it('should return 500 and render error page when cannot retrieve claims', async () => {
+        it('should return 500 and render error page when cannot retrieve claim by external id', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
@@ -61,7 +60,7 @@ describe('Defendant - when will you pay options', () => {
       })
 
       context('when service is healthy', () => {
-        const fullAdmissionQuestion: string = 'When will you pay?'
+        const fullAdmissionQuestion: string = 'When do you want to pay?'
         it(`should render page asking '${fullAdmissionQuestion}' when full admission was selected`, async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response', {
@@ -73,23 +72,6 @@ describe('Defendant - when will you pay options', () => {
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText(fullAdmissionQuestion))
-        })
-
-        const partAdmissionQuestion: string = 'When will you pay the amount you admit you owe?'
-        it(`should render page asking '${partAdmissionQuestion}' when partial admission was selected`, async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response', {
-            response: {
-              type: ResponseType.PART_ADMISSION
-            },
-            rejectPartOfClaim: {
-              option: RejectPartOfClaimOption.AMOUNT_TOO_HIGH
-            }
-          })
-          await request(app)
-            .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText(partAdmissionQuestion))
         })
       })
     })
@@ -105,7 +87,7 @@ describe('Defendant - when will you pay options', () => {
         })
 
         context('when service is unhealthy', () => {
-          it('should return 500 when cannot retrieve claim by external id', async () => {
+          it('should return 500 and render error page when cannot retrieve claim by external id', async () => {
             claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
@@ -115,7 +97,7 @@ describe('Defendant - when will you pay options', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should return 500 when cannot retrieve response draft', async () => {
+          it('should return 500 and render error page when cannot retrieve response draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.rejectFind('Error')
 
@@ -126,7 +108,7 @@ describe('Defendant - when will you pay options', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should return 500 when cannot save response draft', async () => {
+          it('should return 500 and render error page when cannot save response draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.rejectSave()
@@ -165,13 +147,19 @@ describe('Defendant - when will you pay options', () => {
             it('should redirect to repayment plan page for "INSTALMENTS" option selected', async () => {
               await checkThatSelectedPaymentOptionRedirectsToPage(
                 { option: DefendantPaymentType.INSTALMENTS.value },
-                Paths.defencePaymentPlanPage.evaluateUri({ externalId: externalId }))
+                Paths.taskListPage.evaluateUri({ externalId: externalId }))
             })
 
             it('should redirect to payment date page for "BY_SET_DATE" option selected', async () => {
               await checkThatSelectedPaymentOptionRedirectsToPage(
                 { option: DefendantPaymentType.BY_SET_DATE.value },
-                PayBySetDatePaths.paymentDatePage.evaluateUri({ externalId: externalId }))
+                FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: externalId }))
+            })
+
+            it('should redirect to task list page for "IMMEDIATELY" option selected', async () => {
+              await checkThatSelectedPaymentOptionRedirectsToPage(
+                { option: DefendantPaymentType.IMMEDIATELY.value },
+                Paths.taskListPage.evaluateUri({ externalId: externalId }))
             })
           })
 
@@ -181,7 +169,7 @@ describe('Defendant - when will you pay options', () => {
                 .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
                 .send({ name: 'John Smith' })
-                .expect(res => expect(res).to.be.successful.withText('When will you pay?'))
+                .expect(res => expect(res).to.be.successful.withText('When do you want to pay?', 'div class="error-summary"'))
             })
           })
         })

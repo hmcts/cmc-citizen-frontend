@@ -1,8 +1,7 @@
 import { IsDefined, MaxLength, ValidateNested } from 'class-validator'
 import { IsPastDate } from 'forms/validation/validators/datePastConstraint'
 import { LocalDate } from 'forms/models/localDate'
-import { IsNotBlank } from '@hmcts/cmc-validators'
-import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
+import { IsNotBlank, IsValidLocalDate } from '@hmcts/cmc-validators'
 import { MomentFactory } from 'shared/momentFactory'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
@@ -21,7 +20,7 @@ export class WhenDidYouPay {
   @ValidateNested()
   @IsDefined({ message: CommonValidationErrors.DATE_REQUIRED })
   @IsPastDate({ message: ValidationErrors.DATE_OUTSIDE_RANGE })
-  @IsValidYearFormat({ message: CommonValidationErrors.DATE_INVALID_YEAR })
+  @IsValidLocalDate({ message: CommonValidationErrors.DATE_NOT_VALID })
   date?: LocalDate
 
   @IsDefined({ message: ValidationErrors.EXPLANATION_REQUIRED })

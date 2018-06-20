@@ -1,14 +1,16 @@
 import { expect } from 'chai'
+import { LocalDate } from 'forms/models/localDate'
 
-import { ResponseDraft } from 'response/draft/responseDraft'
+import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
+import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+
 import { Response } from 'response/form/models/response'
 import { ResponseType } from 'response/form/models/responseType'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
-import { MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
+import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
-import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 
 describe('ResponseDraft', () => {
@@ -23,39 +25,100 @@ describe('ResponseDraft', () => {
       expect(new ResponseDraft().deserialize(null)).to.eql(new ResponseDraft())
     })
 
-    it('should return a ResponseDraft instance initialised with valid data', () => {
+    it('should return a ResponseDraft instance initialised with valid data (defence)', () => {
+      const responseType: ResponseType = ResponseType.DEFENCE
+
+      const draft: ResponseDraft = new ResponseDraft().deserialize({
+        response: {
+          type: {
+            value: responseType.value,
+            displayValue: responseType.displayValue
+          }
+        },
+        moreTimeNeeded: {
+          option: MoreTimeNeededOption.YES
+        },
+        impactOfDispute: {
+          text: 'This dispute has affected me badly, I cried'
+        },
+        freeMediation: {
+          option: FreeMediationOption.YES
+        }
+      })
+
+      expect(draft.response.type).to.eql(responseType)
+      expect(draft.moreTimeNeeded.option).to.eql(MoreTimeNeededOption.YES)
+      expect(draft.freeMediation.option).to.eql(FreeMediationOption.YES)
+      expect(draft.impactOfDispute.text).to.equal('This dispute has affected me badly, I cried')
+    })
+
+    it('should return a ResponseDraft instance initialised with valid data (full admission)', () => {
       const responseType: ResponseType = ResponseType.PART_ADMISSION
-      const inputData = prepareInputData(responseType, MoreTimeNeededOption.YES)
+      const paymentDate: Partial<LocalDate> = {
+        year: 1988,
+        month: 2,
+        day: 10
+      }
 
-      const responseDraftModel: ResponseDraft = new ResponseDraft().deserialize(inputData)
+      const draft: ResponseDraft = new ResponseDraft().deserialize({
+        response: {
+          type: {
+            value: responseType.value,
+            displayValue: responseType.displayValue
+          }
+        },
+        moreTimeNeeded: {
+          option: MoreTimeNeededOption.YES
+        },
+        fullAdmission: {
+          paymentDate: {
+            date: paymentDate
+          }
+        },
+        statementOfMeans: {
+          residence: {
+            type: {
+              value: ResidenceType.OTHER.value,
+              displayValue: ResidenceType.OTHER.displayValue
+            },
+            housingDetails: 'Squat'
+          }
+        },
+        freeMediation: {
+          option: FreeMediationOption.YES
+        }
+      })
 
-      expect(responseDraftModel.response.type).to.eql(responseType)
-      expect(responseDraftModel.freeMediation.option).to.eql(FreeMediationOption.YES)
-      expect(responseDraftModel.moreTimeNeeded.option).to.eql(MoreTimeNeededOption.YES)
-      expect(responseDraftModel.isMoreTimeRequested()).to.be.eql(true)
-      expect(responseDraftModel.impactOfDispute.text).to.equal('This dispute has affected me badly, I cried')
-      expect(responseDraftModel.statementOfMeans.residence.type).to.eql(ResidenceType.OTHER)
-      assertPaymentDateEquals(responseDraftModel.payBySetDate.paymentDate, inputData.payBySetDate.paymentDate)
-      expect(responseDraftModel.payBySetDate.explanation.text).to.equal(inputData.payBySetDate.explanation.text)
+      expect(draft.response.type).to.eql(responseType)
+      expect(draft.moreTimeNeeded.option).to.eql(MoreTimeNeededOption.YES)
+      expect(draft.freeMediation.option).to.eql(FreeMediationOption.YES)
+      assertLocalDateEquals(draft.fullAdmission.paymentDate.date, paymentDate)
+      expect(draft.statementOfMeans.residence.type).to.eql(ResidenceType.OTHER)
     })
   })
 
   describe('isMoreTimeRequested', () => {
+    it('should return false when instantiated with no input', () => {
+      const draft: ResponseDraft = new ResponseDraft()
 
-    it('should return false when more time was not requested', () => {
-      const responseDraftModel: ResponseDraft = new ResponseDraft().deserialize(
-        prepareInputData(ResponseType.FULL_ADMISSION, MoreTimeNeededOption.NO)
-      )
-
-      expect(responseDraftModel.moreTimeNeeded.option).to.be.eq(MoreTimeNeededOption.NO)
-      expect(responseDraftModel.isMoreTimeRequested()).to.be.eq(false)
+      expect(draft.moreTimeNeeded).to.be.eql(undefined)
+      expect(draft.isMoreTimeRequested()).to.be.eq(false)
     })
 
-    it('should return false when instantiated with no input', () => {
-      const responseDraftModel: ResponseDraft = new ResponseDraft()
+    it('should return false when more time was not requested', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.moreTimeNeeded = new MoreTimeNeeded(MoreTimeNeededOption.NO)
 
-      expect(responseDraftModel.moreTimeNeeded).to.be.eql(undefined)
-      expect(responseDraftModel.isMoreTimeRequested()).to.be.eq(false)
+      expect(draft.moreTimeNeeded.option).to.be.eq(MoreTimeNeededOption.NO)
+      expect(draft.isMoreTimeRequested()).to.be.eq(false)
+    })
+
+    it('should return true when more time was requested', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.moreTimeNeeded = new MoreTimeNeeded(MoreTimeNeededOption.YES)
+
+      expect(draft.moreTimeNeeded.option).to.be.eq(MoreTimeNeededOption.YES)
+      expect(draft.isMoreTimeRequested()).to.be.eq(true)
     })
   })
 
@@ -79,6 +142,44 @@ describe('ResponseDraft', () => {
     it('should return true when response is a full admission', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.FULL_ADMISSION)
+
+      expect(draft.isResponseFullyAdmitted()).to.be.eq(true)
+    })
+  })
+
+  describe('isResponseFullyAdmittedWithInstalments', () => {
+    it('should return false when no response type set', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = undefined
+
+      expect(draft.isResponseFullyAdmittedWithInstalments()).to.be.eq(false)
+    })
+
+    it('should return false when response is not full admission', () => {
+      ResponseType.except(ResponseType.FULL_ADMISSION).forEach(responseType => {
+        const draft: ResponseDraft = new ResponseDraft()
+        draft.response = new Response(responseType)
+
+        expect(draft.isResponseFullyAdmittedWithInstalments()).to.be.eq(false)
+      })
+    })
+
+    it('should return false when response is full admission but payment option is not instalments', () => {
+      DefendantPaymentType.except(DefendantPaymentType.INSTALMENTS).forEach(paymentType => {
+        const draft: ResponseDraft = new ResponseDraft()
+        draft.response = new Response(ResponseType.FULL_ADMISSION)
+        draft.fullAdmission = new FullAdmission()
+        draft.fullAdmission.paymentOption = new DefendantPaymentOption(paymentType)
+
+        expect(draft.isResponseFullyAdmittedWithInstalments()).to.be.eq(false)
+      })
+    })
+
+    it('should return true when response is full admission and payment option is instalments', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.FULL_ADMISSION)
+      draft.fullAdmission = new FullAdmission()
+      draft.fullAdmission.paymentOption = new DefendantPaymentOption(DefendantPaymentType.INSTALMENTS)
 
       expect(draft.isResponseFullyAdmitted()).to.be.eq(true)
     })
@@ -228,50 +329,9 @@ describe('ResponseDraft', () => {
     })
   })
 
-  function prepareInputData (responseType: ResponseType, moreTimeOption: string): any {
-    return {
-      response: {
-        type: {
-          value: responseType.value,
-          displayValue: responseType.displayValue
-        }
-      },
-      freeMediation: {
-        option: FreeMediationOption.YES
-      },
-      moreTimeNeeded: {
-        option: moreTimeOption
-      },
-      impactOfDispute: {
-        text: 'This dispute has affected me badly, I cried'
-      },
-      statementOfMeans: {
-        residence: {
-          type: {
-            value: ResidenceType.OTHER.value,
-            displayValue: ResidenceType.OTHER.displayValue
-          },
-          housingDetails: 'Squat'
-        }
-      },
-      payBySetDate: {
-        paymentDate: {
-          date: {
-            year: 1988,
-            month: 2,
-            day: 10
-          }
-        },
-        explanation: {
-          text: 'I can not pay now'
-        }
-      }
-    }
-  }
-
-  function assertPaymentDateEquals (actual: PaymentDate, expected: any) {
-    expect(actual.date.year).to.equal(expected.date.year)
-    expect(actual.date.month).to.equal(expected.date.month)
-    expect(actual.date.day).to.equal(expected.date.day)
+  function assertLocalDateEquals (actual: LocalDate, expected: any) {
+    expect(actual.year).to.equal(expected.year)
+    expect(actual.month).to.equal(expected.month)
+    expect(actual.day).to.equal(expected.day)
   }
 })

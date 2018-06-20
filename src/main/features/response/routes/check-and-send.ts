@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths, PayBySetDatePaths, StatementOfMeansPaths } from 'response/paths'
+import { Paths } from 'response/paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
@@ -27,9 +27,6 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
   res.render(Paths.checkAndSendPage.associatedView, {
-    paths: Paths,
-    statementOfMeansPaths: StatementOfMeansPaths,
-    payBySetDatePaths: PayBySetDatePaths,
     claim: claim,
     form: form,
     draft: draft.document,

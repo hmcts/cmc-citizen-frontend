@@ -1,12 +1,14 @@
 import { expect } from 'chai'
+import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import * as request from 'supertest'
 import * as config from 'config'
+import * as _ from 'lodash'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
 import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks/already-submitted-check'
 
-import { Paths, PayBySetDatePaths } from 'response/paths'
+import { Paths, FullAdmissionPaths } from 'response/paths'
 
 import { app } from 'main/app'
 
@@ -20,7 +22,10 @@ import { ValidationErrors } from 'forms/models/payBySetDate'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = PayBySetDatePaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath = FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+
+const draft = _.cloneDeep(draftStoreServiceMock.sampleResponseDraftObj)
+draft.fullAdmission.paymentOption.option = DefendantPaymentType.BY_SET_DATE
 
 function nextDay () {
   const nextDay: moment.Moment = moment().add(1, 'days')
@@ -33,18 +38,7 @@ function nextDay () {
   }
 }
 
-function date29DaysFromToday () {
-  const dateLaterThan28DaysFromToday: moment.Moment = moment().add(29, 'days')
-  return {
-    date: {
-      year: dateLaterThan28DaysFromToday.year().toString(),
-      month: (dateLaterThan28DaysFromToday.month() + 1).toString(),
-      day: dateLaterThan28DaysFromToday.date().toString()
-    }
-  }
-}
-
-describe('Pay by set date : payment date', () => {
+describe('Pay by set date: payment date', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -75,7 +69,7 @@ describe('Pay by set date : payment date', () => {
         })
 
         it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response', draft)
 
           await request(app)
             .get(pagePath)
@@ -114,7 +108,7 @@ describe('Pay by set date : payment date', () => {
         })
 
         it('should render error page when unable to save draft', async () => {
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response', draft)
           draftStoreServiceMock.rejectSave()
 
           await request(app)
@@ -125,7 +119,7 @@ describe('Pay by set date : payment date', () => {
         })
 
         it('should trigger validation when invalid data is given', async () => {
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response', draft)
 
           await request(app)
             .post(pagePath)
@@ -135,7 +129,7 @@ describe('Pay by set date : payment date', () => {
         })
 
         it('should redirect to task list when data is valid and user provides a date within 28 days from today', async () => {
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response', draft)
           draftStoreServiceMock.resolveSave()
 
           await request(app)
@@ -145,21 +139,6 @@ describe('Pay by set date : payment date', () => {
             .expect(res => expect(res).to.be.redirect
               .toLocation(
                 Paths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
-              )
-            )
-        })
-
-        it('should redirect to explanation page when data is valid and user provides a date later than 28 days from today', async () => {
-          draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send(date29DaysFromToday())
-            .expect(res => expect(res).to.be.redirect
-              .toLocation(
-                PayBySetDatePaths.explanationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )
         })

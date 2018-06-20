@@ -28,8 +28,6 @@ export class Paths {
   static readonly defendantHowMuchOwed = new RoutablePath(`${responsePath}/how-much-owed`)
   static readonly defenceRejectAllOfClaimPage = new RoutablePath(`${responsePath}/reject-all-of-claim`)
   static readonly defenceRejectPartOfClaimPage = new RoutablePath(`${responsePath}/reject-part-of-claim`)
-  static readonly defencePaymentOptionsPage = new RoutablePath(`${responsePath}/when-will-you-pay`)
-  static readonly defencePaymentPlanPage = new RoutablePath(`${responsePath}/your-payment-plan`)
   static readonly impactOfDisputePage = new RoutablePath(`${responsePath}/impact-of-dispute`)
   static readonly claimDetailsPage = new RoutablePath(`${responsePath}/claim-details`)
   static readonly summaryPage = new RoutablePath(`${responsePath}/summary`)
@@ -56,9 +54,10 @@ export class StatementOfMeansPaths {
   static readonly courtOrdersPage = new RoutablePath(`${statementOfMeansPath}/court-orders`)
 }
 
-const payBySetDatePath = `${responsePath}/pay-by-set-date`
+const fullAdmissionPath = `${responsePath}/full-admission`
 
-export class PayBySetDatePaths {
-  static readonly paymentDatePage: RoutablePath = new RoutablePath(`${payBySetDatePath}/payment-date`)
-  static readonly explanationPage = new RoutablePath(`${payBySetDatePath}/explanation`)
+export class FullAdmissionPaths {
+  static readonly paymentOptionPage = new RoutablePath(`${fullAdmissionPath}/payment-option`)
+  static readonly paymentDatePage: RoutablePath = new RoutablePath(`${fullAdmissionPath}/payment-date`)
+  static readonly paymentPlanPage = new RoutablePath(`${fullAdmissionPath}/payment-plan`)
 }

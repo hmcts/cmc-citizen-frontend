@@ -1,6 +1,8 @@
 // Infrastructural variables
-variable "product" {
-  default = "cmc"
+variable "product" {}
+
+variable "raw_product" {
+  default = "cmc" // jenkins-library overrides product for PRs and adds e.g. pr-118-cmc
 }
 
 variable "microservice" {
@@ -95,4 +97,8 @@ variable "external_host_name" {
 variable "appinsights_instrumentation_key" {
   description = "Instrumentation key of the App Insights instance this webapp should use. Module will create own App Insights resource if this is not provided"
   default = ""
+}
+
+variable "capacity" {
+  default = "1"
 }
