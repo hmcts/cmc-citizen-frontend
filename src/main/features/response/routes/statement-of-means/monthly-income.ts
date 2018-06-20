@@ -1,3 +1,4 @@
+import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule';
 import * as express from 'express'
 
 import { StatementOfMeansPaths } from 'response/paths'
@@ -25,7 +26,7 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
   if (req.body.action) {
     const form: Form<MonthlyIncome> = req.body
     if (req.body.action.addRow) {
-      form.model.appendRow()
+      // form.model.appendRow()
     }
     return renderView(form, res)
   }
@@ -40,24 +41,23 @@ export default express.Router()
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       const statementOfMeans: StatementOfMeans = draft.document.statementOfMeans || new StatementOfMeans()
+      // statementOfMeans.monthlyIncome = new MonthlyIncome(true, 100, IncomeExpenseSchedule.TWO_WEEKS)
       renderView(new Form(statementOfMeans.monthlyIncome), res)
     })
   .post(
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
-    FormValidator.requestHandler(MonthlyIncome, MonthlyIncome.fromObject, undefined, ['addRow']),
-    actionHandler,
+    FormValidator.requestHandler(MonthlyIncome, MonthlyIncome.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<MonthlyIncome> = req.body
       const { externalId } = req.params
-
+      
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        form.model.removeExcessRows()
         draft.document.statementOfMeans.monthlyIncome = form.model
         await new DraftService().save(draft, user.bearerToken)
 

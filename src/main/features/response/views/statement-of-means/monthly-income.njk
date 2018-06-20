@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, textInputInline, poundInputInline, poundInput, linkButton,
-  saveAndContinueButton, errorSummary, checkboxOption, radioGroup, textInput %}
+{% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary, checkboxOption %}
+{% from "../macro/statement-of-means/incomeExpenseSource.njk" import incomeExpenseSource %}
 
 {% set heading = 'What regular income do you receive?' %}
 
@@ -14,19 +14,18 @@
     <form method="post" novalidate>
       {{ csrfProtection(csrf) }}
 
-      {{ incomeAmountFrequency(label = 'Income from your job', name = 'salary', form = form, hint = 'Include wages, overtime, commission, bonuses') }}
-      {{ incomeAmountFrequency(label = 'Universal Credit', name = 'universalCredit', form = form) }}
-      {{ incomeAmountFrequency(label = 'Jobseeker’s Allowance (income based)', name = 'jobSeekerAllowanceIncome', form = form) }}
-      {{ incomeAmountFrequency(label = 'Jobseeker’s Allowance (contribution based)', name = 'jobSeekerAllowanceContribution', form = form) }}
-      {{ incomeAmountFrequency(label = 'Income Support', name = 'incomeSupport', form = form) }}
-      {{ incomeAmountFrequency(label = 'Working Tax Credit', name = 'workingTaxCredit', form = form) }}
-      {{ incomeAmountFrequency(label = 'Child Tax Credit', name = 'childTaxCredit', form = form) }}
-      {{ incomeAmountFrequency(label = 'Child Benefit', name = 'childBenefit', form = form) }}
-      {{ incomeAmountFrequency(label = 'Council Tax Support', name = 'councilTaxSupport', form = form) }}
-      {{ incomeAmountFrequency(label = 'Pension (paid to you)', name = 'pension', form = form) }}
-      {{ incomeAmountFrequency(label = 'Other', name = 'other', form = form, textBox = true) }}
+      {{ incomeSource(form, name = 'salary', label = 'Income from your job', hint = 'Include wages, overtime, commission, bonuses') }}
+      {{ incomeSource(form, name = 'universalCredit', label = 'Universal Credit') }}
+      {{ incomeSource(form, name = 'jobseekerAllowanceIncome', label = 'Jobseeker’s Allowance (income based)') }}
+      {{ incomeSource(form, name = 'jobseekerAllowanceContribution', label = 'Jobseeker’s Allowance (contribution based)') }}
+      {{ incomeSource(form, name = 'incomeSupport', label = 'Income Support') }}
+      {{ incomeSource(form, name = 'workingTaxCredit', label = 'Working Tax Credit') }}
+      {{ incomeSource(form, name = 'childTaxCredit', label = 'Child Tax Credit') }}
+      {{ incomeSource(form, name = 'childBenefit', label = 'Child Benefit') }}
+      {{ incomeSource(form, name = 'councilTaxSupport', label = 'Council Tax Support') }}
+      {{ incomeSource(form, name = 'pension', label = 'Pension (paid to you)') }}
 
-      <div class="statement-of-means-container">
+      {# <div class="statement-of-means-container">
         {% if form.model and form.model.rows.length > 0 %}
         <div class="multiline">
           <div class="multiline-rows">
@@ -51,66 +50,22 @@
             {{ linkButton('Add another source of income', 'action[addRow]', 'button button-secondary') }}
           </div>
         {% endif %}
-      </div>
+      </div> #}
 
-
+      {{ saveAndContinueButton() }}
     </form>
   </div>
 </div>
 
-  {{ saveAndContinueButton() }}
-
 {% endblock %}
 
-{% macro incomeAmountFrequency(label, secondLabel = 'Amount received', name, form, hint, bold = false, textBox = false) %}
-  {% set error = form.errorFor(name) %}
+{% macro incomeSource(form, name, label, hint) %}
+  {% set capitalisedName = name.slice(0, 1) | upper + name.slice(1) %}
+  {% set checkboxName = 'has' + capitalisedName + 'Source' %}
 
-  {{ checkboxOption(label = label , name = name , form = form, value = 'true', hint = '', checked = false, bold = true, ariaExpand = true) }}
+  {{ checkboxOption(label, checkboxName, form, value = 'true', checked = form.valueFor(checkboxName) === true) }}
 
-  <div class="panel panel-border-narrow {% if error %} form-group-error {% endif %}">
-
-  {% if textBox %} {{ textInput(label = 'Source of income', name = 'otherIncome', form = form) }} {% endif %}
-
-    <label for="{{ name }}" id="{{ name }}[label]" class="form-label{% if bold %}-bold{% endif %}">
-      {{ t(secondLabel) }}
-
-      {% if hint %}
-        <span class="form-hint">{{ t(hint) }}</span>
-      {% endif %}
-    </label>
-    {% if error %}
-      <span class="error-message">{{ t(error) }}</span>
-    {% endif %}
-    {{ poundInputInline(name = name, label = label, form = form) }}
-
-      {# <div class="form-group">
-        {{ radioGroup(
-        form = form,
-        label = 'Received every',
-        name = 'incomeExpenseSchedule',
-        options = [
-        {
-          label: IncomeExpenseSchedule.EACH_WEEK.displayValue,
-          value: IncomeExpenseSchedule.EACH_WEEK.value,
-          checked: form.valueFor('incomeExpenseSchedule') === IncomeExpenseSchedule.EACH_WEEK
-        },
-        {
-          label: IncomeExpenseSchedule.EVERY_TWO_WEEKS.displayValue,
-          value: IncomeExpenseSchedule.EVERY_TWO_WEEKS.value,
-          checked: form.valueFor('incomeExpenseSchedule') === IncomeExpenseSchedule.EVERY_TWO_WEEKS
-        },
-        {
-          label: IncomeExpenseSchedule.EVERY_FOUR_WEEKS.displayValue,
-          value: IncomeExpenseSchedule.EVERY_FOUR_WEEKS.value,
-          checked: form.valueFor('incomeExpenseSchedule') === IncomeExpenseSchedule.EVERY_FOUR_WEEKS
-        },
-        {
-          label: IncomeExpenseSchedule.EVERY_MONTH.displayValue,
-          value: IncomeExpenseSchedule.EVERY_MONTH.value,
-          checked: form.valueFor('incomeExpenseSchedule') === IncomeExpenseSchedule.EVERY_MONTH
-        }
-        ]
-        ) }}
-      </div> #}
+  <div class="panel panel-border-narrow" id="income-other-details" aria-hidden="false">
+    {{ incomeExpenseSource(form, name = name + 'Source', amountLabel = 'Amount received', amountHint = hint, scheduleLabel = 'Received every') }}
   </div>
 {% endmacro %}
