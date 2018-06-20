@@ -1,0 +1,63 @@
+{% from "form.njk" import poundInputInline, radioGroup %}
+
+{% macro incomeExpenseSource(form, name, amountLabel, amountHint, scheduleLabel) %}
+  {{ amountSource(form, name, label = amountLabel, hint = amountHint) }}
+  {{ scheduleSource(form, name, label = scheduleLabel) }}
+{% endmacro %}
+
+{% macro amountSource(form, name, label, hint) %}
+  {% set name = name + '[amount]' %}
+  {% set error = form.errorFor(name) %}
+
+  <div class="form-group {% if error %} form-group-error {% endif %}">
+    <div class="form-group">
+      <label id="{{ name }}[label]" for="{{ name }}" class="form-label">
+        {{ t(label) }}
+      </label>
+
+      {% if hint %}
+        <span class="form-hint">{{ t(hint) }}</span>
+      {% endif %}
+            {% if error %}
+        <span class="error-message">{{ t(error) }}</span>
+      {% endif %}
+      {{ poundInputInline(name = name, label = label, form = form) }}
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro scheduleSource(form, name, label) %}
+  {% set name = name + '[schedule]' %}
+  {% set error = form.errorFor(name) %}
+
+  <div class="form-group">
+    {{ radioGroup(
+      form = form,
+      label = label,
+      name = name,
+      labelBold = false,
+      options = [
+        {
+          label: 'Week',
+          value: 'WEEK',
+          checked: form.valueFor(name).value === 'WEEK'
+        },
+        {
+          label: '2 weeks',
+          value: 'TWO_WEEKS',
+          checked: form.valueFor(name).value === 'TWO_WEEKS'
+        },
+        {
+          label: '4 weeks',
+          value: 'FOUR_WEEKS',
+          checked: form.valueFor(name).value === 'FOUR_WEEKS'
+        },
+        {
+          label: 'Month',
+          value: 'MONTH',
+          checked: form.valueFor(name).value === 'MONTH'
+        }
+      ]
+    ) }}
+  </div>
+{% endmacro %}

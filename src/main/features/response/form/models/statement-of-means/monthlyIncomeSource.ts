@@ -8,10 +8,10 @@ export const MAX_NUMBER_OF_ROWS: number = 10
 export const INIT_ROW_COUNT: number = 0
 
 export class ValidationErrors {
-  static readonly AMOUNT_REQUIRED = (name: string) => `${GlobalValidationErrors.AMOUNT_REQUIRED} for $name`
-  static readonly AMOUNT_INVALID_DECIMALS = (name: string) => `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for $name`
-  static readonly AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED = (name: string) => `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for $name`
-  static readonly SCHEDULE_SELECT_AN_OPTION = (name: string) => `${GlobalValidationErrors.SELECT_AN_OPTION} for $name`
+  static readonly AMOUNT_REQUIRED = (name: string) => `${GlobalValidationErrors.AMOUNT_REQUIRED} for ${name}`
+  static readonly AMOUNT_INVALID_DECIMALS = (name: string) => `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for ${name}`
+  static readonly AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED = (name: string) => `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for ${name}`
+  static readonly SCHEDULE_SELECT_AN_OPTION = (name: string) => `${GlobalValidationErrors.SELECT_AN_OPTION} for ${name}`
 }
 
 function withMessage(validationError: (string) => string) {
