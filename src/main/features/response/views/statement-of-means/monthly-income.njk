@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary, checkboxOption %}
+{% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary, expandibleCheckboxOption %}
 {% from "../macro/statement-of-means/incomeExpenseSource.njk" import incomeExpenseSource %}
 
 {% set heading = 'What regular income do you receive?' %}
@@ -14,17 +14,18 @@
     <form method="post" novalidate>
       {{ csrfProtection(csrf) }}
 
-      {{ incomeSource(form, name = 'salary', label = 'Income from your job', hint = 'Include wages, overtime, commission, bonuses') }}
-      {{ incomeSource(form, name = 'universalCredit', label = 'Universal Credit') }}
-      {{ incomeSource(form, name = 'jobseekerAllowanceIncome', label = 'Jobseeker’s Allowance (income based)') }}
-      {{ incomeSource(form, name = 'jobseekerAllowanceContribution', label = 'Jobseeker’s Allowance (contribution based)') }}
-      {{ incomeSource(form, name = 'incomeSupport', label = 'Income Support') }}
-      {{ incomeSource(form, name = 'workingTaxCredit', label = 'Working Tax Credit') }}
-      {{ incomeSource(form, name = 'childTaxCredit', label = 'Child Tax Credit') }}
-      {{ incomeSource(form, name = 'childBenefit', label = 'Child Benefit') }}
-      {{ incomeSource(form, name = 'councilTaxSupport', label = 'Council Tax Support') }}
-      {{ incomeSource(form, name = 'pension', label = 'Pension (paid to you)') }}
-
+      <div class="form-group">
+        {{ incomeSource(form, name = 'salary', label = 'Income from your job', hint = 'Include wages, overtime, commission, bonuses') }}
+        {{ incomeSource(form, name = 'universalCredit', label = 'Universal Credit') }}
+        {{ incomeSource(form, name = 'jobseekerAllowanceIncome', label = 'Jobseeker’s Allowance (income based)') }}
+        {{ incomeSource(form, name = 'jobseekerAllowanceContribution', label = 'Jobseeker’s Allowance (contribution based)') }}
+        {{ incomeSource(form, name = 'incomeSupport', label = 'Income Support') }}
+        {{ incomeSource(form, name = 'workingTaxCredit', label = 'Working Tax Credit') }}
+        {{ incomeSource(form, name = 'childTaxCredit', label = 'Child Tax Credit') }}
+        {{ incomeSource(form, name = 'childBenefit', label = 'Child Benefit') }}
+        {{ incomeSource(form, name = 'councilTaxSupport', label = 'Council Tax Support') }}
+        {{ incomeSource(form, name = 'pension', label = 'Pension (paid to you)') }}
+      </div>
       {# <div class="statement-of-means-container">
         {% if form.model and form.model.rows.length > 0 %}
         <div class="multiline">
@@ -51,8 +52,9 @@
           </div>
         {% endif %}
       </div> #}
-
-      {{ saveAndContinueButton() }}
+      
+      {{ saveAndContinueButton() }}  
+      
     </form>
   </div>
 </div>
@@ -63,9 +65,7 @@
   {% set capitalisedName = name.slice(0, 1) | upper + name.slice(1) %}
   {% set checkboxName = 'has' + capitalisedName + 'Source' %}
 
-  {{ checkboxOption(label, checkboxName, form, value = 'true', checked = form.valueFor(checkboxName) === true) }}
-
-  <div class="panel panel-border-narrow" id="income-other-details" aria-hidden="false">
+  {% call expandibleCheckboxOption(label, checkboxName, form, value = 'true', checked = form.valueFor(checkboxName) === true) -%}
     {{ incomeExpenseSource(form, name = name + 'Source', amountLabel = 'Amount received', amountHint = hint, scheduleLabel = 'Received every') }}
-  </div>
+  {%- endcall %}
 {% endmacro %}
