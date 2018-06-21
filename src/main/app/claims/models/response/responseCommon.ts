@@ -1,20 +1,15 @@
+import { ResponseType } from 'claims/models/response/responseType'
+
+import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+
 import { PartyType } from 'common/partyType'
 import { Party } from 'claims/models/details/yours/party'
 import { Individual } from 'claims/models/details/yours/individual'
-import { Company } from 'claims/models/details/yours/company'
 import { SoleTrader } from 'claims/models/details/yours/soleTrader'
+import { Company } from 'claims/models/details/yours/company'
 import { Organisation } from 'claims/models/details/yours/organisation'
+
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
-
-export enum ResponseType {
-  FULL_DEFENCE = 'FULL_DEFENCE',
-  FULL_ADMISSION = 'FULL_ADMISSION'
-}
-
-export enum YesNoOption {
-  YES = 'yes',
-  NO = 'no'
-}
 
 export interface ResponseCommon {
   responseType: ResponseType

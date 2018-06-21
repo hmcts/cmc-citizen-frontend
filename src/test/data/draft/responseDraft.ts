@@ -1,4 +1,4 @@
-import { PaymentSchedule } from 'claims/models/response/fullDefenceAdmission'
+import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'

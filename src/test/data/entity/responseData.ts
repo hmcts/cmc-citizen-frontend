@@ -1,9 +1,10 @@
-import { PaymentOption, PaymentSchedule } from 'claims/models/response/fullDefenceAdmission'
-import {
-  AgeGroupType,
-  BankAccountType,
-  ResidenceType
-} from 'claims/models/response/statement-of-means/statementOfMeans'
+import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
+
+import { AgeGroupType } from 'claims/models/response/statement-of-means/dependant'
+import { ResidenceType } from 'claims/models/response/statement-of-means/residence'
+import { BankAccountType } from 'claims/models/response/statement-of-means/bankAccount'
+
 import { MomentFactory } from 'shared/momentFactory'
 import { individual } from 'test/data/entity/party'
 

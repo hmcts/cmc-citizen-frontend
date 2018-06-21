@@ -1,4 +1,4 @@
-import { ResponseType } from 'claims/models/response/responseCommon'
+import { ResponseType } from 'claims/models/response/responseType'
 import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { FullAdmissionResponse } from 'claims/models/response/fullDefenceAdmission'
 

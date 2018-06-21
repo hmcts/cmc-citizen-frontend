@@ -1,15 +1,17 @@
-import { FullAdmissionResponse, PaymentOption, PaymentSchedule } from 'claims/models/response/fullDefenceAdmission'
-import {
-  AgeGroupType,
-  BankAccountType,
-  Child,
-  ResidenceType, StatementOfMeans
-} from 'claims/models/response/statement-of-means/statementOfMeans'
+import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { DefenceType } from 'claims/models/response/defenceType'
+import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
+import { BankAccountType } from 'claims/models/response/statement-of-means/bankAccount'
+import { AgeGroupType, Child } from 'claims/models/response/statement-of-means/dependant'
+import { ResidenceType } from 'claims/models/response/statement-of-means/residence'
 import { Moment } from 'moment'
 import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
 import { Response } from 'claims/models/response'
-import { ResponseType, YesNoOption } from 'claims/models/response/responseCommon'
-import { DefenceType, FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
+import { ResponseType } from 'claims/models/response/responseType'
+import { FullAdmissionResponse } from 'claims/models/response/fullDefenceAdmission'
+import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
+import { StatementOfMeans } from 'claims/models/response/statement-of-means/statementOfMeans'
 import { PartyType } from 'common/partyType'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { Party } from 'claims/models/details/yours/party'

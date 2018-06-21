@@ -1,25 +1,13 @@
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
-import { ResponseCommon, ResponseType } from 'claims/models/response/responseCommon'
+
+import { ResponseCommon } from 'claims/models/response/responseCommon'
+import { ResponseType } from 'claims/models/response/responseType'
+
+import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { RepaymentPlan } from 'claims/models/response/core/repaymentPlan'
+
 import { StatementOfMeans } from 'claims/models/response/statement-of-means/statementOfMeans'
-
-export enum PaymentOption {
-  IMMEDIATELY = 'IMMEDIATELY',
-  FULL_BY_SPECIFIED_DATE = 'FULL_BY_SPECIFIED_DATE',
-  INSTALMENTS = 'INSTALMENTS'
-}
-
-export enum PaymentSchedule {
-  EACH_WEEK = 'EACH_WEEK',
-  EVERY_TWO_WEEKS = 'EVERY_TWO_WEEKS',
-  EVERY_MONTH = 'EVERY_MONTH'
-}
-
-export interface RepaymentPlan {
-  instalmentAmount: number
-  firstPaymentDate: Moment
-  paymentSchedule: PaymentSchedule
-}
 
 export interface FullAdmissionResponse extends ResponseCommon {
   responseType: ResponseType.FULL_ADMISSION
