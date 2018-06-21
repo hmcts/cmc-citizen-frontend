@@ -12,8 +12,8 @@ const buttons = {
 
 export class ExplanationPage {
 
-  enterExplanation (): void {
-    I.fillField(fields.text, 'I cannot pay immediately')
+  enterExplanation (text: string): void {
+    I.fillField(fields.text, text)
   }
 
   clickContinue (): void {

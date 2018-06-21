@@ -12,7 +12,7 @@ const buttons = {
 
 export class EducationPage {
 
-  enterNumberOfChildren (value): void {
+  enterNumberOfChildren (value: number): void {
     I.fillField(fields.value, value.toFixed())
   }
 

@@ -36,7 +36,7 @@ const explanationPage: ExplanationPage = new ExplanationPage()
 
 export class StatementOfMeansSteps {
 
-  fillMandatoryStatementOfMeans (): void {
+  fillStatementOfMeansWithMinimalDataSet (): void {
     startPage.clickContinue()
     bankAccountsPage.enterBankAccount('Current account', false, 1000)
     bankAccountsPage.clickContinue()
@@ -60,11 +60,11 @@ export class StatementOfMeansSteps {
     expensesPage.clickContinue()
     courtOrdersPage.selectNotDeclared()
     courtOrdersPage.clickContinue()
-    explanationPage.enterExplanation()
+    explanationPage.enterExplanation('I cannot pay immediately')
     explanationPage.clickContinue()
   }
 
-  fillOptionalStatementOfMeans (): void {
+  fillStatementOfMeansWithFullDataSet (): void {
     startPage.clickContinue()
     bankAccountsPage.enterBankAccount('Saving account', true, 10000)
     bankAccountsPage.clickContinue()
@@ -102,7 +102,7 @@ export class StatementOfMeansSteps {
     courtOrdersPage.selectDeclared()
     courtOrdersPage.enterCourtOrder('000MC001', 100, 10)
     courtOrdersPage.clickContinue()
-    explanationPage.enterExplanation()
+    explanationPage.enterExplanation('I cannot pay immediately')
     explanationPage.clickContinue()
   }
 }

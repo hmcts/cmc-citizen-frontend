@@ -221,7 +221,7 @@ export class DefenceSteps {
     defendantSteps.selectTaskDecideHowWillYouPay()
     defendantWhenWillYouPage.chooseInstalments()
     defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan)
-    statementOfMeansSteps.fillMandatoryStatementOfMeans()
+    statementOfMeansSteps.fillStatementOfMeansWithMinimalDataSet()
     I.see('Respond to a money claim')
     defendantSteps.selectTaskFreeMediation()
     defendantFreeMediationPage.chooseYes()
@@ -314,10 +314,10 @@ export class DefenceSteps {
         break
       case PaymentOption.BY_SET_DATE:
         defendantWhenWillYouPage.chooseFullBySetDate()
-        defendantPaymentDatePage.enterDate('2020-12-31')
+        defendantPaymentDatePage.enterDate('2025-01-01')
         defendantPaymentDatePage.saveAndContinue()
         defendantTaskListPage.selectShareYourFinancialDetailsTask()
-        statementOfMeansSteps.fillMandatoryStatementOfMeans()
+        statementOfMeansSteps.fillStatementOfMeansWithMinimalDataSet()
         break
       case PaymentOption.INSTALMENTS:
         defendantWhenWillYouPage.chooseInstalments()
@@ -325,7 +325,7 @@ export class DefenceSteps {
         defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan)
         defendantPaymentPlanPage.saveAndContinue()
         defendantTaskListPage.selectShareYourFinancialDetailsTask()
-        statementOfMeansSteps.fillOptionalStatementOfMeans()
+        statementOfMeansSteps.fillStatementOfMeansWithFullDataSet()
         break
       default:
         throw new Error(`Unknown payment option: ${paymentOption}`)
@@ -341,7 +341,7 @@ export class DefenceSteps {
         I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} to tell them you’ll pay immediately.`)
         break
       case PaymentOption.BY_SET_DATE:
-        I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} your offer to pay by 31 December 2020 and your explanation of why you can’t pay before then.`)
+        I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} your offer to pay by 1 January 2025 and your explanation of why you can’t pay before then.`)
         break
       case PaymentOption.INSTALMENTS:
         I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} to tell them you’ve suggested paying by instalments.`)
