@@ -7,16 +7,16 @@ import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/val
 export class Maintenance {
 
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
-  option: boolean
+  declared: boolean
 
-  @ValidateIf(o => o.option === true)
+  @ValidateIf(o => o.declared === true)
   @IsDefined({ message: GlobalValidationErrors.NUMBER_REQUIRED })
   @IsInt({ message: GlobalValidationErrors.INTEGER_REQUIRED })
   @IsPositive({ message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
   value: number
 
-  constructor (option?: boolean, value?: number) {
-    this.option = option
+  constructor (declared?: boolean, value?: number) {
+    this.declared = declared
     this.value = value
   }
 
@@ -25,22 +25,18 @@ export class Maintenance {
       return value
     }
 
-    const maintenance = new Maintenance(
-      value.option !== undefined ? toBoolean(value.option) === true : undefined,
-      toNumberOrUndefined(value.value)
+    const declared: boolean = value.declared !== undefined ? toBoolean(value.declared) : undefined
+
+    return new Maintenance(
+      declared,
+      declared ? toNumberOrUndefined(value.value) : undefined
     )
-
-    if (!maintenance.option) {
-      maintenance.value = undefined
-    }
-
-    return maintenance
   }
 
   deserialize (input?: any): Maintenance {
     if (input) {
-      this.option = input.option
-      if (this.option) {
+      this.declared = input.declared
+      if (this.declared) {
         this.value = input.value
       }
     }

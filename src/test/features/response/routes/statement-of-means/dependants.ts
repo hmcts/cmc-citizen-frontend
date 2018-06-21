@@ -60,7 +60,7 @@ describe('Defendant response: Statement of means: dependants', () => {
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
 
           await request(app)
             .get(pagePath)
@@ -112,12 +112,12 @@ describe('Defendant response: Statement of means: dependants', () => {
 
         it('maintenance page when no children', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
             .post(pagePath)
-            .send({ hasAnyChildren: 'false' })
+            .send({ declared: 'false' })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.maintenancePage.evaluateUri(
@@ -128,13 +128,13 @@ describe('Defendant response: Statement of means: dependants', () => {
 
         it('maintenance page when 0 children between 16 and 19', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
             .post(pagePath)
             .send({
-              hasAnyChildren: 'true',
+              declared: 'true',
               numberOfChildren: { under11: '1', between11and15: '2', between16and19: '0' }
             })
             .set('Cookie', `${cookieName}=ABC`)
@@ -147,13 +147,13 @@ describe('Defendant response: Statement of means: dependants', () => {
 
         it('education page when > 0 children between 16 and 19', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
             .post(pagePath)
             .send({
-              hasAnyChildren: 'true',
+              declared: 'true',
               numberOfChildren: { under11: '0', between11and15: '0', between16and19: '3' }
             })
             .set('Cookie', `${cookieName}=ABC`)
