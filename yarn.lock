@@ -174,9 +174,9 @@
   dependencies:
     "@types/chai" "*"
 
-"@types/chai-spies@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@types/chai-spies/-/chai-spies-0.0.1.tgz#f95c741f0d9b88216b328ec6fb45f54701fbdef0"
+"@types/chai-spies@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/chai-spies/-/chai-spies-1.0.0.tgz#1442daa924d2a8c3f20253db5e5e8fdd1fd4f229"
   dependencies:
     "@types/chai" "*"
 
