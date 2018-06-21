@@ -5,7 +5,7 @@ import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 
 export class ValidationErrors {
-  static readonly REASON_REQUIRED: string = 'You need to explain why you’re owed the money'
+  static readonly REASON_REQUIRED: string = 'You need to explain why you believe you’re owed the money'
 }
 
 export class Reason implements CompletableTask {
