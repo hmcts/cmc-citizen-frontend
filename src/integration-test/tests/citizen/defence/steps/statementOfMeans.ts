@@ -38,7 +38,7 @@ export class StatementOfMeansSteps {
 
   fillMandatoryStatementOfMeans (): void {
     startPage.clickContinue()
-    bankAccountsPage.addBankAccount('Current account', false, 1000)
+    bankAccountsPage.enterBankAccount('Current account', false, 1000)
     bankAccountsPage.clickContinue()
     residencePage.selectOwnHome()
     residencePage.clickContinue()
@@ -66,7 +66,7 @@ export class StatementOfMeansSteps {
 
   fillOptionalStatementOfMeans (): void {
     startPage.clickContinue()
-    bankAccountsPage.addBankAccount('Saving account', true, 10000)
+    bankAccountsPage.enterBankAccount('Saving account', true, 10000)
     bankAccountsPage.clickContinue()
     residencePage.selectOther('Special home')
     residencePage.clickContinue()
@@ -93,14 +93,14 @@ export class StatementOfMeansSteps {
     onTaxPaymentsPage.enterDetails(100, 'Various taxes')
     onTaxPaymentsPage.clickContinue()
     debtsPage.selectDeclared()
-    debtsPage.addDebt('Wife\'s debt', 100, 10)
+    debtsPage.enterDebt('Wife\'s debt', 100, 10)
     debtsPage.clickContinue()
     incomePage.fillOutAllFields()
     incomePage.clickContinue()
     expensesPage.fillOutAllFields()
     expensesPage.clickContinue()
     courtOrdersPage.selectDeclared()
-    courtOrdersPage.addCourtOrder('000MC001', 100, 10)
+    courtOrdersPage.enterCourtOrder('000MC001', 100, 10)
     courtOrdersPage.clickContinue()
     explanationPage.enterExplanation()
     explanationPage.clickContinue()

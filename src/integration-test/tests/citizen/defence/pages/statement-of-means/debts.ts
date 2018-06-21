@@ -28,7 +28,7 @@ export class DebtsPage {
     I.checkOption(fields.options.notDeclared)
   }
 
-  addDebt (debt: string, totalOwed: number, monthlyPayments: number): void {
+  enterDebt (debt: string, totalOwed: number, monthlyPayments: number): void {
     I.fillField(fields.row.debt, debt)
     I.fillField(fields.row.totalOwed, totalOwed.toFixed())
     I.fillField(fields.row.monthlyPayments, monthlyPayments.toFixed())

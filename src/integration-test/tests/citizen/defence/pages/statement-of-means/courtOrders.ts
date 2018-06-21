@@ -28,7 +28,7 @@ export class CourtOrdersPage {
     I.checkOption(fields.options.notDeclared)
   }
 
-  addCourtOrder (claimNumber: string, amount: number, instalmentAmount: number): void {
+  enterCourtOrder (claimNumber: string, amount: number, instalmentAmount: number): void {
     I.fillField(fields.row.claimNumber, claimNumber)
     I.fillField(fields.row.amount, amount.toFixed())
     I.fillField(fields.row.instalmentAmount, instalmentAmount.toFixed())
