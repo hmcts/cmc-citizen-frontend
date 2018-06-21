@@ -3,7 +3,7 @@ import {
   AgeGroupType,
   BankAccountType,
   Child,
-  ResidenceType
+  ResidenceType, StatementOfMeans
 } from 'claims/models/response/statement-of-means/statementOfMeans'
 import { Moment } from 'moment'
 import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
@@ -41,7 +41,7 @@ import { MomentFactory } from 'shared/momentFactory'
 export class ResponseModelConverter {
 
   static convert (draft: ResponseDraft): Response {
-    switch (draft.response.type) { // TODO: consider using single type interface / class
+    switch (draft.response.type) {
       case FormResponseType.DEFENCE:
         return this.convertFullDefence(draft)
       case FormResponseType.FULL_ADMISSION:
@@ -60,7 +60,6 @@ export class ResponseModelConverter {
     return {
       responseType: ResponseType.FULL_DEFENCE,
       defendant: this.convertPartyDetails(draft.defendantDetails),
-      moreTimeNeeded: draft.moreTimeNeeded && draft.moreTimeNeeded.option as YesNoOption,
       defenceType: this.inferDefenceType(draft),
       defence: draft.defence.text,
       timeline: {
@@ -81,7 +80,6 @@ export class ResponseModelConverter {
     return {
       responseType: ResponseType.FULL_ADMISSION,
       defendant: this.convertPartyDetails(draft.defendantDetails),
-      moreTimeNeeded: draft.moreTimeNeeded && draft.moreTimeNeeded.option as YesNoOption,
       paymentOption: draft.fullAdmission.paymentOption.option.value as PaymentOption,
       paymentDate: this.convertPaymentDate(draft.fullAdmission),
       repaymentPlan: draft.fullAdmission.paymentPlan && {
@@ -89,65 +87,68 @@ export class ResponseModelConverter {
         firstPaymentDate: draft.fullAdmission.paymentPlan.firstPaymentDate.toMoment(),
         paymentSchedule: draft.fullAdmission.paymentPlan.paymentSchedule.value as PaymentSchedule
       },
-      freeMediation: undefined,
-      statementOfMeans: draft.statementOfMeans && {
-        bankAccounts: draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly().map((bankAccount: BankAccountRow) => {
-          return {
-            type: bankAccount.typeOfAccount.value as BankAccountType,
-            joint: bankAccount.joint,
-            balance: bankAccount.balance
-          }
-        }),
-        residence: {
-          type: draft.statementOfMeans.residence.type.value as ResidenceType,
-          otherDetail: draft.statementOfMeans.residence.housingDetails
-        },
-        dependant: draft.statementOfMeans.dependants.declared || draft.statementOfMeans.maintenance.declared || draft.statementOfMeans.otherDependants.declared ? {
-          children: draft.statementOfMeans.dependants.declared ? this.convertStatementOfMeansChildreen(draft) : undefined,
-          numberOfMaintainedChildren: draft.statementOfMeans.maintenance.declared ? draft.statementOfMeans.maintenance.value : undefined,
-          otherDependants: draft.statementOfMeans.otherDependants.declared ? undefined : undefined
-        } : undefined,
-        employment: {
-          employers: draft.statementOfMeans.employment.employed ? draft.statementOfMeans.employers.getPopulatedRowsOnly().map((employer: EmployerRow) => {
-            return {
-              jobTitle: employer.jobTitle,
-              name: employer.employerName
-            }
-          }) : undefined,
-          selfEmployment: draft.statementOfMeans.employment.selfEmployed ? {
-            jobTitle: draft.statementOfMeans.selfEmployment.jobTitle,
-            annualTurnover: draft.statementOfMeans.selfEmployment.annualTurnover,
-            onTaxPayments: draft.statementOfMeans.onTaxPayments.declared ? {
-              amountYouOwe: draft.statementOfMeans.onTaxPayments.amountYouOwe,
-              reason: draft.statementOfMeans.onTaxPayments.reason
-            } : undefined
-          } : undefined,
-          unemployment: !draft.statementOfMeans.employment.employed && !draft.statementOfMeans.employment.selfEmployed ? {
-            unemployed: draft.statementOfMeans.unemployment.option === UnemploymentType.UNEMPLOYED ? {
-              numberOfMonths: draft.statementOfMeans.unemployment.unemploymentDetails.months,
-              numberOfYears: draft.statementOfMeans.unemployment.unemploymentDetails.years
-            } : undefined,
-            retired: draft.statementOfMeans.unemployment.option === UnemploymentType.RETIRED,
-            other: draft.statementOfMeans.unemployment.option === UnemploymentType.OTHER ? draft.statementOfMeans.unemployment.otherDetails.details : undefined
-          } : undefined
-        },
-        debts: draft.statementOfMeans.debts.declared ? draft.statementOfMeans.debts.getPopulatedRowsOnly().map((debt: DebtRow) => {
-          return {
-            description: debt.debt,
-            totalOwed: debt.totalOwed,
-            monthlyPayments: debt.monthlyPayments
-          }
-        }) : undefined,
-        courtOrders: draft.statementOfMeans.courtOrders.declared ? draft.statementOfMeans.courtOrders.getPopulatedRowsOnly().map((courtOrder: CourtOrderRow) => {
-          return {
-            claimNumber: courtOrder.claimNumber,
-            amountOwed: courtOrder.amount,
-            monthlyInstalmentAmount: courtOrder.instalmentAmount
-          }
-        }) : undefined,
-        reason: draft.statementOfMeans.explanation.text
-      },
+      statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft)
+    }
+  }
+
+  private static convertStatementOfMeans (draft: ResponseDraft): StatementOfMeans {
+    return draft.statementOfMeans && {
+      bankAccounts: draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly().map((bankAccount: BankAccountRow) => {
+        return {
+          type: bankAccount.typeOfAccount.value as BankAccountType,
+          joint: bankAccount.joint,
+          balance: bankAccount.balance
+        }
+      }),
+      residence: {
+        type: draft.statementOfMeans.residence.type.value as ResidenceType,
+        otherDetail: draft.statementOfMeans.residence.housingDetails
+      },
+      dependant: draft.statementOfMeans.dependants.declared || draft.statementOfMeans.maintenance.declared || draft.statementOfMeans.otherDependants.declared ? {
+        children: draft.statementOfMeans.dependants.declared ? this.convertStatementOfMeansChildreen(draft) : undefined,
+        numberOfMaintainedChildren: draft.statementOfMeans.maintenance.declared ? draft.statementOfMeans.maintenance.value : undefined,
+        otherDependants: draft.statementOfMeans.otherDependants.declared ? undefined : undefined
+      } : undefined,
+      employment: {
+        employers: draft.statementOfMeans.employment.employed ? draft.statementOfMeans.employers.getPopulatedRowsOnly().map((employer: EmployerRow) => {
+          return {
+            jobTitle: employer.jobTitle,
+            name: employer.employerName
+          }
+        }) : undefined,
+        selfEmployment: draft.statementOfMeans.employment.selfEmployed ? {
+          jobTitle: draft.statementOfMeans.selfEmployment.jobTitle,
+          annualTurnover: draft.statementOfMeans.selfEmployment.annualTurnover,
+          onTaxPayments: draft.statementOfMeans.onTaxPayments.declared ? {
+            amountYouOwe: draft.statementOfMeans.onTaxPayments.amountYouOwe,
+            reason: draft.statementOfMeans.onTaxPayments.reason
+          } : undefined
+        } : undefined,
+        unemployment: !draft.statementOfMeans.employment.employed && !draft.statementOfMeans.employment.selfEmployed ? {
+          unemployed: draft.statementOfMeans.unemployment.option === UnemploymentType.UNEMPLOYED ? {
+            numberOfMonths: draft.statementOfMeans.unemployment.unemploymentDetails.months,
+            numberOfYears: draft.statementOfMeans.unemployment.unemploymentDetails.years
+          } : undefined,
+          retired: draft.statementOfMeans.unemployment.option === UnemploymentType.RETIRED,
+          other: draft.statementOfMeans.unemployment.option === UnemploymentType.OTHER ? draft.statementOfMeans.unemployment.otherDetails.details : undefined
+        } : undefined
+      },
+      debts: draft.statementOfMeans.debts.declared ? draft.statementOfMeans.debts.getPopulatedRowsOnly().map((debt: DebtRow) => {
+        return {
+          description: debt.debt,
+          totalOwed: debt.totalOwed,
+          monthlyPayments: debt.monthlyPayments
+        }
+      }) : undefined,
+      courtOrders: draft.statementOfMeans.courtOrders.declared ? draft.statementOfMeans.courtOrders.getPopulatedRowsOnly().map((courtOrder: CourtOrderRow) => {
+        return {
+          claimNumber: courtOrder.claimNumber,
+          amountOwed: courtOrder.amount,
+          monthlyInstalmentAmount: courtOrder.instalmentAmount
+        }
+      }) : undefined,
+      reason: draft.statementOfMeans.explanation.text
     }
   }
 

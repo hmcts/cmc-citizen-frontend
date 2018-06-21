@@ -12,8 +12,8 @@ export enum ResponseType {
 }
 
 export enum YesNoOption {
-  YES = 'YES',
-  NO = 'NO'
+  YES = 'yes',
+  NO = 'no'
 }
 
 export interface ResponseCommon {
@@ -29,7 +29,6 @@ export namespace ResponseCommon {
     return {
       responseType: input.responseType,
       defendant: deserializeDefendantDetails(input.defendant),
-      moreTimeNeeded: input.moreTimeNeeded,
       freeMediation: input.freeMediation,
       statementOfTruth: input.statementOfTruth
         ? new StatementOfTruth().deserialize(input.statementOfTruth)
