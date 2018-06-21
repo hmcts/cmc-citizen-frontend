@@ -8,11 +8,16 @@ import * as moment from 'moment'
 import { TaskListBuilder } from 'response/helpers/taskListBuilder'
 import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
 import { TaskList } from 'drafts/tasks/taskList'
-import { LocalDate } from 'forms/models/localDate'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Claim } from 'claims/models/claim'
 import { defenceWithDisputeDraft } from 'test/data/draft/responseDraft'
 import { MomentFactory } from 'shared/momentFactory'
+import { PartyType } from 'common/partyType'
+import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { ResponseType } from 'response/form/models/responseType'
+import { StatementOfMeansTask } from 'response/tasks/statementOfMeansTask'
+import { PartyDetails } from 'forms/models/partyDetails'
+import { Response } from 'response/form/models/response'
 
 describe('Defendant response task list builder', () => {
   let claim: Claim
@@ -56,6 +61,7 @@ describe('Defendant response task list builder', () => {
   describe('"Respond to claim" section', () => {
     describe('"Why do you disagree with the claim?" task', () => {
       let stub: sinon.SinonStub
+      const responseDraft: ResponseDraft = new ResponseDraft().deserialize(defenceWithDisputeDraft)
 
       beforeEach(() => {
         stub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
@@ -68,20 +74,21 @@ describe('Defendant response task list builder', () => {
       it('should be enabled when response is rejected with dispute', () => {
         stub.returns(true)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('Why do you disagree with the claim?')
       })
 
       it('should be disabled when response is not rejected with dispute', () => {
         stub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('Why do you disagree with the claim?')
       })
     })
 
     describe('"Free mediation" task', () => {
       let stub: sinon.SinonStub
+      const responseDraft: ResponseDraft = new ResponseDraft().deserialize(defenceWithDisputeDraft)
 
       beforeEach(() => {
         stub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
@@ -94,20 +101,21 @@ describe('Defendant response task list builder', () => {
       it('should be enabled when response is rejected with dispute', () => {
         stub.returns(true)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('Free mediation')
       })
 
       it('should be disabled when response is not rejected with dispute', () => {
         stub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('Free mediation')
       })
     })
 
     describe('"When did you pay" task', () => {
       let isResponseRejectedFullyWithAmountClaimedPaidStub: sinon.SinonStub
+      const responseDraft: ResponseDraft = new ResponseDraft().deserialize(defenceWithDisputeDraft)
 
       beforeEach(() => {
         isResponseRejectedFullyWithAmountClaimedPaidStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithAmountClaimedPaid')
@@ -119,14 +127,6 @@ describe('Defendant response task list builder', () => {
 
       it('should be enabled when claim is fully rejected due to amount being paid and claimed', () => {
         isResponseRejectedFullyWithAmountClaimedPaidStub.returns(true)
-
-        const input = {
-          whenDidYouPay: {
-            date: new LocalDate(20, 1, 12),
-            text: 'I paid cash'
-          }
-        }
-        const responseDraft: ResponseDraft = new ResponseDraft().deserialize(input)
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('When did you pay?')
       })
@@ -134,7 +134,7 @@ describe('Defendant response task list builder', () => {
       it('should be disabled in remaining cases', () => {
         isResponseRejectedFullyWithAmountClaimedPaidStub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('When did you pay?')
       })
     })
@@ -195,20 +195,25 @@ describe('Defendant response task list builder', () => {
 
     describe('"Decide how you`ll pay" task', () => {
       let isResponseFullyAdmittedStub: sinon.SinonStub
+      let isResponseFullyAdmittedWithPayBySetDateStub: sinon.SinonStub
 
       beforeEach(() => {
         isResponseFullyAdmittedStub = sinon.stub(ResponseDraft.prototype, 'isResponseFullyAdmitted')
+        isResponseFullyAdmittedWithPayBySetDateStub = sinon.stub(ResponseDraft.prototype, 'isResponseFullyAdmittedWithPayBySetDate')
       })
 
       afterEach(() => {
         isResponseFullyAdmittedStub.restore()
+        isResponseFullyAdmittedWithPayBySetDateStub.restore()
       })
 
       it('should be enabled when claim is fully admitted', () => {
         isResponseFullyAdmittedStub.returns(true)
-
+        isResponseFullyAdmittedWithPayBySetDateStub.returns(false)
         const draft = new ResponseDraft()
         draft.fullAdmission = new FullAdmission()
+        draft.defendantDetails.partyDetails = new PartyDetails()
+        draft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('Decide how you`ll pay')
@@ -254,6 +259,51 @@ describe('Defendant response task list builder', () => {
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('Your repayment plan')
+      })
+    })
+
+    describe('"Share your financial details" task', () => {
+      let isResponseFullyAdmittedStub: sinon.SinonStub
+      let isResponseFullyAdmittedWithPayBySetDateStub: sinon.SinonStub
+      let isStatementOfMeansStub: sinon.SinonStub
+
+      beforeEach(() => {
+        isResponseFullyAdmittedStub = sinon.stub(ResponseDraft.prototype, 'isResponseFullyAdmitted')
+        isResponseFullyAdmittedWithPayBySetDateStub = sinon.stub(ResponseDraft.prototype, 'isResponseFullyAdmittedWithPayBySetDate')
+        isStatementOfMeansStub = sinon.stub(StatementOfMeansTask, 'isCompleted')
+      })
+
+      afterEach(() => {
+        isResponseFullyAdmittedStub.restore()
+        isResponseFullyAdmittedWithPayBySetDateStub.restore()
+        isStatementOfMeansStub.restore()
+      })
+
+      it('should be enabled when claim is fully admitted for an indivdual with payment option by set date', () => {
+        isResponseFullyAdmittedStub.returns(true)
+        isResponseFullyAdmittedWithPayBySetDateStub.returns(true)
+        isStatementOfMeansStub.returns(true)
+
+        const draft = new ResponseDraft()
+        draft.response = new Response(ResponseType.FULL_ADMISSION)
+        draft.fullAdmission = new FullAdmission()
+        draft.defendantDetails.partyDetails = new PartyDetails()
+        draft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
+        draft.fullAdmission.paymentOption = new DefendantPaymentOption(DefendantPaymentType.BY_SET_DATE)
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
+        expect(taskList.tasks.map(task => task.name)).to.contain('Share your financial details')
+      })
+
+      it('should be disabled in remaining cases', () => {
+        isResponseFullyAdmittedStub.returns(false)
+        isResponseFullyAdmittedWithPayBySetDateStub.returns(false)
+
+        const draft = new ResponseDraft()
+        draft.fullAdmission = new FullAdmission()
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
+        expect(taskList.tasks.map(task => task.name)).to.not.contain('Share your financial details')
       })
     })
   })

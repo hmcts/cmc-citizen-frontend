@@ -53,12 +53,12 @@ describe('Statement of means', () => {
 
         it('should return successful response when claim is retrieved', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
 
           await request(app)
             .get(residencePage)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Where are you living?'))
+            .expect(res => expect(res).to.be.successful.withText('Where do you live?'))
         })
       })
     })
@@ -96,7 +96,7 @@ describe('Statement of means', () => {
 
         it('should return error page when unable to save draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
           draftStoreServiceMock.rejectSave()
 
           await request(app)
@@ -108,7 +108,7 @@ describe('Statement of means', () => {
 
         it('should redirect to dependants page when all is fine and form is valid', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
@@ -122,7 +122,7 @@ describe('Statement of means', () => {
 
         it('should trigger validation when all is fine and form is invalid', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
 
           await request(app)
             .post(residencePage)

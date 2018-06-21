@@ -15,18 +15,18 @@ describe('BankAccountRow', () => {
 
       expect(actual).instanceof(BankAccountRow)
       expect(actual.typeOfAccount).to.eq(undefined)
-      expect(actual.isJoint).to.eq(undefined)
+      expect(actual.joint).to.eq(undefined)
       expect(actual.balance).to.eq(undefined)
     })
 
     it('should return populated object', () => {
       const actual: BankAccountRow = new BankAccountRow().deserialize({
-        typeOfAccount: BankAccountType.SAVING_ACCOUNT, isJoint: false, balance: 10
+        typeOfAccount: BankAccountType.SAVING_ACCOUNT, joint: false, balance: 10
       })
 
       expect(actual).instanceof(BankAccountRow)
       expect(actual.typeOfAccount).to.eq(BankAccountType.SAVING_ACCOUNT)
-      expect(actual.isJoint).to.eq(false)
+      expect(actual.joint).to.eq(false)
       expect(actual.balance).to.eq(10)
     })
   })
@@ -41,12 +41,12 @@ describe('BankAccountRow', () => {
 
     it('should return populated object', () => {
       const actual: BankAccountRow = BankAccountRow.fromObject({
-        typeOfAccount: BankAccountType.SAVING_ACCOUNT.value, isJoint: false, balance: 10
+        typeOfAccount: BankAccountType.SAVING_ACCOUNT.value, joint: false, balance: 10
       })
 
       expect(actual).instanceof(BankAccountRow)
       expect(actual.typeOfAccount).to.eq(BankAccountType.SAVING_ACCOUNT)
-      expect(actual.isJoint).to.eq(false)
+      expect(actual.joint).to.eq(false)
       expect(actual.balance).to.eq(10)
     })
   })
@@ -59,7 +59,7 @@ describe('BankAccountRow', () => {
 
       expect(actual).instanceof(BankAccountRow)
       expect(actual.typeOfAccount).to.eq(undefined)
-      expect(actual.isJoint).to.eq(undefined)
+      expect(actual.joint).to.eq(undefined)
       expect(actual.balance).to.eq(undefined)
     })
   })
