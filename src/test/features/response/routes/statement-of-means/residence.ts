@@ -58,7 +58,7 @@ describe('Statement of means', () => {
           await request(app)
             .get(residencePage)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Where are you living?'))
+            .expect(res => expect(res).to.be.successful.withText('Where do you live?'))
         })
       })
     })
