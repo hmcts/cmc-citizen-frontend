@@ -1,10 +1,8 @@
 import { expect } from 'chai'
 import { IncomeExpenseSources } from 'common/incomeExpenseSources'
 import { IncomeExpenseSchedule } from 'common/incomeExpenseSchedule'
-import {ValidationErrors as GlobalValidationErrors} from "forms/validation/validationErrors";
-import {IncomeExpenseSource} from "common/incomeExpenseSource";
-import {Validator} from "class-validator";
-import {expectValidationError} from "../forms/models/validationUtils";
+import { Validator } from 'class-validator'
+import { expectValidationError } from '../forms/models/validationUtils'
 
 const SAMPLE_INCOME_EXPENSE_SOURCES_FROM_OBJECT = {
   incomeExpenseSources: [
@@ -40,10 +38,7 @@ describe('IncomeExpenseSources', () => {
           [
             {
               'amount': 100,
-              'schedule': {
-                'value': 'MONTH',
-                'valueInMonths': 1
-              }
+              'schedule': IncomeExpenseSchedule.MONTH
             }
           ]
         )
@@ -52,7 +47,7 @@ describe('IncomeExpenseSources', () => {
 
   })
 
-  describe.only('validation', () => {
+  describe('validation', () => {
     const validator: Validator = new Validator()
 
     describe('when not successful', () => {
@@ -61,43 +56,31 @@ describe('IncomeExpenseSources', () => {
         const errors = validator.validateSync(new IncomeExpenseSources(undefined))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors,'SHOULD_BE_AN_ARRAY')
+        expectValidationError(errors,'ARRAY_REQUIRED')
       })
 
       it('should return an error when `incomeExpenseSources` is empty array', () => {
         const errors = validator.validateSync(new IncomeExpenseSources([]))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors,'EMPTY_ARRAY')
+        expectValidationError(errors,'INVALID_ARRAY_MIN_SIZE')
       })
 
-      // it('should return an error when `amount` is negative', () => {
-      //   const errors = validator.validateSync(new IncomeExpenseSource(-100, IncomeExpenseSchedule.MONTH))
-      //
-      //   expect(errors.length).to.equal(1)
-      //   expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
-      // })
-      //
-      // it('should return an error when `schedule` is undefined', () => {
-      //   const errors = validator.validateSync(new IncomeExpenseSource(100, undefined))
-      //
-      //   expect(errors.length).to.equal(1)
-      //   expectValidationError(errors, GlobalValidationErrors.SELECT_AN_OPTION)
-      // })
-      //
-      // it('should return an error when `schedule` is invalid', () => {
-      //   const errors = validator.validateSync(new IncomeExpenseSource(100, new IncomeExpenseSchedule('UNKNOWN', 1)))
-      //
-      //   expect(errors.length).to.equal(1)
-      //   expectValidationError(errors, GlobalValidationErrors.SELECT_AN_OPTION)
-      // })
-
-      // describe('when successful', () => {
-      //   it('should return no error', () => {
-      //     const errors = validator.validateSync(new IncomeExpenseSource(100, IncomeExpenseSchedule.MONTH))
-      //     expect(errors.length).to.equal(0)
-      //   })
-      // })
+      describe('when successful', () => {
+        it('should return no error', () => {
+          const errors = validator.validateSync(new IncomeExpenseSources([
+            {
+              'amount': 100,
+              'schedule': IncomeExpenseSchedule.MONTH
+            },
+            {
+              'amount': 200,
+              'schedule': IncomeExpenseSchedule.WEEK
+            }
+          ]))
+          expect(errors.length).to.equal(0)
+        })
+      })
     })
   })
 })

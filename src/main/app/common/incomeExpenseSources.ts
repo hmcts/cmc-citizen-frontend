@@ -1,11 +1,10 @@
 import { IncomeExpenseSource } from 'common/incomeExpenseSource'
-import { IsArray, MinLength, ValidateNested } from 'class-validator'
-import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
+import { ArrayMinSize, IsArray, ValidateNested } from 'class-validator'
 
 export class IncomeExpenseSources {
 
   @ValidateNested()
-  @MinLength(1, { message: 'EMPTY_ARRAY' })
+  @ArrayMinSize(1, { message: 'INVALID_ARRAY_MIN_SIZE' })
   @IsArray({ message: 'ARRAY_REQUIRED' })
   incomeExpenseSources?: IncomeExpenseSource[]
 
