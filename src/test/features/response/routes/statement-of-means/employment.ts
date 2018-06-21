@@ -65,7 +65,7 @@ describe('Defendant response: Statement of means: employment', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Are you currently working?'))
+            .expect(res => expect(res).to.be.successful.withText('Do you have a job?'))
         })
       })
     })
