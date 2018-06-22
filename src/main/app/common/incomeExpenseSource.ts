@@ -26,7 +26,15 @@ export class IncomeExpenseSource {
 
     return new IncomeExpenseSource(
       toNumberOrUndefined(value.amount),
-      value.schedule ? IncomeExpenseSchedule.of(value.schedule) : undefined
+      toIncomeExpenseScheduleOrUndefined(value.schedule)
     )
+  }
+}
+
+function toIncomeExpenseScheduleOrUndefined (value?: any): IncomeExpenseSchedule {
+  try {
+    return IncomeExpenseSchedule.of(value)
+  } catch (error) {
+    return undefined
   }
 }

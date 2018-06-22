@@ -47,7 +47,7 @@ describe('IncomeExpenseSources', () => {
 
   })
 
-  describe.only('validation', () => {
+  describe('validation', () => {
     const validator: Validator = new Validator()
 
     describe('when not successful', () => {

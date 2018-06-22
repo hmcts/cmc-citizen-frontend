@@ -3,23 +3,26 @@ import * as HttpStatus from 'http-status-codes'
 
 import { Paths } from 'main/app/paths'
 import { CalculateMonthlyIncomeExpense } from 'main/app/common/calculateMonthlyIncomeExpense'
-import { IncomeExpenseSource } from 'main/app/common/incomeExpenseSource'
 import { ValidationError, Validator } from 'class-validator'
-import {IncomeExpenseSources} from "common/incomeExpenseSources"
-// import { Router } from 'express'
-// import { IncomeExpenseSources } from 'common/incomeExpenseSources'
+import { IncomeExpenseSources } from 'common/incomeExpenseSources'
 
 export default express.Router()
-  .post(Paths.totalIncomeOrExpensesCalculation.uri, async (req, res) => {
+  .post(Paths.totalIncomeOrExpensesCalculation.uri, (req, res) => {
 
-    const incomeExpenseSource: IncomeExpenseSource[] = req.body.incomeExpenseSources
+    // console.log('req.body--->',req.body)
+    const incomeExpenseSources: IncomeExpenseSources = IncomeExpenseSources.fromObject(req.body)
+    // console.log('incomeExpenseSources-->',incomeExpenseSources)
 
     const validator: Validator = new Validator()
-    let error: ValidationError[] = validator.validateSync(new IncomeExpenseSource())
+    let error: ValidationError[] = validator.validateSync(incomeExpenseSources)
 
-    console.log('error--->',error)
+    if (error.length > 0) {
+      console.log('errr-----------',JSON.stringify(error))
+      return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json(error)
+    }
 
-    const totalMonthlyIncomeExpense = CalculateMonthlyIncomeExpense.calculateTotalAmount(incomeExpenseSource)
+    const totalMonthlyIncomeExpense = CalculateMonthlyIncomeExpense.calculateTotalAmount(incomeExpenseSources.incomeExpenseSources)
+    // console.log('totalMonthlyIncomeExpense--',totalMonthlyIncomeExpense)
     return res.status(HttpStatus.OK).json({
       totalMonthlyIncomeExpense: totalMonthlyIncomeExpense
     })

@@ -27,6 +27,13 @@ describe('IncomeExpenseSource', () => {
       ))
     })
 
+    it('should return a new instance with defaults when amount and schedule are invalid', () => {
+      expect(IncomeExpenseSource.fromObject({ 'amount': 'INVALID' , 'schedule': 'UNKNOWN' })).to.deep.equal(new IncomeExpenseSource(
+        undefined,
+        undefined
+      ))
+    })
+
     it('should return a new instance initialised with set fields from object parameter provided', () => {
       expect(IncomeExpenseSource.fromObject(SAMPLE_INCOME_EXPENSE_SOURCE_FROM_OBJECT)).to.deep.equal(
         new IncomeExpenseSource(

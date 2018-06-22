@@ -15,25 +15,29 @@ describe('Monthly Income Expenses Calculation', () => {
 
       const incomeExpenseSources = {
         incomeExpenseSources: [
-          { 'amount': 100, 'schedule': IncomeExpenseSchedule.WEEK },
-          { 'amount': 100, 'schedule': IncomeExpenseSchedule.TWO_WEEKS }
+          {
+            'amount': 100,
+            'schedule': IncomeExpenseSchedule.MONTH.value
+          }
         ]
       }
 
       await request(app)
         .post(Paths.totalIncomeOrExpensesCalculation.uri)
         .send(incomeExpenseSources)
-        .expect(HttpStatus.OK, { 'totalMonthlyIncomeExpense' : 650 })
+        .expect(HttpStatus.OK, { 'totalMonthlyIncomeExpense' : 100 })
     })
   })
 
   describe.only('when income expense details are incorrect', () => {
-
     it('should return error', async () => {
 
       const incomeExpenseSources = {
         incomeExpenseSources: [
-          { 'amount': 'INVALID', 'schedule': IncomeExpenseSchedule.WEEK }
+          {
+            'amount': 100,
+            'schedule': 'INVALID'
+          }
         ]
       }
 
