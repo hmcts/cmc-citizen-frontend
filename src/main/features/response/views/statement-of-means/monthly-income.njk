@@ -4,6 +4,7 @@
 
 {% block additional_scripts %}
   {% include "expandible-checkbox-option-scripts.njk" %}
+  {% include "income-expense-calculation-scripts.njk" %}
 {% endblock %}
 
 {% set heading = 'What regular income do you receive?' %}
@@ -15,7 +16,7 @@
 <div class="grid-row">
   <div class="column-two-thirds">
 
-    <form method="post" novalidate>
+    <form method="post" novalidate class="income-expense-calculation">
       {{ csrfProtection(csrf) }}
 
       <div class="form-group">
@@ -56,6 +57,10 @@
           </div>
         {% endif %}
       </div> #}
+
+      <p id="total" class="heading-small">
+        Total monthly income: £<span class="total-monthly-income-expense"> {{ totalMonthlyIncomeExpense | default('0.00') }} </span>
+      </p>
 
       {{ saveAndContinueButton() }}  
       
