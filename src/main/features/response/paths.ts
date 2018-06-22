@@ -36,22 +36,23 @@ export class Paths {
 const statementOfMeansPath = `${responsePath}/statement-of-means`
 
 export class StatementOfMeansPaths {
-  static readonly startPage = new RoutablePath(`${statementOfMeansPath}/start`)
-  static readonly whatYouNeedPage = new RoutablePath(`${statementOfMeansPath}/what-you-need`)
+  static readonly introPage = new RoutablePath(`${statementOfMeansPath}/intro`)
+  static readonly bankAccountsPage = new RoutablePath(`${statementOfMeansPath}/bank-accounts`)
   static readonly residencePage = new RoutablePath(`${statementOfMeansPath}/residence`)
   static readonly dependantsPage = new RoutablePath(`${statementOfMeansPath}/dependants`)
-  static readonly educationPage = new RoutablePath(`${statementOfMeansPath}/education`)
+  static readonly educationPage = new RoutablePath(`${statementOfMeansPath}/dependants/education`)
   static readonly maintenancePage = new RoutablePath(`${statementOfMeansPath}/maintenance`)
-  static readonly supportedByYouPage = new RoutablePath(`${statementOfMeansPath}/supported-by-you`)
+  static readonly otherDependantsPage = new RoutablePath(`${statementOfMeansPath}/other-dependants`)
   static readonly employmentPage = new RoutablePath(`${statementOfMeansPath}/employment`)
-  static readonly employersPage = new RoutablePath(`${statementOfMeansPath}/employers`)
-  static readonly selfEmployedPage = new RoutablePath(`${statementOfMeansPath}/self-employed`)
-  static readonly unemployedPage = new RoutablePath(`${statementOfMeansPath}/unemployed`)
-  static readonly bankAccountsPage = new RoutablePath(`${statementOfMeansPath}/bank-accounts`)
-  static readonly debtsPage = new RoutablePath(`${statementOfMeansPath}/debts`)
+  static readonly employersPage = new RoutablePath(`${statementOfMeansPath}/employment/employers`)
+  static readonly selfEmploymentPage = new RoutablePath(`${statementOfMeansPath}/employment/self-employment`)
+  static readonly onTaxPaymentsPage = new RoutablePath(`${statementOfMeansPath}/employment/self-employment/on-tax-payments`)
+  static readonly unemployedPage = new RoutablePath(`${statementOfMeansPath}/unemployment`)
   static readonly monthlyIncomePage = new RoutablePath(`${statementOfMeansPath}/monthly-income`)
   static readonly monthlyExpensesPage = new RoutablePath(`${statementOfMeansPath}/monthly-expenses`)
+  static readonly debtsPage = new RoutablePath(`${statementOfMeansPath}/debts`)
   static readonly courtOrdersPage = new RoutablePath(`${statementOfMeansPath}/court-orders`)
+  static readonly explanationPage = new RoutablePath(`${statementOfMeansPath}/explanation`)
 }
 
 const fullAdmissionPath = `${responsePath}/full-admission`

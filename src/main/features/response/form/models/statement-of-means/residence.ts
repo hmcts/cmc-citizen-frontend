@@ -19,9 +19,9 @@ export class Residence {
   @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
   housingDetails?: string
 
-  constructor (type?: ResidenceType, otherTypeDetails?: string) {
+  constructor (type?: ResidenceType, housingDetails?: string) {
     this.type = type
-    this.housingDetails = otherTypeDetails
+    this.housingDetails = housingDetails
   }
 
   static fromObject (input?: any) {
