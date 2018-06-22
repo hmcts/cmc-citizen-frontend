@@ -18,7 +18,12 @@ export default express.Router()
 
     if (error.length > 0) {
       console.log('errr-----------',JSON.stringify(error))
-      return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json(error)
+      return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
+        error: {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          message: error
+        }
+      })
     }
 
     const totalMonthlyIncomeExpense = CalculateMonthlyIncomeExpense.calculateTotalAmount(incomeExpenseSources.incomeExpenseSources)
