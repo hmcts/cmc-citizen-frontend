@@ -2,6 +2,10 @@
 {% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary, expandibleCheckboxOption %}
 {% from "../macro/statement-of-means/incomeExpenseSource.njk" import incomeExpenseSource %}
 
+{% block additional_scripts %}
+  {% include "expandible-checkbox-option-scripts.njk" %}
+{% endblock %}
+
 {% set heading = 'What regular income do you receive?' %}
 
 {% block content %}
@@ -52,7 +56,7 @@
           </div>
         {% endif %}
       </div> #}
-      
+
       {{ saveAndContinueButton() }}  
       
     </form>
