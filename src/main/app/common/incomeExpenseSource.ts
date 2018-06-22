@@ -14,7 +14,7 @@ export class IncomeExpenseSource {
   @IsIn(IncomeExpenseSchedule.all(), { message: GlobalValidationErrors.SELECT_AN_OPTION })
   schedule?: IncomeExpenseSchedule
 
-  constructor (amount: number, incomeExpenseSchedule: IncomeExpenseSchedule) {
+  constructor (amount?: number, incomeExpenseSchedule?: IncomeExpenseSchedule) {
     this.amount = amount
     this.schedule = incomeExpenseSchedule
   }

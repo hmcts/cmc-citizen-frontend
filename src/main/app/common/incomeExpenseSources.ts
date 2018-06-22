@@ -1,11 +1,10 @@
 import { IncomeExpenseSource } from 'common/incomeExpenseSource'
-import { ArrayMinSize, IsArray, ValidateNested } from 'class-validator'
+import { ArrayMinSize, ValidateNested } from 'class-validator'
 
 export class IncomeExpenseSources {
 
   @ValidateNested()
-  @ArrayMinSize(1, { message: 'INVALID_ARRAY_MIN_SIZE' })
-  @IsArray({ message: 'ARRAY_REQUIRED' })
+  @ArrayMinSize(1, { message: 'INVALID_ARRAY' })
   incomeExpenseSources?: IncomeExpenseSource[]
 
   constructor (incomeExpenseSources: IncomeExpenseSource[]) {

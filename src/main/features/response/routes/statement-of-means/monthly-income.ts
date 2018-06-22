@@ -1,4 +1,4 @@
-import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule';
+// import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule';
 import * as express from 'express'
 
 import { StatementOfMeansPaths } from 'response/paths'
@@ -22,16 +22,16 @@ function renderView (form: Form<MonthlyIncome>, res: express.Response): void {
   })
 }
 
-function actionHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
-  if (req.body.action) {
-    const form: Form<MonthlyIncome> = req.body
-    if (req.body.action.addRow) {
-      // form.model.appendRow()
-    }
-    return renderView(form, res)
-  }
-  next()
-}
+// function actionHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
+//   if (req.body.action) {
+//     const form: Form<MonthlyIncome> = req.body
+//     if (req.body.action.addRow) {
+//       // form.model.appendRow()
+//     }
+//     return renderView(form, res)
+//   }
+//   next()
+// }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -51,7 +51,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<MonthlyIncome> = req.body
       const { externalId } = req.params
-      
+
       if (form.hasErrors()) {
         renderView(form, res)
       } else {

@@ -47,7 +47,7 @@ describe('IncomeExpenseSources', () => {
 
   })
 
-  describe('validation', () => {
+  describe.only('validation', () => {
     const validator: Validator = new Validator()
 
     describe('when not successful', () => {
@@ -56,14 +56,14 @@ describe('IncomeExpenseSources', () => {
         const errors = validator.validateSync(new IncomeExpenseSources(undefined))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors,'ARRAY_REQUIRED')
+        expectValidationError(errors,'INVALID_ARRAY')
       })
 
       it('should return an error when `incomeExpenseSources` is empty array', () => {
         const errors = validator.validateSync(new IncomeExpenseSources([]))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors,'INVALID_ARRAY_MIN_SIZE')
+        expectValidationError(errors,'INVALID_ARRAY')
       })
 
       describe('when successful', () => {

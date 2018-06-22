@@ -1,16 +1,13 @@
 import * as _ from 'lodash'
-import { IncomeExpenseSchedule } from 'common/incomeExpenseSchedule'
+import { IncomeExpenseSource } from 'common/incomeExpenseSource'
 
-//convert below interface to class and test it
-interface IncomeExpenseSource {
-  amount: number,
-  incomeExpenseSchedule: IncomeExpenseSchedule
-}
+export class CalculateMonthlyIncomeExpense {
 
-export function calculateTotalAmount (sources: IncomeExpenseSource[]): number {
-  const totalMonthlyAmount = _.reduce(sources, function (total: number, source: IncomeExpenseSource) {
-    const monthlyAmount = source.amount * source.incomeExpenseSchedule.valueInMonths
-    return total + monthlyAmount
-  }, 0)
-  return _.round(totalMonthlyAmount,2)
+  static calculateTotalAmount (sources: IncomeExpenseSource[]): number {
+    const totalMonthlyAmount = _.reduce(sources, function (total: number, source: IncomeExpenseSource) {
+      const monthlyAmount = source.amount * source.schedule.valueInMonths
+      return total + monthlyAmount
+    }, 0)
+    return _.round(totalMonthlyAmount, 2)
+  }
 }
