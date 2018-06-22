@@ -1,3 +1,6 @@
+require('ts-node/register')
+require('tsconfig-paths/register')
+
 const ProxySettings = require('./src/integration-test/config/proxy-settings').ProxySettings
 
 exports.config = {
@@ -6,6 +9,11 @@ exports.config = {
   tests: './src/integration-test/tests/**/*_test.*',
   output: './output',
   timeout: 10000,
+  multiple: {
+    parallel: {
+      chunks: 3
+    }
+  },
   helpers: {
     WebDriverIO: {
       host: process.env.WEB_DRIVER_HOST || 'localhost',
