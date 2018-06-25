@@ -6,8 +6,6 @@ import { Paths } from 'paths'
 import * as HttpStatus from 'http-status-codes'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { expectValidationError } from '../app/forms/models/validationUtils'
-import { IncomeExpenseSources } from 'common/incomeExpenseSources'
-import { IncomeExpenseSource } from 'common/incomeExpenseSource'
 
 describe('Monthly Income Expenses Calculation', () => {
   attachDefaultHooks(app)
@@ -28,20 +26,42 @@ describe('Monthly Income Expenses Calculation', () => {
       await request(app)
         .post(Paths.totalIncomeOrExpensesCalculation.uri)
         .send(incomeExpenseSources)
-        .expect(HttpStatus.OK, { 'totalMonthlyIncomeExpense': 100 })
+        .expect(HttpStatus.OK, {'totalMonthlyIncomeExpense': 100})
     })
   })
 
   describe.only('when income expense details are incorrect', () => {
-    it('should return error', async () => {
+    it('should return error when missing Income Expense Schedule in IncomeExpenseSource', async () => {
 
-      const incomeExpenseSource: IncomeExpenseSource = { 'amount': 100 }
-      const incomeExpenseSources: IncomeExpenseSources = new IncomeExpenseSources([incomeExpenseSource])
-
+      const incomeExpenseSources = {
+        incomeExpenseSources: [
+          {
+            'amount': 100,
+            'schedule': 'INVALID'
+          }
+        ]
+      }
       await request(app)
         .post(Paths.totalIncomeOrExpensesCalculation.uri)
         .send(incomeExpenseSources)
+        // .expect(res => console.log('response error--->',res.body))
         .expect(res => expectValidationError(res.body, GlobalValidationErrors.SELECT_AN_OPTION))
+    })
+
+    it('should return error when missing amount in IncomeExpenseSource', async () => {
+
+      const incomeExpenseSources = {
+        incomeExpenseSources: [
+          {
+            'schedule': IncomeExpenseSchedule.MONTH
+          }
+        ]
+      }
+      await request(app)
+        .post(Paths.totalIncomeOrExpensesCalculation.uri)
+        .send(incomeExpenseSources)
+        .expect(res => expectValidationError(res.body,
+          GlobalValidationErrors.NUMBER_REQUIRED && GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED))
     })
   })
 })
