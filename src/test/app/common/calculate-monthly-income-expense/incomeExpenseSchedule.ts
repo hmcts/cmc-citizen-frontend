@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { IncomeExpenseSchedule } from 'common/incomeExpenseSchedule'
+import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
 
 describe('IncomeExpenseSchedule', () => {
   describe('of', () => {

@@ -1,4 +1,4 @@
-import { IncomeExpenseSchedule } from 'common/incomeExpenseSchedule'
+import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
 import { toNumberOrUndefined } from 'main/common/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { IsDefined, IsIn, IsPositive } from 'class-validator'

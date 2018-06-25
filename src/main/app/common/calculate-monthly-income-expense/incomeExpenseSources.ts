@@ -1,4 +1,4 @@
-import { IncomeExpenseSource } from 'common/incomeExpenseSource'
+import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
 import { ArrayMinSize, ValidateNested } from 'class-validator'
 
 export class IncomeExpenseSources {

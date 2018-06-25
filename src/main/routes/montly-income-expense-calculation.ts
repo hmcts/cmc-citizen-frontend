@@ -2,9 +2,9 @@ import * as express from 'express'
 import * as HttpStatus from 'http-status-codes'
 
 import { Paths } from 'main/app/paths'
-import { CalculateMonthlyIncomeExpense } from 'main/app/common/calculateMonthlyIncomeExpense'
+import { CalculateMonthlyIncomeExpense } from 'main/app/common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
 import { ValidationError, Validator } from 'class-validator'
-import { IncomeExpenseSources } from 'common/incomeExpenseSources'
+import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/incomeExpenseSources'
 
 export default express.Router()
   .post(Paths.totalIncomeOrExpensesCalculation.uri, (req, res) => {

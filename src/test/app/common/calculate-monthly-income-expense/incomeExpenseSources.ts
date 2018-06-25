@@ -1,8 +1,10 @@
 import { expect } from 'chai'
-import { IncomeExpenseSources } from 'common/incomeExpenseSources'
-import { IncomeExpenseSchedule } from 'common/incomeExpenseSchedule'
+import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/incomeExpenseSources'
+import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
+import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
 import { Validator } from 'class-validator'
-import { expectValidationError } from '../forms/models/validationUtils'
+import { expectValidationError } from '../../forms/models/validationUtils'
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 const SAMPLE_INCOME_EXPENSE_SOURCES_FROM_OBJECT = {
   incomeExpenseSources: [
@@ -64,6 +66,14 @@ describe('IncomeExpenseSources', () => {
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors,'INVALID_ARRAY')
+      })
+
+      it('should return an error when `incomeExpenseSources` is invalid', () => {
+        const invalidIncomeExpenseSource = new IncomeExpenseSource(undefined, IncomeExpenseSchedule.MONTH)
+        const errors = validator.validateSync(new IncomeExpenseSources([invalidIncomeExpenseSource]))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
       })
 
       describe('when successful', () => {

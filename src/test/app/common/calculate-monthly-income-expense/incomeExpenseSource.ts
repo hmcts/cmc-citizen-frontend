@@ -1,8 +1,8 @@
 import { expect } from 'chai'
-import { IncomeExpenseSource } from 'common/incomeExpenseSource'
-import { IncomeExpenseSchedule } from 'common/incomeExpenseSchedule'
+import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
+import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
 import { Validator } from 'class-validator'
-import { expectValidationError } from '../forms/models/validationUtils'
+import { expectValidationError } from '../../forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 const SAMPLE_INCOME_EXPENSE_SOURCE_FROM_OBJECT = {

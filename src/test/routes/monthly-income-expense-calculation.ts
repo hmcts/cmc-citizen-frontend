@@ -30,8 +30,8 @@ describe('Monthly Income Expenses Calculation', () => {
     })
   })
 
-  describe.only('when income expense details are incorrect', () => {
-    it('should return error when Income Expense Schedule is invalid in IncomeExpenseSource', async () => {
+  describe('when income expense details are incorrect', () => {
+    it('should return error', async () => {
 
       const incomeExpenseSources = {
         incomeExpenseSources: [
