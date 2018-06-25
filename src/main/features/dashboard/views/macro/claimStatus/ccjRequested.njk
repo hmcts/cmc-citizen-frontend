@@ -8,7 +8,7 @@
 {% macro ccjRequestedForClaimantClaimDetails(claim) %}
   <h2 class="heading-small">{{ t('You’ve requested a County Court Judgment (CCJ)') }}</h2>
   <p>
-    {{ t('We’ll contact you within 5 days to tell you whether the judgment has been entered.') }}
+    {{ t('We’ll contact you within 14 days to tell you whether the judgment has been entered.') }}
   </p>
   <p>
     {{ t('{{ defendantName }} can no longer respond to your claim using this service - they may have responded by post.',
@@ -29,7 +29,7 @@
   </p>
   <p>
     {{ t('{{ claimantName }} requested a default County Court Judgment (CCJ) against you on {{ ccjRequestedAt }}. '
-      + 'We’ll contact you within 5 days to tell you whether the claimant’s request for judgment has been successful.',
+      + 'We’ll contact you within 14 days to tell you whether the claimant’s request for judgment has been successful.',
       { claimantName : claim.claimData.claimant.name,
       ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
   </p>
