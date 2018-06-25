@@ -5,4 +5,6 @@ fees_api_url = "https://fees-register.reform.hmcts.net:4411"
 payments_api_url = "https://payments.reform.hmcts.net:4401"
 ga_tracking_id = "UA-97111056-2"
 external_host_name = "www.moneyclaims.service.gov.uk"
+feature_return_error_to_user = "false"
 capacity = "2"
+

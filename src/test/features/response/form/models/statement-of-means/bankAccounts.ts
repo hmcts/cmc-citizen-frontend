@@ -33,14 +33,14 @@ describe('BankAccounts', () => {
     it('should return BankAccounts with first element on list populated', () => {
       const actual: BankAccounts = BankAccounts.fromObject({
         rows: [
-          { typeOfAccount: BankAccountType.SAVING_ACCOUNT.value, isJoint: true, balance: 100 }
+          { typeOfAccount: BankAccountType.SAVING_ACCOUNT.value, joint: true, balance: 100 }
         ]
       })
 
       const populatedItem: BankAccountRow = actual.rows.pop()
 
       expect(populatedItem.typeOfAccount).to.eq(BankAccountType.SAVING_ACCOUNT)
-      expect(populatedItem.isJoint).to.eq(true)
+      expect(populatedItem.joint).to.eq(true)
       expect(populatedItem.balance).to.eq(100)
 
       expectAllRowsToBeEmpty(actual.rows)
@@ -52,7 +52,7 @@ function expectAllRowsToBeEmpty (rows: BankAccountRow[]) {
   rows.forEach(item => {
     expect(item).instanceof(BankAccountRow)
     expect(item.typeOfAccount).to.eq(undefined)
-    expect(item.isJoint).to.eq(undefined)
+    expect(item.joint).to.eq(undefined)
     expect(item.balance).to.eq(undefined)
   })
 }

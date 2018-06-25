@@ -1,34 +1,33 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, radioOption, checkboxOption, saveAndContinueButton, errorSummary %}
-{% from "date.njk" import dateInput %}
 
-{% set heading = 'Are you currently working?' %}
+{% set heading = 'Do you have a job?' %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
       <form method="post" novalidate
         class="analytics-submit-event-trigger"
-        data-event-action="SoM: Are you currently working"
-        data-event-label-from="isCurrentlyEmployed">
+        data-event-action="SoM: Do you have a job?"
+        data-event-label-from="declared">
 
         {{ csrfProtection(csrf) }}
 
-        {% set error = form.errorFor('isCurrentlyEmployed') %}
-        <fieldset id="isCurrentlyEmployed[label]" class="form-group {% if error %} form-group-error {% endif %}">
-          <legend class="visually-hidden">{{ t('Are you currently working?') }}</legend>
+        {% set error = form.errorFor('declared') %}
+        <fieldset id="declared[label]" class="form-group {% if error %} form-group-error {% endif %}">
+          <legend class="visually-hidden">{{ t('Do you have a job?') }}</legend>
 
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
 
           {{
-            radioOption(form = form, label = 'Yes', name = 'isCurrentlyEmployed', value = 'true', checked = form.valueFor('isCurrentlyEmployed') === true)
+            radioOption(form = form, label = 'Yes', name = 'declared', value = 'true', checked = form.valueFor('declared') === true)
           }}
 
           {% set errorCheckbox = form.errorFor('employed') %}
 
-          <div class="form-group panel panel-border-narrow js-hidden {% if errorCheckbox %} form-group-error {% endif %}" id="isCurrentlyEmployed-true" aria-hidden="false">
+          <div class="form-group panel panel-border-narrow js-hidden {% if errorCheckbox %} form-group-error {% endif %}" id="declared-true" aria-hidden="false">
             <p>{{ t('What’s your employment status?') }}</p>
-            <p class="form-hint">{{ t('You can select more than one option.') }}</p>
+            <p class="form-hint">{{ t('You can select both') }}</p>
 
             {% if errorCheckbox %}<span class="error-message" id="employed[label]">{{ t(errorCheckbox) }}</span>{% endif %}
             {{
@@ -42,7 +41,7 @@
           </div>
 
           {{
-            radioOption(form = form, label = 'No', name = 'isCurrentlyEmployed', value = 'false', checked = form.valueFor('isCurrentlyEmployed') === false)
+            radioOption(form = form, label = 'No', name = 'declared', value = 'false', checked = form.valueFor('declared') === false)
           }}
 
         </fieldset>

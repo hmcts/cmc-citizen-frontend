@@ -20,7 +20,7 @@
 {% endmacro %}
 
 {% macro claimRejectedAlreadyPaidForDefendantDashboard(claim) %}
-  {{ t('We’ve emailed {{ claimantName }} telling them when and how you paid the claim.',
+  {{ t('We’ve emailed {{ claimantName }} telling them when and how you said you paid the claim.',
     { claimantName: claim.claimData.claimant.name }) }}
 {% endmacro %}
 

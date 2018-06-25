@@ -55,11 +55,11 @@ export class ResponseDraft extends DraftDocument {
   rejectAllOfClaim?: RejectAllOfClaim
   paidAmount?: PaidAmount
   impactOfDispute?: ImpactOfDispute
-  statementOfMeans?: StatementOfMeans
   whenDidYouPay?: WhenDidYouPay
   howMuchPaidClaimant?: HowMuchPaidClaimant
 
   fullAdmission?: FullAdmission
+  statementOfMeans?: StatementOfMeans
 
   deserialize (input: any): ResponseDraft {
     if (input) {
@@ -80,14 +80,14 @@ export class ResponseDraft extends DraftDocument {
       this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
-      if (input.statementOfMeans) {
-        this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
-      }
       this.whenDidYouPay = new WhenDidYouPay().deserialize(input.whenDidYouPay)
       this.howMuchPaidClaimant = new HowMuchPaidClaimant(input.howMuchPaidClaimant && input.howMuchPaidClaimant.option)
 
       if (input.fullAdmission) {
         this.fullAdmission = new FullAdmission().deserialize(input.fullAdmission)
+      }
+      if (input.statementOfMeans) {
+        this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
       }
     }
     return this
@@ -152,5 +152,10 @@ export class ResponseDraft extends DraftDocument {
 
   public isResponsePopulated (): boolean {
     return !!this.response && !!this.response.type
+  }
+
+  public isResponseFullyAdmittedWithPayBySetDate (): boolean {
+    return this.fullAdmission !== undefined
+      && this.fullAdmission.paymentOption.option === DefendantPaymentType.BY_SET_DATE
   }
 }
