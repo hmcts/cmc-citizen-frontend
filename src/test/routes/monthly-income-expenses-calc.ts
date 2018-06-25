@@ -1,21 +1,20 @@
 import { IncomeExpenseSchedule } from '../../main/app/common/incomeExpenseSchedule'
-
 import * as request from 'supertest'
 import { app } from 'main/app'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { Paths } from 'paths'
 import * as HttpStatus from 'http-status-codes'
-import {ValidationErrors as GlobalValidationErrors} from "forms/validation/validationErrors";
-import {expectValidationError} from "../app/forms/models/validationUtils";
-import {IncomeExpenseSource} from "common/incomeExpenseSource";
-import {expect} from "chai";
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
+import { expectValidationError } from '../app/forms/models/validationUtils'
+import { IncomeExpenseSources } from 'common/incomeExpenseSources'
+import { IncomeExpenseSource } from 'common/incomeExpenseSource'
 
 describe('Monthly Income Expenses Calculation', () => {
   attachDefaultHooks(app)
 
   describe('when income expense details are correct', () => {
 
-    it('should return ok', async () => {
+    it('should return OK ', async () => {
 
       const incomeExpenseSources = {
         incomeExpenseSources: [
@@ -29,35 +28,20 @@ describe('Monthly Income Expenses Calculation', () => {
       await request(app)
         .post(Paths.totalIncomeOrExpensesCalculation.uri)
         .send(incomeExpenseSources)
-        .expect(HttpStatus.OK, { 'totalMonthlyIncomeExpense' : 100 })
+        .expect(HttpStatus.OK, {'totalMonthlyIncomeExpense': 100})
     })
   })
 
   describe.only('when income expense details are incorrect', () => {
     it('should return error', async () => {
 
-      const incomeExpenseSources = {
-        incomeExpenseSources: [
-          {
-            'amount': 100,
-            'schedule': 'INVALID'
-          }
-        ]
-      }
+      const incomeExpenseSource: IncomeExpenseSource = new IncomeExpenseSource(100,IncomeExpenseSchedule.MONTH)
+      const incomeExpenseSources: IncomeExpenseSources = new IncomeExpenseSources([incomeExpenseSource])
 
-      await totalIncomeExpenseCalculatorShouldReturnValidationError(incomeExpenseSources, 'Select an option')
+      await request(app)
+        .post(Paths.totalIncomeOrExpensesCalculation.uri)
+        .send(incomeExpenseSources)
+        .expect(res => expectValidationError(res.body, GlobalValidationErrors.SELECT_AN_OPTION))
     })
   })
 })
-
-async function totalIncomeExpenseCalculatorShouldReturnValidationError (input: object, expectedErrorMessage: string) {
-  await request(app)
-    .post(Paths.totalIncomeOrExpensesCalculation.uri)
-    .send(input)
-    .expect(HttpStatus.UNPROCESSABLE_ENTITY, {
-      error: {
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        message: expectedErrorMessage
-      }
-    })
-}
