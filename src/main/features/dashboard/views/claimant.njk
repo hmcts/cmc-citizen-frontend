@@ -1,5 +1,6 @@
 {% extends "layout.njk" %}
 {% from "./macro/caseHistory.njk" import caseHistoryForClaimantClaimDetails %}
+{% from "../../claim/views/macro/about-claim-widget.njk" import aboutClaimWidget %}
 
 {% set headingVisible = false %}
 {% set heading = 'Claim status' %}
@@ -29,29 +30,7 @@
 
     {% if claim %}
       <div class="column-one-third">
-        <div class="about-claim-widget">
-          <p class="heading-small">{{ t('About claim') }}</p>
-          <ul class="font-xsmall list">
-            <li>
-              <strong class="bold">{{ t('Defendant name:') }}</strong>
-              <div>{{ claim.claimData.defendant.name }}</div>
-            </li>
-            <li>
-              <strong class="bold">{{ t('Total claim amount:') }}</strong>
-              <div>{{ claim.totalAmountTillToday | numeral }}</div>
-            </li>
-            <li>
-              <strong class="bold">{{ t('Claim details:') }}</strong>
-              <a class="block" href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View claim') }}</a>
-            </li>
-            {% if claim.response %}
-              <li>
-                <strong class="bold">{{ t('Defendant’s response:') }}</strong>
-                <a class="block" href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a>
-              </li>
-            {% endif %}
-          </ul>
-        </div>
+        {{ aboutClaimWidget(user, claim) }}
       </div>
     {% endif %}
   </div>

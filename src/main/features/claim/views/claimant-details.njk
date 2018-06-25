@@ -1,5 +1,6 @@
 {% extends "layout.njk" %}
 {% from "task-list.njk" import task, taskListHeading, disabledTask %}
+{% from "./macro/about-claim-widget.njk" import aboutClaimWidget %}
 
 {% set headingVisible = false %}
 {% set heading = 'Claimant contact details' %}
@@ -29,23 +30,7 @@
     </div>
 
     <div class="column-one-third">
-      <div class="about-claim-widget">
-        <p class="heading-small">{{ t('About claim') }}</p>
-        <ul class="font-xsmall list">
-          <li>
-            <strong class="bold">{{ t('Claimant name:') }}</strong>
-            <span class="block">{{ claim.claimData.claimant.name }}</span>
-          </li>
-          <li>
-            <strong class="bold">{{ t('Claim amount:') }}</strong>
-            <div>{{ claim.totalAmountTillToday | numeral }}</div>
-          </li>
-          <li>
-            <strong class="bold">{{ t('Claim details:') }}</strong>
-            <a class="block" href="{{ ClaimPaths.sealedClaimPdfReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download claim') }}</a>
-          </li>
-        </ul>
-      </div>
+      {{ aboutClaimWidget(user, claim, showResponse = false) }}
     </div>
   </div>
 {% endblock %}
