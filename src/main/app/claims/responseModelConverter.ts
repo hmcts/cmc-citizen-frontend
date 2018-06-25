@@ -108,7 +108,7 @@ export class ResponseModelConverter {
         otherDetail: draft.statementOfMeans.residence.housingDetails
       },
       dependant: draft.statementOfMeans.dependants.declared || draft.statementOfMeans.maintenance.declared || draft.statementOfMeans.otherDependants.declared ? {
-        children: draft.statementOfMeans.dependants.declared ? this.convertStatementOfMeansChildreen(draft) : undefined,
+        children: draft.statementOfMeans.dependants.declared ? this.convertStatementOfMeansChildren(draft) : undefined,
         numberOfMaintainedChildren: draft.statementOfMeans.maintenance.declared ? draft.statementOfMeans.maintenance.value : undefined,
         otherDependants: draft.statementOfMeans.otherDependants.declared ? undefined : undefined
       } : undefined,
@@ -233,7 +233,7 @@ export class ResponseModelConverter {
     return new PaymentDeclaration(whenDidYouPay.date.asString(), whenDidYouPay.text)
   }
 
-  private static convertStatementOfMeansChildreen (draft: ResponseDraft): Child[] {
+  private static convertStatementOfMeansChildren (draft: ResponseDraft): Child[] {
     if (!draft.statementOfMeans.dependants.declared) {
       return undefined
     }
