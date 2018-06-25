@@ -31,7 +31,7 @@ describe('Monthly Income Expenses Calculation', () => {
   })
 
   describe.only('when income expense details are incorrect', () => {
-    it('should return error when missing Income Expense Schedule in IncomeExpenseSource', async () => {
+    it('should return error when Income Expense Schedule is invalid in IncomeExpenseSource', async () => {
 
       const incomeExpenseSources = {
         incomeExpenseSources: [
@@ -44,11 +44,27 @@ describe('Monthly Income Expenses Calculation', () => {
       await request(app)
         .post(Paths.totalIncomeOrExpensesCalculation.uri)
         .send(incomeExpenseSources)
-        // .expect(res => console.log('response error--->',res.body))
         .expect(res => expectValidationError(res.body, GlobalValidationErrors.SELECT_AN_OPTION))
+        .expect(HttpStatus.UNPROCESSABLE_ENTITY)
     })
 
-    it('should return error when missing amount in IncomeExpenseSource', async () => {
+    it('should return error when Income Expense Schedule missing in IncomeExpenseSource', async () => {
+
+      const incomeExpenseSources = {
+        incomeExpenseSources: [
+          {
+            'amount': 100
+          }
+        ]
+      }
+      await request(app)
+        .post(Paths.totalIncomeOrExpensesCalculation.uri)
+        .send(incomeExpenseSources)
+        .expect(res => expectValidationError(res.body, GlobalValidationErrors.SELECT_AN_OPTION))
+        .expect(HttpStatus.UNPROCESSABLE_ENTITY)
+    })
+
+    it('should return error when amount is missing in IncomeExpenseSource', async () => {
 
       const incomeExpenseSources = {
         incomeExpenseSources: [
@@ -62,6 +78,7 @@ describe('Monthly Income Expenses Calculation', () => {
         .send(incomeExpenseSources)
         .expect(res => expectValidationError(res.body,
           GlobalValidationErrors.NUMBER_REQUIRED && GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED))
+        .expect(HttpStatus.UNPROCESSABLE_ENTITY)
     })
   })
 })
