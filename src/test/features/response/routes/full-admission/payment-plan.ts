@@ -56,7 +56,7 @@ describe('Defendant: payment page', () => {
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
 
           await request(app)
             .get(pagePath)
@@ -66,7 +66,7 @@ describe('Defendant: payment page', () => {
 
         it('should calculate length of payment with given payment plan', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
 
           await request(app)
             .get(pagePath)
@@ -122,7 +122,7 @@ describe('Defendant: payment page', () => {
       context('when form is valid', async () => {
         it('should redirect to task list page after form submit', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response', {
+          draftStoreServiceMock.resolveFind('response:full-admission', {
             response: {
               type: ResponseType.FULL_ADMISSION
             }
@@ -140,7 +140,7 @@ describe('Defendant: payment page', () => {
       context('when form is invalid with no regular payments', async () => {
         it('should render page with error messages', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
 
           await request(app)
             .post(pagePath)

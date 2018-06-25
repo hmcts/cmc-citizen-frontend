@@ -12,15 +12,15 @@ export class ValidationErrors {
 export class Dependants {
 
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
-  hasAnyChildren: boolean
+  declared: boolean
 
-  @ValidateIf(o => o.hasAnyChildren === true)
+  @ValidateIf(o => o.declared === true)
   @ValidateNested()
   @AtLeastOneFieldIsPopulated({ message: ValidationErrors.ENTER_AT_LEAST_ONE })
   numberOfChildren: NumberOfChildren
 
-  constructor (hasAnyChildren?: boolean, numberOfChildren?: NumberOfChildren) {
-    this.hasAnyChildren = hasAnyChildren
+  constructor (declared?: boolean, numberOfChildren?: NumberOfChildren) {
+    this.declared = declared
     this.numberOfChildren = numberOfChildren
   }
 
@@ -29,18 +29,18 @@ export class Dependants {
       return value
     }
 
-    const hasAnyChildren: boolean = value.hasAnyChildren !== undefined ? toBoolean(value.hasAnyChildren) : undefined
+    const declared: boolean = value.declared !== undefined ? toBoolean(value.declared) : undefined
 
     return new Dependants(
-      hasAnyChildren,
-      hasAnyChildren ? NumberOfChildren.fromObject(value.numberOfChildren) : undefined
+      declared,
+      declared ? NumberOfChildren.fromObject(value.numberOfChildren) : undefined
     )
   }
 
   deserialize (input?: any): Dependants {
     if (input) {
-      this.hasAnyChildren = input.hasAnyChildren
-      if (this.hasAnyChildren) {
+      this.declared = input.declared
+      if (this.declared) {
         this.numberOfChildren = new NumberOfChildren().deserialize(input.numberOfChildren)
       }
     }
