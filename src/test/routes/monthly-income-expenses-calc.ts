@@ -28,14 +28,14 @@ describe('Monthly Income Expenses Calculation', () => {
       await request(app)
         .post(Paths.totalIncomeOrExpensesCalculation.uri)
         .send(incomeExpenseSources)
-        .expect(HttpStatus.OK, {'totalMonthlyIncomeExpense': 100})
+        .expect(HttpStatus.OK, { 'totalMonthlyIncomeExpense': 100 })
     })
   })
 
   describe.only('when income expense details are incorrect', () => {
     it('should return error', async () => {
 
-      const incomeExpenseSource: IncomeExpenseSource = new IncomeExpenseSource(100,IncomeExpenseSchedule.MONTH)
+      const incomeExpenseSource: IncomeExpenseSource = { 'amount': 100 }
       const incomeExpenseSources: IncomeExpenseSources = new IncomeExpenseSources([incomeExpenseSource])
 
       await request(app)
