@@ -3,12 +3,12 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const buttons = {
-  submit: 'input[id="saveAndContinue"]'
+  continueButton: 'a[class="button"]'
 }
 
 export class StartPage {
 
   clickContinue (): void {
-    I.click(buttons.submit)
+    I.click(buttons.continueButton)
   }
 }
