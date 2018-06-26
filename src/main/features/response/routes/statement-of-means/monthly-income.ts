@@ -1,5 +1,6 @@
 // import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule';
 import * as express from 'express'
+import * as _ from 'lodash'
 import { StatementOfMeansPaths } from 'response/paths'
 
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
@@ -44,7 +45,6 @@ export default express.Router()
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       const statementOfMeans: StatementOfMeans = draft.document.statementOfMeans || new StatementOfMeans()
-      // statementOfMeans.monthlyIncome = new MonthlyIncome(true, 100, IncomeExpenseSchedule.TWO_WEEKS)
       renderView(new Form(statementOfMeans.monthlyIncome), res)
     })
   .post(
@@ -52,10 +52,12 @@ export default express.Router()
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     StatementOfMeansStateGuard.requestHandler(),
     FormValidator.requestHandler(MonthlyIncome, MonthlyIncome.fromObject),
+    // FormValidator.requestHandler(MonthlyIncome, MonthlyIncome.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<MonthlyIncome> = req.body
       const { externalId } = req.params
 
+      console.log('normalised--->',MonthlyIncome)
       if (form.hasErrors()) {
         renderView(form, res)
       } else {

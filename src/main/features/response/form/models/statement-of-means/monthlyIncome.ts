@@ -91,7 +91,7 @@ export class MonthlyIncome {
   @ValidateNested()
   pensionSource?: MonthlyIncomeSource
 
-  constructor(
+  constructor (
     hasSalarySource?: boolean, salarySource?: MonthlyIncomeSource,
     hasUniversalCreditSource?: boolean, universalCreditSource?: MonthlyIncomeSource,
     hasJobseekerAllowanceIncomeSource?: boolean, jobseekerAllowanceIncomeSource?: MonthlyIncomeSource,
@@ -125,36 +125,51 @@ export class MonthlyIncome {
     this.pensionSource = pensionSource
   }
 
-  static fromObject(value?: any): MonthlyIncome {
+  static fromObject (value?: any): MonthlyIncome {
     if (!value) {
       return value
     }
 
     return new MonthlyIncome(
       Boolean(value.hasSalarySource),
-      value.hasSalarySource ? MonthlyIncomeSource.fromObject(SourceNames.SALARY, value.salarySource) : undefined,
+      MonthlyIncomeSource.fromObject(SourceNames.SALARY, value.salarySource),
       Boolean(value.hasUniversalCreditSource),
-      value.hasUniversalCreditSource ? MonthlyIncomeSource.fromObject(SourceNames.UNIVERSAL_CREDIT, value.universalCreditSource) : undefined,
+      MonthlyIncomeSource.fromObject(SourceNames.UNIVERSAL_CREDIT, value.universalCreditSource),
       Boolean(value.hasJobseekerAllowanceIncomeSource),
-      value.hasJobseekerAllowanceIncomeSource ? MonthlyIncomeSource.fromObject(SourceNames.JOBSEEKER_ALLOWANE_INCOME, value.jobseekerAllowanceIncomeSource) : undefined,
+      MonthlyIncomeSource.fromObject(SourceNames.JOBSEEKER_ALLOWANE_INCOME, value.jobseekerAllowanceIncomeSource),
       Boolean(value.hasJobseekerAllowanceContributionSource),
-      value.hasJobseekerAllowanceContributionSource ? MonthlyIncomeSource.fromObject(SourceNames.JOBSEEKER_ALLOWANE_CONTRIBUTION, value.jobseekerAllowanceContributionSource) : undefined,
+      MonthlyIncomeSource.fromObject(SourceNames.JOBSEEKER_ALLOWANE_CONTRIBUTION, value.jobseekerAllowanceContributionSource),
       Boolean(value.hasIncomeSupportSource),
-      value.hasIncomeSupportSource ? MonthlyIncomeSource.fromObject(SourceNames.INCOME_SUPPORT, value.incomeSupportSource) : undefined,
+      MonthlyIncomeSource.fromObject(SourceNames.INCOME_SUPPORT, value.incomeSupportSource),
       Boolean(value.hasWorkingTaxCreditSource),
-      value.hasWorkingTaxCreditSource ? MonthlyIncomeSource.fromObject(SourceNames.WORKING_TAX_CREDIT, value.workingTaxCreditSource) : undefined,
+      MonthlyIncomeSource.fromObject(SourceNames.WORKING_TAX_CREDIT, value.workingTaxCreditSource),
       Boolean(value.hasChildTaxCreditSource),
-      value.hasChildTaxCreditSource ? MonthlyIncomeSource.fromObject(SourceNames.CHILD_TAX_CREDIT, value.childTaxCreditSource) : undefined,
+      MonthlyIncomeSource.fromObject(SourceNames.CHILD_TAX_CREDIT, value.childTaxCreditSource),
       Boolean(value.hasChildBenefitSource),
-      value.hasChildBenefitSource ? MonthlyIncomeSource.fromObject(SourceNames.CHILD_BENEFIT, value.childBenefitSource) : undefined,
+      MonthlyIncomeSource.fromObject(SourceNames.CHILD_BENEFIT, value.childBenefitSource),
       Boolean(value.hasCouncilTaxSupportSource),
-      value.hasCouncilTaxSupportSource ? MonthlyIncomeSource.fromObject(SourceNames.COUNCIL_TAX_SUPPORT, value.councilTaxSupportSource) : undefined,
+      MonthlyIncomeSource.fromObject(SourceNames.COUNCIL_TAX_SUPPORT, value.councilTaxSupportSource),
       Boolean(value.hasPensionSource),
-      value.hasPensionSource ? MonthlyIncomeSource.fromObject(SourceNames.PENSION, value.pensionSource) : undefined
+      MonthlyIncomeSource.fromObject(SourceNames.PENSION, value.pensionSource)
     )
   }
 
-  deserialize(input?: any): MonthlyIncome {
+  normalize (): MonthlyIncome {
+    const clone = Object.assign({}, this)
+    clone.hasSalarySource = hasSource(this.salarySource)
+    clone.hasUniversalCreditSource = hasSource(this.universalCreditSource)
+    clone.hasJobseekerAllowanceIncomeSource = hasSource(this.jobseekerAllowanceIncomeSource)
+    clone.hasJobseekerAllowanceContributionSource = hasSource(this.jobseekerAllowanceContributionSource)
+    clone.hasIncomeSupportSource = hasSource(this.incomeSupportSource)
+    clone.hasWorkingTaxCreditSource = hasSource(this.workingTaxCreditSource)
+    clone.hasChildTaxCreditSource = hasSource(this.childTaxCreditSource)
+    clone.hasChildBenefitSource = hasSource(this.childBenefitSource)
+    clone.hasCouncilTaxSupportSource = hasSource(this.councilTaxSupportSource)
+    clone.hasPensionSource = hasSource(this.pensionSource)
+    return clone
+  }
+
+  deserialize (input?: any): MonthlyIncome {
     if (input) {
       this.hasSalarySource = input.hasSalarySource
       this.salarySource = input.salarySource
@@ -180,4 +195,8 @@ export class MonthlyIncome {
 
     return this
   }
+}
+
+function hasSource (source: MonthlyIncomeSource): boolean {
+  return Boolean(source.amount || source.schedule)
 }
