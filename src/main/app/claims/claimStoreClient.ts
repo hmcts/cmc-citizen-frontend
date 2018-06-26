@@ -10,7 +10,7 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Logger } from '@hmcts/nodejs-logging'
-import { PartyDetails } from 'forms/models/partyDetails'
+import { PartyContactDetails } from 'claims/models/api/partyContactDetails'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -146,7 +146,7 @@ export class ClaimStoreClient {
       })
   }
 
-  requestForMoreTime (externalId: string, user: User, defendantDetails: PartyDetails): Promise<Claim> {
+  requestForMoreTime (externalId: string, user: User, defendantContactDetails: PartyContactDetails): Promise<Claim> {
     if (!externalId) {
       return Promise.reject(new Error('External ID is required'))
     }
@@ -160,9 +160,7 @@ export class ClaimStoreClient {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         },
-        body: {
-          defendantDetails: defendantDetails
-        }
+        body: defendantContactDetails
       })
   }
 
