@@ -32,6 +32,9 @@ async function runPa11y (url: string): Promise<Issue[]> {
   const result = await pa11y(url, {
     headers: {
       Cookie: `${cookieName}=ABC`
+    },
+    chromeLaunchConfig: {
+      args: ['--no-sandbox']
     }
   })
   return result.issues
