@@ -7,7 +7,7 @@ import * as HttpStatus from 'http-status-codes'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { expectValidationError } from '../app/forms/models/validationUtils'
 
-describe.only('Monthly Income Expenses Calculation', () => {
+describe('Monthly Income Expenses Calculation', () => {
   attachDefaultHooks(app)
 
   describe('when income expense details are correct', () => {
@@ -78,7 +78,7 @@ describe.only('Monthly Income Expenses Calculation', () => {
           .post(Paths.totalIncomeOrExpensesCalculation.uri)
           .send(incomeExpenseSources)
           .expect(res => expectValidationError(res.body,
-            GlobalValidationErrors.NUMBER_REQUIRED && 
+            GlobalValidationErrors.NUMBER_REQUIRED &&
             GlobalValidationErrors.AMOUNT_INVALID_DECIMALS))
           .expect(HttpStatus.UNPROCESSABLE_ENTITY)
       })
@@ -96,7 +96,7 @@ describe.only('Monthly Income Expenses Calculation', () => {
         .post(Paths.totalIncomeOrExpensesCalculation.uri)
         .send(incomeExpenseSources)
         .expect(res => expectValidationError(res.body,
-          GlobalValidationErrors.NUMBER_REQUIRED && 
+          GlobalValidationErrors.NUMBER_REQUIRED &&
           GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED))
         .expect(HttpStatus.UNPROCESSABLE_ENTITY)
     })

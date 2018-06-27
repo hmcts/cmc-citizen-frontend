@@ -127,10 +127,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
               childTaxCredit: '1',
               childBenefit: '1',
               councilTaxSupport: '1',
-              pension: '1',
-              maintenance: '1',
-              rows: [{ amount: '10', description: 'bla bla bla' }]
-            })
+              pension: '1'})
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.monthlyExpensesPage.evaluateUri(
@@ -140,19 +137,19 @@ describe('Defendant response: Statement of means: monthly-income', () => {
         })
       })
 
-      describe('add a new row', () => {
-
-        it('should update draft store and redirect', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response:full-admission')
-
-          await request(app)
-            .post(pagePath)
-            .send({ action: { addRow: 'Add row' } })
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('What regular income do you receive?'))
-        })
-      })
+      // describe('add a new row', () => {
+      //
+      //   it('should update draft store and redirect', async () => {
+      //     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+      //     draftStoreServiceMock.resolveFind('response:full-admission')
+      //
+      //     await request(app)
+      //       .post(pagePath)
+      //       .send({ action: { addRow: 'Add row' } })
+      //       .set('Cookie', `${cookieName}=ABC`)
+      //       .expect(res => expect(res).to.be.successful.withText('What regular income do you receive?'))
+      //   })
+      // })
     })
   })
 })

@@ -207,7 +207,7 @@ function forDeserialize () {
   }
 }
 
-describe.only('MonthlyIncome', () => {
+describe('MonthlyIncome', () => {
   describe('fromObject', () => {
     it('should return undefined when undefined provided as object parameter', () => {
       expect(MonthlyIncome.fromObject(undefined)).to.eql(undefined)

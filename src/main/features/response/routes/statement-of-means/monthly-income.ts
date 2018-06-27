@@ -1,6 +1,5 @@
 // import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule';
 import * as express from 'express'
-import * as _ from 'lodash'
 import { StatementOfMeansPaths } from 'response/paths'
 
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
@@ -56,8 +55,6 @@ export default express.Router()
       const form: Form<MonthlyIncome> = req.body
       const { externalId } = req.params
 
-      console.log('normalised--->',new MonthlyIncome().normalize())
-      console.log('fromObject--->',MonthlyIncome.fromObject)
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
