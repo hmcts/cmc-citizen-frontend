@@ -1,15 +1,14 @@
-import { CorrespondenceAddress } from 'forms/models/correspondenceAddress'
-import { Address } from 'forms/models/address'
 import { Defendant } from 'drafts/models/defendant'
+import { Address } from 'claims/models/api/address'
 
 export class PartyContactDetails {
   address?: Address
-  correspondenceAddress?: CorrespondenceAddress
+  correspondenceAddress?: Address
   phoneNumber: string
 
   constructor (
     address?: Address,
-    correspondenceAddress?: CorrespondenceAddress,
+    correspondenceAddress?: Address,
     phoneNumber?: string
   ) {
     this.address = address
@@ -19,8 +18,8 @@ export class PartyContactDetails {
 
   static fromDefendant (defendant: Defendant) {
     return new PartyContactDetails(
-      defendant.partyDetails.address,
-      defendant.partyDetails.correspondenceAddress,
+      Address.fromFormAddress(defendant.partyDetails.address),
+      Address.fromFormAddress(defendant.partyDetails.correspondenceAddress),
       defendant.mobilePhone !== undefined ? defendant.mobilePhone.number : null
     )
   }
