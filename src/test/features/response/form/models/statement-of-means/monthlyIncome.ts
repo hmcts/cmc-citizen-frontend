@@ -67,7 +67,8 @@ function getSampleMonthtlyIncomeObject (options?: object) {
   return {
     sampleData,
     forConstructor: forConstructor,
-    forFromObjectMethod: forFromObjectMethod
+    forFromObjectMethod: forFromObjectMethod,
+    forDeserialize: forDeserialize
   }
 }
 
@@ -137,6 +138,62 @@ function forFromObjectMethod () {
     pensionSource: {
       amount: this.sampleData.pensionSource.amount,
       schedule: this.sampleData.pensionSource.schedule.value
+    }
+  }
+}
+
+function forDeserialize () {
+  return {
+    hasSalarySource: this.sampleData.hasSalarySource,
+    salarySource: {
+      name: this.sampleData.salarySource.
+      amount: this.sampleData.salarySource.amount,
+      schedule: this.sampleData.salarySource.schedule
+    },
+    hasUniversalCreditSource: this.sampleData.hasUniversalCreditSource,
+    universalCreditSource: {
+      amount: this.sampleData.universalCreditSource.amount,
+      schedule: this.sampleData.universalCreditSource.schedule
+    },
+    hasJobseekerAllowanceIncomeSource: this.sampleData.hasJobseekerAllowanceIncomeSource,
+    jobseekerAllowanceIncomeSource: {
+      amount: this.sampleData.jobseekerAllowanceIncomeSource.amount,
+      schedule: this.sampleData.jobseekerAllowanceIncomeSource.schedule
+    },
+    hasJobseekerAllowanceContributionSource: this.sampleData.hasJobseekerAllowanceContributionSource,
+    jobseekerAllowanceContributionSource: {
+      amount: this.sampleData.jobseekerAllowanceContributionSource.amount,
+      schedule: this.sampleData.jobseekerAllowanceContributionSource.schedule
+    },
+    hasIncomeSupportSource: this.sampleData.hasIncomeSupportSource,
+    incomeSupportSource: {
+      amount: this.sampleData.incomeSupportSource.amount,
+      schedule: this.sampleData.incomeSupportSource.schedule
+    },
+    hasWorkingTaxCreditSource: this.sampleData.hasWorkingTaxCreditSource,
+    workingTaxCreditSource: {
+      amount: this.sampleData.workingTaxCreditSource.amount,
+      schedule: this.sampleData.workingTaxCreditSource.schedule
+    },
+    hasChildTaxCreditSource: this.sampleData.hasChildTaxCreditSource,
+    childTaxCreditSource: {
+      amount: this.sampleData.childTaxCreditSource.amount,
+      schedule: this.sampleData.childTaxCreditSource.schedule
+    },
+    hasChildBenefitSource: this.sampleData.hasChildBenefitSource,
+    childBenefitSource: {
+      amount: this.sampleData.childBenefitSource.amount,
+      schedule: this.sampleData.childBenefitSource.schedule
+    },
+    hasCouncilTaxSupportSource: this.sampleData.hasCouncilTaxSupportSource,
+    councilTaxSupportSource: {
+      amount: this.sampleData.councilTaxSupportSource.amount,
+      schedule: this.sampleData.councilTaxSupportSource.schedule
+    },
+    hasPensionSource: this.sampleData.hasPensionSource,
+    pensionSource: {
+      amount: this.sampleData.pensionSource.amount,
+      schedule: this.sampleData.pensionSource.schedule
     }
   }
 }
@@ -275,12 +332,12 @@ describe.only('MonthlyIncome', () => {
     })
 
     it('should return instance initialised with set fields from object provided', () => {
-      expect(new MonthlyIncome().deserialize(SAMPLE_VALID_MONTHLY_INCOME_DESERIALIZE)).to.deep.equal(getSampleMonthtlyIncomeObject().forConstructor())
+      expect(new MonthlyIncome().deserialize(getSampleMonthtlyIncomeObject().forDeserialize())).to.deep.equal(getSampleMonthtlyIncomeObject().forConstructor())
     })
   })
 
   describe('normalize', () => {
-    it('should return normalized MonthlyIncome with hasSalarySource true when  schedule not provided', () => {
+    it('should return normalized MonthlyIncome with `hasSalarySource` true when `schedule` not provided', () => {
       const sampleMonthtlyIncomeObject = getSampleMonthtlyIncomeObject({
         hasSalarySource: false,
         salarySource: {
@@ -297,7 +354,7 @@ describe.only('MonthlyIncome', () => {
       expect(sampleMonthtlyIncomeObject.normalize()).to.deep.equal(expectedMonthtlyIncomeObject)
     })
 
-    it('should return normalized MonthlyIncome with hasSalarySource true when  amount not provided', () => {
+    it('should return normalized MonthlyIncome with `hasSalarySource` true when `amount` not provided', () => {
       const sampleMonthtlyIncomeObject = getSampleMonthtlyIncomeObject({
         hasSalarySource: false,
         salarySource: {
@@ -314,7 +371,7 @@ describe.only('MonthlyIncome', () => {
       expect(sampleMonthtlyIncomeObject.normalize()).to.deep.equal(expectedMonthtlyIncomeObject)
     })
 
-    it('should return normalized MonthlyIncome with hasSalarySource true when amount and schedule provided', () => {
+    it('should return normalized MonthlyIncome with `hasSalarySource` true when `amount` and `schedule` provided', () => {
       const sampleMonthtlyIncomeObject = getSampleMonthtlyIncomeObject({
         hasSalarySource: false,
         salarySource: {
@@ -333,7 +390,7 @@ describe.only('MonthlyIncome', () => {
       expect(sampleMonthtlyIncomeObject.normalize()).to.deep.equal(expectedMonthtlyIncomeObject)
     })
 
-    it('should return normalized MonthlyIncome with hasSalarySource false when salary source is not provided', () => {
+    it('should return normalized MonthlyIncome with `hasSalarySource` false when `salary` source is not provided', () => {
       const sampleMonthtlyIncomeObject = getSampleMonthtlyIncomeObject({
         hasSalarySource: false,
         salarySource: {}
@@ -346,7 +403,7 @@ describe.only('MonthlyIncome', () => {
       expect(sampleMonthtlyIncomeObject.normalize()).to.deep.equal(expectedMonthtlyIncomeObject)
     })
 
-    it('should return normalized MonthlyIncome with hasSource property to true for all incomes sources', () => {
+    it('should return normalized MonthlyIncome with `hasSource` property to true for all incomes sources', () => {
       const sampleMonthtlyIncomeObject = getSampleMonthtlyIncomeObject({
         hasSalarySource: false,
         salarySource: {

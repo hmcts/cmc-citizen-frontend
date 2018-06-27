@@ -51,13 +51,13 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     StatementOfMeansStateGuard.requestHandler(),
-    FormValidator.requestHandler(MonthlyIncome, MonthlyIncome.fromObject),
-    // FormValidator.requestHandler(MonthlyIncome, MonthlyIncome.fromObject),
+    FormValidator.requestHandler(MonthlyIncome, normaliseFormData(MonthlyIncome.fromObject)),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<MonthlyIncome> = req.body
       const { externalId } = req.params
 
-      console.log('normalised--->',MonthlyIncome)
+      console.log('normalised--->',new MonthlyIncome().normalize())
+      console.log('fromObject--->',MonthlyIncome.fromObject)
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
@@ -71,3 +71,7 @@ export default express.Router()
       }
     })
   )
+
+function normaliseFormData (fromObject) {
+  return (value?: any): MonthlyIncome => fromObject(value).normalize()
+}

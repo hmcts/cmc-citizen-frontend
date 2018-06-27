@@ -198,5 +198,5 @@ export class MonthlyIncome {
 }
 
 function hasSource (source: MonthlyIncomeSource): boolean {
-  return Boolean(source.amount || source.schedule)
+  return source ? Boolean(source.amount || source.schedule) : undefined
 }
