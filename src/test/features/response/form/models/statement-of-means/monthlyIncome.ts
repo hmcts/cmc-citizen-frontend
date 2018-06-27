@@ -146,147 +146,63 @@ function forDeserialize () {
   return {
     hasSalarySource: this.sampleData.hasSalarySource,
     salarySource: {
-      name: this.sampleData.salarySource.
+      name: SourceNames.SALARY,
       amount: this.sampleData.salarySource.amount,
       schedule: this.sampleData.salarySource.schedule
     },
     hasUniversalCreditSource: this.sampleData.hasUniversalCreditSource,
     universalCreditSource: {
+      name: SourceNames.UNIVERSAL_CREDIT,
       amount: this.sampleData.universalCreditSource.amount,
       schedule: this.sampleData.universalCreditSource.schedule
     },
     hasJobseekerAllowanceIncomeSource: this.sampleData.hasJobseekerAllowanceIncomeSource,
     jobseekerAllowanceIncomeSource: {
+      name: SourceNames.JOBSEEKER_ALLOWANE_INCOME,
       amount: this.sampleData.jobseekerAllowanceIncomeSource.amount,
       schedule: this.sampleData.jobseekerAllowanceIncomeSource.schedule
     },
     hasJobseekerAllowanceContributionSource: this.sampleData.hasJobseekerAllowanceContributionSource,
     jobseekerAllowanceContributionSource: {
+      name: SourceNames.JOBSEEKER_ALLOWANE_CONTRIBUTION,
       amount: this.sampleData.jobseekerAllowanceContributionSource.amount,
       schedule: this.sampleData.jobseekerAllowanceContributionSource.schedule
     },
     hasIncomeSupportSource: this.sampleData.hasIncomeSupportSource,
     incomeSupportSource: {
+      name: SourceNames.INCOME_SUPPORT,
       amount: this.sampleData.incomeSupportSource.amount,
       schedule: this.sampleData.incomeSupportSource.schedule
     },
     hasWorkingTaxCreditSource: this.sampleData.hasWorkingTaxCreditSource,
     workingTaxCreditSource: {
+      name: SourceNames.WORKING_TAX_CREDIT,
       amount: this.sampleData.workingTaxCreditSource.amount,
       schedule: this.sampleData.workingTaxCreditSource.schedule
     },
     hasChildTaxCreditSource: this.sampleData.hasChildTaxCreditSource,
     childTaxCreditSource: {
+      name: SourceNames.CHILD_TAX_CREDIT,
       amount: this.sampleData.childTaxCreditSource.amount,
       schedule: this.sampleData.childTaxCreditSource.schedule
     },
     hasChildBenefitSource: this.sampleData.hasChildBenefitSource,
     childBenefitSource: {
+      name: SourceNames.CHILD_BENEFIT,
       amount: this.sampleData.childBenefitSource.amount,
       schedule: this.sampleData.childBenefitSource.schedule
     },
     hasCouncilTaxSupportSource: this.sampleData.hasCouncilTaxSupportSource,
     councilTaxSupportSource: {
+      name: SourceNames.COUNCIL_TAX_SUPPORT,
       amount: this.sampleData.councilTaxSupportSource.amount,
       schedule: this.sampleData.councilTaxSupportSource.schedule
     },
     hasPensionSource: this.sampleData.hasPensionSource,
     pensionSource: {
+      name: SourceNames.PENSION,
       amount: this.sampleData.pensionSource.amount,
       schedule: this.sampleData.pensionSource.schedule
-    }
-  }
-}
-
-const SAMPLE_VALID_MONTHLY_INCOME_DESERIALIZE = {
-  hasSalarySource: true,
-  salarySource: {
-    name: SourceNames.SALARY,
-    amount: 100,
-    schedule: {
-      value: IncomeExpenseSchedule.MONTH.value,
-      displayValue: IncomeExpenseSchedule.MONTH.displayValue
-    }
-  },
-  hasUniversalCreditSource: true,
-  universalCreditSource: {
-    name: SourceNames.UNIVERSAL_CREDIT,
-    amount: 200,
-    schedule: {
-      value: IncomeExpenseSchedule.MONTH.value,
-      displayValue: IncomeExpenseSchedule.MONTH.displayValue
-    }
-  },
-  hasJobseekerAllowanceIncomeSource: true,
-  jobseekerAllowanceIncomeSource: {
-    name: SourceNames.JOBSEEKER_ALLOWANE_INCOME,
-    amount: 300,
-    schedule: {
-      value: IncomeExpenseSchedule.TWO_WEEKS.value,
-      displayValue: IncomeExpenseSchedule.TWO_WEEKS.displayValue
-    }
-  },
-  hasJobseekerAllowanceContributionSource: true,
-  jobseekerAllowanceContributionSource: {
-    name: SourceNames.JOBSEEKER_ALLOWANE_CONTRIBUTION,
-    amount: 400,
-    schedule: {
-      value: IncomeExpenseSchedule.MONTH.value,
-      displayValue: IncomeExpenseSchedule.MONTH.displayValue
-    }
-  },
-  hasIncomeSupportSource: true,
-  incomeSupportSource: {
-    name: SourceNames.INCOME_SUPPORT,
-    amount: 500,
-    schedule: {
-      value: IncomeExpenseSchedule.MONTH.value,
-      displayValue: IncomeExpenseSchedule.MONTH.displayValue
-    }
-  },
-  hasWorkingTaxCreditSource: true,
-  workingTaxCreditSource: {
-    name: SourceNames.WORKING_TAX_CREDIT,
-    amount: 600,
-    schedule: {
-      value: IncomeExpenseSchedule.TWO_WEEKS.value,
-      displayValue: IncomeExpenseSchedule.TWO_WEEKS.displayValue
-    }
-  },
-  hasChildTaxCreditSource: true,
-  childTaxCreditSource: {
-    name: SourceNames.CHILD_TAX_CREDIT,
-    amount: 700,
-    schedule: {
-      value: IncomeExpenseSchedule.MONTH.value,
-      displayValue: IncomeExpenseSchedule.MONTH.displayValue
-    }
-  },
-  hasChildBenefitSource: true,
-  childBenefitSource: {
-    name: SourceNames.CHILD_BENEFIT,
-    amount: 800,
-    schedule: {
-      value: IncomeExpenseSchedule.MONTH.value,
-      displayValue: IncomeExpenseSchedule.MONTH.displayValue
-    }
-  },
-  hasCouncilTaxSupportSource: true,
-  councilTaxSupportSource: {
-    name: SourceNames.COUNCIL_TAX_SUPPORT,
-    amount: 900,
-    schedule: {
-      value: IncomeExpenseSchedule.TWO_WEEKS.value,
-      displayValue: IncomeExpenseSchedule.TWO_WEEKS.displayValue
-    }
-  },
-  hasPensionSource: true,
-  pensionSource: {
-    name: SourceNames.PENSION,
-    amount: 100,
-    schedule: {
-      value: IncomeExpenseSchedule.TWO_WEEKS.value,
-      displayValue: IncomeExpenseSchedule.TWO_WEEKS.displayValue
     }
   }
 }
