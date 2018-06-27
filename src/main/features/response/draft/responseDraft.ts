@@ -12,7 +12,10 @@ import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
 import { HowMuchPaid } from 'response/form/models/howMuchPaid'
 import { HowMuchOwed } from 'response/form/models/howMuchOwed'
-import { DefendantPaymentOption as PaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import {
+  DefendantPaymentOption as PaymentOption,
+  DefendantPaymentType
+} from 'response/form/models/defendantPaymentOption'
 import { DefendantPaymentPlan as PaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
@@ -34,16 +37,22 @@ export class FullAdmission {
       this.paymentOption = new PaymentOption().deserialize(input.paymentOption)
       this.paymentDate = new PaymentDate().deserialize(input.paymentDate)
       this.paymentPlan = new PaymentPlan().deserialize(input.paymentPlan)
-      return this
     }
+
+    return this
   }
 }
 
-export class PartAdmission {
-  deserialize (input: any): PartAdmission {
+export class PartialAdmission {
+
+  alreadyPaid?: AlreadyPaid
+
+  deserialize (input: any): PartialAdmission {
     if (input) {
-      return this
+      this.alreadyPaid = AlreadyPaid.fromObject(input.alreadyPaid && input.alreadyPaid.option)
     }
+
+    return this
   }
 }
 
@@ -59,7 +68,6 @@ export class ResponseDraft extends DraftDocument {
   evidence: DefendantEvidence
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
   howMuchOwed?: HowMuchOwed
-  partialAdmission?: AlreadyPaid
   rejectAllOfClaim?: RejectAllOfClaim
   paidAmount?: PaidAmount
   impactOfDispute?: ImpactOfDispute
@@ -67,7 +75,7 @@ export class ResponseDraft extends DraftDocument {
   howMuchPaidClaimant?: HowMuchPaidClaimant
 
   fullAdmission?: FullAdmission
-  partAdmission?: PartAdmission
+  partialAdmission?: PartialAdmission
   statementOfMeans?: StatementOfMeans
 
   deserialize (input: any): ResponseDraft {
@@ -85,7 +93,7 @@ export class ResponseDraft extends DraftDocument {
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }
-      this.partialAdmission = new AlreadyPaid().deserialize(input.partialAdmission)
+      this.partialAdmission = new PartialAdmission().deserialize(input.partialAdmission)
       this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
@@ -99,6 +107,7 @@ export class ResponseDraft extends DraftDocument {
         this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
       }
     }
+
     return this
   }
 
@@ -118,24 +127,19 @@ export class ResponseDraft extends DraftDocument {
   // is incomplete. ROC-3658 should revisit once 'statement of means' flow is complete.
   public isResponseFullyAdmittedWithInstalments (): boolean {
     return this.isResponseFullyAdmitted()
-        && this.fullAdmission
-        && this.fullAdmission.paymentOption
-        && (this.fullAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS)
+      && this.fullAdmission
+      && this.fullAdmission.paymentOption
+      && (this.fullAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS)
   }
 
-  public isResponsePartiallyRejectedDueTo (option: String): boolean {
+  public isResponsePartiallyAdmitted (): boolean {
     if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission'))) {
       return false
-    }
-
-    if (option === undefined) {
-      throw new Error('Option is undefined')
     }
 
     return this.isResponsePopulated()
       && this.response.type === ResponseType.PART_ADMISSION
       && this.partialAdmission !== undefined
-      && this.partialAdmission.option === option
   }
 
   public isResponseRejectedFullyWithDispute (): boolean {

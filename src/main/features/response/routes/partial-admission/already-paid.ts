@@ -5,7 +5,6 @@ import { Paths, PartAdmissionPaths } from 'response/paths'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 
-import { ResponseType } from 'response/form/models/responseType'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { ErrorHandling } from 'shared/errorHandling'
 import { User } from 'idam/user'
@@ -19,8 +18,7 @@ import { RoutablePath } from 'shared/router/routablePath'
 function isRequestAllowed (res: express.Response): boolean {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-  return draft.document.response !== undefined
-    && draft.document.response.type === ResponseType.PART_ADMISSION
+  return draft.document.isResponsePartiallyAdmitted()
 }
 
 function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -44,7 +42,7 @@ export default express.Router()
     guardRequestHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      renderView(new Form(draft.document.partialAdmission), res)
+      renderView(new Form(draft.document.partialAdmission.alreadyPaid), res)
     }))
   .post(
     page.uri,
@@ -59,7 +57,7 @@ export default express.Router()
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        draft.document.partialAdmission = form.model
+        draft.document.partialAdmission.alreadyPaid = form.model
         draft.document.fullAdmission = draft.document.rejectAllOfClaim = undefined
 
         await new DraftService().save(draft, user.bearerToken)
