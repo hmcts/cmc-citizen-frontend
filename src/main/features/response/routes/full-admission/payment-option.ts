@@ -12,7 +12,15 @@ import { FeatureToggleGuard } from 'main/app/guards/featureToggleGuard'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'main/app/claims/models/claim'
-import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
+import { FeatureToggles } from 'utils/featureToggles'
+
+function isApplicableFor (draft: ResponseDraft): boolean {
+  if (!FeatureToggles.isEnabled('statementOfMeans')) {
+    return false
+  }
+  return draft.isResponseFullyAdmitted()
+    && !draft.defendantDetails.partyDetails.isBusiness()
+}
 
 function renderView (form: Form<DefendantPaymentOption>, res: express.Response) {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -21,7 +29,7 @@ function renderView (form: Form<DefendantPaymentOption>, res: express.Response) 
     form: form,
     claim: claim,
     draft: draft.document,
-    statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(draft.document)
+    statementOfMeansIsApplicable: isApplicableFor(draft.document)
   })
 }
 
