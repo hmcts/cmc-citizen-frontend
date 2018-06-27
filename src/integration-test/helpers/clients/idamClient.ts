@@ -1,4 +1,6 @@
 import { request } from 'integration-test/helpers/clients/base/request'
+import * as url from 'url'
+import * as urlencode from 'urlencode'
 
 const baseURL: string = process.env.IDAM_URL
 
@@ -10,6 +12,9 @@ const oauth2 = {
   client_secret: process.env.OAUTH2_CLIENT_SECRET
 }
 
+const strategicIdam: boolean = baseURL.includes('core-compute') ||
+  baseURL.includes('platform.hmcts.net')
+
 export class IdamClient {
 
   /**
@@ -17,6 +22,7 @@ export class IdamClient {
    *
    * @param {string} email
    * @param {string} userGroupCode
+   * @param password the user's password, will use a default if undefined
    * @returns {Promise<void>}
    */
   static createUser (email: string, userGroupCode: string, password: string = undefined): Promise<void> {
@@ -26,7 +32,7 @@ export class IdamClient {
         email: email,
         forename: 'John',
         surname: 'Smith',
-        levelOfAccess: 1,
+        levelOfAccess: 0,
         userGroup: {
           code: userGroupCode
         },
@@ -40,7 +46,7 @@ export class IdamClient {
   /**
    * Authenticate user
    *
-   * @param {string} email
+   * @param {string} username the username to authenticate
    * @param password the users password (optional, default will be used if none provided)
    * @returns {Promise<string>}
    */
@@ -48,10 +54,12 @@ export class IdamClient {
 
     const base64Authorisation: string = IdamClient.toBase64(`${username}:${password || defaultPassword}`)
     const oauth2Params: string = IdamClient.toUrlParams(oauth2)
-
     const authResponse = await request.post({
       url: `${baseURL}/oauth2/authorize?response_type=code&${oauth2Params}`,
-      headers: { Authorization: `Basic ${base64Authorisation}` }
+      headers: {
+        Authorization: `Basic ${base64Authorisation}`,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     })
 
     return IdamClient.exchangeCode(authResponse['code'])
@@ -73,23 +81,46 @@ export class IdamClient {
    * @param upliftToken the pin user's authorization header
    * @returns {Promise<string>}
    */
-  static async upliftUser (email: string, upliftToken: string): Promise<string> {
-    const base64EncodedCredentials = IdamClient.toBase64(`${email}:${defaultPassword}`)
-    const upliftParams = IdamClient.toUrlParams({
-      response_type: 'code',
-      client_id: oauth2.client_id,
-      redirect_uri: oauth2.redirect_uri,
-      upliftToken: upliftToken
-    })
+  static async upliftUser (email: string, upliftToken: string): Promise<void> {
+    if (strategicIdam) {
+      const upliftParams = IdamClient.toUrlParams({
+        userName: email,
+        password: defaultPassword,
+        jwt: upliftToken,
+        clientId: oauth2.client_id,
+        redirectUri: oauth2.redirect_uri
+      })
 
-    const obj = await request.post({
-      uri: `${baseURL}/oauth2/authorize?${upliftParams}`,
-      headers: {
-        Authorization: `Basic ${base64EncodedCredentials}`
-      }
-    })
+      const res = await require('request-promise-native').post({
+        uri: `${baseURL}/login/uplift?${upliftParams}`,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        simple: false,
+        followRedirect: false,
+        json: false,
+        resolveWithFullResponse: true
+      })
 
-    return obj.code
+      const code: string = url.parse(res.headers.location, true).query.code.toString()
+      await IdamClient.exchangeCode(code)
+    } else {
+      const base64EncodedCredentials = IdamClient.toBase64(`${email}:${defaultPassword}`)
+      const upliftParams = IdamClient.toUrlParams({
+        response_type: 'code',
+        client_id: oauth2.client_id,
+        redirect_uri: oauth2.redirect_uri,
+        upliftToken: upliftToken
+      })
+
+      await request.post({
+        uri: `${baseURL}/oauth2/authorize?${upliftParams}`,
+        headers: {
+          Authorization: `Basic ${base64EncodedCredentials}`
+        }
+      })
+    }
+
   }
 
   /**
@@ -99,15 +130,32 @@ export class IdamClient {
    * @returns {Promise<string>} bearer token
    */
   static async authenticatePinUser (pin: string): Promise<string> {
-    const base64EncodedCredentials = IdamClient.toBase64(pin)
     const oauth2Params: string = IdamClient.toUrlParams(oauth2)
+    let code
+    if (strategicIdam) {
+      const res = await request.get({
+        uri: `${baseURL}/pin?${oauth2Params}`,
+        headers: {
+          pin,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        simple: false,
+        followRedirect: false,
+        json: false,
+        resolveWithFullResponse: true
+      })
 
-    const { code } = await request.post({
-      uri: `${baseURL}/oauth2/authorize?${oauth2Params}&response_type=code`,
-      headers: {
-        Authorization: `Pin ${base64EncodedCredentials}`
-      }
-    })
+      code = url.parse(res.headers.location, true).query.code
+    } else {
+      const base64EncodedCredentials = IdamClient.toBase64(pin)
+
+      code = (await request.post({
+        uri: `${baseURL}/oauth2/authorize?${oauth2Params}&response_type=code`,
+        headers: {
+          Authorization: `Pin ${base64EncodedCredentials}`
+        }
+      })).code
+    }
 
     return IdamClient.exchangeCode(code)
   }
@@ -143,10 +191,10 @@ export class IdamClient {
   }
 
   private static toBase64 (value: string): string {
-    return new Buffer(value).toString('base64')
+    return Buffer.from(value).toString('base64')
   }
 
   private static toUrlParams (value: object): string {
-    return Object.entries(value).map(([key, val]) => `${key}=${val}`).join('&')
+    return Object.entries(value).map(([key, val]) => `${key}=${urlencode(val)}`).join('&')
   }
 }
