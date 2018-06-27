@@ -12,7 +12,7 @@ export class Helper {
 
   async enterPinNumber (claimRef: string, claimantEmail: string): Promise<void> {
     defenceSteps.enterClaimReference(claimRef)
-    I.waitForText('Please enter your security code to continue')
+    I.waitForText('Security code')
     const authorisation = await IdamClient.authenticateUser(claimantEmail)
     return defenceSteps.enterClaimPin(claimRef, authorisation)
   }

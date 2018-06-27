@@ -64,6 +64,6 @@ export class AccessRoutesSteps {
     I.amOnPage(respondToClaimPage)
     I.fillField(selectors.reference, reference)
     I.click(selectors.submit)
-    I.see('Please enter your security code to continue')
+    I.see('Security code')
   }
 }
