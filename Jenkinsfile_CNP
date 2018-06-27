@@ -46,6 +46,18 @@ withPipeline("nodejs", product, component) {
     }
   }
 
+  after('functionalTest') {
+    try {
+      sh """
+        pwd
+        ls -al functional-output
+        ls -al functional-output/*
+      """
+    } catch (err) {
+      // ignore
+    }
+  }
+
   after('build') {
     sh 'yarn setup'
   }
