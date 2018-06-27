@@ -1,8 +1,7 @@
-sudo: required
-addons:
-  chrome: stable
+
 before_install:
-  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
 
 language: node_js
 cache: yarn
@@ -10,11 +9,11 @@ script:
   - yarn --version
   - yarn check --integrity
   - yarn setup
-  - yarn lint
-  - yarn test
-  - yarn test:routes
+#   - yarn lint
+#   - yarn test
+#   - yarn test:routes
   - yarn test:a11y
-  - yarn test:coverage-unit
-after_success:
-  - yarn test:codacy-upload
-  - yarn test:codecov-upload
+#   - yarn test:coverage-unit
+# after_success:
+#   - yarn test:codacy-upload
+#   - yarn test:codecov-upload
