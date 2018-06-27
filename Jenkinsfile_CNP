@@ -23,13 +23,11 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 String notificationsChannel = '#cmc-tech-notification'
 
 withPipeline("nodejs", product, component) {
-  beforeCheckout {
+  afterCheckout {
     sh """
       ls -al functional-output/*
     """
-  }
 
-  afterCheckout {
     onMaster {
       try {
         sh """
