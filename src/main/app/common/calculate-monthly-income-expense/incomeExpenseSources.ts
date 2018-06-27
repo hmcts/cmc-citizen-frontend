@@ -1,10 +1,10 @@
 import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
-import { ArrayMinSize, ValidateNested } from 'class-validator'
+import { IsArray, ValidateNested } from 'class-validator'
 
 export class IncomeExpenseSources {
 
   @ValidateNested()
-  @ArrayMinSize(1, { message: 'INVALID_ARRAY' })
+  @IsArray()
   incomeExpenseSources?: IncomeExpenseSource[]
 
   constructor (incomeExpenseSources: IncomeExpenseSource[]) {
@@ -16,10 +16,14 @@ export class IncomeExpenseSources {
       return value
     }
 
-    const incomeExpenseSources = value.incomeExpenseSources || []
+    let incomeExpenseSources = undefined
 
-    return new IncomeExpenseSources(
-      incomeExpenseSources.map(incomeExpenseSource => IncomeExpenseSource.fromObject(incomeExpenseSource))
-    )
+    if (Array.isArray(value.incomeExpenseSources)) {
+      incomeExpenseSources = value.incomeExpenseSources.map(
+        incomeExpenseSource => IncomeExpenseSource.fromObject(incomeExpenseSource)
+      )
+    }
+
+    return new IncomeExpenseSources(incomeExpenseSources)
   }
 }

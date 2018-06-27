@@ -27,11 +27,15 @@ describe('IncomeExpenseSources', () => {
     })
 
     it('should return a new instance initialised with defaults when an empty object parameter is provided', () => {
-      expect(IncomeExpenseSources.fromObject({})).to.deep.equal(new IncomeExpenseSources([]))
+      expect(IncomeExpenseSources.fromObject({})).to.deep.equal(new IncomeExpenseSources(undefined))
     })
 
     it('should return a new instance initialised with defaults when an empty incomeExpenseSources array is provided', () => {
       expect(IncomeExpenseSources.fromObject({ incomeExpenseSources: [] })).to.deep.equal(new IncomeExpenseSources([]))
+    })
+
+    it('should return a new instance initialised with defaults when incomeExpenseSources provided is not an array', () => {
+      expect(IncomeExpenseSources.fromObject({ incomeExpenseSources: "not an array" })).to.deep.equal(new IncomeExpenseSources(undefined))
     })
 
     it('should return a new instance initialised with set fields from object parameter provided', () => {
@@ -58,14 +62,7 @@ describe('IncomeExpenseSources', () => {
         const errors = validator.validateSync(new IncomeExpenseSources(undefined))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors,'INVALID_ARRAY')
-      })
-
-      it('should return an error when `incomeExpenseSources` is empty array', () => {
-        const errors = validator.validateSync(new IncomeExpenseSources([]))
-
-        expect(errors.length).to.equal(1)
-        expectValidationError(errors,'INVALID_ARRAY')
+        expectValidationError(errors, 'incomeExpenseSources must be an array')
       })
 
       it('should return an error when `incomeExpenseSources` is invalid', () => {
@@ -73,11 +70,13 @@ describe('IncomeExpenseSources', () => {
         const errors = validator.validateSync(new IncomeExpenseSources([invalidIncomeExpenseSource]))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
+        expectValidationError(errors, 
+          GlobalValidationErrors.NUMBER_REQUIRED && 
+          GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
       })
 
       describe('when successful', () => {
-        it('should return no error', () => {
+        it('should return no error when `incomeExpenseSources` is valid', () => {
           const errors = validator.validateSync(new IncomeExpenseSources([
             {
               'amount': 100,
@@ -88,6 +87,11 @@ describe('IncomeExpenseSources', () => {
               'schedule': IncomeExpenseSchedule.WEEK
             }
           ]))
+          expect(errors.length).to.equal(0)
+        })
+
+        it('should return no error when `incomeExpenseSources` is an empty array', () => {
+          const errors = validator.validateSync(new IncomeExpenseSources([]))
           expect(errors.length).to.equal(0)
         })
       })
