@@ -27,6 +27,7 @@ withPipeline("nodejs", product, component) {
     try {
       sh """
         pwd
+        ls -al functional-output
         ls -al functional-output/*
       """
     } catch (err) {
