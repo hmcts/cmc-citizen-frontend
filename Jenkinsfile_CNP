@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@feature/search-test-artifacts-in-subdirs")
 
 String product = "cmc"
 String component = "citizen-frontend"
@@ -23,6 +23,12 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 String notificationsChannel = '#cmc-tech-notification'
 
 withPipeline("nodejs", product, component) {
+  beforeCheckout {
+    sh """
+      ls -al functional-output/*
+    """
+  }
+
   afterCheckout {
     onMaster {
       try {
