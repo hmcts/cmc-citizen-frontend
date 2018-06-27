@@ -1,27 +1,26 @@
 import { IsDefined, IsIn } from 'class-validator'
+import { YesNoOption } from 'models/yesNoOption'
 
-export class ValidationErrors {
-  static readonly OPTION_REQUIRED: string = 'Please select a response'
-}
-
-export class RejectPartOfClaimOption {
-  static readonly AMOUNT_TOO_HIGH = 'amountTooHigh'
-  static readonly PAID_WHAT_BELIEVED_WAS_OWED = 'paidWhatBelievedWasOwed'
-
-  static all (): string[] {
-    return [
-      RejectPartOfClaimOption.AMOUNT_TOO_HIGH,
-      RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED
-    ]
-  }
-}
+import { ValidationErrors } from 'forms/validation/validationErrors'
 
 export class RejectPartOfClaim {
-  @IsDefined({ message: ValidationErrors.OPTION_REQUIRED })
-  @IsIn(RejectPartOfClaimOption.all(), { message: ValidationErrors.OPTION_REQUIRED })
-  option?: string
+  @IsDefined({ message: ValidationErrors.YES_NO_REQUIRED })
+  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED })
+  option?: YesNoOption
 
-  constructor (option?: string) {
+  constructor (option?: YesNoOption) {
     this.option = option
+  }
+
+  static fromObject (input: any) {
+    return new RejectPartOfClaim(YesNoOption.fromObject(input.option))
+  }
+
+  deserialize (input?: any): RejectPartOfClaim {
+    if (input && input.option) {
+      this.option = YesNoOption.fromObject(input.option.option)
+    }
+
+    return this
   }
 }

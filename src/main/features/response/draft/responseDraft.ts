@@ -39,6 +39,14 @@ export class FullAdmission {
   }
 }
 
+export class PartAdmission {
+  deserialize (input: any): PartAdmission {
+    if (input) {
+      return this
+    }
+  }
+}
+
 export class ResponseDraft extends DraftDocument {
 
   response?: Response
@@ -59,6 +67,7 @@ export class ResponseDraft extends DraftDocument {
   howMuchPaidClaimant?: HowMuchPaidClaimant
 
   fullAdmission?: FullAdmission
+  partAdmission?: FullAdmission
   statementOfMeans?: StatementOfMeans
 
   deserialize (input: any): ResponseDraft {
@@ -76,7 +85,7 @@ export class ResponseDraft extends DraftDocument {
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }
-      this.rejectPartOfClaim = new RejectPartOfClaim(input.rejectPartOfClaim && input.rejectPartOfClaim.option)
+      this.rejectPartOfClaim = new RejectPartOfClaim().deserialize(input.rejectPartOfClaim)
       this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)

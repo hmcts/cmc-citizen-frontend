@@ -60,13 +60,13 @@ export default express.Router()
             res.redirect(Paths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: externalId }))
             break
           case ResponseType.PART_ADMISSION:
-            res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: claim.externalId }))
+            res.redirect(Paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: externalId }))
             break
           case ResponseType.FULL_ADMISSION:
             if (FeatureToggles.isEnabled('fullAdmission')) {
               res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
             } else {
-              res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: claim.externalId }))
+              res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
             }
             break
           default:

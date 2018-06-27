@@ -43,12 +43,14 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
+      console.log(draft.document.rejectPartOfClaim)
+
       renderView(new Form(draft.document.rejectPartOfClaim), res)
     }))
   .post(
     Paths.defenceRejectPartOfClaimPage.uri,
     guardRequestHandler,
-    FormValidator.requestHandler(RejectPartOfClaim),
+    FormValidator.requestHandler(RejectPartOfClaim, RejectPartOfClaim.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<RejectPartOfClaim> = req.body
 
@@ -59,7 +61,11 @@ export default express.Router()
         const user: User = res.locals.user
 
         draft.document.rejectPartOfClaim = form.model
+        draft.document.fullAdmission = draft.document.rejectAllOfClaim = undefined
+
         await new DraftService().save(draft, user.bearerToken)
+
+        console.log(form)
 
         const { externalId } = req.params
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
