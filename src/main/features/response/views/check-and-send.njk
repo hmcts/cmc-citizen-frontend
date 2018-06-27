@@ -33,15 +33,14 @@
     {{ row(label = 'Do you owe the money claimed?', value = t(draft.response.type.displayValue) | capitalize, changeLink = ResponsePaths.responseTypePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
 
     {% if draft.response.type === ResponseType.PART_ADMISSION %}
-      {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED %}
-        {% set rejectPartOption = 'I’ve paid what I believe I owe' %}
-      {% endif %}
-
-      {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH %}
-        {% set rejectPartOption = 'The claim amount is too much' %}
-      {% endif %}
-
-      {{ row(label = 'Why are you rejecting part of this claim?', value = t(rejectPartOption), changeLink = ResponsePaths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+      {{
+        row(
+          label = 'TODO Why are you rejecting part of this claim?',
+          value = t('TODO Partially admitted'),
+          changeLink = PartAdmissionPaths.alreadyPaidPage.evaluateUri({ externalId: claim.externalId }),
+          bold = true
+        )
+      }}
     {% endif %}
 
     {% if draft.response.type === ResponseType.DEFENCE %}

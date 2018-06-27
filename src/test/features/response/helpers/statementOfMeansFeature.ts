@@ -9,7 +9,7 @@ import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
-import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
+// import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { ResponseType } from 'response/form/models/responseType'
 import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
 
@@ -65,16 +65,16 @@ describe('StatementOfMeansFeature', () => {
       itShouldBeEnabledForNonBusinessAndDisabledForBusinessDefendants(new ResponseDraft().deserialize(responseDraft))
     })
 
-    context('when response is part admission - I paid what I believe I owe', () => {
-      const responseDraft: ResponseDraft = {
-        response: {
-          type: ResponseType.PART_ADMISSION
-        },
-        rejectPartOfClaim: new RejectPartOfClaim(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)
-      } as ResponseDraft
-
-      itShouldBeDisabledForAllDefendantTypes(new ResponseDraft().deserialize(responseDraft))
-    })
+    // context('when response is part admission - I paid what I believe I owe', () => {
+    //   const responseDraft: ResponseDraft = {
+    //     response: {
+    //       type: ResponseType.PART_ADMISSION
+    //     },
+    //     partialAdmission: new AlreadyPaid(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)
+    //   } as ResponseDraft
+    //
+    //   itShouldBeDisabledForAllDefendantTypes(new ResponseDraft().deserialize(responseDraft))
+    // })
 
     context('when response is rejection', () => {
       const responseDraft: ResponseDraft = {

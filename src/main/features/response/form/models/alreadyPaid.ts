@@ -3,7 +3,7 @@ import { YesNoOption } from 'models/yesNoOption'
 
 import { ValidationErrors } from 'forms/validation/validationErrors'
 
-export class RejectPartOfClaim {
+export class AlreadyPaid {
   @IsDefined({ message: ValidationErrors.YES_NO_REQUIRED })
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED })
   option?: YesNoOption
@@ -12,11 +12,15 @@ export class RejectPartOfClaim {
     this.option = option
   }
 
-  static fromObject (input: any) {
-    return new RejectPartOfClaim(YesNoOption.fromObject(input.option))
+  static fromObject (input?: any): AlreadyPaid {
+    if (!input) {
+      return input
+    }
+
+    return new AlreadyPaid(YesNoOption.fromObject(input.option))
   }
 
-  deserialize (input?: any): RejectPartOfClaim {
+  deserialize (input?: any): AlreadyPaid {
     if (input && input.option) {
       this.option = YesNoOption.fromObject(input.option.option)
     }

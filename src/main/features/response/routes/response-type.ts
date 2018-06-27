@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { Paths } from 'response/paths'
+import { PartAdmissionPaths, Paths } from 'response/paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
@@ -60,7 +60,7 @@ export default express.Router()
             res.redirect(Paths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: externalId }))
             break
           case ResponseType.PART_ADMISSION:
-            res.redirect(Paths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: externalId }))
+            res.redirect(PartAdmissionPaths.alreadyPaidPage.evaluateUri({ externalId: externalId }))
             break
           case ResponseType.FULL_ADMISSION:
             if (FeatureToggles.isEnabled('fullAdmission')) {

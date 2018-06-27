@@ -1,7 +1,7 @@
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { Response } from 'response/form/models/response'
 import { FreeMediation } from 'response/form/models/freeMediation'
-import { RejectPartOfClaim } from 'response/form/models/rejectPartOfClaim'
+import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { Defence } from 'response/form/models/defence'
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
@@ -59,7 +59,7 @@ export class ResponseDraft extends DraftDocument {
   evidence: DefendantEvidence
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
   howMuchOwed?: HowMuchOwed
-  rejectPartOfClaim?: RejectPartOfClaim
+  partialAdmission?: AlreadyPaid
   rejectAllOfClaim?: RejectAllOfClaim
   paidAmount?: PaidAmount
   impactOfDispute?: ImpactOfDispute
@@ -67,7 +67,7 @@ export class ResponseDraft extends DraftDocument {
   howMuchPaidClaimant?: HowMuchPaidClaimant
 
   fullAdmission?: FullAdmission
-  partAdmission?: FullAdmission
+  partAdmission?: PartAdmission
   statementOfMeans?: StatementOfMeans
 
   deserialize (input: any): ResponseDraft {
@@ -85,7 +85,7 @@ export class ResponseDraft extends DraftDocument {
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }
-      this.rejectPartOfClaim = new RejectPartOfClaim().deserialize(input.rejectPartOfClaim)
+      this.partialAdmission = new AlreadyPaid().deserialize(input.partialAdmission)
       this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
@@ -134,8 +134,8 @@ export class ResponseDraft extends DraftDocument {
 
     return this.isResponsePopulated()
       && this.response.type === ResponseType.PART_ADMISSION
-      && this.rejectPartOfClaim !== undefined
-      && this.rejectPartOfClaim.option === option
+      && this.partialAdmission !== undefined
+      && this.partialAdmission.option === option
   }
 
   public isResponseRejectedFullyWithDispute (): boolean {
