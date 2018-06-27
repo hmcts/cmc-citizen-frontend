@@ -1,5 +1,6 @@
 import { request } from 'integration-test/helpers/clients/base/request'
 import * as url from 'url'
+import * as urlencode from 'urlencode'
 
 const baseURL: string = process.env.IDAM_URL
 
@@ -31,7 +32,7 @@ export class IdamClient {
         email: email,
         forename: 'John',
         surname: 'Smith',
-        levelOfAccess: 1,
+        levelOfAccess: 0,
         userGroup: {
           code: userGroupCode
         },
@@ -45,7 +46,7 @@ export class IdamClient {
   /**
    * Authenticate user
    *
-   * @param {string} email
+   * @param {string} username the username to authenticate
    * @param password the users password (optional, default will be used if none provided)
    * @returns {Promise<string>}
    */
@@ -90,11 +91,12 @@ export class IdamClient {
         redirectUri: oauth2.redirect_uri
       })
 
-      const res = await request.post({
+      const res = await require('request-promise-native').post({
         uri: `${baseURL}/login/uplift?${upliftParams}`,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         },
+        simple: false,
         followRedirect: false,
         json: false,
         resolveWithFullResponse: true
@@ -137,12 +139,13 @@ export class IdamClient {
           pin,
           'Content-Type': 'application/x-www-form-urlencoded'
         },
+        simple: false,
         followRedirect: false,
         json: false,
         resolveWithFullResponse: true
       })
-      code = url.parse(res.headers.location, true).query.code
 
+      code = url.parse(res.headers.location, true).query.code
     } else {
       const base64EncodedCredentials = IdamClient.toBase64(pin)
 
@@ -192,6 +195,6 @@ export class IdamClient {
   }
 
   private static toUrlParams (value: object): string {
-    return Object.entries(value).map(([key, val]) => `${key}=${val}`).join('&')
+    return Object.entries(value).map(([key, val]) => `${key}=${urlencode(val)}`).join('&')
   }
 }
