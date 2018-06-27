@@ -24,9 +24,14 @@ String notificationsChannel = '#cmc-tech-notification'
 
 withPipeline("nodejs", product, component) {
   afterCheckout {
-    sh """
-      ls -al functional-output/*
-    """
+    try {
+      sh """
+        pwd
+        ls -al functional-output/*
+      """
+    } catch (err) {
+      // ignore
+    }
 
     onMaster {
       try {
