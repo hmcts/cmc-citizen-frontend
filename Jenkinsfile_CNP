@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@feature/search-test-artifacts-in-subdirs")
 
 String product = "cmc"
 String component = "citizen-frontend"
@@ -24,6 +24,16 @@ String notificationsChannel = '#cmc-tech-notification'
 
 withPipeline("nodejs", product, component) {
   afterCheckout {
+    try {
+      sh """
+        pwd
+        ls -al functional-output
+        ls -al functional-output/*
+      """
+    } catch (err) {
+      // ignore
+    }
+
     onMaster {
       try {
         sh """
@@ -33,6 +43,18 @@ withPipeline("nodejs", product, component) {
       } catch (err) {
         notifyBuildEvent channel: notificationsChannel, color: 'warning', message: 'Failed to update demo branch'
       }
+    }
+  }
+
+  after('functionalTest') {
+    try {
+      sh """
+        pwd
+        ls -al functional-output
+        ls -al functional-output/*
+      """
+    } catch (err) {
+      // ignore
     }
   }
 
