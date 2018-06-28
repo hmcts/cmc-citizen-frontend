@@ -26,6 +26,7 @@ import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
+import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 
 export class FullAdmission {
   paymentOption: PaymentOption
@@ -46,10 +47,12 @@ export class FullAdmission {
 export class PartialAdmission {
 
   alreadyPaid?: AlreadyPaid
+  howMuchDidYouPaid?: HowMuchHaveYouPaid
 
   deserialize (input: any): PartialAdmission {
     if (input) {
-      this.alreadyPaid = AlreadyPaid.fromObject(input.alreadyPaid && input.alreadyPaid.option)
+      this.alreadyPaid = new AlreadyPaid().deserialize(input.alreadyPaid)
+      this.howMuchDidYouPaid = new HowMuchHaveYouPaid().deserialize(input.howMuchDidYouPaid)
     }
 
     return this

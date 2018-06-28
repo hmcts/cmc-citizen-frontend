@@ -22,7 +22,7 @@ export class AlreadyPaid {
 
   deserialize (input?: any): AlreadyPaid {
     if (input && input.option) {
-      this.option = YesNoOption.fromObject(input.option.option)
+      this.option = YesNoOption.fromObject(input.option)
     }
 
     return this
