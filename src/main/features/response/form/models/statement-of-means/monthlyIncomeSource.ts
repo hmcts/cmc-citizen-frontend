@@ -2,16 +2,14 @@ import { IncomeExpenseSchedule } from 'features/response/form/models/statement-o
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { IsDefined, IsIn } from 'class-validator'
 import { Fractions, Min } from '@hmcts/cmc-validators'
-import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
-export const MAX_NUMBER_OF_ROWS: number = 10
 export const INIT_ROW_COUNT: number = 0
 
 export class ValidationErrors {
-  static readonly AMOUNT_REQUIRED = (name: string) => `${GlobalValidationErrors.AMOUNT_REQUIRED} for ${name}`
-  static readonly AMOUNT_INVALID_DECIMALS = (name: string) => `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for ${name}`
-  static readonly AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED = (name: string) => `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for ${name}`
-  static readonly SCHEDULE_SELECT_AN_OPTION = (name: string) => `${GlobalValidationErrors.SELECT_AN_OPTION} for ${name}`
+  static readonly AMOUNT_REQUIRED = (name: string) => `Enter how much ${name} you receive`
+  static readonly AMOUNT_INVALID_DECIMALS = (name: string) => `Enter a valid ${name} amount, maximum two decimal places`
+  static readonly AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED = (name: string) => `Enter a valid ${name} amount, maximum two decimal places`
+  static readonly SCHEDULE_SELECT_AN_OPTION = (name: string) => `Select how often you receive ${name}`
 }
 
 function withMessage(validationError: (string) => string) {
