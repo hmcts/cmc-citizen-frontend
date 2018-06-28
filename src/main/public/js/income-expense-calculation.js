@@ -1,18 +1,29 @@
 $(document).ready(function () {
   var feature = (function () {
     var config = {
+      incomeExpenseCalculationApi: '/total-income-expense-calculation',
+      noTotalMonthlyIncomeExpense: '0.00',
+
       // Default selectors
       containerSelector: '.income-expense-calculation',
 
       panelSelector: '.expandible-checkbox-option .expandible.panel',
-      inputFieldSelector: 'input[name*=amount],input:checked[name*=schedule]',
-      totalMonthlyIncomeExpenseSelector: 'total-monthly-income-expense',
+      csrfInputFieldSelector: 'input[name=_csrf]',
+      amountInputFieldSelector: 'input[name*=amount]',
+      scheduleInputFieldSelector: 'input[name*=schedule]',
+      formDataFieldSelector: 'input[name*=amount],input:checked[name*=schedule]',
+      totalMonthlyIncomeExpenseSelector: '.total-monthly-income-expense',
 
       amountType: 'amount',
       scheduleType: 'schedule'
     }
 
     var containerElement = null;
+    var totalMonthlyIncomeExpenseElement = null;
+
+    var getCsrfToken = function () {
+      return csrfInputFieldElement.val();
+    }
 
     var setTotalMonthlyIncomeExpense = function (totalAmount) {
       totalMonthlyIncomeExpenseElement.text(totalAmount);
@@ -23,22 +34,58 @@ $(document).ready(function () {
       $.extend(config, settings);
 
       containerElement = $(config.containerSelector);
-    
-      console.log('output: ', removeInvalidFormDataEntries(extractFormData()));
+      csrfInputFieldElement = containerElement.find(config.csrfInputFieldSelector);
+      amountInputFieldElement = containerElement.find(config.amountInputFieldSelector);
+      scheduleInputFieldElement = containerElement.find(config.scheduleInputFieldSelector);
+      totalMonthlyIncomeExpenseElement = containerElement.find(config.totalMonthlyIncomeExpenseSelector);
 
       setup();
     };
 
     var setup = function () {
+      amountInputFieldElement.keyup(updatePaymentLength);
+      scheduleInputFieldElement.change(updatePaymentLength);
     }
 
-    var extractFormData = function() {
+    var updatePaymentLength = function () {
+      var formData = removeInvalidFormDataEntries(extractFormData());
+
+      if (formData.length < 1) {
+        setTotalMonthlyIncomeExpense(config.noTotalMonthlyIncomeExpense);
+        return
+      }
+
+      var body = {
+        incomeExpenseSources: formData
+      };
+
+      callPaymentPlanCalculationEndpoint(body);
+    }
+
+    var callPaymentPlanCalculationEndpoint = function (body) {
+      $.ajax({
+        url: config.incomeExpenseCalculationApi,
+        type: 'post',
+        data: body,
+        headers: {
+          'csrf-token': getCsrfToken()
+        },
+        dataType: 'json',
+        success: incomeExpenseCalculationHandler
+      });
+    }
+
+    var incomeExpenseCalculationHandler = function (data) {
+      setTotalMonthlyIncomeExpense(data.totalMonthlyIncomeExpense || config.noTotalMonthlyIncomeExpense);
+    }
+
+    var extractFormData = function () {
       var formData = [];
 
       containerElement
         .find(config.panelSelector)
-        .find(config.inputFieldSelector)
-        .each(function() {
+        .find(config.formDataFieldSelector)
+        .each(function () {
           var fieldType = deriveFieldTypeFromFieldName(this.name);
           var fieldValue = $(this).val();
 
@@ -55,7 +102,7 @@ $(document).ready(function () {
           }
         });
 
-        return formData;
+      return formData;
     }
 
     var deriveFieldTypeFromFieldName = function (fieldName) {
