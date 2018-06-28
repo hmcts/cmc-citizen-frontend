@@ -33,4 +33,44 @@ describe('AlreadyPaid', () => {
       })
     })
   })
+
+  describe('fromObject should return', () => {
+
+    it('undefined when undefined provided', () => {
+      const model = AlreadyPaid.fromObject(undefined)
+
+      expect(model).to.be.eq(undefined)
+    })
+
+    it('empty object when unknown value provided', () => {
+      const model = AlreadyPaid.fromObject({ option: 'I do not know this value!' })
+
+      expect(model.option).to.be.eq(undefined)
+    })
+
+    YesNoOption.all().forEach(item => {
+      it(`valid object when ${item.option} provided`, () => {
+        const model = AlreadyPaid.fromObject({ option: item.option })
+
+        expect(model.option).to.be.eq(item)
+      })
+    })
+  })
+
+  describe('deserialize', () => {
+
+    it('should return an instance initialised with defaults for undefined', () => {
+      expect(new AlreadyPaid().deserialize(undefined)).to.be.eql(new AlreadyPaid())
+    })
+
+    YesNoOption.all().forEach(item => {
+      it('should return an instance from given object', () => {
+        const actual: AlreadyPaid = new AlreadyPaid().deserialize({ option: item.option })
+
+        expect(actual).to.be.eql(new AlreadyPaid(item))
+      })
+    })
+
+  })
+
 })

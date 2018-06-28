@@ -12,7 +12,7 @@ export class AlreadyPaid {
     this.option = option
   }
 
-  static fromObject (input?: any): AlreadyPaid {
+  public static fromObject (input?: any): AlreadyPaid {
     if (!input) {
       return input
     }
