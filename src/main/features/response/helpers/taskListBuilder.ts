@@ -147,9 +147,9 @@ export class TaskListBuilder {
         )
       )
       return new TaskList(3, 'Submit', tasks)
-    } else {
-      return undefined
     }
+
+    return undefined
   }
 
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {
