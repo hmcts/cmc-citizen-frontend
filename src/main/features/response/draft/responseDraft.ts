@@ -46,12 +46,12 @@ export class FullAdmission {
 export class PartialAdmission {
 
   alreadyPaid?: AlreadyPaid
-  howMuchDidYouPaid?: HowMuchHaveYouPaid
+  howMuchHaveYouPaid?: HowMuchHaveYouPaid
 
   deserialize (input: any): PartialAdmission {
     if (input) {
       this.alreadyPaid = new AlreadyPaid().deserialize(input.alreadyPaid)
-      this.howMuchDidYouPaid = new HowMuchHaveYouPaid().deserialize(input.howMuchDidYouPaid)
+      this.howMuchHaveYouPaid = new HowMuchHaveYouPaid().deserialize(input.howMuchHaveYouPaid)
     }
 
     return this

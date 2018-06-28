@@ -46,7 +46,7 @@ export default express.Router()
     guardRequestHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      renderView(new Form(draft.document.partialAdmission.howMuchDidYouPaid), res)
+      renderView(new Form(draft.document.partialAdmission.howMuchHaveYouPaid), res)
     }))
   .post(
     page.uri,
@@ -61,7 +61,7 @@ export default express.Router()
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        draft.document.partialAdmission.howMuchDidYouPaid = form.model
+        draft.document.partialAdmission.howMuchHaveYouPaid = form.model
 
         await new DraftService().save(draft, user.bearerToken)
 

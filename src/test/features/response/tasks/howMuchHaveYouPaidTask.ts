@@ -17,7 +17,7 @@ function validResponseDraft (): ResponseDraft {
   responseDraft.response = new Response(ResponseType.PART_ADMISSION)
   responseDraft.partialAdmission = new PartialAdmission()
   responseDraft.partialAdmission.alreadyPaid = new AlreadyPaid(YesNoOption.YES)
-  responseDraft.partialAdmission.howMuchDidYouPaid = new HowMuchHaveYouPaid(100)
+  responseDraft.partialAdmission.howMuchHaveYouPaid = new HowMuchHaveYouPaid(100)
   responseDraft.defendantDetails = new Defendant(new IndividualDetails())
 
   return responseDraft
@@ -38,21 +38,21 @@ describe('HowMuchHaveYouPaidTask', () => {
 
     it('howMuchHaveYouPaid is undefined', () => {
       const draft: ResponseDraft = validResponseDraft()
-      draft.partialAdmission.howMuchDidYouPaid = undefined
+      draft.partialAdmission.howMuchHaveYouPaid = undefined
 
       expect(HowMuchHaveYouPaidTask.isCompleted(draft)).to.be.false
     })
 
     it('howMuchHaveYouPaid.amount is 0', () => {
       const draft: ResponseDraft = validResponseDraft()
-      draft.partialAdmission.howMuchDidYouPaid = new HowMuchHaveYouPaid(0)
+      draft.partialAdmission.howMuchHaveYouPaid = new HowMuchHaveYouPaid(0)
 
       expect(HowMuchHaveYouPaidTask.isCompleted(draft)).to.be.false
     })
 
     it('howMuchHaveYouPaid.amount is less than 0', () => {
       const draft: ResponseDraft = validResponseDraft()
-      draft.partialAdmission.howMuchDidYouPaid = new HowMuchHaveYouPaid(-10)
+      draft.partialAdmission.howMuchHaveYouPaid = new HowMuchHaveYouPaid(-10)
 
       expect(HowMuchHaveYouPaidTask.isCompleted(draft)).to.be.false
     })
