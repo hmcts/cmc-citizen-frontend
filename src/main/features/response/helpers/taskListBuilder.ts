@@ -127,7 +127,6 @@ export class TaskListBuilder {
           WhyDoYouDisagreeTask.isCompleted(draft)
         )
       )
-
     }
 
     return new TaskList(2, 'Respond to claim', tasks)
@@ -135,10 +134,11 @@ export class TaskListBuilder {
 
   static buildSubmitSection (draft: ResponseDraft, externalId: string): TaskList {
     const tasks: TaskListItem[] = []
-    if (! draft.isResponsePopulated()
+    if (!draft.isResponsePopulated()
       || draft.isResponseRejectedFullyWithDispute()
       || draft.isResponseRejectedFullyWithAmountClaimedPaid()
-      || draft.isResponseFullyAdmitted()) {
+      || draft.isResponseFullyAdmitted()
+      || draft.isResponsePartiallyAdmitted()) {
       tasks.push(
         new TaskListItem(
           'Check and submit your response',
