@@ -40,7 +40,15 @@ export default express.Router()
     page.uri,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      renderView(new Form(draft.document.evidence), res)
+      let evidence
+
+      if (draft.document.isResponsePartiallyAdmitted()) {
+        evidence = draft.document.partialAdmission.evidence
+      } else {
+        evidence = draft.document.evidence
+      }
+
+      renderView(new Form(evidence), res)
     })
   .post(
     page.uri,
