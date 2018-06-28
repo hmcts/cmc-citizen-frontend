@@ -155,18 +155,17 @@ export class MonthlyIncome {
   }
 
   normalize (): MonthlyIncome {
-    const clone = Object.assign({}, this)
-    clone.hasSalarySource = hasSource(this.salarySource)
-    clone.hasUniversalCreditSource = hasSource(this.universalCreditSource)
-    clone.hasJobseekerAllowanceIncomeSource = hasSource(this.jobseekerAllowanceIncomeSource)
-    clone.hasJobseekerAllowanceContributionSource = hasSource(this.jobseekerAllowanceContributionSource)
-    clone.hasIncomeSupportSource = hasSource(this.incomeSupportSource)
-    clone.hasWorkingTaxCreditSource = hasSource(this.workingTaxCreditSource)
-    clone.hasChildTaxCreditSource = hasSource(this.childTaxCreditSource)
-    clone.hasChildBenefitSource = hasSource(this.childBenefitSource)
-    clone.hasCouncilTaxSupportSource = hasSource(this.councilTaxSupportSource)
-    clone.hasPensionSource = hasSource(this.pensionSource)
-    return clone
+    this.hasSalarySource = hasSource(this.salarySource)
+    this.hasUniversalCreditSource = hasSource(this.universalCreditSource)
+    this.hasJobseekerAllowanceIncomeSource = hasSource(this.jobseekerAllowanceIncomeSource)
+    this.hasJobseekerAllowanceContributionSource = hasSource(this.jobseekerAllowanceContributionSource)
+    this.hasIncomeSupportSource = hasSource(this.incomeSupportSource)
+    this.hasWorkingTaxCreditSource = hasSource(this.workingTaxCreditSource)
+    this.hasChildTaxCreditSource = hasSource(this.childTaxCreditSource)
+    this.hasChildBenefitSource = hasSource(this.childBenefitSource)
+    this.hasCouncilTaxSupportSource = hasSource(this.councilTaxSupportSource)
+    this.hasPensionSource = hasSource(this.pensionSource)
+    return this
   }
 
   deserialize (input?: any): MonthlyIncome {
