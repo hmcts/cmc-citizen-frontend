@@ -89,7 +89,7 @@
     "serve-favicon": "^2.3.0",
     "string.prototype.startswith": "^0.2.0",
     "to-boolean": "^1.0.0",
-    "ts-node": "^6.0.0",
+    "ts-node": "^7.0.0",
     "tsconfig-paths": "^3.1.1",
     "typescript": "^2.4.2",
     "uuid": "^3.0.1"
