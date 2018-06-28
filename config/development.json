@@ -6,7 +6,8 @@
     "partialAdmission": true,
     "offer": true,
     "statementOfMeans": true,
-    "returnErrorToUser": true
+    "returnErrorToUser": true,
+    "mockPay": false
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

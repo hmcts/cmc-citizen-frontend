@@ -3,7 +3,7 @@ import * as config from 'config'
 
 import { Paths } from 'claim/paths'
 
-import { PayClient } from 'payment-hub-client/payClient'
+import { GovPayClient, MockPayClient, PayClient } from 'payment-hub-client/payClient'
 import { Payment } from 'payment-hub-client/payment'
 
 import { FeesClient } from 'fees/feesClient'
@@ -21,6 +21,7 @@ import { FeeOutcome } from 'fees/models/feeOutcome'
 import { Fee } from 'payment-hub-client/fee'
 import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveResponse'
 import * as HttpStatus from 'http-status-codes'
+import { FeatureToggles } from 'utils/featureToggles'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -31,7 +32,10 @@ const channel: string = config.get<string>('fees.channel.online')
 const getPayClient = async (): Promise<PayClient> => {
   const authToken = await new ServiceAuthTokenFactoryImpl().get()
 
-  return new PayClient(authToken)
+  if (FeatureToggles.isEnabled('mockPay')) {
+    return new MockPayClient(authToken)
+  }
+  return new GovPayClient(authToken)
 }
 
 const getReturnURL = (req: express.Request, externalId: string) => {
