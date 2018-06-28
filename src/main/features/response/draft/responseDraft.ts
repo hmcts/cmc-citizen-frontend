@@ -47,11 +47,13 @@ export class PartialAdmission {
 
   alreadyPaid?: AlreadyPaid
   howMuchHaveYouPaid?: HowMuchHaveYouPaid
+  whyDoYouDisagree?: Defence
 
   deserialize (input: any): PartialAdmission {
     if (input) {
-      this.alreadyPaid = new AlreadyPaid().deserialize(input.alreadyPaid)
+      this.alreadyPaid = new AlreadyPaid().deserialize(input.alreadyPaid && input.alreadyPaid.option)
       this.howMuchHaveYouPaid = new HowMuchHaveYouPaid().deserialize(input.howMuchHaveYouPaid)
+      this.whyDoYouDisagree = new Defence().deserialize(input.whyDoYouDisagree)
     }
 
     return this
@@ -93,7 +95,6 @@ export class ResponseDraft extends DraftDocument {
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }
-      this.partialAdmission = new PartialAdmission().deserialize(input.partialAdmission)
       this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
@@ -103,6 +104,11 @@ export class ResponseDraft extends DraftDocument {
       if (input.fullAdmission) {
         this.fullAdmission = new FullAdmission().deserialize(input.fullAdmission)
       }
+
+      if (input.partialAdmission) {
+        this.partialAdmission = new PartialAdmission().deserialize(input.partialAdmission)
+      }
+
       if (input.statementOfMeans) {
         this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
       }

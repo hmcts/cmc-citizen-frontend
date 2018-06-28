@@ -17,6 +17,7 @@ import { YourRepaymentPlanTask } from 'features/response/tasks/yourRepaymentPlan
 import { StatementOfMeansTask } from 'response/tasks/statementOfMeansTask'
 import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
 import { HowMuchHaveYouPaidTask } from 'response/tasks/howMuchHaveYouPaidTask'
+import { WhyDoYouDisagreeTask } from 'response/tasks/whyDoYouDisagreeTask'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -118,6 +119,15 @@ export class TaskListBuilder {
           HowMuchHaveYouPaidTask.isCompleted(draft)
         )
       )
+
+      tasks.push(
+        new TaskListItem(
+          'Why do you disagree with the amount claimed?',
+          PartAdmissionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: externalId }),
+          WhyDoYouDisagreeTask.isCompleted(draft)
+        )
+      )
+
     }
 
     return new TaskList(2, 'Respond to claim', tasks)

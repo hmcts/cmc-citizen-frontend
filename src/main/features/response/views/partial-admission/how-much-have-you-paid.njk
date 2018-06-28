@@ -12,7 +12,8 @@
 
       {{ csrfProtection(csrf) }}
 
-      <p>{{ t('The total amount claimed is {{ totalAmount }}. This includes the claim fee and any interest.', { totalAmount: totalAmount | numeral }) }}</p>
+      <p>{{ t('The total amount claimed is {{ totalAmount }}. This includes the claim fee and any interest.',
+                { totalAmount: totalAmount | numeral }) }}</p>
 
       {{ poundInput(label = '', name = 'amount', form = form) }}
 

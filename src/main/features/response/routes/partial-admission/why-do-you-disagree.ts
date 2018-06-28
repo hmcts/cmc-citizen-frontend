@@ -13,7 +13,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
 import { RoutablePath } from 'shared/router/routablePath'
-import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
+import { Defence } from 'response/form/models/defence'
 
 function isRequestAllowed (res: express.Response): boolean {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -27,9 +27,9 @@ function accessDeniedCallback (req: express.Request, res: express.Response): voi
 }
 
 const guardRequestHandler: express.RequestHandler = GuardFactory.create(isRequestAllowed, accessDeniedCallback)
-const page: RoutablePath = PartAdmissionPaths.howMuchHaveYouPaid
+const page: RoutablePath = PartAdmissionPaths.whyDoYouDisagreePage
 
-function renderView (form: Form<HowMuchHaveYouPaid>, res: express.Response) {
+function renderView (form: Form<Defence>, res: express.Response) {
   res.render(page.associatedView, {
     form: form,
     totalAmount: res.locals.claim.totalAmountTillToday
@@ -43,14 +43,14 @@ export default express.Router()
     guardRequestHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      renderView(new Form(draft.document.partialAdmission.howMuchHaveYouPaid), res)
+      renderView(new Form(draft.document.partialAdmission.whyDoYouDisagree), res)
     }))
   .post(
     page.uri,
     guardRequestHandler,
-    FormValidator.requestHandler(HowMuchHaveYouPaid, HowMuchHaveYouPaid.fromObject),
+    FormValidator.requestHandler(Defence, Defence.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<HowMuchHaveYouPaid> = req.body
+      const form: Form<Defence> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)
@@ -58,7 +58,8 @@ export default express.Router()
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        draft.document.partialAdmission.howMuchHaveYouPaid = form.model
+        draft.document.partialAdmission.whyDoYouDisagree = form.model
+        draft.document.fullAdmission = draft.document.rejectAllOfClaim = undefined
 
         await new DraftService().save(draft, user.bearerToken)
 

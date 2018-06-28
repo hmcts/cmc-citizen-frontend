@@ -17,6 +17,14 @@ export class Defence {
     this.text = text
   }
 
+  public static fromObject (input?: any): Defence {
+    if (!input) {
+      return input
+    }
+
+    return new Defence(input.text)
+  }
+
   deserialize (input: any): Defence {
     if (input) {
       this.text = input.text
