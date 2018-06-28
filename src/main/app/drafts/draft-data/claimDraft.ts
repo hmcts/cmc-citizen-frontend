@@ -2,7 +2,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import * as uuid from 'uuid'
 import { PartyType } from 'common/partyType'
 
-export function prepareClaimDraft () {
+export function prepareClaimDraft (userEmailAddress: string) {
   return {
     externalId: uuid(),
     eligibility: true,
@@ -45,7 +45,7 @@ export function prepareClaimDraft () {
         }
       },
       email: {
-        address: ''
+        address: userEmailAddress
       }
     },
     amount: {
