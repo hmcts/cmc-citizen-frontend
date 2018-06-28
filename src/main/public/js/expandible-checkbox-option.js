@@ -4,9 +4,15 @@ $(document).ready(function () {
       // Default selectors
       containerSelector: '.expandible-checkbox-option',
 
+      // Main selectors
       headerSelector: '.expandible.heading-medium',
       checkboxSelector: '.expandible.multiple-choice',
-      panelSelector: '.expandible.panel'
+      panelSelector: '.expandible.panel',
+
+      // Error selectors
+      formGroupErrorSelector: '.form-group-error',
+      errorMessageSelector: '.error-message',
+      formControlErrorSelector: '.form-control-error'
     }
 
     var init = function (settings) {
@@ -40,11 +46,23 @@ $(document).ready(function () {
   
       // Private
       var bindClearPanelInputFieldsWhenUnchecking = function() {
-        var inputFieldElements = this.panelElement.find('input');
+        var panelElement = this.panelElement;
+        var inputFieldElements = panelElement.find('input');
         this.checkboxElement.find('input').change(function () {
           if (!this.checked) {
-            inputFieldElements.val('');
-            inputFieldElements.prop('checked', false);
+            clearValidationErrorMessages(panelElement);
+            inputFieldElements.each(function () {
+              var inputFieldelement = $(this);
+
+              switch (inputFieldelement.attr('type')) {
+                case 'number':
+                  inputFieldelement.val('').change();
+                  break;
+                case 'radio':
+                  inputFieldelement.prop('checked', false).change();    
+                  break;
+              }
+            })
           }
         })
       }
@@ -52,6 +70,19 @@ $(document).ready(function () {
       // Private
       var isChecked = function () {
         return !!this.checkboxElement.find('input').attr('checked');
+      }
+
+      // Private
+      var clearValidationErrorMessages = function(panelElement) {
+        panelElement
+          .find(config.formGroupErrorSelector)
+          .removeClass(config.formGroupErrorSelector.slice(1));
+        panelElement
+          .find(config.errorMessageSelector)
+          .remove();
+        panelElement
+          .find(config.formControlErrorSelector)
+          .removeClass(config.formControlErrorSelector.slice(1));
       }
     }
 
