@@ -11,7 +11,6 @@ import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
-import { ResponseType } from 'response/form/models/responseType'
 
 const page: RoutablePath = Paths.evidencePage
 
@@ -58,14 +57,20 @@ export default express.Router()
         const user: User = res.locals.user
 
         form.model.removeExcessRows()
-        draft.document.evidence = form.model
 
-        await new DraftService().save(draft, user.bearerToken)
-
-        if (draft.document.response.type === ResponseType.DEFENCE) {
+        if (draft.document.isResponsePartiallyAdmitted()) {
+          draft.document.partialAdmission.evidence = form.model
+          await new DraftService().save(draft, user.bearerToken)
           res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
         } else {
-          res.redirect(Paths.impactOfDisputePage.evaluateUri({ externalId: claim.externalId }))
+          draft.document.evidence = form.model
+          await new DraftService().save(draft, user.bearerToken)
+
+          if (draft.document.isResponseRejected()) {
+            res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+          } else {
+            res.redirect(Paths.impactOfDisputePage.evaluateUri({ externalId: claim.externalId }))
+          }
         }
       }
     })

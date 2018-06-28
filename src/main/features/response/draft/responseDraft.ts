@@ -32,6 +32,7 @@ export class FullAdmission {
   paymentDate?: PaymentDate
   paymentPlan?: PaymentPlan
 
+
   deserialize (input: any): FullAdmission {
     if (input) {
       this.paymentOption = new PaymentOption().deserialize(input.paymentOption)
@@ -48,12 +49,16 @@ export class PartialAdmission {
   alreadyPaid?: AlreadyPaid
   howMuchHaveYouPaid?: HowMuchHaveYouPaid
   whyDoYouDisagree?: Defence
+  timeline?: DefendantTimeline
+  evidence?: DefendantEvidence
 
   deserialize (input: any): PartialAdmission {
     if (input) {
       this.alreadyPaid = new AlreadyPaid().deserialize(input.alreadyPaid && input.alreadyPaid.option)
       this.howMuchHaveYouPaid = new HowMuchHaveYouPaid().deserialize(input.howMuchHaveYouPaid)
       this.whyDoYouDisagree = new Defence().deserialize(input.whyDoYouDisagree)
+      this.timeline = new DefendantTimeline().deserialize(input.timeline)
+      this.evidence = new DefendantEvidence().deserialize(input.evidence)
     }
 
     return this
@@ -155,6 +160,14 @@ export class ResponseDraft extends DraftDocument {
 
     return this.response.type === ResponseType.DEFENCE
       && this.rejectAllOfClaim !== undefined && this.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE
+  }
+
+  public isResponseRejected (): boolean {
+    if (!this.isResponsePopulated()) {
+      return false
+    }
+
+    return this.response.type === ResponseType.DEFENCE
   }
 
   public isResponseRejectedFullyWithAmountClaimedPaid (): boolean {
