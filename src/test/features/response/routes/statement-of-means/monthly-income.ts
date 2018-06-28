@@ -12,11 +12,15 @@ import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
 import { app } from 'main/app'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import * as _ from 'lodash'
+import {ValidationErrors} from "response/form/models/statement-of-means/monthlyIncomeSource";
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = StatementOfMeansPaths.monthlyIncomePage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
+const draft = _.cloneDeep(draftStoreServiceMock.sampleFullAdmissionResponseDraftObj)
+draft.statementOfMeans.monthlyIncome.salary = -100
 
 describe('Defendant response: Statement of means: monthly-income', () => {
 
@@ -105,6 +109,18 @@ describe('Defendant response: Statement of means: monthly-income', () => {
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+
+        it.only('should trigger validation when invalid data is given', async () => {
+          // claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission',draft)
+          draftStoreServiceMock.resolveSave()
+
+          await request(app)
+            .post(pagePath)
+            .send({})
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText(ValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED.toString()))
         })
       })
 
