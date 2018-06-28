@@ -50,7 +50,13 @@ export class MockPayClient implements PayClient {
   }
 
   async create (user: User, caseReference: string, externalId: string, fees: Fee[], returnURL: string): Promise<Payment> {
-    const payCreateDelayInMs = 300
+    /*
+    Calculated from:
+     dependencies
+      | where name == "POST /card-payments"
+      | summarize avg(duration)
+     */
+    const payCreateDelayInMs = 694
     await delay(payCreateDelayInMs)
 
     return Promise.resolve({
@@ -67,7 +73,13 @@ export class MockPayClient implements PayClient {
   }
 
   async retrieve (user: User, paymentReference: string): Promise<PaymentRetrieveResponse | undefined> {
-    const payRetrieveDelayInMs = 300
+    const payRetrieveDelayInMs = 681
+    /*
+    Calculated from:
+     dependencies
+      | where name contains "GET /card-payments"
+      | summarize avg(duration)
+     */
     await delay(payRetrieveDelayInMs)
 
     return Promise.resolve(
