@@ -40,6 +40,7 @@ import { Eligibility } from 'eligibility/model/eligibility'
 import { ClaimType } from 'eligibility/model/claimType'
 import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
+import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
@@ -276,7 +277,8 @@ export const samplePartialAdmissionResponseDraftObj = {
     type: ResponseType.PART_ADMISSION
   },
   partialAdmission: {
-    alreadyPaid: new AlreadyPaid().deserialize({ alreadyPaid: new AlreadyPaid(YesNoOption.YES) })
+    alreadyPaid: new AlreadyPaid().deserialize({ alreadyPaid: new AlreadyPaid(YesNoOption.YES) }),
+    howMuchHaveYouPaid: new HowMuchHaveYouPaid().deserialize({ amount: 100 })
   }
 }
 
