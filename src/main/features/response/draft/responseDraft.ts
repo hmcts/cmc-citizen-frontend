@@ -10,7 +10,6 @@ import { isNullOrUndefined } from 'util'
 import { Defendant } from 'drafts/models/defendant'
 import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
-import { HowMuchPaid } from 'response/form/models/howMuchPaid'
 import { HowMuchOwed } from 'response/form/models/howMuchOwed'
 import {
   DefendantPaymentOption as PaymentOption,
@@ -66,7 +65,6 @@ export class ResponseDraft extends DraftDocument {
   freeMediation?: FreeMediation
   moreTimeNeeded?: MoreTimeNeeded
   defendantDetails?: Defendant = new Defendant()
-  howMuchIsPaid?: HowMuchPaid
   timeline: DefendantTimeline
   evidence: DefendantEvidence
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
@@ -89,7 +87,6 @@ export class ResponseDraft extends DraftDocument {
       this.freeMediation = new FreeMediation(input.freeMediation && input.freeMediation.option)
       this.moreTimeNeeded = new MoreTimeNeeded(input.moreTimeNeeded && input.moreTimeNeeded.option)
       this.defendantDetails = new Defendant().deserialize(input.defendantDetails)
-      this.howMuchIsPaid = new HowMuchPaid().deserialize(input.howMuchIsPaid)
       this.howMuchOwed = new HowMuchOwed().deserialize(input.howMuchOwed)
       this.evidence = new DefendantEvidence().deserialize(input.evidence)
       this.timeline = new DefendantTimeline().deserialize(input.timeline)

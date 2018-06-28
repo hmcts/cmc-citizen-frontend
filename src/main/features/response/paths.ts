@@ -24,7 +24,6 @@ export class Paths {
   static readonly defendantHowMuchPaidClaimant = new RoutablePath(`${responsePath}/eligibility/how-much-paid-claimant`)
   // Added in case anyone has a printed copy of a PDF with the old URL
   static readonly legacyDashboardRedirect = new RoutablePath('/response/dashboard')
-  static readonly defendantHowMuchPaid = new RoutablePath(`${responsePath}/how-much-paid`)
   static readonly defendantHowMuchOwed = new RoutablePath(`${responsePath}/how-much-owed`)
   static readonly defenceRejectAllOfClaimPage = new RoutablePath(`${responsePath}/reject-all-of-claim`)
   static readonly impactOfDisputePage = new RoutablePath(`${responsePath}/impact-of-dispute`)

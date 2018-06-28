@@ -30,8 +30,12 @@ const guardRequestHandler: express.RequestHandler = GuardFactory.create(isReques
 const page: RoutablePath = PartAdmissionPaths.howMuchHaveYouPaid
 
 function renderView (form: Form<HowMuchHaveYouPaid>, res: express.Response) {
+
+  const totalAmount: number = res.locals.claim.totalAmountTillToday
+
   res.render(page.associatedView, {
-    form: form
+    form: form,
+    totalAmount: totalAmount
   })
 }
 
