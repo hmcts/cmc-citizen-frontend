@@ -3,6 +3,7 @@ import { toNumberOrUndefined } from 'main/common/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { IsDefined, IsIn, IsPositive } from 'class-validator'
 import { Fractions } from '@hmcts/cmc-validators'
+import { MonthlyIncomeSource } from 'response/form/models/statement-of-means/monthlyIncomeSource'
 
 export class IncomeExpenseSource {
 
@@ -29,9 +30,22 @@ export class IncomeExpenseSource {
       toIncomeExpenseScheduleOrUndefined(value.schedule)
     )
   }
+
+  static fromFormModel (monthlyIncomeSource: MonthlyIncomeSource): IncomeExpenseSource {
+    if (!monthlyIncomeSource) {
+      return undefined
+    }
+
+    const schedule = monthlyIncomeSource.schedule ? monthlyIncomeSource.schedule.value : undefined
+
+    return new IncomeExpenseSource(
+      toNumberOrUndefined(monthlyIncomeSource.amount),
+      toIncomeExpenseScheduleOrUndefined(schedule)
+    )
+  }
 }
 
-function toIncomeExpenseScheduleOrUndefined (value?: any): IncomeExpenseSchedule {
+function toIncomeExpenseScheduleOrUndefined (value?: string): IncomeExpenseSchedule {
   try {
     return IncomeExpenseSchedule.of(value)
   } catch (error) {

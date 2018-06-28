@@ -2,7 +2,7 @@ import * as express from 'express'
 import * as HttpStatus from 'http-status-codes'
 
 import { Paths } from 'main/app/paths'
-import { CalculateMonthlyIncomeExpense } from 'main/app/common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
+import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
 import { ValidationError, Validator } from 'class-validator'
 import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/incomeExpenseSources'
 

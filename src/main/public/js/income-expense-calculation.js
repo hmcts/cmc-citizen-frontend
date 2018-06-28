@@ -12,6 +12,7 @@ $(document).ready(function () {
       amountInputFieldSelector: 'input[name*=amount]',
       scheduleInputFieldSelector: 'input[name*=schedule]',
       formDataFieldSelector: 'input[name*=amount],input:checked[name*=schedule]',
+      calculateMontlyIncomeExpenseButtonSelector: '.calculate-montly-income-expense',
       totalMonthlyIncomeExpenseSelector: '.total-monthly-income-expense',
 
       amountType: 'amount',
@@ -20,6 +21,7 @@ $(document).ready(function () {
 
     var containerElement = null;
     var totalMonthlyIncomeExpenseElement = null;
+    var calculateMontlyIncomeExpenseButtonElement = null;
 
     var getCsrfToken = function () {
       return csrfInputFieldElement.val();
@@ -37,14 +39,20 @@ $(document).ready(function () {
       csrfInputFieldElement = containerElement.find(config.csrfInputFieldSelector);
       amountInputFieldElement = containerElement.find(config.amountInputFieldSelector);
       scheduleInputFieldElement = containerElement.find(config.scheduleInputFieldSelector);
+      calculateMontlyIncomeExpenseButtonElement = containerElement.find(config.calculateMontlyIncomeExpenseButtonSelector);
       totalMonthlyIncomeExpenseElement = containerElement.find(config.totalMonthlyIncomeExpenseSelector);
 
       setup();
     };
 
     var setup = function () {
+      enableProgressiveEnhancement();
       amountInputFieldElement.keyup(updatePaymentLength);
       scheduleInputFieldElement.change(updatePaymentLength);
+    }
+
+    var enableProgressiveEnhancement = function() {
+      calculateMontlyIncomeExpenseButtonElement.remove();
     }
 
     var updatePaymentLength = function () {

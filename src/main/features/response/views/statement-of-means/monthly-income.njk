@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary, expandibleCheckboxOption %}
+{% from "form.njk" import csrfProtection, linkButton, saveAndContinueButton, errorSummary, expandibleCheckboxOption %}
 {% from "../macro/statement-of-means/incomeExpenseSource.njk" import incomeExpenseSource %}
 
 {% block additional_scripts %}
@@ -31,32 +31,8 @@
         {{ incomeSource(form, name = 'councilTaxSupport', label = 'Council Tax Support') }}
         {{ incomeSource(form, name = 'pension', label = 'Pension (paid to you)') }}
       </div>
-      {# <div class="statement-of-means-container">
-        {% if form.model and form.model.rows.length > 0 %}
-        <div class="multiline">
-          <div class="multiline-rows">
-            <div class="triple-column mobile-hide">
-              <div class="column-1 mobile-hide">
-                <label id="description-label"  class="form-label-bold">{{ t('Name of income') }}</label>
-              </div>
-              <div class="column-4 mobile-hide">
-                <label id="amount-label"  class="form-label-bold">{{ t('Amount') }}</label>
-              </div>
-            </div>
 
-            {% for row in form.model.rows %}
-              {{ incomeRow(loop.index0, form) }}
-            {% endfor %}
-          </div>
-        </div>
-        {% endif %}
-
-        {% if form.model and form.model.canAddMoreRows() %}
-          <div id="add-event-container" class="form-group">
-            {{ linkButton('Add another source of income', 'action[addRow]', 'button button-secondary') }}
-          </div>
-        {% endif %}
-      </div> #}
+      {{ linkButton('Recalculate total monthly income', 'action[calculateMontlyIncome]', 'button button-secondary calculate-montly-income-expense') }}
 
       <p class="heading-small">
         Total monthly income: £<span class="total-monthly-income-expense"> {{ totalMonthlyIncomeExpense | default('0.00') }} </span>
