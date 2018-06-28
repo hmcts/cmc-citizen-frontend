@@ -2,7 +2,7 @@
 {% set claimantDetailsPageURI = ClaimPaths.claimantDetailsPage.evaluateUri({ externalId: claim.externalId }) %}
 
 {% if claim.response.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-  <p>{{ t('When {{ claimantName }} gets your payment they must tell you and the court you’ve paid.', { claimantName: claimantName }) }}</p>
+  <p>{{ t('When {{ claimantName }} gets your payment they should tell you and the court you’ve paid.', { claimantName: claimantName }) }}</p>
 {% endif %}
 
 {% if claim.response.paymentOption === domain.PaymentOption.FULL_BY_SPECIFIED_DATE %}
