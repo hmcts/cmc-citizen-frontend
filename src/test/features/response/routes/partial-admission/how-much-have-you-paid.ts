@@ -20,10 +20,10 @@ const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = PartAdmissionPaths.howMuchHaveYouPaid.evaluateUri({ externalId: externalId })
 
-const validFormData = { amount: 100 }
-const header: string = 'How much money do you admit you owe?'
+const validFormData = { amount: 100, date: { day: 1, mount: 1, year: 1990 }, text: 'aaa' }
+const header: string = 'How much have you paid the claimant?'
 
-describe('Defendant: partial admission - how much have you paid?', () => {
+describe(`Defendant: partial admission - ${header}`, () => {
 
   attachDefaultHooks(app)
 
