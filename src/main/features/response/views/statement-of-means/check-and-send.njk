@@ -110,13 +110,11 @@
 {% if draft.statementOfMeans.employment.selfEmployed %}
   {{ row('What are you self-employed as?', '', StatementOfMeansPaths.selfEmploymentPage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
   {{ row('Job title', draft.statementOfMeans.selfEmployment.jobTitle, '', false, bold = true ) }}
-  {{ row('Annual turnover', draft.statementOfMeans.selfEmployment.annualTurnover | numeral, '', not draft.statementOfMeans.onTaxPayments, bold = true ) }}
-  {% if draft.statementOfMeans.onTaxPayments %}
-    {{ row('Are you behind on tax', 'Yes' if draft.statementOfMeans.onTaxPayments.declared else 'No', '', false, bold = true ) }}
-    {% if draft.statementOfMeans.onTaxPayments.declared %}
-      {{ row('Amount you owe?', draft.statementOfMeans.onTaxPayments.amountYouOwe | numeral, '', false, bold = true ) }}
-      {{ row('Reason', draft.statementOfMeans.onTaxPayments.reason, bold = true) }}
-    {% endif %}
+  {{ row('Annual turnover', draft.statementOfMeans.selfEmployment.annualTurnover | numeral, '', false, bold = true ) }}
+  {{ row('Are you behind on tax', 'Yes' if draft.statementOfMeans.onTaxPayments.declared else 'No', '', not draft.statementOfMeans.onTaxPayments.declared, bold = true ) }}
+  {% if draft.statementOfMeans.onTaxPayments.declared %}
+    {{ row('Amount you owe?', draft.statementOfMeans.onTaxPayments.amountYouOwe | numeral, '', false, bold = true ) }}
+    {{ row('Reason', draft.statementOfMeans.onTaxPayments.reason, bold = true) }}
   {% endif %}
 {% endif %}
 
