@@ -32,7 +32,6 @@ export class FullAdmission {
   paymentDate?: PaymentDate
   paymentPlan?: PaymentPlan
 
-
   deserialize (input: any): FullAdmission {
     if (input) {
       this.paymentOption = new PaymentOption().deserialize(input.paymentOption)
