@@ -65,7 +65,7 @@ describe('StatementOfMeansFeature', () => {
       itShouldBeEnabledForNonBusinessAndDisabledForBusinessDefendants(new ResponseDraft().deserialize(responseDraft))
     })
 
-    context('when response is part admission - I paid what I believe I owe', () => {
+    context('when response is part admission - I have already paid', () => {
       const responseDraft: ResponseDraft = {
         response: {
           type: ResponseType.PART_ADMISSION
