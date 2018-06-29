@@ -309,6 +309,47 @@ describe('ResponseDraft', () => {
     })
   })
 
+  describe('isResponseRejected', () => {
+
+    context('should return false when', () => {
+
+      it('response is not populated', () => {
+        const draft: ResponseDraft = new ResponseDraft()
+        draft.response = undefined
+
+        expect(draft.isResponseRejected()).to.be.equals(false)
+      })
+
+      it('response type is not populated', () => {
+        const draft: ResponseDraft = new ResponseDraft()
+        draft.response = new Response(undefined)
+
+        expect(draft.isResponseRejected()).to.be.equals(false)
+      })
+
+      it('response is PART_ADMISSION', () => {
+        const draft: ResponseDraft = new ResponseDraft()
+        draft.response = new Response(ResponseType.PART_ADMISSION)
+
+        expect(draft.isResponseRejected()).to.be.equals(false)
+      })
+
+      it('response is FULL_ADMISSION', () => {
+        const draft: ResponseDraft = new ResponseDraft()
+        draft.response = new Response(ResponseType.FULL_ADMISSION)
+
+        expect(draft.isResponseRejected()).to.be.equals(false)
+      })
+    })
+
+    it('should return true when response type is DEFENCE', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.DEFENCE)
+
+      expect(draft.isResponseRejected()).to.be.equals(true)
+    })
+  })
+
   function assertLocalDateEquals (actual: LocalDate, expected: any) {
     expect(actual.year).to.equal(expected.year)
     expect(actual.month).to.equal(expected.month)
