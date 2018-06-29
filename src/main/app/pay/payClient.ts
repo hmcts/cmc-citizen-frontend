@@ -9,6 +9,7 @@ import { Fee } from 'payment-hub-client/fee'
 import { Payment } from 'payment-hub-client/payment'
 import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveResponse'
 import * as uuid from 'uuid'
+import { MomentFactory } from 'shared/momentFactory'
 
 const baseURL = `${config.get('pay.url')}/card-payments`
 
@@ -45,9 +46,7 @@ export interface PayClient {
 const delay = ms => new Promise(_ => setTimeout(_, ms))
 
 export class MockPayClient implements PayClient {
-  constructor (public serviceAuthToken: ServiceAuthToken) {
-    this.serviceAuthToken = serviceAuthToken
-  }
+  constructor (public serviceAuthToken: ServiceAuthToken, public requestUrl: string) {}
 
   async create (user: User, caseReference: string, externalId: string, fees: Fee[], returnURL: string): Promise<Payment> {
     /*
@@ -59,17 +58,22 @@ export class MockPayClient implements PayClient {
     const payCreateDelayInMs = 694
     await delay(payCreateDelayInMs)
 
+    const reference = `RC-${this.referencePart()}-${this.referencePart()}-${this.referencePart()}-${this.referencePart()}`
     return Promise.resolve({
-      reference: 'RC-1530-1936-3463-2155',
-      date_created: '2018-06-28T13:38:46.047+0000',
+      reference: reference,
+      date_created: MomentFactory.currentDateTime().toISOString(),
       status: 'Initiated',
       _links: {
         next_url: {
-          href: `https://localhost:3010/claim/pay/${externalId}/receiver`,
+          href: `${this.requestUrl}/${externalId}/receiver`,
           method: 'GET'
         }
       }
     })
+  }
+
+  private referencePart(): number {
+    return Math.floor(1000 + Math.random() * 9000)
   }
 
   async retrieve (user: User, paymentReference: string): Promise<PaymentRetrieveResponse | undefined> {

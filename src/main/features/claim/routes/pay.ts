@@ -29,11 +29,11 @@ const logger = Logger.getLogger('router/pay')
 const event: string = config.get<string>('fees.issueFee.event')
 const channel: string = config.get<string>('fees.channel.online')
 
-const getPayClient = async (): Promise<PayClient> => {
+const getPayClient = async (req: express.Request): Promise<PayClient> => {
   const authToken = await new ServiceAuthTokenFactoryImpl().get()
 
   if (FeatureToggles.isEnabled('mockPay')) {
-    return new MockPayClient(authToken)
+    return new MockPayClient(authToken, req.url)
   }
   return new GovPayClient(authToken)
 }
@@ -105,7 +105,7 @@ export default express.Router()
       const paymentRef = draft.document.claimant.payment ? draft.document.claimant.payment.reference : undefined
 
       if (paymentRef) {
-        const payClient: PayClient = await getPayClient()
+        const payClient: PayClient = await getPayClient(req)
         const paymentResponse: PaymentRetrieveResponse = await payClient.retrieve(user, paymentRef)
         if (paymentResponse !== undefined) {
           if (paymentResponse.status === 'Success') {
@@ -118,7 +118,7 @@ export default express.Router()
 
       const caseReference: string = await claimStoreClient.savePrePayment(externalId, user)
       const feeOutcome: FeeOutcome = await FeesClient.calculateFee(event, amount, channel)
-      const payClient: PayClient = await getPayClient()
+      const payClient: PayClient = await getPayClient(req)
       const payment: Payment = await payClient.create(
         user,
         caseReference,
@@ -126,6 +126,7 @@ export default express.Router()
         [new Fee(feeOutcome.amount, feeOutcome.code, feeOutcome.version)],
         getReturnURL(req, draft.document.externalId)
       )
+      console.log(payment)
       draft.document.claimant.payment = payment
       await new DraftService().save(draft, user.bearerToken)
 
@@ -146,7 +147,7 @@ export default express.Router()
       if (!paymentReference) {
         return res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
       }
-      const payClient = await getPayClient()
+      const payClient = await getPayClient(req)
 
       const payment: PaymentRetrieveResponse = await payClient.retrieve(user, paymentReference)
       draft.document.claimant.payment = payment
