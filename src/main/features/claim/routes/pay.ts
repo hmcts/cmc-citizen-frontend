@@ -126,7 +126,6 @@ export default express.Router()
         [new Fee(feeOutcome.amount, feeOutcome.code, feeOutcome.version)],
         getReturnURL(req, draft.document.externalId)
       )
-      console.log(payment)
       draft.document.claimant.payment = payment
       await new DraftService().save(draft, user.bearerToken)
 

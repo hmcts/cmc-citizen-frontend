@@ -72,7 +72,7 @@ export class MockPayClient implements PayClient {
     })
   }
 
-  private referencePart(): number {
+  private referencePart (): number {
     return Math.floor(1000 + Math.random() * 9000)
   }
 
