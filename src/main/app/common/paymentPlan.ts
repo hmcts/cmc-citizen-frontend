@@ -9,7 +9,7 @@ class PaymentPlan {
     totalAmount: number,
     instalmentAmount: number,
     private frequencyInWeeks: number) {
-    this.numberOfInstalments = totalAmount / instalmentAmount
+    this.numberOfInstalments = Math.ceil(totalAmount / instalmentAmount)
   }
 
   getPaymentLength (): string {

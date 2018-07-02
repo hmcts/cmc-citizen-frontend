@@ -71,7 +71,7 @@ describe('Defendant: payment page', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('2 years 9 months 4 weeks'))
+            .expect(res => expect(res).to.be.successful.withText('2 years 10 months'))
         })
       })
     })
