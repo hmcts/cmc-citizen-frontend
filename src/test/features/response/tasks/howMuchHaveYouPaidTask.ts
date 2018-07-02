@@ -34,7 +34,7 @@ describe('HowMuchHaveYouPaidTask', () => {
 
   context('should not be completed when', () => {
 
-    it('response is not partially admission', () => {
+    it('response is not partial admission', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = {
         type: ResponseType.FULL_ADMISSION
