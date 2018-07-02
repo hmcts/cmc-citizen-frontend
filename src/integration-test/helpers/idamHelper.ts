@@ -3,11 +3,7 @@ import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 class IdamHelper extends codecept_helper {
 
   createCitizenUser (): Promise<string> {
-    return this.createRandomUser('cmc-private-beta')
-  }
-
-  retrievePin (letterHolderId: string): Promise<string> {
-    return IdamClient.getPin(letterHolderId)
+    return this.createRandomUser('citizens')
   }
 
   private async createRandomUser (userGroupCode: string): Promise<string> {

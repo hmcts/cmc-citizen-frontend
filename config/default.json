@@ -81,13 +81,14 @@
   },
   "featureToggles": {
     "clusterMode": false,
-    "testingSupport": true,
-    "countyCourtJudgment": true,
-    "fullAdmission": true,
-    "partialAdmission": true,
-    "offer": true,
-    "statementOfMeans": true,
-    "returnErrorToUser": true
+    "testingSupport": false,
+    "countyCourtJudgment": false,
+    "fullAdmission": false,
+    "partialAdmission": false,
+    "offer": false,
+    "statementOfMeans": false,
+    "returnErrorToUser": false,
+    "mockPay": false
   },
   "oauth": {
     "clientId": "cmc_citizen",

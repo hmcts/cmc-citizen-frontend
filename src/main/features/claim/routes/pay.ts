@@ -3,7 +3,7 @@ import * as config from 'config'
 
 import { Paths } from 'claim/paths'
 
-import { PayClient } from 'payment-hub-client/payClient'
+import { GovPayClient, MockPayClient, PayClient } from 'payment-hub-client/payClient'
 import { Payment } from 'payment-hub-client/payment'
 
 import { FeesClient } from 'fees/feesClient'
@@ -21,6 +21,7 @@ import { FeeOutcome } from 'fees/models/feeOutcome'
 import { Fee } from 'payment-hub-client/fee'
 import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveResponse'
 import * as HttpStatus from 'http-status-codes'
+import { FeatureToggles } from 'utils/featureToggles'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -28,10 +29,13 @@ const logger = Logger.getLogger('router/pay')
 const event: string = config.get<string>('fees.issueFee.event')
 const channel: string = config.get<string>('fees.channel.online')
 
-const getPayClient = async (): Promise<PayClient> => {
+const getPayClient = async (req: express.Request): Promise<PayClient> => {
   const authToken = await new ServiceAuthTokenFactoryImpl().get()
 
-  return new PayClient(authToken)
+  if (FeatureToggles.isEnabled('mockPay')) {
+    return new MockPayClient(req.url)
+  }
+  return new GovPayClient(authToken)
 }
 
 const getReturnURL = (req: express.Request, externalId: string) => {
@@ -101,7 +105,7 @@ export default express.Router()
       const paymentRef = draft.document.claimant.payment ? draft.document.claimant.payment.reference : undefined
 
       if (paymentRef) {
-        const payClient: PayClient = await getPayClient()
+        const payClient: PayClient = await getPayClient(req)
         const paymentResponse: PaymentRetrieveResponse = await payClient.retrieve(user, paymentRef)
         if (paymentResponse !== undefined) {
           if (paymentResponse.status === 'Success') {
@@ -114,7 +118,7 @@ export default express.Router()
 
       const caseReference: string = await claimStoreClient.savePrePayment(externalId, user)
       const feeOutcome: FeeOutcome = await FeesClient.calculateFee(event, amount, channel)
-      const payClient: PayClient = await getPayClient()
+      const payClient: PayClient = await getPayClient(req)
       const payment: Payment = await payClient.create(
         user,
         caseReference,
@@ -142,7 +146,7 @@ export default express.Router()
       if (!paymentReference) {
         return res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
       }
-      const payClient = await getPayClient()
+      const payClient = await getPayClient(req)
 
       const payment: PaymentRetrieveResponse = await payClient.retrieve(user, paymentReference)
       draft.document.claimant.payment = payment

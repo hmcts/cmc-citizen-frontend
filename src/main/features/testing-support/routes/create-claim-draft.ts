@@ -26,7 +26,7 @@ export default express.Router()
       const draft: Draft<DraftClaim> = res.locals.claimDraft
       const user: User = res.locals.user
 
-      draft.document = new DraftClaim().deserialize(prepareClaimDraft())
+      draft.document = new DraftClaim().deserialize(prepareClaimDraft(user.email))
       await new DraftService().save(draft, user.bearerToken)
 
       res.redirect(ClaimPaths.checkAndSendPage.uri)
