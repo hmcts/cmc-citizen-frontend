@@ -14,7 +14,6 @@ import { User } from 'idam/user'
 import { RoutablePath } from 'shared/router/routablePath'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
-import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
 import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/incomeExpenseSources'
 import { Validator } from 'class-validator'
@@ -57,8 +56,7 @@ export default express.Router()
     StatementOfMeansStateGuard.requestHandler(),
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      const statementOfMeans: StatementOfMeans = draft.document.statementOfMeans || new StatementOfMeans()
-      renderView(new Form(statementOfMeans.monthlyIncome), res)
+      renderView(new Form(draft.document.statementOfMeans.monthlyIncome), res)
     })
   .post(
     page.uri,

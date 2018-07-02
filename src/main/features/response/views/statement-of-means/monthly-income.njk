@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, linkButton, saveAndContinueButton, errorSummary, expandibleCheckboxOption %}
+{% from "form.njk" import csrfProtection, linkButton, saveAndContinueButton, errorSummary, option %}
 {% from "../macro/statement-of-means/incomeExpenseSource.njk" import incomeExpenseSource %}
 
 {% block additional_scripts %}
@@ -53,4 +53,15 @@
   {% call expandibleCheckboxOption(label, checkboxName, form, value = 'true', checked = form.valueFor(checkboxName) === true) -%}
     {{ incomeExpenseSource(form, name = name + 'Source', amountLabel = 'Amount received', amountHint = hint, scheduleLabel = 'Received every') }}
   {%- endcall %}
+{% endmacro %}
+
+{% macro expandibleCheckboxOption(label, name, form, value, hint = '', checked = false, bold = false) %}
+  {% set expandiblePanelId = name + '-' + value | replace(' ', '') %}
+  <div class="expandible-checkbox-option">
+    <h3 class="heading-medium expandible">{{ t(label) }}</h3>
+    {{ option(label, name, form, value, 'checkbox', hint, checked, bold, hidden = true, className = 'expandible visually-hidden', dataTarget = expandiblePanelId) }}
+    <div class="panel panel-border-narrow expandible" id="{{ expandiblePanelId }}">
+      {{ caller() }}
+    </div>
+  </div>
 {% endmacro %}
