@@ -8,7 +8,7 @@ export class DefendantPaymentTypeLabels {
 
 export class DefendantPaymentType {
   static readonly INSTALMENTS = new DefendantPaymentType('INSTALMENTS')
-  static readonly BY_SET_DATE = new DefendantPaymentType('BY_SET_DATE')
+  static readonly BY_SET_DATE = new DefendantPaymentType('FULL_BY_SPECIFIED_DATE')
   static readonly IMMEDIATELY = new DefendantPaymentType('IMMEDIATELY')
 
   readonly value: string

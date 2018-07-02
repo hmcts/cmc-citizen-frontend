@@ -106,3 +106,7 @@ variable "appinsights_instrumentation_key" {
 variable "capacity" {
   default = "1"
 }
+  
+variable "common_tags" {
+  type = "map"
+}

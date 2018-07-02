@@ -35,11 +35,14 @@ export class FullAdmission {
   deserialize (input: any): FullAdmission {
     if (input) {
       this.paymentOption = new PaymentOption().deserialize(input.paymentOption)
-      this.paymentDate = new PaymentDate().deserialize(input.paymentDate)
-      this.paymentPlan = new PaymentPlan().deserialize(input.paymentPlan)
+      if (input.paymentDate) {
+        this.paymentDate = new PaymentDate().deserialize(input.paymentDate)
+      }
+      if (input.paymentPlan) {
+        this.paymentPlan = new PaymentPlan().deserialize(input.paymentPlan)
+      }
+      return this
     }
-
-    return this
   }
 }
 
