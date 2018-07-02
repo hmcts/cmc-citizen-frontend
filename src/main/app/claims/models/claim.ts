@@ -5,7 +5,7 @@ import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { Response } from 'claims/models/response'
-import { ResponseType } from 'claims/models/response/responseCommon'
+import { ResponseType } from 'claims/models/response/responseType'
 import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
@@ -129,8 +129,8 @@ export class Claim {
       return ClaimStatus.OFFER_SUBMITTED
     } else if (this.eligibleForCCJ) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
-    } else if (this.isClaimRejected()) {
-      return ClaimStatus.CLAIM_REJECTED
+    } else if (this.isResponseSubmitted()) {
+      return ClaimStatus.RESPONSE_SUBMITTED
     } else if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
     } else if (!this.response) {
@@ -142,11 +142,15 @@ export class Claim {
 
   get stateHistory (): State[] {
     const statuses = [{ status: this.status }]
-    if (this.isClaimRejected() && statuses[0].status !== ClaimStatus.CLAIM_REJECTED) {
-      statuses.push({ status: ClaimStatus.CLAIM_REJECTED })
+    if (this.isResponseSubmitted() && statuses[0].status !== ClaimStatus.RESPONSE_SUBMITTED) {
+      statuses.push({ status: ClaimStatus.RESPONSE_SUBMITTED })
     }
 
     return statuses
+  }
+
+  private isResponseSubmitted (): boolean {
+    return this.response !== undefined
   }
 
   private isOfferSubmitted (): boolean {
@@ -164,9 +168,5 @@ export class Claim {
 
   private isSettlementReached (): boolean {
     return FeatureToggles.isEnabled('offer') && this.settlement && !!this.settlementReachedAt
-  }
-
-  private isClaimRejected (): boolean {
-    return this.response && this.response.responseType === ResponseType.FULL_DEFENCE
   }
 }

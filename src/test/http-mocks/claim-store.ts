@@ -14,6 +14,7 @@ const serviceBaseURL: string = config.get<string>('claim-store.url')
 export const sampleClaimObj = {
   id: 1,
   submitterId: '1',
+  submitterEmail: 'claimant@example.com',
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
   defendantId: '123',
   referenceNumber: '000MC000',
