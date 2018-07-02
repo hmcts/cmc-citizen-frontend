@@ -29,8 +29,7 @@
     "partialAdmission": true,
     "offer": true,
     "statementOfMeans": true,
-    "returnErrorToUser": true,
-    "mockPay": false
+    "returnErrorToUser": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"
