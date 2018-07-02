@@ -107,6 +107,8 @@ export default express.Router()
               return
             }
             break
+          case ResponseType.FULL_ADMISSION:
+            break
           default:
             next(new Error('Unknown response type: ' + responseType))
         }

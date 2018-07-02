@@ -38,6 +38,7 @@ export class Paths {
   static readonly defendantPartyTypeSelectionPage = new RoutablePath('/claim/defendant-party-type-selection')
   static readonly incompleteSubmissionPage = new RoutablePath('/claim/incomplete-submission')
   static readonly sealedClaimPdfReceiver = new RoutablePath('/claim/:externalId/sealed-claim')
+  static readonly claimantDetailsPage = new RoutablePath('/claim/:externalId/claimant-details')
 }
 
 export class ErrorPaths {
