@@ -27,7 +27,7 @@ function accessDeniedCallback (req: express.Request, res: express.Response): voi
 }
 
 const guardRequestHandler: express.RequestHandler = GuardFactory.create(isRequestAllowed, accessDeniedCallback)
-const page: RoutablePath = PartAdmissionPaths.howMuchHaveYouPaid
+const page: RoutablePath = PartAdmissionPaths.howMuchHaveYouPaidPage
 
 function renderView (form: Form<HowMuchHaveYouPaid>, res: express.Response) {
   res.render(page.associatedView, {

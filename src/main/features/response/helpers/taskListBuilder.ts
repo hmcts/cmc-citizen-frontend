@@ -115,7 +115,7 @@ export class TaskListBuilder {
       tasks.push(
         new TaskListItem(
           'How much have you paid?',
-          PartAdmissionPaths.howMuchHaveYouPaid.evaluateUri({ externalId: externalId }),
+          PartAdmissionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: externalId }),
           HowMuchHaveYouPaidTask.isCompleted(draft)
         )
       )
