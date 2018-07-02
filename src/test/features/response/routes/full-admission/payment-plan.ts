@@ -7,7 +7,7 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
-import { Paths, FullAdmissionPaths } from 'response/paths'
+import { FullAdmissionPaths, Paths } from 'response/paths'
 
 import { app } from 'main/app'
 
@@ -64,15 +64,6 @@ describe('Defendant: payment page', () => {
             .expect(res => expect(res).to.be.successful.withText('Your repayment plan'))
         })
 
-        it('should calculate length of payment with given payment plan', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response:full-admission')
-
-          await request(app)
-            .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('2 years 10 months'))
-        })
       })
     })
   })
