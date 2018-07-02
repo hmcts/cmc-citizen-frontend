@@ -68,7 +68,7 @@ function deserializerFunction (value: any): StatementOfTruth | QualifiedStatemen
   }
 }
 
-function getStatementOfTruthClassFor (claim: Claim, draft: Draft<ResponseDraft>): { new(): StatementOfTruth | QualifiedStatementOfTruth } {
+function getStatementOfTruthClassFor (claim: Claim, draft: Draft<ResponseDraft>): { new (): StatementOfTruth | QualifiedStatementOfTruth } {
   if (signatureTypeFor(claim, draft) === SignatureType.QUALIFIED) {
     return QualifiedStatementOfTruth
   } else {

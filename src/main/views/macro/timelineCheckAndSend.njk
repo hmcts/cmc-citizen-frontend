@@ -1,11 +1,11 @@
 {% from "table.njk" import row %}
 
-{% macro timelineCheckAndSend(header, timeline, url) %}
+{% macro timelineCheckAndSend(header, timeline, url, bottomBorder = true) %}
 
   {{ row(label = header, value = '', changeLink = url, bottomBorder = false, bold = true) }}
   {% set lastItemIndex = timeline.length - 1 %}
   {% for timelineRow in timeline %}
-    {{ row(timelineRow.date, timelineRow.description, '', loop.index0 === lastItemIndex) }}
+    {{ row(timelineRow.date, timelineRow.description, '', bottomBorder and (loop.index0 === lastItemIndex)) }}
   {% endfor %}
 
 {% endmacro %}

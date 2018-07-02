@@ -112,23 +112,34 @@
         }}
 
         {{
+           row(
+             label = 'Why do you disagree with the claim amount?',
+             value = draft.partialAdmission.whyDoYouDisagree.text,
+             changeLink = PartAdmissionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }),
+             bold = true
+           )
+        }}
+
+        {{
           timelineCheckAndSend(
             header = 'Timeline of what happened (optional)',
             timeline = draft.partialAdmission.timeline.getPopulatedRowsOnly(),
-            url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId })
+            url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
+            bottomBorder = false
           )
         }}
-        {{ row(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), bold = true) }}
+        {{ row(label = 'Comments about their timeline (optional)', value = draft.partialAdmission.timeline.comment | default(''), bold = true) }}
 
         {{
           evidenceCheckAndSend(
             header = 'Your evidence (optional)',
             evidence = draft.partialAdmission.evidence.getPopulatedRowsOnly(),
-            url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId })
+            url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
+            bottomBorder = false
           )
         }}
 
-        {{ row(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
+        {{ row(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), bold = true) }}
     {% endif %}
 
     {% if draft.isResponseRejectedFullyWithDispute() %}
