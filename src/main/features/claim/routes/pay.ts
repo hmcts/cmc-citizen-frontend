@@ -33,7 +33,7 @@ const getPayClient = async (req: express.Request): Promise<PayClient> => {
   const authToken = await new ServiceAuthTokenFactoryImpl().get()
 
   if (FeatureToggles.isEnabled('mockPay')) {
-    return new MockPayClient(authToken, req.url)
+    return new MockPayClient(req.url)
   }
   return new GovPayClient(authToken)
 }

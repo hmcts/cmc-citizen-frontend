@@ -19,8 +19,6 @@ const siteId = config.get<string>('pay.site-id')
 const description = config.get<string>('pay.description')
 
 export interface PayClient {
-  serviceAuthToken: ServiceAuthToken
-
   /**
    * Creates a payment within Reform Payment Hub
    *
@@ -46,7 +44,7 @@ export interface PayClient {
 const delay = ms => new Promise(_ => setTimeout(_, ms))
 
 export class MockPayClient implements PayClient {
-  constructor (public serviceAuthToken: ServiceAuthToken, public requestUrl: string) {}
+  constructor (private requestUrl: string) {}
 
   async create (user: User, caseReference: string, externalId: string, fees: Fee[], returnURL: string): Promise<Payment> {
     /*
@@ -77,13 +75,13 @@ export class MockPayClient implements PayClient {
   }
 
   async retrieve (user: User, paymentReference: string): Promise<PaymentRetrieveResponse | undefined> {
-    const payRetrieveDelayInMs = 681
     /*
     Calculated from:
      dependencies
       | where name contains "GET /card-payments"
       | summarize avg(duration)
      */
+    const payRetrieveDelayInMs = 681
     await delay(payRetrieveDelayInMs)
 
     return Promise.resolve(
@@ -109,7 +107,7 @@ export class MockPayClient implements PayClient {
 }
 
 export class GovPayClient implements PayClient {
-  constructor (public serviceAuthToken: ServiceAuthToken) {
+  constructor (private serviceAuthToken: ServiceAuthToken) {
     this.serviceAuthToken = serviceAuthToken
   }
 
