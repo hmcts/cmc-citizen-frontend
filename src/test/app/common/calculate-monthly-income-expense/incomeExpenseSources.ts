@@ -56,7 +56,7 @@ describe('IncomeExpenseSources', () => {
 
   })
 
-  describe.only('fromFormModel', () => {
+  describe('fromFormModel', () => {
     const monthlyIncome: MonthlyIncome = new MonthlyIncome(
       new MonthlyIncomeSource(SourceNames.SALARY, 100, IncomeExpenseScheduleFormModel.MONTH),
       new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, 200, IncomeExpenseScheduleFormModel.MONTH),

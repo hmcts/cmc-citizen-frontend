@@ -111,7 +111,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it.only('should trigger validation when invalid data is given', async () => {
+        it('should trigger validation when invalid data is given', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission', draft)
           draftStoreServiceMock.resolveSave()
