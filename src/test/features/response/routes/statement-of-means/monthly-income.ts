@@ -12,15 +12,12 @@ import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
 import { app } from 'main/app'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
-import * as _ from 'lodash'
-import { ValidationErrors } from 'response/form/models/statement-of-means/monthlyIncomeSource'
+import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = StatementOfMeansPaths.monthlyIncomePage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
-const draft = _.cloneDeep(draftStoreServiceMock.sampleFullAdmissionResponseDraftObj)
-draft.statementOfMeans.monthlyIncome.salary = -100
 
 describe('Defendant response: Statement of means: monthly-income', () => {
 
@@ -111,16 +108,62 @@ describe('Defendant response: Statement of means: monthly-income', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should trigger validation when invalid data is given', async () => {
+        it('should trigger validation when negative amount is given', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response:full-admission', draft)
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('response:full-admission')
 
           await request(app)
             .post(pagePath)
-            .send({})
+            .send({
+              salarySource: {
+                amount: -100,
+                schedule: IncomeExpenseSchedule.MONTH.value
+              }})
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText(ValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED.toString()))
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid Income from your job amount, maximum two decimal places'))
+        })
+
+        it('should trigger validation when invalid decimal amount is given', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              salarySource: {
+                amount: 100.123,
+                schedule: IncomeExpenseSchedule.MONTH.value
+              }})
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid Income from your job amount, maximum two decimal places'))
+        })
+
+        it('should trigger validation when no amount is given', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              salarySource: {
+                schedule: IncomeExpenseSchedule.MONTH.value
+              }})
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Enter how much Income from your job you receive'))
+        })
+
+        it('should trigger validation when no schedule is given', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              salarySource: {
+                amount: 100
+              }})
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Select how often you receive Income from your job'))
         })
       })
 
@@ -134,16 +177,46 @@ describe('Defendant response: Statement of means: monthly-income', () => {
           await request(app)
             .post(pagePath)
             .send({
-              salary: '1',
-              universalCredit: '1',
-              jobSeekerAllowanceIncome: '1',
-              jobSeekerAllowanceContribution: '1',
-              incomeSupport: '1',
-              workingTaxCredit: '1',
-              childTaxCredit: '1',
-              childBenefit: '1',
-              councilTaxSupport: '1',
-              pension: '1'})
+              salarySource: {
+                amount: 100,
+                schedule: IncomeExpenseSchedule.MONTH.value
+              },
+              universalCreditSource: {
+                amount: 200,
+                schedule: IncomeExpenseSchedule.MONTH.value
+              },
+              jobseekerAllowanceIncomeSource: {
+                amount: 300,
+                schedule: IncomeExpenseSchedule.TWO_WEEKS.value
+              },
+              jobseekerAllowanceContributionSource: {
+                amount: 400,
+                schedule: IncomeExpenseSchedule.MONTH.value
+              },
+              incomeSupportSource: {
+                amount: 500,
+                schedule: IncomeExpenseSchedule.MONTH.value
+              },
+              workingTaxCreditSource: {
+                amount: 600,
+                schedule: IncomeExpenseSchedule.TWO_WEEKS.value
+              },
+              childTaxCreditSource: {
+                amount: 700,
+                schedule: IncomeExpenseSchedule.MONTH.value
+              },
+              childBenefitSource: {
+                amount: 800,
+                schedule: IncomeExpenseSchedule.MONTH.value
+              },
+              councilTaxSupportSource: {
+                amount: 900,
+                schedule: IncomeExpenseSchedule.TWO_WEEKS.value
+              },
+              pensionSource: {
+                amount: 100,
+                schedule: IncomeExpenseSchedule.TWO_WEEKS.value
+              } })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.monthlyExpensesPage.evaluateUri(
