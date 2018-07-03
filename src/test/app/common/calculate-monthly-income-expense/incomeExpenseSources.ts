@@ -2,9 +2,12 @@ import { expect } from 'chai'
 import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/incomeExpenseSources'
 import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
 import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
+import { IncomeExpenseSchedule as IncomeExpenseScheduleFormModel } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
+import { MonthlyIncome, SourceNames } from 'response/form/models/statement-of-means/monthlyIncome'
+import { MonthlyIncomeSource } from 'response/form/models/statement-of-means/monthlyIncomeSource'
 
 const SAMPLE_INCOME_EXPENSE_SOURCES_FROM_OBJECT = {
   incomeExpenseSources: [
@@ -35,7 +38,7 @@ describe('IncomeExpenseSources', () => {
     })
 
     it('should return a new instance initialised with defaults when incomeExpenseSources provided is not an array', () => {
-      expect(IncomeExpenseSources.fromObject({ incomeExpenseSources: "not an array" })).to.deep.equal(new IncomeExpenseSources(undefined))
+      expect(IncomeExpenseSources.fromObject({ incomeExpenseSources: 'not an array' })).to.deep.equal(new IncomeExpenseSources(undefined))
     })
 
     it('should return a new instance initialised with set fields from object parameter provided', () => {
@@ -53,8 +56,68 @@ describe('IncomeExpenseSources', () => {
 
   })
 
-  describe('fromFormModel', () => {
-    // TODO: Kieran to add tests here
+  describe.only('fromFormModel', () => {
+    const monthlyIncome: MonthlyIncome = new MonthlyIncome(
+      true, new MonthlyIncomeSource(SourceNames.SALARY, 100, IncomeExpenseScheduleFormModel.MONTH),
+      true, new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, 200, IncomeExpenseScheduleFormModel.MONTH),
+      true, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_INCOME, 300, IncomeExpenseScheduleFormModel.TWO_WEEKS),
+      true, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_CONTRIBUTION, 400, IncomeExpenseScheduleFormModel.MONTH),
+      true, new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, 500, IncomeExpenseScheduleFormModel.MONTH),
+      true, new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, 600, IncomeExpenseScheduleFormModel.TWO_WEEKS),
+      true, new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, 700, IncomeExpenseScheduleFormModel.MONTH),
+      true, new MonthlyIncomeSource(SourceNames.CHILD_BENEFIT, 800, IncomeExpenseScheduleFormModel.MONTH),
+      true, new MonthlyIncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, 900, IncomeExpenseScheduleFormModel.TWO_WEEKS),
+      true, new MonthlyIncomeSource(SourceNames.PENSION, 100, IncomeExpenseScheduleFormModel.TWO_WEEKS)
+    )
+
+    it('should return undefined when undefined provided as object parameter', () => {
+      expect(IncomeExpenseSources.fromFormModel(undefined)).to.equal(undefined)
+    })
+
+    it('should return undefined when no object parameter provided', () => {
+      expect(IncomeExpenseSources.fromFormModel()).to.deep.equal(undefined)
+    })
+
+    it('should return a new instance initialised with set fields from object parameter provided', () => {
+      expect(IncomeExpenseSources.fromFormModel(monthlyIncome)).to.deep.equal(
+        new IncomeExpenseSources(
+          [
+            {
+              'amount': 100,
+              'schedule': IncomeExpenseSchedule.MONTH
+            },
+            {
+              'amount': 200,
+              'schedule': IncomeExpenseSchedule.MONTH
+            },
+            {
+              'amount': 300,
+              'schedule': IncomeExpenseSchedule.TWO_WEEKS
+            },
+            {
+              'amount': 400,
+              'schedule': IncomeExpenseSchedule.MONTH
+            },
+            {
+              'amount': 500,
+              'schedule': IncomeExpenseSchedule.MONTH
+            },
+            {
+              'amount': 600,
+              'schedule': IncomeExpenseSchedule.TWO_WEEKS
+            },
+            {
+              'amount': 900,
+              'schedule': IncomeExpenseSchedule.TWO_WEEKS
+            },
+            {
+              'amount': 100,
+              'schedule': IncomeExpenseSchedule.TWO_WEEKS
+            }
+          ]
+        )
+      )
+    })
   })
 
   describe('validation', () => {
@@ -74,8 +137,8 @@ describe('IncomeExpenseSources', () => {
         const errors = validator.validateSync(new IncomeExpenseSources([invalidIncomeExpenseSource]))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, 
-          GlobalValidationErrors.NUMBER_REQUIRED && 
+        expectValidationError(errors,
+          GlobalValidationErrors.NUMBER_REQUIRED &&
           GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
       })
 

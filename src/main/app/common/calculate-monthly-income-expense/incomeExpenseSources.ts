@@ -28,42 +28,42 @@ export class IncomeExpenseSources {
     return new IncomeExpenseSources(incomeExpenseSources)
   }
 
-  static fromFormModel(monthlyIncome: MonthlyIncome): IncomeExpenseSources {
+  static fromFormModel (monthlyIncome?: MonthlyIncome): IncomeExpenseSources {
     if (!monthlyIncome) {
       return undefined
     }
 
     const incomeExpenseSources = []
 
-    if(monthlyIncome.hasSalarySource) {
+    if (monthlyIncome.hasSalarySource) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.salarySource))
     }
 
-    if(monthlyIncome.hasUniversalCreditSource) {
+    if (monthlyIncome.hasUniversalCreditSource) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.universalCreditSource))
     }
 
-    if(monthlyIncome.hasJobseekerAllowanceIncomeSource) {
+    if (monthlyIncome.hasJobseekerAllowanceIncomeSource) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.jobseekerAllowanceIncomeSource))
     }
 
-    if(monthlyIncome.hasJobseekerAllowanceContributionSource) {
+    if (monthlyIncome.hasJobseekerAllowanceContributionSource) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.jobseekerAllowanceContributionSource))
     }
 
-    if(monthlyIncome.hasIncomeSupportSource) {
+    if (monthlyIncome.hasIncomeSupportSource) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.incomeSupportSource))
     }
 
-    if(monthlyIncome.hasWorkingTaxCreditSource) {
+    if (monthlyIncome.hasWorkingTaxCreditSource) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.workingTaxCreditSource))
     }
 
-    if(monthlyIncome.hasCouncilTaxSupportSource) {
+    if (monthlyIncome.hasCouncilTaxSupportSource) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.councilTaxSupportSource))
     }
 
-    if(monthlyIncome.hasPensionSource) {
+    if (monthlyIncome.hasPensionSource) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.pensionSource))
     }
 
