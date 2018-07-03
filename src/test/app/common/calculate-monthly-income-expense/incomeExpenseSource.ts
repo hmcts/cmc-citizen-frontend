@@ -47,7 +47,7 @@ describe('IncomeExpenseSource', () => {
     })
   })
 
-  describe.only('fromFormModel', () => {
+  describe('fromFormModel', () => {
     it('should return undefined when undefined provided as object parameter', () => {
       expect(IncomeExpenseSource.fromFormModel(undefined)).to.equal(undefined)
     })
