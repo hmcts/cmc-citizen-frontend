@@ -57,28 +57,25 @@ describe('IncomeExpenseSources', () => {
   })
 
   describe('fromFormModel', () => {
-    const monthlyIncome: MonthlyIncome = new MonthlyIncome(
-      new MonthlyIncomeSource(SourceNames.SALARY, 100, IncomeExpenseScheduleFormModel.MONTH),
-      new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, 200, IncomeExpenseScheduleFormModel.MONTH),
-      new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_INCOME, 300, IncomeExpenseScheduleFormModel.TWO_WEEKS),
-      new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_CONTRIBUTION, 400, IncomeExpenseScheduleFormModel.MONTH),
-      new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, 500, IncomeExpenseScheduleFormModel.MONTH),
-      new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, 600, IncomeExpenseScheduleFormModel.TWO_WEEKS),
-      new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, 700, IncomeExpenseScheduleFormModel.MONTH),
-      new MonthlyIncomeSource(SourceNames.CHILD_BENEFIT, 800, IncomeExpenseScheduleFormModel.MONTH),
-      new MonthlyIncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, 900, IncomeExpenseScheduleFormModel.TWO_WEEKS),
-      new MonthlyIncomeSource(SourceNames.PENSION, 100, IncomeExpenseScheduleFormModel.TWO_WEEKS)
-    )
 
     it('should return undefined when undefined provided as object parameter', () => {
       expect(IncomeExpenseSources.fromFormModel(undefined)).to.equal(undefined)
     })
 
-    it('should return undefined when no object parameter provided', () => {
-      expect(IncomeExpenseSources.fromFormModel()).to.deep.equal(undefined)
-    })
-
     it('should return a new instance initialised with set fields from object parameter provided', () => {
+      const monthlyIncome: MonthlyIncome = new MonthlyIncome(
+        new MonthlyIncomeSource(SourceNames.SALARY, 100, IncomeExpenseScheduleFormModel.MONTH),
+        new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, 200, IncomeExpenseScheduleFormModel.MONTH),
+        new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_INCOME, 300, IncomeExpenseScheduleFormModel.TWO_WEEKS),
+        new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_CONTRIBUTION, 400, IncomeExpenseScheduleFormModel.MONTH),
+        new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, 500, IncomeExpenseScheduleFormModel.MONTH),
+        new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, 600, IncomeExpenseScheduleFormModel.TWO_WEEKS),
+        new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, 700, IncomeExpenseScheduleFormModel.MONTH),
+        new MonthlyIncomeSource(SourceNames.CHILD_BENEFIT, 800, IncomeExpenseScheduleFormModel.MONTH),
+        new MonthlyIncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, 900, IncomeExpenseScheduleFormModel.TWO_WEEKS),
+        new MonthlyIncomeSource(SourceNames.PENSION, 100, IncomeExpenseScheduleFormModel.TWO_WEEKS)
+      )
+
       expect(IncomeExpenseSources.fromFormModel(monthlyIncome)).to.deep.equal(
         new IncomeExpenseSources(
           [

@@ -28,7 +28,7 @@ export class IncomeExpenseSources {
     return new IncomeExpenseSources(incomeExpenseSources)
   }
 
-  static fromFormModel (monthlyIncome?: MonthlyIncome): IncomeExpenseSources {
+  static fromFormModel (monthlyIncome: MonthlyIncome): IncomeExpenseSources {
     if (!monthlyIncome) {
       return undefined
     }
