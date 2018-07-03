@@ -12,10 +12,10 @@ export class ValidationErrors {
   static readonly SCHEDULE_SELECT_AN_OPTION = (name: string) => `Select how often you receive ${name}`
 }
 
-function withMessage(validationError: (string) => string) {
-  return (args): string => {
+function withMessage (buildErrorFn: (name: string) => string) {
+  return (args: any): string => {
     const object: MonthlyIncomeSource = args.object
-    return validationError(object.name)
+    return buildErrorFn(object.name)
   }
 }
 
@@ -38,15 +38,19 @@ export class MonthlyIncomeSource {
     this.schedule = schedule
   }
 
-  static fromObject (name: string, value?: any): MonthlyIncomeSource {
+  static fromObject (name: string, value?: any, declared?: boolean): MonthlyIncomeSource {
     if (!value) {
       return value
+    }
+
+    if (!declared && !value.amount && !value.schedule) {
+      return undefined
     }
 
     return new MonthlyIncomeSource(
       name,
       toNumberOrUndefined(value.amount),
-      value.schedule ? IncomeExpenseSchedule.of(value.schedule) : undefined
+      IncomeExpenseSchedule.of(value.schedule)
     )
   }
 

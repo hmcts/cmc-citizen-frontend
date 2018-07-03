@@ -28,7 +28,7 @@ describe('MonthlyIncomeSource', () => {
     })
 
     it('should return a new instance initialised with defaults when an empty object parameter is provided', () => {
-      expect(MonthlyIncomeSource.fromObject('name', {})).to.deep.equal(new MonthlyIncomeSource('name'))
+      expect(MonthlyIncomeSource.fromObject('name', {}, true)).to.deep.equal(new MonthlyIncomeSource('name'))
     })
 
     it('should return a new instance initialised with set fields from object parameter provided', () => {

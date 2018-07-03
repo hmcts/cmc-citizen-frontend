@@ -26,7 +26,7 @@ describe('Monthly Income Expenses Calculation', () => {
       await request(app)
         .post(Paths.totalIncomeOrExpensesCalculation.uri)
         .send(incomeExpenseSources)
-        .expect(HttpStatus.OK, {'totalMonthlyIncomeExpense': 100})
+        .expect(HttpStatus.OK, { 'totalMonthlyIncomeExpense': 100 })
     })
   })
 
@@ -66,22 +66,22 @@ describe('Monthly Income Expenses Calculation', () => {
 
     it('should return error when `amount` is invalid in one of the `incomeExpenseSources` items', async () => {
 
-        const incomeExpenseSources = {
-          incomeExpenseSources: [
-            {
-              'amount': 20.123,
-              'schedule': IncomeExpenseSchedule.MONTH
-            }
-          ]
-        }
-        await request(app)
-          .post(Paths.totalIncomeOrExpensesCalculation.uri)
-          .send(incomeExpenseSources)
-          .expect(res => expectValidationError(res.body,
-            GlobalValidationErrors.NUMBER_REQUIRED &&
-            GlobalValidationErrors.AMOUNT_INVALID_DECIMALS))
-          .expect(HttpStatus.UNPROCESSABLE_ENTITY)
-      })
+      const incomeExpenseSources = {
+        incomeExpenseSources: [
+          {
+            'amount': 20.123,
+            'schedule': IncomeExpenseSchedule.MONTH
+          }
+        ]
+      }
+      await request(app)
+        .post(Paths.totalIncomeOrExpensesCalculation.uri)
+        .send(incomeExpenseSources)
+        .expect(res => expectValidationError(res.body,
+          GlobalValidationErrors.NUMBER_REQUIRED &&
+          GlobalValidationErrors.AMOUNT_INVALID_DECIMALS))
+        .expect(HttpStatus.UNPROCESSABLE_ENTITY)
+    })
 
     it('should return error when `amount` is missing in one of the `incomeExpenseSources` items', async () => {
 
@@ -103,14 +103,14 @@ describe('Monthly Income Expenses Calculation', () => {
 
     it('should return error when `incomeExpenseSources` is not an array', async () => {
 
-        const incomeExpenseSources = {
-            incomeExpenseSources: "not an array"
-        }
-        await request(app)
-          .post(Paths.totalIncomeOrExpensesCalculation.uri)
-          .send(incomeExpenseSources)
-          .expect(res => expectValidationError(res.body, 'incomeExpenseSources must be an array'))
-          .expect(HttpStatus.UNPROCESSABLE_ENTITY)
-      })
+      const incomeExpenseSources = {
+        incomeExpenseSources: 'not an array'
+      }
+      await request(app)
+        .post(Paths.totalIncomeOrExpensesCalculation.uri)
+        .send(incomeExpenseSources)
+        .expect(res => expectValidationError(res.body, 'incomeExpenseSources must be an array'))
+        .expect(HttpStatus.UNPROCESSABLE_ENTITY)
+    })
   })
 })

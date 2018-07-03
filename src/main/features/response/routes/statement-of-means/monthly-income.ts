@@ -1,4 +1,3 @@
-// import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule';
 import * as express from 'express'
 import { StatementOfMeansPaths } from 'response/paths'
 
@@ -42,7 +41,7 @@ function calculateTotalMonthlyIncomeExpense (model: MonthlyIncome): number {
   )
 }
 
-function isValid(incomeExpenseSources: IncomeExpenseSources): boolean {
+function isValid (incomeExpenseSources: IncomeExpenseSources): boolean {
   const validator = new Validator()
   const errors = validator.validateSync(incomeExpenseSources)
   return errors.length < 1
@@ -62,13 +61,20 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     StatementOfMeansStateGuard.requestHandler(),
-    FormValidator.requestHandler(MonthlyIncome, normaliseFormData(MonthlyIncome.fromObject)),
+    FormValidator.requestHandler(MonthlyIncome, MonthlyIncome.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<MonthlyIncome> = req.body
       const { externalId } = req.params
-      const isCalculateMontlyIncomeAction = req.body.action && req.body.action.calculateMontlyIncome
+      const isCalculateMonthlyIncomeAction = req.body.action && req.body.action.calculateMontlyIncome
+      const resetCommand = req.body.action && req.body.action.reset
 
-      if (form.hasErrors() || isCalculateMontlyIncomeAction) {
+      if (form.hasErrors() || isCalculateMonthlyIncomeAction || resetCommand) {
+        if (resetCommand) {
+          Object.keys(resetCommand).map(property => {
+            delete form.model[property]
+          })
+        }
+
         renderView(form, res)
       } else {
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -81,7 +87,3 @@ export default express.Router()
       }
     })
   )
-
-function normaliseFormData (fromObject: (value?: any) => MonthlyIncome) {
-  return (value?: any): MonthlyIncome => fromObject(value).normalize()
-}

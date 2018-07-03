@@ -6,6 +6,7 @@ import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-e
 import { ValidationError, Validator } from 'class-validator'
 import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/incomeExpenseSources'
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .post(Paths.totalIncomeOrExpensesCalculation.uri, (req, res) => {
 

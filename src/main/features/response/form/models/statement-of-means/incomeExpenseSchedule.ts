@@ -11,17 +11,13 @@ export class IncomeExpenseSchedule {
       IncomeExpenseSchedule.WEEK,
       IncomeExpenseSchedule.TWO_WEEKS,
       IncomeExpenseSchedule.FOUR_WEEKS,
-      IncomeExpenseSchedule.MONTH  
+      IncomeExpenseSchedule.MONTH
     ]
   }
 
   static of (value: string): IncomeExpenseSchedule {
-    const result: IncomeExpenseSchedule = IncomeExpenseSchedule.all().filter(item => item.value === value).pop()
-
-    if (result) {
-      return result
-    }
-
-    throw new Error(`There is no IncomeExpenseSchedule: '${value}'`)
+    return IncomeExpenseSchedule.all()
+      .filter(item => item.value === value)
+      .pop()
   }
 }

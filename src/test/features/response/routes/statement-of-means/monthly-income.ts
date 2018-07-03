@@ -13,7 +13,7 @@ import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/r
 import { app } from 'main/app'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 import * as _ from 'lodash'
-import {ValidationErrors} from "response/form/models/statement-of-means/monthlyIncomeSource";
+import { ValidationErrors } from 'response/form/models/statement-of-means/monthlyIncomeSource'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = StatementOfMeansPaths.monthlyIncomePage.evaluateUri(
@@ -112,9 +112,9 @@ describe('Defendant response: Statement of means: monthly-income', () => {
         })
 
         it.only('should trigger validation when invalid data is given', async () => {
-          // claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response:full-admission',draft)
-          // draftStoreServiceMock.resolveSave()
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission', draft)
+          draftStoreServiceMock.resolveSave()
 
           await request(app)
             .post(pagePath)

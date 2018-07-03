@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, linkButton, saveAndContinueButton, errorSummary, option %}
+{% from "form.njk" import csrfProtection, linkButton, saveAndContinueButton, errorSummary, option, linkButton %}
 {% from "../macro/statement-of-means/incomeExpenseSource.njk" import incomeExpenseSource %}
 
 {% block additional_scripts %}
@@ -20,16 +20,16 @@
       {{ csrfProtection(csrf) }}
 
       <div class="form-group">
-        {{ incomeSource(form, name = 'salary', label = 'Income from your job', hint = 'Include wages, overtime, commission, bonuses') }}
-        {{ incomeSource(form, name = 'universalCredit', label = 'Universal Credit') }}
-        {{ incomeSource(form, name = 'jobseekerAllowanceIncome', label = 'Jobseeker’s Allowance (income based)') }}
-        {{ incomeSource(form, name = 'jobseekerAllowanceContribution', label = 'Jobseeker’s Allowance (contribution based)') }}
-        {{ incomeSource(form, name = 'incomeSupport', label = 'Income Support') }}
-        {{ incomeSource(form, name = 'workingTaxCredit', label = 'Working Tax Credit') }}
-        {{ incomeSource(form, name = 'childTaxCredit', label = 'Child Tax Credit') }}
-        {{ incomeSource(form, name = 'childBenefit', label = 'Child Benefit') }}
-        {{ incomeSource(form, name = 'councilTaxSupport', label = 'Council Tax Support') }}
-        {{ incomeSource(form, name = 'pension', label = 'Pension (paid to you)') }}
+        {{ incomeSource(form, name = 'salarySource', label = 'Income from your job', hint = 'Include wages, overtime, commission, bonuses') }}
+        {{ incomeSource(form, name = 'universalCreditSource', label = 'Universal Credit') }}
+        {{ incomeSource(form, name = 'jobseekerAllowanceIncomeSource', label = 'Jobseeker’s Allowance (income based)') }}
+        {{ incomeSource(form, name = 'jobseekerAllowanceContributionSource', label = 'Jobseeker’s Allowance (contribution based)') }}
+        {{ incomeSource(form, name = 'incomeSupportSource', label = 'Income Support') }}
+        {{ incomeSource(form, name = 'workingTaxCreditSource', label = 'Working Tax Credit') }}
+        {{ incomeSource(form, name = 'childTaxCreditSource', label = 'Child Tax Credit') }}
+        {{ incomeSource(form, name = 'childBenefitSource', label = 'Child Benefit') }}
+        {{ incomeSource(form, name = 'councilTaxSupportSource', label = 'Council Tax Support') }}
+        {{ incomeSource(form, name = 'pensionSource', label = 'Pension (paid to you)') }}
       </div>
 
       {{ linkButton('Recalculate total monthly income', 'action[calculateMontlyIncome]', 'button button-secondary calculate-montly-income-expense') }}
@@ -47,21 +47,22 @@
 {% endblock %}
 
 {% macro incomeSource(form, name, label, hint) %}
-  {% set capitalisedName = name.slice(0, 1) | upper + name.slice(1) %}
-  {% set checkboxName = 'has' + capitalisedName + 'Source' %}
+  {% set checkboxName = name + 'Declared' %}
 
-  {% call expandibleCheckboxOption(label, checkboxName, form, value = 'true', checked = form.valueFor(checkboxName) === true) -%}
-    {{ incomeExpenseSource(form, name = name + 'Source', amountLabel = 'Amount received', amountHint = hint, scheduleLabel = 'Received every') }}
-  {%- endcall %}
+  {% call expandibleCheckboxOption(form = form, name = checkboxName, value = 'true', checked = form.valueFor(name), label = label) %}
+    {{ incomeExpenseSource(form = form, name = name, amountLabel = 'Amount received', amountHint = hint, scheduleLabel = 'Received every') }}
+    {{ linkButton(name = 'action[reset][' + name + ']', label = 'Reset this income source', class = 'link-button js-hidden') }}
+  {% endcall %}
 {% endmacro %}
 
 {% macro expandibleCheckboxOption(label, name, form, value, hint = '', checked = false, bold = false) %}
   {% set expandiblePanelId = name + '-' + value | replace(' ', '') %}
   <div class="expandible-checkbox-option">
     <h3 class="heading-medium expandible">{{ t(label) }}</h3>
-    {{ option(label, name, form, value, 'checkbox', hint, checked, bold, hidden = true, className = 'expandible visually-hidden', dataTarget = expandiblePanelId) }}
+    {{ option(form = form, name = name, value = value, type = 'checkbox', checked = checked, label = label, hint = hint, bold = bold, hidden = true, className = 'expandible visually-hidden', dataTarget = expandiblePanelId) }}
     <div class="panel panel-border-narrow expandible" id="{{ expandiblePanelId }}">
       {{ caller() }}
     </div>
+    <br />
   </div>
 {% endmacro %}

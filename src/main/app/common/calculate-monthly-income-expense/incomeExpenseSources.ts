@@ -1,5 +1,5 @@
-import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
 import { IsArray, ValidateNested } from 'class-validator'
+import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
 import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
 
 export class IncomeExpenseSources {
@@ -35,35 +35,35 @@ export class IncomeExpenseSources {
 
     const incomeExpenseSources = []
 
-    if (monthlyIncome.hasSalarySource) {
+    if (monthlyIncome.salarySource) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.salarySource))
     }
 
-    if (monthlyIncome.hasUniversalCreditSource) {
+    if (monthlyIncome.universalCreditSource) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.universalCreditSource))
     }
 
-    if (monthlyIncome.hasJobseekerAllowanceIncomeSource) {
+    if (monthlyIncome.jobseekerAllowanceIncomeSource) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.jobseekerAllowanceIncomeSource))
     }
 
-    if (monthlyIncome.hasJobseekerAllowanceContributionSource) {
+    if (monthlyIncome.jobseekerAllowanceContributionSource) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.jobseekerAllowanceContributionSource))
     }
 
-    if (monthlyIncome.hasIncomeSupportSource) {
+    if (monthlyIncome.incomeSupportSource) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.incomeSupportSource))
     }
 
-    if (monthlyIncome.hasWorkingTaxCreditSource) {
+    if (monthlyIncome.workingTaxCreditSource) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.workingTaxCreditSource))
     }
 
-    if (monthlyIncome.hasCouncilTaxSupportSource) {
+    if (monthlyIncome.councilTaxSupportSource) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.councilTaxSupportSource))
     }
 
-    if (monthlyIncome.hasPensionSource) {
+    if (monthlyIncome.pensionSource) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.pensionSource))
     }
 
