@@ -3,7 +3,11 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  ownHome: 'input[id="typeOWN_HOME"]'
+  options: {
+    ownHome: 'input[id="typeOWN_HOME"]',
+    other: 'input[id="typeOTHER"]'
+  },
+  housingDetails: 'input[id="housingDetails"]'
 }
 
 const buttons = {
@@ -13,7 +17,15 @@ const buttons = {
 export class ResidencePage {
 
   selectOwnHome (): void {
-    I.checkOption(fields.ownHome)
+    I.checkOption(fields.options.ownHome)
+  }
+
+  selectOther (housingDetails: string): void {
+    I.checkOption(fields.options.other)
+    I.fillField(fields.housingDetails, housingDetails)
+  }
+
+  clickContinue (): void {
     I.click(buttons.submit)
   }
 }
