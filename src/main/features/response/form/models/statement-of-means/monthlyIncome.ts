@@ -5,8 +5,8 @@ import { MonthlyIncomeSource } from './monthlyIncomeSource'
 export class SourceNames {
   static readonly SALARY = 'Income from your job'
   static readonly UNIVERSAL_CREDIT = 'Universal Credit'
-  static readonly JOBSEEKER_ALLOWANE_INCOME = 'Jobseeker’s Allowance (income based)'
-  static readonly JOBSEEKER_ALLOWANE_CONTRIBUTION = 'Jobseeker’s Allowance (contribution based)'
+  static readonly JOBSEEKER_ALLOWANCE_INCOME = 'Jobseeker’s Allowance (income based)'
+  static readonly JOBSEEKER_ALLOWANCE_CONTRIBUTION = 'Jobseeker’s Allowance (contribution based)'
   static readonly INCOME_SUPPORT = 'Income Support'
   static readonly WORKING_TAX_CREDIT = 'Working Tax Credit'
   static readonly CHILD_TAX_CREDIT = 'Child Tax Credit'
@@ -117,8 +117,8 @@ export class MonthlyIncome {
     return new MonthlyIncome(
       value.salarySourceDeclared, MonthlyIncomeSource.fromObject(SourceNames.SALARY, value.salarySource),
       value.universalCreditSourceDeclared, MonthlyIncomeSource.fromObject(SourceNames.UNIVERSAL_CREDIT, value.universalCreditSource),
-      value.jobseekerAllowanceIncomeSourceDeclared, MonthlyIncomeSource.fromObject(SourceNames.JOBSEEKER_ALLOWANE_INCOME, value.jobseekerAllowanceIncomeSource),
-      value.jobseekerAllowanceContributionSourceDeclared, MonthlyIncomeSource.fromObject(SourceNames.JOBSEEKER_ALLOWANE_CONTRIBUTION, value.jobseekerAllowanceContributionSource),
+      value.jobseekerAllowanceIncomeSourceDeclared, MonthlyIncomeSource.fromObject(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, value.jobseekerAllowanceIncomeSource),
+      value.jobseekerAllowanceContributionSourceDeclared, MonthlyIncomeSource.fromObject(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, value.jobseekerAllowanceContributionSource),
       value.incomeSupportSourceDeclared, MonthlyIncomeSource.fromObject(SourceNames.INCOME_SUPPORT, value.incomeSupportSource),
       value.workingTaxCreditSourceDeclared, MonthlyIncomeSource.fromObject(SourceNames.WORKING_TAX_CREDIT, value.workingTaxCreditSource),
       value.childTaxCreditSourceDeclared, MonthlyIncomeSource.fromObject(SourceNames.CHILD_TAX_CREDIT, value.childTaxCreditSource),
@@ -133,16 +133,27 @@ export class MonthlyIncome {
 
   deserialize (input?: any): MonthlyIncome {
     if (input) {
+      this.salarySourceDeclared = input.salarySourceDeclared
       this.salarySource = new MonthlyIncomeSource().deserialize(input.salarySource)
+      this.universalCreditSourceDeclared = input.universalCreditSourceDeclared
       this.universalCreditSource = new MonthlyIncomeSource().deserialize(input.universalCreditSource)
+      this.jobseekerAllowanceIncomeSourceDeclared = input.jobseekerAllowanceIncomeSourceDeclared
       this.jobseekerAllowanceIncomeSource = new MonthlyIncomeSource().deserialize(input.jobseekerAllowanceIncomeSource)
+      this.jobseekerAllowanceContributionSourceDeclared = input.jobseekerAllowanceContributionSourceDeclared
       this.jobseekerAllowanceContributionSource = new MonthlyIncomeSource().deserialize(input.jobseekerAllowanceContributionSource)
+      this.incomeSupportSourceDeclared = input.incomeSupportSourceDeclared
       this.incomeSupportSource = new MonthlyIncomeSource().deserialize(input.incomeSupportSource)
+      this.workingTaxCreditSourceDeclared = input.workingTaxCreditSourceDeclared
       this.workingTaxCreditSource = new MonthlyIncomeSource().deserialize(input.workingTaxCreditSource)
+      this.childTaxCreditSourceDeclared = input.childTaxCreditSourceDeclared
       this.childTaxCreditSource = new MonthlyIncomeSource().deserialize(input.childTaxCreditSource)
+      this.childBenefitSourceDeclared = input.childBenefitSourceDeclared
       this.childBenefitSource = new MonthlyIncomeSource().deserialize(input.childBenefitSource)
+      this.councilTaxSupportSourceDeclared = input.councilTaxSupportSourceDeclared
       this.councilTaxSupportSource = new MonthlyIncomeSource().deserialize(input.councilTaxSupportSource)
+      this.pensionSourceDeclared = input.pensionSourceDeclared
       this.pensionSource = new MonthlyIncomeSource().deserialize(input.pensionSource)
+      this.otherSourcesDeclared = input.otherSourcesDeclared
       this.otherSources = input.otherSources && input.otherSources.map(source => new MonthlyIncomeSource().deserialize(source))
     }
 
@@ -150,7 +161,7 @@ export class MonthlyIncome {
   }
 
   get anyOtherIncomePopulated (): boolean {
-    return this.otherSources.some(source => source.populated)
+    return !!this.otherSources && this.otherSources.some(source => source.populated)
   }
 
   addEmptyOtherIncome (): void {

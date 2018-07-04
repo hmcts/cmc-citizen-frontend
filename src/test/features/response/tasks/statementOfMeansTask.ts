@@ -71,10 +71,10 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
   responseDraft.statementOfMeans.bankAccounts = new BankAccounts([new BankAccountRow(BankAccountType.CURRENT_ACCOUNT, false, 100)])
   responseDraft.statementOfMeans.debts = new Debts(false)
   responseDraft.statementOfMeans.monthlyIncome = new MonthlyIncome(
-    undefined, new MonthlyIncomeSource(SourceNames.SALARY, 100, IncomeExpenseSchedule.MONTH),
+    true, new MonthlyIncomeSource(SourceNames.SALARY, 100, IncomeExpenseSchedule.MONTH),
     undefined, new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, 200, IncomeExpenseSchedule.MONTH),
-    undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_INCOME, 300, IncomeExpenseSchedule.TWO_WEEKS),
-    undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_CONTRIBUTION, 400, IncomeExpenseSchedule.MONTH),
+    undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, 300, IncomeExpenseSchedule.TWO_WEEKS),
+    undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, 400, IncomeExpenseSchedule.MONTH),
     undefined, new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, 500, IncomeExpenseSchedule.MONTH),
     undefined, new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, 600, IncomeExpenseSchedule.TWO_WEEKS),
     undefined, new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, 700, IncomeExpenseSchedule.MONTH),
@@ -191,6 +191,25 @@ describe('StatementOfMeansTask', () => {
 
             expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
           })
+
+          it('has monthly income', () => {
+            responseDraft.statementOfMeans.monthlyIncome = new MonthlyIncome(
+              true, new MonthlyIncomeSource(SourceNames.SALARY, 100, IncomeExpenseSchedule.MONTH),
+              undefined, new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, undefined, undefined),
+              true, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, undefined, undefined),
+              true, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, undefined, undefined),
+              true, new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, undefined, undefined),
+              true, new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, undefined, undefined),
+              true, new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, undefined, undefined),
+              true, new MonthlyIncomeSource(SourceNames.CHILD_BENEFIT, undefined, undefined),
+              true, new MonthlyIncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, undefined, undefined),
+              true, new MonthlyIncomeSource(SourceNames.PENSION, undefined, undefined),
+              true, []
+            )
+
+            expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
+          })
+
         })
 
         context('is not completed', () => {

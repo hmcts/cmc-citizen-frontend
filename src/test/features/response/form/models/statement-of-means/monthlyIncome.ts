@@ -64,8 +64,8 @@ function forConstructor () {
   return new MonthlyIncome(
     undefined, new MonthlyIncomeSource(SourceNames.SALARY, this.sampleData.salarySource.amount, this.sampleData.salarySource.schedule),
     undefined, new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, this.sampleData.universalCreditSource.amount, this.sampleData.universalCreditSource.schedule),
-    undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_INCOME, this.sampleData.jobseekerAllowanceIncomeSource.amount, this.sampleData.jobseekerAllowanceIncomeSource.schedule),
-    undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_CONTRIBUTION, this.sampleData.jobseekerAllowanceContributionSource.amount, this.sampleData.jobseekerAllowanceContributionSource.schedule),
+    undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, this.sampleData.jobseekerAllowanceIncomeSource.amount, this.sampleData.jobseekerAllowanceIncomeSource.schedule),
+    undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, this.sampleData.jobseekerAllowanceContributionSource.amount, this.sampleData.jobseekerAllowanceContributionSource.schedule),
     undefined, new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, this.sampleData.incomeSupportSource.amount, this.sampleData.incomeSupportSource.schedule),
     undefined, new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, this.sampleData.workingTaxCreditSource.amount, this.sampleData.workingTaxCreditSource.schedule),
     undefined, new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, this.sampleData.childTaxCreditSource.amount, this.sampleData.childTaxCreditSource.schedule),
@@ -146,13 +146,13 @@ function forDeserialize () {
     },
     jobseekerAllowanceIncomeSourceDeclared: this.sampleData.jobseekerAllowanceIncomeSourceDeclared,
     jobseekerAllowanceIncomeSource: {
-      name: SourceNames.JOBSEEKER_ALLOWANE_INCOME,
+      name: SourceNames.JOBSEEKER_ALLOWANCE_INCOME,
       amount: this.sampleData.jobseekerAllowanceIncomeSource.amount,
       schedule: this.sampleData.jobseekerAllowanceIncomeSource.schedule
     },
     jobseekerAllowanceContributionSourceDeclared: this.sampleData.jobseekerAllowanceContributionSourceDeclared,
     jobseekerAllowanceContributionSource: {
-      name: SourceNames.JOBSEEKER_ALLOWANE_CONTRIBUTION,
+      name: SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION,
       amount: this.sampleData.jobseekerAllowanceContributionSource.amount,
       schedule: this.sampleData.jobseekerAllowanceContributionSource.schedule
     },
@@ -236,10 +236,10 @@ describe('MonthlyIncome', () => {
     })
 
     it('should return a new instance initialised with set fields from object parameter provided', () => {
-      const sampleMonthtlyIncomeData = getSampleMonthtlyIncomeObject().forFromObjectMethod()
-      const expectedMonthtlyIncomeObject = getSampleMonthtlyIncomeObject().forConstructor()
+      const sampleMonthlyIncomeData = getSampleMonthtlyIncomeObject().forFromObjectMethod()
+      const expectedMonthlyIncomeObject = getSampleMonthtlyIncomeObject().forConstructor()
 
-      expect(MonthlyIncome.fromObject(sampleMonthtlyIncomeData)).to.deep.equal(expectedMonthtlyIncomeObject)
+      expect(MonthlyIncome.fromObject(sampleMonthlyIncomeData)).to.deep.equal(expectedMonthlyIncomeObject)
     })
   })
 
@@ -262,8 +262,8 @@ describe('MonthlyIncome', () => {
           new MonthlyIncome(
             undefined, new MonthlyIncomeSource(SourceNames.SALARY, -100, IncomeExpenseSchedule.MONTH),
             undefined, new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, -200, IncomeExpenseSchedule.MONTH),
-            undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_INCOME, -300, IncomeExpenseSchedule.TWO_WEEKS),
-            undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_CONTRIBUTION, -400, IncomeExpenseSchedule.MONTH),
+            undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, -300, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, -400, IncomeExpenseSchedule.MONTH),
             undefined, new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, -500, IncomeExpenseSchedule.MONTH),
             undefined, new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, -600, IncomeExpenseSchedule.TWO_WEEKS),
             undefined, new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, -700, IncomeExpenseSchedule.MONTH),
@@ -276,8 +276,8 @@ describe('MonthlyIncome', () => {
         expect(errors.length).to.equal(10)
         expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(SourceNames.SALARY))
         expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(SourceNames.UNIVERSAL_CREDIT))
-        expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(SourceNames.JOBSEEKER_ALLOWANE_INCOME))
-        expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(SourceNames.JOBSEEKER_ALLOWANE_CONTRIBUTION))
+        expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(SourceNames.JOBSEEKER_ALLOWANCE_INCOME))
+        expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION))
         expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(SourceNames.INCOME_SUPPORT))
         expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(SourceNames.WORKING_TAX_CREDIT))
         expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(SourceNames.CHILD_TAX_CREDIT))
@@ -289,9 +289,9 @@ describe('MonthlyIncome', () => {
 
     describe('when successful', () => {
       it('should return no error when `hasSource` is true and `source` is invalid', () => {
-        const sampleMonthtlyIncomeData = getSampleMonthtlyIncomeObject().forFromObjectMethod()
+        const sampleMonthlyIncomeData = getSampleMonthtlyIncomeObject().forFromObjectMethod()
 
-        const errors = validator.validateSync(sampleMonthtlyIncomeData)
+        const errors = validator.validateSync(sampleMonthlyIncomeData)
         expect(errors.length).to.equal(0)
       })
     })
