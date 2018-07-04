@@ -15,19 +15,17 @@
   {% set error = form.errorFor(name) %}
 
   <div class="form-group {% if error %} form-group-error {% endif %}">
-    <div class="form-group">
-      <label id="{{ name }}[label]" for="{{ name }}" class="form-label">
-        {{ t(label) }}
-      </label>
+    <label id="{{ name }}[label]" for="{{ name }}" class="form-label">
+      {{ t(label) }}
+    </label>
 
-      {% if hint %}
-        <span class="form-hint">{{ t(hint) }}</span>
-      {% endif %}
-            {% if error %}
-        <span class="error-message">{{ t(error) }}</span>
-      {% endif %}
-      {{ poundInputInline(name = name, label = label, form = form) }}
-    </div>
+    {% if hint %}
+      <span class="form-hint">{{ t(hint) }}</span>
+    {% endif %}
+          {% if error %}
+      <span class="error-message">{{ t(error) }}</span>
+    {% endif %}
+    {{ poundInputInline(name = name, label = label, form = form) }}
   </div>
 {% endmacro %}
 
@@ -35,34 +33,32 @@
   {% set name = name + '[schedule]' %}
   {% set error = form.errorFor(name) %}
 
-  <div class="form-group">
-    {{ radioGroup(
-      form = form,
-      label = label,
-      name = name,
-      labelBold = false,
-      options = [
-        {
-          label: 'Week',
-          value: 'WEEK',
-          checked: form.valueFor(name).value === 'WEEK'
-        },
-        {
-          label: '2 weeks',
-          value: 'TWO_WEEKS',
-          checked: form.valueFor(name).value === 'TWO_WEEKS'
-        },
-        {
-          label: '4 weeks',
-          value: 'FOUR_WEEKS',
-          checked: form.valueFor(name).value === 'FOUR_WEEKS'
-        },
-        {
-          label: 'Month',
-          value: 'MONTH',
-          checked: form.valueFor(name).value === 'MONTH'
-        }
-      ]
-    ) }}
-  </div>
+  {{ radioGroup(
+    form = form,
+    label = label,
+    name = name,
+    labelBold = false,
+    options = [
+      {
+        label: 'Week',
+        value: 'WEEK',
+        checked: form.valueFor(name).value === 'WEEK'
+      },
+      {
+        label: '2 weeks',
+        value: 'TWO_WEEKS',
+        checked: form.valueFor(name).value === 'TWO_WEEKS'
+      },
+      {
+        label: '4 weeks',
+        value: 'FOUR_WEEKS',
+        checked: form.valueFor(name).value === 'FOUR_WEEKS'
+      },
+      {
+        label: 'Month',
+        value: 'MONTH',
+        checked: form.valueFor(name).value === 'MONTH'
+      }
+    ]
+  ) }}
 {% endmacro %}
