@@ -62,67 +62,67 @@ function getSampleMonthtlyIncomeObject (options?: object) {
 
 function forConstructor () {
   return new MonthlyIncome(
-    new MonthlyIncomeSource(SourceNames.SALARY, this.sampleData.salarySource.amount, this.sampleData.salarySource.schedule),
-    new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, this.sampleData.universalCreditSource.amount, this.sampleData.universalCreditSource.schedule),
-    new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_INCOME, this.sampleData.jobseekerAllowanceIncomeSource.amount, this.sampleData.jobseekerAllowanceIncomeSource.schedule),
-    new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_CONTRIBUTION, this.sampleData.jobseekerAllowanceContributionSource.amount, this.sampleData.jobseekerAllowanceContributionSource.schedule),
-    new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, this.sampleData.incomeSupportSource.amount, this.sampleData.incomeSupportSource.schedule),
-    new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, this.sampleData.workingTaxCreditSource.amount, this.sampleData.workingTaxCreditSource.schedule),
-    new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, this.sampleData.childTaxCreditSource.amount, this.sampleData.childTaxCreditSource.schedule),
-    new MonthlyIncomeSource(SourceNames.CHILD_BENEFIT, this.sampleData.childBenefitSource.amount, this.sampleData.childBenefitSource.schedule),
-    new MonthlyIncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, this.sampleData.councilTaxSupportSource.amount, this.sampleData.councilTaxSupportSource.schedule),
-    new MonthlyIncomeSource(SourceNames.PENSION, this.sampleData.pensionSource.amount, this.sampleData.pensionSource.schedule)
+    undefined, new MonthlyIncomeSource(SourceNames.SALARY, this.sampleData.salarySource.amount, this.sampleData.salarySource.schedule),
+    undefined, new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, this.sampleData.universalCreditSource.amount, this.sampleData.universalCreditSource.schedule),
+    undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_INCOME, this.sampleData.jobseekerAllowanceIncomeSource.amount, this.sampleData.jobseekerAllowanceIncomeSource.schedule),
+    undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_CONTRIBUTION, this.sampleData.jobseekerAllowanceContributionSource.amount, this.sampleData.jobseekerAllowanceContributionSource.schedule),
+    undefined, new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, this.sampleData.incomeSupportSource.amount, this.sampleData.incomeSupportSource.schedule),
+    undefined, new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, this.sampleData.workingTaxCreditSource.amount, this.sampleData.workingTaxCreditSource.schedule),
+    undefined, new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, this.sampleData.childTaxCreditSource.amount, this.sampleData.childTaxCreditSource.schedule),
+    undefined, new MonthlyIncomeSource(SourceNames.CHILD_BENEFIT, this.sampleData.childBenefitSource.amount, this.sampleData.childBenefitSource.schedule),
+    undefined, new MonthlyIncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, this.sampleData.councilTaxSupportSource.amount, this.sampleData.councilTaxSupportSource.schedule),
+    undefined, new MonthlyIncomeSource(SourceNames.PENSION, this.sampleData.pensionSource.amount, this.sampleData.pensionSource.schedule)
   )
 }
 
 function forFromObjectMethod () {
   return {
-    hasSalarySource: this.sampleData.hasSalarySource,
+    salarySourceDeclared: this.sampleData.salarySourceDeclared,
     salarySource: {
       amount: this.sampleData.salarySource.amount,
       schedule: this.sampleData.salarySource.schedule.value
     },
-    hasUniversalCreditSource: this.sampleData.hasUniversalCreditSource,
+    universalCreditSourceDeclared: this.sampleData.universalCreditSourceDeclared,
     universalCreditSource: {
       amount: this.sampleData.universalCreditSource.amount,
       schedule: this.sampleData.universalCreditSource.schedule.value
     },
-    hasJobseekerAllowanceIncomeSource: this.sampleData.hasJobseekerAllowanceIncomeSource,
+    jobseekerAllowanceIncomeSourceDeclared: this.sampleData.jobseekerAllowanceIncomeSourceDeclared,
     jobseekerAllowanceIncomeSource: {
       amount: this.sampleData.jobseekerAllowanceIncomeSource.amount,
       schedule: this.sampleData.jobseekerAllowanceIncomeSource.schedule.value
     },
-    hasJobseekerAllowanceContributionSource: this.sampleData.hasJobseekerAllowanceContributionSource,
+    jobseekerAllowanceContributionSourceDeclared: this.sampleData.jobseekerAllowanceContributionSourceDeclared,
     jobseekerAllowanceContributionSource: {
       amount: this.sampleData.jobseekerAllowanceContributionSource.amount,
       schedule: this.sampleData.jobseekerAllowanceContributionSource.schedule.value
     },
-    hasIncomeSupportSource: this.sampleData.hasIncomeSupportSource,
+    incomeSupportSourceDeclared: this.sampleData.incomeSupportSourceDeclared,
     incomeSupportSource: {
       amount: this.sampleData.incomeSupportSource.amount,
       schedule: this.sampleData.incomeSupportSource.schedule.value
     },
-    hasWorkingTaxCreditSource: this.sampleData.hasWorkingTaxCreditSource,
+    workingTaxCreditSourceDeclared: this.sampleData.workingTaxCreditSourceDeclared,
     workingTaxCreditSource: {
       amount: this.sampleData.workingTaxCreditSource.amount,
       schedule: this.sampleData.workingTaxCreditSource.schedule.value
     },
-    hasChildTaxCreditSource: this.sampleData.hasChildTaxCreditSource,
+    childTaxCreditSourceDeclared: this.sampleData.childTaxCreditSourceDeclared,
     childTaxCreditSource: {
       amount: this.sampleData.childTaxCreditSource.amount,
       schedule: this.sampleData.childTaxCreditSource.schedule.value
     },
-    hasChildBenefitSource: this.sampleData.hasChildBenefitSource,
+    childBenefitSourceDeclared: this.sampleData.childBenefitSourceDeclared,
     childBenefitSource: {
       amount: this.sampleData.childBenefitSource.amount,
       schedule: this.sampleData.childBenefitSource.schedule.value
     },
-    hasCouncilTaxSupportSource: this.sampleData.hasCouncilTaxSupportSource,
+    cxouncilTaxSupportSourceDeclared: this.sampleData.councilTaxSupportSourceDeclared,
     councilTaxSupportSource: {
       amount: this.sampleData.councilTaxSupportSource.amount,
       schedule: this.sampleData.councilTaxSupportSource.schedule.value
     },
-    hasPensionSource: this.sampleData.hasPensionSource,
+    pensionSourceDeclared: this.sampleData.pensionSourceDeclared,
     pensionSource: {
       amount: this.sampleData.pensionSource.amount,
       schedule: this.sampleData.pensionSource.schedule.value
@@ -132,66 +132,67 @@ function forFromObjectMethod () {
 
 function forDeserialize () {
   return {
-    hasSalarySource: this.sampleData.hasSalarySource,
+    salarySourceDeclared: this.sampleData.salarySourceDeclared,
     salarySource: {
       name: SourceNames.SALARY,
       amount: this.sampleData.salarySource.amount,
       schedule: this.sampleData.salarySource.schedule
     },
-    hasUniversalCreditSource: this.sampleData.hasUniversalCreditSource,
+    universalCreditSourceDeclared: this.sampleData.universalCreditSourceDeclared,
     universalCreditSource: {
       name: SourceNames.UNIVERSAL_CREDIT,
       amount: this.sampleData.universalCreditSource.amount,
       schedule: this.sampleData.universalCreditSource.schedule
     },
-    hasJobseekerAllowanceIncomeSource: this.sampleData.hasJobseekerAllowanceIncomeSource,
+    jobseekerAllowanceIncomeSourceDeclared: this.sampleData.jobseekerAllowanceIncomeSourceDeclared,
     jobseekerAllowanceIncomeSource: {
       name: SourceNames.JOBSEEKER_ALLOWANE_INCOME,
       amount: this.sampleData.jobseekerAllowanceIncomeSource.amount,
       schedule: this.sampleData.jobseekerAllowanceIncomeSource.schedule
     },
-    hasJobseekerAllowanceContributionSource: this.sampleData.hasJobseekerAllowanceContributionSource,
+    jobseekerAllowanceContributionSourceDeclared: this.sampleData.jobseekerAllowanceContributionSourceDeclared,
     jobseekerAllowanceContributionSource: {
       name: SourceNames.JOBSEEKER_ALLOWANE_CONTRIBUTION,
       amount: this.sampleData.jobseekerAllowanceContributionSource.amount,
       schedule: this.sampleData.jobseekerAllowanceContributionSource.schedule
     },
-    hasIncomeSupportSource: this.sampleData.hasIncomeSupportSource,
+    incomeSupportSourceDeclared: this.sampleData.incomeSupportSourceDeclared,
     incomeSupportSource: {
       name: SourceNames.INCOME_SUPPORT,
       amount: this.sampleData.incomeSupportSource.amount,
       schedule: this.sampleData.incomeSupportSource.schedule
     },
-    hasWorkingTaxCreditSource: this.sampleData.hasWorkingTaxCreditSource,
+    workingTaxCreditSourceDeclared: this.sampleData.workingTaxCreditSourceDeclared,
     workingTaxCreditSource: {
       name: SourceNames.WORKING_TAX_CREDIT,
       amount: this.sampleData.workingTaxCreditSource.amount,
       schedule: this.sampleData.workingTaxCreditSource.schedule
     },
-    hasChildTaxCreditSource: this.sampleData.hasChildTaxCreditSource,
+    cildTaxCreditSourceDeclared: this.sampleData.cildTaxCreditSourceDeclared,
     childTaxCreditSource: {
       name: SourceNames.CHILD_TAX_CREDIT,
       amount: this.sampleData.childTaxCreditSource.amount,
       schedule: this.sampleData.childTaxCreditSource.schedule
     },
-    hasChildBenefitSource: this.sampleData.hasChildBenefitSource,
+    childBenefitSourceDeclared: this.sampleData.childBenefitSourceDeclared,
     childBenefitSource: {
       name: SourceNames.CHILD_BENEFIT,
       amount: this.sampleData.childBenefitSource.amount,
       schedule: this.sampleData.childBenefitSource.schedule
     },
-    hasCouncilTaxSupportSource: this.sampleData.hasCouncilTaxSupportSource,
+    councilTaxSupportSourceDeclared: this.sampleData.councilTaxSupportSourceDeclared,
     councilTaxSupportSource: {
       name: SourceNames.COUNCIL_TAX_SUPPORT,
       amount: this.sampleData.councilTaxSupportSource.amount,
       schedule: this.sampleData.councilTaxSupportSource.schedule
     },
-    hasPensionSource: this.sampleData.hasPensionSource,
+    pensionSourceDeclared: this.sampleData.pensionSourceDeclared,
     pensionSource: {
       name: SourceNames.PENSION,
       amount: this.sampleData.pensionSource.amount,
       schedule: this.sampleData.pensionSource.schedule
-    }
+    },
+    otherSources: [{}]
   }
 }
 
@@ -217,7 +218,19 @@ describe('MonthlyIncome', () => {
           undefined,
           undefined,
           undefined,
-          undefined
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+            undefined
         )
       )
     })
@@ -247,16 +260,16 @@ describe('MonthlyIncome', () => {
       it('should return errors when `MonthlyIncomeSource` objects are invalid', () => {
         const errors = validator.validateSync(
           new MonthlyIncome(
-            new MonthlyIncomeSource(SourceNames.SALARY, -100, IncomeExpenseSchedule.MONTH),
-            new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, -200, IncomeExpenseSchedule.MONTH),
-            new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_INCOME, -300, IncomeExpenseSchedule.TWO_WEEKS),
-            new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_CONTRIBUTION, -400, IncomeExpenseSchedule.MONTH),
-            new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, -500, IncomeExpenseSchedule.MONTH),
-            new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, -600, IncomeExpenseSchedule.TWO_WEEKS),
-            new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, -700, IncomeExpenseSchedule.MONTH),
-            new MonthlyIncomeSource(SourceNames.CHILD_BENEFIT, -800, IncomeExpenseSchedule.MONTH),
-            new MonthlyIncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, -900, IncomeExpenseSchedule.TWO_WEEKS),
-            new MonthlyIncomeSource(SourceNames.PENSION, -100, IncomeExpenseSchedule.TWO_WEEKS)
+            undefined, new MonthlyIncomeSource(SourceNames.SALARY, -100, IncomeExpenseSchedule.MONTH),
+            undefined, new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, -200, IncomeExpenseSchedule.MONTH),
+            undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_INCOME, -300, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANE_CONTRIBUTION, -400, IncomeExpenseSchedule.MONTH),
+            undefined, new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, -500, IncomeExpenseSchedule.MONTH),
+            undefined, new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, -600, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, -700, IncomeExpenseSchedule.MONTH),
+            undefined, new MonthlyIncomeSource(SourceNames.CHILD_BENEFIT, -800, IncomeExpenseSchedule.MONTH),
+            undefined, new MonthlyIncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, -900, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new MonthlyIncomeSource(SourceNames.PENSION, -100, IncomeExpenseSchedule.TWO_WEEKS)
           )
         )
 

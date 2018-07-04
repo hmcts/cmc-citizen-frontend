@@ -1,15 +1,16 @@
 import { IncomeExpenseSchedule } from 'features/response/form/models/statement-of-means/incomeExpenseSchedule'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { IsDefined, IsIn } from 'class-validator'
-import { Fractions, Min } from '@hmcts/cmc-validators'
+import { Fractions, IsNotBlank, Min } from '@hmcts/cmc-validators'
 
 export const INIT_ROW_COUNT: number = 0
 
 export class ValidationErrors {
-  static readonly AMOUNT_REQUIRED = (name: string) => `Enter how much ${name} you receive`
-  static readonly AMOUNT_INVALID_DECIMALS = (name: string) => `Enter a valid ${name} amount, maximum two decimal places`
-  static readonly AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED = (name: string) => `Enter a valid ${name} amount, maximum two decimal places`
-  static readonly SCHEDULE_SELECT_AN_OPTION = (name: string) => `Select how often you receive ${name}`
+  static readonly NAME_REQUIRED = 'Enter source of income'
+  static readonly AMOUNT_REQUIRED = (name: string) => `Enter how much ${name ? name : 'income'} you receive`
+  static readonly AMOUNT_INVALID_DECIMALS = (name: string) => `Enter a valid ${name ? name : 'income'} amount, maximum two decimal places`
+  static readonly AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED = (name: string) => `Enter a valid ${name ? name : 'income'} amount, maximum two decimal places`
+  static readonly SCHEDULE_SELECT_AN_OPTION = (name: string) => `Select how often you receive ${name ? name : 'income'}`
 }
 
 function withMessage (buildErrorFn: (name: string) => string) {
@@ -21,7 +22,9 @@ function withMessage (buildErrorFn: (name: string) => string) {
 
 export class MonthlyIncomeSource {
 
-  name: string
+  @IsDefined({ message: ValidationErrors.NAME_REQUIRED })
+  @IsNotBlank({ message: ValidationErrors.NAME_REQUIRED })
+  name?: string
 
   @IsDefined({ message: withMessage(ValidationErrors.AMOUNT_REQUIRED) })
   @Fractions(0, 2, { message: withMessage(ValidationErrors.AMOUNT_INVALID_DECIMALS) })
@@ -32,19 +35,15 @@ export class MonthlyIncomeSource {
   @IsIn(IncomeExpenseSchedule.all(), { message: withMessage(ValidationErrors.SCHEDULE_SELECT_AN_OPTION) })
   schedule?: IncomeExpenseSchedule
 
-  constructor (name: string, amount?: number, schedule?: IncomeExpenseSchedule) {
+  constructor (name?: string, amount?: number, schedule?: IncomeExpenseSchedule) {
     this.name = name
     this.amount = amount
     this.schedule = schedule
   }
 
-  static fromObject (name: string, value?: any, declared?: boolean): MonthlyIncomeSource {
+  static fromObject (name: string, value?: any): MonthlyIncomeSource {
     if (!value) {
       return value
-    }
-
-    if (!declared && !value.amount && !value.schedule) {
-      return undefined
     }
 
     return new MonthlyIncomeSource(
@@ -56,10 +55,16 @@ export class MonthlyIncomeSource {
 
   deserialize (input?: any): MonthlyIncomeSource {
     if (input) {
+      this.name = input.name
       this.amount = input.amount
       this.schedule = input.schedule
     }
 
     return this
   }
+
+  get populated (): boolean {
+    return !!this.amount || !!this.schedule
+  }
+
 }

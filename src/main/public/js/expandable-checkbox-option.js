@@ -2,12 +2,12 @@ $(document).ready(function () {
   var feature = (function () {
     var config = {
       // Default selectors
-      containerSelector: '.expandible-checkbox-option',
+      containerSelector: '.expandable-checkbox-option',
 
       // Main selectors
-      headerSelector: '.expandible.heading-medium',
-      checkboxSelector: '.expandible.multiple-choice',
-      panelSelector: '.expandible.panel',
+      headerSelector: '.expandable.heading-medium',
+      checkboxSelector: '.expandable.multiple-choice',
+      panelSelector: '.expandable.panel',
 
       // Error selectors
       formGroupErrorSelector: '.form-group-error',
@@ -34,7 +34,7 @@ $(document).ready(function () {
         enableProgressiveEnhancement.call(this);
         bindClearPanelInputFieldsWhenUnchecking.call(this);
       }
-      
+
       // Private
       var enableProgressiveEnhancement = function() {
         this.headerElement.remove()
@@ -43,7 +43,7 @@ $(document).ready(function () {
           this.panelElement.addClass('js-hidden')
         }
       }
-  
+
       // Private
       var bindClearPanelInputFieldsWhenUnchecking = function() {
         var panelElement = this.panelElement;
@@ -59,7 +59,7 @@ $(document).ready(function () {
                   inputFieldelement.val('').change();
                   break;
                 case 'radio':
-                  inputFieldelement.prop('checked', false).change();    
+                  inputFieldelement.prop('checked', false).change();
                   break;
               }
             })

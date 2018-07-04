@@ -7,7 +7,7 @@ $(document).ready(function () {
       // Default selectors
       containerSelector: '.income-expense-calculation',
 
-      panelSelector: '.expandible-checkbox-option .expandible.panel',
+      panelSelector: '.expandable-checkbox-option .expandable.panel',
       csrfInputFieldSelector: 'input[name=_csrf]',
       amountInputFieldSelector: 'input[name*=amount]',
       scheduleInputFieldSelector: 'input[name*=schedule]',

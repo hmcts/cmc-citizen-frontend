@@ -47,6 +47,33 @@ function isValid (incomeExpenseSources: IncomeExpenseSources): boolean {
   return errors.length < 1
 }
 
+function actionHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
+  function extractPropertyName (action: object): string {
+    return Object.keys(action)[0]
+  }
+
+  if (req.body.action) {
+    const actionName = Object.keys(req.body.action)[0]
+    const form: Form<MonthlyIncome> = req.body
+
+    switch (actionName) {
+      case 'addOtherIncomeSource':
+        form.model.addEmptyOtherIncome()
+        break
+      case 'removeOtherIncomeSource':
+        const property: string = extractPropertyName(req.body.action[actionName])
+        form.model.removeOtherIncomeAtIndex(+property.substring(property.indexOf('-') + 1))
+        break
+      case 'resetIncomeSource':
+        delete form.model[extractPropertyName(req.body.action[actionName])]
+        break
+    }
+
+    return renderView(form, res)
+  }
+  next()
+}
+
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
@@ -61,20 +88,13 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     StatementOfMeansStateGuard.requestHandler(),
-    FormValidator.requestHandler(MonthlyIncome, MonthlyIncome.fromObject),
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+    FormValidator.requestHandler(MonthlyIncome, MonthlyIncome.fromObject, undefined, ['addOtherIncomeSource', 'removeOtherIncomeSource', 'resetIncomeSource']),
+    actionHandler,
+    ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<MonthlyIncome> = req.body
       const { externalId } = req.params
-      const isCalculateMonthlyIncomeAction = req.body.action && req.body.action.calculateMontlyIncome
-      const resetCommand = req.body.action && req.body.action.reset
 
-      if (form.hasErrors() || isCalculateMonthlyIncomeAction || resetCommand) {
-        if (resetCommand) {
-          Object.keys(resetCommand).map(property => {
-            delete form.model[property]
-          })
-        }
-
+      if (form.hasErrors()) {
         renderView(form, res)
       } else {
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
