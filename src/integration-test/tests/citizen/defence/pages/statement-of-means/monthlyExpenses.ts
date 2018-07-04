@@ -23,7 +23,7 @@ const buttons = {
 
 export class MonthlyExpensesPage {
 
-  fillOutAllFieldsAndContinue (): void {
+  fillOutAllFields (): void {
     I.fillField(fields.mortgage, '10')
     I.fillField(fields.rent, '10')
     I.fillField(fields.councilTax, '10')
@@ -36,7 +36,9 @@ export class MonthlyExpensesPage {
     I.fillField(fields.tvAndBroadband, '10')
     I.fillField(fields.mobilePhone, '10')
     I.fillField(fields.maintenance, '10')
+  }
 
+  clickContinue (): void {
     I.click(buttons.submit)
   }
 }

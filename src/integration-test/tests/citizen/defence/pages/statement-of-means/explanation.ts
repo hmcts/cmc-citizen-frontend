@@ -3,17 +3,17 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  retired: 'input[id="optionRETIRED"]'
+  text: 'textarea[id=text]'
 }
 
 const buttons = {
   submit: 'input[id="saveAndContinue"]'
 }
 
-export class UnemploymentPage {
+export class ExplanationPage {
 
-  selectRetired (): void {
-    I.checkOption(fields.retired)
+  enterExplanation (text: string): void {
+    I.fillField(fields.text, text)
   }
 
   clickContinue (): void {
