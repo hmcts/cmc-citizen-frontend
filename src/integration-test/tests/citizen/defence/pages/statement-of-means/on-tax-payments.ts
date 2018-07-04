@@ -7,14 +7,15 @@ const fields = {
     declared: 'input[id="declaredtrue"]',
     notDeclared: 'input[id="declaredfalse"]'
   },
-  value: 'input[id="value"]'
+  amountYouOwe: 'input[id="amountYouOwe"]',
+  reason: 'textarea[id="reason"]'
 }
 
 const buttons = {
   submit: 'input[id="saveAndContinue"]'
 }
 
-export class MaintenancePage {
+export class OnTaxPaymentsPage {
 
   selectDeclared (): void {
     I.checkOption(fields.options.declared)
@@ -24,8 +25,9 @@ export class MaintenancePage {
     I.checkOption(fields.options.notDeclared)
   }
 
-  enterNumberOfChildren (value: number): void {
-    I.fillField(fields.value, value.toFixed())
+  enterDetails (amountYouOwe: number, reason: string): void {
+    I.fillField(fields.amountYouOwe, amountYouOwe.toFixed())
+    I.fillField(fields.reason, reason)
   }
 
   clickContinue (): void {
