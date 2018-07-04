@@ -38,6 +38,16 @@
        )
     }}
 
+    {% if draft.isResponsePartiallyAdmitted() %}
+      {{ row(
+        label = 'Have you paid the claimant the amount you admit you owe?',
+        value = t(draft.partialAdmission.alreadyPaid.option.option) | capitalize,
+        changeLink = PartAdmissionPaths.alreadyPaidPage.evaluateUri({ externalId: claim.externalId }),
+        bold = true
+      )
+      }}
+    {% endif %}
+
     {% if draft.response.type === ResponseType.DEFENCE %}
       {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
         {% set rejectAllOption = 'I’ve already paid the claim in full' %}
@@ -83,7 +93,7 @@
 
     {% if draft.isResponsePartiallyAdmitted() %}
 
-      {{ tableStart('yourResponse', 'Your response') }}
+      {{ tableStart('responseDetails', 'Response details') }}
 
         {{
           row(
@@ -143,7 +153,7 @@
     {% endif %}
 
     {% if draft.isResponseRejectedFullyWithDispute() %}
-      {{ tableStart('yourDefence', 'Response details') }}
+      {{ tableStart('responseDetails', 'Response details') }}
       {{ row(label = 'Why you disagree with the claim', value = draft.defence.text, changeLink = ResponsePaths.defencePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
 
       {{
