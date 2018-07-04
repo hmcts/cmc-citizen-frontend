@@ -7,13 +7,13 @@ import { CompanyDetails } from 'forms/models/companyDetails'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
-import { ResponseDraft } from 'response/draft/responseDraft'
+import { PartialAdmission, ResponseDraft } from 'response/draft/responseDraft'
 import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
-import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { ResponseType } from 'response/form/models/responseType'
 import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
 
 describe('StatementOfMeansFeature', () => {
+
   describe('isApplicableFor', () => {
     function itShouldBeEnabledForNonBusinessAndDisabledForBusinessDefendants (responseDraft: ResponseDraft) {
       it('should be enabled for individual', () => {
@@ -65,12 +65,16 @@ describe('StatementOfMeansFeature', () => {
       itShouldBeEnabledForNonBusinessAndDisabledForBusinessDefendants(new ResponseDraft().deserialize(responseDraft))
     })
 
-    context('when response is part admission - I paid what I believe I owe', () => {
+    context('when response is part admission - I have already paid', () => {
       const responseDraft: ResponseDraft = {
         response: {
           type: ResponseType.PART_ADMISSION
         },
-        rejectPartOfClaim: new RejectPartOfClaim(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)
+        partialAdmission: new PartialAdmission().deserialize({
+          alreadyPaid: { option: 'yes' },
+          howMuchHaveYouPaid: { amount: 1, date: { day: 1, mount: 1, year: 1999 }, text: 'aaa' },
+          whyDoYouDisagree: { text: 'bbb' }
+        })
       } as ResponseDraft
 
       itShouldBeDisabledForAllDefendantTypes(new ResponseDraft().deserialize(responseDraft))

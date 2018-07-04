@@ -1,12 +1,10 @@
 import * as express from 'express'
 
-import { Paths } from 'response/paths'
+import { Paths, PartAdmissionPaths } from 'response/paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 
-import { ResponseType } from 'response/form/models/responseType'
-import { RejectPartOfClaim } from 'response/form/models/rejectPartOfClaim'
 import { ErrorHandling } from 'shared/errorHandling'
 import { User } from 'idam/user'
 import { GuardFactory } from 'response/guards/guardFactory'
@@ -14,12 +12,13 @@ import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
+import { RoutablePath } from 'shared/router/routablePath'
+import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 
 function isRequestAllowed (res: express.Response): boolean {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-  return draft.document.response !== undefined
-    && draft.document.response.type === ResponseType.PART_ADMISSION
+  return draft.document.isResponsePartiallyAdmitted()
 }
 
 function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -28,29 +27,30 @@ function accessDeniedCallback (req: express.Request, res: express.Response): voi
 }
 
 const guardRequestHandler: express.RequestHandler = GuardFactory.create(isRequestAllowed, accessDeniedCallback)
+const page: RoutablePath = PartAdmissionPaths.howMuchHaveYouPaidPage
 
-function renderView (form: Form<RejectPartOfClaim>, res: express.Response) {
-  res.render(Paths.defenceRejectPartOfClaimPage.associatedView, {
-    form: form
+function renderView (form: Form<HowMuchHaveYouPaid>, res: express.Response) {
+  res.render(page.associatedView, {
+    form: form,
+    totalAmount: res.locals.claim.totalAmountTillToday
   })
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
-    Paths.defenceRejectPartOfClaimPage.uri,
+    page.uri,
     guardRequestHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-
-      renderView(new Form(draft.document.rejectPartOfClaim), res)
+      renderView(new Form(draft.document.partialAdmission.howMuchHaveYouPaid), res)
     }))
   .post(
-    Paths.defenceRejectPartOfClaimPage.uri,
+    page.uri,
     guardRequestHandler,
-    FormValidator.requestHandler(RejectPartOfClaim),
+    FormValidator.requestHandler(HowMuchHaveYouPaid, HowMuchHaveYouPaid.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<RejectPartOfClaim> = req.body
+      const form: Form<HowMuchHaveYouPaid> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)
@@ -58,7 +58,8 @@ export default express.Router()
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        draft.document.rejectPartOfClaim = form.model
+        draft.document.partialAdmission.howMuchHaveYouPaid = form.model
+
         await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params

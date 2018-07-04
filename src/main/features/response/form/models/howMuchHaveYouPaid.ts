@@ -12,25 +12,21 @@ const currentDate = MomentFormatter.formatLongDate(MomentFactory.currentDate())
 
 export class ValidationErrors {
   static readonly NOT_OWE_FULL_AMOUNT_REQUIRED: string = 'Explain why you don’t owe the full amount'
-  static readonly VALID_AMOUNT_REQUIRED: string = 'Enter a valid amount paid'
-  static readonly AMOUNT_REQUIRED: string = 'Enter an amount'
   static readonly AMOUNT_NOT_VALID: string = 'Enter valid amount'
-  static readonly DATE_REQUIRED: string = 'Enter a date'
   static readonly VALID_PAST_DATE: string = `Enter date before ${currentDate}`
-  static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter valid amount, maximum two decimal places'
 }
 
-export class HowMuchPaid {
+export class HowMuchHaveYouPaid {
 
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED })
-  @IsPositive({ message: ValidationErrors.VALID_AMOUNT_REQUIRED })
+  @IsDefined({ message: DefaultValidationErrors.AMOUNT_REQUIRED })
+  @IsPositive({ message: DefaultValidationErrors.AMOUNT_REQUIRED })
   @Min(0.01, { message: ValidationErrors.AMOUNT_NOT_VALID })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS })
+  @Fractions(0, 2, { message: DefaultValidationErrors.AMOUNT_INVALID_DECIMALS })
   amount?: number
 
   @ValidateNested()
-  @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
-  @IsValidLocalDate({ message: ValidationErrors.DATE_REQUIRED })
+  @IsDefined({ message: DefaultValidationErrors.DATE_REQUIRED })
+  @IsValidLocalDate({ message: DefaultValidationErrors.DATE_REQUIRED })
   @IsPastDate({ message: ValidationErrors.VALID_PAST_DATE })
   date?: LocalDate
 
@@ -45,29 +41,25 @@ export class HowMuchPaid {
     this.text = text
   }
 
-  static fromObject (value?: any): HowMuchPaid {
-    if (value) {
-      const amount = toNumberOrUndefined(value.amount)
-      const pastDate = LocalDate.fromObject(value.date)
-      const text = value.text
-      return new HowMuchPaid(amount, pastDate, text)
-    } else {
-      return new HowMuchPaid()
+  static fromObject (value?: any): HowMuchHaveYouPaid {
+    if (!value) {
+      return value
     }
+
+    const amount = toNumberOrUndefined(value.amount)
+    const pastDate = LocalDate.fromObject(value.date)
+    const text = value.text
+
+    return new HowMuchHaveYouPaid(amount, pastDate, text)
   }
 
-  deserialize (input: any): HowMuchPaid {
+  deserialize (input: any): HowMuchHaveYouPaid {
     if (input) {
       this.amount = input.amount
       this.date = new LocalDate().deserialize(input.date)
       this.text = input.text
     }
-    return this
-  }
 
-  isCompleted (): boolean {
-    return !!this.date.year && this.date.year.toString().length > 0 &&
-      !!this.text && this.text.length > 0 &&
-      !!this.amount && this.amount > 0
+    return this
   }
 }
