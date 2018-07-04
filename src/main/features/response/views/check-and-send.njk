@@ -105,7 +105,7 @@
         {{
            row(
              label = 'How did you pay the amount claimed?',
-             value = draft.partialAdmission.howMuchHaveYouPaid.text,
+             value = draft.partialAdmission.howMuchHaveYouPaid.paymentMethod,
              changeLink = PartAdmissionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
              bold = true
            )

@@ -33,12 +33,12 @@ export class HowMuchHaveYouPaid {
   @IsDefined({ message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })
   @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
-  text?: string
+  paymentMethod?: string
 
-  constructor (amount?: number, date?: LocalDate, text?: string) {
+  constructor (amount?: number, date?: LocalDate, paymentMethod?: string) {
     this.amount = amount
     this.date = date
-    this.text = text
+    this.paymentMethod = paymentMethod
   }
 
   static fromObject (value?: any): HowMuchHaveYouPaid {
@@ -48,16 +48,16 @@ export class HowMuchHaveYouPaid {
 
     const amount = toNumberOrUndefined(value.amount)
     const pastDate = LocalDate.fromObject(value.date)
-    const text = value.text
+    const paymentMethod = value.paymentMethod
 
-    return new HowMuchHaveYouPaid(amount, pastDate, text)
+    return new HowMuchHaveYouPaid(amount, pastDate, paymentMethod)
   }
 
   deserialize (input: any): HowMuchHaveYouPaid {
     if (input) {
       this.amount = input.amount
       this.date = new LocalDate().deserialize(input.date)
-      this.text = input.text
+      this.paymentMethod = input.paymentMethod
     }
 
     return this
