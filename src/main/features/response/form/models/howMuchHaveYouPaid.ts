@@ -1,4 +1,4 @@
-import { IsDefined, IsPositive, MaxLength, Min, ValidateNested } from 'class-validator'
+import { IsDefined, IsPositive, MaxLength, ValidateNested } from 'class-validator'
 import { IsPastDate } from 'forms/validation/validators/datePastConstraint'
 import { LocalDate } from 'forms/models/localDate'
 import { IsNotBlank, Fractions, IsValidLocalDate } from '@hmcts/cmc-validators'
@@ -11,7 +11,7 @@ import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 const currentDate = MomentFormatter.formatLongDate(MomentFactory.currentDate())
 
 export class ValidationErrors {
-  static readonly NOT_OWE_FULL_AMOUNT_REQUIRED: string = 'Explain why you don’t owe the full amount'
+  static readonly NOT_OWE_FULL_AMOUNT_REQUIRED: string = 'Explain how you paid this amount'
   static readonly AMOUNT_NOT_VALID: string = 'Enter valid amount'
   static readonly VALID_PAST_DATE: string = `Enter date before ${currentDate}`
 }
@@ -19,8 +19,7 @@ export class ValidationErrors {
 export class HowMuchHaveYouPaid {
 
   @IsDefined({ message: DefaultValidationErrors.AMOUNT_REQUIRED })
-  @IsPositive({ message: DefaultValidationErrors.AMOUNT_REQUIRED })
-  @Min(0.01, { message: ValidationErrors.AMOUNT_NOT_VALID })
+  @IsPositive({ message: ValidationErrors.AMOUNT_NOT_VALID })
   @Fractions(0, 2, { message: DefaultValidationErrors.AMOUNT_INVALID_DECIMALS })
   amount?: number
 
