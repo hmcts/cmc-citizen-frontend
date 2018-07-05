@@ -17,6 +17,17 @@ export class Helper {
     return defenceSteps.enterClaimPin(claimRef, authorisation)
   }
 
+  linkClaimToDefendant (defendantEmail: string): void {
+    I.waitForText(claimDetailsHeading)
+    defenceSteps.respondToClaim()
+    defenceSteps.loginAsDefendant(defendantEmail)
+  }
+
+  startResponseFromDashboard (claimRef: string): void {
+    I.click(claimRef)
+    I.click('Respond to claim')
+  }
+
   finishResponse (claimRef: string, defendantEmail: string, defendantType: PartyType, defenceType: DefenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE): Promise<void> {
     I.waitForText(claimDetailsHeading)
     defenceSteps.respondToClaim()

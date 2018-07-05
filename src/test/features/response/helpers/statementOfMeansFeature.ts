@@ -72,7 +72,7 @@ describe('StatementOfMeansFeature', () => {
         },
         partialAdmission: new PartialAdmission().deserialize({
           alreadyPaid: { option: 'yes' },
-          howMuchHaveYouPaid: { amount: 1, date: { day: 1, mount: 1, year: 1999 }, text: 'aaa' },
+          howMuchHaveYouPaid: { amount: 1, date: { day: 1, month: 1, year: 1999 }, text: 'aaa' },
           whyDoYouDisagree: { text: 'bbb' }
         })
       } as ResponseDraft
