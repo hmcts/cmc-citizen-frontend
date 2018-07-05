@@ -38,7 +38,7 @@ import { MonthlyIncome, SourceNames } from 'response/form/models/statement-of-me
 import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
 import { Explanation } from 'response/form/models/statement-of-means/explanation'
 import { MonthlyIncomeSource } from 'response/form/models/statement-of-means/monthlyIncomeSource'
-import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
+import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
 
 function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDraft {
   const responseDraft: ResponseDraft = new ResponseDraft()
@@ -71,16 +71,16 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
   responseDraft.statementOfMeans.bankAccounts = new BankAccounts([new BankAccountRow(BankAccountType.CURRENT_ACCOUNT, false, 100)])
   responseDraft.statementOfMeans.debts = new Debts(false)
   responseDraft.statementOfMeans.monthlyIncome = new MonthlyIncome(
-    true, new MonthlyIncomeSource(SourceNames.SALARY, 100, IncomeExpenseSchedule.MONTH),
-    undefined, new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, 200, IncomeExpenseSchedule.MONTH),
-    undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, 300, IncomeExpenseSchedule.TWO_WEEKS),
-    undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, 400, IncomeExpenseSchedule.MONTH),
-    undefined, new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, 500, IncomeExpenseSchedule.MONTH),
-    undefined, new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, 600, IncomeExpenseSchedule.TWO_WEEKS),
-    undefined, new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, 700, IncomeExpenseSchedule.MONTH),
-    undefined, new MonthlyIncomeSource(SourceNames.CHILD_BENEFIT, 800, IncomeExpenseSchedule.MONTH),
-    undefined, new MonthlyIncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, 900, IncomeExpenseSchedule.TWO_WEEKS),
-    undefined, new MonthlyIncomeSource(SourceNames.PENSION, 1000, IncomeExpenseSchedule.TWO_WEEKS)
+    true, new MonthlyIncomeSource(SourceNames.SALARY, 100, ExpenseSchedule.MONTH),
+    undefined, new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, 200, ExpenseSchedule.MONTH),
+    undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, 300, ExpenseSchedule.TWO_WEEKS),
+    undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, 400, ExpenseSchedule.MONTH),
+    undefined, new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, 500, ExpenseSchedule.MONTH),
+    undefined, new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, 600, ExpenseSchedule.TWO_WEEKS),
+    undefined, new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, 700, ExpenseSchedule.MONTH),
+    undefined, new MonthlyIncomeSource(SourceNames.CHILD_BENEFIT, 800, ExpenseSchedule.MONTH),
+    undefined, new MonthlyIncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, 900, ExpenseSchedule.TWO_WEEKS),
+    undefined, new MonthlyIncomeSource(SourceNames.PENSION, 1000, ExpenseSchedule.TWO_WEEKS)
   )
   responseDraft.statementOfMeans.monthlyExpenses = new MonthlyExpenses(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, [])
   responseDraft.statementOfMeans.courtOrders = new CourtOrders(false)
@@ -194,7 +194,7 @@ describe('StatementOfMeansTask', () => {
 
           it('has monthly income', () => {
             responseDraft.statementOfMeans.monthlyIncome = new MonthlyIncome(
-              true, new MonthlyIncomeSource(SourceNames.SALARY, 100, IncomeExpenseSchedule.MONTH),
+              true, new MonthlyIncomeSource(SourceNames.SALARY, 100, ExpenseSchedule.MONTH),
               undefined, new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, undefined, undefined),
               true, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, undefined, undefined),
               true, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, undefined, undefined),

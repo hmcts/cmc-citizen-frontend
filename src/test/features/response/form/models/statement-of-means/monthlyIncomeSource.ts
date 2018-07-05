@@ -3,18 +3,18 @@ import { Validator } from 'class-validator'
 
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { MonthlyIncomeSource, ValidationErrors } from 'response/form/models/statement-of-means/monthlyIncomeSource'
-import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
+import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
 
 const SAMPLE_MONTHLY_INCOME_SOURCE_FROM_OBJECT = {
   amount: 100,
-  schedule: IncomeExpenseSchedule.MONTH.value
+  schedule: ExpenseSchedule.MONTH.value
 }
 const SAMPLE_MONTHLY_INCOME_SOURCE_DESERIALIZE = {
   name: 'name',
   amount: 100,
   schedule: {
-    value: IncomeExpenseSchedule.MONTH.value,
-    displayValue: IncomeExpenseSchedule.MONTH.displayValue
+    value: ExpenseSchedule.MONTH.value,
+    displayValue: ExpenseSchedule.MONTH.displayValue
   }
 }
 
@@ -37,7 +37,7 @@ describe('MonthlyIncomeSource', () => {
         new MonthlyIncomeSource(
           'name',
           100,
-          IncomeExpenseSchedule.MONTH
+          ExpenseSchedule.MONTH
         )
       )
     })
@@ -57,7 +57,7 @@ describe('MonthlyIncomeSource', () => {
         new MonthlyIncomeSource(
           'name',
           100,
-          IncomeExpenseSchedule.MONTH
+          ExpenseSchedule.MONTH
         )
       )
     })
@@ -75,21 +75,21 @@ describe('MonthlyIncomeSource', () => {
       })
 
       it('should return an error when `amount` is undefined', () => {
-        const errors = validator.validateSync(new MonthlyIncomeSource('Source name', undefined, IncomeExpenseSchedule.MONTH))
+        const errors = validator.validateSync(new MonthlyIncomeSource('Source name', undefined, ExpenseSchedule.MONTH))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.AMOUNT_REQUIRED('Source name'))
       })
 
       it('should return an error when `amount` has invalid decimal amount', () => {
-        const errors = validator.validateSync(new MonthlyIncomeSource('Source name', 0.123, IncomeExpenseSchedule.MONTH))
+        const errors = validator.validateSync(new MonthlyIncomeSource('Source name', 0.123, ExpenseSchedule.MONTH))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS('Source name'))
       })
 
       it('should return an error when `amount` is negative', () => {
-        const errors = validator.validateSync(new MonthlyIncomeSource('Source name', -100, IncomeExpenseSchedule.MONTH))
+        const errors = validator.validateSync(new MonthlyIncomeSource('Source name', -100, ExpenseSchedule.MONTH))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED('Source name'))
@@ -103,7 +103,7 @@ describe('MonthlyIncomeSource', () => {
       })
 
       it('should return an error when `schedule` is invalid', () => {
-        const errors = validator.validateSync(new MonthlyIncomeSource('Source name', 100, new IncomeExpenseSchedule('UNKNOWN', 'Unknown')))
+        const errors = validator.validateSync(new MonthlyIncomeSource('Source name', 100, new ExpenseSchedule('UNKNOWN', 'Unknown')))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.SCHEDULE_SELECT_AN_OPTION('Source name'))
@@ -112,7 +112,7 @@ describe('MonthlyIncomeSource', () => {
 
     describe('when successful', () => {
       it('should return no error', () => {
-        const errors = validator.validateSync(new MonthlyIncomeSource('Source name', 100, IncomeExpenseSchedule.MONTH))
+        const errors = validator.validateSync(new MonthlyIncomeSource('Source name', 100, ExpenseSchedule.MONTH))
         expect(errors.length).to.equal(0)
       })
     })

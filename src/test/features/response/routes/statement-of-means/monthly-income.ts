@@ -12,7 +12,7 @@ import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
 import { app } from 'main/app'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
-import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
+import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = StatementOfMeansPaths.monthlyIncomePage.evaluateUri(
@@ -117,11 +117,11 @@ describe('Defendant response: Statement of means: monthly-income', () => {
             .send({
               salarySource: {
                 amount: -100,
-                schedule: IncomeExpenseSchedule.MONTH.value
+                schedule: ExpenseSchedule.MONTH.value
               },
               pensionSource: {
                 amount: -200,
-                schedule: IncomeExpenseSchedule.TWO_WEEKS.value
+                schedule: ExpenseSchedule.TWO_WEEKS.value
               }})
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Enter a valid Income from your job amount, maximum two decimal places'))
@@ -137,11 +137,11 @@ describe('Defendant response: Statement of means: monthly-income', () => {
             .send({
               salarySource: {
                 amount: 100.123,
-                schedule: IncomeExpenseSchedule.MONTH.value
+                schedule: ExpenseSchedule.MONTH.value
               },
               jobseekerAllowanceIncomeSource: {
                 amount: 200.345,
-                schedule: IncomeExpenseSchedule.TWO_WEEKS.value
+                schedule: ExpenseSchedule.TWO_WEEKS.value
               } })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Enter a valid Income from your job amount, maximum two decimal places'))
@@ -156,10 +156,10 @@ describe('Defendant response: Statement of means: monthly-income', () => {
             .post(pagePath)
             .send({
               salarySource: {
-                schedule: IncomeExpenseSchedule.MONTH.value
+                schedule: ExpenseSchedule.MONTH.value
               },
               incomeSupportSource: {
-                schedule: IncomeExpenseSchedule.MONTH.value
+                schedule: ExpenseSchedule.MONTH.value
               } })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Enter how much Income from your job you receive'))
@@ -197,43 +197,43 @@ describe('Defendant response: Statement of means: monthly-income', () => {
             .send({
               salarySource: {
                 amount: 100,
-                schedule: IncomeExpenseSchedule.MONTH.value
+                schedule: ExpenseSchedule.MONTH.value
               },
               universalCreditSource: {
                 amount: 200,
-                schedule: IncomeExpenseSchedule.MONTH.value
+                schedule: ExpenseSchedule.MONTH.value
               },
               jobseekerAllowanceIncomeSource: {
                 amount: 300,
-                schedule: IncomeExpenseSchedule.TWO_WEEKS.value
+                schedule: ExpenseSchedule.TWO_WEEKS.value
               },
               jobseekerAllowanceContributionSource: {
                 amount: 400,
-                schedule: IncomeExpenseSchedule.MONTH.value
+                schedule: ExpenseSchedule.MONTH.value
               },
               incomeSupportSource: {
                 amount: 500,
-                schedule: IncomeExpenseSchedule.MONTH.value
+                schedule: ExpenseSchedule.MONTH.value
               },
               workingTaxCreditSource: {
                 amount: 600,
-                schedule: IncomeExpenseSchedule.TWO_WEEKS.value
+                schedule: ExpenseSchedule.TWO_WEEKS.value
               },
               childTaxCreditSource: {
                 amount: 700,
-                schedule: IncomeExpenseSchedule.MONTH.value
+                schedule: ExpenseSchedule.MONTH.value
               },
               childBenefitSource: {
                 amount: 800,
-                schedule: IncomeExpenseSchedule.MONTH.value
+                schedule: ExpenseSchedule.MONTH.value
               },
               councilTaxSupportSource: {
                 amount: 900,
-                schedule: IncomeExpenseSchedule.TWO_WEEKS.value
+                schedule: ExpenseSchedule.TWO_WEEKS.value
               },
               pensionSource: {
                 amount: 100,
-                schedule: IncomeExpenseSchedule.TWO_WEEKS.value
+                schedule: ExpenseSchedule.TWO_WEEKS.value
               } })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect

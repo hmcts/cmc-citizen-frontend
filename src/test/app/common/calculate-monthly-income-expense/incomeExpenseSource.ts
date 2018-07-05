@@ -4,9 +4,9 @@ import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/i
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
-import {MonthlyIncomeSource} from "response/form/models/statement-of-means/monthlyIncomeSource";
-import {IncomeExpenseSchedule as IncomeExpenseScheduleFormModel} from "response/form/models/statement-of-means/incomeExpenseSchedule";
-import {SourceNames} from "response/form/models/statement-of-means/monthlyIncome";
+import { MonthlyIncomeSource } from 'response/form/models/statement-of-means/monthlyIncomeSource'
+import { ExpenseSchedule as IncomeExpenseScheduleFormModel } from 'response/form/models/statement-of-means/expenseSchedule'
+import { SourceNames } from 'response/form/models/statement-of-means/monthlyIncome'
 
 const SAMPLE_INCOME_EXPENSE_SOURCE_FROM_OBJECT = {
   amount: 100,

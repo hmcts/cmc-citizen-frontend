@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { Validator } from 'class-validator'
 
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
-import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
+import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
 import { MonthlyIncome, SourceNames } from 'response/form/models/statement-of-means/MonthlyIncome'
 import { MonthlyIncomeSource, ValidationErrors as MonthlyIncomeSourceValidationErrors } from 'response/form/models/statement-of-means/MonthlyIncomeSource'
 
@@ -10,43 +10,43 @@ function getSampleMonthtlyIncomeObject (options?: object) {
   const DEFAULT_SAMPLE_VALID_MONTHLY_INCOME = {
     salarySource: {
       amount: 100,
-      schedule: IncomeExpenseSchedule.MONTH
+      schedule: ExpenseSchedule.MONTH
     },
     universalCreditSource: {
       amount: 200,
-      schedule: IncomeExpenseSchedule.MONTH
+      schedule: ExpenseSchedule.MONTH
     },
     jobseekerAllowanceIncomeSource: {
       amount: 300,
-      schedule: IncomeExpenseSchedule.TWO_WEEKS
+      schedule: ExpenseSchedule.TWO_WEEKS
     },
     jobseekerAllowanceContributionSource: {
       amount: 400,
-      schedule: IncomeExpenseSchedule.MONTH
+      schedule: ExpenseSchedule.MONTH
     },
     incomeSupportSource: {
       amount: 500,
-      schedule: IncomeExpenseSchedule.MONTH
+      schedule: ExpenseSchedule.MONTH
     },
     workingTaxCreditSource: {
       amount: 600,
-      schedule: IncomeExpenseSchedule.TWO_WEEKS
+      schedule: ExpenseSchedule.TWO_WEEKS
     },
     childTaxCreditSource: {
       amount: 700,
-      schedule: IncomeExpenseSchedule.MONTH
+      schedule: ExpenseSchedule.MONTH
     },
     childBenefitSource: {
       amount: 800,
-      schedule: IncomeExpenseSchedule.MONTH
+      schedule: ExpenseSchedule.MONTH
     },
     councilTaxSupportSource: {
       amount: 900,
-      schedule: IncomeExpenseSchedule.TWO_WEEKS
+      schedule: ExpenseSchedule.TWO_WEEKS
     },
     pensionSource: {
       amount: 100,
-      schedule: IncomeExpenseSchedule.TWO_WEEKS
+      schedule: ExpenseSchedule.TWO_WEEKS
     }
   }
 
@@ -258,20 +258,45 @@ describe('MonthlyIncome', () => {
 
     describe('when not successful', () => {
       it('should return errors when `MonthlyIncomeSource` objects are invalid', () => {
-        const errors = validator.validateSync(
-          new MonthlyIncome(
-            undefined, new MonthlyIncomeSource(SourceNames.SALARY, -100, IncomeExpenseSchedule.MONTH),
-            undefined, new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, -200, IncomeExpenseSchedule.MONTH),
-            undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, -300, IncomeExpenseSchedule.TWO_WEEKS),
-            undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, -400, IncomeExpenseSchedule.MONTH),
-            undefined, new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, -500, IncomeExpenseSchedule.MONTH),
-            undefined, new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, -600, IncomeExpenseSchedule.TWO_WEEKS),
-            undefined, new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, -700, IncomeExpenseSchedule.MONTH),
-            undefined, new MonthlyIncomeSource(SourceNames.CHILD_BENEFIT, -800, IncomeExpenseSchedule.MONTH),
-            undefined, new MonthlyIncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, -900, IncomeExpenseSchedule.TWO_WEEKS),
-            undefined, new MonthlyIncomeSource(SourceNames.PENSION, -100, IncomeExpenseSchedule.TWO_WEEKS)
-          )
-        )
+        const errors = validator.validateSync(MonthlyIncome.fromObject({
+            "salarySource": {
+              "name": "Income from your job"
+            },
+            "universalCreditSource": {
+              "name": "Universal Credit"
+            },
+            "jobseekerAllowanceIncomeSource": {
+              "name": "Jobseeker’s Allowance (income based)"
+            },
+            "jobseekerAllowanceContributionSource": {
+              "name": "Jobseeker’s Allowance (contribution based)"
+            },
+            "incomeSupportSource": {
+              "name": "Income Support"
+            },
+            "workingTaxCreditSource": {
+              "name": "Working Tax Credit"
+            },
+            "childTaxCreditSource": {
+              "name": "Child Tax Credit"
+            },
+            "childBenefitSourceDeclared": "true",
+            "childBenefitSource": {
+              "name": "Child Benefit",
+              "amount": 20000,
+              "schedule": "TWO_WEEKS"
+            },
+            "councilTaxSupportSource": {
+              "name": "Council Tax Support"
+            },
+            "pensionSource": {
+              "name": "Pension (paid to you)"
+            },
+            "otherSources": [{
+              "name": ""
+            }]
+          }
+        ))
 
         expect(errors.length).to.equal(10)
         expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(SourceNames.SALARY))

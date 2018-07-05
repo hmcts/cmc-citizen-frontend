@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
 
-describe('IncomeExpenseSchedule', () => {
+describe('ExpenseSchedule', () => {
   describe('of', () => {
     it('should return valid object for valid input', () => {
       const incomeExpenseSchedule: IncomeExpenseSchedule = IncomeExpenseSchedule.of(IncomeExpenseSchedule.WEEK.value)
