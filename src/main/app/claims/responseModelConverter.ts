@@ -39,7 +39,7 @@ import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { convertEvidence } from 'claims/converters/evidenceConverter'
 import { MomentFactory } from 'shared/momentFactory'
-import { PartAdmissionResponse } from 'claims/models/response/partDefenceAdmission'
+import { PartAdmissionResponse, PaymentDetails } from 'claims/models/response/partDefenceAdmission'
 
 export class ResponseModelConverter {
 
@@ -104,8 +104,8 @@ export class ResponseModelConverter {
       howMuchHaveYouPaid: {
         amount: draft.partialAdmission.howMuchHaveYouPaid.amount,
         date: draft.partialAdmission.howMuchHaveYouPaid.date.toMoment(),
-        paymentMethod: draft.partialAdmission.howMuchHaveYouPaid.paymentMethod
-      },
+        paymentMethod: draft.partialAdmission.howMuchHaveYouPaid.text
+      } as PaymentDetails,
       defence: draft.partialAdmission.whyDoYouDisagree.text,
       timeline: {
         rows: draft.partialAdmission.timeline.getPopulatedRowsOnly(),

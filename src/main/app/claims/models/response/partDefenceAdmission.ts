@@ -12,14 +12,16 @@ import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 
+export interface PaymentDetails {
+  amount: number,
+  date: Moment,
+  paymentMethod: string
+}
+
 export interface PartAdmissionResponse extends ResponseCommon {
   responseType: ResponseType.PART_ADMISSION
   isAlreadyPaid: YesNoOption
-  howMuchHaveYouPaid: {
-    amount: number,
-    date: Moment,
-    paymentMethod: string
-  }
+  howMuchHaveYouPaid: PaymentDetails
   defence: string,
   timeline: DefendantTimeline
   evidence: DefendantEvidence
@@ -39,7 +41,7 @@ export namespace PartAdmissionResponse {
         amount: input.howMuchHaveYouPaid.amount,
         date: input.howMuchHaveYouPaid.date,
         paymentMethod: input.howMuchHaveYouPaid.paymentMethod
-      },
+      } as PaymentDetails,
       defence: input.defence,
       timeline: {
         rows: input.timeline && input.timeline.rows || [],
