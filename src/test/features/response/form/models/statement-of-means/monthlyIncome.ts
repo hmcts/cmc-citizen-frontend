@@ -258,45 +258,20 @@ describe('MonthlyIncome', () => {
 
     describe('when not successful', () => {
       it('should return errors when `MonthlyIncomeSource` objects are invalid', () => {
-        const errors = validator.validateSync(MonthlyIncome.fromObject({
-            "salarySource": {
-              "name": "Income from your job"
-            },
-            "universalCreditSource": {
-              "name": "Universal Credit"
-            },
-            "jobseekerAllowanceIncomeSource": {
-              "name": "Jobseeker’s Allowance (income based)"
-            },
-            "jobseekerAllowanceContributionSource": {
-              "name": "Jobseeker’s Allowance (contribution based)"
-            },
-            "incomeSupportSource": {
-              "name": "Income Support"
-            },
-            "workingTaxCreditSource": {
-              "name": "Working Tax Credit"
-            },
-            "childTaxCreditSource": {
-              "name": "Child Tax Credit"
-            },
-            "childBenefitSourceDeclared": "true",
-            "childBenefitSource": {
-              "name": "Child Benefit",
-              "amount": 20000,
-              "schedule": "TWO_WEEKS"
-            },
-            "councilTaxSupportSource": {
-              "name": "Council Tax Support"
-            },
-            "pensionSource": {
-              "name": "Pension (paid to you)"
-            },
-            "otherSources": [{
-              "name": ""
-            }]
-          }
-        ))
+        const errors = validator.validateSync(
+          new MonthlyIncome(
+            undefined, new MonthlyIncomeSource(SourceNames.SALARY, -100, ExpenseSchedule.MONTH),
+            undefined, new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, -200, ExpenseSchedule.MONTH),
+            undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, -300, ExpenseSchedule.TWO_WEEKS),
+            undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, -400, ExpenseSchedule.MONTH),
+            undefined, new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, -500, ExpenseSchedule.MONTH),
+            undefined, new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, -600, ExpenseSchedule.TWO_WEEKS),
+            undefined, new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, -700, ExpenseSchedule.MONTH),
+            undefined, new MonthlyIncomeSource(SourceNames.CHILD_BENEFIT, -800, ExpenseSchedule.MONTH),
+            undefined, new MonthlyIncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, -900, ExpenseSchedule.TWO_WEEKS),
+            undefined, new MonthlyIncomeSource(SourceNames.PENSION, -100, ExpenseSchedule.TWO_WEEKS)
+          )
+        )
 
         expect(errors.length).to.equal(10)
         expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(SourceNames.SALARY))

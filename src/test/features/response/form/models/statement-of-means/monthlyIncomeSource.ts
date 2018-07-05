@@ -77,6 +77,7 @@ describe('MonthlyIncomeSource', () => {
       it('should return an error when `amount` is undefined', () => {
         const errors = validator.validateSync(new MonthlyIncomeSource('Source name', undefined, ExpenseSchedule.MONTH))
 
+        console.log(JSON.stringify(errors))
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.AMOUNT_REQUIRED('Source name'))
       })
