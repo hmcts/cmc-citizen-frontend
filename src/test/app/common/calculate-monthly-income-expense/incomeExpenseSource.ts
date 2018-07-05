@@ -4,9 +4,9 @@ import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/i
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
-import {MonthlyIncomeSource} from "response/form/models/statement-of-means/monthlyIncomeSource";
-import {IncomeExpenseSchedule as IncomeExpenseScheduleFormModel} from "response/form/models/statement-of-means/incomeExpenseSchedule";
-import {SourceNames} from "response/form/models/statement-of-means/monthlyIncome";
+import { MonthlyIncomeSource } from 'response/form/models/statement-of-means/monthlyIncomeSource'
+import { IncomeExpenseSchedule as IncomeExpenseScheduleFormModel } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
+import { SourceNames } from 'response/form/models/statement-of-means/monthlyIncome'
 
 const SAMPLE_INCOME_EXPENSE_SOURCE_FROM_OBJECT = {
   amount: 100,
@@ -31,7 +31,10 @@ describe('IncomeExpenseSource', () => {
     })
 
     it('should return a new instance with defaults when amount and schedule are invalid', () => {
-      expect(IncomeExpenseSource.fromObject({ 'amount': 'INVALID' , 'schedule': 'UNKNOWN' })).to.deep.equal(new IncomeExpenseSource(
+      expect(IncomeExpenseSource.fromObject({
+        'amount': 'INVALID',
+        'schedule': 'UNKNOWN'
+      })).to.deep.equal(new IncomeExpenseSource(
         undefined,
         undefined
       ))
