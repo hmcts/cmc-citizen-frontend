@@ -21,7 +21,7 @@ export interface PaymentDetails {
 export interface PartAdmissionResponse extends ResponseCommon {
   responseType: ResponseType.PART_ADMISSION
   isAlreadyPaid: YesNoOption
-  howMuchHaveYouPaid: PaymentDetails
+  paymentDetails: PaymentDetails
   defence: string,
   timeline: DefendantTimeline
   evidence: DefendantEvidence
@@ -37,10 +37,10 @@ export namespace PartAdmissionResponse {
       ...ResponseCommon.deserialize(input),
       responseType: ResponseType.PART_ADMISSION,
       isAlreadyPaid: input.isAlreadyPaid,
-      howMuchHaveYouPaid: {
-        amount: input.howMuchHaveYouPaid.amount,
-        date: input.howMuchHaveYouPaid.date,
-        paymentMethod: input.howMuchHaveYouPaid.paymentMethod
+      paymentDetails: {
+        amount: input.paymentDetails.amount,
+        date: input.paymentDetails.date,
+        paymentMethod: input.paymentDetails.paymentMethod
       } as PaymentDetails,
       defence: input.defence,
       timeline: {
