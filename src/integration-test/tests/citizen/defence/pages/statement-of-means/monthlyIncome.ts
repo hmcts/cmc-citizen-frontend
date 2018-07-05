@@ -22,7 +22,7 @@ const buttons = {
 
 export class MonthlyIncomePage {
 
-  fillOutAllFieldsAndContinue (): void {
+  fillOutAllFields (): void {
     I.fillField(fields.salary, '10')
     I.fillField(fields.universalCredit, '10')
     I.fillField(fields.jobSeekerAllowanceIncome, '10')
@@ -34,7 +34,9 @@ export class MonthlyIncomePage {
     I.fillField(fields.councilTaxSupport, '10')
     I.fillField(fields.pension, '10')
     I.fillField(fields.maintenance, '10')
+  }
 
+  clickContinue (): void {
     I.click(buttons.submit)
   }
 }

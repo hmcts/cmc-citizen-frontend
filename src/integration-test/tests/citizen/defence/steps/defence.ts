@@ -1,4 +1,5 @@
-import { createDefendant, DEFAULT_PASSWORD, defence } from 'integration-test/data/test-data'
+import { PaymentOption } from 'integration-test/data/payment-option'
+import { createClaimant, createDefendant, DEFAULT_PASSWORD, defence } from 'integration-test/data/test-data'
 import { DefendantCheckAndSendPage } from 'integration-test/tests/citizen/defence/pages/defendant-check-and-send'
 import { DefendantDefenceTypePage } from 'integration-test/tests/citizen/defence/pages/defendant-defence-type'
 import { DefendantDobPage } from 'integration-test/tests/citizen/defence/pages/defendant-dob'
@@ -12,11 +13,13 @@ import { DefendantMobilePage } from 'integration-test/tests/citizen/defence/page
 import { DefendantMoreTimeConfirmationPage } from 'integration-test/tests/citizen/defence/pages/defendant-more-time-confirmation'
 import { DefendantMoreTimeRequestPage } from 'integration-test/tests/citizen/defence/pages/defendant-more-time-request'
 import { DefendantNameAndAddressPage } from 'integration-test/tests/citizen/defence/pages/defendant-name-and-address'
+import { DefendantPaymentDatePage } from 'integration-test/tests/citizen/defence/pages/defendant-payment-date'
 import { DefendantPaymentPlanPage } from 'integration-test/tests/citizen/defence/pages/defendant-payment-plan'
 import { DefendantRegisterPage } from 'integration-test/tests/citizen/defence/pages/defendant-register'
 import { DefendantRejectAllOfClaimPage } from 'integration-test/tests/citizen/defence/pages/defendant-reject-all-of-claim'
 import { DefendantRejectPartOfClaimPage } from 'integration-test/tests/citizen/defence/pages/defendant-reject-part-of-claim'
 import { DefendantStartPage } from 'integration-test/tests/citizen/defence/pages/defendant-start'
+import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
 import { DefendantTimelineEventsPage } from 'integration-test/tests/citizen/defence/pages/defendant-timeline-events'
 import { DefendantViewClaimPage } from 'integration-test/tests/citizen/defence/pages/defendant-view-claim'
 import { DefendantWhenWillYouPayPage } from 'integration-test/tests/citizen/defence/pages/defendant-when-will-you-pay'
@@ -56,6 +59,8 @@ const defendantTimelineOfEventsPage: DefendantTimelineEventsPage = new Defendant
 const defendantEvidencePage: DefendantEvidencePage = new DefendantEvidencePage()
 const defendantImpactOfDisputePage: DefendantImpactOfDisputePage = new DefendantImpactOfDisputePage()
 const loginPage: LoginPage = new LoginPage()
+const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
+const defendantPaymentDatePage: DefendantPaymentDatePage = new DefendantPaymentDatePage()
 const defendantPaymentPlanPage: DefendantPaymentPlanPage = new DefendantPaymentPlanPage()
 const defendantWhenWillYouPage: DefendantWhenWillYouPayPage = new DefendantWhenWillYouPayPage()
 const defendantSteps: DefendantSteps = new DefendantSteps()
@@ -70,8 +75,6 @@ const defendantRepaymentPlan: PaymentPlan = {
   firstPaymentDate: '2025-01-01',
   frequency: 'everyWeek'
 }
-
-const text = 'I owe nothing'
 
 export class DefenceSteps {
 
@@ -217,8 +220,8 @@ export class DefenceSteps {
     this.explainImpactOfDispute(defence.impactOfDispute)
     defendantSteps.selectTaskDecideHowWillYouPay()
     defendantWhenWillYouPage.chooseInstalments()
-    defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan, text)
-    statementOfMeansSteps.fillStatementOfMeansData()
+    defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan)
+    statementOfMeansSteps.fillStatementOfMeansWithMinimalDataSet()
     I.see('Respond to a money claim')
     defendantSteps.selectTaskFreeMediation()
     defendantFreeMediationPage.chooseYes()
@@ -282,24 +285,69 @@ export class DefenceSteps {
         I.see('When did you pay this amount?')
         I.see('How did you pay the amount claimed?')
         break
-      case DefenceType.FULL_ADMISSION:
-        defendantSteps.selectTaskChooseAResponse()
-        defendantDefenceTypePage.admitAllOfMoneyClaim()
-        defendantSteps.selectTaskDecideHowWillYouPay()
-        defendantWhenWillYouPage.chooseImmediately()
-        defendantSteps.selectCheckAndSubmitYourDefence()
-        break
       default:
         throw new Error('Unknown DefenceType')
     }
 
-    if (defenceType !== DefenceType.FULL_ADMISSION) {
-      this.checkAndSendAndSubmit(defendantType)
-      if (defenceType === DefenceType.FULL_REJECTION_WITH_DISPUTE || defenceType === DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID) {
-        I.see('You’ve submitted your response')
-      } else {
-        I.see('Next steps')
-      }
+    this.checkAndSendAndSubmit(defendantType)
+    if (defenceType === DefenceType.FULL_REJECTION_WITH_DISPUTE || defenceType === DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID) {
+      I.see('You’ve submitted your response')
+    } else {
+      I.see('Next steps')
+    }
+  }
+
+  makeFullAdmission (defendantType: PartyType, paymentOption: PaymentOption): void {
+    I.dontSee('COMPLETE')
+
+    this.confirmYourDetails(createDefendant(defendantType))
+
+    this.requestMoreTimeToRespond()
+
+    defendantSteps.selectTaskChooseAResponse()
+    defendantDefenceTypePage.admitAllOfMoneyClaim()
+    defendantSteps.selectTaskDecideHowWillYouPay()
+
+    switch (paymentOption) {
+      case PaymentOption.IMMEDIATELY:
+        defendantWhenWillYouPage.chooseImmediately()
+        break
+      case PaymentOption.BY_SET_DATE:
+        defendantWhenWillYouPage.chooseFullBySetDate()
+        defendantPaymentDatePage.enterDate('2025-01-01')
+        defendantPaymentDatePage.saveAndContinue()
+        defendantTaskListPage.selectShareYourFinancialDetailsTask()
+        statementOfMeansSteps.fillStatementOfMeansWithMinimalDataSet()
+        break
+      case PaymentOption.INSTALMENTS:
+        defendantWhenWillYouPage.chooseInstalments()
+        defendantTaskListPage.selectYourRepaymentPlanTask()
+        defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan)
+        defendantPaymentPlanPage.saveAndContinue()
+        defendantTaskListPage.selectShareYourFinancialDetailsTask()
+        statementOfMeansSteps.fillStatementOfMeansWithFullDataSet()
+        break
+      default:
+        throw new Error(`Unknown payment option: ${paymentOption}`)
+    }
+
+    defendantSteps.selectCheckAndSubmitYourDefence()
+    this.checkAndSendAndSubmit(defendantType)
+
+    I.see('You’ve submitted your response')
+
+    switch (paymentOption) {
+      case PaymentOption.IMMEDIATELY:
+        I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} to tell them you’ll pay immediately.`)
+        break
+      case PaymentOption.BY_SET_DATE:
+        I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} your offer to pay by 1 January 2025 and your explanation of why you can’t pay before then.`)
+        break
+      case PaymentOption.INSTALMENTS:
+        I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} to tell them you’ve suggested paying by instalments.`)
+        break
+      default:
+        throw new Error(`Unknown payment option: ${paymentOption}`)
     }
   }
 
@@ -317,15 +365,6 @@ export class DefenceSteps {
     this.requestMoreTimeToRespond()
 
     switch (defenceType) {
-
-      case DefenceType.FULL_ADMISSION:
-        this.admitAllOfClaim()
-        I.see('Download the admission form')
-        I.see(claimRef)
-        I.see(claimant.name)
-        I.see(defendant.name)
-        break
-
       case DefenceType.PART_ADMISSION:
         this.admitPartOfClaim()
         I.see('Download the admission form')
