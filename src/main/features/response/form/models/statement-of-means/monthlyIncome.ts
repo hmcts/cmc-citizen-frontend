@@ -168,8 +168,8 @@ export class MonthlyIncome {
     this.otherSources.push(new MonthlyIncomeSource())
   }
 
-  removeOtherIncomeAtIndex (index: number): void {
-    this.otherSources.splice(index, 1)
+  removeOtherIncome (source: MonthlyIncomeSource): void {
+    this.otherSources.splice(this.otherSources.findIndex(element => element === source), 1)
   }
 
 }

@@ -55,6 +55,7 @@ $(document).ready(function () {
               var inputFieldelement = $(this);
 
               switch (inputFieldelement.attr('type')) {
+                case 'text':
                 case 'number':
                   inputFieldelement.val('').change();
                   break;

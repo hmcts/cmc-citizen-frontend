@@ -67,4 +67,8 @@ export class MonthlyIncomeSource {
     return !!this.amount || !!this.schedule
   }
 
+  reset (): void {
+    this.name = this.amount = this.schedule = undefined
+  }
+
 }

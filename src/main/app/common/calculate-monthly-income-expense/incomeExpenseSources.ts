@@ -17,15 +17,13 @@ export class IncomeExpenseSources {
       return value
     }
 
-    let incomeExpenseSources
-
-    if (Array.isArray(value.incomeExpenseSources)) {
-      incomeExpenseSources = value.incomeExpenseSources.map(
-        incomeExpenseSource => IncomeExpenseSource.fromObject(incomeExpenseSource)
-      )
+    if (!Array.isArray(value.incomeExpenseSources)) {
+      throw new Error('Invalid value: missing array')
     }
 
-    return new IncomeExpenseSources(incomeExpenseSources)
+    return new IncomeExpenseSources(value.incomeExpenseSources.map(
+      incomeExpenseSource => IncomeExpenseSource.fromObject(incomeExpenseSource)
+    ))
   }
 
   static fromFormModel (monthlyIncome: MonthlyIncome): IncomeExpenseSources {
@@ -35,37 +33,50 @@ export class IncomeExpenseSources {
 
     const incomeExpenseSources = []
 
-    if (monthlyIncome.salarySource) {
+    if (monthlyIncome.salarySource.populated) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.salarySource))
     }
 
-    if (monthlyIncome.universalCreditSource) {
+    if (monthlyIncome.universalCreditSource.populated) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.universalCreditSource))
     }
 
-    if (monthlyIncome.jobseekerAllowanceIncomeSource) {
+    if (monthlyIncome.jobseekerAllowanceIncomeSource.populated) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.jobseekerAllowanceIncomeSource))
     }
 
-    if (monthlyIncome.jobseekerAllowanceContributionSource) {
+    if (monthlyIncome.jobseekerAllowanceContributionSource.populated) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.jobseekerAllowanceContributionSource))
     }
 
-    if (monthlyIncome.incomeSupportSource) {
+    if (monthlyIncome.incomeSupportSource.populated) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.incomeSupportSource))
     }
 
-    if (monthlyIncome.workingTaxCreditSource) {
+    if (monthlyIncome.workingTaxCreditSource.populated) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.workingTaxCreditSource))
     }
 
-    if (monthlyIncome.councilTaxSupportSource) {
+    if (monthlyIncome.childTaxCreditSource.populated) {
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.childTaxCreditSource))
+    }
+
+    if (monthlyIncome.childBenefitSource.populated) {
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.childBenefitSource))
+    }
+
+    if (monthlyIncome.councilTaxSupportSource.populated) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.councilTaxSupportSource))
     }
 
-    if (monthlyIncome.pensionSource) {
+    if (monthlyIncome.pensionSource.populated) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.pensionSource))
     }
+
+    monthlyIncome.otherSources
+      .filter(source => source.populated)
+      .map(source => IncomeExpenseSource.fromFormModel(source))
+      .forEach(source => incomeExpenseSources.push(source))
 
     return new IncomeExpenseSources(incomeExpenseSources)
   }

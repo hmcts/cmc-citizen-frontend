@@ -19,23 +19,21 @@
     <form method="post" novalidate class="income-expense-calculation">
       {{ csrfProtection(csrf) }}
 
-      <div class="form-group">
-        {{ incomeSource(form, name = 'salarySource', label = 'Income from your job', hint = 'Include wages, overtime, commission, bonuses') }}
-        {{ incomeSource(form, name = 'universalCreditSource', label = 'Universal Credit') }}
-        {{ incomeSource(form, name = 'jobseekerAllowanceIncomeSource', label = 'Jobseeker’s Allowance (income based)') }}
-        {{ incomeSource(form, name = 'jobseekerAllowanceContributionSource', label = 'Jobseeker’s Allowance (contribution based)') }}
-        {{ incomeSource(form, name = 'incomeSupportSource', label = 'Income Support') }}
-        {{ incomeSource(form, name = 'workingTaxCreditSource', label = 'Working Tax Credit') }}
-        {{ incomeSource(form, name = 'childTaxCreditSource', label = 'Child Tax Credit') }}
-        {{ incomeSource(form, name = 'childBenefitSource', label = 'Child Benefit') }}
-        {{ incomeSource(form, name = 'councilTaxSupportSource', label = 'Council Tax Support') }}
-        {{ incomeSource(form, name = 'pensionSource', label = 'Pension (paid to you)') }}
-        {{ incomeSources(form, name = 'otherSources', label = 'Other') }}
-      </div>
+      {{ incomeSource(form, name = 'salarySource', label = 'Income from your job', hint = 'Include wages, overtime, commission, bonuses') }}
+      {{ incomeSource(form, name = 'universalCreditSource', label = 'Universal Credit') }}
+      {{ incomeSource(form, name = 'jobseekerAllowanceIncomeSource', label = 'Jobseeker’s Allowance (income based)') }}
+      {{ incomeSource(form, name = 'jobseekerAllowanceContributionSource', label = 'Jobseeker’s Allowance (contribution based)') }}
+      {{ incomeSource(form, name = 'incomeSupportSource', label = 'Income Support') }}
+      {{ incomeSource(form, name = 'workingTaxCreditSource', label = 'Working Tax Credit') }}
+      {{ incomeSource(form, name = 'childTaxCreditSource', label = 'Child Tax Credit') }}
+      {{ incomeSource(form, name = 'childBenefitSource', label = 'Child Benefit') }}
+      {{ incomeSource(form, name = 'councilTaxSupportSource', label = 'Council Tax Support') }}
+      {{ incomeSource(form, name = 'pensionSource', label = 'Pension (paid to you)') }}
+      {{ incomeSources(form, name = 'otherSources', label = 'Other') }}
 
       {{ linkButton('Recalculate total monthly income', 'action[calculateMonthlyIncome]', 'button button-secondary calculate-montly-income-expense') }}
 
-      <p class="heading-small">
+      <p class="heading-small calculation-outcome-container">
         Total monthly income: £<span class="total-monthly-income-expense"> {{ totalMonthlyIncomeExpense | default('0.00') }} </span>
       </p>
 
@@ -61,20 +59,17 @@
 
   {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.model.anyOtherIncomePopulated)), label = label) %}
     {% for source in form.model.otherSources %}
-      {% if loop.index0 !== 0 %}
-        <hr />
-      {% endif %}
       <div class="other-income-expense-source">
         {{ incomeExpenseSource(form = form, name = name + '[' + loop.index0 + ']', amountLabel = 'Amount received', amountHint = hint, scheduleLabel = 'Received every', nameEditable = true) }}
         {% if form.model.otherSources.length > 1 %}
-          {{ linkButton(name = 'action[removeOtherIncomeSource][otherSources-' + loop.index0 + ']', label = 'Remove this income source', class = 'link-button') }}
+          {{ linkButton(name = 'action[removeOtherIncomeSource][otherSources.' + loop.index0 + ']', label = 'Remove this income source', class = 'link-button') }}
+        {% else %}
+          {{ linkButton(name = 'action[resetIncomeSource][' + name + '.0]', label = 'Reset this income source', class = 'link-button js-hidden') }}
         {% endif %}
       </div>
     {% endfor %}
 
-    <div>
-      {{ linkButton(name = 'action[addOtherIncomeSource]', label = 'Add another source of income', class = 'button button-secondary') }}
-    </div>
+    {{ linkButton(name = 'action[addOtherIncomeSource]', label = 'Add another source of income', class = 'button button-secondary') }}
   {% endcall %}
 {% endmacro %}
 
@@ -86,6 +81,5 @@
     <div class="panel panel-border-narrow expandable" id="{{ expandablePanelId }}">
       {{ caller() }}
     </div>
-    <br />
   </div>
 {% endmacro %}
