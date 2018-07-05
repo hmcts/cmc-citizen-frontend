@@ -1,4 +1,4 @@
-import { IncomeExpenseSchedule } from 'features/response/form/models/statement-of-means/incomeExpenseSchedule'
+import { ExpenseSchedule } from 'features/response/form/models/statement-of-means/ExpenseSchedule'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { IsDefined, IsIn } from 'class-validator'
 import { Fractions, IsNotBlank, Min } from '@hmcts/cmc-validators'
@@ -32,10 +32,10 @@ export class MonthlyIncomeSource {
   amount?: number
 
   @IsDefined({ message: withMessage(ValidationErrors.SCHEDULE_SELECT_AN_OPTION) })
-  @IsIn(IncomeExpenseSchedule.all(), { message: withMessage(ValidationErrors.SCHEDULE_SELECT_AN_OPTION) })
-  schedule?: IncomeExpenseSchedule
+  @IsIn(ExpenseSchedule.all(), { message: withMessage(ValidationErrors.SCHEDULE_SELECT_AN_OPTION) })
+  schedule?: ExpenseSchedule
 
-  constructor (name?: string, amount?: number, schedule?: IncomeExpenseSchedule) {
+  constructor (name?: string, amount?: number, schedule?: ExpenseSchedule) {
     this.name = name
     this.amount = amount
     this.schedule = schedule
@@ -49,7 +49,7 @@ export class MonthlyIncomeSource {
     return new MonthlyIncomeSource(
       name,
       toNumberOrUndefined(value.amount),
-      IncomeExpenseSchedule.of(value.schedule)
+      ExpenseSchedule.of(value.schedule)
     )
   }
 
