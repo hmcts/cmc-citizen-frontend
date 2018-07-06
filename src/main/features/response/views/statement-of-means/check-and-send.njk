@@ -159,7 +159,7 @@
 
 {% set expenses = draft.statementOfMeans.monthlyExpenses %}
 {% set otherExpenses = expenses.getPopulatedRowsOnly() %}
-{{ row('Monthly expenses', '', StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
+{{ row('Monthly expenses', '', StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), true, bold = true) }}
 {{ row('Mortgage', expenses.mortgage | numeral, '', false, bold = true) }}
 {{ row('Rent', expenses.rent | numeral, '', false, bold = true) }}
 {{ row('Council Tax', expenses.councilTax | numeral, '', false, bold = true) }}
