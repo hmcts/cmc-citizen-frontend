@@ -33,51 +33,52 @@ export class IncomeExpenseSources {
 
     const incomeExpenseSources = []
 
-    if (monthlyIncome.salarySource.populated) {
+    if (monthlyIncome.salarySource && monthlyIncome.salarySource.populated) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.salarySource))
     }
 
-    if (monthlyIncome.universalCreditSource.populated) {
+    if (monthlyIncome.universalCreditSource && monthlyIncome.universalCreditSource.populated) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.universalCreditSource))
     }
 
-    if (monthlyIncome.jobseekerAllowanceIncomeSource.populated) {
+    if (monthlyIncome.jobseekerAllowanceIncomeSource && monthlyIncome.jobseekerAllowanceIncomeSource.populated) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.jobseekerAllowanceIncomeSource))
     }
 
-    if (monthlyIncome.jobseekerAllowanceContributionSource.populated) {
+    if (monthlyIncome.jobseekerAllowanceContributionSource && monthlyIncome.jobseekerAllowanceContributionSource.populated) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.jobseekerAllowanceContributionSource))
     }
 
-    if (monthlyIncome.incomeSupportSource.populated) {
+    if (monthlyIncome.incomeSupportSource && monthlyIncome.incomeSupportSource.populated) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.incomeSupportSource))
     }
 
-    if (monthlyIncome.workingTaxCreditSource.populated) {
+    if (monthlyIncome.workingTaxCreditSource && monthlyIncome.workingTaxCreditSource.populated) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.workingTaxCreditSource))
     }
 
-    if (monthlyIncome.childTaxCreditSource.populated) {
+    if (monthlyIncome.childTaxCreditSource && monthlyIncome.childTaxCreditSource.populated) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.childTaxCreditSource))
     }
 
-    if (monthlyIncome.childBenefitSource.populated) {
+    if (monthlyIncome.childBenefitSource && monthlyIncome.childBenefitSource.populated) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.childBenefitSource))
     }
 
-    if (monthlyIncome.councilTaxSupportSource.populated) {
+    if (monthlyIncome.councilTaxSupportSource && monthlyIncome.councilTaxSupportSource.populated) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.councilTaxSupportSource))
     }
 
-    if (monthlyIncome.pensionSource.populated) {
+    if (monthlyIncome.pensionSource && monthlyIncome.pensionSource.populated) {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.pensionSource))
     }
 
-    monthlyIncome.otherSources
-      .filter(source => source.populated)
-      .map(source => IncomeExpenseSource.fromFormModel(source))
-      .forEach(source => incomeExpenseSources.push(source))
-
+    if (monthlyIncome.anyOtherIncomePopulated) {
+      monthlyIncome.otherSources
+        .filter(source => source.populated)
+        .map(source => IncomeExpenseSource.fromFormModel(source))
+        .forEach(source => incomeExpenseSources.push(source))
+    }
     return new IncomeExpenseSources(incomeExpenseSources)
   }
 }
