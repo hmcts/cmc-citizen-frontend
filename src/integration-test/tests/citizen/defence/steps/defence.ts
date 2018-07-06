@@ -198,7 +198,7 @@ export class DefenceSteps {
     defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplaination(
       100,
       { day: '1', month: '1', year: '1990' },
-      defence.claimAmountIsTooMuch.explanation
+      'I will not pay that much!'
     )
 
     defendantSteps.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()

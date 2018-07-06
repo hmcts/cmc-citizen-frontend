@@ -39,9 +39,9 @@ Scenario('I can complete the journey when I fully reject the claim as I have alr
 Scenario('I can fill out forms for I admit part of the claim @citizen', function* (I: I) {
   const claimantEmail: string = yield I.createCitizenUser()
   const defendantEmail: string = yield I.createCitizenUser()
+  const claimModel: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
 
-  const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
-  const claimRef: string = yield I.createClaim(claimData, claimantEmail)
+  const claimRef: string = yield I.createClaim(claimModel, claimantEmail)
 
   yield helperSteps.enterPinNumber(claimRef, claimantEmail)
   yield helperSteps.finishResponse(claimRef, defendantEmail, PartyType.INDIVIDUAL, DefenceType.PART_ADMISSION)
