@@ -196,15 +196,15 @@ describe('StatementOfMeansTask', () => {
             responseDraft.statementOfMeans.monthlyIncome = new MonthlyIncome(
               true, new MonthlyIncomeSource(SourceNames.SALARY, 100, ExpenseSchedule.MONTH),
               undefined, new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, undefined, undefined),
-              true, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, undefined, undefined),
-              true, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, undefined, undefined),
-              true, new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, undefined, undefined),
-              true, new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, undefined, undefined),
-              true, new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, undefined, undefined),
-              true, new MonthlyIncomeSource(SourceNames.CHILD_BENEFIT, undefined, undefined),
-              true, new MonthlyIncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, undefined, undefined),
-              true, new MonthlyIncomeSource(SourceNames.PENSION, undefined, undefined),
-              true, []
+              undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, undefined, undefined),
+              undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, undefined, undefined),
+              undefined, new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, undefined, undefined),
+              undefined, new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, undefined, undefined),
+              undefined, new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, undefined, undefined),
+              undefined, new MonthlyIncomeSource(SourceNames.CHILD_BENEFIT, undefined, undefined),
+              undefined, new MonthlyIncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, undefined, undefined),
+              undefined, new MonthlyIncomeSource(SourceNames.PENSION, undefined, undefined),
+              undefined, []
             )
 
             expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true

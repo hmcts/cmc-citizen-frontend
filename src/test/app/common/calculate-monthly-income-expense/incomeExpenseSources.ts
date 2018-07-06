@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/incomeExpenseSources'
 import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
 import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
-import { ExpenseSchedule as IncomeExpenseScheduleFormModel } from 'response/form/models/statement-of-means/expenseSchedule'
+import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
@@ -59,16 +59,16 @@ describe('IncomeExpenseSources', () => {
   describe('fromFormModel', () => {
     it('should return a new instance initialised with set fields from object parameter provided', () => {
       const monthlyIncome: MonthlyIncome = new MonthlyIncome(
-        undefined, new MonthlyIncomeSource(SourceNames.SALARY, 100, IncomeExpenseScheduleFormModel.MONTH),
-        undefined, new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, 200, IncomeExpenseScheduleFormModel.MONTH),
-        undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, 300, IncomeExpenseScheduleFormModel.TWO_WEEKS),
-        undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, 400, IncomeExpenseScheduleFormModel.MONTH),
-        undefined, new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, 500, IncomeExpenseScheduleFormModel.MONTH),
-        undefined, new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, 600, IncomeExpenseScheduleFormModel.TWO_WEEKS),
-        undefined, new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, 700, IncomeExpenseScheduleFormModel.MONTH),
-        undefined, new MonthlyIncomeSource(SourceNames.CHILD_BENEFIT, 800, IncomeExpenseScheduleFormModel.MONTH),
-        undefined, new MonthlyIncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, 900, IncomeExpenseScheduleFormModel.TWO_WEEKS),
-        undefined, new MonthlyIncomeSource(SourceNames.PENSION, 100, IncomeExpenseScheduleFormModel.TWO_WEEKS)
+        undefined, new MonthlyIncomeSource(SourceNames.SALARY, 100, ExpenseSchedule.MONTH),
+        undefined, new MonthlyIncomeSource(SourceNames.UNIVERSAL_CREDIT, 200, ExpenseSchedule.MONTH),
+        undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, 300, ExpenseSchedule.TWO_WEEKS),
+        undefined, new MonthlyIncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, 400, ExpenseSchedule.MONTH),
+        undefined, new MonthlyIncomeSource(SourceNames.INCOME_SUPPORT, 500, ExpenseSchedule.MONTH),
+        undefined, new MonthlyIncomeSource(SourceNames.WORKING_TAX_CREDIT, 600, ExpenseSchedule.TWO_WEEKS),
+        undefined, new MonthlyIncomeSource(SourceNames.CHILD_TAX_CREDIT, 700, ExpenseSchedule.MONTH),
+        undefined, new MonthlyIncomeSource(SourceNames.CHILD_BENEFIT, 800, ExpenseSchedule.MONTH),
+        undefined, new MonthlyIncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, 900, ExpenseSchedule.TWO_WEEKS),
+        undefined, new MonthlyIncomeSource(SourceNames.PENSION, 100, ExpenseSchedule.TWO_WEEKS)
       )
 
       expect(IncomeExpenseSources.fromFormModel(monthlyIncome)).to.deep.equal(

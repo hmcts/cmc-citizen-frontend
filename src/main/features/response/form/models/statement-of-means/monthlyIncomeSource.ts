@@ -1,4 +1,4 @@
-import { ExpenseSchedule } from 'features/response/form/models/statement-of-means/ExpenseSchedule'
+import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { IsDefined, IsIn } from 'class-validator'
 import { Fractions, IsNotBlank, Min } from '@hmcts/cmc-validators'
