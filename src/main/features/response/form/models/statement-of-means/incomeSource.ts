@@ -15,12 +15,12 @@ export class ValidationErrors {
 
 function withMessage (buildErrorFn: (name: string) => string) {
   return (args: any): string => {
-    const object: MonthlyIncomeSource = args.object
+    const object: IncomeSource = args.object
     return buildErrorFn(object.name)
   }
 }
 
-export class MonthlyIncomeSource {
+export class IncomeSource {
 
   @IsDefined({ message: ValidationErrors.NAME_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.NAME_REQUIRED })
@@ -41,19 +41,19 @@ export class MonthlyIncomeSource {
     this.schedule = schedule
   }
 
-  static fromObject (name: string, value?: any): MonthlyIncomeSource {
+  static fromObject (name: string, value?: any): IncomeSource {
     if (!value) {
       return value
     }
 
-    return new MonthlyIncomeSource(
+    return new IncomeSource(
       name,
       toNumberOrUndefined(value.amount),
       ExpenseSchedule.of(value.schedule)
     )
   }
 
-  deserialize (input?: any): MonthlyIncomeSource {
+  deserialize (input?: any): IncomeSource {
     if (input) {
       this.name = input.name
       this.amount = input.amount
