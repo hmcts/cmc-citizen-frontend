@@ -57,12 +57,8 @@ new DashboardFeature().enableFor(app)
 new ClaimIssueFeature().enableFor(app)
 new DefendantFirstContactFeature().enableFor(app)
 new DefendantResponseFeature().enableFor(app)
-if (toBoolean(config.get<boolean>('featureToggles.countyCourtJudgment'))) {
-  new CCJFeature().enableFor(app)
-}
-if (toBoolean(config.get<boolean>('featureToggles.offer'))) {
-  new OfferFeature().enableFor(app)
-}
+new CCJFeature().enableFor(app)
+new OfferFeature().enableFor(app)
 
 if (toBoolean(config.get<boolean>('featureToggles.testingSupport'))) {
   new TestingSupportFeature().enableFor(app)
