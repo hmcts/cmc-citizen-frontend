@@ -121,38 +121,37 @@
 {% set income = draft.statementOfMeans.monthlyIncome %}
 {{ row('Monthly income', '', StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
 {% if income.salarySource.populated %}
-{{ row('Take home pay', income.salarySource | numeral, '', false, bold = true) }}
+{{ row('Take home pay', income.salarySource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 {% if income.universalCreditSource.populated %}
-{{ row('Universal Credit', income.universalCreditSource | numeral, '', false, bold = true) }}
+{{ row('Universal Credit', income.universalCreditSource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 {% if income.jobseekerAllowanceIncomeSource.populated %}
-{{ row('Jobseeker’s Allowance (income based)', income.jobseekerAllowanceIncomeSource | numeral, '', false, bold = true) }}
+{{ row('Jobseeker’s Allowance (income based)', income.jobseekerAllowanceIncomeSource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 {% if income.jobseekerAllowanceContributionSource.populated %}
-{{ row('Jobseeker’s Allowance (contribution based)', income.jobseekerAllowanceContributionSource | numeral, '', false, bold = true) }}
+{{ row('Jobseeker’s Allowance (contribution based)', income.jobseekerAllowanceContributionSource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 {% if income.incomeSupportSource.populated %}
-{{ row('Income Support', income.incomeSupportSource | numeral, '', false, bold = true) }}
+{{ row('Income Support', income.incomeSupportSource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 {% if income.workingTaxCreditSource.populated %}
-{{ row('Working Tax Credit', income.workingTaxCreditSource | numeral, '', false, bold = true) }}
+{{ row('Working Tax Credit', income.workingTaxCreditSource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 {% if income.childTaxCreditSource.populated %}
-{{ row('Child Tax Credit', income.childTaxCreditSource | numeral, '', false, bold = true) }}
+{{ row('Child Tax Credit', income.childTaxCreditSource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 {% if income.childBenefitSource.populated %}
-{{ row('Child Benefit', income.childBenefitSource | numeral, '', false, bold = true) }}
+{{ row('Child Benefit', income.childBenefitSource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 {% if income.councilTaxSupportSource.populated %}
-{{ row('Council Tax Support', income.councilTaxSupportSource | numeral, '', false, bold = true) }}
+{{ row('Council Tax Support', income.councilTaxSupportSource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 {% if income.pensionSource.populated %}
-{{ row('Pension (paid to you)', income.pensionSource | numeral, '', false, bold = true) }}
+{{ row('Pension (paid to you)', income.pensionSource.amount | numeral, '', false, bold = true) }}
 {% endif %}
-{% set otherIncome = income.anyOtherIncomePopulated() %}
 
-{% if income.anyOtherIncomePopulated() %}
+{% if income.anyOtherIncomePopulated %}
 {% for source in income.otherSources %}
   {{ row(source.name, name.amount | numeral, '', loop.index0 === indexOfLastRow ) }}
 {% endfor %}
