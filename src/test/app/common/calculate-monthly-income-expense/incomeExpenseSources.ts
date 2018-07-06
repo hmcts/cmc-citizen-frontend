@@ -29,16 +29,16 @@ describe('IncomeExpenseSources', () => {
       expect(IncomeExpenseSources.fromObject()).to.deep.equal(undefined)
     })
 
-    it('should return a new instance initialised with defaults when an empty object parameter is provided', () => {
-      expect(IncomeExpenseSources.fromObject({})).to.deep.equal(new IncomeExpenseSources(undefined))
+    it('should throw invalid array error when an empty object parameter is provided', () => {
+      expect(() => IncomeExpenseSources.fromObject({})).to.throw(Error, 'Invalid value: missing array')
     })
 
     it('should return a new instance initialised with defaults when an empty incomeExpenseSources array is provided', () => {
       expect(IncomeExpenseSources.fromObject({ incomeExpenseSources: [] })).to.deep.equal(new IncomeExpenseSources([]))
     })
 
-    it('should return a new instance initialised with defaults when incomeExpenseSources provided is not an array', () => {
-      expect(IncomeExpenseSources.fromObject({ incomeExpenseSources: 'not an array' })).to.deep.equal(new IncomeExpenseSources(undefined))
+    it('should throw invalid array error when incomeExpenseSources provided is not an array', () => {
+      expect(() => IncomeExpenseSources.fromObject({ incomeExpenseSources: 'not an array' })).to.throw(Error, 'Invalid value: missing array')
     })
 
     it('should return a new instance initialised with set fields from object parameter provided', () => {
@@ -97,6 +97,14 @@ describe('IncomeExpenseSources', () => {
             {
               'amount': 600,
               'schedule': IncomeExpenseSchedule.TWO_WEEKS
+            },
+            {
+              'amount': 700,
+              'schedule': IncomeExpenseSchedule.MONTH
+            },
+            {
+              'amount': 800,
+              'schedule': IncomeExpenseSchedule.MONTH
             },
             {
               'amount': 900,
