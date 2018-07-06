@@ -270,7 +270,7 @@ export class DefenceSteps {
         this.admitPartOfTheClaimAlreadyPaid(defence)
         defendantSteps.selectCheckAndSubmitYourDefence()
         I.see('How much money have you paid?')
-        break
+        return
       default:
         throw new Error('Unknown DefenceType')
     }
