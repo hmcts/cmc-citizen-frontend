@@ -4,8 +4,6 @@ import { app } from 'main/app'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { Paths } from 'paths'
 import * as HttpStatus from 'http-status-codes'
-import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
-import { expectValidationError } from '../app/forms/models/validationUtils'
 
 describe('Monthly Income Expenses Calculation', () => {
   attachDefaultHooks(app)
@@ -44,7 +42,6 @@ describe('Monthly Income Expenses Calculation', () => {
       await request(app)
         .post(Paths.totalIncomeOrExpensesCalculation.uri)
         .send(incomeExpenseSources)
-        .expect(res => expectValidationError(res.body, GlobalValidationErrors.SELECT_AN_OPTION))
         .expect(HttpStatus.UNPROCESSABLE_ENTITY)
     })
 
@@ -60,7 +57,6 @@ describe('Monthly Income Expenses Calculation', () => {
       await request(app)
         .post(Paths.totalIncomeOrExpensesCalculation.uri)
         .send(incomeExpenseSources)
-        .expect(res => expectValidationError(res.body, GlobalValidationErrors.SELECT_AN_OPTION))
         .expect(HttpStatus.UNPROCESSABLE_ENTITY)
     })
 
@@ -77,9 +73,6 @@ describe('Monthly Income Expenses Calculation', () => {
       await request(app)
         .post(Paths.totalIncomeOrExpensesCalculation.uri)
         .send(incomeExpenseSources)
-        .expect(res => expectValidationError(res.body,
-          GlobalValidationErrors.NUMBER_REQUIRED &&
-          GlobalValidationErrors.AMOUNT_INVALID_DECIMALS))
         .expect(HttpStatus.UNPROCESSABLE_ENTITY)
     })
 
@@ -95,9 +88,6 @@ describe('Monthly Income Expenses Calculation', () => {
       await request(app)
         .post(Paths.totalIncomeOrExpensesCalculation.uri)
         .send(incomeExpenseSources)
-        .expect(res => expectValidationError(res.body,
-          GlobalValidationErrors.NUMBER_REQUIRED &&
-          GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED))
         .expect(HttpStatus.UNPROCESSABLE_ENTITY)
     })
 
@@ -109,7 +99,6 @@ describe('Monthly Income Expenses Calculation', () => {
       await request(app)
         .post(Paths.totalIncomeOrExpensesCalculation.uri)
         .send(incomeExpenseSources)
-        .expect(res => expectValidationError(res.body, 'incomeExpenseSources must be an array'))
         .expect(HttpStatus.UNPROCESSABLE_ENTITY)
     })
   })

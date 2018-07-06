@@ -8,19 +8,21 @@ import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/in
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .post(Paths.totalIncomeOrExpensesCalculation.uri, (req, res) => {
+  .post(Paths.totalIncomeOrExpensesCalculation.uri, (req: express.Request, res: express.Response) => {
+    try {
+      const incomeExpenseSources: IncomeExpenseSources = IncomeExpenseSources.fromObject(req.body)
 
-    const incomeExpenseSources: IncomeExpenseSources = IncomeExpenseSources.fromObject(req.body)
+      const validator: Validator = new Validator()
+      const error: ValidationError[] = validator.validateSync(incomeExpenseSources)
+      if (error.length > 0) {
+        return res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(error)
+      }
 
-    const validator: Validator = new Validator()
-    let error: ValidationError[] = validator.validateSync(incomeExpenseSources)
-
-    if (error.length > 0) {
-      return res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(error)
+      const totalMonthlyIncomeExpense = CalculateMonthlyIncomeExpense.calculateTotalAmount(incomeExpenseSources.incomeExpenseSources)
+      return res.status(HttpStatus.OK).json({
+        totalMonthlyIncomeExpense: totalMonthlyIncomeExpense
+      })
+    } catch (err) {
+      return res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(err)
     }
-
-    const totalMonthlyIncomeExpense = CalculateMonthlyIncomeExpense.calculateTotalAmount(incomeExpenseSources.incomeExpenseSources)
-    return res.status(HttpStatus.OK).json({
-      totalMonthlyIncomeExpense: totalMonthlyIncomeExpense
-    })
   })
