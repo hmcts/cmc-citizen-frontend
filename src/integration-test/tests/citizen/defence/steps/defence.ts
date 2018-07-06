@@ -269,8 +269,7 @@ export class DefenceSteps {
       case DefenceType.PART_ADMISSION:
         this.admitPartOfTheClaimAlreadyPaid(defence)
         defendantSteps.selectCheckAndSubmitYourDefence()
-        I.see('How much have you paid?')
-        I.see(defence.claimAmountIsTooMuch.explanation)
+        I.see('How much money have you paid?')
         break
       default:
         throw new Error('Unknown DefenceType')
