@@ -144,7 +144,7 @@ export class DefenceSteps {
   }
 
   enterEvidence (description: string, comment: string): void {
-    I.see('Add your timeline of events')
+    I.see('List your evidence')
     defendantEvidencePage.enterEvidenceRow('CONTRACTS_AND_AGREEMENTS', description, comment)
   }
 
