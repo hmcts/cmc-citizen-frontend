@@ -7,7 +7,6 @@ import { AgeGroupType, Child } from 'claims/models/response/statement-of-means/d
 import { ResidenceType } from 'claims/models/response/statement-of-means/residence'
 import { Moment } from 'moment'
 import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
-import { StatementOfMeans as StatementOfMeansDraft } from 'response/draft/statementOfMeans'
 import { Response } from 'claims/models/response'
 import { ResponseType } from 'claims/models/response/responseType'
 import { FullAdmissionResponse } from 'claims/models/response/fullDefenceAdmission'
@@ -42,6 +41,7 @@ import { convertEvidence } from 'claims/converters/evidenceConverter'
 import { MomentFactory } from 'shared/momentFactory'
 import { Income, IncomeType } from 'claims/models/response/statement-of-means/income'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
+import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
 
 export class ResponseModelConverter {
 
@@ -154,7 +154,7 @@ export class ResponseModelConverter {
         }
       }) : undefined,
       reason: draft.statementOfMeans.explanation.text,
-      incomes: this.convertIncomes(draft)
+      incomes: this.convertIncomes(draft.statementOfMeans.monthlyIncome)
     }
   }
 
@@ -265,93 +265,93 @@ export class ResponseModelConverter {
     return children
   }
 
-  private static convertIncomes (statementOfMeans: StatementOfMeansDraft): Income[] {
-    if (!statementOfMeans.monthlyIncome) {
+  private static convertIncomes (income: MonthlyIncome): Income[] {
+    if (!income) {
       return undefined
     }
     const incomes: Income[] = []
-    if (statementOfMeans.monthlyIncome.salarySource.populated) {
+    if (income.salarySource && income.salarySource.populated) {
       incomes.push({
         type: IncomeType.JOB,
-        frequency: statementOfMeans.monthlyIncome.salarySource.schedule.value as PaymentFrequency,
-        amountReceived: statementOfMeans.monthlyIncome.salarySource.amount,
+        frequency: income.salarySource.schedule.value as PaymentFrequency,
+        amountReceived: income.salarySource.amount,
         otherSource: undefined
       })
     }
-    if (statementOfMeans.monthlyIncome.universalCreditSource.populated) {
+    if (income.universalCreditSource && income.universalCreditSource.populated) {
       incomes.push({
         type: IncomeType.UNIVERSAL_CREDIT,
-        frequency: statementOfMeans.monthlyIncome.universalCreditSource.schedule.value as PaymentFrequency,
-        amountReceived: statementOfMeans.monthlyIncome.universalCreditSource.amount,
+        frequency: income.universalCreditSource.schedule.value as PaymentFrequency,
+        amountReceived: income.universalCreditSource.amount,
         otherSource: undefined
       })
     }
-    if (statementOfMeans.monthlyIncome.jobseekerAllowanceIncomeSource.populated) {
+    if (income.jobseekerAllowanceIncomeSource && income.jobseekerAllowanceIncomeSource.populated) {
       incomes.push({
         type: IncomeType.JOB_SEEKERS_ALLOWANCE_INCOME_BASES,
-        frequency: statementOfMeans.monthlyIncome.jobseekerAllowanceIncomeSource.schedule.value as PaymentFrequency,
-        amountReceived: statementOfMeans.monthlyIncome.jobseekerAllowanceIncomeSource.amount,
+        frequency: income.jobseekerAllowanceIncomeSource.schedule.value as PaymentFrequency,
+        amountReceived: income.jobseekerAllowanceIncomeSource.amount,
         otherSource: undefined
       })
     }
-    if (statementOfMeans.monthlyIncome.jobseekerAllowanceContributionSource.populated) {
+    if (income.jobseekerAllowanceContributionSource && income.jobseekerAllowanceContributionSource.populated) {
       incomes.push({
         type: IncomeType.JOB_SEEKERS_ALLOWANCE_CONTRIBUTION_BASED,
-        frequency: statementOfMeans.monthlyIncome.jobseekerAllowanceContributionSource.schedule.value as PaymentFrequency,
-        amountReceived: statementOfMeans.monthlyIncome.jobseekerAllowanceContributionSource.amount,
+        frequency: income.jobseekerAllowanceContributionSource.schedule.value as PaymentFrequency,
+        amountReceived: income.jobseekerAllowanceContributionSource.amount,
         otherSource: undefined
       })
     }
-    if (statementOfMeans.monthlyIncome.incomeSupportSource.populated) {
+    if (income.incomeSupportSource && income.incomeSupportSource.populated) {
       incomes.push({
         type: IncomeType.INCOME_SUPPORT,
-        frequency: statementOfMeans.monthlyIncome.incomeSupportSource.schedule.value as PaymentFrequency,
-        amountReceived: statementOfMeans.monthlyIncome.incomeSupportSource.amount,
+        frequency: income.incomeSupportSource.schedule.value as PaymentFrequency,
+        amountReceived: income.incomeSupportSource.amount,
         otherSource: undefined
       })
     }
-    if (statementOfMeans.monthlyIncome.workingTaxCreditSource.populated) {
+    if (income.workingTaxCreditSource && income.workingTaxCreditSource.populated) {
       incomes.push({
         type: IncomeType.WORKING_TAX_CREDIT,
-        frequency: statementOfMeans.monthlyIncome.workingTaxCreditSource.schedule.value as PaymentFrequency,
-        amountReceived: statementOfMeans.monthlyIncome.workingTaxCreditSource.amount,
+        frequency: income.workingTaxCreditSource.schedule.value as PaymentFrequency,
+        amountReceived: income.workingTaxCreditSource.amount,
         otherSource: undefined
       })
     }
-    if (statementOfMeans.monthlyIncome.childTaxCreditSource.populated) {
+    if (income.childTaxCreditSource && income.childTaxCreditSource.populated) {
       incomes.push({
         type: IncomeType.CHILD_TAX_CREDIT,
-        frequency: statementOfMeans.monthlyIncome.childTaxCreditSource.schedule.value as PaymentFrequency,
-        amountReceived: statementOfMeans.monthlyIncome.childTaxCreditSource.amount,
+        frequency: income.childTaxCreditSource.schedule.value as PaymentFrequency,
+        amountReceived: income.childTaxCreditSource.amount,
         otherSource: undefined
       })
     }
-    if (statementOfMeans.monthlyIncome.childBenefitSource.populated) {
+    if (income.childBenefitSource && income.childBenefitSource.populated) {
       incomes.push({
         type: IncomeType.CHILD_BENEFIT,
-        frequency: statementOfMeans.monthlyIncome.childBenefitSource.schedule.value as PaymentFrequency,
-        amountReceived: statementOfMeans.monthlyIncome.childBenefitSource.amount,
+        frequency: income.childBenefitSource.schedule.value as PaymentFrequency,
+        amountReceived: income.childBenefitSource.amount,
         otherSource: undefined
       })
     }
-    if (statementOfMeans.monthlyIncome.councilTaxSupportSource.populated) {
+    if (income.councilTaxSupportSource && income.councilTaxSupportSource.populated) {
       incomes.push({
         type: IncomeType.COUNCIL_TAX_SUPPORT,
-        frequency: statementOfMeans.monthlyIncome.councilTaxSupportSource.schedule.value as PaymentFrequency,
-        amountReceived: statementOfMeans.monthlyIncome.councilTaxSupportSource.amount,
+        frequency: income.councilTaxSupportSource.schedule.value as PaymentFrequency,
+        amountReceived: income.councilTaxSupportSource.amount,
         otherSource: undefined
       })
     }
-    if (statementOfMeans.monthlyIncome.pensionSource.populated) {
+    if (income.pensionSource && income.pensionSource.populated) {
       incomes.push({
         type: IncomeType.PENSION,
-        frequency: statementOfMeans.monthlyIncome.pensionSource.schedule.value as PaymentFrequency,
-        amountReceived: statementOfMeans.monthlyIncome.pensionSource.amount,
+        frequency: income.pensionSource.schedule.value as PaymentFrequency,
+        amountReceived: income.pensionSource.amount,
         otherSource: undefined
       })
     }
-    if (statementOfMeans.monthlyIncome.anyOtherIncomePopulated) {
-      statementOfMeans.monthlyIncome.otherSources.map(source => {
+    if (income.otherSources && income.anyOtherIncomePopulated) {
+      income.otherSources.map(source => {
         incomes.push({
           type: IncomeType.OTHER,
           frequency: source.schedule.value as PaymentFrequency,
