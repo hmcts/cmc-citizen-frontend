@@ -82,10 +82,8 @@
   "featureToggles": {
     "clusterMode": false,
     "testingSupport": false,
-    "countyCourtJudgment": false,
     "fullAdmission": false,
     "partialAdmission": false,
-    "offer": false,
     "statementOfMeans": false,
     "returnErrorToUser": false,
     "mockPay": false
