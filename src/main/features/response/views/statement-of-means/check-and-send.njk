@@ -153,7 +153,7 @@
 
 {% if income.anyOtherIncomePopulated %}
 {% for source in income.otherSources %}
-  {{ row(source.name, name.amount | numeral, '', loop.index0 === indexOfLastRow ) }}
+  {{ row(source.name, name.amount | numeral, '', loop.index0 === indexOfLastRow, bold = true ) }}
 {% endfor %}
 {% endif %}
 
