@@ -57,7 +57,7 @@ export class IncomeSource {
     if (input) {
       this.name = input.name
       this.amount = input.amount
-      this.schedule = input.schedule
+      this.schedule = ExpenseSchedule.of(input.schedule ? input.schedule.value : undefined)
     }
 
     return this

@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { ExpenseSchedule } from 'features/response/form/models/statement-of-means/expenseSchedule'
+import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
 
 describe('ExpenseSchedule', () => {
 
