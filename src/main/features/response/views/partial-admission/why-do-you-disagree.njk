@@ -10,7 +10,7 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        <p>{{ t('The total amount claimed is {{ totalAmount }}. This includes the claim fee and any interest.',
+        <p>{{ t('The total amount claimed is {{ totalAmount }}. This includes the claim fee.',
                   { totalAmount: totalAmount | numeral }) }}</p>
 
         {{ textArea(name = 'text', form = form, rows = 10) }}
