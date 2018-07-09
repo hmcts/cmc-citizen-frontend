@@ -13,7 +13,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
 import { RoutablePath } from 'shared/router/routablePath'
-import { Defence } from 'response/form/models/defence'
+import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
 
 function isRequestAllowed (res: express.Response): boolean {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -29,7 +29,7 @@ function accessDeniedCallback (req: express.Request, res: express.Response): voi
 const guardRequestHandler: express.RequestHandler = GuardFactory.create(isRequestAllowed, accessDeniedCallback)
 const page: RoutablePath = PartAdmissionPaths.whyDoYouDisagreePage
 
-function renderView (form: Form<Defence>, res: express.Response) {
+function renderView (form: Form<WhyDoYouDisagree>, res: express.Response) {
   res.render(page.associatedView, {
     form: form,
     totalAmount: res.locals.claim.totalAmountTillToday
@@ -48,9 +48,9 @@ export default express.Router()
   .post(
     page.uri,
     guardRequestHandler,
-    FormValidator.requestHandler(Defence, Defence.fromObject),
+    FormValidator.requestHandler(WhyDoYouDisagree, WhyDoYouDisagree.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<Defence> = req.body
+      const form: Form<WhyDoYouDisagree> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)
