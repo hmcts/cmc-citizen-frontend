@@ -6,7 +6,7 @@
       }
 
       &:not(:last-of-type) {
-        border-bottom: 1px solid #bfc1c3;
+        border-bottom: 1px solid $grey-2;
 
         .link-button {
           margin-bottom: 15px;
@@ -14,7 +14,8 @@
       }
     }
 
-    .link-button, .button-secondary {
+    .link-button,
+    .button-secondary {
       margin-top: 15px;
     }
   }
