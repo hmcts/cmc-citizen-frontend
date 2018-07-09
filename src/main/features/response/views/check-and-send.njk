@@ -100,15 +100,16 @@
             label = 'How much money have you paid?',
             value = draft.partialAdmission.howMuchHaveYouPaid.amount | numeral,
             changeLink = PartAdmissionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
+            bold = true,
+            bottomBorder = false
           )
         }}
         {{
            row(
              label = 'When did you pay this amount?',
              value = draft.partialAdmission.howMuchHaveYouPaid.date.toMoment() | date,
-             changeLink = PartAdmissionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
-             bold = true
+             bold = true,
+             bottomBorder = false
            )
         }}
 
@@ -116,7 +117,6 @@
            row(
              label = 'How did you pay the amount claimed?',
              value = draft.partialAdmission.howMuchHaveYouPaid.text,
-             changeLink = PartAdmissionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
              bold = true
            )
         }}
