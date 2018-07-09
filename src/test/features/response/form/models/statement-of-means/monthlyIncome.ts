@@ -3,7 +3,7 @@ import { Validator } from 'class-validator'
 
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
-import { MonthlyIncome, SourceNames } from 'response/form/models/statement-of-means/MonthlyIncome'
+import { MonthlyIncome, SourceNames } from 'response/form/models/statement-of-means/monthlyIncome'
 import { IncomeSource, ValidationErrors as MonthlyIncomeSourceValidationErrors } from 'response/form/models/statement-of-means/incomeSource'
 
 function getSampleMonthtlyIncomeObject (options?: object) {
