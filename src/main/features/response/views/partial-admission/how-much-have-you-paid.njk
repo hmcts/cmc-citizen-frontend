@@ -19,7 +19,7 @@
       {{ poundInput(label = 'How much have you paid?', name = 'amount', form = form, bold = true) }}
 
       <h4 class="heading-small">{{ t('When did you pay this amount?') }}</h4>
-      {{ dateInput(name = 'date', form = form) }}
+      {{ dateInput('date', form, hint = t('For example, {{ pastDate }}', { pastDate: pastDate | inputDate })) }}
 
       {{ textArea(label = 'How did you pay this amount?', name = 'text', form = form, bold = true) }}
 

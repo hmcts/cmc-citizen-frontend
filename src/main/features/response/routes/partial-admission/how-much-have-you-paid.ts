@@ -13,13 +13,18 @@ import { Draft } from '@hmcts/draft-store-client'
 import { RoutablePath } from 'shared/router/routablePath'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { PartialAdmissionGuard } from 'response/guards/partialAdmissionGuard'
+import { MomentFactory } from 'shared/momentFactory'
+import { Moment } from 'moment'
 
 const page: RoutablePath = PartAdmissionPaths.howMuchHaveYouPaidPage
 
 function renderView (form: Form<HowMuchHaveYouPaid>, res: express.Response) {
+  const pastDate: Moment = MomentFactory.currentDate().subtract(3, 'months')
+
   res.render(page.associatedView, {
     form: form,
-    totalAmount: res.locals.claim.totalAmountTillToday
+    totalAmount: res.locals.claim.totalAmountTillToday,
+    pastDate
   })
 }
 
