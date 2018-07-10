@@ -13,7 +13,6 @@ import * as toBoolean from 'to-boolean'
 
 import { NUMBER_FORMAT } from 'utils/numberFormatter'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
-import { RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { SignatureType } from 'common/signatureType'
 import { ResponseType } from 'response/form/models/responseType'
@@ -29,7 +28,7 @@ import { BankAccountType } from 'response/form/models/statement-of-means/bankAcc
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { Paths as AppPaths } from 'paths'
 import { Paths as DashboardPaths } from 'features/dashboard/paths'
-import { Paths as ResponsePaths } from 'features/response/paths'
+import { Paths as ResponsePaths, PartAdmissionPaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 import { InterestTypeOption } from 'claim/form/models/interestType'
@@ -37,6 +36,7 @@ import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { Service } from 'models/service'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestType } from 'claims/models/interestType'
+import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -100,7 +100,7 @@ export class Nunjucks {
 
     nunjucksEnv.addGlobal('featureToggles', this.convertPropertiesToBoolean(config.get('featureToggles')))
     nunjucksEnv.addGlobal('RejectAllOfClaimOption', RejectAllOfClaimOption)
-    nunjucksEnv.addGlobal('RejectPartOfClaimOption', RejectPartOfClaimOption)
+    nunjucksEnv.addGlobal('AlreadyPaid', AlreadyPaid)
     nunjucksEnv.addGlobal('DefendantPaymentType', DefendantPaymentType)
     nunjucksEnv.addGlobal('DefendantPaymentOption', DefendantPaymentOption)
     nunjucksEnv.addGlobal('PaymentType', PaymentType)
@@ -123,6 +123,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('AppPaths', AppPaths)
     nunjucksEnv.addGlobal('DashboardPaths', DashboardPaths)
     nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
+    nunjucksEnv.addGlobal('PartAdmissionPaths', PartAdmissionPaths)
     nunjucksEnv.addGlobal('HowMuchPaidClaimantOption', HowMuchPaidClaimantOption)
     nunjucksEnv.addGlobal('Service', Service)
     nunjucksEnv.addGlobal('cookieText', `GOV.UK uses cookies make the site simpler. <a href="${AppPaths.cookiesPage.uri}">Find out more about cookies</a>`)

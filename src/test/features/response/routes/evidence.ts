@@ -111,7 +111,7 @@ describe('Defendant response: evidence', () => {
         })
       })
 
-      describe('update row action', () => {
+      describe('submit form', () => {
 
         context('valid form should redirect to', () => {
 
@@ -131,6 +131,19 @@ describe('Defendant response: evidence', () => {
           it('taskListPage when it is FULL DEFENCE', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave(100)
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value, description: 'Bla bla' }] })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(Paths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          })
+
+          it('taskListPage when it is PART ADMISSION', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('response:partial-admission', { response: { type: ResponseType.PART_ADMISSION } })
             draftStoreServiceMock.resolveSave(100)
 
             await request(app)

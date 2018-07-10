@@ -39,6 +39,8 @@ import { EvidenceType } from 'forms/models/evidenceType'
 import { Eligibility } from 'eligibility/model/eligibility'
 import { ClaimType } from 'eligibility/model/claimType'
 import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
+import { AlreadyPaid } from 'response/form/models/alreadyPaid'
+import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
@@ -267,6 +269,17 @@ export const sampleFullAdmissionResponseDraftObj = {
   }
 }
 
+export const samplePartialAdmissionResponseDraftObj = {
+  ...commonResponsePartial,
+  response: {
+    type: ResponseType.PART_ADMISSION
+  },
+  partialAdmission: {
+    alreadyPaid: new AlreadyPaid().deserialize({ alreadyPaid: new AlreadyPaid(YesNoOption.YES) }),
+    howMuchHaveYouPaid: new HowMuchHaveYouPaid().deserialize({ amount: 100 })
+  }
+}
+
 const sampleCCJDraftObj = {
   defendant: {
     email: { address: 'a@wp.pl' },
@@ -324,6 +337,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       break
     case 'response:full-admission':
       documentDocument = { ...sampleFullAdmissionResponseDraftObj, ...draftOverride }
+      break
+    case 'response:partial-admission':
+      documentDocument = { ...samplePartialAdmissionResponseDraftObj, ...draftOverride }
       break
     case 'ccj':
       documentDocument = { ...sampleCCJDraftObj, ...draftOverride }
