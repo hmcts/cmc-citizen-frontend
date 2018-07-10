@@ -8,25 +8,12 @@ import { Form } from 'forms/form'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { ErrorHandling } from 'shared/errorHandling'
 import { User } from 'idam/user'
-import { GuardFactory } from 'response/guards/guardFactory'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
 import { RoutablePath } from 'shared/router/routablePath'
+import { PartialAdmissionGuard } from 'response/guards/partialAdmissionGuard'
 
-function isRequestAllowed (res: express.Response): boolean {
-  const draft: Draft<ResponseDraft> = res.locals.responseDraft
-
-  return draft.document.isResponsePartiallyAdmitted()
-}
-
-function accessDeniedCallback (req: express.Request, res: express.Response): void {
-  const claim: Claim = res.locals.claim
-  res.redirect(Paths.responseTypePage.evaluateUri({ externalId: claim.externalId }))
-}
-
-const guardRequestHandler: express.RequestHandler = GuardFactory.create(isRequestAllowed, accessDeniedCallback)
 const page: RoutablePath = PartAdmissionPaths.alreadyPaidPage
 
 function renderView (form: Form<AlreadyPaid>, res: express.Response) {
@@ -39,14 +26,14 @@ function renderView (form: Form<AlreadyPaid>, res: express.Response) {
 export default express.Router()
   .get(
     page.uri,
-    guardRequestHandler,
+    PartialAdmissionGuard.requestHandler(),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.partialAdmission.alreadyPaid), res)
     }))
   .post(
     page.uri,
-    guardRequestHandler,
+    PartialAdmissionGuard.requestHandler(),
     FormValidator.requestHandler(AlreadyPaid, AlreadyPaid.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<AlreadyPaid> = req.body
