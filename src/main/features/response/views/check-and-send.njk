@@ -30,18 +30,22 @@
 
     {{ tableStart('moneyOwed', 'Your response to the claim') }}
 
-    {{ row(label = 'Do you owe the money claimed?', value = t(draft.response.type.displayValue) | capitalize, changeLink = ResponsePaths.responseTypePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+    {{ row(
+        label = 'How do you respond to the claim?',
+        value = t(draft.response.type.displayValue) | capitalize,
+        changeLink = ResponsePaths.responseTypePage.evaluateUri({ externalId: claim.externalId }),
+        bold = true
+       )
+    }}
 
-    {% if draft.response.type === ResponseType.PART_ADMISSION %}
-      {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED %}
-        {% set rejectPartOption = 'I’ve paid what I believe I owe' %}
-      {% endif %}
-
-      {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH %}
-        {% set rejectPartOption = 'The claim amount is too much' %}
-      {% endif %}
-
-      {{ row(label = 'Why are you rejecting part of this claim?', value = t(rejectPartOption), changeLink = ResponsePaths.defenceRejectPartOfClaimPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+    {% if draft.isResponsePartiallyAdmitted() %}
+      {{ row(
+        label = 'Have you paid the claimant the amount you admit you owe?',
+        value = t(draft.partialAdmission.alreadyPaid.option.option) | capitalize,
+        changeLink = PartAdmissionPaths.alreadyPaidPage.evaluateUri({ externalId: claim.externalId }),
+        bold = true
+      )
+      }}
     {% endif %}
 
     {% if draft.response.type === ResponseType.DEFENCE %}
@@ -87,50 +91,69 @@
       {{ tableEnd() }}
     {% endif %}
 
-    {% if draft.response.type === ResponseType.PART_ADMISSION and featureToggles.partialAdmission %}
+    {% if draft.isResponsePartiallyAdmitted() %}
 
-      {{ tableStart('yourResponse', 'Your response') }}
+      {{ tableStart('responseDetails', 'Response details') }}
 
-      {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.AMOUNT_TOO_HIGH %}
-        {{ row(label = 'How much money do you believe you owe?', value = draft.howMuchOwed.amount | numeral, changeLink = ResponsePaths.defendantHowMuchOwed.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-        {{ row(label = 'Why this is what you owe?', value = draft.howMuchOwed.text, changeLink = ResponsePaths.defendantHowMuchOwed.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-      {% endif %}
+        {{
+          row(
+            label = 'How much money have you paid?',
+            value = draft.partialAdmission.howMuchHaveYouPaid.amount | numeral,
+            changeLink = PartAdmissionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
+            bottomBorder = false,
+            bold = true
+          )
+        }}
+        {{
+           row(
+             label = 'When did you pay this amount?',
+             value = draft.partialAdmission.howMuchHaveYouPaid.date.toMoment() | date,
+             bottomBorder = false,
+             bold = true
+           )
+        }}
 
-      {% if draft.rejectPartOfClaim.option === RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED %}
-        {{ row(label = 'How much have you paid the claimant?', value = draft.howMuchIsPaid.amount | numeral, changeLink = ResponsePaths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-        {{ row(label = 'When did you pay this amount?', value = draft.howMuchIsPaid.date.toMoment() | date, changeLink = ResponsePaths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-        {{ row(label = 'Explain why you don’t owe the full amount', value = draft.howMuchIsPaid.text, changeLink = ResponsePaths.defendantHowMuchPaid.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-      {% endif %}
+        {{
+           row(
+             label = 'How did you pay the amount claimed?',
+             value = draft.partialAdmission.howMuchHaveYouPaid.text,
+             bold = true
+           )
+        }}
 
-      {{
-        timelineCheckAndSend(
-          header = 'Timeline of what happened (optional)',
-          timeline = draft.timeline.getPopulatedRowsOnly(),
-          url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId })
-        )
-      }}
-      {{
-        evidenceCheckAndSend(
-          header = 'Your evidence (optional)',
-          evidence = draft.evidence.getPopulatedRowsOnly(),
-          url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId })
-        )
-      }}
+        {{
+           row(
+             label = 'Why do you disagree with the amount claimed?',
+             value = draft.partialAdmission.whyDoYouDisagree.text,
+             changeLink = PartAdmissionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }),
+             bold = true
+           )
+        }}
 
-      {% if draft.isResponseRejectedPartially() %}
-        {% if draft.impactOfDispute.text and draft.impactOfDispute.text.trim() %}
-          {% set impactOfDisputeText = draft.impactOfDispute.text %}
-        {% else %}
-          {% set impactOfDisputeText = '-' %}
-        {% endif %}
-        {{ row(label = 'How this dispute has affected you (optional)', value = impactOfDisputeText, changeLink = ResponsePaths.impactOfDisputePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-      {% endif %}
-      {{ tableEnd() }}
+        {{
+          timelineCheckAndSend(
+            header = 'Timeline of what happened (optional)',
+            timeline = draft.partialAdmission.timeline.getPopulatedRowsOnly(),
+            url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
+            bottomBorder = false
+          )
+        }}
+        {{ row(label = 'Comments about their timeline (optional)', value = draft.partialAdmission.timeline.comment | default(''), bold = true) }}
 
+        {{
+          evidenceCheckAndSend(
+            header = 'Your evidence (optional)',
+            evidence = draft.partialAdmission.evidence.getPopulatedRowsOnly(),
+            url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
+            bottomBorder = false
+          )
+        }}
+
+        {{ row(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), bold = true) }}
     {% endif %}
 
     {% if draft.isResponseRejectedFullyWithDispute() %}
-      {{ tableStart('yourDefence', 'Response details') }}
+      {{ tableStart('responseDetails', 'Response details') }}
       {{ row(label = 'Why you disagree with the claim', value = draft.defence.text, changeLink = ResponsePaths.defencePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
 
       {{
