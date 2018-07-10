@@ -28,11 +28,11 @@ const buttons = {
 export class MonthlyIncomePage {
 
   fillOutSomeFields (): void {
-   this.fillGenericField(fields.salary, '10')
-   this.fillGenericField(fields.universalCredit, '10')
+    this.fillGenericField(fields.salary, '10')
+    this.fillGenericField(fields.universalCredit, '10')
   }
 
-  private fillGenericField(field: GenericMonthyIncomeField, amount: string): void {
+  private fillGenericField (field: GenericMonthyIncomeField, amount: string): void {
     I.click(field.radio)
     I.fillField(field.input, amount)
     I.click(field.everyWeek)
