@@ -74,10 +74,9 @@ export class IncomeExpenseSources {
     }
 
     if (monthlyIncome.anyOtherIncomePopulated) {
-      monthlyIncome.otherSources
+      incomeExpenseSources.push(...monthlyIncome.otherSources
         .filter(source => source.populated)
-        .map(source => IncomeExpenseSource.fromFormModel(source))
-        .forEach(source => incomeExpenseSources.push(source))
+        .map(source => IncomeExpenseSource.fromFormModel(source)))
     }
     return new IncomeExpenseSources(incomeExpenseSources)
   }
