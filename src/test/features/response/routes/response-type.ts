@@ -7,7 +7,7 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
 import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks/already-submitted-check'
 
-import { Paths as ResponsePaths } from 'response/paths'
+import { Paths as ResponsePaths, PartAdmissionPaths } from 'response/paths'
 
 import { app } from 'main/app'
 
@@ -20,7 +20,8 @@ import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/r
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = ResponsePaths.responseTypePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
+const pagePath = ResponsePaths.responseTypePage.evaluateUri({ externalId: externalId })
 
 describe('Defendant response: response type page', () => {
   attachDefaultHooks(app)
@@ -104,8 +105,7 @@ describe('Defendant response: response type page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ type: ResponseType.FULL_ADMISSION })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.taskListPage
-                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+                .toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: externalId })))
           })
 
           it('should redirect to send your response by email page when everything is fine and PART_ADMISSION is selected', async () => {
@@ -118,8 +118,7 @@ describe('Defendant response: response type page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ type: ResponseType.PART_ADMISSION })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.sendYourResponseByEmailPage
-                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+                .toLocation(PartAdmissionPaths.alreadyPaidPage.evaluateUri({ externalId: externalId })))
           })
 
           it('should redirect to reject all of claim page when everything is fine and DEFENCE is selected', async () => {
@@ -132,8 +131,7 @@ describe('Defendant response: response type page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ type: ResponseType.DEFENCE })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.defenceRejectAllOfClaimPage
-                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+                .toLocation(ResponsePaths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: externalId })))
           })
         })
       })
