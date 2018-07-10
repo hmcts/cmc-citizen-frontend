@@ -18,5 +18,5 @@ export interface Income {
   type: IncomeType
   frequency: PaymentFrequency
   amountReceived: number
-  otherSource: string
+  otherSource?: string
 }

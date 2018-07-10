@@ -274,80 +274,70 @@ export class ResponseModelConverter {
       incomes.push({
         type: IncomeType.JOB,
         frequency: income.salarySource.schedule.value as PaymentFrequency,
-        amountReceived: income.salarySource.amount,
-        otherSource: undefined
+        amountReceived: income.salarySource.amount
       })
     }
     if (income.universalCreditSource && income.universalCreditSource.populated) {
       incomes.push({
         type: IncomeType.UNIVERSAL_CREDIT,
         frequency: income.universalCreditSource.schedule.value as PaymentFrequency,
-        amountReceived: income.universalCreditSource.amount,
-        otherSource: undefined
+        amountReceived: income.universalCreditSource.amount
       })
     }
     if (income.jobseekerAllowanceIncomeSource && income.jobseekerAllowanceIncomeSource.populated) {
       incomes.push({
         type: IncomeType.JOB_SEEKERS_ALLOWANCE_INCOME_BASES,
         frequency: income.jobseekerAllowanceIncomeSource.schedule.value as PaymentFrequency,
-        amountReceived: income.jobseekerAllowanceIncomeSource.amount,
-        otherSource: undefined
+        amountReceived: income.jobseekerAllowanceIncomeSource.amount
       })
     }
     if (income.jobseekerAllowanceContributionSource && income.jobseekerAllowanceContributionSource.populated) {
       incomes.push({
         type: IncomeType.JOB_SEEKERS_ALLOWANCE_CONTRIBUTION_BASED,
         frequency: income.jobseekerAllowanceContributionSource.schedule.value as PaymentFrequency,
-        amountReceived: income.jobseekerAllowanceContributionSource.amount,
-        otherSource: undefined
+        amountReceived: income.jobseekerAllowanceContributionSource.amount
       })
     }
     if (income.incomeSupportSource && income.incomeSupportSource.populated) {
       incomes.push({
         type: IncomeType.INCOME_SUPPORT,
         frequency: income.incomeSupportSource.schedule.value as PaymentFrequency,
-        amountReceived: income.incomeSupportSource.amount,
-        otherSource: undefined
+        amountReceived: income.incomeSupportSource.amount
       })
     }
     if (income.workingTaxCreditSource && income.workingTaxCreditSource.populated) {
       incomes.push({
         type: IncomeType.WORKING_TAX_CREDIT,
         frequency: income.workingTaxCreditSource.schedule.value as PaymentFrequency,
-        amountReceived: income.workingTaxCreditSource.amount,
-        otherSource: undefined
+        amountReceived: income.workingTaxCreditSource.amount
       })
     }
     if (income.childTaxCreditSource && income.childTaxCreditSource.populated) {
       incomes.push({
         type: IncomeType.CHILD_TAX_CREDIT,
         frequency: income.childTaxCreditSource.schedule.value as PaymentFrequency,
-        amountReceived: income.childTaxCreditSource.amount,
-        otherSource: undefined
+        amountReceived: income.childTaxCreditSource.amount
       })
     }
     if (income.childBenefitSource && income.childBenefitSource.populated) {
       incomes.push({
         type: IncomeType.CHILD_BENEFIT,
         frequency: income.childBenefitSource.schedule.value as PaymentFrequency,
-        amountReceived: income.childBenefitSource.amount,
-        otherSource: undefined
+        amountReceived: income.childBenefitSource.amount
       })
     }
     if (income.councilTaxSupportSource && income.councilTaxSupportSource.populated) {
       incomes.push({
         type: IncomeType.COUNCIL_TAX_SUPPORT,
         frequency: income.councilTaxSupportSource.schedule.value as PaymentFrequency,
-        amountReceived: income.councilTaxSupportSource.amount,
-        otherSource: undefined
+        amountReceived: income.councilTaxSupportSource.amount
       })
     }
     if (income.pensionSource && income.pensionSource.populated) {
       incomes.push({
         type: IncomeType.PENSION,
         frequency: income.pensionSource.schedule.value as PaymentFrequency,
-        amountReceived: income.pensionSource.amount,
-        otherSource: undefined
+        amountReceived: income.pensionSource.amount
       })
     }
     if (income.otherSources && income.anyOtherIncomePopulated) {
