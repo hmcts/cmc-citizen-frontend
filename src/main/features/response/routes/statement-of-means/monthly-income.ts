@@ -44,8 +44,7 @@ function calculateTotalMonthlyIncomeExpense (model: MonthlyIncome): number {
 
 function isValid (incomeExpenseSources: IncomeExpenseSources): boolean {
   const validator = new Validator()
-  const errors = validator.validateSync(incomeExpenseSources)
-  return errors.length < 1
+  return validator.validateSync(incomeExpenseSources).length === 0
 }
 
 function actionHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
