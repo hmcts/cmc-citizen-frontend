@@ -1,7 +1,9 @@
 import { IsDefined, IsIn } from 'class-validator'
 import { YesNoOption } from 'models/yesNoOption'
 
-import { ValidationErrors } from 'forms/validation/validationErrors'
+export class ValidationErrors {
+  static readonly YES_NO_REQUIRED: string = 'Choose yes if you’ve paid the amount you believe you owe'
+}
 
 export class AlreadyPaid {
   @IsDefined({ message: ValidationErrors.YES_NO_REQUIRED })

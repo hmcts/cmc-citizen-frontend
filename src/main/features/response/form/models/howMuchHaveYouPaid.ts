@@ -11,8 +11,8 @@ import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 const currentDate = MomentFormatter.formatLongDate(MomentFactory.currentDate())
 
 export class ValidationErrors {
-  static readonly NOT_OWE_FULL_AMOUNT_REQUIRED: string = 'Explain how you paid this amount'
-  static readonly AMOUNT_NOT_VALID: string = 'Enter valid amount'
+  static readonly HOW_DID_YOU_PAY: string = 'Enter text explaining how you paid'
+  static readonly AMOUNT_NOT_VALID: string = 'Enter how much you’ve paid'
   static readonly VALID_PAST_DATE: string = `Enter date before ${currentDate}`
 }
 
@@ -29,8 +29,8 @@ export class HowMuchHaveYouPaid {
   @IsPastDate({ message: ValidationErrors.VALID_PAST_DATE })
   date?: LocalDate
 
-  @IsDefined({ message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })
-  @IsNotBlank({ message: ValidationErrors.NOT_OWE_FULL_AMOUNT_REQUIRED })
+  @IsDefined({ message: ValidationErrors.HOW_DID_YOU_PAY })
+  @IsNotBlank({ message: ValidationErrors.HOW_DID_YOU_PAY })
   @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
   text?: string
 
