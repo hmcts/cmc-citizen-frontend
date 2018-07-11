@@ -54,6 +54,9 @@ export class PartialAdmission {
   whyDoYouDisagree?: WhyDoYouDisagree
   timeline?: DefendantTimeline
   evidence?: DefendantEvidence
+  paymentOption?: PaymentOption
+  paymentDate?: PaymentDate
+  paymentPlan?: PaymentPlan
 
   deserialize (input: any): PartialAdmission {
     if (input) {
@@ -62,6 +65,15 @@ export class PartialAdmission {
       this.whyDoYouDisagree = new WhyDoYouDisagree().deserialize(input.whyDoYouDisagree)
       this.timeline = new DefendantTimeline().deserialize(input.timeline)
       this.evidence = new DefendantEvidence().deserialize(input.evidence)
+      if (input.paymentOption) {
+        this.paymentOption = new PaymentOption().deserialize(input.paymentOption)
+      }
+      if (input.paymentDate) {
+        this.paymentDate = new PaymentDate().deserialize(input.paymentDate)
+      }
+      if (input.paymentPlan) {
+        this.paymentPlan = new PaymentPlan().deserialize(input.paymentPlan)
+      }
     }
 
     return this

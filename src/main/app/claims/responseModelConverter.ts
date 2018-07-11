@@ -6,7 +6,7 @@ import { BankAccountType } from 'claims/models/response/statement-of-means/bankA
 import { AgeGroupType, Child } from 'claims/models/response/statement-of-means/dependant'
 import { ResidenceType } from 'claims/models/response/statement-of-means/residence'
 import { Moment } from 'moment'
-import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
+import { FullAdmission, PartialAdmission, ResponseDraft } from 'response/draft/responseDraft'
 import { Response } from 'claims/models/response'
 import { ResponseType } from 'claims/models/response/responseType'
 import { FullAdmissionResponse } from 'claims/models/response/fullDefenceAdmission'
@@ -39,6 +39,7 @@ import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { convertEvidence } from 'claims/converters/evidenceConverter'
 import { MomentFactory } from 'shared/momentFactory'
+import { PartAdmissionResponse, PaymentDetails } from 'claims/models/response/partDefenceAdmission'
 
 export class ResponseModelConverter {
 
@@ -48,6 +49,8 @@ export class ResponseModelConverter {
         return this.convertFullDefence(draft)
       case FormResponseType.FULL_ADMISSION:
         return this.convertFullAdmission(draft)
+      case FormResponseType.PART_ADMISSION:
+        return this.convertPartAdmission(draft)
       default:
         throw new Error(`Unsupported response type: ${draft.response.type.value}`)
     }
@@ -88,6 +91,37 @@ export class ResponseModelConverter {
         instalmentAmount: draft.fullAdmission.paymentPlan.instalmentAmount,
         firstPaymentDate: draft.fullAdmission.paymentPlan.firstPaymentDate.toMoment(),
         paymentSchedule: draft.fullAdmission.paymentPlan.paymentSchedule.value as PaymentSchedule
+      },
+      statementOfMeans: this.convertStatementOfMeans(draft),
+      statementOfTruth: this.convertStatementOfTruth(draft)
+    }
+  }
+
+  private static convertPartAdmission (draft: ResponseDraft): PartAdmissionResponse {
+    return {
+      responseType: ResponseType.PART_ADMISSION,
+      isAlreadyPaid: draft.partialAdmission.alreadyPaid.option.option as YesNoOption,
+      paymentDetails: {
+        amount: draft.partialAdmission.howMuchHaveYouPaid.amount,
+        date: draft.partialAdmission.howMuchHaveYouPaid.date.toMoment(),
+        paymentMethod: draft.partialAdmission.howMuchHaveYouPaid.text
+      } as PaymentDetails,
+      defence: draft.partialAdmission.whyDoYouDisagree.text,
+      timeline: {
+        rows: draft.partialAdmission.timeline.getPopulatedRowsOnly(),
+        comment: draft.partialAdmission.timeline.comment
+      } as DefendantTimeline,
+      evidence: {
+        rows: convertEvidence(draft.partialAdmission.evidence) as any,
+        comment: draft.partialAdmission.evidence.comment
+      } as DefendantEvidence,
+      defendant: this.convertPartyDetails(draft.defendantDetails),
+      paymentOption: draft.partialAdmission.paymentOption && draft.partialAdmission.paymentOption.option.value as PaymentOption,
+      paymentDate: draft.partialAdmission.paymentOption && this.convertPartPaymentDate(draft.partialAdmission),
+      repaymentPlan: draft.partialAdmission.paymentOption && draft.partialAdmission.paymentPlan && {
+        instalmentAmount: draft.partialAdmission.paymentPlan.instalmentAmount,
+        firstPaymentDate: draft.partialAdmission.paymentPlan.firstPaymentDate.toMoment(),
+        paymentSchedule: draft.partialAdmission.paymentPlan.paymentSchedule.value as PaymentSchedule
       },
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft)
@@ -221,6 +255,17 @@ export class ResponseModelConverter {
         return MomentFactory.currentDate().add(5, 'days')
       case DefendantPaymentType.BY_SET_DATE:
         return fullAdmission.paymentDate.date.toMoment()
+      default:
+        return undefined
+    }
+  }
+
+  private static convertPartPaymentDate (partAdmission: PartialAdmission): Moment {
+    switch (partAdmission.paymentOption.option) {
+      case DefendantPaymentType.IMMEDIATELY:
+        return MomentFactory.currentDate().add(5, 'days')
+      case DefendantPaymentType.BY_SET_DATE:
+        return partAdmission.paymentDate.date.toMoment()
       default:
         return undefined
     }

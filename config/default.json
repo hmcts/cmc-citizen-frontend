@@ -84,7 +84,7 @@
     "testingSupport": false,
     "countyCourtJudgment": false,
     "fullAdmission": false,
-    "partialAdmission": false,
+    "partialAdmission": true,
     "offer": false,
     "statementOfMeans": false,
     "returnErrorToUser": false,
