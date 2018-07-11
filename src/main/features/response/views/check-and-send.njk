@@ -93,7 +93,9 @@
 
       {{ tableStart('responseDetails', 'Response details') }}
 
-        {{
+    {% if draft.isResponsePartiallyAdmittedAndAlreadyPaid() %}
+
+      {{
           row(
             label = 'How much money have you paid?',
             value = draft.partialAdmission.howMuchHaveYouPaid.amount | numeral,
@@ -115,18 +117,35 @@
            row(
              label = 'How did you pay the amount claimed?',
              value = draft.partialAdmission.howMuchHaveYouPaid.text,
+             bottomBorder = true,
              bold = true
            )
         }}
 
+      {% else %}
+
         {{
-           row(
-             label = 'Why do you disagree with the amount claimed?',
-             value = draft.partialAdmission.whyDoYouDisagree.text,
-             changeLink = PartAdmissionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }),
-             bold = true
-           )
+          row(
+            label = 'How much money do you admit you owe?',
+            value = draft.partialAdmission.howMuchDoYouOwe.amount | numeral,
+            changeLink = PartAdmissionPaths.howMuchDoYouOwePage.evaluateUri({ externalId: claim.externalId }),
+            bottomBorder = false,
+            bold = true
+          )
         }}
+
+        {% endif %}
+
+      {{
+          row(
+            label = 'Why do you disagree with the amount claimed?',
+            value = draft.partialAdmission.whyDoYouDisagree.text,
+            changeLink = PartAdmissionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }),
+            bold = true
+          )
+      }}
+
+      {#TODO Check if they want the boarder at the bottom of Why do you disagree with the amount claimed?'#}
 
         {{
           timelineCheckAndSend(
