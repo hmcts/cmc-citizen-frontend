@@ -167,6 +167,17 @@
         }}
 
         {{ row(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), bold = true) }}
+
+        {{ tableStart('freeMediation', 'Free mediation') }}
+        {{
+            row(
+              label = 'Will you try mediation?',
+              value = t(draft.freeMediation.option) | capitalize,
+              changeLink = ResponsePaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }),
+              bold = true
+            )
+        }}
+        {{ tableEnd() }}
     {% endif %}
 
     {% if draft.isResponseRejectedFullyWithDispute() %}
