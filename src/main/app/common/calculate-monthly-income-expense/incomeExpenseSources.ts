@@ -1,6 +1,7 @@
 import { IsArray, ValidateNested } from 'class-validator'
 import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
 import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
+import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
 
 export class IncomeExpenseSources {
 
@@ -26,7 +27,15 @@ export class IncomeExpenseSources {
     ))
   }
 
-  static fromFormModel (monthlyIncome: MonthlyIncome): IncomeExpenseSources {
+  static fromMonthlyExpensesFormModel (monthlyExpenses: MonthlyExpenses): IncomeExpenseSources {
+    if (!monthlyExpenses) {
+      return undefined
+    }
+
+    return undefined
+  }
+
+  static fromMonthlyIncomeFormModel (monthlyIncome: MonthlyIncome): IncomeExpenseSources {
     if (!monthlyIncome) {
       return undefined
     }

@@ -71,7 +71,7 @@ describe('IncomeExpenseSources', () => {
         undefined, new IncomeSource(SourceNames.PENSION, 100, ExpenseSchedule.TWO_WEEKS)
       )
 
-      expect(IncomeExpenseSources.fromFormModel(monthlyIncome)).to.deep.equal(
+      expect(IncomeExpenseSources.fromMonthlyIncomeFormModel(monthlyIncome)).to.deep.equal(
         new IncomeExpenseSources(
           [
             {

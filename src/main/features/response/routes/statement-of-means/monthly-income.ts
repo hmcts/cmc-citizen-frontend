@@ -31,7 +31,7 @@ function calculateTotalMonthlyIncomeExpense (model: MonthlyIncome): number {
   if (!model) {
     return undefined
   }
-  const incomeExpenseSources = IncomeExpenseSources.fromFormModel(model)
+  const incomeExpenseSources = IncomeExpenseSources.fromMonthlyIncomeFormModel(model)
 
   if (!isValid(incomeExpenseSources)) {
     return undefined
