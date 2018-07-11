@@ -50,12 +50,14 @@ export default express.Router()
             draft.document.fullAdmission = new FullAdmission()
           }
           delete draft.document.partialAdmission
+          delete draft.document.freeMediation
         } else if (draft.document.response.type === ResponseType.PART_ADMISSION) {
           if (!draft.document.partialAdmission) {
             draft.document.partialAdmission = new PartialAdmission()
           }
           delete draft.document.fullAdmission
           delete draft.document.rejectAllOfClaim
+          delete draft.document.freeMediation
         } else {
           delete draft.document.fullAdmission
           delete draft.document.partialAdmission
