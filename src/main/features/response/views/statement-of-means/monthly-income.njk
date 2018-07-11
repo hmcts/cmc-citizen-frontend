@@ -11,10 +11,9 @@
 
 {% block content %}
 
-<p>{{ t('Select all that apply. The information you enter must be truthful and accurate.') }} </p>
-
 <div class="grid-row">
   <div class="column-two-thirds">
+    <p>{{ t('Select all that apply. The information you enter must be truthful and accurate.') }} </p>
 
     <form method="post" novalidate class="income-expense-calculation">
       {{ csrfProtection(csrf) }}
