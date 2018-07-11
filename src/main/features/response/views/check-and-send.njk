@@ -129,7 +129,7 @@
             label = 'How much money do you admit you owe?',
             value = draft.partialAdmission.howMuchDoYouOwe.amount | numeral,
             changeLink = PartAdmissionPaths.howMuchDoYouOwePage.evaluateUri({ externalId: claim.externalId }),
-            bottomBorder = false,
+            bottomBorder = true,
             bold = true
           )
         }}
