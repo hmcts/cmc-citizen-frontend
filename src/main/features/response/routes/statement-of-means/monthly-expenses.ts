@@ -105,7 +105,7 @@ export default express.Router()
         draft.document.statementOfMeans.monthlyExpenses = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: externalId }))
+        res.redirect(StatementOfMeansPaths.courtOrdersPage.evaluateUri({ externalId: externalId }))
       }
     })
   )
