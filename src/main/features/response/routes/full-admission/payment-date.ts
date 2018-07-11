@@ -28,7 +28,7 @@ const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((re
 })
 
 function renderView (form: Form<PaymentDate>, res: express.Response) {
-  const futureDate: Moment = MomentFactory.currentDate().add(10, 'days')
+  const futureDate: Moment = MomentFactory.currentDate().add(1, 'month')
 
   res.render(FullAdmissionPaths.paymentDatePage.associatedView, {
     form: form,
