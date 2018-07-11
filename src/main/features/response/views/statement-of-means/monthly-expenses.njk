@@ -42,46 +42,27 @@
     <form method="post" novalidate>
       {{ csrfProtection(csrf) }}
 
+      <p>{{ t('Select all that apply. The information you enter must be truthful and accurate.') }}</p>
+
       {{ expenseSource(form, name = 'mortgage', label = 'Mortgage', hint = 'Include all mortgages') }}
       {{ expenseSource(form, name = 'rent', label = 'Rent') }}
       {{ expenseSource(form, name = 'councilTax', label = 'Council Tax') }}
       {{ expenseSource(form, name = 'gas', label = 'Gas') }}
       {{ expenseSource(form, name = 'electricity', label = 'Electricity') }}
-      {{ poundInput(label = 'Electricity', name = 'electricity', form = form) }}
-      {{ poundInput(label = 'Water', name = 'water', form = form) }}
-      {{ poundInput(label = 'Travel (work or school)', name = 'travel', form = form) }}
-      {{ poundInput(label = 'School costs (include clothing)', name = 'schoolCosts', form = form) }}
-      {{ poundInput(label = 'Food and housekeeping', name = 'foodAndHousekeeping', form = form) }}
-      {{ poundInput(label = 'TV and broadband', name = 'tvAndBroadband', form = form) }}
-      {{ poundInput(label = 'Mobile phone', name = 'mobilePhone', form = form) }}
-      {{ poundInput(label = 'Maintenance payments', name = 'maintenance', form = form) }}
+      {{ expenseSource(form, name = 'water', label = 'Water') }}
+      {{ expenseSource(form, name = 'travel', label = 'Travel (work or school)') }}
+      {{ expenseSource(form, name = 'schoolCosts', label = 'School costs (include clothing)') }}
+      {{ expenseSource(form, name = 'foodAndHousekeeping', label = 'Food and housekeeping') }}
+      {{ expenseSource(form, name = 'tvAndBroadband', label = 'TV and broadband') }}
+      {{ expenseSource(form, name = 'mobilePhone', label = 'Mobile phone') }}
+      {{ expenseSource(form, name = 'maintenance', label = 'Maintenance payments') }}
+      {{ expenseSources(form, name = 'otherSources', label = 'Other') }}
 
-      <div class="statement-of-means-container">
-        {% if form.model and form.model.rows.length > 0 %}
-        <div class="multiline">
-          <div class="multiline-rows">
-            <div class="triple-column mobile-hide">
-              <div class="column-1 mobile-hide">
-                <label id="description-label" class="form-label-bold">{{ t('Name of expense') }}</label>
-              </div>
-              <div class="column-4 mobile-hide">
-                <label id="amount-label" class="form-label-bold">{{ t('Amount') }}</label>
-              </div>
-            </div>
+      {{ linkButton('Recalculate total monthly expenditure', 'action[calculateMonthlyIncome]', 'button button-secondary calculate-monthly-income-expense') }}
 
-            {% for row in form.model.rows %}
-              {{ expenseRow(loop.index0, form) }}
-            {% endfor %}
-          </div>
-        </div>
-        {% endif %}
-
-        {% if form.model and form.model.canAddMoreRows() %}
-          <div id="add-event-container" class="form-group">
-            {{ linkButton('Add another expense', 'action[addRow]', 'button button-secondary') }}
-          </div>
-        {% endif %}
-      </div>
+      <p class="heading-small calculation-outcome-container">
+        {{ t('Total monthly expenditure:') }} £<span class="total-monthly-income-expense"> {{ totalMonthlyExpense | default('0.00') }} </span>
+      </p>
 
       {{ saveAndContinueButton() }}
 

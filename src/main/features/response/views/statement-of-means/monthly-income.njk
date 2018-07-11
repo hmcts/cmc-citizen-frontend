@@ -31,7 +31,7 @@
       {{ incomeSource(form, name = 'pensionSource', label = 'Pension (paid to you)') }}
       {{ incomeSources(form, name = 'otherSources', label = 'Other') }}
 
-      {{ linkButton('Recalculate total monthly income', 'action[calculateMonthlyIncome]', 'button button-secondary calculate-montly-income-expense') }}
+      {{ linkButton('Recalculate total monthly income', 'action[calculateMonthlyIncome]', 'button button-secondary calculate-monthly-income-expense') }}
 
       <p class="heading-small calculation-outcome-container">
         {{ t('Total monthly income:') }} £<span class="total-monthly-income-expense"> {{ totalMonthlyIncomeExpense | default('0.00') }} </span>

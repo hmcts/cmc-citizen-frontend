@@ -12,7 +12,7 @@ $(document).ready(function () {
       amountInputFieldSelector: 'input[name*=amount]',
       scheduleInputFieldSelector: 'input[name*=schedule]',
       formDataFieldSelector: 'input[name*=amount],input:checked[name*=schedule]',
-      calculateMontlyIncomeExpenseButtonSelector: '.calculate-montly-income-expense',
+      calculateMonthlyIncomeExpenseButtonSelector: '.calculate-monthly-income-expense',
       totalMonthlyIncomeExpenseSelector: '.total-monthly-income-expense',
 
       amountType: 'amount',
@@ -39,7 +39,7 @@ $(document).ready(function () {
       csrfInputFieldElement = containerElement.find(config.csrfInputFieldSelector);
       amountInputFieldElement = containerElement.find(config.amountInputFieldSelector);
       scheduleInputFieldElement = containerElement.find(config.scheduleInputFieldSelector);
-      calculateMontlyIncomeExpenseButtonElement = containerElement.find(config.calculateMontlyIncomeExpenseButtonSelector);
+      calculateMontlyIncomeExpenseButtonElement = containerElement.find(config.calculateMonthlyIncomeExpenseButtonSelector);
       totalMonthlyIncomeExpenseElement = containerElement.find(config.totalMonthlyIncomeExpenseSelector);
 
       setup();
