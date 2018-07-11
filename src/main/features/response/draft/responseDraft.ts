@@ -26,6 +26,7 @@ import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
+import { HowMuchDoYouOwe } from 'response/form/models/howMuchDoYouOwe'
 import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
 
 export class FullAdmission {
@@ -51,6 +52,7 @@ export class PartialAdmission {
 
   alreadyPaid?: AlreadyPaid
   howMuchHaveYouPaid?: HowMuchHaveYouPaid
+  howMuchDoYouOwe?: HowMuchDoYouOwe
   whyDoYouDisagree?: WhyDoYouDisagree
   timeline?: DefendantTimeline
   evidence?: DefendantEvidence
@@ -59,6 +61,7 @@ export class PartialAdmission {
     if (input) {
       this.alreadyPaid = new AlreadyPaid().deserialize(input.alreadyPaid && input.alreadyPaid.option)
       this.howMuchHaveYouPaid = new HowMuchHaveYouPaid().deserialize(input.howMuchHaveYouPaid)
+      this.howMuchDoYouOwe = new HowMuchHaveYouPaid().deserialize(input.howMuchDoYouOwe)
       this.whyDoYouDisagree = new WhyDoYouDisagree().deserialize(input.whyDoYouDisagree)
       this.timeline = new DefendantTimeline().deserialize(input.timeline)
       this.evidence = new DefendantEvidence().deserialize(input.evidence)
