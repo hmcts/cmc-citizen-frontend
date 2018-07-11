@@ -153,18 +153,35 @@ export class MonthlyExpenses {
 
   deserialize (input?: any): MonthlyExpenses {
     if (input) {
-      this.mortgage = input.mortgage
-      this.rent = input.rent
-      this.councilTax = input.councilTax
-      this.gas = input.gas
-      this.electricity = input.electricity
-      this.water = input.water
-      this.travel = input.travel
-      this.schoolCosts = input.schoolCosts
-      this.foodAndHousekeeping = input.foodAndHousekeeping
-      this.tvAndBroadband = input.tvAndBroadband
-      this.mobilePhone = input.mobilePhone
-      this.maintenance = input.maintenance
+      this.mortgageDeclared = input.mortgageDeclared
+      this.mortgage = new IncomeExpenseSource().deserialize(input.mortgage)
+      this.rentDeclared = input.rentDeclared
+      this.rent = new IncomeExpenseSource().deserialize(input.rent)
+      this.councilTaxDeclared = input.councilTaxDeclared
+      this.councilTax = new IncomeExpenseSource().deserialize(input.councilTax)
+      this.gasDeclared = input.gasDeclared
+      this.gas = new IncomeExpenseSource().deserialize(input.gas)
+      this.electricityDeclared = input.electricityDeclared
+      this.electricity = new IncomeExpenseSource().deserialize(input.electricity)
+      this.waterDeclared = input.waterDeclared
+      this.water = new IncomeExpenseSource().deserialize(input.water)
+      this.travelDeclared = input.travelDeclared
+      this.travel = new IncomeExpenseSource().deserialize(input.travel)
+      this.schoolCostsDeclared = input.schoolCostsDeclared
+      this.schoolCosts = new IncomeExpenseSource().deserialize(input.schoolCosts)
+      this.foodAndHousekeepingDeclared = input.foodAndHousekeepingDeclared
+      this.foodAndHousekeeping = new IncomeExpenseSource().deserialize(input.foodAndHousekeeping)
+      this.tvAndBroadbandDeclared = input.tvAndBroadbandDeclared
+      this.tvAndBroadband = new IncomeExpenseSource().deserialize(input.tvAndBroadband)
+      this.hirePurchaseDeclared = input.hirePurchaseDeclared
+      this.hirePurchase = new IncomeExpenseSource().deserialize(input.hirePurchase)
+      this.mobilePhoneDeclared = input.mobilePhoneDeclared
+      this.mobilePhone = new IncomeExpenseSource().deserialize(input.mobilePhone)
+      this.maintenanceDeclared = input.maintenanceDeclared
+      this.maintenance = new IncomeExpenseSource().deserialize(input.maintenance)
+      
+      this.otherDeclared = input.otherDeclared
+      this.other = input.other && input.other.map(source => new IncomeExpenseSource().deserialize(source))
     }
 
     return this
