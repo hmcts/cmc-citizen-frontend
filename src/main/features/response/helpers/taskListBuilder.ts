@@ -1,6 +1,6 @@
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
-import { Paths, FullAdmissionPaths, StatementOfMeansPaths } from 'response/paths'
+import { Paths, FullAdmissionPaths, PartAdmissionPaths, StatementOfMeansPaths } from 'response/paths'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
@@ -16,6 +16,8 @@ import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
 import { YourRepaymentPlanTask } from 'features/response/tasks/yourRepaymentPlanTask'
 import { StatementOfMeansTask } from 'response/tasks/statementOfMeansTask'
 import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
+import { HowMuchHaveYouPaidTask } from 'response/tasks/howMuchHaveYouPaidTask'
+import { WhyDoYouDisagreeTask } from 'response/tasks/whyDoYouDisagreeTask'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -109,15 +111,34 @@ export class TaskListBuilder {
       )
     }
 
+    if (draft.isResponsePartiallyAdmitted()) {
+      tasks.push(
+        new TaskListItem(
+          'How much have you paid?',
+          PartAdmissionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: externalId }),
+          HowMuchHaveYouPaidTask.isCompleted(draft)
+        )
+      )
+
+      tasks.push(
+        new TaskListItem(
+          'Why do you disagree with the amount claimed?',
+          PartAdmissionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: externalId }),
+          WhyDoYouDisagreeTask.isCompleted(draft)
+        )
+      )
+    }
+
     return new TaskList(2, 'Respond to claim', tasks)
   }
 
   static buildSubmitSection (draft: ResponseDraft, externalId: string): TaskList {
     const tasks: TaskListItem[] = []
-    if (! draft.isResponsePopulated()
+    if (!draft.isResponsePopulated()
       || draft.isResponseRejectedFullyWithDispute()
       || draft.isResponseRejectedFullyWithAmountClaimedPaid()
-      || draft.isResponseFullyAdmitted()) {
+      || draft.isResponseFullyAdmitted()
+      || draft.isResponsePartiallyAdmitted()) {
       tasks.push(
         new TaskListItem(
           'Check and submit your response',
@@ -126,9 +147,9 @@ export class TaskListBuilder {
         )
       )
       return new TaskList(3, 'Submit', tasks)
-    } else {
-      return undefined
     }
+
+    return undefined
   }
 
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {

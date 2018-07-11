@@ -28,7 +28,12 @@ export class Helper {
     I.click('Respond to claim')
   }
 
-  finishResponse (claimRef: string, defendantEmail: string, defendantType: PartyType, defenceType: DefenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE): Promise<void> {
+  finishResponse (
+    claimRef: string,
+    defendantEmail: string,
+    defendantType: PartyType,
+    defenceType: DefenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE): Promise<void> {
+
     I.waitForText(claimDetailsHeading)
     defenceSteps.respondToClaim()
     defenceSteps.loginAsDefendant(defendantEmail)
