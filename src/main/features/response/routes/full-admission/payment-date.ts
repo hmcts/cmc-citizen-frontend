@@ -12,6 +12,8 @@ import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { MomentFactory } from 'shared/momentFactory'
+import { Moment } from 'moment'
 
 const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -26,8 +28,11 @@ const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((re
 })
 
 function renderView (form: Form<PaymentDate>, res: express.Response) {
+  const futureDate: Moment = MomentFactory.currentDate().add(10, 'days')
+
   res.render(FullAdmissionPaths.paymentDatePage.associatedView, {
-    form: form
+    form: form,
+    futureDate: futureDate
   })
 }
 
