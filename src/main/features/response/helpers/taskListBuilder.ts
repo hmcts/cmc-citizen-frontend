@@ -18,6 +18,7 @@ import { StatementOfMeansTask } from 'response/tasks/statementOfMeansTask'
 import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
 import { HowMuchHaveYouPaidTask } from 'response/tasks/howMuchHaveYouPaidTask'
 import { WhyDoYouDisagreeTask } from 'response/tasks/whyDoYouDisagreeTask'
+import { HowMuchDoYouOweTask } from 'response/tasks/howMuchDoYouOweTask'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -112,13 +113,25 @@ export class TaskListBuilder {
     }
 
     if (draft.isResponsePartiallyAdmitted()) {
-      tasks.push(
-        new TaskListItem(
-          'How much have you paid?',
-          PartAdmissionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: externalId }),
-          HowMuchHaveYouPaidTask.isCompleted(draft)
+
+      if (draft.isResponsePartiallyAdmittedAndAlreadyPaid()) {
+        tasks.push(
+          new TaskListItem(
+            'How much have you paid?',
+            PartAdmissionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: externalId }),
+            HowMuchHaveYouPaidTask.isCompleted(draft)
+          )
         )
-      )
+
+      } else {
+        tasks.push(
+          new TaskListItem(
+            'How much money do you admit you owe?',
+            PartAdmissionPaths.howMuchDoYouOwePage.evaluateUri({ externalId: externalId }),
+            HowMuchDoYouOweTask.isCompleted(draft)
+          )
+        )
+      }
 
       tasks.push(
         new TaskListItem(

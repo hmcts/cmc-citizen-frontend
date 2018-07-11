@@ -1,10 +1,5 @@
-import { IsDefined, IsPositive, MaxLength, ValidateNested } from 'class-validator'
-import { IsPastDate } from 'forms/validation/validators/datePastConstraint'
-import { LocalDate } from 'forms/models/localDate'
-import { IsNotBlank, Fractions, IsValidLocalDate } from '@hmcts/cmc-validators'
-import { MomentFactory } from 'shared/momentFactory'
-import { MomentFormatter } from 'utils/momentFormatter'
-import { ValidationConstraints } from 'forms/validation/validationConstraints'
+import { IsDefined, IsPositive } from 'class-validator'
+import { Fractions } from '@hmcts/cmc-validators'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 
@@ -19,7 +14,7 @@ export class HowMuchDoYouOwe {
   @Fractions(0, 2, { message: DefaultValidationErrors.AMOUNT_INVALID_DECIMALS })
   amount?: number
 
-  constructor (amount?: number, date?: LocalDate, text?: string) {
+  constructor (amount?: number) {
     this.amount = amount
 
   }
