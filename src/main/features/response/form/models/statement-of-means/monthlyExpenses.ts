@@ -1,4 +1,4 @@
-import { IncomeSource } from 'response/form/models/statement-of-means/incomeSource'
+import { IncomeExpenseSource } from 'response/form/models/statement-of-means/incomeSource'
 import { ValidateIf, ValidateNested } from 'class-validator'
 
 export class MonthlyExpenses {
@@ -6,91 +6,91 @@ export class MonthlyExpenses {
   mortgageDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.mortgageDeclared || (o.mortgage && o.mortgage.populated))
   @ValidateNested()
-  mortgage?: IncomeSource
+  mortgage?: IncomeExpenseSource
 
   rentDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.rentDeclared || (o.rent && o.rent.populated))
   @ValidateNested()
-  rent?: IncomeSource
+  rent?: IncomeExpenseSource
 
   councilTaxDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.councilTaxDeclared || (o.councilTax && o.councilTax.populated))
   @ValidateNested()
-  councilTax?: IncomeSource
+  councilTax?: IncomeExpenseSource
 
   gasDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.gasDeclared || (o.gas && o.gas.populated))
   @ValidateNested()
-  gas?: IncomeSource
+  gas?: IncomeExpenseSource
 
   electricityDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.electricityDeclared || (o.electricity && o.electricity.populated))
   @ValidateNested()
-  electricity?: IncomeSource
+  electricity?: IncomeExpenseSource
 
   waterDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.waterDeclared || (o.water && o.water.populated))
   @ValidateNested()
-  water?: IncomeSource
+  water?: IncomeExpenseSource
 
   travelDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.travelDeclared || (o.travel && o.travel.populated))
   @ValidateNested()
-  travel?: IncomeSource
+  travel?: IncomeExpenseSource
 
   schoolCostsDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.schoolCostsDeclared || (o.schoolCosts && o.schoolCosts.populated))
   @ValidateNested()
-  schoolCosts?: IncomeSource
+  schoolCosts?: IncomeExpenseSource
 
   foodAndHousekeepingDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.foodAndHousekeepingDeclared ||
     (o.foodAndHousekeeping && o.foodAndHousekeeping.populated))
   @ValidateNested()
-  foodAndHousekeeping?: IncomeSource
+  foodAndHousekeeping?: IncomeExpenseSource
 
   tvAndBroadbandDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.tvAndBroadbandDeclared || (o.tvAndBroadband && o.tvAndBroadband.populated))
   @ValidateNested()
-  tvAndBroadband?: IncomeSource
+  tvAndBroadband?: IncomeExpenseSource
 
   hirePurchaseDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.hirePurchaseDeclared || (o.hirePurchase && o.hirePurchase.populated))
   @ValidateNested()
-  hirePurchase?: IncomeSource
+  hirePurchase?: IncomeExpenseSource
 
   mobilePhoneDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.mobilePhoneDeclared || (o.mobilePhone && o.mobilePhone.populated))
   @ValidateNested()
-  mobilePhone?: IncomeSource
+  mobilePhone?: IncomeExpenseSource
 
   maintenanceDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.maintenanceDeclared || (o.maintenance && o.maintenance.populated))
   @ValidateNested()
-  maintenance?: IncomeSource
+  maintenance?: IncomeExpenseSource
 
   otherDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.otherDeclared || o.anyOtherPopulated)
   @ValidateNested()
-  other?: IncomeSource[]
+  other?: IncomeExpenseSource[]
 
 
 
   constructor (
-    mortgageDeclared?: boolean, mortgage?: IncomeSource,
-    rentDeclared?: boolean, rent?: IncomeSource,
-    councilTaxDeclared?: boolean, councilTax?: IncomeSource,
-    gasDeclared?: boolean, gas?: IncomeSource,
-    electricityDeclared?: boolean, electricity?: IncomeSource,
-    waterDeclared?: boolean, water?: IncomeSource,
-    travelDeclared?: boolean, travel?: IncomeSource,
-    schoolCostsDeclared?: boolean, schoolCosts?: IncomeSource,
-    foodAndHousekeepingDeclared?: boolean, foodAndHousekeeping?: IncomeSource,
-    tvAndBroadbandDeclared?: boolean, tvAndBroadband?: IncomeSource,
-    hirePurchaseDeclared?: boolean, hirePurchase?: IncomeSource,
-    mobilePhoneDeclared?: boolean, mobilePhone?: IncomeSource,
-    maintenanceDeclared?: boolean, maintenance?: IncomeSource,
-    otherDeclared?: boolean, other?: IncomeSource[]
+    mortgageDeclared?: boolean, mortgage?: IncomeExpenseSource,
+    rentDeclared?: boolean, rent?: IncomeExpenseSource,
+    councilTaxDeclared?: boolean, councilTax?: IncomeExpenseSource,
+    gasDeclared?: boolean, gas?: IncomeExpenseSource,
+    electricityDeclared?: boolean, electricity?: IncomeExpenseSource,
+    waterDeclared?: boolean, water?: IncomeExpenseSource,
+    travelDeclared?: boolean, travel?: IncomeExpenseSource,
+    schoolCostsDeclared?: boolean, schoolCosts?: IncomeExpenseSource,
+    foodAndHousekeepingDeclared?: boolean, foodAndHousekeeping?: IncomeExpenseSource,
+    tvAndBroadbandDeclared?: boolean, tvAndBroadband?: IncomeExpenseSource,
+    hirePurchaseDeclared?: boolean, hirePurchase?: IncomeExpenseSource,
+    mobilePhoneDeclared?: boolean, mobilePhone?: IncomeExpenseSource,
+    maintenanceDeclared?: boolean, maintenance?: IncomeExpenseSource,
+    otherDeclared?: boolean, other?: IncomeExpenseSource[]
   ) {
     this.mortgageDeclared = mortgageDeclared
     this.mortgage = mortgage
@@ -146,7 +146,7 @@ export class MonthlyExpenses {
       value.mobilePhoneDeclared, value.mobilePhone,
       value.maintenanceDeclared, value.maintenance,
       value.otherDeclared, value.otherSources && value.otherSources
-      .map(source => IncomeSource.fromObject(source.name, source))
+      .map(source => IncomeExpenseSource.fromObject(source.name, source))
       .filter(source => source !== undefined)
     )
   }
@@ -171,10 +171,10 @@ export class MonthlyExpenses {
   }
 
   addEmptyOtherIncome (): void {
-    this.other.push(new IncomeSource())
+    this.other.push(new IncomeExpenseSource())
   }
 
-  removeOtherIncome (source: IncomeSource): void {
+  removeOtherIncome (source: IncomeExpenseSource): void {
     this.other.splice(this.other.findIndex(element => element === source), 1)
   }
 

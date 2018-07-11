@@ -4,7 +4,7 @@ import { Validator } from 'class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
 import { MonthlyIncome, SourceNames } from 'response/form/models/statement-of-means/monthlyIncome'
-import { IncomeSource, ValidationErrors as MonthlyIncomeSourceValidationErrors } from 'response/form/models/statement-of-means/incomeSource'
+import { IncomeExpenseSource, ValidationErrors as MonthlyIncomeSourceValidationErrors } from 'response/form/models/statement-of-means/incomeSource'
 
 function getSampleMonthtlyIncomeObject (options?: object) {
   const DEFAULT_SAMPLE_VALID_MONTHLY_INCOME = {
@@ -62,16 +62,16 @@ function getSampleMonthtlyIncomeObject (options?: object) {
 
 function forConstructor () {
   return new MonthlyIncome(
-    undefined, new IncomeSource(SourceNames.SALARY, this.sampleData.salarySource.amount, this.sampleData.salarySource.schedule),
-    undefined, new IncomeSource(SourceNames.UNIVERSAL_CREDIT, this.sampleData.universalCreditSource.amount, this.sampleData.universalCreditSource.schedule),
-    undefined, new IncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, this.sampleData.jobseekerAllowanceIncomeSource.amount, this.sampleData.jobseekerAllowanceIncomeSource.schedule),
-    undefined, new IncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, this.sampleData.jobseekerAllowanceContributionSource.amount, this.sampleData.jobseekerAllowanceContributionSource.schedule),
-    undefined, new IncomeSource(SourceNames.INCOME_SUPPORT, this.sampleData.incomeSupportSource.amount, this.sampleData.incomeSupportSource.schedule),
-    undefined, new IncomeSource(SourceNames.WORKING_TAX_CREDIT, this.sampleData.workingTaxCreditSource.amount, this.sampleData.workingTaxCreditSource.schedule),
-    undefined, new IncomeSource(SourceNames.CHILD_TAX_CREDIT, this.sampleData.childTaxCreditSource.amount, this.sampleData.childTaxCreditSource.schedule),
-    undefined, new IncomeSource(SourceNames.CHILD_BENEFIT, this.sampleData.childBenefitSource.amount, this.sampleData.childBenefitSource.schedule),
-    undefined, new IncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, this.sampleData.councilTaxSupportSource.amount, this.sampleData.councilTaxSupportSource.schedule),
-    undefined, new IncomeSource(SourceNames.PENSION, this.sampleData.pensionSource.amount, this.sampleData.pensionSource.schedule)
+    undefined, new IncomeExpenseSource(SourceNames.SALARY, this.sampleData.salarySource.amount, this.sampleData.salarySource.schedule),
+    undefined, new IncomeExpenseSource(SourceNames.UNIVERSAL_CREDIT, this.sampleData.universalCreditSource.amount, this.sampleData.universalCreditSource.schedule),
+    undefined, new IncomeExpenseSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, this.sampleData.jobseekerAllowanceIncomeSource.amount, this.sampleData.jobseekerAllowanceIncomeSource.schedule),
+    undefined, new IncomeExpenseSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, this.sampleData.jobseekerAllowanceContributionSource.amount, this.sampleData.jobseekerAllowanceContributionSource.schedule),
+    undefined, new IncomeExpenseSource(SourceNames.INCOME_SUPPORT, this.sampleData.incomeSupportSource.amount, this.sampleData.incomeSupportSource.schedule),
+    undefined, new IncomeExpenseSource(SourceNames.WORKING_TAX_CREDIT, this.sampleData.workingTaxCreditSource.amount, this.sampleData.workingTaxCreditSource.schedule),
+    undefined, new IncomeExpenseSource(SourceNames.CHILD_TAX_CREDIT, this.sampleData.childTaxCreditSource.amount, this.sampleData.childTaxCreditSource.schedule),
+    undefined, new IncomeExpenseSource(SourceNames.CHILD_BENEFIT, this.sampleData.childBenefitSource.amount, this.sampleData.childBenefitSource.schedule),
+    undefined, new IncomeExpenseSource(SourceNames.COUNCIL_TAX_SUPPORT, this.sampleData.councilTaxSupportSource.amount, this.sampleData.councilTaxSupportSource.schedule),
+    undefined, new IncomeExpenseSource(SourceNames.PENSION, this.sampleData.pensionSource.amount, this.sampleData.pensionSource.schedule)
   )
 }
 
@@ -260,16 +260,16 @@ describe('MonthlyIncome', () => {
       it('should return errors when `IncomeSource` objects are invalid', () => {
         const errors = validator.validateSync(
           new MonthlyIncome(
-            undefined, new IncomeSource(SourceNames.SALARY, -100, ExpenseSchedule.MONTH),
-            undefined, new IncomeSource(SourceNames.UNIVERSAL_CREDIT, -200, ExpenseSchedule.MONTH),
-            undefined, new IncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, -300, ExpenseSchedule.TWO_WEEKS),
-            undefined, new IncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, -400, ExpenseSchedule.MONTH),
-            undefined, new IncomeSource(SourceNames.INCOME_SUPPORT, -500, ExpenseSchedule.MONTH),
-            undefined, new IncomeSource(SourceNames.WORKING_TAX_CREDIT, -600, ExpenseSchedule.TWO_WEEKS),
-            undefined, new IncomeSource(SourceNames.CHILD_TAX_CREDIT, -700, ExpenseSchedule.MONTH),
-            undefined, new IncomeSource(SourceNames.CHILD_BENEFIT, -800, ExpenseSchedule.MONTH),
-            undefined, new IncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, -900, ExpenseSchedule.TWO_WEEKS),
-            undefined, new IncomeSource(SourceNames.PENSION, -100, ExpenseSchedule.TWO_WEEKS)
+            undefined, new IncomeExpenseSource(SourceNames.SALARY, -100, ExpenseSchedule.MONTH),
+            undefined, new IncomeExpenseSource(SourceNames.UNIVERSAL_CREDIT, -200, ExpenseSchedule.MONTH),
+            undefined, new IncomeExpenseSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, -300, ExpenseSchedule.TWO_WEEKS),
+            undefined, new IncomeExpenseSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, -400, ExpenseSchedule.MONTH),
+            undefined, new IncomeExpenseSource(SourceNames.INCOME_SUPPORT, -500, ExpenseSchedule.MONTH),
+            undefined, new IncomeExpenseSource(SourceNames.WORKING_TAX_CREDIT, -600, ExpenseSchedule.TWO_WEEKS),
+            undefined, new IncomeExpenseSource(SourceNames.CHILD_TAX_CREDIT, -700, ExpenseSchedule.MONTH),
+            undefined, new IncomeExpenseSource(SourceNames.CHILD_BENEFIT, -800, ExpenseSchedule.MONTH),
+            undefined, new IncomeExpenseSource(SourceNames.COUNCIL_TAX_SUPPORT, -900, ExpenseSchedule.TWO_WEEKS),
+            undefined, new IncomeExpenseSource(SourceNames.PENSION, -100, ExpenseSchedule.TWO_WEEKS)
           )
         )
 
