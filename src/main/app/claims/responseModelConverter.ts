@@ -39,7 +39,7 @@ import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { convertEvidence } from 'claims/converters/evidenceConverter'
 import { MomentFactory } from 'shared/momentFactory'
-import { PartAdmissionResponse, PaymentDetails } from 'claims/models/response/partDefenceAdmission'
+import { PartialAdmissionResponse, PaymentDetails } from 'claims/models/response/partialAdmissionResponse'
 
 export class ResponseModelConverter {
 
@@ -97,7 +97,7 @@ export class ResponseModelConverter {
     }
   }
 
-  private static convertPartAdmission (draft: ResponseDraft): PartAdmissionResponse {
+  private static convertPartAdmission (draft: ResponseDraft): PartialAdmissionResponse {
     return {
       responseType: ResponseType.PART_ADMISSION,
       isAlreadyPaid: draft.partialAdmission.alreadyPaid.option.option as YesNoOption,

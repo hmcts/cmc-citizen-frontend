@@ -18,7 +18,7 @@ export interface PaymentDetails {
   paymentMethod: string
 }
 
-export interface PartAdmissionResponse extends ResponseCommon {
+export interface PartialAdmissionResponse extends ResponseCommon {
   responseType: ResponseType.PART_ADMISSION
   isAlreadyPaid: YesNoOption
   paymentDetails: PaymentDetails
@@ -31,8 +31,8 @@ export interface PartAdmissionResponse extends ResponseCommon {
   statementOfMeans?: StatementOfMeans
 }
 
-export namespace PartAdmissionResponse {
-  export function deserialize (input: any): PartAdmissionResponse {
+export namespace PartialAdmissionResponse {
+  export function deserialize (input: any): PartialAdmissionResponse {
     return {
       ...ResponseCommon.deserialize(input),
       responseType: ResponseType.PART_ADMISSION,

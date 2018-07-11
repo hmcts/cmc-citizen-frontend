@@ -157,6 +157,13 @@ export class ResponseDraft extends DraftDocument {
       && (this.fullAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS)
   }
 
+  public isResponsePartiallyAdmittedWithInstalments (): boolean {
+    return this.isResponseFullyAdmitted()
+      && this.partialAdmission
+      && this.partialAdmission.paymentOption
+      && (this.partialAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS)
+  }
+
   public isResponsePartiallyAdmitted (): boolean {
     if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission'))) {
       return false
@@ -203,5 +210,11 @@ export class ResponseDraft extends DraftDocument {
   public isResponseFullyAdmittedWithPayBySetDate (): boolean {
     return this.fullAdmission !== undefined
       && this.fullAdmission.paymentOption.option === DefendantPaymentType.BY_SET_DATE
+  }
+
+  public isResponsePartiallyAdmittedWithPayBySetDate (): boolean {
+    return this.partialAdmission !== undefined
+      && this.partialAdmission.paymentOption
+      && this.partialAdmission.paymentOption.option === DefendantPaymentType.BY_SET_DATE
   }
 }

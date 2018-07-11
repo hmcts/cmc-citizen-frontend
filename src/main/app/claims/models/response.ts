@@ -1,14 +1,14 @@
 import { ResponseType } from 'claims/models/response/responseType'
 import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { FullAdmissionResponse } from 'claims/models/response/fullDefenceAdmission'
-import { PartAdmissionResponse } from 'claims/models/response/partDefenceAdmission'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 
-export type Response = FullDefenceResponse | FullAdmissionResponse | PartAdmissionResponse
+export type Response = FullDefenceResponse | FullAdmissionResponse | PartialAdmissionResponse
 
 const deserializers = {
   [ResponseType.FULL_DEFENCE]: FullDefenceResponse.deserialize,
   [ResponseType.FULL_ADMISSION]: FullAdmissionResponse.deserialize,
-  [ResponseType.PART_ADMISSION]: PartAdmissionResponse.deserialize
+  [ResponseType.PART_ADMISSION]: PartialAdmissionResponse.deserialize
 }
 
 export namespace Response {
