@@ -40,7 +40,7 @@ function renderView (form: Form<DefendantPaymentPlan>, res: express.Response): v
     paymentLength: calculatePaymentPlanLength(form.model),
     monthlyIncome: _.get(draft, 'document.statementOfMeans.monthlyIncome', 0),
     monthlyExpenses: _.get(draft, 'document.statementOfMeans.monthlyExpenses', 0),
-    totalAmount: claim.claimData.amount.totalAmount()
+    totalAmount: claim.totalAmountTillToday
   })
 }
 
