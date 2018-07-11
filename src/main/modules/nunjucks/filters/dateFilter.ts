@@ -37,7 +37,7 @@ export function dateFilter (value: moment.Moment | string): string {
  * {{ myDateVar | inputDate }}
  *
  * output:
- *  06 04 2018
+ *  6 4 2018
  * */
 export function dateInputFilter (value: moment.Moment | string): string {
   try {
