@@ -4,7 +4,7 @@ import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/i
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
-import { IncomeExpenseSource } from 'response/form/models/statement-of-means/incomeSource'
+import { IncomeExpenseSource } from 'response/form/models/statement-of-means/incomeExpenseSource'
 import { SourceNames } from 'response/form/models/statement-of-means/monthlyIncome'
 import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
 

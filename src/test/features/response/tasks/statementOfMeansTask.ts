@@ -37,7 +37,7 @@ import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders
 import { MonthlyIncome, SourceNames } from 'response/form/models/statement-of-means/monthlyIncome'
 import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
 import { Explanation } from 'response/form/models/statement-of-means/explanation'
-import { IncomeExpenseSource } from 'response/form/models/statement-of-means/incomeSource'
+import { IncomeExpenseSource } from 'response/form/models/statement-of-means/incomeExpenseSource'
 import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
 
 function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDraft {

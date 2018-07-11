@@ -1,4 +1,4 @@
-import { IncomeExpenseSource } from 'response/form/models/statement-of-means/incomeSource'
+import { IncomeExpenseSource } from 'response/form/models/statement-of-means/incomeExpenseSource'
 import { ValidateIf, ValidateNested } from 'class-validator'
 
 export class MonthlyExpenses {

@@ -1,6 +1,6 @@
 import { ValidateIf, ValidateNested } from 'class-validator'
 
-import { IncomeExpenseSource } from './incomeSource'
+import { IncomeExpenseSource } from './incomeExpenseSource'
 
 export class SourceNames {
   static readonly SALARY = 'Income from your job'

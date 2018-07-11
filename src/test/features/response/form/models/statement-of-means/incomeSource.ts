@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { Validator } from 'class-validator'
 
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
-import { IncomeExpenseSource, ValidationErrors } from 'response/form/models/statement-of-means/incomeSource'
+import { IncomeExpenseSource, ValidationErrors } from 'response/form/models/statement-of-means/incomeExpenseSource'
 import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
 
 const SAMPLE_MONTHLY_INCOME_SOURCE_FROM_OBJECT = {

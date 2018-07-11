@@ -4,7 +4,7 @@ import { Validator } from 'class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
 import { MonthlyIncome, SourceNames } from 'response/form/models/statement-of-means/monthlyIncome'
-import { IncomeExpenseSource, ValidationErrors as MonthlyIncomeSourceValidationErrors } from 'response/form/models/statement-of-means/incomeSource'
+import { IncomeExpenseSource, ValidationErrors as MonthlyIncomeSourceValidationErrors } from 'response/form/models/statement-of-means/incomeExpenseSource'
 
 function getSampleMonthtlyIncomeObject (options?: object) {
   const DEFAULT_SAMPLE_VALID_MONTHLY_INCOME = {
