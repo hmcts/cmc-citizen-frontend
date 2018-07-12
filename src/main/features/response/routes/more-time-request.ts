@@ -13,6 +13,7 @@ import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
+import { PartyContactDetails } from 'claims/models/api/partyContactDetails'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -53,12 +54,13 @@ export default express.Router()
         const claim: Claim = res.locals.claim
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
+        const defendantContactDetails: PartyContactDetails = PartyContactDetails.fromDefendant(draft.document.defendantDetails)
 
         draft.document.moreTimeNeeded = form.model
         await new DraftService().save(draft, user.bearerToken)
 
         if (form.model.option === MoreTimeNeededOption.YES) {
-          await claimStoreClient.requestForMoreTime(claim.externalId, user)
+          await claimStoreClient.requestForMoreTime(claim.externalId, user, defendantContactDetails)
 
           res.redirect(Paths.moreTimeConfirmationPage.evaluateUri({ externalId: claim.externalId }))
         } else {
