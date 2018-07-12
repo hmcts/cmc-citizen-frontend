@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { MomentFactory } from 'shared/momentFactory'
 
-import { calculateInterest } from 'common/calculateInterest'
+import { calculateInterest } from 'common/calculate-interest/calculateInterest'
 import { mockCalculateInterestRate } from 'test/http-mocks/claim-store'
 
 import { attachDefaultHooks } from 'test/hooks'

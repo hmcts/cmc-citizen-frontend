@@ -27,6 +27,7 @@
     "countyCourtJudgment": true,
     "fullAdmission": true,
     "partialAdmission": true,
+    "admissions": true,
     "offer": true,
     "statementOfMeans": true,
     "returnErrorToUser": true

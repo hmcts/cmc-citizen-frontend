@@ -1,140 +1,112 @@
-import { AmountDescriptionRow } from 'features/response/form/models/statement-of-means/amountDescriptionRow'
-import { MultiRowForm } from 'forms/models/multiRowForm'
-import { toNumberOrUndefined } from 'shared/utils/numericUtils'
-import { IsDefined } from 'class-validator'
-import { Fractions, Min } from '@hmcts/cmc-validators'
-import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
+import { ValidateIf, ValidateNested } from 'class-validator'
 
-export const MAX_NUMBER_OF_ROWS: number = 10
-export const INIT_ROW_COUNT: number = 0
+import { IncomeExpenseSource } from './incomeExpenseSource'
 
-export class ValidationErrors {
-  static readonly AMOUNT_REQUIRED_SALARY: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Salary`
-  static readonly AMOUNT_INVALID_DECIMALS_SALARY: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Salary`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_SALARY: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Salary`
-
-  static readonly AMOUNT_REQUIRED_CREDIT: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Universal Credit`
-  static readonly AMOUNT_INVALID_DECIMALS_CREDIT: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Rent`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_CREDIT: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Rent`
-
-  static readonly AMOUNT_REQUIRED_JOB_SEEK_INCOME: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Jobseeker’s Allowance (income based)`
-  static readonly AMOUNT_INVALID_DECIMALS_JOB_SEEK_INCOME: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Jobseeker’s Allowance (income based)`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_JOB_SEEK_INCOME: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Jobseeker’s Allowance (income based)`
-
-  static readonly AMOUNT_REQUIRED_JOB_SEEK_CONTRIBUTION: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Jobseeker’s Allowance (contribution based)`
-  static readonly AMOUNT_INVALID_DECIMALS_JOB_SEEK_CONTRIBUTION: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Jobseeker’s Allowance (contribution based)`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_JOB_SEEK_CONTRIBUTION: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Jobseeker’s Allowance (contribution based)`
-
-  static readonly AMOUNT_REQUIRED_INCOME: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Income Support`
-  static readonly AMOUNT_INVALID_DECIMALS_INCOME: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Income Support`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_INCOME: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Income Support`
-
-  static readonly AMOUNT_REQUIRED_WORKING_TAX_CREDIT: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Working Tax Credit`
-  static readonly AMOUNT_INVALID_DECIMALS_WORKING_TAX_CREDIT: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Working Tax Credit`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_WORKING_TAX_CREDIT: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Working Tax Credit`
-
-  static readonly AMOUNT_REQUIRED_CHILD_TAX_CREDIT: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Child Tax Credit`
-  static readonly AMOUNT_INVALID_DECIMALS_CHILD_TAX_CREDIT: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Child Tax Credit`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_CHILD_TAX_CREDIT: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Child Tax Credit`
-
-  static readonly AMOUNT_REQUIRED_CHILD_BENEFIT: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Child Benefit`
-  static readonly AMOUNT_INVALID_DECIMALS_CHILD_BENEFIT: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Child Benefit`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_CHILD_BENEFIT: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Child Benefit`
-
-  static readonly AMOUNT_REQUIRED_COUNCIL_TAX_SUPPORT: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Council Tax Support`
-  static readonly AMOUNT_INVALID_DECIMALS_COUNCIL_TAX_SUPPORT: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Council Tax Support`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_COUNCIL_TAX_SUPPORT: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Council Tax Support`
-
-  static readonly AMOUNT_REQUIRED_PENSION: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Pension (paid to you)`
-  static readonly AMOUNT_INVALID_DECIMALS_PENSION: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Pension (paid to you)`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_PENSION: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Pension (paid to you)`
-
-  static readonly AMOUNT_REQUIRED_MAINTENANCE: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Maintenance payments (paid to you)`
-  static readonly AMOUNT_INVALID_DECIMALS_MAINTENANCE: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Maintenance payments (paid to you)`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_MAINTENANCE: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Maintenance payments (paid to you)`
+export class SourceNames {
+  static readonly SALARY = 'Income from your job'
+  static readonly UNIVERSAL_CREDIT = 'Universal Credit'
+  static readonly JOBSEEKER_ALLOWANCE_INCOME = 'Jobseeker’s Allowance (income based)'
+  static readonly JOBSEEKER_ALLOWANCE_CONTRIBUTION = 'Jobseeker’s Allowance (contribution based)'
+  static readonly INCOME_SUPPORT = 'Income Support'
+  static readonly WORKING_TAX_CREDIT = 'Working Tax Credit'
+  static readonly CHILD_TAX_CREDIT = 'Child Tax Credit'
+  static readonly CHILD_BENEFIT = 'Child Benefit'
+  static readonly COUNCIL_TAX_SUPPORT = 'Council Tax Support'
+  static readonly PENSION = 'Pension (paid to you)'
 }
 
-export class MonthlyIncome extends MultiRowForm<AmountDescriptionRow> {
+export class MonthlyIncome {
 
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_SALARY })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_SALARY })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_SALARY })
-  salary?: number
+  salarySourceDeclared?: boolean
+  @ValidateIf((o: MonthlyIncome) => o.salarySourceDeclared || (o.salarySource && o.salarySource.populated))
+  @ValidateNested()
+  salarySource?: IncomeExpenseSource
 
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_CREDIT })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_CREDIT })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_CREDIT })
-  universalCredit?: number
+  universalCreditSourceDeclared?: boolean
+  @ValidateIf((o: MonthlyIncome) => o.universalCreditSourceDeclared || (o.universalCreditSource && o.universalCreditSource.populated))
+  @ValidateNested()
+  universalCreditSource?: IncomeExpenseSource
 
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_JOB_SEEK_INCOME })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_JOB_SEEK_INCOME })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_JOB_SEEK_INCOME })
-  jobSeekerAllowanceIncome?: number
+  jobseekerAllowanceIncomeSourceDeclared?: boolean
+  @ValidateIf((o: MonthlyIncome) => o.jobseekerAllowanceIncomeSourceDeclared || (o.jobseekerAllowanceIncomeSource && o.jobseekerAllowanceIncomeSource.populated))
+  @ValidateNested()
+  jobseekerAllowanceIncomeSource?: IncomeExpenseSource
 
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_JOB_SEEK_CONTRIBUTION })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_JOB_SEEK_CONTRIBUTION })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_JOB_SEEK_CONTRIBUTION })
-  jobSeekerAllowanceContribution?: number
+  jobseekerAllowanceContributionSourceDeclared?: boolean
+  @ValidateIf((o: MonthlyIncome) => o.jobseekerAllowanceContributionSourceDeclared || (o.jobseekerAllowanceContributionSource && o.jobseekerAllowanceContributionSource.populated))
+  @ValidateNested()
+  jobseekerAllowanceContributionSource?: IncomeExpenseSource
 
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_INCOME })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_INCOME })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_INCOME })
-  incomeSupport?: number
+  incomeSupportSourceDeclared?: boolean
+  @ValidateIf((o: MonthlyIncome) => o.incomeSupportSourceDeclared || (o.incomeSupportSource && o.incomeSupportSource.populated))
+  @ValidateNested()
+  incomeSupportSource?: IncomeExpenseSource
 
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_WORKING_TAX_CREDIT })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_WORKING_TAX_CREDIT })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_WORKING_TAX_CREDIT })
-  workingTaxCredit?: number
+  workingTaxCreditSourceDeclared?: boolean
+  @ValidateIf((o: MonthlyIncome) => o.workingTaxCreditSourceDeclared || (o.workingTaxCreditSource && o.workingTaxCreditSource.populated))
+  @ValidateNested()
+  workingTaxCreditSource?: IncomeExpenseSource
 
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_CHILD_TAX_CREDIT })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_CHILD_TAX_CREDIT })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_CHILD_TAX_CREDIT })
-  childTaxCredit?: number
+  childTaxCreditSourceDeclared?: boolean
+  @ValidateIf((o: MonthlyIncome) => o.childTaxCreditSourceDeclared || (o.childTaxCreditSource && o.childTaxCreditSource.populated))
+  @ValidateNested()
+  childTaxCreditSource?: IncomeExpenseSource
 
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_CHILD_BENEFIT })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_CHILD_BENEFIT })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_CHILD_BENEFIT })
-  childBenefit?: number
+  childBenefitSourceDeclared?: boolean
+  @ValidateIf((o: MonthlyIncome) => o.childBenefitSourceDeclared || (o.childBenefitSource && o.childBenefitSource.populated))
+  @ValidateNested()
+  childBenefitSource?: IncomeExpenseSource
 
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_COUNCIL_TAX_SUPPORT })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_COUNCIL_TAX_SUPPORT })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_COUNCIL_TAX_SUPPORT })
-  councilTaxSupport?: number
+  councilTaxSupportSourceDeclared?: boolean
+  @ValidateIf((o: MonthlyIncome) => o.councilTaxSupportSourceDeclared || (o.councilTaxSupportSource && o.councilTaxSupportSource.populated))
+  @ValidateNested()
+  councilTaxSupportSource?: IncomeExpenseSource
 
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_PENSION })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_PENSION })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_PENSION })
-  pension?: number
+  pensionSourceDeclared?: boolean
+  @ValidateIf((o: MonthlyIncome) => o.pensionSourceDeclared || (o.pensionSource && o.pensionSource.populated))
+  @ValidateNested()
+  pensionSource?: IncomeExpenseSource
 
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_MAINTENANCE })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_MAINTENANCE })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_MAINTENANCE })
-  maintenance?: number
+  otherSourcesDeclared?: boolean
+  @ValidateIf((o: MonthlyIncome) => o.otherSourcesDeclared || o.anyOtherIncomePopulated)
+  @ValidateNested()
+  otherSources?: IncomeExpenseSource[]
 
-  constructor (salary?: number,
-               universalCredit?: number,
-               jobSeekerAllowanceIncome?: number,
-               jobSeekerAllowanceContribution?: number,
-               incomeSupport?: number,
-               workingTaxCredit?: number,
-               childTaxCredit?: number,
-               childBenefit?: number,
-               councilTaxSupport?: number,
-               pension?: number,
-               maintenance?: number,
-               rows?: AmountDescriptionRow[]) {
-    super(rows)
-    this.salary = salary
-    this.universalCredit = universalCredit
-    this.jobSeekerAllowanceIncome = jobSeekerAllowanceIncome
-    this.jobSeekerAllowanceContribution = jobSeekerAllowanceContribution
-    this.incomeSupport = incomeSupport
-    this.workingTaxCredit = workingTaxCredit
-    this.childTaxCredit = childTaxCredit
-    this.childBenefit = childBenefit
-    this.councilTaxSupport = councilTaxSupport
-    this.pension = pension
-    this.maintenance = maintenance
+  constructor (
+    salarySourceDeclared?: boolean, salarySource?: IncomeExpenseSource,
+    universalCreditSourceDeclared?: boolean, universalCreditSource?: IncomeExpenseSource,
+    jobseekerAllowanceIncomeSourceDeclared?: boolean, jobseekerAllowanceIncomeSource?: IncomeExpenseSource,
+    jobseekerAllowanceContributionSourceDeclared?: boolean, jobseekerAllowanceContributionSource?: IncomeExpenseSource,
+    incomeSupportSourceDeclared?: boolean, incomeSupportSource?: IncomeExpenseSource,
+    workingTaxCreditSourceDeclared?: boolean, workingTaxCreditSource?: IncomeExpenseSource,
+    childTaxCreditSourceDeclared?: boolean, childTaxCreditSource?: IncomeExpenseSource,
+    childBenefitSourceDeclared?: boolean, childBenefitSource?: IncomeExpenseSource,
+    councilTaxSupportSourceDeclared?: boolean, councilTaxSupportSource?: IncomeExpenseSource,
+    pensionSourceDeclared?: boolean, pensionSource?: IncomeExpenseSource,
+    otherSourcesDeclared?: boolean, otherSources: IncomeExpenseSource[] = [new IncomeExpenseSource()]
+  ) {
+    this.salarySourceDeclared = salarySourceDeclared
+    this.salarySource = salarySource
+    this.universalCreditSourceDeclared = universalCreditSourceDeclared
+    this.universalCreditSource = universalCreditSource
+    this.jobseekerAllowanceIncomeSourceDeclared = jobseekerAllowanceIncomeSourceDeclared
+    this.jobseekerAllowanceIncomeSource = jobseekerAllowanceIncomeSource
+    this.jobseekerAllowanceContributionSourceDeclared = jobseekerAllowanceContributionSourceDeclared
+    this.jobseekerAllowanceContributionSource = jobseekerAllowanceContributionSource
+    this.incomeSupportSourceDeclared = incomeSupportSourceDeclared
+    this.incomeSupportSource = incomeSupportSource
+    this.workingTaxCreditSourceDeclared = workingTaxCreditSourceDeclared
+    this.workingTaxCreditSource = workingTaxCreditSource
+    this.childTaxCreditSourceDeclared = childTaxCreditSourceDeclared
+    this.childTaxCreditSource = childTaxCreditSource
+    this.childBenefitSourceDeclared = childBenefitSourceDeclared
+    this.childBenefitSource = childBenefitSource
+    this.councilTaxSupportSourceDeclared = councilTaxSupportSourceDeclared
+    this.councilTaxSupportSource = councilTaxSupportSource
+    this.pensionSourceDeclared = pensionSourceDeclared
+    this.pensionSource = pensionSource
+    this.otherSourcesDeclared = otherSourcesDeclared
+    this.otherSources = otherSources
   }
 
   static fromObject (value?: any): MonthlyIncome {
@@ -143,50 +115,61 @@ export class MonthlyIncome extends MultiRowForm<AmountDescriptionRow> {
     }
 
     return new MonthlyIncome(
-      toNumberOrUndefined(value.salary),
-      toNumberOrUndefined(value.universalCredit),
-      toNumberOrUndefined(value.jobSeekerAllowanceIncome),
-      toNumberOrUndefined(value.jobSeekerAllowanceContribution),
-      toNumberOrUndefined(value.incomeSupport),
-      toNumberOrUndefined(value.workingTaxCredit),
-      toNumberOrUndefined(value.childTaxCredit),
-      toNumberOrUndefined(value.childBenefit),
-      toNumberOrUndefined(value.councilTaxSupport),
-      toNumberOrUndefined(value.pension),
-      toNumberOrUndefined(value.maintenance),
-      value.rows ? value.rows.map(AmountDescriptionRow.fromObject) : []
+      value.salarySourceDeclared, IncomeExpenseSource.fromObject(SourceNames.SALARY, value.salarySource),
+      value.universalCreditSourceDeclared, IncomeExpenseSource.fromObject(SourceNames.UNIVERSAL_CREDIT, value.universalCreditSource),
+      value.jobseekerAllowanceIncomeSourceDeclared, IncomeExpenseSource.fromObject(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, value.jobseekerAllowanceIncomeSource),
+      value.jobseekerAllowanceContributionSourceDeclared, IncomeExpenseSource.fromObject(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, value.jobseekerAllowanceContributionSource),
+      value.incomeSupportSourceDeclared, IncomeExpenseSource.fromObject(SourceNames.INCOME_SUPPORT, value.incomeSupportSource),
+      value.workingTaxCreditSourceDeclared, IncomeExpenseSource.fromObject(SourceNames.WORKING_TAX_CREDIT, value.workingTaxCreditSource),
+      value.childTaxCreditSourceDeclared, IncomeExpenseSource.fromObject(SourceNames.CHILD_TAX_CREDIT, value.childTaxCreditSource),
+      value.childBenefitSourceDeclared, IncomeExpenseSource.fromObject(SourceNames.CHILD_BENEFIT, value.childBenefitSource),
+      value.councilTaxSupportSourceDeclared, IncomeExpenseSource.fromObject(SourceNames.COUNCIL_TAX_SUPPORT, value.councilTaxSupportSource),
+      value.pensionSourceDeclared, IncomeExpenseSource.fromObject(SourceNames.PENSION, value.pensionSource),
+      value.otherSourcesDeclared, value.otherSources && value.otherSources
+        .map(source => IncomeExpenseSource.fromObject(source.name, source))
+        .filter(source => source !== undefined)
     )
-  }
-
-  createEmptyRow (): AmountDescriptionRow {
-    return new AmountDescriptionRow(undefined)
   }
 
   deserialize (input?: any): MonthlyIncome {
     if (input) {
-      this.salary = input.salary
-      this.universalCredit = input.universalCredit
-      this.jobSeekerAllowanceIncome = input.jobSeekerAllowanceIncome
-      this.jobSeekerAllowanceContribution = input.jobSeekerAllowanceContribution
-      this.incomeSupport = input.incomeSupport
-      this.workingTaxCredit = input.workingTaxCredit
-      this.childTaxCredit = input.childTaxCredit
-      this.childBenefit = input.childBenefit
-      this.councilTaxSupport = input.councilTaxSupport
-      this.pension = input.pension
-      this.maintenance = input.maintenance
-
-      this.rows = this.deserializeRows(input.rows)
+      this.salarySourceDeclared = input.salarySourceDeclared
+      this.salarySource = new IncomeExpenseSource().deserialize(input.salarySource)
+      this.universalCreditSourceDeclared = input.universalCreditSourceDeclared
+      this.universalCreditSource = new IncomeExpenseSource().deserialize(input.universalCreditSource)
+      this.jobseekerAllowanceIncomeSourceDeclared = input.jobseekerAllowanceIncomeSourceDeclared
+      this.jobseekerAllowanceIncomeSource = new IncomeExpenseSource().deserialize(input.jobseekerAllowanceIncomeSource)
+      this.jobseekerAllowanceContributionSourceDeclared = input.jobseekerAllowanceContributionSourceDeclared
+      this.jobseekerAllowanceContributionSource = new IncomeExpenseSource().deserialize(input.jobseekerAllowanceContributionSource)
+      this.incomeSupportSourceDeclared = input.incomeSupportSourceDeclared
+      this.incomeSupportSource = new IncomeExpenseSource().deserialize(input.incomeSupportSource)
+      this.workingTaxCreditSourceDeclared = input.workingTaxCreditSourceDeclared
+      this.workingTaxCreditSource = new IncomeExpenseSource().deserialize(input.workingTaxCreditSource)
+      this.childTaxCreditSourceDeclared = input.childTaxCreditSourceDeclared
+      this.childTaxCreditSource = new IncomeExpenseSource().deserialize(input.childTaxCreditSource)
+      this.childBenefitSourceDeclared = input.childBenefitSourceDeclared
+      this.childBenefitSource = new IncomeExpenseSource().deserialize(input.childBenefitSource)
+      this.councilTaxSupportSourceDeclared = input.councilTaxSupportSourceDeclared
+      this.councilTaxSupportSource = new IncomeExpenseSource().deserialize(input.councilTaxSupportSource)
+      this.pensionSourceDeclared = input.pensionSourceDeclared
+      this.pensionSource = new IncomeExpenseSource().deserialize(input.pensionSource)
+      this.otherSourcesDeclared = input.otherSourcesDeclared
+      this.otherSources = input.otherSources && input.otherSources.map(source => new IncomeExpenseSource().deserialize(source))
     }
 
     return this
   }
 
-  getInitialNumberOfRows (): number {
-    return INIT_ROW_COUNT
+  get anyOtherIncomePopulated (): boolean {
+    return !!this.otherSources && this.otherSources.some(source => source.populated)
   }
 
-  getMaxNumberOfRows (): number {
-    return MAX_NUMBER_OF_ROWS
+  addEmptyOtherIncome (): void {
+    this.otherSources.push(new IncomeExpenseSource())
   }
+
+  removeOtherIncome (source: IncomeExpenseSource): void {
+    this.otherSources.splice(this.otherSources.findIndex(element => element === source), 1)
+  }
+
 }

@@ -98,7 +98,7 @@ export class Form<Model> {
    *
    * @param fieldName - field name / model property
    */
-  valueFor (fieldName: string): string | undefined {
+  valueFor (fieldName: string): any | undefined {
     if (this.model) {
       return this.getValueFrom(this.model, fieldName)
     } else {
