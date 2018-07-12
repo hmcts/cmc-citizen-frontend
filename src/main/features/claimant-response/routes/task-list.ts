@@ -23,8 +23,8 @@ export default express.Router()
       res.render(Paths.taskListPage.associatedView,
         {
           beforeYouStartSection: beforeYouStartSection,
-          submitSection: submitSection,
           howYouWantToRespondSection: howYouWantToRespondSection,
+          submitSection: submitSection,
           claim: claim
         })
     } catch (err) {

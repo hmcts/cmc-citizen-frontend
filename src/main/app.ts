@@ -23,6 +23,7 @@ import { Feature as OfferFeature } from 'offer/index'
 import { TestingSupportFeature } from 'testing-support/index'
 import * as toBoolean from 'to-boolean'
 import { FeatureToggles } from 'utils/featureToggles'
+import { ClaimantResponseFeature } from 'claimant-response/index'
 
 export const app: express.Express = express()
 
@@ -67,6 +68,7 @@ if (toBoolean(config.get<boolean>('featureToggles.offer'))) {
 if (toBoolean(config.get<boolean>('featureToggles.testingSupport'))) {
   new TestingSupportFeature().enableFor(app)
 }
+new ClaimantResponseFeature().enableFor(app)
 
 // Below method overrides the moment's toISOString method, which is used by RequestPromise
 // to convert moment object to String
