@@ -3,7 +3,7 @@ import { toNumberOrUndefined } from 'main/common/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { IsDefined, IsIn, IsPositive } from 'class-validator'
 import { Fractions } from '@hmcts/cmc-validators'
-import { IncomeExpenseSource  as FormIncomeExpenseSource} from 'response/form/models/statement-of-means/incomeExpenseSource'
+import { IncomeExpenseSource  as FormIncomeExpenseSource } from 'response/form/models/statement-of-means/incomeExpenseSource'
 
 export class IncomeExpenseSource {
 

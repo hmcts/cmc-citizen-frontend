@@ -90,8 +90,6 @@ export class MonthlyExpenses {
   @ValidateNested()
   other?: IncomeExpenseSource[]
 
-
-
   constructor (
     mortgageDeclared?: boolean, mortgage?: IncomeExpenseSource,
     rentDeclared?: boolean, rent?: IncomeExpenseSource,
