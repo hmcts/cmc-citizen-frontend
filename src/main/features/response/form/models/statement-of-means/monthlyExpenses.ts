@@ -1,6 +1,22 @@
 import { IncomeExpenseSource } from 'response/form/models/statement-of-means/incomeExpenseSource'
 import { ValidateIf, ValidateNested } from 'class-validator'
 
+export class FieldNames {
+  static readonly MORTGAGE = 'mortgage'
+  static readonly RENT = 'rent'
+  static readonly COUNCIL_TAX = 'Council Tax'
+  static readonly GAS = 'gas'
+  static readonly ELECTRICITY = 'electricity'
+  static readonly WATER = 'water'
+  static readonly TRAVEL = 'travel'
+  static readonly SCHOOL = 'school costs'
+  static readonly FOOD_AND_HOUSEKEEPING = 'food and housekeeping'
+  static readonly TV_AND_BROADBAND = 'TV and broadband'
+  static readonly HIRE_PURCHASE = 'hire purchases'
+  static readonly MOBILE_PHONE = 'mobile phone'
+  static readonly MAINTENANCE = 'maintenance'
+}
+
 export class MonthlyExpenses {
 
   mortgageDeclared?: boolean
@@ -132,19 +148,19 @@ export class MonthlyExpenses {
     }
 
     return new MonthlyExpenses(
-      value.mortgageDeclared, value.mortgage,
-      value.rentDeclared, value.rent,
-      value.councilTaxDeclared, value.councilTax,
-      value.gasDeclared, value.gas,
-      value.electricityDeclared, value.electricity,
-      value.waterDeclared, value.water,
-      value.travelDeclared, value.travel,
-      value.schoolCostsDeclared, value.schoolCosts,
-      value.foodAndHousekeepingDeclared, value.foodAndHousekeeping,
-      value.tvAndBroadbandDeclared, value.tvAndBroadband,
-      value.hirePurchaseDeclared, value.hirePurchase,
-      value.mobilePhoneDeclared, value.mobilePhone,
-      value.maintenanceDeclared, value.maintenance,
+      value.mortgageDeclared, IncomeExpenseSource.fromObject(FieldNames.MORTGAGE, value.mortgage),
+      value.rentDeclared, IncomeExpenseSource.fromObject(FieldNames.RENT, value.rent),
+      value.councilTaxDeclared, IncomeExpenseSource.fromObject(FieldNames.COUNCIL_TAX, value.councilTax),
+      value.gasDeclared, IncomeExpenseSource.fromObject(FieldNames.GAS, value.gas),
+      value.electricityDeclared, IncomeExpenseSource.fromObject(FieldNames.ELECTRICITY, value.electricity),
+      value.waterDeclared, IncomeExpenseSource.fromObject(FieldNames.WATER, value.water),
+      value.travelDeclared, IncomeExpenseSource.fromObject(FieldNames.TRAVEL, value.travel),
+      value.schoolCostsDeclared, IncomeExpenseSource.fromObject(FieldNames.SCHOOL, value.schoolCosts),
+      value.foodAndHousekeepingDeclared, IncomeExpenseSource.fromObject(FieldNames.FOOD_AND_HOUSEKEEPING, value.foodAndHousekeeping),
+      value.tvAndBroadbandDeclared, IncomeExpenseSource.fromObject(FieldNames.TV_AND_BROADBAND, value.tvAndBroadband),
+      value.hirePurchaseDeclared, IncomeExpenseSource.fromObject(FieldNames.HIRE_PURCHASE, value.hirePurchase),
+      value.mobilePhoneDeclared, IncomeExpenseSource.fromObject(FieldNames.MOBILE_PHONE, value.mobilePhone),
+      value.maintenanceDeclared, IncomeExpenseSource.fromObject(FieldNames.MAINTENANCE, value.maintenance),
       value.otherDeclared, value.otherSources && value.otherSources
       .map(source => IncomeExpenseSource.fromObject(source.name, source))
       .filter(source => source !== undefined)
@@ -179,7 +195,7 @@ export class MonthlyExpenses {
       this.mobilePhone = new IncomeExpenseSource().deserialize(input.mobilePhone)
       this.maintenanceDeclared = input.maintenanceDeclared
       this.maintenance = new IncomeExpenseSource().deserialize(input.maintenance)
-      
+
       this.otherDeclared = input.otherDeclared
       this.other = input.other && input.other.map(source => new IncomeExpenseSource().deserialize(source))
     }
