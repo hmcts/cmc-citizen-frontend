@@ -3,7 +3,7 @@ import { Moment } from 'moment'
 export const DATE_FORMAT = 'YYYY-MM-DD'
 export const LONG_DATE_FORMAT = 'D MMMM YYYY'
 export const TIME_FORMAT = 'h:mma'
-export const INPUT_DATE_FORMAT = 'DD MM YYYY'
+export const INPUT_DATE_FORMAT = 'D M YYYY'
 
 export class MomentFormatter {
 
