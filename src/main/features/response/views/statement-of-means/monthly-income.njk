@@ -5,17 +5,13 @@
 {% block additional_scripts %}
   {% include "expandable-checkbox-option-scripts.njk" %}
   {% include "income-expense-calculation-scripts.njk" %}
-<<<<<<< HEAD
-=======
   {% include "append-income-source-section.njk" %}
->>>>>>> master
 {% endblock %}
 
 {% set heading = 'What regular income do you receive?' %}
 
 {% block content %}
 
-<<<<<<< HEAD
 <div class="grid-row">
   <div class="column-two-thirds">
     <p>{{ t('Select all that apply. The information you enter must be truthful and accurate.') }} </p>
@@ -47,40 +43,6 @@
   </div>
 </div>
 
-=======
-<p>{{ t('Select all that apply. The information you enter must be truthful and accurate.') }} </p>
-
-<div class="grid-row">
-  <div class="column-two-thirds">
-
-    <form method="post" novalidate class="income-expense-calculation">
-      {{ csrfProtection(csrf) }}
-
-      {{ incomeSource(form, name = 'salarySource', label = 'Income from your job', hint = 'Include wages, overtime, commission, bonuses') }}
-      {{ incomeSource(form, name = 'universalCreditSource', label = 'Universal Credit') }}
-      {{ incomeSource(form, name = 'jobseekerAllowanceIncomeSource', label = 'Jobseeker’s Allowance (income based)') }}
-      {{ incomeSource(form, name = 'jobseekerAllowanceContributionSource', label = 'Jobseeker’s Allowance (contribution based)') }}
-      {{ incomeSource(form, name = 'incomeSupportSource', label = 'Income Support') }}
-      {{ incomeSource(form, name = 'workingTaxCreditSource', label = 'Working Tax Credit') }}
-      {{ incomeSource(form, name = 'childTaxCreditSource', label = 'Child Tax Credit') }}
-      {{ incomeSource(form, name = 'childBenefitSource', label = 'Child Benefit') }}
-      {{ incomeSource(form, name = 'councilTaxSupportSource', label = 'Council Tax Support') }}
-      {{ incomeSource(form, name = 'pensionSource', label = 'Pension (paid to you)') }}
-      {{ incomeSources(form, name = 'otherSources', label = 'Other') }}
-
-      {{ linkButton('Recalculate total monthly income', 'action[calculateMonthlyIncome]', 'button button-secondary calculate-montly-income-expense') }}
-
-      <p class="heading-small calculation-outcome-container">
-        {{ t('Total monthly income:') }} £<span class="total-monthly-income-expense"> {{ totalMonthlyIncomeExpense | default('0.00') }} </span>
-      </p>
-
-      {{ saveAndContinueButton() }}
-
-    </form>
-  </div>
-</div>
-
->>>>>>> master
 {% endblock %}
 
 {% macro incomeSource(form, name, label, hint) %}
