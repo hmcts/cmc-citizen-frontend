@@ -57,13 +57,13 @@ new DashboardFeature().enableFor(app)
 new ClaimIssueFeature().enableFor(app)
 new DefendantFirstContactFeature().enableFor(app)
 new DefendantResponseFeature().enableFor(app)
-if (FeatureToggles.isEnabled('featureToggles.countyCourtJudgment')) {
+if (FeatureToggles.isEnabled('countyCourtJudgment')) {
   new CCJFeature().enableFor(app)
 }
-if (FeatureToggles.isEnabled('featureToggles.offer')) {
+if (FeatureToggles.isEnabled('offer')) {
   new OfferFeature().enableFor(app)
 }
-if (FeatureToggles.isEnabled('featureToggles.testingSupport')) {
+if (FeatureToggles.isEnabled('testingSupport')) {
   new TestingSupportFeature().enableFor(app)
 }
 if (FeatureToggles.isEnabled('admissions')) {
