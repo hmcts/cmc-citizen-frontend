@@ -58,14 +58,14 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
     const form: Form<MonthlyExpenses> = req.body
 
     switch (actionName) {
-      case 'addOther':
-        form.model.addEmptyOtherIncome()
+      case 'addOtherExpenseSource':
+        form.model.addEmptyOtherExpense()
         break
-      case 'removeOther':
+      case 'removeOtherExpenseSource':
         const selectedForRemoval: IncomeExpenseSource = form.valueFor(extractPropertyName(req.body.action[actionName]))
-        form.model.removeOtherIncome(selectedForRemoval)
+        form.model.removeOtherExpense(selectedForRemoval)
         break
-      case 'reset':
+      case 'resetExpenseSource':
         const selectedForReset: IncomeExpenseSource = form.valueFor(extractPropertyName(req.body.action[actionName]))
         selectedForReset.reset()
         break
@@ -90,7 +90,7 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     StatementOfMeansStateGuard.requestHandler(),
-    FormValidator.requestHandler(MonthlyExpenses, MonthlyExpenses.fromObject, undefined, ['addOther', 'removeOther', 'reset']),
+    FormValidator.requestHandler(MonthlyExpenses, MonthlyExpenses.fromObject, undefined, ['addOtherExpenseSource', 'removeOtherExpenseSource', 'resetExpenseSource']),
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<MonthlyExpenses> = req.body

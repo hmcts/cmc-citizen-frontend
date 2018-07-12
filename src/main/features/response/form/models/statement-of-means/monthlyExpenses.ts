@@ -90,8 +90,6 @@ export class MonthlyExpenses {
   @ValidateNested()
   other?: IncomeExpenseSource[]
 
-
-
   constructor (
     mortgageDeclared?: boolean, mortgage?: IncomeExpenseSource,
     rentDeclared?: boolean, rent?: IncomeExpenseSource,
@@ -106,7 +104,7 @@ export class MonthlyExpenses {
     hirePurchaseDeclared?: boolean, hirePurchase?: IncomeExpenseSource,
     mobilePhoneDeclared?: boolean, mobilePhone?: IncomeExpenseSource,
     maintenanceDeclared?: boolean, maintenance?: IncomeExpenseSource,
-    otherDeclared?: boolean, other?: IncomeExpenseSource[]
+    otherDeclared?: boolean, other: IncomeExpenseSource[] = [new IncomeExpenseSource()]
   ) {
     this.mortgageDeclared = mortgageDeclared
     this.mortgage = mortgage
@@ -203,11 +201,11 @@ export class MonthlyExpenses {
     return this
   }
 
-  addEmptyOtherIncome (): void {
+  addEmptyOtherExpense (): void {
     this.other.push(new IncomeExpenseSource())
   }
 
-  removeOtherIncome (source: IncomeExpenseSource): void {
+  removeOtherExpense (source: IncomeExpenseSource): void {
     this.other.splice(this.other.findIndex(element => element === source), 1)
   }
 

@@ -85,7 +85,7 @@
   {% set checkboxName = name + 'Declared' %}
 
   {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.model.anyOtherExpensePopulated)), label = label) %}
-    {% for source in form.model.otherSources %}
+    {% for source in form.model.other %}
       <div class="other-income-expense-source">
         {{ incomeExpenseSource(form = form, name = name + '[' + loop.index0 + ']', amountLabel = 'Amount paid', amountHint = hint, scheduleLabel = 'Received every', nameEditable = true) }}
         {% if form.model.otherSources.length > 1 %}
