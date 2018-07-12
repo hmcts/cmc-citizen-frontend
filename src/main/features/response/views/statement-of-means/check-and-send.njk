@@ -153,32 +153,59 @@
 
 {% if income.anyOtherIncomePopulated %}
 {% for source in income.otherSources %}
-  {{ row(source.name, name.amount | numeral, '', loop.index0 === indexOfLastRow, bold = true ) }}
+  {{ row(source.name, source.amount | numeral, '', bottomBorder = false, bold = true ) }}
 {% endfor %}
 {% endif %}
 
 {% set expenses = draft.statementOfMeans.monthlyExpenses %}
-{% set otherExpenses = expenses.getPopulatedRowsOnly() %}
 {{ row('Monthly expenses', '', StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true, topBorder = true) }}
-{{ row('Mortgage', expenses.mortgage | numeral, '', false, bold = true) }}
-{{ row('Rent', expenses.rent | numeral, '', false, bold = true) }}
-{{ row('Council Tax', expenses.councilTax | numeral, '', false, bold = true) }}
-{{ row('Gas', expenses.gas | numeral, '', false, bold = true) }}
-{{ row('Electricity', expenses.electricity | numeral, '', false, bold = true) }}
-{{ row('Water', expenses.water | numeral, '', false, bold = true) }}
-{{ row('Travel (school or work)', expenses.travel | numeral, '', false, bold = true) }}
-{{ row('School costs (include clothing)', expenses.schoolCosts | numeral, '', false, bold = true) }}
-{{ row('Food and Housekeeping', expenses.foodAndHousekeeping | numeral, '', false, bold = true) }}
-{{ row('TV and Broadband', expenses.tvAndBroadband | numeral, '', false, bold = true) }}
-{{ row('Mobile phone', expenses.mobilePhone | numeral, '', false, bold = true) }}
-{{ row('Maintenance payments', expenses.maintenance | numeral, '', otherExpenses.length === 0, bold = true) }}
+{% if expenses.mortgage.populated %}
+{{ row('Mortgage', expenses.mortgage.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+{% if expenses.rent.populated %}
+{{ row('Rent', expenses.rent.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+{% if expenses.councilTax.populated %}
+{{ row('Council Tax', expenses.councilTax.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+{% if expenses.gas.populated %}
+{{ row('Gas', expenses.gas.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+{% if expenses.electricity.populated %}
+{{ row('Electricity', expenses.electricity.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+{% if expenses.water.populated %}
+{{ row('Water', expenses.water.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+{% if expenses.travel.populated %}
+{{ row('Travel (school or work)', expenses.travel.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+{% if expenses.schoolCosts.populated %}
+{{ row('School costs (include clothing)', expenses.schoolCosts.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+{% if expenses.foodAndHousekeeping.populated %}
+{{ row('Food and Housekeeping', expenses.foodAndHousekeeping.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+{% if expenses.tvAndBroadband.populated %}
+{{ row('TV and Broadband', expenses.tvAndBroadband.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+{% if expenses.hirePurchase.populated %}
+{{ row('Hire purchase', expenses.hirePurchase.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+{% if expenses.mobilePhone.populated %}
+{{ row('Mobile phone', expenses.mobilePhone.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+{% if expenses.maintenance.populated %}
+{{ row('Maintenance payments', expenses.maintenance.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
 
-{% set indexOfLastRow = otherExpenses.length - 1 %}
-{% for expenseRow in otherExpenses %}
-  {{ row(expenseRow.description, expenseRow.amount | numeral, '', loop.index0 === indexOfLastRow ) }}
-{% endfor %}
+{% if expenses.anyOtherPopulated %}
+  {% for expense in expenses.other %}
+    {{ row(expense.name, expense.amount | numeral, '', bottomBorder = false, bold = true ) }}
+  {% endfor %}
+{% endif %}
 
-{{ row('Debts', '', StatementOfMeansPaths.debtsPage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
+{{ row('Debts', '', StatementOfMeansPaths.debtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true, topBorder = true) }}
 {{ row('Do you have any debts?', 'Yes' if draft.statementOfMeans.debts.declared else 'No', '', not draft.statementOfMeans.debts.declared, bold = true) }}
 {% set debtRows = draft.statementOfMeans.debts.getPopulatedRowsOnly() %}
 {% set indexOfLastRow = debtRows.length - 1 %}
