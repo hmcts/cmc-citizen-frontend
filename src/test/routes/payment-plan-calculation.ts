@@ -4,7 +4,7 @@ import * as sinon from 'sinon'
 import * as request from 'supertest'
 import * as HttpStatus from 'http-status-codes'
 
-import * as paymentPlan from 'common/paymentPlan'
+import * as paymentPlan from 'common/calculate-payment-plan/paymentPlan'
 
 import { app } from 'main/app'
 

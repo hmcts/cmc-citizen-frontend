@@ -4,11 +4,12 @@ import { Claim } from 'claims/models/claim'
 import { TaskListBuilder } from 'claimant-response/helpers/taskListBuilder'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
+import { ErrorHandling } from 'shared/errorHandling'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.taskListPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    try {
+  .get(Paths.taskListPage.uri,
+    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const claim: Claim = res.locals.claim
 
@@ -27,7 +28,5 @@ export default express.Router()
           submitSection: submitSection,
           claim: claim
         })
-    } catch (err) {
-      next(err)
-    }
-  })
+    })
+  )

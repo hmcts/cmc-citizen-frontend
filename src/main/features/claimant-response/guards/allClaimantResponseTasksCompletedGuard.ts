@@ -23,7 +23,7 @@ export class AllClaimantResponseTasksCompletedGuard {
         return next()
       }
 
-      logger.debug('State guard: claim check and send page is disabled until all tasks are completed - redirecting to task list')
+      logger.debug('State guard: check and send page is disabled until all tasks are completed - redirecting to task list')
       res.redirect(Paths.incompleteSubmissionPage.evaluateUri({ externalId: claim.externalId }))
     } catch (err) {
       next(err)
