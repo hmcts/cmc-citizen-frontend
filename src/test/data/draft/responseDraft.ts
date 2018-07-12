@@ -152,7 +152,27 @@ export const statementOfMeansWithMandatoryFieldsDraft = {
   courtOrders: {
     declared: false
   },
-  explanation: 'Some reason'
+  explanation: 'Some reason',
+  monthlyIncome: {
+    childBenefitSource: {
+      name: 'Child Benefit',
+      amount: 200,
+      schedule: {
+        value: 'WEEK',
+        displayValue: 'Week'
+      }
+    }
+  },
+  monthlyExpenses: {
+    mortgage: {
+      name: 'mortgage',
+      amount: 100,
+      schedule: {
+        value: 'MONTH',
+        displayValue: 'Month'
+      }
+    }
+  }
 }
 
 export const statementOfMeansWithAllFieldsDraft = {

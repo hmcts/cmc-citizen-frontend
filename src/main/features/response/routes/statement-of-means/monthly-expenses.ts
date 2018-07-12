@@ -14,21 +14,63 @@ import { User } from 'idam/user'
 import { RoutablePath } from 'shared/router/routablePath'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
+import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/incomeExpenseSources'
+import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
+import { Validator } from 'class-validator'
+import { IncomeExpenseSource } from 'response/form/models/statement-of-means/incomeExpenseSource'
 
 const page: RoutablePath = StatementOfMeansPaths.monthlyExpensesPage
 
 function renderView (form: Form<MonthlyExpenses>, res: express.Response): void {
   res.render(page.associatedView, {
-    form: form
+    form: form,
+    totalMonthlyIncomeExpense: calculateTotalMonthlyIncomeExpense(form.model)
   })
 }
 
+function calculateTotalMonthlyIncomeExpense (model: MonthlyExpenses): number {
+  if (!model) {
+    return undefined
+  }
+  const incomeExpenseSources = IncomeExpenseSources.fromMonthlyExpensesFormModel(model)
+
+  if (!isValid(incomeExpenseSources)) {
+    return undefined
+  }
+
+  return CalculateMonthlyIncomeExpense.calculateTotalAmount(
+    incomeExpenseSources.incomeExpenseSources
+  )
+}
+
+function isValid (incomeExpenseSources: IncomeExpenseSources): boolean {
+  const validator = new Validator()
+  return validator.validateSync(incomeExpenseSources).length === 0
+}
+
 function actionHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
+  function extractPropertyName (action: object): string {
+    return Object.keys(action)[0]
+  }
+
   if (req.body.action) {
+    const actionName = extractPropertyName(req.body.action)
     const form: Form<MonthlyExpenses> = req.body
-    if (req.body.action.addRow) {
-      form.model.appendRow()
+
+    switch (actionName) {
+      case 'addOther':
+        form.model.addEmptyOtherIncome()
+        break
+      case 'removeOther':
+        const selectedForRemoval: IncomeExpenseSource = form.valueFor(extractPropertyName(req.body.action[actionName]))
+        form.model.removeOtherIncome(selectedForRemoval)
+        break
+      case 'reset':
+        const selectedForReset: IncomeExpenseSource = form.valueFor(extractPropertyName(req.body.action[actionName]))
+        selectedForReset.reset()
+        break
     }
+
     return renderView(form, res)
   }
   next()
@@ -40,17 +82,17 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     StatementOfMeansStateGuard.requestHandler(),
-    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.statementOfMeans.monthlyExpenses), res)
-    })
+    }))
   .post(
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     StatementOfMeansStateGuard.requestHandler(),
-    FormValidator.requestHandler(MonthlyExpenses, MonthlyExpenses.fromObject, undefined, ['addRow']),
+    FormValidator.requestHandler(MonthlyExpenses, MonthlyExpenses.fromObject, undefined, ['addOther', 'removeOther', 'reset']),
     actionHandler,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<MonthlyExpenses> = req.body
       const { externalId } = req.params
 
@@ -60,7 +102,6 @@ export default express.Router()
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        form.model.removeExcessRows()
         draft.document.statementOfMeans.monthlyExpenses = form.model
         await new DraftService().save(draft, user.bearerToken)
 

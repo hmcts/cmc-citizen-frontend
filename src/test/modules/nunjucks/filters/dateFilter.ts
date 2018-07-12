@@ -46,15 +46,15 @@ describe('dateFilter', () => {
 
 describe('dateInputFilter', () => {
   it('formats date (moment object) properly', () => {
-    expect(dateInputFilter(moment('2017-01-01'))).to.eq('01 01 2017')
+    expect(dateInputFilter(moment('2017-01-01'))).to.eq('1 1 2017')
   })
 
   it('formats date (string) properly', () => {
-    expect(dateInputFilter('2017-01-01')).to.eq('01 01 2017')
+    expect(dateInputFilter('2017-01-01')).to.eq('1 1 2017')
   })
 
   it('formats date properly (object with time)', () => {
-    expect(dateInputFilter(moment('2017-01-01 12:12:12'))).to.eq('01 01 2017')
+    expect(dateInputFilter(moment('2017-01-01 12:12:12'))).to.eq('1 1 2017')
   })
 
   describe('throws exception when', () => {

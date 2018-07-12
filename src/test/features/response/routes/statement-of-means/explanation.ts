@@ -19,7 +19,7 @@ import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/r
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const expectedText: string = 'Briefly explain why you can`t pay immediately'
+const expectedText: string = 'Briefly explain why you can’t pay immediately'
 
 const pagePath = StatementOfMeansPaths.explanationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 describe('Statement of means: Briefly explain why cannot page immediately page', () => {
