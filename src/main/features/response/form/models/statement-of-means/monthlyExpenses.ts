@@ -159,7 +159,7 @@ export class MonthlyExpenses {
       value.hirePurchaseDeclared, IncomeExpenseSource.fromObject(FieldNames.HIRE_PURCHASE, value.hirePurchase),
       value.mobilePhoneDeclared, IncomeExpenseSource.fromObject(FieldNames.MOBILE_PHONE, value.mobilePhone),
       value.maintenanceDeclared, IncomeExpenseSource.fromObject(FieldNames.MAINTENANCE, value.maintenance),
-      value.otherDeclared, value.otherSources && value.otherSources
+      value.otherDeclared, value.other && value.other
       .map(source => IncomeExpenseSource.fromObject(source.name, source))
       .filter(source => source !== undefined)
     )
@@ -193,7 +193,6 @@ export class MonthlyExpenses {
       this.mobilePhone = new IncomeExpenseSource().deserialize(input.mobilePhone)
       this.maintenanceDeclared = input.maintenanceDeclared
       this.maintenance = new IncomeExpenseSource().deserialize(input.maintenance)
-
       this.otherDeclared = input.otherDeclared
       this.other = input.other && input.other.map(source => new IncomeExpenseSource().deserialize(source))
     }
