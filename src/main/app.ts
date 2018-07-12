@@ -68,8 +68,10 @@ if (toBoolean(config.get<boolean>('featureToggles.offer'))) {
 if (toBoolean(config.get<boolean>('featureToggles.testingSupport'))) {
   new TestingSupportFeature().enableFor(app)
 }
-new ClaimantResponseFeature().enableFor(app)
 
+if (toBoolean(config.get<boolean>('featureToggles.admissions'))) {
+  new ClaimantResponseFeature().enableFor(app)
+}
 // Below method overrides the moment's toISOString method, which is used by RequestPromise
 // to convert moment object to String
 moment.prototype.toISOString = function () {
