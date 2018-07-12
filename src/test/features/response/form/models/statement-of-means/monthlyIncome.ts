@@ -117,7 +117,7 @@ function forFromObjectMethod () {
       amount: this.sampleData.childBenefitSource.amount,
       schedule: this.sampleData.childBenefitSource.schedule.value
     },
-    cxouncilTaxSupportSourceDeclared: this.sampleData.councilTaxSupportSourceDeclared,
+    councilTaxSupportSourceDeclared: this.sampleData.councilTaxSupportSourceDeclared,
     councilTaxSupportSource: {
       amount: this.sampleData.councilTaxSupportSource.amount,
       schedule: this.sampleData.councilTaxSupportSource.schedule.value
@@ -168,7 +168,7 @@ function forDeserialize () {
       amount: this.sampleData.workingTaxCreditSource.amount,
       schedule: this.sampleData.workingTaxCreditSource.schedule
     },
-    cildTaxCreditSourceDeclared: this.sampleData.cildTaxCreditSourceDeclared,
+    childTaxCreditSourceDeclared: this.sampleData.childTaxCreditSourceDeclared,
     childTaxCreditSource: {
       name: SourceNames.CHILD_TAX_CREDIT,
       amount: this.sampleData.childTaxCreditSource.amount,
