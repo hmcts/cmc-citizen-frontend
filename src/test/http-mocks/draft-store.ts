@@ -327,6 +327,10 @@ const sampleCCJDraftObj = {
   }
 }
 
+const sampleClaimantResponseDraftObj = {
+  externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5'
+}
+
 export function resolveFind (draftType: string, draftOverride?: object): mock.Scope {
   let documentDocument: object
 
@@ -345,6 +349,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       break
     case 'ccj':
       documentDocument = { ...sampleCCJDraftObj, ...draftOverride }
+      break
+    case 'claimantResponse':
+      documentDocument = { ...sampleClaimantResponseDraftObj, ...draftOverride }
       break
     default:
       documentDocument = { ...draftOverride }
