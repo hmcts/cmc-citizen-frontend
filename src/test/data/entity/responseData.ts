@@ -50,7 +50,7 @@ export const fullAdmissionWithImmediatePaymentData = {
 export const fullAdmissionWithPaymentBySetDateData = {
   ...baseResponseData,
   ...baseFullAdmissionData,
-  paymentOption: PaymentOption.FULL_BY_SPECIFIED_DATE,
+  paymentOption: PaymentOption.BY_SPECIFIED_DATE,
   paymentDate: '2050-12-31'
 }
 

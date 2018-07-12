@@ -33,8 +33,9 @@ import { DefendantHowMuchHaveYouPaidClaimantPage } from 'integration-test/tests/
 import { DefendantWhenDidYouPayPage } from 'integration-test/tests/citizen/defence/pages/defendant-when-did-you-pay'
 import { ClaimStoreClient } from 'integration-test/helpers/clients/claimStoreClient'
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
-import I = CodeceptJS.I
 import { DefendantEvidencePage } from 'integration-test/tests/citizen/defence/pages/defendant-evidence'
+import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import I = CodeceptJS.I
 
 const I: I = actor()
 const defendantStartPage: DefendantStartPage = new DefendantStartPage()
@@ -349,6 +350,30 @@ export class DefenceSteps {
       default:
         throw new Error(`Unknown payment option: ${paymentOption}`)
     }
+  }
+
+  makePartialAdmission (defendantType: PartyType, alreadyPaid: YesNoOption): void {
+    I.dontSee('COMPLETE')
+
+    this.confirmYourDetails(createDefendant(defendantType))
+
+    this.requestMoreTimeToRespond()
+
+    defendantSteps.selectTaskChooseAResponse()
+    defendantDefenceTypePage.admitPartOfMoneyClaim()
+    defendantSteps.selectTaskHaveYouPaidClaimant()
+    defendantSteps.selectTaskHowMuchPaidToClaiment()
+
+    defendantWhenWillYouPage.chooseInstalments()
+    defendantTaskListPage.selectYourRepaymentPlanTask()
+    defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan)
+    defendantPaymentPlanPage.saveAndContinue()
+    defendantTaskListPage.selectShareYourFinancialDetailsTask()
+    statementOfMeansSteps.fillStatementOfMeansWithFullDataSet()
+    defendantSteps.selectCheckAndSubmitYourDefence()
+    this.checkAndSendAndSubmit(defendantType)
+
+    I.see('You’ve submitted your response')
   }
 
   sendDefenceResponseHandOff (claimRef: string, defendant: Party, claimant: Party, defenceType: DefenceType): void {

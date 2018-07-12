@@ -16,6 +16,10 @@ export class DefendantSteps {
     defendantTaskListPage.selectChooseAResponse()
   }
 
+  selectTaskHaveYouPaidClaimant (): void {
+    defendantTaskListPage.selectTaskHaveYouPaidTheClaimantTheAmountYouAdmitYouOwe()
+  }
+
   selectTaskHowMuchMoneyBelieveYouOwe (): void {
     defendantTaskListPage.selectTaskHowMuchMoneyBelieveYouOwe()
   }

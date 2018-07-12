@@ -16,6 +16,10 @@ export class DefendantTaskListPage {
     I.click('Choose a response')
   }
 
+  selectTaskHaveYouPaidTheClaimantTheAmountYouAdmitYouOwe (): void {
+    I.click('Have you paid the claimant the amount you admit you owe?')
+  }
+
   selectTaskHowMuchPaidToClaiment (): void {
     I.click('How much have you paid the claimant?')
   }
