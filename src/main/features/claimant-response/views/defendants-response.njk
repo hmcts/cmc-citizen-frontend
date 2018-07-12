@@ -1,0 +1,59 @@
+{% extends "layout.njk" %}
+{% set heading = 'The defendant’s response' %}
+
+{% set claimantName = claim.claimData.claimant.name %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      {% if claim.response.paymentOption === domain.PaymentOption.INSTALMENTS %}
+        <p>{{ t('{{ claimantName }} admits they owe all the money you’ve claimed. They’ve offered to pay you in instalments.', { claimantName: claimantName }) }}</p>
+
+        <h2 class="heading-medium">{{ t('How they want to pay') }}</h2>
+
+
+        <h3 class="heading-small form-group-related">{{ t('Why they can’t pay the full amount now') }}</h3>
+
+        <p>{{ t('I am heavily in debt at the moment and I’m not earning that much money.
+          {{ totalAmount }} a month is all i can afford.',{ totalAmount: totalAmount | numeral }) }}</p>
+
+        <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
+
+        <p>{{ t('Their total monthly income is {{ monthlyIncome }}',
+          { monthlyIncome: monthlyIncome | numeral }) }}</p>
+        <p>{{ t('Their total monthly expenses is {{ monthlyExpenses }}',
+          { monthlyExpenses: monthlyExpenses | numeral }) }}</p>
+
+        <summary>{{ t('See their financial details') }}</summary>
+
+      {% endif %}
+
+      {% if claim.response.paymentOption === domain.PaymentOption.FULL_BY_SPECIFIED_DATE %}
+        <p>{{ t('{{ claimantName }} admits they owe all the money you’ve claimed.', { claimantName: claimantName }) }}</p>
+
+        <p>{{ t('They’ve offered to pay you in full by.') }}</p>
+
+        <p>{{ t('They’ve offered to pay you in full by {{ paymentDate }}.', { paymentDate: claim.response.paymentDate | date }) }}</p>
+
+        <h3 class="heading-small form-group-related">{{ t('Why they can’t pay the full amount now') }}</h3>
+
+        <p>{{ t('I am heavily in debt at the moment and I’m not earning that much money. i can pay when i’ve cleared my debts.') }}</p>
+
+        <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
+
+        <p>{{ t('Their total monthly income is {{ monthlyIncome }}',
+          { monthlyIncome: monthlyIncome | numeral }) }}</p>
+        <p>{{ t('Their total monthly expenses is {{ monthlyExpenses }}',
+          { monthlyExpenses: monthlyExpenses | numeral }) }}</p>
+
+        <summary>{{ t('See their financial details') }}</summary>
+
+      {% endif %}
+
+      {% if draft.response.type === ResponseType.PART_ADMISSION %}
+      {% endif %}
+
+    </div>
+  </div>
+{% endblock %}
