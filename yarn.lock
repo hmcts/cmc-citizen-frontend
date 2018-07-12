@@ -82,9 +82,9 @@
     lodash "^4.17.5"
     to-fast-properties "^2.0.0"
 
-"@hmcts/cmc-common-frontend@^1.47.0":
-  version "1.47.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.47.0.tgz#ba6afea1e1bd919e78d177501608f9dfb70b34fd"
+"@hmcts/cmc-common-frontend@^1.49.0":
+  version "1.49.0"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.49.0.tgz#54a89b400a05de2f26a6a7056525f2d03f44b13b"
 
 "@hmcts/cmc-draft-store-middleware@^2.0.0":
   version "2.0.0"

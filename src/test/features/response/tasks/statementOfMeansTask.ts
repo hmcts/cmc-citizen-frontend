@@ -34,9 +34,11 @@ import { OtherDependants } from 'response/form/models/statement-of-means/otherDe
 import { NumberOfPeople } from 'response/form/models/statement-of-means/numberOfPeople'
 import { Debts } from 'response/form/models/statement-of-means/debts'
 import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders'
-import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
+import { MonthlyIncome, SourceNames } from 'response/form/models/statement-of-means/monthlyIncome'
 import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
 import { Explanation } from 'response/form/models/statement-of-means/explanation'
+import { IncomeSource } from 'response/form/models/statement-of-means/incomeSource'
+import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
 
 function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDraft {
   const responseDraft: ResponseDraft = new ResponseDraft()
@@ -68,7 +70,18 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
   responseDraft.statementOfMeans.unemployment = new Unemployment(UnemploymentType.RETIRED)
   responseDraft.statementOfMeans.bankAccounts = new BankAccounts([new BankAccountRow(BankAccountType.CURRENT_ACCOUNT, false, 100)])
   responseDraft.statementOfMeans.debts = new Debts(false)
-  responseDraft.statementOfMeans.monthlyIncome = new MonthlyIncome(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, [])
+  responseDraft.statementOfMeans.monthlyIncome = new MonthlyIncome(
+    true, new IncomeSource(SourceNames.SALARY, 100, ExpenseSchedule.MONTH),
+    undefined, new IncomeSource(SourceNames.UNIVERSAL_CREDIT, 200, ExpenseSchedule.MONTH),
+    undefined, new IncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, 300, ExpenseSchedule.TWO_WEEKS),
+    undefined, new IncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, 400, ExpenseSchedule.MONTH),
+    undefined, new IncomeSource(SourceNames.INCOME_SUPPORT, 500, ExpenseSchedule.MONTH),
+    undefined, new IncomeSource(SourceNames.WORKING_TAX_CREDIT, 600, ExpenseSchedule.TWO_WEEKS),
+    undefined, new IncomeSource(SourceNames.CHILD_TAX_CREDIT, 700, ExpenseSchedule.MONTH),
+    undefined, new IncomeSource(SourceNames.CHILD_BENEFIT, 800, ExpenseSchedule.MONTH),
+    undefined, new IncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, 900, ExpenseSchedule.TWO_WEEKS),
+    undefined, new IncomeSource(SourceNames.PENSION, 1000, ExpenseSchedule.TWO_WEEKS)
+  )
   responseDraft.statementOfMeans.monthlyExpenses = new MonthlyExpenses(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, [])
   responseDraft.statementOfMeans.courtOrders = new CourtOrders(false)
   responseDraft.statementOfMeans.explanation = new Explanation('Some explanation')
@@ -178,6 +191,25 @@ describe('StatementOfMeansTask', () => {
 
             expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
           })
+
+          it('has monthly income', () => {
+            responseDraft.statementOfMeans.monthlyIncome = new MonthlyIncome(
+              true, new IncomeSource(SourceNames.SALARY, 100, ExpenseSchedule.MONTH),
+              undefined, new IncomeSource(SourceNames.UNIVERSAL_CREDIT, undefined, undefined),
+              undefined, new IncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, undefined, undefined),
+              undefined, new IncomeSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, undefined, undefined),
+              undefined, new IncomeSource(SourceNames.INCOME_SUPPORT, undefined, undefined),
+              undefined, new IncomeSource(SourceNames.WORKING_TAX_CREDIT, undefined, undefined),
+              undefined, new IncomeSource(SourceNames.CHILD_TAX_CREDIT, undefined, undefined),
+              undefined, new IncomeSource(SourceNames.CHILD_BENEFIT, undefined, undefined),
+              undefined, new IncomeSource(SourceNames.COUNCIL_TAX_SUPPORT, undefined, undefined),
+              undefined, new IncomeSource(SourceNames.PENSION, undefined, undefined),
+              undefined, []
+            )
+
+            expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
+          })
+
         })
 
         context('is not completed', () => {

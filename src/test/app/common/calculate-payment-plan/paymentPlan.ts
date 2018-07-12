@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-expression */
-import { createPaymentPlan } from 'common/paymentPlan'
+import { createPaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
 import { expect } from 'chai'
 import * as moment from 'moment'
 

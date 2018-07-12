@@ -9,7 +9,7 @@ import { Moment } from 'moment'
 import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
 import { Response } from 'claims/models/response'
 import { ResponseType } from 'claims/models/response/responseType'
-import { FullAdmissionResponse } from 'claims/models/response/fullDefenceAdmission'
+import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { StatementOfMeans } from 'claims/models/response/statement-of-means/statementOfMeans'
 import { PartyType } from 'common/partyType'
@@ -39,6 +39,9 @@ import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { convertEvidence } from 'claims/converters/evidenceConverter'
 import { MomentFactory } from 'shared/momentFactory'
+import { Income, IncomeType } from 'claims/models/response/statement-of-means/income'
+import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
+import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
 
 export class ResponseModelConverter {
 
@@ -150,7 +153,8 @@ export class ResponseModelConverter {
           monthlyInstalmentAmount: courtOrder.instalmentAmount
         }
       }) : undefined,
-      reason: draft.statementOfMeans.explanation.text
+      reason: draft.statementOfMeans.explanation.text,
+      incomes: this.convertIncomes(draft.statementOfMeans.monthlyIncome)
     }
   }
 
@@ -259,5 +263,93 @@ export class ResponseModelConverter {
       })
     }
     return children
+  }
+
+  private static convertIncomes (income: MonthlyIncome): Income[] {
+    if (!income) {
+      return undefined
+    }
+    const incomes: Income[] = []
+    if (income.salarySource && income.salarySource.populated) {
+      incomes.push({
+        type: IncomeType.JOB,
+        frequency: income.salarySource.schedule.value as PaymentFrequency,
+        amountReceived: income.salarySource.amount
+      })
+    }
+    if (income.universalCreditSource && income.universalCreditSource.populated) {
+      incomes.push({
+        type: IncomeType.UNIVERSAL_CREDIT,
+        frequency: income.universalCreditSource.schedule.value as PaymentFrequency,
+        amountReceived: income.universalCreditSource.amount
+      })
+    }
+    if (income.jobseekerAllowanceIncomeSource && income.jobseekerAllowanceIncomeSource.populated) {
+      incomes.push({
+        type: IncomeType.JOB_SEEKERS_ALLOWANCE_INCOME_BASES,
+        frequency: income.jobseekerAllowanceIncomeSource.schedule.value as PaymentFrequency,
+        amountReceived: income.jobseekerAllowanceIncomeSource.amount
+      })
+    }
+    if (income.jobseekerAllowanceContributionSource && income.jobseekerAllowanceContributionSource.populated) {
+      incomes.push({
+        type: IncomeType.JOB_SEEKERS_ALLOWANCE_CONTRIBUTION_BASED,
+        frequency: income.jobseekerAllowanceContributionSource.schedule.value as PaymentFrequency,
+        amountReceived: income.jobseekerAllowanceContributionSource.amount
+      })
+    }
+    if (income.incomeSupportSource && income.incomeSupportSource.populated) {
+      incomes.push({
+        type: IncomeType.INCOME_SUPPORT,
+        frequency: income.incomeSupportSource.schedule.value as PaymentFrequency,
+        amountReceived: income.incomeSupportSource.amount
+      })
+    }
+    if (income.workingTaxCreditSource && income.workingTaxCreditSource.populated) {
+      incomes.push({
+        type: IncomeType.WORKING_TAX_CREDIT,
+        frequency: income.workingTaxCreditSource.schedule.value as PaymentFrequency,
+        amountReceived: income.workingTaxCreditSource.amount
+      })
+    }
+    if (income.childTaxCreditSource && income.childTaxCreditSource.populated) {
+      incomes.push({
+        type: IncomeType.CHILD_TAX_CREDIT,
+        frequency: income.childTaxCreditSource.schedule.value as PaymentFrequency,
+        amountReceived: income.childTaxCreditSource.amount
+      })
+    }
+    if (income.childBenefitSource && income.childBenefitSource.populated) {
+      incomes.push({
+        type: IncomeType.CHILD_BENEFIT,
+        frequency: income.childBenefitSource.schedule.value as PaymentFrequency,
+        amountReceived: income.childBenefitSource.amount
+      })
+    }
+    if (income.councilTaxSupportSource && income.councilTaxSupportSource.populated) {
+      incomes.push({
+        type: IncomeType.COUNCIL_TAX_SUPPORT,
+        frequency: income.councilTaxSupportSource.schedule.value as PaymentFrequency,
+        amountReceived: income.councilTaxSupportSource.amount
+      })
+    }
+    if (income.pensionSource && income.pensionSource.populated) {
+      incomes.push({
+        type: IncomeType.PENSION,
+        frequency: income.pensionSource.schedule.value as PaymentFrequency,
+        amountReceived: income.pensionSource.amount
+      })
+    }
+    if (income.otherSources && income.anyOtherIncomePopulated) {
+      income.otherSources.map(source => {
+        incomes.push({
+          type: IncomeType.OTHER,
+          frequency: source.schedule.value as PaymentFrequency,
+          amountReceived: source.amount,
+          otherSource: source.name
+        })
+      })
+    }
+    return incomes
   }
 }
