@@ -1,6 +1,6 @@
 import { ValidateIf, ValidateNested } from 'class-validator'
 
-import { IncomeSource } from './incomeSource'
+import { IncomeExpenseSource } from './incomeExpenseSource'
 
 export class SourceNames {
   static readonly SALARY = 'Income from your job'
@@ -20,70 +20,70 @@ export class MonthlyIncome {
   salarySourceDeclared?: boolean
   @ValidateIf((o: MonthlyIncome) => o.salarySourceDeclared || (o.salarySource && o.salarySource.populated))
   @ValidateNested()
-  salarySource?: IncomeSource
+  salarySource?: IncomeExpenseSource
 
   universalCreditSourceDeclared?: boolean
   @ValidateIf((o: MonthlyIncome) => o.universalCreditSourceDeclared || (o.universalCreditSource && o.universalCreditSource.populated))
   @ValidateNested()
-  universalCreditSource?: IncomeSource
+  universalCreditSource?: IncomeExpenseSource
 
   jobseekerAllowanceIncomeSourceDeclared?: boolean
   @ValidateIf((o: MonthlyIncome) => o.jobseekerAllowanceIncomeSourceDeclared || (o.jobseekerAllowanceIncomeSource && o.jobseekerAllowanceIncomeSource.populated))
   @ValidateNested()
-  jobseekerAllowanceIncomeSource?: IncomeSource
+  jobseekerAllowanceIncomeSource?: IncomeExpenseSource
 
   jobseekerAllowanceContributionSourceDeclared?: boolean
   @ValidateIf((o: MonthlyIncome) => o.jobseekerAllowanceContributionSourceDeclared || (o.jobseekerAllowanceContributionSource && o.jobseekerAllowanceContributionSource.populated))
   @ValidateNested()
-  jobseekerAllowanceContributionSource?: IncomeSource
+  jobseekerAllowanceContributionSource?: IncomeExpenseSource
 
   incomeSupportSourceDeclared?: boolean
   @ValidateIf((o: MonthlyIncome) => o.incomeSupportSourceDeclared || (o.incomeSupportSource && o.incomeSupportSource.populated))
   @ValidateNested()
-  incomeSupportSource?: IncomeSource
+  incomeSupportSource?: IncomeExpenseSource
 
   workingTaxCreditSourceDeclared?: boolean
   @ValidateIf((o: MonthlyIncome) => o.workingTaxCreditSourceDeclared || (o.workingTaxCreditSource && o.workingTaxCreditSource.populated))
   @ValidateNested()
-  workingTaxCreditSource?: IncomeSource
+  workingTaxCreditSource?: IncomeExpenseSource
 
   childTaxCreditSourceDeclared?: boolean
   @ValidateIf((o: MonthlyIncome) => o.childTaxCreditSourceDeclared || (o.childTaxCreditSource && o.childTaxCreditSource.populated))
   @ValidateNested()
-  childTaxCreditSource?: IncomeSource
+  childTaxCreditSource?: IncomeExpenseSource
 
   childBenefitSourceDeclared?: boolean
   @ValidateIf((o: MonthlyIncome) => o.childBenefitSourceDeclared || (o.childBenefitSource && o.childBenefitSource.populated))
   @ValidateNested()
-  childBenefitSource?: IncomeSource
+  childBenefitSource?: IncomeExpenseSource
 
   councilTaxSupportSourceDeclared?: boolean
   @ValidateIf((o: MonthlyIncome) => o.councilTaxSupportSourceDeclared || (o.councilTaxSupportSource && o.councilTaxSupportSource.populated))
   @ValidateNested()
-  councilTaxSupportSource?: IncomeSource
+  councilTaxSupportSource?: IncomeExpenseSource
 
   pensionSourceDeclared?: boolean
   @ValidateIf((o: MonthlyIncome) => o.pensionSourceDeclared || (o.pensionSource && o.pensionSource.populated))
   @ValidateNested()
-  pensionSource?: IncomeSource
+  pensionSource?: IncomeExpenseSource
 
   otherSourcesDeclared?: boolean
   @ValidateIf((o: MonthlyIncome) => o.otherSourcesDeclared || o.anyOtherIncomePopulated)
   @ValidateNested()
-  otherSources?: IncomeSource[]
+  otherSources?: IncomeExpenseSource[]
 
   constructor (
-    salarySourceDeclared?: boolean, salarySource?: IncomeSource,
-    universalCreditSourceDeclared?: boolean, universalCreditSource?: IncomeSource,
-    jobseekerAllowanceIncomeSourceDeclared?: boolean, jobseekerAllowanceIncomeSource?: IncomeSource,
-    jobseekerAllowanceContributionSourceDeclared?: boolean, jobseekerAllowanceContributionSource?: IncomeSource,
-    incomeSupportSourceDeclared?: boolean, incomeSupportSource?: IncomeSource,
-    workingTaxCreditSourceDeclared?: boolean, workingTaxCreditSource?: IncomeSource,
-    childTaxCreditSourceDeclared?: boolean, childTaxCreditSource?: IncomeSource,
-    childBenefitSourceDeclared?: boolean, childBenefitSource?: IncomeSource,
-    councilTaxSupportSourceDeclared?: boolean, councilTaxSupportSource?: IncomeSource,
-    pensionSourceDeclared?: boolean, pensionSource?: IncomeSource,
-    otherSourcesDeclared?: boolean, otherSources: IncomeSource[] = [new IncomeSource()]
+    salarySourceDeclared?: boolean, salarySource?: IncomeExpenseSource,
+    universalCreditSourceDeclared?: boolean, universalCreditSource?: IncomeExpenseSource,
+    jobseekerAllowanceIncomeSourceDeclared?: boolean, jobseekerAllowanceIncomeSource?: IncomeExpenseSource,
+    jobseekerAllowanceContributionSourceDeclared?: boolean, jobseekerAllowanceContributionSource?: IncomeExpenseSource,
+    incomeSupportSourceDeclared?: boolean, incomeSupportSource?: IncomeExpenseSource,
+    workingTaxCreditSourceDeclared?: boolean, workingTaxCreditSource?: IncomeExpenseSource,
+    childTaxCreditSourceDeclared?: boolean, childTaxCreditSource?: IncomeExpenseSource,
+    childBenefitSourceDeclared?: boolean, childBenefitSource?: IncomeExpenseSource,
+    councilTaxSupportSourceDeclared?: boolean, councilTaxSupportSource?: IncomeExpenseSource,
+    pensionSourceDeclared?: boolean, pensionSource?: IncomeExpenseSource,
+    otherSourcesDeclared?: boolean, otherSources: IncomeExpenseSource[] = [new IncomeExpenseSource()]
   ) {
     this.salarySourceDeclared = salarySourceDeclared
     this.salarySource = salarySource
@@ -115,18 +115,18 @@ export class MonthlyIncome {
     }
 
     return new MonthlyIncome(
-      value.salarySourceDeclared, IncomeSource.fromObject(SourceNames.SALARY, value.salarySource),
-      value.universalCreditSourceDeclared, IncomeSource.fromObject(SourceNames.UNIVERSAL_CREDIT, value.universalCreditSource),
-      value.jobseekerAllowanceIncomeSourceDeclared, IncomeSource.fromObject(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, value.jobseekerAllowanceIncomeSource),
-      value.jobseekerAllowanceContributionSourceDeclared, IncomeSource.fromObject(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, value.jobseekerAllowanceContributionSource),
-      value.incomeSupportSourceDeclared, IncomeSource.fromObject(SourceNames.INCOME_SUPPORT, value.incomeSupportSource),
-      value.workingTaxCreditSourceDeclared, IncomeSource.fromObject(SourceNames.WORKING_TAX_CREDIT, value.workingTaxCreditSource),
-      value.childTaxCreditSourceDeclared, IncomeSource.fromObject(SourceNames.CHILD_TAX_CREDIT, value.childTaxCreditSource),
-      value.childBenefitSourceDeclared, IncomeSource.fromObject(SourceNames.CHILD_BENEFIT, value.childBenefitSource),
-      value.councilTaxSupportSourceDeclared, IncomeSource.fromObject(SourceNames.COUNCIL_TAX_SUPPORT, value.councilTaxSupportSource),
-      value.pensionSourceDeclared, IncomeSource.fromObject(SourceNames.PENSION, value.pensionSource),
+      value.salarySourceDeclared, IncomeExpenseSource.fromObject(SourceNames.SALARY, value.salarySource),
+      value.universalCreditSourceDeclared, IncomeExpenseSource.fromObject(SourceNames.UNIVERSAL_CREDIT, value.universalCreditSource),
+      value.jobseekerAllowanceIncomeSourceDeclared, IncomeExpenseSource.fromObject(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, value.jobseekerAllowanceIncomeSource),
+      value.jobseekerAllowanceContributionSourceDeclared, IncomeExpenseSource.fromObject(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, value.jobseekerAllowanceContributionSource),
+      value.incomeSupportSourceDeclared, IncomeExpenseSource.fromObject(SourceNames.INCOME_SUPPORT, value.incomeSupportSource),
+      value.workingTaxCreditSourceDeclared, IncomeExpenseSource.fromObject(SourceNames.WORKING_TAX_CREDIT, value.workingTaxCreditSource),
+      value.childTaxCreditSourceDeclared, IncomeExpenseSource.fromObject(SourceNames.CHILD_TAX_CREDIT, value.childTaxCreditSource),
+      value.childBenefitSourceDeclared, IncomeExpenseSource.fromObject(SourceNames.CHILD_BENEFIT, value.childBenefitSource),
+      value.councilTaxSupportSourceDeclared, IncomeExpenseSource.fromObject(SourceNames.COUNCIL_TAX_SUPPORT, value.councilTaxSupportSource),
+      value.pensionSourceDeclared, IncomeExpenseSource.fromObject(SourceNames.PENSION, value.pensionSource),
       value.otherSourcesDeclared, value.otherSources && value.otherSources
-        .map(source => IncomeSource.fromObject(source.name, source))
+        .map(source => IncomeExpenseSource.fromObject(source.name, source))
         .filter(source => source !== undefined)
     )
   }
@@ -134,27 +134,27 @@ export class MonthlyIncome {
   deserialize (input?: any): MonthlyIncome {
     if (input) {
       this.salarySourceDeclared = input.salarySourceDeclared
-      this.salarySource = new IncomeSource().deserialize(input.salarySource)
+      this.salarySource = new IncomeExpenseSource().deserialize(input.salarySource)
       this.universalCreditSourceDeclared = input.universalCreditSourceDeclared
-      this.universalCreditSource = new IncomeSource().deserialize(input.universalCreditSource)
+      this.universalCreditSource = new IncomeExpenseSource().deserialize(input.universalCreditSource)
       this.jobseekerAllowanceIncomeSourceDeclared = input.jobseekerAllowanceIncomeSourceDeclared
-      this.jobseekerAllowanceIncomeSource = new IncomeSource().deserialize(input.jobseekerAllowanceIncomeSource)
+      this.jobseekerAllowanceIncomeSource = new IncomeExpenseSource().deserialize(input.jobseekerAllowanceIncomeSource)
       this.jobseekerAllowanceContributionSourceDeclared = input.jobseekerAllowanceContributionSourceDeclared
-      this.jobseekerAllowanceContributionSource = new IncomeSource().deserialize(input.jobseekerAllowanceContributionSource)
+      this.jobseekerAllowanceContributionSource = new IncomeExpenseSource().deserialize(input.jobseekerAllowanceContributionSource)
       this.incomeSupportSourceDeclared = input.incomeSupportSourceDeclared
-      this.incomeSupportSource = new IncomeSource().deserialize(input.incomeSupportSource)
+      this.incomeSupportSource = new IncomeExpenseSource().deserialize(input.incomeSupportSource)
       this.workingTaxCreditSourceDeclared = input.workingTaxCreditSourceDeclared
-      this.workingTaxCreditSource = new IncomeSource().deserialize(input.workingTaxCreditSource)
+      this.workingTaxCreditSource = new IncomeExpenseSource().deserialize(input.workingTaxCreditSource)
       this.childTaxCreditSourceDeclared = input.childTaxCreditSourceDeclared
-      this.childTaxCreditSource = new IncomeSource().deserialize(input.childTaxCreditSource)
+      this.childTaxCreditSource = new IncomeExpenseSource().deserialize(input.childTaxCreditSource)
       this.childBenefitSourceDeclared = input.childBenefitSourceDeclared
-      this.childBenefitSource = new IncomeSource().deserialize(input.childBenefitSource)
+      this.childBenefitSource = new IncomeExpenseSource().deserialize(input.childBenefitSource)
       this.councilTaxSupportSourceDeclared = input.councilTaxSupportSourceDeclared
-      this.councilTaxSupportSource = new IncomeSource().deserialize(input.councilTaxSupportSource)
+      this.councilTaxSupportSource = new IncomeExpenseSource().deserialize(input.councilTaxSupportSource)
       this.pensionSourceDeclared = input.pensionSourceDeclared
-      this.pensionSource = new IncomeSource().deserialize(input.pensionSource)
+      this.pensionSource = new IncomeExpenseSource().deserialize(input.pensionSource)
       this.otherSourcesDeclared = input.otherSourcesDeclared
-      this.otherSources = input.otherSources && input.otherSources.map(source => new IncomeSource().deserialize(source))
+      this.otherSources = input.otherSources && input.otherSources.map(source => new IncomeExpenseSource().deserialize(source))
     }
 
     return this
@@ -165,10 +165,10 @@ export class MonthlyIncome {
   }
 
   addEmptyOtherIncome (): void {
-    this.otherSources.push(new IncomeSource())
+    this.otherSources.push(new IncomeExpenseSource())
   }
 
-  removeOtherIncome (source: IncomeSource): void {
+  removeOtherIncome (source: IncomeExpenseSource): void {
     this.otherSources.splice(this.otherSources.findIndex(element => element === source), 1)
   }
 

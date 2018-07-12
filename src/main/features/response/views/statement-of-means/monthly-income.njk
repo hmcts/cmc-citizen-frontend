@@ -12,10 +12,9 @@
 
 {% block content %}
 
-<p>{{ t('Select all that apply. The information you enter must be truthful and accurate.') }} </p>
-
 <div class="grid-row">
   <div class="column-two-thirds">
+    <p>{{ t('Select all that apply. The information you enter must be truthful and accurate.') }} </p>
 
     <form method="post" novalidate class="income-expense-calculation">
       {{ csrfProtection(csrf) }}
@@ -32,7 +31,7 @@
       {{ incomeSource(form, name = 'pensionSource', label = 'Pension (paid to you)') }}
       {{ incomeSources(form, name = 'otherSources', label = 'Other') }}
 
-      {{ linkButton('Recalculate total monthly income', 'action[calculateMonthlyIncome]', 'button button-secondary calculate-montly-income-expense') }}
+      {{ linkButton('Recalculate total monthly income', 'action[calculateMonthlyIncome]', 'button button-secondary calculate-monthly-income-expense') }}
 
       <p class="heading-small calculation-outcome-container">
         {{ t('Total monthly income:') }} £<span class="total-monthly-income-expense"> {{ totalMonthlyIncomeExpense | default('0.00') }} </span>
