@@ -16,7 +16,7 @@ export enum IncomeType {
 
 export interface Income {
   type: IncomeType
-  otherSource: string
   frequency: PaymentFrequency
   amountReceived: number
+  otherSource?: string
 }

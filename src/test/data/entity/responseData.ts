@@ -80,7 +80,12 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
     unemployment: {
       retired: true
     }
-  }
+  },
+  incomes: [{
+    amountReceived: 200,
+    frequency: 'WEEK',
+    type: 'CHILD_BENEFIT'
+  }]
 }
 
 export const statementOfMeansWithAllFieldsData = {

@@ -31,7 +31,7 @@ function validPaymentPlan (): DefendantPaymentPlan {
 
 describe('DefendantPaymentPlan', () => {
   describe('form object deserialization', () => {
-    it('should return new instance when value is undefined', () => {
+    it('should return undefined when value is undefined', () => {
       expect(DefendantPaymentPlan.fromObject(undefined)).to.equal(undefined)
     })
 
