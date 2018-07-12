@@ -17,12 +17,14 @@ $(document).ready(function () {
     };
 
     var setup = function () {
-      addOtherIncomeSourceButtonElement.keyup(addNewOtherIncome);
-      otherIncomeExpenseSourceSectionElement.change();
+      addOtherIncomeSourceButtonElement.click(addNewOtherIncome);
     }
 
     var addNewOtherIncome = function () {
-
+      console.log('this is a test')
+      var newOtherIncomeSection = otherIncomeExpenseSourceSectionElement.clone()
+      console.log(newOtherIncomeSection)
+      otherIncomeExpenseSourceSectionElement.parent().append(newOtherIncomeSection)
     }
 
     return {
@@ -32,3 +34,9 @@ $(document).ready(function () {
 
   feature.init();
 });
+
+
+// var lastRow = $('.panel panel-border-narrow expandable').last()
+// var newRow = lastRow.clone()
+//
+// lastRow.parent().append(newRow)
