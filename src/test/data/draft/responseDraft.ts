@@ -162,6 +162,16 @@ export const statementOfMeansWithMandatoryFieldsDraft = {
         displayValue: 'Week'
       }
     }
+  },
+  monthlyExpenses: {
+    mortgage: {
+      name: 'mortgage',
+      amount: 100,
+      schedule: {
+        value: 'MONTH',
+        displayValue: 'Month'
+      }
+    }
   }
 }
 
