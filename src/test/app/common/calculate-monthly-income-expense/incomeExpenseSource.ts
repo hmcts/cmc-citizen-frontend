@@ -56,8 +56,8 @@ describe('IncomeExpenseSource', () => {
     })
 
     it('should return a new instance initialised with set fields from object parameter provided', () => {
-      const montlyIncomeSource = new FormIncomeExpenseSource(SourceNames.SALARY, 100, ExpenseSchedule.MONTH)
-      expect(IncomeExpenseSource.fromFormModel(montlyIncomeSource)).to.deep.equal({
+      const monthlyExpense = new FormIncomeExpenseSource(SourceNames.SALARY, 100, ExpenseSchedule.MONTH)
+      expect(IncomeExpenseSource.fromFormModel(monthlyExpense)).to.deep.equal({
         'amount': 100,
         'schedule': IncomeExpenseSchedule.MONTH
       })

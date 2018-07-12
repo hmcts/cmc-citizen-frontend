@@ -66,7 +66,7 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
         break
       case 'resetIncomeSource':
         const selectedForReset: IncomeExpenseSource = form.valueFor(extractPropertyName(req.body.action[actionName]))
-        selectedForReset.reset()
+        form.model.removeOtherIncome(selectedForReset)
         break
     }
 

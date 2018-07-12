@@ -6,7 +6,7 @@ import { ExpenseSchedule } from 'response/form/models/statement-of-means/expense
 import { MonthlyIncome, SourceNames } from 'response/form/models/statement-of-means/monthlyIncome'
 import { IncomeExpenseSource, ValidationErrors as MonthlyIncomeSourceValidationErrors } from 'response/form/models/statement-of-means/incomeExpenseSource'
 
-function getSampleMonthtlyIncomeObject (options?: object) {
+function getSampleMonthlyIncomeObject (options?: object) {
   const DEFAULT_SAMPLE_VALID_MONTHLY_INCOME = {
     salarySource: {
       amount: 100,
@@ -236,8 +236,8 @@ describe('MonthlyIncome', () => {
     })
 
     it('should return a new instance initialised with set fields from object parameter provided', () => {
-      const sampleMonthlyIncomeData = getSampleMonthtlyIncomeObject().forFromObjectMethod()
-      const expectedMonthlyIncomeObject = getSampleMonthtlyIncomeObject().forConstructor()
+      const sampleMonthlyIncomeData = getSampleMonthlyIncomeObject().forFromObjectMethod()
+      const expectedMonthlyIncomeObject = getSampleMonthlyIncomeObject().forConstructor()
 
       expect(MonthlyIncome.fromObject(sampleMonthlyIncomeData)).to.deep.equal(expectedMonthlyIncomeObject)
     })
@@ -249,7 +249,7 @@ describe('MonthlyIncome', () => {
     })
 
     it('should return instance initialised with set fields from object provided', () => {
-      expect(new MonthlyIncome().deserialize(getSampleMonthtlyIncomeObject().forDeserialize())).to.deep.equal(getSampleMonthtlyIncomeObject().forConstructor())
+      expect(new MonthlyIncome().deserialize(getSampleMonthlyIncomeObject().forDeserialize())).to.deep.equal(getSampleMonthlyIncomeObject().forConstructor())
     })
   })
 
@@ -289,7 +289,7 @@ describe('MonthlyIncome', () => {
 
     describe('when successful', () => {
       it('should return no error when `hasSource` is true and `source` is invalid', () => {
-        const sampleMonthlyIncomeData = getSampleMonthtlyIncomeObject().forFromObjectMethod()
+        const sampleMonthlyIncomeData = getSampleMonthlyIncomeObject().forFromObjectMethod()
 
         const errors = validator.validateSync(sampleMonthlyIncomeData)
         expect(errors.length).to.equal(0)
