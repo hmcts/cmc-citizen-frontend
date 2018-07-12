@@ -86,7 +86,7 @@
     {% if draft.isResponsePartiallyAdmitted() %}
 
       {{ tableStart('responseDetails', 'Response details') }}
-      {% if claim.response['isAlreadyPaid'] === 'yes' %}
+      {% if draft.partialAdmission.alreadyPaid.option === YesNoOption.YES %}
 
         {{ row(
           label = 'How much money have you paid?',
@@ -142,12 +142,12 @@
 
       {% if ( draft.partialAdmission.paymentOption) %}
         {{ tableStart('whenWillYouPay', 'When will you pay') }}
-        {{ row(label = 'When will you pay', value = t(draft.partialAdmission.paymentOption.option.displayValue) | capitalize, changeLink = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+        {{ row(label = 'When will you pay', value = t(draft.partialAdmission.paymentOption.option.displayValue) | capitalize, changeLink = PartAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
         {% if draft.partialAdmission.paymentOption.isOfType(DefendantPaymentType.BY_SET_DATE) %}
-          {{ row(label = 'When you’ll pay the amount', value = draft.partialAdmission.paymentDate.date.toMoment() | date, changeLink = FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+          {{ row(label = 'When you’ll pay the amount', value = draft.partialAdmission.paymentDate.date.toMoment() | date, changeLink = PartAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
         {% endif %}
         {% if draft.partialAdmission.paymentOption.isOfType(DefendantPaymentType.INSTALMENTS) %}
-          {{ row(label = 'Regular payments of', value = draft.partialAdmission.paymentPlan.instalmentAmount | numeral, changeLink = FullAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: claim.externalId }), bold = true, bottomBorder = false) }}
+          {{ row(label = 'Regular payments of', value = draft.partialAdmission.paymentPlan.instalmentAmount | numeral, changeLink = PartAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: claim.externalId }), bold = true, bottomBorder = false) }}
           {{ row(label = 'Frequency of payments', value = t(draft.partialAdmission.paymentPlan.paymentSchedule.displayValue), bold = true, bottomBorder = false) }}
           {{ row(label = 'Make the first payment on', value = draft.partialAdmission.paymentPlan.firstPaymentDate.toMoment() | date, bold = true) }}
         {% endif %}

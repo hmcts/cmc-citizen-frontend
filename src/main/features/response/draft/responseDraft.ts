@@ -158,7 +158,7 @@ export class ResponseDraft extends DraftDocument {
   }
 
   public isResponsePartiallyAdmittedWithInstalments (): boolean {
-    return this.isResponseFullyAdmitted()
+    return this.isResponsePartiallyAdmitted()
       && this.partialAdmission
       && this.partialAdmission.paymentOption
       && (this.partialAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS)
