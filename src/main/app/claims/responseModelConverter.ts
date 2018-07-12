@@ -42,6 +42,8 @@ import { MomentFactory } from 'shared/momentFactory'
 import { Income, IncomeType } from 'claims/models/response/statement-of-means/income'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
 import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
+import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
+import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
 
 export class ResponseModelConverter {
 
@@ -154,7 +156,8 @@ export class ResponseModelConverter {
         }
       }) : undefined,
       reason: draft.statementOfMeans.explanation.text,
-      incomes: this.convertIncomes(draft.statementOfMeans.monthlyIncome)
+      incomes: this.convertIncomes(draft.statementOfMeans.monthlyIncome),
+      expenses: this.convertExpenses(draft.statementOfMeans.monthlyExpenses)
     }
   }
 
@@ -265,7 +268,7 @@ export class ResponseModelConverter {
     return children
   }
 
-  private static convertIncomes (income: MonthlyIncome): Income[] {
+  private static convertIncomes (income: MonthlyIncome | undefined): Income[] {
     if (!income) {
       return undefined
     }
@@ -351,5 +354,130 @@ export class ResponseModelConverter {
       })
     }
     return incomes
+  }
+
+  private static convertExpenses (monthlyExpenses: MonthlyExpenses | undefined): Expense[] {
+    if (!monthlyExpenses) {
+      return undefined
+    }
+
+    const expenses: Expense[] = []
+
+    if (monthlyExpenses.mortgage && monthlyExpenses.mortgage.populated) {
+      expenses.push({
+        type: ExpenseType.MORTGAGE,
+        frequency:  monthlyExpenses.mortgage.schedule.value as PaymentFrequency,
+        amountPaid: monthlyExpenses.mortgage.amount
+      })
+    }
+
+    if (monthlyExpenses.rent && monthlyExpenses.rent.populated) {
+      expenses.push({
+        type: ExpenseType.RENT,
+        frequency:  monthlyExpenses.rent.schedule.value as PaymentFrequency,
+        amountPaid: monthlyExpenses.rent.amount
+      })
+    }
+
+    if (monthlyExpenses.councilTax && monthlyExpenses.councilTax.populated) {
+      expenses.push({
+        type: ExpenseType.COUNCIL_TAX,
+        frequency:  monthlyExpenses.councilTax.schedule.value as PaymentFrequency,
+        amountPaid: monthlyExpenses.councilTax.amount
+      })
+    }
+
+    if (monthlyExpenses.gas && monthlyExpenses.gas.populated) {
+      expenses.push({
+        type: ExpenseType.GAS,
+        frequency:  monthlyExpenses.gas.schedule.value as PaymentFrequency,
+        amountPaid: monthlyExpenses.gas.amount
+      })
+    }
+
+    if (monthlyExpenses.electricity && monthlyExpenses.electricity.populated) {
+      expenses.push({
+        type: ExpenseType.ELECTRICITY,
+        frequency:  monthlyExpenses.electricity.schedule.value as PaymentFrequency,
+        amountPaid: monthlyExpenses.electricity.amount
+      })
+    }
+
+    if (monthlyExpenses.water && monthlyExpenses.water.populated) {
+      expenses.push({
+        type: ExpenseType.WATER,
+        frequency:  monthlyExpenses.water.schedule.value as PaymentFrequency,
+        amountPaid: monthlyExpenses.water.amount
+      })
+    }
+
+    if (monthlyExpenses.travel && monthlyExpenses.travel.populated) {
+      expenses.push({
+        type: ExpenseType.TRAVEL,
+        frequency:  monthlyExpenses.travel.schedule.value as PaymentFrequency,
+        amountPaid: monthlyExpenses.travel.amount
+      })
+    }
+
+    if (monthlyExpenses.schoolCosts && monthlyExpenses.schoolCosts.populated) {
+      expenses.push({
+        type: ExpenseType.SCHOOL_COSTS,
+        frequency:  monthlyExpenses.schoolCosts.schedule.value as PaymentFrequency,
+        amountPaid: monthlyExpenses.schoolCosts.amount
+      })
+    }
+
+    if (monthlyExpenses.foodAndHousekeeping && monthlyExpenses.foodAndHousekeeping.populated) {
+      expenses.push({
+        type: ExpenseType.FOOD_HOUSEKEEPING,
+        frequency:  monthlyExpenses.foodAndHousekeeping.schedule.value as PaymentFrequency,
+        amountPaid: monthlyExpenses.foodAndHousekeeping.amount
+      })
+    }
+
+    if (monthlyExpenses.tvAndBroadband && monthlyExpenses.tvAndBroadband.populated) {
+      expenses.push({
+        type: ExpenseType.TV_AND_BROADBAND,
+        frequency:  monthlyExpenses.tvAndBroadband.schedule.value as PaymentFrequency,
+        amountPaid: monthlyExpenses.tvAndBroadband.amount
+      })
+    }
+
+    if (monthlyExpenses.hirePurchase && monthlyExpenses.hirePurchase.populated) {
+      expenses.push({
+        type: ExpenseType.HIRE_PURCHASES,
+        frequency:  monthlyExpenses.hirePurchase.schedule.value as PaymentFrequency,
+        amountPaid: monthlyExpenses.hirePurchase.amount
+      })
+    }
+
+    if (monthlyExpenses.mobilePhone && monthlyExpenses.mobilePhone.populated) {
+      expenses.push({
+        type: ExpenseType.MOBILE_PHONE,
+        frequency:  monthlyExpenses.mobilePhone.schedule.value as PaymentFrequency,
+        amountPaid: monthlyExpenses.mobilePhone.amount
+      })
+    }
+
+    if (monthlyExpenses.maintenance && monthlyExpenses.maintenance.populated) {
+      expenses.push({
+        type: ExpenseType.MAINTENANCE_PAYMENTS,
+        frequency:  monthlyExpenses.maintenance.schedule.value as PaymentFrequency,
+        amountPaid: monthlyExpenses.maintenance.amount
+      })
+    }
+
+    if (monthlyExpenses.other && monthlyExpenses.anyOtherPopulated) {
+      monthlyExpenses.other.map(source => {
+        expenses.push({
+          type: ExpenseType.OTHER,
+          frequency: source.schedule.value as PaymentFrequency,
+          amountPaid: source.amount,
+          otherSource: source.name
+        })
+      })
+    }
+
+    return expenses
   }
 }
