@@ -31,14 +31,4 @@ $(document).ready(function () {
   })();
 
   feature.init();
-
-  // $('input[name="action[addOtherIncomeSource]"]').click(function () {
-  //   var lastRow = $('.panel panel-border-narrow expandable').last()
-  //   var newRow = lastRow.clone()
-  //
-  //   lastRow.parent().append(newRow)
-  //
-  //   return false
-  // })
-
 });
