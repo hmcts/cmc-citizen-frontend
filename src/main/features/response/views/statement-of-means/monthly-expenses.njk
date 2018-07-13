@@ -49,7 +49,7 @@
       {{ expenseSource(form, name = 'councilTax', label = 'Council Tax') }}
       {{ expenseSource(form, name = 'gas', label = 'Gas') }}
       {{ expenseSource(form, name = 'electricity', label = 'Electricity') }}
-      {{ expenseSource(form, name = 'water', label = 'Water') }}
+      {{ expenseSource(form, name = 'water', label = 'Water', hint = 'Include sewerage payments') }}
       {{ expenseSource(form, name = 'travel', label = 'Travel (work or school)') }}
       {{ expenseSource(form, name = 'schoolCosts', label = 'School costs (include clothing)') }}
       {{ expenseSource(form, name = 'foodAndHousekeeping', label = 'Food and housekeeping') }}
@@ -76,7 +76,7 @@
   {% set checkboxName = name + 'Declared' %}
 
   {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.valueFor(name).populated)), label = label) %}
-    {{ incomeExpenseSource(form = form, name = name, amountLabel = 'Amount paid', amountHint = hint, scheduleLabel = 'Received every') }}
+    {{ incomeExpenseSource(form = form, name = name, amountLabel = 'Amount paid', amountHint = hint, scheduleLabel = 'Paid every') }}
     {{ linkButton(name = 'action[resetExpenseSource][' + name + ']', label = 'Reset this expense source', class = 'link-button js-hidden') }}
   {% endcall %}
 {% endmacro %}
@@ -87,7 +87,7 @@
   {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.model.anyOtherExpensePopulated)), label = label) %}
     {% for source in form.model.other %}
       <div class="other-income-expense-source">
-        {{ incomeExpenseSource(form = form, name = name + '[' + loop.index0 + ']', amountLabel = 'Amount paid', amountHint = hint, scheduleLabel = 'Received every', nameEditable = true) }}
+        {{ incomeExpenseSource(form = form, name = name + '[' + loop.index0 + ']', amountLabel = 'Amount paid', amountHint = hint, scheduleLabel = 'Paid every', nameEditable = true) }}
         {% if form.model.other.length > 1 %}
           {{ linkButton(name = 'action[removeOther][otherSources.' + loop.index0 + ']', label = 'Remove this expense source', class = 'link-button') }}
         {% else %}
