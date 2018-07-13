@@ -63,7 +63,7 @@
     "csurf": "^1.9.0",
     "express": "^4.13.3",
     "govuk-elements-sass": "^3.1.2",
-    "govuk_template_jinja": "0.24.0",
+    "govuk_template_jinja": "0.24.1",
     "gulp": "^4.0.0",
     "helmet": "^3.1.0",
     "http-status-codes": "^1.1.6",
