@@ -7,7 +7,7 @@
       submitType.addEventListener('dblclick', function (event) {
         event.preventDefault()
       })
-    }g
+    }
 
   })
 
