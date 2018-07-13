@@ -7,6 +7,9 @@ import { BankAccountType } from 'claims/models/response/statement-of-means/bankA
 
 import { MomentFactory } from 'shared/momentFactory'
 import { individual } from 'test/data/entity/party'
+import { Income, IncomeType } from 'claims/models/response/statement-of-means/income'
+import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
+import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
 
 const baseResponseData = {
   defendant: individual,
@@ -80,7 +83,17 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
     unemployment: {
       retired: true
     }
-  }
+  },
+  incomes: [{
+    amountReceived: 200,
+    frequency: PaymentFrequency.WEEK,
+    type: IncomeType.CHILD_BENEFIT
+  }] as Income[],
+  expenses: [{
+    amountPaid: 100,
+    frequency: PaymentFrequency.MONTH,
+    type: ExpenseType.MORTGAGE
+  }] as Expense[]
 }
 
 export const statementOfMeansWithAllFieldsData = {
