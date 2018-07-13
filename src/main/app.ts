@@ -21,7 +21,6 @@ import { DashboardFeature } from 'dashboard/index'
 import { CCJFeature } from 'ccj/index'
 import { Feature as OfferFeature } from 'offer/index'
 import { TestingSupportFeature } from 'testing-support/index'
-import * as toBoolean from 'to-boolean'
 import { FeatureToggles } from 'utils/featureToggles'
 import { ClaimantResponseFeature } from 'claimant-response/index'
 
@@ -58,18 +57,17 @@ new DashboardFeature().enableFor(app)
 new ClaimIssueFeature().enableFor(app)
 new DefendantFirstContactFeature().enableFor(app)
 new DefendantResponseFeature().enableFor(app)
-if (toBoolean(config.get<boolean>('featureToggles.countyCourtJudgment'))) {
+if (FeatureToggles.isEnabled('countyCourtJudgment')) {
   new CCJFeature().enableFor(app)
 }
-if (toBoolean(config.get<boolean>('featureToggles.offer'))) {
+if (FeatureToggles.isEnabled('offer')) {
   new OfferFeature().enableFor(app)
 }
-
-if (toBoolean(config.get<boolean>('featureToggles.testingSupport'))) {
+if (FeatureToggles.isEnabled('testingSupport')) {
   new TestingSupportFeature().enableFor(app)
 }
 
-if (toBoolean(config.get<boolean>('featureToggles.admissions'))) {
+if (FeatureToggles.isEnabled('admissions')) {
   new ClaimantResponseFeature().enableFor(app)
 }
 // Below method overrides the moment's toISOString method, which is used by RequestPromise

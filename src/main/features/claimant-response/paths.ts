@@ -9,5 +9,4 @@ export class Paths {
   static readonly incompleteSubmissionPage = new RoutablePath(`${claimantResponsePath}/incomplete-submission`)
   static readonly notImplementedYetPage = new RoutablePath(`${claimantResponsePath}/not-implemented-yet`)
   static readonly defendantsResponsePage = new RoutablePath(`${claimantResponsePath}/defendants-response`)
-
 }
