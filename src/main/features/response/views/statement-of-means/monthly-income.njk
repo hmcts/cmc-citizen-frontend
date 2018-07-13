@@ -4,8 +4,7 @@
 
 {% block additional_scripts %}
   {% include "expandable-checkbox-option-scripts.njk" %}
-  {% include "income-expense-calculation-scripts.njk" %}
-  {% include "append-income-source-section.njk" %}
+  {% include "income-expense-scripts.njk" %}
 {% endblock %}
 
 {% set heading = 'What regular income do you receive?' %}
@@ -57,7 +56,7 @@
 {% macro incomeSources(form, name, label, hint) %}
   {% set checkboxName = name + 'Declared' %}
 
-  {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.model.anyOtherIncomePopulated)), label = label) %}
+  {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.model.anyOtherIncomePopulated)), label = label, additionalClasses = 'otherSection') %}
     {% for source in form.model.otherSources %}
       <div class="other-income-expense-source">
         {{ incomeExpenseSource(form = form, name = name + '[' + loop.index0 + ']', amountLabel = 'Amount received', amountHint = hint, scheduleLabel = 'Received every', nameEditable = true) }}
@@ -73,12 +72,12 @@
   {% endcall %}
 {% endmacro %}
 
-{% macro expandableCheckboxOption(form, name, value, checked = false, label, hint = '', bold = false) %}
+{% macro expandableCheckboxOption(form, name, value, checked = false, label, hint = '', bold = false, additionalClasses = undefined) %}
   {% set expandablePanelId = name + '-' + value | replace(' ', '') %}
   <div class="expandable-checkbox-option">
     <h3 class="heading-medium expandable">{{ t(label) }}</h3>
     {{ option(form = form, name = name, value = value, type = 'checkbox', checked = checked, label = label, hint = hint, bold = bold, hidden = true, className = 'expandable visually-hidden', dataTarget = expandablePanelId) }}
-    <div class="panel panel-border-narrow expandable" id="{{ expandablePanelId }}">
+    <div class="panel panel-border-narrow expandable{{ ' ' + additionalClasses if additionalClasses }}" id="{{ expandablePanelId }}">
       {{ caller() }}
     </div>
   </div>
