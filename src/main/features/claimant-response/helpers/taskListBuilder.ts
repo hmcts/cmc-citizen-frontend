@@ -19,7 +19,7 @@ export class TaskListBuilder {
       )
     )
 
-    return new TaskList(1, 'What the defendant said', tasks)
+    return new TaskList('What the defendant said', tasks)
   }
 
   static buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
@@ -45,7 +45,7 @@ export class TaskListBuilder {
         )
       )
     }
-    return new TaskList(2, 'How do you want to respond?', tasks)
+    return new TaskList('How do you want to respond?', tasks)
   }
 
   static buildSubmitSection (draft: DraftClaimantResponse, externalId: string): TaskList {
@@ -57,7 +57,7 @@ export class TaskListBuilder {
         false
       )
     )
-    return new TaskList(3, 'Submit', tasks)
+    return new TaskList('Submit', tasks)
   }
 
   static buildRemainingTasks (draft: DraftClaimantResponse, claim: Claim): TaskListItem[] {
