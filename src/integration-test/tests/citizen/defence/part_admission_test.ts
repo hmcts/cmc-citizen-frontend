@@ -4,7 +4,6 @@ import { PartyType } from 'integration-test/data/party-type'
 
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defence'
-import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 
 const helperSteps: Helper = new Helper()
 const defenceSteps: DefenceSteps = new DefenceSteps()
@@ -24,5 +23,5 @@ Before(function* (I: I) {
 })
 
 Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen', function* (I: I) {
-  defenceSteps.makePartialAdmission(PartyType.INDIVIDUAL, YesNoOption.YES)
+  defenceSteps.makePartialAdmission(PartyType.INDIVIDUAL)
 })

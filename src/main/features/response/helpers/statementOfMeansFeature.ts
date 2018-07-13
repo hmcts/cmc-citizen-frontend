@@ -11,13 +11,13 @@ export class StatementOfMeansFeature {
       throw new Error('Response draft is required')
     }
     return (
-      (draft.isResponseFullyAdmitted()
-      && (draft.isResponseFullyAdmittedWithPayBySetDate() || draft.isResponseFullyAdmittedWithInstalments())
-      )
-      ||
-      (
-        draft.isResponsePartiallyAdmitted()
-        && (draft.isResponsePartiallyAdmittedWithPayBySetDate() || draft.isResponsePartiallyAdmittedWithInstalments()))
+        (draft.isResponseFullyAdmitted()
+          && (draft.isResponseFullyAdmittedWithPayBySetDate() || draft.isResponseFullyAdmittedWithInstalments())
+        )
+        ||
+        (
+          draft.isResponsePartiallyAdmitted()
+          && (draft.isResponsePartiallyAdmittedWithPayBySetDate() || draft.isResponsePartiallyAdmittedWithInstalments()))
       )
       && !draft.defendantDetails.partyDetails.isBusiness()
   }
