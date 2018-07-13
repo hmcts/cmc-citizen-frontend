@@ -1,9 +1,8 @@
 import { TaskListItem } from 'drafts/tasks/taskListItem'
 
 export class TaskList {
-  constructor (public position: number, public name: string, public tasks: TaskListItem[]) {
+  constructor (public name: string, public tasks: TaskListItem[]) {
     this.name = name
-    this.position = position
     this.tasks = tasks
   }
 
