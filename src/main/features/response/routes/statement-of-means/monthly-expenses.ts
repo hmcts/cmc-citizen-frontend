@@ -59,11 +59,11 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 
     switch (actionName) {
       case 'addOther':
-        form.model.addEmptyOtherIncome()
+        form.model.addEmptyOtherExpense()
         break
       case 'removeOther':
         const selectedForRemoval: IncomeExpenseSource = form.valueFor(extractPropertyName(req.body.action[actionName]))
-        form.model.removeOtherIncome(selectedForRemoval)
+        form.model.removeOtherExpense(selectedForRemoval)
         break
       case 'reset':
         const selectedForReset: IncomeExpenseSource = form.valueFor(extractPropertyName(req.body.action[actionName]))
