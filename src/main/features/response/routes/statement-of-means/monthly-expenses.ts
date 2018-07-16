@@ -24,7 +24,7 @@ const page: RoutablePath = StatementOfMeansPaths.monthlyExpensesPage
 function renderView (form: Form<MonthlyExpenses>, res: express.Response): void {
   res.render(page.associatedView, {
     form: form,
-    totalMonthlyIncomeExpense: calculateTotalMonthlyIncomeExpense(form.model)
+    totalMonthlyExpense: calculateTotalMonthlyIncomeExpense(form.model)
   })
 }
 
