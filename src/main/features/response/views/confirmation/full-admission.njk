@@ -15,7 +15,7 @@
   <p>{{ t('<a href="{{ link }}">Contact {{ claimantName }}</a> if you need their payment details.', { claimantName: claimantName, link: claimantDetailsPageURI }) | safe }}</p>
 {% endif %}
 
-{% if claim.response.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+{% if claim.response.paymentOption === domain.PaymentOption.FULL_BY_SPECIFIED_DATE %}
   <p>{{ t('We’ve emailed {{ claimantName }} your offer to pay by {{ paymentDate }} and your explanation of why you can’t pay before then.',
       { claimantName: claimantName, paymentDate: claim.response.paymentDate | date }) }}</p>
 {% endif %}

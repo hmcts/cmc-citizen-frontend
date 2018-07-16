@@ -10,15 +10,10 @@ export class StatementOfMeansFeature {
     if (!draft) {
       throw new Error('Response draft is required')
     }
-    return (
-        (draft.isResponseFullyAdmitted()
-          && (draft.isResponseFullyAdmittedWithPayBySetDate() || draft.isResponseFullyAdmittedWithInstalments())
-        )
-        ||
-        (
-          draft.isResponsePartiallyAdmitted()
-          && (draft.isResponsePartiallyAdmittedWithPayBySetDate() || draft.isResponsePartiallyAdmittedWithInstalments()))
-      )
+    const fullAdmissionHasStatementOfMeans = draft.isResponseFullyAdmittedWithPayBySetDate() || draft.isResponseFullyAdmittedWithInstalments()
+    const parAdmissionHasStatementOfMeans = draft.isResponsePartiallyAdmittedWithPayBySetDate() || draft.isResponsePartiallyAdmittedWithInstalments()
+    return ((draft.isResponseFullyAdmitted() && fullAdmissionHasStatementOfMeans)
+        || (draft.isResponsePartiallyAdmitted() && parAdmissionHasStatementOfMeans))
       && !draft.defendantDetails.partyDetails.isBusiness()
   }
 }

@@ -8,12 +8,12 @@ import { Defendant } from 'drafts/models/defendant'
 import { Response } from 'response/form/models/response'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { YesNoOption } from 'models/yesNoOption'
-import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { ResponseType } from 'response/form/models/responseType'
 import { HowMuchHaveYouPaidTask } from 'response/tasks/howMuchHaveYouPaidTask'
 import { LocalDate } from 'forms/models/localDate'
-import { generateString } from '../../../app/forms/models/validationUtils'
+import { generateString } from 'test/app/forms/models/validationUtils'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
+import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 
 const validLocalDate = LocalDate.fromObject({ day: 1, month: 1, year: 2010 })
 const validAmount = 100
@@ -69,8 +69,16 @@ describe('HowMuchHaveYouPaidTask', () => {
 
     context('date is', () => {
 
-      it('in the past', () => {
-        const dateInThePast = LocalDate.fromObject({ day: 10, mount: 10, year: 1990 })
+      it('in the future', () => {
+        const dateInThePast = LocalDate.fromObject({ day: 10, month: 10, year: 2200 })
+        const draft: ResponseDraft = validResponseDraft()
+        draft.partialAdmission.howMuchHaveYouPaid = new HowMuchHaveYouPaid(validAmount, dateInThePast, validText)
+
+        expect(HowMuchHaveYouPaidTask.isCompleted(draft)).to.be.false
+      })
+
+      it('invalid', () => {
+        const dateInThePast = LocalDate.fromObject({ day: 33, month: 13, year: 1990 })
         const draft: ResponseDraft = validResponseDraft()
         draft.partialAdmission.howMuchHaveYouPaid = new HowMuchHaveYouPaid(validAmount, dateInThePast, validText)
 

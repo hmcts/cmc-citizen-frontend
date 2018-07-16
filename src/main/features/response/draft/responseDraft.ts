@@ -26,6 +26,7 @@ import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
+import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
 
 export class FullAdmission {
   paymentOption: PaymentOption
@@ -50,7 +51,7 @@ export class PartialAdmission {
 
   alreadyPaid?: AlreadyPaid
   howMuchHaveYouPaid?: HowMuchHaveYouPaid
-  whyDoYouDisagree?: Defence
+  whyDoYouDisagree?: WhyDoYouDisagree
   timeline?: DefendantTimeline
   evidence?: DefendantEvidence
   paymentOption?: PaymentOption
@@ -61,7 +62,7 @@ export class PartialAdmission {
     if (input) {
       this.alreadyPaid = new AlreadyPaid().deserialize(input.alreadyPaid && input.alreadyPaid.option)
       this.howMuchHaveYouPaid = new HowMuchHaveYouPaid().deserialize(input.howMuchHaveYouPaid)
-      this.whyDoYouDisagree = new Defence().deserialize(input.whyDoYouDisagree)
+      this.whyDoYouDisagree = new WhyDoYouDisagree().deserialize(input.whyDoYouDisagree)
       this.timeline = new DefendantTimeline().deserialize(input.timeline)
       this.evidence = new DefendantEvidence().deserialize(input.evidence)
       if (input.paymentOption) {
@@ -132,7 +133,6 @@ export class ResponseDraft extends DraftDocument {
         this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
       }
     }
-
     return this
   }
 
@@ -152,15 +152,15 @@ export class ResponseDraft extends DraftDocument {
   // is incomplete. ROC-3658 should revisit once 'statement of means' flow is complete.
   public isResponseFullyAdmittedWithInstalments (): boolean {
     return this.isResponseFullyAdmitted()
-      && this.fullAdmission
-      && this.fullAdmission.paymentOption
+      && this.fullAdmission !== undefined
+      && this.fullAdmission.paymentOption !== undefined
       && (this.fullAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS)
   }
 
   public isResponsePartiallyAdmittedWithInstalments (): boolean {
     return this.isResponsePartiallyAdmitted()
-      && this.partialAdmission
-      && this.partialAdmission.paymentOption
+      && this.partialAdmission !== undefined
+      && this.partialAdmission.paymentOption !== undefined
       && (this.partialAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS)
   }
 
@@ -209,12 +209,13 @@ export class ResponseDraft extends DraftDocument {
 
   public isResponseFullyAdmittedWithPayBySetDate (): boolean {
     return this.fullAdmission !== undefined
+      && this.fullAdmission.paymentOption !== undefined
       && this.fullAdmission.paymentOption.option === DefendantPaymentType.BY_SET_DATE
   }
 
   public isResponsePartiallyAdmittedWithPayBySetDate (): boolean {
     return this.partialAdmission !== undefined
-      && this.partialAdmission.paymentOption
+      && this.partialAdmission.paymentOption !== undefined
       && this.partialAdmission.paymentOption.option === DefendantPaymentType.BY_SET_DATE
   }
 }

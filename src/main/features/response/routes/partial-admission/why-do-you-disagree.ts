@@ -7,29 +7,16 @@ import { Form } from 'forms/form'
 
 import { ErrorHandling } from 'shared/errorHandling'
 import { User } from 'idam/user'
-import { GuardFactory } from 'response/guards/guardFactory'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
 import { RoutablePath } from 'shared/router/routablePath'
-import { Defence } from 'response/form/models/defence'
+import { PartialAdmissionGuard } from 'response/guards/partialAdmissionGuard'
+import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
 
-function isRequestAllowed (res: express.Response): boolean {
-  const draft: Draft<ResponseDraft> = res.locals.responseDraft
-
-  return draft.document.isResponsePartiallyAdmitted()
-}
-
-function accessDeniedCallback (req: express.Request, res: express.Response): void {
-  const claim: Claim = res.locals.claim
-  res.redirect(Paths.responseTypePage.evaluateUri({ externalId: claim.externalId }))
-}
-
-const guardRequestHandler: express.RequestHandler = GuardFactory.create(isRequestAllowed, accessDeniedCallback)
 const page: RoutablePath = PartAdmissionPaths.whyDoYouDisagreePage
 
-function renderView (form: Form<Defence>, res: express.Response) {
+function renderView (form: Form<WhyDoYouDisagree>, res: express.Response) {
   res.render(page.associatedView, {
     form: form,
     totalAmount: res.locals.claim.totalAmountTillToday
@@ -40,17 +27,17 @@ function renderView (form: Form<Defence>, res: express.Response) {
 export default express.Router()
   .get(
     page.uri,
-    guardRequestHandler,
+    PartialAdmissionGuard.requestHandler(),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.partialAdmission.whyDoYouDisagree), res)
     }))
   .post(
     page.uri,
-    guardRequestHandler,
-    FormValidator.requestHandler(Defence, Defence.fromObject),
+    PartialAdmissionGuard.requestHandler(),
+    FormValidator.requestHandler(WhyDoYouDisagree, WhyDoYouDisagree.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<Defence> = req.body
+      const form: Form<WhyDoYouDisagree> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)

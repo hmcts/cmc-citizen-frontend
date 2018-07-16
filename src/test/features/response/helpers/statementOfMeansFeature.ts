@@ -65,6 +65,21 @@ describe('StatementOfMeansFeature', () => {
       itShouldBeEnabledForNonBusinessAndDisabledForBusinessDefendants(new ResponseDraft().deserialize(responseDraft))
     })
 
+    context('when response is part admission - I have already paid', () => {
+      const responseDraft: ResponseDraft = {
+        response: {
+          type: ResponseType.PART_ADMISSION
+        },
+        partialAdmission: new PartialAdmission().deserialize({
+          alreadyPaid: { option: 'yes' },
+          howMuchHaveYouPaid: { amount: 1, date: { day: 1, month: 1, year: 1999 }, text: 'aaa' },
+          whyDoYouDisagree: { text: 'bbb' }
+        })
+      } as ResponseDraft
+
+      itShouldBeDisabledForAllDefendantTypes(new ResponseDraft().deserialize(responseDraft))
+    })
+
     context('when response is part admission - I have not already paid', () => {
       const responseDraft: ResponseDraft = {
         response: {

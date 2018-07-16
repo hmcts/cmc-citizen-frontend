@@ -28,7 +28,7 @@ function convertPaidAmount (draftCcj: DraftCCJ): number {
 }
 
 function convertPayBySetDate (draftCcj: DraftCCJ): Moment {
-  return (draftCcj.paymentOption.option === PaymentType.BY_SPECIFIED_DATE)
+  return (draftCcj.paymentOption.option === PaymentType.FULL_BY_SPECIFIED_DATE)
     ? draftCcj.payBySetDate.date.toMoment() : undefined
 }
 

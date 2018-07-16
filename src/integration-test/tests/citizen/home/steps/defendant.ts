@@ -32,7 +32,7 @@ export class DefendantSteps {
     defendantTaskListPage.selectTaskHowMuchPaidToClaiment()
   }
 
-  selectTaskHowMuchHowMuchHaveYouPaid (): void {
+  selectTaskHowMuchHaveYouPaid (): void {
     defendantTaskListPage.selectTaskHowMuchHaveYouPaid()
   }
 

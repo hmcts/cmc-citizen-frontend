@@ -1,6 +1,6 @@
 import { ResponseType } from 'claims/models/response/responseType'
 import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
-import { FullAdmissionResponse } from 'claims/models/response/fullDefenceAdmission'
+import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 
 export type Response = FullDefenceResponse | FullAdmissionResponse | PartialAdmissionResponse

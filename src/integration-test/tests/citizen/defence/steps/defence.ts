@@ -7,7 +7,6 @@ import { DefendantEnterClaimPinNumberPage } from 'integration-test/tests/citizen
 import { DefendantEnterClaimReferencePage } from 'integration-test/tests/citizen/defence/pages/defendant-enter-claim-reference'
 import { DefendantFreeMediationPage } from 'integration-test/tests/citizen/defence/pages/defendant-free-mediation'
 import { DefendantHowMuchHaveYouPaidPage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-have-you-paid'
-import { DefendantHowMuchYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-you-owe'
 import { DefendantImpactOfDisputePage } from 'integration-test/tests/citizen/defence/pages/defendant-impact-of-dispute'
 import { DefendantMobilePage } from 'integration-test/tests/citizen/defence/pages/defendant-mobile'
 import { DefendantMoreTimeConfirmationPage } from 'integration-test/tests/citizen/defence/pages/defendant-more-time-confirmation'
@@ -17,7 +16,6 @@ import { DefendantPaymentDatePage } from 'integration-test/tests/citizen/defence
 import { DefendantPaymentPlanPage } from 'integration-test/tests/citizen/defence/pages/defendant-payment-plan'
 import { DefendantRegisterPage } from 'integration-test/tests/citizen/defence/pages/defendant-register'
 import { DefendantRejectAllOfClaimPage } from 'integration-test/tests/citizen/defence/pages/defendant-reject-all-of-claim'
-import { DefendantRejectPartOfClaimPage } from 'integration-test/tests/citizen/defence/pages/defendant-reject-part-of-claim'
 import { DefendantStartPage } from 'integration-test/tests/citizen/defence/pages/defendant-start'
 import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
 import { DefendantTimelineEventsPage } from 'integration-test/tests/citizen/defence/pages/defendant-timeline-events'
@@ -34,7 +32,8 @@ import { DefendantWhenDidYouPayPage } from 'integration-test/tests/citizen/defen
 import { ClaimStoreClient } from 'integration-test/helpers/clients/claimStoreClient'
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 import { DefendantEvidencePage } from 'integration-test/tests/citizen/defence/pages/defendant-evidence'
-import { DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage } from '../pages/defendant-have-you-paid-the-claimant-the-amount-you-admit-you-owe'
+import { AlreadyPaidPage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/already-paid'
+import { DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-have-you-paid-the-claimant-the-amount-you-admit-you-owe'
 import I = CodeceptJS.I
 
 const I: I = actor()
@@ -52,10 +51,9 @@ const defendantDefenceTypePage: DefendantDefenceTypePage = new DefendantDefenceT
 const defendantRejectAllOfClaimPage: DefendantRejectAllOfClaimPage = new DefendantRejectAllOfClaimPage()
 const defendantYourDefencePage: DefendantYourDefencePage = new DefendantYourDefencePage()
 const defendantFreeMediationPage: DefendantFreeMediationPage = new DefendantFreeMediationPage()
+const alreadyPaidPage: AlreadyPaidPage = new AlreadyPaidPage()
 const defendantCheckAndSendPage: DefendantCheckAndSendPage = new DefendantCheckAndSendPage()
-const defendantHowMuchYouBelieveYouOwePage: DefendantHowMuchYouOwePage = new DefendantHowMuchYouOwePage()
 const defendantHowMuchHaveYouPaidTheClaimant: DefendantHowMuchHaveYouPaidPage = new DefendantHowMuchHaveYouPaidPage()
-const defendantRejectPartOfClaimPage: DefendantRejectPartOfClaimPage = new DefendantRejectPartOfClaimPage()
 const defendantTimelineOfEventsPage: DefendantTimelineEventsPage = new DefendantTimelineEventsPage()
 const defendantEvidencePage: DefendantEvidencePage = new DefendantEvidencePage()
 const defendantImpactOfDisputePage: DefendantImpactOfDisputePage = new DefendantImpactOfDisputePage()
@@ -148,11 +146,6 @@ export class DefenceSteps {
   }
 
   enterEvidence (description: string, comment: string): void {
-    I.see('Add your timeline of events')
-    defendantEvidencePage.enterEvidenceRow('CONTRACTS_AND_AGREEMENTS', description, comment)
-  }
-
-  addEvidences (description: string, comment: string): void {
     I.see('List your evidence')
     defendantEvidencePage.enterEvidenceRow('CONTRACTS_AND_AGREEMENTS', description, comment)
   }
@@ -196,42 +189,25 @@ export class DefenceSteps {
     I.click('Save and continue')
   }
 
-  rejectPartOfTheClaim_PaidWhatIBelieveIOwe (defence: PartialDefence): void {
+  admitPartOfTheClaimAlreadyPaid (defence: PartialDefence): void {
     defendantSteps.selectTaskChooseAResponse()
     defendantDefenceTypePage.admitPartOfMoneyClaim()
-    defendantRejectPartOfClaimPage.rejectClaimPaidWhatIBelieveIOwe()
-    I.see('Respond to a money claim')
-    defendantSteps.selectTaskHowMuchPaidToClaiment()
-    defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplaination(
-      defence.paidWhatIBelieveIOwe.howMuchAlreadyPaid,
-      defence.paidWhatIBelieveIOwe.paidDate,
-      defence.paidWhatIBelieveIOwe.explanation)
-    this.addTimeLineOfEvents(defence.timeline)
-    this.enterEvidence('description', 'They do not have evidence')
-    this.explainImpactOfDispute(defence.impactOfDispute)
-    defendantSteps.selectTaskFreeMediation()
-    defendantFreeMediationPage.chooseYes()
-  }
+    alreadyPaidPage.chooseYes()
+    I.see('How much have you paid?')
 
-  rejectPartOfTheClaimTooMuch (defence: PartialDefence): void {
-    defendantSteps.selectTaskChooseAResponse()
-    defendantDefenceTypePage.admitPartOfMoneyClaim()
-    defendantRejectPartOfClaimPage.rejectClaimTooMuch()
-    I.see('Respond to a money claim')
-    defendantSteps.selectTaskHowMuchMoneyBelieveYouOwe()
-    defendantHowMuchYouBelieveYouOwePage.enterAmountOwedAndExplaination(
-      defence.claimAmountIsTooMuch.howMuchIBelieveIOwe,
-      defence.claimAmountIsTooMuch.explanation)
+    defendantSteps.selectTaskHowMuchHaveYouPaid()
+
+    defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplaination(
+      100,
+      { day: '1', month: '1', year: '1990' },
+      'I will not pay that much!'
+    )
+
+    defendantSteps.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
+    defendantYourDefencePage.enterYourDefence('I do not like it')
     this.addTimeLineOfEvents(defence.timeline)
     this.enterEvidence('description', 'They do not have evidence')
-    this.explainImpactOfDispute(defence.impactOfDispute)
-    defendantSteps.selectTaskDecideHowWillYouPay()
-    defendantWhenWillYouPage.chooseInstalments()
-    defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan)
-    statementOfMeansSteps.fillStatementOfMeansWithMinimalDataSet()
     I.see('Respond to a money claim')
-    defendantSteps.selectTaskFreeMediation()
-    defendantFreeMediationPage.chooseYes()
   }
 
   submitDefenceText (text: string): void {
@@ -292,6 +268,11 @@ export class DefenceSteps {
         I.see('When did you pay this amount?')
         I.see('How did you pay the amount claimed?')
         break
+      case DefenceType.PART_ADMISSION:
+        this.admitPartOfTheClaimAlreadyPaid(defence)
+        defendantSteps.selectCheckAndSubmitYourDefence()
+        I.see('How much money have you paid?')
+        return
       default:
         throw new Error('Unknown DefenceType')
     }
@@ -369,7 +350,7 @@ export class DefenceSteps {
     defendantDefenceTypePage.admitPartOfMoneyClaim()
     I.see('Have you paid the claimant the amount you admit you owe?')
     haveYouPaidTheClaimantPage.selectYesOption()
-    defendantSteps.selectTaskHowMuchHowMuchHaveYouPaid()
+    defendantSteps.selectTaskHowMuchHaveYouPaid()
     defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplaination(
       defence.paidWhatIBelieveIOwe.howMuchAlreadyPaid,
       defence.paidWhatIBelieveIOwe.paidDate,
@@ -377,7 +358,7 @@ export class DefenceSteps {
     defendantSteps.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
     defendantYourDefencePage.enterYourDefence('I have already paid for the bill')
     this.addTimeLineOfEvents(defence.timeline)
-    this.addEvidences('description', 'They do not have evidence')
+    this.enterEvidence('description', 'They do not have evidence')
     defendantSteps.selectCheckAndSubmitYourDefence()
     this.checkAndSendAndSubmit(defendantType)
 

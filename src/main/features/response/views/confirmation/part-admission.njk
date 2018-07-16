@@ -12,7 +12,7 @@
   {% endif %}
   {% if claim.response.paymentOption === domain.PaymentOption.IMMEDIATELY %}
     {% set paymentMethod = 'immediately' %}
-  {% elseif claim.response.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+  {% elseif claim.response.paymentOption === domain.PaymentOption.FULL_BY_SPECIFIED_DATE %}
     {% set paymentMethod = 'by '+ paymentDate %}
   {% elseif  claim.response.paymentOption === domain.PaymentOption.INSTALMENTS %}
     {% set paymentMethod = 'by instalments' %}
