@@ -1,8 +1,7 @@
 import { IsDefined, IsPositive } from 'class-validator'
-import { Fractions, IsLessThan, Min } from '@hmcts/cmc-validators'
+import { Fractions, IsLessThan } from '@hmcts/cmc-validators'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
-import response from 'offer/routes/response'
 
 export class ValidationErrors {
   static readonly AMOUNT_NOT_VALID: string = 'Enter valid amount'
