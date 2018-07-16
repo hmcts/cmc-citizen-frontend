@@ -45,7 +45,7 @@ variable "vault_section" {
 }
 // feature toggles
 variable "feature_ccj" {
-  default = "false"
+  default = "true"
 }
 
 variable "feature_offer" {
@@ -106,7 +106,7 @@ variable "appinsights_instrumentation_key" {
 variable "capacity" {
   default = "1"
 }
-
+  
 variable "common_tags" {
   type = "map"
 }
