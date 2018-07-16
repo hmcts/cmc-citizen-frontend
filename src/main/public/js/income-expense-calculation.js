@@ -80,11 +80,13 @@ $(document).ready(function () {
         event.preventDefault()
 
         var lastOtherElement = $(config.otherIncomeExpenseSelector).last();
-        $(config.otherIncomeExpenseSelector).find('input.link-button').removeClass('hidden')
+        $(config.otherIncomeExpenseSelector).find('input.link-button').removeClass('hidden');
         var newOtherElement = lastOtherElement.clone();
-        incrementDomNodesIds(newOtherElement)
+        incrementDomNodesIds(newOtherElement);
         sanitizeContent(newOtherElement);
-        newOtherElement.find('input.link-button').on('click', removeElementListener)
+        newOtherElement.find('input.link-button').on('click', removeElementListener);
+        newOtherElement.find(config.amountInputFieldSelector).keyup(updatePaymentLength);
+        newOtherElement.find(config.scheduleInputFieldSelector).change(updatePaymentLength);
 
         lastOtherElement.parent().append(newOtherElement);
       })
@@ -93,7 +95,7 @@ $(document).ready(function () {
 
       function sanitizeContent (newElement) {
         newElement.find('input[type=text]').val('')
-        newElement.find('input[type=radio]').val('')
+        newElement.find('input[type=radio]').prop('checked', false)
         newElement.find('input[type=number]').val('')
 
         newElement.find('*').removeClass('form-group-error')
@@ -118,7 +120,8 @@ $(document).ready(function () {
     }
 
     var updatePaymentLength = function () {
-      var formData = removeInvalidFormDataEntries(extractFormData());
+      var potentiallyInvalidFormData = extractFormData()
+      var formData = removeInvalidFormDataEntries(potentiallyInvalidFormData);
 
       if (formData.length < 1) {
         setTotalMonthlyIncomeExpense(config.noTotalMonthlyIncomeExpense);
