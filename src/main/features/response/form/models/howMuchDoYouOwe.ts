@@ -5,15 +5,12 @@ import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 
 export class ValidationErrors {
   static readonly AMOUNT_NOT_VALID: string = 'Enter valid amount'
-  static readonly AMOUNT_LESS_THAN_CLAIMED: string = 'Enter a value less then the claimed amount'
 }
-
-// TODO AMOUNT_LESS_THAN_CLAIMED is a placeholder and has not been approved by PO or content. It was missing in story 3662
 
 export class HowMuchDoYouOwe {
 
   @IsDefined({ message: DefaultValidationErrors.AMOUNT_REQUIRED })
-  @IsLessThan('totalAmount', { message: ValidationErrors.AMOUNT_LESS_THAN_CLAIMED })
+  @IsLessThan('totalAmount', { message: DefaultValidationErrors.AMOUNT_ENTERED_TOO_LARGE })
   @IsPositive({ message: ValidationErrors.AMOUNT_NOT_VALID })
   @Fractions(0, 2, { message: DefaultValidationErrors.AMOUNT_INVALID_DECIMALS })
   amount?: number
