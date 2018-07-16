@@ -243,7 +243,7 @@ function forDeserialize () {
       amount: this.sampleData.maintenance.amount,
       schedule: this.sampleData.maintenance.schedule
     },
-    otherSources: [{}]
+    other: [{}]
   }
 }
 
