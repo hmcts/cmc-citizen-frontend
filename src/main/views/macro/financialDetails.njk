@@ -3,6 +3,23 @@
     <summary>{{ t(label) }}</summary>
     <div class="panel panel-border-narrow">
       <table class="table-form">
+        <thead>
+        <tr>
+          <th scope="col">{{ t('Bank and savings accounts') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for account in claim.response.statementOfMeans.bankAccounts.getPopulatedRowsOnly() %}
+            <tr>
+              <td scope="col">{{ t('Type of account') }}</td>
+              <td scope="col">{{ account.typeOfAccount.displayValue }}</td>
+              <td scope="col">{{ t('Balance') }}</td>
+              <td scope="numeric last">{{ account.balance | numeral }}</td>
+              <td scope="col">{{ t('Joint account') }}</td>
+              <td scope="numeric last">{{ 'Yes' if account.joint else 'No', '', loop.index0 === indexOfLastRow }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
       </table>
     </div>
   </details>
