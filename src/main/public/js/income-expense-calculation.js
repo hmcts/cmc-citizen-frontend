@@ -120,8 +120,7 @@ $(document).ready(function () {
     }
 
     var updatePaymentLength = function () {
-      var potentiallyInvalidFormData = extractFormData()
-      var formData = removeInvalidFormDataEntries(potentiallyInvalidFormData);
+      var formData = removeInvalidFormDataEntries(extractFormData());
 
       if (formData.length < 1) {
         setTotalMonthlyIncomeExpense(config.noTotalMonthlyIncomeExpense);
