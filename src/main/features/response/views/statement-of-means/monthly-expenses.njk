@@ -57,7 +57,7 @@
       {{ expenseSource(form, name = 'hirePurchase', label = 'Hire purchase') }}
       {{ expenseSource(form, name = 'mobilePhone', label = 'Mobile phone') }}
       {{ expenseSource(form, name = 'maintenance', label = 'Maintenance payments') }}
-      {{ expenseSources(form, name = 'otherSources', label = 'Other') }}
+      {{ expenseSources(form, name = 'other', label = 'Other') }}
 
       {{ linkButton('Recalculate total monthly expenditure', 'action[calculateMonthlyIncome]', 'button button-secondary calculate-monthly-income-expense') }}
 
@@ -85,18 +85,18 @@
   {% set checkboxName = name + 'Declared' %}
 
   {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.model.anyOtherExpensePopulated)), label = label) %}
-    {% for source in form.model.otherSources %}
+    {% for source in form.model.other %}
       <div class="other-income-expense-source">
         {{ incomeExpenseSource(form = form, name = name + '[' + loop.index0 + ']', amountLabel = 'Amount paid', amountHint = hint, scheduleLabel = 'Paid every', nameEditable = true) }}
-        {% if form.model.otherSources.length > 1 %}
-          {{ linkButton(name = 'action[removeOtherExpenseSource][otherSources.' + loop.index0 + ']', label = 'Remove this expense source', class = 'link-button') }}
+        {% if form.model.other.length > 1 %}
+          {{ linkButton(name = 'action[removeOther][other.' + loop.index0 + ']', label = 'Remove this expense source', class = 'link-button') }}
         {% else %}
-          {{ linkButton(name = 'action[resetExpenseSource][' + name + '.0]', label = 'Reset this expense source', class = 'link-button js-hidden') }}
+          {{ linkButton(name = 'action[reset][' + name + '.0]', label = 'Reset this expense source', class = 'link-button js-hidden') }}
         {% endif %}
       </div>
     {% endfor %}
 
-    {{ linkButton(name = 'action[addOtherExpenseSource]', label = 'Add another expense', class = 'button button-secondary') }}
+    {{ linkButton(name = 'action[addOther]', label = 'Add another expense', class = 'button button-secondary') }}
   {% endcall %}
 {% endmacro %}
 
