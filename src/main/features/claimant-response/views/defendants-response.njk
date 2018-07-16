@@ -1,5 +1,8 @@
 {% extends "layout.njk" %}
+
 {% set heading = 'The defendant’s response' %}
+
+{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
 
 {% set claimantName = claim.claimData.claimant.name %}
 
@@ -32,8 +35,6 @@
       {% if claim.response.paymentOption === domain.PaymentOption.FULL_BY_SPECIFIED_DATE %}
         <p>{{ t('{{ claimantName }} admits they owe all the money you’ve claimed.', { claimantName: claimantName }) }}</p>
 
-        <p>{{ t('They’ve offered to pay you in full by.') }}</p>
-
         <p>{{ t('They’ve offered to pay you in full by {{ paymentDate }}.', { paymentDate: claim.response.paymentDate | date }) }}</p>
 
         <h3 class="heading-small form-group-related">{{ t('Why they can’t pay the full amount now') }}</h3>
@@ -52,7 +53,44 @@
       {% endif %}
 
       {% if draft.response.type === ResponseType.PART_ADMISSION %}
+        <p>{{ t('{{ claimantName }} admits they owe all the money you’ve claimed.', { claimantName: claimantName }) }}</p>
+
+        <p>{{ t('They’ve offered to pay you this in instalments.') }}</p>
+
+        <h2 class="heading-medium">{{ t('Their defence') }}</h2>
+
+        <h3 class="heading-small form-group-related">{{ t('Why they they don’t owe the amount claimed') }}</h3>
+
+        <h3 class="heading-small form-group-related">{{ t('Their timeline of events') }}</h3>
+
+        <table>
+          <thead>
+          <tr>
+            <th scope="col">{{ t('Date') }}</th>
+            <th scope="col">{{ t('What happened') }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for event in timeline.rows %}
+            <tr>
+              <td>{{ event.date }}</td>
+              <td>{{ event.description }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+
+        <h3 class="heading-small form-group-related">{{ t('They disagree with your evidence') }}</h3>
+        <p>{{ t('I didn’t get an email from {{ claimantName }} about this, so I didn’t get a chance to sort it out.
+                  It would be good to see a copy of the email.', { claimantName: claimantName }) }}</p>
+
       {% endif %}
+
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+
+        {{ submitButton('Continue') }}
+      </form>
 
     </div>
   </div>
