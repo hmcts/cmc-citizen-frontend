@@ -197,9 +197,9 @@ export class DefenceSteps {
 
     defendantSteps.selectTaskHowMuchHaveYouPaid()
 
-    defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplaination(
+    defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplanation(
       100,
-      { day: '1', month: '1', year: '1990' },
+      '1990-01-01' ,
       'I will not pay that much!'
     )
 
@@ -351,7 +351,7 @@ export class DefenceSteps {
     I.see('Have you paid the claimant the amount you admit you owe?')
     haveYouPaidTheClaimantPage.selectYesOption()
     defendantSteps.selectTaskHowMuchHaveYouPaid()
-    defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplaination(
+    defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplanation(
       defence.paidWhatIBelieveIOwe.howMuchAlreadyPaid,
       defence.paidWhatIBelieveIOwe.paidDate,
       defence.paidWhatIBelieveIOwe.explanation)
