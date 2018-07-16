@@ -102,9 +102,11 @@ $(document).ready(function () {
       }
 
       function incrementDomNodesIds (newRow) {
+        var nameOfElement = newRow[0].firstElementChild.firstElementChild.firstElementChild.getAttribute('for').split('[')[0]
+
         newRow.html(function (index, oldHtml) {
-          return oldHtml.replace(/otherSources\[(\d+)\]/g, function (match, capturedRowIndex) {
-            return 'otherSources[' + (parseInt(capturedRowIndex) + 1) + ']'
+          return oldHtml.replace(new RegExp(nameOfElement + '\\[(\\d+)]', 'g'), function (match, capturedRowIndex) {
+            return nameOfElement + '[' + (parseInt(capturedRowIndex) + 1) + ']'
           })
         })
       }
