@@ -11,6 +11,7 @@ export class DraftClaimantResponse extends DraftDocument {
   deserialize (input: any): DraftClaimantResponse {
     if (input) {
       this.externalId = input.externalId
+      this.viewedDefendantResponse = input.viewedDefendantResponse
     }
     return this
   }
