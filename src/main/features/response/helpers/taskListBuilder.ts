@@ -84,7 +84,7 @@ export class TaskListBuilder {
     if (draft.isResponseFullyAdmitted()) {
       tasks.push(
         new TaskListItem(
-          'Decide how you`ll pay',
+          'Decide how you’ll pay',
           FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: externalId }),
           DecideHowYouWillPayTask.isCompleted(draft)
         )
