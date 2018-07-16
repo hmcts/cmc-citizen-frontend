@@ -1,14 +1,12 @@
 (function () {
   document.addEventListener('DOMContentLoaded', function (event) {
 
-    var submitType = document.querySelector('input[type=submit]')
+    var submitInputTypeList = document.querySelectorAll('input[type=submit]')
+      .forEach(function (item) {
+        item.addEventListener('dblclick', function (event) {
+          event.preventDefault();
+        })
+      });
+  });
 
-    if (submitType != null) {
-      submitType.addEventListener('dblclick', function (event) {
-        event.preventDefault()
-      })
-    }
-
-  })
-
-})()
+})();
