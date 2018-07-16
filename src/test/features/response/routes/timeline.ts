@@ -15,7 +15,8 @@ import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/r
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = Paths.timelinePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
+const pagePath: string = Paths.timelinePage.evaluateUri({ externalId: externalId })
 
 describe('Defendant response: timeline', () => {
 
@@ -111,17 +112,19 @@ describe('Defendant response: timeline', () => {
 
         context('valid form', () => {
 
-          it('should redirect to evidence page when and everything is fine', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave(100)
+          ['response', 'response:partial-admission'].forEach(responseDraftType => {
+            it('should redirect to evidence page when and everything is fine', async () => {
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+              draftStoreServiceMock.resolveFind(responseDraftType)
+              draftStoreServiceMock.resolveSave(100)
 
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ rows: [{ date: 'Damaged roof', description: '299' }] })
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.evidencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+              await request(app)
+                .post(pagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .send({ rows: [{ date: 'Damaged roof', description: '299' }] })
+                .expect(res => expect(res).to.be.redirect
+                  .toLocation(Paths.evidencePage.evaluateUri({ externalId: externalId })))
+            })
           })
         })
 

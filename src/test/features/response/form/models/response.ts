@@ -7,6 +7,7 @@ import { Response, ValidationErrors } from 'response/form/models/response'
 import { ResponseType } from 'response/form/models/responseType'
 
 describe('Response', () => {
+
   describe('validation', () => {
     const validator: Validator = new Validator()
 

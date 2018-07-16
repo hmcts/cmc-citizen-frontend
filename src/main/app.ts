@@ -21,8 +21,8 @@ import { DashboardFeature } from 'dashboard/index'
 import { CCJFeature } from 'ccj/index'
 import { Feature as OfferFeature } from 'offer/index'
 import { TestingSupportFeature } from 'testing-support/index'
-import * as toBoolean from 'to-boolean'
 import { FeatureToggles } from 'utils/featureToggles'
+import { ClaimantResponseFeature } from 'claimant-response/index'
 
 export const app: express.Express = express()
 
@@ -60,10 +60,12 @@ new DefendantResponseFeature().enableFor(app)
 new CCJFeature().enableFor(app)
 new OfferFeature().enableFor(app)
 
-if (toBoolean(config.get<boolean>('featureToggles.testingSupport'))) {
+if (FeatureToggles.isEnabled('testingSupport')) {
   new TestingSupportFeature().enableFor(app)
 }
-
+if (FeatureToggles.isEnabled('admissions')) {
+  new ClaimantResponseFeature().enableFor(app)
+}
 // Below method overrides the moment's toISOString method, which is used by RequestPromise
 // to convert moment object to String
 moment.prototype.toISOString = function () {

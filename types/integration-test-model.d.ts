@@ -100,7 +100,7 @@ declare type PaidWhatIBeliveIOweDefence = {
 
 declare type ClaimAmountIsTooHighDefence = {
   howMuchIBelieveIOwe: number
-  explanation: stirng
+  explanation: string
 }
 
 declare type Timeline = {

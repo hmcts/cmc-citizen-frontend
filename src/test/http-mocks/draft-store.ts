@@ -39,6 +39,8 @@ import { EvidenceType } from 'forms/models/evidenceType'
 import { Eligibility } from 'eligibility/model/eligibility'
 import { ClaimType } from 'eligibility/model/claimType'
 import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
+import { AlreadyPaid } from 'response/form/models/alreadyPaid'
+import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
@@ -246,9 +248,7 @@ export const sampleFullAdmissionResponseDraftObj = {
       childTaxCredit: 1,
       childBenefit: 1,
       councilTaxSupport: 1,
-      pension: 1,
-      maintenance: 1,
-      rows: [{ amount: 10, description: 'bla bla bla' }]
+      pension: 1
     },
     monthlyExpenses: {
       mortgage: 1,
@@ -266,6 +266,17 @@ export const sampleFullAdmissionResponseDraftObj = {
       rows: [{ amount: 10, description: 'bla bla bla' }]
     },
     courtOrders: { declared: false }
+  }
+}
+
+export const samplePartialAdmissionResponseDraftObj = {
+  ...commonResponsePartial,
+  response: {
+    type: ResponseType.PART_ADMISSION
+  },
+  partialAdmission: {
+    alreadyPaid: new AlreadyPaid().deserialize({ alreadyPaid: new AlreadyPaid(YesNoOption.YES) }),
+    howMuchHaveYouPaid: new HowMuchHaveYouPaid().deserialize({ amount: 100 })
   }
 }
 
@@ -314,6 +325,10 @@ const sampleCCJDraftObj = {
   }
 }
 
+export const sampleClaimantResponseDraftObj = {
+  externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5'
+}
+
 export function resolveFind (draftType: string, draftOverride?: object): mock.Scope {
   let documentDocument: object
 
@@ -327,8 +342,14 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
     case 'response:full-admission':
       documentDocument = { ...sampleFullAdmissionResponseDraftObj, ...draftOverride }
       break
+    case 'response:partial-admission':
+      documentDocument = { ...samplePartialAdmissionResponseDraftObj, ...draftOverride }
+      break
     case 'ccj':
       documentDocument = { ...sampleCCJDraftObj, ...draftOverride }
+      break
+    case 'claimantResponse':
+      documentDocument = { ...sampleClaimantResponseDraftObj, ...draftOverride }
       break
     default:
       documentDocument = { ...draftOverride }
