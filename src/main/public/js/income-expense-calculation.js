@@ -14,7 +14,7 @@ $(document).ready(function () {
       formDataFieldSelector: 'input[name*=amount],input:checked[name*=schedule]',
       calculateMonthlyIncomeExpenseButtonSelector: '.calculate-monthly-income-expense',
       totalMonthlyIncomeExpenseSelector: '.total-monthly-income-expense',
-      otherIncomeExpenseSelector: '.other-income-expense',
+      otherIncomeExpenseSelector: '.other-income-expense-source',
       otherAddAnotherButton: '.other-section input.button',
       otherRemoveButton: '.other-section input.link-button',
 
@@ -56,18 +56,58 @@ $(document).ready(function () {
       setup();
     };
 
+    var removeElementListener = function(event) {
+      event.preventDefault()
+      if ($(config.otherIncomeExpenseSelector).length < 2) {
+        return
+      }
+      this.parentElement.remove()
+
+      var otherIncomeElements = $(config.otherIncomeExpenseSelector)
+      if (otherIncomeElements.length < 2) {
+        otherIncomeElements.find('input.link-button').addClass('hidden')
+      }
+
+      updatePaymentLength()
+    }
+
+
     var setup = function () {
       enableProgressiveEnhancement();
       amountInputFieldElement.keyup(updatePaymentLength);
       scheduleInputFieldElement.change(updatePaymentLength);
       otherAddAnotherButtonElements.on('click', function(event) {
         event.preventDefault()
+
+        var lastOtherElement = $(config.otherIncomeExpenseSelector).last();
+        $(config.otherIncomeExpenseSelector).find('input.link-button').removeClass('hidden')
+        var newOtherElement = lastOtherElement.clone();
+        incrementDomNodesIds(newOtherElement)
+        sanitizeContent(newOtherElement);
+        newOtherElement.find('input.link-button').on('click', removeElementListener)
+
+        lastOtherElement.parent().append(newOtherElement);
       })
-      otherRemoveButtonElements.on('click', function(event) {
-        event.preventDefault()
-        this.parentElement.remove()
-        updatePaymentLength()
-      })
+
+      otherRemoveButtonElements.on('click', removeElementListener)
+
+      function sanitizeContent (newElement) {
+        newElement.find('input[type=text]').val('')
+        newElement.find('input[type=radio]').val('')
+        newElement.find('input[type=number]').val('')
+
+        newElement.find('*').removeClass('form-group-error')
+        newElement.find('*').removeClass('form-control-error')
+        newElement.find('.error-message').remove()
+      }
+
+      function incrementDomNodesIds (newRow) {
+        newRow.html(function (index, oldHtml) {
+          return oldHtml.replace(/otherSources\[(\d+)\]/g, function (match, capturedRowIndex) {
+            return 'otherSources[' + (parseInt(capturedRowIndex) + 1) + ']'
+          })
+        })
+      }
 
     }
 
