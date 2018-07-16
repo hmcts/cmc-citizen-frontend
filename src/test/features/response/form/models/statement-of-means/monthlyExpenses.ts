@@ -243,7 +243,7 @@ function forDeserialize () {
       amount: this.sampleData.maintenance.amount,
       schedule: this.sampleData.maintenance.schedule
     },
-    otherSources: [{}]
+    other: [{}]
   }
 }
 
@@ -299,7 +299,7 @@ describe('MonthlyExpenses', () => {
       expect(new MonthlyExpenses().deserialize(undefined)).to.deep.equal(new MonthlyExpenses())
     })
 
-    it('should return instance initialised with set fields from object provided', () => {
+    it.only('should return instance initialised with set fields from object provided', () => {
       expect(new MonthlyExpenses().deserialize(getSampleMonthtlyExpensesObject().forDeserialize())).to.deep.equal(getSampleMonthtlyExpensesObject().forConstructor())
     })
   })
