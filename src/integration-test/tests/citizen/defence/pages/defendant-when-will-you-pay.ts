@@ -6,7 +6,7 @@ const fields = {
   paymentOption: {
     Immediately: 'input[id=optionIMMEDIATELY]',
     Instalments: 'input[id=optionINSTALMENTS]',
-    FullBySetDate: 'input[id=optionFULL_BY_SPECIFIED_DATE]'
+    BySetDate: 'input[id=optionBY_SPECIFIED_DATE]'
   }
 }
 
@@ -27,7 +27,7 @@ export class DefendantWhenWillYouPayPage {
   }
 
   chooseFullBySetDate (): void {
-    I.checkOption(fields.paymentOption.FullBySetDate)
+    I.checkOption(fields.paymentOption.BySetDate)
     I.click(buttons.submit)
   }
 
