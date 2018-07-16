@@ -13,14 +13,14 @@ import { IndividualDetails } from 'forms/models/individualDetails'
 import { Defendant } from 'drafts/models/defendant'
 
 const amountOwed = 100
-const amountClaimed = 500
+const totalAmount = 500
 
 function validResponseDraft (): ResponseDraft {
   const responseDraft: ResponseDraft = new ResponseDraft()
   responseDraft.response = new Response(ResponseType.PART_ADMISSION)
   responseDraft.partialAdmission = new PartialAdmission()
   responseDraft.partialAdmission.alreadyPaid = new AlreadyPaid(YesNoOption.NO)
-  responseDraft.partialAdmission.howMuchDoYouOwe = new HowMuchDoYouOwe(amountOwed, amountClaimed)
+  responseDraft.partialAdmission.howMuchDoYouOwe = new HowMuchDoYouOwe(amountOwed, totalAmount)
   responseDraft.defendantDetails = new Defendant(new IndividualDetails())
 
   return responseDraft
@@ -64,7 +64,7 @@ describe('HowMuchDoYouOweTask', () => {
 
       it('greater than claimed amount', () => {
         const draft: ResponseDraft = validResponseDraft()
-        draft.partialAdmission.howMuchDoYouOwe = new HowMuchDoYouOwe(amountClaimed + 1, amountClaimed)
+        draft.partialAdmission.howMuchDoYouOwe = new HowMuchDoYouOwe(totalAmount + 1, totalAmount)
 
         expect(HowMuchDoYouOweTask.isCompleted(draft)).to.be.false
       })
