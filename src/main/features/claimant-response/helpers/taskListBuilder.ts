@@ -19,7 +19,7 @@ export class TaskListBuilder {
       )
     )
 
-    return new TaskList(1, 'What the defendant said', tasks)
+    return new TaskList(1, 'Before you start', tasks)
   }
 
   static buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
