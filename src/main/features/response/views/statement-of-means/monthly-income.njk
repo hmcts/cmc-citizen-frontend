@@ -56,7 +56,7 @@
 {% macro incomeSources(form, name, label, hint) %}
   {% set checkboxName = name + 'Declared' %}
 
-  {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.model.anyOtherIncomePopulated)), label = label, additionalClasses = 'otherSection') %}
+  {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.model.anyOtherIncomePopulated)), label = label, additionalClasses = 'other-section') %}
     {% for source in form.model.otherSources %}
       <div class="other-income-expense-source">
         {{ incomeExpenseSource(form = form, name = name + '[' + loop.index0 + ']', amountLabel = 'Amount received', amountHint = hint, scheduleLabel = 'Received every', nameEditable = true) }}

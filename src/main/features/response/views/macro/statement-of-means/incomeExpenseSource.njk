@@ -22,7 +22,7 @@
     {% if hint %}
       <span class="form-hint">{{ t(hint) }}</span>
     {% endif %}
-          {% if error %}
+    {% if error %}
       <span class="error-message">{{ t(error) }}</span>
     {% endif %}
     {{ poundInputInline(name = name, label = label, form = form) }}

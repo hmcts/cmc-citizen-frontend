@@ -14,6 +14,9 @@ $(document).ready(function () {
       formDataFieldSelector: 'input[name*=amount],input:checked[name*=schedule]',
       calculateMonthlyIncomeExpenseButtonSelector: '.calculate-monthly-income-expense',
       totalMonthlyIncomeExpenseSelector: '.total-monthly-income-expense',
+      otherIncomeExpenseSelector: '.other-income-expense',
+      otherAddAnotherButton: '.other-section input.button',
+      otherRemoveButton: '.other-section input.link-button',
 
       amountType: 'amount',
       scheduleType: 'schedule'
@@ -31,6 +34,12 @@ $(document).ready(function () {
       totalMonthlyIncomeExpenseElement.text(totalAmount);
     }
 
+    var csrfInputFieldElement,
+      amountInputFieldElement,
+      scheduleInputFieldElement,
+      otherAddAnotherButtonElements,
+      otherRemoveButtonElements;
+
     var init = function (settings) {
       // Allow overriding the default config
       $.extend(config, settings);
@@ -41,6 +50,8 @@ $(document).ready(function () {
       scheduleInputFieldElement = containerElement.find(config.scheduleInputFieldSelector);
       calculateMontlyIncomeExpenseButtonElement = containerElement.find(config.calculateMonthlyIncomeExpenseButtonSelector);
       totalMonthlyIncomeExpenseElement = containerElement.find(config.totalMonthlyIncomeExpenseSelector);
+      otherAddAnotherButtonElements = containerElement.find(config.otherAddAnotherButton)
+      otherRemoveButtonElements = containerElement.find(config.otherRemoveButton)
 
       setup();
     };
@@ -49,6 +60,15 @@ $(document).ready(function () {
       enableProgressiveEnhancement();
       amountInputFieldElement.keyup(updatePaymentLength);
       scheduleInputFieldElement.change(updatePaymentLength);
+      otherAddAnotherButtonElements.on('click', function(event) {
+        event.preventDefault()
+      })
+      otherRemoveButtonElements.on('click', function(event) {
+        event.preventDefault()
+        this.parentElement.remove()
+        updatePaymentLength()
+      })
+
     }
 
     var enableProgressiveEnhancement = function() {
