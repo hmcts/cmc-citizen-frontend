@@ -81,10 +81,10 @@ export default express.Router()
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     StatementOfMeansStateGuard.requestHandler(),
-    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.statementOfMeans.monthlyIncome), res)
-    })
+    }))
   .post(
     page.uri,
     FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
