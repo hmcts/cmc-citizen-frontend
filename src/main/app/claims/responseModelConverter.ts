@@ -109,7 +109,9 @@ export class ResponseModelConverter {
       isAlreadyPaid: draft.partialAdmission.alreadyPaid.option.option as YesNoOption,
       paymentDetails: {
         amount: draft.partialAdmission.howMuchHaveYouPaid.amount,
-        date: draft.partialAdmission.howMuchHaveYouPaid.date && draft.partialAdmission.howMuchHaveYouPaid.date.toMoment(),
+        date: draft.partialAdmission.howMuchHaveYouPaid.date
+          ? draft.partialAdmission.howMuchHaveYouPaid.date.toMoment()
+          : undefined,
         paymentMethod: draft.partialAdmission.howMuchHaveYouPaid.text
       } as PaymentDetails,
       defence: draft.partialAdmission.whyDoYouDisagree.text,
