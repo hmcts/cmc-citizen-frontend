@@ -155,14 +155,14 @@ export class ResponseDraft extends DraftDocument {
     return this.isResponseFullyAdmitted()
       && this.fullAdmission !== undefined
       && this.fullAdmission.paymentOption !== undefined
-      && (this.fullAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS)
+      && this.fullAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS
   }
 
   public isResponsePartiallyAdmittedWithInstalments (): boolean {
     return this.isResponsePartiallyAdmitted()
       && this.partialAdmission !== undefined
       && this.partialAdmission.paymentOption !== undefined
-      && (this.partialAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS)
+      && this.partialAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS
   }
 
   public isResponsePartiallyAdmitted (): boolean {

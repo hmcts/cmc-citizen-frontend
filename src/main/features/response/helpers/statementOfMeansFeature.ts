@@ -12,8 +12,10 @@ export class StatementOfMeansFeature {
     }
     const fullAdmissionHasStatementOfMeans = draft.isResponseFullyAdmittedWithPayBySetDate() || draft.isResponseFullyAdmittedWithInstalments()
     const parAdmissionHasStatementOfMeans = draft.isResponsePartiallyAdmittedWithPayBySetDate() || draft.isResponsePartiallyAdmittedWithInstalments()
-    return ((draft.isResponseFullyAdmitted() && fullAdmissionHasStatementOfMeans)
-        || (draft.isResponsePartiallyAdmitted() && parAdmissionHasStatementOfMeans))
+    return (
+        (draft.isResponseFullyAdmitted() && fullAdmissionHasStatementOfMeans)
+        || (draft.isResponsePartiallyAdmitted() && parAdmissionHasStatementOfMeans)
+      )
       && !draft.defendantDetails.partyDetails.isBusiness()
   }
 }
