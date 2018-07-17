@@ -34,11 +34,12 @@ import { OtherDependants } from 'response/form/models/statement-of-means/otherDe
 import { NumberOfPeople } from 'response/form/models/statement-of-means/numberOfPeople'
 import { Debts } from 'response/form/models/statement-of-means/debts'
 import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders'
-import { MonthlyIncome, SourceNames } from 'response/form/models/statement-of-means/monthlyIncome'
-import { FieldNames, MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
+import { MonthlyIncome, FieldNames as MonthlyIncomeFieldNames} from 'response/form/models/statement-of-means/monthlyIncome'
+import { MonthlyExpenses, FieldNames as MonthlyExpensesFieldNames } from 'response/form/models/statement-of-means/monthlyExpenses'
 import { Explanation } from 'response/form/models/statement-of-means/explanation'
-import { IncomeExpenseSource } from 'response/form/models/statement-of-means/incomeExpenseSource'
-import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
+import { IncomeSource } from 'response/form/models/statement-of-means/incomeSource'
+import { ExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
+import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
 
 function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDraft {
   const responseDraft: ResponseDraft = new ResponseDraft()
@@ -71,29 +72,29 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
   responseDraft.statementOfMeans.bankAccounts = new BankAccounts([new BankAccountRow(BankAccountType.CURRENT_ACCOUNT, false, 100)])
   responseDraft.statementOfMeans.debts = new Debts(false)
   responseDraft.statementOfMeans.monthlyIncome = new MonthlyIncome(
-    true, new IncomeExpenseSource(SourceNames.SALARY, 100, ExpenseSchedule.MONTH),
-    undefined, new IncomeExpenseSource(SourceNames.UNIVERSAL_CREDIT, undefined, undefined),
-    undefined, new IncomeExpenseSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, undefined, undefined),
-    undefined, new IncomeExpenseSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, undefined, undefined),
-    undefined, new IncomeExpenseSource(SourceNames.INCOME_SUPPORT, undefined, undefined),
-    undefined, new IncomeExpenseSource(SourceNames.WORKING_TAX_CREDIT, undefined, undefined),
-    undefined, new IncomeExpenseSource(SourceNames.CHILD_TAX_CREDIT, undefined, undefined),
-    undefined, new IncomeExpenseSource(SourceNames.CHILD_BENEFIT, undefined, undefined),
-    undefined, new IncomeExpenseSource(SourceNames.COUNCIL_TAX_SUPPORT, undefined, undefined),
-    undefined, new IncomeExpenseSource(SourceNames.PENSION, undefined, undefined)
+    true, new IncomeSource(MonthlyIncomeFieldNames.SALARY, 100, IncomeExpenseSchedule.MONTH),
+    undefined, new IncomeSource(MonthlyIncomeFieldNames.UNIVERSAL_CREDIT, undefined, undefined),
+    undefined, new IncomeSource(MonthlyIncomeFieldNames.JOBSEEKER_ALLOWANCE_INCOME, undefined, undefined),
+    undefined, new IncomeSource(MonthlyIncomeFieldNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, undefined, undefined),
+    undefined, new IncomeSource(MonthlyIncomeFieldNames.INCOME_SUPPORT, undefined, undefined),
+    undefined, new IncomeSource(MonthlyIncomeFieldNames.WORKING_TAX_CREDIT, undefined, undefined),
+    undefined, new IncomeSource(MonthlyIncomeFieldNames.CHILD_TAX_CREDIT, undefined, undefined),
+    undefined, new IncomeSource(MonthlyIncomeFieldNames.CHILD_BENEFIT, undefined, undefined),
+    undefined, new IncomeSource(MonthlyIncomeFieldNames.COUNCIL_TAX_SUPPORT, undefined, undefined),
+    undefined, new IncomeSource(MonthlyIncomeFieldNames.PENSION, undefined, undefined)
   )
 
   responseDraft.statementOfMeans.monthlyExpenses = new MonthlyExpenses(
-    true, new IncomeExpenseSource(FieldNames.MORTGAGE, 100, ExpenseSchedule.MONTH),
-    undefined, new IncomeExpenseSource(FieldNames.RENT, undefined, undefined),
-    undefined, new IncomeExpenseSource(FieldNames.COUNCIL_TAX, undefined, undefined),
-    undefined, new IncomeExpenseSource(FieldNames.GAS, undefined, undefined),
-    undefined, new IncomeExpenseSource(FieldNames.ELECTRICITY, undefined, undefined),
-    undefined, new IncomeExpenseSource(FieldNames.WATER, undefined, undefined),
-    undefined, new IncomeExpenseSource(FieldNames.TRAVEL, undefined, undefined),
-    undefined, new IncomeExpenseSource(FieldNames.SCHOOL, undefined, undefined),
-    undefined, new IncomeExpenseSource(FieldNames.FOOD_AND_HOUSEKEEPING, undefined, undefined),
-    undefined, new IncomeExpenseSource(FieldNames.TV_AND_BROADBAND, undefined, undefined)
+    true, new ExpenseSource(MonthlyExpensesFieldNames.MORTGAGE, 100, IncomeExpenseSchedule.MONTH),
+    undefined, new ExpenseSource(MonthlyExpensesFieldNames.RENT, undefined, undefined),
+    undefined, new ExpenseSource(MonthlyExpensesFieldNames.COUNCIL_TAX, undefined, undefined),
+    undefined, new ExpenseSource(MonthlyExpensesFieldNames.GAS, undefined, undefined),
+    undefined, new ExpenseSource(MonthlyExpensesFieldNames.ELECTRICITY, undefined, undefined),
+    undefined, new ExpenseSource(MonthlyExpensesFieldNames.WATER, undefined, undefined),
+    undefined, new ExpenseSource(MonthlyExpensesFieldNames.TRAVEL, undefined, undefined),
+    undefined, new ExpenseSource(MonthlyExpensesFieldNames.SCHOOL, undefined, undefined),
+    undefined, new ExpenseSource(MonthlyExpensesFieldNames.FOOD_AND_HOUSEKEEPING, undefined, undefined),
+    undefined, new ExpenseSource(MonthlyExpensesFieldNames.TV_AND_BROADBAND, undefined, undefined)
   )
 
   responseDraft.statementOfMeans.courtOrders = new CourtOrders(false)
@@ -207,16 +208,16 @@ describe('StatementOfMeansTask', () => {
 
           it('has monthly income', () => {
             responseDraft.statementOfMeans.monthlyIncome = new MonthlyIncome(
-              true, new IncomeExpenseSource(SourceNames.SALARY, 100, ExpenseSchedule.MONTH),
-              undefined, new IncomeExpenseSource(SourceNames.UNIVERSAL_CREDIT, undefined, undefined),
-              undefined, new IncomeExpenseSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, undefined, undefined),
-              undefined, new IncomeExpenseSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, undefined, undefined),
-              undefined, new IncomeExpenseSource(SourceNames.INCOME_SUPPORT, undefined, undefined),
-              undefined, new IncomeExpenseSource(SourceNames.WORKING_TAX_CREDIT, undefined, undefined),
-              undefined, new IncomeExpenseSource(SourceNames.CHILD_TAX_CREDIT, undefined, undefined),
-              undefined, new IncomeExpenseSource(SourceNames.CHILD_BENEFIT, undefined, undefined),
-              undefined, new IncomeExpenseSource(SourceNames.COUNCIL_TAX_SUPPORT, undefined, undefined),
-              undefined, new IncomeExpenseSource(SourceNames.PENSION, undefined, undefined),
+              true, new IncomeSource(MonthlyIncomeFieldNames.SALARY, 100, IncomeExpenseSchedule.MONTH),
+              undefined, new IncomeSource(MonthlyIncomeFieldNames.UNIVERSAL_CREDIT, undefined, undefined),
+              undefined, new IncomeSource(MonthlyIncomeFieldNames.JOBSEEKER_ALLOWANCE_INCOME, undefined, undefined),
+              undefined, new IncomeSource(MonthlyIncomeFieldNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, undefined, undefined),
+              undefined, new IncomeSource(MonthlyIncomeFieldNames.INCOME_SUPPORT, undefined, undefined),
+              undefined, new IncomeSource(MonthlyIncomeFieldNames.WORKING_TAX_CREDIT, undefined, undefined),
+              undefined, new IncomeSource(MonthlyIncomeFieldNames.CHILD_TAX_CREDIT, undefined, undefined),
+              undefined, new IncomeSource(MonthlyIncomeFieldNames.CHILD_BENEFIT, undefined, undefined),
+              undefined, new IncomeSource(MonthlyIncomeFieldNames.COUNCIL_TAX_SUPPORT, undefined, undefined),
+              undefined, new IncomeSource(MonthlyIncomeFieldNames.PENSION, undefined, undefined),
               undefined, []
             )
 

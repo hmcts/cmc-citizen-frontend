@@ -1,4 +1,4 @@
-import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
+import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { IsDefined, IsIn } from 'class-validator'
 import { Fractions, IsNotBlank, Min } from '@hmcts/cmc-validators'
@@ -32,10 +32,10 @@ export class IncomeSource {
   amount?: number
 
   @IsDefined({ message: withMessage(ValidationErrors.SCHEDULE_SELECT_AN_OPTION) })
-  @IsIn(ExpenseSchedule.all(), { message: withMessage(ValidationErrors.SCHEDULE_SELECT_AN_OPTION) })
-  schedule?: ExpenseSchedule
+  @IsIn(IncomeExpenseSchedule.all(), { message: withMessage(ValidationErrors.SCHEDULE_SELECT_AN_OPTION) })
+  schedule?: IncomeExpenseSchedule
 
-  constructor (name?: string, amount?: number, schedule?: ExpenseSchedule) {
+  constructor (name?: string, amount?: number, schedule?: IncomeExpenseSchedule) {
     this.name = name
     this.amount = amount
     this.schedule = schedule
@@ -49,7 +49,7 @@ export class IncomeSource {
     return new IncomeSource(
       name,
       toNumberOrUndefined(value.amount),
-      ExpenseSchedule.of(value.schedule)
+      IncomeExpenseSchedule.of(value.schedule)
     )
   }
 
@@ -57,7 +57,7 @@ export class IncomeSource {
     if (input) {
       this.name = input.name
       this.amount = input.amount
-      this.schedule = ExpenseSchedule.of(input.schedule ? input.schedule.value : undefined)
+      this.schedule = IncomeExpenseSchedule.of(input.schedule ? input.schedule.value : undefined)
     }
 
     return this
