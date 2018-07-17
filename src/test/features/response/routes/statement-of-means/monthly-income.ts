@@ -244,19 +244,19 @@ describe('Defendant response: Statement of means: monthly-income', () => {
         })
       })
 
-      // describe('add a new row', () => {
-      //
-      //   it('should update draft store and redirect', async () => {
-      //     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-      //     draftStoreServiceMock.resolveFind('response:full-admission')
-      //
-      //     await request(app)
-      //       .post(pagePath)
-      //       .send({ action: { addRow: 'Add row' } })
-      //       .set('Cookie', `${cookieName}=ABC`)
-      //       .expect(res => expect(res).to.be.successful.withText('What regular income do you receive?'))
-      //   })
-      // })
+      describe('add a new row', () => {
+
+        it('should update draft store and add new row', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({ action: { addRow: 'Add row' } })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('What regular income do you receive?'))
+        })
+      })
     })
   })
 })
