@@ -124,8 +124,8 @@ describe('Defendant response: Statement of means: monthly-income', () => {
                 schedule: IncomeExpenseSchedule.TWO_WEEKS.value
               }})
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Enter a valid Income from your job amount, maximum two decimal places'))
-            .expect(res => expect(res).to.be.successful.withText('Enter a valid Pension (paid to you) amount, maximum two decimal places'))
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid income amount, maximum two decimal places'))
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid pension payments amount, maximum two decimal places'))
         })
 
         it('should trigger validation when invalid decimal amount is given', async () => {
@@ -144,8 +144,8 @@ describe('Defendant response: Statement of means: monthly-income', () => {
                 schedule: IncomeExpenseSchedule.TWO_WEEKS.value
               } })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Enter a valid Income from your job amount, maximum two decimal places'))
-            .expect(res => expect(res).to.be.successful.withText('Enter a valid Jobseeker’s Allowance (income based) amount, maximum two decimal places'))
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid income amount, maximum two decimal places'))
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid income-based Jobseeker’s Allowance amount, maximum two decimal places'))
         })
 
         it('should trigger validation when no amount is given', async () => {
@@ -162,7 +162,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
                 schedule: IncomeExpenseSchedule.MONTH.value
               } })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Enter how much Income from your job you receive'))
+            .expect(res => expect(res).to.be.successful.withText('Enter how much income you receive'))
             .expect(res => expect(res).to.be.successful.withText('Enter how much Income Support you receive'))
         })
 
@@ -180,7 +180,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
                 amount: 700
               } })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Select how often you receive Income from your job'))
+            .expect(res => expect(res).to.be.successful.withText('Select how often you receive income'))
             .expect(res => expect(res).to.be.successful.withText('Select how often you receive Child Tax Credit'))
         })
       })
