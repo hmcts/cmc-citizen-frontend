@@ -6,7 +6,7 @@ import { Fractions, IsNotBlank, Min } from '@hmcts/cmc-validators'
 export const INIT_ROW_COUNT: number = 0
 
 export class ValidationErrors {
-  static readonly NAME_REQUIRED = 'Enter source of other income'
+  static readonly NAME_REQUIRED = 'Enter other income source'
   static readonly AMOUNT_REQUIRED = (name: string) => `Enter how much ${name ? name : 'other income'} you receive`
   static readonly AMOUNT_INVALID_DECIMALS = (name: string) => `Enter a valid ${name ? name : 'other income'} amount, maximum two decimal places`
   static readonly AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED = (name: string) => `Enter a valid ${name ? name : 'other income'} amount, maximum two decimal places`
