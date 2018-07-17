@@ -1,0 +1,17 @@
+{% set claimantName = claim.claimData.claimant.name %}
+{% set amount = claim.response.paymentDetails.amount| numeral %}
+{% set fullAmount = claim.totalAmountTillToday| numeral %}
+
+{% if claim.response['isAlreadyPaid'] === 'yes' %}
+<p>{{ t('If {{ claimantName }} accepts your response the claim will be settled. We’ll email you to tell you.', {claimantName: claimantName}) }}</p>
+<p> {{ t('If they reject your response the court will review the case. You might have to go to a hearing.') }}</p>
+<p>{{ t('We’ll contact you if we set a hearing date to tell you how to prepare') }}.</p>
+{% endif %}
+
+{% if claim.response.paymentOption %}
+
+  <p>{{ t('If {{ claimantName }} accepts your admission of {{ amount }} and your offer to pay, the claim will be settled. We’ll email you to tell you.', {claimantName: claimantName, amount: amount}) }}</p>
+  <p>{{ t('If they reject it the court will review the case for the full amount of {{ fullAmount }}. You might have to go to a hearing.', {fullAmount: fullAmount }) }}</p>
+  <p>{{ t('We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
+  <p>{{ t('If they do not respond within 6 months, the court will put the claim on hold.') }}</p>
+{% endif %}
