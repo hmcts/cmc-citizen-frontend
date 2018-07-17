@@ -14,7 +14,7 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
-import { IncomeExpenseSource } from 'response/form/models/statement-of-means/incomeExpenseSource'
+import { ExpenseSource } from 'response/form/models/statement-of-means/ExpenseSource'
 import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/incomeExpenseSources'
 import { Validator } from 'class-validator'
 
@@ -61,11 +61,11 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
         form.model.addEmptyOtherIncome()
         break
       case 'removeOtherIncomeSource':
-        const selectedForRemoval: IncomeExpenseSource = form.valueFor(extractPropertyName(req.body.action[actionName]))
+        const selectedForRemoval: ExpenseSource = form.valueFor(extractPropertyName(req.body.action[actionName]))
         form.model.removeOtherIncome(selectedForRemoval)
         break
       case 'resetIncomeSource':
-        const selectedForReset: IncomeExpenseSource = form.valueFor(extractPropertyName(req.body.action[actionName]))
+        const selectedForReset: ExpenseSource = form.valueFor(extractPropertyName(req.body.action[actionName]))
         form.model.removeOtherIncome(selectedForReset)
         break
     }
