@@ -24,10 +24,8 @@ export class Paths {
   static readonly defendantHowMuchPaidClaimant = new RoutablePath(`${responsePath}/eligibility/how-much-paid-claimant`)
   // Added in case anyone has a printed copy of a PDF with the old URL
   static readonly legacyDashboardRedirect = new RoutablePath('/response/dashboard')
-  static readonly defendantHowMuchPaid = new RoutablePath(`${responsePath}/how-much-paid`)
   static readonly defendantHowMuchOwed = new RoutablePath(`${responsePath}/how-much-owed`)
   static readonly defenceRejectAllOfClaimPage = new RoutablePath(`${responsePath}/reject-all-of-claim`)
-  static readonly defenceRejectPartOfClaimPage = new RoutablePath(`${responsePath}/reject-part-of-claim`)
   static readonly impactOfDisputePage = new RoutablePath(`${responsePath}/impact-of-dispute`)
   static readonly claimDetailsPage = new RoutablePath(`${responsePath}/claim-details`)
   static readonly summaryPage = new RoutablePath(`${responsePath}/summary`)
@@ -36,22 +34,23 @@ export class Paths {
 const statementOfMeansPath = `${responsePath}/statement-of-means`
 
 export class StatementOfMeansPaths {
-  static readonly startPage = new RoutablePath(`${statementOfMeansPath}/start`)
-  static readonly whatYouNeedPage = new RoutablePath(`${statementOfMeansPath}/what-you-need`)
+  static readonly introPage = new RoutablePath(`${statementOfMeansPath}/intro`)
+  static readonly bankAccountsPage = new RoutablePath(`${statementOfMeansPath}/bank-accounts`)
   static readonly residencePage = new RoutablePath(`${statementOfMeansPath}/residence`)
   static readonly dependantsPage = new RoutablePath(`${statementOfMeansPath}/dependants`)
-  static readonly educationPage = new RoutablePath(`${statementOfMeansPath}/education`)
+  static readonly educationPage = new RoutablePath(`${statementOfMeansPath}/dependants/education`)
   static readonly maintenancePage = new RoutablePath(`${statementOfMeansPath}/maintenance`)
-  static readonly supportedByYouPage = new RoutablePath(`${statementOfMeansPath}/supported-by-you`)
+  static readonly otherDependantsPage = new RoutablePath(`${statementOfMeansPath}/other-dependants`)
   static readonly employmentPage = new RoutablePath(`${statementOfMeansPath}/employment`)
-  static readonly employersPage = new RoutablePath(`${statementOfMeansPath}/employers`)
-  static readonly selfEmployedPage = new RoutablePath(`${statementOfMeansPath}/self-employed`)
-  static readonly unemployedPage = new RoutablePath(`${statementOfMeansPath}/unemployed`)
-  static readonly bankAccountsPage = new RoutablePath(`${statementOfMeansPath}/bank-accounts`)
-  static readonly debtsPage = new RoutablePath(`${statementOfMeansPath}/debts`)
+  static readonly employersPage = new RoutablePath(`${statementOfMeansPath}/employment/employers`)
+  static readonly selfEmploymentPage = new RoutablePath(`${statementOfMeansPath}/employment/self-employment`)
+  static readonly onTaxPaymentsPage = new RoutablePath(`${statementOfMeansPath}/employment/self-employment/on-tax-payments`)
+  static readonly unemployedPage = new RoutablePath(`${statementOfMeansPath}/unemployment`)
   static readonly monthlyIncomePage = new RoutablePath(`${statementOfMeansPath}/monthly-income`)
   static readonly monthlyExpensesPage = new RoutablePath(`${statementOfMeansPath}/monthly-expenses`)
+  static readonly debtsPage = new RoutablePath(`${statementOfMeansPath}/debts`)
   static readonly courtOrdersPage = new RoutablePath(`${statementOfMeansPath}/court-orders`)
+  static readonly explanationPage = new RoutablePath(`${statementOfMeansPath}/explanation`)
 }
 
 const fullAdmissionPath = `${responsePath}/full-admission`
@@ -60,4 +59,12 @@ export class FullAdmissionPaths {
   static readonly paymentOptionPage = new RoutablePath(`${fullAdmissionPath}/payment-option`)
   static readonly paymentDatePage: RoutablePath = new RoutablePath(`${fullAdmissionPath}/payment-date`)
   static readonly paymentPlanPage = new RoutablePath(`${fullAdmissionPath}/payment-plan`)
+}
+
+const partialAdmissionPath = `${responsePath}/partial-admission`
+
+export class PartAdmissionPaths {
+  static readonly alreadyPaidPage = new RoutablePath(`${partialAdmissionPath}/already-paid`)
+  static readonly howMuchHaveYouPaidPage = new RoutablePath(`${partialAdmissionPath}/how-much-have-you-paid`)
+  static readonly whyDoYouDisagreePage = new RoutablePath(`${partialAdmissionPath}/why-do-you-disagree`)
 }

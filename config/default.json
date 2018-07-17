@@ -85,9 +85,11 @@
     "countyCourtJudgment": false,
     "fullAdmission": false,
     "partialAdmission": false,
+    "admissions": false,
     "offer": false,
     "statementOfMeans": false,
-    "returnErrorToUser": false
+    "returnErrorToUser": false,
+    "mockPay": false
   },
   "oauth": {
     "clientId": "cmc_citizen",

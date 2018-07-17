@@ -1,6 +1,5 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, radioOption, numericInput, saveAndContinueButton, errorSummary %}
-{% from "date.njk" import dateInput %}
 
 {% set heading = 'Do you or your partner pay maintenance for any children?' %}
 
@@ -10,30 +9,30 @@
       <form method="post" novalidate
         class="analytics-submit-event-trigger"
         data-event-action="SoM: Do you or your partner pay maintenance for any children?"
-        data-event-label-from="option">
+        data-event-label-from="declared">
 
         {{ csrfProtection(csrf) }}
 
-        {% set errorOption = form.errorFor('option') %}
-        <fieldset id="option[label]" class="form-group {% if errorOption %} form-group-error {% endif %}">
+        {% set errorOption = form.errorFor('declared') %}
+        <fieldset id="declared[label]" class="form-group {% if errorOption %} form-group-error {% endif %}">
           <legend class="visually-hidden">{{ t('Do you or your partner pay maintenance for any children?') }}</legend>
 
-          {% if error %}<span class="error-message">{{ t(errorOption) }}</span>{% endif %}
+          {% if errorOption %}<span class="error-message">{{ t(errorOption) }}</span>{% endif %}
 
           {{
-            radioOption(form = form, label = 'Yes', name = 'option', value = 'true', checked = form.valueFor('option') === true)
+            radioOption(form = form, label = 'Yes', name = 'declared', value = 'true', checked = form.valueFor('declared') === true)
           }}
 
           <div class="form-group panel panel-border-narrow js-hidden"
-            id="option-true"
+            id="declared-true"
             aria-hidden="false">
 
-            {{ numericInput('Number of children', 'value', form) }}
+            {{ numericInput('How many?', 'value', form) }}
 
           </div>
 
           {{
-            radioOption(form = form, label = 'No', name = 'option', value = 'false', checked = form.valueFor('option') === false)
+            radioOption(form = form, label = 'No', name = 'declared', value = 'false', checked = form.valueFor('declared') === false)
           }}
 
         </fieldset>

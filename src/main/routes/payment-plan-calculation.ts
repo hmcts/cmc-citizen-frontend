@@ -3,7 +3,7 @@ import * as HttpStatus from 'http-status-codes'
 import * as _ from 'lodash'
 
 import { Paths as AppPaths } from 'paths'
-import { createPaymentPlan } from 'common/paymentPlan'
+import { createPaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
 
 /* tslint:disable:no-default-export */
 export default express.Router()

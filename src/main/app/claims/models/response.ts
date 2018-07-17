@@ -1,11 +1,12 @@
-import { ResponseType } from './response/responseCommon'
-import { FullDefenceResponse } from './response/fullDefenceResponse'
+import { ResponseType } from 'claims/models/response/responseType'
+import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
+import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 
-export type Response
-  = FullDefenceResponse
+export type Response = FullDefenceResponse | FullAdmissionResponse
 
 const deserializers = {
-  [ResponseType.FULL_DEFENCE]: FullDefenceResponse.deserialize
+  [ResponseType.FULL_DEFENCE]: FullDefenceResponse.deserialize,
+  [ResponseType.FULL_ADMISSION]: FullAdmissionResponse.deserialize
 }
 
 export namespace Response {

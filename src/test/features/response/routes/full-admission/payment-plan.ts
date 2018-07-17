@@ -7,7 +7,7 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
-import { Paths, FullAdmissionPaths } from 'response/paths'
+import { FullAdmissionPaths, Paths } from 'response/paths'
 
 import { app } from 'main/app'
 
@@ -56,7 +56,7 @@ describe('Defendant: payment page', () => {
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
 
           await request(app)
             .get(pagePath)
@@ -64,15 +64,6 @@ describe('Defendant: payment page', () => {
             .expect(res => expect(res).to.be.successful.withText('Your repayment plan'))
         })
 
-        it('should calculate length of payment with given payment plan', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
-
-          await request(app)
-            .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('2 years 9 months 4 weeks'))
-        })
       })
     })
   })
@@ -122,7 +113,7 @@ describe('Defendant: payment page', () => {
       context('when form is valid', async () => {
         it('should redirect to task list page after form submit', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response', {
+          draftStoreServiceMock.resolveFind('response:full-admission', {
             response: {
               type: ResponseType.FULL_ADMISSION
             }
@@ -140,7 +131,7 @@ describe('Defendant: payment page', () => {
       context('when form is invalid with no regular payments', async () => {
         it('should render page with error messages', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
 
           await request(app)
             .post(pagePath)

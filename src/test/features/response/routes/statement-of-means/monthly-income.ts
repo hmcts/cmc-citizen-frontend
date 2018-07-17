@@ -12,6 +12,7 @@ import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
 import { app } from 'main/app'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = StatementOfMeansPaths.monthlyIncomePage.evaluateUri(
@@ -60,12 +61,12 @@ describe('Defendant response: Statement of means: monthly-income', () => {
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
 
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Monthly income'))
+            .expect(res => expect(res).to.be.successful.withText('What regular income do you receive?'))
         })
       })
     })
@@ -106,31 +107,134 @@ describe('Defendant response: Statement of means: monthly-income', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
+
+        it('should trigger validation when negative amount is given', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              salarySource: {
+                amount: -100,
+                schedule: ExpenseSchedule.MONTH.value
+              },
+              pensionSource: {
+                amount: -200,
+                schedule: ExpenseSchedule.TWO_WEEKS.value
+              }})
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid Income from your job amount, maximum two decimal places'))
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid Pension (paid to you) amount, maximum two decimal places'))
+        })
+
+        it('should trigger validation when invalid decimal amount is given', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              salarySource: {
+                amount: 100.123,
+                schedule: ExpenseSchedule.MONTH.value
+              },
+              jobseekerAllowanceIncomeSource: {
+                amount: 200.345,
+                schedule: ExpenseSchedule.TWO_WEEKS.value
+              } })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid Income from your job amount, maximum two decimal places'))
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid Jobseeker’s Allowance (income based) amount, maximum two decimal places'))
+        })
+
+        it('should trigger validation when no amount is given', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              salarySource: {
+                schedule: ExpenseSchedule.MONTH.value
+              },
+              incomeSupportSource: {
+                schedule: ExpenseSchedule.MONTH.value
+              } })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Enter how much Income from your job you receive'))
+            .expect(res => expect(res).to.be.successful.withText('Enter how much Income Support you receive'))
+        })
+
+        it('should trigger validation when no schedule is given', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              salarySource: {
+                amount: 100
+              },
+              childTaxCreditSource: {
+                amount: 700
+              } })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Select how often you receive Income from your job'))
+            .expect(res => expect(res).to.be.successful.withText('Select how often you receive Child Tax Credit'))
+        })
       })
 
       describe('save and continue', () => {
 
         it('should update draft store and redirect', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
             .post(pagePath)
             .send({
-              salary: '1',
-              universalCredit: '1',
-              jobSeekerAllowanceIncome: '1',
-              jobSeekerAllowanceContribution: '1',
-              incomeSupport: '1',
-              workingTaxCredit: '1',
-              childTaxCredit: '1',
-              childBenefit: '1',
-              councilTaxSupport: '1',
-              pension: '1',
-              maintenance: '1',
-              rows: [{ amount: '10', description: 'bla bla bla' }]
-            })
+              salarySource: {
+                amount: 100,
+                schedule: ExpenseSchedule.MONTH.value
+              },
+              universalCreditSource: {
+                amount: 200,
+                schedule: ExpenseSchedule.MONTH.value
+              },
+              jobseekerAllowanceIncomeSource: {
+                amount: 300,
+                schedule: ExpenseSchedule.TWO_WEEKS.value
+              },
+              jobseekerAllowanceContributionSource: {
+                amount: 400,
+                schedule: ExpenseSchedule.MONTH.value
+              },
+              incomeSupportSource: {
+                amount: 500,
+                schedule: ExpenseSchedule.MONTH.value
+              },
+              workingTaxCreditSource: {
+                amount: 600,
+                schedule: ExpenseSchedule.TWO_WEEKS.value
+              },
+              childTaxCreditSource: {
+                amount: 700,
+                schedule: ExpenseSchedule.MONTH.value
+              },
+              childBenefitSource: {
+                amount: 800,
+                schedule: ExpenseSchedule.MONTH.value
+              },
+              councilTaxSupportSource: {
+                amount: 900,
+                schedule: ExpenseSchedule.TWO_WEEKS.value
+              },
+              pensionSource: {
+                amount: 100,
+                schedule: ExpenseSchedule.TWO_WEEKS.value
+              } })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.monthlyExpensesPage.evaluateUri(
@@ -140,19 +244,19 @@ describe('Defendant response: Statement of means: monthly-income', () => {
         })
       })
 
-      describe('add a new row', () => {
-
-        it('should update draft store and redirect', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
-
-          await request(app)
-            .post(pagePath)
-            .send({ action: { addRow: 'Add row' } })
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Monthly income'))
-        })
-      })
+      // describe('add a new row', () => {
+      //
+      //   it('should update draft store and redirect', async () => {
+      //     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+      //     draftStoreServiceMock.resolveFind('response:full-admission')
+      //
+      //     await request(app)
+      //       .post(pagePath)
+      //       .send({ action: { addRow: 'Add row' } })
+      //       .set('Cookie', `${cookieName}=ABC`)
+      //       .expect(res => expect(res).to.be.successful.withText('What regular income do you receive?'))
+      //   })
+      // })
     })
   })
 })

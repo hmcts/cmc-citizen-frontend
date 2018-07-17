@@ -18,4 +18,3 @@ services:
         - ./functional-output:/usr/src/app/output
     remote-webdriver:
       image: selenium/standalone-chrome:3.8.1
-

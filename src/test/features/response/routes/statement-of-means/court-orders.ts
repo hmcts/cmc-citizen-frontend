@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 import 'test/routes/expectations'
-import { Paths, StatementOfMeansPaths } from 'response/paths'
+import { StatementOfMeansPaths } from 'response/paths'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
@@ -18,7 +18,7 @@ const pagePath: string = StatementOfMeansPaths.courtOrdersPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
 
-describe('Defendant response: Statement of means: debts', () => {
+describe('Defendant response: Statement of means: court orders', () => {
 
   attachDefaultHooks(app)
 
@@ -60,12 +60,12 @@ describe('Defendant response: Statement of means: debts', () => {
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
 
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Are you paying any other court orders?'))
+            .expect(res => expect(res).to.be.successful.withText('Are you paying money as a result of any court orders?'))
         })
       })
     })
@@ -114,15 +114,15 @@ describe('Defendant response: Statement of means: debts', () => {
 
           it('when valid debt provided', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('response:full-admission')
             draftStoreServiceMock.resolveSave()
 
             await request(app)
               .post(pagePath)
-              .send({ hasAnyCourtOrders: 'true', rows: [{ details: 'my debt', amount: '100' }] })
+              .send({ declared: 'true', rows: [{ instalmentAmount: '100', amount: '100', claimNumber: '12345' }] })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.taskListPage.evaluateUri(
+                .toLocation(StatementOfMeansPaths.explanationPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
                 )
               )
@@ -130,15 +130,15 @@ describe('Defendant response: Statement of means: debts', () => {
 
           it('when no selected', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('response:full-admission')
             draftStoreServiceMock.resolveSave()
 
             await request(app)
               .post(pagePath)
-              .send({ hasAnyCourtOrders: 'false' })
+              .send({ declared: 'false' })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.taskListPage.evaluateUri(
+                .toLocation(StatementOfMeansPaths.explanationPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
                 )
               )
@@ -150,13 +150,13 @@ describe('Defendant response: Statement of means: debts', () => {
 
         it('should add more rows', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
 
           await request(app)
             .post(pagePath)
             .send({ action: { addRow: 'Add row' } })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Are you paying any other court orders?'))
+            .expect(res => expect(res).to.be.successful.withText('Are you paying money as a result of any court orders?'))
         })
       })
     })

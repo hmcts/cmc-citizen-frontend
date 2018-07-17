@@ -1,0 +1,4 @@
+export enum ResponseType {
+  FULL_DEFENCE = 'FULL_DEFENCE',
+  FULL_ADMISSION = 'FULL_ADMISSION'
+}

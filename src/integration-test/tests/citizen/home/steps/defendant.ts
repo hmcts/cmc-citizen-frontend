@@ -32,8 +32,16 @@ export class DefendantSteps {
     defendantTaskListPage.selectTaskHowMuchPaidToClaiment()
   }
 
+  selectTaskHowMuchHaveYouPaid (): void {
+    defendantTaskListPage.selectTaskHowMuchHaveYouPaid()
+  }
+
   selectTaskWhyDoYouDisagreeWithTheClaim (): void {
     defendantTaskListPage.selectTaskWhyDoYouDisagreeWithTheClaim()
+  }
+
+  selectTaskWhyDoYouDisagreeWithTheAmountClaimed (): void {
+    defendantTaskListPage.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
   }
 
   selectCheckAndSubmitYourDefence (): void {
