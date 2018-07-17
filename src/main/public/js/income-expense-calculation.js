@@ -15,8 +15,8 @@ $(document).ready(function () {
       calculateMonthlyIncomeExpenseButtonSelector: '.calculate-monthly-income-expense',
       totalMonthlyIncomeExpenseSelector: '.total-monthly-income-expense',
       otherIncomeExpenseSelector: '.other-income-expense-source',
-      otherAddAnotherButton: '.other-section input.button',
-      otherRemoveButton: '.other-section input.link-button',
+      otherAddAnotherButtonSelector: '.other-section input.button',
+      otherRemoveButtonSelector: '.other-section input.link-button',
 
       amountType: 'amount',
       scheduleType: 'schedule'
@@ -50,8 +50,8 @@ $(document).ready(function () {
       scheduleInputFieldElement = containerElement.find(config.scheduleInputFieldSelector);
       calculateMontlyIncomeExpenseButtonElement = containerElement.find(config.calculateMonthlyIncomeExpenseButtonSelector);
       totalMonthlyIncomeExpenseElement = containerElement.find(config.totalMonthlyIncomeExpenseSelector);
-      otherAddAnotherButtonElements = containerElement.find(config.otherAddAnotherButton)
-      otherRemoveButtonElements = containerElement.find(config.otherRemoveButton)
+      otherAddAnotherButtonElements = containerElement.find(config.otherAddAnotherButtonSelector)
+      otherRemoveButtonElements = containerElement.find(config.otherRemoveButtonSelector)
 
       setup();
     };
