@@ -14,14 +14,9 @@
             novalidate>
         {{ csrfProtection(csrf) }}
 
-        <div class="notice">
-          <i class="icon icon-important"><span class="visually-hidden">{{ t('Warning') }}</span></i>
-          <strong class="bold-small">{{ t('You may receive a County Court Judgment (CCJ) if you don`t pay immediately.') }}</strong>
-        </div>
 
-        {% if statementOfMeansIsApplicable %}
-          {% set hintText = t('You will need to give details of your finances to {{ claimantFullName }} to explain why you can`t pay immediately.', { claimantFullName: claim.claimData.claimant.name }) %}
-        {% endif %}
+
+
 
         {{
         radioGroupWithHintPanel(
@@ -34,19 +29,18 @@
               label: DefendantPaymentType.IMMEDIATELY.displayValue,
               value: DefendantPaymentType.IMMEDIATELY.value,
               checked: (form.valueFor('option') === DefendantPaymentType.IMMEDIATELY),
-              hint: 'You must make sure they receive the money within 5 days. Any cheques or transfers must be clear in their account.'
+              hint: 'You must contact the claimant and pay the full amount within 5 days. Any cheques or transfers must be clear in their account.'
             },
             {
               label: DefendantPaymentType.BY_SET_DATE.displayValue,
               value: DefendantPaymentType.BY_SET_DATE.value,
               checked: (form.valueFor('option') === DefendantPaymentType.BY_SET_DATE),
-              hint: hintText
-            },
+              hint: 'The claimant can request a County Court Judgment (CCJ) against you if you don't pay immediately.'
             {
               label: DefendantPaymentType.INSTALMENTS.displayValue,
               value: DefendantPaymentType.INSTALMENTS.value,
               checked: (form.valueFor('option') === DefendantPaymentType.INSTALMENTS),
-              hint: hintText
+              hint: 'The claimant can request a County Court Judgment (CCJ) against you if you don't pay immediately.'
             }
           ]
         )
