@@ -1,8 +1,8 @@
 {% set claimantName = claim.claimData.claimant.name %}
 {% set claimantDetailsPageURI = ClaimPaths.claimantDetailsPage.evaluateUri({ externalId: claim.externalId }) %}
-{% set amount = claim.response.paymentDetails.amount| numeral %}
+{% set amount = claim.response.paymentDetails.amount | numeral %}
 
-{% if claim.response['isAlreadyPaid'] === 'yes' %}
+{% if claim.response['isAlreadyPaid'] === YesNoOption.Yes.option %}
   <p> {{ t('You told us you’ve paid the {{ amount }} you believe you owe. We’ve sent {{ claimantName }} this response.', { claimantName: claimantName, amount: amount }) }}</p>
 {% endif %}
 
@@ -13,7 +13,7 @@
   {% if claim.response.paymentOption === domain.PaymentOption.IMMEDIATELY %}
     {% set paymentMethod = 'immediately' %}
   {% elseif claim.response.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-    {% set paymentMethod = 'by '+ paymentDate %}
+    {% set paymentMethod = 'by ' + paymentDate %}
   {% elseif  claim.response.paymentOption === domain.PaymentOption.INSTALMENTS %}
     {% set paymentMethod = 'by instalments' %}
   {% endif %}
