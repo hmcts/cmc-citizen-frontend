@@ -34,7 +34,7 @@ import { OtherDependants } from 'response/form/models/statement-of-means/otherDe
 import { NumberOfPeople } from 'response/form/models/statement-of-means/numberOfPeople'
 import { Debts } from 'response/form/models/statement-of-means/debts'
 import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders'
-import { MonthlyIncome, FieldNames as MonthlyIncomeFieldNames} from 'response/form/models/statement-of-means/monthlyIncome'
+import { MonthlyIncome, FieldNames as MonthlyIncomeFieldNames } from 'response/form/models/statement-of-means/monthlyIncome'
 import { MonthlyExpenses, FieldNames as MonthlyExpensesFieldNames } from 'response/form/models/statement-of-means/monthlyExpenses'
 import { Explanation } from 'response/form/models/statement-of-means/explanation'
 import { IncomeSource } from 'response/form/models/statement-of-means/incomeSource'

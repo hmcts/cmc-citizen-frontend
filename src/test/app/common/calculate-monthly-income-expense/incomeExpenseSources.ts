@@ -2,12 +2,18 @@ import { expect } from 'chai'
 import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/incomeExpenseSources'
 import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
 import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
-import { IncomeExpenseSchedule as FormIncomeExpenseSchedule} from 'response/form/models/statement-of-means/incomeExpenseSchedule'
+import { IncomeExpenseSchedule as FormIncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
-import { MonthlyIncome, FieldNames as MonthlyIncomeFieldNames} from 'response/form/models/statement-of-means/monthlyIncome'
-import { MonthlyExpenses, FieldNames as MonthlyExpenseFieldNames} from 'response/form/models/statement-of-means/monthlyExpenses'
+import {
+  FieldNames as MonthlyIncomeFieldNames,
+  MonthlyIncome
+} from 'response/form/models/statement-of-means/monthlyIncome'
+import {
+  FieldNames as MonthlyExpenseFieldNames,
+  MonthlyExpenses
+} from 'response/form/models/statement-of-means/monthlyExpenses'
 import { IncomeSource as FormIncomeSource } from 'response/form/models/statement-of-means/incomeSource'
 import { ExpenseSource as FormExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
 
@@ -137,7 +143,7 @@ describe('IncomeExpenseSources', () => {
         undefined, new FormExpenseSource(MonthlyExpenseFieldNames.TV_AND_BROADBAND, 100, FormIncomeExpenseSchedule.TWO_WEEKS),
         undefined, new FormExpenseSource(MonthlyExpenseFieldNames.HIRE_PURCHASE, 100, FormIncomeExpenseSchedule.MONTH),
         undefined, new FormExpenseSource(MonthlyExpenseFieldNames.MOBILE_PHONE, 200, FormIncomeExpenseSchedule.MONTH),
-        undefined, new FormExpenseSource(MonthlyExpenseFieldNames.MAINTENANCE, 300, FormIncomeExpenseSchedule.TWO_WEEKS),
+        undefined, new FormExpenseSource(MonthlyExpenseFieldNames.MAINTENANCE, 300, FormIncomeExpenseSchedule.TWO_WEEKS)
       )
 
       expect(IncomeExpenseSources.fromMonthlyExpensesFormModel(monthlyExpenses)).to.deep.equal(
