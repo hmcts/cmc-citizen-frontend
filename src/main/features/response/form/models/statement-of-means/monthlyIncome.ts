@@ -13,6 +13,7 @@ export class FieldNames {
   static readonly CHILD_BENEFIT = 'Child Benefit'
   static readonly COUNCIL_TAX_SUPPORT = 'Council Tax Support'
   static readonly PENSION = 'pension payments'
+  static readonly OTHER = 'other expense'
 }
 
 export class MonthlyIncome {

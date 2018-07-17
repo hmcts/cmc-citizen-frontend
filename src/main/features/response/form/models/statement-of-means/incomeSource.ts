@@ -6,11 +6,11 @@ import { Fractions, IsNotBlank, Min } from '@hmcts/cmc-validators'
 export const INIT_ROW_COUNT: number = 0
 
 export class ValidationErrors {
-  static readonly NAME_REQUIRED = 'Enter source of income'
-  static readonly AMOUNT_REQUIRED = (name: string) => `Enter how much ${name ? name : 'income'} you receive`
-  static readonly AMOUNT_INVALID_DECIMALS = (name: string) => `Enter a valid ${name ? name : 'income'} amount, maximum two decimal places`
-  static readonly AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED = (name: string) => `Enter a valid ${name ? name : 'income'} amount, maximum two decimal places`
-  static readonly SCHEDULE_SELECT_AN_OPTION = (name: string) => `Select how often you receive ${name ? name : 'income'}`
+  static readonly NAME_REQUIRED = 'Enter source of other income'
+  static readonly AMOUNT_REQUIRED = (name: string) => `Enter how much ${name ? name : 'other income'} you receive`
+  static readonly AMOUNT_INVALID_DECIMALS = (name: string) => `Enter a valid ${name ? name : 'other income'} amount, maximum two decimal places`
+  static readonly AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED = (name: string) => `Enter a valid ${name ? name : 'other income'} amount, maximum two decimal places`
+  static readonly SCHEDULE_SELECT_AN_OPTION = (name: string) => `Select how often you receive ${name ? name : 'other income'}`
 }
 
 function withMessage (buildErrorFn: (name: string) => string) {
