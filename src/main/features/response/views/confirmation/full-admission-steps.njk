@@ -5,7 +5,7 @@
   <p>{{ t('When {{ claimantName }} gets your payment they should tell you and the court you’ve paid.', { claimantName: claimantName }) }}</p>
 {% endif %}
 
-{% if claim.response.paymentOption === domain.PaymentOption.FULL_BY_SPECIFIED_DATE %}
+{% if claim.response.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
   <p>{{ t('If {{ claimantName }} accepts your offer to pay, you need to <a href="{{ link }}">contact them for payment details</a> and to arrange payment.', { claimantName: claimantName, link: claimantDetailsPageURI }) | safe }}</p>
 
   <p>{{ t('If they reject your offer to pay by a set date then the court will decide how you must pay.') }}</p>

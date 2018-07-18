@@ -207,7 +207,7 @@ describe('Defendant response task list builder', () => {
       })
     })
 
-    describe('"Decide how you`ll pay" task', () => {
+    describe('"Decide how you’ll pay" task', () => {
       let isResponseFullyAdmittedStub: sinon.SinonStub
       let isResponseFullyAdmittedWithPayBySetDateStub: sinon.SinonStub
 
@@ -230,7 +230,7 @@ describe('Defendant response task list builder', () => {
         draft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.contain('Decide how you`ll pay')
+        expect(taskList.tasks.map(task => task.name)).to.contain('Decide how you’ll pay')
       })
 
       it('should be disabled in remaining cases', () => {
@@ -240,7 +240,7 @@ describe('Defendant response task list builder', () => {
         draft.fullAdmission = new FullAdmission()
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('Decide how you`ll pay')
+        expect(taskList.tasks.map(task => task.name)).to.not.contain('Decide how you’ll pay')
       })
     })
 
