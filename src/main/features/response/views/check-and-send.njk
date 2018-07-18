@@ -78,10 +78,6 @@
     {% endif %}
     {{ tableEnd() }}
 
-    {% if statementOfMeansIsApplicable and draft.statementOfMeans %}
-      {% include "./statement-of-means/check-and-send.njk" %}
-    {% endif %}
-
     {% if draft.isResponseRejectedFullyWithAmountClaimedPaid() %}
       {{ tableStart('yourResponse', 'Your response') }}
         {{ row(label = 'When did you pay this amount?', value = draft.whenDidYouPay.date.toMoment() | date, changeLink = ResponsePaths.whenDidYouPay.evaluateUri({ externalId: claim.externalId }), bold = true) }}
@@ -92,6 +88,7 @@
     {% if draft.isResponsePartiallyAdmitted() %}
 
       {{ tableStart('responseDetails', 'Response details') }}
+      {% if draft.partialAdmission.alreadyPaid.option === YesNoOption.YES %}
 
         {{
           row(
@@ -118,6 +115,17 @@
              bold = true
            )
         }}
+
+      {% else %}
+        {{
+          row(
+            label = 'How much money do you admit you owe?',
+            value = draft.partialAdmission.howMuchHaveYouPaid.amount | numeral,
+            changeLink = PartAdmissionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
+            bold = true
+          )
+        }}
+      {% endif %}
 
         {{
            row(
@@ -147,7 +155,24 @@
           )
         }}
 
-        {{ row(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), bold = true) }}
+      {{ row(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), bold = true) }}
+
+      {% if ( draft.partialAdmission.paymentOption) %}
+        {{ tableStart('whenWillYouPay', 'When will you pay') }}
+        {{ row(label = 'When will you pay', value = t(draft.partialAdmission.paymentOption.option.displayValue) | capitalize, changeLink = PartAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+
+        {% if draft.partialAdmission.paymentOption.isOfType(DefendantPaymentType.BY_SET_DATE) %}
+          {{ row(label = 'When you’ll pay the amount', value = draft.partialAdmission.paymentDate.date.toMoment() | date, changeLink = PartAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+        {% endif %}
+
+        {% if draft.partialAdmission.paymentOption.isOfType(DefendantPaymentType.INSTALMENTS) %}
+          {{ row(label = 'Regular payments of', value = draft.partialAdmission.paymentPlan.instalmentAmount | numeral, changeLink = PartAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: claim.externalId }), bold = true, bottomBorder = false) }}
+          {{ row(label = 'Frequency of payments', value = t(draft.partialAdmission.paymentPlan.paymentSchedule.displayValue), bold = true, bottomBorder = false) }}
+          {{ row(label = 'Make the first payment on', value = draft.partialAdmission.paymentPlan.firstPaymentDate.toMoment() | date, bold = true) }}
+        {% endif %}
+
+        {{ tableEnd() }}
+      {% endif %}
     {% endif %}
 
     {% if draft.isResponseRejectedFullyWithDispute() %}
@@ -172,6 +197,10 @@
       }}
       {{ row(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
       {{ tableEnd() }}
+    {% endif %}
+
+    {% if statementOfMeansIsApplicable and draft.statementOfMeans %}
+      {% include "./statement-of-means/check-and-send.njk" %}
     {% endif %}
 
     {% if draft.isResponseRejectedFullyWithDispute() %}
