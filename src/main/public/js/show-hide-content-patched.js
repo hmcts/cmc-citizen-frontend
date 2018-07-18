@@ -10,10 +10,7 @@
     // Radio and Checkbox selectors
     var selectors = {
       namespace: 'ShowHideContent',
-      // Patched to escape the selector to support nested radio buttons
-      // Not sending upstream due to elements being deprecated and frontend doesn't use jquery
-      // so it will have been reimplemented
-      radio: $.escapeSelector('[data-target] > input[type="radio"]'),
+      radio: '[data-target] > input[type="radio"]',
       checkbox: '[data-target] > input[type="checkbox"]'
     }
 
