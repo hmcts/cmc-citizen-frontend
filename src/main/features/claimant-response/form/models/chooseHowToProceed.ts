@@ -1,12 +1,12 @@
 import { IsDefined, IsIn } from 'class-validator'
 
 export class ValidationErrors {
-  static readonly OPTION_REQUIRED: string = 'Choose option: Sign a settlement agreement or Request a County Court Judgement(CCJ)'
+  static readonly OPTION_REQUIRED: string = 'select an option'
 }
 
 export class ChooseHowToProceedOption {
-  static readonly SIGN_SETTLEMENT_AGREEMENT = 'Sign a settlement agreement'
-  static readonly REQUEST_COUNTY_COURT_JUDGEMENT = 'Request a County Court Judgment(CCJ)'
+  static readonly SIGN_SETTLEMENT_AGREEMENT = 'signSettlementAgreement'
+  static readonly REQUEST_COUNTY_COURT_JUDGEMENT = 'requestCCJ'
 
   static all (): string[] {
     return [

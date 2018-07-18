@@ -1,5 +1,5 @@
 import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
-import {ChooseHowToProceed} from "claimant-response/form/models/chooseHowToProceed";
+import { ChooseHowToProceed } from 'claimant-response/form/models/chooseHowToProceed'
 
 export class DraftClaimantResponse extends DraftDocument {
 

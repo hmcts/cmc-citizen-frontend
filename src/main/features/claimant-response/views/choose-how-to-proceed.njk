@@ -1,9 +1,13 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary %}
 
 {% set heading = 'Choose how to proceed' %}
 
 {% block content %}
+
+  <p>
+    {{ t('There are two ways to formalise the repayment plan:') }}
+  </p>
 
   <div class="grid-row">
     <div class="column-two-thirds">
@@ -13,26 +17,18 @@
         {{ csrfProtection(csrf) }}
 
         {{
-        radioGroup(
-          label = "There are two ways to formalise the repayment plan:",
-          name = "option",
-          options = [
-          {
-            label: "signSettlementAgreement",
-            value: "yes",
-            hint: 'test',
-            bold: true
-          },
-          {
-            label: 'No, I don’t need more time',
-            value: "no",
-            bold: true
-          }
-        ],
-          form = form,
-          legendHidden = true
-        )
+        radioOption(form = form, label = 'Sign a settlement agreement', name = 'option', value = ChooseHowToProceedOption.SIGN_SETTLEMENT_AGREEMENT,
+          hint='This is a legal agreement between you and the defendant agreeing to the repayment plan. If they break it you can request a County Court Judgment.',
+          checked = false, bold = true)
         }}
+
+        {{
+        radioOption(form = form, label = 'Request a County Court Judgment (CCJ)', name = 'option', value = ChooseHowToProceedOption.REQUEST_COUNTY_COURT_JUDGEMENT,
+          hint='You can ask the court to make a formal order binding the defendant to the repayment plan. This adds the defendant to the CCJ register, which may make it more difficult for them to borrow money to repay you.',
+          checked = false, bold = true)
+        }}
+
+
         <div class="form-group">
           {{ saveAndContinueButton() }}
         </div>
@@ -40,5 +36,3 @@
     </div>
   </div>
 {% endblock %}
-
-
