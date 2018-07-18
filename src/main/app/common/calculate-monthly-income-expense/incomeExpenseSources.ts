@@ -35,61 +35,61 @@ export class IncomeExpenseSources {
     const incomeExpenseSources = []
 
     if (monthlyExpenses.mortgage && monthlyExpenses.mortgage.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyExpenses.mortgage))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(monthlyExpenses.mortgage))
     }
 
     if (monthlyExpenses.rent && monthlyExpenses.rent.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyExpenses.rent))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(monthlyExpenses.rent))
     }
 
     if (monthlyExpenses.councilTax && monthlyExpenses.councilTax.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyExpenses.councilTax))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(monthlyExpenses.councilTax))
     }
 
     if (monthlyExpenses.gas && monthlyExpenses.gas.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyExpenses.gas))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(monthlyExpenses.gas))
     }
 
     if (monthlyExpenses.electricity && monthlyExpenses.electricity.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyExpenses.electricity))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(monthlyExpenses.electricity))
     }
 
     if (monthlyExpenses.water && monthlyExpenses.water.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyExpenses.water))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(monthlyExpenses.water))
     }
 
     if (monthlyExpenses.travel && monthlyExpenses.travel.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyExpenses.travel))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(monthlyExpenses.travel))
     }
 
     if (monthlyExpenses.schoolCosts && monthlyExpenses.schoolCosts.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyExpenses.schoolCosts))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(monthlyExpenses.schoolCosts))
     }
 
     if (monthlyExpenses.foodAndHousekeeping && monthlyExpenses.foodAndHousekeeping.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyExpenses.foodAndHousekeeping))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(monthlyExpenses.foodAndHousekeeping))
     }
 
     if (monthlyExpenses.tvAndBroadband && monthlyExpenses.tvAndBroadband.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyExpenses.tvAndBroadband))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(monthlyExpenses.tvAndBroadband))
     }
 
     if (monthlyExpenses.hirePurchase && monthlyExpenses.hirePurchase.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyExpenses.hirePurchase))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(monthlyExpenses.hirePurchase))
     }
 
     if (monthlyExpenses.mobilePhone && monthlyExpenses.mobilePhone.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyExpenses.mobilePhone))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(monthlyExpenses.mobilePhone))
     }
 
     if (monthlyExpenses.maintenance && monthlyExpenses.maintenance.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyExpenses.maintenance))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(monthlyExpenses.maintenance))
     }
 
     if (monthlyExpenses.anyOtherPopulated) {
       incomeExpenseSources.push(...monthlyExpenses.other
         .filter(source => source.populated)
-        .map(source => IncomeExpenseSource.fromFormModel(source)))
+        .map(source => IncomeExpenseSource.fromFormExpenseSource(source)))
     }
 
     return new IncomeExpenseSources(incomeExpenseSources)
@@ -103,49 +103,49 @@ export class IncomeExpenseSources {
     const incomeExpenseSources = []
 
     if (monthlyIncome.salarySource && monthlyIncome.salarySource.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.salarySource))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormIncomeSource(monthlyIncome.salarySource))
     }
 
     if (monthlyIncome.universalCreditSource && monthlyIncome.universalCreditSource.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.universalCreditSource))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormIncomeSource(monthlyIncome.universalCreditSource))
     }
 
     if (monthlyIncome.jobseekerAllowanceIncomeSource && monthlyIncome.jobseekerAllowanceIncomeSource.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.jobseekerAllowanceIncomeSource))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormIncomeSource(monthlyIncome.jobseekerAllowanceIncomeSource))
     }
 
     if (monthlyIncome.jobseekerAllowanceContributionSource && monthlyIncome.jobseekerAllowanceContributionSource.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.jobseekerAllowanceContributionSource))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormIncomeSource(monthlyIncome.jobseekerAllowanceContributionSource))
     }
 
     if (monthlyIncome.incomeSupportSource && monthlyIncome.incomeSupportSource.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.incomeSupportSource))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormIncomeSource(monthlyIncome.incomeSupportSource))
     }
 
     if (monthlyIncome.workingTaxCreditSource && monthlyIncome.workingTaxCreditSource.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.workingTaxCreditSource))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormIncomeSource(monthlyIncome.workingTaxCreditSource))
     }
 
     if (monthlyIncome.childTaxCreditSource && monthlyIncome.childTaxCreditSource.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.childTaxCreditSource))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormIncomeSource(monthlyIncome.childTaxCreditSource))
     }
 
     if (monthlyIncome.childBenefitSource && monthlyIncome.childBenefitSource.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.childBenefitSource))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormIncomeSource(monthlyIncome.childBenefitSource))
     }
 
     if (monthlyIncome.councilTaxSupportSource && monthlyIncome.councilTaxSupportSource.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.councilTaxSupportSource))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormIncomeSource(monthlyIncome.councilTaxSupportSource))
     }
 
     if (monthlyIncome.pensionSource && monthlyIncome.pensionSource.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormModel(monthlyIncome.pensionSource))
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormIncomeSource(monthlyIncome.pensionSource))
     }
 
     if (monthlyIncome.anyOtherIncomePopulated) {
       incomeExpenseSources.push(...monthlyIncome.otherSources
         .filter(source => source.populated)
-        .map(source => IncomeExpenseSource.fromFormModel(source)))
+        .map(source => IncomeExpenseSource.fromFormIncomeSource(source)))
     }
     return new IncomeExpenseSources(incomeExpenseSources)
   }

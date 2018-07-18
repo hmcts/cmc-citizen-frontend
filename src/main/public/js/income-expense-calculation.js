@@ -14,6 +14,9 @@ $(document).ready(function () {
       formDataFieldSelector: 'input[name*=amount],input:checked[name*=schedule]',
       calculateMonthlyIncomeExpenseButtonSelector: '.calculate-monthly-income-expense',
       totalMonthlyIncomeExpenseSelector: '.total-monthly-income-expense',
+      otherIncomeExpenseSelector: '.other-income-expense-source',
+      otherAddAnotherButtonSelector: '.other-section input.button',
+      otherRemoveButtonSelector: '.other-section input.link-button',
 
       amountType: 'amount',
       scheduleType: 'schedule'
@@ -31,6 +34,12 @@ $(document).ready(function () {
       totalMonthlyIncomeExpenseElement.text(totalAmount);
     }
 
+    var csrfInputFieldElement,
+      amountInputFieldElement,
+      scheduleInputFieldElement,
+      otherAddAnotherButtonElements,
+      otherRemoveButtonElements;
+
     var init = function (settings) {
       // Allow overriding the default config
       $.extend(config, settings);
@@ -41,14 +50,69 @@ $(document).ready(function () {
       scheduleInputFieldElement = containerElement.find(config.scheduleInputFieldSelector);
       calculateMontlyIncomeExpenseButtonElement = containerElement.find(config.calculateMonthlyIncomeExpenseButtonSelector);
       totalMonthlyIncomeExpenseElement = containerElement.find(config.totalMonthlyIncomeExpenseSelector);
+      otherAddAnotherButtonElements = containerElement.find(config.otherAddAnotherButtonSelector)
+      otherRemoveButtonElements = containerElement.find(config.otherRemoveButtonSelector)
 
       setup();
     };
+
+    var removeElementListener = function(event) {
+      event.preventDefault()
+      if ($(config.otherIncomeExpenseSelector).length < 2) {
+        return
+      }
+      this.parentElement.remove()
+
+      var otherIncomeElements = $(config.otherIncomeExpenseSelector)
+      if (otherIncomeElements.length < 2) {
+        otherIncomeElements.find('input.link-button').addClass('hidden')
+      }
+
+      updatePaymentLength()
+    }
+
 
     var setup = function () {
       enableProgressiveEnhancement();
       amountInputFieldElement.keyup(updatePaymentLength);
       scheduleInputFieldElement.change(updatePaymentLength);
+      otherAddAnotherButtonElements.on('click', function(event) {
+        event.preventDefault()
+
+        var lastOtherElement = $(config.otherIncomeExpenseSelector).last();
+        $(config.otherIncomeExpenseSelector).find('input.link-button').removeClass('hidden');
+        var newOtherElement = lastOtherElement.clone();
+        incrementDomNodesIds(newOtherElement);
+        sanitizeContent(newOtherElement);
+        newOtherElement.find('input.link-button').on('click', removeElementListener);
+        newOtherElement.find(config.amountInputFieldSelector).keyup(updatePaymentLength);
+        newOtherElement.find(config.scheduleInputFieldSelector).change(updatePaymentLength);
+
+        lastOtherElement.parent().append(newOtherElement);
+      })
+
+      otherRemoveButtonElements.on('click', removeElementListener)
+
+      function sanitizeContent (newElement) {
+        newElement.find('input[type=text]').val('')
+        newElement.find('input[type=radio]').prop('checked', false)
+        newElement.find('input[type=number]').val('')
+
+        newElement.find('*').removeClass('form-group-error')
+        newElement.find('*').removeClass('form-control-error')
+        newElement.find('.error-message').remove()
+      }
+
+      function incrementDomNodesIds (newRow) {
+        var nameOfElement = newRow[0].firstElementChild.firstElementChild.firstElementChild.getAttribute('for').split('[')[0]
+
+        newRow.html(function (index, oldHtml) {
+          return oldHtml.replace(new RegExp(nameOfElement + '\\[(\\d+)]', 'g'), function (match, capturedRowIndex) {
+            return nameOfElement + '[' + (parseInt(capturedRowIndex) + 1) + ']'
+          })
+        })
+      }
+
     }
 
     var enableProgressiveEnhancement = function() {

@@ -1,12 +1,13 @@
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { BankAccountType } from 'claims/models/response/statement-of-means/bankAccount'
 import { AgeGroupType, Child } from 'claims/models/response/statement-of-means/dependant'
 import { ResidenceType } from 'claims/models/response/statement-of-means/residence'
 import { Moment } from 'moment'
-import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
+import { ResponseDraft } from 'response/draft/responseDraft'
 import { Response } from 'claims/models/response'
 import { ResponseType } from 'claims/models/response/responseType'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
@@ -25,7 +26,6 @@ import { CompanyDetails } from 'forms/models/companyDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { Defendant } from 'drafts/models/defendant'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
-import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { ResponseType as FormResponseType } from 'response/form/models/responseType'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
@@ -44,6 +44,8 @@ import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
 import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
 import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
 import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 
 export class ResponseModelConverter {
 
@@ -53,6 +55,8 @@ export class ResponseModelConverter {
         return this.convertFullDefence(draft)
       case FormResponseType.FULL_ADMISSION:
         return this.convertFullAdmission(draft)
+      case FormResponseType.PART_ADMISSION:
+        return this.convertPartAdmission(draft)
       default:
         throw new Error(`Unsupported response type: ${draft.response.type.value}`)
     }
@@ -88,11 +92,46 @@ export class ResponseModelConverter {
       responseType: ResponseType.FULL_ADMISSION,
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentOption: draft.fullAdmission.paymentOption.option.value as PaymentOption,
-      paymentDate: this.convertPaymentDate(draft.fullAdmission),
+      paymentDate: this.convertPaymentDate(draft.fullAdmission.paymentOption, draft.fullAdmission.paymentDate),
       repaymentPlan: draft.fullAdmission.paymentPlan && {
         instalmentAmount: draft.fullAdmission.paymentPlan.instalmentAmount,
         firstPaymentDate: draft.fullAdmission.paymentPlan.firstPaymentDate.toMoment(),
         paymentSchedule: draft.fullAdmission.paymentPlan.paymentSchedule.value as PaymentSchedule
+      },
+      statementOfMeans: this.convertStatementOfMeans(draft),
+      statementOfTruth: this.convertStatementOfTruth(draft)
+    }
+  }
+
+  private static convertPartAdmission (draft: ResponseDraft): PartialAdmissionResponse {
+    return {
+      responseType: ResponseType.PART_ADMISSION,
+      isAlreadyPaid: draft.partialAdmission.alreadyPaid.option.option as YesNoOption,
+      amount: draft.partialAdmission.howMuchHaveYouPaid.amount,
+      paymentDeclaration: draft.partialAdmission.howMuchHaveYouPaid.date
+      && draft.partialAdmission.howMuchHaveYouPaid.text
+      && {
+        paidDate:  draft.partialAdmission.howMuchHaveYouPaid.date.asString(),
+        explanation: draft.partialAdmission.howMuchHaveYouPaid.text
+      } as PaymentDeclaration,
+      defence: draft.partialAdmission.whyDoYouDisagree.text,
+      timeline: {
+        rows: draft.partialAdmission.timeline.getPopulatedRowsOnly(),
+        comment: draft.partialAdmission.timeline.comment
+      } as DefendantTimeline,
+      evidence: {
+        rows: convertEvidence(draft.partialAdmission.evidence) as any,
+        comment: draft.partialAdmission.evidence.comment
+      } as DefendantEvidence,
+      defendant: this.convertPartyDetails(draft.defendantDetails),
+      paymentIntention: draft.partialAdmission.paymentOption && {
+        paymentOption: draft.partialAdmission.paymentOption.option.value as PaymentOption,
+        paymentDate: this.convertPaymentDate(draft.partialAdmission.paymentOption, draft.partialAdmission.paymentDate),
+        repaymentPlan: draft.partialAdmission.paymentPlan && {
+          instalmentAmount: draft.partialAdmission.paymentPlan.instalmentAmount,
+          firstPaymentDate: draft.partialAdmission.paymentPlan.firstPaymentDate.toMoment(),
+          paymentSchedule: draft.partialAdmission.paymentPlan.paymentSchedule.value as PaymentSchedule
+        }
       },
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft)
@@ -222,12 +261,12 @@ export class ResponseModelConverter {
     return party
   }
 
-  private static convertPaymentDate (fullAdmission: FullAdmission): Moment {
-    switch (fullAdmission.paymentOption.option) {
+  private static convertPaymentDate (paymentOption: DefendantPaymentOption, paymentDate: PaymentDate): Moment {
+    switch (paymentOption.option) {
       case DefendantPaymentType.IMMEDIATELY:
         return MomentFactory.currentDate().add(5, 'days')
       case DefendantPaymentType.BY_SET_DATE:
-        return fullAdmission.paymentDate.date.toMoment()
+        return paymentDate.date.toMoment()
       default:
         return undefined
     }
@@ -366,7 +405,7 @@ export class ResponseModelConverter {
     if (monthlyExpenses.mortgage && monthlyExpenses.mortgage.populated) {
       expenses.push({
         type: ExpenseType.MORTGAGE,
-        frequency:  monthlyExpenses.mortgage.schedule.value as PaymentFrequency,
+        frequency: monthlyExpenses.mortgage.schedule.value as PaymentFrequency,
         amountPaid: monthlyExpenses.mortgage.amount
       })
     }
@@ -374,7 +413,7 @@ export class ResponseModelConverter {
     if (monthlyExpenses.rent && monthlyExpenses.rent.populated) {
       expenses.push({
         type: ExpenseType.RENT,
-        frequency:  monthlyExpenses.rent.schedule.value as PaymentFrequency,
+        frequency: monthlyExpenses.rent.schedule.value as PaymentFrequency,
         amountPaid: monthlyExpenses.rent.amount
       })
     }
@@ -382,7 +421,7 @@ export class ResponseModelConverter {
     if (monthlyExpenses.councilTax && monthlyExpenses.councilTax.populated) {
       expenses.push({
         type: ExpenseType.COUNCIL_TAX,
-        frequency:  monthlyExpenses.councilTax.schedule.value as PaymentFrequency,
+        frequency: monthlyExpenses.councilTax.schedule.value as PaymentFrequency,
         amountPaid: monthlyExpenses.councilTax.amount
       })
     }
@@ -390,7 +429,7 @@ export class ResponseModelConverter {
     if (monthlyExpenses.gas && monthlyExpenses.gas.populated) {
       expenses.push({
         type: ExpenseType.GAS,
-        frequency:  monthlyExpenses.gas.schedule.value as PaymentFrequency,
+        frequency: monthlyExpenses.gas.schedule.value as PaymentFrequency,
         amountPaid: monthlyExpenses.gas.amount
       })
     }
@@ -398,7 +437,7 @@ export class ResponseModelConverter {
     if (monthlyExpenses.electricity && monthlyExpenses.electricity.populated) {
       expenses.push({
         type: ExpenseType.ELECTRICITY,
-        frequency:  monthlyExpenses.electricity.schedule.value as PaymentFrequency,
+        frequency: monthlyExpenses.electricity.schedule.value as PaymentFrequency,
         amountPaid: monthlyExpenses.electricity.amount
       })
     }
@@ -406,7 +445,7 @@ export class ResponseModelConverter {
     if (monthlyExpenses.water && monthlyExpenses.water.populated) {
       expenses.push({
         type: ExpenseType.WATER,
-        frequency:  monthlyExpenses.water.schedule.value as PaymentFrequency,
+        frequency: monthlyExpenses.water.schedule.value as PaymentFrequency,
         amountPaid: monthlyExpenses.water.amount
       })
     }
@@ -414,7 +453,7 @@ export class ResponseModelConverter {
     if (monthlyExpenses.travel && monthlyExpenses.travel.populated) {
       expenses.push({
         type: ExpenseType.TRAVEL,
-        frequency:  monthlyExpenses.travel.schedule.value as PaymentFrequency,
+        frequency: monthlyExpenses.travel.schedule.value as PaymentFrequency,
         amountPaid: monthlyExpenses.travel.amount
       })
     }
@@ -422,7 +461,7 @@ export class ResponseModelConverter {
     if (monthlyExpenses.schoolCosts && monthlyExpenses.schoolCosts.populated) {
       expenses.push({
         type: ExpenseType.SCHOOL_COSTS,
-        frequency:  monthlyExpenses.schoolCosts.schedule.value as PaymentFrequency,
+        frequency: monthlyExpenses.schoolCosts.schedule.value as PaymentFrequency,
         amountPaid: monthlyExpenses.schoolCosts.amount
       })
     }
@@ -430,7 +469,7 @@ export class ResponseModelConverter {
     if (monthlyExpenses.foodAndHousekeeping && monthlyExpenses.foodAndHousekeeping.populated) {
       expenses.push({
         type: ExpenseType.FOOD_HOUSEKEEPING,
-        frequency:  monthlyExpenses.foodAndHousekeeping.schedule.value as PaymentFrequency,
+        frequency: monthlyExpenses.foodAndHousekeeping.schedule.value as PaymentFrequency,
         amountPaid: monthlyExpenses.foodAndHousekeeping.amount
       })
     }
@@ -438,7 +477,7 @@ export class ResponseModelConverter {
     if (monthlyExpenses.tvAndBroadband && monthlyExpenses.tvAndBroadband.populated) {
       expenses.push({
         type: ExpenseType.TV_AND_BROADBAND,
-        frequency:  monthlyExpenses.tvAndBroadband.schedule.value as PaymentFrequency,
+        frequency: monthlyExpenses.tvAndBroadband.schedule.value as PaymentFrequency,
         amountPaid: monthlyExpenses.tvAndBroadband.amount
       })
     }
@@ -446,7 +485,7 @@ export class ResponseModelConverter {
     if (monthlyExpenses.hirePurchase && monthlyExpenses.hirePurchase.populated) {
       expenses.push({
         type: ExpenseType.HIRE_PURCHASES,
-        frequency:  monthlyExpenses.hirePurchase.schedule.value as PaymentFrequency,
+        frequency: monthlyExpenses.hirePurchase.schedule.value as PaymentFrequency,
         amountPaid: monthlyExpenses.hirePurchase.amount
       })
     }
@@ -454,7 +493,7 @@ export class ResponseModelConverter {
     if (monthlyExpenses.mobilePhone && monthlyExpenses.mobilePhone.populated) {
       expenses.push({
         type: ExpenseType.MOBILE_PHONE,
-        frequency:  monthlyExpenses.mobilePhone.schedule.value as PaymentFrequency,
+        frequency: monthlyExpenses.mobilePhone.schedule.value as PaymentFrequency,
         amountPaid: monthlyExpenses.mobilePhone.amount
       })
     }
@@ -462,7 +501,7 @@ export class ResponseModelConverter {
     if (monthlyExpenses.maintenance && monthlyExpenses.maintenance.populated) {
       expenses.push({
         type: ExpenseType.MAINTENANCE_PAYMENTS,
-        frequency:  monthlyExpenses.maintenance.schedule.value as PaymentFrequency,
+        frequency: monthlyExpenses.maintenance.schedule.value as PaymentFrequency,
         amountPaid: monthlyExpenses.maintenance.amount
       })
     }

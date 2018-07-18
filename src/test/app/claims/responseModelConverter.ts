@@ -10,7 +10,11 @@ import {
   fullAdmissionWithPaymentBySetDateDraft,
   fullAdmissionWithPaymentByInstalmentsDraft,
   statementOfMeansWithMandatoryFieldsDraft,
-  statementOfMeansWithAllFieldsDraft
+  statementOfMeansWithAllFieldsDraft,
+  partialAdmissionWithPaymentBySetDateDraft,
+  partialAdmissionWithPaymentByInstalmentsDraft,
+  partialAdmissionWithImmediatePaymentDraft,
+  partialAdmissionAlreadyPaidDraft
 } from 'test/data/draft/responseDraft'
 import {
   companyDetails,
@@ -27,7 +31,11 @@ import {
   fullAdmissionWithPaymentBySetDateData,
   fullAdmissionWithPaymentByInstalmentsData,
   statementOfMeansWithMandatoryFieldsOnlyData,
-  statementOfMeansWithAllFieldsData
+  statementOfMeansWithAllFieldsData,
+  partialAdmissionWithPaymentBySetDateData,
+  partialAdmissionWithPaymentByInstalmentsData,
+  partialAdmissionWithImmediatePaymentData,
+  partialAdmissionAlreadyPaidData
 } from 'test/data/entity/responseData'
 import { company, individual, organisation, soleTrader } from 'test/data/entity/party'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
@@ -45,6 +53,14 @@ function prepareResponseData (template, party: object): Response {
     ...template,
     defendant: { ...party, email: 'user@example.com', mobilePhone: '0700000000' },
     timeline: { rows: [], comment: 'I do not agree' }
+  })
+}
+
+function preparePartialResponseData (template, party: object): Response {
+  return Response.deserialize({
+    ...template,
+    defendant: { ...party, email: 'user@example.com', mobilePhone: '0700000000' },
+    timeline: template.timeline
   })
 }
 
@@ -129,6 +145,56 @@ describe('ResponseModelConverter', () => {
     it('should convert full admission paid by instalments with complete SoM', () => {
       const responseDraft = prepareResponseDraft({ ...fullAdmissionWithPaymentByInstalmentsDraft, statementOfMeans: { ...statementOfMeansWithAllFieldsDraft } }, individualDetails)
       const responseData = prepareResponseData({ ...fullAdmissionWithPaymentByInstalmentsData, statementOfMeans: { ...statementOfMeansWithAllFieldsData } }, individual)
+
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+        .to.deep.equal(convertObjectLiteralToJSON(responseData))
+    })
+  })
+
+  context('partial admission conversion', () => {
+    it('should convert already paid partial admission', () => {
+      const responseDraft = prepareResponseDraft(partialAdmissionAlreadyPaidDraft, individualDetails)
+      const responseData = preparePartialResponseData(partialAdmissionAlreadyPaidData, individual)
+
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+        .to.deep.equal(convertObjectLiteralToJSON(responseData))
+    })
+
+    it('should convert partial admission paid immediately', () => {
+      const responseDraft = prepareResponseDraft(partialAdmissionWithImmediatePaymentDraft, individualDetails)
+      const responseData = preparePartialResponseData(partialAdmissionWithImmediatePaymentData, individual)
+
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+        .to.deep.equal(convertObjectLiteralToJSON(responseData))
+    })
+
+    it('should convert partial admission paid by set date', () => {
+      const responseDraft = prepareResponseDraft(partialAdmissionWithPaymentBySetDateDraft, individualDetails)
+      const responseData = preparePartialResponseData(partialAdmissionWithPaymentBySetDateData, individual)
+
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+        .to.deep.equal(convertObjectLiteralToJSON(responseData))
+    })
+
+    it('should convert partial admission paid by set date with mandatory SoM only', () => {
+      const responseDraft = prepareResponseDraft({ ...partialAdmissionWithPaymentBySetDateDraft, statementOfMeans: { ...statementOfMeansWithMandatoryFieldsDraft } }, individualDetails)
+      const responseData = preparePartialResponseData({ ...partialAdmissionWithPaymentBySetDateData, statementOfMeans: { ...statementOfMeansWithMandatoryFieldsOnlyData } }, individual)
+
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+        .to.deep.equal(convertObjectLiteralToJSON(responseData))
+    })
+
+    it('should convert partial admission paid by instalments', () => {
+      const responseDraft = prepareResponseDraft(partialAdmissionWithPaymentByInstalmentsDraft, individualDetails)
+      const responseData = preparePartialResponseData(partialAdmissionWithPaymentByInstalmentsData, individual)
+
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+        .to.deep.equal(convertObjectLiteralToJSON(responseData))
+    })
+
+    it('should convert partial admission paid by instalments with complete SoM', () => {
+      const responseDraft = prepareResponseDraft({ ...partialAdmissionWithPaymentByInstalmentsDraft, statementOfMeans: { ...statementOfMeansWithAllFieldsDraft } }, individualDetails)
+      const responseData = preparePartialResponseData({ ...partialAdmissionWithPaymentByInstalmentsData, statementOfMeans: { ...statementOfMeansWithAllFieldsData } }, individual)
 
       expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
         .to.deep.equal(convertObjectLiteralToJSON(responseData))
