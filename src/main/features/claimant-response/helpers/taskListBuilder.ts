@@ -45,6 +45,17 @@ export class TaskListBuilder {
         )
       )
     }
+
+    if (claim.response && claim.response.responseType === ResponseType.FULL_ADMISSION && claim.response.paymentOption !== PaymentOption.INSTALMENTS) {
+      tasks.push(
+        new TaskListItem(
+          'Choose how to proceed',
+          Paths.notImplementedYetPage.evaluateUri({ externalId: externalId }),
+          false
+        )
+      )
+    }
+
     return new TaskList(2, 'How do you want to respond?', tasks)
   }
 
