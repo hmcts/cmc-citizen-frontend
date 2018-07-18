@@ -171,7 +171,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
           await request(app)
             .post(pagePath)
             .send({
-              otherSources: [
+              other: [
                 {
                   name: '',
                   amount: ''
@@ -180,7 +180,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
                   name: '',
                   amount: ''
                 }],
-              action: { removeOther: 'Remove this expese source' }
+              action: { removeOther: 'Remove this expense source' }
             })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('other[0][name]'))
