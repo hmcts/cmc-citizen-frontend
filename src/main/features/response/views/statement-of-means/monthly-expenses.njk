@@ -6,7 +6,7 @@
 
 {% block additional_scripts %}
   {% include "expandable-checkbox-option-scripts.njk" %}
-  {% include "income-expense-calculation-scripts.njk" %}
+  {% include "income-expense-scripts.njk" %}
 {% endblock %}
 
 {% macro expenseRow(index, form) %}
@@ -76,7 +76,7 @@
   {% set checkboxName = name + 'Declared' %}
 
   {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.valueFor(name).populated)), label = label) %}
-    {{ incomeExpenseSource(form = form, name = name, amountLabel = 'Amount paid', amountHint = hint, scheduleLabel = 'Paid every') }}
+    {{ incomeExpenseSource(form = form, name = name, sourceLabel = 'Source of expense', amountLabel = 'Amount paid', amountHint = hint, scheduleLabel = 'Paid every') }}
     {{ linkButton(name = 'action[resetExpenseSource][' + name + ']', label = 'Reset this expense source', class = 'link-button js-hidden') }}
   {% endcall %}
 {% endmacro %}
@@ -84,28 +84,31 @@
 {% macro expenseSources(form, name, label, hint) %}
   {% set checkboxName = name + 'Declared' %}
 
-  {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.model.anyOtherExpensePopulated)), label = label) %}
-    {% for source in form.model.other %}
-      <div class="other-income-expense-source">
-        {{ incomeExpenseSource(form = form, name = name + '[' + loop.index0 + ']', amountLabel = 'Amount paid', amountHint = hint, scheduleLabel = 'Paid every', nameEditable = true) }}
-        {% if form.model.other.length > 1 %}
-          {{ linkButton(name = 'action[removeOther][other.' + loop.index0 + ']', label = 'Remove this expense source', class = 'link-button') }}
-        {% else %}
-          {{ linkButton(name = 'action[reset][' + name + '.0]', label = 'Reset this expense source', class = 'link-button js-hidden') }}
-        {% endif %}
-      </div>
-    {% endfor %}
+  {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.model.anyOtherExpensePopulated)), label = label, additionalClasses = 'other-section') %}
+    <div>
+      {% for source in form.model.other %}
+        <div class="other-income-expense-source">
+          {{ incomeExpenseSource(form = form, name = name + '[' + loop.index0 + ']', sourceLabel = 'Source of expense', amountLabel = 'Amount paid', amountHint = hint, scheduleLabel = 'Paid every', nameEditable = true) }}
+          {% if form.model.other.length > 1 %}
+            {{ linkButton(name = 'action[removeOther][other.' + loop.index0 + ']', label = 'Remove this expense source', class = 'link-button') }}
+          {% else %}
+            {{ linkButton(name = 'action[removeOther][other.' + loop.index0 + ']', label = 'Remove this expense source', class = 'link-button hidden') }}
+            {{ linkButton(name = 'action[reset][' + name + '.0]', label = 'Reset this expense source', class = 'link-button js-hidden') }}
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
 
     {{ linkButton(name = 'action[addOther]', label = 'Add another expense', class = 'button button-secondary') }}
   {% endcall %}
 {% endmacro %}
 
-{% macro expandableCheckboxOption(form, name, value, checked = false, label, hint = '', bold = false) %}
+{% macro expandableCheckboxOption(form, name, value, checked = false, label, hint = '', bold = false, additionalClasses = undefined) %}
   {% set expandablePanelId = name + '-' + value | replace(' ', '') %}
   <div class="expandable-checkbox-option">
     <h3 class="heading-medium expandable">{{ t(label) }}</h3>
     {{ option(form = form, name = name, value = value, type = 'checkbox', checked = checked, label = label, hint = hint, bold = bold, hidden = true, className = 'expandable visually-hidden', dataTarget = expandablePanelId) }}
-    <div class="panel panel-border-narrow expandable" id="{{ expandablePanelId }}">
+    <div class="panel panel-border-narrow expandable{{ ' ' + additionalClasses if additionalClasses }}" id="{{ expandablePanelId }}">
       {{ caller() }}
     </div>
   </div>

@@ -1,9 +1,9 @@
 {% from "form.njk" import textInput, poundInputInline, radioGroup %}
 
-{% macro incomeExpenseSource(form, name, amountLabel, amountHint, scheduleLabel, nameEditable) %}
+{% macro incomeExpenseSource(form, name, sourceLabel, amountLabel, amountHint, scheduleLabel, nameEditable) %}
   <div class="income-expense-source">
     {% if nameEditable %}
-      {{ textInput(form = form, name = name + '[name]', label = 'Source of income') }}
+      {{ textInput(form = form, name = name + '[name]', label = sourceLabel) }}
     {% endif %}
     {{ amountSource(form, name, label = amountLabel, hint = amountHint) }}
     {{ scheduleSource(form, name, label = scheduleLabel) }}
@@ -22,7 +22,7 @@
     {% if hint %}
       <span class="form-hint">{{ t(hint) }}</span>
     {% endif %}
-          {% if error %}
+    {% if error %}
       <span class="error-message">{{ t(error) }}</span>
     {% endif %}
     {{ poundInputInline(name = name, label = label, form = form) }}

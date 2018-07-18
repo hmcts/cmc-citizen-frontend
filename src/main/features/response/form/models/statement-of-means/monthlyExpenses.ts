@@ -1,4 +1,4 @@
-import { IncomeExpenseSource } from 'response/form/models/statement-of-means/incomeExpenseSource'
+import { ExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
 import { ValidateIf, ValidateNested } from 'class-validator'
 
 export class FieldNames {
@@ -22,89 +22,89 @@ export class MonthlyExpenses {
   mortgageDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.mortgageDeclared || (o.mortgage && o.mortgage.populated))
   @ValidateNested()
-  mortgage?: IncomeExpenseSource
+  mortgage?: ExpenseSource
 
   rentDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.rentDeclared || (o.rent && o.rent.populated))
   @ValidateNested()
-  rent?: IncomeExpenseSource
+  rent?: ExpenseSource
 
   councilTaxDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.councilTaxDeclared || (o.councilTax && o.councilTax.populated))
   @ValidateNested()
-  councilTax?: IncomeExpenseSource
+  councilTax?: ExpenseSource
 
   gasDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.gasDeclared || (o.gas && o.gas.populated))
   @ValidateNested()
-  gas?: IncomeExpenseSource
+  gas?: ExpenseSource
 
   electricityDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.electricityDeclared || (o.electricity && o.electricity.populated))
   @ValidateNested()
-  electricity?: IncomeExpenseSource
+  electricity?: ExpenseSource
 
   waterDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.waterDeclared || (o.water && o.water.populated))
   @ValidateNested()
-  water?: IncomeExpenseSource
+  water?: ExpenseSource
 
   travelDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.travelDeclared || (o.travel && o.travel.populated))
   @ValidateNested()
-  travel?: IncomeExpenseSource
+  travel?: ExpenseSource
 
   schoolCostsDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.schoolCostsDeclared || (o.schoolCosts && o.schoolCosts.populated))
   @ValidateNested()
-  schoolCosts?: IncomeExpenseSource
+  schoolCosts?: ExpenseSource
 
   foodAndHousekeepingDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.foodAndHousekeepingDeclared ||
     (o.foodAndHousekeeping && o.foodAndHousekeeping.populated))
   @ValidateNested()
-  foodAndHousekeeping?: IncomeExpenseSource
+  foodAndHousekeeping?: ExpenseSource
 
   tvAndBroadbandDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.tvAndBroadbandDeclared || (o.tvAndBroadband && o.tvAndBroadband.populated))
   @ValidateNested()
-  tvAndBroadband?: IncomeExpenseSource
+  tvAndBroadband?: ExpenseSource
 
   hirePurchaseDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.hirePurchaseDeclared || (o.hirePurchase && o.hirePurchase.populated))
   @ValidateNested()
-  hirePurchase?: IncomeExpenseSource
+  hirePurchase?: ExpenseSource
 
   mobilePhoneDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.mobilePhoneDeclared || (o.mobilePhone && o.mobilePhone.populated))
   @ValidateNested()
-  mobilePhone?: IncomeExpenseSource
+  mobilePhone?: ExpenseSource
 
   maintenanceDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.maintenanceDeclared || (o.maintenance && o.maintenance.populated))
   @ValidateNested()
-  maintenance?: IncomeExpenseSource
+  maintenance?: ExpenseSource
 
   otherDeclared?: boolean
   @ValidateIf((o: MonthlyExpenses) => o.otherDeclared || o.anyOtherPopulated)
   @ValidateNested()
-  other?: IncomeExpenseSource[]
+  other?: ExpenseSource[]
 
   constructor (
-    mortgageDeclared?: boolean, mortgage?: IncomeExpenseSource,
-    rentDeclared?: boolean, rent?: IncomeExpenseSource,
-    councilTaxDeclared?: boolean, councilTax?: IncomeExpenseSource,
-    gasDeclared?: boolean, gas?: IncomeExpenseSource,
-    electricityDeclared?: boolean, electricity?: IncomeExpenseSource,
-    waterDeclared?: boolean, water?: IncomeExpenseSource,
-    travelDeclared?: boolean, travel?: IncomeExpenseSource,
-    schoolCostsDeclared?: boolean, schoolCosts?: IncomeExpenseSource,
-    foodAndHousekeepingDeclared?: boolean, foodAndHousekeeping?: IncomeExpenseSource,
-    tvAndBroadbandDeclared?: boolean, tvAndBroadband?: IncomeExpenseSource,
-    hirePurchaseDeclared?: boolean, hirePurchase?: IncomeExpenseSource,
-    mobilePhoneDeclared?: boolean, mobilePhone?: IncomeExpenseSource,
-    maintenanceDeclared?: boolean, maintenance?: IncomeExpenseSource,
-    otherDeclared?: boolean, other: IncomeExpenseSource[] = [new IncomeExpenseSource()]
+    mortgageDeclared?: boolean, mortgage?: ExpenseSource,
+    rentDeclared?: boolean, rent?: ExpenseSource,
+    councilTaxDeclared?: boolean, councilTax?: ExpenseSource,
+    gasDeclared?: boolean, gas?: ExpenseSource,
+    electricityDeclared?: boolean, electricity?: ExpenseSource,
+    waterDeclared?: boolean, water?: ExpenseSource,
+    travelDeclared?: boolean, travel?: ExpenseSource,
+    schoolCostsDeclared?: boolean, schoolCosts?: ExpenseSource,
+    foodAndHousekeepingDeclared?: boolean, foodAndHousekeeping?: ExpenseSource,
+    tvAndBroadbandDeclared?: boolean, tvAndBroadband?: ExpenseSource,
+    hirePurchaseDeclared?: boolean, hirePurchase?: ExpenseSource,
+    mobilePhoneDeclared?: boolean, mobilePhone?: ExpenseSource,
+    maintenanceDeclared?: boolean, maintenance?: ExpenseSource,
+    otherDeclared?: boolean, other: ExpenseSource[] = [new ExpenseSource()]
   ) {
     this.mortgageDeclared = mortgageDeclared
     this.mortgage = mortgage
@@ -146,21 +146,21 @@ export class MonthlyExpenses {
     }
 
     return new MonthlyExpenses(
-      value.mortgageDeclared, IncomeExpenseSource.fromObject(FieldNames.MORTGAGE, value.mortgage),
-      value.rentDeclared, IncomeExpenseSource.fromObject(FieldNames.RENT, value.rent),
-      value.councilTaxDeclared, IncomeExpenseSource.fromObject(FieldNames.COUNCIL_TAX, value.councilTax),
-      value.gasDeclared, IncomeExpenseSource.fromObject(FieldNames.GAS, value.gas),
-      value.electricityDeclared, IncomeExpenseSource.fromObject(FieldNames.ELECTRICITY, value.electricity),
-      value.waterDeclared, IncomeExpenseSource.fromObject(FieldNames.WATER, value.water),
-      value.travelDeclared, IncomeExpenseSource.fromObject(FieldNames.TRAVEL, value.travel),
-      value.schoolCostsDeclared, IncomeExpenseSource.fromObject(FieldNames.SCHOOL, value.schoolCosts),
-      value.foodAndHousekeepingDeclared, IncomeExpenseSource.fromObject(FieldNames.FOOD_AND_HOUSEKEEPING, value.foodAndHousekeeping),
-      value.tvAndBroadbandDeclared, IncomeExpenseSource.fromObject(FieldNames.TV_AND_BROADBAND, value.tvAndBroadband),
-      value.hirePurchaseDeclared, IncomeExpenseSource.fromObject(FieldNames.HIRE_PURCHASE, value.hirePurchase),
-      value.mobilePhoneDeclared, IncomeExpenseSource.fromObject(FieldNames.MOBILE_PHONE, value.mobilePhone),
-      value.maintenanceDeclared, IncomeExpenseSource.fromObject(FieldNames.MAINTENANCE, value.maintenance),
+      value.mortgageDeclared, ExpenseSource.fromObject(FieldNames.MORTGAGE, value.mortgage),
+      value.rentDeclared, ExpenseSource.fromObject(FieldNames.RENT, value.rent),
+      value.councilTaxDeclared, ExpenseSource.fromObject(FieldNames.COUNCIL_TAX, value.councilTax),
+      value.gasDeclared, ExpenseSource.fromObject(FieldNames.GAS, value.gas),
+      value.electricityDeclared, ExpenseSource.fromObject(FieldNames.ELECTRICITY, value.electricity),
+      value.waterDeclared, ExpenseSource.fromObject(FieldNames.WATER, value.water),
+      value.travelDeclared, ExpenseSource.fromObject(FieldNames.TRAVEL, value.travel),
+      value.schoolCostsDeclared, ExpenseSource.fromObject(FieldNames.SCHOOL, value.schoolCosts),
+      value.foodAndHousekeepingDeclared, ExpenseSource.fromObject(FieldNames.FOOD_AND_HOUSEKEEPING, value.foodAndHousekeeping),
+      value.tvAndBroadbandDeclared, ExpenseSource.fromObject(FieldNames.TV_AND_BROADBAND, value.tvAndBroadband),
+      value.hirePurchaseDeclared, ExpenseSource.fromObject(FieldNames.HIRE_PURCHASE, value.hirePurchase),
+      value.mobilePhoneDeclared, ExpenseSource.fromObject(FieldNames.MOBILE_PHONE, value.mobilePhone),
+      value.maintenanceDeclared, ExpenseSource.fromObject(FieldNames.MAINTENANCE, value.maintenance),
       value.otherDeclared, value.other && value.other
-      .map(source => IncomeExpenseSource.fromObject(source.name, source))
+      .map(source => ExpenseSource.fromObject(source.name, source))
       .filter(source => source !== undefined)
     )
   }
@@ -168,43 +168,43 @@ export class MonthlyExpenses {
   deserialize (input?: any): MonthlyExpenses {
     if (input) {
       this.mortgageDeclared = input.mortgageDeclared
-      this.mortgage = new IncomeExpenseSource().deserialize(input.mortgage)
+      this.mortgage = new ExpenseSource().deserialize(input.mortgage)
       this.rentDeclared = input.rentDeclared
-      this.rent = new IncomeExpenseSource().deserialize(input.rent)
+      this.rent = new ExpenseSource().deserialize(input.rent)
       this.councilTaxDeclared = input.councilTaxDeclared
-      this.councilTax = new IncomeExpenseSource().deserialize(input.councilTax)
+      this.councilTax = new ExpenseSource().deserialize(input.councilTax)
       this.gasDeclared = input.gasDeclared
-      this.gas = new IncomeExpenseSource().deserialize(input.gas)
+      this.gas = new ExpenseSource().deserialize(input.gas)
       this.electricityDeclared = input.electricityDeclared
-      this.electricity = new IncomeExpenseSource().deserialize(input.electricity)
+      this.electricity = new ExpenseSource().deserialize(input.electricity)
       this.waterDeclared = input.waterDeclared
-      this.water = new IncomeExpenseSource().deserialize(input.water)
+      this.water = new ExpenseSource().deserialize(input.water)
       this.travelDeclared = input.travelDeclared
-      this.travel = new IncomeExpenseSource().deserialize(input.travel)
+      this.travel = new ExpenseSource().deserialize(input.travel)
       this.schoolCostsDeclared = input.schoolCostsDeclared
-      this.schoolCosts = new IncomeExpenseSource().deserialize(input.schoolCosts)
+      this.schoolCosts = new ExpenseSource().deserialize(input.schoolCosts)
       this.foodAndHousekeepingDeclared = input.foodAndHousekeepingDeclared
-      this.foodAndHousekeeping = new IncomeExpenseSource().deserialize(input.foodAndHousekeeping)
+      this.foodAndHousekeeping = new ExpenseSource().deserialize(input.foodAndHousekeeping)
       this.tvAndBroadbandDeclared = input.tvAndBroadbandDeclared
-      this.tvAndBroadband = new IncomeExpenseSource().deserialize(input.tvAndBroadband)
+      this.tvAndBroadband = new ExpenseSource().deserialize(input.tvAndBroadband)
       this.hirePurchaseDeclared = input.hirePurchaseDeclared
-      this.hirePurchase = new IncomeExpenseSource().deserialize(input.hirePurchase)
+      this.hirePurchase = new ExpenseSource().deserialize(input.hirePurchase)
       this.mobilePhoneDeclared = input.mobilePhoneDeclared
-      this.mobilePhone = new IncomeExpenseSource().deserialize(input.mobilePhone)
+      this.mobilePhone = new ExpenseSource().deserialize(input.mobilePhone)
       this.maintenanceDeclared = input.maintenanceDeclared
-      this.maintenance = new IncomeExpenseSource().deserialize(input.maintenance)
+      this.maintenance = new ExpenseSource().deserialize(input.maintenance)
       this.otherDeclared = input.otherDeclared
-      this.other = input.other && input.other.map(source => new IncomeExpenseSource().deserialize(source))
+      this.other = input.other && input.other.map(source => new ExpenseSource().deserialize(source))
     }
 
     return this
   }
 
   addEmptyOtherExpense (): void {
-    this.other.push(new IncomeExpenseSource())
+    this.other.push(new ExpenseSource())
   }
 
-  removeOtherExpense (source: IncomeExpenseSource): void {
+  removeOtherExpense (source: ExpenseSource): void {
     this.other.splice(this.other.findIndex(element => element === source), 1)
   }
 
