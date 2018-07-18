@@ -266,10 +266,11 @@ describe('Defendant response: Statement of means: monthly-income', () => {
                   name: '',
                   amount: ''
                 }],
-              action: { addOtherIncomeSource: 'Add row' }
+              action: { addOtherIncomeSource: 'Add another income' }
             })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('otherSources[2][name]'))
+            .expect(res => expect(res).to.be.successful.withoutText('otherSources[3][name]'))
         })
         it('should remove row', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
@@ -290,6 +291,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
               action: { removeOtherIncomeSource: 'Remove this income source' }
             })
             .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('otherSources[0][name]'))
             .expect(res => expect(res).to.be.successful.withoutText('otherSources[1][name]'))
         })
       })

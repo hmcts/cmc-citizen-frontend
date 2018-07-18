@@ -141,17 +141,50 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
         })
       })
 
-      describe('add a new row', () => {
-
-        it('should update draft store and redirect', async () => {
+      describe('other actions', () => {
+        it('should add new row', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
 
           await request(app)
             .post(pagePath)
-            .send({ action: { addRow: 'Add row' } })
+            .send({
+              other: [
+                {
+                  name: '',
+                  amount: ''
+                },
+                {
+                  name: '',
+                  amount: ''
+                }],
+              action: { addOther: 'Add another expense' }
+            })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('What are your regular expenses?'))
+            .expect(res => expect(res).to.be.successful.withText('other[2][name]'))
+            .expect(res => expect(res).to.be.successful.withoutText('other[3][name]'))
+        })
+        it('should remove row', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              otherSources: [
+                {
+                  name: '',
+                  amount: ''
+                },
+                {
+                  name: '',
+                  amount: ''
+                }],
+              action: { removeOther: 'Remove this expese source' }
+            })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('other[0][name]'))
+            .expect(res => expect(res).to.be.successful.withoutText('other[1][name]'))
         })
       })
     })
