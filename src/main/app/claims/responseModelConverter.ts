@@ -44,7 +44,7 @@ import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
 import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
 import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
 import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
-import { PartialAdmissionResponse, PaymentDetails } from 'claims/models/response/partialAdmissionResponse'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 
 export class ResponseModelConverter {
@@ -107,13 +107,13 @@ export class ResponseModelConverter {
     return {
       responseType: ResponseType.PART_ADMISSION,
       isAlreadyPaid: draft.partialAdmission.alreadyPaid.option.option as YesNoOption,
-      paymentDetails: {
-        amount: draft.partialAdmission.howMuchHaveYouPaid.amount,
-        date: draft.partialAdmission.howMuchHaveYouPaid.date
-          ? draft.partialAdmission.howMuchHaveYouPaid.date.toMoment()
-          : undefined,
-        paymentMethod: draft.partialAdmission.howMuchHaveYouPaid.text
-      } as PaymentDetails,
+      amount: draft.partialAdmission.howMuchHaveYouPaid.amount,
+      paymentDeclaration: draft.partialAdmission.howMuchHaveYouPaid.date
+      && draft.partialAdmission.howMuchHaveYouPaid.text
+      && {
+        paidDate:  draft.partialAdmission.howMuchHaveYouPaid.date.asString(),
+        explanation: draft.partialAdmission.howMuchHaveYouPaid.text
+      } as PaymentDeclaration,
       defence: draft.partialAdmission.whyDoYouDisagree.text,
       timeline: {
         rows: draft.partialAdmission.timeline.getPopulatedRowsOnly(),
@@ -124,13 +124,14 @@ export class ResponseModelConverter {
         comment: draft.partialAdmission.evidence.comment
       } as DefendantEvidence,
       defendant: this.convertPartyDetails(draft.defendantDetails),
-      paymentOption: draft.partialAdmission.paymentOption && draft.partialAdmission.paymentOption.option.value as PaymentOption,
-      paymentDate: draft.partialAdmission.paymentOption
-      && this.convertPaymentDate(draft.partialAdmission.paymentOption, draft.partialAdmission.paymentDate),
-      repaymentPlan: draft.partialAdmission.paymentOption && draft.partialAdmission.paymentPlan && {
-        instalmentAmount: draft.partialAdmission.paymentPlan.instalmentAmount,
-        firstPaymentDate: draft.partialAdmission.paymentPlan.firstPaymentDate.toMoment(),
-        paymentSchedule: draft.partialAdmission.paymentPlan.paymentSchedule.value as PaymentSchedule
+      paymentIntention: draft.partialAdmission.paymentOption && {
+        paymentOption: draft.partialAdmission.paymentOption.option.value as PaymentOption,
+        paymentDate: this.convertPaymentDate(draft.partialAdmission.paymentOption, draft.partialAdmission.paymentDate),
+        repaymentPlan: draft.partialAdmission.paymentPlan && {
+          instalmentAmount: draft.partialAdmission.paymentPlan.instalmentAmount,
+          firstPaymentDate: draft.partialAdmission.paymentPlan.firstPaymentDate.toMoment(),
+          paymentSchedule: draft.partialAdmission.paymentPlan.paymentSchedule.value as PaymentSchedule
+        }
       },
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft)

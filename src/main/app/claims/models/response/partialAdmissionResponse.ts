@@ -11,23 +11,23 @@ import { StatementOfMeans } from 'claims/models/response/statement-of-means/stat
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
 
-export interface PaymentDetails {
-  amount: number,
-  date: Moment,
-  paymentMethod: string
+export interface PaymentIntention {
+  paymentOption?: PaymentOption
+  paymentDate?: Moment
+  repaymentPlan?: RepaymentPlan
 }
 
 export interface PartialAdmissionResponse extends ResponseCommon {
   responseType: ResponseType.PART_ADMISSION
   isAlreadyPaid: YesNoOption
-  paymentDetails: PaymentDetails
+  amount: number
+  paymentDeclaration: PaymentDeclaration
   defence: string,
   timeline: DefendantTimeline
   evidence: DefendantEvidence
-  paymentOption?: PaymentOption
-  paymentDate?: Moment
-  repaymentPlan?: RepaymentPlan
+  paymentIntention?: PaymentIntention
   statementOfMeans?: StatementOfMeans
 }
 
@@ -37,11 +37,12 @@ export namespace PartialAdmissionResponse {
       ...ResponseCommon.deserialize(input),
       responseType: ResponseType.PART_ADMISSION,
       isAlreadyPaid: input.isAlreadyPaid,
-      paymentDetails: {
-        amount: input.paymentDetails.amount,
-        date: input.paymentDetails.date,
-        paymentMethod: input.paymentDetails.paymentMethod
-      } as PaymentDetails,
+      amount: input.amount,
+      paymentDeclaration: input.paymentDeclaration
+      && {
+        paidDate: input.paymentDeclaration.paidDate,
+        explanation: input.paymentDeclaration.explanation
+      } as PaymentDeclaration,
       defence: input.defence,
       timeline: {
         rows: input.timeline && input.timeline.rows || [],
@@ -51,12 +52,15 @@ export namespace PartialAdmissionResponse {
         rows: input.evidence && input.evidence.rows || [],
         comment: input.evidence && input.evidence.comment || undefined
       } as DefendantEvidence,
-      paymentOption: input.paymentOption as PaymentOption,
-      paymentDate: input.paymentDate && MomentFactory.parse(input.paymentDate),
-      repaymentPlan: input.repaymentPlan && {
-        instalmentAmount: input.repaymentPlan.instalmentAmount,
-        firstPaymentDate: MomentFactory.parse(input.repaymentPlan.firstPaymentDate),
-        paymentSchedule: input.repaymentPlan.paymentSchedule
+      paymentIntention: input.paymentIntention
+      && {
+        paymentOption: input.paymentIntention.paymentOption as PaymentOption,
+        paymentDate: input.paymentIntention.paymentDate && MomentFactory.parse(input.paymentIntention.paymentDate),
+        repaymentPlan: input.paymentIntention.repaymentPlan && {
+          instalmentAmount: input.paymentIntention.repaymentPlan.instalmentAmount,
+          firstPaymentDate: MomentFactory.parse(input.paymentIntention.repaymentPlan.firstPaymentDate),
+          paymentSchedule: input.paymentIntention.repaymentPlan.paymentSchedule
+        }
       },
       statementOfMeans: input.statementOfMeans
     }

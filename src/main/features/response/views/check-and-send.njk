@@ -170,7 +170,7 @@
           {{ row(label = 'Frequency of payments', value = t(draft.partialAdmission.paymentPlan.paymentSchedule.displayValue), bold = true, bottomBorder = false) }}
           {{ row(label = 'Make the first payment on', value = draft.partialAdmission.paymentPlan.firstPaymentDate.toMoment() | date, bold = true) }}
         {% endif %}
-        
+
         {{ tableEnd() }}
       {% endif %}
     {% endif %}

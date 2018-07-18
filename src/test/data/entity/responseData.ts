@@ -82,12 +82,11 @@ export const partialAdmissionWithImmediatePaymentData = {
   ...basePartialEvidencesAndTimeLines,
   isAlreadyPaid: 'no',
   defence: 'i have paid more than enough',
-  paymentOption: PaymentOption.IMMEDIATELY,
-  paymentDate: MomentFactory.currentDate().add(5, 'days'),
-  paymentDetails: {
-    amount: 3000,
-    date: null
-  }
+  paymentIntention: {
+    paymentOption: PaymentOption.IMMEDIATELY,
+    paymentDate: MomentFactory.currentDate().add(5, 'days')
+  },
+  amount: 3000
 }
 
 export const partialAdmissionAlreadyPaidData = {
@@ -95,11 +94,11 @@ export const partialAdmissionAlreadyPaidData = {
   ...basePartialAdmissionData,
   ...basePartialEvidencesAndTimeLines,
   isAlreadyPaid: 'yes',
+  amount: 3000,
   defence: 'i have paid more than enough',
-  paymentDetails: {
-    amount: 3000,
-    date: '2050-12-31T00:00:00.000',
-    paymentMethod: 'i have already paid enough'
+  paymentDeclaration: {
+    paidDate: '2050-12-31',
+    explanation: 'i have already paid enough'
   }
 }
 
@@ -116,12 +115,11 @@ export const partialAdmissionWithPaymentBySetDateData = {
   ...basePartialEvidencesAndTimeLines,
   isAlreadyPaid: 'no',
   defence: 'i have paid more than enough',
-  paymentOption: PaymentOption.BY_SPECIFIED_DATE,
-  paymentDate: '2050-12-31',
-  paymentDetails: {
-    amount: 3000,
-    date: null
-  }
+  paymentIntention: {
+    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+    paymentDate: '2050-12-31'
+  },
+  amount: 3000
 }
 
 export const fullAdmissionWithPaymentByInstalmentsData = {
@@ -141,16 +139,15 @@ export const partialAdmissionWithPaymentByInstalmentsData = {
   ...basePartialEvidencesAndTimeLines,
   isAlreadyPaid: 'no',
   defence: 'i have paid more than enough',
-  paymentOption: PaymentOption.INSTALMENTS,
-  repaymentPlan: {
-    instalmentAmount: 100,
-    firstPaymentDate: '2050-12-31',
-    paymentSchedule: PaymentSchedule.EACH_WEEK
+  paymentIntention: {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: '2050-12-31',
+      paymentSchedule: PaymentSchedule.EACH_WEEK
+    }
   },
-  paymentDetails: {
-    amount: 3000,
-    date: null
-  }
+  amount: 3000
 }
 
 export const statementOfMeansWithMandatoryFieldsOnlyData = {
