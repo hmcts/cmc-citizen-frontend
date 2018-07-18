@@ -12,6 +12,7 @@ import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
 import { app } from 'main/app'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = StatementOfMeansPaths.monthlyExpensesPage.evaluateUri(
@@ -106,6 +107,82 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
+
+        it('should trigger validation when negative amount is given', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              mortgage: {
+                amount: -100,
+                schedule: IncomeExpenseSchedule.MONTH.value
+              },
+              rent: {
+                amount: -200,
+                schedule: IncomeExpenseSchedule.TWO_WEEKS.value
+              }})
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid mortgage amount, maximum two decimal places'))
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid rent amount, maximum two decimal places'))
+        })
+
+        it('should trigger validation when invalid decimal amount is given', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              mortgage: {
+                amount: 100.123,
+                schedule: IncomeExpenseSchedule.MONTH.value
+              },
+              rent: {
+                amount: 200.345,
+                schedule: IncomeExpenseSchedule.TWO_WEEKS.value
+              } })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid mortgage amount, maximum two decimal places'))
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid rent amount, maximum two decimal places'))
+        })
+
+        it('should trigger validation when no amount is given', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              mortgage: {
+                schedule: IncomeExpenseSchedule.MONTH.value
+              },
+              rent: {
+                schedule: IncomeExpenseSchedule.MONTH.value
+              } })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Enter how much you pay for mortgage'))
+            .expect(res => expect(res).to.be.successful.withText('Enter how much you pay for rent'))
+        })
+
+        it('should trigger validation when no schedule is given', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              mortgage: {
+                amount: 100
+              },
+              rent: {
+                amount: 700
+              } })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Select how often you pay for mortgage'))
+            .expect(res => expect(res).to.be.successful.withText('Select how often you pay for rent'))
+        })
       })
 
       describe('save and continue', () => {
@@ -141,17 +218,50 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
         })
       })
 
-      describe('add a new row', () => {
-
-        it('should update draft store and redirect', async () => {
+      describe('other actions', () => {
+        it('should add new row', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
 
           await request(app)
             .post(pagePath)
-            .send({ action: { addRow: 'Add row' } })
+            .send({
+              other: [
+                {
+                  name: '',
+                  amount: ''
+                },
+                {
+                  name: '',
+                  amount: ''
+                }],
+              action: { addOther: 'Add another expense' }
+            })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('What are your regular expenses?'))
+            .expect(res => expect(res).to.be.successful.withText('other[2][name]'))
+            .expect(res => expect(res).to.be.successful.withoutText('other[3][name]'))
+        })
+        it('should remove row', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              other: [
+                {
+                  name: '',
+                  amount: ''
+                },
+                {
+                  name: '',
+                  amount: ''
+                }],
+              action: { removeOther: 'Remove this expense source' }
+            })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('other[0][name]'))
+            .expect(res => expect(res).to.be.successful.withoutText('other[1][name]'))
         })
       })
     })
