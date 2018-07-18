@@ -68,4 +68,7 @@ export class PartAdmissionPaths {
   static readonly howMuchHaveYouPaidPage = new RoutablePath(`${partialAdmissionPath}/how-much-have-you-paid`)
   static readonly howMuchDoYouOwePage = new RoutablePath(`${partialAdmissionPath}/how-much-do-you-owe`)
   static readonly whyDoYouDisagreePage = new RoutablePath(`${partialAdmissionPath}/why-do-you-disagree`)
+  static readonly paymentOptionPage = new RoutablePath(`${partialAdmissionPath}/payment-option`)
+  static readonly paymentDatePage: RoutablePath = new RoutablePath(`${partialAdmissionPath}/payment-date`)
+  static readonly paymentPlanPage = new RoutablePath(`${partialAdmissionPath}/payment-plan`)
 }

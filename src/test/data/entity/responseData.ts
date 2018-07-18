@@ -43,6 +43,32 @@ const baseFullAdmissionData = {
   freeMediation: undefined
 }
 
+const basePartialAdmissionData = {
+  responseType: 'PART_ADMISSION',
+  freeMediation: undefined
+}
+
+const basePartialEvidencesAndTimeLines = {
+  evidence: {
+    rows: [
+      {
+        type: 'CONTRACTS_AND_AGREEMENTS',
+        description: ' you might have signed a contract'
+      }
+    ],
+    comment: ' you might have signed a contract'
+  },
+  timeline: {
+    rows: [
+      {
+        date: '1 May 2017',
+        description: ' you might have signed a contract'
+      }
+    ],
+    comment: ' you might have signed a contract'
+  }
+}
+
 export const fullAdmissionWithImmediatePaymentData = {
   ...baseResponseData,
   ...baseFullAdmissionData,
@@ -50,11 +76,50 @@ export const fullAdmissionWithImmediatePaymentData = {
   paymentDate: MomentFactory.currentDate().add(5, 'days')
 }
 
+export const partialAdmissionWithImmediatePaymentData = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  isAlreadyPaid: 'no',
+  defence: 'i have paid more than enough',
+  paymentIntention: {
+    paymentOption: PaymentOption.IMMEDIATELY,
+    paymentDate: MomentFactory.currentDate().add(5, 'days')
+  },
+  amount: 3000
+}
+
+export const partialAdmissionAlreadyPaidData = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  isAlreadyPaid: 'yes',
+  amount: 3000,
+  defence: 'i have paid more than enough',
+  paymentDeclaration: {
+    paidDate: '2050-12-31',
+    explanation: 'i have already paid enough'
+  }
+}
+
 export const fullAdmissionWithPaymentBySetDateData = {
   ...baseResponseData,
   ...baseFullAdmissionData,
-  paymentOption: PaymentOption.FULL_BY_SPECIFIED_DATE,
+  paymentOption: PaymentOption.BY_SPECIFIED_DATE,
   paymentDate: '2050-12-31'
+}
+
+export const partialAdmissionWithPaymentBySetDateData = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  isAlreadyPaid: 'no',
+  defence: 'i have paid more than enough',
+  paymentIntention: {
+    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+    paymentDate: '2050-12-31'
+  },
+  amount: 3000
 }
 
 export const fullAdmissionWithPaymentByInstalmentsData = {
@@ -66,6 +131,23 @@ export const fullAdmissionWithPaymentByInstalmentsData = {
     firstPaymentDate: '2050-12-31',
     paymentSchedule: PaymentSchedule.EACH_WEEK
   }
+}
+
+export const partialAdmissionWithPaymentByInstalmentsData = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  isAlreadyPaid: 'no',
+  defence: 'i have paid more than enough',
+  paymentIntention: {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: '2050-12-31',
+      paymentSchedule: PaymentSchedule.EACH_WEEK
+    }
+  },
+  amount: 3000
 }
 
 export const statementOfMeansWithMandatoryFieldsOnlyData = {
