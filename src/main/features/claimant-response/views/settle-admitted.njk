@@ -10,32 +10,41 @@
       <form method="post"
             class="analytics-submit-event-trigger"
             data-event-action="Claimant response: Settle defendant admitted option"
-            data-event-label-from="option"
+            data-event-label-from="admitted[value]"
             novalidate>
+
         {{ csrfProtection(csrf) }}
 
-        {{
-        radioGroupWithHintPanel(
-          form = form,
-          label = heading,
-          labelForScreenReadersOnly = true,
-          name = 'option',
-          options = [
-          {
-            label: t('Yes'),
-            value: YesNoOption.YES.option,
-            checked:  (form.valueFor(name) === YesNoOption.YES),
-            hint: 'You can agree to their repayment plan or suggest your own.'
-          },
-          {
-            label: t('No'),
-            value: YesNoOption.NO.option,
-            checked: (form.valueFor(name) === YesNoOption.NO),
-            hint: 'The claim will continue for the total amount you claimed:'
-          }
-        ]
-        )
-        }}
+        {% set error = form.errorFor('admitted') %}
+        <div class="form-group {% if error %} form-group-error {% endif %}">
+          <fieldset id="admitted[label]">
+            <legend class="visually-hidden">{{ t('Do you want to settle the claim for the £1,200 the defendant admitted?') }}</legend>
+            {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+
+            {{
+              radioOption(
+                form = form,
+                name = 'admitted[value]',
+                value = YesNoOption.YES.option,
+                label = t('Yes'),
+                bold = true,
+                hint = 'You can agree to their repayment plan or suggest your own.'
+              )
+            }}
+
+            {{
+              radioOption(
+                form = form,
+                name = 'admitted[value]',
+                value = YesNoOption.NO.option,
+                label = t('No'),
+                bold = true,
+                hint = 'The claim will continue for the total amount you claimed:'
+              )
+            }}
+
+          </fieldset>
+        </div>
 
         {{ saveAndContinueButton() }}
       </form>
