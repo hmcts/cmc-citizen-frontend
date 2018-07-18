@@ -208,4 +208,9 @@ export class MonthlyExpenses {
     this.other.splice(this.other.findIndex(element => element === source), 1)
   }
 
+  resetExpense (propertyName: string, source: ExpenseSource): void {
+    this[`${propertyName.split('.')[0]}Declared`] = false
+    source.reset()
+  }
+
 }

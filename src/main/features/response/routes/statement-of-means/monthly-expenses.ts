@@ -66,8 +66,9 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
         form.model.removeOtherExpense(selectedForRemoval)
         break
       case 'reset':
-        const selectedForReset: ExpenseSource = form.valueFor(extractPropertyName(req.body.action[actionName]))
-        selectedForReset.reset()
+        const propertyName = extractPropertyName(req.body.action[actionName])
+        const selectedForReset: ExpenseSource = form.valueFor(propertyName)
+        form.model.resetExpense(propertyName, selectedForReset)
         break
     }
 
