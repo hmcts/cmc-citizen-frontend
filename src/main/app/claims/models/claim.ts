@@ -11,6 +11,7 @@ import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { FeatureToggles } from 'utils/featureToggles'
 import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
+import { PartyDetails } from 'forms/models/partyDetails'
 
 interface State {
   status: ClaimStatus
