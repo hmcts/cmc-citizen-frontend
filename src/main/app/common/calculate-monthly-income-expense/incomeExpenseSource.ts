@@ -3,7 +3,8 @@ import { toNumberOrUndefined } from 'main/common/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { IsDefined, IsIn, IsPositive } from 'class-validator'
 import { Fractions } from '@hmcts/cmc-validators'
-import { IncomeExpenseSource as FormIncomeExpenseSource } from 'response/form/models/statement-of-means/incomeExpenseSource'
+import { IncomeSource as FormIncomeSource } from 'response/form/models/statement-of-means/incomeSource'
+import { ExpenseSource as FormExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
 
 export class IncomeExpenseSource {
 
@@ -31,7 +32,7 @@ export class IncomeExpenseSource {
     )
   }
 
-  static fromFormModel (incomeSource: FormIncomeExpenseSource): IncomeExpenseSource {
+  static fromFormIncomeSource (incomeSource: FormIncomeSource): IncomeExpenseSource {
     if (!incomeSource) {
       return undefined
     }
@@ -40,6 +41,19 @@ export class IncomeExpenseSource {
 
     return new IncomeExpenseSource(
       toNumberOrUndefined(incomeSource.amount),
+      toIncomeExpenseScheduleOrUndefined(schedule)
+    )
+  }
+
+  static fromFormExpenseSource (expenseSource: FormExpenseSource): IncomeExpenseSource {
+    if (!expenseSource) {
+      return undefined
+    }
+
+    const schedule = expenseSource.schedule ? expenseSource.schedule.value : undefined
+
+    return new IncomeExpenseSource(
+      toNumberOrUndefined(expenseSource.amount),
       toIncomeExpenseScheduleOrUndefined(schedule)
     )
   }
