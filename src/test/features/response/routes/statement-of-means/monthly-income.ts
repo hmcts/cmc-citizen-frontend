@@ -267,6 +267,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
             .expect(res => expect(res).to.be.successful.withText('otherSources[2][name]'))
             .expect(res => expect(res).to.be.successful.withoutText('otherSources[3][name]'))
         })
+
         it('should remove row', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
@@ -288,6 +289,29 @@ describe('Defendant response: Statement of means: monthly-income', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('otherSources[0][name]'))
             .expect(res => expect(res).to.be.successful.withoutText('otherSources[1][name]'))
+        })
+
+        it('should reset row', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              otherSources: [
+                {
+                  name: 'abcdefghijkl',
+                  amount: '1234'
+                }],
+              action: {
+                resetIncomeSource: {
+                  'otherSources.0': 'Reset this income source'
+                }
+              }
+            })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('otherSources[0][name]'))
+            .expect(res => expect(res).to.be.successful.withoutText('abcdefghijkl'))
         })
       })
     })

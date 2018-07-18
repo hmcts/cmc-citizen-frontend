@@ -172,4 +172,9 @@ export class MonthlyIncome {
     this.otherSources.splice(this.otherSources.findIndex(element => element === source), 1)
   }
 
+  resetIncome (propertyName: string, source: IncomeSource): void {
+    this[`${propertyName.split('.')[0]}Declared`] = false
+    source.reset()
+  }
+
 }

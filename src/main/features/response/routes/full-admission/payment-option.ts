@@ -56,10 +56,21 @@ export default express.Router()
           const user: User = res.locals.user
 
           draft.document.fullAdmission.paymentOption = form.model
+
+          const option: DefendantPaymentType = form.model.option
+
+          if (option !== DefendantPaymentType.BY_SET_DATE) {
+            draft.document.fullAdmission.paymentDate = undefined
+          }
+
+          if (option !== DefendantPaymentType.INSTALMENTS) {
+            draft.document.fullAdmission.paymentPlan = undefined
+          }
+
           await new DraftService().save(draft, user.bearerToken)
 
           const { externalId } = req.params
-          switch (form.model.option) {
+          switch (option) {
             case DefendantPaymentType.IMMEDIATELY:
               return res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
             case DefendantPaymentType.BY_SET_DATE:
