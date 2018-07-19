@@ -16,7 +16,10 @@
 
     // Escape name attribute for use in DOM selector
     function escapeElementName (str) {
-      var result = str.replace('[', '\\[').replace(']', '\\]')
+      // Patched to support nested radio buttons (replacing all [ and ])
+      // Not sending upstream due to elements being deprecated and frontend doesn't use jquery
+      // so it will have been reimplemented
+      var result = str.replace(/\[/g, '\\[').replace(/]/g, '\\]')
       return result
     }
 

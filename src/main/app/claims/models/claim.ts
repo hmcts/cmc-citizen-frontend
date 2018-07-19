@@ -1,15 +1,12 @@
 import { Moment } from 'moment'
 import { ClaimData } from 'claims/models/claimData'
 import { MomentFactory } from 'shared/momentFactory'
-import * as config from 'config'
-import * as toBoolean from 'to-boolean'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { Response } from 'claims/models/response'
 import { ResponseType } from 'claims/models/response/responseType'
 import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
-import { FeatureToggles } from 'utils/featureToggles'
 import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
 import { PartyDetails } from 'forms/models/partyDetails'
 
@@ -108,9 +105,6 @@ export class Claim {
   }
 
   get eligibleForCCJ (): boolean {
-    if (!toBoolean(config.get<boolean>('featureToggles.countyCourtJudgment'))) {
-      return false
-    }
 
     return !this.countyCourtJudgmentRequestedAt
       && !this.respondedAt
@@ -155,19 +149,18 @@ export class Claim {
   }
 
   private isOfferSubmitted (): boolean {
-    return FeatureToggles.isEnabled('offer')
-      && this.settlement && this.response && this.response.responseType === ResponseType.FULL_DEFENCE
+    return this.settlement && this.response && this.response.responseType === ResponseType.FULL_DEFENCE
   }
 
   private isOfferAccepted (): boolean {
-    return FeatureToggles.isEnabled('offer') && this.settlement && this.settlement.isOfferAccepted()
+    return this.settlement && this.settlement.isOfferAccepted()
   }
 
   private isOfferRejected (): boolean {
-    return FeatureToggles.isEnabled('offer') && this.settlement && this.settlement.isOfferRejected()
+    return this.settlement && this.settlement.isOfferRejected()
   }
 
   private isSettlementReached (): boolean {
-    return FeatureToggles.isEnabled('offer') && this.settlement && !!this.settlementReachedAt
+    return this.settlement && !!this.settlementReachedAt
   }
 }

@@ -76,8 +76,8 @@
   {% set checkboxName = name + 'Declared' %}
 
   {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.valueFor(name).populated)), label = label) %}
-    {{ incomeExpenseSource(form = form, name = name, amountLabel = 'Amount paid', amountHint = hint, scheduleLabel = 'Paid every') }}
-    {{ linkButton(name = 'action[resetExpenseSource][' + name + ']', label = 'Reset this expense source', class = 'link-button js-hidden') }}
+    {{ incomeExpenseSource(form = form, name = name, sourceLabel = 'Source of expense', amountLabel = 'Amount paid', amountHint = hint, scheduleLabel = 'Paid every') }}
+    {{ linkButton(name = 'action[reset][' + name + ']', label = 'Reset this expense source', class = 'link-button js-hidden') }}
   {% endcall %}
 {% endmacro %}
 
@@ -88,7 +88,7 @@
     <div>
       {% for source in form.model.other %}
         <div class="other-income-expense-source">
-          {{ incomeExpenseSource(form = form, name = name + '[' + loop.index0 + ']', amountLabel = 'Amount paid', amountHint = hint, scheduleLabel = 'Paid every', nameEditable = true) }}
+          {{ incomeExpenseSource(form = form, name = name + '[' + loop.index0 + ']', sourceLabel = 'Source of expense', amountLabel = 'Amount paid', amountHint = hint, scheduleLabel = 'Paid every', nameEditable = true) }}
           {% if form.model.other.length > 1 %}
             {{ linkButton(name = 'action[removeOther][other.' + loop.index0 + ']', label = 'Remove this expense source', class = 'link-button') }}
           {% else %}
