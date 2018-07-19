@@ -91,7 +91,7 @@ describe('SelfEmployment', () => {
         )
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.AMOUNT_ENTERED_TOO_LARGE)
+        expectValidationError(errors, GlobalValidationErrors.AMOUNT_TOO_HIGH)
       })
     })
   })
