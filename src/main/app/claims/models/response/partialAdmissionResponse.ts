@@ -27,6 +27,7 @@ export interface PartialAdmissionResponse extends ResponseCommon {
   defence: string,
   timeline: DefendantTimeline
   evidence: DefendantEvidence
+  freeMediation?: YesNoOption,
   paymentIntention?: PaymentIntention
   statementOfMeans?: StatementOfMeans
 }
