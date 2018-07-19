@@ -75,10 +75,8 @@
   "featureToggles": {
     "clusterMode": "FEATURE_CLUSTER_MODE",
     "testingSupport": "FEATURE_TESTING_SUPPORT",
-    "countyCourtJudgment": "FEATURE_CCJ",
     "fullAdmission": "FEATURE_FULL_ADMISSION",
     "partialAdmission": "FEATURE_PARTIAL_ADMISSION",
-    "offer": "FEATURE_OFFER",
     "statementOfMeans": "FEATURE_STATEMENT_OF_MEANS",
     "returnErrorToUser": "FEATURE_RETURN_ERROR_TO_USER",
     "mockPay": "FEATURE_MOCK_PAY"

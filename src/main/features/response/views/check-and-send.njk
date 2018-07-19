@@ -64,8 +64,14 @@
       {{ row(label = 'Why do you reject all of this claim?', value = rejectAllOption, changeLink = ResponsePaths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
     {% endif %}
 
+    {% if draft.isResponseFullyAdmitted() and draft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+      {{ row(label = 'When will you pay', value = t(draft.fullAdmission.paymentOption.option.displayValue) | capitalize, changeLink = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+    {% endif %} 
 
-    {% if draft.isResponseFullyAdmitted() %}
+    {{ tableEnd() }}
+
+    {% if draft.isResponseFullyAdmitted() and not draft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+      {{ tableStart('whenWillYouPay', 'When will you pay') }}
       {{ row(label = 'When will you pay', value = t(draft.fullAdmission.paymentOption.option.displayValue) | capitalize, changeLink = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
       {% if draft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.BY_SET_DATE) %}
         {{ row(label = 'When you’ll pay the amount', value = draft.fullAdmission.paymentDate.date.toMoment() | date, changeLink = FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
@@ -75,8 +81,8 @@
         {{ row(label = 'Frequency of payments', value = t(draft.fullAdmission.paymentPlan.paymentSchedule.displayValue), bold = true, bottomBorder = false) }}
         {{ row(label = 'Make the first payment on', value = draft.fullAdmission.paymentPlan.firstPaymentDate.toMoment() | date, bold = true) }}
       {% endif %}
+      {{ tableEnd() }}
     {% endif %}
-    {{ tableEnd() }}
 
     {% if draft.isResponseRejectedFullyWithAmountClaimedPaid() %}
       {{ tableStart('yourResponse', 'Your response') }}
