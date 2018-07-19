@@ -14,6 +14,64 @@ import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'main/app/claims/models/claim'
 import { FeatureToggles } from 'utils/featureToggles'
 
+class PaymentOptionPage {
+  constructor (private admissionType: string) {}
+
+  buildRouter (): express.Router {
+    return express.Router()
+      .get(FullAdmissionPaths.paymentOptionPage.uri,
+        FeatureToggleGuard.featureEnabledGuard(this.admissionType),
+        ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
+          const draft: Draft<ResponseDraft> = res.locals.responseDraft
+
+          renderView(new Form(draft.document[this.admissionType].paymentOption), res)
+        }))
+      .post(FullAdmissionPaths.paymentOptionPage.uri,
+        FeatureToggleGuard.featureEnabledGuard(this.admissionType),
+        FormValidator.requestHandler(DefendantPaymentOption, DefendantPaymentOption.fromObject),
+        ErrorHandling.apply(
+          async (req: express.Request, res: express.Response): Promise<void> => {
+            const form: Form<DefendantPaymentOption> = req.body
+
+            if (form.hasErrors()) {
+              renderView(form, res)
+            } else {
+              const draft: Draft<ResponseDraft> = res.locals.responseDraft
+              const user: User = res.locals.user
+
+              draft.document[this.admissionType].paymentOption = form.model
+
+              const option: DefendantPaymentType = form.model.option
+
+              if (option === DefendantPaymentType.IMMEDIATELY) {
+                draft.document.statementOfMeans = undefined
+              }
+
+              if (option !== DefendantPaymentType.BY_SET_DATE) {
+                draft.document[this.admissionType].paymentDate = undefined
+              }
+
+              if (option !== DefendantPaymentType.INSTALMENTS) {
+                draft.document[this.admissionType].paymentPlan = undefined
+              }
+
+              await new DraftService().save(draft, user.bearerToken)
+
+              const { externalId } = req.params
+              switch (option) {
+                case DefendantPaymentType.IMMEDIATELY:
+                  return res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
+                case DefendantPaymentType.BY_SET_DATE:
+                  return res.redirect(FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: externalId }))
+                case DefendantPaymentType.INSTALMENTS:
+                  return res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
+              }
+            }
+          }))
+
+  }
+}
+
 function isApplicableFor (draft: ResponseDraft): boolean {
   if (!FeatureToggles.isEnabled('statementOfMeans')) {
     return false
@@ -34,53 +92,4 @@ function renderView (form: Form<DefendantPaymentOption>, res: express.Response) 
 }
 
 /* tslint:disable:no-default-export */
-export default express.Router()
-  .get(FullAdmissionPaths.paymentOptionPage.uri,
-    FeatureToggleGuard.featureEnabledGuard('fullAdmission'),
-    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const draft: Draft<ResponseDraft> = res.locals.responseDraft
-
-      renderView(new Form(draft.document.fullAdmission.paymentOption), res)
-    }))
-  .post(FullAdmissionPaths.paymentOptionPage.uri,
-    FeatureToggleGuard.featureEnabledGuard('fullAdmission'),
-    FormValidator.requestHandler(DefendantPaymentOption, DefendantPaymentOption.fromObject),
-    ErrorHandling.apply(
-      async (req: express.Request, res: express.Response): Promise<void> => {
-        const form: Form<DefendantPaymentOption> = req.body
-
-        if (form.hasErrors()) {
-          renderView(form, res)
-        } else {
-          const draft: Draft<ResponseDraft> = res.locals.responseDraft
-          const user: User = res.locals.user
-
-          draft.document.fullAdmission.paymentOption = form.model
-
-          const option: DefendantPaymentType = form.model.option
-
-          if (option === DefendantPaymentType.IMMEDIATELY) {
-            draft.document.statementOfMeans = undefined
-          }
-
-          if (option !== DefendantPaymentType.BY_SET_DATE) {
-            draft.document.fullAdmission.paymentDate = undefined
-          }
-
-          if (option !== DefendantPaymentType.INSTALMENTS) {
-            draft.document.fullAdmission.paymentPlan = undefined
-          }
-
-          await new DraftService().save(draft, user.bearerToken)
-
-          const { externalId } = req.params
-          switch (option) {
-            case DefendantPaymentType.IMMEDIATELY:
-              return res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
-            case DefendantPaymentType.BY_SET_DATE:
-              return res.redirect(FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: externalId }))
-            case DefendantPaymentType.INSTALMENTS:
-              return res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
-          }
-        }
-      }))
+export default new PaymentOptionPage('fullAdmission').buildRouter()
