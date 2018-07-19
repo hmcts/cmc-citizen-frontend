@@ -27,6 +27,8 @@ import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
+import { YesNoOption } from 'models/yesNoOption'
+import { HowMuchDoYouOwe } from 'response/form/models/howMuchDoYouOwe'
 
 export class FullAdmission {
   paymentOption: PaymentOption
@@ -51,6 +53,7 @@ export class PartialAdmission {
 
   alreadyPaid?: AlreadyPaid
   howMuchHaveYouPaid?: HowMuchHaveYouPaid
+  howMuchDoYouOwe?: HowMuchDoYouOwe
   whyDoYouDisagree?: WhyDoYouDisagree
   timeline?: DefendantTimeline
   evidence?: DefendantEvidence
@@ -62,6 +65,7 @@ export class PartialAdmission {
     if (input) {
       this.alreadyPaid = new AlreadyPaid().deserialize(input.alreadyPaid && input.alreadyPaid.option)
       this.howMuchHaveYouPaid = new HowMuchHaveYouPaid().deserialize(input.howMuchHaveYouPaid)
+      this.howMuchDoYouOwe = new HowMuchDoYouOwe().deserialize(input.howMuchDoYouOwe)
       this.whyDoYouDisagree = new WhyDoYouDisagree().deserialize(input.whyDoYouDisagree)
       this.timeline = new DefendantTimeline().deserialize(input.timeline)
       this.evidence = new DefendantEvidence().deserialize(input.evidence)
@@ -173,6 +177,10 @@ export class ResponseDraft extends DraftDocument {
     return this.isResponsePopulated()
       && this.response.type === ResponseType.PART_ADMISSION
       && this.partialAdmission !== undefined
+  }
+
+  public isResponsePartiallyAdmittedAndAlreadyPaid (): boolean {
+    return this.isResponsePartiallyAdmitted() && this.partialAdmission.alreadyPaid.option === YesNoOption.YES
   }
 
   public isResponseRejectedFullyWithDispute (): boolean {

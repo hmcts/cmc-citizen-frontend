@@ -46,6 +46,7 @@ import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthly
 import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
+import { YesNoOption as DraftYesNoOption } from 'models/yesNoOption'
 
 export class ResponseModelConverter {
 
@@ -104,10 +105,17 @@ export class ResponseModelConverter {
   }
 
   private static convertPartAdmission (draft: ResponseDraft): PartialAdmissionResponse {
+    let amount
+    if (draft.partialAdmission.alreadyPaid.option === DraftYesNoOption.YES) {
+      amount = draft.partialAdmission.howMuchHaveYouPaid.amount
+    } else {
+      amount = draft.partialAdmission.howMuchDoYouOwe.amount
+    }
+
     return {
       responseType: ResponseType.PART_ADMISSION,
       isAlreadyPaid: draft.partialAdmission.alreadyPaid.option.option as YesNoOption,
-      amount: draft.partialAdmission.howMuchHaveYouPaid.amount,
+      amount: amount,
       paymentDeclaration: draft.partialAdmission.howMuchHaveYouPaid.date
       && draft.partialAdmission.howMuchHaveYouPaid.text
       && {
