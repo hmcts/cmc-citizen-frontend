@@ -44,14 +44,6 @@ variable "vault_section" {
   default = "test"
 }
 // feature toggles
-variable "feature_ccj" {
-  default = "true"
-}
-
-variable "feature_offer" {
-  default = "true"
-}
-
 variable "feature_statement_of_means" {
   default = "false"
 }
@@ -106,7 +98,7 @@ variable "appinsights_instrumentation_key" {
 variable "capacity" {
   default = "1"
 }
-  
+
 variable "common_tags" {
   type = "map"
 }

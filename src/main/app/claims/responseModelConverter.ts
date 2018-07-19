@@ -519,7 +519,7 @@ export class ResponseModelConverter {
           type: ExpenseType.OTHER,
           frequency: source.schedule.value as PaymentFrequency,
           amountPaid: source.amount,
-          otherSource: source.name
+          otherName: source.name
         })
       })
     }

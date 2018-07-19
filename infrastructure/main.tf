@@ -107,8 +107,6 @@ module "citizen-frontend" {
     // Feature toggles
     FEATURE_TESTING_SUPPORT = "${var.env == "prod" ? "false" : "true"}"
     // Enabled everywhere except prod
-    FEATURE_CCJ = "${var.feature_ccj}"
-    FEATURE_OFFER = "${var.feature_offer}"
     FEATURE_STATEMENT_OF_MEANS = "${var.feature_statement_of_means}"
     FEATURE_FULL_ADMISSION = "${var.feature_full_admission}"
     FEATURE_PARTIAL_ADMISSION = "${var.feature_partial_admission}"
