@@ -84,10 +84,10 @@
     "testingSupport": false,
     "countyCourtJudgment": false,
     "fullAdmission": false,
-    "partialAdmission": true,
-    "admissions": true,
+    "partialAdmission": false,
+    "admissions": false,
     "offer": false,
-    "statementOfMeans": true,
+    "statementOfMeans": false,
     "returnErrorToUser": false,
     "mockPay": false
   },
