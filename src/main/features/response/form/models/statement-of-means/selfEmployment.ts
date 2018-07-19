@@ -19,7 +19,7 @@ export class SelfEmployment {
 
   @IsDefined({ message: ValidationErrors.ANNUAL_TURNOVER_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Max(GlobalValidationConstants.MAX_VALUE, { message: GlobalValidationErrors.AMOUNT_TOO_HIGH })
+  @Max(GlobalValidationConstants.MAX_VALUE, { message: GlobalValidationErrors.AMOUNT_ENTERED_TOO_LARGE })
   annualTurnover?: number
 
   constructor (jobTitle?: string, annualTurnover?: number) {

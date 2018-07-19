@@ -1,7 +1,5 @@
 export class ValidationErrors {
   static readonly TEXT_TOO_LONG: string = 'You’ve entered too many characters'
-  static readonly AMOUNT_TOO_HIGH: string = 'Are you sure this is a valid value?'
-  // TODO Get Ranjit to check that AMOUNT_TOO_HIGH has the correct content
   static readonly AMOUNT_ENTERED_TOO_LARGE: string = 'Enter a value less then the amount claimed'
 
   static readonly WHY_NOT_OWE_FULL_AMOUNT_REQUIRED: string = 'Explain why you don’t owe the full amount'

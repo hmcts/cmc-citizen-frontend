@@ -22,7 +22,7 @@ export class OnTaxPayments {
   @IsDefined({ message: GlobalValidationErrors.VALID_OWED_AMOUNT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
   @Min(ValidationConstraints.AMOUNT_YOU_OWE_MIN_VALUE, { message: GlobalValidationErrors.VALID_OWED_AMOUNT_REQUIRED })
-  @Max(GlobalValidationConstants.MAX_VALUE, { message: GlobalValidationErrors.AMOUNT_TOO_HIGH })
+  @Max(GlobalValidationConstants.MAX_VALUE, { message: GlobalValidationErrors.AMOUNT_ENTERED_TOO_LARGE })
   amountYouOwe: number
 
   @ValidateIf(o => o.declared === true)
