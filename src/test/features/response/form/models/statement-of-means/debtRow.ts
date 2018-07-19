@@ -123,6 +123,12 @@ describe('DebtRow', () => {
 
         expect(errors.length).to.equal(0)
       })
+
+      it('when total owed has minimal value of 1 penny', () => {
+        const errors = validator.validateSync(new DebtRow('credit card', 0.01, 0))
+
+        expect(errors.length).to.equal(0)
+      })
     })
 
     context('should reject', () => {
@@ -150,6 +156,13 @@ describe('DebtRow', () => {
 
       it('when negative monthlyPayments', () => {
         const errors = validator.validateSync(new DebtRow('credit card', -10, 1))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
+      })
+
+      it('when total owed equal zero', () => {
+        const errors = validator.validateSync(new DebtRow('card', 0, 1))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)

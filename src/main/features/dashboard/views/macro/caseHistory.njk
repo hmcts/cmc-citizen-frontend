@@ -40,13 +40,15 @@ ccjRequestedForDefendantClaimDetails %}
         {{ ccjEligibleForClaimantClaimDetails(claim, csrf) }}
       {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
         {{ ccjRequestedForClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
-        {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
-          {{ claimRejectedAlreadyPaidForClaimantClaimDetails(claim) }}
-        {% elif claim.response.freeMediation === FreeMediationOption.NO %}
-          {{ claimRejectedFreeMediationNOForClaimantClaimDetails(claim) }}
-        {% else %}
-          {{ claimRejectedFreeMediationYESForClaimantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
+        {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
+          {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+            {{ claimRejectedAlreadyPaidForClaimantClaimDetails(claim) }}
+          {% elif claim.response.freeMediation === FreeMediationOption.NO %}
+            {{ claimRejectedFreeMediationNOForClaimantClaimDetails(claim) }}
+          {% else %}
+            {{ claimRejectedFreeMediationYESForClaimantClaimDetails(claim) }}
+          {% endif %}
         {% endif %}
       {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
         {{ offerSubmittedForClaimantClaimDetails(claim) }}
@@ -76,17 +78,19 @@ ccjRequestedForDefendantClaimDetails %}
         {{ ccjEligibleForDefendantClaimDetails(claim, csrf) }}
       {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
         {{ ccjRequestedForDefendantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.CLAIM_REJECTED %}
-        {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
-          {{ claimRejectedAlreadyPaidForDefendantClaimDetails(claim) }}
-        {% elif claim.response.freeMediation === FreeMediationOption.NO %}
-          {{ claimRejectedFreeMediationNOForDefendantClaimDetails(claim) }}
-        {% else %}
-          {{ claimRejectedFreeMediationYESForDefendantClaimDetails(claim) }}
-        {% endif %}
+      {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
+        {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
+          {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+            {{ claimRejectedAlreadyPaidForDefendantClaimDetails(claim) }}
+          {% elif claim.response.freeMediation === FreeMediationOption.NO %}
+            {{ claimRejectedFreeMediationNOForDefendantClaimDetails(claim) }}
+          {% else %}
+            {{ claimRejectedFreeMediationYESForDefendantClaimDetails(claim) }}
+          {% endif %}
 
-        {% if not claim.settlement and claim.response.defenceType !== DefenceType.ALREADY_PAID %}
-          {{ _settleOutOfCourtOption (claim) }}
+          {% if not claim.settlement and claim.response.defenceType !== DefenceType.ALREADY_PAID %}
+            {{ _settleOutOfCourtOption (claim) }}
+          {% endif %}
         {% endif %}
       {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
         {{ offerSubmittedForDefendantClaimDetails(claim) }}

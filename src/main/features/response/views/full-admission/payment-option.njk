@@ -14,9 +14,13 @@
             novalidate>
         {{ csrfProtection(csrf) }}
 
+<<<<<<< HEAD
 
 
 
+=======
+        {% set nonImmediateHintText = 'The claimant can request a County Court Judgment (CCJ) against you if you don’t pay immediately.' %}
+>>>>>>> master
 
         {{
         radioGroupWithHintPanel(
@@ -35,12 +39,21 @@
               label: DefendantPaymentType.BY_SET_DATE.displayValue,
               value: DefendantPaymentType.BY_SET_DATE.value,
               checked: (form.valueFor('option') === DefendantPaymentType.BY_SET_DATE),
+<<<<<<< HEAD
               hint: 'The claimant can request a County Court Judgment (CCJ) against you if you don't pay immediately.'
+=======
+              hint: nonImmediateHintText
+            },
+>>>>>>> master
             {
               label: DefendantPaymentType.INSTALMENTS.displayValue,
               value: DefendantPaymentType.INSTALMENTS.value,
               checked: (form.valueFor('option') === DefendantPaymentType.INSTALMENTS),
+<<<<<<< HEAD
               hint: 'The claimant can request a County Court Judgment (CCJ) against you if you don't pay immediately.'
+=======
+              hint: nonImmediateHintText
+>>>>>>> master
             }
           ]
         )

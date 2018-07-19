@@ -6,4 +6,8 @@ payments_api_url = "https://preprod.payments.reform.hmcts.net:4401"
 external_host_name = "www.moneyclaims.demo.platform.hmcts.net"
 feature_return_error_to_user = "true"
 feature_full_admission = "true"
+feature_partial_admission = "true"
 capacity = "2"
+
+fees_api_url = "http://fees-register-api-demo.service.core-compute-demo.internal"
+payments_api_url = "http://payment-api-demo.service.core-compute-demo.internal"

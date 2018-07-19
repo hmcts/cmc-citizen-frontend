@@ -1,20 +1,21 @@
+import { ResponseType } from 'claims/models/response/responseType'
+
+import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+
 import { PartyType } from 'common/partyType'
 import { Party } from 'claims/models/details/yours/party'
 import { Individual } from 'claims/models/details/yours/individual'
-import { Company } from 'claims/models/details/yours/company'
 import { SoleTrader } from 'claims/models/details/yours/soleTrader'
+import { Company } from 'claims/models/details/yours/company'
 import { Organisation } from 'claims/models/details/yours/organisation'
-import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
-export enum ResponseType {
-  FULL_DEFENCE = 'FULL_DEFENCE'
-}
+import { StatementOfTruth } from 'claims/models/statementOfTruth'
 
 export interface ResponseCommon {
   responseType: ResponseType
-  freeMediation: string
-  moreTimeNeeded?: string
   defendant: Party
+  moreTimeNeeded?: YesNoOption
+  freeMediation?: YesNoOption
   statementOfTruth?: StatementOfTruth
 }
 
@@ -22,9 +23,8 @@ export namespace ResponseCommon {
   export function deserialize (input: any): ResponseCommon {
     return {
       responseType: input.responseType,
-      freeMediation: input.freeMediation,
-      moreTimeNeeded: input.moreTimeNeeded,
       defendant: deserializeDefendantDetails(input.defendant),
+      freeMediation: input.freeMediation,
       statementOfTruth: input.statementOfTruth
         ? new StatementOfTruth().deserialize(input.statementOfTruth)
         : undefined

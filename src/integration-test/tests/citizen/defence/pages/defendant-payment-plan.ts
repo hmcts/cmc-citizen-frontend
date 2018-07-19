@@ -18,8 +18,7 @@ const fields = {
       everyTwoWeeks: 'input[id=paymentScheduleEVERY_TWO_WEEKS]',
       everyMonth: 'input[id=paymentScheduleEVERY_MONTH]'
     }
-  },
-  text: 'textarea[id=text]'
+  }
 }
 
 const buttons = {
@@ -33,7 +32,7 @@ export class DefendantPaymentPlanPage {
     I.see('You believe you owe ' + AmountHelper.formatMoney(amountOutstanding))
   }
 
-  enterRepaymentPlan (plan: PaymentPlan, text: string): void {
+  enterRepaymentPlan (plan: PaymentPlan): void {
     const [ year, month, day ] = DateParser.parse(plan.firstPaymentDate)
 
     I.fillField(fields.repayment.equalInstalments, plan.equalInstalment.toString())
@@ -41,8 +40,6 @@ export class DefendantPaymentPlanPage {
     I.fillField(fields.repayment.firstPaymentDate.month, month)
     I.fillField(fields.repayment.firstPaymentDate.year, year)
     I.checkOption(fields.repayment.frequency[plan.frequency])
-    I.fillField(fields.text, text)
-    I.click(buttons.submit)
   }
 
   saveAndContinue (): void {

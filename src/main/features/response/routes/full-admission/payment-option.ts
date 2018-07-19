@@ -10,9 +10,17 @@ import { User } from 'main/app/idam/user'
 import { DraftService } from 'services/draftService'
 import { FeatureToggleGuard } from 'main/app/guards/featureToggleGuard'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'main/app/claims/models/claim'
+import { FeatureToggles } from 'utils/featureToggles'
+
+function isApplicableFor (draft: ResponseDraft): boolean {
+  if (!FeatureToggles.isEnabled('statementOfMeans')) {
+    return false
+  }
+  return draft.isResponseFullyAdmitted()
+    && !draft.defendantDetails.partyDetails.isBusiness()
+}
 
 function renderView (form: Form<DefendantPaymentOption>, res: express.Response) {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -21,7 +29,7 @@ function renderView (form: Form<DefendantPaymentOption>, res: express.Response) 
     form: form,
     claim: claim,
     draft: draft.document,
-    statementOfMeansIsApplicable: StatementOfMeans.isApplicableFor(draft.document)
+    statementOfMeansIsApplicable: isApplicableFor(draft.document)
   })
 }
 
@@ -48,10 +56,21 @@ export default express.Router()
           const user: User = res.locals.user
 
           draft.document.fullAdmission.paymentOption = form.model
+
+          const option: DefendantPaymentType = form.model.option
+
+          if (option !== DefendantPaymentType.BY_SET_DATE) {
+            draft.document.fullAdmission.paymentDate = undefined
+          }
+
+          if (option !== DefendantPaymentType.INSTALMENTS) {
+            draft.document.fullAdmission.paymentPlan = undefined
+          }
+
           await new DraftService().save(draft, user.bearerToken)
 
           const { externalId } = req.params
-          switch (form.model.option) {
+          switch (option) {
             case DefendantPaymentType.IMMEDIATELY:
               return res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
             case DefendantPaymentType.BY_SET_DATE:

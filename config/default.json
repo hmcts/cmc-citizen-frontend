@@ -82,12 +82,12 @@
   "featureToggles": {
     "clusterMode": false,
     "testingSupport": false,
-    "countyCourtJudgment": false,
     "fullAdmission": false,
     "partialAdmission": false,
-    "offer": false,
+    "admissions": false,
     "statementOfMeans": false,
-    "returnErrorToUser": false
+    "returnErrorToUser": false,
+    "mockPay": false
   },
   "oauth": {
     "clientId": "cmc_citizen",

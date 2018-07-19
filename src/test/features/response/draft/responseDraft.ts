@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { LocalDate } from 'forms/models/localDate'
 
-import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
+import { FullAdmission, PartialAdmission, ResponseDraft } from 'response/draft/responseDraft'
 import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 
 import { Response } from 'response/form/models/response'
@@ -9,9 +9,10 @@ import { ResponseType } from 'response/form/models/responseType'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
-import { RejectPartOfClaim, RejectPartOfClaimOption } from 'response/form/models/rejectPartOfClaim'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
+import { PartyType } from 'common/partyType'
+import { PartyDetails } from 'forms/models/partyDetails'
 
 describe('ResponseDraft', () => {
 
@@ -123,9 +124,10 @@ describe('ResponseDraft', () => {
   })
 
   describe('isResponseFullyAdmitted', () => {
-    it('should return false when no response type set', () => {
+    it('should return false when no response type or defendantDetails is set', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = undefined
+      draft.defendantDetails.partyDetails = undefined
 
       expect(draft.isResponseFullyAdmitted()).to.be.eq(false)
     })
@@ -142,6 +144,8 @@ describe('ResponseDraft', () => {
     it('should return true when response is a full admission', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.FULL_ADMISSION)
+      draft.defendantDetails.partyDetails = new PartyDetails()
+      draft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
 
       expect(draft.isResponseFullyAdmitted()).to.be.eq(true)
     })
@@ -185,69 +189,45 @@ describe('ResponseDraft', () => {
     })
   })
 
-  describe('isResponsePartiallyRejectedDueTo', () => {
+  describe('isResponsePartiallyAdmitted', () => {
 
-    it('should return false when no response type set', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = undefined
+    context('should return false when', () => {
 
-      expect(draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)).to.be.eq(false)
-    })
-
-    it('should return error message when option argument is undefined', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.PART_ADMISSION)
-
-      expect(() => draft.isResponsePartiallyRejectedDueTo(undefined)).to.throw(Error, 'Option is undefined')
-    })
-
-    it('should return false message when response type is not a part rejection', () => {
-      ResponseType.except(ResponseType.PART_ADMISSION).forEach(responseType => {
+      it('no response set', () => {
         const draft: ResponseDraft = new ResponseDraft()
-        draft.response = new Response(responseType)
+        draft.response = undefined
 
-        expect(draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)).to.be.equal(false)
+        expect(draft.isResponsePartiallyAdmitted()).to.be.eq(false)
+      })
+
+      it('response type is fully admitted', () => {
+        const draft: ResponseDraft = new ResponseDraft()
+        draft.response = {
+          type: ResponseType.FULL_ADMISSION
+        }
+
+        expect(draft.isResponsePartiallyAdmitted()).to.be.eq(false)
+      })
+
+      it('partial admission is not populated', () => {
+        const draft: ResponseDraft = new ResponseDraft()
+        draft.response = {
+          type: ResponseType.FULL_ADMISSION
+        }
+        draft.partialAdmission = undefined
+
+        expect(draft.isResponsePartiallyAdmitted()).to.be.eq(false)
       })
     })
 
-    it('should return false when response is part admission without subtype selected', () => {
+    it('should return true when type is PART_ADMISSION and partial admission is populated', () => {
       const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.PART_ADMISSION)
-      draft.rejectPartOfClaim = new RejectPartOfClaim(undefined)
+      draft.response = {
+        type: ResponseType.PART_ADMISSION
+      }
+      draft.partialAdmission = new PartialAdmission().deserialize({ alreadyPaid: 'yes' })
 
-      expect(draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)).to.be.equal(false)
-    })
-
-    it('should return false when response is part admission with paid what believed was owed (match)', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.PART_ADMISSION)
-      draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)
-
-      expect(draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)).to.be.eq(true)
-    })
-
-    it('should return true when response is part admission with amount too high (match)', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.PART_ADMISSION)
-      draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
-
-      expect(draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)).to.be.eq(true)
-    })
-
-    it('should return false when response is part admission with wrong option amount too high', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.PART_ADMISSION)
-      draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)
-
-      expect(draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)).to.be.eq(false)
-    })
-
-    it('should return false when response is part admission with wrong option paid what believed was owed', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.PART_ADMISSION)
-      draft.rejectPartOfClaim = new RejectPartOfClaim(RejectPartOfClaimOption.PAID_WHAT_BELIEVED_WAS_OWED)
-
-      expect(draft.isResponsePartiallyRejectedDueTo(RejectPartOfClaimOption.AMOUNT_TOO_HIGH)).to.be.eq(false)
+      expect(draft.isResponsePartiallyAdmitted()).to.be.eq(true)
     })
   })
 
@@ -326,6 +306,47 @@ describe('ResponseDraft', () => {
       draft.response = undefined
 
       expect(draft.isResponsePopulated()).to.be.equals(false)
+    })
+  })
+
+  describe('isResponseRejected', () => {
+
+    context('should return false when', () => {
+
+      it('response is not populated', () => {
+        const draft: ResponseDraft = new ResponseDraft()
+        draft.response = undefined
+
+        expect(draft.isResponseRejected()).to.be.equals(false)
+      })
+
+      it('response type is not populated', () => {
+        const draft: ResponseDraft = new ResponseDraft()
+        draft.response = new Response(undefined)
+
+        expect(draft.isResponseRejected()).to.be.equals(false)
+      })
+
+      it('response is PART_ADMISSION', () => {
+        const draft: ResponseDraft = new ResponseDraft()
+        draft.response = new Response(ResponseType.PART_ADMISSION)
+
+        expect(draft.isResponseRejected()).to.be.equals(false)
+      })
+
+      it('response is FULL_ADMISSION', () => {
+        const draft: ResponseDraft = new ResponseDraft()
+        draft.response = new Response(ResponseType.FULL_ADMISSION)
+
+        expect(draft.isResponseRejected()).to.be.equals(false)
+      })
+    })
+
+    it('should return true when response type is DEFENCE', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = new Response(ResponseType.DEFENCE)
+
+      expect(draft.isResponseRejected()).to.be.equals(true)
     })
   })
 
