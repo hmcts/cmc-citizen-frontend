@@ -1,5 +1,5 @@
 {% set claimantName = claim.claimData.claimant.name %}
-{% set amount = claim.response.paymentDetails.amount | numeral %}
+{% set amount = claim.response.amount | numeral %}
 {% set fullAmount = claim.totalAmountTillToday | numeral %}
 
 {% if claim.response['isAlreadyPaid'] === YesNoOption.Yes.option %}
