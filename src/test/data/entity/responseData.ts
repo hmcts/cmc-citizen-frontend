@@ -113,7 +113,7 @@ export const partialAdmissionWithPaymentBySetDateData = {
   ...baseResponseData,
   ...basePartialAdmissionData,
   ...basePartialEvidencesAndTimeLines,
-  isAlreadyPaid: 'no',
+  isAlreadyPaid: 'yes',
   defence: 'i have paid more than enough',
   paymentIntention: {
     paymentOption: PaymentOption.BY_SPECIFIED_DATE,
@@ -137,7 +137,7 @@ export const partialAdmissionWithPaymentByInstalmentsData = {
   ...baseResponseData,
   ...basePartialAdmissionData,
   ...basePartialEvidencesAndTimeLines,
-  isAlreadyPaid: 'no',
+  isAlreadyPaid: 'yes',
   defence: 'i have paid more than enough',
   paymentIntention: {
     paymentOption: PaymentOption.INSTALMENTS,
