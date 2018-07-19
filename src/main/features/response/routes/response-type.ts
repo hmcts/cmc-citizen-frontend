@@ -61,6 +61,7 @@ export default express.Router()
         } else {
           delete draft.document.fullAdmission
           delete draft.document.partialAdmission
+          delete draft.document.statementOfMeans
         }
 
         await new DraftService().save(draft, user.bearerToken)
