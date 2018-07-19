@@ -6,6 +6,7 @@ import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResp
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { ResponseType } from 'claims/models/response/responseType'
 import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { ViewDefendantResponse } from 'claimant-response/tasks/viewDefendantResponse'
 
 export class TaskListBuilder {
   static buildDefendantResponseSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
@@ -14,8 +15,8 @@ export class TaskListBuilder {
     tasks.push(
       new TaskListItem(
         'View the defendant’s full response',
-        Paths.notImplementedYetPage.evaluateUri({ externalId: externalId }),
-        false
+        Paths.defendantsResponsePage.evaluateUri({ externalId: externalId }),
+        ViewDefendantResponse.isCompleted(draft)
       )
     )
 

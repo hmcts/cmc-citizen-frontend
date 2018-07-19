@@ -4,6 +4,8 @@ import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/val
 import { IsDefined, IsIn, IsPositive } from 'class-validator'
 import { Fractions } from '@hmcts/cmc-validators'
 import { IncomeExpenseSource as FormIncomeExpenseSource } from 'response/form/models/statement-of-means/incomeExpenseSource'
+import { Income } from 'claims/models/response/statement-of-means/income'
+import { Expense } from 'claims/models/response/statement-of-means/expense'
 
 export class IncomeExpenseSource {
 
@@ -40,6 +42,32 @@ export class IncomeExpenseSource {
 
     return new IncomeExpenseSource(
       toNumberOrUndefined(incomeSource.amount),
+      toIncomeExpenseScheduleOrUndefined(schedule)
+    )
+  }
+
+  static fromClaimIncome (income: Income): IncomeExpenseSource {
+    if (!income) {
+      return undefined
+    }
+
+    const schedule: string = income.frequency ? income.frequency : undefined
+
+    return new IncomeExpenseSource(
+      toNumberOrUndefined(income.amountReceived),
+      toIncomeExpenseScheduleOrUndefined(schedule)
+    )
+  }
+
+  static fromClaimExpense (expense: Expense): IncomeExpenseSource {
+    if (!expense) {
+      return undefined
+    }
+
+    const schedule: string = expense.frequency ? expense.frequency : undefined
+
+    return new IncomeExpenseSource(
+      toNumberOrUndefined(expense.amountPaid),
       toIncomeExpenseScheduleOrUndefined(schedule)
     )
   }

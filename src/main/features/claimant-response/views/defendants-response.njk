@@ -1,8 +1,10 @@
 {% extends "layout.njk" %}
+{% from "table.njk" import tableStart, tableEnd, row %}
 
 {% set heading = 'The defendant’s response' %}
 
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+{% from "financialDetails.njk" import financialDetailsTable %}
 
 {% set claimantName = claim.claimData.claimant.name %}
 
@@ -15,6 +17,7 @@
 
         <h2 class="heading-medium">{{ t('How they want to pay') }}</h2>
 
+        {{ row('Balance', account.balance | numeral, '', false, bold = false) }}
 
         <h3 class="heading-small form-group-related">{{ t('Why they can’t pay the full amount now') }}</h3>
 
@@ -23,10 +26,10 @@
 
         <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
 
-        <p>{{ t('Their total monthly income is {{ monthlyIncome }}',
-          { monthlyIncome: monthlyIncome | numeral }) }}</p>
-        <p>{{ t('Their total monthly expenses is {{ monthlyExpenses }}',
-          { monthlyExpenses: monthlyExpenses | numeral }) }}</p>
+        <p>{{ t('Their total monthly income is {{ totalMonthlyIncome }}',
+          { totalMonthlyIncome: totalMonthlyIncome | numeral }) }}</p>
+        <p>{{ t('Their total monthly expenses is {{ totalMonthlyExpenses }}',
+          { totalMonthlyExpenses: totalMonthlyExpenses | numeral }) }}</p>
 
         <summary>{{ t('See their financial details') }}</summary>
 
@@ -43,16 +46,17 @@
 
         <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
 
-        <p>{{ t('Their total monthly income is {{ monthlyIncome }}',
-          { monthlyIncome: monthlyIncome | numeral }) }}</p>
-        <p>{{ t('Their total monthly expenses is {{ monthlyExpenses }}',
-          { monthlyExpenses: monthlyExpenses | numeral }) }}</p>
+        <p>{{ t('Their total monthly income is {{ totalMonthlyIncome }}',
+          { totalMonthlyIncome: totalMonthlyIncome | numeral }) }}</p>
+        <p>{{ t('Their total monthly expenses is {{ totalMonthlyExpenses }}',
+          { totalMonthlyExpenses: totalMonthlyExpenses | numeral }) }}</p>
 
-        <summary>{{ t('See their financial details') }}</summary>
+        {{ financialDetailsTable('See their financial details', claim) }}
+
 
       {% endif %}
 
-      {% if draft.response.type === ResponseType.PART_ADMISSION %}
+      {% if claim.response.ResponseType === ResponseType.PART_ADMISSION %}
         <p>{{ t('{{ claimantName }} admits they owe all the money you’ve claimed.', { claimantName: claimantName }) }}</p>
 
         <p>{{ t('They’ve offered to pay you this in instalments.') }}</p>
@@ -87,6 +91,7 @@
       {% endif %}
 
       <form novalidate method="post">
+
         {{ csrfProtection(csrf) }}
 
         {{ submitButton('Continue') }}
