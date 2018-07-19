@@ -80,7 +80,7 @@ export const partialAdmissionWithImmediatePaymentData = {
   ...baseResponseData,
   ...basePartialAdmissionData,
   ...basePartialEvidencesAndTimeLines,
-  isAlreadyPaid: 'no',
+  isAlreadyPaid: 'yes',
   defence: 'i have paid more than enough',
   paymentIntention: {
     paymentOption: PaymentOption.IMMEDIATELY,
