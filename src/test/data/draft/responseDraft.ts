@@ -94,7 +94,7 @@ export const fullAdmissionWithImmediatePaymentDraft = {
 
 export const basePartialFuturePaymentDetails = {
   alreadyPaid: {
-    option: YesNoOption.NO
+    option: YesNoOption.YES
   } as AlreadyPaid,
   howMuchHaveYouPaid: {
     amount: 3000
