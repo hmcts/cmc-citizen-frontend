@@ -4,8 +4,7 @@
 
 {% block additional_scripts %}
   {% include "expandable-checkbox-option-scripts.njk" %}
-  {% include "income-expense-calculation-scripts.njk" %}
-  {% include "append-income-source-section.njk" %}
+  {% include "income-expense-scripts.njk" %}
 {% endblock %}
 
 {% set heading = 'What regular income do you receive?' %}
@@ -49,7 +48,7 @@
   {% set checkboxName = name + 'Declared' %}
 
   {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.valueFor(name).populated)), label = label) %}
-    {{ incomeExpenseSource(form = form, name = name, amountLabel = 'Amount received', amountHint = hint, scheduleLabel = 'Received every') }}
+    {{ incomeExpenseSource(form = form, name = name, sourceLabel = 'Source of income', amountLabel = 'Amount received', amountHint = hint, scheduleLabel = 'Received every') }}
     {{ linkButton(name = 'action[resetIncomeSource][' + name + ']', label = 'Reset this income source', class = 'link-button js-hidden') }}
   {% endcall %}
 {% endmacro %}
@@ -57,28 +56,31 @@
 {% macro incomeSources(form, name, label, hint) %}
   {% set checkboxName = name + 'Declared' %}
 
-  {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.model.anyOtherIncomePopulated)), label = label) %}
-    {% for source in form.model.otherSources %}
-      <div class="other-income-expense-source">
-        {{ incomeExpenseSource(form = form, name = name + '[' + loop.index0 + ']', amountLabel = 'Amount received', amountHint = hint, scheduleLabel = 'Received every', nameEditable = true) }}
-        {% if form.model.otherSources.length > 1 %}
-          {{ linkButton(name = 'action[removeOtherIncomeSource][otherSources.' + loop.index0 + ']', label = 'Remove this income source', class = 'link-button') }}
-        {% else %}
-          {{ linkButton(name = 'action[resetIncomeSource][' + name + '.0]', label = 'Reset this income source', class = 'link-button js-hidden') }}
-        {% endif %}
-      </div>
-    {% endfor %}
+  {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.model.anyOtherIncomePopulated)), label = label, additionalClasses = 'other-section') %}
+    <div>
+      {% for source in form.model.otherSources %}
+        <div class="other-income-expense-source">
+          {{ incomeExpenseSource(form = form, name = name + '[' + loop.index0 + ']', sourceLabel = 'Source of income', amountLabel = 'Amount received', amountHint = hint, scheduleLabel = 'Received every', nameEditable = true) }}
+          {% if form.model.otherSources.length > 1 %}
+            {{ linkButton(name = 'action[removeOtherIncomeSource][otherSources.' + loop.index0 + ']', label = 'Remove this income source', class = 'link-button') }}
+          {% else %}
+            {{ linkButton(name = 'action[removeOtherIncomeSource][otherSources.' + loop.index0 + ']', label = 'Remove this income source', class = 'link-button hidden') }}
+            {{ linkButton(name = 'action[resetIncomeSource][' + name + '.0]', label = 'Reset this income source', class = 'link-button js-hidden') }}
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
 
     {{ linkButton(name = 'action[addOtherIncomeSource]', label = 'Add another source of income', class = 'button button-secondary') }}
   {% endcall %}
 {% endmacro %}
 
-{% macro expandableCheckboxOption(form, name, value, checked = false, label, hint = '', bold = false) %}
+{% macro expandableCheckboxOption(form, name, value, checked = false, label, hint = '', bold = false, additionalClasses = undefined) %}
   {% set expandablePanelId = name + '-' + value | replace(' ', '') %}
   <div class="expandable-checkbox-option">
     <h3 class="heading-medium expandable">{{ t(label) }}</h3>
     {{ option(form = form, name = name, value = value, type = 'checkbox', checked = checked, label = label, hint = hint, bold = bold, hidden = true, className = 'expandable visually-hidden', dataTarget = expandablePanelId) }}
-    <div class="panel panel-border-narrow expandable" id="{{ expandablePanelId }}">
+    <div class="panel panel-border-narrow expandable{{ ' ' + additionalClasses if additionalClasses }}" id="{{ expandablePanelId }}">
       {{ caller() }}
     </div>
   </div>

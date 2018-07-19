@@ -31,9 +31,10 @@ import { DefendantHowMuchHaveYouPaidClaimantPage } from 'integration-test/tests/
 import { DefendantWhenDidYouPayPage } from 'integration-test/tests/citizen/defence/pages/defendant-when-did-you-pay'
 import { ClaimStoreClient } from 'integration-test/helpers/clients/claimStoreClient'
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
-import I = CodeceptJS.I
 import { DefendantEvidencePage } from 'integration-test/tests/citizen/defence/pages/defendant-evidence'
-import { AlreadyPaidPage } from '../pages/statement-of-means/already-paid'
+import { AlreadyPaidPage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/already-paid'
+import { DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-have-you-paid-the-claimant-the-amount-you-admit-you-owe'
+import I = CodeceptJS.I
 
 const I: I = actor()
 const defendantStartPage: DefendantStartPage = new DefendantStartPage()
@@ -65,6 +66,7 @@ const defendantSteps: DefendantSteps = new DefendantSteps()
 const statementOfMeansSteps: StatementOfMeansSteps = new StatementOfMeansSteps()
 const defendantHowMuchHaveYouPaidClaimantPage: DefendantHowMuchHaveYouPaidClaimantPage = new DefendantHowMuchHaveYouPaidClaimantPage()
 const defendantWhenDidYouPayPage: DefendantWhenDidYouPayPage = new DefendantWhenDidYouPayPage()
+const haveYouPaidTheClaimantPage: DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage = new DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage()
 
 const updatedAddress = { line1: 'ABC Street', line2: 'A cool place', city: 'Bristol', postcode: 'BS1 5TL' }
 
@@ -195,9 +197,9 @@ export class DefenceSteps {
 
     defendantSteps.selectTaskHowMuchHaveYouPaid()
 
-    defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplaination(
+    defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplanation(
       100,
-      { day: '1', month: '1', year: '1990' },
+      '1990-01-01' ,
       'I will not pay that much!'
     )
 
@@ -337,6 +339,32 @@ export class DefenceSteps {
     }
   }
 
+  makePartialAdmission (defendantType: PartyType): void {
+    I.dontSee('COMPLETE')
+
+    this.confirmYourDetails(createDefendant(defendantType))
+
+    this.requestMoreTimeToRespond()
+
+    defendantSteps.selectTaskChooseAResponse()
+    defendantDefenceTypePage.admitPartOfMoneyClaim()
+    I.see('Have you paid the claimant the amount you admit you owe?')
+    haveYouPaidTheClaimantPage.selectYesOption()
+    defendantSteps.selectTaskHowMuchHaveYouPaid()
+    defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplanation(
+      defence.paidWhatIBelieveIOwe.howMuchAlreadyPaid,
+      defence.paidWhatIBelieveIOwe.paidDate,
+      defence.paidWhatIBelieveIOwe.explanation)
+    defendantSteps.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
+    defendantYourDefencePage.enterYourDefence('I have already paid for the bill')
+    this.addTimeLineOfEvents(defence.timeline)
+    this.enterEvidence('description', 'They do not have evidence')
+    defendantSteps.selectCheckAndSubmitYourDefence()
+    this.checkAndSendAndSubmit(defendantType)
+
+    I.see('You’ve submitted your response')
+  }
+
   sendDefenceResponseHandOff (claimRef: string, defendant: Party, claimant: Party, defenceType: DefenceType): void {
     I.click('Respond to claim')
     I.see('Confirm your details')
@@ -351,6 +379,11 @@ export class DefenceSteps {
     this.requestMoreTimeToRespond()
 
     switch (defenceType) {
+      case DefenceType.PART_ADMISSION:
+        this.admitPartOfClaim()
+        I.see('Have you paid the claimant the amount you admit you owe?')
+        break
+
       case DefenceType.FULL_REJECTION_WITH_COUNTER_CLAIM:
         this.admitAllOfClaimAndMakeCounterClaim()
         I.see('Counterclaim fee')

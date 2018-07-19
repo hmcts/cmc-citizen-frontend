@@ -30,6 +30,9 @@
       {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
         {% include "./confirmation/full-defence.njk" %}
       {% endif %}
+      {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+        {% include "./confirmation/part-admission.njk" %}
+      {% endif %}
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
 
@@ -38,6 +41,10 @@
       {% endif %}
       {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
         {% include "./confirmation/full-defence-steps.njk" %}
+      {% endif %}
+
+      {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+        {% include "./confirmation/part-admission-steps.njk" %}
       {% endif %}
 
       {% include "includes/service_survey_link.njk" %}
