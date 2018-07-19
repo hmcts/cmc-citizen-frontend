@@ -5,7 +5,7 @@ import * as config from 'config'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 
-import { Paths, PartAdmissionPaths } from 'response/paths'
+import { PartAdmissionPaths, Paths } from 'response/paths'
 
 import { app } from 'main/app'
 
@@ -24,7 +24,7 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = PartAdmissionPaths.howMuchDoYouOwePage.evaluateUri({ externalId: externalId })
 const redirectPath = Paths.taskListPage.evaluateUri({ externalId: externalId })
 
-const validFormData = { amount: 100 }
+const validFormData = { amount: 100, totalAmount: claimStoreServiceMock.sampleClaimObj.totalAmountTillToday }
 const header: string = 'How much money do you admit you owe?'
 
 describe('Defendant: partial admission - ' + header, () => {
