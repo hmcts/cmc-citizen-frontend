@@ -1,57 +1,55 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton %}
 
 {% set heading = 'Free mediation' %}
 
 {% block content %}
-  <div class="grid-row">
-    <div class="column-two-thirds">
+<div class="grid-row">
+  <div class="column-two-thirds">
 
-      <p>{{ t('Many people resolve their dispute without a hearing by taking part in telephone mediation.') }}</p>
+    {% if amount %}
+    <p>{{ t('If {{ claimantFullName }} rejects your admission of {{ amount }} you can try to resolve this dispute using
+      telephone mediation.',
+      { claimantFullName : claimantFullName, amount: amount | numeral }) }}</p>
+    <p>{{ t('If you succeed, you won’t have to go to a hearing.') }}</p>
+    {% else %}
+    <p>{{ t('Many people resolve their dispute without a hearing by taking part in telephone mediation.') }}</p>
+    {% endif %}
 
-      <p>{{ t('A mediator will:') }}</p>
+    <p>{{ t('A mediator will:') }}</p>
 
-      <ul class="list list-bullet">
-        <li>{{ t('listen to each side separately - you won’t talk to directly to the other side') }}</li>
-        <li>{{ t('ask you to consider what the other side says - they won’t force you to settle') }}</li>
-        <li>{{ t('help you reach an agreement, if possible') }}</li>
-      </ul>
+    <ul class="list list-bullet">
+      <li>{{ t('listen to each side separately - you won’t talk to directly to the other side') }}</li>
+      <li>{{ t('ask you to consider what the other side says - they won’t force you to settle') }}</li>
+      <li>{{ t('help you reach an agreement, if possible') }}</li>
+    </ul>
 
-      <form method="post"
-            class="analytics-submit-event-trigger"
-            data-event-action="Response: Free mediation"
-            data-event-label-from="option" novalidate>
-        {{ csrfProtection(csrf) }}
-        <div class="form-group">
+    <form method="post"
+          class="analytics-submit-event-trigger"
+          data-event-action="Response: Free mediation"
+          data-event-label-from="option" novalidate>
 
-          <fieldset>
-            <legend id="option[label]" class="form-group">
-              <h2 class="bold-medium">{{ t('Will you try telephone mediation?') }}</h2>
-            </legend>
+      {{ csrfProtection(csrf) }}
 
-            {{
-              radioOption(
-                label = t('Yes'),
-                name = 'option',
-                form = form,
-                value = 'yes'
-              )
-            }}
-            {{
-              radioOption(
-                label = t('No'),
-                name = 'option',
-                form = form,
-                value = 'no'
-              )
-            }}
-          </fieldset>
-        </div>
-        <div class="form-group">
-          {{ saveAndContinueButton() }}
-        </div>
-      </form>
-    </div>
+      {% set name = 'option' %}
+
+      {{
+        radioGroup(
+          label = 'Will you try telephone mediation?',
+          name = name,
+          options = [
+            { label: t('Yes'), value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES) },
+            { label: t('No'), value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO) }
+          ],
+          form = form,
+          labelForScreenReadersOnly = false,
+          isInline = true
+        )
+      }}
+
+      {{ saveAndContinueButton() }}
+    </form>
   </div>
+</div>
 {% endblock %}
 
