@@ -8,21 +8,20 @@ export class SettleAdmitted {
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED })
   admitted?: YesNoOption
 
-  constructor (option?: YesNoOption) {
-    this.admitted = option
+  constructor (admitted?: YesNoOption) {
+    this.admitted = admitted
   }
 
-  public static fromObject (input?: any): SettleAdmitted {
-    if (!input) {
+  static fromObject (input?: any): SettleAdmitted {
+    if (input == null) {
       return input
     }
-
     return new SettleAdmitted(YesNoOption.fromObject(input.admitted))
   }
 
   deserialize (input?: any): SettleAdmitted {
     if (input && input.admitted) {
-      this.admitted = YesNoOption.fromObject(input.admitted)
+      this.admitted = YesNoOption.fromObject(input.admitted.option)
     }
 
     return this

@@ -6,6 +6,7 @@ import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResp
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { ResponseType } from 'claims/models/response/responseType'
 import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { NumberFormatter } from 'utils/numberFormatter'
 
 export class TaskListBuilder {
   static buildDefendantResponseSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
@@ -31,6 +32,16 @@ export class TaskListBuilder {
         new TaskListItem(
           'Accept or reject their response',
           Paths.notImplementedYetPage.evaluateUri({ externalId: externalId }),
+          false
+        )
+      )
+    }
+
+    if (claim.response && claim.response.responseType === ResponseType.PART_ADMISSION && claim.response.amount) {
+      tasks.push(
+        new TaskListItem(
+          'Accept or reject the ' + NumberFormatter.formatMoney(claim.response.amount),
+          Paths.settleAdmittedPage.evaluateUri({ externalId: externalId }),
           false
         )
       )

@@ -10,10 +10,13 @@ import { Draft } from '@hmcts/draft-store-client'
 import { Paths } from 'claimant-response/paths'
 import { SettleAdmitted } from 'claimant-response/form/models/settleAdmitted'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
+import { Claim } from 'claims/models/claim'
 
 function renderView (form: Form<SettleAdmitted>, res: express.Response) {
+  const claim: Claim = res.locals.claim
   res.render(Paths.settleAdmittedPage.associatedView, {
-    form: form
+    form: form,
+    claim: claim
   })
 }
 
@@ -30,7 +33,6 @@ export default express.Router()
     FormValidator.requestHandler(SettleAdmitted, SettleAdmitted.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<SettleAdmitted> = req.body
-
       if (form.hasErrors()) {
         renderView(form, res)
       } else {

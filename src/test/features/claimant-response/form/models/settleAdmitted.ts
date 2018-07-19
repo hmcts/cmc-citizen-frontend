@@ -43,16 +43,16 @@ describe('SettleAdmitted', () => {
     })
 
     it('empty object when unknown value provided', () => {
-      const model = SettleAdmitted.fromObject({ option: 'I do not know this value!' })
+      const model = SettleAdmitted.fromObject({ admitted: 'I do not know this value!' })
 
-      expect(model.option).to.be.eq(undefined)
+      expect(model.admitted).to.be.eq(undefined)
     })
 
     YesNoOption.all().forEach(item => {
       it(`valid object when ${item.option} provided`, () => {
-        const model = SettleAdmitted.fromObject({ option: item.option })
+        const model = SettleAdmitted.fromObject({ admitted: item.option })
 
-        expect(model.option).to.be.eq(item)
+        expect(model.admitted).to.be.eq(item)
       })
     })
   })
@@ -65,7 +65,7 @@ describe('SettleAdmitted', () => {
 
     YesNoOption.all().forEach(item => {
       it('should return an instance from given object', () => {
-        const actual: SettleAdmitted = new SettleAdmitted().deserialize({ option: item.option })
+        const actual: SettleAdmitted = new SettleAdmitted().deserialize({ admitted: item })
 
         expect(actual).to.be.eql(new SettleAdmitted(item))
       })
