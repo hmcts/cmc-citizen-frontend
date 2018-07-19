@@ -1,14 +1,14 @@
 import { IsDefined, IsPositive } from 'class-validator'
 import { Fractions, IsLessThan } from '@hmcts/cmc-validators'
-import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
+import { ValidationErrors } from 'forms/validation/validationErrors'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 
 export class HowMuchDoYouOwe {
 
-  @IsDefined({ message: DefaultValidationErrors.AMOUNT_REQUIRED })
-  @IsLessThan('totalAmount', { message: DefaultValidationErrors.AMOUNT_ENTERED_TOO_LARGE })
-  @IsPositive({ message: DefaultValidationErrors.AMOUNT_NOT_VALID })
-  @Fractions(0, 2, { message: DefaultValidationErrors.AMOUNT_INVALID_DECIMALS })
+  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED })
+  @IsLessThan('totalAmount', { message: ValidationErrors.AMOUNT_ENTERED_TOO_LARGE })
+  @IsPositive({ message: ValidationErrors.AMOUNT_NOT_VALID })
+  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS })
   amount?: number
 
   totalAmount?: number
