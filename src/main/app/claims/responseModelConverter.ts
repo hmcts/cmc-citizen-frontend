@@ -104,10 +104,17 @@ export class ResponseModelConverter {
   }
 
   private static convertPartAdmission (draft: ResponseDraft): PartialAdmissionResponse {
+    let amount
+    if (draft.partialAdmission.alreadyPaid.option === YesNoOption.YES) {
+      amount = draft.partialAdmission.howMuchHaveYouPaid.amount
+    } else {
+      amount = draft.partialAdmission.howMuchDoYouOwe.amount
+    }
+
     return {
       responseType: ResponseType.PART_ADMISSION,
       isAlreadyPaid: draft.partialAdmission.alreadyPaid.option.option as YesNoOption,
-      amount: draft.partialAdmission.howMuchHaveYouPaid.amount,
+      amount: amount,
       paymentDeclaration: draft.partialAdmission.howMuchHaveYouPaid.date
       && draft.partialAdmission.howMuchHaveYouPaid.text
       && {
