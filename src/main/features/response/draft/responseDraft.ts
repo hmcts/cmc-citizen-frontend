@@ -54,6 +54,9 @@ export class PartialAdmission {
   whyDoYouDisagree?: WhyDoYouDisagree
   timeline?: DefendantTimeline
   evidence?: DefendantEvidence
+  paymentOption?: PaymentOption
+  paymentDate?: PaymentDate
+  paymentPlan?: PaymentPlan
 
   deserialize (input: any): PartialAdmission {
     if (input) {
@@ -62,6 +65,15 @@ export class PartialAdmission {
       this.whyDoYouDisagree = new WhyDoYouDisagree().deserialize(input.whyDoYouDisagree)
       this.timeline = new DefendantTimeline().deserialize(input.timeline)
       this.evidence = new DefendantEvidence().deserialize(input.evidence)
+      if (input.paymentOption) {
+        this.paymentOption = new PaymentOption().deserialize(input.paymentOption)
+      }
+      if (input.paymentDate) {
+        this.paymentDate = new PaymentDate().deserialize(input.paymentDate)
+      }
+      if (input.paymentPlan) {
+        this.paymentPlan = new PaymentPlan().deserialize(input.paymentPlan)
+      }
     }
 
     return this
@@ -141,9 +153,16 @@ export class ResponseDraft extends DraftDocument {
   // is incomplete. ROC-3658 should revisit once 'statement of means' flow is complete.
   public isResponseFullyAdmittedWithInstalments (): boolean {
     return this.isResponseFullyAdmitted()
-      && this.fullAdmission
-      && this.fullAdmission.paymentOption
-      && (this.fullAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS)
+      && this.fullAdmission !== undefined
+      && this.fullAdmission.paymentOption !== undefined
+      && this.fullAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS
+  }
+
+  public isResponsePartiallyAdmittedWithInstalments (): boolean {
+    return this.isResponsePartiallyAdmitted()
+      && this.partialAdmission !== undefined
+      && this.partialAdmission.paymentOption !== undefined
+      && this.partialAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS
   }
 
   public isResponsePartiallyAdmitted (): boolean {
@@ -191,6 +210,13 @@ export class ResponseDraft extends DraftDocument {
 
   public isResponseFullyAdmittedWithPayBySetDate (): boolean {
     return this.fullAdmission !== undefined
+      && this.fullAdmission.paymentOption !== undefined
       && this.fullAdmission.paymentOption.option === DefendantPaymentType.BY_SET_DATE
+  }
+
+  public isResponsePartiallyAdmittedWithPayBySetDate (): boolean {
+    return this.partialAdmission !== undefined
+      && this.partialAdmission.paymentOption !== undefined
+      && this.partialAdmission.paymentOption.option === DefendantPaymentType.BY_SET_DATE
   }
 }

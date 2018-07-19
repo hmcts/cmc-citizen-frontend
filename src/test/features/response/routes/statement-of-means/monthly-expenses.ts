@@ -122,7 +122,8 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
               rent: {
                 amount: -200,
                 schedule: IncomeExpenseSchedule.TWO_WEEKS.value
-              }})
+              }
+            })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Enter a valid mortgage amount, maximum two decimal places'))
             .expect(res => expect(res).to.be.successful.withText('Enter a valid rent amount, maximum two decimal places'))
@@ -142,7 +143,8 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
               rent: {
                 amount: 200.345,
                 schedule: IncomeExpenseSchedule.TWO_WEEKS.value
-              } })
+              }
+            })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Enter a valid mortgage amount, maximum two decimal places'))
             .expect(res => expect(res).to.be.successful.withText('Enter a valid rent amount, maximum two decimal places'))
@@ -160,7 +162,8 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
               },
               rent: {
                 schedule: IncomeExpenseSchedule.MONTH.value
-              } })
+              }
+            })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Enter how much you pay for mortgage'))
             .expect(res => expect(res).to.be.successful.withText('Enter how much you pay for rent'))
@@ -178,7 +181,8 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
               },
               rent: {
                 amount: 700
-              } })
+              }
+            })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Select how often you pay for mortgage'))
             .expect(res => expect(res).to.be.successful.withText('Select how often you pay for rent'))
@@ -218,17 +222,74 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
         })
       })
 
-      describe('add a new row', () => {
-
-        it('should update draft store and redirect', async () => {
+      describe('other actions', () => {
+        it('should add new row', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
 
           await request(app)
             .post(pagePath)
-            .send({ action: { addRow: 'Add row' } })
+            .send({
+              other: [
+                {
+                  name: '',
+                  amount: ''
+                },
+                {
+                  name: '',
+                  amount: ''
+                }],
+              action: { addOther: 'Add another expense' }
+            })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('What are your regular expenses?'))
+            .expect(res => expect(res).to.be.successful.withText('other[2][name]'))
+            .expect(res => expect(res).to.be.successful.withoutText('other[3][name]'))
+        })
+
+        it('should remove row', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              other: [
+                {
+                  name: '',
+                  amount: ''
+                },
+                {
+                  name: '',
+                  amount: ''
+                }],
+              action: { removeOther: 'Remove this expense source' }
+            })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('other[0][name]'))
+            .expect(res => expect(res).to.be.successful.withoutText('other[1][name]'))
+        })
+
+        it('should remove row', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              other: [
+                {
+                  name: 'abcdefghijkl',
+                  amount: '1234'
+                }],
+              action: {
+                reset: {
+                  'other.0': 'Reset this expense source'
+                }
+              }
+            })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('other[0][name]'))
+            .expect(res => expect(res).to.be.successful.withoutText('abcdefghijkl'))
         })
       })
     })

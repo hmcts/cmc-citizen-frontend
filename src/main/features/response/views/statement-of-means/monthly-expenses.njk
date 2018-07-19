@@ -77,7 +77,7 @@
 
   {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.valueFor(name).populated)), label = label) %}
     {{ incomeExpenseSource(form = form, name = name, sourceLabel = 'Source of expense', amountLabel = 'Amount paid', amountHint = hint, scheduleLabel = 'Paid every') }}
-    {{ linkButton(name = 'action[resetExpenseSource][' + name + ']', label = 'Reset this expense source', class = 'link-button js-hidden') }}
+    {{ linkButton(name = 'action[reset][' + name + ']', label = 'Reset this expense source', class = 'link-button js-hidden') }}
   {% endcall %}
 {% endmacro %}
 
