@@ -18,16 +18,16 @@ import { FeatureToggles } from 'utils/featureToggles'
 export class PaymentOptionPage {
   constructor (private admissionType: string) {}
 
-  buildRouter (): express.Router {
+  buildRouter (path: string = ''): express.Router {
     return express.Router()
-      .get(PaymentIntentionPaths.paymentOptionPage.uri,
+      .get(path + PaymentIntentionPaths.paymentOptionPage.uri,
         FeatureToggleGuard.featureEnabledGuard(this.admissionType),
         ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
           const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
           this.renderView(new Form(draft.document[this.admissionType].paymentOption), res)
         }))
-      .post(PaymentIntentionPaths.paymentOptionPage.uri,
+      .post(path + PaymentIntentionPaths.paymentOptionPage.uri,
         FeatureToggleGuard.featureEnabledGuard(this.admissionType),
         FormValidator.requestHandler(DefendantPaymentOption, DefendantPaymentOption.fromObject),
         ErrorHandling.apply(
