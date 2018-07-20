@@ -35,8 +35,8 @@
   {% set postcode = claim.claimData.defendant.address.postcode %}
 
 
-  {% set phone = claim.claimData.defendant.mobilePhone %}
-  {% set email = claimData.defendant.email %}
+  {% set phone = claim.response.defendant.mobilePhone %}
+  {% set email = claim.claimData.defendant.email %}
 
 {% endif %}
 
