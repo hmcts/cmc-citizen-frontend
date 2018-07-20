@@ -373,7 +373,7 @@ describe('Defendant response task list builder', () => {
 
       context('should be disabled when', () => {
 
-        it('should be disabled when response is not rejected with dispute', () => {
+        it('response is not rejected with dispute', () => {
           isResponseRejectedFullyWithDisputeStub.returns(false)
           isResponsePartiallyAdmitted.returns(false)
 

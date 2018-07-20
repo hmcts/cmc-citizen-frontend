@@ -47,7 +47,7 @@ export const partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted = {
   ...baseDefenceDraft,
   partialAdmission: { whyDoYouDisagree: new WhyDoYouDisagree('I am not sure') },
   timeline: new DefendantTimeline(),
-  Evidence: new DefendantEvidence()
+  evidence: new DefendantEvidence()
 }
 
 export const defenceWithDisputeDraft = {
