@@ -92,12 +92,14 @@ export class ResponseModelConverter {
     return {
       responseType: ResponseType.FULL_ADMISSION,
       defendant: this.convertPartyDetails(draft.defendantDetails),
-      paymentOption: draft.fullAdmission.paymentOption.option.value as PaymentOption,
-      paymentDate: this.convertPaymentDate(draft.fullAdmission.paymentOption, draft.fullAdmission.paymentDate),
-      repaymentPlan: draft.fullAdmission.paymentPlan && {
-        instalmentAmount: draft.fullAdmission.paymentPlan.instalmentAmount,
-        firstPaymentDate: draft.fullAdmission.paymentPlan.firstPaymentDate.toMoment(),
-        paymentSchedule: draft.fullAdmission.paymentPlan.paymentSchedule.value as PaymentSchedule
+      paymentIntention: draft.fullAdmission.paymentOption && {
+        paymentOption: draft.fullAdmission.paymentOption.option.value as PaymentOption,
+        paymentDate: this.convertPaymentDate(draft.fullAdmission.paymentOption, draft.fullAdmission.paymentDate),
+        repaymentPlan: draft.fullAdmission.paymentPlan && {
+          instalmentAmount: draft.fullAdmission.paymentPlan.instalmentAmount,
+          firstPaymentDate: draft.fullAdmission.paymentPlan.firstPaymentDate.toMoment(),
+          paymentSchedule: draft.fullAdmission.paymentPlan.paymentSchedule.value as PaymentSchedule
+        }
       },
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft)

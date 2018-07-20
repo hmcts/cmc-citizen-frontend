@@ -53,8 +53,7 @@ export namespace PartialAdmissionResponse {
         rows: input.evidence && input.evidence.rows || [],
         comment: input.evidence && input.evidence.comment || undefined
       } as DefendantEvidence,
-      paymentIntention: input.paymentIntention
-      && {
+      paymentIntention: input.paymentIntention && {
         paymentOption: input.paymentIntention.paymentOption as PaymentOption,
         paymentDate: input.paymentIntention.paymentDate && MomentFactory.parse(input.paymentIntention.paymentDate),
         repaymentPlan: input.paymentIntention.repaymentPlan && {
