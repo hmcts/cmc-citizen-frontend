@@ -5,7 +5,7 @@
     {% if nameEditable %}
       {{ textInput(form = form, name = name + '[name]', label = sourceLabel) }}
     {% endif %}
-    {{ poundInput(form = form, name = name + '[amount]', label = amountLabel, hint = hinamountHintt) }}
+    {{ poundInput(form = form, name = name + '[amount]', label = amountLabel, hint = amountHint) }}
     {{ scheduleSource(form, name, label = scheduleLabel) }}
   </div>
 {% endmacro %}
