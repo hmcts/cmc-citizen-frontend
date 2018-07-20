@@ -71,7 +71,6 @@ export class Claim {
       this.totalAmountTillToday = input.totalAmountTillToday
       this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
       this.totalInterest = input.totalInterest
-
     }
     return this
   }

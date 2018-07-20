@@ -8,7 +8,7 @@
 {% if user.id === claim.claimantId %}
   {% set otherParty = 'Defendant:' %}
   {% set otherPartyName = claim.claimData.defendant.name %}
-  {% set phone = claim.claimData.defendant.mobilePhone %}
+  {% set phone = claim.response.defendant.mobilePhone %}
   {% set email = claim.claimData.defendant.email %}
   {% set correspondenceAddress = claim.response.defendant.correspondenceAddress %}
   {% set defendantResponded = claim.response %}
