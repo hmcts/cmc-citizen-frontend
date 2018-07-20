@@ -1,4 +1,5 @@
 import { RoutablePath } from 'shared/router/routablePath'
+import { Paths as PaymentIntentionPaths } from 'response/components/payment-intention/paths'
 
 const responsePath = '/case/:externalId/response'
 
@@ -53,11 +54,11 @@ export class StatementOfMeansPaths {
   static readonly explanationPage = new RoutablePath(`${statementOfMeansPath}/explanation`)
 }
 
-const fullAdmissionPath = `${responsePath}/full-admission`
+export const fullAdmissionPath = `${responsePath}/full-admission`
 
 export class FullAdmissionPaths {
-  static readonly paymentOptionPage = new RoutablePath(`${fullAdmissionPath}/payment-option`)
-  static readonly paymentDatePage: RoutablePath = new RoutablePath(`${fullAdmissionPath}/payment-date`)
+  static readonly paymentOptionPage = new RoutablePath(`${fullAdmissionPath}${PaymentIntentionPaths.paymentOptionPage.uri}`)
+  static readonly paymentDatePage = new RoutablePath(`${fullAdmissionPath}/payment-date`)
   static readonly paymentPlanPage = new RoutablePath(`${fullAdmissionPath}/payment-plan`)
 }
 
