@@ -1,5 +1,7 @@
 {% macro aboutClaimWidget(user, claim, showResponse = true) %}
 
+  {% set contactThem = 'contact-them' %}
+
 {% if user.id === claim.claimantId %}
   {% set otherPartyLabel = 'Defendant name:' %}
   {% set otherPartyName = claim.claimData.defendant.name %}
@@ -15,7 +17,7 @@
   <ul class="font-xsmall list">
     <li>
       <strong class="bold">{{ t(otherPartyLabel) }}</strong>
-      <div><a href="contact-them">{{ otherPartyName }}</a></div>
+      <div><a href={{ contactThem }}>{{ otherPartyName }}</a></div>
     </li>
     <li>
       <strong class="bold">{{ t('Claim amount:') }}</strong>

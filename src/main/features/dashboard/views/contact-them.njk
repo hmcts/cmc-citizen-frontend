@@ -6,37 +6,45 @@
 {% set headingVisible = false %}
 {% set heading = 'Claim status' %}
 
-
-
 {% if user.id === claim.claimantId %}
   {% set otherParty = 'Defendant:' %}
   {% set otherPartyName = claim.claimData.defendant.name %}
-
-  {% set line1 = claim.claimData.claimant.address.line1 %}
-  {% set line2 = claim.claimData.claimant.address.line2 %}
-  {% set line3 = claim.claimData.claimant.address.line3 %}
-  {% set city = claim.claimData.claimant.address.city %}
-  {% set postcode = claim.claimData.claimant.address.postcode %}
-
-
   {% set phone = claim.claimData.claimant.mobilePhone %}
   {% set email = claim.claimantEmail %}
 
-
+  {% if claim.claimData.claimant.correspondenceAddress != null %}
+    {% set line1 = claim.claimData.claimant.correspondenceAddress.line1 %}
+    {% set line2 = claim.claimData.claimant.correspondenceAddress.line2 %}
+    {% set line3 = claim.claimData.claimant.correspondenceAddress.line3 %}
+    {% set city = claim.claimData.claimant.correspondenceAddress.city %}
+    {% set postcode = claim.claimData.claimant.correspondenceAddress.postcode %}
+  {% else %}
+    {% set line1 = claim.claimData.claimant.address.line1 %}
+    {% set line2 = claim.claimData.claimant.address.line2 %}
+    {% set line3 = claim.claimData.claimant.address.line3 %}
+    {% set city = claim.claimData.claimant.address.city %}
+    {% set postcode = claim.claimData.claimant.address.postcode %}
+  {% endif %}
 
   {% elif user.id === claim.defendantId %}
   {% set otherParty = 'Claimant' %}
   {% set otherPartyName = claim.claimData.claimant.name %}
-
-  {% set line1 = claim.claimData.defendant.address.line1 %}
-  {% set line2 = claim.claimData.defendant.address.line2 %}
-  {% set line3 = claim.claimData.defendant.address.line3 %}
-  {% set city = claim.claimData.defendant.address.city %}
-  {% set postcode = claim.claimData.defendant.address.postcode %}
-
-
   {% set phone = claim.response.defendant.mobilePhone %}
   {% set email = claim.claimData.defendant.email %}
+
+  {% if claim.claimData.defendant.correspondenceAddress != null %}
+    {% set line1 = claim.claimData.defendant.correspondenceAddress.line1 %}
+    {% set line2 = claim.claimData.defendant.correspondenceAddress.line2 %}
+    {% set line3 = claim.claimData.defendant.correspondenceAddress.line3 %}
+    {% set city = claim.claimData.defendant.correspondenceAddress.city %}
+    {% set postcode = claim.claimData.defendant.correspondenceAddress.postcode %}
+  {% else %}
+    {% set line1 = claim.response.defendant.correspondenceAddress.line1 %}
+    {% set line2 = claim.response.defendant.correspondenceAddress.line2 %}
+    {% set line3 = claim.response.defendant.correspondenceAddress.line3 %}
+    {% set city = claim.response.defendant.correspondenceAddress.city %}
+    {% set postcode = claim.response.defendant.correspondenceAddress.postcode %}
+  {% endif %}
 
 {% endif %}
 
@@ -49,29 +57,44 @@
       </h1>
 
       <div>
-        <br>
-        {{ line1 }}
-        <br>
-        {{ line2 }}
-        <br>
-        {{ line3 }}
-        <br>
-        {{ city }}
-        <br>
-        {{ postcode }}
+        {% if line1 != null %}
+          <br>
+          {{ line1 }}
+        {% endif %}
+
+        {% if line2 != null %}
+          <br>
+          {{ line2 }}
+        {% endif %}
+
+        {% if line3 != null %}
+          <br>
+          {{ line3 }}
+        {% endif %}
+
+        {% if city != null %}
+          <br>
+          {{ city }}
+        {% endif %}
+
+        {% if postcode != null %}
+          <br>
+          {{ postcode }}
+          <br>
+        {% endif %}
       </div>
 
       <br>
       <div>
         {% if phone != undefined %}
-        {{ t('Phone: ' ) + phone }}
+          {{ t('Phone: ' ) + phone }}
         {% endif %}
       </div>
 
-      {%  if email != undefined %}
-      <p>
-        {{ t('Email: <a href="mailto:{{ email }}">{{ email }}</a>', { email: email }) | safe }}
-      </p>
+      {% if email != undefined %}
+        <p>
+          {{ t('Email: <a href="mailto:{{ email }}">{{ email }}</a>', { email: email }) | safe }}
+        </p>
       {% endif %}
     </div>
 
