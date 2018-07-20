@@ -10,7 +10,10 @@ import { FullAdmission, PartialAdmission, ResponseDraft } from 'response/draft/r
 import { TaskList } from 'drafts/tasks/taskList'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Claim } from 'claims/models/claim'
-import { defenceWithDisputeDraft } from 'test/data/draft/responseDraft'
+import {
+  defenceWithDisputeDraft,
+  partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted
+} from 'test/data/draft/responseDraft'
 import { MomentFactory } from 'shared/momentFactory'
 import { PartyType } from 'common/partyType'
 import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
@@ -87,33 +90,6 @@ describe('Defendant response task list builder', () => {
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('Why do you disagree with the claim?')
-      })
-    })
-
-    describe('"Free mediation" task', () => {
-      let stub: sinon.SinonStub
-      const responseDraft: ResponseDraft = new ResponseDraft().deserialize(defenceWithDisputeDraft)
-
-      beforeEach(() => {
-        stub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
-      })
-
-      afterEach(() => {
-        stub.restore()
-      })
-
-      it('should be enabled when response is rejected with dispute', () => {
-        stub.returns(true)
-
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.contain('Free mediation')
-      })
-
-      it('should be disabled when response is not rejected with dispute', () => {
-        stub.returns(false)
-
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('Free mediation')
       })
     })
 
@@ -353,6 +329,60 @@ describe('Defendant response task list builder', () => {
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('How much have you paid?')
         expect(taskList.tasks.map(task => task.name)).to.contain('Why do you disagree with the amount claimed?')
+      })
+    })
+
+    describe('"Consider free mediation" task', () => {
+      let isResponseRejectedFullyWithDisputeStub: sinon.SinonStub
+      let isResponsePartiallyAdmitted: sinon.SinonStub
+
+      beforeEach(() => {
+        isResponseRejectedFullyWithDisputeStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
+        isResponsePartiallyAdmitted = sinon.stub(ResponseDraft.prototype, 'isResponsePartiallyAdmitted')
+      })
+
+      afterEach(() => {
+        isResponseRejectedFullyWithDisputeStub.restore()
+        isResponsePartiallyAdmitted.restore()
+      })
+
+      context('should be enabled when', () => {
+
+        it('response is rejected with dispute', () => {
+          isResponseRejectedFullyWithDisputeStub.returns(true)
+          isResponsePartiallyAdmitted.returns(false)
+
+          const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
+            new ResponseDraft().deserialize(defenceWithDisputeDraft), claim
+          )
+
+          expect(taskList.tasks.map(task => task.name)).to.contain('Consider free mediation')
+        })
+
+        it('response is partial admission and why do you disagree is completed', () => {
+          isResponseRejectedFullyWithDisputeStub.returns(false)
+          isResponsePartiallyAdmitted.returns(true)
+
+          const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
+            new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim
+          )
+
+          expect(taskList.tasks.map(task => task.name)).to.contain('Consider free mediation')
+        })
+      })
+
+      context('should be disabled when', () => {
+
+        it('should be disabled when response is not rejected with dispute', () => {
+          isResponseRejectedFullyWithDisputeStub.returns(false)
+          isResponsePartiallyAdmitted.returns(false)
+
+          const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
+            new ResponseDraft().deserialize(defenceWithDisputeDraft), claim
+          )
+
+          expect(taskList).to.be.eq(undefined)
+        })
       })
     })
   })
