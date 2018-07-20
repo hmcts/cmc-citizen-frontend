@@ -141,6 +141,7 @@ export class ResponseModelConverter {
           paymentSchedule: draft.partialAdmission.paymentPlan.paymentSchedule.value as PaymentSchedule
         }
       },
+      freeMediation: draft.freeMediation && draft.freeMediation.option as YesNoOption,
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
