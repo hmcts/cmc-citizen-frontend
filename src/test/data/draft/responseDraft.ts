@@ -9,6 +9,9 @@ import { UnemploymentType } from 'response/form/models/statement-of-means/unempl
 import { individualDetails } from 'test/data/draft/partyDetails'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { YesNoOption } from 'models/yesNoOption'
+import { DefendantTimeline } from 'response/form/models/defendantTimeline'
+import { DefendantEvidence } from 'response/form/models/defendantEvidence'
+import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
 
 const baseResponseDraft = {
   defendantDetails: {
@@ -37,6 +40,14 @@ const baseDefenceDraft = {
   freeMediation: {
     option: 'no'
   }
+}
+
+export const partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted = {
+  ...baseResponseDraft,
+  ...baseDefenceDraft,
+  partialAdmission: { whyDoYouDisagree: new WhyDoYouDisagree('I am not sure') },
+  timeline: new DefendantTimeline(),
+  evidence: new DefendantEvidence()
 }
 
 export const defenceWithDisputeDraft = {
@@ -94,7 +105,7 @@ export const fullAdmissionWithImmediatePaymentDraft = {
 
 export const basePartialFuturePaymentDetails = {
   alreadyPaid: {
-    option: YesNoOption.NO
+    option: YesNoOption.YES
   } as AlreadyPaid,
   howMuchHaveYouPaid: {
     amount: 3000

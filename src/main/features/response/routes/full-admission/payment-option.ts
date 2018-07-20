@@ -59,6 +59,10 @@ export default express.Router()
 
           const option: DefendantPaymentType = form.model.option
 
+          if (option === DefendantPaymentType.IMMEDIATELY) {
+            draft.document.statementOfMeans = undefined
+          }
+
           if (option !== DefendantPaymentType.BY_SET_DATE) {
             draft.document.fullAdmission.paymentDate = undefined
           }
