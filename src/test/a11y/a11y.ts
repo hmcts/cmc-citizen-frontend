@@ -121,4 +121,5 @@ describe('Accessibility', () => {
   checkPaths(OfferPaths)
   checkPaths(StatementOfMeansPaths)
   checkPaths(FullAdmissionPaths)
+  checkPaths(ClaimantResponsePaths)
 })
