@@ -17,7 +17,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/incomeExpenseSources'
 import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
 import { Validator } from 'class-validator'
-import { IncomeExpenseSource } from 'response/form/models/statement-of-means/incomeExpenseSource'
+import { ExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
 
 const page: RoutablePath = StatementOfMeansPaths.monthlyExpensesPage
 
@@ -62,12 +62,13 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
         form.model.addEmptyOtherExpense()
         break
       case 'removeOther':
-        const selectedForRemoval: IncomeExpenseSource = form.valueFor(extractPropertyName(req.body.action[actionName]))
+        const selectedForRemoval: ExpenseSource = form.valueFor(extractPropertyName(req.body.action[actionName]))
         form.model.removeOtherExpense(selectedForRemoval)
         break
       case 'reset':
-        const selectedForReset: IncomeExpenseSource = form.valueFor(extractPropertyName(req.body.action[actionName]))
-        selectedForReset.reset()
+        const propertyName = extractPropertyName(req.body.action[actionName])
+        const selectedForReset: ExpenseSource = form.valueFor(propertyName)
+        form.model.resetExpense(propertyName, selectedForReset)
         break
     }
 

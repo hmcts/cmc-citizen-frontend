@@ -9,6 +9,7 @@ declare namespace Chai {
   }
   interface RenderAssertion {
     withText (...text: string[]): Assertion
+    withoutText (...text: string[]): Assertion
   }
   interface RedirectAssertion {
     toLocation (location: string | RegExp): Assertion

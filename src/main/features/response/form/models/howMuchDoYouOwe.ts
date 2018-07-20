@@ -1,27 +1,21 @@
-import { IsDefined, IsPositive, MaxLength, ValidateNested } from 'class-validator'
-import { IsPastDate } from 'forms/validation/validators/datePastConstraint'
-import { LocalDate } from 'forms/models/localDate'
-import { IsNotBlank, Fractions, IsValidLocalDate } from '@hmcts/cmc-validators'
-import { MomentFactory } from 'shared/momentFactory'
-import { MomentFormatter } from 'utils/momentFormatter'
-import { ValidationConstraints } from 'forms/validation/validationConstraints'
-import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
+import { IsDefined, IsPositive } from 'class-validator'
+import { Fractions, IsLessThan } from '@hmcts/cmc-validators'
+import { ValidationErrors } from 'forms/validation/validationErrors'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
-
-export class ValidationErrors {
-  static readonly AMOUNT_NOT_VALID: string = 'Enter valid amount'
-}
 
 export class HowMuchDoYouOwe {
 
-  @IsDefined({ message: DefaultValidationErrors.AMOUNT_REQUIRED })
+  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED })
+  @IsLessThan('totalAmount', { message: ValidationErrors.AMOUNT_ENTERED_TOO_LARGE })
   @IsPositive({ message: ValidationErrors.AMOUNT_NOT_VALID })
-  @Fractions(0, 2, { message: DefaultValidationErrors.AMOUNT_INVALID_DECIMALS })
+  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS })
   amount?: number
 
-  constructor (amount?: number, date?: LocalDate, text?: string) {
-    this.amount = amount
+  totalAmount?: number
 
+  constructor (amount?: number, totalAmount?: number) {
+    this.amount = amount
+    this.totalAmount = totalAmount
   }
 
   static fromObject (value?: any): HowMuchDoYouOwe {
@@ -30,13 +24,15 @@ export class HowMuchDoYouOwe {
     }
 
     const amount = toNumberOrUndefined(value.amount)
+    const totalAmount = toNumberOrUndefined(value.totalAmount)
 
-    return new HowMuchDoYouOwe(amount)
+    return new HowMuchDoYouOwe(amount, totalAmount)
   }
 
   deserialize (input: any): HowMuchDoYouOwe {
     if (input) {
       this.amount = input.amount
+      this.totalAmount = input.totalAmount
     }
 
     return this
