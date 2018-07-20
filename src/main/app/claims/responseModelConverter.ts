@@ -48,6 +48,7 @@ import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissio
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { YesNoOption as DraftYesNoOption } from 'models/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 
 export class ResponseModelConverter {
 
@@ -264,7 +265,7 @@ export class ResponseModelConverter {
     return party
   }
 
-  private static convertPaymentIntention (paymentOption: DefendantPaymentOption, paymentDate: PaymentDate, paymentPlan: any): PaymentIntention {
+  private static convertPaymentIntention (paymentOption: DefendantPaymentOption, paymentDate: PaymentDate, paymentPlan: DefendantPaymentPlan): PaymentIntention {
     return {
       paymentOption: paymentOption.option.value as PaymentOption,
       paymentDate: this.convertPaymentDate(paymentOption, paymentDate),
