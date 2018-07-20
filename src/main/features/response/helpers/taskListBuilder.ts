@@ -42,7 +42,7 @@ export class TaskListBuilder {
       )
     }
 
-    return new TaskList(1, 'Before you start', tasks)
+    return new TaskList('Before you start', tasks)
   }
 
   static buildRespondToClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
@@ -142,7 +142,23 @@ export class TaskListBuilder {
       )
     }
 
-    return new TaskList(2, 'Respond to claim', tasks)
+    return new TaskList('Respond to claim', tasks)
+  }
+
+  static buildResolvingClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
+    if (TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)) {
+      return new TaskList(
+        'Resolving the claim', [
+          new TaskListItem(
+            'Consider free mediation',
+            Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId }),
+            FreeMediationTask.isCompleted(draft)
+          )
+        ]
+      )
+    }
+
+    return undefined
   }
 
   static buildSubmitSection (draft: ResponseDraft, externalId: string): TaskList {
@@ -159,10 +175,14 @@ export class TaskListBuilder {
           false
         )
       )
-      return new TaskList(3, 'Submit', tasks)
+      return new TaskList('Submit', tasks)
     }
 
     return undefined
+  }
+
+  private static isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted (draft: ResponseDraft): boolean {
+    return draft.isResponsePartiallyAdmitted() && WhyDoYouDisagreeTask.isCompleted(draft)
   }
 
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {
