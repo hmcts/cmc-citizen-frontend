@@ -28,7 +28,6 @@ export class TaskListBuilder {
   static buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
     const externalId: string = claim.externalId
     const tasks: TaskListItem[] = []
-    console.log('draft:: ', JSON.stringify(draft))
     if (claim.response && claim.response.responseType === ResponseType.FULL_DEFENCE && claim.response.freeMediation === YesNoOption.NO) {
       tasks.push(
         new TaskListItem(

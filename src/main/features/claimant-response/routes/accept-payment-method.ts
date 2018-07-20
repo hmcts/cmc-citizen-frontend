@@ -15,21 +15,29 @@ import { PaymentOption } from 'claims/models/response/core/paymentOption'
 import { Response } from 'claims/models/response'
 import { ResponseType } from 'claims/models/response/responseType'
 import { Moment } from 'moment'
+import { generatePaymentPlan, PaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
 
 function renderView (form: Form<AcceptPaymentMethod>, res: express.Response) {
   const claim: Claim = res.locals.claim
-  console.log('getPaymentOption(claim.response)',getPaymentOption(claim.response))
-  console.log('getPaymentDate(claim.response)',getPaymentDate(claim.response))
   res.render(Paths.acceptPaymentMethodPage.associatedView, {
     form: form,
     claim: claim,
     paymentOption: getPaymentOption(claim.response),
-    paymentDate: getPaymentDate(claim.response)
+    paymentDate: getPaymentDate(claim.response),
+    paymentPlan: getPaymentPlan(claim)
   })
 }
 
+function getPaymentPlan (claim: Claim): PaymentPlan {
+  switch (claim.response.responseType) {
+    case ResponseType.PART_ADMISSION:
+      return generatePaymentPlan(claim.claimData.amount.totalAmount(), claim.response.paymentIntention.repaymentPlan)
+    default:
+      return undefined
+  }
+}
+
 function getPaymentOption (response: Response): PaymentOption {
-  console.log('response:: ', JSON.stringify(response))
   switch (response.responseType) {
     case ResponseType.FULL_ADMISSION:
       return response.paymentOption

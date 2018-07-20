@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 
 {% from "form.njk" import saveAndContinueButton, csrfProtection, radioGroup, radioGroupWithHintPanel, errorSummary %}
-
+{% from "./macro/paymentPlanTable.njk" import paymentPlanTable %}
 {% set heading = 'How they want to pay' %}
 
 {% block content %}
@@ -16,8 +16,14 @@
 
         {% if paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
         <p>{{ t('{{ defendantFullName }} has offered to pay you in full by {{ paymentDate }}.', { defendantFullName: claim.claimData.defendant.name, paymentDate: paymentDate | date }) }}</p>
-        {% elseif paymentOption === domain.PaymentOption.INSTALMENTS %}
-          <p> TODO: macro to render the repayment plan here...</p>
+        {% elseif paymentOption === domain.PaymentOption.INSTALMENTS and paymentPlan is defined %}
+          {{ paymentPlanTable(
+            'paymentPlanTable',
+            claim.response.paymentIntention.repaymentPlan.instalmentAmount,
+            claim.response.paymentIntention.repaymentPlan.firstPaymentDate,
+            paymentPlan.getLastPaymentDate(),
+            paymentPlan.getPaymentLength()
+          ) }}
         {% endif %}
 
         {{
