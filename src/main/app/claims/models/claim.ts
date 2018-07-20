@@ -72,8 +72,6 @@ export class Claim {
       this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
       this.totalInterest = input.totalInterest
 
-      this.claimData.claimant.address.line1
-
     }
     return this
   }

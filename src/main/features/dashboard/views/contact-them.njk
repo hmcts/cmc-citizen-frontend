@@ -10,7 +10,8 @@
   {% set otherPartyName = claim.claimData.defendant.name %}
   {% set phone = claim.claimData.defendant.mobilePhone %}
   {% set email = claim.claimData.defendant.email %}
-  {% set correspondenceAddress = claim.claimData.defendant.correspondenceAddress %}
+  {% set correspondenceAddress = claim.response.defendant.correspondenceAddress %}
+  {% set defendantResponded = claim.response %}
 
   {% if correspondenceAddress == null %}
     {% set line1 = claim.claimData.defendant.address.line1 %}
@@ -33,7 +34,7 @@
   {% set email = claim.claimantEmail %}
   {% set correspondenceAddress = claim.claimData.claimant.correspondenceAddress != null %}
 
-  {% if claim.claimData.claimant.correspondenceAddress == null %}
+  {% if correspondenceAddress == null %}
     {% set line1 = claim.claimData.claimant.address.line1 %}
     {% set line2 = claim.claimData.claimant.address.line2 %}
     {% set line3 = claim.claimData.claimant.address.line3 %}
@@ -57,8 +58,19 @@
         {{ otherPartyName }}
       </h1>
 
-      <div>
+      {% if defendantResponded != null %}
+        responded
+      {% else %}
+        no response
+      {% endif %}
+      <br>
+      {% if claim.response.defendant.correspondenceAddress != null %}
+        correspondenceAddress
+      {% else %}
+        address
+      {% endif %}
 
+      <div>
         {% if line1 != null %}
           <br>
           {{ line1 }}
