@@ -8,7 +8,7 @@
 
 {% if claim.response.paymentIntention %}
   {% if claim.response.paymentIntention.paymentDate %}
-    {% set paymentDate = claim.response.paymentDate | date %}
+    {% set paymentDate = claim.response.paymentIntention.paymentDate | date %}
   {% endif %}
   {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
     {% set paymentMethod = 'immediately' %}
