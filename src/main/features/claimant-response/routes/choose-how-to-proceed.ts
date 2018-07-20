@@ -14,8 +14,7 @@ import { User } from 'idam/user'
 function renderView (form: Form<ChooseHowToProceed>, res: express.Response, next: express.NextFunction) {
   try {
     res.render(Paths.chooseHowToProceedPage.associatedView, {
-      form: form,
-      ChooseHowToProceedOption: ChooseHowToProceedOption
+      form: form
     })
   } catch (err) {
     next(err)

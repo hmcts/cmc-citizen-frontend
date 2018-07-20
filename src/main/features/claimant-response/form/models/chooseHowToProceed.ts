@@ -1,7 +1,7 @@
 import { IsDefined, IsIn } from 'class-validator'
 
 export class ValidationErrors {
-  static readonly OPTION_REQUIRED: string = 'select an option'
+  static readonly OPTION_REQUIRED: string = 'Select an option'
 }
 
 export class ChooseHowToProceedOption {
