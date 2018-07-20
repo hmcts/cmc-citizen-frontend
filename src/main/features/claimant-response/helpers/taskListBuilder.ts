@@ -36,7 +36,7 @@ export class TaskListBuilder {
       )
     }
 
-    if (claim.response && claim.response.responseType === ResponseType.FULL_ADMISSION && claim.response.paymentOption !== PaymentOption.IMMEDIATELY) {
+    if (claim.response && claim.response.responseType === ResponseType.FULL_ADMISSION && claim.response.paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY) {
       tasks.push(
         new TaskListItem(
           'Accept or reject their repayment plan',
