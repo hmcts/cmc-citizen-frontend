@@ -57,12 +57,9 @@ new DashboardFeature().enableFor(app)
 new ClaimIssueFeature().enableFor(app)
 new DefendantFirstContactFeature().enableFor(app)
 new DefendantResponseFeature().enableFor(app)
-if (FeatureToggles.isEnabled('countyCourtJudgment')) {
-  new CCJFeature().enableFor(app)
-}
-if (FeatureToggles.isEnabled('offer')) {
-  new OfferFeature().enableFor(app)
-}
+new CCJFeature().enableFor(app)
+new OfferFeature().enableFor(app)
+
 if (FeatureToggles.isEnabled('testingSupport')) {
   new TestingSupportFeature().enableFor(app)
 }

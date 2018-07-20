@@ -2,70 +2,67 @@ import { expect } from 'chai'
 import { Validator } from 'class-validator'
 
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
-import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
-import {
-  IncomeExpenseSource,
-  ValidationErrors as MonthlyExpensesSourceValidationErrors
-} from 'response/form/models/statement-of-means/incomeExpenseSource'
+import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
+import { ExpenseSource, ValidationErrors as MonthlyExpensesSourceValidationErrors } from 'response/form/models/statement-of-means/expenseSource'
 import { FieldNames, MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
 
 function getSampleMonthtlyExpensesObject (options?: object) {
-  const DEFAULT_SAMPLE_VALID_MONTHLY_INCOME = {
+  const DEFAULT_SAMPLE_VALID_MONTHLY_EXPENSES = {
     mortgage: {
       amount: 100,
-      schedule: ExpenseSchedule.MONTH
+      schedule: IncomeExpenseSchedule.MONTH
     },
     rent: {
       amount: 200,
-      schedule: ExpenseSchedule.MONTH
+      schedule: IncomeExpenseSchedule.MONTH
     },
     councilTax: {
       amount: 300,
-      schedule: ExpenseSchedule.TWO_WEEKS
+      schedule: IncomeExpenseSchedule.TWO_WEEKS
     },
     gas: {
       amount: 400,
-      schedule: ExpenseSchedule.MONTH
+      schedule: IncomeExpenseSchedule.MONTH
     },
     electricity: {
       amount: 500,
-      schedule: ExpenseSchedule.MONTH
+      schedule: IncomeExpenseSchedule.MONTH
     },
     water: {
       amount: 600,
-      schedule: ExpenseSchedule.TWO_WEEKS
+      schedule: IncomeExpenseSchedule.TWO_WEEKS
     },
     travel: {
       amount: 700,
-      schedule: ExpenseSchedule.MONTH
+      schedule: IncomeExpenseSchedule.MONTH
     },
     schoolCosts: {
       amount: 800,
-      schedule: ExpenseSchedule.MONTH
+      schedule: IncomeExpenseSchedule.MONTH
     },
     foodAndHousekeeping: {
       amount: 900,
-      schedule: ExpenseSchedule.TWO_WEEKS
+      schedule: IncomeExpenseSchedule.TWO_WEEKS
     },
     tvAndBroadband: {
       amount: 100,
-      schedule: ExpenseSchedule.TWO_WEEKS
+      schedule: IncomeExpenseSchedule.TWO_WEEKS
     },
     hirePurchase: {
       amount: 100,
-      schedule: ExpenseSchedule.TWO_WEEKS
+      schedule: IncomeExpenseSchedule.TWO_WEEKS
     },
     mobilePhone: {
       amount: 100,
-      schedule: ExpenseSchedule.TWO_WEEKS
+      schedule: IncomeExpenseSchedule.TWO_WEEKS
     },
     maintenance: {
       amount: 100,
-      schedule: ExpenseSchedule.TWO_WEEKS
+      schedule: IncomeExpenseSchedule.TWO_WEEKS
     }
   }
 
-  const sampleData = Object.assign({}, DEFAULT_SAMPLE_VALID_MONTHLY_INCOME, options || {})
+  const sampleData = Object.assign({}, DEFAULT_SAMPLE_VALID_MONTHLY_EXPENSES, options || {})
 
   return {
     sampleData,
@@ -77,19 +74,19 @@ function getSampleMonthtlyExpensesObject (options?: object) {
 
 function forConstructor () {
   return new MonthlyExpenses(
-    undefined, new IncomeExpenseSource(FieldNames.MORTGAGE, this.sampleData.mortgage.amount, this.sampleData.mortgage.schedule),
-    undefined, new IncomeExpenseSource(FieldNames.RENT, this.sampleData.rent.amount, this.sampleData.rent.schedule),
-    undefined, new IncomeExpenseSource(FieldNames.COUNCIL_TAX, this.sampleData.councilTax.amount, this.sampleData.councilTax.schedule),
-    undefined, new IncomeExpenseSource(FieldNames.GAS, this.sampleData.gas.amount, this.sampleData.gas.schedule),
-    undefined, new IncomeExpenseSource(FieldNames.ELECTRICITY, this.sampleData.electricity.amount, this.sampleData.electricity.schedule),
-    undefined, new IncomeExpenseSource(FieldNames.WATER, this.sampleData.water.amount, this.sampleData.water.schedule),
-    undefined, new IncomeExpenseSource(FieldNames.TRAVEL, this.sampleData.travel.amount, this.sampleData.travel.schedule),
-    undefined, new IncomeExpenseSource(FieldNames.SCHOOL, this.sampleData.schoolCosts.amount, this.sampleData.schoolCosts.schedule),
-    undefined, new IncomeExpenseSource(FieldNames.FOOD_AND_HOUSEKEEPING, this.sampleData.foodAndHousekeeping.amount, this.sampleData.foodAndHousekeeping.schedule),
-    undefined, new IncomeExpenseSource(FieldNames.TV_AND_BROADBAND, this.sampleData.tvAndBroadband.amount, this.sampleData.tvAndBroadband.schedule),
-    undefined, new IncomeExpenseSource(FieldNames.HIRE_PURCHASE, this.sampleData.hirePurchase.amount, this.sampleData.hirePurchase.schedule),
-    undefined, new IncomeExpenseSource(FieldNames.MOBILE_PHONE, this.sampleData.mobilePhone.amount, this.sampleData.mobilePhone.schedule),
-    undefined, new IncomeExpenseSource(FieldNames.MAINTENANCE, this.sampleData.maintenance.amount, this.sampleData.maintenance.schedule)
+    undefined, new ExpenseSource(FieldNames.MORTGAGE, this.sampleData.mortgage.amount, this.sampleData.mortgage.schedule),
+    undefined, new ExpenseSource(FieldNames.RENT, this.sampleData.rent.amount, this.sampleData.rent.schedule),
+    undefined, new ExpenseSource(FieldNames.COUNCIL_TAX, this.sampleData.councilTax.amount, this.sampleData.councilTax.schedule),
+    undefined, new ExpenseSource(FieldNames.GAS, this.sampleData.gas.amount, this.sampleData.gas.schedule),
+    undefined, new ExpenseSource(FieldNames.ELECTRICITY, this.sampleData.electricity.amount, this.sampleData.electricity.schedule),
+    undefined, new ExpenseSource(FieldNames.WATER, this.sampleData.water.amount, this.sampleData.water.schedule),
+    undefined, new ExpenseSource(FieldNames.TRAVEL, this.sampleData.travel.amount, this.sampleData.travel.schedule),
+    undefined, new ExpenseSource(FieldNames.SCHOOL, this.sampleData.schoolCosts.amount, this.sampleData.schoolCosts.schedule),
+    undefined, new ExpenseSource(FieldNames.FOOD_AND_HOUSEKEEPING, this.sampleData.foodAndHousekeeping.amount, this.sampleData.foodAndHousekeeping.schedule),
+    undefined, new ExpenseSource(FieldNames.TV_AND_BROADBAND, this.sampleData.tvAndBroadband.amount, this.sampleData.tvAndBroadband.schedule),
+    undefined, new ExpenseSource(FieldNames.HIRE_PURCHASE, this.sampleData.hirePurchase.amount, this.sampleData.hirePurchase.schedule),
+    undefined, new ExpenseSource(FieldNames.MOBILE_PHONE, this.sampleData.mobilePhone.amount, this.sampleData.mobilePhone.schedule),
+    undefined, new ExpenseSource(FieldNames.MAINTENANCE, this.sampleData.maintenance.amount, this.sampleData.maintenance.schedule)
   )
 }
 
@@ -243,7 +240,7 @@ function forDeserialize () {
       amount: this.sampleData.maintenance.amount,
       schedule: this.sampleData.maintenance.schedule
     },
-    otherSources: [{}]
+    other: [{}]
   }
 }
 
@@ -308,22 +305,22 @@ describe('MonthlyExpenses', () => {
     const validator: Validator = new Validator()
 
     describe('when not successful', () => {
-      it('should return errors when `IncomeSource` objects are invalid', () => {
+      it('should return errors when `ExpenseSource` objects are invalid', () => {
         const errors = validator.validateSync(
           new MonthlyExpenses(
-            undefined, new IncomeExpenseSource(FieldNames.MORTGAGE, -100, ExpenseSchedule.MONTH),
-            undefined, new IncomeExpenseSource(FieldNames.RENT, -200, ExpenseSchedule.MONTH),
-            undefined, new IncomeExpenseSource(FieldNames.COUNCIL_TAX, -300, ExpenseSchedule.TWO_WEEKS),
-            undefined, new IncomeExpenseSource(FieldNames.GAS, -400, ExpenseSchedule.MONTH),
-            undefined, new IncomeExpenseSource(FieldNames.ELECTRICITY, -500, ExpenseSchedule.MONTH),
-            undefined, new IncomeExpenseSource(FieldNames.WATER, -600, ExpenseSchedule.TWO_WEEKS),
-            undefined, new IncomeExpenseSource(FieldNames.TRAVEL, -700, ExpenseSchedule.MONTH),
-            undefined, new IncomeExpenseSource(FieldNames.SCHOOL, -800, ExpenseSchedule.MONTH),
-            undefined, new IncomeExpenseSource(FieldNames.FOOD_AND_HOUSEKEEPING, -900, ExpenseSchedule.TWO_WEEKS),
-            undefined, new IncomeExpenseSource(FieldNames.TV_AND_BROADBAND, -100, ExpenseSchedule.TWO_WEEKS),
-            undefined, new IncomeExpenseSource(FieldNames.HIRE_PURCHASE, -100, ExpenseSchedule.TWO_WEEKS),
-            undefined, new IncomeExpenseSource(FieldNames.MOBILE_PHONE, -100, ExpenseSchedule.TWO_WEEKS),
-            undefined, new IncomeExpenseSource(FieldNames.MAINTENANCE, -100, ExpenseSchedule.TWO_WEEKS)
+            undefined, new ExpenseSource(FieldNames.MORTGAGE, -100, IncomeExpenseSchedule.MONTH),
+            undefined, new ExpenseSource(FieldNames.RENT, -200, IncomeExpenseSchedule.MONTH),
+            undefined, new ExpenseSource(FieldNames.COUNCIL_TAX, -300, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new ExpenseSource(FieldNames.GAS, -400, IncomeExpenseSchedule.MONTH),
+            undefined, new ExpenseSource(FieldNames.ELECTRICITY, -500, IncomeExpenseSchedule.MONTH),
+            undefined, new ExpenseSource(FieldNames.WATER, -600, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new ExpenseSource(FieldNames.TRAVEL, -700, IncomeExpenseSchedule.MONTH),
+            undefined, new ExpenseSource(FieldNames.SCHOOL, -800, IncomeExpenseSchedule.MONTH),
+            undefined, new ExpenseSource(FieldNames.FOOD_AND_HOUSEKEEPING, -900, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new ExpenseSource(FieldNames.TV_AND_BROADBAND, -100, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new ExpenseSource(FieldNames.HIRE_PURCHASE, -100, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new ExpenseSource(FieldNames.MOBILE_PHONE, -100, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new ExpenseSource(FieldNames.MAINTENANCE, -100, IncomeExpenseSchedule.TWO_WEEKS)
           )
         )
 
