@@ -73,11 +73,6 @@ export class TaskListBuilder {
           'Why do you disagree with the claim?',
           Paths.defencePage.evaluateUri({ externalId: externalId }),
           YourDefenceTask.isCompleted(draft)
-        ),
-        new TaskListItem(
-          'Free mediation',
-          Paths.freeMediationPage.evaluateUri({ externalId: externalId }),
-          FreeMediationTask.isCompleted(draft)
         )
       )
     }
@@ -146,7 +141,8 @@ export class TaskListBuilder {
   }
 
   static buildResolvingClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
-    if (TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)) {
+    if (TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)
+      || draft.isResponseRejectedFullyWithDispute()) {
       return new TaskList(
         'Resolving the claim', [
           new TaskListItem(

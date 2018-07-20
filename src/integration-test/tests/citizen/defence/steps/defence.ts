@@ -215,7 +215,7 @@ export class DefenceSteps {
     defendantYourDefencePage.enterYourDefence(text)
   }
 
-  askforMediation (): void {
+  askForMediation (): void {
     defendantSteps.selectTaskFreeMediation()
     defendantFreeMediationPage.chooseYes()
   }
@@ -259,7 +259,7 @@ export class DefenceSteps {
         this.submitDefenceText('I fully dispute this claim')
         this.addTimeLineOfEvents({ events: [{ date: 'may', description: 'ok' } as TimelineEvent] } as Timeline)
         this.enterEvidence('description', 'comment')
-        this.askforMediation()
+        this.askForMediation()
         defendantSteps.selectCheckAndSubmitYourDefence()
         break
       case DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID:
