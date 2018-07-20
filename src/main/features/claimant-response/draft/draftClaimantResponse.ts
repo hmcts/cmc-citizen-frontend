@@ -1,9 +1,9 @@
 import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
-import { ChooseHowToProceed } from 'claimant-response/form/models/chooseHowToProceed'
+import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 
 export class DraftClaimantResponse extends DraftDocument {
 
-  chooseHowToRespond?: ChooseHowToProceed
+  formaliseRepaymentPlan?: FormaliseRepaymentPlan
 
   constructor () {
     super()
@@ -12,7 +12,9 @@ export class DraftClaimantResponse extends DraftDocument {
   deserialize (input: any): DraftClaimantResponse {
     if (input) {
       this.externalId = input.externalId
-      this.chooseHowToRespond = input.chooseHowToRespond
+      if (input.chooseHowToRespond) {
+        this.formaliseRepaymentPlan = input.formaliseRepaymentPlan
+      }
     }
     return this
   }

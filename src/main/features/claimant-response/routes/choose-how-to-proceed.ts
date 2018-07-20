@@ -6,12 +6,12 @@ import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResp
 import { Claim } from 'claims/models/claim'
 import { ErrorHandling } from 'shared/errorHandling'
 import { FormValidator } from 'forms/validation/formValidator'
-import { ChooseHowToProceed, ChooseHowToProceedOption } from 'claimant-response/form/models/chooseHowToProceed'
+import { FormaliseRepaymentPlan, FormaliseRepaymentPlanOption } from 'claimant-response/form/models/FormaliseRepaymentPlan'
 import { Form } from 'forms/form'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 
-function renderView (form: Form<ChooseHowToProceed>, res: express.Response, next: express.NextFunction) {
+function renderView (form: Form<FormaliseRepaymentPlan>, res: express.Response, next: express.NextFunction) {
   try {
     res.render(Paths.chooseHowToProceedPage.associatedView, {
       form: form
@@ -28,13 +28,13 @@ export default express.Router()
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
 
-      renderView(new Form(draft.document.chooseHowToRespond), res, next)
+      renderView(new Form(draft.document.formaliseRepaymentPlan), res, next)
     })
   .post(
     Paths.chooseHowToProceedPage.uri,
-    FormValidator.requestHandler(ChooseHowToProceed),
+    FormValidator.requestHandler(null),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const form: Form<ChooseHowToProceed> = req.body
+      const form: Form<FormaliseRepaymentPlan> = req.body
       // console.log('form----------->',form)
       if (form.hasErrors()) {
         renderView(form, res, next)
@@ -45,10 +45,10 @@ export default express.Router()
 
         console.log('draft------',draft)
 
-        draft.document.chooseHowToRespond = form.model
+        draft.document.formaliseRepaymentPlan = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        if (ChooseHowToProceedOption.all().includes(form.model.option)) {
+        if (FormaliseRepaymentPlanOption.all().includes(form.model.option)) {
           res.render(Paths.chooseHowToProceedPage.associatedView,
             {
               taskListUri: Paths.taskListPage.evaluateUri({ externalId: claim.externalId })
