@@ -24,7 +24,7 @@ class PaymentOptionPage {
         ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
           const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-          renderView(new Form(draft.document[this.admissionType].paymentOption), res)
+          this.renderView(new Form(draft.document[this.admissionType].paymentOption), res)
         }))
       .post(FullAdmissionPaths.paymentOptionPage.uri,
         FeatureToggleGuard.featureEnabledGuard(this.admissionType),
@@ -34,7 +34,7 @@ class PaymentOptionPage {
             const form: Form<DefendantPaymentOption> = req.body
 
             if (form.hasErrors()) {
-              renderView(form, res)
+              this.renderView(form, res)
             } else {
               const draft: Draft<ResponseDraft> = res.locals.responseDraft
               const user: User = res.locals.user
@@ -68,27 +68,26 @@ class PaymentOptionPage {
               }
             }
           }))
-
   }
-}
 
-function isApplicableFor (draft: ResponseDraft): boolean {
-  if (!FeatureToggles.isEnabled('statementOfMeans')) {
-    return false
+  private renderView (form: Form<DefendantPaymentOption>, res: express.Response) {
+    function isApplicableFor (draft: ResponseDraft): boolean {
+      if (!FeatureToggles.isEnabled('statementOfMeans')) {
+        return false
+      }
+      return draft.isResponseFullyAdmitted()
+        && !draft.defendantDetails.partyDetails.isBusiness()
+    }
+
+    const draft: Draft<ResponseDraft> = res.locals.responseDraft
+    const claim: Claim = res.locals.claim
+    res.render('response/views/full-admission/payment-option.njk', {
+      form: form,
+      claim: claim,
+      draft: draft.document,
+      statementOfMeansIsApplicable: isApplicableFor(draft.document)
+    })
   }
-  return draft.isResponseFullyAdmitted()
-    && !draft.defendantDetails.partyDetails.isBusiness()
-}
-
-function renderView (form: Form<DefendantPaymentOption>, res: express.Response) {
-  const draft: Draft<ResponseDraft> = res.locals.responseDraft
-  const claim: Claim = res.locals.claim
-  res.render(FullAdmissionPaths.paymentOptionPage.associatedView, {
-    form: form,
-    claim: claim,
-    draft: draft.document,
-    statementOfMeansIsApplicable: isApplicableFor(draft.document)
-  })
 }
 
 /* tslint:disable:no-default-export */
