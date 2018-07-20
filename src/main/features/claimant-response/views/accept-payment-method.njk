@@ -1,0 +1,50 @@
+{% extends "layout.njk" %}
+
+{% from "form.njk" import saveAndContinueButton, csrfProtection, radioGroup, radioGroupWithHintPanel, errorSummary %}
+
+{% set heading = 'How they want to pay' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post"
+            class="analytics-submit-event-trigger"
+            data-event-action="Claimant: How they want to pay"
+            data-event-label-from="accept"
+            novalidate>
+        {{ csrfProtection(csrf) }}
+
+        {% if paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+        <p>{{ t('{{ defendantFullName }} has offered to pay you in full by {{ paymentDate }}.', { defendantFullName: claim.claimData.defendant.name, paymentDate: paymentDate | date }) }}</p>
+        {% elseif paymentOption === domain.PaymentOption.INSTALMENTS %}
+          <p> TODO: macro to render the repayment plan here...</p>
+        {% endif %}
+
+        {{
+        radioGroupWithHintPanel(
+          form = form,
+          label = 'Do you accept the repayment plan?',
+          labelForScreenReadersOnly = false,
+          name = 'accept',
+          options = [
+          {
+            label: t('Yes'),
+            value: YesNoOption.YES.option,
+            checked: (form.valueFor('accept') === YesNoOption.YES),
+            hint: 'The claim will be put on hold. If the defendant doesn’t pay, you can ask the court to enforce payment.'
+          },
+          {
+            label: t('No - I’ll suggest my own'),
+            value: YesNoOption.NO.option,
+            checked: (form.valueFor('accept') === YesNoOption.NO)
+          }
+        ]
+        )
+        }}
+
+        {{ saveAndContinueButton() }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

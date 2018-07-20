@@ -7,6 +7,8 @@ import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { ResponseType } from 'claims/models/response/responseType'
 import { PaymentOption } from 'claims/models/response/core/paymentOption'
 import { NumberFormatter } from 'utils/numberFormatter'
+import { SettleAdmittedTask } from 'claimant-response/tasks/settleAdmittedTask'
+import { AcceptPaymentMethodTask } from 'claimant-response/tasks/acceptPaymentMethodTask'
 
 export class TaskListBuilder {
   static buildDefendantResponseSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
@@ -26,7 +28,7 @@ export class TaskListBuilder {
   static buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
     const externalId: string = claim.externalId
     const tasks: TaskListItem[] = []
-
+    console.log('draft:: ', JSON.stringify(draft))
     if (claim.response && claim.response.responseType === ResponseType.FULL_DEFENCE && claim.response.freeMediation === YesNoOption.NO) {
       tasks.push(
         new TaskListItem(
@@ -37,14 +39,25 @@ export class TaskListBuilder {
       )
     }
 
-    if (claim.response && claim.response.responseType === ResponseType.PART_ADMISSION && claim.response.amount) {
-      tasks.push(
-        new TaskListItem(
-          'Accept or reject the ' + NumberFormatter.formatMoney(claim.response.amount),
-          Paths.settleAdmittedPage.evaluateUri({ externalId: externalId }),
-          false
+    if (claim.response && claim.response.responseType === ResponseType.PART_ADMISSION) {
+      if (claim.response.amount) {
+        tasks.push(
+          new TaskListItem(
+            'Accept or reject the ' + NumberFormatter.formatMoney(claim.response.amount),
+            Paths.settleAdmittedPage.evaluateUri({ externalId: externalId }),
+            SettleAdmittedTask.isCompleted(draft)
+          )
         )
-      )
+      }
+      if (draft.settleAdmitted && draft.settleAdmitted.admitted.option === YesNoOption.YES) {
+        tasks.push(
+          new TaskListItem(
+            'Accept or reject their repayment plan',
+            Paths.acceptPaymentMethodPage.evaluateUri({ externalId: externalId }),
+            AcceptPaymentMethodTask.isCompleted(draft)
+          )
+        )
+      }
     }
 
     if (claim.response && claim.response.responseType === ResponseType.FULL_ADMISSION && claim.response.paymentOption !== PaymentOption.IMMEDIATELY) {
