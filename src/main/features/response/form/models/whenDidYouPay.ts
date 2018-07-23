@@ -8,7 +8,7 @@ import { ValidationErrors as CommonValidationErrors } from 'forms/validation/val
 import { MomentFormatter } from 'utils/momentFormatter'
 
 export class ValidationErrors {
-  static readonly EXPLANATION_REQUIRED: string = 'Explain how did you pay the amount claimed'
+  static readonly EXPLANATION_REQUIRED: string = 'Explain how you paid the amount claimed'
   static readonly DATE_OUTSIDE_RANGE = () => {
     const currentDate = MomentFormatter.formatLongDate(MomentFactory.currentDate())
     return `Enter date before ${currentDate}`

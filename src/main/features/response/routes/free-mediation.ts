@@ -15,9 +15,13 @@ import { Claim } from 'claims/models/claim'
 async function renderView (form: Form<FreeMediation>, res: express.Response, next: express.NextFunction) {
   try {
     const claim: Claim = res.locals.claim
+    const draft: ResponseDraft = res.locals.responseDraft.document
+    const amount = draft.isResponsePartiallyAdmitted() ? draft.partialAdmission.howMuchDoYouOwe.amount : 0
+
     res.render(Paths.freeMediationPage.associatedView, {
       form: form,
-      claimantFullName: claim.claimData.claimant.name
+      claimantFullName: claim.claimData.claimant.name,
+      amount: amount
     })
   } catch (err) {
     next(err)
