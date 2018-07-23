@@ -28,7 +28,11 @@ export class TaskListBuilder {
   static buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
     const externalId: string = claim.externalId
     const tasks: TaskListItem[] = []
-    if (claim.response && claim.response.responseType === ResponseType.FULL_DEFENCE && claim.response.freeMediation === YesNoOption.NO) {
+
+    if (claim.response
+      && claim.response.responseType === ResponseType.FULL_DEFENCE
+      && claim.response.freeMediation === YesNoOption.NO
+    ) {
       tasks.push(
         new TaskListItem(
           'Accept or reject their response',
@@ -59,7 +63,10 @@ export class TaskListBuilder {
       }
     }
 
-    if (claim.response && claim.response.responseType === ResponseType.FULL_ADMISSION && claim.response.paymentOption !== PaymentOption.IMMEDIATELY) {
+    if (claim.response
+      && claim.response.responseType === ResponseType.FULL_ADMISSION
+      && claim.response.paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY
+    ) {
       tasks.push(
         new TaskListItem(
           'Accept or reject their repayment plan',
