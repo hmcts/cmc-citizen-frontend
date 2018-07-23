@@ -9,7 +9,7 @@ import { DraftService } from 'services/draftService'
 import { OnlyClaimantLinkedToClaimCanDoIt } from 'guards/onlyClaimantLinkedToClaimCanDoIt'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { DraftClaimantResponse } from 'features/claimant-response/draft/draftClaimantResponse'
-import { ClaimantResponseGuard } from 'claimant-response/guards/claimantResponseGuard'
+import { ResponseGuard } from 'response/guards/responseGuard'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -27,7 +27,7 @@ export class ClaimantResponseFeature {
     app.all(allClaimantResponse, requestHandler())
     app.all(allClaimantResponse, ClaimMiddleware.retrieveByExternalId)
     app.all(allClaimantResponse, OnlyClaimantLinkedToClaimCanDoIt.check())
-    app.all(allClaimantResponse, ClaimantResponseGuard.requestHandler)
+    app.all(allClaimantResponse, ResponseGuard.checkResponseExists())
     app.all(/^\/case\/.+\/claimant-response\/(?!confirmation).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'claimantResponse', 100, (value: any): DraftClaimantResponse => {
         return new DraftClaimantResponse().deserialize(value)

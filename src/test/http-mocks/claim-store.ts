@@ -8,9 +8,9 @@ import { InterestDateType } from 'common/interestDateType'
 import { Interest } from 'claims/models/interest'
 import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
-import { PaymentOption } from "claims/models/response/core/paymentOption"
-import { MomentFactory } from "shared/momentFactory"
-import { ResponseType } from "claims/models/response/responseType"
+import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { MomentFactory } from 'shared/momentFactory'
+import { ResponseType } from 'claims/models/response/responseType'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
@@ -128,7 +128,6 @@ export const sampleDefendantPartialAdmissionResponseObj = {
     }
   }
 }
-
 
 export function mockCalculateInterestRate (expected: number): mock.Scope {
   return mock(serviceBaseURL)
