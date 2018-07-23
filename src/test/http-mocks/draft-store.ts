@@ -393,6 +393,12 @@ export function resolveFindAllDrafts (): mock.Scope {
         document: sampleCCJDraftObj,
         created: '2017-10-03T12:00:00.000',
         updated: '2017-10-03T12:01:00.000'
+      }, {
+        id: 204,
+        type: 'claimantResponse',
+        document: sampleClaimantResponseDraftObj,
+        created: '2017-10-03T12:00:00.000',
+        updated: '2017-10-03T12:01:00.000'
       }]
     })
 }
