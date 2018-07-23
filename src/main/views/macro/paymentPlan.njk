@@ -1,0 +1,31 @@
+{% macro paymentPlanTable(claim, lastPayment, lengthOfPayment) %}
+  <details>
+    <div class="panel panel-border-narrow">
+      <table class="table-form">
+        <thead>
+        <tr>
+          <th scope="col">{{ t('How they want to pay') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td scope="col">{{ t('Monthly instalments of') }}</td>
+              <td class="numeric last">{{ claim.response.repaymentPlan.instalmentAmount }}</td>
+            </tr>
+            <tr>
+              <td scope="col">{{ t('Make the first payment on') }}</td>
+              <td class="numeric last">{{ claim.response.repaymentPlan.firstPaymentDate }}</td>
+            </tr>
+            <tr>
+              <td scope="col">{{ t('Last Payment on') }}</td>
+              <td class="numeric last">{{ lastPayment | numeral }}</td>
+            </tr>
+            <tr>
+              <td class="bold-small" scope="row">{{ t('Length of repayment plan') }}</td>
+              <td class="bold-small numeric last">{{ lengthOfPayment | numeral }}</td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+{% endmacro %}

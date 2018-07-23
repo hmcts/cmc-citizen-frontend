@@ -12,6 +12,10 @@ import { Expense } from 'claims/models/response/statement-of-means/expense'
 import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
 import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
+import { createPaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
+import { ResponseType } from 'claims/models/response/responseType'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -19,11 +23,29 @@ export default express.Router()
     Paths.defendantsResponsePage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const claim: Claim = res.locals.claim
-      const response: FullAdmissionResponse = claim.response as FullAdmissionResponse
+      const responseType = claim.response.responseType
+      let response
+
+      switch (responseType) {
+        case ResponseType.FULL_ADMISSION:
+          response = claim.response as FullAdmissionResponse
+          break
+        case ResponseType.PART_ADMISSION:
+          response = claim.response as PartialAdmissionResponse
+          break
+      }
+      const totalAmount: number = response.paymentIntention.repaymentPlan.instalmentAmount
+      const firstPaymentDate: number = response.paymentIntention.repaymentPlan.firstPaymentDate
+      const paymentSchedule: PaymentSchedule = response.paymentIntention.repaymentPlan.paymentSchedule
+
+      const paymentPlan = createPaymentPlan(totalAmount, firstPaymentDate, mapFrequencyInWeeks(paymentSchedule))
+
       res.render(Paths.defendantsResponsePage.associatedView, {
         claim: claim,
         totalMonthlyIncome: calculateTotalMonthlyIncome(response.statementOfMeans.incomes),
-        totalMonthlyExpenses: calculateTotalMonthlyExpense(response.statementOfMeans.expenses)
+        totalMonthlyExpenses: calculateTotalMonthlyExpense(response.statementOfMeans.expenses),
+        paymentLength: paymentPlan.getPaymentLength(),
+        lastPaymentDate: paymentPlan.getLastPaymentDate()
       })
     })
   )
@@ -47,4 +69,17 @@ function calculateTotalMonthlyIncome (incomes: Income[]) {
 function calculateTotalMonthlyExpense (expenses: Expense[]) {
   const expenseSources = expenses.map(expense => IncomeExpenseSource.fromClaimExpense(expense))
   return CalculateMonthlyIncomeExpense.calculateTotalAmount(expenseSources)
+}
+
+function mapFrequencyInWeeks (frequency: PaymentSchedule): number {
+  switch (frequency) {
+    case PaymentSchedule.EACH_WEEK:
+      return 1
+    case PaymentSchedule.EVERY_TWO_WEEKS:
+      return 2
+    case PaymentSchedule.EVERY_MONTH:
+      return 4
+    default:
+      throw new Error('Unknown payment schedule')
+  }
 }
