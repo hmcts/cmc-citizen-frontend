@@ -170,6 +170,6 @@ export class Claim {
 
   private payImmediatelyDeadline (): Moment {
     // TODO set below datetime to 4pm
-    return (this.response as FullAdmissionResponse).paymentDate
+    return (this.response as FullAdmissionResponse).paymentIntention.paymentDate
   }
 }

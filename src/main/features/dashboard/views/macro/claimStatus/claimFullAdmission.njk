@@ -2,15 +2,15 @@
 {% from "form.njk" import linkButton %}
 
 {% macro claimFullAdmissionForDefendantDashboard(claim) %}
-  {% if claim.response.paymentDate %}
-    {% set paymentDate = claim.response.paymentDate | date %}
+  {% if claim.response.paymentIntention.paymentDate %}
+    {% set paymentDate = claim.response.paymentIntention.paymentDate | date %}
   {% endif %}
 
-  {% if claim.response.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+  {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
     {% set paymentMethod = 'immediately' %}
-  {% elseif claim.response.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+  {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
     {% set paymentMethod = 'by ' + paymentDate %}
-  {% elseif  claim.response.paymentOption === domain.PaymentOption.INSTALMENTS %}
+  {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
     {% set paymentMethod= 'in instalments' %}
   {% endif %}
   {{ t('You’ve admitted all of the claim and said you’ll pay the full amount {{ paymentMethod}}.', { paymentMethod: paymentMethod }) }}
@@ -21,11 +21,11 @@
   {% set claimantName = claim.claimData.claimant.name %}
   {% set amount = claim.totalAmountTillToday | numeral %}
 
-  {% if claim.response.paymentDate %}
-    {% set paymentDate = claim.response.paymentDate | date %}
+  {% if claim.response.paymentIntention.paymentDate %}
+    {% set paymentDate = claim.response.paymentIntention.paymentDate | date %}
   {% endif %}
 
-  {% if claim.response.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+  {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
     {% set paymentMethod = 'immediately' %}
     <p> {{ t('You said you’ll pay {{ claimantName }} {{ amount }} before 4pm on {{ paymentDate }}.',
         { claimantName: claimantName, amount: amount, paymentDate: paymentDate }) }} </p>
@@ -35,21 +35,21 @@
         { claimantName: claimantName }) }} </p>
     <p> {{ t('Make sure you get receipts for any payments.') }} </p>
 
-  {% elseif claim.response.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+  {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
     <p> {{ t('You’ve offered to pay {{ claimantName }} {{ amount }} on {{ paymentDate }}.',
         { claimantName: claimantName, amount: amount, paymentDate: paymentDate }) }} </p>
     <p>
       {{ t('We’ll contact you when they respond.') }}
     </p>
-  {% elseif  claim.response.paymentOption === domain.PaymentOption.INSTALMENTS %}
-    {% if claim.response.repaymentPlan.paymentSchedule === domain.PaymentSchedule.EVERY_MONTH %}
+  {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+    {% if claim.response.paymentIntention.repaymentPlan.paymentSchedule === domain.PaymentSchedule.EVERY_MONTH %}
       {% set paymentSchedule = 'per month' %}
-    {% elif claim.response.repaymentPlan.paymentSchedule === domain.PaymentSchedule.EVERY_TWO_WEEKS %}
+    {% elif claim.response.paymentIntention.repaymentPlan.paymentSchedule === domain.PaymentSchedule.EVERY_TWO_WEEKS %}
       {% set paymentSchedule = 'per two weeks' %}
-    {% elif claim.response.repaymentPlan.paymentSchedule === domain.PaymentSchedule.EACH_WEEK %}
+    {% elif claim.response.paymentIntention.repaymentPlan.paymentSchedule === domain.PaymentSchedule.EACH_WEEK %}
       {% set paymentSchedule = 'per week' %}
     {% endif %}
-    {% set repaymentDate = claim.response.repaymentPlan.firstPaymentDate |date %}
+    {% set repaymentDate = claim.response.paymentIntention.repaymentPlan.firstPaymentDate |date %}
     <p> {{ t('You’ve offered to pay {{ claimantName }} {{ amount }} {{ paymentSchedule }} starting {{ repaymentDate }}.',
         { claimantName: claimantName, amount: amount, paymentSchedule: paymentSchedule, repaymentDate: repaymentDate }) }} </p>
     <p>
@@ -67,10 +67,10 @@
   {% set amount = claim.totalAmountTillToday | numeral %}
 
   {% if claim.response.paymentDate %}
-    {% set paymentDate = claim.response.paymentDate | date %}
+    {% set paymentDate = claim.response.paymentIntention.paymentDate | date %}
   {% endif %}
 
-  {% if claim.response.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+  {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
     <h2 class="heading-small">{{ t('The defendant will pay you immediately') }}</h2>
     <p> {{ t('The defendant said they’ll pay you immediately. They must make sure you have the money by 4pm on {{ paymentDate }}.',
         { paymentDate: paymentDate }) }} </p>
@@ -83,13 +83,13 @@
       <h2 class="heading-small">{{ t('What to do if they haven’t paid') }}</h2>
       <p> {{ t('If the defendant doesn’t pay you, you can request a County Court Judgment.') }} </p>
     {% endif %}
-  {% elseif claim.response.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+  {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
     <p> {{ t('{{ defendantName }} admits they owe all the money. They’ve offered to pay you in full by {{ paymentDate }}.',
         { defendantName: defendantName, paymentDate: paymentDate }) }} </p>
     <p>
       {{ t('You can accept or reject their offer.') }}
     </p>
-  {% elseif  claim.response.paymentOption === domain.PaymentOption.INSTALMENTS %}
+  {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
     <p> {{ t('{{ defendantName }} admits they owe all the money. They’ve offered to pay you in instalments.',
         { defendantName: defendantName }) }} </p>
     <p>
@@ -99,15 +99,12 @@
 {% endmacro %}
 
 {% macro claimFullAdmissionForClaimantDashboard(claim) %}
-  {% if claim.response.paymentDate %}
-    {% set paymentDate = claim.response.paymentDate | date %}
-  {% endif %}
 
-  {% if claim.response.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+  {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
   {{ t('The defendant admits they owe all the money. They’ve said that they will pay immediately.') }}
-  {% elseif claim.response.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+  {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
     {{ t('The defendant admits they owe all the money. You need to accept or reject their offer.') }}
-  {% elseif  claim.response.paymentOption === domain.PaymentOption.INSTALMENTS %}
+  {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
     {{ t('The defendant admits they owe all the money. You need to accept or reject their offer.') }}
   {% endif %}
 {% endmacro %}
