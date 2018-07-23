@@ -37,7 +37,7 @@ import { Service } from 'models/service'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestType } from 'claims/models/interestType'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
-import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlan'
+import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 
 const packageDotJson = require('../../../../package.json')
 

@@ -20,9 +20,9 @@
           form = form, 
           label = 'Sign a settlement agreement', 
           name = 'option', 
-          value = FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT,
+          value = FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value,
           hint='This is a legal agreement between you and the defendant agreeing to the repayment plan. If they break it you can request a County Court Judgment.',
-          checked = false, 
+          checked = (form.valueFor('option').value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value), 
           bold = true
           )
         }}
@@ -32,9 +32,9 @@
           form = form, 
           label = 'Request a County Court Judgment (CCJ)', 
           name = 'option', 
-          value = FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT,
+          value = FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value,
           hint='You can ask the court to make a formal order binding the defendant to the repayment plan. This adds the defendant to the CCJ register, which may make it more difficult for them to borrow money to repay you.',
-          checked = false, 
+          checked = (form.valueFor('option').value === FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value), 
           bold = true
           )
         }}

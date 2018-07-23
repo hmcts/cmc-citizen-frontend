@@ -3,7 +3,7 @@ import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseR
 
 export class DraftClaimantResponse extends DraftDocument {
 
-  formaliseRepaymentPlan?: FormaliseRepaymentPlan
+  formaliseRepaymentPlan?: FormaliseRepaymentPlan = new FormaliseRepaymentPlan()
 
   constructor () {
     super()
@@ -12,7 +12,7 @@ export class DraftClaimantResponse extends DraftDocument {
   deserialize (input: any): DraftClaimantResponse {
     if (input) {
       this.externalId = input.externalId
-      if (input.chooseHowToRespond) {
+      if (input.formaliseRepaymentPlan) {
         this.formaliseRepaymentPlan = input.formaliseRepaymentPlan
       }
     }

@@ -326,7 +326,7 @@ const sampleCCJDraftObj = {
 }
 
 export const sampleClaimantResponseDraftObj = {
-  externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5'
+  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 }
 
 export function resolveFind (draftType: string, draftOverride?: object): mock.Scope {
