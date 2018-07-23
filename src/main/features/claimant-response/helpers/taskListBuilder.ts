@@ -46,11 +46,21 @@ export class TaskListBuilder {
       )
     }
 
-    if (claim.response && claim.response.responseType === ResponseType.FULL_ADMISSION && claim.response.paymentOption !== PaymentOption.INSTALMENTS) {
+    if (claim.response && claim.response.responseType === ResponseType.FULL_ADMISSION) {
       tasks.push(
         new TaskListItem(
           'Choose how to proceed',
-          Paths.notImplementedYetPage.evaluateUri({ externalId: externalId }),
+          Paths.chooseHowToProceedPage.evaluateUri({ externalId: externalId }),
+          false
+        )
+      )
+    }
+    
+    if (claim.response && claim.response.responseType === ResponseType.FULL_ADMISSION) {
+      tasks.push(
+        new TaskListItem(
+          'Sign a settlement agreement',
+          Paths.signSettlementAgreementPage.evaluateUri({ externalId: externalId }),
           false
         )
       )
