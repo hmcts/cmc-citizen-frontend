@@ -1,0 +1,37 @@
+{% extends "layout.njk" %}
+
+{% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+
+{% set heading = 'Check your answers before submitting your response' %}
+
+{% block content %}
+  <form novalidate method="post">
+    {{ csrfProtection(csrf) }}
+
+    {% if draft.acceptPaymentMethod.accept.option === 'yes' %}
+      {% set acceptPaymentMethodResponse = 'I accept this amount' %}
+    {% else %}
+      {% set acceptPaymentMethodResponse = 'I reject this amount' %}
+    {% endif %}
+
+    {% if draft.settleAdmitted.admitted.option === 'yes' %}
+      {% set paymentPlanResponse = 'I accept this repayment plan' %}
+    {% else %}
+      {% set paymentPlanResponse = 'I reject this repayment plan' %}
+    {% endif %}
+
+    {{ tableStart('yourResponse', 'Your response') }}
+
+    {{ row(label = 'Do you accept or reject the defendant’s admission?', bold= true,
+      value = paymentPlanResponse, changeLink = settleAdmittedPageUrl, bottomBorder = true) }}
+
+    {{ row(label = 'Do you accept the defendant’s repayment plan?', bold = true,
+      value = paymentPlanResponse, changeLink = acceptPaymentMethodPageUrl, bottomBorder = true) }}
+
+    {{ tableEnd() }}
+
+    {{ submitButton('Submit response') }}
+
+  </form>
+{% endblock %}

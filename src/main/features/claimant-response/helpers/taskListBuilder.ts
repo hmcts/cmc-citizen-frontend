@@ -18,7 +18,7 @@ export class TaskListBuilder {
       new TaskListItem(
         'View the defendant’s full response',
         Paths.notImplementedYetPage.evaluateUri({ externalId: externalId }),
-        false
+        true
       )
     )
 
