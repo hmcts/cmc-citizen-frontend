@@ -8,6 +8,7 @@ import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
+import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 
 interface State {
   status: ClaimStatus
@@ -161,5 +162,14 @@ export class Claim {
 
   private isSettlementReached (): boolean {
     return this.settlement && !!this.settlementReachedAt
+  }
+
+  get pastDefendantPayImmediatelyDate (): boolean {
+    return MomentFactory.currentDateTime() > this.payImmediatelyDeadline()
+  }
+
+  private payImmediatelyDeadline (): Moment {
+    // TODO set below datetime to 4pm
+    return (this.response as FullAdmissionResponse).paymentDate
   }
 }

@@ -8,7 +8,6 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { MomentFactory } from 'shared/momentFactory'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -28,7 +27,6 @@ export default express.Router()
       claimsAsClaimant: claimsAsClaimant,
       claimDraftSaved: claimDraftSaved,
       claimsAsDefendant: claimsAsDefendant,
-      responseDraftSaved: responseDraftSaved,
-      currentDate: MomentFactory.currentDateTime()
+      responseDraftSaved: responseDraftSaved
     })
   }))

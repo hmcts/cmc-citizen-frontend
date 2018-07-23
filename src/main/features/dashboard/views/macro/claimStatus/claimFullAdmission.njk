@@ -71,17 +71,18 @@
   {% endif %}
 
   {% if claim.response.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-    {% set paymentMethod = 'immediately' %}
     <h2 class="heading-small">{{ t('The defendant will pay you immediately') }}</h2>
     <p> {{ t('The defendant said they’ll pay you immediately. They must make sure you have the money by 4pm on {{ paymentDate }}.',
         { paymentDate: paymentDate }) }} </p>
     <p> {{ t('You need to tell us if you’ve settled the claim because the defendant has paid you.') }} </p>
     <p> {{ t('You can settle for less than the full claim amount.') }} </p>
-
-    <h2 class="heading-small">{{ t('The defendant will pay you immediately') }}</h2>
-    <p> {{ t('If the defendant has not paid you by {{ paymentDate }}, you can request a County Court Judgment.', {paymentDate: paymentDate}) }} </p>
-    <h2 class="heading-small">{{ t('What to do if they haven’t paid') }}</h2>
-    <p> {{ t('If the defendant doesn’t pay you, you can request a County Court Judgment.') }} </p>
+    {% if claim.pastDefendantPayImmediatelyDate %}
+      <h2 class="heading-small">{{ t('The defendant will pay you immediately') }}</h2>
+      <p> {{ t('If the defendant has not paid you by {{ paymentDate }}, you can request a County Court Judgment.', {paymentDate: paymentDate}) }} </p>
+    {% else %}
+      <h2 class="heading-small">{{ t('What to do if they haven’t paid') }}</h2>
+      <p> {{ t('If the defendant doesn’t pay you, you can request a County Court Judgment.') }} </p>
+    {% endif %}
   {% elseif claim.response.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
     <p> {{ t('{{ defendantName }} admits they owe all the money. They’ve offered to pay you in full by {{ paymentDate }}.',
         { defendantName: defendantName, paymentDate: paymentDate }) }} </p>
@@ -103,13 +104,12 @@
   {% endif %}
 
   {% if claim.response.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-    {% set paymentMethod = 'immediately' %}
+  {{ t('The defendant admits they owe all the money. They’ve said that they will pay immediately.') }}
   {% elseif claim.response.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-    {% set paymentMethod = 'by ' + paymentDate %}
+    {{ t('The defendant admits they owe all the money. You need to accept or reject their offer.') }}
   {% elseif  claim.response.paymentOption === domain.PaymentOption.INSTALMENTS %}
-    {% set paymentMethod= 'in instalments' %}
+    {{ t('The defendant admits they owe all the money. You need to accept or reject their offer.') }}
   {% endif %}
-  {{ t('The defendant admits they owe all the money. They’ve said that they will pay {{ paymentMethod}}.', { paymentMethod: paymentMethod }) }}
 {% endmacro %}
 
 {% macro _downloadResponseLink(claim, text) %}
