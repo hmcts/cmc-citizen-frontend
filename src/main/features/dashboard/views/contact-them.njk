@@ -3,10 +3,9 @@
 {% from "../../claim/views/macro/about-claim-widget.njk" import aboutClaimWidget %}
 
 {% set headingVisible = false %}
-{% set heading = 'Claim status' %}
 
 {% if user.id === claim.claimantId %}
-  {% set otherParty = 'Defendant:' %}
+  {% set otherParty = 'Defendant' %}
   {% set otherPartyName = claim.claimData.defendant.name %}
   {% set phone = claim.response.defendant.mobilePhone %}
   {% set email = claim.claimData.defendant.email %}
@@ -32,7 +31,7 @@
   {% endif %}
 
   {% elif user.id === claim.defendantId %}
-  {% set otherParty = 'Claimant:' %}
+  {% set otherParty = 'Claimant' %}
   {% set otherPartyName = claim.claimData.claimant.name %}
   {% set phone = claim.claimData.claimant.mobilePhone %}
   {% set email = claim.claimantEmail %}
@@ -57,6 +56,8 @@
   {% endif %}
 
 {% endif %}
+
+{% set heading = 'Contact ' + t(otherParty) %}
 
 {% block content %}
   <div class="grid-row">
@@ -134,15 +135,14 @@
 
       {% endif %}
 
-
-      <br>
-      <div>
-        {% if phone != undefined %}
+      {% if phone != null %}
+        <br>
+        <div>
           {{ t('Phone: ' ) + phone }}
-        {% endif %}
       </div>
+      {% endif %}
 
-      {% if email != undefined %}
+      {% if email != null %}
         <p>
           {{ t('Email: <a href="mailto:{{ email }}">{{ email }}</a>', { email: email }) | safe }}
         </p>
