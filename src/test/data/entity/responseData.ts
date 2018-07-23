@@ -72,8 +72,10 @@ const basePartialEvidencesAndTimeLines = {
 export const fullAdmissionWithImmediatePaymentData = {
   ...baseResponseData,
   ...baseFullAdmissionData,
-  paymentOption: PaymentOption.IMMEDIATELY,
-  paymentDate: MomentFactory.currentDate().add(5, 'days')
+  paymentIntention: {
+    paymentOption: PaymentOption.IMMEDIATELY,
+    paymentDate: MomentFactory.currentDate().add(5, 'days')
+  }
 }
 
 export const partialAdmissionWithImmediatePaymentData = {
@@ -105,8 +107,10 @@ export const partialAdmissionAlreadyPaidData = {
 export const fullAdmissionWithPaymentBySetDateData = {
   ...baseResponseData,
   ...baseFullAdmissionData,
-  paymentOption: PaymentOption.BY_SPECIFIED_DATE,
-  paymentDate: '2050-12-31'
+  paymentIntention: {
+    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+    paymentDate: '2050-12-31'
+  }
 }
 
 export const partialAdmissionWithPaymentBySetDateData = {
@@ -125,11 +129,13 @@ export const partialAdmissionWithPaymentBySetDateData = {
 export const fullAdmissionWithPaymentByInstalmentsData = {
   ...baseResponseData,
   ...baseFullAdmissionData,
-  paymentOption: PaymentOption.INSTALMENTS,
-  repaymentPlan: {
-    instalmentAmount: 100,
-    firstPaymentDate: '2050-12-31',
-    paymentSchedule: PaymentSchedule.EACH_WEEK
+  paymentIntention: {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: '2050-12-31',
+      paymentSchedule: PaymentSchedule.EACH_WEEK
+    }
   }
 }
 
