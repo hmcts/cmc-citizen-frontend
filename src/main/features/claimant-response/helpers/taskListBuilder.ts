@@ -28,7 +28,6 @@ export class TaskListBuilder {
   static buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
     const externalId: string = claim.externalId
     const tasks: TaskListItem[] = []
-
     if (claim.response
       && claim.response.responseType === ResponseType.FULL_DEFENCE
       && claim.response.freeMediation === YesNoOption.NO
@@ -70,7 +69,7 @@ export class TaskListBuilder {
       tasks.push(
         new TaskListItem(
           'Accept or reject their repayment plan',
-          Paths.notImplementedYetPage.evaluateUri({ externalId: externalId }),
+          Paths.acceptPaymentMethodPage.evaluateUri({ externalId: externalId }),
           false
         )
       )
