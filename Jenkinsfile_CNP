@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure@feature/search-test-artifacts-in-subdirs")
+@Library("Infrastructure")
 
 String product = "cmc"
 String component = "citizen-frontend"
