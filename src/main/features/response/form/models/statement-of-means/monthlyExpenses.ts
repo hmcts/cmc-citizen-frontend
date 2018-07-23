@@ -1,21 +1,6 @@
+import { MonthlyExpenseType } from './monthlyExpenseType'
 import { ExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
 import { ValidateIf, ValidateNested } from 'class-validator'
-
-export class FieldNames {
-  static readonly MORTGAGE = 'mortgage'
-  static readonly RENT = 'rent'
-  static readonly COUNCIL_TAX = 'Council Tax'
-  static readonly GAS = 'gas'
-  static readonly ELECTRICITY = 'electricity'
-  static readonly WATER = 'water'
-  static readonly TRAVEL = 'travel'
-  static readonly SCHOOL = 'school costs'
-  static readonly FOOD_AND_HOUSEKEEPING = 'food and housekeeping'
-  static readonly TV_AND_BROADBAND = 'TV and broadband'
-  static readonly HIRE_PURCHASE = 'hire purchases'
-  static readonly MOBILE_PHONE = 'mobile phone'
-  static readonly MAINTENANCE = 'maintenance'
-}
 
 export class MonthlyExpenses {
 
@@ -146,19 +131,19 @@ export class MonthlyExpenses {
     }
 
     return new MonthlyExpenses(
-      value.mortgageDeclared, ExpenseSource.fromObject(FieldNames.MORTGAGE, value.mortgage),
-      value.rentDeclared, ExpenseSource.fromObject(FieldNames.RENT, value.rent),
-      value.councilTaxDeclared, ExpenseSource.fromObject(FieldNames.COUNCIL_TAX, value.councilTax),
-      value.gasDeclared, ExpenseSource.fromObject(FieldNames.GAS, value.gas),
-      value.electricityDeclared, ExpenseSource.fromObject(FieldNames.ELECTRICITY, value.electricity),
-      value.waterDeclared, ExpenseSource.fromObject(FieldNames.WATER, value.water),
-      value.travelDeclared, ExpenseSource.fromObject(FieldNames.TRAVEL, value.travel),
-      value.schoolCostsDeclared, ExpenseSource.fromObject(FieldNames.SCHOOL, value.schoolCosts),
-      value.foodAndHousekeepingDeclared, ExpenseSource.fromObject(FieldNames.FOOD_AND_HOUSEKEEPING, value.foodAndHousekeeping),
-      value.tvAndBroadbandDeclared, ExpenseSource.fromObject(FieldNames.TV_AND_BROADBAND, value.tvAndBroadband),
-      value.hirePurchaseDeclared, ExpenseSource.fromObject(FieldNames.HIRE_PURCHASE, value.hirePurchase),
-      value.mobilePhoneDeclared, ExpenseSource.fromObject(FieldNames.MOBILE_PHONE, value.mobilePhone),
-      value.maintenanceDeclared, ExpenseSource.fromObject(FieldNames.MAINTENANCE, value.maintenance),
+      value.mortgageDeclared, ExpenseSource.fromObject(MonthlyExpenseType.MORTGAGE.displayValue, value.mortgage),
+      value.rentDeclared, ExpenseSource.fromObject(MonthlyExpenseType.RENT.displayValue, value.rent),
+      value.councilTaxDeclared, ExpenseSource.fromObject(MonthlyExpenseType.COUNCIL_TAX.displayValue, value.councilTax),
+      value.gasDeclared, ExpenseSource.fromObject(MonthlyExpenseType.GAS.displayValue, value.gas),
+      value.electricityDeclared, ExpenseSource.fromObject(MonthlyExpenseType.ELECTRICITY.displayValue, value.electricity),
+      value.waterDeclared, ExpenseSource.fromObject(MonthlyExpenseType.WATER.displayValue, value.water),
+      value.travelDeclared, ExpenseSource.fromObject(MonthlyExpenseType.TRAVEL.displayValue, value.travel),
+      value.schoolCostsDeclared, ExpenseSource.fromObject(MonthlyExpenseType.SCHOOL_COSTS.displayValue, value.schoolCosts),
+      value.foodAndHousekeepingDeclared, ExpenseSource.fromObject(MonthlyExpenseType.FOOD_HOUSEKEEPING.displayValue, value.foodAndHousekeeping),
+      value.tvAndBroadbandDeclared, ExpenseSource.fromObject(MonthlyExpenseType.TV_AND_BROADBAND.displayValue, value.tvAndBroadband),
+      value.hirePurchaseDeclared, ExpenseSource.fromObject(MonthlyExpenseType.HIRE_PURCHASES.displayValue, value.hirePurchase),
+      value.mobilePhoneDeclared, ExpenseSource.fromObject(MonthlyExpenseType.MOBILE_PHONE.displayValue, value.mobilePhone),
+      value.maintenanceDeclared, ExpenseSource.fromObject(MonthlyExpenseType.MAINTENANCE_PAYMENTS.displayValue, value.maintenance),
       value.otherDeclared, value.other && value.other
       .map(source => ExpenseSource.fromObject(source.name, source))
       .filter(source => source !== undefined)

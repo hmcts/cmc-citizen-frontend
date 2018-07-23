@@ -5,8 +5,8 @@ import { Validator } from 'class-validator'
 import { expectValidationError } from '../../forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { IncomeSource as FormIncomeSource } from 'response/form/models/statement-of-means/incomeSource'
+import { MonthlyIncomeType } from 'response/form/models/statement-of-means/monthlyIncomeType'
 import { ExpenseSource as FormExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
-import { FieldNames } from 'response/form/models/statement-of-means/monthlyIncome'
 import { IncomeExpenseSchedule as FormIncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
 
 const SAMPLE_INCOME_EXPENSE_SOURCE_FROM_OBJECT = {
@@ -57,7 +57,7 @@ describe('IncomeExpenseSource', () => {
     })
 
     it('should return a new instance initialised with set fields from object parameter provided', () => {
-      const monthlyIncome = new FormIncomeSource(FieldNames.SALARY, 100, FormIncomeExpenseSchedule.MONTH)
+      const monthlyIncome = new FormIncomeSource(MonthlyIncomeType.JOB.displayValue, 100, FormIncomeExpenseSchedule.MONTH)
       expect(IncomeExpenseSource.fromFormIncomeSource(monthlyIncome)).to.deep.equal({
         'amount': 100,
         'schedule': IncomeExpenseSchedule.MONTH
@@ -71,7 +71,7 @@ describe('IncomeExpenseSource', () => {
     })
 
     it('should return a new instance initialised with set fields from object parameter provided', () => {
-      const monthlyExpense = new FormExpenseSource(FieldNames.SALARY, 100, FormIncomeExpenseSchedule.MONTH)
+      const monthlyExpense = new FormExpenseSource(MonthlyIncomeType.JOB.displayValue, 100, FormIncomeExpenseSchedule.MONTH)
       expect(IncomeExpenseSource.fromFormExpenseSource(monthlyExpense)).to.deep.equal({
         'amount': 100,
         'schedule': IncomeExpenseSchedule.MONTH
