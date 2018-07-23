@@ -5,21 +5,21 @@ import { Paths, PartAdmissionPaths } from 'response/paths'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 
-import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { ErrorHandling } from 'shared/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { RoutablePath } from 'shared/router/routablePath'
+import { HowMuchDoYouOwe } from 'response/form/models/howMuchDoYouOwe'
 import { PartialAdmissionGuard } from 'response/guards/partialAdmissionGuard'
-import { YesNoOption } from 'models/yesNoOption'
 
-const page: RoutablePath = PartAdmissionPaths.alreadyPaidPage
+const page: RoutablePath = PartAdmissionPaths.howMuchDoYouOwePage
 
-function renderView (form: Form<AlreadyPaid>, res: express.Response) {
+function renderView (form: Form<HowMuchDoYouOwe>, res: express.Response) {
   res.render(page.associatedView, {
-    form: form
+    form: form,
+    totalAmount: res.locals.claim.totalAmountTillToday
   })
 }
 
@@ -28,16 +28,16 @@ export default express.Router()
   .get(
     page.uri,
     PartialAdmissionGuard.requestHandler(),
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      renderView(new Form(draft.document.partialAdmission.alreadyPaid), res)
+      renderView(new Form(draft.document.partialAdmission.howMuchDoYouOwe), res)
     }))
   .post(
     page.uri,
     PartialAdmissionGuard.requestHandler(),
-    FormValidator.requestHandler(AlreadyPaid, AlreadyPaid.fromObject),
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<AlreadyPaid> = req.body
+    FormValidator.requestHandler(HowMuchDoYouOwe, HowMuchDoYouOwe.fromObject),
+    ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
+      const form: Form<HowMuchDoYouOwe> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)
@@ -45,14 +45,7 @@ export default express.Router()
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        draft.document.partialAdmission.alreadyPaid = form.model
-        draft.document.fullAdmission = draft.document.rejectAllOfClaim = undefined
-
-        if (draft.document.partialAdmission.alreadyPaid.option === YesNoOption.YES) {
-          draft.document.partialAdmission.howMuchDoYouOwe = undefined
-        } else {
-          draft.document.partialAdmission.howMuchHaveYouPaid = undefined
-        }
+        draft.document.partialAdmission.howMuchDoYouOwe = form.model
 
         await new DraftService().save(draft, user.bearerToken)
 

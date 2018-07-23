@@ -225,10 +225,47 @@ describe('ResponseDraft', () => {
       draft.response = {
         type: ResponseType.PART_ADMISSION
       }
-      draft.partialAdmission = new PartialAdmission().deserialize({ alreadyPaid: 'yes' })
+      draft.partialAdmission = new PartialAdmission().deserialize({
+        alreadyPaid: { option: { option: 'yes' } }
+      })
 
       expect(draft.isResponsePartiallyAdmitted()).to.be.eq(true)
     })
+  })
+
+  describe('isResponsePartiallyAdmittedAndAlreadyPaid', () => {
+
+    it('should return false when no response type set', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = undefined
+
+      expect(draft.isResponsePartiallyAdmittedAndAlreadyPaid()).to.be.equals(false)
+    })
+
+    it('should return true when partially admitted and already paid', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = {
+        type: ResponseType.PART_ADMISSION
+      }
+      draft.partialAdmission = new PartialAdmission().deserialize({
+        alreadyPaid: { option: { option: 'yes' } }
+      })
+
+      expect(draft.isResponsePartiallyAdmittedAndAlreadyPaid()).to.be.equals(true)
+    })
+
+    it('should return false when partially admitted and NOT already paid', () => {
+      const draft: ResponseDraft = new ResponseDraft()
+      draft.response = {
+        type: ResponseType.PART_ADMISSION
+      }
+      draft.partialAdmission = new PartialAdmission().deserialize({
+        alreadyPaid: { option: { option: 'no' } }
+      })
+
+      expect(draft.isResponsePartiallyAdmittedAndAlreadyPaid()).to.be.equals(false)
+    })
+
   })
 
   describe('isResponseRejectedFullyWithAmountClaimedPaid', () => {
