@@ -24,6 +24,8 @@ const validFormData = {
   admitted: 'yes'
 }
 
+const defendantPartialAdmissionResponse = claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj
+
 describe('Claimant response: settle admitted page', () => {
   attachDefaultHooks(app)
 
@@ -48,7 +50,7 @@ describe('Claimant response: settle admitted page', () => {
 
       it('should return 500 and render error page when cannot retrieve claimantResponse draft', async () => {
         draftStoreServiceMock.rejectFind('Error')
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
 
         await request(app)
           .get(pagePath)
@@ -57,7 +59,7 @@ describe('Claimant response: settle admitted page', () => {
       })
 
       it('should render page when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
         draftStoreServiceMock.resolveFind('claimantResponse')
 
         await request(app)
@@ -90,7 +92,7 @@ describe('Claimant response: settle admitted page', () => {
 
           it('should return 500 when cannot retrieve claimantResponse draft', async () => {
             draftStoreServiceMock.rejectFind('Error')
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
 
             await request(app)
               .post(pagePath)
@@ -102,7 +104,7 @@ describe('Claimant response: settle admitted page', () => {
 
         context('when form is valid', async () => {
           it('should redirect to task list page', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
             draftStoreServiceMock.resolveFind('claimantResponse')
             draftStoreServiceMock.resolveSave()
 
@@ -114,7 +116,7 @@ describe('Claimant response: settle admitted page', () => {
           })
 
           it('should return 500 and render error page when cannot save claimantResponse draft', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
             draftStoreServiceMock.resolveFind('claimantResponse')
             draftStoreServiceMock.rejectSave()
 
@@ -128,7 +130,7 @@ describe('Claimant response: settle admitted page', () => {
 
         context('when form is invalid', async () => {
           it('should render page', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
             draftStoreServiceMock.resolveFind('claimantResponse')
 
             await request(app)

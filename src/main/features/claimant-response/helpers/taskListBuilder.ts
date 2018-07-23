@@ -28,8 +28,7 @@ export class TaskListBuilder {
   static buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
     const externalId: string = claim.externalId
     const tasks: TaskListItem[] = []
-    if (claim.response
-      && claim.response.responseType === ResponseType.FULL_DEFENCE
+    if (claim.response.responseType === ResponseType.FULL_DEFENCE
       && claim.response.freeMediation === YesNoOption.NO
     ) {
       tasks.push(
@@ -41,8 +40,7 @@ export class TaskListBuilder {
       )
     }
 
-    if (claim.response
-      && claim.response.responseType === ResponseType.PART_ADMISSION
+    if (claim.response.responseType === ResponseType.PART_ADMISSION
     ) {
       if (claim.response.amount) {
         tasks.push(
@@ -66,8 +64,7 @@ export class TaskListBuilder {
       }
     }
 
-    if (claim.response
-      && claim.response.responseType === ResponseType.FULL_ADMISSION
+    if (claim.response.responseType === ResponseType.FULL_ADMISSION
       && claim.response.paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY
     ) {
       tasks.push(

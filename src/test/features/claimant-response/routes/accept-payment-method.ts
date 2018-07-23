@@ -14,9 +14,6 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { checkAuthorizationGuards } from 'test/features/claimant-response/routes/checks/authorization-check'
 import { checkNotClaimantInCaseGuard } from 'test/features/claimant-response/routes/checks/not-claimant-in-case-check'
-import { ResponseType } from 'claims/models/response/responseType'
-import { PaymentOption } from 'claims/models/response/core/paymentOption'
-import { MomentFactory } from 'shared/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -27,22 +24,7 @@ const validFormData = {
   accept: 'yes'
 }
 
-const claimOverride = {
-  response: {
-    responseType: ResponseType.PART_ADMISSION,
-    paymentIntention: {
-      paymentOption: PaymentOption.INSTALMENTS,
-      repaymentPlan: {
-        firstPaymentDate: MomentFactory.parse('2018-12-30')
-      },
-      paymentDate: {
-        year: 2018,
-        month: 12,
-        day: 31
-      }
-    }
-  }
-}
+const defendantPartialAdmissionResponse = claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj
 
 describe('Claimant response: accept payment method page', () => {
   attachDefaultHooks(app)
@@ -68,7 +50,7 @@ describe('Claimant response: accept payment method page', () => {
 
       it('should return 500 and render error page when cannot retrieve claimantResponse draft', async () => {
         draftStoreServiceMock.rejectFind('Error')
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
 
         await request(app)
           .get(pagePath)
@@ -77,7 +59,7 @@ describe('Claimant response: accept payment method page', () => {
       })
 
       it('should render page when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimOverride)
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
         draftStoreServiceMock.resolveFind('claimantResponse')
 
         await request(app)
@@ -110,7 +92,7 @@ describe('Claimant response: accept payment method page', () => {
 
           it('should return 500 when cannot retrieve claimantResponse draft', async () => {
             draftStoreServiceMock.rejectFind('Error')
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
 
             await request(app)
               .post(pagePath)
@@ -122,7 +104,7 @@ describe('Claimant response: accept payment method page', () => {
 
         context('when form is valid', async () => {
           it('should redirect to task list page', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
             draftStoreServiceMock.resolveFind('claimantResponse')
             draftStoreServiceMock.resolveSave()
 
@@ -134,7 +116,7 @@ describe('Claimant response: accept payment method page', () => {
           })
 
           it('should return 500 and render error page when cannot save claimantResponse draft', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
             draftStoreServiceMock.resolveFind('claimantResponse')
             draftStoreServiceMock.rejectSave()
 
@@ -148,7 +130,7 @@ describe('Claimant response: accept payment method page', () => {
 
         context('when form is invalid', async () => {
           it('should render page', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimOverride)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
             draftStoreServiceMock.resolveFind('claimantResponse')
 
             await request(app)
