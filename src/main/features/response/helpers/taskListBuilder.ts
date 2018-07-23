@@ -19,6 +19,8 @@ import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeatur
 import { HowMuchHaveYouPaidTask } from 'response/tasks/howMuchHaveYouPaidTask'
 import { WhyDoYouDisagreeTask } from 'response/tasks/whyDoYouDisagreeTask'
 import { HowMuchDoYouOweTask } from 'response/tasks/howMuchDoYouOweTask'
+import { WhenWillYouPay } from 'response/tasks/whenWillYouPay'
+import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -102,14 +104,17 @@ export class TaskListBuilder {
         new TaskListItem(
           'Your repayment plan',
           FullAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId }),
-          YourRepaymentPlanTask.isCompleted(draft)
+          YourRepaymentPlanTask.isCompleted(draft.fullAdmission.paymentPlan)
         )
       )
     }
 
-    if (draft.isResponsePartiallyAdmitted()) {
+    const partiallyAdmitted = draft.isResponsePartiallyAdmitted()
+    const partiallyAdmittedAndPaid = draft.isResponsePartiallyAdmittedAndAlreadyPaid()
 
-      if (draft.isResponsePartiallyAdmittedAndAlreadyPaid()) {
+    if (partiallyAdmitted) {
+
+      if (partiallyAdmittedAndPaid) {
         tasks.push(
           new TaskListItem(
             'How much have you paid?',
@@ -135,6 +140,27 @@ export class TaskListBuilder {
           WhyDoYouDisagreeTask.isCompleted(draft)
         )
       )
+    }
+
+    if (partiallyAdmitted && !partiallyAdmittedAndPaid) {
+      tasks.push(
+        new TaskListItem(
+          `When will you pay the £${draft.partialAdmission.howMuchDoYouOwe.amount}?`,
+          PartAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: externalId }),
+          WhenWillYouPay.isCompleted(draft)
+        )
+      )
+
+      if (WhenWillYouPay.isCompleted(draft)
+        && draft.partialAdmission.paymentOption.isOfType(DefendantPaymentType.INSTALMENTS)) {
+        tasks.push(
+          new TaskListItem(
+            'Your repayment plan',
+            PartAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId }),
+            YourRepaymentPlanTask.isCompleted(draft.partialAdmission.paymentPlan)
+          )
+        )
+      }
     }
 
     return new TaskList('Respond to claim', tasks)

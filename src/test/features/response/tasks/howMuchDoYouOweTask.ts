@@ -26,7 +26,7 @@ function validResponseDraft (): ResponseDraft {
   return responseDraft
 }
 
-describe('HowMuchDoYouOweTask', () => {
+describe('WhenWillYouPay', () => {
 
   context('should not be completed when', () => {
 

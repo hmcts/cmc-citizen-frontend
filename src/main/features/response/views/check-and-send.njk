@@ -188,7 +188,14 @@
 
     {% if draft.isResponseRejectedFullyWithDispute() %}
       {{ tableStart('responseDetails', 'Response details') }}
-      {{ row(label = 'Why you disagree with the claim', value = draft.defence.text, changeLink = ResponsePaths.defencePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+      {{
+          row(
+            label = 'Why you disagree with the claim',
+            value = draft.defence.text,
+            changeLink = ResponsePaths.defencePage.evaluateUri({ externalId: claim.externalId }),
+            bold = true
+          )
+      }}
 
       {{
         timelineCheckAndSend(
@@ -216,7 +223,14 @@
 
     {% if draft.isResponseRejectedFullyWithDispute() or draft.isResponsePartiallyAdmittedAndAlreadyPaid() %}
       {{ tableStart('freeMediation', 'Free mediation') }}
-      {{ row(label = 'Will you try mediation?', value = t(draft.freeMediation.option) | capitalize, changeLink = ResponsePaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+      {{
+          row(
+            label = 'Will you try mediation?',
+            value = t(draft.freeMediation.option) | capitalize,
+            changeLink = ResponsePaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }),
+            bold = true
+          )
+      }}
       {{ tableEnd() }}
     {% endif %}
 
