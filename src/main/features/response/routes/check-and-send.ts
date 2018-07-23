@@ -68,7 +68,7 @@ function deserializerFunction (value: any): StatementOfTruth | QualifiedStatemen
   }
 }
 
-function getStatementOfTruthClassFor (claim: Claim, draft: Draft<ResponseDraft>): { new(): StatementOfTruth | QualifiedStatementOfTruth } {
+function getStatementOfTruthClassFor (claim: Claim, draft: Draft<ResponseDraft>): { new (): StatementOfTruth | QualifiedStatementOfTruth } {
   if (signatureTypeFor(claim, draft) === SignatureType.QUALIFIED) {
     return QualifiedStatementOfTruth
   } else {
@@ -106,6 +106,9 @@ export default express.Router()
               res.redirect(Paths.counterClaimPage.evaluateUri({ externalId: claim.externalId }))
               return
             }
+            break
+          case ResponseType.FULL_ADMISSION:
+          case ResponseType.PART_ADMISSION:
             break
           default:
             next(new Error('Unknown response type: ' + responseType))

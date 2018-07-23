@@ -1,6 +1,7 @@
 export class ValidationErrors {
   static readonly TEXT_TOO_LONG: string = 'You’ve entered too many characters'
   static readonly AMOUNT_TOO_HIGH: string = 'Are you sure this is a valid value?'
+  static readonly AMOUNT_ENTERED_TOO_LARGE: string = 'Enter a value less then the amount claimed'
 
   static readonly WHY_NOT_OWE_FULL_AMOUNT_REQUIRED: string = 'Explain why you don’t owe the full amount'
   static readonly YES_NO_REQUIRED: string = 'Please select yes or no'
@@ -8,7 +9,7 @@ export class ValidationErrors {
   static readonly NUMBER_REQUIRED: string = 'Enter a valid number'
   static readonly VALID_OWED_AMOUNT_REQUIRED: string = 'Enter a valid amount owed'
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount'
-  static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter valid amount, maximum two decimal places'
+  static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter a valid amount, maximum two decimal places'
   static readonly NON_NEGATIVE_NUMBER_REQUIRED: string = 'Don’t enter a negative number'
   static readonly POSITIVE_NUMBER_REQUIRED: string = 'Enter a number higher than 0'
   static readonly INTEGER_REQUIRED: string = 'Enter a numeric, for example 3'

@@ -10,7 +10,7 @@
       <form method="post">
         {{ csrfProtection(csrf) }}
 
-        {{ dateInput(form = form, name = 'date', hint = 'For example, 12 12 2017') }}
+        {{ dateInput(form = form, name = 'date', hint = t('For example, {{ futureDate }}', { futureDate: futureDate | inputDate })) }}
 
         {{ saveAndContinueButton() }}
       </form>

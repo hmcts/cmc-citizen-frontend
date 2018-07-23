@@ -34,9 +34,12 @@ import { OtherDependants } from 'response/form/models/statement-of-means/otherDe
 import { NumberOfPeople } from 'response/form/models/statement-of-means/numberOfPeople'
 import { Debts } from 'response/form/models/statement-of-means/debts'
 import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders'
-import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
-import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
+import { MonthlyIncome, FieldNames as MonthlyIncomeFieldNames } from 'response/form/models/statement-of-means/monthlyIncome'
+import { MonthlyExpenses, FieldNames as MonthlyExpensesFieldNames } from 'response/form/models/statement-of-means/monthlyExpenses'
 import { Explanation } from 'response/form/models/statement-of-means/explanation'
+import { IncomeSource } from 'response/form/models/statement-of-means/incomeSource'
+import { ExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
+import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
 
 function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDraft {
   const responseDraft: ResponseDraft = new ResponseDraft()
@@ -68,8 +71,32 @@ function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDra
   responseDraft.statementOfMeans.unemployment = new Unemployment(UnemploymentType.RETIRED)
   responseDraft.statementOfMeans.bankAccounts = new BankAccounts([new BankAccountRow(BankAccountType.CURRENT_ACCOUNT, false, 100)])
   responseDraft.statementOfMeans.debts = new Debts(false)
-  responseDraft.statementOfMeans.monthlyIncome = new MonthlyIncome(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, [])
-  responseDraft.statementOfMeans.monthlyExpenses = new MonthlyExpenses(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, [])
+  responseDraft.statementOfMeans.monthlyIncome = new MonthlyIncome(
+    true, new IncomeSource(MonthlyIncomeFieldNames.SALARY, 100, IncomeExpenseSchedule.MONTH),
+    undefined, new IncomeSource(MonthlyIncomeFieldNames.UNIVERSAL_CREDIT, undefined, undefined),
+    undefined, new IncomeSource(MonthlyIncomeFieldNames.JOBSEEKER_ALLOWANCE_INCOME, undefined, undefined),
+    undefined, new IncomeSource(MonthlyIncomeFieldNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, undefined, undefined),
+    undefined, new IncomeSource(MonthlyIncomeFieldNames.INCOME_SUPPORT, undefined, undefined),
+    undefined, new IncomeSource(MonthlyIncomeFieldNames.WORKING_TAX_CREDIT, undefined, undefined),
+    undefined, new IncomeSource(MonthlyIncomeFieldNames.CHILD_TAX_CREDIT, undefined, undefined),
+    undefined, new IncomeSource(MonthlyIncomeFieldNames.CHILD_BENEFIT, undefined, undefined),
+    undefined, new IncomeSource(MonthlyIncomeFieldNames.COUNCIL_TAX_SUPPORT, undefined, undefined),
+    undefined, new IncomeSource(MonthlyIncomeFieldNames.PENSION, undefined, undefined)
+  )
+
+  responseDraft.statementOfMeans.monthlyExpenses = new MonthlyExpenses(
+    true, new ExpenseSource(MonthlyExpensesFieldNames.MORTGAGE, 100, IncomeExpenseSchedule.MONTH),
+    undefined, new ExpenseSource(MonthlyExpensesFieldNames.RENT, undefined, undefined),
+    undefined, new ExpenseSource(MonthlyExpensesFieldNames.COUNCIL_TAX, undefined, undefined),
+    undefined, new ExpenseSource(MonthlyExpensesFieldNames.GAS, undefined, undefined),
+    undefined, new ExpenseSource(MonthlyExpensesFieldNames.ELECTRICITY, undefined, undefined),
+    undefined, new ExpenseSource(MonthlyExpensesFieldNames.WATER, undefined, undefined),
+    undefined, new ExpenseSource(MonthlyExpensesFieldNames.TRAVEL, undefined, undefined),
+    undefined, new ExpenseSource(MonthlyExpensesFieldNames.SCHOOL, undefined, undefined),
+    undefined, new ExpenseSource(MonthlyExpensesFieldNames.FOOD_AND_HOUSEKEEPING, undefined, undefined),
+    undefined, new ExpenseSource(MonthlyExpensesFieldNames.TV_AND_BROADBAND, undefined, undefined)
+  )
+
   responseDraft.statementOfMeans.courtOrders = new CourtOrders(false)
   responseDraft.statementOfMeans.explanation = new Explanation('Some explanation')
 
@@ -178,6 +205,25 @@ describe('StatementOfMeansTask', () => {
 
             expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
           })
+
+          it('has monthly income', () => {
+            responseDraft.statementOfMeans.monthlyIncome = new MonthlyIncome(
+              true, new IncomeSource(MonthlyIncomeFieldNames.SALARY, 100, IncomeExpenseSchedule.MONTH),
+              undefined, new IncomeSource(MonthlyIncomeFieldNames.UNIVERSAL_CREDIT, undefined, undefined),
+              undefined, new IncomeSource(MonthlyIncomeFieldNames.JOBSEEKER_ALLOWANCE_INCOME, undefined, undefined),
+              undefined, new IncomeSource(MonthlyIncomeFieldNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, undefined, undefined),
+              undefined, new IncomeSource(MonthlyIncomeFieldNames.INCOME_SUPPORT, undefined, undefined),
+              undefined, new IncomeSource(MonthlyIncomeFieldNames.WORKING_TAX_CREDIT, undefined, undefined),
+              undefined, new IncomeSource(MonthlyIncomeFieldNames.CHILD_TAX_CREDIT, undefined, undefined),
+              undefined, new IncomeSource(MonthlyIncomeFieldNames.CHILD_BENEFIT, undefined, undefined),
+              undefined, new IncomeSource(MonthlyIncomeFieldNames.COUNCIL_TAX_SUPPORT, undefined, undefined),
+              undefined, new IncomeSource(MonthlyIncomeFieldNames.PENSION, undefined, undefined),
+              undefined, []
+            )
+
+            expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
+          })
+
         })
 
         context('is not completed', () => {

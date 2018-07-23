@@ -98,7 +98,7 @@ Assertion.addMethod('toLocation', function (location: string | RegExp) {
 })
 
 /**
- * Checks whether response 'location' header matches specified location
+ * Checks whether response has text
  */
 Assertion.addMethod('withText', function (...texts: string[]) {
   const res = this._obj
@@ -106,6 +106,21 @@ Assertion.addMethod('withText', function (...texts: string[]) {
   this.assert(
     _.every(texts, (text) => res.text.includes(text))
     , errorMessageWithResponseExtract('expected response text to include #{exp} but got #{act}', res)
+    , errorMessageWithResponseExtract('expected response text to include #{act}', res)
+    , texts.join(', ') // expected
+    , res.text.replace(/\n+\s*/g, '') // actual
+  )
+})
+
+/**
+ * Checks whether response does not have text
+ */
+Assertion.addMethod('withoutText', function (...texts: string[]) {
+  const res = this._obj
+
+  this.assert(
+    _.every(texts, (text) => !res.text.includes(text))
+    , errorMessageWithResponseExtract('expected response text to not include #{exp} but got #{act}', res)
     , errorMessageWithResponseExtract('expected response text to not include #{act}', res)
     , texts.join(', ') // expected
     , res.text.replace(/\n+\s*/g, '') // actual

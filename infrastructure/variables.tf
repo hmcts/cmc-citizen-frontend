@@ -44,14 +44,6 @@ variable "vault_section" {
   default = "test"
 }
 // feature toggles
-variable "feature_ccj" {
-  default = "true"
-}
-
-variable "feature_offer" {
-  default = "true"
-}
-
 variable "feature_statement_of_means" {
   default = "false"
 }
@@ -70,6 +62,10 @@ variable "feature_fine_print" {
 
 variable "feature_return_error_to_user" {
   default = "true"
+}
+
+variable "feature_mock_pay" {
+  default = "false"
 }
 
 variable "jenkins_AAD_objectId" {
@@ -101,4 +97,8 @@ variable "appinsights_instrumentation_key" {
 
 variable "capacity" {
   default = "1"
+}
+
+variable "common_tags" {
+  type = "map"
 }

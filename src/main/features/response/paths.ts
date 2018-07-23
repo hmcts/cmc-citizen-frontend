@@ -24,10 +24,8 @@ export class Paths {
   static readonly defendantHowMuchPaidClaimant = new RoutablePath(`${responsePath}/eligibility/how-much-paid-claimant`)
   // Added in case anyone has a printed copy of a PDF with the old URL
   static readonly legacyDashboardRedirect = new RoutablePath('/response/dashboard')
-  static readonly defendantHowMuchPaid = new RoutablePath(`${responsePath}/how-much-paid`)
   static readonly defendantHowMuchOwed = new RoutablePath(`${responsePath}/how-much-owed`)
   static readonly defenceRejectAllOfClaimPage = new RoutablePath(`${responsePath}/reject-all-of-claim`)
-  static readonly defenceRejectPartOfClaimPage = new RoutablePath(`${responsePath}/reject-part-of-claim`)
   static readonly impactOfDisputePage = new RoutablePath(`${responsePath}/impact-of-dispute`)
   static readonly claimDetailsPage = new RoutablePath(`${responsePath}/claim-details`)
   static readonly summaryPage = new RoutablePath(`${responsePath}/summary`)
@@ -61,4 +59,16 @@ export class FullAdmissionPaths {
   static readonly paymentOptionPage = new RoutablePath(`${fullAdmissionPath}/payment-option`)
   static readonly paymentDatePage: RoutablePath = new RoutablePath(`${fullAdmissionPath}/payment-date`)
   static readonly paymentPlanPage = new RoutablePath(`${fullAdmissionPath}/payment-plan`)
+}
+
+const partialAdmissionPath = `${responsePath}/partial-admission`
+
+export class PartAdmissionPaths {
+  static readonly alreadyPaidPage = new RoutablePath(`${partialAdmissionPath}/already-paid`)
+  static readonly howMuchHaveYouPaidPage = new RoutablePath(`${partialAdmissionPath}/how-much-have-you-paid`)
+  static readonly howMuchDoYouOwePage = new RoutablePath(`${partialAdmissionPath}/how-much-do-you-owe`)
+  static readonly whyDoYouDisagreePage = new RoutablePath(`${partialAdmissionPath}/why-do-you-disagree`)
+  static readonly paymentOptionPage = new RoutablePath(`${partialAdmissionPath}/payment-option`)
+  static readonly paymentDatePage: RoutablePath = new RoutablePath(`${partialAdmissionPath}/payment-date`)
+  static readonly paymentPlanPage = new RoutablePath(`${partialAdmissionPath}/payment-plan`)
 }

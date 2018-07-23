@@ -34,7 +34,7 @@ Scenario('I can complete the journey when I fully reject the claim as I have alr
   I.see(`We’ve emailed ${claimModel.claimants[0].name} telling them when and how you said you paid the claim`)
 })
 
-Scenario('I can complete the journey when I fully admit all of the claim @citizen', function* (I: I) {
+Scenario('I can fill out forms for I admit part of the claim @citizen', function* (I: I) {
   const claimantEmail: string = yield I.createCitizenUser()
   const defendantEmail: string = yield I.createCitizenUser()
 
@@ -42,5 +42,6 @@ Scenario('I can complete the journey when I fully admit all of the claim @citize
   const claimRef: string = yield I.createClaim(claimData, claimantEmail)
 
   yield helperSteps.enterPinNumber(claimRef, claimantEmail)
-  helperSteps.finishResponse(claimRef, defendantEmail, PartyType.INDIVIDUAL, DefenceType.FULL_ADMISSION)
+
+  helperSteps.finishResponse(claimRef, defendantEmail, PartyType.INDIVIDUAL, DefenceType.PART_ADMISSION)
 })

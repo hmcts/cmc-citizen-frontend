@@ -24,10 +24,9 @@
   },
   "featureToggles": {
     "testingSupport": true,
-    "countyCourtJudgment": true,
     "fullAdmission": true,
     "partialAdmission": true,
-    "offer": true,
+    "admissions": true,
     "statementOfMeans": true,
     "returnErrorToUser": true
   },

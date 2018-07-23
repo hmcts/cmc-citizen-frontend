@@ -60,6 +60,7 @@ module "citizen-frontend" {
   additional_host_name = "${var.env != "preview" ? var.external_host_name : "null"}"
   https_only = "true"
   capacity = "${var.capacity}"
+  common_tags = "${var.common_tags}"
 
   app_settings = {
     // Node specific vars
@@ -106,13 +107,12 @@ module "citizen-frontend" {
     // Feature toggles
     FEATURE_TESTING_SUPPORT = "${var.env == "prod" ? "false" : "true"}"
     // Enabled everywhere except prod
-    FEATURE_CCJ = "${var.feature_ccj}"
-    FEATURE_OFFER = "${var.feature_offer}"
     FEATURE_STATEMENT_OF_MEANS = "${var.feature_statement_of_means}"
     FEATURE_FULL_ADMISSION = "${var.feature_full_admission}"
     FEATURE_PARTIAL_ADMISSION = "${var.feature_partial_admission}"
     FEATURE_FINE_PRINT = "${var.feature_fine_print}"
     FEATURE_RETURN_ERROR_TO_USER = "${var.feature_return_error_to_user}"
+    FEATURE_MOCK_PAY = "${var.feature_mock_pay}"
 
     CONTACT_EMAIL = "${data.azurerm_key_vault_secret.staff_email.value}"
 

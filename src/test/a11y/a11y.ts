@@ -1,10 +1,10 @@
 /* Allow chai assertions which don't end in a function call, e.g. expect(thing).to.be.undefined */
 /* tslint:disable:no-unused-expression */
 /* tslint:disable:no-console */
+
 import * as config from 'config'
 import * as supertest from 'supertest'
 import * as pa11y from 'pa11y'
-import * as promisify from 'es6-promisify'
 import { expect } from 'chai'
 
 import { RoutablePath } from 'shared/router/routablePath'
@@ -12,6 +12,7 @@ import { Paths as EligibilityPaths } from 'eligibility/paths'
 import { ErrorPaths as ClaimIssueErrorPaths, Paths as ClaimIssuePaths } from 'claim/paths'
 import { ErrorPaths as DefendantFirstContactErrorPaths, Paths as DefendantFirstContactPaths } from 'first-contact/paths'
 import { Paths as DefendantResponsePaths, StatementOfMeansPaths, FullAdmissionPaths } from 'response/paths'
+import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 import { Paths as CCJPaths } from 'ccj/paths'
 import { Paths as OfferPaths } from 'offer/paths'
 
@@ -23,23 +24,31 @@ app.locals.csrf = 'dummy-token'
 const cookieName: string = config.get<string>('session.cookieName')
 
 const agent = supertest.agent(app)
-const pa11yTest = pa11y({
-  page: {
+
+interface Issue {
+  type
+}
+
+async function runPa11y (url: string): Promise<Issue[]> {
+  const result = await pa11y(url, {
     headers: {
       Cookie: `${cookieName}=ABC`
+    },
+    chromeLaunchConfig: {
+      args: ['--no-sandbox']
     }
-  }
-})
-const test = promisify(pa11yTest.run, pa11yTest)
+  })
+  return result.issues
+}
 
-function check (url: string): void {
-  describe(`Page ${url}`, () => {
-    it('should be accessible', async () => {
-      const text = await extractPageText(url)
+function check (uri: string): void {
+  describe(`Page ${uri}`, () => {
+    it('should have no accessibility errors', async () => {
+      const text = await extractPageText(uri)
       ensureHeadingIsIncludedInPageTitle(text)
 
-      const messages = await test(agent.get(url).url)
-      ensureNoAccessibilityErrors(messages)
+      const issues: Issue[] = await runPa11y(agent.get(uri).url)
+      ensureNoAccessibilityErrors(issues)
     })
   })
 }
@@ -71,8 +80,8 @@ function ensureHeadingIsIncludedInPageTitle (text: string): void {
   }
 }
 
-function ensureNoAccessibilityErrors (messages: any[]): void {
-  const errors = messages.filter((message) => message.type === 'error')
+function ensureNoAccessibilityErrors (issues: Issue[]): void {
+  const errors: Issue[] = issues.filter((issue: Issue) => issue.type === 'error')
   expect(errors, `\n${JSON.stringify(errors, null, 2)}\n`).to.be.empty
 }
 
@@ -84,7 +93,8 @@ const excludedPaths: DefendantResponsePaths[] = [
   DefendantResponsePaths.receiptReceiver,
   DefendantResponsePaths.legacyDashboardRedirect,
   OfferPaths.agreementReceiver,
-  DefendantFirstContactPaths.receiptReceiver
+  DefendantFirstContactPaths.receiptReceiver,
+  ClaimantResponsePaths.checkAndSendPage
 ]
 
 describe('Accessibility', () => {
@@ -111,4 +121,5 @@ describe('Accessibility', () => {
   checkPaths(OfferPaths)
   checkPaths(StatementOfMeansPaths)
   checkPaths(FullAdmissionPaths)
+  checkPaths(ClaimantResponsePaths)
 })

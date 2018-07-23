@@ -14,6 +14,9 @@ export class UnemploymentPage {
 
   selectRetired (): void {
     I.checkOption(fields.retired)
+  }
+
+  clickContinue (): void {
     I.click(buttons.submit)
   }
 }
