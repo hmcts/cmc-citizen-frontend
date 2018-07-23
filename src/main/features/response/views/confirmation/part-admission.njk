@@ -2,7 +2,7 @@
 {% set claimantDetailsPageURI = ClaimPaths.claimantDetailsPage.evaluateUri({ externalId: claim.externalId }) %}
 {% set amount = claim.response.amount | numeral %}
 
-{% if claim.response['isAlreadyPaid'] === YesNoOption.Yes.option %}
+{% if claim.response.paymentDeclaration %}
   <p> {{ t('You told us you’ve paid the {{ amount }} you believe you owe. We’ve sent {{ claimantName }} this response.', { claimantName: claimantName, amount: amount }) }}</p>
 {% endif %}
 
@@ -18,8 +18,7 @@
     {% set paymentMethod = 'by instalments' %}
   {% endif %}
 
-  <p>{{ t('You believe you owe {{ amount }}. We’ve emailed {{ claimantName }} your offer to pay this amount {{ paymentMethod }}.', { claimantName: claimantName, paymentMethod: paymentMethod, amount: amount    }) }}
+  <p>{{ t('You believe you owe {{ amount }}. We’ve emailed {{ claimantName }} your offer to pay this amount {{ paymentMethod }}.', { claimantName: claimantName, paymentMethod: paymentMethod, amount: amount    }) }}</p>
 
-  </p>
   <p>{{ t('We’ve also sent them your explanation of why you do not believe you owe the amount claimed.') }}</p>
 {% endif %}
