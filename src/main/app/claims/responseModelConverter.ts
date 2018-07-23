@@ -114,7 +114,6 @@ export class ResponseModelConverter {
 
     return {
       responseType: ResponseType.PART_ADMISSION,
-      isAlreadyPaid: draft.partialAdmission.alreadyPaid.option.option as YesNoOption,
       amount: amount,
       paymentDeclaration: draft.partialAdmission.howMuchHaveYouPaid.date
       && draft.partialAdmission.howMuchHaveYouPaid.text
