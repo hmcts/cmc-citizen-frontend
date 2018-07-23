@@ -67,6 +67,9 @@ function mapFrequencyInWeeks (paymentSchedule: PaymentSchedule): number {
 export function generatePaymentPlan (
   totalAmount: number,
   repaymentPlan: RepaymentPlan): PaymentPlan {
+  if (!repaymentPlan) {
+    return undefined
+  }
   return new PaymentPlan(totalAmount, repaymentPlan.instalmentAmount, mapFrequencyInWeeks(repaymentPlan.paymentSchedule))
 }
 

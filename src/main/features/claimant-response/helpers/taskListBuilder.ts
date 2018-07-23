@@ -41,7 +41,9 @@ export class TaskListBuilder {
       )
     }
 
-    if (claim.response && claim.response.responseType === ResponseType.PART_ADMISSION) {
+    if (claim.response
+      && claim.response.responseType === ResponseType.PART_ADMISSION
+    ) {
       if (claim.response.amount) {
         tasks.push(
           new TaskListItem(
@@ -51,7 +53,9 @@ export class TaskListBuilder {
           )
         )
       }
-      if (draft.settleAdmitted && draft.settleAdmitted.admitted.option === YesNoOption.YES) {
+      if (draft.settleAdmitted
+        && draft.settleAdmitted.admitted.option === YesNoOption.YES
+      ) {
         tasks.push(
           new TaskListItem(
             'Accept or reject their repayment plan',
@@ -70,7 +74,7 @@ export class TaskListBuilder {
         new TaskListItem(
           'Accept or reject their repayment plan',
           Paths.acceptPaymentMethodPage.evaluateUri({ externalId: externalId }),
-          false
+          AcceptPaymentMethodTask.isCompleted(draft)
         )
       )
     }

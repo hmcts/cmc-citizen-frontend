@@ -10,10 +10,10 @@
   </fieldset>
 {% endmacro %}
 
-{% macro row(label, value, bottomBorder = true, bold = false, topBorder = false) %}
-  <div class="{% if topBorder %}top-border {% endif %} {% if bottomBorder %} bottom-border{% endif %}">
+{% macro row(label, value) %}
+  <div class="bottom-border">
     <div class="column-one-half  {% if not label %}if-empty{% endif %}">
-      <span {% if bold %}class="form-label-bold"{% endif %}>{{ t( label ) }}</span>
+      <span> {{ t( label ) }}</span>
     </div>
     <div class="column-one-half {% if not value %}if-empty{% endif %}">
       <span>{{ value }}</span>
