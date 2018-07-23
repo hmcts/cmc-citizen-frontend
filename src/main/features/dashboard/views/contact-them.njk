@@ -10,21 +10,25 @@
   {% set otherPartyName = claim.claimData.defendant.name %}
   {% set phone = claim.response.defendant.mobilePhone %}
   {% set email = claim.claimData.defendant.email %}
+  {% set contactPerson = claim.response.defendant.name %}
+  {% set address = claim.claimData.defendant.address %}
   {% set correspondenceAddress = claim.response.defendant.correspondenceAddress %}
-  {% set defendantResponded = claim.response %}
+  {% set contactPerson = claim.response.defendant.contactPerson %}
 
-  {% if correspondenceAddress == null %}
+  {% if address != null %}
     {% set line1 = claim.claimData.defendant.address.line1 %}
     {% set line2 = claim.claimData.defendant.address.line2 %}
     {% set line3 = claim.claimData.defendant.address.line3 %}
     {% set city = claim.claimData.defendant.address.city %}
     {% set postcode = claim.claimData.defendant.address.postcode %}
-  {% else %}
-    {% set line1 = claim.response.defendant.correspondenceAddress.line1 %}
-    {% set line2 = claim.response.defendant.correspondenceAddress.line2 %}
-    {% set line3 = claim.response.defendant.correspondenceAddress.line3 %}
-    {% set city = claim.response.defendant.correspondenceAddress.city %}
-    {% set postcode = claim.response.defendant.correspondenceAddress.postcode %}
+  {% endif %}
+
+  {% if correspondenceAddress != null %}
+    {% set correspondenceAddressLine1 = claim.response.defendant.correspondenceAddress.line1 %}
+    {% set correspondenceAddressLine2 = claim.response.defendant.correspondenceAddress.line2 %}
+    {% set correspondenceAddressLine3 = claim.response.defendant.correspondenceAddress.line3 %}
+    {% set correspondenceAddressCity = claim.response.defendant.correspondenceAddress.city %}
+    {% set correspondenceAddressPostcode = claim.response.defendant.correspondenceAddress.postcode %}
   {% endif %}
 
   {% elif user.id === claim.defendantId %}
@@ -32,20 +36,24 @@
   {% set otherPartyName = claim.claimData.claimant.name %}
   {% set phone = claim.claimData.claimant.mobilePhone %}
   {% set email = claim.claimantEmail %}
-  {% set correspondenceAddress = claim.claimData.claimant.correspondenceAddress != null %}
+  {% set address = claim.claimData.claimant.address %}
+  {% set correspondenceAddress = claim.claimData.claimant.correspondenceAddress %}
+  {% set contactPerson = claim.claimData.claimant.contactPerson %}
 
-  {% if correspondenceAddress == null %}
+  {% if address != null %}
     {% set line1 = claim.claimData.claimant.address.line1 %}
     {% set line2 = claim.claimData.claimant.address.line2 %}
     {% set line3 = claim.claimData.claimant.address.line3 %}
     {% set city = claim.claimData.claimant.address.city %}
     {% set postcode = claim.claimData.claimant.address.postcode %}
-  {% else %}
-    {% set line1 = claim.claimData.claimant.correspondenceAddress.line1 %}
-    {% set line2 = claim.claimData.claimant.correspondenceAddress.line2 %}
-    {% set line3 = claim.claimData.claimant.correspondenceAddress.line3 %}
-    {% set city = claim.claimData.claimant.correspondenceAddress.city %}
-    {% set postcode = claim.claimData.claimant.correspondenceAddress.postcode %}
+  {% endif %}
+
+  {% if correspondenceAddress != null %}
+    {% set correspondenceAddressLine1 = claim.claimData.claimant.correspondenceAddress.line1 %}
+    {% set correspondenceAddressLine2 = claim.claimData.claimant.correspondenceAddress.line2 %}
+    {% set correspondenceAddressLine3 = claim.claimData.claimant.correspondenceAddress.line3 %}
+    {% set correspondenceAddressCity = claim.claimData.claimant.correspondenceAddress.city %}
+    {% set correspondenceAddressPostcode = claim.claimData.claimant.correspondenceAddress.postcode %}
   {% endif %}
 
 {% endif %}
@@ -57,20 +65,11 @@
         <span class="heading-secondary">{{ t(otherParty) }}</span>
         {{ otherPartyName }}
       </h1>
-
-      {% if defendantResponded != null %}
-        responded
-      {% else %}
-        no response
-      {% endif %}
-      <br>
-      {% if claim.response.defendant.correspondenceAddress != null %}
-        correspondenceAddress
-      {% else %}
-        address
-      {% endif %}
-
+      <span class="heading-medium">{{ t('Address') }}</span>
       <div>
+
+        {% if address != null %}
+
         {% if line1 != null %}
           <br>
           {{ line1 }}
@@ -96,7 +95,45 @@
           {{ postcode }}
           <br>
         {% endif %}
+
+        {% endif %}
       </div>
+
+
+      {% if correspondenceAddress != null %}
+        <br>
+        <br>
+        <span class="heading-medium">{{ t('Correspondence Address') }}</span>
+        <div>
+          {% if correspondenceAddressLine1 != null %}
+            <br>
+            {{ correspondenceAddressLine1 }}
+          {% endif %}
+
+          {% if correspondenceAddressLine2 != null %}
+            <br>
+            {{ correspondenceAddressLine2 }}
+          {% endif %}
+
+          {% if correspondenceAddressLine3 != null %}
+            <br>
+            {{ correspondenceAddressLine3 }}
+          {% endif %}
+
+          {% if correspondenceAddressCity != null %}
+            <br>
+            {{ correspondenceAddressCity }}
+          {% endif %}
+
+          {% if correspondenceAddressPostcode != null %}
+            <br>
+            {{ correspondenceAddressPostcode }}
+            <br>
+          {% endif %}
+        </div>
+
+      {% endif %}
+
 
       <br>
       <div>
@@ -110,7 +147,12 @@
           {{ t('Email: <a href="mailto:{{ email }}">{{ email }}</a>', { email: email }) | safe }}
         </p>
       {% endif %}
+
+      {% if contactPerson != null %}
+        {{ t('Contact person: ' + contactPerson) }}
+      {% endif %}
     </div>
+
 
     {% if claim %}
       <div class="column-one-third">
