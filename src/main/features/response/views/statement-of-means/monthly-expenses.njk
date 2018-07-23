@@ -44,20 +44,20 @@
 
       <p>{{ t('Select all that apply. The information you enter must be truthful and accurate.') }}</p>
 
-      {{ expenseSource(form, name = 'mortgage', label = 'Mortgage', hint = 'Include all mortgages') }}
-      {{ expenseSource(form, name = 'rent', label = 'Rent') }}
-      {{ expenseSource(form, name = 'councilTax', label = 'Council Tax') }}
-      {{ expenseSource(form, name = 'gas', label = 'Gas') }}
-      {{ expenseSource(form, name = 'electricity', label = 'Electricity') }}
-      {{ expenseSource(form, name = 'water', label = 'Water', hint = 'Include sewerage payments') }}
-      {{ expenseSource(form, name = 'travel', label = 'Travel (work or school)') }}
-      {{ expenseSource(form, name = 'schoolCosts', label = 'School costs (include clothing)') }}
-      {{ expenseSource(form, name = 'foodAndHousekeeping', label = 'Food and housekeeping') }}
-      {{ expenseSource(form, name = 'tvAndBroadband', label = 'TV and broadband') }}
-      {{ expenseSource(form, name = 'hirePurchase', label = 'Hire purchase') }}
-      {{ expenseSource(form, name = 'mobilePhone', label = 'Mobile phone') }}
-      {{ expenseSource(form, name = 'maintenance', label = 'Maintenance payments') }}
-      {{ expenseSources(form, name = 'other', label = 'Other') }}
+      {{ expenseSource(form, name = 'mortgage', label = MonthlyExpenseType.MORTGAGE.displayValue | capitalize, hint = 'Include all mortgages') }}
+      {{ expenseSource(form, name = 'rent', label = MonthlyExpenseType.RENT.displayValue | capitalize) }}
+      {{ expenseSource(form, name = 'councilTax', label = MonthlyExpenseType.COUNCIL_TAX.displayValue) }}
+      {{ expenseSource(form, name = 'gas', label = MonthlyExpenseType.GAS.displayValue | capitalize) }}
+      {{ expenseSource(form, name = 'electricity', label = MonthlyExpenseType.ELECTRICITY.displayValue | capitalize) }}
+      {{ expenseSource(form, name = 'water', label = MonthlyExpenseType.WATER.displayValue | capitalize, hint = 'Include sewerage payments') }}
+      {{ expenseSource(form, name = 'travel', label = MonthlyExpenseType.TRAVEL.displayValue | capitalize) }}
+      {{ expenseSource(form, name = 'schoolCosts', label = MonthlyExpenseType.SCHOOL_COSTS.displayValue | capitalize) }}
+      {{ expenseSource(form, name = 'foodAndHousekeeping', label = MonthlyExpenseType.FOOD_HOUSEKEEPING.displayValue | capitalize) }}
+      {{ expenseSource(form, name = 'tvAndBroadband', label = MonthlyExpenseType.TV_AND_BROADBAND.displayValue) }}
+      {{ expenseSource(form, name = 'hirePurchase', label = MonthlyExpenseType.HIRE_PURCHASES.displayValue | capitalize) }}
+      {{ expenseSource(form, name = 'mobilePhone', label = MonthlyExpenseType.MOBILE_PHONE.displayValue | capitalize) }}
+      {{ expenseSource(form, name = 'maintenance', label = MonthlyExpenseType.MAINTENANCE_PAYMENTS.displayValue | capitalize) }}
+      {{ expenseSources(form, name = 'other', label = MonthlyExpenseType.OTHER.displayValue | capitalize) }}
 
       {{ linkButton('Recalculate total monthly expenditure', 'action[calculateMonthlyIncome]', 'button button-secondary calculate-monthly-income-expense') }}
 
