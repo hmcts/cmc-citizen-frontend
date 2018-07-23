@@ -7,7 +7,7 @@ import I = CodeceptJS.I
 const userSteps: UserSteps = new UserSteps()
 const offerSteps: OfferSteps = new OfferSteps()
 
-Feature('Offers')
+Feature('Offers').retry(3)
 
 Scenario('I can as a defendant make an offer, accept offer and counter sign the agreement @citizen', function* (I: I) {
   const claimantEmail: string = yield I.createCitizenUser()

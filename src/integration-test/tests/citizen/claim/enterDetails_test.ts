@@ -8,7 +8,7 @@ const userSteps: UserSteps = new UserSteps()
 const claimSteps: ClaimSteps = new ClaimSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 
-Feature('Claimant Enter details of claim')
+Feature('Claimant Enter details of claim').retry(3)
 
 Scenario('I can prepare a claim with default interest @citizen', function* (I: I) {
   const email: string = yield I.createCitizenUser()
