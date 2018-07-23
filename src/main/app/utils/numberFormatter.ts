@@ -1,4 +1,7 @@
 import * as numeral from 'numeral'
+import 'numeral/locales/en-gb'
+
+numeral.locale('en-gb')
 
 export const NUMBER_FORMAT = '$0,0[.]00'
 
