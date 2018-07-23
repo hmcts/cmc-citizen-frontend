@@ -28,7 +28,7 @@
   {% if claim.response.paymentDeclaration.paidDate %}
     {% set paymentDate = claim.response.paymentDeclaration.paidDate | date %}
   {% endif %}
-  <h2 class="heading-small">{{ t('Your response to the claim') }}</h2>
+  <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
   <p>
     {{ t('{{ defendantName }} says they paid you {{ amount }} on {{ paymentDate }}.',
       { defendantName: claim.claimData.defendant.name, amount: claim.response.amount | numeral, paymentDate: paymentDate }) }}
