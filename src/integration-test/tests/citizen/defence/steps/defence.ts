@@ -379,11 +379,6 @@ export class DefenceSteps {
     this.requestMoreTimeToRespond()
 
     switch (defenceType) {
-      case DefenceType.PART_ADMISSION:
-        this.admitPartOfClaim()
-        I.see('Have you paid the claimant the amount you admit you owe?')
-        break
-
       case DefenceType.FULL_REJECTION_WITH_COUNTER_CLAIM:
         this.admitAllOfClaimAndMakeCounterClaim()
         I.see('Counterclaim fee')

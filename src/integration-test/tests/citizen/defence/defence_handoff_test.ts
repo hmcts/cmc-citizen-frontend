@@ -8,20 +8,6 @@ const helperSteps: Helper = new Helper()
 
 Feature('Respond to claim: handoff journey')
 
-Scenario('I can see send your response by email page when I admit part of the claim @citizen', function* (I: I) {
-  const claimantEmail: string = yield I.createCitizenUser()
-  const defendantEmail: string = yield I.createCitizenUser()
-
-  const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
-  const defendant: Party = claimData.defendants[0]
-  const claimant: Party = claimData.claimants[0]
-
-  const claimRef: string = yield I.createClaim(claimData, claimantEmail)
-
-  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
-  helperSteps.finishResponseWithHandOff(claimRef, defendant, claimant, defendantEmail, DefenceType.PART_ADMISSION)
-})
-
 Scenario('I can see send your response by email page when I reject all of the claim with counter claim @citizen', function* (I: I) {
   const claimantEmail: string = yield I.createCitizenUser()
   const defendantEmail: string = yield I.createCitizenUser()
