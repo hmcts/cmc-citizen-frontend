@@ -1,23 +1,12 @@
-import { Moment } from 'moment'
-import { MomentFactory } from 'shared/momentFactory'
-
 import { ResponseCommon } from 'claims/models/response/responseCommon'
 import { ResponseType } from 'claims/models/response/responseType'
 
-import { PaymentOption } from 'claims/models/response/core/paymentOption'
-import { RepaymentPlan } from 'claims/models/response/core/repaymentPlan'
-
+import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { StatementOfMeans } from 'claims/models/response/statement-of-means/statementOfMeans'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
-
-export interface PaymentIntention {
-  paymentOption?: PaymentOption
-  paymentDate?: Moment
-  repaymentPlan?: RepaymentPlan
-}
 
 export interface PartialAdmissionResponse extends ResponseCommon {
   responseType: ResponseType.PART_ADMISSION
@@ -53,16 +42,7 @@ export namespace PartialAdmissionResponse {
         rows: input.evidence && input.evidence.rows || [],
         comment: input.evidence && input.evidence.comment || undefined
       } as DefendantEvidence,
-      paymentIntention: input.paymentIntention
-      && {
-        paymentOption: input.paymentIntention.paymentOption as PaymentOption,
-        paymentDate: input.paymentIntention.paymentDate && MomentFactory.parse(input.paymentIntention.paymentDate),
-        repaymentPlan: input.paymentIntention.repaymentPlan && {
-          instalmentAmount: input.paymentIntention.repaymentPlan.instalmentAmount,
-          firstPaymentDate: MomentFactory.parse(input.paymentIntention.repaymentPlan.firstPaymentDate),
-          paymentSchedule: input.paymentIntention.repaymentPlan.paymentSchedule
-        }
-      },
+      paymentIntention: PaymentIntention.deserialize(input.paymentIntention),
       statementOfMeans: input.statementOfMeans
     }
   }
