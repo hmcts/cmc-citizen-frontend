@@ -75,7 +75,7 @@
 
   <h2 class="heading-small">{{ t('Your response to the claim') }}</h2>
   <p>
-    {{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} {{ paymentMethod }}',
+    {{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} {{ paymentMethod }}.',
       { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name, paymentMethod: paymentMethod }) }}
   </p>
   <p>
