@@ -1,19 +1,6 @@
-import { ValidateIf, ValidateNested } from 'class-validator'
-
+import { MonthlyIncomeType } from './monthlyIncomeType'
 import { IncomeSource } from './incomeSource'
-
-export class FieldNames {
-  static readonly SALARY = 'income'
-  static readonly UNIVERSAL_CREDIT = 'Universal Credit'
-  static readonly JOBSEEKER_ALLOWANCE_INCOME = 'income-based Jobseeker’s Allowance'
-  static readonly JOBSEEKER_ALLOWANCE_CONTRIBUTION = 'contribution-based Jobseeker’s Allowance'
-  static readonly INCOME_SUPPORT = 'Income Support'
-  static readonly WORKING_TAX_CREDIT = 'Working Tax Credit'
-  static readonly CHILD_TAX_CREDIT = 'Child Tax Credit'
-  static readonly CHILD_BENEFIT = 'Child Benefit'
-  static readonly COUNCIL_TAX_SUPPORT = 'Council Tax Support'
-  static readonly PENSION = 'pension payments'
-}
+import { ValidateIf, ValidateNested } from 'class-validator'
 
 export class MonthlyIncome {
 
@@ -115,16 +102,16 @@ export class MonthlyIncome {
     }
 
     return new MonthlyIncome(
-      value.salarySourceDeclared, IncomeSource.fromObject(FieldNames.SALARY, value.salarySource),
-      value.universalCreditSourceDeclared, IncomeSource.fromObject(FieldNames.UNIVERSAL_CREDIT, value.universalCreditSource),
-      value.jobseekerAllowanceIncomeSourceDeclared, IncomeSource.fromObject(FieldNames.JOBSEEKER_ALLOWANCE_INCOME, value.jobseekerAllowanceIncomeSource),
-      value.jobseekerAllowanceContributionSourceDeclared, IncomeSource.fromObject(FieldNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, value.jobseekerAllowanceContributionSource),
-      value.incomeSupportSourceDeclared, IncomeSource.fromObject(FieldNames.INCOME_SUPPORT, value.incomeSupportSource),
-      value.workingTaxCreditSourceDeclared, IncomeSource.fromObject(FieldNames.WORKING_TAX_CREDIT, value.workingTaxCreditSource),
-      value.childTaxCreditSourceDeclared, IncomeSource.fromObject(FieldNames.CHILD_TAX_CREDIT, value.childTaxCreditSource),
-      value.childBenefitSourceDeclared, IncomeSource.fromObject(FieldNames.CHILD_BENEFIT, value.childBenefitSource),
-      value.councilTaxSupportSourceDeclared, IncomeSource.fromObject(FieldNames.COUNCIL_TAX_SUPPORT, value.councilTaxSupportSource),
-      value.pensionSourceDeclared, IncomeSource.fromObject(FieldNames.PENSION, value.pensionSource),
+      value.salarySourceDeclared, IncomeSource.fromObject(MonthlyIncomeType.JOB.displayValue, value.salarySource),
+      value.universalCreditSourceDeclared, IncomeSource.fromObject(MonthlyIncomeType.UNIVERSAL_CREDIT.displayValue, value.universalCreditSource),
+      value.jobseekerAllowanceIncomeSourceDeclared, IncomeSource.fromObject(MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_INCOME_BASES.displayValue, value.jobseekerAllowanceIncomeSource),
+      value.jobseekerAllowanceContributionSourceDeclared, IncomeSource.fromObject(MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_CONTRIBUTION_BASED.displayValue, value.jobseekerAllowanceContributionSource),
+      value.incomeSupportSourceDeclared, IncomeSource.fromObject(MonthlyIncomeType.INCOME_SUPPORT.displayValue, value.incomeSupportSource),
+      value.workingTaxCreditSourceDeclared, IncomeSource.fromObject(MonthlyIncomeType.WORKING_TAX_CREDIT.displayValue, value.workingTaxCreditSource),
+      value.childTaxCreditSourceDeclared, IncomeSource.fromObject(MonthlyIncomeType.CHILD_TAX_CREDIT.displayValue, value.childTaxCreditSource),
+      value.childBenefitSourceDeclared, IncomeSource.fromObject(MonthlyIncomeType.CHILD_BENEFIT.displayValue, value.childBenefitSource),
+      value.councilTaxSupportSourceDeclared, IncomeSource.fromObject(MonthlyIncomeType.COUNCIL_TAX_SUPPORT.displayValue, value.councilTaxSupportSource),
+      value.pensionSourceDeclared, IncomeSource.fromObject(MonthlyIncomeType.PENSION.displayValue, value.pensionSource),
       value.otherSourcesDeclared, value.otherSources && value.otherSources
         .map(source => IncomeSource.fromObject(source.name, source))
         .filter(source => source !== undefined)
