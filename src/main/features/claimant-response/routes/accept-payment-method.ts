@@ -40,7 +40,6 @@ function getPaymentPlan (claim: Claim): PaymentPlan {
 function getPaymentOption (response: Response): PaymentOption {
   switch (response.responseType) {
     case ResponseType.FULL_ADMISSION:
-      return response.paymentOption
     case ResponseType.PART_ADMISSION:
       return response.paymentIntention && response.paymentIntention.paymentOption
     default:
@@ -51,7 +50,6 @@ function getPaymentOption (response: Response): PaymentOption {
 function getPaymentDate (response: Response): Moment {
   switch (response.responseType) {
     case ResponseType.FULL_ADMISSION:
-      return response.paymentDate
     case ResponseType.PART_ADMISSION:
       return response.paymentIntention && response.paymentIntention.paymentDate
     default:
