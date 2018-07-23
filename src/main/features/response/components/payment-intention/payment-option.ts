@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths, FullAdmissionPaths } from 'response/paths'
+import { Paths } from 'response/paths'
 import { Paths as PaymentIntentionPaths } from 'response/components/payment-intention/paths'
 
 import { ErrorHandling } from 'main/common/errorHandling'
@@ -13,6 +13,7 @@ import { FeatureToggleGuard } from 'main/app/guards/featureToggleGuard'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'main/app/claims/models/claim'
+import { RoutablePath } from 'shared/router/routablePath'
 import { FeatureToggles } from 'utils/featureToggles'
 
 export class PaymentOptionPage {
@@ -63,7 +64,7 @@ export class PaymentOptionPage {
                 case DefendantPaymentType.IMMEDIATELY:
                   return res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
                 case DefendantPaymentType.BY_SET_DATE:
-                  return res.redirect(FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: externalId }))
+                  return res.redirect(new RoutablePath(path + PaymentIntentionPaths.paymentDatePage.uri).evaluateUri({ externalId: externalId }))
                 case DefendantPaymentType.INSTALMENTS:
                   return res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
               }
