@@ -7,7 +7,7 @@ import { DefenceType } from 'integration-test/data/defence-type'
 
 const helperSteps: Helper = new Helper()
 
-Feature('Respond to claim: online journey')
+Feature('Respond to claim: online journey').retry(3)
 
 Scenario('I can complete the journey when I fully reject the claim as I dispute the claim @citizen', function* (I: I) {
   const claimantEmail: string = yield I.createCitizenUser()

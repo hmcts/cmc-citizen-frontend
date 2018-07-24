@@ -10,7 +10,7 @@ import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defen
 const helperSteps: Helper = new Helper()
 const defenceSteps: DefenceSteps = new DefenceSteps()
 
-Feature('Fully admit all of the claim')
+Feature('Fully admit all of the claim').retry(3)
 
 Before(function* (I: I) {
   const claimantEmail: string = yield I.createCitizenUser()
