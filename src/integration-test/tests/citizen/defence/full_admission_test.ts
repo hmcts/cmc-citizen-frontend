@@ -12,7 +12,7 @@ const defenceSteps: DefenceSteps = new DefenceSteps()
 
 Feature('Fully admit all of the claim').retry(3)
 
-Before(async (I: I) => {
+async function prepareClaim (I: I) {
   const claimantEmail: string = await I.createCitizenUser()
   const defendantEmail: string = await I.createCitizenUser()
 
@@ -22,16 +22,22 @@ Before(async (I: I) => {
   await helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.linkClaimToDefendant(defendantEmail)
   helperSteps.startResponseFromDashboard(claimRef)
-})
+}
 
-Scenario('I can complete the journey when I fully admit all of the claim with immediate payment @citizen', (I: I) => {
+Scenario('I can complete the journey when I fully admit all of the claim with immediate payment @citizen', async (I: I) => {
+  await prepareClaim(I)
+
   defenceSteps.makeFullAdmission(PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY)
 })
 
-Scenario('I can complete the journey when I fully admit all of the claim with full payment by set date @citizen', (I: I) => {
+Scenario('I can complete the journey when I fully admit all of the claim with full payment by set date @citizen', async (I: I) => {
+  await prepareClaim(I)
+
   defenceSteps.makeFullAdmission(PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
 })
 
-Scenario('I can complete the journey when I fully admit all of the claim with full payment by instalments @citizen', (I: I) => {
+Scenario('I can complete the journey when I fully admit all of the claim with full payment by instalments @citizen', async (I: I) => {
+  await prepareClaim(I)
+
   defenceSteps.makeFullAdmission(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
 })
