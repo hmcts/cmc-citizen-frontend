@@ -2,15 +2,16 @@ import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/i
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { IsDefined, IsIn } from 'class-validator'
 import { Fractions, IsNotBlank, Min } from '@hmcts/cmc-validators'
+import { MonthlyIncomeType } from './monthlyIncomeType'
 
 export const INIT_ROW_COUNT: number = 0
 
 export class ValidationErrors {
   static readonly NAME_REQUIRED = 'Enter other income source'
-  static readonly AMOUNT_REQUIRED = (name: string) => `Enter how much ${name ? name : 'other income'} you receive`
-  static readonly AMOUNT_INVALID_DECIMALS = (name: string) => `Enter a valid ${name ? name : 'other income'} amount, maximum two decimal places`
-  static readonly AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED = (name: string) => `Enter a valid ${name ? name : 'other income'} amount, maximum two decimal places`
-  static readonly SCHEDULE_SELECT_AN_OPTION = (name: string) => `Select how often you receive ${name ? name : 'other income'}`
+  static readonly AMOUNT_REQUIRED = (name: string) => `Enter how much ${name ? name : MonthlyIncomeType.OTHER.displayValue} you receive`
+  static readonly AMOUNT_INVALID_DECIMALS = (name: string) => `Enter a valid ${name ? name : MonthlyIncomeType.OTHER.displayValue} amount, maximum two decimal places`
+  static readonly AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED = (name: string) => `Enter a valid ${name ? name : MonthlyIncomeType.OTHER.displayValue} amount, maximum two decimal places`
+  static readonly SCHEDULE_SELECT_AN_OPTION = (name: string) => `Select how often you receive ${name ? name : MonthlyIncomeType.OTHER.displayValue}`
 }
 
 function withMessage (buildErrorFn: (name: string) => string) {

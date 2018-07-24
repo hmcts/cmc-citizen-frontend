@@ -18,17 +18,17 @@
     <form method="post" novalidate class="income-expense-calculation">
       {{ csrfProtection(csrf) }}
 
-      {{ incomeSource(form, name = 'salarySource', label = 'Income from your job', hint = 'Include wages, overtime, commission, bonuses') }}
-      {{ incomeSource(form, name = 'universalCreditSource', label = 'Universal Credit') }}
-      {{ incomeSource(form, name = 'jobseekerAllowanceIncomeSource', label = 'Jobseeker’s Allowance (income based)') }}
-      {{ incomeSource(form, name = 'jobseekerAllowanceContributionSource', label = 'Jobseeker’s Allowance (contribution based)') }}
-      {{ incomeSource(form, name = 'incomeSupportSource', label = 'Income Support') }}
-      {{ incomeSource(form, name = 'workingTaxCreditSource', label = 'Working Tax Credit') }}
-      {{ incomeSource(form, name = 'childTaxCreditSource', label = 'Child Tax Credit') }}
-      {{ incomeSource(form, name = 'childBenefitSource', label = 'Child Benefit') }}
-      {{ incomeSource(form, name = 'councilTaxSupportSource', label = 'Council Tax Support') }}
-      {{ incomeSource(form, name = 'pensionSource', label = 'Pension (paid to you)') }}
-      {{ incomeSources(form, name = 'otherSources', label = 'Other') }}
+      {{ incomeSource(form, name = 'salarySource', label = MonthlyIncomeType.JOB.displayValue | capitalize, hint = 'Include wages, overtime, commission, bonuses') }}
+      {{ incomeSource(form, name = 'universalCreditSource', label = MonthlyIncomeType.UNIVERSAL_CREDIT.displayValue) }}
+      {{ incomeSource(form, name = 'jobseekerAllowanceIncomeSource', label = MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_INCOME_BASES.displayValue) }}
+      {{ incomeSource(form, name = 'jobseekerAllowanceContributionSource', label = MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_CONTRIBUTION_BASED.displayValue) }}
+      {{ incomeSource(form, name = 'incomeSupportSource', label = MonthlyIncomeType.INCOME_SUPPORT.displayValue) }}
+      {{ incomeSource(form, name = 'workingTaxCreditSource', label = MonthlyIncomeType.WORKING_TAX_CREDIT.displayValue) }}
+      {{ incomeSource(form, name = 'childTaxCreditSource', label = MonthlyIncomeType.CHILD_TAX_CREDIT.displayValue) }}
+      {{ incomeSource(form, name = 'childBenefitSource', label = MonthlyIncomeType.CHILD_BENEFIT.displayValue) }}
+      {{ incomeSource(form, name = 'councilTaxSupportSource', label = MonthlyIncomeType.COUNCIL_TAX_SUPPORT.displayValue) }}
+      {{ incomeSource(form, name = 'pensionSource', label = MonthlyIncomeType.PENSION.displayValue | capitalize) }}
+      {{ incomeSources(form, name = 'otherSources', label = MonthlyIncomeType.OTHER.displayValue | capitalize) }}
 
       {{ linkButton('Recalculate total monthly income', 'action[calculateMonthlyIncome]', 'button button-secondary calculate-monthly-income-expense') }}
 

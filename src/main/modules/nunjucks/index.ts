@@ -37,6 +37,8 @@ import { Service } from 'models/service'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestType } from 'claims/models/interestType'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
+import { MonthlyIncomeType } from 'response/form/models/statement-of-means/monthlyIncomeType'
+import { MonthlyExpenseType } from 'response/form/models/statement-of-means/monthlyExpenseType'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -125,6 +127,8 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
     nunjucksEnv.addGlobal('PartAdmissionPaths', PartAdmissionPaths)
     nunjucksEnv.addGlobal('HowMuchPaidClaimantOption', HowMuchPaidClaimantOption)
+    nunjucksEnv.addGlobal('MonthlyIncomeType', MonthlyIncomeType)
+    nunjucksEnv.addGlobal('MonthlyExpenseType', MonthlyExpenseType)
     nunjucksEnv.addGlobal('Service', Service)
     nunjucksEnv.addGlobal('cookieText', `GOV.UK uses cookies make the site simpler. <a href="${AppPaths.cookiesPage.uri}">Find out more about cookies</a>`)
     nunjucksEnv.addGlobal('serviceName', `Money Claims`)
