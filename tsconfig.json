@@ -10,7 +10,7 @@
       "es2017.object",
       "dom"
     ],
-    "target": "es6",
+    "target": "es2017",
     "module": "commonjs",
     "baseUrl": "src" ,
     "paths": {
