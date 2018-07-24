@@ -1,11 +1,11 @@
 import { Validator } from 'class-validator'
 
-import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
+import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
 
 const validator = new Validator()
 
 export class AcceptPaymentMethodTask {
-  static isCompleted (draftClaimantResponse: DraftClaimantResponse): boolean {
-    return draftClaimantResponse.acceptPaymentMethod !== undefined && validator.validateSync(draftClaimantResponse.acceptPaymentMethod).length === 0
+  static isCompleted (value: AcceptPaymentMethod): boolean {
+    return value !== undefined && validator.validateSync(value).length === 0
   }
 }

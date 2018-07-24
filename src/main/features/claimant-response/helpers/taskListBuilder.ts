@@ -46,7 +46,7 @@ export class TaskListBuilder {
         new TaskListItem(
           'Accept or reject the ' + NumberFormatter.formatMoney(claim.response.amount),
           Paths.settleAdmittedPage.evaluateUri({ externalId: externalId }),
-          SettleAdmittedTask.isCompleted(draft)
+          SettleAdmittedTask.isCompleted(draft.settleAdmitted)
         )
       )
 
@@ -57,7 +57,7 @@ export class TaskListBuilder {
           new TaskListItem(
             'Accept or reject their repayment plan',
             Paths.acceptPaymentMethodPage.evaluateUri({ externalId: externalId }),
-            AcceptPaymentMethodTask.isCompleted(draft)
+            AcceptPaymentMethodTask.isCompleted(draft.acceptPaymentMethod)
           )
         )
       }
@@ -70,7 +70,7 @@ export class TaskListBuilder {
         new TaskListItem(
           'Accept or reject their repayment plan',
           Paths.acceptPaymentMethodPage.evaluateUri({ externalId: externalId }),
-          AcceptPaymentMethodTask.isCompleted(draft)
+          AcceptPaymentMethodTask.isCompleted(draft.acceptPaymentMethod)
         )
       )
     }
