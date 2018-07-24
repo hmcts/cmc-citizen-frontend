@@ -1,6 +1,8 @@
 import * as express from 'express'
 import * as path from 'path'
 
+import { Paths } from 'claimant-response/paths'
+
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'shared/router/routerFinder'
 import { ClaimMiddleware } from 'claims/claimMiddleware'
@@ -23,6 +25,10 @@ function requestHandler (): express.RequestHandler {
 
 export class ClaimantResponseFeature {
   enableFor (app: express.Express) {
+    if (app.settings.nunjucksEnv && app.settings.nunjucksEnv.globals) {
+      app.settings.nunjucksEnv.globals.ClaimantResponsePaths = Paths
+    }
+
     const allClaimantResponse = '/case/*/claimant-response/*'
     app.all(allClaimantResponse, requestHandler())
     app.all(allClaimantResponse, ClaimMiddleware.retrieveByExternalId)

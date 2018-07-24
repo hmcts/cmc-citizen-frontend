@@ -23,11 +23,11 @@
 
     {{ tableStart('yourResponse', 'Your response') }}
 
-    {{ row(label = 'Do you accept or reject the defendant’s admission?', bold= true,
-      value = paymentPlanResponse, changeLink = settleAdmittedPageUrl, bottomBorder = true) }}
+    {{ row(label = 'Do you accept or reject the defendant’s admission?', bold= true, value = paymentPlanResponse,
+      changeLink = ClaimantResponsePaths.settleAdmittedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
 
-    {{ row(label = 'Do you accept the defendant’s repayment plan?', bold = true,
-      value = paymentPlanResponse, changeLink = acceptPaymentMethodPageUrl, bottomBorder = true) }}
+    {{ row(label = 'Do you accept the defendant’s repayment plan?', bold = true, value = paymentPlanResponse,
+      changeLink = ClaimantResponsePaths.acceptPaymentMethodPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
 
     {{ tableEnd() }}
 
