@@ -26,7 +26,7 @@
               form = form,
               name = 'admitted',
               value = YesNoOption.YES.option,
-              label = t('Yes'),
+              label = 'Yes',
               bold = true,
               hint = 'You can agree to their repayment plan or suggest your own.',
               checked = (form.valueFor('admitted') === YesNoOption.YES)
@@ -36,7 +36,7 @@
               form = form,
               name = 'admitted',
               value = YesNoOption.NO.option,
-              label = t('No'),
+              label = 'No',
               bold = true,
               hint = t('The claim will continue for the total amount you claimed: {{ claimAmount }}', { claimAmount: claim.claimData.amount.totalAmount() | numeral }),
               checked = (form.valueFor('admitted') === YesNoOption.NO)
