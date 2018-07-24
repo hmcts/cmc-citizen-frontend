@@ -10,7 +10,6 @@ import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
 
 export interface PartialAdmissionResponse extends ResponseCommon {
   responseType: ResponseType.PART_ADMISSION
-  isAlreadyPaid: YesNoOption
   amount: number
   paymentDeclaration: PaymentDeclaration
   defence: string,
@@ -26,7 +25,6 @@ export namespace PartialAdmissionResponse {
     return {
       ...ResponseCommon.deserialize(input),
       responseType: ResponseType.PART_ADMISSION,
-      isAlreadyPaid: input.isAlreadyPaid,
       amount: input.amount,
       paymentDeclaration: input.paymentDeclaration
       && {
