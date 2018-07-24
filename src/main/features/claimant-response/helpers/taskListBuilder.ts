@@ -1,11 +1,14 @@
-import { TaskList } from 'drafts/tasks/taskList'
-import { TaskListItem } from 'drafts/tasks/taskListItem'
-import { Paths } from 'claimant-response/paths'
-import { Claim } from 'claims/models/claim'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
+import { Paths } from 'claimant-response/paths'
+import { AcceptPaymentMethodTask } from 'claimant-response/tasks/acceptPaymentMethodTask'
+import { SettleAdmittedTask } from 'claimant-response/tasks/settleAdmittedTask'
+import { Claim } from 'claims/models/claim'
+import { PaymentOption } from 'claims/models/response/core/paymentOption'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { ResponseType } from 'claims/models/response/responseType'
-import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { TaskList } from 'drafts/tasks/taskList'
+import { TaskListItem } from 'drafts/tasks/taskListItem'
+import { NumberFormatter } from 'utils/numberFormatter'
 
 export class TaskListBuilder {
   static buildDefendantResponseSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
@@ -15,7 +18,7 @@ export class TaskListBuilder {
       new TaskListItem(
         'View the defendant’s full response',
         Paths.notImplementedYetPage.evaluateUri({ externalId: externalId }),
-        false
+        true
       )
     )
 
@@ -26,7 +29,8 @@ export class TaskListBuilder {
     const externalId: string = claim.externalId
     const tasks: TaskListItem[] = []
 
-    if (claim.response && claim.response.responseType === ResponseType.FULL_DEFENCE && claim.response.freeMediation === YesNoOption.NO) {
+    if (claim.response.responseType === ResponseType.FULL_DEFENCE
+      && claim.response.freeMediation === YesNoOption.NO) {
       tasks.push(
         new TaskListItem(
           'Accept or reject their response',
@@ -36,14 +40,37 @@ export class TaskListBuilder {
       )
     }
 
-    if (claim.response
-      && claim.response.responseType === ResponseType.FULL_ADMISSION
-      && claim.response.paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY) {
+    if (claim.response.responseType === ResponseType.PART_ADMISSION
+      && claim.response.paymentIntention !== undefined) {
+      tasks.push(
+        new TaskListItem(
+          'Accept or reject the ' + NumberFormatter.formatMoney(claim.response.amount),
+          Paths.settleAdmittedPage.evaluateUri({ externalId: externalId }),
+          SettleAdmittedTask.isCompleted(draft.settleAdmitted)
+        )
+      )
+
+      if (draft.settleAdmitted
+        && draft.settleAdmitted.admitted.option === YesNoOption.YES
+        && claim.response.paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY) {
+        tasks.push(
+          new TaskListItem(
+            'Accept or reject their repayment plan',
+            Paths.acceptPaymentMethodPage.evaluateUri({ externalId: externalId }),
+            AcceptPaymentMethodTask.isCompleted(draft.acceptPaymentMethod)
+          )
+        )
+      }
+    }
+
+    if (claim.response.responseType === ResponseType.FULL_ADMISSION
+      && claim.response.paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY
+    ) {
       tasks.push(
         new TaskListItem(
           'Accept or reject their repayment plan',
-          Paths.notImplementedYetPage.evaluateUri({ externalId: externalId }),
-          false
+          Paths.acceptPaymentMethodPage.evaluateUri({ externalId: externalId }),
+          AcceptPaymentMethodTask.isCompleted(draft.acceptPaymentMethod)
         )
       )
     }
