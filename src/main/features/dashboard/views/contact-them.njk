@@ -66,13 +66,10 @@
         <span class="heading-secondary">{{ t(otherParty) }}</span>
         {{ otherPartyName }}
       </h1>
-      <span class="heading-medium">{{ t('Address') }}</span>
       <div>
-
+        <h2 class="heading-medium">{{ t('Address') }}</h2>
         {% if address != null %}
-
         {% if line1 != null %}
-          <br>
           {{ line1 }}
         {% endif %}
 
@@ -94,7 +91,6 @@
         {% if postcode != null %}
           <br>
           {{ postcode }}
-          <br>
         {% endif %}
 
         {% endif %}
@@ -102,12 +98,9 @@
 
 
       {% if correspondenceAddress != null %}
-        <br>
-        <br>
-        <span class="heading-medium">{{ t('Correspondence Address') }}</span>
         <div>
+          <h2 class="heading-medium">{{ t('Correspondence address') }}</h2>
           {% if correspondenceAddressLine1 != null %}
-            <br>
             {{ correspondenceAddressLine1 }}
           {% endif %}
 
