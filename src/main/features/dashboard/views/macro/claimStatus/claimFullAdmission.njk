@@ -57,7 +57,7 @@
     </p>
   {% endif %}
   <p>
-    {{ _downloadResponseLink(claim, 'Download your response') }}
+    {{ _downloadResponseLink(claim) }}
   </p>
 {% endmacro %}
 
@@ -111,6 +111,6 @@
   {% endif %}
 {% endmacro %}
 
-{% macro _downloadResponseLink(claim, text) %}
-  <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t(text) }}</a>
+{% macro _downloadResponseLink(claim) %}
+  <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>
 {% endmacro %}

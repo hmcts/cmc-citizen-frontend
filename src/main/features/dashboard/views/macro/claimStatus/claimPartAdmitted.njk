@@ -20,7 +20,7 @@
       'settled, or they can proceed with it.') }}
   </p>
   <p>
-    {{ _downloadResponseLink(claim, 'Download your response') }}
+    {{ _downloadResponseLink(claim) }}
   </p>
 {% endmacro %}
 
@@ -35,7 +35,7 @@
   </p>
   <p> {{ t('You can accept or reject this response.') }}</p>
   <p>
-    {{ t('You need to respond before 4pm on {{ respondDate}} or your claim won’t proceed.', {respondDate: claim.respondedAt.add(33, 'days') | date}) }}
+    {{ t('You need to respond before 4pm on {{ respondDate}} or your claim won’t proceed.', {respondDate: claim.respondToResponseDeadline | date}) }}
   </p>
 {% endmacro %}
 
@@ -82,7 +82,7 @@
     {{ t('We’ll contact you when they respond.') }}
   </p>
   <p>
-    {{ _downloadResponseLink(claim, 'Download your response') }}
+    {{ _downloadResponseLink(claim) }}
   </p>
 {% endmacro %}
 
@@ -97,6 +97,6 @@
   </p>
 {% endmacro %}
 
-{% macro _downloadResponseLink(claim, text) %}
-  <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t(text) }}</a>
+{% macro _downloadResponseLink(claim) %}
+  <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>
 {% endmacro %}

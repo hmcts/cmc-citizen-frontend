@@ -222,7 +222,7 @@ describe('Claim', () => {
       claim = new Claim()
     })
 
-    it('should return true when payment date less than 4 pm of current date', () => {
+    it('should return true when payment date is earlier than current day', () => {
       claim.response = FullAdmissionResponse.deserialize({
         paymentIntention: {
           paymentDate: MomentFactory.currentDateTime().subtract(1, 'day')
@@ -232,25 +232,7 @@ describe('Claim', () => {
       expect(claim.pastDefendantPayImmediatelyDate).to.be.equal(true)
     })
 
-    it('should return false when payment date is equal to 4 pm of current date ', () => {
-      claim.response = FullAdmissionResponse.deserialize({
-        paymentIntention: {
-          paymentDate: MomentFactory.currentDate().hour(15)
-        }
-      })
-      expect(claim.pastDefendantPayImmediatelyDate).to.be.equal(false)
-    })
-
-    it('should return false when payment date is after 4 pm of current date ', () => {
-      claim.response = FullAdmissionResponse.deserialize({
-        paymentIntention: {
-          paymentDate: MomentFactory.currentDate().hour(16)
-        }
-      })
-      expect(claim.pastDefendantPayImmediatelyDate).to.be.equal(false)
-    })
-
-    it('should return false when payment date is greater than 4 pm of current date ', () => {
+    it('should return false when payment date is later than current day', () => {
       claim.response = FullAdmissionResponse.deserialize({
         paymentIntention: {
           paymentDate: MomentFactory.currentDate().add(1, 'day')

@@ -7,13 +7,11 @@
 {% endif %}
 
 {% if claim.response.paymentIntention %}
-  {% if claim.response.paymentIntention.paymentDate %}
-    {% set paymentDate = claim.response.paymentIntention.paymentDate | date %}
-  {% endif %}
+
   {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
     {% set paymentMethod = 'immediately' %}
   {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-    {% set paymentMethod = 'by ' + paymentDate %}
+    {% set paymentMethod = 'by ' + claim.response.paymentIntention.paymentDate | date %}
   {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
     {% set paymentMethod = 'by instalments' %}
   {% endif %}
