@@ -21,6 +21,7 @@ import { WhyDoYouDisagreeTask } from 'response/tasks/whyDoYouDisagreeTask'
 import { HowMuchDoYouOweTask } from 'response/tasks/howMuchDoYouOweTask'
 import { WhenWillYouPay } from 'response/tasks/whenWillYouPay'
 import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { NumberFormatter } from 'utils/numberFormatter'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -89,16 +90,6 @@ export class TaskListBuilder {
       )
     }
 
-    if (StatementOfMeansFeature.isApplicableFor(draft)) {
-      tasks.push(
-        new TaskListItem(
-          'Share your financial details',
-          StatementOfMeansPaths.introPage.evaluateUri({ externalId: externalId }),
-          StatementOfMeansTask.isCompleted(draft)
-        )
-      )
-    }
-
     if (draft.isResponseFullyAdmittedWithInstalments()) {
       tasks.push(
         new TaskListItem(
@@ -142,10 +133,12 @@ export class TaskListBuilder {
       )
     }
 
-    if (partiallyAdmitted && !partiallyAdmittedAndPaid) {
+    const howMuchDoYouOwe = HowMuchDoYouOweTask.isCompleted(draft)
+
+    if (partiallyAdmitted && howMuchDoYouOwe) {
       tasks.push(
         new TaskListItem(
-          `When will you pay the £${draft.partialAdmission.howMuchDoYouOwe.amount}?`,
+          `When will you pay the ${NumberFormatter.formatMoney(draft.partialAdmission.howMuchDoYouOwe.amount)}?`,
           PartAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: externalId }),
           WhenWillYouPay.isCompleted(draft)
         )
@@ -161,6 +154,16 @@ export class TaskListBuilder {
           )
         )
       }
+    }
+
+    if (StatementOfMeansFeature.isApplicableFor(draft)) {
+      tasks.push(
+        new TaskListItem(
+          'Share your financial details',
+          StatementOfMeansPaths.introPage.evaluateUri({ externalId: externalId }),
+          StatementOfMeansTask.isCompleted(draft)
+        )
+      )
     }
 
     return new TaskList('Respond to claim', tasks)
