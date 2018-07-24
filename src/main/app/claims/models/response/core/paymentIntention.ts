@@ -8,6 +8,7 @@ export interface PaymentIntention {
   paymentOption?: PaymentOption
   paymentDate?: Moment
   repaymentPlan?: RepaymentPlan
+  pastDefendantPayImmediatelyDate?: boolean
 }
 
 export namespace PaymentIntention {
@@ -19,6 +20,10 @@ export namespace PaymentIntention {
         instalmentAmount: input.repaymentPlan.instalmentAmount,
         firstPaymentDate: MomentFactory.parse(input.repaymentPlan.firstPaymentDate),
         paymentSchedule: input.repaymentPlan.paymentSchedule
+      },
+      get pastDefendantPayImmediatelyDate (): boolean {
+        const currentDateSetTo4PM = MomentFactory.currentDate().hour(15)
+        return this.paymentDate && currentDateSetTo4PM > this.paymentDate
       }
     }
   }

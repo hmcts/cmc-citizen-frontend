@@ -25,9 +25,8 @@
 {% endmacro %}
 
 {% macro claimPartAdmittedAlreadyPaidForClaimantClaimDetails(claim) %}
-  {% if claim.response.paymentDeclaration.paidDate %}
-    {% set paymentDate = claim.response.paymentDeclaration.paidDate | date %}
-  {% endif %}
+  {% set paymentDate = claim.response.paymentDeclaration.paidDate | date %}
+
   <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
   <p>
     {{ t('{{ defendantName }} says they paid you {{ amount }} on {{ paymentDate }}.',
@@ -40,8 +39,7 @@
 {% endmacro %}
 
 {% macro claimPartAdmittedToOweForDefendantDashboard(claim) %}
-  {{ t('You’ve admitted part of the claim.',
-    { defendantName: claim.claimData.defendant.name }) }}
+  {{ t('You’ve admitted part of the claim.') }}
 {% endmacro %}
 
 {% macro claimPartAdmittedToOweForClaimantDashboard(claim) %}
@@ -50,27 +48,16 @@
 {% endmacro %}
 
 {% macro claimPartAdmittedToOweForDefendantClaimDetails(claim) %}
-  {% if claim.response.paymentIntention.paymentDate %}
-    {% set paymentDate = claim.response.paymentIntention.paymentDate | date %}
-  {% endif %}
 
   {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
     {% set paymentMethod = 'immediately' %}
   {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-    {% set paymentMethod = 'on ' + paymentDate %}
+    {% set paymentMethod = 'on ' + claim.response.paymentIntention.paymentDate | date %}
   {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
     {% set repaymentPlan = claim.response.paymentIntention.repaymentPlan %}
-    {% set amount = repaymentPlan.instalmentAmount | numeral %}
-
-    {% if repaymentPlan.paymentSchedule === domain.PaymentSchedule.EVERY_MONTH %}
-      {% set paymentSchedule = 'every month' %}
-    {% elif repaymentPlan.paymentSchedule === domain.PaymentSchedule.EVERY_TWO_WEEKS %}
-      {% set paymentSchedule = 'every two weeks' %}
-    {% elif repaymentPlan.paymentSchedule === domain.PaymentSchedule.EVERY_WEEK %}
-      {% set paymentSchedule = 'every week' %}
-    {% endif %}
-
-    {% set paymentMethod =  amount + ' ' + paymentSchedule + ' starting '+ repaymentPlan.firstPaymentDate |date %}
+    {% set installmentAmount = repaymentPlan.instalmentAmount | numeral %}
+    {% set paymentSchedule = repaymentPlan.paymentSchedule | renderPaymentSchedule %}
+    {% set paymentMethod =  installmentAmount + ' ' + paymentSchedule + ' starting '+ repaymentPlan.firstPaymentDate |date %}
   {% endif %}
 
   <h2 class="heading-small">{{ t('Your response to the claim') }}</h2>
@@ -98,5 +85,6 @@
 {% endmacro %}
 
 {% macro _downloadResponseLink(claim) %}
-  <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>{{ t(' (PDF)') }}
+  <a
+  href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>{{ t(' (PDF)') }}
 {% endmacro %}

@@ -24,7 +24,7 @@ ccjRequestedForDefendantClaimDetails %}
   claimPartAdmittedAlreadyPaidForDefendantClaimDetails,
   claimPartAdmittedAlreadyPaidForClaimantClaimDetails%}
 
-{% from "./claimStatus/claimFullAdmission.njk" import
+{% from "./claimStatus/claimFullyAdmitted.njk" import
   claimFullAdmissionForDefendantClaimDetails,
   claimFullAdmissionForClaimantClaimDetails %}
 
@@ -59,13 +59,13 @@ ccjRequestedForDefendantClaimDetails %}
           {% else %}
             {{ claimRejectedFreeMediationYESForClaimantClaimDetails(claim) }}
           {% endif %}
-          {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+        {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
           {% if claim.response.paymentDeclaration %}
             {{ claimPartAdmittedAlreadyPaidForClaimantClaimDetails(claim) }}
           {% else %}
             {{ claimPartAdmittedToOweForClaimantClaimDetails(claim) }}
           {% endif %}
-          {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
+        {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
           {{ claimFullAdmissionForClaimantClaimDetails(claim) }}
         {% endif %}
       {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}

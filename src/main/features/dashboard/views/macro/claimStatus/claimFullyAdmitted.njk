@@ -39,14 +39,10 @@
       {{ t('We’ll contact you when they respond.') }}
     </p>
   {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-    {% if claim.response.paymentIntention.repaymentPlan.paymentSchedule === domain.PaymentSchedule.EVERY_MONTH %}
-      {% set paymentSchedule = 'per month' %}
-    {% elif claim.response.paymentIntention.repaymentPlan.paymentSchedule === domain.PaymentSchedule.EVERY_TWO_WEEKS %}
-      {% set paymentSchedule = 'per two weeks' %}
-    {% elif claim.response.paymentIntention.repaymentPlan.paymentSchedule === domain.PaymentSchedule.EACH_WEEK %}
-      {% set paymentSchedule = 'per week' %}
-    {% endif %}
+    {% set repaymentPlan = claim.response.paymentIntention.repaymentPlan %}
     {% set repaymentDate = claim.response.paymentIntention.repaymentPlan.firstPaymentDate |date %}
+    {% set paymentSchedule = repaymentPlan.paymentSchedule | renderPaymentSchedule %}
+
     <p> {{ t('You’ve offered to pay {{ claimantName }} {{ amount }} {{ paymentSchedule }} starting {{ repaymentDate }}.',
         { claimantName: claimantName, amount: amount, paymentSchedule: paymentSchedule, repaymentDate: repaymentDate }) }} </p>
     <p>
@@ -75,7 +71,7 @@
         { paymentDate: paymentDate }) }} </p>
     <h2 class="heading-small"> {{ t('If the defendant pays you.') }} </h2>
     <p> {{ t('You need to email moneyclaims@hmcts.gsi.gov.uk to let us know. Include the date you were paid.') }} </p>
-    {% if claim.pastDefendantPayImmediatelyDate %}
+    {% if claim.response.paymentIntention.pastDefendantPayImmediatelyDate %}
       <h2 class="heading-small">{{ t('What to do if they haven’t paid') }}</h2>
       <p> {{ t('If the defendant doesn’t pay you, you can request a County Court Judgment.') }} </p>
     {% else %}
