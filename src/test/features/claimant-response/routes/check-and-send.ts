@@ -12,8 +12,6 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
-import { fullAdmissionWithPaymentByInstalmentsData } from 'test/data/entity/responseData'
-
 import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 
 import { app } from 'main/app'
@@ -47,10 +45,7 @@ describe('Claimant response: check and send page', () => {
         })
 
         it('should return 500 and render error page when cannot retrieve draft', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId({
-            response: fullAdmissionWithPaymentByInstalmentsData,
-            respondedAt: '2018-07-01'
-          })
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj)
           draftStoreServiceMock.rejectFind('Error')
 
           await request(app)
@@ -60,10 +55,7 @@ describe('Claimant response: check and send page', () => {
         })
 
         it('should redirect to incomplete submission when not all tasks are completed', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId({
-            response: fullAdmissionWithPaymentByInstalmentsData,
-            respondedAt: '2018-07-01'
-          })
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj)
           draftStoreServiceMock.resolveFind(draftType, { acceptPaymentMethod: undefined })
 
           await request(app)
@@ -74,10 +66,7 @@ describe('Claimant response: check and send page', () => {
         })
 
         it('should render page when everything is fine', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId({
-            response: fullAdmissionWithPaymentByInstalmentsData,
-            respondedAt: '2018-07-01'
-          })
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj)
           draftStoreServiceMock.resolveFind(draftType)
 
           await request(app)
