@@ -31,13 +31,13 @@
   {% endif %}
 
   {% elif user.id === claim.defendantId %}
-  {% set otherParty = 'Claimant' %}
-  {% set otherPartyName = claim.claimData.claimant.name %}
-  {% set phone = claim.claimData.claimant.mobilePhone %}
-  {% set email = claim.claimantEmail %}
-  {% set address = claim.claimData.claimant.address %}
-  {% set correspondenceAddress = claim.claimData.claimant.correspondenceAddress %}
-  {% set contactPerson = claim.claimData.claimant.contactPerson %}
+    {% set otherParty = 'Claimant' %}
+    {% set otherPartyName = claim.claimData.claimant.name %}
+    {% set phone = claim.claimData.claimant.mobilePhone %}
+    {% set email = claim.claimantEmail %}
+    {% set address = claim.claimData.claimant.address %}
+    {% set correspondenceAddress = claim.claimData.claimant.correspondenceAddress %}
+    {% set contactPerson = claim.claimData.claimant.contactPerson %}
 
   {% if address != null %}
     {% set line1 = claim.claimData.claimant.address.line1 %}
@@ -125,7 +125,6 @@
             <br>
           {% endif %}
         </div>
-
       {% endif %}
 
       {% if phone != null %}
