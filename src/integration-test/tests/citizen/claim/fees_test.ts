@@ -11,8 +11,8 @@ const claimantClaimAmountPage: ClaimantClaimAmountPage = new ClaimantClaimAmount
 
 Feature('Claimant enter details of claim: fees').retry(3)
 
-Scenario('I can see the Claim amount page calculates properly and shows the correct fees table @citizen', function* (I: I) {
-  const email: string = yield I.createCitizenUser()
+Scenario('I can see the Claim amount page calculates properly and shows the correct fees table @citizen', async (I: I) => {
+  const email: string = await I.createCitizenUser()
   userSteps.login(email)
 
   claimSteps.completeEligibility()

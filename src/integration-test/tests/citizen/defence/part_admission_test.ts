@@ -10,18 +10,18 @@ const defenceSteps: DefenceSteps = new DefenceSteps()
 
 Feature('Partially admit the claim').retry(3)
 
-Before(function* (I: I) {
-  const claimantEmail: string = yield I.createCitizenUser()
-  const defendantEmail: string = yield I.createCitizenUser()
+Before(async (I: I) => {
+  const claimantEmail: string = await I.createCitizenUser()
+  const defendantEmail: string = await I.createCitizenUser()
 
   const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
-  const claimRef: string = yield I.createClaim(claimData, claimantEmail)
+  const claimRef: string = await I.createClaim(claimData, claimantEmail)
 
-  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
+  await helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.linkClaimToDefendant(defendantEmail)
   helperSteps.startResponseFromDashboard(claimRef)
 })
 
-Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen', function* (I: I) {
+Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen', (I: I) => {
   defenceSteps.makePartialAdmission(PartyType.INDIVIDUAL)
 })
