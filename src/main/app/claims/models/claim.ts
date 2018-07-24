@@ -165,11 +165,11 @@ export class Claim {
   }
 
   get pastDefendantPayImmediatelyDate (): boolean {
-    return MomentFactory.currentDateTime() > this.payImmediatelyDeadline()
+    const currentDateSetTo4PM = MomentFactory.currentDate().hour(15)
+    return currentDateSetTo4PM > this.payImmediatelyDeadline()
   }
 
   private payImmediatelyDeadline (): Moment {
-    // TODO set below datetime to 4pm
     return (this.response as FullAdmissionResponse).paymentIntention.paymentDate
   }
 }
