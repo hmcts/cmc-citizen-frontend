@@ -8,8 +8,8 @@ const paymentSteps: PaymentSteps = new PaymentSteps()
 
 Feature('Claim issue').retry(3)
 
-Scenario('I can cancel payment, attempt payment with declined card and finally issue claim using working card @citizen @quick', function* (I: I) {
-  const email: string = yield I.createCitizenUser()
+Scenario('I can cancel payment, attempt payment with declined card and finally issue claim using working card @citizen @quick', async (I: I) => {
+  const email: string = await I.createCitizenUser()
 
   claimSteps.makeAClaimAndSubmitStatementOfTruth(email, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
 

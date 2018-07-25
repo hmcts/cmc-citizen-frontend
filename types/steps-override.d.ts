@@ -6,9 +6,9 @@ declare const Feature: (string: string) => Feature;
 
 declare namespace CodeceptJS {
   export interface I {
-    createCitizenUser: () => string
-    createSolicitorUser: () => string
-    createClaim: (claimData: ClaimData, submitterEmail: string) => string
+    createCitizenUser: () => Promise[string]
+    createSolicitorUser: () => Promise[string]
+    createClaim: (claimData: ClaimData, submitterEmail: string) => Promise[string]
     linkDefendantToClaim: (claimRef: string, claimantEmail: string, defendantEmail: string) => void
     respondToClaim: (referenceNumber: string, ownerEmail: string, responseData: ResponseData, defendantEmail: string) => void
     retrievePin (letterHolderId: string): () => string
