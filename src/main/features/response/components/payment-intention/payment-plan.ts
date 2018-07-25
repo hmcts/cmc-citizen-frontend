@@ -50,7 +50,7 @@ export class PaymentPlanPage {
   constructor (private admissionType: string) {
   }
 
-  buildRouter (path: string = ''): express.Router {
+  buildRouter (path: string): express.Router {
     const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
