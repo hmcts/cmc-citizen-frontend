@@ -5,24 +5,25 @@
 
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
 {% from "financialDetails.njk" import financialDetailsTable %}
+{% from "paymentPlan.njk" import paymentPlanTable %}
 
 {% set claimantName = claim.claimData.claimant.name %}
+{% set reason = claim.response.statementOfMeans.reason %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
 
-      {% if claim.response.paymentOption === domain.PaymentOption.INSTALMENTS %}
+      {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
         <p>{{ t('{{ claimantName }} admits they owe all the money you’ve claimed. They’ve offered to pay you in instalments.', { claimantName: claimantName }) }}</p>
 
         <h2 class="heading-medium">{{ t('How they want to pay') }}</h2>
 
-        {{ row('Balance', account.balance | numeral, '', false, bold = false) }}
+        {{ paymentPlanTable("type[label]", totalAmount, firstPaymentDate, lastPaymentDate, paymentLength) }}
 
         <h3 class="heading-small form-group-related">{{ t('Why they can’t pay the full amount now') }}</h3>
 
-        <p>{{ t('I am heavily in debt at the moment and I’m not earning that much money.
-          {{ totalAmount }} a month is all i can afford.',{ totalAmount: totalAmount | numeral }) }}</p>
+        <p>{{ t('"{{ reason }}."',{ reason: reason }) }}</p>
 
         <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
 
@@ -31,14 +32,14 @@
         <p>{{ t('Their total monthly expenses is {{ totalMonthlyExpenses }}',
           { totalMonthlyExpenses: totalMonthlyExpenses | numeral }) }}</p>
 
-        <summary>{{ t('See their financial details') }}</summary>
+        {{ financialDetailsTable('See their financial details', claim) }}
 
       {% endif %}
 
-      {% if claim.response.paymentOption === domain.PaymentOption.FULL_BY_SPECIFIED_DATE %}
+      {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.FULL_BY_SPECIFIED_DATE %}
         <p>{{ t('{{ claimantName }} admits they owe all the money you’ve claimed.', { claimantName: claimantName }) }}</p>
 
-        <p>{{ t('They’ve offered to pay you in full by {{ paymentDate }}.', { paymentDate: claim.response.paymentDate | date }) }}</p>
+        <p>{{ t('They’ve offered to pay you in full by {{ paymentDate }}.', { paymentDate: firstPaymentDate.toMoment() | date }) }}</p>
 
         <h3 class="heading-small form-group-related">{{ t('Why they can’t pay the full amount now') }}</h3>
 
@@ -75,7 +76,7 @@
           </tr>
           </thead>
           <tbody>
-          {% for event in timeline.rows %}
+          {% for event in claim.response.timeline.rows %}
             <tr>
               <td>{{ event.date }}</td>
               <td>{{ event.description }}</td>

@@ -1,6 +1,8 @@
 import * as moment from 'moment'
 import 'moment-precise-range-plugin'
 import { MomentFactory } from 'shared/momentFactory'
+import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
+import { RepaymentPlan } from 'claims/models/response/core/repaymentPlan'
 
 class PaymentPlan {
   private numberOfInstalments: number
@@ -54,4 +56,26 @@ export function createPaymentPlan (
   instalmentAmount: number,
   frequencyInWeeks: number): PaymentPlan {
   return new PaymentPlan(totalAmount, instalmentAmount, frequencyInWeeks)
+}
+
+function mapFrequencyInWeeks (paymentSchedule: PaymentSchedule): number {
+  switch (paymentSchedule) {
+    case 'EACH_WEEK':
+      return 1
+    case 'EVERY_TWO_WEEKS':
+      return 2
+    case 'EVERY_MONTH':
+      return 4
+    default:
+      return undefined
+  }
+}
+
+export function generatePaymentPlan (
+  totalAmount: number,
+  repaymentPlan: RepaymentPlan): PaymentPlan {
+  if (!repaymentPlan) {
+    return undefined
+  }
+  return new PaymentPlan(totalAmount, repaymentPlan.instalmentAmount, mapFrequencyInWeeks(repaymentPlan.paymentSchedule))
 }

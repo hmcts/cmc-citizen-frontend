@@ -12,9 +12,8 @@ import { Expense } from 'claims/models/response/statement-of-means/expense'
 import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
 import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
-import { createPaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
+import { generatePaymentPlan, PaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
-import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { ResponseType } from 'claims/models/response/responseType'
 
 /* tslint:disable:no-default-export */
@@ -25,27 +24,32 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const responseType = claim.response.responseType
       let response
+      let totalAmount
+      let firstPaymentDate
 
       switch (responseType) {
         case ResponseType.FULL_ADMISSION:
           response = claim.response as FullAdmissionResponse
+          totalAmount = response.paymentIntention.repaymentPlan.instalmentAmount
+          firstPaymentDate = response.paymentIntention.repaymentPlan.firstPaymentDate
           break
         case ResponseType.PART_ADMISSION:
           response = claim.response as PartialAdmissionResponse
+          totalAmount = response.paymentIntention.repaymentPlan.instalmentAmount
+          firstPaymentDate = response.paymentIntention.repaymentPlan.firstPaymentDate
           break
       }
-      const totalAmount: number = response.paymentIntention.repaymentPlan.instalmentAmount
-      const firstPaymentDate: number = response.paymentIntention.repaymentPlan.firstPaymentDate
-      const paymentSchedule: PaymentSchedule = response.paymentIntention.repaymentPlan.paymentSchedule
 
-      const paymentPlan = createPaymentPlan(totalAmount, firstPaymentDate, mapFrequencyInWeeks(paymentSchedule))
+      const paymentPlan: PaymentPlan = generatePaymentPlan(claim.claimData.amount.totalAmount(), claim.response.paymentIntention.repaymentPlan)
 
       res.render(Paths.defendantsResponsePage.associatedView, {
         claim: claim,
         totalMonthlyIncome: calculateTotalMonthlyIncome(response.statementOfMeans.incomes),
         totalMonthlyExpenses: calculateTotalMonthlyExpense(response.statementOfMeans.expenses),
         paymentLength: paymentPlan.getPaymentLength(),
-        lastPaymentDate: paymentPlan.getLastPaymentDate()
+        lastPaymentDate: paymentPlan.getLastPaymentDate(),
+        totalAmount: totalAmount,
+        firstPaymentDate: firstPaymentDate
       })
     })
   )
@@ -69,17 +73,4 @@ function calculateTotalMonthlyIncome (incomes: Income[]) {
 function calculateTotalMonthlyExpense (expenses: Expense[]) {
   const expenseSources = expenses.map(expense => IncomeExpenseSource.fromClaimExpense(expense))
   return CalculateMonthlyIncomeExpense.calculateTotalAmount(expenseSources)
-}
-
-function mapFrequencyInWeeks (frequency: PaymentSchedule): number {
-  switch (frequency) {
-    case PaymentSchedule.EACH_WEEK:
-      return 1
-    case PaymentSchedule.EVERY_TWO_WEEKS:
-      return 2
-    case PaymentSchedule.EVERY_MONTH:
-      return 4
-    default:
-      throw new Error('Unknown payment schedule')
-  }
 }
