@@ -10,6 +10,8 @@ import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
 import { NumberFormatter } from 'utils/numberFormatter'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
+import { ChooseHowToProceedTask } from 'claimant-response/tasks/chooseHowToProceedTask'
+import { SignSettlementAgreementTask } from 'claimant-response/tasks/signSettlementAgreementTask'
 
 export class TaskListBuilder {
   static buildDefendantResponseSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
@@ -104,7 +106,7 @@ export class TaskListBuilder {
         new TaskListItem(
           'Choose how to proceed',
           Paths.chooseHowToProceedPage.evaluateUri({ externalId: externalId }),
-          false
+          ChooseHowToProceedTask.isCompleted(draft.formaliseRepaymentPlan)
         )
       )
     }
@@ -116,7 +118,7 @@ export class TaskListBuilder {
       new TaskListItem(
         'Check and submit your response',
         Paths.checkAndSendPage.evaluateUri({ externalId: externalId }),
-        false
+        SignSettlementAgreementTask.isCompleted(draft.settlementAgreement)
       )
     )
     return new TaskList('Submit', tasks)

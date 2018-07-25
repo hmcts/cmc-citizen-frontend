@@ -1,4 +1,4 @@
-{% macro termsOfAgreement(id, response, lastPaymentOn) %}
+{% macro termsOfAgreement(id, response, paymentPlan) %}
   <fieldset id="{{ id }}" class="form-group">
     <legend>
       <span class="visually-hidden">{{ t( 'Payment plan' ) }}</span>
@@ -8,6 +8,7 @@
       {{ row('The offer', t('{{ defendantFullName }} will pay the full amount {{ paymentDate }}, no later than',
         { defendantFullName: response.defendant.name, paymentDate: response.paymentIntention.paymentDate | date }
       )) }}
+      {{ row('Completion date', response.paymentIntention.paymentDate | date) }}
     {% else %}
       {{ row('The offer', t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} every month. The first instalment will be paid by {{ firstPaymentDate }}.',
         { defendantFullName: response.defendant.name,
@@ -15,9 +16,9 @@
           firstPaymentDate: response.paymentIntention.repaymentPlan.firstPaymentDate | date
         }
       )) }}
+      {{ row('Completion date', paymentPlan.getLastPaymentDate() | date) }}
     {% endif %}
 
-    {{ row('Completion date', lastPaymentOn | date) }}
   </fieldset>
 {% endmacro %}
 
