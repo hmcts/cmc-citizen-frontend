@@ -94,7 +94,7 @@
     {{ row('Monthly income', '', '', false, bold = true) }}
 
     {% for income in claim.response.statementOfMeans.incomes %}
-      {{ row(income.type | renderIncomeType, income.amountReceived | numeral, '', false, bold = false) }}
+      {{ row(income.type | renderIncomeType | capitalize, income.amountReceived | numeral, '', false, bold = false) }}
     {% endfor %}
 
       {% if income.anyOtherIncomePopulated %}
@@ -107,7 +107,7 @@
     {{ row('Monthly expenses', '', '', bottomBorder = false, bold = true, topBorder = true) }}
 
     {% for expense in claim.response.statementOfMeans.expenses %}
-      {{ row(expense.type | renderExpenseType, expense.amountPaid | numeral, '', false, bold = false) }}
+      {{ row(expense.type | renderExpenseType | capitalize, expense.amountPaid | numeral, '', false, bold = false) }}
     {% endfor %}
 
     {% if expenses.anyOtherPopulated %}
