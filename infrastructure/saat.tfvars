@@ -6,6 +6,6 @@ external_host_name = "moneyclaims.saat.platform.hmcts.net"
 
 idam_api_url = "http://betaDevBccidamAppLB.reform.hmcts.net"
 authentication_web_url = "https://idam-test.dev.ccidam.reform.hmcts.net"
-fees_api_url = "http://fees-register-api-aat.service.core-compute-aat.internal"
-payments_api_url = "http://payment-api-aat.service.core-compute-aat.internal"
+fees_api_url = "http://fees-register-api-saat.service.core-compute-saat.internal"
+payments_api_url = "http://payment-api-saat.service.core-compute-saat.internal"
 capacity = "2"
