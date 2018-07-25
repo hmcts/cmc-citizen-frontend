@@ -9,17 +9,21 @@ export class PaymentIntention {
   paymentDate?: Moment
   repaymentPlan?: RepaymentPlan
 
-  deserialize (input: any): PaymentIntention {
-    if (input) {
-      this.paymentOption = input.paymentOption as PaymentOption,
-        this.paymentDate = input.paymentDate && MomentFactory.parse(input.paymentDate),
-        this.repaymentPlan = input.repaymentPlan && {
-          instalmentAmount: input.repaymentPlan.instalmentAmount,
-          firstPaymentDate: MomentFactory.parse(input.repaymentPlan.firstPaymentDate),
-          paymentSchedule: input.repaymentPlan.paymentSchedule
-        }
+  static deserialize (input: any): PaymentIntention {
+    if (!input) {
+      return input
     }
-    return this
+
+    const instance = new PaymentIntention()
+    instance.paymentOption = input.paymentOption
+    instance.paymentDate = input.paymentDate && MomentFactory.parse(input.paymentDate)
+    instance.repaymentPlan = input.repaymentPlan && {
+      instalmentAmount: input.repaymentPlan.instalmentAmount,
+      firstPaymentDate: MomentFactory.parse(input.repaymentPlan.firstPaymentDate),
+      paymentSchedule: input.repaymentPlan.paymentSchedule
+    }
+
+    return instance
   }
 
   get pastDefendantPayImmediatelyDate (): boolean {
