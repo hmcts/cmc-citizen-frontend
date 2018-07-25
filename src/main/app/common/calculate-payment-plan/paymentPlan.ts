@@ -4,7 +4,7 @@ import { MomentFactory } from 'shared/momentFactory'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { RepaymentPlan } from 'claims/models/response/core/repaymentPlan'
 
-class PaymentPlan {
+export class PaymentPlan {
   private numberOfInstalments: number
 
   constructor (
@@ -51,13 +51,6 @@ class PaymentPlan {
   }
 }
 
-export function createPaymentPlan (
-  totalAmount: number,
-  instalmentAmount: number,
-  frequencyInWeeks: number): PaymentPlan {
-  return new PaymentPlan(totalAmount, instalmentAmount, frequencyInWeeks)
-}
-
 function mapFrequencyInWeeks (paymentSchedule: PaymentSchedule): number {
   switch (paymentSchedule) {
     case 'EACH_WEEK':
@@ -78,4 +71,11 @@ export function generatePaymentPlan (
     return undefined
   }
   return new PaymentPlan(totalAmount, repaymentPlan.instalmentAmount, mapFrequencyInWeeks(repaymentPlan.paymentSchedule))
+}
+
+export function createPaymentPlan (
+  totalAmount: number,
+  instalmentAmount: number,
+  frequencyInWeeks: number): PaymentPlan {
+  return new PaymentPlan(totalAmount, instalmentAmount, frequencyInWeeks)
 }

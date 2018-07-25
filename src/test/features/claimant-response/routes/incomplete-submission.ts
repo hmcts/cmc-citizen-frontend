@@ -15,6 +15,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ClaimantResponsePaths.incompleteSubmissionPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const defendantPartialAdmissionResponse = claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj
 
 describe('Claimant response: incomplete submission page', () => {
   attachDefaultHooks(app)
@@ -31,7 +32,7 @@ describe('Claimant response: incomplete submission page', () => {
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
       draftStoreServiceMock.resolveFind('claimantResponse')
-      claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+      claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
 
       await request(app)
         .get(pagePath)

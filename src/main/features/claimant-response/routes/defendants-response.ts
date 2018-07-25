@@ -40,7 +40,7 @@ export default express.Router()
           break
       }
 
-      const paymentPlan: PaymentPlan = generatePaymentPlan(claim.claimData.amount.totalAmount(), claim.response.paymentIntention.repaymentPlan)
+      const paymentPlan: PaymentPlan = generatePaymentPlan(claim.claimData.amount.totalAmount(), (claim.response as FullAdmissionResponse).paymentIntention.repaymentPlan)
 
       res.render(Paths.defendantsResponsePage.associatedView, {
         claim: claim,

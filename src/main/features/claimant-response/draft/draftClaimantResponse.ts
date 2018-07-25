@@ -1,6 +1,10 @@
 import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
+import { SettleAdmitted } from 'claimant-response/form/models/settleAdmitted'
+import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
 
 export class DraftClaimantResponse extends DraftDocument {
+  settleAdmitted?: SettleAdmitted
+  acceptPaymentMethod?: AcceptPaymentMethod
 
   viewedDefendantResponse: boolean = false
 
@@ -12,6 +16,12 @@ export class DraftClaimantResponse extends DraftDocument {
     if (input) {
       this.externalId = input.externalId
       this.viewedDefendantResponse = input.viewedDefendantResponse
+      if (input.settleAdmitted) {
+        this.settleAdmitted = new SettleAdmitted().deserialize(input.settleAdmitted)
+      }
+      if (input.acceptPaymentMethod) {
+        this.acceptPaymentMethod = new AcceptPaymentMethod().deserialize(input.acceptPaymentMethod)
+      }
     }
     return this
   }

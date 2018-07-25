@@ -11,7 +11,7 @@
       <div class="govuk-box-highlight">
         <h1 class="bold-large">{{ t('You’ve submitted your response') }}</h1>
         <p class="reference-number">
-          <span>{{ t('Your claim reference:') }}</span>
+          <span>{{ t('Claim number:') }}</span>
           <span class="block bold-large">{{ claim.claimNumber }}</span>
         </p>
         <p>
@@ -22,7 +22,6 @@
         </p>
       </div>
 
-      <h2 class="bold-large form-group">{{ t('Your response') }}</h2>
 
       {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
         {% include "./confirmation/full-admission.njk" %}
