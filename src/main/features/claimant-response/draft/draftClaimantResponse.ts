@@ -3,10 +3,10 @@ import { SettleAdmitted } from 'claimant-response/form/models/settleAdmitted'
 import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
 
 export class DraftClaimantResponse extends DraftDocument {
+  defendantResponseViewed: boolean
+
   settleAdmitted?: SettleAdmitted
   acceptPaymentMethod?: AcceptPaymentMethod
-
-  viewedDefendantResponse: boolean = false
 
   constructor () {
     super()
@@ -15,7 +15,9 @@ export class DraftClaimantResponse extends DraftDocument {
   deserialize (input: any): DraftClaimantResponse {
     if (input) {
       this.externalId = input.externalId
-      this.viewedDefendantResponse = input.viewedDefendantResponse
+      if (input.defendantResponseViewed) {
+        this.defendantResponseViewed = input.defendantResponseViewed
+      }
       if (input.settleAdmitted) {
         this.settleAdmitted = new SettleAdmitted().deserialize(input.settleAdmitted)
       }
