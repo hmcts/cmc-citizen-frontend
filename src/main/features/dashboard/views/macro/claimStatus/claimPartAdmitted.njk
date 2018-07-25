@@ -1,8 +1,8 @@
 {% from "externalLink.njk" import externalLink %}
 
 {% macro claimPartAdmittedAlreadyPaidForDefendantDashboard(claim) %}
-  {{ t('We’ve emailed {{ defendantName }} telling them when and how you said you paid the claim.',
-    { defendantName: claim.claimData.defendant.name }) }}
+  {{ t('We’ve emailed {{ claimantName }} telling them when and how you said you paid the claim.',
+    { claimantName: claim.claimData.claimant.name }) }}
 {% endmacro %}
 
 {% macro claimPartAdmittedAlreadyPaidForClaimantDashboard(claim) %}
