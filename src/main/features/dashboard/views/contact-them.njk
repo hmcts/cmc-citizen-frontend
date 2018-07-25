@@ -6,6 +6,7 @@
 
 {% if user.id === claim.claimantId %}
   {% set otherParty = 'Defendant' %}
+  {% set otherPartyLowerCase = 'defendant' %}
   {% set otherPartyName = claim.claimData.defendant.name %}
   {% set phone = claim.response.defendant.mobilePhone %}
   {% set email = claim.claimData.defendant.email %}
@@ -32,6 +33,7 @@
 
   {% elif user.id === claim.defendantId %}
     {% set otherParty = 'Claimant' %}
+    {% set otherPartyLowerCase = 'claimant' %}
     {% set otherPartyName = claim.claimData.claimant.name %}
     {% set phone = claim.claimData.claimant.mobilePhone %}
     {% set email = claim.claimantEmail %}
@@ -57,7 +59,7 @@
 
 {% endif %}
 
-{% set heading = 'Contact ' + t(otherParty) %}
+{% set heading = 'Contact ' + t(otherPartyLowerCase) %}
 
 {% block content %}
   <div class="grid-row">
@@ -67,9 +69,9 @@
         {{ otherPartyName }}
       </h1>
       <div>
-        <h2 class="heading-medium">{{ t('Address') }}</h2>
         {% if address != null %}
-        {% if line1 != null %}
+          <h2 class="heading-medium">{{ t('Address') }}</h2>
+          {% if line1 != null %}
           {{ line1 }}
         {% endif %}
 

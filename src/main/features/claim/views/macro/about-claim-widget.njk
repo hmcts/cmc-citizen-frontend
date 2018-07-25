@@ -1,3 +1,7 @@
+{% from "internalLink.njk" import internalLink %}
+
+
+
 {% macro aboutClaimWidget(user, claim, showResponse = true) %}
 
   {% set contactThem = 'contact-them' %}
@@ -17,7 +21,7 @@
   <ul class="font-xsmall list">
     <li>
       <strong class="bold">{{ t(otherPartyLabel) }}</strong>
-      <div><a href={{ contactThem }}>{{ otherPartyName }}</a></div>
+      {{ internalLink(t(otherPartyName), DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) }}
     </li>
     <li>
       <strong class="bold">{{ t('Claim amount:') }}</strong>
