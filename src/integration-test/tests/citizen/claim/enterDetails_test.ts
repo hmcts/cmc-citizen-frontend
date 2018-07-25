@@ -10,8 +10,8 @@ const interestSteps: InterestSteps = new InterestSteps()
 
 Feature('Claimant Enter details of claim').retry(3)
 
-Scenario('I can prepare a claim with default interest @citizen', function* (I: I) {
-  const email: string = yield I.createCitizenUser()
+Scenario('I can prepare a claim with default interest @citizen', async (I: I) => {
+  const email: string = await I.createCitizenUser()
   userSteps.login(email)
   claimSteps.completeEligibility()
   userSteps.selectClaimAmount()
@@ -26,8 +26,8 @@ Scenario('I can prepare a claim with default interest @citizen', function* (I: I
   I.see('Prepare your claim')
 })
 
-Scenario('I can prepare a claim with no interest @citizen', function* (I: I) {
-  const email: string = yield I.createCitizenUser()
+Scenario('I can prepare a claim with no interest @citizen', async (I: I) => {
+  const email: string = await I.createCitizenUser()
   userSteps.login(email)
 
   claimSteps.completeEligibility()
@@ -43,8 +43,8 @@ Scenario('I can prepare a claim with no interest @citizen', function* (I: I) {
   I.see('Prepare your claim')
 })
 
-Scenario('I can prepare a claim with different interest rate and date @citizen', function* (I: I) {
-  const email: string = yield I.createCitizenUser()
+Scenario('I can prepare a claim with different interest rate and date @citizen', async (I: I) => {
+  const email: string = await I.createCitizenUser()
   userSteps.login(email)
 
   claimSteps.completeEligibility()
@@ -59,8 +59,8 @@ Scenario('I can prepare a claim with different interest rate and date @citizen',
   I.see('Prepare your claim')
 })
 
-Scenario('I can prepare a claim with a manually entered interest amount and a daily amount added @citizen', function* (I: I) {
-  const email: string = yield I.createCitizenUser()
+Scenario('I can prepare a claim with a manually entered interest amount and a daily amount added @citizen', async (I: I) => {
+  const email: string = await I.createCitizenUser()
   userSteps.login(email)
 
   claimSteps.completeEligibility()
@@ -77,6 +77,6 @@ Scenario('I can prepare a claim with a manually entered interest amount and a da
 
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user
 
-Scenario('I can enter a claim details and navigate up to payment page @citizen-smoke-test', function* (I: I) {
+Scenario('I can enter a claim details and navigate up to payment page @citizen-smoke-test', (I: I) => {
   claimSteps.makeAClaimAndNavigateUpToPayment(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
 })
