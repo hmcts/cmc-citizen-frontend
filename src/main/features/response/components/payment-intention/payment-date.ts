@@ -69,7 +69,7 @@ export class PaymentDatePage {
   private renderView (form: Form<PaymentDate>, res: express.Response) {
     const futureDate: Moment = MomentFactory.currentDate().add(1, 'month')
 
-    res.render('response/components/payment-intention/payment-date.njk', {
+    res.render('response/components/payment-intention/payment-date', {
       form: form,
       futureDate: futureDate
     })

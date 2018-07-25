@@ -19,7 +19,7 @@ import { FeatureToggles } from 'utils/featureToggles'
 export class PaymentOptionPage {
   constructor (private admissionType: string) {}
 
-  buildRouter (path: string = ''): express.Router {
+  buildRouter (path: string): express.Router {
     return express.Router()
       .get(path + PaymentIntentionPaths.paymentOptionPage.uri,
         FeatureToggleGuard.featureEnabledGuard(this.admissionType),
