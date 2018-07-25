@@ -1,3 +1,15 @@
+main {
+  counter-reset: cmc-task-list-counter;
+
+  .task-list-heading {
+    &::before {
+      content: counter(cmc-task-list-counter) '.';
+      counter-increment: cmc-task-list-counter;
+      padding-right: 30px;
+    }
+  }
+}
+
 .task-group {
   margin-bottom: 4rem;
 }
@@ -79,3 +91,4 @@ div {
 .if-empty {
   min-height: 1rem;
 }
+

@@ -1,9 +1,9 @@
 import { expect } from 'chai'
 
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
-import { FormaliseRepaymentPlan } from 'features/claimant-response/form/models/formaliseRepaymentPlan'
-import { FormaliseRepaymentPlanOption } from 'features/claimant-response/form/models/formaliseRepaymentPlanOption'
-import { SettlementAgreement } from 'claimant-response/form/models/settlementAgreement'
+import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
+import { SettleAdmitted } from 'claimant-response/form/models/settleAdmitted'
+import { YesNoOption } from 'models/yesNoOption'
 
 describe('DraftClaimantResponse', () => {
   describe('deserialization', () => {
@@ -17,18 +17,28 @@ describe('DraftClaimantResponse', () => {
     })
 
     it('should return a DraftClaimantResponse instance initialised with valid data', () => {
-      const givenExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
-      const givenFormaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT) 
-      const givenSettlementAgreement = new SettlementAgreement(true) 
-      const input = { 
-        externalId: givenExternalId,
-        formaliseRepaymentPlan:  givenFormaliseRepaymentPlan,
-        settlementAgreement: givenSettlementAgreement
-      }
-      const draft: DraftClaimantResponse = new DraftClaimantResponse().deserialize( input)
-      expect(draft.externalId).to.eql(givenExternalId)
-      expect(draft.formaliseRepaymentPlan).to.eql(givenFormaliseRepaymentPlan)
-      expect(draft.settlementAgreement).to.eql(givenSettlementAgreement)
+      const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
+      const draft: DraftClaimantResponse = new DraftClaimantResponse().deserialize({
+        externalId: myExternalId,
+        settleAdmitted: {
+          admitted: {
+            option: 'yes'
+          }
+        },
+        acceptPaymentMethod: {
+          accept: {
+            option: 'no'
+          }
+        }
+      })
+      expect(draft.externalId).to.eql(myExternalId)
+      expect(draft).to.be.instanceof(DraftClaimantResponse)
+      expect(draft.acceptPaymentMethod).to.be.instanceOf(AcceptPaymentMethod)
+      expect(draft.acceptPaymentMethod.accept).to.be.instanceOf(YesNoOption)
+      expect(draft.acceptPaymentMethod.accept.option).to.be.equals(YesNoOption.NO.option)
+      expect(draft.settleAdmitted).to.be.instanceOf(SettleAdmitted)
+      expect(draft.settleAdmitted.admitted).to.be.instanceOf(YesNoOption)
+      expect(draft.settleAdmitted.admitted.option).to.be.equals(YesNoOption.YES.option)
     })
   })
 })

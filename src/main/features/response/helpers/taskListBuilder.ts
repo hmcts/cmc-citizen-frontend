@@ -18,6 +18,7 @@ import { StatementOfMeansTask } from 'response/tasks/statementOfMeansTask'
 import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
 import { HowMuchHaveYouPaidTask } from 'response/tasks/howMuchHaveYouPaidTask'
 import { WhyDoYouDisagreeTask } from 'response/tasks/whyDoYouDisagreeTask'
+import { HowMuchDoYouOweTask } from 'response/tasks/howMuchDoYouOweTask'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -41,7 +42,7 @@ export class TaskListBuilder {
       )
     }
 
-    return new TaskList(1, 'Before you start', tasks)
+    return new TaskList('Before you start', tasks)
   }
 
   static buildRespondToClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
@@ -72,11 +73,6 @@ export class TaskListBuilder {
           'Why do you disagree with the claim?',
           Paths.defencePage.evaluateUri({ externalId: externalId }),
           YourDefenceTask.isCompleted(draft)
-        ),
-        new TaskListItem(
-          'Free mediation',
-          Paths.freeMediationPage.evaluateUri({ externalId: externalId }),
-          FreeMediationTask.isCompleted(draft)
         )
       )
     }
@@ -112,13 +108,25 @@ export class TaskListBuilder {
     }
 
     if (draft.isResponsePartiallyAdmitted()) {
-      tasks.push(
-        new TaskListItem(
-          'How much have you paid?',
-          PartAdmissionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: externalId }),
-          HowMuchHaveYouPaidTask.isCompleted(draft)
+
+      if (draft.isResponsePartiallyAdmittedAndAlreadyPaid()) {
+        tasks.push(
+          new TaskListItem(
+            'How much have you paid?',
+            PartAdmissionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: externalId }),
+            HowMuchHaveYouPaidTask.isCompleted(draft)
+          )
         )
-      )
+
+      } else {
+        tasks.push(
+          new TaskListItem(
+            'How much money do you admit you owe?',
+            PartAdmissionPaths.howMuchDoYouOwePage.evaluateUri({ externalId: externalId }),
+            HowMuchDoYouOweTask.isCompleted(draft)
+          )
+        )
+      }
 
       tasks.push(
         new TaskListItem(
@@ -129,7 +137,24 @@ export class TaskListBuilder {
       )
     }
 
-    return new TaskList(2, 'Respond to claim', tasks)
+    return new TaskList('Respond to claim', tasks)
+  }
+
+  static buildResolvingClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
+    if (TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)
+      || draft.isResponseRejectedFullyWithDispute()) {
+      return new TaskList(
+        'Resolving the claim', [
+          new TaskListItem(
+            'Consider free mediation',
+            Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId }),
+            FreeMediationTask.isCompleted(draft)
+          )
+        ]
+      )
+    }
+
+    return undefined
   }
 
   static buildSubmitSection (draft: ResponseDraft, externalId: string): TaskList {
@@ -146,10 +171,14 @@ export class TaskListBuilder {
           false
         )
       )
-      return new TaskList(3, 'Submit', tasks)
+      return new TaskList('Submit', tasks)
     }
 
     return undefined
+  }
+
+  private static isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted (draft: ResponseDraft): boolean {
+    return draft.isResponsePartiallyAdmitted() && WhyDoYouDisagreeTask.isCompleted(draft)
   }
 
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {

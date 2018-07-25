@@ -6,7 +6,7 @@
   <div class="grid-row">
     <div class="column-two-thirds">
       <div class="task-group">
-        {{ taskListHeading(beforeYouStart.position, t(beforeYouStart.name)) }}
+        {{ taskListHeading(beforeYouStart.name) }}
 
         {% for item in beforeYouStart.tasks %}
           {{ task(item.startPageUrl, t(item.name), item.completed) }}
@@ -14,7 +14,7 @@
       </div>
 
       <div class="task-group">
-        {{ taskListHeading(prepareYourClaim.position, t(prepareYourClaim.name)) }}
+        {{ taskListHeading(prepareYourClaim.name) }}
 
         {% for item in prepareYourClaim.tasks %}
           {{ task(item.startPageUrl, t(item.name), item.completed) }}
@@ -22,7 +22,7 @@
       </div>
 
       <div class="task-group">
-        {{ taskListHeading(submit.position, t(submit.name)) }}
+        {{ taskListHeading(submit.name) }}
 
         {% for item in submit.tasks %}
           {{ task(item.startPageUrl, t(item.name), item.completed) }}

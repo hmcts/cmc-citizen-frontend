@@ -17,8 +17,8 @@ export class DashboardClaimDetails {
     I.see(claimData.total)
     I.see(claimData.reason)
     I.click(fields.amountBreakdown)
-    I.click('Download claim')
     I.see('Claim amount')
     I.see(claimData.total)
+    I.click('Download claim')
   }
 }

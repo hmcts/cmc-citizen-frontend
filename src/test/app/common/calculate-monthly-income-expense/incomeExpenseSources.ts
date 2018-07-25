@@ -2,12 +2,16 @@ import { expect } from 'chai'
 import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/incomeExpenseSources'
 import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
 import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
-import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
+import { IncomeExpenseSchedule as FormIncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
-import { MonthlyIncome, SourceNames } from 'response/form/models/statement-of-means/monthlyIncome'
-import { IncomeExpenseSource as FormIncomeExpenseSource } from 'response/form/models/statement-of-means/incomeExpenseSource'
+import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
+import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
+import { MonthlyIncomeType } from 'response/form/models/statement-of-means/monthlyIncomeType'
+import { MonthlyExpenseType } from 'response/form/models/statement-of-means/monthlyExpenseType'
+import { IncomeSource as FormIncomeSource } from 'response/form/models/statement-of-means/incomeSource'
+import { ExpenseSource as FormExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
 
 const SAMPLE_INCOME_EXPENSE_SOURCES_FROM_OBJECT = {
   incomeExpenseSources: [
@@ -56,19 +60,19 @@ describe('IncomeExpenseSources', () => {
 
   })
 
-  describe('fromFormModel', () => {
+  describe('fromMonthlyIncomeFormModel', () => {
     it('should return a new instance initialised with set fields from object parameter provided', () => {
       const monthlyIncome: MonthlyIncome = new MonthlyIncome(
-        undefined, new FormIncomeExpenseSource(SourceNames.SALARY, 100, ExpenseSchedule.MONTH),
-        undefined, new FormIncomeExpenseSource(SourceNames.UNIVERSAL_CREDIT, 200, ExpenseSchedule.MONTH),
-        undefined, new FormIncomeExpenseSource(SourceNames.JOBSEEKER_ALLOWANCE_INCOME, 300, ExpenseSchedule.TWO_WEEKS),
-        undefined, new FormIncomeExpenseSource(SourceNames.JOBSEEKER_ALLOWANCE_CONTRIBUTION, 400, ExpenseSchedule.MONTH),
-        undefined, new FormIncomeExpenseSource(SourceNames.INCOME_SUPPORT, 500, ExpenseSchedule.MONTH),
-        undefined, new FormIncomeExpenseSource(SourceNames.WORKING_TAX_CREDIT, 600, ExpenseSchedule.TWO_WEEKS),
-        undefined, new FormIncomeExpenseSource(SourceNames.CHILD_TAX_CREDIT, 700, ExpenseSchedule.MONTH),
-        undefined, new FormIncomeExpenseSource(SourceNames.CHILD_BENEFIT, 800, ExpenseSchedule.MONTH),
-        undefined, new FormIncomeExpenseSource(SourceNames.COUNCIL_TAX_SUPPORT, 900, ExpenseSchedule.TWO_WEEKS),
-        undefined, new FormIncomeExpenseSource(SourceNames.PENSION, 100, ExpenseSchedule.TWO_WEEKS)
+        undefined, new FormIncomeSource(MonthlyIncomeType.JOB.displayValue, 100, FormIncomeExpenseSchedule.MONTH),
+        undefined, new FormIncomeSource(MonthlyIncomeType.UNIVERSAL_CREDIT.displayValue, 200, FormIncomeExpenseSchedule.MONTH),
+        undefined, new FormIncomeSource(MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_INCOME_BASES.displayValue, 300, FormIncomeExpenseSchedule.TWO_WEEKS),
+        undefined, new FormIncomeSource(MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_CONTRIBUTION_BASED.displayValue, 400, FormIncomeExpenseSchedule.MONTH),
+        undefined, new FormIncomeSource(MonthlyIncomeType.INCOME_SUPPORT.displayValue, 500, FormIncomeExpenseSchedule.MONTH),
+        undefined, new FormIncomeSource(MonthlyIncomeType.WORKING_TAX_CREDIT.displayValue, 600, FormIncomeExpenseSchedule.TWO_WEEKS),
+        undefined, new FormIncomeSource(MonthlyIncomeType.CHILD_TAX_CREDIT.displayValue, 700, FormIncomeExpenseSchedule.MONTH),
+        undefined, new FormIncomeSource(MonthlyIncomeType.CHILD_BENEFIT.displayValue, 800, FormIncomeExpenseSchedule.MONTH),
+        undefined, new FormIncomeSource(MonthlyIncomeType.COUNCIL_TAX_SUPPORT.displayValue, 900, FormIncomeExpenseSchedule.TWO_WEEKS),
+        undefined, new FormIncomeSource(MonthlyIncomeType.PENSION.displayValue, 100, FormIncomeExpenseSchedule.TWO_WEEKS)
       )
 
       expect(IncomeExpenseSources.fromMonthlyIncomeFormModel(monthlyIncome)).to.deep.equal(
@@ -112,6 +116,85 @@ describe('IncomeExpenseSources', () => {
             },
             {
               'amount': 100,
+              'schedule': IncomeExpenseSchedule.TWO_WEEKS
+            }
+          ]
+        )
+      )
+    })
+  })
+
+  describe('fromMonthlyExpenseFormModel', () => {
+    it('should return a new instance initialised with set fields from object parameter provided', () => {
+      const monthlyExpenses: MonthlyExpenses = new MonthlyExpenses(
+        undefined, new FormExpenseSource(MonthlyExpenseType.MORTGAGE.displayValue, 100, FormIncomeExpenseSchedule.MONTH),
+        undefined, new FormExpenseSource(MonthlyExpenseType.RENT.displayValue, 200, FormIncomeExpenseSchedule.MONTH),
+        undefined, new FormExpenseSource(MonthlyExpenseType.COUNCIL_TAX.displayValue, 300, FormIncomeExpenseSchedule.TWO_WEEKS),
+        undefined, new FormExpenseSource(MonthlyExpenseType.GAS.displayValue, 400, FormIncomeExpenseSchedule.MONTH),
+        undefined, new FormExpenseSource(MonthlyExpenseType.ELECTRICITY.displayValue, 500, FormIncomeExpenseSchedule.MONTH),
+        undefined, new FormExpenseSource(MonthlyExpenseType.WATER.displayValue, 600, FormIncomeExpenseSchedule.TWO_WEEKS),
+        undefined, new FormExpenseSource(MonthlyExpenseType.TRAVEL.displayValue, 700, FormIncomeExpenseSchedule.MONTH),
+        undefined, new FormExpenseSource(MonthlyExpenseType.SCHOOL_COSTS.displayValue, 800, FormIncomeExpenseSchedule.MONTH),
+        undefined, new FormExpenseSource(MonthlyExpenseType.FOOD_HOUSEKEEPING.displayValue, 900, FormIncomeExpenseSchedule.TWO_WEEKS),
+        undefined, new FormExpenseSource(MonthlyExpenseType.TV_AND_BROADBAND.displayValue, 100, FormIncomeExpenseSchedule.TWO_WEEKS),
+        undefined, new FormExpenseSource(MonthlyExpenseType.HIRE_PURCHASES.displayValue, 100, FormIncomeExpenseSchedule.MONTH),
+        undefined, new FormExpenseSource(MonthlyExpenseType.MOBILE_PHONE.displayValue, 200, FormIncomeExpenseSchedule.MONTH),
+        undefined, new FormExpenseSource(MonthlyExpenseType.MAINTENANCE_PAYMENTS.displayValue, 300, FormIncomeExpenseSchedule.TWO_WEEKS)
+      )
+
+      expect(IncomeExpenseSources.fromMonthlyExpensesFormModel(monthlyExpenses)).to.deep.equal(
+        new IncomeExpenseSources(
+          [
+            {
+              'amount': 100,
+              'schedule': IncomeExpenseSchedule.MONTH
+            },
+            {
+              'amount': 200,
+              'schedule': IncomeExpenseSchedule.MONTH
+            },
+            {
+              'amount': 300,
+              'schedule': IncomeExpenseSchedule.TWO_WEEKS
+            },
+            {
+              'amount': 400,
+              'schedule': IncomeExpenseSchedule.MONTH
+            },
+            {
+              'amount': 500,
+              'schedule': IncomeExpenseSchedule.MONTH
+            },
+            {
+              'amount': 600,
+              'schedule': IncomeExpenseSchedule.TWO_WEEKS
+            },
+            {
+              'amount': 700,
+              'schedule': IncomeExpenseSchedule.MONTH
+            },
+            {
+              'amount': 800,
+              'schedule': IncomeExpenseSchedule.MONTH
+            },
+            {
+              'amount': 900,
+              'schedule': IncomeExpenseSchedule.TWO_WEEKS
+            },
+            {
+              'amount': 100,
+              'schedule': IncomeExpenseSchedule.TWO_WEEKS
+            },
+            {
+              'amount': 100,
+              'schedule': IncomeExpenseSchedule.MONTH
+            },
+            {
+              'amount': 200,
+              'schedule': IncomeExpenseSchedule.MONTH
+            },
+            {
+              'amount': 300,
               'schedule': IncomeExpenseSchedule.TWO_WEEKS
             }
           ]

@@ -31,9 +31,10 @@ import { DefendantHowMuchHaveYouPaidClaimantPage } from 'integration-test/tests/
 import { DefendantWhenDidYouPayPage } from 'integration-test/tests/citizen/defence/pages/defendant-when-did-you-pay'
 import { ClaimStoreClient } from 'integration-test/helpers/clients/claimStoreClient'
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
-import I = CodeceptJS.I
 import { DefendantEvidencePage } from 'integration-test/tests/citizen/defence/pages/defendant-evidence'
-import { AlreadyPaidPage } from '../pages/statement-of-means/already-paid'
+import { AlreadyPaidPage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/already-paid'
+import { DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-have-you-paid-the-claimant-the-amount-you-admit-you-owe'
+import I = CodeceptJS.I
 
 const I: I = actor()
 const defendantStartPage: DefendantStartPage = new DefendantStartPage()
@@ -65,6 +66,7 @@ const defendantSteps: DefendantSteps = new DefendantSteps()
 const statementOfMeansSteps: StatementOfMeansSteps = new StatementOfMeansSteps()
 const defendantHowMuchHaveYouPaidClaimantPage: DefendantHowMuchHaveYouPaidClaimantPage = new DefendantHowMuchHaveYouPaidClaimantPage()
 const defendantWhenDidYouPayPage: DefendantWhenDidYouPayPage = new DefendantWhenDidYouPayPage()
+const haveYouPaidTheClaimantPage: DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage = new DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage()
 
 const updatedAddress = { line1: 'ABC Street', line2: 'A cool place', city: 'Bristol', postcode: 'BS1 5TL' }
 
@@ -195,9 +197,9 @@ export class DefenceSteps {
 
     defendantSteps.selectTaskHowMuchHaveYouPaid()
 
-    defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplaination(
+    defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplanation(
       100,
-      { day: '1', month: '1', year: '1990' },
+      '1990-01-01' ,
       'I will not pay that much!'
     )
 
@@ -213,7 +215,7 @@ export class DefenceSteps {
     defendantYourDefencePage.enterYourDefence(text)
   }
 
-  askforMediation (): void {
+  askForMediation (): void {
     defendantSteps.selectTaskFreeMediation()
     defendantFreeMediationPage.chooseYes()
   }
@@ -257,7 +259,7 @@ export class DefenceSteps {
         this.submitDefenceText('I fully dispute this claim')
         this.addTimeLineOfEvents({ events: [{ date: 'may', description: 'ok' } as TimelineEvent] } as Timeline)
         this.enterEvidence('description', 'comment')
-        this.askforMediation()
+        this.askForMediation()
         defendantSteps.selectCheckAndSubmitYourDefence()
         break
       case DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID:
@@ -335,6 +337,32 @@ export class DefenceSteps {
       default:
         throw new Error(`Unknown payment option: ${paymentOption}`)
     }
+  }
+
+  makePartialAdmission (defendantType: PartyType): void {
+    I.dontSee('COMPLETE')
+
+    this.confirmYourDetails(createDefendant(defendantType))
+
+    this.requestMoreTimeToRespond()
+
+    defendantSteps.selectTaskChooseAResponse()
+    defendantDefenceTypePage.admitPartOfMoneyClaim()
+    I.see('Have you paid the claimant the amount you admit you owe?')
+    haveYouPaidTheClaimantPage.selectYesOption()
+    defendantSteps.selectTaskHowMuchHaveYouPaid()
+    defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplanation(
+      defence.paidWhatIBelieveIOwe.howMuchAlreadyPaid,
+      defence.paidWhatIBelieveIOwe.paidDate,
+      defence.paidWhatIBelieveIOwe.explanation)
+    defendantSteps.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
+    defendantYourDefencePage.enterYourDefence('I have already paid for the bill')
+    this.addTimeLineOfEvents(defence.timeline)
+    this.enterEvidence('description', 'They do not have evidence')
+    defendantSteps.selectCheckAndSubmitYourDefence()
+    this.checkAndSendAndSubmit(defendantType)
+
+    I.see('You’ve submitted your response')
   }
 
   sendDefenceResponseHandOff (claimRef: string, defendant: Party, claimant: Party, defenceType: DefenceType): void {

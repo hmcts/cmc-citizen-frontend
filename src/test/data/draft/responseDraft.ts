@@ -7,6 +7,11 @@ import { BankAccountType } from 'response/form/models/statement-of-means/bankAcc
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 import { individualDetails } from 'test/data/draft/partyDetails'
+import { AlreadyPaid } from 'response/form/models/alreadyPaid'
+import { YesNoOption } from 'models/yesNoOption'
+import { DefendantTimeline } from 'response/form/models/defendantTimeline'
+import { DefendantEvidence } from 'response/form/models/defendantEvidence'
+import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
 
 const baseResponseDraft = {
   defendantDetails: {
@@ -35,6 +40,14 @@ const baseDefenceDraft = {
   freeMediation: {
     option: 'no'
   }
+}
+
+export const partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted = {
+  ...baseResponseDraft,
+  ...baseDefenceDraft,
+  partialAdmission: { whyDoYouDisagree: new WhyDoYouDisagree('I am not sure') },
+  timeline: new DefendantTimeline(),
+  evidence: new DefendantEvidence()
 }
 
 export const defenceWithDisputeDraft = {
@@ -72,6 +85,14 @@ const baseFullAdmissionDraft = {
   }
 }
 
+const basePartialAdmissionDraft = {
+  response: {
+    type: {
+      value: ResponseType.PART_ADMISSION.value
+    }
+  }
+}
+
 export const fullAdmissionWithImmediatePaymentDraft = {
   ...baseResponseDraft,
   ...baseFullAdmissionDraft,
@@ -79,6 +100,82 @@ export const fullAdmissionWithImmediatePaymentDraft = {
     paymentOption: {
       option: DefendantPaymentType.IMMEDIATELY
     }
+  }
+}
+
+export const basePartialFuturePaymentDetails = {
+  alreadyPaid: {
+    option: YesNoOption.YES
+  } as AlreadyPaid,
+  howMuchHaveYouPaid: {
+    amount: 3000
+  },
+  whyDoYouDisagree: {
+    text: 'i have paid more than enough'
+  }
+}
+
+export const basePartialAlreadyPaidDetails = {
+  alreadyPaid: {
+    option: YesNoOption.YES
+  } as AlreadyPaid,
+  howMuchHaveYouPaid: {
+    amount: 3000,
+    date: {
+      year: 2050,
+      month: 12,
+      day: 31
+    },
+    text: 'i have already paid enough'
+  },
+  whyDoYouDisagree: {
+    text: 'i have paid more than enough'
+  }
+}
+
+export const partialTimelineAndEvidences = {
+  timeline: {
+    rows: [
+      {
+        date: '1 May 2017',
+        description: ' you might have signed a contract'
+      }
+    ],
+    comment: ' you might have signed a contract'
+  },
+  evidence: {
+    rows: [
+      {
+        type: {
+          value: 'CONTRACTS_AND_AGREEMENTS',
+          displayValue: 'Contracts and agreements'
+        },
+        description: ' you might have signed a contract'
+      }
+    ],
+    comment: ' you might have signed a contract'
+  }
+
+}
+
+export const partialAdmissionWithImmediatePaymentDraft = {
+  ...baseResponseDraft,
+  ...basePartialAdmissionDraft,
+  partialAdmission: {
+    ...basePartialFuturePaymentDetails,
+    paymentOption: {
+      option: DefendantPaymentType.IMMEDIATELY
+    },
+    ...partialTimelineAndEvidences
+  }
+}
+
+export const partialAdmissionAlreadyPaidDraft = {
+  ...baseResponseDraft,
+  ...basePartialAdmissionDraft,
+  partialAdmission: {
+    ...basePartialAlreadyPaidDetails,
+    ...partialTimelineAndEvidences
   }
 }
 
@@ -96,6 +193,25 @@ export const fullAdmissionWithPaymentBySetDateDraft = {
         day: 31
       }
     }
+  }
+}
+
+export const partialAdmissionWithPaymentBySetDateDraft = {
+  ...baseResponseDraft,
+  ...basePartialAdmissionDraft,
+  partialAdmission: {
+    ...basePartialFuturePaymentDetails,
+    paymentOption: {
+      option: DefendantPaymentType.BY_SET_DATE
+    },
+    paymentDate: {
+      date: {
+        year: 2050,
+        month: 12,
+        day: 31
+      }
+    },
+    ...partialTimelineAndEvidences
   }
 }
 
@@ -117,6 +233,29 @@ export const fullAdmissionWithPaymentByInstalmentsDraft = {
         value: PaymentSchedule.EACH_WEEK
       }
     }
+  }
+}
+
+export const partialAdmissionWithPaymentByInstalmentsDraft = {
+  ...baseResponseDraft,
+  ...basePartialAdmissionDraft,
+  partialAdmission: {
+    ...basePartialFuturePaymentDetails,
+    paymentOption: {
+      option: DefendantPaymentType.INSTALMENTS
+    },
+    paymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: {
+        year: 2050,
+        month: 12,
+        day: 31
+      },
+      paymentSchedule: {
+        value: PaymentSchedule.EACH_WEEK
+      }
+    },
+    ...partialTimelineAndEvidences
   }
 }
 

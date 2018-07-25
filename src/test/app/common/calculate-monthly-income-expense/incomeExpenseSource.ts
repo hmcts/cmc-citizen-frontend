@@ -4,9 +4,10 @@ import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/i
 import { Validator } from 'class-validator'
 import { expectValidationError } from '../../forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
-import { IncomeExpenseSource as FormIncomeExpenseSource } from 'response/form/models/statement-of-means/incomeExpenseSource'
-import { SourceNames } from 'response/form/models/statement-of-means/monthlyIncome'
-import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
+import { IncomeSource as FormIncomeSource } from 'response/form/models/statement-of-means/incomeSource'
+import { MonthlyIncomeType } from 'response/form/models/statement-of-means/monthlyIncomeType'
+import { ExpenseSource as FormExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
+import { IncomeExpenseSchedule as FormIncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
 
 const SAMPLE_INCOME_EXPENSE_SOURCE_FROM_OBJECT = {
   amount: 100,
@@ -50,14 +51,28 @@ describe('IncomeExpenseSource', () => {
     })
   })
 
-  describe('fromFormModel', () => {
+  describe('fromFormIncomeSource', () => {
     it('should return undefined when undefined provided as object parameter', () => {
-      expect(IncomeExpenseSource.fromFormModel(undefined)).to.equal(undefined)
+      expect(IncomeExpenseSource.fromFormIncomeSource(undefined)).to.equal(undefined)
     })
 
     it('should return a new instance initialised with set fields from object parameter provided', () => {
-      const monthlyExpense = new FormIncomeExpenseSource(SourceNames.SALARY, 100, ExpenseSchedule.MONTH)
-      expect(IncomeExpenseSource.fromFormModel(monthlyExpense)).to.deep.equal({
+      const monthlyIncome = new FormIncomeSource(MonthlyIncomeType.JOB.displayValue, 100, FormIncomeExpenseSchedule.MONTH)
+      expect(IncomeExpenseSource.fromFormIncomeSource(monthlyIncome)).to.deep.equal({
+        'amount': 100,
+        'schedule': IncomeExpenseSchedule.MONTH
+      })
+    })
+  })
+
+  describe('fromFormExpenseSource', () => {
+    it('should return undefined when undefined provided as object parameter', () => {
+      expect(IncomeExpenseSource.fromFormExpenseSource(undefined)).to.equal(undefined)
+    })
+
+    it('should return a new instance initialised with set fields from object parameter provided', () => {
+      const monthlyExpense = new FormExpenseSource(MonthlyIncomeType.JOB.displayValue, 100, FormIncomeExpenseSchedule.MONTH)
+      expect(IncomeExpenseSource.fromFormExpenseSource(monthlyExpense)).to.deep.equal({
         'amount': 100,
         'schedule': IncomeExpenseSchedule.MONTH
       })

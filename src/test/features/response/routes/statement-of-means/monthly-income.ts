@@ -12,7 +12,7 @@ import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
 import { app } from 'main/app'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
-import { ExpenseSchedule } from 'response/form/models/statement-of-means/expenseSchedule'
+import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = StatementOfMeansPaths.monthlyIncomePage.evaluateUri(
@@ -117,15 +117,15 @@ describe('Defendant response: Statement of means: monthly-income', () => {
             .send({
               salarySource: {
                 amount: -100,
-                schedule: ExpenseSchedule.MONTH.value
+                schedule: IncomeExpenseSchedule.MONTH.value
               },
               pensionSource: {
                 amount: -200,
-                schedule: ExpenseSchedule.TWO_WEEKS.value
+                schedule: IncomeExpenseSchedule.TWO_WEEKS.value
               }})
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Enter a valid Income from your job amount, maximum two decimal places'))
-            .expect(res => expect(res).to.be.successful.withText('Enter a valid Pension (paid to you) amount, maximum two decimal places'))
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid income from your job amount, maximum two decimal places'))
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid pension payments amount, maximum two decimal places'))
         })
 
         it('should trigger validation when invalid decimal amount is given', async () => {
@@ -137,14 +137,14 @@ describe('Defendant response: Statement of means: monthly-income', () => {
             .send({
               salarySource: {
                 amount: 100.123,
-                schedule: ExpenseSchedule.MONTH.value
+                schedule: IncomeExpenseSchedule.MONTH.value
               },
               jobseekerAllowanceIncomeSource: {
                 amount: 200.345,
-                schedule: ExpenseSchedule.TWO_WEEKS.value
+                schedule: IncomeExpenseSchedule.TWO_WEEKS.value
               } })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Enter a valid Income from your job amount, maximum two decimal places'))
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid income from your job amount, maximum two decimal places'))
             .expect(res => expect(res).to.be.successful.withText('Enter a valid Jobseeker’s Allowance (income based) amount, maximum two decimal places'))
         })
 
@@ -156,13 +156,13 @@ describe('Defendant response: Statement of means: monthly-income', () => {
             .post(pagePath)
             .send({
               salarySource: {
-                schedule: ExpenseSchedule.MONTH.value
+                schedule: IncomeExpenseSchedule.MONTH.value
               },
               incomeSupportSource: {
-                schedule: ExpenseSchedule.MONTH.value
+                schedule: IncomeExpenseSchedule.MONTH.value
               } })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Enter how much Income from your job you receive'))
+            .expect(res => expect(res).to.be.successful.withText('Enter how much income from your job you receive'))
             .expect(res => expect(res).to.be.successful.withText('Enter how much Income Support you receive'))
         })
 
@@ -180,7 +180,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
                 amount: 700
               } })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Select how often you receive Income from your job'))
+            .expect(res => expect(res).to.be.successful.withText('Select how often you receive income from your job'))
             .expect(res => expect(res).to.be.successful.withText('Select how often you receive Child Tax Credit'))
         })
       })
@@ -197,43 +197,43 @@ describe('Defendant response: Statement of means: monthly-income', () => {
             .send({
               salarySource: {
                 amount: 100,
-                schedule: ExpenseSchedule.MONTH.value
+                schedule: IncomeExpenseSchedule.MONTH.value
               },
               universalCreditSource: {
                 amount: 200,
-                schedule: ExpenseSchedule.MONTH.value
+                schedule: IncomeExpenseSchedule.MONTH.value
               },
               jobseekerAllowanceIncomeSource: {
                 amount: 300,
-                schedule: ExpenseSchedule.TWO_WEEKS.value
+                schedule: IncomeExpenseSchedule.TWO_WEEKS.value
               },
               jobseekerAllowanceContributionSource: {
                 amount: 400,
-                schedule: ExpenseSchedule.MONTH.value
+                schedule: IncomeExpenseSchedule.MONTH.value
               },
               incomeSupportSource: {
                 amount: 500,
-                schedule: ExpenseSchedule.MONTH.value
+                schedule: IncomeExpenseSchedule.MONTH.value
               },
               workingTaxCreditSource: {
                 amount: 600,
-                schedule: ExpenseSchedule.TWO_WEEKS.value
+                schedule: IncomeExpenseSchedule.TWO_WEEKS.value
               },
               childTaxCreditSource: {
                 amount: 700,
-                schedule: ExpenseSchedule.MONTH.value
+                schedule: IncomeExpenseSchedule.MONTH.value
               },
               childBenefitSource: {
                 amount: 800,
-                schedule: ExpenseSchedule.MONTH.value
+                schedule: IncomeExpenseSchedule.MONTH.value
               },
               councilTaxSupportSource: {
                 amount: 900,
-                schedule: ExpenseSchedule.TWO_WEEKS.value
+                schedule: IncomeExpenseSchedule.TWO_WEEKS.value
               },
               pensionSource: {
                 amount: 100,
-                schedule: ExpenseSchedule.TWO_WEEKS.value
+                schedule: IncomeExpenseSchedule.TWO_WEEKS.value
               } })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
@@ -244,19 +244,76 @@ describe('Defendant response: Statement of means: monthly-income', () => {
         })
       })
 
-      // describe('add a new row', () => {
-      //
-      //   it('should update draft store and redirect', async () => {
-      //     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-      //     draftStoreServiceMock.resolveFind('response:full-admission')
-      //
-      //     await request(app)
-      //       .post(pagePath)
-      //       .send({ action: { addRow: 'Add row' } })
-      //       .set('Cookie', `${cookieName}=ABC`)
-      //       .expect(res => expect(res).to.be.successful.withText('What regular income do you receive?'))
-      //   })
-      // })
+      describe('other actions', () => {
+        it('should add new row', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              otherSources: [
+                {
+                  name: '',
+                  amount: ''
+                },
+                {
+                  name: '',
+                  amount: ''
+                }],
+              action: { addOtherIncomeSource: 'Add another income' }
+            })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('otherSources[2][name]'))
+            .expect(res => expect(res).to.be.successful.withoutText('otherSources[3][name]'))
+        })
+
+        it('should remove row', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              otherSources: [
+                {
+                  name: '',
+                  amount: ''
+                },
+                {
+                  name: '',
+                  amount: ''
+                }],
+              action: { removeOtherIncomeSource: 'Remove this income source' }
+            })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('otherSources[0][name]'))
+            .expect(res => expect(res).to.be.successful.withoutText('otherSources[1][name]'))
+        })
+
+        it('should reset row', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              otherSources: [
+                {
+                  name: 'abcdefghijkl',
+                  amount: '1234'
+                }],
+              action: {
+                resetIncomeSource: {
+                  'otherSources.0': 'Reset this income source'
+                }
+              }
+            })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('otherSources[0][name]'))
+            .expect(res => expect(res).to.be.successful.withoutText('abcdefghijkl'))
+        })
+      })
     })
   })
 })
