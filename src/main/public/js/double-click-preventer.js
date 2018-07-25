@@ -1,5 +1,5 @@
 (function () {
-  document.addEventListener('DOMContentLoaded', function (event) {
+  document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('input[type=submit]')
       .forEach(function (element) {
