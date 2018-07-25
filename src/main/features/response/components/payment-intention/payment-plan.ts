@@ -64,14 +64,14 @@ export class PaymentPlanPage {
 
     return express.Router()
       .get(path + PaymentIntentionPaths.paymentPlanPage.uri,
-        FeatureToggleGuard.featureEnabledGuard(this.admissionType),
+        FeatureToggleGuard.featureEnabledGuard('admissions'),
         stateGuardRequestHandler,
         ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
           const draft: Draft<ResponseDraft> = res.locals.responseDraft
           this.renderView(new Form(draft.document[this.admissionType].paymentPlan), res)
         }))
       .post(path + PaymentIntentionPaths.paymentPlanPage.uri,
-        FeatureToggleGuard.featureEnabledGuard(this.admissionType),
+        FeatureToggleGuard.featureEnabledGuard('admissions'),
         stateGuardRequestHandler,
         FormValidator.requestHandler(DefendantPaymentPlan, DefendantPaymentPlan.fromObject, undefined, ['calculatePaymentPlan']),
         ErrorHandling.apply(

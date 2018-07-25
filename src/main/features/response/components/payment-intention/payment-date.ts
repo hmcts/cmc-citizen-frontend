@@ -39,7 +39,7 @@ export class PaymentDatePage {
     return express.Router()
       .get(
         path + PaymentIntentionPaths.paymentDatePage.uri,
-        FeatureToggleGuard.featureEnabledGuard(this.admissionType),
+        FeatureToggleGuard.featureEnabledGuard('admissions'),
         stateGuardRequestHandler,
         (req: express.Request, res: express.Response) => {
           const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -47,7 +47,7 @@ export class PaymentDatePage {
         })
       .post(
         path + PaymentIntentionPaths.paymentDatePage.uri,
-        FeatureToggleGuard.featureEnabledGuard(this.admissionType),
+        FeatureToggleGuard.featureEnabledGuard('admissions'),
         stateGuardRequestHandler,
         FormValidator.requestHandler(PaymentDate, PaymentDate.fromObject),
         ErrorHandling.apply(async (req: express.Request, res: express.Response) => {

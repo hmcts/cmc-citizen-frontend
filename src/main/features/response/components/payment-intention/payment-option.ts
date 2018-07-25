@@ -22,14 +22,14 @@ export class PaymentOptionPage {
   buildRouter (path: string): express.Router {
     return express.Router()
       .get(path + PaymentIntentionPaths.paymentOptionPage.uri,
-        FeatureToggleGuard.featureEnabledGuard(this.admissionType),
+        FeatureToggleGuard.featureEnabledGuard('admissions'),
         ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
           const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
           this.renderView(new Form(draft.document[this.admissionType].paymentOption), res)
         }))
       .post(path + PaymentIntentionPaths.paymentOptionPage.uri,
-        FeatureToggleGuard.featureEnabledGuard(this.admissionType),
+        FeatureToggleGuard.featureEnabledGuard('admissions'),
         FormValidator.requestHandler(DefendantPaymentOption, DefendantPaymentOption.fromObject),
         ErrorHandling.apply(
           async (req: express.Request, res: express.Response): Promise<void> => {
