@@ -9,14 +9,15 @@
 {% if claim.response.paymentIntention %}
 
   {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-    {% set paymentMethod = 'immediately' %}
+    <p>{{ t('You believe you owe {{ amount }}. We’ve emailed {{ claimantName }} your offer to pay this amount immediately.',
+        { claimantName: claimantName, amount: amount    }) }}</p>
   {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-    {% set paymentMethod = 'by ' + claim.response.paymentIntention.paymentDate | date %}
+    <p>{{ t('You believe you owe {{ amount }}. We’ve emailed {{ claimantName }} your offer to pay this amount by {{ paymentDate }}.',
+        { amount: amount, claimantName: claimantName, paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
   {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-    {% set paymentMethod = 'by instalments' %}
+    <p>{{ t('You believe you owe {{ amount }}. We’ve emailed {{ claimantName }} your offer to pay this amount by instalments.',
+        { amount: amount, claimantName: claimantName }) }}</p>
   {% endif %}
-
-  <p>{{ t('You believe you owe {{ amount }}. We’ve emailed {{ claimantName }} your offer to pay this amount {{ paymentMethod }}.', { claimantName: claimantName, paymentMethod: paymentMethod, amount: amount    }) }}</p>
 
   <p>{{ t('We’ve also sent them your explanation of why you do not believe you owe the amount claimed.') }}</p>
 {% endif %}

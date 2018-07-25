@@ -53,8 +53,8 @@
       {{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} immediately.',
         { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}
     {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-      {{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} on {{ paymentMethod }}.',
-        { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name, paymentMethod: claim.response.paymentIntention.paymentDate | date }) }}
+      {{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} on {{ paymentDate }}.',
+        { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name, paymentDate: claim.response.paymentIntention.paymentDate | date }) }}
     {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
       {% set repaymentPlan = claim.response.paymentIntention.repaymentPlan %}
       {% set installmentAmount = repaymentPlan.instalmentAmount | numeral %}
