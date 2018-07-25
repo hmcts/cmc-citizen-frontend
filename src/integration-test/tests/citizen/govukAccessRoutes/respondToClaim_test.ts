@@ -5,7 +5,7 @@ import { AccessRoutesSteps } from 'integration-test/tests/citizen/govukAccessRou
 
 const accessRoutesSteps: AccessRoutesSteps = new AccessRoutesSteps()
 
-Feature('GovUK access routes - respond to claim')
+Feature('GovUK access routes - respond to claim').retry(3)
 
 Scenario('I can enter a CCBC reference and get sent to MCOL @citizen', function* (I: I) {
   accessRoutesSteps.respondToClaimMcol()

@@ -1,3 +1,9 @@
+interface Feature {
+  retry (numberOfRetries?: number)
+}
+
+declare const Feature: (string: string) => Feature;
+
 declare namespace CodeceptJS {
   export interface I {
     createCitizenUser: () => string

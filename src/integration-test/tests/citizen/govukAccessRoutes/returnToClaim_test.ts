@@ -5,7 +5,7 @@ import { createClaimData } from 'integration-test/data/test-data'
 
 const accessRoutesSteps: AccessRoutesSteps = new AccessRoutesSteps()
 
-Feature('GovUK access routes - return to claim')
+Feature('GovUK access routes - return to claim').retry(3)
 
 Scenario('I can enter a CCBC reference and get sent to MCOL @citizen', function* (I: I) {
   accessRoutesSteps.returnToClaimMcol()
