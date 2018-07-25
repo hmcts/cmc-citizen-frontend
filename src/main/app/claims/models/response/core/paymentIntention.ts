@@ -26,7 +26,7 @@ export class PaymentIntention {
     return instance
   }
 
-  get pastDefendantPayImmediatelyDate (): boolean {
+  get isPastPaymentDeadline (): boolean {
     const currentDateSetTo4PM = MomentFactory.currentDate().hour(15)
     return this.paymentDate && currentDateSetTo4PM > this.paymentDate
   }

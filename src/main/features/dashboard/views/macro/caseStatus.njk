@@ -105,7 +105,7 @@
           {{ claimPartAdmittedToOweForDefendantDashboard(claim) }}
         {% endif %}
       {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
-          {{ claimFullAdmissionForDefendantDashboard(claim) }}
+        {{ claimFullAdmissionForDefendantDashboard(claim) }}
       {% endif %}
     {% elif status === ClaimStatus.OFFER_SUBMITTED %}
     {{ offerSubmittedForDefendantDashboard() }}
