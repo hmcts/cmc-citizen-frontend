@@ -65,7 +65,7 @@
     {% endif %}
 
     {% if draft.isResponseFullyAdmitted() and draft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
-      {{ row(label = 'When will you pay', value = t(draft.fullAdmission.paymentOption.option.displayValue) | capitalize, changeLink = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+      {{ row(label = 'When you`ll pay', value = t(draft.fullAdmission.paymentOption.option.displayValue) | capitalize, changeLink = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
     {% endif %}
 
     {{ tableEnd() }}
@@ -221,7 +221,7 @@
       {% include "./statement-of-means/check-and-send.njk" %}
     {% endif %}
 
-    {% if draft.isResponseRejectedFullyWithDispute() or draft.isResponsePartiallyAdmittedAndAlreadyPaid() %}
+    {% if draft.freeMediation %}
       {{ tableStart('freeMediation', 'Free mediation') }}
       {{
           row(
