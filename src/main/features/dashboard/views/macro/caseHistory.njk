@@ -90,17 +90,17 @@ ccjRequestedForDefendantClaimDetails %}
     <div class="status-block">
       {% if state.status === ClaimStatus.NO_RESPONSE %}
         {{ noResponseForDefendantClaimDetails(claim) }}
-        {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
+      {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
         {{ moreTimeRequestedForDefendantClaimDetails(claim) }}
-        {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
+      {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
         {{ ccjEligibleForDefendantClaimDetails(claim, csrf) }}
-        {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
+      {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
         {{ ccjRequestedForDefendantClaimDetails(claim) }}
-        {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
+      {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
         {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
           {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
             {{ claimRejectedAlreadyPaidForDefendantClaimDetails(claim) }}
-            {% elif claim.response.freeMediation === FreeMediationOption.NO %}
+          {% elif claim.response.freeMediation === FreeMediationOption.NO %}
             {{ claimRejectedFreeMediationNOForDefendantClaimDetails(claim) }}
           {% else %}
             {{ claimRejectedFreeMediationYESForDefendantClaimDetails(claim) }}
@@ -113,19 +113,19 @@ ccjRequestedForDefendantClaimDetails %}
           {% if claim.response.paymentDeclaration %}
             {{ claimPartAdmittedAlreadyPaidForDefendantClaimDetails(claim) }}
           {% else %}
-              {{ claimPartAdmittedToOweForDefendantClaimDetails(claim) }}
+            {{ claimPartAdmittedToOweForDefendantClaimDetails(claim) }}
           {% endif %}
         {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
             {{ claimFullAdmissionForDefendantClaimDetails(claim) }}
         {% endif %}
-        {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
+      {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
         {{ offerSubmittedForDefendantClaimDetails(claim) }}
-        {% elif state.status === ClaimStatus.OFFER_REJECTED %}
+      {% elif state.status === ClaimStatus.OFFER_REJECTED %}
         {{ offerRejectedForDefendantClaimDetails() }}
-        {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
+      {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         {{ offerAcceptedForDefendantClaimDetails(claim) }}
-        {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
-        {{ offerSettlementReachedClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
+          {{ offerSettlementReachedClaimDetails(claim) }}
       {% else %}
         <p>
           {{ caseStatusForDefendant(claim.status, claim) }}

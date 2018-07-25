@@ -10,7 +10,7 @@
 
   {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
     <p>{{ t('You believe you owe {{ amount }}. We’ve emailed {{ claimantName }} your offer to pay this amount immediately.',
-        { claimantName: claimantName, amount: amount    }) }}</p>
+        { claimantName: claimantName, amount: amount }) }}</p>
   {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
     <p>{{ t('You believe you owe {{ amount }}. We’ve emailed {{ claimantName }} your offer to pay this amount by {{ paymentDate }}.',
         { amount: amount, claimantName: claimantName, paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
