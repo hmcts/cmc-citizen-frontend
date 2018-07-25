@@ -118,7 +118,7 @@ export class ResponseModelConverter {
       paymentDeclaration: draft.partialAdmission.howMuchHaveYouPaid.date
       && draft.partialAdmission.howMuchHaveYouPaid.text
       && {
-        paidDate:  draft.partialAdmission.howMuchHaveYouPaid.date.asString(),
+        paidDate: draft.partialAdmission.howMuchHaveYouPaid.date.asString(),
         explanation: draft.partialAdmission.howMuchHaveYouPaid.text
       } as PaymentDeclaration,
       defence: draft.partialAdmission.whyDoYouDisagree.text,
@@ -222,6 +222,7 @@ export class ResponseModelConverter {
       ? DefenceType.ALREADY_PAID
       : DefenceType.DISPUTE
   }
+
   private static convertPartyDetails (defendant: Defendant): Party {
     let party: Party = undefined
     switch (defendant.partyDetails.type) {
@@ -273,7 +274,7 @@ export class ResponseModelConverter {
         firstPaymentDate: paymentPlan.firstPaymentDate.toMoment(),
         paymentSchedule: paymentPlan.paymentSchedule.value as PaymentSchedule
       }
-    }
+    } as PaymentIntention
   }
 
   private static convertPaymentDate (paymentOption: DefendantPaymentOption, paymentDate: PaymentDate): Moment {

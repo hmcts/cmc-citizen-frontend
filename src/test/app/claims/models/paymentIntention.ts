@@ -4,7 +4,7 @@ import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 
 describe('pastDefendantPayImmediatelyDate', () => {
   it('should return true when payment date is earlier than current day', () => {
-    const paymentIntention = PaymentIntention.deserialize({
+    const paymentIntention = new PaymentIntention().deserialize({
       paymentDate: MomentFactory.currentDateTime().subtract(1, 'day')
     })
 
@@ -12,7 +12,7 @@ describe('pastDefendantPayImmediatelyDate', () => {
   })
 
   it('should return false when payment date is later than current day', () => {
-    const paymentIntention = PaymentIntention.deserialize({
+    const paymentIntention = new PaymentIntention().deserialize({
       paymentDate: MomentFactory.currentDate().add(1, 'day')
     })
 

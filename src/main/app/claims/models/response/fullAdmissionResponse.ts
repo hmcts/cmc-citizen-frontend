@@ -15,7 +15,7 @@ export namespace FullAdmissionResponse {
     return {
       ...ResponseCommon.deserialize(input),
       responseType: ResponseType.FULL_ADMISSION,
-      paymentIntention: PaymentIntention.deserialize(input.paymentIntention),
+      paymentIntention: new PaymentIntention().deserialize(input.paymentIntention),
       statementOfMeans: input.statementOfMeans
     }
   }

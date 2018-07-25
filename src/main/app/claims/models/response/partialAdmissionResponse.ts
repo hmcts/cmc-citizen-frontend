@@ -40,7 +40,7 @@ export namespace PartialAdmissionResponse {
         rows: input.evidence && input.evidence.rows || [],
         comment: input.evidence && input.evidence.comment || undefined
       } as DefendantEvidence,
-      paymentIntention: PaymentIntention.deserialize(input.paymentIntention),
+      paymentIntention: input.paymentIntention && new PaymentIntention().deserialize(input.paymentIntention),
       statementOfMeans: input.statementOfMeans
     }
   }
