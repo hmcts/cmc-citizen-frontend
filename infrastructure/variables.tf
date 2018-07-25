@@ -40,9 +40,6 @@ variable "authentication_web_url" {
 
 variable "subscription" {}
 
-variable "vault_section" {
-  default = "test"
-}
 // feature toggles
 variable "feature_statement_of_means" {
   default = "false"
