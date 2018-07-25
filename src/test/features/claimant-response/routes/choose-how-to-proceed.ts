@@ -35,7 +35,7 @@ describe('Claimant response: choose how to proceed page', () => {
       it('should render page when everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-  
+
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
@@ -43,11 +43,10 @@ describe('Claimant response: choose how to proceed page', () => {
       })
     })
 
-    
   })
 
   describe('on POST', () => {
-    
+
     describe('authorization guards', () => {
       checkAuthorizationGuards(app, 'post', pagePath)
     })

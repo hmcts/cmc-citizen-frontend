@@ -48,7 +48,7 @@ describe('FormaliseRepaymentPlan', () => {
     })
 
     it('should return a new instance with defaults when amount and schedule are invalid', () => {
-      expect(FormaliseRepaymentPlan.fromObject({'option': 'INVALID'})).to.deep.equal(new FormaliseRepaymentPlan(
+      expect(FormaliseRepaymentPlan.fromObject({ 'option': 'INVALID' })).to.deep.equal(new FormaliseRepaymentPlan(
         undefined
       ))
     })
@@ -70,12 +70,12 @@ describe('FormaliseRepaymentPlan', () => {
 
     it('should return a FormaliseRepaymentPlan instance with fields set to default values when given "undefined"', () => {
       const deserialized = new FormaliseRepaymentPlan().deserialize(undefined)
-      expect(deserialized.option).to.be.undefined
+      expect(deserialized.option).to.be.equal(undefined)
     })
 
     it('should return a FormaliseRepaymentPlan instance with fields set to default values when given "null"', () => {
       const deserialized = new FormaliseRepaymentPlan().deserialize(null)
-      expect(deserialized.option).to.be.undefined
+      expect(deserialized.option).to.be.equal(undefined)
     })
 
     it('should return a FormaliseRepaymentPlan instance with fields set when given an object with value', () => {
