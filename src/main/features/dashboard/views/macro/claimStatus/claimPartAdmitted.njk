@@ -76,7 +76,7 @@
 
   <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
   <p>{{ t('{{ defendantName }} admits they owe you {{ amount }} - they said they don’t owe the full amount you claimed.',
-      { defendantName: claim.claimData.defendant.name, amount: claim.response.amount | numeral}) }} </p>
+      { defendantName: claim.claimData.defendant.name, amount: claim.response.amount | numeral }) }} </p>
   <p>
     {{ t('You need to accept or reject the defendant’s admission of {{ amount }}.',
       { amount: claim.response.amount | numeral }) }}
