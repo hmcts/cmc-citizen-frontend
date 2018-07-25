@@ -83,7 +83,7 @@ export class PaymentOptionPage {
 
     const draft: Draft<ResponseDraft> = res.locals.responseDraft
     const claim: Claim = res.locals.claim
-    res.render('response/components/payment-intention/payment-option.njk', {
+    res.render('response/components/payment-intention/payment-option', {
       form: form,
       claim: claim,
       draft: draft.document,

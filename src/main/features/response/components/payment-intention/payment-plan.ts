@@ -47,7 +47,8 @@ function calculatePaymentPlanLength (model: DefendantPaymentPlan): string {
 }
 
 export class PaymentPlanPage {
-  constructor (private admissionType: string) {}
+  constructor (private admissionType: string) {
+  }
 
   buildRouter (path: string = ''): express.Router {
     const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
@@ -96,7 +97,7 @@ export class PaymentPlanPage {
     const claim: Claim = res.locals.claim
     const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-    res.render('response/components/payment-intention/payment-plan.njk', {
+    res.render('response/components/payment-intention/payment-plan', {
       form: form,
       paymentLength: calculatePaymentPlanLength(form.model),
       monthlyIncome: _.get(draft, 'document.statementOfMeans.monthlyIncome', 0),
