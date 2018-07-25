@@ -80,7 +80,7 @@ describe('FormaliseRepaymentPlan', () => {
 
     it('should return a FormaliseRepaymentPlan instance with fields set when given an object with value', () => {
       const deserialized = new FormaliseRepaymentPlan().deserialize(
-        { option: FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value })
+        { option: FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT })
       expect(deserialized).to.be.deep.equal({ option: FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT })
     })
   })

@@ -1,0 +1,33 @@
+{% macro termsOfAgreement(id, response, lastPaymentOn) %}
+  <fieldset id="{{ id }}" class="form-group">
+    <legend>
+      <span class="visually-hidden">{{ t( 'Payment plan' ) }}</span>
+    </legend>
+
+    {% if response.paymentIntention.paymentDate %}
+      {{ row('The offer', t('{{ defendantFullName }} will pay the full amount {{ paymentDate }}, no later than',
+        { defendantFullName: response.defendant.name, paymentDate: response.paymentIntention.paymentDate | date }
+      )) }}
+    {% else %}
+      {{ row('The offer', t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} every month. The first instalment will be paid by {{ firstPaymentDate }}.',
+        { defendantFullName: response.defendant.name,
+          instalmentAmount: response.paymentIntention.repaymentPlan.instalmentAmount | numeral,
+          firstPaymentDate: response.paymentIntention.repaymentPlan.firstPaymentDate | date
+        }
+      )) }}
+    {% endif %}
+
+    {{ row('Completion date', lastPaymentOn | date) }}
+  </fieldset>
+{% endmacro %}
+
+{% macro row(label, value) %}
+  <div class="bottom-border">
+    <div class="column-one-third  {% if not label %}if-empty{% endif %}">
+      <span> {{ t( label ) }}</span>
+    </div>
+    <div class="column-two-thirds {% if not value %}if-empty{% endif %}">
+      <span>{{ value }}</span>
+    </div>
+  </div>
+{% endmacro %}

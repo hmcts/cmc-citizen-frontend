@@ -80,7 +80,7 @@ describe('Claimant response: choose how to proceed page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to sign settlement agreement page when `signSettlementAgreement` is selected and everything is fine', async () => {
+      it('should redirect to task list page when `signSettlementAgreement` is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
         draftStoreServiceMock.resolveSave()
@@ -89,10 +89,10 @@ describe('Claimant response: choose how to proceed page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ option: FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value })
-          .expect(res => expect(res).to.be.redirect.toLocation(Paths.signSettlementAgreementPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          .expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
       })
 
-      it('should redirect to total page when `requestCCJ` is selected and everything is fine', async () => {
+      it('should redirect to task list page when `requestCCJ` is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
         draftStoreServiceMock.resolveSave()
@@ -101,7 +101,7 @@ describe('Claimant response: choose how to proceed page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ option: FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value })
-          .expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          .expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
       })
     })
   })

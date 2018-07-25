@@ -6,7 +6,6 @@ import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResp
 import { ErrorHandling } from 'shared/errorHandling'
 import { FormValidator } from 'forms/validation/formValidator'
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
-import { FormaliseRepaymentPlanOption } from 'features/claimant-response/form/models/formaliseRepaymentPlanOption'
 import { Form } from 'forms/form'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
@@ -47,11 +46,7 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         const externalId: string = req.params.externalId
-        if (form.model.option.value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value) {
-          res.redirect(Paths.signSettlementAgreementPage.evaluateUri({ externalId: externalId }))
-        } else {
-          res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
-        }
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
       }
     })
   )

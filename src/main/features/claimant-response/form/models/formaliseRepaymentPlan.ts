@@ -23,7 +23,7 @@ export class FormaliseRepaymentPlan {
 
   deserialize (input?: any): FormaliseRepaymentPlan {
     if (input && input.option) {
-      this.option = FormaliseRepaymentPlanOption.fromObject(input.option)
+      this.option = FormaliseRepaymentPlanOption.fromObject(input.option.value)
     }
     return this
   }

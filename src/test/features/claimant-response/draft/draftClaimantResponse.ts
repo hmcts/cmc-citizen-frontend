@@ -39,7 +39,7 @@ describe('DraftClaimantResponse', () => {
           signed: true
         },
         formaliseRepaymentPlan: {
-          option: FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value
+          option: FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT
         }
       })
       expect(draft.externalId).to.eql(myExternalId)

@@ -31,6 +31,7 @@ function renderView (form: Form<AcceptPaymentMethod>, res: express.Response) {
 function getPaymentPlan (claim: Claim): PaymentPlan {
   switch (claim.response.responseType) {
     case ResponseType.PART_ADMISSION:
+    case ResponseType.FULL_ADMISSION:
       return generatePaymentPlan(claim.claimData.amount.totalAmount(), claim.response.paymentIntention.repaymentPlan)
     default:
       return undefined

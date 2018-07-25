@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
-{% from "table.njk" import tableStart, tableEnd, row %}
 {% from "form.njk" import csrfProtection, checkboxSingle, saveAndContinueButton, errorSummary %}
+{% from "./macro/termsOfAgreementTable.njk" import termsOfAgreement %}
 
 {% set heading = 'Terms of the agreement' %}
 
@@ -10,10 +10,11 @@
     <form novalidate method="post">
       {{ csrfProtection(csrf) }}
 
-      {{ tableStart('') }}
-        {{ row('The offer', 'Bla bla bla') }}
-        {{ row('Completion date', 'Bla bla bla') }}
-      {{ tableEnd() }}
+      {{ termsOfAgreement (
+        'termsOfAgreement',
+        claim.response,
+        paymentPlan.getLastPaymentDate()
+      ) }}
 
       <p>This agreement settles the claim made by Jan Clark against Mary Richards. This includes all money owed in the claim, for example court fees, expenses or interest.</p>
       <p>Neither party can make any further claims relating to this case, other than to enforce it.</p>

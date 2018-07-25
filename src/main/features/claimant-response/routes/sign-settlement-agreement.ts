@@ -7,16 +7,30 @@ import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { SettlementAgreement } from 'features/claimant-response/form/models/settlementAgreement'
 import { DraftService } from 'services/draftService'
+import { Claim } from 'claims/models/claim'
+import { ResponseType } from 'claims/models/response/responseType'
+import { generatePaymentPlan, PaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
 
 function renderView (form: Form<SettlementAgreement>, res: express.Response, next: express.NextFunction) {
-  try {
-    res.render(Paths.signSettlementAgreementPage.associatedView, {
-      form: form
-    })
-  } catch (err) {
-    next(err)
+  const claim: Claim = res.locals.claim
+
+  res.render(Paths.signSettlementAgreementPage.associatedView, {
+    form: form,
+    claim: claim,
+    paymentPlan: getPaymentPlan(claim)
+  })
+}
+
+function getPaymentPlan (claim: Claim): PaymentPlan {
+  switch (claim.response.responseType) {
+    case ResponseType.PART_ADMISSION:
+    case ResponseType.FULL_ADMISSION:
+      return generatePaymentPlan(claim.claimData.amount.totalAmount(), claim.response.paymentIntention.repaymentPlan)
+    default:
+      return undefined
   }
 }
+
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.signSettlementAgreementPage.uri, (req: express.Request, res: express.Response, next: express.NextFunction) => {

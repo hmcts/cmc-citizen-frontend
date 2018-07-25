@@ -62,6 +62,9 @@ export class TaskListBuilder {
           )
         )
       }
+
+      this.buildChooseHowToProceed(draft, tasks, externalId)
+      this.buildSignSettlementAgreement(draft, tasks, externalId)
     }
 
     if (claim.response.responseType === ResponseType.FULL_ADMISSION
@@ -74,32 +77,37 @@ export class TaskListBuilder {
           AcceptPaymentMethodTask.isCompleted(draft.acceptPaymentMethod)
         )
       )
-
-      if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept === YesNoOption.YES) {
-        tasks.push(
-          new TaskListItem(
-            'Choose how to proceed',
-            Paths.chooseHowToProceedPage.evaluateUri({ externalId: externalId }),
-            false
-          )
-        )
-      }
-
-      if (draft.formaliseRepaymentPlan
-        && draft.formaliseRepaymentPlan.option === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT
-      ) {
-        tasks.push(
-          new TaskListItem(
-            'Sign a settlement agreement',
-            Paths.signSettlementAgreementPage.evaluateUri({ externalId: externalId }),
-            false
-          )
-        )
-      }
-
+      this.buildChooseHowToProceed(draft, tasks, externalId)
+      this.buildSignSettlementAgreement(draft, tasks, externalId)
     }
 
     return new TaskList('How do you want to respond?', tasks)
+  }
+
+  private static buildSignSettlementAgreement (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
+    if (draft.formaliseRepaymentPlan
+      && draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value
+    ) {
+      tasks.push(
+        new TaskListItem(
+          'Sign a settlement agreement',
+          Paths.signSettlementAgreementPage.evaluateUri({ externalId: externalId }),
+          false
+        )
+      )
+    }
+  }
+
+  private static buildChooseHowToProceed (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
+    if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
+      tasks.push(
+        new TaskListItem(
+          'Choose how to proceed',
+          Paths.chooseHowToProceedPage.evaluateUri({ externalId: externalId }),
+          false
+        )
+      )
+    }
   }
 
   static buildSubmitSection (draft: DraftClaimantResponse, externalId: string): TaskList {
