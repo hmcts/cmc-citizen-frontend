@@ -9,17 +9,18 @@ import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
 import { NumberFormatter } from 'utils/numberFormatter'
 import { PaymentOption } from 'claims/models/response/core/paymentOption'
-import { ViewDefendantResponse } from 'claimant-response/tasks/viewDefendantResponse'
+import { ViewDefendantResponseTask } from 'claimant-response/tasks/viewDefendantResponseTask'
 
 export class TaskListBuilder {
   static buildDefendantResponseSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
     const tasks: TaskListItem[] = []
     const externalId: string = claim.externalId
+
     tasks.push(
       new TaskListItem(
         'View the defendant’s full response',
         Paths.defendantsResponsePage.evaluateUri({ externalId: externalId }),
-        ViewDefendantResponse.isCompleted(draft)
+        ViewDefendantResponseTask.isCompleted(draft.defendantResponseViewed)
       )
     )
 

@@ -48,15 +48,15 @@
 
     {% for account in claim.response.statementOfMeans.bankAccounts %}
       {% if numberOfBankAccounts === 1 %}
-        {{ row('Type of account', account.type | bankAccountLabel, '', false, bold = false ) }}
+        {{ row('Type of account', account.type | renderBankAccountType, '', false, bold = false ) }}
       {% else %}
-        {{ row(loop.index0 + 1 + '. Type of account', account.type | bankAccountLabel, '', false, bold = false ) }}
+        {{ row(loop.index0 + 1 + '. Type of account', account.type | renderBankAccountType, '', false, bold = false ) }}
       {% endif %}
       {{ row('Balance', account.balance | numeral, '', false, bold = false) }}
       {{ row('Joint account', 'Yes' if account.joint else 'No', '', loop.index0 === indexOfLastRow, bold = false ) }}
     {% endfor %}
 
-    {{ row('Where are you living?	', claim.response.statementOfMeans.residence.type | residenceLabel, bold = false, '') }}
+    {{ row('Where are you living?	', claim.response.statementOfMeans.residence.type | renderResidenceType, bold = false, '') }}
 
     {{ row('Children', '', '', false) }}
     {{ row('Do any children live with you?', 'Yes' if claim.response.statementOfMeans.dependant.children else 'No', '', not claim.response.statementOfMeans.dependant.children, bold = false) }}
@@ -94,7 +94,7 @@
     {{ row('Monthly income', '', '', false, bold = true) }}
 
     {% for income in claim.response.statementOfMeans.incomes %}
-      {{ row(income.type | incomeLabel, income.amountReceived | numeral, '', false, bold = false) }}
+      {{ row(income.type | renderIncomeType, income.amountReceived | numeral, '', false, bold = false) }}
     {% endfor %}
 
       {% if income.anyOtherIncomePopulated %}
@@ -107,7 +107,7 @@
     {{ row('Monthly expenses', '', '', bottomBorder = false, bold = true, topBorder = true) }}
 
     {% for expense in claim.response.statementOfMeans.expenses %}
-      {{ row(expense.type | expenseLabel, expense.amountPaid | numeral, '', false, bold = false) }}
+      {{ row(expense.type | renderExpenseType, expense.amountPaid | numeral, '', false, bold = false) }}
     {% endfor %}
 
     {% if expenses.anyOtherPopulated %}
