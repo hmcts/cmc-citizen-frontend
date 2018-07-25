@@ -35,7 +35,7 @@ variable "idam_api_url" {
 }
 
 variable "authentication_web_url" {
-  default = "http://idam-web-public-idam-saat.service.core-compute-saat.internal"
+  default = "https://idam-test.dev.ccidam.reform.hmcts.net"
 }
 
 variable "subscription" {}
