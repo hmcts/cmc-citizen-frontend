@@ -9,6 +9,7 @@ import { ResponseType } from 'claims/models/response/responseType'
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
 import { NumberFormatter } from 'utils/numberFormatter'
+import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 
 export class TaskListBuilder {
   static buildDefendantResponseSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
@@ -73,26 +74,29 @@ export class TaskListBuilder {
           AcceptPaymentMethodTask.isCompleted(draft.acceptPaymentMethod)
         )
       )
-    }
 
-    if (claim.response && claim.response.responseType === ResponseType.FULL_ADMISSION) {
-      tasks.push(
-        new TaskListItem(
-          'Choose how to proceed',
-          Paths.chooseHowToProceedPage.evaluateUri({ externalId: externalId }),
-          false
+      if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept === YesNoOption.YES) {
+        tasks.push(
+          new TaskListItem(
+            'Choose how to proceed',
+            Paths.chooseHowToProceedPage.evaluateUri({ externalId: externalId }),
+            false
+          )
         )
-      )
-    }
+      }
 
-    if (claim.response && claim.response.responseType === ResponseType.FULL_ADMISSION) {
-      tasks.push(
-        new TaskListItem(
-          'Sign a settlement agreement',
-          Paths.signSettlementAgreementPage.evaluateUri({ externalId: externalId }),
-          false
+      if (draft.formaliseRepaymentPlan
+        && draft.formaliseRepaymentPlan.option === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT
+      ) {
+        tasks.push(
+          new TaskListItem(
+            'Sign a settlement agreement',
+            Paths.signSettlementAgreementPage.evaluateUri({ externalId: externalId }),
+            false
+          )
         )
-      )
+      }
+
     }
 
     return new TaskList('How do you want to respond?', tasks)

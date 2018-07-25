@@ -17,8 +17,10 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { FormaliseRepaymentPlanOption } from 'features/claimant-response/form/models/formaliseRepaymentPlanOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = Paths.chooseHowToProceedPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const externalId = claimStoreServiceMock.sampleClaimObj.externalId
+const pagePath: string = Paths.chooseHowToProceedPage.evaluateUri({ externalId: externalId })
 const pageContent: string = 'Choose how to proceed'
+const defendantPartialAdmissionResponse = claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj
 
 describe('Claimant response: choose how to proceed page', () => {
   attachDefaultHooks(app)
@@ -29,12 +31,12 @@ describe('Claimant response: choose how to proceed page', () => {
 
     describe('for authorized user', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
       it('should render page when everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
 
         await request(app)
           .get(pagePath)
@@ -58,7 +60,7 @@ describe('Claimant response: choose how to proceed page', () => {
 
       it('should render page when form is invalid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
 
         await request(app)
           .post(pagePath)
@@ -68,7 +70,7 @@ describe('Claimant response: choose how to proceed page', () => {
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
         draftStoreServiceMock.rejectSave()
 
         await request(app)
@@ -80,7 +82,7 @@ describe('Claimant response: choose how to proceed page', () => {
 
       it('should redirect to sign settlement agreement page when `signSettlementAgreement` is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
         draftStoreServiceMock.resolveSave()
 
         await request(app)
@@ -92,7 +94,7 @@ describe('Claimant response: choose how to proceed page', () => {
 
       it('should redirect to total page when `requestCCJ` is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
         draftStoreServiceMock.resolveSave()
 
         await request(app)

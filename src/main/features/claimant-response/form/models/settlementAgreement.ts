@@ -3,7 +3,7 @@ import { IsBooleanTrue } from '@hmcts/cmc-validators'
 import { SignatureType } from 'common/signatureType'
 
 export class ValidationErrors {
-  static readonly SETTLEMENT_AGREEMENT_REQUIRED_MESSAGE: string = 'Please select I confirm I\'ve read and accept the terms of the agreement.'
+  static readonly SETTLEMENT_AGREEMENT_REQUIRED_MESSAGE: string = 'Please select I confirm I’ve read and accept the terms of the agreement.'
 }
 
 export class SettlementAgreement {
@@ -13,8 +13,7 @@ export class SettlementAgreement {
   @IsBooleanTrue({ message: ValidationErrors.SETTLEMENT_AGREEMENT_REQUIRED_MESSAGE })
   signed?: boolean
 
-  constructor (signed?: boolean
-  ) {
+  constructor (signed?: boolean) {
     this.signed = signed
   }
 
@@ -23,5 +22,12 @@ export class SettlementAgreement {
       return value
     }
     return new SettlementAgreement(value.signed === 'true')
+  }
+
+  deserialize (input?: any): SettlementAgreement {
+    if (input && input.signed) {
+      this.signed = input.signed
+    }
+    return this
   }
 }

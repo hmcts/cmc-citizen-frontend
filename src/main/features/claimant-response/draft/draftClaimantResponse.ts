@@ -7,9 +7,8 @@ import { SettlementAgreement } from 'claimant-response/form/models/settlementAgr
 export class DraftClaimantResponse extends DraftDocument {
   settleAdmitted?: SettleAdmitted
   acceptPaymentMethod?: AcceptPaymentMethod
-
-  formaliseRepaymentPlan?: FormaliseRepaymentPlan = new FormaliseRepaymentPlan()
-  settlementAgreement?: SettlementAgreement = new SettlementAgreement()
+  formaliseRepaymentPlan?: FormaliseRepaymentPlan
+  settlementAgreement?: SettlementAgreement
 
   constructor () {
     super()
@@ -25,10 +24,10 @@ export class DraftClaimantResponse extends DraftDocument {
         this.acceptPaymentMethod = new AcceptPaymentMethod().deserialize(input.acceptPaymentMethod)
       }
       if (input.formaliseRepaymentPlan) {
-        this.formaliseRepaymentPlan = input.formaliseRepaymentPlan
+        this.formaliseRepaymentPlan = new FormaliseRepaymentPlan().deserialize(input.formaliseRepaymentPlan)
       }
       if (input.settlementAgreement) {
-        this.settlementAgreement = input.settlementAgreement
+        this.settlementAgreement = new SettlementAgreement().deserialize(input.settlementAgreement)
       }
     }
     return this
