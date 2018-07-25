@@ -52,9 +52,10 @@
     {% set repaymentPlan = claim.response.paymentIntention.repaymentPlan %}
     {% set repaymentDate = repaymentPlan.firstPaymentDate | date %}
     {% set paymentSchedule = t(repaymentPlan.paymentSchedule | renderPaymentSchedule) %}
+    {% set installmentAmount = repaymentPlan.instalmentAmount | numeral %}
 
     <p> {{ t('You’ve offered to pay {{ claimantName }} {{ amount }} {{ paymentSchedule }} starting {{ repaymentDate }}.',
-        { claimantName: claimantName, amount: amount, paymentSchedule: paymentSchedule, repaymentDate: repaymentDate }) }} </p>
+        { claimantName: claimantName, amount: installmentAmount, paymentSchedule: paymentSchedule, repaymentDate: repaymentDate }) }} </p>
     <p>
       {{ t('We’ll contact you when they respond.') }}
     </p>
