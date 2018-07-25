@@ -84,6 +84,5 @@
 {% endmacro %}
 
 {% macro _downloadResponseLink(claim) %}
-  <a
-  href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>{{ t(' (PDF)') }}
+  <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>{{ t(' (PDF)') }}
 {% endmacro %}
