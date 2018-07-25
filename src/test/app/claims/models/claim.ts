@@ -16,7 +16,6 @@ import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { Individual } from 'claims/models/details/yours/individual'
 import { PartyStatement } from 'claims/models/partyStatement'
 import * as moment from 'moment'
-import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -212,34 +211,6 @@ describe('Claim', () => {
       expect(claim.stateHistory).to.have.lengthOf(2)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
       expect(claim.stateHistory[1].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
-    })
-  })
-
-  describe('pastDefendantPayImmediatelyDate', () => {
-    let claim
-
-    beforeEach(() => {
-      claim = new Claim()
-    })
-
-    it('should return true when payment date is earlier than current day', () => {
-      claim.response = FullAdmissionResponse.deserialize({
-        paymentIntention: {
-          paymentDate: MomentFactory.currentDateTime().subtract(1, 'day')
-        }
-      })
-
-      expect(claim.pastDefendantPayImmediatelyDate).to.be.equal(true)
-    })
-
-    it('should return false when payment date is later than current day', () => {
-      claim.response = FullAdmissionResponse.deserialize({
-        paymentIntention: {
-          paymentDate: MomentFactory.currentDate().add(1, 'day')
-        }
-      })
-
-      expect(claim.pastDefendantPayImmediatelyDate).to.be.equal(false)
     })
   })
 })
