@@ -57,7 +57,7 @@ export default express.Router()
     Paths.defendantsResponsePage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
-      draft.document.viewedDefendantResponse = true
+      draft.document.defendantResponseViewed = true
       const user: User = res.locals.user
       await new DraftService().save(draft, user.bearerToken)
       const claim: Claim = res.locals.claim

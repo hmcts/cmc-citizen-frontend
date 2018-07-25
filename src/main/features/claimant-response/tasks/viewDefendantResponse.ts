@@ -3,6 +3,6 @@ import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResp
 export class ViewDefendantResponse {
 
   static isCompleted (response: DraftClaimantResponse): boolean {
-    return response.viewedDefendantResponse
+    return response.defendantResponseViewed
   }
 }
