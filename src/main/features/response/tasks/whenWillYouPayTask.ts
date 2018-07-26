@@ -5,11 +5,11 @@ import { YesNoOption } from 'models/yesNoOption'
 
 const validator = new Validator()
 
-export class WhenWillYouPay {
+export class WhenWillYouPayTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
     return responseDraft.isResponsePartiallyAdmitted()
       && responseDraft.partialAdmission.alreadyPaid.option === YesNoOption.NO
-      && WhenWillYouPay.isWhenWillYouPayValid(responseDraft.partialAdmission.paymentOption)
+      && WhenWillYouPayTask.isWhenWillYouPayValid(responseDraft.partialAdmission.paymentOption)
   }
 
   private static isWhenWillYouPayValid (model: HowMuchDoYouOwe): boolean {

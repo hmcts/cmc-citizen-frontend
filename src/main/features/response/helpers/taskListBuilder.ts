@@ -19,7 +19,7 @@ import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeatur
 import { HowMuchHaveYouPaidTask } from 'response/tasks/howMuchHaveYouPaidTask'
 import { WhyDoYouDisagreeTask } from 'response/tasks/whyDoYouDisagreeTask'
 import { HowMuchDoYouOweTask } from 'response/tasks/howMuchDoYouOweTask'
-import { WhenWillYouPay } from 'response/tasks/whenWillYouPay'
+import { WhenWillYouPayTask } from 'response/tasks/whenWillYouPayTask'
 import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { NumberFormatter } from 'utils/numberFormatter'
 
@@ -133,18 +133,16 @@ export class TaskListBuilder {
       )
     }
 
-    const howMuchDoYouOwe = HowMuchDoYouOweTask.isCompleted(draft)
-
-    if (partiallyAdmitted && howMuchDoYouOwe) {
+    if (partiallyAdmitted && HowMuchDoYouOweTask.isCompleted(draft)) {
       tasks.push(
         new TaskListItem(
           `When will you pay the ${NumberFormatter.formatMoney(draft.partialAdmission.howMuchDoYouOwe.amount)}?`,
           PartAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: externalId }),
-          WhenWillYouPay.isCompleted(draft)
+          WhenWillYouPayTask.isCompleted(draft)
         )
       )
 
-      if (WhenWillYouPay.isCompleted(draft)
+      if (WhenWillYouPayTask.isCompleted(draft)
         && draft.partialAdmission.paymentOption.isOfType(DefendantPaymentType.INSTALMENTS)) {
         tasks.push(
           new TaskListItem(
