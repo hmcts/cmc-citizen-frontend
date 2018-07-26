@@ -221,7 +221,7 @@
       {% include "./statement-of-means/check-and-send.njk" %}
     {% endif %}
 
-    {% if draft.freeMediation %}
+    {% if draft.isResponsePartiallyAdmitted() or draft.isResponseRejectedFullyWithDispute() %}
       {{ tableStart('freeMediation', 'Free mediation') }}
       {{
           row(
