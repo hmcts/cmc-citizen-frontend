@@ -8,9 +8,9 @@ export class FormaliseRepaymentPlanOption {
     if (!input) {
       return input
     }
-    if (input === 'signSettlementAgreement') {
+    if (input === this.SIGN_SETTLEMENT_AGREEMENT.value) {
       return FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT
-    } else if (input === 'requestCCJ') {
+    } else if (input === this.REQUEST_COUNTY_COURT_JUDGEMENT.value) {
       return FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT
     } else {
       return undefined
