@@ -28,6 +28,7 @@ import { BankAccountType } from 'response/form/models/statement-of-means/bankAcc
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { Paths as AppPaths } from 'paths'
 import { Paths as DashboardPaths } from 'features/dashboard/paths'
+import { Paths as ClaimantResponsePaths } from 'features/claimant-response/paths'
 import { Paths as ResponsePaths, PartAdmissionPaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
@@ -123,6 +124,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('BankAccountType', BankAccountType)
     nunjucksEnv.addGlobal('ClaimStatus', ClaimStatus)
     nunjucksEnv.addGlobal('AppPaths', AppPaths)
+    nunjucksEnv.addGlobal('ClaimantResponsePaths', ClaimantResponsePaths)
     nunjucksEnv.addGlobal('DashboardPaths', DashboardPaths)
     nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
     nunjucksEnv.addGlobal('PartAdmissionPaths', PartAdmissionPaths)

@@ -1,0 +1,116 @@
+{% from "externalLink.njk" import externalLink %}
+{% from "form.njk" import linkButton %}
+
+{% macro claimFullAdmissionForDefendantDashboard(claim) %}
+
+  {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+    {{ t('You’ve admitted all of the claim and said you’ll pay the full amount immediately.') }}
+  {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+    {{ t('You’ve admitted all of the claim and said you’ll pay the full amount by {{ paymentDate }}.',
+      { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}
+  {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+    {{ t('You’ve admitted all of the claim and offered to pay the full amount in instalments.') }}
+  {% endif %}
+{% endmacro %}
+
+{% macro claimFullAdmissionForClaimantDashboard(claim) %}
+
+  {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+    {{ t('The defendant admits they owe all the money. They’ve said that they will pay immediately.') }}
+  {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+    {{ t('The defendant admits they owe all the money. You need to accept or reject their offer.') }}
+  {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+    {{ t('The defendant admits they owe all the money. You need to accept or reject their offer.') }}
+  {% endif %}
+{% endmacro %}
+
+{% macro claimFullAdmissionForDefendantClaimDetails(claim) %}
+  <h2 class="heading-small">{{ t('Your response to the claim') }}</h2>
+  {% set claimantName = claim.claimData.claimant.name %}
+  {% set amount = claim.totalAmountTillToday | numeral %}
+
+  {% if claim.response.paymentIntention.paymentDate %}
+    {% set paymentDate = claim.response.paymentIntention.paymentDate | date %}
+  {% endif %}
+
+  {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+    <p> {{ t('You said you’ll pay {{ claimantName }} {{ amount }} before 4pm on {{ paymentDate }}.',
+        { claimantName: claimantName, amount: amount, paymentDate: paymentDate }) }} </p>
+    <p> {{ t('If you pay by cheque or transfer the money must be clear in their account.') }} </p>
+    <p> {{ t('If they don’t receive the money by then, they can request a County Court Judgment against you.') }} </p>
+    <p> {{ t('Contact {{ claimantName }} if you need their payment details.',
+        { claimantName: claimantName }) }} </p>
+    <p> {{ t('Make sure you get receipts for any payments.') }} </p>
+
+  {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+    <p> {{ t('You’ve offered to pay {{ claimantName }} {{ amount }} on {{ paymentDate }}.',
+        { claimantName: claimantName, amount: amount, paymentDate: paymentDate }) }} </p>
+    <p>
+      {{ t('We’ll contact you when they respond.') }}
+    </p>
+  {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+    {% set repaymentPlan = claim.response.paymentIntention.repaymentPlan %}
+    {% set repaymentDate = repaymentPlan.firstPaymentDate | date %}
+    {% set paymentSchedule = t(repaymentPlan.paymentSchedule | renderPaymentSchedule) %}
+    {% set installmentAmount = repaymentPlan.instalmentAmount | numeral %}
+
+    <p> {{ t('You’ve offered to pay {{ claimantName }} {{ amount }} {{ paymentSchedule }} starting {{ repaymentDate }}.',
+        { claimantName: claimantName, amount: installmentAmount, paymentSchedule: paymentSchedule, repaymentDate: repaymentDate }) }} </p>
+    <p>
+      {{ t('We’ll contact you when they respond.') }}
+    </p>
+  {% endif %}
+  <p>
+    {{ _downloadResponseLink(claim) }}
+  </p>
+{% endmacro %}
+
+{% macro claimFullAdmissionForClaimantClaimDetails(claim) %}
+
+  {% set claimantName = claim.claimData.claimant.name %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  {% set amount = claim.totalAmountTillToday | numeral %}
+
+  {% if claim.response.paymentIntention.paymentDate %}
+    {% set paymentDate = claim.response.paymentIntention.paymentDate | date %}
+  {% endif %}
+
+  {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+    <h2 class="heading-small">{{ t('The defendant will pay you immediately') }}</h2>
+    <p> {{ t('The defendant said they’ll pay you immediately. They must make sure you have the money by 4pm on {{ paymentDate }}.',
+        { paymentDate: paymentDate }) }} </p>
+    <h2 class="heading-small"> {{ t('If the defendant pays you') }} </h2>
+    <p> {{ t('You need to email {{ supportMail }} to let us know. Include the date you were paid.', { supportMail: supportEmailAddress }) }} </p>
+    {% if claim.response.paymentIntention.isPastPaymentDeadline %}
+      <h2 class="heading-small">{{ t('What to do if they haven’t paid') }}</h2>
+      <p> {{ t('If the defendant doesn’t pay you, you can request a County Court Judgment.') }} </p>
+    {% else %}
+      <h2 class="heading-small">{{ t('What to do if they don’t pay') }}</h2>
+      <p> {{ t('If the defendant has not paid you by {{ paymentDate }}, you can request a County Court Judgment.', { paymentDate: paymentDate}) }} </p>
+    {% endif %}
+  {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+    <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
+    <p> {{ t('{{ defendantName }} admits they owe all the money. They’ve offered to pay you in full by {{ paymentDate }}.',
+        { defendantName: defendantName, paymentDate: paymentDate }) }} </p>
+    <p>
+      {{ t('You can accept or reject their offer.') }}
+    </p>
+    {{ _viewAndRespondOffer(claim) }}
+  {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+    <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
+    <p> {{ t('{{ defendantName }} admits they owe all the money. They’ve offered to pay you in instalments.',
+        { defendantName: defendantName }) }} </p>
+    <p>
+      {{ t('You can accept or reject their offer.') }}
+    </p>
+    {{ _viewAndRespondOffer(claim) }}
+  {% endif %}
+{% endmacro %}
+
+{% macro _downloadResponseLink(claim) %}
+  <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>{{ t(' (PDF)') }}
+{% endmacro %}
+
+{% macro _viewAndRespondOffer(claim) %}
+  <a href='{{ ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }) }}' class="button button-secondary">{{ t('View and respond to offer') }}</a>
+{% endmacro %}
