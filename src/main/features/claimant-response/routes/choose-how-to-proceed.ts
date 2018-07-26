@@ -11,13 +11,9 @@ import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 
 function renderView (form: Form<FormaliseRepaymentPlan>, res: express.Response, next: express.NextFunction) {
-  try {
-    res.render(Paths.chooseHowToProceedPage.associatedView, {
-      form: form
-    })
-  } catch (err) {
-    next(err)
-  }
+  res.render(Paths.chooseHowToProceedPage.associatedView, {
+    form: form
+  })
 }
 
 /* tslint:disable:no-default-export */
