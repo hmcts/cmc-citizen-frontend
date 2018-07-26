@@ -9,7 +9,6 @@ import { Form } from 'main/app/forms/form'
 import { FormValidator } from 'main/app/forms/validation/formValidator'
 import { User } from 'main/app/idam/user'
 import { DraftService } from 'services/draftService'
-import { FeatureToggleGuard } from 'main/app/guards/featureToggleGuard'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'main/app/claims/models/claim'
@@ -19,17 +18,17 @@ import { FeatureToggles } from 'utils/featureToggles'
 export class PaymentOptionPage {
   constructor (private admissionType: string) {}
 
-  buildRouter (path: string): express.Router {
+  buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
     return express.Router()
       .get(path + PaymentIntentionPaths.paymentOptionPage.uri,
-        FeatureToggleGuard.featureEnabledGuard('admissions'),
+        ...guards,
         ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
           const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
           this.renderView(new Form(draft.document[this.admissionType].paymentOption), res)
         }))
       .post(path + PaymentIntentionPaths.paymentOptionPage.uri,
-        FeatureToggleGuard.featureEnabledGuard('admissions'),
+        ...guards,
         FormValidator.requestHandler(DefendantPaymentOption, DefendantPaymentOption.fromObject),
         ErrorHandling.apply(
           async (req: express.Request, res: express.Response): Promise<void> => {

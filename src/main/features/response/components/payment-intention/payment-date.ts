@@ -23,7 +23,7 @@ export class PaymentDatePage {
 
   constructor (private admissionType: string) {}
 
-  buildRouter (path: string): express.Router {
+  buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
     const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
@@ -39,7 +39,7 @@ export class PaymentDatePage {
     return express.Router()
       .get(
         path + PaymentIntentionPaths.paymentDatePage.uri,
-        FeatureToggleGuard.featureEnabledGuard('admissions'),
+        ...guards,
         stateGuardRequestHandler,
         (req: express.Request, res: express.Response) => {
           const draft: Draft<ResponseDraft> = res.locals.responseDraft

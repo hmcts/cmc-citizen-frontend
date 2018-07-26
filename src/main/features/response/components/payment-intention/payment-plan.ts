@@ -13,7 +13,6 @@ import { User } from 'idam/user'
 import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { FormValidator } from 'forms/validation/formValidator'
-import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
@@ -50,7 +49,7 @@ export class PaymentPlanPage {
   constructor (private admissionType: string) {
   }
 
-  buildRouter (path: string): express.Router {
+  buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
     const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
@@ -65,14 +64,14 @@ export class PaymentPlanPage {
 
     return express.Router()
       .get(path + PaymentIntentionPaths.paymentPlanPage.uri,
-        FeatureToggleGuard.featureEnabledGuard('admissions'),
+        ...guards,
         stateGuardRequestHandler,
         ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
           const draft: Draft<ResponseDraft> = res.locals.responseDraft
           this.renderView(new Form(draft.document[this.admissionType].paymentPlan), res)
         }))
       .post(path + PaymentIntentionPaths.paymentPlanPage.uri,
-        FeatureToggleGuard.featureEnabledGuard('admissions'),
+        ...guards,
         stateGuardRequestHandler,
         FormValidator.requestHandler(DefendantPaymentPlan, DefendantPaymentPlan.fromObject, undefined, ['calculatePaymentPlan']),
         ErrorHandling.apply(
