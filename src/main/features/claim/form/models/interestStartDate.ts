@@ -19,7 +19,7 @@ export class InterestStartDate implements CompletableTask {
 
   @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.REASON_REQUIRED })
-  @MaxLength(250, { message: CommonValidationErrors.REASON_TOO_LONG })
+  @MaxLength(10000, { message: CommonValidationErrors.REASON_TOO_LONG })
   reason?: string
 
   constructor (date?: LocalDate, reason?: string) {
