@@ -12,9 +12,9 @@
       {{ csrfProtection(csrf) }}
       <h2 class="heading-small">{{ t('Example timeline') }}</h2>
       <ul class="list list-bullet">
-        <li>{{ t('12 January 2017 - John Smith gave me a quote to replace the roof.') }}</li>
-        <li>{{ t('14 January 2017 - We agreed and signed a contract for the work.') }}</li>
-        <li>{{ t('21 March 2017 - I noticed a leak on the landing and told Mr Smith about this.') }}</li>
+        <li>{{ t('{{ earliest }} - John Smith gave me a quote to replace the roof.', {earliest: 'now' | addDays(-28) | date}) }}</li>
+        <li>{{ t('{{ later }} - We agreed and signed a contract for the work.', {later: 'now' | addDays(-24) | date}) }}</li>
+        <li>{{ t('{{ latest }} - I noticed a leak on the landing and told Mr Smith about this.', {latest: 'now' | addDays(-7) | date}) }}</li>
       </ul>
 
       {{ timelineFragment(form) }}
