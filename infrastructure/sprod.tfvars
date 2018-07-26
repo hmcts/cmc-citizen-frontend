@@ -1,3 +1,4 @@
+feature_mock_pay = "true"
 feature_fine_print = "true"
 feature_full_admission = "true"
 feature_partial_admission = "true"
