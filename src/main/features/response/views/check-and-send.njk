@@ -71,7 +71,7 @@
     {{ tableEnd() }}
 
     {% if draft.isResponseFullyAdmitted() and not draft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
-      {{ tableStart('whenWillYouPay', 'When will you pay') }}
+      {{ tableStart('whenWillYouPay', 'When you’ll pay') }}
       {{ row(label = 'When will you pay', value = t(draft.fullAdmission.paymentOption.option.displayValue) | capitalize, changeLink = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
       {% if draft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.BY_SET_DATE) %}
         {{ row(label = 'When you’ll pay the amount', value = draft.fullAdmission.paymentDate.date.toMoment() | date, changeLink = FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
@@ -169,11 +169,11 @@
       {{ row(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), bold = true) }}
 
       {% if ( draft.partialAdmission.paymentOption) %}
-        {{ tableStart('whenWillYouPay', 'When will you pay') }}
+        {{ tableStart('whenWillYouPay', 'When you’ll pay') }}
         {{ row(label = 'When will you pay', value = t(draft.partialAdmission.paymentOption.option.displayValue) | capitalize, changeLink = PartAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
 
         {% if draft.partialAdmission.paymentOption.isOfType(DefendantPaymentType.BY_SET_DATE) %}
-          {{ row(label = 'When you’ll pay the amount', value = draft.partialAdmission.paymentDate.date.toMoment() | date, changeLink = PartAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+          {{ row(label = 'When will you pay the amount', value = draft.partialAdmission.paymentDate.date.toMoment() | date, changeLink = PartAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
         {% endif %}
 
         {% if draft.partialAdmission.paymentOption.isOfType(DefendantPaymentType.INSTALMENTS) %}
