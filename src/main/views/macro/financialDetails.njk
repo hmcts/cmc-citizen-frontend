@@ -1,22 +1,36 @@
-{% from "table.njk" import tableStart, tableEnd, row %}
+{% from "table.njk" import tableStart, tableEnd %}
+
+{% macro heading(label) %}
+  <h3 class="heading-small form-group-related">{{ t(label) }}</h3>
+{% endmacro %}
+
+{% macro row(label, value, bottomBorder = true) %}
+  <div class="{% if bottomBorder %}bottom-border{% else %}no-bottom-border{% endif %}">
+    <div class="column-one-half {% if not label %}if-empty{% endif %}">
+      <span>{{ t( label ) }}</span>
+    </div>
+    <div class="column-one-half {% if not value %}if-empty{% endif %}">
+      <span>{{ value }}</span>
+    </div>
+  </div>
+{% endmacro %}
 
 {% macro employmentStatus(statementOfMeans) %}
-
-  {% if statementOfMeans.employment.declared %}
-    {% set employmentStatus = 'Employed' if statementOfMeans.employment.employed %}
-    {% if statementOfMeans.employment.selfEmployed %}
-      {% if employmentStatus %}
-        {% set employmentStatus = employmentStatus + ' and ' %}
+  {% if statementOfMeans.employment %}
+    {% set status = 'Employed' if statementOfMeans.employment.employers %}
+    {% if statementOfMeans.employment.selfEmployment %}
+      {% if status %}
+        {% set status = status + ' and ' %}
       {% endif %}
-      {% set employmentStatus = employmentStatus + ' Self-employed ' %}
+      {% set status = status + ' Self-employed ' %}
     {% endif %}
-    {{ row('Type of job', employmentStatus, '', bold = true) }}
+    {{ row(label = 'Type of job', value = status) }}
   {% else %}
-    {% if statementOfMeans.unemployment.option === UnemploymentType.UNEMPLOYED %}
-      {% set years = statementOfMeans.unemployment.unemploymentDetails.years %}
-      {% set months = statementOfMeans.unemployment.unemploymentDetails.months %}
+    {% if statementOfMeans.unemployment.unemployed %}
+      {% set years = statementOfMeans.unemployment.unemployed.numberOfYears %}
+      {% set months = statementOfMeans.unemployment.unemployed.numberOfMonths %}
 
-      {% set status = statementOfMeans.unemployment.option.displayValue %}
+      {% set status = 'Unemployed' %}
       {% if years or months %}
         {% set status = status + ' for ' %}
         {% if years %}
@@ -27,121 +41,112 @@
         {% endif %}
       {% endif %}
 
-      {{ row('Type of job', status, '', bold = true) }}
-    {% elseif statementOfMeans.unemployment.option === UnemploymentType.OTHER %}
-      {{ row('Type of job', statementOfMeans.unemployment.otherDetails.details, '', bold = true) }}
+      {{ row(label = 'Type of job', value = status) }}
+    {% elseif statementOfMeans.unemployment.retired %}
+      {{ row(label = 'Type of job', value = 'Retired') }}
     {% else %}
-      {{ row('Type of job', statementOfMeans.unemployment.option.displayValue, '', bold = true) }}
+      {{ row(label = 'Type of job', value = statementOfMeans.unemployment.other) }}
     {% endif %}
-
   {% endif %}
-
 {% endmacro %}
 
-{% macro financialDetailsTable(label, claim) %}
+{% macro financialDetailsTable(label, statementOfMeans) %}
   <details>
     <summary>{{ t(label) }}</summary>
-    {{ tableStart('financialDetails', 'Bank and savings accounts') }}
+    <div class="panel">
+      {{ heading('Bank and savings accounts') }}
 
-    {% set numberOfBankAccounts = claim.response.statementOfMeans.bankAccounts.length %}
-    {% set indexOfLastRow = numberOfBankAccounts - 1 %}
-
-    {% for account in claim.response.statementOfMeans.bankAccounts %}
-      {% if numberOfBankAccounts === 1 %}
-        {{ row('Type of account', account.type | renderBankAccountType, '', false, bold = false ) }}
-      {% else %}
-        {{ row(loop.index0 + 1 + '. Type of account', account.type | renderBankAccountType, '', false, bold = false ) }}
-      {% endif %}
-      {{ row('Balance', account.balance | numeral, '', false, bold = false) }}
-      {{ row('Joint account', 'Yes' if account.joint else 'No', '', loop.index0 === indexOfLastRow, bold = false ) }}
-    {% endfor %}
-
-    {{ row('Where are you living?	', claim.response.statementOfMeans.residence.type | renderResidenceType, bold = false, '') }}
-
-    {{ row('Children', '', '', false) }}
-    {{ row('Do any children live with you?', 'Yes' if claim.response.statementOfMeans.dependant.children else 'No', '', not claim.response.statementOfMeans.dependant.children, bold = false) }}
-
-    {% if claim.response.statementOfMeans.dependant.children %}
-      {% set noOfKids = claim.response.statementOfMeans.dependant.children %}
-      {{ row('Under 11', noOfKids.ageGroupType | default('0'), '', not (noOfKids.between11and15 or noOfKids.between16and19), bold = false) }}
-      {{ row('11 to 15', noOfKids.ageGroupType | default('0'), '', not noOfKids.between16and19, bold = false) }}
-      {{ row('How many are aged 16 to 19?', noOfKids.between16and19 | default('0'), '', bold = false) }}
-    {% endif %}
-
-    {{ row('Employment details', '', '', false, bold = true) }}
-    {{ row('Do they have a job?', 'Yes' if claim.response.statementOfMeans.employment.employers.length > 0 else 'No', '', false, bold = false) }}
-    {#{{ employmentStatus(claim.response.statementOfMeans) }}#}
-
-    {% if claim.response.statementOfMeans.employment.employers.length > 0 %}
-      {{ row('Who employs you?', '', '', false, bold = true) }}
-      {% set indexOfLastRow = claim.response.statementOfMeans.employment.employers.length - 1 %}
-      {% for employer in claim.response.statementOfMeans.employment.employers %}
-        {{ row('Employer name', employer.name, '', false, bold = false ) }}
-        {{ row('Job title', employer.jobTitle, '', loop.index0 === indexOfLastRow, bold = false ) }}
+      {% for account in statementOfMeans.bankAccounts %}
+        {% if statementOfMeans.bankAccounts.length === 1 %}
+          {{ row(label = 'Type of account', value = account.type | renderBankAccountType, bottomBorder = false) }}
+        {% else %}
+          {{ row(label = loop.index0 + 1 + '. Type of account', value = account.type | renderBankAccountType, bottomBorder = false) }}
+        {% endif %}
+        {{ row(label = 'Balance', value = account.balance | numeral, bottomBorder = false) }}
+        {{ row(label = 'Joint account', value = account.joint | renderYesNo, bottomBorder = loop.index0 === statementOfMeans.bankAccounts.length - 1) }}
       {% endfor %}
-    {% endif %}
+      {{ row(label = 'Where are you living?	', value = statementOfMeans.residence.type | renderResidenceType) }}
 
-    {% if claim.response.statementOfMeans.employment %}
-      {{ row('Self-employment details', '', '', false, bold = true) }}
-      {{ row('Job title', claim.response.statementOfMeans.employment.selfEmployment.jobTitle, '', false, bold = false ) }}
-      {{ row('Annual turnover', claim.response.statementOfMeans.employment.selfEmployment.annualTurnover | numeral, '', false, bold = false ) }}
-      {{ row('Are you behind on tax', 'Yes' if claim.response.statementOfMeans.employment.selfEmployment.onTaxPayments else 'No', '', not claim.response.statementOfMeans.onTaxPayments, bold = false ) }}
-      {{ row('Amount you owe?', claim.response.statementOfMeans.employment.selfEmployment.onTaxPayments.amountYouOwe | numeral, '', false, bold = false ) }}
-      {{ row('Reason', claim.response.statementOfMeans.employment.selfEmployment.onTaxPayments.reason, bold = false) }}
-    {% endif %}
+      {{ heading('Children') }}
 
-    {% set income = claim.response.statementOfMeans.incomes.length %}
-    {{ row('Monthly income', '', '', false, bold = true) }}
-
-    {% for income in claim.response.statementOfMeans.incomes %}
-      {{ row(income.type | renderIncomeType | capitalize, income.amountReceived | numeral, '', false, bold = false) }}
-    {% endfor %}
-
-      {% if income.anyOtherIncomePopulated %}
-        {% for source in income.otherSources %}
-          {{ row(source.otherSource, source.amountReceived | numeral, '', bottomBorder = false, bold = false ) }}
+      {{ row(label = 'Do any children live with them?', value = (statementOfMeans.dependant.children !== undefined) | renderYesNo, bottomBorder = not statementOfMeans.dependant.children) }}
+      {% if statementOfMeans.dependant.children %}
+        {% for child in statementOfMeans.dependant.children %}
+          {{ row(label = 'How many are aged ' + (child.ageGroupType | renderAgeGroupType) + '?', value = child.numberOfChildren | default('0'), bottomBorder = loop.index0 === statementOfMeans.dependant.children.length - 1) }}
+          {% if child.ageGroupType === 'BETWEEN_16_AND_19' and child.numberOfChildren > 0 %}
+            {{ row(label = 'How many aged ' + (child.ageGroupType | renderAgeGroupType) + ' are in full-time education or training?', value = child.numberOfChildrenLivingWithYou | default('0')) }}
+          {% endif %}
         {% endfor %}
       {% endif %}
 
-    {% set expenses = claim.response.statementOfMeans.expenses.length %}
-    {{ row('Monthly expenses', '', '', bottomBorder = false, bold = true, topBorder = true) }}
+      {{ heading('Maintenance') }}
 
-    {% for expense in claim.response.statementOfMeans.expenses %}
-      {{ row(expense.type | renderExpenseType | capitalize, expense.amountPaid | numeral, '', false, bold = false) }}
-    {% endfor %}
-
-    {% if expenses.anyOtherPopulated %}
-      {% for expense in expenses.other %}
-        {{ row(expense.otherSource, expense.amountPaid | numeral, '', bottomBorder = false, bold = false ) }}
-      {% endfor %}
-    {% endif %}
-
-    {{ row('Debts', '', '', bottomBorder = false, bold = true, topBorder = true) }}
-    {{ row('Do you have any debts?', 'Yes' if claim.response.statementOfMeans.debts else 'No', '', not draft.statementOfMeans.debts.declared, bold = false) }}
-    {% set debtRows = claim.response.statementOfMeans.debts.length %}
-    {% set indexOfLastRow = debtRows.length - 1 %}
-
-    {% for debtRow in claim.response.statementOfMeans.debts %}
-      {% if debtRows.length === 1 %}
-        {{ row('Debt' , debtRow.description, '', false, bold = false ) }}
-      {% else %}
-        {{ row(loop.index0 + 1 + '. Debt' , debtRow.description, '', false, bold = false ) }}
+      {{ row(label = 'Do they or their partner pay maintenance for any children?', value = (statementOfMeans.dependant.numberOfMaintainedChildren > 0) | renderYesNo, bottomBorder = not statementOfMeans.dependant.numberOfMaintainedChildren > 0) }}
+      {% if statementOfMeans.dependant.numberOfMaintainedChildren > 0 %}
+        {{ row(label = 'Number of children', value = statementOfMeans.dependant.numberOfMaintainedChildren) }}
       {% endif %}
 
-      {{ row('Total owed', debtRow.totalOwed | numeral, '', false, bold = false) }}
-      {{ row('Monthly Payments', debtRow.monthlyPayments | numeral, '', loop.index0 === indexOfLastRow, bold = false ) }}
-    {% endfor %}
+      {{ heading('Financial support') }}
 
-    {{ row('Court orders', '', '', false, bold = true) }}
-    {{ row('Has a court ordered you to pay anyone else?', 'Yes' if claim.response.statementOfMeans.courtOrders else 'No', '', not claim.response.statementOfMeans.courtOrders.declared, bold = false) }}
-    {% set courtOrdersRows = claim.response.statementOfMeans.courtOrders.length %}
-    {% set indexOfLastRow = courtOrdersRows.length - 1 %}
+      {{ row(label = 'Do they support anyone else financially?', value = (statementOfMeans.dependant.otherDependants !== undefined) | renderYesNo, bottomBorder = not statementOfMeans.dependant.otherDependants) }}
+      {% if statementOfMeans.dependant.otherDependants %}
+        {{ row(label = 'Number of people', value = statementOfMeans.dependant.otherDependants.numberOfPeople, bottomBorder = false) }}
+        {{ row(label = 'Give details', value = statementOfMeans.dependant.otherDependants.details) }}
+      {% endif %}
 
-    {% for courtOrderRow in claim.response.statementOfMeans.courtOrders %}
-      {{ row('Claim number', courtOrderRow.claimNumber, '', false, bold = false ) }}
-      {{ row('Amount you owe', courtOrderRow.amountOwed | numeral, '', loop.index0 === indexOfLastRow, bold = false) }}
-    {% endfor %}
+      {{ heading('Employment details') }}
 
-    {{ tableEnd() }}
+      {{ row(label = 'Do they have a job?', value = (statementOfMeans.employment.employers.length > 0) | renderYesNo, bottomBorder = false) }}
+      {{ employmentStatus(statementOfMeans) }}
+      {% if statementOfMeans.employment.employers.length > 0 %}
+        {% for employer in statementOfMeans.employment.employers %}
+          {{ row(label = 'Employer name', value = employer.name, bottomBorder = false) }}
+          {{ row(label = 'Job title', value = employer.jobTitle, bottomBorder = loop.index0 === statementOfMeans.employment.employers.length - 1) }}
+        {% endfor %}
+      {% endif %}
+
+      {{ heading('Self-employment details') }}
+
+      {% if statementOfMeans.employment.selfEmployment %}
+        {{ row(label = 'Job title', value = statementOfMeans.employment.selfEmployment.jobTitle, bottomBorder = false) }}
+        {{ row(label = 'Annual turnover', value = statementOfMeans.employment.selfEmployment.annualTurnover | numeral, bottomBorder = not statementOfMeans.employment.selfEmployment.onTaxPayments) }}
+        {{ row(label = 'Are you behind on tax payments?', value = (statementOfMeans.employment.selfEmployment.onTaxPayments !== undefined) | renderYesNo, bottomBorder = false) }}
+        {{ row(label = 'Amount they owe?', value = statementOfMeans.employment.selfEmployment.onTaxPayments.amountYouOwe | numeral, bottomBorder = false) }}
+        {{ row(label = 'Reason', value = statementOfMeans.employment.selfEmployment.onTaxPayments.reason) }}
+      {% endif %}
+
+      {{ heading('Monthly income') }}
+
+      {% for income in statementOfMeans.incomes %}
+        {{ row(label = income.type | renderIncomeType | capitalize, value = income.amountReceived | numeral, bottomBorder = loop.index0 === statementOfMeans.incomes.length - 1) }}
+      {% endfor %}
+
+      {{ heading('Monthly expenses') }}
+
+      {% for expense in statementOfMeans.expenses %}
+        {{ row(label = expense.type | renderExpenseType | capitalize, value = expense.amountPaid | numeral, bottomBorder = loop.index0 === statementOfMeans.incomes.length - 1) }}
+      {% endfor %}
+
+      {{ heading('Debts') }}
+
+      {{ row(label = 'Do you have any debts?', value = (statementOfMeans.debts !== undefined) | renderYesNo, bottomBorder = not statementOfMeans.debts) }}
+      {% for debtRow in statementOfMeans.debts %}
+        {% if statementOfMeans.debts.length === 1 %}
+          {{ row(label = 'Debt' , value = debtRow.description, bottomBorder = false) }}
+        {% else %}
+          {{ row(label = loop.index0 + 1 + '. Debt' , value = debtRow.description, bottomBorder = false) }}
+        {% endif %}
+        {{ row(label = 'Total owed', value = debtRow.totalOwed | numeral, bottomBorder = false) }}
+        {{ row(label = 'Monthly Payments', value = debtRow.monthlyPayments | numeral, bottomBorder = loop.index0 === statementOfMeans.debts.length - 1) }}
+      {% endfor %}
+
+      {{ heading('Court orders') }}
+
+      {{ row(label = 'Has a court ordered you to pay anyone else?', value = (statementOfMeans.courtOrders !== undefined) | renderYesNo, bottomBorder = not statementOfMeans.courtOrders) }}
+      {% for courtOrder in statementOfMeans.courtOrders %}
+        {{ row(label = 'Claim number', value = courtOrder.claimNumber, bottomBorder = false) }}
+        {{ row(label = 'Amount you owe', value = courtOrder.amountOwed | numeral, bottomBorder = loop.index0 === statementOfMeans.courtOrders.length - 1) }}
+      {% endfor %}
+    </div>
   </details>
 {% endmacro %}

@@ -1,3 +1,5 @@
+import { AgeGroupTypeViewFilter } from 'claimant-response/filters/age-group-type-view-filter'
+import { YesNoViewFilter } from 'claimant-response/filters/yes-no-view-filter'
 import * as express from 'express'
 import * as path from 'path'
 
@@ -35,8 +37,10 @@ export class ClaimantResponseFeature {
       app.settings.nunjucksEnv.globals.ClaimantResponsePaths = Paths
     }
     if (app.settings.nunjucksEnv && app.settings.nunjucksEnv.filters) {
+      app.settings.nunjucksEnv.filters.renderYesNo = YesNoViewFilter.render
       app.settings.nunjucksEnv.filters.renderBankAccountType = BankAccountTypeViewFilter.render
       app.settings.nunjucksEnv.filters.renderResidenceType = ResidenceTypeViewFilter.render
+      app.settings.nunjucksEnv.filters.renderAgeGroupType = AgeGroupTypeViewFilter.render
       app.settings.nunjucksEnv.filters.renderPaymentScheduleType = PaymentScheduleTypeViewFilter.render
       app.settings.nunjucksEnv.filters.renderIncomeType = IncomeTypeViewFilter.render
       app.settings.nunjucksEnv.filters.renderExpenseType = ExpenseTypeViewFilter.render

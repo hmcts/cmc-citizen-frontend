@@ -4,8 +4,8 @@
 {% set heading = 'The defendant’s response' %}
 
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
-{% from "financialDetails.njk" import financialDetailsTable %}
 {% from "./macro/paymentPlanTable.njk" import paymentPlanTable %}
+{% from "financialDetails.njk" import financialDetailsTable %}
 
 {% set claimantName = claim.claimData.claimant.name %}
 {% set reason = claim.response.statementOfMeans.reason %}
@@ -17,7 +17,10 @@
       {% if claim.response.responseType === ResponseType.FULL_ADMISSION.value %}
         <p>
           {{ t('{{ claimantName }} admits they owe all the money you’ve claimed.', { claimantName: claimantName }) }}
-          {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+
+          {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+            <p>{{ t('They’ve offered to pay you in full by {{ paymentDate }}.', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+          {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
             {{ t('They’ve offered to pay you in instalments.') }}
           {% endif %}
         </p>
@@ -33,7 +36,7 @@
         <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
         <p>{{ t('Their total monthly income is {{ totalMonthlyIncome }}', { totalMonthlyIncome: totalMonthlyIncome | numeral }) }}</p>
         <p>{{ t('Their total monthly expenses is {{ totalMonthlyExpenses }}', { totalMonthlyExpenses: totalMonthlyExpenses | numeral }) }}</p>
-        {{ financialDetailsTable('See their financial details', claim) }}
+        {{ financialDetailsTable('See their financial details', claim.response.statementOfMeans) }}
       {% endif %}
 
       {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
