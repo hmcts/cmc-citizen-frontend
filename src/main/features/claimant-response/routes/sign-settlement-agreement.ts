@@ -8,10 +8,9 @@ import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResp
 import { SettlementAgreement } from 'features/claimant-response/form/models/settlementAgreement'
 import { DraftService } from 'services/draftService'
 import { Claim } from 'claims/models/claim'
-import { ResponseType } from 'claims/models/response/responseType'
-import { generatePaymentPlan, PaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
+import { getPaymentPlan } from 'claimant-response/helpers/paymentPlanHelper'
 
-function renderView (form: Form<SettlementAgreement>, res: express.Response, next: express.NextFunction) {
+function renderView (form: Form<SettlementAgreement>, res: express.Response) {
   const claim: Claim = res.locals.claim
 
   res.render(Paths.signSettlementAgreementPage.associatedView, {
@@ -21,21 +20,11 @@ function renderView (form: Form<SettlementAgreement>, res: express.Response, nex
   })
 }
 
-function getPaymentPlan (claim: Claim): PaymentPlan {
-  switch (claim.response.responseType) {
-    case ResponseType.PART_ADMISSION:
-    case ResponseType.FULL_ADMISSION:
-      return generatePaymentPlan(claim.claimData.amount.totalAmount(), claim.response.paymentIntention.repaymentPlan)
-    default:
-      return undefined
-  }
-}
-
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.signSettlementAgreementPage.uri, (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
-    renderView(new Form(draft.document.settlementAgreement), res, next)
+    renderView(new Form(draft.document.settlementAgreement), res)
   })
   .post(
     Paths.signSettlementAgreementPage.uri,
@@ -43,7 +32,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<SettlementAgreement> = req.body
       if (form.hasErrors()) {
-        renderView(form, res, next)
+        renderView(form, res)
       } else {
         const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
         const user: User = res.locals.user

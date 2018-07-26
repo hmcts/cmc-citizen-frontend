@@ -5,7 +5,7 @@
     </legend>
 
     {% if response.paymentIntention.paymentDate %}
-      {{ row('The offer', t('{{ defendantFullName }} will pay the full amount {{ paymentDate }}, no later than',
+      {{ row('The offer', t('{{ defendantFullName }} will pay the full amount, no later than {{ paymentDate }}',
         { defendantFullName: response.defendant.name, paymentDate: response.paymentIntention.paymentDate | date }
       )) }}
       {{ row('Completion date', response.paymentIntention.paymentDate | date) }}
