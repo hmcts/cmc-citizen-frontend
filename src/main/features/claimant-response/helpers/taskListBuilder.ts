@@ -65,7 +65,7 @@ export class TaskListBuilder {
         )
       }
 
-      this.buildChooseHowToProceed(draft, tasks, externalId)
+      this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
       this.buildSignSettlementAgreement(draft, tasks, externalId)
     }
 
@@ -79,7 +79,7 @@ export class TaskListBuilder {
           AcceptPaymentMethodTask.isCompleted(draft.acceptPaymentMethod)
         )
       )
-      this.buildChooseHowToProceed(draft, tasks, externalId)
+      this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
       this.buildSignSettlementAgreement(draft, tasks, externalId)
     }
 
@@ -100,11 +100,11 @@ export class TaskListBuilder {
     }
   }
 
-  private static buildChooseHowToProceed (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
+  private static buildFormaliseRepaymentPlan (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
     if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
       tasks.push(
         new TaskListItem(
-          'Choose how to proceed',
+          'Formalise the repayment plan',
           Paths.chooseHowToProceedPage.evaluateUri({ externalId: externalId }),
           ChooseHowToProceedTask.isCompleted(draft.formaliseRepaymentPlan)
         )
