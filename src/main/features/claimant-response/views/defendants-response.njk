@@ -14,50 +14,29 @@
   <div class="grid-row">
     <div class="column-two-thirds">
 
-      {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-        <p>{{ t('{{ claimantName }} admits they owe all the money you’ve claimed. They’ve offered to pay you in instalments.', { claimantName: claimantName }) }}</p>
+      {% if claim.response.responseType === ResponseType.FULL_ADMISSION.value %}
+        <p>
+          {{ t('{{ claimantName }} admits they owe all the money you’ve claimed.', { claimantName: claimantName }) }}
+          {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+            {{ t('They’ve offered to pay you in instalments.') }}
+          {% endif %}
+        </p>
 
-        <h2 class="heading-medium">{{ t('How they want to pay') }}</h2>
-
-        {{ paymentPlanTable("type[label]", totalAmount, firstPaymentDate, lastPaymentDate, paymentLength) }}
-
-        <h3 class="heading-small form-group-related">{{ t('Why they can’t pay the full amount now') }}</h3>
-
-        <p>{{ t('"{{ reason }}."',{ reason: reason }) }}</p>
-
-        <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
-
-        <p>{{ t('Their total monthly income is {{ totalMonthlyIncome }}',
-          { totalMonthlyIncome: totalMonthlyIncome | numeral }) }}</p>
-        <p>{{ t('Their total monthly expenses is {{ totalMonthlyExpenses }}',
-          { totalMonthlyExpenses: totalMonthlyExpenses | numeral }) }}</p>
-
-        {{ financialDetailsTable('See their financial details', claim) }}
-
-      {% endif %}
-
-      {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.FULL_BY_SPECIFIED_DATE %}
-        <p>{{ t('{{ claimantName }} admits they owe all the money you’ve claimed.', { claimantName: claimantName }) }}</p>
-
-        <p>{{ t('They’ve offered to pay you in full by {{ paymentDate }}.', { paymentDate: firstPaymentDate.toMoment() | date }) }}</p>
+        {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+          <h2 class="heading-medium">{{ t('How they want to pay') }}</h2>
+          {{ paymentPlanTable("type[label]", claim.response.paymentIntention.repaymentPlan.instalmentAmount, claim.response.paymentIntention.repaymentPlan.firstPaymentDate, paymentPlan.getLastPaymentDate(), paymentPlan.getPaymentLength()) }}
+        {% endif %}
 
         <h3 class="heading-small form-group-related">{{ t('Why they can’t pay the full amount now') }}</h3>
-
-        <p>{{ t('I am heavily in debt at the moment and I’m not earning that much money. i can pay when i’ve cleared my debts.') }}</p>
+        <p>{{ t('"{{ reason }}"', { reason: reason }) }}</p>
 
         <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
-
-        <p>{{ t('Their total monthly income is {{ totalMonthlyIncome }}',
-          { totalMonthlyIncome: totalMonthlyIncome | numeral }) }}</p>
-        <p>{{ t('Their total monthly expenses is {{ totalMonthlyExpenses }}',
-          { totalMonthlyExpenses: totalMonthlyExpenses | numeral }) }}</p>
-
+        <p>{{ t('Their total monthly income is {{ totalMonthlyIncome }}', { totalMonthlyIncome: totalMonthlyIncome | numeral }) }}</p>
+        <p>{{ t('Their total monthly expenses is {{ totalMonthlyExpenses }}', { totalMonthlyExpenses: totalMonthlyExpenses | numeral }) }}</p>
         {{ financialDetailsTable('See their financial details', claim) }}
-
-
       {% endif %}
 
-      {% if claim.response.ResponseType === ResponseType.PART_ADMISSION %}
+      {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
         <p>{{ t('{{ claimantName }} admits they owe all the money you’ve claimed.', { claimantName: claimantName }) }}</p>
 
         <p>{{ t('They’ve offered to pay you this in instalments.') }}</p>
@@ -92,7 +71,6 @@
       {% endif %}
 
       <form novalidate method="post">
-
         {{ csrfProtection(csrf) }}
 
         {{ submitButton('Continue') }}
