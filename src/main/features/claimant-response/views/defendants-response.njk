@@ -32,7 +32,9 @@
         <p>{{ t('Their total monthly expenses is {{ totalMonthlyExpenses }}',
           { totalMonthlyExpenses: totalMonthlyExpenses | numeral }) }}</p>
 
+        {% if claim.response.statementOfMeans %}
         {{ financialDetailsTable('See their financial details', claim) }}
+        {% endif %}
 
       {% endif %}
 

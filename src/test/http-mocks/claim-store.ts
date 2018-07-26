@@ -9,7 +9,10 @@ import { Interest } from 'claims/models/interest'
 import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
-import { partialAdmissionWithPaymentByInstalmentsData } from 'test/data/entity/responseData'
+import {
+  fullAdmissionWithPaymentByInstalmentsData,
+  partialAdmissionWithPaymentByInstalmentsData
+} from 'test/data/entity/responseData'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
@@ -113,6 +116,11 @@ export const sampleDefendantResponseObj = {
 export const sampleDefendantPartialAdmissionResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: partialAdmissionWithPaymentByInstalmentsData
+}
+
+export const sampleDefendantFullAdmissionResponseObj = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithPaymentByInstalmentsData
 }
 
 export function mockCalculateInterestRate (expected: number): mock.Scope {

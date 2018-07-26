@@ -20,7 +20,7 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = ClaimantResponsePaths.defendantsResponsePage.evaluateUri({ externalId: externalId })
 const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
 
-const defendantPartialAdmissionResponse = claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj
+const defendantFullAdmissionResponse = claimStoreServiceMock.sampleDefendantFullAdmissionResponseObj
 
 describe('Claimant response: view defendant response page', () => {
   attachDefaultHooks(app)
@@ -46,12 +46,22 @@ describe('Claimant response: view defendant response page', () => {
 
       it('should return 500 and render error page when cannot retrieve claimantResponse draft', async () => {
         draftStoreServiceMock.rejectFind('Error')
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
 
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should render page when everything is fine', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
+        draftStoreServiceMock.resolveFind('claimantResponse')
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('The defendant’s response'))
       })
     })
 
@@ -78,7 +88,7 @@ describe('Claimant response: view defendant response page', () => {
 
           it('should return 500 when cannot retrieve claimantResponse draft', async () => {
             draftStoreServiceMock.rejectFind('Error')
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
 
             await request(app)
               .post(pagePath)
@@ -90,7 +100,7 @@ describe('Claimant response: view defendant response page', () => {
 
         context('when form is valid', async () => {
           it('should redirect to task list page', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
             draftStoreServiceMock.resolveFind('claimantResponse')
             draftStoreServiceMock.resolveSave()
 
@@ -102,7 +112,7 @@ describe('Claimant response: view defendant response page', () => {
           })
 
           it('should return 500 and render error page when cannot save claimantResponse draft', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
             draftStoreServiceMock.resolveFind('claimantResponse')
             draftStoreServiceMock.rejectSave()
 
@@ -111,6 +121,19 @@ describe('Claimant response: view defendant response page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ viewedDefendantResponse: true })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
+          })
+        })
+
+        context('when form is invalid', async () => {
+          it('should render page', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
+            draftStoreServiceMock.resolveFind('claimantResponse')
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ viewedDefendantResponse: true })
+              .expect(res => expect(res).to.be.successful.withText('The defendant’s response', 'div class="error-summary"'))
           })
         })
 
