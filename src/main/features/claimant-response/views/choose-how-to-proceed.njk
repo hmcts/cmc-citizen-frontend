@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 
-{% from "form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
 
 {% set heading = 'Choose how to proceed' %}
 
@@ -15,28 +15,30 @@
       <form method="post" class="analytics-submit-event-trigger" data-event-label-from="option" novalidate>
         {{ csrfProtection(csrf) }}
 
+        {% set name = 'option' %}
         {{
-        radioOption(
-          form = form, 
-          label = 'Sign a settlement agreement', 
-          name = 'option', 
-          value = FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value,
-          hint='This is a legal agreement between you and the defendant agreeing to the repayment plan. If they break it you can request a County Court Judgment.',
-          checked = (form.valueFor('option').value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value), 
-          bold = true
-          )
-        }}
-
-        {{
-        radioOption(
-          form = form, 
-          label = 'Request a County Court Judgment (CCJ)', 
-          name = 'option', 
-          value = FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value,
-          hint='You can ask the court to make a formal order binding the defendant to the repayment plan. This adds the defendant to the CCJ register, which may make it more difficult for them to borrow money to repay you.',
-          checked = (form.valueFor('option').value === FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value), 
-          bold = true
-          )
+        radioGroup(
+          label = 'Sign a settlement agreement',
+          labelForScreenReadersOnly = true,
+          form = form,
+          name = name,
+          options = [
+            {
+              label: 'Sign a settlement agreement',
+              value: FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value,
+              checked: (form.valueFor(name) === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value),
+              bold: true,
+              hint: 'This is a legal agreement between you and the defendant agreeing to the repayment plan. If they break it you can request a County Court Judgment.'
+            },
+            {
+              label: 'Request a County Court Judgment (CCJ)',
+              value:  FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value,
+              checked: (form.valueFor(name) ===  FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value),
+              bold: true,
+              hint: 'You can ask the court to make a formal order binding the defendant to the repayment plan. This adds the defendant to the CCJ register, which may make it more difficult for them to borrow money to repay you.'
+            }
+          ]
+        )
         }}
 
         <div class="form-group">
