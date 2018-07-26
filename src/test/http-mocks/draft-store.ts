@@ -336,6 +336,15 @@ export const sampleClaimantResponseDraftObj = {
     accept: {
       option: 'yes'
     }
+  },
+  formaliseRepaymentPlan: {
+    option: {
+      value: 'signSettlementAgreement'
+    }
+  },
+  settlementAgreement: {
+    type: 'basic',
+    signed: true
   }
 }
 

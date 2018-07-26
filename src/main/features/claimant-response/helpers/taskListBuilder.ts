@@ -94,7 +94,7 @@ export class TaskListBuilder {
         new TaskListItem(
           'Sign a settlement agreement',
           Paths.signSettlementAgreementPage.evaluateUri({ externalId: externalId }),
-          false
+          SignSettlementAgreementTask.isCompleted(draft.settlementAgreement)
         )
       )
     }
