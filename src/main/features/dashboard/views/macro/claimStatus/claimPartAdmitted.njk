@@ -34,6 +34,7 @@
   <p>
     {{ t('You need to respond before 4pm on {{ respondDate }} or your claim won’t proceed.', { respondDate: claim.respondToResponseDeadline | date}) }}
   </p>
+  {{ _respond(claim, 'Respond') }}
 {% endmacro %}
 
 {% macro claimPartAdmittedToOweForDefendantDashboard(claim) %}
@@ -81,8 +82,13 @@
     {{ t('You need to accept or reject the defendant’s admission of {{ amount }}.',
       { amount: claim.response.amount | numeral }) }}
   </p>
+  {{ _respond(claim, 'View and respond to offer') }}
 {% endmacro %}
 
 {% macro _downloadResponseLink(claim) %}
   <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>{{ t(' (PDF)') }}
+{% endmacro %}
+
+{% macro _respond(claim, text) %}
+  <a href='{{ ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }) }}' class="button button-secondary">{{ t(text) }}</a>
 {% endmacro %}
