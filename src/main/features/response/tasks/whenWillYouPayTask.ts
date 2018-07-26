@@ -7,8 +7,7 @@ const validator = new Validator()
 
 export class WhenWillYouPayTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
-    return responseDraft.partialAdmission !== undefined && responseDraft.partialAdmission.alreadyPaid !== undefined
-      && responseDraft.partialAdmission.alreadyPaid.option === YesNoOption.NO
+    return responseDraft.partialAdmission.alreadyPaid.option === YesNoOption.NO
       && WhenWillYouPayTask.isWhenWillYouPayValid(responseDraft.partialAdmission.paymentOption)
   }
 

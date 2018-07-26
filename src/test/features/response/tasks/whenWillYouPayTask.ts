@@ -27,15 +27,6 @@ describe('WhenWillYouPayTask', () => {
 
   context('should not be completed when', () => {
 
-    it('response is not partial admission', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = {
-        type: ResponseType.FULL_ADMISSION
-      }
-
-      expect(WhenWillYouPayTask.isCompleted(draft)).to.be.false
-    })
-
     it('paymentOption is undefined', () => {
       const draft: ResponseDraft = validResponseDraft()
       draft.partialAdmission.paymentOption = undefined

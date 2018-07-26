@@ -24,6 +24,7 @@ import { Response } from 'response/form/models/response'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { YesNoOption } from 'models/yesNoOption'
 import { HowMuchDoYouOwe } from 'response/form/models/howMuchDoYouOwe'
+import { Defendant } from 'drafts/models/defendant'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 
@@ -223,19 +224,24 @@ describe('Defendant response task list builder', () => {
 
     describe('"Your repayment plan" task', () => {
       let isResponseFullyAdmittedWithInstalmentsStub: sinon.SinonStub
+      let isResponseFullyAdmittedStub: sinon.SinonStub
 
       beforeEach(() => {
         isResponseFullyAdmittedWithInstalmentsStub = sinon.stub(ResponseDraft.prototype, 'isResponseFullyAdmittedWithInstalments')
+        isResponseFullyAdmittedStub = sinon.stub(ResponseDraft.prototype, 'isResponseFullyAdmitted')
       })
 
       afterEach(() => {
         isResponseFullyAdmittedWithInstalmentsStub.restore()
+        isResponseFullyAdmittedStub.restore()
       })
 
       it('should be enabled when claim is fully admitted with payment option as instalments', () => {
         isResponseFullyAdmittedWithInstalmentsStub.returns(true)
+        isResponseFullyAdmittedStub.returns(true)
 
         const draft = new ResponseDraft()
+        draft.defendantDetails = new Defendant(new PartyDetails('John'))
         draft.fullAdmission = new FullAdmission()
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
@@ -244,6 +250,7 @@ describe('Defendant response task list builder', () => {
 
       it('should be disabled in remaining cases', () => {
         isResponseFullyAdmittedWithInstalmentsStub.returns(false)
+        isResponseFullyAdmittedStub.returns(false)
 
         const draft = new ResponseDraft()
         draft.fullAdmission = new FullAdmission()
