@@ -65,6 +65,16 @@ describe('Claimant response: check and send page', () => {
             .expect(res => expect(res).to.be.redirect
               .toLocation(ClaimantResponsePaths.incompleteSubmissionPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
+
+        it('should render page when everything is fine', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj)
+          draftStoreServiceMock.resolveFind(draftType)
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting your response'))
+        })
       })
     })
   })
