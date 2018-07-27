@@ -147,8 +147,8 @@
   {% endfor %}
 {% endmacro %}
 
-{% macro financialDetailsTable(label, statementOfMeans) %}
-  <details>
+{% macro financialDetailsTable(label, statementOfMeans, classes = undefined) %}
+  <details {% if classes %} class="{{ classes }}"{% endif %}>
     <summary>{{ t(label) }}</summary>
     <div class="panel">
       {{ heading('Bank and savings accounts') }}

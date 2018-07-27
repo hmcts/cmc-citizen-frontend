@@ -7,8 +7,34 @@
 {% from "./macro/paymentPlanTable.njk" import paymentPlanTable %}
 {% from "financialDetails.njk" import financialDetailsTable %}
 
-{% set claimantName = claim.claimData.claimant.name %}
-{% set reason = claim.response.statementOfMeans.reason %}
+{% set defendantName = claim.claimData.defendant.name %}
+
+{% macro paymentIntentionFragment(paymentIntention) %}
+  {% if paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+    <p>{{ t('They’ve offered to pay you in full by {{ paymentDate }}.', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+  {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+    {{ t('They’ve offered to pay you in instalments.') }}
+  {% endif %}
+{% endmacro %}
+
+{% macro timelineFragment(timeline) %}
+  <table>
+    <thead>
+    <tr>
+      <th scope="col">{{ t('Date') }}</th>
+      <th scope="col">{{ t('What happened') }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for event in timeline.rows %}
+      <tr>
+        <td>{{ event.date }}</td>
+        <td>{{ event.description }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endmacro %}
 
 {% block content %}
   <div class="grid-row">
@@ -16,13 +42,8 @@
 
       {% if claim.response.responseType === ResponseType.FULL_ADMISSION.value %}
         <p>
-          {{ t('{{ claimantName }} admits they owe all the money you’ve claimed.', { claimantName: claimantName }) }}
-
-          {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-            <p>{{ t('They’ve offered to pay you in full by {{ paymentDate }}.', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
-          {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-            {{ t('They’ve offered to pay you in instalments.') }}
-          {% endif %}
+          {{ t('{{ defendantName }} admits they owe all the money you’ve claimed.', { defendantName: defendantName }) }}
+          {{ paymentIntentionFragment(claim.response.paymentIntention) }}
         </p>
 
         {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
@@ -31,46 +52,32 @@
         {% endif %}
 
         <h3 class="heading-small form-group-related">{{ t('Why they can’t pay the full amount now') }}</h3>
-        <p>{{ t('"{{ reason }}"', { reason: reason }) }}</p>
+        <p>{{ t('"{{ reason }}"', { reason: claim.response.statementOfMeans.reason }) }}</p>
 
         <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
         <p>{{ t('Their total monthly income is {{ totalMonthlyIncome }}', { totalMonthlyIncome: totalMonthlyIncome | numeral }) }}</p>
         <p>{{ t('Their total monthly expenses is {{ totalMonthlyExpenses }}', { totalMonthlyExpenses: totalMonthlyExpenses | numeral }) }}</p>
-        {{ financialDetailsTable('See their financial details', claim.response.statementOfMeans) }}
+        {{ financialDetailsTable(label = 'See their financial details', statementOfMeans = claim.response.statementOfMeans, classes = 'form-group') }}
       {% endif %}
 
       {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
-        <p>{{ t('{{ claimantName }} admits they owe all the money you’ve claimed.', { claimantName: claimantName }) }}</p>
-
-        <p>{{ t('They’ve offered to pay you this in instalments.') }}</p>
+        <p>{{ t('{{ defendantName }} admits they owe you {{ amount }}.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
+        {{ paymentIntentionFragment(claim.response.paymentIntention) }}
 
         <h2 class="heading-medium">{{ t('Their defence') }}</h2>
 
-        <h3 class="heading-small form-group-related">{{ t('Why they they don’t owe the amount claimed') }}</h3>
+        <h3 class="heading-small form-group-related">{{ t('Why they don’t owe the amount claimed') }}</h3>
+        <p>{{ t('"{{ defence }}"', { reason: claim.response.defence }) }}</p>
 
-        <h3 class="heading-small form-group-related">{{ t('Their timeline of events') }}</h3>
+        {% if claim.response.timeline %}
+          <h3 class="heading-small form-group-related">{{ t('Their timeline of events') }}</h3>
+          {{ timelineFragment(claim.response.timeline) }}
+        {% endif %}
 
-        <table>
-          <thead>
-          <tr>
-            <th scope="col">{{ t('Date') }}</th>
-            <th scope="col">{{ t('What happened') }}</th>
-          </tr>
-          </thead>
-          <tbody>
-          {% for event in claim.response.timeline.rows %}
-            <tr>
-              <td>{{ event.date }}</td>
-              <td>{{ event.description }}</td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-
-        <h3 class="heading-small form-group-related">{{ t('They disagree with your evidence') }}</h3>
-        <p>{{ t('I didn’t get an email from {{ claimantName }} about this, so I didn’t get a chance to sort it out.
-                  It would be good to see a copy of the email.', { claimantName: claimantName }) }}</p>
-
+        {% if claim.response.evidence and claim.response.evidence.comment %}
+          <h3 class="heading-small form-group-related">{{ t('They disagree with your evidence') }}</h3>
+          <p>{{ t('"{{ comment }}"', { reason: claim.response.evidence.comment }) }}</p>
+        {% endif %}
       {% endif %}
 
       <form novalidate method="post">
