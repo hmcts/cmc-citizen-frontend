@@ -28,7 +28,7 @@
 {% endmacro %}
 
 {% macro resideceneSection(residence) %}
-  {{ row(label = 'Where are you living?	', value = residence.type | renderResidenceType) }}
+  {{ row(label = 'Where are they living?', value = residence.type | renderResidenceType) }}
 {% endmacro %}
 
 {% macro childrenSection(children) %}
@@ -101,7 +101,7 @@
 {% macro selfEmploymentSection(selfEmployment) %}
   {{ row(label = 'Job title', value = selfEmployment.jobTitle, bottomBorder = false) }}
   {{ row(label = 'Annual turnover', value = selfEmployment.annualTurnover | numeral, bottomBorder = not selfEmployment.onTaxPayments) }}
-  {{ row(label = 'Are you behind on tax payments?', value = (selfEmployment.onTaxPayments !== undefined) | renderYesNo, bottomBorder = false) }}
+  {{ row(label = 'Are they behind on tax payments?', value = (selfEmployment.onTaxPayments !== undefined) | renderYesNo, bottomBorder = false) }}
   {{ row(label = 'Amount they owe?', value = selfEmployment.onTaxPayments.amountYouOwe | numeral, bottomBorder = false) }}
   {{ row(label = 'Reason', value = selfEmployment.onTaxPayments.reason) }}
 {% endmacro %}
@@ -127,7 +127,7 @@
 {% endmacro %}
 
 {% macro debtsSection(debts) %}
-  {{ row(label = 'Do you have any debts?', value = (debts !== undefined) | renderYesNo, bottomBorder = not debts) }}
+  {{ row(label = 'Do they have any debts?', value = (debts !== undefined) | renderYesNo, bottomBorder = not debts) }}
   {% for debt in debts %}
     {% if debts.length === 1 %}
       {{ row(label = 'Debt' , value = debt.description, bottomBorder = false) }}
@@ -140,10 +140,10 @@
 {% endmacro %}
 
 {% macro courtOrdersSection(courtOrders) %}
-  {{ row(label = 'Has a court ordered you to pay anyone else?', value = (courtOrders !== undefined) | renderYesNo, bottomBorder = not courtOrders) }}
+  {{ row(label = 'Has a court ordered them to pay anyone else?', value = (courtOrders !== undefined) | renderYesNo, bottomBorder = not courtOrders) }}
   {% for courtOrder in courtOrders %}
     {{ row(label = 'Claim number', value = courtOrder.claimNumber, bottomBorder = false) }}
-    {{ row(label = 'Amount you owe', value = courtOrder.amountOwed | numeral, bottomBorder = loop.index0 === courtOrders.length - 1) }}
+    {{ row(label = 'Amount they owe', value = courtOrder.amountOwed | numeral, bottomBorder = loop.index0 === courtOrders.length - 1) }}
   {% endfor %}
 {% endmacro %}
 
