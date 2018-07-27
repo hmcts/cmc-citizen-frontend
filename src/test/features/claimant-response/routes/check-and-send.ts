@@ -18,6 +18,7 @@ import { app } from 'main/app'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const draftType = 'claimantResponse'
+const defendantPartialAdmissionResponse = claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj
 
 const pagePath = ClaimantResponsePaths.checkAndSendPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
@@ -45,7 +46,7 @@ describe('Claimant response: check and send page', () => {
         })
 
         it('should return 500 and render error page when cannot retrieve draft', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj)
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
           draftStoreServiceMock.rejectFind('Error')
 
           await request(app)
@@ -55,7 +56,7 @@ describe('Claimant response: check and send page', () => {
         })
 
         it('should redirect to incomplete submission when not all tasks are completed', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj)
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
           draftStoreServiceMock.resolveFind(draftType, { acceptPaymentMethod: undefined })
 
           await request(app)
@@ -63,16 +64,6 @@ describe('Claimant response: check and send page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(ClaimantResponsePaths.incompleteSubmissionPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-        })
-
-        it('should render page when everything is fine', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj)
-          draftStoreServiceMock.resolveFind(draftType)
-
-          await request(app)
-            .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting your response'))
         })
       })
     })

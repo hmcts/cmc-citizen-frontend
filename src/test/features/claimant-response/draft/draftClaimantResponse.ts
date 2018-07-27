@@ -6,7 +6,6 @@ import { SettleAdmitted } from 'claimant-response/form/models/settleAdmitted'
 import { YesNoOption } from 'models/yesNoOption'
 import { SettlementAgreement } from 'claimant-response/form/models/settlementAgreement'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
-import { SignatureType } from 'common/signatureType'
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 
 describe('DraftClaimantResponse', () => {
@@ -35,7 +34,6 @@ describe('DraftClaimantResponse', () => {
           }
         },
         settlementAgreement: {
-          type: SignatureType.BASIC,
           signed: true
         },
         formaliseRepaymentPlan: {
@@ -52,7 +50,6 @@ describe('DraftClaimantResponse', () => {
       expect(draft.settleAdmitted.admitted.option).to.be.equals(YesNoOption.YES.option)
       expect(draft.settlementAgreement).to.be.instanceOf(SettlementAgreement)
       expect(draft.settlementAgreement.signed).to.be.eqls(true)
-      expect(draft.settlementAgreement.type).to.be.eqls(SignatureType.BASIC)
       expect(draft.formaliseRepaymentPlan).to.be.instanceOf(FormaliseRepaymentPlan)
       expect(draft.formaliseRepaymentPlan.option).to.be.eqls(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT)
 

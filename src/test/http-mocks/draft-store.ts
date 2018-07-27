@@ -343,8 +343,7 @@ export const sampleClaimantResponseDraftObj = {
     }
   },
   settlementAgreement: {
-    type: 'basic',
-    signed: true
+    signed: 'true'
   }
 }
 

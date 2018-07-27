@@ -21,7 +21,7 @@ const pagePath = ClaimantResponsePaths.signSettlementAgreementPage.evaluateUri({
 const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
 const pageHeading: string = 'Terms of the agreement'
 
-const validFormData = { type: 'basic', signed: true }
+const validFormData = { signed: 'true' }
 
 const defendantPartialAdmissionResponse = claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj
 
@@ -136,7 +136,7 @@ describe('Claimant response: sign settlement agreement page', () => {
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send({ type: 'basic', signed: undefined })
+            .send({ signed: undefined })
             .expect(res => expect(res).to.be.successful.withText(pageHeading, 'div class="error-summary"'))
         })
       })
