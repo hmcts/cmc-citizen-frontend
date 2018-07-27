@@ -123,7 +123,7 @@ export const partialAdmissionWithPaymentBySetDateData = {
   amount: 3000
 }
 
-export const fullAdmissionWithPaymentByInstalmentsData = {
+export const fullAdmissionWithSoMPaymentByInstalmentsData = {
   ...baseResponseData,
   ...baseFullAdmissionData,
   paymentIntention: {
@@ -193,6 +193,18 @@ export const fullAdmissionWithPaymentByInstalmentsData = {
       amountOwed: 100,
       monthlyInstalmentAmount: 10
     }]
+  }}
+
+export const fullAdmissionWithPaymentByInstalmentsData = {
+  ...baseResponseData,
+  ...baseFullAdmissionData,
+  paymentIntention: {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: '2050-12-31',
+      paymentSchedule: PaymentSchedule.EACH_WEEK
+    }
   }
 }
 

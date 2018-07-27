@@ -165,7 +165,7 @@ describe('Claimant response task list builder', () => {
     it('should list all incomplete tasks when tries to respond', () => {
       claim.response.freeMediation = YesNoOption.NO
       const taskListItems: TaskListItem[] = TaskListBuilder.buildRemainingTasks(claimantResponseDraft, claim)
-      expect(taskListItems.length).to.be.eq(1)
+      expect(taskListItems.length).to.be.eq(2)
     })
   })
 })

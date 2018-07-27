@@ -327,6 +327,7 @@ const sampleCCJDraftObj = {
 
 export const sampleClaimantResponseDraftObj = {
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
+  defendantResponseViewed: true,
   settleAdmitted: {
     admitted: {
       option: 'yes'

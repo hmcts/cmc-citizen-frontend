@@ -20,7 +20,7 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = ClaimantResponsePaths.defendantsResponsePage.evaluateUri({ externalId: externalId })
 const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
 
-const defendantFullAdmissionResponse = claimStoreServiceMock.sampleDefendantFullAdmissionResponseObj
+const defendantFullAdmissionResponse = claimStoreServiceMock.sampleDefendantFullAdmissionResponseWithSoM
 
 describe('Claimant response: view defendant response page', () => {
   attachDefaultHooks(app)

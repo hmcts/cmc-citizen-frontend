@@ -10,7 +10,7 @@ import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 import {
-  fullAdmissionWithPaymentByInstalmentsData,
+  fullAdmissionWithPaymentByInstalmentsData, fullAdmissionWithSoMPaymentByInstalmentsData,
   partialAdmissionWithPaymentByInstalmentsData
 } from 'test/data/entity/responseData'
 
@@ -121,6 +121,11 @@ export const sampleDefendantPartialAdmissionResponseObj = {
 export const sampleDefendantFullAdmissionResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullAdmissionWithPaymentByInstalmentsData
+}
+
+export const sampleDefendantFullAdmissionResponseWithSoM = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMPaymentByInstalmentsData
 }
 
 export function mockCalculateInterestRate (expected: number): mock.Scope {
