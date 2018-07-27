@@ -4,7 +4,7 @@
   <h3 class="heading-small form-group-related">{{ t(label) }}</h3>
 {% endmacro %}
 
-{% macro row(label, value, bottomBorder = true) %}
+{% macro row(label, value, bottomBorder = false) %}
   <div class="{% if bottomBorder %}bottom-border{% else %}no-bottom-border{% endif %}">
     <div class="column-one-half {% if not label %}if-empty{% endif %}">
       <span>{{ t( label ) }}</span>
@@ -18,17 +18,17 @@
 {% macro bankAccountsSection(bankAccounts) %}
   {% for bankAccount in bankAccounts %}
     {% if bankAccounts.length === 1 %}
-      {{ row(label = 'Type of account', value = bankAccount.type | renderBankAccountType, bottomBorder = false) }}
+      {{ row(label = 'Type of account', value = bankAccount.type | renderBankAccountType) }}
     {% else %}
-      {{ row(label = loop.index0 + 1 + '. Type of account', value = bankAccount.type | renderBankAccountType, bottomBorder = false) }}
+      {{ row(label = loop.index0 + 1 + '. Type of account', value = bankAccount.type | renderBankAccountType) }}
     {% endif %}
-    {{ row(label = 'Balance', value = bankAccount.balance | numeral, bottomBorder = false) }}
+    {{ row(label = 'Balance', value = bankAccount.balance | numeral) }}
     {{ row(label = 'Joint account', value = bankAccount.joint | renderYesNo, bottomBorder = loop.index0 === bankAccounts.length - 1) }}
   {% endfor %}
 {% endmacro %}
 
 {% macro resideceneSection(residence) %}
-  {{ row(label = 'Where are they living?', value = residence.type | renderResidenceType) }}
+  {{ row(label = 'Where are they living?', value = residence.type | renderResidenceType, bottomBorder = true) }}
 {% endmacro %}
 
 {% macro childrenSection(children) %}
@@ -37,7 +37,7 @@
     {% for child in children %}
       {{ row(label = 'How many are aged ' + (child.ageGroupType | renderAgeGroupType) + '?', value = child.numberOfChildren | default('0'), bottomBorder = loop.index0 === children.length - 1) }}
       {% if child.ageGroupType === 'BETWEEN_16_AND_19' and child.numberOfChildren > 0 %}
-        {{ row(label = 'How many aged ' + (child.ageGroupType | renderAgeGroupType) + ' are in full-time education or training?', value = child.numberOfChildrenLivingWithYou | default('0')) }}
+        {{ row(label = 'How many aged ' + (child.ageGroupType | renderAgeGroupType) + ' are in full-time education or training?', value = child.numberOfChildrenLivingWithYou | default('0'), bottomBorder = true) }}
       {% endif %}
     {% endfor %}
   {% endif %}
@@ -46,15 +46,15 @@
 {% macro maintenanceSection(numberOfMaintainedChildren) %}
   {{ row(label = 'Do they or their partner pay maintenance for any children?', value = (numberOfMaintainedChildren > 0) | renderYesNo, bottomBorder = not numberOfMaintainedChildren > 0) }}
   {% if numberOfMaintainedChildren > 0 %}
-    {{ row(label = 'Number of children', value = numberOfMaintainedChildren) }}
+    {{ row(label = 'Number of children', value = numberOfMaintainedChildren, bottomBorder = true) }}
   {% endif %}
 {% endmacro %}
 
 {% macro otherDependantsSection(otherDependants) %}
   {{ row(label = 'Do they support anyone else financially?', value = (otherDependants !== undefined) | renderYesNo, bottomBorder = not otherDependants) }}
   {% if otherDependants %}
-    {{ row(label = 'Number of people', value = otherDependants.numberOfPeople, bottomBorder = false) }}
-    {{ row(label = 'Give details', value = otherDependants.details) }}
+    {{ row(label = 'Number of people', value = otherDependants.numberOfPeople) }}
+    {{ row(label = 'Give details', value = otherDependants.details, bottomBorder = true) }}
   {% endif %}
 {% endmacro %}
 
@@ -89,21 +89,21 @@
       {% set status = status + ' Self-employed ' %}
     {% endif %}
   {% endif %}
-  {{ row(label = 'Type of job', value = status) }}
+  {{ row(label = 'Type of job', value = status, bottomBorder = true) }}
   {% if employment.employers.length > 0 %}
     {% for employer in employment.employers %}
-      {{ row(label = 'Employer name', value = employer.name, bottomBorder = false) }}
+      {{ row(label = 'Employer name', value = employer.name) }}
       {{ row(label = 'Job title', value = employer.jobTitle, bottomBorder = loop.index0 === employment.employers.length - 1) }}
     {% endfor %}
   {% endif %}
 {% endmacro %}
 
 {% macro selfEmploymentSection(selfEmployment) %}
-  {{ row(label = 'Job title', value = selfEmployment.jobTitle, bottomBorder = false) }}
+  {{ row(label = 'Job title', value = selfEmployment.jobTitle) }}
   {{ row(label = 'Annual turnover', value = selfEmployment.annualTurnover | numeral, bottomBorder = not selfEmployment.onTaxPayments) }}
-  {{ row(label = 'Are they behind on tax payments?', value = (selfEmployment.onTaxPayments !== undefined) | renderYesNo, bottomBorder = false) }}
-  {{ row(label = 'Amount they owe?', value = selfEmployment.onTaxPayments.amountYouOwe | numeral, bottomBorder = false) }}
-  {{ row(label = 'Reason', value = selfEmployment.onTaxPayments.reason) }}
+  {{ row(label = 'Are they behind on tax payments?', value = (selfEmployment.onTaxPayments !== undefined) | renderYesNo) }}
+  {{ row(label = 'Amount they owe?', value = selfEmployment.onTaxPayments.amountYouOwe | numeral) }}
+  {{ row(label = 'Reason', value = selfEmployment.onTaxPayments.reason, bottomBorder = true) }}
 {% endmacro %}
 
 {% macro monthlyIncomesSection(incomes) %}
@@ -112,7 +112,7 @@
       {{ row(label = income.type | renderIncomeType | capitalize, value = income.amountReceived | numeral, bottomBorder = loop.index0 === incomes.length - 1) }}
     {% endfor %}
   {% else %}
-    {{ row(label = 'Do they receive any income?', value = 'No') }}
+    {{ row(label = 'Do they receive any income?', value = 'No', bottomBorder = true) }}
   {% endif %}
 {% endmacro %}
 
@@ -122,7 +122,7 @@
       {{ row(label = expense.type | renderExpenseType | capitalize, value = expense.amountPaid | numeral, bottomBorder = loop.index0 === expenses.length - 1) }}
     {% endfor %}
   {% else %}
-    {{ row(label = 'Do they pay any expenses?', value = 'No') }}
+    {{ row(label = 'Do they pay any expenses?', value = 'No', bottomBorder = true) }}
   {% endif %}
 {% endmacro %}
 
@@ -130,11 +130,11 @@
   {{ row(label = 'Do they have any debts?', value = (debts !== undefined) | renderYesNo, bottomBorder = not debts) }}
   {% for debt in debts %}
     {% if debts.length === 1 %}
-      {{ row(label = 'Debt' , value = debt.description, bottomBorder = false) }}
+      {{ row(label = 'Debt' , value = debt.description) }}
     {% else %}
-      {{ row(label = loop.index0 + 1 + '. Debt' , value = debt.description, bottomBorder = false) }}
+      {{ row(label = loop.index0 + 1 + '. Debt' , value = debt.description) }}
     {% endif %}
-    {{ row(label = 'Total owed', value = debt.totalOwed | numeral, bottomBorder = false) }}
+    {{ row(label = 'Total owed', value = debt.totalOwed | numeral) }}
     {{ row(label = 'Monthly Payments', value = debt.monthlyPayments | numeral, bottomBorder = loop.index0 === debts.length - 1) }}
   {% endfor %}
 {% endmacro %}
@@ -142,7 +142,7 @@
 {% macro courtOrdersSection(courtOrders) %}
   {{ row(label = 'Has a court ordered them to pay anyone else?', value = (courtOrders !== undefined) | renderYesNo, bottomBorder = not courtOrders) }}
   {% for courtOrder in courtOrders %}
-    {{ row(label = 'Claim number', value = courtOrder.claimNumber, bottomBorder = false) }}
+    {{ row(label = 'Claim number', value = courtOrder.claimNumber) }}
     {{ row(label = 'Amount they owe', value = courtOrder.amountOwed | numeral, bottomBorder = loop.index0 === courtOrders.length - 1) }}
   {% endfor %}
 {% endmacro %}
