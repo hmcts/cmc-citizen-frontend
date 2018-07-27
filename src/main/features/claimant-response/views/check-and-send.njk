@@ -65,7 +65,7 @@
         bottomBorder = true, bold = true,
         changeLink = ClaimantResponsePaths.signSettlementAgreementPage.evaluateUri({ externalId: claim.externalId })
       ) }}
-    {% else %}
+    {% elseif claim.response.paymentIntention.repaymentPlan %}
       {{ row(label = 'The offer',
         value = t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} every month. The first instalment will be paid by {{ firstPaymentDate }}.',
           { defendantFullName: claim.response.defendant.name,
