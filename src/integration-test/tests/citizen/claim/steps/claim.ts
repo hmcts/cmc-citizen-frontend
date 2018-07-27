@@ -267,8 +267,11 @@ export class ClaimSteps {
     I.see(claimReason)
     claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(defendantType, enterDefendantEmail)
     claimantCheckAndSendPage.verifyClaimAmount()
-    claimantCheckAndSendPage.checkFactsTrueAndSubmit()
-    I.waitForText('Enter card details')
+
+    if (!process.env.CITIZEN_APP_URL.includes('sprod')) {
+      claimantCheckAndSendPage.checkFactsTrueAndSubmit()
+      I.waitForText('Enter card details')
+    }
 
   }
 

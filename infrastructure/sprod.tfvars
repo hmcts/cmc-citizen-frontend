@@ -1,0 +1,13 @@
+feature_mock_pay = "true"
+feature_fine_print = "true"
+feature_full_admission = "true"
+feature_partial_admission = "true"
+feature_statement_of_means = "true"
+feature_return_error_to_user = "true"
+external_host_name = "moneyclaim.sprod.platform.hmcts.net"
+
+idam_api_url = "http://betaDevBccidamAppLB.reform.hmcts.net"
+authentication_web_url = "https://idam-test.dev.ccidam.reform.hmcts.net"
+fees_api_url = "http://fees-register-api-sprod.service.core-compute-sprod.internal"
+payments_api_url = "http://payment-api-sprod.service.core-compute-sprod.internal"
+capacity = "2"
