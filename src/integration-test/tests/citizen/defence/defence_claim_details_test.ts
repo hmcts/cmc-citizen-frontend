@@ -8,16 +8,16 @@ import { DashboardClaimDetails } from 'integration-test/tests/citizen/defence/pa
 const helperSteps: Helper = new Helper()
 const defendantDetails: DashboardClaimDetails = new DashboardClaimDetails()
 
-Feature('Respond to claim: claim details')
+Feature('Respond to claim: claim details').retry(3)
 
-Scenario('I can view the claim details from a link on the dashboard @citizen', function* (I: I) {
-  const claimantEmail: string = yield I.createCitizenUser()
-  const defendantEmail: string = yield I.createCitizenUser()
+Scenario('I can view the claim details from a link on the dashboard @citizen', async (I: I) => {
+  const claimantEmail: string = await I.createCitizenUser()
+  const defendantEmail: string = await I.createCitizenUser()
 
   const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
-  const claimRef: string = yield I.createClaim(claimData, claimantEmail)
+  const claimRef: string = await I.createClaim(claimData, claimantEmail)
 
-  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
+  await helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.defendantViewCaseTaskList(defendantEmail)
   I.click(claimRef)
   I.click('Respond to claim')
@@ -25,14 +25,14 @@ Scenario('I can view the claim details from a link on the dashboard @citizen', f
   defendantDetails.checkClaimData(claimRef, claimData)
 })
 
-Scenario('I can view the claim details from a link on the dashboard for interest breakdown @citizen', function* (I: I) {
-  const claimantEmail: string = yield I.createCitizenUser()
-  const defendantEmail: string = yield I.createCitizenUser()
+Scenario('I can view the claim details from a link on the dashboard for interest breakdown @citizen', async (I: I) => {
+  const claimantEmail: string = await I.createCitizenUser()
+  const defendantEmail: string = await I.createCitizenUser()
 
   const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true, InterestType.BREAKDOWN)
-  const claimRef: string = yield I.createClaim(claimData, claimantEmail)
+  const claimRef: string = await I.createClaim(claimData, claimantEmail)
 
-  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
+  await helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.defendantViewCaseTaskList(defendantEmail)
   I.click(claimRef)
   I.click('Respond to claim')

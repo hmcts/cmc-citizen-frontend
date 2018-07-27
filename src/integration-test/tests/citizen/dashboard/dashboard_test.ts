@@ -8,11 +8,13 @@ import { DashboardClaimDetails } from 'integration-test/tests/citizen/defence/pa
 const claimSteps: ClaimSteps = new ClaimSteps()
 const dashboardClaimDetails: DashboardClaimDetails = new DashboardClaimDetails()
 
-Scenario('Check newly created claim is in my account dashboard with correct claim amount @citizen', function* (I: I) {
-  const email: string = yield I.createCitizenUser()
+Feature('Dashboard').retry(3)
+
+Scenario('Check newly created claim is in my account dashboard with correct claim amount @citizen', async (I: I) => {
+  const email: string = await I.createCitizenUser()
   const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
 
-  const claimRef: string = yield claimSteps.makeAClaimAndSubmit(email, PartyType.COMPANY, PartyType.INDIVIDUAL, false)
+  const claimRef: string = await claimSteps.makeAClaimAndSubmit(email, PartyType.COMPANY, PartyType.INDIVIDUAL, false)
 
   I.click('My account')
   I.see('Your money claims account')

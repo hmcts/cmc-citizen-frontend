@@ -14,6 +14,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 
 const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const incompleteSubmissionPagePath = ClaimantResponsePaths.incompleteSubmissionPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const defendantPartialAdmissionResponse = claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj
 
 describe('Claimant response: task list page', () => {
   attachDefaultHooks(app)
@@ -24,7 +25,7 @@ describe('Claimant response: task list page', () => {
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claimantResponse')
-      claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+      claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
 
       await request(app)
         .get(taskListPagePath)
