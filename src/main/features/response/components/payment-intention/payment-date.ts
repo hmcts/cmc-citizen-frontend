@@ -8,7 +8,6 @@ import { Draft } from '@hmcts/draft-store-client'
 import { Form } from 'forms/form'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { FormValidator } from 'forms/validation/formValidator'
-import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { User } from 'idam/user'
 import { Moment } from 'moment'
 
@@ -47,7 +46,7 @@ export class PaymentDatePage {
         })
       .post(
         path + PaymentIntentionPaths.paymentDatePage.uri,
-        FeatureToggleGuard.featureEnabledGuard('admissions'),
+        ...guards,
         stateGuardRequestHandler,
         FormValidator.requestHandler(PaymentDate, PaymentDate.fromObject),
         ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
