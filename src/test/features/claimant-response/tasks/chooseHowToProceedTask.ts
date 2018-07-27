@@ -13,7 +13,7 @@ describe('ChooseHowToProceedTask', () => {
     expect(ChooseHowToProceedTask.isCompleted(new FormaliseRepaymentPlan(undefined))).to.be.false
   })
 
-  it.skip('should be completed when option is selected', () => {
+  it('should be completed when option is selected', () => {
     FormaliseRepaymentPlanOption.all().forEach(option => {
       expect(ChooseHowToProceedTask.isCompleted(new FormaliseRepaymentPlan(option))).to.be.true
     })

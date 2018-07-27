@@ -1,5 +1,5 @@
 import { IsDefined, IsIn } from 'class-validator'
-import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/FormaliseRepaymentPlanOption'
+import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 
 export class ValidationErrors {
   static readonly OPTION_REQUIRED: string = 'Select an option'
