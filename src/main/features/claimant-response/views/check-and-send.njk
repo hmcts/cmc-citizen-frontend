@@ -72,13 +72,11 @@
             instalmentAmount: claim.response.paymentIntention.repaymentPlan.instalmentAmount | numeral,
             firstPaymentDate: claim.response.paymentIntention.repaymentPlan.firstPaymentDate | date
           }),
-        bottomBorder = true, bold = true,
-        changeLink = ClaimantResponsePaths.signSettlementAgreementPage.evaluateUri({ externalId: claim.externalId })
+        bottomBorder = true, bold = true
       ) }}
       {{ row(label = 'Completion date',
         value = lastPaymentDate | date,
-        bottomBorder = true, bold = true,
-        changeLink = ClaimantResponsePaths.signSettlementAgreementPage.evaluateUri({ externalId: claim.externalId })
+        bottomBorder = true, bold = true
       ) }}
     {% endif %}
 
