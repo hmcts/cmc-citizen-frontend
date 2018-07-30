@@ -1,4 +1,5 @@
 {% from "externalLink.njk" import externalLink %}
+{% from "internalLink.njk" import internalLink %}
 {% from "form.njk" import linkButton %}
 
 {% macro claimFullAdmissionForDefendantDashboard(claim) %}
@@ -28,6 +29,7 @@
   <h2 class="heading-small">{{ t('Your response to the claim') }}</h2>
   {% set claimantName = claim.claimData.claimant.name %}
   {% set amount = claim.totalAmountTillToday | numeral %}
+  {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
 
   {% if claim.response.paymentIntention.paymentDate %}
     {% set paymentDate = claim.response.paymentIntention.paymentDate | date %}
@@ -38,8 +40,9 @@
         { claimantName: claimantName, amount: amount, paymentDate: paymentDate }) }} </p>
     <p> {{ t('If you pay by cheque or transfer the money must be clear in their account.') }} </p>
     <p> {{ t('If they don’t receive the money by then, they can request a County Court Judgment against you.') }} </p>
-    <p> {{ t('Contact {{ claimantName }} if you need their payment details.',
-        { claimantName: claimantName }) }} </p>
+    <p>{{ t(internalLink('Contact ' + claimantName, claimantDetailsPageURI) + 'if you need their payment details.',
+      { claimantName: claimantName, link: claimantDetailsPageURI }) | safe }}
+    </p>
     <p> {{ t('Make sure you get receipts for any payments.') }} </p>
 
   {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
