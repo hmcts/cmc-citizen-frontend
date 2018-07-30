@@ -14,8 +14,22 @@ import { Logger } from '@hmcts/nodejs-logging'
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
 const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
+const claimStoreFeatureTogglesPermissionsApiUrl: string = `${claimApiBaseUrl}/users/roles`
 
 const logger = Logger.getLogger('claims/claimStoreClient')
+
+function getHeaders (claimant: User, admissionsAllowed: boolean) {
+  if (admissionsAllowed) {
+    return {
+      Authorization: `Bearer ${claimant.bearerToken}`,
+      features: 'admissions'
+    }
+  } else {
+    return {
+      Authorization: `Bearer ${claimant.bearerToken}`
+    }
+  }
+}
 
 export class ClaimStoreClient {
   constructor (private request: RequestPromiseAPI = requestPromiseApi) {
@@ -32,14 +46,14 @@ export class ClaimStoreClient {
     })
   }
 
-  saveClaim (draft: Draft<DraftClaim>, claimant: User): Promise<Claim> {
+  saveClaim (draft: Draft<DraftClaim>, claimant: User, admissionsAllowed: boolean): Promise<Claim> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
+    const headers = getHeaders(claimant , admissionsAllowed)
+
     return this.request
       .post(`${claimStoreApiUrl}/${claimant.id}`, {
         body: convertedDraftClaim,
-        headers: {
-          Authorization: `Bearer ${claimant.bearerToken}`
-        }
+        headers: headers
       })
       .then(claim => {
         return new Claim().deserialize(claim)
@@ -170,5 +184,21 @@ export class ClaimStoreClient {
     return this.request
       .get(`${claimStoreApiUrl}/${reference}/defendant-link-status`)
       .then(linkStatus => linkStatus.linked)
+  }
+
+  retrieveUserRoles (user: User): Promise<string> {
+    if (!user) {
+      return Promise.reject(new Error('user must be set'))
+    }
+
+    return this.request
+      .get(`${claimStoreFeatureTogglesPermissionsApiUrl}`, {
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
+      .then((roles: string) => {
+        return roles
+      })
   }
 }

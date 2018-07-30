@@ -1,8 +1,8 @@
 import * as express from 'express'
-
+import * as config from 'config'
+import * as toBoolean from 'to-boolean'
 import { GuardFactory } from 'features/response/guards/guardFactory'
 import { NotFoundError } from 'errors'
-import { FeatureToggles } from 'utils/featureToggles'
 
 export class FeatureToggleGuard {
   /**
@@ -12,7 +12,11 @@ export class FeatureToggleGuard {
    * @returns {express.RequestHandler} - request handler middleware
    */
   static featureEnabledGuard (feature: string): express.RequestHandler {
-    return GuardFactory.create(() => FeatureToggles.isEnabled(feature), (req: express.Request, res: express.Response): void => {
+    return GuardFactory.createAsync(async (req: express.Request, res: express.Response) => {
+
+      return toBoolean(config.get<boolean>(`featureToggles.${feature}`))
+        && res.locals.claim.features.indexOf(feature) > -1
+    }, (req: express.Request, res: express.Response): void => {
       throw new NotFoundError(req.path)
     })
   }
@@ -24,7 +28,13 @@ export class FeatureToggleGuard {
    * @returns {express.RequestHandler} - request handler middleware
    */
   static anyFeatureEnabledGuard (...features: string[]): express.RequestHandler {
-    return GuardFactory.create(() => FeatureToggles.isAnyEnabled(...features), (req: express.Request, res: express.Response): void => {
+    return GuardFactory.createAsync(async (req: express.Request, res: express.Response) => {
+
+      return features
+        .some((feature) => toBoolean(config.get<boolean>(`featureToggles.${feature}`))
+          && res.locals.claim.features.indexOf(feature) > -1
+        )
+    }, (req: express.Request, res: express.Response): void => {
       throw new NotFoundError(req.path)
     })
   }
