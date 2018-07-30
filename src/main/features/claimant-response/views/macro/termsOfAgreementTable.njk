@@ -10,9 +10,10 @@
       )) }}
       {{ row('Completion date', response.paymentIntention.paymentDate | date) }}
     {% elseif response.paymentIntention.repaymentPlan %}
-      {{ row('The offer', t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} every month. The first instalment will be paid by {{ firstPaymentDate }}.',
+      {{ row('The offer', t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
         { defendantFullName: response.defendant.name,
           instalmentAmount: response.paymentIntention.repaymentPlan.instalmentAmount | numeral,
+          paymentSchedule: response.paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
           firstPaymentDate: response.paymentIntention.repaymentPlan.firstPaymentDate | date
         }
       )) }}
