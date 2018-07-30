@@ -12,7 +12,8 @@ import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 import {
   fullAdmissionWithSoMPaymentByInstalmentsData,
   fullAdmissionWithSoMPaymentBySetDate,
-  partialAdmissionWithPaymentByInstalmentsData, partialAdmissionWithSoMPaymentBySetDateData
+  partialAdmissionWithPaymentBySetDateData,
+  partialAdmissionWithSoMPaymentBySetDateData
 } from 'test/data/entity/responseData'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
@@ -116,7 +117,7 @@ export const sampleDefendantResponseObj = {
 
 export const sampleDefendantPartialAdmissionResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
-  response: partialAdmissionWithPaymentByInstalmentsData
+  response: partialAdmissionWithPaymentBySetDateData
 }
 
 export const sampleDefendantFullAdmissionResponseBySetDateWithSoM = {
