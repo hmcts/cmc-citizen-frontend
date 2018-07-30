@@ -15,8 +15,11 @@
           <span>{{ t('Your claim number:') }}</span>
           <h1 class="bold-large">{{ claimNumber }}</h1>
         </div>
+        <p>
+          <span class="bold">{{ claim.respondedAt | date }}</span>
+        </p>
         <p class="receipt-download-container">
-          <a href="/claim/{{ externalId }}/receipt">{{ t('Download your claim as a PDF') }}</a>
+          <a href="/claim/{{ externalId }}/receipt">{{ t('Download your claim form') }}</a>
         </p>
 
       </div>
