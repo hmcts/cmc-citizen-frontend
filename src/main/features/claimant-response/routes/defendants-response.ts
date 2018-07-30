@@ -45,7 +45,7 @@ function calculateTotalMonthlyExpense (expenses: Expense[]): number {
   return CalculateMonthlyIncomeExpense.calculateTotalAmount(expenseSources)
 }
 
-function renderView (res: express.Response, page: number = 0) {
+function renderView (res: express.Response, page: number = 0): void {
   const claim: Claim = res.locals.claim
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
@@ -63,9 +63,9 @@ export default express.Router()
   .get(
     Paths.defendantsResponsePage.uri,
     stateGuardRequestHandler,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
+    (req: express.Request, res: express.Response) => {
       renderView(res)
-    })
+    }
   )
   .post(
     Paths.defendantsResponsePage.uri,
