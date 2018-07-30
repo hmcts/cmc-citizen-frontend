@@ -24,13 +24,14 @@ describe('Claimant response task list builder', () => {
   let claimantResponseDraft: DraftClaimantResponse
 
   beforeEach(() => {
-    claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleDefendantResponseObj })
+    claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleDefendantResponseObj, ...claimStoreServiceMock })
     claimantResponseDraft = new DraftClaimantResponse().deserialize(draftStoreServiceMock.sampleClaimantResponseDraftObj)
   })
 
   describe('"Before you start section" section', () => {
     describe('"View the defendant’s full response" task', () => {
       it('should be available when claimant tries to respond', () => {
+        claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleDefendantFullAdmissionByInstalmentsResponseWithSoM })
         const taskList: TaskList = TaskListBuilder.buildDefendantResponseSection(claimantResponseDraft, claim)
         expect(taskList.tasks.find(task => task.name === 'View the defendant’s full response')).not.to.be.undefined
       })
