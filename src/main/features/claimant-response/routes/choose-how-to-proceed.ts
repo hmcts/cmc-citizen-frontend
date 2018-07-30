@@ -10,7 +10,7 @@ import { Form } from 'forms/form'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 
-function renderView (form: Form<FormaliseRepaymentPlan>, res: express.Response, next: express.NextFunction) {
+function renderView (form: Form<FormaliseRepaymentPlan>, res: express.Response) {
   res.render(Paths.chooseHowToProceedPage.associatedView, {
     form: form
   })
@@ -23,7 +23,7 @@ export default express.Router()
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
 
-      renderView(new Form(draft.document.formaliseRepaymentPlan), res, next)
+      renderView(new Form(draft.document.formaliseRepaymentPlan), res)
     }
   )
   .post(
@@ -32,7 +32,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<FormaliseRepaymentPlan> = req.body
       if (form.hasErrors()) {
-        renderView(form, res, next)
+        renderView(form, res)
       } else {
         const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
         const user: User = res.locals.user

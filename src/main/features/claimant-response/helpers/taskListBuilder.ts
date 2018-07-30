@@ -118,7 +118,7 @@ export class TaskListBuilder {
       new TaskListItem(
         'Check and submit your response',
         Paths.checkAndSendPage.evaluateUri({ externalId: externalId }),
-        SignSettlementAgreementTask.isCompleted(draft.settlementAgreement)
+        false
       )
     )
     return new TaskList('Submit', tasks)
