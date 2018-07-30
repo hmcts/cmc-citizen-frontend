@@ -121,11 +121,6 @@ export const sampleDefendantPartialAdmissionResponseObj = {
 
 export const sampleDefendantFullAdmissionResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
-  response: fullAdmissionWithPaymentByInstalmentsData
-}
-
-export const sampleDefendantFullAdmissionResponseWithSoM = {
-  respondedAt: '2017-07-25T22:45:51.785',
   response: {
     ...fullAdmissionWithPaymentByInstalmentsData,
     statementOfMeans: {
