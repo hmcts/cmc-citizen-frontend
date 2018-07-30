@@ -16,13 +16,16 @@ export class TaskListBuilder {
     const tasks: TaskListItem[] = []
     const externalId: string = claim.externalId
 
-    tasks.push(
-      new TaskListItem(
-        'View the defendant’s full response',
-        Paths.defendantsResponsePage.evaluateUri({ externalId: externalId }),
-        ViewDefendantResponseTask.isCompleted(draft.defendantResponseViewed)
+    if (claim.response.responseType === ResponseType.FULL_ADMISSION
+      || (claim.response.responseType === ResponseType.PART_ADMISSION && claim.response.paymentIntention !== undefined)) {
+      tasks.push(
+        new TaskListItem(
+          'View the defendant’s full response',
+          Paths.defendantsResponsePage.evaluateUri({ externalId: externalId }),
+          ViewDefendantResponseTask.isCompleted(draft.defendantResponseViewed)
+        )
       )
-    )
+    }
 
     return new TaskList('Before you start', tasks)
   }
