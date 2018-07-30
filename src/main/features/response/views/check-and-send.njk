@@ -6,6 +6,7 @@
 {% from "party/details.njk" import partyDetailsSummaryFragment %}
 {% from "timelineCheckAndSend.njk" import timelineCheckAndSend %}
 {% from "evidenceCheckAndSend.njk" import evidenceCheckAndSend %}
+{% from "./macro/check-and-send/admission.njk" import notImmediatePayment, whenWillYouPayRow %}
 
 {% set heading = 'Check your answers' %}
 
@@ -65,23 +66,29 @@
     {% endif %}
 
     {% if draft.isResponseFullyAdmitted() and draft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
-      {{ row(label = 'When will you pay', value = t(draft.fullAdmission.paymentOption.option.displayValue) | capitalize, changeLink = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+
+      {{
+        whenWillYouPayRow(
+          value = t(draft.fullAdmission.paymentOption.option.displayValue) | capitalize,
+          url = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId })
+        )
+      }}
     {% endif %}
 
     {{ tableEnd() }}
 
     {% if draft.isResponseFullyAdmitted() and not draft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
-      {{ tableStart('whenWillYouPay', 'When will you pay') }}
-      {{ row(label = 'When will you pay', value = t(draft.fullAdmission.paymentOption.option.displayValue) | capitalize, changeLink = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-      {% if draft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.BY_SET_DATE) %}
-        {{ row(label = 'When you’ll pay the amount', value = draft.fullAdmission.paymentDate.date.toMoment() | date, changeLink = FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-      {% endif %}
-      {% if draft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.INSTALMENTS) %}
-        {{ row(label = 'Regular payments of', value = draft.fullAdmission.paymentPlan.instalmentAmount | numeral, changeLink = FullAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: claim.externalId }), bold = true, bottomBorder = false) }}
-        {{ row(label = 'Frequency of payments', value = t(draft.fullAdmission.paymentPlan.paymentSchedule.displayValue), bold = true, bottomBorder = false) }}
-        {{ row(label = 'Make the first payment on', value = draft.fullAdmission.paymentPlan.firstPaymentDate.toMoment() | date, bold = true) }}
-      {% endif %}
-      {{ tableEnd() }}
+
+      {{
+        notImmediatePayment(
+          type = draft.fullAdmission.paymentOption,
+          paymentDate = draft.fullAdmission.paymentDate,
+          paymentPlan = draft.fullAdmission.paymentPlan,
+          explanation = draft.statementOfMeans.explanation.text,
+          Paths = FullAdmissionPaths,
+          externalId = claim.externalId
+        )
+      }}
     {% endif %}
 
     {% if draft.isResponseRejectedFullyWithAmountClaimedPaid() %}
@@ -168,27 +175,43 @@
 
       {{ row(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), bold = true) }}
 
-      {% if ( draft.partialAdmission.paymentOption) %}
-        {{ tableStart('whenWillYouPay', 'When will you pay') }}
-        {{ row(label = 'When will you pay', value = t(draft.partialAdmission.paymentOption.option.displayValue) | capitalize, changeLink = PartAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+      {% if draft.partialAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+        {{ tableStart('whenWillYouPay', 'When you’ll pay') }}
 
-        {% if draft.partialAdmission.paymentOption.isOfType(DefendantPaymentType.BY_SET_DATE) %}
-          {{ row(label = 'When you’ll pay the amount', value = draft.partialAdmission.paymentDate.date.toMoment() | date, changeLink = PartAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-        {% endif %}
-
-        {% if draft.partialAdmission.paymentOption.isOfType(DefendantPaymentType.INSTALMENTS) %}
-          {{ row(label = 'Regular payments of', value = draft.partialAdmission.paymentPlan.instalmentAmount | numeral, changeLink = PartAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: claim.externalId }), bold = true, bottomBorder = false) }}
-          {{ row(label = 'Frequency of payments', value = t(draft.partialAdmission.paymentPlan.paymentSchedule.displayValue), bold = true, bottomBorder = false) }}
-          {{ row(label = 'Make the first payment on', value = draft.partialAdmission.paymentPlan.firstPaymentDate.toMoment() | date, bold = true) }}
-        {% endif %}
-
+        {{
+          whenWillYouPayRow(
+            value = t(draft.partialAdmission.paymentOption.option.displayValue) | capitalize,
+            url = PartAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId })
+          )
+        }}
         {{ tableEnd() }}
+
+      {% else %}
+
+        {{
+          notImmediatePayment(
+            type = draft.partialAdmission.paymentOption,
+            paymentDate = draft.partialAdmission.paymentDate,
+            paymentPlan = draft.partialAdmission.paymentPlan,
+            explanation = draft.statementOfMeans.explanation.text,
+            Paths = PartAdmissionPaths,
+            externalId = claim.externalId
+          )
+        }}
+
       {% endif %}
     {% endif %}
 
     {% if draft.isResponseRejectedFullyWithDispute() %}
       {{ tableStart('responseDetails', 'Response details') }}
-      {{ row(label = 'Why you disagree with the claim', value = draft.defence.text, changeLink = ResponsePaths.defencePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+      {{
+          row(
+            label = 'Why you disagree with the claim',
+            value = draft.defence.text,
+            changeLink = ResponsePaths.defencePage.evaluateUri({ externalId: claim.externalId }),
+            bold = true
+          )
+      }}
 
       {{
         timelineCheckAndSend(
@@ -214,9 +237,16 @@
       {% include "./statement-of-means/check-and-send.njk" %}
     {% endif %}
 
-    {% if draft.isResponseRejectedFullyWithDispute() or draft.isResponsePartiallyAdmittedAndAlreadyPaid() %}
+    {% if draft.isResponsePartiallyAdmitted() or draft.isResponseRejectedFullyWithDispute() %}
       {{ tableStart('freeMediation', 'Free mediation') }}
-      {{ row(label = 'Will you try mediation?', value = t(draft.freeMediation.option) | capitalize, changeLink = ResponsePaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+      {{
+          row(
+            label = 'Will you try mediation?',
+            value = t(draft.freeMediation.option) | capitalize,
+            changeLink = ResponsePaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }),
+            bold = true
+          )
+      }}
       {{ tableEnd() }}
     {% endif %}
 

@@ -265,7 +265,8 @@ export const sampleFullAdmissionResponseDraftObj = {
       maintenance: 1,
       rows: [{ amount: 10, description: 'bla bla bla' }]
     },
-    courtOrders: { declared: false }
+    courtOrders: { declared: false },
+    explanation: { text: 'aaa' }
   }
 }
 
