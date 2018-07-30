@@ -1,14 +1,12 @@
 import { IsDefined } from 'class-validator'
 import { IsBooleanTrue } from '@hmcts/cmc-validators'
-
-export class ValidationErrors {
-  static readonly SETTLEMENT_AGREEMENT_REQUIRED_MESSAGE: string = 'Please select I confirm I’ve read and accept the terms of the agreement.'
-}
+import * as toBoolean from 'to-boolean'
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 export class SettlementAgreement {
 
-  @IsDefined({ message: ValidationErrors.SETTLEMENT_AGREEMENT_REQUIRED_MESSAGE })
-  @IsBooleanTrue({ message: ValidationErrors.SETTLEMENT_AGREEMENT_REQUIRED_MESSAGE })
+  @IsDefined({ message: GlobalValidationErrors.DECLARATION_REQUIRED })
+  @IsBooleanTrue({ message: GlobalValidationErrors.DECLARATION_REQUIRED })
   signed?: boolean
 
   constructor (signed?: boolean) {
@@ -19,7 +17,7 @@ export class SettlementAgreement {
     if (!value) {
       return value
     }
-    return new SettlementAgreement(value.signed === 'true')
+    return new SettlementAgreement(value.signed && toBoolean(value.signed) === true)
   }
 
   deserialize (input?: any): SettlementAgreement {

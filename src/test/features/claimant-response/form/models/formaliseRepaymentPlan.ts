@@ -2,8 +2,9 @@ import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
-import { FormaliseRepaymentPlan, ValidationErrors } from 'claimant-response/form/models/formaliseRepaymentPlan'
+import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 describe('FormaliseRepaymentPlan', () => {
   describe('validation', () => {
@@ -13,14 +14,14 @@ describe('FormaliseRepaymentPlan', () => {
       const errors = validator.validateSync(new FormaliseRepaymentPlan(undefined))
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.OPTION_REQUIRED)
+      expectValidationError(errors, GlobalValidationErrors.SELECT_AN_OPTION)
     })
 
     it('should reject with invalid value', () => {
       const errors = validator.validateSync(new FormaliseRepaymentPlan(new FormaliseRepaymentPlanOption('invalid')))
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.OPTION_REQUIRED)
+      expectValidationError(errors, GlobalValidationErrors.SELECT_AN_OPTION)
     })
 
     it('should accept formaliseRepaymentPlan with recognised type', () => {

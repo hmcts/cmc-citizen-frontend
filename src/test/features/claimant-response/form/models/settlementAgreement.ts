@@ -4,7 +4,8 @@
 import { expect } from 'chai'
 import { Validator } from 'class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
-import { SettlementAgreement, ValidationErrors } from 'claimant-response/form/models/settlementAgreement'
+import { SettlementAgreement } from 'claimant-response/form/models/settlementAgreement'
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 describe('SettlementAgreement', () => {
   describe('constructor', () => {
@@ -21,20 +22,20 @@ describe('SettlementAgreement', () => {
       const errors = validator.validateSync(new SettlementAgreement(null))
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.SETTLEMENT_AGREEMENT_REQUIRED_MESSAGE)
+      expectValidationError(errors, GlobalValidationErrors.DECLARATION_REQUIRED)
     })
 
     it('should reject settlement agreement with empty string', () => {
       const errors = validator.validateSync(new SettlementAgreement())
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.SETTLEMENT_AGREEMENT_REQUIRED_MESSAGE)
+      expectValidationError(errors, GlobalValidationErrors.DECLARATION_REQUIRED)
     })
 
     it('should reject settlement agreement without signature', () => {
       const errors = validator.validateSync(new SettlementAgreement(undefined))
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.SETTLEMENT_AGREEMENT_REQUIRED_MESSAGE)
+      expectValidationError(errors, GlobalValidationErrors.DECLARATION_REQUIRED)
     })
 
     it('should accept settlement agreement with signature', () => {

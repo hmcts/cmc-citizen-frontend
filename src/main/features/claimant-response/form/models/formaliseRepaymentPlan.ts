@@ -1,13 +1,10 @@
 import { IsDefined, IsIn } from 'class-validator'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
-
-export class ValidationErrors {
-  static readonly OPTION_REQUIRED: string = 'Select an option'
-}
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 export class FormaliseRepaymentPlan {
-  @IsDefined({ message: ValidationErrors.OPTION_REQUIRED })
-  @IsIn(FormaliseRepaymentPlanOption.all(), { message: ValidationErrors.OPTION_REQUIRED })
+  @IsDefined({ message: GlobalValidationErrors.SELECT_AN_OPTION })
+  @IsIn(FormaliseRepaymentPlanOption.all(), { message: GlobalValidationErrors.SELECT_AN_OPTION })
   option?: FormaliseRepaymentPlanOption
 
   constructor (option?: FormaliseRepaymentPlanOption) {
