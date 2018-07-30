@@ -21,7 +21,7 @@
   <ul class="font-xsmall list">
     <li>
       <strong class="bold">{{ t(otherPartyLabel) }}</strong>
-      {{ internalLink(t(otherPartyName), DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) }}
+      <a class="block" {{ internalLink(t(otherPartyName), DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) }}</a>
     </li>
     <li>
       <strong class="bold">{{ t('Claim amount:') }}</strong>

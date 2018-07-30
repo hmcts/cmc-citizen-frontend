@@ -1,5 +1,7 @@
+{% from "internalLink.njk" import internalLink %}
+
 {% set claimantName = claim.claimData.claimant.name %}
-{% set claimantDetailsPageURI = ClaimPaths.claimantDetailsPage.evaluateUri({ externalId: claim.externalId }) %}
+{% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
 
 {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
   <p>{{ t('When {{ claimantName }} gets your payment they should tell you and the court you’ve paid.', { claimantName: claimantName }) }}</p>
@@ -19,8 +21,10 @@
   <ul class="list list-bullet">
     <li>{{ t('set up your repayment plan to begin when you said it would') }}</li>
     <li>{{ t('<a href="{{ link }}">contact {{ claimantName }}</a> if you need their payment details', { claimantName: claimantName, link: claimantDetailsPageURI }) | safe }}</li>
+    <li>{{ t(internalLink(claimantName, claimantDetailsPageURI) + 'if you need their payment details', { claimantName: claimantName, link: claimantDetailsPageURI }) | safe }}</li>
     <li>{{ t('make sure you get a receipt for any payments') }}</li>
   </ul>
+
 
   <p>{{ t('If they reject your offer to pay in instalments then the court will decide how you can pay.') }}</p>
 

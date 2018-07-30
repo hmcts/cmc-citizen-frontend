@@ -15,6 +15,8 @@
   {% set correspondenceAddress = claim.response.defendant.correspondenceAddress %}
   {% set contactPerson = claim.response.defendant.contactPerson %}
 
+   {#TODO WIP -The address of the defendant does not update if altered, however correspondenceAddress is.#}
+
   {% if address != null %}
     {% set line1 = claim.claimData.defendant.address.line1 %}
     {% set line2 = claim.claimData.defendant.address.line2 %}
