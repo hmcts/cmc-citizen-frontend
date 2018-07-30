@@ -1,5 +1,10 @@
 import * as express from 'express'
 import * as mock from 'mock-require'
+import {
+  defenceWithDisputeData,
+  fullAdmissionWithPaymentByInstalmentsData,
+  partialAdmissionWithPaymentByInstalmentsData, statementOfMeansWithMandatoryFieldsOnlyData
+} from 'test/data/entity/responseData'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreMock from 'test/http-mocks/draft-store'
@@ -13,8 +18,16 @@ idamServiceMock.resolveRetrieveServiceToken().persist()
 draftStoreMock.resolveFindAllDrafts().persist()
 
 claimStoreMock.resolveRetrieveByLetterHolderId('000MC000').persist()
-claimStoreMock.resolveRetrieveClaimByExternalIdWithResponse({
+claimStoreMock.resolveRetrieveClaimByExternalId({
   respondedAt: '2017-08-07T15:27:34.654',
+  response: {
+    ...defenceWithDisputeData,
+    ...fullAdmissionWithPaymentByInstalmentsData,
+    ...partialAdmissionWithPaymentByInstalmentsData,
+    statementOfMeans: {
+      ...statementOfMeansWithMandatoryFieldsOnlyData
+    }
+  },
   countyCourtJudgmentRequestedAt: '2017-08-09T11:51:28.144',
   settlementReachedAt: '2017-08-10T15:27:32.917'
 }).persist()
