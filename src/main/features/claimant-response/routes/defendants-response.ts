@@ -23,7 +23,7 @@ const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((re
 
   return claim.response.responseType === ResponseType.FULL_ADMISSION
     || (claim.response.responseType === ResponseType.PART_ADMISSION && claim.response.paymentIntention !== undefined)
-}, (req: express.Request, res: express.Response): void => {
+}, (req: express.Request): void => {
   throw new NotFoundError(req.path)
 })
 
