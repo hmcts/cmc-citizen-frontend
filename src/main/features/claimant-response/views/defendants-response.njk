@@ -1,5 +1,4 @@
 {% extends "layout.njk" %}
-{% from "table.njk" import tableStart, tableEnd, row %}
 
 {% set heading = 'The defendant’s response' %}
 
@@ -11,10 +10,34 @@
 
 {% macro paymentIntentionFragment(paymentIntention) %}
   {% if paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-    <p>{{ t('They’ve offered to pay you in full by {{ paymentDate }}.', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+    {{ t('They’ve offered to pay you in full by {{ paymentDate }}.', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}
   {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
     {{ t('They’ve offered to pay you in instalments.') }}
   {% endif %}
+{% endmacro %}
+
+{% macro repaymentPlanBlock(repaymentPlan, paymentPlan) %}
+  <h2 class="heading-medium">{{ t('How they want to pay') }}</h2>
+  <p>{{ t('The defendant suggested this repayment plan:') }}</p>
+  {{ paymentPlanTable(
+      instalmentAmount = repaymentPlan.instalmentAmount,
+      firstPaymentDate = repaymentPlan.firstPaymentDate,
+      lastPaymentOn = paymentPlan.getLastPaymentDate(),
+      lengthOfPayment = paymentPlan.getPaymentLength()
+    )
+  }}
+{% endmacro %}
+
+{% macro paymentDateExplanationBlock(reason) %}
+  <h3 class="heading-small form-group-related">{{ t('Why they can’t pay the full amount now') }}</h3>
+  <p>{{ t('"{{ reason }}"', { reason: reason }) }}</p>
+{% endmacro %}
+
+{% macro financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, statementOfMeans) %}
+  <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
+  <p>{{ t('Their total monthly income is {{ totalMonthlyIncome }}', { totalMonthlyIncome: totalMonthlyIncome | numeral }) }}</p>
+  <p>{{ t('Their total monthly expenses is {{ totalMonthlyExpenses }}', { totalMonthlyExpenses: totalMonthlyExpenses | numeral }) }}</p>
+  {{ financialDetailsTable(label = 'See their financial details', statementOfMeans = statementOfMeans, classes = 'form-group') }}
 {% endmacro %}
 
 {% macro timelineFragment(timeline) %}
@@ -39,49 +62,55 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-
       {% if claim.response.responseType === ResponseType.FULL_ADMISSION.value %}
-        <p>
-          {{ t('{{ defendantName }} admits they owe all the money you’ve claimed.', { defendantName: defendantName }) }}
-          {{ paymentIntentionFragment(claim.response.paymentIntention) }}
-        </p>
+        <p>{{ t('{{ defendantName }} admits they owe all the money you’ve claimed.', { defendantName: defendantName }) }}</p>
+        <p>{{ paymentIntentionFragment(claim.response.paymentIntention) }}</p>
 
         {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-          <h2 class="heading-medium">{{ t('How they want to pay') }}</h2>
-          {{ paymentPlanTable("type[label]", claim.response.paymentIntention.repaymentPlan.instalmentAmount, claim.response.paymentIntention.repaymentPlan.firstPaymentDate, paymentPlan.getLastPaymentDate(), paymentPlan.getPaymentLength()) }}
+          {{ repaymentPlanBlock(claim.response.paymentIntention.repaymentPlan, paymentPlan) }}
         {% endif %}
 
-        <h3 class="heading-small form-group-related">{{ t('Why they can’t pay the full amount now') }}</h3>
-        <p>{{ t('"{{ reason }}"', { reason: claim.response.statementOfMeans.reason }) }}</p>
+        {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
 
-        <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
-        <p>{{ t('Their total monthly income is {{ totalMonthlyIncome }}', { totalMonthlyIncome: totalMonthlyIncome | numeral }) }}</p>
-        <p>{{ t('Their total monthly expenses is {{ totalMonthlyExpenses }}', { totalMonthlyExpenses: totalMonthlyExpenses | numeral }) }}</p>
-        {{ financialDetailsTable(label = 'See their financial details', statementOfMeans = claim.response.statementOfMeans, classes = 'form-group') }}
+        {{ financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, claim.response.statementOfMeans) }}
       {% endif %}
 
       {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
-        <p>{{ t('{{ defendantName }} admits they owe you {{ amount }}.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
-        {{ paymentIntentionFragment(claim.response.paymentIntention) }}
+        {% if page === 0 %}
+          <p>{{ t('{{ defendantName }} admits they owe you {{ amount }}. However they don’t believe they owe the full amount claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
+          <p>{{ paymentIntentionFragment(claim.response.paymentIntention) }}</p>
 
-        <h2 class="heading-medium">{{ t('Their defence') }}</h2>
+          <h2 class="heading-medium">{{ t('Their defence') }}</h2>
 
-        <h3 class="heading-small form-group-related">{{ t('Why they don’t owe the amount claimed') }}</h3>
-        <p>{{ t('"{{ defence }}"', { reason: claim.response.defence }) }}</p>
+          <h3 class="heading-small form-group-related">{{ t('Why they don’t owe the amount claimed') }}</h3>
+          <p>{{ t('"{{ defence }}"', { defence: claim.response.defence }) }}</p>
 
-        {% if claim.response.timeline %}
-          <h3 class="heading-small form-group-related">{{ t('Their timeline of events') }}</h3>
-          {{ timelineFragment(claim.response.timeline) }}
-        {% endif %}
+          {% if claim.response.timeline %}
+            <h3 class="heading-small form-group-related">{{ t('Their timeline of events') }}</h3>
+            {{ timelineFragment(claim.response.timeline) }}
+          {% endif %}
 
-        {% if claim.response.evidence and claim.response.evidence.comment %}
-          <h3 class="heading-small form-group-related">{{ t('They disagree with your evidence') }}</h3>
-          <p>{{ t('"{{ comment }}"', { reason: claim.response.evidence.comment }) }}</p>
+          {% if claim.response.evidence and claim.response.evidence.comment %}
+            <h3 class="heading-small form-group-related">{{ t('They disagree with your evidence') }}</h3>
+            <p>{{ t('"{{ comment }}"', { comment: claim.response.evidence.comment }) }}</p>
+          {% endif %}
+        {% elseif page === 1 %}
+          {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+            {{ repaymentPlanBlock(claim.response.paymentIntention.repaymentPlan, paymentPlan) }}
+          {% endif %}
+
+          {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
+
+          {{ financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, claim.response.statementOfMeans) }}
         {% endif %}
       {% endif %}
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
+
+        {% if claim.response.responseType === ResponseType.PART_ADMISSION.value and page !== 1 %}
+          <input type="hidden" name="action[showPage]" value="{{ page + 1 }}">
+        {% endif %}
 
         {{ submitButton('Continue') }}
       </form>

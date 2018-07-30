@@ -1,5 +1,5 @@
-{% macro paymentPlanTable(id, instalmentAmount, firstPaymentDate, lastPaymentOn, lengthOfPayment) %}
-  <fieldset id="{{ id }}" class="form-group">
+{% macro paymentPlanTable(instalmentAmount, firstPaymentDate, lastPaymentOn, lengthOfPayment) %}
+  <fieldset class="form-group">
     <legend>
       <span class="visually-hidden">{{ t( 'Payment plan' ) }}</span>
     </legend>

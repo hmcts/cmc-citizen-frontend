@@ -22,41 +22,10 @@ const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((re
   const claim: Claim = res.locals.claim
 
   return claim.response.responseType === ResponseType.FULL_ADMISSION
+    || (claim.response.responseType === ResponseType.PART_ADMISSION && claim.response.paymentIntention !== undefined)
 }, (req: express.Request, res: express.Response): void => {
   throw new NotFoundError(req.path)
 })
-
-/* tslint:disable:no-default-export */
-export default express.Router()
-  .get(
-    Paths.defendantsResponsePage.uri,
-    stateGuardRequestHandler,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const claim: Claim = res.locals.claim
-      const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-
-      res.render(Paths.defendantsResponsePage.associatedView, {
-        claim: claim,
-        totalMonthlyIncome: calculateTotalMonthlyIncome(response.statementOfMeans.incomes),
-        totalMonthlyExpenses: calculateTotalMonthlyExpense(response.statementOfMeans.expenses),
-        paymentPlan: generatePaymentPlan(claim.claimData.amount.totalAmount(), response.paymentIntention.repaymentPlan)
-      })
-    })
-  )
-  .post(
-    Paths.defendantsResponsePage.uri,
-    stateGuardRequestHandler,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
-      const user: User = res.locals.user
-
-      draft.document.defendantResponseViewed = true
-      await new DraftService().save(draft, user.bearerToken)
-
-      const { externalId } = req.params
-      res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
-
-    }))
 
 function calculateTotalMonthlyIncome (incomes: Income[]): number {
   if (incomes === undefined) {
@@ -75,3 +44,44 @@ function calculateTotalMonthlyExpense (expenses: Expense[]): number {
   const expenseSources = expenses.map(expense => IncomeExpenseSource.fromClaimExpense(expense))
   return CalculateMonthlyIncomeExpense.calculateTotalAmount(expenseSources)
 }
+
+function renderView (res: express.Response, page: number = 0) {
+  const claim: Claim = res.locals.claim
+  const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
+  res.render(Paths.defendantsResponsePage.associatedView, {
+    claim: claim,
+    totalMonthlyIncome: calculateTotalMonthlyIncome(response.statementOfMeans.incomes),
+    totalMonthlyExpenses: calculateTotalMonthlyExpense(response.statementOfMeans.expenses),
+    paymentPlan: generatePaymentPlan(response.responseType === ResponseType.PART_ADMISSION ? response.amount : claim.totalAmountTillToday, response.paymentIntention.repaymentPlan),
+    page: page
+  })
+}
+
+/* tslint:disable:no-default-export */
+export default express.Router()
+  .get(
+    Paths.defendantsResponsePage.uri,
+    stateGuardRequestHandler,
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
+      renderView(res)
+    })
+  )
+  .post(
+    Paths.defendantsResponsePage.uri,
+    stateGuardRequestHandler,
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
+      const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
+      const user: User = res.locals.user
+
+      if (req.body.action && req.body.action.showPage) {
+        const page: number = +req.body.action.showPage
+        return renderView(res, page)
+      }
+
+      draft.document.defendantResponseViewed = true
+      await new DraftService().save(draft, user.bearerToken)
+
+      const { externalId } = req.params
+      res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
+    }))
