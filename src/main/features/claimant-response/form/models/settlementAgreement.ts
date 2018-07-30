@@ -17,7 +17,7 @@ export class SettlementAgreement {
     if (!value) {
       return value
     }
-    return new SettlementAgreement(value.signed && toBoolean(value.signed) === true)
+    return new SettlementAgreement(value.signed && toBoolean(value.signed))
   }
 
   deserialize (input?: any): SettlementAgreement {
