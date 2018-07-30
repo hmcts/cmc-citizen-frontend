@@ -67,9 +67,10 @@
       ) }}
     {% elseif claim.response.paymentIntention.repaymentPlan %}
       {{ row(label = 'The offer',
-        value = t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} every month. The first instalment will be paid by {{ firstPaymentDate }}.',
+        value = t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
           { defendantFullName: claim.response.defendant.name,
             instalmentAmount: claim.response.paymentIntention.repaymentPlan.instalmentAmount | numeral,
+            paymentSchedule: claim.response.paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
             firstPaymentDate: claim.response.paymentIntention.repaymentPlan.firstPaymentDate | date
           }),
         bottomBorder = true, bold = true
