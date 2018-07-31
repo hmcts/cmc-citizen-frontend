@@ -9,6 +9,6 @@ export function getPaymentPlan (claim: Claim): PaymentPlan {
     case ResponseType.FULL_ADMISSION:
       return generatePaymentPlan(claim.claimData.amount.totalAmount(), claim.response.paymentIntention.repaymentPlan)
     default:
-      return undefined
+      throw new Error(`Incompatible response type: ${claim.response.responseType}`)
   }
 }
