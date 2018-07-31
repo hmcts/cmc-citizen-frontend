@@ -171,4 +171,35 @@ export class ClaimStoreClient {
       .get(`${claimStoreApiUrl}/${reference}/defendant-link-status`)
       .then(linkStatus => linkStatus.linked)
   }
+
+  retrieveRoleNameByUserId (user: User): Promise<String> {
+    if (!user) {
+      return Promise.reject(new Error('User is required'))
+    }
+
+    return this.request
+      .get(`${claimStoreApiUrl}/users/roles`, {
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
+      .then(roleName => null)
+  }
+
+  persistRoleNameByUserId (user: User, roleName: string): Promise<String> {
+    if (!user) {
+      return Promise.reject(new Error('User is required'))
+    }
+
+    const roleJson = { role_name : roleName }
+
+    return this.request
+      .post(`${claimStoreApiUrl}/users/roles/assign`, {
+        body: roleJson,
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
+      .then(roleName => null)
+  }
 }

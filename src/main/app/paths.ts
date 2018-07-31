@@ -10,6 +10,7 @@ export class Paths {
   static readonly cookiesPage = new RoutablePath('/cookies', false)
   static readonly termsAndConditionsPage = new RoutablePath('/terms-and-conditions', false)
   static readonly contactUsPage = new RoutablePath('/contact-us', false)
+  static readonly featureOptInPage = new RoutablePath('/feature-opt-in', false)
 
   // Ajax endpoints
   static readonly postcodeLookupProxy = new RoutablePath('/postcode-lookup', false)
