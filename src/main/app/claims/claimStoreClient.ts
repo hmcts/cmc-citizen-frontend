@@ -176,7 +176,6 @@ export class ClaimStoreClient {
     if (!user) {
       return Promise.reject(new Error('User is required'))
     }
-
     return this.request
       .get(`${claimStoreApiUrl}/users/roles`, {
         headers: {
@@ -200,6 +199,5 @@ export class ClaimStoreClient {
           Authorization: `Bearer ${user.bearerToken}`
         }
       })
-      .then(roleName => null)
   }
 }

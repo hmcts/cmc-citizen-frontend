@@ -9,20 +9,17 @@ const logger = Logger.getLogger('middleware/authorization')
 
 export class FeatureConsentMiddleware {
 
-  static requestHandler (req: express.Request, res: express.Response): express.RequestHandler {
-
+  static retrieveUserConsentRole (req: express.Request, res: express.Response, next: express.NextFunction): void {
+    logger.info('inside featureConsentMiddleware')
     const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+    const user: User = res.locals.user
 
-    return (req: express.Request, res: express.Response) => {
+    claimStoreClient.retrieveRoleNameByUserId(user).then(value => {
+      if (value == null) {
+        logger.info('showing feature opt in page')
+        res.redirect(AppPaths.featureOptInPage.uri)
+      }
+    })
 
-      const user: User = res.locals.user
-
-      claimStoreClient.retrieveRoleNameByUserId(user).then(value => {
-        if (value === null) {
-          logger.debug('showing feature opt in page')
-          res.redirect(AppPaths.featureOptInPage.uri)
-        }
-      })
-    }
   }
 }

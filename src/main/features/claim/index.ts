@@ -10,6 +10,7 @@ import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { OAuthHelper } from 'idam/oAuthHelper'
+import { FeatureConsentMiddleware } from 'claims/featureConsentMiddleware'
 
 function claimIssueRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -20,7 +21,8 @@ function claimIssueRequestHandler (): express.RequestHandler {
     'citizen'
   ]
   const unprotectedPaths = []
-  return AuthorizationMiddleware.requestHandler(requiredRoles, accessDeniedCallback, unprotectedPaths)
+  AuthorizationMiddleware.requestHandler(requiredRoles, accessDeniedCallback, unprotectedPaths)
+  return FeatureConsentMiddleware.retrieveUserConsentRole
 }
 
 export class Feature {
