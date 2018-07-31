@@ -25,14 +25,14 @@ describe('SettlementAgreement', () => {
       expectValidationError(errors, GlobalValidationErrors.DECLARATION_REQUIRED)
     })
 
-    it('should reject settlement agreement with empty string', () => {
+    it('should reject settlement agreement without signature', () => {
       const errors = validator.validateSync(new SettlementAgreement())
 
       expect(errors.length).to.equal(1)
       expectValidationError(errors, GlobalValidationErrors.DECLARATION_REQUIRED)
     })
 
-    it('should reject settlement agreement without signature', () => {
+    it('should reject settlement agreement with undefined', () => {
       const errors = validator.validateSync(new SettlementAgreement(undefined))
       expect(errors.length).to.equal(1)
       expectValidationError(errors, GlobalValidationErrors.DECLARATION_REQUIRED)

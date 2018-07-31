@@ -34,6 +34,25 @@ describe('Claimant response: choose how to proceed page', () => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
+      it('should return 500 and render error page when cannot retrieve claims', async () => {
+        claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should return 500 and render error page when cannot retrieve claimantResponse draft', async () => {
+        draftStoreServiceMock.rejectFind('Error')
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
       it('should render page when everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
@@ -56,6 +75,29 @@ describe('Claimant response: choose how to proceed page', () => {
     describe('for authorized user', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
+      })
+
+      context('when middleware failure', () => {
+        it('should return 500 when cannot retrieve claim by external id', async () => {
+          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ option: FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value })
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+
+        it('should return 500 when cannot retrieve claimantResponse draft', async () => {
+          draftStoreServiceMock.rejectFind('Error')
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ option: FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value })
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
       })
 
       it('should render page when form is invalid and everything is fine', async () => {
