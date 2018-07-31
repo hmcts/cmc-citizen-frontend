@@ -1,6 +1,8 @@
 import * as express from 'express'
 
 import { StatementOfMeansPaths as Paths } from 'response/paths'
+
+import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { StatementOfMeansStateGuard } from 'response/guards/statementOfMeansStateGuard'
 
 import { Form } from 'forms/form'
@@ -23,6 +25,7 @@ function renderView (form: Form<Residence>, res: express.Response): void {
 export default express.Router()
   .get(
     Paths.residencePage.uri,
+    FeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -30,6 +33,7 @@ export default express.Router()
     })
   .post(
     Paths.residencePage.uri,
+    FeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     FormValidator.requestHandler(Residence, Residence.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
