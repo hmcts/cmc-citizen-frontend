@@ -1,0 +1,22 @@
+{% from "table.njk" import row %}
+
+{% macro twoColumnHeadingRow(heading1, heading2, topBorder = false, bottomBorder = true) %}
+  <div class="{% if topBorder %}top-border {% else %}no-top-border {% endif %} {% if bottomBorder %} bottom-border{% else %} no-bottom-border{% endif %}">
+    <div class="column-one-quarter form-label-bold">{{ t(heading1) }}</div>
+    <div class="column-one-half form-label-bold">{{ t(heading2) }}</div>
+  </div>
+{% endmacro %}
+
+{% macro evidenceSummary(evidence) %}
+  {{ twoColumnHeadingRow(t('Type'), t('Description')) }}
+  {% for evidenceRow in evidence %}
+    {{ row(evidenceRow.type.displayValue, evidenceRow.description, false) }}
+  {% endfor %}
+{% endmacro %}
+
+{% macro timelineSummary(timeline) %}
+  {{ twoColumnHeadingRow(t('Date'), t('What happened')) }}
+  {% for timelineRow in timeline %}
+    {{ row(timelineRow.date, timelineRow.description, false) }}
+  {% endfor %}
+{% endmacro %}
