@@ -18,6 +18,16 @@ ccjRequestedForDefendantClaimDetails %}
   claimRejectedFreeMediationYESForClaimantClaimDetails,
   claimRejectedFreeMediationYESForDefendantClaimDetails %}
 
+{% from "./claimStatus/claimPartAdmitted.njk" import
+  claimPartAdmittedToOweForDefendantClaimDetails,
+  claimPartAdmittedToOweForClaimantClaimDetails,
+  claimPartAdmittedAlreadyPaidForDefendantClaimDetails,
+  claimPartAdmittedAlreadyPaidForClaimantClaimDetails%}
+
+{% from "./claimStatus/claimFullyAdmitted.njk" import
+  claimFullAdmissionForDefendantClaimDetails,
+  claimFullAdmissionForClaimantClaimDetails %}
+
 {% from "./claimStatus/offerSubmitted.njk" import
   offerSubmittedForClaimantClaimDetails,
   offerSubmittedForDefendantClaimDetails %}
@@ -49,6 +59,14 @@ ccjRequestedForDefendantClaimDetails %}
           {% else %}
             {{ claimRejectedFreeMediationYESForClaimantClaimDetails(claim) }}
           {% endif %}
+        {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+          {% if claim.response.paymentDeclaration %}
+            {{ claimPartAdmittedAlreadyPaidForClaimantClaimDetails(claim) }}
+          {% else %}
+            {{ claimPartAdmittedToOweForClaimantClaimDetails(claim) }}
+          {% endif %}
+        {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
+          {{ claimFullAdmissionForClaimantClaimDetails(claim) }}
         {% endif %}
       {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
         {{ offerSubmittedForClaimantClaimDetails(claim) }}
@@ -91,6 +109,14 @@ ccjRequestedForDefendantClaimDetails %}
           {% if not claim.settlement and claim.response.defenceType !== DefenceType.ALREADY_PAID %}
             {{ _settleOutOfCourtOption (claim) }}
           {% endif %}
+        {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+          {% if claim.response.paymentDeclaration %}
+            {{ claimPartAdmittedAlreadyPaidForDefendantClaimDetails(claim) }}
+          {% else %}
+            {{ claimPartAdmittedToOweForDefendantClaimDetails(claim) }}
+          {% endif %}
+        {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
+            {{ claimFullAdmissionForDefendantClaimDetails(claim) }}
         {% endif %}
       {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
         {{ offerSubmittedForDefendantClaimDetails(claim) }}
