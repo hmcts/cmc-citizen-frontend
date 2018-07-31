@@ -51,7 +51,7 @@ function removeIllegalCharacters (value) {
   }
 
   if (typeof value === 'object') {
-    return (_.isArray(value) ? _.map : _.mapValues)(value, removeIllegalCharacters)
+    return ((_.isArray(value) ? _.map : _.mapValues) as any)(value, removeIllegalCharacters)
   }
 
   return value
