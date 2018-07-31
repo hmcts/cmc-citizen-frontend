@@ -20,9 +20,9 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = ClaimantResponsePaths.defendantsResponsePage.evaluateUri({ externalId: externalId })
 const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
 
-const defendantFullAdmissionResponseBySetDate = claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj
-const defendantFullAdmissionResponseInstalments = claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj
-const defendantPartAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
+const fullAdmissionResponseWithPaymentBySetDate = claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj
+const fullAdmissionResponseWithPaymentByInstalments = claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj
+const partialAdmissionWithPaymentBySetDate = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
 
 describe('Claimant response: view defendant response page', () => {
   attachDefaultHooks(app)
@@ -48,7 +48,7 @@ describe('Claimant response: view defendant response page', () => {
 
       it('should return 500 and render error page when cannot retrieve claimantResponse draft', async () => {
         draftStoreServiceMock.rejectFind('Error')
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponseInstalments)
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionResponseWithPaymentByInstalments)
 
         await request(app)
           .get(pagePath)
@@ -57,37 +57,33 @@ describe('Claimant response: view defendant response page', () => {
       })
 
       it('should render full admission with instalments page when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponseInstalments)
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionResponseWithPaymentByInstalments)
         draftStoreServiceMock.resolveFind('claimantResponse')
 
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('The defendant’s response'))
-          .expect(res => expect(res).to.be.successful.withText('How they want to pay'))
       })
 
       it('should render full admission with set date page when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponseBySetDate)
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionResponseWithPaymentBySetDate)
         draftStoreServiceMock.resolveFind('claimantResponse')
 
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('The defendant’s response'))
-          .expect(res => expect(res).to.be.successful.withText('Why they can’t pay the full amount now'))
       })
 
       it('should render part admission with SoM page when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartAdmissionResponse)
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(partialAdmissionWithPaymentBySetDate)
         draftStoreServiceMock.resolveFind('claimantResponse')
 
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('The defendant’s response'))
-          .expect(res => expect(res).to.be.successful.withText('Their defence'))
-          .expect(res => expect(res).to.be.successful.withText('Their timeline of events'))
       })
     })
 
@@ -114,7 +110,7 @@ describe('Claimant response: view defendant response page', () => {
 
           it('should return 500 when cannot retrieve claimantResponse draft', async () => {
             draftStoreServiceMock.rejectFind('Error')
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponseInstalments)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionResponseWithPaymentByInstalments)
 
             await request(app)
               .post(pagePath)
@@ -124,7 +120,7 @@ describe('Claimant response: view defendant response page', () => {
           })
 
           it('should return 500 and render error page when cannot save claimantResponse draft', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponseInstalments)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionResponseWithPaymentByInstalments)
             draftStoreServiceMock.resolveFind('claimantResponse')
             draftStoreServiceMock.rejectSave()
 
@@ -136,8 +132,19 @@ describe('Claimant response: view defendant response page', () => {
           })
         })
 
-        it('should redirect to task list page', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponseInstalments)
+        it('should render second part admission page when pagination was requested and everything is fine', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(partialAdmissionWithPaymentBySetDate)
+          draftStoreServiceMock.resolveFind('claimantResponse')
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ action: { showPage: 1 } })
+            .expect(res => expect(res).to.be.successful.withText('How they want to pay'))
+        })
+
+        it('should redirect to task list page when pagination was not requested and everything is fine', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionResponseWithPaymentByInstalments)
           draftStoreServiceMock.resolveFind('claimantResponse')
           draftStoreServiceMock.resolveSave()
 
