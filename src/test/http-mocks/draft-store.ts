@@ -327,7 +327,6 @@ const sampleCCJDraftObj = {
 }
 
 export const sampleClaimantResponseDraftObj = {
-  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
   settleAdmitted: {
     admitted: {
       option: 'yes'
@@ -340,7 +339,8 @@ export const sampleClaimantResponseDraftObj = {
   },
   formaliseRepaymentPlan: {
     option: {
-      value: 'signSettlementAgreement'
+      value: 'signSettlementAgreement',
+      displayValue: 'Sign a settlement agreement'
     }
   },
   settlementAgreement: {
