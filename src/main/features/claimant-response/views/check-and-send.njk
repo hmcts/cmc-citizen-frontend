@@ -37,13 +37,12 @@
 
     {{ tableStart('howYouWnatToProceed', 'How you wish to proceed') }}
     {% if draft.formaliseRepaymentPlan %}
-      {% if draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value %}
-        {% set formaliseRepaymentPlanResponse = 'Sign a settlement agreement' %}
-      {% else %}
-        {% set formaliseRepaymentPlanResponse = 'Request a County Court Judgment (CCJ)' %}
-      {% endif %}
-      {{ row(label = 'How do you want to formalise the repayment plan?', bold = true, value = formaliseRepaymentPlanResponse,
-        changeLink = ClaimantResponsePaths.chooseHowToProceedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+      {{ row(
+        label = 'How do you want to formalise the repayment plan?',
+        bold = true,
+        value = draft.formaliseRepaymentPlan.option | renderFormaliseRepaymentPlanOption,
+        changeLink = ClaimantResponsePaths.chooseHowToProceedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
+      ) }}
     {% endif %}
     {{ tableEnd() }}
 

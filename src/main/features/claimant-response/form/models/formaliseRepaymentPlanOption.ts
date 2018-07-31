@@ -1,20 +1,13 @@
 export class FormaliseRepaymentPlanOption {
-  static readonly SIGN_SETTLEMENT_AGREEMENT = new FormaliseRepaymentPlanOption('signSettlementAgreement')
-  static readonly REQUEST_COUNTY_COURT_JUDGEMENT = new FormaliseRepaymentPlanOption('requestCCJ')
+  static readonly SIGN_SETTLEMENT_AGREEMENT = new FormaliseRepaymentPlanOption('signSettlementAgreement', 'Sign a settlement agreement')
+  static readonly REQUEST_COUNTY_COURT_JUDGEMENT = new FormaliseRepaymentPlanOption('requestCCJ', 'Request a County Court Judgment (CCJ)')
 
-  constructor (readonly value?: string) {}
+  readonly displayValue: string
+  readonly value: string
 
-  static fromObject (input?: any): FormaliseRepaymentPlanOption {
-    if (!input) {
-      return input
-    }
-    if (input === this.SIGN_SETTLEMENT_AGREEMENT.value) {
-      return FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT
-    } else if (input === this.REQUEST_COUNTY_COURT_JUDGEMENT.value) {
-      return FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT
-    } else {
-      return undefined
-    }
+  constructor (value: string, displayValue: string) {
+    this.value = value
+    this.displayValue = displayValue
   }
 
   static all (): FormaliseRepaymentPlanOption[] {
@@ -22,5 +15,11 @@ export class FormaliseRepaymentPlanOption {
       FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT,
       FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT
     ]
+  }
+
+  static valueOf (value: string): FormaliseRepaymentPlanOption {
+    return FormaliseRepaymentPlanOption.all()
+      .filter(type => type.value === value)
+      .pop()
   }
 }

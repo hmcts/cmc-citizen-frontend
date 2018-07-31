@@ -18,7 +18,7 @@ describe('FormaliseRepaymentPlan', () => {
     })
 
     it('should reject with invalid value', () => {
-      const errors = validator.validateSync(new FormaliseRepaymentPlan(new FormaliseRepaymentPlanOption('invalid')))
+      const errors = validator.validateSync(new FormaliseRepaymentPlan(new FormaliseRepaymentPlanOption('invalid', 'value')))
 
       expect(errors.length).to.equal(1)
       expectValidationError(errors, GlobalValidationErrors.SELECT_AN_OPTION)
