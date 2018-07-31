@@ -82,7 +82,7 @@ async function successHandler (res, next) {
 
   if (!claimIsAlreadyFullyPersisted) {
     const roles = await claimStoreClient.retrieveUserRoles(user)
-    const admissionsAllowed = await featureTogglesClient.retrieveUserRoles(user, roles)
+    const admissionsAllowed = await featureTogglesClient.isAdmissionsAllowed(user, roles)
     await claimStoreClient.saveClaim(draft, user, admissionsAllowed)
   }
 
