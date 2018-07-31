@@ -45,7 +45,7 @@ describe('Claimant response: check and send page', () => {
         })
 
         it('should return 500 and render error page when cannot retrieve draft', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj)
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
           draftStoreServiceMock.rejectFind('Error')
 
           await request(app)
@@ -55,7 +55,7 @@ describe('Claimant response: check and send page', () => {
         })
 
         it('should redirect to incomplete submission when not all tasks are completed', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj)
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
           draftStoreServiceMock.resolveFind(draftType, { acceptPaymentMethod: undefined })
 
           await request(app)
@@ -66,7 +66,7 @@ describe('Claimant response: check and send page', () => {
         })
 
         it('should render page when everything is fine', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj)
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
           draftStoreServiceMock.resolveFind(draftType)
 
           await request(app)

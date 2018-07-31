@@ -10,10 +10,9 @@ import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 import {
-  fullAdmissionWithPaymentByInstalmentsData, fullAdmissionWithSoMPaymentByInstalmentsData,
   fullAdmissionWithSoMPaymentBySetDate,
-  partialAdmissionWithPaymentByInstalmentsData, partialAdmissionWithSoMPaymentBySetDateData,
-  statementOfMeansWithMandatoryFieldsOnlyData
+  fullAdmissionWithSoMPaymentByInstalmentsData,
+  partialAdmissionWithSoMPaymentBySetDateData
 } from 'test/data/entity/responseData'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
@@ -115,32 +114,17 @@ export const sampleDefendantResponseObj = {
   }
 }
 
-export const sampleDefendantPartialAdmissionResponseObj = {
-  respondedAt: '2017-07-25T22:45:51.785',
-  response: partialAdmissionWithPaymentByInstalmentsData
-}
-
-export const sampleDefendantFullAdmissionResponseObj = {
-  respondedAt: '2017-07-25T22:45:51.785',
-  response: {
-    ...fullAdmissionWithPaymentByInstalmentsData,
-    statementOfMeans: {
-      ...statementOfMeansWithMandatoryFieldsOnlyData
-    }
-  }
-}
-
-export const sampleDefendantPartialAdmissionResponseWithSoM = {
+export const samplePartialAdmissionWithPaymentBySetDateResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: partialAdmissionWithSoMPaymentBySetDateData
 }
 
-export const sampleDefendantFullAdmissionResponseBySetDateWithSoM = {
+export const sampleFullAdmissionWithPaymentBySetDateResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullAdmissionWithSoMPaymentBySetDate
 }
 
-export const sampleDefendantFullAdmissionByInstalmentsResponseWithSoM = {
+export const sampleFullAdmissionWithPaymentByInstalmentsResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullAdmissionWithSoMPaymentByInstalmentsData
 }

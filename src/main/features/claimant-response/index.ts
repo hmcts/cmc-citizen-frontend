@@ -1,5 +1,3 @@
-import { AgeGroupTypeViewFilter } from 'claimant-response/filters/age-group-type-view-filter'
-import { YesNoViewFilter } from 'claimant-response/filters/yes-no-view-filter'
 import * as express from 'express'
 import * as path from 'path'
 
@@ -20,6 +18,8 @@ import { ResidenceTypeViewFilter } from 'claimant-response/filters/residence-typ
 import { PaymentScheduleTypeViewFilter } from 'claimant-response/filters/payment-schedule-type-view-filter'
 import { IncomeTypeViewFilter } from 'claimant-response/filters/income-type-view-filter'
 import { ExpenseTypeViewFilter } from 'claimant-response/filters/expense-type-view-filter'
+import { AgeGroupTypeViewFilter } from 'claimant-response/filters/age-group-type-view-filter'
+import { YesNoViewFilter } from 'claimant-response/filters/yes-no-view-filter'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {

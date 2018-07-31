@@ -20,10 +20,9 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = ClaimantResponsePaths.defendantsResponsePage.evaluateUri({ externalId: externalId })
 const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
 
-const defendantFullAdmissionResponse = claimStoreServiceMock.sampleDefendantFullAdmissionResponseObj
-const defendantFullAdmissionResponseInstalments = claimStoreServiceMock.sampleDefendantFullAdmissionByInstalmentsResponseWithSoM
-const defendantFullAdmissionResponseBySetDate = claimStoreServiceMock.sampleDefendantFullAdmissionResponseBySetDateWithSoM
-const defendantPartAdmissionResponseWithSoM = claimStoreServiceMock.sampleDefendantPartialAdmissionResponseWithSoM
+const defendantFullAdmissionResponseBySetDate = claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj
+const defendantFullAdmissionResponseInstalments = claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj
+const defendantPartAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
 
 describe('Claimant response: view defendant response page', () => {
   attachDefaultHooks(app)
@@ -49,7 +48,7 @@ describe('Claimant response: view defendant response page', () => {
 
       it('should return 500 and render error page when cannot retrieve claimantResponse draft', async () => {
         draftStoreServiceMock.rejectFind('Error')
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponseInstalments)
 
         await request(app)
           .get(pagePath)
@@ -80,7 +79,7 @@ describe('Claimant response: view defendant response page', () => {
       })
 
       it('should render part admission with SoM page when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartAdmissionResponseWithSoM)
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartAdmissionResponse)
         draftStoreServiceMock.resolveFind('claimantResponse')
 
         await request(app)
@@ -115,7 +114,7 @@ describe('Claimant response: view defendant response page', () => {
 
           it('should return 500 when cannot retrieve claimantResponse draft', async () => {
             draftStoreServiceMock.rejectFind('Error')
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponseInstalments)
 
             await request(app)
               .post(pagePath)
@@ -125,7 +124,7 @@ describe('Claimant response: view defendant response page', () => {
           })
 
           it('should return 500 and render error page when cannot save claimantResponse draft', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponseInstalments)
             draftStoreServiceMock.resolveFind('claimantResponse')
             draftStoreServiceMock.rejectSave()
 
@@ -138,7 +137,7 @@ describe('Claimant response: view defendant response page', () => {
         })
 
         it('should redirect to task list page', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponseInstalments)
           draftStoreServiceMock.resolveFind('claimantResponse')
           draftStoreServiceMock.resolveSave()
 

@@ -24,7 +24,7 @@ describe('Claimant response task list builder', () => {
   let draft: DraftClaimantResponse
 
   beforeEach(() => {
-    claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleDefendantFullAdmissionResponseObj })
+    claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj })
     draft = new DraftClaimantResponse().deserialize({})
   })
 

@@ -95,7 +95,10 @@ describe('IncomeExpenseSource', () => {
       } as Income
       expect(IncomeExpenseSource.fromClaimIncome(income)).to.deep.equal({
         amount: 200,
-        schedule: { value: 'WEEK', valueInMonths: 4.333333333333333 }
+        schedule: {
+          value: 'WEEK',
+          valueInMonths: 4.333333333333333
+        }
       })
     })
   })
