@@ -11,7 +11,7 @@
         {{ csrfProtection(csrf) }}
 
         <p>{{ t('Make it clear what you will do and by when. For example: "I will pay you £240 on {{ nextMonth }} by bank transfer".',
-            {nextMonth: 'now' | addDays(30) | inputDate}) }}</p>
+            { nextMonth: 'now' | addDays(30) | inputDate }) }}</p>
 
         <p>{{ t('If you’re also asking {{ claimantName }} to do something, say clearly what it is and by when it should be done. For example: "You will fix the roof by {{ twoWeeksLater }}."',
             { claimantName: claim.claimData.claimant.name, twoWeeksLater: 'now' | addDays(44) | inputDate }) }}</p>
