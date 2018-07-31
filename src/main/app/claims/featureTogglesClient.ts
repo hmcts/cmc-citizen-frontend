@@ -3,7 +3,7 @@ import { User } from 'idam/user'
 import * as config from 'config'
 
 export const featureTogglesApiBaseUrl: string = `${config.get<string>('feature-toggles-api.url')}`
-const featureTogglesApiUrl: string = `${featureTogglesApiBaseUrl}/api/ff4j/check/cmc_admissions`
+const featureTogglesApiUrl: string = `${featureTogglesApiBaseUrl}/api/ff4j/check`
 
 export class FeatureTogglesClient {
   constructor (private request: RequestPromiseAPI = requestPromiseApi) {
@@ -16,7 +16,7 @@ export class FeatureTogglesClient {
     }
 
     return this.request
-      .get(`${featureTogglesApiUrl}`, {
+      .get(`${featureTogglesApiUrl}/cmc_admissions`, {
         headers: {
           'X-USER-ID': `${user.email}`,
           'X-USER-PERMISSIONS': permissions

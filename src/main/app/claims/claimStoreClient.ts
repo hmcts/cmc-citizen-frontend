@@ -14,21 +14,19 @@ import { Logger } from '@hmcts/nodejs-logging'
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
 const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
-const claimStoreFeatureTogglesPermissionsApiUrl: string = `${claimApiBaseUrl}/users/roles`
 
 const logger = Logger.getLogger('claims/claimStoreClient')
 
-function getHeaders (claimant: User, admissionsAllowed: boolean) {
-  if (admissionsAllowed) {
-    return {
-      Authorization: `Bearer ${claimant.bearerToken}`,
-      features: 'admissions'
-    }
-  } else {
-    return {
-      Authorization: `Bearer ${claimant.bearerToken}`
-    }
+function getHeaders (claimant: User, admissionsAllowed: boolean): object {
+  let headers = {
+    Authorization: `Bearer ${claimant.bearerToken}`
   }
+
+  if (admissionsAllowed) {
+    headers['Features'] = 'admissions'
+  }
+
+  return headers
 }
 
 export class ClaimStoreClient {
@@ -48,12 +46,10 @@ export class ClaimStoreClient {
 
   saveClaim (draft: Draft<DraftClaim>, claimant: User, admissionsAllowed: boolean): Promise<Claim> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
-    const headers = getHeaders(claimant , admissionsAllowed)
-
     return this.request
       .post(`${claimStoreApiUrl}/${claimant.id}`, {
         body: convertedDraftClaim,
-        headers: headers
+        headers: getHeaders(claimant, admissionsAllowed)
       })
       .then(claim => {
         return new Claim().deserialize(claim)
@@ -192,7 +188,7 @@ export class ClaimStoreClient {
     }
 
     return this.request
-      .get(`${claimStoreFeatureTogglesPermissionsApiUrl}`, {
+      .get(`${claimApiBaseUrl}/users/roles`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }
