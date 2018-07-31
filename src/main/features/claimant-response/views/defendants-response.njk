@@ -34,6 +34,7 @@
   {% endif %}
   <p>{{ t('The defendant suggested this repayment plan:') }}</p>
   {{ paymentPlanTable(
+      id = 'payment-table',
       instalmentAmount = repaymentPlan.instalmentAmount,
       firstPaymentDate = repaymentPlan.firstPaymentDate,
       lastPaymentOn = paymentPlan.getLastPaymentDate(),

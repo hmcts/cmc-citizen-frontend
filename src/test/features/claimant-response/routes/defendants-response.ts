@@ -20,6 +20,7 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = ClaimantResponsePaths.defendantsResponsePage.evaluateUri({ externalId: externalId })
 const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
 
+const defendantFullAdmissionResponse = claimStoreServiceMock.sampleDefendantFullAdmissionResponseObj
 const defendantFullAdmissionResponseInstalments = claimStoreServiceMock.sampleDefendantFullAdmissionByInstalmentsResponseWithSoM
 const defendantFullAdmissionResponseBySetDate = claimStoreServiceMock.sampleDefendantFullAdmissionResponseBySetDateWithSoM
 const defendantPartAdmissionResponseWithSoM = claimStoreServiceMock.sampleDefendantPartialAdmissionResponseWithSoM
@@ -48,7 +49,7 @@ describe('Claimant response: view defendant response page', () => {
 
       it('should return 500 and render error page when cannot retrieve claimantResponse draft', async () => {
         draftStoreServiceMock.rejectFind('Error')
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponseInstalments)
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
 
         await request(app)
           .get(pagePath)
@@ -114,7 +115,19 @@ describe('Claimant response: view defendant response page', () => {
 
           it('should return 500 when cannot retrieve claimantResponse draft', async () => {
             draftStoreServiceMock.rejectFind('Error')
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponseInstalments)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ viewedDefendantResponse: true })
+              .expect(res => expect(res).to.be.serverError.withText('Error'))
+          })
+
+          it('should return 500 and render error page when cannot save claimantResponse draft', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
+            draftStoreServiceMock.resolveFind('claimantResponse')
+            draftStoreServiceMock.rejectSave()
 
             await request(app)
               .post(pagePath)
@@ -123,8 +136,9 @@ describe('Claimant response: view defendant response page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
         })
-        it('should redirect to task list page with full admission by instalments', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponseInstalments)
+
+        it('should redirect to task list page', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
           draftStoreServiceMock.resolveFind('claimantResponse')
           draftStoreServiceMock.resolveSave()
 
@@ -133,18 +147,6 @@ describe('Claimant response: view defendant response page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .send({ viewedDefendantResponse: true })
             .expect(res => expect(res).to.be.redirect.toLocation(taskListPagePath))
-        })
-
-        it('should return 500 and render error page when cannot save claimantResponse draft', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponseInstalments)
-          draftStoreServiceMock.resolveFind('claimantResponse')
-          draftStoreServiceMock.rejectSave()
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send({ viewedDefendantResponse: true })
-            .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
       })

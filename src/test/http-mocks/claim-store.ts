@@ -10,10 +10,10 @@ import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 import {
-  fullAdmissionWithSoMPaymentByInstalmentsData,
+  fullAdmissionWithPaymentByInstalmentsData, fullAdmissionWithSoMPaymentByInstalmentsData,
   fullAdmissionWithSoMPaymentBySetDate,
-  partialAdmissionWithPaymentBySetDateData,
-  partialAdmissionWithSoMPaymentBySetDateData
+  partialAdmissionWithPaymentByInstalmentsData, partialAdmissionWithSoMPaymentBySetDateData,
+  statementOfMeansWithMandatoryFieldsOnlyData
 } from 'test/data/entity/responseData'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
@@ -117,7 +117,22 @@ export const sampleDefendantResponseObj = {
 
 export const sampleDefendantPartialAdmissionResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
-  response: partialAdmissionWithPaymentBySetDateData
+  response: partialAdmissionWithPaymentByInstalmentsData
+}
+
+export const sampleDefendantFullAdmissionResponseObj = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: {
+    ...fullAdmissionWithPaymentByInstalmentsData,
+    statementOfMeans: {
+      ...statementOfMeansWithMandatoryFieldsOnlyData
+    }
+  }
+}
+
+export const sampleDefendantPartialAdmissionResponseWithSoM = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: partialAdmissionWithSoMPaymentBySetDateData
 }
 
 export const sampleDefendantFullAdmissionResponseBySetDateWithSoM = {
@@ -128,11 +143,6 @@ export const sampleDefendantFullAdmissionResponseBySetDateWithSoM = {
 export const sampleDefendantFullAdmissionByInstalmentsResponseWithSoM = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullAdmissionWithSoMPaymentByInstalmentsData
-}
-
-export const sampleDefendantPartialAdmissionResponseWithSoM = {
-  respondedAt: '2017-07-25T22:45:51.785',
-  response: partialAdmissionWithSoMPaymentBySetDateData
 }
 
 export function mockCalculateInterestRate (expected: number): mock.Scope {

@@ -223,48 +223,21 @@ export const statementOfMeansWithAllFieldsData = {
 }
 
 export const fullAdmissionWithSoMPaymentBySetDate = {
-  ...baseResponseData,
-  ...baseFullAdmissionData,
-  paymentIntention: {
-    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
-    paymentDate: '2050-12-31',
-    repaymentPlan: {
-      instalmentAmount: 100,
-      firstPaymentDate: '2050-12-31',
-      paymentSchedule: PaymentSchedule.EACH_WEEK
-    }
-  },
+  ...fullAdmissionWithPaymentBySetDateData,
   statementOfMeans: {
     ...statementOfMeansWithAllFieldsData
   }
 }
 
 export const fullAdmissionWithSoMPaymentByInstalmentsData = {
-  ...baseResponseData,
-  ...baseFullAdmissionData,
-  paymentIntention: {
-    paymentOption: PaymentOption.INSTALMENTS,
-    repaymentPlan: {
-      instalmentAmount: 100,
-      firstPaymentDate: '2050-12-31',
-      paymentSchedule: PaymentSchedule.EACH_WEEK
-    }
-  },
+  ...fullAdmissionWithPaymentByInstalmentsData,
   statementOfMeans: {
     ...statementOfMeansWithAllFieldsData
   }
 }
 
 export const partialAdmissionWithSoMPaymentBySetDateData = {
-  ...baseResponseData,
-  ...basePartialAdmissionData,
-  ...basePartialEvidencesAndTimeLines,
-  defence: 'i have paid more than enough',
-  paymentIntention: {
-    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
-    paymentDate: '2050-12-31'
-  },
-  amount: 3000,
+  ...partialAdmissionWithPaymentBySetDateData,
   statementOfMeans: {
     ...statementOfMeansWithAllFieldsData
   }
