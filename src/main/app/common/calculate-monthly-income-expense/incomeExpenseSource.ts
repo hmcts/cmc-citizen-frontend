@@ -65,11 +65,9 @@ export class IncomeExpenseSource {
       return undefined
     }
 
-    const schedule: string = income.frequency ? income.frequency : undefined
-
     return new IncomeExpenseSource(
       toNumberOrUndefined(income.amountReceived),
-      toIncomeExpenseScheduleOrUndefined(schedule)
+      toIncomeExpenseScheduleOrUndefined(income.frequency)
     )
   }
 
@@ -78,11 +76,9 @@ export class IncomeExpenseSource {
       return undefined
     }
 
-    const schedule: string = expense.frequency ? expense.frequency : undefined
-
     return new IncomeExpenseSource(
       toNumberOrUndefined(expense.amountPaid),
-      toIncomeExpenseScheduleOrUndefined(schedule)
+      toIncomeExpenseScheduleOrUndefined(expense.frequency)
     )
   }
 }
