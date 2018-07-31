@@ -1,8 +1,6 @@
 import * as express from 'express'
 
-import { StatementOfMeansPaths, Paths as Paths } from 'response/paths'
-
-import { FeatureToggleGuard } from 'guards/featureToggleGuard'
+import { Paths as Paths, StatementOfMeansPaths } from 'response/paths'
 import { StatementOfMeansStateGuard } from 'response/guards/statementOfMeansStateGuard'
 
 import { Form } from 'forms/form'
@@ -25,7 +23,6 @@ function renderView (form: Form<Explanation>, res: express.Response) {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(StatementOfMeansPaths.explanationPage.uri,
-    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     StatementOfMeansStateGuard.requestHandler(),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -33,7 +30,6 @@ export default express.Router()
     }))
   .post(
     StatementOfMeansPaths.explanationPage.uri,
-    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     StatementOfMeansStateGuard.requestHandler(),
     FormValidator.requestHandler(Explanation),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {

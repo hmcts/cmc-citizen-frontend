@@ -10,7 +10,7 @@ export class FeatureTogglesClient {
     // Nothing to do
   }
 
-  retrieveUserRoles (user: User, permissions: string): Promise<boolean> {
+  isAdmissionsAllowed (user: User, permissions: string): Promise<boolean> {
     if (!user) {
       return Promise.reject(new Error('user must be set'))
     }

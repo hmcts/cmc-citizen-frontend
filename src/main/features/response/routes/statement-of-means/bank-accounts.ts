@@ -1,8 +1,6 @@
 import * as express from 'express'
 
 import { StatementOfMeansPaths } from 'response/paths'
-
-import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { StatementOfMeansStateGuard } from 'response/guards/statementOfMeansStateGuard'
 
 import { Form } from 'forms/form'
@@ -37,7 +35,6 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 export default express.Router()
   .get(
     page.uri,
-    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     StatementOfMeansStateGuard.requestHandler(),
     async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -45,7 +42,6 @@ export default express.Router()
     })
   .post(
     page.uri,
-    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
     StatementOfMeansStateGuard.requestHandler(),
     FormValidator.requestHandler(BankAccounts, BankAccounts.fromObject, undefined, ['addRow']),
     actionHandler,
