@@ -1,0 +1,8 @@
+{% import "table.njk" as table %}
+
+{% macro timelineSummary(timeline) %}
+  {{ table.twoColumnHeadingRow(t('Date'), t('What happened')) }}
+  {% for timelineRow in timeline %}
+    {{ table.row(timelineRow.date, timelineRow.description, false) }}
+  {% endfor %}
+{% endmacro %}

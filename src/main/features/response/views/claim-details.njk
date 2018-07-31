@@ -4,6 +4,8 @@
 
 {% from "form.njk" import csrfProtection %}
 {% from "amountBreakdown.njk" import amountBreakdownTable %}
+{% from "timelineSummary.njk" import timelineSummary %}
+{% from "evidenceSummary.njk" import evidenceSummary %}
 
 {% block content %}
   <div class="grid-row">
@@ -14,6 +16,16 @@
       {{ amountBreakdownTable('View amount breakdown', claim, interestData) }}
       <p><span class="bold-small">{{ t('Reason for claim') }}:</span></p>
       <p>{{ claim.claimData.reason }}</p>
+
+      <p><span class="bold-small">Timeline</span></p>
+      {{ timelineSummary(claim.claimData.timeline.getPopulatedRowsOnly()) }}
+
+      {% set evidenceRows = claim.claimData.evidence.getPopulatedRowsOnly() %}
+      {% if 0 < evidenceRows | length %}
+        <p><span class="bold-small">Evidence</span></p>
+        {{ evidenceSummary(evidenceRows) }}
+      {% endif %}
+
       <p><span class="bold-small">{{ t('Download the claim') }}</span></p>
       <p><a href="{{ pdfUrl.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download claim') }}</a> ({{ t('PDF') }})</p>
     </div>

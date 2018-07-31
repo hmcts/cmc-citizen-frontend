@@ -1,0 +1,8 @@
+{% import "table.njk" as table %}
+
+{% macro evidenceSummary(evidence) %}
+  {{ table.twoColumnHeadingRow(t('Type'), t('Description')) }}
+  {% for evidenceRow in evidence %}
+    {{ table.row(evidenceRow.type.displayValue, evidenceRow.description, false) }}
+  {% endfor %}
+{% endmacro %}
