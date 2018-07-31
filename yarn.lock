@@ -1415,14 +1415,14 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codeceptjs@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/codeceptjs/-/codeceptjs-1.3.0.tgz#616959d82ec4865b47eb94cbd1a1469364a1529d"
+codeceptjs@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/codeceptjs/-/codeceptjs-1.3.2.tgz#9d309bcbcef022dd4dc18bb16e4df46111c3cd4d"
   dependencies:
     chalk "^1.1.3"
-    commander "^2.14.1"
+    commander "^2.16.0"
     css-to-xpath "^0.1.0"
-    cucumber-expressions "^6.0.0"
+    cucumber-expressions "^6.0.1"
     escape-string-regexp "^1.0.3"
     fn-args "^3.0.0"
     gherkin "^5.1.0"
@@ -1430,9 +1430,9 @@ codeceptjs@^1.3.0:
     inquirer "^0.11.0"
     mkdirp "^0.5.1"
     mocha "^4.1.0"
-    parse-function "^5.2.7"
+    parse-function "^5.2.10"
     promise-retry "^1.1.1"
-    requireg "^0.1.5"
+    requireg "^0.1.8"
     sprintf-js "^1.1.1"
 
 codecov@^3.0.0:
@@ -1501,6 +1501,10 @@ commander@^2.12.1, commander@^2.9.0, commander@^2.x:
 commander@^2.14.1:
   version "2.14.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.14.1.tgz#2235123e37af8ca3c65df45b026dbd357b01b9aa"
+
+commander@^2.16.0:
+  version "2.16.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.16.0.tgz#f16390593996ceb4f3eeb020b31d78528f7f8a50"
 
 commander@~2.8.1:
   version "2.8.1"
@@ -1745,7 +1749,7 @@ csurf@^1.9.0:
     csrf "~3.0.3"
     http-errors "~1.5.0"
 
-cucumber-expressions@^6.0.0:
+cucumber-expressions@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/cucumber-expressions/-/cucumber-expressions-6.0.1.tgz#47c9c573781c2ff721d7ad5b2cd1c97f4399ab8e"
   dependencies:
@@ -1889,9 +1893,9 @@ deep-equal@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.0.1.tgz#f5d260292b660e084eff4cdbc9f08ad3247448b5"
 
-deep-extend@~0.2.5:
-  version "0.2.11"
-  resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.2.11.tgz#7a16ba69729132340506170494bc83f7076fe08f"
+deep-extend@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.6.0.tgz#c4fa7c95404a17a9c3e8ca7e1537312b736330ac"
 
 deep-extend@~0.4.0:
   version "0.4.2"
@@ -5052,7 +5056,7 @@ minimist@^1.1.0, minimist@^1.1.3, minimist@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.0.tgz#a35008b20f41383eec1fb914f4cd5df79a264284"
 
-minimist@~0.0.1, minimist@~0.0.7:
+minimist@~0.0.1:
   version "0.0.10"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-0.0.10.tgz#de3f98543dbf96082be48ad1a0c7cda836301dcf"
 
@@ -5231,11 +5235,9 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
-nested-error-stacks@~2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/nested-error-stacks/-/nested-error-stacks-2.0.0.tgz#98b2ffaefb4610fa3936f1e71435d30700de2840"
-  dependencies:
-    inherits "~2.0.1"
+nested-error-stacks@~2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/nested-error-stacks/-/nested-error-stacks-2.0.1.tgz#d2cc9fc5235ddb371fc44d506234339c8e4b0a4b"
 
 nise@^1.3.3:
   version "1.4.1"
@@ -5772,7 +5774,7 @@ parse-filepath@^1.0.1:
     map-cache "^0.2.0"
     path-root "^0.1.1"
 
-parse-function@^5.2.7:
+parse-function@^5.2.10:
   version "5.2.10"
   resolved "https://registry.yarnpkg.com/parse-function/-/parse-function-5.2.10.tgz#6a057d5d7b2a026aed81bd26cb6863b5741de25f"
   dependencies:
@@ -6162,14 +6164,14 @@ rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-rc@~1.0.0:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/rc/-/rc-1.0.3.tgz#51bf28d21f13a9324528a9633460161ad9a39f77"
+rc@~1.2.7:
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/rc/-/rc-1.2.8.tgz#cd924bf5200a075b83c188cd6b9e211b7fc0d3ed"
   dependencies:
-    deep-extend "~0.2.5"
+    deep-extend "^0.6.0"
     ini "~1.3.0"
-    minimist "~0.0.7"
-    strip-json-comments "0.1.x"
+    minimist "^1.2.0"
+    strip-json-comments "~2.0.1"
 
 react-dom@^16.0.0:
   version "16.2.0"
@@ -6522,13 +6524,13 @@ require-uncached@^1.0.2:
     caller-path "^0.1.0"
     resolve-from "^1.0.0"
 
-requireg@^0.1.5:
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/requireg/-/requireg-0.1.7.tgz#9d5210d2af9c718bdaba3c2a0cefebbc846b56c5"
+requireg@^0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/requireg/-/requireg-0.1.8.tgz#75c1d495294fa5ddfd51e4fcca4965c44f1ed8b1"
   dependencies:
-    nested-error-stacks "~2.0.0"
-    rc "~1.0.0"
-    resolve "~0.6.1"
+    nested-error-stacks "~2.0.1"
+    rc "~1.2.7"
+    resolve "~1.7.1"
 
 resolve-dir@^0.1.0:
   version "0.1.1"
@@ -6568,9 +6570,11 @@ resolve@^1.1.6, resolve@^1.1.7, resolve@^1.3.2, resolve@^1.4.0:
   dependencies:
     path-parse "^1.0.5"
 
-resolve@~0.6.1:
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/resolve/-/resolve-0.6.3.tgz#dd957982e7e736debdf53b58a4dd91754575dd46"
+resolve@~1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.7.1.tgz#aadd656374fd298aee895bc026b8297418677fd3"
+  dependencies:
+    path-parse "^1.0.5"
 
 restore-cursor@^1.0.1:
   version "1.0.1"
@@ -7202,10 +7206,6 @@ strip-indent@^1.0.1:
 strip-indent@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/strip-indent/-/strip-indent-2.0.0.tgz#5ef8db295d01e6ed6cbf7aab96998d7822527b68"
-
-strip-json-comments@0.1.x:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-0.1.3.tgz#164c64e370a8a3cc00c9e01b539e569823f0ee54"
 
 strip-json-comments@~1.0.1:
   version "1.0.4"
