@@ -1,8 +1,8 @@
 import * as express from 'express'
 
-import { Paths } from '../paths'
+import { TaskList } from 'main/common/components/task-list/model'
 
-import { TaskList } from 'main/common/components/task-list/model/task-list'
+import { Paths } from '../paths'
 
 export abstract class AbstractTaskListPage {
   constructor (private heading: string) {}
@@ -14,7 +14,7 @@ export abstract class AbstractTaskListPage {
       .get(path + Paths.taskListPage.uri,
         ...guards,
         (req: express.Request, res: express.Response) => {
-          res.render('components/task-list/task-list',
+          res.render('components/task-list/pages/task-list',
             {
               heading: this.heading,
               taskList: this.buildTaskList(res)

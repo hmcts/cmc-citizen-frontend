@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { TaskList } from 'shared/components/task-list/model/task-list'
+import { TaskList } from 'shared/components/task-list/model'
 
 import { Logger } from '@hmcts/nodejs-logging'
 

@@ -1,5 +1,6 @@
 import * as express from 'express'
-import { TaskList } from 'main/common/components/task-list/model/task-list'
+
+import { TaskList } from 'main/common/components/task-list/model'
 
 import { Paths } from 'main/common/components/task-list/paths'
 
@@ -15,7 +16,7 @@ export abstract class AbstractIncompleteTaskListPage {
       .get(path + Paths.incompleteTaskListPage.uri,
         ...guards,
         (req: express.Request, res: express.Response) => {
-          res.render('components/task-list/incomplete-task-list', {
+          res.render('components/task-list/pages/incomplete-task-list', {
             heading: this.heading,
             taskList: this.buildTaskList(res),
             taskListUri: this.buildTaskListPath(req, res)

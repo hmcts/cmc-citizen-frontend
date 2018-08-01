@@ -2,7 +2,7 @@ import { TaskListBuilder } from 'claimant-response/helpers/taskListBuilder'
 import { Claim } from 'claims/models/claim'
 import * as express from 'express'
 
-import { TaskList } from 'shared/components/task-list/model/task-list'
+import { TaskList } from 'shared/components/task-list/model'
 import { AbstractAllTasksCompletedGuard } from 'shared/components/task-list/guards/allTasksCompletedGuard'
 
 import { Paths } from 'claimant-response/paths'
@@ -24,7 +24,7 @@ class AllTasksCompletedGuard extends AbstractAllTasksCompletedGuard {
   }
 }
 
-const stateGuard: AllTasksCompletedGuard = new AllTasksCompletedGuard(Paths.incompleteSubmissionPage)
+const stateGuard: AllTasksCompletedGuard = new AllTasksCompletedGuard()
 
 /* tslint:disable:no-default-export */
 export default express.Router()

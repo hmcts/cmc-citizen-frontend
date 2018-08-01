@@ -1,4 +1,4 @@
-import { ITaskListBuilder, TaskListSection, Task, TaskList } from 'shared/components/task-list/model/task-list'
+import { ITaskListBuilder, TaskListSection, Task, TaskList } from 'shared/components/task-list/model'
 
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { Claim } from 'claims/models/claim'
@@ -103,4 +103,3 @@ export class TaskListBuilder implements ITaskListBuilder<[DraftClaimantResponse,
     ])
   }
 }
-

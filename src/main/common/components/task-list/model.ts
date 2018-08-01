@@ -9,6 +9,13 @@ export class TaskList {
     return this.sections.every((section: TaskListSection) => section.completed === true)
   }
 
+  get tasks (): Task[] {
+    return this.sections.reduce((tasks: Task[], section: TaskListSection): Task[] => {
+      tasks.push(...section.tasks)
+      return tasks
+    }, [])
+  }
+
   get remainingTasks (): Task[] {
     return this.sections.reduce((tasks: Task[], section: TaskListSection): Task[] => {
       tasks.push(...section.remainingTasks)
