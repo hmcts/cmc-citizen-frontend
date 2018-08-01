@@ -1,9 +1,9 @@
 {% from "table.njk" import row %}
 
-{% macro twoColumnHeadingRow(heading1, heading2, topBorder = false, bottomBorder = true) %}
-  <div class="{% if topBorder %}top-border {% else %}no-top-border {% endif %} {% if bottomBorder %} bottom-border{% else %} no-bottom-border{% endif %}">
-    <div class="column-one-quarter form-label-bold">{{ t(heading1) }}</div>
-    <div class="column-one-half form-label-bold">{{ t(heading2) }}</div>
+{% macro twoColumnHeadingRow(labelHeading, valueHeading, topBorder = false, bottomBorder = true) %}
+  <div class="{% if topBorder %}top-border{% else %}no-top-border{% endif %} {% if bottomBorder %}bottom-border{% else %}no-bottom-border{% endif %}">
+    <div class="column-one-quarter form-label-bold">{{ t(labelHeading) }}</div>
+    <div class="column-one-half form-label-bold">{{ t(valueHeading) }}</div>
   </div>
 {% endmacro %}
 
