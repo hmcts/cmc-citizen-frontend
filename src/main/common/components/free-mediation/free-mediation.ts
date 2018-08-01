@@ -14,6 +14,7 @@ import { ErrorHandling } from 'main/common/errorHandling'
 
 /* tslint:disable:no-default-export */
 export abstract class AbstractFreeMediationPage {
+
   abstract redirectUri (req: express.Request, res: express.Response): string
 
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
@@ -49,13 +50,17 @@ export abstract class AbstractFreeMediationPage {
 
   private static renderView (form: Form<FreeMediation>, res: express.Response) {
     const claim: Claim = res.locals.claim
-    // const draft: any = res.locals.draft
-    // const amount = draft.isResponsePartiallyAdmitted() ? draft.partialAdmission.howMuchDoYouOwe.amount : 0
+    const draft: any = res.locals.draft
+    let amount: number = 0
+
+    if (typeof draft.document.isResponsePartiallyAdmitted === 'function') {
+      amount = draft.document.isResponsePartiallyAdmitted() ? draft.document.partialAdmission.howMuchDoYouOwe.amount : 0
+    }
 
     res.render('components/free-mediation/free-mediation', {
       form: form,
       claimantFullName: claim.claimData.claimant.name,
-      // amount: amount
+      amount: amount
     })
   }
 }
