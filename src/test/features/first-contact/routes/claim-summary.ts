@@ -52,6 +52,19 @@ describe('Defendant first contact: claim summary page', () => {
           .set('Cookie', `${cookieName}=ABC;state=000MC001`)
           .expect(res => expect(res).to.be.successful.withText('Claim details'))
       })
+
+      it('should include evidence section when evidence was provided', async () => {
+        claimStoreServiceMock.resolveRetrieveByLetterHolderId(
+          '000MC001',
+          claimStoreServiceMock.sampleClaimDataWithEvidence
+        )
+
+        await request(app)
+          .get(Paths.claimSummaryPage.uri)
+          .set('Cookie', `${cookieName}=ABC;state=000MC001`)
+          .expect(res => expect(res).to.be.successful.withText('Evidence'))
+      })
+
     })
   })
 

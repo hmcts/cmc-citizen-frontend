@@ -10,6 +10,7 @@ import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 import { partialAdmissionWithPaymentByInstalmentsData } from 'test/data/entity/responseData'
+import { EvidenceType } from 'forms/models/evidenceType'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
@@ -87,6 +88,18 @@ export const sampleClaimObj = {
         offer: { content: 'offer text', completionDate: '2017-08-08' }
       }
     ]
+  }
+}
+
+export const sampleClaimDataWithEvidence = {
+  claim: {
+    ...sampleClaimObj.claim,
+    evidence: {
+      rows: [{
+        type: EvidenceType.PHOTO,
+        description: 'my photo evidence'
+      }]
+    }
   }
 }
 
