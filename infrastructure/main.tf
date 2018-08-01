@@ -20,6 +20,7 @@ locals {
 
   s2sUrl = "http://rpe-service-auth-provider-${local.local_env}.service.${local.local_ase}.internal"
   claimStoreUrl = "http://cmc-claim-store-${local.local_env}.service.${local.local_ase}.internal"
+  featureTogglesApiUrl = "http://rpe-feature-toggle-api-${local.local_env}.service.core-compute-${local.local_ase}.internal"
   draftStoreUrl = "http://draft-store-service-${local.local_env}.service.${local.local_ase}.internal"
 }
 
@@ -109,6 +110,7 @@ module "citizen-frontend" {
     // Our service dependencies
     CLAIM_STORE_URL = "${local.claimStoreUrl}"
 
+    FEATURE_TOGGLES_API_URL = "${local.featureTogglesApiUrl}"
     // Surveys
     SERVICE_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPT1/"
     FEEDBACK_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPFB/"
