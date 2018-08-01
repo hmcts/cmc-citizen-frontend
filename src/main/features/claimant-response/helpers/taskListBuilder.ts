@@ -86,7 +86,7 @@ function buildSubmitSection (draft: DraftClaimantResponse, externalId: string): 
     new Task(
       'Check and submit your response',
       Paths.checkAndSendPage.evaluateUri({ externalId: externalId }),
-      false
+      undefined
     )
   )
   return new Section('Submit', tasks)

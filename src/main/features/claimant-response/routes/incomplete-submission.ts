@@ -1,24 +1,29 @@
 import * as express from 'express'
 
-import { Draft } from '@hmcts/draft-store-client'
-import { Paths } from 'claimant-response/paths'
+import { AbstractIncompleteTaskListPage } from 'shared/components/task-list/incomplete-task-list'
+import { TaskList } from 'shared/components/task-list/model/task-list'
+
+import { claimantResponsePath, Paths } from 'claimant-response/paths'
+
 import { TaskListBuilder } from 'claimant-response/helpers/taskListBuilder'
+import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { Claim } from 'claims/models/claim'
-import { ErrorHandling } from 'shared/errorHandling'
+
+class IncompleteTaskListPage extends AbstractIncompleteTaskListPage {
+  buildTaskList (res: express.Response): TaskList {
+    const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
+    const claim: Claim = res.locals.claim
+
+    return new TaskListBuilder().build([draft.document, claim])
+  }
+
+  buildTaskListPath (req: express.Request, res: express.Response): string {
+    const { externalId } = req.params
+    return Paths.taskListPage.evaluateUri({ externalId: externalId })
+  }
+}
 
 /* tslint:disable:no-default-export */
-export default express.Router()
-  .get(Paths.incompleteSubmissionPage.uri,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
-      const claim: Claim = res.locals.claim
-
-      res.render(Paths.incompleteSubmissionPage.associatedView,
-        {
-          taskListUri: Paths.taskListPage.evaluateUri({ externalId: claim.externalId }),
-          tasks: TaskListBuilder.buildRemainingTasks(draft.document, claim)
-        }
-      )
-    })
-  )
+export default new IncompleteTaskListPage('You need to complete all sections before you submit your response')
+  .buildRouter(claimantResponsePath)
