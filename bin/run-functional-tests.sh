@@ -1,6 +1,11 @@
 #!/bin/bash
 set -ex
 
+if [[ ${TEST_URL} = *"sprod"*  ]]; then
+  echo "Not running functional tests on sprod, due to pay being skipped"
+  exit 0
+fi
+
 ADDITIONAL_COMPOSE_FILE="docker-compose.functional-tests.yml -f docker-compose.yml"
 
 function shutdownDocker() {
