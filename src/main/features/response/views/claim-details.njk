@@ -6,6 +6,8 @@
 {% from "amountBreakdown.njk" import amountBreakdownTable %}
 {% from "summaryTable.njk" import timelineSummary, evidenceSummary %}
 
+{% set evidenceRows = claim.claimData.evidence.getPopulatedRowsOnly() if claim.claimData.evidence %}
+
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
@@ -21,8 +23,7 @@
         {{ timelineSummary(claim.claimData.timeline.getPopulatedRowsOnly()) }}
       </div>
 
-      {% set evidenceRows = claim.claimData.evidence.getPopulatedRowsOnly() %}
-      {% if 0 < evidenceRows | length %}
+      {% if evidenceRows and 0 < evidenceRows | length %}
         <div class="form-group">
           <p><span class="bold-small">{{ t('Evidence') }}</span></p>
           {{ evidenceSummary(evidenceRows) }}
