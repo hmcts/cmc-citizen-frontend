@@ -38,7 +38,7 @@
       {% elseif reason === NotEligibleReason.CLAIM_VALUE_OVER_10000 %}
         <p>{{ t('This service is for claims of £10,000 or less.') }}</p>
         <p>{{ t('For claims between £10,001 and £100,000 you might be able to ' + externalLink('use Money Claim Online (MCOL)', legacyServiceUrl) + '.') | safe }}</p>
-        <p>{{ t('You can also claim by paper.' + externalLink('Download a paper form', n1FormUrl) + ', complete it and return it to make your claim.') | safe }}</p>
+        <p>{{ t('You can also claim by paper. ' + externalLink('Download a paper form', n1FormUrl) + ', complete it and return it to make your claim.') | safe }}</p>
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.UNDER_18 %}
         <p>{{ t('You need to be 18 or over to use this service.') }}</p>
