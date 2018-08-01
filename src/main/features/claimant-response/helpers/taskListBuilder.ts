@@ -104,25 +104,3 @@ export class TaskListBuilder implements ITaskListBuilder<[DraftClaimantResponse,
   }
 }
 
-// export class TaskListBuilder {
-//
-//   static buildSubmitSection (draft: DraftClaimantResponse, externalId: string): TaskList {
-//     const tasks: Task[] = []
-//     tasks.push(
-//       new Task(
-//         'Check and submit your response',
-//         Paths.checkAndSendPage.evaluateUri({ externalId: externalId }),
-//         false
-//       )
-//     )
-//     return new TaskList('Submit', tasks)
-//   }
-//
-//   static buildRemainingTasks (draft: DraftClaimantResponse, claim: Claim): Task[] {
-//     return [].concat(
-//       TaskListBuilder.buildDefendantResponseSection(draft, claim).tasks,
-//       TaskListBuilder.buildHowYouWantToRespondSection(draft, claim).tasks
-//     )
-//       .filter(item => !item.completed)
-//   }
-// }
