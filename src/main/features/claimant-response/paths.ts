@@ -1,6 +1,7 @@
 import { RoutablePath } from 'shared/router/routablePath'
+import { Paths as FreeMediationPaths } from 'main/common/components/free-mediation/paths'
 
-const claimantResponsePath = '/case/:externalId/claimant-response'
+export const claimantResponsePath = '/case/:externalId/claimant-response'
 
 export class Paths {
   static readonly taskListPage = new RoutablePath(`${claimantResponsePath}/task-list`)
@@ -9,4 +10,5 @@ export class Paths {
   static readonly checkAndSendPage = new RoutablePath(`${claimantResponsePath}/check-and-send`)
   static readonly incompleteSubmissionPage = new RoutablePath(`${claimantResponsePath}/incomplete-submission`)
   static readonly notImplementedYetPage = new RoutablePath(`${claimantResponsePath}/not-implemented-yet`)
+  static readonly freeMediationPage = new RoutablePath(claimantResponsePath + FreeMediationPaths.freeMediationPage.uri)
 }

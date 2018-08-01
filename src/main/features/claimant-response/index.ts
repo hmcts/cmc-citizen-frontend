@@ -37,7 +37,11 @@ export class ClaimantResponseFeature {
     app.all(/^\/case\/.+\/claimant-response\/(?!confirmation).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'claimantResponse', 100, (value: any): DraftClaimantResponse => {
         return new DraftClaimantResponse().deserialize(value)
-      }))
+      }),
+      (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        res.locals.draft = res.locals.claimantResponseDraft
+        next()
+      })
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }

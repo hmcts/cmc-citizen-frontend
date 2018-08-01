@@ -9,6 +9,7 @@ import { ResponseType } from 'claims/models/response/responseType'
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
 import { NumberFormatter } from 'utils/numberFormatter'
+import { FreeMediationTask } from 'claimant-response/tasks/freeMediationTask'
 
 export class TaskListBuilder {
   static buildDefendantResponseSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
@@ -58,6 +59,17 @@ export class TaskListBuilder {
             'Accept or reject their repayment plan',
             Paths.acceptPaymentMethodPage.evaluateUri({ externalId: externalId }),
             AcceptPaymentMethodTask.isCompleted(draft.acceptPaymentMethod)
+          )
+        )
+      }
+
+      if (draft.settleAdmitted
+        && draft.settleAdmitted.admitted.option === YesNoOption.NO) {
+        tasks.push(
+          new TaskListItem(
+            'Free mediation?',
+            Paths.freeMediationPage.evaluateUri({ externalId: externalId }),
+            FreeMediationTask.isCompleted(draft.freeMediation)
           )
         )
       }
