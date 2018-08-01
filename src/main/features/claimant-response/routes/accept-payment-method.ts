@@ -56,6 +56,7 @@ export default express.Router()
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       renderView(new Form(draft.document.acceptPaymentMethod), res)
     }))
+
   .post(
     Paths.acceptPaymentMethodPage.uri,
     FormValidator.requestHandler(AcceptPaymentMethod, AcceptPaymentMethod.fromObject),
