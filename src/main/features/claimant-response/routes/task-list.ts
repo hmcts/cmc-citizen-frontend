@@ -1,32 +1,24 @@
 import * as express from 'express'
-import { Paths } from 'claimant-response/paths'
-import { Claim } from 'claims/models/claim'
+
+import { AbstractTaskListPage } from 'shared/components/task-list/task-list'
+import { TaskList } from 'shared/components/task-list/model/task-list'
+
+import { claimantResponsePath } from 'claimant-response/paths'
+
 import { TaskListBuilder } from 'claimant-response/helpers/taskListBuilder'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
-import { ErrorHandling } from 'shared/errorHandling'
+import { Claim } from 'claims/models/claim'
+
+class TaskListPage extends AbstractTaskListPage {
+  buildTaskList (res: express.Response): TaskList {
+    const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
+    const claim: Claim = res.locals.claim
+
+    return new TaskListBuilder().build([draft.document, claim])
+  }
+}
 
 /* tslint:disable:no-default-export */
-export default express.Router()
-  .get(Paths.taskListPage.uri,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
-      const claim: Claim = res.locals.claim
-
-      const beforeYouStartSection = TaskListBuilder
-        .buildDefendantResponseSection(draft.document, claim)
-
-      const howYouWantToRespondSection = TaskListBuilder
-        .buildHowYouWantToRespondSection(draft.document, claim)
-
-      const submitSection = TaskListBuilder.buildSubmitSection(draft.document, claim.externalId)
-
-      res.render(Paths.taskListPage.associatedView,
-        {
-          beforeYouStartSection: beforeYouStartSection,
-          howYouWantToRespondSection: howYouWantToRespondSection,
-          submitSection: submitSection,
-          claim: claim
-        })
-    })
-  )
+export default new TaskListPage('Your response')
+  .buildRouter(claimantResponsePath)

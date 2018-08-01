@@ -1,6 +1,6 @@
 import { RoutablePath } from 'shared/router/routablePath'
 
-const claimantResponsePath = '/case/:externalId/claimant-response'
+export const claimantResponsePath = '/case/:externalId/claimant-response'
 
 export class Paths {
   static readonly taskListPage = new RoutablePath(`${claimantResponsePath}/task-list`)

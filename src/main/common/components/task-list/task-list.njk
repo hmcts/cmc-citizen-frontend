@@ -1,0 +1,17 @@
+{% extends "layout.njk" %}
+{% from "task-list.njk" import taskListHeading, task as taskRow %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      {% for section in taskList.sections %}
+        <div class="task-group">
+          {{ taskListHeading(section.name) }}
+          {% for task in section.tasks %}
+            {{ taskRow(task.url, t(task.name), task.completed) }}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
