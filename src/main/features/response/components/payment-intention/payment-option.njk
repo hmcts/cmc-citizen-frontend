@@ -2,7 +2,11 @@
 
 {% from "form.njk" import saveAndContinueButton, csrfProtection, radioGroup, radioGroupWithHintPanel, errorSummary %}
 
-{% set heading = 'When do you want to pay?' %}
+{% if amount %}
+  {% set heading = t('When do you want to pay the {{ amount }}?', { amount: amount | numeral }) %}
+{% else %}
+  {% set heading = 'When do you want to pay?' %}
+{% endif %}
 
 {% block content %}
   <div class="grid-row">

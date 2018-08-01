@@ -30,11 +30,7 @@ describe('Claim issue: reason page', () => {
       await request(app)
         .get(ClaimPaths.reasonPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-<<<<<<< HEAD
-        .expect(res => expect(res).to.be.successful.withText('Why you believe you’re owed the money'))
-=======
         .expect(res => expect(res).to.be.successful.withText('Briefly explain your claim'))
->>>>>>> master
     })
 
     it('should render page when everything is fine without a name field', async () => {
@@ -44,11 +40,7 @@ describe('Claim issue: reason page', () => {
       await request(app)
         .get(ClaimPaths.reasonPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-<<<<<<< HEAD
-        .expect(res => expect(res).to.be.successful.withText('Why you believe you’re owed the money'))
-=======
         .expect(res => expect(res).to.be.successful.withText('Briefly explain your claim'))
->>>>>>> master
     })
   })
 
@@ -67,11 +59,7 @@ describe('Claim issue: reason page', () => {
         await request(app)
           .post(ClaimPaths.reasonPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-<<<<<<< HEAD
-          .expect(res => expect(res).to.be.successful.withText('Why you believe you’re owed the money', 'div class="error-summary"'))
-=======
           .expect(res => expect(res).to.be.successful.withText('Briefly explain your claim', 'div class="error-summary"'))
->>>>>>> master
       })
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {

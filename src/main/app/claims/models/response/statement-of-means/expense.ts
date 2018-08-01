@@ -19,7 +19,7 @@ export enum ExpenseType {
 
 export interface Expense {
   type: ExpenseType
-  otherSource?: string
+  otherName?: string
   frequency: PaymentFrequency
   amountPaid: number
 }

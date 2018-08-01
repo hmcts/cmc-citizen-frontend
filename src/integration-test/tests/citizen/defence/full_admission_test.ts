@@ -10,28 +10,34 @@ import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defen
 const helperSteps: Helper = new Helper()
 const defenceSteps: DefenceSteps = new DefenceSteps()
 
-Feature('Fully admit all of the claim')
+Feature('Fully admit all of the claim').retry(3)
 
-Before(function* (I: I) {
-  const claimantEmail: string = yield I.createCitizenUser()
-  const defendantEmail: string = yield I.createCitizenUser()
+async function prepareClaim (I: I) {
+  const claimantEmail: string = await I.createCitizenUser()
+  const defendantEmail: string = await I.createCitizenUser()
 
   const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
-  const claimRef: string = yield I.createClaim(claimData, claimantEmail)
+  const claimRef: string = await I.createClaim(claimData, claimantEmail)
 
-  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
+  await helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.linkClaimToDefendant(defendantEmail)
   helperSteps.startResponseFromDashboard(claimRef)
-})
+}
 
-Scenario('I can complete the journey when I fully admit all of the claim with immediate payment @citizen', function* (I: I) {
+Scenario('I can complete the journey when I fully admit all of the claim with immediate payment @citizen', async (I: I) => {
+  await prepareClaim(I)
+
   defenceSteps.makeFullAdmission(PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY)
 })
 
-Scenario('I can complete the journey when I fully admit all of the claim with full payment by set date @citizen', function* (I: I) {
+Scenario('I can complete the journey when I fully admit all of the claim with full payment by set date @citizen', async (I: I) => {
+  await prepareClaim(I)
+
   defenceSteps.makeFullAdmission(PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
 })
 
-Scenario('I can complete the journey when I fully admit all of the claim with full payment by instalments @citizen', function* (I: I) {
+Scenario('I can complete the journey when I fully admit all of the claim with full payment by instalments @citizen', async (I: I) => {
+  await prepareClaim(I)
+
   defenceSteps.makeFullAdmission(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
 })

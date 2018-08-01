@@ -13,6 +13,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { RoutablePath } from 'shared/router/routablePath'
 import { PartialAdmissionGuard } from 'response/guards/partialAdmissionGuard'
+import { YesNoOption } from 'models/yesNoOption'
 
 const page: RoutablePath = PartAdmissionPaths.alreadyPaidPage
 
@@ -46,6 +47,12 @@ export default express.Router()
 
         draft.document.partialAdmission.alreadyPaid = form.model
         draft.document.fullAdmission = draft.document.rejectAllOfClaim = undefined
+
+        if (draft.document.partialAdmission.alreadyPaid.option === YesNoOption.YES) {
+          draft.document.partialAdmission.howMuchDoYouOwe = undefined
+        } else {
+          draft.document.partialAdmission.howMuchHaveYouPaid = undefined
+        }
 
         await new DraftService().save(draft, user.bearerToken)
 
