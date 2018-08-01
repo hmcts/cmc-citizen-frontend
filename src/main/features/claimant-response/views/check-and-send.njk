@@ -1,0 +1,41 @@
+{% extends "layout.njk" %}
+
+{% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+
+{% set heading = 'Check your answers' %}
+
+{% block content %}
+  <form novalidate method="post">
+    {{ csrfProtection(csrf) }}
+
+    {{ tableStart('yourResponse', 'Your response') }}
+
+    {% if draft.settleAdmitted %}
+      {% if draft.settleAdmitted.admitted.option === 'yes' %}
+        {% set settleAdmittedResponse = 'I accept this amount' %}
+      {% else %}
+        {% set settleAdmittedResponse = 'I reject this amount' %}
+      {% endif %}
+
+      {{ row(label = 'Do you accept or reject the defendant’s admission?', bold = true, value = settleAdmittedResponse,
+        changeLink = ClaimantResponsePaths.settleAdmittedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+    {% endif %}
+
+    {% if draft.acceptPaymentMethod %}
+      {% if draft.acceptPaymentMethod.accept.option === 'yes' %}
+        {% set acceptPaymentMethodResponse = 'I accept this repayment plan' %}
+      {% else %}
+        {% set acceptPaymentMethodResponse = 'I reject this repayment plan' %}
+      {% endif %}
+
+      {{ row(label = 'Do you accept the defendant’s repayment plan?', bold = true, value = acceptPaymentMethodResponse,
+        changeLink = ClaimantResponsePaths.acceptPaymentMethodPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+    {% endif %}
+
+    {{ tableEnd() }}
+
+    {{ submitButton('Submit response') }}
+
+  </form>
+{% endblock %}

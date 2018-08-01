@@ -1,11 +1,11 @@
 {% set claimantName = claim.claimData.claimant.name %}
 {% set claimantDetailsPageURI = ClaimPaths.claimantDetailsPage.evaluateUri({ externalId: claim.externalId }) %}
 
-{% if claim.response.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+{% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
   <p>{{ t('When {{ claimantName }} gets your payment they should tell you and the court you’ve paid.', { claimantName: claimantName }) }}</p>
 {% endif %}
 
-{% if claim.response.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+{% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
   <p>{{ t('If {{ claimantName }} accepts your offer to pay, you need to <a href="{{ link }}">contact them for payment details</a> and to arrange payment.', { claimantName: claimantName, link: claimantDetailsPageURI }) | safe }}</p>
 
   <p>{{ t('If they reject your offer to pay by a set date then the court will decide how you must pay.') }}</p>
@@ -13,7 +13,7 @@
   <p>{{ t('If they do not respond within 6 months, the court will put the claim on hold.') }}</p>
 {% endif %}
 
-{% if claim.response.paymentOption === domain.PaymentOption.INSTALMENTS %}
+{% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
   <p>{{ t('You should:') }}</p>
 
   <ul class="list list-bullet">

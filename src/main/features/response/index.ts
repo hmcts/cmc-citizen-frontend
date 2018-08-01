@@ -12,6 +12,7 @@ import { RouterFinder } from 'shared/router/routerFinder'
 import { ResponseType } from 'claims/models/response/responseType'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { ResponseGuard } from 'response/guards/responseGuard'
 import { ClaimMiddleware } from 'claims/claimMiddleware'
@@ -58,7 +59,8 @@ export class Feature {
       app.settings.nunjucksEnv.globals.FreeMediationOption = FreeMediationOption
       app.settings.nunjucksEnv.globals.domain = {
         ResponseType: ResponseType,
-        PaymentOption: PaymentOption
+        PaymentOption: PaymentOption,
+        PaymentSchedule: PaymentSchedule
       }
     }
 

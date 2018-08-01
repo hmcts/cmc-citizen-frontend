@@ -27,11 +27,11 @@
             ' or use ' + externalLink('form N1', n1FormUrl) + ' to make your claim.') | safe }}
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.MULTIPLE_CLAIMANTS %}
-        <p>{{ t('You can’t use this service if more than one person or business is making the claim.') }}</p>
+        <p>{{ t('You can’t use this service if more than one person or organisation is making the claim.') }}</p>
         <p>{{ t('Use ' + externalLink('form N1', n1FormUrl) + ' to make your claim.') | safe }}</p>
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.MULTIPLE_DEFENDANTS %}
-        <p>{{ t('You can’t use this service if this claim is against more than one person or business.') }}</p>
+        <p>{{ t('You can’t use this service if this claim is against more than one person or organisation.') }}</p>
         <p>{{ t('Use ' + externalLink('Money Claim Online (MCOL)', legacyServiceUrl)
           + ' for claims against 2 people or organisations.') | safe }}</p>
         <p>{{ t('Use ' + externalLink('form N1', n1FormUrl) + ' for claims against 3 or more people or organisations.') | safe }}</p>

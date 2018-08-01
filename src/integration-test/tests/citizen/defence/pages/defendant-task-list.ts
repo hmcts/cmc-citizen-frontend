@@ -57,7 +57,7 @@ export class DefendantTaskListPage {
   }
 
   selectTaskFreeMediation (): void {
-    I.click('Free mediation')
+    I.click('Consider free mediation')
   }
 
 }

@@ -20,6 +20,8 @@ export default express.Router()
         .buildBeforeYouStartSection(draft.document, claim, MomentFactory.currentDateTime())
       const respondToClaimSection = TaskListBuilder
         .buildRespondToClaimSection(draft.document, claim)
+      const resolvingClaimSection = TaskListBuilder
+        .buildResolvingClaimSection(draft.document, claim)
 
       const submitSection = TaskListBuilder.buildSubmitSection(draft.document, claim.externalId)
 
@@ -28,6 +30,7 @@ export default express.Router()
           beforeYouStartSection: beforeYouStartSection,
           submitSection: submitSection,
           respondToClaimSection: respondToClaimSection,
+          resolvingClaimSection: resolvingClaimSection,
           claim: claim
         })
     } catch (err) {
