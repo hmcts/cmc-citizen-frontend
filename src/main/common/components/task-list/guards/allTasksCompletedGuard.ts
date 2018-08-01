@@ -3,7 +3,6 @@ import * as express from 'express'
 import { TaskList } from 'shared/components/task-list/model/task-list'
 
 import { Logger } from '@hmcts/nodejs-logging'
-import { RoutablePath } from 'shared/router/routablePath'
 
 const logger = Logger.getLogger('router/claimant-response/check-and-send')
 
@@ -20,8 +19,9 @@ export abstract class AbstractAllTasksCompletedGuard {
         return next()
       }
 
-      logger.debug('State guard: check and send page is disabled until all tasks are completed - redirecting to task list')
-      res.redirect(this.buildRedirectPath(req, res))
+      const redirectPath = this.buildRedirectPath(req, res)
+      logger.debug(`State guard: check and send page is disabled until all tasks are completed - redirecting to ${redirectPath}`)
+      res.redirect(redirectPath)
     }
   }
 }
