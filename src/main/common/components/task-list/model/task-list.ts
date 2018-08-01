@@ -3,21 +3,21 @@ export interface ITaskListBuilder<Data> {
 }
 
 export class TaskList {
-  constructor (public sections: Section[]) {}
+  constructor (public sections: TaskListSection[]) {}
 
   get completed (): boolean {
-    return this.sections.every((section: Section) => section.completed === true)
+    return this.sections.every((section: TaskListSection) => section.completed === true)
   }
 
   get remainingTasks (): Task[] {
-    return this.sections.reduce((tasks: Task[], section: Section): Task[] => {
+    return this.sections.reduce((tasks: Task[], section: TaskListSection): Task[] => {
       tasks.push(...section.remainingTasks)
       return tasks
     }, [])
   }
 }
 
-export class Section {
+export class TaskListSection {
   constructor (public name: string, public tasks: Task[]) {}
 
   get completed (): boolean {

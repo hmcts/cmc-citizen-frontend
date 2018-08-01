@@ -1,4 +1,4 @@
-import { ITaskListBuilder, Section, Task, TaskList } from 'shared/components/task-list/model/task-list'
+import { ITaskListBuilder, TaskListSection, Task, TaskList } from 'shared/components/task-list/model/task-list'
 
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { Claim } from 'claims/models/claim'
@@ -14,7 +14,7 @@ import { SettleAdmittedTask } from 'claimant-response/tasks/settleAdmittedTask'
 
 import { NumberFormatter } from 'utils/numberFormatter'
 
-function buildDefendantResponseSection (draft: DraftClaimantResponse, externalId: string): Section {
+function buildDefendantResponseSection (draft: DraftClaimantResponse, externalId: string): TaskListSection {
   const tasks: Task[] = []
 
   tasks.push(
@@ -25,10 +25,10 @@ function buildDefendantResponseSection (draft: DraftClaimantResponse, externalId
     )
   )
 
-  return new Section('Before you start', tasks)
+  return new TaskListSection('Before you start', tasks)
 }
 
-function buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim): Section {
+function buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim): TaskListSection {
   const tasks: Task[] = []
 
   if (claim.response.responseType === ResponseType.FULL_DEFENCE
@@ -76,10 +76,10 @@ function buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: C
       )
     )
   }
-  return new Section('How do you want to respond?', tasks)
+  return new TaskListSection('How do you want to respond?', tasks)
 }
 
-function buildSubmitSection (draft: DraftClaimantResponse, externalId: string): Section {
+function buildSubmitSection (draft: DraftClaimantResponse, externalId: string): TaskListSection {
   const tasks: Task[] = []
 
   tasks.push(
@@ -89,7 +89,7 @@ function buildSubmitSection (draft: DraftClaimantResponse, externalId: string): 
       undefined
     )
   )
-  return new Section('Submit', tasks)
+  return new TaskListSection('Submit', tasks)
 }
 
 export class TaskListBuilder implements ITaskListBuilder<[DraftClaimantResponse, Claim]> {
