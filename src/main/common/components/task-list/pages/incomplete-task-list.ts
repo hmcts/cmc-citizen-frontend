@@ -1,7 +1,7 @@
 import * as express from 'express'
-import { TaskList } from 'shared/components/task-list/model/task-list'
+import { TaskList } from 'main/common/components/task-list/model/task-list'
 
-import { Paths } from 'shared/components/task-list/paths'
+import { Paths } from 'main/common/components/task-list/paths'
 
 export abstract class AbstractIncompleteTaskListPage {
   constructor (private heading: string) {}

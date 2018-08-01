@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { AbstractTaskListPage } from 'shared/components/task-list/task-list'
+import { AbstractTaskListPage } from 'shared/components/task-list/pages/task-list'
 import { TaskList } from 'shared/components/task-list/model/task-list'
 
 import { claimantResponsePath } from 'claimant-response/paths'

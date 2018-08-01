@@ -1,8 +1,8 @@
 import * as express from 'express'
 
-import { Paths } from './paths'
+import { Paths } from '../paths'
 
-import { TaskList } from 'shared/components/task-list/model/task-list'
+import { TaskList } from 'main/common/components/task-list/model/task-list'
 
 export abstract class AbstractTaskListPage {
   constructor (private heading: string) {}
