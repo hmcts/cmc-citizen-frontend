@@ -24,22 +24,21 @@
       {% elseif reason === NotEligibleReason.CLAIM_ON_BEHALF %}
         <p>{{ t('This service is currently for claimants representing themselves.') }}</p>
         <p>{{ t('If you’re a legal representative ' + externalLink('use the Money Claim Online (MCOL) service', legacyServiceUrl) +
-            ' or use ' + externalLink('form N1', n1FormUrl) + ' to make your claim.') | safe }}
+            ' or ' + externalLink('download a paper form,', n1FormUrl) + ' complete and return it to make your claim.') | safe }}
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.MULTIPLE_CLAIMANTS %}
-        <p>{{ t('You can’t use this service if more than one person or business is making the claim.') }}</p>
-        <p>{{ t('Use ' + externalLink('form N1', n1FormUrl) + ' to make your claim.') | safe }}</p>
-        {{ paperFormAddress() }}
+        <p>{{ t('You can’t use this service if more than one person or organisation is making the claim.') }}</p>
+        <p>{{ t(externalLink('Download a paper form', n1FormUrl) + ', complete it and return it to make your claim.') | safe }}</p>
+         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.MULTIPLE_DEFENDANTS %}
-        <p>{{ t('You can’t use this service if this claim is against more than one person or business.') }}</p>
-        <p>{{ t('Use ' + externalLink('Money Claim Online (MCOL)', legacyServiceUrl)
-          + ' for claims against 2 people or organisations.') | safe }}</p>
-        <p>{{ t('Use ' + externalLink('form N1', n1FormUrl) + ' for claims against 3 or more people or organisations.') | safe }}</p>
+        <p>{{ t('You can’t use this service if this claim is against more than one person or organisation.') }}</p>
+        <p>{{ t('Use ' + externalLink('Money Claim Online (MCOL)', legacyServiceUrl) + ' for claims against 2 people or organisations.') | safe }}</p>
+        <p>{{ t(externalLink('Download a paper form', n1FormUrl) + ' for claims against 3 or more people or organisations. Complete and return the form to make your claim.') | safe }}</p>
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.CLAIM_VALUE_OVER_10000 %}
         <p>{{ t('This service is for claims of £10,000 or less.') }}</p>
         <p>{{ t('For claims between £10,001 and £100,000 you might be able to ' + externalLink('use Money Claim Online (MCOL)', legacyServiceUrl) + '.') | safe }}</p>
-        <p>{{ t('Use ' + externalLink('form N1', n1FormUrl) + ' for claims over £100,000.') | safe }}</p>
+        <p>{{ t('You can also claim by paper. ' + externalLink('Download a paper form', n1FormUrl) + ', complete it and return it to make your claim.') | safe }}</p>
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.UNDER_18 %}
         <p>{{ t('You need to be 18 or over to use this service.') }}</p>
@@ -50,19 +49,19 @@
         <p>{{ t('You might be able to get advice from organisations like ' + externalLink('Citizens Advice', citizensAdviceUrl)
             + ' about making a claim.') | safe }}</p>
       {% elseif reason === NotEligibleReason.HELP_WITH_FEES %}
-        <p>{{ t('You need to use the paper service if you want ' + externalLink('help paying your court fees', feesHelpUri ) + '.') | safe }}</p>
-        <p>{{ t('Make your claim by post using ' + externalLink('form N1', n1FormUrl) + '.') | safe }}</p>
+        <p>{{ t('You need to use a paper form if you want ' + externalLink('help paying your court fees', feesHelpUri ) + '.') | safe }}</p>
+        <p>{{ t(externalLink('Download a paper form', n1FormUrl) + ', complete it and return it to make your claim.') | safe }}</p>
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.CLAIMANT_ADDRESS %}
         <p>{{ t('You need to have an address in the UK to make a money claim.') }}</p>
       {% elseif reason === NotEligibleReason.DEFENDANT_ADDRESS %}
         <p>{{ t('You can only use this service to claim against a person or organisation with an address in England or Wales.') }}</p>
-        <p>{{ t('Depending on where you’ll be sending the claim, you might be able to use ' + externalLink('form N1', n1FormUrl)
-            + ' and ' + externalLink('form N510', n510Url) + '.') | safe }}</p>
+        <p>{{ t('Depending on where you’ll be sending the claim, you might be able to claim using a paper form. ' + externalLink('Download the paper form N1', n1FormUrl)
+            + ' and ' + externalLink('form N510', n510Url) + '. Complete the forms and return them to make your claim.') | safe }}</p>
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.GOVERNMENT_DEPARTMENT %}
-        <p>{{ t('You can’t use this service to claim against ' + externalLink('government departments', governmentDepartmentsUrl) + '. ') | safe }}</p>
-        <p>{{ t('Use ' + externalLink('form N1', n1FormUrl) + ' to make your claim.') | safe }}</p>
+        <p>{{ t('You can’t use this service to claim against ' + externalLink('government departments', governmentDepartmentsUrl) + '.') | safe }}</p>
+        <p>{{ t(externalLink('Download a paper form', n1FormUrl) + ', complete it and return it to make your claim.') | safe }}</p>
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.CLAIM_IS_FOR_TENANCY_DEPOSIT %}
         <p>{{ t('You can’t make a claim for a tenancy deposit using this service.') }}</p>
