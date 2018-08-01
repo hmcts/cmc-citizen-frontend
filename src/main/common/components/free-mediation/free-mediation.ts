@@ -24,7 +24,7 @@ export abstract class AbstractFreeMediationPage {
         (req: express.Request, res: express.Response) => {
           const draft: Draft<any> = res.locals.draft
 
-          this.renderView(new Form(draft.document.freeMediation), res)
+          AbstractFreeMediationPage.renderView(new Form(draft.document.freeMediation), res)
         })
       .post(
         path + FreeMediationPaths.freeMediationPage.uri,
@@ -34,7 +34,7 @@ export abstract class AbstractFreeMediationPage {
           const form: Form<FreeMediation> = req.body
 
           if (form.hasErrors()) {
-            this.renderView(form, res)
+            AbstractFreeMediationPage.renderView(form, res)
           } else {
             const draft: Draft<any> = res.locals.draft
             const user: User = res.locals.user
@@ -47,7 +47,7 @@ export abstract class AbstractFreeMediationPage {
         }))
   }
 
-  private renderView (form: Form<FreeMediation>, res: express.Response) {
+  private static renderView (form: Form<FreeMediation>, res: express.Response) {
     const claim: Claim = res.locals.claim
     // const draft: any = res.locals.draft
     // const amount = draft.isResponsePartiallyAdmitted() ? draft.partialAdmission.howMuchDoYouOwe.amount : 0
