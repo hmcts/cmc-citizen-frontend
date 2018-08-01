@@ -10,7 +10,7 @@ export class PaymentRetrieveResponse extends Payment {
   readonly currency: string
 
   @Expose({ name: 'ccd_case_number' })
-  readonly ccdCaseNumber: string
+  readonly ccdCaseNumber?: string
 
   @Expose({ name: 'case_reference' })
   readonly caseReference: string
@@ -32,5 +32,5 @@ export class PaymentRetrieveResponse extends Payment {
   readonly serviceName: string
 
   @Type(() => Fee)
-  readonly fees: Fee
+  readonly fees: Fee[]
 }

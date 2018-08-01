@@ -33,32 +33,18 @@ Scenario('I can complete the journey when I fully reject the claim as I have alr
 
   I.click('My account')
   I.see(claimRef)
-  I.see(`We’ve emailed ${claimModel.claimants[0].name} telling them when and how you paid the claim`)
+  I.see(`We’ve emailed ${claimModel.claimants[0].name} telling them when and how you said you paid the claim`)
 })
 
-Scenario('I can complete the journey when I fully admit all of the claim @citizen', function* (I: I) {
+Scenario('I can fill out forms for I admit part of the claim @citizen', function* (I: I) {
   const claimantEmail: string = yield I.createCitizenUser()
   const defendantEmail: string = yield I.createCitizenUser()
+  const claimModel: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
 
-  const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
-  const claimRef: string = yield I.createClaim(claimData, claimantEmail)
-
-  yield helperSteps.enterPinNumber(claimRef, claimantEmail)
-  helperSteps.finishResponse(claimRef, defendantEmail, PartyType.INDIVIDUAL, DefenceType.FULL_ADMISSION)
-})
-
-Scenario('I can see send your response by email page when I admit part of the claim @citizen', function* (I: I) {
-  const claimantEmail: string = yield I.createCitizenUser()
-  const defendantEmail: string = yield I.createCitizenUser()
-
-  const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
-  const defendant: Party = claimData.defendants[0]
-  const claimant: Party = claimData.claimants[0]
-
-  const claimRef: string = yield I.createClaim(claimData, claimantEmail)
+  const claimRef: string = yield I.createClaim(claimModel, claimantEmail)
 
   yield helperSteps.enterPinNumber(claimRef, claimantEmail)
-  helperSteps.finishResponseWithHandOff(claimRef, defendant, claimant, defendantEmail, DefenceType.PART_ADMISSION)
+  yield helperSteps.finishResponse(claimRef, defendantEmail, PartyType.INDIVIDUAL, DefenceType.PART_ADMISSION)
 })
 
 Scenario('I can see send your response by email page when I reject all of the claim with counter claim @citizen', function* (I: I) {

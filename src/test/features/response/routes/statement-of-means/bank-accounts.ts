@@ -19,7 +19,7 @@ const pagePath: string = StatementOfMeansPaths.bankAccountsPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
 
-describe('Defendant response: Statement of means: account-banks', () => {
+describe('Defendant response: Statement of means: bank accounts', () => {
 
   attachDefaultHooks(app)
 
@@ -61,7 +61,7 @@ describe('Defendant response: Statement of means: account-banks', () => {
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
 
           await request(app)
             .get(pagePath)
@@ -113,15 +113,15 @@ describe('Defendant response: Statement of means: account-banks', () => {
 
         it('should update draft store and redirect', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
             .post(pagePath)
-            .send({ rows: [{ typeOfAccount: BankAccountType.ISA.value, isJoint: false, balance: 10 }] })
+            .send({ rows: [{ typeOfAccount: BankAccountType.ISA.value, joint: false, balance: 10 }] })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.debtsPage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.residencePage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )
@@ -132,7 +132,7 @@ describe('Defendant response: Statement of means: account-banks', () => {
 
         it('should update draft store and redirect', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
 
           await request(app)
             .post(pagePath)

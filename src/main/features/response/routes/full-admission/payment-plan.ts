@@ -16,7 +16,7 @@ import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
-import { createPaymentPlan } from 'common/paymentPlan'
+import { createPaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
 import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
 
 const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
@@ -40,7 +40,7 @@ function renderView (form: Form<DefendantPaymentPlan>, res: express.Response): v
     paymentLength: calculatePaymentPlanLength(form.model),
     monthlyIncome: _.get(draft, 'document.statementOfMeans.monthlyIncome', 0),
     monthlyExpenses: _.get(draft, 'document.statementOfMeans.monthlyExpenses', 0),
-    totalAmount: claim.claimData.amount.totalAmount()
+    totalAmount: claim.totalAmountTillToday
   })
 }
 

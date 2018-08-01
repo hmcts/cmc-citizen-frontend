@@ -6,12 +6,13 @@ import { StatementType } from 'offer/form/models/statementType'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
-import { ResponseType } from 'claims/models/response/responseCommon'
+import { ResponseType } from 'claims/models/response/responseType'
+import { DefenceType } from 'claims/models/response/defenceType'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { defenceWithDisputeData } from 'test/data/entity/responseData'
 import { offer, offerRejection } from 'test/data/entity/offer'
 import { individual } from 'test/data/entity/party'
-import { DefenceType, FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
+import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { Individual } from 'claims/models/details/yours/individual'
 import { PartyStatement } from 'claims/models/partyStatement'
 import * as moment from 'moment'
@@ -121,7 +122,7 @@ describe('Claim', () => {
     });
 
     [true, false].forEach(isMoreTimeRequested => {
-      it(`should return CLAIM_REJECTED when the defendant has rejected the claim with no free mediation and more time requested = ${isMoreTimeRequested}`, () => {
+      it(`should return RESPONSE_SUBMITTED when the defendant has rejected the claim with no free mediation and more time requested = ${isMoreTimeRequested}`, () => {
         claim.moreTimeRequested = isMoreTimeRequested
         claim.response = {
           responseType: ResponseType.FULL_DEFENCE,
@@ -130,7 +131,7 @@ describe('Claim', () => {
           freeMediation: FreeMediationOption.NO,
           defendant: new Individual().deserialize(individual)
         }
-        expect(claim.status).to.be.equal(ClaimStatus.CLAIM_REJECTED)
+        expect(claim.status).to.be.equal(ClaimStatus.RESPONSE_SUBMITTED)
       })
     })
 
@@ -193,15 +194,15 @@ describe('Claim', () => {
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.NO_RESPONSE)
     })
 
-    it('should contain the claim status only if response rejected but no offer made', () => {
+    it('should contain the claim status only if response submited but no offer made', () => {
       claim.respondedAt = moment()
       claim.response = { responseType: ResponseType.FULL_DEFENCE }
 
       expect(claim.stateHistory).to.have.lengthOf(1)
-      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIM_REJECTED)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
     })
 
-    it('should contain multiple statuses when response rejected and offers exchanged', () => {
+    it('should contain multiple statuses when response submited and offers exchanged', () => {
       claim.respondedAt = moment()
       claim.response = { responseType: ResponseType.FULL_DEFENCE }
       claim.settlement = new Settlement()
@@ -209,7 +210,7 @@ describe('Claim', () => {
 
       expect(claim.stateHistory).to.have.lengthOf(2)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
-      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.CLAIM_REJECTED)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
     })
   })
 })

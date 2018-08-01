@@ -1,14 +1,14 @@
 import { IsDefined, IsIn } from 'class-validator'
 
 export class DefendantPaymentTypeLabels {
-  static readonly INSTALMENTS: string = 'I`ll suggest a repayment plan'
+  static readonly INSTALMENTS: string = 'I’ll suggest a repayment plan'
   static readonly BY_SET_DATE: string = 'By a set date'
   static readonly IMMEDIATELY: string = 'Immediately'
 }
 
 export class DefendantPaymentType {
   static readonly INSTALMENTS = new DefendantPaymentType('INSTALMENTS')
-  static readonly BY_SET_DATE = new DefendantPaymentType('BY_SET_DATE')
+  static readonly BY_SET_DATE = new DefendantPaymentType('BY_SPECIFIED_DATE')
   static readonly IMMEDIATELY = new DefendantPaymentType('IMMEDIATELY')
 
   readonly value: string

@@ -14,6 +14,7 @@ export class Paths {
   // Ajax endpoints
   static readonly postcodeLookupProxy = new RoutablePath('/postcode-lookup', false)
   static readonly paymentPlanCalculation = new RoutablePath('/payment-plan-calculation', false)
+  static readonly totalIncomeOrExpensesCalculation = new RoutablePath('/total-income-expense-calculation',false)
 
   // gov.uk entrypoints - these can't change without updating gov.uk content as well
   static readonly makeClaimReceiver = new RoutablePath('/make-claim', false)

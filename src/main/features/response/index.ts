@@ -7,9 +7,11 @@ import { PartyDetails } from 'forms/models/partyDetails'
 import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
-import { FullAdmissionPaths, StatementOfMeansPaths } from 'response/paths'
+import { FullAdmissionPaths, PartAdmissionPaths, StatementOfMeansPaths } from 'response/paths'
 import { RouterFinder } from 'shared/router/routerFinder'
-import { DefenceType } from 'claims/models/response/fullDefenceResponse'
+import { ResponseType } from 'claims/models/response/responseType'
+import { DefenceType } from 'claims/models/response/defenceType'
+import { PaymentOption } from 'claims/models/response/core/paymentOption'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { ResponseGuard } from 'response/guards/responseGuard'
 import { ClaimMiddleware } from 'claims/claimMiddleware'
@@ -50,9 +52,14 @@ export class Feature {
   enableFor (app: express.Express) {
     if (app.settings.nunjucksEnv && app.settings.nunjucksEnv.globals) {
       app.settings.nunjucksEnv.globals.FullAdmissionPaths = FullAdmissionPaths
+      app.settings.nunjucksEnv.globals.PartAdmissionPaths = PartAdmissionPaths
       app.settings.nunjucksEnv.globals.StatementOfMeansPaths = StatementOfMeansPaths
       app.settings.nunjucksEnv.globals.DefenceType = DefenceType
       app.settings.nunjucksEnv.globals.FreeMediationOption = FreeMediationOption
+      app.settings.nunjucksEnv.globals.domain = {
+        ResponseType: ResponseType,
+        PaymentOption: PaymentOption
+      }
     }
 
     const allResponseRoutes = '/case/*/response/*'

@@ -43,7 +43,7 @@
     {% else %}
       {{ row('How you want the defendant to pay',
         draft.paymentOption.option.displayValue, changeLink = paymentOptionUrl, bottomBorder = false) }}
-      {% if draft.paymentOption.option.value === PaymentType.FULL_BY_SPECIFIED_DATE %}
+      {% if draft.paymentOption.option.value === PaymentType.BY_SPECIFIED_DATE %}
         {{ row('When you want the defendant to pay',
           draft.payBySetDate.date.toMoment() | date, bottomBorder = true) }}
       {% endif %}

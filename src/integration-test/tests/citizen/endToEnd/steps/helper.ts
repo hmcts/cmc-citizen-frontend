@@ -12,12 +12,28 @@ export class Helper {
 
   async enterPinNumber (claimRef: string, claimantEmail: string): Promise<void> {
     defenceSteps.enterClaimReference(claimRef)
-    I.waitForText('Please enter your security code to continue')
+    I.waitForText('Security code')
     const authorisation = await IdamClient.authenticateUser(claimantEmail)
     return defenceSteps.enterClaimPin(claimRef, authorisation)
   }
 
-  finishResponse (claimRef: string, defendantEmail: string, defendantType: PartyType, defenceType: DefenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE): Promise<void> {
+  linkClaimToDefendant (defendantEmail: string): void {
+    I.waitForText(claimDetailsHeading)
+    defenceSteps.respondToClaim()
+    defenceSteps.loginAsDefendant(defendantEmail)
+  }
+
+  startResponseFromDashboard (claimRef: string): void {
+    I.click(claimRef)
+    I.click('Respond to claim')
+  }
+
+  finishResponse (
+    claimRef: string,
+    defendantEmail: string,
+    defendantType: PartyType,
+    defenceType: DefenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE): Promise<void> {
+
     I.waitForText(claimDetailsHeading)
     defenceSteps.respondToClaim()
     defenceSteps.loginAsDefendant(defendantEmail)

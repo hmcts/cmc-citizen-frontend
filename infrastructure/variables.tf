@@ -1,6 +1,8 @@
 // Infrastructural variables
-variable "product" {
-  default = "cmc"
+variable "product" {}
+
+variable "raw_product" {
+  default = "cmc" // jenkins-library overrides product for PRs and adds e.g. pr-118-cmc
 }
 
 variable "microservice" {
@@ -21,7 +23,7 @@ variable "ga_tracking_id" {
 }
 
 variable "payments_api_url" {
-  default = "https://test.payments.reform.hmcts.net:4421"
+  default = "http://payment-api-saat-staging.service.core-compute-saat.internal"
 }
 
 variable "fees_api_url" {
@@ -29,11 +31,11 @@ variable "fees_api_url" {
 }
 
 variable "idam_api_url" {
-  default = "http://betaDevBccidamAppLB.reform.hmcts.net"
+  default = "http://idam-api-idam-saat.service.core-compute-saat.internal"
 }
 
 variable "authentication_web_url" {
-  default = "https://idam-test.dev.ccidam.reform.hmcts.net"
+  default = "http://idam-web-public-idam-saat.service.core-compute-saat.internal"
 }
 
 variable "subscription" {}
@@ -42,14 +44,6 @@ variable "vault_section" {
   default = "test"
 }
 // feature toggles
-variable "feature_ccj" {
-  default = "true"
-}
-
-variable "feature_offer" {
-  default = "true"
-}
-
 variable "feature_statement_of_means" {
   default = "false"
 }
@@ -67,6 +61,10 @@ variable "feature_fine_print" {
 }
 
 variable "feature_return_error_to_user" {
+  default = "true"
+}
+
+variable "feature_mock_pay" {
   default = "false"
 }
 
@@ -99,4 +97,8 @@ variable "appinsights_instrumentation_key" {
 
 variable "capacity" {
   default = "1"
+}
+
+variable "common_tags" {
+  type = "map"
 }

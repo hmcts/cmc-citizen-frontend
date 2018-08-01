@@ -39,6 +39,8 @@ import { EvidenceType } from 'forms/models/evidenceType'
 import { Eligibility } from 'eligibility/model/eligibility'
 import { ClaimType } from 'eligibility/model/claimType'
 import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
+import { AlreadyPaid } from 'response/form/models/alreadyPaid'
+import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
@@ -154,7 +156,32 @@ export const sampleClaimDraftObj = {
   } as Evidence
 } as DraftClaim
 
+const commonResponsePartial = {
+  defendantDetails: {
+    email: { address: 'example@example.com' } as Email,
+    mobilePhone: { number: '01223344444' } as MobilePhone,
+    partyDetails: {
+      type: 'individual',
+      name: 'John Smith',
+      address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
+      hasCorrespondenceAddress: false,
+      dateOfBirth: {
+        known: true,
+        date: {
+          day: 31,
+          month: 12,
+          year: 1980
+        } as LocalDate
+      } as DateOfBirth
+    } as IndividualDetails
+  } as Defendant,
+  moreTimeNeeded: {
+    option: MoreTimeNeededOption.YES
+  }
+}
+
 export const sampleResponseDraftObj = {
+  ...commonResponsePartial,
   response: {
     type: ResponseType.DEFENCE
   },
@@ -170,53 +197,13 @@ export const sampleResponseDraftObj = {
   },
   freeMediation: {
     option: FreeMediationOption.NO
-  },
-  moreTimeNeeded: {
-    option: MoreTimeNeededOption.YES
-  },
-  statementOfMeans: {
-    residence: {
-      type: ResidenceType.OWN_HOME
-    },
-    employment: { isCurrentlyEmployed: false },
-    employers: undefined,
-    selfEmployed: undefined,
-    unemployed: { option: { value: UnemploymentType.RETIRED.value } },
-    dependants: { hasAnyChildren: false },
-    supportedByYou: { doYouSupportAnyone: false },
-    maintenance: { option: false },
-    bankAccounts: { rows: [] },
-    debts: { hasAnyDebts: false },
-    monthlyIncome: {
-      salary: 1,
-      universalCredit: 1,
-      jobSeekerAllowanceIncome: 1,
-      jobSeekerAllowanceContribution: 1,
-      incomeSupport: 1,
-      workingTaxCredit: 1,
-      childTaxCredit: 1,
-      childBenefit: 1,
-      councilTaxSupport: 1,
-      pension: 1,
-      maintenance: 1,
-      rows: [{ amount: 10, description: 'bla bla bla' }]
-    },
-    monthlyExpenses: {
-      mortgage: 1,
-      rent: 1,
-      councilTax: 1,
-      gas: 1,
-      electricity: 1,
-      water: 1,
-      travel: 1,
-      schoolCosts: 1,
-      foodAndHousekeeping: 1,
-      tvAndBroadband: 1,
-      mobilePhone: 1,
-      maintenance: 1,
-      rows: [{ amount: 10, description: 'bla bla bla' }]
-    },
-    courtOrders: { hasAnyCourtOrders: false }
+  }
+} as ResponseDraft
+
+export const sampleFullAdmissionResponseDraftObj = {
+  ...commonResponsePartial,
+  response: {
+    type: ResponseType.FULL_ADMISSION
   },
   fullAdmission: {
     paymentOption: {
@@ -238,25 +225,60 @@ export const sampleResponseDraftObj = {
       }
     }
   },
-  defendantDetails: {
-    email: { address: 'example@example.com' } as Email,
-    mobilePhone: { number: '01223344444' } as MobilePhone,
-    partyDetails: {
-      type: 'individual',
-      name: 'John Smith',
-      address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
-      hasCorrespondenceAddress: false,
-      dateOfBirth: {
-        known: true,
-        date: {
-          day: 31,
-          month: 12,
-          year: 1980
-        } as LocalDate
-      } as DateOfBirth
-    } as IndividualDetails
-  } as Defendant
-} as ResponseDraft
+  statementOfMeans: {
+    residence: {
+      type: ResidenceType.OWN_HOME
+    },
+    employment: { declared: false },
+    employers: undefined,
+    selfEmployment: undefined,
+    unemployment: { option: { value: UnemploymentType.RETIRED.value } },
+    dependants: { declared: false },
+    otherDependants: { declared: false },
+    maintenance: { declared: false },
+    bankAccounts: { rows: [] },
+    debts: { declared: false },
+    monthlyIncome: {
+      salary: 1,
+      universalCredit: 1,
+      jobSeekerAllowanceIncome: 1,
+      jobSeekerAllowanceContribution: 1,
+      incomeSupport: 1,
+      workingTaxCredit: 1,
+      childTaxCredit: 1,
+      childBenefit: 1,
+      councilTaxSupport: 1,
+      pension: 1
+    },
+    monthlyExpenses: {
+      mortgage: 1,
+      rent: 1,
+      councilTax: 1,
+      gas: 1,
+      electricity: 1,
+      water: 1,
+      travel: 1,
+      schoolCosts: 1,
+      foodAndHousekeeping: 1,
+      tvAndBroadband: 1,
+      mobilePhone: 1,
+      maintenance: 1,
+      rows: [{ amount: 10, description: 'bla bla bla' }]
+    },
+    courtOrders: { declared: false }
+  }
+}
+
+export const samplePartialAdmissionResponseDraftObj = {
+  ...commonResponsePartial,
+  response: {
+    type: ResponseType.PART_ADMISSION
+  },
+  partialAdmission: {
+    alreadyPaid: new AlreadyPaid().deserialize({ alreadyPaid: new AlreadyPaid(YesNoOption.YES) }),
+    howMuchHaveYouPaid: new HowMuchHaveYouPaid().deserialize({ amount: 100, date: '2018-02-01', text: 'by Cash' })
+  }
+}
 
 const sampleCCJDraftObj = {
   defendant: {
@@ -303,6 +325,10 @@ const sampleCCJDraftObj = {
   }
 }
 
+export const sampleClaimantResponseDraftObj = {
+  externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5'
+}
+
 export function resolveFind (draftType: string, draftOverride?: object): mock.Scope {
   let documentDocument: object
 
@@ -313,8 +339,17 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
     case 'response':
       documentDocument = { ...sampleResponseDraftObj, ...draftOverride }
       break
+    case 'response:full-admission':
+      documentDocument = { ...sampleFullAdmissionResponseDraftObj, ...draftOverride }
+      break
+    case 'response:partial-admission':
+      documentDocument = { ...samplePartialAdmissionResponseDraftObj, ...draftOverride }
+      break
     case 'ccj':
       documentDocument = { ...sampleCCJDraftObj, ...draftOverride }
+      break
+    case 'claimantResponse':
+      documentDocument = { ...sampleClaimantResponseDraftObj, ...draftOverride }
       break
     default:
       documentDocument = { ...draftOverride }
@@ -325,7 +360,7 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
     .reply(HttpStatus.OK, {
       data: [{
         id: 100,
-        type: draftType,
+        type: draftType.split(':')[0],
         document: documentDocument,
         created: '2017-10-01T12:00:00.000',
         updated: '2017-10-01T12:01:00.000'
@@ -346,7 +381,10 @@ export function resolveFindAllDrafts (): mock.Scope {
       }, {
         id: 201,
         type: 'response',
-        document: sampleResponseDraftObj,
+        document: {
+          ...sampleResponseDraftObj,
+          ...sampleFullAdmissionResponseDraftObj
+        },
         created: '2017-10-02T12:00:00.000',
         updated: '2017-10-02T12:01:00.000'
       }, {

@@ -1,24 +1,21 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, poundInput, textArea, radioOption, linkButton, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, poundInput, radioOption, linkButton, saveAndContinueButton, errorSummary, textInput %}
 
-{% set heading = 'Are you paying any other court orders?' %}
+{% set heading = 'Are you paying money as a result of any court orders?' %}
 
 {% macro courtOrdersRow(index, form) %}
 
   {% set prefix = 'rows[' + index + ']' %}
-  {% set detailsKey = prefix + '[details]' %}
   {% set amountKey = prefix + '[amount]' %}
+  {% set instalmentAmountKey = prefix + '[instalmentAmount]' %}
+  {% set claimNumberKey = prefix + '[claimNumber]' %}
 
-  <div class="form-group {% if form.errorFor(detailsKey) or form.errorFor(amountKey) %} form-group-error {% endif %}">
+  <div class="form-group {% if form.errorFor(amountKey) or form.errorFor(instalmentAmountKey) or form.errorFor(claimNumberKey) %} form-group-error {% endif %}">
 
-    {{
-      textArea(
-        label = 'Give details - for example how you’re paying and the claim number',
-        name = detailsKey,
-        form = form
-      )
-    }}
+    {{ textInput('Claim number', name = claimNumberKey, form = form) }}
     {{ poundInput(label = 'Amount you owe', name = amountKey, form = form) }}
+    {{ poundInput(label = 'Monthly instalment amount', name = instalmentAmountKey, form = form) }}
+
 
   </div>
 
@@ -30,23 +27,24 @@
 
     <form method="post" novalidate
           class="analytics-submit-event-trigger"
-          data-event-action="SoM: Are you paying any other court orders?"
-          data-event-label-from="hasAnyCourtOrders">
+          data-event-action="SoM: Are you paying money as a result of any court orders?"
+          data-event-label-from="declared">
 
       {{ csrfProtection(csrf) }}
 
-      {% set errorHasAnyCourtOrders = form.errorFor('hasAnyCourtOrders') %}
+      {% set errorHasAnyCourtOrders = form.errorFor('declared') %}
       <div class="statement-of-means-container">
-        <fieldset id="hasAnyCourtOrders[label]" class="form-group {% if errorHasAnyCourtOrders %} form-group-error {% endif %}">
-          <legend class="visually-hidden">{{ t('Are you paying any other court orders?') }}</legend>
+        <fieldset id="declared[label]" class="form-group {% if errorHasAnyCourtOrders %} form-group-error {% endif %}">
+          <legend class="visually-hidden">{{ t('Are you paying money as a result of any court orders?') }}</legend>
+          {% if errorHasAnyCourtOrders %}<span class="error-message">{{ t(errorHasAnyCourtOrders) }}</span>{% endif %}
 
           {{
-            radioOption(form = form, label = 'Yes', name = 'hasAnyCourtOrders', value = 'true', checked = form.valueFor('hasAnyCourtOrders') === true)
+            radioOption(form = form, label = 'Yes', name = 'declared', value = 'true', checked = form.valueFor('declared') === true)
           }}
 
           {% set noRowsError = form.errorFor('rows') %}
           <div class="form-group panel panel-border-narrow js-hidden {% if noRowsError %} form-group-error {% endif %}"
-               id="hasAnyCourtOrders-true" aria-hidden="false">
+               id="declared-true" aria-hidden="false">
 
             {% if noRowsError %}<span class="error-message" id="rows[label]">{{ t(noRowsError) }}</span>{% endif %}
 
@@ -63,7 +61,7 @@
           </div>
 
           {{
-            radioOption(form = form, label = 'No', name = 'hasAnyCourtOrders', value = 'false', checked = form.valueFor('hasAnyCourtOrders') === false)
+            radioOption(form = form, label = 'No', name = 'declared', value = 'false', checked = form.valueFor('declared') === false)
           }}
         </fieldset>
       </div>

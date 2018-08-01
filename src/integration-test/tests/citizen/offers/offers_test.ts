@@ -20,7 +20,7 @@ Scenario('I can as a defendant make an offer, accept offer and counter sign the 
 
   userSteps.login(defendantEmail)
   offerSteps.makeOfferFromDashboard(claimRef)
-  I.see('Your offer has been sent to ' + createClaimant(PartyType.INDIVIDUAL).name)
+  I.see('We’ve sent your offer to ' + createClaimant(PartyType.INDIVIDUAL).name)
   I.click('Sign out')
 
   userSteps.login(claimantEmail)
@@ -44,7 +44,7 @@ Scenario('I can make an offer as a defendant to a claimant and have the claimant
 
   userSteps.login(defendantEmail)
   offerSteps.makeOfferFromDashboard(claimRef)
-  I.see('Your offer has been sent to ' + createClaimant(PartyType.INDIVIDUAL).name)
+  I.see('We’ve sent your offer to ' + createClaimant(PartyType.INDIVIDUAL).name)
   I.click('Sign out')
 
   userSteps.login(claimantEmail)

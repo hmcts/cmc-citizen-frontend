@@ -89,6 +89,9 @@
       "response/*": [
         "main/features/response/*"
       ],
+      "claimant-response/*": [
+        "main/features/claimant-response/*"
+      ],
       "offer/*": [
         "main/features/offer/*"
       ],
