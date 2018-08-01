@@ -300,9 +300,9 @@
   version "2.2.44"
   resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-2.2.44.tgz#1d4a798e53f35212fd5ad4d04050620171cd5b5e"
 
-"@types/nock@^9.1.0":
-  version "9.1.2"
-  resolved "https://registry.yarnpkg.com/@types/nock/-/nock-9.1.2.tgz#0515b27e3f6bbc11834d22508ad02e2921dd376a"
+"@types/nock@^9.3.0":
+  version "9.3.0"
+  resolved "https://registry.yarnpkg.com/@types/nock/-/nock-9.3.0.tgz#9d34358fdcc08afd07144e0784ac9e951d412dd4"
   dependencies:
     "@types/node" "*"
 
