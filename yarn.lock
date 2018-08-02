@@ -266,17 +266,13 @@
   dependencies:
     "@types/i18next" "^2"
 
-"@types/i18next@*":
-  version "8.4.2"
-  resolved "https://registry.yarnpkg.com/@types/i18next/-/i18next-8.4.2.tgz#9f809c4a9d3687f7643254cde85b1127db616180"
+"@types/i18next@*", "@types/i18next@^8.4.4":
+  version "8.4.4"
+  resolved "https://registry.yarnpkg.com/@types/i18next/-/i18next-8.4.4.tgz#76591ab5974b65910e44b8860202d4f544f39b9d"
 
 "@types/i18next@^2":
   version "2.3.40"
   resolved "https://registry.yarnpkg.com/@types/i18next/-/i18next-2.3.40.tgz#c04d46c97b1a99bd10b9bba41e0d4bb5303084af"
-
-"@types/i18next@^8.4.1":
-  version "8.4.3"
-  resolved "https://registry.yarnpkg.com/@types/i18next/-/i18next-8.4.3.tgz#9136a9551bf5bf7169aa9f3125c1743f1f8dd6de"
 
 "@types/json5@^0.0.29":
   version "0.0.29"
