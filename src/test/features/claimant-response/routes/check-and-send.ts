@@ -72,7 +72,7 @@ describe('Claimant response: check and send page', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting your response'))
+            .expect(res => expect(res).to.be.successful.withText('Check your answers'))
         })
       })
     })

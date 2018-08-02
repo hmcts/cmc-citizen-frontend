@@ -70,7 +70,7 @@ describe('Defendant response: check and send page', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting your response'))
+            .expect(res => expect(res).to.be.successful.withText('Check your answers'))
         })
       })
     })
@@ -121,7 +121,7 @@ describe('Defendant response: check and send page', () => {
               .post(pagePath)
               .send({ type: SignatureType.BASIC })
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting your response', 'div class="error-summary"'))
+              .expect(res => expect(res).to.be.successful.withText('Check your answers', 'div class="error-summary"'))
           })
         })
 
