@@ -91,7 +91,7 @@
     "ts-node": "^7.0.0",
     "tsconfig-paths": "^3.5.0",
     "typescript": "^3.0.1",
-    "uuid": "^3.0.1"
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@hmcts/cmc-supported-browsers": "^1.0.1",
