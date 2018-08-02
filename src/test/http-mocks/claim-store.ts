@@ -94,12 +94,7 @@ export const sampleClaimObj = {
 export const sampleClaimDataWithEvidence = {
   claim: {
     ...sampleClaimObj.claim,
-    evidence: {
-      rows: [{
-        type: EvidenceType.PHOTO,
-        description: 'my photo evidence'
-      }]
-    }
+    evidence: { rows: [{ type: EvidenceType.PHOTO.value, description: 'my photo evidence' }] }
   }
 }
 

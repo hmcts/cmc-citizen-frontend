@@ -65,6 +65,18 @@ describe('Defendant first contact: claim summary page', () => {
           .expect(res => expect(res).to.be.successful.withText('Evidence'))
       })
 
+      it('should not include evidence section when evidence was not provided', async () => {
+        claimStoreServiceMock.resolveRetrieveByLetterHolderId(
+          '000MC001',
+          { claim: { ...claimStoreServiceMock.sampleClaimObj.claim, evidence: null } }
+        )
+
+        await request(app)
+          .get(Paths.claimSummaryPage.uri)
+          .set('Cookie', `${cookieName}=ABC;state=000MC001`)
+          .expect(res => expect(res).to.be.successful.withoutText('Evidence'))
+      })
+
     })
   })
 
