@@ -1,7 +1,9 @@
 import { RoutablePath } from 'shared/router/routablePath'
 
+import { Paths as TaskListPaths } from 'shared/components/task-list/paths'
+
 export class Paths {
-  static readonly taskListPage = new RoutablePath('/claim/task-list')
+  static readonly taskListPage = new RoutablePath('/claim' + TaskListPaths.taskListPage.uri)
   static readonly resolvingThisDisputerPage = new RoutablePath('/claim/resolving-this-dispute')
   static readonly completingClaimPage = new RoutablePath('/claim/completing-claim')
   static readonly claimantIndividualDetailsPage = new RoutablePath('/claim/claimant-individual-details')
@@ -36,7 +38,7 @@ export class Paths {
   static readonly receiptReceiver = new RoutablePath('/claim/:externalId/receipt')
   static readonly claimantPartyTypeSelectionPage = new RoutablePath('/claim/claimant-party-type-selection')
   static readonly defendantPartyTypeSelectionPage = new RoutablePath('/claim/defendant-party-type-selection')
-  static readonly incompleteSubmissionPage = new RoutablePath('/claim/incomplete-submission')
+  static readonly incompleteSubmissionPage = new RoutablePath('/claim' + TaskListPaths.incompleteTaskListPage.uri)
   static readonly sealedClaimPdfReceiver = new RoutablePath('/claim/:externalId/sealed-claim')
   static readonly claimantDetailsPage = new RoutablePath('/claim/:externalId/claimant-details')
 }

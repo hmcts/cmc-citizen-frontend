@@ -1,7 +1,8 @@
-import { DraftClaim } from 'drafts/models/draftClaim'
-import { TaskList } from 'drafts/tasks/taskList'
-import { TaskListItem } from 'drafts/tasks/taskListItem'
+import { ITaskListBuilder, TaskList, TaskListSection, Task } from 'shared/components/task-list/model'
+
 import { Paths } from 'claim/paths'
+
+import { DraftClaim } from 'drafts/models/draftClaim'
 import { ResolveDispute } from 'drafts/tasks/resolveDispute'
 import { CompletingYourClaim } from 'drafts/tasks/completingYourClaim'
 import { ClaimAmount } from 'drafts/tasks/claimAmount'
@@ -9,34 +10,34 @@ import { ClaimDetails } from 'drafts/tasks/claimDetails'
 import { YourDetails } from 'drafts/tasks/yourDetails'
 import { TheirDetails } from 'drafts/tasks/theirDetails'
 
-export class TaskListBuilder {
-  static buildBeforeYouStartSection (draft: DraftClaim): TaskList {
-    return new TaskList('Before you start', [
-      new TaskListItem('Resolving this dispute', Paths.resolvingThisDisputerPage.uri, ResolveDispute.isCompleted(draft))
-    ])
-  }
+function buildBeforeYouStartSection (draft: DraftClaim): TaskListSection {
+  return new TaskListSection('Before you start', [
+    new Task('Resolving this dispute', Paths.resolvingThisDisputerPage.uri, ResolveDispute.isCompleted(draft))
+  ])
+}
 
-  static buildPrepareYourClaimSection (draft: DraftClaim): TaskList {
-    return new TaskList('Prepare your claim', [
-      new TaskListItem('Completing your claim', Paths.completingClaimPage.uri, CompletingYourClaim.isCompleted(draft)),
-      new TaskListItem('Your details', Paths.claimantPartyTypeSelectionPage.uri, YourDetails.isCompleted(draft)),
-      new TaskListItem('Their details', Paths.defendantPartyTypeSelectionPage.uri, TheirDetails.isCompleted(draft)),
-      new TaskListItem('Claim amount', Paths.amountPage.uri, ClaimAmount.isCompleted(draft)),
-      new TaskListItem('Claim details', Paths.reasonPage.uri, ClaimDetails.isCompleted(draft))
-    ])
-  }
+function buildPrepareYourClaimSection (draft: DraftClaim): TaskListSection {
+  return new TaskListSection('Prepare your claim', [
+    new Task('Completing your claim', Paths.completingClaimPage.uri, CompletingYourClaim.isCompleted(draft)),
+    new Task('Your details', Paths.claimantPartyTypeSelectionPage.uri, YourDetails.isCompleted(draft)),
+    new Task('Their details', Paths.defendantPartyTypeSelectionPage.uri, TheirDetails.isCompleted(draft)),
+    new Task('Claim amount', Paths.amountPage.uri, ClaimAmount.isCompleted(draft)),
+    new Task('Claim details', Paths.reasonPage.uri, ClaimDetails.isCompleted(draft))
+  ])
+}
 
-  static buildSubmitSection (): TaskList {
-    return new TaskList('Submit', [
-      new TaskListItem('Check and submit your claim', Paths.checkAndSendPage.uri, false)
-    ])
-  }
+function buildSubmitSection (): TaskListSection {
+  return new TaskListSection('Submit', [
+    new Task('Check and submit your claim', Paths.checkAndSendPage.uri, undefined)
+  ])
+}
 
-  static buildRemainingTasks (draft: DraftClaim): TaskListItem[] {
-    return [].concat(
-      TaskListBuilder.buildBeforeYouStartSection(draft).tasks,
-      TaskListBuilder.buildPrepareYourClaimSection(draft).tasks
-    )
-      .filter(item => !item.completed)
+export class TaskListBuilder implements ITaskListBuilder<DraftClaim> {
+  build (draft: DraftClaim): TaskList {
+    return new TaskList([
+      buildBeforeYouStartSection(draft),
+      buildPrepareYourClaimSection(draft),
+      buildSubmitSection()
+    ])
   }
 }

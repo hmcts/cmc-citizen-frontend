@@ -1,5 +1,9 @@
 import * as express from 'express'
 
+import { TaskListBuilder } from 'claim/helpers/taskListBuilder'
+import { TaskList } from 'shared/components/task-list/model'
+import { AbstractAllTasksCompletedGuard } from 'shared/components/task-list/guards/allTasksCompletedGuard'
+
 import { Paths } from 'claim/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
@@ -8,7 +12,6 @@ import { FeesClient } from 'fees/feesClient'
 import { TotalAmount } from 'forms/models/totalAmount'
 import { draftInterestAmount } from 'shared/interestUtils'
 import { PartyType } from 'common/partyType'
-import { AllClaimTasksCompletedGuard } from 'claim/guards/allClaimTasksCompletedGuard'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { CompanyDetails } from 'forms/models/companyDetails'
@@ -126,15 +129,29 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
     }).catch(next)
 }
 
+class AllTasksCompletedGuard extends AbstractAllTasksCompletedGuard {
+  buildTaskList (res: express.Response): TaskList {
+    const draft: Draft<DraftClaim> = res.locals.claimDraft
+
+    return new TaskListBuilder().build(draft.document)
+  }
+
+  buildRedirectPath (req: express.Request, res: express.Response): string {
+    return Paths.incompleteSubmissionPage.uri
+  }
+}
+
+const stateGuard: AllTasksCompletedGuard = new AllTasksCompletedGuard()
+
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.checkAndSendPage.uri, AllClaimTasksCompletedGuard.requestHandler, (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  .get(Paths.checkAndSendPage.uri, stateGuard.requestHandler(), (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
     const StatementOfTruthClass = getStatementOfTruthClassFor(draft)
     renderView(new Form(new StatementOfTruthClass()), res, next)
   })
   .post(Paths.checkAndSendPage.uri,
-    AllClaimTasksCompletedGuard.requestHandler,
+    stateGuard.requestHandler(),
     FormValidator.requestHandler(undefined, deserializerFunction),
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<StatementOfTruth | QualifiedStatementOfTruth> = req.body

@@ -1,26 +1,20 @@
 import * as express from 'express'
 
-import { Paths } from 'claim/paths'
-
-import { TaskList } from 'drafts/tasks/taskList'
+import { AbstractTaskListPage } from 'shared/components/task-list/pages/task-list'
+import { TaskList } from 'shared/components/task-list/model'
 
 import { TaskListBuilder } from 'claim/helpers/taskListBuilder'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
 
-/* tslint:disable:no-default-export */
-export default express.Router()
-  .get(Paths.taskListPage.uri, (req: express.Request, res: express.Response) => {
+class TaskListPage extends AbstractTaskListPage {
+  buildTaskList (res: express.Response): TaskList {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
 
-    const beforeYouStartSection: TaskList = TaskListBuilder.buildBeforeYouStartSection(draft.document)
-    const prepareYourClaimSection: TaskList = TaskListBuilder.buildPrepareYourClaimSection(draft.document)
-    const submitSection: TaskList = TaskListBuilder.buildSubmitSection()
+    return new TaskListBuilder().build(draft.document)
+  }
+}
 
-    res.render(Paths.taskListPage.associatedView,
-      {
-        beforeYouStart: beforeYouStartSection,
-        prepareYourClaim: prepareYourClaimSection,
-        submit: submitSection
-      })
-  })
+/* tslint:disable:no-default-export */
+export default new TaskListPage('Make a money claim')
+  .buildRouter('/claim')
