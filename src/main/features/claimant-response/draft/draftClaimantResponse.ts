@@ -1,7 +1,7 @@
 import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { SettleAdmitted } from 'claimant-response/form/models/settleAdmitted'
 import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
-import { FreeMediation } from "response/form/models/freeMediation";
+import { FreeMediation } from 'response/form/models/freeMediation'
 
 export class DraftClaimantResponse extends DraftDocument {
   settleAdmitted?: SettleAdmitted
