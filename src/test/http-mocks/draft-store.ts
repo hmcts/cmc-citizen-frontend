@@ -337,6 +337,9 @@ export const sampleClaimantResponseDraftObj = {
     accept: {
       option: 'yes'
     }
+  },
+  freeMediation: {
+    option: FreeMediationOption.NO
   }
 }
 
