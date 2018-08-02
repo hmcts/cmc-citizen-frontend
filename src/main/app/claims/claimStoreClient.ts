@@ -177,15 +177,15 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('User is required'))
     }
     return this.request
-      .get(`${claimStoreApiUrl}/users/roles`, {
+      .get(`${claimApiBaseUrl}/users/roles`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }
       })
-      .then(roleName => null)
+      .then(roleNames => roleNames)
   }
 
-  persistRoleNameByUserId (user: User, roleName: string): Promise<String> {
+  persistRoleName (user: User, roleName: string): Promise<String> {
     if (!user) {
       return Promise.reject(new Error('User is required'))
     }
@@ -193,7 +193,7 @@ export class ClaimStoreClient {
     const roleJson = { role_name : roleName }
 
     return this.request
-      .post(`${claimStoreApiUrl}/users/roles/assign`, {
+      .post(`${claimApiBaseUrl}/users/roles/assign`, {
         body: roleJson,
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
