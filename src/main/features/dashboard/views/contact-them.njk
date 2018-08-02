@@ -5,8 +5,7 @@
 {% set headingVisible = false %}
 
 {% if user.id === claim.claimantId %}
-  {% set otherParty = 'Defendant' %}
-  {% set otherPartyLowerCase = 'defendant' %}
+  {% set otherParty = 'defendant' %}
   {% set otherPartyName = claim.claimData.defendant.name %}
   {% set phone = claim.response.defendant.mobilePhone %}
   {% set email = claim.claimData.defendant.email %}
@@ -16,8 +15,7 @@
   {% set contactPerson = claim.response.defendant.contactPerson %}
 
 {% elif user.id === claim.defendantId %}
-  {% set otherParty = 'Claimant' %}
-  {% set otherPartyLowerCase = 'claimant' %}
+  {% set otherParty = 'claimant' %}
   {% set otherPartyName = claim.claimData.claimant.name %}
   {% set phone = claim.claimData.claimant.mobilePhone %}
   {% set email = claim.claimantEmail %}
@@ -27,13 +25,13 @@
 
 {% endif %}
 
-{% set heading = 'Contact ' + t(otherPartyLowerCase) %}
+{% set heading = 'Contact ' + t(otherParty) %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
       <h1 class="heading-large">
-        <span class="heading-secondary">{{ t(otherParty) }}</span>
+        <span class="heading-secondary">{{ t(otherParty) | capitalize }}</span>
         {{ otherPartyName }}
       </h1>
       <div class="notice">
