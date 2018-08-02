@@ -27,7 +27,7 @@ describe('Defendant first contact: claim summary page', () => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-holder')
       })
 
-      it('should redirect to access denied page when claim reference number does not match', async () => {
+      it('should redirect to access denied page when not eligible page claim reference number does not match', async () => {
         claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001')
 
         await request(app)

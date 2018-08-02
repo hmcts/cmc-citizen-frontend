@@ -10,16 +10,19 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        <p>{{ t('Make it clear what you will do and by when. For example: "I will pay you £240 on 29 April 2018 by bank transfer".') }}</p>
+        <p>{{ t('Make it clear what you will do and by when. For example: "I will pay you £240 on {{ nextMonth }} by bank transfer".',
+            { nextMonth: 'now' | addDays(30) | inputDate }) }}</p>
 
-        <p>{{ t('If you’re also asking {{ claimantName }} to do something, say clearly what it is and by when it should be done. For example: "You will fix the roof by 28 April 2018."', { claimantName: claim.claimData.claimant.name }) }}</p>
+        <p>{{ t('If you’re also asking {{ claimantName }} to do something, say clearly what it is and by when it should be done. For example: "You will fix the roof by {{ twoWeeksLater }}."',
+            { claimantName: claim.claimData.claimant.name, twoWeeksLater: 'now' | addDays(44) | inputDate }) }}</p>
 
         <h2 class="bold-medium notice"> {{ t('Your offer') }}</h2>
         {{ textArea(id='offerText', label= '', name='offerText', form = form, rows = 10) }}
 
         <h4 class="heading-small"> {{ t('When will all parts of this offer be done?') }}</h4>
 
-        {{ dateInput(form = form, name = 'completionDate',label = '', hint = t('For example, {{ futureDate }}', { futureDate: futureDate | inputDate })) }}
+        {{ dateInput(form = form, name = 'completionDate',label = '',
+          hint = t('For example, {{ twoMonths }}', { twoMonths: 'now' | addDays(61) | inputDate })) }}
 
         <div class="panel panel-border-wide">
           <p>
