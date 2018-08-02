@@ -1,8 +1,5 @@
 import { IsDefined, IsIn } from 'class-validator'
 import { YesNoOption } from 'models/yesNoOption'
-import { Logger } from '@hmcts/nodejs-logging'
-
-const logger = Logger.getLogger('feature/consent')
 
 export class ValidationErrors {
   static readonly TYPE_REQUIRED: string = 'Choose your response'
@@ -21,7 +18,6 @@ export class FeatureConsentResponse {
     if (input == null) {
       return input
     }
-    logger.info('Feature Consent: ' + input.consentResponse)
     return new FeatureConsentResponse(YesNoOption.fromObject(input.consentResponse))
   }
 }
