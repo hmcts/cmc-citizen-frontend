@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import * as moment from 'moment'
 
-import { dateFilter, dateInputFilter } from 'modules/nunjucks/filters/dateFilter'
+import { addDaysFilter, dateFilter, dateInputFilter } from 'modules/nunjucks/filters/dateFilter'
 
 describe('dateFilter', () => {
   it('formats date (moment object) properly', () => {
@@ -85,6 +85,47 @@ describe('dateInputFilter', () => {
   })
 })
 
+describe('addDaysFilter', () => {
+  it('adds days to a moment', () => {
+    expect(addDaysFilter(moment('2018-01-01'), 1).toJSON()).to.eq(moment('2018-01-02').toJSON())
+  })
+
+  it('adds days to a valid string', () => {
+    expect(addDaysFilter('2018-01-1', 10).toJSON()).to.eq(moment('2018-01-11').toJSON())
+  })
+
+  it('adds negative days', () => {
+    expect(addDaysFilter('2018-01-01', -1).toJSON()).to.eq(moment('2017-12-31').toJSON())
+  })
+
+  describe('throws exception when', () => {
+    it('null given', () => {
+      expectAddDaysFilterToThrowErrorWithMsg(null, 'Input should be moment or string, cannot be empty')
+    })
+
+    it('undefined given', () => {
+      expectAddDaysFilterToThrowErrorWithMsg(undefined, 'Input should be moment or string, cannot be empty')
+    })
+
+    it('empty string given', () => {
+      expectAddDaysFilterToThrowErrorWithMsg('', 'Input should be moment or string, cannot be empty')
+    })
+
+    it('number given', () => {
+      expectAddDaysFilterToThrowErrorWithMsg(1.01 as any, 'Input should be moment or string, cannot be empty')
+    })
+
+    it('string given, but it is not a valid date', () => {
+      expectAddDaysFilterToThrowErrorWithMsg('this is invalid date', 'Invalid date')
+    })
+
+    it('moment given with invalid date', () => {
+      const invalidDateMoment = moment('2010-02-31')
+      expectAddDaysFilterToThrowErrorWithMsg(invalidDateMoment, 'Invalid date')
+    })
+  })
+})
+
 function expectDateFilterToThrowErrorWithMsg (input: any, msg: string): void {
   expect(() => {
     dateFilter(input)
@@ -93,6 +134,12 @@ function expectDateFilterToThrowErrorWithMsg (input: any, msg: string): void {
 
 function expectInputDateFilterToThrowErrorWithMsg (input: any, msg: string): void {
   expect(() => {
-    dateFilter(input)
+    dateInputFilter(input)
+  }).to.throw(Error, msg)
+}
+
+function expectAddDaysFilterToThrowErrorWithMsg (input: any, msg: string): void {
+  expect(() => {
+    addDaysFilter(input, 1)
   }).to.throw(Error, msg)
 }
