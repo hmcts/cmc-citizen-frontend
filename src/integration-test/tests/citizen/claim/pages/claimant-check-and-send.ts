@@ -103,7 +103,7 @@ export class ClaimantCheckAndSendPage {
   verifyCheckAndSendAnswers (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): void {
     const claimant: Party = createClaimant(claimantType)
 
-    I.waitForText('Check your answers before submitting your claim')
+    I.waitForText('Check your answers')
     this.verifyClaimantCheckAndSendAnswers(claimant, claimantType)
     this.verifyDefendantCheckAndSendAnswers(defendantType, enterDefendantEmail)
     this.verifyClaimAmount()

@@ -56,7 +56,7 @@ describe('Claim issue: check and send page', () => {
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting your claim'))
+          .expect(res => expect(res).to.be.successful.withText('Check your answers'))
       })
     })
   })
@@ -99,7 +99,7 @@ describe('Claim issue: check and send page', () => {
           .post(ClaimPaths.checkAndSendPage.uri)
           .send({ type: SignatureType.BASIC })
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting your claim', 'div class="error-summary"'))
+          .expect(res => expect(res).to.be.successful.withText('Check your answers', 'div class="error-summary"'))
       })
 
       it('should redirect to payment page when form is valid and everything is fine', async () => {
