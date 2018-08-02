@@ -8,6 +8,7 @@ import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
+import { Paths } from 'dashboard/paths'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -21,16 +22,23 @@ function requestHandler (): express.RequestHandler {
 
 export class DashboardFeature {
   enableFor (app: express.Express) {
-    if (app.settings.nunjucksEnv && app.settings.nunjucksEnv.filters) {
-      app.settings.nunjucksEnv.filters.renderPaymentSchedule = (value: string) => {
-        switch (value) {
-          case PaymentSchedule.EACH_WEEK:
-            return 'every week'
-          case PaymentSchedule.EVERY_TWO_WEEKS:
-            return 'every two weeks'
-          case PaymentSchedule.EVERY_MONTH:
-            return 'every month'
+    if (app.settings.nunjucksEnv) {
+
+      if (app.settings.nunjucksEnv.filters) {
+        app.settings.nunjucksEnv.filters.renderPaymentSchedule = (value: string) => {
+          switch (value) {
+            case PaymentSchedule.EACH_WEEK:
+              return 'every week'
+            case PaymentSchedule.EVERY_TWO_WEEKS:
+              return 'every two weeks'
+            case PaymentSchedule.EVERY_MONTH:
+              return 'every month'
+          }
         }
+      }
+
+      if (app.settings.nunjucksEnv.globals) {
+        app.settings.nunjucksEnv.globals.DashboardPaths = Paths
       }
     }
 
