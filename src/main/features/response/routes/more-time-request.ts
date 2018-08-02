@@ -19,7 +19,7 @@ const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 function renderView (form: Form<MoreTimeNeeded>, res: express.Response, next: express.NextFunction) {
   try {
     const claim: Claim = res.locals.claim
-    const moreTimeDeadline: string = 'You’ll have until 4pm on ' + claim.responseDeadline.format('LL') + ' to respond'
+    const moreTimeDeadline: string = 'You’ll have to respond before 4pm on ' + claim.responseDeadline.format('LL')
 
     res.render(Paths.moreTimeRequestPage.associatedView, {
       form: form,
