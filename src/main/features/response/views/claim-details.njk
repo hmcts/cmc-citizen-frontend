@@ -8,7 +8,7 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <p><span class="bold-small">{{ t('Claim reference') }}:</span> {{ claim.claimNumber }}</p>
+      <p><span class="bold-small">{{ t('Claim number') }}:</span> {{ claim.claimNumber }}</p>
       <p><span class="bold-small">{{ t('Claim amount') }}:</span> {{ claim.totalAmountTillToday | numeral }}</p>
 
       {{ amountBreakdownTable('View amount breakdown', claim, interestData) }}
