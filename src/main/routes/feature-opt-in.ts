@@ -21,7 +21,7 @@ export default express.Router()
 .get(AppPaths.featureOptInPage.uri,
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-    renderView(Form.empty<FeatureConsentResponse>(), res)
+    renderView(new Form(new FeatureConsentResponse()), res)
 
   })
 .post(AppPaths.featureOptInPage.uri,
