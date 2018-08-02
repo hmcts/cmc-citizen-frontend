@@ -21,8 +21,8 @@ function claimIssueRequestHandler (): express.RequestHandler {
     'citizen'
   ]
   const unprotectedPaths = []
-  AuthorizationMiddleware.requestHandler(requiredRoles, accessDeniedCallback, unprotectedPaths)
-  return FeatureConsentMiddleware.retrieveUserConsentRole
+
+  return AuthorizationMiddleware.requestHandler(requiredRoles, accessDeniedCallback, unprotectedPaths)
 }
 
 export class Feature {
@@ -31,7 +31,7 @@ export class Feature {
       app.settings.nunjucksEnv.globals.ClaimPaths = Paths
     }
 
-    app.all('/claim/*', claimIssueRequestHandler())
+    app.all('/claim/*', claimIssueRequestHandler(), FeatureConsentMiddleware.retrieveUserConsentRole)
     app.all(/^\/claim\/(?!start|amount-exceeded|.+\/confirmation|.+\/receipt|.+\/sealed-claim|.+\/claimant-details).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'claim', 100, (value: any): DraftClaim => {
         return new DraftClaim().deserialize(value)

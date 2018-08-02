@@ -1,39 +1,39 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import nameInput, csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
+{% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 
 {% set heading = 'Do you want to try new features as we add them?' %}
 
 {% block content %}
 <div class="grid-row">
   <div class="column-two-thirds">
-    <p>{{ t('We're continuously adding new features to this digital service. You can choose to try these features as we launch them') }}</p>
+    <p>{{ t('We’re continuously adding new features to this digital service. You can choose to try these features as we launch them') }}</p>
     <form method="POST" novalidate>
       {{ csrfProtection(csrf) }}
 
       {{
       radioGroup(
-      form = form,
       label = 'Do you want to try new features as we add them?',
       labelForScreenReadersOnly = true,
-      name = 'type',
+      name = 'consentResponse',
       options = [
       {
-      bold: true,
-      label: 'I'll try new features',
-      value: 'yes',
-      checked: (form.valueFor('type').value === 'yes')
+      bold: false,
+      label: 'I’ll try new features',
+      value: YesNoOption.YES.option,
+      checked: (form.valueFor('consentResponse') === YesNoOption.YES)
       },
       {
-      bold: true,
-      label: 'I don't want to try new features',
-      value: 'no',
-      checked: (form.valueFor('type').value === 'no')
+      bold: false,
+      label: 'I don’t want to try new features',
+      value: YesNoOption.NO.option,
+      checked: (form.valueFor('consentResponse').value === YesNoOption.NO)
       }
       ]
       )
       }}
 
-      {{ continueButton() }}
+
+      {{ saveAndContinueButton() }}
     </form>
   </div>
 </div>
