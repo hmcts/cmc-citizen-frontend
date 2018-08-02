@@ -17,9 +17,6 @@
           <span>{{ t('Your claim number:') }}</span>
           <h1 class="bold-large">{{ claim.claimNumber }}</h1>
         </div>
-        <p>
-          <span class="bold">{{ claim.createdAt | date  }}</span>
-        </p>
         <p class="receipt-download-container">
           <a href="{{ ClaimPaths.receiptReceiver.evaluateUri({ externalId: claim.externalId}) }}">
             {{ t('Download your claim form') }}
