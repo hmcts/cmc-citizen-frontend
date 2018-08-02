@@ -117,7 +117,7 @@
     "gulp-sass": "^4.0.0",
     "husky": "^0.14.3",
     "jsonwebtoken": "^8.0.1",
-    "mocha": "^5.0.3",
+    "mocha": "^5.2.0",
     "mocha-junit-reporter": "^1.17.0",
     "mocha-multi": "^1.0.1",
     "mochawesome": "^3.0.2",
