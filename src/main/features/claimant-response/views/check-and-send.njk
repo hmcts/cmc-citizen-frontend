@@ -56,13 +56,11 @@
             paymentDate: claim.response.paymentIntention.paymentDate | date
           }
         ),
-        bottomBorder = true, bold = true,
-        changeLink = ClaimantResponsePaths.signSettlementAgreementPage.evaluateUri({ externalId: claim.externalId })
+        bottomBorder = true, bold = true
       ) }}
       {{ row(label = 'Completion date',
         value = claim.response.paymentIntention.paymentDate | date,
-        bottomBorder = true, bold = true,
-        changeLink = ClaimantResponsePaths.signSettlementAgreementPage.evaluateUri({ externalId: claim.externalId })
+        bottomBorder = true, bold = true
       ) }}
     {% elseif claim.response.paymentIntention.repaymentPlan %}
       {{ row(label = 'The offer',
