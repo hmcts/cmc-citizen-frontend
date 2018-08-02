@@ -8,7 +8,7 @@
     {% for evidenceRow in evidence %}
       <tr>
         <td>{{ evidenceRow.type.displayValue }}</td>
-        <td>{{ evidenceRow.description }}</td>
+        <td>{{ evidenceRow.description | default('') }}</td>
       </tr>
     {% endfor %}
   </table>
