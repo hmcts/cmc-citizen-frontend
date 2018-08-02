@@ -31,13 +31,14 @@ export class Feature {
       app.settings.nunjucksEnv.globals.ClaimPaths = Paths
     }
 
-    app.all('/claim/*', claimIssueRequestHandler(), FeatureConsentMiddleware.retrieveUserConsentRole)
+    app.all('/claim/*', claimIssueRequestHandler())
     app.all(/^\/claim\/(?!start|amount-exceeded|.+\/confirmation|.+\/receipt|.+\/sealed-claim|.+\/claimant-details).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'claim', 100, (value: any): DraftClaim => {
         return new DraftClaim().deserialize(value)
       }),
       ClaimEligibilityGuard.requestHandler()
     )
+    app.all('/claim/*', FeatureConsentMiddleware.retrieveUserConsentRole)
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }
 }

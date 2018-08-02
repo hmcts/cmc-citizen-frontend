@@ -1,7 +1,5 @@
 import * as express from 'express'
-
-import { Paths as AppPaths } from 'paths'
-import { Paths as claimPaths } from 'claim/paths'
+import { Paths as ClaimPaths } from 'features/claim/paths'
 import { Form } from 'forms/form'
 import { FeatureConsentResponse } from 'forms/models/featureConsentResponse'
 import { FormValidator } from 'forms/validation/formValidator'
@@ -16,19 +14,19 @@ const claimStoreClient = new ClaimStoreClient()
 
 function renderView (form: Form<FeatureConsentResponse>, res: express.Response) {
 
-  res.render(AppPaths.featureOptInPage.associatedView, { form: form })
+  res.render(ClaimPaths.featureOptInPage.associatedView, { form: form })
 
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(AppPaths.featureOptInPage.uri,
+  .get(ClaimPaths.featureOptInPage.uri,
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-      renderView(new Form(new FeatureConsentResponse()), res)
+      renderView(Form.empty<FeatureConsentResponse>(), res)
 
     })
-  .post(AppPaths.featureOptInPage.uri,
+  .post(ClaimPaths.featureOptInPage.uri,
     FormValidator.requestHandler(FeatureConsentResponse, FeatureConsentResponse.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
@@ -47,7 +45,7 @@ export default express.Router()
           roleName = 'cmc-new-features-consent-not-given'
         }
         await claimStoreClient.persistRoleName(user, roleName)
-        res.redirect(claimPaths.taskListPage.uri)
+        res.redirect(ClaimPaths.taskListPage.uri)
       }
 
     }))
