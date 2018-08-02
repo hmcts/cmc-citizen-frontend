@@ -18,7 +18,7 @@ export default express.Router()
       const claim: Claim = await new ClaimStoreClient().retrieveByExternalId(externalId, user)
 
       res.render(page.associatedView, {
-        deadline: claim.respondedAt.add(19, 'days'),
+        deadline: claim.respondedAt.clone().add(19, 'days'),
         claimNumber: claim.claimNumber,
         citizenName: user.forename + ' ' + user.surname
       })
