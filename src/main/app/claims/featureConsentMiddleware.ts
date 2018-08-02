@@ -3,7 +3,7 @@ import * as express from 'express'
 import { User } from 'idam/user'
 import { Logger } from '@hmcts/nodejs-logging'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
-import { Paths as ClaimPaths } from 'main/features/claim/paths'
+import { Paths as ClaimPaths } from 'claim/paths'
 
 const logger = Logger.getLogger('middleware/featureConsent')
 
@@ -22,6 +22,5 @@ export class FeatureConsentMiddleware {
         return next()
       }
     })
-return next()
   }
 }

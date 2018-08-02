@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { Paths as ClaimPaths } from 'features/claim/paths'
+import { Paths as ClaimPaths } from 'claim/paths'
 import { Form } from 'forms/form'
 import { FeatureConsentResponse } from 'forms/models/featureConsentResponse'
 import { FormValidator } from 'forms/validation/formValidator'

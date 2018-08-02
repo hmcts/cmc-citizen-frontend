@@ -10,7 +10,6 @@ import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { OAuthHelper } from 'idam/oAuthHelper'
-import { FeatureConsentMiddleware } from 'claims/featureConsentMiddleware'
 
 function claimIssueRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -38,7 +37,6 @@ export class Feature {
       }),
       ClaimEligibilityGuard.requestHandler()
     )
-    app.all('/claim/*', FeatureConsentMiddleware.retrieveUserConsentRole)
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }
 }
