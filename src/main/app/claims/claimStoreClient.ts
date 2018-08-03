@@ -188,7 +188,7 @@ export class ClaimStoreClient {
     }
 
     return this.request
-      .get(`${claimApiBaseUrl}/users/roles`, {
+      .get(`${claimApiBaseUrl}/user/roles`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }
