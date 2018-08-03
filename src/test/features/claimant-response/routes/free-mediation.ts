@@ -2,9 +2,11 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
-import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
+import { attachDefaultHooks } from 'test/routes/hooks'
+
+import { checkAuthorizationGuards } from 'test/features/claimant-response/routes/checks/authorization-check'
+import { checkNotClaimantInCaseGuard } from 'test/features/claimant-response/routes/checks/not-claimant-in-case-check'
 
 import { app } from 'main/app'
 
@@ -12,7 +14,6 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
-import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 import { Paths } from 'claimant-response/paths'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 
@@ -27,7 +28,7 @@ describe('Claimant response: free mediation page', () => {
   describe('on GET', () => {
     const method = 'get'
     checkAuthorizationGuards(app, method, pagePath)
-    checkNotDefendantInCaseGuard(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
@@ -64,7 +65,7 @@ describe('Claimant response: free mediation page', () => {
   describe('on POST', () => {
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
-    checkNotDefendantInCaseGuard(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
