@@ -316,7 +316,7 @@ export function resolveRetrieveRoleNameByUserIdWhenUserRolePresent () {
     .reply(HttpStatus.OK, ['cmc-new-features-consent-given'])
 }
 
-export function resolveRetrieveRoleNameByUserIdWhenNoRolePresent () {
+export function resolveRetrieveRoleNameByUserIdWhenNoUserRolePresent () {
   mock(`${serviceBaseURL}`)
     .get(new RegExp('/users/roles'))
     .reply(HttpStatus.OK, [])

@@ -43,7 +43,7 @@ describe('Claim issue: task list page', () => {
     it('should render page redirect to feature consent page when no role present', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
-      claimStoreServiceMock.resolveRetrieveRoleNameByUserIdWhenNoRolePresent()
+      claimStoreServiceMock.resolveRetrieveRoleNameByUserIdWhenNoUserRolePresent()
 
       await request(app)
         .get(ClaimPaths.taskListPage.uri)
