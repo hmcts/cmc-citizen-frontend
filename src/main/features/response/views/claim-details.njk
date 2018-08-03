@@ -23,7 +23,7 @@
         {{ timelineSummary(claim.claimData.timeline.getPopulatedRowsOnly()) }}
       </div>
 
-      {% if evidenceRows and 0 < evidenceRows | length %}
+      {% if evidenceRows and evidenceRows.length > 0 %}
         <div class="form-group">
           <p><span class="bold-small">{{ t('Evidence') }}</span></p>
           {{ evidenceSummary(evidenceRows) }}
