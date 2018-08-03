@@ -1,10 +1,5 @@
 import * as express from 'express'
 import * as mock from 'mock-require'
-import {
-  defenceWithDisputeData,
-  fullAdmissionWithPaymentByInstalmentsData,
-  partialAdmissionWithPaymentByInstalmentsData, statementOfMeansWithMandatoryFieldsOnlyData
-} from 'test/data/entity/responseData'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreMock from 'test/http-mocks/draft-store'

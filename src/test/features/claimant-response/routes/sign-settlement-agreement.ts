@@ -23,7 +23,7 @@ const pageHeading: string = 'Terms of the agreement'
 
 const validFormData = { signed: 'true' }
 
-const defendantPartialAdmissionResponse = claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj
+const defendantPartialAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
 
 describe('Claimant response: sign settlement agreement page', () => {
   attachDefaultHooks(app)
