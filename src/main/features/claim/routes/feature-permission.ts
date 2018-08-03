@@ -30,6 +30,7 @@ export default express.Router()
       const form: Form<FeaturePermissionResponse> = req.body
 
       const user: User = res.locals.user
+
       if (form.hasErrors()) {
         renderView(form, res)
       } else {

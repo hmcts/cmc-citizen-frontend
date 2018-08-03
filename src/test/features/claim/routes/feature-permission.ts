@@ -7,18 +7,18 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 import { checkEligibilityGuards } from 'test/features/claim/routes/checks/eligibility-check'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
-
 import { Paths as ClaimPaths } from 'claim/paths'
 
 import { app } from 'main/app'
 
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as idamServiceMock from 'test/http-mocks/idam'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
 const pagePath: string = ClaimPaths.featurePermissionPage.uri
 
-describe('Feature permission: Claimant permission to try new feature', () => {
+describe('Feature permission: Claimant permission to try new features', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -31,7 +31,6 @@ describe('Feature permission: Claimant permission to try new feature', () => {
 
     it.only('should render feature permission page when everything is fine', async () => {
       draftStoreServiceMock.resolveFind('claim')
-
       await request(app)
         .get(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
@@ -49,6 +48,7 @@ describe('Feature permission: Claimant permission to try new feature', () => {
       })
 
       it('should render page with error when no selection is made', async () => {
+        draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
           .post(pagePath)
@@ -58,11 +58,13 @@ describe('Feature permission: Claimant permission to try new feature', () => {
       })
 
       it('should redirect to task list page when selection is made', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+        claimStoreServiceMock.resolvePersistUserRoles('cmc-new-features-consent-given')
 
         await request(app)
-          .post(pagePath)
+          .post(ClaimPaths.featurePermissionPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ permissionResponse: 'no' })
+          .send({ permissionResponse: 'yes' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
       })
     })
