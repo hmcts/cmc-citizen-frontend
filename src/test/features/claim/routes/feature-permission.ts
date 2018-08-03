@@ -25,11 +25,8 @@ describe('Feature permission: Claimant permission to try new features', () => {
     checkAuthorizationGuards(app, 'get', pagePath)
     checkEligibilityGuards(app, 'get', pagePath)
 
-    beforeEach(() => {
+    it('should render feature permission page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-    })
-
-    it.only('should render feature permission page when everything is fine', async () => {
       draftStoreServiceMock.resolveFind('claim')
       await request(app)
         .get(pagePath)

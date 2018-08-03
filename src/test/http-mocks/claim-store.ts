@@ -310,18 +310,6 @@ export function resolveRetrieveDocument () {
     .reply(HttpStatus.OK)
 }
 
-export function resolveRetrieveRoleNameByUserIdWhenUserRolePresent () {
-  mock(`${serviceBaseURL}`)
-    .get(new RegExp('/users/roles'))
-    .reply(HttpStatus.OK, ['cmc-new-features-consent-given'])
-}
-
-export function resolveRetrieveRoleNameByUserIdWhenNoUserRolePresent () {
-  mock(`${serviceBaseURL}`)
-    .get(new RegExp('/users/roles'))
-    .reply(HttpStatus.OK, [])
-}
-
 export function resolvePersistUserRoles (role: string) {
   mock(`${serviceBaseURL}/user`)
     .post('/roles')
