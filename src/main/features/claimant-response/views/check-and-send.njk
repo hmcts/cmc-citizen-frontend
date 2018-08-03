@@ -16,10 +16,17 @@
         {% set settleAdmittedResponse = 'I accept this amount' %}
       {% else %}
         {% set settleAdmittedResponse = 'I reject this amount' %}
+          {% if draft.freeMediation.option === 'yes' %}
+            {% set freeMediationResponse =  'Yes' %}
+          {% else %}
+            {% set freeMediationResponse = 'No' %}
+          {% endif %}
       {% endif %}
 
       {{ row(label = 'Do you accept or reject the defendant’s admission?', bold = true, value = settleAdmittedResponse,
         changeLink = ClaimantResponsePaths.settleAdmittedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+      {{ row(label = 'Will you try free mediation?', bold = true, value = freeMediationResponse,
+        changeLink = ClaimantResponsePaths.freeMediationPage.evaluateUri({ externalId: draft.externalId }), bottomBorder = true) }}
     {% endif %}
 
     {% if draft.acceptPaymentMethod %}
