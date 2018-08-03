@@ -3686,9 +3686,9 @@ i18next-conv@^6.0.0:
     mkdirp "^0.5.1"
     node-gettext "^2.0.0"
 
-i18next-express-middleware@^1.0.2:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/i18next-express-middleware/-/i18next-express-middleware-1.1.1.tgz#9204f28c8800ac3bff87fbee01945367956f349c"
+i18next-express-middleware@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/i18next-express-middleware/-/i18next-express-middleware-1.2.0.tgz#1622e79110806ea6132de30476394d56b2812fc7"
   dependencies:
     cookies "0.7.1"
 
