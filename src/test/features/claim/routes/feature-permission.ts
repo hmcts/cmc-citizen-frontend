@@ -6,6 +6,7 @@ import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 import { checkEligibilityGuards } from 'test/features/claim/routes/checks/eligibility-check'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 import { Paths as ClaimPaths } from 'claim/paths'
 
@@ -15,26 +16,32 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
+const pagePath: string = ClaimPaths.featurePermissionPage.uri
+
 describe('Feature permission: Claimant permission to try new feature', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ClaimPaths.featurePermissionPage.uri)
-    checkEligibilityGuards(app, 'get', ClaimPaths.featurePermissionPage.uri)
+    checkAuthorizationGuards(app, 'get', pagePath)
+    checkEligibilityGuards(app, 'get', pagePath)
 
-    it('should render feature permission page when everything is fine', async () => {
+    beforeEach(() => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+    })
+
+    it.only('should render feature permission page when everything is fine', async () => {
+      draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
-        .get(ClaimPaths.featurePermissionPage.uri)
+        .get(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.successful.withText('I’ll try new features'))
     })
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', ClaimPaths.featurePermissionPage.uri)
-    checkEligibilityGuards(app, 'post', ClaimPaths.featurePermissionPage.uri)
+    checkAuthorizationGuards(app, 'post', pagePath)
+    checkEligibilityGuards(app, 'post', pagePath)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -44,7 +51,7 @@ describe('Feature permission: Claimant permission to try new feature', () => {
       it('should render page with error when no selection is made', async () => {
 
         await request(app)
-          .post(ClaimPaths.featurePermissionPage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ permissionResponse: undefined })
           .expect(res => expect(res).to.be.successful.withText('I’ll try new features', 'div class="error-summary"'))
@@ -53,7 +60,7 @@ describe('Feature permission: Claimant permission to try new feature', () => {
       it('should redirect to task list page when selection is made', async () => {
 
         await request(app)
-          .post(ClaimPaths.claimantPartyTypeSelectionPage.uri)
+          .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ permissionResponse: 'no' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))

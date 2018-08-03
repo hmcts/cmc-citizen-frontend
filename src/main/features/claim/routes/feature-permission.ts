@@ -20,7 +20,6 @@ function renderView (form: Form<FeaturePermissionResponse>, res: express.Respons
 export default express.Router()
   .get(ClaimPaths.featurePermissionPage.uri,
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
-
       renderView(Form.empty<FeaturePermissionResponse>(), res)
 
     })
