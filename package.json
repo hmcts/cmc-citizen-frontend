@@ -52,7 +52,7 @@
     "@types/request-promise-native": "^1.0.2",
     "@types/shortid": "^0.0.29",
     "applicationinsights": "^1.0.3",
-    "body-parser": "^1.13.3",
+    "body-parser": "^1.18.3",
     "build-url": "^1.1.2",
     "class-transformer": "^0.1.7",
     "class-validator": "^0.8.1",
