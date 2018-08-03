@@ -172,17 +172,20 @@ export class ClaimStoreClient {
       .then(linkStatus => linkStatus.linked)
   }
 
-  retrieveRoleNameByUserId (user: User): Promise<String> {
+  retrieveUserRoles (user: User): Promise<String> {
     if (!user) {
-      return Promise.reject(new Error('User is required'))
+      return Promise.reject(new Error('User must be set'))
     }
+
     return this.request
-      .get(`${claimApiBaseUrl}/users/roles`, {
+      .get(`${claimApiBaseUrl}/user/roles`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }
       })
-      .then(roleNames => roleNames)
+      .then((roles: string[]) => {
+        return roles.join(',')
+      })
   }
 
   persistRoleName (user: User, roleName: string): Promise<String> {
@@ -193,7 +196,7 @@ export class ClaimStoreClient {
     const roleJson = { role_name : roleName }
 
     return this.request
-      .post(`${claimApiBaseUrl}/users/roles/assign`, {
+      .post(`${claimApiBaseUrl}/user/roles`, {
         body: roleJson,
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
