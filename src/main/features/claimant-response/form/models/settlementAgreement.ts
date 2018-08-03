@@ -3,7 +3,8 @@ import { IsBooleanTrue } from '@hmcts/cmc-validators'
 import * as toBoolean from 'to-boolean'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
-export class Declaration {
+export class SettlementAgreement {
+
   @IsDefined({ message: GlobalValidationErrors.DECLARATION_REQUIRED })
   @IsBooleanTrue({ message: GlobalValidationErrors.DECLARATION_REQUIRED })
   signed?: boolean
@@ -12,10 +13,17 @@ export class Declaration {
     this.signed = signed
   }
 
-  static fromObject (value?: any): Declaration {
+  static fromObject (value?: any): SettlementAgreement {
     if (!value) {
       return value
     }
-    return new Declaration(value.signed && toBoolean(value.signed))
+    return new SettlementAgreement(value.signed && toBoolean(value.signed))
+  }
+
+  deserialize (input?: any): SettlementAgreement {
+    if (input && input.signed) {
+      this.signed = input.signed
+    }
+    return this
   }
 }

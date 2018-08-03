@@ -9,6 +9,9 @@ import { ResponseType } from 'claims/models/response/responseType'
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
 import { NumberFormatter } from 'utils/numberFormatter'
+import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
+import { ChooseHowToProceedTask } from 'claimant-response/tasks/chooseHowToProceedTask'
+import { SignSettlementAgreementTask } from 'claimant-response/tasks/signSettlementAgreementTask'
 import { FreeMediationTask } from 'claimant-response/tasks/freeMediationTask'
 
 export class TaskListBuilder {
@@ -63,6 +66,9 @@ export class TaskListBuilder {
         )
       }
 
+      this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+      this.buildSignSettlementAgreement(draft, tasks, externalId)
+
       if (draft.settleAdmitted
         && draft.settleAdmitted.admitted.option === YesNoOption.NO) {
         tasks.push(
@@ -85,8 +91,37 @@ export class TaskListBuilder {
           AcceptPaymentMethodTask.isCompleted(draft.acceptPaymentMethod)
         )
       )
+      this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+      this.buildSignSettlementAgreement(draft, tasks, externalId)
     }
+
     return new TaskList('How do you want to respond?', tasks)
+  }
+
+  private static buildSignSettlementAgreement (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
+    if (draft.formaliseRepaymentPlan
+      && draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value
+    ) {
+      tasks.push(
+        new TaskListItem(
+          'Sign a settlement agreement',
+          Paths.signSettlementAgreementPage.evaluateUri({ externalId: externalId }),
+          SignSettlementAgreementTask.isCompleted(draft.settlementAgreement)
+        )
+      )
+    }
+  }
+
+  private static buildFormaliseRepaymentPlan (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
+    if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
+      tasks.push(
+        new TaskListItem(
+          'Formalise the repayment plan',
+          Paths.chooseHowToProceedPage.evaluateUri({ externalId: externalId }),
+          ChooseHowToProceedTask.isCompleted(draft.formaliseRepaymentPlan)
+        )
+      )
+    }
   }
 
   static buildSubmitSection (draft: DraftClaimantResponse, externalId: string): TaskList {

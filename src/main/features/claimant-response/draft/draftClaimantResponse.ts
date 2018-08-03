@@ -1,11 +1,15 @@
 import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { SettleAdmitted } from 'claimant-response/form/models/settleAdmitted'
 import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
+import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
+import { SettlementAgreement } from 'claimant-response/form/models/settlementAgreement'
 import { FreeMediation } from 'response/form/models/freeMediation'
 
 export class DraftClaimantResponse extends DraftDocument {
   settleAdmitted?: SettleAdmitted
   acceptPaymentMethod?: AcceptPaymentMethod
+  formaliseRepaymentPlan?: FormaliseRepaymentPlan
+  settlementAgreement?: SettlementAgreement
   freeMediation?: FreeMediation
 
   constructor () {
@@ -20,6 +24,12 @@ export class DraftClaimantResponse extends DraftDocument {
       }
       if (input.acceptPaymentMethod) {
         this.acceptPaymentMethod = new AcceptPaymentMethod().deserialize(input.acceptPaymentMethod)
+      }
+      if (input.formaliseRepaymentPlan) {
+        this.formaliseRepaymentPlan = new FormaliseRepaymentPlan().deserialize(input.formaliseRepaymentPlan)
+      }
+      if (input.settlementAgreement) {
+        this.settlementAgreement = new SettlementAgreement().deserialize(input.settlementAgreement)
       }
       if (input.freeMediation) {
         this.freeMediation = new FreeMediation(input.freeMediation.option)
