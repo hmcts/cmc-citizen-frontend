@@ -9,10 +9,8 @@
 <div class="grid-row">
   <div class="column-two-thirds">
     <p class="panel panel-border-wide">
-      {{ t('We need to receive your response before ' +
-      '<strong class="bold">4pm on <span class="dates5"> {{ deadline }}</span></strong>.',
-      { deadline: deadline | date }) | safe }}
-
+      {{ t('We need to receive your response before <strong class="bold">4pm on {{ deadline }}</strong>.',
+          { deadline: deadline | date }) | safe }}
     </p>
 
     <h3 class="heading-medium">{{ t('Follow these steps') }}</h3>

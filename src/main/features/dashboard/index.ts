@@ -23,7 +23,6 @@ function requestHandler (): express.RequestHandler {
 export class DashboardFeature {
   enableFor (app: express.Express) {
     if (app.settings.nunjucksEnv) {
-
       if (app.settings.nunjucksEnv.filters) {
         app.settings.nunjucksEnv.filters.renderPaymentSchedule = (value: string) => {
           switch (value) {
