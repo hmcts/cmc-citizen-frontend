@@ -13,6 +13,7 @@ import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -23,14 +24,31 @@ describe('Claim issue: task list page', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.incompleteSubmissionPage.uri)
     checkEligibilityGuards(app, 'get', ClaimPaths.incompleteSubmissionPage.uri)
 
-    it('should render page when everything is fine', async () => {
+    it('should render page when everything is fine when user role present', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
+      claimStoreServiceMock.resolveRetrieveRoleNameByUserIdWhenUserRolePresent()
 
       await request(app)
         .get(ClaimPaths.taskListPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.successful.withText('Make a money claim'))
+    })
+  })
+
+  describe('on GET', () => {
+    checkAuthorizationGuards(app, 'get', ClaimPaths.incompleteSubmissionPage.uri)
+    checkEligibilityGuards(app, 'get', ClaimPaths.incompleteSubmissionPage.uri)
+
+    it('should render page redirect to feature consent page when no role present', async () => {
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+      draftStoreServiceMock.resolveFind('claim')
+      claimStoreServiceMock.resolveRetrieveRoleNameByUserIdWhenNoRolePresent()
+
+      await request(app)
+        .get(ClaimPaths.taskListPage.uri)
+        .set('Cookie', `${cookieName}=ABC`)
+        .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.featureOptInPage.uri))
     })
   })
 })
