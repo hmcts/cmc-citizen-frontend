@@ -14,6 +14,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import { EvidenceType } from 'forms/models/evidenceType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -51,7 +52,12 @@ describe('Defendant response: claim details page', () => {
       })
 
       it('should include evidence section when evidence was provided', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleClaimDataWithEvidence)
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId({
+          claim: {
+            ...claimStoreServiceMock.sampleClaimObj.claim,
+            evidence: { rows: [{ type: EvidenceType.PHOTO.value, description: 'my photo evidence' }] }
+          }
+        })
         draftStoreServiceMock.resolveFindNoDraftFound()
 
         await request(app)

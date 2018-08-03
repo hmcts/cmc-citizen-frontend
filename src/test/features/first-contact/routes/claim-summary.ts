@@ -13,6 +13,7 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { MomentFactory } from 'shared/momentFactory'
+import { EvidenceType } from 'forms/models/evidenceType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -56,7 +57,12 @@ describe('Defendant first contact: claim summary page', () => {
       it('should include evidence section when evidence was provided', async () => {
         claimStoreServiceMock.resolveRetrieveByLetterHolderId(
           '000MC001',
-          claimStoreServiceMock.sampleClaimDataWithEvidence
+          {
+            claim: {
+              ...claimStoreServiceMock.sampleClaimObj.claim,
+              evidence: { rows: [{ type: EvidenceType.PHOTO.value, description: 'my photo evidence' }] }
+            }
+          }
         )
 
         await request(app)
