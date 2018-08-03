@@ -18,8 +18,6 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const paymentPlan = getPaymentPlan(claim)
 
-      console.log('draft------',draft)
-
       res.render(Paths.checkAndSendPage.associatedView, {
         draft: draft.document,
         claim: claim,
