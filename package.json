@@ -85,7 +85,7 @@
     "request": "^2.81.0",
     "request-promise-native": "^1.0.3",
     "require-directory": "^2.1.1",
-    "serve-favicon": "^2.3.0",
+    "serve-favicon": "^2.5.0",
     "string.prototype.startswith": "^0.2.0",
     "to-boolean": "^1.0.0",
     "ts-node": "^7.0.0",
