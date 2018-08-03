@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { Paths as ClaimPaths } from 'claim/paths'
 import { Form } from 'forms/form'
-import { FeatureConsentResponse } from 'forms/models/featureConsentResponse'
+import { FeaturePermissionResponse } from 'forms/models/featurePermissionResponse'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
@@ -10,32 +10,32 @@ import { User } from 'idam/user'
 
 const claimStoreClient = new ClaimStoreClient()
 
-function renderView (form: Form<FeatureConsentResponse>, res: express.Response) {
+function renderView (form: Form<FeaturePermissionResponse>, res: express.Response) {
 
-  res.render(ClaimPaths.featureOptInPage.associatedView, { form: form })
+  res.render(ClaimPaths.featurePermissionPage.associatedView, { form: form })
 
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(ClaimPaths.featureOptInPage.uri,
+  .get(ClaimPaths.featurePermissionPage.uri,
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-      renderView(Form.empty<FeatureConsentResponse>(), res)
+      renderView(Form.empty<FeaturePermissionResponse>(), res)
 
     })
-  .post(ClaimPaths.featureOptInPage.uri,
-    FormValidator.requestHandler(FeatureConsentResponse, FeatureConsentResponse.fromObject),
+  .post(ClaimPaths.featurePermissionPage.uri,
+    FormValidator.requestHandler(FeaturePermissionResponse, FeaturePermissionResponse.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-      const form: Form<FeatureConsentResponse> = req.body
+      const form: Form<FeaturePermissionResponse> = req.body
 
       const user: User = res.locals.user
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
         let roleName
-        if (form.model.consentResponse.option === YesNoOption.YES.option) {
+        if (form.model.permissionResponse.option === YesNoOption.YES.option) {
           roleName = 'cmc-new-features-consent-given'
         } else {
           roleName = 'cmc-new-features-consent-not-given'

@@ -9,7 +9,7 @@ import { Paths } from 'claim/paths'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-export function featureConsentAlreadySubmittedGuard (app: any, method: string, pagePath: string, expectedPage: string) {
+export function featurePermissionAlreadySubmittedGuard (app: any, method: string, pagePath: string, expectedPage: string) {
   it(`for ${method} return 200 and render expected page when user role is found`, async () => {
     claimStoreServiceMock.resolveRetrieveRoleNameByUserIdWhenUserRolePresent()
 
@@ -23,6 +23,6 @@ export function featureConsentAlreadySubmittedGuard (app: any, method: string, p
 
     await request(app)[method](pagePath)
       .set('Cookie', `${cookieName}=ABC`)
-      .expect(res => expect(res).to.be.redirect.toLocation(Paths.featureOptInPage.uri))
+      .expect(res => expect(res).to.be.redirect.toLocation(Paths.featurePermissionPage.uri))
   })
 }
