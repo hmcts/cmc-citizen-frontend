@@ -39,9 +39,8 @@
       <div class="notice">
         {% if address %}
           <h2 class="heading-medium">{{ t('Address') }}</h2>
-          {% if address.line1 %}
-            <span class="block">{{ address.line1 }}</span>
-          {% endif %}
+          
+          <span class="block">{{ address.line1 }}</span>
 
           {% if address.line2 %}
             <span class="block">{{ address.line2 }}</span>
@@ -51,13 +50,9 @@
             <span class="block">{{ address.line3 }}</span>
           {% endif %}
 
-          {% if address.city %}
-            <span class="block">{{ address.city }}</span>
-          {% endif %}
+          <span class="block">{{ address.city }}</span>
 
-          {% if address.postcode %}
-            <span class="block">{{ address.postcode }}</span>
-          {% endif %}
+          <span class="block">{{ address.postcode }}</span>
 
         {% endif %}
       </div>
@@ -65,9 +60,8 @@
       {% if correspondenceAddress %}
         <div class="notice">
           <h2 class="heading-medium">{{ t('Correspondence address') }}</h2>
-          {% if correspondenceAddress.line1 %}
-            <span class="block">{{ correspondenceAddress.line1 }}</span>
-          {% endif %}
+          
+          <span class="block">{{ correspondenceAddress.line1 }}</span>
 
           {% if correspondenceAddress.line2 %}
             <span class="block">{{ correspondenceAddress.line2 }}</span>
@@ -77,13 +71,9 @@
             <span class="block">{{ correspondenceAddress.line3 }}</span>
           {% endif %}
 
-          {% if correspondenceAddress.city %}
-            <span class="block">{{ correspondenceAddress.city }}</span>
-          {% endif %}
+          <span class="block">{{ correspondenceAddress.city }}</span>
 
-          {% if correspondenceAddress.postcode %}
-            <span class="block">{{ correspondenceAddress.postcode }}</span>
-          {% endif %}
+          <span class="block">{{ correspondenceAddress.postcode }}</span>
         </div>
       {% endif %}
 
