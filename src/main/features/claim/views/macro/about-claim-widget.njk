@@ -1,10 +1,6 @@
 {% from "internalLink.njk" import internalLink %}
 
-
-
 {% macro aboutClaimWidget(user, claim, showResponse = true) %}
-
-  {% set contactThem = 'contact-them' %}
 
 {% if user.id === claim.claimantId %}
   {% set otherPartyLabel = 'Defendant name:' %}

@@ -14,8 +14,9 @@
     <li>{{ t('you get a receipt for any payments') }}</li>
   </ul>
 
-  <p>{{ t(internalLink('Contact ' + claimantName, claimantDetailsPageURI) + 'if you need their payment details.',
-    { claimantName: claimantName, link: claimantDetailsPageURI }) | safe }}
+  <p>
+    {{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }} 
+    {{ t('if you need their payment details.') }}
   </p>
 {% endif %}
 

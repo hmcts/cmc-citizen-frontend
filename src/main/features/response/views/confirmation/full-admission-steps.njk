@@ -8,9 +8,10 @@
 {% endif %}
 
 {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-  <p>{{ t('If {{ claimantName }} accepts your offer to pay, you need to '
-    + internalLink('contact them for payment details ', claimantDetailsPageURI) + ' and to arrange payment.',
-    { claimantName: claimantName, claimantDetailsPageURI: claimantDetailsPageURI }) | safe }}
+  <p>
+    {{ t('If {{ claimantName }} accepts your offer to pay, you need to ', { claimantName: claimantName }) }}
+    {{ internalLink('contact them for payment details', claimantDetailsPageURI) }} 
+    {{ t('and to arrange payment.') }}
   </p>
 
   <p>{{ t('If they reject your offer to pay by a set date then the court will decide how you must pay.') }}</p>
@@ -24,8 +25,8 @@
   <ul class="list list-bullet">
     <li>{{ t('set up your repayment plan to begin when you said it would') }}</li>
     <li>
-      {{ t(internalLink('Contact ' + claimantName, claimantDetailsPageURI) + 'if you need their payment details.',
-      { claimantName: claimantName, link: claimantDetailsPageURI }) | safe }}
+      {{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }} 
+      {{ t('if you need their payment details.') }}
     </li>
     <li>{{ t('make sure you get a receipt for any payments') }}</li>
   </ul>

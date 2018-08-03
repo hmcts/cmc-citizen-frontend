@@ -2,6 +2,8 @@
 {% from "./macro/caseHistory.njk" import caseHistoryForClaimantClaimDetails %}
 {% from "../../claim/views/macro/about-claim-widget.njk" import aboutClaimWidget %}
 
+{% from "table.njk" import tableStart,tableEnd, row, rowWithMultipleValue %}
+
 {% set headingVisible = false %}
 
 {% if user.id === claim.claimantId %}
@@ -38,58 +40,49 @@
         {% if address %}
           <h2 class="heading-medium">{{ t('Address') }}</h2>
           {% if address.line1 %}
-            {{ address.line1 }}
+            <span class="block">{{ address.line1 }}</span>
           {% endif %}
 
           {% if address.line2 %}
-            <br>
-            {{ address.line2 }}
+            <span class="block">{{ address.line2 }}</span>
           {% endif %}
 
           {% if address.line3 %}
-            <br>
-            {{ address.line3 }}
+            <span class="block">{{ address.line3 }}</span>
           {% endif %}
 
           {% if address.city %}
-            <br>
-            {{ address.city }}
+            <span class="block">{{ address.city }}</span>
           {% endif %}
 
           {% if address.postcode %}
-            <br>
-            {{ address.postcode }}
+            <span class="block">{{ address.postcode }}</span>
           {% endif %}
 
         {% endif %}
       </div>
 
-
       {% if correspondenceAddress %}
         <div class="notice">
           <h2 class="heading-medium">{{ t('Correspondence address') }}</h2>
           {% if correspondenceAddress.line1 %}
-            {{ correspondenceAddress.line1 }}
+            <span class="block">{{ correspondenceAddress.line1 }}</span>
           {% endif %}
 
           {% if correspondenceAddress.line2 %}
-            <br>
-            {{ correspondenceAddress.line2 }}
+            <span class="block">{{ correspondenceAddress.line2 }}</span>
           {% endif %}
 
           {% if correspondenceAddress.line3 %}
-            <br>
-            {{ correspondenceAddress.line3 }}
+            <span class="block">{{ correspondenceAddress.line3 }}</span>
           {% endif %}
 
           {% if correspondenceAddress.city %}
-            <br>
-            {{ correspondenceAddress.city }}
+            <span class="block">{{ correspondenceAddress.city }}</span>
           {% endif %}
 
           {% if correspondenceAddress.postcode %}
-            <br>
-            {{ correspondenceAddress.postcode }}
+            <span class="block">{{ correspondenceAddress.postcode }}</span>
           {% endif %}
         </div>
       {% endif %}
@@ -108,7 +101,6 @@
         {% endif %}
       </div>
     </div>
-
 
     {% if claim %}
       <div class="column-one-third">

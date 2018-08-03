@@ -40,8 +40,9 @@
         { claimantName: claimantName, amount: amount, paymentDate: paymentDate }) }} </p>
     <p> {{ t('If you pay by cheque or transfer the money must be clear in their account.') }} </p>
     <p> {{ t('If they don’t receive the money by then, they can request a County Court Judgment against you.') }} </p>
-    <p>{{ t(internalLink('Contact ' + claimantName, claimantDetailsPageURI) + 'if you need their payment details.',
-      { claimantName: claimantName, link: claimantDetailsPageURI }) | safe }}
+    <p>
+      {{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }} 
+      {{ t('if you need their payment details.') }}
     </p>
     <p> {{ t('Make sure you get receipts for any payments.') }} </p>
 
