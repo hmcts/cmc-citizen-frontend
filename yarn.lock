@@ -1048,9 +1048,9 @@ buffer@^5.1.0:
     base64-js "^1.0.2"
     ieee754 "^1.1.4"
 
-build-url@^1.0.9:
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/build-url/-/build-url-1.0.10.tgz#e986f5cb63e18d6f681c600a8222bdda1e1d2344"
+build-url@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/build-url/-/build-url-1.1.2.tgz#ae0103f6c16a626d122ff06b508455d476c92825"
 
 builtin-modules@^1.0.0, builtin-modules@^1.1.1:
   version "1.1.1"
