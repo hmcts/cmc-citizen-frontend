@@ -22,7 +22,7 @@ import { Fee } from 'payment-hub-client/fee'
 import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveResponse'
 import * as HttpStatus from 'http-status-codes'
 import { FeatureToggles } from 'utils/featureToggles'
-import { FeatureTogglesClient } from 'claims/featureTogglesClient'
+import { FeatureTogglesClient } from 'shared/clients/featureTogglesClient'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 const featureTogglesClient: FeatureTogglesClient = new FeatureTogglesClient()
@@ -81,8 +81,8 @@ async function successHandler (res, next) {
   }
 
   if (!claimIsAlreadyFullyPersisted) {
-    const roles = await claimStoreClient.retrieveUserRoles(user)
-    const admissionsAllowed = await featureTogglesClient.isAdmissionsAllowed(user, roles)
+    const roles: string = await claimStoreClient.retrieveUserRoles(user)
+    const admissionsAllowed: boolean = await featureTogglesClient.isAdmissionsAllowed(user, roles)
     await claimStoreClient.saveClaim(draft, user, admissionsAllowed)
   }
 

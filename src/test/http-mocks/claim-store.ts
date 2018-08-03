@@ -325,14 +325,14 @@ export function resolveRetrieveDocument () {
     .reply(HttpStatus.OK)
 }
 
-export function resolveUserRoles () {
-  mock(`${serviceBaseURL}/users`)
+export function resolveRetriveUserRoles () {
+  mock(`${serviceBaseURL}/user`)
     .get('/roles')
-    .reply(HttpStatus.OK, 'cmc-new-features-consent-given, citizen, admin, some-role')
+    .reply(HttpStatus.OK, 'cmc-new-features-consent-given')
 }
 
-export function rejectUserRoles () {
-  mock(`${serviceBaseURL}/users`)
-    .get('roles')
+export function rejectRetriveUserRoles () {
+  mock(`${serviceBaseURL}/user`)
+    .get('/roles')
     .reply(HttpStatus.INTERNAL_SERVER_ERROR)
 }

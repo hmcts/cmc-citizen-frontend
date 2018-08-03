@@ -14,7 +14,7 @@
     "url": "http://localhost:14400"
   },
   "feature-toggles-api": {
-    "url": "http://localhost:8580"
+    "url": "http://localhost:18580"
   },
   "draft-store": {
     "url": "http://localhost:18800"
