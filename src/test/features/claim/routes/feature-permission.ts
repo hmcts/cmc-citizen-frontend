@@ -11,7 +11,9 @@ import { Paths as ClaimPaths } from 'claim/paths'
 
 import { app } from 'main/app'
 
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as idamServiceMock from 'test/http-mocks/idam'
+import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -24,7 +26,7 @@ describe('Feature permission: Claimant permission to try new feature', () => {
 
     it('should render feature permission page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-
+      draftStoreServiceMock.resolveFind('claim')
       await request(app)
         .get(ClaimPaths.featurePermissionPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
@@ -42,6 +44,7 @@ describe('Feature permission: Claimant permission to try new feature', () => {
       })
 
       it('should render page with error when no selection is made', async () => {
+        draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
           .post(ClaimPaths.featurePermissionPage.uri)
@@ -51,11 +54,13 @@ describe('Feature permission: Claimant permission to try new feature', () => {
       })
 
       it('should redirect to task list page when selection is made', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+        claimStoreServiceMock.resolvePersistUserRoles('cmc-new-features-consent-given')
 
         await request(app)
-          .post(ClaimPaths.claimantPartyTypeSelectionPage.uri)
+          .post(ClaimPaths.featurePermissionPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ permissionResponse: 'no' })
+          .send({ permissionResponse: 'yes' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
       })
     })

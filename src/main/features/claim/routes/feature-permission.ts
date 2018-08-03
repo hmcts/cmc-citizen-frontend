@@ -29,6 +29,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
       const form: Form<FeaturePermissionResponse> = req.body
+      console.log('coming here')
 
       const user: User = res.locals.user
       if (form.hasErrors()) {

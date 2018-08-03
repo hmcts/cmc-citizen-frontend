@@ -321,3 +321,15 @@ export function resolveRetrieveRoleNameByUserIdWhenNoUserRolePresent () {
     .get(new RegExp('/users/roles'))
     .reply(HttpStatus.OK, [])
 }
+
+export function resolvePersistUserRoles (role: string) {
+  mock(`${serviceBaseURL}/user`)
+    .post('/roles')
+    .reply(HttpStatus.CREATED, { role: role })
+}
+
+export function resolveRetrieveUserRoles (role: string) {
+  mock(`${serviceBaseURL}/user`)
+    .get('/roles')
+    .reply(HttpStatus.OK, [role])
+}
