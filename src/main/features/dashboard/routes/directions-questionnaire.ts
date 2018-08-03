@@ -17,7 +17,7 @@ export default express.Router()
       const claim: Claim = res.locals.claim
 
       res.render(page.associatedView, {
-        deadline: claim.respondedAt.clone().add(19, 'days'),
+        deadline: claim.directionsQuestionnaireSubmissionDeadline,
         claimNumber: claim.claimNumber,
         citizenName: user.forename + ' ' + user.surname
       })

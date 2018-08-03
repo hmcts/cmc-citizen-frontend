@@ -75,6 +75,10 @@ export class Claim {
     return this
   }
 
+  get directionsQuestionnaireSubmissionDeadline (): Moment {
+    return this.respondedAt ? this.respondedAt.clone().add(19, 'days') : undefined
+  }
+
   get defendantOffer (): Offer {
     if (!this.settlement) {
       return undefined

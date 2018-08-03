@@ -213,4 +213,21 @@ describe('Claim', () => {
       expect(claim.stateHistory[1].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
     })
   })
+
+  describe('directionsQuestionnaireSubmissionDeadline', () => {
+
+    it('should return undefined when respondedAt is undefined', () => {
+      const claim = new Claim()
+      claim.respondedAt = undefined
+
+      expect(claim.directionsQuestionnaireSubmissionDeadline).to.be.eq(undefined)
+    })
+
+    it('should return respondedAt + 19 days', () => {
+      const claim = new Claim()
+      claim.respondedAt = moment()
+
+      expect(claim.directionsQuestionnaireSubmissionDeadline.diff(claim.respondedAt, 'days')).to.be.eq(19)
+    })
+  })
 })
