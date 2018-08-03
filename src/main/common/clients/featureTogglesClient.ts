@@ -1,5 +1,5 @@
-import { request as requestPromiseApi, RequestPromiseAPI } from 'client/request'
-import { User } from 'idam/user'
+import { request as requestPromiseApi, RequestPromiseAPI } from 'main/app/client/request'
+import { User } from 'main/app/idam/user'
 import * as config from 'config'
 
 export const featureTogglesApiBaseUrl: string = `${config.get<string>('feature-toggles-api.url')}`
@@ -21,9 +21,6 @@ export class FeatureTogglesClient {
           'X-USER-ID': `${user.email}`,
           'X-USER-PERMISSIONS': permissions
         }
-      })
-      .then((isPermitted: boolean) => {
-        return isPermitted
       })
   }
 }
