@@ -21,4 +21,6 @@ export class ValidationErrors {
 
   static readonly REASON_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
   static readonly AMOUNT_NOT_VALID: string = 'Enter a valid amount'
+
+  static readonly DECLARATION_REQUIRED: string = 'Please select I confirm I’ve read and accept the terms of the agreement.'
 }
