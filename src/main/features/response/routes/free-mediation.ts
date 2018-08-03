@@ -5,7 +5,7 @@ import { AbstractFreeMediationPage } from 'shared/components/free-mediation/free
 import { responsePath, Paths } from 'features/response/paths'
 
 class FreeMediationPage extends AbstractFreeMediationPage {
-  redirectUri (req: express.Request, res: express.Response): string {
+  buildRedirectUri (req: express.Request, res: express.Response): string {
     const { externalId } = req.params
     return Paths.taskListPage.evaluateUri({ externalId: externalId })
   }

@@ -15,7 +15,7 @@ import { ErrorHandling } from 'main/common/errorHandling'
 /* tslint:disable:no-default-export */
 export abstract class AbstractFreeMediationPage {
 
-  abstract redirectUri (req: express.Request, res: express.Response): string
+  abstract buildRedirectUri (req: express.Request, res: express.Response): string
 
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
     return express.Router()
@@ -43,7 +43,7 @@ export abstract class AbstractFreeMediationPage {
             draft.document.freeMediation = form.model
             await new DraftService().save(draft, user.bearerToken)
 
-            res.redirect(this.redirectUri(req, res))
+            res.redirect(this.buildRedirectUri(req, res))
           }
         }))
   }
