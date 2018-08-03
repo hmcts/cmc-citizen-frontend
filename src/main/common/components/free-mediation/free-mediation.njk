@@ -8,12 +8,11 @@
   <div class="column-two-thirds">
 
     {% if amount %}
-    <p>{{ t('If {{ claimantFullName }} rejects your admission of {{ amount }} you can try to resolve this dispute using
-      telephone mediation.',
-      { claimantFullName : claimantFullName, amount: amount | numeral }) }}</p>
-    <p>{{ t('If you succeed, you won’t have to go to a hearing.') }}</p>
+      <p>{{ t('If {{ claimantFullName }} rejects your admission of {{ amount }} you can try to resolve this dispute using telephone mediation.',
+        { claimantFullName : claim.claimData.claimant.name, amount: amount | numeral }) }}</p>
+      <p>{{ t('If you succeed, you won’t have to go to a hearing.') }}</p>
     {% else %}
-    <p>{{ t('Many people resolve their dispute without a hearing by taking part in telephone mediation.') }}</p>
+      <p>{{ t('Many people resolve their dispute without a hearing by taking part in telephone mediation.') }}</p>
     {% endif %}
 
     <p>{{ t('A mediator will:') }}</p>

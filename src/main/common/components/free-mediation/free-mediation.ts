@@ -8,7 +8,6 @@ import { FreeMediation } from 'main/features/response/form/models/freeMediation'
 
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftService } from 'services/draftService'
-import { Claim } from 'main/app/claims/models/claim'
 
 import { ErrorHandling } from 'main/common/errorHandling'
 
@@ -25,7 +24,7 @@ export abstract class AbstractFreeMediationPage {
         (req: express.Request, res: express.Response) => {
           const draft: Draft<any> = res.locals.draft
 
-          AbstractFreeMediationPage.renderView(new Form(draft.document.freeMediation), res)
+          this.renderView(new Form(draft.document.freeMediation), res)
         })
       .post(
         path + FreeMediationPaths.freeMediationPage.uri,
@@ -35,7 +34,7 @@ export abstract class AbstractFreeMediationPage {
           const form: Form<FreeMediation> = req.body
 
           if (form.hasErrors()) {
-            AbstractFreeMediationPage.renderView(form, res)
+            this.renderView(form, res)
           } else {
             const draft: Draft<any> = res.locals.draft
             const user: User = res.locals.user
@@ -48,19 +47,9 @@ export abstract class AbstractFreeMediationPage {
         }))
   }
 
-  private static renderView (form: Form<FreeMediation>, res: express.Response) {
-    const claim: Claim = res.locals.claim
-    const draft: any = res.locals.draft
-    let amount: number = 0
-
-    if (typeof draft.document.isResponsePartiallyAdmitted === 'function') {
-      amount = draft.document.isResponsePartiallyAdmitted() ? draft.document.partialAdmission.howMuchDoYouOwe.amount : 0
-    }
-
+  private renderView (form: Form<FreeMediation>, res: express.Response) {
     res.render('components/free-mediation/free-mediation', {
-      form: form,
-      claimantFullName: claim.claimData.claimant.name,
-      amount: amount
+      form: form
     })
   }
 }
