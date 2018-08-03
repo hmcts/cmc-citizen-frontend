@@ -18,6 +18,7 @@ import { app } from 'main/app'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const draftType = 'claimantResponse'
+const defendantPartialAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
 
 const pagePath = ClaimantResponsePaths.checkAndSendPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
@@ -45,7 +46,7 @@ describe('Claimant response: check and send page', () => {
         })
 
         it('should return 500 and render error page when cannot retrieve draft', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
           draftStoreServiceMock.rejectFind('Error')
 
           await request(app)
@@ -55,7 +56,7 @@ describe('Claimant response: check and send page', () => {
         })
 
         it('should redirect to incomplete submission when not all tasks are completed', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
           draftStoreServiceMock.resolveFind(draftType, { acceptPaymentMethod: undefined })
 
           await request(app)

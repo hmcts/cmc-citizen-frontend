@@ -12,6 +12,13 @@ import * as claimStoreMock from 'test/http-mocks/claim-store'
 import * as feesMock from 'test/http-mocks/fees'
 import { Claim } from 'claims/models/claim'
 
+import {
+  defenceWithDisputeData,
+  fullAdmissionWithPaymentByInstalmentsData,
+  partialAdmissionWithPaymentByInstalmentsData,
+  statementOfMeansWithMandatoryFieldsOnlyData
+} from 'test/data/entity/responseData'
+
 idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-holder').persist()
 idamServiceMock.resolveRetrieveServiceToken().persist()
 
@@ -31,6 +38,7 @@ claimStoreMock.resolveRetrieveClaimByExternalId({
   countyCourtJudgmentRequestedAt: '2017-08-09T11:51:28.144',
   settlementReachedAt: '2017-08-10T15:27:32.917'
 }).persist()
+
 claimStoreMock.mockCalculateInterestRate(0).persist()
 feesMock.resolveCalculateIssueFee().persist()
 feesMock.resolveCalculateHearingFee().persist()
