@@ -11,9 +11,10 @@ export class FeatureToggleGuard {
    * @returns {express.RequestHandler} - request handler middleware
    */
   static featureEnabledGuard (feature: string): express.RequestHandler {
-    return GuardFactory.createAsync(
-      async (req: express.Request, res: express.Response) => FeatureToggles.hasAuthorisedFeature(feature, res.locals.claim.features),
+    return GuardFactory.create(
+      (res: express.Response) => FeatureToggles.hasAuthorisedFeature(feature, res.locals.claim.features),
       (req: express.Request, res: express.Response): void => {
+        console.log('coming here', req.path)
         throw new NotFoundError(req.path)
       })
   }
