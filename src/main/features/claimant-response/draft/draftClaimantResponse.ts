@@ -16,6 +16,7 @@ export class DraftClaimantResponse extends DraftDocument {
 
   deserialize (input: any): DraftClaimantResponse {
     if (input) {
+      console.log('input', input)
       this.externalId = input.externalId
       if (input.settleAdmitted) {
         this.settleAdmitted = new SettleAdmitted().deserialize(input.settleAdmitted)

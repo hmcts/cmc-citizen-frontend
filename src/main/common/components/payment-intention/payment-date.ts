@@ -1,38 +1,36 @@
 import * as express from 'express'
-
-import { Paths } from 'response/paths'
-import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intention/paths'
-
-import { Claim } from 'claims/models/claim'
-import { Draft } from '@hmcts/draft-store-client'
-import { Form } from 'forms/form'
-import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
-import { FormValidator } from 'forms/validation/formValidator'
-import { User } from 'idam/user'
 import { Moment } from 'moment'
 
-import { ResponseDraft } from 'response/draft/responseDraft'
-import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
-import { GuardFactory } from 'response/guards/guardFactory'
-import { DraftService } from 'services/draftService'
+import { ModelAccessor } from 'shared/components/payment-intention/model-accessor'
+import { PaymentIntention } from 'shared/components/payment-intention/model'
+import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intention/paths'
+
+import { NotFoundError } from 'errors'
 import { ErrorHandling } from 'shared/errorHandling'
 import { MomentFactory } from 'shared/momentFactory'
 
-export class PaymentDatePage {
+import { Form } from 'forms/form'
+import { FormValidator } from 'forms/validation/formValidator'
+import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
+import { User } from 'idam/user'
 
-  constructor (private admissionType: string) {}
+import { DefendantPaymentType as PaymentType } from 'response/form/models/defendantPaymentOption'
+import { GuardFactory } from 'response/guards/guardFactory'
+import { DraftService } from 'services/draftService'
+
+export abstract class AbstractPaymentDatePage<Draft> {
+
+  abstract getHeading (): string
+  abstract createModelAccessor (): ModelAccessor<Draft, PaymentIntention>
+  abstract buildTaskListUri (req: express.Request, res: express.Response): string
 
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
     const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
-      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      const model: PaymentIntention = this.createModelAccessor().get(res.locals.draft.document)
 
-      return draft.document[this.admissionType]
-        && draft.document[this.admissionType].paymentOption
-        && draft.document[this.admissionType].paymentOption.isOfType(DefendantPaymentType.BY_SET_DATE)
+      return model && model.paymentOption && model.paymentOption.isOfType(PaymentType.BY_SET_DATE)
     }, (req: express.Request, res: express.Response): void => {
-      const claim: Claim = res.locals.claim
-
-      res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+      throw new NotFoundError(req.path)
     })
 
     return express.Router()
@@ -41,8 +39,7 @@ export class PaymentDatePage {
         ...guards,
         stateGuardRequestHandler,
         (req: express.Request, res: express.Response) => {
-          const draft: Draft<ResponseDraft> = res.locals.responseDraft
-          this.renderView(new Form(draft.document[this.admissionType].paymentDate), res)
+          this.renderView(new Form(this.createModelAccessor().get(res.locals.draft.document).paymentDate), res)
         })
       .post(
         path + PaymentIntentionPaths.paymentDatePage.uri,
@@ -54,13 +51,12 @@ export class PaymentDatePage {
           if (form.hasErrors()) {
             this.renderView(form, res)
           } else {
-            const draft: Draft<ResponseDraft> = res.locals.responseDraft
+            this.createModelAccessor().patch(res.locals.draft.document, model => model.paymentDate = form.model)
+
             const user: User = res.locals.user
+            await new DraftService().save(res.locals.draft, user.bearerToken)
 
-            draft.document[this.admissionType].paymentDate = form.model
-            await new DraftService().save(draft, user.bearerToken)
-
-            res.redirect(Paths.taskListPage.evaluateUri({ externalId: req.params.externalId }))
+            res.redirect(this.buildTaskListUri(req, res))
           }
         }))
   }
@@ -69,6 +65,7 @@ export class PaymentDatePage {
     const futureDate: Moment = MomentFactory.currentDate().add(1, 'month')
 
     res.render('components/payment-intention/payment-date', {
+      heading: this.getHeading(),
       form: form,
       futureDate: futureDate
     })

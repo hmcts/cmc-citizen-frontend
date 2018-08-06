@@ -12,10 +12,12 @@ export class PaymentIntention {
   paymentOption?: PaymentOption
 
   @ValidateIf((o: PaymentIntention) => o.paymentOption.option === PaymentType.BY_SET_DATE)
+  @IsDefined()
   @ValidateNested()
   paymentDate?: PaymentDate
 
   @ValidateIf((o: PaymentIntention) => o.paymentOption.option === PaymentType.INSTALMENTS)
+  @IsDefined()
   @ValidateNested()
   paymentPlan?: PaymentPlan
 
@@ -28,7 +30,7 @@ export class PaymentIntention {
     if (input.paymentOption) {
       instance.paymentOption = new PaymentOption().deserialize(input.paymentOption)
 
-      switch (input.paymentOption.option) {
+      switch (instance.paymentOption.option) {
         case PaymentType.BY_SET_DATE:
           if (input.paymentDate) {
             instance.paymentDate = new PaymentDate().deserialize(input.paymentDate)
