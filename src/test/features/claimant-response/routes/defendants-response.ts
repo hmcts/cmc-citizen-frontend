@@ -17,16 +17,14 @@ import { checkNotClaimantInCaseGuard } from 'test/features/claimant-response/rou
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const pagePath = ClaimantResponsePaths.settleAdmittedPage.evaluateUri({ externalId: externalId })
+const pagePath = ClaimantResponsePaths.defendantsResponsePage.evaluateUri({ externalId: externalId })
 const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
 
-const validFormData = {
-  admitted: 'yes'
-}
+const fullAdmissionResponseWithPaymentBySetDate = claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj
+const fullAdmissionResponseWithPaymentByInstalments = claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj
+const partialAdmissionWithPaymentBySetDate = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
 
-const defendantPartialAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
-
-describe('Claimant response: settle admitted page', () => {
+describe('Claimant response: view defendant response page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -50,7 +48,7 @@ describe('Claimant response: settle admitted page', () => {
 
       it('should return 500 and render error page when cannot retrieve claimantResponse draft', async () => {
         draftStoreServiceMock.rejectFind('Error')
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionResponseWithPaymentByInstalments)
 
         await request(app)
           .get(pagePath)
@@ -58,14 +56,34 @@ describe('Claimant response: settle admitted page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should render page when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+      it('should render full admission with instalments page when everything is fine', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionResponseWithPaymentByInstalments)
         draftStoreServiceMock.resolveFind('claimantResponse')
 
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Do you want to settle the claim'))
+          .expect(res => expect(res).to.be.successful.withText('The defendant’s response'))
+      })
+
+      it('should render full admission with set date page when everything is fine', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionResponseWithPaymentBySetDate)
+        draftStoreServiceMock.resolveFind('claimantResponse')
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('The defendant’s response'))
+      })
+
+      it('should render part admission with SoM page when everything is fine', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(partialAdmissionWithPaymentBySetDate)
+        draftStoreServiceMock.resolveFind('claimantResponse')
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('The defendant’s response'))
       })
     })
 
@@ -86,59 +104,55 @@ describe('Claimant response: settle admitted page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send(validFormData)
+              .send({ viewedDefendantResponse: true })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
           it('should return 500 when cannot retrieve claimantResponse draft', async () => {
             draftStoreServiceMock.rejectFind('Error')
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionResponseWithPaymentByInstalments)
 
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send(validFormData)
+              .send({ viewedDefendantResponse: true })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
-          })
-        })
-
-        context('when form is valid', async () => {
-          it('should redirect to task list page', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
-            draftStoreServiceMock.resolveFind('claimantResponse')
-            draftStoreServiceMock.resolveSave()
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(validFormData)
-              .expect(res => expect(res).to.be.redirect.toLocation(taskListPagePath))
           })
 
           it('should return 500 and render error page when cannot save claimantResponse draft', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionResponseWithPaymentByInstalments)
             draftStoreServiceMock.resolveFind('claimantResponse')
             draftStoreServiceMock.rejectSave()
 
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send(validFormData)
+              .send({ viewedDefendantResponse: true })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
         })
 
-        context('when form is invalid', async () => {
-          it('should render page', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
-            draftStoreServiceMock.resolveFind('claimantResponse')
+        it('should render second part admission page when pagination was requested and everything is fine', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(partialAdmissionWithPaymentBySetDate)
+          draftStoreServiceMock.resolveFind('claimantResponse')
 
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: undefined })
-              .expect(res => expect(res).to.be.successful.withText('Do you want to settle the claim', 'div class="error-summary"'))
-          })
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ action: { showPage: 1 } })
+            .expect(res => expect(res).to.be.successful.withText('How they want to pay'))
+        })
+
+        it('should redirect to task list page when pagination was not requested and everything is fine', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionResponseWithPaymentByInstalments)
+          draftStoreServiceMock.resolveFind('claimantResponse')
+          draftStoreServiceMock.resolveSave()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ viewedDefendantResponse: true })
+            .expect(res => expect(res).to.be.redirect.toLocation(taskListPagePath))
         })
 
       })
