@@ -69,7 +69,8 @@ export class TaskListBuilder {
       this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
       this.buildSignSettlementAgreement(draft, tasks, externalId)
 
-      if (draft.settleAdmitted
+      if (claim.response.freeMediation === YesNoOption.YES
+        && draft.settleAdmitted
         && draft.settleAdmitted.admitted.option === YesNoOption.NO) {
         tasks.push(
           new TaskListItem(
