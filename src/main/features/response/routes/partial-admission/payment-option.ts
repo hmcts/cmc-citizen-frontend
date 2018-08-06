@@ -1,26 +1,31 @@
 import * as express from 'express'
 
 import { AbstractPaymentOptionPage } from 'shared/components/payment-intention/payment-option'
+import { AbstractModelAccessor } from 'shared/components/payment-intention/model-accessor'
+import { PaymentIntention } from 'shared/components/payment-intention/model'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 
-import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
-
-import { DefendantPaymentOption as PaymentOption } from 'response/form/models/defendantPaymentOption'
 
 import { partialAdmissionPath, Paths } from 'response/paths'
 
-class PaymentOptionPage extends AbstractPaymentOptionPage {
-  getModel (res: express.Response): PaymentOption {
-    const draft: Draft<ResponseDraft> = res.locals.responseDraft
-
-    return draft.document.partialAdmission.paymentOption
+class ModelAccessor extends AbstractModelAccessor<ResponseDraft, PaymentIntention> {
+  get (draft: ResponseDraft): PaymentIntention {
+    return draft.fullAdmission
   }
 
-  saveModel (res: express.Response, model: PaymentOption): void {
-    const draft: Draft<ResponseDraft> = res.locals.responseDraft
+  set (draft: ResponseDraft, model: PaymentIntention): void {
+    draft.fullAdmission = model
+  }
+}
 
-    draft.document.partialAdmission.paymentOption = model
+class PaymentOptionPage extends AbstractPaymentOptionPage<ResponseDraft> {
+  getHeading (): string {
+    return ''
+  }
+
+  createModelAccessor (): AbstractModelAccessor<ResponseDraft, PaymentIntention> {
+    return new ModelAccessor()
   }
 
   buildTaskListUri (req: express.Request, res: express.Response): string {

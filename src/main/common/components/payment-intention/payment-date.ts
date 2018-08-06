@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { Moment } from 'moment'
 
-import { ModelAccessor } from 'shared/components/payment-intention/model-accessor'
+import { AbstractModelAccessor } from 'shared/components/payment-intention/model-accessor'
 import { PaymentIntention } from 'shared/components/payment-intention/model'
 import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intention/paths'
 
@@ -21,7 +21,7 @@ import { DraftService } from 'services/draftService'
 export abstract class AbstractPaymentDatePage<Draft> {
 
   abstract getHeading (): string
-  abstract createModelAccessor (): ModelAccessor<Draft, PaymentIntention>
+  abstract createModelAccessor (): AbstractModelAccessor<Draft, PaymentIntention>
   abstract buildTaskListUri (req: express.Request, res: express.Response): string
 
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {

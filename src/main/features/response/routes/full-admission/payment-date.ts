@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { AbstractPaymentDatePage } from 'shared/components/payment-intention/payment-date'
-import { ModelAccessor as IModelAccessor } from 'shared/components/payment-intention/model-accessor'
+import { AbstractModelAccessor as IModelAccessor } from 'shared/components/payment-intention/model-accessor'
 import { PaymentIntention } from 'shared/components/payment-intention/model'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 
