@@ -2,6 +2,7 @@
   "featureToggles": {
     "testingSupport": true,
     "fullAdmission": true,
+    "featuresPermission": false,
     "partialAdmission": true,
     "admissions": true,
     "statementOfMeans": true,
