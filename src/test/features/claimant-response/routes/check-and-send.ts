@@ -18,7 +18,7 @@ import { app } from 'main/app'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const draftType = 'claimantResponse'
-const defendantPartialAdmissionResponse = claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj
+const defendantPartialAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
 
 const pagePath = ClaimantResponsePaths.checkAndSendPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
@@ -67,7 +67,7 @@ describe('Claimant response: check and send page', () => {
         })
 
         it('should render page when everything is fine', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj)
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
           draftStoreServiceMock.resolveFind(draftType)
 
           await request(app)

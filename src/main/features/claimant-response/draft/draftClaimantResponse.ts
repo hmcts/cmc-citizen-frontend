@@ -5,6 +5,8 @@ import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseR
 import { SettlementAgreement } from 'claimant-response/form/models/settlementAgreement'
 
 export class DraftClaimantResponse extends DraftDocument {
+  defendantResponseViewed: boolean
+
   settleAdmitted?: SettleAdmitted
   acceptPaymentMethod?: AcceptPaymentMethod
   formaliseRepaymentPlan?: FormaliseRepaymentPlan
@@ -17,6 +19,9 @@ export class DraftClaimantResponse extends DraftDocument {
   deserialize (input: any): DraftClaimantResponse {
     if (input) {
       this.externalId = input.externalId
+      if (input.defendantResponseViewed) {
+        this.defendantResponseViewed = input.defendantResponseViewed
+      }
       if (input.settleAdmitted) {
         this.settleAdmitted = new SettleAdmitted().deserialize(input.settleAdmitted)
       }
