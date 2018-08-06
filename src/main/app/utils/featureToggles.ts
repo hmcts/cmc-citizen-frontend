@@ -17,7 +17,7 @@ export class FeatureToggles {
 
     return features
       .some((feature) => toBoolean(config.get<boolean>(`featureToggles.${feature}`))
-        && authorisedFeatures.includes(feature))
+        && authorisedFeatures !== undefined && authorisedFeatures.includes(feature))
 
   }
 
