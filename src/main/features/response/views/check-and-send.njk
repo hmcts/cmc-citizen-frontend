@@ -8,7 +8,7 @@
 {% from "evidenceCheckAndSend.njk" import evidenceCheckAndSend %}
 {% from "./macro/check-and-send/admission.njk" import notImmediatePayment, whenWillYouPayRow %}
 
-{% set heading = 'Check your answers before submitting your response' %}
+{% set heading = 'Check your answers' %}
 
 {% block content %}
   <form novalidate method="post">
@@ -154,51 +154,47 @@
         )
       }}
 
-      {{
-        timelineCheckAndSend(
-          header = 'Timeline of what happened (optional)',
-          timeline = draft.partialAdmission.timeline.getPopulatedRowsOnly(),
-          url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
-          bottomBorder = false
-        )
-      }}
-      {{ row(label = 'Comments about their timeline (optional)', value = draft.partialAdmission.timeline.comment | default(''), bold = true) }}
-
-      {{
-        evidenceCheckAndSend(
-          header = 'Your evidence (optional)',
-          evidence = draft.partialAdmission.evidence.getPopulatedRowsOnly(),
-          url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
-          bottomBorder = false
-        )
-      }}
-
-      {{ row(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), bold = true) }}
-
-      {% if draft.partialAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
-        {{ tableStart('whenWillYouPay', 'When you’ll pay') }}
-
+      {% if draft.isResponsePartiallyAdmittedAndAlreadyPaid() %}
         {{
-          whenWillYouPayRow(
-            value = t(draft.partialAdmission.paymentOption.option.displayValue) | capitalize,
-            url = PartAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId })
+          timelineCheckAndSend(
+            header = 'Timeline of what happened (optional)',
+            timeline = draft.partialAdmission.timeline.getPopulatedRowsOnly(),
+            url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
+            bottomBorder = false
           )
         }}
-        {{ tableEnd() }}
-
+        {{ row(label = 'Comments about their timeline (optional)', value = draft.partialAdmission.timeline.comment | default(''), bold = true) }}
+        {{
+          evidenceCheckAndSend(
+            header = 'Your evidence (optional)',
+            evidence = draft.partialAdmission.evidence.getPopulatedRowsOnly(),
+            url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
+            bottomBorder = false
+          )
+        }}
+        {{ row(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), bold = true) }}
       {% else %}
-
-        {{
-          notImmediatePayment(
-            type = draft.partialAdmission.paymentOption,
-            paymentDate = draft.partialAdmission.paymentDate,
-            paymentPlan = draft.partialAdmission.paymentPlan,
-            explanation = draft.statementOfMeans.explanation.text,
-            Paths = PartAdmissionPaths,
-            externalId = claim.externalId
-          )
-        }}
-
+        {% if draft.partialAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+          {{ tableStart('whenWillYouPay', 'When you’ll pay') }}
+          {{
+            whenWillYouPayRow(
+              value = t(draft.partialAdmission.paymentOption.option.displayValue) | capitalize,
+              url = PartAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId })
+            )
+          }}
+          {{ tableEnd() }}
+        {% else %}
+          {{
+            notImmediatePayment(
+              type = draft.partialAdmission.paymentOption,
+              paymentDate = draft.partialAdmission.paymentDate,
+              paymentPlan = draft.partialAdmission.paymentPlan,
+              explanation = draft.statementOfMeans.explanation.text,
+              Paths = PartAdmissionPaths,
+              externalId = claim.externalId
+            )
+          }}
+        {% endif %}
       {% endif %}
     {% endif %}
 

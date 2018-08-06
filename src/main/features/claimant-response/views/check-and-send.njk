@@ -3,7 +3,7 @@
 {% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
 
-{% set heading = 'Check your answers before submitting your response' %}
+{% set heading = 'Check your answers' %}
 
 {% block content %}
   <form novalidate method="post">
@@ -31,6 +31,51 @@
 
       {{ row(label = 'Do you accept the defendant’s repayment plan?', bold = true, value = acceptPaymentMethodResponse,
         changeLink = ClaimantResponsePaths.acceptPaymentMethodPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+    {% endif %}
+
+    {{ tableEnd() }}
+
+    {{ tableStart('howYouWnatToProceed', 'How you wish to proceed') }}
+    {% if draft.formaliseRepaymentPlan %}
+      {{ row(
+        label = 'How do you want to formalise the repayment plan?',
+        bold = true,
+        value = draft.formaliseRepaymentPlan.option | renderFormaliseRepaymentPlanOption,
+        changeLink = ClaimantResponsePaths.chooseHowToProceedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
+      ) }}
+    {% endif %}
+    {{ tableEnd() }}
+
+    {{ tableStart('settlementAgreement', 'Settlement agreement') }}
+
+    {% if claim.response.paymentIntention.paymentDate %}
+      {{ row(label = 'The offer',
+        value = t('{{ defendantFullName }} will pay the full amount, no later than {{ paymentDate }}',
+          {
+            defendantFullName: claim.response.defendant.name,
+            paymentDate: claim.response.paymentIntention.paymentDate | date
+          }
+        ),
+        bottomBorder = true, bold = true
+      ) }}
+      {{ row(label = 'Completion date',
+        value = claim.response.paymentIntention.paymentDate | date,
+        bottomBorder = true, bold = true
+      ) }}
+    {% elseif claim.response.paymentIntention.repaymentPlan %}
+      {{ row(label = 'The offer',
+        value = t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
+          { defendantFullName: claim.response.defendant.name,
+            instalmentAmount: claim.response.paymentIntention.repaymentPlan.instalmentAmount | numeral,
+            paymentSchedule: claim.response.paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
+            firstPaymentDate: claim.response.paymentIntention.repaymentPlan.firstPaymentDate | date
+          }),
+        bottomBorder = true, bold = true
+      ) }}
+      {{ row(label = 'Completion date',
+        value = lastPaymentDate | date,
+        bottomBorder = true, bold = true
+      ) }}
     {% endif %}
 
     {{ tableEnd() }}
