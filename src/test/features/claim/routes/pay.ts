@@ -465,8 +465,6 @@ describe('Claim issue: post payment callback receiver', () => {
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
             claimStoreServiceMock.resolveRetriveUserRoles()
-            featureToggleApiMock.resolveIsAdmissionsAllowed()
-            claimStoreServiceMock.rejectSaveClaimForUser()
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
@@ -481,9 +479,6 @@ describe('Claim issue: post payment callback receiver', () => {
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
             claimStoreServiceMock.resolveRetriveUserRoles()
-            featureToggleApiMock.resolveIsAdmissionsAllowed()
-            claimStoreServiceMock.resolveSaveClaimForUser()
-            draftStoreServiceMock.rejectDelete()
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)

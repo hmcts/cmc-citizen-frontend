@@ -328,7 +328,7 @@ export function resolveRetrieveDocument () {
 export function resolveRetriveUserRoles () {
   mock(`${serviceBaseURL}/user`)
     .get('/roles')
-    .reply(HttpStatus.OK, 'cmc-new-features-consent-given')
+    .reply(HttpStatus.OK, ['cmc-new-features-consent-given'])
 }
 
 export function rejectRetriveUserRoles () {

@@ -194,6 +194,7 @@ export class ClaimStoreClient {
         }
       })
       .then((roles: string[]) => {
+        console.log(roles)
         return roles.join(',')
       })
   }
