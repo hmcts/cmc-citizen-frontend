@@ -221,3 +221,24 @@ export const statementOfMeansWithAllFieldsData = {
     monthlyInstalmentAmount: 10
   }]
 }
+
+export const fullAdmissionWithSoMPaymentBySetDate = {
+  ...fullAdmissionWithPaymentBySetDateData,
+  statementOfMeans: {
+    ...statementOfMeansWithAllFieldsData
+  }
+}
+
+export const fullAdmissionWithSoMPaymentByInstalmentsData = {
+  ...fullAdmissionWithPaymentByInstalmentsData,
+  statementOfMeans: {
+    ...statementOfMeansWithAllFieldsData
+  }
+}
+
+export const partialAdmissionWithSoMPaymentBySetDateData = {
+  ...partialAdmissionWithPaymentBySetDateData,
+  statementOfMeans: {
+    ...statementOfMeansWithAllFieldsData
+  }
+}
