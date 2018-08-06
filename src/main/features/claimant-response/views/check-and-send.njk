@@ -25,8 +25,10 @@
 
       {{ row(label = 'Do you accept or reject the defendant’s admission?', bold = true, value = settleAdmittedResponse,
         changeLink = ClaimantResponsePaths.settleAdmittedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
-      {{ row(label = 'Will you try free mediation?', bold = true, value = freeMediationResponse,
-        changeLink = ClaimantResponsePaths.freeMediationPage.evaluateUri({ externalId: draft.externalId }), bottomBorder = true) }}
+      {% if draft.settleAdmitted.admitted.option === 'no' and claim.response.freeMediation === 'yes' %}
+        {{ row(label = 'Will you try free mediation?', bold = true, value = freeMediationResponse,
+          changeLink = ClaimantResponsePaths.freeMediationPage.evaluateUri({ externalId: draft.externalId }), bottomBorder = true) }}
+      {% endif %}
     {% endif %}
 
     {% if draft.acceptPaymentMethod %}
