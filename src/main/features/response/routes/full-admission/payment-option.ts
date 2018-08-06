@@ -8,7 +8,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 
 import { DefendantPaymentOption as PaymentOption } from 'response/form/models/defendantPaymentOption'
 
-import { fullAdmissionPath } from 'response/paths'
+import { fullAdmissionPath, Paths } from 'response/paths'
 
 class PaymentOptionPage extends AbstractPaymentOptionPage {
   getModel (res: express.Response): PaymentOption {
@@ -21,6 +21,10 @@ class PaymentOptionPage extends AbstractPaymentOptionPage {
     const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
     draft.document.fullAdmission.paymentOption = model
+  }
+
+  buildTaskListUri (req: express.Request, res: express.Response): string {
+    return Paths.taskListPage.uri
   }
 }
 

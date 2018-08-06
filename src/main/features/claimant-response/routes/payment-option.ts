@@ -10,7 +10,7 @@ import {
   DefendantPaymentOption as PaymentOption
 } from 'response/form/models/defendantPaymentOption'
 
-import { claimantResponsePath } from 'claimant-response/paths'
+import { claimantResponsePath, Paths } from 'claimant-response/paths'
 
 class PaymentOptionPage extends AbstractPaymentOptionPage {
   getModel (res: express.Response): PaymentOption {
@@ -29,6 +29,10 @@ class PaymentOptionPage extends AbstractPaymentOptionPage {
 
   getView (): string {
     return 'claimant-response/views/payment-option'
+  }
+
+  buildTaskListUri (req: express.Request, res: express.Response): string {
+    return Paths.taskListPage.uri
   }
 }
 
