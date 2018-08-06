@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { Paths } from 'response/paths'
-import { Paths as PaymentIntentionPaths } from 'response/components/payment-intention/paths'
+import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intention/paths'
 
 import { ErrorHandling } from 'main/common/errorHandling'
 import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
@@ -82,7 +82,7 @@ export class PaymentOptionPage {
 
     const draft: Draft<ResponseDraft> = res.locals.responseDraft
     const claim: Claim = res.locals.claim
-    res.render('response/components/payment-intention/payment-option', {
+    res.render('components/payment-intention/payment-option', {
       form: form,
       claim: claim,
       draft: draft.document,

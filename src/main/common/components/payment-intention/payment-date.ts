@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { Paths } from 'response/paths'
-import { Paths as PaymentIntentionPaths } from 'response/components/payment-intention/paths'
+import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intention/paths'
 
 import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
@@ -68,7 +68,7 @@ export class PaymentDatePage {
   private renderView (form: Form<PaymentDate>, res: express.Response) {
     const futureDate: Moment = MomentFactory.currentDate().add(1, 'month')
 
-    res.render('response/components/payment-intention/payment-date', {
+    res.render('components/payment-intention/payment-date', {
       form: form,
       futureDate: futureDate
     })

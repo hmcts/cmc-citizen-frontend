@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { partialAdmissionPath } from 'response/paths'
-import { PaymentOptionPage } from 'response/components/payment-intention/payment-option'
+import { PaymentOptionPage } from 'shared/components/payment-intention/payment-option'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { ResponseDraft } from 'response/draft/responseDraft'
 

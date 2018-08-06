@@ -3,7 +3,7 @@ import * as express from 'express'
 import * as _ from 'lodash'
 
 import { Paths } from 'response/paths'
-import { Paths as PaymentIntentionPaths } from 'response/components/payment-intention/paths'
+import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intention/paths'
 
 import { GuardFactory } from 'response/guards/guardFactory'
 import { ErrorHandling } from 'shared/errorHandling'
@@ -96,7 +96,7 @@ export class PaymentPlanPage {
     const claim: Claim = res.locals.claim
     const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-    res.render('response/components/payment-intention/payment-plan', {
+    res.render('components/payment-intention/payment-plan', {
       form: form,
       paymentLength: calculatePaymentPlanLength(form.model),
       monthlyIncome: _.get(draft, 'document.statementOfMeans.monthlyIncome', 0),

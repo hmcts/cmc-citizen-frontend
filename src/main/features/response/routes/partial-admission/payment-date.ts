@@ -1,5 +1,5 @@
 import { partialAdmissionPath } from 'response/paths'
-import { PaymentDatePage } from 'response/components/payment-intention/payment-date'
+import { PaymentDatePage } from 'shared/components/payment-intention/payment-date'
 import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 
 /* tslint:disable:no-default-export */
