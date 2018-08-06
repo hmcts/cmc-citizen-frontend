@@ -25,7 +25,6 @@
           {'label': 'No', value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO)}
         ],
           form = form,
-
           labelForScreenReadersOnly = true
         )
         }}
@@ -39,7 +38,7 @@
             <p>{{ t('The court will decide if you’re entitled to some or all of the interest claimed.') }}</p>
           </div>
         </details>
-        
+
         <div class="form-group">
           {{ saveAndContinueButton() }}
         </div>

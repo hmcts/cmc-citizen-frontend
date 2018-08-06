@@ -40,7 +40,7 @@ export default express.Router()
         } else {
           roleName = 'cmc-new-features-consent-not-given'
         }
-        await claimStoreClient.persistRoleName(user, roleName)
+        await claimStoreClient.addRoleToUser(user, roleName)
         res.redirect(ClaimPaths.taskListPage.uri)
       }
 

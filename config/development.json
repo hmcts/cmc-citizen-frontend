@@ -2,7 +2,7 @@
   "featureToggles": {
     "testingSupport": true,
     "fullAdmission": true,
-    "featuresPermission": true,
+    "newFeaturesConsent": true,
     "partialAdmission": true,
     "admissions": true,
     "statementOfMeans": true,

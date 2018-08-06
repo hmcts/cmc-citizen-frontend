@@ -48,6 +48,10 @@ variable "feature_statement_of_means" {
   default = "false"
 }
 
+variable "feature_new_features_consent" {
+  default = "false"
+}
+
 variable "feature_full_admission" {
   default = "false"
 }

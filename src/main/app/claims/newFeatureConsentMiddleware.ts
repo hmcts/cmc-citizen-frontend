@@ -3,19 +3,18 @@ import * as express from 'express'
 import { User } from 'idam/user'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { Paths as ClaimPaths } from 'claim/paths'
-import * as toBoolean from 'to-boolean'
-import * as config from 'config'
+import { FeatureToggles } from 'utils/featureToggles'
 
-export class FeaturePermissionMiddleware {
+export class NewFeatureConsentMiddleware {
 
   static retrieveUserConsentRole (req: express.Request, res: express.Response, next: express.NextFunction): void {
-    if (!toBoolean(config.get<boolean>('featureToggles.featuresPermission'))) {
+    if(!FeatureToggles.isEnabled('newFeaturesConsent')) {
       return next()
     }
     const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
     const user: User = res.locals.user
     claimStoreClient.retrieveUserRoles(user).then(value => {
-      if (value.length === 0) {
+      if (value.length === 0 && !value.includes('cmc-new-features-consent') ) {
         res.redirect(ClaimPaths.featurePermissionPage.uri)
       } else {
         return next()

@@ -1,5 +1,6 @@
 vault_section = "preprod"
 feature_fine_print = "true"
+feature_new_features_consent = "true"
 feature_full_admission = "true"
 feature_admissions = "true"
 feature_partial_admission = "true"

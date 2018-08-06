@@ -188,16 +188,17 @@ export class ClaimStoreClient {
       })
   }
 
-  persistRoleName (user: User, roleName: string): Promise<String> {
+  // This is a tactical solution until SIDAM is able to add roles to user ID
+  addRoleToUser (user: User, roleName: string): Promise<String> {
     if (!user) {
       return Promise.reject(new Error('User is required'))
     }
 
-    const roleJson = { role_name : roleName }
+    const roleObj = { role_name: roleName }
 
     return this.request
       .post(`${claimApiBaseUrl}/user/roles`, {
-        body: roleJson,
+        body: roleObj,
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }

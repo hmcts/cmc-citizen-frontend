@@ -118,6 +118,7 @@ module "citizen-frontend" {
     FEATURE_TESTING_SUPPORT = "${var.env == "prod" ? "false" : "true"}"
     // Enabled everywhere except prod
     FEATURE_STATEMENT_OF_MEANS = "${var.feature_statement_of_means}"
+    FEATURE_NEW_FEATURES_CONSENT = "${var.feature_new_features_consent}"
     FEATURE_FULL_ADMISSION = "${var.feature_full_admission}"
     FEATURE_ADMISSIONS = "${var.feature_admissions}"
     FEATURE_PARTIAL_ADMISSION = "${var.feature_partial_admission}"
