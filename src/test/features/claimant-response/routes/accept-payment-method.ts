@@ -24,7 +24,7 @@ const validFormData = {
   accept: 'yes'
 }
 
-const defendantPartialAdmissionResponse = claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj
+const defendantPartialAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
 
 describe('Claimant response: accept payment method page', () => {
   attachDefaultHooks(app)
