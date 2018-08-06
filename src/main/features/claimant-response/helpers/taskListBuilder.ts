@@ -6,6 +6,7 @@ import { Claim } from 'claims/models/claim'
 import { PaymentOption } from 'claims/models/response/core/paymentOption'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { ResponseType } from 'claims/models/response/responseType'
+import { Validator } from 'class-validator'
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
 import { NumberFormatter } from 'utils/numberFormatter'
@@ -13,6 +14,12 @@ import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/form
 import { ChooseHowToProceedTask } from 'claimant-response/tasks/chooseHowToProceedTask'
 import { SignSettlementAgreementTask } from 'claimant-response/tasks/signSettlementAgreementTask'
 import { FreeMediationTask } from 'claimant-response/tasks/freeMediationTask'
+
+const validator: Validator = new Validator()
+
+function isDefinedAndValid (value: any): boolean {
+  return value && validator.validateSync(value).length === 0
+}
 
 export class TaskListBuilder {
   static buildDefendantResponseSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
@@ -107,7 +114,7 @@ export class TaskListBuilder {
         new TaskListItem(
           'Propose an alternative repayment plan',
           Paths.alternateRepaymentPlanPage.evaluateUri({ externalId: externalId }),
-          false
+          isDefinedAndValid(draft.alternatePaymentMethod)
         )
       )
     }
