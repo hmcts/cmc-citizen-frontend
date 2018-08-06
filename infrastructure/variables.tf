@@ -49,6 +49,10 @@ variable "feature_full_admission" {
   default = "false"
 }
 
+variable "feature_admissions" {
+  default = "false"
+}
+
 variable "feature_partial_admission" {
   default = "false"
 }

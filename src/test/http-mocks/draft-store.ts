@@ -265,7 +265,8 @@ export const sampleFullAdmissionResponseDraftObj = {
       maintenance: 1,
       rows: [{ amount: 10, description: 'bla bla bla' }]
     },
-    courtOrders: { declared: false }
+    courtOrders: { declared: false },
+    explanation: { text: 'aaa' }
   }
 }
 
@@ -326,7 +327,6 @@ const sampleCCJDraftObj = {
 }
 
 export const sampleClaimantResponseDraftObj = {
-  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
   settleAdmitted: {
     admitted: {
       option: 'yes'
@@ -336,6 +336,15 @@ export const sampleClaimantResponseDraftObj = {
     accept: {
       option: 'yes'
     }
+  },
+  formaliseRepaymentPlan: {
+    option: {
+      value: 'signSettlementAgreement',
+      displayValue: 'Sign a settlement agreement'
+    }
+  },
+  settlementAgreement: {
+    signed: true
   }
 }
 

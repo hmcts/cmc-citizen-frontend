@@ -1,5 +1,6 @@
 feature_fine_print = "true"
 feature_full_admission = "true"
+feature_admissions = "true"
 feature_partial_admission = "true"
 feature_statement_of_means = "true"
 external_host_name = "moneyclaim.nonprod.platform.hmcts.net"
