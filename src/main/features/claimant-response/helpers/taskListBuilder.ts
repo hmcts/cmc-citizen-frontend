@@ -66,6 +66,7 @@ export class TaskListBuilder {
         )
       }
 
+      this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
       this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
       this.buildSignSettlementAgreement(draft, tasks, externalId)
 
@@ -92,11 +93,24 @@ export class TaskListBuilder {
           AcceptPaymentMethodTask.isCompleted(draft.acceptPaymentMethod)
         )
       )
+      this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
       this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
       this.buildSignSettlementAgreement(draft, tasks, externalId)
     }
 
     return new TaskList('How do you want to respond?', tasks)
+  }
+
+  private static buildProposeAlternateRepaymentPlanTask (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
+    if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept.option === YesNoOption.NO) {
+      tasks.push(
+        new TaskListItem(
+          'Propose an alternative repayment plan',
+          Paths.alternateRepaymentPlanPage.evaluateUri({ externalId: externalId }),
+          false
+        )
+      )
+    }
   }
 
   private static buildSignSettlementAgreement (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {

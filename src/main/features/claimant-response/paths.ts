@@ -13,4 +13,5 @@ export class Paths {
   static readonly chooseHowToProceedPage = new RoutablePath(`${claimantResponsePath}/choose-how-to-proceed`)
   static readonly signSettlementAgreementPage = new RoutablePath(`${claimantResponsePath}/sign-settlement-agreement`)
   static readonly freeMediationPage = new RoutablePath(claimantResponsePath + FreeMediationPaths.freeMediationPage.uri)
+  static readonly alternateRepaymentPlanPage = new RoutablePath(claimantResponsePath + '/payment-option')
 }
