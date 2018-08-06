@@ -43,21 +43,25 @@ describe('Defendant response: more time needed page', () => {
           it('when no option selected', async () => {
             draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolvePostponedDeadline('2020-01-01')
 
             await request(app)
               .get(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Do you want more time to respond?'))
+              .expect(res => expect(res).to.be.successful.withText('Do you want more time to respond?',
+                'You’ll have to respond before 4pm on 1 January 2020'))
           })
 
           it('when answer is "no"', async () => {
             draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: MoreTimeNeededOption.NO } })
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolvePostponedDeadline('2020-01-01')
 
             await request(app)
               .get(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Do you want more time to respond?'))
+              .expect(res => expect(res).to.be.successful.withText('Do you want more time to respond?',
+                'You’ll have to respond before 4pm on 1 January 2020'))
           })
         })
 
@@ -104,8 +108,9 @@ describe('Defendant response: more time needed page', () => {
 
         context('when form is invalid', () => {
           it('should render page when everything is fine', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId({ moreTimeRequested: false })
             draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
+            claimStoreServiceMock.resolvePostponedDeadline('2020-01-01')
 
             await request(app)
               .post(pagePath)
