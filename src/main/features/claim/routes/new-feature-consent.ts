@@ -12,18 +12,18 @@ const claimStoreClient = new ClaimStoreClient()
 
 function renderView (form: Form<FeaturePermissionResponse>, res: express.Response) {
 
-  res.render(ClaimPaths.featurePermissionPage.associatedView, { form: form })
+  res.render(ClaimPaths.newFeatureConsent.associatedView, { form: form })
 
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(ClaimPaths.featurePermissionPage.uri,
+  .get(ClaimPaths.newFeatureConsent.uri,
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
       renderView(Form.empty<FeaturePermissionResponse>(), res)
 
     })
-  .post(ClaimPaths.featurePermissionPage.uri,
+  .post(ClaimPaths.newFeatureConsent.uri,
     FormValidator.requestHandler(FeaturePermissionResponse, FeaturePermissionResponse.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
