@@ -15,6 +15,7 @@ import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { PartialAdmissionGuard } from 'response/guards/partialAdmissionGuard'
 import { MomentFactory } from 'shared/momentFactory'
 import { Moment } from 'moment'
+import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 
 const page: RoutablePath = PartAdmissionPaths.howMuchHaveYouPaidPage
 
@@ -33,6 +34,7 @@ export default express.Router()
   .get(
     page.uri,
     PartialAdmissionGuard.requestHandler(),
+    FeatureToggleGuard.featureEnabledGuard('admissions'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.partialAdmission.howMuchHaveYouPaid), res)
@@ -40,6 +42,7 @@ export default express.Router()
   .post(
     page.uri,
     PartialAdmissionGuard.requestHandler(),
+    FeatureToggleGuard.featureEnabledGuard('admissions'),
     FormValidator.requestHandler(HowMuchHaveYouPaid, HowMuchHaveYouPaid.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<HowMuchHaveYouPaid> = req.body
