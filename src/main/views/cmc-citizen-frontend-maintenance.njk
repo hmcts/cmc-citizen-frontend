@@ -1,0 +1,18 @@
+{% extends 'layout.njk' %}
+{% from "support.njk" import supportWidget %}
+
+{% set heading = 'Sorry, there’s a problem with this service' %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+  <p> {{ t('We’re working on fixing the problem. Please try again later.') }}</p>
+
+  <p> {{ t('If you were making a claim or responding to one then your information has been saved in your account.') }}</p>
+
+  <p> {{ t('You can contact us if you need help.') }}</p>
+
+  {{ supportWidget() }}
+  </div>
+</div>
+{% endblock %}
