@@ -188,7 +188,7 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('User must be set'))
     }
 
-    return await this.request
+    return this.request
       .get(`${claimApiBaseUrl}/user/roles`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
