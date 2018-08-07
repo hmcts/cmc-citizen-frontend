@@ -16,12 +16,21 @@ function renderView (form: Form<FeaturePermissionResponse>, res: express.Respons
 
 }
 
+// async function checkUserConsentRolePresent(user: User, res: express.Response): Promise<void> {
+//   await claimStoreClient.retrieveUserRoles(user).then(value => {
+//     console.log('zzz: ', value.length, 'value: ', value.includes('cmc-new-features-consent'))
+//     if (value.length != 0 && value.includes('cmc-new-features-consent')) {
+//       return res.render(new ForbiddenError().associatedView)
+//     }
+//   })
+// }
+
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(ClaimPaths.newFeaturesConsent.uri,
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      // checkUserConsentRolePresent(res.locals.user, res)
       renderView(Form.empty<FeaturePermissionResponse>(), res)
-
     })
   .post(ClaimPaths.newFeaturesConsent.uri,
     FormValidator.requestHandler(FeaturePermissionResponse, FeaturePermissionResponse.fromObject),
