@@ -10,8 +10,8 @@ import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 import {
-  fullAdmissionWithSoMPaymentBySetDate,
   fullAdmissionWithSoMPaymentByInstalmentsData,
+  fullAdmissionWithSoMPaymentBySetDate,
   partialAdmissionWithSoMPaymentBySetDateData
 } from 'test/data/entity/responseData'
 
@@ -325,10 +325,10 @@ export function resolveRetrieveDocument () {
     .reply(HttpStatus.OK)
 }
 
-export function resolveRetrieveUserRoles () {
+export function resolveRetrieveUserRoles (...userRoles: string[]) {
   mock(`${serviceBaseURL}/user`)
     .get('/roles')
-    .reply(HttpStatus.OK, ['cmc-new-features-consent-given'])
+    .reply(HttpStatus.OK, userRoles)
 }
 
 export function rejectRetriveUserRoles () {

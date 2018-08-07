@@ -10,16 +10,16 @@ export class FeatureTogglesClient {
     // Nothing to do
   }
 
-  isAdmissionsAllowed (user: User, roles: string[]): Promise<boolean> {
+  async isAdmissionsAllowed (user: User, roles: string[]): Promise<boolean> {
     if (!user) {
       return Promise.reject(new Error('user must be set'))
     }
 
-    return this.request
+    return await this.request
       .get(`${featureTogglesApiUrl}/cmc_admissions`, {
         headers: {
           'X-USER-ID': `${user.email}`,
-          'X-USER-PERMISSIONS': roles.join(",")
+          'X-USER-PERMISSIONS': roles.join(',')
         }
       })
   }

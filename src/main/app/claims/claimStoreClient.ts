@@ -183,12 +183,12 @@ export class ClaimStoreClient {
       .then(linkStatus => linkStatus.linked)
   }
 
-  retrieveUserRoles (user: User): Promise<string[]> {
+  async retrieveUserRoles (user: User): Promise<string[]> {
     if (!user) {
       return Promise.reject(new Error('User must be set'))
     }
 
-    return this.request
+    return await this.request
       .get(`${claimApiBaseUrl}/user/roles`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`

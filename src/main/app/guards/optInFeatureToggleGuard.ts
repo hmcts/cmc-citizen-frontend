@@ -5,7 +5,8 @@ import { FeatureToggles } from 'utils/featureToggles'
 
 export class OptInFeatureToggleGuard {
   /**
-   * Throws NotFound error when feature is not opted of
+   * This looks for feature being enabled in config as well as
+   * check for user consent by checking feature being present in claim's allowed features.
    *
    * @param {string} feature feature name
    * @returns {express.RequestHandler} - request handler middleware
