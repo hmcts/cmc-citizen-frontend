@@ -464,7 +464,7 @@ describe('Claim issue: post payment callback receiver', () => {
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
-            claimStoreServiceMock.resolveRetrieveUserRoles()
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             featureToggleApiMock.resolveIsAdmissionsAllowed()
             claimStoreServiceMock.rejectSaveClaimForUser()
 
@@ -481,7 +481,7 @@ describe('Claim issue: post payment callback receiver', () => {
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
             featureToggleApiMock.resolveIsAdmissionsAllowed()
-            claimStoreServiceMock.resolveRetrieveUserRoles()
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             claimStoreServiceMock.resolveSaveClaimForUser()
             draftStoreServiceMock.rejectDelete()
 
@@ -497,7 +497,7 @@ describe('Claim issue: post payment callback receiver', () => {
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
-            claimStoreServiceMock.resolveRetrieveUserRoles()
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             featureToggleApiMock.rejectIsAdmissionsAllowed()
 
             await request(app)
@@ -526,8 +526,42 @@ describe('Claim issue: post payment callback receiver', () => {
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
-            claimStoreServiceMock.resolveRetrieveUserRoles()
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             featureToggleApiMock.resolveIsAdmissionsAllowed()
+            claimStoreServiceMock.resolveSaveClaimForUser()
+            draftStoreServiceMock.resolveDelete()
+
+            await request(app)
+              .get(Paths.finishPaymentReceiver.uri)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
+          })
+
+          it('should redirect to confirmation page when everything is fine however user has not given any consent', async () => {
+            draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
+            idamServiceMock.resolveRetrieveServiceToken()
+            payServiceMock.resolveRetrieve('Success')
+            draftStoreServiceMock.resolveSave()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
+            claimStoreServiceMock.resolveRetrieveUserRoles()
+            featureToggleApiMock.resolveIsAdmissionsAllowed(false)
+            claimStoreServiceMock.resolveSaveClaimForUser()
+            draftStoreServiceMock.resolveDelete()
+
+            await request(app)
+              .get(Paths.finishPaymentReceiver.uri)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
+          })
+
+          it('should redirect to confirmation page when everything is fine however feature toggle does not allows admission', async () => {
+            draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
+            idamServiceMock.resolveRetrieveServiceToken()
+            payServiceMock.resolveRetrieve('Success')
+            draftStoreServiceMock.resolveSave()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
+            featureToggleApiMock.resolveIsAdmissionsAllowed(false)
             claimStoreServiceMock.resolveSaveClaimForUser()
             draftStoreServiceMock.resolveDelete()
 
