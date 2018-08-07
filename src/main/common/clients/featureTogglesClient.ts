@@ -10,7 +10,7 @@ export class FeatureTogglesClient {
     // Nothing to do
   }
 
-  isAdmissionsAllowed (user: User, permissions: string): Promise<boolean> {
+  isAdmissionsAllowed (user: User, roles: string[]): Promise<boolean> {
     if (!user) {
       return Promise.reject(new Error('user must be set'))
     }
@@ -19,7 +19,7 @@ export class FeatureTogglesClient {
       .get(`${featureTogglesApiUrl}/cmc_admissions`, {
         headers: {
           'X-USER-ID': `${user.email}`,
-          'X-USER-PERMISSIONS': permissions
+          'X-USER-PERMISSIONS': roles.join(",")
         }
       })
   }
