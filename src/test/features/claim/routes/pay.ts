@@ -537,7 +537,7 @@ describe('Claim issue: post payment callback receiver', () => {
               .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
           })
 
-          it('should redirect to confirmation page when everything is fine however user has not given any consent', async () => {
+          it('should redirect to confirmation page when user have not given any consent', async () => {
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
@@ -554,7 +554,7 @@ describe('Claim issue: post payment callback receiver', () => {
               .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
           })
 
-          it('should redirect to confirmation page when everything is fine however feature toggle does not allows admission', async () => {
+          it('should redirect to confirmation page when feature toggle does not allows admission', async () => {
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
