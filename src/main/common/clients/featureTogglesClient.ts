@@ -15,7 +15,7 @@ export class FeatureTogglesClient {
       return Promise.reject(new Error('user must be set'))
     }
 
-    return await this.request
+    return this.request
       .get(`${featureTogglesApiUrl}/cmc_admissions`, {
         headers: {
           'X-USER-ID': `${user.email}`,
