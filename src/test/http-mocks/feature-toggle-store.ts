@@ -9,3 +9,9 @@ export function resolveIsAdmissionsAllowed () {
     .get(new RegExp('/check/cmc_admissions'))
     .reply(HttpStatus.OK, true)
 }
+
+export function rejectIsAdmissionsAllowed () {
+  mock(`${serviceBaseURL}/api/ff4j`)
+    .get(new RegExp('/check/cmc_admissions'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR)
+}

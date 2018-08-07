@@ -17,13 +17,13 @@ const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
 
 const logger = Logger.getLogger('claims/claimStoreClient')
 
-function buildCaseSubmissionHeaders (claimant: User, optInFeature: boolean): object {
+function buildCaseSubmissionHeaders (claimant: User, ...optInFeatures: string[]): object {
   const headers = {
     Authorization: `Bearer ${claimant.bearerToken}`
   }
 
-  if (optInFeature) {
-    headers['Features'] = 'admissions'
+  if (optInFeatures) {
+    headers['Features'] = optInFeatures
   }
 
   return headers
@@ -49,7 +49,7 @@ export class ClaimStoreClient {
     return this.request
       .post(`${claimStoreApiUrl}/${claimant.id}`, {
         body: convertedDraftClaim,
-        headers: buildCaseSubmissionHeaders(claimant, optInFeature)
+        headers: buildCaseSubmissionHeaders(claimant, optInFeature ? 'admissions' : undefined)
       })
       .then(claim => {
         return new Claim().deserialize(claim)
@@ -182,7 +182,7 @@ export class ClaimStoreClient {
       .then(linkStatus => linkStatus.linked)
   }
 
-  retrieveUserRoles (user: User): Promise<string> {
+  retrieveUserRoles (user: User): Promise<string[]> {
     if (!user) {
       return Promise.reject(new Error('User must be set'))
     }
@@ -192,10 +192,6 @@ export class ClaimStoreClient {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }
-      })
-      .then((roles: string[]) => {
-        console.log(roles)
-        return roles.join(',')
       })
   }
 }

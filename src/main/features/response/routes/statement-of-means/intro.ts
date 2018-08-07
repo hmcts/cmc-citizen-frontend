@@ -1,8 +1,6 @@
 import * as express from 'express'
 
 import { StatementOfMeansPaths, StatementOfMeansPaths as Paths } from 'response/paths'
-
-import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { StatementOfMeansStateGuard } from 'response/guards/statementOfMeansStateGuard'
 
 import { Claim } from 'claims/models/claim'
@@ -11,12 +9,13 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { DraftService } from 'services/draftService'
 import { ErrorHandling } from 'shared/errorHandling'
+import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.introPage.uri,
-    FeatureToggleGuard.featureEnabledGuard('admissions'),
+    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(false),
     (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.claim
@@ -26,7 +25,7 @@ export default express.Router()
     })
   .post(
     Paths.introPage.uri,
-    FeatureToggleGuard.featureEnabledGuard('admissions'),
+    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(false),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.claim
