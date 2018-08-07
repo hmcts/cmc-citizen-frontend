@@ -1,0 +1,40 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
+
+{% set heading = 'Do you want to try new features as we add them?' %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <p>{{ t('We’re continuously adding new features to this digital service. You can choose to try these features as we launch them') }}</p>
+    <form method="POST" novalidate>
+      {{ csrfProtection(csrf) }}
+
+      {{
+        radioGroup(
+          label = 'Do you want to try new features as we add them?',
+          labelForScreenReadersOnly = true,
+          name = 'permissionResponse',
+          form = form,
+          options = [
+            {
+              bold: false,
+              label: 'I’ll try new features',
+              value: YesNoOption.YES.option,
+              checked: (form.valueFor('permissionResponse') === YesNoOption.YES)
+            },
+            {
+              bold: false,
+              label: 'I don’t want to try new features',
+              value: YesNoOption.NO.option,
+              checked: (form.valueFor('permissionResponse').value === YesNoOption.NO)
+            }
+          ]
+        )
+      }}
+
+      {{ saveAndContinueButton() }}
+    </form>
+  </div>
+</div>
+{% endblock %}

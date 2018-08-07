@@ -16,7 +16,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const pagePath: string = ClaimPaths.newFeatureConsent.uri
+const pagePath: string = ClaimPaths.newFeaturesConsent.uri
 
 describe('Feature permission: Claimant permission to try new features', () => {
   attachDefaultHooks(app)
@@ -59,7 +59,7 @@ describe('Feature permission: Claimant permission to try new features', () => {
         claimStoreServiceMock.resolvePersistUserRoles('cmc-new-features-consent-given')
 
         await request(app)
-          .post(ClaimPaths.newFeatureConsent.uri)
+          .post(ClaimPaths.newFeaturesConsent.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ permissionResponse: 'yes' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
