@@ -17,13 +17,13 @@ const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
 
 const logger = Logger.getLogger('claims/claimStoreClient')
 
-function buildCaseSubmissionHeaders (claimant: User, ...optInFeatures: string[]): object {
+function buildCaseSubmissionHeaders (claimant: User, features: string[]): object {
   const headers = {
     Authorization: `Bearer ${claimant.bearerToken}`
   }
 
-  if (optInFeatures) {
-    headers['Features'] = optInFeatures
+  if (features.length > 0) {
+    headers['Features'] = features
   }
 
   return headers
@@ -44,12 +44,13 @@ export class ClaimStoreClient {
     })
   }
 
-  saveClaim (draft: Draft<DraftClaim>, claimant: User, optInFeature: boolean): Promise<Claim> {
+  saveClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
+
     return this.request
       .post(`${claimStoreApiUrl}/${claimant.id}`, {
         body: convertedDraftClaim,
-        headers: buildCaseSubmissionHeaders(claimant, optInFeature ? 'admissions' : undefined)
+        headers: buildCaseSubmissionHeaders(claimant, features)
       })
       .then(claim => {
         return new Claim().deserialize(claim)
