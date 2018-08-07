@@ -56,8 +56,10 @@ describe('StatementOfMeansFeature', () => {
           type: ResponseType.FULL_ADMISSION
         },
         fullAdmission: {
-          paymentOption: {
-            option: DefendantPaymentType.INSTALMENTS
+          paymentIntention: {
+            paymentOption: {
+              option: DefendantPaymentType.INSTALMENTS
+            }
           }
         }
       } as ResponseDraft
@@ -89,8 +91,10 @@ describe('StatementOfMeansFeature', () => {
           alreadyPaid: { option: 'no' },
           howMuchHaveYouPaid: { amount: 100 },
           whyDoYouDisagree: { text: 'bbb' },
-          paymentOption: {
-            option: DefendantPaymentType.INSTALMENTS
+          paymentIntention: {
+            paymentOption: {
+              option: DefendantPaymentType.INSTALMENTS
+            }
           }
         })
       } as ResponseDraft

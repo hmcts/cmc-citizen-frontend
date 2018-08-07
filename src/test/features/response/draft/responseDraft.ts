@@ -13,6 +13,7 @@ import { ResidenceType } from 'response/form/models/statement-of-means/residence
 import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { PartyType } from 'common/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
+import { PaymentIntention } from 'shared/components/payment-intention/model'
 
 describe('ResponseDraft', () => {
 
@@ -72,8 +73,15 @@ describe('ResponseDraft', () => {
           option: MoreTimeNeededOption.YES
         },
         fullAdmission: {
-          paymentDate: {
-            date: paymentDate
+          paymentIntention: {
+            paymentOption: {
+              option: {
+                value: 'BY_SPECIFIED_DATE'
+              }
+            },
+            paymentDate: {
+              date: paymentDate
+            }
           }
         },
         statementOfMeans: {
@@ -93,7 +101,7 @@ describe('ResponseDraft', () => {
       expect(draft.response.type).to.eql(responseType)
       expect(draft.moreTimeNeeded.option).to.eql(MoreTimeNeededOption.YES)
       expect(draft.freeMediation.option).to.eql(FreeMediationOption.YES)
-      assertLocalDateEquals(draft.fullAdmission.paymentDate.date, paymentDate)
+      assertLocalDateEquals(draft.fullAdmission.paymentIntention.paymentDate.date, paymentDate)
       expect(draft.statementOfMeans.residence.type).to.eql(ResidenceType.OTHER)
     })
   })
@@ -173,7 +181,8 @@ describe('ResponseDraft', () => {
         const draft: ResponseDraft = new ResponseDraft()
         draft.response = new Response(ResponseType.FULL_ADMISSION)
         draft.fullAdmission = new FullAdmission()
-        draft.fullAdmission.paymentOption = new DefendantPaymentOption(paymentType)
+        draft.fullAdmission.paymentIntention = new PaymentIntention()
+        draft.fullAdmission.paymentIntention.paymentOption = new DefendantPaymentOption(paymentType)
 
         expect(draft.isResponseFullyAdmittedWithInstalments()).to.be.eq(false)
       })
@@ -183,7 +192,8 @@ describe('ResponseDraft', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.FULL_ADMISSION)
       draft.fullAdmission = new FullAdmission()
-      draft.fullAdmission.paymentOption = new DefendantPaymentOption(DefendantPaymentType.INSTALMENTS)
+      draft.fullAdmission.paymentIntention = new PaymentIntention()
+      draft.fullAdmission.paymentIntention.paymentOption = new DefendantPaymentOption(DefendantPaymentType.INSTALMENTS)
 
       expect(draft.isResponseFullyAdmitted()).to.be.eq(true)
     })

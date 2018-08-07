@@ -105,7 +105,7 @@ export class TaskListBuilder {
           new TaskListItem(
             'Your repayment plan',
             FullAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId }),
-            YourRepaymentPlanTask.isCompleted(draft.fullAdmission.paymentPlan)
+            YourRepaymentPlanTask.isCompleted(draft.fullAdmission.paymentIntention.paymentPlan)
           )
         )
       }
@@ -166,12 +166,12 @@ export class TaskListBuilder {
       }
 
       if (howMuchDoYouOweTask && WhenWillYouPayTask.isCompleted(draft)
-        && draft.partialAdmission.paymentOption.isOfType(DefendantPaymentType.INSTALMENTS)) {
+        && draft.partialAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.INSTALMENTS)) {
         tasks.push(
           new TaskListItem(
             'Your repayment plan',
             PartAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId }),
-            YourRepaymentPlanTask.isCompleted(draft.partialAdmission.paymentPlan)
+            YourRepaymentPlanTask.isCompleted(draft.partialAdmission.paymentIntention.paymentPlan)
           )
         )
       }

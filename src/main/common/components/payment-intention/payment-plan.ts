@@ -54,8 +54,9 @@ export class PaymentPlanPage {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
       return draft.document[this.admissionType]
-        && draft.document[this.admissionType].paymentOption
-        && draft.document[this.admissionType].paymentOption.isOfType(DefendantPaymentType.INSTALMENTS)
+        && draft.document[this.admissionType].paymentIntention
+        && draft.document[this.admissionType].paymentIntention.paymentOption
+        && draft.document[this.admissionType].paymentIntention.paymentOption.isOfType(DefendantPaymentType.INSTALMENTS)
     }, (req: express.Request, res: express.Response): void => {
       const claim: Claim = res.locals.claim
 

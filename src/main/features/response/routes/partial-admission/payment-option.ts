@@ -11,11 +11,11 @@ import { partialAdmissionPath, Paths } from 'response/paths'
 
 class ModelAccessor extends AbstractModelAccessor<ResponseDraft, PaymentIntention> {
   get (draft: ResponseDraft): PaymentIntention {
-    return draft.fullAdmission
+    return draft.partialAdmission.paymentIntention ? draft.partialAdmission.paymentIntention : new PaymentIntention()
   }
 
   set (draft: ResponseDraft, model: PaymentIntention): void {
-    draft.fullAdmission = model
+    draft.partialAdmission.paymentIntention = model
   }
 }
 
