@@ -2,8 +2,8 @@ import * as express from 'express'
 
 import { partialAdmissionPath } from 'response/paths'
 import { PaymentOptionPage } from 'response/components/payment-intention/payment-option'
-import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 const setHowMuchDoYouOweAmount = (req: express.Request, res: express.Response, next: express.NextFunction) => {
   const draft: ResponseDraft = res.locals.responseDraft.document
@@ -17,4 +17,4 @@ const setHowMuchDoYouOweAmount = (req: express.Request, res: express.Response, n
 
 /* tslint:disable:no-default-export */
 export default new PaymentOptionPage('partialAdmission')
-  .buildRouter(partialAdmissionPath, FeatureToggleGuard.featureEnabledGuard('admissions'), setHowMuchDoYouOweAmount)
+  .buildRouter(partialAdmissionPath, OptInFeatureToggleGuard.featureEnabledGuard('admissions'), setHowMuchDoYouOweAmount)

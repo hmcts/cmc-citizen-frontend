@@ -1,8 +1,6 @@
 import * as express from 'express'
 
 import { StatementOfMeansPaths } from 'response/paths'
-
-import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { StatementOfMeansStateGuard } from 'response/guards/statementOfMeansStateGuard'
 
 import { Form } from 'forms/form'
@@ -15,6 +13,7 @@ import { BankAccounts } from 'response/form/models/statement-of-means/bankAccoun
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
+import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 const page: RoutablePath = StatementOfMeansPaths.bankAccountsPage
 
@@ -37,7 +36,7 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 export default express.Router()
   .get(
     page.uri,
-    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
+    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -45,7 +44,7 @@ export default express.Router()
     })
   .post(
     page.uri,
-    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
+    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     FormValidator.requestHandler(BankAccounts, BankAccounts.fromObject, undefined, ['addRow']),
     actionHandler,
