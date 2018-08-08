@@ -35,6 +35,7 @@ export class Claim {
   totalAmountTillToday: number
   totalAmountTillDateOfIssue: number
   totalInterest: number
+  features: string[]
   directionsQuestionnaireDeadline: Moment
 
   deserialize (input: any): Claim {
@@ -72,6 +73,7 @@ export class Claim {
       this.totalAmountTillToday = input.totalAmountTillToday
       this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
       this.totalInterest = input.totalInterest
+      this.features = input.features
       if (input.directionsQuestionnaireDeadline) {
         this.directionsQuestionnaireDeadline = MomentFactory.parse(input.directionsQuestionnaireDeadline)
       }
