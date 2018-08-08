@@ -27,10 +27,7 @@
   },
   "featureToggles": {
     "testingSupport": true,
-    "fullAdmission": true,
-    "partialAdmission": true,
     "admissions": true,
-    "statementOfMeans": true,
     "returnErrorToUser": true
   },
   "appInsights": {

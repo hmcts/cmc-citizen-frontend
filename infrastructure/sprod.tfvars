@@ -1,8 +1,5 @@
 feature_mock_pay = "true"
 feature_fine_print = "true"
-feature_full_admission = "true"
-feature_partial_admission = "true"
-feature_statement_of_means = "true"
 feature_return_error_to_user = "true"
 external_host_name = "moneyclaim.sprod.platform.hmcts.net"
 

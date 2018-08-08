@@ -4,7 +4,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 
 export class StatementOfMeansFeature {
   static isApplicableFor (draft: ResponseDraft): boolean {
-    if (!FeatureToggles.isEnabled('statementOfMeans')) {
+    if (!FeatureToggles.isEnabled('admissions')) {
       return false
     }
     if (!draft) {

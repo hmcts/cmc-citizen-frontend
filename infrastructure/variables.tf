@@ -41,19 +41,7 @@ variable "authentication_web_url" {
 variable "subscription" {}
 
 // feature toggles
-variable "feature_statement_of_means" {
-  default = "false"
-}
-
-variable "feature_full_admission" {
-  default = "false"
-}
-
 variable "feature_admissions" {
-  default = "false"
-}
-
-variable "feature_partial_admission" {
   default = "false"
 }
 

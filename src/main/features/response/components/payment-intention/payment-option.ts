@@ -73,7 +73,7 @@ export class PaymentOptionPage {
 
   private renderView (form: Form<DefendantPaymentOption>, res: express.Response) {
     function isApplicableFor (draft: ResponseDraft): boolean {
-      if (!FeatureToggles.isEnabled('statementOfMeans')) {
+      if (!FeatureToggles.isEnabled('admissions')) {
         return false
       }
       return draft.isResponseFullyAdmitted()

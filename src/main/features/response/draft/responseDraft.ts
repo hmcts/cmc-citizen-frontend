@@ -23,13 +23,12 @@ import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
 import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
-import * as config from 'config'
-import * as toBoolean from 'to-boolean'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 
 import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
 import { YesNoOption } from 'models/yesNoOption'
 import { HowMuchDoYouOwe } from 'response/form/models/howMuchDoYouOwe'
+import { FeatureToggles } from 'utils/featureToggles'
 
 export class FullAdmission {
   paymentOption: PaymentOption
@@ -147,7 +146,7 @@ export class ResponseDraft extends DraftDocument {
   }
 
   public isResponseFullyAdmitted (): boolean {
-    if (!toBoolean(config.get<boolean>('featureToggles.fullAdmission'))) {
+    if (!FeatureToggles.isEnabled('admissions')) {
       return false
     }
 
@@ -171,7 +170,7 @@ export class ResponseDraft extends DraftDocument {
   }
 
   public isResponsePartiallyAdmitted (): boolean {
-    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission'))) {
+    if (!FeatureToggles.isEnabled('admissions')) {
       return false
     }
 
