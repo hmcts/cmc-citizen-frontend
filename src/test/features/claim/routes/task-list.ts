@@ -35,14 +35,14 @@ describe('Claim issue: task list page', () => {
         .expect(res => expect(res).to.be.successful.withText('Make a money claim'))
     })
 
-    it('should render page when user role cannot be retrieved', async () => {
+    it('should show error page when user role cannot be retrieved', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
       claimStoreServiceMock.rejectRetrieveUserRoles()
       await request(app)
         .get(ClaimPaths.taskListPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Make a money claim'))
+        .expect(res => expect(res).to.be.serverError.withText('error'))
     })
   })
 
