@@ -35,6 +35,7 @@ export class Claim {
   totalAmountTillToday: number
   totalAmountTillDateOfIssue: number
   totalInterest: number
+  directionsQuestionnaireDeadline: Moment
 
   deserialize (input: any): Claim {
     if (input) {
@@ -71,12 +72,11 @@ export class Claim {
       this.totalAmountTillToday = input.totalAmountTillToday
       this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
       this.totalInterest = input.totalInterest
+      if (input.directionsQuestionnaireDeadline) {
+        this.directionsQuestionnaireDeadline = MomentFactory.parse(input.directionsQuestionnaireDeadline)
+      }
     }
     return this
-  }
-
-  get directionsQuestionnaireSubmissionDeadline (): Moment {
-    return this.respondedAt ? this.respondedAt.clone().add(19, 'days') : undefined
   }
 
   get defendantOffer (): Offer {

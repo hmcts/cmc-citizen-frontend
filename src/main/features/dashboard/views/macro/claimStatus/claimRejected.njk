@@ -58,7 +58,7 @@
         { url: DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }) }) | safe }}</p>
 
   <p>{{ t('Your claim will be cancelled if you don’t complete and return the form before 4pm on {{ deadline }}.',
-        { deadline: claim.directionsQuestionnaireSubmissionDeadline | date }) }}</p>
+        { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
 
   <p>
     {{ _downloadResponseLink(claim, 'Download their response') }}
@@ -79,7 +79,7 @@
         { url: DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }) }) | safe }}</p>
 
   <p>{{ t('Your defence will be cancelled if you don’t complete and return the form before 4pm on {{ deadline }}.',
-        { deadline: claim.directionsQuestionnaireSubmissionDeadline | date }) }}</p>
+        { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
 
   <p>
     {{ _downloadResponseLink(claim, 'Download your response') }}
