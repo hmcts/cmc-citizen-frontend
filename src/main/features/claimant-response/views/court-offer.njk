@@ -1,0 +1,59 @@
+{% extends "layout.njk" %}
+
+{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+{% from "./macro/paymentPlanTable.njk" import paymentPlanTable %}
+{% from "financialDetails.njk" import financialDetailsTable %}
+
+{% set heading = 'Your instalments are more than the defendant can afford' %}
+{% set defendantName = claim.claimData.defendant.name %}
+
+{% macro repaymentPlanBlock(heading = 'The court`s proposed repayment plan', repaymentPlan, paymentPlan) %}
+  {% if heading %}
+    <h2 class="heading-medium">{{ t(heading) }}</h2>
+  {% endif %}
+
+  {{ paymentPlanTable(
+    id = 'payment-table',
+    instalmentAmount = repaymentPlan.instalmentAmount,
+    firstPaymentDate = repaymentPlan.firstPaymentDate,
+    lastPaymentOn = paymentPlan.getLastPaymentDate(),
+    lengthOfPayment = paymentPlan.getPaymentLength()
+  )
+  }}
+{% endmacro %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('Based on the financial details provided by the defendant, we do not believe they would be able to meet these requirements.') }}</p>
+
+      <p>{{ t('The court affordability calculator has proposed the below repayment plan as the maximum the defendant can repay.') }}</p>
+
+      {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+        {{
+        repaymentPlanBlock(
+          repaymentPlan = claim.response.paymentIntention.repaymentPlan,
+          paymentPlan = paymentPlan
+        )
+        }}
+      {% endif %}
+
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+
+        {{ radioOption(
+          form = form,
+          name = 'admitted',
+          value = YesNoOption.YES.option,
+          label = 'Yes',
+          bold = true,
+          hint = 'You can agree to their repayment plan or suggest your own.',
+          checked = (form.valueFor('admitted') === YesNoOption.YES)
+        ) }}
+
+        {{ submitButton('Continue') }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}
