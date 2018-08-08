@@ -2,7 +2,7 @@ import * as express from 'express'
 import { Paths as ClaimPaths } from 'claim/paths'
 import { Form } from 'forms/form'
 import { FeaturePermissionResponse } from 'forms/models/featurePermissionResponse'
-import { NewFeatureConsentGuard } from 'claim/guards/newFeatureConsentGuard'
+import { NewFeaturesConsentGuard } from 'claim/guards/newFeaturesConsentGuard'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
@@ -20,7 +20,7 @@ function renderView (form: Form<FeaturePermissionResponse>, res: express.Respons
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(ClaimPaths.newFeaturesConsent.uri,
-    NewFeatureConsentGuard.requestHandler,
+    NewFeaturesConsentGuard.requestHandler,
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
       renderView(Form.empty<FeaturePermissionResponse>(), res)
     })

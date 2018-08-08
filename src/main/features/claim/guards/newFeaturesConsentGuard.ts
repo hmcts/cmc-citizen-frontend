@@ -4,7 +4,7 @@ import { ForbiddenError } from 'errors'
 
 const claimStoreClient = new ClaimStoreClient()
 
-export class NewFeatureConsentGuard {
+export class NewFeaturesConsentGuard {
 
   static requestHandler (req: express.Request, res: express.Response, next: express.NextFunction) {
     claimStoreClient.retrieveUserRoles(res.locals.user).then(value => {
