@@ -27,7 +27,7 @@ describe('Claim issue: task list page', () => {
     it('should render page when everything is fine when user role present', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
-      claimStoreServiceMock.resolveRetrieveUserRoles('mock-user-role')
+      claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
 
       await request(app)
         .get(ClaimPaths.taskListPage.uri)

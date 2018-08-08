@@ -25,13 +25,24 @@ describe('Feature permission: Claimant permission to try new features', () => {
     checkAuthorizationGuards(app, 'get', pagePath)
     checkEligibilityGuards(app, 'get', pagePath)
 
-    it('should render feature permission page when everything is fine', async () => {
+    it('should render new feature consent page when user role not present and everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
+      claimStoreServiceMock.resolveRetrieveUserRoles(null)
       await request(app)
         .get(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.successful.withText('I’ll try new features'))
+    })
+
+    it('should not render new feature consent page when new feature consent role present', async () => {
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+      draftStoreServiceMock.resolveFind('claim')
+      claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
+      await request(app)
+        .get(pagePath)
+        .set('Cookie', `${cookieName}=ABC`)
+        .expect(res => expect(res).to.be.successful.withText('Forbidden'))
     })
   })
 
@@ -56,7 +67,7 @@ describe('Feature permission: Claimant permission to try new features', () => {
 
       it('should redirect to task list page when selection is made', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        claimStoreServiceMock.resolvePersistUserRoles('cmc-new-features-consent-given')
+        claimStoreServiceMock.resolveAddRolesToUser('cmc-new-features-consent-given')
 
         await request(app)
           .post(ClaimPaths.newFeaturesConsent.uri)

@@ -324,7 +324,7 @@ export function resolveRetrieveDocument () {
     .reply(HttpStatus.OK)
 }
 
-export function resolvePersistUserRoles (role: string) {
+export function resolveAddRolesToUser (role: string) {
   mock(`${serviceBaseURL}/user`)
     .post('/roles')
     .reply(HttpStatus.CREATED, { role: role })
