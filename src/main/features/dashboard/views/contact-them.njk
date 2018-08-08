@@ -10,7 +10,11 @@
   {% set otherParty = 'defendant' %}
   {% set otherPartyName = claim.claimData.defendant.name %}
   {% set phone = claim.response.defendant.mobilePhone %}
-  {% set email = claim.claimData.defendant.email %}
+  {% if claim.defendantEmail %}
+    {% set email = claim.defendantEmail %}
+  {% else %}
+    {% set email = claim.claimData.defendant.email %}
+  {% endif %}
   {% set contactPerson = claim.response.defendant.name %}
   {% set address = claim.response.defendant.address if claim.response.defendant.address else claim.claimData.defendant.address %}
   {% set correspondenceAddress = claim.response.defendant.correspondenceAddress if claim.response.defendant.correspondenceAddress else claim.claimData.defendant.correspondenceAddress %}
@@ -39,7 +43,7 @@
       <div class="notice">
         {% if address %}
           <h2 class="heading-medium">{{ t('Address') }}</h2>
-          
+
           <span class="block">{{ address.line1 }}</span>
 
           {% if address.line2 %}
@@ -60,7 +64,7 @@
       {% if correspondenceAddress %}
         <div class="notice">
           <h2 class="heading-medium">{{ t('Correspondence address') }}</h2>
-          
+
           <span class="block">{{ correspondenceAddress.line1 }}</span>
 
           {% if correspondenceAddress.line2 %}
