@@ -41,17 +41,30 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        {{ radioOption(
+        {{
+        radioGroup(
+          label = 'Do you accept the court`s proposed repayment plan?',
+          labelForScreenReadersOnly = true,
           form = form,
-          name = 'admitted',
-          value = YesNoOption.YES.option,
-          label = 'Yes',
-          bold = true,
-          hint = 'You can agree to their repayment plan or suggest your own.',
-          checked = (form.valueFor('admitted') === YesNoOption.YES)
-        ) }}
+          name = name,
+          options = [
+          {
+            label: 'Yes',
+            value: FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value,
+            checked: (form.valueFor(name).value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value),
+            bold: false
+          },
+          {
+            label: 'No - I want a judge to decide the repayment plan',
+            value:  FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value,
+            checked: (form.valueFor(name).value === FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value),
+            bold: false
+          }
+        ]
+        )
+        }}
 
-        {{ submitButton('Continue') }}
+        {{ saveAndContinueButton() }}
       </form>
 
     </div>
