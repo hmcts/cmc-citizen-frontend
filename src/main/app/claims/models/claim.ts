@@ -35,6 +35,7 @@ export class Claim {
   totalAmountTillToday: number
   totalAmountTillDateOfIssue: number
   totalInterest: number
+  features: string[]
 
   deserialize (input: any): Claim {
     if (input) {
@@ -71,6 +72,7 @@ export class Claim {
       this.totalAmountTillToday = input.totalAmountTillToday
       this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
       this.totalInterest = input.totalInterest
+      this.features = input.features
     }
     return this
   }
