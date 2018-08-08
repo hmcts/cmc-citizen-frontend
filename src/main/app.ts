@@ -63,6 +63,7 @@ new OfferFeature().enableFor(app)
 if (FeatureToggles.isEnabled('testingSupport')) {
   new TestingSupportFeature().enableFor(app)
 }
+
 if (FeatureToggles.isEnabled('admissions')) {
   new ClaimantResponseFeature().enableFor(app)
 }

@@ -1,4 +1,3 @@
-vault_section = "prod"
 idam_api_url = "https://prod-idamapi.reform.hmcts.net"
 authentication_web_url = "https://hmcts-access.service.gov.uk"
 fees_api_url = "https://fees-register-api.platform.hmcts.net"

@@ -24,7 +24,7 @@ const validFormData = {
   admitted: 'yes'
 }
 
-const defendantPartialAdmissionResponse = claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj
+const defendantPartialAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
 
 describe('Claimant response: settle admitted page', () => {
   attachDefaultHooks(app)
