@@ -20,7 +20,7 @@ locals {
 
   s2sUrl = "http://rpe-service-auth-provider-${local.local_env}.service.${local.local_ase}.internal"
   claimStoreUrl = "http://cmc-claim-store-${local.local_env}.service.${local.local_ase}.internal"
-  featureTogglesApiUrl = "http://rpe-feature-toggle-api-${local.local_env}.service.core-compute-${local.local_ase}.internal"
+  featureTogglesApiUrl = "http://rpe-feature-toggle-api-${local.local_env}.service.${local.local_ase}.internal"
   draftStoreUrl = "http://draft-store-service-${local.local_env}.service.${local.local_ase}.internal"
 }
 
