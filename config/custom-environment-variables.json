@@ -21,6 +21,9 @@
   "claim-store": {
     "url": "CLAIM_STORE_URL"
   },
+  "feature-toggles-api": {
+    "url": "FEATURE_TOGGLES_API_URL"
+  },
   "draft-store": {
     "url": "DRAFT_STORE_URL",
     "apiVersion": "DRAFT_STORE_API_VERSION",
