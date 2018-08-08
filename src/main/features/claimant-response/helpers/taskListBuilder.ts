@@ -108,6 +108,7 @@ export class TaskListBuilder {
       this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
       this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
       this.buildSignSettlementAgreement(draft, tasks, externalId)
+      this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
     }
 
     return new TaskList('How do you want to respond?', tasks)
@@ -134,6 +135,20 @@ export class TaskListBuilder {
           'Sign a settlement agreement',
           Paths.signSettlementAgreementPage.evaluateUri({ externalId: externalId }),
           SignSettlementAgreementTask.isCompleted(draft.settlementAgreement)
+        )
+      )
+    }
+  }
+
+  private static buildRequestCountyCourtJudgment (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
+    if (draft.formaliseRepaymentPlan
+      && draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value
+    ) {
+      tasks.push(
+        new TaskListItem(
+          'Request a County Court Judgment',
+          Paths.paidAmountPage.evaluateUri({ externalId: externalId }),
+          true
         )
       )
     }
