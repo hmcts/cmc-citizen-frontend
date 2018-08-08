@@ -1,13 +1,6 @@
 #!groovy
 //noinspection GroovyUnusedAssignment
-@Library("Infrastructure") _
-
-//noinspection GroovyAssignabilityCheck
-properties([
-		parameters([
-			choice(name: 'ENVIRONMENT', choices: 'saat\nsprod', description: 'Environment where code should be build and deployed')
-		])
-])
+@Library("Infrastructure@timw-aks") _
 
 List<LinkedHashMap<String, Object>> secrets = [
   secret('smoke-test-citizen-username', 'SMOKE_TEST_CITIZEN_USERNAME'),
@@ -24,8 +17,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
   ]
 }
 
-
-withParameterizedPipeline('nodejs', 'cmc', 'citizen-frontend', params.ENVIRONMENT, 'sandbox') {
+withPipeline("nodejs", product, component) {
   after('build') {
     sh 'yarn setup'
   }
