@@ -10,8 +10,8 @@ import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 import {
-  fullAdmissionWithSoMPaymentBySetDate,
   fullAdmissionWithSoMPaymentByInstalmentsData,
+  fullAdmissionWithSoMPaymentBySetDate,
   partialAdmissionWithSoMPaymentBySetDateData
 } from 'test/data/entity/responseData'
 
@@ -91,7 +91,8 @@ export const sampleClaimObj = {
         offer: { content: 'offer text', completionDate: '2017-08-08' }
       }
     ]
-  }
+  },
+  features: ['admissions']
 }
 
 export const sampleDefendantResponseObj = {
@@ -322,4 +323,16 @@ export function resolveRetrieveDocument () {
   mock(`${serviceBaseURL}/documents`)
     .get(new RegExp('/.+/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
     .reply(HttpStatus.OK)
+}
+
+export function resolveRetrieveUserRoles (...userRoles: string[]) {
+  mock(`${serviceBaseURL}/user`)
+    .get('/roles')
+    .reply(HttpStatus.OK, userRoles)
+}
+
+export function rejectRetriveUserRoles () {
+  mock(`${serviceBaseURL}/user`)
+    .get('/roles')
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR)
 }
