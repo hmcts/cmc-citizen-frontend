@@ -335,3 +335,15 @@ export function resolveRetrieveUserRoles (role: string) {
     .get('/roles')
     .reply(HttpStatus.OK, [role])
 }
+
+export function rejectRetrieveUserRoles (reason: string = 'HTTP error') {
+  mock(`${serviceBaseURL}/user`)
+    .get('/roles')
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
+export function rejectAddRolesToUser (reason: string = 'HTTP error') {
+  mock(`${serviceBaseURL}/user`)
+    .post('/roles')
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}

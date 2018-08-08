@@ -14,20 +14,20 @@
         radioGroup(
           label = 'Do you want to try new features as we add them?',
           labelForScreenReadersOnly = true,
-          name = 'permissionResponse',
+          name = 'consentResponse',
           form = form,
           options = [
             {
               bold: false,
               label: 'I’ll try new features',
               value: YesNoOption.YES.option,
-              checked: (form.valueFor('permissionResponse') === YesNoOption.YES)
+              checked: (form.valueFor('consentResponse') === YesNoOption.YES)
             },
             {
               bold: false,
               label: 'I don’t want to try new features',
               value: YesNoOption.NO.option,
-              checked: (form.valueFor('permissionResponse').value === YesNoOption.NO)
+              checked: (form.valueFor('consentResponse').value === YesNoOption.NO)
             }
           ]
         )

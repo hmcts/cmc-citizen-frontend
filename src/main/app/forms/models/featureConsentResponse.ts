@@ -5,19 +5,19 @@ export class ValidationErrors {
   static readonly TYPE_REQUIRED: string = 'Choose your response'
 }
 
-export class FeaturePermissionResponse {
+export class FeatureConsentResponse {
   @IsDefined({ message: ValidationErrors.TYPE_REQUIRED })
   @IsIn(YesNoOption.all(), { message: ValidationErrors.TYPE_REQUIRED })
-  permissionResponse?: YesNoOption
+  consentResponse?: YesNoOption
 
-  constructor (permissionResponse?: YesNoOption) {
-    this.permissionResponse = permissionResponse
+  constructor (consentResponse?: YesNoOption) {
+    this.consentResponse = consentResponse
   }
 
-  static fromObject (input?: any): FeaturePermissionResponse {
+  static fromObject (input?: any): FeatureConsentResponse {
     if (input == null) {
       return input
     }
-    return new FeaturePermissionResponse(YesNoOption.fromObject(input.permissionResponse))
+    return new FeatureConsentResponse(YesNoOption.fromObject(input.consentResponse))
   }
 }

@@ -61,7 +61,7 @@ describe('Feature permission: Claimant permission to try new features', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ permissionResponse: undefined })
+          .send({ consentResponse: undefined })
           .expect(res => expect(res).to.be.successful.withText('I’ll try new features', 'div class="error-summary"'))
       })
 
@@ -72,8 +72,19 @@ describe('Feature permission: Claimant permission to try new features', () => {
         await request(app)
           .post(ClaimPaths.newFeaturesConsent.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ permissionResponse: 'yes' })
+          .send({ consentResponse: 'yes' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
+      })
+
+      it('should return 500 when role cannot be saved', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+        claimStoreServiceMock.rejectAddRolesToUser()
+
+        await request(app)
+          .post(ClaimPaths.newFeaturesConsent.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ consentResponse: 'yes' })
+          .expect(res => expect(res).to.be.serverError.withText('error'))
       })
     })
   })
