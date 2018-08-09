@@ -15,7 +15,7 @@ export class NewFeaturesConsentMiddleware {
     const user: User = res.locals.user
     claimStoreClient.retrieveUserRoles(user)
       .then(roles => {
-        if (roles.length === 0 || !(roles.some(role => role.includes('cmc-new-features-consent')))) {
+        if (roles.length === 0 || !roles.some(role => role.includes('cmc-new-features-consent'))) {
           res.redirect(ClaimPaths.newFeaturesConsent.uri)
         } else {
           return next()

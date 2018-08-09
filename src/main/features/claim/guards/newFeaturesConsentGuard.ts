@@ -7,12 +7,13 @@ const claimStoreClient = new ClaimStoreClient()
 export class NewFeaturesConsentGuard {
 
   static requestHandler (req: express.Request, res: express.Response, next: express.NextFunction) {
-    claimStoreClient.retrieveUserRoles(res.locals.user).then(value => {
-      if (value.length !== 0 && value.includes('cmc-new-features-consent')) {
-        return res.render(new ForbiddenError().associatedView)
-      } else {
-        next()
-      }
-    })
+    claimStoreClient.retrieveUserRoles(res.locals.user)
+      .then(roles => {
+        if (roles.length !== 0 && roles.some(role => role.includes('cmc-new-features-consent'))) {
+          return res.render(new ForbiddenError().associatedView)
+        } else {
+          next()
+        }
+      })
   }
 }

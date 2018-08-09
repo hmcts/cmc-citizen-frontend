@@ -28,7 +28,7 @@ describe('Feature permission: Claimant permission to try new features', () => {
     it('should render new feature consent page when user role not present and everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
-      claimStoreServiceMock.resolveRetrieveUserRoles(null)
+      claimStoreServiceMock.resolveRetrieveUserRoles()
       await request(app)
         .get(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
