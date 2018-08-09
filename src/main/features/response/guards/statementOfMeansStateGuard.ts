@@ -19,7 +19,7 @@ export class StatementOfMeansStateGuard {
     return GuardFactory.create((res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
 
-      return StatementOfMeansFeature.isApplicableFor(draft.document)
+      return StatementOfMeansFeature.isApplicableFor(res.locals.claim.features, draft.document)
         && (requireInitiatedModel ? draft.document.statementOfMeans !== undefined : true)
     }, (req: express.Request, res: express.Response): void => {
       res.redirect(Paths.taskListPage.evaluateUri({ externalId: UUIDUtils.extractFrom(req.path) }))

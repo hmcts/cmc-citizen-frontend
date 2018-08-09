@@ -1,6 +1,6 @@
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
-import { Paths, FullAdmissionPaths, PartAdmissionPaths, StatementOfMeansPaths } from 'response/paths'
+import { FullAdmissionPaths, PartAdmissionPaths, Paths, StatementOfMeansPaths } from 'response/paths'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
@@ -81,7 +81,7 @@ export class TaskListBuilder {
       )
     }
 
-    if (draft.isResponseFullyAdmitted()) {
+    if (draft.isResponseFullyAdmitted(claim.features)) {
       tasks.push(
         new TaskListItem(
           'Decide how you’ll pay',
@@ -90,7 +90,7 @@ export class TaskListBuilder {
         )
       )
 
-      if (StatementOfMeansFeature.isApplicableFor(draft)) {
+      if (StatementOfMeansFeature.isApplicableFor(claim.features, draft)) {
         tasks.push(
           new TaskListItem(
             'Share your financial details',
@@ -100,7 +100,7 @@ export class TaskListBuilder {
         )
       }
 
-      if (draft.isResponseFullyAdmittedWithInstalments()) {
+      if (draft.isResponseFullyAdmittedWithInstalments(claim.features)) {
         tasks.push(
           new TaskListItem(
             'Your repayment plan',
@@ -111,8 +111,8 @@ export class TaskListBuilder {
       }
     }
 
-    const partiallyAdmitted = draft.isResponsePartiallyAdmitted()
-    const partiallyAdmittedAndPaid = draft.isResponsePartiallyAdmittedAndAlreadyPaid()
+    const partiallyAdmitted = draft.isResponsePartiallyAdmitted(claim.features)
+    const partiallyAdmittedAndPaid = draft.isResponsePartiallyAdmittedAndAlreadyPaid(claim.features)
 
     if (partiallyAdmitted) {
 
@@ -155,7 +155,7 @@ export class TaskListBuilder {
         )
       }
 
-      if (StatementOfMeansFeature.isApplicableFor(draft)) {
+      if (StatementOfMeansFeature.isApplicableFor(claim.features, draft)) {
         tasks.push(
           new TaskListItem(
             'Share your financial details',
@@ -181,7 +181,7 @@ export class TaskListBuilder {
   }
 
   static buildResolvingClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
-    if (TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)
+    if (TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(claim.features, draft)
       || draft.isResponseRejectedFullyWithDispute()) {
       return new TaskList(
         'Resolving the claim', [
@@ -197,13 +197,13 @@ export class TaskListBuilder {
     return undefined
   }
 
-  static buildSubmitSection (draft: ResponseDraft, externalId: string): TaskList {
+  static buildSubmitSection (draft: ResponseDraft, externalId: string, features: string[]): TaskList {
     const tasks: TaskListItem[] = []
     if (!draft.isResponsePopulated()
       || draft.isResponseRejectedFullyWithDispute()
       || draft.isResponseRejectedFullyWithAmountClaimedPaid()
-      || draft.isResponseFullyAdmitted()
-      || draft.isResponsePartiallyAdmitted()) {
+      || draft.isResponseFullyAdmitted(features)
+      || draft.isResponsePartiallyAdmitted(features)) {
       tasks.push(
         new TaskListItem(
           'Check and submit your response',
@@ -217,8 +217,8 @@ export class TaskListBuilder {
     return undefined
   }
 
-  private static isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted (draft: ResponseDraft): boolean {
-    return draft.isResponsePartiallyAdmitted() && WhyDoYouDisagreeTask.isCompleted(draft)
+  private static isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted (features: string[], draft: ResponseDraft): boolean {
+    return draft.isResponsePartiallyAdmitted(features) && WhyDoYouDisagreeTask.isCompleted(draft)
   }
 
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {

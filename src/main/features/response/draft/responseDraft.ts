@@ -145,8 +145,8 @@ export class ResponseDraft extends DraftDocument {
     return !isNullOrUndefined(this.moreTimeNeeded) && this.moreTimeNeeded.option === MoreTimeNeededOption.YES
   }
 
-  public isResponseFullyAdmitted (): boolean {
-    if (!FeatureToggles.isEnabled('admissions')) {
+  public isResponseFullyAdmitted (features: string[]): boolean {
+    if (!FeatureToggles.hasAnyAuthorisedFeature(features,'admissions')) {
       return false
     }
 
@@ -155,22 +155,22 @@ export class ResponseDraft extends DraftDocument {
 
   // TODO: Because of an overlap between two stories (ROC-3657, ROC-3658), the logic of this function
   // is incomplete. ROC-3658 should revisit once 'statement of means' flow is complete.
-  public isResponseFullyAdmittedWithInstalments (): boolean {
-    return this.isResponseFullyAdmitted()
+  public isResponseFullyAdmittedWithInstalments (features: string[]): boolean {
+    return this.isResponseFullyAdmitted(features)
       && this.fullAdmission !== undefined
       && this.fullAdmission.paymentOption !== undefined
       && this.fullAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS
   }
 
-  public isResponsePartiallyAdmittedWithInstalments (): boolean {
-    return this.isResponsePartiallyAdmitted()
+  public isResponsePartiallyAdmittedWithInstalments (features: string[]): boolean {
+    return this.isResponsePartiallyAdmitted(features)
       && this.partialAdmission !== undefined
       && this.partialAdmission.paymentOption !== undefined
       && this.partialAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS
   }
 
-  public isResponsePartiallyAdmitted (): boolean {
-    if (!FeatureToggles.isEnabled('admissions')) {
+  public isResponsePartiallyAdmitted (features: string[]): boolean {
+    if (!FeatureToggles.hasAnyAuthorisedFeature(features,'admissions')) {
       return false
     }
 
@@ -179,8 +179,8 @@ export class ResponseDraft extends DraftDocument {
       && this.partialAdmission !== undefined
   }
 
-  public isResponsePartiallyAdmittedAndAlreadyPaid (): boolean {
-    return this.isResponsePartiallyAdmitted() && this.partialAdmission.alreadyPaid.option === YesNoOption.YES
+  public isResponsePartiallyAdmittedAndAlreadyPaid (features: string[]): boolean {
+    return this.isResponsePartiallyAdmitted(features) && this.partialAdmission.alreadyPaid.option === YesNoOption.YES
   }
 
   public isResponseRejectedFullyWithDispute (): boolean {
