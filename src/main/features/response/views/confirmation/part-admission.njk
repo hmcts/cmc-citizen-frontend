@@ -1,5 +1,4 @@
 {% set claimantName = claim.claimData.claimant.name %}
-{% set claimantDetailsPageURI = ClaimPaths.claimantDetailsPage.evaluateUri({ externalId: claim.externalId }) %}
 {% set amount = claim.response.amount | numeral %}
 
 {% if claim.response.paymentDeclaration %}
