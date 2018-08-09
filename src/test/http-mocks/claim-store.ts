@@ -10,8 +10,8 @@ import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 import {
-  fullAdmissionWithSoMPaymentBySetDate,
   fullAdmissionWithSoMPaymentByInstalmentsData,
+  fullAdmissionWithSoMPaymentBySetDate,
   partialAdmissionWithSoMPaymentBySetDateData
 } from 'test/data/entity/responseData'
 
@@ -91,7 +91,8 @@ export const sampleClaimObj = {
         offer: { content: 'offer text', completionDate: '2017-08-08' }
       }
     ]
-  }
+  },
+  features: ['admissions']
 }
 
 export const sampleDefendantResponseObj = {
@@ -328,4 +329,16 @@ export function resolvePostponedDeadline (deadline: string): mock.Scope {
   return mock(`${serviceBaseURL}/deadline`)
     .get(new RegExp('/\\d{4}-\\d{2}-\\d{2}'))
     .reply(HttpStatus.OK, deadline)
+}
+
+export function resolveRetrieveUserRoles (...userRoles: string[]) {
+  mock(`${serviceBaseURL}/user`)
+    .get('/roles')
+    .reply(HttpStatus.OK, userRoles)
+}
+
+export function rejectRetriveUserRoles () {
+  mock(`${serviceBaseURL}/user`)
+    .get('/roles')
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR)
 }
