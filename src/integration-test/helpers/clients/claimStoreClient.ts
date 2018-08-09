@@ -31,7 +31,6 @@ export class ClaimStoreClient {
    *
    * @param {ClaimData} claimData - claim data
    * @param {User} submitter - user that submits claim
-   * @headers Authorization, Features
    * @returns {Promise<Claim>}
    */
   static create (claimData: ClaimData, submitter: User): Promise<Claim> {
