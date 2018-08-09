@@ -42,7 +42,8 @@ export class ClaimStoreClient {
     }
 
     const headers = {
-      Authorization: `Bearer ${submitter.bearerToken}`
+      Authorization: `Bearer ${submitter.bearerToken}`,
+      Features: ['admissions']
     }
     return request.post(`${baseURL}/claims/${claimData.externalId}/pre-payment`, {
       headers
