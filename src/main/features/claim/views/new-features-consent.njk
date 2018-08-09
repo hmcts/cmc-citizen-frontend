@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
+{% from "form.njk" import csrfProtection, radioGroup, submitButton %}
 
 {% set heading = 'Do you want to try new features as we add them?' %}
 
@@ -33,7 +33,7 @@
         )
       }}
 
-      {{ saveAndContinueButton() }}
+      {{ submitButton() }}
     </form>
   </div>
 </div>
