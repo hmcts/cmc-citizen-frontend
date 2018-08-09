@@ -29,6 +29,7 @@ import I = CodeceptJS.I
 import { ClaimantTimelinePage } from 'integration-test/tests/citizen/claim/pages/claimant-timeline'
 import { ClaimantEvidencePage } from 'integration-test/tests/citizen/claim/pages/claimant-evidence'
 import { AmountHelper } from 'integration-test/helpers/amountHelper'
+import { NewFeaturesPage } from '../pages/new-features'
 
 const I: I = actor()
 const citizenResolveDisputePage: CitizenResolveDisputePage = new CitizenResolveDisputePage()
@@ -46,6 +47,8 @@ const claimantTimelinePage: ClaimantTimelinePage = new ClaimantTimelinePage()
 const claimantEvidencePage: ClaimantEvidencePage = new ClaimantEvidencePage()
 const claimantCheckAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const claimantClaimConfirmedPage: ClaimantClaimConfirmedPage = new ClaimantClaimConfirmedPage()
+const newFeaturesPage: NewFeaturesPage = new NewFeaturesPage()
+
 const userSteps: UserSteps = new UserSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 const eligibilitySteps: EligibilitySteps = new EligibilitySteps()
@@ -215,6 +218,10 @@ export class ClaimSteps {
 
   completeEligibility (): void {
     eligibilitySteps.complete()
+  }
+
+  optIntoNewFeatures (): void {
+    newFeaturesPage.optIn()
   }
 
   enterClaimantDetails (claimantType: PartyType): void {
