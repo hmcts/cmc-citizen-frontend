@@ -72,7 +72,7 @@ export default express.Router()
             break
 
           case ResponseType.PART_ADMISSION:
-            if (FeatureToggles.isEnabled('admissions')) {
+            if (FeatureToggles.hasAnyAuthorisedFeature(claim.features, 'admissions')) {
               res.redirect(PartAdmissionPaths.alreadyPaidPage.evaluateUri({ externalId: externalId }))
             } else {
               res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
@@ -80,7 +80,7 @@ export default express.Router()
             break
 
           case ResponseType.FULL_ADMISSION:
-            if (FeatureToggles.isEnabled('admissions')) {
+            if (FeatureToggles.hasAnyAuthorisedFeature(claim.features, 'admissions')) {
               res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
             } else {
               res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
