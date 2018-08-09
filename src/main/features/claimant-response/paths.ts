@@ -2,7 +2,7 @@ import { RoutablePath } from 'shared/router/routablePath'
 
 import { Paths as FreeMediationPaths } from 'shared/components/free-mediation/paths'
 import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intention/paths'
-import { Paths as CCJPaths } from 'main/common/ccj/paths'
+import { Paths as CCJPaths } from 'shared/components/ccj/Paths'
 
 export const claimantResponsePath = '/case/:externalId/claimant-response'
 
