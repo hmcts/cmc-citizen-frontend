@@ -41,9 +41,10 @@ export default express.Router()
     page.uri,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      const claim: Claim = res.locals.claim
       let timeline
 
-      if (draft.document.isResponsePartiallyAdmitted()) {
+      if (draft.document.isResponsePartiallyAdmitted(claim.features)) {
         timeline = draft.document.partialAdmission.timeline
       } else {
         timeline = draft.document.timeline

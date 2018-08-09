@@ -16,7 +16,8 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { FeatureToggles } from 'utils/featureToggles'
 
 export class PaymentOptionPage {
-  constructor (private admissionType: string) {}
+  constructor (private admissionType: string) {
+  }
 
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
     return express.Router()
@@ -72,16 +73,17 @@ export class PaymentOptionPage {
   }
 
   private renderView (form: Form<DefendantPaymentOption>, res: express.Response) {
+    const claim: Claim = res.locals.claim
+
     function isApplicableFor (draft: ResponseDraft): boolean {
-      if (!FeatureToggles.hasAnyAuthorisedFeature(res.locals.claim.features, 'admissions')) {
+      if (!FeatureToggles.hasAnyAuthorisedFeature(claim.features, 'admissions')) {
         return false
       }
-      return draft.isResponseFullyAdmitted()
+      return draft.isResponseFullyAdmitted(claim.features)
         && !draft.defendantDetails.partyDetails.isBusiness()
     }
 
     const draft: Draft<ResponseDraft> = res.locals.responseDraft
-    const claim: Claim = res.locals.claim
     res.render('response/components/payment-intention/payment-option', {
       form: form,
       claim: claim,

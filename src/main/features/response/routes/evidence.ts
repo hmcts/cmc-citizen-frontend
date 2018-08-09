@@ -40,9 +40,10 @@ export default express.Router()
     page.uri,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      const claim: Claim = res.locals.claim
       let evidence
 
-      if (draft.document.isResponsePartiallyAdmitted()) {
+      if (draft.document.isResponsePartiallyAdmitted(claim.features)) {
         evidence = draft.document.partialAdmission.evidence
       } else {
         evidence = draft.document.evidence
@@ -66,7 +67,7 @@ export default express.Router()
 
         form.model.removeExcessRows()
 
-        if (draft.document.isResponsePartiallyAdmitted()) {
+        if (draft.document.isResponsePartiallyAdmitted(claim.features)) {
           draft.document.partialAdmission.evidence = form.model
           await new DraftService().save(draft, user.bearerToken)
           res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
