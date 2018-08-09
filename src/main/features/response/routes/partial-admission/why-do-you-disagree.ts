@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths, PartAdmissionPaths } from 'response/paths'
+import { PartAdmissionPaths, Paths } from 'response/paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
@@ -13,6 +13,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { RoutablePath } from 'shared/router/routablePath'
 import { PartialAdmissionGuard } from 'response/guards/partialAdmissionGuard'
 import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
+import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 const page: RoutablePath = PartAdmissionPaths.whyDoYouDisagreePage
 
@@ -28,6 +29,7 @@ export default express.Router()
   .get(
     page.uri,
     PartialAdmissionGuard.requestHandler(),
+    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.partialAdmission.whyDoYouDisagree), res)
@@ -35,6 +37,7 @@ export default express.Router()
   .post(
     page.uri,
     PartialAdmissionGuard.requestHandler(),
+    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     FormValidator.requestHandler(WhyDoYouDisagree, WhyDoYouDisagree.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<WhyDoYouDisagree> = req.body

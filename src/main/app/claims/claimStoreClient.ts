@@ -17,6 +17,18 @@ const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
 
 const logger = Logger.getLogger('claims/claimStoreClient')
 
+function buildCaseSubmissionHeaders (claimant: User, features: string[]): object {
+  const headers = {
+    Authorization: `Bearer ${claimant.bearerToken}`
+  }
+
+  if (features.length > 0) {
+    headers['Features'] = features
+  }
+
+  return headers
+}
+
 export class ClaimStoreClient {
   constructor (private request: RequestPromiseAPI = requestPromiseApi) {
     // Nothing to do
@@ -32,14 +44,13 @@ export class ClaimStoreClient {
     })
   }
 
-  saveClaim (draft: Draft<DraftClaim>, claimant: User): Promise<Claim> {
+  saveClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
+
     return this.request
       .post(`${claimStoreApiUrl}/${claimant.id}`, {
         body: convertedDraftClaim,
-        headers: {
-          Authorization: `Bearer ${claimant.bearerToken}`
-        }
+        headers: buildCaseSubmissionHeaders(claimant, features)
       })
       .then(claim => {
         return new Claim().deserialize(claim)
@@ -172,7 +183,7 @@ export class ClaimStoreClient {
       .then(linkStatus => linkStatus.linked)
   }
 
-  retrieveUserRoles (user: User): Promise<String> {
+  async retrieveUserRoles (user: User): Promise<string[]> {
     if (!user) {
       return Promise.reject(new Error('User must be set'))
     }
@@ -183,13 +194,10 @@ export class ClaimStoreClient {
           Authorization: `Bearer ${user.bearerToken}`
         }
       })
-      .then((roles: string[]) => {
-        return roles.join(',')
-      })
   }
 
   // This is a tactical solution until SIDAM is able to add roles to user ID
-  addRoleToUser (user: User, role: string): Promise<String> {
+  addRoleToUser (user: User, role: string): Promise<void> {
     if (!user) {
       return Promise.reject(new Error('User is required'))
     }
