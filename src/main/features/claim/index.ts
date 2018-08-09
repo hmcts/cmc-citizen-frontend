@@ -20,7 +20,6 @@ function claimIssueRequestHandler (): express.RequestHandler {
     'citizen'
   ]
   const unprotectedPaths = []
-
   return AuthorizationMiddleware.requestHandler(requiredRoles, accessDeniedCallback, unprotectedPaths)
 }
 

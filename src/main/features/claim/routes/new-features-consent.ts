@@ -12,24 +12,19 @@ import { User } from 'idam/user'
 const claimStoreClient = new ClaimStoreClient()
 
 function renderView (form: Form<FeatureConsentResponse>, res: express.Response) {
-
   res.render(ClaimPaths.newFeaturesConsent.associatedView, { form: form })
-
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(ClaimPaths.newFeaturesConsent.uri,
-    NewFeaturesConsentGuard.requestHandler,
-    (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    NewFeaturesConsentGuard.requestHandler, (req: express.Request, res: express.Response) => {
       renderView(Form.empty<FeatureConsentResponse>(), res)
     })
   .post(ClaimPaths.newFeaturesConsent.uri,
     FormValidator.requestHandler(FeatureConsentResponse, FeatureConsentResponse.fromObject),
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<FeatureConsentResponse> = req.body
-
       const user: User = res.locals.user
 
       if (form.hasErrors()) {
