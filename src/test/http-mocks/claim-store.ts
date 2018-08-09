@@ -337,8 +337,8 @@ export function rejectAddRolesToUser (reason: string = 'HTTP error') {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveRetrieveUserRoles (...userRoles: string[]) {
-  mock(`${serviceBaseURL}/user`)
+export function resolveRetrieveUserRoles (...userRoles: string[]): mock.Scope {
+  return mock(`${serviceBaseURL}/user`)
     .get('/roles')
     .reply(HttpStatus.OK, userRoles)
 }
