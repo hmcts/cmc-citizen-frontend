@@ -12,6 +12,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 const page: RoutablePath = Paths.timelinePage
 
@@ -44,7 +45,7 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       let timeline
 
-      if (draft.document.isResponsePartiallyAdmitted(claim.features)) {
+      if (ClaimFeatureToggles.areAdmissionsEnabled(claim) && draft.document.isResponsePartiallyAdmitted()) {
         timeline = draft.document.partialAdmission.timeline
       } else {
         timeline = draft.document.timeline
