@@ -15,6 +15,7 @@ function renderView (form: Form<RejectionReason>, res: express.Response) {
   })
 }
 
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.rejectionReasonPage.uri,
