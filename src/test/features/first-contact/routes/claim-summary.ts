@@ -13,6 +13,7 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { MomentFactory } from 'shared/momentFactory'
+import { EvidenceType } from 'forms/models/evidenceType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -27,7 +28,7 @@ describe('Defendant first contact: claim summary page', () => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-holder')
       })
 
-      it('should redirect to access denied page when claim reference number does not match', async () => {
+      it('should redirect to access denied page when not eligible page claim reference number does not match', async () => {
         claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001')
 
         await request(app)
@@ -52,6 +53,36 @@ describe('Defendant first contact: claim summary page', () => {
           .set('Cookie', `${cookieName}=ABC;state=000MC001`)
           .expect(res => expect(res).to.be.successful.withText('Claim details'))
       })
+
+      it('should include evidence section when evidence was provided', async () => {
+        claimStoreServiceMock.resolveRetrieveByLetterHolderId(
+          '000MC001',
+          {
+            claim: {
+              ...claimStoreServiceMock.sampleClaimObj.claim,
+              evidence: { rows: [{ type: EvidenceType.PHOTO.value, description: 'my photo evidence' }] }
+            }
+          }
+        )
+
+        await request(app)
+          .get(Paths.claimSummaryPage.uri)
+          .set('Cookie', `${cookieName}=ABC;state=000MC001`)
+          .expect(res => expect(res).to.be.successful.withText('Evidence'))
+      })
+
+      it('should not include evidence section when evidence was not provided', async () => {
+        claimStoreServiceMock.resolveRetrieveByLetterHolderId(
+          '000MC001',
+          { claim: { ...claimStoreServiceMock.sampleClaimObj.claim, evidence: null } }
+        )
+
+        await request(app)
+          .get(Paths.claimSummaryPage.uri)
+          .set('Cookie', `${cookieName}=ABC;state=000MC001`)
+          .expect(res => expect(res).to.be.successful.withoutText('Evidence'))
+      })
+
     })
   })
 

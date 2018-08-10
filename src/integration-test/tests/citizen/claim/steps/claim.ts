@@ -204,7 +204,7 @@ export class ClaimSteps {
     this.checkClaimFactsAreTrueAndSubmit(claimantType, defendantType, enterDefendantEmail)
   }
 
-  makeAClaimAndSubmit (email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): string {
+  makeAClaimAndSubmit (email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): Promise<string> {
     this.makeAClaimAndSubmitStatementOfTruth(email, claimantType, defendantType, enterDefendantEmail)
     paymentSteps.payWithWorkingCard()
     this.reloadPage() // reload gets over the ESOCKETTIMEDOUT Error
@@ -267,8 +267,11 @@ export class ClaimSteps {
     I.see(claimReason)
     claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(defendantType, enterDefendantEmail)
     claimantCheckAndSendPage.verifyClaimAmount()
-    claimantCheckAndSendPage.checkFactsTrueAndSubmit()
-    I.waitForText('Enter card details')
+
+    if (!process.env.CITIZEN_APP_URL.includes('sprod')) {
+      claimantCheckAndSendPage.checkFactsTrueAndSubmit()
+      I.waitForText('Enter card details')
+    }
 
   }
 

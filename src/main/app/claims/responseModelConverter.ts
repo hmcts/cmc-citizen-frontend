@@ -47,6 +47,8 @@ import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { YesNoOption as DraftYesNoOption } from 'models/yesNoOption'
+import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 
 export class ResponseModelConverter {
 
@@ -92,13 +94,11 @@ export class ResponseModelConverter {
     return {
       responseType: ResponseType.FULL_ADMISSION,
       defendant: this.convertPartyDetails(draft.defendantDetails),
-      paymentOption: draft.fullAdmission.paymentOption.option.value as PaymentOption,
-      paymentDate: this.convertPaymentDate(draft.fullAdmission.paymentOption, draft.fullAdmission.paymentDate),
-      repaymentPlan: draft.fullAdmission.paymentPlan && {
-        instalmentAmount: draft.fullAdmission.paymentPlan.instalmentAmount,
-        firstPaymentDate: draft.fullAdmission.paymentPlan.firstPaymentDate.toMoment(),
-        paymentSchedule: draft.fullAdmission.paymentPlan.paymentSchedule.value as PaymentSchedule
-      },
+      paymentIntention: this.convertPaymentIntention(
+        draft.fullAdmission.paymentOption,
+        draft.fullAdmission.paymentDate,
+        draft.fullAdmission.paymentPlan
+      ),
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
@@ -114,12 +114,11 @@ export class ResponseModelConverter {
 
     return {
       responseType: ResponseType.PART_ADMISSION,
-      isAlreadyPaid: draft.partialAdmission.alreadyPaid.option.option as YesNoOption,
       amount: amount,
       paymentDeclaration: draft.partialAdmission.howMuchHaveYouPaid.date
       && draft.partialAdmission.howMuchHaveYouPaid.text
       && {
-        paidDate:  draft.partialAdmission.howMuchHaveYouPaid.date.asString(),
+        paidDate: draft.partialAdmission.howMuchHaveYouPaid.date.asString(),
         explanation: draft.partialAdmission.howMuchHaveYouPaid.text
       } as PaymentDeclaration,
       defence: draft.partialAdmission.whyDoYouDisagree.text,
@@ -132,15 +131,11 @@ export class ResponseModelConverter {
         comment: draft.partialAdmission.evidence.comment
       } as DefendantEvidence,
       defendant: this.convertPartyDetails(draft.defendantDetails),
-      paymentIntention: draft.partialAdmission.paymentOption && {
-        paymentOption: draft.partialAdmission.paymentOption.option.value as PaymentOption,
-        paymentDate: this.convertPaymentDate(draft.partialAdmission.paymentOption, draft.partialAdmission.paymentDate),
-        repaymentPlan: draft.partialAdmission.paymentPlan && {
-          instalmentAmount: draft.partialAdmission.paymentPlan.instalmentAmount,
-          firstPaymentDate: draft.partialAdmission.paymentPlan.firstPaymentDate.toMoment(),
-          paymentSchedule: draft.partialAdmission.paymentPlan.paymentSchedule.value as PaymentSchedule
-        }
-      },
+      paymentIntention: draft.partialAdmission.paymentOption && this.convertPaymentIntention(
+        draft.partialAdmission.paymentOption,
+        draft.partialAdmission.paymentDate,
+        draft.partialAdmission.paymentPlan
+      ),
       freeMediation: draft.freeMediation && draft.freeMediation.option as YesNoOption,
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft)
@@ -268,6 +263,18 @@ export class ResponseModelConverter {
       party.mobilePhone = defendant.mobilePhone.number
     }
     return party
+  }
+
+  private static convertPaymentIntention (paymentOption: DefendantPaymentOption, paymentDate: PaymentDate, paymentPlan: DefendantPaymentPlan): PaymentIntention {
+    return {
+      paymentOption: paymentOption.option.value as PaymentOption,
+      paymentDate: this.convertPaymentDate(paymentOption, paymentDate),
+      repaymentPlan: paymentPlan && {
+        instalmentAmount: paymentPlan.instalmentAmount,
+        firstPaymentDate: paymentPlan.firstPaymentDate.toMoment(),
+        paymentSchedule: paymentPlan.paymentSchedule.value as PaymentSchedule
+      }
+    } as PaymentIntention
   }
 
   private static convertPaymentDate (paymentOption: DefendantPaymentOption, paymentDate: PaymentDate): Moment {

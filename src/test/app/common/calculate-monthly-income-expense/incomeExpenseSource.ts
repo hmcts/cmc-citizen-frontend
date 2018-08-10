@@ -5,9 +5,12 @@ import { Validator } from 'class-validator'
 import { expectValidationError } from '../../forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { IncomeSource as FormIncomeSource } from 'response/form/models/statement-of-means/incomeSource'
+import { MonthlyIncomeType } from 'response/form/models/statement-of-means/monthlyIncomeType'
 import { ExpenseSource as FormExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
-import { FieldNames } from 'response/form/models/statement-of-means/monthlyIncome'
 import { IncomeExpenseSchedule as FormIncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
+import { Income } from 'claims/models/response/statement-of-means/income'
+import { Expense } from 'claims/models/response/statement-of-means/expense'
+import { MonthlyExpenseType } from 'response/form/models/statement-of-means/monthlyExpenseType'
 
 const SAMPLE_INCOME_EXPENSE_SOURCE_FROM_OBJECT = {
   amount: 100,
@@ -57,7 +60,7 @@ describe('IncomeExpenseSource', () => {
     })
 
     it('should return a new instance initialised with set fields from object parameter provided', () => {
-      const monthlyIncome = new FormIncomeSource(FieldNames.SALARY, 100, FormIncomeExpenseSchedule.MONTH)
+      const monthlyIncome = new FormIncomeSource(MonthlyIncomeType.JOB.displayValue, 100, FormIncomeExpenseSchedule.MONTH)
       expect(IncomeExpenseSource.fromFormIncomeSource(monthlyIncome)).to.deep.equal({
         'amount': 100,
         'schedule': IncomeExpenseSchedule.MONTH
@@ -71,10 +74,52 @@ describe('IncomeExpenseSource', () => {
     })
 
     it('should return a new instance initialised with set fields from object parameter provided', () => {
-      const monthlyExpense = new FormExpenseSource(FieldNames.SALARY, 100, FormIncomeExpenseSchedule.MONTH)
+      const monthlyExpense = new FormExpenseSource(MonthlyIncomeType.JOB.displayValue, 100, FormIncomeExpenseSchedule.MONTH)
       expect(IncomeExpenseSource.fromFormExpenseSource(monthlyExpense)).to.deep.equal({
         'amount': 100,
         'schedule': IncomeExpenseSchedule.MONTH
+      })
+    })
+  })
+
+  describe('fromClaimIncome', () => {
+    it('should return undefined when undefined provided as object parameter', () => {
+      expect(IncomeExpenseSource.fromClaimIncome(undefined)).to.equal(undefined)
+    })
+
+    it('should return a new instance initialised with set fields from object parameter provided', () => {
+      const income = {
+        amountReceived: 200,
+        frequency: IncomeExpenseSchedule.WEEK.value,
+        type: MonthlyExpenseType.COUNCIL_TAX.displayValue
+      } as Income
+      expect(IncomeExpenseSource.fromClaimIncome(income)).to.deep.equal({
+        amount: 200,
+        schedule: {
+          value: 'WEEK',
+          valueInMonths: 4.333333333333333
+        }
+      })
+    })
+  })
+
+  describe('fromClaimExpense', () => {
+    it('should return undefined when undefined provided as object parameter', () => {
+      expect(IncomeExpenseSource.fromClaimExpense(undefined)).to.equal(undefined)
+    })
+
+    it('should return a new instance initialised with set fields from object parameter provided', () => {
+      const expense = {
+        amountPaid: 200,
+        frequency: IncomeExpenseSchedule.MONTH.value,
+        type: MonthlyExpenseType.MORTGAGE.displayValue
+      } as Expense
+      expect(IncomeExpenseSource.fromClaimExpense(expense)).to.deep.equal({
+        amount: 200,
+        schedule: {
+          value: 'MONTH',
+          valueInMonths: 1
+        }
       })
     })
   })

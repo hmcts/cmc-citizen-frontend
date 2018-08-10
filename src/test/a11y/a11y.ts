@@ -11,7 +11,8 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { Paths as EligibilityPaths } from 'eligibility/paths'
 import { ErrorPaths as ClaimIssueErrorPaths, Paths as ClaimIssuePaths } from 'claim/paths'
 import { ErrorPaths as DefendantFirstContactErrorPaths, Paths as DefendantFirstContactPaths } from 'first-contact/paths'
-import { Paths as DefendantResponsePaths, StatementOfMeansPaths, FullAdmissionPaths } from 'response/paths'
+import { FullAdmissionPaths, Paths as DefendantResponsePaths, StatementOfMeansPaths } from 'response/paths'
+import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 import { Paths as CCJPaths } from 'ccj/paths'
 import { Paths as OfferPaths } from 'offer/paths'
 
@@ -119,4 +120,5 @@ describe('Accessibility', () => {
   checkPaths(OfferPaths)
   checkPaths(StatementOfMeansPaths)
   checkPaths(FullAdmissionPaths)
+  checkPaths(ClaimantResponsePaths)
 })

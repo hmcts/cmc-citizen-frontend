@@ -19,11 +19,15 @@ import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeatur
 import { HowMuchHaveYouPaidTask } from 'response/tasks/howMuchHaveYouPaidTask'
 import { WhyDoYouDisagreeTask } from 'response/tasks/whyDoYouDisagreeTask'
 import { HowMuchDoYouOweTask } from 'response/tasks/howMuchDoYouOweTask'
+import { WhenWillYouPayTask } from 'response/tasks/whenWillYouPayTask'
+import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { NumberFormatter } from 'utils/numberFormatter'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
     const tasks: TaskListItem[] = []
     const externalId: string = claim.externalId
+
     tasks.push(
       new TaskListItem(
         'Confirm your details',
@@ -73,11 +77,6 @@ export class TaskListBuilder {
           'Why do you disagree with the claim?',
           Paths.defencePage.evaluateUri({ externalId: externalId }),
           YourDefenceTask.isCompleted(draft)
-        ),
-        new TaskListItem(
-          'Free mediation',
-          Paths.freeMediationPage.evaluateUri({ externalId: externalId }),
-          FreeMediationTask.isCompleted(draft)
         )
       )
     }
@@ -90,31 +89,34 @@ export class TaskListBuilder {
           DecideHowYouWillPayTask.isCompleted(draft)
         )
       )
-    }
 
-    if (StatementOfMeansFeature.isApplicableFor(draft)) {
-      tasks.push(
-        new TaskListItem(
-          'Share your financial details',
-          StatementOfMeansPaths.introPage.evaluateUri({ externalId: externalId }),
-          StatementOfMeansTask.isCompleted(draft)
+      if (StatementOfMeansFeature.isApplicableFor(draft)) {
+        tasks.push(
+          new TaskListItem(
+            'Share your financial details',
+            StatementOfMeansPaths.introPage.evaluateUri({ externalId: externalId }),
+            StatementOfMeansTask.isCompleted(draft)
+          )
         )
-      )
-    }
+      }
 
-    if (draft.isResponseFullyAdmittedWithInstalments()) {
-      tasks.push(
-        new TaskListItem(
-          'Your repayment plan',
-          FullAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId }),
-          YourRepaymentPlanTask.isCompleted(draft)
+      if (draft.isResponseFullyAdmittedWithInstalments()) {
+        tasks.push(
+          new TaskListItem(
+            'Your repayment plan',
+            FullAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId }),
+            YourRepaymentPlanTask.isCompleted(draft.fullAdmission.paymentPlan)
+          )
         )
-      )
+      }
     }
 
-    if (draft.isResponsePartiallyAdmitted()) {
+    const partiallyAdmitted = draft.isResponsePartiallyAdmitted()
+    const partiallyAdmittedAndPaid = draft.isResponsePartiallyAdmittedAndAlreadyPaid()
 
-      if (draft.isResponsePartiallyAdmittedAndAlreadyPaid()) {
+    if (partiallyAdmitted) {
+
+      if (partiallyAdmittedAndPaid) {
         tasks.push(
           new TaskListItem(
             'How much have you paid?',
@@ -140,13 +142,47 @@ export class TaskListBuilder {
           WhyDoYouDisagreeTask.isCompleted(draft)
         )
       )
+
+      const howMuchDoYouOweTask = HowMuchDoYouOweTask.isCompleted(draft)
+
+      if (howMuchDoYouOweTask) {
+        tasks.push(
+          new TaskListItem(
+            `When will you pay the ${NumberFormatter.formatMoney(draft.partialAdmission.howMuchDoYouOwe.amount)}?`,
+            PartAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: externalId }),
+            WhenWillYouPayTask.isCompleted(draft)
+          )
+        )
+      }
+
+      if (StatementOfMeansFeature.isApplicableFor(draft)) {
+        tasks.push(
+          new TaskListItem(
+            'Share your financial details',
+            StatementOfMeansPaths.introPage.evaluateUri({ externalId: externalId }),
+            StatementOfMeansTask.isCompleted(draft)
+          )
+        )
+      }
+
+      if (howMuchDoYouOweTask && WhenWillYouPayTask.isCompleted(draft)
+        && draft.partialAdmission.paymentOption.isOfType(DefendantPaymentType.INSTALMENTS)) {
+        tasks.push(
+          new TaskListItem(
+            'Your repayment plan',
+            PartAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId }),
+            YourRepaymentPlanTask.isCompleted(draft.partialAdmission.paymentPlan)
+          )
+        )
+      }
     }
 
     return new TaskList('Respond to claim', tasks)
   }
 
   static buildResolvingClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
-    if (TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)) {
+    if (TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)
+      || draft.isResponseRejectedFullyWithDispute()) {
       return new TaskList(
         'Resolving the claim', [
           new TaskListItem(

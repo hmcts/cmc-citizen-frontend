@@ -9,6 +9,12 @@ import { Interest } from 'claims/models/interest'
 import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
+import {
+  fullAdmissionWithSoMPaymentByInstalmentsData,
+  fullAdmissionWithSoMPaymentBySetDate,
+  partialAdmissionWithSoMPaymentBySetDateData
+} from 'test/data/entity/responseData'
+
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
 export const sampleClaimObj = {
@@ -85,7 +91,8 @@ export const sampleClaimObj = {
         offer: { content: 'offer text', completionDate: '2017-08-08' }
       }
     ]
-  }
+  },
+  features: ['admissions']
 }
 
 export const sampleDefendantResponseObj = {
@@ -106,6 +113,21 @@ export const sampleDefendantResponseObj = {
       }
     }
   }
+}
+
+export const samplePartialAdmissionWithPaymentBySetDateResponseObj = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: partialAdmissionWithSoMPaymentBySetDateData
+}
+
+export const sampleFullAdmissionWithPaymentBySetDateResponseObj = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMPaymentBySetDate
+}
+
+export const sampleFullAdmissionWithPaymentByInstalmentsResponseObj = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMPaymentByInstalmentsData
 }
 
 export function mockCalculateInterestRate (expected: number): mock.Scope {
@@ -301,4 +323,16 @@ export function resolveRetrieveDocument () {
   mock(`${serviceBaseURL}/documents`)
     .get(new RegExp('/.+/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
     .reply(HttpStatus.OK)
+}
+
+export function resolveRetrieveUserRoles (...userRoles: string[]) {
+  mock(`${serviceBaseURL}/user`)
+    .get('/roles')
+    .reply(HttpStatus.OK, userRoles)
+}
+
+export function rejectRetriveUserRoles () {
+  mock(`${serviceBaseURL}/user`)
+    .get('/roles')
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR)
 }

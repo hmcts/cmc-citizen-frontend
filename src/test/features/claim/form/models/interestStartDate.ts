@@ -100,10 +100,10 @@ describe('InterestStartDate', () => {
     })
 
     it('should reject custom InterestStartDate date with reason longer then upper limit', () => {
-      const errors = validator.validateSync(new InterestStartDate(new LocalDate(2016, 12, 24), _.repeat('*', 251)))
+      const errors = validator.validateSync(new InterestStartDate(new LocalDate(2016, 12, 24), _.repeat('*', 10001)))
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, CommonValidationErrors.REASON_TOO_LONG.replace('$constraint1', '250'))
+      expectValidationError(errors, CommonValidationErrors.REASON_TOO_LONG.replace('$constraint1', '10000'))
     })
 
     it('should accept valid custom interest date', () => {

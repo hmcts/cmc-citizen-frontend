@@ -1,24 +1,33 @@
-{% set claimantName = claim.claimData.claimant.name %}
-{% set claimantDetailsPageURI = ClaimPaths.claimantDetailsPage.evaluateUri({ externalId: claim.externalId }) %}
+{% from "internalLink.njk" import internalLink %}
 
-{% if claim.response.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+{% set claimantName = claim.claimData.claimant.name %}
+{% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
+
+{% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
   <p>{{ t('When {{ claimantName }} gets your payment they should tell you and the court you’ve paid.', { claimantName: claimantName }) }}</p>
 {% endif %}
 
-{% if claim.response.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-  <p>{{ t('If {{ claimantName }} accepts your offer to pay, you need to <a href="{{ link }}">contact them for payment details</a> and to arrange payment.', { claimantName: claimantName, link: claimantDetailsPageURI }) | safe }}</p>
+{% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+  <p>
+    {{ t('If {{ claimantName }} accepts your offer to pay, you need to ', { claimantName: claimantName }) }}
+    {{ internalLink('contact them for payment details', claimantDetailsPageURI) }} 
+    {{ t('and to arrange payment.') }}
+  </p>
 
   <p>{{ t('If they reject your offer to pay by a set date then the court will decide how you must pay.') }}</p>
 
   <p>{{ t('If they do not respond within 6 months, the court will put the claim on hold.') }}</p>
 {% endif %}
 
-{% if claim.response.paymentOption === domain.PaymentOption.INSTALMENTS %}
+{% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
   <p>{{ t('You should:') }}</p>
 
   <ul class="list list-bullet">
     <li>{{ t('set up your repayment plan to begin when you said it would') }}</li>
-    <li>{{ t('<a href="{{ link }}">contact {{ claimantName }}</a> if you need their payment details', { claimantName: claimantName, link: claimantDetailsPageURI }) | safe }}</li>
+    <li>
+      {{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }} 
+      {{ t('if you need their payment details.') }}
+    </li>
     <li>{{ t('make sure you get a receipt for any payments') }}</li>
   </ul>
 

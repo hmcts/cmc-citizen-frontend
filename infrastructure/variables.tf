@@ -23,32 +23,33 @@ variable "ga_tracking_id" {
 }
 
 variable "payments_api_url" {
-  default = "http://payment-api-saat-staging.service.core-compute-saat.internal"
+  default = "http://payment-api-saat.service.core-compute-saat.internal"
 }
 
 variable "fees_api_url" {
-  default = "https://test.fees-register.reform.hmcts.net:4431"
+  default = "http://fees-register-api-saat.service.core-compute-saat.internal"
 }
 
 variable "idam_api_url" {
-  default = "http://idam-api-idam-saat.service.core-compute-saat.internal"
+  default = "http://betaDevBccidamAppLB.reform.hmcts.net"
 }
 
 variable "authentication_web_url" {
-  default = "http://idam-web-public-idam-saat.service.core-compute-saat.internal"
+  default = "https://idam-test.dev.ccidam.reform.hmcts.net"
 }
 
 variable "subscription" {}
 
-variable "vault_section" {
-  default = "test"
-}
 // feature toggles
 variable "feature_statement_of_means" {
   default = "false"
 }
 
 variable "feature_full_admission" {
+  default = "false"
+}
+
+variable "feature_admissions" {
   default = "false"
 }
 

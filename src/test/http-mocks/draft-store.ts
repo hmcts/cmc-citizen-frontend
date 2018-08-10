@@ -265,7 +265,8 @@ export const sampleFullAdmissionResponseDraftObj = {
       maintenance: 1,
       rows: [{ amount: 10, description: 'bla bla bla' }]
     },
-    courtOrders: { declared: false }
+    courtOrders: { declared: false },
+    explanation: { text: 'aaa' }
   }
 }
 
@@ -326,7 +327,26 @@ const sampleCCJDraftObj = {
 }
 
 export const sampleClaimantResponseDraftObj = {
-  externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5'
+  defendantResponseViewed: true,
+  settleAdmitted: {
+    admitted: {
+      option: 'yes'
+    }
+  },
+  acceptPaymentMethod: {
+    accept: {
+      option: 'yes'
+    }
+  },
+  formaliseRepaymentPlan: {
+    option: {
+      value: 'signSettlementAgreement',
+      displayValue: 'Sign a settlement agreement'
+    }
+  },
+  settlementAgreement: {
+    signed: true
+  }
 }
 
 export function resolveFind (draftType: string, draftOverride?: object): mock.Scope {
@@ -391,6 +411,12 @@ export function resolveFindAllDrafts (): mock.Scope {
         id: 203,
         type: 'ccj',
         document: sampleCCJDraftObj,
+        created: '2017-10-03T12:00:00.000',
+        updated: '2017-10-03T12:01:00.000'
+      }, {
+        id: 204,
+        type: 'claimantResponse',
+        document: sampleClaimantResponseDraftObj,
         created: '2017-10-03T12:00:00.000',
         updated: '2017-10-03T12:01:00.000'
       }]

@@ -1,15 +1,5 @@
 {% from "table.njk" import tableStart, tableEnd, row %}
-
-{% macro singularOrPlural(value, noun) %}
-
-  {% set result =  value + ' ' + noun %}
-  {% if value > 1 %}
-    {% set result = result + 's' %}
-  {% endif %}
-
-  {{ result }}
-
-{% endmacro %}
+{% from "singularOrPlural.njk" import singularOrPlural %}
 
 {% macro employmentStatus(statementOfMeans) %}
 
@@ -121,34 +111,34 @@
 {% set income = draft.statementOfMeans.monthlyIncome %}
 {{ row('Monthly income', '', StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
 {% if income.salarySource.populated %}
-{{ row('Take home pay', income.salarySource.amount | numeral, '', false, bold = true) }}
+{{ row(MonthlyIncomeType.JOB.displayValue | capitalize, income.salarySource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 {% if income.universalCreditSource.populated %}
-{{ row('Universal Credit', income.universalCreditSource.amount | numeral, '', false, bold = true) }}
+{{ row(MonthlyIncomeType.UNIVERSAL_CREDIT.displayValue, income.universalCreditSource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 {% if income.jobseekerAllowanceIncomeSource.populated %}
-{{ row('Jobseeker’s Allowance (income based)', income.jobseekerAllowanceIncomeSource.amount | numeral, '', false, bold = true) }}
+{{ row(MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_INCOME_BASES.displayValue, income.jobseekerAllowanceIncomeSource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 {% if income.jobseekerAllowanceContributionSource.populated %}
-{{ row('Jobseeker’s Allowance (contribution based)', income.jobseekerAllowanceContributionSource.amount | numeral, '', false, bold = true) }}
+{{ row(MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_CONTRIBUTION_BASED.displayValue, income.jobseekerAllowanceContributionSource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 {% if income.incomeSupportSource.populated %}
-{{ row('Income Support', income.incomeSupportSource.amount | numeral, '', false, bold = true) }}
+{{ row(MonthlyIncomeType.INCOME_SUPPORT.displayValue, income.incomeSupportSource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 {% if income.workingTaxCreditSource.populated %}
-{{ row('Working Tax Credit', income.workingTaxCreditSource.amount | numeral, '', false, bold = true) }}
+{{ row(MonthlyIncomeType.WORKING_TAX_CREDIT.displayValue, income.workingTaxCreditSource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 {% if income.childTaxCreditSource.populated %}
-{{ row('Child Tax Credit', income.childTaxCreditSource.amount | numeral, '', false, bold = true) }}
+{{ row(MonthlyIncomeType.CHILD_TAX_CREDIT.displayValue, income.childTaxCreditSource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 {% if income.childBenefitSource.populated %}
-{{ row('Child Benefit', income.childBenefitSource.amount | numeral, '', false, bold = true) }}
+{{ row(MonthlyIncomeType.CHILD_BENEFIT.displayValue, income.childBenefitSource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 {% if income.councilTaxSupportSource.populated %}
-{{ row('Council Tax Support', income.councilTaxSupportSource.amount | numeral, '', false, bold = true) }}
+{{ row(MonthlyIncomeType.COUNCIL_TAX_SUPPORT.displayValue, income.councilTaxSupportSource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 {% if income.pensionSource.populated %}
-{{ row('Pension (paid to you)', income.pensionSource.amount | numeral, '', false, bold = true) }}
+{{ row(MonthlyIncomeType.PENSION.displayValue, income.pensionSource.amount | numeral, '', false, bold = true) }}
 {% endif %}
 
 {% if income.anyOtherIncomePopulated %}
@@ -160,43 +150,43 @@
 {% set expenses = draft.statementOfMeans.monthlyExpenses %}
 {{ row('Monthly expenses', '', StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true, topBorder = true) }}
 {% if expenses.mortgage.populated %}
-{{ row('Mortgage', expenses.mortgage.amount | numeral, '', bottomBorder = false, bold = true) }}
+{{ row(MonthlyExpenseType.MORTGAGE.displayValue | capitalize, expenses.mortgage.amount | numeral, '', bottomBorder = false, bold = true) }}
 {% endif %}
 {% if expenses.rent.populated %}
-{{ row('Rent', expenses.rent.amount | numeral, '', bottomBorder = false, bold = true) }}
+{{ row(MonthlyExpenseType.RENT.displayValue | capitalize, expenses.rent.amount | numeral, '', bottomBorder = false, bold = true) }}
 {% endif %}
 {% if expenses.councilTax.populated %}
-{{ row('Council Tax', expenses.councilTax.amount | numeral, '', bottomBorder = false, bold = true) }}
+{{ row(MonthlyExpenseType.COUNCIL_TAX.displayValue, expenses.councilTax.amount | numeral, '', bottomBorder = false, bold = true) }}
 {% endif %}
 {% if expenses.gas.populated %}
-{{ row('Gas', expenses.gas.amount | numeral, '', bottomBorder = false, bold = true) }}
+{{ row(MonthlyExpenseType.GAS.displayValue | capitalize, expenses.gas.amount | numeral, '', bottomBorder = false, bold = true) }}
 {% endif %}
 {% if expenses.electricity.populated %}
-{{ row('Electricity', expenses.electricity.amount | numeral, '', bottomBorder = false, bold = true) }}
+{{ row(MonthlyExpenseType.ELECTRICITY.displayValue | capitalize, expenses.electricity.amount | numeral, '', bottomBorder = false, bold = true) }}
 {% endif %}
 {% if expenses.water.populated %}
-{{ row('Water', expenses.water.amount | numeral, '', bottomBorder = false, bold = true) }}
+{{ row(MonthlyExpenseType.WATER.displayValue | capitalize, expenses.water.amount | numeral, '', bottomBorder = false, bold = true) }}
 {% endif %}
 {% if expenses.travel.populated %}
-{{ row('Travel (school or work)', expenses.travel.amount | numeral, '', bottomBorder = false, bold = true) }}
+{{ row(MonthlyExpenseType.TRAVEL.displayValue | capitalize, expenses.travel.amount | numeral, '', bottomBorder = false, bold = true) }}
 {% endif %}
 {% if expenses.schoolCosts.populated %}
-{{ row('School costs (include clothing)', expenses.schoolCosts.amount | numeral, '', bottomBorder = false, bold = true) }}
+{{ row(MonthlyExpenseType.SCHOOL_COSTS.displayValue | capitalize, expenses.schoolCosts.amount | numeral, '', bottomBorder = false, bold = true) }}
 {% endif %}
 {% if expenses.foodAndHousekeeping.populated %}
-{{ row('Food and Housekeeping', expenses.foodAndHousekeeping.amount | numeral, '', bottomBorder = false, bold = true) }}
+{{ row(MonthlyExpenseType.FOOD_HOUSEKEEPING.displayValue | capitalize, expenses.foodAndHousekeeping.amount | numeral, '', bottomBorder = false, bold = true) }}
 {% endif %}
 {% if expenses.tvAndBroadband.populated %}
-{{ row('TV and Broadband', expenses.tvAndBroadband.amount | numeral, '', bottomBorder = false, bold = true) }}
+{{ row(MonthlyExpenseType.TV_AND_BROADBAND.displayValue, expenses.tvAndBroadband.amount | numeral, '', bottomBorder = false, bold = true) }}
 {% endif %}
 {% if expenses.hirePurchase.populated %}
-{{ row('Hire purchase', expenses.hirePurchase.amount | numeral, '', bottomBorder = false, bold = true) }}
+{{ row(MonthlyExpenseType.HIRE_PURCHASES.displayValue | capitalize, expenses.hirePurchase.amount | numeral, '', bottomBorder = false, bold = true) }}
 {% endif %}
 {% if expenses.mobilePhone.populated %}
-{{ row('Mobile phone', expenses.mobilePhone.amount | numeral, '', bottomBorder = false, bold = true) }}
+{{ row(MonthlyExpenseType.MOBILE_PHONE.displayValue | capitalize, expenses.mobilePhone.amount | numeral, '', bottomBorder = false, bold = true) }}
 {% endif %}
 {% if expenses.maintenance.populated %}
-{{ row('Maintenance payments', expenses.maintenance.amount | numeral, '', bottomBorder = false, bold = true) }}
+{{ row(MonthlyExpenseType.MAINTENANCE_PAYMENTS.displayValue | capitalize, expenses.maintenance.amount | numeral, '', bottomBorder = false, bold = true) }}
 {% endif %}
 
 {% if expenses.anyOtherPopulated %}

@@ -10,7 +10,10 @@ import { FullAdmission, PartialAdmission, ResponseDraft } from 'response/draft/r
 import { TaskList } from 'drafts/tasks/taskList'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Claim } from 'claims/models/claim'
-import { defenceWithDisputeDraft } from 'test/data/draft/responseDraft'
+import {
+  defenceWithDisputeDraft,
+  partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted
+} from 'test/data/draft/responseDraft'
 import { MomentFactory } from 'shared/momentFactory'
 import { PartyType } from 'common/partyType'
 import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
@@ -20,6 +23,8 @@ import { PartyDetails } from 'forms/models/partyDetails'
 import { Response } from 'response/form/models/response'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { YesNoOption } from 'models/yesNoOption'
+import { HowMuchDoYouOwe } from 'response/form/models/howMuchDoYouOwe'
+import { Defendant } from 'drafts/models/defendant'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 
@@ -87,33 +92,6 @@ describe('Defendant response task list builder', () => {
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('Why do you disagree with the claim?')
-      })
-    })
-
-    describe('"Free mediation" task', () => {
-      let stub: sinon.SinonStub
-      const responseDraft: ResponseDraft = new ResponseDraft().deserialize(defenceWithDisputeDraft)
-
-      beforeEach(() => {
-        stub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
-      })
-
-      afterEach(() => {
-        stub.restore()
-      })
-
-      it('should be enabled when response is rejected with dispute', () => {
-        stub.returns(true)
-
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.contain('Free mediation')
-      })
-
-      it('should be disabled when response is not rejected with dispute', () => {
-        stub.returns(false)
-
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('Free mediation')
       })
     })
 
@@ -246,19 +224,24 @@ describe('Defendant response task list builder', () => {
 
     describe('"Your repayment plan" task', () => {
       let isResponseFullyAdmittedWithInstalmentsStub: sinon.SinonStub
+      let isResponseFullyAdmittedStub: sinon.SinonStub
 
       beforeEach(() => {
         isResponseFullyAdmittedWithInstalmentsStub = sinon.stub(ResponseDraft.prototype, 'isResponseFullyAdmittedWithInstalments')
+        isResponseFullyAdmittedStub = sinon.stub(ResponseDraft.prototype, 'isResponseFullyAdmitted')
       })
 
       afterEach(() => {
         isResponseFullyAdmittedWithInstalmentsStub.restore()
+        isResponseFullyAdmittedStub.restore()
       })
 
       it('should be enabled when claim is fully admitted with payment option as instalments', () => {
         isResponseFullyAdmittedWithInstalmentsStub.returns(true)
+        isResponseFullyAdmittedStub.returns(true)
 
         const draft = new ResponseDraft()
+        draft.defendantDetails = new Defendant(new PartyDetails('John'))
         draft.fullAdmission = new FullAdmission()
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
@@ -267,6 +250,7 @@ describe('Defendant response task list builder', () => {
 
       it('should be disabled in remaining cases', () => {
         isResponseFullyAdmittedWithInstalmentsStub.returns(false)
+        isResponseFullyAdmittedStub.returns(false)
 
         const draft = new ResponseDraft()
         draft.fullAdmission = new FullAdmission()
@@ -353,6 +337,87 @@ describe('Defendant response task list builder', () => {
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('How much have you paid?')
         expect(taskList.tasks.map(task => task.name)).to.contain('Why do you disagree with the amount claimed?')
+      })
+    })
+
+    describe('"When will you pay the £xxx?" task', () => {
+      let isResponsePartiallyAdmittedStub: sinon.SinonStub
+
+      beforeEach(() => {
+        isResponsePartiallyAdmittedStub = sinon.stub(ResponseDraft.prototype, 'isResponsePartiallyAdmitted')
+        isResponsePartiallyAdmittedStub.returns(true)
+      })
+
+      afterEach(() => {
+        isResponsePartiallyAdmittedStub.restore()
+      })
+
+      it('should be enabled when response is PART_ADMISSION and alreadyPaid is "NO" and how much you admit populated', () => {
+        const draft = new ResponseDraft()
+
+        draft.response = new Response(ResponseType.PART_ADMISSION)
+        draft.partialAdmission = new PartialAdmission()
+        draft.defendantDetails.partyDetails = new PartyDetails()
+        draft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
+        draft.partialAdmission.alreadyPaid = new AlreadyPaid(YesNoOption.NO)
+        draft.partialAdmission.howMuchDoYouOwe = new HowMuchDoYouOwe(100, 200)
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
+        expect(taskList.tasks.map(task => task.name)).to.contain('When will you pay the £100?')
+      })
+    })
+
+    describe('"Consider free mediation" task', () => {
+      let isResponseRejectedFullyWithDisputeStub: sinon.SinonStub
+      let isResponsePartiallyAdmitted: sinon.SinonStub
+
+      beforeEach(() => {
+        isResponseRejectedFullyWithDisputeStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
+        isResponsePartiallyAdmitted = sinon.stub(ResponseDraft.prototype, 'isResponsePartiallyAdmitted')
+      })
+
+      afterEach(() => {
+        isResponseRejectedFullyWithDisputeStub.restore()
+        isResponsePartiallyAdmitted.restore()
+      })
+
+      context('should be enabled when', () => {
+
+        it('response is rejected with dispute', () => {
+          isResponseRejectedFullyWithDisputeStub.returns(true)
+          isResponsePartiallyAdmitted.returns(false)
+
+          const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
+            new ResponseDraft().deserialize(defenceWithDisputeDraft), claim
+          )
+
+          expect(taskList.tasks.map(task => task.name)).to.contain('Consider free mediation')
+        })
+
+        it('response is partial admission and why do you disagree is completed', () => {
+          isResponseRejectedFullyWithDisputeStub.returns(false)
+          isResponsePartiallyAdmitted.returns(true)
+
+          const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
+            new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim
+          )
+
+          expect(taskList.tasks.map(task => task.name)).to.contain('Consider free mediation')
+        })
+      })
+
+      context('should be disabled when', () => {
+
+        it('response is not rejected with dispute', () => {
+          isResponseRejectedFullyWithDisputeStub.returns(false)
+          isResponsePartiallyAdmitted.returns(false)
+
+          const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
+            new ResponseDraft().deserialize(defenceWithDisputeDraft), claim
+          )
+
+          expect(taskList).to.be.eq(undefined)
+        })
       })
     })
   })
