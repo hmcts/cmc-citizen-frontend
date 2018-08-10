@@ -3,7 +3,7 @@ import * as express from 'express'
 import { AbstractPaymentOptionPage } from 'shared/components/payment-intention/payment-option'
 import { AbstractModelAccessor } from 'shared/components/payment-intention/model-accessor'
 import { PaymentIntention } from 'shared/components/payment-intention/model'
-import { FeatureToggleGuard } from 'guards/featureToggleGuard'
+import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
 
@@ -45,4 +45,4 @@ const setHowMuchDoYouOweAmount = (req: express.Request, res: express.Response, n
 
 /* tslint:disable:no-default-export */
 export default new PaymentOptionPage()
-  .buildRouter(partialAdmissionPath, FeatureToggleGuard.featureEnabledGuard('admissions'), setHowMuchDoYouOweAmount)
+  .buildRouter(partialAdmissionPath, OptInFeatureToggleGuard.featureEnabledGuard('admissions'), setHowMuchDoYouOweAmount)

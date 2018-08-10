@@ -1,8 +1,6 @@
 import * as express from 'express'
 
 import { StatementOfMeansPaths as Paths } from 'response/paths'
-
-import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { StatementOfMeansStateGuard } from 'response/guards/statementOfMeansStateGuard'
 
 import { Form } from 'forms/form'
@@ -14,6 +12,7 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { OtherDependants } from 'response/form/models/statement-of-means/otherDependants'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 const page: RoutablePath = Paths.otherDependantsPage
 
@@ -21,7 +20,7 @@ const page: RoutablePath = Paths.otherDependantsPage
 export default express.Router()
   .get(
     page.uri,
-    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
+    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -31,7 +30,7 @@ export default express.Router()
     })
   .post(
     page.uri,
-    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
+    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     FormValidator.requestHandler(OtherDependants, OtherDependants.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {

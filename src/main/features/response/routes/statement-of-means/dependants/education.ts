@@ -3,7 +3,6 @@ import * as express from 'express'
 import { StatementOfMeansPaths as Paths } from 'response/paths'
 
 import { GuardFactory } from 'response/guards/guardFactory'
-import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { StatementOfMeansStateGuard } from 'response/guards/statementOfMeansStateGuard'
 
 import { Form } from 'forms/form'
@@ -17,6 +16,7 @@ import { NumberOfChildren } from 'response/form/models/statement-of-means/number
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { UUIDUtils } from 'shared/utils/uuidUtils'
+import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 const page: RoutablePath = Paths.educationPage
 
@@ -43,7 +43,7 @@ function renderView (form: Form<Education>, res: express.Response): void {
 export default express.Router()
   .get(
     page.uri,
-    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
+    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     stateGuardRequestHandler,
     (req: express.Request, res: express.Response) => {
@@ -52,7 +52,7 @@ export default express.Router()
     })
   .post(
     page.uri,
-    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
+    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     stateGuardRequestHandler,
     FormValidator.requestHandler(Education, Education.fromObject),

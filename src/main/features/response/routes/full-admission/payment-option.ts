@@ -3,7 +3,7 @@ import * as express from 'express'
 import { AbstractPaymentOptionPage } from 'shared/components/payment-intention/payment-option'
 import { AbstractModelAccessor } from 'shared/components/payment-intention/model-accessor'
 import { PaymentIntention } from 'shared/components/payment-intention/model'
-import { FeatureToggleGuard } from 'guards/featureToggleGuard'
+import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
 
@@ -35,4 +35,4 @@ class PaymentOptionPage extends AbstractPaymentOptionPage<ResponseDraft> {
 
 /* tslint:disable:no-default-export */
 export default new PaymentOptionPage()
-  .buildRouter(fullAdmissionPath, FeatureToggleGuard.featureEnabledGuard('admissions'))
+  .buildRouter(fullAdmissionPath, OptInFeatureToggleGuard.featureEnabledGuard('admissions'))

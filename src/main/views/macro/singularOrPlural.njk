@@ -1,0 +1,9 @@
+{% macro singularOrPlural(value, noun) %}
+  {% set result =  value + ' ' + noun %}
+
+  {% if value > 1 %}
+    {% set result = result + 's' %}
+  {% endif %}
+
+  {{ result }}
+{% endmacro %}

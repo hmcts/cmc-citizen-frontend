@@ -3,13 +3,14 @@ import { Paths } from 'claimant-response/paths'
 import { AcceptPaymentMethodTask } from 'claimant-response/tasks/acceptPaymentMethodTask'
 import { SettleAdmittedTask } from 'claimant-response/tasks/settleAdmittedTask'
 import { Claim } from 'claims/models/claim'
-import { PaymentOption } from 'claims/models/response/core/paymentOption'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { ResponseType } from 'claims/models/response/responseType'
 import { Validator } from 'class-validator'
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
 import { NumberFormatter } from 'utils/numberFormatter'
+import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { ViewDefendantResponseTask } from 'claimant-response/tasks/viewDefendantResponseTask'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { ChooseHowToProceedTask } from 'claimant-response/tasks/chooseHowToProceedTask'
 import { SignSettlementAgreementTask } from 'claimant-response/tasks/signSettlementAgreementTask'
@@ -25,13 +26,17 @@ export class TaskListBuilder {
   static buildDefendantResponseSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
     const tasks: TaskListItem[] = []
     const externalId: string = claim.externalId
-    tasks.push(
-      new TaskListItem(
-        'View the defendant’s full response',
-        Paths.notImplementedYetPage.evaluateUri({ externalId: externalId }),
-        true
+
+    if (claim.response.responseType === ResponseType.FULL_ADMISSION
+      || (claim.response.responseType === ResponseType.PART_ADMISSION && claim.response.paymentIntention !== undefined)) {
+      tasks.push(
+        new TaskListItem(
+          'View the defendant’s full response',
+          Paths.defendantsResponsePage.evaluateUri({ externalId: externalId }),
+          ViewDefendantResponseTask.isCompleted(draft.defendantResponseViewed)
+        )
       )
-    )
+    }
 
     return new TaskList('Before you start', tasks)
   }

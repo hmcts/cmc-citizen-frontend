@@ -329,6 +329,7 @@ const sampleCCJDraftObj = {
 }
 
 export const sampleClaimantResponseDraftObj = {
+  defendantResponseViewed: true,
   settleAdmitted: {
     admitted: {
       option: 'yes'

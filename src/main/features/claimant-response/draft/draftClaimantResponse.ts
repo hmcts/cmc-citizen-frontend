@@ -7,6 +7,8 @@ import { PaymentIntention } from 'shared/components/payment-intention/model'
 import { FreeMediation } from 'response/form/models/freeMediation'
 
 export class DraftClaimantResponse extends DraftDocument {
+  defendantResponseViewed: boolean
+
   settleAdmitted?: SettleAdmitted
   acceptPaymentMethod?: AcceptPaymentMethod
   formaliseRepaymentPlan?: FormaliseRepaymentPlan
@@ -18,6 +20,9 @@ export class DraftClaimantResponse extends DraftDocument {
     if (input) {
       console.log('input', input)
       this.externalId = input.externalId
+      if (input.defendantResponseViewed) {
+        this.defendantResponseViewed = input.defendantResponseViewed
+      }
       if (input.settleAdmitted) {
         this.settleAdmitted = new SettleAdmitted().deserialize(input.settleAdmitted)
       }
