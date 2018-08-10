@@ -112,8 +112,7 @@ export class TaskListBuilder {
           )
         }
       }
-
-
+      
       const partiallyAdmitted = draft.isResponsePartiallyAdmitted()
       const partiallyAdmittedAndPaid = draft.isResponsePartiallyAdmittedAndAlreadyPaid()
 

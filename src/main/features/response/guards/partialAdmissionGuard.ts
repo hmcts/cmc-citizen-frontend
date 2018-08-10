@@ -17,7 +17,7 @@ export class PartialAdmissionGuard {
 
     function isRequestAllowed (res: express.Response): boolean {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      const claim:Claim = res.locals.claim
+      const claim: Claim = res.locals.claim
 
       return ClaimFeatureToggles.areAdmissionsEnabled(claim) && draft.document.isResponsePartiallyAdmitted()
     }
