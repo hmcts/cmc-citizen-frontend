@@ -85,7 +85,7 @@ async function createSmokeTestsUserIfDoesntExist (username: string, userGroup: s
 
   try {
     await ClaimStoreClient.addRoleToUser(bearerToken, 'cmc-new-features-consent-given')
-  } catch(err) {
+  } catch (err) {
     if (err && err.statusCode === 409) {
       console.log('User already has user consent role')
       return
