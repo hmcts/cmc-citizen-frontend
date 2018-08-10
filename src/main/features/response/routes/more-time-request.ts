@@ -14,12 +14,16 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
 import { DeadlineCalculatorClient } from 'claims/deadlineCalculatorClient'
+import { Moment } from 'moment'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
-function renderView (form: Form<MoreTimeNeeded>, res: express.Response, next: express.NextFunction) {
+async function renderView (form: Form<MoreTimeNeeded>, res: express.Response, next: express.NextFunction) {
   try {
-    const moreTimeDeadline: string = 'You’ll have to respond before 4pm on ' + res.locals.postponedDeadline.format('LL')
+    const claim: Claim = res.locals.claim
+    const postponedDeadline: Moment = await DeadlineCalculatorClient.calculatePostponedDeadline(claim.issuedOn)
+
+    const moreTimeDeadline: string = 'You’ll have to respond before 4pm on ' + postponedDeadline.format('LL')
 
     res.render(Paths.moreTimeRequestPage.associatedView, {
       form: form,
@@ -37,7 +41,6 @@ export default express.Router()
     MoreTimeAlreadyRequestedGuard.requestHandler,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      res.locals.postponedDeadline = await DeadlineCalculatorClient.calculatePostponedDeadline(res.locals.claim.issuedOn)
       renderView(new Form(draft.document.moreTimeNeeded), res, next)
     })
   .post(
@@ -48,7 +51,6 @@ export default express.Router()
       const form: Form<MoreTimeNeeded> = req.body
 
       if (form.hasErrors()) {
-        res.locals.postponedDeadline = await DeadlineCalculatorClient.calculatePostponedDeadline(res.locals.claim.issuedOn)
         renderView(form, res, next)
       } else {
         const claim: Claim = res.locals.claim
