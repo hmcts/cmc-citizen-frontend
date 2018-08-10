@@ -202,6 +202,10 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('User is required'))
     }
 
+    if (!role) {
+      return Promise.reject(new Error('role is required'))
+    }
+
     return this.request
       .post(`${claimApiBaseUrl}/user/roles`, {
         body: { role: role },

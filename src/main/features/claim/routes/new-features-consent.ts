@@ -2,12 +2,12 @@ import * as express from 'express'
 import { Paths as ClaimPaths } from 'claim/paths'
 import { Form } from 'forms/form'
 import { FeatureConsentResponse } from 'forms/models/featureConsentResponse'
-import { NewFeaturesConsentGuard } from 'claim/guards/newFeaturesConsentGuard'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { YesNoOption } from 'models/yesNoOption'
 import { User } from 'idam/user'
+import { GuardFactory } from 'response/guards/guardFactory'
 
 const claimStoreClient = new ClaimStoreClient()
 
@@ -15,10 +15,22 @@ function renderView (form: Form<FeatureConsentResponse>, res: express.Response) 
   res.render(ClaimPaths.newFeaturesConsent.associatedView, { form: form })
 }
 
+function checkConsentedAlready (): express.RequestHandler {
+  return GuardFactory.createAsync(async (req: express.Request, res: express.Response) => {
+    const user: User = res.locals.user
+    const roles = await claimStoreClient.retrieveUserRoles(user)
+
+    return roles && !roles.some(role => role.includes('cmc-new-features-consent'))
+  }, (req: express.Request, res: express.Response): void => {
+    res.redirect(ClaimPaths.taskListPage.uri)
+  })
+}
+
+
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(ClaimPaths.newFeaturesConsent.uri,
-    NewFeaturesConsentGuard.requestHandler, (req: express.Request, res: express.Response) => {
+    checkConsentedAlready(), (req: express.Request, res: express.Response) => {
       renderView(Form.empty<FeatureConsentResponse>(), res)
     })
   .post(ClaimPaths.newFeaturesConsent.uri,

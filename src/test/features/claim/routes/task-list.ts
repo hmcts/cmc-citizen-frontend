@@ -44,11 +44,6 @@ describe('Claim issue: task list page', () => {
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.serverError.withText('error'))
     })
-  })
-
-  describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ClaimPaths.incompleteSubmissionPage.uri)
-    checkEligibilityGuards(app, 'get', ClaimPaths.incompleteSubmissionPage.uri)
 
     it('should render page redirect to feature consent page when no role present', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
