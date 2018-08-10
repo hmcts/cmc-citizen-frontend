@@ -112,7 +112,7 @@ export class TaskListBuilder {
           )
         }
       }
-      
+
       const partiallyAdmitted = draft.isResponsePartiallyAdmitted()
       const partiallyAdmittedAndPaid = draft.isResponsePartiallyAdmittedAndAlreadyPaid()
 
@@ -126,7 +126,6 @@ export class TaskListBuilder {
               HowMuchHaveYouPaidTask.isCompleted(draft)
             )
           )
-
         } else {
           tasks.push(
             new TaskListItem(
