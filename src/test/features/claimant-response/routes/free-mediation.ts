@@ -19,7 +19,7 @@ import { FreeMediationOption } from 'response/form/models/freeMediation'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const defendantPartialAdmissionResponse = claimStoreServiceMock.sampleDefendantPartialAdmissionResponseObj
+const defendantPartialAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
 const pagePath = Paths.freeMediationPage.evaluateUri({ externalId: externalId })
 
 describe('Claimant response: free mediation page', () => {

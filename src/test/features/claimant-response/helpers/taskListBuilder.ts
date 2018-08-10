@@ -163,7 +163,7 @@ describe('Claimant response task list builder', () => {
       describe('when response type is part admission', () => {
         it('should be available when payment will be made by set date, defendant requested free mediation and claimant rejected response', () => {
           claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: { ...partialAdmissionWithPaymentBySetDateData, freeMediation: 'yes' } } })
-          claimantResponseDraft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+          draft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
             settleAdmitted: {
               admitted: {
                 option: 'no'
@@ -171,13 +171,13 @@ describe('Claimant response task list builder', () => {
             }
           }})
 
-          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(claimantResponseDraft, claim)
+          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
           expect(taskList.tasks.find(task => task.name === taskName)).not.to.be.undefined
         })
 
         it('should be available when payment will be made by instalments, defendant requested free mediation and claimant rejected response', () => {
           claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: { ...partialAdmissionWithPaymentByInstalmentsData, freeMediation: 'yes' } } })
-          claimantResponseDraft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+          draft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
             settleAdmitted: {
               admitted: {
                 option: 'no'
@@ -185,13 +185,13 @@ describe('Claimant response task list builder', () => {
             }
           }})
 
-          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(claimantResponseDraft, claim)
+          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
           expect(taskList.tasks.find(task => task.name === taskName)).not.to.be.undefined
         })
 
         it('should be not available when defendant did not request free mediation and claimant rejected response', () => {
           claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: { ...partialAdmissionWithPaymentBySetDateData, freeMediation: 'no' } } })
-          claimantResponseDraft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+          draft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
             settleAdmitted: {
               admitted: {
                 option: 'no'
@@ -199,13 +199,13 @@ describe('Claimant response task list builder', () => {
             }
           }})
 
-          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(claimantResponseDraft, claim)
+          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
           expect(taskList.tasks.find(task => task.name === taskName)).to.be.undefined
         })
 
         it('should be not available when defendant requested free mediation and claimant accepted response', () => {
           claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: { ...partialAdmissionWithPaymentBySetDateData, freeMediation: 'yes' } } })
-          claimantResponseDraft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+          draft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
             settleAdmitted: {
               admitted: {
                 option: 'yes'
@@ -213,7 +213,7 @@ describe('Claimant response task list builder', () => {
             }
           }})
 
-          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(claimantResponseDraft, claim)
+          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
           expect(taskList.tasks.find(task => task.name === taskName)).to.be.undefined
         })
       })
@@ -222,7 +222,7 @@ describe('Claimant response task list builder', () => {
         it('should not be available', () => {
           claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithPaymentBySetDateData } })
 
-          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(claimantResponseDraft, claim)
+          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
           expect(taskList.tasks.find(task => task.name === taskName)).to.be.undefined
         })
       })
