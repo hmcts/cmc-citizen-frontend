@@ -13,7 +13,6 @@ import { ViewDefendantResponseTask } from 'claimant-response/tasks/viewDefendant
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { ChooseHowToProceedTask } from 'claimant-response/tasks/chooseHowToProceedTask'
 import { SignSettlementAgreementTask } from 'claimant-response/tasks/signSettlementAgreementTask'
-import { RejectionReasonTask } from 'claimant-response/tasks/rejectionReasonTask'
 
 export class TaskListBuilder {
   static buildDefendantResponseSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
@@ -67,17 +66,6 @@ export class TaskListBuilder {
             'Accept or reject their repayment plan',
             Paths.acceptPaymentMethodPage.evaluateUri({ externalId: externalId }),
             AcceptPaymentMethodTask.isCompleted(draft.acceptPaymentMethod)
-          )
-        )
-      }
-
-      //TO-DO: update condition near to the end of PR
-      if (draft.rejectionReason !== undefined) {
-        tasks.push(
-          new TaskListItem(
-            'Repayment plan rejection reason',
-            Paths.rejectionReasonPage.evaluateUri({ externalId: externalId }),
-            RejectionReasonTask.isCompleted(draft.rejectionReason)
           )
         )
       }
