@@ -9,12 +9,14 @@
 {% block content %}
   <div class="column-two-thirds">
 
-    <p>{{ t('The total amount claimed is {{ totalAmount }}. This includes the claim fee and any interest.', { totalAmount: totalAmount | numeral }) }} </p>
+    <p class="panel">{{ t('The court will review your suggestion and may reject it if it’s more than the defendant can afford.') }}</p>
+
+    <p>{{ t('Total claim amount is {{ totalAmount }}.', { totalAmount: totalAmount | numeral }) }} </p>
 
     <form method="post" novalidate class="payment-plan-calculation">
       {{ csrfProtection(csrf) }}
 
-      <h2 class="heading-small">Your finances</h2>
+      <h2 class="heading-small">{{ t('Your finances') }}</h2>
       <p>{{ t('Your total monthly income is {{ monthlyIncome }}',
           { monthlyIncome: monthlyIncome | numeral }) }}</p>
       <p>{{ t('Your total monthly expenses is {{ monthlyExpenses }}',
@@ -25,14 +27,14 @@
       <div class="form-group">
         <fieldset>
           <legend class="visually-hidden">{{ t('Regular payments of') }}</legend>
-          {{ poundInput('Regular payments of:', 'instalmentAmount', form, 'For example, £200', bold = true) }}
+          {{ poundInput('Regular payments of:', 'instalmentAmount', form, 'For example, £10', bold = true) }}
         </fieldset>
       </div>
 
       <div class="form-group">
         {{ radioGroup(
         form = form,
-        label = 'How often you’ll make payments',
+        label = 'How often do you want to receive payments?',
         name = 'paymentSchedule',
         options = [
         {
@@ -56,13 +58,13 @@
 
       {{ linkButton('Calculate length of repayment plan', 'action[calculatePaymentPlan]', 'button button-secondary calculateLengthOfRepayment') }}
 
-      <h2 class="heading-small">Length of repayment plan</h2>
+      <h2 class="heading-small">{{ t('Length of repayment plan') }}</h2>
       <p id="lengthOfRepayment" class="lengthOfRepayment"> {{ paymentLength | default('-') }} </p>
 
       <div class="form-group">
         <fieldset>
-          <legend class="visually-hidden">{{ t('When will you make the first payment') }}</legend>
-          {{ dateInput('firstPaymentDate', form, hint = t('For example, {{ nextMonth }}', { nextMonth: 'now' | addDays(30) | inputDate }), label = 'When will you make the first payment?') }}
+          <legend class="visually-hidden">{{ t('Date for first instalment') }}</legend>
+          {{ dateInput('firstPaymentDate', form, hint = t('For example, {{ nextMonth }}', { nextMonth: 'now' | addDays(30) | inputDate }), label = 'Date for first instalment') }}
         </fieldset>
       </div>
 

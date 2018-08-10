@@ -13,11 +13,12 @@ import { User } from 'idam/user'
 import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { FormValidator } from 'forms/validation/formValidator'
-import { ResponseDraft } from 'response/draft/responseDraft'
-import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
 import { createPaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
 import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
+import { AbstractModelAccessor } from 'shared/components/payment-intention/model-accessor'
+import { PaymentIntention } from 'shared/components/payment-intention/model'
+import { NotFoundError } from 'errors'
 
 function mapFrequencyInWeeks (frequency: PaymentSchedule): number {
   switch (frequency) {
@@ -45,22 +46,24 @@ function calculatePaymentPlanLength (model: DefendantPaymentPlan): string {
   return undefined
 }
 
-export class PaymentPlanPage {
-  constructor (private admissionType: string) {
+export abstract class AbstractPaymentPlanPage<Draft> {
+  abstract getHeading (): string
+  abstract createModelAccessor (): AbstractModelAccessor<Draft, PaymentIntention>
+  abstract buildTaskListUri (req: express.Request, res: express.Response): string
+
+  getView (): string {
+    return 'components/payment-intention/payment-plan'
   }
 
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
     const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
-      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      const model: PaymentIntention = this.createModelAccessor().get(res.locals.draft.document)
 
-      return draft.document[this.admissionType]
-        && draft.document[this.admissionType].paymentIntention
-        && draft.document[this.admissionType].paymentIntention.paymentOption
-        && draft.document[this.admissionType].paymentIntention.paymentOption.isOfType(DefendantPaymentType.INSTALMENTS)
+      return model
+        && model.paymentOption
+        && model.paymentOption.isOfType(DefendantPaymentType.INSTALMENTS)
     }, (req: express.Request, res: express.Response): void => {
-      const claim: Claim = res.locals.claim
-
-      res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+      throw new NotFoundError(req.path)
     })
 
     return express.Router()
@@ -68,8 +71,7 @@ export class PaymentPlanPage {
         ...guards,
         stateGuardRequestHandler,
         ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-          const draft: Draft<ResponseDraft> = res.locals.responseDraft
-          this.renderView(new Form(draft.document[this.admissionType].paymentPlan), res)
+          this.renderView(new Form(this.createModelAccessor().get(res.locals.draft.document).paymentPlan), res)
         }))
       .post(path + PaymentIntentionPaths.paymentPlanPage.uri,
         ...guards,
@@ -81,11 +83,10 @@ export class PaymentPlanPage {
             if (form.hasErrors() || _.get(req, 'body.action.calculatePaymentPlan')) {
               this.renderView(form, res)
             } else {
-              const draft: Draft<ResponseDraft> = res.locals.responseDraft
-              const user: User = res.locals.user
+              this.createModelAccessor().patch(res.locals.draft.document, model => model.paymentPlan = form.model)
 
-              draft.document[this.admissionType].paymentPlan = form.model
-              await new DraftService().save(draft, user.bearerToken)
+              const user: User = res.locals.user
+              await new DraftService().save(res.locals.draft, user.bearerToken)
 
               const { externalId } = req.params
               res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
@@ -95,13 +96,14 @@ export class PaymentPlanPage {
 
   renderView (form: Form<DefendantPaymentPlan>, res: express.Response): void {
     const claim: Claim = res.locals.claim
-    const draft: Draft<ResponseDraft> = res.locals.responseDraft
+    // const draft: Draft<ResponseDraft> = this.createModelAccessor().get(res.locals.draft.document)
 
-    res.render('components/payment-intention/payment-plan', {
+    res.render(this.getView(), {
+      heading: this.getHeading(),
       form: form,
       paymentLength: calculatePaymentPlanLength(form.model),
-      monthlyIncome: _.get(draft, 'document.statementOfMeans.monthlyIncome', 0),
-      monthlyExpenses: _.get(draft, 'document.statementOfMeans.monthlyExpenses', 0),
+      // monthlyIncome: _.get(draft, 'document.statementOfMeans.monthlyIncome', 0),
+      // monthlyExpenses: _.get(draft, 'document.statementOfMeans.monthlyExpenses', 0),
       totalAmount: claim.totalAmountTillToday
     })
   }
