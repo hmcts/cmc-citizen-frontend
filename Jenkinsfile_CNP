@@ -34,7 +34,6 @@ withPipeline("nodejs", product, component) {
         notifyBuildEvent channel: notificationsChannel, color: 'warning', message: 'Failed to update demo branch'
       }
     }
-    sh "yarn cache clean"
   }
 
   after('build') {
