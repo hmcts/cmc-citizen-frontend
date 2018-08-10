@@ -202,11 +202,9 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('User is required'))
     }
 
-    const roleObj = { role: role }
-
     return this.request
       .post(`${claimApiBaseUrl}/user/roles`, {
-        body: roleObj,
+        body: { role: role },
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }

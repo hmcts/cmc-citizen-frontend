@@ -4,6 +4,7 @@ import * as fs from 'fs'
 import { request } from 'integration-test/helpers/clients/base/request'
 import { RequestResponse } from 'request'
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
+import { ClaimStoreClient } from 'integration-test/helpers/clients/claimStoreClient'
 
 const citizenAppURL = process.env.CITIZEN_APP_URL
 
@@ -69,15 +70,28 @@ async function waitTillHealthy (appURL: string) {
   return Promise.reject(error)
 }
 
-async function createSmokeTestsUserIfDoesntExist (username: string, userGroup: string, password: string): Promise<void | string> {
+async function createSmokeTestsUserIfDoesntExist (username: string, userGroup: string, password: string): Promise<void> {
+  let bearerToken
   try {
-    return await IdamClient.authenticateUser(username, password)
+    bearerToken = await IdamClient.authenticateUser(username, password)
   } catch {
     if (!(username || password)) {
-      return undefined
+      return
     }
 
-    return IdamClient.createUser(username, userGroup, password)
+    await IdamClient.createUser(username, userGroup, password)
+    bearerToken = await IdamClient.authenticateUser(username, password)
+  }
+
+  try {
+    await ClaimStoreClient.addRoleToUser(bearerToken, 'cmc-new-features-consent-given')
+  } catch(err) {
+    if (err && err.statusCode === 409) {
+      console.log('User already has user consent role')
+      return
+    }
+    console.log('Failed to add user consent role')
+    throw err
   }
 }
 
