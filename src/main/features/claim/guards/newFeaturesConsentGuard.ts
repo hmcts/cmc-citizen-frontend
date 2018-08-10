@@ -12,18 +12,14 @@ export class NewFeaturesConsentGuard {
 
   static requestHandler (): express.RequestHandler {
     return GuardFactory.createAsync(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      try {
-        if (!FeatureToggles.isEnabled('newFeaturesConsent')) {
-          return true
-        }
-
-        const user: User = res.locals.user
-        const roles = await claimStoreClient.retrieveUserRoles(user)
-
-        return roles.length !== 0 && roles.some(role => role.includes('cmc-new-features-consent'))
-      } catch(err) {
-        return false
+      if (!FeatureToggles.isEnabled('newFeaturesConsent')) {
+        return true
       }
+
+      const user: User = res.locals.user
+      const roles = await claimStoreClient.retrieveUserRoles(user)
+
+      return roles.length !== 0 && roles.some(role => role.includes('cmc-new-features-consent'))
     }, (req: express.Request, res: express.Response): void => {
       res.redirect(ClaimPaths.newFeaturesConsent.uri)
     })

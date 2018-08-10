@@ -26,7 +26,6 @@ function checkConsentedAlready (): express.RequestHandler {
   })
 }
 
-
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(ClaimPaths.newFeaturesConsent.uri,
@@ -34,6 +33,7 @@ export default express.Router()
       renderView(Form.empty<FeatureConsentResponse>(), res)
     })
   .post(ClaimPaths.newFeaturesConsent.uri,
+    checkConsentedAlready(),
     FormValidator.requestHandler(FeatureConsentResponse, FeatureConsentResponse.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<FeatureConsentResponse> = req.body

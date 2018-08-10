@@ -22,31 +22,35 @@ describe('New features consent: opt-in to new features', () => {
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', pagePath)
 
-    it('should render page when user role not present and everything is fine', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      claimStoreServiceMock.resolveRetrieveUserRoles()
-      await request(app)
-        .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('I’ll try new features'))
-    })
+    describe('for authorized user', () => {
+      beforeEach(() => {
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+      })
 
-    it('should not render page when new feature consent role present', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
-      await request(app)
-        .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
-    })
+      it('should render page when user role not present and everything is fine', async () => {
+        claimStoreServiceMock.resolveRetrieveUserRoles()
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('I’ll try new features'))
+      })
 
-    it('should return 500 when role cannot be retrieved', async () => {
-      claimStoreServiceMock.rejectRetrieveUserRoles()
+      it('should not render page when new feature consent role present', async () => {
+        claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
+      })
 
-      await request(app)
-        .get(ClaimPaths.newFeaturesConsent.uri)
-        .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.serverError.withText('error'))
+      it('should return 500 when role cannot be retrieved', async () => {
+        claimStoreServiceMock.rejectRetrieveUserRoles()
+
+        await request(app)
+          .get(ClaimPaths.newFeaturesConsent.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('error'))
+      })
     })
   })
 
@@ -59,6 +63,8 @@ describe('New features consent: opt-in to new features', () => {
       })
 
       it('should render page with error when no selection is made', async () => {
+        claimStoreServiceMock.resolveRetrieveUserRoles()
+
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
@@ -67,6 +73,7 @@ describe('New features consent: opt-in to new features', () => {
       })
 
       it('should redirect to task list page when selection is made', async () => {
+        claimStoreServiceMock.resolveRetrieveUserRoles()
         claimStoreServiceMock.resolveAddRolesToUser('cmc-new-features-consent-given')
 
         await request(app)
@@ -87,6 +94,7 @@ describe('New features consent: opt-in to new features', () => {
       })
 
       it('should return 500 when role cannot be saved', async () => {
+        claimStoreServiceMock.resolveRetrieveUserRoles()
         claimStoreServiceMock.rejectAddRolesToUser()
 
         await request(app)
