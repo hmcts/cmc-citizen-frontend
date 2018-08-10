@@ -4,6 +4,7 @@ import { Form } from 'main/app/forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { PaidAmount } from 'main/features/ccj/form/models/paidAmount'
 import { Paths } from 'shared/components/ccj/Paths'
+import { Claim } from 'claims/models/claim'
 
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftService } from 'services/draftService'
@@ -40,15 +41,16 @@ export abstract class AbstractPaidAmountPage {
               draft.document.paidAmount = form.model
               await new DraftService().save(draft, user.bearerToken)
 
-              const { externalId } = req.params
-              res.redirect(Paths.paidAmountSummaryPage.evaluateUri({ externalId: externalId }))
+              res.redirect(this.buildRedirectUri(req, res))
             }
           }))
   }
 
   private renderView (form: Form<PaidAmount>, res: express.Response) {
-    res.render('components/ccj/route/abstract-paid-amount', {
-      form: form
+    const claim: Claim = res.locals.claim
+    res.render('components/ccj/views/paid-amount', {
+      form: form,
+      totalAmount: claim.totalAmountTillToday
     })
   }
 
