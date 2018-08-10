@@ -12,10 +12,10 @@ export class GuardFactory {
     }
   }
 
-  static createAsync (isAllowed: (req: express.Request, res: express.Response, next?: express.NextFunction) => Promise<boolean>, accessDeniedCallback: (req: express.Request, res: express.Response) => void): express.RequestHandler {
+  static createAsync (isAllowed: (req: express.Request, res: express.Response) => Promise<boolean>, accessDeniedCallback: (req: express.Request, res: express.Response) => void): express.RequestHandler {
     return async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       try {
-        if (await isAllowed(req, res, next)) {
+        if (await isAllowed(req, res)) {
           next()
         } else {
           accessDeniedCallback(req, res)

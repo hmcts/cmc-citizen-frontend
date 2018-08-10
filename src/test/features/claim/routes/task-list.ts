@@ -53,7 +53,7 @@ describe('Claim issue: task list page', () => {
       await request(app)
         .get(ClaimPaths.taskListPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.newFeaturesConsent.uri))
+        .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.newFeaturesConsentPage.uri))
     })
   })
 })

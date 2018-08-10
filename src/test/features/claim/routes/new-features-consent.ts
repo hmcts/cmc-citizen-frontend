@@ -14,7 +14,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const pagePath: string = ClaimPaths.newFeaturesConsent.uri
+const pagePath: string = ClaimPaths.newFeaturesConsentPage.uri
 
 describe('New features consent: opt-in to new features', () => {
   attachDefaultHooks(app)
@@ -47,7 +47,7 @@ describe('New features consent: opt-in to new features', () => {
         claimStoreServiceMock.rejectRetrieveUserRoles()
 
         await request(app)
-          .get(ClaimPaths.newFeaturesConsent.uri)
+          .get(ClaimPaths.newFeaturesConsentPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('error'))
       })
@@ -77,7 +77,7 @@ describe('New features consent: opt-in to new features', () => {
         claimStoreServiceMock.resolveAddRolesToUser('cmc-new-features-consent-given')
 
         await request(app)
-          .post(ClaimPaths.newFeaturesConsent.uri)
+          .post(ClaimPaths.newFeaturesConsentPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ consentResponse: 'yes' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
@@ -87,7 +87,7 @@ describe('New features consent: opt-in to new features', () => {
         claimStoreServiceMock.rejectRetrieveUserRoles()
 
         await request(app)
-          .post(ClaimPaths.newFeaturesConsent.uri)
+          .post(ClaimPaths.newFeaturesConsentPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ consentResponse: 'yes' })
           .expect(res => expect(res).to.be.serverError.withText('error'))
@@ -98,7 +98,7 @@ describe('New features consent: opt-in to new features', () => {
         claimStoreServiceMock.rejectAddRolesToUser()
 
         await request(app)
-          .post(ClaimPaths.newFeaturesConsent.uri)
+          .post(ClaimPaths.newFeaturesConsentPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ consentResponse: 'yes' })
           .expect(res => expect(res).to.be.serverError.withText('error'))

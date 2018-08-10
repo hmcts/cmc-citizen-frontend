@@ -11,7 +11,7 @@ const claimStoreClient = new ClaimStoreClient()
 export class NewFeaturesConsentGuard {
 
   static requestHandler (): express.RequestHandler {
-    return GuardFactory.createAsync(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    return GuardFactory.createAsync(async (req: express.Request, res: express.Response) => {
       if (!FeatureToggles.isEnabled('newFeaturesConsent')) {
         return true
       }
@@ -21,7 +21,7 @@ export class NewFeaturesConsentGuard {
 
       return roles.length !== 0 && roles.some(role => role.includes('cmc-new-features-consent'))
     }, (req: express.Request, res: express.Response): void => {
-      res.redirect(ClaimPaths.newFeaturesConsent.uri)
+      res.redirect(ClaimPaths.newFeaturesConsentPage.uri)
     })
   }
 }

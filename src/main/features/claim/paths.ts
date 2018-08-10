@@ -39,7 +39,7 @@ export class Paths {
   static readonly incompleteSubmissionPage = new RoutablePath('/claim/incomplete-submission')
   static readonly sealedClaimPdfReceiver = new RoutablePath('/claim/:externalId/sealed-claim')
   static readonly claimantDetailsPage = new RoutablePath('/claim/:externalId/claimant-details')
-  static readonly newFeaturesConsent = new RoutablePath('/claim/new-features-consent')
+  static readonly newFeaturesConsentPage = new RoutablePath('/claim/new-features-consent')
 
 }
 

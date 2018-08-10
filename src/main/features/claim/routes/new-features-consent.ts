@@ -12,7 +12,7 @@ import { GuardFactory } from 'response/guards/guardFactory'
 const claimStoreClient = new ClaimStoreClient()
 
 function renderView (form: Form<FeatureConsentResponse>, res: express.Response) {
-  res.render(ClaimPaths.newFeaturesConsent.associatedView, { form: form })
+  res.render(ClaimPaths.newFeaturesConsentPage.associatedView, { form: form })
 }
 
 function checkConsentedAlready (): express.RequestHandler {
@@ -28,11 +28,11 @@ function checkConsentedAlready (): express.RequestHandler {
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(ClaimPaths.newFeaturesConsent.uri,
+  .get(ClaimPaths.newFeaturesConsentPage.uri,
     checkConsentedAlready(), (req: express.Request, res: express.Response) => {
       renderView(Form.empty<FeatureConsentResponse>(), res)
     })
-  .post(ClaimPaths.newFeaturesConsent.uri,
+  .post(ClaimPaths.newFeaturesConsentPage.uri,
     checkConsentedAlready(),
     FormValidator.requestHandler(FeatureConsentResponse, FeatureConsentResponse.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
