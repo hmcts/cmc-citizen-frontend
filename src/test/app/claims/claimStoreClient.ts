@@ -58,7 +58,15 @@ describe('ClaimStoreClient', () => {
           .reply(HttpStatus.OK, returnedClaim)
       }
 
-      it('should retrieve a claim that was successfully saved on first attempt', async () => {
+      it('should retrieve a claim that was successfully saved on first attempt with feature toggles', async () => {
+        mockSuccessOnFirstSaveAttempt()
+
+        const claim: Claim = await claimStoreClient.saveClaim(claimDraft, claimant, 'admissions')
+
+        expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimData))
+      })
+
+      it('should retrieve a claim that was successfully saved on first attempt without feature toggles', async () => {
         mockSuccessOnFirstSaveAttempt()
 
         const claim: Claim = await claimStoreClient.saveClaim(claimDraft, claimant)
@@ -82,7 +90,7 @@ describe('ClaimStoreClient', () => {
         resolveLinkDefendant()
         mockTimeoutOnFirstSaveAttemptAndConflictOnSecondOne()
 
-        const claim: Claim = await claimStoreClient.saveClaim(claimDraft, claimant)
+        const claim: Claim = await claimStoreClient.saveClaim(claimDraft, claimant, 'admissions')
 
         expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimData))
       })
@@ -104,7 +112,7 @@ describe('ClaimStoreClient', () => {
         mockInternalServerErrorOnAllAttempts()
 
         try {
-          await claimStoreClient.saveClaim(claimDraft, claimant)
+          await claimStoreClient.saveClaim(claimDraft, claimant, 'admissions')
         } catch (err) {
           expect(err.statusCode).to.equal(HttpStatus.INTERNAL_SERVER_ERROR)
           expect(err.error).to.equal('An unexpected error occurred')
