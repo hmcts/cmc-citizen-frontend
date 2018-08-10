@@ -241,10 +241,12 @@ export class ClaimSteps {
     citizenMobilePage.enterMobile(claimant.mobilePhone)
   }
 
-  makeAClaimAndNavigateUpToPayment (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
+  makeAClaimAndNavigateUpToPayment (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true, fillInNewFeaturesPage = true) {
     userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
     this.completeEligibility()
-    this.optIntoNewFeatures()
+    if (fillInNewFeaturesPage) {
+      this.optIntoNewFeatures()
+    }
     userSteps.selectResolvingThisDispute()
     this.resolveDispute()
     userSteps.selectCompletingYourClaim()
