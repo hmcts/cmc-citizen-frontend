@@ -146,7 +146,7 @@ export class ResponseDraft extends DraftDocument {
   }
 
   public isResponseFullyAdmitted (features: string[]): boolean {
-    if (!FeatureToggles.hasAnyAuthorisedFeature(features,'admissions')) {
+    if (!FeatureToggles.hasAnyAuthorisedFeature(features, 'admissions')) {
       return false
     }
 
@@ -170,7 +170,7 @@ export class ResponseDraft extends DraftDocument {
   }
 
   public isResponsePartiallyAdmitted (features: string[]): boolean {
-    if (!FeatureToggles.hasAnyAuthorisedFeature(features,'admissions')) {
+    if (!FeatureToggles.hasAnyAuthorisedFeature(features, 'admissions')) {
       return false
     }
 
