@@ -63,6 +63,17 @@ describe('Defendant response: more time needed page', () => {
               .expect(res => expect(res).to.be.successful.withText('Do you want more time to respond?',
                 'You’ll have to respond before 4pm on 1 January 2020'))
           })
+
+          it('when deadline calculation fails', async () => {
+            draftStoreServiceMock.resolveFind('response')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.rejectPostponedDeadline()
+
+            await request(app)
+              .get(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.serverError.withText('Error'))
+          })
         })
 
         it('should redirect to confirmation page when answer is "yes"', async () => {
@@ -182,6 +193,17 @@ describe('Defendant response: more time needed page', () => {
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: 'yes' })
+              .expect(res => expect(res).to.be.serverError.withText('Error'))
+          })
+
+          it('when deadline calculation fails', async () => {
+            draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId({ moreTimeRequested: false })
+            claimStoreServiceMock.rejectPostponedDeadline()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
         })
