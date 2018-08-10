@@ -234,7 +234,7 @@ describe('Claimant response task list builder', () => {
       describe('when response type is part admission', () => {
         it('should be available when payment will be made by set date and payment method is rejected by claimant', () => {
           claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: partialAdmissionWithPaymentBySetDateData } })
-          claimantResponseDraft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+          draft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
             acceptPaymentMethod: {
               accept: {
                 option: 'no'
@@ -242,13 +242,13 @@ describe('Claimant response task list builder', () => {
             }
           }})
 
-          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(claimantResponseDraft, claim)
+          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
           expect(taskList.tasks.find(task => task.name === taskName)).not.to.be.undefined
         })
 
         it('should be available when payment will be made by instalments and payment method is rejected by claimant', () => {
           claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: partialAdmissionWithPaymentByInstalmentsData } })
-          claimantResponseDraft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+          draft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
             acceptPaymentMethod: {
               accept: {
                 option: 'no'
@@ -256,13 +256,13 @@ describe('Claimant response task list builder', () => {
             }
           }})
 
-          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(claimantResponseDraft, claim)
+          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
           expect(taskList.tasks.find(task => task.name === taskName)).not.to.be.undefined
         })
 
         it('should not be available when payment method is accepted by claimant', () => {
           claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: partialAdmissionWithPaymentBySetDateData } })
-          claimantResponseDraft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+          draft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
             acceptPaymentMethod: {
               accept: {
                 option: 'yes'
@@ -270,27 +270,27 @@ describe('Claimant response task list builder', () => {
             }
           }})
 
-          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(claimantResponseDraft, claim)
+          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
           expect(taskList.tasks.find(task => task.name === taskName)).to.be.undefined
         })
 
         it('should not be available when payment will be made immediately', () => {
           claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: partialAdmissionWithImmediatePaymentData } })
-          claimantResponseDraft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+          draft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
             acceptPaymentMethod: undefined
           }})
 
-          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(claimantResponseDraft, claim)
+          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
           expect(taskList.tasks.find(task => task.name === taskName)).to.be.undefined
         })
 
         it('should not be available when payment was already made', () => {
           claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: partialAdmissionAlreadyPaidData } })
-          claimantResponseDraft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+          draft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
             acceptPaymentMethod: undefined
           }})
 
-          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(claimantResponseDraft, claim)
+          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
           expect(taskList.tasks.find(task => task.name === taskName)).to.be.undefined
         })
       })
@@ -298,7 +298,7 @@ describe('Claimant response task list builder', () => {
       describe('when response type is full admission', () => {
         it('should be available when payment will be made by set date and payment method is rejected by claimant', () => {
           claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithPaymentBySetDateData } })
-          claimantResponseDraft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+          draft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
             acceptPaymentMethod: {
               accept: {
                 option: 'no'
@@ -306,13 +306,13 @@ describe('Claimant response task list builder', () => {
             }
           }})
 
-          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(claimantResponseDraft, claim)
+          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
           expect(taskList.tasks.find(task => task.name === taskName)).not.to.be.undefined
         })
 
         it('should be available when payment will be made by instalments and payment method is rejected by claimant', () => {
           claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithPaymentByInstalmentsData } })
-          claimantResponseDraft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+          draft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
             acceptPaymentMethod: {
               accept: {
                 option: 'no'
@@ -320,13 +320,13 @@ describe('Claimant response task list builder', () => {
             }
           }})
 
-          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(claimantResponseDraft, claim)
+          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
           expect(taskList.tasks.find(task => task.name === taskName)).not.to.be.undefined
         })
 
         it('should not be available when payment method is accepted by claimant', () => {
           claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithPaymentBySetDateData } })
-          claimantResponseDraft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+          draft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
             acceptPaymentMethod: {
               accept: {
                 option: 'yes'
@@ -334,14 +334,14 @@ describe('Claimant response task list builder', () => {
             }
           }})
 
-          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(claimantResponseDraft, claim)
+          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
           expect(taskList.tasks.find(task => task.name === taskName)).to.be.undefined
         })
 
         it('should not be available when payment will be made immediately', () => {
           claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithImmediatePaymentData } })
 
-          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(claimantResponseDraft, claim)
+          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
           expect(taskList.tasks.find(task => task.name === taskName)).to.be.undefined
         })
       })
