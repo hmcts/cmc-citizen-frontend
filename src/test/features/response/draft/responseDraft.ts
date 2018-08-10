@@ -14,8 +14,6 @@ import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/mo
 import { PartyType } from 'common/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
 
-const features: string[] = ['admissions']
-
 describe('ResponseDraft', () => {
 
   describe('deserialization', () => {
@@ -131,7 +129,7 @@ describe('ResponseDraft', () => {
       draft.response = undefined
       draft.defendantDetails.partyDetails = undefined
 
-      expect(draft.isResponseFullyAdmitted(['admissions'])).to.be.eq(false)
+      expect(draft.isResponseFullyAdmitted()).to.be.eq(false)
     })
 
     it('should return false when response is not full admission', () => {
@@ -139,7 +137,7 @@ describe('ResponseDraft', () => {
         const draft: ResponseDraft = new ResponseDraft()
         draft.response = new Response(responseType)
 
-        expect(draft.isResponseFullyAdmitted(features)).to.be.eq(false)
+        expect(draft.isResponseFullyAdmitted()).to.be.eq(false)
       })
     })
 
@@ -149,7 +147,7 @@ describe('ResponseDraft', () => {
       draft.defendantDetails.partyDetails = new PartyDetails()
       draft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
 
-      expect(draft.isResponseFullyAdmitted(features)).to.be.eq(true)
+      expect(draft.isResponseFullyAdmitted()).to.be.eq(true)
     })
   })
 
@@ -158,7 +156,7 @@ describe('ResponseDraft', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = undefined
 
-      expect(draft.isResponseFullyAdmittedWithInstalments(features)).to.be.eq(false)
+      expect(draft.isResponseFullyAdmittedWithInstalments()).to.be.eq(false)
     })
 
     it('should return false when response is not full admission', () => {
@@ -166,7 +164,7 @@ describe('ResponseDraft', () => {
         const draft: ResponseDraft = new ResponseDraft()
         draft.response = new Response(responseType)
 
-        expect(draft.isResponseFullyAdmittedWithInstalments(features)).to.be.eq(false)
+        expect(draft.isResponseFullyAdmittedWithInstalments()).to.be.eq(false)
       })
     })
 
@@ -177,7 +175,7 @@ describe('ResponseDraft', () => {
         draft.fullAdmission = new FullAdmission()
         draft.fullAdmission.paymentOption = new DefendantPaymentOption(paymentType)
 
-        expect(draft.isResponseFullyAdmittedWithInstalments(features)).to.be.eq(false)
+        expect(draft.isResponseFullyAdmittedWithInstalments()).to.be.eq(false)
       })
     })
 
@@ -187,7 +185,7 @@ describe('ResponseDraft', () => {
       draft.fullAdmission = new FullAdmission()
       draft.fullAdmission.paymentOption = new DefendantPaymentOption(DefendantPaymentType.INSTALMENTS)
 
-      expect(draft.isResponseFullyAdmitted(features)).to.be.eq(true)
+      expect(draft.isResponseFullyAdmitted()).to.be.eq(true)
     })
   })
 
@@ -199,7 +197,7 @@ describe('ResponseDraft', () => {
         const draft: ResponseDraft = new ResponseDraft()
         draft.response = undefined
 
-        expect(draft.isResponsePartiallyAdmitted(features)).to.be.eq(false)
+        expect(draft.isResponsePartiallyAdmitted()).to.be.eq(false)
       })
 
       it('response type is fully admitted', () => {
@@ -208,7 +206,7 @@ describe('ResponseDraft', () => {
           type: ResponseType.FULL_ADMISSION
         }
 
-        expect(draft.isResponsePartiallyAdmitted(features)).to.be.eq(false)
+        expect(draft.isResponsePartiallyAdmitted()).to.be.eq(false)
       })
 
       it('partial admission is not populated', () => {
@@ -218,7 +216,7 @@ describe('ResponseDraft', () => {
         }
         draft.partialAdmission = undefined
 
-        expect(draft.isResponsePartiallyAdmitted(features)).to.be.eq(false)
+        expect(draft.isResponsePartiallyAdmitted()).to.be.eq(false)
       })
     })
 
@@ -231,7 +229,7 @@ describe('ResponseDraft', () => {
         alreadyPaid: { option: { option: 'yes' } }
       })
 
-      expect(draft.isResponsePartiallyAdmitted(features)).to.be.eq(true)
+      expect(draft.isResponsePartiallyAdmitted()).to.be.eq(true)
     })
   })
 
@@ -241,7 +239,7 @@ describe('ResponseDraft', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = undefined
 
-      expect(draft.isResponsePartiallyAdmittedAndAlreadyPaid(features)).to.be.equals(false)
+      expect(draft.isResponsePartiallyAdmittedAndAlreadyPaid()).to.be.equals(false)
     })
 
     it('should return true when partially admitted and already paid', () => {
@@ -253,7 +251,7 @@ describe('ResponseDraft', () => {
         alreadyPaid: { option: { option: 'yes' } }
       })
 
-      expect(draft.isResponsePartiallyAdmittedAndAlreadyPaid(features)).to.be.equals(true)
+      expect(draft.isResponsePartiallyAdmittedAndAlreadyPaid()).to.be.equals(true)
     })
 
     it('should return false when partially admitted and NOT already paid', () => {
@@ -265,7 +263,7 @@ describe('ResponseDraft', () => {
         alreadyPaid: { option: { option: 'no' } }
       })
 
-      expect(draft.isResponsePartiallyAdmittedAndAlreadyPaid(features)).to.be.equals(false)
+      expect(draft.isResponsePartiallyAdmittedAndAlreadyPaid()).to.be.equals(false)
     })
 
   })

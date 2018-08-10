@@ -13,7 +13,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'main/app/claims/models/claim'
 import { RoutablePath } from 'shared/router/routablePath'
-import { FeatureToggles } from 'utils/featureToggles'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 export class PaymentOptionPage {
   constructor (private admissionType: string) {
@@ -76,10 +76,11 @@ export class PaymentOptionPage {
     const claim: Claim = res.locals.claim
 
     function isApplicableFor (draft: ResponseDraft): boolean {
-      if (!FeatureToggles.hasAnyAuthorisedFeature(claim.features, 'admissions')) {
+      if (!ClaimFeatureToggles.areAdmissionsEnabled(claim)) {
         return false
       }
-      return draft.isResponseFullyAdmitted(claim.features)
+
+      return draft.isResponseFullyAdmitted()
         && !draft.defendantDetails.partyDetails.isBusiness()
     }
 

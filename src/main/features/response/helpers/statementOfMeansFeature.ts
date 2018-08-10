@@ -1,20 +1,20 @@
-import { FeatureToggles } from 'utils/featureToggles'
-
+import { Claim } from 'claims/models/claim'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 export class StatementOfMeansFeature {
-  static isApplicableFor (features: string[], draft: ResponseDraft): boolean {
-    if (!FeatureToggles.hasAnyAuthorisedFeature(features, 'admissions')) {
+  static isApplicableFor (claim: Claim, draft: ResponseDraft): boolean {
+    if (!ClaimFeatureToggles.areAdmissionsEnabled(claim)) {
       return false
     }
     if (!draft) {
       throw new Error('Response draft is required')
     }
-    const fullAdmissionHasStatementOfMeans = draft.isResponseFullyAdmittedWithPayBySetDate() || draft.isResponseFullyAdmittedWithInstalments(features)
-    const parAdmissionHasStatementOfMeans = draft.isResponsePartiallyAdmittedWithPayBySetDate() || draft.isResponsePartiallyAdmittedWithInstalments(features)
+    const fullAdmissionHasStatementOfMeans = draft.isResponseFullyAdmittedWithPayBySetDate() || draft.isResponseFullyAdmittedWithInstalments()
+    const parAdmissionHasStatementOfMeans = draft.isResponsePartiallyAdmittedWithPayBySetDate() || draft.isResponsePartiallyAdmittedWithInstalments()
     return (
-        (draft.isResponseFullyAdmitted(features) && fullAdmissionHasStatementOfMeans)
-        || (draft.isResponsePartiallyAdmitted(features) && parAdmissionHasStatementOfMeans)
+        (draft.isResponseFullyAdmitted() && fullAdmissionHasStatementOfMeans)
+        || (draft.isResponsePartiallyAdmitted() && parAdmissionHasStatementOfMeans)
       )
       && !draft.defendantDetails.partyDetails.isBusiness()
   }

@@ -28,7 +28,6 @@ import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
 import { YesNoOption } from 'models/yesNoOption'
 import { HowMuchDoYouOwe } from 'response/form/models/howMuchDoYouOwe'
-import { FeatureToggles } from 'utils/featureToggles'
 
 export class FullAdmission {
   paymentOption: PaymentOption
@@ -145,42 +144,37 @@ export class ResponseDraft extends DraftDocument {
     return !isNullOrUndefined(this.moreTimeNeeded) && this.moreTimeNeeded.option === MoreTimeNeededOption.YES
   }
 
-  public isResponseFullyAdmitted (features: string[]): boolean {
-    if (!FeatureToggles.hasAnyAuthorisedFeature(features, 'admissions')) {
-      return false
-    }
-
+  public isResponseFullyAdmitted (): boolean {
     return this.isResponsePopulated() && this.response.type === ResponseType.FULL_ADMISSION
   }
 
   // TODO: Because of an overlap between two stories (ROC-3657, ROC-3658), the logic of this function
   // is incomplete. ROC-3658 should revisit once 'statement of means' flow is complete.
-  public isResponseFullyAdmittedWithInstalments (features: string[]): boolean {
-    return this.isResponseFullyAdmitted(features)
+  public isResponseFullyAdmittedWithInstalments (): boolean {
+
+    return this.isResponseFullyAdmitted()
       && this.fullAdmission !== undefined
       && this.fullAdmission.paymentOption !== undefined
       && this.fullAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS
   }
 
-  public isResponsePartiallyAdmittedWithInstalments (features: string[]): boolean {
-    return this.isResponsePartiallyAdmitted(features)
+  public isResponsePartiallyAdmittedWithInstalments (): boolean {
+
+    return this.isResponsePartiallyAdmitted()
       && this.partialAdmission !== undefined
       && this.partialAdmission.paymentOption !== undefined
       && this.partialAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS
   }
 
-  public isResponsePartiallyAdmitted (features: string[]): boolean {
-    if (!FeatureToggles.hasAnyAuthorisedFeature(features, 'admissions')) {
-      return false
-    }
+  public isResponsePartiallyAdmitted (): boolean {
 
     return this.isResponsePopulated()
       && this.response.type === ResponseType.PART_ADMISSION
       && this.partialAdmission !== undefined
   }
 
-  public isResponsePartiallyAdmittedAndAlreadyPaid (features: string[]): boolean {
-    return this.isResponsePartiallyAdmitted(features) && this.partialAdmission.alreadyPaid.option === YesNoOption.YES
+  public isResponsePartiallyAdmittedAndAlreadyPaid (): boolean {
+    return this.isResponsePartiallyAdmitted() && this.partialAdmission.alreadyPaid.option === YesNoOption.YES
   }
 
   public isResponseRejectedFullyWithDispute (): boolean {
