@@ -16,13 +16,14 @@ export abstract class AbstractPaidAmountSummaryPage {
 
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
     return express.Router()
-      .get(Paths.paidAmountSummaryPage.uri,
+      .get(
+        path + Paths.paidAmountSummaryPage.uri,
       ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
         const claim: Claim = res.locals.claim
         const draft: Draft<any> = res.locals.draft
 
         res.render(
-          Paths.paidAmountSummaryPage.associatedView, {
+          'components/ccj/views/paid-amount-summary', {
             claim: claim,
             alreadyPaid: draft.document.paidAmount.amount || 0,
             interestDetails: await getInterestDetails(claim),
