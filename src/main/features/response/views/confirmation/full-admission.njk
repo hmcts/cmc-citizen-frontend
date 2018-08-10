@@ -1,5 +1,7 @@
+{% from "internalLink.njk" import internalLink %}
+
 {% set claimantName = claim.claimData.claimant.name %}
-{% set claimantDetailsPageURI = ClaimPaths.claimantDetailsPage.evaluateUri({ externalId: claim.externalId }) %}
+{% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
 
 {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
   <p>{{ t('We’ve emailed {{ claimantName }} to tell them you’ll pay immediately.', { claimantName: claimantName }) }}</p>
@@ -12,7 +14,10 @@
     <li>{{ t('you get a receipt for any payments') }}</li>
   </ul>
 
-  <p>{{ t('<a href="{{ link }}">Contact {{ claimantName }}</a> if you need their payment details.', { claimantName: claimantName, link: claimantDetailsPageURI }) | safe }}</p>
+  <p>
+    {{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }} 
+    {{ t('if you need their payment details.') }}
+  </p>
 {% endif %}
 
 {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
