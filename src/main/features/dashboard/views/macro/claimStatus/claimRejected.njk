@@ -1,4 +1,5 @@
 {% from "externalLink.njk" import externalLink %}
+{% from "internalLink.njk" import internalLink %}
 
 {% macro claimRejectedAlreadyPaidForClaimantDashboard(claim) %}
   {{ t('{{ defendantName }} believes that they’ve paid the claim in full.',
@@ -54,8 +55,7 @@
   <p>{{ t('{{ defendantName }} has rejected your claim. You’ll have to go to a hearing to resolve it.',
         { defendantName: claim.claimData.defendant.name }) }}</p>
 
-  <p>{{ t('You need to complete a <a href="{{ url }}">directions questionnaire form</a> to tell us more about the claim.',
-        { url: DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }) }) | safe }}</p>
+  {{ _linkToDirectionsQuestionnairePage(claim.externalId) }}
 
   <p>{{ t('Your claim will be cancelled if you don’t complete and return the form before 4pm on {{ deadline }}.',
         { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
@@ -75,8 +75,7 @@
     {{ t('You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.') }}
   </p>
 
-  <p>{{ t('You need to complete a <a href="{{ url }}">directions questionnaire form</a> to tell us more about the claim.',
-        { url: DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }) }) | safe }}</p>
+  {{ _linkToDirectionsQuestionnairePage(claim.externalId) }}
 
   <p>{{ t('Your defence will be cancelled if you don’t complete and return the form before 4pm on {{ deadline }}.',
         { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
@@ -133,4 +132,15 @@
 
 {% macro _downloadResponseLink(claim, text) %}
   <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t(text) }}</a>
+{% endmacro %}
+
+{% macro _linkToDirectionsQuestionnairePage(externalId) %}
+<p>
+  {{ t('You need to complete a {{ url }} to tell us more about the claim.',
+        { url: internalLink(
+          'directions questionnaire form',
+          DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: externalId }))
+        }
+      ) | safe
+  }}</p>
 {% endmacro %}
