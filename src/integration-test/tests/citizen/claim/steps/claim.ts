@@ -211,6 +211,8 @@ export class ClaimSteps {
   makeAClaimAndSubmit (email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): Promise<string> {
     this.makeAClaimAndSubmitStatementOfTruth(email, claimantType, defendantType, enterDefendantEmail)
     paymentSteps.payWithWorkingCard()
+    this.reloadPage() // reload gets over the ESOCKETTIMEDOUT Error
+    this.reloadPage() // reload gets over the 409 Duplicate Key value violates unique constraint Error
     I.waitForText('Claim submitted')
     return claimantClaimConfirmedPage.getClaimReference()
   }
