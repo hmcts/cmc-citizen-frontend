@@ -337,13 +337,25 @@ export function rejectPostponedDeadline (reason: string = 'HTTP error'): mock.Sc
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveRetrieveUserRoles (...userRoles: string[]) {
+export function resolveAddRolesToUser (role: string) {
   mock(`${serviceBaseURL}/user`)
+    .post('/roles')
+    .reply(HttpStatus.CREATED, { role: role })
+}
+
+export function rejectAddRolesToUser (reason: string = 'HTTP error') {
+  mock(`${serviceBaseURL}/user`)
+    .post('/roles')
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
+export function resolveRetrieveUserRoles (...userRoles: string[]): mock.Scope {
+  return mock(`${serviceBaseURL}/user`)
     .get('/roles')
     .reply(HttpStatus.OK, userRoles)
 }
 
-export function rejectRetriveUserRoles () {
+export function rejectRetrieveUserRoles () {
   mock(`${serviceBaseURL}/user`)
     .get('/roles')
     .reply(HttpStatus.INTERNAL_SERVER_ERROR)
