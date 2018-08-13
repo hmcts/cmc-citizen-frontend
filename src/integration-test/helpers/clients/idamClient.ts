@@ -48,7 +48,7 @@ export class IdamClient {
    *
    * @param {string} username the username to authenticate
    * @param password the users password (optional, default will be used if none provided)
-   * @returns {Promise<string>}
+   * @returns {Promise<string>} the users access token
    */
   static async authenticateUser (username: string, password: string = undefined): Promise<string> {
 
