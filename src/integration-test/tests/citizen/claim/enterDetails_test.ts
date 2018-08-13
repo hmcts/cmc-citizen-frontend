@@ -14,6 +14,7 @@ Scenario('I can prepare a claim with default interest @citizen', async (I: I) =>
   const email: string = await I.createCitizenUser()
   userSteps.login(email)
   claimSteps.completeEligibility()
+  claimSteps.optIntoNewFeatures()
   userSteps.selectClaimAmount()
   I.see('Claim amount')
   claimSteps.enterClaimAmount(10, 20.50, 50)
@@ -31,6 +32,7 @@ Scenario('I can prepare a claim with no interest @citizen', async (I: I) => {
   userSteps.login(email)
 
   claimSteps.completeEligibility()
+  claimSteps.optIntoNewFeatures()
   userSteps.selectClaimAmount()
   I.see('Claim amount')
   claimSteps.enterClaimAmount(10, 20.50, 50)
@@ -48,6 +50,7 @@ Scenario('I can prepare a claim with different interest rate and date @citizen',
   userSteps.login(email)
 
   claimSteps.completeEligibility()
+  claimSteps.optIntoNewFeatures()
   userSteps.selectClaimAmount()
   claimSteps.enterClaimAmount(10, 20.50, 50)
   I.see('£80.50')
@@ -64,6 +67,7 @@ Scenario('I can prepare a claim with a manually entered interest amount and a da
   userSteps.login(email)
 
   claimSteps.completeEligibility()
+  claimSteps.optIntoNewFeatures()
   userSteps.selectClaimAmount()
   claimSteps.enterClaimAmount(10, 20.50, 50)
   I.see('£80.50')
@@ -78,5 +82,5 @@ Scenario('I can prepare a claim with a manually entered interest amount and a da
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user
 
 Scenario('I can enter a claim details and navigate up to payment page @citizen-smoke-test', (I: I) => {
-  claimSteps.makeAClaimAndNavigateUpToPayment(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
+  claimSteps.makeAClaimAndNavigateUpToPayment(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true, false)
 })

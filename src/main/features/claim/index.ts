@@ -30,7 +30,7 @@ export class Feature {
     }
 
     app.all('/claim/*', claimIssueRequestHandler())
-    app.all(/^\/claim\/(?!start|amount-exceeded|.+\/confirmation|.+\/receipt|.+\/sealed-claim|.+\/claimant-details).*$/,
+    app.all(/^\/claim\/(?!start|amount-exceeded|new-features-consent|.+\/confirmation|.+\/receipt|.+\/sealed-claim|.+\/claimant-details).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'claim', 100, (value: any): DraftClaim => {
         return new DraftClaim().deserialize(value)
       }),

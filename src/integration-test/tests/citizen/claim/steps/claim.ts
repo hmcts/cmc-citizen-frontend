@@ -29,6 +29,7 @@ import I = CodeceptJS.I
 import { ClaimantTimelinePage } from 'integration-test/tests/citizen/claim/pages/claimant-timeline'
 import { ClaimantEvidencePage } from 'integration-test/tests/citizen/claim/pages/claimant-evidence'
 import { AmountHelper } from 'integration-test/helpers/amountHelper'
+import { NewFeaturesPage } from 'integration-test/tests/citizen/claim/pages/new-features'
 
 const I: I = actor()
 const citizenResolveDisputePage: CitizenResolveDisputePage = new CitizenResolveDisputePage()
@@ -46,6 +47,8 @@ const claimantTimelinePage: ClaimantTimelinePage = new ClaimantTimelinePage()
 const claimantEvidencePage: ClaimantEvidencePage = new ClaimantEvidencePage()
 const claimantCheckAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const claimantClaimConfirmedPage: ClaimantClaimConfirmedPage = new ClaimantClaimConfirmedPage()
+const newFeaturesPage: NewFeaturesPage = new NewFeaturesPage()
+
 const userSteps: UserSteps = new UserSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 const eligibilitySteps: EligibilitySteps = new EligibilitySteps()
@@ -180,6 +183,7 @@ export class ClaimSteps {
   makeAClaimAndSubmitStatementOfTruth (email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
     userSteps.login(email)
     this.completeEligibility()
+    this.optIntoNewFeatures()
     userSteps.selectResolvingThisDispute()
     this.resolveDispute()
     userSteps.selectCompletingYourClaim()
@@ -217,6 +221,10 @@ export class ClaimSteps {
     eligibilitySteps.complete()
   }
 
+  optIntoNewFeatures (): void {
+    newFeaturesPage.optIn()
+  }
+
   enterClaimantDetails (claimantType: PartyType): void {
     const claimant = createClaimant(claimantType)
     switch (claimantType) {
@@ -233,9 +241,12 @@ export class ClaimSteps {
     citizenMobilePage.enterMobile(claimant.mobilePhone)
   }
 
-  makeAClaimAndNavigateUpToPayment (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
+  makeAClaimAndNavigateUpToPayment (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true, fillInNewFeaturesPage = true) {
     userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
     this.completeEligibility()
+    if (fillInNewFeaturesPage) {
+      this.optIntoNewFeatures()
+    }
     userSteps.selectResolvingThisDispute()
     this.resolveDispute()
     userSteps.selectCompletingYourClaim()
