@@ -121,6 +121,19 @@ export class ResponseDraft extends DraftDocument {
       }
     }
 
+    const isImmediatePaymentOptionSelected = (data: FullAdmission | PartialAdmission): boolean => {
+      const isPaymentOptionPopulated = (): boolean => {
+        return data !== undefined
+          && data.paymentIntention !== undefined
+          && data.paymentIntention.paymentOption !== undefined
+      }
+      return isPaymentOptionPopulated() && data.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY)
+    }
+
+    if (isImmediatePaymentOptionSelected(this.fullAdmission) || isImmediatePaymentOptionSelected(this.partialAdmission)) {
+      delete this.statementOfMeans
+    }
+
     return this
   }
 

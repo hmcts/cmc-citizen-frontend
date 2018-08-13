@@ -57,10 +57,6 @@ export abstract class AbstractPaymentOptionPage<Draft> {
             } else {
               this.createModelAccessor().patch(res.locals.draft.document, model => model.paymentOption = form.model)
 
-              // if (option === DefendantPaymentType.IMMEDIATELY) {
-              //   draft.document.statementOfMeans = undefined
-              // }
-
               const user: User = res.locals.user
               await new DraftService().save(res.locals.draft, user.bearerToken)
 

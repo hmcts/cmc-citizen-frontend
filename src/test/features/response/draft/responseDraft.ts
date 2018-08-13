@@ -1,3 +1,5 @@
+/* tslint:disable:no-unused-expression */
+
 import { expect } from 'chai'
 import { LocalDate } from 'forms/models/localDate'
 
@@ -14,6 +16,10 @@ import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/mo
 import { PartyType } from 'common/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { PaymentIntention } from 'shared/components/payment-intention/model'
+import {
+  fullAdmissionWithImmediatePaymentDraft,
+  statementOfMeansWithAllFieldsDraft, partialAdmissionWithImmediatePaymentDraft
+} from 'test/data/draft/responseDraft'
 
 describe('ResponseDraft', () => {
 
@@ -103,6 +109,26 @@ describe('ResponseDraft', () => {
       expect(draft.freeMediation.option).to.eql(FreeMediationOption.YES)
       assertLocalDateEquals(draft.fullAdmission.paymentIntention.paymentDate.date, paymentDate)
       expect(draft.statementOfMeans.residence.type).to.eql(ResidenceType.OTHER)
+    })
+
+    it('should return not have statement of means populated when immediate payment is declared (full admission)', () => {
+      const draft: ResponseDraft = new ResponseDraft().deserialize({
+        ...fullAdmissionWithImmediatePaymentDraft,
+        statementOfMeans: {
+          ...statementOfMeansWithAllFieldsDraft
+        }
+      })
+      expect(draft.statementOfMeans).to.be.undefined
+    })
+
+    it('should return not have statement of means populated when immediate payment is declared (partial admission)', () => {
+      const draft: ResponseDraft = new ResponseDraft().deserialize({
+        ...partialAdmissionWithImmediatePaymentDraft,
+        statementOfMeans: {
+          ...statementOfMeansWithAllFieldsDraft
+        }
+      })
+      expect(draft.statementOfMeans).to.be.undefined
     })
   })
 
