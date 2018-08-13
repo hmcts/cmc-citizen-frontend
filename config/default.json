@@ -18,6 +18,9 @@
   "claim-store": {
     "url": "http://localhost:4400"
   },
+  "feature-toggles-api": {
+    "url": "http://localhost:8580"
+  },
   "draft-store": {
     "url": "http://localhost:8800",
     "secrets": {
@@ -83,6 +86,7 @@
     "clusterMode": false,
     "testingSupport": false,
     "fullAdmission": false,
+    "newFeaturesConsent": false,
     "partialAdmission": false,
     "admissions": false,
     "statementOfMeans": false,

@@ -2,8 +2,6 @@ import * as express from 'express'
 import { GuardFactory } from 'response/guards/guardFactory'
 
 import { StatementOfMeansPaths as Paths, StatementOfMeansPaths } from 'response/paths'
-
-import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { StatementOfMeansStateGuard } from 'response/guards/statementOfMeansStateGuard'
 
 import { Form } from 'forms/form'
@@ -16,6 +14,7 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { UUIDUtils } from 'shared/utils/uuidUtils'
+import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 const page: RoutablePath = StatementOfMeansPaths.selfEmploymentPage
 
@@ -33,7 +32,7 @@ const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((re
 export default express.Router()
   .get(
     page.uri,
-    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
+    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     stateGuardRequestHandler,
     (req: express.Request, res: express.Response) => {
@@ -42,7 +41,7 @@ export default express.Router()
     })
   .post(
     page.uri,
-    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
+    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     stateGuardRequestHandler,
     FormValidator.requestHandler(SelfEmployment, SelfEmployment.fromObject),

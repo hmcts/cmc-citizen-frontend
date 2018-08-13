@@ -20,6 +20,7 @@ locals {
 
   s2sUrl = "http://rpe-service-auth-provider-${local.local_env}.service.${local.local_ase}.internal"
   claimStoreUrl = "http://cmc-claim-store-${local.local_env}.service.${local.local_ase}.internal"
+  featureTogglesApiUrl = "http://rpe-feature-toggle-api-${local.local_env}.service.${local.local_ase}.internal"
   draftStoreUrl = "http://draft-store-service-${local.local_env}.service.${local.local_ase}.internal"
 }
 
@@ -109,6 +110,7 @@ module "citizen-frontend" {
     // Our service dependencies
     CLAIM_STORE_URL = "${local.claimStoreUrl}"
 
+    FEATURE_TOGGLES_API_URL = "${local.featureTogglesApiUrl}"
     // Surveys
     SERVICE_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPT1/"
     FEEDBACK_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPFB/"
@@ -118,6 +120,7 @@ module "citizen-frontend" {
     FEATURE_TESTING_SUPPORT = "${var.env == "prod" ? "false" : "true"}"
     // Enabled everywhere except prod
     FEATURE_STATEMENT_OF_MEANS = "${var.feature_statement_of_means}"
+    FEATURE_NEW_FEATURES_CONSENT = "${var.feature_new_features_consent}"
     FEATURE_FULL_ADMISSION = "${var.feature_full_admission}"
     FEATURE_ADMISSIONS = "${var.feature_admissions}"
     FEATURE_PARTIAL_ADMISSION = "${var.feature_partial_admission}"
