@@ -24,6 +24,20 @@ export abstract class AbstractPaymentOptionPage<Draft> {
     return 'components/payment-intention/payment-option'
   }
 
+  buildPostSubmissionUri (path: string, req: express.Request, res: express.Response): string {
+    const model: PaymentOption = req.body.model
+    const { externalId } = req.params
+
+    switch (model.option) {
+      case PaymentType.IMMEDIATELY:
+        return this.buildTaskListUri(req, res)
+      case PaymentType.BY_SET_DATE:
+        return new RoutablePath(path + PaymentIntentionPaths.paymentDatePage.uri).evaluateUri({ externalId: externalId })
+      case PaymentType.INSTALMENTS:
+        return new RoutablePath(path + PaymentIntentionPaths.paymentPlanPage.uri).evaluateUri({ externalId: externalId })
+    }
+  }
+
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
     return express.Router()
       .get(path + PaymentIntentionPaths.paymentOptionPage.uri,
@@ -50,15 +64,7 @@ export abstract class AbstractPaymentOptionPage<Draft> {
               const user: User = res.locals.user
               await new DraftService().save(res.locals.draft, user.bearerToken)
 
-              const { externalId } = req.params
-              switch (form.model.option) {
-                case PaymentType.IMMEDIATELY:
-                  return res.redirect(new RoutablePath(this.buildTaskListUri(req, res)).evaluateUri({ externalId: externalId }))
-                case PaymentType.BY_SET_DATE:
-                  return res.redirect(new RoutablePath(path + PaymentIntentionPaths.paymentDatePage.uri).evaluateUri({ externalId: externalId }))
-                case PaymentType.INSTALMENTS:
-                  return res.redirect(new RoutablePath(this.buildTaskListUri(req, res)).evaluateUri({ externalId: externalId }))
-              }
+              res.redirect(this.buildPostSubmissionUri(path, req, res))
             }
           }))
   }

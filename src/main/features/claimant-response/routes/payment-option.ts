@@ -23,7 +23,8 @@ class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantResponse>
   }
 
   buildTaskListUri (req: express.Request, res: express.Response): string {
-    return Paths.taskListPage.uri
+    const { externalId } = req.params
+    return Paths.taskListPage.evaluateUri({ externalId: externalId })
   }
 }
 

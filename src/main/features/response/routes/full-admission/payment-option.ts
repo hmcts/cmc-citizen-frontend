@@ -6,6 +6,10 @@ import { PaymentIntention } from 'shared/components/payment-intention/model'
 import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
+import {
+  DefendantPaymentOption as PaymentOption,
+  DefendantPaymentType as PaymentType
+} from 'response/form/models/defendantPaymentOption'
 
 import { fullAdmissionPath, Paths } from 'response/paths'
 
@@ -28,8 +32,19 @@ class PaymentOptionPage extends AbstractPaymentOptionPage<ResponseDraft> {
     return new ModelAccessor()
   }
 
+  buildPostSubmissionUri (path: string, req: express.Request, res: express.Response): string {
+    const model: PaymentOption = req.body.model
+
+    if (model.isOfType(PaymentType.INSTALMENTS)) {
+      return this.buildTaskListUri(req, res)
+    }
+
+    return super.buildPostSubmissionUri(path, req, res)
+  }
+
   buildTaskListUri (req: express.Request, res: express.Response): string {
-    return Paths.taskListPage.uri
+    const { externalId } = req.params
+    return Paths.taskListPage.evaluateUri({ externalId : externalId })
   }
 }
 

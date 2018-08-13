@@ -2,7 +2,6 @@ import * as express from 'express'
 
 import * as _ from 'lodash'
 
-import { Paths } from 'response/paths'
 import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intention/paths'
 
 import { GuardFactory } from 'response/guards/guardFactory'
@@ -10,8 +9,8 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { Form } from 'forms/form'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
-import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
-import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
+import { DefendantPaymentType as PaymentType } from 'response/form/models/defendantPaymentOption'
+import { DefendantPaymentPlan as PaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Claim } from 'claims/models/claim'
 import { createPaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
@@ -33,7 +32,7 @@ function mapFrequencyInWeeks (frequency: PaymentSchedule): number {
   }
 }
 
-function calculatePaymentPlanLength (model: DefendantPaymentPlan): string {
+function calculatePaymentPlanLength (model: PaymentPlan): string {
   if (!model) {
     return undefined
   }
@@ -61,7 +60,7 @@ export abstract class AbstractPaymentPlanPage<Draft> {
 
       return model
         && model.paymentOption
-        && model.paymentOption.isOfType(DefendantPaymentType.INSTALMENTS)
+        && model.paymentOption.isOfType(PaymentType.INSTALMENTS)
     }, (req: express.Request, res: express.Response): void => {
       throw new NotFoundError(req.path)
     })
@@ -76,10 +75,10 @@ export abstract class AbstractPaymentPlanPage<Draft> {
       .post(path + PaymentIntentionPaths.paymentPlanPage.uri,
         ...guards,
         stateGuardRequestHandler,
-        FormValidator.requestHandler(DefendantPaymentPlan, DefendantPaymentPlan.fromObject, undefined, ['calculatePaymentPlan']),
+        FormValidator.requestHandler(PaymentPlan, PaymentPlan.fromObject, undefined, ['calculatePaymentPlan']),
         ErrorHandling.apply(
           async (req: express.Request, res: express.Response): Promise<void> => {
-            const form: Form<DefendantPaymentPlan> = req.body
+            const form: Form<PaymentPlan> = req.body
             if (form.hasErrors() || _.get(req, 'body.action.calculatePaymentPlan')) {
               this.renderView(form, res)
             } else {
@@ -88,13 +87,12 @@ export abstract class AbstractPaymentPlanPage<Draft> {
               const user: User = res.locals.user
               await new DraftService().save(res.locals.draft, user.bearerToken)
 
-              const { externalId } = req.params
-              res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
+              res.redirect(this.buildTaskListUri(req, res))
             }
           }))
   }
 
-  renderView (form: Form<DefendantPaymentPlan>, res: express.Response): void {
+  renderView (form: Form<PaymentPlan>, res: express.Response): void {
     const claim: Claim = res.locals.claim
     // const draft: Draft<ResponseDraft> = this.createModelAccessor().get(res.locals.draft.document)
 
