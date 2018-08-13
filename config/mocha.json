@@ -28,6 +28,7 @@
   "featureToggles": {
     "testingSupport": true,
     "fullAdmission": true,
+    "newFeaturesConsent": true,
     "partialAdmission": true,
     "admissions": true,
     "statementOfMeans": true,

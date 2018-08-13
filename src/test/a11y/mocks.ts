@@ -35,6 +35,7 @@ claimStoreMock.resolveRetrieveClaimByExternalId({
 }).persist()
 
 claimStoreMock.mockCalculateInterestRate(0).persist()
+claimStoreMock.resolveRetrieveUserRoles('cmc-new-features-consent-given').persist()
 feesMock.resolveCalculateIssueFee().persist()
 feesMock.resolveCalculateHearingFee().persist()
 feesMock.resolveGetIssueFeeRangeGroup().persist()

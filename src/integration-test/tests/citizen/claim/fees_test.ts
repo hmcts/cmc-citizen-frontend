@@ -16,6 +16,7 @@ Scenario('I can see the Claim amount page calculates properly and shows the corr
   userSteps.login(email)
 
   claimSteps.completeEligibility()
+  claimSteps.optIntoNewFeatures()
   userSteps.selectClaimAmount()
   I.see('Claim amount')
   claimantClaimAmountPage.enterAmount(11, 20.50, 32.25)

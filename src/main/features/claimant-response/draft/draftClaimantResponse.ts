@@ -16,6 +16,10 @@ export class DraftClaimantResponse extends DraftDocument {
   alternatePaymentMethod?: PaymentIntention
   freeMediation?: FreeMediation
 
+  constructor () {
+    super()
+  }
+
   deserialize (input: any): DraftClaimantResponse {
     if (input) {
       console.log('input', input)

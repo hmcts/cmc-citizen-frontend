@@ -97,4 +97,18 @@ export class ClaimStoreClient {
       }
     })
   }
+
+  static addRoleToUser (bearerToken: string, role: string): Promise<void> {
+    if (!bearerToken) {
+      return Promise.reject(new Error('bearerToken is required'))
+    }
+
+    return request
+      .post(`${baseURL}/user/roles`, {
+        body: { role: role },
+        headers: {
+          Authorization: `Bearer ${bearerToken}`
+        }
+      })
+  }
 }
