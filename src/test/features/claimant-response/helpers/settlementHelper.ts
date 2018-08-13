@@ -29,7 +29,16 @@ describe('settlementHelper', () => {
       draft = new DraftClaimantResponse().deserialize({ ...sampleClaimantResponseDraftObj })
     })
 
-    it('should return defendant party statement', () => {
+    it('should return defendant party statement by installment option', () => {
+      const partyStatement: PartyStatement = prepareDefendantPartyStatement(claim)
+      expect(partyStatement).is.not.undefined
+      expect(partyStatement.madeBy).to.be.eql('DEFENDANT')
+      expect(partyStatement.type).to.be.eql('OFFER')
+    })
+
+    it('should return defendant party statement by set date option', () => {
+      claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj })
+
       const partyStatement: PartyStatement = prepareDefendantPartyStatement(claim)
       expect(partyStatement).is.not.undefined
       expect(partyStatement.madeBy).to.be.eql('DEFENDANT')
@@ -44,6 +53,16 @@ describe('settlementHelper', () => {
       expect(settlement.partyStatements[0].madeBy).to.be.eql('DEFENDANT')
       expect(settlement.partyStatements[1].type).to.be.eql('ACCEPTATION')
       expect(settlement.partyStatements[1].madeBy).to.be.eql('CLAIMANT')
+    })
+
+    it('should throw error when payment method is not accepted', () => {
+      draft = new DraftClaimantResponse().deserialize({ ...sampleClaimantResponseDraftObj, ...{ acceptPaymentMethod: undefined } })
+      expect(() => prepareSettlement(claim, draft)).to.throw(Error, 'PaymentMethod must be accepted and settlementAgreement should be signed by claimant')
+    })
+
+    it('should throw error when settlement is not signed', () => {
+      draft = new DraftClaimantResponse().deserialize({ ...sampleClaimantResponseDraftObj, ...{ settlementAgreement: undefined } })
+      expect(() => prepareSettlement(claim, draft)).to.throw(Error, 'PaymentMethod must be accepted and settlementAgreement should be signed by claimant')
     })
   })
 
