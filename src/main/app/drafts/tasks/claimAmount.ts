@@ -17,12 +17,12 @@ export class ClaimAmount {
     if (claim.interestType.option === InterestTypeOption.SAME_RATE) {
       if (claim.interestDate.type === InterestDateType.SUBMISSION) {
         return claim.amount.totalAmount() > 0 &&
-          claim.amount.totalAmount() < 10000 &&
+          claim.amount.totalAmount() <= 10000 &&
           claim.interestType.isCompleted() &&
           claim.interestRate.isCompleted()
       } else {
         return claim.amount.totalAmount() > 0 &&
-          claim.amount.totalAmount() < 10000 &&
+          claim.amount.totalAmount() <= 10000 &&
           claim.interestType.isCompleted() &&
           claim.interestRate.isCompleted() &&
           claim.interestStartDate.isCompleted() &&
@@ -31,12 +31,12 @@ export class ClaimAmount {
     } else {
       if (claim.interestContinueClaiming.option === YesNoOption.NO) {
         return claim.amount.totalAmount() > 0 &&
-          claim.amount.totalAmount() < 10000 &&
+          claim.amount.totalAmount() <= 10000 &&
           claim.interestTotal.isCompleted() &&
           claim.interestContinueClaiming.isCompleted()
       } else {
         return claim.amount.totalAmount() > 0 &&
-          claim.amount.totalAmount() < 10000 &&
+          claim.amount.totalAmount() <= 10000 &&
         claim.interestTotal.isCompleted() &&
         claim.interestContinueClaiming.isCompleted() &&
         claim.interestHowMuch.isCompleted()
