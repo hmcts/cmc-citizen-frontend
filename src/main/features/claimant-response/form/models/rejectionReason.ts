@@ -4,7 +4,7 @@ import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 
 export class ValidationErrors {
-  static readonly EXPLAIN_WHY_YOU_REJECT_REPAYMENT_PLAN = 'Enter an explanation of why you reject repayment plan'
+  static readonly EXPLAIN_WHY_YOU_REJECT_REPAYMENT_PLAN = 'Enter why you rejected repayment plan'
 }
 export class RejectionReason {
   @IsDefined({ message: ValidationErrors.EXPLAIN_WHY_YOU_REJECT_REPAYMENT_PLAN })

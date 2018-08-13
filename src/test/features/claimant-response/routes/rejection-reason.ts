@@ -113,7 +113,7 @@ describe('Claimant Response - Rejection Reason', () => {
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ text: '' })
-            .expect(res => expect(res).to.be.successful.withText('Enter an explanation of why you reject repayment plan'))
+            .expect(res => expect(res).to.be.successful.withText('Enter why you rejected repayment plan'))
         })
       })
     })
