@@ -5,6 +5,11 @@ import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/p
 import { PaymentIntention } from 'shared/components/payment-intention/model'
 
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
+import { Claim } from 'claims/models/claim'
+import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
+import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
 
 import { claimantResponsePath, Paths } from 'claimant-response/paths'
 
@@ -29,4 +34,17 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
 /* tslint:disable:no-default-export */
 export default new PaymentPlanPage()
-  .buildRouter(claimantResponsePath)
+  .buildRouter(claimantResponsePath, (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const claim: Claim = res.locals.claim
+    const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
+    res.locals.monthlyIncomeAmount = response.statementOfMeans.incomes ? CalculateMonthlyIncomeExpense.calculateTotalAmount(
+      response.statementOfMeans.incomes.map(income => IncomeExpenseSource.fromClaimIncome(income))
+    ) : 0
+    res.locals.monthlyExpensesAmount = response.statementOfMeans.expenses ? CalculateMonthlyIncomeExpense.calculateTotalAmount(
+      response.statementOfMeans.expenses.map(expense => IncomeExpenseSource.fromClaimExpense(expense))
+    ) : 0
+    res.locals.statementOfMeans = response.statementOfMeans
+
+    next()
+  })

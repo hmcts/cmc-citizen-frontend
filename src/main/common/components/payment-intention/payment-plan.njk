@@ -15,10 +15,10 @@
       {{ csrfProtection(csrf) }}
 
       <h2 class="heading-small">Your finances</h2>
-      <p>{{ t('Your total monthly income is {{ monthlyIncome }}',
-          { monthlyIncome: monthlyIncome | numeral }) }}</p>
-      <p>{{ t('Your total monthly expenses is {{ monthlyExpenses }}',
-          { monthlyExpenses: monthlyExpenses | numeral }) }}</p>
+      <p>{{ t('Your total monthly income is {{ monthlyIncomeAmount }}',
+          { monthlyIncomeAmount: monthlyIncomeAmount | numeral }) }}</p>
+      <p>{{ t('Your total monthly expenses is {{ monthlyExpensesAmount }}',
+          { monthlyExpensesAmount: monthlyExpensesAmount | numeral }) }}</p>
 
       <input type="hidden" name="totalAmount" value="{{ totalAmount }}"/>
 

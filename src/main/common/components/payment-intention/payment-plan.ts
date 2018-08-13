@@ -94,15 +94,12 @@ export abstract class AbstractPaymentPlanPage<Draft> {
 
   renderView (form: Form<PaymentPlan>, res: express.Response): void {
     const claim: Claim = res.locals.claim
-    // const draft: Draft<ResponseDraft> = this.createModelAccessor().get(res.locals.draft.document)
 
     res.render(this.getView(), {
       heading: this.getHeading(),
       form: form,
-      paymentLength: calculatePaymentPlanLength(form.model),
-      // monthlyIncome: _.get(draft, 'document.statementOfMeans.monthlyIncome', 0),
-      // monthlyExpenses: _.get(draft, 'document.statementOfMeans.monthlyExpenses', 0),
-      totalAmount: claim.totalAmountTillToday
+      totalAmount: claim.totalAmountTillToday,
+      paymentLength: calculatePaymentPlanLength(form.model)
     })
   }
 }
