@@ -40,13 +40,13 @@ export function prepareSettlement (claim: Claim, draft: DraftClaimantResponse): 
   throw new Error('PaymentMethod must be accepted and settlementAgreement should be signed by claimant')
 }
 
-function prepareDefendantPartyStatement (claim: Claim): PartyStatement {
+export function prepareDefendantPartyStatement (claim: Claim): PartyStatement {
   const paymentPlan: PaymentPlan = getPaymentPlan(claim)
   const offer: Offer = prepareDefendantOffer(claim, paymentPlan)
   return new PartyStatement(StatementType.OFFER.value, MadeBy.DEFENDANT.value, offer)
 }
 
-function prepareDefendantOffer (claim: Claim, paymentPlan: PaymentPlan): Offer {
+export function prepareDefendantOffer (claim: Claim, paymentPlan: PaymentPlan): Offer {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
   if (response.paymentIntention.paymentDate) {
     const completionDate: Moment = response.paymentIntention.paymentDate
@@ -63,6 +63,6 @@ function prepareDefendantOffer (claim: Claim, paymentPlan: PaymentPlan): Offer {
   throw new Error('Invalid paymentIntention')
 }
 
-function acceptOffer (): PartyStatement {
+export function acceptOffer (): PartyStatement {
   return new PartyStatement(StatementType.ACCEPTATION.value, MadeBy.CLAIMANT.value)
 }
