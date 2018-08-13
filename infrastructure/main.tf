@@ -119,6 +119,7 @@ module "citizen-frontend" {
     // Feature toggles
     FEATURE_TESTING_SUPPORT = "${var.env == "prod" ? "false" : "true"}"
     // Enabled everywhere except prod
+    FEATURE_NEW_FEATURES_CONSENT = "${var.feature_new_features_consent}"
     FEATURE_ADMISSIONS = "${var.feature_admissions}"
     FEATURE_FINE_PRINT = "${var.feature_fine_print}"
     FEATURE_RETURN_ERROR_TO_USER = "${var.feature_return_error_to_user}"

@@ -1,5 +1,6 @@
 feature_mock_pay = "true"
 feature_fine_print = "true"
+feature_new_features_consent = "true"
 feature_return_error_to_user = "true"
 external_host_name = "moneyclaim.sprod.platform.hmcts.net"
 

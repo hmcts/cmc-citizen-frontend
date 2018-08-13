@@ -45,6 +45,10 @@ variable "feature_admissions" {
   default = "false"
 }
 
+variable "feature_new_features_consent" {
+  default = "false"
+}
+
 variable "feature_fine_print" {
   default = "false"
 }

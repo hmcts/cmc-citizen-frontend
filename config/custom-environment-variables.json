@@ -78,6 +78,7 @@
   "featureToggles": {
     "clusterMode": "FEATURE_CLUSTER_MODE",
     "testingSupport": "FEATURE_TESTING_SUPPORT",
+    "newFeaturesConsent": "FEATURE_NEW_FEATURES_CONSENT",
     "admissions": "FEATURE_ADMISSIONS",
     "returnErrorToUser": "FEATURE_RETURN_ERROR_TO_USER",
     "mockPay": "FEATURE_MOCK_PAY"

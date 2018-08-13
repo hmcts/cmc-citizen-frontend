@@ -1,4 +1,5 @@
 feature_fine_print = "true"
+feature_new_features_consent = "true"
 feature_admissions = "true"
 external_host_name = "moneyclaim.nonprod.platform.hmcts.net"
 
