@@ -70,17 +70,8 @@ export abstract class AbstractPaymentOptionPage<Draft> {
   }
 
   private renderView (form: Form<PaymentOption>, res: express.Response) {
-    // function isApplicableFor (draft: ResponseDraft): boolean {
-    //   if (!FeatureToggles.isEnabled('statementOfMeans')) {
-    //     return false
-    //   }
-    //   return draft.isResponseFullyAdmitted()
-    //     && !draft.defendantDetails.partyDetails.isBusiness()
-    // }
-
     res.render(this.getView(), {
       form: form
-      // statementOfMeansIsApplicable: isApplicableFor(draft.document)
     })
   }
 }
