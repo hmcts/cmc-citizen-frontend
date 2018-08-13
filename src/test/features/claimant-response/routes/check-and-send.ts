@@ -13,7 +13,6 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
-
 import { app } from 'main/app'
 
 const cookieName: string = config.get<string>('session.cookieName')
@@ -21,6 +20,19 @@ const draftType = 'claimantResponse'
 const defendantPartialAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
 
 const pagePath = ClaimantResponsePaths.checkAndSendPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const settlementRequest = {
+  partyStatements: [{
+    type: 'OFFER',
+    madeBy: 'DEFENDANT',
+    offer: {
+      content: 'Daniel Murphy will pay the full amount, no later than 1 January 2019',
+      completionDate: '2019-01-01T00:00:00.000'
+    }
+  }, {
+    type: 'ACCEPTATION',
+    madeBy: 'CLAIMANT'
+  }]
+}
 
 describe('Claimant response: check and send page', () => {
   attachDefaultHooks(app)
@@ -75,6 +87,70 @@ describe('Claimant response: check and send page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Check your answers'))
         })
+      })
+    })
+  })
+
+  describe('on POST', () => {
+    const method = 'post'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath)
+
+    context('when user authorised', () => {
+      beforeEach(() => {
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
+      })
+
+      context('when claimant response not submitted', () => {
+
+        it('should return 500 and render error page when form is valid and cannot retrieve claim', async () => {
+          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({})
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+
+        it('should return 500 and render error page when cannot save settlement', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
+          draftStoreServiceMock.resolveFind(draftType)
+          claimStoreServiceMock.rejectSignSettlementAgreement('HTTP error')
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({})
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+
+        it('should return 500 and render error page when form is valid and cannot delete draft response', async () => {
+          draftStoreServiceMock.resolveFind(draftType)
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
+          claimStoreServiceMock.resolveSignSettlementAgreement()
+          draftStoreServiceMock.rejectDelete()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(settlementRequest)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+      })
+
+      it('should redirect to confirmation page when user signed settlement agreement', async () => {
+        draftStoreServiceMock.resolveFind(draftType)
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
+        claimStoreServiceMock.resolveSignSettlementAgreement()
+        draftStoreServiceMock.resolveDelete()
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send(settlementRequest)
+          .expect(res => expect(res).to.be.redirect
+            .toLocation(ClaimantResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
       })
     })
   })
