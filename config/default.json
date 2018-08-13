@@ -86,6 +86,7 @@
     "clusterMode": false,
     "testingSupport": false,
     "fullAdmission": false,
+    "newFeaturesConsent": false,
     "partialAdmission": false,
     "admissions": false,
     "statementOfMeans": false,

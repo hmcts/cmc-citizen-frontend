@@ -512,7 +512,7 @@ describe('Claim issue: post payment callback receiver', () => {
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
-            claimStoreServiceMock.rejectRetriveUserRoles()
+            claimStoreServiceMock.rejectRetrieveUserRoles()
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
