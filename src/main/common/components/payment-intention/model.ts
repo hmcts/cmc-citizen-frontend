@@ -4,7 +4,7 @@ import {
   DefendantPaymentType as PaymentType
 } from 'response/form/models/defendantPaymentOption'
 import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
-import { DefendantPaymentPlan as PaymentPlan } from 'response/form/models/defendantPaymentPlan'
+import { PaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
 
 export class PaymentIntention {
   @IsDefined()

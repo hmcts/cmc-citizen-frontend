@@ -13,7 +13,7 @@ export class ValidationErrors {
   static readonly SELECT_PAYMENT_SCHEDULE: string = 'Select how often you wish to pay'
 }
 
-export class DefendantPaymentPlan {
+export class PaymentPlan {
 
   totalAmount?: number
 
@@ -42,19 +42,19 @@ export class DefendantPaymentPlan {
     this.paymentSchedule = paymentSchedule
   }
 
-  static fromObject (value?: any): DefendantPaymentPlan {
+  static fromObject (value?: any): PaymentPlan {
     if (!value) {
       return undefined
     }
 
-    return new DefendantPaymentPlan(
+    return new PaymentPlan(
       toNumberOrUndefined(value.totalAmount),
       toNumberOrUndefined(value.instalmentAmount),
       LocalDate.fromObject(value.firstPaymentDate),
       value.paymentSchedule ? PaymentSchedule.of(value.paymentSchedule) : undefined)
   }
 
-  deserialize (input?: any): DefendantPaymentPlan {
+  deserialize (input?: any): PaymentPlan {
     if (input) {
       this.totalAmount = input.totalAmount
       this.instalmentAmount = input.instalmentAmount
