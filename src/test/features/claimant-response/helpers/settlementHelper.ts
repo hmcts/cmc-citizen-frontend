@@ -55,14 +55,14 @@ describe('settlementHelper', () => {
       expect(settlement.partyStatements[1].madeBy).to.be.eql('CLAIMANT')
     })
 
-    it('should throw error when payment method is not accepted', () => {
-      draft = new DraftClaimantResponse().deserialize({ ...sampleClaimantResponseDraftObj, ...{ acceptPaymentMethod: undefined } })
-      expect(() => prepareSettlement(claim, draft)).to.throw(Error, 'PaymentMethod must be accepted and settlementAgreement should be signed by claimant')
+    it('should throw error when settlement agreement is undefined', () => {
+      draft = new DraftClaimantResponse().deserialize({ ...sampleClaimantResponseDraftObj, ...{ settlementAgreement: undefined } })
+      expect(() => prepareSettlement(claim, draft)).to.throw(Error, 'SettlementAgreement should be signed by claimant')
     })
 
     it('should throw error when settlement is not signed', () => {
-      draft = new DraftClaimantResponse().deserialize({ ...sampleClaimantResponseDraftObj, ...{ settlementAgreement: undefined } })
-      expect(() => prepareSettlement(claim, draft)).to.throw(Error, 'PaymentMethod must be accepted and settlementAgreement should be signed by claimant')
+      draft = new DraftClaimantResponse().deserialize({ ...sampleClaimantResponseDraftObj, ...{ settlementAgreement: { signed: false } } })
+      expect(() => prepareSettlement(claim, draft)).to.throw(Error, 'SettlementAgreement should be signed by claimant')
     })
   })
 

@@ -1,7 +1,6 @@
 import { Settlement } from 'claims/models/settlement'
 import { PartyStatement } from 'claims/models/partyStatement'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
-import { YesNoOption } from 'models/yesNoOption'
 import { PaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
 import { Offer } from 'claims/models/offer'
 import { Moment } from 'moment'
@@ -31,13 +30,11 @@ export function getRepaymentPlanOrigin (settlement: Settlement): string {
 
 export function prepareSettlement (claim: Claim, draft: DraftClaimantResponse): Settlement {
 
-  if (draft.settlementAgreement && draft.settlementAgreement.signed &&
-    draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept === YesNoOption.YES
-  ) {
+  if (draft.settlementAgreement && draft.settlementAgreement.signed) {
     const partyStatements: PartyStatement[] = [prepareDefendantPartyStatement(claim), acceptOffer()]
     return new Settlement(partyStatements)
   }
-  throw new Error('PaymentMethod must be accepted and settlementAgreement should be signed by claimant')
+  throw new Error('SettlementAgreement should be signed by claimant')
 }
 
 export function prepareDefendantPartyStatement (claim: Claim): PartyStatement {
