@@ -24,9 +24,6 @@ class ModelAccessor extends AbstractModelAccessor<ResponseDraft, PaymentIntentio
 }
 
 class PaymentOptionPage extends AbstractPaymentOptionPage<ResponseDraft> {
-  getHeading (): string {
-    return ''
-  }
 
   createModelAccessor (): AbstractModelAccessor<ResponseDraft, PaymentIntention> {
     return new ModelAccessor()

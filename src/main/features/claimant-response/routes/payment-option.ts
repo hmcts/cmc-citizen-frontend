@@ -14,10 +14,6 @@ class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantResponse>
     return 'claimant-response/views/payment-option'
   }
 
-  getHeading (): string {
-    return ''
-  }
-
   createModelAccessor (): AbstractModelAccessor<DraftClaimantResponse, PaymentIntention> {
     return new DefaultModelAccessor('alternatePaymentMethod', () => new PaymentIntention())
   }

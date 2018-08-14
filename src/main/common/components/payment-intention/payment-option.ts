@@ -17,7 +17,6 @@ import { FormValidator } from 'main/app/forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
 
 export abstract class AbstractPaymentOptionPage<Draft> {
-  abstract getHeading (): string
   abstract createModelAccessor (): AbstractModelAccessor<Draft, PaymentIntention>
   abstract buildTaskListUri (req: express.Request, res: express.Response): string
 
