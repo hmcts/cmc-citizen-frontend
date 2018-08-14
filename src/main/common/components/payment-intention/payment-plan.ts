@@ -1,23 +1,24 @@
 import * as express from 'express'
-
 import * as _ from 'lodash'
 
-import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intention/paths'
+import { AbstractModelAccessor } from 'shared/components/model-accessor'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import { PaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
+import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
+import { Paths } from 'shared/components/payment-intention/paths'
 
 import { GuardFactory } from 'response/guards/guardFactory'
 import { ErrorHandling } from 'shared/errorHandling'
-import { Form } from 'forms/form'
-import { DraftService } from 'services/draftService'
-import { User } from 'idam/user'
-import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
-import { PaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
-import { FormValidator } from 'forms/validation/formValidator'
-import { Claim } from 'claims/models/claim'
-import { createPaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
-import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
-import { AbstractModelAccessor } from 'shared/components/model-accessor'
-import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { NotFoundError } from 'errors'
+
+import { User } from 'idam/user'
+import { Claim } from 'claims/models/claim'
+import { Form } from 'forms/form'
+import { FormValidator } from 'forms/validation/formValidator'
+import { DraftService } from 'services/draftService'
+
+import { createPaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
 
 function mapFrequencyInWeeks (frequency: PaymentSchedule): number {
   switch (frequency) {
@@ -66,13 +67,13 @@ export abstract class AbstractPaymentPlanPage<Draft> {
     })
 
     return express.Router()
-      .get(path + PaymentIntentionPaths.paymentPlanPage.uri,
+      .get(path + Paths.paymentPlanPage.uri,
         ...guards,
         stateGuardRequestHandler,
         ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
           this.renderView(new Form(this.createModelAccessor().get(res.locals.draft.document).paymentPlan), res)
         }))
-      .post(path + PaymentIntentionPaths.paymentPlanPage.uri,
+      .post(path + Paths.paymentPlanPage.uri,
         ...guards,
         stateGuardRequestHandler,
         FormValidator.requestHandler(PaymentPlan, PaymentPlan.fromObject, undefined, ['calculatePaymentPlan']),

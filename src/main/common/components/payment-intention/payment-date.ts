@@ -3,19 +3,18 @@ import { Moment } from 'moment'
 
 import { AbstractModelAccessor } from 'shared/components/model-accessor'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
-import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intention/paths'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
+import { Paths } from 'shared/components/payment-intention/paths'
 
-import { NotFoundError } from 'errors'
+import { GuardFactory } from 'response/guards/guardFactory'
 import { ErrorHandling } from 'shared/errorHandling'
+import { NotFoundError } from 'errors'
 import { MomentFactory } from 'shared/momentFactory'
 
+import { User } from 'idam/user'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
-import { User } from 'idam/user'
-
-import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
-import { GuardFactory } from 'response/guards/guardFactory'
 import { DraftService } from 'services/draftService'
 
 export abstract class AbstractPaymentDatePage<Draft> {
@@ -24,30 +23,35 @@ export abstract class AbstractPaymentDatePage<Draft> {
   abstract createModelAccessor (): AbstractModelAccessor<Draft, PaymentIntention>
   abstract buildTaskListUri (req: express.Request, res: express.Response): string
 
+  getView (): string {
+    return 'components/payment-intention/payment-date'
+  }
+
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
     const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
       const model: PaymentIntention = this.createModelAccessor().get(res.locals.draft.document)
 
       return model && model.paymentOption && model.paymentOption.isOfType(PaymentType.BY_SET_DATE)
-    }, (req: express.Request, res: express.Response): void => {
+    }, (req: express.Request): void => {
       throw new NotFoundError(req.path)
     })
 
     return express.Router()
       .get(
-        path + PaymentIntentionPaths.paymentDatePage.uri,
+        path + Paths.paymentDatePage.uri,
         ...guards,
         stateGuardRequestHandler,
         (req: express.Request, res: express.Response) => {
           this.renderView(new Form(this.createModelAccessor().get(res.locals.draft.document).paymentDate), res)
         })
       .post(
-        path + PaymentIntentionPaths.paymentDatePage.uri,
+        path + Paths.paymentDatePage.uri,
         ...guards,
         stateGuardRequestHandler,
         FormValidator.requestHandler(PaymentDate, PaymentDate.fromObject),
         ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
           const form: Form<PaymentDate> = req.body
+
           if (form.hasErrors()) {
             this.renderView(form, res)
           } else {
@@ -64,7 +68,7 @@ export abstract class AbstractPaymentDatePage<Draft> {
   private renderView (form: Form<PaymentDate>, res: express.Response) {
     const futureDate: Moment = MomentFactory.currentDate().add(1, 'month')
 
-    res.render('components/payment-intention/payment-date', {
+    res.render(this.getView(), {
       heading: this.getHeading(),
       form: form,
       futureDate: futureDate

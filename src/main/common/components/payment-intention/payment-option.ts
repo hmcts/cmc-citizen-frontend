@@ -1,19 +1,20 @@
 import * as express from 'express'
-import { Form } from 'main/app/forms/form'
-import { FormValidator } from 'main/app/forms/validation/formValidator'
-import { User } from 'main/app/idam/user'
 
-import { ErrorHandling } from 'main/common/errorHandling'
+import { AbstractModelAccessor } from 'shared/components/model-accessor'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import {
   PaymentType,
   PaymentOption
 } from 'shared/components/payment-intention/model/paymentOption'
-import { DraftService } from 'services/draftService'
-import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intention/paths'
+import { Paths } from 'shared/components/payment-intention/paths'
+
+import { ErrorHandling } from 'main/common/errorHandling'
 import { RoutablePath } from 'shared/router/routablePath'
 
-import { AbstractModelAccessor } from 'shared/components/model-accessor'
-import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
+import { User } from 'main/app/idam/user'
+import { Form } from 'main/app/forms/form'
+import { FormValidator } from 'main/app/forms/validation/formValidator'
+import { DraftService } from 'services/draftService'
 
 export abstract class AbstractPaymentOptionPage<Draft> {
   abstract getHeading (): string
@@ -32,20 +33,20 @@ export abstract class AbstractPaymentOptionPage<Draft> {
       case PaymentType.IMMEDIATELY:
         return this.buildTaskListUri(req, res)
       case PaymentType.BY_SET_DATE:
-        return new RoutablePath(path + PaymentIntentionPaths.paymentDatePage.uri).evaluateUri({ externalId: externalId })
+        return new RoutablePath(path + Paths.paymentDatePage.uri).evaluateUri({ externalId: externalId })
       case PaymentType.INSTALMENTS:
-        return new RoutablePath(path + PaymentIntentionPaths.paymentPlanPage.uri).evaluateUri({ externalId: externalId })
+        return new RoutablePath(path + Paths.paymentPlanPage.uri).evaluateUri({ externalId: externalId })
     }
   }
 
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
     return express.Router()
-      .get(path + PaymentIntentionPaths.paymentOptionPage.uri,
+      .get(path + Paths.paymentOptionPage.uri,
         ...guards,
         (req: express.Request, res: express.Response) => {
           this.renderView(new Form(this.createModelAccessor().get(res.locals.draft.document).paymentOption), res)
         })
-      .post(path + PaymentIntentionPaths.paymentOptionPage.uri,
+      .post(path + Paths.paymentOptionPage.uri,
         ...guards,
         FormValidator.requestHandler(PaymentOption, PaymentOption.fromObject),
         ErrorHandling.apply(
