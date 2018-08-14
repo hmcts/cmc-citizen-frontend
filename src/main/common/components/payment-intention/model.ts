@@ -1,8 +1,8 @@
 import { IsDefined, ValidateIf, ValidateNested } from 'class-validator'
 import {
-  DefendantPaymentOption as PaymentOption,
-  DefendantPaymentType as PaymentType
-} from 'response/form/models/defendantPaymentOption'
+  PaymentOption,
+  PaymentType
+} from 'shared/components/payment-intention/model/paymentOption'
 import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { PaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
 

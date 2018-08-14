@@ -14,7 +14,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { User } from 'idam/user'
 
-import { DefendantPaymentType as PaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { GuardFactory } from 'response/guards/guardFactory'
 import { DraftService } from 'services/draftService'
 

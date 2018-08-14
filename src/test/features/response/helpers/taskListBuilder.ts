@@ -16,7 +16,7 @@ import {
 } from 'test/data/draft/responseDraft'
 import { MomentFactory } from 'shared/momentFactory'
 import { PartyType } from 'common/partyType'
-import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentOption, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { ResponseType } from 'response/form/models/responseType'
 import { StatementOfMeansTask } from 'response/tasks/statementOfMeansTask'
 import { PartyDetails } from 'forms/models/partyDetails'
@@ -291,7 +291,7 @@ describe('Defendant response task list builder', () => {
         draft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
         draft.fullAdmission = new FullAdmission()
         draft.fullAdmission.paymentIntention = new PaymentIntention()
-        draft.fullAdmission.paymentIntention.paymentOption = new DefendantPaymentOption(DefendantPaymentType.BY_SET_DATE)
+        draft.fullAdmission.paymentIntention.paymentOption = new PaymentOption(PaymentType.BY_SET_DATE)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('Share your financial details')

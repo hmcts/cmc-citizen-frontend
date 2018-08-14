@@ -7,7 +7,7 @@ import { OnTaxPayments } from 'response/form/models/statement-of-means/onTaxPaym
 import { StatementOfMeansTask } from 'response/tasks/statementOfMeansTask'
 import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
-import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentOption, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { PaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
 import { MomentFactory } from 'shared/momentFactory'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
@@ -44,17 +44,17 @@ import { ExpenseSource } from 'response/form/models/statement-of-means/expenseSo
 import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
 import { PaymentIntention } from 'shared/components/payment-intention/model'
 
-function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDraft {
+function validResponseDraftWith (paymentType: PaymentType): ResponseDraft {
   const responseDraft: ResponseDraft = new ResponseDraft()
   responseDraft.response = new Response(ResponseType.FULL_ADMISSION)
   responseDraft.fullAdmission = new FullAdmission()
   responseDraft.fullAdmission.paymentIntention = new PaymentIntention()
-  responseDraft.fullAdmission.paymentIntention.paymentOption = new DefendantPaymentOption(paymentType)
+  responseDraft.fullAdmission.paymentIntention.paymentOption = new PaymentOption(paymentType)
   switch (paymentType) {
-    case DefendantPaymentType.BY_SET_DATE:
+    case PaymentType.BY_SET_DATE:
       responseDraft.fullAdmission.paymentIntention.paymentDate = new PaymentDate(localDateFrom(MomentFactory.currentDate()))
       break
-    case DefendantPaymentType.INSTALMENTS:
+    case PaymentType.INSTALMENTS:
       responseDraft.fullAdmission.paymentIntention.paymentPlan = new PaymentPlan(
         1000,
         100,
@@ -113,7 +113,7 @@ describe('StatementOfMeansTask', () => {
     let responseDraft: ResponseDraft
 
     beforeEach(() => {
-      responseDraft = validResponseDraftWith(DefendantPaymentType.BY_SET_DATE)
+      responseDraft = validResponseDraftWith(PaymentType.BY_SET_DATE)
     })
 
     context('when it applies', () => {

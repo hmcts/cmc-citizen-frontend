@@ -5,9 +5,9 @@ import { User } from 'main/app/idam/user'
 
 import { ErrorHandling } from 'main/common/errorHandling'
 import {
-  DefendantPaymentType as PaymentType,
-  DefendantPaymentOption as PaymentOption
-} from 'response/form/models/defendantPaymentOption'
+  PaymentType,
+  PaymentOption
+} from 'shared/components/payment-intention/model/paymentOption'
 import { DraftService } from 'services/draftService'
 import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intention/paths'
 import { RoutablePath } from 'shared/router/routablePath'

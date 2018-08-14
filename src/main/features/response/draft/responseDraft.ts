@@ -10,9 +10,7 @@ import { Defendant } from 'drafts/models/defendant'
 import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
 import { HowMuchOwed } from 'response/form/models/howMuchOwed'
-import {
-  DefendantPaymentType
-} from 'response/form/models/defendantPaymentOption'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
@@ -127,7 +125,7 @@ export class ResponseDraft extends DraftDocument {
           && data.paymentIntention !== undefined
           && data.paymentIntention.paymentOption !== undefined
       }
-      return isPaymentOptionPopulated() && data.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY)
+      return isPaymentOptionPopulated() && data.paymentIntention.paymentOption.isOfType(PaymentType.IMMEDIATELY)
     }
 
     if (isImmediatePaymentOptionSelected(this.fullAdmission) || isImmediatePaymentOptionSelected(this.partialAdmission)) {
@@ -156,7 +154,7 @@ export class ResponseDraft extends DraftDocument {
       && this.fullAdmission !== undefined
       && this.fullAdmission.paymentIntention
       && this.fullAdmission.paymentIntention.paymentOption !== undefined
-      && this.fullAdmission.paymentIntention.paymentOption.option === DefendantPaymentType.INSTALMENTS
+      && this.fullAdmission.paymentIntention.paymentOption.option === PaymentType.INSTALMENTS
   }
 
   public isResponsePartiallyAdmittedWithInstalments (): boolean {
@@ -164,7 +162,7 @@ export class ResponseDraft extends DraftDocument {
       && this.partialAdmission !== undefined
       && this.partialAdmission.paymentIntention !== undefined
       && this.partialAdmission.paymentIntention.paymentOption !== undefined
-      && this.partialAdmission.paymentIntention.paymentOption.option === DefendantPaymentType.INSTALMENTS
+      && this.partialAdmission.paymentIntention.paymentOption.option === PaymentType.INSTALMENTS
   }
 
   public isResponsePartiallyAdmitted (): boolean {
@@ -218,13 +216,13 @@ export class ResponseDraft extends DraftDocument {
     return this.fullAdmission !== undefined
       && this.fullAdmission.paymentIntention !== undefined
       && this.fullAdmission.paymentIntention.paymentOption !== undefined
-      && this.fullAdmission.paymentIntention.paymentOption.option === DefendantPaymentType.BY_SET_DATE
+      && this.fullAdmission.paymentIntention.paymentOption.option === PaymentType.BY_SET_DATE
   }
 
   public isResponsePartiallyAdmittedWithPayBySetDate (): boolean {
     return this.partialAdmission !== undefined
       && this.partialAdmission.paymentIntention !== undefined
       && this.partialAdmission.paymentIntention.paymentOption !== undefined
-      && this.partialAdmission.paymentIntention.paymentOption.option === DefendantPaymentType.BY_SET_DATE
+      && this.partialAdmission.paymentIntention.paymentOption.option === PaymentType.BY_SET_DATE
   }
 }

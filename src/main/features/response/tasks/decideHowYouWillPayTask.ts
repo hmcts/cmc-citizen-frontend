@@ -1,7 +1,7 @@
 import { Validator } from 'class-validator'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 
 const validator = new Validator()
 
@@ -18,10 +18,10 @@ export class DecideHowYouWillPayTask {
 
   private static paymentDetailsAreProvidedFor (responseDraft: ResponseDraft): boolean {
     switch (responseDraft.fullAdmission.paymentIntention.paymentOption.option) {
-      case DefendantPaymentType.IMMEDIATELY:
-      case DefendantPaymentType.INSTALMENTS:
+      case PaymentType.IMMEDIATELY:
+      case PaymentType.INSTALMENTS:
         return true
-      case DefendantPaymentType.BY_SET_DATE:
+      case PaymentType.BY_SET_DATE:
         return isValid(responseDraft.fullAdmission.paymentIntention.paymentDate)
       default:
         throw new Error(`Unknown payment option: ${responseDraft.fullAdmission.paymentIntention.paymentOption.option}`)

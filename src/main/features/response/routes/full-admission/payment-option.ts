@@ -7,9 +7,9 @@ import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
 import {
-  DefendantPaymentOption as PaymentOption,
-  DefendantPaymentType as PaymentType
-} from 'response/form/models/defendantPaymentOption'
+  PaymentOption,
+  PaymentType
+} from 'shared/components/payment-intention/model/paymentOption'
 
 import { fullAdmissionPath, Paths } from 'response/paths'
 

@@ -1,7 +1,7 @@
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { PaymentOption } from 'claims/models/response/core/paymentOption'
-import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentOption as PaymentOptionDraft, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { BankAccountType } from 'claims/models/response/statement-of-means/bankAccount'
 import { AgeGroupType, Child } from 'claims/models/response/statement-of-means/dependant'
@@ -269,11 +269,11 @@ export class ResponseModelConverter {
     } as PaymentIntention
   }
 
-  private static convertPaymentDate (paymentOption: DefendantPaymentOption, paymentDate: PaymentDate): Moment {
+  private static convertPaymentDate (paymentOption: PaymentOptionDraft, paymentDate: PaymentDate): Moment {
     switch (paymentOption.option) {
-      case DefendantPaymentType.IMMEDIATELY:
+      case PaymentType.IMMEDIATELY:
         return MomentFactory.currentDate().add(5, 'days')
-      case DefendantPaymentType.BY_SET_DATE:
+      case PaymentType.BY_SET_DATE:
         return paymentDate.date.toMoment()
       default:
         return undefined

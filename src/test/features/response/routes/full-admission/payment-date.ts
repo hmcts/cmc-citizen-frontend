@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import * as request from 'supertest'
 import * as config from 'config'
 import * as _ from 'lodash'
@@ -25,7 +25,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 const draft = _.cloneDeep(draftStoreServiceMock.sampleFullAdmissionResponseDraftObj)
-draft.fullAdmission.paymentIntention.paymentOption.option = DefendantPaymentType.BY_SET_DATE
+draft.fullAdmission.paymentIntention.paymentOption.option = PaymentType.BY_SET_DATE
 
 function nextDay () {
   const nextDay: moment.Moment = moment().add(1, 'days')

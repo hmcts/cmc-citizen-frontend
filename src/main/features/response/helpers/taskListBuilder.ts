@@ -20,7 +20,7 @@ import { HowMuchHaveYouPaidTask } from 'response/tasks/howMuchHaveYouPaidTask'
 import { WhyDoYouDisagreeTask } from 'response/tasks/whyDoYouDisagreeTask'
 import { HowMuchDoYouOweTask } from 'response/tasks/howMuchDoYouOweTask'
 import { WhenWillYouPayTask } from 'response/tasks/whenWillYouPayTask'
-import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { NumberFormatter } from 'utils/numberFormatter'
 
 export class TaskListBuilder {
@@ -166,7 +166,7 @@ export class TaskListBuilder {
       }
 
       if (howMuchDoYouOweTask && WhenWillYouPayTask.isCompleted(draft)
-        && draft.partialAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.INSTALMENTS)) {
+        && draft.partialAdmission.paymentIntention.paymentOption.isOfType(PaymentType.INSTALMENTS)) {
         tasks.push(
           new TaskListItem(
             'Your repayment plan',

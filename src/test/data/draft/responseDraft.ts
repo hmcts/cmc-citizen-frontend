@@ -1,5 +1,5 @@
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
-import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { ResponseType } from 'response/form/models/responseType'
@@ -99,7 +99,7 @@ export const fullAdmissionWithImmediatePaymentDraft = {
   fullAdmission: {
     paymentIntention: {
       paymentOption: {
-        option: DefendantPaymentType.IMMEDIATELY
+        option: PaymentType.IMMEDIATELY
       }
     }
   }
@@ -167,7 +167,7 @@ export const partialAdmissionWithImmediatePaymentDraft = {
     ...basePartialFuturePaymentDetails,
     paymentIntention: {
       paymentOption: {
-        option: DefendantPaymentType.IMMEDIATELY
+        option: PaymentType.IMMEDIATELY
       }
     },
     ...partialTimelineAndEvidences
@@ -189,7 +189,7 @@ export const fullAdmissionWithPaymentBySetDateDraft = {
   fullAdmission: {
     paymentIntention: {
       paymentOption: {
-        option: DefendantPaymentType.BY_SET_DATE
+        option: PaymentType.BY_SET_DATE
       },
       paymentDate: {
         date: {
@@ -209,7 +209,7 @@ export const partialAdmissionWithPaymentBySetDateDraft = {
     ...basePartialFuturePaymentDetails,
     paymentIntention: {
       paymentOption: {
-        option: DefendantPaymentType.BY_SET_DATE
+        option: PaymentType.BY_SET_DATE
       },
       paymentDate: {
         date: {
@@ -229,7 +229,7 @@ export const fullAdmissionWithPaymentByInstalmentsDraft = {
   fullAdmission: {
     paymentIntention: {
       paymentOption: {
-        option: DefendantPaymentType.INSTALMENTS
+        option: PaymentType.INSTALMENTS
       },
       paymentPlan: {
         instalmentAmount: 100,
@@ -253,7 +253,7 @@ export const partialAdmissionWithPaymentByInstalmentsDraft = {
     ...basePartialFuturePaymentDetails,
     paymentIntention: {
       paymentOption: {
-        option: DefendantPaymentType.INSTALMENTS
+        option: PaymentType.INSTALMENTS
       },
       paymentPlan: {
         instalmentAmount: 100,

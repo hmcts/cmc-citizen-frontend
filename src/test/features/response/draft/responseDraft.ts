@@ -4,7 +4,7 @@ import { expect } from 'chai'
 import { LocalDate } from 'forms/models/localDate'
 
 import { FullAdmission, PartialAdmission, ResponseDraft } from 'response/draft/responseDraft'
-import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentOption, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 
 import { Response } from 'response/form/models/response'
 import { ResponseType } from 'response/form/models/responseType'
@@ -203,12 +203,12 @@ describe('ResponseDraft', () => {
     })
 
     it('should return false when response is full admission but payment option is not instalments', () => {
-      DefendantPaymentType.except(DefendantPaymentType.INSTALMENTS).forEach(paymentType => {
+      PaymentType.except(PaymentType.INSTALMENTS).forEach(paymentType => {
         const draft: ResponseDraft = new ResponseDraft()
         draft.response = new Response(ResponseType.FULL_ADMISSION)
         draft.fullAdmission = new FullAdmission()
         draft.fullAdmission.paymentIntention = new PaymentIntention()
-        draft.fullAdmission.paymentIntention.paymentOption = new DefendantPaymentOption(paymentType)
+        draft.fullAdmission.paymentIntention.paymentOption = new PaymentOption(paymentType)
 
         expect(draft.isResponseFullyAdmittedWithInstalments()).to.be.eq(false)
       })
@@ -219,7 +219,7 @@ describe('ResponseDraft', () => {
       draft.response = new Response(ResponseType.FULL_ADMISSION)
       draft.fullAdmission = new FullAdmission()
       draft.fullAdmission.paymentIntention = new PaymentIntention()
-      draft.fullAdmission.paymentIntention.paymentOption = new DefendantPaymentOption(DefendantPaymentType.INSTALMENTS)
+      draft.fullAdmission.paymentIntention.paymentOption = new PaymentOption(PaymentType.INSTALMENTS)
 
       expect(draft.isResponseFullyAdmitted()).to.be.eq(true)
     })
