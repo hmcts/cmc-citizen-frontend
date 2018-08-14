@@ -4,6 +4,7 @@ import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPayment
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 import { SettlementAgreement } from 'claimant-response/form/models/settlementAgreement'
 import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
+import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
 
 export class DraftClaimantResponse extends DraftDocument {
   defendantResponseViewed: boolean
@@ -13,6 +14,7 @@ export class DraftClaimantResponse extends DraftDocument {
   formaliseRepaymentPlan?: FormaliseRepaymentPlan
   settlementAgreement?: SettlementAgreement
   rejectionReason?: RejectionReason
+  acceptCourtOffer?: AcceptCourtOffer
 
   constructor () {
     super()
@@ -38,6 +40,9 @@ export class DraftClaimantResponse extends DraftDocument {
       }
       if (input.rejectionReason) {
         this.rejectionReason = new RejectionReason().deserialize(input.rejectionReason)
+      }
+      if (input.acceptCourtOffer) {
+        this.acceptCourtOffer = new AcceptCourtOffer().deserialize(input.acceptCourtOffer)
       }
     }
     return this
