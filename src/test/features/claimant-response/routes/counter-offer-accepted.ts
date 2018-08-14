@@ -17,7 +17,7 @@ import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/chec
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const pagePath = ClaimantResponsePaths.counterOfferApprovedPage.evaluateUri({ externalId: externalId })
+const pagePath = ClaimantResponsePaths.counterOfferAcceptedPage.evaluateUri({ externalId: externalId })
 const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
 const defendantPartialAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
 

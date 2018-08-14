@@ -13,5 +13,5 @@ export class Paths {
   static readonly chooseHowToProceedPage = new RoutablePath(`${claimantResponsePath}/choose-how-to-proceed`)
   static readonly signSettlementAgreementPage = new RoutablePath(`${claimantResponsePath}/sign-settlement-agreement`)
   static readonly rejectionReasonPage = new RoutablePath(`${claimantResponsePath}/rejection-reason`)
-  static readonly counterOfferApprovedPage = new RoutablePath(`${claimantResponsePath}/counter-offer-approved`)
+  static readonly counterOfferAcceptedPage = new RoutablePath(`${claimantResponsePath}/counter-offer-accepted`)
 }
