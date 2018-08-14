@@ -2,8 +2,13 @@ import * as express from 'express'
 
 import { AbstractPaidAmountSummaryPage } from 'shared/components/ccj/routes/paid-amount-summary'
 import { claimantResponsePath, Paths } from 'features/claimant-response/paths'
+import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 
-class PaidAmountSummary extends AbstractPaidAmountSummaryPage {
+class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftClaimantResponse> {
+
+  retrieveDraft = function (res: express.Response) {
+    return res.locals.claimantResponseDraft
+  }
   buildRedirectUri (req: express.Request, res: express.Response): string {
     const { externalId } = req.params
     return Paths.taskListPage.evaluateUri({ externalId: externalId })
@@ -11,5 +16,5 @@ class PaidAmountSummary extends AbstractPaidAmountSummaryPage {
 }
 
 /* tslint:disable:no-default-export */
-export default new PaidAmountSummary()
+export default new PaidAmountSummaryPage()
   .buildRouter(claimantResponsePath)

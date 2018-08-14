@@ -16,11 +16,10 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const draft: Draft<DraftCCJ> = res.locals.ccjDraft
       const { externalId } = req.params
-
       res.render(
         Paths.paidAmountSummaryPage.associatedView, {
           claim: claim,
-          alreadyPaid: draft.document.paidAmount.amount || 0,
+          alreadyPaid: draft.document.paidAmount.amount,
           interestDetails: await getInterestDetails(claim),
           nextPageUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId }),
           defaultJudgmentDate: MomentFactory.currentDate()

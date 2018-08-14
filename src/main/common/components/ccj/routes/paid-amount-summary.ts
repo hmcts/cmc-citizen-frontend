@@ -10,8 +10,9 @@ import { getInterestDetails } from 'shared/interestUtils'
 import { MomentFactory } from 'shared/momentFactory'
 
 /* tslint:disable:no-default-export */
-export abstract class AbstractPaidAmountSummaryPage {
+export abstract class AbstractPaidAmountSummaryPage<D> {
 
+  abstract retrieveDraft: (res: express.Response) => Draft<D>
   abstract buildRedirectUri (req: express.Request, res: express.Response): string
 
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
@@ -20,14 +21,13 @@ export abstract class AbstractPaidAmountSummaryPage {
         path + Paths.paidAmountSummaryPage.uri,
       ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
         const claim: Claim = res.locals.claim
-        const draft: Draft<any> = res.locals.draft
-
+        const draft: Draft<D> = this.retrieveDraft(res)
         res.render(
           'components/ccj/views/paid-amount-summary', {
             claim: claim,
-            alreadyPaid: draft.document.paidAmount.amount || 0,
+            alreadyPaid: draft.document.paidAmount,
             interestDetails: await getInterestDetails(claim),
-            nextPageUrl: res.redirect(this.buildRedirectUri(req, res)),
+            // nextPageUrl: res.redirect(this.buildRedirectUri(req, res)),
             defaultJudgmentDate: MomentFactory.currentDate()
           }
         )

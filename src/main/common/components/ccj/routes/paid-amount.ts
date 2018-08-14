@@ -6,14 +6,14 @@ import { PaidAmount } from 'main/features/ccj/form/models/paidAmount'
 import { Paths } from 'shared/components/ccj/Paths'
 import { Claim } from 'claims/models/claim'
 
-import { Draft } from '@hmcts/draft-store-client'
 import { DraftService } from 'services/draftService'
 
 import { ErrorHandling } from 'main/common/errorHandling'
 
 /* tslint:disable:no-default-export */
-export abstract class AbstractPaidAmountPage {
+export abstract class AbstractPaidAmountPage<D> {
 
+  abstract retrieveDraft: (res: express.Response) => Draft<D>
   abstract buildRedirectUri (req: express.Request, res: express.Response): string
 
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
@@ -21,8 +21,7 @@ export abstract class AbstractPaidAmountPage {
       .get(
         path + Paths.paidAmountPage.uri,
         ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-          const draft: Draft<any> = res.locals.draft
-
+          const draft: Draft<D> = this.retrieveDraft(res)
           this.renderView(new Form(draft.document.paidAmount), res)
         }))
       .post(
@@ -35,7 +34,7 @@ export abstract class AbstractPaidAmountPage {
             if (form.hasErrors()) {
               this.renderView(form, res)
             } else {
-              const draft: Draft<any> = res.locals.draft
+              const draft: Draft<D> = this.retrieveDraft(res)
               const user: User = res.locals.user
 
               draft.document.paidAmount = form.model
