@@ -32,9 +32,9 @@ export default express.Router()
       draft.document = new DraftClaim().deserialize(prepareClaimDraft(user.email))
       await new DraftService().save(draft, user.bearerToken)
 
-      const userRoles: string[] = await claimStoreClient.retrieveUserRoles(user)
+      const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
 
-      if (userRoles.length === 0 || !userRoles.includes('cmc-new-features-consent-given')) {
+      if (roles && !roles.some(role => role.includes('cmc-new-features-consent'))) {
         await claimStoreClient.addRoleToUser(user, 'cmc-new-features-consent-given')
       }
 
