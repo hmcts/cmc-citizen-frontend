@@ -22,7 +22,6 @@ export class DraftClaimantResponse extends DraftDocument {
 
   deserialize (input: any): DraftClaimantResponse {
     if (input) {
-      console.log('input', input)
       this.externalId = input.externalId
       if (input.defendantResponseViewed) {
         this.defendantResponseViewed = input.defendantResponseViewed
@@ -46,7 +45,6 @@ export class DraftClaimantResponse extends DraftDocument {
         this.freeMediation = new FreeMediation(input.freeMediation.option)
       }
     }
-    console.log(this)
     return this
   }
 }
