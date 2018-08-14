@@ -41,7 +41,7 @@ export default express.Router()
 
         const { externalId } = req.params
 
-        if (form.model.accept.option === YesNoOption.YES.option) {
+        if (form.model.acceptCourtOffer.option === YesNoOption.YES.option) {
           res.redirect(ClaimantsResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
         } else {
           res.redirect(ClaimantsResponsePaths.rejectionReasonPage.evaluateUri({ externalId: externalId }))

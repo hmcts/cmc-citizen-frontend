@@ -45,20 +45,20 @@
         {{
         radioGroup(
           label = 'Do you want to accept the court`s proposed repayment plan?',
-          labelForScreenReadersOnly = true,
+          labelForScreenReadersOnly = false,
           form = form,
-          name = name,
+          name = 'courtOffer',
           options = [
           {
-            label: 'I want to accept this repayment plan',
-            value: FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value,
-            checked: (form.valueFor(name).value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value),
+            label: 'Yes',
+            value: YesNoOption.YES.option,
+            checked: (form.valueFor('courtOffer').value === YesNoOption.YES),
             bold: false
           },
           {
-            label: 'I want a judge to make a repayment plan',
-            value:  FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value,
-            checked: (form.valueFor(name).value === FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value),
+            label: 'No - I want a judge to make a new repayment plan',
+            value:  YesNoOption.NO.option,
+            checked: (form.valueFor('courtOffer').value === YesNoOption.NO),
             bold: false
           }
         ]
