@@ -25,7 +25,7 @@ const buttons = {
   submit: 'input[type=submit]'
 }
 
-export class DefendantPayByInstalmentsPage {
+export class DefendantPayByInstalmentsPageX {
 
   checkOutstandingAmount (defendantPaidAmount: number): void {
     const amountOutstanding: number = claimAmount.getTotal() - defendantPaidAmount
@@ -40,7 +40,6 @@ export class DefendantPayByInstalmentsPage {
     I.fillField(fields.repayment.firstPaymentDate.month, month)
     I.fillField(fields.repayment.firstPaymentDate.year, year)
     I.checkOption(fields.repayment.frequency[plan.frequency])
-    I.click(buttons.submit)
   }
 
   saveAndContinue (): void {

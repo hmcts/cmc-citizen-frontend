@@ -13,7 +13,7 @@ const buttons = {
   submit: 'input[type=submit]'
 }
 
-export class DefendantPayBySetDatePage {
+export class DefendantPayBySetDatePageX {
 
   paymentBySetDate (paymentDate: string): void {
     const [ year, month, day ] = DateParser.parse(paymentDate)
