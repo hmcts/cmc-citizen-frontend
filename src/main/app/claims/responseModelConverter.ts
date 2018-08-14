@@ -48,7 +48,7 @@ import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissio
 import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { YesNoOption as DraftYesNoOption } from 'models/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
-import { PaymentIntention as PaymentIntentionDraft } from 'shared/components/payment-intention/model'
+import { PaymentIntention as PaymentIntentionDraft } from 'shared/components/payment-intention/model/paymentIntention'
 
 export class ResponseModelConverter {
 

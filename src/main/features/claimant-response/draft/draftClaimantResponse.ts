@@ -3,7 +3,7 @@ import { SettleAdmitted } from 'claimant-response/form/models/settleAdmitted'
 import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 import { SettlementAgreement } from 'claimant-response/form/models/settlementAgreement'
-import { PaymentIntention } from 'shared/components/payment-intention/model'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { FreeMediation } from 'response/form/models/freeMediation'
 
 export class DraftClaimantResponse extends DraftDocument {

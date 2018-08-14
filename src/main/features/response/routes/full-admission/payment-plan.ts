@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { AbstractPaymentPlanPage } from 'shared/components/payment-intention/payment-plan'
 import { AbstractModelAccessor } from 'shared/components/model-accessor'
-import { PaymentIntention } from 'shared/components/payment-intention/model'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 import { Draft } from '@hmcts/draft-store-client'

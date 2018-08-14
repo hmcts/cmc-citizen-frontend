@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { AbstractPaymentDatePage } from 'shared/components/payment-intention/payment-date'
 import { AbstractModelAccessor } from 'shared/components/model-accessor'
-import { PaymentIntention } from 'shared/components/payment-intention/model'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 import { ResponseDraft } from 'response/draft/responseDraft'

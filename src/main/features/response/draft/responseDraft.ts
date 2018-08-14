@@ -25,7 +25,7 @@ import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
 import { YesNoOption } from 'models/yesNoOption'
 import { HowMuchDoYouOwe } from 'response/form/models/howMuchDoYouOwe'
-import { PaymentIntention } from 'shared/components/payment-intention/model'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 
 export class FullAdmission {
   paymentIntention: PaymentIntention

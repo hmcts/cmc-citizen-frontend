@@ -2,9 +2,9 @@ import { IsDefined, ValidateIf, ValidateNested } from 'class-validator'
 import {
   PaymentOption,
   PaymentType
-} from 'shared/components/payment-intention/model/paymentOption'
-import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
-import { PaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
+} from 'main/common/components/payment-intention/model/paymentOption'
+import { PaymentDate } from 'main/common/components/payment-intention/model/paymentDate'
+import { PaymentPlan } from 'main/common/components/payment-intention/model/paymentPlan'
 
 export class PaymentIntention {
   @IsDefined()

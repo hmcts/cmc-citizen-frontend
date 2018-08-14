@@ -2,7 +2,7 @@ import * as express from 'express'
 import { Moment } from 'moment'
 
 import { AbstractModelAccessor } from 'shared/components/model-accessor'
-import { PaymentIntention } from 'shared/components/payment-intention/model'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intention/paths'
 
 import { NotFoundError } from 'errors'

@@ -25,7 +25,7 @@ import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { YesNoOption } from 'models/yesNoOption'
 import { HowMuchDoYouOwe } from 'response/form/models/howMuchDoYouOwe'
 import { Defendant } from 'drafts/models/defendant'
-import { PaymentIntention } from 'shared/components/payment-intention/model'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 

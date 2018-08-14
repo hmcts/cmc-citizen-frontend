@@ -16,7 +16,7 @@ import { Claim } from 'claims/models/claim'
 import { createPaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
 import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
 import { AbstractModelAccessor } from 'shared/components/model-accessor'
-import { PaymentIntention } from 'shared/components/payment-intention/model'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { NotFoundError } from 'errors'
 
 function mapFrequencyInWeeks (frequency: PaymentSchedule): number {

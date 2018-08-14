@@ -15,7 +15,7 @@ import { IndividualDetails } from 'forms/models/individualDetails'
 import { Defendant } from 'drafts/models/defendant'
 import { ResponseType } from 'response/form/models/responseType'
 import { Response } from 'response/form/models/response'
-import { PaymentIntention } from 'shared/components/payment-intention/model'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 
 function validResponseDraftWith (paymentType: PaymentType): ResponseDraft {
   const responseDraft: ResponseDraft = new ResponseDraft()

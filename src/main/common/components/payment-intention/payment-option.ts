@@ -13,7 +13,7 @@ import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intent
 import { RoutablePath } from 'shared/router/routablePath'
 
 import { AbstractModelAccessor } from 'shared/components/model-accessor'
-import { PaymentIntention } from 'shared/components/payment-intention/model'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 
 export abstract class AbstractPaymentOptionPage<Draft> {
   abstract getHeading (): string

@@ -15,7 +15,7 @@ import { ResidenceType } from 'response/form/models/statement-of-means/residence
 import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { PartyType } from 'common/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
-import { PaymentIntention } from 'shared/components/payment-intention/model'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import {
   fullAdmissionWithImmediatePaymentDraft,
   statementOfMeansWithAllFieldsDraft, partialAdmissionWithImmediatePaymentDraft

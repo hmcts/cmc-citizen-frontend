@@ -42,7 +42,7 @@ import { Explanation } from 'response/form/models/statement-of-means/explanation
 import { IncomeSource } from 'response/form/models/statement-of-means/incomeSource'
 import { ExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
 import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
-import { PaymentIntention } from 'shared/components/payment-intention/model'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 
 function validResponseDraftWith (paymentType: PaymentType): ResponseDraft {
   const responseDraft: ResponseDraft = new ResponseDraft()
