@@ -38,7 +38,9 @@ export default express.Router()
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const user: User = res.locals.user
       const settlement: Settlement = prepareSettlement(claim, draft.document)
+
       await OfferClient.signSettlementAgreement(claim.externalId, user, settlement)
       await new DraftService().delete(draft.id, user.bearerToken)
+
       res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
     }))

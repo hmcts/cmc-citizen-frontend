@@ -15,21 +15,19 @@ import { NumberFormatter } from 'utils/numberFormatter'
 import { PaymentScheduleTypeViewFilter } from 'claimant-response/filters/payment-schedule-type-view-filter'
 
 export function getRepaymentPlanOrigin (settlement: Settlement): string {
-
   if (!settlement) {
     throw new Error('settlement must not be null')
   }
 
-  const partyStatement: PartyStatement = settlement.partyStatements.slice(-2)[0]
-  if (!partyStatement) {
+  const partyStatementSuggestingPaymentPlan: PartyStatement = settlement.partyStatements.slice(-2)[0]
+  if (!partyStatementSuggestingPaymentPlan) {
     throw new Error('partyStatement must not be null')
   }
 
-  return partyStatement.madeBy
+  return partyStatementSuggestingPaymentPlan.madeBy
 }
 
 export function prepareSettlement (claim: Claim, draft: DraftClaimantResponse): Settlement {
-
   if (draft.settlementAgreement && draft.settlementAgreement.signed) {
     const partyStatements: PartyStatement[] = [prepareDefendantPartyStatement(claim), acceptOffer()]
     return new Settlement(partyStatements)
@@ -45,6 +43,7 @@ export function prepareDefendantPartyStatement (claim: Claim): PartyStatement {
 
 export function prepareDefendantOffer (claim: Claim, paymentPlan: PaymentPlan): Offer {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
   if (response.paymentIntention.paymentDate) {
     const completionDate: Moment = response.paymentIntention.paymentDate
     const content: string = `${response.defendant.name} will pay the full amount, no later than ${MomentFormatter.formatLongDate(completionDate)}`
