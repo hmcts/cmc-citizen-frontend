@@ -12,7 +12,7 @@ import { DraftService } from 'services/draftService'
 import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intention/paths'
 import { RoutablePath } from 'shared/router/routablePath'
 
-import { AbstractModelAccessor } from 'shared/components/payment-intention/model-accessor'
+import { AbstractModelAccessor } from 'shared/components/model-accessor'
 import { PaymentIntention } from 'shared/components/payment-intention/model'
 
 export abstract class AbstractPaymentOptionPage<Draft> {

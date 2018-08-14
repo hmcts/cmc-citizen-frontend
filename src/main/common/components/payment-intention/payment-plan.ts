@@ -15,7 +15,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { Claim } from 'claims/models/claim'
 import { createPaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
 import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
-import { AbstractModelAccessor } from 'shared/components/payment-intention/model-accessor'
+import { AbstractModelAccessor } from 'shared/components/model-accessor'
 import { PaymentIntention } from 'shared/components/payment-intention/model'
 import { NotFoundError } from 'errors'
 

@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { AbstractPaymentDatePage } from 'shared/components/payment-intention/payment-date'
-import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/payment-intention/model-accessor'
+import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/model-accessor'
 import { PaymentIntention } from 'shared/components/payment-intention/model'
 
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'

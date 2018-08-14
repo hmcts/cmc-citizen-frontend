@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { AbstractPaymentOptionPage } from 'shared/components/payment-intention/payment-option'
-import { AbstractModelAccessor } from 'shared/components/payment-intention/model-accessor'
+import { AbstractModelAccessor } from 'shared/components/model-accessor'
 import { PaymentIntention } from 'shared/components/payment-intention/model'
 import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 

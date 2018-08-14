@@ -1,5 +1,4 @@
 import { RoutablePath } from 'shared/router/routablePath'
-import { Paths as FreeMediationPaths } from 'main/common/components/free-mediation/paths'
 
 import { Paths as FreeMediationPaths } from 'shared/components/free-mediation/paths'
 import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intention/paths'
