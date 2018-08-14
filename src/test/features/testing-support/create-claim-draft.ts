@@ -10,6 +10,7 @@ import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/routes/authorization-check'
@@ -69,6 +70,7 @@ describe('Testing Support: Create Claim Draft', () => {
       it('should redirect to check and send page when everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
+        claimStoreServiceMock.resolveAddRolesToUser('cmc-new-features-consent-given')
 
         await request(app)
           .post(pagePath)
